@@ -17,6 +17,7 @@ import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.repository.api.IAclScenarioRepository;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclFundPoolService;
+import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioAuditService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageService;
 
@@ -62,16 +63,19 @@ public class AclScenarioServiceTest {
     private IAclScenarioRepository aclScenarioRepository;
     private IAclFundPoolService aclFundPoolService;
     private IAclUsageService aclUsageService;
+    private IAclScenarioAuditService aclScenarioAuditService;
 
     @Before
     public void setUp() {
         aclScenarioRepository = createMock(IAclScenarioRepository.class);
         aclFundPoolService = createMock(IAclFundPoolService.class);
         aclUsageService = createMock(IAclUsageService.class);
+        aclScenarioAuditService = createMock(IAclScenarioAuditService.class);
         aclScenarioService = new AclScenarioService();
         Whitebox.setInternalState(aclScenarioService, aclScenarioRepository);
         Whitebox.setInternalState(aclScenarioService, aclFundPoolService);
         Whitebox.setInternalState(aclScenarioService, aclUsageService);
+        Whitebox.setInternalState(aclScenarioService, aclScenarioAuditService);
     }
 
     @Test
@@ -216,6 +220,19 @@ public class AclScenarioServiceTest {
         replay(aclScenarioRepository);
         assertSame(licenseeClasses, aclScenarioService.getDetailLicenseeClassesByScenarioId(SCENARIO_UID));
         verify(aclScenarioRepository);
+    }
+
+    @Test
+    public void testDeleteScenario() {
+        aclScenarioAuditService.deleteActions(SCENARIO_UID);
+        expectLastCall().once();
+        aclScenarioRepository.removeScenarioData(SCENARIO_UID);
+        expectLastCall().once();
+        aclScenarioRepository.remove(SCENARIO_UID);
+        expectLastCall().once();
+        replay(aclScenarioAuditService, aclScenarioRepository);
+        aclScenarioService.deleteAclScenario(buildAclScenario());
+        verify(aclScenarioAuditService, aclScenarioRepository);
     }
 
     private AclScenario buildAclScenario() {

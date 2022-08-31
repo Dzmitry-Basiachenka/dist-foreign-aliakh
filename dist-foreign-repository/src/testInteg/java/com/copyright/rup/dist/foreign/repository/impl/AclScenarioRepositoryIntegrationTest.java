@@ -13,6 +13,7 @@ import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.repository.api.IAclScenarioRepository;
+import com.copyright.rup.dist.foreign.repository.api.IAclScenarioUsageRepository;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.junit.Test;
@@ -48,6 +49,7 @@ public class AclScenarioRepositoryIntegrationTest {
 
     private static final String FOLDER_NAME = "acl-scenario-repository-integration-test/";
     private static final String SCENARIO_UID = "cf1b6b34-0a67-4177-a456-4429f20fe2c5";
+    private static final String SCENARIO_NAME = "ACL Scenario 201812";
     private static final String LICENSE_TYPE_ACL = "ACL";
     private static final String DESCRIPTION = "Description";
     private static final String USER_NAME = "user@copyright.com";
@@ -55,6 +57,8 @@ public class AclScenarioRepositoryIntegrationTest {
 
     @Autowired
     private IAclScenarioRepository aclScenarioRepository;
+    @Autowired
+    private IAclScenarioUsageRepository aclScenarioUsageRepository;
 
     @Test
     @TestData(fileName = FOLDER_NAME + "find-all.groovy")
@@ -194,6 +198,35 @@ public class AclScenarioRepositoryIntegrationTest {
             buildDetailLicenseeClass(1, "Food and Tobacco", 51, "Materials"));
         verifyDetailLicenseeClass(detailLicenseeClasses.get(1),
             buildDetailLicenseeClass(2, "Textiles, Apparel, etc.", 52, "Medical"));
+    }
+
+    @Test
+    @TestData(fileName = FOLDER_NAME + "remove-scenario.groovy")
+    public void testRemove() {
+        aclScenarioRepository.insertAclScenario(buildAclScenario(SCENARIO_UID,
+            "4426b58d-9df9-4c5e-842f-b179ba87989f", "61be2512-cbf7-4d39-94d7-acf419238dbd",
+            "924aab3c-b2e0-4115-b46a-cb6cfe70fb61", SCENARIO_NAME, DESCRIPTION,
+            ScenarioStatusEnum.IN_PROGRESS, true, 202012, LICENSE_TYPE_ACL, USER_NAME, DATE));
+        assertEquals(1, aclScenarioRepository.findCountByName(SCENARIO_NAME));
+        aclScenarioRepository.remove(SCENARIO_UID);
+        assertEquals(0, aclScenarioRepository.findCountByName(SCENARIO_NAME));
+    }
+
+    @Test
+    @TestData(fileName = FOLDER_NAME + "remove-scenario-data.groovy")
+    public void testRemoveScenarioData() {
+        String scenarioId = "8e4f30ca-48c8-4349-8d5a-ffc393a74a30";
+        AclScenario scenario = aclScenarioRepository.findById(scenarioId);
+        assertEquals(2, scenario.getDetailLicenseeClasses().size());
+        assertEquals(2, scenario.getPublicationTypes().size());
+        assertEquals(2, scenario.getUsageAges().size());
+        assertNotNull(aclScenarioUsageRepository.findScenarioDetailsByScenarioId(scenarioId));
+        aclScenarioRepository.removeScenarioData(scenarioId);
+        aclScenarioRepository.findAclPublicationTypesByScenarioId(scenarioId);
+        assertEquals(0, aclScenarioRepository.findAclPublicationTypesByScenarioId(scenarioId).size());
+        assertEquals(0, aclScenarioRepository.findDetailLicenseeClassesByScenarioId(scenarioId).size());
+        assertEquals(0, aclScenarioRepository.findAclPublicationTypesByScenarioId(scenarioId).size());
+        assertEquals(0, aclScenarioUsageRepository.findScenarioDetailsByScenarioId(scenarioId).size());
     }
 
     private UsageAge buildUsageAge(Integer period, String weight) {

@@ -32,4 +32,11 @@ public interface IAclScenarioAuditService {
      * @return list of {@link ScenarioAuditItem}s
      */
     List<ScenarioAuditItem> getActions(String scenarioId);
+
+    /**
+     * Deletes ACL scenario actions by scenario identifier.
+     *
+     * @param scenarioId scenario identifier
+     */
+    void deleteActions(String scenarioId);
 }
