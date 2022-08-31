@@ -12,7 +12,6 @@ import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.data.provider.DataProvider;
 import com.vaadin.data.provider.ListDataProvider;
-import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
@@ -67,14 +66,14 @@ public class AclScenarioDrillDownAggLcClassesWindow extends Window {
         this.controller = controller;
         this.filter = filter;
         setWidth(1280, Unit.PIXELS);
-        setHeight(600, Unit.PIXELS);
+        setHeight(Objects.nonNull(filter.getWrWrkInst()) ? 75 : 85, Unit.PERCENTAGE);
         initGrid();
         Button closeButton = Buttons.createCloseButton(this);
-        VerticalLayout layout = new VerticalLayout(initMetaInfoLayout(), grid, closeButton);
-        layout.setSizeFull();
-        layout.setExpandRatio(grid, 1);
-        layout.setComponentAlignment(closeButton, Alignment.BOTTOM_RIGHT);
-        setContent(layout);
+        VerticalLayout content = new VerticalLayout(initMetaInfoLayout(), grid, closeButton);
+        content.setSizeFull();
+        content.setExpandRatio(grid, 1);
+        content.setComponentAlignment(closeButton, Alignment.BOTTOM_RIGHT);
+        setContent(content);
         setCaption(ForeignUi.getMessage("window.acl_scenario_drill_down_aggregate-licensee-class"));
         VaadinUtils.addComponentStyle(this, "acl-scenario-drill-down-aggregate-licensee-class-window");
     }
@@ -89,7 +88,7 @@ public class AclScenarioDrillDownAggLcClassesWindow extends Window {
             .filter(Objects::nonNull)
             .toArray(HorizontalLayout[]::new);
         VerticalLayout verticalLayout = new VerticalLayout();
-        verticalLayout.setMargin(new MarginInfo(true, false, true, false));
+        verticalLayout.setMargin(false);
         verticalLayout.setSpacing(false);
         verticalLayout.addComponents(components);
         return verticalLayout;

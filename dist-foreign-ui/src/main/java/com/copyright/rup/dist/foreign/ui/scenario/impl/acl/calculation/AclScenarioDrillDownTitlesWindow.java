@@ -13,7 +13,6 @@ import com.copyright.rup.vaadin.widget.SearchWidget;
 
 import com.vaadin.data.provider.DataProvider;
 import com.vaadin.data.provider.ListDataProvider;
-import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
@@ -73,16 +72,16 @@ public class AclScenarioDrillDownTitlesWindow extends Window implements SearchWi
         this.controller = controller;
         this.filter = filter;
         setWidth(1280, Unit.PIXELS);
-        setHeight(600, Unit.PIXELS);
+        setHeight(Objects.nonNull(filter.getAggregateLicenseeClassId()) ? 75 : 85, Unit.PERCENTAGE);
         searchWidget = new SearchWidget(this);
         searchWidget.setPrompt(ForeignUi.getMessage("field.prompt.view_titles_by_rightsholder.search.acl"));
         initGrid();
         Button closeButton = Buttons.createCloseButton(this);
-        VerticalLayout layout = new VerticalLayout(initMetaInfoLayout(), searchWidget, grid, closeButton);
-        layout.setSizeFull();
-        layout.setExpandRatio(grid, 1);
-        layout.setComponentAlignment(closeButton, Alignment.BOTTOM_RIGHT);
-        setContent(layout);
+        VerticalLayout content = new VerticalLayout(initMetaInfoLayout(), searchWidget, grid, closeButton);
+        content.setSizeFull();
+        content.setExpandRatio(grid, 1);
+        content.setComponentAlignment(closeButton, Alignment.BOTTOM_RIGHT);
+        setContent(content);
         setCaption(ForeignUi.getMessage("window.acl_scenario_drill_down_titles"));
         VaadinUtils.addComponentStyle(this, "acl-scenario-drill-down-titles-window");
     }
@@ -99,7 +98,7 @@ public class AclScenarioDrillDownTitlesWindow extends Window implements SearchWi
             .filter(Objects::nonNull)
             .toArray(HorizontalLayout[]::new);
         VerticalLayout verticalLayout = new VerticalLayout();
-        verticalLayout.setMargin(new MarginInfo(true, false, true, false));
+        verticalLayout.setMargin(false);
         verticalLayout.setSpacing(false);
         verticalLayout.addComponents(components);
         return verticalLayout;

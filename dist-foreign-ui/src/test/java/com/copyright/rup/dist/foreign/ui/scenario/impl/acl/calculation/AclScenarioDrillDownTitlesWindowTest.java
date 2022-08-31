@@ -5,7 +5,6 @@ import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyFooterI
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGrid;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGridItems;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyLabel;
-import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
@@ -88,7 +87,11 @@ public class AclScenarioDrillDownTitlesWindowTest {
 
     @Test
     public void testStructure() {
-        verifyWindow(window, "Results by Rightsholder: Title", 1280, 600, Sizeable.Unit.PIXELS);
+        assertEquals("Results by Rightsholder: Title", window.getCaption());
+        assertEquals(1280, window.getWidth(), 0);
+        assertEquals(Sizeable.Unit.PIXELS, window.getWidthUnits());
+        assertEquals(75, window.getHeight(), 0);
+        assertEquals(Sizeable.Unit.PERCENTAGE, window.getHeightUnits());
         VerticalLayout content = (VerticalLayout) window.getContent();
         assertEquals(4, content.getComponentCount());
         verifyMetaInfoLayout(content.getComponent(0));
