@@ -123,8 +123,8 @@ public interface IAclScenarioRepository {
     void remove(String scenarioId);
 
     /**
-     * Removes {@link AclPublicationType}s, {@link UsageAge}s, {@link DetailLicenseeClass}s and scenario details and shares
-     * related to the scenario by given identifier.
+     * Removes {@link AclPublicationType}s, {@link UsageAge}s, {@link DetailLicenseeClass}s and scenario details
+     * and shares related to the scenario by given identifier.
      *
      * @param scenarioId {@link AclScenario} identifier
      */
