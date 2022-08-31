@@ -11,7 +11,6 @@ import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.util.CurrencyUtils;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.vaadin.data.ValueProvider;
-import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
@@ -57,7 +56,7 @@ public class AclScenarioDrillDownUsageDetailsWindow extends Window {
         this.controller = controller;
         this.filter = Objects.requireNonNull(filter);
         setWidth(1280, Unit.PIXELS);
-        setHeight(600, Unit.PIXELS);
+        setHeight(65, Unit.PERCENTAGE);
         initGrid();
         Button closeButton = Buttons.createCloseButton(this);
         VerticalLayout content = new VerticalLayout(initMetaInfoLayout(), grid, closeButton);
@@ -83,7 +82,7 @@ public class AclScenarioDrillDownUsageDetailsWindow extends Window {
             .filter(Objects::nonNull)
             .toArray(HorizontalLayout[]::new);
         VerticalLayout verticalLayout = new VerticalLayout();
-        verticalLayout.setMargin(new MarginInfo(true, false, true, false));
+        verticalLayout.setMargin(false);
         verticalLayout.setSpacing(false);
         verticalLayout.addComponents(components);
         return verticalLayout;

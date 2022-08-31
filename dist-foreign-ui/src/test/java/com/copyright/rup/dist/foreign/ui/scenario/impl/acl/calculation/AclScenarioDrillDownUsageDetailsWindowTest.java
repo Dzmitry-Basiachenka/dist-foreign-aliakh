@@ -22,6 +22,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.vaadin.server.Sizeable;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.shared.ui.MarginInfo;
@@ -67,14 +68,19 @@ public class AclScenarioDrillDownUsageDetailsWindowTest {
 
     @Test
     public void testComponentStructure() {
-        assertEquals("acl-scenario-drill-down-usage-details-window", window.getId());
-        verifyWindow(window, "Results by Rightsholder: Usage Details", 1280, 600, Unit.PIXELS);
+        assertEquals("Results by Rightsholder: Usage Details", window.getCaption());
+        assertEquals(1280, window.getWidth(), 0);
+        assertEquals(Sizeable.Unit.PIXELS, window.getWidthUnits());
+        assertEquals(65, window.getHeight(), 0);
+        assertEquals(Sizeable.Unit.PERCENTAGE, window.getHeightUnits());
         VerticalLayout content = (VerticalLayout) window.getContent();
         assertEquals(new MarginInfo(true, true, true, true), content.getMargin());
         assertEquals(3, content.getComponentCount());
         verifyMetaInfoLayout(content.getComponent(0));
         verifyGrid(content.getComponent(1));
         verifyButton(content.getComponent(2), "Close", true);
+        assertEquals("acl-scenario-drill-down-usage-details-window", window.getStyleName());
+        assertEquals("acl-scenario-drill-down-usage-details-window", window.getId());
     }
 
     @Test
