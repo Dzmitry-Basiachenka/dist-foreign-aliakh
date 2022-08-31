@@ -1,6 +1,8 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl.acl.calculation;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButton;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyFooterItems;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGridItems;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
 import static org.easymock.EasyMock.eq;
@@ -27,12 +29,14 @@ import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
 import com.vaadin.data.ValueProvider;
+import com.vaadin.data.provider.DataProvider;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.JavaScript;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.components.grid.FooterRow;
@@ -48,6 +52,8 @@ import org.powermock.reflect.Whitebox;
 import java.math.BigDecimal;
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.function.Supplier;
 
 /**
@@ -60,12 +66,19 @@ import java.util.function.Supplier;
  * @author Dzmitry Basiachenka
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({AclScenarioWidget.class, Windows.class})
+@PrepareForTest({AclScenarioWidget.class, Windows.class, JavaScript.class})
 public class AclScenarioWidgetTest {
 
     private static final String SCENARIO_ID = "24b0a5a9-6380-4519-91f2-779c98ed45cc";
     private static final Long RH_ACCOUNT_NUMBER = 7000447306L;
     private static final String RH_NAME = "Longhouse";
+    private static final String GROSS_TOTAL_PRINT = "20000.00";
+    private static final String SERVICE_FEE_TOTAL_PRINT = "6400.00";
+    private static final String NET_TOTAL_PRINT = "13600.00";
+    private static final String GROSS_TOTAL_DIGITAL = "1000.00";
+    private static final String SERVICE_FEE_TOTAL_DIGITAL = "600.00";
+    private static final String NET_TOTAL_DIGITAL = "130.00";
+    private static final String STYLE_ALIGN_RIGHT = "v-align-right";
 
     private AclScenarioWidget scenarioWidget;
     private IAclScenarioController controller;
@@ -98,6 +111,34 @@ public class AclScenarioWidgetTest {
         verifySearchWidget(content.getComponent(0));
         verifyGrid((Grid) content.getComponent(1));
         verifyButtonsLayout((HorizontalLayout) content.getComponent(2));
+    }
+
+    @Test
+    public void testGridValues() {
+        mockStatic(JavaScript.class);
+        List<AclRightsholderTotalsHolder> holders = Collections.singletonList(buildAclRightsholderTotalsHolder());
+        expect(JavaScript.getCurrent()).andReturn(createMock(JavaScript.class)).times(2);
+        expect(controller.getSize()).andReturn(1).once();
+        expect(controller.loadBeans(0, Integer.MAX_VALUE, Collections.emptyList())).andReturn(holders).once();
+        replay(JavaScript.class, controller);
+        Grid grid = (Grid) ((VerticalLayout) scenarioWidget.getContent()).getComponent(1);
+        DataProvider dataProvider = grid.getDataProvider();
+        dataProvider.refreshAll();
+        Object[][] expectedCells = {
+            {"7000447306", RH_NAME, "20,000.00", "6,400.00", "13,600.00", "1,000.00",
+                SERVICE_FEE_TOTAL_DIGITAL, NET_TOTAL_DIGITAL, "1", "1", "ACL"}
+        };
+        verifyGridItems(grid, holders, expectedCells);
+        verify(JavaScript.class, controller);
+        Object[][] expectedFooterColumns = {
+            {"grossTotalPrint", "20,000.00", STYLE_ALIGN_RIGHT},
+            {"serviceFeeTotalPrint", "6,400.00", STYLE_ALIGN_RIGHT},
+            {"netTotalPrint", "13,600.00", STYLE_ALIGN_RIGHT},
+            {"grossTotalDigital", "1,000.00", STYLE_ALIGN_RIGHT},
+            {"serviceFeeTotalDigital", SERVICE_FEE_TOTAL_DIGITAL, STYLE_ALIGN_RIGHT},
+            {"netTotalDigital", NET_TOTAL_DIGITAL, STYLE_ALIGN_RIGHT},
+        };
+        verifyFooterItems(grid, expectedFooterColumns);
     }
 
     @Test
@@ -147,12 +188,12 @@ public class AclScenarioWidgetTest {
         AclScenarioDto scenario = new AclScenarioDto();
         scenario.setId(SCENARIO_ID);
         scenario.setName("Scenario name");
-        scenario.setGrossTotalPrint(new BigDecimal("20000.00"));
-        scenario.setServiceFeeTotalPrint(new BigDecimal("6400.00"));
-        scenario.setNetTotalPrint(new BigDecimal("13600.00"));
-        scenario.setGrossTotalDigital(new BigDecimal("1000.00"));
-        scenario.setServiceFeeTotalDigital(new BigDecimal("600.00"));
-        scenario.setNetTotalDigital(new BigDecimal("130.00"));
+        scenario.setGrossTotalPrint(new BigDecimal(GROSS_TOTAL_PRINT));
+        scenario.setServiceFeeTotalPrint(new BigDecimal(SERVICE_FEE_TOTAL_PRINT));
+        scenario.setNetTotalPrint(new BigDecimal(NET_TOTAL_PRINT));
+        scenario.setGrossTotalDigital(new BigDecimal(GROSS_TOTAL_DIGITAL));
+        scenario.setServiceFeeTotalDigital(new BigDecimal(SERVICE_FEE_TOTAL_DIGITAL));
+        scenario.setNetTotalDigital(new BigDecimal(NET_TOTAL_DIGITAL));
         return scenario;
     }
 
@@ -170,6 +211,15 @@ public class AclScenarioWidgetTest {
         rightsholder.setAccountNumber(RH_ACCOUNT_NUMBER);
         rightsholder.setName(RH_NAME);
         holder.setRightsholder(rightsholder);
+        holder.setGrossTotalPrint(new BigDecimal(GROSS_TOTAL_PRINT));
+        holder.setServiceFeeTotalPrint(new BigDecimal(SERVICE_FEE_TOTAL_PRINT));
+        holder.setNetTotalPrint(new BigDecimal(NET_TOTAL_PRINT));
+        holder.setGrossTotalDigital(new BigDecimal(GROSS_TOTAL_DIGITAL));
+        holder.setServiceFeeTotalDigital(new BigDecimal(SERVICE_FEE_TOTAL_DIGITAL));
+        holder.setNetTotalDigital(new BigDecimal(NET_TOTAL_DIGITAL));
+        holder.setNumberOfTitles(1);
+        holder.setNumberOfAggLcClasses(1);
+        holder.setLicenseType("ACL");
         return holder;
     }
 
@@ -207,8 +257,8 @@ public class AclScenarioWidgetTest {
         assertEquals("6,400.00", footerRow.getCell("serviceFeeTotalPrint").getText());
         assertEquals("13,600.00", footerRow.getCell("netTotalPrint").getText());
         assertEquals("1,000.00", footerRow.getCell("grossTotalDigital").getText());
-        assertEquals("600.00", footerRow.getCell("serviceFeeTotalDigital").getText());
-        assertEquals("130.00", footerRow.getCell("netTotalDigital").getText());
+        assertEquals(SERVICE_FEE_TOTAL_DIGITAL, footerRow.getCell("serviceFeeTotalDigital").getText());
+        assertEquals(NET_TOTAL_DIGITAL, footerRow.getCell("netTotalDigital").getText());
     }
 
     private void verifyButtonsLayout(HorizontalLayout layout) {
