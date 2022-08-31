@@ -686,8 +686,8 @@
             coalesce(sum(shd.net_amount), 0) as net_total
         from ${schema}.df_acl_share_detail shd
         join ${schema}.df_aggregate_licensee_class alc on shd.aggregate_licensee_class_id = alc.aggregate_licensee_class_id
-        join apps.df_acl_scenario s on shd.df_acl_scenario_uid = s.df_acl_scenario_uid
-        join apps.df_acl_scenario_detail scd on s.df_acl_scenario_uid = scd.df_acl_scenario_uid
+        join ${schema}.df_acl_scenario s on shd.df_acl_scenario_uid = s.df_acl_scenario_uid
+        join ${schema}.df_acl_scenario_detail scd on s.df_acl_scenario_uid = scd.df_acl_scenario_uid
         where shd.df_acl_scenario_uid = #{scenarioId}
             and shd.rh_account_number = #{accountNumber}
             <if test="null != systemTitle">
@@ -695,5 +695,26 @@
             </if>
         group by alc.aggregate_licensee_class_id, aggregate_licensee_class_name
         order by alc.aggregate_licensee_class_id
+    </select>
+
+    <select id="findRightsholderTitleResults" parameterType="map" resultMap="aclRightsholderTotalsHolderDtoResultMap">
+        select
+            wr_wrk_inst,
+            system_title,
+            sum(case when shd.type_of_use = 'PRINT' then coalesce(shd.gross_amount, 0) else 0 end) as gross_total_print,
+            sum(case when shd.type_of_use = 'PRINT' then coalesce(shd.net_amount, 0) else 0 end) as net_total_print,
+            sum(case when shd.type_of_use = 'DIGITAL' then coalesce(shd.gross_amount, 0) else 0 end) as gross_total_digital,
+            sum(case when shd.type_of_use = 'DIGITAL' then coalesce(shd.net_amount, 0) else 0 end) as net_total_digital,
+            coalesce(sum(shd.gross_amount), 0) as gross_total,
+            coalesce(sum(shd.net_amount), 0) as net_total
+        from ${schema}.df_acl_scenario_detail scd
+        join ${schema}.df_acl_share_detail shd on scd.df_acl_scenario_detail_uid = shd.df_acl_scenario_detail_uid
+        where scd.df_acl_scenario_uid = #{scenarioId}
+            and shd.rh_account_number = #{accountNumber}
+        <if test="null != aggregateLicenseeClassId">
+            and shd.aggregate_licensee_class_id = #{aggregateLicenseeClassId}
+        </if>
+        group by wr_wrk_inst, system_title
+        order by wr_wrk_inst
     </select>
 </mapper>

@@ -1,0 +1,32 @@
+[
+  {
+    "wrWrkInst": 122813964,
+    "systemTitle": "Aerospace America",
+    "grossTotalPrint": 100.0000000000,
+    "grossTotalDigital": 130.0000000000,
+    "netTotalPrint": 84.1000000000,
+    "netTotalDigital": 110.0000000000,
+    "grossTotal": 230.0000000000,
+    "netTotal": 194.1000000000
+  },
+  {
+    "wrWrkInst": 122820638,
+    "systemTitle": "Technology review",
+    "grossTotalPrint": 0,
+    "grossTotalDigital": 234.9175526000,
+    "netTotalPrint": 0,
+    "netTotalDigital": 202.9175526000,
+    "grossTotal": 234.9175526000,
+    "netTotal": 202.9175526000
+  },
+  {
+    "wrWrkInst": 254327612,
+    "systemTitle": "Current topics in library and information practice",
+    "grossTotalPrint": 110.0000000000,
+    "grossTotalDigital": 0,
+    "netTotalPrint": 100.0000000000,
+    "netTotalDigital": 0,
+    "grossTotal": 110.0000000000,
+    "netTotal": 100.0000000000
+  }
+]

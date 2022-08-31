@@ -16,7 +16,6 @@ import com.google.common.collect.Maps;
 import org.springframework.stereotype.Repository;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -163,8 +162,12 @@ public class AclScenarioUsageRepository extends AclBaseRepository implements IAc
 
     @Override
     public List<AclRightsholderTotalsHolderDto> findRightsholderTitleResults(RightsholderResultsFilter filter) {
-        // TODO {dbasiachenka} implement
-        return Collections.emptyList();
+        Objects.requireNonNull(filter);
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
+        parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(filter.getScenarioId()));
+        parameters.put(ACCOUNT_NUMBER, Objects.requireNonNull(filter.getRhAccountNumber()));
+        parameters.put("aggregateLicenseeClassId", filter.getAggregateLicenseeClassId());
+        return selectList("IAclScenarioUsageMapper.findRightsholderTitleResults", parameters);
     }
 
     @Override

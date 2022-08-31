@@ -5,6 +5,7 @@ import com.copyright.rup.dist.foreign.domain.filter.RightsholderResultsFilter;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioController;
 import com.copyright.rup.vaadin.ui.Buttons;
+import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.util.CurrencyUtils;
 import com.copyright.rup.vaadin.util.VaadinUtils;
@@ -87,17 +88,17 @@ public class AclScenarioDrillDownTitlesWindow extends Window implements SearchWi
     }
 
     private VerticalLayout initMetaInfoLayout() {
+        HorizontalLayout[] components = Stream.of(
+            initLabelsHorizontalLayout(ForeignUi.getMessage("label.rh_account_number"), filter.getRhAccountNumber()),
+            initLabelsHorizontalLayout(ForeignUi.getMessage("label.rh_name"), filter.getRhName()),
+            initLabelsHorizontalLayout(ForeignUi.getMessage("label.agg_lic_class_id"),
+                filter.getAggregateLicenseeClassId()),
+            initLabelsHorizontalLayout(ForeignUi.getMessage("label.agg_lic_class_name"),
+                filter.getAggregateLicenseeClassName())
+        )
+            .filter(Objects::nonNull)
+            .toArray(HorizontalLayout[]::new);
         VerticalLayout verticalLayout = new VerticalLayout();
-        HorizontalLayout rhAccountLayout = initLabelsHorizontalLayout("RH Account #", filter.getRhAccountNumber());
-        HorizontalLayout rhNameLayout = initLabelsHorizontalLayout("RH Name", filter.getRhName());
-        HorizontalLayout aggLcClassIdLayout = initLabelsHorizontalLayout("Agg Lic Class ID",
-            filter.getAggregateLicenseeClassId());
-        HorizontalLayout aggLcClassNameLayout = initLabelsHorizontalLayout("Agg Lic Class Name",
-            filter.getAggregateLicenseeClassName());
-        HorizontalLayout[] components =
-            Stream.of(rhAccountLayout, rhNameLayout, aggLcClassIdLayout, aggLcClassNameLayout)
-                .filter(Objects::nonNull)
-                .toArray(HorizontalLayout[]::new);
         verticalLayout.setMargin(new MarginInfo(true, false, true, false));
         verticalLayout.setSpacing(false);
         verticalLayout.addComponents(components);
@@ -152,8 +153,15 @@ public class AclScenarioDrillDownTitlesWindow extends Window implements SearchWi
         grid.addComponentColumn(holder -> {
             Button button = Buttons.createButton(Objects.toString(holder.getSystemTitle()));
             button.addStyleName(ValoTheme.BUTTON_LINK);
-            // TODO implement
-            button.addClickListener(event -> {});
+            button.addClickListener(event -> {
+                filter.setWrWrkInst(holder.getWrWrkInst());
+                filter.setSystemTitle(holder.getSystemTitle());
+                Windows.showModalWindow(
+                    Objects.nonNull(filter.getAggregateLicenseeClassId())
+                        ? new AclScenarioDrillDownUsageDetailsWindow(controller, new RightsholderResultsFilter(filter))
+                        : new AclScenarioDrillDownAggLcClassesWindow(controller, new RightsholderResultsFilter(filter))
+                );
+            });
             return button;
         }).setCaption(ForeignUi.getMessage("table.column.system_title"))
             .setId(SYSTEM_TITLE_PROPERTY)
