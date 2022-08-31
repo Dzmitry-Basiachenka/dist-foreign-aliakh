@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl.calculation.fundpool;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGrid;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGridItems;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
 import static org.easymock.EasyMock.anyObject;
@@ -43,9 +44,12 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -80,6 +84,17 @@ public class ViewAclFundPoolWindowTest {
         Whitebox.setInternalState(window, "grid", aclFundPoolGrid);
         verify(ForeignSecurityUtils.class, controller);
         reset(ForeignSecurityUtils.class, controller);
+    }
+
+    @Test
+    public void testGridValues() {
+        List<AclFundPool> fundPools = Collections.singletonList(buildAclFundPool(true));
+        Grid<?> grid = (Grid<?>) ((VerticalLayout) window.getContent()).getComponent(1);
+        Object[][] expectedCells = {
+            {"ACL Fund Pool 2021", "ACL", new BigDecimal("26618664.46"), new BigDecimal("18370661.72"), "Manual",
+                "user@copyright.com", "08/31/2022 12:00 AM"}
+        };
+        verifyGridItems(grid, fundPools, expectedCells);
     }
 
     @Test
@@ -196,8 +211,12 @@ public class ViewAclFundPoolWindowTest {
         fundPool.setPeriod(202112);
         fundPool.setLicenseType("ACL");
         fundPool.setManualUploadFlag(manualFlag);
-        fundPool.setNetAmount(new BigDecimal("50.0"));
-        fundPool.setTotalAmount(new BigDecimal("80.0"));
+        fundPool.setTotalAmount(new BigDecimal("26618664.46"));
+        fundPool.setNetAmount(new BigDecimal("18370661.72"));
+        fundPool.setCreateUser("user@copyright.com");
+        fundPool.setCreateDate(Date.from(LocalDate.of(2022, 8, 31).atStartOfDay(
+            ZoneId.systemDefault()).toInstant()));
+        fundPool.setUpdateDate(fundPool.getCreateDate());
         return fundPool;
     }
 }

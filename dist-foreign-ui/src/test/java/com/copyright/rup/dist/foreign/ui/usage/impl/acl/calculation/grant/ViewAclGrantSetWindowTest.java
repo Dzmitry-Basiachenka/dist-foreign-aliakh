@@ -2,7 +2,9 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl.calculation.grant;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGrid;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGridItems;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
+
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
@@ -21,6 +23,7 @@ import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclGrantDetailController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.widget.SearchWidget;
+
 import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.server.Sizeable;
 import com.vaadin.ui.Button;
@@ -29,6 +32,7 @@ import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.tuple.Triple;
 import org.junit.Before;
@@ -75,6 +79,16 @@ public class ViewAclGrantSetWindowTest {
         Whitebox.setInternalState(window, "grid", aclGrantSetGrid);
         verify(ForeignSecurityUtils.class, controller);
         reset(ForeignSecurityUtils.class, controller);
+    }
+
+    @Test
+    public void testGridValues() {
+        List<AclGrantSet> grantSets = Collections.singletonList(buildAclGrantSet());
+        Grid grid = (Grid) ((VerticalLayout) window.getContent()).getComponent(1);
+        Object[][] expectedCells = {
+            {"ACL Grant Set 2021", 202112, "ACL", "Y"}
+        };
+        verifyGridItems(grid, grantSets, expectedCells);
     }
 
     @Test

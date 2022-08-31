@@ -1,7 +1,9 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.calculation.usage;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButton;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyFooterItems;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGrid;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGridItems;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyMenuBar;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
@@ -17,6 +19,10 @@ import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.domain.AclUsageDto;
+import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
+import com.copyright.rup.dist.foreign.domain.PublicationType;
+import com.copyright.rup.dist.foreign.domain.UdmChannelEnum;
+import com.copyright.rup.dist.foreign.domain.UdmUsageOriginEnum;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclUsageFilterController;
@@ -25,6 +31,7 @@ import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Sets;
 import com.vaadin.data.provider.CallbackDataProvider;
+import com.vaadin.data.provider.DataProvider;
 import com.vaadin.data.provider.Query;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Button;
@@ -46,9 +53,13 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
@@ -101,7 +112,7 @@ public class AclUsageWidgetTest {
     @Test
     public void testWidgetStructureForViewOnly() {
         setViewOnlyExpectations();
-        verifyWidgetStructure(NoSelectionModel.class, false, false,true);
+        verifyWidgetStructure(NoSelectionModel.class, false, false, true);
     }
 
     @Test
@@ -217,6 +228,33 @@ public class AclUsageWidgetTest {
         verify(controller, streamSource, ForeignSecurityUtils.class);
     }
 
+    @Test
+    public void testGridValues() {
+        mockStatic(JavaScript.class);
+        List<AclUsageDto> usages = Collections.singletonList(buildAclUsageDto());
+        setSpecialistExpectations();
+        expect(JavaScript.getCurrent()).andReturn(createMock(JavaScript.class)).times(2);
+        expect(controller.getBeansCount()).andReturn(1).once();
+        expect(controller.loadBeans(0, Integer.MAX_VALUE, Collections.emptyList())).andReturn(usages).once();
+        expect(controller.getRecordThreshold()).andReturn(RECORD_THRESHOLD).once();
+        replay(JavaScript.class, ForeignSecurityUtils.class, controller, streamSource);
+        initWidget();
+        Grid grid = (Grid) ((VerticalLayout) aclUsageWidget.getSecondComponent()).getComponent(1);
+        DataProvider dataProvider = grid.getDataProvider();
+        dataProvider.refreshAll();
+        Object[][] expectedCells = {
+            {"48579d64-99b7-492a-975a-93c96499417a", 202012, UdmUsageOriginEnum.SS, UdmChannelEnum.CCC, "LUBRIZ0610EML",
+                122815600L, "Tribology international", 5, "Chemicals", 51, "Materials", "International", "SJ", "8.932",
+                "DIGITAL", "1.00", "user@copyright.com", "08/31/2022"}
+        };
+        verifyGridItems(grid, usages, expectedCells);
+        verify(JavaScript.class, ForeignSecurityUtils.class, controller, streamSource);
+        Object[][] expectedFooterColumns = {
+            {"detailId", "Usages Count: 1", null},
+        };
+        verifyFooterItems(grid, expectedFooterColumns);
+    }
+
     private void verifyWidgetStructure(Class<?> selectionModel, boolean... buttonsVisibility) {
         replay(ForeignSecurityUtils.class, controller, streamSource);
         initWidget();
@@ -286,7 +324,7 @@ public class AclUsageWidgetTest {
     }
 
     private HorizontalLayout getButtonsLayout() {
-        return (HorizontalLayout) ((VerticalLayout)aclUsageWidget.getSecondComponent()).getComponent(0);
+        return (HorizontalLayout) ((VerticalLayout) aclUsageWidget.getSecondComponent()).getComponent(0);
     }
 
     private void initWidget() {
@@ -294,5 +332,41 @@ public class AclUsageWidgetTest {
         aclUsageWidget.setController(controller);
         aclUsageWidget.init();
         aclUsageWidget.initMediator().applyPermissions();
+    }
+
+    private AclUsageDto buildAclUsageDto() {
+        AclUsageDto usage = new AclUsageDto();
+        usage.setId("48579d64-99b7-492a-975a-93c96499417a");
+        usage.setPeriod(202012);
+        usage.setUsageOrigin(UdmUsageOriginEnum.SS);
+        usage.setChannel(UdmChannelEnum.CCC);
+        usage.setOriginalDetailId("LUBRIZ0610EML");
+        usage.setWrWrkInst(122815600L);
+        usage.setSystemTitle("Tribology international");
+        usage.setDetailLicenseeClass(buildDetailLicenseeClass());
+        usage.setAggregateLicenseeClassId(51);
+        usage.setAggregateLicenseeClassName("Materials");
+        usage.setSurveyCountry("International");
+        usage.setPublicationType(buildPublicationType());
+        usage.setContentUnitPrice(new BigDecimal("8.932"));
+        usage.setTypeOfUse("DIGITAL");
+        usage.setAnnualizedCopies(new BigDecimal("1.00"));
+        usage.setUpdateUser("user@copyright.com");
+        usage.setUpdateDate(Date.from(LocalDate.of(2022, 8, 31).atStartOfDay(
+            ZoneId.systemDefault()).toInstant()));
+        return usage;
+    }
+
+    private DetailLicenseeClass buildDetailLicenseeClass() {
+        DetailLicenseeClass detLicClass = new DetailLicenseeClass();
+        detLicClass.setId(5);
+        detLicClass.setDescription("Chemicals");
+        return detLicClass;
+    }
+
+    private PublicationType buildPublicationType() {
+        PublicationType publicationType = new PublicationType();
+        publicationType.setName("SJ");
+        return publicationType;
     }
 }

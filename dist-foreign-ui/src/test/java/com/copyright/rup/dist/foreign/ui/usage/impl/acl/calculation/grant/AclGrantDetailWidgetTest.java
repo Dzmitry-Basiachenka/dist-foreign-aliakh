@@ -1,7 +1,9 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.calculation.grant;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButton;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyFooterItems;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGrid;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGridItems;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyMenuBar;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
@@ -24,12 +26,14 @@ import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclGrantDetailController
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclGrantDetailFilterController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
+import com.vaadin.data.provider.DataProvider;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.JavaScript;
 import com.vaadin.ui.VerticalLayout;
 
 import org.apache.commons.lang3.tuple.Triple;
@@ -39,9 +43,13 @@ import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
+import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
 
@@ -55,7 +63,7 @@ import java.util.function.Supplier;
  * @author Dzmitry Basiachenka
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({AclGrantDetailWidget.class, ForeignSecurityUtils.class, Windows.class})
+@PrepareForTest({AclGrantDetailWidget.class, ForeignSecurityUtils.class, Windows.class, JavaScript.class})
 public class AclGrantDetailWidgetTest {
 
     private AclGrantDetailWidget aclGrantDetailWidget;
@@ -132,6 +140,31 @@ public class AclGrantDetailWidgetTest {
         verify(controller, Windows.class, EditAclGrantDetailWindow.class, ForeignSecurityUtils.class, streamSource);
     }
 
+    @Test
+    public void testGridValues() {
+        mockStatic(JavaScript.class);
+        List<AclGrantDetailDto> grantDetails = Collections.singletonList(buildAclGrantDetailDto());
+        setSpecialistExpectations();
+        expect(JavaScript.getCurrent()).andReturn(createMock(JavaScript.class)).times(2);
+        expect(controller.getBeansCount()).andReturn(1).once();
+        expect(controller.loadBeans(0, Integer.MAX_VALUE, Collections.emptyList())).andReturn(grantDetails).once();
+        replay(JavaScript.class, ForeignSecurityUtils.class, controller, streamSource);
+        initWidget();
+        Grid grid = (Grid) ((VerticalLayout) aclGrantDetailWidget.getSecondComponent()).getComponent(1);
+        DataProvider dataProvider = grid.getDataProvider();
+        dataProvider.refreshAll();
+        Object[][] expectedCells = {
+            {"ACL", "Print&Digital", "GRANT", "N", 122857215L, "Applied catalysis", 1000009641L,
+                "Elsevier Science & Technology Journals", "PRINT", "08/31/2022", "08/31/2022", 202212, "N"}
+        };
+        verifyGridItems(grid, grantDetails, expectedCells);
+        verify(JavaScript.class, ForeignSecurityUtils.class, controller, streamSource);
+        Object[][] expectedFooterColumns = {
+            {"licenseType", "Grant Details Count: 1", null},
+        };
+        verifyFooterItems(grid, expectedFooterColumns);
+    }
+
     private void verifyStructure(boolean... buttonsVisibility) {
         replay(controller, ForeignSecurityUtils.class, streamSource);
         initWidget();
@@ -199,5 +232,24 @@ public class AclGrantDetailWidgetTest {
 
     private HorizontalLayout getButtonsLayout() {
         return (HorizontalLayout) ((VerticalLayout) aclGrantDetailWidget.getSecondComponent()).getComponent(0);
+    }
+
+    private AclGrantDetailDto buildAclGrantDetailDto() {
+        AclGrantDetailDto grantDetail = new AclGrantDetailDto();
+        grantDetail.setLicenseType("ACL");
+        grantDetail.setTypeOfUseStatus("Print&Digital");
+        grantDetail.setGrantStatus("GRANT");
+        grantDetail.setEligible(false);
+        grantDetail.setWrWrkInst(122857215L);
+        grantDetail.setSystemTitle("Applied catalysis");
+        grantDetail.setRhAccountNumber(1000009641L);
+        grantDetail.setRhName("Elsevier Science & Technology Journals");
+        grantDetail.setTypeOfUse("PRINT");
+        grantDetail.setCreateDate(Date.from(LocalDate.of(2022, 8, 31).atStartOfDay(
+            ZoneId.systemDefault()).toInstant()));
+        grantDetail.setUpdateDate(grantDetail.getCreateDate());
+        grantDetail.setGrantPeriod(202212);
+        grantDetail.setManualUploadFlag(false);
+        return grantDetail;
     }
 }
