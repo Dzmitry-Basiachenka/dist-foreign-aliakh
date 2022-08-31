@@ -14,6 +14,7 @@ import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
 import com.copyright.rup.dist.foreign.repository.api.IAclScenarioAuditRepository;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioAuditService;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -73,6 +74,15 @@ public class AclScenarioAuditServiceTest {
         expect(aclScenarioAuditRepository.findByScenarioId(SCENARIO_UID)).andReturn(auditItems).once();
         replay(aclScenarioAuditRepository);
         assertSame(auditItems, aclScenarioAuditService.getActions(SCENARIO_UID));
+        verify(aclScenarioAuditRepository);
+    }
+
+    @Test
+    public void testDeleteActions() {
+        aclScenarioAuditRepository.deleteByScenarioId(SCENARIO_UID);
+        expectLastCall().once();
+        replay(aclScenarioAuditRepository);
+        aclScenarioAuditService.deleteActions(SCENARIO_UID);
         verify(aclScenarioAuditRepository);
     }
 

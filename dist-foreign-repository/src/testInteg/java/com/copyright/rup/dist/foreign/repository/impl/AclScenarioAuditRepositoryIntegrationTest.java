@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.test.liquibase.LiquibaseTestExecutionListener;
@@ -8,6 +9,7 @@ import com.copyright.rup.dist.common.test.liquibase.TestData;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
 import com.copyright.rup.dist.foreign.repository.api.IAclScenarioAuditRepository;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -64,6 +66,15 @@ public class AclScenarioAuditRepositoryIntegrationTest {
         List<ScenarioAuditItem> auditItems = aclScenarioAuditRepository.findByScenarioId(SCENARIO_UID_1);
         assertEquals(1, CollectionUtils.size(auditItems));
         assertEquals(auditItem, auditItems.get(0));
+    }
+
+    @Test
+    @TestData(fileName = FOLDER_NAME + "find-by-acl-scenario-id.groovy")
+    public void testDeleteByScenarioId() {
+        aclScenarioAuditRepository.insert(buildScenarioAuditItem(SCENARIO_UID_1));
+        assertEquals(1, CollectionUtils.size(aclScenarioAuditRepository.findByScenarioId(SCENARIO_UID_1)));
+        aclScenarioAuditRepository.deleteByScenarioId(SCENARIO_UID_1);
+        assertTrue(CollectionUtils.isEmpty(aclScenarioAuditRepository.findByScenarioId(SCENARIO_UID_1)));
     }
 
     private ScenarioAuditItem buildScenarioAuditItem(String scenarioId) {

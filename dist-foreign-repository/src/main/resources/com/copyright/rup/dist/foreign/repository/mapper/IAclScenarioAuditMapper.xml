@@ -38,4 +38,9 @@
         where df_acl_scenario_uid = #{scenarioId}
         order by created_datetime desc
     </select>
+
+    <delete id="deleteByScenarioId" parameterType="string">
+        delete from ${schema}.df_acl_scenario_audit
+        where df_acl_scenario_uid = #{scenarioId}
+    </delete>
 </mapper>

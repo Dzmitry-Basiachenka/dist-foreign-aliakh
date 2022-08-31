@@ -109,4 +109,14 @@ public class AclScenarioRepository extends BaseRepository implements IAclScenari
         return selectList("IAclScenarioMapper.findDetailLicenseeClassesByScenarioId",
             Objects.requireNonNull(scenarioId));
     }
+
+    @Override
+    public void remove(String scenarioId) {
+        delete("IAclScenarioMapper.remove", Objects.requireNonNull(scenarioId));
+    }
+
+    @Override
+    public void removeScenarioData(String scenarioId) {
+        delete("IAclScenarioMapper.removeScenarioData", Objects.requireNonNull(scenarioId));
+    }
 }

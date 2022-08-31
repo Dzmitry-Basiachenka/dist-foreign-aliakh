@@ -29,4 +29,11 @@ public interface IAclScenarioAuditRepository {
      * @return list of {@link ScenarioAuditItem}s
      */
     List<ScenarioAuditItem> findByScenarioId(String scenarioId);
+
+    /**
+     * Deletes {@link ScenarioAuditItem}s by given scenario identifier.
+     *
+     * @param scenarioId scenario identifier
+     */
+    void deleteByScenarioId(String scenarioId);
 }
