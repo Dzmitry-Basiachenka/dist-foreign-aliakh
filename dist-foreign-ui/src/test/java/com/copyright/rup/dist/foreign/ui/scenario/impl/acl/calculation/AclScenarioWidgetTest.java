@@ -85,6 +85,7 @@ public class AclScenarioWidgetTest {
         replay(controller, streamSource);
         scenarioWidget.init();
         verify(controller, streamSource);
+        reset(controller);
     }
 
     @Test
@@ -109,12 +110,11 @@ public class AclScenarioWidgetTest {
 
     @Test
     public void testNumberOfTitlesCellClick() throws Exception {
-        reset(controller);
         RightsholderResultsFilter filter = buildRightsholderResultsFilter();
-        AclScenarioDrillDownTitlesWindow window = createMock(AclScenarioDrillDownTitlesWindow.class);
-        expectNew(AclScenarioDrillDownTitlesWindow.class, eq(controller), eq(filter)).andReturn(window).once();
+        AclScenarioDrillDownTitlesWindow mockWindow = createMock(AclScenarioDrillDownTitlesWindow.class);
+        expectNew(AclScenarioDrillDownTitlesWindow.class, eq(controller), eq(filter)).andReturn(mockWindow).once();
         mockStatic(Windows.class);
-        Windows.showModalWindow(window);
+        Windows.showModalWindow(mockWindow);
         expectLastCall().once();
         replay(Windows.class, AclScenarioDrillDownTitlesWindow.class, controller);
         Grid grid = Whitebox.getInternalState(scenarioWidget, "rightsholdersGrid");
@@ -127,12 +127,12 @@ public class AclScenarioWidgetTest {
 
     @Test
     public void testNumberOfAggLcClassesCellClick() throws Exception {
-        reset(controller);
         RightsholderResultsFilter filter = buildRightsholderResultsFilter();
-        AclScenarioDrillDownAggLcClassesWindow window = createMock(AclScenarioDrillDownAggLcClassesWindow.class);
-        expectNew(AclScenarioDrillDownAggLcClassesWindow.class, eq(controller), eq(filter)).andReturn(window).once();
+        AclScenarioDrillDownAggLcClassesWindow mockWindow = createMock(AclScenarioDrillDownAggLcClassesWindow.class);
+        expectNew(AclScenarioDrillDownAggLcClassesWindow.class, eq(controller), eq(filter)).andReturn(mockWindow)
+            .once();
         mockStatic(Windows.class);
-        Windows.showModalWindow(window);
+        Windows.showModalWindow(mockWindow);
         expectLastCall().once();
         replay(Windows.class, AclScenarioDrillDownAggLcClassesWindow.class, controller);
         Grid grid = Whitebox.getInternalState(scenarioWidget, "rightsholdersGrid");
