@@ -3,22 +3,33 @@ package com.copyright.rup.dist.foreign.ui.scenario.impl.acl.calculation;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButton;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
-import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.expectLastCall;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.powermock.api.easymock.PowerMock.createMock;
+import static org.powermock.api.easymock.PowerMock.expectNew;
+import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
+import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
+import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
+import com.copyright.rup.dist.foreign.domain.filter.RightsholderResultsFilter;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioController;
 import com.copyright.rup.dist.foreign.ui.usage.UiTestHelper;
+import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
+import com.vaadin.data.ValueProvider;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Alignment;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
@@ -29,6 +40,9 @@ import com.vaadin.ui.components.grid.FooterRow;
 import org.apache.commons.lang3.tuple.Triple;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
@@ -45,7 +59,13 @@ import java.util.function.Supplier;
  *
  * @author Dzmitry Basiachenka
  */
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({AclScenarioWidget.class, Windows.class})
 public class AclScenarioWidgetTest {
+
+    private static final String SCENARIO_ID = "24b0a5a9-6380-4519-91f2-779c98ed45cc";
+    private static final Long RH_ACCOUNT_NUMBER = 7000447306L;
+    private static final String RH_NAME = "Longhouse";
 
     private AclScenarioWidget scenarioWidget;
     private IAclScenarioController controller;
@@ -87,9 +107,45 @@ public class AclScenarioWidgetTest {
         assertEquals("search", scenarioWidget.getSearchValue());
     }
 
+    @Test
+    public void testNumberOfTitlesCellClick() throws Exception {
+        reset(controller);
+        RightsholderResultsFilter filter = buildRightsholderResultsFilter();
+        AclScenarioDrillDownTitlesWindow window = createMock(AclScenarioDrillDownTitlesWindow.class);
+        expectNew(AclScenarioDrillDownTitlesWindow.class, eq(controller), eq(filter)).andReturn(window).once();
+        mockStatic(Windows.class);
+        Windows.showModalWindow(window);
+        expectLastCall().once();
+        replay(Windows.class, AclScenarioDrillDownTitlesWindow.class, controller);
+        Grid grid = Whitebox.getInternalState(scenarioWidget, "rightsholdersGrid");
+        Grid.Column column = (Grid.Column) grid.getColumns().get(8);
+        ValueProvider<AclRightsholderTotalsHolder, Button> provider = column.getValueProvider();
+        Button button = provider.apply(buildAclRightsholderTotalsHolder());
+        button.click();
+        verify(Windows.class, AclScenarioDrillDownTitlesWindow.class, controller);
+    }
+
+    @Test
+    public void testNumberOfAggLcClassesCellClick() throws Exception {
+        reset(controller);
+        RightsholderResultsFilter filter = buildRightsholderResultsFilter();
+        AclScenarioDrillDownAggLcClassesWindow window = createMock(AclScenarioDrillDownAggLcClassesWindow.class);
+        expectNew(AclScenarioDrillDownAggLcClassesWindow.class, eq(controller), eq(filter)).andReturn(window).once();
+        mockStatic(Windows.class);
+        Windows.showModalWindow(window);
+        expectLastCall().once();
+        replay(Windows.class, AclScenarioDrillDownAggLcClassesWindow.class, controller);
+        Grid grid = Whitebox.getInternalState(scenarioWidget, "rightsholdersGrid");
+        Grid.Column column = (Grid.Column) grid.getColumns().get(9);
+        ValueProvider<AclRightsholderTotalsHolder, Button> provider = column.getValueProvider();
+        Button button = provider.apply(buildAclRightsholderTotalsHolder());
+        button.click();
+        verify(Windows.class, AclScenarioDrillDownAggLcClassesWindow.class, controller);
+    }
+
     private AclScenarioDto buildAclScenarioDto() {
         AclScenarioDto scenario = new AclScenarioDto();
-        scenario.setId("24b0a5a9-6380-4519-91f2-779c98ed45cc");
+        scenario.setId(SCENARIO_ID);
         scenario.setName("Scenario name");
         scenario.setGrossTotalPrint(new BigDecimal("20000.00"));
         scenario.setServiceFeeTotalPrint(new BigDecimal("6400.00"));
@@ -98,6 +154,23 @@ public class AclScenarioWidgetTest {
         scenario.setServiceFeeTotalDigital(new BigDecimal("600.00"));
         scenario.setNetTotalDigital(new BigDecimal("130.00"));
         return scenario;
+    }
+
+    private RightsholderResultsFilter buildRightsholderResultsFilter() {
+        RightsholderResultsFilter filter = new RightsholderResultsFilter();
+        filter.setScenarioId(SCENARIO_ID);
+        filter.setRhAccountNumber(RH_ACCOUNT_NUMBER);
+        filter.setRhName(RH_NAME);
+        return filter;
+    }
+
+    private AclRightsholderTotalsHolder buildAclRightsholderTotalsHolder() {
+        AclRightsholderTotalsHolder holder = new AclRightsholderTotalsHolder();
+        Rightsholder rightsholder = new Rightsholder();
+        rightsholder.setAccountNumber(RH_ACCOUNT_NUMBER);
+        rightsholder.setName(RH_NAME);
+        holder.setRightsholder(rightsholder);
+        return holder;
     }
 
     private void verifySearchWidget(Component component) {
