@@ -6,15 +6,19 @@ import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioController;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
+import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.util.CurrencyUtils;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.data.provider.DataProvider;
 import com.vaadin.data.provider.ListDataProvider;
+import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.SelectionMode;
+import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.components.grid.FooterCell;
@@ -25,6 +29,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 /**
  * Modal window that provides functionality for viewing aggregate licensee classes by rightsholder.
@@ -64,15 +69,44 @@ public class AclScenarioDrillDownAggLcClassesWindow extends Window {
         setWidth(1280, Unit.PIXELS);
         setHeight(600, Unit.PIXELS);
         initGrid();
-        // TODO will be implemented label section
         Button closeButton = Buttons.createCloseButton(this);
-        VerticalLayout layout = new VerticalLayout(grid, closeButton);
+        VerticalLayout layout = new VerticalLayout(initMetaInfoLayout(), grid, closeButton);
         layout.setSizeFull();
         layout.setExpandRatio(grid, 1);
         layout.setComponentAlignment(closeButton, Alignment.BOTTOM_RIGHT);
         setContent(layout);
         setCaption(ForeignUi.getMessage("window.acl_scenario_drill_down_aggregate-licensee-class"));
         VaadinUtils.addComponentStyle(this, "acl-scenario-drill-down-aggregate-licensee-class-window");
+    }
+
+    private VerticalLayout initMetaInfoLayout() {
+        HorizontalLayout[] components = Stream.of(
+            initLabelsHorizontalLayout(ForeignUi.getMessage("label.rh_account_number"), filter.getRhAccountNumber()),
+            initLabelsHorizontalLayout(ForeignUi.getMessage("label.rh_name"), filter.getRhName()),
+            initLabelsHorizontalLayout(ForeignUi.getMessage("label.wr_wrk_inst"), filter.getWrWrkInst()),
+            initLabelsHorizontalLayout(ForeignUi.getMessage("label.system_title"), filter.getSystemTitle())
+        )
+            .filter(Objects::nonNull)
+            .toArray(HorizontalLayout[]::new);
+        VerticalLayout verticalLayout = new VerticalLayout();
+        verticalLayout.setMargin(new MarginInfo(true, false, true, false));
+        verticalLayout.setSpacing(false);
+        verticalLayout.addComponents(components);
+        return verticalLayout;
+    }
+
+    private HorizontalLayout initLabelsHorizontalLayout(String title, Object value) {
+        HorizontalLayout horizontalLayout = null;
+        if (Objects.nonNull(value)) {
+            horizontalLayout = new HorizontalLayout();
+            Label titleLabel = new Label(ForeignUi.getMessage("label.title", title));
+            titleLabel.setWidth(125, Unit.PIXELS);
+            titleLabel.addStyleName(Cornerstone.LABEL_BOLD);
+            Label valueLabel = new Label(String.valueOf(value));
+            valueLabel.setWidth(1125, Unit.PIXELS);
+            horizontalLayout.addComponents(titleLabel, valueLabel);
+        }
+        return horizontalLayout;
     }
 
     private void initGrid() {

@@ -1,0 +1,34 @@
+[
+  {
+    "rightsholder": {
+      "accountNumber": 1000010022,
+      "name": "Yale University Press"
+    },
+    "aggregateLicenseeClass": {
+      "id": 1,
+      "description": "Food and Tobacco"
+    },
+    "grossTotalPrint": 1.001,
+    "netTotalPrint": 3.700,
+    "grossTotalDigital": 2.950,
+    "netTotalDigital": 4.567,
+    "grossTotal": 3.951,
+    "netTotal": 8.267
+  },
+  {
+    "rightsholder": {
+      "accountNumber": 1000010022,
+      "name": "Yale University Press"
+    },
+    "aggregateLicenseeClass": {
+      "id": 12,
+      "description": "Machinery"
+    },
+    "grossTotalPrint": 2.0100000,
+    "netTotalPrint": 2.7400000,
+    "grossTotalDigital": 4.0000000,
+    "netTotalDigital": 5.0000000,
+    "grossTotal": 6.0100000,
+    "netTotal": 7.7400000
+  }
+]
