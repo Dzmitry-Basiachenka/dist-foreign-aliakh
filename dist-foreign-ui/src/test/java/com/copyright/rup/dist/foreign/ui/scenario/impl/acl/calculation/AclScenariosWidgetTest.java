@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl.acl.calculation;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGridItems;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyLabel;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
@@ -127,6 +128,15 @@ public class AclScenariosWidgetTest {
         component = layout.getComponent(1);
         assertTrue(component instanceof Panel);
         verifyPanel((Panel) component);
+    }
+
+    @Test
+    public void testGridValues() {
+        Grid<?> grid = (Grid<?>) ((HorizontalLayout) scenariosWidget.getComponent(1)).getComponent(0);
+        Object[][] expectedCells = {
+            {"ACL Scenario name", "ACL", 202212, "N", "06/01/2022", "IN_PROGRESS"}
+        };
+        verifyGridItems(grid, Collections.singletonList(scenario), expectedCells);
     }
 
     @Test
