@@ -24,6 +24,27 @@ public class RightsholderResultsFilter {
     private Integer aggregateLicenseeClassId;
     private String aggregateLicenseeClassName;
 
+    /**
+     * Default constructor.
+     */
+    public RightsholderResultsFilter() {
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param filter {@link RightsholderResultsFilter}
+     */
+    public RightsholderResultsFilter(RightsholderResultsFilter filter) {
+        setScenarioId(filter.getScenarioId());
+        setRhAccountNumber(filter.getRhAccountNumber());
+        setRhName(filter.getRhName());
+        setWrWrkInst(filter.getWrWrkInst());
+        setSystemTitle(filter.getSystemTitle());
+        setAggregateLicenseeClassId(filter.getAggregateLicenseeClassId());
+        setAggregateLicenseeClassName(filter.getAggregateLicenseeClassName());
+    }
+
     public String getScenarioId() {
         return scenarioId;
     }

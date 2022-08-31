@@ -21,7 +21,7 @@ public class AclRightsholderTotalsHolderDto extends AclRightsholderTotalsHolder 
     private String systemTitle;
     private BigDecimal grossTotal = BigDecimal.ZERO.setScale(10, BigDecimal.ROUND_HALF_UP);
     private BigDecimal netTotal = BigDecimal.ZERO.setScale(10, BigDecimal.ROUND_HALF_UP);
-    private AggregateLicenseeClass aggregateLicenseeClass;
+    private AggregateLicenseeClass aggregateLicenseeClass = new AggregateLicenseeClass();
 
     public Long getWrWrkInst() {
         return wrWrkInst;

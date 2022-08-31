@@ -73,10 +73,13 @@ public class AclScenarioUsageRepositoryIntegrationTest {
         FOLDER_NAME + "find-acl-rh-totals-holders-by-scenario-id.groovy";
     private static final String FIND_BY_SCENARIO_ID_AND_RH_ACCOUNT_NUMBER =
         FOLDER_NAME + "find-by-scenario-id-and-rh-account-number.groovy";
+    private static final String FIND_RIGHTSHOLDER_TITLE_RESULTS =
+        FOLDER_NAME + "find-rightsholder-title-results.groovy";
     private static final String SCENARIO_UID_1 = "0d0041a3-833e-463e-8ad4-f28461dc961d";
     private static final String SCENARIO_UID_2 = "d18d7cab-8a69-4b60-af5a-0a0c99b8a4d3";
     private static final String SCENARIO_UID_3 = "53a1c4e8-f1fe-4b17-877e-2d721b2059b5";
     private static final String SCENARIO_UID_4 = "f473fa64-12ea-4db6-9d30-94087fe500fd";
+    private static final String SCENARIO_UID_5 = "2a75aa1c-7bfa-4d8b-9e27-d2e17f3bd8da";
     private static final String LICENSE_TYPE_ACL = "ACL";
     private static final Long RH_ACCOUNT_NUMBER = 1000002859L;
     private static final String RH_NAME = "John Wiley & Sons - Books";
@@ -84,6 +87,12 @@ public class AclScenarioUsageRepositoryIntegrationTest {
     private static final String USER_NAME = "user@copyright.com";
     private static final String PRINT_TOU = "PRINT";
     private static final String DIGITAL_TOU = "DIGITAL";
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+
+    static {
+        OBJECT_MAPPER.registerModule(new JavaTimeModule());
+        OBJECT_MAPPER.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
+    }
 
     @Autowired
     private IAclScenarioUsageRepository aclScenarioUsageRepository;
@@ -527,14 +536,40 @@ public class AclScenarioUsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindRightsholderTitleResults() {
-        // TODO {dbasiachenka} implement
+    @TestData(fileName = FIND_RIGHTSHOLDER_TITLE_RESULTS)
+    public void testFindRightsholderTitleResultsAggLcClassIdNull() {
+        List<AclRightsholderTotalsHolderDto> expectedRhTotalsHolderDtos = loadExpectedAclRightsholderTotalsHolderDto(
+            "json/acl/acl_rightsholder_totals_holder_dto_1.json");
+        RightsholderResultsFilter filter = new RightsholderResultsFilter();
+        filter.setScenarioId(SCENARIO_UID_5);
+        filter.setRhAccountNumber(1000002859L);
+        List<AclRightsholderTotalsHolderDto> actualRhTotalsHolderDtos =
+            aclScenarioUsageRepository.findRightsholderTitleResults(filter);
+        assertEquals(expectedRhTotalsHolderDtos.size(), actualRhTotalsHolderDtos.size());
+        IntStream.range(0, expectedRhTotalsHolderDtos.size()).forEach(i -> {
+            verifyAclRightsholderTotalsHolderDto(expectedRhTotalsHolderDtos.get(i), actualRhTotalsHolderDtos.get(i));
+        });
+    }
+
+    @Test
+    @TestData(fileName = FIND_RIGHTSHOLDER_TITLE_RESULTS)
+    public void testFindRightsholderTitleResultsAggLcClassIdNotNull() {
+        List<AclRightsholderTotalsHolderDto> expectedRhTotalsHolderDtos = loadExpectedAclRightsholderTotalsHolderDto(
+            "json/acl/acl_rightsholder_totals_holder_dto_2.json");
+        RightsholderResultsFilter filter = new RightsholderResultsFilter();
+        filter.setScenarioId(SCENARIO_UID_5);
+        filter.setRhAccountNumber(1000002859L);
+        filter.setAggregateLicenseeClassId(12);
+        List<AclRightsholderTotalsHolderDto> actualRhTotalsHolderDtos =
+            aclScenarioUsageRepository.findRightsholderTitleResults(filter);
+        assertEquals(expectedRhTotalsHolderDtos.size(), actualRhTotalsHolderDtos.size());
+        verifyAclRightsholderTotalsHolderDto(expectedRhTotalsHolderDtos.get(0), actualRhTotalsHolderDtos.get(0));
     }
 
     @Test
     @TestData(fileName = FOLDER_NAME + "find-agg-lc-class-results.groovy")
     public void testFindRightsholderAggLcClassResults() {
-        AclRightsholderTotalsHolderDto expected = loadExpectedAclRightsholderTotalsHolderDto(
+        List<AclRightsholderTotalsHolderDto> expected = loadExpectedAclRightsholderTotalsHolderDto(
                 "json/acl/acl_scenario_detail_dto_for_find_rightsholder_agg_lc_cl_results.json");
         RightsholderResultsFilter filter = new RightsholderResultsFilter();
         filter.setScenarioId("7ae1468e-ae4d-4846-b20d-46f28b75c82c");
@@ -543,7 +578,7 @@ public class AclScenarioUsageRepositoryIntegrationTest {
         List<AclRightsholderTotalsHolderDto> actual =
             aclScenarioUsageRepository.findRightsholderAggLcClassResults(filter);
         assertEquals(1, actual.size());
-        verifyAclRightsholderTotalsHolderDto(expected, actual.get(0));
+        verifyAclRightsholderTotalsHolderDto(expected.get(0), actual.get(0));
     }
 
     private AclScenarioDetail buildAclScenarioDetail() {
@@ -648,7 +683,9 @@ public class AclScenarioUsageRepositoryIntegrationTest {
     }
 
     private void verifyAclRightsholderTotalsHolderDto(AclRightsholderTotalsHolderDto expected,
-                                            AclRightsholderTotalsHolderDto actual) {
+                                                      AclRightsholderTotalsHolderDto actual) {
+        assertEquals(expected.getWrWrkInst(), actual.getWrWrkInst());
+        assertEquals(expected.getSystemTitle(), actual.getSystemTitle());
         assertEquals(expected.getAggregateLicenseeClass().getId(), actual.getAggregateLicenseeClass().getId());
         assertEquals(expected.getAggregateLicenseeClass().getDescription(),
             actual.getAggregateLicenseeClass().getDescription());
@@ -827,23 +864,17 @@ public class AclScenarioUsageRepositoryIntegrationTest {
     private AclScenarioDetailDto loadExpectedAclScenarioDetailDto(String fileName) {
         try {
             String content = TestUtils.fileToString(this.getClass(), fileName);
-            ObjectMapper mapper = new ObjectMapper();
-            mapper.registerModule(new JavaTimeModule());
-            mapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
-            return mapper.readValue(content, new TypeReference<AclScenarioDetailDto>() {
+            return OBJECT_MAPPER.readValue(content, new TypeReference<AclScenarioDetailDto>() {
             });
         } catch (IOException e) {
             throw new AssertionError(e);
         }
     }
 
-    private AclRightsholderTotalsHolderDto loadExpectedAclRightsholderTotalsHolderDto(String fileName) {
+    private List<AclRightsholderTotalsHolderDto> loadExpectedAclRightsholderTotalsHolderDto(String fileName) {
         try {
             String content = TestUtils.fileToString(this.getClass(), fileName);
-            ObjectMapper mapper = new ObjectMapper();
-            mapper.registerModule(new JavaTimeModule());
-            mapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
-            return mapper.readValue(content, new TypeReference<AclRightsholderTotalsHolderDto>() {
+            return OBJECT_MAPPER.readValue(content, new TypeReference<List<AclRightsholderTotalsHolderDto>>() {
             });
         } catch (IOException e) {
             throw new AssertionError(e);
