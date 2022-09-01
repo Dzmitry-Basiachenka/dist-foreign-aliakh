@@ -568,16 +568,31 @@ public class AclScenarioUsageRepositoryIntegrationTest {
 
     @Test
     @TestData(fileName = FOLDER_NAME + "find-agg-lc-class-results.groovy")
-    public void testFindRightsholderAggLcClassResults() {
+    public void testFindRightsholderAggLcClassResultsSystemTitleNull() {
         List<AclRightsholderTotalsHolderDto> expected = loadExpectedAclRightsholderTotalsHolderDto(
-                "json/acl/acl_scenario_detail_dto_for_find_rightsholder_agg_lc_cl_results.json");
+                "json/acl/acl_scenario_detail_dto_for_find_rightsholder_agg_lc_cl_results1.json");
+        RightsholderResultsFilter filter = new RightsholderResultsFilter();
+        filter.setScenarioId("7ae1468e-ae4d-4846-b20d-46f28b75c82c");
+        filter.setRhAccountNumber(1000028511L);
+        List<AclRightsholderTotalsHolderDto> actual =
+            aclScenarioUsageRepository.findRightsholderAggLcClassResults(filter);
+        assertEquals(expected.size(), actual.size());
+        IntStream.range(0, expected.size()).forEach(i ->
+            verifyAclRightsholderTotalsHolderDto(expected.get(i), actual.get(i)));
+    }
+
+    @Test
+    @TestData(fileName = FOLDER_NAME + "find-agg-lc-class-results.groovy")
+    public void testFindRightsholderAggLcClassResultsSystemTitleNotNull() {
+        List<AclRightsholderTotalsHolderDto> expected = loadExpectedAclRightsholderTotalsHolderDto(
+            "json/acl/acl_scenario_detail_dto_for_find_rightsholder_agg_lc_cl_results2.json");
         RightsholderResultsFilter filter = new RightsholderResultsFilter();
         filter.setScenarioId("7ae1468e-ae4d-4846-b20d-46f28b75c82c");
         filter.setRhAccountNumber(1000028511L);
         filter.setSystemTitle(SYSTEM_TITLE);
         List<AclRightsholderTotalsHolderDto> actual =
             aclScenarioUsageRepository.findRightsholderAggLcClassResults(filter);
-        assertEquals(1, actual.size());
+        assertEquals(expected.size(), actual.size());
         verifyAclRightsholderTotalsHolderDto(expected.get(0), actual.get(0));
     }
 

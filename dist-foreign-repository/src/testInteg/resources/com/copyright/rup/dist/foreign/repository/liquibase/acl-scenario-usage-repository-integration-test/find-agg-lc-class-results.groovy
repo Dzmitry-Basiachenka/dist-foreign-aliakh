@@ -72,6 +72,40 @@ databaseChangeLog {
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_detail') {
+            column(name: 'df_acl_scenario_detail_uid', value: '08d1abc3-d036-4a3b-99fb-57d8b7caa6aa')
+            column(name: 'df_acl_scenario_uid', value: '7ae1468e-ae4d-4846-b20d-46f28b75c82c')
+            column(name: 'period_end_date', value: 202212)
+            column(name: 'original_detail_id', value: 'GGN974GHHSB100')
+            column(name: 'wr_wrk_inst', value: 122813964)
+            column(name: 'system_title', value: 'Aerospace America')
+            column(name: 'detail_licensee_class_id', value: 1)
+            column(name: 'publication_type_uid', value: '73876e58-2e87-485e-b6f3-7e23792dd214')
+            column(name: 'pub_type_weight', value: 2)
+            column(name: 'content_unit_price', value: 1.0000000000)
+            column(name: 'number_of_copies', value: 3)
+            column(name: 'usage_age_weight', value: 1.00000)
+            column(name: 'weighted_copies', value: 3.0000000000)
+            column(name: 'survey_country', value: 'United States')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_detail') {
+            column(name: 'df_acl_scenario_detail_uid', value: '08d1abc3-d036-4a3b-99fb-57a741caa6aa')
+            column(name: 'df_acl_scenario_uid', value: '7ae1468e-ae4d-4846-b20d-46f28b75c82c')
+            column(name: 'period_end_date', value: 202212)
+            column(name: 'original_detail_id', value: 'GGN974GHHSB100')
+            column(name: 'wr_wrk_inst', value: 122813964)
+            column(name: 'system_title', value: 'Aerospace America')
+            column(name: 'detail_licensee_class_id', value: 1)
+            column(name: 'publication_type_uid', value: '73876e58-2e87-485e-b6f3-7e23792dd214')
+            column(name: 'pub_type_weight', value: 2)
+            column(name: 'content_unit_price', value: 1.0000000000)
+            column(name: 'number_of_copies', value: 3)
+            column(name: 'usage_age_weight', value: 1.00000)
+            column(name: 'weighted_copies', value: 3.0000000000)
+            column(name: 'survey_country', value: 'United States')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_detail') {
             column(name: 'df_acl_scenario_detail_uid', value: '7b116db8-0c3f-4bb0-9e19-14fa1500a55e')
             column(name: 'df_acl_scenario_uid', value: '7ae1468e-ae4d-4846-b20d-46f28b75c82c')
             column(name: 'period_end_date', value: 202212)
@@ -91,7 +125,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_acl_share_detail') {
             column(name: 'df_acl_share_detail_uid', value: '249f7418-1ea6-4615-a688-525eb3c1fef5')
             column(name: 'df_acl_scenario_uid', value: '7ae1468e-ae4d-4846-b20d-46f28b75c82c')
-            column(name: 'df_acl_scenario_detail_uid', value: '7b116db8-0c3f-4bb0-9e19-14fa1500a55e')
+            column(name: 'df_acl_scenario_detail_uid', value: '08d1abc3-d036-4a3b-99fb-57d8b7caa6aa')
             column(name: 'type_of_use', value: 'PRINT')
             column(name: 'rh_account_number', value: 1000028511)
             column(name: 'aggregate_licensee_class_id', value: 1)
@@ -100,14 +134,14 @@ databaseChangeLog {
             column(name: 'volume_share', value: 1.0000000000)
             column(name: 'value_share', value: 1.0000000000)
             column(name: 'detail_share', value: 1.0000000000)
-            column(name: 'net_amount', value: 1.0000000000)
-            column(name: 'gross_amount', value: 1.0000000000)
+            column(name: 'net_amount', value: 1.0500000000)
+            column(name: 'gross_amount', value: 2.5326400000)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_acl_share_detail') {
             column(name: 'df_acl_share_detail_uid', value: 'f8717239-a851-478a-85a9-0630f0f92160')
             column(name: 'df_acl_scenario_uid', value: '7ae1468e-ae4d-4846-b20d-46f28b75c82c')
-            column(name: 'df_acl_scenario_detail_uid', value: '7b116db8-0c3f-4bb0-9e19-14fa1500a55e')
+            column(name: 'df_acl_scenario_detail_uid', value: '08d1abc3-d036-4a3b-99fb-57d8b7caa6aa')
             column(name: 'type_of_use', value: 'DIGITAL')
             column(name: 'rh_account_number', value: 1000028511)
             column(name: 'aggregate_licensee_class_id', value: 1)
@@ -116,8 +150,40 @@ databaseChangeLog {
             column(name: 'volume_share', value: 1.0000000000)
             column(name: 'value_share', value: 1.0000000000)
             column(name: 'detail_share', value: 1.0000000000)
-            column(name: 'net_amount', value: 1.0000000000)
-            column(name: 'gross_amount', value: 1.0000000000)
+            column(name: 'net_amount', value: 3.5463200000)
+            column(name: 'gross_amount', value: 4.3456300000)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_share_detail') {
+            column(name: 'df_acl_share_detail_uid', value: '7c0651ca-8352-45fe-ad70-2eb7d6f8997b')
+            column(name: 'df_acl_scenario_uid', value: '7ae1468e-ae4d-4846-b20d-46f28b75c82c')
+            column(name: 'df_acl_scenario_detail_uid', value: '08d1abc3-d036-4a3b-99fb-57a741caa6aa')
+            column(name: 'type_of_use', value: 'DIGITAL')
+            column(name: 'rh_account_number', value: 1000028511)
+            column(name: 'aggregate_licensee_class_id', value: 12)
+            column(name: 'volume_weight', value: 3.0000000000)
+            column(name: 'value_weight', value: 6.0000000000)
+            column(name: 'volume_share', value: 1.0000000000)
+            column(name: 'value_share', value: 1.0000000000)
+            column(name: 'detail_share', value: 1.0000000000)
+            column(name: 'net_amount', value: 12.5710000000)
+            column(name: 'gross_amount', value: 15.5400000000)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_share_detail') {
+            column(name: 'df_acl_share_detail_uid', value: 'abd179df-650b-4e2d-9642-92f023c732c5')
+            column(name: 'df_acl_scenario_uid', value: '7ae1468e-ae4d-4846-b20d-46f28b75c82c')
+            column(name: 'df_acl_scenario_detail_uid', value: '7b116db8-0c3f-4bb0-9e19-14fa1500a55e')
+            column(name: 'type_of_use', value: 'PRINT')
+            column(name: 'rh_account_number', value: 1000028511)
+            column(name: 'aggregate_licensee_class_id', value: 13)
+            column(name: 'volume_weight', value: 3.0000000000)
+            column(name: 'value_weight', value: 6.0000000000)
+            column(name: 'volume_share', value: 1.0000000000)
+            column(name: 'value_share', value: 1.0000000000)
+            column(name: 'detail_share', value: 1.0000000000)
+            column(name: 'net_amount', value: 25.0673233000)
+            column(name: 'gross_amount', value: 27.6573523650)
         }
 
         rollback {
