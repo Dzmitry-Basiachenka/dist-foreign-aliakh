@@ -1,0 +1,38 @@
+[
+  {
+    "aggregateLicenseeClass": {
+      "id": 1,
+      "description": "Food and Tobacco"
+    },
+    "grossTotalPrint": 2.5326400000,
+    "grossTotalDigital": 4.3456300000,
+    "netTotalPrint": 1.0500000000,
+    "netTotalDigital": 3.5463200000,
+    "grossTotal": 6.8782700000,
+    "netTotal": 4.5963200000
+  },
+  {
+    "aggregateLicenseeClass": {
+      "id": 12,
+      "description": "Machinery"
+    },
+    "grossTotalPrint": 0,
+    "grossTotalDigital": 15.5400000000,
+    "netTotalPrint": 0,
+    "netTotalDigital": 12.5710000000,
+    "grossTotal": 15.5400000000,
+    "netTotal": 12.5710000000
+  },
+  {
+    "aggregateLicenseeClass": {
+      "id": 13,
+      "description": "Computers"
+    },
+    "grossTotalPrint": 27.6573523650,
+    "grossTotalDigital": 0,
+    "netTotalPrint": 25.0673233000,
+    "netTotalDigital": 0,
+    "grossTotal": 27.6573523650,
+    "netTotal": 25.0673233000
+  }
+]
