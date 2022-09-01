@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.usage;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyFooterItems;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGridItems;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyMenuBar;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
@@ -20,7 +22,10 @@ import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
+import com.copyright.rup.dist.common.test.TestUtils;
+import com.copyright.rup.dist.foreign.domain.UdmChannelEnum;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
+import com.copyright.rup.dist.foreign.domain.UdmUsageOriginEnum;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageController;
@@ -29,8 +34,13 @@ import com.copyright.rup.vaadin.ui.component.window.ConfirmDialogWindow;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.common.collect.ImmutableList;
 import com.vaadin.data.provider.CallbackDataProvider;
+import com.vaadin.data.provider.DataProvider;
 import com.vaadin.data.provider.Query;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.MouseEventDetails;
@@ -62,6 +72,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
+import java.io.IOException;
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -124,6 +135,7 @@ public class UdmUsageWidgetTest {
         "WORK_NOT_FOUND, RH_NOT_FOUND, OPS_REVIEW";
     private static final String USAGE_NOT_EDITED_ERROR_MESSAGE = "Selected UDM usage cannot be edited. Please " +
         "assign it to yourself first";
+
     private UdmUsageWidget usagesWidget;
     private IUdmUsageController controller;
     private IStreamSource streamSource;
@@ -139,6 +151,36 @@ public class UdmUsageWidgetTest {
         expect(RupContextUtils.getUserName()).andReturn(USER).once();
         expect(streamSource.getSource()).andReturn(new SimpleImmutableEntry(createMock(Supplier.class),
             createMock(Supplier.class))).once();
+    }
+
+    @Test
+    public void testGridValues() {
+        mockStatic(JavaScript.class);
+        List<UdmUsageDto> udmUsages = loadExpectedUdmUsageDto("json/udm_usage_dto_b989e02b.json");
+        expect(JavaScript.getCurrent()).andReturn(createMock(JavaScript.class)).times(2);
+        expect(controller.loadBeans(0, Integer.MAX_VALUE, Collections.emptyList())).andReturn(udmUsages).once();
+        expect(controller.getBeansCount()).andReturn(1).once();
+        expect(controller.getUdmRecordThreshold()).andReturn(UDM_RECORD_THRESHOLD).once();
+        setSpecialistExpectations();
+        replay(JavaScript.class, ForeignSecurityUtils.class, controller, streamSource);
+        initWidget();
+        Grid grid = (Grid) ((VerticalLayout) usagesWidget.getSecondComponent()).getComponent(1);
+        DataProvider dataProvider = grid.getDataProvider();
+        dataProvider.refreshAll();
+        Object[][] expectedCells = {
+            {"b989e02b-1f1d-4637-b89e-dc99938a51b9", 202106, UdmUsageOriginEnum.SS, "OGN674GHHSB0108",
+                UsageStatusEnum.RH_FOUND, "wjohn@copyright.com", 1000002612L, "CFC", 227738245L,
+                "The Wall Street journal", "Wall Street journal", "9780470373606", "9780470373606", "Not Shared",
+                "Digital", "Economics of strategy", "English", "action reason", "Assigned to wjohn for review",
+                "google.com", 22, "Banks/Ins/RE/Holding Cos", 1136L, "Albany International Corp.",
+                "c6615155-f82b-402c-8f22-77e2722ae448", "localhost", "United States", UdmChannelEnum.CCC,
+                "05/10/2020", "04/20/2020", "05/15/2020", 25, "1.00", "COPY_FOR_MYSELF", 3L, "75.00",
+                "ineligible reason", "09/01/2022", "uuser@copyright.com", "09/02/2022"}
+        };
+        verifyGridItems(grid, udmUsages, expectedCells);
+        verify(JavaScript.class, ForeignSecurityUtils.class, controller, streamSource);
+        Object[][] expectedFooterColumns = {{"detailId", "Usages Count: 1", null}};
+        verifyFooterItems(grid, expectedFooterColumns);
     }
 
     @Test
@@ -1003,5 +1045,18 @@ public class UdmUsageWidgetTest {
         listener.itemClick(usageDtoItemClick);
         verify(controller, streamSource, Windows.class, UdmViewUsageWindow.class, RupContextUtils.class,
             ForeignSecurityUtils.class);
+    }
+
+    private List<UdmUsageDto> loadExpectedUdmUsageDto(String fileName) {
+        try {
+            String content = TestUtils.fileToString(this.getClass(), fileName);
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.registerModule(new JavaTimeModule());
+            mapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
+            return mapper.readValue(content, new TypeReference<List<UdmUsageDto>>() {
+            });
+        } catch (IOException e) {
+            throw new AssertionError(e);
+        }
     }
 }

@@ -1,0 +1,50 @@
+[
+  {
+    "id": "b989e02b-1f1d-4637-b89e-dc99938a51b9",
+    "period": 202106,
+    "usageOrigin": "SS",
+    "originalDetailId": "OGN674GHHSB0108",
+    "status": "RH_FOUND",
+    "assignee": "wjohn@copyright.com",
+    "rhAccountNumber": 1000002612,
+    "rhName": "CFC",
+    "wrWrkInst": 227738245,
+    "reportedTitle": "The Wall Street journal",
+    "systemTitle": "Wall Street journal",
+    "reportedStandardNumber": "9780470373606",
+    "standardNumber": "9780470373606",
+    "reportedPubType": "Not Shared",
+    "pubFormat": "Digital",
+    "article": "Economics of strategy",
+    "language": "English",
+    "actionReason": {
+      "reason": "action reason"
+    },
+    "comment": "Assigned to wjohn for review",
+    "researchUrl": "google.com",
+    "detailLicenseeClass": {
+      "id": 22,
+      "description": "Banks/Ins/RE/Holding Cos"
+    },
+    "companyId": 1136,
+    "companyName": "Albany International Corp.",
+    "surveyRespondent": "c6615155-f82b-402c-8f22-77e2722ae448",
+    "ipAddress": "localhost",
+    "surveyCountry": "United States",
+    "channel": "CCC",
+    "usageDate": "2020-05-10",
+    "surveyStartDate": "2020-04-20",
+    "surveyEndDate": "2020-05-15",
+    "annualMultiplier": 25,
+    "statisticalMultiplier": 1.00000,
+    "reportedTypeOfUse": "COPY_FOR_MYSELF",
+    "quantity": 3,
+    "annualizedCopies": 75.00000,
+    "ineligibleReason": {
+      "reason": "ineligible reason"
+    },
+    "createDate": "2022-09-02",
+    "updateUser": "uuser@copyright.com",
+    "updateDate": "2022-09-03"
+  }
+]

@@ -2,7 +2,9 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.usage;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGrid;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGridItems;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
+
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
@@ -42,9 +44,12 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 
 /**
  * Verifies {@link ViewUdmBatchWindow}.
@@ -78,6 +83,16 @@ public class ViewUdmBatchWindowTest {
         Whitebox.setInternalState(viewUdmBatchWindow, "grid", udmBatchGrid);
         verify(controller, ForeignSecurityUtils.class);
         reset(controller, ForeignSecurityUtils.class);
+    }
+
+    @Test
+    public void testGridValues() {
+        Grid grid = (Grid) ((VerticalLayout) viewUdmBatchWindow.getContent()).getComponent(1);
+        Object[][] expectedCells = {
+            {UDM_BATCH_NAME, 202006, UdmUsageOriginEnum.SS, UdmChannelEnum.CCC, "user@copyright.com",
+                "09/01/2022 12:00 AM"}
+        };
+        verifyGridItems(grid, Collections.singletonList(buildUdmBatch()), expectedCells);
     }
 
     @Test
@@ -192,8 +207,10 @@ public class ViewUdmBatchWindowTest {
         udmBatch.setId(UDM_BATCH_UID);
         udmBatch.setName(UDM_BATCH_NAME);
         udmBatch.setPeriod(202006);
-        udmBatch.setChannel(UdmChannelEnum.CCC);
         udmBatch.setUsageOrigin(UdmUsageOriginEnum.SS);
+        udmBatch.setChannel(UdmChannelEnum.CCC);
+        udmBatch.setCreateUser("user@copyright.com");
+        udmBatch.setCreateDate(Date.from(LocalDate.of(2022, 9, 1).atStartOfDay(ZoneId.systemDefault()).toInstant()));
         return udmBatch;
     }
 }
