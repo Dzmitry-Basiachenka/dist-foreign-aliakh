@@ -230,6 +230,7 @@ public class AclScenarioDrillDownUsageDetailsWindow extends Window {
         cell.setText(BigDecimalUtils.formatCurrencyForGrid(
             scenarioDetails.stream()
                 .map(function)
+                .map(value -> Objects.nonNull(value) ? value : BigDecimal.ZERO)
                 .reduce(BigDecimal.ZERO, BigDecimal::add)
         ));
         cell.setStyleName(STYLE_ALIGN_RIGHT);
