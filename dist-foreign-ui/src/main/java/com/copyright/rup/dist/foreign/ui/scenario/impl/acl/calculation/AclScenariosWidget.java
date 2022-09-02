@@ -186,9 +186,10 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
                 new CreateAclScenarioWindow(aclScenariosController, createEvent -> refresh())));
         viewButton.addClickListener(event -> onClickViewButton());
         deleteButton.addClickListener(event -> aclScenariosController.onDeleteButtonClicked());
-        boolean inProgressStatus = ScenarioStatusEnum.IN_PROGRESS == getSelectedScenario().getStatus();
+        boolean inProgressStatus = Objects.nonNull(
+            getSelectedScenario()) && ScenarioStatusEnum.IN_PROGRESS == getSelectedScenario().getStatus();
         deleteButton.setEnabled(ForeignSecurityUtils.hasSpecialistPermission() && inProgressStatus
-            || getSelectedScenario().isEditableFlag() && inProgressStatus);
+            || Objects.nonNull(getSelectedScenario()) && getSelectedScenario().isEditableFlag() && inProgressStatus);
         pubTypeWeights.addClickListener(event -> {
             AclPublicationTypeWeightsWindow window = new AclPublicationTypeWeightsWindow(aclScenariosController, true);
             window.setAppliedParameters(aclScenariosController.getAclHistoricalPublicationTypes());
