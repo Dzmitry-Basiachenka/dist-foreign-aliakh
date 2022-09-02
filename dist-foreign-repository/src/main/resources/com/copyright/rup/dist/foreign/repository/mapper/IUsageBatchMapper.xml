@@ -118,34 +118,31 @@
         order by ub.updated_datetime desc
     </select>
 
-    <sql id="withdrawnUsagesWhereClause">
-        where u.df_usage_batch_uid = ub.df_usage_batch_uid
-            and u.status_ind = #{status}
-            and ufas.df_fund_pool_uid is null
-    </sql>
-
     <select id="findUsageBatchesForNtsFundPool" resultMap="usageBatchResultMap" parameterType="map">
+        with u as materialized (
+            select
+                distinct on (df_usage_batch_uid)
+                df_usage_batch_uid,
+                sum(u.gross_amount) gross_amount
+            from ${schema}.df_usage u
+            join ${schema}.df_usage_fas ufas on u.df_usage_uid = ufas.df_usage_fas_uid
+            where u.status_ind = #{status}
+                and ufas.df_fund_pool_uid is null
+            group by u.df_usage_batch_uid
+        )
         select
             ub.df_usage_batch_uid,
             ub.name,
             (
-                select sum(u.gross_amount)
-                from ${schema}.df_usage u
-                join ${schema}.df_usage_fas ufas on u.df_usage_uid = ufas.df_usage_fas_uid
-                <include refid="withdrawnUsagesWhereClause"/>
+                select gross_amount from u where u.df_usage_batch_uid = ub.df_usage_batch_uid
             ) gross_amount,
             ub.updated_datetime
         from ${schema}.df_usage_batch ub
-        where ub.product_family in
-        <foreach collection="productFamilies" item="productFamily" separator="," open="(" close=")">
-            #{productFamily}
-        </foreach>
-        and exists (
-            select 1
-            from ${schema}.df_usage u
-            join ${schema}.df_usage_fas ufas on u.df_usage_uid = ufas.df_usage_fas_uid
-            <include refid="withdrawnUsagesWhereClause"/>
-        )
+        where ub.df_usage_batch_uid in (select df_usage_batch_uid from u)
+            and ub.product_family in
+                <foreach collection="productFamilies" item="productFamily" separator="," open="(" close=")">
+                    #{productFamily}
+                </foreach>
         order by ub.updated_datetime desc
     </select>
 
