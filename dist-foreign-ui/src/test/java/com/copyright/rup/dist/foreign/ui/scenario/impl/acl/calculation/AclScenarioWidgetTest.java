@@ -1,6 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl.acl.calculation;
 
-import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButton;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyFooterItems;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGridItems;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
@@ -91,8 +91,9 @@ public class AclScenarioWidgetTest {
         AclScenarioDto scenario = buildAclScenarioDto();
         IStreamSource streamSource = createMock(IStreamSource.class);
         expect(streamSource.getSource()).andReturn(new SimpleImmutableEntry(createMock(Supplier.class),
-            createMock(Supplier.class))).once();
+            createMock(Supplier.class))).times(2);
         expect(controller.getExportAclScenarioDetailsStreamSource()).andReturn(streamSource).once();
+        expect(controller.getExportAclScenarioRightsholderTotalsStreamSource()).andReturn(streamSource).once();
         expect(controller.getScenario()).andReturn(scenario).once();
         expect(controller.getAclScenarioWithAmountsAndLastAction()).andReturn(scenario).once();
         replay(controller, streamSource);
@@ -110,7 +111,7 @@ public class AclScenarioWidgetTest {
         assertEquals(3, content.getComponentCount());
         verifySearchWidget(content.getComponent(0));
         verifyGrid((Grid) content.getComponent(1));
-        verifyButtonsLayout((HorizontalLayout) content.getComponent(2));
+        verifyButtonsLayout(content.getComponent(2), "Export Details", "Export", "Close");
     }
 
     @Test
@@ -259,10 +260,5 @@ public class AclScenarioWidgetTest {
         assertEquals("1,000.00", footerRow.getCell("grossTotalDigital").getText());
         assertEquals(SERVICE_FEE_TOTAL_DIGITAL, footerRow.getCell("serviceFeeTotalDigital").getText());
         assertEquals(NET_TOTAL_DIGITAL, footerRow.getCell("netTotalDigital").getText());
-    }
-
-    private void verifyButtonsLayout(HorizontalLayout layout) {
-        verifyButton(layout.getComponent(0), "Export Details", true);
-        verifyButton(layout.getComponent(1), "Close", true);
     }
 }

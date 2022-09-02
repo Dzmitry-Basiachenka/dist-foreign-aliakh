@@ -95,4 +95,9 @@ public interface IAclScenarioController extends IController<IAclScenarioWidget>,
      * @return list of {@link AclRightsholderTotalsHolderDto}s
      */
     List<AclRightsholderTotalsHolderDto> getRightsholderAggLcClassResults(RightsholderResultsFilter filter);
+
+    /**
+     * @return instance of {@link IStreamSource} for export scenario.
+     */
+    IStreamSource getExportAclScenarioRightsholderTotalsStreamSource();
 }
