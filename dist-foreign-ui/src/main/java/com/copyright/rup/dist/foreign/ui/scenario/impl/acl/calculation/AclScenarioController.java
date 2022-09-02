@@ -116,6 +116,13 @@ public class AclScenarioController extends CommonController<IAclScenarioWidget> 
     }
 
     @Override
+    public IStreamSource getExportAclScenarioRightsholderTotalsStreamSource() {
+        //TODO {dbasiachenka} implement
+        return streamSourceHandler.getCsvStreamSource(() -> aclScenario.getName() + "_",
+            pos -> {});
+    }
+
+    @Override
     protected IAclScenarioWidget instantiateWidget() {
         return new AclScenarioWidget(this);
     }

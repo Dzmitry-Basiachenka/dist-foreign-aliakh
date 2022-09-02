@@ -136,9 +136,9 @@ public class AclScenarioControllerTest {
         Capture<Consumer<PipedOutputStream>> posConsumerCapture = newCapture();
         IStreamSource streamSource = createMock(IStreamSource.class);
         expect(streamSource.getSource()).andReturn(new SimpleImmutableEntry(createMock(Supplier.class),
-            createMock(Supplier.class))).once();
+            createMock(Supplier.class))).times(2);
         expect(streamSourceHandler.getCsvStreamSource(capture(fileNameSupplierCapture), capture(posConsumerCapture)))
-            .andReturn(streamSource).once();
+            .andReturn(streamSource).times(2);
         replay(aclScenarioUsageService, streamSourceHandler, streamSource);
         controller.initWidget();
         List<AclRightsholderTotalsHolder> result = controller.loadBeans(10, 150, null);
@@ -163,9 +163,9 @@ public class AclScenarioControllerTest {
         Capture<Consumer<PipedOutputStream>> posConsumerCapture = newCapture();
         IStreamSource streamSource = createMock(IStreamSource.class);
         expect(streamSource.getSource()).andReturn(new SimpleImmutableEntry(createMock(Supplier.class),
-            createMock(Supplier.class))).once();
+            createMock(Supplier.class))).times(2);
         expect(streamSourceHandler.getCsvStreamSource(capture(fileNameSupplierCapture), capture(posConsumerCapture)))
-            .andReturn(streamSource).once();
+            .andReturn(streamSource).times(2);
         replay(aclScenarioUsageService, streamSourceHandler, streamSource);
         controller.initWidget();
         assertEquals(1, controller.getSize());
@@ -234,6 +234,11 @@ public class AclScenarioControllerTest {
         replay(aclScenarioUsageService);
         assertSame(holderDtos, controller.getRightsholderAggLcClassResults(filter));
         verify(aclScenarioUsageService);
+    }
+
+    @Test
+    public void testGetExportAclScenarioRightsholderTotalsStreamSource() {
+        //TODO {dbasiachenka} implement
     }
 
     private AclScenario buildAclScenario() {

@@ -46,6 +46,7 @@ import org.apache.commons.lang3.tuple.Triple;
 import org.powermock.reflect.Whitebox;
 
 import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -66,7 +67,7 @@ import java.util.stream.Stream;
  */
 public final class UiTestHelper {
 
-    private static final String EXPORT_BUTTON = "Export";
+    private static final List<String> BUTTONS = Arrays.asList("Export Details", "Export");
     private static final String UNCHECKED = "unchecked";
 
     private UiTestHelper() {
@@ -497,7 +498,7 @@ public final class UiTestHelper {
 
     private static void verifyButtonClickListener(Button button) {
         Collection<?> listeners = button.getListeners(ClickEvent.class);
-        if (!EXPORT_BUTTON.equals(button.getCaption())) {
+        if (!BUTTONS.contains(button.getCaption())) {
             assertTrue(CollectionUtils.isNotEmpty(listeners));
             assertEquals(1, listeners.size());
             assertNotNull(listeners.iterator().next());
