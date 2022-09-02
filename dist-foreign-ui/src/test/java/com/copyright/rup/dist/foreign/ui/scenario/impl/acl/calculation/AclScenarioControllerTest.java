@@ -238,7 +238,25 @@ public class AclScenarioControllerTest {
 
     @Test
     public void testGetExportAclScenarioRightsholderTotalsStreamSource() {
-        //TODO {dbasiachenka} implement
+        mockStatic(OffsetDateTime.class);
+        Capture<Supplier<String>> fileNameSupplierCapture = newCapture();
+        Capture<Consumer<PipedOutputStream>> posConsumerCapture = newCapture();
+        String fileName = scenario.getName() + "_";
+        Supplier<String> fileNameSupplier = () -> fileName;
+        Supplier<InputStream> isSupplier = () -> IOUtils.toInputStream(StringUtils.EMPTY, StandardCharsets.UTF_8);
+        PipedOutputStream pos = new PipedOutputStream();
+        expect(OffsetDateTime.now()).andReturn(DATE).once();
+        expect(streamSourceHandler.getCsvStreamSource(capture(fileNameSupplierCapture), capture(posConsumerCapture)))
+            .andReturn(new StreamSource(fileNameSupplier, "csv", isSupplier)).once();
+        aclCalculationReportService.writeAclScenarioRightsholderTotalsCsvReport(scenario.getId(), pos);
+        expectLastCall().once();
+        replay(OffsetDateTime.class, streamSourceHandler, aclCalculationReportService);
+        IStreamSource streamSource = controller.getExportAclScenarioRightsholderTotalsStreamSource();
+        assertEquals("Scenario_name_01_02_2019_03_04.csv", streamSource.getSource().getKey().get());
+        assertEquals(fileName, fileNameSupplierCapture.getValue().get());
+        Consumer<PipedOutputStream> posConsumer = posConsumerCapture.getValue();
+        posConsumer.accept(pos);
+        verify(OffsetDateTime.class, streamSourceHandler, aclCalculationReportService);
     }
 
     private AclScenario buildAclScenario() {

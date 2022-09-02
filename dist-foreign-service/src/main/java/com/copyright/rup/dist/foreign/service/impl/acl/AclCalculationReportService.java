@@ -45,4 +45,9 @@ public class AclCalculationReportService implements IAclCalculationReportService
     public void writeAclScenarioDetailsCsvReport(String scenarioId, PipedOutputStream pipedOutputStream) {
         aclCalculationReportRepository.writeAclScenarioDetailsCsvReport(scenarioId, pipedOutputStream);
     }
+
+    @Override
+    public void writeAclScenarioRightsholderTotalsCsvReport(String scenarioId, PipedOutputStream pipedOutputStream) {
+        aclCalculationReportRepository.writeAclScenarioRightsholderTotalsCsvReport(scenarioId, pipedOutputStream);
+    }
 }

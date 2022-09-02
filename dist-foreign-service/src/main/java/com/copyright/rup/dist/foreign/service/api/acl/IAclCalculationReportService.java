@@ -48,4 +48,12 @@ public interface IAclCalculationReportService {
      * @param pipedOutputStream instance of {@link PipedOutputStream}
      */
     void writeAclScenarioDetailsCsvReport(String scenarioId, PipedOutputStream pipedOutputStream);
+
+    /**
+     * Writes ACL scenario rightsholder totals found by scenario id into csv output stream.
+     *
+     * @param scenarioId        scenario id
+     * @param pipedOutputStream instance of {@link PipedOutputStream}
+     */
+    void writeAclScenarioRightsholderTotalsCsvReport(String scenarioId, PipedOutputStream pipedOutputStream);
 }

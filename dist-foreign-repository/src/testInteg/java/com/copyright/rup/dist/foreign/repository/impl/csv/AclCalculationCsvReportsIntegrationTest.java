@@ -132,4 +132,14 @@ public class AclCalculationCsvReportsIntegrationTest extends CsvReportsTestHelpe
             aclCalculationReportRepository.writeAclScenarioDetailsCsvReport("0d9f5bba-4961-449b-ae7d-4586d1b5c0d5",
                 outputStream), "acl/scenario_details_report_empty.csv");
     }
+
+    @Test
+    public void testWriteAclScenarioRightsholderTotalsCsvReport() throws IOException {
+        // TODO {dbasiachenka} implement
+    }
+
+    @Test
+    public void testWriteAclScenarioRightsholderTotalsEmptyCsvReport() throws IOException {
+        // TODO {dbasiachenka} implement
+    }
 }
