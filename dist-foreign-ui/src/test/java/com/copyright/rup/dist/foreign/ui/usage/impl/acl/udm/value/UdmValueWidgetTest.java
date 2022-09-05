@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.value;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyFooterItems;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGridItems;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyMenuBar;
 
 import static org.easymock.EasyMock.anyObject;
@@ -18,6 +20,7 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
+import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.UdmValueDto;
 import com.copyright.rup.dist.foreign.domain.UdmValueStatusEnum;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
@@ -27,8 +30,13 @@ import com.copyright.rup.vaadin.ui.component.window.ConfirmDialogWindow;
 import com.copyright.rup.vaadin.ui.component.window.ConfirmDialogWindow.IListener;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.common.collect.ImmutableList;
 import com.vaadin.data.provider.CallbackDataProvider;
+import com.vaadin.data.provider.DataProvider;
 import com.vaadin.data.provider.Query;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.MouseEventDetails;
@@ -57,6 +65,7 @@ import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -84,6 +93,7 @@ public class UdmValueWidgetTest {
     private static final int EXCEEDED_UDM_RECORD_THRESHOLD = 10001;
     private static final String INVALID_ASSIGNEE = "invalid_assignee";
 
+    private final List<UdmValueDto> udmValues = loadExpectedUdmValueDto("json/udm_value_dto_43699543.json");
     private IUdmValueController controller;
     private UdmValueWidget valueWidget;
 
@@ -95,6 +105,32 @@ public class UdmValueWidgetTest {
         UdmValueFilterWidget filterWidget = new UdmValueFilterWidget(createMock(IUdmValueFilterController.class));
         expect(controller.initValuesFilterWidget()).andReturn(filterWidget).once();
         expect(RupContextUtils.getUserName()).andReturn(USER).once();
+    }
+
+    @Test
+    public void testGridValues() {
+        mockStatic(JavaScript.class);
+        expect(JavaScript.getCurrent()).andReturn(createMock(JavaScript.class)).times(2);
+        expect(controller.loadBeans(0, Integer.MAX_VALUE, Collections.emptyList())).andReturn(udmValues).once();
+        expect(controller.getBeansCount()).andReturn(1).once();
+        expect(controller.getUdmRecordThreshold()).andReturn(UDM_RECORD_THRESHOLD).once();
+        setSpecialistExpectations();
+        replay(controller, JavaScript.class, ForeignSecurityUtils.class, RupContextUtils.class);
+        initWidget();
+        Grid grid = (Grid) ((VerticalLayout) valueWidget.getSecondComponent()).getComponent(1);
+        DataProvider dataProvider = grid.getDataProvider();
+        dataProvider.refreshAll();
+        Object[][] expectedCells = {
+            {"43699543-3287-40e1-a4b8-553e7547deb9", 211012, UdmValueStatusEnum.RESEARCH_COMPLETE, "jjohn@copyright.com"
+                , 100006859L, "West: A Thomson Business", 273337156L, "Bread and Butter", "1822-7773", 202712, "BK",
+                "BK", "", "N", "", "http://google.com", "", "200.00", "USD", "Individual", "", 2021, "", "200.00", "Y",
+                "1.00", "09/03/2022", "", "N", "", "Book", "", "23.1111", "Content comment", "Y", "150.00", "",
+                "Comment", "user@copyright.com", "09/05/2022"}
+        };
+        verifyGridItems(grid, udmValues, expectedCells);
+        verify(controller, JavaScript.class, ForeignSecurityUtils.class, RupContextUtils.class);
+        Object[][] expectedFooterColumns = {{"valueId", "Values Count: 1", null}};
+        verifyFooterItems(grid, expectedFooterColumns);
     }
 
     @Test
@@ -528,5 +564,18 @@ public class UdmValueWidgetTest {
             new ItemClick<>(grid, grid.getColumns().get(0), udmValueDto, createMouseEvent(), 0);
         listener.itemClick(usageDtoItemClick);
         verify(controller, Windows.class, ForeignSecurityUtils.class, UdmViewValueWindow.class, RupContextUtils.class);
+    }
+
+    private List<UdmValueDto> loadExpectedUdmValueDto(String fileName) {
+        try {
+            String content = TestUtils.fileToString(this.getClass(), fileName);
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.registerModule(new JavaTimeModule());
+            mapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
+            return mapper.readValue(content, new TypeReference<List<UdmValueDto>>() {
+            });
+        } catch (IOException e) {
+            throw new AssertionError(e);
+        }
     }
 }

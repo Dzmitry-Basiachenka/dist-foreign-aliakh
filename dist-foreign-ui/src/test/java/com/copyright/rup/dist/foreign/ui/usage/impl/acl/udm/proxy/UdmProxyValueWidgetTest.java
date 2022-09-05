@@ -1,7 +1,9 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.proxy;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyFooterItems;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGrid;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGridItems;
 
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
@@ -13,6 +15,7 @@ import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
+import com.copyright.rup.dist.foreign.domain.UdmProxyValueDto;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmProxyValueController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
@@ -31,8 +34,11 @@ import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import java.math.BigDecimal;
 import java.util.AbstractMap;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.function.Supplier;
 
 /**
@@ -64,6 +70,21 @@ public class UdmProxyValueWidgetTest {
         expect(controller.getExportUdmProxyValuesStreamSource()).andReturn(streamSource).once();
         expect(streamSource.getSource()).andReturn(new AbstractMap.SimpleImmutableEntry(createMock(Supplier.class),
             createMock(Supplier.class))).once();
+    }
+
+    @Test
+    public void testGridValues() {
+        List<UdmProxyValueDto> udmProxyValues = Collections.singletonList(buildUdmProxyValueDto());
+        expect(controller.getProxyValues()).andReturn(udmProxyValues).once();
+        replay(controller, streamSource);
+        initWidget();
+        valueWidget.refresh();
+        Grid grid = (Grid) ((VerticalLayout) valueWidget.getSecondComponent()).getComponent(1);
+        Object[][] expectedCells = {{201812, "SJ", "13.0411170688", 2}};
+        verifyGridItems(grid, udmProxyValues, expectedCells);
+        verify(controller, streamSource);
+        Object[][] expectedFooterColumns = {{"period", "Proxy Values Count: 1", null}};
+        verifyFooterItems(grid, expectedFooterColumns);
     }
 
     @Test
@@ -105,5 +126,14 @@ public class UdmProxyValueWidgetTest {
         valueWidget = new UdmProxyValueWidget();
         valueWidget.setController(controller);
         valueWidget.init();
+    }
+
+    private UdmProxyValueDto buildUdmProxyValueDto() {
+        UdmProxyValueDto udmProxyValue = new UdmProxyValueDto();
+        udmProxyValue.setPeriod(201812);
+        udmProxyValue.setPubTypeName("SJ");
+        udmProxyValue.setContentUnitPrice(new BigDecimal("13.0411170688"));
+        udmProxyValue.setContentUnitPriceCount(2);
+        return udmProxyValue;
     }
 }

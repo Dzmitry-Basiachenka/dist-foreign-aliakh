@@ -1,7 +1,9 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.baseline;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyFooterItems;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGrid;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGridItems;
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.eq;
@@ -16,19 +18,22 @@ import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.domain.UdmBaselineDto;
+import com.copyright.rup.dist.foreign.domain.UdmChannelEnum;
+import com.copyright.rup.dist.foreign.domain.UdmUsageOriginEnum;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineFilterController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
+import com.vaadin.data.provider.DataProvider;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.MouseEventDetails;
 import com.vaadin.shared.MouseEventDetails.MouseButton;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.ItemClick;
+import com.vaadin.ui.JavaScript;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.components.grid.FooterRow;
 import com.vaadin.ui.components.grid.ItemClickListener;
 
 import org.apache.commons.lang3.tuple.Triple;
@@ -40,9 +45,15 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
 import java.util.function.Supplier;
 
 /**
@@ -55,10 +66,12 @@ import java.util.function.Supplier;
  * @author Dzmitry Basiachenka
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({UdmBaselineWidget.class, Windows.class, ForeignSecurityUtils.class})
+@PrepareForTest({UdmBaselineWidget.class, Windows.class, ForeignSecurityUtils.class, JavaScript.class})
 public class UdmBaselineWidgetTest {
 
     private static final int DOUBLE_CLICK = 0x00002;
+    private static final int UDM_RECORD_THRESHOLD = 10000;
+
     private UdmBaselineWidget udmBaselineWidget;
     private IUdmBaselineController controller;
     private IStreamSource streamSource;
@@ -77,6 +90,31 @@ public class UdmBaselineWidgetTest {
         expect(streamSource.getSource()).andReturn(new SimpleImmutableEntry(createMock(Supplier.class),
             createMock(Supplier.class))).once();
         expect(controller.getExportUdmBaselineUsagesStreamSource()).andReturn(streamSource).once();
+    }
+
+    @Test
+    public void testGridValues() {
+        mockStatic(JavaScript.class);
+        List<UdmBaselineDto> udmBaselines = Collections.singletonList(buildUdmBaselineDto());
+        expect(JavaScript.getCurrent()).andReturn(createMock(JavaScript.class)).times(2);
+        expect(controller.getBeansCount()).andReturn(1).once();
+        expect(controller.loadBeans(0, Integer.MAX_VALUE, Collections.emptyList())).andReturn(udmBaselines).once();
+        expect(controller.getUdmRecordThreshold()).andReturn(UDM_RECORD_THRESHOLD).once();
+        replay(JavaScript.class, ForeignSecurityUtils.class, controller, streamSource);
+        udmBaselineWidget.init();
+        Grid grid = (Grid) ((VerticalLayout) udmBaselineWidget.getSecondComponent()).getComponent(1);
+        DataProvider dataProvider = grid.getDataProvider();
+        dataProvider.refreshAll();
+        Object[][] expectedCells = {
+            {"040ed0ac-a3a5-4e4a-a3c6-262335bb1ed9", 202006, UdmUsageOriginEnum.SS,
+                "d47e921a-8581-4d35-a2e7-98c00d22492d", 123456789L, "Brain surgery", 22, "Banks/Ins/RE/Holding Cos",
+                26, "Law Firms", "United States", UdmChannelEnum.CCC, "Book", "10.00", "user@copyright.com",
+                "06/01/2020", "wuser@copyright.com", "06/02/2020"}
+        };
+        verifyGridItems(grid, udmBaselines, expectedCells);
+        verify(JavaScript.class, ForeignSecurityUtils.class, controller, streamSource);
+        Object[][] expectedFooterColumns = {{"detailId", "Usages Count: 1", null}};
+        verifyFooterItems(grid, expectedFooterColumns);
     }
 
     @Test
@@ -113,7 +151,6 @@ public class UdmBaselineWidgetTest {
             Triple.of("Created Date", 110.0, -1),
             Triple.of("Updated By", 150.0, -1),
             Triple.of("Updated Date", 110.0, -1)));
-        verifyGridFooter((Grid) layout.getComponent(1));
         assertEquals(1, layout.getExpandRatio(layout.getComponent(1)), 0);
     }
 
@@ -139,12 +176,6 @@ public class UdmBaselineWidgetTest {
         verify(controller, streamSource, Windows.class, ViewBaselineWindow.class, ForeignSecurityUtils.class);
     }
 
-    private void verifyGridFooter(Grid grid) {
-        assertTrue(grid.isFooterVisible());
-        FooterRow footerRow = grid.getFooterRow(0);
-        assertEquals("Usages Count: 0", footerRow.getCell("detailId").getText());
-    }
-
     private void verifySize(Component component) {
         assertEquals(100, component.getWidth(), 0);
         assertEquals(100, component.getHeight(), 0);
@@ -157,5 +188,30 @@ public class UdmBaselineWidgetTest {
         mouseEventDetails.setType(DOUBLE_CLICK);
         mouseEventDetails.setButton(MouseButton.LEFT);
         return mouseEventDetails;
+    }
+
+    private UdmBaselineDto buildUdmBaselineDto() {
+        UdmBaselineDto udmBaseline = new UdmBaselineDto();
+        udmBaseline.setId("040ed0ac-a3a5-4e4a-a3c6-262335bb1ed9");
+        udmBaseline.setPeriod(202006);
+        udmBaseline.setUsageOrigin(UdmUsageOriginEnum.SS);
+        udmBaseline.setOriginalDetailId("d47e921a-8581-4d35-a2e7-98c00d22492d");
+        udmBaseline.setWrWrkInst(123456789L);
+        udmBaseline.setSystemTitle("Brain surgery");
+        udmBaseline.setDetailLicenseeClassId(22);
+        udmBaseline.setDetailLicenseeClassName("Banks/Ins/RE/Holding Cos");
+        udmBaseline.setAggregateLicenseeClassId(26);
+        udmBaseline.setAggregateLicenseeClassName("Law Firms");
+        udmBaseline.setSurveyCountry("United States");
+        udmBaseline.setChannel(UdmChannelEnum.CCC);
+        udmBaseline.setTypeOfUse("Book");
+        udmBaseline.setAnnualizedCopies(new BigDecimal("10.00000"));
+        udmBaseline.setCreateUser("user@copyright.com");
+        udmBaseline.setCreateDate(
+            Date.from(LocalDate.of(2020, 6, 1).atStartOfDay(ZoneId.systemDefault()).toInstant()));
+        udmBaseline.setUpdateUser("wuser@copyright.com");
+        udmBaseline.setUpdateDate(
+            Date.from(LocalDate.of(2020, 6, 2).atStartOfDay(ZoneId.systemDefault()).toInstant()));
+        return udmBaseline;
     }
 }
