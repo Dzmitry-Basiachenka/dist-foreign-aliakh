@@ -143,14 +143,8 @@ public class AclScenarioDrillDownTitlesWindow extends Window implements SearchWi
     }
 
     private void addGridColumns() {
-        grid.addColumn(AclRightsholderTotalsHolderDto::getWrWrkInst)
-            .setCaption(ForeignUi.getMessage("table.column.wr_wrk_inst"))
-            .setId(WR_WRK_INST_PROPERTY)
-            .setSortProperty(WR_WRK_INST_PROPERTY)
-            .setComparator((holder1, holder2) -> holder1.getWrWrkInst().compareTo(holder2.getWrWrkInst()))
-            .setWidth(110);
         grid.addComponentColumn(holder -> {
-            Button button = Buttons.createButton(Objects.toString(holder.getSystemTitle()));
+            Button button = Buttons.createButton(Objects.toString(holder.getWrWrkInst()));
             button.addStyleName(ValoTheme.BUTTON_LINK);
             button.addClickListener(event -> {
                 filter.setWrWrkInst(holder.getWrWrkInst());
@@ -162,11 +156,17 @@ public class AclScenarioDrillDownTitlesWindow extends Window implements SearchWi
                 );
             });
             return button;
-        }).setCaption(ForeignUi.getMessage("table.column.system_title"))
+        }).setCaption(ForeignUi.getMessage("table.column.wr_wrk_inst"))
+            .setId(WR_WRK_INST_PROPERTY)
+            .setSortProperty(WR_WRK_INST_PROPERTY)
+            .setComparator((holder1, holder2) -> holder1.getWrWrkInst().compareTo(holder2.getWrWrkInst()))
+            .setExpandRatio(1);
+        grid.addColumn(AclRightsholderTotalsHolderDto::getSystemTitle)
+            .setCaption(ForeignUi.getMessage("table.column.system_title"))
             .setId(SYSTEM_TITLE_PROPERTY)
             .setSortProperty(SYSTEM_TITLE_PROPERTY)
             .setComparator((holder1, holder2) -> holder1.getSystemTitle().compareToIgnoreCase(holder2.getSystemTitle()))
-            .setWidth(256);
+            .setWidth(255);
         addAmountColumn(AclRightsholderTotalsHolderDto::getGrossTotalPrint, "table.column.print_gross_amount",
             PRINT_GROSS_TOTAL_PROPERTY, 150);
         addAmountColumn(AclRightsholderTotalsHolderDto::getNetTotalPrint, "table.column.print_net_amount",
@@ -187,6 +187,7 @@ public class AclScenarioDrillDownTitlesWindow extends Window implements SearchWi
             .setCaption(ForeignUi.getMessage(captionProperty))
             .setId(columnId)
             .setSortProperty(columnId)
+            .setComparator((holder1, holder2) -> function.apply(holder1).compareTo(function.apply(holder2)))
             .setStyleGenerator(item -> STYLE_ALIGN_RIGHT)
             .setWidth(width);
     }
