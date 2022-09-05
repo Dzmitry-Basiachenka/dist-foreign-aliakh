@@ -1,3 +1,13 @@
+16.0.1
+-
+* B-57802 FDA: Delete ACL Scenario: resolve issue with nulpointer exception when scenarios tab is empty
+* B-71854 FDA: Export Scenario View by RHs: add Export button in ACL Scenario window
+* B-71854 FDA: Export Scenario View by RHs: implement service logic to generate ACL scenario by RHs report
+* B-73151 FDA: View Agg Lic Class by Rightsholder: move hyperlink to Agg Lc CL id and add sort for columns
+* B-73149 FDA: View Titles by Rightsholder: move hyperlink to Wr Wrk Inst and add sort for amount columns
+* CDP-1097: NTS: Create Additional Fund: Opening 'Batches filter' modal window takes much time
+* B-74271 Tech Debt: FDA: display number of works instead of titles on View ACL Scenario window
+
 16.0.0
 -
 * B-73150 FDA: Details view by Title and Agg Lic Class: implement Usage Details by Title and Agg Lic Class repository
