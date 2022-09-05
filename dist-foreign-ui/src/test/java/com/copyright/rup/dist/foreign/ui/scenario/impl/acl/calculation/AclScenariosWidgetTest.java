@@ -101,14 +101,16 @@ public class AclScenariosWidgetTest {
         scenarioDto = buildAclScenarioDto();
         mockStatic(ForeignSecurityUtils.class);
         scenariosWidget = new AclScenariosWidget(controller, createMock(IAclScenarioHistoryController.class));
-        expect(controller.getScenarios()).andReturn(Collections.singletonList(scenario)).once();
-        expect(controller.getAclScenarioWithAmountsAndLastAction(SCENARIO_UID)).andReturn(scenarioDto).once();
-        expect(controller.getCriteriaHtmlRepresentation()).andReturn(SELECTION_CRITERIA).once();
+        expect(controller.getScenarios()).andReturn(Collections.singletonList(scenario)).times(2);
+        expect(controller.getAclScenarioWithAmountsAndLastAction(SCENARIO_UID)).andReturn(scenarioDto).times(2);
+        expect(controller.getCriteriaHtmlRepresentation()).andReturn(SELECTION_CRITERIA).times(2);
         expect(controller.getUsageAgeWeights()).andReturn(Collections.emptyList()).once();
         expect(controller.getDetailLicenseeClasses()).andReturn(Collections.emptyList()).once();
-        expect(ForeignSecurityUtils.hasSpecialistPermission()).andReturn(true).once();
+        expect(ForeignSecurityUtils.hasSpecialistPermission()).andReturn(true).times(2);
         replay(controller, ForeignSecurityUtils.class);
         scenariosWidget.init();
+        scenariosWidget.initMediator();
+        scenariosWidget.refresh();
         verify(controller, ForeignSecurityUtils.class);
         reset(controller);
     }
@@ -141,38 +143,46 @@ public class AclScenariosWidgetTest {
 
     @Test
     public void testRefresh() {
+        reset(controller, ForeignSecurityUtils.class);
+        expect(controller.getAclScenarioWithAmountsAndLastAction(SCENARIO_UID)).andReturn(scenarioDto).once();
+        expect(controller.getCriteriaHtmlRepresentation()).andReturn(SELECTION_CRITERIA).once();
+        expect(ForeignSecurityUtils.hasSpecialistPermission()).andReturn(true).times(2);
         expect(controller.getScenarios()).andReturn(Collections.singletonList(scenario)).once();
         expect(controller.getAclScenarioWithAmountsAndLastAction(SCENARIO_UID)).andReturn(scenarioDto).once();
         expect(controller.getCriteriaHtmlRepresentation()).andReturn(SELECTION_CRITERIA).once();
-        replay(controller);
+        replay(controller, ForeignSecurityUtils.class);
         scenariosWidget.refresh();
-        verify(controller);
+        verify(controller, ForeignSecurityUtils.class);
     }
 
     @Test
     public void testSelectScenario() {
+        reset(ForeignSecurityUtils.class);
+        expect(ForeignSecurityUtils.hasSpecialistPermission()).andReturn(true).once();
         Grid grid = Whitebox.getInternalState(scenariosWidget, SCENARIO_GRID);
         grid.deselectAll();
         assertTrue(CollectionUtils.isEmpty(grid.getSelectedItems()));
         expect(controller.getAclScenarioWithAmountsAndLastAction(scenarioDto.getId())).andReturn(scenarioDto).once();
         expect(controller.getCriteriaHtmlRepresentation()).andReturn(StringUtils.EMPTY).once();
-        replay(controller);
+        replay(controller, ForeignSecurityUtils.class);
         scenariosWidget.selectScenario(scenario);
         assertEquals(scenario, grid.getSelectedItems().iterator().next());
-        verify(controller);
+        verify(controller, ForeignSecurityUtils.class);
     }
 
     @Test
     public void testRefreshSelectedScenario() {
+        reset(ForeignSecurityUtils.class);
+        expect(ForeignSecurityUtils.hasSpecialistPermission()).andReturn(true).once();
         Grid grid = createMock(Grid.class);
         Whitebox.setInternalState(scenariosWidget, SCENARIO_GRID, grid);
         expect(grid.getSelectedItems()).andReturn(Collections.singleton(scenario)).once();
         expect(controller.getAclScenarioWithAmountsAndLastAction(scenarioDto.getId())).andReturn(scenarioDto).once();
         expect(controller.getCriteriaHtmlRepresentation()).andReturn(SELECTION_CRITERIA).once();
-        replay(controller, grid);
+        replay(controller, grid, ForeignSecurityUtils.class);
         scenariosWidget.refreshSelectedScenario();
         verifyScenarioMetadataPanel();
-        verify(controller, grid);
+        verify(controller, grid, ForeignSecurityUtils.class);
     }
 
     @Test
@@ -338,7 +348,6 @@ public class AclScenariosWidgetTest {
 
     private void verifyPanel(Panel panel) {
         verifyWindow(panel, null, 100, 100, Unit.PERCENTAGE);
-        assertNotNull(panel.getContent());
     }
 
     private void verifyGrid(Grid grid) {
@@ -360,8 +369,8 @@ public class AclScenariosWidgetTest {
         assertEquals(4, layout.getComponentCount());
         verifyButton(layout.getComponent(0), "Create", false, 1);
         verifyButton(layout.getComponent(1), "View", true, 2);
-        verifyButton(layout.getComponent(2), "Pub Type Weights", false, 1);
-        verifyButton(layout.getComponent(3), "Delete", false, 1);
+        verifyButton(layout.getComponent(2), "Delete", false, 1);
+        verifyButton(layout.getComponent(3), "Pub Type Weights", false, 1);
     }
 
     private void verifyButton(Component component, String caption, boolean isDisabled, int listenersCount) {

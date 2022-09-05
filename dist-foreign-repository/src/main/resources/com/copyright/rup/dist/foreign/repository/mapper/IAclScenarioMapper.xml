@@ -390,7 +390,7 @@
         order by slc.detail_licensee_class_id
     </select>
 
-    <delete id="removeScenarioData" parameterType="string">
+    <delete id="deleteScenarioData" parameterType="string">
         with deleted_acl_scenario_pub_type_weight as (
             delete from ${schema}.df_acl_scenario_pub_type_weight
             where df_acl_scenario_uid = #{scenarioId}
@@ -411,7 +411,7 @@
         where df_acl_scenario_uid = #{scenarioId}
     </delete>
 
-    <delete id="remove" parameterType="string">
+    <delete id="delete" parameterType="string">
         delete from ${schema}.df_acl_scenario
         where df_acl_scenario_uid = #{scenarioId}
     </delete>

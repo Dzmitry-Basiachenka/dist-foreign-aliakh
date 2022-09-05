@@ -116,17 +116,17 @@ public interface IAclScenarioRepository {
     List<DetailLicenseeClass> findDetailLicenseeClassesByScenarioId(String scenarioId);
 
     /**
-     * Removes {@link AclScenario} by given identifier.
+     * Deletes {@link AclScenario} by given identifier.
      *
      * @param scenarioId {@link AclScenario} identifier
      */
-    void remove(String scenarioId);
+    void deleteScenario(String scenarioId);
 
     /**
-     * Removes {@link AclPublicationType}s, {@link UsageAge}s, {@link DetailLicenseeClass}s and scenario details
+     * Deletes {@link AclPublicationType}s, {@link UsageAge}s, {@link DetailLicenseeClass}s and scenario details
      * and shares related to the scenario by given identifier.
      *
      * @param scenarioId {@link AclScenario} identifier
      */
-    void removeScenarioData(String scenarioId);
+    void deleteScenarioData(String scenarioId);
 }

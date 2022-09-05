@@ -226,9 +226,9 @@ public class AclScenarioServiceTest {
     public void testDeleteScenario() {
         aclScenarioAuditService.deleteActions(SCENARIO_UID);
         expectLastCall().once();
-        aclScenarioRepository.removeScenarioData(SCENARIO_UID);
+        aclScenarioRepository.deleteScenarioData(SCENARIO_UID);
         expectLastCall().once();
-        aclScenarioRepository.remove(SCENARIO_UID);
+        aclScenarioRepository.deleteScenario(SCENARIO_UID);
         expectLastCall().once();
         replay(aclScenarioAuditService, aclScenarioRepository);
         aclScenarioService.deleteAclScenario(buildAclScenario());

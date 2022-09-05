@@ -178,8 +178,8 @@ public class AclScenarioService implements IAclScenarioService {
         LOGGER.info("Delete ACL scenario. Started. {}, User={}", ForeignLogUtils.aclScenario(aclScenario), userName);
         String scenarioId = aclScenario.getId();
         aclScenarioAuditService.deleteActions(scenarioId);
-        aclScenarioRepository.removeScenarioData(scenarioId);
-        aclScenarioRepository.remove(scenarioId);
+        aclScenarioRepository.deleteScenarioData(scenarioId);
+        aclScenarioRepository.deleteScenario(scenarioId);
         LOGGER.info("Delete ACL scenario. Finished. {}, User={}", ForeignLogUtils.aclScenario(aclScenario), userName);
     }
 

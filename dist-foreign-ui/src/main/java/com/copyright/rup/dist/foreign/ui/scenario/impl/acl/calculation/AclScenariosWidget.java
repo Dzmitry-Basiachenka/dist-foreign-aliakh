@@ -5,11 +5,9 @@ import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
-import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.ui.common.utils.IDateFormatter;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
-import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioHistoryController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioHistoryWidget;
@@ -145,6 +143,7 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
         mediator.setViewButton(viewButton);
         mediator.setDeleteButton(deleteButton);
         mediator.setPubTypeWeights(pubTypeWeights);
+        mediator.selectedScenarioChanged(getSelectedScenario());
         return mediator;
     }
 
@@ -176,7 +175,6 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
         scenarioGrid.setSizeFull();
         scenarioGrid.getColumns().forEach(column -> column.setSortable(true));
         scenarioGrid.addSelectionListener(event -> onItemChanged(event.getFirstSelectedItem().orElse(null)));
-        selectFirstScenario(scenarios);
         VaadinUtils.addComponentStyle(scenarioGrid, "acl-scenarios-table");
     }
 
@@ -186,10 +184,6 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
                 new CreateAclScenarioWindow(aclScenariosController, createEvent -> refresh())));
         viewButton.addClickListener(event -> onClickViewButton());
         deleteButton.addClickListener(event -> aclScenariosController.onDeleteButtonClicked());
-        boolean inProgressStatus = Objects.nonNull(
-            getSelectedScenario()) && ScenarioStatusEnum.IN_PROGRESS == getSelectedScenario().getStatus();
-        deleteButton.setEnabled(ForeignSecurityUtils.hasSpecialistPermission() && inProgressStatus
-            || Objects.nonNull(getSelectedScenario()) && getSelectedScenario().isEditableFlag() && inProgressStatus);
         pubTypeWeights.addClickListener(event -> {
             AclPublicationTypeWeightsWindow window = new AclPublicationTypeWeightsWindow(aclScenariosController, true);
             window.setAppliedParameters(aclScenariosController.getAclHistoricalPublicationTypes());
@@ -199,7 +193,7 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
                 IParametersSaveListener.SAVE_HANDLER);
             Windows.showModalWindow(window);
         });
-        HorizontalLayout buttonsLayout = new HorizontalLayout(createButton, viewButton, pubTypeWeights, deleteButton);
+        HorizontalLayout buttonsLayout = new HorizontalLayout(createButton, viewButton, deleteButton, pubTypeWeights);
         buttonsLayout.setMargin(new MarginInfo(true, true, true, true));
         VaadinUtils.setButtonsAutoDisabled(viewButton);
         VaadinUtils.addComponentStyle(buttonsLayout, "acl-scenario-buttons-layout");
@@ -374,9 +368,7 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
         } else {
             metadataPanel.setContent(new Label());
         }
-        if (Objects.nonNull(mediator)) {
-            mediator.selectedScenarioChanged(scenario);
-        }
+        mediator.selectedScenarioChanged(scenario);
     }
 
     private void updateScenarioMetadata(AclScenarioDto scenario) {
@@ -426,6 +418,7 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
     private void selectFirstScenario(List<AclScenario> scenarios) {
         if (CollectionUtils.isNotEmpty(scenarios)) {
             scenarioGrid.select(scenarios.get(0));
+            refreshSelectedScenario();
         }
     }
 }

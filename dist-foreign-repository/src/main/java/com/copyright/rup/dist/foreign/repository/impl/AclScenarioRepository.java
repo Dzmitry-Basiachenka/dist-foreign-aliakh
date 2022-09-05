@@ -111,12 +111,12 @@ public class AclScenarioRepository extends BaseRepository implements IAclScenari
     }
 
     @Override
-    public void remove(String scenarioId) {
-        delete("IAclScenarioMapper.remove", Objects.requireNonNull(scenarioId));
+    public void deleteScenario(String scenarioId) {
+        delete("IAclScenarioMapper.delete", Objects.requireNonNull(scenarioId));
     }
 
     @Override
-    public void removeScenarioData(String scenarioId) {
-        delete("IAclScenarioMapper.removeScenarioData", Objects.requireNonNull(scenarioId));
+    public void deleteScenarioData(String scenarioId) {
+        delete("IAclScenarioMapper.deleteScenarioData", Objects.requireNonNull(scenarioId));
     }
 }
