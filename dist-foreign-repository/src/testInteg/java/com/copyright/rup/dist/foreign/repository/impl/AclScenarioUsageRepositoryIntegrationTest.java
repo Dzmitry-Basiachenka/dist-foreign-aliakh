@@ -243,10 +243,10 @@ public class AclScenarioUsageRepositoryIntegrationTest {
             aclScenarioUsageRepository.findAclRightsholderTotalsHoldersByScenarioId(
                 SCENARIO_UID_1, StringUtils.EMPTY, null, null);
         assertEquals(2, holders.size());
-        verifyAclRightsholderTotalsHolder(buildAclRightsholderTotalsHolder(1000002859L, RH_NAME, 100.00,
-            16.00, 84.00, 220.00, 35.00, 178.00, 2, 2), holders.get(0));
-        verifyAclRightsholderTotalsHolder(buildAclRightsholderTotalsHolder(1000000026L, null, 20.00, 3.00, 10.00,
-            0.00, 0.00, 0.00, 1, 1), holders.get(1));
+        verifyAclRightsholderTotalsHolder(buildAclRightsholderTotalsHolder(1000002859L, RH_NAME,
+            150.00, 24.00, 126.00, 220.00, 35.00, 178.00, 3, 3), holders.get(0));
+        verifyAclRightsholderTotalsHolder(buildAclRightsholderTotalsHolder(1000000026L, null,
+            20.00, 3.00, 10.00, 0.00, 0.00, 0.00, 1, 1), holders.get(1));
     }
 
     @Test
@@ -256,17 +256,17 @@ public class AclScenarioUsageRepositoryIntegrationTest {
             aclScenarioUsageRepository.findAclRightsholderTotalsHoldersByScenarioId(
                 SCENARIO_UID_1, "JohN", null, null);
         assertEquals(1, holders.size());
-        verifyAclRightsholderTotalsHolder(buildAclRightsholderTotalsHolder(1000002859L, RH_NAME, 100.00,
-            16.00, 84.00, 220.00, 35.00, 178.00, 2, 2), holders.get(0));
+        verifyAclRightsholderTotalsHolder(buildAclRightsholderTotalsHolder(1000002859L, RH_NAME,
+            150.00, 24.00, 126.00, 220.00, 35.00, 178.00, 3, 3), holders.get(0));
     }
 
     @Test
     @TestData(fileName = FIND_ACL_RH_TOTALS_HOLDERS_BY_SCENARIO_ID)
     public void testSortingFindAclRightsholderTotalsHoldersByScenarioId() {
-        AclRightsholderTotalsHolder holder1 = buildAclRightsholderTotalsHolder(1000002859L, RH_NAME, 100.00,
-            16.00, 84.00, 220.00, 35.00, 178.00, 2, 2);
-        AclRightsholderTotalsHolder holder2 = buildAclRightsholderTotalsHolder(1000000026L, null, 20.00, 3.00, 10.00,
-            0.00, 0.00, 0.00, 1, 1);
+        AclRightsholderTotalsHolder holder1 =
+            buildAclRightsholderTotalsHolder(1000002859L, RH_NAME, 150.00, 24.00, 126.00, 220.00, 35.00, 178.00, 3, 3);
+        AclRightsholderTotalsHolder holder2 =
+            buildAclRightsholderTotalsHolder(1000000026L, null, 20.00, 3.00, 10.00, 0.00, 0.00, 0.00, 1, 1);
         assertSortingAclRightsholderTotalsHolder(holder2, holder1, "rightsholder.accountNumber");
         assertSortingAclRightsholderTotalsHolder(holder1, holder2, "rightsholder.name");
         assertSortingAclRightsholderTotalsHolder(holder2, holder1, "grossTotalPrint");
@@ -570,7 +570,7 @@ public class AclScenarioUsageRepositoryIntegrationTest {
     @TestData(fileName = FOLDER_NAME + "find-agg-lc-class-results.groovy")
     public void testFindRightsholderAggLcClassResultsSystemTitleNull() {
         List<AclRightsholderTotalsHolderDto> expected = loadExpectedAclRightsholderTotalsHolderDto(
-                "json/acl/acl_scenario_detail_dto_for_find_rightsholder_agg_lc_cl_results1.json");
+            "json/acl/acl_scenario_detail_dto_for_find_rightsholder_agg_lc_cl_results1.json");
         RightsholderResultsFilter filter = new RightsholderResultsFilter();
         filter.setScenarioId("7ae1468e-ae4d-4846-b20d-46f28b75c82c");
         filter.setRhAccountNumber(1000028511L);
