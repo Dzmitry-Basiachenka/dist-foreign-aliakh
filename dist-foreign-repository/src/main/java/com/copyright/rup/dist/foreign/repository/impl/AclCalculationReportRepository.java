@@ -68,4 +68,9 @@ public class AclCalculationReportRepository extends CommonReportRepository imple
             "IAclCalculationReportMapper.findAclScenarioDetailDtos", parameters,
             () -> new AclScenarioDetailCsvReportHandler(Objects.requireNonNull(pipedOutputStream)));
     }
+
+    @Override
+    public void writeAclScenarioRightsholderTotalsCsvReport(String scenarioId, PipedOutputStream pipedOutputStream) {
+        // TODO {dbasiachenka} implement
+    }
 }
