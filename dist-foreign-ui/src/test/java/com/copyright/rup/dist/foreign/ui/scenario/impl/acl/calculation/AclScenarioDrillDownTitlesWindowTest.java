@@ -99,8 +99,8 @@ public class AclScenarioDrillDownTitlesWindowTest {
         Component component = content.getComponent(2);
         assertTrue(component instanceof Grid);
         verifyGrid((Grid) component, Arrays.asList(
-            Triple.of("Wr Wrk Inst", 110.0, -1),
-            Triple.of("System Title", 256.0, -1),
+            Triple.of("Wr Wrk Inst", -1.0, 1),
+            Triple.of("System Title", 255.0, -1),
             Triple.of("Print Gross Amt", 150.0, -1),
             Triple.of("Print Net Amt", 150.0, -1),
             Triple.of("Digital Gross Amt", 150.0, -1),
@@ -131,7 +131,8 @@ public class AclScenarioDrillDownTitlesWindowTest {
     public void testGridValues() {
         VerticalLayout content = (VerticalLayout) window.getContent();
         Object[][] expectedCells = {
-            {WR_WRK_INST, SYSTEM_TITLE, "1,500.00", "8,300.00", "1,000.00", "2,000.00", "2,500.00", "10,300.00"}
+            {WR_WRK_INST.toString(), SYSTEM_TITLE, "1,500.00", "8,300.00", "1,000.00", "2,000.00", "2,500.00",
+                "10,300.00"}
         };
         Grid grid = (Grid) content.getComponent(2);
         verifyGridItems(grid, buildAclRightsholderTotalsHolderDtos(), expectedCells);
@@ -148,7 +149,7 @@ public class AclScenarioDrillDownTitlesWindowTest {
     }
 
     @Test
-    public void testSystemTitleCellClickToDrillDownAggLcClassesWindow() throws Exception {
+    public void testWrWrkInstCellClickToDrillDownAggLcClassesWindow() throws Exception {
         RightsholderResultsFilter filter = buildRightsholderResultsFilter(null, null);
         expect(controller.getRightsholderTitleResults(filter)).andReturn(buildAclRightsholderTotalsHolderDtos()).once();
         AclScenarioDrillDownAggLcClassesWindow mockWindow = createMock(AclScenarioDrillDownAggLcClassesWindow.class);
@@ -160,7 +161,7 @@ public class AclScenarioDrillDownTitlesWindowTest {
         replay(Windows.class, AclScenarioDrillDownAggLcClassesWindow.class, controller);
         window = new AclScenarioDrillDownTitlesWindow(controller, filter);
         Grid grid = Whitebox.getInternalState(window, "grid");
-        Grid.Column column = (Grid.Column) grid.getColumns().get(1);
+        Grid.Column column = (Grid.Column) grid.getColumns().get(0);
         ValueProvider<AclRightsholderTotalsHolder, Button> provider = column.getValueProvider();
         Button button = provider.apply(buildAclRightsholderTotalsHolderDtos().get(0));
         button.click();
@@ -168,7 +169,7 @@ public class AclScenarioDrillDownTitlesWindowTest {
     }
 
     @Test
-    public void testSystemTitleCellClickToDrillDownUsageDetailsWindow() throws Exception {
+    public void testWrWrkInstCellClickToDrillDownUsageDetailsWindow() throws Exception {
         RightsholderResultsFilter filter = buildRightsholderResultsFilter(AGG_LIC_CLASS_ID, AGG_LIC_CLASS_NAME);
         AclScenarioDrillDownUsageDetailsWindow mockWindow = createMock(AclScenarioDrillDownUsageDetailsWindow.class);
         expectNew(AclScenarioDrillDownUsageDetailsWindow.class, eq(controller), eq(filter)).andReturn(mockWindow)
@@ -178,7 +179,7 @@ public class AclScenarioDrillDownTitlesWindowTest {
         expectLastCall().once();
         replay(Windows.class, AclScenarioDrillDownUsageDetailsWindow.class, controller);
         Grid grid = Whitebox.getInternalState(window, "grid");
-        Grid.Column column = (Grid.Column) grid.getColumns().get(1);
+        Grid.Column column = (Grid.Column) grid.getColumns().get(0);
         ValueProvider<AclRightsholderTotalsHolder, Button> provider = column.getValueProvider();
         Button button = provider.apply(buildAclRightsholderTotalsHolderDtos().get(0));
         button.click();
