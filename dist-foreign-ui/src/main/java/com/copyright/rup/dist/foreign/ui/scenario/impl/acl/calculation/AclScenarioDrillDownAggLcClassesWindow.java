@@ -121,13 +121,8 @@ public class AclScenarioDrillDownAggLcClassesWindow extends Window {
     }
 
     private void addColumns() {
-        grid.addColumn(holder -> holder.getAggregateLicenseeClass().getId())
-            .setCaption(ForeignUi.getMessage("table.column.aggregate_licensee_class_id"))
-            .setId("aggregateLicenseeClass.id")
-            .setSortProperty("aggregateLicenseeClass.id")
-            .setWidth(110);
         grid.addComponentColumn(holder -> {
-            Button button = Buttons.createButton(Objects.toString(holder.getAggregateLicenseeClass().getDescription()));
+            Button button = Buttons.createButton(Objects.toString(holder.getAggregateLicenseeClass().getId()));
             button.addStyleName(ValoTheme.BUTTON_LINK);
             button.addClickListener(event -> {
                 filter.setAggregateLicenseeClassId(holder.getAggregateLicenseeClass().getId());
@@ -139,9 +134,18 @@ public class AclScenarioDrillDownAggLcClassesWindow extends Window {
                 );
             });
             return button;
-        }).setCaption(ForeignUi.getMessage("table.column.aggregate_licensee_class_name"))
+        }).setCaption(ForeignUi.getMessage("table.column.aggregate_licensee_class_id"))
+            .setId("aggregateLicenseeClass.id")
+            .setSortProperty("aggregateLicenseeClass.id")
+            .setComparator((holder1, holder2) -> holder1.getAggregateLicenseeClass().getId()
+                .compareTo(holder2.getAggregateLicenseeClass().getId()))
+            .setWidth(110);
+        grid.addColumn(holder -> holder.getAggregateLicenseeClass().getDescription())
+            .setCaption(ForeignUi.getMessage("table.column.aggregate_licensee_class_name"))
             .setId("aggregateLicenseeClass.description")
             .setSortProperty("aggregateLicenseeClass.description")
+            .setComparator((holder1, holder2) -> holder1.getAggregateLicenseeClass().getDescription()
+                .compareToIgnoreCase(holder2.getAggregateLicenseeClass().getDescription()))
             .setWidth(256);
         addAmountColumn(AclRightsholderTotalsHolderDto::getGrossTotalPrint, "table.column.print_gross_amount",
             PRINT_GROSS_TOTAL_PROPERTY, 150);
@@ -163,6 +167,7 @@ public class AclScenarioDrillDownAggLcClassesWindow extends Window {
             .setCaption(ForeignUi.getMessage(captionProperty))
             .setId(columnId)
             .setSortProperty(columnId)
+            .setComparator((holder1, holder2) -> function.apply(holder1).compareTo(function.apply(holder2)))
             .setStyleGenerator(item -> STYLE_ALIGN_RIGHT)
             .setWidth(width);
     }

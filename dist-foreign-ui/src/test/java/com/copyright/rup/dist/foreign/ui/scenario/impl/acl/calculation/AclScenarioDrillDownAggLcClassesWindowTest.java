@@ -127,8 +127,8 @@ public class AclScenarioDrillDownAggLcClassesWindowTest {
     public void testGridValues() {
         Grid<?> grid = (Grid<?>) ((VerticalLayout) window.getContent()).getComponent(1);
         Object[][] expectedCells = {
-            {1, "Food and Tobacco", "1.00", "3.70", "2.95", "4.57", "3.95", "8.27"},
-            {12, "Machinery", "2.01", "2.74", "4.00", "5.00", "6.01", "7.74"}
+            {"1", "Food and Tobacco", "1.00", "3.70", "2.95", "4.57", "3.95", "8.27"},
+            {"12", "Machinery", "2.01", "2.74", "4.00", "5.00", "6.01", "7.74"}
         };
         verifyGridItems(grid, rightsholderTotalsHolderDtos, expectedCells);
         Object[][] expectedFooterColumns = {
@@ -156,7 +156,7 @@ public class AclScenarioDrillDownAggLcClassesWindowTest {
         replay(Windows.class, AclScenarioDrillDownTitlesWindow.class, controller);
         window = new AclScenarioDrillDownAggLcClassesWindow(controller, filter);
         Grid grid = Whitebox.getInternalState(window, "grid");
-        Grid.Column column = (Grid.Column) grid.getColumns().get(1);
+        Grid.Column column = (Grid.Column) grid.getColumns().get(0);
         ValueProvider<AclRightsholderTotalsHolder, Button> provider = column.getValueProvider();
         Button button = provider.apply(rightsholderTotalsHolderDtos.get(0));
         button.click();
@@ -174,7 +174,7 @@ public class AclScenarioDrillDownAggLcClassesWindowTest {
         expectLastCall().once();
         replay(Windows.class, AclScenarioDrillDownUsageDetailsWindow.class, controller);
         Grid grid = Whitebox.getInternalState(window, "grid");
-        Grid.Column column = (Grid.Column) grid.getColumns().get(1);
+        Grid.Column column = (Grid.Column) grid.getColumns().get(0);
         ValueProvider<AclRightsholderTotalsHolder, Button> provider = column.getValueProvider();
         Button button = provider.apply(rightsholderTotalsHolderDtos.get(0));
         button.click();
