@@ -1,37 +1,32 @@
 16.0.0
 -
-* B-74270 FDA: Tech Debt: update unit tests for Usage Age Weight Window
-* B-74270 FDA: Tech Debt: update unit tests for Acl Usage Age Weight, Acl Publication Type Weights windows
-* B-73149 FDA: View Titles by Rightsholder: implement domain object for View Titles by RH window
-* B-74271 FDA: Tech Debt: update unit tests for AACL metadata panel windows
+* B-73150 FDA: Details view by Title and Agg Lic Class: implement Usage Details by Title and Agg Lic Class repository
 * B-73150 FDA: Details view by Title and Agg Lic Class: implement Usage Details by Title and Agg Lic Class widget
 * B-73150 FDA: Details view by Title and Agg Lic Class: implement Usage Details by Title and Agg Lic Class controller and service
-* B-73149 FDA: View Titles by Rightsholder: implement View Titles by RH window
-* B-73150 FDA: Details view by Title and Agg Lic Class: implement Usage Details by Title and Agg Lic Class repository
-* B-74271 Tech Debt: FDA: improve performance of viewing ACL scenarios
-* B-73151 FDA: View Agg Lic Class by Rightsholder: implement widget and controller
-* B-73149 FDA: View Titles by Rightsholder: implement service logic for  ACL Scenario Drill Down Titles window
-* B-73149 FDA: View Titles by Rightsholder: fix faild build
-* B-74271 Tech Debt: FDA: fix usage age periods in UI tests
-* B-57802 FDA: Delete ACL Scenario: implement delete button on UI
-* B-74271 Tech Debt: FDA: fix usage age periods in service tests
-* B-73150 FDA: Details view by Title and Agg Lic Class: implement totals row in the window
-* B-73149 FDA: View Titles by Rightsholder: implement totals row and meta info layout on ACL Scenario Drill Down Titles window
 * B-73150 FDA: Details view by Title and Agg Lic Class: implement meta info layout in the window
-* B-57802 FDA: Delete ACL Scenario: implement mediator to control permissions
-* B-73151 FDA: View Agg Lic Class by Rightsholder: implement backend logic and rename styles for window
-* B-73150 FDA: Details view by Title and Agg Lic Class: implement unit tests for hyperlinks from View Scenario window
-* B-73149 FDA: View Titles by Rightsholder: implement repository logic for  ACL Scenario Drill Down Titles window
 * B-73150 FDA: Details view by Title and Agg Lic Class: implement unit tests for hyperlinks from 'Results by Rightsholder: Title' window
-* B-74271 Tech Debt: FDA: add unit tests to verify grid items for ACL scenario windows
 * B-73150 FDA: Details view by Title and Agg Lic Class: implement unit tests for hyperlinks from 'Results by Rightsholder: Aggregate Licensee Class' window
-* B-57802 FDA: Delete ACL Scenario: implement backend logic to delete scenario
-* B-73151 FDA: View Agg Lic Class by Rightsholder: implement meta info layout on window
-* B-57802 FDA: Delete ACL Scenario: fix checkstyle issue
+* B-73150 FDA: Details view by Title and Agg Lic Class: implement unit tests for hyperlinks from View Scenario window
+* B-73150 FDA: Details view by Title and Agg Lic Class: implement totals row in the window
 * B-73150 FDA: Details view by Title and Agg Lic Class: implement resizing the windows according to their order
 * B-73150 FDA: Details view by Title and Agg Lic Class: modify footer formatting if usage details have only single type of use
+* B-73151 FDA: View Agg Lic Class by Rightsholder: implement widget and controller
+* B-73151 FDA: View Agg Lic Class by Rightsholder: implement meta info layout on window
+* B-73151 FDA: View Agg Lic Class by Rightsholder: implement backend logic and rename styles for window
 * B-73151 FDA: View Agg Lic Class by Rightsholder: add test cases for testFindRightsholderAggLcClassResults
+* B-73149 FDA: View Titles by Rightsholder: implement service logic for  ACL Scenario Drill Down Titles window
+* B-73149 FDA: View Titles by Rightsholder: implement totals row and meta info layout on ACL Scenario Drill Down Titles window
+* B-73149 FDA: View Titles by Rightsholder: implement repository logic for  ACL Scenario Drill Down Titles window
+* B-73149 FDA: View Titles by Rightsholder: implement domain object for View Titles by RH window
+* B-73149 FDA: View Titles by Rightsholder: implement View Titles by RH window
+* B-57802 FDA: Delete ACL Scenario: implement delete button on UI
+* B-57802 FDA: Delete ACL Scenario: implement backend logic to delete scenario
+* B-57802 FDA: Delete ACL Scenario: implement mediator to control permissions
 * B-74271 Tech Debt: FDA: add unit tests to verify grid items for ACL usage windows
+* B-74270 Tech Debt: FDA: update unit tests for Usage Age Weight Window
+* B-74270 Tech Debt: FDA: update unit tests for Acl Usage Age Weight, Acl Publication Type Weights windows
+* B-74271 Tech Debt: FDA: add unit tests to verify grid items for ACL scenario windows
+* B-74271 Tech Debt: FDA: improve performance of viewing ACL scenarios
 
 15.1.45
 -
