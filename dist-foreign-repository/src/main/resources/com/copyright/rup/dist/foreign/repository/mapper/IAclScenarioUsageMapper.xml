@@ -689,8 +689,8 @@
         join ${schema}.df_acl_scenario_detail scd on shd.df_acl_scenario_detail_uid = scd.df_acl_scenario_detail_uid
         where shd.df_acl_scenario_uid = #{scenarioId}
             and shd.rh_account_number = #{accountNumber}
-            <if test="null != systemTitle">
-                and scd.system_title = #{systemTitle}
+            <if test="null != wrWrkInst">
+                and scd.wr_wrk_inst = #{wrWrkInst}
             </if>
         group by shd.aggregate_licensee_class_id, aggregate_licensee_class_name
         order by shd.aggregate_licensee_class_id
