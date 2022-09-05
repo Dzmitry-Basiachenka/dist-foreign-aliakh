@@ -2,8 +2,10 @@ databaseChangeLog {
     property(file: 'database.properties')
 
     changeSet(id: '2022-07-01-00', author: 'Dzmitry Basiachenka <dbasiachenka@copyright.com>') {
-        comment('Insert test data for testFindAclRightsholderTotalsHoldersByScenarioIdEmptySearchValue, testFindAclRightsholderTotalsHoldersByScenarioIdNotEmptySearchValue, ' +
-                'testFindAclRightsholderTotalsHolderCountByScenarioIdEmptySearchValue, testFindAclRightsholderTotalsHolderCountByScenarioIdNullSearchValue, ' +
+        comment('Insert test data for testFindAclRightsholderTotalsHoldersByScenarioIdEmptySearchValue, ' +
+                'testFindAclRightsholderTotalsHoldersByScenarioIdNotEmptySearchValue, ' +
+                'testFindAclRightsholderTotalsHolderCountByScenarioIdEmptySearchValue, ' +
+                'testFindAclRightsholderTotalsHolderCountByScenarioIdNullSearchValue, ' +
                 'testSortingFindAclRightsholderTotalsHoldersByScenarioId')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
@@ -51,12 +53,12 @@ databaseChangeLog {
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_detail') {
-            column(name: 'df_acl_scenario_detail_uid', value: '66845e1f-5603-4101-811d-29e4187a5976')
+            column(name: 'df_acl_scenario_detail_uid', value: '79c6196c-6d52-4ed5-8251-d653afa89aee')
             column(name: 'df_acl_scenario_uid', value: '0d0041a3-833e-463e-8ad4-f28461dc961d')
             column(name: 'period_end_date', value: 202212)
-            column(name: 'original_detail_id', value: 'OGN674GHHSB107')
-            column(name: 'wr_wrk_inst', value: 122813964)
-            column(name: 'system_title', value: 'Aerospace America')
+            column(name: 'original_detail_id', value: 'OGN674GHHSB108')
+            column(name: 'wr_wrk_inst', value: 918765432)
+            column(name: 'system_title', value: 'Corporate identity manuals')
             column(name: 'detail_licensee_class_id', value: 1)
             column(name: 'publication_type_uid', value: 'ad8df236-5200-4acf-be55-cf82cd342f14')
             column(name: 'content_unit_price', value: 1.0000000000)
@@ -66,13 +68,49 @@ databaseChangeLog {
             column(name: 'survey_country', value: 'United States')
         }
 
-        insert(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_detail') {
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_share_detail') {
+            column(name: 'df_acl_share_detail_uid', value: 'a5a30e94-6e8b-42bb-bd8e-37adb19741d2')
+            column(name: 'df_acl_scenario_uid', value: '0d0041a3-833e-463e-8ad4-f28461dc961d')
             column(name: 'df_acl_scenario_detail_uid', value: '79c6196c-6d52-4ed5-8251-d653afa89aee')
+            column(name: 'type_of_use', value: 'PRINT')
+            column(name: 'rh_account_number', value: 1000000026)
+            column(name: 'aggregate_licensee_class_id', value: 1)
+            column(name: 'volume_weight', value: 1.0000000000)
+            column(name: 'value_weight', value: 1.0000000000)
+            column(name: 'volume_weight_denominator', value: 1.0000000000)
+            column(name: 'value_weight_denominator', value: 1.0000000000)
+            column(name: 'volume_share', value: 1.0000000000)
+            column(name: 'value_share', value: 1.0000000000)
+            column(name: 'net_amount', value: 10.00)
+            column(name: 'gross_amount', value: 20.00)
+            column(name: 'service_fee_amount', value: 3.00)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_share_detail') {
+            column(name: 'df_acl_share_detail_uid', value: '86314fa2-4dd7-44d7-b75b-76358a599085')
+            column(name: 'df_acl_scenario_uid', value: '0d0041a3-833e-463e-8ad4-f28461dc961d')
+            column(name: 'df_acl_scenario_detail_uid', value: '79c6196c-6d52-4ed5-8251-d653afa89aee')
+            column(name: 'type_of_use', value: 'DIGITAL')
+            column(name: 'rh_account_number', value: 1000002859)
+            column(name: 'aggregate_licensee_class_id', value: 12)
+            column(name: 'volume_weight', value: 1.0000000000)
+            column(name: 'value_weight', value: 1.0000000000)
+            column(name: 'volume_weight_denominator', value: 1.0000000000)
+            column(name: 'value_weight_denominator', value: 1.0000000000)
+            column(name: 'volume_share', value: 1.0000000000)
+            column(name: 'value_share', value: 1.0000000000)
+            column(name: 'net_amount', value: 10.00)
+            column(name: 'gross_amount', value: 20.00)
+            column(name: 'service_fee_amount', value: 3.00)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_detail') {
+            column(name: 'df_acl_scenario_detail_uid', value: '66845e1f-5603-4101-811d-29e4187a5976')
             column(name: 'df_acl_scenario_uid', value: '0d0041a3-833e-463e-8ad4-f28461dc961d')
             column(name: 'period_end_date', value: 202212)
-            column(name: 'original_detail_id', value: 'OGN674GHHSB108')
-            column(name: 'wr_wrk_inst', value: 918765432)
-            column(name: 'system_title', value: 'Corporate identity manuals')
+            column(name: 'original_detail_id', value: 'OGN674GHHSB107')
+            column(name: 'wr_wrk_inst', value: 122813964)
+            column(name: 'system_title', value: 'Aerospace America')
             column(name: 'detail_licensee_class_id', value: 1)
             column(name: 'publication_type_uid', value: 'ad8df236-5200-4acf-be55-cf82cd342f14')
             column(name: 'content_unit_price', value: 1.0000000000)
@@ -118,42 +156,39 @@ databaseChangeLog {
             column(name: 'service_fee_amount', value: 32.00)
         }
 
-        insert(schemaName: dbAppsSchema, tableName: 'df_acl_share_detail') {
-            column(name: 'df_acl_share_detail_uid', value: 'a5a30e94-6e8b-42bb-bd8e-37adb19741d2')
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_detail') {
+            column(name: 'df_acl_scenario_detail_uid', value: 'a1c9054b-4716-4fdb-a9c7-8abc79347f35')
             column(name: 'df_acl_scenario_uid', value: '0d0041a3-833e-463e-8ad4-f28461dc961d')
-            column(name: 'df_acl_scenario_detail_uid', value: '79c6196c-6d52-4ed5-8251-d653afa89aee')
+            column(name: 'period_end_date', value: 202212)
+            column(name: 'original_detail_id', value: 'OGN674GHHSB109')
+            column(name: 'wr_wrk_inst', value: 100002555)
+            column(name: 'system_title', value: 'Aerospace America')
+            column(name: 'detail_licensee_class_id', value: 3)
+            column(name: 'publication_type_uid', value: 'ad8df236-5200-4acf-be55-cf82cd342f14')
+            column(name: 'content_unit_price', value: 1.0000000000)
+            column(name: 'number_of_copies', value: 1)
+            column(name: 'usage_age_weight', value: 1.00000)
+            column(name: 'weighted_copies', value: 1.0000000000)
+            column(name: 'survey_country', value: 'United States')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_share_detail') {
+            column(name: 'df_acl_share_detail_uid', value: 'b2ee2225-3436-4098-9e29-9cd861fb44f4')
+            column(name: 'df_acl_scenario_uid', value: '0d0041a3-833e-463e-8ad4-f28461dc961d')
+            column(name: 'df_acl_scenario_detail_uid', value: 'a1c9054b-4716-4fdb-a9c7-8abc79347f35')
             column(name: 'type_of_use', value: 'PRINT')
-            column(name: 'rh_account_number', value: 1000000026)
-            column(name: 'aggregate_licensee_class_id', value: 1)
-            column(name: 'volume_weight', value: 1.0000000000)
-            column(name: 'value_weight', value: 1.0000000000)
-            column(name: 'volume_weight_denominator', value: 1.0000000000)
-            column(name: 'value_weight_denominator', value: 1.0000000000)
-            column(name: 'volume_share', value: 1.0000000000)
-            column(name: 'value_share', value: 1.0000000000)
-            column(name: 'net_amount', value: 10.00)
-            column(name: 'gross_amount', value: 20.00)
-            column(name: 'service_fee_amount', value: 3.00)
-        }
-
-        insert(schemaName: dbAppsSchema, tableName: 'df_acl_share_detail') {
-            column(name: 'df_acl_share_detail_uid', value: '86314fa2-4dd7-44d7-b75b-76358a599085')
-            column(name: 'df_acl_scenario_uid', value: '0d0041a3-833e-463e-8ad4-f28461dc961d')
-            column(name: 'df_acl_scenario_detail_uid', value: '79c6196c-6d52-4ed5-8251-d653afa89aee')
-            column(name: 'type_of_use', value: 'DIGITAL')
             column(name: 'rh_account_number', value: 1000002859)
-            column(name: 'aggregate_licensee_class_id', value: 12)
+            column(name: 'aggregate_licensee_class_id', value: 51)
             column(name: 'volume_weight', value: 1.0000000000)
             column(name: 'value_weight', value: 1.0000000000)
             column(name: 'volume_weight_denominator', value: 1.0000000000)
             column(name: 'value_weight_denominator', value: 1.0000000000)
             column(name: 'volume_share', value: 1.0000000000)
             column(name: 'value_share', value: 1.0000000000)
-            column(name: 'net_amount', value: 10.00)
-            column(name: 'gross_amount', value: 20.00)
-            column(name: 'service_fee_amount', value: 3.00)
+            column(name: 'net_amount', value: 42.00)
+            column(name: 'gross_amount', value: 50.00)
+            column(name: 'service_fee_amount', value: 8.00)
         }
-
         rollback {
             dbRollback
         }
