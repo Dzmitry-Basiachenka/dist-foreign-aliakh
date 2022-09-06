@@ -56,6 +56,7 @@ public class AclCalculationWidget extends TabSheet implements IAclCalculationWid
         IController<?> controller = supplier.get();
         IWidget widget = controller.initWidget();
         widget.setController(controller);
+        controller.refreshWidget();
         addTab(widget, ForeignUi.getMessage(caption));
     }
 }

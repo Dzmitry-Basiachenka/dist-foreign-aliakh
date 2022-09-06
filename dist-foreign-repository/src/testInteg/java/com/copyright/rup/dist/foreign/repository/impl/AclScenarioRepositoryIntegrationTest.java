@@ -208,7 +208,7 @@ public class AclScenarioRepositoryIntegrationTest {
             "924aab3c-b2e0-4115-b46a-cb6cfe70fb61", SCENARIO_NAME, DESCRIPTION,
             ScenarioStatusEnum.IN_PROGRESS, true, 202012, LICENSE_TYPE_ACL, USER_NAME, DATE));
         assertEquals(1, aclScenarioRepository.findCountByName(SCENARIO_NAME));
-        aclScenarioRepository.remove(SCENARIO_UID);
+        aclScenarioRepository.deleteScenario(SCENARIO_UID);
         assertEquals(0, aclScenarioRepository.findCountByName(SCENARIO_NAME));
     }
 
@@ -221,7 +221,7 @@ public class AclScenarioRepositoryIntegrationTest {
         assertEquals(2, scenario.getPublicationTypes().size());
         assertEquals(2, scenario.getUsageAges().size());
         assertNotNull(aclScenarioUsageRepository.findScenarioDetailsByScenarioId(scenarioId));
-        aclScenarioRepository.removeScenarioData(scenarioId);
+        aclScenarioRepository.deleteScenarioData(scenarioId);
         aclScenarioRepository.findAclPublicationTypesByScenarioId(scenarioId);
         assertEquals(0, aclScenarioRepository.findAclPublicationTypesByScenarioId(scenarioId).size());
         assertEquals(0, aclScenarioRepository.findDetailLicenseeClassesByScenarioId(scenarioId).size());

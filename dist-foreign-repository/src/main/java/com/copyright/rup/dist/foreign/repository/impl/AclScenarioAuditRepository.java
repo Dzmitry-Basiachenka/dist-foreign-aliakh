@@ -1,12 +1,9 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
-import static com.google.common.base.Preconditions.checkArgument;
-
 import com.copyright.rup.dist.common.repository.BaseRepository;
 import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
 import com.copyright.rup.dist.foreign.repository.api.IAclScenarioAuditRepository;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -36,7 +33,6 @@ public class AclScenarioAuditRepository extends BaseRepository implements IAclSc
 
     @Override
     public void deleteByScenarioId(String scenarioId) {
-        checkArgument(StringUtils.isNotBlank(scenarioId));
-        delete("IAclScenarioAuditMapper.deleteByScenarioId", scenarioId);
+        delete("IAclScenarioAuditMapper.deleteByScenarioId", Objects.requireNonNull(scenarioId));
     }
 }

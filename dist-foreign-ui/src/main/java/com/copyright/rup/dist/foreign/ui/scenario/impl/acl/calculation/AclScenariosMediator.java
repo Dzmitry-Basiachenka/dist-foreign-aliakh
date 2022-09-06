@@ -43,8 +43,8 @@ class AclScenariosMediator implements IMediator {
         if (Objects.nonNull(aclScenario)) {
             boolean inProgressStatus = ScenarioStatusEnum.IN_PROGRESS == aclScenario.getStatus();
             viewButton.setEnabled(true);
-            deleteButton.setEnabled(ForeignSecurityUtils.hasSpecialistPermission() && inProgressStatus
-                || aclScenario.isEditableFlag() && inProgressStatus);
+            deleteButton.setEnabled(
+                inProgressStatus && (ForeignSecurityUtils.hasSpecialistPermission() || aclScenario.isEditableFlag()));
         } else {
             viewButton.setEnabled(false);
             deleteButton.setEnabled(false);
