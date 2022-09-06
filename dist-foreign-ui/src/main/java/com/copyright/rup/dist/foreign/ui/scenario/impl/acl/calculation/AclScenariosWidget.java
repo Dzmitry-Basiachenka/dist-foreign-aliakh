@@ -195,7 +195,7 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
         });
         HorizontalLayout buttonsLayout = new HorizontalLayout(createButton, viewButton, deleteButton, pubTypeWeights);
         buttonsLayout.setMargin(new MarginInfo(true, true, true, true));
-        VaadinUtils.setButtonsAutoDisabled(viewButton);
+        VaadinUtils.setButtonsAutoDisabled(createButton, viewButton, deleteButton, pubTypeWeights);
         VaadinUtils.addComponentStyle(buttonsLayout, "acl-scenario-buttons-layout");
         return buttonsLayout;
     }

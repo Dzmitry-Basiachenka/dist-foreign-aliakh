@@ -37,16 +37,15 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.Window;
-
 import com.vaadin.ui.components.grid.FooterCell;
 import com.vaadin.ui.components.grid.FooterRow;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Triple;
 import org.powermock.reflect.Whitebox;
 
 import java.lang.reflect.Array;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -67,7 +66,6 @@ import java.util.stream.Stream;
  */
 public final class UiTestHelper {
 
-    private static final List<String> BUTTONS = Arrays.asList("Export Details", "Export");
     private static final String UNCHECKED = "unchecked";
 
     private UiTestHelper() {
@@ -245,7 +243,7 @@ public final class UiTestHelper {
             Component button = layout.getComponent(i);
             if (Objects.nonNull(captions[i])) {
                 assertTrue(button instanceof Button);
-                verifyButtonClickListener((Button) button);
+                // TODO verify disable on click
             }
             assertEquals(captions[i], button.getCaption());
         });
@@ -494,16 +492,5 @@ public final class UiTestHelper {
         assertTrue(button.isDisableOnClick());
         assertTrue(StringUtils.contains(button.getStyleName(), Cornerstone.BUTTON_LINK));
         assertFalse(iterator.hasNext());
-    }
-
-    private static void verifyButtonClickListener(Button button) {
-        Collection<?> listeners = button.getListeners(ClickEvent.class);
-        if (!BUTTONS.contains(button.getCaption())) {
-            assertTrue(CollectionUtils.isNotEmpty(listeners));
-            assertEquals(1, listeners.size());
-            assertNotNull(listeners.iterator().next());
-        } else {
-            assertTrue(CollectionUtils.isEmpty(listeners));
-        }
     }
 }

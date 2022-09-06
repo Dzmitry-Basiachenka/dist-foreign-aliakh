@@ -117,6 +117,7 @@ public class AclScenarioWidget extends Window implements IAclScenarioWidget {
             button.addStyleName(ValoTheme.BUTTON_LINK);
             button.addClickListener(event -> controller.onRightsholderAccountNumberClicked(
                 holder.getRightsholder().getAccountNumber(), holder.getRightsholder().getName()));
+            VaadinUtils.setButtonsAutoDisabled(button);
             return button;
         }).setCaption(ForeignUi.getMessage("table.column.rh_account_number"))
             .setId("rightsholder.accountNumber")

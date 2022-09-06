@@ -295,6 +295,7 @@ public class CreateAclScenarioWindow extends Window implements IDateFormatter {
             onConfirmButtonClicked();
             createButtonClickListener.buttonClick(event);
         });
+        VaadinUtils.setButtonsAutoDisabled(confirmButton);
         HorizontalLayout layout = new HorizontalLayout(confirmButton, Buttons.createCancelButton(this));
         layout.setSpacing(true);
         return layout;

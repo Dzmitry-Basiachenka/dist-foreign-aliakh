@@ -114,6 +114,7 @@ public class AclPublicationTypeWeightsWindow extends Window {
                 IParametersSaveListener.SAVE_HANDLER);
         });
         addButton.setVisible(isEditable);
+        VaadinUtils.setButtonsAutoDisabled(addButton);
         Button saveButton = new Button(ForeignUi.getMessage("button.save"));
         saveButton.addClickListener(event -> {
             fireParametersSaveEvent(new ParametersSaveEvent<>(this, currentValues));
