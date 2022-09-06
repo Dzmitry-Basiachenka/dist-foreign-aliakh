@@ -46,6 +46,8 @@ public class AclCalculationCsvReportsIntegrationTest extends CsvReportsTestHelpe
         FOLDER_NAME + "write-fund-pool-detail-csv-report.groovy";
     private static final String WRITE_SCENARIO_DETAILS_CSV_REPORT =
         FOLDER_NAME + "write-scenario-details-csv-report.groovy";
+    private static final String WRITE_SCENARIO_RIGHTSHOLDER_TOTALS_CSV_REPORT =
+        FOLDER_NAME + "write-scenario-rightsholder-totals-csv-report.groovy";
 
     @Autowired
     private IAclCalculationReportRepository aclCalculationReportRepository;
@@ -134,12 +136,19 @@ public class AclCalculationCsvReportsIntegrationTest extends CsvReportsTestHelpe
     }
 
     @Test
+    @TestData(fileName = WRITE_SCENARIO_RIGHTSHOLDER_TOTALS_CSV_REPORT)
     public void testWriteAclScenarioRightsholderTotalsCsvReport() throws IOException {
-        // TODO {dbasiachenka} implement
+        assertFilesWithExecutor(outputStream ->
+            aclCalculationReportRepository.writeAclScenarioRightsholderTotalsCsvReport(
+                "ac2b822b-c8d1-4599-acdc-e1d13713a6c9", outputStream), "acl/scenario_rightsholder_totals_report.csv");
     }
 
     @Test
+    @TestData(fileName = WRITE_SCENARIO_RIGHTSHOLDER_TOTALS_CSV_REPORT)
     public void testWriteAclScenarioRightsholderTotalsEmptyCsvReport() throws IOException {
-        // TODO {dbasiachenka} implement
+        assertFilesWithExecutor(
+            outputStream -> aclCalculationReportRepository.writeAclScenarioRightsholderTotalsCsvReport(
+                "12208959-6b37-4ac4-a921-cda0cc652c09", outputStream),
+            "acl/scenario_rightsholder_totals_report_empty.csv");
     }
 }

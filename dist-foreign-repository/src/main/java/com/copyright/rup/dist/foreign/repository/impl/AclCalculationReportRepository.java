@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
+import com.copyright.rup.dist.common.repository.api.Sort;
+import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.foreign.domain.filter.AclFundPoolDetailFilter;
 import com.copyright.rup.dist.foreign.domain.filter.AclGrantDetailFilter;
 import com.copyright.rup.dist.foreign.domain.filter.AclUsageFilter;
@@ -7,6 +9,7 @@ import com.copyright.rup.dist.foreign.repository.api.IAclCalculationReportReposi
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.AclFundPoolDetailsCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.AclGrantDetailCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.AclScenarioDetailCsvReportHandler;
+import com.copyright.rup.dist.foreign.repository.impl.csv.acl.AclScenarioRightsholderTotalsCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.AclUsageCsvReportHandler;
 
 import com.google.common.collect.Maps;
@@ -71,6 +74,13 @@ public class AclCalculationReportRepository extends CommonReportRepository imple
 
     @Override
     public void writeAclScenarioRightsholderTotalsCsvReport(String scenarioId, PipedOutputStream pipedOutputStream) {
-        // TODO {dbasiachenka} implement
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
+        parameters.put("scenarioId", Objects.requireNonNull(scenarioId));
+        parameters.put("sort", new Sort("rightsholder.accountNumber", Direction.ASC));
+        try (AclScenarioRightsholderTotalsCsvReportHandler handler =
+                 new AclScenarioRightsholderTotalsCsvReportHandler(Objects.requireNonNull(pipedOutputStream))) {
+            getTemplate().select("IAclCalculationReportMapper.findAclRightsholderTotalsHoldersReportDtos",
+                parameters, handler);
+        }
     }
 }
