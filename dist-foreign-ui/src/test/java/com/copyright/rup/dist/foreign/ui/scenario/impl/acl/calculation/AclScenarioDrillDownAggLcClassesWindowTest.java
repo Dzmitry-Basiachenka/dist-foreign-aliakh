@@ -137,8 +137,7 @@ public class AclScenarioDrillDownAggLcClassesWindowTest {
             {"grossTotalDigital", "6.95", STYLE_ALIGN_RIGHT},
             {"netTotalDigital", "9.57", STYLE_ALIGN_RIGHT},
             {"grossTotal", "9.96", STYLE_ALIGN_RIGHT},
-            {"netTotal", "16.01", STYLE_ALIGN_RIGHT},
-
+            {"netTotal", "16.01", STYLE_ALIGN_RIGHT}
         };
         verifyFooterItems(grid, expectedFooterColumns);
     }
@@ -146,8 +145,8 @@ public class AclScenarioDrillDownAggLcClassesWindowTest {
     @Test
     public void testAggLcClassCellClickToDrillDownTitlesWindow() throws Exception {
         RightsholderResultsFilter filter = buildRightsholderResultsFilter(null, null);
-        expect(controller.getRightsholderAggLcClassResults(filter)).andReturn(rightsholderTotalsHolderDtos)
-            .once();
+        expect(controller.getRightsholderAggLcClassResults(filter))
+            .andReturn(rightsholderTotalsHolderDtos).once();
         AclScenarioDrillDownTitlesWindow mockWindow = createMock(AclScenarioDrillDownTitlesWindow.class);
         expectNew(AclScenarioDrillDownTitlesWindow.class, eq(controller), eq(filter)).andReturn(mockWindow).once();
         mockStatic(Windows.class);

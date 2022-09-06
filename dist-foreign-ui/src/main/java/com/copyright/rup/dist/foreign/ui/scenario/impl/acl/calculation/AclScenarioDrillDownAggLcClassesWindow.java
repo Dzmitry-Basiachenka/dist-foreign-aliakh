@@ -74,7 +74,7 @@ public class AclScenarioDrillDownAggLcClassesWindow extends Window {
         content.setExpandRatio(grid, 1);
         content.setComponentAlignment(closeButton, Alignment.BOTTOM_RIGHT);
         setContent(content);
-        setCaption(ForeignUi.getMessage("window.acl_scenario_drill_down_aggregate-licensee-class"));
+        setCaption(ForeignUi.getMessage("window.acl_scenario_drill_down_aggregate_licensee_class"));
         VaadinUtils.addComponentStyle(this, "acl-scenario-drill-down-aggregate-licensee-class-window");
     }
 
@@ -177,8 +177,7 @@ public class AclScenarioDrillDownAggLcClassesWindow extends Window {
         grid.setFooterVisible(true);
         FooterRow row = grid.getFooterRow(0);
         row.setStyleName("table-ext-footer");
-        row.join("aggregateLicenseeClass.id", "aggregateLicenseeClass.description")
-            .setText("Totals");
+        row.join("aggregateLicenseeClass.id", "aggregateLicenseeClass.description").setText("Totals");
         initFooterCell(row, PRINT_GROSS_TOTAL_PROPERTY, AclRightsholderTotalsHolderDto::getGrossTotalPrint);
         initFooterCell(row, PRINT_NET_TOTAL_PROPERTY, AclRightsholderTotalsHolderDto::getNetTotalPrint);
         initFooterCell(row, DIGITAL_GROSS_TOTAL_PROPERTY, AclRightsholderTotalsHolderDto::getGrossTotalDigital);
