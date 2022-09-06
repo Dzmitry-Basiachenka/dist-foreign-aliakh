@@ -53,7 +53,7 @@ public class AclScenarioDrillDownUsageDetailsWindow extends Window {
      * Constructor.
      *
      * @param controller instance of {@link IAclScenarioController}
-     * @param filter     instance of {@link RightsholderResultsFilter}d
+     * @param filter     instance of {@link RightsholderResultsFilter}
      */
     public AclScenarioDrillDownUsageDetailsWindow(IAclScenarioController controller, RightsholderResultsFilter filter) {
         this.controller = controller;
@@ -239,7 +239,7 @@ public class AclScenarioDrillDownUsageDetailsWindow extends Window {
         cell.setText(BigDecimalUtils.formatCurrencyForGrid(
             scenarioDetails.stream()
                 .map(function)
-                .map(value -> Objects.nonNull(value) ? value : BigDecimal.ZERO)
+                .filter(Objects::nonNull)
                 .reduce(BigDecimal.ZERO, BigDecimal::add)
         ));
         cell.setStyleName(STYLE_ALIGN_RIGHT);
