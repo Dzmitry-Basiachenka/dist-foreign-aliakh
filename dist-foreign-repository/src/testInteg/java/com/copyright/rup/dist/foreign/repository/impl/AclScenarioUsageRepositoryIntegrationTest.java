@@ -589,7 +589,7 @@ public class AclScenarioUsageRepositoryIntegrationTest {
         RightsholderResultsFilter filter = new RightsholderResultsFilter();
         filter.setScenarioId("7ae1468e-ae4d-4846-b20d-46f28b75c82c");
         filter.setRhAccountNumber(1000028511L);
-        filter.setSystemTitle(SYSTEM_TITLE);
+        filter.setWrWrkInst(122825555L);
         List<AclRightsholderTotalsHolderDto> actual =
             aclScenarioUsageRepository.findRightsholderAggLcClassResults(filter);
         assertEquals(expected.size(), actual.size());
