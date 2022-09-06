@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.domain;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.common.domain.StoredEntity;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -17,7 +18,7 @@ import java.math.BigDecimal;
  *
  * @author Dzmitry Basiachenka
  */
-public class AclRightsholderTotalsHolder {
+public class AclRightsholderTotalsHolder extends StoredEntity<String> {
 
     private Rightsholder rightsholder = new Rightsholder();
     private BigDecimal grossTotalPrint = BigDecimal.ZERO.setScale(10, BigDecimal.ROUND_HALF_UP);

@@ -30,4 +30,8 @@
     <select id="findAclScenarioDetailDtos" resultMap="IAclScenarioUsageMapper.aclScenarioDetailDtoResultMap" parameterType="map" fetchSize="${usageSelectFetchSize}">
         <include refid="IAclScenarioUsageMapper.selectDtosByScenarioIdSql"/>
     </select>
+
+    <select id="findAclRightsholderTotalsHoldersReportDtos" parameterType="map" resultMap="IAclScenarioUsageMapper.aclRightsholderTotalsHolderResultMap">
+        <include refid="IAclScenarioUsageMapper.findAclRightsholderTotalsHoldersByScenarioIdSql"/>
+    </select>
 </mapper>
