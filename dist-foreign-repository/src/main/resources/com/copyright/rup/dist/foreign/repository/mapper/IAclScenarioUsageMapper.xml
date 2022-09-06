@@ -673,7 +673,7 @@
         <include refid="IAclScenarioUsageMapper.selectScenarioDetailDtosSql"/>
         where s.df_acl_scenario_uid = #{scenarioId}
             and (print_details.rh_account_number = #{accountNumber} or digital_details.rh_account_number = #{accountNumber})
-            and system_title = #{systemTitle}
+            and wr_wrk_inst = #{wrWrkInst}
             and alc.aggregate_licensee_class_id = #{aggregateLicenseeClassId}
         order by scd.updated_datetime desc, scd.df_acl_scenario_detail_uid
     </select>

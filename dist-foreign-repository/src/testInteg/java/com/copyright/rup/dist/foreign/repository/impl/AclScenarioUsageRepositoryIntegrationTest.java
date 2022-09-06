@@ -527,7 +527,7 @@ public class AclScenarioUsageRepositoryIntegrationTest {
         RightsholderResultsFilter filter = new RightsholderResultsFilter();
         filter.setScenarioId(SCENARIO_UID_4);
         filter.setRhAccountNumber(1000002859L);
-        filter.setSystemTitle("Aerospace America");
+        filter.setWrWrkInst(122813964L);
         filter.setAggregateLicenseeClassId(1);
         List<AclScenarioDetailDto> actualScenarioDetails =
             aclScenarioUsageRepository.findRightsholderDetailsResults(filter);

@@ -10,7 +10,9 @@ import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.util.CurrencyUtils;
 import com.copyright.rup.vaadin.util.VaadinUtils;
+
 import com.vaadin.data.ValueProvider;
+import com.vaadin.server.SerializableComparator;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
@@ -23,6 +25,7 @@ import com.vaadin.ui.components.grid.FooterCell;
 import com.vaadin.ui.components.grid.FooterRow;
 
 import java.math.BigDecimal;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
@@ -177,6 +180,9 @@ public class AclScenarioDrillDownUsageDetailsWindow extends Window {
             .setCaption(ForeignUi.getMessage(captionProperty))
             .setId(columnId)
             .setSortProperty(columnId)
+            .setComparator((SerializableComparator<AclScenarioDetailDto>) (detail1, detail2) ->
+                Comparator.comparing(function, Comparator.nullsLast(Comparator.naturalOrder()))
+                    .compare(detail1, detail2))
             .setHidable(true)
             .setStyleGenerator(item -> STYLE_ALIGN_RIGHT)
             .setWidth(width);
@@ -188,14 +194,17 @@ public class AclScenarioDrillDownUsageDetailsWindow extends Window {
             .setCaption(ForeignUi.getMessage(captionProperty))
             .setId(columnId)
             .setSortProperty(columnId)
+            .setComparator((SerializableComparator<AclScenarioDetailDto>) (detail1, detail2) ->
+                Comparator.comparing(function, Comparator.nullsLast(Comparator.naturalOrder()))
+                    .compare(detail1, detail2))
             .setHidable(true)
             .setStyleGenerator(item -> STYLE_ALIGN_RIGHT)
             .setWidth(width);
     }
 
-    private void addBooleanColumn(ValueProvider<AclScenarioDetailDto, Boolean> valueProvider, String captionProperty,
+    private void addBooleanColumn(ValueProvider<AclScenarioDetailDto, Boolean> provider, String captionProperty,
                                   String columnId, double width) {
-        grid.addColumn(value -> BooleanUtils.toYNString(valueProvider.apply(value)))
+        grid.addColumn(value -> BooleanUtils.toYNString(provider.apply(value)))
             .setCaption(ForeignUi.getMessage(captionProperty))
             .setId(columnId)
             .setSortable(true)

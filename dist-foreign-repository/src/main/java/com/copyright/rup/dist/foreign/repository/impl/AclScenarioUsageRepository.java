@@ -35,7 +35,6 @@ public class AclScenarioUsageRepository extends AclBaseRepository implements IAc
     private static final String SCENARIO_ID_KEY = "scenarioId";
     private static final String SEARCH_VALUE_KEY = "searchValue";
     private static final String ACCOUNT_NUMBER_KEY = "accountNumber";
-    private static final String SYSTEM_TITLE_KEY = "systemTitle";
     private static final String WR_WRK_INST_KEY = "wrWrkInst";
     private static final String PAGEABLE_KEY = "pageable";
     private static final String SORT_KEY = "sort";
@@ -156,7 +155,7 @@ public class AclScenarioUsageRepository extends AclBaseRepository implements IAc
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(4);
         parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(filter.getScenarioId()));
         parameters.put(ACCOUNT_NUMBER_KEY, Objects.requireNonNull(filter.getRhAccountNumber()));
-        parameters.put(SYSTEM_TITLE_KEY, Objects.requireNonNull(filter.getSystemTitle()));
+        parameters.put(WR_WRK_INST_KEY, Objects.requireNonNull(filter.getWrWrkInst()));
         parameters.put("aggregateLicenseeClassId", Objects.requireNonNull(filter.getAggregateLicenseeClassId()));
         return selectList("IAclScenarioUsageMapper.findRightsholderDetailsResults", parameters);
     }
