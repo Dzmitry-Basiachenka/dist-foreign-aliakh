@@ -173,7 +173,7 @@ public class ViewAclGrantSetWindowTest {
         HorizontalLayout buttonsLayout = (HorizontalLayout) content.getComponent(2);
         Button deleteButton = (Button) buttonsLayout.getComponent(0);
         Collection<?> listeners = deleteButton.getListeners(Button.ClickEvent.class);
-        assertEquals(1, CollectionUtils.size(listeners));
+        assertEquals(2, CollectionUtils.size(listeners));
         return (Button.ClickListener) listeners.iterator().next();
     }
 

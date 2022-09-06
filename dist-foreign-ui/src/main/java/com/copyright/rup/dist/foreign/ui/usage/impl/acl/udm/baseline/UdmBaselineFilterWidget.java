@@ -176,6 +176,7 @@ public class UdmBaselineFilterWidget extends VerticalLayout implements IUdmBasel
                 filterChanged();
             });
         });
+        VaadinUtils.setButtonsAutoDisabled(moreFiltersButton);
     }
 
     private Label buildFiltersHeaderLabel() {

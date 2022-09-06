@@ -140,6 +140,7 @@ public class AclUsageFilterWidget extends VerticalLayout implements IAclUsageFil
                 filterChanged();
             });
         });
+        VaadinUtils.setButtonsAutoDisabled(moreFiltersButton);
     }
 
     private Label buildFiltersHeaderLabel() {

@@ -189,7 +189,7 @@ public class AclUsageFilterWidgetTest {
         verifyFiltersLabel(verticalLayout.getComponent(0));
         verifyComboBox(verticalLayout.getComponent(1), "Usage Batch Name", true,
             Collections.singletonList(ACL_USAGE_BATCH_NAME));
-        verifyMoreFiltersButton(verticalLayout.getComponent(2), 1);
+        verifyMoreFiltersButton(verticalLayout.getComponent(2), 2);
     }
 
     private Button getApplyButton() {

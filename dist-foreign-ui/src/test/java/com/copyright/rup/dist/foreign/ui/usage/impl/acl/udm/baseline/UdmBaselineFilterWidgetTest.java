@@ -146,7 +146,7 @@ public class UdmBaselineFilterWidgetTest {
         verifyItemsFilterWidget(verticalLayout.getComponent(1), "Periods");
         verifyComboBox(verticalLayout.getComponent(2), "Usage Origin", true, UdmUsageOriginEnum.values());
         verifyComboBox(verticalLayout.getComponent(3), "Channel", true, UdmChannelEnum.values());
-        verifyMoreFiltersButton(verticalLayout.getComponent(4), 1);
+        verifyMoreFiltersButton(verticalLayout.getComponent(4), 2);
     }
 
     private void verifyButtonsLayout(Component component) {

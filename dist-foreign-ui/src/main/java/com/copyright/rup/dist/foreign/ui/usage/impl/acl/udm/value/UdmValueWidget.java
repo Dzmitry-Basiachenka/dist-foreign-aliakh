@@ -185,6 +185,7 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
         publishButton = Buttons.createButton(ForeignUi.getMessage("button.publish"));
         publishButton.addClickListener(event -> Windows.showModalWindow(new UdmPublishToBaselineWindow(controller,
             publishEvent -> refresh())));
+        VaadinUtils.setButtonsAutoDisabled(populateButton, calculateProxyValuesButton, publishButton);
         HorizontalLayout layout = new HorizontalLayout(populateButton, assignmentMenuBar, calculateProxyValuesButton,
             publishButton);
         layout.setMargin(true);

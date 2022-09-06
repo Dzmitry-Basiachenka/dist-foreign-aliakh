@@ -188,6 +188,7 @@ public class UdmBaselineWidget extends HorizontalSplitPanel implements IUdmBasel
         deleteButton = Buttons.createButton(ForeignUi.getMessage("button.delete"));
         deleteButton.addClickListener(event -> showConfirmationWindow());
         deleteButton.setEnabled(false);
+        VaadinUtils.setButtonsAutoDisabled(deleteButton);
         Button exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
         OnDemandFileDownloader fileDownloader =
             new OnDemandFileDownloader(controller.getExportUdmBaselineUsagesStreamSource().getSource());

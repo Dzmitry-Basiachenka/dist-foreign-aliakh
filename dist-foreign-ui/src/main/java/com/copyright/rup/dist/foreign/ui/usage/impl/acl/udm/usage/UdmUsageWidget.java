@@ -169,7 +169,7 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
         });
         publishButton.addClickListener(event -> Windows.showModalWindow(new UdmUsageBaselinePublishWindow(controller,
             publishEvent -> refresh())));
-        VaadinUtils.setButtonsAutoDisabled(multipleEditButton);
+        VaadinUtils.setButtonsAutoDisabled(multipleEditButton, publishButton);
         return new HorizontalLayout(udmBatchMenuBar, assignmentMenuBar, multipleEditButton, publishButton,
             exportButton);
     }

@@ -71,6 +71,7 @@ public class UdmPublishToBaselineWindow extends Window {
                 Windows.showNotificationWindow(ForeignUi.getMessage("message.error.udm_value.publish"));
             }
         });
+        VaadinUtils.setButtonsAutoDisabled(continueButton);
         horizontalLayout.addComponents(continueButton, cancelButton);
         return horizontalLayout;
     }

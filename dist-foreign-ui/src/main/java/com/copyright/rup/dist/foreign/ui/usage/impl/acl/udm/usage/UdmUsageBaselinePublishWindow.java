@@ -67,6 +67,7 @@ public class UdmUsageBaselinePublishWindow extends Window {
             publishButtonClickListener.buttonClick(event);
             close();
         });
+        VaadinUtils.setButtonsAutoDisabled(publishButton);
         horizontalLayout.addComponents(publishButton, closeButton);
         return horizontalLayout;
     }

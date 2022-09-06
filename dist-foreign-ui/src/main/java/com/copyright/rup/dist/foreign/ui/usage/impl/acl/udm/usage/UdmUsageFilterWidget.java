@@ -173,6 +173,7 @@ public class UdmUsageFilterWidget extends VerticalLayout implements IUdmUsageFil
             Windows.showModalWindow(udmFiltersWindow);
             udmFiltersWindow.addCloseListener(closeEvent -> filterChanged());
         });
+        VaadinUtils.setButtonsAutoDisabled(moreFiltersButton);
     }
 
     private HorizontalLayout buildUdmUsageBatchFilter() {
