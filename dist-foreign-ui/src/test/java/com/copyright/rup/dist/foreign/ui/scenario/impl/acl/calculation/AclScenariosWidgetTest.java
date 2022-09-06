@@ -367,18 +367,18 @@ public class AclScenariosWidgetTest {
     private void verifyButtonsLayout(HorizontalLayout layout) {
         assertEquals("acl-scenario-buttons-layout", layout.getId());
         assertEquals(4, layout.getComponentCount());
-        verifyButton(layout.getComponent(0), "Create", false, 1);
-        verifyButton(layout.getComponent(1), "View", true, 2);
-        verifyButton(layout.getComponent(2), "Delete", false, 1);
-        verifyButton(layout.getComponent(3), "Pub Type Weights", false, 1);
+        verifyButton(layout.getComponent(0), "Create", 2);
+        verifyButton(layout.getComponent(1), "View", 2);
+        verifyButton(layout.getComponent(2), "Delete", 2);
+        verifyButton(layout.getComponent(3), "Pub Type Weights", 2);
     }
 
-    private void verifyButton(Component component, String caption, boolean isDisabled, int listenersCount) {
+    private void verifyButton(Component component, String caption, int listenersCount) {
         assertTrue(component instanceof Button);
         Button button = (Button) component;
         assertEquals(caption, button.getCaption());
         assertTrue(button.isEnabled());
-        assertEquals(isDisabled, button.isDisableOnClick());
+        assertTrue(button.isDisableOnClick());
         assertEquals(listenersCount, button.getListeners(ClickEvent.class).size());
     }
 
