@@ -62,6 +62,7 @@ public class UdmPopulateValueBatchWindow extends Window {
             close();
             Windows.showNotificationWindow(ForeignUi.getMessage("message.udm_value.populate", populatedValuesCount));
         });
+        VaadinUtils.setButtonsAutoDisabled(continueButton);
         horizontalLayout.addComponents(continueButton, cancelButton);
         return horizontalLayout;
     }

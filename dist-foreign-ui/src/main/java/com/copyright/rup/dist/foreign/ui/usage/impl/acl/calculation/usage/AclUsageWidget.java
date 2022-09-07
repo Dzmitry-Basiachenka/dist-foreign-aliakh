@@ -146,6 +146,7 @@ public class AclUsageWidget extends HorizontalSplitPanel implements IAclUsageWid
                 Windows.showNotificationWindow(ForeignUi.getMessage("message.error.usage_not_editable"));
             }
         });
+        VaadinUtils.setButtonsAutoDisabled(editButton);
         HorizontalLayout layout = new HorizontalLayout(aclUsageBatchMenuBar, editButton, exportButton);
         layout.setMargin(true);
         VaadinUtils.addComponentStyle(layout, "acl-usage-buttons");

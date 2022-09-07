@@ -193,6 +193,7 @@ public class AclGrantDetailWidget extends HorizontalSplitPanel implements IAclGr
         fileDownloader.extend(exportButton);
         HorizontalLayout layout = new HorizontalLayout(grantSetMenuBar, uploadButton, editButton, exportButton);
         layout.setMargin(true);
+        VaadinUtils.setButtonsAutoDisabled(editButton, uploadButton);
         VaadinUtils.addComponentStyle(layout, "acl-grant-detail-buttons");
         return layout;
     }

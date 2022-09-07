@@ -220,7 +220,7 @@ public class UdmUsageFilterWidgetTest {
         verifyItemsFilterWidget(verticalLayout.getComponent(2), "Periods");
         verifyComboBox(verticalLayout.getComponent(3), "Status", true, ACL_STATUSES);
         verifyComboBox(verticalLayout.getComponent(4), "Usage Origin", true, UdmUsageOriginEnum.values());
-        verifyMoreFiltersButton(verticalLayout.getComponent(5), 1);
+        verifyMoreFiltersButton(verticalLayout.getComponent(5), 2);
     }
 
     private Button getApplyButton() {

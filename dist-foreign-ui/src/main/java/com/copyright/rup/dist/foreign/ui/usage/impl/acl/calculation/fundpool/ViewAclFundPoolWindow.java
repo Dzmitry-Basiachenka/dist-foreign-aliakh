@@ -121,6 +121,7 @@ public class ViewAclFundPoolWindow extends Window implements SearchWidget.ISearc
         deleteButton.setEnabled(false);
         HorizontalLayout layout = new HorizontalLayout(deleteButton, closeButton);
         layout.setSpacing(true);
+        VaadinUtils.setButtonsAutoDisabled(deleteButton);
         VaadinUtils.addComponentStyle(layout, "view-acl-fund-pool-buttons");
         return layout;
     }

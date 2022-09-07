@@ -67,6 +67,7 @@ public class UdmCalculateProxyValuesWindow extends Window {
             Windows.showNotificationWindow(ForeignUi.getMessage("message.udm_proxy_value.calculate",
                 updatedValuesCount));
         });
+        VaadinUtils.setButtonsAutoDisabled(continueButton);
         horizontalLayout.addComponents(continueButton, cancelButton);
         return horizontalLayout;
     }

@@ -234,6 +234,7 @@ public class CreateAclGrantSetWindow extends Window {
         Button closeButton = Buttons.createCloseButton(this);
         Button createButton = Buttons.createButton(ForeignUi.getMessage("button.create"));
         createButton.addClickListener(event -> onCreateClicked());
+        VaadinUtils.setButtonsAutoDisabled(createButton);
         HorizontalLayout horizontalLayout = new HorizontalLayout();
         horizontalLayout.addComponents(createButton, closeButton);
         return horizontalLayout;

@@ -490,6 +490,7 @@ public class UdmEditUsageWindow extends CommonUdmUsageWindow implements IDateFor
                 showValidationErrorWindow();
             }
         });
+        VaadinUtils.setButtonsAutoDisabled(saveButton);
         Button discardButton = Buttons.createButton(ForeignUi.getMessage("button.discard"));
         discardButton.addClickListener(event -> {
             binder.readBean(udmUsage);

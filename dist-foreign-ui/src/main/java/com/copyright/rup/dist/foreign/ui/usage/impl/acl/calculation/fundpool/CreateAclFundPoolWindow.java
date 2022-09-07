@@ -232,6 +232,7 @@ public class CreateAclFundPoolWindow extends Window {
         Button closeButton = Buttons.createCloseButton(this);
         Button confirmButton = Buttons.createButton(ForeignUi.getMessage("button.confirm"));
         confirmButton.addClickListener(event -> onConfirmClicked());
+        VaadinUtils.setButtonsAutoDisabled(confirmButton);
         HorizontalLayout horizontalLayout = new HorizontalLayout();
         horizontalLayout.addComponents(confirmButton, closeButton);
         return horizontalLayout;

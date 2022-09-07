@@ -116,6 +116,7 @@ public class ViewUdmBatchWindow extends Window implements SearchWidget.ISearchCo
         deleteBatchButton.addClickListener(event ->
             deleteUdmBatch(grid.getSelectedItems().stream().findFirst().orElse(null)));
         deleteBatchButton.setEnabled(false);
+        VaadinUtils.setButtonsAutoDisabled(deleteBatchButton);
         HorizontalLayout layout = new HorizontalLayout(deleteBatchButton, closeButton);
         layout.setSpacing(true);
         VaadinUtils.addComponentStyle(layout, "view-batch-buttons");
