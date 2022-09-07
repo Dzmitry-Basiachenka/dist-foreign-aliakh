@@ -139,7 +139,7 @@ public class AclScenarioDrillDownTitlesWindow extends Window implements SearchWi
         addFooter();
         grid.setSelectionMode(SelectionMode.NONE);
         grid.setSizeFull();
-        VaadinUtils.addComponentStyle(grid, "view-acl-titles-by-rightsholder-grid");
+        VaadinUtils.addComponentStyle(grid, "acl-scenario-drill-down-titles-grid");
     }
 
     private void addGridColumns() {
