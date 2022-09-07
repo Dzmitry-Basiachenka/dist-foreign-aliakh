@@ -99,14 +99,14 @@ public class AclScenarioDrillDownTitlesWindowTest {
         Component component = content.getComponent(2);
         assertTrue(component instanceof Grid);
         verifyGrid((Grid) component, Arrays.asList(
-            Triple.of("Wr Wrk Inst", -1.0, 1),
-            Triple.of("System Title", 255.0, -1),
-            Triple.of("Print Gross Amt", 150.0, -1),
-            Triple.of("Print Net Amt", 150.0, -1),
-            Triple.of("Digital Gross Amt", 150.0, -1),
-            Triple.of("Digital Net Amt", 150.0, -1),
-            Triple.of("Total Gross Amt", 150.0, -1),
-            Triple.of("Total Net Amt", 140.0, -1)
+            Triple.of("Wr Wrk Inst", 110.0, -1),
+            Triple.of("System Title", 400.0, -1),
+            Triple.of("Print Gross Amt", -1.0, 1),
+            Triple.of("Print Net Amt", -1.0, 1),
+            Triple.of("Digital Gross Amt", -1.0, 1),
+            Triple.of("Digital Net Amt", -1.0, 1),
+            Triple.of("Total Gross Amt", -1.0, 1),
+            Triple.of("Total Net Amt", -1.0, 1)
         ));
         verifyButton(content.getComponent(3), "Close", true);
         assertEquals("acl-scenario-drill-down-titles-window", window.getStyleName());
