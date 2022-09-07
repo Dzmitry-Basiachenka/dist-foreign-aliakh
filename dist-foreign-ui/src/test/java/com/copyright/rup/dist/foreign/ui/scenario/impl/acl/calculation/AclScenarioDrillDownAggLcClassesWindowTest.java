@@ -110,13 +110,13 @@ public class AclScenarioDrillDownAggLcClassesWindowTest {
         assertTrue(component instanceof Grid);
         verifyGrid((Grid) component, Arrays.asList(
             Triple.of("Agg LC ID", 110.0, -1),
-            Triple.of("Agg LC Name", 256.0, -1),
-            Triple.of("Print Gross Amt", 150.0, -1),
-            Triple.of("Print Net Amt", 150.0, -1),
-            Triple.of("Digital Gross Amt", 150.0, -1),
-            Triple.of("Digital Net Amt", 150.0, -1),
-            Triple.of("Total Gross Amt", 150.0, -1),
-            Triple.of("Total Net Amt", 140.0, -1)
+            Triple.of("Agg LC Name", 400.0, -1),
+            Triple.of("Print Gross Amt", -1.0, 1),
+            Triple.of("Print Net Amt", -1.0, 1),
+            Triple.of("Digital Gross Amt", -1.0, 1),
+            Triple.of("Digital Net Amt", -1.0, 1),
+            Triple.of("Total Gross Amt", -1.0, 1),
+            Triple.of("Total Net Amt", -1.0, 1)
         ));
         verifyButton(content.getComponent(2), "Close", true);
         assertEquals("acl-scenario-drill-down-aggregate-licensee-class-window", window.getStyleName());

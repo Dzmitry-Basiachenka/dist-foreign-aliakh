@@ -133,6 +133,7 @@ public class AclScenarioDrillDownAggLcClassesWindow extends Window {
                         : new AclScenarioDrillDownTitlesWindow(controller, new RightsholderResultsFilter(filter))
                 );
             });
+            VaadinUtils.setButtonsAutoDisabled(button);
             return button;
         }).setCaption(ForeignUi.getMessage("table.column.aggregate_licensee_class_id"))
             .setId("aggregateLicenseeClass.id")
@@ -146,30 +147,30 @@ public class AclScenarioDrillDownAggLcClassesWindow extends Window {
             .setSortProperty("aggregateLicenseeClass.description")
             .setComparator((holder1, holder2) -> holder1.getAggregateLicenseeClass().getDescription()
                 .compareToIgnoreCase(holder2.getAggregateLicenseeClass().getDescription()))
-            .setWidth(256);
+            .setWidth(400);
         addAmountColumn(AclRightsholderTotalsHolderDto::getGrossTotalPrint, "table.column.print_gross_amount",
-            PRINT_GROSS_TOTAL_PROPERTY, 150);
+            PRINT_GROSS_TOTAL_PROPERTY);
         addAmountColumn(AclRightsholderTotalsHolderDto::getNetTotalPrint, "table.column.print_net_amount",
-            PRINT_NET_TOTAL_PROPERTY, 150);
+            PRINT_NET_TOTAL_PROPERTY);
         addAmountColumn(AclRightsholderTotalsHolderDto::getGrossTotalDigital, "table.column.digital_gross_amount",
-            DIGITAL_GROSS_TOTAL_PROPERTY, 150);
+            DIGITAL_GROSS_TOTAL_PROPERTY);
         addAmountColumn(AclRightsholderTotalsHolderDto::getNetTotalDigital, "table.column.digital_net_amount",
-            DIGITAL_NET_TOTAL_PROPERTY, 150);
+            DIGITAL_NET_TOTAL_PROPERTY);
         addAmountColumn(AclRightsholderTotalsHolderDto::getGrossTotal, "table.column.total_gross_amount",
-            GROSS_TOTAL_PROPERTY, 150);
+            GROSS_TOTAL_PROPERTY);
         addAmountColumn(AclRightsholderTotalsHolderDto::getNetTotal, "table.column.total_net_amount",
-            NET_TOTAL_PROPERTY, 140);
+            NET_TOTAL_PROPERTY);
     }
 
     private void addAmountColumn(Function<AclRightsholderTotalsHolderDto, BigDecimal> function, String captionProperty,
-                                 String columnId, double width) {
+                                 String columnId) {
         grid.addColumn(holder -> CurrencyUtils.format(function.apply(holder), null))
             .setCaption(ForeignUi.getMessage(captionProperty))
             .setId(columnId)
             .setSortProperty(columnId)
             .setComparator((holder1, holder2) -> function.apply(holder1).compareTo(function.apply(holder2)))
             .setStyleGenerator(item -> STYLE_ALIGN_RIGHT)
-            .setWidth(width);
+            .setExpandRatio(1);
     }
 
     private void addFooter() {
