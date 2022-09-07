@@ -520,19 +520,21 @@ public class AclScenarioUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = FIND_BY_SCENARIO_ID_AND_RH_ACCOUNT_NUMBER)
+    @TestData(fileName = FOLDER_NAME + "find-rightsholder-details-results.groovy")
     public void testFindRightsholderDetailsResults() {
-        AclScenarioDetailDto expectedScenarioDetail =
-            loadExpectedAclScenarioDetailDto("json/acl/acl_scenario_detail_dto_d1e23c04.json");
+        List<AclScenarioDetailDto> expectedScenarioDetails =
+            loadExpectedAclScenarioDetailDto("json/acl/acl_scenario_detail_dto_2c13581a.json");
         RightsholderResultsFilter filter = new RightsholderResultsFilter();
-        filter.setScenarioId(SCENARIO_UID_4);
+        filter.setScenarioId("ae790945-f541-4149-9ac2-9a5d29516c38");
         filter.setRhAccountNumber(1000002859L);
         filter.setWrWrkInst(122813964L);
-        filter.setAggregateLicenseeClassId(1);
+        filter.setAggregateLicenseeClassId(12);
         List<AclScenarioDetailDto> actualScenarioDetails =
             aclScenarioUsageRepository.findRightsholderDetailsResults(filter);
-        assertEquals(1, actualScenarioDetails.size());
-        verifyAclScenarioDetailDto(expectedScenarioDetail, actualScenarioDetails.get(0));
+        assertEquals(expectedScenarioDetails.size(), actualScenarioDetails.size());
+        IntStream.range(0, expectedScenarioDetails.size())
+            .forEach(index ->
+                verifyAclScenarioDetailDto(expectedScenarioDetails.get(index), actualScenarioDetails.get(index)));
     }
 
     @Test
@@ -869,17 +871,17 @@ public class AclScenarioUsageRepositoryIntegrationTest {
     }
 
     private AclScenarioDetailDto buildDigitalAclScenarioDetailDto() {
-        return loadExpectedAclScenarioDetailDto("json/acl/acl_scenario_detail_dto_digital.json");
+        return loadExpectedAclScenarioDetailDto("json/acl/acl_scenario_detail_dto_digital.json").get(0);
     }
 
     private AclScenarioDetailDto buildPrintDigitalAclScenarioDetailDto() {
-        return loadExpectedAclScenarioDetailDto("json/acl/acl_scenario_detail_dto_print_digital.json");
+        return loadExpectedAclScenarioDetailDto("json/acl/acl_scenario_detail_dto_print_digital.json").get(0);
     }
 
-    private AclScenarioDetailDto loadExpectedAclScenarioDetailDto(String fileName) {
+    private List<AclScenarioDetailDto> loadExpectedAclScenarioDetailDto(String fileName) {
         try {
             String content = TestUtils.fileToString(this.getClass(), fileName);
-            return OBJECT_MAPPER.readValue(content, new TypeReference<AclScenarioDetailDto>() {
+            return OBJECT_MAPPER.readValue(content, new TypeReference<List<AclScenarioDetailDto>>() {
             });
         } catch (IOException e) {
             throw new AssertionError(e);

@@ -463,6 +463,7 @@ public final class UiTestHelper {
      * @param expectedFooterColumns expected footer columns
      */
     public static <T> void verifyFooterItems(Grid grid, Object[]... expectedFooterColumns) {
+        assertTrue(grid.isFooterVisible());
         FooterRow footerRow = grid.getFooterRow(0);
         assertNotNull(footerRow);
         for (Object[] expectedFooterColumn : expectedFooterColumns) {
