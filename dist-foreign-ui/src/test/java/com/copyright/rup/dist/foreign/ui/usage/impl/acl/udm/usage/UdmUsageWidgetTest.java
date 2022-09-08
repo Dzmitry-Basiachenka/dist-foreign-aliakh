@@ -156,7 +156,7 @@ public class UdmUsageWidgetTest {
     @Test
     public void testGridValues() {
         mockStatic(JavaScript.class);
-        List<UdmUsageDto> udmUsages = loadExpectedUdmUsageDto("json/udm_usage_dto_b989e02b.json");
+        List<UdmUsageDto> udmUsages = loadExpectedUdmUsageDto("udm_usage_dto_b989e02b.json");
         expect(JavaScript.getCurrent()).andReturn(createMock(JavaScript.class)).times(2);
         expect(controller.loadBeans(0, Integer.MAX_VALUE, Collections.emptyList())).andReturn(udmUsages).once();
         expect(controller.getBeansCount()).andReturn(1).once();
