@@ -36,7 +36,6 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.JavaScript;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.components.grid.FooterRow;
@@ -66,7 +65,7 @@ import java.util.function.Supplier;
  * @author Dzmitry Basiachenka
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({AclScenarioWidget.class, Windows.class, JavaScript.class})
+@PrepareForTest({AclScenarioWidget.class, Windows.class})
 public class AclScenarioWidgetTest {
 
     private static final String SCENARIO_ID = "24b0a5a9-6380-4519-91f2-779c98ed45cc";
@@ -90,12 +89,13 @@ public class AclScenarioWidgetTest {
         scenarioWidget.setController(controller);
         AclScenarioDto scenario = buildAclScenarioDto();
         IStreamSource streamSource = createMock(IStreamSource.class);
+        List<AclRightsholderTotalsHolder> holders = Collections.singletonList(buildAclRightsholderTotalsHolder());
+        expect(controller.getAclRightsholderTotalsHolders()).andReturn(holders).once();
         expect(streamSource.getSource()).andReturn(new SimpleImmutableEntry(createMock(Supplier.class),
             createMock(Supplier.class))).times(2);
         expect(controller.getExportAclScenarioDetailsStreamSource()).andReturn(streamSource).once();
         expect(controller.getExportAclScenarioRightsholderTotalsStreamSource()).andReturn(streamSource).once();
         expect(controller.getScenario()).andReturn(scenario).once();
-        expect(controller.getAclScenarioWithAmountsAndLastAction()).andReturn(scenario).once();
         replay(controller, streamSource);
         scenarioWidget.init();
         verify(controller, streamSource);
@@ -116,12 +116,7 @@ public class AclScenarioWidgetTest {
 
     @Test
     public void testGridValues() {
-        mockStatic(JavaScript.class);
-        List<AclRightsholderTotalsHolder> holders = Collections.singletonList(buildAclRightsholderTotalsHolder());
-        expect(JavaScript.getCurrent()).andReturn(createMock(JavaScript.class)).times(2);
-        expect(controller.getSize()).andReturn(1).once();
-        expect(controller.loadBeans(0, Integer.MAX_VALUE, Collections.emptyList())).andReturn(holders).once();
-        replay(JavaScript.class, controller);
+        replay(controller);
         Grid grid = (Grid) ((VerticalLayout) scenarioWidget.getContent()).getComponent(1);
         DataProvider dataProvider = grid.getDataProvider();
         dataProvider.refreshAll();
@@ -129,8 +124,8 @@ public class AclScenarioWidgetTest {
             {"7000447306", RH_NAME, "20,000.00", "6,400.00", "13,600.00", "1,000.00",
                 SERVICE_FEE_TOTAL_DIGITAL, NET_TOTAL_DIGITAL, "1", "1", "ACL"}
         };
-        verifyGridItems(grid, holders, expectedCells);
-        verify(JavaScript.class, controller);
+        verifyGridItems(grid, Collections.singletonList(buildAclRightsholderTotalsHolder()), expectedCells);
+        verify(controller);
         Object[][] expectedFooterColumns = {
             {"grossTotalPrint", "20,000.00", STYLE_ALIGN_RIGHT},
             {"serviceFeeTotalPrint", "6,400.00", STYLE_ALIGN_RIGHT},
@@ -144,7 +139,7 @@ public class AclScenarioWidgetTest {
 
     @Test
     public void testGetSearchValue() {
-        SearchWidget searchWidget = new SearchWidget(controller);
+        SearchWidget searchWidget = new SearchWidget(scenarioWidget);
         searchWidget.setSearchValue("search");
         Whitebox.setInternalState(scenarioWidget, searchWidget);
         assertEquals("search", scenarioWidget.getSearchValue());

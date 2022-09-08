@@ -17,9 +17,4 @@ public interface IAclScenarioWidget extends IWidget<IAclScenarioController> {
      * @return value from search field.
      */
     String getSearchValue();
-
-    /**
-     * Applies search value for table container.
-     */
-    void applySearch();
 }

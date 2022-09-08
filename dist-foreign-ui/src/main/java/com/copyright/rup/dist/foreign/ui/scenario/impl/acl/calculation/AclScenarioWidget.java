@@ -2,20 +2,18 @@ package com.copyright.rup.dist.foreign.ui.scenario.impl.acl.calculation;
 
 import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
-import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
 import com.copyright.rup.dist.foreign.domain.filter.RightsholderResultsFilter;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
-import com.copyright.rup.vaadin.ui.component.dataprovider.LoadingIndicatorDataProvider;
 import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.CurrencyUtils;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
-import com.vaadin.data.provider.DataProvider;
+import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -28,7 +26,12 @@ import com.vaadin.ui.components.grid.FooterCell;
 import com.vaadin.ui.components.grid.FooterRow;
 import com.vaadin.ui.themes.ValoTheme;
 
+import org.apache.commons.lang3.StringUtils;
+
+import java.math.BigDecimal;
+import java.util.List;
 import java.util.Objects;
+import java.util.function.Function;
 
 /**
  * Implementation of {@link IAclScenarioWidget}.
@@ -39,7 +42,7 @@ import java.util.Objects;
  *
  * @author Anton Azarenka
  */
-public class AclScenarioWidget extends Window implements IAclScenarioWidget {
+public class AclScenarioWidget extends Window implements IAclScenarioWidget, SearchWidget.ISearchController {
 
     private static final String STYLE_ALIGN_RIGHT = "v-align-right";
     private static final String PROPERTY_PRINT_GROSS_TOTAL = "grossTotalPrint";
@@ -52,7 +55,8 @@ public class AclScenarioWidget extends Window implements IAclScenarioWidget {
     private IAclScenarioController controller;
     private SearchWidget searchWidget;
     private Grid<AclRightsholderTotalsHolder> rightsholdersGrid;
-    private DataProvider<AclRightsholderTotalsHolder, Void> dataProvider;
+    private ListDataProvider<AclRightsholderTotalsHolder> dataProvider;
+    private List<AclRightsholderTotalsHolder> rightsholderTotalsHolders;
     private AclScenario scenario;
 
     /**
@@ -89,14 +93,20 @@ public class AclScenarioWidget extends Window implements IAclScenarioWidget {
     }
 
     @Override
-    public void applySearch() {
-        dataProvider.refreshAll();
+    public void performSearch() {
+        dataProvider.clearFilters();
+        String searchValue = searchWidget.getSearchValue();
+        if (StringUtils.isNotBlank(searchValue)) {
+            dataProvider.setFilter(value ->
+                StringUtils.containsIgnoreCase(Objects.toString(value.getRightsholder().getAccountNumber(), null),
+                    searchValue) || StringUtils.containsIgnoreCase(value.getRightsholder().getName(), searchValue));
+        }
+        rightsholdersGrid.recalculateColumnWidths();
     }
 
     private VerticalLayout initContent() {
-        dataProvider = LoadingIndicatorDataProvider.fromCallbacks(
-            query -> controller.loadBeans(query.getOffset(), query.getLimit(), query.getSortOrders()).stream(),
-            query -> controller.getSize());
+        rightsholderTotalsHolders = controller.getAclRightsholderTotalsHolders();
+        dataProvider = new ListDataProvider<>(rightsholderTotalsHolders);
         rightsholdersGrid = new Grid<>(dataProvider);
         addColumns();
         addFooter();
@@ -113,102 +123,79 @@ public class AclScenarioWidget extends Window implements IAclScenarioWidget {
 
     private void addColumns() {
         rightsholdersGrid.addComponentColumn(holder -> {
-            Button button = Buttons.createButton(Objects.toString(holder.getRightsholder().getAccountNumber()));
-            button.addStyleName(ValoTheme.BUTTON_LINK);
-            button.addClickListener(event -> controller.onRightsholderAccountNumberClicked(
-                holder.getRightsholder().getAccountNumber(), holder.getRightsholder().getName()));
-            VaadinUtils.setButtonsAutoDisabled(button);
-            return button;
-        }).setCaption(ForeignUi.getMessage("table.column.rh_account_number"))
+                Button button = Buttons.createButton(Objects.toString(holder.getRightsholder().getAccountNumber()));
+                button.addStyleName(ValoTheme.BUTTON_LINK);
+                button.addClickListener(event -> controller.onRightsholderAccountNumberClicked(
+                    holder.getRightsholder().getAccountNumber(), holder.getRightsholder().getName()));
+                VaadinUtils.setButtonsAutoDisabled(button);
+                return button;
+            }).setCaption(ForeignUi.getMessage("table.column.rh_account_number"))
             .setId("rightsholder.accountNumber")
-            .setSortProperty("rightsholder.accountNumber")
+            .setComparator((holder1, holder2) ->
+                holder1.getRightsholder().getAccountNumber().compareTo(holder2.getRightsholder().getAccountNumber()))
             .setExpandRatio(1);
         rightsholdersGrid.addColumn(holder -> holder.getRightsholder().getName())
             .setCaption(ForeignUi.getMessage("table.column.rh_account_name"))
             .setId("rightsholder.name")
-            .setSortProperty("rightsholder.name")
+            .setComparator((holder1, holder2) ->
+                holder1.getRightsholder().getName().compareTo(holder2.getRightsholder().getName()))
             .setHidable(true)
             .setExpandRatio(2);
-        rightsholdersGrid.addColumn(holder -> CurrencyUtils.format(holder.getGrossTotalPrint(), null))
-            .setCaption(ForeignUi.getMessage("table.column.print_gross_amount_in_usd"))
-            .setId(PROPERTY_PRINT_GROSS_TOTAL)
-            .setSortProperty(PROPERTY_PRINT_GROSS_TOTAL)
-            .setStyleGenerator(item -> STYLE_ALIGN_RIGHT)
-            .setHidable(true)
-            .setExpandRatio(1);
-        rightsholdersGrid.addColumn(holder -> CurrencyUtils.format(holder.getServiceFeeTotalPrint(), null))
-            .setCaption(ForeignUi.getMessage("table.column.print_service_fee_amount_in_usd"))
-            .setId(PROPERTY_PRINT_SERVICE_FEE_TOTAL)
-            .setSortProperty(PROPERTY_PRINT_SERVICE_FEE_TOTAL)
-            .setStyleGenerator(item -> STYLE_ALIGN_RIGHT)
-            .setHidable(true)
-            .setExpandRatio(1);
-        rightsholdersGrid.addColumn(holder -> CurrencyUtils.format(holder.getNetTotalPrint(), null))
-            .setCaption(ForeignUi.getMessage("table.column.print_net_amount_in_usd"))
-            .setId(PROPERTY_PRINT_NET_TOTAL)
-            .setSortProperty(PROPERTY_PRINT_NET_TOTAL)
-            .setStyleGenerator(item -> STYLE_ALIGN_RIGHT)
-            .setHidable(true)
-            .setExpandRatio(1);
-        rightsholdersGrid.addColumn(holder -> CurrencyUtils.format(holder.getGrossTotalDigital(), null))
-            .setCaption(ForeignUi.getMessage("table.column.digital_gross_amount_in_usd"))
-            .setId(PROPERTY_DIGITAL_GROSS_TOTAL)
-            .setSortProperty(PROPERTY_DIGITAL_GROSS_TOTAL)
-            .setStyleGenerator(item -> STYLE_ALIGN_RIGHT)
-            .setHidable(true)
-            .setExpandRatio(1);
-        rightsholdersGrid.addColumn(holder -> CurrencyUtils.format(holder.getServiceFeeTotalDigital(), null))
-            .setCaption(ForeignUi.getMessage("table.column.digital_service_fee_amount_in_usd"))
-            .setId(PROPERTY_DIGITAL_SERVICE_FEE_TOTAL)
-            .setSortProperty(PROPERTY_DIGITAL_SERVICE_FEE_TOTAL)
-            .setStyleGenerator(item -> STYLE_ALIGN_RIGHT)
-            .setHidable(true)
-            .setExpandRatio(1);
-        rightsholdersGrid.addColumn(holder -> CurrencyUtils.format(holder.getNetTotalDigital(), null))
-            .setCaption(ForeignUi.getMessage("table.column.digital_net_amount_in_usd"))
-            .setId(PROPERTY_DIGITAL_NET_TOTAL)
-            .setSortProperty(PROPERTY_DIGITAL_NET_TOTAL)
-            .setStyleGenerator(item -> STYLE_ALIGN_RIGHT)
-            .setHidable(true)
-            .setExpandRatio(1);
-        rightsholdersGrid.addComponentColumn(holder -> {
-            Button button = Buttons.createButton(Objects.toString(holder.getNumberOfTitles()));
-            button.addStyleName(ValoTheme.BUTTON_LINK);
-            button.addClickListener(event -> {
-                RightsholderResultsFilter filter = new RightsholderResultsFilter();
-                filter.setScenarioId(scenario.getId());
-                filter.setRhAccountNumber(holder.getRightsholder().getAccountNumber());
-                filter.setRhName(holder.getRightsholder().getName());
-                Windows.showModalWindow(new AclScenarioDrillDownTitlesWindow(controller, filter));
-            });
-            return button;
-        }).setCaption(ForeignUi.getMessage("table.column.number_of_titles"))
-            .setId("numberOfTitles")
-            .setSortProperty("numberOfTitles")
-            .setHidable(true)
-            .setExpandRatio(2);
-        rightsholdersGrid.addComponentColumn(holder -> {
-            Button button = Buttons.createButton(Objects.toString(holder.getNumberOfAggLcClasses()));
-            button.addStyleName(ValoTheme.BUTTON_LINK);
-            button.addClickListener(event -> {
-                RightsholderResultsFilter filter = new RightsholderResultsFilter();
-                filter.setScenarioId(scenario.getId());
-                filter.setRhAccountNumber(holder.getRightsholder().getAccountNumber());
-                filter.setRhName(holder.getRightsholder().getName());
-                Windows.showModalWindow(new AclScenarioDrillDownAggLcClassesWindow(controller, filter));
-            });
-            return button;
-        }).setCaption(ForeignUi.getMessage("table.column.number_of_aggregate_licensee_classes"))
-            .setId("numberOfAggLcClasses")
-            .setSortProperty("numberOfAggLcClasses")
-            .setHidable(true)
-            .setExpandRatio(2);
+        addAmountColumn(AclRightsholderTotalsHolder::getGrossTotalPrint, "table.column.print_gross_amount_in_usd",
+            PROPERTY_PRINT_GROSS_TOTAL);
+        addAmountColumn(AclRightsholderTotalsHolder::getServiceFeeTotalPrint,
+            "table.column.print_service_fee_amount_in_usd", PROPERTY_PRINT_SERVICE_FEE_TOTAL);
+        addAmountColumn(AclRightsholderTotalsHolder::getNetTotalPrint, "table.column.print_net_amount_in_usd",
+            PROPERTY_PRINT_NET_TOTAL);
+        addAmountColumn(AclRightsholderTotalsHolder::getGrossTotalDigital, "table.column.digital_gross_amount_in_usd",
+            PROPERTY_DIGITAL_GROSS_TOTAL);
+        addAmountColumn(AclRightsholderTotalsHolder::getServiceFeeTotalDigital,
+            "table.column.digital_service_fee_amount_in_usd", PROPERTY_DIGITAL_SERVICE_FEE_TOTAL);
+        addAmountColumn(AclRightsholderTotalsHolder::getNetTotalDigital, "table.column.digital_net_amount_in_usd",
+            PROPERTY_DIGITAL_NET_TOTAL);
+        addComponentColumn(AclRightsholderTotalsHolder::getNumberOfTitles,
+            filter -> new AclScenarioDrillDownTitlesWindow(controller, filter), "table.column.number_of_titles",
+            "numberOfTitles");
+        addComponentColumn(AclRightsholderTotalsHolder::getNumberOfAggLcClasses,
+            filter -> new AclScenarioDrillDownAggLcClassesWindow(controller, filter),
+            "table.column.number_of_aggregate_licensee_classes", "numberOfAggLcClasses");
         rightsholdersGrid.addColumn(AclRightsholderTotalsHolder::getLicenseType)
             .setCaption(ForeignUi.getMessage("table.column.license_type"))
             .setId("licenseType")
-            .setSortProperty("licenseType")
+            .setComparator((holder1, holder2) -> holder1.getLicenseType().compareTo(holder2.getLicenseType()))
             .setHidable(true)
             .setExpandRatio(2);
+    }
+
+    private void addComponentColumn(Function<AclRightsholderTotalsHolder, Integer> function,
+                                    Function<RightsholderResultsFilter, Window> windowFunction, String caption,
+                                    String columnId) {
+        rightsholdersGrid.addComponentColumn(holder -> {
+                Button button = Buttons.createButton(Objects.toString(function.apply(holder)));
+                button.addStyleName(ValoTheme.BUTTON_LINK);
+                button.addClickListener(event -> {
+                    RightsholderResultsFilter filter = new RightsholderResultsFilter();
+                    filter.setScenarioId(scenario.getId());
+                    filter.setRhAccountNumber(holder.getRightsholder().getAccountNumber());
+                    filter.setRhName(holder.getRightsholder().getName());
+                    Windows.showModalWindow(windowFunction.apply(filter));
+                });
+                return button;
+            }).setCaption(ForeignUi.getMessage(caption))
+            .setId(columnId)
+            .setComparator((holder1, holder2) -> function.apply(holder1).compareTo(function.apply(holder2)))
+            .setHidable(true)
+            .setExpandRatio(2);
+    }
+
+    private void addAmountColumn(Function<AclRightsholderTotalsHolder, BigDecimal> function, String captionProperty,
+                                 String columnId) {
+        rightsholdersGrid.addColumn(holder -> CurrencyUtils.format(function.apply(holder), null))
+            .setCaption(ForeignUi.getMessage(captionProperty))
+            .setId(columnId)
+            .setComparator((holder1, holder2) -> function.apply(holder1).compareTo(function.apply(holder2)))
+            .setStyleGenerator(item -> STYLE_ALIGN_RIGHT)
+            .setExpandRatio(1);
     }
 
     private void addFooter() {
@@ -216,44 +203,26 @@ public class AclScenarioWidget extends Window implements IAclScenarioWidget {
         rightsholdersGrid.setFooterVisible(true);
         FooterRow row = rightsholdersGrid.getFooterRow(0);
         row.setStyleName("table-ext-footer");
-        row.join("rightsholder.accountNumber", "rightsholder.name")
-            .setText("Totals");
-        row.getCell(PROPERTY_PRINT_GROSS_TOTAL)
-            .setStyleName(STYLE_ALIGN_RIGHT);
-        row.getCell(PROPERTY_PRINT_SERVICE_FEE_TOTAL)
-            .setStyleName(STYLE_ALIGN_RIGHT);
-        row.getCell(PROPERTY_PRINT_NET_TOTAL)
-            .setStyleName(STYLE_ALIGN_RIGHT);
-        row.getCell(PROPERTY_DIGITAL_GROSS_TOTAL)
-            .setStyleName(STYLE_ALIGN_RIGHT);
-        row.getCell(PROPERTY_DIGITAL_SERVICE_FEE_TOTAL)
-            .setStyleName(STYLE_ALIGN_RIGHT);
-        row.getCell(PROPERTY_DIGITAL_NET_TOTAL)
-            .setStyleName(STYLE_ALIGN_RIGHT);
+        row.join("rightsholder.accountNumber", "rightsholder.name").setText("Totals");
         updateFooter();
     }
 
     private void updateFooter() {
-        AclScenarioDto scenarioWithAmounts = controller.getAclScenarioWithAmountsAndLastAction();
         FooterRow row = rightsholdersGrid.getFooterRow(0);
-        FooterCell printGrossTotalCell = row.getCell(PROPERTY_PRINT_GROSS_TOTAL);
-        printGrossTotalCell.setText(CurrencyUtils.format(scenarioWithAmounts.getGrossTotalPrint(), null));
-        printGrossTotalCell.setStyleName(STYLE_ALIGN_RIGHT);
-        FooterCell printServiceFeeTotalCell = row.getCell(PROPERTY_PRINT_SERVICE_FEE_TOTAL);
-        printServiceFeeTotalCell.setText(CurrencyUtils.format(scenarioWithAmounts.getServiceFeeTotalPrint(), null));
-        printServiceFeeTotalCell.setStyleName(STYLE_ALIGN_RIGHT);
-        FooterCell printNetTotalCell = row.getCell(PROPERTY_PRINT_NET_TOTAL);
-        printNetTotalCell.setText(CurrencyUtils.format(scenarioWithAmounts.getNetTotalPrint(), null));
-        printNetTotalCell.setStyleName(STYLE_ALIGN_RIGHT);
-        FooterCell digitalGrossTotalCell = row.getCell(PROPERTY_DIGITAL_GROSS_TOTAL);
-        digitalGrossTotalCell.setText(CurrencyUtils.format(scenarioWithAmounts.getGrossTotalDigital(), null));
-        digitalGrossTotalCell.setStyleName(STYLE_ALIGN_RIGHT);
-        FooterCell digitalServiceFeeTotalCell = row.getCell(PROPERTY_DIGITAL_SERVICE_FEE_TOTAL);
-        digitalServiceFeeTotalCell.setText(CurrencyUtils.format(scenarioWithAmounts.getServiceFeeTotalDigital(), null));
-        digitalServiceFeeTotalCell.setStyleName(STYLE_ALIGN_RIGHT);
-        FooterCell digitalNetTotalCell = row.getCell(PROPERTY_DIGITAL_NET_TOTAL);
-        digitalNetTotalCell.setText(CurrencyUtils.format(scenarioWithAmounts.getNetTotalDigital(), null));
-        digitalNetTotalCell.setStyleName(STYLE_ALIGN_RIGHT);
+        initFooterCell(row, PROPERTY_PRINT_GROSS_TOTAL, AclRightsholderTotalsHolder::getGrossTotalPrint);
+        initFooterCell(row, PROPERTY_PRINT_SERVICE_FEE_TOTAL, AclRightsholderTotalsHolder::getServiceFeeTotalPrint);
+        initFooterCell(row, PROPERTY_PRINT_NET_TOTAL, AclRightsholderTotalsHolder::getNetTotalPrint);
+        initFooterCell(row, PROPERTY_DIGITAL_GROSS_TOTAL, AclRightsholderTotalsHolder::getGrossTotalDigital);
+        initFooterCell(row, PROPERTY_DIGITAL_SERVICE_FEE_TOTAL, AclRightsholderTotalsHolder::getServiceFeeTotalDigital);
+        initFooterCell(row, PROPERTY_DIGITAL_NET_TOTAL, AclRightsholderTotalsHolder::getNetTotalDigital);
+    }
+
+    private void initFooterCell(FooterRow row, String cellProperty,
+                                Function<AclRightsholderTotalsHolder, BigDecimal> function) {
+        FooterCell cell = row.getCell(cellProperty);
+        cell.setText(CurrencyUtils.format(
+            rightsholderTotalsHolders.stream().map(function).reduce(BigDecimal.ZERO, BigDecimal::add), null));
+        cell.setStyleName(STYLE_ALIGN_RIGHT);
     }
 
     private HorizontalLayout initButtons() {
@@ -273,7 +242,7 @@ public class AclScenarioWidget extends Window implements IAclScenarioWidget {
     }
 
     private HorizontalLayout initSearchWidget() {
-        searchWidget = new SearchWidget(controller);
+        searchWidget = new SearchWidget(this);
         searchWidget.setPrompt(ForeignUi.getMessage("field.prompt.acl_scenario.search_widget"));
         HorizontalLayout toolbar = new HorizontalLayout(searchWidget);
         VaadinUtils.setMaxComponentsWidth(toolbar);

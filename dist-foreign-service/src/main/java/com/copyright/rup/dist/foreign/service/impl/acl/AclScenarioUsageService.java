@@ -65,16 +65,8 @@ public class AclScenarioUsageService implements IAclScenarioUsageService {
     }
 
     @Override
-    public List<AclRightsholderTotalsHolder> getAclRightsholderTotalsHoldersByScenarioId(String scenarioId,
-                                                                                         String searchValue,
-                                                                                         Pageable pageable, Sort sort) {
-        return aclScenarioUsageRepository.findAclRightsholderTotalsHoldersByScenarioId(
-            scenarioId, searchValue, pageable, sort);
-    }
-
-    @Override
-    public int getAclRightsholderTotalsHolderCountByScenarioId(String scenarioId, String searchValue) {
-        return aclScenarioUsageRepository.findAclRightsholderTotalsHolderCountByScenarioId(scenarioId, searchValue);
+    public List<AclRightsholderTotalsHolder> getAclRightsholderTotalsHoldersByScenarioId(String scenarioId) {
+        return aclScenarioUsageRepository.findAclRightsholderTotalsHoldersByScenarioId(scenarioId);
     }
 
     @Override

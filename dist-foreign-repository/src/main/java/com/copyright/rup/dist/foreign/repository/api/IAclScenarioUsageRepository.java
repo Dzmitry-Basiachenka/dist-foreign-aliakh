@@ -89,23 +89,9 @@ public interface IAclScenarioUsageRepository {
      * Finds {@link AclRightsholderTotalsHolder}s based on ACL scenario id.
      *
      * @param scenarioId  scenario id
-     * @param searchValue search value
-     * @param pageable    instance of {@link Pageable}
-     * @param sort        instance of {@link Sort}
      * @return list of {@link AclRightsholderTotalsHolder}s
      */
-    List<AclRightsholderTotalsHolder> findAclRightsholderTotalsHoldersByScenarioId(String scenarioId,
-                                                                                   String searchValue,
-                                                                                   Pageable pageable, Sort sort);
-
-    /**
-     * Finds count of {@link AclRightsholderTotalsHolder}s based on ACL scenario id.
-     *
-     * @param scenarioId  scenario id
-     * @param searchValue search value
-     * @return count of {@link AclRightsholderTotalsHolder}s
-     */
-    int findAclRightsholderTotalsHolderCountByScenarioId(String scenarioId, String searchValue);
+    List<AclRightsholderTotalsHolder> findAclRightsholderTotalsHoldersByScenarioId(String scenarioId);
 
     /**
      * Finds {@link AclScenarioDto} by scenario id.

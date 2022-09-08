@@ -102,24 +102,9 @@ public class AclScenarioUsageRepository extends AclBaseRepository implements IAc
     }
 
     @Override
-    public List<AclRightsholderTotalsHolder> findAclRightsholderTotalsHoldersByScenarioId(String scenarioId,
-                                                                                          String searchValue,
-                                                                                          Pageable pageable,
-                                                                                          Sort sort) {
-        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(4);
-        parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
-        parameters.put(SEARCH_VALUE_KEY, escapeSqlLikePattern(searchValue));
-        parameters.put(PAGEABLE_KEY, pageable);
-        parameters.put(SORT_KEY, sort);
-        return selectList("IAclScenarioUsageMapper.findAclRightsholderTotalsHoldersByScenarioId", parameters);
-    }
-
-    @Override
-    public int findAclRightsholderTotalsHolderCountByScenarioId(String scenarioId, String searchValue) {
-        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
-        parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
-        parameters.put(SEARCH_VALUE_KEY, escapeSqlLikePattern(searchValue));
-        return selectOne("IAclScenarioUsageMapper.findAclRightsholderTotalsHolderCountByScenarioId", parameters);
+    public List<AclRightsholderTotalsHolder> findAclRightsholderTotalsHoldersByScenarioId(String scenarioId) {
+        return selectList("IAclScenarioUsageMapper.findAclRightsholderTotalsHoldersByScenarioId",
+            Objects.requireNonNull(scenarioId));
     }
 
     @Override

@@ -1,12 +1,9 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl.acl.calculation;
 
-import static org.easymock.EasyMock.anyString;
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
-import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
-import static org.easymock.EasyMock.isNull;
 import static org.easymock.EasyMock.newCapture;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -18,17 +15,14 @@ import static org.powermock.api.easymock.PowerMock.verify;
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.reporting.api.IStreamSourceHandler;
 import com.copyright.rup.dist.common.reporting.impl.StreamSource;
-import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolderDto;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDetailDto;
-import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
 import com.copyright.rup.dist.foreign.domain.filter.RightsholderResultsFilter;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclCalculationReportService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioUsageService;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioWidget;
-import com.copyright.rup.vaadin.widget.api.IWidget;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -46,7 +40,6 @@ import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -102,76 +95,15 @@ public class AclScenarioControllerTest {
     }
 
     @Test
-    public void testPerformSearch() {
-        IAclScenarioWidget widget = createMock(IAclScenarioWidget.class);
-        Whitebox.setInternalState(controller, IWidget.class, widget);
-        widget.applySearch();
-        expectLastCall().once();
-        replay(widget);
-        controller.performSearch();
-        verify(widget);
-    }
-
-    @Test
-    public void testGetAclScenarioWithAmountsAndLastAction() {
-        AclScenarioDto scenarioDto = new AclScenarioDto();
-        scenarioDto.setId(SCENARIO_UID);
-        expect(aclScenarioUsageService.getAclScenarioWithAmountsAndLastAction(scenario.getId())).andReturn(scenarioDto)
-            .once();
+    public void testGetAclRightsholderTotalsHoldersByScenarioId() {
+        List<AclRightsholderTotalsHolder> holders = Collections.singletonList(new AclRightsholderTotalsHolder());
+        expect(aclScenarioUsageService.getAclRightsholderTotalsHoldersByScenarioId(scenario.getId()))
+            .andReturn(holders).once();
         replay(aclScenarioUsageService);
-        assertSame(scenarioDto, controller.getAclScenarioWithAmountsAndLastAction());
-        verify(aclScenarioUsageService);
-    }
-
-    @Test
-    public void testLoadBeans() {
-        AclScenarioDto scenarioDto = new AclScenarioDto();
-        scenarioDto.setId(SCENARIO_UID);
-        Capture<Pageable> pageableCapture = newCapture();
-        expect(aclScenarioUsageService.getAclRightsholderTotalsHoldersByScenarioId(eq(scenario.getId()), anyString(),
-            capture(pageableCapture), isNull())).andReturn(Collections.emptyList()).once();
-        expect(aclScenarioUsageService.getAclScenarioWithAmountsAndLastAction(scenario.getId())).andReturn(scenarioDto)
-            .once();
-        Capture<Supplier<String>> fileNameSupplierCapture = newCapture();
-        Capture<Consumer<PipedOutputStream>> posConsumerCapture = newCapture();
-        IStreamSource streamSource = createMock(IStreamSource.class);
-        expect(streamSource.getSource()).andReturn(new SimpleImmutableEntry(createMock(Supplier.class),
-            createMock(Supplier.class))).times(2);
-        expect(streamSourceHandler.getCsvStreamSource(capture(fileNameSupplierCapture), capture(posConsumerCapture)))
-            .andReturn(streamSource).times(2);
-        replay(aclScenarioUsageService, streamSourceHandler, streamSource);
-        controller.initWidget();
-        List<AclRightsholderTotalsHolder> result = controller.loadBeans(10, 150, null);
-        Pageable pageable = pageableCapture.getValue();
-        assertEquals(10, pageable.getOffset());
-        assertEquals(150, pageable.getLimit());
+        List<AclRightsholderTotalsHolder> result = controller.getAclRightsholderTotalsHolders();
         assertNotNull(result);
-        assertEquals(0, result.size());
-        assertNotNull(fileNameSupplierCapture.getValue());
-        assertNotNull(posConsumerCapture.getValue());
-        verify(aclScenarioUsageService, streamSourceHandler, streamSource);
-    }
-
-    @Test
-    public void testGetSize() {
-        AclScenarioDto scenarioDto = new AclScenarioDto();
-        scenarioDto.setId(SCENARIO_UID);
-        expect(aclScenarioUsageService.getAclRightsholderTotalsHolderCountByScenarioId(scenario.getId(),
-            StringUtils.EMPTY)).andReturn(1).once();
-        expect(controller.getAclScenarioWithAmountsAndLastAction()).andReturn(scenarioDto).once();
-        Capture<Supplier<String>> fileNameSupplierCapture = newCapture();
-        Capture<Consumer<PipedOutputStream>> posConsumerCapture = newCapture();
-        IStreamSource streamSource = createMock(IStreamSource.class);
-        expect(streamSource.getSource()).andReturn(new SimpleImmutableEntry(createMock(Supplier.class),
-            createMock(Supplier.class))).times(2);
-        expect(streamSourceHandler.getCsvStreamSource(capture(fileNameSupplierCapture), capture(posConsumerCapture)))
-            .andReturn(streamSource).times(2);
-        replay(aclScenarioUsageService, streamSourceHandler, streamSource);
-        controller.initWidget();
-        assertEquals(1, controller.getSize());
-        assertNotNull(fileNameSupplierCapture.getValue());
-        assertNotNull(posConsumerCapture.getValue());
-        verify(aclScenarioUsageService, streamSourceHandler, streamSource);
+        assertSame(holders, result);
+        verify(aclScenarioUsageService);
     }
 
     @Test
