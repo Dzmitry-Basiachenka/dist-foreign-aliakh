@@ -240,58 +240,12 @@ public class AclScenarioUsageRepositoryIntegrationTest {
     @TestData(fileName = FIND_ACL_RH_TOTALS_HOLDERS_BY_SCENARIO_ID)
     public void testFindAclRightsholderTotalsHoldersByScenarioIdEmptySearchValue() {
         List<AclRightsholderTotalsHolder> holders =
-            aclScenarioUsageRepository.findAclRightsholderTotalsHoldersByScenarioId(
-                SCENARIO_UID_1, StringUtils.EMPTY, null, null);
+            aclScenarioUsageRepository.findAclRightsholderTotalsHoldersByScenarioId(SCENARIO_UID_1);
         assertEquals(2, holders.size());
         verifyAclRightsholderTotalsHolder(buildAclRightsholderTotalsHolder(1000002859L, RH_NAME,
             150.00, 24.00, 126.00, 220.00, 35.00, 178.00, 3, 3), holders.get(0));
         verifyAclRightsholderTotalsHolder(buildAclRightsholderTotalsHolder(1000000026L, null,
             20.00, 3.00, 10.00, 0.00, 0.00, 0.00, 1, 1), holders.get(1));
-    }
-
-    @Test
-    @TestData(fileName = FIND_ACL_RH_TOTALS_HOLDERS_BY_SCENARIO_ID)
-    public void testFindAclRightsholderTotalsHoldersByScenarioIdNotEmptySearchValue() {
-        List<AclRightsholderTotalsHolder> holders =
-            aclScenarioUsageRepository.findAclRightsholderTotalsHoldersByScenarioId(
-                SCENARIO_UID_1, "JohN", null, null);
-        assertEquals(1, holders.size());
-        verifyAclRightsholderTotalsHolder(buildAclRightsholderTotalsHolder(1000002859L, RH_NAME,
-            150.00, 24.00, 126.00, 220.00, 35.00, 178.00, 3, 3), holders.get(0));
-    }
-
-    @Test
-    @TestData(fileName = FIND_ACL_RH_TOTALS_HOLDERS_BY_SCENARIO_ID)
-    public void testSortingFindAclRightsholderTotalsHoldersByScenarioId() {
-        AclRightsholderTotalsHolder holder1 =
-            buildAclRightsholderTotalsHolder(1000002859L, RH_NAME, 150.00, 24.00, 126.00, 220.00, 35.00, 178.00, 3, 3);
-        AclRightsholderTotalsHolder holder2 =
-            buildAclRightsholderTotalsHolder(1000000026L, null, 20.00, 3.00, 10.00, 0.00, 0.00, 0.00, 1, 1);
-        assertSortingAclRightsholderTotalsHolder(holder2, holder1, "rightsholder.accountNumber");
-        assertSortingAclRightsholderTotalsHolder(holder1, holder2, "rightsholder.name");
-        assertSortingAclRightsholderTotalsHolder(holder2, holder1, "grossTotalPrint");
-        assertSortingAclRightsholderTotalsHolder(holder2, holder1, "serviceFeeTotalPrint");
-        assertSortingAclRightsholderTotalsHolder(holder2, holder1, "netTotalPrint");
-        assertSortingAclRightsholderTotalsHolder(holder2, holder1, "grossTotalDigital");
-        assertSortingAclRightsholderTotalsHolder(holder2, holder1, "serviceFeeTotalDigital");
-        assertSortingAclRightsholderTotalsHolder(holder2, holder1, "netTotalDigital");
-        assertSortingAclRightsholderTotalsHolder(holder2, holder1, "numberOfTitles");
-        assertSortingAclRightsholderTotalsHolder(holder2, holder1, "numberOfAggLcClasses");
-        assertSortingAclRightsholderTotalsHolder(holder1, holder1, "licenseType");
-    }
-
-    @Test
-    @TestData(fileName = FIND_ACL_RH_TOTALS_HOLDERS_BY_SCENARIO_ID)
-    public void testFindAclRightsholderTotalsHolderCountByScenarioIdEmptySearchValue() {
-        assertEquals(2, aclScenarioUsageRepository.findAclRightsholderTotalsHolderCountByScenarioId(SCENARIO_UID_1,
-            StringUtils.EMPTY));
-    }
-
-    @Test
-    @TestData(fileName = FIND_ACL_RH_TOTALS_HOLDERS_BY_SCENARIO_ID)
-    public void testFindAclRightsholderTotalsHolderCountByScenarioIdNullSearchValue() {
-        assertEquals(2,
-            aclScenarioUsageRepository.findAclRightsholderTotalsHolderCountByScenarioId(SCENARIO_UID_1, null));
     }
 
     @Test
@@ -830,17 +784,6 @@ public class AclScenarioUsageRepositoryIntegrationTest {
         assertEquals(expectedHolder.getNumberOfTitles(), actualHolder.getNumberOfTitles());
         assertEquals(expectedHolder.getNumberOfAggLcClasses(), actualHolder.getNumberOfAggLcClasses());
         assertEquals(expectedHolder.getLicenseType(), actualHolder.getLicenseType());
-    }
-
-    private void assertSortingAclRightsholderTotalsHolder(AclRightsholderTotalsHolder holderAsc,
-                                                          AclRightsholderTotalsHolder holderDesc, String sortProperty) {
-        List<AclRightsholderTotalsHolder> holders =
-            aclScenarioUsageRepository.findAclRightsholderTotalsHoldersByScenarioId(
-                SCENARIO_UID_1, StringUtils.EMPTY, null, new Sort(sortProperty, Sort.Direction.ASC));
-        verifyAclRightsholderTotalsHolder(holderAsc, holders.get(0));
-        holders = aclScenarioUsageRepository.findAclRightsholderTotalsHoldersByScenarioId(
-            SCENARIO_UID_1, StringUtils.EMPTY, null, new Sort(sortProperty, Sort.Direction.DESC));
-        verifyAclRightsholderTotalsHolder(holderDesc, holders.get(0));
     }
 
     private void verifyFindByScenarioIdAndRhSearch(List<AclScenarioDetailDto> expectedScenarioDetailDtos,

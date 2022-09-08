@@ -2,14 +2,10 @@ package com.copyright.rup.dist.foreign.ui.scenario.impl.acl.calculation;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.reporting.api.IStreamSourceHandler;
-import com.copyright.rup.dist.common.repository.api.Pageable;
-import com.copyright.rup.dist.common.repository.api.Sort;
-import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolderDto;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDetailDto;
-import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
 import com.copyright.rup.dist.foreign.domain.filter.RightsholderResultsFilter;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclCalculationReportService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioUsageService;
@@ -18,10 +14,6 @@ import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioController
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioWidget;
 import com.copyright.rup.vaadin.widget.api.CommonController;
 
-import com.vaadin.data.provider.QuerySortOrder;
-import com.vaadin.shared.data.sort.SortDirection;
-
-import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -63,30 +55,8 @@ public class AclScenarioController extends CommonController<IAclScenarioWidget> 
     }
 
     @Override
-    public void performSearch() {
-        getWidget().applySearch();
-    }
-
-    @Override
-    public AclScenarioDto getAclScenarioWithAmountsAndLastAction() {
-        return scenarioUsageService.getAclScenarioWithAmountsAndLastAction(aclScenario.getId());
-    }
-
-    @Override
-    public List<AclRightsholderTotalsHolder> loadBeans(int startIndex, int count, List<QuerySortOrder> sortOrders) {
-        Sort sort = null;
-        if (CollectionUtils.isNotEmpty(sortOrders)) {
-            QuerySortOrder sortOrder = sortOrders.get(0);
-            sort = new Sort(sortOrder.getSorted(), Direction.of(SortDirection.ASCENDING == sortOrder.getDirection()));
-        }
-        return scenarioUsageService.getAclRightsholderTotalsHoldersByScenarioId(aclScenario.getId(),
-            getWidget().getSearchValue(), new Pageable(startIndex, count), sort);
-    }
-
-    @Override
-    public int getSize() {
-        return scenarioUsageService.getAclRightsholderTotalsHolderCountByScenarioId(aclScenario.getId(),
-            getWidget().getSearchValue());
+    public List<AclRightsholderTotalsHolder> getAclRightsholderTotalsHolders() {
+        return scenarioUsageService.getAclRightsholderTotalsHoldersByScenarioId(aclScenario.getId());
     }
 
     @Override

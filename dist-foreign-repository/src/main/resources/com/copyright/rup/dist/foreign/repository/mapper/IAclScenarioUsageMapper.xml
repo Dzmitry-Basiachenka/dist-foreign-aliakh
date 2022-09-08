@@ -122,53 +122,6 @@
         <result property="aggregateLicenseeClass.description" column="aggregate_licensee_class_name"/>
     </resultMap>
 
-    <sql id="rightsholderAclTotalHoldersOrderBy">
-        order by
-        <choose>
-            <when test="null != sort">
-                <choose>
-                    <when test="sort.property == 'rightsholder.name'">
-                        r.name <include refid="IUsageMapper.direction"/>
-                    </when>
-                    <when test="sort.property == 'rightsholder.accountNumber'">
-                        shd.rh_account_number <include refid="IUsageMapper.direction"/>
-                    </when>
-                    <when test="sort.property == 'grossTotalPrint'">
-                        gross_total_print <include refid="IUsageMapper.direction"/>
-                    </when>
-                    <when test="sort.property == 'serviceFeeTotalPrint'">
-                        service_fee_total_print <include refid="IUsageMapper.direction"/>
-                    </when>
-                    <when test="sort.property == 'netTotalPrint'">
-                        net_total_print <include refid="IUsageMapper.direction"/>
-                    </when>
-                    <when test="sort.property == 'grossTotalDigital'">
-                        gross_total_digital <include refid="IUsageMapper.direction"/>
-                    </when>
-                    <when test="sort.property == 'serviceFeeTotalDigital'">
-                        service_fee_total_digital <include refid="IUsageMapper.direction"/>
-                    </when>
-                    <when test="sort.property == 'netTotalDigital'">
-                        net_total_digital <include refid="IUsageMapper.direction"/>
-                    </when>
-                    <when test="sort.property == 'numberOfTitles'">
-                        number_of_titles <include refid="IUsageMapper.direction"/>
-                    </when>
-                    <when test="sort.property == 'numberOfAggLcClasses'">
-                        number_of_agg_lc_classes <include refid="IUsageMapper.direction"/>
-                    </when>
-                    <when test="sort.property == 'licenseType'">
-                        license_type <include refid="IUsageMapper.direction"/>
-                    </when>
-                </choose>,
-                r.name
-            </when>
-            <otherwise>
-                r.name
-            </otherwise>
-        </choose>
-    </sql>
-
     <sql id="periodPriorSql">
         <!--Gets period_prior for each usage 'years interval * 12 + month interval / 6'  for example: 202212 and 202012 returns 4-->
         select (
@@ -387,11 +340,7 @@
             group by shd.rh_account_number, s.license_type
         ) shd
         left join ${schema}.df_rightsholder r on shd.rh_account_number = r.rh_account_number
-        <if test="null != searchValue">
-            where <include refid="IAclScenarioUsageMapper.searchWhereClause"/>
-        </if>
-        <include refid="IAclScenarioUsageMapper.rightsholderAclTotalHoldersOrderBy"/>
-        <include refid="IUsageMapper.ifPageable"/>
+        order by r.name
     </sql>
 
     <insert id="addToScenario" parameterType="map">
@@ -608,17 +557,6 @@
 
     <select id="findAclRightsholderTotalsHoldersByScenarioId" parameterType="map" resultMap="aclRightsholderTotalsHolderResultMap">
         <include refid="IAclScenarioUsageMapper.findAclRightsholderTotalsHoldersByScenarioIdSql"/>
-    </select>
-
-    <select id="findAclRightsholderTotalsHolderCountByScenarioId" parameterType="map" resultType="int">
-        select count(distinct shd.rh_account_number)
-        from ${schema}.df_acl_scenario s
-        join ${schema}.df_acl_share_detail shd on s.df_acl_scenario_uid = shd.df_acl_scenario_uid
-        left join ${schema}.df_rightsholder r on shd.rh_account_number = r.rh_account_number
-        where s.df_acl_scenario_uid = #{scenarioId}
-        <if test="null != searchValue">
-            and <include refid="IAclScenarioUsageMapper.searchWhereClause"/>
-        </if>
     </select>
 
     <select id="findWithAmountsAndLastAction" parameterType="string" resultMap="aclScenarioDtoResultMap">

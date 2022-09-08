@@ -19,7 +19,6 @@ import com.copyright.rup.dist.foreign.domain.filter.RightsholderResultsFilter;
 import com.copyright.rup.dist.foreign.repository.api.IAclScenarioUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioUsageService;
 
-import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
@@ -120,21 +119,10 @@ public class AclScenarioUsageServiceTest {
     @Test
     public void testGetAclRightsholderTotalsHoldersByScenarioId() {
         List<AclRightsholderTotalsHolder> holders = Collections.singletonList(new AclRightsholderTotalsHolder());
-        expect(aclScenarioUsageRepository.findAclRightsholderTotalsHoldersByScenarioId(SCENARIO_UID, StringUtils.EMPTY,
-            null, null)).andReturn(holders).once();
+        expect(aclScenarioUsageRepository.findAclRightsholderTotalsHoldersByScenarioId(SCENARIO_UID))
+            .andReturn(holders).once();
         replay(aclScenarioUsageRepository);
-        assertSame(holders, aclScenarioUsageService.getAclRightsholderTotalsHoldersByScenarioId(SCENARIO_UID,
-            StringUtils.EMPTY, null, null));
-        verify(aclScenarioUsageRepository);
-    }
-
-    @Test
-    public void testGetAclRightsholderTotalsHolderCountByScenarioId() {
-        expect(aclScenarioUsageRepository.findAclRightsholderTotalsHolderCountByScenarioId(
-            SCENARIO_UID, StringUtils.EMPTY)).andReturn(5).once();
-        replay(aclScenarioUsageRepository);
-        assertEquals(5, aclScenarioUsageService.getAclRightsholderTotalsHolderCountByScenarioId(SCENARIO_UID,
-            StringUtils.EMPTY));
+        assertSame(holders, aclScenarioUsageService.getAclRightsholderTotalsHoldersByScenarioId(SCENARIO_UID));
         verify(aclScenarioUsageRepository);
     }
 

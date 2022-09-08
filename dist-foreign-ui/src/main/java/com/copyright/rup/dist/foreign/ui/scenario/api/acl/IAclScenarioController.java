@@ -5,12 +5,8 @@ import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolderDto;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDetailDto;
-import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
 import com.copyright.rup.dist.foreign.domain.filter.RightsholderResultsFilter;
-import com.copyright.rup.vaadin.widget.SearchWidget.ISearchController;
 import com.copyright.rup.vaadin.widget.api.IController;
-
-import com.vaadin.data.provider.QuerySortOrder;
 
 import java.util.List;
 
@@ -23,7 +19,7 @@ import java.util.List;
  *
  * @author Anton Azarenka
  */
-public interface IAclScenarioController extends IController<IAclScenarioWidget>, ISearchController {
+public interface IAclScenarioController extends IController<IAclScenarioWidget> {
 
     /**
      * @return current {@link AclScenario}.
@@ -38,24 +34,11 @@ public interface IAclScenarioController extends IController<IAclScenarioWidget>,
     void setScenario(AclScenario scenario);
 
     /**
-     * @return instance of {@link AclScenarioDto}
-     */
-    AclScenarioDto getAclScenarioWithAmountsAndLastAction();
-
-    /**
-     * Loads specified number of beans from the storage with given start index.
+     * Loads {@link AclRightsholderTotalsHolder}s from the storage for specific scenario.
      *
-     * @param startIndex start index
-     * @param count      items count to load
-     * @param sortOrders sort orders
      * @return list of items to be displayed on UI
      */
-    List<AclRightsholderTotalsHolder> loadBeans(int startIndex, int count, List<QuerySortOrder> sortOrders);
-
-    /**
-     * @return number of items.
-     */
-    int getSize();
+    List<AclRightsholderTotalsHolder> getAclRightsholderTotalsHolders();
 
     /**
      * Handles click on "Rightsholder Account Number" button.
