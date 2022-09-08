@@ -1,3 +1,17 @@
+16.0.2
+-
+* B-57802 FDA: Delete ACL Scenario: make changes based on comments in code review
+* B-71854 FDA: Export Scenario View by RHs: implement repository logic to generate ACL scenario by RHs report
+* B-73151 FDA: View Agg Lic Class by Rightsholder: change System Title by Wr Wrk Inst filter parameter
+* B-73151 FDA: View Agg Lic Class by Rightsholder: make changes based on comments in code review
+* B-73151 FDA: View Agg Lic Class by Rightsholder: add auto disabled for hyperlink button and adjust columns size
+* B-73149 FDA: View Titles by Rightsholder: add auto disabled of # of Titles button and adjust columns size on ACL Scenario Drill Down Titles window
+* B-73150 FDA: Details view by Title and Agg Lic Class: make changes based on comments in code review
+* B-73150 FDA: Details view by Title and Agg Lic Class: add sort for columns and change System Title to Wr Wrk Inst filter parameter
+* B-74271 Tech Debt: FDA: fix double click issue for ACL scenario buttons
+* B-74271 Tech Debt: FDA: fix double click issue for ACL buttons
+* B-74271 Tech Debt: FDA: add unit tests to verify grid items for ACL udm windows
+
 16.0.1
 -
 * B-57802 FDA: Delete ACL Scenario: resolve issue with nulpointer exception when scenarios tab is empty
