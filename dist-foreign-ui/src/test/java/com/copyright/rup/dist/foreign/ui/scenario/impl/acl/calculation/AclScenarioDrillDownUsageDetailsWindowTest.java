@@ -5,6 +5,7 @@ import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyFooterI
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGridItems;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyLabel;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
+
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
@@ -18,6 +19,7 @@ import com.copyright.rup.dist.foreign.domain.AclScenarioDetailDto;
 import com.copyright.rup.dist.foreign.domain.filter.RightsholderResultsFilter;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioController;
 import com.copyright.rup.dist.foreign.ui.usage.UiTestHelper;
+
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -30,6 +32,7 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
+
 import org.apache.commons.lang3.tuple.Triple;
 import org.junit.Before;
 import org.junit.Test;
@@ -86,14 +89,16 @@ public class AclScenarioDrillDownUsageDetailsWindowTest {
     @Test
     public void testGridValues() {
         Grid<?> grid = (Grid<?>) ((VerticalLayout) window.getContent()).getComponent(1);
-        Object[][] expectedCells = {
-            {"112ff7b8-8fe3-4b5a-a5da-978210889fce", 202206, "1.00", "United Kingdom", 22, "Banks/Ins/RE/Holding Cos",
-                null, "44.00", "44.00", "TGB", "1.90", "", "N", "", "N", "1.6906798275", "N", "0.0000093612",
-                "0.0000094213", "0.0000093912", "0.34", "0.0000100811", "0.000010214", "0.0000101476", "0.37", "0.70"},
-            {"2d4b5a31-bbcd-44cf-b1e5-a9144c58a39c", 202206, "1.00", "Belarus", 22, "Banks/Ins/RE/Holding Cos",
-                null, "60.00", "60.00", "TGB", "1.90", "", "N", "", "N", "1.6906798275", "N", "0.0000127652",
-                "0.0000128472", "0.0000128062", "0.46", "0.000013747", "0.0000139282", "0.0000138376", "0.50", "0.96"}
-        };
+        Object[][] expectedCells =
+            {{"112ff7b8-8fe3-4b5a-a5da-978210889fce", "CHEV2021May0027", 202206, "1.00", "United Kingdom", 22,
+                "Banks/Ins/RE/Holding Cos", null, "44.00", "44.00", "TGB", "1.90", "", "N", "", "N", "1.6906798275",
+                "N", "0.0000093612", "0.0000094213", "0.0000093912", "0.34", "0.0000100811", "0.000010214",
+                "0.0000101476", "0.37", "0.70"},
+                {"2d4b5a31-bbcd-44cf-b1e5-a9144c58a39c", "CHEV2021May0028", 202206,
+                "1.00", "Belarus", 22, "Banks/Ins/RE/Holding Cos", null, "60.00", "60.00", "TGB", "1.90", "", "N", "",
+                "N", "1.6906798275", "N", "0.0000127652", "0.0000128472", "0.0000128062", "0.46", "0.000013747",
+                "0.0000139282", "0.0000138376", "0.50", "0.96"}
+            };
         verifyGridItems(grid, scenarioDetails, expectedCells);
         Object[][] expectedFooterColumns = {
             {"valueSharePrint", "0.0000221264", STYLE_ALIGN_RIGHT},
@@ -129,8 +134,8 @@ public class AclScenarioDrillDownUsageDetailsWindowTest {
             {"RH Name:", "Longhouse"},
             {"Wr Wrk Inst:", "303580015"},
             {"System Title:", "Fortune"},
-            {"Agg Lic Class ID:", "12"},
-            {"Agg Lic Class Name:", "Machinery"}
+            {"Agg LC Id:", "12"},
+            {"Agg LC Name:", "Machinery"}
         };
         verifyLabelLayout(verticalLayout, expectedCaptions);
     }
@@ -143,8 +148,8 @@ public class AclScenarioDrillDownUsageDetailsWindowTest {
             assertTrue(horizontalComponent instanceof HorizontalLayout);
             HorizontalLayout horizontalLayout = (HorizontalLayout) verticalLayout.getComponent(i);
             assertEquals(2, horizontalLayout.getComponentCount());
-            verifyLabel(horizontalLayout.getComponent(0), expectedCaptions[i][0], ContentMode.TEXT, 125);
-            verifyLabel(horizontalLayout.getComponent(1), expectedCaptions[i][1], ContentMode.TEXT, 1125);
+            verifyLabel(horizontalLayout.getComponent(0), expectedCaptions[i][0], ContentMode.TEXT, 90);
+            verifyLabel(horizontalLayout.getComponent(1), expectedCaptions[i][1], ContentMode.TEXT, 1160);
         });
     }
 
@@ -155,6 +160,7 @@ public class AclScenarioDrillDownUsageDetailsWindowTest {
         assertTrue(grid.getStyleName().contains("acl-scenario-drill-down-usage-details-grid"));
         UiTestHelper.verifyGrid(grid, Arrays.asList(
             Triple.of("Detail ID", 130.0, -1),
+            Triple.of("Usage Detail ID", 130.0, -1),
             Triple.of("Usage Period", 125.0, -1),
             Triple.of("Usage Age Weight", 130.0, -1),
             Triple.of("Survey Country", 120.0, -1),

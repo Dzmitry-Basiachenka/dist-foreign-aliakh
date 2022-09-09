@@ -109,10 +109,10 @@ public class AclScenarioDrillDownTitlesWindow extends Window implements SearchWi
         if (Objects.nonNull(value)) {
             horizontalLayout = new HorizontalLayout();
             Label titleLabel = new Label(ForeignUi.getMessage("label.title", title));
-            titleLabel.setWidth(125, Unit.PIXELS);
+            titleLabel.setWidth(90, Unit.PIXELS);
             titleLabel.addStyleName(Cornerstone.LABEL_BOLD);
             Label valueLabel = new Label(String.valueOf(value));
-            valueLabel.setWidth(1125, Unit.PIXELS);
+            valueLabel.setWidth(1160, Unit.PIXELS);
             horizontalLayout.addComponents(titleLabel, valueLabel);
         }
         return horizontalLayout;
