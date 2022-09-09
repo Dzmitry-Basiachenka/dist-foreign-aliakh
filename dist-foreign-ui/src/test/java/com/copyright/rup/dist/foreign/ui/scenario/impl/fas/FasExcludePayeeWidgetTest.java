@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.scenario.impl.fas;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGrid;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGridItems;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
 import static org.easymock.EasyMock.anyObject;
@@ -47,7 +48,9 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
+import java.math.BigDecimal;
 import java.util.AbstractMap.SimpleImmutableEntry;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -114,6 +117,16 @@ public class FasExcludePayeeWidgetTest {
         ));
         verifyButtonsLayout(content.getComponent(2), "Exclude Details", "Redesignate Details", "Clear",
             "Close");
+    }
+
+    @Test
+    public void testGridValues() {
+        Grid<?> grid = (Grid<?>) ((VerticalLayout) ((HorizontalSplitPanel) widget.getContent())
+            .getSecondComponent()).getComponent(1);
+        Object[][] expectedCells = {
+            {PAYEE_ACCOUNT_NUMBER, "Chinese Medical Association", "15,403,080.62", "2,464,492.90", "12,938,587.72", 'Y'}
+        };
+        verifyGridItems(grid, new ArrayList<>(buildPayeeTotalHolder()), expectedCells);
     }
 
     @Test
@@ -225,6 +238,11 @@ public class FasExcludePayeeWidgetTest {
         Set<PayeeTotalHolder> payeeTotalHolders = new HashSet<>();
         PayeeTotalHolder payeeTotalHolder = new PayeeTotalHolder();
         payeeTotalHolder.getPayee().setAccountNumber(PAYEE_ACCOUNT_NUMBER);
+        payeeTotalHolder.getPayee().setName("Chinese Medical Association");
+        payeeTotalHolder.setGrossTotal(new BigDecimal("15403080.62"));
+        payeeTotalHolder.setServiceFeeTotal(new BigDecimal("2464492.90"));
+        payeeTotalHolder.setNetTotal(new BigDecimal("12938587.72"));
+        payeeTotalHolder.setPayeeParticipating(true);
         payeeTotalHolders.add(payeeTotalHolder);
         return payeeTotalHolders;
     }
@@ -269,7 +287,7 @@ public class FasExcludePayeeWidgetTest {
             createMock(Supplier.class))).once();
         expect(controller.getCsvStreamSource()).andReturn(streamSource).once();
         expect(controller.getExcludePayeesFilterController()).andReturn(filterController).once();
-        expect(controller.getPayeeTotalHolders()).andReturn(Collections.emptyList()).once();
+        expect(controller.getPayeeTotalHolders()).andReturn(new ArrayList<>(buildPayeeTotalHolder())).once();
         expect(filterController.initWidget()).andReturn(filterWidget).once();
         replay(controller, filterController, streamSource);
         widget.init();
