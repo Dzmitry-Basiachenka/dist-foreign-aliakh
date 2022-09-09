@@ -1,19 +1,29 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl.fas;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGrid;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGridItems;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
 import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.reset;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.powermock.api.easymock.PowerMock.mockStatic;
+import static org.powermock.api.easymock.PowerMock.replay;
+import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasDrillDownByRightsholderController;
 import com.copyright.rup.dist.foreign.ui.usage.UiTestHelper;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.vaadin.data.ValueProvider;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.MarginInfo;
@@ -22,15 +32,21 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.JavaScript;
 import com.vaadin.ui.VerticalLayout;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Triple;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -42,13 +58,17 @@ import java.util.List;
  *
  * @author Stanislau Rudak
  */
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({JavaScript.class})
 public class FasDrillDownByRightsholderWidgetTest {
 
+    private final List<UsageDto> usages = loadExpectedUsageDto("usage_dto_c2c29b7b.json");
     private FasDrillDownByRightsholderWidget widget;
+    private IFasDrillDownByRightsholderController controller;
 
     @Before
     public void setUp() {
-        IFasDrillDownByRightsholderController controller = createMock(IFasDrillDownByRightsholderController.class);
+        controller = createMock(IFasDrillDownByRightsholderController.class);
         widget = new FasDrillDownByRightsholderWidget();
         widget.setController(controller);
         widget.init();
@@ -65,6 +85,25 @@ public class FasDrillDownByRightsholderWidgetTest {
         verifySearchWidget(content.getComponent(0));
         verifyTable(content.getComponent(1));
         UiTestHelper.verifyButtonsLayout(content.getComponent(2), "Close");
+    }
+
+    @Test
+    public void testGridValues() {
+        mockStatic(JavaScript.class);
+        expect(JavaScript.getCurrent()).andReturn(createMock(JavaScript.class)).times(2);
+        expect(controller.loadBeans(0, Integer.MAX_VALUE, Collections.emptyList())).andReturn(usages).once();
+        expect(controller.getSize()).andReturn(1).once();
+        replay(JavaScript.class, controller);
+        Grid<?> grid = (Grid<?>) ((VerticalLayout) widget.getContent()).getComponent(1);
+        Object[][] expectedCells = {
+            {"c2c29b7b-13e1-4f02-afc0-ed1684253e20", "FAS", "Paid batch", 1000000008L, "Intercept Limited [T]",
+                340415946L, "100 ROAD MOVIES", "2046-9055", "VALISSN", "FY2021", "02/12/2021",
+                "Paediatrics and international child health", "some article", "some publisher", "02/13/2021", 2,
+                "3,000.00", "500.00", "1,000.00", "1,866.67", "9,800.00", "16.0", "Univ", 2015, 2016, "author",
+                "usage from usages_10.csv"}
+        };
+        verifyGridItems(grid, usages, expectedCells);
+        verify(JavaScript.class, controller);
     }
 
     private void verifySearchWidget(Component component) {
@@ -131,5 +170,18 @@ public class FasDrillDownByRightsholderWidgetTest {
         assertEquals(StringUtils.EMPTY, provider.apply(usage));
         usage.setBatchGrossAmount(new BigDecimal("100.00"));
         assertEquals("100.00", provider.apply(usage));
+    }
+
+    private List<UsageDto> loadExpectedUsageDto(String fileName) {
+        try {
+            String content = TestUtils.fileToString(this.getClass(), fileName);
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.registerModule(new JavaTimeModule());
+            mapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
+            return mapper.readValue(content, new TypeReference<List<UsageDto>>() {
+            });
+        } catch (IOException e) {
+            throw new AssertionError(e);
+        }
     }
 }

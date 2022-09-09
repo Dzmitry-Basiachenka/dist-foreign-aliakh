@@ -93,7 +93,7 @@ public class UdmValueWidgetTest {
     private static final int EXCEEDED_UDM_RECORD_THRESHOLD = 10001;
     private static final String INVALID_ASSIGNEE = "invalid_assignee";
 
-    private final List<UdmValueDto> udmValues = loadExpectedUdmValueDto("json/udm_value_dto_43699543.json");
+    private final List<UdmValueDto> udmValues = loadExpectedUdmValueDto("udm_value_dto_43699543.json");
     private IUdmValueController controller;
     private UdmValueWidget valueWidget;
 

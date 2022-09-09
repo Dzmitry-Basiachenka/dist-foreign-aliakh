@@ -56,7 +56,7 @@ public class AclScenarioDrillDownUsageDetailsWindowTest {
     private static final String STYLE_ALIGN_RIGHT = "v-align-right";
 
     private final List<AclScenarioDetailDto> scenarioDetails =
-        loadExpectedAclScenarioDetailDto("json/acl_scenario_detail_dto_112ff7b8_2d4b5a31.json");
+        loadExpectedAclScenarioDetailDto("acl_scenario_detail_dto_112ff7b8_2d4b5a31.json");
     private AclScenarioDrillDownUsageDetailsWindow window;
 
     @Before

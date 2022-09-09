@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl.fas;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGridItems;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyLabel;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
@@ -17,6 +18,7 @@ import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
+import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasScenariosController;
 import com.copyright.rup.dist.foreign.ui.scenario.impl.ScenarioHistoryController;
 import com.copyright.rup.dist.foreign.ui.usage.UiTestHelper;
@@ -30,6 +32,7 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.JavaScript;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
 
@@ -38,6 +41,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Triple;
 import org.junit.Before;
 import org.junit.Test;
+import org.powermock.api.easymock.PowerMock;
 import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
@@ -72,14 +76,7 @@ public class FasScenariosWidgetTest {
         controller = createMock(IFasScenariosController.class);
         scenariosWidget = new FasScenariosWidget(controller, new ScenarioHistoryController());
         scenariosWidget.setController(controller);
-        scenario = new Scenario();
-        scenario.setId(SCENARIO_ID);
-        scenario.setDescription("Description");
-        scenario.setNetTotal(new BigDecimal("6800.00"));
-        scenario.setServiceFeeTotal(new BigDecimal("3200.00"));
-        scenario.setGrossTotal(new BigDecimal("10000.00"));
-        scenario.setCreateUser("User@copyright.com");
-        scenario.setAuditItem(buildScenarioAuditItem());
+        scenario = buildScenario();
         expect(controller.getScenarios()).andReturn(Collections.singletonList(scenario)).once();
         replay(controller);
         scenariosWidget.init();
@@ -104,6 +101,14 @@ public class FasScenariosWidgetTest {
         component = layout.getComponent(1);
         assertTrue(component instanceof Panel);
         verifyPanel((Panel) component);
+    }
+
+    @Test
+    public void testGridValues() {
+        Grid<?> grid = (Grid<?>) ((HorizontalLayout) scenariosWidget.getComponent(1)).getComponent(0);
+        Object[][] expectedCells = {{"FAS Distribution 04/07/2022", "04/07/2022", "IN_PROGRESS"}};
+        verifyGridItems(grid, Collections.singletonList(scenario), expectedCells);
+        PowerMock.verify(JavaScript.class);
     }
 
     @Test
@@ -238,6 +243,22 @@ public class FasScenariosWidgetTest {
         verifyLabel(lastActionLayout.getComponent(3), "<b>Reason:</b> ");
         assertTrue(lastActionLayout.getComponent(4) instanceof Button);
         assertEquals("View All Actions", lastActionLayout.getComponent(4).getCaption());
+    }
+
+    private Scenario buildScenario() {
+        Scenario fasScenario = new Scenario();
+        fasScenario.setId(SCENARIO_ID);
+        fasScenario.setName("FAS Distribution 04/07/2022");
+        fasScenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);
+        fasScenario.setDescription("Description");
+        fasScenario.setNetTotal(new BigDecimal("6800.00"));
+        fasScenario.setServiceFeeTotal(new BigDecimal("3200.00"));
+        fasScenario.setGrossTotal(new BigDecimal("10000.00"));
+        fasScenario.setCreateUser("User@copyright.com");
+        fasScenario.setCreateDate(
+            Date.from(LocalDate.of(2022, 4, 7).atStartOfDay(ZoneId.systemDefault()).toInstant()));
+        fasScenario.setAuditItem(buildScenarioAuditItem());
+        return fasScenario;
     }
 
     private ScenarioAuditItem buildScenarioAuditItem() {

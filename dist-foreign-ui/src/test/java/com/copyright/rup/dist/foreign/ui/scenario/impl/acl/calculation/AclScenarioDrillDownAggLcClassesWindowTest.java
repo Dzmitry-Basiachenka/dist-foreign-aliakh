@@ -74,7 +74,7 @@ public class AclScenarioDrillDownAggLcClassesWindowTest {
     private static final String AGG_LIC_CLASS_NAME = "Food and Tobacco";
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
     private final List<AclRightsholderTotalsHolderDto> rightsholderTotalsHolderDtos =
-        loadExpectedAclRightsholderTotalsHolderDto("json/acl_rightsholder_totals_holder_dto_agg_lc_class.json");
+        loadExpectedAclRightsholderTotalsHolderDto("acl_rightsholder_totals_holder_dto_agg_lc_class.json");
 
     static {
         OBJECT_MAPPER.registerModule(new JavaTimeModule());
