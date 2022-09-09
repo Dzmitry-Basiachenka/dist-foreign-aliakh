@@ -98,9 +98,23 @@ public final class UiTestHelper {
      * @param width       width
      */
     public static void verifyLabel(Component component, String caption, ContentMode contentMode, float width) {
+        verifyLabel(component, caption, contentMode, width, Unit.PIXELS);
+    }
+
+    /**
+     * Verifies label.
+     *
+     * @param component   UI component
+     * @param caption     caption
+     * @param contentMode content mode
+     * @param width       width
+     * @param unit        unit
+     */
+    public static void verifyLabel(Component component, String caption, ContentMode contentMode, float width,
+                                   Unit unit) {
         assertTrue(component instanceof Label);
         assertEquals(width, component.getWidth(), 0);
-        assertEquals(Unit.PIXELS, component.getWidthUnits());
+        assertEquals(unit, component.getWidthUnits());
         Label label = (Label) component;
         assertEquals(caption, label.getValue());
         assertEquals(contentMode, label.getContentMode());

@@ -27,6 +27,7 @@ import com.copyright.rup.vaadin.widget.SearchWidget;
 
 import com.vaadin.data.ValueProvider;
 import com.vaadin.server.Sizeable;
+import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
@@ -233,7 +234,8 @@ public class AclScenarioDrillDownTitlesWindowTest {
             HorizontalLayout horizontalLayout = (HorizontalLayout) verticalLayout.getComponent(i);
             assertEquals(2, horizontalLayout.getComponentCount());
             verifyLabel(horizontalLayout.getComponent(0), expectedCaptions[i][0], ContentMode.TEXT, 90);
-            verifyLabel(horizontalLayout.getComponent(1), expectedCaptions[i][1], ContentMode.TEXT, 1160);
+            verifyLabel(horizontalLayout.getComponent(1), expectedCaptions[i][1], ContentMode.TEXT, 100.0f,
+                Unit.PERCENTAGE);
         });
     }
 
