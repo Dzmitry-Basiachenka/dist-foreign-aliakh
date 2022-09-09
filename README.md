@@ -1,3 +1,10 @@
+16.0.3
+-
+* B-74271 Tech Debt: FDA: remove lazy loading from View ACL Scenario window
+* B-74271 Tech Debt: FDA: add unit tests to verify grid items for FAS scenario windows
+* B-74271 Tech Debt: FDA: adjust naming for meta info panel on drill down windows and add new Usage Detail Id column on usage detail window
+* B-74271 Tech Debt: FDA: adjust meta layout with dynamic label width on ACL Scenario Drill Down windows
+
 16.0.2
 -
 * B-57802 FDA: Delete ACL Scenario: make changes based on comments in code review
