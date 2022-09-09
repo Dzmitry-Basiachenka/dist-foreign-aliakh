@@ -96,10 +96,10 @@ public class AclScenarioDrillDownUsageDetailsWindow extends Window {
         if (Objects.nonNull(value)) {
             horizontalLayout = new HorizontalLayout();
             Label titleLabel = new Label(ForeignUi.getMessage("label.title", title));
-            titleLabel.setWidth(125, Unit.PIXELS);
+            titleLabel.setWidth(90, Unit.PIXELS);
             titleLabel.addStyleName(Cornerstone.LABEL_BOLD);
             Label valueLabel = new Label(String.valueOf(value));
-            valueLabel.setWidth(1125, Unit.PIXELS);
+            valueLabel.setWidth(1160, Unit.PIXELS);
             horizontalLayout.addComponents(titleLabel, valueLabel);
         }
         return horizontalLayout;
@@ -119,6 +119,8 @@ public class AclScenarioDrillDownUsageDetailsWindow extends Window {
 
     private void addColumns() {
         addColumn(AclScenarioDetailDto::getId, "table.column.detail_id", "detailId", false, 130);
+        addColumn(AclScenarioDetailDto::getOriginalDetailId, "table.column.usage_detail_id", "usageDetailId", true,
+            130);
         addColumn(AclScenarioDetailDto::getPeriodEndPeriod, "table.column.usage_period", "periodEndDate", true, 125);
         addBigDecimalColumn(AclScenarioDetailDto::getUsageAgeWeight, "table.column.usage_age_weight",
             "usageAgeWeight", 130);
@@ -218,9 +220,10 @@ public class AclScenarioDrillDownUsageDetailsWindow extends Window {
         grid.setFooterVisible(true);
         FooterRow row = grid.getFooterRow(0);
         row.setStyleName("table-ext-footer");
-        row.join("detailId", "periodEndDate", "usageAgeWeight", "surveyCountry", "detailLicenseeClassId",
-            "detailLicenseeClassName", "reportedTypeOfUse", "numberOfCopies", "weightedCopies", "publicationType",
-            "pubTypeWeight", "price", "priceFlag", "content", "contentFlag", "contentUnitPrice", "contentUnitPriceFlag")
+        row.join("detailId", "usageDetailId", "periodEndDate", "usageAgeWeight", "surveyCountry",
+                "detailLicenseeClassId", "detailLicenseeClassName", "reportedTypeOfUse", "numberOfCopies",
+                "weightedCopies", "publicationType", "pubTypeWeight", "price", "priceFlag", "content", "contentFlag",
+                "contentUnitPrice", "contentUnitPriceFlag")
             .setText("Totals");
         initFooterBigDecimalCell(row, "valueSharePrint", AclScenarioDetailDto::getValueSharePrint);
         initFooterBigDecimalCell(row, "volumeSharePrint", AclScenarioDetailDto::getVolumeSharePrint);

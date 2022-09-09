@@ -220,8 +220,8 @@ public class AclScenarioDrillDownTitlesWindowTest {
         String[][] expectedMetaInfoCaptions = {
             {"RH Account #:", "1000010022"},
             {"RH Name:", RH_NAME},
-            {"Agg Lic Class ID:", AGG_LIC_CLASS_ID.toString()},
-            {"Agg Lic Class Name:", AGG_LIC_CLASS_NAME}
+            {"Agg LC Id:", AGG_LIC_CLASS_ID.toString()},
+            {"Agg LC Name:", AGG_LIC_CLASS_NAME}
         };
         verifyLabelLayout(verticalLayout, expectedMetaInfoCaptions, verticalLayout.getComponentCount());
     }
@@ -232,8 +232,8 @@ public class AclScenarioDrillDownTitlesWindowTest {
             assertTrue(horizontalComponent instanceof HorizontalLayout);
             HorizontalLayout horizontalLayout = (HorizontalLayout) verticalLayout.getComponent(i);
             assertEquals(2, horizontalLayout.getComponentCount());
-            verifyLabel(horizontalLayout.getComponent(0), expectedCaptions[i][0], ContentMode.TEXT, 125);
-            verifyLabel(horizontalLayout.getComponent(1), expectedCaptions[i][1], ContentMode.TEXT, 1125);
+            verifyLabel(horizontalLayout.getComponent(0), expectedCaptions[i][0], ContentMode.TEXT, 90);
+            verifyLabel(horizontalLayout.getComponent(1), expectedCaptions[i][1], ContentMode.TEXT, 1160);
         });
     }
 
