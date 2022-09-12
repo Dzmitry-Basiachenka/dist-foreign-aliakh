@@ -120,30 +120,30 @@ public class AclScenarioDrillDownUsageDetailsWindow extends Window {
     }
 
     private void addColumns() {
-        addColumn(AclScenarioDetailDto::getId, "table.column.detail_id", "detailId", false, 130);
+        addColumn(AclScenarioDetailDto::getId, "table.column.detail_id", "detailId", false, 250);
         addColumn(AclScenarioDetailDto::getOriginalDetailId, "table.column.usage_detail_id", "usageDetailId", true,
-            130);
-        addColumn(AclScenarioDetailDto::getPeriodEndPeriod, "table.column.usage_period", "periodEndDate", true, 125);
+            170);
+        addColumn(AclScenarioDetailDto::getPeriodEndPeriod, "table.column.usage_period", "periodEndDate", true, 100);
         addBigDecimalColumn(AclScenarioDetailDto::getUsageAgeWeight, "table.column.usage_age_weight",
             "usageAgeWeight", 130);
         addColumn(AclScenarioDetailDto::getSurveyCountry, "table.column.survey_country", "surveyCountry", true, 120);
         addColumn(AclScenarioDetailDto::getDetailLicenseeClassId, "table.column.det_lc_id",
-            "detailLicenseeClassId", true, 100);
+            "detailLicenseeClassId", true, 75);
         addColumn(AclScenarioDetailDto::getDetailLicenseeClassName, "table.column.det_lc_name",
             "detailLicenseeClassName", true, 200);
-        addColumn(AclScenarioDetailDto::getReportedTypeOfUse, "table.column.tou", "reportedTypeOfUse", true, 120);
+        addColumn(AclScenarioDetailDto::getReportedTypeOfUse, "table.column.tou", "reportedTypeOfUse", true, 75);
         addBigDecimalColumn(AclScenarioDetailDto::getNumberOfCopies, "table.column.acl_number_of_copies",
-            "numberOfCopies", 125);
+            "numberOfCopies", 90);
         addBigDecimalColumn(AclScenarioDetailDto::getWeightedCopies, "table.column.number_of_weighted_copies",
             "weightedCopies", 150);
         addColumn(detail -> detail.getPublicationType().getName(), "table.column.publication_type",
-            "publicationType", true, 120);
+            "publicationType", true, 75);
         addBigDecimalColumn(detail -> detail.getPublicationType().getWeight(), "table.column.publication_type_weight",
             "pubTypeWeight", 120);
         addBigDecimalColumn(AclScenarioDetailDto::getPrice, "table.column.price", "price", 100);
-        addBooleanColumn(AclScenarioDetailDto::isPriceFlag, "table.column.price_flag", "priceFlag", 110);
+        addBooleanColumn(AclScenarioDetailDto::isPriceFlag, "table.column.price_flag", "priceFlag", 100);
         addBigDecimalColumn(AclScenarioDetailDto::getContent, "table.column.content", "content", 100);
-        addBooleanColumn(AclScenarioDetailDto::isContentFlag, "table.column.content_flag", "contentFlag", 110);
+        addBooleanColumn(AclScenarioDetailDto::isContentFlag, "table.column.content_flag", "contentFlag", 100);
         addBigDecimalColumn(AclScenarioDetailDto::getContentUnitPrice, "table.column.content_unit_price",
             "contentUnitPrice", 150);
         addBooleanColumn(AclScenarioDetailDto::isContentUnitPriceFlag, "table.column.content_unit_price_flag",
@@ -155,7 +155,7 @@ public class AclScenarioDrillDownUsageDetailsWindow extends Window {
         addBigDecimalColumn(AclScenarioDetailDto::getDetailSharePrint, "table.column.print_detail_share",
             "detailSharePrint", 140);
         addAmountColumn(AclScenarioDetailDto::getNetAmountPrint, "table.column.print_net_amount",
-            "netAmountPrint", 150);
+            "netAmountPrint", 140);
         addBigDecimalColumn(AclScenarioDetailDto::getValueShareDigital, "table.column.digital_value_share",
             "valueShareDigital", 150);
         addBigDecimalColumn(AclScenarioDetailDto::getVolumeShareDigital, "table.column.digital_volume_share",
@@ -163,9 +163,9 @@ public class AclScenarioDrillDownUsageDetailsWindow extends Window {
         addBigDecimalColumn(AclScenarioDetailDto::getDetailShareDigital, "table.column.digital_detail_share",
             "detailShareDigital", 150);
         addAmountColumn(AclScenarioDetailDto::getNetAmountDigital, "table.column.digital_net_amount",
-            "netAmountDigital", 150);
+            "netAmountDigital", 140);
         addAmountColumn(AclScenarioDetailDto::getCombinedNetAmount, "table.column.combined_net_amount",
-            "combinedNetAmount", 170);
+            "combinedNetAmount", 140);
     }
 
     private void addColumn(ValueProvider<AclScenarioDetailDto, ?> provider, String captionProperty, String columnId,
