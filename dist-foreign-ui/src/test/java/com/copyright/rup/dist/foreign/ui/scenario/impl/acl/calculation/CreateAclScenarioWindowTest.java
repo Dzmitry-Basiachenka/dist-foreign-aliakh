@@ -34,6 +34,7 @@ import com.copyright.rup.dist.foreign.ui.usage.impl.ScenarioParameterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.impl.acl.AclPublicationTypeWeightsParameterWidget;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import com.vaadin.data.Binder;
 import com.vaadin.data.ValidationResult;
@@ -125,8 +126,8 @@ public class CreateAclScenarioWindowTest {
         assertEquals(13, content.getComponentCount());
         verifyScenarioNameField(content.getComponent(0));
         UiTestHelper.verifyComboBox(content.getComponent(1), "Period", true, 202206);
-        UiTestHelper.verifyComboBox(content.getComponent(2), "License Type", true, LICENSE_TYPE, "MACL", "VGW",
-            "JACDCL");
+        UiTestHelper.verifyComboBox(content.getComponent(2), "License Type", true,
+            ImmutableSet.of("ACL", "MACL", "VGW", "JACDCL"));
         verifyComboBox(content.getComponent(3), "Usage Batch");
         verifyComboBox(content.getComponent(4), "Fund Pool");
         verifyComboBox(content.getComponent(5), "Grant Set");

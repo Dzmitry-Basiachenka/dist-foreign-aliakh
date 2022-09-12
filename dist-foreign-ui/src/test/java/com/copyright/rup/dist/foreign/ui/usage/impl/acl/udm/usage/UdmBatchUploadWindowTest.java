@@ -32,6 +32,7 @@ import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageController;
 import com.copyright.rup.vaadin.ui.component.upload.UploadField;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
+import com.google.common.collect.ImmutableSet;
 import com.vaadin.data.Binder;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.ComboBox;
@@ -172,7 +173,7 @@ public class UdmBatchUploadWindowTest {
         assertEquals(2, horizontalLayout.getComponentCount());
         assertTrue(horizontalLayout.getComponent(1) instanceof ComboBox);
         verifyTextField(horizontalLayout.getComponent(0), "Period Year");
-        verifyComboBox(horizontalLayout.getComponent(1), "Period Month", true, "06", "12");
+        verifyComboBox(horizontalLayout.getComponent(1), "Period Month", true, ImmutableSet.of("06", "12"));
     }
 
     private void verifyChannelAndUsageOriginComponents(Component component) {

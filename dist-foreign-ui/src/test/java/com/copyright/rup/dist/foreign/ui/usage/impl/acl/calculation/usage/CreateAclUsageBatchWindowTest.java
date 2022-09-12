@@ -27,6 +27,7 @@ import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.PeriodFilterWidget;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
+import com.google.common.collect.ImmutableSet;
 import com.vaadin.data.Binder;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.CheckBox;
@@ -263,7 +264,8 @@ public class CreateAclUsageBatchWindowTest {
         HorizontalLayout horizontalLayout = (HorizontalLayout) component;
         assertEquals(2, horizontalLayout.getComponentCount());
         verifyTextField(horizontalLayout.getComponent(0), "Distribution Period Year");
-        verifyComboBox(horizontalLayout.getComponent(1), "Distribution Period Month", true, "06", "12");
+        verifyComboBox(horizontalLayout.getComponent(1), "Distribution Period Month", true,
+            ImmutableSet.of("06", "12"));
     }
 
     private AclUsageBatch buildAclUsageBatch() {

@@ -113,14 +113,14 @@ public final class FdaConstants {
         ImmutableSet.of(FAS_PRODUCT_FAMILY, CLA_FAS_PRODUCT_FAMILY);
 
     /**
-     * Array of ACL License Types.
+     * Set of ACL License Types.
      */
-    public static final String[] ACL_LICENSE_TYPES = new String[]{"ACL", "MACL", "VGW", "JACDCL"};
+    public static final Set<String> ACL_LICENSE_TYPES = ImmutableSet.of("ACL", "MACL", "VGW", "JACDCL");
 
     /**
-     * Arrays of available months for ACL periods.
+     * Set of available months for ACL periods.
      */
-    public static final String[] ACL_PERIOD_MONTHS = new String[]{"06", "12"};
+    public static final Set<String> ACL_PERIOD_MONTHS = ImmutableSet.of("06", "12");
 
     /**
      * Archived scenario statuses.
