@@ -1,15 +1,21 @@
 package com.copyright.rup.dist.foreign.ui.audit.impl;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGrid;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGridItems;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
+import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.common.collect.Lists;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.MarginInfo;
@@ -22,7 +28,9 @@ import com.vaadin.ui.VerticalLayout;
 import org.apache.commons.lang3.tuple.Triple;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Verifies {@link UsageHistoryWindow}.
@@ -34,6 +42,17 @@ import java.util.Arrays;
  * @author Aliaksandr Radkevich
  */
 public class UsageHistoryWindowTest {
+
+    private final List<UsageAuditItem> usageAuditItems = loadExpectedUsageAuditItems("usage_audit_item_66d43472.json");
+
+    @Test
+    public void testGridValues() {
+        String detailId = "1380eddb-e9de-48bf-a264-16dc1fd8f4ec";
+        UsageHistoryWindow window = new UsageHistoryWindow(detailId, usageAuditItems);
+        Grid<?> grid = (Grid<?>) ((VerticalLayout) window.getContent()).getComponent(0);
+        Object[][] expectedCells = {{"LOADED", "user@copyright.com", "09/12/2022 2:25 AM","Usage was uploaded"}};
+        verifyGridItems(grid, usageAuditItems, expectedCells);
+    }
 
     @Test
     public void testLayout() {
@@ -74,4 +93,16 @@ public class UsageHistoryWindowTest {
         assertEquals(1, button.getListeners(ClickEvent.class).size());
     }
 
+    private List<UsageAuditItem> loadExpectedUsageAuditItems(String fileName) {
+        try {
+            String content = TestUtils.fileToString(this.getClass(), fileName);
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.registerModule(new JavaTimeModule());
+            mapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
+            return mapper.readValue(content, new TypeReference<List<UsageAuditItem>>() {
+            });
+        } catch (IOException e) {
+            throw new AssertionError(e);
+        }
+    }
 }

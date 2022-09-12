@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.fas;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGrid;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGridItems;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
 import static org.easymock.EasyMock.anyObject;
@@ -17,7 +18,7 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
-import com.copyright.rup.common.persist.RupPersistUtils;
+import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.fas.IFasUsageController;
@@ -43,9 +44,13 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 
 /**
  * Verifies {@link ViewUsageBatchWindow}.
@@ -60,7 +65,7 @@ import java.util.Collections;
 @PrepareForTest({Windows.class, ForeignSecurityUtils.class})
 public class ViewUsageBatchWindowTest {
 
-    private static final String USAGE_BATCH_ID = RupPersistUtils.generateUuid();
+    private static final String USAGE_BATCH_ID = "410ee825-6a6b-422b-8d27-57950e70d810";
     private static final String UNCHECKED = "unchecked";
 
     private Grid<UsageBatch> grid;
@@ -74,7 +79,7 @@ public class ViewUsageBatchWindowTest {
         grid = createMock(Grid.class);
         expect(ForeignSecurityUtils.hasDeleteUsagePermission()).andReturn(true).once();
         expect(controller.getSelectedProductFamily()).andReturn("FAS").once();
-        expect(controller.getUsageBatches("FAS")).andReturn(Collections.singletonList(new UsageBatch())).once();
+        expect(controller.getUsageBatches("FAS")).andReturn(Collections.singletonList(buildUsageBatch())).once();
         replay(controller, ForeignSecurityUtils.class);
         viewUsageBatchWindow = new ViewUsageBatchWindow(controller);
         Whitebox.setInternalState(viewUsageBatchWindow, "grid", grid);
@@ -103,6 +108,16 @@ public class ViewUsageBatchWindowTest {
         assertNotNull(createDateColumn.getComparator(SortDirection.ASCENDING));
         assertEquals(1, content.getExpandRatio(componentGrid), 0);
         verifyButtonsLayout(content.getComponent(2), "Delete", "Close");
+    }
+
+    @Test
+    public void testGridValues() {
+        Grid<?> usageBatchGrid = (Grid<?>) ((VerticalLayout) viewUsageBatchWindow.getContent()).getComponent(1);
+        Object[][] expectedCells = {
+            {"FAS batch", 1000000008L, "ProLitteris", LocalDate.of(2022, 9, 12), "FY2022", new BigDecimal("5000.00"),
+                "user@copyright.com", "09/01/2022 12:00 AM"}
+        };
+        verifyGridItems(usageBatchGrid, Collections.singletonList(buildUsageBatch()), expectedCells);
     }
 
     @Test
@@ -204,6 +219,19 @@ public class ViewUsageBatchWindowTest {
         UsageBatch usageBatch = new UsageBatch();
         usageBatch.setId(USAGE_BATCH_ID);
         usageBatch.setName("FAS batch");
+        usageBatch.setRro(buildRightsholder(1000000008L, "ProLitteris"));
+        usageBatch.setPaymentDate(LocalDate.of(2022, 9, 12));
+        usageBatch.setFiscalYear(2022);
+        usageBatch.setGrossAmount(new BigDecimal("5000.00"));
+        usageBatch.setCreateUser("user@copyright.com");
+        usageBatch.setCreateDate(Date.from(LocalDate.of(2022, 9, 1).atStartOfDay(ZoneId.systemDefault()).toInstant()));
         return usageBatch;
+    }
+
+    private Rightsholder buildRightsholder(Long accountNumber, String name) {
+        Rightsholder rightsholder = new Rightsholder();
+        rightsholder.setAccountNumber(accountNumber);
+        rightsholder.setName(name);
+        return rightsholder;
     }
 }
