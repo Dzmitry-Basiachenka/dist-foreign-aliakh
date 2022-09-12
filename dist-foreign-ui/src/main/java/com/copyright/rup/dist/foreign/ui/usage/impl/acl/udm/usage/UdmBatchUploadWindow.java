@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.usage;
 
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ValidationException;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.UdmBatch;
 import com.copyright.rup.dist.foreign.domain.UdmChannelEnum;
 import com.copyright.rup.dist.foreign.domain.UdmUsage;
@@ -44,7 +45,7 @@ import java.util.Arrays;
 public class UdmBatchUploadWindow extends Window {
 
     private static final String EMPTY_FIELD_MESSAGE = "field.error.empty";
-    private static final String[] MONTHS = new String[]{"06", "12"};
+
     private final Binder<UdmBatch> batchBinder = new Binder<>();
     private final Binder<String> binder = new Binder<>();
     private final IUdmUsageController udmUsageController;
@@ -167,7 +168,7 @@ public class UdmBatchUploadWindow extends Window {
 
     private ComboBox<String> initPeriodMonthField() {
         monthField = new ComboBox<>(ForeignUi.getMessage("label.distribution_udm_period_month"));
-        monthField.setItems(MONTHS);
+        monthField.setItems(FdaConstants.ACL_PERIOD_MONTHS);
         monthField.setRequiredIndicatorVisible(true);
         binder.forField(monthField)
             .withValidator(new RequiredValidator())

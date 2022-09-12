@@ -4,6 +4,7 @@ import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.Processin
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ValidationException;
 import com.copyright.rup.dist.foreign.domain.AclFundPool;
 import com.copyright.rup.dist.foreign.domain.AclFundPoolDetail;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.service.impl.csv.AclFundPoolCsvProcessor;
 import com.copyright.rup.dist.foreign.ui.common.validator.RequiredValidator;
 import com.copyright.rup.dist.foreign.ui.common.validator.YearValidator;
@@ -42,8 +43,6 @@ import java.util.Arrays;
  */
 public class CreateAclFundPoolWindow extends Window {
 
-    private static final String[] MONTHS = new String[]{"06", "12"};
-    private static final String[] LICENSE_TYPES = new String[]{"ACL", "MACL", "VGW", "JACDCL"};
     private static final String EMPTY_FIELD_MESSAGE = "field.error.empty";
 
     private final Binder<AclFundPool> fundPoolBinder = new Binder<>();
@@ -177,7 +176,7 @@ public class CreateAclFundPoolWindow extends Window {
 
     private ComboBox<String> initFundPoolMonthComboBox() {
         fundPoolPeriodMonthComboBox = new ComboBox<>(ForeignUi.getMessage("label.fund_pool.period_month"));
-        fundPoolPeriodMonthComboBox.setItems(MONTHS);
+        fundPoolPeriodMonthComboBox.setItems(FdaConstants.ACL_PERIOD_MONTHS);
         fundPoolPeriodMonthComboBox.setRequiredIndicatorVisible(true);
         binder.forField(fundPoolPeriodMonthComboBox)
             .withValidator(new RequiredValidator())
@@ -190,7 +189,7 @@ public class CreateAclFundPoolWindow extends Window {
 
     private ComboBox<String> initLicenseTypeComboBox() {
         licenseTypeComboBox = new ComboBox<>(ForeignUi.getMessage("label.license_type"));
-        licenseTypeComboBox.setItems(LICENSE_TYPES);
+        licenseTypeComboBox.setItems(FdaConstants.ACL_LICENSE_TYPES);
         licenseTypeComboBox.setRequiredIndicatorVisible(true);
         fundPoolBinder.forField(licenseTypeComboBox)
             .asRequired(ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
