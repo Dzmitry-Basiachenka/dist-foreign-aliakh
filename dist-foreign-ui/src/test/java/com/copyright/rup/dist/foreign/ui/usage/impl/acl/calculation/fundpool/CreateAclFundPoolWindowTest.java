@@ -30,6 +30,7 @@ import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclFundPoolController;
 import com.copyright.rup.vaadin.ui.component.upload.UploadField;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
+import com.google.common.collect.ImmutableSet;
 import com.vaadin.data.Binder;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.CheckBox;
@@ -64,7 +65,6 @@ public class CreateAclFundPoolWindowTest {
     private static final String FUND_POOL_PERIOD_MONTH_COMBO_BOX = "fundPoolPeriodMonthComboBox";
     private static final String LICENSE_TYPE_COMBO_BOX = "licenseTypeComboBox";
     private static final String LDMT_CHECK_BOX = "ldmtCheckBox";
-    private static final String[] LICENSE_TYPES = new String[]{"ACL", "MACL", "VGW", "JACDCL"};
     private static final String FUND_POOL_NAME = "Fund Pool Name";
     private static final String PERIOD_YEAR = "2021";
     private static final String PERIOD_MONTH = "12";
@@ -233,7 +233,8 @@ public class CreateAclFundPoolWindowTest {
         assertEquals(6, verticalLayout.getComponentCount());
         verifyTextField(verticalLayout.getComponent(0), "Fund Pool Name");
         verifyPeriodYearAndPeriodMonthComponents(verticalLayout.getComponent(1));
-        verifyComboBox(verticalLayout.getComponent(2), "License Type", true, LICENSE_TYPES);
+        verifyComboBox(verticalLayout.getComponent(2), "License Type", true,
+            ImmutableSet.of("ACL", "MACL", "VGW", "JACDCL"));
         verifyUploadComponent(verticalLayout.getComponent(3));
         assertTrue(verticalLayout.getComponent(4) instanceof CheckBox);
         CheckBox checkBox = (CheckBox) verticalLayout.getComponent(4);
@@ -248,7 +249,7 @@ public class CreateAclFundPoolWindowTest {
         HorizontalLayout horizontalLayout = (HorizontalLayout) component;
         assertEquals(2, horizontalLayout.getComponentCount());
         verifyTextField(horizontalLayout.getComponent(0), "Fund Pool Period Year");
-        verifyComboBox(horizontalLayout.getComponent(1), "Fund Pool Period Month", true, "06", "12");
+        verifyComboBox(horizontalLayout.getComponent(1), "Fund Pool Period Month", true, ImmutableSet.of("06", "12"));
     }
 
     private ProcessingResult<AclFundPoolDetail> buildCsvProcessingResult() {

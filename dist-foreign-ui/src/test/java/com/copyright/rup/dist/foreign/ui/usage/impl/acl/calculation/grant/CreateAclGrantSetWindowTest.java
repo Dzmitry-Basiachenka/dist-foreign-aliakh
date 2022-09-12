@@ -29,6 +29,7 @@ import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclGrantDetailController
 import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.PeriodFilterWidget;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
+import com.google.common.collect.ImmutableSet;
 import com.vaadin.data.Binder;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.CheckBox;
@@ -70,9 +71,7 @@ public class CreateAclGrantSetWindowTest {
     private static final String GRANT_SET_NAME_2022 = "Grant Set Name 2022";
     private static final Integer GRANT_SET_GRANT_PERIOD = 202206;
     private static final String ACL = "ACL";
-    private static final String[] MONTHS = new String[]{"06", "12"};
     private static final Set<Integer> PERIODS = Collections.singleton(202112);
-    private static final String[] LICENSE_TYPES = new String[]{"ACL", "MACL", "VGW", "JACDCL"};
     private static final String SPACES_STRING = "   ";
     private static final String GRANT_SET_NAME_FIELD = "grantSetNameFiled";
     private static final String GRANT_PERIOD_YEAR_FIELD = "grantPeriodYearField";
@@ -282,7 +281,8 @@ public class CreateAclGrantSetWindowTest {
         verifyGrantSetNameComponent(verticalLayout.getComponent(0));
         verifyPeriodYearAndPeriodMonthComponents(verticalLayout.getComponent(1));
         verifyItemsFilterWidget(verticalLayout.getComponent(2), "Periods");
-        verifyComboBox(verticalLayout.getComponent(3), "License Type", true, LICENSE_TYPES);
+        verifyComboBox(verticalLayout.getComponent(3), "License Type", true,
+            ImmutableSet.of("ACL", "MACL", "VGW", "JACDCL"));
         verifyComboBox(verticalLayout.getComponent(4), "Copy From", true, buildAclGrantSet());
         verifyCheckBox(verticalLayout.getComponent(5), "Editable", "acl-editable-checkbox");
         verifyButtonsLayout(verticalLayout.getComponent(6), "Create", "Close");
@@ -301,7 +301,7 @@ public class CreateAclGrantSetWindowTest {
         assertTrue(horizontalLayout.getComponent(0) instanceof TextField);
         assertTrue(horizontalLayout.getComponent(1) instanceof ComboBox);
         verifyTextField(horizontalLayout.getComponent(0), "Grant Period Year");
-        verifyComboBox(horizontalLayout.getComponent(1), "Grant Period Month", true, MONTHS);
+        verifyComboBox(horizontalLayout.getComponent(1), "Grant Period Month", true, ImmutableSet.of("06", "12"));
     }
 
     private AclGrantSet buildAclGrantSet() {
