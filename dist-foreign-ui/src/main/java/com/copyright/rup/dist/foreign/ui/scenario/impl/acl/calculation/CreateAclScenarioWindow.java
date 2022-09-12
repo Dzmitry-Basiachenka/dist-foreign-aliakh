@@ -63,8 +63,6 @@ import java.util.stream.Collectors;
  */
 public class CreateAclScenarioWindow extends Window implements IDateFormatter {
 
-    //TODO move it in FdaConstants
-    private static final String[] LICENSE_TYPES = new String[]{"ACL", "MACL", "VGW", "JACDCL"};
     private static final String EMPTY_FIELD_MESSAGE = "field.error.empty";
 
     private final Binder<AclScenario> scenarioBinder = new Binder<>();
@@ -171,7 +169,7 @@ public class CreateAclScenarioWindow extends Window implements IDateFormatter {
 
     private void initLicenseTypeComboBox() {
         licenseTypeComboBox = new ComboBox<>(ForeignUi.getMessage("label.license_type"));
-        licenseTypeComboBox.setItems(LICENSE_TYPES);
+        licenseTypeComboBox.setItems(FdaConstants.ACL_LICENSE_TYPES);
         licenseTypeComboBox.addValueChangeListener(event -> populateComboBoxes());
         licenseTypeComboBox.setRequiredIndicatorVisible(true);
         scenarioBinder.forField(licenseTypeComboBox)

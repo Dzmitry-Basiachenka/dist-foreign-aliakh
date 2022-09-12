@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.calculation.grant;
 
 import com.copyright.rup.dist.foreign.domain.AclGrantSet;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.ui.common.validator.RequiredValidator;
 import com.copyright.rup.dist.foreign.ui.common.validator.YearValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
@@ -42,8 +43,6 @@ public class CreateAclGrantSetWindow extends Window {
 
     private static final String EMPTY_PERIOD_STYLE = "empty-selected-periods";
     private static final String EMPTY_FIELD_MESSAGE = "field.error.empty";
-    private static final String[] MONTHS = new String[]{"06", "12"};
-    private static final String[] LICENSE_TYPES = new String[]{"ACL", "MACL", "VGW", "JACDCL"};
 
     private final Binder<AclGrantSet> grantSetBinder = new Binder<>();
     private final Binder<String> binder = new Binder<>();
@@ -157,7 +156,7 @@ public class CreateAclGrantSetWindow extends Window {
 
     private ComboBox<String> initGrantPeriodMonthComboBox() {
         grantPeriodMonthComboBox = new ComboBox<>(ForeignUi.getMessage("label.grant_period_month"));
-        grantPeriodMonthComboBox.setItems(MONTHS);
+        grantPeriodMonthComboBox.setItems(FdaConstants.ACL_PERIOD_MONTHS);
         grantPeriodMonthComboBox.setRequiredIndicatorVisible(true);
         binder.forField(grantPeriodMonthComboBox)
             .withValidator(new RequiredValidator())
@@ -193,7 +192,7 @@ public class CreateAclGrantSetWindow extends Window {
 
     private ComboBox<String> initLicenseTypeComboBox() {
         licenseTypeComboBox = new ComboBox<>(ForeignUi.getMessage("label.license_type"));
-        licenseTypeComboBox.setItems(LICENSE_TYPES);
+        licenseTypeComboBox.setItems(FdaConstants.ACL_LICENSE_TYPES);
         licenseTypeComboBox.setRequiredIndicatorVisible(true);
         grantSetBinder.forField(licenseTypeComboBox)
             .asRequired(ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))

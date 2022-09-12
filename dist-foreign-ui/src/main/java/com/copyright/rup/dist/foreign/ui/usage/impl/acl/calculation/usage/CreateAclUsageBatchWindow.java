@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.calculation.usage;
 
 import com.copyright.rup.dist.foreign.domain.AclUsageBatch;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.ui.common.validator.RequiredValidator;
 import com.copyright.rup.dist.foreign.ui.common.validator.YearValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
@@ -41,7 +42,6 @@ import java.util.Set;
 public class CreateAclUsageBatchWindow extends Window {
 
     private static final String EMPTY_PERIOD_STYLE = "empty-selected-periods";
-    private static final String[] MONTHS = new String[]{"06", "12"};
 
     private final Binder<AclUsageBatch> usageBatchBinder = new Binder<>();
     private final Binder<String> binder = new Binder<>();
@@ -153,7 +153,7 @@ public class CreateAclUsageBatchWindow extends Window {
 
     private ComboBox<String> initDistributionPeriodMonthComboBox() {
         distributionPeriodMonthComboBox = new ComboBox<>(ForeignUi.getMessage("label.distribution_period_month"));
-        distributionPeriodMonthComboBox.setItems(MONTHS);
+        distributionPeriodMonthComboBox.setItems(FdaConstants.ACL_PERIOD_MONTHS);
         distributionPeriodMonthComboBox.setRequiredIndicatorVisible(true);
         binder.forField(distributionPeriodMonthComboBox)
             .withValidator(new RequiredValidator())
