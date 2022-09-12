@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl.fas;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGridItems;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
 import static org.easymock.EasyMock.createMock;
@@ -46,20 +47,19 @@ import java.util.stream.Collectors;
  */
 public class FasExcludeRightsholdersWindowTest {
 
+    private final List<RightsholderPayeePair> rightsholderPayeePairs = Lists.newArrayList(
+        buildRightsholderPayeePair(
+            buildRightsholder(1000033963L, "Alfred R. Lindesmith"),
+            buildRightsholder(2000148821L, "ABR Company, Ltd")),
+        buildRightsholderPayeePair(
+            buildRightsholder(7000425474L, "American Dialect Society"),
+            buildRightsholder(2000196395L, "Advance Central Services")));
     private FasExcludeRightsholdersWindow window;
 
     @Before
     public void setUp() {
         IFasScenarioController scenarioController = createMock(IFasScenarioController.class);
-        expect(scenarioController.getRightsholdersPayeePairs(1000009522L))
-            .andReturn(Lists.newArrayList(
-                buildRightsholderPayeePair(
-                    buildRightsholder(1000033963L, "Alfred R. Lindesmith"),
-                    buildRightsholder(2000148821L, "ABR Company, Ltd")),
-                buildRightsholderPayeePair(
-                    buildRightsholder(7000425474L, "American Dialect Society"),
-                    buildRightsholder(2000196395L, "Advance Central Services"))))
-            .once();
+        expect(scenarioController.getRightsholdersPayeePairs(1000009522L)).andReturn(rightsholderPayeePairs).once();
         replay(scenarioController);
         window = new FasExcludeRightsholdersWindow(1000009522L, scenarioController);
         verify(scenarioController);
@@ -72,6 +72,16 @@ public class FasExcludeRightsholdersWindowTest {
         assertEquals(3, content.getComponentCount());
         verifyGrid(content.getComponent(1));
         verifyButtonsLayout(content.getComponent(2), "Confirm", "Clear", "Close");
+    }
+
+    @Test
+    public void testGridValues() {
+        Grid<?> grid = (Grid<?>) ((VerticalLayout) window.getContent()).getComponent(1);
+        Object[][] expectedCells = {
+            {2000148821L, "ABR Company, Ltd", 1000033963L, "Alfred R. Lindesmith",},
+            {2000196395L, "Advance Central Services", 7000425474L, "American Dialect Society"}
+        };
+        verifyGridItems(grid, rightsholderPayeePairs, expectedCells);
     }
 
     @Test

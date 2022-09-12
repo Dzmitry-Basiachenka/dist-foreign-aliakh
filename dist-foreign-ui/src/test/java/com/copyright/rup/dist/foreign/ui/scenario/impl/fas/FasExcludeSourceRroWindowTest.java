@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.scenario.impl.fas;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGrid;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGridItems;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
 import static org.easymock.EasyMock.createMock;
@@ -30,6 +31,7 @@ import org.powermock.reflect.Whitebox;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 
 /**
@@ -43,16 +45,16 @@ import java.util.Collections;
  */
 public class FasExcludeSourceRroWindowTest {
 
+    private final List<Rightsholder> rightsholders = Arrays.asList(
+        buildRightsholder(2000017004L, "Access Copyright, The Canadian Copyright Agency"),
+        buildRightsholder(2000017006L, "CAL, Copyright Agency Limited"));
+
     private FasExcludeSourceRroWindow window;
 
     @Before
     public void setUp() {
         IFasScenarioController scenarioController = createMock(IFasScenarioController.class);
-        expect(scenarioController.getSourceRros())
-            .andReturn(Arrays.asList(
-                buildRightsholder(2000017004L, "Access Copyright, The Canadian Copyright Agency"),
-                buildRightsholder(2000017006L, "CAL, Copyright Agency Limited")))
-            .once();
+        expect(scenarioController.getSourceRros()).andReturn(rightsholders).once();
         replay(scenarioController);
         window = new FasExcludeSourceRroWindow(scenarioController);
         verify(scenarioController);
@@ -71,6 +73,16 @@ public class FasExcludeSourceRroWindowTest {
             Triple.of(StringUtils.EMPTY, 95.0, -1)
         ));
         verifyButtonsLayout(content.getComponent(2), "Cancel");
+    }
+
+    @Test
+    public void testGridValues() {
+        Grid<?> grid = (Grid<?>) ((VerticalLayout) window.getContent()).getComponent(1);
+        Object[][] expectedCells = {
+            {2000017004L, "Access Copyright, The Canadian Copyright Agency", "Exclude"},
+            {2000017006L, "CAL, Copyright Agency Limited", "Exclude"}
+        };
+        verifyGridItems(grid, rightsholders, expectedCells);
     }
 
     @Test
