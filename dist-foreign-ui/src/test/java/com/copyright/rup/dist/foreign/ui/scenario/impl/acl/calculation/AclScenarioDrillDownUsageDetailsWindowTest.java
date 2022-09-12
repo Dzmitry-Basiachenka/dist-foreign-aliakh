@@ -160,33 +160,33 @@ public class AclScenarioDrillDownUsageDetailsWindowTest {
         Grid<?> grid = (Grid<?>) component;
         assertTrue(grid.getStyleName().contains("acl-scenario-drill-down-usage-details-grid"));
         UiTestHelper.verifyGrid(grid, Arrays.asList(
-            Triple.of("Detail ID", 130.0, -1),
-            Triple.of("Usage Detail ID", 130.0, -1),
-            Triple.of("Usage Period", 125.0, -1),
+            Triple.of("Detail ID", 250.0, -1),
+            Triple.of("Usage Detail ID", 170.0, -1),
+            Triple.of("Usage Period", 100.0, -1),
             Triple.of("Usage Age Weight", 130.0, -1),
             Triple.of("Survey Country", 120.0, -1),
-            Triple.of("Det LC ID", 100.0, -1),
+            Triple.of("Det LC ID", 75.0, -1),
             Triple.of("Det LC Name", 200.0, -1),
-            Triple.of("TOU", 120.0, -1),
-            Triple.of("# of Copies", 125.0, -1),
+            Triple.of("TOU", 75.0, -1),
+            Triple.of("# of Copies", 90.0, -1),
             Triple.of("# of Weighted Copies", 150.0, -1),
-            Triple.of("Pub Type", 120.0, -1),
+            Triple.of("Pub Type", 75.0, -1),
             Triple.of("Pub Type Weight", 120.0, -1),
             Triple.of("Price", 100.0, -1),
-            Triple.of("Price Flag", 110.0, -1),
+            Triple.of("Price Flag", 100.0, -1),
             Triple.of("Content", 100.0, -1),
-            Triple.of("Content Flag", 110.0, -1),
+            Triple.of("Content Flag", 100.0, -1),
             Triple.of("Content Unit Price", 150.0, -1),
             Triple.of("Content Unit Price Flag", 160.0, -1),
             Triple.of("Print Value Share", 140.0, -1),
             Triple.of("Print Volume Share", 140.0, -1),
             Triple.of("Print Detail Share", 140.0, -1),
-            Triple.of("Print Net Amt", 150.0, -1),
+            Triple.of("Print Net Amt", 140.0, -1),
             Triple.of("Digital Value Share", 150.0, -1),
             Triple.of("Digital Volume Share", 150.0, -1),
             Triple.of("Digital Detail Share", 150.0, -1),
-            Triple.of("Digital Net Amt", 150.0, -1),
-            Triple.of("Combined Net Amt", 170.0, -1)
+            Triple.of("Digital Net Amt", 140.0, -1),
+            Triple.of("Combined Net Amt", 140.0, -1)
         ));
         verifyWindow(grid, null, 100, 100, Unit.PERCENTAGE);
         grid.getColumns().forEach(column -> {
