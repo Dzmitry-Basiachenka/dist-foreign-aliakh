@@ -32,7 +32,6 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.JavaScript;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
 
@@ -41,7 +40,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Triple;
 import org.junit.Before;
 import org.junit.Test;
-import org.powermock.api.easymock.PowerMock;
 import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
@@ -108,7 +106,6 @@ public class FasScenariosWidgetTest {
         Grid<?> grid = (Grid<?>) ((HorizontalLayout) scenariosWidget.getComponent(1)).getComponent(0);
         Object[][] expectedCells = {{"FAS Distribution 04/07/2022", "04/07/2022", "IN_PROGRESS"}};
         verifyGridItems(grid, Collections.singletonList(scenario), expectedCells);
-        PowerMock.verify(JavaScript.class);
     }
 
     @Test

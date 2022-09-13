@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.fas;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGrid;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGridItems;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyMenuBar;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
@@ -20,8 +21,10 @@ import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
+import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
+import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.IFasNtsUsageFilterController;
@@ -30,6 +33,10 @@ import com.copyright.rup.dist.foreign.ui.usage.impl.FasNtsUsageFilterWidget;
 import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.vaadin.data.provider.DataProvider;
 import com.vaadin.server.Extension;
 import com.vaadin.server.Sizeable.Unit;
@@ -40,6 +47,7 @@ import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.JavaScript;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.MenuBar.MenuItem;
 import com.vaadin.ui.VerticalLayout;
@@ -53,6 +61,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Arrays;
@@ -71,13 +80,15 @@ import java.util.function.Supplier;
  * @author Uladzislau Shalamitski
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({FasUsageWidget.class, Windows.class, ForeignSecurityUtils.class})
+@PrepareForTest({FasUsageWidget.class, Windows.class, ForeignSecurityUtils.class, JavaScript.class})
 public class FasUsageWidgetTest {
 
     private static final String DATE =
         CommonDateUtils.format(LocalDate.now(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT);
     private static final String FAS_PRODUCT_FAMILY = "FAS";
     private static final String FAS_SCENARIO_NAME_PREFIX = "FAS Distribution ";
+
+    private final List<UsageDto> usages = loadExpectedUsageDtos("usage_dto_05f0385c.json");
     private FasUsageWidget usagesWidget;
     private IFasUsageController controller;
 
@@ -145,6 +156,25 @@ public class FasUsageWidgetTest {
             Triple.of("Comment", 200.0, -1)
         ));
         assertEquals(1, layout.getExpandRatio(layout.getComponent(1)), 0);
+    }
+
+    @Test
+    public void testGridValues() {
+        mockStatic(JavaScript.class);
+        expect(JavaScript.getCurrent()).andReturn(createMock(JavaScript.class)).times(2);
+        expect(controller.loadBeans(0, Integer.MAX_VALUE, Collections.emptyList())).andReturn(usages).once();
+        expect(controller.getBeansCount()).andReturn(1).once();
+        replay(JavaScript.class, controller);
+        Grid<?> grid = (Grid<?>) ((VerticalLayout) usagesWidget.getSecondComponent()).getComponent(1);
+        Object[][] expectedCells = {
+            {"05f0385c-798d-4c96-8278-8f5ff873b15f", UsageStatusEnum.PAID, "FAS", "Paid batch", 1000000004L,
+                "Computers for Design and Construction", 1000002859L, "John Wiley & Sons - Books", 243904752L,
+                "100 ROAD MOVIES", "1008902112317555XX", "VALISBN13", "FY2021", "02/12/2021", "100 ROAD MOVIES",
+                "some article", "some publisher", "02/13/2021", 2, "3,000.00", "500.00", "1,000.00", "lib", 1980, 2000,
+                "author", "usage from usages_10.csv"}
+        };
+        verifyGridItems(grid, usages, expectedCells);
+        verify(JavaScript.class, controller);
     }
 
     @Test
@@ -357,5 +387,18 @@ public class FasUsageWidgetTest {
             (HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent()).getComponent(0);
         MenuBar menuBar = (MenuBar) buttonsBar.getComponent(0);
         return menuBar.getItems().get(0).getChildren();
+    }
+
+    private List<UsageDto> loadExpectedUsageDtos(String fileName) {
+        try {
+            String content = TestUtils.fileToString(this.getClass(), fileName);
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.registerModule(new JavaTimeModule());
+            mapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
+            return mapper.readValue(content, new TypeReference<List<UsageDto>>() {
+            });
+        } catch (IOException e) {
+            throw new AssertionError(e);
+        }
     }
 }

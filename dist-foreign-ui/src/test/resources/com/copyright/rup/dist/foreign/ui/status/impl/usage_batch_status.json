@@ -1,0 +1,16 @@
+[
+  {
+    "batchName": "FAS Usage Batch 1",
+    "totalCount": 51,
+    "newCount": 8,
+    "workNotFoundCount": 6,
+    "workFoundCount": 4,
+    "workResearchCount": 2,
+    "rhNotFoundCount": 7,
+    "rhFoundCount": 5,
+    "sentForRaCount": 3,
+    "ntsWithdrawnCount": 1,
+    "eligibleCount": 15,
+    "status": "status"
+  }
+]
