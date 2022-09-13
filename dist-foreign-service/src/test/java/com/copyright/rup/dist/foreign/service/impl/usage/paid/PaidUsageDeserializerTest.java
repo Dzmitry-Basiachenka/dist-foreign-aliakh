@@ -1,7 +1,9 @@
 package com.copyright.rup.dist.foreign.service.impl.usage.paid;
 
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
@@ -39,7 +41,7 @@ public class PaidUsageDeserializerTest {
             String jsonString = CharStreams.toString(new InputStreamReader(inputStream, Charsets.UTF_8));
             Object paidUsageMessage =
                 unmarshaller.unmarshal(null, new ByteArrayInputStream(jsonString.getBytes(Charsets.UTF_8)));
-            assertTrue(paidUsageMessage instanceof List);
+            assertThat(paidUsageMessage, instanceOf(List.class));
             List<PaidUsage> paidUsages = (List<PaidUsage>) paidUsageMessage;
             assertEquals(1, CollectionUtils.size(paidUsages));
             verifyPaidUsage(paidUsages.get(0));

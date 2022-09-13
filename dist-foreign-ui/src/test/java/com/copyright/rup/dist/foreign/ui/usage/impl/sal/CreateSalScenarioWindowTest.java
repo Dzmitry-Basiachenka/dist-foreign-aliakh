@@ -6,8 +6,10 @@ import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyComboBo
 
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
@@ -138,7 +140,7 @@ public class CreateSalScenarioWindowTest {
         applyConfirmCreateScenarioAction(createScenarioWindow);
         EventObject event = createScenarioWindow.getEventObject();
         assertNotNull(event);
-        assertTrue(event instanceof ScenarioCreateEvent);
+        assertThat(event, instanceOf(ScenarioCreateEvent.class));
         ScenarioCreateEvent scenarioCreateEvent = (ScenarioCreateEvent) event;
         assertEquals(scenario, scenarioCreateEvent.getScenarioId());
         assertEquals(createScenarioWindow, scenarioCreateEvent.getSource());

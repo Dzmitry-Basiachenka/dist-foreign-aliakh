@@ -8,7 +8,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 {{/jdk8}}
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import io.swagger.annotations.Api;
 {{^jdk8}}
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -42,19 +44,17 @@ import java.util.concurrent.Callable;
 {{/jdk8}}
 {{>generatedAnnotation}}
 @Controller
-{{=<% %>=}}
-@RequestMapping
-<%={{ }}=%>
+@Api(tags = {"{{{baseName}}}"})
 {{#operations}}
 public class {{classname}}Controller implements {{classname}} {
-{{#isDelegate}}
-
+    {{#isDelegate}}
     private final {{classname}}Delegate delegate;
 
-    public {{classname}}Controller(@org.springframework.beans.factory.annotation.Autowired(required = false) {{classname}}Delegate delegate) {
-    {{#jdk8}}
-        this.delegate = Optional.ofNullable(delegate).orElse(new {{classname}}Delegate() {});
+    @Autowired
+    public {{classname}}Controller({{classname}}Delegate delegate) {
+        this.delegate = delegate;
     }
+        {{#jdk8}}
 
     @Override
     public {{classname}}Delegate getDelegate() {

@@ -1,17 +1,19 @@
 package com.copyright.rup.dist.foreign.ui.rest.gen.api;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.Optional;
 
 @Controller
-@RequestMapping
+@Api(tags = {"StatisticUsage"})
 public class StatisticUsageApiController implements StatisticUsageApi {
-
     private final StatisticUsageApiDelegate delegate;
 
-    public StatisticUsageApiController(@org.springframework.beans.factory.annotation.Autowired(required = false) StatisticUsageApiDelegate delegate) {
-        this.delegate = Optional.ofNullable(delegate).orElse(new StatisticUsageApiDelegate() {});
+    @Autowired
+    public StatisticUsageApiController(StatisticUsageApiDelegate delegate) {
+        this.delegate = delegate;
     }
 
     @Override

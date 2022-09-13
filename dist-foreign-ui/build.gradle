@@ -52,18 +52,9 @@ dependencies {
     testIntegRuntime("org.skyscreamer:jsonassert:${jsonassertVersion}")
 }
 
-task compileVaadinTheme(type: com.devsoap.plugin.tasks.CompileThemeTask, group: "rupVaadin")
-
 war {
-    dependsOn 'compileVaadinTheme'
+    dependsOn 'vaadinThemeCompile'
     exclude '**/*.scss'
-}
-
-afterEvaluate {
-
-    appBeforeIntegrationTest.doFirst {
-        systemProperty "dbPidLocation", "${projectDir}/build/tmp/embeddedPostgres/postgresUi.pid"
-    }
 }
 
 tasks.withType(Test) {

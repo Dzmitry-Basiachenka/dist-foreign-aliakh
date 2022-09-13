@@ -7,7 +7,9 @@
     <description>
         Rule set for Distributions projects
     </description>
+
     <exclude-pattern>.*/gen/.*</exclude-pattern>
+
     <rule ref="category/java/bestpractices.xml">
         <exclude name="AccessorMethodGeneration"/>
         <!--Too many messages to write-->
@@ -17,15 +19,12 @@
         <!--False positive on equalsVerifier library-->
         <exclude name="JUnitTestsShouldIncludeAssert"/>
         <exclude name="JUnitTestContainsTooManyAsserts"/>
+        <exclude name="UseTryWithResources"/><!--TODO fix the rule-->
+        <exclude name="GuardLogStatement"/><!--TODO fix the rule-->
+        <exclude name="LiteralsFirstInComparisons"/><!--TODO fix the rule-->
+        <exclude name="UnusedAssignment"/><!--TODO fix the rule-->
+        <exclude name="MissingOverride"/><!--TODO fix the rule-->
     </rule>
-    <rule ref="category/java/bestpractices.xml/GuardLogStatement">
-        <properties>
-            <property name="logLevels">
-                <value>"[trace, debug, log, finest, finer, fine, severe]"</value>
-            </property>
-        </properties>
-    </rule>
-
 
     <rule ref="category/java/codestyle.xml">
         <!--There is a need to have descriptive variable names especially in tests-->
@@ -47,7 +46,11 @@
         <exclude name="DefaultPackage"/>
         <!--Static imports are used for unit tests-->
         <exclude name="TooManyStaticImports"/>
-
+        <exclude name="UnnecessaryAnnotationValueElement"/><!--TODO fix the rule-->
+        <exclude name="FieldNamingConventions"/><!--TODO fix the rule-->
+        <exclude name="LinguisticNaming"/><!--TODO fix the rule-->
+        <exclude name="UseUnderscoresInNumericLiterals"/>
+        <exclude name="UseShortArrayInitializer"/><!--TODO fix the rule-->
     </rule>
 
     <rule ref="category/java/codestyle.xml/ShortClassName">
@@ -80,6 +83,7 @@
         <exclude name="TooManyMethods"/>
         <!--Not applicable for integration tests-->
         <exclude name="UseObjectForClearerAPI"/>
+        <exclude name="AvoidUncheckedExceptionsInSignatures"/><!--TODO fix the rule-->
     </rule>
 
     <rule ref="category/java/design.xml/CyclomaticComplexity">
@@ -89,8 +93,14 @@
             </property>
             <!--TODO: optimize UsageDto, Usage classes-->
             <property name="classReportLevel">
-                <value>85</value>
+                <value>97</value>
             </property>
+        </properties>
+    </rule>
+
+    <rule ref="category/java/design.xml/CognitiveComplexity">
+        <properties>
+            <property name="reportLevel" value="25"/>
         </properties>
     </rule>
 
@@ -126,7 +136,11 @@
         <exclude name="MissingSerialVersionUID"/>
         <!--Required in reset methods of test builders-->
         <exclude name="NullAssignment"/>
+        <exclude name="InvalidLogMessageFormat"/><!--TODO fix the rule-->
+        <exclude name="CloseResource"/><!--TODO fix the rule-->
+        <exclude name="ReturnEmptyCollectionRatherThanNull"/><!--TODO fix the rule-->
     </rule>
+
     <rule ref="category/java/errorprone.xml/AssignmentInOperand">
         <properties>
             <property name="allowIncrementDecrement">
@@ -144,10 +158,12 @@
         <!--Threads are used for Vaadin webapp, not complying with J2EE spec-->
         <exclude name="DoNotUseThreads"/>
     </rule>
+
     <rule ref="category/java/performance.xml">
         <!--Sometimes it's really necessary. For ex. while sending messages to upstream systems-->
         <exclude name="AvoidInstantiatingObjectsInLoops"/>
         <!--False positive since string concatenation is implemented through the StringBuilder-->
         <exclude name="UseStringBufferForStringAppends"/>
+        <exclude name="InsufficientStringBufferDeclaration"/><!--TODO fix the rule-->
     </rule>
 </ruleset>

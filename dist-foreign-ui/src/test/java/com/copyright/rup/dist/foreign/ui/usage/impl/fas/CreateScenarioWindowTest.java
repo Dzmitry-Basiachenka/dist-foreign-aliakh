@@ -5,9 +5,11 @@ import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtons
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
 import static org.easymock.EasyMock.expect;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.replay;
@@ -101,7 +103,7 @@ public class CreateScenarioWindowTest {
         listener.buttonClick(new ClickEvent(window));
         EventObject event = window.getEventObject();
         assertNotNull(event);
-        assertTrue(event instanceof ScenarioCreateEvent);
+        assertThat(event, instanceOf(ScenarioCreateEvent.class));
         ScenarioCreateEvent scenarioCreateEvent = (ScenarioCreateEvent) event;
         assertEquals(scenario, scenarioCreateEvent.getScenarioId());
         assertEquals(window, scenarioCreateEvent.getSource());

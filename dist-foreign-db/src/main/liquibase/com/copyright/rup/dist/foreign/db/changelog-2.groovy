@@ -953,8 +953,8 @@ databaseChangeLog {
             }
             column(name: 'job_name', type: 'VARCHAR(200)', remarks: '')
             column(name: 'job_group', type: 'VARCHAR(200)', remarks: '')
-            column(name: 'is_nonconcurrent ', type: 'BOOLEAN', remarks: '')
-            column(name: 'requests_recovery ', type: 'BOOLEAN', remarks: '')
+            column(name: 'is_nonconcurrent', type: 'BOOLEAN', remarks: '')
+            column(name: 'requests_recovery', type: 'BOOLEAN', remarks: '')
         }
 
         addPrimaryKey(constraintName: 'pk_df_qrtz_fired_triggers', schemaName: dbAppsSchema,
