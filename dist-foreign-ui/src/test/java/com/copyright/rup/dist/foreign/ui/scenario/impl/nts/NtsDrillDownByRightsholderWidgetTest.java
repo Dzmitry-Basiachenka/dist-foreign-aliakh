@@ -2,31 +2,49 @@ package com.copyright.rup.dist.foreign.ui.scenario.impl.nts;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGrid;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGridItems;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
-import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.reset;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.powermock.api.easymock.PowerMock.createMock;
+import static org.powermock.api.easymock.PowerMock.mockStatic;
+import static org.powermock.api.easymock.PowerMock.replay;
+import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
+import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.scenario.api.nts.INtsDrillDownByRightsholderController;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.JavaScript;
 import com.vaadin.ui.VerticalLayout;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Triple;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
+import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Verifies {@link NtsDrillDownByRightsholderWidget}.
@@ -37,13 +55,17 @@ import java.util.Arrays;
  *
  * @author Stanislau Rudak
  */
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({ForeignSecurityUtils.class, JavaScript.class})
 public class NtsDrillDownByRightsholderWidgetTest {
 
+    private final List<UsageDto> usages = loadExpectedUsageDtos("usage_dto_e2fabeb2.json");
     private NtsDrillDownByRightsholderWidget widget;
+    private INtsDrillDownByRightsholderController controller;
 
     @Before
     public void setUp() {
-        INtsDrillDownByRightsholderController controller = createMock(INtsDrillDownByRightsholderController.class);
+        controller = createMock(INtsDrillDownByRightsholderController.class);
         widget = new NtsDrillDownByRightsholderWidget();
         widget.setController(controller);
         widget.init();
@@ -92,6 +114,24 @@ public class NtsDrillDownByRightsholderWidgetTest {
         verifyButtonsLayout(content.getComponent(2), "Close");
     }
 
+    @Test
+    public void testGridValues() {
+        mockStatic(JavaScript.class);
+        expect(JavaScript.getCurrent()).andReturn(createMock(JavaScript.class)).times(2);
+        expect(controller.loadBeans(0, Integer.MAX_VALUE, Collections.emptyList())).andReturn(usages).once();
+        expect(controller.getSize()).andReturn(1).once();
+        replay(JavaScript.class, controller);
+        Grid<?> grid = (Grid<?>) ((VerticalLayout) widget.getContent()).getComponent(1);
+        Object[][] expectedCells = {
+            {"e2fabeb2-69f8-4288-b34f-698d8c514c84", "FAS", "Paid batch", 1000000004L,
+                "Computers for Design and Construction", 243904752L, "100 ROAD MOVIES", "1008902112317555XX",
+                "VALISBN13", "FY2021", "02/12/2021", "100 ROAD MOVIES", "some article", "some publisher", "02/13/2021",
+                2, "3,000.00", "500.00", "160.00", "340.00", "32.0", "lib", 1980, 2000, "author", "comment"}
+        };
+        verifyGridItems(grid, usages, expectedCells);
+        verify(JavaScript.class, controller);
+    }
+
     private void verifySearchWidget(Component component) {
         assertTrue(component instanceof HorizontalLayout);
         HorizontalLayout horizontalLayout = (HorizontalLayout) component;
@@ -103,5 +143,18 @@ public class NtsDrillDownByRightsholderWidgetTest {
         assertTrue(horizontalLayout.isSpacing());
         assertEquals(100, horizontalLayout.getWidth(), 0);
         assertEquals(Unit.PERCENTAGE, horizontalLayout.getWidthUnits());
+    }
+
+    private List<UsageDto> loadExpectedUsageDtos(String fileName) {
+        try {
+            String content = TestUtils.fileToString(this.getClass(), fileName);
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.registerModule(new JavaTimeModule());
+            mapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
+            return mapper.readValue(content, new TypeReference<List<UsageDto>>() {
+            });
+        } catch (IOException e) {
+            throw new AssertionError(e);
+        }
     }
 }

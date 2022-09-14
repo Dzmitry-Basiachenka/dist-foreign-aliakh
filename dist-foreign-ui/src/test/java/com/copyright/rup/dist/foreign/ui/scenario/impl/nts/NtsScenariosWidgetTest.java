@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl.nts;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGrid;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGridItems;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyLabel;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
@@ -20,6 +21,7 @@ import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Scenario.NtsFields;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
+import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.ui.scenario.api.nts.INtsScenariosController;
 import com.copyright.rup.dist.foreign.ui.scenario.impl.ScenarioHistoryController;
 
@@ -74,22 +76,7 @@ public class NtsScenariosWidgetTest {
     public void setUp() {
         controller = createMock(INtsScenariosController.class);
         scenariosWidget = new NtsScenariosWidget(controller, new ScenarioHistoryController());
-        scenario = new Scenario();
-        scenario.setId(SCENARIO_ID);
-        NtsFields ntsFields = new NtsFields();
-        ntsFields.setRhMinimumAmount(new BigDecimal("300.00"));
-        ntsFields.setPreServiceFeeAmount(new BigDecimal("500.00"));
-        ntsFields.setPostServiceFeeAmount(new BigDecimal("800.00"));
-        ntsFields.setPreServiceFeeFundTotal(new BigDecimal("300.00"));
-        ntsFields.setPreServiceFeeFundId("40f97da2-79f6-4917-b683-1cfa0fccd669");
-        ntsFields.setPreServiceFeeFundName("test name");
-        scenario.setNtsFields(ntsFields);
-        scenario.setDescription("Description");
-        scenario.setNetTotal(new BigDecimal("6800.00"));
-        scenario.setServiceFeeTotal(new BigDecimal("3200.00"));
-        scenario.setGrossTotal(new BigDecimal("10000.00"));
-        scenario.setCreateUser("User@copyright.com");
-        scenario.setAuditItem(buildScenarioAuditItem());
+        scenario = buildScenario();
         expect(controller.getScenarios()).andReturn(Collections.singletonList(scenario)).once();
         replay(controller);
         scenariosWidget.init();
@@ -121,6 +108,13 @@ public class NtsScenariosWidgetTest {
         assertTrue(component instanceof Panel);
         verifyWindow((Panel) component, null, 100, 100, Unit.PERCENTAGE);
         assertNull(((Panel) component).getContent());
+    }
+
+    @Test
+    public void testGridValues() {
+        Grid<?> grid = (Grid<?>) ((HorizontalLayout) scenariosWidget.getComponent(1)).getComponent(0);
+        Object[][] expectedCells = {{"Scenario nts 20", "09/13/2022", "IN_PROGRESS"}};
+        verifyGridItems(grid, Collections.singletonList(scenario), expectedCells);
     }
 
     @Test
@@ -245,6 +239,34 @@ public class NtsScenariosWidgetTest {
         verifyLabel(lastActionLayout.getComponent(3), "<b>Reason:</b> ");
         assertTrue(lastActionLayout.getComponent(4) instanceof Button);
         assertEquals("View All Actions", lastActionLayout.getComponent(4).getCaption());
+    }
+
+    private Scenario buildScenario() {
+        Scenario ntsScenario = new Scenario();
+        ntsScenario.setId(SCENARIO_ID);
+        ntsScenario.setName("Scenario nts 20");
+        ntsScenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);
+        ntsScenario.setNtsFields(buildNtsFields());
+        ntsScenario.setDescription("Description");
+        ntsScenario.setNetTotal(new BigDecimal("6800.00"));
+        ntsScenario.setServiceFeeTotal(new BigDecimal("3200.00"));
+        ntsScenario.setGrossTotal(new BigDecimal("10000.00"));
+        ntsScenario.setCreateUser("User@copyright.com");
+        ntsScenario.setCreateDate(
+            Date.from(LocalDate.of(2022, 9, 13).atStartOfDay(ZoneId.systemDefault()).toInstant()));
+        ntsScenario.setAuditItem(buildScenarioAuditItem());
+        return ntsScenario;
+    }
+
+    private NtsFields buildNtsFields() {
+        NtsFields ntsFields = new NtsFields();
+        ntsFields.setRhMinimumAmount(new BigDecimal("300.00"));
+        ntsFields.setPreServiceFeeAmount(new BigDecimal("500.00"));
+        ntsFields.setPostServiceFeeAmount(new BigDecimal("800.00"));
+        ntsFields.setPreServiceFeeFundTotal(new BigDecimal("300.00"));
+        ntsFields.setPreServiceFeeFundId("40f97da2-79f6-4917-b683-1cfa0fccd669");
+        ntsFields.setPreServiceFeeFundName("test name");
+        return ntsFields;
     }
 
     private ScenarioAuditItem buildScenarioAuditItem() {

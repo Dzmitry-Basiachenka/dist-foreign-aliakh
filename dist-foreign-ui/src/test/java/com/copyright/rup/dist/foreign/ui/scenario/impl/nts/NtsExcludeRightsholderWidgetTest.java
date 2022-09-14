@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.scenario.impl.nts;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGrid;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGridItems;
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
@@ -23,6 +24,7 @@ import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Verifies functionality on {@link NtsExcludeRightsholderWidget}.
@@ -35,20 +37,19 @@ import java.util.Arrays;
  */
 public class NtsExcludeRightsholderWidgetTest {
 
+    private final List<RightsholderPayeePair> rightsholderPayeePairs = Arrays.asList(
+        buildRightsholderPayeePair(
+            buildRightsholder(1000033963L, "Alfred R. Lindesmith"),
+            buildRightsholder(2000148821L, "ABR Company, Ltd")),
+        buildRightsholderPayeePair(
+            buildRightsholder(7000425474L, "American Dialect Society"),
+            buildRightsholder(2000196395L, "Advance Central Services")));
     private final NtsExcludeRightsholderWidget widget = new NtsExcludeRightsholderWidget();
 
     @Before
     public void setUp() {
         NtsExcludeRightsholderController controller = createMock(NtsExcludeRightsholderController.class);
-        expect(controller.getRightsholderPayeePairs())
-            .andReturn(Arrays.asList(
-                buildRightsholderPayeePair(
-                    buildRightsholder(1000033963L, "Alfred R. Lindesmith"),
-                    buildRightsholder(2000148821L, "ABR Company, Ltd")),
-                buildRightsholderPayeePair(
-                    buildRightsholder(7000425474L, "American Dialect Society"),
-                    buildRightsholder(2000196395L, "Advance Central Services"))))
-            .once();
+        expect(controller.getRightsholderPayeePairs()).andReturn(rightsholderPayeePairs).once();
         replay(controller);
         Whitebox.setInternalState(widget, "controller", controller);
         widget.init();
@@ -68,6 +69,16 @@ public class NtsExcludeRightsholderWidgetTest {
             Triple.of("Payee Name", -1.0, -1)
         ));
         verifyButtonsLayout(content.getComponent(2), "Exclude Details", "Clear", "Close");
+    }
+
+    @Test
+    public void testGridValues() {
+        Grid<?> grid = (Grid<?>) ((VerticalLayout) widget.getContent()).getComponent(1);
+        Object[][] expectedCells = {
+            {1000033963L, "Alfred R. Lindesmith", 2000148821L, "ABR Company, Ltd"},
+            {7000425474L, "American Dialect Society", 2000196395L, "Advance Central Services"},
+        };
+        verifyGridItems(grid, rightsholderPayeePairs, expectedCells);
     }
 
     private RightsholderPayeePair buildRightsholderPayeePair(Rightsholder rightsholder, Rightsholder payee) {

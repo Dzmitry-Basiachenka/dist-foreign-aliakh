@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl.nts;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyFooterItems;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGridItems;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyLabel;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
@@ -16,6 +18,8 @@ import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
+import com.copyright.rup.dist.common.test.TestUtils;
+import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
@@ -23,6 +27,8 @@ import com.copyright.rup.dist.foreign.ui.scenario.api.nts.INtsScenarioController
 import com.copyright.rup.dist.foreign.ui.usage.UiTestHelper;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
@@ -30,6 +36,7 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.JavaScript;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
@@ -43,9 +50,12 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.function.Supplier;
 
 /**
@@ -58,9 +68,13 @@ import java.util.function.Supplier;
  * @author Ihar Suvorau
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({ForeignSecurityUtils.class})
+@PrepareForTest({ForeignSecurityUtils.class, JavaScript.class})
 public class NtsScenarioWidgetTest {
 
+    private static final String STYLE_ALIGN_RIGHT = "v-align-right";
+
+    private final List<RightsholderTotalsHolder> rightsholderTotalsHolders =
+        loadExpectedRightsholderTotalsHolders("rightsholder_total_holder_1000001770.json");
     private NtsScenarioWidget scenarioWidget;
     private INtsScenarioController controller;
     private NtsScenarioMediator mediator;
@@ -123,6 +137,28 @@ public class NtsScenarioWidgetTest {
     }
 
     @Test
+    public void testGridValues() {
+        mockStatic(JavaScript.class);
+        expect(JavaScript.getCurrent()).andReturn(createMock(JavaScript.class)).times(2);
+        expect(controller.loadBeans(0, Integer.MAX_VALUE, Collections.emptyList()))
+            .andReturn(rightsholderTotalsHolders).once();
+        expect(controller.getSize()).andReturn(1).once();
+        replay(JavaScript.class, controller);
+        Grid<?> grid = (Grid<?>) ((VerticalLayout) scenarioWidget.getContent()).getComponent(1);
+        Object[][] expectedCells = {
+            {"1000001770", "Andrew Goodwin", 2000017003L, "ProLitteris", "20,000.00", "6,400.00", "13,600.00", "16.0"}
+        };
+        verifyGridItems(grid, rightsholderTotalsHolders, expectedCells);
+        verify(JavaScript.class, controller);
+        Object[][] expectedFooterColumns = {
+            {"grossTotal", "20,000.00", STYLE_ALIGN_RIGHT},
+            {"serviceFeeTotal", "6,400.00", STYLE_ALIGN_RIGHT},
+            {"netTotal", "13,600.00", STYLE_ALIGN_RIGHT}
+        };
+        verifyFooterItems(grid, expectedFooterColumns);
+    }
+
+    @Test
     public void testGetSearchValue() {
         SearchWidget searchWidget = new SearchWidget(controller);
         searchWidget.setSearchValue("search");
@@ -164,7 +200,6 @@ public class NtsScenarioWidgetTest {
         assertEquals("13,600.00", footerRow.getCell("netTotal").getText());
     }
 
-
     private void verifyButtonsLayout(Component component) {
         assertTrue(component instanceof HorizontalLayout);
         HorizontalLayout horizontalLayout = (HorizontalLayout) component;
@@ -182,5 +217,16 @@ public class NtsScenarioWidgetTest {
         assertEquals("Close", closeButton.getId());
         assertTrue(horizontalLayout.isSpacing());
         assertEquals(new MarginInfo(false, true, true, false), horizontalLayout.getMargin());
+    }
+
+    private List<RightsholderTotalsHolder> loadExpectedRightsholderTotalsHolders(String fileName) {
+        try {
+            String content = TestUtils.fileToString(this.getClass(), fileName);
+            ObjectMapper mapper = new ObjectMapper();
+            return mapper.readValue(content, new TypeReference<List<RightsholderTotalsHolder>>() {
+            });
+        } catch (IOException e) {
+            throw new AssertionError(e);
+        }
     }
 }
