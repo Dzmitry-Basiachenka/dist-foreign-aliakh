@@ -1,0 +1,29 @@
+[
+  {
+    "id": "0a9941d6-254d-457a-a667-498c87e5df5e",
+    "status": "PAID",
+    "productFamily": "NTS",
+    "batchName": "Paid batch",
+    "paymentDate": "2021-02-12",
+    "rhAccountNumber": 1000002859,
+    "rhName": "John Wiley & Sons - Books",
+    "payeeAccountNumber": 1000000001,
+    "payeeName": "Rothchild Consultants",
+    "wrWrkInst": 243904752,
+    "systemTitle": "100 ROAD MOVIES",
+    "workTitle": "100 ROAD MOVIES",
+    "standardNumber": "1008902112317555XX",
+    "standardNumberType": "VALISBN13",
+    "reportedValue": 3000.00000,
+    "grossAmount": 500.0000000000,
+    "serviceFee": 0.16,
+    "scenarioName": "scenario name",
+    "checkNumber": 650738,
+    "checkDate": "2022-02-13T00:00-04:00",
+    "cccEventId": 97423,
+    "distributionName": "dist name",
+    "distributionDate": "2022-01-02T00:00-04:00",
+    "periodEndDate": "2022-01-03",
+    "comment": "some comment"
+  }
+]

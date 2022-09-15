@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.nts;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGridItems;
+
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.eq;
@@ -16,6 +18,7 @@ import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
+import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.WorkClassification;
 import com.copyright.rup.dist.foreign.ui.usage.api.nts.IWorkClassificationController;
 import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
@@ -23,6 +26,10 @@ import com.copyright.rup.vaadin.ui.component.window.ConfirmDialogWindow.IListene
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.common.collect.Sets;
 import com.vaadin.server.Extension;
 import com.vaadin.server.Sizeable.Unit;
@@ -35,6 +42,7 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.JavaScript;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
@@ -46,6 +54,7 @@ import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import java.io.IOException;
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Arrays;
 import java.util.Collection;
@@ -65,7 +74,7 @@ import java.util.stream.Collectors;
  * @author Ihar Suvorau
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest(Windows.class)
+@PrepareForTest({Windows.class, JavaScript.class})
 public class WorkClassificationWindowTest {
 
     private final Set<String> batchesIds = Collections.singleton(RupPersistUtils.generateUuid());
@@ -112,6 +121,26 @@ public class WorkClassificationWindowTest {
         assertEquals(HorizontalLayout.class, buttonsLayoutComponent.getClass());
         verifyButtonsLayout((HorizontalLayout) buttonsLayoutComponent);
         assertEquals(Alignment.BOTTOM_RIGHT, content.getComponentAlignment(buttonsLayoutComponent));
+    }
+
+    @Test
+    public void testGridValues() {
+        mockStatic(JavaScript.class);
+        List<WorkClassification> workClassifications =
+            loadExpectedWorkClassifications("work_classification_b133a87f.json");
+        expect(JavaScript.getCurrent()).andReturn(createMock(JavaScript.class)).times(2);
+        expect(workClassificationController.getClassificationCount(batchesIds, "")).andReturn(1).once();
+        expect(workClassificationController.getClassifications(batchesIds, "", 0, Integer.MAX_VALUE,
+            Collections.emptyList())).andReturn(workClassifications).once();
+        replay(JavaScript.class, workClassificationController);
+        Grid<?> grid = (Grid<?>) ((VerticalLayout) window.getContent()).getComponent(2);
+        Object[][] expectedCells = {
+            {180382914L, "2001 IEEE Workshop on High Performance Switching", "NON-STM", "1008902112377654XX",
+                "VALISBN13", 1000009997L, "IEEE - Inst of Electrical and Electronics Engrs", "02/01/2019",
+                "user@copyright.com"}
+        };
+        verifyGridItems(grid, workClassifications, expectedCells);
+        verify(JavaScript.class, workClassificationController);
     }
 
     @Test
@@ -224,5 +253,18 @@ public class WorkClassificationWindowTest {
 
     private Set<WorkClassification> buildClassifications() {
         return Sets.newHashSet(new WorkClassification(), new WorkClassification());
+    }
+
+    private List<WorkClassification> loadExpectedWorkClassifications(String fileName) {
+        try {
+            String content = TestUtils.fileToString(this.getClass(), fileName);
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.registerModule(new JavaTimeModule());
+            mapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
+            return mapper.readValue(content, new TypeReference<List<WorkClassification>>() {
+            });
+        } catch (IOException e) {
+            throw new AssertionError(e);
+        }
     }
 }

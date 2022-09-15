@@ -1,0 +1,14 @@
+[
+  {
+    "batchName": "NTS Usage Batch 1",
+    "totalCount": 50,
+    "workFoundCount": 4,
+    "rhFoundCount": 5,
+    "nonStmRhCount": 6,
+    "usTaxCountryCount": 7,
+    "unclassifiedCount": 3,
+    "eligibleCount": 15,
+    "excludedCount": 10,
+    "status": "status"
+  }
+]

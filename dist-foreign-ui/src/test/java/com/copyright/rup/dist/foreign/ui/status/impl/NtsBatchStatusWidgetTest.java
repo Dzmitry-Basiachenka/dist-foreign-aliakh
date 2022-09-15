@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.status.impl;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGridItems;
+
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
@@ -7,10 +9,13 @@ import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.UsageBatchStatus;
 import com.copyright.rup.dist.foreign.ui.status.api.ICommonBatchStatusController;
 import com.copyright.rup.dist.foreign.ui.usage.UiTestHelper;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.data.provider.Query;
 import com.vaadin.server.Sizeable.Unit;
@@ -21,8 +26,10 @@ import org.apache.commons.lang3.tuple.Triple;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * Verifies {@link NtsBatchStatusWidget}.
@@ -35,6 +42,8 @@ import java.util.Collections;
  */
 public class NtsBatchStatusWidgetTest {
 
+    private final List<UsageBatchStatus> usageBatchStatuses =
+        loadExpectedUsageBatchStatuses("nts_usage_batch_status.json");
     private NtsBatchStatusWidget batchStatusWidget;
     private ICommonBatchStatusController controller;
 
@@ -70,6 +79,18 @@ public class NtsBatchStatusWidgetTest {
     }
 
     @Test
+    public void testGridValues() {
+        batchStatusWidget.init();
+        expect(controller.getBatchStatuses()).andReturn(usageBatchStatuses).once();
+        replay(controller);
+        batchStatusWidget.refresh();
+        Grid<?> grid = (Grid<?>) batchStatusWidget.getComponent(0);
+        Object[][] expectedCells = {{"NTS Usage Batch 1", 50, 4, 5, 6, 7, 3, 15, 10, "status"}};
+        verifyGridItems(grid, usageBatchStatuses, expectedCells);
+        verify(controller);
+    }
+
+    @Test
     public void testRefresh() {
         batchStatusWidget.init();
         expect(controller.getBatchStatuses()).andReturn(Collections.singletonList(new UsageBatchStatus())).once();
@@ -81,5 +102,16 @@ public class NtsBatchStatusWidgetTest {
         Grid<?> grid = (Grid<?>) component;
         assertEquals(1, ((ListDataProvider<?>) grid.getDataProvider()).getItems().size());
         verify(controller);
+    }
+
+    private List<UsageBatchStatus> loadExpectedUsageBatchStatuses(String fileName) {
+        try {
+            String content = TestUtils.fileToString(this.getClass(), fileName);
+            ObjectMapper mapper = new ObjectMapper();
+            return mapper.readValue(content, new TypeReference<List<UsageBatchStatus>>() {
+            });
+        } catch (IOException e) {
+            throw new AssertionError(e);
+        }
     }
 }
