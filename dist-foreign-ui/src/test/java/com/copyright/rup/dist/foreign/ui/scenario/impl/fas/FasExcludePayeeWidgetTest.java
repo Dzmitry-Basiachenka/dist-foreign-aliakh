@@ -11,7 +11,9 @@ import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
@@ -105,7 +107,7 @@ public class FasExcludePayeeWidgetTest {
         VerticalLayout content = (VerticalLayout) splitPanel.getSecondComponent();
         assertEquals(3, content.getComponentCount());
         verifyToolbar(content.getComponent(0));
-        assertTrue(content.getComponent(1) instanceof Grid);
+        assertThat(content.getComponent(1), instanceOf(Grid.class));
         Grid grid = (Grid) content.getComponent(1);
         verifyGrid(grid, Arrays.asList(
             Triple.of("Payee Account #", -1.0, -1),
@@ -259,7 +261,7 @@ public class FasExcludePayeeWidgetTest {
     }
 
     private void verifyToolbar(Component component) {
-        assertTrue(component instanceof HorizontalLayout);
+        assertThat(component, instanceOf(HorizontalLayout.class));
         HorizontalLayout layout = (HorizontalLayout) component;
         assertEquals(new MarginInfo(false, true, false, true), layout.getMargin());
         assertEquals(2, layout.getComponentCount());
@@ -268,14 +270,14 @@ public class FasExcludePayeeWidgetTest {
     }
 
     private void verifySearchWidget(Component component) {
-        assertTrue(component instanceof SearchWidget);
+        assertThat(component, instanceOf(SearchWidget.class));
         SearchWidget searchWidget = (SearchWidget) component;
         assertEquals("Enter Payee Name/Account #",
             Whitebox.getInternalState(searchWidget, TextField.class).getPlaceholder());
     }
 
     private void verifyExportButton(Component component) {
-        assertTrue(component instanceof Button);
+        assertThat(component, instanceOf(Button.class));
         Button button = (Button) component;
         assertEquals("Export", button.getCaption());
         assertEquals(1, button.getExtensions().size());

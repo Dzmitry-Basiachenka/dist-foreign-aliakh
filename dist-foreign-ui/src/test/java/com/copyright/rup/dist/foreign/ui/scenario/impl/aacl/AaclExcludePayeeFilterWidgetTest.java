@@ -4,9 +4,11 @@ import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.validateField
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyFiltersLabel;
 
 import static org.easymock.EasyMock.createMock;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.foreign.domain.filter.ExcludePayeeFilter;
@@ -123,7 +125,7 @@ public class AaclExcludePayeeFilterWidgetTest {
     }
 
     private void verifyButtonsLayout(Component component) {
-        assertTrue(component instanceof HorizontalLayout);
+        assertThat(component, instanceOf(HorizontalLayout.class));
         HorizontalLayout layout = (HorizontalLayout) component;
         assertEquals(2, layout.getComponentCount());
         assertTrue(layout.isSpacing());
@@ -132,7 +134,7 @@ public class AaclExcludePayeeFilterWidgetTest {
     }
 
     private void verifyButton(Component component, String caption) {
-        assertTrue(component instanceof Button);
+        assertThat(component, instanceOf(Button.class));
         Button button = (Button) component;
         assertEquals(caption, button.getCaption());
         assertEquals(100, button.getWidth(), 0);

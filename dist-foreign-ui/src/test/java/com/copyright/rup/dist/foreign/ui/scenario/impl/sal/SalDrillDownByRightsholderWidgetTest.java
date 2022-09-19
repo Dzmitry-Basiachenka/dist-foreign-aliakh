@@ -4,7 +4,9 @@ import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGrid;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
 import static org.easymock.EasyMock.createMock;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.foreign.domain.UsageDto;
@@ -65,7 +67,7 @@ public class SalDrillDownByRightsholderWidgetTest {
     }
 
     private void verifySearchWidget(Component component) {
-        assertTrue(component instanceof HorizontalLayout);
+        assertThat(component, instanceOf(HorizontalLayout.class));
         HorizontalLayout horizontalLayout = (HorizontalLayout) component;
         assertEquals(1, horizontalLayout.getComponentCount());
         SearchWidget searchWidget = (SearchWidget) horizontalLayout.getComponent(0);
@@ -126,7 +128,7 @@ public class SalDrillDownByRightsholderWidgetTest {
     }
 
     private void verifyButtonsLayout(Component component) {
-        assertTrue(component instanceof HorizontalLayout);
+        assertThat(component, instanceOf(HorizontalLayout.class));
         HorizontalLayout horizontalLayout = (HorizontalLayout) component;
         assertEquals(1, horizontalLayout.getComponentCount());
         Button closeButton = (Button) horizontalLayout.getComponent(0);

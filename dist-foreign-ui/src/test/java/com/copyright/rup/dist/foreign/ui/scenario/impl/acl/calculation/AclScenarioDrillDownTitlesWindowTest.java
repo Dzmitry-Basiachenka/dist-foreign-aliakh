@@ -9,8 +9,9 @@ import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyLabel;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertThat;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.expectNew;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
@@ -98,7 +99,7 @@ public class AclScenarioDrillDownTitlesWindowTest {
         verifyMetaInfoLayout(content.getComponent(0));
         verifySearchWidget(content.getComponent(1));
         Component component = content.getComponent(2);
-        assertTrue(component instanceof Grid);
+        assertThat(component, instanceOf(Grid.class));
         verifyGrid((Grid) component, Arrays.asList(
             Triple.of("Wr Wrk Inst", 110.0, -1),
             Triple.of("System Title", 400.0, -1),
@@ -215,7 +216,7 @@ public class AclScenarioDrillDownTitlesWindowTest {
     }
 
     private void verifyMetaInfoLayout(Component component) {
-        assertTrue(component instanceof VerticalLayout);
+        assertThat(component, instanceOf(VerticalLayout.class));
         VerticalLayout verticalLayout = (VerticalLayout) component;
         assertEquals(4, verticalLayout.getComponentCount());
         String[][] expectedMetaInfoCaptions = {
@@ -230,7 +231,7 @@ public class AclScenarioDrillDownTitlesWindowTest {
     private void verifyLabelLayout(VerticalLayout verticalLayout, String[][] expectedCaptions, int componentCount) {
         IntStream.range(0, componentCount).forEach(i -> {
             Component horizontalComponent = verticalLayout.getComponent(i);
-            assertTrue(horizontalComponent instanceof HorizontalLayout);
+            assertThat(horizontalComponent, instanceOf(HorizontalLayout.class));
             HorizontalLayout horizontalLayout = (HorizontalLayout) verticalLayout.getComponent(i);
             assertEquals(2, horizontalLayout.getComponentCount());
             verifyLabel(horizontalLayout.getComponent(0), expectedCaptions[i][0], ContentMode.TEXT, 90);
@@ -240,7 +241,7 @@ public class AclScenarioDrillDownTitlesWindowTest {
     }
 
     private void verifySearchWidget(Component component) {
-        assertTrue(component instanceof SearchWidget);
+        assertThat(component, instanceOf(SearchWidget.class));
         SearchWidget searchWidget = (SearchWidget) component;
         assertEquals("Enter Wr Wrk Inst or System Title",
             Whitebox.getInternalState(searchWidget, TextField.class).getPlaceholder());

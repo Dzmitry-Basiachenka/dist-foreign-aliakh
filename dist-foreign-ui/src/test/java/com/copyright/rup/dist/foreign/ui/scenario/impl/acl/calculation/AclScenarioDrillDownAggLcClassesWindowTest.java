@@ -9,8 +9,9 @@ import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyLabel;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertThat;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.expectNew;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
@@ -108,7 +109,7 @@ public class AclScenarioDrillDownAggLcClassesWindowTest {
         assertEquals(3, content.getComponentCount());
         verifyMetaInfoLayout(content.getComponent(0));
         Component component = content.getComponent(1);
-        assertTrue(component instanceof Grid);
+        assertThat(component, instanceOf(Grid.class));
         verifyGrid((Grid) component, Arrays.asList(
             Triple.of("Agg LC ID", 110.0, -1),
             Triple.of("Agg LC Name", 400.0, -1),
@@ -194,7 +195,7 @@ public class AclScenarioDrillDownAggLcClassesWindowTest {
     }
 
     private void verifyMetaInfoLayout(Component component) {
-        assertTrue(component instanceof VerticalLayout);
+        assertThat(component, instanceOf(VerticalLayout.class));
         VerticalLayout verticalLayout = (VerticalLayout) component;
         assertEquals(4, verticalLayout.getComponentCount());
         String[][] expectedMetaInfoCaptions = {
@@ -209,7 +210,7 @@ public class AclScenarioDrillDownAggLcClassesWindowTest {
     private void verifyLabelLayout(VerticalLayout verticalLayout, String[][] expectedCaptions, int componentCount) {
         IntStream.range(0, componentCount).forEach(i -> {
             Component horizontalComponent = verticalLayout.getComponent(i);
-            assertTrue(horizontalComponent instanceof HorizontalLayout);
+            assertThat(horizontalComponent, instanceOf(HorizontalLayout.class));
             HorizontalLayout horizontalLayout = (HorizontalLayout) verticalLayout.getComponent(i);
             assertEquals(2, horizontalLayout.getComponentCount());
             verifyLabel(horizontalLayout.getComponent(0), expectedCaptions[i][0], ContentMode.TEXT, 90);

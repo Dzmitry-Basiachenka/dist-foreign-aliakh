@@ -5,8 +5,10 @@ import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGridIte
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
 import static org.easymock.EasyMock.expect;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
@@ -115,7 +117,7 @@ public class AclDrillDownByRightsholderWidgetTest {
     }
 
     private void verifySearchWidget(Component component) {
-        assertTrue(component instanceof HorizontalLayout);
+        assertThat(component, instanceOf(HorizontalLayout.class));
         HorizontalLayout horizontalLayout = (HorizontalLayout) component;
         assertEquals(1, horizontalLayout.getComponentCount());
         SearchWidget searchWidget = (SearchWidget) horizontalLayout.getComponent(0);
@@ -131,7 +133,7 @@ public class AclDrillDownByRightsholderWidgetTest {
 
     private void verifyTable(Component component) {
         assertNotNull(component);
-        assertTrue(component instanceof Grid);
+        assertThat(component, instanceOf(Grid.class));
         Grid<UsageDto> grid = (Grid<UsageDto>) component;
         assertTrue(grid.getStyleName().contains("acl-drill-down-by-rightsholder-table"));
         verifyGrid(grid, Arrays.asList(
