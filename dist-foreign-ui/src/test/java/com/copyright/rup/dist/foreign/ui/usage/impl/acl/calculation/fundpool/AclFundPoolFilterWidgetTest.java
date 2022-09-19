@@ -7,10 +7,12 @@ import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyItemsFi
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyLabel;
 
 import static org.easymock.EasyMock.anyObject;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
@@ -62,7 +64,7 @@ public class AclFundPoolFilterWidgetTest {
         verifyButtonsLayout(widget.getComponent(1), "Apply", "Clear");
         assertEquals(new MarginInfo(true), widget.getMargin());
         verifyLabel(widget.getComponent(2), "Applied Filters:", ContentMode.TEXT, -1.0f);
-        assertTrue(widget.getComponent(3) instanceof AclFundPoolAppliedFilterWidget);
+        assertThat(widget.getComponent(3), instanceOf(AclFundPoolAppliedFilterWidget.class));
     }
 
     @Test
@@ -120,7 +122,7 @@ public class AclFundPoolFilterWidgetTest {
     }
 
     private void verifyFiltersLayout(Component layout) {
-        assertTrue(layout instanceof VerticalLayout);
+        assertThat(layout, instanceOf(VerticalLayout.class));
         VerticalLayout verticalLayout = (VerticalLayout) layout;
         assertEquals(7, verticalLayout.getComponentCount());
         verifyFiltersLabel(verticalLayout.getComponent(0));

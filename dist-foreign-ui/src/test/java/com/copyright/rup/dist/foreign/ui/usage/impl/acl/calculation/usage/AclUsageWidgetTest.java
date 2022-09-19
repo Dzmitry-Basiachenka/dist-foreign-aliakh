@@ -10,8 +10,10 @@ import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
@@ -159,7 +161,7 @@ public class AclUsageWidgetTest {
         assertEquals(aclUsageDtos, dataProvider.fetch(new Query<>(0, 2, Collections.emptyList(), null,
             null)).collect(Collectors.toList()));
         assertEquals(aclUsageDtos.size(), dataProvider.size(new Query<>()));
-        assertTrue(grid.getSelectionModel() instanceof MultiSelectionModelImpl);
+        assertThat(grid.getSelectionModel(), instanceOf(MultiSelectionModelImpl.class));
         assertTrue(((MultiSelectionModelImpl<?>) grid.getSelectionModel()).isSelectAllCheckBoxVisible());
         verify(controller, streamSource, ForeignSecurityUtils.class, JavaScript.class);
     }
@@ -182,7 +184,7 @@ public class AclUsageWidgetTest {
         assertEquals(aclUsageDtos, dataProvider.fetch(new Query<>(0, 2, Collections.emptyList(), null,
             null)).collect(Collectors.toList()));
         assertEquals(EXCEEDED_RECORD_THRESHOLD, dataProvider.size(new Query<>()));
-        assertTrue(grid.getSelectionModel() instanceof MultiSelectionModelImpl);
+        assertThat(grid.getSelectionModel(), instanceOf(MultiSelectionModelImpl.class));
         assertFalse(((MultiSelectionModelImpl<?>) grid.getSelectionModel()).isSelectAllCheckBoxVisible());
         verify(controller, streamSource, ForeignSecurityUtils.class, JavaScript.class);
     }
@@ -203,7 +205,7 @@ public class AclUsageWidgetTest {
         assertEquals(Collections.emptyList(), dataProvider.fetch(new Query<>(0, 2, Collections.emptyList(), null,
             null)).collect(Collectors.toList()));
         assertEquals(0, dataProvider.size(new Query<>()));
-        assertTrue(grid.getSelectionModel() instanceof MultiSelectionModelImpl);
+        assertThat(grid.getSelectionModel(), instanceOf(MultiSelectionModelImpl.class));
         assertFalse(((MultiSelectionModelImpl<?>) grid.getSelectionModel()).isSelectAllCheckBoxVisible());
         verify(controller, streamSource, ForeignSecurityUtils.class, JavaScript.class);
     }
@@ -261,9 +263,9 @@ public class AclUsageWidgetTest {
         assertTrue(aclUsageWidget.isLocked());
         assertEquals(270, aclUsageWidget.getSplitPosition(), 0);
         verifyWindow(aclUsageWidget, null, 100, 100, Unit.PERCENTAGE);
-        assertTrue(aclUsageWidget.getFirstComponent() instanceof VerticalLayout);
+        assertThat(aclUsageWidget.getFirstComponent(), instanceOf(VerticalLayout.class));
         Component secondComponent = aclUsageWidget.getSecondComponent();
-        assertTrue(secondComponent instanceof VerticalLayout);
+        assertThat(secondComponent, instanceOf(VerticalLayout.class));
         VerticalLayout layout = (VerticalLayout) secondComponent;
         verifyWindow(layout, null, 100, 100, Unit.PERCENTAGE);
         assertEquals(2, layout.getComponentCount());

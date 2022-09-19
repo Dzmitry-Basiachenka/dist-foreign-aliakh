@@ -9,9 +9,12 @@ import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.newCapture;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
@@ -192,7 +195,7 @@ public class AclAddPublicationTypeWindowTest {
         listener.buttonClick(new ClickEvent(window));
         EventObject event = window.getEventObject();
         assertNotNull(event);
-        assertFalse(event instanceof ParametersSaveEvent);
+        assertThat(event, not(instanceOf(ParametersSaveEvent.class)));
         assertFalse(window.isClosed());
         assertEquals(Arrays.asList(pubTypeComboBox, pubTypePeriodField, pubTypeWeightField),
             componentsCapture.getValue());

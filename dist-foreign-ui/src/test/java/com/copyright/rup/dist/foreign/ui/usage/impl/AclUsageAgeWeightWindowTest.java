@@ -205,7 +205,7 @@ public class AclUsageAgeWeightWindowTest {
 
     @SuppressWarnings("unchecked")
     private void verifyGrid(Grid grid, boolean isEditorEnabled) {
-        UiTestHelper.verifyGrid((Grid) grid, Arrays.asList(
+        UiTestHelper.verifyGrid(grid, Arrays.asList(
             Triple.of("Period Prior", -1.0, -1),
             Triple.of("Default Weight", -1.0, -1),
             Triple.of("Scenario Weight", -1.0, -1)));

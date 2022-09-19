@@ -4,8 +4,9 @@ import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertThat;
 
 import com.copyright.rup.dist.foreign.domain.AclUsageBatch;
 import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
@@ -57,7 +58,7 @@ public class AclUsageFilterControllerTest {
 
     @Test
     public void testInstantiateWidget() {
-        assertTrue(controller.instantiateWidget() instanceof AclUsageFilterWidget);
+        assertThat(controller.instantiateWidget(), instanceOf(AclUsageFilterWidget.class));
     }
 
     @Test

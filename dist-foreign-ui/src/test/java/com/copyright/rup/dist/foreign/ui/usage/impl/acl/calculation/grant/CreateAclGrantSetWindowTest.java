@@ -13,9 +13,11 @@ import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.newCapture;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.createPartialMock;
@@ -275,7 +277,7 @@ public class CreateAclGrantSetWindowTest {
     }
 
     private void verifyRootLayout(Component component) {
-        assertTrue(component instanceof VerticalLayout);
+        assertThat(component, instanceOf(VerticalLayout.class));
         VerticalLayout verticalLayout = (VerticalLayout) component;
         assertEquals(7, verticalLayout.getComponentCount());
         verifyGrantSetNameComponent(verticalLayout.getComponent(0));
@@ -295,11 +297,11 @@ public class CreateAclGrantSetWindowTest {
 
     @SuppressWarnings("unchecked")
     private void verifyPeriodYearAndPeriodMonthComponents(Component component) {
-        assertTrue(component instanceof HorizontalLayout);
+        assertThat(component, instanceOf(HorizontalLayout.class));
         HorizontalLayout horizontalLayout = (HorizontalLayout) component;
         assertEquals(2, horizontalLayout.getComponentCount());
-        assertTrue(horizontalLayout.getComponent(0) instanceof TextField);
-        assertTrue(horizontalLayout.getComponent(1) instanceof ComboBox);
+        assertThat(horizontalLayout.getComponent(0), instanceOf(TextField.class));
+        assertThat(horizontalLayout.getComponent(1), instanceOf(ComboBox.class));
         verifyTextField(horizontalLayout.getComponent(0), "Grant Period Year");
         verifyComboBox(horizontalLayout.getComponent(1), "Grant Period Month", true, ImmutableSet.of("06", "12"));
     }
