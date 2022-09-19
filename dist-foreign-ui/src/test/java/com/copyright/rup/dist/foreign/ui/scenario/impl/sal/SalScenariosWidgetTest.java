@@ -9,9 +9,11 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.reset;
 import static org.easymock.EasyMock.verify;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.foreign.domain.Scenario;
@@ -99,14 +101,14 @@ public class SalScenariosWidgetTest {
     public void testComponentStructure() {
         assertEquals(2, scenariosWidget.getComponentCount());
         Component component = scenariosWidget.getComponent(0);
-        assertTrue(component instanceof HorizontalLayout);
+        assertThat(component, instanceOf(HorizontalLayout.class));
         verifyButtonsLayout((HorizontalLayout) component);
         component = scenariosWidget.getComponent(1);
-        assertTrue(component instanceof HorizontalLayout);
+        assertThat(component, instanceOf(HorizontalLayout.class));
         HorizontalLayout layout = (HorizontalLayout) component;
         assertEquals(2, layout.getComponentCount());
         component = layout.getComponent(0);
-        assertTrue(component instanceof Grid);
+        assertThat(component, instanceOf(Grid.class));
         Grid grid = (Grid) component;
         assertEquals("scenarios-table", grid.getId());
         verifyGrid(grid, Arrays.asList(
@@ -116,14 +118,14 @@ public class SalScenariosWidgetTest {
         ));
         assertNotNull(((Column) grid.getColumns().get(2)).getComparator(SortDirection.ASCENDING));
         component = layout.getComponent(1);
-        assertTrue(component instanceof Panel);
+        assertThat(component, instanceOf(Panel.class));
         verifyWindow((Panel) component, null, 100, 100, Unit.PERCENTAGE);
         assertNull(((Panel) component).getContent());
     }
 
     @Test
     public void testInitMediator() {
-        assertTrue(scenariosWidget.initMediator() instanceof SalScenariosMediator);
+        assertThat(scenariosWidget.initMediator(), instanceOf(SalScenariosMediator.class));
     }
 
     @Test
@@ -197,7 +199,7 @@ public class SalScenariosWidgetTest {
     }
 
     private void verifyButton(Component component, String caption, boolean isEnabled) {
-        assertTrue(component instanceof Button);
+        assertThat(component, instanceOf(Button.class));
         Button button = (Button) component;
         assertEquals(caption, button.getCaption());
         assertEquals(caption.replaceAll(StringUtils.SPACE, "_"), button.getId());
@@ -210,7 +212,7 @@ public class SalScenariosWidgetTest {
         Panel panel = (Panel) ((HorizontalLayout) scenariosWidget.getComponent(1)).getComponent(1);
         assertEquals("scenarios-metadata", panel.getId());
         Component content = panel.getContent();
-        assertTrue(content instanceof VerticalLayout);
+        assertThat(content, instanceOf(VerticalLayout.class));
         VerticalLayout layout = (VerticalLayout) content;
         assertEquals(new MarginInfo(false, true, false, true), layout.getMargin());
         assertEquals(100, layout.getWidth(), 0);
@@ -232,7 +234,7 @@ public class SalScenariosWidgetTest {
         verifyLabel(lastActionLayout.getComponent(1), "<b>User:</b> user@copyright.com");
         verifyLabel(lastActionLayout.getComponent(2), "<b>Date:</b> 12/24/2016 12:00 AM");
         verifyLabel(lastActionLayout.getComponent(3), "<b>Reason:</b> ");
-        assertTrue(lastActionLayout.getComponent(4) instanceof Button);
+        assertThat(lastActionLayout.getComponent(4), instanceOf(Button.class));
         assertEquals("View All Actions", lastActionLayout.getComponent(4).getCaption());
     }
 

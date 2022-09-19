@@ -10,8 +10,10 @@ import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.test.TestUtils;
@@ -127,7 +129,7 @@ public class AclScenarioDrillDownUsageDetailsWindowTest {
     }
 
     private void verifyMetaInfoLayout(Component component) {
-        assertTrue(component instanceof VerticalLayout);
+        assertThat(component, instanceOf(VerticalLayout.class));
         VerticalLayout verticalLayout = (VerticalLayout) component;
         String[][] expectedCaptions = {
             {"RH Account #:", "7000447306"},
@@ -145,7 +147,7 @@ public class AclScenarioDrillDownUsageDetailsWindowTest {
         assertEquals(componentCount, verticalLayout.getComponentCount());
         IntStream.range(0, componentCount).forEach(i -> {
             Component horizontalComponent = verticalLayout.getComponent(i);
-            assertTrue(horizontalComponent instanceof HorizontalLayout);
+            assertThat(horizontalComponent, instanceOf(HorizontalLayout.class));
             HorizontalLayout horizontalLayout = (HorizontalLayout) verticalLayout.getComponent(i);
             assertEquals(2, horizontalLayout.getComponentCount());
             verifyLabel(horizontalLayout.getComponent(0), expectedCaptions[i][0], ContentMode.TEXT, 90);
@@ -156,7 +158,7 @@ public class AclScenarioDrillDownUsageDetailsWindowTest {
 
     private void verifyGrid(Component component) {
         assertNotNull(component);
-        assertTrue(component instanceof Grid);
+        assertThat(component, instanceOf(Grid.class));
         Grid<?> grid = (Grid<?>) component;
         assertTrue(grid.getStyleName().contains("acl-scenario-drill-down-usage-details-grid"));
         UiTestHelper.verifyGrid(grid, Arrays.asList(

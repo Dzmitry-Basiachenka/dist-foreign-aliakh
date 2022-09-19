@@ -4,9 +4,11 @@ import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.foreign.domain.Scenario;
@@ -70,7 +72,7 @@ public class SalSendToLmWindowTest {
         assertEquals("Choose Scenarios to Send to LM", widget.getCaption());
         assertEquals(3, content.getComponentCount());
         Component searchWidget = content.getComponent(0);
-        assertTrue(searchWidget instanceof SearchWidget);
+        assertThat(searchWidget, instanceOf(SearchWidget.class));
         verifyGrid((Grid) content.getComponent(1));
         verifyButtonsLayout((HorizontalLayout) content.getComponent(2));
     }

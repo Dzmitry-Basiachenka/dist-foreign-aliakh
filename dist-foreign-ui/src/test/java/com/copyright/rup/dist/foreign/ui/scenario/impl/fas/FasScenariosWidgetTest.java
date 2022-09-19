@@ -9,9 +9,11 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.reset;
 import static org.easymock.EasyMock.verify;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
@@ -87,17 +89,17 @@ public class FasScenariosWidgetTest {
     public void testComponentStructure() {
         assertEquals(2, scenariosWidget.getComponentCount());
         Component component = scenariosWidget.getComponent(0);
-        assertTrue(component instanceof HorizontalLayout);
+        assertThat(component, instanceOf(HorizontalLayout.class));
         verifyButtonsLayout((HorizontalLayout) component);
         component = scenariosWidget.getComponent(1);
-        assertTrue(component instanceof HorizontalLayout);
+        assertThat(component, instanceOf(HorizontalLayout.class));
         HorizontalLayout layout = (HorizontalLayout) component;
         assertEquals(2, layout.getComponentCount());
         component = layout.getComponent(0);
-        assertTrue(component instanceof Grid);
+        assertThat(component, instanceOf(Grid.class));
         verifyGrid((Grid) component);
         component = layout.getComponent(1);
-        assertTrue(component instanceof Panel);
+        assertThat(component, instanceOf(Panel.class));
         verifyPanel((Panel) component);
     }
 
@@ -110,7 +112,7 @@ public class FasScenariosWidgetTest {
 
     @Test
     public void testInitMediator() {
-        assertTrue(scenariosWidget.initMediator() instanceof FasScenariosMediator);
+        assertThat(scenariosWidget.initMediator(), instanceOf(FasScenariosMediator.class));
     }
 
     @Test
@@ -203,7 +205,7 @@ public class FasScenariosWidgetTest {
     }
 
     private void verifyButton(Component component, String caption, boolean isEnabled) {
-        assertTrue(component instanceof Button);
+        assertThat(component, instanceOf(Button.class));
         Button button = (Button) component;
         assertEquals(caption, button.getCaption());
         assertEquals(caption.replaceAll(StringUtils.SPACE, "_"), button.getId());
@@ -216,7 +218,7 @@ public class FasScenariosWidgetTest {
         Panel panel = (Panel) ((HorizontalLayout) scenariosWidget.getComponent(1)).getComponent(1);
         assertEquals("scenarios-metadata", panel.getId());
         Component content = panel.getContent();
-        assertTrue(content instanceof VerticalLayout);
+        assertThat(content, instanceOf(VerticalLayout.class));
         VerticalLayout layout = (VerticalLayout) content;
         assertEquals(new MarginInfo(false, true, false, true), layout.getMargin());
         assertEquals(100, layout.getWidth(), 0);
@@ -231,14 +233,14 @@ public class FasScenariosWidgetTest {
             "<b>Net Amt in USD: </b><span class='label-amount'>6,800.00</span>");
         verifyLabel(layout.getComponent(4), "<b>Description: </b>Description");
         verifyLabel(layout.getComponent(5), SELECTION_CRITERIA);
-        assertTrue(layout.getComponent(6) instanceof VerticalLayout);
+        assertThat(layout.getComponent(6), instanceOf(VerticalLayout.class));
         VerticalLayout lastActionLayout = (VerticalLayout) layout.getComponent(6);
         assertEquals(5, lastActionLayout.getComponentCount());
         verifyLabel(lastActionLayout.getComponent(0), "<b>Type:</b> ADDED_USAGES");
         verifyLabel(lastActionLayout.getComponent(1), "<b>User:</b> user@copyright.com");
         verifyLabel(lastActionLayout.getComponent(2), "<b>Date:</b> 12/24/2016 12:00 AM");
         verifyLabel(lastActionLayout.getComponent(3), "<b>Reason:</b> ");
-        assertTrue(lastActionLayout.getComponent(4) instanceof Button);
+        assertThat(lastActionLayout.getComponent(4), instanceOf(Button.class));
         assertEquals("View All Actions", lastActionLayout.getComponent(4).getCaption());
     }
 

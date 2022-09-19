@@ -5,8 +5,10 @@ import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGrid;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
 import static org.easymock.EasyMock.createMock;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.foreign.domain.UsageDto;
@@ -64,7 +66,7 @@ public class AaclDrillDownByRightsholderWidgetTest {
     }
 
     private void verifySearchWidget(Component component) {
-        assertTrue(component instanceof HorizontalLayout);
+        assertThat(component, instanceOf(HorizontalLayout.class));
         HorizontalLayout horizontalLayout = (HorizontalLayout) component;
         assertEquals(1, horizontalLayout.getComponentCount());
         SearchWidget searchWidget = (SearchWidget) horizontalLayout.getComponent(0);
@@ -78,7 +80,7 @@ public class AaclDrillDownByRightsholderWidgetTest {
 
     private void verifyTable(Component component) {
         assertNotNull(component);
-        assertTrue(component instanceof Grid);
+        assertThat(component, instanceOf(Grid.class));
         Grid<UsageDto> grid = (Grid<UsageDto>) component;
         verifyGrid(grid, Arrays.asList(
             Triple.of("Detail ID", 130.0, -1),

@@ -6,9 +6,11 @@ import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyCheckBo
 
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
@@ -385,7 +387,7 @@ public class CreateAclScenarioWindowTest {
     }
 
     private <T> void verifyComboBox(Component component, String caption) {
-        assertTrue(component instanceof ComboBox);
+        assertThat(component, instanceOf(ComboBox.class));
         ComboBox<T> comboBox = (ComboBox<T>) component;
         assertFalse(comboBox.isReadOnly());
         assertTrue(comboBox.isTextInputAllowed());

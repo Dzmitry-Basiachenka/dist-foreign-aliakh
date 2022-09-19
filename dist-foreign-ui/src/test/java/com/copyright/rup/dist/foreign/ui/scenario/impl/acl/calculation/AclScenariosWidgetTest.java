@@ -9,9 +9,11 @@ import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.newCapture;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
@@ -121,14 +123,14 @@ public class AclScenariosWidgetTest {
         assertEquals(2, scenariosWidget.getComponentCount());
         verifyButtonsLayout((HorizontalLayout) scenariosWidget.getComponent(0));
         Component component = scenariosWidget.getComponent(1);
-        assertTrue(component instanceof HorizontalLayout);
+        assertThat(component, instanceOf(HorizontalLayout.class));
         HorizontalLayout layout = (HorizontalLayout) component;
         assertEquals(2, layout.getComponentCount());
         component = layout.getComponent(0);
-        assertTrue(component instanceof Grid);
+        assertThat(component, instanceOf(Grid.class));
         verifyGrid((Grid) component);
         component = layout.getComponent(1);
-        assertTrue(component instanceof Panel);
+        assertThat(component, instanceOf(Panel.class));
         verifyPanel((Panel) component);
     }
 
@@ -374,7 +376,7 @@ public class AclScenariosWidgetTest {
     }
 
     private void verifyButton(Component component, String caption, int listenersCount) {
-        assertTrue(component instanceof Button);
+        assertThat(component, instanceOf(Button.class));
         Button button = (Button) component;
         assertEquals(caption, button.getCaption());
         assertTrue(button.isEnabled());
@@ -386,11 +388,11 @@ public class AclScenariosWidgetTest {
         Panel metadataPanel = (Panel) ((HorizontalLayout) scenariosWidget.getComponent(1)).getComponent(1);
         assertEquals("scenarios-metadata", metadataPanel.getId());
         Component content = metadataPanel.getContent();
-        assertTrue(content instanceof VerticalLayout);
+        assertThat(content, instanceOf(VerticalLayout.class));
         VerticalLayout metadataLayout = (VerticalLayout) content;
         assertEquals(11, metadataLayout.getComponentCount());
         verifyLabel(metadataLayout.getComponent(0), "<b>Owner: </b>user@copyright.com");
-        assertTrue(metadataLayout.getComponent(1) instanceof VerticalLayout);
+        assertThat(metadataLayout.getComponent(1), instanceOf(VerticalLayout.class));
         VerticalLayout grossTotalLayout = (VerticalLayout) metadataLayout.getComponent(1);
         assertEquals("scenario-detailed-amount", grossTotalLayout.getId());
         assertEquals("<b>Gross Amt in USD: </b><span class='label-amount'>30,000.00</span>",
@@ -404,7 +406,7 @@ public class AclScenariosWidgetTest {
         verifyLabel(grossTotalLayout.getComponent(3), "<b># of RH Digital: </b>2");
         verifyLabel(grossTotalLayout.getComponent(4), "<b># of works Print: </b>3");
         verifyLabel(grossTotalLayout.getComponent(5), "<b># of works Digital: </b>4");
-        assertTrue(metadataLayout.getComponent(2) instanceof VerticalLayout);
+        assertThat(metadataLayout.getComponent(2), instanceOf(VerticalLayout.class));
         VerticalLayout serviceFeeTotalLayout = (VerticalLayout) metadataLayout.getComponent(2);
         assertEquals("scenario-detailed-amount", serviceFeeTotalLayout.getId());
         assertEquals("<b>Service Fee Amt in USD: </b><span class='label-amount'>4,800.00</span>",
@@ -414,7 +416,7 @@ public class AclScenariosWidgetTest {
             "<b>Service Fee Amt in USD by Print: </b><span class='label-amount'>1,600.00</span>");
         verifyLabel(serviceFeeTotalLayout.getComponent(1),
             "<b>Service Fee Amt in USD by Digital: </b><span class='label-amount'>3,200.00</span>");
-        assertTrue(metadataLayout.getComponent(3) instanceof VerticalLayout);
+        assertThat(metadataLayout.getComponent(3), instanceOf(VerticalLayout.class));
         VerticalLayout netTotalLayout = (VerticalLayout) metadataLayout.getComponent(3);
         assertEquals("scenario-detailed-amount", netTotalLayout.getId());
         assertEquals("<b>Net Amt in USD: </b><span class='label-amount'>25,200.00</span>",
@@ -430,7 +432,7 @@ public class AclScenariosWidgetTest {
         verifyAclPublicationTypeWeightsParameterWidget(metadataLayout.getComponent(7));
         verifyScenarioParameterWidget(metadataLayout.getComponent(8), "Licensee Class Mapping");
         verifyLabel(metadataLayout.getComponent(9), "<b>Copied From: </b>");
-        assertTrue(metadataLayout.getComponent(10) instanceof VerticalLayout);
+        assertThat(metadataLayout.getComponent(10), instanceOf(VerticalLayout.class));
         VerticalLayout lastActionLayout = (VerticalLayout) metadataLayout.getComponent(10);
         assertEquals("scenario-last-action", lastActionLayout.getId());
         assertEquals(5, lastActionLayout.getComponentCount());

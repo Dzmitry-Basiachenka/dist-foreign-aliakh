@@ -4,8 +4,9 @@ import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertThat;
 
 import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioAuditService;
@@ -49,6 +50,6 @@ public class AclScenarioHistoryControllerTest {
 
     @Test
     public void testInstantiateWidget() {
-        assertTrue(controller.instantiateWidget() instanceof AclScenarioHistoryWidget);
+        assertThat(controller.instantiateWidget(), instanceOf(AclScenarioHistoryWidget.class));
     }
 }

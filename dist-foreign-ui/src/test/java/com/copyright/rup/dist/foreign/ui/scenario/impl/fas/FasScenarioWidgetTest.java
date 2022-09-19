@@ -8,8 +8,10 @@ import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.reset;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
@@ -156,7 +158,7 @@ public class FasScenarioWidgetTest {
     }
 
     private void verifySearchWidget(Component component) {
-        assertTrue(component instanceof VerticalLayout);
+        assertThat(component, instanceOf(VerticalLayout.class));
         VerticalLayout verticalLayout = (VerticalLayout) component;
         HorizontalLayout horizontalLayout = (HorizontalLayout) verticalLayout.getComponent(0);
         assertEquals(1, horizontalLayout.getComponentCount());
@@ -171,7 +173,7 @@ public class FasScenarioWidgetTest {
     }
 
     private void verifyGrid(Component component) {
-        assertTrue(component instanceof Grid);
+        assertThat(component, instanceOf(Grid.class));
         Grid grid = (Grid) component;
         List<Column> columns = grid.getColumns();
         assertEquals(Arrays.asList("RH Account #", "RH Name", "Payee Account #", "Payee Name", "Gross Amt in USD",
@@ -190,7 +192,7 @@ public class FasScenarioWidgetTest {
     }
 
     private void verifyButtonsLayout(Component component) {
-        assertTrue(component instanceof HorizontalLayout);
+        assertThat(component, instanceOf(HorizontalLayout.class));
         HorizontalLayout horizontalLayout = (HorizontalLayout) component;
         assertEquals(4, horizontalLayout.getComponentCount());
         Button excludeByRroButton = (Button) horizontalLayout.getComponent(0);

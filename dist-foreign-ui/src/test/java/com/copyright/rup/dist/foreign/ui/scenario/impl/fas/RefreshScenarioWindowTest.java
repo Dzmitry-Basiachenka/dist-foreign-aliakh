@@ -7,7 +7,9 @@ import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
@@ -67,7 +69,7 @@ public class RefreshScenarioWindowTest {
         verifyWindow(window, "Refresh Scenario", 800, 400, Unit.PIXELS);
         VerticalLayout content = (VerticalLayout) window.getContent();
         assertEquals(3, content.getComponentCount());
-        assertTrue(content.getComponent(1) instanceof Grid);
+        assertThat(content.getComponent(1), instanceOf(Grid.class));
         Grid grid = (Grid) content.getComponent(1);
         verifyGrid(grid, Arrays.asList(
             Triple.of("Detail ID", 130.0, -1),

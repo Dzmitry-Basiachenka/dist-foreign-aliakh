@@ -8,10 +8,12 @@ import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.newCapture;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
@@ -113,14 +115,14 @@ public class AaclScenariosWidgetTest {
     public void testComponentStructure() {
         assertEquals(2, scenariosWidget.getComponentCount());
         Component component = scenariosWidget.getComponent(0);
-        assertTrue(component instanceof HorizontalLayout);
+        assertThat(component, instanceOf(HorizontalLayout.class));
         verifyButtonsLayout((HorizontalLayout) component);
         component = scenariosWidget.getComponent(1);
-        assertTrue(component instanceof HorizontalLayout);
+        assertThat(component, instanceOf(HorizontalLayout.class));
         HorizontalLayout layout = (HorizontalLayout) component;
         assertEquals(2, layout.getComponentCount());
         component = layout.getComponent(0);
-        assertTrue(component instanceof Grid);
+        assertThat(component, instanceOf(Grid.class));
         Grid grid = (Grid) component;
         verifyWindow(grid, null, 100, 100, Unit.PERCENTAGE);
         verifyGrid(grid, Arrays.asList(
@@ -130,13 +132,13 @@ public class AaclScenariosWidgetTest {
         ));
         assertEquals("scenarios-table", grid.getId());
         component = layout.getComponent(1);
-        assertTrue(component instanceof Panel);
+        assertThat(component, instanceOf(Panel.class));
         verifyPanel((Panel) component);
     }
 
     @Test
     public void testInitMediator() {
-        assertTrue(scenariosWidget.initMediator() instanceof AaclScenariosMediator);
+        assertThat(scenariosWidget.initMediator(), instanceOf(AaclScenariosMediator.class));
     }
 
     @Test
@@ -333,7 +335,7 @@ public class AaclScenariosWidgetTest {
     }
 
     private void verifyButton(Component component, String caption) {
-        assertTrue(component instanceof Button);
+        assertThat(component, instanceOf(Button.class));
         Button button = (Button) component;
         assertEquals(caption, button.getCaption());
         assertEquals(caption.replaceAll(StringUtils.SPACE, "_"), button.getId());
@@ -346,7 +348,7 @@ public class AaclScenariosWidgetTest {
         Panel panel = (Panel) ((HorizontalLayout) scenariosWidget.getComponent(1)).getComponent(1);
         assertEquals("scenarios-metadata", panel.getId());
         Component content = panel.getContent();
-        assertTrue(content instanceof VerticalLayout);
+        assertThat(content, instanceOf(VerticalLayout.class));
         VerticalLayout layout = (VerticalLayout) content;
         assertEquals(new MarginInfo(false, true, false, true), layout.getMargin());
         assertEquals(100, layout.getWidth(), 0);
@@ -362,19 +364,19 @@ public class AaclScenariosWidgetTest {
         verifyLabel(layout.getComponent(4), "<b>Description: </b>Description", ContentMode.HTML, -1.0f);
         verifyLabel(layout.getComponent(5), SELECTION_CRITERIA, ContentMode.HTML, -1.0f);
         Component fundPool = layout.getComponent(6);
-        assertTrue(fundPool instanceof Button);
+        assertThat(fundPool, instanceOf(Button.class));
         assertEquals("Fund Pool", fundPool.getCaption());
         verifyScenarioParameterWidget(layout.getComponent(7), "Usage Age Weights");
         verifyScenarioParameterWidget(layout.getComponent(8), "Pub Type Weights");
         verifyScenarioParameterWidget(layout.getComponent(9), "Licensee Class Mapping");
-        assertTrue(layout.getComponent(10) instanceof VerticalLayout);
+        assertThat(layout.getComponent(10), instanceOf(VerticalLayout.class));
         VerticalLayout lastActionLayout = (VerticalLayout) layout.getComponent(10);
         assertEquals(5, lastActionLayout.getComponentCount());
         verifyLabel(lastActionLayout.getComponent(0), "<b>Type:</b> ADDED_USAGES");
         verifyLabel(lastActionLayout.getComponent(1), "<b>User:</b> user@copyright.com");
         verifyLabel(lastActionLayout.getComponent(2), "<b>Date:</b> 12/24/2016 12:00 AM");
         verifyLabel(lastActionLayout.getComponent(3), "<b>Reason:</b> ");
-        assertTrue(lastActionLayout.getComponent(4) instanceof Button);
+        assertThat(lastActionLayout.getComponent(4), instanceOf(Button.class));
         assertEquals("View All Actions", lastActionLayout.getComponent(4).getCaption());
     }
 
