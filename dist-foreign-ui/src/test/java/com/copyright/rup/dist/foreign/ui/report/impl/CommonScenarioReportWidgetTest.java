@@ -7,8 +7,10 @@ import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
@@ -100,19 +102,19 @@ public class CommonScenarioReportWidgetTest {
     }
 
     private void verifyButtonsLayout(Component component) {
-        assertTrue(component instanceof HorizontalLayout);
+        assertThat(component, instanceOf(HorizontalLayout.class));
         HorizontalLayout layout = (HorizontalLayout) component;
         assertEquals(2, layout.getComponentCount());
         Button exportButton = verifyButton(layout.getComponent(0), "Export", 0);
         Collection<Extension> extensions = exportButton.getExtensions();
         assertTrue(CollectionUtils.isNotEmpty(extensions));
         assertEquals(1, extensions.size());
-        assertTrue(extensions.iterator().next() instanceof OnDemandFileDownloader);
+        assertThat(extensions.iterator().next(), instanceOf(OnDemandFileDownloader.class));
         verifyButton(layout.getComponent(1), "Close", 1);
     }
 
     private Button verifyButton(Component component, String caption, int listenerCount) {
-        assertTrue(component instanceof Button);
+        assertThat(component, instanceOf(Button.class));
         Button button = (Button) component;
         assertEquals(caption, button.getCaption());
         assertEquals(caption, button.getId());

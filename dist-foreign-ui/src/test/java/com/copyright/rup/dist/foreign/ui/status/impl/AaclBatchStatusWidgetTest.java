@@ -4,8 +4,9 @@ import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertThat;
 
 import com.copyright.rup.dist.foreign.domain.UsageBatchStatus;
 import com.copyright.rup.dist.foreign.ui.status.api.ICommonBatchStatusController;
@@ -50,7 +51,7 @@ public class AaclBatchStatusWidgetTest {
         batchStatusWidget.init();
         assertEquals(1, batchStatusWidget.getComponentCount());
         Component component = batchStatusWidget.getComponent(0);
-        assertTrue(component instanceof Grid);
+        assertThat(component, instanceOf(Grid.class));
         Grid<?> grid = (Grid<?>) component;
         UiTestHelper.verifyWindow(grid, null, 100, 100, Unit.PERCENTAGE);
         assertEquals("batch-status-grid", grid.getId());
@@ -77,7 +78,7 @@ public class AaclBatchStatusWidgetTest {
         batchStatusWidget.refresh();
         assertEquals(1, batchStatusWidget.getComponentCount());
         Component component = batchStatusWidget.getComponent(0);
-        assertTrue(component instanceof Grid);
+        assertThat(component, instanceOf(Grid.class));
         Grid<?> grid = (Grid<?>) component;
         assertEquals(1, ((ListDataProvider<?>) grid.getDataProvider()).getItems().size());
         verify(controller);

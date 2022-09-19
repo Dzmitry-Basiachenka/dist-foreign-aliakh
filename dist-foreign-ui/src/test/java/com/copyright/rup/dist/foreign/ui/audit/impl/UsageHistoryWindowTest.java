@@ -4,7 +4,9 @@ import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGrid;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGridItems;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
+import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
@@ -65,7 +67,7 @@ public class UsageHistoryWindowTest {
         verifyWindow(window, "History for usage detail " + detailId, 700, 300, Unit.PIXELS);
         assertTrue(window.isResizable());
         Component content = window.getContent();
-        assertTrue(content instanceof VerticalLayout);
+        assertThat(content, instanceOf(VerticalLayout.class));
         verifyContent((VerticalLayout) content);
     }
 
@@ -76,7 +78,7 @@ public class UsageHistoryWindowTest {
         assertEquals(2, layout.getComponentCount());
         Component component = layout.getComponent(0);
         assertEquals(1f, layout.getExpandRatio(component), 0);
-        assertTrue(component instanceof Grid);
+        assertThat(component, instanceOf(Grid.class));
         verifyGrid((Grid) component, Arrays.asList(
             Triple.of("Type", -1.0, -1),
             Triple.of("User", -1.0, -1),
@@ -84,7 +86,7 @@ public class UsageHistoryWindowTest {
             Triple.of("Reason", -1.0, 1)
         ));
         component = layout.getComponent(1);
-        assertTrue(component instanceof Button);
+        assertThat(component, instanceOf(Button.class));
         verifyButton((Button) component);
     }
 

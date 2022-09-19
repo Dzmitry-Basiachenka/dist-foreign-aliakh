@@ -9,8 +9,10 @@ import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
@@ -93,11 +95,11 @@ public class TaxNotificationReportWidgetTest {
         VerticalLayout content = (VerticalLayout) widget.getContent();
         assertEquals(4, content.getComponentCount());
         Component searchWidget = content.getComponent(0);
-        assertTrue(searchWidget instanceof SearchWidget);
+        assertThat(searchWidget, instanceOf(SearchWidget.class));
         Component numberOfDaysField = content.getComponent(2);
-        assertTrue(numberOfDaysField instanceof TextField);
+        assertThat(numberOfDaysField, instanceOf(TextField.class));
         Component grid = content.getComponent(1);
-        assertTrue(grid instanceof Grid);
+        assertThat(grid, instanceOf(Grid.class));
         verifyGrid((Grid) content.getComponent(1),
             Collections.singletonList(Triple.of("Scenario Name", -1.0, -1)));
         verifyNumberOfDaysField((TextField) numberOfDaysField);

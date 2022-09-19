@@ -6,8 +6,10 @@ import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyFilters
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 
@@ -72,20 +74,20 @@ public class AaclAuditFilterWidgetTest {
         Component component = widget.getComponent(0);
         verifyFiltersLabel(component);
         component = widget.getComponent(1);
-        assertTrue(component instanceof LazyRightsholderFilterWidget);
+        assertThat(component, instanceOf(LazyRightsholderFilterWidget.class));
         assertEquals("Rightsholders", Whitebox.getInternalState(component, Button.class).getCaption());
         assertNotNull(Whitebox.getInternalState(component, IFilterSaveListener.class));
         component = widget.getComponent(2);
-        assertTrue(component instanceof UsageBatchFilterWidget);
+        assertThat(component, instanceOf(UsageBatchFilterWidget.class));
         verifyFilterWidget((UsageBatchFilterWidget) component, "Batches");
         component = widget.getComponent(3);
-        assertTrue(component instanceof CommonStatusFilterWidget);
+        assertThat(component, instanceOf(CommonStatusFilterWidget.class));
         verifyFilterWidget((CommonStatusFilterWidget) component, "Statuses");
         verifyComboBox(widget.getComponent(4), "Usage Period", true, USAGE_PERIOD);
         verifyTextField(widget.getComponent(5), "Event ID");
         verifyTextField(widget.getComponent(6), "Dist. Name");
         component = widget.getComponent(7);
-        assertTrue(component instanceof HorizontalLayout);
+        assertThat(component, instanceOf(HorizontalLayout.class));
         verifyButtonsLayout((HorizontalLayout) component);
         assertEquals(Alignment.MIDDLE_RIGHT, widget.getComponentAlignment(component));
     }
@@ -123,10 +125,10 @@ public class AaclAuditFilterWidgetTest {
         assertEquals("filter-buttons", layout.getId());
         assertEquals(2, layout.getComponentCount());
         Component component = layout.getComponent(0);
-        assertTrue(component instanceof Button);
+        assertThat(component, instanceOf(Button.class));
         verifyButton((Button) component, "Apply", false);
         component = layout.getComponent(1);
-        assertTrue(component instanceof Button);
+        assertThat(component, instanceOf(Button.class));
         verifyButton((Button) component, "Clear", true);
     }
 

@@ -6,8 +6,10 @@ import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
@@ -117,9 +119,9 @@ public class FasAuditWidgetTest {
         assertTrue(widget.isLocked());
         assertEquals("audit-widget", widget.getStyleName());
         Component component = widget.getFirstComponent();
-        assertTrue(component instanceof ICommonAuditFilterWidget);
+        assertThat(component, instanceOf(ICommonAuditFilterWidget.class));
         component = widget.getSecondComponent();
-        assertTrue(component instanceof VerticalLayout);
+        assertThat(component, instanceOf(VerticalLayout.class));
         verifyGridLayout((VerticalLayout) component);
     }
 
@@ -195,7 +197,7 @@ public class FasAuditWidgetTest {
     }
 
     private void verifyToolbar(Component component) {
-        assertTrue(component instanceof HorizontalLayout);
+        assertThat(component, instanceOf(HorizontalLayout.class));
         HorizontalLayout layout = (HorizontalLayout) component;
         verifySize(layout, 100, Unit.PIXELS, -1);
         assertEquals(new MarginInfo(false, true, false, true), layout.getMargin());
@@ -205,7 +207,7 @@ public class FasAuditWidgetTest {
     }
 
     private void verifySearchWidget(Component component) {
-        assertTrue(component instanceof SearchWidget);
+        assertThat(component, instanceOf(SearchWidget.class));
         SearchWidget searchWidget = (SearchWidget) component;
         verifySize(searchWidget, 75, Unit.PIXELS, -1);
         assertEquals("Enter Detail ID or Wr Wrk Inst or System Title or Work Title",
@@ -213,7 +215,7 @@ public class FasAuditWidgetTest {
     }
 
     private void verifyExportButton(Component component) {
-        assertTrue(component instanceof Button);
+        assertThat(component, instanceOf(Button.class));
         Button button = (Button) component;
         assertEquals("Export", button.getCaption());
         assertEquals(1, button.getExtensions().size());
