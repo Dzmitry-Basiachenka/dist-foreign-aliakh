@@ -9,8 +9,10 @@ import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.newCapture;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
@@ -142,9 +144,9 @@ public class UdmValueWidgetTest {
         assertTrue(valueWidget.isLocked());
         assertEquals(270, valueWidget.getSplitPosition(), 0);
         verifySize(valueWidget, 100, 100, Unit.PERCENTAGE);
-        assertTrue(valueWidget.getFirstComponent() instanceof UdmValueFilterWidget);
+        assertThat(valueWidget.getFirstComponent(), instanceOf(UdmValueFilterWidget.class));
         Component secondComponent = valueWidget.getSecondComponent();
-        assertTrue(secondComponent instanceof VerticalLayout);
+        assertThat(secondComponent, instanceOf(VerticalLayout.class));
         VerticalLayout layout = (VerticalLayout) secondComponent;
         verifySize(layout, 100, 100, Unit.PERCENTAGE);
         assertEquals(2, layout.getComponentCount());
@@ -279,7 +281,7 @@ public class UdmValueWidgetTest {
         assertEquals(udmValueDtos, dataProvider.fetch(new Query<>(0, 2, Collections.emptyList(), null,
             null)).collect(Collectors.toList()));
         assertEquals(UDM_RECORD_THRESHOLD, dataProvider.size(new Query<>()));
-        assertTrue(grid.getSelectionModel() instanceof MultiSelectionModelImpl);
+        assertThat(grid.getSelectionModel(), instanceOf(MultiSelectionModelImpl.class));
         assertTrue(((MultiSelectionModelImpl<?>) grid.getSelectionModel()).isSelectAllCheckBoxVisible());
         verify(controller, RupContextUtils.class, ForeignSecurityUtils.class, JavaScript.class);
     }
@@ -302,7 +304,7 @@ public class UdmValueWidgetTest {
         assertEquals(udmValueDtos, dataProvider.fetch(new Query<>(0, 2, Collections.emptyList(), null,
             null)).collect(Collectors.toList()));
         assertEquals(EXCEEDED_UDM_RECORD_THRESHOLD, dataProvider.size(new Query<>()));
-        assertTrue(grid.getSelectionModel() instanceof MultiSelectionModelImpl);
+        assertThat(grid.getSelectionModel(), instanceOf(MultiSelectionModelImpl.class));
         assertFalse(((MultiSelectionModelImpl<?>) grid.getSelectionModel()).isSelectAllCheckBoxVisible());
         verify(controller, RupContextUtils.class, ForeignSecurityUtils.class, JavaScript.class);
     }
@@ -323,7 +325,7 @@ public class UdmValueWidgetTest {
         assertEquals(Collections.emptyList(), dataProvider.fetch(new Query<>(0, 2, Collections.emptyList(), null,
             null)).collect(Collectors.toList()));
         assertEquals(0, dataProvider.size(new Query<>()));
-        assertTrue(grid.getSelectionModel() instanceof MultiSelectionModelImpl);
+        assertThat(grid.getSelectionModel(), instanceOf(MultiSelectionModelImpl.class));
         assertFalse(((MultiSelectionModelImpl<?>) grid.getSelectionModel()).isSelectAllCheckBoxVisible());
         verify(controller, RupContextUtils.class, ForeignSecurityUtils.class, JavaScript.class);
     }
@@ -435,7 +437,7 @@ public class UdmValueWidgetTest {
             "Content Flag", "Content Unit Price", "Last Comment", "Comment", "Updated By", "Updated Date"),
             columns.stream().map(Column::getCaption).collect(Collectors.toList()));
         verifySize(grid, 100, 100, Unit.PERCENTAGE);
-        assertTrue(grid.getSelectionModel() instanceof MultiSelectionModelImpl);
+        assertThat(grid.getSelectionModel(), instanceOf(MultiSelectionModelImpl.class));
         assertTrue(grid.isFooterVisible());
         FooterRow footerRow = grid.getFooterRow(0);
         assertEquals("Values Count: 0", footerRow.getCell("valueId").getText());
@@ -459,7 +461,7 @@ public class UdmValueWidgetTest {
     }
 
     private void verifyButton(Component component, String name) {
-        assertTrue(component instanceof Button);
+        assertThat(component, instanceOf(Button.class));
         Button button = (Button) component;
         assertEquals(name, button.getCaption());
         assertTrue(button.isVisible());
