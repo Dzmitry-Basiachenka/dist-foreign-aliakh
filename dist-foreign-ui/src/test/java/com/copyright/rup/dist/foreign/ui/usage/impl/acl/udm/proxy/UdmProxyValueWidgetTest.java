@@ -6,7 +6,9 @@ import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGrid;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGridItems;
 
 import static org.easymock.EasyMock.expect;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
@@ -95,9 +97,9 @@ public class UdmProxyValueWidgetTest {
         assertTrue(valueWidget.isLocked());
         assertEquals(200, valueWidget.getSplitPosition(), 0);
         verifySize(valueWidget);
-        assertTrue(valueWidget.getFirstComponent() instanceof UdmProxyValueFilterWidget);
+        assertThat(valueWidget.getFirstComponent(), instanceOf(UdmProxyValueFilterWidget.class));
         Component secondComponent = valueWidget.getSecondComponent();
-        assertTrue(secondComponent instanceof VerticalLayout);
+        assertThat(secondComponent, instanceOf(VerticalLayout.class));
         VerticalLayout layout = (VerticalLayout) secondComponent;
         verifySize(layout);
         assertEquals(2, layout.getComponentCount());

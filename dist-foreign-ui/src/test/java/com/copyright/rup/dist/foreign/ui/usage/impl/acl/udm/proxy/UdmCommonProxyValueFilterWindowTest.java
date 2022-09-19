@@ -4,9 +4,11 @@ import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtons
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
 import static org.easymock.EasyMock.expect;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.replay;
@@ -74,7 +76,7 @@ public class UdmCommonProxyValueFilterWindowTest {
         assertEquals(new MarginInfo(true), content.getMargin());
         Iterator<Component> iterator = content.iterator();
         Component component = iterator.next();
-        assertTrue(component instanceof SearchWidget);
+        assertThat(component, instanceOf(SearchWidget.class));
         verifyPanel((Panel) iterator.next());
         verifyButtonsLayout(iterator.next(), "Save", "Select All", "Clear", "Close");
         assertFalse(iterator.hasNext());

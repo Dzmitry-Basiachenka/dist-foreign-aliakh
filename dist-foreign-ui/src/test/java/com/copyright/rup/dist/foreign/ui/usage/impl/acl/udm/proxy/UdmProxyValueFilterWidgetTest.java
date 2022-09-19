@@ -4,9 +4,11 @@ import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtons
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyFiltersLabel;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyItemsFilterWidget;
 
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.replay;
@@ -112,7 +114,7 @@ public class UdmProxyValueFilterWidgetTest {
     }
 
     private void verifyFiltersLayout(Component layout) {
-        assertTrue(layout instanceof VerticalLayout);
+        assertThat(layout, instanceOf(VerticalLayout.class));
         VerticalLayout verticalLayout = (VerticalLayout) layout;
         assertEquals(3, verticalLayout.getComponentCount());
         verifyFiltersLabel(verticalLayout.getComponent(0));

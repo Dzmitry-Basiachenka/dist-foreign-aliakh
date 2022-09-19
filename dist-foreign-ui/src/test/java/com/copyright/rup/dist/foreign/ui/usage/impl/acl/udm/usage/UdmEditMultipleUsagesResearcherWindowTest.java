@@ -10,7 +10,9 @@ import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
@@ -263,7 +265,7 @@ public class UdmEditMultipleUsagesResearcherWindowTest {
     }
 
     private void verifyRootLayout(Component component) {
-        assertTrue(component instanceof VerticalLayout);
+        assertThat(component, instanceOf(VerticalLayout.class));
         VerticalLayout verticalLayout = (VerticalLayout) component;
         assertEquals(5, verticalLayout.getComponentCount());
         verifyComboBoxLayout(verticalLayout.getComponent(0), "Detail Status", false,
@@ -277,7 +279,7 @@ public class UdmEditMultipleUsagesResearcherWindowTest {
 
     private <T> void verifyComboBoxLayout(Component component, String caption, boolean emptySelectionAllowed,
                                           Collection<T> expectedItems) {
-        assertTrue(component instanceof HorizontalLayout);
+        assertThat(component, instanceOf(HorizontalLayout.class));
         HorizontalLayout layout = (HorizontalLayout) component;
         assertEquals(2, layout.getComponentCount());
         verifyLabel(layout.getComponent(0), caption, ContentMode.TEXT, 110);
@@ -285,7 +287,7 @@ public class UdmEditMultipleUsagesResearcherWindowTest {
     }
 
     private void verifyTextFieldLayout(Component component, String caption) {
-        assertTrue(component instanceof HorizontalLayout);
+        assertThat(component, instanceOf(HorizontalLayout.class));
         HorizontalLayout layout = (HorizontalLayout) component;
         assertEquals(2, layout.getComponentCount());
         verifyLabel(layout.getComponent(0), caption, ContentMode.TEXT, 110);

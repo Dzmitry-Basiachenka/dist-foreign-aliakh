@@ -11,8 +11,10 @@ import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.newCapture;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.expectNew;
@@ -192,15 +194,15 @@ public class UdmUsageWidgetTest {
         assertTrue(usagesWidget.isLocked());
         assertEquals(270, usagesWidget.getSplitPosition(), 0);
         verifyWindow(usagesWidget, null, 100, 100, Unit.PERCENTAGE);
-        assertTrue(usagesWidget.getFirstComponent() instanceof UdmUsageFilterWidget);
+        assertThat(usagesWidget.getFirstComponent(), instanceOf(UdmUsageFilterWidget.class));
         Component secondComponent = usagesWidget.getSecondComponent();
-        assertTrue(secondComponent instanceof VerticalLayout);
+        assertThat(secondComponent, instanceOf(VerticalLayout.class));
         VerticalLayout layout = (VerticalLayout) secondComponent;
         verifyWindow(layout, null, 100, 100, Unit.PERCENTAGE);
         assertEquals(2, layout.getComponentCount());
         verifyToolbarLayout(layout.getComponent(0), SEARCH_PLACEHOLDER, true, true, true, true, true);
         Grid grid = (Grid) layout.getComponent(1);
-        assertTrue(grid.getSelectionModel() instanceof MultiSelectionModelImpl);
+        assertThat(grid.getSelectionModel(), instanceOf(MultiSelectionModelImpl.class));
         verifyGrid(grid, VISIBLE_COLUMNS_FOR_MANAGER_AND_SPECIALIST);
         assertEquals(1, layout.getExpandRatio(layout.getComponent(1)), 0);
     }
@@ -214,15 +216,15 @@ public class UdmUsageWidgetTest {
         assertTrue(usagesWidget.isLocked());
         assertEquals(270, usagesWidget.getSplitPosition(), 0);
         verifyWindow(usagesWidget, null, 100, 100, Unit.PERCENTAGE);
-        assertTrue(usagesWidget.getFirstComponent() instanceof UdmUsageFilterWidget);
+        assertThat(usagesWidget.getFirstComponent(), instanceOf(UdmUsageFilterWidget.class));
         Component secondComponent = usagesWidget.getSecondComponent();
-        assertTrue(secondComponent instanceof VerticalLayout);
+        assertThat(secondComponent, instanceOf(VerticalLayout.class));
         VerticalLayout layout = (VerticalLayout) secondComponent;
         verifyWindow(layout, null, 100, 100, Unit.PERCENTAGE);
         assertEquals(2, layout.getComponentCount());
         verifyToolbarLayout(layout.getComponent(0), SEARCH_PLACEHOLDER, false, true, true, false, true);
         Grid grid = (Grid) layout.getComponent(1);
-        assertTrue(grid.getSelectionModel() instanceof MultiSelectionModelImpl);
+        assertThat(grid.getSelectionModel(), instanceOf(MultiSelectionModelImpl.class));
         verifyGrid(grid, VISIBLE_COLUMNS_FOR_MANAGER_AND_SPECIALIST);
         assertEquals(1, layout.getExpandRatio(layout.getComponent(1)), 0);
     }
@@ -236,15 +238,15 @@ public class UdmUsageWidgetTest {
         assertTrue(usagesWidget.isLocked());
         assertEquals(270, usagesWidget.getSplitPosition(), 0);
         verifyWindow(usagesWidget, null, 100, 100, Unit.PERCENTAGE);
-        assertTrue(usagesWidget.getFirstComponent() instanceof UdmUsageFilterWidget);
+        assertThat(usagesWidget.getFirstComponent(), instanceOf(UdmUsageFilterWidget.class));
         Component secondComponent = usagesWidget.getSecondComponent();
-        assertTrue(secondComponent instanceof VerticalLayout);
+        assertThat(secondComponent, instanceOf(VerticalLayout.class));
         VerticalLayout layout = (VerticalLayout) secondComponent;
         verifyWindow(layout, null, 100, 100, Unit.PERCENTAGE);
         assertEquals(2, layout.getComponentCount());
         verifyToolbarLayout(layout.getComponent(0), SEARCH_PLACEHOLDER, false, false, false, false, true);
         Grid grid = (Grid) layout.getComponent(1);
-        assertTrue(grid.getSelectionModel() instanceof SingleSelectionModel);
+        assertThat(grid.getSelectionModel(), instanceOf(SingleSelectionModel.class));
         verifyGrid(grid, VISIBLE_COLUMNS_FOR_VIEW_ONLY);
         assertEquals(1, layout.getExpandRatio(layout.getComponent(1)), 0);
     }
@@ -258,15 +260,15 @@ public class UdmUsageWidgetTest {
         assertTrue(usagesWidget.isLocked());
         assertEquals(270, usagesWidget.getSplitPosition(), 0);
         verifyWindow(usagesWidget, null, 100, 100, Unit.PERCENTAGE);
-        assertTrue(usagesWidget.getFirstComponent() instanceof UdmUsageFilterWidget);
+        assertThat(usagesWidget.getFirstComponent(), instanceOf(UdmUsageFilterWidget.class));
         Component secondComponent = usagesWidget.getSecondComponent();
-        assertTrue(secondComponent instanceof VerticalLayout);
+        assertThat(secondComponent, instanceOf(VerticalLayout.class));
         VerticalLayout layout = (VerticalLayout) secondComponent;
         verifyWindow(layout, null, 100, 100, Unit.PERCENTAGE);
         assertEquals(2, layout.getComponentCount());
         verifyToolbarLayout(layout.getComponent(0), SEARCH_PLACEHOLDER_RESEARCHER, false, true, true, false, true);
         Grid grid = (Grid) layout.getComponent(1);
-        assertTrue(grid.getSelectionModel() instanceof MultiSelectionModelImpl);
+        assertThat(grid.getSelectionModel(), instanceOf(MultiSelectionModelImpl.class));
         verifyGrid(grid, VISIBLE_COLUMNS_FOR_RESEARCHER);
         assertEquals(1, layout.getExpandRatio(layout.getComponent(1)), 0);
     }
@@ -576,7 +578,7 @@ public class UdmUsageWidgetTest {
         assertEquals(udmUsageDtos, dataProvider.fetch(new Query<>(0, 2, Collections.emptyList(), null,
             null)).collect(Collectors.toList()));
         assertEquals(UDM_RECORD_THRESHOLD, dataProvider.size(new Query<>()));
-        assertTrue(grid.getSelectionModel() instanceof MultiSelectionModelImpl);
+        assertThat(grid.getSelectionModel(), instanceOf(MultiSelectionModelImpl.class));
         assertTrue(((MultiSelectionModelImpl<?>) grid.getSelectionModel()).isSelectAllCheckBoxVisible());
         verify(controller, streamSource, RupContextUtils.class, ForeignSecurityUtils.class, JavaScript.class);
     }
@@ -599,7 +601,7 @@ public class UdmUsageWidgetTest {
         assertEquals(udmUsageDtos, dataProvider.fetch(new Query<>(0, 2, Collections.emptyList(), null,
             null)).collect(Collectors.toList()));
         assertEquals(EXCEEDED_UDM_RECORD_THRESHOLD, dataProvider.size(new Query<>()));
-        assertTrue(grid.getSelectionModel() instanceof MultiSelectionModelImpl);
+        assertThat(grid.getSelectionModel(), instanceOf(MultiSelectionModelImpl.class));
         assertFalse(((MultiSelectionModelImpl<?>) grid.getSelectionModel()).isSelectAllCheckBoxVisible());
         verify(controller, streamSource, RupContextUtils.class, ForeignSecurityUtils.class, JavaScript.class);
     }
@@ -620,7 +622,7 @@ public class UdmUsageWidgetTest {
         assertEquals(Collections.emptyList(), dataProvider.fetch(new Query<>(0, 2, Collections.emptyList(), null,
             null)).collect(Collectors.toList()));
         assertEquals(0, dataProvider.size(new Query<>()));
-        assertTrue(grid.getSelectionModel() instanceof MultiSelectionModelImpl);
+        assertThat(grid.getSelectionModel(), instanceOf(MultiSelectionModelImpl.class));
         assertFalse(((MultiSelectionModelImpl<?>) grid.getSelectionModel()).isSelectAllCheckBoxVisible());
         verify(controller, streamSource, RupContextUtils.class, ForeignSecurityUtils.class, JavaScript.class);
     }
@@ -822,7 +824,7 @@ public class UdmUsageWidgetTest {
     }
 
     private void verifyToolbarLayout(Component component, String searchPlaceholder, boolean... buttonsVisibility) {
-        assertTrue(component instanceof VerticalLayout);
+        assertThat(component, instanceOf(VerticalLayout.class));
         VerticalLayout layout = (VerticalLayout) component;
         assertTrue(layout.isSpacing());
         verifySize(layout, 100, -1, Unit.PIXELS);
@@ -833,7 +835,7 @@ public class UdmUsageWidgetTest {
     }
 
     private void verifySearchWidget(Component component, String searchPlaceholder) {
-        assertTrue(component instanceof SearchWidget);
+        assertThat(component, instanceOf(SearchWidget.class));
         SearchWidget searchWidget = (SearchWidget) component;
         verifySize(searchWidget, 65, -1, Unit.PIXELS);
         assertEquals(searchPlaceholder, Whitebox.getInternalState(searchWidget, TextField.class).getPlaceholder());
@@ -851,7 +853,7 @@ public class UdmUsageWidgetTest {
     }
 
     private void verifyButton(Component component, String name, boolean isVisible) {
-        assertTrue(component instanceof Button);
+        assertThat(component, instanceOf(Button.class));
         Button button = (Button) component;
         assertEquals(name, button.getCaption());
         assertEquals(isVisible, button.isVisible());
