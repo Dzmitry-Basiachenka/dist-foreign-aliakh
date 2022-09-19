@@ -7,9 +7,11 @@ import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyTextFie
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
@@ -327,7 +329,7 @@ public class SalFundPoolLoadWindowTest {
     }
 
     private void verifyRootLayout(Component component) {
-        assertTrue(component instanceof VerticalLayout);
+        assertThat(component, instanceOf(VerticalLayout.class));
         VerticalLayout verticalLayout = (VerticalLayout) component;
         assertEquals(10, verticalLayout.getComponentCount());
         verifyTextFieldComponent(verticalLayout.getComponent(0), "Fund Pool Name", false);
@@ -353,20 +355,20 @@ public class SalFundPoolLoadWindowTest {
     }
 
     private void verifyLicenseeComponents(Component component) {
-        assertTrue(component instanceof VerticalLayout);
+        assertThat(component, instanceOf(VerticalLayout.class));
         VerticalLayout verticalLayout = (VerticalLayout) component;
         assertEquals(2, verticalLayout.getComponentCount());
         HorizontalLayout horizontalLayout = (HorizontalLayout) verticalLayout.getComponent(0);
         verifyTextFieldComponent(horizontalLayout.getComponent(0), "Licensee Account #", false);
         Component verifyComponent = horizontalLayout.getComponent(1);
-        assertTrue(verifyComponent instanceof Button);
+        assertThat(verifyComponent, instanceOf(Button.class));
         assertEquals("Verify", verifyComponent.getCaption());
         verifyTextFieldComponent(verticalLayout.getComponent(1), "Licensee Name", true);
         assertTrue(((TextField) verticalLayout.getComponent(1)).isReadOnly());
     }
 
     private void verifyDateComponent(Component component) {
-        assertTrue(component instanceof LocalDateWidget);
+        assertThat(component, instanceOf(LocalDateWidget.class));
         LocalDateWidget widget = (LocalDateWidget) component;
         assertEquals("Date Received", widget.getCaption());
     }
@@ -378,7 +380,7 @@ public class SalFundPoolLoadWindowTest {
     }
 
     private void verifyButtonsLayout(Component component) {
-        assertTrue(component instanceof HorizontalLayout);
+        assertThat(component, instanceOf(HorizontalLayout.class));
         HorizontalLayout layout = (HorizontalLayout) component;
         assertEquals(2, layout.getComponentCount());
         Button loadButton = verifyButton(layout.getComponent(0), "Upload");
@@ -398,7 +400,7 @@ public class SalFundPoolLoadWindowTest {
     }
 
     private Button verifyButton(Component component, String caption) {
-        assertTrue(component instanceof Button);
+        assertThat(component, instanceOf(Button.class));
         assertEquals(caption, component.getCaption());
         return (Button) component;
     }

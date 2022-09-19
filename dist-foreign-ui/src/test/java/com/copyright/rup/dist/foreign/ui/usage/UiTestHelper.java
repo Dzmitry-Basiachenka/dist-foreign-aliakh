@@ -1,10 +1,12 @@
 package com.copyright.rup.dist.foreign.ui.usage;
 
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
@@ -112,7 +114,7 @@ public final class UiTestHelper {
      */
     public static void verifyLabel(Component component, String caption, ContentMode contentMode, float width,
                                    Unit unit) {
-        assertTrue(component instanceof Label);
+        assertThat(component, instanceOf(Label.class));
         assertEquals(width, component.getWidth(), 0);
         assertEquals(unit, component.getWidthUnits());
         Label label = (Label) component;
@@ -127,7 +129,7 @@ public final class UiTestHelper {
      * @param caption   caption
      */
     public static void verifyLabel(Component component, String caption) {
-        assertTrue(component instanceof Label);
+        assertThat(component, instanceOf(Label.class));
         Label label = (Label) component;
         assertEquals(caption, label.getValue());
     }
@@ -138,7 +140,7 @@ public final class UiTestHelper {
      * @param component UI component
      */
     public static void verifyFiltersLabel(Component component) {
-        assertTrue(component instanceof Label);
+        assertThat(component, instanceOf(Label.class));
         Label label = (Label) component;
         assertEquals("Filters", label.getValue());
         assertEquals(Cornerstone.LABEL_H2, label.getStyleName());
@@ -166,7 +168,7 @@ public final class UiTestHelper {
      * @param component instance of {@link Component}
      */
     public static void verifyUploadComponent(Component component) {
-        assertTrue(component instanceof UploadField);
+        assertThat(component, instanceOf(UploadField.class));
         assertEquals(100, component.getWidth(), 0);
         assertEquals(Unit.PERCENTAGE, component.getWidthUnits());
     }
@@ -230,7 +232,7 @@ public final class UiTestHelper {
      */
     public static void verifyMenuBar(Component component, String menuBarName, boolean isMenuBarVisible,
                                      List<String> menuItemNames) {
-        assertTrue(component instanceof MenuBar);
+        assertThat(component, instanceOf(MenuBar.class));
         MenuBar menuBar = (MenuBar) component;
         assertEquals(isMenuBarVisible, menuBar.isVisible());
         List<MenuBar.MenuItem> parentItems = menuBar.getItems();
@@ -250,13 +252,13 @@ public final class UiTestHelper {
      * @param captions  headers of buttons.
      */
     public static void verifyButtonsLayout(Component component, String... captions) {
-        assertTrue(component instanceof HorizontalLayout);
+        assertThat(component, instanceOf(HorizontalLayout.class));
         HorizontalLayout layout = (HorizontalLayout) component;
         assertEquals(captions.length, layout.getComponentCount());
         IntStream.range(0, captions.length).forEach(i -> {
             Component button = layout.getComponent(i);
             if (Objects.nonNull(captions[i])) {
-                assertTrue(button instanceof Button);
+                assertThat(button, instanceOf(Button.class));
                 // TODO verify disable on click
             }
             assertEquals(captions[i], button.getCaption());
@@ -280,7 +282,7 @@ public final class UiTestHelper {
      * @param isVisible {@code true} if button is visible, {@code false} otherwise
      */
     public static void verifyButton(Component component, String caption, boolean isVisible) {
-        assertTrue(component instanceof Button);
+        assertThat(component, instanceOf(Button.class));
         Button button = (Button) component;
         assertEquals(caption, button.getCaption());
         assertEquals(isVisible, button.isVisible());
@@ -293,7 +295,7 @@ public final class UiTestHelper {
      * @param listenersCount count of listeners applied to the button
      */
     public static void verifyMoreFiltersButton(Component component, int listenersCount) {
-        assertTrue(component instanceof Button);
+        assertThat(component, instanceOf(Button.class));
         Button button = (Button) component;
         assertEquals("More Filters", component.getCaption());
         assertTrue(StringUtils.contains(button.getStyleName(), Cornerstone.BUTTON_LINK));
@@ -333,7 +335,7 @@ public final class UiTestHelper {
      * @return of {@link TextField}
      */
     public static TextField verifyTextField(Component component, String caption, float width) {
-        assertTrue(component instanceof TextField);
+        assertThat(component, instanceOf(TextField.class));
         assertEquals(caption, component.getCaption());
         assertEquals(width, component.getWidth(), 0);
         assertEquals(Unit.PERCENTAGE, component.getWidthUnits());
@@ -396,7 +398,7 @@ public final class UiTestHelper {
     @SuppressWarnings("unchecked")
     public static <T> ComboBox<T> verifyComboBox(Component component, String caption, Unit widthUnits, float width,
                                                  boolean emptySelectionAllowed, Collection<T> expectedItems) {
-        assertTrue(component instanceof ComboBox);
+        assertThat(component, instanceOf(ComboBox.class));
         ComboBox<T> comboBox = (ComboBox<T>) component;
         assertFalse(comboBox.isReadOnly());
         assertTrue(comboBox.isTextInputAllowed());
@@ -419,7 +421,7 @@ public final class UiTestHelper {
      * @param styleName name of style
      */
     public static void verifyCheckBox(Component component, String caption, String styleName) {
-        assertTrue(component instanceof CheckBox);
+        assertThat(component, instanceOf(CheckBox.class));
         CheckBox checkBox = (CheckBox) component;
         assertEquals(caption, checkBox.getCaption());
         assertEquals(styleName, checkBox.getStyleName());
@@ -495,7 +497,7 @@ public final class UiTestHelper {
      */
     @SuppressWarnings(UNCHECKED)
     public static void verifyItemsFilterWidget(Component component, String caption) {
-        assertTrue(component instanceof HorizontalLayout);
+        assertThat(component, instanceOf(HorizontalLayout.class));
         HorizontalLayout layout = (HorizontalLayout) component;
         assertTrue(layout.isEnabled());
         assertTrue(layout.isSpacing());

@@ -3,8 +3,9 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.nts;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
 import static org.easymock.EasyMock.expect;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertThat;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
@@ -60,7 +61,7 @@ public class AdditionalFundBatchesFilterWindowTest {
     }
 
     private void verifyRootLayout(Component component) {
-        assertTrue(component instanceof VerticalLayout);
+        assertThat(component, instanceOf(VerticalLayout.class));
         VerticalLayout verticalLayout = (VerticalLayout) component;
         assertEquals(3, verticalLayout.getComponentCount());
         verifySearchWidget(verticalLayout.getComponent(0));
@@ -69,7 +70,7 @@ public class AdditionalFundBatchesFilterWindowTest {
     }
 
     private void verifySearchWidget(Component component) {
-        assertTrue(component instanceof SearchWidget);
+        assertThat(component, instanceOf(SearchWidget.class));
         SearchWidget searchWidget = (SearchWidget) component;
         verifySize(searchWidget);
         assertEquals("Enter Usage Batch Name",
@@ -77,7 +78,7 @@ public class AdditionalFundBatchesFilterWindowTest {
     }
 
     private void verifyCheckBoxGroupLayout(Component component) {
-        assertTrue(component instanceof Panel);
+        assertThat(component, instanceOf(Panel.class));
         Panel panel = (Panel) component;
         assertEquals(1, panel.getComponentCount());
         CheckBoxGroup checkBoxGroup = (CheckBoxGroup) panel.getContent();

@@ -4,8 +4,10 @@ import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtons
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsVisibility;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGridItems;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
@@ -60,7 +62,7 @@ public class AclAggregateLicenseeClassMappingViewWindowTest {
         verifyWindow(window, "Licensee Class Mapping", 850, 550, Unit.PIXELS);
         assertEquals(2, content.getComponentCount());
         Component component = content.getComponent(0);
-        assertTrue(component instanceof Grid);
+        assertThat(component, instanceOf(Grid.class));
         verifyGrid((Grid) component);
         assertEquals(1, content.getExpandRatio(component), 0);
         verifyButtonsLayout(content.getComponent(1), "Close");

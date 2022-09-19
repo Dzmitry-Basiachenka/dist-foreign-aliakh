@@ -8,7 +8,9 @@ import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
@@ -84,7 +86,7 @@ public class SalUpdateRighstholderWindowTest {
         assertEquals(190, window.getHeight(), 0);
         assertEquals(Sizeable.Unit.PIXELS, window.getHeightUnits());
         Component content = window.getContent();
-        assertTrue(content instanceof VerticalLayout);
+        assertThat(content, instanceOf(VerticalLayout.class));
         VerticalLayout contentLayout = (VerticalLayout) content;
         assertEquals(2, contentLayout.getComponentCount());
         Component rhLayout = contentLayout.getComponent(0);
@@ -134,7 +136,7 @@ public class SalUpdateRighstholderWindowTest {
         expectLastCall().once();
         replay(clickEvent, usageController, Windows.class);
         Component content = window.getContent();
-        assertTrue(content instanceof VerticalLayout);
+        assertThat(content, instanceOf(VerticalLayout.class));
         VerticalLayout contentLayout = (VerticalLayout) content;
         assertEquals(2, contentLayout.getComponentCount());
         Component rhLayout = contentLayout.getComponent(0);
@@ -177,7 +179,7 @@ public class SalUpdateRighstholderWindowTest {
         expectLastCall().once();
         replay(clickEvent, usageController, detailsWindow, binder, Windows.class);
         Component content = window.getContent();
-        assertTrue(content instanceof VerticalLayout);
+        assertThat(content, instanceOf(VerticalLayout.class));
         VerticalLayout contentLayout = (VerticalLayout) content;
         assertEquals(2, contentLayout.getComponentCount());
         Component rhLayout = contentLayout.getComponent(0);
@@ -221,7 +223,7 @@ public class SalUpdateRighstholderWindowTest {
         expectLastCall().once();
         replay(clickEvent, usageController, detailsWindow, binder, Windows.class);
         Component content = window.getContent();
-        assertTrue(content instanceof VerticalLayout);
+        assertThat(content, instanceOf(VerticalLayout.class));
         VerticalLayout contentLayout = (VerticalLayout) content;
         assertEquals(2, contentLayout.getComponentCount());
         Component rhLayout = contentLayout.getComponent(0);
@@ -254,7 +256,7 @@ public class SalUpdateRighstholderWindowTest {
     }
 
     private void verifyRightsholderLayout(Component component) {
-        assertTrue(component instanceof VerticalLayout);
+        assertThat(component, instanceOf(VerticalLayout.class));
         VerticalLayout verticalLayout = (VerticalLayout) component;
         assertEquals(2, verticalLayout.getComponentCount());
         HorizontalLayout horizontalLayout = (HorizontalLayout) verticalLayout.getComponent(0);
@@ -266,7 +268,7 @@ public class SalUpdateRighstholderWindowTest {
         TextField nameField = verifyTextField(verticalLayout.getComponent(1), "RH Name");
         assertTrue(nameField.isReadOnly());
         Component verifyComponent = horizontalLayout.getComponent(1);
-        assertTrue(verifyComponent instanceof Button);
+        assertThat(verifyComponent, instanceOf(Button.class));
         Button verifyButton = (Button) verifyComponent;
         assertEquals("Verify", verifyComponent.getCaption());
         assertEquals(1, verifyButton.getListeners(Button.ClickEvent.class).size());
@@ -291,7 +293,7 @@ public class SalUpdateRighstholderWindowTest {
     }
 
     private void verifyButtonsLayout(Component component) {
-        assertTrue(component instanceof HorizontalLayout);
+        assertThat(component, instanceOf(HorizontalLayout.class));
         HorizontalLayout layout = (HorizontalLayout) component;
         assertEquals(2, layout.getComponentCount());
         Button saveButton = verifyButton(layout.getComponent(0), "Save");
@@ -303,7 +305,7 @@ public class SalUpdateRighstholderWindowTest {
     }
 
     private Button verifyButton(Component component, String caption) {
-        assertTrue(component instanceof Button);
+        assertThat(component, instanceOf(Button.class));
         assertEquals(caption, component.getCaption());
         return (Button) component;
     }

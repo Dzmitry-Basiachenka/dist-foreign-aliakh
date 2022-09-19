@@ -7,8 +7,10 @@ import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyUploadC
 
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.expect;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.powermock.api.easymock.PowerMock.createMock;
@@ -247,7 +249,7 @@ public class UsageBatchUploadWindowTest {
     }
 
     private void verifyRootLayout(Component component) {
-        assertTrue(component instanceof VerticalLayout);
+        assertThat(component, instanceOf(VerticalLayout.class));
         VerticalLayout verticalLayout = (VerticalLayout) component;
         assertEquals(6, verticalLayout.getComponentCount());
         verifyUsageBatchNameComponent(verticalLayout.getComponent(0));
@@ -264,7 +266,7 @@ public class UsageBatchUploadWindowTest {
     }
 
     private void verifyButtonsLayout(Component component) {
-        assertTrue(component instanceof HorizontalLayout);
+        assertThat(component, instanceOf(HorizontalLayout.class));
         HorizontalLayout layout = (HorizontalLayout) component;
         assertEquals(2, layout.getComponentCount());
         Button loadButton = verifyButton(layout.getComponent(0), "Upload");
@@ -280,13 +282,13 @@ public class UsageBatchUploadWindowTest {
     }
 
     private Button verifyButton(Component component, String caption) {
-        assertTrue(component instanceof Button);
+        assertThat(component, instanceOf(Button.class));
         assertEquals(caption, component.getCaption());
         return (Button) component;
     }
 
     private void verifyRightsholdersComponents(Component component) {
-        assertTrue(component instanceof VerticalLayout);
+        assertThat(component, instanceOf(VerticalLayout.class));
         VerticalLayout verticalLayout = (VerticalLayout) component;
         assertEquals(2, verticalLayout.getComponentCount());
         HorizontalLayout horizontalLayout = (HorizontalLayout) verticalLayout.getComponent(0);
@@ -310,7 +312,7 @@ public class UsageBatchUploadWindowTest {
 
     private void assertVerifyButton(Component verifyComponent, TextField numberField, TextField nameField,
                                     TextField productFamilyField) {
-        assertTrue(verifyComponent instanceof Button);
+        assertThat(verifyComponent, instanceOf(Button.class));
         Button verifyButton = (Button) verifyComponent;
         assertEquals("Verify", verifyComponent.getCaption());
         assertEquals(1, verifyButton.getListeners(ClickEvent.class).size());
@@ -342,12 +344,12 @@ public class UsageBatchUploadWindowTest {
     }
 
     private void verifyDateComponents(Component component) {
-        assertTrue(component instanceof HorizontalLayout);
+        assertThat(component, instanceOf(HorizontalLayout.class));
         HorizontalLayout horizontalLayout = (HorizontalLayout) component;
         assertEquals(2, horizontalLayout.getComponentCount());
         Component paymentDateComponent = horizontalLayout.getComponent(0);
         Component fiscalYearComponent = horizontalLayout.getComponent(1);
-        assertTrue(paymentDateComponent instanceof LocalDateWidget);
+        assertThat(paymentDateComponent, instanceOf(LocalDateWidget.class));
         LocalDateWidget widget = (LocalDateWidget) paymentDateComponent;
         assertEquals("Payment Date", widget.getCaption());
         TextField fiscalYearField = verifyTextField(fiscalYearComponent, "Fiscal Year");
@@ -364,7 +366,7 @@ public class UsageBatchUploadWindowTest {
     }
 
     private void verifyGrossAmount(Component component) {
-        assertTrue(component instanceof HorizontalLayout);
+        assertThat(component, instanceOf(HorizontalLayout.class));
         HorizontalLayout horizontalLayout = (HorizontalLayout) component;
         assertEquals(2, horizontalLayout.getComponentCount());
         verifyGrossAmountComponent(horizontalLayout.getComponent(0));

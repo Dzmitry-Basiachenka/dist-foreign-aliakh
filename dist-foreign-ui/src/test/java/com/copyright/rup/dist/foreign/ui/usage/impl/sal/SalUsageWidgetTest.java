@@ -5,9 +5,11 @@ import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyMenuBar
 
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.expect;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
@@ -101,9 +103,9 @@ public class SalUsageWidgetTest {
         assertTrue(usagesWidget.isLocked());
         assertEquals(200, usagesWidget.getSplitPosition(), 0);
         verifySize(usagesWidget);
-        assertTrue(usagesWidget.getFirstComponent() instanceof SalUsageFilterWidget);
+        assertThat(usagesWidget.getFirstComponent(), instanceOf(SalUsageFilterWidget.class));
         Component secondComponent = usagesWidget.getSecondComponent();
-        assertTrue(secondComponent instanceof VerticalLayout);
+        assertThat(secondComponent, instanceOf(VerticalLayout.class));
         VerticalLayout layout = (VerticalLayout) secondComponent;
         verifySize(layout);
         assertEquals(2, layout.getComponentCount());

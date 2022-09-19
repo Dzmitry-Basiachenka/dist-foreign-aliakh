@@ -7,8 +7,10 @@ import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyUploadC
 
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.expect;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.powermock.api.easymock.PowerMock.createMock;
@@ -238,7 +240,7 @@ public class ItemBankUploadWindowTest {
     }
 
     private void verifyRootLayout(Component component) {
-        assertTrue(component instanceof VerticalLayout);
+        assertThat(component, instanceOf(VerticalLayout.class));
         VerticalLayout verticalLayout = (VerticalLayout) component;
         assertEquals(5, verticalLayout.getComponentCount());
         verifyItemBankNameComponent(verticalLayout.getComponent(0));
@@ -254,7 +256,7 @@ public class ItemBankUploadWindowTest {
     }
 
     private void verifyLicenseeComponents(Component component) {
-        assertTrue(component instanceof VerticalLayout);
+        assertThat(component, instanceOf(VerticalLayout.class));
         VerticalLayout verticalLayout = (VerticalLayout) component;
         assertEquals(2, verticalLayout.getComponentCount());
         HorizontalLayout horizontalLayout = (HorizontalLayout) verticalLayout.getComponent(0);
@@ -263,14 +265,14 @@ public class ItemBankUploadWindowTest {
         assertTrue(CollectionUtils.isNotEmpty(listeners));
         assertEquals(2, listeners.size());
         Component verifyComponent = horizontalLayout.getComponent(1);
-        assertTrue(verifyComponent instanceof Button);
+        assertThat(verifyComponent, instanceOf(Button.class));
         assertEquals("Verify", verifyComponent.getCaption());
         TextField nameField = verifyTextField(verticalLayout.getComponent(1), "Licensee Name");
         assertTrue(nameField.isReadOnly());
     }
 
     private void verifyButtonsLayout(Component component) {
-        assertTrue(component instanceof HorizontalLayout);
+        assertThat(component, instanceOf(HorizontalLayout.class));
         HorizontalLayout layout = (HorizontalLayout) component;
         assertEquals(2, layout.getComponentCount());
         Button loadButton = verifyButton(layout.getComponent(0), "Upload");
@@ -285,7 +287,7 @@ public class ItemBankUploadWindowTest {
     }
 
     private Button verifyButton(Component component, String caption) {
-        assertTrue(component instanceof Button);
+        assertThat(component, instanceOf(Button.class));
         assertEquals(caption, component.getCaption());
         return (Button) component;
     }
