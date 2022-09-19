@@ -3,7 +3,9 @@ package com.copyright.rup.dist.foreign.ui.audit.impl;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGrid;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
@@ -46,7 +48,7 @@ public class UdmValueHistoryWindowTest {
         verifyWindow(window, "History for UDM value " + udmValueId, 700, 300, Sizeable.Unit.PIXELS);
         assertTrue(window.isResizable());
         Component content = window.getContent();
-        assertTrue(content instanceof VerticalLayout);
+        assertThat(content, instanceOf(VerticalLayout.class));
         verifyContent((VerticalLayout) content);
     }
 
@@ -56,7 +58,7 @@ public class UdmValueHistoryWindowTest {
         assertEquals(2, layout.getComponentCount());
         Component component = layout.getComponent(0);
         assertEquals(1f, layout.getExpandRatio(component), 0);
-        assertTrue(component instanceof Grid);
+        assertThat(component, instanceOf(Grid.class));
         Grid grid = (Grid) layout.getComponent(0);
         verifyGrid(grid, Arrays.asList(
             Triple.of("Type", -1.0, -1),
@@ -65,7 +67,7 @@ public class UdmValueHistoryWindowTest {
             Triple.of("Reason", -1.0, 1)
         ));
         component = layout.getComponent(1);
-        assertTrue(component instanceof Button);
+        assertThat(component, instanceOf(Button.class));
         verifyButton((Button) component);
     }
 

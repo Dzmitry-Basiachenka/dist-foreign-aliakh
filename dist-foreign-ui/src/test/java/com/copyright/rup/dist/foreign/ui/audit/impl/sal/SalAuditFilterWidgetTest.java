@@ -8,8 +8,10 @@ import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.foreign.domain.SalDetailTypeEnum;
@@ -72,25 +74,25 @@ public class SalAuditFilterWidgetTest {
         Component component = widget.getComponent(0);
         verifyFiltersLabel(component);
         component = widget.getComponent(1);
-        assertTrue(component instanceof LazyRightsholderFilterWidget);
+        assertThat(component, instanceOf(LazyRightsholderFilterWidget.class));
         assertEquals("Rightsholders", Whitebox.getInternalState(component, Button.class).getCaption());
         assertNotNull(Whitebox.getInternalState(component, IFilterSaveListener.class));
         component = widget.getComponent(2);
-        assertTrue(component instanceof SalLicenseeFilterWidget);
+        assertThat(component, instanceOf(SalLicenseeFilterWidget.class));
         assertEquals("Licensees", Whitebox.getInternalState(component, Button.class).getCaption());
         assertNotNull(Whitebox.getInternalState(component, IFilterSaveListener.class));
         component = widget.getComponent(3);
-        assertTrue(component instanceof UsageBatchFilterWidget);
+        assertThat(component, instanceOf(UsageBatchFilterWidget.class));
         verifyFilterWidget((UsageBatchFilterWidget) component, "Batches");
         component = widget.getComponent(4);
-        assertTrue(component instanceof CommonStatusFilterWidget);
+        assertThat(component, instanceOf(CommonStatusFilterWidget.class));
         verifyFilterWidget((CommonStatusFilterWidget) component, "Statuses");
         verifyComboBox(widget.getComponent(5), "Detail Type", true, SalDetailTypeEnum.values());
         verifyComboBox(widget.getComponent(6), "Usage Period", true, buildUsagePeriods());
         verifyTextField(widget.getComponent(7), "Event ID");
         verifyTextField(widget.getComponent(8), "Dist. Name");
         component = widget.getComponent(9);
-        assertTrue(component instanceof HorizontalLayout);
+        assertThat(component, instanceOf(HorizontalLayout.class));
         verifyButtonsLayout((HorizontalLayout) component);
         assertEquals(Alignment.MIDDLE_RIGHT, widget.getComponentAlignment(component));
     }
@@ -126,10 +128,10 @@ public class SalAuditFilterWidgetTest {
         assertEquals("filter-buttons", layout.getId());
         assertEquals(2, layout.getComponentCount());
         Component component = layout.getComponent(0);
-        assertTrue(component instanceof Button);
+        assertThat(component, instanceOf(Button.class));
         verifyButton((Button) component, "Apply", false);
         component = layout.getComponent(1);
-        assertTrue(component instanceof Button);
+        assertThat(component, instanceOf(Button.class));
         verifyButton((Button) component, "Clear", true);
     }
 

@@ -7,8 +7,9 @@ import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertThat;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.ui.report.api.ISummaryMarketReportController;
@@ -63,11 +64,11 @@ public class SummaryMarketReportWidgetTest {
         VerticalLayout content = (VerticalLayout) widget.getContent();
         assertEquals(3, content.getComponentCount());
         Component firstComponent = content.getComponent(0);
-        assertTrue(firstComponent instanceof SearchWidget);
+        assertThat(firstComponent, instanceOf(SearchWidget.class));
         Component secondComponent = content.getComponent(1);
-        assertTrue(secondComponent instanceof Panel);
+        assertThat(secondComponent, instanceOf(Panel.class));
         Panel panel = (Panel) secondComponent;
-        assertTrue(panel.getContent() instanceof CheckBoxGroup);
+        assertThat(panel.getContent(), instanceOf(CheckBoxGroup.class));
         verifyButtonsLayout(content.getComponent(2), "Export", "Clear", "Close");
         assertEquals("summary-market-report-window", widget.getStyleName());
         assertEquals("summary-market-report-window", widget.getId());

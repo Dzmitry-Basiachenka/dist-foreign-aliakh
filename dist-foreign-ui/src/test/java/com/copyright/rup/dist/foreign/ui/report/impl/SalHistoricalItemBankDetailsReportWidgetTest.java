@@ -8,8 +8,9 @@ import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertThat;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.domain.report.SalLicensee;
@@ -116,14 +117,14 @@ public class SalHistoricalItemBankDetailsReportWidgetTest {
     }
 
     private void verifyPeriodEndDate(Component component) {
-        assertTrue(component instanceof HorizontalLayout);
+        assertThat(component, instanceOf(HorizontalLayout.class));
         HorizontalLayout horizontalLayout = (HorizontalLayout) component;
         assertEquals(2, horizontalLayout.getComponentCount());
         Component periodEndDateFrom = horizontalLayout.getComponent(0);
         Component periodEndDateTo = horizontalLayout.getComponent(1);
-        assertTrue(periodEndDateFrom instanceof TextField);
+        assertThat(periodEndDateFrom, instanceOf(TextField.class));
         verifyTextField(periodEndDateFrom, "Period End Date From");
-        assertTrue(periodEndDateTo instanceof TextField);
+        assertThat(periodEndDateTo, instanceOf(TextField.class));
         verifyTextField(periodEndDateTo, "Period End Date To");
     }
 

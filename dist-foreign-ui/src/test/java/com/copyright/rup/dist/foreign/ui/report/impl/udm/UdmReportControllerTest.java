@@ -1,8 +1,9 @@
 package com.copyright.rup.dist.foreign.ui.report.impl.udm;
 
 import static org.easymock.EasyMock.createMock;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertThat;
 
 import com.copyright.rup.dist.foreign.ui.report.api.udm.ICompletedAssignmentsReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmSurveyLicenseeReportController;
@@ -86,6 +87,6 @@ public class UdmReportControllerTest {
 
     @Test
     public void testInstantiateWidget() {
-        assertTrue(udmReportController.instantiateWidget() instanceof UdmReportWidget);
+        assertThat(udmReportController.instantiateWidget(), instanceOf(UdmReportWidget.class));
     }
 }

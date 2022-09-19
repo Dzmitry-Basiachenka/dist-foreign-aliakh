@@ -5,9 +5,10 @@ import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertThat;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
@@ -199,6 +200,6 @@ public class FasAuditControllerTest {
 
     @Test
     public void testInstantiateWidget() {
-        assertTrue(controller.instantiateWidget() instanceof FasAuditWidget);
+        assertThat(controller.instantiateWidget(), instanceOf(FasAuditWidget.class));
     }
 }
