@@ -8,9 +8,11 @@ import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyMoreFil
 
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.expect;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
@@ -74,7 +76,7 @@ public class AclGrantDetailFilterWidgetTest {
         verifyFiltersLayout(widget.getComponent(0));
         verifyButtonsLayout(widget.getComponent(1), "Apply", "Clear");
         verifyLabel(widget.getComponent(2), "Applied Filters:", ContentMode.TEXT, -1.0f);
-        assertTrue(widget.getComponent(3) instanceof AclGrantDetailAppliedFilterWidget);
+        assertThat(widget.getComponent(3), instanceOf(AclGrantDetailAppliedFilterWidget.class));
     }
 
     @Test
@@ -147,7 +149,7 @@ public class AclGrantDetailFilterWidgetTest {
     }
 
     private void verifyFiltersLayout(Component layout) {
-        assertTrue(layout instanceof VerticalLayout);
+        assertThat(layout, instanceOf(VerticalLayout.class));
         VerticalLayout verticalLayout = (VerticalLayout) layout;
         assertEquals(3, verticalLayout.getComponentCount());
         verifyFiltersLabel(verticalLayout.getComponent(0));

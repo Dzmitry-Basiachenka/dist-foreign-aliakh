@@ -8,8 +8,10 @@ import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
@@ -102,9 +104,9 @@ public class ViewAclFundPoolWindowTest {
         verifyWindow(window, "View Fund Pool", 870, 550, Sizeable.Unit.PIXELS);
         VerticalLayout content = (VerticalLayout) window.getContent();
         assertEquals(3, content.getComponentCount());
-        assertTrue(content.getComponent(0) instanceof SearchWidget);
+        assertThat(content.getComponent(0), instanceOf(SearchWidget.class));
         Component component = content.getComponent(1);
-        assertTrue(component instanceof Grid);
+        assertThat(component, instanceOf(Grid.class));
         Grid grid = (Grid) component;
         verifyGrid(grid, Arrays.asList(
             Triple.of("Fund Pool Name", 200.0, -1),

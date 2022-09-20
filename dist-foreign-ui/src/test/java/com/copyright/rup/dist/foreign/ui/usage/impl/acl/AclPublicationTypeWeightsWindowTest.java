@@ -10,9 +10,11 @@ import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.foreign.domain.AclPublicationType;
@@ -72,7 +74,7 @@ public class AclPublicationTypeWeightsWindowTest {
         VerticalLayout content = (VerticalLayout) window.getContent();
         assertEquals(2, content.getComponentCount());
         Component component = content.getComponent(0);
-        assertTrue(component instanceof Grid);
+        assertThat(component, instanceOf(Grid.class));
         verifyGrid((Grid) component);
         assertEquals(1, content.getExpandRatio(component), 0);
         HorizontalLayout buttonsLayout = (HorizontalLayout) content.getComponent(1);
@@ -90,7 +92,7 @@ public class AclPublicationTypeWeightsWindowTest {
         VerticalLayout content = (VerticalLayout) window.getContent();
         assertEquals(2, content.getComponentCount());
         Component component = content.getComponent(0);
-        assertTrue(component instanceof Grid);
+        assertThat(component, instanceOf(Grid.class));
         verifyGrid((Grid) component);
         assertEquals(1, content.getExpandRatio(component), 0);
         HorizontalLayout buttonsLayout = (HorizontalLayout) content.getComponent(1);

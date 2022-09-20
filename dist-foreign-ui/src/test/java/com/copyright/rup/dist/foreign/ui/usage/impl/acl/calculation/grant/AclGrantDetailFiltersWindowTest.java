@@ -9,8 +9,10 @@ import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 
@@ -181,7 +183,7 @@ public class AclGrantDetailFiltersWindowTest {
     }
 
     private VerticalLayout verifyRootLayout(Component component) {
-        assertTrue(component instanceof VerticalLayout);
+        assertThat(component, instanceOf(VerticalLayout.class));
         VerticalLayout verticalLayout = (VerticalLayout) component;
         assertEquals(2, verticalLayout.getComponentCount());
         verifyButtonsLayout(verticalLayout.getComponent(1), "Save", "Clear", "Close");
@@ -189,9 +191,9 @@ public class AclGrantDetailFiltersWindowTest {
     }
 
     private void verifyPanel(Component component) {
-        assertTrue(component instanceof Panel);
+        assertThat(component, instanceOf(Panel.class));
         Component panelContent = ((Panel) component).getContent();
-        assertTrue(panelContent instanceof VerticalLayout);
+        assertThat(panelContent, instanceOf(VerticalLayout.class));
         VerticalLayout verticalLayout = (VerticalLayout) panelContent;
         assertEquals(6, verticalLayout.getComponentCount());
         verifyItemsFilterLayout(verticalLayout.getComponent(0), "License Types", "Grant Statuses", "Types of Use");
@@ -206,37 +208,37 @@ public class AclGrantDetailFiltersWindowTest {
 
     private void verifyComboBoxLayout(Component component, String firstCaption, List<?> firstItemList,
                                       String secondCaption, List<?> secondItemList) {
-        assertTrue(component instanceof HorizontalLayout);
+        assertThat(component, instanceOf(HorizontalLayout.class));
         HorizontalLayout layout = (HorizontalLayout) component;
         verifyComboBox(layout.getComponent(0), firstCaption, true, firstItemList);
         verifyComboBox(layout.getComponent(1), secondCaption, true, secondItemList);
     }
 
     private void verifyFieldWithTextOperatorComponent(Component component, String caption) {
-        assertTrue(component instanceof HorizontalLayout);
+        assertThat(component, instanceOf(HorizontalLayout.class));
         HorizontalLayout layout = (HorizontalLayout) component;
         assertEquals(2, layout.getComponentCount());
-        assertTrue(layout.getComponent(0) instanceof TextField);
+        assertThat(layout.getComponent(0), instanceOf(TextField.class));
         assertEquals(caption, layout.getComponent(0).getCaption());
-        assertTrue(layout.getComponent(1) instanceof ComboBox);
+        assertThat(layout.getComponent(1), instanceOf(ComboBox.class));
         assertEquals(CAPTION_OPERATOR, layout.getComponent(1).getCaption());
     }
 
     private void verifyFieldWithNumericOperatorComponent(Component component, String captionFrom, String captionTo) {
-        assertTrue(component instanceof HorizontalLayout);
+        assertThat(component, instanceOf(HorizontalLayout.class));
         HorizontalLayout layout = (HorizontalLayout) component;
         assertEquals(3, layout.getComponentCount());
-        assertTrue(layout.getComponent(0) instanceof TextField);
+        assertThat(layout.getComponent(0), instanceOf(TextField.class));
         assertEquals(captionFrom, layout.getComponent(0).getCaption());
-        assertTrue(layout.getComponent(1) instanceof TextField);
+        assertThat(layout.getComponent(1), instanceOf(TextField.class));
         assertEquals(captionTo, layout.getComponent(1).getCaption());
-        assertTrue(layout.getComponent(2) instanceof ComboBox);
+        assertThat(layout.getComponent(2), instanceOf(ComboBox.class));
         assertEquals(CAPTION_OPERATOR, layout.getComponent(2).getCaption());
     }
 
     private void verifyItemsFilterLayout(Component component, String firstCaption, String secondCaption,
                                          String thirdCaption) {
-        assertTrue(component instanceof HorizontalLayout);
+        assertThat(component, instanceOf(HorizontalLayout.class));
         HorizontalLayout layout = (HorizontalLayout) component;
         assertEquals(3, layout.getComponentCount());
         verifyItemsFilterWidget(layout.getComponent(0), firstCaption);

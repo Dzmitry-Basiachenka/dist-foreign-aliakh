@@ -2,8 +2,9 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl.calculation.usage;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertThat;
 
 import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
@@ -44,7 +45,7 @@ public class AclUsageAppliedFilterWidgetTest {
         widget.refreshFilterPanel(filter);
         verifyWindow(widget, null, 100, 100, Unit.PERCENTAGE);
         Component component = widget.getContent();
-        assertTrue(component instanceof VerticalLayout);
+        assertThat(component, instanceOf(VerticalLayout.class));
         VerticalLayout verticalLayout = (VerticalLayout) component;
         assertEquals(14, verticalLayout.getComponentCount());
         verifyLabel(verticalLayout.getComponent(0), "Usage Batch Name", "ACL Usage Batch 2021");

@@ -11,8 +11,10 @@ import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.expect;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.powermock.api.easymock.PowerMock.createMock;
@@ -228,7 +230,7 @@ public class CreateAclFundPoolWindowTest {
     }
 
     private void verifyRootLayout(Component component) {
-        assertTrue(component instanceof VerticalLayout);
+        assertThat(component, instanceOf(VerticalLayout.class));
         VerticalLayout verticalLayout = (VerticalLayout) component;
         assertEquals(6, verticalLayout.getComponentCount());
         verifyTextField(verticalLayout.getComponent(0), "Fund Pool Name");
@@ -236,7 +238,7 @@ public class CreateAclFundPoolWindowTest {
         verifyComboBox(verticalLayout.getComponent(2), "License Type", true,
             ImmutableSet.of("ACL", "MACL", "VGW", "JACDCL"));
         verifyUploadComponent(verticalLayout.getComponent(3));
-        assertTrue(verticalLayout.getComponent(4) instanceof CheckBox);
+        assertThat(verticalLayout.getComponent(4), instanceOf(CheckBox.class));
         CheckBox checkBox = (CheckBox) verticalLayout.getComponent(4);
         assertEquals("LDMT", checkBox.getCaption());
         assertEquals("acl-ldmt-checkbox", checkBox.getStyleName());
@@ -245,7 +247,7 @@ public class CreateAclFundPoolWindowTest {
     }
 
     private void verifyPeriodYearAndPeriodMonthComponents(Component component) {
-        assertTrue(component instanceof HorizontalLayout);
+        assertThat(component, instanceOf(HorizontalLayout.class));
         HorizontalLayout horizontalLayout = (HorizontalLayout) component;
         assertEquals(2, horizontalLayout.getComponentCount());
         verifyTextField(horizontalLayout.getComponent(0), "Fund Pool Period Year");
