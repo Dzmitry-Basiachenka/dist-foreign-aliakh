@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.nts;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGrid;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGridItems;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
 import static org.easymock.EasyMock.anyObject;
@@ -17,8 +18,9 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
-import com.copyright.rup.common.persist.RupPersistUtils;
+import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
+import com.copyright.rup.dist.foreign.domain.UsageBatch.NtsFields;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.nts.INtsUsageController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
@@ -43,9 +45,13 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 
 /**
  * Verifies {@link ViewFundPoolWindow}.
@@ -60,7 +66,7 @@ import java.util.Collections;
 @PrepareForTest({Windows.class, ForeignSecurityUtils.class})
 public class ViewFundPoolWindowTest {
 
-    private static final String USAGE_BATCH_ID = RupPersistUtils.generateUuid();
+    private static final String USAGE_BATCH_ID = "34874581-347e-44ec-99be-721e586ec80d";
     private static final String UNCHECKED = "unchecked";
 
     private Grid<UsageBatch> grid;
@@ -74,7 +80,7 @@ public class ViewFundPoolWindowTest {
         grid = createMock(Grid.class);
         expect(ForeignSecurityUtils.hasDeleteUsagePermission()).andReturn(true).once();
         expect(controller.getSelectedProductFamily()).andReturn("NTS").once();
-        expect(controller.getUsageBatches("NTS")).andReturn(Collections.singletonList(new UsageBatch())).once();
+        expect(controller.getUsageBatches("NTS")).andReturn(Collections.singletonList(buildUsageBatch())).once();
         replay(controller, ForeignSecurityUtils.class);
         viewFundPoolWindow = new ViewFundPoolWindow(controller);
         Whitebox.setInternalState(viewFundPoolWindow, "grid", grid);
@@ -110,6 +116,17 @@ public class ViewFundPoolWindowTest {
         Grid.Column createDateColumn = ((Grid<?>) component).getColumns().get(13);
         assertNotNull(createDateColumn.getComparator(SortDirection.ASCENDING));
         verifyButtonsLayout(content.getComponent(2), "Delete", "Close");
+    }
+
+    @Test
+    public void testGridValues() {
+        Grid<?> usageBatchGrid = (Grid<?>) ((VerticalLayout) viewFundPoolWindow.getContent()).getComponent(1);
+        Object[][] expectedCells = {
+            {"NTS batch", 1000000008L, "ProLitteris", LocalDate.of(2022, 9, 12), "FY2022", new BigDecimal("50000"),
+                new BigDecimal("500000"), new BigDecimal("50"), new BigDecimal("7"), "Bus", 2000, 2010,
+                "user@copyright.com", "09/01/2022 12:00 AM"}
+        };
+        verifyGridItems(usageBatchGrid, Collections.singletonList(buildUsageBatch()), expectedCells);
     }
 
     @Test
@@ -212,6 +229,31 @@ public class ViewFundPoolWindowTest {
         UsageBatch usageBatch = new UsageBatch();
         usageBatch.setId(USAGE_BATCH_ID);
         usageBatch.setName("NTS batch");
+        usageBatch.setRro(buildRightsholder(1000000008L, "ProLitteris"));
+        usageBatch.setPaymentDate(LocalDate.of(2022, 9, 12));
+        usageBatch.setFiscalYear(2022);
+        usageBatch.setNtsFields(buildNtsFields());
+        usageBatch.setCreateUser("user@copyright.com");
+        usageBatch.setCreateDate(Date.from(LocalDate.of(2022, 9, 1).atStartOfDay(ZoneId.systemDefault()).toInstant()));
         return usageBatch;
+    }
+
+    private NtsFields buildNtsFields() {
+        NtsFields ntsFields = new NtsFields();
+        ntsFields.setStmAmount(new BigDecimal("50000"));
+        ntsFields.setNonStmAmount(new BigDecimal("500000"));
+        ntsFields.setStmMinimumAmount(new BigDecimal("50"));
+        ntsFields.setNonStmMinimumAmount(new BigDecimal("7"));
+        ntsFields.setMarkets(Collections.singleton("Bus"));
+        ntsFields.setFundPoolPeriodFrom(2000);
+        ntsFields.setFundPoolPeriodTo(2010);
+        return ntsFields;
+    }
+
+    private Rightsholder buildRightsholder(Long accountNumber, String name) {
+        Rightsholder rightsholder = new Rightsholder();
+        rightsholder.setAccountNumber(accountNumber);
+        rightsholder.setName(name);
+        return rightsholder;
     }
 }

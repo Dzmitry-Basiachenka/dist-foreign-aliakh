@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.nts;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGridItems;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
 import static org.easymock.EasyMock.capture;
@@ -16,7 +17,6 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
-import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.ui.usage.UiTestHelper;
 import com.copyright.rup.dist.foreign.ui.usage.api.nts.INtsUsageController;
@@ -48,6 +48,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -65,7 +66,7 @@ import java.util.Collections;
 @PrepareForTest(Windows.class)
 public class ViewAdditionalFundsWindowTest {
 
-    private static final String FUND_ID = RupPersistUtils.generateUuid();
+    private static final String FUND_ID = "be340eb2-950d-4cf7-a56d-3e4c8d690f8a";
 
     private ViewAdditionalFundsWindow viewWindow;
     private FundPool fundPool;
@@ -73,9 +74,7 @@ public class ViewAdditionalFundsWindowTest {
 
     @Before
     public void setUp() {
-        fundPool = new FundPool();
-        fundPool.setName("Test Fund");
-        fundPool.setId(FUND_ID);
+        fundPool = buildFundPool();
         controller = createMock(INtsUsageController.class);
         expect(controller.getAdditionalFunds()).andReturn(Collections.singletonList(fundPool)).once();
         replay(controller);
@@ -102,6 +101,13 @@ public class ViewAdditionalFundsWindowTest {
         assertEquals(Button.class, component.getClass());
         assertEquals("Close", component.getCaption());
         assertEquals(Alignment.MIDDLE_RIGHT, content.getComponentAlignment(component));
+    }
+
+    @Test
+    public void testGridValues() {
+        Grid<?> grid = (Grid<?>) ((VerticalLayout) viewWindow.getContent()).getComponent(1);
+        Object[][] expectedCells = {{"Test Fund", "1,201,933.17", "user@copyright.com", "comment", "Delete"}};
+        verifyGridItems(grid, Collections.singletonList(fundPool), expectedCells);
     }
 
     @Test
@@ -168,5 +174,15 @@ public class ViewAdditionalFundsWindowTest {
         ));
         Button button = (Button) grid.getColumn("delete").getValueProvider().apply(fundPool);
         assertEquals("Delete", button.getCaption());
+    }
+
+    private FundPool buildFundPool() {
+        FundPool ntsFundPool = new FundPool();
+        ntsFundPool.setId(FUND_ID);
+        ntsFundPool.setTotalAmount(new BigDecimal("1201933.17"));
+        ntsFundPool.setName("Test Fund");
+        ntsFundPool.setCreateUser("user@copyright.com");
+        ntsFundPool.setComment("comment");
+        return ntsFundPool;
     }
 }

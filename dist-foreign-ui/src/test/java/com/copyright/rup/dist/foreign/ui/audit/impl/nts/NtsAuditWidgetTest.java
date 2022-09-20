@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.audit.impl.nts;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGridItems;
+
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
@@ -15,13 +17,19 @@ import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
+import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.ui.audit.api.ICommonAuditFilterController;
 import com.copyright.rup.dist.foreign.ui.audit.api.ICommonAuditFilterWidget;
 import com.copyright.rup.dist.foreign.ui.audit.api.nts.INtsAuditController;
 import com.copyright.rup.dist.foreign.ui.audit.api.nts.INtsAuditFilterController;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.common.collect.Lists;
 import com.vaadin.data.provider.CallbackDataProvider;
 import com.vaadin.data.provider.Query;
@@ -45,6 +53,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
+import java.io.IOException;
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Arrays;
 import java.util.Collections;
@@ -66,6 +75,7 @@ import java.util.stream.Stream;
 @PrepareForTest(JavaScript.class)
 public class NtsAuditWidgetTest {
 
+    private final List<UsageDto> usages = loadExpectedUsageDtos("usage_dto_0a9941d6.json");
     private NtsAuditWidget widget;
     private INtsAuditController controller;
     private ICommonAuditFilterWidget filterWidget;
@@ -79,6 +89,26 @@ public class NtsAuditWidgetTest {
         filterController = createMock(INtsAuditFilterController.class);
         filterWidget = new NtsAuditFilterWidget();
         filterWidget.setController(filterController);
+    }
+
+    @Test
+    public void testGridValues() {
+        initWidget();
+        mockStatic(JavaScript.class);
+        expect(JavaScript.getCurrent()).andReturn(createMock(JavaScript.class)).times(2);
+        expect(controller.loadBeans(0, Integer.MAX_VALUE, Collections.emptyList())).andReturn(usages).once();
+        expect(controller.getSize()).andReturn(1).once();
+        replay(JavaScript.class, controller);
+        Grid<?> grid = (Grid<?>) ((VerticalLayout) widget.getSecondComponent()).getComponent(1);
+        Object[][] expectedCells = {
+            {"0a9941d6-254d-457a-a667-498c87e5df5e", UsageStatusEnum.PAID, "NTS", "Paid batch", "02/12/2021",
+                1000002859L, "John Wiley & Sons - Books", 1000000001L, "Rothchild Consultants", 243904752L,
+                "100 ROAD MOVIES", "100 ROAD MOVIES", "1008902112317555XX", "VALISBN13", "3,000.00", "500.00", "16.0",
+                "scenario name", "650738", "02/13/2022", "97423", "dist name", "01/02/2022", "01/03/2022",
+                "some comment"}
+        };
+        verifyGridItems(grid, usages, expectedCells);
+        verify(JavaScript.class, controller);
     }
 
     @Test
@@ -194,5 +224,18 @@ public class NtsAuditWidgetTest {
         widget.init();
         verify(controller, filterController, streamSource);
         reset(controller, filterController, streamSource);
+    }
+
+    private List<UsageDto> loadExpectedUsageDtos(String fileName) {
+        try {
+            String content = TestUtils.fileToString(this.getClass(), fileName);
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.registerModule(new JavaTimeModule());
+            mapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
+            return mapper.readValue(content, new TypeReference<List<UsageDto>>() {
+            });
+        } catch (IOException e) {
+            throw new AssertionError(e);
+        }
     }
 }
