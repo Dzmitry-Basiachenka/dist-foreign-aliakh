@@ -4,8 +4,9 @@ import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.createNiceMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertThat;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
@@ -98,19 +99,19 @@ public class UdmWidgetTest {
         assertEquals(5, widget.getComponentCount());
         TabSheet.Tab tab1 = widget.getTab(0);
         assertEquals("Usages", tab1.getCaption());
-        assertTrue(tab1.getComponent() instanceof IUdmUsageWidget);
+        assertThat(tab1.getComponent(), instanceOf(IUdmUsageWidget.class));
         TabSheet.Tab tab2 = widget.getTab(1);
         assertEquals("Values", tab2.getCaption());
-        assertTrue(tab2.getComponent() instanceof IUdmValueWidget);
+        assertThat(tab2.getComponent(), instanceOf(IUdmValueWidget.class));
         TabSheet.Tab tab3 = widget.getTab(2);
         assertEquals("Proxy Values", tab3.getCaption());
-        assertTrue(tab3.getComponent() instanceof IUdmProxyValueWidget);
+        assertThat(tab3.getComponent(), instanceOf(IUdmProxyValueWidget.class));
         TabSheet.Tab tab4 = widget.getTab(3);
         assertEquals("Baseline", tab4.getCaption());
-        assertTrue(tab4.getComponent() instanceof IUdmBaselineWidget);
+        assertThat(tab4.getComponent(), instanceOf(IUdmBaselineWidget.class));
         TabSheet.Tab tab5 = widget.getTab(4);
         assertEquals("Baseline Values", tab5.getCaption());
-        assertTrue(tab5.getComponent() instanceof IUdmBaselineValueWidget);
+        assertThat(tab5.getComponent(), instanceOf(IUdmBaselineValueWidget.class));
     }
 
     @Test
@@ -139,10 +140,10 @@ public class UdmWidgetTest {
         assertEquals(2, widget.getComponentCount());
         TabSheet.Tab tab1 = widget.getTab(0);
         assertEquals("Usages", tab1.getCaption());
-        assertTrue(tab1.getComponent() instanceof IUdmUsageWidget);
+        assertThat(tab1.getComponent(), instanceOf(IUdmUsageWidget.class));
         TabSheet.Tab tab2 = widget.getTab(1);
         assertEquals("Values", tab2.getCaption());
-        assertTrue(tab2.getComponent() instanceof IUdmValueWidget);
+        assertThat(tab2.getComponent(), instanceOf(IUdmValueWidget.class));
     }
 
     @Test

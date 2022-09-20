@@ -13,9 +13,11 @@ import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.newCapture;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
@@ -649,7 +651,7 @@ public class UdmEditUsageWindowTest {
     }
 
     private VerticalLayout verifyRootLayout(Component component, boolean isVisible) {
-        assertTrue(component instanceof VerticalLayout);
+        assertThat(component, instanceOf(VerticalLayout.class));
         VerticalLayout verticalLayout = (VerticalLayout) component;
         assertEquals(2, verticalLayout.getComponentCount());
         verifyButtonsLayout(verticalLayout.getComponent(1), isVisible);
@@ -657,9 +659,9 @@ public class UdmEditUsageWindowTest {
     }
 
     private void verifyPanelSpecialistAndManager(Component component) {
-        assertTrue(component instanceof Panel);
+        assertThat(component, instanceOf(Panel.class));
         Component panelContent = ((Panel) component).getContent();
-        assertTrue(panelContent instanceof VerticalLayout);
+        assertThat(panelContent, instanceOf(VerticalLayout.class));
         VerticalLayout verticalLayout = (VerticalLayout) panelContent;
         assertEquals(39, verticalLayout.getComponentCount());
         verifyTextFieldLayout(verticalLayout.getComponent(0), "Detail ID", true, false);
@@ -709,9 +711,9 @@ public class UdmEditUsageWindowTest {
     }
 
     private void verifyPanelResearcher(Component component) {
-        assertTrue(component instanceof Panel);
+        assertThat(component, instanceOf(Panel.class));
         Component panelContent = ((Panel) component).getContent();
-        assertTrue(panelContent instanceof VerticalLayout);
+        assertThat(panelContent, instanceOf(VerticalLayout.class));
         VerticalLayout verticalLayout = (VerticalLayout) panelContent;
         assertEquals(29, verticalLayout.getComponentCount());
         verifyTextFieldLayout(verticalLayout.getComponent(0), "Detail ID", true, false);
@@ -749,7 +751,7 @@ public class UdmEditUsageWindowTest {
     }
 
     private void verifyTextFieldLayout(Component component, String caption, boolean isReadOnly, boolean isValidated) {
-        assertTrue(component instanceof HorizontalLayout);
+        assertThat(component, instanceOf(HorizontalLayout.class));
         HorizontalLayout layout = (HorizontalLayout) component;
         assertEquals(2, layout.getComponentCount());
         verifyLabel(layout.getComponent(0), caption, ContentMode.TEXT, 165);
@@ -768,7 +770,7 @@ public class UdmEditUsageWindowTest {
 
     private <T> void verifyComboBoxLayout(Component component, String caption, boolean isValidated,
                                           boolean emptySelectionAllowed, Collection<T> expectedItems) {
-        assertTrue(component instanceof HorizontalLayout);
+        assertThat(component, instanceOf(HorizontalLayout.class));
         HorizontalLayout layout = (HorizontalLayout) component;
         assertEquals(2, layout.getComponentCount());
         verifyLabel(layout.getComponent(0), caption, ContentMode.TEXT, 165);
@@ -776,7 +778,7 @@ public class UdmEditUsageWindowTest {
     }
 
     private void verifyCompanyIdLayout(Component component) {
-        assertTrue(component instanceof HorizontalLayout);
+        assertThat(component, instanceOf(HorizontalLayout.class));
         HorizontalLayout layout = (HorizontalLayout) component;
         assertEquals(3, layout.getComponentCount());
         verifyLabel(layout.getComponent(0), "Company ID", ContentMode.TEXT, 165);
@@ -790,7 +792,7 @@ public class UdmEditUsageWindowTest {
     }
 
     private void verifyButtonsLayout(Component component, boolean isVisible) {
-        assertTrue(component instanceof HorizontalLayout);
+        assertThat(component, instanceOf(HorizontalLayout.class));
         HorizontalLayout layout = (HorizontalLayout) component;
         assertEquals(3, layout.getComponentCount());
         verifyButton(layout.getComponent(0), "Save");
@@ -801,7 +803,7 @@ public class UdmEditUsageWindowTest {
     }
 
     private void verifyButton(Component component, String caption) {
-        assertTrue(component instanceof Button);
+        assertThat(component, instanceOf(Button.class));
         assertEquals(caption, component.getCaption());
     }
 
