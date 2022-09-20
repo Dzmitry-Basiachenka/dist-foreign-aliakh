@@ -8,12 +8,14 @@ import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyMoreFil
 
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.createMock;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
@@ -74,7 +76,7 @@ public class UdmBaselineFilterWidgetTest {
         verifyFiltersLayout(widget.getComponent(0));
         verifyButtonsLayout(widget.getComponent(1));
         verifyLabel(widget.getComponent(2), "Applied Filters:", ContentMode.TEXT, -1.0f);
-        assertTrue(widget.getComponent(3) instanceof UdmBaselineAppliedFilterWidget);
+        assertThat(widget.getComponent(3), instanceOf(UdmBaselineAppliedFilterWidget.class));
     }
 
     @Test
@@ -139,7 +141,7 @@ public class UdmBaselineFilterWidgetTest {
     }
 
     private void verifyFiltersLayout(Component layout) {
-        assertTrue(layout instanceof VerticalLayout);
+        assertThat(layout, instanceOf(VerticalLayout.class));
         VerticalLayout verticalLayout = (VerticalLayout) layout;
         assertEquals(5, verticalLayout.getComponentCount());
         verifyFiltersLabel(verticalLayout.getComponent(0));
@@ -150,7 +152,7 @@ public class UdmBaselineFilterWidgetTest {
     }
 
     private void verifyButtonsLayout(Component component) {
-        assertTrue(component instanceof HorizontalLayout);
+        assertThat(component, instanceOf(HorizontalLayout.class));
         HorizontalLayout layout = (HorizontalLayout) component;
         assertEquals(2, layout.getComponentCount());
         assertTrue(layout.isSpacing());
@@ -159,7 +161,7 @@ public class UdmBaselineFilterWidgetTest {
     }
 
     private void verifyButton(Component component, String caption) {
-        assertTrue(component instanceof Button);
+        assertThat(component, instanceOf(Button.class));
         Button button = (Button) component;
         assertEquals(caption, button.getCaption());
         assertEquals(100, button.getWidth(), 0);

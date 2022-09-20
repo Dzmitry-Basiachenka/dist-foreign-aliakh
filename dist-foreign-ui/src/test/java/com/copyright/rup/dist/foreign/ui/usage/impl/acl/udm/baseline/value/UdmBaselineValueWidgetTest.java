@@ -7,7 +7,9 @@ import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
@@ -95,9 +97,9 @@ public class UdmBaselineValueWidgetTest {
         assertTrue(udmBaselineValueWidget.isLocked());
         assertEquals(270, udmBaselineValueWidget.getSplitPosition(), 0);
         verifyWindow(udmBaselineValueWidget, null, 100, 100, Unit.PERCENTAGE);
-        assertTrue(udmBaselineValueWidget.getFirstComponent() instanceof VerticalLayout);
+        assertThat(udmBaselineValueWidget.getFirstComponent(), instanceOf(VerticalLayout.class));
         Component secondComponent = udmBaselineValueWidget.getSecondComponent();
-        assertTrue(secondComponent instanceof VerticalLayout);
+        assertThat(secondComponent, instanceOf(VerticalLayout.class));
         VerticalLayout layout = (VerticalLayout) secondComponent;
         verifyWindow(layout, null, 100, 100, Unit.PERCENTAGE);
         assertEquals(1, layout.getComponentCount());
@@ -139,7 +141,7 @@ public class UdmBaselineValueWidgetTest {
         udmValueBaseline.setComment("some comment");
         udmValueBaseline.setUpdateUser("user@copyright.com");
         udmValueBaseline.setUpdateDate(
-            Date.from(LocalDate.of(2022, 9, 01).atStartOfDay(ZoneId.systemDefault()).toInstant()));
+            Date.from(LocalDate.of(2022, 9, 1).atStartOfDay(ZoneId.systemDefault()).toInstant()));
         return udmValueBaseline;
     }
 }
