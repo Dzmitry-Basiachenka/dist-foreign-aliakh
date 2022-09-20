@@ -5,12 +5,14 @@ import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyFilters
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyItemsFilterWidget;
 
 import static org.easymock.EasyMock.expect;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
@@ -185,7 +187,7 @@ public class SalUsageFilterWidgetTest {
     }
 
     private void verifyFiltersLayout(Component layout) {
-        assertTrue(layout instanceof VerticalLayout);
+        assertThat(layout, instanceOf(VerticalLayout.class));
         VerticalLayout verticalLayout = (VerticalLayout) layout;
         assertEquals(4, verticalLayout.getComponentCount());
         verifyFiltersLabel(verticalLayout.getComponent(0));
@@ -195,7 +197,7 @@ public class SalUsageFilterWidgetTest {
     }
 
     private void verifyButtonsLayout(Component component) {
-        assertTrue(component instanceof HorizontalLayout);
+        assertThat(component, instanceOf(HorizontalLayout.class));
         HorizontalLayout layout = (HorizontalLayout) component;
         assertEquals(2, layout.getComponentCount());
         assertTrue(layout.isSpacing());
@@ -204,7 +206,7 @@ public class SalUsageFilterWidgetTest {
     }
 
     private void verifyButton(Component component, String caption) {
-        assertTrue(component instanceof Button);
+        assertThat(component, instanceOf(Button.class));
         Button button = (Button) component;
         assertEquals(caption, button.getCaption());
         assertEquals(100, button.getWidth(), 0);

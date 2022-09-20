@@ -2,8 +2,10 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.nts;
 
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.expect;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
@@ -131,7 +133,7 @@ public class NtsUsageBatchSelectorWidgetTest {
     }
 
     private void verifyRootLayout(Component component) {
-        assertTrue(component instanceof VerticalLayout);
+        assertThat(component, instanceOf(VerticalLayout.class));
         VerticalLayout verticalLayout = (VerticalLayout) component;
         assertEquals(3, verticalLayout.getComponentCount());
         verifySearchWidget(verticalLayout.getComponent(0));
@@ -140,7 +142,7 @@ public class NtsUsageBatchSelectorWidgetTest {
     }
 
     private void verifySearchWidget(Component component) {
-        assertTrue(component instanceof SearchWidget);
+        assertThat(component, instanceOf(SearchWidget.class));
         SearchWidget searchWidget = (SearchWidget) component;
         verifySize(searchWidget);
         assertEquals("Enter Usage Batch Name",
@@ -148,7 +150,7 @@ public class NtsUsageBatchSelectorWidgetTest {
     }
 
     private void verifyCheckBoxGroupLayout(Component component) {
-        assertTrue(component instanceof Panel);
+        assertThat(component, instanceOf(Panel.class));
         Panel panel = (Panel) component;
         assertEquals(1, panel.getComponentCount());
         CheckBoxGroup checkBoxGroup = (CheckBoxGroup) panel.getContent();
@@ -158,7 +160,7 @@ public class NtsUsageBatchSelectorWidgetTest {
     }
 
     private void verifyButtonsLayout(Component component) {
-        assertTrue(component instanceof HorizontalLayout);
+        assertThat(component, instanceOf(HorizontalLayout.class));
         HorizontalLayout layout = (HorizontalLayout) component;
         assertEquals(4, layout.getComponentCount());
         Button saveButton = verifyButton(layout.getComponent(0), "Continue");
@@ -176,7 +178,7 @@ public class NtsUsageBatchSelectorWidgetTest {
     }
 
     private Button verifyButton(Component component, String caption) {
-        assertTrue(component instanceof Button);
+        assertThat(component, instanceOf(Button.class));
         assertEquals(caption, component.getCaption());
         return (Button) component;
     }

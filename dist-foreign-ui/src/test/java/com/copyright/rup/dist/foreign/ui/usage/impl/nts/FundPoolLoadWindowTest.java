@@ -8,9 +8,11 @@ import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyTextFie
 
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.expect;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.createPartialMock;
@@ -356,7 +358,7 @@ public class FundPoolLoadWindowTest {
     }
 
     private void verifyRootLayout(Component component) {
-        assertTrue(component instanceof VerticalLayout);
+        assertThat(component, instanceOf(VerticalLayout.class));
         VerticalLayout verticalLayout = (VerticalLayout) component;
         assertEquals(8, verticalLayout.getComponentCount());
         verifyUsageBatchNameComponent(verticalLayout.getComponent(0));
@@ -375,7 +377,7 @@ public class FundPoolLoadWindowTest {
     }
 
     private void verifyButtonsLayout(Component component) {
-        assertTrue(component instanceof HorizontalLayout);
+        assertThat(component, instanceOf(HorizontalLayout.class));
         HorizontalLayout layout = (HorizontalLayout) component;
         assertEquals(2, layout.getComponentCount());
         Button loadButton = verifyButton(layout.getComponent(0), "Upload");
@@ -396,13 +398,13 @@ public class FundPoolLoadWindowTest {
     }
 
     private Button verifyButton(Component component, String caption) {
-        assertTrue(component instanceof Button);
+        assertThat(component, instanceOf(Button.class));
         assertEquals(caption, component.getCaption());
         return (Button) component;
     }
 
     private void verifyRightsholdersComponents(Component component) {
-        assertTrue(component instanceof HorizontalLayout);
+        assertThat(component, instanceOf(HorizontalLayout.class));
         HorizontalLayout rroAccountLayout = (HorizontalLayout) component;
         assertEquals(3, rroAccountLayout.getComponentCount());
         Component numberComponent = rroAccountLayout.getComponent(0);
@@ -420,7 +422,7 @@ public class FundPoolLoadWindowTest {
     }
 
     private void assertVerifyButton(Component verifyComponent, TextField numberField, TextField nameField) {
-        assertTrue(verifyComponent instanceof Button);
+        assertThat(verifyComponent, instanceOf(Button.class));
         Button verifyButton = (Button) verifyComponent;
         assertEquals("Verify", verifyComponent.getCaption());
         assertEquals(1, verifyButton.getListeners(ClickEvent.class).size());
@@ -445,23 +447,23 @@ public class FundPoolLoadWindowTest {
     }
 
     private void verifyDateComponents(Component component) {
-        assertTrue(component instanceof HorizontalLayout);
+        assertThat(component, instanceOf(HorizontalLayout.class));
         HorizontalLayout horizontalLayout = (HorizontalLayout) component;
         assertEquals(3, horizontalLayout.getComponentCount());
         Component paymentDateComponent = horizontalLayout.getComponent(0);
         Component fundPoolPeriodFromComponent = horizontalLayout.getComponent(1);
         Component fundPoolPeriodToComponent = horizontalLayout.getComponent(2);
-        assertTrue(paymentDateComponent instanceof LocalDateWidget);
+        assertThat(paymentDateComponent, instanceOf(LocalDateWidget.class));
         LocalDateWidget widget = (LocalDateWidget) paymentDateComponent;
         assertEquals("Payment Date", widget.getCaption());
-        assertTrue(fundPoolPeriodFromComponent instanceof TextField);
+        assertThat(fundPoolPeriodFromComponent, instanceOf(TextField.class));
         verifyTextField(fundPoolPeriodFromComponent, "Fund Pool Period From");
-        assertTrue(fundPoolPeriodToComponent instanceof TextField);
+        assertThat(fundPoolPeriodToComponent, instanceOf(TextField.class));
         verifyTextField(fundPoolPeriodToComponent, "Fund Pool Period To");
     }
 
     private void verifyAmountsComponent(Component component) {
-        assertTrue(component instanceof HorizontalLayout);
+        assertThat(component, instanceOf(HorizontalLayout.class));
         HorizontalLayout horizontalLayout = (HorizontalLayout) component;
         assertEquals(2, horizontalLayout.getComponentCount());
         verifyAmountComponent(horizontalLayout.getComponent(0), "STM Amount", "");
@@ -469,7 +471,7 @@ public class FundPoolLoadWindowTest {
     }
 
     private void verifyMinAmountsComponent(Component component) {
-        assertTrue(component instanceof HorizontalLayout);
+        assertThat(component, instanceOf(HorizontalLayout.class));
         HorizontalLayout horizontalLayout = (HorizontalLayout) component;
         assertEquals(2, horizontalLayout.getComponentCount());
         verifyAmountComponent(horizontalLayout.getComponent(0), "STM Minimum Amount", "50");
@@ -484,7 +486,7 @@ public class FundPoolLoadWindowTest {
     }
 
     private void verifyExcludeStmCheckBox(Component component) {
-        assertTrue(component instanceof CheckBox);
+        assertThat(component, instanceOf(CheckBox.class));
         CheckBox checkBox = (CheckBox) component;
         assertEquals("Exclude STM RHs", checkBox.getCaption());
         assertEquals("exclude-stm-rhs-checkbox", checkBox.getStyleName());

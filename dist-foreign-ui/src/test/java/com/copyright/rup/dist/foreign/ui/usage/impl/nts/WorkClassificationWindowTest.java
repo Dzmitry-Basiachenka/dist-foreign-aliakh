@@ -5,8 +5,10 @@ import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
@@ -181,7 +183,7 @@ public class WorkClassificationWindowTest {
         Collection<Extension> extensions = exportButton.getExtensions();
         assertTrue(CollectionUtils.isNotEmpty(extensions));
         assertEquals(1, extensions.size());
-        assertTrue(extensions.iterator().next() instanceof OnDemandFileDownloader);
+        assertThat(extensions.iterator().next(), instanceOf(OnDemandFileDownloader.class));
     }
 
     private void verifySize(Component component, float width, Unit widthUnit, float height, Unit heightUnit) {

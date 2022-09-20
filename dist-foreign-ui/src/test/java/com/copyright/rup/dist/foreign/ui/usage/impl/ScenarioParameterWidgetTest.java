@@ -1,7 +1,9 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl;
 
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
@@ -66,7 +68,7 @@ public class ScenarioParameterWidgetTest {
     }
 
     private void verifyButton(Component component) {
-        assertTrue(component instanceof Button);
+        assertThat(component, instanceOf(Button.class));
         Button button = (Button) component;
         assertEquals(CAPTION, button.getCaption());
         assertTrue(button.getStyleName().contains("link"));

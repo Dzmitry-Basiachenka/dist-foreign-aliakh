@@ -7,9 +7,11 @@ import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.expect;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
@@ -117,9 +119,9 @@ public class FasUsageWidgetTest {
         assertTrue(usagesWidget.isLocked());
         assertEquals(200, usagesWidget.getSplitPosition(), 0);
         verifyWindow(usagesWidget, null, 100, 100, Unit.PERCENTAGE);
-        assertTrue(usagesWidget.getFirstComponent() instanceof FasNtsUsageFilterWidget);
+        assertThat(usagesWidget.getFirstComponent(), instanceOf(FasNtsUsageFilterWidget.class));
         Component secondComponent = usagesWidget.getSecondComponent();
-        assertTrue(secondComponent instanceof VerticalLayout);
+        assertThat(secondComponent, instanceOf(VerticalLayout.class));
         VerticalLayout layout = (VerticalLayout) secondComponent;
         verifyWindow(layout, null, 100, 100, Unit.PERCENTAGE);
         assertEquals(2, layout.getComponentCount());
@@ -374,7 +376,7 @@ public class FasUsageWidgetTest {
         Collection<Extension> extensions = component.getExtensions();
         assertTrue(CollectionUtils.isNotEmpty(extensions));
         assertEquals(1, extensions.size());
-        assertTrue(extensions.iterator().next() instanceof OnDemandFileDownloader);
+        assertThat(extensions.iterator().next(), instanceOf(OnDemandFileDownloader.class));
     }
 
     private void prepareCreateScenarioExpectation() {

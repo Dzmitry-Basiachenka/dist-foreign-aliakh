@@ -7,9 +7,11 @@ import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.expect;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
@@ -111,9 +113,9 @@ public class AaclUsageWidgetTest {
     public void testWidgetStructure() {
         assertTrue(usagesWidget.isLocked());
         assertEquals(200, usagesWidget.getSplitPosition(), 0);
-        assertTrue(usagesWidget.getFirstComponent() instanceof AaclUsageFilterWidget);
+        assertThat(usagesWidget.getFirstComponent(), instanceOf(AaclUsageFilterWidget.class));
         Component secondComponent = usagesWidget.getSecondComponent();
-        assertTrue(secondComponent instanceof VerticalLayout);
+        assertThat(secondComponent, instanceOf(VerticalLayout.class));
         VerticalLayout layout = (VerticalLayout) secondComponent;
         verifyWindow(usagesWidget, null, 100, 100, Unit.PERCENTAGE);
         verifyWindow(layout, null, 100, 100, Unit.PERCENTAGE);
@@ -361,7 +363,7 @@ public class AaclUsageWidgetTest {
         assertEquals(1, listeners.size());
         ((ClickListener) listeners.iterator().next()).buttonClick(clickEvent);
         Window notificationWindow = notificationWindowCapture.getValue();
-        assertTrue(notificationWindow instanceof NotificationWindow);
+        assertThat(notificationWindow, instanceOf(NotificationWindow.class));
         assertEquals("File download is in progress. Please wait",
             ((Label) ((VerticalLayout) notificationWindow.getContent()).getComponent(0)).getValue());
         Collection<?> notificationWindowListeners = notificationWindow.getListeners(CloseEvent.class);

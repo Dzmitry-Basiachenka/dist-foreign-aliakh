@@ -4,8 +4,10 @@ import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyLabel;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 
@@ -86,7 +88,7 @@ public class ErrorUploadWindowTest {
         Collection<Extension> extensions = download.getExtensions();
         assertTrue(CollectionUtils.isNotEmpty(extensions));
         assertEquals(1, extensions.size());
-        assertTrue(extensions.iterator().next() instanceof OnDemandFileDownloader);
+        assertThat(extensions.iterator().next(), instanceOf(OnDemandFileDownloader.class));
         assertEquals("Close", horizontalLayout.getComponent(1).getCaption());
     }
 }
