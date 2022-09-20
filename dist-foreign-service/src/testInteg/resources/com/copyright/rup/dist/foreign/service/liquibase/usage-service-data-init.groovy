@@ -1,5 +1,5 @@
 databaseChangeLog {
-    property(file: 'database.properties')
+    property(file: 'database-testInteg.properties')
 
     changeSet(id: '2017-11-10-00', author: 'Aliaksand Radkevich <aradkevich@copyright.com>') {
         comment('Inserting data for integration test for excluding usages from a scenario')

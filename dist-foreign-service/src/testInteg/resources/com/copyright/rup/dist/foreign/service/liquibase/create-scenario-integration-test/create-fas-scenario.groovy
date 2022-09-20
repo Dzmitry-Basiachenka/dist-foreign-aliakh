@@ -1,5 +1,5 @@
 databaseChangeLog {
-    property(file: 'database.properties')
+    property(file: 'database-testInteg.properties')
 
     changeSet(id: '2017-12-01-00', author: 'Aliaksandra Bayanouskaya <abayanouskaya@copyright.com>') {
         comment('Inserting test data for testCreateFasScenario, testCreateFasScenarioNoRollupsNoPreferences')

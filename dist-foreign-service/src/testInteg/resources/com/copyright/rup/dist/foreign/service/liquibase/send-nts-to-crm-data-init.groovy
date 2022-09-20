@@ -1,5 +1,5 @@
 databaseChangeLog {
-    property(file: 'database.properties')
+    property(file: 'database-testInteg.properties')
 
     changeSet(id: '2019-07-04-00', author: 'Stanislau Rudak <srudak@copyright.com>') {
         comment('Inserting test data for testSendToCrm: insert NTS usages')

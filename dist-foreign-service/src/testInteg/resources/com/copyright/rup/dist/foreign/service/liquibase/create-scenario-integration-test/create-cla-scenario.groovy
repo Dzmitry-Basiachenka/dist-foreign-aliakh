@@ -1,5 +1,5 @@
 databaseChangeLog {
-    property(file: 'database.properties')
+    property(file: 'database-testInteg.properties')
 
     changeSet(id: '2018-03-15-00', author: 'Darya Baraukova <dbaraukova@copyright.com>') {
         comment('Insert test data for testCreateClaScenario')

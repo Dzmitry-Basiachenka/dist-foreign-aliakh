@@ -10,7 +10,8 @@
            http://www.springframework.org/schema/util
            http://www.springframework.org/schema/util/spring-util.xsd">
 
-    <context:property-placeholder location="classpath:/database.properties" properties-ref="requiredProperties"/>
+    <!-- TODO: delete file database.properties during migration to RUP Gradle Plugins 7 -->
+    <context:property-placeholder location="classpath:/database-testInteg.properties" properties-ref="requiredProperties"/>
     <util:properties id="requiredProperties">
         <prop key="rup.config.dir"/>
     </util:properties>
