@@ -1,5 +1,5 @@
 databaseChangeLog {
-    property(file: 'database.properties')
+    property(file: 'database-testInteg.properties')
 
     changeSet(id: '2021-12-16-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
         comment('Inserts test data for testClearProxyValues')

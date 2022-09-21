@@ -1,5 +1,5 @@
 databaseChangeLog {
-    property(file: 'database.properties')
+    property(file: 'database-testInteg.properties')
 
     changeSet(id: '2019-12-18-01', author: 'Anton Azarenka <aazarenka@copyright.com>') {
         comment('Inserting test data for testWriteAuditCsvReport, testWriteAuditEmptyCsvReport, testWriteAuditCsvReportSearchBySqlLikePattern')

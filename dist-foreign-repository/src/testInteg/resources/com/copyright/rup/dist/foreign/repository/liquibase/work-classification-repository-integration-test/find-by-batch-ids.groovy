@@ -1,5 +1,5 @@
 databaseChangeLog {
-    property(file: 'database.properties')
+    property(file: 'database-testInteg.properties')
 
     changeSet(id: '2021-11-30-02', author: 'Uladzislau Shalamitski <ushalamitsski@copyright.com>') {
         comment('Inserting test data for testFindByBatches and testFindCountByBatches')

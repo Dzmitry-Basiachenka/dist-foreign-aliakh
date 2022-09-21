@@ -1,5 +1,5 @@
 databaseChangeLog {
-    property(file: 'database.properties')
+    property(file: 'database-testInteg.properties')
 
     changeSet(id: '2019-06-21-00', author: 'Darya Baraukova <dbaraukova@copyright.com>') {
         comment('Inserting test data for testCopyFasToArchiveByScenarioId, testCopyNtsToArchiveByScenarioId')

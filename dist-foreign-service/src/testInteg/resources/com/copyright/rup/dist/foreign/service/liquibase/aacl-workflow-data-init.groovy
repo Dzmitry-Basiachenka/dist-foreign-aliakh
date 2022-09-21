@@ -1,5 +1,5 @@
 databaseChangeLog {
-    property(file: 'database.properties')
+    property(file: 'database-testInteg.properties')
 
     changeSet(id: '2020-03-03-00', author: 'Stanislau Rudak <srudak@copyright.com>') {
         comment('Inserting data for testAaclWorkflow')

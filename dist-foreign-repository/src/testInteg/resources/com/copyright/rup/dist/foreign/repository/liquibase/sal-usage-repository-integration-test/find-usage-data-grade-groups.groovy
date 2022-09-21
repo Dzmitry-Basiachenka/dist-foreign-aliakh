@@ -1,5 +1,5 @@
 databaseChangeLog {
-    property(file: 'database.properties')
+    property(file: 'database-testInteg.properties')
 
     changeSet(id: '2020-07-29-02', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
         comment('Insert test data for testFindUsageDataGradeGroups')

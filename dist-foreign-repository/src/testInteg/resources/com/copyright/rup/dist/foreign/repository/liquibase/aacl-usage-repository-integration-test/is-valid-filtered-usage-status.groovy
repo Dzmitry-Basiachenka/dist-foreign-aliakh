@@ -1,5 +1,5 @@
 databaseChangeLog {
-    property(file: 'database.properties')
+    property(file: 'database-testInteg.properties')
 
     changeSet(id: '2020-01-27-00', author: 'Stanislau Rudak <srudak@copyright.com>') {
         comment('Insert test data for testIsValidFilteredUsageStatus')

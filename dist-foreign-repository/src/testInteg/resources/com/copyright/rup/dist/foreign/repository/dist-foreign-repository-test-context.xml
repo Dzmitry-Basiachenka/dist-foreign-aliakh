@@ -9,7 +9,8 @@
 
     <import resource="classpath:/com/copyright/rup/dist/foreign/repository/dist-foreign-repository-context.xml"/>
 
-    <context:property-placeholder location="classpath:/database.properties" />
+    <!-- TODO: delete file database.properties during migration to RUP Gradle Plugins 7 -->
+    <context:property-placeholder location="classpath:/database-testInteg.properties"/>
 
     <bean id="dist.common.repository.grantPriorityRepository"
           class="com.copyright.rup.dist.common.repository.impl.GrantPriorityRepository"/>
