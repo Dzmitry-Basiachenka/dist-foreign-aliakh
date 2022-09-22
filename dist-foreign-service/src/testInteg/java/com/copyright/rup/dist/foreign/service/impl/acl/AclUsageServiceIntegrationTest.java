@@ -20,8 +20,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * @author Dzmitry Basiachenka
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(
-    value = {"classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-test-context.xml"})
+@ContextConfiguration("classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-test-context.xml")
 public class AclUsageServiceIntegrationTest {
 
     @Autowired

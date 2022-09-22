@@ -32,107 +32,107 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CrmRightsDistributionRequest {
 
-    @JsonProperty(value = "cccEventId")
+    @JsonProperty("cccEventId")
     private String cccEventId;
 
-    @JsonProperty(value = "product")
+    @JsonProperty("product")
     private String productFamily;
 
-    @JsonProperty(value = "rorAccountNumber")
+    @JsonProperty("rorAccountNumber")
     @JsonSerialize(using = ToStringSerializer.class)
     private Long rorAccountNumber;
 
-    @JsonProperty(value = "payeeAccountNumber")
+    @JsonProperty("payeeAccountNumber")
     @JsonSerialize(using = ToStringSerializer.class)
     private Long payeeAccountNumber;
 
-    @JsonProperty(value = "royaltyAmount")
+    @JsonProperty("royaltyAmount")
     private BigDecimal royaltyAmount;
 
-    @JsonProperty(value = "currency")
+    @JsonProperty("currency")
     private String currency = "USD";
 
-    @JsonProperty(value = "licenseCreateDate")
+    @JsonProperty("licenseCreateDate")
     @JsonFormat(pattern = "MM-dd-yyyy'T'hh:mm:ss a")
     private OffsetDateTime licenseCreateDate;
 
-    @JsonProperty(value = "serviceFeeAmount")
+    @JsonProperty("serviceFeeAmount")
     private BigDecimal serviceFeeAmount;
 
-    @JsonProperty(value = "wrWrkInst")
+    @JsonProperty("wrWrkInst")
     @JsonSerialize(using = ToStringSerializer.class)
     private Long wrWrkInst;
 
-    @JsonProperty(value = "publicationName")
+    @JsonProperty("publicationName")
     private String publicationName;
 
-    @JsonProperty(value = "author")
+    @JsonProperty("author")
     private String author;
 
-    @JsonProperty(value = "chapterArticleTitle")
+    @JsonProperty("chapterArticleTitle")
     private String chapterArticleTitle;
 
-    @JsonProperty(value = "omOrderDetailNumber")
+    @JsonProperty("omOrderDetailNumber")
     private String omOrderDetailNumber;
 
-    @JsonProperty(value = "totalAmount")
+    @JsonProperty("totalAmount")
     private BigDecimal totalAmount;
 
-    @JsonProperty(value = "periodEndDate")
+    @JsonProperty("periodEndDate")
     @JsonFormat(pattern = RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT)
     private OffsetDateTime periodEndDate;
 
-    @JsonProperty(value = "publicationDate")
+    @JsonProperty("publicationDate")
     @JsonFormat(pattern = RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT)
     private LocalDate publicationDate;
 
-    @JsonProperty(value = "numberOfCopies")
+    @JsonProperty("numberOfCopies")
     private Integer numberOfCopies;
 
-    @JsonProperty(value = "adjustmentFlag")
+    @JsonProperty("adjustmentFlag")
     private boolean adjustmentFlag;
 
-    @JsonProperty(value = "passThroughFlag")
+    @JsonProperty("passThroughFlag")
     private boolean passThroughFlag = true;
 
-    @JsonProperty(value = "market")
+    @JsonProperty("market")
     private String market;
 
-    @JsonProperty(value = "marketPeriodFrom")
+    @JsonProperty("marketPeriodFrom")
     private Integer marketPeriodFrom;
 
-    @JsonProperty(value = "marketPeriodTo")
+    @JsonProperty("marketPeriodTo")
     private Integer marketPeriodTo;
 
-    @JsonProperty(value = "arAccountNumber")
+    @JsonProperty("arAccountNumber")
     @JsonSerialize(using = ToStringSerializer.class)
     private Long arAccountNumber;
 
-    @JsonProperty(value = "serviceNameReporting")
+    @JsonProperty("serviceNameReporting")
     private String serviceNameReporting;
 
-    @JsonProperty(value = "createUser")
+    @JsonProperty("createUser")
     private String createUser = "FDA Distribution";
 
-    @JsonProperty(value = "status")
+    @JsonProperty("status")
     private String status = "D - Distributed";
 
-    @JsonProperty(value = "issueVolumeSeries")
+    @JsonProperty("issueVolumeSeries")
     private String issueVolumeSeries;
 
-    @JsonProperty(value = "grade")
+    @JsonProperty("grade")
     private String grade;
 
-    @JsonProperty(value = "academicYear")
+    @JsonProperty("academicYear")
     private String academicYear;
 
-    @JsonProperty(value = "state")
+    @JsonProperty("state")
     private String state;
 
-    @JsonProperty(value = "assessmentType")
+    @JsonProperty("assessmentType")
     private String assessmentType;
 
-    @JsonProperty(value = "publicationIssueDate")
+    @JsonProperty("publicationIssueDate")
     private String publicationIssueDate;
 
     /**

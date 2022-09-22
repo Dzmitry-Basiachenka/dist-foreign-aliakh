@@ -34,8 +34,7 @@ import java.util.List;
  * @author Aliaksandr Liakh
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(
-    value = {"classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-test-context.xml"})
+@ContextConfiguration("classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-test-context.xml")
 //TODO: split test data into separate files for each test method
 @TestData(fileName = "refresh-scenario-service-data-init.groovy")
 @TestExecutionListeners(

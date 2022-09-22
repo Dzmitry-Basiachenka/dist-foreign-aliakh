@@ -41,8 +41,7 @@ import java.util.stream.IntStream;
  * @author Ihar Suvorau
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(
-    value = {"classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-test-context.xml"})
+@ContextConfiguration("classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-test-context.xml")
 public class AaclUsageCsvProcessorIntegrationTest {
 
     private static final String BASE_PATH = "/com/copyright/rup/dist/foreign/service/impl/usage/aacl/";

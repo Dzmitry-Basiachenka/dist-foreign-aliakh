@@ -29,8 +29,7 @@ import java.util.List;
  * @author Anton Azarenka
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(
-    value = {"classpath:/com/copyright/rup/dist/foreign/repository/dist-foreign-repository-test-context.xml"})
+@ContextConfiguration("classpath:/com/copyright/rup/dist/foreign/repository/dist-foreign-repository-test-context.xml")
 @Transactional
 public class PublicationTypeRepositoryIntegrationTest {
 

@@ -20,7 +20,7 @@ import java.util.List;
  */
 public class ExternalUsageWrapper {
 
-    @JsonProperty(value = "details")
+    @JsonProperty("details")
     private final List<ExternalUsage> externalUsages;
 
     /**
