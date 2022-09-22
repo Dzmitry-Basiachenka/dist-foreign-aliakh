@@ -68,7 +68,7 @@ public class DomainVerifierTest {
 
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
-        Object[][] testData = new Object[][]{
+        Object[][] testData = {
             {UsageFilter.class},
             {AuditFilter.class},
             {UsageBatch.class},

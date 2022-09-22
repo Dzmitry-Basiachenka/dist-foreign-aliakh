@@ -58,11 +58,10 @@ public class AclUsageFiltersWindow extends CommonAclFiltersWindow {
         ForeignUi.getMessage("field.error.populated_for_between_operator");
     private static final String GRATER_OR_EQUAL_VALIDATION_MESSAGE = "field.error.greater_or_equal_to";
     private static final String EQUALS = "EQUALS";
-    private static final FilterOperatorEnum[] TEXT_OPERATOR_ITEMS =
-        new FilterOperatorEnum[]{FilterOperatorEnum.EQUALS, FilterOperatorEnum.DOES_NOT_EQUAL,
-            FilterOperatorEnum.CONTAINS};
-    private static final FilterOperatorEnum[] NUMERIC_OPERATOR_ITEMS =
-        new FilterOperatorEnum[]{FilterOperatorEnum.EQUALS, FilterOperatorEnum.DOES_NOT_EQUAL,
+    private static final FilterOperatorEnum[] TEXT_OPERATOR_ITEMS = {
+            FilterOperatorEnum.EQUALS, FilterOperatorEnum.DOES_NOT_EQUAL, FilterOperatorEnum.CONTAINS};
+    private static final FilterOperatorEnum[] NUMERIC_OPERATOR_ITEMS = {
+            FilterOperatorEnum.EQUALS, FilterOperatorEnum.DOES_NOT_EQUAL,
             FilterOperatorEnum.GREATER_THAN, FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO, FilterOperatorEnum.LESS_THAN,
             FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO, FilterOperatorEnum.BETWEEN};
 

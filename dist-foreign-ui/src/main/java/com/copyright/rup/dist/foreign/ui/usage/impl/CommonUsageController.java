@@ -179,5 +179,6 @@ public abstract class CommonUsageController extends CommonController<ICommonUsag
      *
      * @return {@link ICommonUsageWidget} instance
      */
+    @Override
     protected abstract ICommonUsageWidget instantiateWidget();
 }

@@ -39,7 +39,7 @@ public class DomainVerifierTest {
 
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
-        Object[][] testData = new Object[][]{
+        Object[][] testData = {
             {CrmRightsDistributionRequest.class},
             {ExternalUsage.class},
             {ExternalUsageMessage.class},

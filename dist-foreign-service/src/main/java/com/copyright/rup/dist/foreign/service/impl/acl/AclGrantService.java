@@ -97,7 +97,7 @@ public class AclGrantService implements IAclGrantService {
             .get()
             .getValue()
             .stream()
-            .filter(grant -> grant.getRightStatus().equals(GRANT))
+            .filter(grant -> GRANT.equals(grant.getRightStatus()))
             .collect(Collectors.toList());
     }
 
