@@ -64,6 +64,7 @@ public abstract class CommonAuditController extends CommonController<ICommonAudi
      *
      * @return {@link ICommonAuditWidget} instance
      */
+    @Override
     protected abstract ICommonAuditWidget instantiateWidget();
 
     protected IUsageAuditService getUsageAuditService() {

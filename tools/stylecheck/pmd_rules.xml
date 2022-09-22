@@ -21,9 +21,7 @@
         <exclude name="JUnitTestContainsTooManyAsserts"/>
         <exclude name="UseTryWithResources"/><!--TODO fix the rule-->
         <exclude name="GuardLogStatement"/><!--TODO fix the rule-->
-        <exclude name="LiteralsFirstInComparisons"/><!--TODO fix the rule-->
         <exclude name="UnusedAssignment"/><!--TODO fix the rule-->
-        <exclude name="MissingOverride"/><!--TODO fix the rule-->
     </rule>
 
     <rule ref="category/java/codestyle.xml">
@@ -49,7 +47,6 @@
         <exclude name="FieldNamingConventions"/><!--TODO fix the rule-->
         <exclude name="LinguisticNaming"/><!--TODO fix the rule-->
         <exclude name="UseUnderscoresInNumericLiterals"/>
-        <exclude name="UseShortArrayInitializer"/><!--TODO fix the rule-->
     </rule>
 
     <rule ref="category/java/codestyle.xml/ShortClassName">
@@ -137,7 +134,7 @@
         <exclude name="NullAssignment"/>
         <exclude name="InvalidLogMessageFormat"/><!--TODO fix the rule-->
         <exclude name="CloseResource"/><!--TODO fix the rule-->
-        <exclude name="ReturnEmptyCollectionRatherThanNull"/><!--TODO fix the rule-->
+        <exclude name="ReturnEmptyCollectionRatherThanNull"/>
     </rule>
 
     <rule ref="category/java/errorprone.xml/AssignmentInOperand">

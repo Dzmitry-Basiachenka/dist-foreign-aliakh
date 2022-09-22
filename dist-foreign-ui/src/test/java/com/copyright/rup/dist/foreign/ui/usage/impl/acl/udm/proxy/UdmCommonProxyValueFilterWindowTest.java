@@ -51,7 +51,7 @@ import java.util.List;
 public class UdmCommonProxyValueFilterWindowTest {
 
     private static final String UNCHECKED = "unchecked";
-    private static final String[] PUB_TYPE_CODES = new String[]{"BK", "PK", "LM"};
+    private static final String[] PUB_TYPE_CODES = {"BK", "PK", "LM"};
 
     private UdmCommonProxyValueFilterWindow<String> filterWindow;
 

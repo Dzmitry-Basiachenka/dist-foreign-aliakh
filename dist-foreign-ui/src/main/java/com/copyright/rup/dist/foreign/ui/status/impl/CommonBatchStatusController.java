@@ -32,6 +32,7 @@ public abstract class CommonBatchStatusController extends CommonController<IComm
      *
      * @return {@link ICommonBatchStatusWidget} instance
      */
+    @Override
     protected abstract ICommonBatchStatusWidget instantiateWidget();
 
     protected IUsageBatchStatusService getUsageBatchStatusService() {
