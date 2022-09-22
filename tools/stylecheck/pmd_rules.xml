@@ -46,7 +46,6 @@
         <exclude name="DefaultPackage"/>
         <!--Static imports are used for unit tests-->
         <exclude name="TooManyStaticImports"/>
-        <exclude name="UnnecessaryAnnotationValueElement"/><!--TODO fix the rule-->
         <exclude name="FieldNamingConventions"/><!--TODO fix the rule-->
         <exclude name="LinguisticNaming"/><!--TODO fix the rule-->
         <exclude name="UseUnderscoresInNumericLiterals"/>

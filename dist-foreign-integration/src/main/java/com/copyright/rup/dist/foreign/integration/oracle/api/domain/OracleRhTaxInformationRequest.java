@@ -24,11 +24,11 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class OracleRhTaxInformationRequest {
 
-    @JsonProperty(value = "payeeAccountNumber")
+    @JsonProperty("payeeAccountNumber")
     @JsonSerialize(using = ToStringSerializer.class)
     private Long payeeAccountNumber;
 
-    @JsonProperty(value = "tboAccountNumber")
+    @JsonProperty("tboAccountNumber")
     @JsonSerialize(using = ToStringSerializer.class)
     private Long tboAccountNumber;
 

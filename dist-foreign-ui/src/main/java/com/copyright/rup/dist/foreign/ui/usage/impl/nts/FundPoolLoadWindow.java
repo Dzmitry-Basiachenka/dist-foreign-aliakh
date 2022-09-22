@@ -165,7 +165,7 @@ class FundPoolLoadWindow extends Window {
             } else {
                 marketFilterWidget.addStyleName(EMPTY_MARKET_STYLE);
             }
-            selectedMarkets = (Set<String>) event.getSelectedItemsIds();
+            selectedMarkets = event.getSelectedItemsIds();
         });
         return marketFilterWidget;
     }

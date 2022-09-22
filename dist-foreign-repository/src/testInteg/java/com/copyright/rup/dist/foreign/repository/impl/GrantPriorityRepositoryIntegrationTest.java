@@ -27,8 +27,7 @@ import java.util.stream.IntStream;
  * @author Pavel Liakh
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(
-    value = {"classpath:/com/copyright/rup/dist/foreign/repository/dist-foreign-repository-test-context.xml"})
+@ContextConfiguration("classpath:/com/copyright/rup/dist/foreign/repository/dist-foreign-repository-test-context.xml")
 public class GrantPriorityRepositoryIntegrationTest {
 
     private static final String PRINT_TYPE_OF_USE = "PRINT";

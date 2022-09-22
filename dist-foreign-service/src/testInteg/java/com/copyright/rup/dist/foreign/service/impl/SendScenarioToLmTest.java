@@ -53,8 +53,7 @@ import java.util.stream.IntStream;
  * @author Ihar Suvorau
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(
-    value = {"classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-test-context.xml"})
+@ContextConfiguration("classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-test-context.xml")
 //TODO: split test data into separate files for each test method
 @TestData(fileName = "send-scenario-to-lm-data-init.groovy")
 @TestExecutionListeners(

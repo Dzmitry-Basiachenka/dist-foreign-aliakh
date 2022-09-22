@@ -23,7 +23,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CrmRightsDistributionRequestWrapper {
 
-    @JsonProperty(value = "list")
+    @JsonProperty("list")
     private ListWrapper list;
 
     /**
@@ -84,7 +84,7 @@ public class CrmRightsDistributionRequestWrapper {
      */
     static class ListWrapper {
 
-        @JsonProperty(value = "rightsDistribution")
+        @JsonProperty("rightsDistribution")
         private Collection<CrmRightsDistributionRequest> requests;
 
         /**
