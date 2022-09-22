@@ -25,12 +25,9 @@ import java.util.List;
 import java.util.Map;
 
 @Validated
-@Api(value = "Jobs", description = "the Jobs API")
+@Api(tags = {"Jobs"})
 public interface JobsApi {
-
-    default JobsApiDelegate getDelegate() {
-        return new JobsApiDelegate() {};
-    }
+        JobsApiDelegate getDelegate();
 
     @ApiOperation(value = "Gets status of the job", nickname = "getJobStatus", notes = "Gets status of the job", response = JobStatus.class, tags={ "jobs", })
     @ApiResponses(value = { 

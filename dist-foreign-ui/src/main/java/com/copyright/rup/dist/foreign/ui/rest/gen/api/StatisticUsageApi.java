@@ -25,12 +25,9 @@ import java.util.List;
 import java.util.Map;
 
 @Validated
-@Api(value = "StatisticUsage", description = "the StatisticUsage API")
+@Api(tags = {"StatisticUsage"})
 public interface StatisticUsageApi {
-
-    default StatisticUsageApiDelegate getDelegate() {
-        return new StatisticUsageApiDelegate() {};
-    }
+        StatisticUsageApiDelegate getDelegate();
 
     @ApiOperation(value = "Gets usage statistic", nickname = "getUsageStatistic", notes = "Gets usage statistic", response = UsageStat.class, tags={ "statistic, usage", })
     @ApiResponses(value = { 

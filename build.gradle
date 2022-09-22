@@ -9,6 +9,10 @@ buildscript {
     dependencies {
         classpath("com.copyright.rup.scm.gradle.plugins:rup-gradle-plugins:${rupGradlePluginsVersion}")
         classpath("com.devsoap.plugin:gradle-vaadin-plugin:${gradleVaadinPluginVersion}")
+        // TODO remove the dependencies when the migration is finished
+        classpath("com.fasterxml.jackson.core:jackson-core:2.13.4")
+        classpath("com.fasterxml.jackson.core:jackson-databind:2.13.4")
+        classpath("com.fasterxml.jackson.core:jackson-annotations:2.13.4")
     }
 }
 
@@ -35,29 +39,26 @@ subprojects {
     checkstyle {
         configProperties.suppressionsFile = styleCheckConfigDir + 'checkstyle-suppressions.xml'
     }
-    findbugs {
-        // fail build if exists a call private java 8 method reference
-        toolVersion = '3.0.1'
-        // fail build if findbugs exceptions found
+    spotbugs {
+        // Fail build if SpotBugs exceptions found
         ignoreFailures = false
         // Higher levels increase precision and find more bugs
         effort = "max"
         // Report all bugs
         reportLevel = "low"
-        excludeFilter = file("${styleCheckConfigDir}findbugs_excludes.xml")
+        excludeFilter = file("${styleCheckConfigDir}spotbugs_excludes.xml")
     }
 
     // Enabling pmd fail on error (disabled by rup-plugin)
     pmd {
-        toolVersion = '6.1.0'
         ignoreFailures = false
         ruleSetFiles = files("${styleCheckConfigDir}pmd_rules.xml")
         ruleSets = []
     }
     [pmdMain, pmdTest, pmdTestInteg]*.ignoreFailures = false
 
-    tasks.test.rupCodeCoverage {
-        preInstrument = true
+    tasks.test {
+        maxHeapSize = '2G'
     }
 
     tasks.withType(Test) {

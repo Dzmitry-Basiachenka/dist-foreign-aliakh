@@ -1,0 +1,9 @@
+{
+  "checksumsToClear": [
+    {
+      "changesetId": "2018-05-03-00",
+      "md5sum": "8:e04f8185e70b0098d17a6823d481e7b9",
+      "notes": "Liquibase 4 Upgrade"
+    }
+  ]
+}

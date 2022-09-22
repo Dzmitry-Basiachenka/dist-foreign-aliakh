@@ -26,9 +26,11 @@ openApiGenerate {
     outputDir = "$rootDir/../../dist-foreign-ui".toString()
     templateDir = "$rootDir/src/main/resources/templates".toString()
     configFile = "$rootDir/src/main/resources/swagger-config.json".toString()
-    apiFilesConstrainedTo = [""]
-    modelFilesConstrainedTo = [""]
-    supportingFilesConstrainedTo = ["ApiUtil.java"]
+    systemProperties = [
+            apis           : '',
+            models         : '',
+            supportingFiles: 'false'
+    ]
 }
 
 tasks.openApiGenerate {

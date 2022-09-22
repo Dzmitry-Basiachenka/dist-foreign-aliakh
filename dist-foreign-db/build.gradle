@@ -2,9 +2,10 @@ apply plugin: 'rup-postgres'
 
 rupPostgres {
     commonScripts {
-        version = '4.0.0'
+        version = '4.0.1'
     }
     mainChangelog = 'com/copyright/rup/dist/foreign/db/main-changelog.groovy'
+    deploymentHooksSpec = 'deployment-hooks-spec.json'
     
     schemaSpy {
         schema = 'apps'

@@ -25,12 +25,9 @@ import java.util.List;
 import java.util.Map;
 
 @Validated
-@Api(value = "StatisticBatch", description = "the StatisticBatch API")
+@Api(tags = {"StatisticBatch"})
 public interface StatisticBatchApi {
-
-    default StatisticBatchApiDelegate getDelegate() {
-        return new StatisticBatchApiDelegate() {};
-    }
+        StatisticBatchApiDelegate getDelegate();
 
     @ApiOperation(value = "Gets batches statistic", nickname = "getBatchesStatistic", notes = "Gets batches statistic", response = BatchStats.class, tags={ "statistic, batch", })
     @ApiResponses(value = { 

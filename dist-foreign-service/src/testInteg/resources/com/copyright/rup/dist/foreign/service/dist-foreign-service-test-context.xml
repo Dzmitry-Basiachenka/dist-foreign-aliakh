@@ -10,8 +10,7 @@
            http://www.springframework.org/schema/util
            http://www.springframework.org/schema/util/spring-util.xsd">
 
-    <!-- TODO: delete file database.properties during migration to RUP Gradle Plugins 7 -->
-    <context:property-placeholder location="classpath:/database-testInteg.properties" properties-ref="requiredProperties"/>
+    <context:property-placeholder properties-ref="requiredProperties"/>
     <util:properties id="requiredProperties">
         <prop key="rup.config.dir"/>
     </util:properties>
@@ -28,6 +27,9 @@
     </bean>
 
     <bean id="dfDataSource" class="com.copyright.rup.common.test.integ.db.testcontainers.TestcontainersPostgresDatabaseFactory">
+        <property name="databaseProperties">
+            <util:properties location="classpath:/database-testInteg.properties"/>
+        </property>
         <property name="engineVersion" value="12.7"/>
         <property name="resourcesFromPaths" value="#{defaultChangelog}"/>
         <property name="createCommonTablesOnStartup" value="false"/>

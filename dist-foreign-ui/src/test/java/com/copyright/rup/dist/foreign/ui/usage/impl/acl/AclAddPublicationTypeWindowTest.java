@@ -164,7 +164,7 @@ public class AclAddPublicationTypeWindowTest {
         listener.buttonClick(new ClickEvent(window));
         EventObject event = window.getEventObject();
         assertNotNull(event);
-        assertTrue(event instanceof ParametersSaveEvent);
+        assertThat(event, instanceOf(ParametersSaveEvent.class));
         ParametersSaveEvent<AclPublicationType> scenarioCreateEvent = (ParametersSaveEvent<AclPublicationType>) event;
         AclPublicationType publicationType = scenarioCreateEvent.getSavedParameters();
         assertEquals(PUBLICATION_TYPE_UID, publicationType.getId());

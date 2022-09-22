@@ -17,7 +17,6 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 {{/reactive}}
-
 import java.util.List;
 import java.util.Map;
 {{#jdk8}}
@@ -37,24 +36,13 @@ import java.util.concurrent.{{^jdk8}}Callable{{/jdk8}}{{#jdk8}}CompletableFuture
  * A delegate to be called by the {@link {{classname}}Controller}}.
  * Implement this interface with a {@link org.springframework.stereotype.Service} annotated class.
  */
-{{>generatedAnnotation}}
 public interface {{classname}}Delegate {
-{{#jdk8-default-interface}}
-
-    default Optional<NativeWebRequest> getRequest() {
-        return Optional.empty();
-    }
-{{/jdk8-default-interface}}
-
 {{#operation}}
     /**
      * @see {{classname}}#{{operationId}}
      */
-    {{#jdk8-default-interface}}default {{/jdk8-default-interface}}{{#responseWrapper}}{{.}}<{{/responseWrapper}}ResponseEntity<{{>returnTypes}}>{{#responseWrapper}}>{{/responseWrapper}} {{operationId}}({{#allParams}}{{^isFile}}{{^isBodyParam}}{{>optionalDataType}}{{/isBodyParam}}{{#isBodyParam}}{{^reactive}}{{{dataType}}}{{/reactive}}{{#reactive}}{{^isListContainer}}Mono{{/isListContainer}}{{#isListContainer}}Flux{{/isListContainer}}<{{{baseType}}}>{{/reactive}}{{/isBodyParam}}{{/isFile}}{{#isFile}}MultipartFile{{/isFile}} {{paramName}}{{#hasMore}},
-        {{/hasMore}}{{/allParams}}{{#reactive}}{{#hasParams}},
-        {{/hasParams}}ServerWebExchange exchange{{/reactive}}){{^jdk8-default-interface}};{{/jdk8-default-interface}}{{#jdk8-default-interface}} {
-        {{>methodBody}}
-    }{{/jdk8-default-interface}}
+    {{#responseWrapper}}{{.}}<{{/responseWrapper}}ResponseEntity<{{>returnTypes}}>{{#responseWrapper}}>{{/responseWrapper}} {{operationId}}({{#allParams}}{{^isFile}}{{^isBodyParam}}{{>optionalDataType}}{{/isBodyParam}}{{#isBodyParam}}{{^reactive}}{{{dataType}}}{{/reactive}}{{#reactive}}{{^isListContainer}}Mono{{/isListContainer}}{{#isListContainer}}Flux{{/isListContainer}}<{{{baseType}}}>{{/reactive}}{{/isBodyParam}}{{/isFile}}{{#isFile}}MultipartFile{{/isFile}} {{paramName}}{{#hasMore}},
+        {{/hasMore}}{{/allParams}});
 
 {{/operation}}
 }
