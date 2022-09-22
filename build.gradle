@@ -10,9 +10,10 @@ buildscript {
         classpath("com.copyright.rup.scm.gradle.plugins:rup-gradle-plugins:${rupGradlePluginsVersion}")
         classpath("com.devsoap.plugin:gradle-vaadin-plugin:${gradleVaadinPluginVersion}")
         // TODO remove the dependencies when the migration is finished
-        classpath("com.fasterxml.jackson.core:jackson-core:2.13.4")
-        classpath("com.fasterxml.jackson.core:jackson-databind:2.13.4")
-        classpath("com.fasterxml.jackson.core:jackson-annotations:2.13.4")
+        classpath("com.google.guava:guava:${guavaVersion}")
+        classpath("com.fasterxml.jackson.core:jackson-core:${jacksonVersion}")
+        classpath("com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}")
+        classpath("com.fasterxml.jackson.core:jackson-annotations:${jacksonVersion}")
     }
 }
 
