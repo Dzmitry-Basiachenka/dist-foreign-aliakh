@@ -21,5 +21,5 @@ public interface IOracleRhTaxCountryService {
      * @return map where key is account number and value is {@code true} if the tax residency country is US,
      * otherwise {@code false}
      */
-    Map<Long, Boolean> isUsTaxCountry(Set<Long> accountNumbers);
+    Map<Long, Boolean> getAccountNumbersToUsTaxCountryFlags(Set<Long> accountNumbers);
 }

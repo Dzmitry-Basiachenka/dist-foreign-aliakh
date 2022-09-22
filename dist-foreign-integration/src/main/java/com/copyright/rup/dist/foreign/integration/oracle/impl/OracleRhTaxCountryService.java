@@ -37,7 +37,7 @@ public class OracleRhTaxCountryService implements IOracleRhTaxCountryService {
     private String rhTaxCountryUrl;
 
     @Override
-    public Map<Long, Boolean> isUsTaxCountry(Set<Long> accountNumbers) {
+    public Map<Long, Boolean> getAccountNumbersToUsTaxCountryFlags(Set<Long> accountNumbers) {
         try {
             OracleRhTaxCountryRestHandler handler = new OracleRhTaxCountryRestHandler(restTemplate);
             return handler.handleResponse(rhTaxCountryUrl, ImmutableMap.of("accountNumbers",

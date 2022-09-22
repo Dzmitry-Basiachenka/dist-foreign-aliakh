@@ -808,7 +808,7 @@ public class UdmEditMultipleUsagesWindowTest {
     private void verifyUpdatedUdmUsages(UdmUsageDto expectedUdmUsageDto, UdmUsageDto actualUdmUsageDto) {
         assertEquals(expectedUdmUsageDto.getStatus(), actualUdmUsageDto.getStatus());
         assertEquals(expectedUdmUsageDto.getPeriod(), actualUdmUsageDto.getPeriod());
-        assertEquals(setPeriodEndDate(expectedUdmUsageDto.getPeriod()), actualUdmUsageDto.getPeriodEndDate());
+        assertEquals(getPeriodEndDate(expectedUdmUsageDto.getPeriod()), actualUdmUsageDto.getPeriodEndDate());
         assertEquals(expectedUdmUsageDto.getCompanyName(), actualUdmUsageDto.getCompanyName());
         if (Objects.nonNull(expectedUdmUsageDto.getDetailLicenseeClass())) {
             assertEquals(expectedUdmUsageDto.getDetailLicenseeClass().getId(),
@@ -916,7 +916,7 @@ public class UdmEditMultipleUsagesWindowTest {
         saveButton.click();
     }
 
-    private LocalDate setPeriodEndDate(Integer period) {
+    private LocalDate getPeriodEndDate(Integer period) {
         String value = String.valueOf(period);
         if (StringUtils.isNotEmpty(value)) {
             int year = Integer.parseInt(value.substring(0, 4));

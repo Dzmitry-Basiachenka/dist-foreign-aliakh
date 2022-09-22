@@ -52,7 +52,7 @@ public class OracleRhTaxCountryServiceTest {
     }
 
     @Test
-    public void testIsUsTaxCountry() {
+    public void testGetAccountNumbersToUsTaxCountryFlags() {
         restTemplate.setErrorHandler(anyObject(DefaultResponseErrorHandler.class));
         expectLastCall().once();
         expect(restTemplate.getForObject(RH_TAX_COUNTRY_URL, String.class,
@@ -61,12 +61,12 @@ public class OracleRhTaxCountryServiceTest {
             .once();
         replay(restTemplate);
         assertEquals(ImmutableMap.of(7001413934L, Boolean.TRUE, 1000009522L, Boolean.FALSE),
-            oracleRhTaxCountryService.isUsTaxCountry(ACCOUNT_NUMBERS));
+            oracleRhTaxCountryService.getAccountNumbersToUsTaxCountryFlags(ACCOUNT_NUMBERS));
         verify(restTemplate);
     }
 
     @Test
-    public void testIsUsTaxCountryNotFoundCode() {
+    public void testGetAccountNumbersToUsTaxCountryFlagsNotFoundCode() {
         restTemplate.setErrorHandler(anyObject(DefaultResponseErrorHandler.class));
         expectLastCall().once();
         expect(restTemplate.getForObject(RH_TAX_COUNTRY_URL, String.class, ImmutableBiMap.of("accountNumbers",
@@ -74,7 +74,7 @@ public class OracleRhTaxCountryServiceTest {
             .andReturn(loadJson("rh_tax_country_not_found_response.json"))
             .once();
         replay(restTemplate);
-        assertTrue(MapUtils.isEmpty(oracleRhTaxCountryService.isUsTaxCountry(ACCOUNT_NUMBERS)));
+        assertTrue(MapUtils.isEmpty(oracleRhTaxCountryService.getAccountNumbersToUsTaxCountryFlags(ACCOUNT_NUMBERS)));
         verify(restTemplate);
     }
 

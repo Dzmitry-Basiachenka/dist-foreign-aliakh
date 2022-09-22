@@ -37,13 +37,13 @@ public class OracleRhTaxCountryCacheService extends AbstractMultipleCacheService
     }
 
     @Override
-    public Map<Long, Boolean> isUsTaxCountry(Set<Long> accountNumbers) {
+    public Map<Long, Boolean> getAccountNumbersToUsTaxCountryFlags(Set<Long> accountNumbers) {
         return getDataFromCache(accountNumbers);
     }
 
     @Override
     public Map<Long, Boolean> loadData(Set<Long> accountNumbers) {
-        return oracleRhTaxCountryService.isUsTaxCountry(accountNumbers);
+        return oracleRhTaxCountryService.getAccountNumbersToUsTaxCountryFlags(accountNumbers);
     }
 
     @Override

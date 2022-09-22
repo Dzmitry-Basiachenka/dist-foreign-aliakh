@@ -16,7 +16,6 @@ import com.google.common.collect.Sets;
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
-import org.springframework.util.CollectionUtils;
 
 import java.util.Collections;
 import java.util.Map;
@@ -52,21 +51,23 @@ public class OracleRhTaxCountryCacheServiceTest {
     }
 
     @Test
-    public void testIsUsTaxCountry() {
+    public void testGetAccountNumbersToUsTaxCountryFlags() {
         Map<Long, Boolean> resultMap = ImmutableMap.of(7001413934L, Boolean.TRUE, 1000009522L, Boolean.FALSE);
-        expect(oracleRhTaxCountryService.isUsTaxCountry(ACCOUNT_NUMBERS)).andReturn(resultMap).once();
+        expect(oracleRhTaxCountryService.getAccountNumbersToUsTaxCountryFlags(ACCOUNT_NUMBERS))
+                .andReturn(resultMap).once();
         replay(oracleRhTaxCountryService);
-        assertEquals(resultMap, oracleRhTaxCountryCacheService.isUsTaxCountry(ACCOUNT_NUMBERS));
+        assertEquals(resultMap, oracleRhTaxCountryCacheService.getAccountNumbersToUsTaxCountryFlags(ACCOUNT_NUMBERS));
         assertEquals(ImmutableMap.of(7001413934L, Boolean.TRUE),
-            oracleRhTaxCountryCacheService.isUsTaxCountry(Collections.singleton(7001413934L)));
+            oracleRhTaxCountryCacheService.getAccountNumbersToUsTaxCountryFlags(Collections.singleton(7001413934L)));
         verify(oracleRhTaxCountryService);
     }
 
     @Test
-    public void testIsUsTaxCountryWithNotFoundResponse() {
-        expect(oracleRhTaxCountryService.isUsTaxCountry(ACCOUNT_NUMBERS)).andReturn(Collections.emptyMap()).once();
+    public void testGetAccountNumbersToUsTaxCountryFlagsNotFoundResponse() {
+        expect(oracleRhTaxCountryService.getAccountNumbersToUsTaxCountryFlags(ACCOUNT_NUMBERS))
+                .andReturn(Collections.emptyMap()).once();
         replay(oracleRhTaxCountryService);
-        assertTrue(CollectionUtils.isEmpty(oracleRhTaxCountryCacheService.isUsTaxCountry(ACCOUNT_NUMBERS)));
+        assertTrue(oracleRhTaxCountryCacheService.getAccountNumbersToUsTaxCountryFlags(ACCOUNT_NUMBERS).isEmpty());
         verify(oracleRhTaxCountryService);
     }
 }

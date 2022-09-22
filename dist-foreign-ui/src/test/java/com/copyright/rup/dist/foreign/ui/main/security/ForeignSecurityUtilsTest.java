@@ -48,7 +48,7 @@ public final class ForeignSecurityUtilsTest {
     }
 
     @Parameterized.Parameters
-    public static Collection<Object[]> setUpUserPermissions() {
+    public static Collection<Object[]> getUserPermissions() {
         Object[] viewOnlyRole = {Sets.newHashSet(FDA_ACCESS_APPLICATION, FDA_VIEW_SCENARIO, FDA_VIEW_ONLY_PERMISSION)};
         Object[] managerRole =
             {Sets.newHashSet(FDA_ACCESS_APPLICATION, FDA_VIEW_SCENARIO, "FDA_MANAGER_PERMISSION")};

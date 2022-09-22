@@ -116,13 +116,14 @@ public class UdmBaselineControllerTest {
         Capture<Consumer<PipedOutputStream>> posConsumerCapture = newCapture();
         String fileName = "export_udm_baseline_usage_";
         Supplier<String> fileNameSupplier = () -> fileName;
-        Supplier<InputStream> isSupplier = () -> IOUtils.toInputStream(StringUtils.EMPTY, StandardCharsets.UTF_8);
+        Supplier<InputStream> inputStreamSupplier =
+                () -> IOUtils.toInputStream(StringUtils.EMPTY, StandardCharsets.UTF_8);
         PipedOutputStream pos = new PipedOutputStream();
         expect(OffsetDateTime.now()).andReturn(date).once();
         expect(udmBaselineFilterController.getWidget()).andReturn(udmBaselineFilterWidget).once();
         expect(udmBaselineFilterWidget.getAppliedFilter()).andReturn(baselineFilter).once();
         expect(streamSourceHandler.getCsvStreamSource(capture(fileNameSupplierCapture), capture(posConsumerCapture)))
-            .andReturn(new StreamSource(fileNameSupplier, "csv", isSupplier)).once();
+            .andReturn(new StreamSource(fileNameSupplier, "csv", inputStreamSupplier)).once();
         udmReportService.writeUdmBaselineUsageCsvReport(baselineFilter, pos);
         expectLastCall().once();
         replay(OffsetDateTime.class, udmBaselineFilterWidget, udmBaselineFilterController,

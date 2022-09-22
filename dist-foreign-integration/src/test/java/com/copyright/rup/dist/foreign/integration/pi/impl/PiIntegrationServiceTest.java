@@ -213,7 +213,7 @@ public class PiIntegrationServiceTest {
         expectGetResponseWithIsbn13();
         expectGetResponseWithDoi();
         expectGetResponseWithStdId();
-        getEmptySearchResponseByStdId();
+        expectEmptySearchResponseByStdId();
     }
 
     private void expectGetResponseWithIssn() {
@@ -261,7 +261,7 @@ public class PiIntegrationServiceTest {
         expect(rupEsApi.search(capture(requestCapture))).andReturn(searchResponse).times(5);
     }
 
-    private void getEmptySearchResponseByStdId() {
+    private void expectEmptySearchResponseByStdId() {
         expect(searchResponse.getResults()).andReturn(searchResults).times(5);
         expect(searchResults.getHits()).andReturn(Collections.emptyList()).times(5);
         expect(rupEsApi.search(capture(requestCapture))).andReturn(searchResponse).times(5);
