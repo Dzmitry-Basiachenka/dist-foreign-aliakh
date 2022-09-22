@@ -26,7 +26,7 @@ public class LdmtDetailsUnmarshaller extends CommonMarshaller {
     private static final TypeReference<List<LdmtDetail>> TYPE_REFERENCE = new TypeReference<List<LdmtDetail>>() {};
 
     @Override
-    public void marshal(Exchange exchange, Object graph, OutputStream stream) throws UnsupportedOperationException {
+    public void marshal(Exchange exchange, Object graph, OutputStream stream) {
         throw new UnsupportedOperationException();
     }
 

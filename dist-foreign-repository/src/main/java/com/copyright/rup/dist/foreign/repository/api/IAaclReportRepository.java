@@ -1,6 +1,5 @@
 package com.copyright.rup.dist.foreign.repository.api;
 
-import com.copyright.rup.common.exception.RupRuntimeException;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.ExcludePayeeFilter;
@@ -64,9 +63,9 @@ public interface IAaclReportRepository {
      *
      * @param filter            filter
      * @param pipedOutputStream stream
-     * @throws RupRuntimeException in case when IOException appears during writing report
+     * @throws com.copyright.rup.common.exception.RupRuntimeException if IOException appears during writing report
      */
-    void writeAuditAaclCsvReport(AuditFilter filter, PipedOutputStream pipedOutputStream) throws RupRuntimeException;
+    void writeAuditAaclCsvReport(AuditFilter filter, PipedOutputStream pipedOutputStream);
 
     /**
      * Finds archived usages by AACL scenario id and writes them into the output stream in CSV format.

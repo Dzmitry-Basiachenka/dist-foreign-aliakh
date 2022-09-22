@@ -1,6 +1,5 @@
 package com.copyright.rup.dist.foreign.repository.impl.csv.fas;
 
-import com.copyright.rup.common.exception.RupRuntimeException;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 
 import org.apache.ibatis.session.ResultContext;
@@ -34,7 +33,7 @@ public class SendForResearchCsvReportHandler extends FasUsageCsvReportHandler {
     }
 
     @Override
-    public void handleResult(ResultContext<? extends UsageDto> context) throws RupRuntimeException {
+    public void handleResult(ResultContext<? extends UsageDto> context) {
         super.handleResult(context);
         usagesIds.add(context.getResultObject().getId());
     }

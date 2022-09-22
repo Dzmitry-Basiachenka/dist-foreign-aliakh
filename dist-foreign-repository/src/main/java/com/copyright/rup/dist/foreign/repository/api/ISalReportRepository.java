@@ -1,6 +1,5 @@
 package com.copyright.rup.dist.foreign.repository.api;
 
-import com.copyright.rup.common.exception.RupRuntimeException;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
@@ -34,9 +33,9 @@ public interface ISalReportRepository {
      *
      * @param filter            filter
      * @param pipedOutputStream stream
-     * @throws RupRuntimeException in case when IOException appears during writing report
+     * @throws com.copyright.rup.common.exception.RupRuntimeException if IOException appears during writing report
      */
-    void writeAuditSalCsvReport(AuditFilter filter, PipedOutputStream pipedOutputStream) throws RupRuntimeException;
+    void writeAuditSalCsvReport(AuditFilter filter, PipedOutputStream pipedOutputStream);
 
     /**
      * Writes SAL Liabilities by Rightsholer report into the output stream in CSV format.

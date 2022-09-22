@@ -1,6 +1,5 @@
 package com.copyright.rup.dist.foreign.integration.lm.impl;
 
-import com.copyright.rup.common.exception.RupRuntimeException;
 import com.copyright.rup.dist.common.integration.camel.IProducer;
 import com.copyright.rup.dist.foreign.integration.lm.api.ILmIntegrationService;
 import com.copyright.rup.dist.foreign.integration.lm.api.domain.ExternalUsage;
@@ -36,7 +35,7 @@ public class LmIntegrationService implements ILmIntegrationService {
     private int batchSize;
 
     @Override
-    public void sendToLm(List<ExternalUsage> externalUsages) throws RupRuntimeException {
+    public void sendToLm(List<ExternalUsage> externalUsages) {
         Iterables.partition(externalUsages, batchSize)
             .forEach(partition -> externalUsageProducer.send(
                 new ExternalUsageMessage(ImmutableMap.of("source", "FDA"), partition)));

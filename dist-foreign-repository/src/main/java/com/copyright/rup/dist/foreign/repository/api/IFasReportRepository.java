@@ -1,6 +1,5 @@
 package com.copyright.rup.dist.foreign.repository.api;
 
-import com.copyright.rup.common.exception.RupRuntimeException;
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancyStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.ExcludePayeeFilter;
@@ -139,9 +138,9 @@ public interface IFasReportRepository {
      *
      * @param filter            filter
      * @param pipedOutputStream stream
-     * @throws RupRuntimeException in case when IOException appears during writing report
+     * @throws com.copyright.rup.common.exception.RupRuntimeException if IOException appears during writing report
      */
-    void writeAuditFasCsvReport(AuditFilter filter, PipedOutputStream pipedOutputStream) throws RupRuntimeException;
+    void writeAuditFasCsvReport(AuditFilter filter, PipedOutputStream pipedOutputStream);
 
     /**
      * Finds FAS details by filter and writes them with payee exclude status into the output stream in CSV format.

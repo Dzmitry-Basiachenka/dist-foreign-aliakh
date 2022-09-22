@@ -78,7 +78,6 @@
         <exclude name="TooManyMethods"/>
         <!--Not applicable for integration tests-->
         <exclude name="UseObjectForClearerAPI"/>
-        <exclude name="AvoidUncheckedExceptionsInSignatures"/><!--TODO fix the rule-->
     </rule>
 
     <rule ref="category/java/design.xml/CyclomaticComplexity">

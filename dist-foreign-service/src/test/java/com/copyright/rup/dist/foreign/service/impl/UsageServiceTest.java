@@ -679,7 +679,7 @@ public class UsageServiceTest {
         Capture<Runnable> captureRunnable = new Capture<>();
         chainExecutor.execute(capture(captureRunnable));
         expectLastCall().once();
-        chainExecutor.execute(Arrays.asList(usage1), ChainProcessorTypeEnum.MATCHING);
+        chainExecutor.execute(Collections.singletonList(usage1), ChainProcessorTypeEnum.MATCHING);
         expectLastCall().once();
         replay(chainExecutor);
         usageService.sendForMatching(Arrays.asList(usage1, usage2));
@@ -699,7 +699,7 @@ public class UsageServiceTest {
         Capture<Runnable> captureRunnable = new Capture<>();
         chainExecutor.execute(capture(captureRunnable));
         expectLastCall().once();
-        chainExecutor.execute(Arrays.asList(usage1), ChainProcessorTypeEnum.RIGHTS);
+        chainExecutor.execute(Collections.singletonList(usage1), ChainProcessorTypeEnum.RIGHTS);
         expectLastCall().once();
         replay(chainExecutor);
         usageService.sendForGettingRights(Arrays.asList(usage1, usage2), "Batch name");

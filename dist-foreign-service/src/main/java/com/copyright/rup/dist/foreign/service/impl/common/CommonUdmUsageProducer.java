@@ -42,7 +42,7 @@ public class CommonUdmUsageProducer implements IProducer<List<UdmUsage>> {
     }
 
     @Override
-    public void send(List<UdmUsage> usages) throws RupRuntimeException {
+    public void send(List<UdmUsage> usages) {
         try {
             producerTemplate.sendBody(endPoint, usages);
         } catch (CamelExecutionException e) {

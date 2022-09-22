@@ -41,7 +41,7 @@ public class ExternalUsageMarshaller extends CommonMarshaller {
     }
 
     @Override
-    public Object unmarshal(Exchange exchange, InputStream stream) throws UnsupportedOperationException {
+    public Object unmarshal(Exchange exchange, InputStream stream) {
         throw new UnsupportedOperationException();
     }
 
