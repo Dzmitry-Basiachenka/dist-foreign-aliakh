@@ -1,6 +1,5 @@
 package com.copyright.rup.dist.foreign.repository.api;
 
-import com.copyright.rup.common.exception.RupRuntimeException;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
@@ -60,9 +59,9 @@ public interface INtsReportRepository {
      *
      * @param filter            filter
      * @param pipedOutputStream stream
-     * @throws RupRuntimeException in case when IOException appears during writing report
+     * @throws com.copyright.rup.common.exception.RupRuntimeException if IOException appears during writing report
      */
-    void writeAuditNtsCsvReport(AuditFilter filter, PipedOutputStream pipedOutputStream) throws RupRuntimeException;
+    void writeAuditNtsCsvReport(AuditFilter filter, PipedOutputStream pipedOutputStream);
 
     /**
      * Writes {@link com.copyright.rup.dist.foreign.domain.WorkClassification}s by batches ids and search value.

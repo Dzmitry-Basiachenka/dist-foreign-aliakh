@@ -50,7 +50,7 @@ public class ExternalUsageProducer implements IProducer<ExternalUsageMessage> {
     }
 
     @Override
-    public void send(ExternalUsageMessage message) throws RupRuntimeException {
+    public void send(ExternalUsageMessage message) {
         try {
             producerTemplate.sendBodyAndHeaders(endPoint, new ExternalUsageWrapper(message.getExternalUsages()),
                 message.getHeaders());

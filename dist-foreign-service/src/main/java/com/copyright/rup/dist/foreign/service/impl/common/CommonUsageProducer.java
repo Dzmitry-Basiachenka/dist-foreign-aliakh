@@ -50,7 +50,7 @@ public class CommonUsageProducer implements IProducer<List<Usage>> {
     }
 
     @Override
-    public void send(List<Usage> usages) throws RupRuntimeException {
+    public void send(List<Usage> usages) {
         try {
             Map<String, Object> headers = Maps.newHashMapWithExpectedSize(1);
             if (CollectionUtils.isNotEmpty(usages)) {

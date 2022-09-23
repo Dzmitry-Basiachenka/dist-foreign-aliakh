@@ -35,7 +35,7 @@ public class FdaCommonUnmarshaller<T> extends CommonMarshaller {
     }
 
     @Override
-    public void marshal(Exchange exchange, Object graph, OutputStream stream) throws UnsupportedOperationException {
+    public void marshal(Exchange exchange, Object graph, OutputStream stream) {
         throw new UnsupportedOperationException();
     }
 
