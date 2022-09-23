@@ -66,7 +66,7 @@ public class RhTaxService implements IRhTaxService {
         LOGGER.debug("Processing RH tax country. Started. UsageIds={}, RhAccountNumbers={}", usageIdsWrapper,
             accountNumbers);
         Map<Long, Boolean> accountNumberToUsTaxCountryMap =
-            oracleRhTaxCountryService.isUsTaxCountry(accountNumbers);
+            oracleRhTaxCountryService.getAccountNumbersToUsTaxCountryFlags(accountNumbers);
         accountNumberToUsTaxCountryMap.entrySet().stream()
             .filter(Map.Entry::getValue)
             .forEach(entry -> {

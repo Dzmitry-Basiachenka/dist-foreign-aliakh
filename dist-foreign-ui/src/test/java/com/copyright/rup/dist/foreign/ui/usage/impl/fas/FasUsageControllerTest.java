@@ -128,7 +128,7 @@ public class FasUsageControllerTest {
     }
 
     @Test
-    public void getBeansCount() {
+    public void testGetBeansCount() {
         usageFilter.setFiscalYear(2017);
         expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
         expect(filterWidgetMock.getAppliedFilter()).andReturn(usageFilter).once();
@@ -233,13 +233,14 @@ public class FasUsageControllerTest {
         Capture<Consumer<PipedOutputStream>> posConsumerCapture = new Capture<>();
         String fileName = "export_usage_";
         Supplier<String> fileNameSupplier = () -> fileName;
-        Supplier<InputStream> isSupplier = () -> IOUtils.toInputStream(StringUtils.EMPTY, StandardCharsets.UTF_8);
+        Supplier<InputStream> inputStreamSupplier =
+                () -> IOUtils.toInputStream(StringUtils.EMPTY, StandardCharsets.UTF_8);
         PipedOutputStream pos = new PipedOutputStream();
         expect(OffsetDateTime.now()).andReturn(DATE).once();
         expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
         expect(filterWidgetMock.getAppliedFilter()).andReturn(usageFilter).once();
         expect(streamSourceHandler.getCsvStreamSource(capture(fileNameSupplierCapture), capture(posConsumerCapture)))
-            .andReturn(new StreamSource(fileNameSupplier, "csv", isSupplier)).once();
+            .andReturn(new StreamSource(fileNameSupplier, "csv", inputStreamSupplier)).once();
         reportService.writeFasUsageCsvReport(usageFilter, pos);
         expectLastCall().once();
         replay(OffsetDateTime.class, filterWidgetMock, filterController, streamSourceHandler, reportService);

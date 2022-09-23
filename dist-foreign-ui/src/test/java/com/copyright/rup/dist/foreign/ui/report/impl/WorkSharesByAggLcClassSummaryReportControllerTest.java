@@ -90,12 +90,13 @@ public class WorkSharesByAggLcClassSummaryReportControllerTest {
         Capture<Supplier<String>> fileNameSupplierCapture = new Capture<>();
         Capture<Consumer<PipedOutputStream>> posConsumerCapture = new Capture<>();
         String fileName = String.format("work_shares_by_agg_lc_class_summary_report_%s_", scenario.getName());
-        Supplier<InputStream> isSupplier = () -> IOUtils.toInputStream(StringUtils.EMPTY, StandardCharsets.UTF_8);
+        Supplier<InputStream> inputStreamSupplier =
+                () -> IOUtils.toInputStream(StringUtils.EMPTY, StandardCharsets.UTF_8);
         PipedOutputStream pos = new PipedOutputStream();
         expect(OffsetDateTime.now()).andReturn(now).once();
         expect(widget.getScenario()).andReturn(scenario).times(2);
         expect(streamSourceHandler.getCsvStreamSource(capture(fileNameSupplierCapture), capture(posConsumerCapture)))
-            .andReturn(new StreamSource(() -> fileName, "csv", isSupplier)).once();
+            .andReturn(new StreamSource(() -> fileName, "csv", inputStreamSupplier)).once();
         reportService.writeWorkSharesByAggLcClassSummaryCsvReport(scenario, pos);
         expectLastCall().once();
         replay(OffsetDateTime.class, widget, streamSourceHandler, reportService);

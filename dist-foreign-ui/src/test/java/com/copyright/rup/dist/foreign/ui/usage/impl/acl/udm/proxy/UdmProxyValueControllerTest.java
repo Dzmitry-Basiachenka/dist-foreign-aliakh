@@ -102,13 +102,14 @@ public class UdmProxyValueControllerTest {
         Capture<Supplier<String>> fileNameSupplierCapture = new Capture<>();
         Capture<Consumer<PipedOutputStream>> posConsumerCapture = new Capture<>();
         String fileName = "export_udm_proxy_value_";
-        Supplier<InputStream> isSupplier = () -> IOUtils.toInputStream(StringUtils.EMPTY, StandardCharsets.UTF_8);
+        Supplier<InputStream> inputStreamSupplier =
+                () -> IOUtils.toInputStream(StringUtils.EMPTY, StandardCharsets.UTF_8);
         PipedOutputStream pos = new PipedOutputStream();
         expect(OffsetDateTime.now()).andReturn(DATE).once();
         expect(udmProxyValueFilterController.getWidget()).andReturn(udmProxyValueFilterWidget).once();
         expect(udmProxyValueFilterWidget.getAppliedFilter()).andReturn(udmUsageFilter).once();
         expect(streamSourceHandler.getCsvStreamSource(capture(fileNameSupplierCapture), capture(posConsumerCapture)))
-            .andReturn(new StreamSource(() -> fileName, "csv", isSupplier)).once();
+            .andReturn(new StreamSource(() -> fileName, "csv", inputStreamSupplier)).once();
         udmReportService.writeUdmProxyValueCsvReport(udmUsageFilter, pos);
         expectLastCall().once();
         replay(OffsetDateTime.class, udmProxyValueFilterWidget, udmProxyValueFilterController,

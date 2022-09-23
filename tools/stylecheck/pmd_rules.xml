@@ -45,7 +45,6 @@
         <!--Static imports are used for unit tests-->
         <exclude name="TooManyStaticImports"/>
         <exclude name="FieldNamingConventions"/><!--TODO fix the rule-->
-        <exclude name="LinguisticNaming"/><!--TODO fix the rule-->
         <exclude name="UseUnderscoresInNumericLiterals"/>
     </rule>
 

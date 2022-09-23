@@ -135,11 +135,12 @@ public class ReconcileRightsholdersControllerTest {
         Capture<Consumer<PipedOutputStream>> posConsumerCapture = new Capture<>();
         String fileName = String.format("ownership_adjustment_report_%s_", scenario.getName());
         Supplier<String> fileNameSupplier = () -> fileName;
-        Supplier<InputStream> isSupplier = () -> IOUtils.toInputStream(StringUtils.EMPTY, StandardCharsets.UTF_8);
+        Supplier<InputStream> inputStreamSupplier =
+                () -> IOUtils.toInputStream(StringUtils.EMPTY, StandardCharsets.UTF_8);
         PipedOutputStream pos = new PipedOutputStream();
         expect(OffsetDateTime.now()).andReturn(now).once();
         expect(streamSourceHandler.getCsvStreamSource(capture(fileNameSupplierCapture), capture(posConsumerCapture)))
-            .andReturn(new StreamSource(fileNameSupplier, "csv", isSupplier)).once();
+            .andReturn(new StreamSource(fileNameSupplier, "csv", inputStreamSupplier)).once();
         reportService.writeOwnershipAdjustmentCsvReport(scenario.getId(),
             Collections.singleton(RightsholderDiscrepancyStatusEnum.DRAFT), pos);
         expectLastCall().once();

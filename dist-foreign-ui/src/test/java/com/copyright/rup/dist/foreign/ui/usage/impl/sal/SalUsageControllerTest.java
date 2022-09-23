@@ -165,7 +165,7 @@ public class SalUsageControllerTest {
     }
 
     @Test
-    public void getBeansCount() {
+    public void testGetBeansCount() {
         usageFilter.setSalDetailType(SalDetailTypeEnum.IB);
         expect(filterController.getWidget()).andReturn(filterWidget).once();
         expect(filterWidget.getAppliedFilter()).andReturn(usageFilter).once();
@@ -201,13 +201,14 @@ public class SalUsageControllerTest {
         Capture<Consumer<PipedOutputStream>> posConsumerCapture = new Capture<>();
         String fileName = "export_usage_";
         Supplier<String> fileNameSupplier = () -> fileName;
-        Supplier<InputStream> isSupplier = () -> IOUtils.toInputStream(StringUtils.EMPTY, StandardCharsets.UTF_8);
+        Supplier<InputStream> inputStreamSupplier =
+                () -> IOUtils.toInputStream(StringUtils.EMPTY, StandardCharsets.UTF_8);
         PipedOutputStream pos = new PipedOutputStream();
         expect(OffsetDateTime.now()).andReturn(DATE).once();
         expect(filterController.getWidget()).andReturn(filterWidget).once();
         expect(filterWidget.getAppliedFilter()).andReturn(usageFilter).once();
         expect(streamSourceHandler.getCsvStreamSource(capture(fileNameSupplierCapture), capture(posConsumerCapture)))
-            .andReturn(new StreamSource(fileNameSupplier, "csv", isSupplier)).once();
+            .andReturn(new StreamSource(fileNameSupplier, "csv", inputStreamSupplier)).once();
         reportService.writeSalUsageCsvReport(usageFilter, pos);
         expectLastCall().once();
         replay(OffsetDateTime.class, filterWidget, filterController, streamSourceHandler, reportService);

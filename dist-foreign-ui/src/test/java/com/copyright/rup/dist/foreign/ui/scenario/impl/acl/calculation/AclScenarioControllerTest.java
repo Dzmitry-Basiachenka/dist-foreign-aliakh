@@ -120,11 +120,12 @@ public class AclScenarioControllerTest {
         Capture<Consumer<PipedOutputStream>> posConsumerCapture = newCapture();
         String fileName = scenario.getName() + "_Details_";
         Supplier<String> fileNameSupplier = () -> fileName;
-        Supplier<InputStream> isSupplier = () -> IOUtils.toInputStream(StringUtils.EMPTY, StandardCharsets.UTF_8);
+        Supplier<InputStream> inputStreamSupplier =
+                () -> IOUtils.toInputStream(StringUtils.EMPTY, StandardCharsets.UTF_8);
         PipedOutputStream pos = new PipedOutputStream();
         expect(OffsetDateTime.now()).andReturn(DATE).once();
         expect(streamSourceHandler.getCsvStreamSource(capture(fileNameSupplierCapture), capture(posConsumerCapture)))
-            .andReturn(new StreamSource(fileNameSupplier, "csv", isSupplier)).once();
+            .andReturn(new StreamSource(fileNameSupplier, "csv", inputStreamSupplier)).once();
         aclCalculationReportService.writeAclScenarioDetailsCsvReport(scenario.getId(), pos);
         expectLastCall().once();
         replay(OffsetDateTime.class, streamSourceHandler, aclCalculationReportService);
@@ -175,11 +176,12 @@ public class AclScenarioControllerTest {
         Capture<Consumer<PipedOutputStream>> posConsumerCapture = newCapture();
         String fileName = scenario.getName() + "_";
         Supplier<String> fileNameSupplier = () -> fileName;
-        Supplier<InputStream> isSupplier = () -> IOUtils.toInputStream(StringUtils.EMPTY, StandardCharsets.UTF_8);
+        Supplier<InputStream> inputStreamSupplier =
+                () -> IOUtils.toInputStream(StringUtils.EMPTY, StandardCharsets.UTF_8);
         PipedOutputStream pos = new PipedOutputStream();
         expect(OffsetDateTime.now()).andReturn(DATE).once();
         expect(streamSourceHandler.getCsvStreamSource(capture(fileNameSupplierCapture), capture(posConsumerCapture)))
-            .andReturn(new StreamSource(fileNameSupplier, "csv", isSupplier)).once();
+            .andReturn(new StreamSource(fileNameSupplier, "csv", inputStreamSupplier)).once();
         aclCalculationReportService.writeAclScenarioRightsholderTotalsCsvReport(scenario.getId(), pos);
         expectLastCall().once();
         replay(OffsetDateTime.class, streamSourceHandler, aclCalculationReportService);

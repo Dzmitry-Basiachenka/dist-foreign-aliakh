@@ -113,7 +113,8 @@ public class RhTaxServiceTest {
         Usage usTaxUsage = buildUsage(ACC_NUMBER_2);
         Usage notUsTaxUsage = buildUsage(ACC_NUMBER_3);
         List<Usage> usages = Arrays.asList(usTaxUsage, notUsTaxUsage);
-        expect(oracleRhTaxCountryService.isUsTaxCountry(Sets.newHashSet(ACC_NUMBER_2, ACC_NUMBER_3)))
+        expect(oracleRhTaxCountryService.getAccountNumbersToUsTaxCountryFlags(
+                Sets.newHashSet(ACC_NUMBER_2, ACC_NUMBER_3)))
             .andReturn(ImmutableMap.of(ACC_NUMBER_2, Boolean.TRUE, ACC_NUMBER_3, Boolean.FALSE))
             .once();
         usageService.updateProcessedUsage(usTaxUsage);

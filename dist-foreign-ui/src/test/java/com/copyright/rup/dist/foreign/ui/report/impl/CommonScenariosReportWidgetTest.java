@@ -82,7 +82,7 @@ public class CommonScenariosReportWidgetTest {
         assertEquals(3, content.getComponentCount());
         Component searchWidget = content.getComponent(0);
         assertThat(searchWidget, instanceOf(SearchWidget.class));
-        UiTestHelper.verifyGrid((Grid) content.getComponent(1), Arrays.asList(
+        UiTestHelper.verifyGrid((Grid) content.getComponent(1), Collections.singletonList(
             Triple.of("Scenario Name", -1.0, -1)));
         verifyButtonsLayout(content.getComponent(2), "Export", "Close");
     }
