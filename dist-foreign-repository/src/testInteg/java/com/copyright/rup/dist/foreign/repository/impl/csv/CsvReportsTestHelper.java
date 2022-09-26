@@ -38,25 +38,24 @@ public class CsvReportsTestHelper {
 
     protected void assertFilesWithExecutor(Consumer<PipedOutputStream> reportWriter, String fileName)
         throws IOException {
-        ExecutorService executorService = Executors.newFixedThreadPool(2);
-        PipedOutputStream outputStream = new PipedOutputStream();
-        PipedInputStream inputStream = new PipedInputStream(outputStream);
-        Future<?> writeReportFuture = executorService.submit(() -> reportWriter.accept(outputStream));
-        Future<byte[]> readReportFuture = executorService.submit(() -> {
-            try {
-                return IOUtils.toByteArray(inputStream);
-            } catch (IOException e) {
-                throw new AssertionError(e);
-            }
-        });
-        byte[] actualReportBytes;
-        try {
+        try (PipedOutputStream outputStream = new PipedOutputStream();
+             PipedInputStream inputStream = new PipedInputStream(outputStream)) {
+            ExecutorService executorService = Executors.newFixedThreadPool(2);
+            Future<?> writeReportFuture = executorService.submit(() -> reportWriter.accept(outputStream));
+            Future<byte[]> readReportFuture = executorService.submit(() -> {
+                try {
+                    return IOUtils.toByteArray(inputStream);
+                } catch (IOException e) {
+                    throw new AssertionError(e);
+                }
+            });
+            byte[] actualReportBytes;
             writeReportFuture.get(10, TimeUnit.SECONDS);
             actualReportBytes = readReportFuture.get(10, TimeUnit.SECONDS);
+            reportTestUtils.assertCsvReport(fileName, new ByteArrayInputStream(actualReportBytes));
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             throw new AssertionError(e);
         }
-        reportTestUtils.assertCsvReport(fileName, new ByteArrayInputStream(actualReportBytes));
     }
 
     protected void assertFiles(Consumer<ByteArrayOutputStream> reportWriter, String fileName) throws IOException {

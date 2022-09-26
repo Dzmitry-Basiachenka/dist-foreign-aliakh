@@ -19,8 +19,8 @@
         <!--False positive on equalsVerifier library-->
         <exclude name="JUnitTestsShouldIncludeAssert"/>
         <exclude name="JUnitTestContainsTooManyAsserts"/>
-        <exclude name="UseTryWithResources"/><!--TODO fix the rule-->
-        <exclude name="GuardLogStatement"/><!--TODO fix the rule-->
+        <exclude name="UseTryWithResources"/>
+        <exclude name="GuardLogStatement"/>
         <exclude name="UnusedAssignment"/><!--TODO fix the rule-->
     </rule>
 
@@ -131,8 +131,13 @@
         <!--Required in reset methods of test builders-->
         <exclude name="NullAssignment"/>
         <exclude name="InvalidLogMessageFormat"/><!--TODO fix the rule-->
-        <exclude name="CloseResource"/><!--TODO fix the rule-->
         <exclude name="ReturnEmptyCollectionRatherThanNull"/>
+    </rule>
+
+    <rule ref="category/java/errorprone.xml/CloseResource">
+        <properties>
+            <property name="violationSuppressXPath" value="//ClassOrInterfaceDeclaration[ends-with(@SimpleName, 'Test')]"/>
+        </properties>
     </rule>
 
     <rule ref="category/java/errorprone.xml/AssignmentInOperand">
