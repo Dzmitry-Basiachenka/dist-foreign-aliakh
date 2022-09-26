@@ -77,7 +77,7 @@ public class AaclScenariosController extends CommonScenariosController implement
     public String getCriteriaHtmlRepresentation() {
         ScenarioUsageFilter filter =
             getScenarioUsageFilterService().getByScenarioId(getWidget().getSelectedScenario().getId());
-        StringBuilder sb = new StringBuilder(ForeignUi.getMessage("label.criteria"));
+        StringBuilder sb = new StringBuilder(128).append(ForeignUi.getMessage("label.criteria"));
         if (Objects.nonNull(filter)) {
             sb.append("<ul>");
             if (Objects.nonNull(filter.getProductFamily())) {
