@@ -34,7 +34,7 @@ public class AclUsageAppliedFilterWidget extends CommonAclAppliedFilterPanel {
      * @param filter instance of {@link AclUsageFilter}
      */
     public void refreshFilterPanel(AclUsageFilter filter) {
-        VerticalLayout layout = initLayout();
+        VerticalLayout layout = initFilterPanel();
         if (!filter.isEmpty()) {
             addLabel(createLabelWithSingleValue(AclUsageFilter::getUsageBatchName, filter, "label.usage_batch_name"),
                 layout);

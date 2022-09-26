@@ -33,7 +33,7 @@ public class AclGrantDetailAppliedFilterWidget extends CommonAclAppliedFilterPan
      * @param filter instance of {@link AclGrantDetailFilter}
      */
     public void refreshFilterPanel(AclGrantDetailFilter filter) {
-        VerticalLayout layout = initLayout();
+        VerticalLayout layout = initFilterPanel();
         if (!filter.isEmpty()) {
             addLabel(createLabelWithMultipleValues(sortStringValuesByNaturalOrder(filter.getGrantSetNames()),
                 "label.grant_sets", String::valueOf), layout);

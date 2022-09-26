@@ -35,7 +35,7 @@ public class UdmBaselineAppliedFilterWidget extends CommonAclAppliedFilterPanel 
      * @param filter instance of {@link UdmBaselineFilter}
      */
     public void refreshFilterPanel(UdmBaselineFilter filter) {
-        VerticalLayout layout = initLayout();
+        VerticalLayout layout = initFilterPanel();
         if (!filter.isEmpty()) {
             addLabel(createLabelWithMultipleValues(sortIntegerValuesByDesc(filter.getPeriods()), "label.periods",
                 String::valueOf), layout);

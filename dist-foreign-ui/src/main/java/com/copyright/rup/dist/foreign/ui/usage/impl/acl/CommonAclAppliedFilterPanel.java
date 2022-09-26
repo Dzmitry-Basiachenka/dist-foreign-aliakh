@@ -42,10 +42,7 @@ public abstract class CommonAclAppliedFilterPanel extends Panel {
      * Constructor.
      */
     public CommonAclAppliedFilterPanel() {
-        setWidth(265, Unit.PIXELS);
-        setHeight(700, Unit.PIXELS);
-        setStyleName(Cornerstone.FORMLAYOUT_LIGHT);
-        setSizeFull();
+        initLayout();
     }
 
     /**
@@ -128,15 +125,15 @@ public abstract class CommonAclAppliedFilterPanel extends Panel {
     }
 
     /**
-     * Initialize layout.
+     * Initialize filter panel.
      *
      * @return instance of {@link VerticalLayout}
      */
-    protected VerticalLayout initLayout() {
-        VerticalLayout filtersPanelLayout = new VerticalLayout();
-        filtersPanelLayout.setMargin(new MarginInfo(false, true, false, true));
-        VaadinUtils.setMaxComponentsWidth(filtersPanelLayout);
-        return filtersPanelLayout;
+    protected VerticalLayout initFilterPanel() {
+        VerticalLayout filterPanel = new VerticalLayout();
+        filterPanel.setMargin(new MarginInfo(false, true, false, true));
+        VaadinUtils.setMaxComponentsWidth(filterPanel);
+        return filterPanel;
     }
 
     /**
@@ -207,6 +204,13 @@ public abstract class CommonAclAppliedFilterPanel extends Panel {
         return publicationTypes.stream()
             .sorted((p1, p2) -> p1.getNameAndDescription().compareToIgnoreCase(p2.getNameAndDescription()))
             .collect(Collectors.toCollection(LinkedHashSet::new));
+    }
+
+    private void initLayout() {
+        setWidth(265, Unit.PIXELS);
+        setHeight(700, Unit.PIXELS);
+        setStyleName(Cornerstone.FORMLAYOUT_LIGHT);
+        setSizeFull();
     }
 
     private <T> String formatMultipleSelectToString(Collection<T> values, Function<T, String> formatFunction) {

@@ -49,7 +49,7 @@ public class UdmUsageAppliedFilterWidget extends CommonAclAppliedFilterPanel imp
      * @param filter instance of {@link UdmUsageFilter}
      */
     public void refreshFilterPanel(UdmUsageFilter filter) {
-        VerticalLayout layout = initLayout();
+        VerticalLayout layout = initFilterPanel();
         if (!filter.isEmpty()) {
             addLabel(createLabelWithMultipleValues(convertBatchIdsToBatchNames(filter.getUdmBatchesIds()),
                 "label.batches", String::valueOf), layout);
