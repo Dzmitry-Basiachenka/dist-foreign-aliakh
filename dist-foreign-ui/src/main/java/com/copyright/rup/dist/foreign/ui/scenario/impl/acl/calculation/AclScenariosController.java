@@ -84,7 +84,7 @@ public class AclScenariosController extends CommonController<IAclScenariosWidget
     @Override
     public String getCriteriaHtmlRepresentation() {
         AclScenario scenario = getWidget().getSelectedScenario();
-        StringBuilder sb = new StringBuilder(ForeignUi.getMessage("label.criteria"));
+        StringBuilder sb = new StringBuilder(128).append(ForeignUi.getMessage("label.criteria"));
         if (Objects.nonNull(scenario)) {
             sb.append("<ul>");
             appendCriterionMessage(sb, "label.usage_batch",

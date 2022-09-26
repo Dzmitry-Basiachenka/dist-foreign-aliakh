@@ -49,8 +49,13 @@
         <exclude name="DefaultPackage"/>
         <!--Static imports are used for unit tests-->
         <exclude name="TooManyStaticImports"/>
-        <exclude name="FieldNamingConventions"/><!--TODO fix the rule-->
         <exclude name="UseUnderscoresInNumericLiterals"/>
+    </rule>
+
+    <rule ref="category/java/codestyle.xml/FieldNamingConventions">
+        <properties>
+            <property name="enumConstantPattern" value="[A-Z][a-zA-Z_0-9]*" />
+        </properties>
     </rule>
 
     <rule ref="category/java/codestyle.xml/ShortClassName">
@@ -166,6 +171,5 @@
         <exclude name="AvoidInstantiatingObjectsInLoops"/>
         <!--False positive since string concatenation is implemented through the StringBuilder-->
         <exclude name="UseStringBufferForStringAppends"/>
-        <exclude name="InsufficientStringBufferDeclaration"/><!--TODO fix the rule-->
     </rule>
 </ruleset>
