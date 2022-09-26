@@ -48,7 +48,7 @@ public abstract class CommonAclFiltersWindow extends Window {
      *
      * @return text operator combobox
      */
-    protected ComboBox<FilterOperatorEnum> buildTextOperatorComboBox() {
+    protected final ComboBox<FilterOperatorEnum> buildTextOperatorComboBox() {
         return buildOperatorComboBox(FilterOperatorEnum.EQUALS, FilterOperatorEnum.DOES_NOT_EQUAL,
             FilterOperatorEnum.CONTAINS, FilterOperatorEnum.IS_NULL, FilterOperatorEnum.IS_NOT_NULL);
     }
@@ -68,7 +68,7 @@ public abstract class CommonAclFiltersWindow extends Window {
      *
      * @return numeric operator combobox
      */
-    protected ComboBox<FilterOperatorEnum> buildNumericOperatorComboBox() {
+    protected final ComboBox<FilterOperatorEnum> buildNumericOperatorComboBox() {
         return buildOperatorComboBox(FilterOperatorEnum.EQUALS, FilterOperatorEnum.DOES_NOT_EQUAL,
             FilterOperatorEnum.GREATER_THAN, FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO,
             FilterOperatorEnum.LESS_THAN, FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO,

@@ -33,7 +33,7 @@ public class AclFundPoolAppliedFilterWidget extends CommonAclAppliedFilterPanel 
      * @param filter instance of {@link AclFundPoolDetailFilter}
      */
     public void refreshFilterPanel(AclFundPoolDetailFilter filter) {
-        VerticalLayout layout = initLayout();
+        VerticalLayout layout = initFilterPanel();
         if (!filter.isEmpty()) {
             addLabel(createLabelWithMultipleValues(sortStringValuesByNaturalOrder(filter.getFundPoolNames()),
                 "label.fund_pool.names", String::valueOf), layout);

@@ -49,20 +49,8 @@ public abstract class AbstractViewUsageBatchWindow extends Window
      */
     public AbstractViewUsageBatchWindow(ICommonUsageController controller) {
         this.controller = controller;
-        setWidth(1000, Unit.PIXELS);
-        setHeight(550, Unit.PIXELS);
-        searchWidget = new SearchWidget(this);
-        searchWidget.setPrompt(getSearchMessage());
-        initUsageBatchesGrid();
-        HorizontalLayout buttonsLayout = initButtons();
-        initMediator();
-        VerticalLayout layout = new VerticalLayout(searchWidget, grid, buttonsLayout);
-        layout.setSizeFull();
-        layout.setExpandRatio(grid, 1);
-        layout.setComponentAlignment(buttonsLayout, Alignment.MIDDLE_RIGHT);
-        setContent(layout);
-        setCaption(getCaptionMessage());
-        VaadinUtils.addComponentStyle(this, "view-batch-window");
+        this.searchWidget = new SearchWidget(this);
+        initLayout();
     }
 
     @Override
@@ -165,6 +153,22 @@ public abstract class AbstractViewUsageBatchWindow extends Window
      * @return instance of  {@link SerializablePredicate}
      */
     protected abstract SerializablePredicate<UsageBatch> getSearchFilter(String searchValue);
+
+    private void initLayout() {
+        this.searchWidget.setPrompt(getSearchMessage());
+        setWidth(1000, Unit.PIXELS);
+        setHeight(550, Unit.PIXELS);
+        initUsageBatchesGrid();
+        HorizontalLayout buttonsLayout = initButtons();
+        initMediator();
+        VerticalLayout layout = new VerticalLayout(searchWidget, grid, buttonsLayout);
+        layout.setSizeFull();
+        layout.setExpandRatio(grid, 1);
+        layout.setComponentAlignment(buttonsLayout, Alignment.MIDDLE_RIGHT);
+        setContent(layout);
+        setCaption(getCaptionMessage());
+        VaadinUtils.addComponentStyle(this, "view-batch-window");
+    }
 
     private void initMediator() {
         ViewUsageBatchMediator mediator = new ViewUsageBatchMediator();

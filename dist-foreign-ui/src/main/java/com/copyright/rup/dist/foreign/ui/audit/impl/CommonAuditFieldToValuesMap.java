@@ -87,7 +87,7 @@ public class CommonAuditFieldToValuesMap<T> {
             .collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().getActionReasons()));
     }
 
-    protected Map<String, Pair<String, String>> getFieldToValueChangesMap() {
+    protected final Map<String, Pair<String, String>> getFieldToValueChangesMap() {
         return fieldToValueChangesMap;
     }
 }

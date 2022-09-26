@@ -36,8 +36,7 @@ class SwitchableWidget<W extends IWidget<C>, C extends IController<W>> extends P
     public SwitchableWidget(IControllerProvider<C> controllerProvider, Consumer<W> listenerRegisterer) {
         this.controllerProvider = controllerProvider;
         this.listenerRegisterer = listenerRegisterer;
-        setStyleName("switchable-widget");
-        setSizeFull();
+        initLayout();
     }
 
     /**
@@ -63,5 +62,10 @@ class SwitchableWidget<W extends IWidget<C>, C extends IController<W>> extends P
         if (content instanceof IRefreshable) {
             ((IRefreshable) content).refresh();
         }
+    }
+
+    private void initLayout() {
+        setStyleName("switchable-widget");
+        setSizeFull();
     }
 }
