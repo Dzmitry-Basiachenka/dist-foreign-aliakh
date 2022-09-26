@@ -21,7 +21,12 @@
         <exclude name="JUnitTestContainsTooManyAsserts"/>
         <exclude name="UseTryWithResources"/>
         <exclude name="GuardLogStatement"/>
-        <exclude name="UnusedAssignment"/><!--TODO fix the rule-->
+    </rule>
+
+    <rule ref="category/java/bestpractices.xml/UnusedAssignment">
+        <properties>
+            <property name="violationSuppressXPath" value="//PackageDeclaration/Name[starts-with(@Image, 'com.copyright.rup.dist.foreign.ui')]" />
+        </properties>
     </rule>
 
     <rule ref="category/java/codestyle.xml">
@@ -126,11 +131,9 @@
         <!--False positive on utility methods-->
         <exclude name="DataflowAnomalyAnalysis"/>
         <!--False positive in messages from constants-->
-        <exclude name="InvalidSlf4jMessageFormat"/>
         <exclude name="MissingSerialVersionUID"/>
         <!--Required in reset methods of test builders-->
         <exclude name="NullAssignment"/>
-        <exclude name="InvalidLogMessageFormat"/><!--TODO fix the rule-->
         <exclude name="ReturnEmptyCollectionRatherThanNull"/>
     </rule>
 
