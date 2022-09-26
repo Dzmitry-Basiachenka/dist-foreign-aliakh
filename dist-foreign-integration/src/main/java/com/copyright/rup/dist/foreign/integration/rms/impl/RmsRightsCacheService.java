@@ -42,7 +42,7 @@ public class RmsRightsCacheService extends AbstractMultipleCacheService<RmsGrant
         this.rmsRightsService = rmsRightsService;
         this.cacheEnabled = cacheEnabled;
         super.setExpirationTime(TimeUnit.MINUTES.toSeconds(timeToLive));
-        getLogger().info("RMS rights cache service. CacheEnabled={}", this.cacheEnabled);
+        logParams();
     }
 
     @Override
@@ -79,6 +79,11 @@ public class RmsRightsCacheService extends AbstractMultipleCacheService<RmsGrant
     @Override
     protected Set<RmsGrant> loadData(RmsGrantKey key) {
         return null;
+    }
+
+    private void logParams() {
+        getLogger().info("RMS rights cache service. ExpirationTime={}, CacheEnabled={}",
+            this.getExpirationTime(), this.cacheEnabled);
     }
 
     private Set<RmsGrant> getGrantsWithoutCache(List<Long> wrWrkInsts, LocalDate periodEndDate, Set<String> statuses,
