@@ -123,7 +123,7 @@ public class AclScenarioDrillDownUsageDetailsWindow extends Window {
         addColumn(AclScenarioDetailDto::getId, "table.column.detail_id", "detailId", false, 250);
         addColumn(AclScenarioDetailDto::getOriginalDetailId, "table.column.usage_detail_id", "usageDetailId", true,
             170);
-        addColumn(AclScenarioDetailDto::getPeriodEndPeriod, "table.column.usage_period", "periodEndDate", true, 100);
+        addColumn(AclScenarioDetailDto::getUsagePeriod, "table.column.usage_period", "usagePeriod", true, 100);
         addBigDecimalColumn(AclScenarioDetailDto::getUsageAgeWeight, "table.column.usage_age_weight",
             "usageAgeWeight", 130);
         addColumn(AclScenarioDetailDto::getSurveyCountry, "table.column.survey_country", "surveyCountry", true, 120);
@@ -222,7 +222,7 @@ public class AclScenarioDrillDownUsageDetailsWindow extends Window {
         grid.setFooterVisible(true);
         FooterRow row = grid.getFooterRow(0);
         row.setStyleName("table-ext-footer");
-        row.join("detailId", "usageDetailId", "periodEndDate", "usageAgeWeight", "surveyCountry",
+        row.join("detailId", "usageDetailId", "usagePeriod", "usageAgeWeight", "surveyCountry",
                 "detailLicenseeClassId", "detailLicenseeClassName", "reportedTypeOfUse", "numberOfCopies",
                 "weightedCopies", "publicationType", "pubTypeWeight", "price", "priceFlag", "content", "contentFlag",
                 "contentUnitPrice", "contentUnitPriceFlag")
