@@ -1134,7 +1134,7 @@
             </foreach>
         </if>
         <if test="!filter.batchesIds.isEmpty()">
-            and ub.df_usage_batch_uid in
+            and u.df_usage_batch_uid in
             <foreach collection="filter.batchesIds" item="batchId" separator="," open="(" close=")">
                 #{batchId}
             </foreach>
