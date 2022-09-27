@@ -1,3 +1,11 @@
+16.0.4
+-
+* B-75436 FDA: Gradle upgrade for FDA: upgrade to Gradle 5 / RUP Gradle Plugins 7
+* B-75436 FDA: Gradle upgrade for FDA: apply ignored PMD rules
+* B-74271 Tech Debt: FDA: add unit tests to verify grid items for NTS windows
+* B-74271 Tech Debt: FDA: adjust columns width on ACL Scenario drill down details window
+* CDP-1099: FDA: Results By Rightsholder - Usage Details window: 'Usage Period' column is populated with 'Period End Date' instead of 'Usage Period' date
+
 16.0.3
 -
 * B-74271 Tech Debt: FDA: remove lazy loading from View ACL Scenario window
