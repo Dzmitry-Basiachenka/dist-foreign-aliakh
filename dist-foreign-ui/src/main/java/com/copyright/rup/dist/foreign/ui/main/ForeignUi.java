@@ -5,6 +5,8 @@ import com.copyright.rup.dist.foreign.ui.main.api.IMainWidgetController;
 import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.report.api.IReportController;
+import com.copyright.rup.dist.foreign.ui.report.api.acl.IAclReportController;
+import com.copyright.rup.dist.foreign.ui.report.api.acl.IAclReportWidget;
 import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmReportWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
@@ -50,12 +52,14 @@ public class ForeignUi extends CommonUi implements IMediatorProvider {
     private static final ResourceBundle MESSAGES =
         ResourceBundle.getBundle("com.copyright.rup.dist.foreign.ui.messages");
     private static final String UDM_TAB = "UDM";
+    private static final String CALCULATIONS_TAB = "Calculations";
 
     private static final String REPORT_MENU_CSS_POSITION = "left: 385px;";
     private static final String UDM_REPORT_MENU_CSS_POSITION_MANAGER = "left: 415px; top: 29px;";
     private static final String UDM_REPORT_MENU_CSS_POSITION_SPECIALIST = "left: 540px; top: 29px;";
     private static final String UDM_REPORT_MENU_CSS_POSITION_VIEW_ONLY = "left: 415px; top: 29px;";
     private static final String UDM_REPORT_MENU_CSS_POSITION_RESEARCHER = "left: 165px; top: 29px;";
+    private static final String ACL_REPORT_MENU_CSS_POSITION = "left: 400px; top: 29px;";
 
     @Autowired
     private IMainWidgetController controller;
@@ -65,9 +69,12 @@ public class ForeignUi extends CommonUi implements IMediatorProvider {
     private IProductFamilyProvider productFamilyProvider;
     @Autowired
     private IUdmReportController udmReportController;
+    @Autowired
+    private IAclReportController aclReportController;
 
     private ComboBox<String> productFamilyComboBox;
     private IUdmReportWidget udmReportWidget;
+    private IAclReportWidget aclReportWidget;
 
     /**
      * Gets a message associated with specified {@code key}.
@@ -160,6 +167,7 @@ public class ForeignUi extends CommonUi implements IMediatorProvider {
 
     private void initAclReportWidgets() {
         initUdmReportWidget();
+        initAclReportWidget();
         switchAclReportWidgets();
     }
 
@@ -168,13 +176,25 @@ public class ForeignUi extends CommonUi implements IMediatorProvider {
         VaadinUtils.addComponentStyle(udmReportWidget, "udm-reports-menu");
     }
 
+    private void initAclReportWidget() {
+        aclReportWidget = aclReportController.initWidget();
+        VaadinUtils.addComponentStyle(aclReportWidget, "acl-reports-menu");
+    }
+
     private void switchAclReportWidgets() {
         String selectedTabName = getSelectedTabName();
         if (Objects.nonNull(selectedTabName)) {
-            if (isAclProductFamily() && UDM_TAB.equals(selectedTabName)) {
-                addUdmReportWidgetToAbsoluteLayout();
+            if (isAclProductFamily()) {
+                if (UDM_TAB.equals(selectedTabName)) {
+                    addUdmReportWidgetToAbsoluteLayout();
+                    getAbsoluteLayout().removeComponent(aclReportWidget);
+                } else if (CALCULATIONS_TAB.equals(selectedTabName)) {
+                    getAbsoluteLayout().addComponent(aclReportWidget, ACL_REPORT_MENU_CSS_POSITION);
+                    getAbsoluteLayout().removeComponent(udmReportWidget);
+                }
             } else {
                 getAbsoluteLayout().removeComponent(udmReportWidget);
+                getAbsoluteLayout().removeComponent(aclReportWidget);
             }
         }
     }
