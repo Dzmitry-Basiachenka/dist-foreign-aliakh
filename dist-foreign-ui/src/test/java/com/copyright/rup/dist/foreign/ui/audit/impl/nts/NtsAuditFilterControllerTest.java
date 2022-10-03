@@ -37,12 +37,12 @@ import java.util.List;
  */
 public class NtsAuditFilterControllerTest {
 
+    private static final String NTS_PRODUCT_FAMILY = "NTS";
+
     private CommonAuditFilterController controller;
     private IUsageBatchService usageBatchService;
     private IRightsholderService rightsholderService;
     private IProductFamilyProvider productFamilyProvider;
-
-    private static final String NTS_PRODUCT_FAMILY = "NTS";
 
     @Before
     public void setUp() {

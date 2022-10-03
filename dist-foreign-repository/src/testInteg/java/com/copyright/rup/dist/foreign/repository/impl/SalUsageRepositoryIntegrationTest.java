@@ -132,11 +132,10 @@ public class SalUsageRepositoryIntegrationTest {
     private static final BigDecimal ZERO_AMOUNT = new BigDecimal("0.0000000000");
     private static final String PERCENT = "%";
     private static final String UNDERSCORE = "_";
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     @Autowired
     private ISalUsageRepository salUsageRepository;
-
-    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     static {
         OBJECT_MAPPER.registerModule(new JavaTimeModule());

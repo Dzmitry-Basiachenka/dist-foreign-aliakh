@@ -38,7 +38,10 @@ allprojects {
 subprojects {
     def styleCheckConfigDir = rootProject.getProjectDir().getCanonicalPath() + '/tools/stylecheck/'
     checkstyle {
+        configFile = file("${styleCheckConfigDir}checkstyle.xml")
+        //This property will be used for suppressions location
         configProperties.suppressionsFile = styleCheckConfigDir + 'checkstyle-suppressions.xml'
+        ignoreFailures = false
     }
     spotbugs {
         // Fail build if SpotBugs exceptions found

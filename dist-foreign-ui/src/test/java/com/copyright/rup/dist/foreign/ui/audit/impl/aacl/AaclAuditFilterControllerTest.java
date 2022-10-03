@@ -37,12 +37,12 @@ import java.util.List;
  */
 public class AaclAuditFilterControllerTest {
 
+    private static final String AACL_PRODUCT_FAMILY = "AACL";
+
     private CommonAuditFilterController controller;
     private IUsageBatchService usageBatchService;
     private IRightsholderService rightsholderService;
     private IProductFamilyProvider productFamilyProvider;
-
-    private static final String AACL_PRODUCT_FAMILY = "AACL";
 
     @Before
     public void setUp() {

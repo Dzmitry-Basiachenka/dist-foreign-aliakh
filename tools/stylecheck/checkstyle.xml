@@ -560,7 +560,7 @@
         <!-- Checks for multiple occurrences of the same string literal within a single file. !-->
         <!-- See http://checkstyle.sourceforge.net/config_coding.html#MultipleStringLiterals !-->
         <module name="MultipleStringLiterals">
-            <property name="allowedDuplicates" value="2"/>
+            <property name="allowedDuplicates" value="3"/>
             <property name="ignoreStringsRegexp" value='^""$'/>
             <property name="ignoreOccurrenceContext" value="ANNOTATION"/>
         </module>
@@ -710,7 +710,9 @@
         <!-- See http://checkstyle.sourceforge.net/config_imports.html#AvoidStaticImport !-->
         <module name="AvoidStaticImport">
             <property name="excludes"
-                      value="com.google.common.base.Preconditions.*,org.junit.Assert.*,org.junit.Assume.*,org.easymock.EasyMock.*,org.powermock.api.easymock.PowerMock.*"/>
+                      value="com.google.common.base.Preconditions.*,org.junit.Assert.*,org.junit.Assume.*,org.easymock.EasyMock.*,
+                            org.powermock.api.easymock.PowerMock.*,junit.framework.TestCase.*,org.hamcrest.Matchers.*,
+                            com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.*"/>
         </module>
 
         <!-- Checks for imports from a set of illegal packages. !-->

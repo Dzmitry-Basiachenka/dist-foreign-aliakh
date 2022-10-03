@@ -1,7 +1,5 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
-import static com.copyright.rup.dist.foreign.domain.FdaConstants.NTS_PRODUCT_FAMILY;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -10,6 +8,7 @@ import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.test.liquibase.LiquibaseTestExecutionListener;
 import com.copyright.rup.dist.common.test.liquibase.TestData;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
@@ -232,7 +231,7 @@ public class RightsholderRepositoryIntegrationTest {
             "CADRA, Centro de Administracion de Derechos Reprograficos, Asociacion Civil"));
         usage.setPayee(usage.getRightsholder());
         usage.setStatus(UsageStatusEnum.LOCKED);
-        usage.setProductFamily(NTS_PRODUCT_FAMILY);
+        usage.setProductFamily(FdaConstants.NTS_PRODUCT_FAMILY);
         usage.setArticle("Article");
         usage.setStandardNumber("StandardNumber");
         usage.setPublisher("Publisher");
