@@ -47,6 +47,8 @@ import java.util.stream.Collectors;
 @Service
 public class UdmValueService implements IUdmValueService {
 
+    private static final Logger LOGGER = RupLogUtils.getLogger();
+
     @Value("#{$RUP{dist.foreign.udm.currencies}}")
     private Map<String, String> currencyCodesToCurrencyNamesMap;
     @Autowired
@@ -59,8 +61,6 @@ public class UdmValueService implements IUdmValueService {
     private IRightsService rightsService;
     @Value("$RUP{dist.foreign.udm.record.threshold}")
     private int udmRecordsThreshold;
-
-    private static final Logger LOGGER = RupLogUtils.getLogger();
 
     @Override
     @Transactional

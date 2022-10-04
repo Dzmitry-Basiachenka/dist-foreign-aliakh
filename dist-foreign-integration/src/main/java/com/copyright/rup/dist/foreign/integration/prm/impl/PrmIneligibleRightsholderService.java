@@ -154,6 +154,11 @@ public class PrmIneligibleRightsholderService implements IPrmIneligibleRightshol
         return rightsholder;
     }
 
+    private LocalDate getLocalDateValue(JsonNode node) {
+        String date = node.asText();
+        return LocalDate.parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss-SSSS"));
+    }
+
     private class IneligibleRightsholdersHandler extends CommonPrmRestHandler<List<AclIneligibleRightsholder>> {
 
         private String typeOfUse;
@@ -177,10 +182,5 @@ public class PrmIneligibleRightsholderService implements IPrmIneligibleRightshol
         private void setTypeOfUse(String typeOfUse) {
             this.typeOfUse = typeOfUse;
         }
-    }
-
-    private LocalDate getLocalDateValue(JsonNode node) {
-        String date = node.asText();
-        return LocalDate.parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss-SSSS"));
     }
 }

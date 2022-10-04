@@ -7,6 +7,36 @@
 <suppressions>
     <suppress checks="MagicNumber"              files=".*"/>
 
+    <!--TODO resolve MultipleStringLiterals suppression-->
+    <suppress checks="MultipleStringLiterals"
+              files="src[/\\]test[/\\]java[/\\]com[/\\]copyright[/\\]rup[/\\]dist[/\\]foreign[/\\]integration[/\\]prm[/\\]impl[/\\]PrmIntegrationServiceTest.java"/>
+    <!--TODO resolve MultipleStringLiterals suppression-->
+    <suppress checks="MultipleStringLiterals"
+              files="src[/\\]testInteg[/\\]java[/\\]com[/\\]copyright[/\\]rup[/\\]dist[/\\]foreign[/\\]repository[/\\]impl[/\\]UsageArchiveRepositoryIntegrationTest.java"/>
+    <!--TODO resolve MultipleStringLiterals suppression-->
+    <suppress checks="MultipleStringLiterals"
+              files="src[/\\]testInteg[/\\]java[/\\]com[/\\]copyright[/\\]rup[/\\]dist[/\\]foreign[/\\]repository[/\\]impl[/\\]PublicationTypeRepositoryIntegrationTest.java"/>
+    <!--TODO resolve MultipleStringLiterals suppression-->
+    <suppress checks="MultipleStringLiterals"
+              files="src[/\\]test[/\\]java[/\\]com[/\\]copyright[/\\]rup[/\\]dist[/\\]foreign[/\\]ui[/\\]usage[/\\]impl[/\\]acl[/\\]udm[/\\]value[/\\]UdmEditValueWindowTest.java"/>
+    <!--TODO resolve MultipleStringLiterals suppression-->
+    <suppress checks="MultipleStringLiterals"
+              files="src[/\\]test[/\\]java[/\\]com[/\\]copyright[/\\]rup[/\\]dist[/\\]foreign[/\\]ui[/\\]scenario[/\\]impl[/\\]acl[/\\]calculation[/\\]AclScenarioDrillDownUsageDetailsWindowTest.java"/>
+    <!--TODO resolve MultipleStringLiterals suppression-->
+    <suppress checks="MultipleStringLiterals"
+              files="src[/\\]test[/\\]java[/\\]com[/\\]copyright[/\\]rup[/\\]dist[/\\]foreign[/\\]ui[/\\]usage[/\\]impl[/\\]sal[/\\]SalFundPoolLoadWindowTest.java"/>
+
+    <!--TODO resolve IllegalImport suppression-->
+    <suppress checks="IllegalImport"
+              files="src[/\\]test[/\\]java[/\\]com[/\\]copyright[/\\]rup[/\\]dist[/\\]foreign[/\\]repository[/\\]impl[/\\]converter.*"/>
+
+    <!--TODO resolve Regexp suppression-->
+    <suppress checks="Regexp"
+              files="src[/\\]main[/\\]java[/\\]com[/\\]copyright[/\\]rup[/\\]dist[/\\]foreign[/\\]service[/\\]impl[/\\]acl[/\\]UdmValueService.java"/>
+    <!--TODO resolve Regexp suppression-->
+    <suppress checks="Regexp"
+              files="src[/\\]main[/\\]java[/\\]com[/\\]copyright[/\\]rup[/\\]dist[/\\]foreign[/\\]service[/\\]impl[/\\]stm[/\\]StmRhConsumer.java"/>
+
     <!-- Unit tests -->
     <suppress checks="JavadocMethod"            files="src[/\\]test[/\\]java[/\\].*"/>
     <suppress checks="JavadocVariable"          files="src[/\\]test[/\\]java[/\\].*"/>

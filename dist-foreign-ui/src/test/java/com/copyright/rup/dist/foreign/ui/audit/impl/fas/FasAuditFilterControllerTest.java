@@ -37,12 +37,12 @@ import java.util.List;
  */
 public class FasAuditFilterControllerTest {
 
+    private static final String FAS_PRODUCT_FAMILY = "FAS";
+
     private CommonAuditFilterController controller;
     private IUsageBatchService usageBatchService;
     private IRightsholderService rightsholderService;
     private IProductFamilyProvider productFamilyProvider;
-
-    private static final String FAS_PRODUCT_FAMILY = "FAS";
 
     @Before
     public void setUp() {

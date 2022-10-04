@@ -30,9 +30,9 @@ import java.util.List;
  */
 public class AaclScenarioFieldsJsonMapperTest {
 
-    private final AaclScenarioFieldsJsonMapper jsonMapper = new AaclScenarioFieldsJsonMapper();
-
     private static final String ONE = "1.00";
+
+    private final AaclScenarioFieldsJsonMapper jsonMapper = new AaclScenarioFieldsJsonMapper();
 
     @Test
     public void testDeserialize() throws IOException {

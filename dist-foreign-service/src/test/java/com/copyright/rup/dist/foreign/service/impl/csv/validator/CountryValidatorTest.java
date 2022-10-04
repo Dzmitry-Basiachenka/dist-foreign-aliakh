@@ -36,10 +36,16 @@ public class CountryValidatorTest {
 
     private final String country;
     private final boolean expectedResult;
-    private CountryValidator validator;
     private final Map<String, Country> expectedCountries = ImmutableMap.of(
         "BLR", createCountry("Belarus", "BLR"),
         "CA", createCountry("Canada", "CND"));
+
+    private CountryValidator validator;
+
+    public CountryValidatorTest(String country, boolean expectedResult) {
+        this.country = country;
+        this.expectedResult = expectedResult;
+    }
 
     @Before
     public void setUp() {
@@ -48,11 +54,6 @@ public class CountryValidatorTest {
         replay(prmIntegrationService);
         validator = new CountryValidator(prmIntegrationService);
         verify(prmIntegrationService);
-    }
-
-    public CountryValidatorTest(String country, boolean expectedResult) {
-        this.country = country;
-        this.expectedResult = expectedResult;
     }
 
     @Parameters

@@ -62,6 +62,13 @@ import java.util.stream.IntStream;
 )
 public class SendScenarioToLmTest {
 
+    private static final String FAS_SCENARIO_ID = "4c014547-06f3-4840-94ff-6249730d537d";
+    private static final String NTS_SCENARIO_ID = "67027e15-17c6-4b9b-b7f0-12ec414ad344";
+    private static final String AACL_SCENARIO_ID = "d92e3c8e-7ecc-4080-bf3f-b541f51c9a06";
+    private static final String SAL_SCENARIO_ID = "b32a1abe-0de7-4889-99aa-fd5491c85a94";
+    private static final String QUEUE_NAME = "fda-test-sf-detail.fifo";
+    private static final Map<String, String> SOURCE_MAP = ImmutableMap.of("source", "FDA");
+
     @Autowired
     private IFasScenarioService fasScenarioService;
     @Autowired
@@ -82,13 +89,6 @@ public class SendScenarioToLmTest {
     private SqsClientMock sqsClientMock;
     @Autowired
     private ServiceTestHelper testHelper;
-
-    private static final String FAS_SCENARIO_ID = "4c014547-06f3-4840-94ff-6249730d537d";
-    private static final String NTS_SCENARIO_ID = "67027e15-17c6-4b9b-b7f0-12ec414ad344";
-    private static final String AACL_SCENARIO_ID = "d92e3c8e-7ecc-4080-bf3f-b541f51c9a06";
-    private static final String SAL_SCENARIO_ID = "b32a1abe-0de7-4889-99aa-fd5491c85a94";
-    private static final String QUEUE_NAME = "fda-test-sf-detail.fifo";
-    private static final Map<String, String> SOURCE_MAP = ImmutableMap.of("source", "FDA");
 
     @Before
     public void setUp() {

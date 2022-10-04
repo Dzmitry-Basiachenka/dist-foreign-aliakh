@@ -47,10 +47,11 @@ import org.powermock.reflect.Whitebox;
 @PrepareForTest({Windows.class, SecurityUtils.class})
 public class CommonScenariosControllerTest {
 
-    private final CommonScenariosController scenariosController = new CommonScenariosControllerMock();
-
     private static final String SCENARIO_ID = "2fe241c4-7625-437b-9c8f-ff7ba4d3cb07";
     private static final String SCENARIO_NAME = "Scenario name";
+
+    private final CommonScenariosController scenariosController = new CommonScenariosControllerMock();
+
     private IAaclScenariosWidget scenariosWidget;
     private Scenario scenario;
     private IScenarioService scenarioService;
