@@ -21,7 +21,8 @@ public class UdmBaselineUsageCsvReportHandler extends BaseCsvReportHandler<UdmBa
 
     private static final List<String> HEADERS = Arrays.asList("Detail ID", "Period", "Usage Origin", "Usage Detail ID",
         "Wr Wrk Inst", "System Title", "Det LC ID", "Det LC Name", "Agg LC ID", "Agg LC Name", "Survey Country",
-        "Channel", "TOU", "Annualized Copies", "Created By", "Created Date", "Updated By", "Updated Date");
+        "Channel", "Reported TOU", "TOU", "Annualized Copies", "Created By", "Created Date", "Updated By",
+        "Updated Date");
 
     /**
      * Constructor.
@@ -47,6 +48,7 @@ public class UdmBaselineUsageCsvReportHandler extends BaseCsvReportHandler<UdmBa
         beanProperties.add(bean.getAggregateLicenseeClassName());
         beanProperties.add(bean.getSurveyCountry());
         beanProperties.add(bean.getChannel().name());
+        beanProperties.add(bean.getReportedTypeOfUse());
         beanProperties.add(bean.getTypeOfUse());
         beanProperties.add(getBeanBigDecimal(bean.getAnnualizedCopies()));
         beanProperties.add(bean.getCreateUser());
