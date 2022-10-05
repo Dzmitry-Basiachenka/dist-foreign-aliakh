@@ -29,6 +29,7 @@
         <result property="rhName" column="rh_name"/>
         <result property="typeOfUse" column="type_of_use"/>
         <result property="grantPeriod" column="grant_period"/>
+        <result property="grantSetName" column="name"/>
         <result property="editable" column="is_editable"/>
         <result property="manualUploadFlag" column="manual_upload_flag"/>
     </resultMap>
@@ -68,6 +69,7 @@
             r.name rh_name,
             type_of_use,
             grant_period,
+            gs.name,
             gs.is_editable,
             manual_upload_flag,
             gd.created_datetime,
@@ -159,6 +161,12 @@
 
     <sql id="chooseSortProperty">
         <choose>
+            <when test="sort.property == 'grantSetName'">
+                gs.name <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'grantPeriod'">
+                grant_period <include refid="IUsageMapper.direction"/>
+            </when>
             <when test="sort.property == 'licenseType'">
                 license_type <include refid="IUsageMapper.direction"/>
             </when>
@@ -185,9 +193,6 @@
             </when>
             <when test="sort.property == 'typeOfUse'">
                 type_of_use <include refid="IUsageMapper.direction"/>
-            </when>
-            <when test="sort.property == 'grantPeriod'">
-                grant_period <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'createDate'">
                 gd.created_datetime <include refid="IUsageMapper.direction"/>
