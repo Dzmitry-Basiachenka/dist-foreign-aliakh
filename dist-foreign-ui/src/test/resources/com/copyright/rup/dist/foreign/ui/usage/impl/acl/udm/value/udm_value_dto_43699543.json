@@ -37,6 +37,7 @@
     "contentComment": "Content comment",
     "contentFlag": true,
     "contentUnitPrice": 150.0000000000,
+    "contentUnitPriceFlag": false,
     "lastComment": "",
     "comment": "Comment",
     "updateUser": "user@copyright.com",

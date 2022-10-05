@@ -55,6 +55,7 @@ public class UdmValueDto extends StoredEntity<String> {
     private String contentComment;
     private Boolean contentFlag;
     private BigDecimal contentUnitPrice;
+    private Boolean contentUnitPriceFlag;
     private String comment;
     private String lastComment;
 
@@ -338,6 +339,14 @@ public class UdmValueDto extends StoredEntity<String> {
         this.contentUnitPrice = contentUnitPrice;
     }
 
+    public Boolean isContentUnitPriceFlag() {
+        return contentUnitPriceFlag;
+    }
+
+    public void setContentUnitPriceFlag(Boolean contentUnitPriceFlag) {
+        this.contentUnitPriceFlag = contentUnitPriceFlag;
+    }
+
     public String getComment() {
         return comment;
     }
@@ -400,6 +409,7 @@ public class UdmValueDto extends StoredEntity<String> {
             .append(contentComment, that.contentComment)
             .append(contentFlag, that.contentFlag)
             .append(contentUnitPrice, that.contentUnitPrice)
+            .append(contentUnitPriceFlag, that.contentUnitPriceFlag)
             .append(comment, that.comment)
             .append(lastComment, that.lastComment)
             .isEquals();
@@ -444,6 +454,7 @@ public class UdmValueDto extends StoredEntity<String> {
             .append(contentComment)
             .append(contentFlag)
             .append(contentUnitPrice)
+            .append(contentUnitPriceFlag)
             .append(comment)
             .append(lastComment)
             .toHashCode();
@@ -488,6 +499,7 @@ public class UdmValueDto extends StoredEntity<String> {
             .append("contentComment", contentComment)
             .append("contentFlag", contentFlag)
             .append("contentUnitPrice", contentUnitPrice)
+            .append("contentUnitPriceFlag", contentUnitPriceFlag)
             .append("comment", comment)
             .append("lastComment", lastComment)
             .toString();

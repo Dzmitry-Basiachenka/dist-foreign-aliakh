@@ -52,6 +52,7 @@
         <result property="contentComment" column="content_comment"/>
         <result property="contentFlag" column="content_flag"/>
         <result property="contentUnitPrice" column="content_unit_price"/>
+        <result property="contentUnitPriceFlag" column="content_unit_price_flag"/>
         <result property="comment" column="comment"/>
         <result property="lastComment" column="last_comment"/>
     </resultMap>
@@ -95,6 +96,7 @@
             content_source,
             content,
             content_unit_price,
+            content_unit_price_flag,
             content_comment,
             content_flag,
             comment,
@@ -470,6 +472,9 @@
             </when>
             <when test="sort.property == 'contentUnitPrice'">
                 content_unit_price <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'contentUnitPriceFlag'">
+                content_unit_price_flag <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'comment'">
                 comment <include refid="IUsageMapper.direction"/>

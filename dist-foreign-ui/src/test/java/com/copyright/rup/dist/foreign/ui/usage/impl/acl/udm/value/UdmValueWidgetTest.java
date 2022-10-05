@@ -126,7 +126,7 @@ public class UdmValueWidgetTest {
             {"43699543-3287-40e1-a4b8-553e7547deb9", 211012, UdmValueStatusEnum.RESEARCH_COMPLETE, "jjohn@copyright.com"
                 , 100006859L, "West: A Thomson Business", 273337156L, "Bread and Butter", "1822-7773", 202712, "BK",
                 "BK", "", "N", "", "http://google.com", "", "200.00", "USD", "Individual", "", 2021, "", "200.00", "Y",
-                "1.00", "09/03/2022", "", "N", "", "Book", "", "23.1111", "Content comment", "Y", "150.00", "",
+                "1.00", "09/03/2022", "", "N", "", "Book", "", "23.1111", "Content comment", "Y", "150.00", "N", "",
                 "Comment", "user@copyright.com", "09/05/2022"}
         };
         verifyGridItems(grid, udmValues, expectedCells);
@@ -434,7 +434,8 @@ public class UdmValueWidgetTest {
             "Currency", "Price Type", "Price Access Type", "Price Year", "Price Comment", "Price in USD", "Price Flag",
             "Currency Exchange Rate", "Currency Exchange Rate Date", "Last Content", "Last Content Flag",
             "Last Content Source", "Content Source", "Last Content Comment", "Content", "Content Comment",
-            "Content Flag", "Content Unit Price", "Last Comment", "Comment", "Updated By", "Updated Date"),
+            "Content Flag", "Content Unit Price", "Content Unit Price Flag", "Last Comment", "Comment", "Updated By",
+            "Updated Date"),
             columns.stream().map(Column::getCaption).collect(Collectors.toList()));
         verifySize(grid, 100, 100, Unit.PERCENTAGE);
         assertThat(grid.getSelectionModel(), instanceOf(MultiSelectionModelImpl.class));
