@@ -3,9 +3,11 @@ package com.copyright.rup.dist.foreign.repository.impl.csv;
 import com.copyright.rup.dist.common.test.ReportTestUtils;
 import com.copyright.rup.dist.common.test.liquibase.LiquibaseTestExecutionListener;
 import com.copyright.rup.dist.common.test.liquibase.TestData;
+import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.filter.AclFundPoolDetailFilter;
 import com.copyright.rup.dist.foreign.domain.filter.AclGrantDetailFilter;
 import com.copyright.rup.dist.foreign.domain.filter.AclUsageFilter;
+import com.copyright.rup.dist.foreign.domain.report.AclCalculationReportsInfoDto;
 import com.copyright.rup.dist.foreign.repository.api.IAclCalculationReportRepository;
 
 import com.google.common.collect.Sets;
@@ -19,6 +21,7 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Collections;
 
 /**
@@ -47,6 +50,8 @@ public class AclCalculationCsvReportsIntegrationTest extends CsvReportsTestHelpe
         FOLDER_NAME + "write-scenario-details-csv-report.groovy";
     private static final String WRITE_SCENARIO_RIGHTSHOLDER_TOTALS_CSV_REPORT =
         FOLDER_NAME + "write-scenario-rightsholder-totals-csv-report.groovy";
+    private static final String WRITE_SCENARIO_SUMMARY_OF_WORK_SHARES_BY_AGG_LC_CSV_REPORT =
+        FOLDER_NAME + "write-scenario-summary-of-work-shares-by-agg-lc-csv-report.groovy";
 
     @Autowired
     private IAclCalculationReportRepository aclCalculationReportRepository;
@@ -149,5 +154,41 @@ public class AclCalculationCsvReportsIntegrationTest extends CsvReportsTestHelpe
             outputStream -> aclCalculationReportRepository.writeAclScenarioRightsholderTotalsCsvReport(
                 "12208959-6b37-4ac4-a921-cda0cc652c09", outputStream),
             "acl/scenario_rightsholder_totals_report_empty.csv");
+    }
+
+    @Test
+    @TestData(fileName = WRITE_SCENARIO_SUMMARY_OF_WORK_SHARES_BY_AGG_LC_CSV_REPORT)
+    public void testWriteSummaryOfWorkSharesByAggLcCsvReport() throws IOException {
+        AclCalculationReportsInfoDto reportsInfoDto = new AclCalculationReportsInfoDto();
+        AclScenario scenario = new AclScenario();
+        scenario.setId("a0162659-86af-40ab-bc55-2ae0cdebc2a4");
+        scenario.setName("ACL Scenario 10/05/202212");
+        scenario.setLicenseType("ACL");
+        scenario.setPeriodEndDate(202212);
+        reportsInfoDto.setReportName("Summary of Work Shares by Agg LC Report");
+        reportsInfoDto.setScenarios(Collections.singletonList(scenario));
+        reportsInfoDto.setUser("user@copyright.com");
+        reportsInfoDto.setReportDateTime(LocalDateTime.of(2022, 10, 5, 14, 30, 30));
+        assertFilesWithExecutor(outputStream ->
+            aclCalculationReportRepository.writeSummaryOfWorkSharesByAggLcCsvReport(reportsInfoDto,
+                outputStream), "acl/summary_work_shares_agg_lc_report.csv");
+    }
+
+    @Test
+    @TestData(fileName = WRITE_SCENARIO_SUMMARY_OF_WORK_SHARES_BY_AGG_LC_CSV_REPORT)
+    public void testWriteSummaryOfWorkSharesByAggLcEmptyCsvReport() throws IOException {
+        AclCalculationReportsInfoDto reportsInfoDto = new AclCalculationReportsInfoDto();
+        AclScenario scenario = new AclScenario();
+        scenario.setId("38688258-b86b-41f5-b7fd-a45121cdc2cb");
+        scenario.setName("ACL Scenario 11/05/202212");
+        scenario.setLicenseType("ACL");
+        scenario.setPeriodEndDate(202212);
+        reportsInfoDto.setReportName("Summary of Work Shares by Agg LC Report");
+        reportsInfoDto.setScenarios(Collections.singletonList(scenario));
+        reportsInfoDto.setUser("user@copyright.com");
+        reportsInfoDto.setReportDateTime(LocalDateTime.of(2022, 10, 5, 14, 30, 30));
+        assertFilesWithExecutor(outputStream ->
+            aclCalculationReportRepository.writeSummaryOfWorkSharesByAggLcCsvReport(reportsInfoDto,
+                outputStream), "acl/summary_work_shares_agg_lc_report_empty.csv");
     }
 }

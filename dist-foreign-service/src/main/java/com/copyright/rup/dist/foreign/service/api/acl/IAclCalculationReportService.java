@@ -3,7 +3,9 @@ package com.copyright.rup.dist.foreign.service.api.acl;
 import com.copyright.rup.dist.foreign.domain.filter.AclFundPoolDetailFilter;
 import com.copyright.rup.dist.foreign.domain.filter.AclGrantDetailFilter;
 import com.copyright.rup.dist.foreign.domain.filter.AclUsageFilter;
+import com.copyright.rup.dist.foreign.domain.report.AclCalculationReportsInfoDto;
 
+import java.io.OutputStream;
 import java.io.PipedOutputStream;
 
 /**
@@ -56,4 +58,13 @@ public interface IAclCalculationReportService {
      * @param pipedOutputStream instance of {@link PipedOutputStream}
      */
     void writeAclScenarioRightsholderTotalsCsvReport(String scenarioId, PipedOutputStream pipedOutputStream);
+
+    /**
+     * Writes Summary of Work Shares by Agg LC Report into csv output stream.
+     *
+     * @param reportInfo   report info
+     * @param outputStream instance of {@link OutputStream}
+     */
+    void writeSummaryOfWorkSharesByAggLcCsvReport(AclCalculationReportsInfoDto reportInfo,
+                                                  OutputStream outputStream);
 }

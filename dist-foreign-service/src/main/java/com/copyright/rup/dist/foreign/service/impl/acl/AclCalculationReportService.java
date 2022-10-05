@@ -3,12 +3,14 @@ package com.copyright.rup.dist.foreign.service.impl.acl;
 import com.copyright.rup.dist.foreign.domain.filter.AclFundPoolDetailFilter;
 import com.copyright.rup.dist.foreign.domain.filter.AclGrantDetailFilter;
 import com.copyright.rup.dist.foreign.domain.filter.AclUsageFilter;
+import com.copyright.rup.dist.foreign.domain.report.AclCalculationReportsInfoDto;
 import com.copyright.rup.dist.foreign.repository.api.IAclCalculationReportRepository;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclCalculationReportService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.OutputStream;
 import java.io.PipedOutputStream;
 
 /**
@@ -49,5 +51,11 @@ public class AclCalculationReportService implements IAclCalculationReportService
     @Override
     public void writeAclScenarioRightsholderTotalsCsvReport(String scenarioId, PipedOutputStream pipedOutputStream) {
         aclCalculationReportRepository.writeAclScenarioRightsholderTotalsCsvReport(scenarioId, pipedOutputStream);
+    }
+
+    @Override
+    public void writeSummaryOfWorkSharesByAggLcCsvReport(AclCalculationReportsInfoDto reportInfo,
+                                                         OutputStream outputStream) {
+        aclCalculationReportRepository.writeSummaryOfWorkSharesByAggLcCsvReport(reportInfo, outputStream);
     }
 }

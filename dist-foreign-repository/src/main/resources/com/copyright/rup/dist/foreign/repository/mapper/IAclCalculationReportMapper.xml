@@ -3,6 +3,14 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="IAclCalculationReportMapper">
+
+    <resultMap id="aclSummaryOfWorkSharesByAggLcReportDtoResultMap" type="AclSummaryOfWorkSharesByAggLcReportDto">
+        <result property="aggregateLicenseeClassId" column="aggregate_licensee_class_id"/>
+        <result property="aggregateLicenseeClassName" column="description"/>
+        <result property="totalDetailSharePrint" column="total_shares_print"/>
+        <result property="totalDetailShareDigital" column="total_shares_digital"/>
+    </resultMap>
+
     <select id="findAclGrantDetailsCountByFilter" parameterType="map" resultType="int">
         <include refid="IAclGrantDetailMapper.selectCountByFilterSql"/>
     </select>
@@ -33,5 +41,18 @@
 
     <select id="findAclRightsholderTotalsHoldersReportDtos" parameterType="map" resultMap="IAclScenarioUsageMapper.aclRightsholderTotalsHolderResultMap">
         <include refid="IAclScenarioUsageMapper.findAclRightsholderTotalsHoldersByScenarioIdSql"/>
+    </select>
+
+    <select id="findSummaryOfWorkSharesByAggLcReportDtos" parameterType="string" resultMap="aclSummaryOfWorkSharesByAggLcReportDtoResultMap">
+        select
+            shd.aggregate_licensee_class_id,
+            description,
+            sum(case when type_of_use = 'PRINT' then coalesce(detail_share, 0) else 0 end) as total_shares_print,
+            sum(case when type_of_use = 'DIGITAL' then coalesce(detail_share, 0) else 0 end) as total_shares_digital
+        from ${schema}.df_acl_share_detail shd
+        join ${schema}.df_aggregate_licensee_class alc on shd.aggregate_licensee_class_id = alc.aggregate_licensee_class_id
+        where df_acl_scenario_uid = #{scenarioId}
+        group by shd.aggregate_licensee_class_id, description
+        order by shd.aggregate_licensee_class_id
     </select>
 </mapper>

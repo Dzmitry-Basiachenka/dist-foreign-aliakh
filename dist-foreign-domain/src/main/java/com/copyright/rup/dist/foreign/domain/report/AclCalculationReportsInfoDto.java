@@ -22,7 +22,6 @@ public class AclCalculationReportsInfoDto {
 
     private String reportName;
     private List<AclScenario> scenarios;
-    private String licenseType;
     private Integer period;
     private String user;
     private LocalDateTime reportDateTime;
@@ -41,14 +40,6 @@ public class AclCalculationReportsInfoDto {
 
     public void setScenarios(List<AclScenario> scenarios) {
         this.scenarios = scenarios;
-    }
-
-    public String getLicenseType() {
-        return licenseType;
-    }
-
-    public void setLicenseType(String licenseType) {
-        this.licenseType = licenseType;
     }
 
     public Integer getPeriod() {
@@ -87,7 +78,6 @@ public class AclCalculationReportsInfoDto {
         return new EqualsBuilder()
             .append(reportName, that.reportName)
             .append(scenarios, that.scenarios)
-            .append(licenseType, that.licenseType)
             .append(period, that.period)
             .append(user, that.user)
             .append(reportDateTime, that.reportDateTime)
@@ -99,7 +89,6 @@ public class AclCalculationReportsInfoDto {
         return new HashCodeBuilder()
             .append(reportName)
             .append(scenarios)
-            .append(licenseType)
             .append(period)
             .append(user)
             .append(reportDateTime)
@@ -111,7 +100,6 @@ public class AclCalculationReportsInfoDto {
         return new ToStringBuilder(this)
             .append("reportName", reportName)
             .append("scenarios", scenarios)
-            .append("licenseType", licenseType)
             .append("period", period)
             .append("user", user)
             .append("reportDateTime", reportDateTime)
