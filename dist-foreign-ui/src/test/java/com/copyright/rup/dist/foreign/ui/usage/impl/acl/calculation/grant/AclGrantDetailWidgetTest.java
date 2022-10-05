@@ -156,8 +156,8 @@ public class AclGrantDetailWidgetTest {
         DataProvider dataProvider = grid.getDataProvider();
         dataProvider.refreshAll();
         Object[][] expectedCells = {
-            {"ACL", "Print&Digital", "GRANT", "N", 122857215L, "Applied catalysis", 1000009641L,
-                "Elsevier Science & Technology Journals", "PRINT", "08/31/2022", "08/31/2022", 202212, "N"}
+            {"Grant set name", 202212, "ACL", "Print&Digital", "GRANT", "N", 122857215L, "Applied catalysis",
+                1000009641L, "Elsevier Science & Technology Journals", "PRINT", "08/31/2022", "08/31/2022", "N"}
         };
         verifyGridItems(grid, grantDetails, expectedCells);
         verify(JavaScript.class, ForeignSecurityUtils.class, controller, streamSource);
@@ -182,6 +182,8 @@ public class AclGrantDetailWidgetTest {
         verifyButtonsLayout((HorizontalLayout) layout.getComponent(0), buttonsVisibility);
         Grid grid = (Grid) layout.getComponent(1);
         verifyGrid(grid, Arrays.asList(
+            Triple.of("Grant Set Name", 130.0, -1),
+            Triple.of("Grant Period", 110.0, -1),
             Triple.of("License Type", 200.0, -1),
             Triple.of("TOU Status", 150.0, -1),
             Triple.of("Grant Status", 120.0, -1),
@@ -193,7 +195,6 @@ public class AclGrantDetailWidgetTest {
             Triple.of("TOU", 120.0, -1),
             Triple.of("Created Date", 100.0, -1),
             Triple.of("Updated Date", 100.0, -1),
-            Triple.of("Grant Period", 110.0, -1),
             Triple.of("Manual Upload Flag", 150.0, -1)));
         verifyWindow(grid, null, 100, 100, Unit.PERCENTAGE);
         assertEquals(1, layout.getExpandRatio(grid), 0);
@@ -239,6 +240,7 @@ public class AclGrantDetailWidgetTest {
     private AclGrantDetailDto buildAclGrantDetailDto() {
         AclGrantDetailDto grantDetail = new AclGrantDetailDto();
         grantDetail.setLicenseType("ACL");
+        grantDetail.setGrantSetName("Grant set name");
         grantDetail.setTypeOfUseStatus("Print&Digital");
         grantDetail.setGrantStatus("GRANT");
         grantDetail.setEligible(false);

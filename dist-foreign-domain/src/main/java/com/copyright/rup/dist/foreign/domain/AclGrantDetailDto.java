@@ -19,6 +19,7 @@ public class AclGrantDetailDto extends AclGrantDetail {
     private String rhName;
     private Integer grantPeriod;
     private Boolean editable;
+    private String grantSetName;
 
     public String getLicenseType() {
         return licenseType;
@@ -52,6 +53,14 @@ public class AclGrantDetailDto extends AclGrantDetail {
         this.editable = editable;
     }
 
+    public String getGrantSetName() {
+        return grantSetName;
+    }
+
+    public void setGrantSetName(String grantSetName) {
+        this.grantSetName = grantSetName;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -67,6 +76,7 @@ public class AclGrantDetailDto extends AclGrantDetail {
             .append(rhName, that.rhName)
             .append(grantPeriod, that.grantPeriod)
             .append(editable, that.editable)
+            .append(grantSetName, that.grantSetName)
             .isEquals();
     }
 
@@ -78,6 +88,7 @@ public class AclGrantDetailDto extends AclGrantDetail {
             .append(rhName)
             .append(grantPeriod)
             .append(editable)
+            .append(grantSetName)
             .toHashCode();
     }
 
@@ -89,6 +100,7 @@ public class AclGrantDetailDto extends AclGrantDetail {
             .append("rhName", rhName)
             .append("grantPeriod", grantPeriod)
             .append("editable", editable)
+            .append("grantSetName", grantSetName)
             .toString();
     }
 }

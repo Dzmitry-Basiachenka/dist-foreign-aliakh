@@ -476,6 +476,7 @@ public class AclGrantDetailRepositoryIntegrationTest {
                                          boolean isValidateDate) {
         assertEquals(expectedGrantDetail.getLicenseType(), actualGrantDetail.getLicenseType());
         assertEquals(expectedGrantDetail.getTypeOfUseStatus(), actualGrantDetail.getTypeOfUseStatus());
+        assertEquals(expectedGrantDetail.getGrantSetName(), actualGrantDetail.getGrantSetName());
         assertEquals(expectedGrantDetail.getGrantStatus(), actualGrantDetail.getGrantStatus());
         assertEquals(expectedGrantDetail.getEligible(), actualGrantDetail.getEligible());
         assertEquals(expectedGrantDetail.getWrWrkInst(), actualGrantDetail.getWrWrkInst());
