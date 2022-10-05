@@ -1,6 +1,5 @@
 package com.copyright.rup.dist.foreign.ui.report.api.acl;
 
-import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.vaadin.widget.api.IController;
 import com.copyright.rup.vaadin.widget.api.IRefreshable;
 import com.copyright.rup.vaadin.widget.api.IWidget;
@@ -23,11 +22,4 @@ public interface IAclReportWidget extends IWidget<IAclReportController>, IRefres
      * @param reportController the report controller
      */
     void openReportWindow(String reportCaption, IController reportController);
-
-    /**
-     * Generates a report.
-     *
-     * @param streamSource instance of {@link IStreamSource}
-     */
-    void generateReport(IStreamSource streamSource);
 }

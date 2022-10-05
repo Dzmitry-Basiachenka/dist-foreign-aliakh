@@ -1,16 +1,11 @@
 package com.copyright.rup.dist.foreign.ui.report.impl.acl;
 
-import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.report.api.acl.IAclReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.acl.IAclReportWidget;
-import com.copyright.rup.dist.foreign.ui.report.impl.report.ReportStreamSource;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.widget.api.IController;
 
-import com.vaadin.server.Page;
-import com.vaadin.server.ResourceReference;
-import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.Window;
 
@@ -32,9 +27,10 @@ public class AclReportWidget extends MenuBar implements IAclReportWidget {
         removeItems();
         MenuItem rootItem = addItem(ForeignUi.getMessage("tab.reports"), null);
         rootItem.setStyleName("reports-menu-root");
-        rootItem.addItem(ForeignUi.getMessage("menu.report.liabilities_by_agg_lc"),
-            menuItem -> generateReport(
-                controller.getAclLiabilitiesByAggLicClassReportController().getCsvStreamSource()));
+        String liabilitiesByAggLicClassReport = ForeignUi.getMessage("menu.report.liabilities_by_agg_lc");
+        rootItem.addItem(liabilitiesByAggLicClassReport,
+            menuItem -> openReportWindow(liabilitiesByAggLicClassReport,
+                controller.getAclLiabilitiesByAggLicClassReportController()));
     }
 
     @Override
@@ -55,19 +51,5 @@ public class AclReportWidget extends MenuBar implements IAclReportWidget {
         Window reportWindow = (Window) reportController.initWidget();
         reportWindow.setCaption(reportCaption);
         Windows.showModalWindow(reportWindow);
-    }
-
-    @Override
-    public void generateReport(IStreamSource streamSource) {
-        VaadinSession session = VaadinSession.getCurrent();
-        session.lock();
-        try {
-            ReportStreamSource resource = new ReportStreamSource(streamSource);
-            setResource(resource.getFilename(), resource);
-            ResourceReference resourceReference = ResourceReference.create(resource, this, resource.getFilename());
-            Page.getCurrent().open(resourceReference.getURL(), null);
-        } finally {
-            session.unlock();
-        }
     }
 }
