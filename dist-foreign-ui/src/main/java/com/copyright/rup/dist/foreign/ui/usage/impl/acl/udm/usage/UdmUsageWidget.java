@@ -369,6 +369,7 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
             addBigDecimalColumn(UdmUsageDto::getStatisticalMultiplier, "table.column.statistical_multiplier",
                 "statisticalMultiplier", 150, hasResearcherPermission),
             addColumn(UdmUsageDto::getReportedTypeOfUse, "table.column.reported_tou", "reportedTypeOfUse", 120, false),
+            addColumn(UdmUsageDto::getTypeOfUse, "table.column.tou", "typeOfUse", 120, false),
             addColumn(UdmUsageDto::getQuantity, "table.column.quantity", "quantity", 100, hasResearcherPermission),
             addBigDecimalColumn(UdmUsageDto::getAnnualizedCopies, "table.column.annualized_copies", "annualizedCopies",
                 130, hasResearcherPermission),

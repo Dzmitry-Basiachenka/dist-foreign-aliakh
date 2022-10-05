@@ -104,14 +104,14 @@ public class UdmUsageWidgetTest {
             "RH Name", "Wr Wrk Inst", "Reported Title", "System Title", "Reported Standard Number",
             "Standard Number", "Reported Pub Type", "Publication Format", "Article", "Language", "Action Reason",
             "Comment", "Research URL", "Det LC ID", "Det LC Name", "Channel", "Usage Date", "Survey Start Date",
-            "Survey End Date", "Reported TOU", "Ineligible Reason", "Load Date", "Updated By", "Updated Date");
+            "Survey End Date", "Reported TOU", "TOU", "Ineligible Reason", "Load Date", "Updated By", "Updated Date");
     private static final List<String> VISIBLE_COLUMNS_FOR_MANAGER_AND_SPECIALIST =
         Arrays.asList("Detail ID", "Period", "Usage Origin", "Usage Detail ID", "Detail Status", "Assignee",
             "RH Account #", "RH Name", "Wr Wrk Inst", "Reported Title", "System Title", "Reported Standard Number",
             "Standard Number", "Reported Pub Type", "Publication Format", "Article", "Language", "Action Reason",
             "Comment", "Research URL", "Det LC ID", "Det LC Name", "Company ID", "Company Name", "Survey Respondent",
             "IP Address", "Survey Country", "Channel", "Usage Date", "Survey Start Date", "Survey End Date",
-            "Annual Multiplier", "Statistical Multiplier", "Reported TOU", "Quantity", "Annualized Copies",
+            "Annual Multiplier", "Statistical Multiplier", "Reported TOU", "TOU", "Quantity", "Annualized Copies",
             "Ineligible Reason", "Load Date", "Updated By", "Updated Date");
     private static final List<String> VISIBLE_COLUMNS_FOR_VIEW_ONLY =
         Arrays.asList("Detail ID", "Period", "Usage Origin", "Usage Detail ID", "Detail Status", "Assignee",
@@ -119,8 +119,8 @@ public class UdmUsageWidgetTest {
             "Standard Number", "Reported Pub Type", "Publication Format", "Article", "Language", "Action Reason",
             "Comment", "Research URL", "Det LC ID", "Det LC Name", "Company ID", "Company Name", "Survey Respondent",
             "Survey Country", "Channel", "Usage Date", "Survey Start Date", "Survey End Date", "Annual Multiplier",
-            "Statistical Multiplier", "Reported TOU", "Quantity", "Annualized Copies", "Ineligible Reason", "Load Date",
-            "Updated By", "Updated Date");
+            "Statistical Multiplier", "Reported TOU", "TOU", "Quantity", "Annualized Copies", "Ineligible Reason",
+            "Load Date", "Updated By", "Updated Date");
     private static final String SEARCH_PLACEHOLDER =
         "Enter Reported/System Title or Usage Detail ID or Standard Number or Article or Survey Respondent or Comment";
     private static final String SEARCH_PLACEHOLDER_RESEARCHER =
@@ -176,7 +176,7 @@ public class UdmUsageWidgetTest {
                 "Digital", "Economics of strategy", "English", "action reason", "Assigned to wjohn for review",
                 "google.com", 22, "Banks/Ins/RE/Holding Cos", 1136L, "Albany International Corp.",
                 "c6615155-f82b-402c-8f22-77e2722ae448", "localhost", "United States", UdmChannelEnum.CCC,
-                "05/10/2020", "04/20/2020", "05/15/2020", 25, "1.00", "COPY_FOR_MYSELF", 3L, "75.00",
+                "05/10/2020", "04/20/2020", "05/15/2020", 25, "1.00", "COPY_FOR_MYSELF", "DIGITAL", 3L, "75.00",
                 "ineligible reason", "09/01/2022", "uuser@copyright.com", "09/02/2022"}
         };
         verifyGridItems(grid, udmUsages, expectedCells);

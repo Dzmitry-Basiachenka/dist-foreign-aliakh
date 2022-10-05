@@ -38,6 +38,7 @@
     "annualMultiplier": 25,
     "statisticalMultiplier": 1.00000,
     "reportedTypeOfUse": "COPY_FOR_MYSELF",
+    "typeOfUse": "DIGITAL",
     "quantity": 3,
     "annualizedCopies": 75.00000,
     "ineligibleReason": {

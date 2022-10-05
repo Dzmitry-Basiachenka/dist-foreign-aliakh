@@ -1212,6 +1212,7 @@ public class UdmUsageRepositoryIntegrationTest {
         assertSortingFindDtosByFilter(UDM_USAGE_UID_3, UDM_USAGE_UID_4, "annualMultiplier");
         assertSortingFindDtosByFilter(UDM_USAGE_UID_3, UDM_USAGE_UID_4, "statisticalMultiplier");
         assertSortingFindDtosByFilter(UDM_USAGE_UID_3, UDM_USAGE_UID_4, "reportedTypeOfUse");
+        assertSortingFindDtosByFilter(UDM_USAGE_UID_3, UDM_USAGE_UID_4, "typeOfUse");
         assertSortingFindDtosByFilter(UDM_USAGE_UID_4, UDM_USAGE_UID_3, "quantity");
         assertSortingFindDtosByFilter(UDM_USAGE_UID_3, UDM_USAGE_UID_4, "annualizedCopies");
         assertSortingFindDtosByFilter(UDM_USAGE_UID_4, UDM_USAGE_UID_3, "ineligibleReason");
