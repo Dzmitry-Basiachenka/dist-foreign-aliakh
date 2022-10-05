@@ -2,14 +2,14 @@ package com.copyright.rup.dist.foreign.ui.report.impl.acl;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
-import com.copyright.rup.dist.foreign.ui.report.api.acl.IAclLiabilitiesByAggLicClassReportController;
 
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 /**
- * Implementation of controller for {@link IAclLiabilitiesByAggLicClassReportController}.
+ * Implementation of controller for {@link AclCommonReportController} to generate ACL Liabilities by Agg Lic Classes
+ * report.
  * <p/>
  * Copyright (C) 2022 copyright.com
  * <p>
@@ -17,9 +17,9 @@ import org.springframework.stereotype.Component;
  *
  * @author Ihar Suvorau
  */
-@Component
+@Component("df.aclLiabilitiesByAggLicClassReportController")
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class AclLiabilitiesByAggLicClassReportController implements IAclLiabilitiesByAggLicClassReportController {
+public class AclLiabilitiesByAggLicClassReportController extends AclCommonReportController {
 
     @Override
     public IStreamSource getCsvStreamSource() {

@@ -1,11 +1,12 @@
 package com.copyright.rup.dist.foreign.ui.report.impl.acl;
 
-import com.copyright.rup.dist.foreign.ui.report.api.acl.IAclLiabilitiesByAggLicClassReportController;
+import com.copyright.rup.dist.foreign.ui.report.api.acl.IAclCommonReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.acl.IAclReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.acl.IAclReportWidget;
 import com.copyright.rup.vaadin.widget.api.CommonController;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -24,10 +25,11 @@ import org.springframework.stereotype.Component;
 public class AclReportController extends CommonController<IAclReportWidget> implements IAclReportController {
 
     @Autowired
-    private IAclLiabilitiesByAggLicClassReportController liabilitiesByAggLicClassReportController;
+    @Qualifier("df.aclLiabilitiesByAggLicClassReportController")
+    private IAclCommonReportController liabilitiesByAggLicClassReportController;
 
     @Override
-    public IAclLiabilitiesByAggLicClassReportController getAclLiabilitiesByAggLicClassReportController() {
+    public IAclCommonReportController getAclLiabilitiesByAggLicClassReportController() {
         return liabilitiesByAggLicClassReportController;
     }
 
