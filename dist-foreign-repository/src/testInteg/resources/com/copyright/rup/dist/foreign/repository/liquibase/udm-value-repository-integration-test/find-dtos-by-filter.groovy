@@ -204,6 +204,7 @@ databaseChangeLog {
             column(name: 'currency_exchange_rate', value: 3)
             column(name: 'currency_exchange_rate_date', value: '2021-09-11')
             column(name: 'content_unit_price', value: 10.0000000000)
+            column(name: 'content_unit_price_flag', value: true)
             column(name: 'comment', value: 'Comment 2')
             column(name: 'content_comment', value: 'Content comment 2')
             column(name: 'updated_datetime', value: '2021-09-10')

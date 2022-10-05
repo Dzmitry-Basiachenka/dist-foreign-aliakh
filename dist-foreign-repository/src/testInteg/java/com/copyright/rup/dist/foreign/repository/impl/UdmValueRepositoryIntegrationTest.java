@@ -1453,6 +1453,7 @@ public class UdmValueRepositoryIntegrationTest {
         assertSortingFindDtosByFilter(UDM_VALUE_UID_6, UDM_VALUE_UID_7, "contentComment");
         assertSortingFindDtosByFilter(UDM_VALUE_UID_6, UDM_VALUE_UID_7, "contentFlag");
         assertSortingFindDtosByFilter(UDM_VALUE_UID_6, UDM_VALUE_UID_6, "contentUnitPrice");
+        assertSortingFindDtosByFilter(UDM_VALUE_UID_6, UDM_VALUE_UID_7, "contentUnitPriceFlag");
         assertSortingFindDtosByFilter(UDM_VALUE_UID_6, UDM_VALUE_UID_7, "comment");
         assertSortingFindDtosByFilter(UDM_VALUE_UID_6, UDM_VALUE_UID_6, "lastComment");
         assertSortingFindDtosByFilter(UDM_VALUE_UID_7, UDM_VALUE_UID_6, "updateDate");
@@ -1599,14 +1600,15 @@ public class UdmValueRepositoryIntegrationTest {
         assertEquals(expectedValue.getPriceSource(), actualValue.getPriceSource());
         assertEquals(expectedValue.getPriceInUsd(), actualValue.getPriceInUsd());
         assertEquals(expectedValue.isPriceFlag(), actualValue.isPriceFlag());
-        assertEquals(expectedValue.getContent(), actualValue.getContent());
         assertEquals(expectedValue.getCurrency(), actualValue.getCurrency());
         assertEquals(expectedValue.getCurrencyExchangeRate(), actualValue.getCurrencyExchangeRate());
         assertEquals(expectedValue.getCurrencyExchangeRateDate(), actualValue.getCurrencyExchangeRateDate());
-        assertEquals(expectedValue.getContentUnitPrice(), actualValue.getContentUnitPrice());
-        assertEquals(expectedValue.isContentFlag(), actualValue.isContentFlag());
-        assertEquals(expectedValue.getContentComment(), actualValue.getContentComment());
         assertEquals(expectedValue.getContentSource(), actualValue.getContentSource());
+        assertEquals(expectedValue.getContent(), actualValue.getContent());
+        assertEquals(expectedValue.getContentComment(), actualValue.getContentComment());
+        assertEquals(expectedValue.isContentFlag(), actualValue.isContentFlag());
+        assertEquals(expectedValue.getContentUnitPrice(), actualValue.getContentUnitPrice());
+        assertEquals(expectedValue.isContentUnitPriceFlag(), actualValue.isContentUnitPriceFlag());
         assertEquals(expectedValue.getComment(), actualValue.getComment());
         assertEquals(expectedValue.getUpdateUser(), actualValue.getUpdateUser());
         assertEquals(expectedValue.getCreateUser(), actualValue.getCreateUser());
