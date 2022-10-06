@@ -5,17 +5,20 @@ import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.foreign.domain.filter.AclFundPoolDetailFilter;
 import com.copyright.rup.dist.foreign.domain.filter.AclGrantDetailFilter;
 import com.copyright.rup.dist.foreign.domain.filter.AclUsageFilter;
+import com.copyright.rup.dist.foreign.domain.report.AclCalculationReportsInfoDto;
 import com.copyright.rup.dist.foreign.repository.api.IAclCalculationReportRepository;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.AclFundPoolDetailsCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.AclGrantDetailCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.AclScenarioDetailCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.AclScenarioRightsholderTotalsCsvReportHandler;
+import com.copyright.rup.dist.foreign.repository.impl.csv.acl.AclSummaryOfWorkSharesByAggLcCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.AclUsageCsvReportHandler;
 
 import com.google.common.collect.Maps;
 
 import org.springframework.stereotype.Repository;
 
+import java.io.OutputStream;
 import java.io.PipedOutputStream;
 import java.util.Map;
 import java.util.Objects;
@@ -81,6 +84,18 @@ public class AclCalculationReportRepository extends CommonReportRepository imple
                  new AclScenarioRightsholderTotalsCsvReportHandler(Objects.requireNonNull(pipedOutputStream))) {
             getTemplate().select("IAclCalculationReportMapper.findAclRightsholderTotalsHoldersReportDtos",
                 parameters, handler);
+        }
+    }
+
+    @Override
+    public void writeSummaryOfWorkSharesByAggLcCsvReport(AclCalculationReportsInfoDto reportInfo,
+                                                         OutputStream outputStream) {
+        String scenarioId = Objects.requireNonNull(reportInfo.getScenarios().get(0).getId());
+        try (AclSummaryOfWorkSharesByAggLcCsvReportHandler handler =
+                 new AclSummaryOfWorkSharesByAggLcCsvReportHandler(Objects.requireNonNull(outputStream))) {
+            getTemplate().select("IAclCalculationReportMapper.findSummaryOfWorkSharesByAggLcReportDtos",
+                scenarioId, handler);
+            handler.writeMetadata(reportInfo);
         }
     }
 }

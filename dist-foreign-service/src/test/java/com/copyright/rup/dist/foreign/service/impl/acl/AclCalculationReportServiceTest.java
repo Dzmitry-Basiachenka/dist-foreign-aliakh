@@ -8,6 +8,7 @@ import static org.easymock.EasyMock.verify;
 import com.copyright.rup.dist.foreign.domain.filter.AclFundPoolDetailFilter;
 import com.copyright.rup.dist.foreign.domain.filter.AclGrantDetailFilter;
 import com.copyright.rup.dist.foreign.domain.filter.AclUsageFilter;
+import com.copyright.rup.dist.foreign.domain.report.AclCalculationReportsInfoDto;
 import com.copyright.rup.dist.foreign.repository.api.IAclCalculationReportRepository;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclCalculationReportService;
 
@@ -15,6 +16,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
+import java.io.OutputStream;
 import java.io.PipedOutputStream;
 
 /**
@@ -78,6 +80,17 @@ public class AclCalculationReportServiceTest {
         expectLastCall().once();
         replay(aclCalculationReportRepository);
         aclCalculationReportService.writeAclScenarioDetailsCsvReport(scenarioId, outputStream);
+        verify(aclCalculationReportRepository);
+    }
+
+    @Test
+    public void writeSummaryOfWorkSharesByAggLcCsvReport() {
+        AclCalculationReportsInfoDto reportInfo = new AclCalculationReportsInfoDto();
+        OutputStream outputStream = createMock(OutputStream.class);
+        aclCalculationReportRepository.writeSummaryOfWorkSharesByAggLcCsvReport(reportInfo, outputStream);
+        expectLastCall().once();
+        replay(aclCalculationReportRepository);
+        aclCalculationReportService.writeSummaryOfWorkSharesByAggLcCsvReport(reportInfo, outputStream);
         verify(aclCalculationReportRepository);
     }
 }
