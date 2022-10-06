@@ -247,7 +247,7 @@ public class AclUsageWidgetTest {
         Object[][] expectedCells = {
             {"48579d64-99b7-492a-975a-93c96499417a", 202012, UdmUsageOriginEnum.SS, UdmChannelEnum.CCC, "LUBRIZ0610EML",
                 122815600L, "Tribology international", 5, "Chemicals", 51, "Materials", "International", "SJ", "8.932",
-                "DIGITAL", "1.00", "user@copyright.com", "08/31/2022"}
+                "N", "DIGITAL", "1.00", "user@copyright.com", "08/31/2022"}
         };
         verifyGridItems(grid, usages, expectedCells);
         verify(JavaScript.class, ForeignSecurityUtils.class, controller, streamSource);
@@ -287,6 +287,7 @@ public class AclUsageWidgetTest {
             Triple.of("Survey Country", 120.0, -1),
             Triple.of("Pub Type", 150.0, -1),
             Triple.of("Content Unit Price", 200.0, -1),
+            Triple.of("CUP Flag", 90.0, -1),
             Triple.of("TOU", 120.0, -1),
             Triple.of("Annualized Copies", 130.0, -1),
             Triple.of("Updated By", 200.0, -1),
@@ -351,6 +352,7 @@ public class AclUsageWidgetTest {
         usage.setSurveyCountry("International");
         usage.setPublicationType(buildPublicationType());
         usage.setContentUnitPrice(new BigDecimal("8.932"));
+        usage.setContentUnitPriceFlag(false);
         usage.setTypeOfUse("DIGITAL");
         usage.setAnnualizedCopies(new BigDecimal("1.00"));
         usage.setUpdateUser("user@copyright.com");

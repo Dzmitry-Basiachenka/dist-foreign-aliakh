@@ -22,6 +22,7 @@
         <result property="publicationType.name" column="pub_type_name"/>
         <result property="publicationType.description" column="pub_type_description"/>
         <result property="contentUnitPrice" column="content_unit_price"/>
+        <result property="contentUnitPriceFlag" column="content_unit_price_flag"/>
         <result property="typeOfUse" column="type_of_use"/>
         <result property="annualizedCopies" column="annualized_copies"/>
         <result property="quantity" column="quantity"/>
@@ -70,6 +71,7 @@
         pt.name pub_type_name,
         pt.description pub_type_description,
         content_unit_price,
+        content_unit_price_flag,
         type_of_use,
         annualized_copies,
         u.quantity,
@@ -248,6 +250,9 @@
             </when>
             <when test="sort.property == 'contentUnitPrice'">
                 content_unit_price <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'contentUnitPriceFlag'">
+                content_unit_price_flag <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'typeOfUse'">
                 type_of_use <include refid="IUsageMapper.direction"/>

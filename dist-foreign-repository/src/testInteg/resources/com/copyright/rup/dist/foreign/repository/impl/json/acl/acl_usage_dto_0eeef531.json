@@ -21,6 +21,7 @@
       "description": "Book"
     },
     "contentUnitPrice": 10.0000000000,
+    "contentUnitPriceFlag": true,
     "typeOfUse": "PRINT",
     "annualizedCopies": 1.00000,
     "quantity": 1,

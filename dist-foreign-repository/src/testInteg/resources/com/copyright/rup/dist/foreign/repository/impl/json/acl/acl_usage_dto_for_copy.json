@@ -15,6 +15,7 @@
     "aggregateLicenseeClassName": "Materials",
     "surveyCountry": "United States",
     "contentUnitPrice": 10.0000000000,
+    "contentUnitPriceFlag": false,
     "typeOfUse": "PRINT",
     "annualizedCopies": 1.00000,
     "quantity": 10,
@@ -45,6 +46,7 @@
       "description": "Book"
     },
     "contentUnitPrice": 9.0000000000,
+    "contentUnitPriceFlag": false,
     "typeOfUse": "PRINT",
     "annualizedCopies": 2.00000,
     "quantity": 11,
