@@ -17,7 +17,8 @@
         <result property="aggregateLicenseeClassName" column="aggregate_licensee_class_name"/>
         <result property="surveyCountry" column="survey_country"/>
         <result property="channel" column="channel"/>
-        <result property="typeOfUse" column="reported_type_of_use"/>
+        <result property="typeOfUse" column="type_of_use"/>
+        <result property="reportedTypeOfUse" column="reported_type_of_use"/>
         <result property="annualizedCopies" column="annualized_copies"/>
         <result property="valueId" column="df_udm_value_uid"/>
     </resultMap>
@@ -138,6 +139,9 @@
             <when test="sort.property == 'channel'">
                 ub.channel <include refid="IUsageMapper.direction"/>
             </when>
+            <when test="sort.property == 'typeOfUse'">
+                u.type_of_use <include refid="IUsageMapper.direction"/>
+            </when>
             <when test="sort.property == 'reportedTypeOfUse'">
                 u.reported_type_of_use <include refid="IUsageMapper.direction"/>
             </when>
@@ -173,6 +177,7 @@
             alc.description aggregate_licensee_class_name,
             survey_country,
             ub.channel,
+            u.type_of_use,
             u.reported_type_of_use,
             u.annualized_copies,
             u.df_udm_value_uid,

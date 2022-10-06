@@ -536,11 +536,11 @@
             <when test="sort.property == 'statisticalMultiplier'">
                 statistical_multiplier <include refid="IUsageMapper.direction"/>
             </when>
-            <when test="sort.property == 'reportedTypeOfUse'">
-                reported_type_of_use <include refid="IUsageMapper.direction"/>
-            </when>
             <when test="sort.property == 'typeOfUse'">
                 type_of_use <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'reportedTypeOfUse'">
+                reported_type_of_use <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'quantity'">
                 quantity <include refid="IUsageMapper.direction"/>

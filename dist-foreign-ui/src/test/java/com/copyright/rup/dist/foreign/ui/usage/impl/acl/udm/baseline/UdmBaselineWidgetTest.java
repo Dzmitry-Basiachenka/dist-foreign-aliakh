@@ -110,8 +110,8 @@ public class UdmBaselineWidgetTest {
         Object[][] expectedCells = {
             {"040ed0ac-a3a5-4e4a-a3c6-262335bb1ed9", 202006, UdmUsageOriginEnum.SS,
                 "d47e921a-8581-4d35-a2e7-98c00d22492d", 123456789L, "Brain surgery", 22, "Banks/Ins/RE/Holding Cos",
-                26, "Law Firms", "United States", UdmChannelEnum.CCC, "Book", "10.00", "user@copyright.com",
-                "06/01/2020", "wuser@copyright.com", "06/02/2020"}
+                26, "Law Firms", "United States", UdmChannelEnum.CCC, "COPY_FOR_MYSELF", "DIGITAL", "10.00",
+                "user@copyright.com", "06/01/2020", "wuser@copyright.com", "06/02/2020"}
         };
         verifyGridItems(grid, udmBaselines, expectedCells);
         verify(JavaScript.class, ForeignSecurityUtils.class, controller, streamSource);
@@ -147,7 +147,8 @@ public class UdmBaselineWidgetTest {
             Triple.of("Agg LC Name", 100.0, -1),
             Triple.of("Survey Country", 120.0, -1),
             Triple.of("Channel", 100.0, -1),
-            Triple.of("TOU", 100.0, -1),
+            Triple.of("Reported TOU", 120.0, -1),
+            Triple.of("TOU", 120.0, -1),
             Triple.of("Annualized Copies", 130.0, -1),
             Triple.of("Created By", 200.0, -1),
             Triple.of("Created Date", 110.0, -1),
@@ -206,7 +207,8 @@ public class UdmBaselineWidgetTest {
         udmBaseline.setAggregateLicenseeClassName("Law Firms");
         udmBaseline.setSurveyCountry("United States");
         udmBaseline.setChannel(UdmChannelEnum.CCC);
-        udmBaseline.setTypeOfUse("Book");
+        udmBaseline.setTypeOfUse("DIGITAL");
+        udmBaseline.setReportedTypeOfUse("COPY_FOR_MYSELF");
         udmBaseline.setAnnualizedCopies(new BigDecimal("10.00000"));
         udmBaseline.setCreateUser("user@copyright.com");
         udmBaseline.setCreateDate(

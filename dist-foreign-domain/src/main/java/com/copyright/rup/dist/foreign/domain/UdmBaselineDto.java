@@ -31,6 +31,7 @@ public class UdmBaselineDto extends StoredEntity<String> {
     private String surveyCountry;
     private UdmChannelEnum channel;
     private String typeOfUse;
+    private String reportedTypeOfUse;
     private BigDecimal annualizedCopies;
     private String valueId;
 
@@ -130,6 +131,14 @@ public class UdmBaselineDto extends StoredEntity<String> {
         this.typeOfUse = typeOfUse;
     }
 
+    public String getReportedTypeOfUse() {
+        return reportedTypeOfUse;
+    }
+
+    public void setReportedTypeOfUse(String reportedTypeOfUse) {
+        this.reportedTypeOfUse = reportedTypeOfUse;
+    }
+
     public BigDecimal getAnnualizedCopies() {
         return annualizedCopies;
     }
@@ -169,6 +178,7 @@ public class UdmBaselineDto extends StoredEntity<String> {
             .append(surveyCountry, that.surveyCountry)
             .append(channel, that.channel)
             .append(typeOfUse, that.typeOfUse)
+            .append(reportedTypeOfUse, that.reportedTypeOfUse)
             .append(annualizedCopies, that.annualizedCopies)
             .append(valueId, that.valueId)
             .isEquals();
@@ -190,6 +200,7 @@ public class UdmBaselineDto extends StoredEntity<String> {
             .append(surveyCountry)
             .append(channel)
             .append(typeOfUse)
+            .append(reportedTypeOfUse)
             .append(annualizedCopies)
             .append(valueId)
             .toHashCode();
@@ -211,6 +222,7 @@ public class UdmBaselineDto extends StoredEntity<String> {
             .append("surveyCountry", surveyCountry)
             .append("channel", channel)
             .append("typeOfUse", typeOfUse)
+            .append("reportedTypeOfUse", reportedTypeOfUse)
             .append("annualizedCopies", annualizedCopies)
             .append("valueId", valueId)
             .toString();

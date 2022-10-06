@@ -537,6 +537,7 @@ public class UdmBaselineRepositoryIntegrationTest {
         verifySortingFindDtosByFilter(USAGE_ID_2, USAGE_ID_3, "aggLcId");
         verifySortingFindDtosByFilter(USAGE_ID_3, USAGE_ID_2, "aggLcName");
         verifySortingFindDtosByFilter(USAGE_ID_3, USAGE_ID_2, "surveyCountry");
+        verifySortingFindDtosByFilter(USAGE_ID_2, USAGE_ID_3, "typeOfUse");
         verifySortingFindDtosByFilter(USAGE_ID_2, USAGE_ID_3, "reportedTypeOfUse");
         verifySortingFindDtosByFilter(USAGE_ID_2, USAGE_ID_3, "annualizedCopies");
         verifySortingFindDtosByFilter(USAGE_ID_2, USAGE_ID_3, "createDate");
