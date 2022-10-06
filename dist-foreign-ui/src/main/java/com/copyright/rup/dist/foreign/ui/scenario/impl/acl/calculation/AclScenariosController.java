@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl.acl.calculation;
 
+import com.copyright.rup.dist.common.reporting.api.IStreamSource;
+import com.copyright.rup.dist.common.reporting.api.IStreamSourceHandler;
 import com.copyright.rup.dist.foreign.domain.AclFundPool;
 import com.copyright.rup.dist.foreign.domain.AclFundPoolDetailDto;
 import com.copyright.rup.dist.foreign.domain.AclGrantSet;
@@ -12,8 +14,10 @@ import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
+import com.copyright.rup.dist.foreign.domain.report.AclCalculationReportsInfoDto;
 import com.copyright.rup.dist.foreign.service.api.ILicenseeClassService;
 import com.copyright.rup.dist.foreign.service.api.IPublicationTypeService;
+import com.copyright.rup.dist.foreign.service.api.acl.IAclCalculationReportService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclFundPoolService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclGrantSetService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioService;
@@ -36,6 +40,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Supplier;
 
 /**
  * Implementation of {@link IAclScenariosController}.
@@ -70,6 +75,10 @@ public class AclScenariosController extends CommonController<IAclScenariosWidget
     private ILicenseeClassService licenseeClassService;
     @Autowired
     private IAclUsageService aclUsageService;
+    @Autowired
+    private IStreamSourceHandler streamSourceHandler;
+    @Autowired
+    private IAclCalculationReportService aclCalculationReportService;
 
     @Override
     public List<AclScenario> getScenarios() {
@@ -195,6 +204,13 @@ public class AclScenariosController extends CommonController<IAclScenariosWidget
     @Override
     public List<DetailLicenseeClass> getDetailLicenseeClassesByScenarioId(String scenarioId) {
         return aclScenarioService.getDetailLicenseeClassesByScenarioId(scenarioId);
+    }
+
+    @Override
+    public IStreamSource getExportAclSummaryOfWorkSharesByAggLcStreamSource(
+        Supplier<AclCalculationReportsInfoDto> reportInfoSupplier) {
+        return streamSourceHandler.getCsvStreamSource(() -> "summary_of_work_shares_by_agg_lc_report_",
+            os -> aclCalculationReportService.writeSummaryOfWorkSharesByAggLcCsvReport(reportInfoSupplier.get(), os));
     }
 
     @Override

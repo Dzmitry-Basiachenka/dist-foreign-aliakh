@@ -4,6 +4,7 @@ import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.newCapture;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
@@ -13,6 +14,9 @@ import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.dist.common.reporting.api.IStreamSource;
+import com.copyright.rup.dist.common.reporting.api.IStreamSourceHandler;
+import com.copyright.rup.dist.common.reporting.impl.StreamSource;
 import com.copyright.rup.dist.foreign.domain.AclFundPool;
 import com.copyright.rup.dist.foreign.domain.AclGrantSet;
 import com.copyright.rup.dist.foreign.domain.AclPublicationType;
@@ -24,8 +28,10 @@ import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
+import com.copyright.rup.dist.foreign.domain.report.AclCalculationReportsInfoDto;
 import com.copyright.rup.dist.foreign.service.api.ILicenseeClassService;
 import com.copyright.rup.dist.foreign.service.api.IPublicationTypeService;
+import com.copyright.rup.dist.foreign.service.api.acl.IAclCalculationReportService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclFundPoolService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclGrantSetService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioService;
@@ -40,6 +46,8 @@ import com.copyright.rup.vaadin.ui.component.window.Windows;
 
 import com.google.common.collect.Sets;
 
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
@@ -48,12 +56,19 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
+import java.io.InputStream;
+import java.io.PipedOutputStream;
 import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 /**
  * Verifies {@link AclScenariosController}.
@@ -65,7 +80,7 @@ import java.util.List;
  * @author Dzmitry Basiahenka
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({Windows.class, ForeignSecurityUtils.class})
+@PrepareForTest({Windows.class, ForeignSecurityUtils.class, OffsetDateTime.class, StreamSource.class})
 public class AclScenariosControllerTest {
 
     private static final String SCENARIO_UID = "7ed0e17d-6baf-454c-803f-1d9be3cb3192";
@@ -84,6 +99,8 @@ public class AclScenariosControllerTest {
     private IAclScenarioController aclScenarioController;
     private ILicenseeClassService licenseeClassService;
     private IAclUsageService aclUsageService;
+    private IStreamSourceHandler streamSourceHandler;
+    private IAclCalculationReportService aclCalculationReportService;
 
     @Before
     public void setUp() {
@@ -98,6 +115,8 @@ public class AclScenariosControllerTest {
         licenseeClassService = createMock(ILicenseeClassService.class);
         aclUsageService = createMock(IAclUsageService.class);
         aclScenarioController = createMock(IAclScenarioController.class);
+        streamSourceHandler = createMock(IStreamSourceHandler.class);
+        aclCalculationReportService = createMock(IAclCalculationReportService.class);
         mockStatic(ForeignSecurityUtils.class);
         Whitebox.setInternalState(aclScenariosController, "widget", scenariosWidget);
         Whitebox.setInternalState(aclScenariosController, aclScenarioService);
@@ -109,6 +128,8 @@ public class AclScenariosControllerTest {
         Whitebox.setInternalState(aclScenariosController, licenseeClassService);
         Whitebox.setInternalState(aclScenariosController, aclUsageService);
         Whitebox.setInternalState(aclScenariosController, aclScenarioController);
+        Whitebox.setInternalState(aclScenariosController, streamSourceHandler);
+        Whitebox.setInternalState(aclScenariosController, aclCalculationReportService);
     }
 
     @Test
@@ -357,6 +378,35 @@ public class AclScenariosControllerTest {
         aclScenariosController.onDeleteButtonClicked();
         listenerCapture.getValue().onActionConfirmed();
         verify(scenariosWidget, aclScenarioService, Windows.class);
+    }
+
+    @Test
+    public void testGetExportAclSummaryOfWorkSharesByAggLcStreamSource() {
+        OffsetDateTime date = OffsetDateTime.of(2022, 10, 6, 3, 20, 20, 6, ZoneOffset.ofHours(0));
+        AclCalculationReportsInfoDto reportInfo = new AclCalculationReportsInfoDto();
+        mockStatic(OffsetDateTime.class);
+        Capture<Supplier<String>> fileNameSupplierCapture = newCapture();
+        Capture<Consumer<PipedOutputStream>> posConsumerCapture = newCapture();
+        String fileName = "summary_of_work_shares_by_agg_lc_report_";
+        Supplier<AclCalculationReportsInfoDto> reportInfoSupplier = () -> reportInfo;
+        Supplier<String> fileNameSupplier = () -> fileName;
+        Supplier<InputStream> inputStreamSupplier =
+            () -> IOUtils.toInputStream(StringUtils.EMPTY, StandardCharsets.UTF_8);
+        PipedOutputStream pos = new PipedOutputStream();
+        expect(OffsetDateTime.now()).andReturn(date).once();
+        expect(streamSourceHandler.getCsvStreamSource(capture(fileNameSupplierCapture), capture(posConsumerCapture)))
+            .andReturn(new StreamSource(fileNameSupplier, "csv", inputStreamSupplier)).once();
+        aclCalculationReportService.writeSummaryOfWorkSharesByAggLcCsvReport(reportInfo, pos);
+        expectLastCall().once();
+        replay(OffsetDateTime.class, streamSourceHandler, aclCalculationReportService);
+        IStreamSource streamSource =
+            aclScenariosController.getExportAclSummaryOfWorkSharesByAggLcStreamSource(reportInfoSupplier);
+        assertEquals(
+            "summary_of_work_shares_by_agg_lc_report_10_06_2022_03_20.csv", streamSource.getSource().getKey().get());
+        assertEquals(fileName, fileNameSupplierCapture.getValue().get());
+        Consumer<PipedOutputStream> posConsumer = posConsumerCapture.getValue();
+        posConsumer.accept(pos);
+        verify(OffsetDateTime.class, streamSourceHandler, aclCalculationReportService);
     }
 
     private AclScenario buildAclScenario() {
