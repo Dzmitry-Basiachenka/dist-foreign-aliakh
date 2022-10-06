@@ -237,9 +237,9 @@ public class UdmBaselineValueRepositoryIntegrationTest {
     @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindDtosByFilterContentFlag() {
         assertFilteringFindDtosByFilter(filter -> filter.setContentFlagExpression(
-            new FilterExpression<>(FilterOperatorEnum.Y)), UDM_BASELINE_VALUE_UID_2);
+            new FilterExpression<>(FilterOperatorEnum.Y)), UDM_BASELINE_VALUE_UID_2, UDM_BASELINE_VALUE_UID_3);
         assertFilteringFindDtosByFilter(filter -> filter.setContentFlagExpression(
-            new FilterExpression<>(FilterOperatorEnum.N)), UDM_BASELINE_VALUE_UID_3, UDM_BASELINE_VALUE_UID_1);
+            new FilterExpression<>(FilterOperatorEnum.N)), UDM_BASELINE_VALUE_UID_1);
     }
 
     @Test
@@ -463,9 +463,9 @@ public class UdmBaselineValueRepositoryIntegrationTest {
     @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindCountByFilterContentFlag() {
         assertFilteringFindCountByFilter(filter -> filter.setContentFlagExpression(
-            new FilterExpression<>(FilterOperatorEnum.Y)), 1);
+            new FilterExpression<>(FilterOperatorEnum.Y)), 2);
         assertFilteringFindCountByFilter(filter -> filter.setContentFlagExpression(
-            new FilterExpression<>(FilterOperatorEnum.N)), 2);
+            new FilterExpression<>(FilterOperatorEnum.N)), 1);
     }
 
     @Test
@@ -591,8 +591,9 @@ public class UdmBaselineValueRepositoryIntegrationTest {
         assertSortingFindDtosByFilter(UDM_BASELINE_VALUE_UID_2, UDM_BASELINE_VALUE_UID_1, "price");
         assertSortingFindDtosByFilter(UDM_BASELINE_VALUE_UID_2, UDM_BASELINE_VALUE_UID_3, "priceFlag");
         assertSortingFindDtosByFilter(UDM_BASELINE_VALUE_UID_2, UDM_BASELINE_VALUE_UID_1, "content");
-        assertSortingFindDtosByFilter(UDM_BASELINE_VALUE_UID_3, UDM_BASELINE_VALUE_UID_2, "contentFlag");
+        assertSortingFindDtosByFilter(UDM_BASELINE_VALUE_UID_1, UDM_BASELINE_VALUE_UID_2, "contentFlag");
         assertSortingFindDtosByFilter(UDM_BASELINE_VALUE_UID_1, UDM_BASELINE_VALUE_UID_2, "contentUnitPrice");
+        assertSortingFindDtosByFilter(UDM_BASELINE_VALUE_UID_2, UDM_BASELINE_VALUE_UID_3, "contentUnitPriceFlag");
         assertSortingFindDtosByFilter(UDM_BASELINE_VALUE_UID_2, UDM_BASELINE_VALUE_UID_1, "comment");
         assertSortingFindDtosByFilter(UDM_BASELINE_VALUE_UID_2, UDM_BASELINE_VALUE_UID_3, "updateDate");
         assertSortingFindDtosByFilter(UDM_BASELINE_VALUE_UID_3, UDM_BASELINE_VALUE_UID_2, "updateUser");
@@ -627,6 +628,7 @@ public class UdmBaselineValueRepositoryIntegrationTest {
         assertEquals(expectedValue.getContent(), actualValue.getContent());
         assertEquals(expectedValue.getContentFlag(), actualValue.getContentFlag());
         assertEquals(expectedValue.getContentUnitPrice(), actualValue.getContentUnitPrice());
+        assertEquals(expectedValue.getContentUnitPriceFlag(), actualValue.getContentUnitPriceFlag());
         assertEquals(expectedValue.getComment(), actualValue.getComment());
     }
 

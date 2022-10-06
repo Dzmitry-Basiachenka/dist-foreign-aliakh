@@ -80,7 +80,7 @@ public class UdmBaselineValueWidgetTest {
         dataProvider.refreshAll();
         Object[][] expectedCells = {
             {"04fec507-881f-4c4f-b31a-85230821dad0", 202806, 122890651L, "Journal of medical education", "BK",
-                "379.3984392886", "Y", "100.01", "Y", "16.5833333333", "some comment", "user@copyright.com",
+                "379.3984392886", "Y", "100.01", "Y", "16.5833333333", "Y", "some comment", "user@copyright.com",
                 "09/01/2022"}
         };
         verifyGridItems(grid, udmValueBaselines, expectedCells);
@@ -114,6 +114,7 @@ public class UdmBaselineValueWidgetTest {
             Triple.of("Content", 100.0, -1),
             Triple.of("Content Flag", 100.0, -1),
             Triple.of("Content Unit Price", 200.0, -1),
+            Triple.of("Content Unit Price Flag", 160.0, -1),
             Triple.of("Comment", 300.0, -1),
             Triple.of("Updated By", 150.0, -1),
             Triple.of("Updated Date", 110.0, -1)));
@@ -138,6 +139,7 @@ public class UdmBaselineValueWidgetTest {
         udmValueBaseline.setContent(new BigDecimal("100.01"));
         udmValueBaseline.setContentFlag(true);
         udmValueBaseline.setContentUnitPrice(new BigDecimal("16.5833333333"));
+        udmValueBaseline.setContentUnitPriceFlag(true);
         udmValueBaseline.setComment("some comment");
         udmValueBaseline.setUpdateUser("user@copyright.com");
         udmValueBaseline.setUpdateDate(

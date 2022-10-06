@@ -8,8 +8,9 @@
     "priceFlag": false,
     "price": 50.0000000000,
     "content": 2.0000000000,
-    "contentUnitPrice": 25.0000000000,
     "contentFlag": true,
+    "contentUnitPrice": 25.0000000000,
+    "contentUnitPriceFlag": false,
     "comment": "Comment",
     "createUser": "user@copyright.com",
     "updateUser": "user@copyright.com"
