@@ -26,6 +26,21 @@ public interface IAclScenarioRepository {
     List<AclScenario> findAll();
 
     /**
+     * Finds list of {@link AclScenario}s for specified period.
+     *
+     * @param period selected period
+     * @return list of {@link AclScenario}s
+     */
+    List<AclScenario> findByPeriod(Integer period);
+
+    /**
+     * Finds list of scenario periods.
+     *
+     * @return list of periods
+     */
+    List<Integer> findPeriods();
+
+    /**
      * Finds {@link AclScenario}s count with specified name.
      *
      * @param name {@link AclScenario} name

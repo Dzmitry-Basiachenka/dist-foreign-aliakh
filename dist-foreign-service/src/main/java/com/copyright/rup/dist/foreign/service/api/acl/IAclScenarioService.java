@@ -63,6 +63,21 @@ public interface IAclScenarioService {
     List<AclScenario> getScenarios();
 
     /**
+     * Gets list of {@link AclScenario}s for specified period.
+     *
+     * @param period selected period
+     * @return list of {@link AclScenario}s
+     */
+    List<AclScenario> getScenariosByPeriod(Integer period);
+
+    /**
+     * Gets list of scenario periods.
+     *
+     * @return list of periods
+     */
+    List<Integer> getScenarioPeriods();
+
+    /**
      * Checks whether {@link AclScenario} with specified name already exists in database.
      *
      * @param scenarioName name of {@link AclScenario} to check

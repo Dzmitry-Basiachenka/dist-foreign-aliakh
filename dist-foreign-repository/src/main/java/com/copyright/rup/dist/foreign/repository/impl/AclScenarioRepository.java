@@ -39,6 +39,16 @@ public class AclScenarioRepository extends BaseRepository implements IAclScenari
     }
 
     @Override
+    public List<AclScenario> findByPeriod(Integer period) {
+        return selectList("IAclScenarioMapper.findByPeriod", period);
+    }
+
+    @Override
+    public List<Integer> findPeriods() {
+        return selectList("IAclScenarioMapper.findPeriods");
+    }
+
+    @Override
     public int findCountByName(String name) {
         checkArgument(StringUtils.isNotBlank(name));
         return selectOne("IAclScenarioMapper.findCountByName", name);

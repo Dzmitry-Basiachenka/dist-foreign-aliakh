@@ -113,6 +113,16 @@ public class AclScenarioService implements IAclScenarioService {
     }
 
     @Override
+    public List<AclScenario> getScenariosByPeriod(Integer period) {
+        return aclScenarioRepository.findByPeriod(period);
+    }
+
+    @Override
+    public List<Integer> getScenarioPeriods() {
+        return aclScenarioRepository.findPeriods();
+    }
+
+    @Override
     public boolean aclScenarioExists(String scenarioName) {
         return 0 < aclScenarioRepository.findCountByName(scenarioName);
     }

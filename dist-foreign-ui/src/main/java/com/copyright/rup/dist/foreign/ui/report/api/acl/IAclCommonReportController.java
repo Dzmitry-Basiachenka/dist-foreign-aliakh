@@ -23,7 +23,10 @@ public interface IAclCommonReportController extends IController<IAclCommonReport
     List<Integer> getPeriods();
 
     /**
-     * @return list of available ACL scenarios.
+     * Get list of ACL scenarios by for specified period.
+     *
+     * @param period scenario period
+     * @return list of available ACL scenarios
      */
-    List<AclScenario> getScenarios();
+    List<AclScenario> getScenarios(Integer period);
 }

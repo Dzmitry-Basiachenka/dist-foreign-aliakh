@@ -325,6 +325,27 @@
         order by updated_datetime desc
     </select>
 
+    <select id="findByPeriod" resultMap="aclScenarioResultMap" parameterType="int">
+        select
+            df_acl_scenario_uid,
+            df_acl_usage_batch_uid,
+            df_acl_fund_pool_uid,
+            df_acl_grant_set_uid,
+            name,
+            description,
+            status_ind,
+            is_editable,
+            period_end_date,
+            license_type,
+            copied_from,
+            <include refid="StoredEntityMapper.additionalColumns"/>
+        from ${schema}.df_acl_scenario
+        <if test="null != period">
+            where period_end_date = #{period}
+        </if>
+        order by updated_datetime desc
+    </select>
+
     <select id="findScenarioById" resultMap="aclScenarioResultMap" parameterType="string">
         select
             <include refid="aclScenarioColumns"/>
@@ -342,6 +363,12 @@
         select count(name)
         from ${schema}.df_acl_scenario
         where upper(name) = upper(#{name})
+    </select>
+
+    <select id="findPeriods" resultType="int">
+        select distinct period_end_date
+        from ${schema}.df_acl_scenario
+        order by period_end_date desc
     </select>
 
     <select id="findScenarioNamesByFundPoolId" parameterType="string" resultType="string">

@@ -50,7 +50,8 @@ public class AclCommonReportWidget extends Window implements IAclCommonReportWid
         VerticalLayout verticalLayout = new VerticalLayout();
         periodComboBox.setItems(controller.getPeriods());
         VaadinUtils.setMaxComponentsWidth(periodComboBox);
-        AclScenarioFilterWidget scenarioFilterWidget = new AclScenarioFilterWidget(() -> controller.getScenarios());
+        AclScenarioFilterWidget scenarioFilterWidget =
+            new AclScenarioFilterWidget(() -> controller.getScenarios(periodComboBox.getSelectedItem().orElse(null)));
         HorizontalLayout buttonsLayout = initButtonsLayout();
         verticalLayout.addComponents(scenarioFilterWidget, periodComboBox, buttonsLayout);
         verticalLayout.setComponentAlignment(buttonsLayout, Alignment.BOTTOM_RIGHT);

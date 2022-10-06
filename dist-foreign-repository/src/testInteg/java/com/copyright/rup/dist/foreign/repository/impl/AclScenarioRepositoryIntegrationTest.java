@@ -25,6 +25,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -47,12 +48,21 @@ import java.util.List;
 public class AclScenarioRepositoryIntegrationTest {
 
     private static final String FOLDER_NAME = "acl-scenario-repository-integration-test/";
+    private static final String FIND_ALL_FILE = "find-all.groovy";
     private static final String SCENARIO_UID = "cf1b6b34-0a67-4177-a456-4429f20fe2c5";
     private static final String SCENARIO_NAME = "ACL Scenario 201812";
     private static final String LICENSE_TYPE_ACL = "ACL";
     private static final String DESCRIPTION = "Description";
     private static final String USER_NAME = "user@copyright.com";
     private static final String DATE = "2022-02-14T12:00:00+00:00";
+    private final AclScenario scenario1 = buildAclScenario("c65e9c0a-006f-4b79-b828-87d2106330b7",
+        "274ad62f-365e-41a6-a169-0e85e04d52d4", "2474c9ae-dfaf-404f-b4eb-17b7c88794d2",
+        "7e89e5c4-7db6-44b6-9a82-43166ec8da63", "ACL Scenario 202212", DESCRIPTION,
+        ScenarioStatusEnum.IN_PROGRESS, true, 202212, LICENSE_TYPE_ACL, USER_NAME, DATE);
+    private final AclScenario scenario2 = buildAclScenario("1995d50d-41c6-4e81-8c82-51a983bbecf8",
+        "2a173b41-75e3-4478-80ef-157527b18996", "65b930f1-777d-4a51-b878-bea3c68624d8",
+        "83e881cf-b258-42c1-849e-b2ec32b302b5", "ACL Scenario 202112", null, ScenarioStatusEnum.IN_PROGRESS,
+        false, 202112, LICENSE_TYPE_ACL, "auser@copyright.com", "2021-02-14T12:00:00+00:00");
 
     @Autowired
     private IAclScenarioRepository aclScenarioRepository;
@@ -60,16 +70,8 @@ public class AclScenarioRepositoryIntegrationTest {
     private IAclScenarioUsageRepository aclScenarioUsageRepository;
 
     @Test
-    @TestData(fileName = FOLDER_NAME + "find-all.groovy")
+    @TestData(fileName = FOLDER_NAME + FIND_ALL_FILE)
     public void testFindAll() {
-        AclScenario scenario1 = buildAclScenario("c65e9c0a-006f-4b79-b828-87d2106330b7",
-            "274ad62f-365e-41a6-a169-0e85e04d52d4", "2474c9ae-dfaf-404f-b4eb-17b7c88794d2",
-            "7e89e5c4-7db6-44b6-9a82-43166ec8da63", "ACL Scenario 202212", DESCRIPTION,
-            ScenarioStatusEnum.IN_PROGRESS, true, 202212, LICENSE_TYPE_ACL, USER_NAME, DATE);
-        AclScenario scenario2 = buildAclScenario("1995d50d-41c6-4e81-8c82-51a983bbecf8",
-            "2a173b41-75e3-4478-80ef-157527b18996", "65b930f1-777d-4a51-b878-bea3c68624d8",
-            "83e881cf-b258-42c1-849e-b2ec32b302b5", "ACL Scenario 202112", null, ScenarioStatusEnum.IN_PROGRESS,
-            false, 202112, LICENSE_TYPE_ACL, "auser@copyright.com", "2021-02-14T12:00:00+00:00");
         List<AclScenario> scenarios = aclScenarioRepository.findAll();
         assertEquals(2, CollectionUtils.size(scenarios));
         verifyAclScenario(scenario1, scenarios.get(0));
@@ -77,10 +79,27 @@ public class AclScenarioRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = FOLDER_NAME + "find-all.groovy")
+    @TestData(fileName = FOLDER_NAME + FIND_ALL_FILE)
     public void testFindCountByName() {
         assertEquals(1, aclScenarioRepository.findCountByName("ACL Scenario 202212"));
         assertEquals(0, aclScenarioRepository.findCountByName("ACL Scenario"));
+    }
+
+    @Test
+    @TestData(fileName = FOLDER_NAME + FIND_ALL_FILE)
+    public void testFindByPeriod() {
+        List<AclScenario> scenarios = aclScenarioRepository.findByPeriod(202212);
+        assertEquals(1, scenarios.size());
+        verifyAclScenario(scenario1, scenarios.get(0));
+        scenarios = aclScenarioRepository.findByPeriod(202112);
+        assertEquals(1, scenarios.size());
+        verifyAclScenario(scenario2, scenarios.get(0));
+    }
+
+    @Test
+    @TestData(fileName = FOLDER_NAME + FIND_ALL_FILE)
+    public void testPeriods() {
+        assertEquals(Arrays.asList(202212, 202112), aclScenarioRepository.findPeriods());
     }
 
     @Test
@@ -103,13 +122,9 @@ public class AclScenarioRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = FOLDER_NAME + "find-all.groovy")
+    @TestData(fileName = FOLDER_NAME + FIND_ALL_FILE)
     public void testFindScenarioById() {
-        AclScenario expectedScenario = buildAclScenario("1995d50d-41c6-4e81-8c82-51a983bbecf8",
-            "2a173b41-75e3-4478-80ef-157527b18996", "65b930f1-777d-4a51-b878-bea3c68624d8",
-            "83e881cf-b258-42c1-849e-b2ec32b302b5", "ACL Scenario 202112", null, ScenarioStatusEnum.IN_PROGRESS,
-            false, 202112, LICENSE_TYPE_ACL, "auser@copyright.com", "2021-02-14T12:00:00+00:00");
-        verifyAclScenario(expectedScenario, aclScenarioRepository.findById("1995d50d-41c6-4e81-8c82-51a983bbecf8"));
+        verifyAclScenario(scenario2, aclScenarioRepository.findById("1995d50d-41c6-4e81-8c82-51a983bbecf8"));
     }
 
     @Test
