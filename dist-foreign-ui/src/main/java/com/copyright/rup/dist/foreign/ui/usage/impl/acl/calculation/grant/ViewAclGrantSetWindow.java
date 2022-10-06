@@ -20,7 +20,9 @@ import com.vaadin.ui.Window;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Modal window that provides functionality for viewing and deleting {@link AclGrantSet}s.
@@ -97,6 +99,14 @@ public class ViewAclGrantSetWindow extends Window implements SearchWidget.ISearc
             .setCaption(ForeignUi.getMessage("table.column.license_type"))
             .setComparator((grantSet1, grantSet2) -> grantSet1.getLicenseType().compareTo(grantSet2.getLicenseType()))
             .setWidth(100);
+        grid.addColumn(grantSet -> grantSet.getPeriods().stream()
+                .sorted(Comparator.reverseOrder())
+                .map(String::valueOf)
+                .collect(Collectors.joining(", ")))
+            .setCaption(ForeignUi.getMessage("table.column.periods"))
+            .setComparator((grantSet1, grantSet2) -> grantSet1.getPeriods().toString()
+                .compareTo(grantSet2.getPeriods().toString()))
+            .setExpandRatio(1);
         grid.addColumn(grantSet -> BooleanUtils.toYNString(grantSet.getEditable()))
             .setCaption(ForeignUi.getMessage("table.column.editable"))
             .setComparator((grantSet1, grantSet2) -> grantSet1.getEditable().compareTo(grantSet2.getEditable()))
