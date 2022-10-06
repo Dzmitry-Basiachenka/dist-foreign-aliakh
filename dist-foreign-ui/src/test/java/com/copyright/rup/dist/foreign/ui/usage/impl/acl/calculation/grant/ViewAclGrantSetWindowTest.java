@@ -47,6 +47,7 @@ import org.powermock.reflect.Whitebox;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -88,7 +89,7 @@ public class ViewAclGrantSetWindowTest {
         List<AclGrantSet> grantSets = Collections.singletonList(buildAclGrantSet());
         Grid grid = (Grid) ((VerticalLayout) window.getContent()).getComponent(1);
         Object[][] expectedCells = {
-            {"ACL Grant Set 2021", 202112, "ACL", "Y"}
+            {"ACL Grant Set 2021", 202112, "ACL", "202112, 202006", "Y"}
         };
         verifyGridItems(grid, grantSets, expectedCells);
     }
@@ -106,6 +107,7 @@ public class ViewAclGrantSetWindowTest {
             Triple.of("Grant Set Name", -1.0, 1),
             Triple.of("Grant Period", 110.0, -1),
             Triple.of("License Type", 100.0, -1),
+            Triple.of("Periods", -1.0, 1),
             Triple.of("Editable", 80.0, -1)
         ));
         verifyButtonsLayout(content.getComponent(2), "Delete", "Close");
@@ -185,6 +187,7 @@ public class ViewAclGrantSetWindowTest {
         grantSet.setName("ACL Grant Set 2021");
         grantSet.setGrantPeriod(202112);
         grantSet.setLicenseType("ACL");
+        grantSet.setPeriods(new HashSet<>(Arrays.asList(202006, 202112)));
         grantSet.setEditable(true);
         return grantSet;
     }
