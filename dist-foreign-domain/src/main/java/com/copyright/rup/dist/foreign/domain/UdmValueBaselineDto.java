@@ -28,6 +28,7 @@ public class UdmValueBaselineDto extends StoredEntity<String> {
     private BigDecimal content;
     private Boolean contentFlag;
     private BigDecimal contentUnitPrice;
+    private Boolean contentUnitPriceFlag;
     private String comment;
 
     public Integer getPeriod() {
@@ -102,6 +103,14 @@ public class UdmValueBaselineDto extends StoredEntity<String> {
         this.contentUnitPrice = contentUnitPrice;
     }
 
+    public Boolean getContentUnitPriceFlag() {
+        return contentUnitPriceFlag;
+    }
+
+    public void setContentUnitPriceFlag(Boolean contentUnitPriceFlag) {
+        this.contentUnitPriceFlag = contentUnitPriceFlag;
+    }
+
     public String getComment() {
         return comment;
     }
@@ -130,6 +139,7 @@ public class UdmValueBaselineDto extends StoredEntity<String> {
             .append(content, that.content)
             .append(contentFlag, that.contentFlag)
             .append(contentUnitPrice, that.contentUnitPrice)
+            .append(contentUnitPriceFlag, that.contentUnitPriceFlag)
             .append(comment, that.comment)
             .isEquals();
     }
@@ -147,6 +157,7 @@ public class UdmValueBaselineDto extends StoredEntity<String> {
             .append(content)
             .append(contentFlag)
             .append(contentUnitPrice)
+            .append(contentUnitPriceFlag)
             .append(comment)
             .toHashCode();
     }
@@ -164,6 +175,7 @@ public class UdmValueBaselineDto extends StoredEntity<String> {
             .append("content", content)
             .append("contentFlag", contentFlag)
             .append("contentUnitPrice", contentUnitPrice)
+            .append("contentUnitPriceFlag", contentUnitPriceFlag)
             .append("comment", comment)
             .toString();
     }

@@ -15,6 +15,7 @@
         <result property="content" column="content"/>
         <result property="contentFlag" column="content_flag"/>
         <result property="contentUnitPrice" column="content_unit_price"/>
+        <result property="contentUnitPriceFlag" column="content_unit_price_flag"/>
         <result property="comment" column="comment"/>
     </resultMap>
 
@@ -30,6 +31,7 @@
             v.content,
             v.content_flag,
             v.content_unit_price,
+            v.content_unit_price_flag,
             v.comment,
             v.created_datetime,
             v.updated_datetime,
@@ -175,6 +177,9 @@
             </when>
             <when test="sort.property == 'contentUnitPrice'">
                 v.content_unit_price <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'contentUnitPriceFlag'">
+                v.content_unit_price_flag <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'comment'">
                 v.comment <include refid="IUsageMapper.direction"/>
