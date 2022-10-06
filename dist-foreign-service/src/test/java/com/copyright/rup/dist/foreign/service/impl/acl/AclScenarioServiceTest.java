@@ -88,6 +88,24 @@ public class AclScenarioServiceTest {
     }
 
     @Test
+    public void testGetScenariosByPeriod() {
+        List<AclScenario> scenarios = Collections.singletonList(buildAclScenario());
+        expect(aclScenarioRepository.findByPeriod(202012)).andReturn(scenarios).once();
+        replay(aclScenarioRepository);
+        assertSame(scenarios, aclScenarioService.getScenariosByPeriod(202012));
+        verify(aclScenarioRepository);
+    }
+
+    @Test
+    public void testGetScenarioPeriods() {
+        List<Integer> periods = Collections.singletonList(202112);
+        expect(aclScenarioRepository.findPeriods()).andReturn(periods).once();
+        replay(aclScenarioRepository);
+        assertSame(periods, aclScenarioService.getScenarioPeriods());
+        verify(aclScenarioRepository);
+    }
+
+    @Test
     public void testInsertAclScenarioPubTypeWeights() {
         AclPublicationType publicationType = buildPublicationType("Book", new BigDecimal("3.12"));
         aclScenarioRepository.insertAclScenarioPubTypeWeight(publicationType, SCENARIO_UID, USER_NAME);

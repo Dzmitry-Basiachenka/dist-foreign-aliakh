@@ -1,11 +1,16 @@
 package com.copyright.rup.dist.foreign.ui.report.impl.acl;
 
 import com.copyright.rup.dist.foreign.domain.AclScenario;
+import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioService;
 import com.copyright.rup.dist.foreign.ui.report.api.acl.IAclCommonReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.acl.IAclCommonReportWidget;
 import com.copyright.rup.vaadin.widget.api.CommonController;
 
-import java.util.Collections;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
 import java.util.List;
 
 /**
@@ -17,19 +22,22 @@ import java.util.List;
  *
  * @author Ihar Suvorau
  */
+@Component
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public abstract class AclCommonReportController extends CommonController<IAclCommonReportWidget>
     implements IAclCommonReportController {
 
+    @Autowired
+    private IAclScenarioService scenarioService;
+
     @Override
     public List<Integer> getPeriods() {
-        //TODO implement service logic
-        return Collections.emptyList();
+        return scenarioService.getScenarioPeriods();
     }
 
     @Override
-    public List<AclScenario> getScenarios() {
-        //TODO implement service logic
-        return Collections.emptyList();
+    public List<AclScenario> getScenarios(Integer period) {
+        return scenarioService.getScenariosByPeriod(period);
     }
 
     @Override
