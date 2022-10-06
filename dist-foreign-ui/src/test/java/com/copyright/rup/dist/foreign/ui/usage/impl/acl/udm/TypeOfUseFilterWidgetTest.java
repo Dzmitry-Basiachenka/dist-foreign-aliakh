@@ -38,7 +38,7 @@ import java.util.List;
  */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({Windows.class})
-public class TypeOfUserFilterWidgetTest {
+public class TypeOfUseFilterWidgetTest {
 
     private static final String REPORTED_TYPE_OF_USE = "COPY_FOR_MYSELF";
     private final TypeOfUseFilterWidget typeOfUseFilterWidget =

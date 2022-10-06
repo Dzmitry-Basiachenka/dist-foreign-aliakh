@@ -65,6 +65,8 @@ public class UdmUsageAppliedFilterWidget extends CommonAclAppliedFilterPanel imp
             addLabel(createLabelWithMultipleValues(sortStringValuesByNaturalOrder(filter.getReportedPubTypes()),
                 "label.reported_pub_types", String::valueOf), layout);
             addLabel(createLabelWithMultipleValues(sortStringValuesByNaturalOrder(filter.getReportedTypeOfUses()),
+                "label.reported_types_of_use", String::valueOf), layout);
+            addLabel(createLabelWithMultipleValues(sortStringValuesByNaturalOrder(filter.getTypeOfUses()),
                 "label.types_of_use", String::valueOf), layout);
             addLabel(createLabelWithMultipleValues(sortStringValuesByNaturalOrder(filter.getPubFormats()),
                 "label.publication_formats", String::valueOf), layout);

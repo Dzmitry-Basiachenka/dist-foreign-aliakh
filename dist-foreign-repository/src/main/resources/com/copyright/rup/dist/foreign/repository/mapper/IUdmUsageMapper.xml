@@ -145,6 +145,12 @@
                     u.reported_type_of_use = #{reportedTypeOfUse}
                 </foreach>
             </if>
+            <if test="null != filter.typeOfUses and filter.typeOfUses.size() > 0">
+                and
+                <foreach collection="filter.typeOfUses" item="typeOfUse" open="(" separator=" or " close=")">
+                    u.type_of_use = #{typeOfUse}
+                </foreach>
+            </if>
             <if test="null != filter.channel">
                 and ub.channel = #{filter.channel}
             </if>

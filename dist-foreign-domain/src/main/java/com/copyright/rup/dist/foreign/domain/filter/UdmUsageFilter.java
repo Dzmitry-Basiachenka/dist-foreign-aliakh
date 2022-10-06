@@ -35,6 +35,7 @@ public class UdmUsageFilter {
     private Set<DetailLicenseeClass> detailLicenseeClasses = new HashSet<>();
     private Set<String> reportedPubTypes = new HashSet<>();
     private Set<String> reportedTypeOfUses = new HashSet<>();
+    private Set<String> typeOfUses = new HashSet<>();
     private Set<String> pubFormats = new HashSet<>();
     private LocalDate usageDateFrom;
     private LocalDate usageDateTo;
@@ -77,6 +78,7 @@ public class UdmUsageFilter {
             setDetailLicenseeClasses(filter.getDetailLicenseeClasses());
             setReportedPubTypes(filter.getReportedPubTypes());
             setReportedTypeOfUses(filter.getReportedTypeOfUses());
+            setTypeOfUses(filter.getTypeOfUses());
             setPubFormats(filter.getPubFormats());
             setUsageDateFrom(filter.getUsageDateFrom());
             setUsageDateTo(filter.getUsageDateTo());
@@ -162,6 +164,14 @@ public class UdmUsageFilter {
 
     public void setReportedTypeOfUses(Set<String> reportedTypeOfUses) {
         this.reportedTypeOfUses = reportedTypeOfUses;
+    }
+
+    public Set<String> getTypeOfUses() {
+        return typeOfUses;
+    }
+
+    public void setTypeOfUses(Set<String> typeOfUses) {
+        this.typeOfUses = typeOfUses;
     }
 
     public Set<String> getPubFormats() {
@@ -336,6 +346,7 @@ public class UdmUsageFilter {
             && CollectionUtils.isEmpty(detailLicenseeClasses)
             && CollectionUtils.isEmpty(reportedPubTypes)
             && CollectionUtils.isEmpty(reportedTypeOfUses)
+            && CollectionUtils.isEmpty(typeOfUses)
             && CollectionUtils.isEmpty(pubFormats)
             && null == usageDateFrom
             && null == usageDateTo
@@ -376,6 +387,7 @@ public class UdmUsageFilter {
             .append(detailLicenseeClasses, that.detailLicenseeClasses)
             .append(reportedPubTypes, that.reportedPubTypes)
             .append(reportedTypeOfUses, that.reportedTypeOfUses)
+            .append(typeOfUses, that.typeOfUses)
             .append(pubFormats, that.pubFormats)
             .append(usageDateFrom, that.usageDateFrom)
             .append(usageDateTo, that.usageDateTo)
@@ -410,6 +422,7 @@ public class UdmUsageFilter {
             .append(detailLicenseeClasses)
             .append(reportedPubTypes)
             .append(reportedTypeOfUses)
+            .append(typeOfUses)
             .append(pubFormats)
             .append(usageDateFrom)
             .append(usageDateTo)
@@ -444,6 +457,7 @@ public class UdmUsageFilter {
             .append("detailLicenseeClasses", detailLicenseeClasses)
             .append("reportedPubTypes", reportedPubTypes)
             .append("reportedTypeOfUses", reportedTypeOfUses)
+            .append("typeOfUses", typeOfUses)
             .append("pubFormats", pubFormats)
             .append("usageDateFrom", usageDateFrom)
             .append("usageDateTo", usageDateTo)
