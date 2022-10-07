@@ -10,14 +10,20 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.ui.report.api.acl.IAclCommonReportController;
 
 import com.vaadin.server.Sizeable;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.ComboBox;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 
 import org.apache.commons.lang3.StringUtils;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.AbstractMap.SimpleImmutableEntry;
@@ -35,16 +41,21 @@ import java.util.function.Supplier;
  */
 public class AclCommonReportWidgetTest {
 
-    @Test
-    public void testInit() {
-        IAclCommonReportController controller = createMock(IAclCommonReportController.class);
-        AclCommonReportWidget widget = new AclCommonReportWidget();
+    private final AclCommonReportWidget widget = new AclCommonReportWidget();
+    private final IAclCommonReportController controller = createMock(IAclCommonReportController.class);
+    private final IStreamSource streamSource = createMock(IStreamSource.class);
+
+    @Before
+    public void setUp() {
         widget.setController(controller);
         expect(controller.getPeriods()).andReturn(Collections.singletonList(202012)).once();
-        IStreamSource streamSource = createMock(IStreamSource.class);
         expect(streamSource.getSource()).andReturn(new SimpleImmutableEntry(createMock(Supplier.class),
             createMock(Supplier.class))).once();
         expect(controller.getCsvStreamSource()).andReturn(streamSource).once();
+    }
+
+    @Test
+    public void testInit() {
         replay(controller, streamSource);
         widget.init();
         verifyWindow(widget, StringUtils.EMPTY, 270, 145, Sizeable.Unit.PIXELS);
@@ -53,9 +64,29 @@ public class AclCommonReportWidgetTest {
         assertEquals(VerticalLayout.class, widget.getContent().getClass());
         VerticalLayout content = (VerticalLayout) widget.getContent();
         assertEquals(3, content.getComponentCount());
-        verifyItemsFilterWidget(content.getComponent(0), "Scenarios");
-        verifyComboBox(content.getComponent(1), "Period", true, 202012);
+        verifyComboBox(content.getComponent(0), "Period", true, 202012);
+        ComboBox<Integer> periodComboBox = (ComboBox<Integer>) content.getComponent(0);
+        periodComboBox.setSelectedItem(202012);
+        verifyItemsFilterWidget(content.getComponent(1), "Scenarios");
         verifyButtonsLayout(content.getComponent(2), "Export", "Close");
+        verify(controller, streamSource);
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void testSelectedPeriod() {
+        replay(controller, streamSource);
+        widget.init();
+        widget.setController(controller);
+        VerticalLayout content = (VerticalLayout) widget.getContent();
+        ComboBox<Integer> periodComboBox = (ComboBox<Integer>) content.getComponent(0);
+        AclScenarioFilterWidget scenarioFilterWidget = (AclScenarioFilterWidget) content.getComponent(1);
+        Button exportButton = (Button) ((HorizontalLayout) content.getComponent(2)).getComponent(0);
+        assertFalse(scenarioFilterWidget.isEnabled());
+        assertFalse(exportButton.isEnabled());
+        periodComboBox.setSelectedItem(202012);
+        assertTrue(scenarioFilterWidget.isEnabled());
+        assertTrue(exportButton.isEnabled());
         verify(controller, streamSource);
     }
 }

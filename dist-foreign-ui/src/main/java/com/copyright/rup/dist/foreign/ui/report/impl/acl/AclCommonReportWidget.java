@@ -27,6 +27,7 @@ import com.vaadin.ui.Window;
  */
 public class AclCommonReportWidget extends Window implements IAclCommonReportWidget {
 
+    private final Button exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
     private final ComboBox<Integer> periodComboBox = new ComboBox<>(ForeignUi.getMessage("label.period"));
     private IAclCommonReportController controller;
 
@@ -47,20 +48,27 @@ public class AclCommonReportWidget extends Window implements IAclCommonReportWid
     }
 
     private ComponentContainer initRootLayout() {
-        VerticalLayout verticalLayout = new VerticalLayout();
         periodComboBox.setItems(controller.getPeriods());
+        periodComboBox.setRequiredIndicatorVisible(true);
         VaadinUtils.setMaxComponentsWidth(periodComboBox);
         AclScenarioFilterWidget scenarioFilterWidget =
             new AclScenarioFilterWidget(() -> controller.getScenarios(periodComboBox.getSelectedItem().orElse(null)));
+        scenarioFilterWidget.setEnabled(false);
+        periodComboBox.addValueChangeListener(event -> {
+            scenarioFilterWidget.reset();
+            scenarioFilterWidget.setEnabled(periodComboBox.getSelectedItem().isPresent());
+            exportButton.setEnabled(periodComboBox.getSelectedItem().isPresent());
+        });
         HorizontalLayout buttonsLayout = initButtonsLayout();
-        verticalLayout.addComponents(scenarioFilterWidget, periodComboBox, buttonsLayout);
+        VerticalLayout verticalLayout = new VerticalLayout();
+        verticalLayout.addComponents(periodComboBox, scenarioFilterWidget, buttonsLayout);
         verticalLayout.setComponentAlignment(buttonsLayout, Alignment.BOTTOM_RIGHT);
         return verticalLayout;
     }
 
     private HorizontalLayout initButtonsLayout() {
+        exportButton.setEnabled(false);
         Button closeButton = Buttons.createCloseButton(this);
-        Button exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
         HorizontalLayout layout = new HorizontalLayout(exportButton, closeButton);
         OnDemandFileDownloader downloader = new OnDemandFileDownloader(new CsvStreamSource(controller).getSource());
         downloader.extend(exportButton);
