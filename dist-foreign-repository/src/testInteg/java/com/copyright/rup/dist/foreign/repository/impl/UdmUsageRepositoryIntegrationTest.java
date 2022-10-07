@@ -89,7 +89,8 @@ public class UdmUsageRepositoryIntegrationTest {
     private static final String UDM_BATCH_UID_3 = "4b6055be-fc4e-4b49-aeab-28563366c9fd";
     private static final String UDM_BATCH_UID_4 = "80452178-e250-415f-b3e4-71a48ca3e218";
     private static final String REPORTED_STANDARD_NUMBER = "0927-7765";
-    private static final String REPORTED_TYPE_OF_USE = "COPY_FOR_MYSELF";
+    private static final String REPORTED_TYPE_OF_USE = "PRINT_COPIES";
+    private static final String TYPE_OF_USE = "PRINT";
     private static final String PUB_TYPE_JOURNAL = "Journal";
     private static final String PUB_TYPE_NOT_SHARED = "Not Shared";
     private static final String PUBLICATION_FORMAT = "Digital";
@@ -225,6 +226,7 @@ public class UdmUsageRepositoryIntegrationTest {
         filter.setDetailLicenseeClasses(Collections.singleton(buildDetailLicenseeClass(22)));
         filter.setReportedPubTypes(Collections.singleton(PUB_TYPE_NOT_SHARED));
         filter.setReportedTypeOfUses(Collections.singleton(REPORTED_TYPE_OF_USE));
+        filter.setTypeOfUses(Collections.singleton(TYPE_OF_USE));
         filter.setPubFormats(Collections.singleton(PUBLICATION_FORMAT));
         filter.setUsageDateFrom(LocalDate.of(2020, 4, 12));
         filter.setUsageDateTo(LocalDate.of(2020, 6, 20));
@@ -252,11 +254,21 @@ public class UdmUsageRepositoryIntegrationTest {
 
     @Test
     @TestData(fileName = FIND_DTOS_BY_FILTER)
-    public void testFindDtosByFilter() {
+    public void testFindDtosByFilterPeriods() {
         assertFilteringFindDtosByFilter(filter -> filter.setPeriods(Collections.singleton(202106)), UDM_USAGE_UID_5,
             UDM_USAGE_UID_6, UDM_USAGE_UID_7);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindDtosByFilterUsageStatus() {
         assertFilteringFindDtosByFilter(filter -> filter.setUsageStatus(UsageStatusEnum.RH_FOUND), UDM_USAGE_UID_5,
             UDM_USAGE_UID_6, UDM_USAGE_UID_7);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindDtosByFilterAssignees() {
         assertFilteringFindDtosByFilter(filter -> filter.setAssignees(Sets.newHashSet(ASSIGNEE_1, UNASSIGNED)),
             UDM_USAGE_UID_5, UDM_USAGE_UID_6);
         assertFilteringFindDtosByFilter(filter -> filter.setAssignees(Collections.singleton(ASSIGNEE_1)),
@@ -265,18 +277,55 @@ public class UdmUsageRepositoryIntegrationTest {
             UDM_USAGE_UID_7);
         assertFilteringFindDtosByFilter(filter -> filter.setAssignees(Collections.singleton(UNASSIGNED)),
             UDM_USAGE_UID_5);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindDtosByFilterReportedPubTypes() {
         assertFilteringFindDtosByFilter(
             filter -> filter.setReportedPubTypes(Collections.singleton(PUB_TYPE_NOT_SHARED)),
             UDM_USAGE_UID_6, UDM_USAGE_UID_7);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindDtosByFilterPubFormats() {
         assertFilteringFindDtosByFilter(filter -> filter.setPubFormats(Collections.singleton(PUBLICATION_FORMAT)),
             UDM_USAGE_UID_5, UDM_USAGE_UID_6, UDM_USAGE_UID_7);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindDtosByFilterDetailLicenseeClasses() {
         assertFilteringFindDtosByFilter(filter ->
             filter.setDetailLicenseeClasses(Collections.singleton(buildDetailLicenseeClass(2))), UDM_USAGE_UID_7);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindDtosByFilterReportedTypeOfUses() {
         assertFilteringFindDtosByFilter(filter ->
                 filter.setReportedTypeOfUses(Collections.singleton(REPORTED_TYPE_OF_USE)), UDM_USAGE_UID_5,
             UDM_USAGE_UID_6);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindDtosByFilterTypeOfUses() {
+        assertFilteringFindDtosByFilter(filter -> filter.setTypeOfUses(Collections.singleton(TYPE_OF_USE)),
+            UDM_USAGE_UID_5, UDM_USAGE_UID_6);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindDtosByFilterChannel() {
         assertFilteringFindDtosByFilter(filter -> filter.setChannel(UdmChannelEnum.CCC), UDM_USAGE_UID_5,
             UDM_USAGE_UID_6, UDM_USAGE_UID_7, UDM_USAGE_UID_12);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindDtosByFilterUsageDate() {
         assertFilteringFindDtosByFilter(filter -> filter.setUsageDateFrom(LocalDate.of(2020, 5, 11)),
             UDM_USAGE_UID_7);
         assertFilteringFindDtosByFilter(filter -> filter.setUsageDateTo(LocalDate.of(2020, 5, 10)),
@@ -285,6 +334,11 @@ public class UdmUsageRepositoryIntegrationTest {
             filter.setUsageDateFrom(LocalDate.of(2020, 4, 12));
             filter.setUsageDateTo(LocalDate.of(2020, 6, 20));
         }, UDM_USAGE_UID_5, UDM_USAGE_UID_6);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindDtosByFilterSurveyStartDates() {
         assertFilteringFindDtosByFilter(filter -> filter.setSurveyStartDateFrom(LocalDate.of(2020, 5, 20)),
             UDM_USAGE_UID_7);
         assertFilteringFindDtosByFilter(filter -> filter.setSurveyStartDateTo(LocalDate.of(2020, 5, 20)),
@@ -789,27 +843,78 @@ public class UdmUsageRepositoryIntegrationTest {
 
     @Test
     @TestData(fileName = FIND_DTOS_BY_FILTER)
-    public void testFindCountByFilter() {
+    public void testFindCountByFilterPeriods() {
         assertFilteringFindCountByFilter(filter -> filter.setPeriods(Collections.singleton(202106)), 3);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindCountByFilterUsageStatus() {
         assertFilteringFindCountByFilter(filter -> filter.setUsageStatus(UsageStatusEnum.RH_FOUND), 3);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindCountByFilterAssignees() {
         assertFilteringFindCountByFilter(filter -> filter.setAssignees(Sets.newHashSet(ASSIGNEE_1, UNASSIGNED)), 2);
         assertFilteringFindCountByFilter(filter -> filter.setAssignees(Collections.singleton(ASSIGNEE_1)), 1);
         assertFilteringFindCountByFilter(filter -> filter.setAssignees(Collections.singleton(ASSIGNEE_2)), 1);
         assertFilteringFindCountByFilter(filter -> filter.setAssignees(Collections.singleton(UNASSIGNED)), 1);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindCountByFilterReportedPubTypes() {
         assertFilteringFindCountByFilter(
             filter -> filter.setReportedPubTypes(Collections.singleton(PUB_TYPE_NOT_SHARED)), 2);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindCountByFilterPubFormats() {
         assertFilteringFindCountByFilter(filter -> filter.setPubFormats(Collections.singleton(PUBLICATION_FORMAT)), 3);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindCountByFilterDetailLicenseeClasses() {
         assertFilteringFindCountByFilter(filter ->
             filter.setDetailLicenseeClasses(Collections.singleton(buildDetailLicenseeClass(2))), 1);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindCountByFilterReportedTypeOfUses() {
         assertFilteringFindCountByFilter(filter ->
             filter.setReportedTypeOfUses(Collections.singleton(REPORTED_TYPE_OF_USE)), 2);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindCountByFilterTypeOfUses() {
+        assertFilteringFindCountByFilter(filter -> filter.setTypeOfUses(Collections.singleton(TYPE_OF_USE)), 2);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindCountByFilterChannel() {
         assertFilteringFindCountByFilter(filter -> filter.setChannel(UdmChannelEnum.CCC), 4);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindCountByFilterUsageDates() {
         assertFilteringFindCountByFilter(filter -> filter.setUsageDateFrom(LocalDate.of(2020, 5, 20)), 1);
         assertFilteringFindCountByFilter(filter -> filter.setUsageDateTo(LocalDate.of(2020, 5, 20)), 3);
         assertFilteringFindCountByFilter(filter -> {
             filter.setUsageDateFrom(LocalDate.of(2020, 4, 12));
             filter.setUsageDateTo(LocalDate.of(2020, 6, 20));
         }, 2);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindCountByFilterSurveyStartDates() {
         assertFilteringFindCountByFilter(filter -> filter.setSurveyStartDateFrom(LocalDate.of(2020, 5, 20)), 1);
         assertFilteringFindCountByFilter(filter -> filter.setSurveyStartDateTo(LocalDate.of(2020, 5, 20)), 3);
         assertFilteringFindCountByFilter(filter -> {
@@ -1230,6 +1335,7 @@ public class UdmUsageRepositoryIntegrationTest {
         filter.setDetailLicenseeClasses(Collections.singleton(buildDetailLicenseeClass(22)));
         filter.setReportedPubTypes(Collections.singleton(PUB_TYPE_NOT_SHARED));
         filter.setReportedTypeOfUses(Collections.singleton(REPORTED_TYPE_OF_USE));
+        filter.setTypeOfUses(Collections.singleton(TYPE_OF_USE));
         filter.setPubFormats(Collections.singleton(PUBLICATION_FORMAT));
         filter.setUsageDateFrom(LocalDate.of(2020, 4, 12));
         filter.setUsageDateTo(LocalDate.of(2020, 6, 20));
@@ -1556,6 +1662,7 @@ public class UdmUsageRepositoryIntegrationTest {
         assertEquals(expectedUsage.getStatisticalMultiplier(), actualUsage.getStatisticalMultiplier());
         assertEquals(expectedUsage.getAnnualMultiplier(), actualUsage.getAnnualMultiplier());
         assertEquals(expectedUsage.getReportedTypeOfUse(), actualUsage.getReportedTypeOfUse());
+        assertEquals(expectedUsage.getTypeOfUse(), actualUsage.getTypeOfUse());
         assertEquals(expectedUsage.getAnnualizedCopies(), actualUsage.getAnnualizedCopies());
         assertEquals(expectedUsage.getQuantity(), actualUsage.getQuantity());
         assertEquals(expectedUsage.getComment(), actualUsage.getComment());

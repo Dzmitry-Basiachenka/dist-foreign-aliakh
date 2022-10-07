@@ -73,6 +73,7 @@ public class UdmUsageFiltersWindowTest {
     private static final String LC_DESCRIPTION = "Law Firms";
     private static final String REPORTED_PUB_TYPES = "Book";
     private static final String REPORTED_TYPE_OF_USE = "EMAIL_COPY";
+    private static final String TYPE_OF_USE = "DIGITAL";
     private static final String PUBLICATION_FORMATS = "PRINT";
     private static final LocalDate DATE_FROM = LocalDate.of(2021, 1, 1);
     private static final LocalDate DATE_TO = LocalDate.of(2021, 1, 2);
@@ -121,7 +122,8 @@ public class UdmUsageFiltersWindowTest {
         usageFilter.setAssignees(Collections.singleton("user@copyright.com"));
         usageFilter.setPubFormats(Sets.newHashSet("Digital", "Not Specified"));
         usageFilter.setReportedPubTypes(Sets.newHashSet("Book", "Not Shared"));
-        usageFilter.setReportedTypeOfUses(Collections.singleton("COPY_FOR_MYSELF"));
+        usageFilter.setReportedTypeOfUses(Collections.singleton(REPORTED_TYPE_OF_USE));
+        usageFilter.setTypeOfUses(Sets.newHashSet("PRINT", "DIGITAL"));
         DetailLicenseeClass licenseeClass = new DetailLicenseeClass();
         licenseeClass.setId(26);
         licenseeClass.setDescription("Law Firms");
@@ -431,8 +433,8 @@ public class UdmUsageFiltersWindowTest {
         VerticalLayout verticalLayout = getFiltersLayout();
         assertEquals(19, verticalLayout.getComponentCount());
         verifyItemsFilterLayout(verticalLayout.getComponent(0), "Assignees", "Detail Licensee Classes");
-        verifyItemsFilterLayout(verticalLayout.getComponent(1), "Reported Pub Types", "Types of Use");
-        verifyItemsFilterWidget(verticalLayout.getComponent(2), "Publication Formats");
+        verifyItemsFilterLayout(verticalLayout.getComponent(1), "Reported Pub Types", "Publication Formats");
+        verifyItemsFilterLayout(verticalLayout.getComponent(2), "Reported Types of Use", "Types of Use");
         verifyDateFieldComponent(verticalLayout.getComponent(3), "Usage Date From", "Usage Date To");
         verifyDateFieldComponent(verticalLayout.getComponent(4), "Survey Start Date From", "Survey Start Date To");
         verifyComboBox(verticalLayout.getComponent(5), "Channel", Unit.PERCENTAGE, 50, true,
@@ -610,6 +612,7 @@ public class UdmUsageFiltersWindowTest {
         filter.setDetailLicenseeClasses(Collections.singleton(detailLicenseeClass));
         filter.setReportedPubTypes(Collections.singleton(REPORTED_PUB_TYPES));
         filter.setReportedTypeOfUses(Collections.singleton(REPORTED_TYPE_OF_USE));
+        filter.setTypeOfUses(Collections.singleton(TYPE_OF_USE));
         filter.setPubFormats(Collections.singleton(PUBLICATION_FORMATS));
         filter.setUsageDateFrom(DATE_FROM);
         filter.setUsageDateTo(DATE_TO);
@@ -641,7 +644,8 @@ public class UdmUsageFiltersWindowTest {
         assertFilterWidgetLabelValue("reportedPubTypeFilterWidget", "(2)");
         assertFilterWidgetLabelValue("publicationFormatFilterWidget", "(2)");
         assertFilterWidgetLabelValue("detailLicenseeClassFilterWidget", "(1)");
-        assertFilterWidgetLabelValue("typeOfUseFilterWidget", "(1)");
+        assertFilterWidgetLabelValue("reportedTypeOfUseFilterWidget", "(1)");
+        assertFilterWidgetLabelValue("typeOfUseFilterWidget", "(2)");
         assertLocalDateFieldValue("usageDateFromWidget", DATE_FROM);
         assertLocalDateFieldValue("usageDateToWidget", DATE_TO);
         assertLocalDateFieldValue("surveyStartDateFromWidget", DATE_FROM);
@@ -716,6 +720,7 @@ public class UdmUsageFiltersWindowTest {
         filter.setDetailLicenseeClasses(Collections.singleton(detailLicenseeClass));
         filter.setReportedPubTypes(Collections.singleton(REPORTED_PUB_TYPES));
         filter.setReportedTypeOfUses(Collections.singleton(REPORTED_TYPE_OF_USE));
+        filter.setTypeOfUses(Collections.singleton(TYPE_OF_USE));
         filter.setPubFormats(Collections.singleton(PUBLICATION_FORMATS));
         populateLocalDateWidget("usageDateFromWidget", DATE_FROM);
         populateLocalDateWidget("usageDateToWidget", DATE_TO);
