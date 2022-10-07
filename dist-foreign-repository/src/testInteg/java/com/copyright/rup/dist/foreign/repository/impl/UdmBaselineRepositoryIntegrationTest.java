@@ -69,8 +69,10 @@ public class UdmBaselineRepositoryIntegrationTest {
     private static final String SURVEY_COUNTRY_1_DIFFERENT_CASE = "PoRtUgaL";
     private static final String SURVEY_COUNTRY_2 = "United States";
     private static final String SURVEY_COUNTRY_3_WITH_METASYMBOLS = "PoRTUgal !@#$%^&*()_+-=?/\\'\"}{][<>";
-    private static final String TYPE_OF_USE_1 = "EMAIL_COPY";
-    private static final String TYPE_OF_USE_2 = "PRINT_COPIES";
+    private static final String REPORTED_TYPE_OF_USE_1 = "EMAIL_COPY";
+    private static final String REPORTED_TYPE_OF_USE_2 = "PRINT_COPIES";
+    private static final String TYPE_OF_USE_1 = "PRINT";
+    private static final String TYPE_OF_USE_2 = "DIGITAL";
     private static final String USAGE_DETAIL_ID_1 = "OGN554GHHSG008";
     private static final String USAGE_DETAIL_ID_1_FRAGMENT = "HSG008";
     private static final String USAGE_DETAIL_ID_1_DIFFERENT_CASE = "Ogn554GHhSg008";
@@ -106,7 +108,8 @@ public class UdmBaselineRepositoryIntegrationTest {
         filter.setUdmUsageOrigin(UdmUsageOriginEnum.SS);
         filter.setDetailLicenseeClasses(Collections.singleton(buildDetailLicenseeClass(22)));
         filter.setAggregateLicenseeClasses(Collections.singleton(buildAggregateLicenseeClass(56)));
-        filter.setReportedTypeOfUses(Collections.singleton(TYPE_OF_USE_1));
+        filter.setReportedTypeOfUses(Collections.singleton(REPORTED_TYPE_OF_USE_1));
+        filter.setTypeOfUse(TYPE_OF_USE_2);
         filter.setSurveyCountryExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, SURVEY_COUNTRY_1, null));
         filter.setWrWrkInstExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 20008506L, null));
         filter.setSystemTitleExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE_1, null));
@@ -117,13 +120,37 @@ public class UdmBaselineRepositoryIntegrationTest {
 
     @Test
     @TestData(fileName = FIND_DTOS_BY_FILTER)
-    public void testFindCountByFilter() {
+    public void testFindCountByFilterChannel() {
         verifyFilteringFindCountByFilter(filter -> filter.setChannel(UdmChannelEnum.CCC), 3);
         verifyFilteringFindCountByFilter(filter -> filter.setChannel(UdmChannelEnum.Rightsdirect), 0);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindCountByFilterUdmUsageOrigin() {
         verifyFilteringFindCountByFilter(filter -> filter.setUdmUsageOrigin(UdmUsageOriginEnum.SS), 3);
         verifyFilteringFindCountByFilter(filter -> filter.setUdmUsageOrigin(UdmUsageOriginEnum.RFA), 0);
-        verifyFilteringFindCountByFilter(filter -> filter.setReportedTypeOfUses(ImmutableSet.of(TYPE_OF_USE_1)), 1);
-        verifyFilteringFindCountByFilter(filter -> filter.setReportedTypeOfUses(ImmutableSet.of(TYPE_OF_USE_2)), 0);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindCountByFilterReportedTypeOfUses() {
+        verifyFilteringFindCountByFilter(filter ->
+            filter.setReportedTypeOfUses(ImmutableSet.of(REPORTED_TYPE_OF_USE_1)), 1);
+        verifyFilteringFindCountByFilter(filter ->
+            filter.setReportedTypeOfUses(ImmutableSet.of(REPORTED_TYPE_OF_USE_2)), 0);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindCountByFilterTypeOfUse() {
+        verifyFilteringFindCountByFilter(filter -> filter.setTypeOfUse(TYPE_OF_USE_1), 1);
+        verifyFilteringFindCountByFilter(filter -> filter.setTypeOfUse(TYPE_OF_USE_2), 1);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindCountByFilterDetailLicenseeClasses() {
         verifyFilteringFindCountByFilter(filter ->
             filter.setDetailLicenseeClasses(Collections.singleton(buildDetailLicenseeClass(22))), 1);
         verifyFilteringFindCountByFilter(filter ->
@@ -306,7 +333,8 @@ public class UdmBaselineRepositoryIntegrationTest {
         filter.setUdmUsageOrigin(UdmUsageOriginEnum.SS);
         filter.setDetailLicenseeClasses(Collections.singleton(buildDetailLicenseeClass(22)));
         filter.setAggregateLicenseeClasses(Collections.singleton(buildAggregateLicenseeClass(56)));
-        filter.setReportedTypeOfUses(Collections.singleton(TYPE_OF_USE_1));
+        filter.setReportedTypeOfUses(Collections.singleton(REPORTED_TYPE_OF_USE_1));
+        filter.setTypeOfUse(TYPE_OF_USE_2);
         filter.setSurveyCountryExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, SURVEY_COUNTRY_1, null));
         filter.setWrWrkInstExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 20008506L, null));
         filter.setSystemTitleExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE_1, null));
@@ -318,16 +346,39 @@ public class UdmBaselineRepositoryIntegrationTest {
 
     @Test
     @TestData(fileName = FIND_DTOS_BY_FILTER)
-    public void testFindDtosByFilter() {
+    public void testFindDtosByFilterChannel() {
         verifyFilteringFindDtosByFilter(filter -> filter.setChannel(UdmChannelEnum.CCC), USAGE_ID_1, USAGE_ID_4,
             USAGE_ID_5);
         verifyFilteringFindDtosByFilter(filter -> filter.setChannel(UdmChannelEnum.Rightsdirect));
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindDtosByFilterUdmUsageOrigin() {
         verifyFilteringFindDtosByFilter(filter -> filter.setUdmUsageOrigin(UdmUsageOriginEnum.SS), USAGE_ID_1,
             USAGE_ID_4, USAGE_ID_5);
         verifyFilteringFindDtosByFilter(filter -> filter.setUdmUsageOrigin(UdmUsageOriginEnum.RFA));
-        verifyFilteringFindDtosByFilter(filter -> filter.setReportedTypeOfUses(ImmutableSet.of(TYPE_OF_USE_1)),
-            USAGE_ID_1);
-        verifyFilteringFindDtosByFilter(filter -> filter.setReportedTypeOfUses(ImmutableSet.of(TYPE_OF_USE_2)));
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindDtosByFilterReportedTypeOfUses() {
+        verifyFilteringFindDtosByFilter(
+            filter -> filter.setReportedTypeOfUses(ImmutableSet.of(REPORTED_TYPE_OF_USE_1)), USAGE_ID_1);
+        verifyFilteringFindDtosByFilter(
+            filter -> filter.setReportedTypeOfUses(ImmutableSet.of(REPORTED_TYPE_OF_USE_2)));
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindDtosByFilterTypeOfUse() {
+        verifyFilteringFindDtosByFilter(filter -> filter.setTypeOfUse(TYPE_OF_USE_1), USAGE_ID_5);
+        verifyFilteringFindDtosByFilter(filter -> filter.setTypeOfUse(TYPE_OF_USE_2), USAGE_ID_1);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindDtosByFilterDetailLicenseeClasses() {
         verifyFilteringFindDtosByFilter(filter ->
             filter.setDetailLicenseeClasses(Collections.singleton(buildDetailLicenseeClass(22))), USAGE_ID_1);
         verifyFilteringFindDtosByFilter(filter ->

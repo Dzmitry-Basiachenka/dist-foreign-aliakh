@@ -30,6 +30,7 @@ public class UdmBaselineFilter {
     private Set<DetailLicenseeClass> detailLicenseeClasses = new HashSet<>();
     private Set<AggregateLicenseeClass> aggregateLicenseeClasses = new HashSet<>();
     private Set<String> reportedTypeOfUses = new HashSet<>();
+    private String typeOfUse;
     private FilterExpression<Number> annualizedCopiesExpression = new FilterExpression<>();
     private FilterExpression<Number> wrWrkInstExpression = new FilterExpression<>();
     private FilterExpression<String> systemTitleExpression = new FilterExpression<>();
@@ -55,6 +56,7 @@ public class UdmBaselineFilter {
             setDetailLicenseeClasses(filter.getDetailLicenseeClasses());
             setAggregateLicenseeClasses(filter.getAggregateLicenseeClasses());
             setReportedTypeOfUses(filter.getReportedTypeOfUses());
+            setTypeOfUse(filter.getTypeOfUse());
             setAnnualizedCopiesExpression(new FilterExpression<>(filter.getAnnualizedCopiesExpression()));
             setWrWrkInstExpression(new FilterExpression<>(filter.getWrWrkInstExpression()));
             setSystemTitleExpression(new FilterExpression<>(filter.getSystemTitleExpression()));
@@ -111,6 +113,14 @@ public class UdmBaselineFilter {
         this.reportedTypeOfUses = reportedTypeOfUses;
     }
 
+    public String getTypeOfUse() {
+        return typeOfUse;
+    }
+
+    public void setTypeOfUse(String typeOfUse) {
+        this.typeOfUse = typeOfUse;
+    }
+
     public FilterExpression<Number> getAnnualizedCopiesExpression() {
         return annualizedCopiesExpression;
     }
@@ -165,7 +175,8 @@ public class UdmBaselineFilter {
             && surveyCountryExpression.isEmpty()
             && CollectionUtils.isEmpty(detailLicenseeClasses)
             && CollectionUtils.isEmpty(aggregateLicenseeClasses)
-            && CollectionUtils.isEmpty(reportedTypeOfUses);
+            && CollectionUtils.isEmpty(reportedTypeOfUses)
+            && null == typeOfUse;
     }
 
     @Override
@@ -184,6 +195,7 @@ public class UdmBaselineFilter {
             .append(detailLicenseeClasses, that.detailLicenseeClasses)
             .append(aggregateLicenseeClasses, that.aggregateLicenseeClasses)
             .append(reportedTypeOfUses, that.reportedTypeOfUses)
+            .append(typeOfUse, that.typeOfUse)
             .append(annualizedCopiesExpression, that.annualizedCopiesExpression)
             .append(wrWrkInstExpression, that.wrWrkInstExpression)
             .append(systemTitleExpression, that.systemTitleExpression)
@@ -201,6 +213,7 @@ public class UdmBaselineFilter {
             .append(detailLicenseeClasses)
             .append(aggregateLicenseeClasses)
             .append(reportedTypeOfUses)
+            .append(typeOfUse)
             .append(annualizedCopiesExpression)
             .append(wrWrkInstExpression)
             .append(systemTitleExpression)
@@ -218,6 +231,7 @@ public class UdmBaselineFilter {
             .append("detailLicenseeClasses", detailLicenseeClasses)
             .append("aggregateLicenseeClasses", aggregateLicenseeClasses)
             .append("reportedTypeOfUses", reportedTypeOfUses)
+            .append("typeOfUse", typeOfUse)
             .append("annualizedCopiesExpression", annualizedCopiesExpression)
             .append("wrWrkInstExpression", wrWrkInstExpression)
             .append("systemTitleExpression", systemTitleExpression)
