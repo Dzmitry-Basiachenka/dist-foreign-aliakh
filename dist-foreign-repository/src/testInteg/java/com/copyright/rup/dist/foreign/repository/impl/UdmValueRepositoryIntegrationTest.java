@@ -174,6 +174,7 @@ public class UdmValueRepositoryIntegrationTest {
         originalValue.setContentComment("Content Comment");
         originalValue.setContentFlag(true);
         originalValue.setContentUnitPrice(new BigDecimal("61.0000000000"));
+        originalValue.setContentUnitPriceFlag(true);
         originalValue.setComment("Comment");
         originalValue.setUpdateUser("user@copyright.com");
         udmValueRepository.update(originalValue);

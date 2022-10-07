@@ -7,6 +7,7 @@ import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.UdmValueDto;
 import com.copyright.rup.dist.foreign.domain.UdmValueStatusEnum;
+
 import org.junit.Test;
 
 import java.math.BigDecimal;
@@ -61,6 +62,8 @@ public class UdmValueAuditFieldToValuesMapTest {
     private static final Boolean CONTENT_FLAG_NEW = false;
     private static final BigDecimal CONTENT_UNIT_PRICE_OLD = new BigDecimal("1694.10610725");
     private static final BigDecimal CONTENT_UNIT_PRICE_NEW = new BigDecimal("1771.4271794667");
+    private static final Boolean CUP_FLAG_OLD = false;
+    private static final Boolean CUP_FLAG_NEW = true;
     private static final String COMMENT_OLD = "comment 1";
     private static final String COMMENT_NEW = "comment 2";
 
@@ -433,6 +436,26 @@ public class UdmValueAuditFieldToValuesMapTest {
         fieldToValuesMap.updateFieldValue("Content Unit Price", null);
         assertEquals(Collections.singletonList("The field 'Content Unit Price' was edited. " +
             "Old Value is '1771.4271794667'. New Value is not specified"), fieldToValuesMap.getActionReasons());
+    }
+
+    @Test
+    public void testContentUnitPriceFlag() {
+        UdmValueDto valueDto = new UdmValueDto();
+        UdmValueAuditFieldToValuesMap fieldToValuesMap = new UdmValueAuditFieldToValuesMap(valueDto);
+        assertEquals(Collections.emptyList(), fieldToValuesMap.getActionReasons());
+        fieldToValuesMap.updateFieldValue("CUP Flag", fromBooleanToYNString(CUP_FLAG_OLD));
+        assertEquals(Collections.singletonList("The field 'CUP Flag' was edited. " +
+            "Old Value is not specified. New Value is 'N'"), fieldToValuesMap.getActionReasons());
+        valueDto.setContentUnitPriceFlag(CUP_FLAG_OLD);
+        fieldToValuesMap = new UdmValueAuditFieldToValuesMap(valueDto);
+        fieldToValuesMap.updateFieldValue("CUP Flag", fromBooleanToYNString(CUP_FLAG_NEW));
+        assertEquals(Collections.singletonList("The field 'CUP Flag' was edited. " +
+            "Old Value is 'N'. New Value is 'Y'"), fieldToValuesMap.getActionReasons());
+        valueDto.setContentUnitPriceFlag(CUP_FLAG_NEW);
+        fieldToValuesMap = new UdmValueAuditFieldToValuesMap(valueDto);
+        fieldToValuesMap.updateFieldValue("CUP Flag", null);
+        assertEquals(Collections.singletonList("The field 'CUP Flag' was edited. " +
+            "Old Value is 'Y'. New Value is not specified"), fieldToValuesMap.getActionReasons());
     }
 
     @Test

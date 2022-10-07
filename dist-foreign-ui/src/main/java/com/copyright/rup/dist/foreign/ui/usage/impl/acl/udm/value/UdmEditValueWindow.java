@@ -57,6 +57,8 @@ import java.util.Objects;
 public class UdmEditValueWindow extends CommonUdmValueWindow {
 
     private static final String NUMBER_VALIDATION_MESSAGE = ForeignUi.getMessage("field.error.not_numeric");
+    private static final String YES = "Y";
+    private static final String NO = "N";
 
     private final Binder<UdmValueDto> binder = new Binder<>();
     private final IUdmValueController controller;
@@ -83,6 +85,7 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
     private final TextField contentCommentField = new TextField(ForeignUi.getMessage("label.content_comment"));
     private final TextField contentFlagField = new TextField();
     private final TextField contentUnitPriceField = new TextField();
+    private final TextField contentUnitPriceFlagField = new TextField();
     private final TextField commentField = new TextField(ForeignUi.getMessage("label.comment"));
     private final UdmValueAuditFieldToValuesMap fieldToValueChangesMap;
 
@@ -141,9 +144,23 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
      */
     void recalculateFlag(TextField valueField, TextField flagField) {
         if (Objects.isNull(valueField.getErrorMessage())) {
-            flagField.setValue(StringUtils.isNotBlank(valueField.getValue()) ? "Y" : "N");
+            flagField.setValue(StringUtils.isNotBlank(valueField.getValue()) ? YES : NO);
         } else {
             flagField.clear();
+        }
+    }
+
+    /**
+     * Recalculates CUP Flag field: clears if Price Flag or/and Content Flag is empty,
+     * set it to "Y" if Price and Content flags are equal "Y", otherwise "N".
+     */
+    void recalculateContentUnitPriceFlag() {
+        String priceFlag = priceFlagField.getValue();
+        String contentFlag = contentFlagField.getValue();
+        if (StringUtils.isEmpty(priceFlag) || StringUtils.isEmpty(contentFlag)) {
+            contentUnitPriceFlagField.clear();
+        } else {
+            contentUnitPriceFlagField.setValue(YES.equals(priceFlag) && YES.equals(contentFlag) ? YES : NO);
         }
     }
 
@@ -253,7 +270,10 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
                     bean -> BooleanUtils.toYNString(bean.isLastContentFlag()), binder),
                 buildReadOnlyLayout(contentUnitPriceField, "label.content_unit_price",
                     fromBigDecimalToMoneyString(UdmValueDto::getContentUnitPrice),
-                    fromStringToBigDecimal(UdmValueDto::setContentUnitPrice))
+                    fromStringToBigDecimal(UdmValueDto::setContentUnitPrice)),
+                buildReadOnlyLayout(contentUnitPriceFlagField, "label.content_unit_price_flag",
+                    fromBooleanToYNString(UdmValueDto::isContentUnitPriceFlag),
+                    fromYNStringToBoolean(UdmValueDto::setContentUnitPriceFlag))
             )),
             new Panel(ForeignUi.getMessage("label.comment"), new VerticalLayout(
                 buildEditableStringLayout(commentField, "label.comment", 1000,
@@ -380,6 +400,7 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
             if (event.isUserOriginated()) {
                 recalculatePriceInUsd();
                 recalculateFlag(priceField, priceFlagField);
+                recalculateContentUnitPriceFlag();
             }
         });
         VaadinUtils.addComponentStyle(priceField, "udm-value-edit-price-field");
@@ -491,6 +512,7 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
             if (event.isUserOriginated()) {
                 recalculateContentUnitPrice();
                 recalculateFlag(contentField, contentFlagField);
+                recalculateContentUnitPriceFlag();
             }
         });
         VaadinUtils.addComponentStyle(contentField, "udm-value-edit-content-field");
