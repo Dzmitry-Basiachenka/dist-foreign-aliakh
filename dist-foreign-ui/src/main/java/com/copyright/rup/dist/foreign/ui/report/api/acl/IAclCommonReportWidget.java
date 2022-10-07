@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.report.api.acl;
 
+import com.copyright.rup.dist.foreign.domain.report.AclCalculationReportsInfoDto;
 import com.copyright.rup.vaadin.widget.api.IWidget;
 
 /**
@@ -12,4 +13,9 @@ import com.copyright.rup.vaadin.widget.api.IWidget;
  * @author Ihar Suvorau
  */
 public interface IAclCommonReportWidget extends IWidget<IAclCommonReportController> {
+
+    /**
+     * @return information for report generation.
+     */
+    AclCalculationReportsInfoDto getReportInfo();
 }

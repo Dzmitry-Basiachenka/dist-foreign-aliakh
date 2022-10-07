@@ -1,6 +1,8 @@
 package com.copyright.rup.dist.foreign.ui.report.impl.acl;
 
 import com.copyright.rup.dist.common.reporting.impl.CsvStreamSource;
+import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
+import com.copyright.rup.dist.foreign.domain.report.AclCalculationReportsInfoDto;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.report.api.acl.IAclCommonReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.acl.IAclCommonReportWidget;
@@ -16,6 +18,8 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
+import java.util.ArrayList;
+
 /**
  * Implementation of {@link IAclCommonReportWidget}.
  * <p>
@@ -29,6 +33,7 @@ public class AclCommonReportWidget extends Window implements IAclCommonReportWid
 
     private final Button exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
     private final ComboBox<Integer> periodComboBox = new ComboBox<>(ForeignUi.getMessage("label.period"));
+    private AclScenarioFilterWidget scenarioFilterWidget;
     private IAclCommonReportController controller;
 
     @Override
@@ -47,11 +52,20 @@ public class AclCommonReportWidget extends Window implements IAclCommonReportWid
         this.controller = controller;
     }
 
+    @Override
+    public AclCalculationReportsInfoDto getReportInfo() {
+        AclCalculationReportsInfoDto reportInfo = new AclCalculationReportsInfoDto();
+        reportInfo.setPeriod(periodComboBox.getSelectedItem().orElse(null));
+        reportInfo.setScenarios(new ArrayList<>(scenarioFilterWidget.getSelectedItemsIds()));
+        reportInfo.setUser(RupContextUtils.getUserName());
+        return reportInfo;
+    }
+
     private ComponentContainer initRootLayout() {
         periodComboBox.setItems(controller.getPeriods());
         periodComboBox.setRequiredIndicatorVisible(true);
         VaadinUtils.setMaxComponentsWidth(periodComboBox);
-        AclScenarioFilterWidget scenarioFilterWidget =
+        scenarioFilterWidget =
             new AclScenarioFilterWidget(() -> controller.getScenarios(periodComboBox.getSelectedItem().orElse(null)));
         scenarioFilterWidget.setEnabled(false);
         periodComboBox.addValueChangeListener(event -> {
