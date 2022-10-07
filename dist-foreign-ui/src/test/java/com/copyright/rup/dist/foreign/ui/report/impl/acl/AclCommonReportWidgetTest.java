@@ -7,13 +7,17 @@ import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.powermock.api.easymock.PowerMock.mockStatic;
+import static org.powermock.api.easymock.PowerMock.replay;
+import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
+import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
+import com.copyright.rup.dist.foreign.domain.AclScenario;
+import com.copyright.rup.dist.foreign.domain.report.AclCalculationReportsInfoDto;
 import com.copyright.rup.dist.foreign.ui.report.api.acl.IAclCommonReportController;
 
 import com.vaadin.server.Sizeable;
@@ -25,9 +29,14 @@ import com.vaadin.ui.VerticalLayout;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
+import org.powermock.reflect.Whitebox;
 
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Collections;
+import java.util.Set;
 import java.util.function.Supplier;
 
 /**
@@ -39,6 +48,8 @@ import java.util.function.Supplier;
  *
  * @author Ihar Suvorau
  */
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({RupContextUtils.class})
 public class AclCommonReportWidgetTest {
 
     private final AclCommonReportWidget widget = new AclCommonReportWidget();
@@ -55,6 +66,7 @@ public class AclCommonReportWidgetTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testInit() {
         replay(controller, streamSource);
         widget.init();
@@ -70,6 +82,26 @@ public class AclCommonReportWidgetTest {
         verifyItemsFilterWidget(content.getComponent(1), "Scenarios");
         verifyButtonsLayout(content.getComponent(2), "Export", "Close");
         verify(controller, streamSource);
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void testGetReportInfo() {
+        mockStatic(RupContextUtils.class);
+        AclScenarioFilterWidget filterWidget = createMock(AclScenarioFilterWidget.class);
+        Set<AclScenario> scenarios = Collections.singleton(new AclScenario());
+        expect(filterWidget.getSelectedItemsIds()).andReturn(scenarios).once();
+        expect(RupContextUtils.getUserName()).andReturn("jjohn@copyright.com").once();
+        replay(controller, filterWidget, streamSource, RupContextUtils.class);
+        widget.init();
+        VerticalLayout content = (VerticalLayout) widget.getContent();
+        ComboBox<Integer> periodComboBox = (ComboBox<Integer>) content.getComponent(0);
+        periodComboBox.setSelectedItem(202012);
+        Whitebox.setInternalState(widget, filterWidget);
+        AclCalculationReportsInfoDto reportInfo = widget.getReportInfo();
+        assertEquals(202012, reportInfo.getPeriod(), 0);
+        assertEquals("jjohn@copyright.com", reportInfo.getUser());
+        verify(controller, filterWidget, streamSource, RupContextUtils.class);
     }
 
     @Test

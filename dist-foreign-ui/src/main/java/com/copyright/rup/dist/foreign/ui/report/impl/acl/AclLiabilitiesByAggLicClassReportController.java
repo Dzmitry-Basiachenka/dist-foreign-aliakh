@@ -1,8 +1,10 @@
 package com.copyright.rup.dist.foreign.ui.report.impl.acl;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
+import com.copyright.rup.dist.foreign.service.api.acl.IAclReportService;
 import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -21,9 +23,12 @@ import org.springframework.stereotype.Component;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class AclLiabilitiesByAggLicClassReportController extends AclCommonReportController {
 
+    @Autowired
+    private IAclReportService aclReportService;
+
     @Override
     public IStreamSource getCsvStreamSource() {
-        return new ByteArrayStreamSource("liabilities_by_agg_lic_class_report_", os -> {
-        });
+        return new ByteArrayStreamSource("liabilities_by_agg_lic_class_report_", os ->
+            aclReportService.writeAclLiabilitiesByAggLicClassReport(getWidget().getReportInfo(), os));
     }
 }
