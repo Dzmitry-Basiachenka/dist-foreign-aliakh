@@ -17,4 +17,9 @@ public interface IAclReportController extends IController<IAclReportWidget> {
      * @return ACL Liabilities By Agg Lic Class report controller.
      */
     IAclCommonReportController getAclLiabilitiesByAggLicClassReportController();
+
+    /**
+     * @return ACL Liability Details report controller.
+     */
+    IAclCommonReportController getAclLiabilityDetailsReportController();
 }

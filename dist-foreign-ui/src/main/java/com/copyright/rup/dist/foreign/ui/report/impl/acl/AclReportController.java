@@ -27,10 +27,18 @@ public class AclReportController extends CommonController<IAclReportWidget> impl
     @Autowired
     @Qualifier("df.aclLiabilitiesByAggLicClassReportController")
     private IAclCommonReportController liabilitiesByAggLicClassReportController;
+    @Autowired
+    @Qualifier("df.aclLiabilityDetailsReportController")
+    private IAclCommonReportController liabilityDetailsReportController;
 
     @Override
     public IAclCommonReportController getAclLiabilitiesByAggLicClassReportController() {
         return liabilitiesByAggLicClassReportController;
+    }
+
+    @Override
+    public IAclCommonReportController getAclLiabilityDetailsReportController() {
+        return liabilityDetailsReportController;
     }
 
     @Override
