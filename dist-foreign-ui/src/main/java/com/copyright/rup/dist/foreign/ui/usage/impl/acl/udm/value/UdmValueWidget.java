@@ -285,7 +285,7 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
             addBigDecimalColumn(UdmValueDto::getContentUnitPrice, "table.column.content_unit_price", "contentUnitPrice",
                 200),
             addBooleanColumn(UdmValueDto::isContentUnitPriceFlag, "table.column.content_unit_price_flag",
-                "contentUnitPriceFlag", 160),
+                "contentUnitPriceFlag", 90),
             addColumn(UdmValueDto::getLastComment, "table.column.last_comment", "lastComment", 200),
             addColumn(UdmValueDto::getComment, "table.column.comment", "comment", 200),
             addColumn(UdmValueDto::getUpdateUser, "table.column.updated_by", "updateUser", 150),

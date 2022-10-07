@@ -434,8 +434,7 @@ public class UdmValueWidgetTest {
             "Currency", "Price Type", "Price Access Type", "Price Year", "Price Comment", "Price in USD", "Price Flag",
             "Currency Exchange Rate", "Currency Exchange Rate Date", "Last Content", "Last Content Flag",
             "Last Content Source", "Content Source", "Last Content Comment", "Content", "Content Comment",
-            "Content Flag", "Content Unit Price", "Content Unit Price Flag", "Last Comment", "Comment", "Updated By",
-            "Updated Date"),
+            "Content Flag", "Content Unit Price", "CUP Flag", "Last Comment", "Comment", "Updated By", "Updated Date"),
             columns.stream().map(Column::getCaption).collect(Collectors.toList()));
         verifySize(grid, 100, 100, Unit.PERCENTAGE);
         assertThat(grid.getSelectionModel(), instanceOf(MultiSelectionModelImpl.class));

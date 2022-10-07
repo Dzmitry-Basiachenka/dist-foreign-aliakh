@@ -114,7 +114,7 @@ public class UdmBaselineValueWidgetTest {
             Triple.of("Content", 100.0, -1),
             Triple.of("Content Flag", 100.0, -1),
             Triple.of("Content Unit Price", 200.0, -1),
-            Triple.of("Content Unit Price Flag", 160.0, -1),
+            Triple.of("CUP Flag", 90.0, -1),
             Triple.of("Comment", 300.0, -1),
             Triple.of("Updated By", 150.0, -1),
             Triple.of("Updated Date", 110.0, -1)));

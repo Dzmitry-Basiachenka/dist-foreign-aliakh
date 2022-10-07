@@ -139,7 +139,7 @@ public class AclDrillDownByRightsholderWidget extends Window implements IAclDril
         addBigDecimalColumn(AclScenarioDetailDto::getContentUnitPrice, "table.column.content_unit_price",
             "contentUnitPrice", 150);
         addBooleanColumn(AclScenarioDetailDto::isContentUnitPriceFlag, "table.column.content_unit_price_flag",
-            "contentUnitPriceFlag", 160);
+            "contentUnitPriceFlag", 90);
         addBigDecimalColumn(AclScenarioDetailDto::getValueSharePrint, "table.column.print_value_share",
             "valueSharePrint", 140);
         addBigDecimalColumn(AclScenarioDetailDto::getVolumeSharePrint, "table.column.print_volume_share",

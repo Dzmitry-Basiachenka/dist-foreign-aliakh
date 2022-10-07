@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl.calculation.usage;
 
 import com.copyright.rup.dist.foreign.domain.AclUsageDto;
 import com.copyright.rup.dist.foreign.ui.common.utils.BigDecimalUtils;
+import com.copyright.rup.dist.foreign.ui.common.utils.BooleanUtils;
 import com.copyright.rup.dist.foreign.ui.common.utils.IDateFormatter;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
@@ -175,6 +176,8 @@ public class AclUsageWidget extends HorizontalSplitPanel implements IAclUsageWid
                 : StringUtils.EMPTY, "table.column.publication_type", "publicationType", 150),
             addBigDecimalColumn(AclUsageDto::getContentUnitPrice, "table.column.content_unit_price", "contentUnitPrice",
                 200),
+            addBooleanColumn(AclUsageDto::getContentUnitPriceFlag, "table.column.content_unit_price_flag",
+                "contentUnitPriceFlag", 90),
             addColumn(AclUsageDto::getTypeOfUse, "table.column.tou", "typeOfUse", 120),
             addBigDecimalColumn(AclUsageDto::getAnnualizedCopies, "table.column.annualized_copies", "annualizedCopies",
                 130),
@@ -198,6 +201,17 @@ public class AclUsageWidget extends HorizontalSplitPanel implements IAclUsageWid
                                                        String captionProperty, String columnId, double width) {
         return aclUsagesGrid.addColumn(value -> BigDecimalUtils.formatCurrencyForGrid(function.apply(value)))
             .setStyleGenerator(item -> "v-align-right")
+            .setCaption(ForeignUi.getMessage(captionProperty))
+            .setId(columnId)
+            .setSortable(true)
+            .setSortProperty(columnId)
+            .setHidable(true)
+            .setWidth(width);
+    }
+
+    private Column<AclUsageDto, ?> addBooleanColumn(ValueProvider<AclUsageDto, Boolean> valueProvider,
+                                                    String captionProperty, String columnId, double width) {
+        return aclUsagesGrid.addColumn(value -> BooleanUtils.toYNString(valueProvider.apply(value)))
             .setCaption(ForeignUi.getMessage(captionProperty))
             .setId(columnId)
             .setSortable(true)

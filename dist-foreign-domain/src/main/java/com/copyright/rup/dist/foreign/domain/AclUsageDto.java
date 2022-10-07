@@ -32,6 +32,7 @@ public class AclUsageDto extends StoredEntity<String> {
     private String surveyCountry;
     private PublicationType publicationType;
     private BigDecimal contentUnitPrice;
+    private Boolean contentUnitPriceFlag;
     private String typeOfUse;
     private BigDecimal annualizedCopies;
     private Long quantity;
@@ -141,6 +142,14 @@ public class AclUsageDto extends StoredEntity<String> {
         this.contentUnitPrice = contentUnitPrice;
     }
 
+    public Boolean getContentUnitPriceFlag() {
+        return contentUnitPriceFlag;
+    }
+
+    public void setContentUnitPriceFlag(Boolean contentUnitPriceFlag) {
+        this.contentUnitPriceFlag = contentUnitPriceFlag;
+    }
+
     public String getTypeOfUse() {
         return typeOfUse;
     }
@@ -197,6 +206,7 @@ public class AclUsageDto extends StoredEntity<String> {
             .append(surveyCountry, that.surveyCountry)
             .append(publicationType, that.publicationType)
             .append(contentUnitPrice, that.contentUnitPrice)
+            .append(contentUnitPriceFlag, that.contentUnitPriceFlag)
             .append(typeOfUse, that.typeOfUse)
             .append(annualizedCopies, that.annualizedCopies)
             .append(quantity, that.quantity)
@@ -221,6 +231,7 @@ public class AclUsageDto extends StoredEntity<String> {
             .append(surveyCountry)
             .append(publicationType)
             .append(contentUnitPrice)
+            .append(contentUnitPriceFlag)
             .append(typeOfUse)
             .append(annualizedCopies)
             .append(quantity)
@@ -245,6 +256,7 @@ public class AclUsageDto extends StoredEntity<String> {
             .append("surveyCountry", surveyCountry)
             .append("publicationType", publicationType)
             .append("contentUnitPrice", contentUnitPrice)
+            .append("contentUnitPriceFlag", contentUnitPriceFlag)
             .append("typeOfUse", typeOfUse)
             .append("annualizedCopies", annualizedCopies)
             .append("quantity", quantity)

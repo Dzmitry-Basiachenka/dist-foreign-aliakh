@@ -165,7 +165,7 @@ public class AclDrillDownByRightsholderWidgetTest {
             Triple.of("Content", 100.0, -1),
             Triple.of("Content Flag", 110.0, -1),
             Triple.of("Content Unit Price", 150.0, -1),
-            Triple.of("Content Unit Price Flag", 160.0, -1),
+            Triple.of("CUP Flag", 90.0, -1),
             Triple.of("Print Value Share", 140.0, -1),
             Triple.of("Print Volume Share", 140.0, -1),
             Triple.of("Print Detail Share", 140.0, -1),
