@@ -90,7 +90,7 @@ public class AclCommonReportWidgetTest {
         mockStatic(RupContextUtils.class);
         AclScenarioFilterWidget filterWidget = createMock(AclScenarioFilterWidget.class);
         Set<AclScenario> scenarios = Collections.singleton(new AclScenario());
-        expect(filterWidget.getSelectedItemsIds()).andReturn(scenarios).once();
+        expect(filterWidget.getSelectedItems()).andReturn(scenarios).once();
         expect(RupContextUtils.getUserName()).andReturn("jjohn@copyright.com").once();
         replay(controller, filterWidget, streamSource, RupContextUtils.class);
         widget.init();

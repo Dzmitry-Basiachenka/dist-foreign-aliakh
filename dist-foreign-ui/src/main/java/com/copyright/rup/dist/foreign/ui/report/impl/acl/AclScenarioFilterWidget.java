@@ -86,7 +86,7 @@ public class AclScenarioFilterWidget extends BaseItemsFilterWidget<AclScenario>
         return filterWindow;
     }
 
-    public Set<AclScenario> getSelectedItemsIds() {
+    public Set<AclScenario> getSelectedItems() {
         return scenarios;
     }
 }

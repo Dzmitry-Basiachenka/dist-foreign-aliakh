@@ -30,21 +30,21 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 
 /**
- * Verifies {@link AclLiabilitiesByAggLicClassReportController}.
+ * Verifies {@link AclLiabilityDetailsReportController}.
  * <p>
  * Copyright (C) 2022 copyright.com
  * <p>
  * Date: 10/07/2022
  *
- * @author Ihar Suvorau
+ * @author Anton Azarenka
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({OffsetDateTime.class, ByteArrayStreamSource.class, AclLiabilitiesByAggLicClassReportController.class})
-public class AclLiabilitiesByAggLicClassReportControllerTest {
+@PrepareForTest({OffsetDateTime.class, ByteArrayStreamSource.class, AclLiabilityDetailsReportController.class})
+public class AclLiabilityDetailsReportTest {
 
     @Test
     public void testGetCsvStreamSource() {
-        AclLiabilitiesByAggLicClassReportController controller = new AclLiabilitiesByAggLicClassReportController();
+        AclLiabilityDetailsReportController controller = new AclLiabilityDetailsReportController();
         IAclCalculationReportService aclReportService = createMock(IAclCalculationReportService.class);
         Whitebox.setInternalState(controller, aclReportService);
         OffsetDateTime now = OffsetDateTime.of(2021, 1, 2, 3, 4, 5, 6, ZoneOffset.ofHours(0));
@@ -57,11 +57,11 @@ public class AclLiabilitiesByAggLicClassReportControllerTest {
         Capture<OutputStream> osCapture = newCapture();
         expect(OffsetDateTime.now()).andReturn(now).once();
         expect(widget.getReportInfo()).andReturn(reportInfo).once();
-        aclReportService.writeAclLiabilitiesByAggLicClassReport(eq(reportInfo), capture(osCapture));
+        aclReportService.writeAclLiabilityDetailsReport(eq(reportInfo), capture(osCapture));
         expectLastCall().once();
         replay(OffsetDateTime.class, widget, aclReportService);
         IStreamSource streamSource = controller.getCsvStreamSource();
-        assertEquals("liabilities_by_agg_lic_class_report_01_02_2021_03_04.csv",
+        assertEquals("liability_details_report_01_02_2021_03_04.csv",
             streamSource.getSource().getKey().get());
         assertNotNull(streamSource.getSource().getValue().get());
         assertNotNull(osCapture.getValue());
