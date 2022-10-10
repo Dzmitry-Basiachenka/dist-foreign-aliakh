@@ -56,7 +56,7 @@ public class AclCommonReportWidget extends Window implements IAclCommonReportWid
     public AclCalculationReportsInfoDto getReportInfo() {
         AclCalculationReportsInfoDto reportInfo = new AclCalculationReportsInfoDto();
         reportInfo.setPeriod(periodComboBox.getSelectedItem().orElse(null));
-        reportInfo.setScenarios(new ArrayList<>(scenarioFilterWidget.getSelectedItemsIds()));
+        reportInfo.setScenarios(new ArrayList<>(scenarioFilterWidget.getSelectedItems()));
         reportInfo.setUser(RupContextUtils.getUserName());
         return reportInfo;
     }

@@ -93,4 +93,15 @@ public class AclCalculationReportServiceTest {
         aclCalculationReportService.writeSummaryOfWorkSharesByAggLcCsvReport(reportInfo, outputStream);
         verify(aclCalculationReportRepository);
     }
+
+    @Test
+    public void testWriteAclLiabilityDetailsReport() {
+        AclCalculationReportsInfoDto reportInfo = new AclCalculationReportsInfoDto();
+        OutputStream outputStream = createMock(OutputStream.class);
+        aclCalculationReportRepository.writeAclLiabilityDetailsReport(reportInfo, outputStream);
+        expectLastCall().once();
+        replay(aclCalculationReportRepository);
+        aclCalculationReportService.writeAclLiabilityDetailsReport(reportInfo, outputStream);
+        verify(aclCalculationReportRepository);
+    }
 }

@@ -69,6 +69,13 @@ public interface IAclCalculationReportRepository {
      * @param reportInfo   report info
      * @param outputStream instance of {@link OutputStream}
      */
-    void writeSummaryOfWorkSharesByAggLcCsvReport(AclCalculationReportsInfoDto reportInfo,
-                                                  OutputStream outputStream);
+    void writeSummaryOfWorkSharesByAggLcCsvReport(AclCalculationReportsInfoDto reportInfo, OutputStream outputStream);
+
+    /**
+     * Finds ACL Liability details by scenario ids and writes them to the output stream in CSV format.
+     *
+     * @param reportInfo   meta information regarding report
+     * @param outputStream instance of {@link OutputStream}
+     */
+    void writeAclLiabilityDetailsReport(AclCalculationReportsInfoDto reportInfo, OutputStream outputStream);
 }
