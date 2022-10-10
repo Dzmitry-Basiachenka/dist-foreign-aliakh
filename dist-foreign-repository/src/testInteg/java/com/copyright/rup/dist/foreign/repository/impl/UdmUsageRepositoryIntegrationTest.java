@@ -226,7 +226,7 @@ public class UdmUsageRepositoryIntegrationTest {
         filter.setDetailLicenseeClasses(Collections.singleton(buildDetailLicenseeClass(22)));
         filter.setReportedPubTypes(Collections.singleton(PUB_TYPE_NOT_SHARED));
         filter.setReportedTypeOfUses(Collections.singleton(REPORTED_TYPE_OF_USE));
-        filter.setTypeOfUses(Collections.singleton(TYPE_OF_USE));
+        filter.setTypeOfUse(TYPE_OF_USE);
         filter.setPubFormats(Collections.singleton(PUBLICATION_FORMAT));
         filter.setUsageDateFrom(LocalDate.of(2020, 4, 12));
         filter.setUsageDateTo(LocalDate.of(2020, 6, 20));
@@ -312,8 +312,7 @@ public class UdmUsageRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindDtosByFilterTypeOfUses() {
-        assertFilteringFindDtosByFilter(filter -> filter.setTypeOfUses(Collections.singleton(TYPE_OF_USE)),
-            UDM_USAGE_UID_5, UDM_USAGE_UID_6);
+        assertFilteringFindDtosByFilter(filter -> filter.setTypeOfUse(TYPE_OF_USE), UDM_USAGE_UID_5, UDM_USAGE_UID_6);
     }
 
     @Test
@@ -892,7 +891,7 @@ public class UdmUsageRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindCountByFilterTypeOfUses() {
-        assertFilteringFindCountByFilter(filter -> filter.setTypeOfUses(Collections.singleton(TYPE_OF_USE)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setTypeOfUse(TYPE_OF_USE), 2);
     }
 
     @Test
@@ -1335,7 +1334,7 @@ public class UdmUsageRepositoryIntegrationTest {
         filter.setDetailLicenseeClasses(Collections.singleton(buildDetailLicenseeClass(22)));
         filter.setReportedPubTypes(Collections.singleton(PUB_TYPE_NOT_SHARED));
         filter.setReportedTypeOfUses(Collections.singleton(REPORTED_TYPE_OF_USE));
-        filter.setTypeOfUses(Collections.singleton(TYPE_OF_USE));
+        filter.setTypeOfUse(TYPE_OF_USE);
         filter.setPubFormats(Collections.singleton(PUBLICATION_FORMAT));
         filter.setUsageDateFrom(LocalDate.of(2020, 4, 12));
         filter.setUsageDateTo(LocalDate.of(2020, 6, 20));

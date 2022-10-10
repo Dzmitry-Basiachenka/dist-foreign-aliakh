@@ -123,7 +123,7 @@ public class UdmUsageFiltersWindowTest {
         usageFilter.setPubFormats(Sets.newHashSet("Digital", "Not Specified"));
         usageFilter.setReportedPubTypes(Sets.newHashSet("Book", "Not Shared"));
         usageFilter.setReportedTypeOfUses(Collections.singleton(REPORTED_TYPE_OF_USE));
-        usageFilter.setTypeOfUses(Sets.newHashSet("PRINT", "DIGITAL"));
+        usageFilter.setTypeOfUse(TYPE_OF_USE);
         DetailLicenseeClass licenseeClass = new DetailLicenseeClass();
         licenseeClass.setId(26);
         licenseeClass.setDescription("Law Firms");
@@ -136,62 +136,62 @@ public class UdmUsageFiltersWindowTest {
 
     @Test
     public void testWrWrkInstFilterOperatorChangeListener() {
-        testNumericFilterOperatorChangeListener(6);
+        testNumericFilterOperatorChangeListener(7);
     }
 
     @Test
     public void testReportedTitleFilterOperatorChangeListener() {
-        testTextFilterOperatorChangeListener(7);
-    }
-
-    @Test
-    public void testSystemTitleFilterOperatorChangeListener() {
         testTextFilterOperatorChangeListener(8);
     }
 
     @Test
-    public void testUsageDetaiIdIdFilterOperatorChangeListener() {
+    public void testSystemTitleFilterOperatorChangeListener() {
         testTextFilterOperatorChangeListener(9);
     }
 
     @Test
+    public void testUsageDetaiIdIdFilterOperatorChangeListener() {
+        testTextFilterOperatorChangeListener(10);
+    }
+
+    @Test
     public void testCompanyIdFilterOperatorChangeListener() {
-        testNumericFilterOperatorChangeListener(10);
+        testNumericFilterOperatorChangeListener(11);
     }
 
     @Test
     public void testCompanyNameFilterOperatorChangeListener() {
-        testTextFilterOperatorChangeListener(11);
-    }
-
-    @Test
-    public void testSurveyRespondentFilterOperatorChangeListener() {
         testTextFilterOperatorChangeListener(12);
     }
 
     @Test
-    public void testSurveyCountryFilterOperatorChangeListener() {
+    public void testSurveyRespondentFilterOperatorChangeListener() {
         testTextFilterOperatorChangeListener(13);
     }
 
     @Test
-    public void testLanguageFilterOperatorChangeListener() {
+    public void testSurveyCountryFilterOperatorChangeListener() {
         testTextFilterOperatorChangeListener(14);
     }
 
     @Test
-    public void testAnnualMultiplierFilterOperatorChangeListener() {
-        testNumericFilterOperatorChangeListener(15);
+    public void testLanguageFilterOperatorChangeListener() {
+        testTextFilterOperatorChangeListener(15);
     }
 
     @Test
-    public void testAnnualizedCopiesFilterOperatorChangeListener() {
+    public void testAnnualMultiplierFilterOperatorChangeListener() {
         testNumericFilterOperatorChangeListener(16);
     }
 
     @Test
-    public void testStatisticalMultiplierMultiplierFilterOperatorChangeListener() {
+    public void testAnnualizedCopiesFilterOperatorChangeListener() {
         testNumericFilterOperatorChangeListener(17);
+    }
+
+    @Test
+    public void testStatisticalMultiplierMultiplierFilterOperatorChangeListener() {
+        testNumericFilterOperatorChangeListener(18);
     }
 
     @Test
@@ -240,15 +240,16 @@ public class UdmUsageFiltersWindowTest {
         assertTrue(verticalLayout.getComponent(7).isEnabled());
         assertTrue(verticalLayout.getComponent(8).isEnabled());
         assertTrue(verticalLayout.getComponent(9).isEnabled());
-        assertFalse(verticalLayout.getComponent(10).isEnabled());
+        assertTrue(verticalLayout.getComponent(10).isEnabled());
         assertFalse(verticalLayout.getComponent(11).isEnabled());
         assertFalse(verticalLayout.getComponent(12).isEnabled());
         assertFalse(verticalLayout.getComponent(13).isEnabled());
-        assertTrue(verticalLayout.getComponent(14).isEnabled());
-        assertFalse(verticalLayout.getComponent(15).isEnabled());
+        assertFalse(verticalLayout.getComponent(14).isEnabled());
+        assertTrue(verticalLayout.getComponent(15).isEnabled());
         assertFalse(verticalLayout.getComponent(16).isEnabled());
         assertFalse(verticalLayout.getComponent(17).isEnabled());
         assertFalse(verticalLayout.getComponent(18).isEnabled());
+        assertFalse(verticalLayout.getComponent(19).isEnabled());
         verify(ForeignSecurityUtils.class);
     }
 
@@ -431,30 +432,32 @@ public class UdmUsageFiltersWindowTest {
 
     private void verifyPanel() {
         VerticalLayout verticalLayout = getFiltersLayout();
-        assertEquals(19, verticalLayout.getComponentCount());
+        assertEquals(20, verticalLayout.getComponentCount());
         verifyItemsFilterLayout(verticalLayout.getComponent(0), "Assignees", "Detail Licensee Classes");
-        verifyItemsFilterLayout(verticalLayout.getComponent(1), "Reported Pub Types", "Publication Formats");
-        verifyItemsFilterLayout(verticalLayout.getComponent(2), "Reported Types of Use", "Types of Use");
+        verifyItemsFilterLayout(verticalLayout.getComponent(1), "Reported Pub Types", "Reported Types of Use");
+        verifyItemsFilterWidget(verticalLayout.getComponent(2), "Publication Formats");
         verifyDateFieldComponent(verticalLayout.getComponent(3), "Usage Date From", "Usage Date To");
         verifyDateFieldComponent(verticalLayout.getComponent(4), "Survey Start Date From", "Survey Start Date To");
-        verifyComboBox(verticalLayout.getComponent(5), "Channel", Unit.PERCENTAGE, 50, true,
+        verifyComboBox(verticalLayout.getComponent(5), "Type of Use", Unit.PERCENTAGE, 50, true,
+            Arrays.asList("PRINT", "DIGITAL"));
+        verifyComboBox(verticalLayout.getComponent(6), "Channel", Unit.PERCENTAGE, 50, true,
             Arrays.asList(UdmChannelEnum.values()));
-        verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(6), "Wr Wrk Inst From", "Wr Wrk Inst To");
-        verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(7), "Reported Title");
-        verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(8), "System Title");
-        verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(9), "Usage Detail ID");
-        verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(10), "Company ID From", "Company ID To");
-        verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(11), "Company Name");
-        verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(12), "Survey Respondent");
-        verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(13), "Survey Country");
-        verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(14), "Language");
-        verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(15), "Annual Multiplier From",
+        verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(7), "Wr Wrk Inst From", "Wr Wrk Inst To");
+        verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(8), "Reported Title");
+        verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(9), "System Title");
+        verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(10), "Usage Detail ID");
+        verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(11), "Company ID From", "Company ID To");
+        verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(12), "Company Name");
+        verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(13), "Survey Respondent");
+        verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(14), "Survey Country");
+        verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(15), "Language");
+        verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(16), "Annual Multiplier From",
             "Annual Multiplier To");
-        verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(16), "Annualized Copies From",
+        verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(17), "Annualized Copies From",
             "Annualized Copies To");
-        verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(17), "Statistical Multiplier From",
+        verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(18), "Statistical Multiplier From",
             "Statistical Multiplier To");
-        verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(18), "Quantity From", "Quantity To");
+        verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(19), "Quantity From", "Quantity To");
     }
 
     private void verifyItemsFilterLayout(Component component, String firstCaption, String secondCaption) {
@@ -612,7 +615,7 @@ public class UdmUsageFiltersWindowTest {
         filter.setDetailLicenseeClasses(Collections.singleton(detailLicenseeClass));
         filter.setReportedPubTypes(Collections.singleton(REPORTED_PUB_TYPES));
         filter.setReportedTypeOfUses(Collections.singleton(REPORTED_TYPE_OF_USE));
-        filter.setTypeOfUses(Collections.singleton(TYPE_OF_USE));
+        filter.setTypeOfUse(TYPE_OF_USE);
         filter.setPubFormats(Collections.singleton(PUBLICATION_FORMATS));
         filter.setUsageDateFrom(DATE_FROM);
         filter.setUsageDateTo(DATE_TO);
@@ -645,11 +648,11 @@ public class UdmUsageFiltersWindowTest {
         assertFilterWidgetLabelValue("publicationFormatFilterWidget", "(2)");
         assertFilterWidgetLabelValue("detailLicenseeClassFilterWidget", "(1)");
         assertFilterWidgetLabelValue("reportedTypeOfUseFilterWidget", "(1)");
-        assertFilterWidgetLabelValue("typeOfUseFilterWidget", "(2)");
         assertLocalDateFieldValue("usageDateFromWidget", DATE_FROM);
         assertLocalDateFieldValue("usageDateToWidget", DATE_TO);
         assertLocalDateFieldValue("surveyStartDateFromWidget", DATE_FROM);
         assertLocalDateFieldValue("surveyStartDateToWidget", DATE_TO);
+        assertComboBoxValue("typeOfUseComboBox", TYPE_OF_USE);
         assertComboBoxValue("channelComboBox", UdmChannelEnum.CCC);
         assertTextFieldValue("wrWrkInstFromField", WR_WRK_INST.toString());
         assertComboBoxValue("wrWrkInstOperatorComboBox", FilterOperatorEnum.EQUALS);
@@ -720,7 +723,7 @@ public class UdmUsageFiltersWindowTest {
         filter.setDetailLicenseeClasses(Collections.singleton(detailLicenseeClass));
         filter.setReportedPubTypes(Collections.singleton(REPORTED_PUB_TYPES));
         filter.setReportedTypeOfUses(Collections.singleton(REPORTED_TYPE_OF_USE));
-        filter.setTypeOfUses(Collections.singleton(TYPE_OF_USE));
+        filter.setTypeOfUse(TYPE_OF_USE);
         filter.setPubFormats(Collections.singleton(PUBLICATION_FORMATS));
         populateLocalDateWidget("usageDateFromWidget", DATE_FROM);
         populateLocalDateWidget("usageDateToWidget", DATE_TO);
