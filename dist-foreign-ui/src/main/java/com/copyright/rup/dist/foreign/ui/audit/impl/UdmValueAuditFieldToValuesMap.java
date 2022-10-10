@@ -4,6 +4,7 @@ import com.copyright.rup.dist.foreign.domain.UdmValueDto;
 import com.copyright.rup.dist.foreign.ui.common.utils.BigDecimalUtils;
 import com.copyright.rup.dist.foreign.ui.common.utils.BooleanUtils;
 import com.copyright.rup.dist.foreign.ui.common.utils.IDateFormatter;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -63,6 +64,8 @@ public class UdmValueAuditFieldToValuesMap extends CommonAuditFieldToValuesMap<U
             value -> BooleanUtils.toYNString(value.isContentFlag())));
         getFieldToValueChangesMap().put("Content Unit Price", buildPair(valueDto,
             value -> BigDecimalUtils.formatCurrencyForDialog(value.getContentUnitPrice())));
+        getFieldToValueChangesMap().put("CUP Flag", buildPair(valueDto,
+            value -> BooleanUtils.toYNString(value.isContentUnitPriceFlag())));
         getFieldToValueChangesMap().put("Comment", buildPair(valueDto, UdmValueDto::getComment));
     }
 

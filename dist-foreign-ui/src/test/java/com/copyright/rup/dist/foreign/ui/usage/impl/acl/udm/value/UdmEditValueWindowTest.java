@@ -117,6 +117,7 @@ public class UdmEditValueWindowTest {
     private static final String CONTENT_COMMENT = "content comment";
     private static final boolean CONTENT_FLAG = false;
     private static final BigDecimal CONTENT_UNIT_PRICE = new BigDecimal("1550.40");
+    private static final boolean CUP_FLAG = false;
     private static final String COMMENT = "comment";
     private static final String USER_NAME = "user@copyright.com";
     private static final String VALID_DECIMAL = "0.1";
@@ -130,6 +131,8 @@ public class UdmEditValueWindowTest {
         "Field value should be positive number and should not exceed 10 digits";
     private static final String PRICE_FIELD = "priceField";
     private static final String CONTENT_FIELD = "contentField";
+    private static final String YES = "Y";
+    private static final String NO = "N";
 
     static {
         PUBLICATION_TYPE = new PublicationType();
@@ -193,11 +196,11 @@ public class UdmEditValueWindowTest {
         assertTextFieldValue(priceContent.getComponent(7), PRICE_YEAR.toString());
         assertTextFieldValue(priceContent.getComponent(8), PRICE_SOURCE);
         assertTextFieldValue(priceContent.getComponent(9), PRICE_COMMENT);
-        assertTextFieldValue(priceContent.getComponent(10), "Y");
+        assertTextFieldValue(priceContent.getComponent(10), YES);
         assertTextFieldValue(priceContent.getComponent(11), LAST_PRICE_IN_USD.toString());
         assertTextFieldValue(priceContent.getComponent(12), LAST_PRICE_SOURCE);
         assertTextFieldValue(priceContent.getComponent(13), LAST_PRICE_COMMENT);
-        assertTextFieldValue(priceContent.getComponent(14), "N");
+        assertTextFieldValue(priceContent.getComponent(14), NO);
         VerticalLayout row2 = (VerticalLayout) horizontalLayout.getComponent(1);
         assertEquals(5, row2.getComponentCount());
         Panel generalPanel = (Panel) row2.getComponent(0);
@@ -214,16 +217,17 @@ public class UdmEditValueWindowTest {
         assertTextFieldValue(pubTypeContent.getComponent(1), LAST_PUB_TYPE);
         Panel contentPanel = (Panel) row2.getComponent(2);
         VerticalLayout contentContent = (VerticalLayout) contentPanel.getContent();
-        assertEquals(9, contentContent.getComponentCount());
+        assertEquals(10, contentContent.getComponentCount());
         assertTextFieldValue(contentContent.getComponent(0), "3.00");
         assertTextFieldValue(contentContent.getComponent(1), CONTENT_SOURCE);
         assertTextFieldValue(contentContent.getComponent(2), CONTENT_COMMENT);
-        assertTextFieldValue(contentContent.getComponent(3), "N");
+        assertTextFieldValue(contentContent.getComponent(3), NO);
         assertTextFieldValue(contentContent.getComponent(4), LAST_CONTENT.toString());
         assertTextFieldValue(contentContent.getComponent(5), LAST_CONTENT_SOURCE);
         assertTextFieldValue(contentContent.getComponent(6), LAST_CONTENT_COMMENT);
-        assertTextFieldValue(contentContent.getComponent(7), "Y");
+        assertTextFieldValue(contentContent.getComponent(7), YES);
         assertTextFieldValue(contentContent.getComponent(8), CONTENT_UNIT_PRICE.toString());
+        assertTextFieldValue(contentContent.getComponent(9), NO);
         Panel commentPanel = (Panel) row2.getComponent(3);
         VerticalLayout commentContent = (VerticalLayout) commentPanel.getContent();
         assertEquals(1, commentContent.getComponentCount());
@@ -394,10 +398,10 @@ public class UdmEditValueWindowTest {
         TextField priceFlagField = Whitebox.getInternalState(window, "priceFlagField");
         priceField.setValue(VALID_DECIMAL);
         window.recalculateFlag(priceField, priceFlagField);
-        assertEquals("Y", priceFlagField.getValue());
+        assertEquals(YES, priceFlagField.getValue());
         priceField.setValue(StringUtils.EMPTY);
         window.recalculateFlag(priceField, priceFlagField);
-        assertEquals("N", priceFlagField.getValue());
+        assertEquals(NO, priceFlagField.getValue());
         priceField.setValue(INVALID_NUMBER);
         window.recalculateFlag(priceField, priceFlagField);
         assertEquals(StringUtils.EMPTY, priceFlagField.getValue());
@@ -475,10 +479,10 @@ public class UdmEditValueWindowTest {
         TextField contentFlagField = Whitebox.getInternalState(window, "contentFlagField");
         contentField.setValue(VALID_DECIMAL);
         window.recalculateFlag(contentField, contentFlagField);
-        assertEquals("Y", contentFlagField.getValue());
+        assertEquals(YES, contentFlagField.getValue());
         contentField.setValue(StringUtils.EMPTY);
         window.recalculateFlag(contentField, contentFlagField);
-        assertEquals("N", contentFlagField.getValue());
+        assertEquals(NO, contentFlagField.getValue());
         contentField.setValue(INVALID_NUMBER);
         window.recalculateFlag(contentField, contentFlagField);
         assertEquals(StringUtils.EMPTY, contentFlagField.getValue());
@@ -507,6 +511,43 @@ public class UdmEditValueWindowTest {
         contentField.setValue(StringUtils.EMPTY);
         window.recalculateContentUnitPrice();
         assertEquals(StringUtils.EMPTY, contentUnitPriceField.getValue());
+    }
+
+    @Test
+    public void testContentUnitPriceFlagRecalculation() {
+        setSpecialistExpectations();
+        initEditWindow();
+        TextField priceFlagField = Whitebox.getInternalState(window, "priceFlagField");
+        TextField contentFlagField = Whitebox.getInternalState(window, "contentFlagField");
+        TextField contentUnitPriceFlagField = Whitebox.getInternalState(window, "contentUnitPriceFlagField");
+        priceFlagField.setValue(NO);
+        contentFlagField.setValue(NO);
+        window.recalculateContentUnitPriceFlag();
+        assertEquals(NO, contentUnitPriceFlagField.getValue());
+        priceFlagField.setValue(YES);
+        contentFlagField.setValue(NO);
+        window.recalculateContentUnitPriceFlag();
+        assertEquals(NO, contentUnitPriceFlagField.getValue());
+        priceFlagField.setValue(NO);
+        contentFlagField.setValue(YES);
+        window.recalculateContentUnitPriceFlag();
+        assertEquals(NO, contentUnitPriceFlagField.getValue());
+        priceFlagField.setValue(YES);
+        contentFlagField.setValue(YES);
+        window.recalculateContentUnitPriceFlag();
+        assertEquals(YES, contentUnitPriceFlagField.getValue());
+        priceFlagField.setValue(StringUtils.EMPTY);
+        contentFlagField.setValue(NO);
+        window.recalculateContentUnitPriceFlag();
+        assertEquals(StringUtils.EMPTY, contentUnitPriceFlagField.getValue());
+        priceFlagField.setValue(NO);
+        contentFlagField.setValue(StringUtils.EMPTY);
+        window.recalculateContentUnitPriceFlag();
+        assertEquals(StringUtils.EMPTY, contentUnitPriceFlagField.getValue());
+        priceFlagField.setValue(StringUtils.EMPTY);
+        contentFlagField.setValue(StringUtils.EMPTY);
+        window.recalculateContentUnitPriceFlag();
+        assertEquals(StringUtils.EMPTY, contentUnitPriceFlagField.getValue());
     }
 
     @Test
@@ -655,7 +696,7 @@ public class UdmEditValueWindowTest {
         Panel contentPanel = (Panel) row2.getComponent(2);
         assertEquals("Content", contentPanel.getCaption());
         VerticalLayout contentContent = (VerticalLayout) contentPanel.getContent();
-        assertEquals(9, contentContent.getComponentCount());
+        assertEquals(10, contentContent.getComponentCount());
         verifyTextFieldLayout(contentContent.getComponent(0), "Content", false, true);
         verifyTextFieldLayout(contentContent.getComponent(1), "Content Source", false, true);
         verifyTextFieldLayout(contentContent.getComponent(2), "Content Comment", false, true);
@@ -665,6 +706,7 @@ public class UdmEditValueWindowTest {
         verifyTextFieldLayout(contentContent.getComponent(6), "Last Content Comment", true, false);
         verifyTextFieldLayout(contentContent.getComponent(7), "Last Content Flag", true, false);
         verifyTextFieldLayout(contentContent.getComponent(8), "Content Unit Price", true, false);
+        verifyTextFieldLayout(contentContent.getComponent(9), "CUP Flag", true, false);
         Panel commentPanel = (Panel) row2.getComponent(3);
         assertEquals("Comment", commentPanel.getCaption());
         VerticalLayout commentContent = (VerticalLayout) commentPanel.getContent();
@@ -760,6 +802,7 @@ public class UdmEditValueWindowTest {
         udmValue.setContentComment(CONTENT_COMMENT);
         udmValue.setContentFlag(CONTENT_FLAG);
         udmValue.setContentUnitPrice(CONTENT_UNIT_PRICE);
+        udmValue.setContentUnitPriceFlag(CUP_FLAG);
         udmValue.setComment(COMMENT);
         udmValue.setCreateDate(Date.from(LocalDate.of(2019, 1, 1).atStartOfDay(ZoneId.systemDefault()).toInstant()));
         udmValue.setUpdateUser(USER_NAME);

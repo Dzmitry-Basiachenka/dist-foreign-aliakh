@@ -18,9 +18,6 @@
               files="src[/\\]testInteg[/\\]java[/\\]com[/\\]copyright[/\\]rup[/\\]dist[/\\]foreign[/\\]repository[/\\]impl[/\\]PublicationTypeRepositoryIntegrationTest.java"/>
     <!--TODO resolve MultipleStringLiterals suppression-->
     <suppress checks="MultipleStringLiterals"
-              files="src[/\\]test[/\\]java[/\\]com[/\\]copyright[/\\]rup[/\\]dist[/\\]foreign[/\\]ui[/\\]usage[/\\]impl[/\\]acl[/\\]udm[/\\]value[/\\]UdmEditValueWindowTest.java"/>
-    <!--TODO resolve MultipleStringLiterals suppression-->
-    <suppress checks="MultipleStringLiterals"
               files="src[/\\]test[/\\]java[/\\]com[/\\]copyright[/\\]rup[/\\]dist[/\\]foreign[/\\]ui[/\\]scenario[/\\]impl[/\\]acl[/\\]calculation[/\\]AclScenarioDrillDownUsageDetailsWindowTest.java"/>
     <!--TODO resolve MultipleStringLiterals suppression-->
     <suppress checks="MultipleStringLiterals"

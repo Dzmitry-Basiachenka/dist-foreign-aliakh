@@ -94,6 +94,7 @@ public class UdmViewValueWindowTest {
     private static final String CONTENT_COMMENT = "content comment";
     private static final boolean CONTENT_FLAG = false;
     private static final BigDecimal CONTENT_UNIT_PRICE = new BigDecimal("1550.40");
+    private static final boolean CUP_FLAG = false;
     private static final String COMMENT = "comment";
     private static final String USER_NAME = "user@copyright.com";
 
@@ -176,7 +177,7 @@ public class UdmViewValueWindowTest {
         assertTextFieldValue(pubTypeContent.getComponent(1), LAST_PUB_TYPE);
         Panel contentPanel = (Panel) row2.getComponent(2);
         VerticalLayout contentContent = (VerticalLayout) contentPanel.getContent();
-        assertEquals(9, contentContent.getComponentCount());
+        assertEquals(10, contentContent.getComponentCount());
         assertTextFieldValue(contentContent.getComponent(0), "3.00");
         assertTextFieldValue(contentContent.getComponent(1), CONTENT_SOURCE);
         assertTextFieldValue(contentContent.getComponent(2), CONTENT_COMMENT);
@@ -186,6 +187,7 @@ public class UdmViewValueWindowTest {
         assertTextFieldValue(contentContent.getComponent(6), LAST_CONTENT_COMMENT);
         assertTextFieldValue(contentContent.getComponent(7), "Y");
         assertTextFieldValue(contentContent.getComponent(8), CONTENT_UNIT_PRICE.toString());
+        assertTextFieldValue(contentContent.getComponent(9), "N");
         Panel commentPanel = (Panel) row2.getComponent(3);
         VerticalLayout commentContent = (VerticalLayout) commentPanel.getContent();
         assertEquals(1, commentContent.getComponentCount());
@@ -268,7 +270,7 @@ public class UdmViewValueWindowTest {
         Panel contentPanel = (Panel) row2.getComponent(2);
         assertEquals("Content", contentPanel.getCaption());
         VerticalLayout contentContent = (VerticalLayout) contentPanel.getContent();
-        assertEquals(9, contentContent.getComponentCount());
+        assertEquals(10, contentContent.getComponentCount());
         verifyTextFieldLayout(contentContent.getComponent(0), "Content");
         verifyTextFieldLayout(contentContent.getComponent(1), "Content Source");
         verifyTextFieldLayout(contentContent.getComponent(2), "Content Comment");
@@ -278,6 +280,7 @@ public class UdmViewValueWindowTest {
         verifyTextFieldLayout(contentContent.getComponent(6), "Last Content Comment");
         verifyTextFieldLayout(contentContent.getComponent(7), "Last Content Flag");
         verifyTextFieldLayout(contentContent.getComponent(8), "Content Unit Price");
+        verifyTextFieldLayout(contentContent.getComponent(9), "CUP Flag");
         Panel commentPanel = (Panel) row2.getComponent(3);
         assertEquals("Comment", commentPanel.getCaption());
         VerticalLayout commentContent = (VerticalLayout) commentPanel.getContent();
@@ -343,6 +346,7 @@ public class UdmViewValueWindowTest {
         udmValue.setContentComment(CONTENT_COMMENT);
         udmValue.setContentFlag(CONTENT_FLAG);
         udmValue.setContentUnitPrice(CONTENT_UNIT_PRICE);
+        udmValue.setContentUnitPriceFlag(CUP_FLAG);
         udmValue.setComment(COMMENT);
         udmValue.setCreateDate(Date.from(LocalDate.of(2019, 1, 1).atStartOfDay(ZoneId.systemDefault()).toInstant()));
         udmValue.setUpdateUser(USER_NAME);
@@ -359,13 +363,9 @@ public class UdmViewValueWindowTest {
         verify(controller, ForeignSecurityUtils.class);
     }
 
-    private void setPermissionsExpectations(boolean isSpecialist, boolean isManager, boolean isResearcher) {
-        expect(ForeignSecurityUtils.hasSpecialistPermission()).andStubReturn(isSpecialist);
-        expect(ForeignSecurityUtils.hasManagerPermission()).andStubReturn(isManager);
-        expect(ForeignSecurityUtils.hasResearcherPermission()).andStubReturn(isResearcher);
-    }
-
     private void setSpecialistExpectations() {
-        setPermissionsExpectations(true, false, false);
+        expect(ForeignSecurityUtils.hasSpecialistPermission()).andStubReturn(true);
+        expect(ForeignSecurityUtils.hasManagerPermission()).andStubReturn(false);
+        expect(ForeignSecurityUtils.hasResearcherPermission()).andStubReturn(false);
     }
 }

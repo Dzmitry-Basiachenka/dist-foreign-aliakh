@@ -534,6 +534,7 @@
             content_comment = #{contentComment},
             content_flag = #{contentFlag},
             content_unit_price = #{contentUnitPrice},
+            content_unit_price_flag = #{contentUnitPriceFlag},
             comment = #{comment},
             <include refid="StoredEntityMapper.update"/>
         where df_udm_value_uid = #{id}

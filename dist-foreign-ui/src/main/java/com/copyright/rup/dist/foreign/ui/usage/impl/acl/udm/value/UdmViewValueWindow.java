@@ -139,7 +139,9 @@ public class UdmViewValueWindow extends CommonUdmValueWindow {
                 buildReadOnlyLayout("label.last_content_flag",
                     bean -> BooleanUtils.toYNString(bean.isLastContentFlag()), binder),
                 buildReadOnlyLayout("label.content_unit_price",
-                    fromBigDecimalToMoneyString(UdmValueDto::getContentUnitPrice), binder)
+                    fromBigDecimalToMoneyString(UdmValueDto::getContentUnitPrice), binder),
+                buildReadOnlyLayout("label.content_unit_price_flag",
+                    bean -> BooleanUtils.toYNString(bean.isContentUnitPriceFlag()), binder)
             )),
             new Panel(ForeignUi.getMessage("label.comment"), new VerticalLayout(
                 buildReadOnlyLayout("label.comment", UdmValueDto::getComment, binder)
