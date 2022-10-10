@@ -108,6 +108,8 @@
         <typeAlias alias="AclScenarioDetailDto" type="com.copyright.rup.dist.foreign.domain.AclScenarioDetailDto"/>
         <typeAlias alias="AclRightsholderTotalsHolderDto" type="com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolderDto"/>
         <typeAlias alias="AclSummaryOfWorkSharesByAggLcReportDto" type="com.copyright.rup.dist.foreign.domain.report.AclSummaryOfWorkSharesByAggLcReportDto"/>
+        <typeAlias alias="AclScenarioDetailsReport" type="com.copyright.rup.dist.foreign.domain.report.AclLiabilityDetailsReportDto"/>
+        <typeAlias alias="AclReportAmountsDto" type="com.copyright.rup.dist.foreign.domain.report.AclReportTotalAmountsDto"/>
     </typeAliases>
 
     <typeHandlers>

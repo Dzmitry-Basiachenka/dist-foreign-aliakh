@@ -11,6 +11,25 @@
         <result property="totalDetailShareDigital" column="total_shares_digital"/>
     </resultMap>
 
+    <resultMap id="aclScenarioDetailsReportDtoResultMap" type="AclScenarioDetailsReport">
+        <result property="rhAccountNumber" column="rh_account_number"/>
+        <result property="rhName" column="rh_name"/>
+        <result property="title" column="system_title"/>
+        <result property="wrWrkInst" column="wr_wrk_inst"/>
+        <result property="scenarioName" column="scenario_name"/>
+        <result property="licenseType" column="license_type"/>
+        <result property="typeOfUse" column="type_of_use"/>
+        <result property="aggregateLicenseeClassId" column="aggregate_licensee_class_id"/>
+        <result property="aggregateLicenseeClassName" column="description"/>
+        <result property="grossAmount" column="gross_amount"/>
+        <result property="netAmount" column="net_amount"/>
+    </resultMap>
+
+    <resultMap id="aclTotalAmountsReportDtoResultMap" type="AclReportAmountsDto">
+        <result property="grossAmount" column="gross_amount"/>
+        <result property="netAmount" column="net_amount"/>
+    </resultMap>
+
     <select id="findAclGrantDetailsCountByFilter" parameterType="map" resultType="int">
         <include refid="IAclGrantDetailMapper.selectCountByFilterSql"/>
     </select>
@@ -54,5 +73,47 @@
         where df_acl_scenario_uid = #{scenarioId}
         group by shd.aggregate_licensee_class_id, description
         order by shd.aggregate_licensee_class_id
+    </select>
+
+    <select id="findAclScenarioDetailsReportDtos" parameterType="map" resultMap="aclScenarioDetailsReportDtoResultMap">
+        select
+            shd.rh_account_number,
+            rh.name rh_name,
+            sd.system_title,
+            sd.wr_wrk_inst,
+            s.name scenario_name,
+            s.license_type,
+            shd.type_of_use,
+            shd.aggregate_licensee_class_id,
+            alc.description,
+            shd.gross_amount,
+            shd.net_amount
+        from ${schema}.df_acl_share_detail shd
+        join ${schema}.df_acl_scenario_detail sd on shd.df_acl_scenario_detail_uid = sd.df_acl_scenario_detail_uid
+        join ${schema}.df_aggregate_licensee_class alc on shd.aggregate_licensee_class_id = alc.aggregate_licensee_class_id
+        join ${schema}.df_rightsholder rh on shd.rh_account_number = rh.rh_account_number
+        join ${schema}.df_acl_scenario s on shd.df_acl_scenario_uid = s.df_acl_scenario_uid
+        where s.period_end_date = #{period}
+            <if test="scenarioIds.size() > 0">
+                and shd.df_acl_scenario_uid in
+                <foreach collection="scenarioIds" item="scenarioId" separator="," open="(" close=")">
+                    #{scenarioId}
+                </foreach>
+            </if>
+    </select>
+
+    <select id="findTotalAmountsOfAclScenarioDetailsReport" parameterType="map" resultMap="aclTotalAmountsReportDtoResultMap">
+        select
+            sum(gross_amount) as gross_amount,
+            sum(net_amount) as net_amount
+        from ${schema}.df_acl_share_detail shd
+        join apps.df_acl_scenario s on shd.df_acl_scenario_uid = s.df_acl_scenario_uid
+        where s.period_end_date = #{period}
+            <if test="scenarioIds.size() > 0">
+                and df_acl_scenario_uid in
+                <foreach collection="scenarioIds" item="scenarioId" separator="," open="(" close=")">
+                    #{scenarioId}
+                </foreach>
+            </if>
     </select>
 </mapper>
