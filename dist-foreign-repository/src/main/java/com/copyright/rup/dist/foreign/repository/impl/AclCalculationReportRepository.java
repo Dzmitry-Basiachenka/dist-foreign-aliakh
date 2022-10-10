@@ -103,4 +103,10 @@ public class AclCalculationReportRepository extends CommonReportRepository imple
     public void writeAclLiabilityDetailsReport(AclCalculationReportsInfoDto reportInfo, OutputStream outputStream) {
         //todo will implement later
     }
+
+    @Override
+    public void writeAclLiabilitiesByAggLicClassReport(AclCalculationReportsInfoDto reportInfo,
+                                                       OutputStream outputStream) {
+        //todo will implement later
+    }
 }
