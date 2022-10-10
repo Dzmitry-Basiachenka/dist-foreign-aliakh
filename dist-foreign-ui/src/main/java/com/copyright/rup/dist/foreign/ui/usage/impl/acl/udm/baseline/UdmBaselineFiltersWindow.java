@@ -11,7 +11,7 @@ import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineFilterControl
 import com.copyright.rup.dist.foreign.ui.usage.impl.acl.CommonAclFiltersWindow;
 import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.AggregateLicenseeClassFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.DetailLicenseeClassFilterWidget;
-import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.TypeOfUseFilterWidget;
+import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.ReportedTypeOfUseFilterWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.filter.CommonFilterWindow.IFilterSaveListener;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
@@ -55,6 +55,7 @@ public class UdmBaselineFiltersWindow extends CommonAclFiltersWindow {
 
     private final StringLengthValidator numberStringLengthValidator =
         new StringLengthValidator(ForeignUi.getMessage("field.error.number_length", 9), 0, 9);
+    private final ComboBox<String> typeOfUseComboBox = new ComboBox<>(ForeignUi.getMessage("label.type_of_use"));
     private final TextField systemTitleField = new TextField(ForeignUi.getMessage("label.system_title"));
     private final ComboBox<FilterOperatorEnum> systemTitleOperatorComboBox = buildTextOperatorComboBox();
     private final TextField surveyCountryField = new TextField(ForeignUi.getMessage("label.survey_country"));
@@ -70,7 +71,7 @@ public class UdmBaselineFiltersWindow extends CommonAclFiltersWindow {
     private final Binder<UdmBaselineFilter> filterBinder = new Binder<>();
     private DetailLicenseeClassFilterWidget detailLicenseeClassFilterWidget;
     private AggregateLicenseeClassFilterWidget aggregateLicenseeClassFilterWidget;
-    private TypeOfUseFilterWidget typeOfUseFilterWidget;
+    private ReportedTypeOfUseFilterWidget reportedTypeOfUseFilterWidget;
     private final UdmBaselineFilter baselineFilter;
     private final IUdmBaselineFilterController controller;
 
@@ -102,11 +103,11 @@ public class UdmBaselineFiltersWindow extends CommonAclFiltersWindow {
         HorizontalLayout buttonsLayout = initButtonsLayout();
         initDetailLicenseeClassFilterWidget();
         initAggregateLicenseeClassFilterWidget();
-        initTypeOfUseFilterWidget();
+        initReportedTypeOfUseFilterWidget();
         VerticalLayout rootLayout = new VerticalLayout();
-        rootLayout.addComponents(initLicenseeClassesLayout(), typeOfUseFilterWidget, initWrWrkInstLayout(),
-            initSystemTitleLayout(), initUsageDetailIdLayout(), initSurveyCountryLayout(), initAnnualizedCopiesLayout(),
-            buttonsLayout);
+        rootLayout.addComponents(initLicenseeClassesLayout(), reportedTypeOfUseFilterWidget, initTypeOfUseLayout(),
+            initWrWrkInstLayout(), initSystemTitleLayout(), initUsageDetailIdLayout(), initSurveyCountryLayout(),
+            initAnnualizedCopiesLayout(), buttonsLayout);
         rootLayout.setMargin(new MarginInfo(true, true, true, true));
         VaadinUtils.setMaxComponentsWidth(rootLayout);
         rootLayout.setComponentAlignment(buttonsLayout, Alignment.BOTTOM_RIGHT);
@@ -132,10 +133,10 @@ public class UdmBaselineFiltersWindow extends CommonAclFiltersWindow {
                 baselineFilter.setAggregateLicenseeClasses(saveEvent.getSelectedItemsIds()));
     }
 
-    private void initTypeOfUseFilterWidget() {
-        typeOfUseFilterWidget =
-            new TypeOfUseFilterWidget(controller::getTypeOfUses, baselineFilter.getReportedTypeOfUses());
-        typeOfUseFilterWidget.addFilterSaveListener((IFilterSaveListener<String>) saveEvent ->
+    private void initReportedTypeOfUseFilterWidget() {
+        reportedTypeOfUseFilterWidget =
+            new ReportedTypeOfUseFilterWidget(controller::getTypeOfUses, baselineFilter.getReportedTypeOfUses());
+        reportedTypeOfUseFilterWidget.addFilterSaveListener((IFilterSaveListener<String>) saveEvent ->
             baselineFilter.setReportedTypeOfUses(saveEvent.getSelectedItemsIds()));
     }
 
@@ -145,6 +146,17 @@ public class UdmBaselineFiltersWindow extends CommonAclFiltersWindow {
         licenseeClassesLayout.setSizeFull();
         licenseeClassesLayout.setSpacing(true);
         return licenseeClassesLayout;
+    }
+
+    private ComboBox<String> initTypeOfUseLayout() {
+        typeOfUseComboBox.setItems(Arrays.asList("PRINT", "DIGITAL"));
+        typeOfUseComboBox.setSelectedItem(baselineFilter.getTypeOfUse());
+        typeOfUseComboBox.setSizeFull();
+        typeOfUseComboBox.setWidth(50, Unit.PERCENTAGE);
+        filterBinder.forField(typeOfUseComboBox)
+            .bind(UdmBaselineFilter::getTypeOfUse, UdmBaselineFilter::setTypeOfUse);
+        VaadinUtils.addComponentStyle(typeOfUseComboBox, "udm-baseline-type-of-use-filter");
+        return typeOfUseComboBox;
     }
 
     private HorizontalLayout initWrWrkInstLayout() {
@@ -301,7 +313,7 @@ public class UdmBaselineFiltersWindow extends CommonAclFiltersWindow {
         baselineFilter.setReportedTypeOfUses(new HashSet<>());
         detailLicenseeClassFilterWidget.reset();
         aggregateLicenseeClassFilterWidget.reset();
-        typeOfUseFilterWidget.reset();
+        reportedTypeOfUseFilterWidget.reset();
         filterBinder.readBean(new UdmBaselineFilter());
     }
 }

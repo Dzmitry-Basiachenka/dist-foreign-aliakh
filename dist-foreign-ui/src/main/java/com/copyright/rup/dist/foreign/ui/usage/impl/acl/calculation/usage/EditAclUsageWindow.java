@@ -55,7 +55,7 @@ public class EditAclUsageWindow extends Window {
     private final TextField periodField = new TextField(ForeignUi.getMessage("label.edit.period"));
     private final TextField wrWrkInstField = new TextField(ForeignUi.getMessage("label.wr_wrk_inst"));
     private final ComboBox<PublicationType> pubTypeComboBox = new ComboBox<>(ForeignUi.getMessage("label.pub_type"));
-    private final ComboBox<String> typeOfUseComboBox = new ComboBox<>(ForeignUi.getMessage("label.tou"));
+    private final ComboBox<String> typeOfUseComboBox = new ComboBox<>(ForeignUi.getMessage("label.type_of_use"));
     private final TextField annualizedCopiesField = new TextField(ForeignUi.getMessage("label.annualized_copies"));
     private final TextField contentUnitPriceField = new TextField(ForeignUi.getMessage("label.content_unit_price"));
     private final ComboBox<DetailLicenseeClass> detailLicenseeClassComboBox =
@@ -149,7 +149,7 @@ public class EditAclUsageWindow extends Window {
         typeOfUseComboBox.setItems("PRINT", "DIGITAL");
         binder.forField(typeOfUseComboBox).bind(AclUsageDto::getTypeOfUse, AclUsageDto::setTypeOfUse);
         VaadinUtils.addComponentStyle(typeOfUseComboBox, "acl-usage-edit-type-of-use-combo-box");
-        return buildCommonLayout(typeOfUseComboBox, "label.tou");
+        return buildCommonLayout(typeOfUseComboBox, "label.type_of_use");
     }
 
     private HorizontalLayout buildDetailLicenseeLayout() {

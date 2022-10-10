@@ -66,7 +66,7 @@ public class ViewBaselineWindow extends Window implements IDateFormatter {
                     baseline.getAggregateLicenseeClassName())),
             buildReadOnlyLayout("label.survey_country", UdmBaselineDto::getSurveyCountry),
             buildReadOnlyLayout("label.channel", baseline -> baseline.getChannel().name()),
-            buildReadOnlyLayout("label.tou", UdmBaselineDto::getTypeOfUse),
+            buildReadOnlyLayout("label.type_of_use", UdmBaselineDto::getTypeOfUse),
             buildReadOnlyLayout(
                 "label.annualized_copies", baseline -> Objects.toString(baseline.getAnnualizedCopies())),
             buildReadOnlyLayout("label.created_by", UdmBaselineDto::getCreateUser),

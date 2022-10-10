@@ -58,6 +58,8 @@ public class UdmBaselineFiltersWindowTest {
 
     private static final String LC_DESCRIPTION = "Law Firms";
     private static final String UNCHECKED = "unchecked";
+    private static final String PRINT_TYPE_OF_USE = "PRINT";
+    private static final String DIGITAL_TYPE_OF_USE = "DIGITAL";
     private static final String SYSTEM_TITLE = "Medical journal";
     private static final String SURVEY_COUNTRY = "United States";
     private static final String USAGE_DETAIL_ID = "OGN174GHHSB109";
@@ -99,12 +101,12 @@ public class UdmBaselineFiltersWindowTest {
 
     @Test
     public void testWrWrkInstFilterOperatorChangeListener() {
-        testNumericFilterOperatorChangeListener(2);
+        testNumericFilterOperatorChangeListener(3);
     }
 
     @Test
     public void testSystemTitleFilterOperatorChangeListener() {
-        testTextFilterOperatorChangeListener(3);
+        testTextFilterOperatorChangeListener(4);
     }
 
     @Test
@@ -119,7 +121,7 @@ public class UdmBaselineFiltersWindowTest {
 
     @Test
     public void testAnnualizedCopiesFilterOperatorChangeListener() {
-        testNumericFilterOperatorChangeListener(6);
+        testNumericFilterOperatorChangeListener(7);
     }
 
     @Test
@@ -127,7 +129,7 @@ public class UdmBaselineFiltersWindowTest {
         UdmBaselineFilter baselineFilter = Whitebox.getInternalState(window, "baselineFilter");
         assertTrue(baselineFilter.isEmpty());
         populateData();
-        HorizontalLayout buttonsLayout = (HorizontalLayout) ((VerticalLayout) window.getContent()).getComponent(7);
+        HorizontalLayout buttonsLayout = (HorizontalLayout) ((VerticalLayout) window.getContent()).getComponent(8);
         Button saveButton = (Button) buttonsLayout.getComponent(0);
         saveButton.click();
         assertEquals(buildExpectedFilter(), baselineFilter);
@@ -138,7 +140,7 @@ public class UdmBaselineFiltersWindowTest {
         UdmBaselineFilter baselineFilter = buildExpectedFilter();
         Whitebox.setInternalState(window, "baselineFilter", baselineFilter);
         assertFalse(baselineFilter.isEmpty());
-        HorizontalLayout buttonsLayout = (HorizontalLayout) ((VerticalLayout) window.getContent()).getComponent(7);
+        HorizontalLayout buttonsLayout = (HorizontalLayout) ((VerticalLayout) window.getContent()).getComponent(8);
         Button clearButton = (Button) buttonsLayout.getComponent(1);
         clearButton.click();
         Button saveButton = (Button) buttonsLayout.getComponent(0);
@@ -206,16 +208,18 @@ public class UdmBaselineFiltersWindowTest {
     private void verifyRootLayout(Component component) {
         assertThat(component, instanceOf(VerticalLayout.class));
         VerticalLayout verticalLayout = (VerticalLayout) component;
-        assertEquals(8, verticalLayout.getComponentCount());
+        assertEquals(9, verticalLayout.getComponentCount());
         verifyFilterLayout(verticalLayout.getComponent(0), "Detail Licensee Classes", "Aggregate Licensee Classes");
-        verifyItemsFilterWidget(verticalLayout.getComponent(1), "Types of Use");
-        verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(2), "Wr Wrk Inst From", "Wr Wrk Inst To");
-        verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(3), "System Title");
-        verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(4), "Usage Detail ID");
-        verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(5), "Survey Country");
-        verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(6), "Annualized Copies From",
+        verifyItemsFilterWidget(verticalLayout.getComponent(1), "Reported Types of Use");
+        verifyComboBox(verticalLayout.getComponent(2), "Type of Use", Unit.PERCENTAGE, 50, true,
+            Arrays.asList(PRINT_TYPE_OF_USE, DIGITAL_TYPE_OF_USE));
+        verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(3), "Wr Wrk Inst From", "Wr Wrk Inst To");
+        verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(4), "System Title");
+        verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(5), "Usage Detail ID");
+        verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(6), "Survey Country");
+        verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(7), "Annualized Copies From",
             "Annualized Copies To");
-        verifyButtonsLayout(verticalLayout.getComponent(7), "Save", "Clear", "Close");
+        verifyButtonsLayout(verticalLayout.getComponent(8), "Save", "Clear", "Close");
     }
 
     private void verifyFilterLayout(Component component, String... captions) {
@@ -362,6 +366,7 @@ public class UdmBaselineFiltersWindowTest {
         filter.setDetailLicenseeClasses(Collections.singleton(detailLicenseeClass));
         filter.setAggregateLicenseeClasses(Collections.singleton(aggregateLicenseeClass));
         filter.setReportedTypeOfUses(Collections.singleton("COPY_FOR_MYSELF"));
+        filter.setTypeOfUse(DIGITAL_TYPE_OF_USE);
         filter.setWrWrkInstExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 243904752L, null));
         filter.setSystemTitleExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE, null));
         filter.setUsageDetailIdExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, USAGE_DETAIL_ID, null));
@@ -371,11 +376,11 @@ public class UdmBaselineFiltersWindowTest {
         return filter;
     }
 
-    @SuppressWarnings(UNCHECKED)
     private void verifyFiltersData() {
         assertFilterWidgetLabelValue("detailLicenseeClassFilterWidget", "(1)");
         assertFilterWidgetLabelValue("aggregateLicenseeClassFilterWidget", "(1)");
-        assertFilterWidgetLabelValue("typeOfUseFilterWidget", "(1)");
+        assertFilterWidgetLabelValue("reportedTypeOfUseFilterWidget", "(1)");
+        assertComboBoxValue("typeOfUseComboBox", DIGITAL_TYPE_OF_USE);
         assertTextFieldValue("wrWrkInstFromField", "243904752");
         assertComboBoxValue("wrWrkInstOperatorComboBox", FilterOperatorEnum.EQUALS);
         assertTextFieldValue("systemTitleField", SYSTEM_TITLE);
@@ -428,6 +433,7 @@ public class UdmBaselineFiltersWindowTest {
         baselineFilter.setDetailLicenseeClasses(Collections.singleton(detailLicenseeClass));
         baselineFilter.setAggregateLicenseeClasses(Collections.singleton(aggregateLicenseeClass));
         baselineFilter.setReportedTypeOfUses(Collections.singleton("COPY_FOR_MYSELF"));
+        populateComboBox("typeOfUseComboBox", DIGITAL_TYPE_OF_USE);
         populateTextField("wrWrkInstFromField", "243904752");
         populateComboBox("wrWrkInstOperatorComboBox", FilterOperatorEnum.EQUALS);
         populateTextField("systemTitleField", SYSTEM_TITLE);

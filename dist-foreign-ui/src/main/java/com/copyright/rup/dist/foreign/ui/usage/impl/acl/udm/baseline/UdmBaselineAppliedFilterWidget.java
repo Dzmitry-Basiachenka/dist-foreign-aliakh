@@ -44,11 +44,11 @@ public class UdmBaselineAppliedFilterWidget extends CommonAclAppliedFilterPanel 
             addLabel(createLabelWithSingleValue(UdmBaselineFilter::getChannel, filter, "label.channel"), layout);
             addLabel(createLabelWithMultipleValues(sortDetailLicenseeClasses(filter.getDetailLicenseeClasses()),
                 "label.detail_licensee_classes", DetailLicenseeClass::getIdAndDescription), layout);
+            addLabel(createLabelWithMultipleValues(sortAggregateLicenseeClasses(filter.getAggregateLicenseeClasses()),
+                "label.aggregate_licensee_classes", AggregateLicenseeClass::getIdAndDescription), layout);
             addLabel(createLabelWithMultipleValues(sortStringValuesByNaturalOrder(filter.getReportedTypeOfUses()),
-                "label.types_of_use", String::valueOf), layout);
-            addLabel(
-                createLabelWithMultipleValues(sortAggregateLicenseeClasses(filter.getAggregateLicenseeClasses()),
-                    "label.aggregate_licensee_classes", AggregateLicenseeClass::getIdAndDescription), layout);
+                "label.reported_types_of_use", String::valueOf), layout);
+            addLabel(createLabelWithSingleValue(UdmBaselineFilter::getTypeOfUse, filter, "label.type_of_use"), layout);
             addLabel(createLabelWithOperator(filter.getWrWrkInstExpression(), "label.wr_wrk_inst_from",
                 "label.wr_wrk_inst_to"), layout);
             addLabel(createLabelWithOperator(filter.getSystemTitleExpression(), "label.system_title",

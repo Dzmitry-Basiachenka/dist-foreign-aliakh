@@ -50,25 +50,26 @@ public class UdmBaselineAppliedFilterWidgetTest {
         Component component = widget.getContent();
         assertThat(component, instanceOf(VerticalLayout.class));
         VerticalLayout verticalLayout = (VerticalLayout) component;
-        assertEquals(11, verticalLayout.getComponentCount());
+        assertEquals(12, verticalLayout.getComponentCount());
         verifyLabel(((VerticalLayout) component).getComponent(0), "Periods", "202106, 202012, 201506");
         verifyLabel(((VerticalLayout) component).getComponent(1), "Usage Origin", "SS");
         verifyLabel(((VerticalLayout) component).getComponent(2), "Channel", "CCC");
         verifyLabel(((VerticalLayout) component).getComponent(3), "Detail Licensee Classes",
             "1 - Food and Tobacco, 22 - Book series, 26 - Law Firms");
-        verifyLabel(((VerticalLayout) component).getComponent(4), "Types of Use",
-            "EMAIL_COPY, FAX_PHOTOCOPIES, STORE_COPY");
-        verifyLabel(((VerticalLayout) component).getComponent(5), "Aggregate Licensee Classes",
+        verifyLabel(((VerticalLayout) component).getComponent(4), "Aggregate Licensee Classes",
             "1 - Food and Tobacco, 12 - Machinery, 56 - Financial");
-        verifyLabelWithOperator(((VerticalLayout) component).getComponent(6),
-            "<li><b><i>Wr Wrk Inst From: </i></b>20008506</li><li><b><i>Operator: </i></b>EQUALS</li>");
+        verifyLabel(((VerticalLayout) component).getComponent(5), "Reported Types of Use",
+            "FAX_PHOTOCOPIES, PRINT_COPIES");
+        verifyLabel(((VerticalLayout) component).getComponent(6), "Type of Use", "PRINT");
         verifyLabelWithOperator(((VerticalLayout) component).getComponent(7),
+            "<li><b><i>Wr Wrk Inst From: </i></b>20008506</li><li><b><i>Operator: </i></b>EQUALS</li>");
+        verifyLabelWithOperator(((VerticalLayout) component).getComponent(8),
             "<li><b><i>System Title: </i></b>Medical journal</li><li><b><i>Operator: </i></b>EQUALS</li>");
-        verifyLabelWithOperator(((VerticalLayout) component).getComponent(8), "<li><b><i>Usage Detail ID: </i></b>" +
+        verifyLabelWithOperator(((VerticalLayout) component).getComponent(9), "<li><b><i>Usage Detail ID: </i></b>" +
             "2fc665eb-6b75-4e12-afbe-d2e1e1bab69d</li><li><b><i>Operator: </i></b>EQUALS</li>");
-        verifyLabelWithOperator(((VerticalLayout) component).getComponent(9),
-            "<li><b><i>Survey Country: </i></b>United States</li><li><b><i>Operator: </i></b>EQUALS</li>");
         verifyLabelWithOperator(((VerticalLayout) component).getComponent(10),
+            "<li><b><i>Survey Country: </i></b>United States</li><li><b><i>Operator: </i></b>EQUALS</li>");
+        verifyLabelWithOperator(((VerticalLayout) component).getComponent(11),
             "<li><b><i>Annualized Copies From: </i></b>5</li><li><b><i>Operator: </i></b>LESS_THAN</li>");
     }
 
@@ -93,7 +94,8 @@ public class UdmBaselineAppliedFilterWidgetTest {
             buildAggregateLicenseeClass(1, "Food and Tobacco"),
             buildAggregateLicenseeClass(12, "Machinery"),
             buildAggregateLicenseeClass(56, "Financial")));
-        filter.setReportedTypeOfUses(Sets.newHashSet("STORE_COPY", "EMAIL_COPY", "FAX_PHOTOCOPIES"));
+        filter.setReportedTypeOfUses(Sets.newHashSet("PRINT_COPIES", "FAX_PHOTOCOPIES"));
+        filter.setTypeOfUse("PRINT");
         filter.setSurveyCountryExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, "United States", null));
         filter.setWrWrkInstExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 20008506L, null));
         filter.setSystemTitleExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, "Medical journal", null));

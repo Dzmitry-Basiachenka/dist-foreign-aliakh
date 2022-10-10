@@ -59,6 +59,9 @@
                 u.reported_type_of_use = #{reportedTypeOfUse}
             </foreach>
         </if>
+        <if test="null != filter.typeOfUse">
+            and u.type_of_use = #{filter.typeOfUse}
+        </if>
         <if test="!filter.wrWrkInstExpression.isEmpty()">
             <include refid="IUdmCommonMapper.numericFieldFilterExpression">
                 <property name="column" value="u.wr_wrk_inst"/>
