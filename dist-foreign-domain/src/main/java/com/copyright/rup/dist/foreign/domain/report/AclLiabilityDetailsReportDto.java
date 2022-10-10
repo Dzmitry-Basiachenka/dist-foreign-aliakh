@@ -165,9 +165,10 @@ public class AclLiabilityDetailsReportDto extends StoredEntity<String> {
     @Override
     public String toString() {
         return new ToStringBuilder(this)
+            .appendSuper(super.toString())
             .append("rhAccountNumber", rhAccountNumber)
             .append("rhName", rhName)
-            .append("rhName", title)
+            .append("title", title)
             .append("wrWrkInst", wrWrkInst)
             .append("scenarioName", scenarioName)
             .append("licenseType", licenseType)

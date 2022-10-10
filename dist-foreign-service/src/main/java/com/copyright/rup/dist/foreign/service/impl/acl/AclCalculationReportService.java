@@ -67,6 +67,6 @@ public class AclCalculationReportService implements IAclCalculationReportService
     @Override
     public void writeAclLiabilitiesByAggLicClassReport(AclCalculationReportsInfoDto reportInfo,
                                                        OutputStream outputStream) {
-        //TODO implement backend logic
+        aclCalculationReportRepository.writeAclLiabilitiesByAggLicClassReport(reportInfo, outputStream);
     }
 }
