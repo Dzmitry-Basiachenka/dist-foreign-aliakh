@@ -1,3 +1,35 @@
+16.0.5
+-
+* B-64703 FDA: improve performance on UI filtering/data processing: improve filtering by usage batch on Audit tab
+* B-67527 FDA: Create Approver role for ACL: add Approver role with access to FDA application
+* B-74415 Grant set name and period for grant set view: implement logic to display new Grant Set Name column on grant sets tab
+* B-74415 Grant set name and period for grant set view: implement logic to display grant sets periods column on view grant set window
+* B-75295 FDA: Liabilities by Agg Lic Class Report: implement reports sub-tab under Calculations tab
+* B-75295 FDA: Liabilities by Agg Lic Class Report: implement common ACL reports window
+* B-75295 FDA: Liabilities by Agg Lic Class Report: implement backend logic to populate report filters
+* B-75295 FDA: Liabilities by Agg Lic Class Report: set period filter required to generate report
+* B-75295 FDA: Liabilities by Agg Lic Class Report: implement dto domain object and CSV report handler
+* B-75295 FDA: Liabilities by Agg Lic Class Report: implement common method to generate report info
+* B-75295 FDA: Liabilities by Agg Lic Class Report: implement backend logic to generate report
+* B-75010 FDA: Liability Details Report: implement Liability Details Report button
+* B-75010 FDA: Liability Details Report: implement queries to get information from DB to generate report
+* B-75010 FDA: Liability Details Report: implement backend logic to generate report
+* B-74954 FDA: Summary of Work Shares by Agg Lic Class Report: implement domain object for ACL Calculation report metadata
+* B-74954 FDA: Summary of Work Shares by Agg Lic Class Report: implement backend logic
+* B-74954 FDA: Summary of Work Shares by Agg Lic Class Report: implement ui and change report metadata headers and report date format in metadata
+* B-73116 FDA: CUP Flag: add CUP flag column to UDM Values tab
+* B-73116 FDA: CUP Flag: add content_unit_price_flag column to df_udm_value and df_udm_value_baseline tables
+* B-73116 FDA: CUP Flag: add CUP flag column to UDM Baseline Values tab
+* B-73116 FDA: CUP Flag: add CUP flag column to Calculations Usages tab and ACL Usages Export report
+* B-73116 FDA: CUP Flag: add CUP flag on UDM Edit Value and UDM View Value windows
+* B-73116 FDA: CUP Flag: add CUP and CUP flag filters to More Filters on UDM Values tab
+* B-73116 FDA: CUP Flag: add CUP flag filter to More Filters on UDM Baseline Values tab
+* B-73712 FDA: Add more fields to Calculation Usages: add columns to the UDM tab, Usages sub-tab: Reported TOU, TOU
+* B-73712 FDA: Add more fields to Calculation Usages: add columns to the UDM tab, Baseline sub-tab: Reported TOU, TOU
+* B-73712 FDA: Add more fields to Calculation Usages: add filter on TOU, Reported TOU on the Calculations tab, Usages sub-tab
+* B-73712 FDA: Add more fields to Calculation Usages: add filter on TOU, Reported TOU on the Calculations tab, Baseline sub-tab
+* B-73712 FDA: Add more fields to Calculation Usages: replace the TOU widget filter with the combobox
+
 16.0.4
 -
 * B-75436 FDA: Gradle upgrade for FDA: upgrade to Gradle 5 / RUP Gradle Plugins 7
