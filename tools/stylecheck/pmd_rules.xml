@@ -172,4 +172,10 @@
         <!--False positive since string concatenation is implemented through the StringBuilder-->
         <exclude name="UseStringBufferForStringAppends"/>
     </rule>
+
+    <rule ref="category/java/design.xml/ExcessiveMethodLength">
+        <properties>
+            <property name="minimum" value="200.0" />
+        </properties>
+    </rule>
 </ruleset>

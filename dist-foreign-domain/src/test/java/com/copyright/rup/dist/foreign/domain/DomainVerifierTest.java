@@ -19,6 +19,7 @@ import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.domain.report.AclCalculationReportsInfoDto;
 import com.copyright.rup.dist.foreign.domain.report.AclLiabilitiesByAggLicClassReportDto;
 import com.copyright.rup.dist.foreign.domain.report.AclLiabilityDetailsReportDto;
+import com.copyright.rup.dist.foreign.domain.report.AclReportTotalAmountsDto;
 import com.copyright.rup.dist.foreign.domain.report.AclSummaryOfWorkSharesByAggLcReportDto;
 import com.copyright.rup.dist.foreign.domain.report.BatchStatistic;
 import com.copyright.rup.dist.foreign.domain.report.FasBatchSummaryReportDto;
@@ -167,7 +168,8 @@ public class DomainVerifierTest {
             {AclCalculationReportsInfoDto.class},
             {AclSummaryOfWorkSharesByAggLcReportDto.class},
             {AclLiabilityDetailsReportDto.class},
-            {AclLiabilitiesByAggLicClassReportDto.class}
+            {AclLiabilitiesByAggLicClassReportDto.class},
+            {AclReportTotalAmountsDto.class}
         };
         return Arrays.asList(testData);
     }
