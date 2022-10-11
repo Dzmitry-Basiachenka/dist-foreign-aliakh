@@ -5,6 +5,7 @@ import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.UdmChannelEnum;
 import com.copyright.rup.dist.foreign.domain.UdmUsageOriginEnum;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -38,6 +39,7 @@ public class AclUsageFilter {
     private FilterExpression<String> systemTitleExpression = new FilterExpression<>();
     private FilterExpression<String> surveyCountryExpression = new FilterExpression<>();
     private FilterExpression<Number> contentUnitPriceExpression = new FilterExpression<>();
+    private FilterExpression<Boolean> contentUnitPriceFlagExpression = new FilterExpression<>();
     private FilterExpression<Number> annualizedCopiesExpression = new FilterExpression<>();
 
     /**
@@ -66,6 +68,7 @@ public class AclUsageFilter {
             setSystemTitleExpression(new FilterExpression<>(filter.getSystemTitleExpression()));
             setSurveyCountryExpression(new FilterExpression<>(filter.getSurveyCountryExpression()));
             setContentUnitPriceExpression(new FilterExpression<>(filter.getContentUnitPriceExpression()));
+            setContentUnitPriceFlagExpression(new FilterExpression<>(filter.getContentUnitPriceFlagExpression()));
             setAnnualizedCopiesExpression(new FilterExpression<>(filter.getAnnualizedCopiesExpression()));
         }
     }
@@ -174,6 +177,14 @@ public class AclUsageFilter {
         this.contentUnitPriceExpression = contentUnitPriceExpression;
     }
 
+    public FilterExpression<Boolean> getContentUnitPriceFlagExpression() {
+        return contentUnitPriceFlagExpression;
+    }
+
+    public void setContentUnitPriceFlagExpression(FilterExpression<Boolean> contentUnitPriceFlagExpression) {
+        this.contentUnitPriceFlagExpression = contentUnitPriceFlagExpression;
+    }
+
     public FilterExpression<Number> getAnnualizedCopiesExpression() {
         return annualizedCopiesExpression;
     }
@@ -199,6 +210,7 @@ public class AclUsageFilter {
             && systemTitleExpression.isEmpty()
             && surveyCountryExpression.isEmpty()
             && contentUnitPriceExpression.isEmpty()
+            && contentUnitPriceFlagExpression.isEmpty()
             && annualizedCopiesExpression.isEmpty();
     }
 
@@ -225,6 +237,7 @@ public class AclUsageFilter {
             .append(systemTitleExpression, that.systemTitleExpression)
             .append(surveyCountryExpression, that.surveyCountryExpression)
             .append(contentUnitPriceExpression, that.contentUnitPriceExpression)
+            .append(contentUnitPriceFlagExpression, that.contentUnitPriceFlagExpression)
             .append(annualizedCopiesExpression, that.annualizedCopiesExpression)
             .isEquals();
     }
@@ -245,6 +258,7 @@ public class AclUsageFilter {
             .append(systemTitleExpression)
             .append(surveyCountryExpression)
             .append(contentUnitPriceExpression)
+            .append(contentUnitPriceFlagExpression)
             .append(annualizedCopiesExpression)
             .toHashCode();
     }
@@ -265,6 +279,7 @@ public class AclUsageFilter {
             .append("systemTitleExpression", systemTitleExpression)
             .append("surveyCountryExpression", surveyCountryExpression)
             .append("contentUnitPriceExpression", contentUnitPriceExpression)
+            .append("contentUnitPriceFlagExpression", contentUnitPriceFlagExpression)
             .append("annualizedCopiesExpression", annualizedCopiesExpression)
             .toString();
     }

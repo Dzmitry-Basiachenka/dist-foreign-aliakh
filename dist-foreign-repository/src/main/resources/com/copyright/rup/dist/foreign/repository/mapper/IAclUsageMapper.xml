@@ -206,6 +206,12 @@
                 <property name="fieldSecondValue" value="${filter.contentUnitPriceExpression.fieldSecondValue}"/>
             </include>
         </if>
+        <if test="!filter.contentUnitPriceFlagExpression.isEmpty()">
+            <include refid="IUdmCommonMapper.booleanFieldFilterExpression">
+                <property name="column" value="u.content_unit_price_flag"/>
+                <property name="operator" value="filter.contentUnitPriceFlagExpression.operator"/>
+            </include>
+        </if>
         <if test="!filter.annualizedCopiesExpression.isEmpty()">
             <include refid="IUdmCommonMapper.numericFieldFilterExpression">
                 <property name="column" value="u.annualized_copies"/>
