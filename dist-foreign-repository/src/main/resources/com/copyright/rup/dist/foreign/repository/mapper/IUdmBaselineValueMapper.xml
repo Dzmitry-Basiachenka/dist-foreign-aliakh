@@ -102,6 +102,12 @@
                     <property name="operator" value="filter.contentFlagExpression.operator"/>
                 </include>
             </if>
+            <if test="!filter.contentUnitPriceFlagExpression.isEmpty()">
+                <include refid="IUdmCommonMapper.booleanFieldFilterExpression">
+                    <property name="column" value="v.content_unit_price_flag"/>
+                    <property name="operator" value="filter.contentUnitPriceFlagExpression.operator"/>
+                </include>
+            </if>
             <if test="!filter.priceExpression.isEmpty()">
                 <include refid="IUdmCommonMapper.numericFieldFilterExpression">
                     <property name="column" value="v.price"/>

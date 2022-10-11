@@ -51,7 +51,7 @@ public class UdmBaselineValueAppliedFilterWidgetTest {
         Component component = widget.getContent();
         assertThat(component, instanceOf(VerticalLayout.class));
         VerticalLayout verticalLayout = (VerticalLayout) component;
-        assertEquals(10, verticalLayout.getComponentCount());
+        assertEquals(11, verticalLayout.getComponentCount());
         verifyLabel(((VerticalLayout) component).getComponent(0), "Periods", "202212, 202106, 201506");
         verifyLabel(((VerticalLayout) component).getComponent(1), "Pub Types",
             "BK - Book, BK2 - Book series, SJ - Scholarly Journal");
@@ -62,13 +62,14 @@ public class UdmBaselineValueAppliedFilterWidgetTest {
                 "<b><i>Operator: </i></b>EQUALS</li>");
         verifyLabel(((VerticalLayout) component).getComponent(4), "Price Flag", "N");
         verifyLabel(((VerticalLayout) component).getComponent(5), "Content Flag", "Y");
-        verifyLabelWithOperator(((VerticalLayout) component).getComponent(6),
-            "<li><b><i>Price From: </i></b>50.0000000000</li><li><b><i>Operator: </i></b>EQUALS</li>");
+        verifyLabel(((VerticalLayout) component).getComponent(6), "CUP Flag", "N");
         verifyLabelWithOperator(((VerticalLayout) component).getComponent(7),
-            "<li><b><i>Content From: </i></b>2.0000000000</li><li><b><i>Operator: </i></b>EQUALS</li>");
+            "<li><b><i>Price From: </i></b>50.0000000000</li><li><b><i>Operator: </i></b>EQUALS</li>");
         verifyLabelWithOperator(((VerticalLayout) component).getComponent(8),
-            "<li><b><i>Content Unit Price From: </i></b>25.0000000000</li><li><b><i>Operator: </i></b>EQUALS</li>");
+            "<li><b><i>Content From: </i></b>2.0000000000</li><li><b><i>Operator: </i></b>EQUALS</li>");
         verifyLabelWithOperator(((VerticalLayout) component).getComponent(9),
+            "<li><b><i>Content Unit Price From: </i></b>25.0000000000</li><li><b><i>Operator: </i></b>EQUALS</li>");
+        verifyLabelWithOperator(((VerticalLayout) component).getComponent(10),
             "<li><b><i>Comment: </i></b>Comment</li><li><b><i>Operator: </i></b>EQUALS</li>");
     }
 
@@ -92,6 +93,7 @@ public class UdmBaselineValueAppliedFilterWidgetTest {
             new FilterExpression<>(FilterOperatorEnum.EQUALS, "Tenside, surfactants, detergents", null));
         filter.setPriceFlagExpression(new FilterExpression<>(FilterOperatorEnum.N));
         filter.setContentFlagExpression(new FilterExpression<>(FilterOperatorEnum.Y));
+        filter.setContentUnitPriceFlagExpression(new FilterExpression<>(FilterOperatorEnum.N));
         filter.setPriceExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, PRICE, null));
         filter.setContentExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, CONTENT, null));
         filter.setContentUnitPriceExpression(

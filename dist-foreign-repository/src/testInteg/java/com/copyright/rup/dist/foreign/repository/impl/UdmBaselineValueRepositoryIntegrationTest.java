@@ -105,6 +105,7 @@ public class UdmBaselineValueRepositoryIntegrationTest {
         filter.setSystemTitleExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE_1, null));
         filter.setPriceFlagExpression(new FilterExpression<>(FilterOperatorEnum.N));
         filter.setContentFlagExpression(new FilterExpression<>(FilterOperatorEnum.Y));
+        filter.setContentUnitPriceFlagExpression(new FilterExpression<>(FilterOperatorEnum.N));
         filter.setPriceExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, PRICE, null));
         filter.setContentExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, CONTENT, null));
         filter.setContentUnitPriceExpression(
@@ -123,6 +124,7 @@ public class UdmBaselineValueRepositoryIntegrationTest {
         filter.setSystemTitleExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE_1, null));
         filter.setPriceFlagExpression(new FilterExpression<>(FilterOperatorEnum.N));
         filter.setContentFlagExpression(new FilterExpression<>(FilterOperatorEnum.Y));
+        filter.setContentUnitPriceFlagExpression(new FilterExpression<>(FilterOperatorEnum.N));
         filter.setPriceExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, PRICE, null));
         filter.setContentExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, CONTENT, null));
         filter.setContentUnitPriceExpression(
@@ -240,6 +242,15 @@ public class UdmBaselineValueRepositoryIntegrationTest {
             new FilterExpression<>(FilterOperatorEnum.Y)), UDM_BASELINE_VALUE_UID_2, UDM_BASELINE_VALUE_UID_3);
         assertFilteringFindDtosByFilter(filter -> filter.setContentFlagExpression(
             new FilterExpression<>(FilterOperatorEnum.N)), UDM_BASELINE_VALUE_UID_1);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindDtosByFilterContentUnitPriceFlag() {
+        assertFilteringFindDtosByFilter(filter -> filter.setContentUnitPriceFlagExpression(
+            new FilterExpression<>(FilterOperatorEnum.Y)), UDM_BASELINE_VALUE_UID_3);
+        assertFilteringFindDtosByFilter(filter -> filter.setContentUnitPriceFlagExpression(
+            new FilterExpression<>(FilterOperatorEnum.N)), UDM_BASELINE_VALUE_UID_2, UDM_BASELINE_VALUE_UID_1);
     }
 
     @Test
@@ -466,6 +477,15 @@ public class UdmBaselineValueRepositoryIntegrationTest {
             new FilterExpression<>(FilterOperatorEnum.Y)), 2);
         assertFilteringFindCountByFilter(filter -> filter.setContentFlagExpression(
             new FilterExpression<>(FilterOperatorEnum.N)), 1);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindCountByFilterContentUnitPriceFlag() {
+        assertFilteringFindCountByFilter(filter -> filter.setContentUnitPriceFlagExpression(
+            new FilterExpression<>(FilterOperatorEnum.Y)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setContentUnitPriceFlagExpression(
+            new FilterExpression<>(FilterOperatorEnum.N)), 2);
     }
 
     @Test
