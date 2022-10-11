@@ -27,6 +27,7 @@ public class UdmBaselineValueFilter {
     private FilterExpression<String> systemTitleExpression = new FilterExpression<>();
     private FilterExpression<Boolean> priceFlagExpression = new FilterExpression<>();
     private FilterExpression<Boolean> contentFlagExpression = new FilterExpression<>();
+    private FilterExpression<Boolean> contentUnitPriceFlagExpression = new FilterExpression<>();
     private FilterExpression<Number> priceExpression = new FilterExpression<>();
     private FilterExpression<Number> contentExpression = new FilterExpression<>();
     private FilterExpression<Number> contentUnitPriceExpression = new FilterExpression<>();
@@ -51,6 +52,7 @@ public class UdmBaselineValueFilter {
             setSystemTitleExpression(new FilterExpression<>(filter.getSystemTitleExpression()));
             setPriceFlagExpression(new FilterExpression<>(filter.getPriceFlagExpression()));
             setContentFlagExpression(new FilterExpression<>(filter.getContentFlagExpression()));
+            setContentUnitPriceFlagExpression(new FilterExpression<>(filter.getContentUnitPriceFlagExpression()));
             setPriceExpression(new FilterExpression<>(filter.getPriceExpression()));
             setContentExpression(new FilterExpression<>(filter.getContentExpression()));
             setContentUnitPriceExpression(new FilterExpression<>(filter.getContentUnitPriceExpression()));
@@ -106,6 +108,14 @@ public class UdmBaselineValueFilter {
         this.contentFlagExpression = contentFlagExpression;
     }
 
+    public FilterExpression<Boolean> getContentUnitPriceFlagExpression() {
+        return contentUnitPriceFlagExpression;
+    }
+
+    public void setContentUnitPriceFlagExpression(FilterExpression<Boolean> contentUnitPriceFlagExpression) {
+        this.contentUnitPriceFlagExpression = contentUnitPriceFlagExpression;
+    }
+
     public FilterExpression<Number> getPriceExpression() {
         return priceExpression;
     }
@@ -148,6 +158,7 @@ public class UdmBaselineValueFilter {
             && systemTitleExpression.isEmpty()
             && priceFlagExpression.isEmpty()
             && contentFlagExpression.isEmpty()
+            && contentUnitPriceFlagExpression.isEmpty()
             && priceExpression.isEmpty()
             && contentExpression.isEmpty()
             && contentUnitPriceExpression.isEmpty()
@@ -173,6 +184,7 @@ public class UdmBaselineValueFilter {
             .append(systemTitleExpression, that.systemTitleExpression)
             .append(priceFlagExpression, that.priceFlagExpression)
             .append(contentFlagExpression, that.contentFlagExpression)
+            .append(contentUnitPriceFlagExpression, that.contentUnitPriceFlagExpression)
             .append(priceExpression, that.priceExpression)
             .append(contentExpression, that.contentExpression)
             .append(contentUnitPriceExpression, that.contentUnitPriceExpression)
@@ -189,6 +201,7 @@ public class UdmBaselineValueFilter {
             .append(systemTitleExpression)
             .append(priceFlagExpression)
             .append(contentFlagExpression)
+            .append(contentUnitPriceFlagExpression)
             .append(priceExpression)
             .append(contentExpression)
             .append(contentUnitPriceExpression)
@@ -205,6 +218,7 @@ public class UdmBaselineValueFilter {
             .append("systemTitleExpression", systemTitleExpression)
             .append("priceFlagExpression", priceFlagExpression)
             .append("contentFlagExpression", contentFlagExpression)
+            .append("contentUnitPriceFlagExpression", contentUnitPriceFlagExpression)
             .append("priceExpression", priceExpression)
             .append("contentExpression", contentExpression)
             .append("contentUnitPriceExpression", contentUnitPriceExpression)

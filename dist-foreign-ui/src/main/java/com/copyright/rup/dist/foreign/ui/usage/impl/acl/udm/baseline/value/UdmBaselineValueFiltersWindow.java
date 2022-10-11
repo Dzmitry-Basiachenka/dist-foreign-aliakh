@@ -71,6 +71,8 @@ public class UdmBaselineValueFiltersWindow extends CommonAclFiltersWindow {
         new ComboBox<>(ForeignUi.getMessage("label.price_flag"));
     private final ComboBox<FilterOperatorEnum> contentFlagComboBox =
         new ComboBox<>(ForeignUi.getMessage("label.content_flag"));
+    private final ComboBox<FilterOperatorEnum> contentUnitPriceFlagComboBox =
+        new ComboBox<>(ForeignUi.getMessage("label.content_unit_price_flag"));
     private final TextField commentField = new TextField(ForeignUi.getMessage("label.comment"));
     private final ComboBox<FilterOperatorEnum> commentOperatorComboBox = buildTextOperatorComboBox();
     private final Binder<UdmBaselineValueFilter> filterBinder = new Binder<>();
@@ -119,10 +121,17 @@ public class UdmBaselineValueFiltersWindow extends CommonAclFiltersWindow {
             .bind(filter -> filter.getContentFlagExpression().getOperator(),
                 (filter, value) -> filter.getContentFlagExpression().setOperator(value));
         contentFlagComboBox.setItems(FLAG_ITEMS);
-        HorizontalLayout horizontalLayout = new HorizontalLayout(priceFlagComboBox, contentFlagComboBox);
-        applyCommonNumericFieldFormatting(horizontalLayout, priceFlagComboBox, contentFlagComboBox);
+        filterBinder.forField(contentUnitPriceFlagComboBox)
+            .bind(filter -> filter.getContentUnitPriceFlagExpression().getOperator(),
+                (filter, value) -> filter.getContentUnitPriceFlagExpression().setOperator(value));
+        contentUnitPriceFlagComboBox.setItems(FLAG_ITEMS);
+        HorizontalLayout horizontalLayout =
+            new HorizontalLayout(priceFlagComboBox, contentFlagComboBox, contentUnitPriceFlagComboBox);
+        horizontalLayout.setSizeFull();
         VaadinUtils.addComponentStyle(priceFlagComboBox, "udm-baseline-value-price-flag-filter");
         VaadinUtils.addComponentStyle(contentFlagComboBox, "udm-baseline-value-content-flag-filter");
+        VaadinUtils.addComponentStyle(contentUnitPriceFlagComboBox,
+            "udm-baseline-value-content-unit-price-flag-filter");
         return horizontalLayout;
     }
 

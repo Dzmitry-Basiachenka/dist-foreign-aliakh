@@ -48,6 +48,9 @@ public class UdmBaselineValueAppliedFilterWidget extends CommonAclAppliedFilterP
                 udmValueFilter.getPriceFlagExpression().getOperator()), filter, "label.price_flag"), layout);
             addLabel(createLabelWithSingleValue(udmValueFilter -> convertFilterOperatorToString(
                 udmValueFilter.getContentFlagExpression().getOperator()), filter, "label.content_flag"), layout);
+            addLabel(createLabelWithSingleValue(udmValueFilter -> convertFilterOperatorToString(
+                udmValueFilter.getContentUnitPriceFlagExpression().getOperator()), filter,
+                "label.content_unit_price_flag"), layout);
             addLabel(createLabelWithOperator(filter.getPriceExpression(), "label.price_from", "label.price_to"),
                 layout);
             addLabel(createLabelWithOperator(filter.getContentExpression(), "label.content_from", "label.content_to"),
