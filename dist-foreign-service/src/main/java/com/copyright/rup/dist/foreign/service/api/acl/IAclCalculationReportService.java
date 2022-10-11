@@ -60,7 +60,7 @@ public interface IAclCalculationReportService {
     void writeAclScenarioRightsholderTotalsCsvReport(String scenarioId, PipedOutputStream pipedOutputStream);
 
     /**
-     * Writes Summary of Work Shares by Agg LC Report into csv output stream.
+     * Writes Summary of Work Shares by Aggregate Licensee Class report into csv output stream.
      *
      * @param reportInfo   report info
      * @param outputStream instance of {@link OutputStream}

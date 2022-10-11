@@ -9,7 +9,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import java.math.BigDecimal;
 
 /**
- * Represents ACL Summary of Work Shares by Agg LC report record.
+ * Represents ACL Summary of Work Shares by Aggregate Licensee Class report record.
  * <p>
  * Copyright (C) 2022 copyright.com
  * <p>

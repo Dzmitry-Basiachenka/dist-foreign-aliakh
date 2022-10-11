@@ -450,7 +450,8 @@ public class AclScenariosWidgetTest {
         verifyLabel(lastActionLayout.getComponent(2), "<b>Date:</b> 07/01/2022 12:00 AM");
         verifyLabel(lastActionLayout.getComponent(3), "<b>Reason:</b> some reason");
         UiTestHelper.verifyButton(lastActionLayout.getComponent(4), "View All Actions", true);
-        UiTestHelper.verifyButton(metadataLayout.getComponent(11), "Summary of Work Shares by Agg LC Report", true);
+        UiTestHelper.verifyButton(
+            metadataLayout.getComponent(11), "Summary of Work Shares by Aggregate Licensee Class Report", true);
     }
 
     private void verifyScenarioParameterWidget(Component component, String expectedCaption) {
