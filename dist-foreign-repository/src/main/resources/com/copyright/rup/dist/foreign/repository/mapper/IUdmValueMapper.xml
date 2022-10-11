@@ -344,6 +344,20 @@
                     <property name="fieldSecondValue" value="${filter.lastContentCommentExpression.fieldSecondValue}"/>
                 </include>
             </if>
+            <if test="!filter.contentUnitPriceExpression.isEmpty()">
+                <include refid="IUdmCommonMapper.numericFieldFilterExpression">
+                    <property name="column" value="content_unit_price"/>
+                    <property name="operator" value="filter.contentUnitPriceExpression.operator"/>
+                    <property name="fieldFirstValue" value="${filter.contentUnitPriceExpression.fieldFirstValue}"/>
+                    <property name="fieldSecondValue" value="${filter.contentUnitPriceExpression.fieldSecondValue}"/>
+                </include>
+            </if>
+            <if test="!filter.contentUnitPriceFlagExpression.isEmpty()">
+                <include refid="IUdmCommonMapper.booleanFieldFilterExpression">
+                    <property name="column" value="v.content_unit_price_flag"/>
+                    <property name="operator" value="filter.contentUnitPriceFlagExpression.operator"/>
+                </include>
+            </if>
             <if test="!filter.commentExpression.isEmpty()">
                 <include refid="IUdmCommonMapper.textFieldFilterExpression">
                     <property name="column" value="v.comment"/>

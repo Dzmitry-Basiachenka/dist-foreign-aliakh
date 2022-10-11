@@ -99,6 +99,13 @@ public class UdmValueFiltersWindow extends CommonAclFiltersWindow {
     private final ComboBox<FilterOperatorEnum> lastContentCommentOperatorComboBox = buildTextOperatorComboBox();
     private final ComboBox<PublicationType> lastPubTypeComboBox =
         new ComboBox<>(ForeignUi.getMessage("label.last_pub_type"));
+    private final TextField contentUnitPriceFromField =
+        new TextField(ForeignUi.getMessage("label.content_unit_price_from"));
+    private final TextField contentUnitPriceToField =
+        new TextField(ForeignUi.getMessage("label.content_unit_price_to"));
+    private final ComboBox<FilterOperatorEnum> contentUnitPriceOperatorComboBox = buildNumericOperatorComboBox();
+    private final ComboBox<FilterOperatorEnum> contentUnitPriceFlagComboBox =
+        new ComboBox<>(ForeignUi.getMessage("label.content_unit_price_flag"));
     private final TextField commentField = new TextField(ForeignUi.getMessage("label.comment"));
     private final ComboBox<FilterOperatorEnum> commentOperatorComboBox = buildTextOperatorComboBox();
     private final TextField lastCommentField = new TextField(ForeignUi.getMessage("label.last_comment"));
@@ -137,7 +144,8 @@ public class UdmValueFiltersWindow extends CommonAclFiltersWindow {
             initSystemStandardNumberLayout(), initRhAccountNumberLayout(), initRhNameLayout(),
             initCurrencyLastPubTypeLayout(), initPriceLayout(), initPriceInUsdLayout(), initPriceFlagsLayout(),
             initPriceCommentLayout(), initLastPriceCommentLayout(), initContentLayout(), initContentFlagsLayout(),
-            initContentCommentLayout(), initLastContentCommentLayout(), initCommentLayout(), initLastCommentLayout());
+            initContentCommentLayout(), initLastContentCommentLayout(), initContentUnitPriceLayout(),
+            initContentUnitPriceFlagLayout(), initCommentLayout(), initLastCommentLayout());
         Panel panel = new Panel(fieldsLayout);
         panel.setSizeFull();
         fieldsLayout.setMargin(new MarginInfo(true));
@@ -554,6 +562,53 @@ public class UdmValueFiltersWindow extends CommonAclFiltersWindow {
         return horizontalLayout;
     }
 
+    private HorizontalLayout initContentUnitPriceLayout() {
+        contentUnitPriceToField.setEnabled(false);
+        filterBinder.forField(contentUnitPriceFromField)
+            .withValidator(new AmountValidator())
+            .withValidator(getBetweenOperatorValidator(contentUnitPriceFromField, contentUnitPriceOperatorComboBox),
+                BETWEEN_OPERATOR_VALIDATION_MESSAGE)
+            .bind(filter ->
+                    Objects.toString(filter.getContentUnitPriceExpression().getFieldFirstValue(), StringUtils.EMPTY),
+                (filter, value) -> filter.getContentUnitPriceExpression()
+                    .setFieldFirstValue(NumberUtils.createBigDecimal(StringUtils.trimToNull(value))));
+        filterBinder.forField(contentUnitPriceToField)
+            .withValidator(new AmountValidator())
+            .withValidator(getBetweenOperatorValidator(contentUnitPriceToField, contentUnitPriceOperatorComboBox),
+                BETWEEN_OPERATOR_VALIDATION_MESSAGE)
+            .withValidator(value -> validateBigDecimalFromToValues(contentUnitPriceFromField, contentUnitPriceToField),
+                ForeignUi.getMessage(GRATER_OR_EQUAL_VALIDATION_MESSAGE,
+                    ForeignUi.getMessage("label.content_unit_price_from")))
+            .bind(filter ->
+                    Objects.toString(filter.getContentUnitPriceExpression().getFieldSecondValue(), StringUtils.EMPTY),
+                (filter, value) -> filter.getContentUnitPriceExpression()
+                    .setFieldSecondValue(NumberUtils.createBigDecimal(StringUtils.trimToNull(value))));
+        contentUnitPriceOperatorComboBox.addValueChangeListener(
+            event -> updateOperatorField(filterBinder, contentUnitPriceFromField, contentUnitPriceToField,
+                event.getValue()));
+        filterBinder.forField(contentUnitPriceOperatorComboBox)
+            .bind(filter -> ObjectUtils.defaultIfNull(
+                filter.getContentUnitPriceExpression().getOperator(), FilterOperatorEnum.valueOf(EQUALS)),
+                (filter, value) -> filter.getContentUnitPriceExpression().setOperator(value));
+        HorizontalLayout horizontalLayout =
+            new HorizontalLayout(contentUnitPriceFromField, contentUnitPriceToField, contentUnitPriceOperatorComboBox);
+        applyCommonNumericFieldFormatting(horizontalLayout, contentUnitPriceFromField, contentUnitPriceToField);
+        VaadinUtils.addComponentStyle(contentUnitPriceFromField, "udm-value-content-unit-price-from-filter");
+        VaadinUtils.addComponentStyle(contentUnitPriceToField, "udm-value-content-unit-price-to-filter");
+        VaadinUtils.addComponentStyle(contentUnitPriceOperatorComboBox, "udm-value-content-unit-price-operator-filter");
+        return horizontalLayout;
+    }
+
+    private ComboBox<FilterOperatorEnum> initContentUnitPriceFlagLayout() {
+        filterBinder.forField(contentUnitPriceFlagComboBox)
+            .bind(filter -> filter.getContentUnitPriceFlagExpression().getOperator(),
+                (filter, value) -> filter.getContentUnitPriceFlagExpression().setOperator(value));
+        populateFlagComboBox(contentUnitPriceFlagComboBox,
+            valueFilter.getContentUnitPriceFlagExpression().getOperator(), "udm-value-content-unit-price-flag-filter");
+        contentUnitPriceFlagComboBox.setWidth(50, Unit.PERCENTAGE);
+        return contentUnitPriceFlagComboBox;
+    }
+
     private HorizontalLayout initCommentLayout() {
         filterBinder.forField(commentField)
             .withValidator(getTextStringLengthValidator(1024))
@@ -602,8 +657,8 @@ public class UdmValueFiltersWindow extends CommonAclFiltersWindow {
                     Arrays.asList(wrWrkInstFromField, wrWrkInstToField, systemTitleField, systemStandardNumberField,
                         rhAccountNumberFromField, rhAccountNumberToField, rhNameField, priceFromField, priceToField,
                         priceInUsdFromField, priceInUsdToField, priceCommentField, lastPriceCommentField,
-                        contentFromField, contentToField, contentCommentField, lastContentCommentField, commentField,
-                        lastCommentField));
+                        contentFromField, contentToField, contentCommentField, lastContentCommentField,
+                        contentUnitPriceFromField, contentUnitPriceToField, commentField, lastCommentField));
             }
         });
         Button clearButton = Buttons.createButton(ForeignUi.getMessage("button.clear"));

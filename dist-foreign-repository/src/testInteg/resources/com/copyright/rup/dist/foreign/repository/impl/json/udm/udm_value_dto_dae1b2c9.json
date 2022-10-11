@@ -28,7 +28,7 @@
     "currencyExchangeRate": 1.1328000040,
     "currencyExchangeRateDate": "2021-09-10",
     "contentUnitPrice": 19.8240000700,
-    "contentUnitPriceFlag": false,
+    "contentUnitPriceFlag": true,
     "contentComment": "content comment 1",
     "comment": "comment 1",
     "createUser": "user@copyright.com",

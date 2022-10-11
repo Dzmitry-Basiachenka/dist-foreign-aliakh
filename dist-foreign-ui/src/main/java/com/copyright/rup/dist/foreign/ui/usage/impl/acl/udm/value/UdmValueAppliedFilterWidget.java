@@ -92,6 +92,11 @@ public class UdmValueAppliedFilterWidget extends CommonAclAppliedFilterPanel {
                 layout);
             addLabel(createLabelWithOperator(filter.getLastContentCommentExpression(), "label.last_content_comment",
                 StringUtils.EMPTY), layout);
+            addLabel(createLabelWithOperator(filter.getContentUnitPriceExpression(), "label.content_unit_price_from",
+                "label.content_unit_price_to"), layout);
+            addLabel(createLabelWithSingleValue(udmValueFilter -> convertFilterOperatorToString(
+                udmValueFilter.getContentUnitPriceFlagExpression().getOperator()), filter,
+                "label.content_unit_price_flag"), layout);
             addLabel(createLabelWithSingleValue(getPubTypeFunction(UdmValueFilter::getLastPubType, filter), filter,
                 "label.last_pub_type"), layout);
             addLabel(createLabelWithOperator(filter.getCommentExpression(), "label.comment",
