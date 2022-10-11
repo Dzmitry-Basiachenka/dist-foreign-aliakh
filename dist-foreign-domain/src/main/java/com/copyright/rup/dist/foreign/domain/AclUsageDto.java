@@ -31,8 +31,11 @@ public class AclUsageDto extends StoredEntity<String> {
     private String aggregateLicenseeClassName;
     private String surveyCountry;
     private PublicationType publicationType;
+    private BigDecimal price;
+    private BigDecimal content;
     private BigDecimal contentUnitPrice;
     private Boolean contentUnitPriceFlag;
+    private String reportedTypeOfUse;
     private String typeOfUse;
     private BigDecimal annualizedCopies;
     private Long quantity;
@@ -134,6 +137,22 @@ public class AclUsageDto extends StoredEntity<String> {
         this.publicationType = publicationType;
     }
 
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    public BigDecimal getContent() {
+        return content;
+    }
+
+    public void setContent(BigDecimal content) {
+        this.content = content;
+    }
+
     public BigDecimal getContentUnitPrice() {
         return contentUnitPrice;
     }
@@ -148,6 +167,14 @@ public class AclUsageDto extends StoredEntity<String> {
 
     public void setContentUnitPriceFlag(Boolean contentUnitPriceFlag) {
         this.contentUnitPriceFlag = contentUnitPriceFlag;
+    }
+
+    public String getReportedTypeOfUse() {
+        return reportedTypeOfUse;
+    }
+
+    public void setReportedTypeOfUse(String reportedTypeOfUse) {
+        this.reportedTypeOfUse = reportedTypeOfUse;
     }
 
     public String getTypeOfUse() {
@@ -205,8 +232,11 @@ public class AclUsageDto extends StoredEntity<String> {
             .append(aggregateLicenseeClassName, that.aggregateLicenseeClassName)
             .append(surveyCountry, that.surveyCountry)
             .append(publicationType, that.publicationType)
+            .append(price, that.price)
+            .append(content, that.content)
             .append(contentUnitPrice, that.contentUnitPrice)
             .append(contentUnitPriceFlag, that.contentUnitPriceFlag)
+            .append(reportedTypeOfUse, that.reportedTypeOfUse)
             .append(typeOfUse, that.typeOfUse)
             .append(annualizedCopies, that.annualizedCopies)
             .append(quantity, that.quantity)
@@ -230,8 +260,11 @@ public class AclUsageDto extends StoredEntity<String> {
             .append(aggregateLicenseeClassName)
             .append(surveyCountry)
             .append(publicationType)
+            .append(price)
+            .append(content)
             .append(contentUnitPrice)
             .append(contentUnitPriceFlag)
+            .append(reportedTypeOfUse)
             .append(typeOfUse)
             .append(annualizedCopies)
             .append(quantity)
@@ -255,8 +288,11 @@ public class AclUsageDto extends StoredEntity<String> {
             .append("aggregateLicenseeClassName", aggregateLicenseeClassName)
             .append("surveyCountry", surveyCountry)
             .append("publicationType", publicationType)
+            .append("price", price)
+            .append("content", content)
             .append("contentUnitPrice", contentUnitPrice)
             .append("contentUnitPriceFlag", contentUnitPriceFlag)
+            .append("reportedTypeOfUse", reportedTypeOfUse)
             .append("typeOfUse", typeOfUse)
             .append("annualizedCopies", annualizedCopies)
             .append("quantity", quantity)

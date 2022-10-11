@@ -174,10 +174,13 @@ public class AclUsageWidget extends HorizontalSplitPanel implements IAclUsageWid
             addColumn(AclUsageDto::getSurveyCountry, "table.column.survey_country", "surveyCountry", 120),
             addColumn(usage -> Objects.nonNull(usage.getPublicationType()) ? usage.getPublicationType().getName()
                 : StringUtils.EMPTY, "table.column.publication_type", "publicationType", 150),
+            addBigDecimalColumn(AclUsageDto::getPrice, "table.column.price", "price", 200),
+            addBigDecimalColumn(AclUsageDto::getContent, "table.column.content", "content", 200),
             addBigDecimalColumn(AclUsageDto::getContentUnitPrice, "table.column.content_unit_price", "contentUnitPrice",
                 200),
             addBooleanColumn(AclUsageDto::getContentUnitPriceFlag, "table.column.content_unit_price_flag",
                 "contentUnitPriceFlag", 90),
+            addColumn(AclUsageDto::getReportedTypeOfUse, "table.column.reported_tou", "reportedTypeOfUse", 120),
             addColumn(AclUsageDto::getTypeOfUse, "table.column.tou", "typeOfUse", 120),
             addBigDecimalColumn(AclUsageDto::getAnnualizedCopies, "table.column.annualized_copies", "annualizedCopies",
                 130),

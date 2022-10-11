@@ -643,8 +643,11 @@ public class AclUsageRepositoryIntegrationTest {
         assertSortingFindDtosByFilter(ACL_USAGE_UID_4, ACL_USAGE_UID_5, "aggLcName");
         assertSortingFindDtosByFilter(ACL_USAGE_UID_4, ACL_USAGE_UID_5, "surveyCountry");
         assertSortingFindDtosByFilter(ACL_USAGE_UID_2, ACL_USAGE_UID_1, "publicationType");
+        assertSortingFindDtosByFilter(ACL_USAGE_UID_2, ACL_USAGE_UID_1, "content");
+        assertSortingFindDtosByFilter(ACL_USAGE_UID_2, ACL_USAGE_UID_1, "price");
         assertSortingFindDtosByFilter(ACL_USAGE_UID_5, ACL_USAGE_UID_1, "contentUnitPrice");
         assertSortingFindDtosByFilter(ACL_USAGE_UID_5, ACL_USAGE_UID_2, "contentUnitPriceFlag");
+        assertSortingFindDtosByFilter(ACL_USAGE_UID_1, ACL_USAGE_UID_5, "reportedTypeOfUse");
         assertSortingFindDtosByFilter(ACL_USAGE_UID_5, ACL_USAGE_UID_2, "typeOfUse");
         assertSortingFindDtosByFilter(ACL_USAGE_UID_2, ACL_USAGE_UID_5, "annualizedCopies");
         assertSortingFindDtosByFilter(ACL_USAGE_UID_1, ACL_USAGE_UID_2, "updateUser");
@@ -725,8 +728,11 @@ public class AclUsageRepositoryIntegrationTest {
         assertEquals(expectedUsage.getAggregateLicenseeClassName(), actualUsage.getAggregateLicenseeClassName());
         assertEquals(expectedUsage.getSurveyCountry(), actualUsage.getSurveyCountry());
         assertEquals(expectedUsage.getPublicationType(), actualUsage.getPublicationType());
+        assertEquals(expectedUsage.getPrice(), actualUsage.getPrice());
+        assertEquals(expectedUsage.getContent(), actualUsage.getContent());
         assertEquals(expectedUsage.getContentUnitPrice(), actualUsage.getContentUnitPrice());
         assertEquals(expectedUsage.getContentUnitPriceFlag(), actualUsage.getContentUnitPriceFlag());
+        assertEquals(expectedUsage.getReportedTypeOfUse(), actualUsage.getReportedTypeOfUse());
         assertEquals(expectedUsage.getTypeOfUse(), actualUsage.getTypeOfUse());
         assertEquals(expectedUsage.getAnnualizedCopies(), actualUsage.getAnnualizedCopies());
         assertEquals(expectedUsage.getQuantity(), actualUsage.getQuantity());

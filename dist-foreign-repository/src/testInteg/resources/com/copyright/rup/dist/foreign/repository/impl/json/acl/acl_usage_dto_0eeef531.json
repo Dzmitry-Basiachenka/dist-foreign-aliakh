@@ -20,8 +20,11 @@
       "name": "BK",
       "description": "Book"
     },
+    "price": 20.0000000000,
+    "content": 2.0000000000,
     "contentUnitPrice": 10.0000000000,
     "contentUnitPriceFlag": true,
+    "reportedTypeOfUse": "PRINT_COPIES",
     "typeOfUse": "PRINT",
     "annualizedCopies": 1.00000,
     "quantity": 1,
