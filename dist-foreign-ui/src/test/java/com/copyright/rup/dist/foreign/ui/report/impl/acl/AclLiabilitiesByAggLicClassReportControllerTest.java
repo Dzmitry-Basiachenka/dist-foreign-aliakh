@@ -61,7 +61,7 @@ public class AclLiabilitiesByAggLicClassReportControllerTest {
         expectLastCall().once();
         replay(OffsetDateTime.class, widget, aclReportService);
         IStreamSource streamSource = controller.getCsvStreamSource();
-        assertEquals("liabilities_by_agg_lic_class_report_01_02_2021_03_04.csv",
+        assertEquals("liabilities_by_aggregate_licensee_class_report_01_02_2021_03_04.csv",
             streamSource.getSource().getKey().get());
         assertNotNull(streamSource.getSource().getValue().get());
         assertNotNull(osCapture.getValue());

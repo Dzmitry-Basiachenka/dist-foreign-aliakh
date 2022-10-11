@@ -9,6 +9,7 @@ import com.copyright.rup.dist.foreign.domain.report.AclCalculationReportsInfoDto
 import com.copyright.rup.dist.foreign.repository.api.IAclCalculationReportRepository;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.AclFundPoolDetailsCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.AclGrantDetailCsvReportHandler;
+import com.copyright.rup.dist.foreign.repository.impl.csv.acl.AclLiabilitiesByAggLicClassCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.AclScenarioDetailCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.AclScenarioRightsholderTotalsCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.AclSummaryOfWorkSharesByAggLcCsvReportHandler;
@@ -107,6 +108,10 @@ public class AclCalculationReportRepository extends CommonReportRepository imple
     @Override
     public void writeAclLiabilitiesByAggLicClassReport(AclCalculationReportsInfoDto reportInfo,
                                                        OutputStream outputStream) {
-        //todo will implement later
+        try (AclLiabilitiesByAggLicClassCsvReportHandler handler =
+                 new AclLiabilitiesByAggLicClassCsvReportHandler(Objects.requireNonNull(outputStream))) {
+            getTemplate().select("IAclCalculationReportMapper.findAclLiabilitiesByAggLicClassReportDtos",
+                reportInfo, handler);
+        }
     }
 }

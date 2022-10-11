@@ -28,7 +28,7 @@ public class AclLiabilitiesByAggLicClassReportController extends AclCommonReport
 
     @Override
     public IStreamSource getCsvStreamSource() {
-        return new ByteArrayStreamSource("liabilities_by_agg_lic_class_report_", os ->
+        return new ByteArrayStreamSource("liabilities_by_aggregate_licensee_class_report_", os ->
             reportService.writeAclLiabilitiesByAggLicClassReport(getWidget().getReportInfo(), os));
     }
 }
