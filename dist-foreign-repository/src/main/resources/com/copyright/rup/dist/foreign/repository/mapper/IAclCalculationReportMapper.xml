@@ -11,6 +11,19 @@
         <result property="totalDetailShareDigital" column="total_shares_digital"/>
     </resultMap>
 
+    <resultMap id="aclLiabilitiesByAggLicClassReportDtoResultMap" type="AclLiabilitiesByAggLicClassReportDto">
+        <result property="aggregateLicenseeClassId" column="aggregate_licensee_class_id"/>
+        <result property="aggregateLicenseeClassName" column="description"/>
+        <result property="grossAmount" column="gross_amount"/>
+        <result property="netAmount" column="net_amount"/>
+        <result property="printNetAmount" column="print_net_amount"/>
+        <result property="digitalNetAmount" column="digital_net_amount"/>
+        <result property="aclNetAmount" column="acl_net_amount"/>
+        <result property="maclNetAmount" column="macl_net_amount"/>
+        <result property="vgwNetAmount" column="vgw_net_amount"/>
+        <result property="jacdclNetAmount" column="jacdcl_net_amount"/>
+    </resultMap>
+
     <resultMap id="aclScenarioDetailsReportDtoResultMap" type="AclScenarioDetailsReport">
         <result property="rhAccountNumber" column="rh_account_number"/>
         <result property="rhName" column="rh_name"/>
@@ -115,5 +128,31 @@
                     #{scenarioId}
                 </foreach>
             </if>
+    </select>
+
+    <select id="findAclLiabilitiesByAggLicClassReportDtos" parameterType="map" resultMap="aclLiabilitiesByAggLicClassReportDtoResultMap">
+        select
+            shd.aggregate_licensee_class_id,
+            alc.description,
+            sum(gross_amount) gross_amount,
+            sum(net_amount) net_amount,
+            sum(case when type_of_use = 'PRINT' then coalesce(net_amount , 0) else 0 end) as print_net_amount,
+            sum(case when type_of_use = 'DIGITAL' then coalesce(net_amount , 0) else 0 end) as digital_net_amount,
+            sum(case when s.license_type = 'ACL' then coalesce(net_amount , 0) else 0 end) as acl_net_amount,
+            sum(case when s.license_type = 'MACL' then coalesce(net_amount , 0) else 0 end) as macl_net_amount,
+            sum(case when s.license_type = 'VGW' then coalesce(net_amount , 0) else 0 end) as vgw_net_amount,
+            sum(case when s.license_type = 'JACDCL' then coalesce(net_amount , 0) else 0 end) as jacdcl_net_amount
+        from ${schema}.df_acl_share_detail shd
+        join ${schema}.df_acl_scenario s on shd.df_acl_scenario_uid = s.df_acl_scenario_uid
+        join ${schema}.df_aggregate_licensee_class alc on shd.aggregate_licensee_class_id = alc.aggregate_licensee_class_id
+        where s.period_end_date = #{period}
+        <if test="scenarios.size() > 0">
+            and
+            <foreach collection="scenarios" item="scenario" open="(" separator=" or " close=")">
+                shd.df_acl_scenario_uid = #{scenario.id}
+            </foreach>
+        </if>
+        group by shd.aggregate_licensee_class_id, alc.description
+        order by shd.aggregate_licensee_class_id
     </select>
 </mapper>

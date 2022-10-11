@@ -22,6 +22,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.Collections;
 
 /**
@@ -52,6 +53,8 @@ public class AclCalculationCsvReportsIntegrationTest extends CsvReportsTestHelpe
         FOLDER_NAME + "write-scenario-rightsholder-totals-csv-report.groovy";
     private static final String WRITE_SCENARIO_SUMMARY_OF_WORK_SHARES_BY_AGG_LC_CSV_REPORT =
         FOLDER_NAME + "write-scenario-summary-of-work-shares-by-agg-lc-csv-report.groovy";
+    private static final String WRITE_LIABILITIES_BY_AGG_LIC_CLASS_CSV_REPORT =
+        FOLDER_NAME + "write-liabilities-by-agg-lic-class-csv-report.groovy";
 
     @Autowired
     private IAclCalculationReportRepository aclCalculationReportRepository;
@@ -178,9 +181,7 @@ public class AclCalculationCsvReportsIntegrationTest extends CsvReportsTestHelpe
     @TestData(fileName = WRITE_SCENARIO_SUMMARY_OF_WORK_SHARES_BY_AGG_LC_CSV_REPORT)
     public void testWriteSummaryOfWorkSharesByAggLcEmptyCsvReport() throws IOException {
         AclCalculationReportsInfoDto reportsInfoDto = new AclCalculationReportsInfoDto();
-        AclScenario scenario = new AclScenario();
-        scenario.setId("38688258-b86b-41f5-b7fd-a45121cdc2cb");
-        scenario.setName("ACL Scenario 11/05/202212");
+        AclScenario scenario = buildScenario("38688258-b86b-41f5-b7fd-a45121cdc2cb", "ACL Scenario 11/05/202212");
         scenario.setLicenseType("ACL");
         scenario.setPeriodEndDate(202212);
         reportsInfoDto.setReportName("Summary of Work Shares by Agg LC Report");
@@ -188,7 +189,40 @@ public class AclCalculationCsvReportsIntegrationTest extends CsvReportsTestHelpe
         reportsInfoDto.setUser("user@copyright.com");
         reportsInfoDto.setReportDateTime(LocalDateTime.of(2022, 10, 5, 14, 30, 30));
         assertFilesWithExecutor(outputStream ->
-            aclCalculationReportRepository.writeSummaryOfWorkSharesByAggLcCsvReport(reportsInfoDto,
-                outputStream), "acl/summary_work_shares_agg_lc_report_empty.csv");
+            aclCalculationReportRepository.writeSummaryOfWorkSharesByAggLcCsvReport(reportsInfoDto, outputStream),
+            "acl/summary_work_shares_agg_lc_report_empty.csv");
+    }
+
+    @Test
+    @TestData(fileName = WRITE_LIABILITIES_BY_AGG_LIC_CLASS_CSV_REPORT)
+    public void testWriteAclLiabilitiesByAggLicClassReport() throws IOException {
+        AclCalculationReportsInfoDto reportsInfoDto = new AclCalculationReportsInfoDto();
+        reportsInfoDto.setPeriod(202212);
+        reportsInfoDto.setScenarios(Arrays.asList(
+            buildScenario("06fee547-bfc4-4f2a-9578-58c03821e217", "ACL Scenario 10/05/202212"),
+            buildScenario("6dbd30f7-91f6-4949-a74c-cfbac5e466ac", "MCL Scenario 10/05/202212"),
+            buildScenario("ca1c5532-eb1c-440a-8fbc-8e595dbea5cb", "VGW Scenario 10/05/202212"),
+            buildScenario("d86f2c59-a50c-4e54-826a-ee50aeb98904", "JACDCL Scenario 10/05/202212")));
+        assertFilesWithExecutor(outputStream ->
+            aclCalculationReportRepository.writeAclLiabilitiesByAggLicClassReport(reportsInfoDto, outputStream),
+            "acl/liabilities_by_agg_lic_class_report.csv");
+    }
+
+    @Test
+    @TestData(fileName = WRITE_LIABILITIES_BY_AGG_LIC_CLASS_CSV_REPORT)
+    public void testWriteAclLiabilitiesByAggLicClassEmptyReport() throws IOException {
+        AclCalculationReportsInfoDto reportsInfoDto = new AclCalculationReportsInfoDto();
+        reportsInfoDto.setPeriod(202112);
+        reportsInfoDto.setScenarios(Collections.emptyList());
+        assertFilesWithExecutor(outputStream ->
+            aclCalculationReportRepository.writeAclLiabilitiesByAggLicClassReport(reportsInfoDto, outputStream),
+            "acl/liabilities_by_agg_lic_class_empty_report.csv");
+    }
+
+    private AclScenario buildScenario(String id, String name) {
+        AclScenario scenario = new AclScenario();
+        scenario.setId(id);
+        scenario.setName(name);
+        return scenario;
     }
 }
