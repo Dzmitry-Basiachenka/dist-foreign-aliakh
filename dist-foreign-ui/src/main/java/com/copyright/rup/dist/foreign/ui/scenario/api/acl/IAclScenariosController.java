@@ -212,7 +212,7 @@ public interface IAclScenariosController extends IController<IAclScenariosWidget
      * Gets {@link AclCalculationReportsInfoDto} for filter and metadata.
      *
      * @param reportInfoSupplier supplier of report info
-     * @return instance of {@link IStreamSource} for export ACL Summary of Work Shares by Agg LC Report.
+     * @return instance of {@link IStreamSource} for export Summary of Work Shares by Aggregate Licensee Class Report.
      */
     IStreamSource getExportAclSummaryOfWorkSharesByAggLcStreamSource(
         Supplier<AclCalculationReportsInfoDto> reportInfoSupplier);

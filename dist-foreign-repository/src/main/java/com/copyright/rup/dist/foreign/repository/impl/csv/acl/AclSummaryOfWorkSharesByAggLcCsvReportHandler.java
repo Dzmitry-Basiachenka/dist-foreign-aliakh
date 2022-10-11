@@ -17,7 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Implementation of {@link BaseCsvReportHandler} to write Summary of Work Shares by Agg LC Report.
+ * Implementation of {@link BaseCsvReportHandler} to write Summary of Work Shares by Aggregate Licensee Class Report.
  * <p/>
  * Copyright (C) 2022 copyright.com
  * <p/>
@@ -33,7 +33,7 @@ public class AclSummaryOfWorkSharesByAggLcCsvReportHandler extends
     private static final List<String> METADATA_HEADERS =
         ImmutableList.of("Report Name", "Scenario Name", "License Type", "Report Period", "User",
             "Report Date");
-    private static final String REPORT_NAME = "Summary of Work Shares by Agg LC Report";
+    private static final String REPORT_NAME = "Summary of Work Shares by Aggregate Licensee Class Report";
 
     /**
      * Constructor.

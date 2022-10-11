@@ -163,17 +163,15 @@ public class AclCalculationCsvReportsIntegrationTest extends CsvReportsTestHelpe
     @TestData(fileName = WRITE_SCENARIO_SUMMARY_OF_WORK_SHARES_BY_AGG_LC_CSV_REPORT)
     public void testWriteSummaryOfWorkSharesByAggLcCsvReport() throws IOException {
         AclCalculationReportsInfoDto reportsInfoDto = new AclCalculationReportsInfoDto();
-        AclScenario scenario = new AclScenario();
-        scenario.setId("a0162659-86af-40ab-bc55-2ae0cdebc2a4");
-        scenario.setName("ACL Scenario 10/05/202212");
+        AclScenario scenario = buildScenario("a0162659-86af-40ab-bc55-2ae0cdebc2a4", "ACL Scenario 10/05/202212");
         scenario.setLicenseType("ACL");
         scenario.setPeriodEndDate(202212);
         reportsInfoDto.setScenarios(Collections.singletonList(scenario));
         reportsInfoDto.setUser("user@copyright.com");
         reportsInfoDto.setReportDateTime(LocalDateTime.of(2022, 10, 5, 14, 30, 30));
         assertFilesWithExecutor(outputStream ->
-            aclCalculationReportRepository.writeSummaryOfWorkSharesByAggLcCsvReport(reportsInfoDto,
-                outputStream), "acl/summary_work_shares_agg_lc_report.csv");
+            aclCalculationReportRepository.writeSummaryOfWorkSharesByAggLcCsvReport(reportsInfoDto, outputStream),
+            "acl/summary_work_shares_agg_lc_report.csv");
     }
 
     @Test
