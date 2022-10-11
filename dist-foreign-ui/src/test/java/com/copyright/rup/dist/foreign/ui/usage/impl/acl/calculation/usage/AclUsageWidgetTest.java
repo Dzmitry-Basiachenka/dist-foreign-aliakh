@@ -122,13 +122,13 @@ public class AclUsageWidgetTest {
     public void testEditButtonClickListenerForbiddenUsageNotEditable() {
         setSpecialistExpectations();
         mockStatic(Windows.class);
-        AclUsageDto aclUsageDtoFirst = new AclUsageDto();
-        aclUsageDtoFirst.setId("5b5526c7-0af0-4895-b3b5-cb5a555d3375");
-        aclUsageDtoFirst.setEditable(false);
-        AclUsageDto aclUsageDtoSecond = new AclUsageDto();
-        aclUsageDtoSecond.setId("e27fabb0-89b1-40af-9e77-e32adfc72816");
-        aclUsageDtoSecond.setEditable(true);
-        Set<AclUsageDto> aclUsages = Sets.newHashSet(aclUsageDtoFirst, aclUsageDtoSecond);
+        AclUsageDto aclUsageDto1 = new AclUsageDto();
+        aclUsageDto1.setId("5b5526c7-0af0-4895-b3b5-cb5a555d3375");
+        aclUsageDto1.setEditable(false);
+        AclUsageDto aclUsageDto2 = new AclUsageDto();
+        aclUsageDto2.setId("e27fabb0-89b1-40af-9e77-e32adfc72816");
+        aclUsageDto2.setEditable(true);
+        Set<AclUsageDto> aclUsages = Sets.newHashSet(aclUsageDto1, aclUsageDto2);
         Windows.showNotificationWindow("One of selected usages is not editable");
         expectLastCall().once();
         replay(controller, streamSource, Windows.class, ForeignSecurityUtils.class);
@@ -136,8 +136,8 @@ public class AclUsageWidgetTest {
         Grid<AclUsageDto> grid =
             (Grid<AclUsageDto>) ((VerticalLayout) aclUsageWidget.getSecondComponent()).getComponent(1);
         grid.setItems(aclUsages);
-        grid.select(aclUsageDtoFirst);
-        grid.select(aclUsageDtoSecond);
+        grid.select(aclUsageDto1);
+        grid.select(aclUsageDto2);
         Button editButton = (Button) getButtonsLayout().getComponent(1);
         editButton.click();
         verify(controller, streamSource, Windows.class, ForeignSecurityUtils.class);
@@ -246,8 +246,9 @@ public class AclUsageWidgetTest {
         dataProvider.refreshAll();
         Object[][] expectedCells = {
             {"48579d64-99b7-492a-975a-93c96499417a", 202012, UdmUsageOriginEnum.SS, UdmChannelEnum.CCC, "LUBRIZ0610EML",
-                122815600L, "Tribology international", 5, "Chemicals", 51, "Materials", "International", "SJ", "8.932",
-                "N", "DIGITAL", "1.00", "user@copyright.com", "08/31/2022"}
+                122815600L, "Tribology international", 5, "Chemicals", 51, "Materials", "International", "SJ",
+                "6.0000000006", "3.0000000003", "2.0000000002", "N", "EMAIL_COPY", "DIGITAL", "1.00",
+                "user@copyright.com", "08/31/2022"}
         };
         verifyGridItems(grid, usages, expectedCells);
         verify(JavaScript.class, ForeignSecurityUtils.class, controller, streamSource);
@@ -286,8 +287,11 @@ public class AclUsageWidgetTest {
             Triple.of("Agg LC Name", 100.0, -1),
             Triple.of("Survey Country", 120.0, -1),
             Triple.of("Pub Type", 150.0, -1),
+            Triple.of("Price", 200.0, -1),
+            Triple.of("Content", 200.0, -1),
             Triple.of("Content Unit Price", 200.0, -1),
             Triple.of("CUP Flag", 90.0, -1),
+            Triple.of("Reported TOU", 120.0, -1),
             Triple.of("TOU", 120.0, -1),
             Triple.of("Annualized Copies", 130.0, -1),
             Triple.of("Updated By", 200.0, -1),
@@ -351,8 +355,11 @@ public class AclUsageWidgetTest {
         usage.setAggregateLicenseeClassName("Materials");
         usage.setSurveyCountry("International");
         usage.setPublicationType(buildPublicationType());
-        usage.setContentUnitPrice(new BigDecimal("8.932"));
+        usage.setPrice(new BigDecimal("6.0000000006"));
+        usage.setContent(new BigDecimal("3.0000000003"));
+        usage.setContentUnitPrice(new BigDecimal("2.0000000002"));
         usage.setContentUnitPriceFlag(false);
+        usage.setReportedTypeOfUse("EMAIL_COPY");
         usage.setTypeOfUse("DIGITAL");
         usage.setAnnualizedCopies(new BigDecimal("1.00"));
         usage.setUpdateUser("user@copyright.com");

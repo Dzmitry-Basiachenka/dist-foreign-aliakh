@@ -21,8 +21,11 @@
         <result property="publicationType.id" column="pub_type_id"/>
         <result property="publicationType.name" column="pub_type_name"/>
         <result property="publicationType.description" column="pub_type_description"/>
+        <result property="price" column="price"/>
+        <result property="content" column="content"/>
         <result property="contentUnitPrice" column="content_unit_price"/>
         <result property="contentUnitPriceFlag" column="content_unit_price_flag"/>
+        <result property="reportedTypeOfUse" column="reported_type_of_use"/>
         <result property="typeOfUse" column="type_of_use"/>
         <result property="annualizedCopies" column="annualized_copies"/>
         <result property="quantity" column="quantity"/>
@@ -46,7 +49,10 @@
         detail_licensee_class_id,
         survey_country,
         publication_type_uid,
+        price,
+        content,
         content_unit_price,
+        reported_type_of_use,
         type_of_use,
         annualized_copies,
         quantity,
@@ -70,8 +76,11 @@
         u.publication_type_uid pub_type_id,
         pt.name pub_type_name,
         pt.description pub_type_description,
+        price,
+        content,
         content_unit_price,
         content_unit_price_flag,
+        reported_type_of_use,
         type_of_use,
         annualized_copies,
         u.quantity,
@@ -248,11 +257,20 @@
             <when test="sort.property == 'publicationType'">
                 pt.name <include refid="IUsageMapper.direction"/>
             </when>
+            <when test="sort.property == 'price'">
+                price <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'content'">
+                content <include refid="IUsageMapper.direction"/>
+            </when>
             <when test="sort.property == 'contentUnitPrice'">
                 content_unit_price <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'contentUnitPriceFlag'">
                 content_unit_price_flag <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'reportedTypeOfUse'">
+                reported_type_of_use <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'typeOfUse'">
                 type_of_use <include refid="IUsageMapper.direction"/>
@@ -297,7 +315,10 @@
             u.detail_licensee_class_id,
             u.survey_country,
             vb.publication_type_uid,
+            vb.price,
+            vb.content,
             vb.content_unit_price,
+            u.reported_type_of_use,
             u.type_of_use,
             u.annualized_copies,
             u.quantity,
@@ -426,7 +447,10 @@
             detail_licensee_class_id,
             survey_country,
             publication_type_uid,
+            price,
+            content,
             content_unit_price,
+            reported_type_of_use,
             type_of_use,
             annualized_copies,
             quantity,
