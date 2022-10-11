@@ -177,25 +177,12 @@ public class AclCalculationCsvReportsIntegrationTest extends CsvReportsTestHelpe
     }
 
     @Test
-    @TestData(fileName = WRITE_SCENARIO_SUMMARY_OF_WORK_SHARES_BY_AGG_LC_CSV_REPORT)
-    public void testWriteSummaryOfWorkSharesByAggLcEmptyCsvReport() throws IOException {
-        AclCalculationReportsInfoDto reportsInfoDto = new AclCalculationReportsInfoDto();
-        AclScenario scenario = buildScenario("38688258-b86b-41f5-b7fd-a45121cdc2cb", "ACL Scenario 11/05/202212");
-        scenario.setLicenseType("ACL");
-        scenario.setPeriodEndDate(202212);
-        reportsInfoDto.setScenarios(Collections.singletonList(scenario));
-        reportsInfoDto.setUser("user@copyright.com");
-        reportsInfoDto.setReportDateTime(LocalDateTime.of(2022, 10, 5, 14, 30, 30));
-        assertFilesWithExecutor(outputStream ->
-            aclCalculationReportRepository.writeSummaryOfWorkSharesByAggLcCsvReport(reportsInfoDto, outputStream),
-            "acl/summary_work_shares_agg_lc_report_empty.csv");
-    }
-
-    @Test
     @TestData(fileName = WRITE_LIABILITIES_BY_AGG_LIC_CLASS_CSV_REPORT)
     public void testWriteAclLiabilitiesByAggLicClassReport() throws IOException {
         AclCalculationReportsInfoDto reportsInfoDto = new AclCalculationReportsInfoDto();
         reportsInfoDto.setPeriod(202212);
+        reportsInfoDto.setUser("user@copyright.com");
+        reportsInfoDto.setReportDateTime(LocalDateTime.of(2022, 10, 5, 14, 30, 30));
         reportsInfoDto.setScenarios(Arrays.asList(
             buildScenario("06fee547-bfc4-4f2a-9578-58c03821e217", "ACL Scenario 10/05/202212"),
             buildScenario("6dbd30f7-91f6-4949-a74c-cfbac5e466ac", "MCL Scenario 10/05/202212"),
@@ -204,17 +191,6 @@ public class AclCalculationCsvReportsIntegrationTest extends CsvReportsTestHelpe
         assertFilesWithExecutor(outputStream ->
             aclCalculationReportRepository.writeAclLiabilitiesByAggLicClassReport(reportsInfoDto, outputStream),
             "acl/liabilities_by_agg_lic_class_report.csv");
-    }
-
-    @Test
-    @TestData(fileName = WRITE_LIABILITIES_BY_AGG_LIC_CLASS_CSV_REPORT)
-    public void testWriteAclLiabilitiesByAggLicClassEmptyReport() throws IOException {
-        AclCalculationReportsInfoDto reportsInfoDto = new AclCalculationReportsInfoDto();
-        reportsInfoDto.setPeriod(202112);
-        reportsInfoDto.setScenarios(Collections.emptyList());
-        assertFilesWithExecutor(outputStream ->
-            aclCalculationReportRepository.writeAclLiabilitiesByAggLicClassReport(reportsInfoDto, outputStream),
-            "acl/liabilities_by_agg_lic_class_empty_report.csv");
     }
 
     @Test

@@ -119,6 +119,9 @@ public class AclCalculationReportRepository extends CommonReportRepository imple
                  new AclLiabilitiesByAggLicClassCsvReportHandler(Objects.requireNonNull(outputStream))) {
             getTemplate().select("IAclCalculationReportMapper.findAclLiabilitiesByAggLicClassReportDtos",
                 reportInfo, handler);
+            handler.writeTotals(
+                selectOne("IAclCalculationReportMapper.findAclLiabilitiesByAggLicClassReportTotalAmounts", reportInfo));
+            handler.writeMetadata(reportInfo);
         }
     }
 }
