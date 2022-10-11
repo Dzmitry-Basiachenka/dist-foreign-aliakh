@@ -50,7 +50,7 @@ public class UdmValueAppliedFiltersWidgetTest {
         Component component = widget.getContent();
         assertThat(component, instanceOf(VerticalLayout.class));
         VerticalLayout verticalLayout = (VerticalLayout) component;
-        assertEquals(25, verticalLayout.getComponentCount());
+        assertEquals(27, verticalLayout.getComponentCount());
         verifyLabel(((VerticalLayout) component).getComponent(0), "Periods", "202212, 202106, 201506");
         verifyLabel(((VerticalLayout) component).getComponent(1), "Status", "NEW");
         verifyLabel(((VerticalLayout) component).getComponent(2), "Pub Types",
@@ -91,10 +91,14 @@ public class UdmValueAppliedFiltersWidgetTest {
         verifyLabel(((VerticalLayout) component).getComponent(20), "Last Content Flag", "N");
         verifyLabelWithOperator(((VerticalLayout) component).getComponent(21),
             "<li><b><i>Last Content Comment: </i></b>last content comment</li><li><b><i>Operator: </i></b>EQUALS</li>");
-        verifyLabel(((VerticalLayout) component).getComponent(22), "Last Pub Type", "BK - Book");
-        verifyLabelWithOperator(((VerticalLayout) component).getComponent(23),
+        verifyLabelWithOperator(((VerticalLayout) component).getComponent(22),
+            "<li><b><i>Content Unit Price From: </i></b>10</li><li><b><i>Content Unit Price To: </i></b>20</li>" +
+                "<li><b><i>Operator: </i></b>BETWEEN</li>");
+        verifyLabel(((VerticalLayout) component).getComponent(23), "CUP Flag", "N");
+        verifyLabel(((VerticalLayout) component).getComponent(24), "Last Pub Type", "BK - Book");
+        verifyLabelWithOperator(((VerticalLayout) component).getComponent(25),
             "<li><b><i>Comment: </i></b>comment</li><li><b><i>Operator: </i></b>EQUALS</li>");
-        verifyLabelWithOperator(((VerticalLayout) component).getComponent(24),
+        verifyLabelWithOperator(((VerticalLayout) component).getComponent(26),
             "<li><b><i>Last Comment: </i></b>last comment</li><li><b><i>Operator: </i></b>EQUALS</li>");
     }
 
@@ -137,6 +141,8 @@ public class UdmValueAppliedFiltersWidgetTest {
         filter.setLastContentFlagExpression(new FilterExpression<>(FilterOperatorEnum.N));
         filter.setLastContentCommentExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, "last content comment", null));
+        filter.setContentUnitPriceExpression(new FilterExpression<>(FilterOperatorEnum.BETWEEN, 10, 20));
+        filter.setContentUnitPriceFlagExpression(new FilterExpression<>(FilterOperatorEnum.N));
         filter.setPubTypes(Sets.newHashSet(new PublicationType(),
             buildPubType("34574f62-7922-48b9-b798-73bf5c3163da", "SJ", "Scholarly Journal"),
             buildPubType("ce650157-3dbf-4385-938c-f3f1e10f4577", "BK", "Book")));

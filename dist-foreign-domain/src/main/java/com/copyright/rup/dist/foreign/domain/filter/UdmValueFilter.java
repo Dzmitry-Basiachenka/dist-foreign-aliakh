@@ -44,6 +44,8 @@ public class UdmValueFilter {
     private FilterExpression<String> contentCommentExpression = new FilterExpression<>();
     private FilterExpression<Boolean> lastContentFlagExpression = new FilterExpression<>();
     private FilterExpression<String> lastContentCommentExpression = new FilterExpression<>();
+    private FilterExpression<Number> contentUnitPriceExpression = new FilterExpression<>();
+    private FilterExpression<Boolean> contentUnitPriceFlagExpression = new FilterExpression<>();
     private Set<PublicationType> pubTypes = new HashSet<>();
     private PublicationType lastPubType;
     private FilterExpression<String> commentExpression = new FilterExpression<>();
@@ -83,6 +85,8 @@ public class UdmValueFilter {
             setLastContentFlagExpression(new FilterExpression<>(filter.getLastContentFlagExpression()));
             setContentCommentExpression(new FilterExpression<>(filter.getContentCommentExpression()));
             setLastContentCommentExpression(new FilterExpression<>(filter.getLastContentCommentExpression()));
+            setContentUnitPriceExpression(new FilterExpression<>(filter.getContentUnitPriceExpression()));
+            setContentUnitPriceFlagExpression(new FilterExpression<>(filter.getContentUnitPriceFlagExpression()));
             setPubTypes(filter.getPubTypes());
             setLastPubType(filter.getLastPubType());
             setCommentExpression(new FilterExpression<>(filter.getCommentExpression()));
@@ -258,6 +262,22 @@ public class UdmValueFilter {
         this.lastContentCommentExpression = lastContentCommentExpression;
     }
 
+    public FilterExpression<Number> getContentUnitPriceExpression() {
+        return contentUnitPriceExpression;
+    }
+
+    public void setContentUnitPriceExpression(FilterExpression<Number> contentUnitPriceExpression) {
+        this.contentUnitPriceExpression = contentUnitPriceExpression;
+    }
+
+    public FilterExpression<Boolean> getContentUnitPriceFlagExpression() {
+        return contentUnitPriceFlagExpression;
+    }
+
+    public void setContentUnitPriceFlagExpression(FilterExpression<Boolean> contentUnitPriceFlagExpression) {
+        this.contentUnitPriceFlagExpression = contentUnitPriceFlagExpression;
+    }
+
     public Set<PublicationType> getPubTypes() {
         return pubTypes;
     }
@@ -314,6 +334,8 @@ public class UdmValueFilter {
             && contentFlagExpression.isEmpty()
             && lastContentFlagExpression.isEmpty()
             && contentCommentExpression.isEmpty()
+            && contentUnitPriceExpression.isEmpty()
+            && contentUnitPriceFlagExpression.isEmpty()
             && lastContentCommentExpression.isEmpty()
             && CollectionUtils.isEmpty(pubTypes)
             && null == lastPubType
@@ -352,6 +374,8 @@ public class UdmValueFilter {
             .append(lastContentFlagExpression, that.lastContentFlagExpression)
             .append(contentCommentExpression, that.contentCommentExpression)
             .append(lastContentCommentExpression, that.lastContentCommentExpression)
+            .append(contentUnitPriceExpression, that.contentUnitPriceExpression)
+            .append(contentUnitPriceFlagExpression, that.contentUnitPriceFlagExpression)
             .append(pubTypes, that.pubTypes)
             .append(lastPubType, that.lastPubType)
             .append(commentExpression, that.commentExpression)
@@ -383,6 +407,8 @@ public class UdmValueFilter {
             .append(lastContentFlagExpression)
             .append(contentCommentExpression)
             .append(lastContentCommentExpression)
+            .append(contentUnitPriceExpression)
+            .append(contentUnitPriceFlagExpression)
             .append(pubTypes)
             .append(lastPubType)
             .append(commentExpression)
@@ -414,6 +440,8 @@ public class UdmValueFilter {
             .append("lastContentFlagExpression", lastContentFlagExpression)
             .append("contentCommentExpression", contentCommentExpression)
             .append("lastContentCommentExpression", lastContentCommentExpression)
+            .append("contentUnitPriceExpression", contentUnitPriceExpression)
+            .append("contentUnitPriceFlagExpression", contentUnitPriceFlagExpression)
             .append("pubTypes", pubTypes)
             .append("lastPubType", lastPubType)
             .append("commentExpression", commentExpression)

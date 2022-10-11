@@ -124,6 +124,7 @@ public class UdmValueRepositoryIntegrationTest {
     private static final BigDecimal PRICE = new BigDecimal("70.0000000000");
     private static final BigDecimal PRICE_IN_USD = new BigDecimal("79.29600028");
     private static final BigDecimal CONTENT = new BigDecimal("4");
+    private static final BigDecimal CONTENT_UNIT_PRICE = new BigDecimal("19.82400007");
     private static final String BK = "BK";
     private static final String BOOK = "Book";
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
@@ -216,6 +217,9 @@ public class UdmValueRepositoryIntegrationTest {
         filter.setContentCommentExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, CONTENT_COMMENT, null));
         filter.setLastContentFlagExpression(new FilterExpression<>());
         filter.setLastContentCommentExpression(new FilterExpression<>());
+        filter.setContentUnitPriceExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, CONTENT_UNIT_PRICE, null));
+        filter.setContentUnitPriceFlagExpression(new FilterExpression<>(FilterOperatorEnum.Y));
         filter.setPubTypes(Collections.emptySet());
         filter.setLastPubType(null);
         filter.setCommentExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, COMMENT, null));
@@ -248,6 +252,9 @@ public class UdmValueRepositoryIntegrationTest {
         filter.setContentCommentExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, CONTENT_COMMENT, null));
         filter.setLastContentFlagExpression(new FilterExpression<>());
         filter.setLastContentCommentExpression(new FilterExpression<>());
+        filter.setContentUnitPriceExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, CONTENT_UNIT_PRICE, null));
+        filter.setContentUnitPriceFlagExpression(new FilterExpression<>(FilterOperatorEnum.Y));
         filter.setPubTypes(Collections.emptySet());
         filter.setLastPubType(null);
         filter.setCommentExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, COMMENT, null));
@@ -818,6 +825,49 @@ public class UdmValueRepositoryIntegrationTest {
 
     @Test
     @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindDtosByFilterContentUnitPrice() {
+        assertFilteringFindDtosByFilter(filter -> filter.setContentUnitPriceExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, CONTENT_UNIT_PRICE, null)),
+            UDM_VALUE_UID_4);
+        assertFilteringFindDtosByFilter(filter -> filter.setContentUnitPriceExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, CONTENT_UNIT_PRICE, null)),
+            UDM_VALUE_UID_1, UDM_VALUE_UID_2, UDM_VALUE_UID_3, UDM_VALUE_UID_5);
+        assertFilteringFindDtosByFilter(filter -> filter.setContentUnitPriceExpression(
+            new FilterExpression<>(FilterOperatorEnum.GREATER_THAN, CONTENT_UNIT_PRICE, null)),
+            UDM_VALUE_UID_1, UDM_VALUE_UID_3);
+        assertFilteringFindDtosByFilter(filter -> filter.setContentUnitPriceExpression(
+            new FilterExpression<>(FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO, CONTENT_UNIT_PRICE, null)),
+            UDM_VALUE_UID_1, UDM_VALUE_UID_3, UDM_VALUE_UID_4);
+        assertFilteringFindDtosByFilter(filter -> filter.setContentUnitPriceExpression(
+            new FilterExpression<>(FilterOperatorEnum.LESS_THAN, CONTENT_UNIT_PRICE, null)),
+            UDM_VALUE_UID_2);
+        assertFilteringFindDtosByFilter(filter -> filter.setContentUnitPriceExpression(
+            new FilterExpression<>(FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO, CONTENT_UNIT_PRICE, null)),
+            UDM_VALUE_UID_2, UDM_VALUE_UID_4);
+        assertFilteringFindDtosByFilter(filter -> filter.setContentUnitPriceExpression(
+            new FilterExpression<>(FilterOperatorEnum.BETWEEN, new BigDecimal("16"), CONTENT_UNIT_PRICE)),
+            UDM_VALUE_UID_2, UDM_VALUE_UID_4);
+        assertFilteringFindDtosByFilter(filter -> filter.setContentUnitPriceExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NULL, null, null)),
+            UDM_VALUE_UID_5);
+        assertFilteringFindDtosByFilter(filter -> filter.setContentUnitPriceExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NOT_NULL, null, null)),
+            UDM_VALUE_UID_1, UDM_VALUE_UID_2, UDM_VALUE_UID_3, UDM_VALUE_UID_4);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindDtosByFilterContentUnitPriceFlag() {
+        assertFilteringFindDtosByFilter(
+            filter -> filter.setContentUnitPriceFlagExpression(new FilterExpression<>(FilterOperatorEnum.Y)),
+            UDM_VALUE_UID_4);
+        assertFilteringFindDtosByFilter(
+            filter -> filter.setContentUnitPriceFlagExpression(new FilterExpression<>(FilterOperatorEnum.N)),
+            UDM_VALUE_UID_1, UDM_VALUE_UID_2, UDM_VALUE_UID_3, UDM_VALUE_UID_5);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindDtosByFilterComment() {
         assertFilteringFindDtosByFilter(filter -> filter.setCommentExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, COMMENT, null)),
@@ -1336,6 +1386,38 @@ public class UdmValueRepositoryIntegrationTest {
             new FilterExpression<>(FilterOperatorEnum.IS_NULL, null, null)), 2);
         assertFilteringFindCountByFilter(filter -> filter.setLastContentCommentExpression(
             new FilterExpression<>(FilterOperatorEnum.IS_NOT_NULL, null, null)), 3);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindCountByFilterContentUnitPrice() {
+        assertFilteringFindCountByFilter(filter -> filter.setContentUnitPriceExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, CONTENT_UNIT_PRICE, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setContentUnitPriceExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, CONTENT_UNIT_PRICE, null)), 4);
+        assertFilteringFindCountByFilter(filter -> filter.setContentUnitPriceExpression(
+            new FilterExpression<>(FilterOperatorEnum.GREATER_THAN, CONTENT_UNIT_PRICE, null)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setContentUnitPriceExpression(
+            new FilterExpression<>(FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO, CONTENT_UNIT_PRICE, null)), 3);
+        assertFilteringFindCountByFilter(filter -> filter.setContentUnitPriceExpression(
+            new FilterExpression<>(FilterOperatorEnum.LESS_THAN, CONTENT_UNIT_PRICE, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setContentUnitPriceExpression(
+            new FilterExpression<>(FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO, CONTENT_UNIT_PRICE, null)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setContentUnitPriceExpression(
+            new FilterExpression<>(FilterOperatorEnum.BETWEEN, new BigDecimal("16"), CONTENT_UNIT_PRICE)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setContentUnitPriceExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NULL, null, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setContentUnitPriceExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NOT_NULL, null, null)), 4);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindCountByFilterContentUnitPriceFlag() {
+        assertFilteringFindCountByFilter(
+            filter -> filter.setContentUnitPriceFlagExpression(new FilterExpression<>(FilterOperatorEnum.Y)), 1);
+        assertFilteringFindCountByFilter(
+            filter -> filter.setContentUnitPriceFlagExpression(new FilterExpression<>(FilterOperatorEnum.N)), 4);
     }
 
     @Test
