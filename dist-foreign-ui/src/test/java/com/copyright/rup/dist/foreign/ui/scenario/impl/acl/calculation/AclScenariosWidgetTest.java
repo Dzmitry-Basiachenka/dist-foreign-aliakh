@@ -4,6 +4,7 @@ import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGridIte
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyLabel;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
+import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
@@ -20,6 +21,7 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.domain.AclPublicationType;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
@@ -68,10 +70,12 @@ import org.powermock.reflect.Whitebox;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 /**
@@ -108,12 +112,17 @@ public class AclScenariosWidgetTest {
         expect(controller.getCriteriaHtmlRepresentation()).andReturn(SELECTION_CRITERIA).times(2);
         expect(controller.getUsageAgeWeights()).andReturn(Collections.emptyList()).once();
         expect(controller.getDetailLicenseeClasses()).andReturn(Collections.emptyList()).once();
+        IStreamSource streamSource = createMock(IStreamSource.class);
+        expect(streamSource.getSource()).andReturn(new SimpleImmutableEntry(createMock(Supplier.class),
+            createMock(Supplier.class))).once();
+        expect(controller.getExportAclSummaryOfWorkSharesByAggLcStreamSource(anyObject(Supplier.class)))
+            .andReturn(streamSource).once();
         expect(ForeignSecurityUtils.hasSpecialistPermission()).andReturn(true).times(2);
-        replay(controller, ForeignSecurityUtils.class);
+        replay(controller, streamSource, ForeignSecurityUtils.class);
         scenariosWidget.init();
         scenariosWidget.initMediator();
         scenariosWidget.refresh();
-        verify(controller, ForeignSecurityUtils.class);
+        verify(controller, streamSource, ForeignSecurityUtils.class);
         reset(controller);
     }
 
@@ -390,7 +399,7 @@ public class AclScenariosWidgetTest {
         Component content = metadataPanel.getContent();
         assertThat(content, instanceOf(VerticalLayout.class));
         VerticalLayout metadataLayout = (VerticalLayout) content;
-        assertEquals(11, metadataLayout.getComponentCount());
+        assertEquals(12, metadataLayout.getComponentCount());
         verifyLabel(metadataLayout.getComponent(0), "<b>Owner: </b>user@copyright.com");
         assertThat(metadataLayout.getComponent(1), instanceOf(VerticalLayout.class));
         VerticalLayout grossTotalLayout = (VerticalLayout) metadataLayout.getComponent(1);
@@ -441,6 +450,7 @@ public class AclScenariosWidgetTest {
         verifyLabel(lastActionLayout.getComponent(2), "<b>Date:</b> 07/01/2022 12:00 AM");
         verifyLabel(lastActionLayout.getComponent(3), "<b>Reason:</b> some reason");
         UiTestHelper.verifyButton(lastActionLayout.getComponent(4), "View All Actions", true);
+        UiTestHelper.verifyButton(metadataLayout.getComponent(11), "Summary of Work Shares by Agg LC Report", true);
     }
 
     private void verifyScenarioParameterWidget(Component component, String expectedCaption) {

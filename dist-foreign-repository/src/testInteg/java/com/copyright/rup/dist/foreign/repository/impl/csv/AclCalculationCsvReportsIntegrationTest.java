@@ -165,7 +165,6 @@ public class AclCalculationCsvReportsIntegrationTest extends CsvReportsTestHelpe
         scenario.setName("ACL Scenario 10/05/202212");
         scenario.setLicenseType("ACL");
         scenario.setPeriodEndDate(202212);
-        reportsInfoDto.setReportName("Summary of Work Shares by Agg LC Report");
         reportsInfoDto.setScenarios(Collections.singletonList(scenario));
         reportsInfoDto.setUser("user@copyright.com");
         reportsInfoDto.setReportDateTime(LocalDateTime.of(2022, 10, 5, 14, 30, 30));
@@ -183,7 +182,6 @@ public class AclCalculationCsvReportsIntegrationTest extends CsvReportsTestHelpe
         scenario.setName("ACL Scenario 11/05/202212");
         scenario.setLicenseType("ACL");
         scenario.setPeriodEndDate(202212);
-        reportsInfoDto.setReportName("Summary of Work Shares by Agg LC Report");
         reportsInfoDto.setScenarios(Collections.singletonList(scenario));
         reportsInfoDto.setUser("user@copyright.com");
         reportsInfoDto.setReportDateTime(LocalDateTime.of(2022, 10, 5, 14, 30, 30));

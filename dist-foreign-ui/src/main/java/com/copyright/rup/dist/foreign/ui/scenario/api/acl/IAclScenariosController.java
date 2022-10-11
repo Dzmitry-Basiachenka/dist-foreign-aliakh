@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.scenario.api.acl;
 
+import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.domain.AclFundPool;
 import com.copyright.rup.dist.foreign.domain.AclFundPoolDetailDto;
 import com.copyright.rup.dist.foreign.domain.AclGrantSet;
@@ -11,10 +12,12 @@ import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
+import com.copyright.rup.dist.foreign.domain.report.AclCalculationReportsInfoDto;
 import com.copyright.rup.vaadin.widget.api.IController;
 
 import java.util.List;
 import java.util.Set;
+import java.util.function.Supplier;
 
 /**
  * Interface for ACL scenarios controller.
@@ -204,4 +207,13 @@ public interface IAclScenariosController extends IController<IAclScenariosWidget
      * Handles click on 'Delete' button.
      */
     void onDeleteButtonClicked();
+
+    /**
+     * Gets {@link AclCalculationReportsInfoDto} for filter and metadata.
+     *
+     * @param reportInfoSupplier supplier of report info
+     * @return instance of {@link IStreamSource} for export ACL Summary of Work Shares by Agg LC Report.
+     */
+    IStreamSource getExportAclSummaryOfWorkSharesByAggLcStreamSource(
+        Supplier<AclCalculationReportsInfoDto> reportInfoSupplier);
 }

@@ -20,19 +20,10 @@ import java.util.List;
  */
 public class AclCalculationReportsInfoDto {
 
-    private String reportName;
     private List<AclScenario> scenarios;
     private Integer period;
     private String user;
     private LocalDateTime reportDateTime;
-
-    public String getReportName() {
-        return reportName;
-    }
-
-    public void setReportName(String reportName) {
-        this.reportName = reportName;
-    }
 
     public List<AclScenario> getScenarios() {
         return scenarios;
@@ -76,7 +67,6 @@ public class AclCalculationReportsInfoDto {
         }
         AclCalculationReportsInfoDto that = (AclCalculationReportsInfoDto) obj;
         return new EqualsBuilder()
-            .append(reportName, that.reportName)
             .append(scenarios, that.scenarios)
             .append(period, that.period)
             .append(user, that.user)
@@ -87,7 +77,6 @@ public class AclCalculationReportsInfoDto {
     @Override
     public int hashCode() {
         return new HashCodeBuilder()
-            .append(reportName)
             .append(scenarios)
             .append(period)
             .append(user)
@@ -98,7 +87,6 @@ public class AclCalculationReportsInfoDto {
     @Override
     public String toString() {
         return new ToStringBuilder(this)
-            .append("reportName", reportName)
             .append("scenarios", scenarios)
             .append("period", period)
             .append("user", user)

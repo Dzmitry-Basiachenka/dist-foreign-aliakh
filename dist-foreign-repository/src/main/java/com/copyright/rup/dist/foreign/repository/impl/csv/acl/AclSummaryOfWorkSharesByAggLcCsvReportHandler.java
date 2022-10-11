@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.repository.impl.csv.acl;
 
+import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.common.repository.impl.csv.BaseCsvReportHandler;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.report.AclCalculationReportsInfoDto;
@@ -30,8 +31,9 @@ public class AclSummaryOfWorkSharesByAggLcCsvReportHandler extends
     private static final List<String> HEADERS =
         ImmutableList.of("Agg LC ID", "Agg LC Name", "Total Shares Print", "Total Shares Digital");
     private static final List<String> METADATA_HEADERS =
-        ImmutableList.of("Report Name", "Scenario Name", "License Type", "Period", "User who exported",
-            "Time of export");
+        ImmutableList.of("Report Name", "Scenario Name", "License Type", "Report Period", "User",
+            "Report Date");
+    private static final String REPORT_NAME = "Summary of Work Shares by Agg LC Report";
 
     /**
      * Constructor.
@@ -48,12 +50,12 @@ public class AclSummaryOfWorkSharesByAggLcCsvReportHandler extends
      * @param metadata ACL calculation report metadata
      */
     public void writeMetadata(AclCalculationReportsInfoDto metadata) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy hh:mm:ss a");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(RupDateUtils.US_DATETIME_FORMAT_PATTERN_LONG);
         AclScenario scenario = metadata.getScenarios().get(0);
         writeStringRow(Arrays.asList(StringUtils.EMPTY, StringUtils.EMPTY, StringUtils.EMPTY, StringUtils.EMPTY,
             StringUtils.EMPTY, StringUtils.EMPTY));
         writeStringRow(METADATA_HEADERS);
-        writeStringRow(Arrays.asList(metadata.getReportName(), scenario.getName(), scenario.getLicenseType(),
+        writeStringRow(Arrays.asList(REPORT_NAME, scenario.getName(), scenario.getLicenseType(),
             String.valueOf(scenario.getPeriodEndDate()), metadata.getUser(),
             metadata.getReportDateTime().format(formatter)));
     }

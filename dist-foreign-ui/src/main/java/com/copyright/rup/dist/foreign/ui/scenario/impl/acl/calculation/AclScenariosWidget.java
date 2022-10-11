@@ -1,11 +1,13 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl.acl.calculation;
 
+import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.AclPublicationType;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
+import com.copyright.rup.dist.foreign.domain.report.AclCalculationReportsInfoDto;
 import com.copyright.rup.dist.foreign.ui.common.utils.IDateFormatter;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioController;
@@ -22,6 +24,7 @@ import com.copyright.rup.dist.foreign.ui.usage.impl.ScenarioParameterWidget.Para
 import com.copyright.rup.dist.foreign.ui.usage.impl.acl.AclPublicationTypeWeightsParameterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.impl.acl.AclPublicationTypeWeightsWindow;
 import com.copyright.rup.vaadin.ui.Buttons;
+import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.CurrencyUtils;
 import com.copyright.rup.vaadin.util.VaadinUtils;
@@ -46,6 +49,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -87,6 +91,7 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
     private final Button deleteButton = Buttons.createButton(ForeignUi.getMessage("button.delete"));
     private final Button viewButton = Buttons.createButton(ForeignUi.getMessage("button.view"));
     private final Button pubTypeWeights = Buttons.createButton(ForeignUi.getMessage("button.publication_type_weights"));
+    private final String userName = RupContextUtils.getUserName();
 
     private IAclScenariosController aclScenariosController;
     private Grid<AclScenario> scenarioGrid;
@@ -276,6 +281,7 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
         VaadinUtils.addComponentStyle(metadataPanel, "scenarios-metadata");
         metadataLayout = initMetadataLayout();
         metadataLayout.addComponent(initScenarioActionLayout());
+        metadataLayout.addComponent(initSummaryOfWorkSharesByAggLcReportButton());
         metadataLayout.setMargin(new MarginInfo(false, true, false, true));
         VaadinUtils.setMaxComponentsWidth(metadataLayout);
     }
@@ -346,6 +352,18 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
         VaadinUtils.setMaxComponentsWidth(layout, actionType, actionCreatedUser, actionCreatedDate, actionReason);
         VaadinUtils.setButtonsAutoDisabled(viewAllActions);
         return layout;
+    }
+
+    private Button initSummaryOfWorkSharesByAggLcReportButton() {
+        Button button = Buttons.createButton(
+            ForeignUi.getMessage("menu.report.summary_of_work_shares_by_agg_lc_report"));
+        button.addStyleName(ValoTheme.BUTTON_LINK);
+        OnDemandFileDownloader downloader = new OnDemandFileDownloader(
+            aclScenariosController.getExportAclSummaryOfWorkSharesByAggLcStreamSource(
+                this::setupReportInfo).getSource());
+        downloader.extend(button);
+        VaadinUtils.setButtonsAutoDisabled(button);
+        return button;
     }
 
     private void onItemChanged(AclScenario scenario) {
@@ -420,5 +438,13 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
             scenarioGrid.select(scenarios.get(0));
             refreshSelectedScenario();
         }
+    }
+
+    private AclCalculationReportsInfoDto setupReportInfo() {
+        AclCalculationReportsInfoDto reportInfo = new AclCalculationReportsInfoDto();
+        reportInfo.setScenarios(Collections.singletonList(getSelectedScenario()));
+        reportInfo.setUser(userName);
+        reportInfo.setReportDateTime(LocalDateTime.now());
+        return reportInfo;
     }
 }
