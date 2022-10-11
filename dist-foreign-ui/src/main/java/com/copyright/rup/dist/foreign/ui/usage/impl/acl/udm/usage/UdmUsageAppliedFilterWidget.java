@@ -66,8 +66,6 @@ public class UdmUsageAppliedFilterWidget extends CommonAclAppliedFilterPanel imp
                 "label.reported_pub_types", String::valueOf), layout);
             addLabel(createLabelWithMultipleValues(sortStringValuesByNaturalOrder(filter.getReportedTypeOfUses()),
                 "label.reported_types_of_use", String::valueOf), layout);
-            addLabel(createLabelWithMultipleValues(sortStringValuesByNaturalOrder(filter.getTypeOfUses()),
-                "label.types_of_use", String::valueOf), layout);
             addLabel(createLabelWithMultipleValues(sortStringValuesByNaturalOrder(filter.getPubFormats()),
                 "label.publication_formats", String::valueOf), layout);
             addLabel(createLabelWithSingleValue(getFunctionForDate(UdmUsageFilter::getUsageDateFrom, filter), filter,
@@ -78,6 +76,7 @@ public class UdmUsageAppliedFilterWidget extends CommonAclAppliedFilterPanel imp
                 filter, "label.survey_start_date_from"), layout);
             addLabel(createLabelWithSingleValue(getFunctionForDate(UdmUsageFilter::getSurveyStartDateTo, filter),
                 filter, "label.survey_start_date_to"), layout);
+            addLabel(createLabelWithSingleValue(UdmUsageFilter::getTypeOfUse, filter, "label.type_of_use"), layout);
             addLabel(createLabelWithSingleValue(UdmUsageFilter::getChannel, filter, "label.channel"), layout);
             addLabel(createLabelWithOperator(filter.getWrWrkInstExpression(), "label.wr_wrk_inst_from",
                 "label.wr_wrk_inst_to"), layout);

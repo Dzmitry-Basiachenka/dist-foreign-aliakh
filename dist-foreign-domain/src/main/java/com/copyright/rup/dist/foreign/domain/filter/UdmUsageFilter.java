@@ -35,12 +35,12 @@ public class UdmUsageFilter {
     private Set<DetailLicenseeClass> detailLicenseeClasses = new HashSet<>();
     private Set<String> reportedPubTypes = new HashSet<>();
     private Set<String> reportedTypeOfUses = new HashSet<>();
-    private Set<String> typeOfUses = new HashSet<>();
     private Set<String> pubFormats = new HashSet<>();
     private LocalDate usageDateFrom;
     private LocalDate usageDateTo;
     private LocalDate surveyStartDateFrom;
     private LocalDate surveyStartDateTo;
+    private String typeOfUse;
     private UdmChannelEnum channel;
     private FilterExpression<Number> wrWrkInstExpression = new FilterExpression<>();
     private FilterExpression<String> reportedTitleExpression = new FilterExpression<>();
@@ -78,12 +78,12 @@ public class UdmUsageFilter {
             setDetailLicenseeClasses(filter.getDetailLicenseeClasses());
             setReportedPubTypes(filter.getReportedPubTypes());
             setReportedTypeOfUses(filter.getReportedTypeOfUses());
-            setTypeOfUses(filter.getTypeOfUses());
             setPubFormats(filter.getPubFormats());
             setUsageDateFrom(filter.getUsageDateFrom());
             setUsageDateTo(filter.getUsageDateTo());
             setSurveyStartDateFrom(filter.getSurveyStartDateFrom());
             setSurveyStartDateTo(filter.getSurveyStartDateTo());
+            setTypeOfUse(filter.getTypeOfUse());
             setChannel(filter.getChannel());
             setWrWrkInstExpression(new FilterExpression<>(filter.getWrWrkInstExpression()));
             setReportedTitleExpression(new FilterExpression<>(filter.getReportedTitleExpression()));
@@ -166,14 +166,6 @@ public class UdmUsageFilter {
         this.reportedTypeOfUses = reportedTypeOfUses;
     }
 
-    public Set<String> getTypeOfUses() {
-        return typeOfUses;
-    }
-
-    public void setTypeOfUses(Set<String> typeOfUses) {
-        this.typeOfUses = typeOfUses;
-    }
-
     public Set<String> getPubFormats() {
         return pubFormats;
     }
@@ -212,6 +204,14 @@ public class UdmUsageFilter {
 
     public void setSurveyStartDateTo(LocalDate surveyStartDateTo) {
         this.surveyStartDateTo = surveyStartDateTo;
+    }
+
+    public String getTypeOfUse() {
+        return typeOfUse;
+    }
+
+    public void setTypeOfUse(String typeOfUse) {
+        this.typeOfUse = typeOfUse;
     }
 
     public UdmChannelEnum getChannel() {
@@ -346,12 +346,12 @@ public class UdmUsageFilter {
             && CollectionUtils.isEmpty(detailLicenseeClasses)
             && CollectionUtils.isEmpty(reportedPubTypes)
             && CollectionUtils.isEmpty(reportedTypeOfUses)
-            && CollectionUtils.isEmpty(typeOfUses)
             && CollectionUtils.isEmpty(pubFormats)
             && null == usageDateFrom
             && null == usageDateTo
             && null == surveyStartDateFrom
             && null == surveyStartDateTo
+            && null == typeOfUse
             && null == channel
             && wrWrkInstExpression.isEmpty()
             && reportedTitleExpression.isEmpty()
@@ -387,12 +387,12 @@ public class UdmUsageFilter {
             .append(detailLicenseeClasses, that.detailLicenseeClasses)
             .append(reportedPubTypes, that.reportedPubTypes)
             .append(reportedTypeOfUses, that.reportedTypeOfUses)
-            .append(typeOfUses, that.typeOfUses)
             .append(pubFormats, that.pubFormats)
             .append(usageDateFrom, that.usageDateFrom)
             .append(usageDateTo, that.usageDateTo)
             .append(surveyStartDateFrom, that.surveyStartDateFrom)
             .append(surveyStartDateTo, that.surveyStartDateTo)
+            .append(typeOfUse, that.typeOfUse)
             .append(channel, that.channel)
             .append(wrWrkInstExpression, that.wrWrkInstExpression)
             .append(reportedTitleExpression, that.reportedTitleExpression)
@@ -422,12 +422,12 @@ public class UdmUsageFilter {
             .append(detailLicenseeClasses)
             .append(reportedPubTypes)
             .append(reportedTypeOfUses)
-            .append(typeOfUses)
             .append(pubFormats)
             .append(usageDateFrom)
             .append(usageDateTo)
             .append(surveyStartDateFrom)
             .append(surveyStartDateTo)
+            .append(typeOfUse)
             .append(channel)
             .append(wrWrkInstExpression)
             .append(reportedTitleExpression)
@@ -457,12 +457,12 @@ public class UdmUsageFilter {
             .append("detailLicenseeClasses", detailLicenseeClasses)
             .append("reportedPubTypes", reportedPubTypes)
             .append("reportedTypeOfUses", reportedTypeOfUses)
-            .append("typeOfUses", typeOfUses)
             .append("pubFormats", pubFormats)
             .append("usageDateFrom", usageDateFrom)
             .append("usageDateTo", usageDateTo)
             .append("surveyStartDateFrom", surveyStartDateFrom)
             .append("surveyStartDateTo", surveyStartDateTo)
+            .append("typeOfUse", typeOfUse)
             .append("channel", channel)
             .append("wrWrkInstExpression", wrWrkInstExpression)
             .append("reportedTitleExpression", reportedTitleExpression)
