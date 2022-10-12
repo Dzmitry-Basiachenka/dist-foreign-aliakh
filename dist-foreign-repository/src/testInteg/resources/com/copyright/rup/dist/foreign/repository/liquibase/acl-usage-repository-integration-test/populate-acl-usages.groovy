@@ -22,16 +22,19 @@ databaseChangeLog {
             column(name: 'publication_type_uid', value: '73876e58-2e87-485e-b6f3-7e23792dd214')
             column(name: 'standard_number', value: '1873-7773')
             column(name: 'price', value: 5.0000000000)
+            column(name: 'price_flag', value: true)
             column(name: 'price_in_usd', value: 5.0000000000)
             column(name: 'price_year', value: 2021)
             column(name: 'price_type', value: 'Individual')
             column(name: 'price_source', value: 'http://google.com')
             column(name: 'content', value: 1)
+            column(name: 'content_flag', value: true)
             column(name: 'content_source', value: 'Book')
             column(name: 'currency', value: 'USD')
             column(name: 'currency_exchange_rate', value: 1.0000000000)
             column(name: 'currency_exchange_rate_date', value: '2021-09-10')
             column(name: 'content_unit_price', value: 5.0000000000)
+            column(name: 'content_unit_price_flag', value: true)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_udm_value_baseline') {
@@ -45,6 +48,7 @@ databaseChangeLog {
             column(name: 'content', value: 1)
             column(name: 'content_flag', value: true)
             column(name: 'content_unit_price', value: 5.0000000000)
+            column(name: 'content_unit_price_flag', value: true)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_udm_usage') {

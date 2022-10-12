@@ -51,7 +51,7 @@
     "price": 27.0000000000,
     "content": 3.0000000000,
     "contentUnitPrice": 9.0000000000,
-    "contentUnitPriceFlag": false,
+    "contentUnitPriceFlag": true,
     "reportedTypeOfUse": "FAX_PHOTOCOPIES",
     "typeOfUse": "PRINT",
     "annualizedCopies": 2.00000,
