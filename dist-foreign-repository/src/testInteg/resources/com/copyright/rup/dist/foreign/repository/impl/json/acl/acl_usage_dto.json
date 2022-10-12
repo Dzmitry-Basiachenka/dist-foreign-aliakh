@@ -22,7 +22,7 @@
     "price": 5.0000000000,
     "content": 1.0000000000,
     "contentUnitPrice": 5.0000000000,
-    "contentUnitPriceFlag": false,
+    "contentUnitPriceFlag": true,
     "reportedTypeOfUse": "PRINT_COPIES",
     "typeOfUse": "PRINT",
     "annualizedCopies": 1.00000,
