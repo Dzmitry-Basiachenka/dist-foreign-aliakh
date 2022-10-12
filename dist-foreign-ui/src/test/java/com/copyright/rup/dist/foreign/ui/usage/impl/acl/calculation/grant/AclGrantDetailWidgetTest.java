@@ -182,9 +182,9 @@ public class AclGrantDetailWidgetTest {
         verifyButtonsLayout((HorizontalLayout) layout.getComponent(0), buttonsVisibility);
         Grid grid = (Grid) layout.getComponent(1);
         verifyGrid(grid, Arrays.asList(
-            Triple.of("Grant Set Name", 130.0, -1),
+            Triple.of("Grant Set Name", 200.0, -1),
             Triple.of("Grant Period", 110.0, -1),
-            Triple.of("License Type", 200.0, -1),
+            Triple.of("License Type", 130.0, -1),
             Triple.of("TOU Status", 150.0, -1),
             Triple.of("Grant Status", 120.0, -1),
             Triple.of("Eligible", 100.0, -1),

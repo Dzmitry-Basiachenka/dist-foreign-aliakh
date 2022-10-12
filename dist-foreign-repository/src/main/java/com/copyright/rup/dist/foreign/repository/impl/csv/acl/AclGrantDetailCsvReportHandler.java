@@ -19,9 +19,9 @@ import java.util.List;
  */
 public class AclGrantDetailCsvReportHandler extends BaseCsvReportHandler<AclGrantDetailDto> {
 
-    private static final List<String> HEADERS = Arrays.asList("License Type", "TOU Status", "Grant Status", "Eligible",
-        "Wr Wrk Inst", "System Title", "RH Account #", "RH Name", "TOU", "Created Date", "Updated Date",
-        "Grant Period", "Manual Upload Flag");
+    private static final List<String> HEADERS = Arrays.asList("Grant Set Name", "Grant Period", "License Type",
+        "TOU Status", "Grant Status", "Eligible", "Wr Wrk Inst", "System Title", "RH Account #", "RH Name", "TOU",
+        "Created Date", "Updated Date", "Manual Upload Flag");
 
     /**
      * Constructor.
@@ -35,6 +35,8 @@ public class AclGrantDetailCsvReportHandler extends BaseCsvReportHandler<AclGran
     @Override
     protected List<String> getBeanProperties(AclGrantDetailDto bean) {
         List<String> beanProperties = new ArrayList<>();
+        beanProperties.add(getBeanPropertyAsString(bean.getGrantSetName()));
+        beanProperties.add(getBeanPropertyAsString(bean.getGrantPeriod()));
         beanProperties.add(bean.getLicenseType());
         beanProperties.add(bean.getTypeOfUseStatus());
         beanProperties.add(bean.getGrantStatus());
@@ -46,7 +48,6 @@ public class AclGrantDetailCsvReportHandler extends BaseCsvReportHandler<AclGran
         beanProperties.add(bean.getTypeOfUse());
         beanProperties.add(convertDateToString(bean.getCreateDate()));
         beanProperties.add(convertDateToString(bean.getUpdateDate()));
-        beanProperties.add(getBeanPropertyAsString(bean.getGrantPeriod()));
         beanProperties.add(bean.getManualUploadFlag() ? "Y" : "N");
         return beanProperties;
     }

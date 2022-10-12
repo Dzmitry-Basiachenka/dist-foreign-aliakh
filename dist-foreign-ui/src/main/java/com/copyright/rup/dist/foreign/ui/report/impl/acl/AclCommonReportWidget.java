@@ -18,6 +18,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 /**
@@ -58,6 +59,7 @@ public class AclCommonReportWidget extends Window implements IAclCommonReportWid
         reportInfo.setPeriod(periodComboBox.getSelectedItem().orElse(null));
         reportInfo.setScenarios(new ArrayList<>(scenarioFilterWidget.getSelectedItems()));
         reportInfo.setUser(RupContextUtils.getUserName());
+        reportInfo.setReportDateTime(LocalDateTime.now());
         return reportInfo;
     }
 
