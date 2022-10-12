@@ -14,7 +14,6 @@ import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
-import com.copyright.rup.dist.foreign.domain.report.AclCalculationReportsInfoDto;
 import com.copyright.rup.dist.foreign.service.api.ILicenseeClassService;
 import com.copyright.rup.dist.foreign.service.api.IPublicationTypeService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclCalculationReportService;
@@ -40,7 +39,6 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
-import java.util.function.Supplier;
 
 /**
  * Implementation of {@link IAclScenariosController}.
@@ -207,11 +205,11 @@ public class AclScenariosController extends CommonController<IAclScenariosWidget
     }
 
     @Override
-    public IStreamSource getExportAclSummaryOfWorkSharesByAggLcStreamSource(
-        Supplier<AclCalculationReportsInfoDto> reportInfoSupplier) {
+    public IStreamSource getExportAclSummaryOfWorkSharesByAggLcStreamSource() {
         return streamSourceHandler.getCsvStreamSource(
             () -> "summary_of_work_shares_by_aggregate_licensee_class_report_",
-            os -> aclCalculationReportService.writeSummaryOfWorkSharesByAggLcCsvReport(reportInfoSupplier.get(), os));
+            os -> aclCalculationReportService.writeSummaryOfWorkSharesByAggLcCsvReport(
+                getWidget().getReportInfo(), os));
     }
 
     @Override
