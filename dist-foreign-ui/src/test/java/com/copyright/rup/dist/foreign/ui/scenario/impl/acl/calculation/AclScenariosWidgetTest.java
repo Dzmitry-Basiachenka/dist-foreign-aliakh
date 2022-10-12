@@ -4,7 +4,6 @@ import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGridIte
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyLabel;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
-import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
@@ -22,6 +21,7 @@ import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
+import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.AclPublicationType;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
@@ -31,6 +31,7 @@ import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
+import com.copyright.rup.dist.foreign.domain.report.AclCalculationReportsInfoDto;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioHistoryController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenariosController;
@@ -88,7 +89,7 @@ import java.util.stream.Collectors;
  * @author Dzmitry Basiachenka
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({Windows.class, ForeignSecurityUtils.class})
+@PrepareForTest({Windows.class, ForeignSecurityUtils.class, RupContextUtils.class})
 public class AclScenariosWidgetTest {
 
     private static final String SCENARIO_UID = "29ca6de6-0496-49e8-8ff4-334ef1bab597";
@@ -115,8 +116,7 @@ public class AclScenariosWidgetTest {
         IStreamSource streamSource = createMock(IStreamSource.class);
         expect(streamSource.getSource()).andReturn(new SimpleImmutableEntry(createMock(Supplier.class),
             createMock(Supplier.class))).once();
-        expect(controller.getExportAclSummaryOfWorkSharesByAggLcStreamSource(anyObject(Supplier.class)))
-            .andReturn(streamSource).once();
+        expect(controller.getExportAclSummaryOfWorkSharesByAggLcStreamSource()).andReturn(streamSource).once();
         expect(ForeignSecurityUtils.hasSpecialistPermission()).andReturn(true).times(2);
         replay(controller, streamSource, ForeignSecurityUtils.class);
         scenariosWidget.init();
@@ -278,6 +278,18 @@ public class AclScenariosWidgetTest {
         DataProvider<DetailLicenseeClass, ?> dataProvider = grid.getDataProvider();
         assertEquals(detailLicenseeClasses, dataProvider.fetch(new Query<>()).collect(Collectors.toList()));
         verify(controller, Windows.class);
+    }
+
+    @Test
+    public void testGetReportInfo() {
+        Grid grid = createMock(Grid.class);
+        Whitebox.setInternalState(scenariosWidget, SCENARIO_GRID, grid);
+        expect(grid.getSelectedItems()).andReturn(Collections.singleton(scenario)).once();
+        replay(controller, grid);
+        AclCalculationReportsInfoDto reportInfo = scenariosWidget.getReportInfo();
+        assertEquals(scenario, reportInfo.getScenarios().get(0));
+        assertEquals("SYSTEM", reportInfo.getUser());
+        verify(controller, grid);
     }
 
     private AclScenario buildAclScenario() {

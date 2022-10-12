@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.scenario.api.acl;
 
 import com.copyright.rup.dist.foreign.domain.AclScenario;
+import com.copyright.rup.dist.foreign.domain.report.AclCalculationReportsInfoDto;
 import com.copyright.rup.vaadin.widget.api.IMediatorProvider;
 import com.copyright.rup.vaadin.widget.api.IRefreshable;
 import com.copyright.rup.vaadin.widget.api.IWidget;
@@ -34,4 +35,9 @@ public interface IAclScenariosWidget extends IWidget<IAclScenariosController>, I
      * Refreshes metadata information for the selected ACL scenario.
      */
     void refreshSelectedScenario();
+
+    /**
+     * @return information for report generation.
+     */
+    AclCalculationReportsInfoDto getReportInfo();
 }

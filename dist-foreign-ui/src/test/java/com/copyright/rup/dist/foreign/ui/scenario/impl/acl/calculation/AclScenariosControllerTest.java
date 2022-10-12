@@ -28,7 +28,6 @@ import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
-import com.copyright.rup.dist.foreign.domain.report.AclCalculationReportsInfoDto;
 import com.copyright.rup.dist.foreign.service.api.ILicenseeClassService;
 import com.copyright.rup.dist.foreign.service.api.IPublicationTypeService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclCalculationReportService;
@@ -383,12 +382,10 @@ public class AclScenariosControllerTest {
     @Test
     public void testGetExportAclSummaryOfWorkSharesByAggLcStreamSource() {
         OffsetDateTime date = OffsetDateTime.of(2022, 10, 6, 3, 20, 20, 6, ZoneOffset.ofHours(0));
-        AclCalculationReportsInfoDto reportInfo = new AclCalculationReportsInfoDto();
         mockStatic(OffsetDateTime.class);
         Capture<Supplier<String>> fileNameSupplierCapture = newCapture();
         Capture<Consumer<PipedOutputStream>> posConsumerCapture = newCapture();
         String fileName = "summary_of_work_shares_by_aggregate_licensee_class_report_";
-        Supplier<AclCalculationReportsInfoDto> reportInfoSupplier = () -> reportInfo;
         Supplier<String> fileNameSupplier = () -> fileName;
         Supplier<InputStream> inputStreamSupplier =
             () -> IOUtils.toInputStream(StringUtils.EMPTY, StandardCharsets.UTF_8);
@@ -396,11 +393,11 @@ public class AclScenariosControllerTest {
         expect(OffsetDateTime.now()).andReturn(date).once();
         expect(streamSourceHandler.getCsvStreamSource(capture(fileNameSupplierCapture), capture(posConsumerCapture)))
             .andReturn(new StreamSource(fileNameSupplier, "csv", inputStreamSupplier)).once();
-        aclCalculationReportService.writeSummaryOfWorkSharesByAggLcCsvReport(reportInfo, pos);
+        aclCalculationReportService.writeSummaryOfWorkSharesByAggLcCsvReport(null, pos);
         expectLastCall().once();
         replay(OffsetDateTime.class, streamSourceHandler, aclCalculationReportService);
         IStreamSource streamSource =
-            aclScenariosController.getExportAclSummaryOfWorkSharesByAggLcStreamSource(reportInfoSupplier);
+            aclScenariosController.getExportAclSummaryOfWorkSharesByAggLcStreamSource();
         assertEquals("summary_of_work_shares_by_aggregate_licensee_class_report_10_06_2022_03_20.csv",
             streamSource.getSource().getKey().get());
         assertEquals(fileName, fileNameSupplierCapture.getValue().get());

@@ -172,6 +172,15 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
         onItemChanged(getSelectedScenario());
     }
 
+    @Override
+    public AclCalculationReportsInfoDto getReportInfo() {
+        AclCalculationReportsInfoDto reportInfo = new AclCalculationReportsInfoDto();
+        reportInfo.setScenarios(Collections.singletonList(getSelectedScenario()));
+        reportInfo.setUser(userName);
+        reportInfo.setReportDateTime(LocalDateTime.now());
+        return reportInfo;
+    }
+
     private void initGrid() {
         List<AclScenario> scenarios = aclScenariosController.getScenarios();
         dataProvider = DataProvider.ofCollection(scenarios);
@@ -359,8 +368,7 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
             ForeignUi.getMessage("menu.report.summary_of_work_shares_by_agg_lc_report"));
         button.addStyleName(ValoTheme.BUTTON_LINK);
         OnDemandFileDownloader downloader = new OnDemandFileDownloader(
-            aclScenariosController.getExportAclSummaryOfWorkSharesByAggLcStreamSource(
-                this::setupReportInfo).getSource());
+            aclScenariosController.getExportAclSummaryOfWorkSharesByAggLcStreamSource().getSource());
         downloader.extend(button);
         VaadinUtils.setButtonsAutoDisabled(button);
         return button;
@@ -438,13 +446,5 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
             scenarioGrid.select(scenarios.get(0));
             refreshSelectedScenario();
         }
-    }
-
-    private AclCalculationReportsInfoDto setupReportInfo() {
-        AclCalculationReportsInfoDto reportInfo = new AclCalculationReportsInfoDto();
-        reportInfo.setScenarios(Collections.singletonList(getSelectedScenario()));
-        reportInfo.setUser(userName);
-        reportInfo.setReportDateTime(LocalDateTime.now());
-        return reportInfo;
     }
 }
