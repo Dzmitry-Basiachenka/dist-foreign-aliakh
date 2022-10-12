@@ -1660,8 +1660,9 @@ public class UdmValueRepositoryIntegrationTest {
             assertEquals(expectedValue.getPrice(), actualValue.getPrice());
             assertEquals(expectedValue.getPriceFlag(), actualValue.getPriceFlag());
             assertEquals(expectedValue.getContent(), actualValue.getContent());
-            assertEquals(expectedValue.getContentUnitPrice(), actualValue.getContentUnitPrice());
             assertEquals(expectedValue.getContentFlag(), actualValue.getContentFlag());
+            assertEquals(expectedValue.getContentUnitPrice(), actualValue.getContentUnitPrice());
+            assertEquals(expectedValue.getContentUnitPriceFlag(), actualValue.getContentUnitPriceFlag());
             assertEquals(expectedValue.getComment(), actualValue.getComment());
             assertEquals(expectedValue.getUpdateUser(), actualValue.getUpdateUser());
             assertEquals(expectedValue.getCreateUser(), actualValue.getCreateUser());

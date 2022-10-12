@@ -8,8 +8,9 @@
     "priceFlag": true,
     "price": 90.0000000000,
     "content": 5.0000000000,
-    "contentUnitPrice": 18.0000000000,
     "contentFlag": true,
+    "contentUnitPrice": 18.0000000000,
+    "contentUnitPriceFlag": true,
     "comment": "Comment",
     "createUser": "jjohn@copyright.com",
     "updateUser": "jjohn@copyright.com"
@@ -23,8 +24,9 @@
     "priceFlag": true,
     "price": 48.6000000000,
     "content": 5.0000000000,
-    "contentUnitPrice": 9.7200000000,
     "contentFlag": true,
+    "contentUnitPrice": 9.7200000000,
+    "contentUnitPriceFlag": true,
     "comment": "Comment",
     "createUser": "jjohn@copyright.com",
     "updateUser": "jjohn@copyright.com"
