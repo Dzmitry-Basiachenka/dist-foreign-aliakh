@@ -563,6 +563,7 @@ public class AclScenarioUsageRepositoryIntegrationTest {
         scenarioDetail.setAggregateLicenseeClassName("Food and Tobacco");
         scenarioDetail.setPublicationType(buildPubType());
         scenarioDetail.setContentUnitPrice(new BigDecimal("11.0000000000"));
+        scenarioDetail.setContentUnitPriceFlag(true);
         scenarioDetail.setNumberOfCopies(new BigDecimal("10.00000"));
         scenarioDetail.setUsageAgeWeight(new BigDecimal("0.50000"));
         scenarioDetail.setWeightedCopies(new BigDecimal("5.0000000000"));
@@ -605,6 +606,7 @@ public class AclScenarioUsageRepositoryIntegrationTest {
         assertEquals(expectedScenarioDetail.getPublicationType().getWeight(),
             actualScenarioDetail.getPublicationType().getWeight());
         assertEquals(expectedScenarioDetail.getContentUnitPrice(), actualScenarioDetail.getContentUnitPrice());
+        assertEquals(expectedScenarioDetail.getContentUnitPriceFlag(), actualScenarioDetail.getContentUnitPriceFlag());
         assertEquals(expectedScenarioDetail.getNumberOfCopies(), actualScenarioDetail.getNumberOfCopies());
         assertEquals(expectedScenarioDetail.getUsageAgeWeight(), actualScenarioDetail.getUsageAgeWeight());
         assertEquals(expectedScenarioDetail.getWeightedCopies(), actualScenarioDetail.getWeightedCopies());

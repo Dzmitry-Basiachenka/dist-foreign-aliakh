@@ -30,6 +30,7 @@ public class AclScenarioDetail extends StoredEntity<String> {
     private String aggregateLicenseeClassName;
     private PublicationType publicationType;
     private BigDecimal contentUnitPrice;
+    private Boolean contentUnitPriceFlag;
     private BigDecimal numberOfCopies;
     private BigDecimal usageAgeWeight;
     private BigDecimal weightedCopies;
@@ -98,6 +99,14 @@ public class AclScenarioDetail extends StoredEntity<String> {
 
     public void setContentUnitPrice(BigDecimal contentUnitPrice) {
         this.contentUnitPrice = contentUnitPrice;
+    }
+
+    public Boolean getContentUnitPriceFlag() {
+        return contentUnitPriceFlag;
+    }
+
+    public void setContentUnitPriceFlag(Boolean contentUnitPriceFlag) {
+        this.contentUnitPriceFlag = contentUnitPriceFlag;
     }
 
     public BigDecimal getNumberOfCopies() {
@@ -177,6 +186,7 @@ public class AclScenarioDetail extends StoredEntity<String> {
             .append(aggregateLicenseeClassName, that.aggregateLicenseeClassName)
             .append(publicationType, that.publicationType)
             .append(contentUnitPrice, that.contentUnitPrice)
+            .append(contentUnitPriceFlag, that.contentUnitPriceFlag)
             .append(numberOfCopies, that.numberOfCopies)
             .append(usageAgeWeight, that.usageAgeWeight)
             .append(weightedCopies, that.weightedCopies)
@@ -199,6 +209,7 @@ public class AclScenarioDetail extends StoredEntity<String> {
             .append(aggregateLicenseeClassName)
             .append(publicationType)
             .append(contentUnitPrice)
+            .append(contentUnitPriceFlag)
             .append(numberOfCopies)
             .append(usageAgeWeight)
             .append(weightedCopies)
@@ -221,6 +232,7 @@ public class AclScenarioDetail extends StoredEntity<String> {
             .append("aggregateLicenseeClassName", aggregateLicenseeClassName)
             .append("publicationType", publicationType)
             .append("contentUnitPrice", contentUnitPrice)
+            .append("contentUnitPriceFlag", contentUnitPriceFlag)
             .append("numberOfCopies", numberOfCopies)
             .append("usageAgeWeight", usageAgeWeight)
             .append("weightedCopies", weightedCopies)

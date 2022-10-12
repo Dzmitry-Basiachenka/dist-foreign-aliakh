@@ -19,6 +19,7 @@
         <result property="publicationType.weight" column="pub_type_weight"/>
         <result property="publicationType.period" column="pub_type_period"/>
         <result property="contentUnitPrice" column="content_unit_price"/>
+        <result property="contentUnitPriceFlag" column="content_unit_price_flag"/>
         <result property="numberOfCopies" column="number_of_copies"/>
         <result property="usageAgeWeight" column="usage_age_weight"/>
         <result property="weightedCopies" column="weighted_copies"/>
@@ -355,6 +356,7 @@
             detail_licensee_class_id,
             publication_type_uid,
             content_unit_price,
+            content_unit_price_flag,
             number_of_copies,
             usage_age_weight,
             survey_country,
@@ -372,6 +374,7 @@
             detail_licensee_class_id,
             publication_type_uid,
             content_unit_price,
+            content_unit_price_flag,
             annualized_copies,
             uaw.weight usage_age_weight,
             survey_country,
@@ -511,6 +514,7 @@
             sd.publication_type_uid,
             pub_type_weight,
             content_unit_price,
+            content_unit_price_flag,
             number_of_copies,
             usage_age_weight,
             weighted_copies,
