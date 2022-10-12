@@ -55,6 +55,8 @@ public class AclCalculationCsvReportsIntegrationTest extends CsvReportsTestHelpe
         FOLDER_NAME + "write-scenario-summary-of-work-shares-by-agg-lc-csv-report.groovy";
     private static final String WRITE_LIABILITIES_BY_AGG_LIC_CLASS_CSV_REPORT =
         FOLDER_NAME + "write-liabilities-by-agg-lic-class-csv-report.groovy";
+    private static final String WRITE_LIABILITY_DETAILS_CSV_REPORT =
+        FOLDER_NAME + "write-liability-details-csv-report.groovy";
 
     @Autowired
     private IAclCalculationReportRepository aclCalculationReportRepository;
@@ -213,6 +215,20 @@ public class AclCalculationCsvReportsIntegrationTest extends CsvReportsTestHelpe
         assertFilesWithExecutor(outputStream ->
             aclCalculationReportRepository.writeAclLiabilitiesByAggLicClassReport(reportsInfoDto, outputStream),
             "acl/liabilities_by_agg_lic_class_empty_report.csv");
+    }
+
+    @Test
+    @TestData(fileName = WRITE_LIABILITY_DETAILS_CSV_REPORT)
+    public void testWriteAclLiabilityDetailsReport() throws IOException {
+        AclCalculationReportsInfoDto reportsInfoDto = new AclCalculationReportsInfoDto();
+        reportsInfoDto.setPeriod(202212);
+        reportsInfoDto.setScenarios(Arrays.asList(
+            buildScenario("06fee547-bfc4-4f2a-9578-58c03821e217", "ACL Scenario 10/05/202212"),
+            buildScenario("d86f2c59-a50c-4e54-826a-ee50aeb98904", "JACDCL Scenario 10/05/202212")));
+        reportsInfoDto.setReportDateTime(LocalDateTime.of(2022, 10, 5, 14, 30, 30));
+        assertFilesWithExecutor(outputStream ->
+            aclCalculationReportRepository.writeAclLiabilityDetailsReport(reportsInfoDto, outputStream),
+            "acl/liability_details_report.csv");
     }
 
     private AclScenario buildScenario(String id, String name) {

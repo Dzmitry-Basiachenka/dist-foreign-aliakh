@@ -123,11 +123,11 @@ public class AclGrantDetailWidget extends HorizontalSplitPanel implements IAclGr
         FooterRow footer = aclGrantDetailsGrid.appendFooterRow();
         aclGrantDetailsGrid.setFooterVisible(true);
         footer.getCell(
-                addColumn(AclGrantDetailDto::getGrantSetName, "table.column.grant_set_name", "grantSetName", 130))
+                addColumn(AclGrantDetailDto::getGrantSetName, "table.column.grant_set_name", "grantSetName", 200))
             .setText(String.format(FOOTER_LABEL, 0));
         footer.join(
             addColumn(AclGrantDetailDto::getGrantPeriod, "table.column.grant_period", "grantPeriod", 110),
-            addColumn(AclGrantDetailDto::getLicenseType, "table.column.license_type", "licenseType", 200),
+            addColumn(AclGrantDetailDto::getLicenseType, "table.column.license_type", "licenseType", 130),
             addColumn(AclGrantDetailDto::getTypeOfUseStatus, "table.column.tou_status", "typeOfUseStatus", 150),
             addColumn(AclGrantDetailDto::getGrantStatus, "table.column.grant_status", "grantStatus", 120),
             addColumn(value -> BooleanUtils.toYNString(value.getEligible()), "table.column.eligible", "eligible", 100),
