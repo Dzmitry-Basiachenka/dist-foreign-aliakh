@@ -93,6 +93,8 @@ public class AclUsageFiltersWindow extends CommonAclFiltersWindow {
         new TextField(ForeignUi.getMessage("label.content_unit_price_to"));
     private final ComboBox<FilterOperatorEnum> contentUnitPriceOperatorComboBox =
         buildNumericOperatorComboBox(NUMERIC_OPERATOR_ITEMS);
+    private final ComboBox<FilterOperatorEnum> contentUnitPriceFlagComboBox =
+        new ComboBox<>(ForeignUi.getMessage("label.content_unit_price_flag"));
     private final TextField annualizedCopiesFromField =
         new TextField(ForeignUi.getMessage("label.annualized_copies_from"));
     private final TextField annualizedCopiesToField = new TextField(ForeignUi.getMessage("label.annualized_copies_to"));
@@ -118,7 +120,7 @@ public class AclUsageFiltersWindow extends CommonAclFiltersWindow {
         setCaption(ForeignUi.getMessage("window.acl_usages_additional_filters"));
         setResizable(false);
         setWidth(600, Unit.PIXELS);
-        setHeight(490, Unit.PIXELS);
+        setHeight(540, Unit.PIXELS);
         VaadinUtils.addComponentStyle(this, "acl-usages-additional-filters-window");
     }
 
@@ -135,7 +137,7 @@ public class AclUsageFiltersWindow extends CommonAclFiltersWindow {
         fieldsLayout.addComponents(initPeriodDetailLicenseeClassLayout(), initAggregateLicenseeClassPubTypeLayout(),
             typeOfUseFilterWidget, initUsageOriginChannelLayout(), initUsageDetailIdLayout(), initWrWrkInstLayout(),
             initSystemTitleLayout(), initSurveyCountryLayout(), initContentUnitPriceLayout(),
-            initAnnualizedCopiesLayout());
+            initContentUnitPriceFlagLayout(), initAnnualizedCopiesLayout());
         filterBinder.readBean(usageFilter);
         filterBinder.validate();
         return buildRootLayout(fieldsLayout);
@@ -323,6 +325,16 @@ public class AclUsageFiltersWindow extends CommonAclFiltersWindow {
         VaadinUtils.addComponentStyle(contentUnitPriceOperatorComboBox,
             "acl-usage-content-unit-price-operator-filter");
         return horizontalLayout;
+    }
+
+    private ComboBox<FilterOperatorEnum> initContentUnitPriceFlagLayout() {
+        filterBinder.forField(contentUnitPriceFlagComboBox)
+            .bind(filter -> filter.getContentUnitPriceFlagExpression().getOperator(),
+                (filter, value) -> filter.getContentUnitPriceFlagExpression().setOperator(value));
+        populateFlagComboBox(contentUnitPriceFlagComboBox,
+            usageFilter.getContentUnitPriceFlagExpression().getOperator(), "acl-usage-content-unit-price-flag-filter");
+        contentUnitPriceFlagComboBox.setWidth(50, Unit.PERCENTAGE);
+        return contentUnitPriceFlagComboBox;
     }
 
     private HorizontalLayout initAnnualizedCopiesLayout() {

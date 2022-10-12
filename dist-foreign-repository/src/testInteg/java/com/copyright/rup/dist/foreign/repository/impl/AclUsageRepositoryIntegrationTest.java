@@ -167,6 +167,7 @@ public class AclUsageRepositoryIntegrationTest {
         filter.setSystemTitleExpression(new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, SYSTEM_TITLE, null));
         filter.setSurveyCountryExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, SURVEY_COUNTRY, null));
         filter.setContentUnitPriceExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 10, null));
+        filter.setContentUnitPriceFlagExpression(new FilterExpression<>(FilterOperatorEnum.Y));
         filter.setAnnualizedCopiesExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 1, null));
         assertEquals(1, aclUsageRepository.findCountByFilter(filter));
     }
@@ -340,6 +341,15 @@ public class AclUsageRepositoryIntegrationTest {
 
     @Test
     @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindCountByFilterContentUnitPriceFlag() {
+        assertFilteringFindCountByFilter(filter -> filter.setContentUnitPriceFlagExpression(
+            new FilterExpression<>(FilterOperatorEnum.Y)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setContentUnitPriceFlagExpression(
+            new FilterExpression<>(FilterOperatorEnum.N)), 3);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindCountByFilterAnnualizedCopies() {
         assertFilteringFindCountByFilter(filter -> filter.setAnnualizedCopiesExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, ANNUALIZED_COPIES_1, null)), 1);
@@ -374,6 +384,7 @@ public class AclUsageRepositoryIntegrationTest {
         filter.setSystemTitleExpression(new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, SYSTEM_TITLE, null));
         filter.setSurveyCountryExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, SURVEY_COUNTRY, null));
         filter.setContentUnitPriceExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 10, null));
+        filter.setContentUnitPriceFlagExpression(new FilterExpression<>(FilterOperatorEnum.Y));
         filter.setAnnualizedCopiesExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 1, null));
         List<AclUsageDto> values = aclUsageRepository.findDtosByFilter(filter, null, buildSort());
         assertEquals(1, values.size());
@@ -599,6 +610,15 @@ public class AclUsageRepositoryIntegrationTest {
         assertFilteringFindDtosByFilter(filter -> filter.setContentUnitPriceExpression(
             new FilterExpression<>(FilterOperatorEnum.BETWEEN, CONTENT_UNIT_PRICE_1, CONTENT_UNIT_PRICE_2)),
             ACL_USAGE_UID_3, ACL_USAGE_UID_4, ACL_USAGE_UID_5);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindDtosByFilterContentUnitPriceFlag() {
+        assertFilteringFindDtosByFilter(filter -> filter.setContentUnitPriceFlagExpression(
+            new FilterExpression<>(FilterOperatorEnum.Y)), ACL_USAGE_UID_2);
+        assertFilteringFindDtosByFilter(filter -> filter.setContentUnitPriceFlagExpression(
+            new FilterExpression<>(FilterOperatorEnum.N)), ACL_USAGE_UID_3, ACL_USAGE_UID_4, ACL_USAGE_UID_5);
     }
 
     @Test

@@ -6,7 +6,9 @@ import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.filter.AclUsageFilter;
 import com.copyright.rup.dist.foreign.ui.usage.impl.acl.CommonAclAppliedFilterPanel;
 import com.copyright.rup.vaadin.util.VaadinUtils;
+
 import com.vaadin.ui.VerticalLayout;
+
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -61,6 +63,9 @@ public class AclUsageAppliedFilterWidget extends CommonAclAppliedFilterPanel {
                 StringUtils.EMPTY), layout);
             addLabel(createLabelWithOperator(filter.getContentUnitPriceExpression(), "label.content_unit_price_from",
                 "label.content_unit_price_to"), layout);
+            addLabel(createLabelWithSingleValue(aclUsageFilter -> convertFilterOperatorToString(
+                aclUsageFilter.getContentUnitPriceFlagExpression().getOperator()), filter,
+                "label.content_unit_price_flag"), layout);
             addLabel(createLabelWithOperator(filter.getAnnualizedCopiesExpression(), "label.annualized_copies_from",
                 "label.annualized_copies_to"), layout);
         }

@@ -60,6 +60,8 @@ public class AclUsageFiltersWindowTest {
 
     private static final String UNCHECKED = "unchecked";
     private static final String CAPTION_OPERATOR = "Operator";
+    private static final List<FilterOperatorEnum> FLAG_ITEMS =
+        Arrays.asList(FilterOperatorEnum.Y, FilterOperatorEnum.N);
     private static final String USAGE_FILTER = "usageFilter";
     private static final Integer LC_ID = 26;
     private static final String LC_DESCRIPTION = "Law Firms";
@@ -71,6 +73,7 @@ public class AclUsageFiltersWindowTest {
     private static final String SYSTEM_TITLE = "Medical Journal";
     private static final String SURVEY_COUNTRY = "Portugal";
     private static final BigDecimal CONTENT_UNIT_PRICE = new BigDecimal("25.0000000000");
+    private static final FilterExpression<Boolean> CUP_FLAG = new FilterExpression<>(FilterOperatorEnum.N);
     private static final String VALID_INTEGER = "123456789";
     private static final String VALID_DECIMAL = "1.2345678";
     private static final String INVALID_NUMBER = "a12345678";
@@ -91,7 +94,7 @@ public class AclUsageFiltersWindowTest {
 
     @Test
     public void testConstructor() {
-        verifyWindow(window, "ACL usages additional filters", 600, 490, Unit.PIXELS);
+        verifyWindow(window, "ACL usages additional filters", 600, 540, Unit.PIXELS);
         VerticalLayout verticalLayout = verifyRootLayout(window.getContent());
         verifyPanel(verticalLayout.getComponent(0));
     }
@@ -156,7 +159,7 @@ public class AclUsageFiltersWindowTest {
 
     @Test
     public void testAnnualizedCopiesFilterOperatorChangeListener() {
-        testNumericFilterOperatorChangeListener(9);
+        testNumericFilterOperatorChangeListener(10);
     }
 
     @Test
@@ -241,7 +244,7 @@ public class AclUsageFiltersWindowTest {
         Component panelContent = ((Panel) component).getContent();
         assertThat(panelContent, instanceOf(VerticalLayout.class));
         VerticalLayout verticalLayout = (VerticalLayout) panelContent;
-        assertEquals(10, verticalLayout.getComponentCount());
+        assertEquals(11, verticalLayout.getComponentCount());
         verifyItemsFilterLayout(verticalLayout.getComponent(0), "Periods", "Detail Licensee Classes");
         verifyItemsFilterLayout(verticalLayout.getComponent(1), "Aggregate Licensee Classes", "Pub Types");
         verifyItemsFilterWidget(verticalLayout.getComponent(2), "Types of Use");
@@ -253,7 +256,8 @@ public class AclUsageFiltersWindowTest {
         verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(7), "Survey Country");
         verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(8), "Content Unit Price From",
             "Content Unit Price To");
-        verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(9), "Annualized Copies From",
+        verifyComboBox(verticalLayout.getComponent(9), "CUP Flag", Unit.PERCENTAGE, 50, true , FLAG_ITEMS);
+        verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(10), "Annualized Copies From",
             "Annualized Copies To");
     }
 
@@ -319,6 +323,7 @@ public class AclUsageFiltersWindowTest {
         filter.setSurveyCountryExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, SURVEY_COUNTRY, null));
         filter.setContentUnitPriceExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, CONTENT_UNIT_PRICE, null));
+        filter.setContentUnitPriceFlagExpression(CUP_FLAG);
         filter.setAnnualizedCopiesExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, new BigDecimal("5.5"), null));
         return filter;
@@ -394,6 +399,7 @@ public class AclUsageFiltersWindowTest {
         assertComboBoxValue("surveyCountryOperatorComboBox", FilterOperatorEnum.EQUALS);
         assertTextFieldValue("contentUnitPriceFromField", CONTENT_UNIT_PRICE.toString());
         assertComboBoxValue("contentUnitPriceOperatorComboBox", FilterOperatorEnum.EQUALS);
+        assertComboBoxValue("contentUnitPriceFlagComboBox", FilterOperatorEnum.N);
         assertTextFieldValue("annualizedCopiesFromField", "5.5");
         assertComboBoxValue("annualizedCopiesOperatorComboBox", FilterOperatorEnum.EQUALS);
     }
@@ -427,6 +433,7 @@ public class AclUsageFiltersWindowTest {
         populateComboBox("surveyCountryOperatorComboBox", FilterOperatorEnum.EQUALS);
         populateTextField("contentUnitPriceFromField", CONTENT_UNIT_PRICE.toString());
         populateComboBox("contentUnitPriceOperatorComboBox", FilterOperatorEnum.EQUALS);
+        populateComboBox("contentUnitPriceFlagComboBox", FilterOperatorEnum.N);
         populateTextField("annualizedCopiesFromField", "5.5");
         populateComboBox("annualizedCopiesOperatorComboBox", FilterOperatorEnum.EQUALS);
     }
