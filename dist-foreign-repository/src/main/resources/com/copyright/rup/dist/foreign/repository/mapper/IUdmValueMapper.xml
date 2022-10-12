@@ -646,6 +646,7 @@
                 content = v.content,
                 content_flag = v.content_flag,
                 content_unit_price = v.content_unit_price,
+                content_unit_price_flag = v.content_unit_price_flag,
                 comment = v.comment,
                 updated_by_user = #{updateUser},
                 updated_datetime = now(),
@@ -667,6 +668,7 @@
                 content,
                 content_flag,
                 content_unit_price,
+                content_unit_price_flag,
                 comment,
                 <include refid="StoredEntityMapper.additionalColumns"/>
             )
@@ -681,6 +683,7 @@
                 content,
                 content_flag,
                 content_unit_price,
+                content_unit_price_flag,
                 comment,
                 <include refid="StoredEntityMapper.insert"/>
             from ${schema}.df_udm_value
