@@ -21,7 +21,8 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.Arrays;
 import java.util.Collections;
 
@@ -170,7 +171,7 @@ public class AclCalculationCsvReportsIntegrationTest extends CsvReportsTestHelpe
         scenario.setPeriodEndDate(202212);
         reportsInfoDto.setScenarios(Collections.singletonList(scenario));
         reportsInfoDto.setUser("user@copyright.com");
-        reportsInfoDto.setReportDateTime(LocalDateTime.of(2022, 10, 5, 14, 30, 30));
+        reportsInfoDto.setReportDateTime(OffsetDateTime.of(2022, 10, 5, 14, 30, 30, 30, ZoneOffset.ofHours(0)));
         assertFilesWithExecutor(outputStream ->
             aclCalculationReportRepository.writeSummaryOfWorkSharesByAggLcCsvReport(reportsInfoDto, outputStream),
             "acl/summary_work_shares_agg_lc_report.csv");
@@ -182,7 +183,7 @@ public class AclCalculationCsvReportsIntegrationTest extends CsvReportsTestHelpe
         AclCalculationReportsInfoDto reportsInfoDto = new AclCalculationReportsInfoDto();
         reportsInfoDto.setPeriod(202212);
         reportsInfoDto.setUser("user@copyright.com");
-        reportsInfoDto.setReportDateTime(LocalDateTime.of(2022, 10, 5, 14, 30, 30));
+        reportsInfoDto.setReportDateTime(OffsetDateTime.of(2022, 10, 5, 14, 30, 30, 30, ZoneOffset.ofHours(0)));
         reportsInfoDto.setScenarios(Arrays.asList(
             buildScenario("06fee547-bfc4-4f2a-9578-58c03821e217", "ACL Scenario 10/05/202212"),
             buildScenario("6dbd30f7-91f6-4949-a74c-cfbac5e466ac", "MCL Scenario 10/05/202212"),
@@ -201,7 +202,7 @@ public class AclCalculationCsvReportsIntegrationTest extends CsvReportsTestHelpe
         reportsInfoDto.setScenarios(Arrays.asList(
             buildScenario("06fee547-bfc4-4f2a-9578-58c03821e217", "ACL Scenario 10/05/202212"),
             buildScenario("d86f2c59-a50c-4e54-826a-ee50aeb98904", "JACDCL Scenario 10/05/202212")));
-        reportsInfoDto.setReportDateTime(LocalDateTime.of(2022, 10, 5, 14, 30, 30));
+        reportsInfoDto.setReportDateTime(OffsetDateTime.of(2022, 10, 5, 14, 30, 30, 30, ZoneOffset.ofHours(0)));
         assertFilesWithExecutor(outputStream ->
             aclCalculationReportRepository.writeAclLiabilityDetailsReport(reportsInfoDto, outputStream),
             "acl/liability_details_report.csv");

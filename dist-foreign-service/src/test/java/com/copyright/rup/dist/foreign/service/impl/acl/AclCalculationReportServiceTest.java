@@ -84,7 +84,7 @@ public class AclCalculationReportServiceTest {
     }
 
     @Test
-    public void writeSummaryOfWorkSharesByAggLcCsvReport() {
+    public void testWriteSummaryOfWorkSharesByAggLcCsvReport() {
         AclCalculationReportsInfoDto reportInfo = new AclCalculationReportsInfoDto();
         OutputStream outputStream = createMock(OutputStream.class);
         aclCalculationReportRepository.writeSummaryOfWorkSharesByAggLcCsvReport(reportInfo, outputStream);
