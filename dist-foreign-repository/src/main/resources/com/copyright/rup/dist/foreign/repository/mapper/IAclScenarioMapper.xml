@@ -167,6 +167,9 @@
             <when test="sort.property == 'reportedTypeOfUse'">
                 reported_type_of_use <include refid="IUsageMapper.direction"/>
             </when>
+            <when test="sort.property == 'typeOfUse'">
+                type_of_use <include refid="IUsageMapper.direction"/>
+            </when>
             <when test="sort.property == 'numberOfCopies'">
                 number_of_copies <include refid="IUsageMapper.direction"/>
             </when>

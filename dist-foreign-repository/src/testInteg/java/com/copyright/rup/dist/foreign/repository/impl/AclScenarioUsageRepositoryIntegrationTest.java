@@ -17,8 +17,6 @@ import com.copyright.rup.dist.foreign.domain.AclScenarioDetail;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDetailDto;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
 import com.copyright.rup.dist.foreign.domain.AclScenarioShareDetail;
-import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
-import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
@@ -107,7 +105,8 @@ public class AclScenarioUsageRepositoryIntegrationTest {
         List<AclScenarioDetail> scenarioDetails =
             aclScenarioUsageRepository.findScenarioDetailsByScenarioId("dec62df4-6a8f-4c59-ad65-2a5e06b3924d");
         assertEquals(1, scenarioDetails.size());
-        AclScenarioDetail expectedScenarioDetail = buildAclScenarioDetail();
+        AclScenarioDetail expectedScenarioDetail =
+            loadExpectedAclScenarioDetails("json/acl/acl_scenario_detail_add_to_scenario.json").get(0);
         verifyAclScenarioDetail(expectedScenarioDetail, scenarioDetails.get(0));
     }
 
@@ -429,47 +428,48 @@ public class AclScenarioUsageRepositoryIntegrationTest {
 
     @Test
     @TestData(fileName = FIND_BY_SCENARIO_ID_AND_RH_ACCOUNT_NUMBER)
-    public void testSortingFindFindByScenarioIdAndRhAccountNumber() {
+    public void testSortingFindByScenarioIdAndRhAccountNumber() {
         AclScenarioDetailDto scenarioDetailDto1 = buildDigitalAclScenarioDetailDto();
         AclScenarioDetailDto scenarioDetailDto2 = buildPrintDigitalAclScenarioDetailDto();
-        assertSortingAclAclScenarioDetailDto(scenarioDetailDto1, scenarioDetailDto2, "detailId");
-        assertSortingAclAclScenarioDetailDto(scenarioDetailDto2, scenarioDetailDto1, "usageDetailId");
-        assertSortingAclAclScenarioDetailDto(scenarioDetailDto1, scenarioDetailDto1, "productFamily");
-        assertSortingAclAclScenarioDetailDto(scenarioDetailDto1, scenarioDetailDto1, "usageBatchName");
-        assertSortingAclAclScenarioDetailDto(scenarioDetailDto1, scenarioDetailDto1, "periodEndDate");
-        assertSortingAclAclScenarioDetailDto(scenarioDetailDto2, scenarioDetailDto1, "wrWrkInst");
-        assertSortingAclAclScenarioDetailDto(scenarioDetailDto2, scenarioDetailDto1, "systemTitle");
-        assertSortingAclAclScenarioDetailDto(scenarioDetailDto2, scenarioDetailDto1, "rhAccountNumberPrint");
-        assertSortingAclAclScenarioDetailDto(scenarioDetailDto2, scenarioDetailDto1, "rhNamePrint");
-        assertSortingAclAclScenarioDetailDto(scenarioDetailDto1, scenarioDetailDto1, "rhAccountNumberDigital");
-        assertSortingAclAclScenarioDetailDto(scenarioDetailDto1, scenarioDetailDto1, "rhNameDigital");
-        assertSortingAclAclScenarioDetailDto(scenarioDetailDto1, scenarioDetailDto2, "usagePeriod");
-        assertSortingAclAclScenarioDetailDto(scenarioDetailDto1, scenarioDetailDto2, "usageAgeWeight");
-        assertSortingAclAclScenarioDetailDto(scenarioDetailDto2, scenarioDetailDto1, "detailLicenseeClassId");
-        assertSortingAclAclScenarioDetailDto(scenarioDetailDto2, scenarioDetailDto1, "detailLicenseeClassName");
-        assertSortingAclAclScenarioDetailDto(scenarioDetailDto2, scenarioDetailDto1, "aggregateLicenseeClassId");
-        assertSortingAclAclScenarioDetailDto(scenarioDetailDto2, scenarioDetailDto1, "aggregateLicenseeClassName");
-        assertSortingAclAclScenarioDetailDto(scenarioDetailDto1, scenarioDetailDto2, "surveyCountry");
-        assertSortingAclAclScenarioDetailDto(scenarioDetailDto2, scenarioDetailDto1, "reportedTypeOfUse");
-        assertSortingAclAclScenarioDetailDto(scenarioDetailDto2, scenarioDetailDto1, "numberOfCopies");
-        assertSortingAclAclScenarioDetailDto(scenarioDetailDto1, scenarioDetailDto2, "weightedCopies");
-        assertSortingAclAclScenarioDetailDto(scenarioDetailDto2, scenarioDetailDto1, "publicationType");
-        assertSortingAclAclScenarioDetailDto(scenarioDetailDto2, scenarioDetailDto1, "pubTypeWeight");
-        assertSortingAclAclScenarioDetailDto(scenarioDetailDto1, scenarioDetailDto2, "price");
-        assertSortingAclAclScenarioDetailDto(scenarioDetailDto2, scenarioDetailDto1, "priceFlag");
-        assertSortingAclAclScenarioDetailDto(scenarioDetailDto1, scenarioDetailDto2, "content");
-        assertSortingAclAclScenarioDetailDto(scenarioDetailDto2, scenarioDetailDto1, "contentFlag");
-        assertSortingAclAclScenarioDetailDto(scenarioDetailDto2, scenarioDetailDto1, "contentUnitPrice");
-        assertSortingAclAclScenarioDetailDto(scenarioDetailDto2, scenarioDetailDto1, "contentUnitPriceFlag");
-        assertSortingAclAclScenarioDetailDto(scenarioDetailDto2, scenarioDetailDto1, "valueSharePrint");
-        assertSortingAclAclScenarioDetailDto(scenarioDetailDto2, scenarioDetailDto1, "volumeSharePrint");
-        assertSortingAclAclScenarioDetailDto(scenarioDetailDto2, scenarioDetailDto1, "detailSharePrint");
-        assertSortingAclAclScenarioDetailDto(scenarioDetailDto1, scenarioDetailDto2, "netAmountPrint");
-        assertSortingAclAclScenarioDetailDto(scenarioDetailDto1, scenarioDetailDto2, "valueShareDigital");
-        assertSortingAclAclScenarioDetailDto(scenarioDetailDto1, scenarioDetailDto2, "volumeShareDigital");
-        assertSortingAclAclScenarioDetailDto(scenarioDetailDto2, scenarioDetailDto1, "detailShareDigital");
-        assertSortingAclAclScenarioDetailDto(scenarioDetailDto2, scenarioDetailDto1, "netAmountDigital");
-        assertSortingAclAclScenarioDetailDto(scenarioDetailDto2, scenarioDetailDto1, "combinedNetAmount");
+        assertSortingAclScenarioDetailDto(scenarioDetailDto1, scenarioDetailDto2, "detailId");
+        assertSortingAclScenarioDetailDto(scenarioDetailDto2, scenarioDetailDto1, "usageDetailId");
+        assertSortingAclScenarioDetailDto(scenarioDetailDto1, scenarioDetailDto1, "productFamily");
+        assertSortingAclScenarioDetailDto(scenarioDetailDto1, scenarioDetailDto1, "usageBatchName");
+        assertSortingAclScenarioDetailDto(scenarioDetailDto1, scenarioDetailDto1, "periodEndDate");
+        assertSortingAclScenarioDetailDto(scenarioDetailDto2, scenarioDetailDto1, "wrWrkInst");
+        assertSortingAclScenarioDetailDto(scenarioDetailDto2, scenarioDetailDto1, "systemTitle");
+        assertSortingAclScenarioDetailDto(scenarioDetailDto2, scenarioDetailDto1, "rhAccountNumberPrint");
+        assertSortingAclScenarioDetailDto(scenarioDetailDto2, scenarioDetailDto1, "rhNamePrint");
+        assertSortingAclScenarioDetailDto(scenarioDetailDto1, scenarioDetailDto1, "rhAccountNumberDigital");
+        assertSortingAclScenarioDetailDto(scenarioDetailDto1, scenarioDetailDto1, "rhNameDigital");
+        assertSortingAclScenarioDetailDto(scenarioDetailDto1, scenarioDetailDto2, "usagePeriod");
+        assertSortingAclScenarioDetailDto(scenarioDetailDto1, scenarioDetailDto2, "usageAgeWeight");
+        assertSortingAclScenarioDetailDto(scenarioDetailDto2, scenarioDetailDto1, "detailLicenseeClassId");
+        assertSortingAclScenarioDetailDto(scenarioDetailDto2, scenarioDetailDto1, "detailLicenseeClassName");
+        assertSortingAclScenarioDetailDto(scenarioDetailDto2, scenarioDetailDto1, "aggregateLicenseeClassId");
+        assertSortingAclScenarioDetailDto(scenarioDetailDto2, scenarioDetailDto1, "aggregateLicenseeClassName");
+        assertSortingAclScenarioDetailDto(scenarioDetailDto1, scenarioDetailDto2, "surveyCountry");
+        assertSortingAclScenarioDetailDto(scenarioDetailDto2, scenarioDetailDto1, "reportedTypeOfUse");
+        assertSortingAclScenarioDetailDto(scenarioDetailDto1, scenarioDetailDto1, "typeOfUse");
+        assertSortingAclScenarioDetailDto(scenarioDetailDto2, scenarioDetailDto1, "numberOfCopies");
+        assertSortingAclScenarioDetailDto(scenarioDetailDto1, scenarioDetailDto2, "weightedCopies");
+        assertSortingAclScenarioDetailDto(scenarioDetailDto2, scenarioDetailDto1, "publicationType");
+        assertSortingAclScenarioDetailDto(scenarioDetailDto2, scenarioDetailDto1, "pubTypeWeight");
+        assertSortingAclScenarioDetailDto(scenarioDetailDto1, scenarioDetailDto2, "price");
+        assertSortingAclScenarioDetailDto(scenarioDetailDto2, scenarioDetailDto1, "priceFlag");
+        assertSortingAclScenarioDetailDto(scenarioDetailDto1, scenarioDetailDto2, "content");
+        assertSortingAclScenarioDetailDto(scenarioDetailDto2, scenarioDetailDto1, "contentFlag");
+        assertSortingAclScenarioDetailDto(scenarioDetailDto2, scenarioDetailDto1, "contentUnitPrice");
+        assertSortingAclScenarioDetailDto(scenarioDetailDto2, scenarioDetailDto1, "contentUnitPriceFlag");
+        assertSortingAclScenarioDetailDto(scenarioDetailDto2, scenarioDetailDto1, "valueSharePrint");
+        assertSortingAclScenarioDetailDto(scenarioDetailDto2, scenarioDetailDto1, "volumeSharePrint");
+        assertSortingAclScenarioDetailDto(scenarioDetailDto2, scenarioDetailDto1, "detailSharePrint");
+        assertSortingAclScenarioDetailDto(scenarioDetailDto1, scenarioDetailDto2, "netAmountPrint");
+        assertSortingAclScenarioDetailDto(scenarioDetailDto1, scenarioDetailDto2, "valueShareDigital");
+        assertSortingAclScenarioDetailDto(scenarioDetailDto1, scenarioDetailDto2, "volumeShareDigital");
+        assertSortingAclScenarioDetailDto(scenarioDetailDto2, scenarioDetailDto1, "detailShareDigital");
+        assertSortingAclScenarioDetailDto(scenarioDetailDto2, scenarioDetailDto1, "netAmountDigital");
+        assertSortingAclScenarioDetailDto(scenarioDetailDto2, scenarioDetailDto1, "combinedNetAmount");
     }
 
     @Test
@@ -551,41 +551,6 @@ public class AclScenarioUsageRepositoryIntegrationTest {
         verifyAclRightsholderTotalsHolderDto(expected.get(0), actual.get(0));
     }
 
-    private AclScenarioDetail buildAclScenarioDetail() {
-        AclScenarioDetail scenarioDetail = new AclScenarioDetail();
-        scenarioDetail.setScenarioId("dec62df4-6a8f-4c59-ad65-2a5e06b3924d");
-        scenarioDetail.setPeriod(202112);
-        scenarioDetail.setOriginalDetailId("OGN674GHHHB0111");
-        scenarioDetail.setWrWrkInst(122820638L);
-        scenarioDetail.setSystemTitle(SYSTEM_TITLE);
-        scenarioDetail.setDetailLicenseeClass(buildDetailLicenseeClass(43, "Other - Govt"));
-        scenarioDetail.setAggregateLicenseeClassId(1);
-        scenarioDetail.setAggregateLicenseeClassName("Food and Tobacco");
-        scenarioDetail.setPublicationType(buildPubType());
-        scenarioDetail.setContentUnitPrice(new BigDecimal("11.0000000000"));
-        scenarioDetail.setContentUnitPriceFlag(true);
-        scenarioDetail.setNumberOfCopies(new BigDecimal("10.00000"));
-        scenarioDetail.setUsageAgeWeight(new BigDecimal("0.50000"));
-        scenarioDetail.setWeightedCopies(new BigDecimal("5.0000000000"));
-        scenarioDetail.setSurveyCountry("Germany");
-        return scenarioDetail;
-    }
-
-    private static DetailLicenseeClass buildDetailLicenseeClass(int id, String description) {
-        DetailLicenseeClass detailLicenseeClass = new DetailLicenseeClass();
-        detailLicenseeClass.setId(id);
-        detailLicenseeClass.setDescription(description);
-        return detailLicenseeClass;
-    }
-
-    private static PublicationType buildPubType() {
-        PublicationType publicationType = new PublicationType();
-        publicationType.setId("73876e58-2e87-485e-b6f3-7e23792dd214");
-        publicationType.setName("BK");
-        publicationType.setDescription("Book");
-        return publicationType;
-    }
-
     private void verifyAclScenarioDetail(AclScenarioDetail expectedScenarioDetail,
                                          AclScenarioDetail actualScenarioDetail) {
         assertEquals(expectedScenarioDetail.getScenarioId(), actualScenarioDetail.getScenarioId());
@@ -605,12 +570,16 @@ public class AclScenarioUsageRepositoryIntegrationTest {
             actualScenarioDetail.getPublicationType().getId());
         assertEquals(expectedScenarioDetail.getPublicationType().getWeight(),
             actualScenarioDetail.getPublicationType().getWeight());
+        assertEquals(expectedScenarioDetail.getPrice(), actualScenarioDetail.getPrice());
+        assertEquals(expectedScenarioDetail.getContent(), actualScenarioDetail.getContent());
         assertEquals(expectedScenarioDetail.getContentUnitPrice(), actualScenarioDetail.getContentUnitPrice());
         assertEquals(expectedScenarioDetail.getContentUnitPriceFlag(), actualScenarioDetail.getContentUnitPriceFlag());
         assertEquals(expectedScenarioDetail.getNumberOfCopies(), actualScenarioDetail.getNumberOfCopies());
         assertEquals(expectedScenarioDetail.getUsageAgeWeight(), actualScenarioDetail.getUsageAgeWeight());
         assertEquals(expectedScenarioDetail.getWeightedCopies(), actualScenarioDetail.getWeightedCopies());
         assertEquals(expectedScenarioDetail.getSurveyCountry(), actualScenarioDetail.getSurveyCountry());
+        assertEquals(expectedScenarioDetail.getReportedTypeOfUse(), actualScenarioDetail.getReportedTypeOfUse());
+        assertEquals(expectedScenarioDetail.getTypeOfUse(), actualScenarioDetail.getTypeOfUse());
     }
 
     private void verifyAclScenarioDetailDto(AclScenarioDetailDto expectedDetail,
@@ -804,8 +773,8 @@ public class AclScenarioUsageRepositoryIntegrationTest {
             SCENARIO_UID_4, searchValue));
     }
 
-    private void assertSortingAclAclScenarioDetailDto(AclScenarioDetailDto detailAsc, AclScenarioDetailDto detailDesc,
-                                                      String sortProperty) {
+    private void assertSortingAclScenarioDetailDto(AclScenarioDetailDto detailAsc, AclScenarioDetailDto detailDesc,
+                                                   String sortProperty) {
         List<AclScenarioDetailDto> scenarioDetailDtos = aclScenarioUsageRepository.findByScenarioIdAndRhAccountNumber(
             RH_ACCOUNT_NUMBER, SCENARIO_UID_4, StringUtils.EMPTY, null, new Sort(sortProperty, Sort.Direction.ASC));
         verifyAclScenarioDetailDto(detailAsc, scenarioDetailDtos.get(0));
@@ -820,6 +789,16 @@ public class AclScenarioUsageRepositoryIntegrationTest {
 
     private AclScenarioDetailDto buildPrintDigitalAclScenarioDetailDto() {
         return loadExpectedAclScenarioDetailDto("json/acl/acl_scenario_detail_dto_print_digital.json").get(0);
+    }
+
+    private List<AclScenarioDetail> loadExpectedAclScenarioDetails(String fileName) {
+        try {
+            String content = TestUtils.fileToString(this.getClass(), fileName);
+            return OBJECT_MAPPER.readValue(content, new TypeReference<List<AclScenarioDetail>>() {
+            });
+        } catch (IOException e) {
+            throw new AssertionError(e);
+        }
     }
 
     private List<AclScenarioDetailDto> loadExpectedAclScenarioDetailDto(String fileName) {

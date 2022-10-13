@@ -108,7 +108,7 @@ public class AclDrillDownByRightsholderWidgetTest {
         Object[][] expectedCells = {
             {"73eb89d8-68e7-4f5c-a6a6-1c8c551e6de3", "Usage Detail Id", "ACL", "Usage Batch Name", 202206, 123090280L,
                 "Langmuir", 1000009767L, "American Chemical Society", 1000009767L, "American Chemical",
-                202206, "1.00", 22, "Banks/Ins/RE/Holding Cos", 56, "Financial", "Belgium", "COPY_FOR_MYSELF",
+                202206, "1.00", 22, "Banks/Ins/RE/Holding Cos", 56, "Financial", "Belgium", "EMAIL_COPY", "DIGITAL",
                 "4.0001", "2.00001", "STND", "3.00", "120.54", "N", "4.00001", "N", "5.0123456789", "N", "6.01", "7.10",
                 "8.123", "9.12", "10.123", "11.00001", "12.0000000009", "13.00", "14.00"}
         };
@@ -155,6 +155,7 @@ public class AclDrillDownByRightsholderWidgetTest {
             Triple.of("Agg LC ID", 100.0, -1),
             Triple.of("Agg LC Name", 200.0, -1),
             Triple.of("Survey Country", 120.0, -1),
+            Triple.of("Reported TOU", 120.0, -1),
             Triple.of("TOU", 120.0, -1),
             Triple.of("# of Copies", 125.0, -1),
             Triple.of("# of Weighted Copies", 150.0, -1),
@@ -207,7 +208,8 @@ public class AclDrillDownByRightsholderWidgetTest {
         scenarioDetail.setAggregateLicenseeClassId(56);
         scenarioDetail.setAggregateLicenseeClassName("Financial");
         scenarioDetail.setSurveyCountry("Belgium");
-        scenarioDetail.setReportedTypeOfUse("COPY_FOR_MYSELF");
+        scenarioDetail.setReportedTypeOfUse("EMAIL_COPY");
+        scenarioDetail.setTypeOfUse("DIGITAL");
         scenarioDetail.setNumberOfCopies(new BigDecimal("4.00010"));
         scenarioDetail.setWeightedCopies(new BigDecimal("2.00001"));
         scenarioDetail.setPublicationType(pubType);

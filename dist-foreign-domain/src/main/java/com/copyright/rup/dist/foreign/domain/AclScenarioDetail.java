@@ -29,12 +29,16 @@ public class AclScenarioDetail extends StoredEntity<String> {
     private Integer aggregateLicenseeClassId;
     private String aggregateLicenseeClassName;
     private PublicationType publicationType;
+    private BigDecimal price;
+    private BigDecimal content;
     private BigDecimal contentUnitPrice;
     private Boolean contentUnitPriceFlag;
     private BigDecimal numberOfCopies;
     private BigDecimal usageAgeWeight;
     private BigDecimal weightedCopies;
     private String surveyCountry;
+    private String reportedTypeOfUse;
+    private String typeOfUse;
     private List<AclScenarioShareDetail> scenarioShareDetails;
 
     public String getScenarioId() {
@@ -85,12 +89,44 @@ public class AclScenarioDetail extends StoredEntity<String> {
         this.detailLicenseeClass = detailLicenseeClass;
     }
 
+    public Integer getAggregateLicenseeClassId() {
+        return aggregateLicenseeClassId;
+    }
+
+    public void setAggregateLicenseeClassId(Integer aggregateLicenseeClassId) {
+        this.aggregateLicenseeClassId = aggregateLicenseeClassId;
+    }
+
+    public String getAggregateLicenseeClassName() {
+        return aggregateLicenseeClassName;
+    }
+
+    public void setAggregateLicenseeClassName(String aggregateLicenseeClassName) {
+        this.aggregateLicenseeClassName = aggregateLicenseeClassName;
+    }
+
     public PublicationType getPublicationType() {
         return publicationType;
     }
 
     public void setPublicationType(PublicationType publicationType) {
         this.publicationType = publicationType;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    public BigDecimal getContent() {
+        return content;
+    }
+
+    public void setContent(BigDecimal content) {
+        this.content = content;
     }
 
     public BigDecimal getContentUnitPrice() {
@@ -141,20 +177,20 @@ public class AclScenarioDetail extends StoredEntity<String> {
         this.surveyCountry = surveyCountry;
     }
 
-    public Integer getAggregateLicenseeClassId() {
-        return aggregateLicenseeClassId;
+    public String getReportedTypeOfUse() {
+        return reportedTypeOfUse;
     }
 
-    public void setAggregateLicenseeClassId(Integer aggregateLicenseeClassId) {
-        this.aggregateLicenseeClassId = aggregateLicenseeClassId;
+    public void setReportedTypeOfUse(String reportedTypeOfUse) {
+        this.reportedTypeOfUse = reportedTypeOfUse;
     }
 
-    public String getAggregateLicenseeClassName() {
-        return aggregateLicenseeClassName;
+    public String getTypeOfUse() {
+        return typeOfUse;
     }
 
-    public void setAggregateLicenseeClassName(String aggregateLicenseeClassName) {
-        this.aggregateLicenseeClassName = aggregateLicenseeClassName;
+    public void setTypeOfUse(String typeOfUse) {
+        this.typeOfUse = typeOfUse;
     }
 
     public List<AclScenarioShareDetail> getScenarioShareDetails() {
@@ -185,12 +221,16 @@ public class AclScenarioDetail extends StoredEntity<String> {
             .append(aggregateLicenseeClassId, that.aggregateLicenseeClassId)
             .append(aggregateLicenseeClassName, that.aggregateLicenseeClassName)
             .append(publicationType, that.publicationType)
+            .append(price, that.price)
+            .append(content, that.content)
             .append(contentUnitPrice, that.contentUnitPrice)
             .append(contentUnitPriceFlag, that.contentUnitPriceFlag)
             .append(numberOfCopies, that.numberOfCopies)
             .append(usageAgeWeight, that.usageAgeWeight)
             .append(weightedCopies, that.weightedCopies)
             .append(surveyCountry, that.surveyCountry)
+            .append(reportedTypeOfUse, that.reportedTypeOfUse)
+            .append(typeOfUse, that.typeOfUse)
             .append(scenarioShareDetails, that.scenarioShareDetails)
             .isEquals();
     }
@@ -208,12 +248,16 @@ public class AclScenarioDetail extends StoredEntity<String> {
             .append(aggregateLicenseeClassId)
             .append(aggregateLicenseeClassName)
             .append(publicationType)
+            .append(price)
+            .append(content)
             .append(contentUnitPrice)
             .append(contentUnitPriceFlag)
             .append(numberOfCopies)
             .append(usageAgeWeight)
             .append(weightedCopies)
             .append(surveyCountry)
+            .append(reportedTypeOfUse)
+            .append(typeOfUse)
             .append(scenarioShareDetails)
             .toHashCode();
     }
@@ -231,12 +275,16 @@ public class AclScenarioDetail extends StoredEntity<String> {
             .append("aggregateLicenseeClassId", aggregateLicenseeClassId)
             .append("aggregateLicenseeClassName", aggregateLicenseeClassName)
             .append("publicationType", publicationType)
+            .append("price", price)
+            .append("content", content)
             .append("contentUnitPrice", contentUnitPrice)
             .append("contentUnitPriceFlag", contentUnitPriceFlag)
             .append("numberOfCopies", numberOfCopies)
             .append("usageAgeWeight", usageAgeWeight)
             .append("weightedCopies", weightedCopies)
             .append("surveyCountry", surveyCountry)
+            .append("reportedTypeOfUse", reportedTypeOfUse)
+            .append("typeOfUse", typeOfUse)
             .append("scenarioShareDetails", scenarioShareDetails)
             .toString();
     }

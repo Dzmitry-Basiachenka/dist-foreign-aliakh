@@ -765,12 +765,16 @@ public class ServiceTestHelper {
             actualScenarioDetail.getPublicationType().getId());
         assertEquals(expectedScenarioDetail.getPublicationType().getWeight(),
             actualScenarioDetail.getPublicationType().getWeight());
+        assertEquals(expectedScenarioDetail.getPrice(), actualScenarioDetail.getPrice());
+        assertEquals(expectedScenarioDetail.getContent(), actualScenarioDetail.getContent());
         assertEquals(expectedScenarioDetail.getContentUnitPrice(), actualScenarioDetail.getContentUnitPrice());
         assertEquals(expectedScenarioDetail.getContentUnitPriceFlag(), actualScenarioDetail.getContentUnitPriceFlag());
         assertEquals(expectedScenarioDetail.getNumberOfCopies(), actualScenarioDetail.getNumberOfCopies());
         assertEquals(expectedScenarioDetail.getUsageAgeWeight(), actualScenarioDetail.getUsageAgeWeight());
         assertEquals(expectedScenarioDetail.getWeightedCopies(), actualScenarioDetail.getWeightedCopies());
         assertEquals(expectedScenarioDetail.getSurveyCountry(), actualScenarioDetail.getSurveyCountry());
+        assertEquals(expectedScenarioDetail.getReportedTypeOfUse(), actualScenarioDetail.getReportedTypeOfUse());
+        assertEquals(expectedScenarioDetail.getTypeOfUse(), actualScenarioDetail.getTypeOfUse());
         List<AclScenarioShareDetail> expectedScenarioShareDetail = expectedScenarioDetail.getScenarioShareDetails();
         List<AclScenarioShareDetail> scenarioShareDetails = actualScenarioDetail.getScenarioShareDetails();
         assertEquals(expectedScenarioShareDetail.size(), scenarioShareDetails.size());

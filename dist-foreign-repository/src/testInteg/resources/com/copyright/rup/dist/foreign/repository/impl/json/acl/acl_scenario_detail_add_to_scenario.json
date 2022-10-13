@@ -1,0 +1,32 @@
+[
+  {
+    "scenarioId": "dec62df4-6a8f-4c59-ad65-2a5e06b3924d",
+    "period": 202112,
+    "originalDetailId": "OGN674GHHHB0111",
+    "wrWrkInst": 122820638,
+    "systemTitle": "Technology review",
+    "detailLicenseeClass": {
+      "id": 43,
+      "description": "Other - Govt",
+      "aggregateLicenseeClass": {
+      }
+    },
+    "aggregateLicenseeClassId": 1,
+    "aggregateLicenseeClassName": "Food and Tobacco",
+    "publicationType": {
+      "id": "73876e58-2e87-485e-b6f3-7e23792dd214",
+      "name": "BK",
+      "description": "Book"
+    },
+    "price": 22.0000000000,
+    "content": 2.0000000000,
+    "contentUnitPrice": 11.0000000000,
+    "contentUnitPriceFlag": true,
+    "numberOfCopies": 10.00000,
+    "usageAgeWeight": 0.50000,
+    "weightedCopies": 5.0000000000,
+    "surveyCountry": "Germany",
+    "reportedTypeOfUse": "EMAIL_COPY",
+    "typeOfUse": "DIGITAL"
+  }
+]

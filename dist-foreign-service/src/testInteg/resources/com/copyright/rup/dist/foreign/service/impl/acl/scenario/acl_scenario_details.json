@@ -13,12 +13,16 @@
       "id": "73876e58-2e87-485e-b6f3-7e23792dd214",
       "weight": 1.00
     },
+    "price": 22.0000000000,
+    "content": 2.0000000000,
     "contentUnitPrice": 11.0000000000,
     "contentUnitPriceFlag": true,
     "numberOfCopies": 10.00000,
     "usageAgeWeight": 0.80000,
     "weightedCopies": 8.0000000000,
     "surveyCountry": "Germany",
+    "reportedTypeOfUse": "EMAIL_COPY",
+    "typeOfUse": "DIGITAL",
     "scenarioShareDetails": [
       {
         "rhAccountNumber": 2000017000,
@@ -48,12 +52,16 @@
       "id": "076f2c40-f524-405d-967a-3840df2b57df",
       "weight": 1.90
     },
+    "price": 10.0000000000,
+    "content": 2.0000000000,
     "contentUnitPrice": 5.0000000000,
     "contentUnitPriceFlag": false,
     "numberOfCopies": 10.00000,
     "usageAgeWeight": 0.20000,
     "weightedCopies": 2.0000000000,
     "surveyCountry": "Germany",
+    "reportedTypeOfUse": "PRINT_COPIES",
+    "typeOfUse": "PRINT",
     "scenarioShareDetails": [
       {
         "rhAccountNumber": 1000028511,
