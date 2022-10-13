@@ -2,8 +2,7 @@ databaseChangeLog {
     property(file: 'database-testInteg.properties')
 
     changeSet(id: '2022-10-05-00', author: 'Mikita Maistrenka <mmaistrenka@copyright.com>') {
-        comment('Inserting test data for testWriteSummaryOfWorkSharesByAggLcCsvReport, ' +
-                'testWriteSummaryOfWorkSharesByAggLcEmptyCsvReport')
+        comment('Inserting test data for testWriteSummaryOfWorkSharesByAggLcCsvReport')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
             column(name: 'df_rightsholder_uid', value: '833739a1-7520-49ba-a877-c168c81da434')

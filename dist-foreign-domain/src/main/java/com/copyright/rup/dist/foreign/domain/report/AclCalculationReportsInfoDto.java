@@ -6,7 +6,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 /**
@@ -23,7 +23,7 @@ public class AclCalculationReportsInfoDto {
     private List<AclScenario> scenarios;
     private Integer period;
     private String user;
-    private LocalDateTime reportDateTime;
+    private OffsetDateTime reportDateTime;
 
     public List<AclScenario> getScenarios() {
         return scenarios;
@@ -49,11 +49,11 @@ public class AclCalculationReportsInfoDto {
         this.user = user;
     }
 
-    public LocalDateTime getReportDateTime() {
+    public OffsetDateTime getReportDateTime() {
         return reportDateTime;
     }
 
-    public void setReportDateTime(LocalDateTime reportDateTime) {
+    public void setReportDateTime(OffsetDateTime reportDateTime) {
         this.reportDateTime = reportDateTime;
     }
 

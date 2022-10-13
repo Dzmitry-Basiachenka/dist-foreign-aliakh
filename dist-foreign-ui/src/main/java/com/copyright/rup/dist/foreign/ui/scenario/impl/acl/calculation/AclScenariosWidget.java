@@ -49,7 +49,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -177,7 +177,7 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
         AclCalculationReportsInfoDto reportInfo = new AclCalculationReportsInfoDto();
         reportInfo.setScenarios(Collections.singletonList(getSelectedScenario()));
         reportInfo.setUser(userName);
-        reportInfo.setReportDateTime(LocalDateTime.now());
+        reportInfo.setReportDateTime(OffsetDateTime.now());
         return reportInfo;
     }
 

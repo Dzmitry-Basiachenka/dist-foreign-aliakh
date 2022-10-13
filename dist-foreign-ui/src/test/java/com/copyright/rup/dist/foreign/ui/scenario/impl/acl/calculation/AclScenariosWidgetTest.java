@@ -70,7 +70,9 @@ import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Arrays;
 import java.util.Collections;
@@ -89,7 +91,8 @@ import java.util.stream.Collectors;
  * @author Dzmitry Basiachenka
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({Windows.class, ForeignSecurityUtils.class, RupContextUtils.class})
+@PrepareForTest({Windows.class, AclScenariosWidget.class, ForeignSecurityUtils.class, RupContextUtils.class,
+    OffsetDateTime.class})
 public class AclScenariosWidgetTest {
 
     private static final String SCENARIO_UID = "29ca6de6-0496-49e8-8ff4-334ef1bab597";
@@ -282,14 +285,18 @@ public class AclScenariosWidgetTest {
 
     @Test
     public void testGetReportInfo() {
+        OffsetDateTime now = OffsetDateTime.of(2022, 10, 13, 1, 2, 3, 4, ZoneOffset.ofHours(0));
+        mockStatic(OffsetDateTime.class);
         Grid grid = createMock(Grid.class);
         Whitebox.setInternalState(scenariosWidget, SCENARIO_GRID, grid);
         expect(grid.getSelectedItems()).andReturn(Collections.singleton(scenario)).once();
-        replay(controller, grid);
+        expect(OffsetDateTime.now()).andReturn(now).once();
+        replay(controller, grid, OffsetDateTime.class);
         AclCalculationReportsInfoDto reportInfo = scenariosWidget.getReportInfo();
         assertEquals(scenario, reportInfo.getScenarios().get(0));
         assertEquals("SYSTEM", reportInfo.getUser());
-        verify(controller, grid);
+        assertEquals(now, reportInfo.getReportDateTime());
+        verify(controller, grid, OffsetDateTime.class);
     }
 
     private AclScenario buildAclScenario() {

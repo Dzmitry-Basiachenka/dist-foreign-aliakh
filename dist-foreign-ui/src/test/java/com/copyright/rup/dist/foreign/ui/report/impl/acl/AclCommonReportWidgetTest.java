@@ -34,7 +34,8 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Collections;
 import java.util.Set;
@@ -50,7 +51,7 @@ import java.util.function.Supplier;
  * @author Ihar Suvorau
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({AclCommonReportWidget.class, RupContextUtils.class, LocalDateTime.class})
+@PrepareForTest({AclCommonReportWidget.class, RupContextUtils.class, OffsetDateTime.class})
 public class AclCommonReportWidgetTest {
 
     private final AclCommonReportWidget widget = new AclCommonReportWidget();
@@ -88,15 +89,15 @@ public class AclCommonReportWidgetTest {
     @Test
     @SuppressWarnings("unchecked")
     public void testGetReportInfo() {
-        LocalDateTime now = LocalDateTime.of(2019, 1, 2, 3, 4, 5, 6);
-        mockStatic(LocalDateTime.class);
+        OffsetDateTime now = OffsetDateTime.of(2019, 1, 2, 3, 4, 5, 6, ZoneOffset.ofHours(0));
+        mockStatic(OffsetDateTime.class);
         mockStatic(RupContextUtils.class);
         AclScenarioFilterWidget filterWidget = createMock(AclScenarioFilterWidget.class);
         Set<AclScenario> scenarios = Collections.singleton(new AclScenario());
         expect(filterWidget.getSelectedItems()).andReturn(scenarios).once();
-        expect(LocalDateTime.now()).andReturn(now).once();
+        expect(OffsetDateTime.now()).andReturn(now).once();
         expect(RupContextUtils.getUserName()).andReturn("jjohn@copyright.com").once();
-        replay(controller, filterWidget, streamSource, RupContextUtils.class, LocalDateTime.class);
+        replay(controller, filterWidget, streamSource, RupContextUtils.class, OffsetDateTime.class);
         widget.init();
         VerticalLayout content = (VerticalLayout) widget.getContent();
         ComboBox<Integer> periodComboBox = (ComboBox<Integer>) content.getComponent(0);
@@ -106,7 +107,7 @@ public class AclCommonReportWidgetTest {
         assertEquals(202012, reportInfo.getPeriod(), 0);
         assertEquals("jjohn@copyright.com", reportInfo.getUser());
         assertEquals(now, reportInfo.getReportDateTime());
-        verify(controller, filterWidget, streamSource, RupContextUtils.class, LocalDateTime.class);
+        verify(controller, filterWidget, streamSource, RupContextUtils.class, OffsetDateTime.class);
     }
 
     @Test

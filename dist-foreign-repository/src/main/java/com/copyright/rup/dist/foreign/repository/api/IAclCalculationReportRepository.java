@@ -66,7 +66,7 @@ public interface IAclCalculationReportRepository {
      * Finds AclSummaryOfWorkSharesByAggLcReportDto and writes Summary of Work Shares by Aggregate Licensee Class Report
      * into csv output stream.
      *
-     * @param reportInfo   report info
+     * @param reportInfo   instance of {@link AclCalculationReportsInfoDto}
      * @param outputStream instance of {@link OutputStream}
      */
     void writeSummaryOfWorkSharesByAggLcCsvReport(AclCalculationReportsInfoDto reportInfo, OutputStream outputStream);
