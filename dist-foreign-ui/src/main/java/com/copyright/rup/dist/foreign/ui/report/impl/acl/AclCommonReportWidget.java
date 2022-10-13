@@ -79,7 +79,7 @@ public class AclCommonReportWidget extends Window implements IAclCommonReportWid
         VerticalLayout verticalLayout = new VerticalLayout();
         verticalLayout.addComponents(periodComboBox, scenarioFilterWidget, buttonsLayout);
         verticalLayout.setComponentAlignment(buttonsLayout, Alignment.BOTTOM_RIGHT);
-        VaadinUtils.addComponentStyle(this, "acl-period-report-filter");
+        VaadinUtils.addComponentStyle(periodComboBox, "acl-period-report-filter");
         return verticalLayout;
     }
 
