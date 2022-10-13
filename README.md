@@ -1,3 +1,20 @@
+16.0.6
+-
+* B-73712 FDA: Add more fields to Calculation Usages: add columns to the Details by RH view: Price, Content, Reported TOU, TO
+* B-73712 FDA: Add more fields to Calculation Usages: add columns to the Export Details report: Price, Content, Reported TOU, TOU
+* B-73712 FDA: Add more fields to Calculation Usages: add columns to the Calculations tab, Usages sub-tab: Price, Content, Reported TOU, TOU
+* B-73116 FDA: CUP Flag: add CUP flag filter to More Filters on Calculations Usages tab
+* B-73116 FDA: CUP Flag: update query for publishing UDM Value to baseline with CUP flag
+* B-73116 FDA: CUP Flag: update queries for populating and copy of ACL Usages with CUP flag
+* B-73116 FDA: CUP Flag: update query for adding ACL usages to scenario with CUP flag
+* B-75010 FDA: Liability Details Report: implement handler to generate report
+* B-75295 FDA: Liabilities by Agg Lic Class Report: implement totals and metadata report info
+* B-75009 FDA: Liabilities by RH Report: add payee_account_number column to df_acl_share_detail table
+* B-75009 FDA: Liabilities by RH Report: implement Liabilities by RH Report button on Report tab
+* B-74954 FDA: Summary of Work Shares by Agg Lic Class Report: remove Supplier from AclScenariosController for reportInfo initialization
+* B-74954 FDA: Summary of Work Shares by Agg Lic Class Report: rename report to project style and refactor test data for integration test
+* B-74954 FDA: Summary of Work Shares by Agg Lic Class Report: make changes based on comments in code review
+
 16.0.5
 -
 * B-64703 FDA: improve performance on UI filtering/data processing: improve filtering by usage batch on Audit tab
