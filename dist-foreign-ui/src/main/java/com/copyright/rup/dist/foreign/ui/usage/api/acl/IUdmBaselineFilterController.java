@@ -27,7 +27,7 @@ public interface IUdmBaselineFilterController extends IFilterController<IUdmBase
     /**
      * @return list of type of uses.
      */
-    List<String> getTypeOfUses();
+    List<String> getTypeOfUses(); // TODO {aliakh} rename to getReportedTypeOfUses
 
     /**
      * @return list of detail licensee classes.

@@ -141,6 +141,7 @@ public class UdmUsageFiltersWindow extends CommonAclFiltersWindow {
         initDetailLicenseeClassFilterWidget();
         initReportedTypeOfUseFilterWidget();
         VerticalLayout fieldsLayout = new VerticalLayout();
+        // TODO {aliakh} reorder the widgets
         fieldsLayout.addComponents(initAssigneeLicenseeClassLayout(), initReportedPubTypeReportedTypeOfUseLayout(),
             publicationFormatFilterWidget, initUsageDateLayout(), initSurveyDateLayout(), initTypeOfUseLayout(),
             initChannelLayout(), initWrWrkInstLayout(), initReportedTitleLayout(), initSystemTitleLayout(),

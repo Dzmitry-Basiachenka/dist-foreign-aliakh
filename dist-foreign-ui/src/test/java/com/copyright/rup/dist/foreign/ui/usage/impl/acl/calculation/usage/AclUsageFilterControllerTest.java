@@ -5,6 +5,7 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.hamcrest.Matchers.instanceOf;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThat;
 
@@ -17,9 +18,9 @@ import com.copyright.rup.dist.foreign.service.api.IPublicationTypeService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageService;
 
+import com.copyright.rup.dist.foreign.service.api.acl.IUdmTypeOfUseService;
 import org.junit.Before;
 import org.junit.Test;
-import org.powermock.api.easymock.PowerMock;
 import org.powermock.reflect.Whitebox;
 
 import java.util.Collections;
@@ -43,17 +44,20 @@ public class AclUsageFilterControllerTest {
     private IAclUsageService aclUsageService;
     private ILicenseeClassService licenseeClassService;
     private IPublicationTypeService publicationTypeService;
+    private IUdmTypeOfUseService udmTypeOfUseService;
 
     @Before
     public void setUp() {
         aclUsageBatchService = createMock(IAclUsageBatchService.class);
         aclUsageService = createMock(IAclUsageService.class);
         licenseeClassService = createMock(ILicenseeClassService.class);
-        publicationTypeService = PowerMock.createMock(IPublicationTypeService.class);
+        publicationTypeService = createMock(IPublicationTypeService.class);
+        udmTypeOfUseService = createMock(IUdmTypeOfUseService.class);
         Whitebox.setInternalState(controller, aclUsageBatchService);
         Whitebox.setInternalState(controller, aclUsageService);
         Whitebox.setInternalState(controller, licenseeClassService);
         Whitebox.setInternalState(controller, publicationTypeService);
+        Whitebox.setInternalState(controller, udmTypeOfUseService);
     }
 
     @Test
@@ -104,6 +108,15 @@ public class AclUsageFilterControllerTest {
         replay(publicationTypeService);
         assertSame(pubTypes, controller.getPublicationTypes());
         verify(publicationTypeService);
+    }
+
+    @Test
+    public void testGetReportedTypeOfUses() {
+        List<String> reportedTypeOfUses = Collections.singletonList("PRINT_COPIES");
+        expect(udmTypeOfUseService.getAllUdmTous()).andReturn(reportedTypeOfUses).once();
+        replay(udmTypeOfUseService);
+        assertEquals(reportedTypeOfUses, controller.getReportedTypeOfUses());
+        verify(udmTypeOfUseService);
     }
 
     private PublicationType buildPublicationType() {

@@ -40,9 +40,6 @@ public class AclUsageAppliedFilterWidget extends CommonAclAppliedFilterPanel {
         if (!filter.isEmpty()) {
             addLabel(createLabelWithSingleValue(AclUsageFilter::getUsageBatchName, filter, "label.usage_batch_name"),
                 layout);
-            addLabel(createLabelWithSingleValue(AclUsageFilter::getUsageOrigin, filter, "label.usage_origin"),
-                layout);
-            addLabel(createLabelWithSingleValue(AclUsageFilter::getChannel, filter, "label.channel"), layout);
             addLabel(createLabelWithMultipleValues(sortIntegerValuesByDesc(filter.getPeriods()), "label.periods",
                 String::valueOf), layout);
             addLabel(createLabelWithMultipleValues(sortDetailLicenseeClasses(filter.getDetailLicenseeClasses()),
@@ -51,8 +48,12 @@ public class AclUsageAppliedFilterWidget extends CommonAclAppliedFilterPanel {
                 "label.aggregate_licensee_classes", AggregateLicenseeClass::getIdAndDescription), layout);
             addLabel(createLabelWithMultipleValues(sortPublicationTypes(filter.getPubTypes()), "label.pub_types",
                 PublicationType::getNameAndDescription), layout);
-            addLabel(createLabelWithMultipleValues(sortStringValuesByNaturalOrder(filter.getTypeOfUses()),
-                "label.types_of_use", String::valueOf), layout);
+            addLabel(createLabelWithMultipleValues(sortStringValuesByNaturalOrder(filter.getReportedTypeOfUses()),
+                "label.reported_types_of_use", String::valueOf), layout);
+            addLabel(createLabelWithSingleValue(AclUsageFilter::getUsageOrigin, filter, "label.usage_origin"),
+                layout);
+            addLabel(createLabelWithSingleValue(AclUsageFilter::getChannel, filter, "label.channel"), layout);
+            addLabel(createLabelWithSingleValue(AclUsageFilter::getTypeOfUse, filter, "label.type_of_use"), layout);
             addLabel(createLabelWithOperator(filter.getUsageDetailIdExpression(), "label.usage_detail_id",
                 StringUtils.EMPTY), layout);
             addLabel(createLabelWithOperator(filter.getWrWrkInstExpression(), "label.wr_wrk_inst_from",

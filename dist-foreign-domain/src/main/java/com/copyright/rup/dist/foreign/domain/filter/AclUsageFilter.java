@@ -29,11 +29,12 @@ public class AclUsageFilter {
     private String usageBatchName;
     private UdmUsageOriginEnum usageOrigin;
     private UdmChannelEnum channel;
+    private String typeOfUse;
     private Set<Integer> periods = new HashSet<>();
     private Set<DetailLicenseeClass> detailLicenseeClasses = new HashSet<>();
     private Set<AggregateLicenseeClass> aggregateLicenseeClasses = new HashSet<>();
     private Set<PublicationType> pubTypes = new HashSet<>();
-    private Set<String> typeOfUses = new HashSet<>();
+    private Set<String> reportedTypeOfUses = new HashSet<>();
     private FilterExpression<String> usageDetailIdExpression = new FilterExpression<>();
     private FilterExpression<Number> wrWrkInstExpression = new FilterExpression<>();
     private FilterExpression<String> systemTitleExpression = new FilterExpression<>();
@@ -58,11 +59,12 @@ public class AclUsageFilter {
             setUsageBatchName(filter.getUsageBatchName());
             setUsageOrigin(filter.getUsageOrigin());
             setChannel(filter.getChannel());
+            setTypeOfUse(filter.getTypeOfUse());
             setPeriods(filter.getPeriods());
             setDetailLicenseeClasses(filter.getDetailLicenseeClasses());
             setAggregateLicenseeClasses(filter.getAggregateLicenseeClasses());
             setPubTypes(filter.getPubTypes());
-            setTypeOfUses(filter.getTypeOfUses());
+            setReportedTypeOfUses(filter.getReportedTypeOfUses());
             setUsageDetailIdExpression(new FilterExpression<>(filter.getUsageDetailIdExpression()));
             setWrWrkInstExpression(new FilterExpression<>(filter.getWrWrkInstExpression()));
             setSystemTitleExpression(new FilterExpression<>(filter.getSystemTitleExpression()));
@@ -97,6 +99,14 @@ public class AclUsageFilter {
         this.channel = channel;
     }
 
+    public String getTypeOfUse() {
+        return typeOfUse;
+    }
+
+    public void setTypeOfUse(String typeOfUse) {
+        this.typeOfUse = typeOfUse;
+    }
+
     public Set<Integer> getPeriods() {
         return periods;
     }
@@ -129,12 +139,12 @@ public class AclUsageFilter {
         this.pubTypes = pubTypes;
     }
 
-    public Set<String> getTypeOfUses() {
-        return typeOfUses;
+    public Set<String> getReportedTypeOfUses() {
+        return reportedTypeOfUses;
     }
 
-    public void setTypeOfUses(Set<String> typeOfUses) {
-        this.typeOfUses = typeOfUses;
+    public void setReportedTypeOfUses(Set<String> reportedTypeOfUses) {
+        this.reportedTypeOfUses = reportedTypeOfUses;
     }
 
     public FilterExpression<String> getUsageDetailIdExpression() {
@@ -200,11 +210,12 @@ public class AclUsageFilter {
         return Objects.isNull(usageBatchName)
             && Objects.isNull(usageOrigin)
             && Objects.isNull(channel)
+            && Objects.isNull(typeOfUse)
             && CollectionUtils.isEmpty(periods)
             && CollectionUtils.isEmpty(detailLicenseeClasses)
             && CollectionUtils.isEmpty(aggregateLicenseeClasses)
             && CollectionUtils.isEmpty(pubTypes)
-            && CollectionUtils.isEmpty(typeOfUses)
+            && CollectionUtils.isEmpty(reportedTypeOfUses)
             && usageDetailIdExpression.isEmpty()
             && wrWrkInstExpression.isEmpty()
             && systemTitleExpression.isEmpty()
@@ -227,11 +238,12 @@ public class AclUsageFilter {
             .append(usageBatchName, that.usageBatchName)
             .append(usageOrigin, that.usageOrigin)
             .append(channel, that.channel)
+            .append(typeOfUse, that.typeOfUse)
             .append(periods, that.periods)
             .append(detailLicenseeClasses, that.detailLicenseeClasses)
             .append(aggregateLicenseeClasses, that.aggregateLicenseeClasses)
             .append(pubTypes, that.pubTypes)
-            .append(typeOfUses, that.typeOfUses)
+            .append(reportedTypeOfUses, that.reportedTypeOfUses)
             .append(usageDetailIdExpression, that.usageDetailIdExpression)
             .append(wrWrkInstExpression, that.wrWrkInstExpression)
             .append(systemTitleExpression, that.systemTitleExpression)
@@ -248,11 +260,12 @@ public class AclUsageFilter {
             .append(usageBatchName)
             .append(usageOrigin)
             .append(channel)
+            .append(typeOfUse)
             .append(periods)
             .append(detailLicenseeClasses)
             .append(aggregateLicenseeClasses)
             .append(pubTypes)
-            .append(typeOfUses)
+            .append(reportedTypeOfUses)
             .append(usageDetailIdExpression)
             .append(wrWrkInstExpression)
             .append(systemTitleExpression)
@@ -269,11 +282,12 @@ public class AclUsageFilter {
             .append("usageBatchName", usageBatchName)
             .append("usageOrigin", usageOrigin)
             .append("channel", channel)
+            .append("typeOfUse", typeOfUse)
             .append("periods", periods)
             .append("detailLicenseeClasses", detailLicenseeClasses)
             .append("aggregateLicenseeClasses", aggregateLicenseeClasses)
             .append("pubTypes", pubTypes)
-            .append("typeOfUses", typeOfUses)
+            .append("reportedTypeOfUses", reportedTypeOfUses)
             .append("usageDetailIdExpression", usageDetailIdExpression)
             .append("wrWrkInstExpression", wrWrkInstExpression)
             .append("systemTitleExpression", systemTitleExpression)

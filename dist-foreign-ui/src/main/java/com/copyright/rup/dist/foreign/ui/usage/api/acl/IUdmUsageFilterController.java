@@ -49,7 +49,7 @@ public interface IUdmUsageFilterController extends IFilterController<IUdmUsageFi
     /**
      * @return list of type of uses.
      */
-    List<String> getTypeOfUses();
+    List<String> getTypeOfUses(); // TODO {aliakh} rename to getReportedTypeOfUses
 
     /**
      * @return list of detail licensee classes.

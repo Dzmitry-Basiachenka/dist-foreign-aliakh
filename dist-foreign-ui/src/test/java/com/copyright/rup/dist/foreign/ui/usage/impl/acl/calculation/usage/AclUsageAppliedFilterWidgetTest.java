@@ -47,25 +47,26 @@ public class AclUsageAppliedFilterWidgetTest {
         Component component = widget.getContent();
         assertThat(component, instanceOf(VerticalLayout.class));
         VerticalLayout verticalLayout = (VerticalLayout) component;
-        assertEquals(15, verticalLayout.getComponentCount());
+        assertEquals(16, verticalLayout.getComponentCount());
         verifyLabel(verticalLayout.getComponent(0), "Usage Batch Name", "ACL Usage Batch 2021");
-        verifyLabel(verticalLayout.getComponent(1), "Usage Origin", "RFA");
-        verifyLabel(verticalLayout.getComponent(2), "Channel", "CCC");
-        verifyLabel(verticalLayout.getComponent(3), "Periods", "202212, 202112, 201506");
-        verifyLabel(verticalLayout.getComponent(4), "Detail Licensee Classes",
+        verifyLabel(verticalLayout.getComponent(1), "Periods", "202212, 202112, 201506");
+        verifyLabel(verticalLayout.getComponent(2), "Detail Licensee Classes",
             "1 - Food and Tobacco, 4 - Publishing, 22 - Book series");
-        verifyLabel(verticalLayout.getComponent(5), "Aggregate Licensee Classes",
+        verifyLabel(verticalLayout.getComponent(3), "Aggregate Licensee Classes",
             "1 - Food and Tobacco, 12 - Machinery, 57 - Communications");
-        verifyLabel(verticalLayout.getComponent(6), "Pub Types",
+        verifyLabel(verticalLayout.getComponent(4), "Pub Types",
             "BK - Book, BK2 - Book series, SJ - Scholarly Journal");
-        verifyLabel(verticalLayout.getComponent(7), "Types of Use", "DIGITAL, PRINT");
-        verifyLabel(verticalLayout.getComponent(8), "Usage Detail ID", "EQUALS", "OGN674GHHHB0153");
-        verifyLabel(verticalLayout.getComponent(9), "Wr Wrk Inst From", "Wr Wrk Inst To", "BETWEEN", "1", "100000000");
-        verifyLabel(verticalLayout.getComponent(10), "System Title", "CONTAINS", "journal");
-        verifyLabel(verticalLayout.getComponent(11), "Survey Country", "DOES_NOT_EQUAL", "Portugal");
-        verifyLabel(verticalLayout.getComponent(12), "Content Unit Price From", "GREATER_THAN", "1");
-        verifyLabel(verticalLayout.getComponent(13), "CUP Flag", "N");
-        verifyLabel(verticalLayout.getComponent(14), "Annualized Copies From", "LESS_THAN", "2");
+        verifyLabel(verticalLayout.getComponent(5), "Reported Types of Use", "FAX_PHOTOCOPIES, PRINT_COPIES");
+        verifyLabel(verticalLayout.getComponent(6), "Usage Origin", "RFA");
+        verifyLabel(verticalLayout.getComponent(7), "Channel", "CCC");
+        verifyLabel(verticalLayout.getComponent(8), "Type of Use", "PRINT");
+        verifyLabel(verticalLayout.getComponent(9), "Usage Detail ID", "EQUALS", "OGN674GHHHB0153");
+        verifyLabel(verticalLayout.getComponent(10), "Wr Wrk Inst From", "Wr Wrk Inst To", "BETWEEN", "1", "100000000");
+        verifyLabel(verticalLayout.getComponent(11), "System Title", "CONTAINS", "journal");
+        verifyLabel(verticalLayout.getComponent(12), "Survey Country", "DOES_NOT_EQUAL", "Portugal");
+        verifyLabel(verticalLayout.getComponent(13), "Content Unit Price From", "GREATER_THAN", "1");
+        verifyLabel(verticalLayout.getComponent(14), "CUP Flag", "N");
+        verifyLabel(verticalLayout.getComponent(15), "Annualized Copies From", "LESS_THAN", "2");
     }
 
     private void verifyLabel(Component component, String labelName, String labelValue) {
@@ -101,7 +102,8 @@ public class AclUsageAppliedFilterWidgetTest {
             buildAggregateLicenseeClass(57, "Communications")));
         filter.setPubTypes(Sets.newHashSet(buildPubType("BK2", "Book series"), buildPubType("SJ", "Scholarly Journal"),
             buildPubType("BK", "Book")));
-        filter.setTypeOfUses(Sets.newHashSet("PRINT", "DIGITAL"));
+        filter.setReportedTypeOfUses(Sets.newHashSet("PRINT_COPIES", "FAX_PHOTOCOPIES"));
+        filter.setTypeOfUse("PRINT");
         filter.setUsageDetailIdExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, "OGN674GHHHB0153", null));
         filter.setWrWrkInstExpression(new FilterExpression<>(FilterOperatorEnum.BETWEEN, 1, 100000000));
         filter.setSystemTitleExpression(new FilterExpression<>(FilterOperatorEnum.CONTAINS, "journal", null));

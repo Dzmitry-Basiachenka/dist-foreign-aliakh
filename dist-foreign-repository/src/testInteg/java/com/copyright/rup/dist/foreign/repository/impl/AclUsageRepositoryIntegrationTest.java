@@ -84,7 +84,8 @@ public class AclUsageRepositoryIntegrationTest {
     private static final Set<AggregateLicenseeClass> AGGREGATE_LICENSEE_CLASSES =
         Collections.singleton(buildAggregateLicenseeClass(51));
     private static final Set<PublicationType> PUB_TYPES = Collections.singleton(buildPubType());
-    private static final Set<String> TYPE_OF_USES = Collections.singleton("PRINT");
+    private static final Set<String> REPORTED_TYPE_OF_USES = Collections.singleton("PRINT_COPIES");
+    private static final String TYPE_OF_USE = "PRINT";
     private static final String USAGE_DETAIL_ID = "OGN674GHHHB0111";
     private static final String USAGE_DETAIL_ID_DIFFERENT_CASE = "ogn674ghhhb0111";
     private static final String USAGE_DETAIL_ID_FRAGMENT = "OGN674";
@@ -161,7 +162,8 @@ public class AclUsageRepositoryIntegrationTest {
         filter.setDetailLicenseeClasses(DETAIL_LICENSEE_CLASSES);
         filter.setAggregateLicenseeClasses(AGGREGATE_LICENSEE_CLASSES);
         filter.setPubTypes(PUB_TYPES);
-        filter.setTypeOfUses(TYPE_OF_USES);
+        filter.setReportedTypeOfUses(REPORTED_TYPE_OF_USES);
+        filter.setTypeOfUse(TYPE_OF_USE);
         filter.setUsageDetailIdExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, USAGE_DETAIL_ID, null));
         filter.setWrWrkInstExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, WR_WRK_INST_2, null));
         filter.setSystemTitleExpression(new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, SYSTEM_TITLE, null));
@@ -210,8 +212,14 @@ public class AclUsageRepositoryIntegrationTest {
 
     @Test
     @TestData(fileName = FIND_DTOS_BY_FILTER)
-    public void testFindCountByFilterTypeOfUses() {
-        assertFilteringFindCountByFilter(filter -> filter.setTypeOfUses(TYPE_OF_USES), 2);
+    public void testFindCountByFilterReportedTypeOfUses() {
+        assertFilteringFindCountByFilter(filter -> filter.setReportedTypeOfUses(REPORTED_TYPE_OF_USES), 1);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindCountByFilterTypeOfUse() {
+        assertFilteringFindCountByFilter(filter -> filter.setTypeOfUse(TYPE_OF_USE), 2);
     }
 
     @Test
@@ -378,7 +386,8 @@ public class AclUsageRepositoryIntegrationTest {
         filter.setDetailLicenseeClasses(DETAIL_LICENSEE_CLASSES);
         filter.setAggregateLicenseeClasses(AGGREGATE_LICENSEE_CLASSES);
         filter.setPubTypes(PUB_TYPES);
-        filter.setTypeOfUses(TYPE_OF_USES);
+        filter.setReportedTypeOfUses(REPORTED_TYPE_OF_USES);
+        filter.setTypeOfUse(TYPE_OF_USE);
         filter.setUsageDetailIdExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, USAGE_DETAIL_ID, null));
         filter.setWrWrkInstExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, WR_WRK_INST_2, null));
         filter.setSystemTitleExpression(new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, SYSTEM_TITLE, null));
@@ -435,9 +444,14 @@ public class AclUsageRepositoryIntegrationTest {
 
     @Test
     @TestData(fileName = FIND_DTOS_BY_FILTER)
-    public void testFindDtosByFilterTypeOfUses() {
-        assertFilteringFindDtosByFilter(filter -> filter.setTypeOfUses(TYPE_OF_USES),
-            ACL_USAGE_UID_2, ACL_USAGE_UID_3);
+    public void testFindDtosByFilterReportedTypeOfUses() {
+        assertFilteringFindDtosByFilter(filter -> filter.setReportedTypeOfUses(REPORTED_TYPE_OF_USES), ACL_USAGE_UID_2);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindDtosByFilterTypeOfUse() {
+        assertFilteringFindDtosByFilter(filter -> filter.setTypeOfUse(TYPE_OF_USE), ACL_USAGE_UID_2, ACL_USAGE_UID_3);
     }
 
     @Test

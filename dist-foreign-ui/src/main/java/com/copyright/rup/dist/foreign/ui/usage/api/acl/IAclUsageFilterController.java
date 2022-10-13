@@ -53,4 +53,11 @@ public interface IAclUsageFilterController extends IFilterController<IAclUsageFi
      * @return list of {@link PublicationType}
      */
     List<PublicationType> getPublicationTypes();
+
+    /**
+     * Gets list of all reported type of uses.
+     *
+     * @return list of reported type of uses.
+     */
+    List<String> getReportedTypeOfUses();
 }
