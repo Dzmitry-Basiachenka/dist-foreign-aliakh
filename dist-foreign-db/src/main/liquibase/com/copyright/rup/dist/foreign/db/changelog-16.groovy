@@ -21,4 +21,16 @@ databaseChangeLog {
             dropColumn(schemaName: dbAppsSchema, tableName: 'df_udm_value_baseline', columnName: 'content_unit_price_flag')
         }
     }
+
+    changeSet(id: '2022-10-13-00', author: 'Dzmitry Basiachenka <dbasiachenka@copyright.com>') {
+        comment("B-75009 FDA: Liabilities by RH Report: add payee_account_number column to df_acl_share_detail table")
+
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_acl_share_detail') {
+            column(name: 'payee_account_number', type: 'NUMERIC(22,0)', remarks: 'The payee account number')
+        }
+
+        rollback {
+            dropColumn(schemaName: dbAppsSchema, tableName: 'df_acl_share_detail', columnName: 'payee_account_number')
+        }
+    }
 }
