@@ -18,12 +18,16 @@
         <result property="publicationType.id" column="publication_type_uid"/>
         <result property="publicationType.weight" column="pub_type_weight"/>
         <result property="publicationType.period" column="pub_type_period"/>
+        <result property="price" column="price"/>
+        <result property="content" column="content"/>
         <result property="contentUnitPrice" column="content_unit_price"/>
         <result property="contentUnitPriceFlag" column="content_unit_price_flag"/>
         <result property="numberOfCopies" column="number_of_copies"/>
         <result property="usageAgeWeight" column="usage_age_weight"/>
         <result property="weightedCopies" column="weighted_copies"/>
         <result property="surveyCountry" column="survey_country"/>
+        <result property="reportedTypeOfUse" column="reported_type_of_use"/>
+        <result property="typeOfUse" column="scenario_detail_type_of_use"/>
         <collection property="scenarioShareDetails" javaType="java.util.List" ofType="com.copyright.rup.dist.foreign.domain.AclScenarioShareDetail">
             <result property="rhAccountNumber" column="rh_account_number"/>
             <result property="typeOfUse" column="type_of_use"/>
@@ -92,6 +96,7 @@
         <result property="aggregateLicenseeClassName" column="aggregate_licensee_class_name"/>
         <result property="surveyCountry" column="survey_country"/>
         <result property="reportedTypeOfUse" column="reported_type_of_use"/>
+        <result property="typeOfUse" column="type_of_use"/>
         <result property="numberOfCopies" column="number_of_copies"/>
         <result property="weightedCopies" column="weighted_copies"/>
         <result property="publicationType.id" column="publication_type_uid"/>
@@ -210,6 +215,7 @@
             alc.description aggregate_licensee_class_name,
             survey_country,
             reported_type_of_use,
+            type_of_use,
             number_of_copies,
             weighted_copies,
             scd.publication_type_uid,
@@ -351,10 +357,13 @@
             period_end_date,
             original_detail_id,
             wr_wrk_inst,
+            reported_type_of_use,
             type_of_use,
             system_title,
             detail_licensee_class_id,
             publication_type_uid,
+            price,
+            content,
             content_unit_price,
             content_unit_price_flag,
             number_of_copies,
@@ -369,10 +378,13 @@
             u.period period_end_date,
             original_detail_id,
             u.wr_wrk_inst,
+            reported_type_of_use,
             u.type_of_use,
             u.system_title,
             detail_licensee_class_id,
             publication_type_uid,
+            price,
+            content,
             content_unit_price,
             content_unit_price_flag,
             annualized_copies,
@@ -513,12 +525,16 @@
             alc.description aggregate_licensee_class_name,
             sd.publication_type_uid,
             pub_type_weight,
+            price,
+            content,
             content_unit_price,
             content_unit_price_flag,
             number_of_copies,
             usage_age_weight,
             weighted_copies,
             survey_country,
+            reported_type_of_use,
+            sd.type_of_use as scenario_detail_type_of_use,
             shd.rh_account_number,
             shd.type_of_use,
             shd.volume_weight,

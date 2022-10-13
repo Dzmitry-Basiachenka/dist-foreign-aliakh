@@ -37,6 +37,7 @@ public class AclScenarioDetailDto extends StoredEntity<String> {
     private String aggregateLicenseeClassName;
     private String surveyCountry;
     private String reportedTypeOfUse;
+    private String typeOfUse;
     private BigDecimal numberOfCopies;
     private BigDecimal weightedCopies;
     private PublicationType publicationType;
@@ -200,6 +201,14 @@ public class AclScenarioDetailDto extends StoredEntity<String> {
         this.reportedTypeOfUse = reportedTypeOfUse;
     }
 
+    public String getTypeOfUse() {
+        return typeOfUse;
+    }
+
+    public void setTypeOfUse(String typeOfUse) {
+        this.typeOfUse = typeOfUse;
+    }
+
     public BigDecimal getNumberOfCopies() {
         return numberOfCopies;
     }
@@ -345,16 +354,16 @@ public class AclScenarioDetailDto extends StoredEntity<String> {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
             return true;
         }
-        if (null == o || getClass() != o.getClass()) {
+        if (null == obj || getClass() != obj.getClass()) {
             return false;
         }
-        AclScenarioDetailDto that = (AclScenarioDetailDto) o;
+        AclScenarioDetailDto that = (AclScenarioDetailDto) obj;
         return new EqualsBuilder()
-            .appendSuper(super.equals(o))
+            .appendSuper(super.equals(obj))
             .append(priceFlag, that.priceFlag)
             .append(contentFlag, that.contentFlag)
             .append(contentUnitPriceFlag, that.contentUnitPriceFlag)
@@ -376,6 +385,7 @@ public class AclScenarioDetailDto extends StoredEntity<String> {
             .append(aggregateLicenseeClassName, that.aggregateLicenseeClassName)
             .append(surveyCountry, that.surveyCountry)
             .append(reportedTypeOfUse, that.reportedTypeOfUse)
+            .append(typeOfUse, that.typeOfUse)
             .append(numberOfCopies, that.numberOfCopies)
             .append(weightedCopies, that.weightedCopies)
             .append(publicationType, that.publicationType)
@@ -416,6 +426,7 @@ public class AclScenarioDetailDto extends StoredEntity<String> {
             .append(aggregateLicenseeClassName)
             .append(surveyCountry)
             .append(reportedTypeOfUse)
+            .append(typeOfUse)
             .append(numberOfCopies)
             .append(weightedCopies)
             .append(publicationType)
@@ -459,6 +470,7 @@ public class AclScenarioDetailDto extends StoredEntity<String> {
             .append("aggregateLicenseeClassName", aggregateLicenseeClassName)
             .append("surveyCountry", surveyCountry)
             .append("reportedTypeOfUse", reportedTypeOfUse)
+            .append("typeOfUse", typeOfUse)
             .append("numberOfCopies", numberOfCopies)
             .append("weightedCopies", weightedCopies)
             .append("publicationType", publicationType)
