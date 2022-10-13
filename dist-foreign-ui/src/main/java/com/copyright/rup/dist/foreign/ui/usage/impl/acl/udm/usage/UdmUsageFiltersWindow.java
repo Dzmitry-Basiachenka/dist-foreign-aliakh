@@ -187,8 +187,8 @@ public class UdmUsageFiltersWindow extends CommonAclFiltersWindow {
     }
 
     private void initReportedTypeOfUseFilterWidget() {
-        reportedTypeOfUseFilterWidget =
-            new ReportedTypeOfUseFilterWidget(controller::getTypeOfUses, usageFilter.getReportedTypeOfUses());
+        reportedTypeOfUseFilterWidget = new ReportedTypeOfUseFilterWidget(controller::getReportedTypeOfUses,
+            usageFilter.getReportedTypeOfUses());
     }
 
     private HorizontalLayout initAssigneeLicenseeClassLayout() {

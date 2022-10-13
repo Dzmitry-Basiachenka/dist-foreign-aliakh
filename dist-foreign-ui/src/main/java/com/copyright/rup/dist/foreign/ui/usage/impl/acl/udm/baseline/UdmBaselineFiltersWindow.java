@@ -134,8 +134,8 @@ public class UdmBaselineFiltersWindow extends CommonAclFiltersWindow {
     }
 
     private void initReportedTypeOfUseFilterWidget() {
-        reportedTypeOfUseFilterWidget =
-            new ReportedTypeOfUseFilterWidget(controller::getTypeOfUses, baselineFilter.getReportedTypeOfUses());
+        reportedTypeOfUseFilterWidget = new ReportedTypeOfUseFilterWidget(controller::getReportedTypeOfUses,
+            baselineFilter.getReportedTypeOfUses());
         reportedTypeOfUseFilterWidget.addFilterSaveListener((IFilterSaveListener<String>) saveEvent ->
             baselineFilter.setReportedTypeOfUses(saveEvent.getSelectedItemsIds()));
     }

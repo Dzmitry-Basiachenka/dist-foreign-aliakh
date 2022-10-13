@@ -5,7 +5,6 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.hamcrest.Matchers.instanceOf;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThat;
 
@@ -115,7 +114,7 @@ public class AclUsageFilterControllerTest {
         List<String> reportedTypeOfUses = Collections.singletonList("PRINT_COPIES");
         expect(udmTypeOfUseService.getAllUdmTous()).andReturn(reportedTypeOfUses).once();
         replay(udmTypeOfUseService);
-        assertEquals(reportedTypeOfUses, controller.getReportedTypeOfUses());
+        assertSame(reportedTypeOfUses, controller.getReportedTypeOfUses());
         verify(udmTypeOfUseService);
     }
 
