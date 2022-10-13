@@ -76,6 +76,7 @@ databaseChangeLog {
             column(name: 'pub_type_weight', value: 1.00)
             column(name: 'survey_country', value: 'United States')
             column(name: 'reported_type_of_use', value: 'COPY_FOR_MYSELF')
+            column(name: 'type_of_use', value: 'DIGITAL')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_detail') {
@@ -99,6 +100,7 @@ databaseChangeLog {
             column(name: 'pub_type_weight', value: 2.00)
             column(name: 'survey_country', value: 'Germany')
             column(name: 'reported_type_of_use', value: 'EMAIL_COPY')
+            column(name: 'type_of_use', value: 'DIGITAL')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_detail') {

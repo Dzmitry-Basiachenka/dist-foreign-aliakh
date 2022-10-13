@@ -22,10 +22,11 @@ public class AclScenarioDetailCsvReportHandler extends BaseCsvReportHandler<AclS
     private static final List<String> HEADERS = Arrays.asList("Detail ID", "Usage Detail ID", "Product Family",
         "Usage Batch Name", "Period End Date", "Wr Wrk Inst", "System Title", "Print RH Account #", "Print RH Name",
         "Digital RH Account #", "Digital RH Name", "Usage Period", "Usage Age Weight", "Det LC ID", "Det LC Name",
-        "Agg LC ID", "Agg LC Name", "Survey Country", "TOU", "# of Copies", "# of Weighted Copies", "Pub Type",
-        "Pub Type Weight", "Price", "Price Flag", "Content", "Content Flag", "Content Unit Price", "CUP Flag",
-        "Print Value Share", "Print Volume Share", "Print Detail Share", "Print Net Amt in USD", "Digital Value Share",
-        "Digital Volume Share", "Digital Detail Share", "Digital Net Amt in USD", "Combined Net Amt in USD");
+        "Agg LC ID", "Agg LC Name", "Survey Country", "Reported TOU", "TOU", "# of Copies", "# of Weighted Copies",
+        "Pub Type", "Pub Type Weight", "Price", "Price Flag", "Content", "Content Flag", "Content Unit Price",
+        "CUP Flag", "Print Value Share", "Print Volume Share", "Print Detail Share", "Print Net Amt in USD",
+        "Digital Value Share", "Digital Volume Share", "Digital Detail Share", "Digital Net Amt in USD",
+        "Combined Net Amt in USD");
 
     /**
      * Constructor.
@@ -58,6 +59,7 @@ public class AclScenarioDetailCsvReportHandler extends BaseCsvReportHandler<AclS
         beanProperties.add(bean.getAggregateLicenseeClassName());
         beanProperties.add(bean.getSurveyCountry());
         beanProperties.add(bean.getReportedTypeOfUse());
+        beanProperties.add(bean.getTypeOfUse());
         beanProperties.add(getBeanBigDecimal(bean.getNumberOfCopies()));
         beanProperties.add(getBeanBigDecimal(bean.getWeightedCopies()));
         beanProperties.add(bean.getPublicationType().getName());
