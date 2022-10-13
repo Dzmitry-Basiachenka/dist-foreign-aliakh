@@ -9,7 +9,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import java.math.BigDecimal;
 
 /**
- * Represents ACL Liabilities By Aggregate Licensee Class Report record.
+ * Represents ACL Liabilities by Aggregate Licensee Class Report record.
  * <p>
  * Copyright (C) 2022 copyright.com
  * <p>

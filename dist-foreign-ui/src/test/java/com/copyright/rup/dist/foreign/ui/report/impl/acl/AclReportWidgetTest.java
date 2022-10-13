@@ -40,8 +40,9 @@ public class AclReportWidgetTest {
     private void assertReportsMenu() {
         assertEquals(1, CollectionUtils.size(reportWidget.getItems()));
         List<MenuItem> menuItems = reportWidget.getItems().get(0).getChildren();
-        assertEquals(2, CollectionUtils.size(menuItems));
-        assertEquals("Liabilities By Aggregate Licensee Class Report", menuItems.get(0).getText());
+        assertEquals(3, CollectionUtils.size(menuItems));
+        assertEquals("Liabilities by Aggregate Licensee Class Report", menuItems.get(0).getText());
         assertEquals("Liability Details Report", menuItems.get(1).getText());
+        assertEquals("Liabilities by Rightsholder Report", menuItems.get(2).getText());
     }
 }
