@@ -14,7 +14,7 @@ import com.copyright.rup.vaadin.widget.api.IController;
 public interface IAclReportController extends IController<IAclReportWidget> {
 
     /**
-     * @return ACL Liabilities By Agg Lic Class report controller.
+     * @return ACL Liabilities by Agg Lic Class report controller.
      */
     IAclCommonReportController getAclLiabilitiesByAggLicClassReportController();
 
@@ -22,4 +22,9 @@ public interface IAclReportController extends IController<IAclReportWidget> {
      * @return ACL Liability Details report controller.
      */
     IAclCommonReportController getAclLiabilityDetailsReportController();
+
+    /**
+     * @return ACL Liabilities by Rightsholder report controller.
+     */
+    IAclCommonReportController getAclLiabilitiesByRhReportController();
 }

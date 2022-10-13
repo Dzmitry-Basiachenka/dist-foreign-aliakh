@@ -34,6 +34,9 @@ public class AclReportWidget extends MenuBar implements IAclReportWidget {
         String liabilityDetailsReport = ForeignUi.getMessage("menu.report.liability_details");
         rootItem.addItem(liabilityDetailsReport,
             menuItem -> openReportWindow(liabilityDetailsReport, controller.getAclLiabilityDetailsReportController()));
+        String liabilitiesByRhReport = ForeignUi.getMessage("menu.report.liabilities_by_rightsholder");
+        rootItem.addItem(liabilitiesByRhReport,
+            menuItem -> openReportWindow(liabilitiesByRhReport, controller.getAclLiabilitiesByRhReportController()));
     }
 
     @Override
