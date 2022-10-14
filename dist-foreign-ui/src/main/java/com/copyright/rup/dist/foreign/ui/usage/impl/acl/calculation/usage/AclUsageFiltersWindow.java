@@ -137,7 +137,7 @@ public class AclUsageFiltersWindow extends CommonAclFiltersWindow {
         fieldsLayout.addComponents(initPeriodDetailLicenseeClassLayout(), initAggregateLicenseeClassPubTypeLayout(),
             typeOfUseFilterWidget, initUsageOriginChannelLayout(), initUsageDetailIdLayout(), initWrWrkInstLayout(),
             initSystemTitleLayout(), initSurveyCountryLayout(), initContentUnitPriceLayout(),
-            initContentUnitPriceFlagLayout(), initAnnualizedCopiesLayout());
+            initContentUnitPriceFlagComboBox(), initAnnualizedCopiesLayout());
         filterBinder.readBean(usageFilter);
         filterBinder.validate();
         return buildRootLayout(fieldsLayout);
@@ -327,7 +327,7 @@ public class AclUsageFiltersWindow extends CommonAclFiltersWindow {
         return horizontalLayout;
     }
 
-    private ComboBox<FilterOperatorEnum> initContentUnitPriceFlagLayout() {
+    private ComboBox<FilterOperatorEnum> initContentUnitPriceFlagComboBox() {
         filterBinder.forField(contentUnitPriceFlagComboBox)
             .bind(filter -> filter.getContentUnitPriceFlagExpression().getOperator(),
                 (filter, value) -> filter.getContentUnitPriceFlagExpression().setOperator(value));

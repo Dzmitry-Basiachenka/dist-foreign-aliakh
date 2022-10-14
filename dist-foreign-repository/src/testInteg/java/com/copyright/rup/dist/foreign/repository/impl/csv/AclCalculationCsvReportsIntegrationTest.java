@@ -208,6 +208,11 @@ public class AclCalculationCsvReportsIntegrationTest extends CsvReportsTestHelpe
             "acl/liability_details_report.csv");
     }
 
+    @Test
+    public void testWriteAclLiabilitiesByRhReport() throws IOException {
+        //TODO {dbasiachenka} implement
+    }
+
     private AclScenario buildScenario(String id, String name) {
         AclScenario scenario = new AclScenario();
         scenario.setId(id);

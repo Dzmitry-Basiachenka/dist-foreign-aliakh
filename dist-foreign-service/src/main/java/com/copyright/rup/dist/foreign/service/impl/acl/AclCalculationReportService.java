@@ -69,4 +69,9 @@ public class AclCalculationReportService implements IAclCalculationReportService
                                                        OutputStream outputStream) {
         aclCalculationReportRepository.writeAclLiabilitiesByAggLicClassReport(reportInfo, outputStream);
     }
+
+    @Override
+    public void writeAclLiabilitiesByRhReport(AclCalculationReportsInfoDto reportInfo, OutputStream outputStream) {
+        aclCalculationReportRepository.writeAclLiabilitiesByRhReport(reportInfo, outputStream);
+    }
 }
