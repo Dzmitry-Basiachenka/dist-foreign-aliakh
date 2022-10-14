@@ -135,16 +135,10 @@ public class UdmUsageFiltersWindow extends CommonAclFiltersWindow {
     }
 
     private ComponentContainer initRootLayout() {
-        initAssigneeFilterWidget();
-        initReportedPublicationTypeFilterWidget();
-        initPublicationFormatFilterWidget();
-        initDetailLicenseeClassFilterWidget();
-        initReportedTypeOfUseFilterWidget();
         VerticalLayout fieldsLayout = new VerticalLayout();
-        // TODO {aliakh} reorder the widgets
         fieldsLayout.addComponents(initAssigneeLicenseeClassLayout(), initReportedPubTypeReportedTypeOfUseLayout(),
-            publicationFormatFilterWidget, initUsageDateLayout(), initSurveyDateLayout(), initTypeOfUseLayout(),
-            initChannelLayout(), initWrWrkInstLayout(), initReportedTitleLayout(), initSystemTitleLayout(),
+            initPublicationFormatFilterWidget(), initUsageDateLayout(), initSurveyDateLayout(),
+            initChannelTypeOfUseLayout(), initWrWrkInstLayout(), initReportedTitleLayout(), initSystemTitleLayout(),
             initUsageDetailIdLayout(), initCompanyIdLayout(), initCompanyNameLayout(), initSurveyRespondentLayout(),
             initSurveyCountryLayout(), initLanguageLayout(), initAnnualMultiplierLayout(), initAnnualizedCopiesLayout(),
             initStatisticalMultiplierLayout(), initQuantityLayout());
@@ -167,33 +161,38 @@ public class UdmUsageFiltersWindow extends CommonAclFiltersWindow {
         return rootLayout;
     }
 
-    private void initAssigneeFilterWidget() {
+    private AssigneeFilterWidget initAssigneeFilterWidget() {
         assigneeFilterWidget = new AssigneeFilterWidget(controller::getAssignees, usageFilter.getAssignees());
+        return assigneeFilterWidget;
     }
 
-    private void initReportedPublicationTypeFilterWidget() {
+    private ReportedPubTypeFilterWidget initReportedPublicationTypeFilterWidget() {
         reportedPubTypeFilterWidget =
             new ReportedPubTypeFilterWidget(controller::getPublicationTypes, usageFilter.getReportedPubTypes());
+        return reportedPubTypeFilterWidget;
     }
 
-    private void initPublicationFormatFilterWidget() {
+    private PublicationFormatFilterWidget initPublicationFormatFilterWidget() {
         publicationFormatFilterWidget =
             new PublicationFormatFilterWidget(controller::getPublicationFormats, usageFilter.getPubFormats());
+        return publicationFormatFilterWidget;
     }
 
-    private void initDetailLicenseeClassFilterWidget() {
+    private DetailLicenseeClassFilterWidget initDetailLicenseeClassFilterWidget() {
         detailLicenseeClassFilterWidget = new DetailLicenseeClassFilterWidget(controller::getDetailLicenseeClasses,
             usageFilter.getDetailLicenseeClasses());
+        return detailLicenseeClassFilterWidget;
     }
 
-    private void initReportedTypeOfUseFilterWidget() {
+    private ReportedTypeOfUseFilterWidget initReportedTypeOfUseFilterWidget() {
         reportedTypeOfUseFilterWidget = new ReportedTypeOfUseFilterWidget(controller::getReportedTypeOfUses,
             usageFilter.getReportedTypeOfUses());
+        return reportedTypeOfUseFilterWidget;
     }
 
     private HorizontalLayout initAssigneeLicenseeClassLayout() {
         HorizontalLayout horizontalLayout =
-            new HorizontalLayout(assigneeFilterWidget, detailLicenseeClassFilterWidget);
+            new HorizontalLayout(initAssigneeFilterWidget(), initDetailLicenseeClassFilterWidget());
         horizontalLayout.setSizeFull();
         horizontalLayout.setSpacing(true);
         return horizontalLayout;
@@ -201,32 +200,36 @@ public class UdmUsageFiltersWindow extends CommonAclFiltersWindow {
 
     private HorizontalLayout initReportedPubTypeReportedTypeOfUseLayout() {
         HorizontalLayout horizontalLayout =
-            new HorizontalLayout(reportedPubTypeFilterWidget, reportedTypeOfUseFilterWidget);
+            new HorizontalLayout(initReportedPublicationTypeFilterWidget(), initReportedTypeOfUseFilterWidget());
         horizontalLayout.setSizeFull();
         horizontalLayout.setSpacing(true);
         return horizontalLayout;
     }
 
-    private ComboBox<String> initTypeOfUseLayout() {
-        typeOfUseComboBox.setItems(Arrays.asList("PRINT", "DIGITAL"));
-        typeOfUseComboBox.setSelectedItem(usageFilter.getTypeOfUse());
-        typeOfUseComboBox.setSizeFull();
-        typeOfUseComboBox.setWidth(50, Unit.PERCENTAGE);
-        filterBinder.forField(typeOfUseComboBox)
-            .bind(UdmUsageFilter::getTypeOfUse, UdmUsageFilter::setTypeOfUse);
-        VaadinUtils.addComponentStyle(typeOfUseComboBox, "udm-type-of-use-filter");
-        return typeOfUseComboBox;
+    private HorizontalLayout initChannelTypeOfUseLayout() {
+        HorizontalLayout horizontalLayout = new HorizontalLayout(initChannelComboBox(), initTypeOfUseCombobox());
+        horizontalLayout.setSizeFull();
+        return horizontalLayout;
     }
 
-    private ComboBox<UdmChannelEnum> initChannelLayout() {
+    private ComboBox<UdmChannelEnum> initChannelComboBox() {
         channelComboBox.setItems(UdmChannelEnum.values());
         channelComboBox.setSelectedItem(usageFilter.getChannel());
         channelComboBox.setSizeFull();
-        channelComboBox.setWidth(50, Unit.PERCENTAGE);
         filterBinder.forField(channelComboBox)
             .bind(UdmUsageFilter::getChannel, UdmUsageFilter::setChannel);
         VaadinUtils.addComponentStyle(channelComboBox, "udm-channel-filter");
         return channelComboBox;
+    }
+
+    private ComboBox<String> initTypeOfUseCombobox() {
+        typeOfUseComboBox.setItems(Arrays.asList("PRINT", "DIGITAL"));
+        typeOfUseComboBox.setSelectedItem(usageFilter.getTypeOfUse());
+        typeOfUseComboBox.setSizeFull();
+        filterBinder.forField(typeOfUseComboBox)
+            .bind(UdmUsageFilter::getTypeOfUse, UdmUsageFilter::setTypeOfUse);
+        VaadinUtils.addComponentStyle(typeOfUseComboBox, "udm-type-of-use-filter");
+        return typeOfUseComboBox;
     }
 
     private HorizontalLayout initWrWrkInstLayout() {

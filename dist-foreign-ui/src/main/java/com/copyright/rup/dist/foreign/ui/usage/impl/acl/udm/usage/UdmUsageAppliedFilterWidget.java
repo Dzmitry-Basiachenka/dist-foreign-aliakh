@@ -76,8 +76,8 @@ public class UdmUsageAppliedFilterWidget extends CommonAclAppliedFilterPanel imp
                 filter, "label.survey_start_date_from"), layout);
             addLabel(createLabelWithSingleValue(getFunctionForDate(UdmUsageFilter::getSurveyStartDateTo, filter),
                 filter, "label.survey_start_date_to"), layout);
-            addLabel(createLabelWithSingleValue(UdmUsageFilter::getTypeOfUse, filter, "label.type_of_use"), layout);
             addLabel(createLabelWithSingleValue(UdmUsageFilter::getChannel, filter, "label.channel"), layout);
+            addLabel(createLabelWithSingleValue(UdmUsageFilter::getTypeOfUse, filter, "label.type_of_use"), layout);
             addLabel(createLabelWithOperator(filter.getWrWrkInstExpression(), "label.wr_wrk_inst_from",
                 "label.wr_wrk_inst_to"), layout);
             addLabel(createLabelWithOperator(filter.getReportedTitleExpression(), "label.reported_title",
