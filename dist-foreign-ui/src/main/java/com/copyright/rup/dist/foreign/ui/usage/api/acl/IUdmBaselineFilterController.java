@@ -25,9 +25,11 @@ public interface IUdmBaselineFilterController extends IFilterController<IUdmBase
     List<Integer> getPeriods();
 
     /**
-     * @return list of type of uses.
+     * Gets list of all reported type of uses.
+     *
+     * @return list of reported type of uses.
      */
-    List<String> getTypeOfUses(); // TODO {aliakh} rename to getReportedTypeOfUses
+    List<String> getReportedTypeOfUses();
 
     /**
      * @return list of detail licensee classes.

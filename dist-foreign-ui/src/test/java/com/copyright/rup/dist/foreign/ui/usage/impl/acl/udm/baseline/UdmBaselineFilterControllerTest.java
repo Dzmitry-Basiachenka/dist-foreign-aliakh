@@ -4,8 +4,8 @@ import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
 
 import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
@@ -58,7 +58,7 @@ public class UdmBaselineFilterControllerTest {
         List<DetailLicenseeClass> licenseeClasses = Collections.singletonList(new DetailLicenseeClass());
         expect(licenseeClassService.getDetailLicenseeClasses("ACL")).andReturn(licenseeClasses).once();
         replay(licenseeClassService);
-        assertEquals(licenseeClasses, controller.getDetailLicenseeClasses());
+        assertSame(licenseeClasses, controller.getDetailLicenseeClasses());
         verify(licenseeClassService);
     }
 
@@ -67,16 +67,16 @@ public class UdmBaselineFilterControllerTest {
         List<AggregateLicenseeClass> licenseeClasses = Collections.singletonList(new AggregateLicenseeClass());
         expect(licenseeClassService.getAggregateLicenseeClasses("ACL")).andReturn(licenseeClasses).once();
         replay(licenseeClassService);
-        assertEquals(licenseeClasses, controller.getAggregateLicenseeClasses());
+        assertSame(licenseeClasses, controller.getAggregateLicenseeClasses());
         verify(licenseeClassService);
     }
 
     @Test
-    public void testGetTypeOfUses() {
-        List<String> typeOfUses = Collections.singletonList("PRINT_COPIES");
-        expect(udmTypeOfUseService.getAllUdmTous()).andReturn(typeOfUses).once();
+    public void testGetReportedTypeOfUses() {
+        List<String> reportedTypeOfUses = Collections.singletonList("PRINT_COPIES");
+        expect(udmTypeOfUseService.getAllUdmTous()).andReturn(reportedTypeOfUses).once();
         replay(udmTypeOfUseService);
-        assertEquals(typeOfUses, controller.getTypeOfUses());
+        assertSame(reportedTypeOfUses, controller.getReportedTypeOfUses());
         verify(udmTypeOfUseService);
     }
 
@@ -85,7 +85,7 @@ public class UdmBaselineFilterControllerTest {
         List<Integer> periods = Arrays.asList(202012, 201906);
         expect(udmBaselineService.getPeriods()).andReturn(periods).once();
         replay(udmBaselineService);
-        assertEquals(periods, controller.getPeriods());
+        assertSame(periods, controller.getPeriods());
         verify(udmBaselineService);
     }
 }

@@ -67,7 +67,7 @@ public class UdmUsageFilterController extends CommonController<IUdmUsageFilterWi
     }
 
     @Override
-    public List<String> getTypeOfUses() {
+    public List<String> getReportedTypeOfUses() {
         return udmTypeOfUseService.getAllUdmTous();
     }
 
