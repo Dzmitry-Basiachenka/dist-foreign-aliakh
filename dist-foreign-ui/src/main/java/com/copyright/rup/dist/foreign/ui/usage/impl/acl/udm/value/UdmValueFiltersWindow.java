@@ -145,7 +145,7 @@ public class UdmValueFiltersWindow extends CommonAclFiltersWindow {
             initCurrencyLastPubTypeLayout(), initPriceLayout(), initPriceInUsdLayout(), initPriceFlagsLayout(),
             initPriceCommentLayout(), initLastPriceCommentLayout(), initContentLayout(), initContentFlagsLayout(),
             initContentCommentLayout(), initLastContentCommentLayout(), initContentUnitPriceLayout(),
-            initContentUnitPriceFlagLayout(), initCommentLayout(), initLastCommentLayout());
+            initContentUnitPriceFlagComboBox(), initCommentLayout(), initLastCommentLayout());
         Panel panel = new Panel(fieldsLayout);
         panel.setSizeFull();
         fieldsLayout.setMargin(new MarginInfo(true));
@@ -599,7 +599,7 @@ public class UdmValueFiltersWindow extends CommonAclFiltersWindow {
         return horizontalLayout;
     }
 
-    private ComboBox<FilterOperatorEnum> initContentUnitPriceFlagLayout() {
+    private ComboBox<FilterOperatorEnum> initContentUnitPriceFlagComboBox() {
         filterBinder.forField(contentUnitPriceFlagComboBox)
             .bind(filter -> filter.getContentUnitPriceFlagExpression().getOperator(),
                 (filter, value) -> filter.getContentUnitPriceFlagExpression().setOperator(value));

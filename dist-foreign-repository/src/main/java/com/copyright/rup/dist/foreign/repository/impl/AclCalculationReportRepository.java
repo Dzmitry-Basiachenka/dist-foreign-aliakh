@@ -124,4 +124,9 @@ public class AclCalculationReportRepository extends CommonReportRepository imple
             handler.writeMetadata(reportInfo);
         }
     }
+
+    @Override
+    public void writeAclLiabilitiesByRhReport(AclCalculationReportsInfoDto reportInfo, OutputStream outputStream) {
+        //TODO {dbasiachenka} implement
+    }
 }
