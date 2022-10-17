@@ -15,7 +15,7 @@ import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.AggregateLicenseeCla
 import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.DetailLicenseeClassFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.PeriodFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.PublicationTypeFilterWidget;
-import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.TypeOfUseFilterWidget;
+import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.ReportedTypeOfUseFilterWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
@@ -72,8 +72,8 @@ public class AclUsageFiltersWindow extends CommonAclFiltersWindow {
     private final IAclUsageFilterController controller;
     private final ComboBox<UdmUsageOriginEnum> usageOriginComboBox =
         new ComboBox<>(ForeignUi.getMessage("label.usage_origin"));
-    private final ComboBox<UdmChannelEnum> channelComboBox =
-        new ComboBox<>(ForeignUi.getMessage("label.channel"));
+    private final ComboBox<UdmChannelEnum> channelComboBox = new ComboBox<>(ForeignUi.getMessage("label.channel"));
+    private final ComboBox<String> typeOfUseComboBox = new ComboBox<>(ForeignUi.getMessage("label.type_of_use"));
     private final TextField usageDetailIdField = new TextField(ForeignUi.getMessage("label.usage_detail_id"));
     private final ComboBox<FilterOperatorEnum> usageDetailIdOperatorComboBox =
         buildTextOperatorComboBox(TEXT_OPERATOR_ITEMS);
@@ -105,7 +105,7 @@ public class AclUsageFiltersWindow extends CommonAclFiltersWindow {
     private DetailLicenseeClassFilterWidget detailLicenseeClassFilterWidget;
     private AggregateLicenseeClassFilterWidget aggregateLicenseeClassFilterWidget;
     private PublicationTypeFilterWidget pubTypeFilterWidget;
-    private TypeOfUseFilterWidget typeOfUseFilterWidget;
+    private ReportedTypeOfUseFilterWidget reportedTypeOfUseFilterWidget;
 
     /**
      * Constructor.
@@ -132,12 +132,11 @@ public class AclUsageFiltersWindow extends CommonAclFiltersWindow {
     }
 
     private ComponentContainer initRootLayout() {
-        initTypeOfUseFilterWidget();
         VerticalLayout fieldsLayout = new VerticalLayout();
         fieldsLayout.addComponents(initPeriodDetailLicenseeClassLayout(), initAggregateLicenseeClassPubTypeLayout(),
-            typeOfUseFilterWidget, initUsageOriginChannelLayout(), initUsageDetailIdLayout(), initWrWrkInstLayout(),
-            initSystemTitleLayout(), initSurveyCountryLayout(), initContentUnitPriceLayout(),
-            initContentUnitPriceFlagComboBox(), initAnnualizedCopiesLayout());
+            initReportedTypeOfUseFilterWidget(), initUsageOriginChannelLayout(), initTypeOfUseComboBox(),
+            initUsageDetailIdLayout(), initWrWrkInstLayout(), initSystemTitleLayout(), initSurveyCountryLayout(),
+            initContentUnitPriceLayout(), initContentUnitPriceFlagComboBox(), initAnnualizedCopiesLayout());
         filterBinder.readBean(usageFilter);
         filterBinder.validate();
         return buildRootLayout(fieldsLayout);
@@ -147,11 +146,11 @@ public class AclUsageFiltersWindow extends CommonAclFiltersWindow {
         periodFilterWidget = new PeriodFilterWidget(controller::getPeriods, usageFilter.getPeriods());
         detailLicenseeClassFilterWidget = new DetailLicenseeClassFilterWidget(controller::getDetailLicenseeClasses,
             usageFilter.getDetailLicenseeClasses());
-        HorizontalLayout periodDetailLicenseeClassLayout =
+        HorizontalLayout horizontalLayout =
             new HorizontalLayout(periodFilterWidget, detailLicenseeClassFilterWidget);
-        periodDetailLicenseeClassLayout.setSizeFull();
-        periodDetailLicenseeClassLayout.setSpacing(true);
-        return periodDetailLicenseeClassLayout;
+        horizontalLayout.setSizeFull();
+        horizontalLayout.setSpacing(true);
+        return horizontalLayout;
     }
 
     private HorizontalLayout initAggregateLicenseeClassPubTypeLayout() {
@@ -159,25 +158,26 @@ public class AclUsageFiltersWindow extends CommonAclFiltersWindow {
             controller::getAggregateLicenseeClasses, usageFilter.getAggregateLicenseeClasses());
         pubTypeFilterWidget = new PublicationTypeFilterWidget(controller::getPublicationTypes,
             usageFilter.getPubTypes());
-        HorizontalLayout assigneeLicenseeClassLayout =
+        HorizontalLayout horizontalLayout =
             new HorizontalLayout(aggregateLicenseeClassFilterWidget, pubTypeFilterWidget);
-        assigneeLicenseeClassLayout.setSizeFull();
-        assigneeLicenseeClassLayout.setSpacing(true);
-        return assigneeLicenseeClassLayout;
+        horizontalLayout.setSizeFull();
+        horizontalLayout.setSpacing(true);
+        return horizontalLayout;
     }
 
-    private void initTypeOfUseFilterWidget() {
-        typeOfUseFilterWidget = new TypeOfUseFilterWidget(
-            () -> Arrays.asList("PRINT", "DIGITAL"), usageFilter.getTypeOfUses());
+    private ReportedTypeOfUseFilterWidget initReportedTypeOfUseFilterWidget() {
+        reportedTypeOfUseFilterWidget = new ReportedTypeOfUseFilterWidget(controller::getReportedTypeOfUses,
+            usageFilter.getReportedTypeOfUses());
+        return reportedTypeOfUseFilterWidget;
     }
 
     private HorizontalLayout initUsageOriginChannelLayout() {
-        HorizontalLayout horizontalLayout = new HorizontalLayout(initUsageOriginFilter(), initChannelLayout());
+        HorizontalLayout horizontalLayout = new HorizontalLayout(initUsageOriginComboBox(), initChannelComboBox());
         horizontalLayout.setSizeFull();
         return horizontalLayout;
     }
 
-    private ComboBox<UdmUsageOriginEnum> initUsageOriginFilter() {
+    private ComboBox<UdmUsageOriginEnum> initUsageOriginComboBox() {
         filterBinder.forField(usageOriginComboBox)
             .bind(AclUsageFilter::getUsageOrigin, AclUsageFilter::setUsageOrigin);
         usageOriginComboBox.setItems(UdmUsageOriginEnum.values());
@@ -186,13 +186,23 @@ public class AclUsageFiltersWindow extends CommonAclFiltersWindow {
         return usageOriginComboBox;
     }
 
-    private ComboBox<UdmChannelEnum> initChannelLayout() {
+    private ComboBox<UdmChannelEnum> initChannelComboBox() {
         filterBinder.forField(channelComboBox)
             .bind(AclUsageFilter::getChannel, AclUsageFilter::setChannel);
         channelComboBox.setItems(UdmChannelEnum.values());
         channelComboBox.setSizeFull();
         VaadinUtils.addComponentStyle(channelComboBox, "acl-usage-channel-filter");
         return channelComboBox;
+    }
+
+    private ComboBox<String> initTypeOfUseComboBox() {
+        filterBinder.forField(typeOfUseComboBox)
+            .bind(AclUsageFilter::getTypeOfUse, AclUsageFilter::setTypeOfUse);
+        typeOfUseComboBox.setItems(Arrays.asList("PRINT", "DIGITAL"));
+        typeOfUseComboBox.setSizeFull();
+        typeOfUseComboBox.setWidth(50, Unit.PERCENTAGE);
+        VaadinUtils.addComponentStyle(typeOfUseComboBox, "acl-usage-type-of-use-filter");
+        return typeOfUseComboBox;
     }
 
     private HorizontalLayout initUsageDetailIdLayout() {
@@ -396,7 +406,7 @@ public class AclUsageFiltersWindow extends CommonAclFiltersWindow {
                 usageFilter.setDetailLicenseeClasses(detailLicenseeClassFilterWidget.getSelectedItemsIds());
                 usageFilter.setAggregateLicenseeClasses(aggregateLicenseeClassFilterWidget.getSelectedItemsIds());
                 usageFilter.setPubTypes(pubTypeFilterWidget.getSelectedItemsIds());
-                usageFilter.setTypeOfUses(typeOfUseFilterWidget.getSelectedItemsIds());
+                usageFilter.setReportedTypeOfUses(reportedTypeOfUseFilterWidget.getSelectedItemsIds());
                 close();
             } catch (ValidationException e) {
                 Windows.showValidationErrorWindow(Arrays.asList(usageDetailIdField, wrWrkInstFromField,
@@ -414,7 +424,7 @@ public class AclUsageFiltersWindow extends CommonAclFiltersWindow {
         detailLicenseeClassFilterWidget.reset();
         aggregateLicenseeClassFilterWidget.reset();
         pubTypeFilterWidget.reset();
-        typeOfUseFilterWidget.reset();
+        reportedTypeOfUseFilterWidget.reset();
         filterBinder.readBean(new AclUsageFilter());
     }
 

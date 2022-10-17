@@ -78,7 +78,7 @@ public class UdmUsageAppliedFilterWidgetTest {
             "1 - Food and Tobacco, 22 - Book series, 26 - Law Firms");
         verifyLabel(((VerticalLayout) component).getComponent(6), "Reported Pub Types", "Book, Journal, Not Shared");
         verifyLabel(((VerticalLayout) component).getComponent(7), "Reported Types of Use",
-            "COPY_FOR_MYSELF, PRINT_COPIES");
+            "FAX_PHOTOCOPIES, PRINT_COPIES");
         verifyLabel(((VerticalLayout) component).getComponent(8), "Publication Formats", "Digital, Print");
         verifyLabel(((VerticalLayout) component).getComponent(9), "Usage Date From", "04/12/2020");
         verifyLabel(((VerticalLayout) component).getComponent(10), "Usage Date To", "06/20/2020");
@@ -139,7 +139,7 @@ public class UdmUsageAppliedFilterWidgetTest {
         filter.setDetailLicenseeClasses(Sets.newHashSet(buildDetailLicenseeClass(22, "Book series"),
             buildDetailLicenseeClass(1, "Food and Tobacco"),
             buildDetailLicenseeClass(26, "Law Firms")));
-        filter.setReportedTypeOfUses(Sets.newHashSet("PRINT_COPIES", "COPY_FOR_MYSELF"));
+        filter.setReportedTypeOfUses(Sets.newHashSet("PRINT_COPIES", "FAX_PHOTOCOPIES"));
         filter.setTypeOfUse("PRINT");
         filter.setUsageDateFrom(LocalDate.of(2020, 4, 12));
         filter.setUsageDateTo(LocalDate.of(2020, 6, 20));

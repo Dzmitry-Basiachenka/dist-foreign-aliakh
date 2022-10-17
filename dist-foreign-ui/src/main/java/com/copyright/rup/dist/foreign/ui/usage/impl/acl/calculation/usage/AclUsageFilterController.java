@@ -9,6 +9,7 @@ import com.copyright.rup.dist.foreign.service.api.ILicenseeClassService;
 import com.copyright.rup.dist.foreign.service.api.IPublicationTypeService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageService;
+import com.copyright.rup.dist.foreign.service.api.acl.IUdmTypeOfUseService;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclUsageFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclUsageFilterWidget;
 import com.copyright.rup.vaadin.widget.api.CommonController;
@@ -42,6 +43,8 @@ public class AclUsageFilterController extends CommonController<IAclUsageFilterWi
     private ILicenseeClassService licenseeClassService;
     @Autowired
     private IPublicationTypeService publicationTypeService;
+    @Autowired
+    private IUdmTypeOfUseService udmTypeOfUseService;
 
     @Override
     public List<AclUsageBatch> getAllAclUsageBatches() {
@@ -66,6 +69,11 @@ public class AclUsageFilterController extends CommonController<IAclUsageFilterWi
     @Override
     public List<PublicationType> getPublicationTypes() {
         return publicationTypeService.getPublicationTypes(FdaConstants.ACL_PRODUCT_FAMILY);
+    }
+
+    @Override
+    public List<String> getReportedTypeOfUses() {
+        return udmTypeOfUseService.getAllUdmTous();
     }
 
     @Override

@@ -65,9 +65,10 @@ public class AclUsageFiltersWindowTest {
     private static final String USAGE_FILTER = "usageFilter";
     private static final Integer LC_ID = 26;
     private static final String LC_DESCRIPTION = "Law Firms";
-    private static final String PRINT_TYPE_OF_USE = "PRINT";
+    private static final String REPORTED_TYPE_OF_USE = "COPY_FOR_MYSELF";
     private static final UdmUsageOriginEnum RFA_USAGE_ORIGIN = UdmUsageOriginEnum.RFA;
     private static final UdmChannelEnum CCC_CHANNEL = UdmChannelEnum.CCC;
+    private static final String TYPE_OF_USE = "PRINT";
     private static final String USAGE_DETAIL_ID = "8d2a1c08-4678-4d50-acd3-7625bdc03da4";
     private static final Long WR_WRK_INST = 243904752L;
     private static final String SYSTEM_TITLE = "Medical Journal";
@@ -103,7 +104,7 @@ public class AclUsageFiltersWindowTest {
     public void testConstructorWithPopulatedFilter() {
         AclUsageFilter usageFilter = buildExpectedFilter();
         usageFilter.setPeriods(Sets.newHashSet(202206, 202212));
-        usageFilter.setTypeOfUses(Sets.newHashSet("DIGITAL", PRINT_TYPE_OF_USE));
+        usageFilter.setReportedTypeOfUses(Sets.newHashSet("PRINT_COPIES", "FAX_PHOTOCOPIES"));
         window = new AclUsageFiltersWindow(createMock(IAclUsageFilterController.class), usageFilter);
         verifyFiltersData();
     }
@@ -134,32 +135,32 @@ public class AclUsageFiltersWindowTest {
 
     @Test
     public void testUsageDetailIdFilterOperatorChangeListener() {
-        testTextFilterOperatorChangeListener(4);
+        testTextFilterOperatorChangeListener(5);
     }
 
     @Test
     public void testWrWrkInstFilterOperatorChangeListener() {
-        testNumericFilterOperatorChangeListener(5);
+        testNumericFilterOperatorChangeListener(6);
     }
 
     @Test
     public void testSystemTitleFilterOperatorChangeListener() {
-        testTextFilterOperatorChangeListener(6);
-    }
-
-    @Test
-    public void testSurveyCountryFilterOperatorChangeListener() {
         testTextFilterOperatorChangeListener(7);
     }
 
     @Test
+    public void testSurveyCountryFilterOperatorChangeListener() {
+        testTextFilterOperatorChangeListener(8);
+    }
+
+    @Test
     public void testContentUnitPriceFilterOperatorChangeListener() {
-        testNumericFilterOperatorChangeListener(8);
+        testNumericFilterOperatorChangeListener(9);
     }
 
     @Test
     public void testAnnualizedCopiesFilterOperatorChangeListener() {
-        testNumericFilterOperatorChangeListener(10);
+        testNumericFilterOperatorChangeListener(11);
     }
 
     @Test
@@ -244,20 +245,22 @@ public class AclUsageFiltersWindowTest {
         Component panelContent = ((Panel) component).getContent();
         assertThat(panelContent, instanceOf(VerticalLayout.class));
         VerticalLayout verticalLayout = (VerticalLayout) panelContent;
-        assertEquals(11, verticalLayout.getComponentCount());
+        assertEquals(12, verticalLayout.getComponentCount());
         verifyItemsFilterLayout(verticalLayout.getComponent(0), "Periods", "Detail Licensee Classes");
         verifyItemsFilterLayout(verticalLayout.getComponent(1), "Aggregate Licensee Classes", "Pub Types");
-        verifyItemsFilterWidget(verticalLayout.getComponent(2), "Types of Use");
+        verifyItemsFilterWidget(verticalLayout.getComponent(2), "Reported Types of Use");
         verifyComboBoxLayout(verticalLayout.getComponent(3), "Usage Origin", Arrays.asList(UdmUsageOriginEnum.values()),
             "Channel", Arrays.asList(UdmChannelEnum.values()));
-        verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(4), "Usage Detail ID");
-        verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(5), "Wr Wrk Inst From", "Wr Wrk Inst To");
-        verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(6), "System Title");
-        verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(7), "Survey Country");
-        verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(8), "Content Unit Price From",
+        verifyComboBox(verticalLayout.getComponent(4), "Type of Use", Unit.PERCENTAGE, 50, true,
+            Arrays.asList("PRINT", "DIGITAL"));
+        verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(5), "Usage Detail ID");
+        verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(6), "Wr Wrk Inst From", "Wr Wrk Inst To");
+        verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(7), "System Title");
+        verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(8), "Survey Country");
+        verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(9), "Content Unit Price From",
             "Content Unit Price To");
-        verifyComboBox(verticalLayout.getComponent(9), "CUP Flag", Unit.PERCENTAGE, 50, true , FLAG_ITEMS);
-        verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(10), "Annualized Copies From",
+        verifyComboBox(verticalLayout.getComponent(10), "CUP Flag", Unit.PERCENTAGE, 50, true , FLAG_ITEMS);
+        verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(11), "Annualized Copies From",
             "Annualized Copies To");
     }
 
@@ -314,9 +317,10 @@ public class AclUsageFiltersWindowTest {
         filter.setDetailLicenseeClasses(Collections.singleton(detailLicenseeClass));
         filter.setAggregateLicenseeClasses(Collections.singleton(aggregateLicenseeClass));
         filter.setPubTypes(Collections.singleton(publicationType));
-        filter.setTypeOfUses(Collections.singleton(PRINT_TYPE_OF_USE));
+        filter.setReportedTypeOfUses(Collections.singleton(REPORTED_TYPE_OF_USE));
         filter.setUsageOrigin(RFA_USAGE_ORIGIN);
         filter.setChannel(CCC_CHANNEL);
+        filter.setTypeOfUse(TYPE_OF_USE);
         filter.setUsageDetailIdExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, USAGE_DETAIL_ID, null));
         filter.setWrWrkInstExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, WR_WRK_INST, null));
         filter.setSystemTitleExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE, null));
@@ -386,9 +390,10 @@ public class AclUsageFiltersWindowTest {
         assertFilterWidgetLabelValue("detailLicenseeClassFilterWidget", "(1)");
         assertFilterWidgetLabelValue("aggregateLicenseeClassFilterWidget", "(1)");
         assertFilterWidgetLabelValue("pubTypeFilterWidget", "(1)");
-        assertFilterWidgetLabelValue("typeOfUseFilterWidget", "(2)");
+        assertFilterWidgetLabelValue("reportedTypeOfUseFilterWidget", "(2)");
         assertComboBoxValue("usageOriginComboBox", RFA_USAGE_ORIGIN);
         assertComboBoxValue("channelComboBox", CCC_CHANNEL);
+        assertComboBoxValue("typeOfUseComboBox", TYPE_OF_USE);
         assertTextFieldValue("usageDetailIdField", USAGE_DETAIL_ID);
         assertComboBoxValue("usageDetailIdOperatorComboBox", FilterOperatorEnum.EQUALS);
         assertTextFieldValue("wrWrkInstFromField", WR_WRK_INST.toString());
@@ -419,10 +424,9 @@ public class AclUsageFiltersWindowTest {
     }
 
     private void populateData() {
-        AclUsageFilter aclUsageFilter = Whitebox.getInternalState(window, USAGE_FILTER);
-        aclUsageFilter.setTypeOfUses(Collections.singleton(PRINT_TYPE_OF_USE));
         populateComboBox("usageOriginComboBox", RFA_USAGE_ORIGIN);
         populateComboBox("channelComboBox", CCC_CHANNEL);
+        populateComboBox("typeOfUseComboBox", TYPE_OF_USE);
         populateTextField("usageDetailIdField", USAGE_DETAIL_ID);
         populateComboBox("usageDetailIdOperatorComboBox", FilterOperatorEnum.EQUALS);
         populateTextField("wrWrkInstFromField", WR_WRK_INST.toString());
