@@ -52,6 +52,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * Verifies {@link UdmUsageFiltersWindow}.
@@ -136,67 +137,67 @@ public class UdmUsageFiltersWindowTest {
 
     @Test
     public void testWrWrkInstFilterOperatorChangeListener() {
-        testNumericFilterOperatorChangeListener(7);
+        testNumericFilterOperatorChangeListener(6);
     }
 
     @Test
     public void testReportedTitleFilterOperatorChangeListener() {
-        testTextFilterOperatorChangeListener(8);
+        testTextFilterOperatorChangeListener(7);
     }
 
     @Test
     public void testSystemTitleFilterOperatorChangeListener() {
-        testTextFilterOperatorChangeListener(9);
+        testTextFilterOperatorChangeListener(8);
     }
 
     @Test
     public void testUsageDetaiIdIdFilterOperatorChangeListener() {
-        testTextFilterOperatorChangeListener(10);
+        testTextFilterOperatorChangeListener(9);
     }
 
     @Test
     public void testCompanyIdFilterOperatorChangeListener() {
-        testNumericFilterOperatorChangeListener(11);
+        testNumericFilterOperatorChangeListener(10);
     }
 
     @Test
     public void testCompanyNameFilterOperatorChangeListener() {
-        testTextFilterOperatorChangeListener(12);
+        testTextFilterOperatorChangeListener(11);
     }
 
     @Test
     public void testSurveyRespondentFilterOperatorChangeListener() {
-        testTextFilterOperatorChangeListener(13);
+        testTextFilterOperatorChangeListener(12);
     }
 
     @Test
     public void testSurveyCountryFilterOperatorChangeListener() {
-        testTextFilterOperatorChangeListener(14);
+        testTextFilterOperatorChangeListener(13);
     }
 
     @Test
     public void testLanguageFilterOperatorChangeListener() {
-        testTextFilterOperatorChangeListener(15);
+        testTextFilterOperatorChangeListener(14);
     }
 
     @Test
     public void testAnnualMultiplierFilterOperatorChangeListener() {
-        testNumericFilterOperatorChangeListener(16);
+        testNumericFilterOperatorChangeListener(15);
     }
 
     @Test
     public void testAnnualizedCopiesFilterOperatorChangeListener() {
-        testNumericFilterOperatorChangeListener(17);
+        testNumericFilterOperatorChangeListener(16);
     }
 
     @Test
     public void testStatisticalMultiplierMultiplierFilterOperatorChangeListener() {
-        testNumericFilterOperatorChangeListener(18);
+        testNumericFilterOperatorChangeListener(17);
     }
 
     @Test
     public void testQuantityFilterOperatorChangeListener() {
-        testNumericFilterOperatorChangeListener(18);
+        testNumericFilterOperatorChangeListener(17);
     }
 
     @Test
@@ -240,16 +241,15 @@ public class UdmUsageFiltersWindowTest {
         assertTrue(verticalLayout.getComponent(7).isEnabled());
         assertTrue(verticalLayout.getComponent(8).isEnabled());
         assertTrue(verticalLayout.getComponent(9).isEnabled());
-        assertTrue(verticalLayout.getComponent(10).isEnabled());
+        assertFalse(verticalLayout.getComponent(10).isEnabled());
         assertFalse(verticalLayout.getComponent(11).isEnabled());
         assertFalse(verticalLayout.getComponent(12).isEnabled());
         assertFalse(verticalLayout.getComponent(13).isEnabled());
-        assertFalse(verticalLayout.getComponent(14).isEnabled());
-        assertTrue(verticalLayout.getComponent(15).isEnabled());
+        assertTrue(verticalLayout.getComponent(14).isEnabled());
+        assertFalse(verticalLayout.getComponent(15).isEnabled());
         assertFalse(verticalLayout.getComponent(16).isEnabled());
         assertFalse(verticalLayout.getComponent(17).isEnabled());
         assertFalse(verticalLayout.getComponent(18).isEnabled());
-        assertFalse(verticalLayout.getComponent(19).isEnabled());
         verify(ForeignSecurityUtils.class);
     }
 
@@ -432,32 +432,30 @@ public class UdmUsageFiltersWindowTest {
 
     private void verifyPanel() {
         VerticalLayout verticalLayout = getFiltersLayout();
-        assertEquals(20, verticalLayout.getComponentCount());
+        assertEquals(19, verticalLayout.getComponentCount());
         verifyItemsFilterLayout(verticalLayout.getComponent(0), "Assignees", "Detail Licensee Classes");
         verifyItemsFilterLayout(verticalLayout.getComponent(1), "Reported Pub Types", "Reported Types of Use");
         verifyItemsFilterWidget(verticalLayout.getComponent(2), "Publication Formats");
         verifyDateFieldComponent(verticalLayout.getComponent(3), "Usage Date From", "Usage Date To");
         verifyDateFieldComponent(verticalLayout.getComponent(4), "Survey Start Date From", "Survey Start Date To");
-        verifyComboBox(verticalLayout.getComponent(5), "Type of Use", Unit.PERCENTAGE, 50, true,
-            Arrays.asList("PRINT", "DIGITAL"));
-        verifyComboBox(verticalLayout.getComponent(6), "Channel", Unit.PERCENTAGE, 50, true,
-            Arrays.asList(UdmChannelEnum.values()));
-        verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(7), "Wr Wrk Inst From", "Wr Wrk Inst To");
-        verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(8), "Reported Title");
-        verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(9), "System Title");
-        verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(10), "Usage Detail ID");
-        verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(11), "Company ID From", "Company ID To");
-        verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(12), "Company Name");
-        verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(13), "Survey Respondent");
-        verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(14), "Survey Country");
-        verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(15), "Language");
-        verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(16), "Annual Multiplier From",
+        verifyComboBoxLayout(verticalLayout.getComponent(5), "Channel", Arrays.asList(UdmChannelEnum.values()),
+            "Type of Use", Arrays.asList("PRINT", "DIGITAL"));
+        verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(6), "Wr Wrk Inst From", "Wr Wrk Inst To");
+        verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(7), "Reported Title");
+        verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(8), "System Title");
+        verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(9), "Usage Detail ID");
+        verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(10), "Company ID From", "Company ID To");
+        verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(11), "Company Name");
+        verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(12), "Survey Respondent");
+        verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(13), "Survey Country");
+        verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(14), "Language");
+        verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(15), "Annual Multiplier From",
             "Annual Multiplier To");
-        verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(17), "Annualized Copies From",
+        verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(16), "Annualized Copies From",
             "Annualized Copies To");
-        verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(18), "Statistical Multiplier From",
+        verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(17), "Statistical Multiplier From",
             "Statistical Multiplier To");
-        verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(19), "Quantity From", "Quantity To");
+        verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(18), "Quantity From", "Quantity To");
     }
 
     private void verifyItemsFilterLayout(Component component, String firstCaption, String secondCaption) {
@@ -477,6 +475,14 @@ public class UdmUsageFiltersWindowTest {
         assertEquals(captionFrom, layout.getComponent(0).getCaption());
         assertThat(layout.getComponent(1), instanceOf(LocalDateWidget.class));
         assertEquals(captionTo, layout.getComponent(1).getCaption());
+    }
+
+    private void verifyComboBoxLayout(Component component, String firstCaption, List<?> firstItemList,
+                                      String secondCaption, List<?> secondItemList) {
+        assertThat(component, instanceOf(HorizontalLayout.class));
+        HorizontalLayout layout = (HorizontalLayout) component;
+        verifyComboBox(layout.getComponent(0), firstCaption, true, firstItemList);
+        verifyComboBox(layout.getComponent(1), secondCaption, true, secondItemList);
     }
 
     private void verifyFieldWithTextOperatorComponent(Component component, String caption) {

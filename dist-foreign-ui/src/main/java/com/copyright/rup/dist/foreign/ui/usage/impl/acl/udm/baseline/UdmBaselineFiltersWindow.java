@@ -101,13 +101,10 @@ public class UdmBaselineFiltersWindow extends CommonAclFiltersWindow {
 
     private ComponentContainer initRootLayout() {
         HorizontalLayout buttonsLayout = initButtonsLayout();
-        initDetailLicenseeClassFilterWidget();
-        initAggregateLicenseeClassFilterWidget();
-        initReportedTypeOfUseFilterWidget();
         VerticalLayout rootLayout = new VerticalLayout();
-        rootLayout.addComponents(initLicenseeClassesLayout(), reportedTypeOfUseFilterWidget, initTypeOfUseLayout(),
-            initWrWrkInstLayout(), initSystemTitleLayout(), initUsageDetailIdLayout(), initSurveyCountryLayout(),
-            initAnnualizedCopiesLayout(), buttonsLayout);
+        rootLayout.addComponents(initLicenseeClassesLayout(), initReportedTypeOfUseFilterWidget(),
+            initTypeOfUseLayout(), initWrWrkInstLayout(), initSystemTitleLayout(), initUsageDetailIdLayout(),
+            initSurveyCountryLayout(), initAnnualizedCopiesLayout(), buttonsLayout);
         rootLayout.setMargin(new MarginInfo(true, true, true, true));
         VaadinUtils.setMaxComponentsWidth(rootLayout);
         rootLayout.setComponentAlignment(buttonsLayout, Alignment.BOTTOM_RIGHT);
@@ -116,36 +113,39 @@ public class UdmBaselineFiltersWindow extends CommonAclFiltersWindow {
         return rootLayout;
     }
 
-    private void initDetailLicenseeClassFilterWidget() {
+    private DetailLicenseeClassFilterWidget initDetailLicenseeClassFilterWidget() {
         detailLicenseeClassFilterWidget = new DetailLicenseeClassFilterWidget(controller::getDetailLicenseeClasses,
             baselineFilter.getDetailLicenseeClasses());
         detailLicenseeClassFilterWidget.addFilterSaveListener(
             (IFilterSaveListener<DetailLicenseeClass>) saveEvent ->
                 baselineFilter.setDetailLicenseeClasses(saveEvent.getSelectedItemsIds()));
+        return detailLicenseeClassFilterWidget;
     }
 
-    private void initAggregateLicenseeClassFilterWidget() {
+    private AggregateLicenseeClassFilterWidget initAggregateLicenseeClassFilterWidget() {
         aggregateLicenseeClassFilterWidget =
             new AggregateLicenseeClassFilterWidget(controller::getAggregateLicenseeClasses,
                 baselineFilter.getAggregateLicenseeClasses());
         aggregateLicenseeClassFilterWidget.addFilterSaveListener(
             (IFilterSaveListener<AggregateLicenseeClass>) saveEvent ->
                 baselineFilter.setAggregateLicenseeClasses(saveEvent.getSelectedItemsIds()));
+        return aggregateLicenseeClassFilterWidget;
     }
 
-    private void initReportedTypeOfUseFilterWidget() {
+    private ReportedTypeOfUseFilterWidget initReportedTypeOfUseFilterWidget() {
         reportedTypeOfUseFilterWidget = new ReportedTypeOfUseFilterWidget(controller::getReportedTypeOfUses,
             baselineFilter.getReportedTypeOfUses());
         reportedTypeOfUseFilterWidget.addFilterSaveListener((IFilterSaveListener<String>) saveEvent ->
             baselineFilter.setReportedTypeOfUses(saveEvent.getSelectedItemsIds()));
+        return reportedTypeOfUseFilterWidget;
     }
 
     private HorizontalLayout initLicenseeClassesLayout() {
-        HorizontalLayout licenseeClassesLayout =
-            new HorizontalLayout(detailLicenseeClassFilterWidget, aggregateLicenseeClassFilterWidget);
-        licenseeClassesLayout.setSizeFull();
-        licenseeClassesLayout.setSpacing(true);
-        return licenseeClassesLayout;
+        HorizontalLayout horizontalLayout =
+            new HorizontalLayout(initDetailLicenseeClassFilterWidget(), initAggregateLicenseeClassFilterWidget());
+        horizontalLayout.setSizeFull();
+        horizontalLayout.setSpacing(true);
+        return horizontalLayout;
     }
 
     private ComboBox<String> initTypeOfUseLayout() {

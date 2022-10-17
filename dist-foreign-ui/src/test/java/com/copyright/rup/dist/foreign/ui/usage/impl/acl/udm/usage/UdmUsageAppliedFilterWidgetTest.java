@@ -84,8 +84,8 @@ public class UdmUsageAppliedFilterWidgetTest {
         verifyLabel(((VerticalLayout) component).getComponent(10), "Usage Date To", "06/20/2020");
         verifyLabel(((VerticalLayout) component).getComponent(11), "Survey Start Date From", "03/12/2020");
         verifyLabel(((VerticalLayout) component).getComponent(12), "Survey Start Date To", "05/20/2020");
-        verifyLabel(((VerticalLayout) component).getComponent(13), "Type of Use", "PRINT");
-        verifyLabel(((VerticalLayout) component).getComponent(14), "Channel", "CCC");
+        verifyLabel(((VerticalLayout) component).getComponent(13), "Channel", "CCC");
+        verifyLabel(((VerticalLayout) component).getComponent(14), "Type of Use", "PRINT");
         verifyLabelWithOperator(((VerticalLayout) component).getComponent(15),
             "<li><b><i>Wr Wrk Inst From: </i></b>254327612</li><li><b><i>Operator: </i></b>EQUALS</li>");
         verifyLabelWithOperator(((VerticalLayout) component).getComponent(16),
