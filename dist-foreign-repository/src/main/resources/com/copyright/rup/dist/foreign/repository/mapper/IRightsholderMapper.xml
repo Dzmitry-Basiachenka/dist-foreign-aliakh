@@ -17,6 +17,12 @@
         <result property="payee.name" column="payee_name"/>
     </resultMap>
 
+    <resultMap id="rightsholderTypeOfUserPairResultMap" type="RightsholderAccountTypeOfUsePair">
+        <result property="rightsholder.id" column="rightsholder_uid"/>
+        <result property="rightsholder.accountNumber" column="rh_account_number"/>
+        <result property="typeOfUse" column="type_of_use"/>
+    </resultMap>
+
     <select id="findRros" resultMap="rroResultMap" parameterType="string">
         select distinct
             ub.rro_account_number,
@@ -109,6 +115,17 @@
         from ${schema}.df_usage u
         join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
         where u.df_scenario_uid = #{scenarioId}
+        order by rh.df_rightsholder_uid
+    </select>
+
+    <select id="findByAclScenarioId" resultMap="rightsholderTypeOfUserPairResultMap" parameterType="string">
+        select distinct
+            rh.df_rightsholder_uid rightsholder_uid,
+            rh.rh_account_number,
+            shd.type_of_use type_of_use
+        from ${schema}.df_acl_share_detail shd
+        join ${schema}.df_rightsholder rh on rh.rh_account_number = shd.rh_account_number
+        where shd.df_acl_scenario_uid = #{scenarioId}
         order by rh.df_rightsholder_uid
     </select>
 

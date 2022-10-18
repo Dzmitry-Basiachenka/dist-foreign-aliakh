@@ -8,6 +8,7 @@ import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.service.impl.CommonRightsholderService;
 import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
+import com.copyright.rup.dist.foreign.domain.RightsholderTypeOfUsePair;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.repository.api.IRightsholderRepository;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
@@ -115,6 +116,11 @@ public class RightsholderService extends CommonRightsholderService implements IR
     @Override
     public List<Rightsholder> getByScenarioId(String scenarioId) {
         return rightsholderRepository.findByScenarioId(scenarioId);
+    }
+
+    @Override
+    public List<RightsholderTypeOfUsePair> getByAclScenarioId(String aclScenarioId) {
+        return rightsholderRepository.findByAclScenarioId(aclScenarioId);
     }
 
     @Override
