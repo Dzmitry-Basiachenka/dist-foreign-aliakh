@@ -5,6 +5,7 @@ import com.copyright.rup.dist.common.repository.api.ICommonRightsholderRepositor
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
+import com.copyright.rup.dist.foreign.domain.RightsholderTypeOfUsePair;
 
 import java.util.List;
 
@@ -39,9 +40,9 @@ public interface IRightsholderRepository extends ICommonRightsholderRepository {
     /**
      * Finds list of unique {@link Rightsholder}s base on search value.
      *
-     * @param searchValue   value to search
-     * @param pageable      instance of {@link Pageable}
-     * @param sort          instance of {@link Sort}
+     * @param searchValue value to search
+     * @param pageable    instance of {@link Pageable}
+     * @param sort        instance of {@link Sort}
      * @return list of unique {@link Rightsholder}s from all usages
      */
     List<Rightsholder> findAllWithSearch(String searchValue, Pageable pageable, Sort sort);
@@ -49,7 +50,7 @@ public interface IRightsholderRepository extends ICommonRightsholderRepository {
     /**
      * Finds count of unique rightsholders based on search value.
      *
-     * @param searchValue   value to search
+     * @param searchValue value to search
      * @return count of rightsholders
      */
     int findCountWithSearch(String searchValue);
@@ -61,6 +62,15 @@ public interface IRightsholderRepository extends ICommonRightsholderRepository {
      * @return list of {@link Rightsholder}s from usages with given scenario identifier
      */
     List<Rightsholder> findByScenarioId(String scenarioId);
+
+    /**
+     * Finds list of {@link RightsholderTypeOfUsePair}s from scenario share details with given ACL
+     * scenario identifier.
+     *
+     * @param aclScenarioId scenario identifier
+     * @return list of {@link RightsholderTypeOfUsePair}s
+     */
+    List<RightsholderTypeOfUsePair> findByAclScenarioId(String aclScenarioId);
 
     /**
      * Finds all {@link RightsholderPayeePair}s within the scenario with given id.

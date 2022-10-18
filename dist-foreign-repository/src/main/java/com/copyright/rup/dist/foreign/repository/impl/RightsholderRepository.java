@@ -7,6 +7,7 @@ import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.impl.CommonRightsholderRepository;
 import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
+import com.copyright.rup.dist.foreign.domain.RightsholderTypeOfUsePair;
 import com.copyright.rup.dist.foreign.repository.api.IRightsholderRepository;
 
 import com.google.common.collect.Maps;
@@ -65,6 +66,11 @@ public class RightsholderRepository extends CommonRightsholderRepository impleme
     @Override
     public List<Rightsholder> findByScenarioId(String scenarioId) {
         return selectList("RightsholderMapper.findByScenarioId", Objects.requireNonNull(scenarioId));
+    }
+
+    @Override
+    public List<RightsholderTypeOfUsePair> findByAclScenarioId(String scenarioId) {
+        return selectList("RightsholderMapper.findByAclScenarioId", Objects.requireNonNull(scenarioId));
     }
 
     @Override

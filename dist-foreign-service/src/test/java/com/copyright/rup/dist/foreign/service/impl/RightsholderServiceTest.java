@@ -13,6 +13,7 @@ import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.integration.rest.prm.IPrmRightsholderService;
 import com.copyright.rup.dist.common.repository.api.Pageable;
+import com.copyright.rup.dist.foreign.domain.RightsholderTypeOfUsePair;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.repository.api.IRightsholderRepository;
 
@@ -136,6 +137,17 @@ public class RightsholderServiceTest {
     }
 
     @Test
+    public void testGetByAclScenarioId() {
+        List<RightsholderTypeOfUsePair> rightsholderTypeOfUsePairs =
+            Arrays.asList(buildRightsholderTypeOfUsePair(7000813806L), buildRightsholderTypeOfUsePair(1000009522L));
+        String scenarioId = "bf6d4cf2-bb84-455c-877e-6fd3afb4deca";
+        expect(rightsholderRepository.findByAclScenarioId(scenarioId)).andReturn(rightsholderTypeOfUsePairs).once();
+        replay(rightsholderRepository);
+        assertEquals(rightsholderTypeOfUsePairs, rightsholderService.getByAclScenarioId(scenarioId));
+        verify(rightsholderRepository);
+    }
+
+    @Test
     public void testGetRightsholdersByScenarioId() {
         expect(rightsholderRepository.findRhPayeePairByScenarioId(SCENARIO_ID)).andReturn(Collections.emptyList())
             .once();
@@ -149,5 +161,12 @@ public class RightsholderServiceTest {
         rightsholder.setAccountNumber(accountNumber);
         rightsholder.setName(RIGHTSHOLDER_NAME);
         return rightsholder;
+    }
+
+    private RightsholderTypeOfUsePair buildRightsholderTypeOfUsePair(Long accountNumber) {
+        RightsholderTypeOfUsePair rightsholderTypeOfUsePair = new RightsholderTypeOfUsePair();
+        rightsholderTypeOfUsePair.setRightsholder(buildRightsholder(accountNumber));
+        rightsholderTypeOfUsePair.setTypeOfUse("PRINT");
+        return rightsholderTypeOfUsePair;
     }
 }

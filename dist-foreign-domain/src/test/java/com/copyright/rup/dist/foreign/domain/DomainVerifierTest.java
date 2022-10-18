@@ -171,7 +171,8 @@ public class DomainVerifierTest {
             {AclLiabilityDetailsReportDto.class},
             {AclLiabilitiesByAggLicClassReportDto.class},
             {AclReportTotalAmountsDto.class},
-            {AclLiabilitiesByRhReportDto.class}
+            {AclLiabilitiesByRhReportDto.class},
+            {RightsholderTypeOfUsePair.class}
         };
         return Arrays.asList(testData);
     }
