@@ -21,6 +21,10 @@ import java.math.BigDecimal;
 public class AclRightsholderTotalsHolder extends StoredEntity<String> {
 
     private Rightsholder rightsholder = new Rightsholder();
+    private Long printPayeeAccountNumber;
+    private String printPayeeName;
+    private Long digitalPayeeAccountNumber;
+    private String digitalPayeeName;
     private BigDecimal grossTotalPrint = BigDecimal.ZERO.setScale(10, BigDecimal.ROUND_HALF_UP);
     private BigDecimal grossTotalDigital = BigDecimal.ZERO.setScale(10, BigDecimal.ROUND_HALF_UP);
     private BigDecimal serviceFeeTotalPrint = BigDecimal.ZERO.setScale(10, BigDecimal.ROUND_HALF_UP);
@@ -37,6 +41,38 @@ public class AclRightsholderTotalsHolder extends StoredEntity<String> {
 
     public void setRightsholder(Rightsholder rightsholder) {
         this.rightsholder = rightsholder;
+    }
+
+    public Long getPrintPayeeAccountNumber() {
+        return printPayeeAccountNumber;
+    }
+
+    public void setPrintPayeeAccountNumber(Long printPayeeAccountNumber) {
+        this.printPayeeAccountNumber = printPayeeAccountNumber;
+    }
+
+    public String getPrintPayeeName() {
+        return printPayeeName;
+    }
+
+    public void setPrintPayeeName(String printPayeeName) {
+        this.printPayeeName = printPayeeName;
+    }
+
+    public Long getDigitalPayeeAccountNumber() {
+        return digitalPayeeAccountNumber;
+    }
+
+    public void setDigitalPayeeAccountNumber(Long digitalPayeeAccountNumber) {
+        this.digitalPayeeAccountNumber = digitalPayeeAccountNumber;
+    }
+
+    public String getDigitalPayeeName() {
+        return digitalPayeeName;
+    }
+
+    public void setDigitalPayeeName(String digitalPayeeName) {
+        this.digitalPayeeName = digitalPayeeName;
     }
 
     public BigDecimal getGrossTotalPrint() {
@@ -121,15 +157,19 @@ public class AclRightsholderTotalsHolder extends StoredEntity<String> {
         }
         AclRightsholderTotalsHolder that = (AclRightsholderTotalsHolder) obj;
         return new EqualsBuilder()
-            .append(numberOfTitles, that.numberOfTitles)
-            .append(numberOfAggLcClasses, that.numberOfAggLcClasses)
             .append(rightsholder, that.rightsholder)
+            .append(printPayeeAccountNumber, that.printPayeeAccountNumber)
+            .append(printPayeeName, that.printPayeeName)
+            .append(digitalPayeeAccountNumber, that.digitalPayeeAccountNumber)
+            .append(digitalPayeeName, that.digitalPayeeName)
             .append(grossTotalPrint, that.grossTotalPrint)
             .append(grossTotalDigital, that.grossTotalDigital)
             .append(serviceFeeTotalPrint, that.serviceFeeTotalPrint)
             .append(serviceFeeTotalDigital, that.serviceFeeTotalDigital)
             .append(netTotalPrint, that.netTotalPrint)
             .append(netTotalDigital, that.netTotalDigital)
+            .append(numberOfTitles, that.numberOfTitles)
+            .append(numberOfAggLcClasses, that.numberOfAggLcClasses)
             .append(licenseType, that.licenseType)
             .isEquals();
     }
@@ -138,6 +178,10 @@ public class AclRightsholderTotalsHolder extends StoredEntity<String> {
     public int hashCode() {
         return new HashCodeBuilder()
             .append(rightsholder)
+            .append(printPayeeAccountNumber)
+            .append(printPayeeName)
+            .append(digitalPayeeAccountNumber)
+            .append(digitalPayeeName)
             .append(grossTotalPrint)
             .append(grossTotalDigital)
             .append(serviceFeeTotalPrint)
@@ -154,6 +198,10 @@ public class AclRightsholderTotalsHolder extends StoredEntity<String> {
     public String toString() {
         return new ToStringBuilder(this)
             .append("rightsholder", rightsholder)
+            .append("printPayeeAccountNumber", printPayeeAccountNumber)
+            .append("printPayeeName", printPayeeName)
+            .append("digitalPayeeAccountNumber", digitalPayeeAccountNumber)
+            .append("digitalPayeeName", digitalPayeeName)
             .append("grossTotalPrint", grossTotalPrint)
             .append("grossTotalDigital", grossTotalDigital)
             .append("serviceFeeTotalPrint", serviceFeeTotalPrint)
