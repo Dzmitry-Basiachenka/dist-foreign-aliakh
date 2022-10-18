@@ -50,6 +50,7 @@ public final class ForeignSecurityUtilsTest {
     @Parameterized.Parameters
     public static Collection<Object[]> getUserPermissions() {
         Object[] viewOnlyRole = {Sets.newHashSet(FDA_ACCESS_APPLICATION, FDA_VIEW_SCENARIO, FDA_VIEW_ONLY_PERMISSION)};
+        Object[] approverRole = {Sets.newHashSet(FDA_ACCESS_APPLICATION, "FDA_APPROVER_PERMISSION")};
         Object[] managerRole =
             {Sets.newHashSet(FDA_ACCESS_APPLICATION, FDA_VIEW_SCENARIO, "FDA_MANAGER_PERMISSION")};
         Object[] specialistRole = {Sets.newHashSet(
@@ -62,6 +63,7 @@ public final class ForeignSecurityUtilsTest {
         Object[] roleWithoutPermissions = {Collections.emptySet()};
         return Arrays.asList(
             viewOnlyRole,
+            approverRole,
             managerRole,
             specialistRole,
             researcherRole,
@@ -122,6 +124,8 @@ public final class ForeignSecurityUtilsTest {
             ForeignSecurityUtils.hasResearcherPermission());
         assertEquals(permissions.contains("FDA_VIEW_ONLY_PERMISSION"),
             ForeignSecurityUtils.hasViewOnlyPermission());
+        assertEquals(permissions.contains("FDA_APPROVER_PERMISSION"),
+            ForeignSecurityUtils.hasApproverPermission());
     }
 
     private static class MockSecurityContext implements SecurityContext {

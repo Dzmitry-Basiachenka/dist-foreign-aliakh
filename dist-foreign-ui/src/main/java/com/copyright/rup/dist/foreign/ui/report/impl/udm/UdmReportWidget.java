@@ -34,7 +34,7 @@ public class UdmReportWidget extends MenuBar implements IUdmReportWidget {
         MenuItem rootItem = addItem(ForeignUi.getMessage("tab.reports"), null);
         rootItem.setStyleName("reports-menu-root");
         if (ForeignSecurityUtils.hasManagerPermission() || ForeignSecurityUtils.hasSpecialistPermission()
-            || ForeignSecurityUtils.hasViewOnlyPermission()) {
+            || ForeignSecurityUtils.hasViewOnlyPermission() || ForeignSecurityUtils.hasApproverPermission()) {
             String weeklySurveyReport = ForeignUi.getMessage("menu.report.weekly_survey_report");
             rootItem.addItem(weeklySurveyReport, menuItem ->
                 this.openReportWindow(weeklySurveyReport, controller.getUdmWeeklySurveyReportController()));

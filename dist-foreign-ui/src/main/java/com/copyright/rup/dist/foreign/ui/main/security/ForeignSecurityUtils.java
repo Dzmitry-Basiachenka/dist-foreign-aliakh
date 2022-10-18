@@ -208,4 +208,11 @@ public final class ForeignSecurityUtils {
     public static boolean hasViewOnlyPermission() {
         return SecurityUtils.hasPermission("FDA_VIEW_ONLY_PERMISSION");
     }
+
+    /**
+     * @return {@code true} if user has approver permission, {@code false} - otherwise.
+     */
+    public static boolean hasApproverPermission() {
+        return SecurityUtils.hasPermission("FDA_APPROVER_PERMISSION");
+    }
 }

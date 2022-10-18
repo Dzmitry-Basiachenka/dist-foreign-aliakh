@@ -124,6 +124,15 @@ public class UdmReportWidgetTest {
     }
 
     @Test
+    public void testRefreshApprover() {
+        setApproverExpectations();
+        replayAll();
+        udmReportWidget.refresh();
+        verifyAll();
+        assertReportsMenu();
+    }
+
+    @Test
     public void testUdmWeeklySurveyReportSelected() {
         UdmCommonReportWidget widget = createMock(UdmCommonReportWidget.class);
         IUdmWeeklySurveyReportController controller = createMock(IUdmWeeklySurveyReportController.class);
@@ -295,26 +304,31 @@ public class UdmReportWidgetTest {
     }
 
     private void setSpecialistExpectations() {
-        setPermissionsExpectations(true, false, false, false);
+        setPermissionsExpectations(true, false, false, false, false);
     }
 
     private void setManagerExpectations() {
-        setPermissionsExpectations(false, true, false, false);
+        setPermissionsExpectations(false, true, false, false, false);
     }
 
     private void setResearcherExpectations() {
-        setPermissionsExpectations(false, false, true, false);
+        setPermissionsExpectations(false, false, true, false, false);
     }
 
     private void setViewOnlyExpectations() {
-        setPermissionsExpectations(false, false, false, true);
+        setPermissionsExpectations(false, false, false, true, false);
+    }
+
+    private void setApproverExpectations() {
+        setPermissionsExpectations(false, false, false, false, true);
     }
 
     private void setPermissionsExpectations(boolean isSpecialist, boolean isManager, boolean isResearcher,
-                                            boolean isViewOnly) {
+                                            boolean isViewOnly, boolean isApprover) {
         expect(ForeignSecurityUtils.hasSpecialistPermission()).andStubReturn(isSpecialist);
         expect(ForeignSecurityUtils.hasManagerPermission()).andStubReturn(isManager);
         expect(ForeignSecurityUtils.hasResearcherPermission()).andStubReturn(isResearcher);
         expect(ForeignSecurityUtils.hasViewOnlyPermission()).andStubReturn(isViewOnly);
+        expect(ForeignSecurityUtils.hasApproverPermission()).andStubReturn(isApprover);
     }
 }
