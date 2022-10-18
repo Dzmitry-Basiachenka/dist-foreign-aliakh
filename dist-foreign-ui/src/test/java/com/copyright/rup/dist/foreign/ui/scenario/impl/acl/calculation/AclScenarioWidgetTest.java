@@ -73,6 +73,10 @@ public class AclScenarioWidgetTest {
     private static final String SCENARIO_ID = "24b0a5a9-6380-4519-91f2-779c98ed45cc";
     private static final Long RH_ACCOUNT_NUMBER = 7000447306L;
     private static final String RH_NAME = "Longhouse";
+    private static final Long PRINT_PAYEE_ACCOUNT_NUMBER = 1000000000L;
+    private static final String PRINT_PAYEE_NAME = "Print Payee Name";
+    private static final Long DIGITAL_PAYEE_ACCOUNT_NUMBER = 1000000001L;
+    private static final String DIGITAL_PAYEE_NAME = "Digital Payee Name";
     private static final String GROSS_TOTAL_PRINT = "20000.00";
     private static final String SERVICE_FEE_TOTAL_PRINT = "6400.00";
     private static final String NET_TOTAL_PRINT = "13600.00";
@@ -123,8 +127,9 @@ public class AclScenarioWidgetTest {
         DataProvider dataProvider = grid.getDataProvider();
         dataProvider.refreshAll();
         Object[][] expectedCells = {
-            {"7000447306", RH_NAME, "20,000.00", "6,400.00", "13,600.00", "1,000.00",
-                SERVICE_FEE_TOTAL_DIGITAL, NET_TOTAL_DIGITAL, "1", "1", "ACL"}
+            {"7000447306", RH_NAME, PRINT_PAYEE_ACCOUNT_NUMBER, PRINT_PAYEE_NAME, DIGITAL_PAYEE_ACCOUNT_NUMBER,
+                DIGITAL_PAYEE_NAME, "20,000.00", "6,400.00", "13,600.00", "1,000.00", SERVICE_FEE_TOTAL_DIGITAL,
+                NET_TOTAL_DIGITAL, "1", "1", "ACL"}
         };
         verifyGridItems(grid, Collections.singletonList(buildAclRightsholderTotalsHolder()), expectedCells);
         verify(controller);
@@ -157,7 +162,7 @@ public class AclScenarioWidgetTest {
         expectLastCall().once();
         replay(Windows.class, AclScenarioDrillDownTitlesWindow.class, controller);
         Grid grid = Whitebox.getInternalState(scenarioWidget, "rightsholdersGrid");
-        Grid.Column column = (Grid.Column) grid.getColumns().get(8);
+        Grid.Column column = (Grid.Column) grid.getColumns().get(12);
         ValueProvider<AclRightsholderTotalsHolder, Button> provider = column.getValueProvider();
         Button button = provider.apply(buildAclRightsholderTotalsHolder());
         button.click();
@@ -175,7 +180,7 @@ public class AclScenarioWidgetTest {
         expectLastCall().once();
         replay(Windows.class, AclScenarioDrillDownAggLcClassesWindow.class, controller);
         Grid grid = Whitebox.getInternalState(scenarioWidget, "rightsholdersGrid");
-        Grid.Column column = (Grid.Column) grid.getColumns().get(9);
+        Grid.Column column = (Grid.Column) grid.getColumns().get(13);
         ValueProvider<AclRightsholderTotalsHolder, Button> provider = column.getValueProvider();
         Button button = provider.apply(buildAclRightsholderTotalsHolder());
         button.click();
@@ -209,6 +214,10 @@ public class AclScenarioWidgetTest {
         rightsholder.setAccountNumber(RH_ACCOUNT_NUMBER);
         rightsholder.setName(RH_NAME);
         holder.setRightsholder(rightsholder);
+        holder.setPrintPayeeAccountNumber(PRINT_PAYEE_ACCOUNT_NUMBER);
+        holder.setPrintPayeeName(PRINT_PAYEE_NAME);
+        holder.setDigitalPayeeAccountNumber(DIGITAL_PAYEE_ACCOUNT_NUMBER);
+        holder.setDigitalPayeeName(DIGITAL_PAYEE_NAME);
         holder.setGrossTotalPrint(new BigDecimal(GROSS_TOTAL_PRINT));
         holder.setServiceFeeTotalPrint(new BigDecimal(SERVICE_FEE_TOTAL_PRINT));
         holder.setNetTotalPrint(new BigDecimal(NET_TOTAL_PRINT));
@@ -240,6 +249,10 @@ public class AclScenarioWidgetTest {
         UiTestHelper.verifyGrid(grid, Arrays.asList(
             Triple.of("RH Account #", -1.0, 1),
             Triple.of("RH Name", -1.0, 2),
+            Triple.of("Print Payee Account #", -1.0, 2),
+            Triple.of("Print Payee Name", -1.0, 2),
+            Triple.of("Digital Payee Account #", -1.0, 2),
+            Triple.of("Digital Payee Name", -1.0, 2),
             Triple.of("Print Gross Amt in USD", -1.0, 1),
             Triple.of("Print Service Fee Amt", -1.0, 1),
             Triple.of("Print Net Amt in USD", -1.0, 1),
@@ -248,7 +261,7 @@ public class AclScenarioWidgetTest {
             Triple.of("Digital Net Amt in USD", -1.0, 1),
             Triple.of("# of Titles", -1.0, 2),
             Triple.of("# of Agg Lic Classes", -1.0, 2),
-            Triple.of("License Type", -1.0, 2)
+            Triple.of("License Type", 120.0, -1)
         ));
         FooterRow footerRow = grid.getFooterRow(0);
         assertEquals("20,000.00", footerRow.getCell("grossTotalPrint").getText());

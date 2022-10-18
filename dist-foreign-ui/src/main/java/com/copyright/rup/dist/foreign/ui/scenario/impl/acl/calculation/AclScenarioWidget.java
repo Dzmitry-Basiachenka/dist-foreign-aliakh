@@ -13,6 +13,7 @@ import com.copyright.rup.vaadin.util.CurrencyUtils;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
+import com.vaadin.data.ValueProvider;
 import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
@@ -141,6 +142,14 @@ public class AclScenarioWidget extends Window implements IAclScenarioWidget, Sea
                 holder1.getRightsholder().getName().compareTo(holder2.getRightsholder().getName()))
             .setHidable(true)
             .setExpandRatio(2);
+        addColumn(AclRightsholderTotalsHolder::getPrintPayeeAccountNumber, "table.column.print_payee_account_number",
+            "printPayeeAccountNumber");
+        addColumn(AclRightsholderTotalsHolder::getPrintPayeeName, "table.column.print_payee_name",
+            "printPayeeName");
+        addColumn(AclRightsholderTotalsHolder::getDigitalPayeeAccountNumber,
+            "table.column.digital_payee_account_number", "digitalPayeeAccountNumber");
+        addColumn(AclRightsholderTotalsHolder::getDigitalPayeeName, "table.column.digital_payee_name",
+            "digitalPayeeName");
         addAmountColumn(AclRightsholderTotalsHolder::getGrossTotalPrint, "table.column.print_gross_amount_in_usd",
             PROPERTY_PRINT_GROSS_TOTAL);
         addAmountColumn(AclRightsholderTotalsHolder::getServiceFeeTotalPrint,
@@ -164,7 +173,7 @@ public class AclScenarioWidget extends Window implements IAclScenarioWidget, Sea
             .setId("licenseType")
             .setComparator((holder1, holder2) -> holder1.getLicenseType().compareTo(holder2.getLicenseType()))
             .setHidable(true)
-            .setExpandRatio(2);
+            .setWidth(120);
     }
 
     private void addComponentColumn(Function<AclRightsholderTotalsHolder, Integer> function,
@@ -198,12 +207,22 @@ public class AclScenarioWidget extends Window implements IAclScenarioWidget, Sea
             .setExpandRatio(1);
     }
 
+    private void addColumn(ValueProvider<AclRightsholderTotalsHolder, ?> provider, String captionProperty,
+                           String columnId) {
+        rightsholdersGrid.addColumn(provider)
+            .setCaption(ForeignUi.getMessage(captionProperty))
+            .setId(columnId)
+            .setHidable(true)
+            .setExpandRatio(2);
+    }
+
     private void addFooter() {
         rightsholdersGrid.appendFooterRow();
         rightsholdersGrid.setFooterVisible(true);
         FooterRow row = rightsholdersGrid.getFooterRow(0);
         row.setStyleName("table-ext-footer");
-        row.join("rightsholder.accountNumber", "rightsholder.name").setText("Totals");
+        row.join("rightsholder.accountNumber", "rightsholder.name", "printPayeeAccountNumber", "printPayeeName",
+            "digitalPayeeAccountNumber", "digitalPayeeName").setText("Totals");
         updateFooter();
     }
 
