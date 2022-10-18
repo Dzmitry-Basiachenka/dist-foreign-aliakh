@@ -112,6 +112,7 @@
         <typeAlias alias="AclLiabilitiesByAggLicClassReportDto" type="com.copyright.rup.dist.foreign.domain.report.AclLiabilitiesByAggLicClassReportDto"/>
         <typeAlias alias="AclReportTotalAmountsDto" type="com.copyright.rup.dist.foreign.domain.report.AclReportTotalAmountsDto"/>
         <typeAlias alias="RightsholderAccountTypeOfUsePair" type="com.copyright.rup.dist.foreign.domain.RightsholderTypeOfUsePair"/>
+        <typeAlias alias="AclLiabilitiesByRhReportDto" type="com.copyright.rup.dist.foreign.domain.report.AclLiabilitiesByRhReportDto"/>
     </typeAliases>
 
     <typeHandlers>

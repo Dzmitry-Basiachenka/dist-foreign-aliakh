@@ -25,8 +25,8 @@ public class AclLiabilitiesByRhReportDto extends StoredEntity<String> {
     private String printPayeeName;
     private Long digitalPayeeAccountNumber;
     private String digitalPayeeName;
-    private BigDecimal grossTotalAmount;
-    private BigDecimal netTotalAmount;
+    private BigDecimal grossAmount;
+    private BigDecimal netAmount;
     private BigDecimal printNetAmount;
     private BigDecimal digitalNetAmount;
     private BigDecimal aclNetAmount;
@@ -82,20 +82,20 @@ public class AclLiabilitiesByRhReportDto extends StoredEntity<String> {
         this.digitalPayeeName = digitalPayeeName;
     }
 
-    public BigDecimal getGrossTotalAmount() {
-        return grossTotalAmount;
+    public BigDecimal getGrossAmount() {
+        return grossAmount;
     }
 
-    public void setGrossTotalAmount(BigDecimal grossTotalAmount) {
-        this.grossTotalAmount = grossTotalAmount;
+    public void setGrossAmount(BigDecimal grossAmount) {
+        this.grossAmount = grossAmount;
     }
 
-    public BigDecimal getNetTotalAmount() {
-        return netTotalAmount;
+    public BigDecimal getNetAmount() {
+        return netAmount;
     }
 
-    public void setNetTotalAmount(BigDecimal netTotalAmount) {
-        this.netTotalAmount = netTotalAmount;
+    public void setNetAmount(BigDecimal netAmount) {
+        this.netAmount = netAmount;
     }
 
     public BigDecimal getPrintNetAmount() {
@@ -163,8 +163,8 @@ public class AclLiabilitiesByRhReportDto extends StoredEntity<String> {
             .append(printPayeeName, that.printPayeeName)
             .append(digitalPayeeAccountNumber, that.digitalPayeeAccountNumber)
             .append(digitalPayeeName, that.digitalPayeeName)
-            .append(grossTotalAmount, that.grossTotalAmount)
-            .append(netTotalAmount, that.netTotalAmount)
+            .append(grossAmount, that.grossAmount)
+            .append(netAmount, that.netAmount)
             .append(printNetAmount, that.printNetAmount)
             .append(digitalNetAmount, that.digitalNetAmount)
             .append(aclNetAmount, that.aclNetAmount)
@@ -184,8 +184,8 @@ public class AclLiabilitiesByRhReportDto extends StoredEntity<String> {
             .append(printPayeeName)
             .append(digitalPayeeAccountNumber)
             .append(digitalPayeeName)
-            .append(grossTotalAmount)
-            .append(netTotalAmount)
+            .append(grossAmount)
+            .append(netAmount)
             .append(printNetAmount)
             .append(digitalNetAmount)
             .append(aclNetAmount)
@@ -205,8 +205,8 @@ public class AclLiabilitiesByRhReportDto extends StoredEntity<String> {
             .append("printPayeeName", printPayeeName)
             .append("digitalPayeeAccountNumber", digitalPayeeAccountNumber)
             .append("digitalPayeeName", digitalPayeeName)
-            .append("grossTotalAmount", grossTotalAmount)
-            .append("netTotalAmount", netTotalAmount)
+            .append("grossAmount", grossAmount)
+            .append("netAmount", netAmount)
             .append("printNetAmount", printNetAmount)
             .append("digitalNetAmount", digitalNetAmount)
             .append("aclNetAmount", aclNetAmount)
