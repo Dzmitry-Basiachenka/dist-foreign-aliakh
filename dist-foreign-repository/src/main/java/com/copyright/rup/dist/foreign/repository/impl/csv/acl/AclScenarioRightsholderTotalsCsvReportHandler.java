@@ -20,7 +20,8 @@ import java.util.List;
  */
 public class AclScenarioRightsholderTotalsCsvReportHandler extends BaseCsvReportHandler<AclRightsholderTotalsHolder> {
 
-    private static final List<String> HEADERS = Arrays.asList("RH Account #", "RH Name", "Print Gross Amt in USD",
+    private static final List<String> HEADERS = Arrays.asList("RH Account #", "RH Name", "Print Payee Account #",
+        "Print Payee Name", "Digital Payee Account #", "Digital Payee Name", "Print Gross Amt in USD",
         "Print Service Fee Amt", "Print Net Amt in USD", "Digital Gross Amt in USD", "Digital Service Fee Amt",
         "Digital Net Amt in USD", "# of Titles", "# of Agg Lic Classes", "License Type");
 
@@ -38,6 +39,10 @@ public class AclScenarioRightsholderTotalsCsvReportHandler extends BaseCsvReport
         List<String> beanProperties = new ArrayList<>();
         beanProperties.add(getBeanPropertyAsString(bean.getRightsholder().getAccountNumber()));
         beanProperties.add(bean.getRightsholder().getName());
+        beanProperties.add(getBeanPropertyAsString(bean.getPrintPayeeAccountNumber()));
+        beanProperties.add(bean.getPrintPayeeName());
+        beanProperties.add(getBeanPropertyAsString(bean.getDigitalPayeeAccountNumber()));
+        beanProperties.add(bean.getDigitalPayeeName());
         beanProperties.add(roundAndGetBeanBigDecimal(bean.getGrossTotalPrint()));
         beanProperties.add(roundAndGetBeanBigDecimal(bean.getServiceFeeTotalPrint()));
         beanProperties.add(roundAndGetBeanBigDecimal(bean.getNetTotalPrint()));

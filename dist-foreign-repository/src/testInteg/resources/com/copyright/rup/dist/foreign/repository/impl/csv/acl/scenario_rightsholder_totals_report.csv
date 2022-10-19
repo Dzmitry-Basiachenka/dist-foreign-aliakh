@@ -1,4 +1,4 @@
-RH Account #,RH Name,Print Gross Amt in USD,Print Service Fee Amt,Print Net Amt in USD,Digital Gross Amt in USD,Digital Service Fee Amt,Digital Net Amt in USD,# of Titles,# of Agg Lic Classes,License Type
-1000002859,John Wiley & Sons - Books,100.00,16.00,84.10,234.92,32.00,202.92,2,1,ACL
-1000000001,Rothchild Consultants,0.00,0.00,0.00,837.33,4.00,833.33,1,1,ACL
-1000028511,,110.00,10.00,100.00,0.00,0.00,0.00,1,1,ACL
+RH Account #,RH Name,Print Payee Account #,Print Payee Name,Digital Payee Account #,Digital Payee Name,Print Gross Amt in USD,Print Service Fee Amt,Print Net Amt in USD,Digital Gross Amt in USD,Digital Service Fee Amt,Digital Net Amt in USD,# of Titles,# of Agg Lic Classes,License Type
+1000002859,John Wiley & Sons - Books,1000009482,Daedalus Enterprises Inc,2000149570,National Association for Management,100.00,16.00,84.10,234.92,32.00,202.92,2,1,ACL
+1000000001,Rothchild Consultants,,,2000149570,National Association for Management,0.00,0.00,0.00,837.33,4.00,833.33,1,1,ACL
+1000028511,,1000028511,,,,110.00,10.00,100.00,0.00,0.00,0.00,1,1,ACL
