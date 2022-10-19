@@ -1,17 +1,12 @@
 package com.copyright.rup.dist.foreign.ui.report.impl.udm;
 
-import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmReportWidget;
-import com.copyright.rup.dist.foreign.ui.report.impl.report.ReportStreamSource;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.widget.api.IController;
 
-import com.vaadin.server.Page;
-import com.vaadin.server.ResourceReference;
-import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.Window;
 
@@ -83,19 +78,5 @@ public class UdmReportWidget extends MenuBar implements IUdmReportWidget {
         Window reportWindow = (Window) reportController.initWidget();
         reportWindow.setCaption(reportCaption);
         Windows.showModalWindow(reportWindow);
-    }
-
-    @Override
-    public void generateReport(IStreamSource streamSource) {
-        VaadinSession session = VaadinSession.getCurrent();
-        session.lock();
-        try {
-            ReportStreamSource resource = new ReportStreamSource(streamSource);
-            setResource(resource.getFilename(), resource);
-            ResourceReference resourceReference = ResourceReference.create(resource, this, resource.getFilename());
-            Page.getCurrent().open(resourceReference.getURL(), null);
-        } finally {
-            session.unlock();
-        }
     }
 }
