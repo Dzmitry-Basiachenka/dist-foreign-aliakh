@@ -58,6 +58,9 @@ public class AclCalculationCsvReportsIntegrationTest extends CsvReportsTestHelpe
         FOLDER_NAME + "write-liabilities-by-agg-lic-class-csv-report.groovy";
     private static final String WRITE_LIABILITY_DETAILS_CSV_REPORT =
         FOLDER_NAME + "write-liability-details-csv-report.groovy";
+    private static final String WRITE_LIABILITIES_BY_RH_CSV_REPORT =
+        FOLDER_NAME + "write-liabilities-by-rh-csv-report.groovy";
+    private static final String ACL_SCENARIO_NAME = "ACL Scenario 10/05/202212";
 
     @Autowired
     private IAclCalculationReportRepository aclCalculationReportRepository;
@@ -166,7 +169,7 @@ public class AclCalculationCsvReportsIntegrationTest extends CsvReportsTestHelpe
     @TestData(fileName = WRITE_SCENARIO_SUMMARY_OF_WORK_SHARES_BY_AGG_LC_CSV_REPORT)
     public void testWriteSummaryOfWorkSharesByAggLcCsvReport() throws IOException {
         AclCalculationReportsInfoDto reportsInfoDto = new AclCalculationReportsInfoDto();
-        AclScenario scenario = buildScenario("a0162659-86af-40ab-bc55-2ae0cdebc2a4", "ACL Scenario 10/05/202212");
+        AclScenario scenario = buildScenario("a0162659-86af-40ab-bc55-2ae0cdebc2a4", ACL_SCENARIO_NAME);
         scenario.setLicenseType("ACL");
         scenario.setPeriodEndDate(202212);
         reportsInfoDto.setScenarios(Collections.singletonList(scenario));
@@ -185,7 +188,7 @@ public class AclCalculationCsvReportsIntegrationTest extends CsvReportsTestHelpe
         reportsInfoDto.setUser("user@copyright.com");
         reportsInfoDto.setReportDateTime(OffsetDateTime.of(2022, 10, 5, 14, 30, 30, 30, ZoneOffset.ofHours(0)));
         reportsInfoDto.setScenarios(Arrays.asList(
-            buildScenario("06fee547-bfc4-4f2a-9578-58c03821e217", "ACL Scenario 10/05/202212"),
+            buildScenario("06fee547-bfc4-4f2a-9578-58c03821e217", ACL_SCENARIO_NAME),
             buildScenario("6dbd30f7-91f6-4949-a74c-cfbac5e466ac", "MCL Scenario 10/05/202212"),
             buildScenario("ca1c5532-eb1c-440a-8fbc-8e595dbea5cb", "VGW Scenario 10/05/202212"),
             buildScenario("d86f2c59-a50c-4e54-826a-ee50aeb98904", "JACDCL Scenario 10/05/202212")));
@@ -200,7 +203,7 @@ public class AclCalculationCsvReportsIntegrationTest extends CsvReportsTestHelpe
         AclCalculationReportsInfoDto reportsInfoDto = new AclCalculationReportsInfoDto();
         reportsInfoDto.setPeriod(202212);
         reportsInfoDto.setScenarios(Arrays.asList(
-            buildScenario("06fee547-bfc4-4f2a-9578-58c03821e217", "ACL Scenario 10/05/202212"),
+            buildScenario("06fee547-bfc4-4f2a-9578-58c03821e217", ACL_SCENARIO_NAME),
             buildScenario("d86f2c59-a50c-4e54-826a-ee50aeb98904", "JACDCL Scenario 10/05/202212")));
         reportsInfoDto.setReportDateTime(OffsetDateTime.of(2022, 10, 5, 14, 30, 30, 30, ZoneOffset.ofHours(0)));
         assertFilesWithExecutor(outputStream ->
@@ -209,8 +212,20 @@ public class AclCalculationCsvReportsIntegrationTest extends CsvReportsTestHelpe
     }
 
     @Test
+    @TestData(fileName = WRITE_LIABILITIES_BY_RH_CSV_REPORT)
     public void testWriteAclLiabilitiesByRhReport() throws IOException {
-        //TODO {dbasiachenka} implement
+        AclCalculationReportsInfoDto reportsInfoDto = new AclCalculationReportsInfoDto();
+        reportsInfoDto.setPeriod(202212);
+        reportsInfoDto.setUser("user@copyright.com");
+        reportsInfoDto.setReportDateTime(OffsetDateTime.of(2022, 10, 5, 14, 30, 30, 30, ZoneOffset.ofHours(0)));
+        reportsInfoDto.setScenarios(Arrays.asList(
+            buildScenario("ae0910b1-1fb0-420a-96c9-76a18ebca229", ACL_SCENARIO_NAME),
+            buildScenario("49c52e95-ca96-400e-a73c-d5732a5d1301", "MACL Scenario 10/05/202212"),
+            buildScenario("3ecfcf3b-1be0-4bfa-bc55-44add8432df9", "VGW Scenario 10/05/202212"),
+            buildScenario("ce858f53-eea8-4273-888e-ab983f88f59b", "JACDCL Scenario 10/05/202212")));
+        assertFilesWithExecutor(outputStream ->
+                aclCalculationReportRepository.writeAclLiabilitiesByRhReport(reportsInfoDto, outputStream),
+            "acl/liabilities_by_rightsholder_report.csv");
     }
 
     private AclScenario buildScenario(String id, String name) {

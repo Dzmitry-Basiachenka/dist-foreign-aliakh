@@ -10,6 +10,7 @@ import com.copyright.rup.dist.foreign.repository.api.IAclCalculationReportReposi
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.AclFundPoolDetailsCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.AclGrantDetailCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.AclLiabilitiesByAggLicClassCsvReportHandler;
+import com.copyright.rup.dist.foreign.repository.impl.csv.acl.AclLiabilitiesByRhCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.AclLiabilityDetailsCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.AclScenarioDetailCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.AclScenarioRightsholderTotalsCsvReportHandler;
@@ -127,6 +128,12 @@ public class AclCalculationReportRepository extends CommonReportRepository imple
 
     @Override
     public void writeAclLiabilitiesByRhReport(AclCalculationReportsInfoDto reportInfo, OutputStream outputStream) {
-        //TODO {dbasiachenka} implement
+        try (AclLiabilitiesByRhCsvReportHandler handler =
+                 new AclLiabilitiesByRhCsvReportHandler(Objects.requireNonNull(outputStream))) {
+            getTemplate().select("IAclCalculationReportMapper.findAclLiabilitiesByRhReportDtos", reportInfo, handler);
+            handler.writeTotals(
+                selectOne("IAclCalculationReportMapper.findAclLiabilitiesByRhReportTotalAmounts", reportInfo));
+            handler.writeMetadata(reportInfo);
+        }
     }
 }
