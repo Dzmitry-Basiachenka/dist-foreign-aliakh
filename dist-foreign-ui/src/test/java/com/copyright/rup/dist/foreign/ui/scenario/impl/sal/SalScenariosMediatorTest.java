@@ -161,19 +161,16 @@ public class SalScenariosMediatorTest {
     }
 
     private void mockViewOnlyPermissions() {
-        expect(SecurityUtils.hasPermission("FDA_VIEW_SCENARIO")).andReturn(true).once();
         expect(SecurityUtils.hasPermission(anyString())).andStubReturn(false);
     }
 
     private void mockManagerPermissions() {
-        expect(SecurityUtils.hasPermission("FDA_VIEW_SCENARIO")).andReturn(true).once();
         expect(SecurityUtils.hasPermission(anyString())).andStubReturn(false);
         expect(SecurityUtils.hasPermission("FDA_APPROVE_SCENARIO")).andReturn(true).once();
         expect(SecurityUtils.hasPermission("FDA_REJECT_SCENARIO")).andReturn(true).once();
     }
 
     private void mockSpecialistPermissions() {
-        expect(SecurityUtils.hasPermission("FDA_VIEW_SCENARIO")).andReturn(true).once();
         expect(SecurityUtils.hasPermission("FDA_EDIT_SCENARIO_NAME")).andReturn(true).once();
         expect(SecurityUtils.hasPermission(anyString())).andStubReturn(false);
         expect(SecurityUtils.hasPermission("FDA_DELETE_SCENARIO")).andReturn(true).once();

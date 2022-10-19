@@ -63,4 +63,65 @@ databaseChangeLog {
             }
         }
     }
+
+    changeSet(id: '2022-10-20-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
+        comment("B-67527 FDA: Create Approver role for ACL: delete permission FDA_VIEW_SCENARIO")
+
+        delete(schemaName: dbCommonSchema, tableName: 'cm_role_to_permission_map') {
+            where "cm_role_uid in ('baseline-fda-distribution-specialist', 'baseline-fda-distribution-manager', 'baseline-fda-view-only') " +
+                    "and cm_permission_uid = 'baseline-fda-view-scenario'"
+        }
+
+        delete(schemaName: dbCommonSchema, tableName: 'cm_permission') {
+            where "cm_permission_uid = 'baseline-fda-view-scenario'"
+        }
+
+        rollback {
+            insert(schemaName: dbCommonSchema, tableName: 'cm_permission') {
+                column(name: 'cm_permission_uid', value: 'baseline-fda-view-scenario')
+                column(name: 'permission_name', value: 'FDA_VIEW_SCENARIO')
+                column(name: 'permission_descr', value: 'Permission to view scenario')
+                column(name: 'cm_application_area_uid', value: 'FDA')
+                column(name: 'cm_permission_type_uid', value: 'ACTION')
+                column(name: 'created_by_user', value: 'system')
+                column(name: 'updated_by_user', value: 'system')
+                column(name: 'created_datetime', value: 'now()')
+                column(name: 'updated_datetime', value: 'now()')
+                column(name: 'record_version', value: '1')
+            }
+
+            insert(schemaName: dbCommonSchema, tableName: 'cm_role_to_permission_map') {
+                column(name: 'cm_role_uid', value: 'baseline-fda-distribution-specialist')
+                column(name: 'cm_permission_uid', value: 'baseline-fda-view-scenario')
+                column(name: 'is_permitted_flag', value: 'true')
+                column(name: 'created_by_user', value: 'system')
+                column(name: 'updated_by_user', value: 'system')
+                column(name: 'created_datetime', value: 'now()')
+                column(name: 'updated_datetime', value: 'now()')
+                column(name: 'record_version', value: '1')
+            }
+
+            insert(schemaName: dbCommonSchema, tableName: 'cm_role_to_permission_map') {
+                column(name: 'cm_role_uid', value: 'baseline-fda-distribution-manager')
+                column(name: 'cm_permission_uid', value: 'baseline-fda-view-scenario')
+                column(name: 'is_permitted_flag', value: 'true')
+                column(name: 'created_by_user', value: 'system')
+                column(name: 'updated_by_user', value: 'system')
+                column(name: 'created_datetime', value: 'now()')
+                column(name: 'updated_datetime', value: 'now()')
+                column(name: 'record_version', value: '1')
+            }
+
+            insert(schemaName: dbCommonSchema, tableName: 'cm_role_to_permission_map') {
+                column(name: 'cm_role_uid', value: 'baseline-fda-view-only')
+                column(name: 'cm_permission_uid', value: 'baseline-fda-view-scenario')
+                column(name: 'is_permitted_flag', value: 'true')
+                column(name: 'created_by_user', value: 'system')
+                column(name: 'updated_by_user', value: 'system')
+                column(name: 'created_datetime', value: 'now()')
+                column(name: 'updated_datetime', value: 'now()')
+                column(name: 'record_version', value: '1')
+            }
+        }
+    }
 }
