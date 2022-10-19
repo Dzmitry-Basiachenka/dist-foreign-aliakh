@@ -242,10 +242,11 @@ public class AclScenarioUsageRepositoryIntegrationTest {
         List<AclRightsholderTotalsHolder> holders =
             aclScenarioUsageRepository.findAclRightsholderTotalsHoldersByScenarioId(SCENARIO_UID_1);
         assertEquals(2, holders.size());
-        verifyAclRightsholderTotalsHolder(buildAclRightsholderTotalsHolder(1000002859L, RH_NAME,
-            150.00, 24.00, 126.00, 220.00, 35.00, 178.00, 3, 3), holders.get(0));
-        verifyAclRightsholderTotalsHolder(buildAclRightsholderTotalsHolder(1000000026L, null,
-            20.00, 3.00, 10.00, 0.00, 0.00, 0.00, 1, 1), holders.get(1));
+        verifyAclRightsholderTotalsHolder(buildAclRightsholderTotalsHolder(1000002859L, RH_NAME, 7000873612L,
+            "Brewin Books Ltd", 1000000001L, "Rothchild Consultants", 150.00, 24.00, 126.00, 220.00, 35.00, 178.00,
+            3, 3), holders.get(0));
+        verifyAclRightsholderTotalsHolder(buildAclRightsholderTotalsHolder(1000000026L, null, 7000873612L,
+            "Brewin Books Ltd", null, null, 20.00, 3.00, 10.00, 0.00, 0.00, 0.00, 1, 1), holders.get(1));
     }
 
     @Test
@@ -738,6 +739,10 @@ public class AclScenarioUsageRepositoryIntegrationTest {
     }
 
     private AclRightsholderTotalsHolder buildAclRightsholderTotalsHolder(Long rhAccountNumber, String rhName,
+                                                                         Long printPayeeAccountNumber,
+                                                                         String printPayeeName,
+                                                                         Long digitalPayeeAccountNumber,
+                                                                         String digitalPayeeName,
                                                                          Double grossTotalPrint,
                                                                          Double serviceFeeTotalPrint,
                                                                          Double netTotalPrint, Double grossTotalDigital,
@@ -747,6 +752,10 @@ public class AclScenarioUsageRepositoryIntegrationTest {
         AclRightsholderTotalsHolder holder = new AclRightsholderTotalsHolder();
         holder.getRightsholder().setAccountNumber(rhAccountNumber);
         holder.getRightsholder().setName(rhName);
+        holder.setPrintPayeeAccountNumber(printPayeeAccountNumber);
+        holder.setPrintPayeeName(printPayeeName);
+        holder.setDigitalPayeeAccountNumber(digitalPayeeAccountNumber);
+        holder.setDigitalPayeeName(digitalPayeeName);
         holder.setGrossTotalPrint(BigDecimal.valueOf(grossTotalPrint).setScale(10, BigDecimal.ROUND_HALF_UP));
         holder.setServiceFeeTotalPrint(
             BigDecimal.valueOf(serviceFeeTotalPrint).setScale(10, BigDecimal.ROUND_HALF_UP));
@@ -767,6 +776,10 @@ public class AclScenarioUsageRepositoryIntegrationTest {
         assertEquals(
             expectedHolder.getRightsholder().getAccountNumber(), actualHolder.getRightsholder().getAccountNumber());
         assertEquals(expectedHolder.getRightsholder().getName(), actualHolder.getRightsholder().getName());
+        assertEquals(expectedHolder.getPrintPayeeAccountNumber(), actualHolder.getPrintPayeeAccountNumber());
+        assertEquals(expectedHolder.getPrintPayeeName(), actualHolder.getPrintPayeeName());
+        assertEquals(expectedHolder.getDigitalPayeeAccountNumber(), actualHolder.getDigitalPayeeAccountNumber());
+        assertEquals(expectedHolder.getDigitalPayeeName(), actualHolder.getDigitalPayeeName());
         assertEquals(expectedHolder.getGrossTotalPrint(),
             actualHolder.getGrossTotalPrint().setScale(10, BigDecimal.ROUND_HALF_UP));
         assertEquals(expectedHolder.getServiceFeeTotalPrint(),

@@ -48,6 +48,10 @@
     <resultMap id="aclRightsholderTotalsHolderResultMap" type="AclRightsholderTotalsHolder">
         <result property="rightsholder.name" column="rh_name"/>
         <result property="rightsholder.accountNumber" column="rh_account_number"/>
+        <result property="printPayeeAccountNumber" column="print_payee_account_number"/>
+        <result property="printPayeeName" column="print_payee_name"/>
+        <result property="digitalPayeeAccountNumber" column="digital_payee_account_number"/>
+        <result property="digitalPayeeName" column="digital_payee_name"/>
         <result property="grossTotalPrint" column="gross_total_print"/>
         <result property="grossTotalDigital" column="gross_total_digital"/>
         <result property="serviceFeeTotalPrint" column="service_fee_total_print"/>
@@ -321,7 +325,9 @@
     <sql id="findAclRightsholderTotalsHoldersByScenarioIdSql">
         select
             shd.*,
-            r.name rh_name
+            r.name rh_name,
+            rp.name print_payee_name,
+            rd.name digital_payee_name
         from (
             with works as (
                 select
@@ -332,6 +338,8 @@
             )
             select
                 shd.rh_account_number,
+                min(case when shd.type_of_use = 'PRINT' then shd.payee_account_number end) as print_payee_account_number,
+                min(case when shd.type_of_use = 'DIGITAL' then shd.payee_account_number end) as digital_payee_account_number,
                 sum(case when shd.type_of_use = 'PRINT' then coalesce(shd.gross_amount, 0) else 0 end) as gross_total_print,
                 sum(case when shd.type_of_use = 'PRINT' then coalesce(shd.service_fee_amount, 0) else 0 end) as service_fee_total_print,
                 sum(case when shd.type_of_use = 'PRINT' then coalesce(shd.net_amount, 0) else 0 end) as net_total_print,
@@ -348,6 +356,8 @@
             group by shd.rh_account_number, s.license_type
         ) shd
         left join ${schema}.df_rightsholder r on shd.rh_account_number = r.rh_account_number
+        left join ${schema}.df_rightsholder rp on shd.print_payee_account_number = rp.rh_account_number
+        left join ${schema}.df_rightsholder rd on shd.digital_payee_account_number = rd.rh_account_number
         order by r.name
     </sql>
 

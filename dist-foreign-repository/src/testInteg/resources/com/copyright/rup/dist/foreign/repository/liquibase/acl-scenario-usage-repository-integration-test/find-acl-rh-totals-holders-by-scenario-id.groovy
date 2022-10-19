@@ -14,6 +14,18 @@ databaseChangeLog {
             column(name: 'name', value: 'John Wiley & Sons - Books')
         }
 
+        insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
+            column(name: 'df_rightsholder_uid', value: '52379b50-1abf-4b20-a1a6-e6fd4e3bc20a')
+            column(name: 'rh_account_number', value: 1000000001)
+            column(name: 'name', value: 'Rothchild Consultants')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
+            column(name: 'df_rightsholder_uid', value: '5021690b-a6e4-4b88-8c22-230b816d9e08')
+            column(name: 'rh_account_number', value: 7000873612)
+            column(name: 'name', value: 'Brewin Books Ltd')
+        }
+
         insert(schemaName: dbAppsSchema, tableName: 'df_acl_fund_pool') {
             column(name: 'df_acl_fund_pool_uid', value: '5fad2697-d683-4e4d-ab1d-7e983d04204d')
             column(name: 'name', value: 'ACL Fund Pool 202212')
@@ -84,6 +96,7 @@ databaseChangeLog {
             column(name: 'net_amount', value: 10.00)
             column(name: 'gross_amount', value: 20.00)
             column(name: 'service_fee_amount', value: 3.00)
+            column(name: 'payee_account_number', value: 7000873612)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_acl_share_detail') {
@@ -102,6 +115,7 @@ databaseChangeLog {
             column(name: 'net_amount', value: 10.00)
             column(name: 'gross_amount', value: 20.00)
             column(name: 'service_fee_amount', value: 3.00)
+            column(name: 'payee_account_number', value: 1000000001)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_detail') {
@@ -136,6 +150,7 @@ databaseChangeLog {
             column(name: 'net_amount', value: 84.00)
             column(name: 'gross_amount', value: 100.00)
             column(name: 'service_fee_amount', value: 16.00)
+            column(name: 'payee_account_number', value: 7000873612)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_acl_share_detail') {
@@ -154,6 +169,7 @@ databaseChangeLog {
             column(name: 'net_amount', value: 168.00)
             column(name: 'gross_amount', value: 200.00)
             column(name: 'service_fee_amount', value: 32.00)
+            column(name: 'payee_account_number', value: 1000000001)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_detail') {
@@ -188,6 +204,7 @@ databaseChangeLog {
             column(name: 'net_amount', value: 42.00)
             column(name: 'gross_amount', value: 50.00)
             column(name: 'service_fee_amount', value: 8.00)
+            column(name: 'payee_account_number', value: 7000873612)
         }
         rollback {
             dbRollback
