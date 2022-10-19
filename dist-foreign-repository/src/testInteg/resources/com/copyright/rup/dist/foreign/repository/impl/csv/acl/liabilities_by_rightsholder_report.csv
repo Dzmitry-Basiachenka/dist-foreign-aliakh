@@ -1,0 +1,8 @@
+RH Account #,RH Name,Print Payee Account #,Print Payee Account Name,Digital Payee Account #,Digital Payee Account Name,Gross Amount,Net Amount,Print Net Amount,Digital Net Amount,ACL Net Amount,MACL Net Amount,VGW Net Amount,JACDCL Net Amount
+1000000004,Computers for Design and Construction,,,1000002901,Kluwer Academic Publishers - Dordrecht,9.0000000000,10.4000000000,0.00,10.4000000000,0.00,0.00,0.00,10.4000000000
+1000002859,John Wiley & Sons - Books,2000017010,"JAC, Japan Academic Association for Copyright Clearance, Inc.",1000002859,John Wiley & Sons - Books,300.0000000000,252.6000000000,84.3000000000,168.3000000000,126.2000000000,126.4000000000,0.00,0.00
+1000000001,Rothchild Consultants,1000028511,Greenleaf Publishing,1000028511,Greenleaf Publishing,300.0000000000,253.4000000000,84.7000000000,168.7000000000,0.00,0.00,126.6000000000,126.8000000000
+Grand Total,,,,,,609.0000000000,516.4000000000,169.0000000000,347.4000000000,126.2000000000,126.4000000000,126.6000000000,137.2000000000
+,
+Report Name,Report Period,User,Report Date,Scenarios
+Liabilities by Rightsholder Report,202212,user@copyright.com,10/05/2022 2:30 PM,"ACL Scenario 10/05/202212, MACL Scenario 10/05/202212, VGW Scenario 10/05/202212, JACDCL Scenario 10/05/202212"

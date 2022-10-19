@@ -1,6 +1,6 @@
 package com.copyright.rup.dist.foreign.repository.impl.csv.acl;
 
-import com.copyright.rup.dist.foreign.domain.report.AclLiabilitiesByAggLicClassReportDto;
+import com.copyright.rup.dist.foreign.domain.report.AclLiabilitiesByRhReportDto;
 import com.copyright.rup.dist.foreign.domain.report.AclReportTotalAmountsDto;
 
 import org.apache.commons.lang3.StringUtils;
@@ -11,19 +11,20 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Writes ACL Liabilities By Agg Licensee Class Report {@link OutputStream}.
+ * Writes ACL Liabilities by Rightsholder Report {@link OutputStream}.
  * <p>
  * Copyright (C) 2022 copyright.com
  * <p>
- * Date: 10/10/2022
+ * Date: 10/18/2022
  *
- * @author Ihar Suvorau
+ * @author Dzmitry Basiachenka
  */
-public class AclLiabilitiesByAggLicClassCsvReportHandler
-    extends AclCommonCalculationsCsvReportHandler<AclLiabilitiesByAggLicClassReportDto> {
+public class AclLiabilitiesByRhCsvReportHandler
+    extends AclCommonCalculationsCsvReportHandler<AclLiabilitiesByRhReportDto> {
 
     private static final List<String> HEADERS =
-        Arrays.asList("Agg LC ID", "Agg LC Name", "Gross Amount", "Net Amount", "Print Net Amount",
+        Arrays.asList("RH Account #", "RH Name", "Print Payee Account #", "Print Payee Account Name",
+            "Digital Payee Account #", "Digital Payee Account Name", "Gross Amount", "Net Amount", "Print Net Amount",
             "Digital Net Amount", "ACL Net Amount", "MACL Net Amount", "VGW Net Amount", "JACDCL Net Amount");
 
     /**
@@ -31,14 +32,14 @@ public class AclLiabilitiesByAggLicClassCsvReportHandler
      *
      * @param outputStream instance of {@link OutputStream}
      */
-    public AclLiabilitiesByAggLicClassCsvReportHandler(OutputStream outputStream) {
-        super(outputStream, "Liabilities by Aggregate Licensee Class Report");
+    public AclLiabilitiesByRhCsvReportHandler(OutputStream outputStream) {
+        super(outputStream, "Liabilities by Rightsholder Report");
     }
 
     @Override
     public void writeTotals(AclReportTotalAmountsDto totalAmountsDto) {
-        writeStringRow(Arrays.asList("Grand Total", StringUtils.EMPTY,
-            getBeanBigDecimal(totalAmountsDto.getGrossAmount()),
+        writeStringRow(Arrays.asList("Grand Total", StringUtils.EMPTY, StringUtils.EMPTY, StringUtils.EMPTY,
+            StringUtils.EMPTY, StringUtils.EMPTY, getBeanBigDecimal(totalAmountsDto.getGrossAmount()),
             getBeanBigDecimal(totalAmountsDto.getNetAmount()),
             getBeanBigDecimal(totalAmountsDto.getPrintNetAmount()),
             getBeanBigDecimal(totalAmountsDto.getDigitalNetAmount()),
@@ -49,10 +50,14 @@ public class AclLiabilitiesByAggLicClassCsvReportHandler
     }
 
     @Override
-    protected List<String> getBeanProperties(AclLiabilitiesByAggLicClassReportDto bean) {
+    protected List<String> getBeanProperties(AclLiabilitiesByRhReportDto bean) {
         List<String> beanProperties = new ArrayList<>();
-        beanProperties.add(getBeanPropertyAsString(bean.getAggregateLicenseeClassId()));
-        beanProperties.add(bean.getAggregateLicenseeClassName());
+        beanProperties.add(getBeanPropertyAsString(bean.getRhAccountNumber()));
+        beanProperties.add(bean.getRhName());
+        beanProperties.add(getBeanPropertyAsString(bean.getPrintPayeeAccountNumber()));
+        beanProperties.add(bean.getPrintPayeeName());
+        beanProperties.add(getBeanPropertyAsString(bean.getDigitalPayeeAccountNumber()));
+        beanProperties.add(bean.getDigitalPayeeName());
         beanProperties.add(getBeanBigDecimal(bean.getGrossAmount()));
         beanProperties.add(getBeanBigDecimal(bean.getNetAmount()));
         beanProperties.add(getBeanBigDecimal(bean.getPrintNetAmount()));
