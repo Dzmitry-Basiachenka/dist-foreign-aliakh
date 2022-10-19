@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.service.impl.acl;
 
+import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.common.integration.rest.prm.PrmRollUpService;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolder;
@@ -7,15 +9,23 @@ import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolderDto;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDetailDto;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
+import com.copyright.rup.dist.foreign.domain.RightsholderTypeOfUsePair;
 import com.copyright.rup.dist.foreign.domain.filter.RightsholderResultsFilter;
+import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.IAclScenarioUsageRepository;
+import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioUsageService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Implementation of {@link IAclScenarioUsageService}.
@@ -31,6 +41,10 @@ public class AclScenarioUsageService implements IAclScenarioUsageService {
 
     @Autowired
     private IAclScenarioUsageRepository aclScenarioUsageRepository;
+    @Autowired
+    private IRightsholderService rightsholderService;
+    @Autowired
+    private IPrmIntegrationService prmIntegrationService;
 
     @Override
     public void addUsagesToAclScenario(AclScenario aclScenario, String username) {
@@ -101,5 +115,23 @@ public class AclScenarioUsageService implements IAclScenarioUsageService {
     @Override
     public List<AclRightsholderTotalsHolderDto> getRightsholderAggLcClassResults(RightsholderResultsFilter filter) {
         return aclScenarioUsageRepository.findRightsholderAggLcClassResults(filter);
+    }
+
+    @Override
+    public void populatePayees(String scenarioId) {
+        Set<Long> payeeAccountNumbers = new HashSet<>();
+        List<RightsholderTypeOfUsePair> rightsholderTypeOfUsePairs = rightsholderService.getByAclScenarioId(scenarioId);
+        Map<String, Map<String, Rightsholder>> rollUps = prmIntegrationService.getRollUps(
+            rightsholderTypeOfUsePairs.stream().map(pair -> pair.getRightsholder().getId()).collect(Collectors.toSet())
+        );
+        rightsholderTypeOfUsePairs.forEach(pair -> {
+            Long payeeAccountNumber = PrmRollUpService.getPayee(
+                rollUps, pair.getRightsholder(), FdaConstants.ACL_PRODUCT_FAMILY + pair.getTypeOfUse()
+            ).getAccountNumber();
+            payeeAccountNumbers.add(payeeAccountNumber);
+            aclScenarioUsageRepository.updatePayeeByAccountNumber(pair.getRightsholder().getAccountNumber(), scenarioId,
+                payeeAccountNumber, pair.getTypeOfUse());
+        });
+        rightsholderService.updateRighstholdersAsync(payeeAccountNumbers);
     }
 }
