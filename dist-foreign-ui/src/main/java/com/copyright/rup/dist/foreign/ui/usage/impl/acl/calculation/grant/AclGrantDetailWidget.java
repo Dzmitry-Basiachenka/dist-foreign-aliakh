@@ -48,7 +48,6 @@ public class AclGrantDetailWidget extends HorizontalSplitPanel implements IAclGr
     private DataProvider<AclGrantDetailDto, Void> dataProvider;
     private MenuBar grantSetMenuBar;
     private MenuBar.MenuItem createMenuItem;
-    private MenuBar.MenuItem viewMenuItem;
     private Button editButton;
     private Button uploadButton;
 
@@ -77,9 +76,7 @@ public class AclGrantDetailWidget extends HorizontalSplitPanel implements IAclGr
     @Override
     public IMediator initMediator() {
         AclGrantDetailMediator mediator = new AclGrantDetailMediator();
-        mediator.setGrantSetMenuBar(grantSetMenuBar);
         mediator.setCreateMenuItem(createMenuItem);
-        mediator.setViewMenuItem(viewMenuItem);
         mediator.setEditButton(editButton);
         mediator.setUploadButton(uploadButton);
         return mediator;
@@ -169,7 +166,7 @@ public class AclGrantDetailWidget extends HorizontalSplitPanel implements IAclGr
         MenuBar.MenuItem menuItem = grantSetMenuBar.addItem(ForeignUi.getMessage("menu.caption.grant_set"), null, null);
         createMenuItem = menuItem.addItem(ForeignUi.getMessage("menu.item.create"), null,
             item -> Windows.showModalWindow(new CreateAclGrantSetWindow(controller)));
-        viewMenuItem = menuItem.addItem(ForeignUi.getMessage("menu.item.view"), null,
+        menuItem.addItem(ForeignUi.getMessage("menu.item.view"), null,
             item -> Windows.showModalWindow(new ViewAclGrantSetWindow(controller)));
         VaadinUtils.addComponentStyle(grantSetMenuBar, "acl-grant-set-menu-bar");
         VaadinUtils.addComponentStyle(grantSetMenuBar, "v-menubar-df");

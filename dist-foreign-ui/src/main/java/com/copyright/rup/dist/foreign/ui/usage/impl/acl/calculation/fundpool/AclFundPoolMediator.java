@@ -17,29 +17,14 @@ import com.vaadin.ui.MenuBar.MenuItem;
  */
 public class AclFundPoolMediator implements IMediator {
 
-    private MenuBar fundPoolMenuBar;
     private MenuBar.MenuItem createMenuItem;
-    private MenuBar.MenuItem viewMenuItem;
 
     @Override
     public void applyPermissions() {
-        boolean isSpecialist = ForeignSecurityUtils.hasSpecialistPermission();
-        boolean isManager = ForeignSecurityUtils.hasManagerPermission();
-        boolean isViewOnly = ForeignSecurityUtils.hasViewOnlyPermission();
-        fundPoolMenuBar.setVisible(isSpecialist || isManager || isViewOnly);
-        createMenuItem.setVisible(isSpecialist);
-        viewMenuItem.setVisible(isSpecialist || isManager || isViewOnly);
-    }
-
-    public void setFundPoolMenuBar(MenuBar fundPoolMenuBar) {
-        this.fundPoolMenuBar = fundPoolMenuBar;
+        createMenuItem.setVisible(ForeignSecurityUtils.hasSpecialistPermission());
     }
 
     public void setCreateMenuItem(MenuItem createMenuItem) {
         this.createMenuItem = createMenuItem;
-    }
-
-    public void setViewMenuItem(MenuItem viewMenuItem) {
-        this.viewMenuItem = viewMenuItem;
     }
 }

@@ -18,9 +18,7 @@ import com.vaadin.ui.MenuBar.MenuItem;
  */
 public class AclGrantDetailMediator implements IMediator {
 
-    private MenuBar grantSetMenuBar;
     private MenuBar.MenuItem createMenuItem;
-    private MenuBar.MenuItem viewMenuItem;
     private Button editButton;
     private Button uploadButton;
 
@@ -28,24 +26,13 @@ public class AclGrantDetailMediator implements IMediator {
     public void applyPermissions() {
         boolean isSpecialist = ForeignSecurityUtils.hasSpecialistPermission();
         boolean isManager = ForeignSecurityUtils.hasManagerPermission();
-        boolean isViewOnly = ForeignSecurityUtils.hasViewOnlyPermission();
-        grantSetMenuBar.setVisible(isSpecialist || isManager || isViewOnly);
         createMenuItem.setVisible(isSpecialist || isManager);
-        viewMenuItem.setVisible(isSpecialist || isManager || isViewOnly);
         editButton.setVisible(isSpecialist);
         uploadButton.setVisible(isSpecialist);
     }
 
-    public void setGrantSetMenuBar(MenuBar grantSetMenuBar) {
-        this.grantSetMenuBar = grantSetMenuBar;
-    }
-
     public void setCreateMenuItem(MenuItem createMenuItem) {
         this.createMenuItem = createMenuItem;
-    }
-
-    public void setViewMenuItem(MenuItem viewMenuItem) {
-        this.viewMenuItem = viewMenuItem;
     }
 
     public void setEditButton(Button editButton) {

@@ -31,8 +31,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 public class AclFundPoolMediatorTest {
 
     private static final String FDA_SPECIALIST_PERMISSION = "FDA_SPECIALIST_PERMISSION";
-    private static final String FDA_MANAGER_PERMISSION = "FDA_MANAGER_PERMISSION";
-    private static final String FDA_VIEW_ONLY_PERMISSION = "FDA_VIEW_ONLY_PERMISSION";
 
     private final MenuBar fundPoolMenuBar = new MenuBar();
 
@@ -43,19 +41,15 @@ public class AclFundPoolMediatorTest {
     @Before
     public void setUp() {
         mediator = new AclFundPoolMediator();
-        mediator.setFundPoolMenuBar(fundPoolMenuBar);
         createMenuItem = fundPoolMenuBar.addItem("Create");
         viewMenuItem = fundPoolMenuBar.addItem("View");
         mediator.setCreateMenuItem(createMenuItem);
-        mediator.setViewMenuItem(viewMenuItem);
     }
 
     @Test
     public void testApplySpecialistPermissions() {
         mockStatic(SecurityUtils.class);
         expect(SecurityUtils.hasPermission(FDA_SPECIALIST_PERMISSION)).andReturn(true).once();
-        expect(SecurityUtils.hasPermission(FDA_MANAGER_PERMISSION)).andReturn(false).once();
-        expect(SecurityUtils.hasPermission(FDA_VIEW_ONLY_PERMISSION)).andReturn(false).once();
         replay(SecurityUtils.class);
         mediator.applyPermissions();
         assertTrue(fundPoolMenuBar.isVisible());
@@ -65,25 +59,9 @@ public class AclFundPoolMediatorTest {
     }
 
     @Test
-    public void testApplyManagerPermissions() {
+    public void testApplyOthersPermissions() {
         mockStatic(SecurityUtils.class);
         expect(SecurityUtils.hasPermission(FDA_SPECIALIST_PERMISSION)).andReturn(false).once();
-        expect(SecurityUtils.hasPermission(FDA_MANAGER_PERMISSION)).andReturn(true).once();
-        expect(SecurityUtils.hasPermission(FDA_VIEW_ONLY_PERMISSION)).andReturn(false).once();
-        replay(SecurityUtils.class);
-        mediator.applyPermissions();
-        assertTrue(fundPoolMenuBar.isVisible());
-        assertFalse(createMenuItem.isVisible());
-        assertTrue(viewMenuItem.isVisible());
-        verify(SecurityUtils.class);
-    }
-
-    @Test
-    public void testApplyViewOnlyPermissions() {
-        mockStatic(SecurityUtils.class);
-        expect(SecurityUtils.hasPermission(FDA_SPECIALIST_PERMISSION)).andReturn(false).once();
-        expect(SecurityUtils.hasPermission(FDA_MANAGER_PERMISSION)).andReturn(false).once();
-        expect(SecurityUtils.hasPermission(FDA_VIEW_ONLY_PERMISSION)).andReturn(true).once();
         replay(SecurityUtils.class);
         mediator.applyPermissions();
         assertTrue(fundPoolMenuBar.isVisible());
