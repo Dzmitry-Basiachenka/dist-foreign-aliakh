@@ -218,11 +218,11 @@ public class RightsholderRepositoryIntegrationTest {
     public void testFindByAclScenarioId() {
         List<RightsholderTypeOfUsePair> rightsholderTypeOfUsePairs =
             rightsholderRepository.findByAclScenarioId("69d80994-db16-42f6-ad82-baa5f63f00c1");
+        assertEquals(3, CollectionUtils.size(rightsholderTypeOfUsePairs));
         Rightsholder rightsholder = rightsholderTypeOfUsePairs.get(0).getRightsholder();
         assertEquals("ccc4da89-aa29-45d6-9bdf-2f7402f9aa08", rightsholder.getId());
         assertEquals(1000000001L, rightsholder.getAccountNumber(), 0);
         assertEquals("PRINT", rightsholderTypeOfUsePairs.get(0).getTypeOfUse());
-        assertEquals(3, CollectionUtils.size(rightsholderTypeOfUsePairs));
         Rightsholder rightsholder1 = rightsholderTypeOfUsePairs.get(1).getRightsholder();
         assertEquals("d13cf4d3-2d7d-45d5-99eb-5aaeca0a6121", rightsholder1.getId());
         assertEquals(1000002859L, rightsholder1.getAccountNumber(), 0);

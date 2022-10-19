@@ -1,22 +1,26 @@
 package com.copyright.rup.dist.foreign.service.impl.acl;
 
+import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
-import static org.powermock.api.easymock.PowerMock.createMock;
 
+import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolderDto;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDetailDto;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
+import com.copyright.rup.dist.foreign.domain.RightsholderTypeOfUsePair;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.RightsholderResultsFilter;
+import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.IAclScenarioUsageRepository;
+import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioUsageService;
 
 import org.junit.Before;
@@ -44,18 +48,41 @@ public class AclScenarioUsageServiceTest {
 
     private static final Long RH_ACCOUNT_NUMBER = 1000009422L;
     private static final String RH_NAME = "CANADIAN CERAMIC SOCIETY";
+    private static final String RH_UID = "378cafcf-cf21-4036-b223-5bd48b09c41f";
     private static final String SCENARIO_UID = "c3077cca-09a0-454f-8b9f-bf6ecb2fbe66";
     private static final String SEARCH_VALUE = "search";
     private static final String USER_NAME = "SYSTEM";
 
     private IAclScenarioUsageService aclScenarioUsageService;
     private IAclScenarioUsageRepository aclScenarioUsageRepository;
+    private IRightsholderService rightsholderService;
+    private IPrmIntegrationService prmIntegrationService;
 
     @Before
     public void setUp() {
         aclScenarioUsageService = new AclScenarioUsageService();
         aclScenarioUsageRepository = createMock(IAclScenarioUsageRepository.class);
+        rightsholderService = createMock(IRightsholderService.class);
+        prmIntegrationService = createMock(IPrmIntegrationService.class);
         Whitebox.setInternalState(aclScenarioUsageService, aclScenarioUsageRepository);
+        Whitebox.setInternalState(aclScenarioUsageService, rightsholderService);
+        Whitebox.setInternalState(aclScenarioUsageService, prmIntegrationService);
+    }
+
+    @Test
+    public void testPopulatePayees() {
+        RightsholderTypeOfUsePair rightsholderTypeOfUsePair = buildRightsholderTypeOfUsePair(2000073957L);
+        expect(rightsholderService.getByAclScenarioId(SCENARIO_UID)).andReturn(
+            Collections.singletonList(rightsholderTypeOfUsePair)).once();
+        expect(prmIntegrationService.getRollUps(Collections.singleton(RH_UID)))
+            .andReturn(Collections.emptyMap()).once();
+        aclScenarioUsageRepository.updatePayeeByAccountNumber(2000073957L, SCENARIO_UID, 2000073957L, "PRINT");
+        expectLastCall().once();
+        rightsholderService.updateRighstholdersAsync(Collections.singleton(2000073957L));
+        expectLastCall().once();
+        replay(aclScenarioUsageRepository, rightsholderService, prmIntegrationService);
+        aclScenarioUsageService.populatePayees(SCENARIO_UID);
+        verify(aclScenarioUsageRepository, rightsholderService, prmIntegrationService);
     }
 
     @Test
@@ -225,5 +252,20 @@ public class AclScenarioUsageServiceTest {
         filter.setRhAccountNumber(RH_ACCOUNT_NUMBER);
         filter.setRhName(RH_NAME);
         return filter;
+    }
+
+    private Rightsholder buildRightsholder(Long accountNumber) {
+        Rightsholder rightsholder = new Rightsholder();
+        rightsholder.setId(RH_UID);
+        rightsholder.setAccountNumber(accountNumber);
+        rightsholder.setName(RH_NAME);
+        return rightsholder;
+    }
+
+    private RightsholderTypeOfUsePair buildRightsholderTypeOfUsePair(Long accountNumber) {
+        RightsholderTypeOfUsePair rightsholderTypeOfUsePair = new RightsholderTypeOfUsePair();
+        rightsholderTypeOfUsePair.setRightsholder(buildRightsholder(accountNumber));
+        rightsholderTypeOfUsePair.setTypeOfUse("PRINT");
+        return rightsholderTypeOfUsePair;
     }
 }

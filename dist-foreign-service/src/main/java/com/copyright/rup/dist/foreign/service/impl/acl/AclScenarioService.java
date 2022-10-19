@@ -79,6 +79,7 @@ public class AclScenarioService implements IAclScenarioService {
         aclScenarioUsageService.calculateScenarioShares(scenarioId, userName);
         aclScenarioUsageService.calculateScenarioAmounts(scenarioId, userName);
         aclScenarioUsageService.deleteZeroAmountUsages(scenarioId);
+        aclScenarioUsageService.populatePayees(scenarioId);
         LOGGER.info("Insert ACL scenario. Finished. ScenarioName={}, Description={}, UserName={}",
             aclScenario.getName(), aclScenario.getDescription(), userName);
     }

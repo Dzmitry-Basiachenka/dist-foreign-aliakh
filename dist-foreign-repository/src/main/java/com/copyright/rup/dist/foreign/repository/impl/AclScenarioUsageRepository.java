@@ -163,4 +163,10 @@ public class AclScenarioUsageRepository extends AclBaseRepository implements IAc
         parameters.put(WR_WRK_INST_KEY, filter.getWrWrkInst());
         return selectList("IAclScenarioUsageMapper.findAclAggregateLicenseeClassesByRightsholder", parameters);
     }
+
+    @Override
+    public void updatePayeeByAccountNumber(Long rhAccountNumber, String scenarioId, Long payeeAccountNumber,
+                                           String typeOfUse) {
+        //TODO will be implement later
+    }
 }
