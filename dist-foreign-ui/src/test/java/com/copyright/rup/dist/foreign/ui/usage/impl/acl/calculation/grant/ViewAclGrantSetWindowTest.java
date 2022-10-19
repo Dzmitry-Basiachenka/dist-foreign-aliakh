@@ -96,7 +96,7 @@ public class ViewAclGrantSetWindowTest {
 
     @Test
     public void testStructure() {
-        verifyWindow(window, "View ACL Grant Set", 600, 550, Sizeable.Unit.PIXELS);
+        verifyWindow(window, "View ACL Grant Set", 1200, 550, Sizeable.Unit.PIXELS);
         VerticalLayout content = (VerticalLayout) window.getContent();
         assertEquals(3, content.getComponentCount());
         assertThat(content.getComponent(0), instanceOf(SearchWidget.class));
@@ -107,7 +107,7 @@ public class ViewAclGrantSetWindowTest {
             Triple.of("Grant Set Name", -1.0, 1),
             Triple.of("Grant Period", 110.0, -1),
             Triple.of("License Type", 100.0, -1),
-            Triple.of("Periods", -1.0, 1),
+            Triple.of("Periods", 580.0, -1),
             Triple.of("Editable", 80.0, -1)
         ));
         verifyButtonsLayout(content.getComponent(2), "Delete", "Close");

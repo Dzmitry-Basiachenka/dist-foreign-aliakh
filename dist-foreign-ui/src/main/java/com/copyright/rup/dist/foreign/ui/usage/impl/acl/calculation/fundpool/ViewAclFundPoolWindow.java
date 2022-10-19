@@ -45,7 +45,7 @@ public class ViewAclFundPoolWindow extends Window implements SearchWidget.ISearc
      */
     public ViewAclFundPoolWindow(IAclFundPoolController controller) {
         this.controller = controller;
-        setWidth(870, Unit.PIXELS);
+        setWidth(1000, Unit.PIXELS);
         setHeight(550, Unit.PIXELS);
         searchWidget = new SearchWidget(this);
         searchWidget.setPrompt(ForeignUi.getMessage("field.prompt.view_fund_pool.search"));
@@ -89,7 +89,7 @@ public class ViewAclFundPoolWindow extends Window implements SearchWidget.ISearc
         grid.addColumn(AclFundPool::getName)
             .setCaption(ForeignUi.getMessage("table.column.fund_pool_name"))
             .setComparator((fundPool1, fundPool2) -> fundPool1.getName().compareToIgnoreCase(fundPool2.getName()))
-            .setWidth(200);
+            .setExpandRatio(1);
         grid.addColumn(AclFundPool::getLicenseType)
             .setCaption(ForeignUi.getMessage("table.column.license_type"))
             .setWidth(100);
@@ -110,7 +110,8 @@ public class ViewAclFundPoolWindow extends Window implements SearchWidget.ISearc
                 (fundPool1, fundPool2) -> fundPool1.getCreateUser().compareToIgnoreCase(fundPool2.getCreateUser()))
             .setWidth(170);
         grid.addColumn(fundPool -> toLongFormat(fundPool.getCreateDate()))
-            .setCaption(ForeignUi.getMessage("table.column.created_date"));
+            .setCaption(ForeignUi.getMessage("table.column.created_date"))
+            .setWidth(130);
     }
 
     private HorizontalLayout initButtons() {
