@@ -1,3 +1,14 @@
+16.0.7
+-
+* B-73712 FDA: Add more fields to Calculation Usages: add filter on TOU, Reported TOU on the Calculations tab, Usages sub-tab
+* B-73712 FDA: Add more fields to Calculation Usages: rename the methods that read ReportedTOU to getReportedTypeOfUses
+* B-73712 FDA: Add more fields to Calculation Usages: reorder Channel and TypeOfUse comboboxes on the UDM Usages filters window
+* B-75336 FDA: Add Payee to the Scenario by RH view: implement logic to get Rightsholders related to ACL scenario for getting payees
+* B-75336 FDA: Add Payee to the Scenario by RH view: implement UI for adding Payee to the Scenario by RH view
+* B-75336 FDA: Add Payee to the Scenario by RH view: implement logic to get payees from PRM system
+* B-75009 FDA: Liabilities by RH Report: implement queries to retrieve information from database to generate report
+* B-75009 FDA: Liabilities by RH Report: implement backend logic to generate report
+
 16.0.6
 -
 * B-73712 FDA: Add more fields to Calculation Usages: add columns to the Details by RH view: Price, Content, Reported TOU, TO
