@@ -18,6 +18,7 @@ import java.math.BigDecimal;
 public class AclScenarioShareDetail {
 
     private Long rhAccountNumber;
+    private Long payeeAccountNumber;
     private String typeOfUse;
     private BigDecimal volumeWeight;
     private BigDecimal valueWeight;
@@ -36,6 +37,14 @@ public class AclScenarioShareDetail {
 
     public void setRhAccountNumber(Long rhAccountNumber) {
         this.rhAccountNumber = rhAccountNumber;
+    }
+
+    public Long getPayeeAccountNumber() {
+        return payeeAccountNumber;
+    }
+
+    public void setPayeeAccountNumber(Long payeeAccountNumber) {
+        this.payeeAccountNumber = payeeAccountNumber;
     }
 
     public String getTypeOfUse() {
@@ -137,6 +146,7 @@ public class AclScenarioShareDetail {
         AclScenarioShareDetail that = (AclScenarioShareDetail) obj;
         return new EqualsBuilder()
             .append(rhAccountNumber, that.rhAccountNumber)
+            .append(payeeAccountNumber, that.payeeAccountNumber)
             .append(typeOfUse, that.typeOfUse)
             .append(volumeWeight, that.volumeWeight)
             .append(valueWeight, that.valueWeight)
@@ -155,6 +165,7 @@ public class AclScenarioShareDetail {
     public int hashCode() {
         return new HashCodeBuilder()
             .append(rhAccountNumber)
+            .append(payeeAccountNumber)
             .append(typeOfUse)
             .append(volumeWeight)
             .append(valueWeight)
@@ -173,6 +184,7 @@ public class AclScenarioShareDetail {
     public String toString() {
         return new ToStringBuilder(this)
             .append("rhAccountNumber", rhAccountNumber)
+            .append("payeeAccountNumber", payeeAccountNumber)
             .append("typeOfUse", typeOfUse)
             .append("volumeWeight", volumeWeight)
             .append("valueWeight", valueWeight)

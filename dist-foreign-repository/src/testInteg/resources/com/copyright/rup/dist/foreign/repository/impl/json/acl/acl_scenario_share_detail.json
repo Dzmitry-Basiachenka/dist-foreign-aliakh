@@ -1,0 +1,62 @@
+[
+  {
+    "rhAccountNumber": 1000002859,
+    "payeeAccountNumber": 1000489976,
+    "typeOfUse": "DIGITAL",
+    "volumeWeight": 1.0000000000,
+    "valueWeight": 1.0000000000,
+    "valueShare": 1.0000000000,
+    "volumeShare": 1.0000000000,
+    "detailShare": 1.0000000000,
+    "volumeWeightDenominator": 1.0000000000,
+    "valueWeightDenominator": 1.0000000000,
+    "netAmount": 84.1000000000,
+    "grossAmount": 100.0000000000,
+    "serviceFeeAmount": 16.0000000000
+  },
+  {
+    "rhAccountNumber": 1000002859,
+    "payeeAccountNumber": 2015489976,
+    "typeOfUse": "PRINT",
+    "volumeWeight": 1.0000000000,
+    "valueWeight": 1.0000000000,
+    "valueShare": 1.0000000000,
+    "volumeShare": 1.0000000000,
+    "detailShare": 1.0000000000,
+    "volumeWeightDenominator": 1.0000000000,
+    "valueWeightDenominator": 1.0000000000,
+    "netAmount": 42.1000000000,
+    "grossAmount": 50.0000000000,
+    "serviceFeeAmount": 7.9000000000
+  },
+  {
+    "rhAccountNumber": 1000000001,
+    "payeeAccountNumber": 1526489976,
+    "typeOfUse": "DIGITAL",
+    "volumeWeight": 1.0000000000,
+    "valueWeight": 1.0000000000,
+    "valueShare": 1.0000000000,
+    "volumeShare": 1.0000000000,
+    "detailShare": 1.0000000000,
+    "volumeWeightDenominator": 1.0000000000,
+    "valueWeightDenominator": 1.0000000000,
+    "netAmount": 168.0000000000,
+    "grossAmount": 200.0000000000,
+    "serviceFeeAmount": 16.0000000000
+  },
+  {
+    "rhAccountNumber": 1000000001,
+    "payeeAccountNumber": 2878895976,
+    "typeOfUse": "PRINT",
+    "volumeWeight": 1.0000000000,
+    "valueWeight": 1.0000000000,
+    "valueShare": 1.0000000000,
+    "volumeShare": 1.0000000000,
+    "detailShare": 1.0000000000,
+    "volumeWeightDenominator": 1.0000000000,
+    "valueWeightDenominator": 1.0000000000,
+    "netAmount": 168.0000000000,
+    "grossAmount": 200.0000000000,
+    "serviceFeeAmount": 16.0000000000
+  }
+]

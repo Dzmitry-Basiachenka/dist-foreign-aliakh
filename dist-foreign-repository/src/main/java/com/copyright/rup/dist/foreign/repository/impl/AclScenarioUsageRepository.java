@@ -167,6 +167,11 @@ public class AclScenarioUsageRepository extends AclBaseRepository implements IAc
     @Override
     public void updatePayeeByAccountNumber(Long rhAccountNumber, String scenarioId, Long payeeAccountNumber,
                                            String typeOfUse) {
-        //TODO will be implement later
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(4);
+        params.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
+        params.put("rhAccountNumber", Objects.requireNonNull(rhAccountNumber));
+        params.put("payeeAccountNumber", Objects.requireNonNull(payeeAccountNumber));
+        params.put("typeOfUse", Objects.requireNonNull(typeOfUse));
+        update("IAclScenarioUsageMapper.updatePayeeByAccountNumber", params);
     }
 }

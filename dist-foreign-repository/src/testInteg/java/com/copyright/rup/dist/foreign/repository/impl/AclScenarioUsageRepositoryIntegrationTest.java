@@ -46,6 +46,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
@@ -78,7 +79,8 @@ public class AclScenarioUsageRepositoryIntegrationTest {
     private static final String SCENARIO_UID_4 = "f473fa64-12ea-4db6-9d30-94087fe500fd";
     private static final String SCENARIO_UID_5 = "2a75aa1c-7bfa-4d8b-9e27-d2e17f3bd8da";
     private static final String LICENSE_TYPE_ACL = "ACL";
-    private static final Long RH_ACCOUNT_NUMBER = 1000002859L;
+    private static final Long RH_ACCOUNT_NUMBER_1 = 1000002859L;
+    private static final Long RH_ACCOUNT_NUMBER_2 = 1000000001L;
     private static final String RH_NAME = "John Wiley & Sons - Books";
     private static final String SYSTEM_TITLE = "Technology review";
     private static final String USER_NAME = "user@copyright.com";
@@ -322,7 +324,7 @@ public class AclScenarioUsageRepositoryIntegrationTest {
         assertEquals(0, aclScenarioUsageRepository.findByScenarioIdAndRhAccountNumber(1000009997L, SCENARIO_UID_4, null,
             null, null).size());
         List<AclScenarioDetailDto> scenarioDetailDtos = aclScenarioUsageRepository.findByScenarioIdAndRhAccountNumber(
-            RH_ACCOUNT_NUMBER, SCENARIO_UID_4, null, null, null);
+            RH_ACCOUNT_NUMBER_1, SCENARIO_UID_4, null, null, null);
         assertEquals(2, scenarioDetailDtos.size());
         AclScenarioDetailDto scenarioDetailDto1 = buildDigitalAclScenarioDetailDto();
         AclScenarioDetailDto scenarioDetailDto2 = buildPrintDigitalAclScenarioDetailDto();
@@ -335,7 +337,7 @@ public class AclScenarioUsageRepositoryIntegrationTest {
     public void testFindCountByScenarioIdAndRhAccountNumberNullSearchValue() {
         assertEquals(0, aclScenarioUsageRepository.findCountByScenarioIdAndRhAccountNumber(1000009997L,
             SCENARIO_UID_4, null));
-        assertEquals(2, aclScenarioUsageRepository.findCountByScenarioIdAndRhAccountNumber(RH_ACCOUNT_NUMBER,
+        assertEquals(2, aclScenarioUsageRepository.findCountByScenarioIdAndRhAccountNumber(RH_ACCOUNT_NUMBER_1,
             SCENARIO_UID_4, null));
     }
 
@@ -551,6 +553,31 @@ public class AclScenarioUsageRepositoryIntegrationTest {
         verifyAclRightsholderTotalsHolderDto(expected.get(0), actual.get(0));
     }
 
+    @Test
+    @TestData(fileName = FOLDER_NAME + "update-payee-by-account-number.groovy")
+    public void testUpdatePayeeByAccountNumber() {
+        String scenarioId = "f5808122-3784-4055-90f8-1c420e67fd0a";
+        List<AclScenarioShareDetail> expectedShareDetailsWithoutPayee = loadExpectedAclScenarioShareDetailDto(
+            "json/acl/acl_scenario_share_detail_without_payee.json");
+        List<AclScenarioShareDetail> actualShareDetails =
+            aclScenarioUsageRepository.findScenarioDetailsByScenarioId(scenarioId).stream()
+                .flatMap(e -> e.getScenarioShareDetails().stream()).collect(Collectors.toList());
+        assertEquals(4, actualShareDetails.size());
+        assertEquals(expectedShareDetailsWithoutPayee.size(), actualShareDetails.size());
+        IntStream.range(0, expectedShareDetailsWithoutPayee.size()).forEach(i ->
+            verifyAclScenarioShareDetails(expectedShareDetailsWithoutPayee.get(i), actualShareDetails.get(i)));
+        aclScenarioUsageRepository.updatePayeeByAccountNumber(RH_ACCOUNT_NUMBER_1, scenarioId, 2015489976L, "PRINT");
+        aclScenarioUsageRepository.updatePayeeByAccountNumber(RH_ACCOUNT_NUMBER_1, scenarioId, 1000489976L, "DIGITAL");
+        aclScenarioUsageRepository.updatePayeeByAccountNumber(RH_ACCOUNT_NUMBER_2, scenarioId, 2878895976L, "PRINT");
+        aclScenarioUsageRepository.updatePayeeByAccountNumber(RH_ACCOUNT_NUMBER_2, scenarioId, 1526489976L, "DIGITAL");
+        List<AclScenarioShareDetail> expectedShareDetails = loadExpectedAclScenarioShareDetailDto(
+            "json/acl/acl_scenario_share_detail.json");
+        IntStream.range(0, expectedShareDetails.size()).forEach(
+            i -> verifyAclScenarioShareDetails(expectedShareDetails.get(i),
+                aclScenarioUsageRepository.findScenarioDetailsByScenarioId(scenarioId).stream()
+                    .flatMap(e -> e.getScenarioShareDetails().stream()).collect(Collectors.toList()).get(i)));
+    }
+
     private void verifyAclScenarioDetail(AclScenarioDetail expectedScenarioDetail,
                                          AclScenarioDetail actualScenarioDetail) {
         assertEquals(expectedScenarioDetail.getScenarioId(), actualScenarioDetail.getScenarioId());
@@ -698,6 +725,7 @@ public class AclScenarioUsageRepositoryIntegrationTest {
     private void verifyAclScenarioShareDetails(AclScenarioShareDetail expectedDetail,
                                                AclScenarioShareDetail actualDetail) {
         assertEquals(expectedDetail.getRhAccountNumber(), actualDetail.getRhAccountNumber());
+        assertEquals(expectedDetail.getPayeeAccountNumber(), actualDetail.getPayeeAccountNumber());
         assertEquals(expectedDetail.getTypeOfUse(), actualDetail.getTypeOfUse());
         assertEquals(expectedDetail.getVolumeWeight(), actualDetail.getVolumeWeight());
         assertEquals(expectedDetail.getValueWeight(), actualDetail.getValueWeight());
@@ -759,7 +787,7 @@ public class AclScenarioUsageRepositoryIntegrationTest {
     private void verifyFindByScenarioIdAndRhSearch(List<AclScenarioDetailDto> expectedScenarioDetailDtos,
                                                    String searchValue) {
         List<AclScenarioDetailDto> scenarioDetailDtos = aclScenarioUsageRepository.findByScenarioIdAndRhAccountNumber(
-            RH_ACCOUNT_NUMBER, SCENARIO_UID_4, searchValue, null, null);
+            RH_ACCOUNT_NUMBER_1, SCENARIO_UID_4, searchValue, null, null);
         assertEquals(expectedScenarioDetailDtos.size(), scenarioDetailDtos.size());
         if (!expectedScenarioDetailDtos.isEmpty()) {
             for (int i = 0; i < scenarioDetailDtos.size(); i++) {
@@ -769,17 +797,18 @@ public class AclScenarioUsageRepositoryIntegrationTest {
     }
 
     private void verifyFindCountByScenarioIdAndRhSearch(int expectedSize, String searchValue) {
-        assertEquals(expectedSize, aclScenarioUsageRepository.findCountByScenarioIdAndRhAccountNumber(RH_ACCOUNT_NUMBER,
+        assertEquals(expectedSize, aclScenarioUsageRepository.findCountByScenarioIdAndRhAccountNumber(
+            RH_ACCOUNT_NUMBER_1,
             SCENARIO_UID_4, searchValue));
     }
 
     private void assertSortingAclScenarioDetailDto(AclScenarioDetailDto detailAsc, AclScenarioDetailDto detailDesc,
                                                    String sortProperty) {
         List<AclScenarioDetailDto> scenarioDetailDtos = aclScenarioUsageRepository.findByScenarioIdAndRhAccountNumber(
-            RH_ACCOUNT_NUMBER, SCENARIO_UID_4, StringUtils.EMPTY, null, new Sort(sortProperty, Sort.Direction.ASC));
+            RH_ACCOUNT_NUMBER_1, SCENARIO_UID_4, StringUtils.EMPTY, null, new Sort(sortProperty, Sort.Direction.ASC));
         verifyAclScenarioDetailDto(detailAsc, scenarioDetailDtos.get(0));
         scenarioDetailDtos = aclScenarioUsageRepository.findByScenarioIdAndRhAccountNumber(
-            RH_ACCOUNT_NUMBER, SCENARIO_UID_4, StringUtils.EMPTY, null, new Sort(sortProperty, Sort.Direction.DESC));
+            RH_ACCOUNT_NUMBER_1, SCENARIO_UID_4, StringUtils.EMPTY, null, new Sort(sortProperty, Sort.Direction.DESC));
         verifyAclScenarioDetailDto(detailDesc, scenarioDetailDtos.get(0));
     }
 
@@ -815,6 +844,16 @@ public class AclScenarioUsageRepositoryIntegrationTest {
         try {
             String content = TestUtils.fileToString(this.getClass(), fileName);
             return OBJECT_MAPPER.readValue(content, new TypeReference<List<AclRightsholderTotalsHolderDto>>() {
+            });
+        } catch (IOException e) {
+            throw new AssertionError(e);
+        }
+    }
+
+    private List<AclScenarioShareDetail> loadExpectedAclScenarioShareDetailDto(String fileName) {
+        try {
+            String content = TestUtils.fileToString(this.getClass(), fileName);
+            return OBJECT_MAPPER.readValue(content, new TypeReference<List<AclScenarioShareDetail>>() {
             });
         } catch (IOException e) {
             throw new AssertionError(e);
