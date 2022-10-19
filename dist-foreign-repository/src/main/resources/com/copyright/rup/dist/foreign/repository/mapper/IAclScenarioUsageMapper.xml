@@ -30,6 +30,7 @@
         <result property="typeOfUse" column="scenario_detail_type_of_use"/>
         <collection property="scenarioShareDetails" javaType="java.util.List" ofType="com.copyright.rup.dist.foreign.domain.AclScenarioShareDetail">
             <result property="rhAccountNumber" column="rh_account_number"/>
+            <result property="payeeAccountNumber" column="payee_account_number"/>
             <result property="typeOfUse" column="type_of_use"/>
             <result property="volumeWeight" column="volume_weight"/>
             <result property="valueWeight" column="value_weight"/>
@@ -536,6 +537,7 @@
             reported_type_of_use,
             sd.type_of_use as scenario_detail_type_of_use,
             shd.rh_account_number,
+            shd.payee_account_number,
             shd.type_of_use,
             shd.volume_weight,
             shd.value_weight,
@@ -678,4 +680,13 @@
         group by wr_wrk_inst, system_title
         order by wr_wrk_inst
     </select>
+
+    <update id="updatePayeeByAccountNumber" parameterType="map">
+        update ${schema}.df_acl_share_detail
+        set
+            payee_account_number = #{payeeAccountNumber}
+        where rh_account_number = #{rhAccountNumber}
+            and df_acl_scenario_uid = #{scenarioId}
+            and type_of_use = #{typeOfUse}
+    </update>
 </mapper>
