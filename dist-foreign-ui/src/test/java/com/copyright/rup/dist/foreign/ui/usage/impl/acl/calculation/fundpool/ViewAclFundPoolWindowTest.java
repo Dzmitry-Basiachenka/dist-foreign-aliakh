@@ -23,7 +23,6 @@ import static org.powermock.api.easymock.PowerMock.verify;
 import com.copyright.rup.dist.foreign.domain.AclFundPool;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclFundPoolController;
-import com.copyright.rup.dist.foreign.ui.usage.impl.acl.calculation.grant.ViewAclGrantSetWindow;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
@@ -64,7 +63,7 @@ import java.util.List;
  * @author Anton Azarenka
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({Windows.class, ForeignSecurityUtils.class, ViewAclGrantSetWindow.class})
+@PrepareForTest({Windows.class, ForeignSecurityUtils.class})
 public class ViewAclFundPoolWindowTest {
 
     private static final String FUND_POOL_ID = "8e440297-b89e-4cf2-b3cd-0420aea06a9d";
@@ -101,7 +100,7 @@ public class ViewAclFundPoolWindowTest {
 
     @Test
     public void testStructure() {
-        verifyWindow(window, "View Fund Pool", 870, 550, Sizeable.Unit.PIXELS);
+        verifyWindow(window, "View Fund Pool", 1000, 550, Sizeable.Unit.PIXELS);
         VerticalLayout content = (VerticalLayout) window.getContent();
         assertEquals(3, content.getComponentCount());
         assertThat(content.getComponent(0), instanceOf(SearchWidget.class));
@@ -109,13 +108,13 @@ public class ViewAclFundPoolWindowTest {
         assertThat(component, instanceOf(Grid.class));
         Grid grid = (Grid) component;
         verifyGrid(grid, Arrays.asList(
-            Triple.of("Fund Pool Name", 200.0, -1),
+            Triple.of("Fund Pool Name", -1, -1),
             Triple.of("License Type", 100.0, -1),
             Triple.of("Gross Amount", 110.0, -1),
             Triple.of("Net Amount", 110.0, -1),
             Triple.of("Source", 80.0, -1),
             Triple.of("Created By", 170.0, -1),
-            Triple.of("Created Date", -1.0, -1)
+            Triple.of("Created Date", 130.0, -1)
         ));
         verifyButtonsLayout(content.getComponent(2), "Delete", "Close");
         assertEquals("view-acl-fund-pool-window", window.getStyleName());

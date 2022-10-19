@@ -47,7 +47,7 @@ public class ViewAclGrantSetWindow extends Window implements SearchWidget.ISearc
      */
     public ViewAclGrantSetWindow(IAclGrantDetailController controller) {
         this.controller = controller;
-        setWidth(600, Unit.PIXELS);
+        setWidth(1200, Unit.PIXELS);
         setHeight(550, Unit.PIXELS);
         searchWidget = new SearchWidget(this);
         searchWidget.setPrompt(ForeignUi.getMessage("field.prompt.view_grant_set.search"));
@@ -106,7 +106,7 @@ public class ViewAclGrantSetWindow extends Window implements SearchWidget.ISearc
             .setCaption(ForeignUi.getMessage("table.column.periods"))
             .setComparator((grantSet1, grantSet2) -> grantSet1.getPeriods().toString()
                 .compareTo(grantSet2.getPeriods().toString()))
-            .setExpandRatio(1);
+            .setWidth(580);
         grid.addColumn(grantSet -> BooleanUtils.toYNString(grantSet.getEditable()))
             .setCaption(ForeignUi.getMessage("table.column.editable"))
             .setComparator((grantSet1, grantSet2) -> grantSet1.getEditable().compareTo(grantSet2.getEditable()))
