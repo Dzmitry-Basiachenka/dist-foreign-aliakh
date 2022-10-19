@@ -95,8 +95,8 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
 
     private IAclScenariosController aclScenariosController;
     private Grid<AclScenario> scenarioGrid;
-    private Panel metadataPanel;
-    private VerticalLayout metadataLayout;
+    private Panel mainPanel;
+    private VerticalLayout mainLayout;
     private ListDataProvider<AclScenario> dataProvider;
     private ScenarioParameterWidget<List<UsageAge>> usageAgeWeightWidget;
     private AclPublicationTypeWeightsParameterWidget publicationTypeWeightWidget;
@@ -127,13 +127,13 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
     @SuppressWarnings("unchecked")
     public IAclScenariosWidget init() {
         setSizeFull();
-        initMetadataPanel();
+        initMainPanel();
         initGrid();
         HorizontalLayout buttonsLayout = initButtonsLayout();
-        HorizontalLayout horizontalLayout = new HorizontalLayout(scenarioGrid, metadataPanel);
+        HorizontalLayout horizontalLayout = new HorizontalLayout(scenarioGrid, mainPanel);
         horizontalLayout.setSizeFull();
         horizontalLayout.setExpandRatio(scenarioGrid, 0.7f);
-        horizontalLayout.setExpandRatio(metadataPanel, 0.3f);
+        horizontalLayout.setExpandRatio(mainPanel, 0.3f);
         addComponents(buttonsLayout, horizontalLayout);
         setExpandRatio(horizontalLayout, 1);
         setSpacing(false);
@@ -284,15 +284,28 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
         return layout;
     }
 
-    private void initMetadataPanel() {
-        metadataPanel = new Panel();
+    private void initMainPanel() {
+        Panel metadataPanel = initMetadataPanel();
+        mainLayout = new VerticalLayout();
+        mainLayout.addComponents(metadataPanel, initReportButtonLayout());
+        mainLayout.setExpandRatio(metadataPanel, 1);
+        mainLayout.setSizeFull();
+        mainLayout.setMargin(false);
+        mainPanel = new Panel();
+        mainPanel.setSizeFull();
+        mainPanel.setContent(mainLayout);
+    }
+
+    private Panel initMetadataPanel() {
+        Panel metadataPanel = new Panel();
         metadataPanel.setSizeFull();
         VaadinUtils.addComponentStyle(metadataPanel, "scenarios-metadata");
-        metadataLayout = initMetadataLayout();
+        VerticalLayout metadataLayout = initMetadataLayout();
         metadataLayout.addComponent(initScenarioActionLayout());
-        metadataLayout.addComponent(initSummaryOfWorkSharesByAggLcReportButton());
         metadataLayout.setMargin(new MarginInfo(false, true, false, true));
         VaadinUtils.setMaxComponentsWidth(metadataLayout);
+        metadataPanel.setContent(metadataLayout);
+        return metadataPanel;
     }
 
     private VerticalLayout initMetadataLayout() {
@@ -302,7 +315,7 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
             new VerticalLayout(ownerLabel, grossTotalLayout, serviceFeeTotalLayout, netTotalLayout, descriptionLabel,
                 selectionCriteriaLabel, initUsageAgeWeightWidget(), initPublicationTypeWeightWidget(),
                 initLicenseeClassMappingWidget(), copiedFromLabel);
-        layout.setMargin(new MarginInfo(false, true, false, true));
+        layout.setMargin(false);
         VaadinUtils.setMaxComponentsWidth(layout);
         return layout;
     }
@@ -363,7 +376,7 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
         return layout;
     }
 
-    private Button initSummaryOfWorkSharesByAggLcReportButton() {
+    private VerticalLayout initReportButtonLayout() {
         Button button = Buttons.createButton(
             ForeignUi.getMessage("menu.report.summary_of_work_shares_by_agg_lc_report"));
         button.addStyleName(ValoTheme.BUTTON_LINK);
@@ -371,7 +384,9 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
             aclScenariosController.getExportAclSummaryOfWorkSharesByAggLcStreamSource().getSource());
         downloader.extend(button);
         VaadinUtils.setButtonsAutoDisabled(button);
-        return button;
+        VerticalLayout reportLayout = new VerticalLayout(button);
+        reportLayout.setHeight(40, Unit.PIXELS);
+        return reportLayout;
     }
 
     private void onItemChanged(AclScenario scenario) {
@@ -390,9 +405,9 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
                 actionReason.setValue(formatScenarioLabel(ForeignUi.getMessage("label.action_reason"),
                     lastAction.getActionReason()));
             }
-            metadataPanel.setContent(metadataLayout);
+            mainPanel.setContent(mainLayout);
         } else {
-            metadataPanel.setContent(new Label());
+            mainPanel.setContent(new Label());
         }
         mediator.selectedScenarioChanged(scenario);
     }

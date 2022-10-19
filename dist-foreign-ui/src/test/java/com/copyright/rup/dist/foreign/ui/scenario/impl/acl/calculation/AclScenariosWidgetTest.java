@@ -228,7 +228,7 @@ public class AclScenariosWidgetTest {
         Windows.showModalWindow(capture(windowCapture));
         expectLastCall().once();
         replay(controller, Windows.class);
-        Panel metadataPanel = (Panel) ((HorizontalLayout) scenariosWidget.getComponent(1)).getComponent(1);
+        Panel metadataPanel = getMetaDataPanel();
         VerticalLayout metadataLayout = (VerticalLayout) metadataPanel.getContent();
         ScenarioParameterWidget widget = (ScenarioParameterWidget) metadataLayout.getComponent(6);
         assertEquals("Usage Age Weights", widget.getComponent(0).getCaption());
@@ -248,7 +248,7 @@ public class AclScenariosWidgetTest {
         Windows.showModalWindow(capture(windowCapture));
         expectLastCall().once();
         replay(controller, Windows.class);
-        Panel metadataPanel = (Panel) ((HorizontalLayout) scenariosWidget.getComponent(1)).getComponent(1);
+        Panel metadataPanel = getMetaDataPanel();
         VerticalLayout metadataLayout = (VerticalLayout) metadataPanel.getContent();
         AclPublicationTypeWeightsParameterWidget widget =
             (AclPublicationTypeWeightsParameterWidget) metadataLayout.getComponent(7);
@@ -269,7 +269,7 @@ public class AclScenariosWidgetTest {
         Windows.showModalWindow(capture(windowCapture));
         expectLastCall().once();
         replay(controller, Windows.class);
-        Panel metadataPanel = (Panel) ((HorizontalLayout) scenariosWidget.getComponent(1)).getComponent(1);
+        Panel metadataPanel = getMetaDataPanel();
         VerticalLayout metadataLayout = (VerticalLayout) metadataPanel.getContent();
         ScenarioParameterWidget widget = (ScenarioParameterWidget) metadataLayout.getComponent(8);
         assertEquals("Licensee Class Mapping", widget.getComponent(0).getCaption());
@@ -376,6 +376,11 @@ public class AclScenariosWidgetTest {
         return Collections.singletonList(detailLicenseeClass);
     }
 
+    private Panel getMetaDataPanel() {
+        return (Panel) ((VerticalLayout) (((Panel) ((HorizontalLayout) scenariosWidget.getComponent(1)).getComponent(1))
+            .getContent())).getComponent(0);
+    }
+
     private void verifyPanel(Panel panel) {
         verifyWindow(panel, null, 100, 100, Unit.PERCENTAGE);
     }
@@ -413,12 +418,12 @@ public class AclScenariosWidgetTest {
     }
 
     private void verifyScenarioMetadataPanel() {
-        Panel metadataPanel = (Panel) ((HorizontalLayout) scenariosWidget.getComponent(1)).getComponent(1);
+        Panel metadataPanel = getMetaDataPanel();
         assertEquals("scenarios-metadata", metadataPanel.getId());
         Component content = metadataPanel.getContent();
         assertThat(content, instanceOf(VerticalLayout.class));
         VerticalLayout metadataLayout = (VerticalLayout) content;
-        assertEquals(12, metadataLayout.getComponentCount());
+        assertEquals(11, metadataLayout.getComponentCount());
         verifyLabel(metadataLayout.getComponent(0), "<b>Owner: </b>user@copyright.com");
         assertThat(metadataLayout.getComponent(1), instanceOf(VerticalLayout.class));
         VerticalLayout grossTotalLayout = (VerticalLayout) metadataLayout.getComponent(1);
@@ -469,8 +474,10 @@ public class AclScenariosWidgetTest {
         verifyLabel(lastActionLayout.getComponent(2), "<b>Date:</b> 07/01/2022 12:00 AM");
         verifyLabel(lastActionLayout.getComponent(3), "<b>Reason:</b> some reason");
         UiTestHelper.verifyButton(lastActionLayout.getComponent(4), "View All Actions", true);
+        VerticalLayout reportLayout = (VerticalLayout) ((VerticalLayout) (((Panel) ((HorizontalLayout)
+            scenariosWidget.getComponent(1)).getComponent(1)).getContent())).getComponent(1);
         UiTestHelper.verifyButton(
-            metadataLayout.getComponent(11), "Summary of Work Shares by Aggregate Licensee Class Report", true);
+            reportLayout.getComponent(0), "Summary of Work Shares by Aggregate Licensee Class Report", true);
     }
 
     private void verifyScenarioParameterWidget(Component component, String expectedCaption) {
