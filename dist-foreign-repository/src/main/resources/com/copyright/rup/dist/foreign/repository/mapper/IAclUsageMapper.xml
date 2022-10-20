@@ -22,7 +22,9 @@
         <result property="publicationType.name" column="pub_type_name"/>
         <result property="publicationType.description" column="pub_type_description"/>
         <result property="price" column="price"/>
+        <result property="priceFlag" column="price_flag"/>
         <result property="content" column="content"/>
+        <result property="contentFlag" column="content_flag"/>
         <result property="contentUnitPrice" column="content_unit_price"/>
         <result property="contentUnitPriceFlag" column="content_unit_price_flag"/>
         <result property="reportedTypeOfUse" column="reported_type_of_use"/>
@@ -50,7 +52,9 @@
         survey_country,
         publication_type_uid,
         price,
+        price_flag,
         content,
+        content_flag,
         content_unit_price,
         content_unit_price_flag,
         reported_type_of_use,
@@ -78,7 +82,9 @@
         pt.name pub_type_name,
         pt.description pub_type_description,
         price,
+        price_flag,
         content,
+        content_flag,
         content_unit_price,
         content_unit_price_flag,
         reported_type_of_use,
@@ -326,7 +332,9 @@
             u.survey_country,
             vb.publication_type_uid,
             vb.price,
+            coalesce(vb.price_flag, false),
             vb.content,
+            coalesce(vb.content_flag, false),
             vb.content_unit_price,
             coalesce(vb.content_unit_price_flag, false),
             u.reported_type_of_use,
@@ -459,7 +467,9 @@
             survey_country,
             publication_type_uid,
             price,
+            price_flag,
             content,
+            content_flag,
             content_unit_price,
             content_unit_price_flag,
             reported_type_of_use,

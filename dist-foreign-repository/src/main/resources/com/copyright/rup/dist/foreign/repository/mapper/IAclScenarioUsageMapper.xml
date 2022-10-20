@@ -19,7 +19,9 @@
         <result property="publicationType.weight" column="pub_type_weight"/>
         <result property="publicationType.period" column="pub_type_period"/>
         <result property="price" column="price"/>
+        <result property="priceFlag" column="price_flag"/>
         <result property="content" column="content"/>
+        <result property="contentFlag" column="content_flag"/>
         <result property="contentUnitPrice" column="content_unit_price"/>
         <result property="contentUnitPriceFlag" column="content_unit_price_flag"/>
         <result property="numberOfCopies" column="number_of_copies"/>
@@ -386,7 +388,9 @@
             detail_licensee_class_id,
             publication_type_uid,
             price,
+            price_flag,
             content,
+            content_flag,
             content_unit_price,
             content_unit_price_flag,
             number_of_copies,
@@ -407,7 +411,9 @@
             detail_licensee_class_id,
             publication_type_uid,
             price,
+            price_flag,
             content,
+            content_flag,
             content_unit_price,
             content_unit_price_flag,
             annualized_copies,
@@ -549,7 +555,9 @@
             sd.publication_type_uid,
             pub_type_weight,
             price,
+            price_flag,
             content,
+            content_flag,
             content_unit_price,
             content_unit_price_flag,
             number_of_copies,

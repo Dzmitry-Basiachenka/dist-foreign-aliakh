@@ -14,7 +14,9 @@
       "weight": 1.00
     },
     "price": 22.0000000000,
+    "priceFlag": true,
     "content": 2.0000000000,
+    "contentFlag": true,
     "contentUnitPrice": 11.0000000000,
     "contentUnitPriceFlag": true,
     "numberOfCopies": 10.00000,
@@ -53,7 +55,9 @@
       "weight": 1.90
     },
     "price": 10.0000000000,
+    "priceFlag": false,
     "content": 2.0000000000,
+    "contentFlag": false,
     "contentUnitPrice": 5.0000000000,
     "contentUnitPriceFlag": false,
     "numberOfCopies": 10.00000,

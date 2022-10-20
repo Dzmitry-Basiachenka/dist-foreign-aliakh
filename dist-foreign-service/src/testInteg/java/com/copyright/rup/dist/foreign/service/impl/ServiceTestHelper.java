@@ -766,7 +766,9 @@ public class ServiceTestHelper {
         assertEquals(expectedScenarioDetail.getPublicationType().getWeight(),
             actualScenarioDetail.getPublicationType().getWeight());
         assertEquals(expectedScenarioDetail.getPrice(), actualScenarioDetail.getPrice());
+        assertEquals(expectedScenarioDetail.getPriceFlag(), actualScenarioDetail.getPriceFlag());
         assertEquals(expectedScenarioDetail.getContent(), actualScenarioDetail.getContent());
+        assertEquals(expectedScenarioDetail.getContentFlag(), actualScenarioDetail.getContentFlag());
         assertEquals(expectedScenarioDetail.getContentUnitPrice(), actualScenarioDetail.getContentUnitPrice());
         assertEquals(expectedScenarioDetail.getContentUnitPriceFlag(), actualScenarioDetail.getContentUnitPriceFlag());
         assertEquals(expectedScenarioDetail.getNumberOfCopies(), actualScenarioDetail.getNumberOfCopies());

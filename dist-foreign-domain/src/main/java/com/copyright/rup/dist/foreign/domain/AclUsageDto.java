@@ -32,7 +32,9 @@ public class AclUsageDto extends StoredEntity<String> {
     private String surveyCountry;
     private PublicationType publicationType;
     private BigDecimal price;
+    private Boolean priceFlag;
     private BigDecimal content;
+    private Boolean contentFlag;
     private BigDecimal contentUnitPrice;
     private Boolean contentUnitPriceFlag;
     private String reportedTypeOfUse;
@@ -145,12 +147,28 @@ public class AclUsageDto extends StoredEntity<String> {
         this.price = price;
     }
 
+    public Boolean getPriceFlag() {
+        return priceFlag;
+    }
+
+    public void setPriceFlag(Boolean priceFlag) {
+        this.priceFlag = priceFlag;
+    }
+
     public BigDecimal getContent() {
         return content;
     }
 
     public void setContent(BigDecimal content) {
         this.content = content;
+    }
+
+    public Boolean getContentFlag() {
+        return contentFlag;
+    }
+
+    public void setContentFlag(Boolean contentFlag) {
+        this.contentFlag = contentFlag;
     }
 
     public BigDecimal getContentUnitPrice() {
@@ -233,7 +251,9 @@ public class AclUsageDto extends StoredEntity<String> {
             .append(surveyCountry, that.surveyCountry)
             .append(publicationType, that.publicationType)
             .append(price, that.price)
+            .append(priceFlag, that.priceFlag)
             .append(content, that.content)
+            .append(contentFlag, that.contentFlag)
             .append(contentUnitPrice, that.contentUnitPrice)
             .append(contentUnitPriceFlag, that.contentUnitPriceFlag)
             .append(reportedTypeOfUse, that.reportedTypeOfUse)
@@ -261,7 +281,9 @@ public class AclUsageDto extends StoredEntity<String> {
             .append(surveyCountry)
             .append(publicationType)
             .append(price)
+            .append(priceFlag)
             .append(content)
+            .append(contentFlag)
             .append(contentUnitPrice)
             .append(contentUnitPriceFlag)
             .append(reportedTypeOfUse)
@@ -289,7 +311,9 @@ public class AclUsageDto extends StoredEntity<String> {
             .append("surveyCountry", surveyCountry)
             .append("publicationType", publicationType)
             .append("price", price)
+            .append("priceFlag", priceFlag)
             .append("content", content)
+            .append("contentFlag", contentFlag)
             .append("contentUnitPrice", contentUnitPrice)
             .append("contentUnitPriceFlag", contentUnitPriceFlag)
             .append("reportedTypeOfUse", reportedTypeOfUse)
