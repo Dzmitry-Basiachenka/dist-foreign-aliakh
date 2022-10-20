@@ -91,8 +91,12 @@
         <result property="systemTitle" column="system_title"/>
         <result property="rhAccountNumberPrint" column="rh_account_number_print"/>
         <result property="rhNamePrint" column="rh_name_print"/>
+        <result property="payeeAccountNumberPrint" column="payee_account_number_print"/>
+        <result property="payeeNamePrint" column="payee_name_print"/>
         <result property="rhAccountNumberDigital" column="rh_account_number_digital"/>
         <result property="rhNameDigital" column="rh_name_digital"/>
+        <result property="payeeAccountNumberDigital" column="payee_account_number_digital"/>
+        <result property="payeeNameDigital" column="payee_name_digital"/>
         <result property="usagePeriod" column="usage_period"/>
         <result property="usageAgeWeight" column="usage_age_weight"/>
         <result property="detailLicenseeClassId" column="detail_licensee_class_id"/>
@@ -210,8 +214,12 @@
             system_title,
             print_details.rh_account_number rh_account_number_print,
             print_details.rh_name rh_name_print,
+            print_details.payee_account_number payee_account_number_print,
+            print_details.payee_name payee_name_print,
             digital_details.rh_account_number rh_account_number_digital,
             digital_details.rh_name rh_name_digital,
+            digital_details.payee_account_number payee_account_number_digital,
+            digital_details.payee_name payee_name_digital,
             scd.period_end_date usage_period,
             usage_age_weight,
             scd.detail_licensee_class_id,
@@ -280,6 +288,7 @@
             <include refid="IAclScenarioUsageMapper.shareDetailColumns"/>
         from ${schema}.df_acl_share_detail shd
         left join ${schema}.df_rightsholder r on shd.rh_account_number = r.rh_account_number
+        left join ${schema}.df_rightsholder p on shd.payee_account_number = p.rh_account_number
         where df_acl_scenario_uid = #{scenarioId}
             and type_of_use = 'PRINT'
         <if test="null != accountNumber">
@@ -292,6 +301,7 @@
             <include refid="IAclScenarioUsageMapper.shareDetailColumns"/>
         from ${schema}.df_acl_share_detail shd
         left join ${schema}.df_rightsholder r on shd.rh_account_number = r.rh_account_number
+        left join ${schema}.df_rightsholder p on shd.payee_account_number = p.rh_account_number
         where df_acl_scenario_uid = #{scenarioId}
             and type_of_use = 'DIGITAL'
         <if test="null != accountNumber">
@@ -303,6 +313,8 @@
         df_acl_scenario_detail_uid,
         shd.rh_account_number,
         r.name rh_name,
+        shd.payee_account_number,
+        p.name payee_name,
         value_share,
         volume_share,
         detail_share,

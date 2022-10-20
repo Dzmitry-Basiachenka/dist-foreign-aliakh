@@ -27,8 +27,12 @@ public class AclScenarioDetailDto extends StoredEntity<String> {
     private String systemTitle;
     private Long rhAccountNumberPrint;
     private String rhNamePrint;
+    private Long payeeAccountNumberPrint;
+    private String payeeNamePrint;
     private Long rhAccountNumberDigital;
     private String rhNameDigital;
+    private Long payeeAccountNumberDigital;
+    private String payeeNameDigital;
     private Integer usagePeriod;
     private BigDecimal usageAgeWeight;
     private Integer detailLicenseeClassId;
@@ -121,6 +125,22 @@ public class AclScenarioDetailDto extends StoredEntity<String> {
         this.rhNamePrint = rhNamePrint;
     }
 
+    public Long getPayeeAccountNumberPrint() {
+        return payeeAccountNumberPrint;
+    }
+
+    public void setPayeeAccountNumberPrint(Long payeeAccountNumberPrint) {
+        this.payeeAccountNumberPrint = payeeAccountNumberPrint;
+    }
+
+    public String getPayeeNamePrint() {
+        return payeeNamePrint;
+    }
+
+    public void setPayeeNamePrint(String payeeNamePrint) {
+        this.payeeNamePrint = payeeNamePrint;
+    }
+
     public Long getRhAccountNumberDigital() {
         return rhAccountNumberDigital;
     }
@@ -135,6 +155,22 @@ public class AclScenarioDetailDto extends StoredEntity<String> {
 
     public void setRhNameDigital(String rhNameDigital) {
         this.rhNameDigital = rhNameDigital;
+    }
+
+    public Long getPayeeAccountNumberDigital() {
+        return payeeAccountNumberDigital;
+    }
+
+    public void setPayeeAccountNumberDigital(Long payeeAccountNumberDigital) {
+        this.payeeAccountNumberDigital = payeeAccountNumberDigital;
+    }
+
+    public String getPayeeNameDigital() {
+        return payeeNameDigital;
+    }
+
+    public void setPayeeNameDigital(String payeeNameDigital) {
+        this.payeeNameDigital = payeeNameDigital;
     }
 
     public Integer getUsagePeriod() {
@@ -375,8 +411,12 @@ public class AclScenarioDetailDto extends StoredEntity<String> {
             .append(systemTitle, that.systemTitle)
             .append(rhAccountNumberPrint, that.rhAccountNumberPrint)
             .append(rhNamePrint, that.rhNamePrint)
+            .append(payeeAccountNumberPrint, that.payeeAccountNumberPrint)
+            .append(payeeNamePrint, that.payeeNamePrint)
             .append(rhAccountNumberDigital, that.rhAccountNumberDigital)
             .append(rhNameDigital, that.rhNameDigital)
+            .append(payeeAccountNumberDigital, that.payeeAccountNumberDigital)
+            .append(payeeNameDigital, that.payeeNameDigital)
             .append(usagePeriod, that.usagePeriod)
             .append(usageAgeWeight, that.usageAgeWeight)
             .append(detailLicenseeClassId, that.detailLicenseeClassId)
@@ -416,8 +456,12 @@ public class AclScenarioDetailDto extends StoredEntity<String> {
             .append(systemTitle)
             .append(rhAccountNumberPrint)
             .append(rhNamePrint)
+            .append(payeeAccountNumberPrint)
+            .append(payeeNamePrint)
             .append(rhAccountNumberDigital)
             .append(rhNameDigital)
+            .append(payeeAccountNumberDigital)
+            .append(payeeNameDigital)
             .append(usagePeriod)
             .append(usageAgeWeight)
             .append(detailLicenseeClassId)
@@ -460,8 +504,12 @@ public class AclScenarioDetailDto extends StoredEntity<String> {
             .append("systemTitle", systemTitle)
             .append("rhAccountNumberPrint", rhAccountNumberPrint)
             .append("rhNamePrint", rhNamePrint)
+            .append("payeeAccountNumberPrint", payeeAccountNumberPrint)
+            .append("payeeNamePrint", payeeNamePrint)
             .append("rhAccountNumberDigital", rhAccountNumberDigital)
             .append("rhNameDigital", rhNameDigital)
+            .append("payeeAccountNumberDigital", payeeAccountNumberDigital)
+            .append("payeeNameDigital", payeeNameDigital)
             .append("usagePeriod", usagePeriod)
             .append("usageAgeWeight", usageAgeWeight)
             .append("detailLicenseeClassId", detailLicenseeClassId)
