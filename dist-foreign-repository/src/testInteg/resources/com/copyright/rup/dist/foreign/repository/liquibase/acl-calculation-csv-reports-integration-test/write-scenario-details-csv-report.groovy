@@ -16,6 +16,18 @@ databaseChangeLog {
             column(name: 'name', value: 'Rothchild Consultants')
         }
 
+        insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
+            column(name: 'df_rightsholder_uid', value: '99ca434a-b9ad-49fd-ad5d-70ea1e89dc38')
+            column(name: 'rh_account_number', value: 1000009378)
+            column(name: 'name', value: 'West: A Thomson Business')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
+            column(name: 'df_rightsholder_uid', value: '0717c9dc-afcc-4143-99a0-c04dfb610a84')
+            column(name: 'rh_account_number', value: 1000004570)
+            column(name: 'name', value: 'American Medical Association')
+        }
+
         insert(schemaName: dbAppsSchema, tableName: 'df_acl_fund_pool') {
             column(name: 'df_acl_fund_pool_uid', value: '90a3a304-fd74-4a79-b0f6-bf5bb75c68f1')
             column(name: 'name', value: 'ACL Fund Pool 202212')
@@ -128,6 +140,7 @@ databaseChangeLog {
             column(name: 'df_acl_scenario_detail_uid', value: 'bba31295-7e0c-40ed-bdd8-a530893d4ced')
             column(name: 'type_of_use', value: 'PRINT')
             column(name: 'rh_account_number', value: 1000002859)
+            column(name: 'payee_account_number', value: 1000002859)
             column(name: 'aggregate_licensee_class_id', value: 1)
             column(name: 'volume_weight', value: 1.0000000000)
             column(name: 'value_weight', value: 1.0000000000)
@@ -147,6 +160,7 @@ databaseChangeLog {
             column(name: 'df_acl_scenario_detail_uid', value: 'bba31295-7e0c-40ed-bdd8-a530893d4ced')
             column(name: 'type_of_use', value: 'DIGITAL')
             column(name: 'rh_account_number', value: 1000000001)
+            column(name: 'payee_account_number', value: 1000000001)
             column(name: 'aggregate_licensee_class_id', value: 1)
             column(name: 'volume_weight', value: 1.0000000000)
             column(name: 'value_weight', value: 1.0000000000)
@@ -166,6 +180,7 @@ databaseChangeLog {
             column(name: 'df_acl_scenario_detail_uid', value: '4ad1a9cd-265f-4aca-9bee-474ab1a847fc')
             column(name: 'type_of_use', value: 'DIGITAL')
             column(name: 'rh_account_number', value: 1000002859)
+            column(name: 'payee_account_number', value: 1000000001)
             column(name: 'aggregate_licensee_class_id', value: 1)
             column(name: 'volume_weight', value: 1.0000000000)
             column(name: 'value_weight', value: 1.0000000000)
@@ -184,7 +199,8 @@ databaseChangeLog {
             column(name: 'df_acl_scenario_uid', value: 'cb3bcdf0-c312-4cb0-bd4c-3f2c9a703d7a')
             column(name: 'df_acl_scenario_detail_uid', value: 'ac764b6c-28fb-4f4d-88c6-a58295d249f4')
             column(name: 'type_of_use', value: 'PRINT')
-            column(name: 'rh_account_number', value: 1000028511)
+            column(name: 'rh_account_number', value: 1000009378)
+            column(name: 'payee_account_number', value: 1000004570)
             column(name: 'aggregate_licensee_class_id', value: 12)
             column(name: 'volume_weight', value: 4.0000000000)
             column(name: 'value_weight', value: 5.0000000000)

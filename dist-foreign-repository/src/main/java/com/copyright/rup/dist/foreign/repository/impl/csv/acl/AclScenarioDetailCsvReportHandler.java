@@ -21,7 +21,8 @@ public class AclScenarioDetailCsvReportHandler extends BaseCsvReportHandler<AclS
 
     private static final List<String> HEADERS = Arrays.asList("Detail ID", "Usage Detail ID", "Product Family",
         "Usage Batch Name", "Period End Date", "Wr Wrk Inst", "System Title", "Print RH Account #", "Print RH Name",
-        "Digital RH Account #", "Digital RH Name", "Usage Period", "Usage Age Weight", "Det LC ID", "Det LC Name",
+        "Print Payee Account #", "Print Payee Name", "Digital RH Account #", "Digital RH Name",
+        "Digital Payee Account #", "Digital Payee Name", "Usage Period", "Usage Age Weight", "Det LC ID", "Det LC Name",
         "Agg LC ID", "Agg LC Name", "Survey Country", "Reported TOU", "TOU", "# of Copies", "# of Weighted Copies",
         "Pub Type", "Pub Type Weight", "Price", "Price Flag", "Content", "Content Flag", "Content Unit Price",
         "CUP Flag", "Print Value Share", "Print Volume Share", "Print Detail Share", "Print Net Amt in USD",
@@ -49,8 +50,12 @@ public class AclScenarioDetailCsvReportHandler extends BaseCsvReportHandler<AclS
         beanProperties.add(bean.getSystemTitle());
         beanProperties.add(getBeanPropertyAsString(bean.getRhAccountNumberPrint()));
         beanProperties.add(bean.getRhNamePrint());
+        beanProperties.add(getBeanPropertyAsString(bean.getPayeeAccountNumberPrint()));
+        beanProperties.add(bean.getPayeeNamePrint());
         beanProperties.add(getBeanPropertyAsString(bean.getRhAccountNumberDigital()));
         beanProperties.add(bean.getRhNameDigital());
+        beanProperties.add(getBeanPropertyAsString(bean.getPayeeAccountNumberDigital()));
+        beanProperties.add(bean.getPayeeNameDigital());
         beanProperties.add(getBeanPropertyAsString(bean.getUsagePeriod()));
         beanProperties.add(getBeanBigDecimal(bean.getUsageAgeWeight()));
         beanProperties.add(getBeanPropertyAsString(bean.getDetailLicenseeClassId()));
