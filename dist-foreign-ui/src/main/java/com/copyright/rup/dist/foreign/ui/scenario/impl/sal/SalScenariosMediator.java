@@ -30,7 +30,6 @@ class SalScenariosMediator implements IScenariosMediator {
 
     @Override
     public void applyPermissions() {
-        viewButton.setVisible(ForeignSecurityUtils.hasViewScenarioPermission());
         editNameButton.setVisible(ForeignSecurityUtils.hasEditScenarioNamePermission());
         deleteButton.setVisible(ForeignSecurityUtils.hasDeleteScenarioPermission());
         submitButton.setVisible(ForeignSecurityUtils.hasSubmitScenarioPermission());

@@ -70,13 +70,6 @@ public final class ForeignSecurityUtils {
     }
 
     /**
-     * @return {@code true} if user has permission to view scenarios.
-     */
-    public static boolean hasViewScenarioPermission() {
-        return SecurityUtils.hasPermission("FDA_VIEW_SCENARIO");
-    }
-
-    /**
      * @return {@code true} if user has permission to edit scenario name.
      */
     public static boolean hasEditScenarioNamePermission() {
