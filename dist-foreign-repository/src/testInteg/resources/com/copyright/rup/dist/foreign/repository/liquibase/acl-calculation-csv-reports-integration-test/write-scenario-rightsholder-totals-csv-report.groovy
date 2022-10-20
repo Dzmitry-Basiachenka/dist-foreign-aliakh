@@ -17,6 +17,18 @@ databaseChangeLog {
             column(name: 'name', value: 'Rothchild Consultants')
         }
 
+        insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
+            column(name: 'df_rightsholder_uid', value: '1908ca9a-309d-4a3b-976f-3d20b747dd54')
+            column(name: 'rh_account_number', value: 1000009482)
+            column(name: 'name', value: 'Daedalus Enterprises Inc')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
+            column(name: 'df_rightsholder_uid', value: '5252eaad-2e7e-45cc-9784-fb207ffb374f')
+            column(name: 'rh_account_number', value: 2000149570)
+            column(name: 'name', value: 'National Association for Management')
+        }
+
         insert(schemaName: dbAppsSchema, tableName: 'df_acl_fund_pool') {
             column(name: 'df_acl_fund_pool_uid', value: '9a3c2bec-cb00-4fc9-a538-ed71a58c37be')
             column(name: 'name', value: 'ACL Fund Pool 202212')
@@ -138,6 +150,7 @@ databaseChangeLog {
             column(name: 'net_amount', value: 84.1000000000)
             column(name: 'gross_amount', value: 100.0000000000)
             column(name: 'service_fee_amount', value: 16.0000000000)
+            column(name: 'payee_account_number', value: 1000009482)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_acl_share_detail') {
@@ -157,6 +170,7 @@ databaseChangeLog {
             column(name: 'net_amount', value: 833.3333334000)
             column(name: 'gross_amount', value: 837.3333334000)
             column(name: 'service_fee_amount', value: 4.0000000000)
+            column(name: 'payee_account_number', value: 2000149570)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_acl_share_detail') {
@@ -176,6 +190,7 @@ databaseChangeLog {
             column(name: 'net_amount', value: 202.9175526000)
             column(name: 'gross_amount', value: 234.9175526000)
             column(name: 'service_fee_amount', value: 32.0000000000)
+            column(name: 'payee_account_number', value: 2000149570)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_acl_share_detail') {
@@ -195,6 +210,7 @@ databaseChangeLog {
             column(name: 'net_amount', value: 100.0000000000)
             column(name: 'gross_amount', value: 110.0000000000)
             column(name: 'service_fee_amount', value: 10.0000000000)
+            column(name: 'payee_account_number', value: 1000028511)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_usage_age_weight') {
