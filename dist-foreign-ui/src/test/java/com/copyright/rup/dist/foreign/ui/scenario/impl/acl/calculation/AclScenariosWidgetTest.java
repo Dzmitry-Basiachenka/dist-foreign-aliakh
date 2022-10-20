@@ -418,8 +418,8 @@ public class AclScenariosWidgetTest {
     }
 
     private void verifyScenarioMetadataPanel() {
+        Panel mainPanel = (Panel) ((HorizontalLayout) scenariosWidget.getComponent(1)).getComponent(1);
         Panel metadataPanel = getMetaDataPanel();
-        assertEquals("scenarios-metadata", metadataPanel.getId());
         Component content = metadataPanel.getContent();
         assertThat(content, instanceOf(VerticalLayout.class));
         VerticalLayout metadataLayout = (VerticalLayout) content;
@@ -474,8 +474,7 @@ public class AclScenariosWidgetTest {
         verifyLabel(lastActionLayout.getComponent(2), "<b>Date:</b> 07/01/2022 12:00 AM");
         verifyLabel(lastActionLayout.getComponent(3), "<b>Reason:</b> some reason");
         UiTestHelper.verifyButton(lastActionLayout.getComponent(4), "View All Actions", true);
-        VerticalLayout reportLayout = (VerticalLayout) ((VerticalLayout) (((Panel) ((HorizontalLayout)
-            scenariosWidget.getComponent(1)).getComponent(1)).getContent())).getComponent(1);
+        VerticalLayout reportLayout = (VerticalLayout) ((VerticalLayout) mainPanel.getContent()).getComponent(1);
         UiTestHelper.verifyButton(
             reportLayout.getComponent(0), "Summary of Work Shares by Aggregate Licensee Class Report", true);
     }

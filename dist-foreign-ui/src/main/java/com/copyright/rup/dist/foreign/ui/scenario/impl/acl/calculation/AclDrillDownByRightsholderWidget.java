@@ -125,7 +125,7 @@ public class AclDrillDownByRightsholderWidget extends Window implements IAclDril
         addColumn(AclScenarioDetailDto::getSurveyCountry, "table.column.survey_country", "surveyCountry", true, 120);
         addColumn(AclScenarioDetailDto::getReportedTypeOfUse, "table.column.reported_tou",
             "reportedTypeOfUse", true, 120);
-        addColumn(AclScenarioDetailDto::getTypeOfUse, "table.column.tou", "typeOfUse", true, 120);
+        addColumn(AclScenarioDetailDto::getTypeOfUse, "table.column.tou", "typeOfUse", true, 75);
         addBigDecimalColumn(AclScenarioDetailDto::getNumberOfCopies, "table.column.acl_number_of_copies",
             "numberOfCopies", 125);
         addBigDecimalColumn(AclScenarioDetailDto::getWeightedCopies, "table.column.number_of_weighted_copies",

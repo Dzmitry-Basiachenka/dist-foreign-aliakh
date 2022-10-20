@@ -156,7 +156,7 @@ public class AclDrillDownByRightsholderWidgetTest {
             Triple.of("Agg LC Name", 200.0, -1),
             Triple.of("Survey Country", 120.0, -1),
             Triple.of("Reported TOU", 120.0, -1),
-            Triple.of("TOU", 120.0, -1),
+            Triple.of("TOU", 75.0, -1),
             Triple.of("# of Copies", 125.0, -1),
             Triple.of("# of Weighted Copies", 150.0, -1),
             Triple.of("Pub Type", 120.0, -1),
