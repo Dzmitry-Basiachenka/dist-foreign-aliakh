@@ -49,6 +49,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.OffsetDateTime;
 import java.util.Collections;
 import java.util.List;
@@ -294,17 +295,17 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
         mainPanel = new Panel();
         mainPanel.setSizeFull();
         mainPanel.setContent(mainLayout);
+        VaadinUtils.addComponentStyle(mainPanel, "scenarios-metadata");
     }
 
     private Panel initMetadataPanel() {
         Panel metadataPanel = new Panel();
         metadataPanel.setSizeFull();
-        VaadinUtils.addComponentStyle(metadataPanel, "scenarios-metadata");
         VerticalLayout metadataLayout = initMetadataLayout();
         metadataLayout.addComponent(initScenarioActionLayout());
         metadataLayout.setMargin(new MarginInfo(false, true, false, true));
-        VaadinUtils.setMaxComponentsWidth(metadataLayout);
         metadataPanel.setContent(metadataLayout);
+        VaadinUtils.setMaxComponentsWidth(metadataLayout);
         return metadataPanel;
     }
 
@@ -453,13 +454,13 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
     }
 
     private String formatAmount(BigDecimal amount) {
-        return CurrencyUtils.formatAsHtml(amount.setScale(2, BigDecimal.ROUND_HALF_UP));
+        return CurrencyUtils.formatAsHtml(amount.setScale(2, RoundingMode.HALF_UP));
     }
 
     private void selectFirstScenario(List<AclScenario> scenarios) {
         if (CollectionUtils.isNotEmpty(scenarios)) {
             scenarioGrid.select(scenarios.get(0));
-            refreshSelectedScenario();
         }
+        refreshSelectedScenario();
     }
 }
