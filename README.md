@@ -1,3 +1,19 @@
+16.0.8
+-
+* B-74954 FDA: Summary of Work Shares by Agg Lic Class Report: separate report button from main metadata panel
+* B-75009 FDA: Liabilities by RH Report: implement data handler to generate CSV file
+* B-67527 FDA: Create Approver role for ACL: Modify ForeignSecurityUtils to add the Approver role and permissions
+* B-67527 FDA: Create Approver role for ACL: delete permission FDA_VIEW_SCENARIO
+* B-75336 FDA: Add Payee to the Scenario by RH view: add logging to service for getting payees and fix sorting in populatePayees integration test
+* B-75336 FDA: Add Payee to the Scenario by RH view: implement logic to update payee in scenario share details
+* B-75336 FDA: Add Payee to the Scenario by RH view: implement backend logic for adding Payee to the Scenario by RH view
+* B-75336 FDA: Add Payee to the Scenario by RH view: add Payees to Export Scenario View by RHs
+* B-75336 FDA: Add Payee to the Scenario by RH view: add payees to export scenario details
+* B-59197 Tech Debt: FDA: extend window widths for view ACL Fund Pool and Grant Set windows
+* B-59197 Tech Debt: FDA: introduce reported TOU on drill down details window
+* B-59197 Tech Debt: FDA: remove redundant method for report generation from UDM report tab
+* B-59197 Tech Debt: FDA: update queries for populating, copying, adding to scenario ACL usages with Price and Content flags
+
 16.0.7
 -
 * B-73712 FDA: Add more fields to Calculation Usages: add filter on TOU, Reported TOU on the Calculations tab, Usages sub-tab
