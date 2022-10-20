@@ -90,7 +90,7 @@ databaseChangeLog {
             column(name: 'df_acl_scenario_detail_uid', value: '73cc5ea1-e629-49ac-a996-212c77601385')
             column(name: 'df_acl_scenario_uid', value: 'f5808122-3784-4055-90f8-1c420e67fd0a')
             column(name: 'period_end_date', value: 202212)
-            column(name: 'original_detail_id', value: 'OGN674GHHSB107')
+            column(name: 'original_detail_id', value: 'OGN674GHHSB106')
             column(name: 'wr_wrk_inst', value: 122813964)
             column(name: 'system_title', value: 'Aerospace America')
             column(name: 'detail_licensee_class_id', value: 1)
