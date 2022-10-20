@@ -19,7 +19,9 @@
       "description": "Book"
     },
     "price": 22.0000000000,
+    "priceFlag": true,
     "content": 2.0000000000,
+    "contentFlag": true,
     "contentUnitPrice": 11.0000000000,
     "contentUnitPriceFlag": true,
     "numberOfCopies": 10.00000,

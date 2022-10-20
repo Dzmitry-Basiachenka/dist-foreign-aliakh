@@ -763,7 +763,9 @@ public class AclUsageRepositoryIntegrationTest {
         assertEquals(expectedUsage.getSurveyCountry(), actualUsage.getSurveyCountry());
         assertEquals(expectedUsage.getPublicationType(), actualUsage.getPublicationType());
         assertEquals(expectedUsage.getPrice(), actualUsage.getPrice());
+        assertEquals(expectedUsage.getPriceFlag(), actualUsage.getPriceFlag());
         assertEquals(expectedUsage.getContent(), actualUsage.getContent());
+        assertEquals(expectedUsage.getContentFlag(), actualUsage.getContentFlag());
         assertEquals(expectedUsage.getContentUnitPrice(), actualUsage.getContentUnitPrice());
         assertEquals(expectedUsage.getContentUnitPriceFlag(), actualUsage.getContentUnitPriceFlag());
         assertEquals(expectedUsage.getReportedTypeOfUse(), actualUsage.getReportedTypeOfUse());

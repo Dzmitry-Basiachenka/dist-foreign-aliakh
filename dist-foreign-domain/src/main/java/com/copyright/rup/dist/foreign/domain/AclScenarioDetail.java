@@ -30,7 +30,9 @@ public class AclScenarioDetail extends StoredEntity<String> {
     private String aggregateLicenseeClassName;
     private PublicationType publicationType;
     private BigDecimal price;
+    private Boolean priceFlag;
     private BigDecimal content;
+    private Boolean contentFlag;
     private BigDecimal contentUnitPrice;
     private Boolean contentUnitPriceFlag;
     private BigDecimal numberOfCopies;
@@ -121,12 +123,28 @@ public class AclScenarioDetail extends StoredEntity<String> {
         this.price = price;
     }
 
+    public Boolean getPriceFlag() {
+        return priceFlag;
+    }
+
+    public void setPriceFlag(Boolean priceFlag) {
+        this.priceFlag = priceFlag;
+    }
+
     public BigDecimal getContent() {
         return content;
     }
 
     public void setContent(BigDecimal content) {
         this.content = content;
+    }
+
+    public Boolean getContentFlag() {
+        return contentFlag;
+    }
+
+    public void setContentFlag(Boolean contentFlag) {
+        this.contentFlag = contentFlag;
     }
 
     public BigDecimal getContentUnitPrice() {
@@ -222,7 +240,9 @@ public class AclScenarioDetail extends StoredEntity<String> {
             .append(aggregateLicenseeClassName, that.aggregateLicenseeClassName)
             .append(publicationType, that.publicationType)
             .append(price, that.price)
+            .append(priceFlag, that.priceFlag)
             .append(content, that.content)
+            .append(contentFlag, that.contentFlag)
             .append(contentUnitPrice, that.contentUnitPrice)
             .append(contentUnitPriceFlag, that.contentUnitPriceFlag)
             .append(numberOfCopies, that.numberOfCopies)
@@ -249,7 +269,9 @@ public class AclScenarioDetail extends StoredEntity<String> {
             .append(aggregateLicenseeClassName)
             .append(publicationType)
             .append(price)
+            .append(priceFlag)
             .append(content)
+            .append(contentFlag)
             .append(contentUnitPrice)
             .append(contentUnitPriceFlag)
             .append(numberOfCopies)
@@ -276,7 +298,9 @@ public class AclScenarioDetail extends StoredEntity<String> {
             .append("aggregateLicenseeClassName", aggregateLicenseeClassName)
             .append("publicationType", publicationType)
             .append("price", price)
+            .append("priceFlag", priceFlag)
             .append("content", content)
+            .append("contentFlag", contentFlag)
             .append("contentUnitPrice", contentUnitPrice)
             .append("contentUnitPriceFlag", contentUnitPriceFlag)
             .append("numberOfCopies", numberOfCopies)

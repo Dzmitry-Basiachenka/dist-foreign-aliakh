@@ -20,7 +20,9 @@
       "description": "Book"
     },
     "price": 5.0000000000,
+    "priceFlag": true,
     "content": 1.0000000000,
+    "contentFlag": true,
     "contentUnitPrice": 5.0000000000,
     "contentUnitPriceFlag": true,
     "reportedTypeOfUse": "PRINT_COPIES",
@@ -46,6 +48,8 @@
     "aggregateLicenseeClassId": 51,
     "aggregateLicenseeClassName": "Materials",
     "surveyCountry": "United States",
+    "priceFlag": false,
+    "contentFlag": false,
     "contentUnitPriceFlag": false,
     "reportedTypeOfUse": "PRINT_COPIES",
     "typeOfUse": "PRINT",
