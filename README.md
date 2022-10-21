@@ -1,3 +1,7 @@
+16.0.9
+-
+* B-75009 FDA: Liabilities by RH Report: display the newest payee in case of difference in chosen scenarios
+
 16.0.8
 -
 * B-74954 FDA: Summary of Work Shares by Agg Lic Class Report: separate report button from main metadata panel
