@@ -208,25 +208,43 @@
     </select>
 
     <select id="findAclLiabilitiesByRhReportDtos" parameterType="map" resultMap="aclLiabilitiesByRhReportDtoResultMap">
+        with payees as (
+            select distinct on (shd.rh_account_number, type_of_use)
+                shd.rh_account_number,
+                type_of_use,
+                payee_account_number,
+                p.name
+            from ${schema}.df_acl_share_detail shd
+            join ${schema}.df_acl_scenario s on shd.df_acl_scenario_uid = s.df_acl_scenario_uid
+            left join ${schema}.df_rightsholder p on p.rh_account_number = shd.payee_account_number
+            where s.period_end_date = #{period}
+            <if test="scenarios.size() > 0">
+                and
+                <foreach collection="scenarios" item="scenario" open="(" separator=" or " close=")">
+                    shd.df_acl_scenario_uid = #{scenario.id}
+                </foreach>
+            </if>
+            order by shd.rh_account_number, type_of_use, s.created_datetime desc
+        )
         select
             shd.rh_account_number,
             rh.name rh_name,
-            min(case when type_of_use = 'PRINT' then shd.payee_account_number end) as print_payee_account_number,
-            min(case when type_of_use = 'PRINT' then p.name end) as print_payee_name,
-            min(case when type_of_use = 'DIGITAL' then shd.payee_account_number end) as digital_payee_account_number,
-            min(case when type_of_use = 'DIGITAL' then p.name end) as digital_payee_name,
+            min(case when payees.type_of_use = 'PRINT' then payees.payee_account_number end) as print_payee_account_number,
+            min(case when payees.type_of_use = 'PRINT' then payees.name end) as print_payee_name,
+            min(case when payees.type_of_use = 'DIGITAL' then payees.payee_account_number end) as digital_payee_account_number,
+            min(case when payees.type_of_use = 'DIGITAL' then payees.name end) as digital_payee_name,
             sum(gross_amount) gross_amount,
             sum(net_amount) net_amount,
-            sum(case when type_of_use = 'PRINT' then coalesce(net_amount , 0) else 0 end) as print_net_amount,
-            sum(case when type_of_use = 'DIGITAL' then coalesce(net_amount , 0) else 0 end) as digital_net_amount,
+            sum(case when shd.type_of_use = 'PRINT' then coalesce(net_amount , 0) else 0 end) as print_net_amount,
+            sum(case when shd.type_of_use = 'DIGITAL' then coalesce(net_amount , 0) else 0 end) as digital_net_amount,
             sum(case when s.license_type = 'ACL' then coalesce(net_amount , 0) else 0 end) as acl_net_amount,
             sum(case when s.license_type = 'MACL' then coalesce(net_amount , 0) else 0 end) as macl_net_amount,
             sum(case when s.license_type = 'VGW' then coalesce(net_amount , 0) else 0 end) as vgw_net_amount,
             sum(case when s.license_type = 'JACDCL' then coalesce(net_amount , 0) else 0 end) as jacdcl_net_amount
         from ${schema}.df_acl_share_detail shd
         join ${schema}.df_acl_scenario s on shd.df_acl_scenario_uid = s.df_acl_scenario_uid
+        join payees on payees.rh_account_number = shd.rh_account_number and payees.type_of_use = shd.type_of_use
         left join ${schema}.df_rightsholder rh on rh.rh_account_number = shd.rh_account_number
-        left join ${schema}.df_rightsholder p on p.rh_account_number = shd.payee_account_number
         where s.period_end_date = #{period}
         <if test="scenarios.size() > 0">
             and

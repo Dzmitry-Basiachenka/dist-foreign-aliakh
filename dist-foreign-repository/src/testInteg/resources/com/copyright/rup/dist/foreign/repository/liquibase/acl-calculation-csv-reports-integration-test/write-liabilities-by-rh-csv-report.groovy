@@ -112,8 +112,8 @@ databaseChangeLog {
             column(name: 'is_editable', value: true)
             column(name: 'created_by_user', value: 'user@copyright.com')
             column(name: 'updated_by_user', value: 'user@copyright.com')
-            column(name: 'created_datetime', value: '2022-02-14 12:00:00+00')
-            column(name: 'updated_datetime', value: '2022-02-14 12:00:00+00')
+            column(name: 'created_datetime', value: '2022-01-14 12:00:00+00')
+            column(name: 'updated_datetime', value: '2022-01-14 12:00:00+00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_acl_grant_set') {
@@ -210,6 +210,7 @@ databaseChangeLog {
             column(name: 'df_acl_scenario_detail_uid', value: '7e6cc293-8b31-4ac0-9ff3-ec977fcc60d8')
             column(name: 'type_of_use', value: 'DIGITAL')
             column(name: 'rh_account_number', value: 1000002859)
+            column(name: 'payee_account_number', value: 1000002859)
             column(name: 'aggregate_licensee_class_id', value: 1)
             column(name: 'volume_weight', value: 1.0000000000)
             column(name: 'value_weight', value: 1.0000000000)
@@ -221,7 +222,6 @@ databaseChangeLog {
             column(name: 'net_amount', value: 84.1000000000)
             column(name: 'gross_amount', value: 100.0000000000)
             column(name: 'service_fee_amount', value: 16.0000000000)
-            column(name: 'payee_account_number', value: 1000002859)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_acl_share_detail') {
@@ -230,6 +230,7 @@ databaseChangeLog {
             column(name: 'df_acl_scenario_detail_uid', value: '7e6cc293-8b31-4ac0-9ff3-ec977fcc60d8')
             column(name: 'type_of_use', value: 'PRINT')
             column(name: 'rh_account_number', value: 1000002859)
+            column(name: 'payee_account_number', value: 2000017010)
             column(name: 'aggregate_licensee_class_id', value: 1)
             column(name: 'volume_weight', value: 1.0000013432)
             column(name: 'value_weight', value: 1.0000000000)
@@ -241,7 +242,6 @@ databaseChangeLog {
             column(name: 'net_amount', value: 42.1000000000)
             column(name: 'gross_amount', value: 50.0000000000)
             column(name: 'service_fee_amount', value: 7.9000000000)
-            column(name: 'payee_account_number', value: 2000017010)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_detail') {
@@ -273,6 +273,7 @@ databaseChangeLog {
             column(name: 'df_acl_scenario_detail_uid', value: '73223d65-c1f7-4344-b933-6d20357f7024')
             column(name: 'type_of_use', value: 'DIGITAL')
             column(name: 'rh_account_number', value: 1000002859)
+            column(name: 'payee_account_number', value: 2000017010)
             column(name: 'aggregate_licensee_class_id', value: 51)
             column(name: 'volume_weight', value: 1.0000000000)
             column(name: 'value_weight', value: 1.0000000000)
@@ -284,7 +285,6 @@ databaseChangeLog {
             column(name: 'net_amount', value: 84.2000000000)
             column(name: 'gross_amount', value: 100.0000000000)
             column(name: 'service_fee_amount', value: 15.8000000000)
-            column(name: 'payee_account_number', value: 1000002859)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_acl_share_detail') {
@@ -293,6 +293,7 @@ databaseChangeLog {
             column(name: 'df_acl_scenario_detail_uid', value: '73223d65-c1f7-4344-b933-6d20357f7024')
             column(name: 'type_of_use', value: 'PRINT')
             column(name: 'rh_account_number', value: 1000002859)
+            column(name: 'payee_account_number', value: 1000002859)
             column(name: 'aggregate_licensee_class_id', value: 51)
             column(name: 'volume_weight', value: 1.0000000000)
             column(name: 'value_weight', value: 1.0000000000)
@@ -304,7 +305,6 @@ databaseChangeLog {
             column(name: 'net_amount', value: 42.2000000000)
             column(name: 'gross_amount', value: 50.0000000000)
             column(name: 'service_fee_amount', value: 7.8000000000)
-            column(name: 'payee_account_number', value: 2000017010)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_detail') {
@@ -336,6 +336,7 @@ databaseChangeLog {
             column(name: 'df_acl_scenario_detail_uid', value: '6c2499a4-7491-4642-b19e-b8a2c62ba3bc')
             column(name: 'type_of_use', value: 'DIGITAL')
             column(name: 'rh_account_number', value: 1000000001)
+            column(name: 'payee_account_number', value: 1000028511)
             column(name: 'aggregate_licensee_class_id', value: 51)
             column(name: 'volume_weight', value: 1.0000000000)
             column(name: 'value_weight', value: 1.0000000000)
@@ -347,7 +348,6 @@ databaseChangeLog {
             column(name: 'net_amount', value: 84.3000000000)
             column(name: 'gross_amount', value: 100.0000000000)
             column(name: 'service_fee_amount', value: 15.7000000000)
-            column(name: 'payee_account_number', value: 1000028511)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_acl_share_detail') {
@@ -356,6 +356,7 @@ databaseChangeLog {
             column(name: 'df_acl_scenario_detail_uid', value: '6c2499a4-7491-4642-b19e-b8a2c62ba3bc')
             column(name: 'type_of_use', value: 'PRINT')
             column(name: 'rh_account_number', value: 1000000001)
+            column(name: 'payee_account_number', value: 1000028511)
             column(name: 'aggregate_licensee_class_id', value: 51)
             column(name: 'volume_weight', value: 1.0000000000)
             column(name: 'value_weight', value: 1.0000000000)
@@ -367,7 +368,6 @@ databaseChangeLog {
             column(name: 'net_amount', value: 42.3000000000)
             column(name: 'gross_amount', value: 50.0000000000)
             column(name: 'service_fee_amount', value: 7.7000000000)
-            column(name: 'payee_account_number', value: 1000028511)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_detail') {
@@ -399,6 +399,7 @@ databaseChangeLog {
             column(name: 'df_acl_scenario_detail_uid', value: 'c6cbb0e2-b356-4180-ae93-da128f5862a3')
             column(name: 'type_of_use', value: 'DIGITAL')
             column(name: 'rh_account_number', value: 1000000001)
+            column(name: 'payee_account_number', value: 1000028511)
             column(name: 'aggregate_licensee_class_id', value: 51)
             column(name: 'volume_weight', value: 1.0000000000)
             column(name: 'value_weight', value: 1.0000000000)
@@ -410,7 +411,6 @@ databaseChangeLog {
             column(name: 'net_amount', value: 84.4000000000)
             column(name: 'gross_amount', value: 100.0000000000)
             column(name: 'service_fee_amount', value: 15.6000000000)
-            column(name: 'payee_account_number', value: 1000028511)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_acl_share_detail') {
@@ -419,6 +419,7 @@ databaseChangeLog {
             column(name: 'df_acl_scenario_detail_uid', value: 'c6cbb0e2-b356-4180-ae93-da128f5862a3')
             column(name: 'type_of_use', value: 'PRINT')
             column(name: 'rh_account_number', value: 1000000001)
+            column(name: 'payee_account_number', value: 1000028511)
             column(name: 'aggregate_licensee_class_id', value: 51)
             column(name: 'volume_weight', value: 1.0000000000)
             column(name: 'value_weight', value: 1.0000000000)
@@ -430,7 +431,6 @@ databaseChangeLog {
             column(name: 'net_amount', value: 42.4000000000)
             column(name: 'gross_amount', value: 50.0000000000)
             column(name: 'service_fee_amount', value: 7.6000000000)
-            column(name: 'payee_account_number', value: 1000028511)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_detail') {
@@ -462,6 +462,7 @@ databaseChangeLog {
             column(name: 'df_acl_scenario_detail_uid', value: '327b06c9-23c5-4455-a54d-eb235d50de52')
             column(name: 'type_of_use', value: 'DIGITAL')
             column(name: 'rh_account_number', value: 1000000004)
+            column(name: 'payee_account_number', value: 1000002901)
             column(name: 'aggregate_licensee_class_id', value: 51)
             column(name: 'volume_weight', value: 1.0000000000)
             column(name: 'value_weight', value: 1.0000000000)
@@ -473,7 +474,6 @@ databaseChangeLog {
             column(name: 'net_amount', value: 10.4000000000)
             column(name: 'gross_amount', value: 9.0000000000)
             column(name: 'service_fee_amount', value: 15.6000000000)
-            column(name: 'payee_account_number', value: 1000002901)
         }
 
         rollback {
