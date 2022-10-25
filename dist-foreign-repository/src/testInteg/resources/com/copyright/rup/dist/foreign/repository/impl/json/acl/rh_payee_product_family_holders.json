@@ -1,0 +1,41 @@
+[
+  {
+    "rightsholder": {
+      "id": "05844db0-e0e4-4423-8966-7f1c6160f000",
+      "name": "Georgia State University Business Press [C]",
+      "accountNumber": 1000000026
+    },
+    "payee": {
+      "id": "5021690b-a6e4-4b88-8c22-230b816d9e08",
+      "name": "Brewin Books Ltd",
+      "accountNumber": 7000873612
+    },
+    "productFamily": "ACLDIGITAL"
+  },
+  {
+    "rightsholder": {
+      "id": "05844db0-e0e4-4423-8966-7f1c6160f000",
+      "name": "Georgia State University Business Press [C]",
+      "accountNumber": 1000000026
+    },
+    "payee": {
+      "id": "5021690b-a6e4-4b88-8c22-230b816d9e08",
+      "name": "Brewin Books Ltd",
+      "accountNumber": 7000873612
+    },
+    "productFamily": "ACLPRINT"
+  },
+  {
+    "rightsholder": {
+      "id": "a5989f7c-fc6f-4e8c-88d4-2fe7bcce8d1f",
+      "name": "John Wiley & Sons - Books",
+      "accountNumber": 1000002859
+    },
+    "payee": {
+      "id": "5021690b-a6e4-4b88-8c22-230b816d9e08",
+      "name": "Brewin Books Ltd",
+      "accountNumber": 7000873612
+    },
+    "productFamily": "ACLPRINT"
+  }
+]

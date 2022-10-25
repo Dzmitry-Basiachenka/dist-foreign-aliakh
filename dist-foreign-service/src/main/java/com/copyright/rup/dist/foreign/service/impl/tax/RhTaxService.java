@@ -85,10 +85,10 @@ public class RhTaxService implements IRhTaxService {
     public List<RhTaxInformation> getRhTaxInformation(Set<String> scenarioIds, int numberOfDays) {
         checkArgument(CollectionUtils.isNotEmpty(scenarioIds));
         List<RhTaxInformation> result;
-        List<RightsholderPayeeProductFamilyHolder> rhPayeeProductHolders =
+        List<RightsholderPayeeProductFamilyHolder> holders =
             usageService.getRightsholderPayeeProductFamilyHoldersByScenarioIds(scenarioIds);
-        if (CollectionUtils.isNotEmpty(rhPayeeProductHolders)) {
-            Map<RightsholderPayeeProductFamilyHolder, Rightsholder> holderToTboMap = rhPayeeProductHolders.stream()
+        if (CollectionUtils.isNotEmpty(holders)) {
+            Map<RightsholderPayeeProductFamilyHolder, Rightsholder> holderToTboMap = holders.stream()
                 .collect(Collectors.toMap(holder -> holder, this::getTaxBeneficialOwner));
             Set<OracleRhTaxInformationRequest> oracleRequests = holderToTboMap.entrySet().stream()
                 .map(entry -> {
@@ -115,18 +115,19 @@ public class RhTaxService implements IRhTaxService {
             });
             result.sort(Comparator
                 .comparing(RhTaxInformation::getTypeOfForm, Comparator.nullsFirst(String::compareToIgnoreCase))
-                .thenComparing(RhTaxInformation::getPayeeName, Comparator.nullsFirst(String::compareToIgnoreCase)));
+                .thenComparing(RhTaxInformation::getPayeeName, Comparator.nullsFirst(String::compareToIgnoreCase))
+                .thenComparing(RhTaxInformation::getRhName, Comparator.nullsFirst(String::compareToIgnoreCase)));
         } else {
             result = Collections.emptyList();
         }
         return result;
     }
 
-    private Rightsholder getTaxBeneficialOwner(RightsholderPayeeProductFamilyHolder rhPayeeProductHolder) {
-        Rightsholder rh = rhPayeeProductHolder.getRightsholder();
-        Rightsholder payee = rhPayeeProductHolder.getPayee();
+    private Rightsholder getTaxBeneficialOwner(RightsholderPayeeProductFamilyHolder holder) {
+        Rightsholder rh = holder.getRightsholder();
+        Rightsholder payee = holder.getPayee();
         boolean isRhTbo = !Objects.equals(rh, payee) &&
-            prmIntegrationService.isRightsholderTaxBeneficialOwner(rh.getId(), rhPayeeProductHolder.getProductFamily());
+            prmIntegrationService.isRightsholderTaxBeneficialOwner(rh.getId(), holder.getProductFamily());
         return isRhTbo ? rh : payee;
     }
 

@@ -718,7 +718,7 @@ public class UsageServiceTest {
         expect(usageRepository.findRightsholderPayeeProductFamilyHoldersByScenarioIds(scenarioIds))
             .andReturn(holders).once();
         replay(usageRepository);
-        assertEquals(holders, usageService.getRightsholderPayeeProductFamilyHoldersByScenarioIds(scenarioIds));
+        assertSame(holders, usageService.getRightsholderPayeeProductFamilyHoldersByScenarioIds(scenarioIds));
         verify(usageRepository);
     }
 

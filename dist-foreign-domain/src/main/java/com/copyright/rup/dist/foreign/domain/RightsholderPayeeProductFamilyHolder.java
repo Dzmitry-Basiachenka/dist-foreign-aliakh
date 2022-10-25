@@ -46,14 +46,14 @@ public class RightsholderPayeeProductFamilyHolder {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
             return true;
         }
-        if (null == o || getClass() != o.getClass()) {
+        if (null == obj || getClass() != obj.getClass()) {
             return false;
         }
-        RightsholderPayeeProductFamilyHolder that = (RightsholderPayeeProductFamilyHolder) o;
+        RightsholderPayeeProductFamilyHolder that = (RightsholderPayeeProductFamilyHolder) obj;
         return new EqualsBuilder()
             .append(rightsholder, that.rightsholder)
             .append(payee, that.payee)
