@@ -3,9 +3,12 @@ package com.copyright.rup.dist.foreign.repository.api;
 import com.copyright.rup.dist.foreign.domain.AclPublicationType;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
+import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Interface for ACL scenario repository.
@@ -144,4 +147,12 @@ public interface IAclScenarioRepository {
      * @param scenarioId {@link AclScenario} identifier
      */
     void deleteScenarioData(String scenarioId);
+
+    /**
+     * Finds list of ACl scenarios by statuses.
+     *
+     * @param statuses set of statuses
+     * @return list of {@link Scenario}s
+     */
+    List<Scenario> findAclScenariosByStatuses(Set<ScenarioStatusEnum> statuses);
 }

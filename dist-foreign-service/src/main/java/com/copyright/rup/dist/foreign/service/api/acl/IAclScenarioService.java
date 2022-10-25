@@ -4,6 +4,8 @@ import com.copyright.rup.dist.foreign.domain.AclFundPoolDetailDto;
 import com.copyright.rup.dist.foreign.domain.AclPublicationType;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
+import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
 
 import java.util.List;
@@ -153,4 +155,12 @@ public interface IAclScenarioService {
      * @param aclScenario instance of {@link AclScenario}
      */
     void deleteAclScenario(AclScenario aclScenario);
+
+    /**
+     * Gets list of ACl scenarios by statuses.
+     *
+     * @param statuses set of statuses
+     * @return list of {@link Scenario}s
+     */
+    List<Scenario> getAclScenariosByStatuses(Set<ScenarioStatusEnum> statuses);
 }

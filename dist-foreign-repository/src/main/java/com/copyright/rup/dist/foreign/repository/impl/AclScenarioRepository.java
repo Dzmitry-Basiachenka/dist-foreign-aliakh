@@ -7,6 +7,8 @@ import com.copyright.rup.dist.common.repository.BaseRepository;
 import com.copyright.rup.dist.foreign.domain.AclPublicationType;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
+import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.repository.api.IAclScenarioRepository;
 
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * Implementation of {@link IAclScenarioRepository}.
@@ -128,5 +131,10 @@ public class AclScenarioRepository extends BaseRepository implements IAclScenari
     @Override
     public void deleteScenarioData(String scenarioId) {
         delete("IAclScenarioMapper.deleteScenarioData", Objects.requireNonNull(scenarioId));
+    }
+
+    @Override
+    public List<Scenario> findAclScenariosByStatuses(Set<ScenarioStatusEnum> statuses) {
+        return selectList("IAclScenarioMapper.findAclScenariosByStatuses", Objects.requireNonNull(statuses));
     }
 }
