@@ -4,8 +4,8 @@ import com.copyright.rup.dist.common.reporting.impl.CsvStreamSource;
 import com.copyright.rup.dist.foreign.domain.filter.UdmReportFilter;
 import com.copyright.rup.dist.foreign.ui.common.validator.DateValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
-import com.copyright.rup.dist.foreign.ui.report.api.udm.ICompletedAssignmentsReportController;
-import com.copyright.rup.dist.foreign.ui.report.api.udm.ICompletedAssignmentsReportWidget;
+import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmCommonUserNamesReportController;
+import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmCommonUserNamesReportWidget;
 import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.PeriodFilterWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
@@ -33,9 +33,9 @@ import java.util.Set;
  *
  * @author Ihar Suvorau
  */
-public class CompletedAssignmentsReportWidget extends Window implements ICompletedAssignmentsReportWidget {
+public class UdmCommonUserNamesReportWidget extends Window implements IUdmCommonUserNamesReportWidget {
 
-    private ICompletedAssignmentsReportController controller;
+    private IUdmCommonUserNamesReportController controller;
     private PeriodFilterWidget periodFilterWidget;
     private UserNameFilterWidget userNameFilterWidget;
     private LocalDateWidget dateFromWidget;
@@ -47,7 +47,7 @@ public class CompletedAssignmentsReportWidget extends Window implements IComplet
 
     @Override
     @SuppressWarnings("unchecked")
-    public ICompletedAssignmentsReportWidget init() {
+    public IUdmCommonUserNamesReportWidget init() {
         setWidth(330, Unit.PIXELS);
         setResizable(false);
         VaadinUtils.addComponentStyle(this, "udm-report-window");
@@ -56,7 +56,7 @@ public class CompletedAssignmentsReportWidget extends Window implements IComplet
     }
 
     @Override
-    public void setController(ICompletedAssignmentsReportController controller) {
+    public void setController(IUdmCommonUserNamesReportController controller) {
         this.controller = controller;
     }
 

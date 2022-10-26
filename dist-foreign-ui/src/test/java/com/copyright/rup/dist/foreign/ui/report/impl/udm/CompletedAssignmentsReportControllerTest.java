@@ -16,7 +16,7 @@ import com.copyright.rup.dist.foreign.domain.filter.UdmReportFilter;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmReportService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageService;
 import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
-import com.copyright.rup.dist.foreign.ui.report.api.udm.ICompletedAssignmentsReportWidget;
+import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmCommonUserNamesReportWidget;
 
 import org.easymock.Capture;
 import org.junit.Before;
@@ -61,9 +61,9 @@ public class CompletedAssignmentsReportControllerTest {
 
     @Test
     public void testInstantiateWidget() {
-        ICompletedAssignmentsReportWidget widget = controller.instantiateWidget();
+        IUdmCommonUserNamesReportWidget widget = controller.instantiateWidget();
         assertNotNull(controller.instantiateWidget());
-        assertEquals(CompletedAssignmentsReportWidget.class, widget.getClass());
+        assertEquals(UdmCommonUserNamesReportWidget.class, widget.getClass());
     }
 
     @Test
@@ -92,7 +92,7 @@ public class CompletedAssignmentsReportControllerTest {
         filter.setDateTo(LocalDate.of(2021, 11, 28));
         filter.setDateFrom(LocalDate.of(2021, 11, 21));
         filter.setPeriods(Collections.singleton(202112));
-        ICompletedAssignmentsReportWidget widget = createMock(ICompletedAssignmentsReportWidget.class);
+        IUdmCommonUserNamesReportWidget widget = createMock(IUdmCommonUserNamesReportWidget.class);
         Whitebox.setInternalState(controller, widget);
         Capture<UdmReportFilter> reportFilterCapture = newCapture();
         Capture<OutputStream> osCapture = newCapture();

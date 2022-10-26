@@ -1,6 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.report.impl.udm;
 
-import com.copyright.rup.dist.foreign.ui.report.api.udm.ICompletedAssignmentsReportController;
+import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmCommonUserNamesReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmReportWidget;
 import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmSurveyLicenseeReportController;
@@ -13,6 +13,7 @@ import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmWeeklySurveyReportCo
 import com.copyright.rup.vaadin.widget.api.CommonController;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -33,7 +34,8 @@ public class UdmReportController extends CommonController<IUdmReportWidget> impl
     @Autowired
     private IUdmWeeklySurveyReportController udmWeeklySurveyReportController;
     @Autowired
-    private ICompletedAssignmentsReportController completedAssignmentsReportController;
+    @Qualifier("df.completedAssignmentsReportController")
+    private IUdmCommonUserNamesReportController completedAssignmentsReportController;
     @Autowired
     private IUdmSurveyLicenseeReportController udmSurveyLicenseeReportController;
     @Autowired
@@ -46,6 +48,9 @@ public class UdmReportController extends CommonController<IUdmReportWidget> impl
     private IUdmUsagesByStatusReportController udmUsagesByStatusReportController;
     @Autowired
     private IUdmValuesByStatusReportController udmValuesByStatusReportController;
+    @Autowired
+    @Qualifier("df.udmBaselineValueUpdatesReportController")
+    private IUdmCommonUserNamesReportController udmBaselineValueUpdatesReportController;
 
     @Override
     public IUdmWeeklySurveyReportController getUdmWeeklySurveyReportController() {
@@ -58,7 +63,7 @@ public class UdmReportController extends CommonController<IUdmReportWidget> impl
     }
 
     @Override
-    public ICompletedAssignmentsReportController getCompletedAssignmentsReportController() {
+    public IUdmCommonUserNamesReportController getCompletedAssignmentsReportController() {
         return completedAssignmentsReportController;
     }
 
@@ -85,6 +90,11 @@ public class UdmReportController extends CommonController<IUdmReportWidget> impl
     @Override
     public IUdmValuesByStatusReportController getUdmValuesByStatusReportController() {
         return udmValuesByStatusReportController;
+    }
+
+    @Override
+    public IUdmCommonUserNamesReportController getUdmBaselineValueUpdatesReportController() {
+        return udmBaselineValueUpdatesReportController;
     }
 
     @Override

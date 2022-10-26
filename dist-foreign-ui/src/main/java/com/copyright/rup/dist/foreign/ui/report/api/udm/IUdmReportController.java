@@ -26,7 +26,7 @@ public interface IUdmReportController extends IController<IUdmReportWidget> {
     /**
      * @return UDM Completed Assignments Report controller.
      */
-    ICompletedAssignmentsReportController getCompletedAssignmentsReportController();
+    IUdmCommonUserNamesReportController getCompletedAssignmentsReportController();
 
     /**
      * @return UDM Verified Details by Source Report controller.
@@ -52,4 +52,9 @@ public interface IUdmReportController extends IController<IUdmReportWidget> {
      * @return UDM Values by Status Report controller.
      */
     IUdmValuesByStatusReportController getUdmValuesByStatusReportController();
+
+    /**
+     * @return UDM Baseline Value Updates Report controller.
+     */
+    IUdmCommonUserNamesReportController getUdmBaselineValueUpdatesReportController();
 }

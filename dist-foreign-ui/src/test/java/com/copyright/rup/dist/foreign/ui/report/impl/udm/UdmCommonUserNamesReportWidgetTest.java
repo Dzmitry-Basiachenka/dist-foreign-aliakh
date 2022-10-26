@@ -30,7 +30,7 @@ import java.util.Collections;
 import java.util.Set;
 
 /**
- * Verifies {@link CompletedAssignmentsReportWidget}.
+ * Verifies {@link UdmCommonUserNamesReportWidget}.
  * <p>
  * Copyright (C) 2022 copyright.com
  * <p>
@@ -38,15 +38,15 @@ import java.util.Set;
  *
  * @author Ihar Suvorau
  */
-public class CompletedAssignmentsReportWidgetTest {
+public class UdmCommonUserNamesReportWidgetTest {
 
-    private CompletedAssignmentsReportWidget widget;
+    private UdmCommonUserNamesReportWidget widget;
     private Binder<LocalDate> dateBinder;
 
     @Before
     public void setUp() {
         CompletedAssignmentsReportController controller = new CompletedAssignmentsReportController();
-        widget = (CompletedAssignmentsReportWidget) controller.initWidget();
+        widget = (UdmCommonUserNamesReportWidget) controller.initWidget();
         dateBinder = Whitebox.getInternalState(widget, "dateBinder");
     }
 
