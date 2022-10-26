@@ -153,6 +153,9 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
         mediator.setViewButton(viewButton);
         mediator.setDeleteButton(deleteButton);
         mediator.setPubTypeWeights(pubTypeWeights);
+        mediator.setApproveButton(approveButton);
+        mediator.setRejectButton(rejectButton);
+        mediator.setSubmitButton(submitButton);
         mediator.selectedScenarioChanged(getSelectedScenario());
         return mediator;
     }
@@ -204,6 +207,7 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
                 approveButton);
         VaadinUtils.setButtonsAutoDisabled(createButton, viewButton, deleteButton, pubTypeWeights, submitButton,
             rejectButton, approveButton);
+        buttonsLayout.setMargin(true);
         VaadinUtils.addComponentStyle(buttonsLayout, "acl-scenario-buttons-layout");
         return buttonsLayout;
     }

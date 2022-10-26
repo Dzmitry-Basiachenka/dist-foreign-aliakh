@@ -24,6 +24,9 @@ class AclScenariosMediator implements IMediator {
     private Button deleteButton;
     private Button viewButton;
     private Button pubTypeWeights;
+    private Button submitButton;
+    private Button rejectButton;
+    private Button approveButton;
 
     @Override
     public void applyPermissions() {
@@ -32,6 +35,9 @@ class AclScenariosMediator implements IMediator {
         createButton.setVisible(hasSpecialistOrManagerPermission);
         deleteButton.setVisible(hasSpecialistOrManagerPermission);
         pubTypeWeights.setVisible(ForeignSecurityUtils.hasSpecialistPermission());
+        submitButton.setVisible(ForeignSecurityUtils.hasManagerPermission());
+        rejectButton.setVisible(ForeignSecurityUtils.hasApproverPermission());
+        approveButton.setVisible(ForeignSecurityUtils.hasApproverPermission());
     }
 
     /**
@@ -45,9 +51,16 @@ class AclScenariosMediator implements IMediator {
             viewButton.setEnabled(true);
             deleteButton.setEnabled(
                 inProgressStatus && (ForeignSecurityUtils.hasSpecialistPermission() || aclScenario.isEditableFlag()));
+            submitButton.setEnabled(inProgressStatus && !aclScenario.isEditableFlag());
+            boolean isSubmittedState = ScenarioStatusEnum.SUBMITTED == aclScenario.getStatus();
+            rejectButton.setEnabled(isSubmittedState);
+            approveButton.setEnabled(isSubmittedState);
         } else {
             viewButton.setEnabled(false);
             deleteButton.setEnabled(false);
+            submitButton.setEnabled(false);
+            rejectButton.setEnabled(false);
+            approveButton.setEnabled(false);
         }
     }
 
@@ -65,5 +78,17 @@ class AclScenariosMediator implements IMediator {
 
     public void setPubTypeWeights(Button pubTypeWeights) {
         this.pubTypeWeights = pubTypeWeights;
+    }
+
+    public void setSubmitButton(Button submitButton) {
+        this.submitButton = submitButton;
+    }
+
+    public void setRejectButton(Button rejectButton) {
+        this.rejectButton = rejectButton;
+    }
+
+    public void setApproveButton(Button approveButton) {
+        this.approveButton = approveButton;
     }
 }

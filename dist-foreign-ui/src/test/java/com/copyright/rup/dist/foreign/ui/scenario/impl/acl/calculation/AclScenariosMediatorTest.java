@@ -34,11 +34,15 @@ public class AclScenariosMediatorTest {
 
     private static final String FDA_SPECIALIST_PERMISSION = "FDA_SPECIALIST_PERMISSION";
     private static final String FDA_MANAGER_PERMISSION = "FDA_MANAGER_PERMISSION";
+    private static final String FDA_APPROVER_PERMISSION = "FDA_APPROVER_PERMISSION";
 
     private final Button createButton = new Button("Create");
     private final Button viewButton = new Button("View");
     private final Button pubTypeWeightsButton = new Button("Pub Type Weights");
     private final Button deleteButton = new Button("Delete");
+    private final Button submitButton = new Button("button.submit");
+    private final Button rejectButton = new Button("button.reject");
+    private final Button approveButton = new Button("button.approve");
 
     private AclScenariosMediator mediator;
 
@@ -49,44 +53,77 @@ public class AclScenariosMediatorTest {
         mediator.setViewButton(viewButton);
         mediator.setPubTypeWeights(pubTypeWeightsButton);
         mediator.setDeleteButton(deleteButton);
+        mediator.setApproveButton(approveButton);
+        mediator.setRejectButton(rejectButton);
+        mediator.setSubmitButton(submitButton);
         mockStatic(SecurityUtils.class);
     }
 
     @Test
     public void testApplySpecialistPermissions() {
         expect(SecurityUtils.hasPermission(FDA_SPECIALIST_PERMISSION)).andReturn(true).times(2);
+        expect(SecurityUtils.hasPermission(FDA_MANAGER_PERMISSION)).andReturn(false).once();
+        expect(SecurityUtils.hasPermission(FDA_APPROVER_PERMISSION)).andReturn(false).times(2);
         replay(SecurityUtils.class);
         mediator.applyPermissions();
         assertTrue(createButton.isVisible());
         assertTrue(viewButton.isVisible());
         assertTrue(pubTypeWeightsButton.isVisible());
         assertTrue(deleteButton.isVisible());
+        assertFalse(submitButton.isVisible());
+        assertFalse(rejectButton.isVisible());
+        assertFalse(approveButton.isVisible());
         verify(SecurityUtils.class);
     }
 
     @Test
     public void testApplyManagerPermissions() {
         expect(SecurityUtils.hasPermission(FDA_SPECIALIST_PERMISSION)).andReturn(false).times(2);
-        expect(SecurityUtils.hasPermission(FDA_MANAGER_PERMISSION)).andReturn(true).once();
+        expect(SecurityUtils.hasPermission(FDA_MANAGER_PERMISSION)).andReturn(true).times(2);
+        expect(SecurityUtils.hasPermission(FDA_APPROVER_PERMISSION)).andReturn(false).times(2);
         replay(SecurityUtils.class);
         mediator.applyPermissions();
         assertTrue(createButton.isVisible());
         assertTrue(viewButton.isVisible());
         assertFalse(pubTypeWeightsButton.isVisible());
         assertTrue(deleteButton.isVisible());
+        assertTrue(submitButton.isVisible());
+        assertFalse(rejectButton.isVisible());
+        assertFalse(approveButton.isVisible());
         verify(SecurityUtils.class);
     }
 
     @Test
     public void testApplyNotSpecialistManagerPermissions() {
         expect(SecurityUtils.hasPermission(FDA_SPECIALIST_PERMISSION)).andReturn(false).times(2);
-        expect(SecurityUtils.hasPermission(FDA_MANAGER_PERMISSION)).andReturn(false).once();
+        expect(SecurityUtils.hasPermission(FDA_MANAGER_PERMISSION)).andReturn(false).times(2);
+        expect(SecurityUtils.hasPermission(FDA_APPROVER_PERMISSION)).andReturn(false).times(2);
         replay(SecurityUtils.class);
         mediator.applyPermissions();
         assertFalse(createButton.isVisible());
         assertTrue(viewButton.isVisible());
         assertFalse(pubTypeWeightsButton.isVisible());
         assertFalse(deleteButton.isVisible());
+        assertFalse(submitButton.isVisible());
+        assertFalse(rejectButton.isVisible());
+        assertFalse(approveButton.isVisible());
+        verify(SecurityUtils.class);
+    }
+
+    @Test
+    public void testApplyApproverPermissions() {
+        expect(SecurityUtils.hasPermission(FDA_SPECIALIST_PERMISSION)).andReturn(false).times(2);
+        expect(SecurityUtils.hasPermission(FDA_MANAGER_PERMISSION)).andReturn(false).times(2);
+        expect(SecurityUtils.hasPermission(FDA_APPROVER_PERMISSION)).andReturn(true).times(2);
+        replay(SecurityUtils.class);
+        mediator.applyPermissions();
+        assertFalse(createButton.isVisible());
+        assertTrue(viewButton.isVisible());
+        assertFalse(pubTypeWeightsButton.isVisible());
+        assertFalse(deleteButton.isVisible());
+        assertFalse(submitButton.isVisible());
+        assertTrue(rejectButton.isVisible());
+        assertTrue(approveButton.isVisible());
         verify(SecurityUtils.class);
     }
 
@@ -126,6 +163,9 @@ public class AclScenariosMediatorTest {
         assertTrue(viewButton.isEnabled());
         assertTrue(pubTypeWeightsButton.isEnabled());
         assertTrue(deleteButton.isEnabled());
+        assertFalse(submitButton.isEnabled());
+        assertFalse(rejectButton.isEnabled());
+        assertFalse(approveButton.isEnabled());
         verify(SecurityUtils.class);
     }
 
@@ -141,6 +181,9 @@ public class AclScenariosMediatorTest {
         assertTrue(viewButton.isEnabled());
         assertTrue(pubTypeWeightsButton.isEnabled());
         assertTrue(deleteButton.isEnabled());
+        assertTrue(submitButton.isEnabled());
+        assertFalse(rejectButton.isEnabled());
+        assertFalse(approveButton.isEnabled());
         verify(SecurityUtils.class);
     }
 
@@ -156,6 +199,24 @@ public class AclScenariosMediatorTest {
         assertTrue(viewButton.isEnabled());
         assertTrue(pubTypeWeightsButton.isEnabled());
         assertFalse(deleteButton.isEnabled());
+        assertTrue(submitButton.isEnabled());
+        assertFalse(rejectButton.isEnabled());
+        assertFalse(approveButton.isEnabled());
         verify(SecurityUtils.class);
+    }
+
+    @Test
+    public void testSelectedScenarioChangedSubmittedStatus() {
+        AclScenario scenario = new AclScenario();
+        scenario.setStatus(ScenarioStatusEnum.SUBMITTED);
+        scenario.setEditableFlag(false);
+        mediator.selectedScenarioChanged(scenario);
+        assertTrue(createButton.isEnabled());
+        assertTrue(viewButton.isEnabled());
+        assertTrue(pubTypeWeightsButton.isEnabled());
+        assertFalse(deleteButton.isEnabled());
+        assertFalse(submitButton.isEnabled());
+        assertTrue(rejectButton.isEnabled());
+        assertTrue(approveButton.isEnabled());
     }
 }
