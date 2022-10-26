@@ -4,7 +4,7 @@ import com.copyright.rup.dist.foreign.domain.filter.UdmReportFilter;
 import com.copyright.rup.vaadin.widget.api.IWidget;
 
 /**
- * Interface for UDM Completed Assignments by Employee Report widget.
+ * Interface for widget for UDM common user names reports.
  * <p/>
  * Copyright (C) 2022 copyright.com
  * <p/>
@@ -12,7 +12,7 @@ import com.copyright.rup.vaadin.widget.api.IWidget;
  *
  * @author Ihar Suvorau
  */
-public interface ICompletedAssignmentsReportWidget extends IWidget<ICompletedAssignmentsReportController> {
+public interface IUdmCommonUserNamesReportWidget extends IWidget<IUdmCommonUserNamesReportController> {
 
     /**
      * Returns reported filter.

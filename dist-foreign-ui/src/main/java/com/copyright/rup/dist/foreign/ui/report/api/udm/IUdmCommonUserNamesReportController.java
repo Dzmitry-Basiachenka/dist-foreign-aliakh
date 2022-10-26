@@ -6,7 +6,7 @@ import com.copyright.rup.vaadin.widget.api.IController;
 import java.util.List;
 
 /**
- * Interface for UDM Completed Assignments by Employee Report widget.
+ * Interface for controller for UDM common user names reports.
  * <p/>
  * Copyright (C) 2022 copyright.com
  * <p/>
@@ -14,7 +14,7 @@ import java.util.List;
  *
  * @author Ihar Suvorau
  */
-public interface ICompletedAssignmentsReportController extends IController<ICompletedAssignmentsReportWidget>,
+public interface IUdmCommonUserNamesReportController extends IController<IUdmCommonUserNamesReportWidget>,
     ICsvReportProvider {
 
     /**
@@ -23,7 +23,7 @@ public interface ICompletedAssignmentsReportController extends IController<IComp
     List<Integer> getAllPeriods();
 
     /**
-     * @return list of usernames with unassigned audit actions.
+     * @return list of usernames.
      */
     List<String> getUserNames();
 }

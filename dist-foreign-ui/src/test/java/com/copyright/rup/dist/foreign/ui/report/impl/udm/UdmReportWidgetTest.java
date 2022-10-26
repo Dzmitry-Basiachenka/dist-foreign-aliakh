@@ -10,7 +10,7 @@ import static org.powermock.api.easymock.PowerMock.verifyAll;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
-import com.copyright.rup.dist.foreign.ui.report.api.udm.ICompletedAssignmentsReportController;
+import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmCommonUserNamesReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmSurveyLicenseeReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmUsableDetailsByCountryReportController;
@@ -59,6 +59,7 @@ public class UdmReportWidgetTest {
     private static final String VERIFIED_DETAILS_BY_SOURCE_REPORT = "Verified Details by Source Report";
     private static final String USABLE_DETAILS_BY_COUNTRY_REPORT = "Usable Details by Country Report";
     private static final String USAGE_EDITS_IN_BASELINE_REPORT = "Usage Edits in Baseline Report";
+    private static final String BASELINE_VALUE_UPDATES_REPORT = "Baseline Value Updates Report";
     private static final String COMPLETED_ASSIGNMENTS_BY_EMPLOYEE_REPORT = "Completed Assignments by Employee Report";
     private static final String USAGE_DETAILS_BY_STATUS_REPORT = "Usage Details by Status Report";
     private static final String VALUES_BY_STATUS_REPORT = "Values by Status Report";
@@ -216,9 +217,25 @@ public class UdmReportWidgetTest {
     }
 
     @Test
+    public void testUdmBaselineValueUpdatesReportSelected() {
+        UdmCommonUserNamesReportWidget widget = createMock(UdmCommonUserNamesReportWidget.class);
+        IUdmCommonUserNamesReportController controller = createMock(IUdmCommonUserNamesReportController.class);
+        setSpecialistExpectations();
+        expect(udmReportController.getUdmBaselineValueUpdatesReportController()).andReturn(controller).once();
+        expect(controller.initWidget()).andReturn(widget).once();
+        widget.setCaption(BASELINE_VALUE_UPDATES_REPORT);
+        expectLastCall().once();
+        Windows.showModalWindow(widget);
+        expectLastCall().once();
+        replayAll();
+        selectMenuItem(5);
+        verifyAll();
+    }
+
+    @Test
     public void testCompletedAssignmentReportSelected() {
-        CompletedAssignmentsReportWidget widget = createMock(CompletedAssignmentsReportWidget.class);
-        ICompletedAssignmentsReportController controller = createMock(ICompletedAssignmentsReportController.class);
+        UdmCommonUserNamesReportWidget widget = createMock(UdmCommonUserNamesReportWidget.class);
+        IUdmCommonUserNamesReportController controller = createMock(IUdmCommonUserNamesReportController.class);
         setSpecialistExpectations();
         expect(udmReportController.getCompletedAssignmentsReportController()).andReturn(controller).once();
         expect(controller.initWidget()).andReturn(widget).once();
@@ -227,7 +244,7 @@ public class UdmReportWidgetTest {
         Windows.showModalWindow(widget);
         expectLastCall().once();
         replayAll();
-        selectMenuItem(5);
+        selectMenuItem(6);
         verifyAll();
     }
 
@@ -243,7 +260,7 @@ public class UdmReportWidgetTest {
         Windows.showModalWindow(widget);
         expectLastCall().once();
         replayAll();
-        selectMenuItem(6);
+        selectMenuItem(7);
         verifyAll();
     }
 
@@ -259,7 +276,7 @@ public class UdmReportWidgetTest {
         Windows.showModalWindow(widget);
         expectLastCall().once();
         replayAll();
-        selectMenuItem(7);
+        selectMenuItem(8);
         verifyAll();
     }
 
@@ -292,15 +309,16 @@ public class UdmReportWidgetTest {
     private void assertReportsMenu() {
         assertEquals(1, CollectionUtils.size(udmReportWidget.getItems()));
         List<MenuItem> menuItems = udmReportWidget.getItems().get(0).getChildren();
-        assertEquals(8, menuItems.size());
+        assertEquals(9, menuItems.size());
         assertEquals(WEEKLY_SURVEY_REPORT, menuItems.get(0).getText());
         assertEquals(SURVEY_LICENSEE_REPORT, menuItems.get(1).getText());
         assertEquals(VERIFIED_DETAILS_BY_SOURCE_REPORT, menuItems.get(2).getText());
         assertEquals(USABLE_DETAILS_BY_COUNTRY_REPORT, menuItems.get(3).getText());
         assertEquals(USAGE_EDITS_IN_BASELINE_REPORT, menuItems.get(4).getText());
-        assertEquals(COMPLETED_ASSIGNMENTS_BY_EMPLOYEE_REPORT, menuItems.get(5).getText());
-        assertEquals(USAGE_DETAILS_BY_STATUS_REPORT, menuItems.get(6).getText());
-        assertEquals(VALUES_BY_STATUS_REPORT, menuItems.get(7).getText());
+        assertEquals(BASELINE_VALUE_UPDATES_REPORT, menuItems.get(5).getText());
+        assertEquals(COMPLETED_ASSIGNMENTS_BY_EMPLOYEE_REPORT, menuItems.get(6).getText());
+        assertEquals(USAGE_DETAILS_BY_STATUS_REPORT, menuItems.get(7).getText());
+        assertEquals(VALUES_BY_STATUS_REPORT, menuItems.get(8).getText());
     }
 
     private void setSpecialistExpectations() {
