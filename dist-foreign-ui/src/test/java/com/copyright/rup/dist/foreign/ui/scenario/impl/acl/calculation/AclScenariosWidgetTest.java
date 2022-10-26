@@ -401,11 +401,14 @@ public class AclScenariosWidgetTest {
 
     private void verifyButtonsLayout(HorizontalLayout layout) {
         assertEquals("acl-scenario-buttons-layout", layout.getId());
-        assertEquals(4, layout.getComponentCount());
+        assertEquals(7, layout.getComponentCount());
         verifyButton(layout.getComponent(0), "Create", 2);
         verifyButton(layout.getComponent(1), "View", 2);
         verifyButton(layout.getComponent(2), "Delete", 2);
         verifyButton(layout.getComponent(3), "Pub Type Weights", 2);
+        verifyButton(layout.getComponent(4), "Submit for Approval", 2);
+        verifyButton(layout.getComponent(5), "Reject", 2);
+        verifyButton(layout.getComponent(6), "Approve", 2);
     }
 
     private void verifyButton(Component component, String caption, int listenersCount) {

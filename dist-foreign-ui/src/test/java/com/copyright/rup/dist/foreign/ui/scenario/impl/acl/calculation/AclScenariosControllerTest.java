@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl.acl.calculation;
 
+import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.eq;
@@ -26,6 +27,7 @@ import com.copyright.rup.dist.foreign.domain.AclUsageBatch;
 import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
+import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.service.api.ILicenseeClassService;
@@ -38,12 +40,16 @@ import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioUsageService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageService;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
+import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioActionHandler;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenariosWidget;
+import com.copyright.rup.vaadin.security.SecurityUtils;
+import com.copyright.rup.vaadin.ui.component.window.ConfirmActionDialogWindow;
 import com.copyright.rup.vaadin.ui.component.window.ConfirmDialogWindow.IListener;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
 import com.google.common.collect.Sets;
+import com.vaadin.data.Validator;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -51,6 +57,7 @@ import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.powermock.api.easymock.PowerMock;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
@@ -79,7 +86,8 @@ import java.util.function.Supplier;
  * @author Dzmitry Basiahenka
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({Windows.class, ForeignSecurityUtils.class, OffsetDateTime.class, StreamSource.class})
+@PrepareForTest({Windows.class, ForeignSecurityUtils.class, OffsetDateTime.class, StreamSource.class,
+    SecurityUtils.class})
 public class AclScenariosControllerTest {
 
     private static final String SCENARIO_UID = "7ed0e17d-6baf-454c-803f-1d9be3cb3192";
@@ -100,6 +108,7 @@ public class AclScenariosControllerTest {
     private IAclUsageService aclUsageService;
     private IStreamSourceHandler streamSourceHandler;
     private IAclCalculationReportService aclCalculationReportService;
+    private AclScenario aclScenario;
 
     @Before
     public void setUp() {
@@ -116,6 +125,11 @@ public class AclScenariosControllerTest {
         aclScenarioController = createMock(IAclScenarioController.class);
         streamSourceHandler = createMock(IStreamSourceHandler.class);
         aclCalculationReportService = createMock(IAclCalculationReportService.class);
+        aclScenario = buildAclScenario();
+        aclScenariosController.initActionHandlers();
+        mockStatic(SecurityUtils.class);
+        expect(SecurityUtils.getUserName()).andReturn("user@copyright.com").anyTimes();
+        replay(SecurityUtils.class);
         mockStatic(ForeignSecurityUtils.class);
         Whitebox.setInternalState(aclScenariosController, "widget", scenariosWidget);
         Whitebox.setInternalState(aclScenariosController, aclScenarioService);
@@ -406,18 +420,94 @@ public class AclScenariosControllerTest {
         verify(OffsetDateTime.class, streamSourceHandler, aclCalculationReportService);
     }
 
+    @Test
+    public void testHandleAction() {
+        expect(scenariosWidget.getSelectedScenario()).andReturn(aclScenario).once();
+        expect(aclScenarioService.validateScenario(aclScenario)).andReturn(true).once();
+        mockStatic(Windows.class);
+        Windows.showConfirmDialogWithReason(eq("Confirm action"), eq("Are you sure you want to perform action?"),
+            eq("Yes"), eq("Cancel"), anyObject(ConfirmActionDialogWindow.IListener.class), anyObject(Validator.class));
+        expectLastCall().once();
+        replay(Windows.class, aclScenarioService, scenariosWidget);
+        aclScenariosController.handleAction(ScenarioActionTypeEnum.SUBMITTED);
+        verify(Windows.class, aclScenarioService, scenariosWidget);
+    }
+
+    @Test
+    public void testHandleActionApproved() {
+        expect(scenariosWidget.getSelectedScenario()).andReturn(aclScenario).once();
+        expect(aclScenarioService.validateScenario(aclScenario)).andReturn(true).once();
+        mockStatic(Windows.class);
+        Windows.showConfirmDialogWithReason(eq("Confirm action"), eq("Are you sure you want to perform action?"),
+            eq("Yes"), eq("Cancel"), anyObject(ConfirmActionDialogWindow.IListener.class), anyObject(Validator.class));
+        expectLastCall().once();
+        replay(Windows.class, aclScenarioService, scenariosWidget);
+        aclScenariosController.handleAction(ScenarioActionTypeEnum.APPROVED);
+        verify(Windows.class, aclScenarioService, scenariosWidget);
+    }
+
+    @Test
+    public void testHandleActionRejected() {
+        expect(scenariosWidget.getSelectedScenario()).andReturn(aclScenario).once();
+        expect(aclScenarioService.validateScenario(aclScenario)).andReturn(true).once();
+        mockStatic(Windows.class);
+        Windows.showConfirmDialogWithReason(eq("Confirm action"), eq("Are you sure you want to perform action?"),
+            eq("Yes"), eq("Cancel"), anyObject(ConfirmActionDialogWindow.IListener.class), anyObject(Validator.class));
+        expectLastCall().once();
+        replay(Windows.class, aclScenarioService, scenariosWidget);
+        aclScenariosController.handleAction(ScenarioActionTypeEnum.REJECTED);
+        verify(Windows.class, aclScenarioService, scenariosWidget);
+    }
+
+    @Test
+    public void testApplyScenarioAction() {
+        expect(scenariosWidget.getSelectedScenario()).andReturn(aclScenario).once();
+        scenariosWidget.refresh();
+        expectLastCall().once();
+        IAclScenarioActionHandler handler = PowerMock.createMock(IAclScenarioActionHandler.class);
+        handler.handleAction(aclScenario, "reason");
+        expectLastCall().once();
+        replay(scenariosWidget, handler);
+        aclScenariosController.applyScenarioAction(handler, "reason");
+        verify(scenariosWidget, handler);
+    }
+
+    @Test
+    public void testHandleActionNull() {
+        expect(scenariosWidget.getSelectedScenario()).andReturn(aclScenario).once();
+        expect(aclScenarioService.validateScenario(aclScenario)).andReturn(true).once();
+        mockStatic(Windows.class);
+        replay(scenariosWidget, Windows.class, aclScenarioService);
+        aclScenariosController.handleAction(null);
+        verify(scenariosWidget, Windows.class, aclScenarioService);
+    }
+
+    @Test
+    public void testHandleActionSubmittedScenario() {
+        expect(scenariosWidget.getSelectedScenario()).andReturn(aclScenario).once();
+        expect(aclScenarioService.validateScenario(aclScenario)).andReturn(false).once();
+        mockStatic(Windows.class);
+        Windows.showNotificationWindow(
+            eq("This scenario cannot be submitted for approval because scenario in 202212 period " +
+                "and ACL license type has been already submitted"));
+        expectLastCall().once();
+        replay(scenariosWidget, Windows.class, aclScenarioService);
+        aclScenariosController.handleAction(null);
+        verify(scenariosWidget, Windows.class, aclScenarioService);
+    }
+
     private AclScenario buildAclScenario() {
-        AclScenario aclScenario = new AclScenario();
-        aclScenario.setId(SCENARIO_UID);
-        aclScenario.setName("ACL Scenario name");
-        aclScenario.setDescription("Description");
-        aclScenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);
-        aclScenario.setEditableFlag(false);
-        aclScenario.setPeriodEndDate(202212);
-        aclScenario.setLicenseType(LICENSE_TYPE);
-        aclScenario.setCreateDate(Date.from(LocalDate.of(2022, 6, 1).atStartOfDay(ZoneId.systemDefault()).toInstant()));
-        aclScenario.setCreateUser("user@copyright.com");
-        return aclScenario;
+        AclScenario scenario = new AclScenario();
+        scenario.setId(SCENARIO_UID);
+        scenario.setName("ACL Scenario name");
+        scenario.setDescription("Description");
+        scenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);
+        scenario.setEditableFlag(false);
+        scenario.setPeriodEndDate(202212);
+        scenario.setLicenseType(LICENSE_TYPE);
+        scenario.setCreateDate(Date.from(LocalDate.of(2022, 6, 1).atStartOfDay(ZoneId.systemDefault()).toInstant()));
+        scenario.setCreateUser("user@copyright.com");
+        return scenario;
     }
 
     private AclGrantSet buildAclGrantSet() {

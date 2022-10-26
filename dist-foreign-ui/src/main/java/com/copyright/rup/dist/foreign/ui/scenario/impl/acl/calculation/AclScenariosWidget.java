@@ -5,6 +5,7 @@ import com.copyright.rup.dist.foreign.domain.AclPublicationType;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
+import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.domain.report.AclCalculationReportsInfoDto;
@@ -92,6 +93,9 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
     private final Button deleteButton = Buttons.createButton(ForeignUi.getMessage("button.delete"));
     private final Button viewButton = Buttons.createButton(ForeignUi.getMessage("button.view"));
     private final Button pubTypeWeights = Buttons.createButton(ForeignUi.getMessage("button.publication_type_weights"));
+    private final Button submitButton = Buttons.createButton(ForeignUi.getMessage("button.submit"));
+    private final Button rejectButton = Buttons.createButton(ForeignUi.getMessage("button.reject"));
+    private final Button approveButton = Buttons.createButton(ForeignUi.getMessage("button.approve"));
     private final String userName = RupContextUtils.getUserName();
 
     private IAclScenariosController aclScenariosController;
@@ -194,9 +198,19 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
     }
 
     private HorizontalLayout initButtonsLayout() {
-        createButton.addClickListener(
-            event -> Windows.showModalWindow(
-                new CreateAclScenarioWindow(aclScenariosController, createEvent -> refresh())));
+        addButtonsListeners();
+        HorizontalLayout buttonsLayout =
+            new HorizontalLayout(createButton, viewButton, deleteButton, pubTypeWeights, submitButton, rejectButton,
+                approveButton);
+        VaadinUtils.setButtonsAutoDisabled(createButton, viewButton, deleteButton, pubTypeWeights, submitButton,
+            rejectButton, approveButton);
+        VaadinUtils.addComponentStyle(buttonsLayout, "acl-scenario-buttons-layout");
+        return buttonsLayout;
+    }
+
+    private void addButtonsListeners() {
+        createButton.addClickListener(event ->
+            Windows.showModalWindow(new CreateAclScenarioWindow(aclScenariosController, createEvent -> refresh())));
         viewButton.addClickListener(event -> onClickViewButton());
         deleteButton.addClickListener(event -> aclScenariosController.onDeleteButtonClicked());
         pubTypeWeights.addClickListener(event -> {
@@ -208,11 +222,9 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
                 IParametersSaveListener.SAVE_HANDLER);
             Windows.showModalWindow(window);
         });
-        HorizontalLayout buttonsLayout = new HorizontalLayout(createButton, viewButton, deleteButton, pubTypeWeights);
-        buttonsLayout.setMargin(new MarginInfo(true, true, true, true));
-        VaadinUtils.setButtonsAutoDisabled(createButton, viewButton, deleteButton, pubTypeWeights);
-        VaadinUtils.addComponentStyle(buttonsLayout, "acl-scenario-buttons-layout");
-        return buttonsLayout;
+        submitButton.addClickListener(event -> aclScenariosController.handleAction(ScenarioActionTypeEnum.SUBMITTED));
+        rejectButton.addClickListener(event -> aclScenariosController.handleAction(ScenarioActionTypeEnum.REJECTED));
+        approveButton.addClickListener(event -> aclScenariosController.handleAction(ScenarioActionTypeEnum.APPROVED));
     }
 
     private void insertAclPubTypes(List<AclPublicationType> publicationTypes) {
