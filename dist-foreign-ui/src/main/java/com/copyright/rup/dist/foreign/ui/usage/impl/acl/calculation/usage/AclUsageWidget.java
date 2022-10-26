@@ -127,6 +127,8 @@ public class AclUsageWidget extends HorizontalSplitPanel implements IAclUsageWid
             aclUsageBatchMenuBar.addItem(ForeignUi.getMessage("menu.caption.usage_batch"), null, null);
         menuItem.addItem(ForeignUi.getMessage("menu.item.create"), null,
             item -> Windows.showModalWindow(new CreateAclUsageBatchWindow(controller)));
+        menuItem.addItem(ForeignUi.getMessage("menu.item.view"), null,
+            item -> Windows.showModalWindow(new ViewAclUsageBatchWindow(controller)));
         VaadinUtils.addComponentStyle(aclUsageBatchMenuBar, "acl-usage-batch-menu-bar");
         VaadinUtils.addComponentStyle(aclUsageBatchMenuBar, "v-menubar-df");
     }

@@ -252,6 +252,16 @@ public class AclUsageControllerTest {
         verify(aclUsageFilterController, aclUsageFilterWidget, aclUsageBatchService);
     }
 
+    @Test
+    public void testDeleteAclUsageBatch() {
+        //TODO will be implemented with backend logic
+    }
+
+    @Test
+    public void testGetScenarioNamesAssociatedWithUsageBatch() {
+        //TODO will be implemented with backend logic
+    }
+
     private AclUsageBatch buildAclUsageBatch() {
         AclUsageBatch usageBatch = new AclUsageBatch();
         usageBatch.setName(ACL_USAGE_BATCH_NAME);

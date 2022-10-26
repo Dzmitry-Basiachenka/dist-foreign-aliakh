@@ -302,7 +302,7 @@ public class AclUsageWidgetTest {
     }
 
     private void verifyButtonsLayout(HorizontalLayout layout, boolean... buttonsVisibility) {
-        verifyMenuBar(layout.getComponent(0), "Usage Batch", buttonsVisibility[0], Collections.singletonList("Create"));
+        verifyMenuBar(layout.getComponent(0), "Usage Batch", buttonsVisibility[0], Arrays.asList("Create", "View"));
         verifyButton(layout.getComponent(1), "Edit", buttonsVisibility[1]);
         verifyButton(layout.getComponent(2), "Export", buttonsVisibility[2]);
     }

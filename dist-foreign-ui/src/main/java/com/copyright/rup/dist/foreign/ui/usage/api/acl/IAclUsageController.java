@@ -130,4 +130,19 @@ public interface IAclUsageController extends IController<IAclUsageWidget> {
      * @return count of copied ACL usages
      */
     int copyAclUsageBatch(String sourceUsageBatchId, AclUsageBatch aclUsageBatch);
+
+    /**
+     * Deletes {@link AclUsageBatch} with all its ACL Usages.
+     *
+     * @param usageBatch {@link AclUsageBatch} to delete
+     */
+    void deleteAclUsageBatch(AclUsageBatch usageBatch);
+
+    /**
+     * Gets AclScenario names associated with grant set.
+     *
+     * @param usageBatchId usage batch id
+     * @return AclScenario names associated with grant set
+     */
+    List<String> getScenarioNamesAssociatedWithUsageBatch(String usageBatchId);
 }
