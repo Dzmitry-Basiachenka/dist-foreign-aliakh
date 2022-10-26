@@ -33,6 +33,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -146,6 +147,18 @@ public class AclUsageController extends CommonController<IAclUsageWidget> implem
         int usagesCount = aclUsageBatchService.copyUsageBatch(sourceUsageBatchId, aclUsageBatch);
         aclUsageFilterController.getWidget().clearFilter();
         return usagesCount;
+    }
+
+    @Override
+    public void deleteAclUsageBatch(AclUsageBatch usageBatch) {
+        //TODO will be added removal with implementation backend logic
+        aclUsageFilterController.getWidget().clearFilter();
+    }
+
+    @Override
+    public List<String> getScenarioNamesAssociatedWithUsageBatch(String usageBatchId) {
+        //TODO will be added getting Acl scenario names with implementation backend logic
+        return Collections.EMPTY_LIST;
     }
 
     @Override
