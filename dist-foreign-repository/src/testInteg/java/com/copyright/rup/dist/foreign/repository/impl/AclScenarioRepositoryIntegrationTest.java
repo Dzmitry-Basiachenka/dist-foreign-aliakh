@@ -10,6 +10,7 @@ import com.copyright.rup.dist.foreign.domain.AclPublicationType;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
+import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.repository.api.IAclScenarioRepository;
@@ -28,6 +29,7 @@ import java.time.OffsetDateTime;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
+import java.util.EnumSet;
 import java.util.List;
 
 /**
@@ -241,6 +243,17 @@ public class AclScenarioRepositoryIntegrationTest {
         assertEquals(0, aclScenarioRepository.findDetailLicenseeClassesByScenarioId(scenarioId).size());
         assertEquals(0, aclScenarioRepository.findAclPublicationTypesByScenarioId(scenarioId).size());
         assertEquals(0, aclScenarioUsageRepository.findScenarioDetailsByScenarioId(scenarioId).size());
+    }
+
+    @Test
+    @TestData(fileName = FOLDER_NAME + "find-by-statuses.groovy")
+    public void testFindAclScenariosByStatuses() {
+        List<Scenario> scenarios =
+            aclScenarioRepository.findAclScenariosByStatuses(EnumSet.of(ScenarioStatusEnum.IN_PROGRESS));
+        assertEquals(1, scenarios.size());
+        Scenario scenario = scenarios.get(0);
+        assertEquals("d4525438-49a1-486a-a651-40b9099ece3a", scenario.getId());
+        assertEquals("ACL Scenario 202112", scenario.getName());
     }
 
     private UsageAge buildUsageAge(Integer period, String weight) {

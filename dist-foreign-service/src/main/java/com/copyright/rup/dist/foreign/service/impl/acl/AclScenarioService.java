@@ -8,6 +8,7 @@ import com.copyright.rup.dist.foreign.domain.AclFundPoolDetailDto;
 import com.copyright.rup.dist.foreign.domain.AclPublicationType;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
+import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
@@ -192,6 +193,11 @@ public class AclScenarioService implements IAclScenarioService {
         aclScenarioRepository.deleteScenarioData(scenarioId);
         aclScenarioRepository.deleteScenario(scenarioId);
         LOGGER.info("Delete ACL scenario. Finished. {}, User={}", ForeignLogUtils.aclScenario(aclScenario), userName);
+    }
+
+    @Override
+    public List<Scenario> getAclScenariosByStatuses(Set<ScenarioStatusEnum> statuses) {
+        return aclScenarioRepository.findAclScenariosByStatuses(statuses);
     }
 
     private void populateScenario(AclScenario aclScenario, String userName, String scenarioId) {

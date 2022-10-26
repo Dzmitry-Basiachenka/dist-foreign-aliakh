@@ -54,6 +54,11 @@
         <result property="aggregateLicenseeClass.description" column="aggregate_licensee_class_name"/>
     </resultMap>
 
+    <resultMap id="scenarioResultMap" type="Scenario" extends="StoredEntityMapper.storedEntityResult">
+        <result property="id" column="df_acl_scenario_uid"/>
+        <result property="name" column="name"/>
+    </resultMap>
+
     <sql id="aclScenarioColumns">
         s.df_acl_scenario_uid,
         df_acl_usage_batch_uid,
@@ -445,4 +450,16 @@
         delete from ${schema}.df_acl_scenario
         where df_acl_scenario_uid = #{scenarioId}
     </delete>
+
+    <select id="findAclScenariosByStatuses" parameterType="collection" resultMap="scenarioResultMap">
+        select
+            df_acl_scenario_uid,
+            name
+        from ${schema}.df_acl_scenario
+        where status_ind in
+            <foreach collection="collection" item="status" separator="," open="(" close=")">
+                #{status}
+            </foreach>
+        order by updated_datetime desc
+    </select>
 </mapper>

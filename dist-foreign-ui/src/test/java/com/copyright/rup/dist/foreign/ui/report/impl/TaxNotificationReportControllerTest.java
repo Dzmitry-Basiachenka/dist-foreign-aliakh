@@ -7,6 +7,7 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
@@ -16,6 +17,7 @@ import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
+import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioService;
 import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
 import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
 import com.copyright.rup.dist.foreign.ui.report.api.ITaxNotificationReportWidget;
@@ -34,6 +36,7 @@ import java.io.OutputStream;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 
@@ -51,10 +54,11 @@ import java.util.Set;
 public class TaxNotificationReportControllerTest {
 
     private static final Set<ScenarioStatusEnum> SCENARIO_STATUSES =
-        Sets.newHashSet(ScenarioStatusEnum.IN_PROGRESS, ScenarioStatusEnum.SUBMITTED, ScenarioStatusEnum.APPROVED);
+        EnumSet.of(ScenarioStatusEnum.IN_PROGRESS, ScenarioStatusEnum.SUBMITTED, ScenarioStatusEnum.APPROVED);
 
     private IReportService reportService;
     private IScenarioService scenarioService;
+    private IAclScenarioService aclScenarioService;
     private IProductFamilyProvider productFamilyProvider;
     private TaxNotificationReportController controller;
 
@@ -63,9 +67,11 @@ public class TaxNotificationReportControllerTest {
         controller = new TaxNotificationReportController();
         reportService = createMock(IReportService.class);
         scenarioService = createMock(IScenarioService.class);
+        aclScenarioService = createMock(IAclScenarioService.class);
         productFamilyProvider = createMock(IProductFamilyProvider.class);
         Whitebox.setInternalState(controller, reportService);
         Whitebox.setInternalState(controller, scenarioService);
+        Whitebox.setInternalState(controller, aclScenarioService);
         Whitebox.setInternalState(controller, productFamilyProvider);
     }
 
@@ -131,5 +137,15 @@ public class TaxNotificationReportControllerTest {
         replay(scenarioService, productFamilyProvider);
         assertEquals(scenarios, controller.getScenarios());
         verify(scenarioService, productFamilyProvider);
+    }
+
+    @Test
+    public void testGetScenariosAcl() {
+        List<Scenario> scenarios = Collections.singletonList(new Scenario());
+        expect(productFamilyProvider.getSelectedProductFamily()).andReturn("ACL").once();
+        expect(aclScenarioService.getAclScenariosByStatuses(SCENARIO_STATUSES)).andReturn(scenarios).once();
+        replay(aclScenarioService, productFamilyProvider);
+        assertSame(scenarios, controller.getScenarios());
+        verify(aclScenarioService, productFamilyProvider);
     }
 }

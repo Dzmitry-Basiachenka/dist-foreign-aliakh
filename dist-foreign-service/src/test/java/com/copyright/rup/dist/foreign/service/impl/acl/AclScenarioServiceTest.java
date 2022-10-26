@@ -13,6 +13,7 @@ import com.copyright.rup.dist.foreign.domain.AclFundPoolDetailDto;
 import com.copyright.rup.dist.foreign.domain.AclPublicationType;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
+import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.repository.api.IAclScenarioRepository;
@@ -34,6 +35,7 @@ import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 
@@ -251,6 +253,16 @@ public class AclScenarioServiceTest {
         replay(aclScenarioAuditService, aclScenarioRepository);
         aclScenarioService.deleteAclScenario(buildAclScenario());
         verify(aclScenarioAuditService, aclScenarioRepository);
+    }
+
+    @Test
+    public void testGetAclScenariosByStatuses() {
+        List<Scenario> scenarios = Collections.singletonList(new Scenario());
+        expect(aclScenarioRepository.findAclScenariosByStatuses(EnumSet.of(ScenarioStatusEnum.IN_PROGRESS)))
+            .andReturn(scenarios).once();
+        replay(aclScenarioRepository);
+        assertSame(scenarios, aclScenarioService.getAclScenariosByStatuses(EnumSet.of(ScenarioStatusEnum.IN_PROGRESS)));
+        verify(aclScenarioRepository);
     }
 
     private AclScenario buildAclScenario() {
