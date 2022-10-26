@@ -5,6 +5,7 @@ import com.copyright.rup.dist.foreign.domain.AclPublicationType;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
 
@@ -163,4 +164,25 @@ public interface IAclScenarioService {
      * @return list of {@link Scenario}s
      */
     List<Scenario> getAclScenariosByStatuses(Set<ScenarioStatusEnum> statuses);
+
+    /**
+     * Validate that the system is not contains a scenario with period and license type in
+     * {@link com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum#SUBMITTED} status.
+     *
+     * @param scenario instance of {@link AclScenario}
+     * @return <code>true</code> if scenario is not exists with license type, period and status
+     * {@link com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum#SUBMITTED} otherwise <code>false</code>
+     */
+    boolean validateScenario(AclScenario scenario);
+
+    /**
+     * Change scenario state {@link AclScenario}.
+     *
+     * @param scenario {@link AclScenario} instance
+     * @param status   new {@link ScenarioStatusEnum} status
+     * @param action   action
+     * @param reason   reason specified by user
+     */
+    void changeScenarioState(AclScenario scenario, ScenarioStatusEnum status, ScenarioActionTypeEnum action,
+                             String reason);
 }

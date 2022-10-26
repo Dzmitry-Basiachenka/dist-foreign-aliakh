@@ -11,6 +11,7 @@ import com.copyright.rup.dist.foreign.domain.AclUsageBatch;
 import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
+import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.vaadin.widget.api.IController;
 
@@ -210,4 +211,11 @@ public interface IAclScenariosController extends IController<IAclScenariosWidget
      * @return instance of {@link IStreamSource} for export Summary of Work Shares by Aggregate Licensee Class Report.
      */
     IStreamSource getExportAclSummaryOfWorkSharesByAggLcStreamSource();
+
+    /**
+     * Handles actions with {@link AclScenario}.
+     *
+     * @param actionType scenario action type
+     */
+    void handleAction(ScenarioActionTypeEnum actionType);
 }

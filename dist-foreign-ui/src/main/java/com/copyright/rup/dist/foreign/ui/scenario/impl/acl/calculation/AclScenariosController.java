@@ -13,6 +13,8 @@ import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
+import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
+import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.service.api.ILicenseeClassService;
 import com.copyright.rup.dist.foreign.service.api.IPublicationTypeService;
@@ -24,21 +26,29 @@ import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioUsageService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageService;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
+import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioActionHandler;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioHistoryController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenariosController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenariosWidget;
+import com.copyright.rup.vaadin.security.SecurityUtils;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.widget.api.CommonController;
+
+import com.vaadin.data.validator.StringLengthValidator;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+
+import javax.annotation.PostConstruct;
 
 /**
  * Implementation of {@link IAclScenariosController}.
@@ -52,6 +62,8 @@ import java.util.Set;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class AclScenariosController extends CommonController<IAclScenariosWidget> implements IAclScenariosController {
+
+    private Map<ScenarioActionTypeEnum, IAclScenarioActionHandler> actionHandlers;
 
     @Autowired
     private IAclScenarioService aclScenarioService;
@@ -221,6 +233,57 @@ public class AclScenariosController extends CommonController<IAclScenariosWidget
                 aclScenarioService.deleteAclScenario(aclScenario);
                 getWidget().refresh();
             });
+    }
+
+    @Override
+    public void handleAction(ScenarioActionTypeEnum actionType) {
+        AclScenario scenario = getWidget().getSelectedScenario();
+        if (aclScenarioService.validateScenario(scenario)) {
+            IAclScenarioActionHandler actionHandler = actionHandlers.get(actionType);
+            if (Objects.nonNull(actionHandler)) {
+                Windows.showConfirmDialogWithReason(
+                    ForeignUi.getMessage("window.confirm"),
+                    ForeignUi.getMessage("message.confirm.action"),
+                    ForeignUi.getMessage("button.yes"),
+                    ForeignUi.getMessage("button.cancel"),
+                    reason -> applyScenarioAction(actionHandler, reason),
+                    new StringLengthValidator(ForeignUi.getMessage("field.error.length", 1024), 0, 1024));
+            }
+        } else {
+            Windows.showNotificationWindow(
+                ForeignUi.getMessage("message.warning.action_for_exist_submitted_scenario", scenario.getPeriodEndDate(),
+                    scenario.getLicenseType()));
+        }
+    }
+
+    /**
+     * Applies ACL scenario action.
+     *
+     * @param actionHandler instance of {@link IAclScenarioActionHandler}
+     * @param reason        action reason
+     */
+    public void applyScenarioAction(IAclScenarioActionHandler actionHandler, String reason) {
+        AclScenario scenario = getWidget().getSelectedScenario();
+        scenario.setUpdateUser(SecurityUtils.getUserName());
+        actionHandler.handleAction(scenario, reason);
+        refreshWidget();
+    }
+
+    /**
+     * Initializes handlers for actions.
+     */
+    @PostConstruct
+    public void initActionHandlers() {
+        actionHandlers = new HashMap<>();
+        actionHandlers.put(ScenarioActionTypeEnum.SUBMITTED,
+            (scenario, reason) -> aclScenarioService.changeScenarioState(scenario, ScenarioStatusEnum.SUBMITTED,
+                ScenarioActionTypeEnum.SUBMITTED, reason));
+        actionHandlers.put(ScenarioActionTypeEnum.APPROVED,
+            (scenario, reason) -> aclScenarioService.changeScenarioState(scenario, ScenarioStatusEnum.APPROVED,
+                ScenarioActionTypeEnum.APPROVED, reason));
+        actionHandlers.put(ScenarioActionTypeEnum.REJECTED,
+            (scenario, reason) -> aclScenarioService.changeScenarioState(scenario, ScenarioStatusEnum.IN_PROGRESS,
+                ScenarioActionTypeEnum.REJECTED, reason));
     }
 
     @Override

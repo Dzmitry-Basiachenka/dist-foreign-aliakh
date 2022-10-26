@@ -200,6 +200,18 @@ public class AclScenarioService implements IAclScenarioService {
         return aclScenarioRepository.findAclScenariosByStatuses(statuses);
     }
 
+    @Override
+    public boolean validateScenario(AclScenario selectedScenario) {
+        //TODO will implement later
+        return false;
+    }
+
+    @Override
+    public void changeScenarioState(AclScenario scenario, ScenarioStatusEnum status, ScenarioActionTypeEnum action,
+                                    String reason) {
+        //TODO will implement later
+    }
+
     private void populateScenario(AclScenario aclScenario, String userName, String scenarioId) {
         aclScenario.setId(scenarioId);
         aclScenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);
