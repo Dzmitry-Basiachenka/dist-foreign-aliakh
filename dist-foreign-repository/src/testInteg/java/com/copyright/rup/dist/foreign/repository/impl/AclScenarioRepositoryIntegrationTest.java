@@ -275,6 +275,21 @@ public class AclScenarioRepositoryIntegrationTest {
         assertFalse(aclScenarioRepository.submittedScenarioExistWithLicenseTypeAndPeriod("MACL", 201506));
     }
 
+    @Test
+    @TestData(fileName = FOLDER_NAME + "update-status.groovy")
+    public void testUpdateStatus() {
+        AclScenario scenario = aclScenarioRepository.findById("3beec0c7-6783-4481-9648-c02f4ec1da5a");
+        assertNotNull(scenario);
+        scenario.setStatus(ScenarioStatusEnum.SUBMITTED);
+        aclScenarioRepository.updateStatus(scenario);
+        AclScenario updatedScenario = aclScenarioRepository.findById("3beec0c7-6783-4481-9648-c02f4ec1da5a");
+        assertNotNull(updatedScenario);
+        assertEquals(ScenarioStatusEnum.SUBMITTED, updatedScenario.getStatus());
+        assertEquals(scenario.getName(), updatedScenario.getName());
+        assertEquals(scenario.getDescription(), updatedScenario.getDescription());
+        assertEquals("SYSTEM", updatedScenario.getUpdateUser());
+    }
+
     private UsageAge buildUsageAge(Integer period, String weight) {
         UsageAge usageAge = new UsageAge();
         usageAge.setPeriod(period);

@@ -35,6 +35,7 @@ import java.util.Set;
 public class AclScenarioRepository extends BaseRepository implements IAclScenarioRepository {
 
     private static final String SCENARIO_ID_KEY = "scenarioId";
+    private static final String UPDATE_USER_KEY = "updateUser";
 
     @Override
     public List<AclScenario> findAll() {
@@ -68,7 +69,7 @@ public class AclScenarioRepository extends BaseRepository implements IAclScenari
         parameters.put("usageAge", Objects.requireNonNull(usageAge));
         parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
         parameters.put("createUser", Objects.requireNonNull(userName));
-        parameters.put("updateUser", Objects.requireNonNull(userName));
+        parameters.put(UPDATE_USER_KEY, Objects.requireNonNull(userName));
         insert("IAclScenarioMapper.insertAclScenarioUsageAgeWeight", parameters);
     }
 
@@ -78,7 +79,7 @@ public class AclScenarioRepository extends BaseRepository implements IAclScenari
         parameters.put("licenseeClass", Objects.requireNonNull(licenseeClass));
         parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
         parameters.put("createUser", Objects.requireNonNull(userName));
-        parameters.put("updateUser", Objects.requireNonNull(userName));
+        parameters.put(UPDATE_USER_KEY, Objects.requireNonNull(userName));
         insert("IAclScenarioMapper.insertAclScenarioLicenseeClass", parameters);
     }
 
@@ -88,7 +89,7 @@ public class AclScenarioRepository extends BaseRepository implements IAclScenari
         parameters.put("publicationType", Objects.requireNonNull(publicationType));
         parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
         parameters.put("createUser", Objects.requireNonNull(userName));
-        parameters.put("updateUser", Objects.requireNonNull(userName));
+        parameters.put(UPDATE_USER_KEY, Objects.requireNonNull(userName));
         insert("IAclScenarioMapper.insertAclScenarioPubTypeWeight", parameters);
     }
 
@@ -149,5 +150,14 @@ public class AclScenarioRepository extends BaseRepository implements IAclScenari
         parameters.put("licenseType", Objects.requireNonNull(licenseType));
         parameters.put("period", Objects.requireNonNull(period));
         return selectOne("IAclScenarioMapper.scenarioExistWithLicenseTypeAndPeriod", parameters);
+    }
+
+    @Override
+    public void updateStatus(AclScenario scenario) {
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(3);
+        params.put("status", Objects.requireNonNull(scenario.getStatus()));
+        params.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenario.getId()));
+        params.put(UPDATE_USER_KEY, Objects.requireNonNull(scenario.getUpdateUser()));
+        update("IAclScenarioMapper.updateStatusById", params);
     }
 }

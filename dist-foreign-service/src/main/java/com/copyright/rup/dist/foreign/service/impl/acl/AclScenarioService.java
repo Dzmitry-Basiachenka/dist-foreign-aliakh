@@ -214,7 +214,13 @@ public class AclScenarioService implements IAclScenarioService {
     @Override
     public void changeScenarioState(AclScenario scenario, ScenarioStatusEnum status, ScenarioActionTypeEnum action,
                                     String reason) {
-        //TODO will implement later
+        String userName = RupContextUtils.getUserName();
+        scenario.setStatus(status);
+        scenario.setUpdateUser(userName);
+        LOGGER.info("Change scenario status. {}, User={}, Reason={}", ForeignLogUtils.aclScenario(scenario), userName,
+            reason);
+        aclScenarioRepository.updateStatus(scenario);
+        aclScenarioAuditService.logAction(scenario.getId(), action, reason);
     }
 
     private void populateScenario(AclScenario aclScenario, String userName, String scenarioId) {

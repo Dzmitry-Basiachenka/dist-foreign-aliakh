@@ -176,4 +176,11 @@ public interface IAclScenarioRepository {
      * otherwise <code>false</code>
      */
     boolean submittedScenarioExistWithLicenseTypeAndPeriod(String licenseType, Integer period);
+
+    /**
+     * Updates {@link AclScenario} status.
+     *
+     * @param scenario {@link Scenario} to update
+     */
+    void updateStatus(AclScenario scenario);
 }
