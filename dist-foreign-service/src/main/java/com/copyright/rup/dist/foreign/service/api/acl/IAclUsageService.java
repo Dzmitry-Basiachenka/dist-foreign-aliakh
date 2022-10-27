@@ -110,4 +110,11 @@ public interface IAclUsageService {
      * @return count of copied grant details
      */
     int copyAclUsages(String sourceUsageBatchId, String targetUsageBatchId, String userName);
+
+    /**
+     * Deletes ACL usages by ACL usage id.
+     *
+     * @param usageBatchId id of the {@link com.copyright.rup.dist.foreign.domain.AclUsageBatch}
+     */
+    void deleteUsages(String usageBatchId);
 }

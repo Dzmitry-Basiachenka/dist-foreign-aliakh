@@ -133,6 +133,21 @@ public class AclUsageBatchServiceTest {
         verify(RupContextUtils.class, aclUsageBatchRepository, aclUsageService);
     }
 
+    @Test
+    public void testDeleteAclUsageBatch() {
+        mockStatic(RupContextUtils.class);
+        AclUsageBatch usageBatch = buildAclUsageBatch();
+        usageBatch.setId("e58a1a83-5766-4c62-8fe6-44ba5d1045b7");
+        expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
+        aclUsageService.deleteUsages(usageBatch.getId());
+        expectLastCall().once();
+        aclUsageBatchRepository.deleteById(usageBatch.getId());
+        expectLastCall().once();
+        replay(RupContextUtils.class, aclUsageService, aclUsageBatchRepository);
+        aclUsageBatchService.deleteAclUsageBatch(usageBatch);
+        verify(RupContextUtils.class, aclUsageService, aclUsageBatchRepository);
+    }
+
     private AclUsageBatch buildAclUsageBatch() {
         AclUsageBatch usageBatch = new AclUsageBatch();
         usageBatch.setName(ACL_USAGE_BATCH_NAME);

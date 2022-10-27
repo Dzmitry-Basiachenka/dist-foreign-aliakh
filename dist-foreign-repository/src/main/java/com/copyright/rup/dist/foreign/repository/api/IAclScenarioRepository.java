@@ -94,6 +94,14 @@ public interface IAclScenarioRepository {
     AclScenario findById(String scenarioId);
 
     /**
+     * Finds names of {@link AclScenario} associated with usage batch.
+     *
+     * @param usageBatchId usage batch id
+     * @return list of {@link AclScenario} names associated with usage batch
+     */
+    List<String> findScenarioNamesByUsageBatchId(String usageBatchId);
+
+    /**
      * Finds names of {@link AclScenario} associated with fund pool.
      *
      * @param fundPoolId fund pool id

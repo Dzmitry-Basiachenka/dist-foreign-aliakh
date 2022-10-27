@@ -379,6 +379,12 @@
         order by period_end_date desc
     </select>
 
+    <select id="findScenarioNamesByUsageBatchId" parameterType="string" resultType="string">
+        select name
+        from ${schema}.df_acl_scenario
+        where df_acl_usage_batch_uid = #{usageBatchId}
+    </select>
+
     <select id="findScenarioNamesByFundPoolId" parameterType="string" resultType="string">
         select name
         from ${schema}.df_acl_scenario

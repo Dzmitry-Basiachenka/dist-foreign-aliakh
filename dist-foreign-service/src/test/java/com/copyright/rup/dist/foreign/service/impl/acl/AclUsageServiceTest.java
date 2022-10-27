@@ -163,6 +163,16 @@ public class AclUsageServiceTest {
         verify(aclUsageRepository);
     }
 
+    @Test
+    public void testDeleteUsages() {
+        String usageBatchId = "a505b23e-99ba-43db-8c5c-d0a739cbbd9b";
+        aclUsageRepository.deleteByUsageBatchId(usageBatchId);
+        expectLastCall().once();
+        replay(aclUsageRepository);
+        aclUsageService.deleteUsages(usageBatchId);
+        verify(aclUsageRepository);
+    }
+
     private AclUsageFilter buildAclUsageFilter() {
         AclUsageFilter aclUsageFilter = new AclUsageFilter();
         aclUsageFilter.setUsageBatchName("ACL Usage Batch 2021");

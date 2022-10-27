@@ -60,4 +60,11 @@ public interface IAclUsageBatchRepository {
      * @return list of periods
      */
     List<Integer> findPeriods();
+
+    /**
+     * Deletes ACL usage batch.
+     *
+     * @param usageBatchId id of the {@link AclUsageBatch}
+     */
+    void deleteById(String usageBatchId);
 }

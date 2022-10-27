@@ -481,4 +481,9 @@
         where df_acl_usage_batch_uid = #{sourceUsageBatchId}
         returning df_acl_usage_uid
     </select>
+
+    <delete id="deleteByUsageBatchId" parameterType="string">
+        delete from ${schema}.df_acl_usage
+        where df_acl_usage_batch_uid = #{usageBatchId}
+    </delete>
 </mapper>
