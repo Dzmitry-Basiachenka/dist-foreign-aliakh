@@ -265,6 +265,16 @@ public class AclScenarioServiceTest {
         verify(aclScenarioRepository);
     }
 
+    @Test
+    public void testIsExistsScenarioInSubmitStatus() {
+        AclScenario scenario = buildAclScenario();
+        expect(aclScenarioRepository.submittedScenarioExistWithLicenseTypeAndPeriod("ACL", 202212)).andReturn(false)
+            .once();
+        replay(aclScenarioRepository);
+        assertTrue(aclScenarioService.isExistsSubmittedScenario(scenario));
+        verify(aclScenarioRepository);
+    }
+
     private AclScenario buildAclScenario() {
         AclScenario aclScenario = new AclScenario();
         aclScenario.setId(SCENARIO_UID);

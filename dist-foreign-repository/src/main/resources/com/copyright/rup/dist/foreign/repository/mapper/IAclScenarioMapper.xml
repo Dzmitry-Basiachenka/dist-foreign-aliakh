@@ -462,4 +462,14 @@
             </foreach>
         order by updated_datetime desc
     </select>
+
+    <select id="scenarioExistWithLicenseTypeAndPeriod" resultType="boolean" parameterType="map">
+        select exists (
+            select
+            from ${schema}.df_acl_scenario
+            where period_end_date = #{period}
+                and license_type = #{licenseType}
+                and status_ind in ('SUBMITTED', 'APPROVED', 'ARCHIVED')
+        )
+    </select>
 </mapper>

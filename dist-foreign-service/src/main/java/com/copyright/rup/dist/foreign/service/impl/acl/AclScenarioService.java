@@ -201,9 +201,9 @@ public class AclScenarioService implements IAclScenarioService {
     }
 
     @Override
-    public boolean validateScenario(AclScenario selectedScenario) {
-        //TODO will implement later
-        return false;
+    public boolean isExistsSubmittedScenario(AclScenario selectedScenario) {
+        return !aclScenarioRepository.submittedScenarioExistWithLicenseTypeAndPeriod(selectedScenario.getLicenseType(),
+            selectedScenario.getPeriodEndDate());
     }
 
     @Override

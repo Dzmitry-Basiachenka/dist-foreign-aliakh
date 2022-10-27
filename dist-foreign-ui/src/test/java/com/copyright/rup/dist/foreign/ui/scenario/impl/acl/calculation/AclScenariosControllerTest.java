@@ -423,7 +423,7 @@ public class AclScenariosControllerTest {
     @Test
     public void testHandleAction() {
         expect(scenariosWidget.getSelectedScenario()).andReturn(aclScenario).once();
-        expect(aclScenarioService.validateScenario(aclScenario)).andReturn(true).once();
+        expect(aclScenarioService.isExistsSubmittedScenario(aclScenario)).andReturn(true).once();
         mockStatic(Windows.class);
         Windows.showConfirmDialogWithReason(eq("Confirm action"), eq("Are you sure you want to perform action?"),
             eq("Yes"), eq("Cancel"), anyObject(ConfirmActionDialogWindow.IListener.class), anyObject(Validator.class));
@@ -436,7 +436,7 @@ public class AclScenariosControllerTest {
     @Test
     public void testHandleActionApproved() {
         expect(scenariosWidget.getSelectedScenario()).andReturn(aclScenario).once();
-        expect(aclScenarioService.validateScenario(aclScenario)).andReturn(true).once();
+        expect(aclScenarioService.isExistsSubmittedScenario(aclScenario)).andReturn(true).once();
         mockStatic(Windows.class);
         Windows.showConfirmDialogWithReason(eq("Confirm action"), eq("Are you sure you want to perform action?"),
             eq("Yes"), eq("Cancel"), anyObject(ConfirmActionDialogWindow.IListener.class), anyObject(Validator.class));
@@ -449,7 +449,7 @@ public class AclScenariosControllerTest {
     @Test
     public void testHandleActionRejected() {
         expect(scenariosWidget.getSelectedScenario()).andReturn(aclScenario).once();
-        expect(aclScenarioService.validateScenario(aclScenario)).andReturn(true).once();
+        expect(aclScenarioService.isExistsSubmittedScenario(aclScenario)).andReturn(true).once();
         mockStatic(Windows.class);
         Windows.showConfirmDialogWithReason(eq("Confirm action"), eq("Are you sure you want to perform action?"),
             eq("Yes"), eq("Cancel"), anyObject(ConfirmActionDialogWindow.IListener.class), anyObject(Validator.class));
@@ -475,7 +475,7 @@ public class AclScenariosControllerTest {
     @Test
     public void testHandleActionNull() {
         expect(scenariosWidget.getSelectedScenario()).andReturn(aclScenario).once();
-        expect(aclScenarioService.validateScenario(aclScenario)).andReturn(true).once();
+        expect(aclScenarioService.isExistsSubmittedScenario(aclScenario)).andReturn(true).once();
         mockStatic(Windows.class);
         replay(scenariosWidget, Windows.class, aclScenarioService);
         aclScenariosController.handleAction(null);
@@ -485,7 +485,7 @@ public class AclScenariosControllerTest {
     @Test
     public void testHandleActionSubmittedScenario() {
         expect(scenariosWidget.getSelectedScenario()).andReturn(aclScenario).once();
-        expect(aclScenarioService.validateScenario(aclScenario)).andReturn(false).once();
+        expect(aclScenarioService.isExistsSubmittedScenario(aclScenario)).andReturn(false).once();
         mockStatic(Windows.class);
         Windows.showNotificationWindow(
             eq("This scenario cannot be submitted for approval because scenario in 202212 period " +
