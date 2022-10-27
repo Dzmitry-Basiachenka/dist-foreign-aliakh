@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -254,6 +255,15 @@ public class AclScenarioRepositoryIntegrationTest {
         Scenario scenario = scenarios.get(0);
         assertEquals("d4525438-49a1-486a-a651-40b9099ece3a", scenario.getId());
         assertEquals("ACL Scenario 202112", scenario.getName());
+    }
+
+    @Test
+    @TestData(fileName = FOLDER_NAME + "find-submitted-scenario.groovy")
+    public void testSubmittedScenarioExistWithLicenseTypeAndPeriod() {
+        assertTrue(aclScenarioRepository.submittedScenarioExistWithLicenseTypeAndPeriod("ACL", 202012));
+        assertFalse(aclScenarioRepository.submittedScenarioExistWithLicenseTypeAndPeriod("MACL", 202206));
+        assertFalse(aclScenarioRepository.submittedScenarioExistWithLicenseTypeAndPeriod("ACL", 201506));
+        assertFalse(aclScenarioRepository.submittedScenarioExistWithLicenseTypeAndPeriod("MACL", 201506));
     }
 
     private UsageAge buildUsageAge(Integer period, String weight) {

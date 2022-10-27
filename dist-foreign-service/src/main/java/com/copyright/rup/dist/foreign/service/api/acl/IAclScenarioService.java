@@ -167,13 +167,15 @@ public interface IAclScenarioService {
 
     /**
      * Validate that the system is not contains a scenario with period and license type in
-     * {@link com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum#SUBMITTED} status.
+     * {@link com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum#SUBMITTED},
+     * {@link com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum#APPROVED},
+     * {@link com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum#ARCHIVED} statuses.
      *
      * @param scenario instance of {@link AclScenario}
-     * @return <code>true</code> if scenario is not exists with license type, period and status
-     * {@link com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum#SUBMITTED} otherwise <code>false</code>
+     * @return <code>true</code> if scenario is not exists with license type, period and
+     * SUBMITTED, APPROVED, ARCHIVED statuses otherwise <code>false</code>
      */
-    boolean validateScenario(AclScenario scenario);
+    boolean isExistsSubmittedScenario(AclScenario scenario);
 
     /**
      * Change scenario state {@link AclScenario}.

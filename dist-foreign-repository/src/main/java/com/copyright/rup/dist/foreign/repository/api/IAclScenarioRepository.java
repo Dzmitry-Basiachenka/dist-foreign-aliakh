@@ -155,4 +155,17 @@ public interface IAclScenarioRepository {
      * @return list of {@link Scenario}s
      */
     List<Scenario> findAclScenariosByStatuses(Set<ScenarioStatusEnum> statuses);
+
+    /**
+     * Finds scenarios with license type, period and
+     * {@link com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum#SUBMITTED},
+     * {@link com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum#APPROVED},
+     * {@link com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum#ARCHIVED} statuses are not exists.
+     *
+     * @param licenseType scenario license type
+     * @param period      period
+     * @return <code>true</code> if scenario is not exists with license type, period and status
+     * otherwise <code>false</code>
+     */
+    boolean submittedScenarioExistWithLicenseTypeAndPeriod(String licenseType, Integer period);
 }

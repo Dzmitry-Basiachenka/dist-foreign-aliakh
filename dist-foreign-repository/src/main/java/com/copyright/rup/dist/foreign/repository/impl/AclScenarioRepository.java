@@ -137,4 +137,12 @@ public class AclScenarioRepository extends BaseRepository implements IAclScenari
     public List<Scenario> findAclScenariosByStatuses(Set<ScenarioStatusEnum> statuses) {
         return selectList("IAclScenarioMapper.findAclScenariosByStatuses", Objects.requireNonNull(statuses));
     }
+
+    @Override
+    public boolean submittedScenarioExistWithLicenseTypeAndPeriod(String licenseType, Integer period) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
+        parameters.put("licenseType", Objects.requireNonNull(licenseType));
+        parameters.put("period", Objects.requireNonNull(period));
+        return selectOne("IAclScenarioMapper.scenarioExistWithLicenseTypeAndPeriod", parameters);
+    }
 }
