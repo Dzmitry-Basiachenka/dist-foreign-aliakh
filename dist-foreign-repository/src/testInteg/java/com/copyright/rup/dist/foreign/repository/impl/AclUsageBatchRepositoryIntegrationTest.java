@@ -100,6 +100,17 @@ public class AclUsageBatchRepositoryIntegrationTest {
         assertEquals(Integer.valueOf(202112), periods.get(1));
     }
 
+    @Test
+    @TestData(fileName = "rollback-only.groovy")
+    public void testDeleteById() {
+        AclUsageBatch usageBatch = buildAclUsageBatch("c7be3b74-341d-412f-9e29-3712a5a49636", "ACL Usage Batch",
+            202112, Sets.newHashSet(202106, 202112), true);
+        aclUsageBatchRepository.insert(usageBatch);
+        assertEquals(1, aclUsageBatchRepository.findAll().size());
+        aclUsageBatchRepository.deleteById(usageBatch.getId());
+        assertEquals(0, aclUsageBatchRepository.findAll().size());
+    }
+
     private AclUsageBatch buildAclUsageBatch() {
         return buildAclUsageBatch(ACL_USAGE_BATCH_ID, ACL_USAGE_BATCH_NAME, 202112, Sets.newHashSet(202106, 202112),
             true);

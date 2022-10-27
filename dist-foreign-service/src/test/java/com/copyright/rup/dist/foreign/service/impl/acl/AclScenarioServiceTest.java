@@ -22,7 +22,6 @@ import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioAuditService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageService;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 import org.junit.Before;
@@ -149,8 +148,17 @@ public class AclScenarioServiceTest {
     }
 
     @Test
+    public void testGetScenarioNamesByUsageBatchId() {
+        List<String> scenarioNames = Collections.singletonList(SCENARIO_NAME);
+        expect(aclScenarioRepository.findScenarioNamesByUsageBatchId(BATCH_UID)).andReturn(scenarioNames).once();
+        replay(aclScenarioRepository);
+        assertSame(scenarioNames, aclScenarioRepository.findScenarioNamesByUsageBatchId(BATCH_UID));
+        verify(aclScenarioRepository);
+    }
+
+    @Test
     public void testGetScenarioNamesByFundPoolId() {
-        List<String> scenarioNames = Lists.newArrayList(SCENARIO_NAME);
+        List<String> scenarioNames = Collections.singletonList(SCENARIO_NAME);
         expect(aclScenarioRepository.findScenarioNamesByFundPoolId(FUND_POOL_ID)).andReturn(scenarioNames).once();
         replay(aclScenarioRepository);
         assertSame(scenarioNames, aclScenarioRepository.findScenarioNamesByFundPoolId(FUND_POOL_ID));
@@ -159,7 +167,7 @@ public class AclScenarioServiceTest {
 
     @Test
     public void testGetScenarioNamesByGrantSetId() {
-        List<String> scenarioNames = Lists.newArrayList(SCENARIO_NAME);
+        List<String> scenarioNames = Collections.singletonList(SCENARIO_NAME);
         expect(aclScenarioRepository.findScenarioNamesByGrantSetId(GRANT_SET_ID)).andReturn(scenarioNames).once();
         replay(aclScenarioRepository);
         assertSame(scenarioNames, aclScenarioRepository.findScenarioNamesByGrantSetId(GRANT_SET_ID));

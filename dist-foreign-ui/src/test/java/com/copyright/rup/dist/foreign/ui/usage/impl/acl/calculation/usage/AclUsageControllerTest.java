@@ -27,6 +27,7 @@ import com.copyright.rup.dist.foreign.domain.filter.AclUsageFilter;
 import com.copyright.rup.dist.foreign.service.api.ILicenseeClassService;
 import com.copyright.rup.dist.foreign.service.api.IPublicationTypeService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclCalculationReportService;
+import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageService;
@@ -71,6 +72,7 @@ public class AclUsageControllerTest {
 
     private static final String ACL_USAGE_BATCH_NAME = "ACL Usage Batch 2021";
     private static final String ACL_USAGE_BATCH_ID = "6367638f-a447-456c-98e3-90d38b5d1f10";
+    private static final List<String> ACL_SCENARIO_NAME = Collections.singletonList("ACL Scenario");
 
     private final AclUsageController controller = new AclUsageController();
 
@@ -83,6 +85,7 @@ public class AclUsageControllerTest {
     private IStreamSourceHandler streamSourceHandler;
     private IPublicationTypeService publicationTypeService;
     private ILicenseeClassService licenseeClassService;
+    private IAclScenarioService aclScenarioService;
 
     @Before
     public void setUp() {
@@ -95,6 +98,7 @@ public class AclUsageControllerTest {
         streamSourceHandler = createMock(IStreamSourceHandler.class);
         publicationTypeService = createMock(IPublicationTypeService.class);
         licenseeClassService = createMock(ILicenseeClassService.class);
+        aclScenarioService = createMock(IAclScenarioService.class);
         Whitebox.setInternalState(controller, udmUsageService);
         Whitebox.setInternalState(controller, aclUsageBatchService);
         Whitebox.setInternalState(controller, aclUsageService);
@@ -103,6 +107,7 @@ public class AclUsageControllerTest {
         Whitebox.setInternalState(controller, streamSourceHandler);
         Whitebox.setInternalState(controller, publicationTypeService);
         Whitebox.setInternalState(controller, licenseeClassService);
+        Whitebox.setInternalState(controller, aclScenarioService);
     }
 
     @Test
@@ -254,12 +259,24 @@ public class AclUsageControllerTest {
 
     @Test
     public void testDeleteAclUsageBatch() {
-        //TODO will be implemented with backend logic
+        AclUsageBatch usageBatch = new AclUsageBatch();
+        aclUsageBatchService.deleteAclUsageBatch(usageBatch);
+        expectLastCall().once();
+        expect(aclUsageFilterController.getWidget()).andReturn(aclUsageFilterWidget).once();
+        aclUsageFilterWidget.clearFilter();
+        expectLastCall().once();
+        replay(aclUsageBatchService, aclUsageFilterController, aclUsageFilterWidget);
+        controller.deleteAclUsageBatch(usageBatch);
+        verify(aclUsageBatchService, aclUsageFilterController, aclUsageFilterWidget);
     }
 
     @Test
     public void testGetScenarioNamesAssociatedWithUsageBatch() {
-        //TODO will be implemented with backend logic
+        expect(aclScenarioService.getScenarioNamesByUsageBatchId(ACL_USAGE_BATCH_ID))
+            .andReturn(ACL_SCENARIO_NAME).once();
+        replay(aclScenarioService);
+        assertEquals(ACL_SCENARIO_NAME, aclScenarioService.getScenarioNamesByUsageBatchId(ACL_USAGE_BATCH_ID));
+        verify(aclScenarioService);
     }
 
     private AclUsageBatch buildAclUsageBatch() {

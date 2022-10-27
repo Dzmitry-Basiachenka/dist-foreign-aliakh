@@ -167,6 +167,15 @@ public class AclScenarioRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = FOLDER_NAME + "find-scenario-names-by-usage-batch-id.groovy")
+    public void testFindScenarioNamesByUsageBatchId() {
+        assertEquals(2,
+            aclScenarioRepository.findScenarioNamesByUsageBatchId("b52b5b2d-77b3-42f1-89a1-85a0c083fd0a").size());
+        assertTrue(CollectionUtils.isEmpty(
+            aclScenarioRepository.findScenarioNamesByUsageBatchId("818d564a-2db7-431f-8ea1-fe74dfdd0973")));
+    }
+
+    @Test
     @TestData(fileName = FOLDER_NAME + "find-scenario-names-by-fund-pool-id.groovy")
     public void testFindScenarioNamesByFundPoolId() {
         assertEquals(2,

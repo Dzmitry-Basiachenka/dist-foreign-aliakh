@@ -90,6 +90,14 @@ public interface IAclScenarioService {
     boolean aclScenarioExists(String scenarioName);
 
     /**
+     * Gets {@link AclScenario} names associated with usage batch id.
+     *
+     * @param usageBatchId usage batch id
+     * @return {@link AclScenario}s names associated with usage batch id
+     */
+    List<String> getScenarioNamesByUsageBatchId(String usageBatchId);
+
+    /**
      * Gets {@link AclScenario} names associated with fund pool id.
      *
      * @param fundPoolId fund pool id

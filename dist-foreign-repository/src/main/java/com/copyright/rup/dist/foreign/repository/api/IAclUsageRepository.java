@@ -111,4 +111,11 @@ public interface IAclUsageRepository {
      * @return ids of inserted ACL usages
      */
     List<String> copyAclUsages(String sourceUsageBatchId, String targetUsageBatchId, String userName);
+
+    /**
+     * Deletes ACL usages by ACL usage batch id.
+     *
+     * @param usageBatchId id of the {@link com.copyright.rup.dist.foreign.domain.AclUsageBatch}
+     */
+    void deleteByUsageBatchId(String usageBatchId);
 }

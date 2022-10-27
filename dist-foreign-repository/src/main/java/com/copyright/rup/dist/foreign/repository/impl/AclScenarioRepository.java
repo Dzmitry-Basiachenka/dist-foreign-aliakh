@@ -98,6 +98,11 @@ public class AclScenarioRepository extends BaseRepository implements IAclScenari
     }
 
     @Override
+    public List<String> findScenarioNamesByUsageBatchId(String usageBatchId) {
+        return selectList("IAclScenarioMapper.findScenarioNamesByUsageBatchId", Objects.requireNonNull(usageBatchId));
+    }
+
+    @Override
     public List<String> findScenarioNamesByFundPoolId(String fundPoolId) {
         return selectList("IAclScenarioMapper.findScenarioNamesByFundPoolId", Objects.requireNonNull(fundPoolId));
     }

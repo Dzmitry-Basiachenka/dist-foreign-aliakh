@@ -89,4 +89,14 @@ public class AclUsageBatchService implements IAclUsageBatchService {
             sourceUsageBatchId, aclUsageBatch, userName, count);
         return count;
     }
+
+    @Override
+    @Transactional
+    public void deleteAclUsageBatch(AclUsageBatch usageBatch) {
+        String userName = RupContextUtils.getUserName();
+        LOGGER.info("Delete ACL usage batch. Started. UsageBatchName={}, UserName={}", usageBatch.getName(), userName);
+        aclUsageService.deleteUsages(usageBatch.getId());
+        aclUsageBatchRepository.deleteById(usageBatch.getId());
+        LOGGER.info("Delete ACL usage batch. Finished. UsageBatchName={}, UserName={}", usageBatch.getName(), userName);
+    }
 }

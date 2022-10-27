@@ -70,4 +70,11 @@ public interface IAclUsageBatchService {
      * @return count of copied ACL usages
      */
     int copyUsageBatch(String sourceUsageBatchId, AclUsageBatch aclUsageBatch);
+
+    /**
+     * Deletes ACL usage batch.
+     *
+     * @param usageBatch instance of {@link AclUsageBatch}
+     */
+    void deleteAclUsageBatch(AclUsageBatch usageBatch);
 }

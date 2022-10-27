@@ -72,4 +72,9 @@
         from ${schema}.df_acl_usage_batch
         order by distribution_period desc
     </select>
+
+    <delete id="deleteById" parameterType="string">
+        delete from ${schema}.df_acl_usage_batch
+        where df_acl_usage_batch_uid = #{usageBatchId}
+    </delete>
 </mapper>

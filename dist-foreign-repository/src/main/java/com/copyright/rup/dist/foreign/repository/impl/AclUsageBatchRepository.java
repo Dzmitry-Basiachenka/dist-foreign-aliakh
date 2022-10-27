@@ -56,4 +56,9 @@ public class AclUsageBatchRepository extends BaseRepository implements IAclUsage
     public List<Integer> findPeriods() {
         return selectList("IAclUsageBatchMapper.findPeriods");
     }
+
+    @Override
+    public void deleteById(String usageBatchId) {
+        delete("IAclUsageBatchMapper.deleteById", Objects.requireNonNull(usageBatchId));
+    }
 }

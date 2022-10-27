@@ -14,6 +14,7 @@ import com.copyright.rup.dist.foreign.domain.filter.AclUsageFilter;
 import com.copyright.rup.dist.foreign.service.api.ILicenseeClassService;
 import com.copyright.rup.dist.foreign.service.api.IPublicationTypeService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclCalculationReportService;
+import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageService;
@@ -33,7 +34,6 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -66,6 +66,8 @@ public class AclUsageController extends CommonController<IAclUsageWidget> implem
     private IPublicationTypeService publicationTypeService;
     @Autowired
     private ILicenseeClassService licenseeClassService;
+    @Autowired
+    private IAclScenarioService aclScenarioService;
 
     @Override
     public int getBeansCount() {
@@ -151,14 +153,13 @@ public class AclUsageController extends CommonController<IAclUsageWidget> implem
 
     @Override
     public void deleteAclUsageBatch(AclUsageBatch usageBatch) {
-        //TODO will be added removal with implementation backend logic
+        aclUsageBatchService.deleteAclUsageBatch(usageBatch);
         aclUsageFilterController.getWidget().clearFilter();
     }
 
     @Override
     public List<String> getScenarioNamesAssociatedWithUsageBatch(String usageBatchId) {
-        //TODO will be added getting Acl scenario names with implementation backend logic
-        return Collections.EMPTY_LIST;
+        return aclScenarioService.getScenarioNamesByUsageBatchId(usageBatchId);
     }
 
     @Override

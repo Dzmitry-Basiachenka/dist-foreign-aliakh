@@ -115,6 +115,11 @@ public class AclUsageRepository extends AclBaseRepository implements IAclUsageRe
         return selectList("IAclUsageMapper.copyAclUsages", parameters);
     }
 
+    @Override
+    public void deleteByUsageBatchId(String usageBatchId) {
+        delete("IAclUsageMapper.deleteByUsageBatchId", Objects.requireNonNull(usageBatchId));
+    }
+
     private AclUsageFilter escapeSqlLikePattern(AclUsageFilter filter) {
         AclUsageFilter filterCopy = new AclUsageFilter(filter);
         filterCopy.setUsageDetailIdExpression(

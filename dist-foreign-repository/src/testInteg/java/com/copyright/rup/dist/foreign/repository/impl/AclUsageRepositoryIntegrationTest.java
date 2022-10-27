@@ -746,6 +746,15 @@ public class AclUsageRepositoryIntegrationTest {
         });
     }
 
+    @Test
+    @TestData(fileName = FOLDER_NAME + "delete-by-usage-batch-id.groovy")
+    public void testDeleteByUsageBatchId() {
+        List<String> usageIds = Collections.singletonList("52c239cf-a09a-4c96-9ec1-986fec4266cf");
+        assertEquals(1, aclUsageRepository.findByIds(usageIds).size());
+        aclUsageRepository.deleteByUsageBatchId("8b81ce3e-6342-42a7-a3eb-c955d5e7ebba");
+        assertEquals(0, aclUsageRepository.findByIds(usageIds).size());
+    }
+
     private void verifyAclUsageDto(AclUsageDto expectedUsage, AclUsageDto actualUsage, boolean isValidateDates) {
         assertEquals(expectedUsage.getId(), actualUsage.getId());
         assertEquals(expectedUsage.getUsageBatchId(), actualUsage.getUsageBatchId());

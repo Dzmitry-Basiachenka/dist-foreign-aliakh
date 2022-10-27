@@ -101,4 +101,9 @@ public class AclUsageService implements IAclUsageService {
     public int copyAclUsages(String sourceUsageBatchId, String targetUsageBatchId, String userName) {
         return aclUsageRepository.copyAclUsages(sourceUsageBatchId, targetUsageBatchId, userName).size();
     }
+
+    @Override
+    public void deleteUsages(String usageBatchId) {
+        aclUsageRepository.deleteByUsageBatchId(usageBatchId);
+    }
 }

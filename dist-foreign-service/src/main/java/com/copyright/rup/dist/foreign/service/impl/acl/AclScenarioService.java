@@ -130,6 +130,11 @@ public class AclScenarioService implements IAclScenarioService {
     }
 
     @Override
+    public List<String> getScenarioNamesByUsageBatchId(String usageBatchId) {
+        return aclScenarioRepository.findScenarioNamesByUsageBatchId(usageBatchId);
+    }
+
+    @Override
     public List<String> getScenarioNamesByFundPoolId(String fundPoolId) {
         return aclScenarioRepository.findScenarioNamesByFundPoolId(fundPoolId);
     }
