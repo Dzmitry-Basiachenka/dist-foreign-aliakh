@@ -6,6 +6,7 @@ import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.dist.common.domain.Country;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.util.LogUtils;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.RhTaxInformation;
 import com.copyright.rup.dist.foreign.domain.RightsholderPayeeProductFamilyHolder;
 import com.copyright.rup.dist.foreign.domain.Usage;
@@ -17,6 +18,7 @@ import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService
 import com.copyright.rup.dist.foreign.service.api.IRhTaxService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 
+import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioUsageService;
 import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +58,8 @@ public class RhTaxService implements IRhTaxService {
     private IPrmIntegrationService prmIntegrationService;
     @Autowired
     private IUsageService usageService;
+    @Autowired
+    private IAclScenarioUsageService aclScenarioUsageService;
 
     @Override
     public void processTaxCountryCode(List<Usage> usages) {
@@ -82,11 +86,12 @@ public class RhTaxService implements IRhTaxService {
     }
 
     @Override
-    public List<RhTaxInformation> getRhTaxInformation(Set<String> scenarioIds, int numberOfDays) {
+    public List<RhTaxInformation> getRhTaxInformation(String productFamily, Set<String> scenarioIds, int numberOfDays) {
         checkArgument(CollectionUtils.isNotEmpty(scenarioIds));
-        List<RhTaxInformation> result;
         List<RightsholderPayeeProductFamilyHolder> holders =
-            usageService.getRightsholderPayeeProductFamilyHoldersByScenarioIds(scenarioIds);
+            FdaConstants.ACL_PRODUCT_FAMILY.equals(productFamily)
+                ? aclScenarioUsageService.getRightsholderPayeeProductFamilyHoldersByAclScenarioIds(scenarioIds)
+                : usageService.getRightsholderPayeeProductFamilyHoldersByScenarioIds(scenarioIds);
         if (CollectionUtils.isNotEmpty(holders)) {
             Map<RightsholderPayeeProductFamilyHolder, Rightsholder> holderToTboMap = holders.stream()
                 .collect(Collectors.toMap(holder -> holder, this::getTaxBeneficialOwner));
@@ -102,7 +107,7 @@ public class RhTaxService implements IRhTaxService {
                 oracleRhTaxInformationService.getRhTaxInformation(oracleRequests);
             Map<String, Country> countries = prmIntegrationService.getCountries();
             RhTaxInformationPredicate numberOfDaysPredicate = new RhTaxInformationPredicate(numberOfDays);
-            result = new ArrayList<>();
+            List<RhTaxInformation> result = new ArrayList<>();
             holderToTboMap.forEach((holder, tbo) -> {
                 Long tboAccountNumber = tbo.getAccountNumber();
                 if (tboToTaxInfoMap.containsKey(tboAccountNumber)) {
@@ -117,10 +122,10 @@ public class RhTaxService implements IRhTaxService {
                 .comparing(RhTaxInformation::getTypeOfForm, Comparator.nullsFirst(String::compareToIgnoreCase))
                 .thenComparing(RhTaxInformation::getPayeeName, Comparator.nullsFirst(String::compareToIgnoreCase))
                 .thenComparing(RhTaxInformation::getRhName, Comparator.nullsFirst(String::compareToIgnoreCase)));
+            return result;
         } else {
-            result = Collections.emptyList();
+            return Collections.emptyList();
         }
-        return result;
     }
 
     private Rightsholder getTaxBeneficialOwner(RightsholderPayeeProductFamilyHolder holder) {

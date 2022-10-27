@@ -1,0 +1,26 @@
+[
+  {
+    "rhAccountNumber": 1000002859,
+    "rhName": "John Wiley & Sons - Books",
+    "payeeAccountNumber": 1000005413,
+    "payeeName": "Kluwer Academic Publishers - Dordrecht",
+    "tboAccountNumber": 1000002859,
+    "tboName": "John Wiley & Sons - Books",
+    "productFamily": "ACLPRINT",
+    "taxOnFile": "1",
+    "notificationsSent": 2,
+    "dateOfLastNotificationSent": "2020-05-15T00:00:00-04:00",
+    "addressLine1": "810 E. 10th Street",
+    "addressLine2": "Address line 2",
+    "addressLine3": "Address line 3",
+    "addressLine4": "Address line 4",
+    "city": "Lawrence",
+    "state": "KS",
+    "zip": "66044-8897",
+    "country": "United States",
+    "countryCode": "US",
+    "withHoldingIndicator": "U",
+    "typeOfForm": "W8IMY",
+    "payGroup": "RIGHTS"
+  }
+]

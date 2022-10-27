@@ -60,6 +60,7 @@ public class ReportServiceTest {
 
     private static final String PATH_TO_EXPECTED_REPORTS =
         "src/test/resources/com/copyright/rup/dist/foreign/service/impl/csv";
+    private static final String FAS_PRODUCT_FAMILY = "FAS";
     private static final BigDecimal USAGE_BATCH_GROSS_AMOUNT = BigDecimal.ONE;
     private static final BigDecimal DEFAULT_ESTIMATED_SERVICE_FEE = new BigDecimal("0.18500");
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
@@ -576,11 +577,11 @@ public class ReportServiceTest {
     @Test
     public void writeTaxNotificationCsvReport() throws IOException {
         Set<String> scenarioIds = Collections.singleton("629c078f-462f-4ba6-bebd-8d558ccc12aa");
-        expect(rhTaxService.getRhTaxInformation(scenarioIds, 15))
+        expect(rhTaxService.getRhTaxInformation(FAS_PRODUCT_FAMILY, scenarioIds, 15))
             .andReturn(loadExpectedRhTaxInformation("json/rh_tax_information_for_tax_notification_report.json")).once();
         replay(rhTaxService);
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        reportService.writeTaxNotificationCsvReport(scenarioIds, 15, outputStream);
+        reportService.writeTaxNotificationCsvReport(FAS_PRODUCT_FAMILY, scenarioIds, 15, outputStream);
         reportTestUtils.assertCsvReport("tax_notification.csv", new ByteArrayInputStream(outputStream.toByteArray()));
         verify(rhTaxService);
     }

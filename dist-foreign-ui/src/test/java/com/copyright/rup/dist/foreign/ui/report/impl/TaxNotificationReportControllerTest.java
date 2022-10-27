@@ -5,6 +5,7 @@ import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
+import static org.easymock.EasyMock.newCapture;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
@@ -55,6 +56,7 @@ public class TaxNotificationReportControllerTest {
 
     private static final Set<ScenarioStatusEnum> SCENARIO_STATUSES =
         EnumSet.of(ScenarioStatusEnum.IN_PROGRESS, ScenarioStatusEnum.SUBMITTED, ScenarioStatusEnum.APPROVED);
+    private static final String PRODUCT_FAMILY_ACL = "ACL";
 
     private IReportService reportService;
     private IScenarioService scenarioService;
@@ -87,20 +89,22 @@ public class TaxNotificationReportControllerTest {
         OffsetDateTime now = OffsetDateTime.of(2019, 1, 2, 3, 4, 5, 6, ZoneOffset.ofHours(0));
         mockStatic(OffsetDateTime.class);
         Set<String> scenarioIds = Collections.singleton("090bdd49-099b-4613-a979-9a3ac014231b");
-        Capture<OutputStream> osCapture = new Capture<>();
+        Capture<OutputStream> osCapture = newCapture();
         ITaxNotificationReportWidget widget = createMock(ITaxNotificationReportWidget.class);
         Whitebox.setInternalState(controller, widget);
         expect(OffsetDateTime.now()).andReturn(now).once();
+        expect(productFamilyProvider.getSelectedProductFamily()).andReturn(PRODUCT_FAMILY_ACL).once();
         expect(widget.getSelectedScenarioIds()).andReturn(scenarioIds).once();
         expect(widget.getNumberOfDays()).andReturn(15).once();
-        reportService.writeTaxNotificationCsvReport(eq(scenarioIds), eq(15), capture(osCapture));
+        reportService.writeTaxNotificationCsvReport(eq(PRODUCT_FAMILY_ACL), eq(scenarioIds), eq(15),
+            capture(osCapture));
         expectLastCall().once();
-        replay(OffsetDateTime.class, widget, reportService);
+        replay(OffsetDateTime.class, widget, reportService, productFamilyProvider);
         IStreamSource streamSource = controller.getCsvStreamSource();
         assertEquals("tax_notification_01_02_2019_03_04.csv", streamSource.getSource().getKey().get());
         assertNotNull(streamSource.getSource().getValue().get());
         assertNotNull(osCapture.getValue());
-        verify(OffsetDateTime.class, widget, reportService);
+        verify(OffsetDateTime.class, widget, reportService, productFamilyProvider);
     }
 
     @Test
@@ -142,7 +146,7 @@ public class TaxNotificationReportControllerTest {
     @Test
     public void testGetScenariosAcl() {
         List<Scenario> scenarios = Collections.singletonList(new Scenario());
-        expect(productFamilyProvider.getSelectedProductFamily()).andReturn("ACL").once();
+        expect(productFamilyProvider.getSelectedProductFamily()).andReturn(PRODUCT_FAMILY_ACL).once();
         expect(aclScenarioService.getAclScenariosByStatuses(SCENARIO_STATUSES)).andReturn(scenarios).once();
         replay(aclScenarioService, productFamilyProvider);
         assertSame(scenarios, controller.getScenarios());

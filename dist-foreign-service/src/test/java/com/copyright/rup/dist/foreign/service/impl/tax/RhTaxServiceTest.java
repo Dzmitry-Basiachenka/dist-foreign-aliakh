@@ -24,6 +24,7 @@ import com.copyright.rup.dist.foreign.integration.oracle.impl.OracleRhTaxInforma
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 
+import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioUsageService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -73,7 +74,10 @@ public class RhTaxServiceTest {
     private static final String RH_NAME_4 = "CLA, The Copyright Licensing Agency Ltd.";
     private static final String FAS_PRODUCT_FAMILY = "FAS";
     private static final String FAS2_PRODUCT_FAMILY = "FAS2";
-
+    private static final String ACL_PRODUCT_FAMILY = "ACL";
+    private static final String ACLPRINT = "ACLPRINT";
+    private static final String ACLDIGITAL = "ACLDIGITAL";
+    private static final String ORACLE_RH_TAX_INFORMATION_JSON = "oracle_rh_tax_information.json";
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
     private static final Set<String> SCENARIO_IDS =
         Sets.newHashSet("493a6870-51ca-42c6-9727-3a333fa55746", "86b62b54-2b1a-4a97-bb68-28a30538dce8");
@@ -85,6 +89,7 @@ public class RhTaxServiceTest {
 
     private RhTaxService rhTaxService;
     private IUsageService usageService;
+    private IAclScenarioUsageService aclScenarioUsageService;
     private IPrmIntegrationService prmIntegrationService;
     private IOracleRhTaxInformationService oracleRhTaxInformationService;
     private IOracleRhTaxCountryService oracleRhTaxCountryService;
@@ -97,15 +102,16 @@ public class RhTaxServiceTest {
         replay(OffsetDateTime.class);
         rhTaxService = new RhTaxService();
         usageService = createMock(IUsageService.class);
+        aclScenarioUsageService = createMock(IAclScenarioUsageService.class);
         prmIntegrationService = createMock(IPrmIntegrationService.class);
         oracleRhTaxInformationService = createMock(OracleRhTaxInformationService.class);
         oracleRhTaxCountryService = createMock(IOracleRhTaxCountryService.class);
         oracleRhTaxCountryService = createMock(IOracleRhTaxCountryService.class);
         Whitebox.setInternalState(rhTaxService, usageService);
+        Whitebox.setInternalState(rhTaxService, aclScenarioUsageService);
         Whitebox.setInternalState(rhTaxService, prmIntegrationService);
         Whitebox.setInternalState(rhTaxService, oracleRhTaxInformationService);
-        Whitebox.setInternalState(rhTaxService, "oracleRhTaxCountryService", oracleRhTaxCountryService);
-        Whitebox.setInternalState(rhTaxService, "oracleRhTaxCountryService", oracleRhTaxCountryService);
+        Whitebox.setInternalState(rhTaxService, oracleRhTaxCountryService);
     }
 
     @Test
@@ -127,7 +133,7 @@ public class RhTaxServiceTest {
     }
 
     @Test
-    public void testGetRhTaxInformation() throws IOException {
+    public void testGetRhTaxInformationFasFas2() throws IOException {
         Rightsholder rh1 = buildRightsholder(RH_ID_1, ACC_NUMBER_1, RH_NAME_1);
         Rightsholder rh2 = buildRightsholder(RH_ID_2, ACC_NUMBER_2, RH_NAME_2);
         Rightsholder rh3 = buildRightsholder(RH_ID_3, ACC_NUMBER_3, RH_NAME_3);
@@ -153,17 +159,16 @@ public class RhTaxServiceTest {
         expect(prmIntegrationService.isRightsholderTaxBeneficialOwner(RH_ID_2, FAS2_PRODUCT_FAMILY))
             .andReturn(false).times(2);
         expect(oracleRhTaxInformationService.getRhTaxInformation(expectedOracleRequests))
-            .andReturn(loadOracleRhTaxInformation("oracle_rh_tax_information.json")).once();
+            .andReturn(loadOracleRhTaxInformation(ORACLE_RH_TAX_INFORMATION_JSON)).once();
         expect(prmIntegrationService.getCountries()).andReturn(buildCountries()).once();
         replay(usageService, prmIntegrationService, oracleRhTaxInformationService);
-        assertEquals(
-            loadExpectedRhTaxInformation("expected_rh_tax_information_1.json"),
-            rhTaxService.getRhTaxInformation(SCENARIO_IDS, 5));
+        assertEquals(loadExpectedRhTaxInformation("expected_rh_tax_information_fas_fas2_1.json"),
+            rhTaxService.getRhTaxInformation(FAS_PRODUCT_FAMILY, SCENARIO_IDS, 5));
         verify(usageService, prmIntegrationService, oracleRhTaxInformationService);
     }
 
     @Test
-    public void testGetRhTaxInformationWithFilteredByNotificationDate() throws IOException {
+    public void testGetRhTaxInformationWithFilteredByNotificationDateFasFas2() throws IOException {
         Rightsholder rh1 = buildRightsholder(RH_ID_1, ACC_NUMBER_1, RH_NAME_1);
         Rightsholder rh2 = buildRightsholder(RH_ID_2, ACC_NUMBER_2, RH_NAME_2);
         Rightsholder rh3 = buildRightsholder(RH_ID_3, ACC_NUMBER_3, RH_NAME_3);
@@ -189,22 +194,94 @@ public class RhTaxServiceTest {
         expect(prmIntegrationService.isRightsholderTaxBeneficialOwner(RH_ID_2, FAS2_PRODUCT_FAMILY))
             .andReturn(false).times(2);
         expect(oracleRhTaxInformationService.getRhTaxInformation(expectedOracleRequests))
-            .andReturn(loadOracleRhTaxInformation("oracle_rh_tax_information.json")).once();
+            .andReturn(loadOracleRhTaxInformation(ORACLE_RH_TAX_INFORMATION_JSON)).once();
         expect(prmIntegrationService.getCountries()).andReturn(buildCountries()).once();
         replay(usageService, prmIntegrationService, oracleRhTaxInformationService);
-        assertEquals(
-            loadExpectedRhTaxInformation("expected_rh_tax_information_2.json"),
-            rhTaxService.getRhTaxInformation(SCENARIO_IDS, 7));
+        assertEquals(loadExpectedRhTaxInformation("expected_rh_tax_information_fas_fas2_2.json"),
+            rhTaxService.getRhTaxInformation(FAS_PRODUCT_FAMILY, SCENARIO_IDS, 7));
         verify(usageService, prmIntegrationService, oracleRhTaxInformationService);
     }
 
     @Test
-    public void testGetRhTaxInformationWithNoUsagesInScenarios() {
+    public void testGetRhTaxInformationWithNoUsagesInScenariosFasFas2() {
         expect(usageService.getRightsholderPayeeProductFamilyHoldersByScenarioIds(SCENARIO_IDS))
             .andReturn(Collections.emptyList()).once();
         replay(usageService, prmIntegrationService, oracleRhTaxInformationService);
-        assertEquals(Collections.emptyList(), rhTaxService.getRhTaxInformation(SCENARIO_IDS, 1));
+        assertEquals(Collections.emptyList(), rhTaxService.getRhTaxInformation(FAS_PRODUCT_FAMILY, SCENARIO_IDS, 1));
         verify(usageService, prmIntegrationService, oracleRhTaxInformationService);
+    }
+
+    @Test
+    public void testGetRhTaxInformationAcl() throws IOException {
+        Rightsholder rh1 = buildRightsholder(RH_ID_1, ACC_NUMBER_1, RH_NAME_1);
+        Rightsholder rh2 = buildRightsholder(RH_ID_2, ACC_NUMBER_2, RH_NAME_2);
+        Rightsholder rh3 = buildRightsholder(RH_ID_3, ACC_NUMBER_3, RH_NAME_3);
+        Rightsholder rh4 = buildRightsholder(RH_ID_4, ACC_NUMBER_4, RH_NAME_4);
+        List<RightsholderPayeeProductFamilyHolder> holders = Arrays.asList(
+            buildHolder(rh2, rh2, ACLPRINT),    // TBO = RH_2, included in the result
+            buildHolder(rh1, rh2, ACLPRINT),    // TBO = RH_1, included in the result
+            buildHolder(rh1, rh2, ACLDIGITAL),  // TBO = RH_2, included in the result
+            buildHolder(rh2, rh3, ACLDIGITAL),  // TBO = RH_3, excluded as number of notifications > 3
+            buildHolder(rh2, rh4, ACLDIGITAL)   // TBO = RH_4, excluded as no information from Oracle
+        );
+        Set<OracleRhTaxInformationRequest> expectedOracleRequests = Sets.newHashSet(
+            new OracleRhTaxInformationRequest(ACC_NUMBER_2, ACC_NUMBER_1),
+            new OracleRhTaxInformationRequest(ACC_NUMBER_2, ACC_NUMBER_2),
+            new OracleRhTaxInformationRequest(ACC_NUMBER_3, ACC_NUMBER_3),
+            new OracleRhTaxInformationRequest(ACC_NUMBER_4, ACC_NUMBER_4));
+        expect(aclScenarioUsageService.getRightsholderPayeeProductFamilyHoldersByAclScenarioIds(SCENARIO_IDS))
+            .andReturn(holders).once();
+        expect(prmIntegrationService.isRightsholderTaxBeneficialOwner(RH_ID_1, ACLPRINT)).andReturn(true).once();
+        expect(prmIntegrationService.isRightsholderTaxBeneficialOwner(RH_ID_1, ACLDIGITAL)).andReturn(false).once();
+        expect(prmIntegrationService.isRightsholderTaxBeneficialOwner(RH_ID_2, ACLDIGITAL)).andReturn(false).times(2);
+        expect(oracleRhTaxInformationService.getRhTaxInformation(expectedOracleRequests))
+            .andReturn(loadOracleRhTaxInformation(ORACLE_RH_TAX_INFORMATION_JSON)).once();
+        expect(prmIntegrationService.getCountries()).andReturn(buildCountries()).once();
+        replay(aclScenarioUsageService, prmIntegrationService, oracleRhTaxInformationService);
+        assertEquals(loadExpectedRhTaxInformation("expected_rh_tax_information_acl_1.json"),
+            rhTaxService.getRhTaxInformation(ACL_PRODUCT_FAMILY, SCENARIO_IDS, 5));
+        verify(aclScenarioUsageService, prmIntegrationService, oracleRhTaxInformationService);
+    }
+
+    @Test
+    public void testGetRhTaxInformationWithFilteredByNotificationDateAcl() throws IOException {
+        Rightsholder rh1 = buildRightsholder(RH_ID_1, ACC_NUMBER_1, RH_NAME_1);
+        Rightsholder rh2 = buildRightsholder(RH_ID_2, ACC_NUMBER_2, RH_NAME_2);
+        Rightsholder rh3 = buildRightsholder(RH_ID_3, ACC_NUMBER_3, RH_NAME_3);
+        Rightsholder rh4 = buildRightsholder(RH_ID_4, ACC_NUMBER_4, RH_NAME_4);
+        List<RightsholderPayeeProductFamilyHolder> holders = Arrays.asList(
+            buildHolder(rh2, rh2, ACLPRINT),    // TBO = RH_2, excluded as last not. date within numberOfDays
+            buildHolder(rh1, rh2, ACLPRINT),    // TBO = RH_1, included in the result
+            buildHolder(rh1, rh2, ACLDIGITAL),  // TBO = RH_2, excluded as last not. date within numberOfDays
+            buildHolder(rh2, rh3, ACLDIGITAL),  // TBO = RH_3, excluded as number of notifications > 3
+            buildHolder(rh2, rh4, ACLDIGITAL)   // TBO = RH_4, excluded as no info from Oracle
+        );
+        Set<OracleRhTaxInformationRequest> expectedOracleRequests = Sets.newHashSet(
+            new OracleRhTaxInformationRequest(ACC_NUMBER_2, ACC_NUMBER_1),
+            new OracleRhTaxInformationRequest(ACC_NUMBER_2, ACC_NUMBER_2),
+            new OracleRhTaxInformationRequest(ACC_NUMBER_3, ACC_NUMBER_3),
+            new OracleRhTaxInformationRequest(ACC_NUMBER_4, ACC_NUMBER_4));
+        expect(aclScenarioUsageService.getRightsholderPayeeProductFamilyHoldersByAclScenarioIds(SCENARIO_IDS))
+            .andReturn(holders).once();
+        expect(prmIntegrationService.isRightsholderTaxBeneficialOwner(RH_ID_1, ACLPRINT)).andReturn(true).once();
+        expect(prmIntegrationService.isRightsholderTaxBeneficialOwner(RH_ID_1, ACLDIGITAL)).andReturn(false).once();
+        expect(prmIntegrationService.isRightsholderTaxBeneficialOwner(RH_ID_2, ACLDIGITAL)).andReturn(false).times(2);
+        expect(oracleRhTaxInformationService.getRhTaxInformation(expectedOracleRequests))
+            .andReturn(loadOracleRhTaxInformation(ORACLE_RH_TAX_INFORMATION_JSON)).once();
+        expect(prmIntegrationService.getCountries()).andReturn(buildCountries()).once();
+        replay(aclScenarioUsageService, prmIntegrationService, oracleRhTaxInformationService);
+        assertEquals(loadExpectedRhTaxInformation("expected_rh_tax_information_acl_2.json"),
+            rhTaxService.getRhTaxInformation(ACL_PRODUCT_FAMILY, SCENARIO_IDS, 7));
+        verify(aclScenarioUsageService, prmIntegrationService, oracleRhTaxInformationService);
+    }
+
+    @Test
+    public void testGetRhTaxInformationWithNoUsagesInScenariosAcl() {
+        expect(aclScenarioUsageService.getRightsholderPayeeProductFamilyHoldersByAclScenarioIds(SCENARIO_IDS))
+            .andReturn(Collections.emptyList()).once();
+        replay(aclScenarioUsageService, prmIntegrationService, oracleRhTaxInformationService);
+        assertEquals(Collections.emptyList(), rhTaxService.getRhTaxInformation(ACL_PRODUCT_FAMILY, SCENARIO_IDS, 1));
+        verify(aclScenarioUsageService, prmIntegrationService, oracleRhTaxInformationService);
     }
 
     private Usage buildUsage(Long accountNumber) {

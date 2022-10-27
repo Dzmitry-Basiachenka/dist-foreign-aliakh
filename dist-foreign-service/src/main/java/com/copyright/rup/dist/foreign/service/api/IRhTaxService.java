@@ -28,10 +28,11 @@ public interface IRhTaxService {
     /**
      * Gets RH Tax Information for RHs from the given scenarios.
      *
-     * @param scenarioIds  set of scenario ids
-     * @param numberOfDays TBOs who received notification within last {@code numberOfDays} won't be included in the
-     *                     result
+     * @param productFamily product family
+     * @param scenarioIds   set of scenario ids
+     * @param numberOfDays  TBOs who received notification within last {@code numberOfDays} won't be included in the
+     *                      result
      * @return list of {@link RhTaxInformation} items
      */
-    List<RhTaxInformation> getRhTaxInformation(Set<String> scenarioIds, int numberOfDays);
+    List<RhTaxInformation> getRhTaxInformation(String productFamily, Set<String> scenarioIds, int numberOfDays);
 }
