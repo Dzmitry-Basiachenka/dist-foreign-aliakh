@@ -8,6 +8,7 @@ import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDetail;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDetailDto;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
+import com.copyright.rup.dist.foreign.domain.RightsholderPayeeProductFamilyHolder;
 import com.copyright.rup.dist.foreign.domain.filter.RightsholderResultsFilter;
 import com.copyright.rup.dist.foreign.repository.api.IAclScenarioUsageRepository;
 
@@ -19,6 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * Implementation of {@link IAclScenarioUsageRepository}.
@@ -173,5 +175,12 @@ public class AclScenarioUsageRepository extends AclBaseRepository implements IAc
         params.put("payeeAccountNumber", Objects.requireNonNull(payeeAccountNumber));
         params.put("typeOfUse", Objects.requireNonNull(typeOfUse));
         update("IAclScenarioUsageMapper.updatePayeeByAccountNumber", params);
+    }
+
+    @Override
+    public List<RightsholderPayeeProductFamilyHolder> findRightsholderPayeeProductFamilyHoldersByAclScenarioIds(
+        Set<String> scenarioIds) {
+        return selectList("IAclScenarioUsageMapper.findRightsholderPayeeProductFamilyHoldersByAclScenarioIds",
+            Objects.requireNonNull(scenarioIds));
     }
 }

@@ -8,9 +8,11 @@ import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDetail;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDetailDto;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
+import com.copyright.rup.dist.foreign.domain.RightsholderPayeeProductFamilyHolder;
 import com.copyright.rup.dist.foreign.domain.filter.RightsholderResultsFilter;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Interface for ACL scenario usage repository.
@@ -163,4 +165,13 @@ public interface IAclScenarioUsageRepository {
      * @param typeOfUse          type of use
      */
     void updatePayeeByAccountNumber(Long rhAccountNumber, String scenarioId, Long payeeAccountNumber, String typeOfUse);
+
+    /**
+     * Finds unique combinations of RH, payee and product family with type of use from ACL scenarios.
+     *
+     * @param scenarioIds set of scenario ids
+     * @return list of {@link RightsholderPayeeProductFamilyHolder}s
+     */
+    List<RightsholderPayeeProductFamilyHolder> findRightsholderPayeeProductFamilyHoldersByAclScenarioIds(
+        Set<String> scenarioIds);
 }

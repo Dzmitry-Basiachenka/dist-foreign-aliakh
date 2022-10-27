@@ -11,6 +11,7 @@ import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDetailDto;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
+import com.copyright.rup.dist.foreign.domain.RightsholderPayeeProductFamilyHolder;
 import com.copyright.rup.dist.foreign.domain.RightsholderTypeOfUsePair;
 import com.copyright.rup.dist.foreign.domain.filter.RightsholderResultsFilter;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
@@ -141,5 +142,11 @@ public class AclScenarioUsageService implements IAclScenarioUsageService {
         rightsholderService.updateRighstholdersAsync(payeeAccountNumbers);
         LOGGER.info("Get Payees for ACL Scenario. Finished. ScenarioId={}, RightsholdersIdsCount={}", scenarioId,
             rightsholdersIds.size());
+    }
+
+    @Override
+    public List<RightsholderPayeeProductFamilyHolder> getRightsholderPayeeProductFamilyHoldersByAclScenarioIds(
+        Set<String> scenarioIds) {
+        return aclScenarioUsageRepository.findRightsholderPayeeProductFamilyHoldersByAclScenarioIds(scenarioIds);
     }
 }

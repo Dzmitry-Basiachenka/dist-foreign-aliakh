@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.common.test.liquibase.LiquibaseTestExecutionListener;
@@ -17,6 +18,7 @@ import com.copyright.rup.dist.foreign.domain.AclScenarioDetail;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDetailDto;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
 import com.copyright.rup.dist.foreign.domain.AclScenarioShareDetail;
+import com.copyright.rup.dist.foreign.domain.RightsholderPayeeProductFamilyHolder;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
@@ -42,10 +44,12 @@ import java.math.RoundingMode;
 import java.time.OffsetDateTime;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -579,6 +583,26 @@ public class AclScenarioUsageRepositoryIntegrationTest {
                     .flatMap(e -> e.getScenarioShareDetails().stream()).collect(Collectors.toList()).get(i)));
     }
 
+    @Test
+    @TestData(fileName = FOLDER_NAME + "find-rightsholder-payee-product-family-holders.groovy")
+    public void testFindRightsholderPayeeProductFamilyHoldersByAclScenarioIds() {
+        Comparator<RightsholderPayeeProductFamilyHolder> comparator = Comparator
+            .comparing(RightsholderPayeeProductFamilyHolder::getRightsholder,
+                Comparator.comparing(Rightsholder::getAccountNumber))
+            .thenComparing(RightsholderPayeeProductFamilyHolder::getPayee,
+                Comparator.comparing(Rightsholder::getAccountNumber))
+            .thenComparing(RightsholderPayeeProductFamilyHolder::getProductFamily);
+        Set<String> scenarioIds = Collections.singleton("f146c64c-6cf7-4d8d-9011-132ee6bf2f3b");
+        List<RightsholderPayeeProductFamilyHolder> actual =
+            aclScenarioUsageRepository.findRightsholderPayeeProductFamilyHoldersByAclScenarioIds(scenarioIds)
+                .stream()
+                .sorted(comparator)
+                .collect(Collectors.toList());
+        verifyRightsholderPayeeProductFamilyHolders(
+            loadExpectedRightsholderPayeeProductFamilyHolders("json/acl/rh_payee_product_family_holders.json"),
+            actual);
+    }
+
     private void verifyAclScenarioDetail(AclScenarioDetail expectedScenarioDetail,
                                          AclScenarioDetail actualScenarioDetail) {
         assertEquals(expectedScenarioDetail.getScenarioId(), actualScenarioDetail.getScenarioId());
@@ -827,6 +851,24 @@ public class AclScenarioUsageRepositoryIntegrationTest {
         verifyAclScenarioDetailDto(detailDesc, scenarioDetailDtos.get(0));
     }
 
+    private void verifyRightsholderPayeeProductFamilyHolders(List<RightsholderPayeeProductFamilyHolder> expected,
+                                                             List<RightsholderPayeeProductFamilyHolder> actual) {
+        assertEquals(expected.size(), actual.size());
+        IntStream.range(0, expected.size())
+            .forEach(index -> verifyRightsholderPayeeProductFamilyHolder(expected.get(index), actual.get(index)));
+    }
+
+    private void verifyRightsholderPayeeProductFamilyHolder(RightsholderPayeeProductFamilyHolder expected,
+                                                            RightsholderPayeeProductFamilyHolder actual) {
+        assertEquals(expected.getRightsholder().getId(), actual.getRightsholder().getId());
+        assertEquals(expected.getRightsholder().getAccountNumber(), actual.getRightsholder().getAccountNumber());
+        assertEquals(expected.getRightsholder().getName(), actual.getRightsholder().getName());
+        assertEquals(expected.getPayee().getId(), actual.getPayee().getId());
+        assertEquals(expected.getPayee().getAccountNumber(), actual.getPayee().getAccountNumber());
+        assertEquals(expected.getPayee().getName(), actual.getPayee().getName());
+        assertEquals(expected.getProductFamily(), actual.getProductFamily());
+    }
+
     private AclScenarioDetailDto buildDigitalAclScenarioDetailDto() {
         return loadExpectedAclScenarioDetailDto("json/acl/acl_scenario_detail_dto_digital.json").get(0);
     }
@@ -869,6 +911,17 @@ public class AclScenarioUsageRepositoryIntegrationTest {
         try {
             String content = TestUtils.fileToString(this.getClass(), fileName);
             return OBJECT_MAPPER.readValue(content, new TypeReference<List<AclScenarioShareDetail>>() {
+            });
+        } catch (IOException e) {
+            throw new AssertionError(e);
+        }
+    }
+
+    private List<RightsholderPayeeProductFamilyHolder> loadExpectedRightsholderPayeeProductFamilyHolders(
+        String fileName) {
+        try {
+            String content = TestUtils.fileToString(this.getClass(), fileName);
+            return OBJECT_MAPPER.readValue(content, new TypeReference<List<RightsholderPayeeProductFamilyHolder>>() {
             });
         } catch (IOException e) {
             throw new AssertionError(e);

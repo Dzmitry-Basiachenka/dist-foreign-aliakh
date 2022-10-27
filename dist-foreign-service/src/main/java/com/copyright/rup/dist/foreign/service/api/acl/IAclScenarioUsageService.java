@@ -7,9 +7,11 @@ import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolderDto;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDetailDto;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
+import com.copyright.rup.dist.foreign.domain.RightsholderPayeeProductFamilyHolder;
 import com.copyright.rup.dist.foreign.domain.filter.RightsholderResultsFilter;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Interface for ACL scenario usage service.
@@ -141,4 +143,13 @@ public interface IAclScenarioUsageService {
      * @param scenarioId scenario identifier
      */
     void populatePayees(String scenarioId);
+
+    /**
+     * Gets unique combinations of RH, payee and product family with type of use from ACL scenarios.
+     *
+     * @param scenarioIds set of scenario ids
+     * @return list of {@link RightsholderPayeeProductFamilyHolder}s
+     */
+    List<RightsholderPayeeProductFamilyHolder> getRightsholderPayeeProductFamilyHoldersByAclScenarioIds(
+        Set<String> scenarioIds);
 }

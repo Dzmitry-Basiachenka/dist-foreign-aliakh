@@ -15,6 +15,7 @@ import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolderDto;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDetailDto;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
+import com.copyright.rup.dist.foreign.domain.RightsholderPayeeProductFamilyHolder;
 import com.copyright.rup.dist.foreign.domain.RightsholderTypeOfUsePair;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.RightsholderResultsFilter;
@@ -34,6 +35,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Verifies {@link AclScenarioUsageService}.
@@ -214,6 +216,19 @@ public class AclScenarioUsageServiceTest {
         expect(aclScenarioUsageRepository.findRightsholderAggLcClassResults(filter)).andReturn(holderDtos).once();
         replay(aclScenarioUsageRepository);
         assertSame(holderDtos, aclScenarioUsageService.getRightsholderAggLcClassResults(filter));
+        verify(aclScenarioUsageRepository);
+    }
+
+    @Test
+    public void testGetRightsholderPayeeProductFamilyHoldersByAclScenarioIds() {
+        Set<String> scenarioIds = Collections.singleton(SCENARIO_UID);
+        List<RightsholderPayeeProductFamilyHolder> holders =
+            Collections.singletonList(new RightsholderPayeeProductFamilyHolder());
+        expect(aclScenarioUsageRepository.findRightsholderPayeeProductFamilyHoldersByAclScenarioIds(scenarioIds))
+            .andReturn(holders).once();
+        replay(aclScenarioUsageRepository);
+        assertSame(holders,
+            aclScenarioUsageService.getRightsholderPayeeProductFamilyHoldersByAclScenarioIds(scenarioIds));
         verify(aclScenarioUsageRepository);
     }
 
