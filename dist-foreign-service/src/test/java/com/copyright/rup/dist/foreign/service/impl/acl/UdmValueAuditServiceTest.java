@@ -19,6 +19,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -66,6 +67,15 @@ public class UdmValueAuditServiceTest {
         expect(udmValueAuditRepository.findByUdmValueId(UDM_VALUE_UID)).andReturn(auditItems).once();
         replay(udmValueAuditRepository);
         assertSame(auditItems, udmValueAuditService.getUdmValueAudit(UDM_VALUE_UID));
+        verify(udmValueAuditRepository);
+    }
+
+    @Test
+    public void testGetUserNames() {
+        List<String> userNames = Arrays.asList("jjohn@copyright.com", "wjohn@copyright.com");
+        expect(udmValueAuditRepository.findUserNames()).andReturn(userNames).once();
+        replay(udmValueAuditRepository);
+        assertSame(userNames, udmValueAuditService.getUserNames());
         verify(udmValueAuditRepository);
     }
 }

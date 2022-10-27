@@ -32,4 +32,11 @@ public interface IUdmValueAuditService {
      * @return list of {@link UdmValueAuditItem}
      */
     List<UdmValueAuditItem> getUdmValueAudit(String udmValueId);
+
+    /**
+     * Gets list of usernames which have VALUE_EDIT status since the first push to baseline.
+     *
+     * @return list of usernames
+     */
+    List<String> getUserNames();
 }

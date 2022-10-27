@@ -42,4 +42,20 @@
         where df_udm_value_uid = #{valueId}
         order by created_datetime desc, action_reason asc
     </select>
+
+    <select id="findUserNames" resultType="string">
+        with publish_to_baseline as (
+            select
+                df_udm_value_uid,
+                min(updated_datetime) as updated_datetime
+            from ${schema}.df_udm_value_audit
+            where action_type_ind = 'PUBLISH_TO_BASELINE'
+            group by df_udm_value_uid
+        )
+        select distinct va.updated_by_user
+        from ${schema}.df_udm_value_audit va
+        join publish_to_baseline ptb on va.df_udm_value_uid = ptb.df_udm_value_uid
+        where va.updated_datetime > ptb.updated_datetime and va.action_type_ind = 'VALUE_EDIT'
+        order by updated_by_user
+    </select>
 </mapper>

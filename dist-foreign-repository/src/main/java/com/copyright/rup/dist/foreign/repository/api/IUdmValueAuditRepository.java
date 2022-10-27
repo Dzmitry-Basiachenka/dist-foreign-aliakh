@@ -29,4 +29,11 @@ public interface IUdmValueAuditRepository {
      * @return list of {@link UdmValueAuditItem}s
      */
     List<UdmValueAuditItem> findByUdmValueId(String udmValueId);
+
+    /**
+     * Finds list of usernames which have VALUE_EDIT status since the first push to baseline.
+     *
+     * @return list of usernames
+     */
+    List<String> findUserNames();
 }

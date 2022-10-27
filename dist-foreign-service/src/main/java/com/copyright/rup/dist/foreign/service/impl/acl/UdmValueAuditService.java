@@ -40,6 +40,11 @@ public class UdmValueAuditService implements IUdmValueAuditService {
         return udmValueAuditRepository.findByUdmValueId(udmValueId);
     }
 
+    @Override
+    public List<String> getUserNames() {
+        return udmValueAuditRepository.findUserNames();
+    }
+
     private UdmValueAuditItem buildUdmValueAuditItem(String udmValueId, UdmValueActionTypeEnum actionType,
                                                      String actionReason) {
         UdmValueAuditItem auditItem = new UdmValueAuditItem();

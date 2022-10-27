@@ -7,6 +7,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.dist.foreign.service.api.acl.IUdmValueAuditService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmValueService;
 import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmCommonUserNamesReportWidget;
 
@@ -30,12 +31,15 @@ public class UdmBaselineValueUpdatesReportControllerTest {
 
     private UdmBaselineValueUpdatesReportController controller;
     private IUdmValueService udmValueService;
+    private IUdmValueAuditService udmValueAuditService;
 
     @Before
     public void setUp() {
         controller = new UdmBaselineValueUpdatesReportController();
         udmValueService = createMock(IUdmValueService.class);
+        udmValueAuditService = createMock(IUdmValueAuditService.class);
         Whitebox.setInternalState(controller, udmValueService);
+        Whitebox.setInternalState(controller, udmValueAuditService);
     }
 
     @Test
@@ -56,7 +60,11 @@ public class UdmBaselineValueUpdatesReportControllerTest {
 
     @Test
     public void testGetUserNames() {
-        //TODO {dbasiachenka} implement
+        List<String> userNames = Collections.singletonList("user@copyrigt.com");
+        expect(udmValueAuditService.getUserNames()).andReturn(userNames).once();
+        replay(udmValueAuditService);
+        assertEquals(userNames, controller.getUserNames());
+        verify(udmValueAuditService);
     }
 
     @Test
