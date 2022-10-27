@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.repository.impl;
 import com.copyright.rup.dist.common.repository.BaseRepository;
 import com.copyright.rup.dist.foreign.domain.UdmValueAuditItem;
 import com.copyright.rup.dist.foreign.repository.api.IUdmValueAuditRepository;
+
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -28,5 +29,10 @@ public class UdmValueAuditRepository extends BaseRepository implements IUdmValue
     @Override
     public List<UdmValueAuditItem> findByUdmValueId(String udmValueId) {
         return selectList("IUdmValueAuditMapper.findByUdmValueId", Objects.requireNonNull(udmValueId));
+    }
+
+    @Override
+    public List<String> findUserNames() {
+        return selectList("IUdmValueAuditMapper.findUserNames");
     }
 }

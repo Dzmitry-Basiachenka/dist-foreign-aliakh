@@ -95,7 +95,7 @@ public interface IUdmUsageRepository {
     /**
      * Finds list of usernames from UDM usages and values audit.
      *
-     * @return list of periods
+     * @return list of usernames
      */
     List<String> findUserNames();
 

@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.report.impl.udm;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
+import com.copyright.rup.dist.foreign.service.api.acl.IUdmValueAuditService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmValueService;
 import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
 
@@ -9,7 +10,6 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -27,6 +27,8 @@ public class UdmBaselineValueUpdatesReportController extends UdmCommonUserNamesR
 
     @Autowired
     private IUdmValueService udmValueService;
+    @Autowired
+    private IUdmValueAuditService udmValueAuditService;
 
     @Override
     public List<Integer> getAllPeriods() {
@@ -35,8 +37,7 @@ public class UdmBaselineValueUpdatesReportController extends UdmCommonUserNamesR
 
     @Override
     public List<String> getUserNames() {
-        //TODO {dbasiachenka} implement
-        return Collections.emptyList();
+        return udmValueAuditService.getUserNames();
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 import com.copyright.rup.dist.common.test.liquibase.LiquibaseTestExecutionListener;
 import com.copyright.rup.dist.common.test.liquibase.TestData;
@@ -15,6 +16,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -34,8 +36,9 @@ import java.util.List;
 )
 public class UdmValueAuditRepositoryIntegrationTest {
 
-    private static final String FIND_BY_UDM_VALUE_ID =
-        "udm-value-audit-repository-integration-test/find-by-udm-value-id.groovy";
+    private static final String FOLDER_NAME = "udm-value-audit-repository-integration-test/";
+    private static final String FIND_BY_UDM_VALUE_ID = FOLDER_NAME + "find-by-udm-value-id.groovy";
+    private static final String FIND_USER_NAMES = FOLDER_NAME + "find-user-names.groovy";
     private static final String UDM_VALUE_UID = "16040f00-8564-4482-ab67-9965483a8a9f";
     private static final String UDM_VALUE_AUDIT_UID_1 = "0cc67ffc-e565-46ef-abbc-1da6cf2e47b5";
     private static final String UDM_VALUE_AUDIT_UID_2 = "e7370736-60c0-4283-9948-717d075f152f";
@@ -74,6 +77,15 @@ public class UdmValueAuditRepositoryIntegrationTest {
         assertEquals(UDM_VALUE_UID, auditItem2.getValueId());
         assertEquals(UdmValueActionTypeEnum.CREATED, auditItem2.getActionType());
         assertEquals("UDM Value batch for period '2021' was populated", auditItem2.getActionReason());
+    }
+
+    @Test
+    @TestData(fileName = FIND_USER_NAMES)
+    public void testFindUserNames() {
+        List<String> expectedUserNames = Arrays.asList("ajohn@copyright.com", "jjohn@copyright.com");
+        List<String> actualUserNames = udmValueAuditRepository.findUserNames();
+        assertFalse(actualUserNames.isEmpty());
+        assertEquals(expectedUserNames, actualUserNames);
     }
 
     private UdmValueAuditItem buildUdmValueAuditItem() {
