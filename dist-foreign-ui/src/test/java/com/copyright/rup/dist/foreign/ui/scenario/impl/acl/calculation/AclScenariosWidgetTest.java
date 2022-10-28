@@ -150,7 +150,7 @@ public class AclScenariosWidgetTest {
     public void testGridValues() {
         Grid<?> grid = (Grid<?>) ((HorizontalLayout) scenariosWidget.getComponent(1)).getComponent(0);
         Object[][] expectedCells = {
-            {"ACL Scenario name", "ACL", 202212, "N", "06/01/2022", "IN_PROGRESS"}
+            {"ACL Scenario name", "ACL", 202212, "N", "IN_PROGRESS"}
         };
         verifyGridItems(grid, Collections.singletonList(scenario), expectedCells);
     }
@@ -393,7 +393,6 @@ public class AclScenariosWidgetTest {
             Triple.of("License Type", 110.0, -1),
             Triple.of("Period", 100.0, -1),
             Triple.of("Editable", 100.0, -1),
-            Triple.of("Created Date", 120.0, -1),
             Triple.of("Status", 130.0, -1)
         ));
         assertNotNull(((Column) grid.getColumns().get(2)).getComparator(SortDirection.ASCENDING));
