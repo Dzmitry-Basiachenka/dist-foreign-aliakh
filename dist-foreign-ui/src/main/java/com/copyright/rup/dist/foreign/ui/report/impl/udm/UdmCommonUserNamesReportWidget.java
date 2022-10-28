@@ -44,6 +44,19 @@ public class UdmCommonUserNamesReportWidget extends Window implements IUdmCommon
     private Button exportButton;
     private final Set<Integer> periods = new HashSet<>();
     private final Set<String> userNames = new HashSet<>();
+    private final String dateFromMessageProperty;
+    private final String dateToMessageProperty;
+
+    /**
+     * Constructor.
+     *
+     * @param dateFromMessageProperty date from message property
+     * @param dateToMessageProperty   date to message property
+     */
+    public UdmCommonUserNamesReportWidget(String dateFromMessageProperty, String dateToMessageProperty) {
+        this.dateFromMessageProperty = dateFromMessageProperty;
+        this.dateToMessageProperty = dateToMessageProperty;
+    }
 
     @Override
     @SuppressWarnings("unchecked")
@@ -101,20 +114,21 @@ public class UdmCommonUserNamesReportWidget extends Window implements IUdmCommon
 
     private void initDatesFilter() {
         dateBinder = new Binder<>();
-        dateFromWidget = new LocalDateWidget(ForeignUi.getMessage("label.from_date"));
+        dateFromWidget = new LocalDateWidget(ForeignUi.getMessage(dateFromMessageProperty));
         dateFromWidget.addValueChangeListener(event -> {
             dateBinder.validate();
             updateExportButtonState();
         });
         VaadinUtils.addComponentStyle(dateFromWidget, "date-from-filter");
-        dateToWidget = new LocalDateWidget(ForeignUi.getMessage("label.to_date"));
+        dateToWidget = new LocalDateWidget(ForeignUi.getMessage(dateToMessageProperty));
         dateToWidget.addValueChangeListener(event -> {
             dateBinder.validate();
             updateExportButtonState();
         });
         VaadinUtils.addComponentStyle(dateToWidget, "date-to-filter");
         dateBinder.forField(dateToWidget)
-            .withValidator(new DateValidator(ForeignUi.getMessage("label.from_date"), dateFromWidget, dateToWidget))
+            .withValidator(
+                new DateValidator(ForeignUi.getMessage(dateFromMessageProperty), dateFromWidget, dateToWidget))
             .bind(source -> source, (bean, fieldValue) -> bean = fieldValue)
             .validate();
     }
