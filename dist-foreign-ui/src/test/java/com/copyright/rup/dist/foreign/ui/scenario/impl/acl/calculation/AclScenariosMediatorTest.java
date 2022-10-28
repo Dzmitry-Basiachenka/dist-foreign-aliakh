@@ -40,9 +40,10 @@ public class AclScenariosMediatorTest {
     private final Button viewButton = new Button("View");
     private final Button pubTypeWeightsButton = new Button("Pub Type Weights");
     private final Button deleteButton = new Button("Delete");
-    private final Button submitButton = new Button("button.submit");
-    private final Button rejectButton = new Button("button.reject");
-    private final Button approveButton = new Button("button.approve");
+    private final Button submitButton = new Button("Submit for Approval");
+    private final Button rejectButton = new Button("Reject");
+    private final Button approveButton = new Button("Approve");
+    private final Button sendToLmButton = new Button("Send to LM");
 
     private AclScenariosMediator mediator;
 
@@ -56,6 +57,7 @@ public class AclScenariosMediatorTest {
         mediator.setApproveButton(approveButton);
         mediator.setRejectButton(rejectButton);
         mediator.setSubmitButton(submitButton);
+        mediator.setSentToLmButton(sendToLmButton);
         mockStatic(SecurityUtils.class);
     }
 
@@ -73,6 +75,7 @@ public class AclScenariosMediatorTest {
         assertFalse(submitButton.isVisible());
         assertFalse(rejectButton.isVisible());
         assertFalse(approveButton.isVisible());
+        assertTrue(sendToLmButton.isVisible());
         verify(SecurityUtils.class);
     }
 
@@ -90,6 +93,7 @@ public class AclScenariosMediatorTest {
         assertTrue(submitButton.isVisible());
         assertFalse(rejectButton.isVisible());
         assertFalse(approveButton.isVisible());
+        assertFalse(sendToLmButton.isVisible());
         verify(SecurityUtils.class);
     }
 
@@ -107,6 +111,7 @@ public class AclScenariosMediatorTest {
         assertFalse(submitButton.isVisible());
         assertFalse(rejectButton.isVisible());
         assertFalse(approveButton.isVisible());
+        assertFalse(sendToLmButton.isVisible());
         verify(SecurityUtils.class);
     }
 
@@ -124,6 +129,7 @@ public class AclScenariosMediatorTest {
         assertFalse(submitButton.isVisible());
         assertTrue(rejectButton.isVisible());
         assertTrue(approveButton.isVisible());
+        assertFalse(sendToLmButton.isVisible());
         verify(SecurityUtils.class);
     }
 
@@ -134,6 +140,7 @@ public class AclScenariosMediatorTest {
         assertFalse(viewButton.isEnabled());
         assertTrue(pubTypeWeightsButton.isEnabled());
         assertFalse(deleteButton.isEnabled());
+        assertFalse(sendToLmButton.isEnabled());
     }
 
     @Test
@@ -148,6 +155,10 @@ public class AclScenariosMediatorTest {
         assertTrue(viewButton.isEnabled());
         assertTrue(pubTypeWeightsButton.isEnabled());
         assertTrue(deleteButton.isEnabled());
+        assertFalse(submitButton.isEnabled());
+        assertFalse(rejectButton.isEnabled());
+        assertFalse(approveButton.isEnabled());
+        assertFalse(sendToLmButton.isEnabled());
         verify(SecurityUtils.class);
     }
 
@@ -166,6 +177,7 @@ public class AclScenariosMediatorTest {
         assertFalse(submitButton.isEnabled());
         assertFalse(rejectButton.isEnabled());
         assertFalse(approveButton.isEnabled());
+        assertFalse(sendToLmButton.isEnabled());
         verify(SecurityUtils.class);
     }
 
@@ -184,6 +196,7 @@ public class AclScenariosMediatorTest {
         assertTrue(submitButton.isEnabled());
         assertFalse(rejectButton.isEnabled());
         assertFalse(approveButton.isEnabled());
+        assertFalse(sendToLmButton.isEnabled());
         verify(SecurityUtils.class);
     }
 
@@ -202,6 +215,7 @@ public class AclScenariosMediatorTest {
         assertTrue(submitButton.isEnabled());
         assertFalse(rejectButton.isEnabled());
         assertFalse(approveButton.isEnabled());
+        assertFalse(sendToLmButton.isEnabled());
         verify(SecurityUtils.class);
     }
 
@@ -218,5 +232,22 @@ public class AclScenariosMediatorTest {
         assertFalse(submitButton.isEnabled());
         assertTrue(rejectButton.isEnabled());
         assertTrue(approveButton.isEnabled());
+        assertFalse(sendToLmButton.isEnabled());
+    }
+
+    @Test
+    public void testSelectedScenarioChangedApprovedStatus() {
+        AclScenario scenario = new AclScenario();
+        scenario.setStatus(ScenarioStatusEnum.APPROVED);
+        scenario.setEditableFlag(false);
+        mediator.selectedScenarioChanged(scenario);
+        assertTrue(createButton.isEnabled());
+        assertTrue(viewButton.isEnabled());
+        assertTrue(pubTypeWeightsButton.isEnabled());
+        assertFalse(deleteButton.isEnabled());
+        assertFalse(submitButton.isEnabled());
+        assertFalse(rejectButton.isEnabled());
+        assertFalse(approveButton.isEnabled());
+        assertTrue(sendToLmButton.isEnabled());
     }
 }

@@ -195,4 +195,11 @@ public interface IAclScenarioService {
      */
     void changeScenarioState(AclScenario scenario, ScenarioStatusEnum status, ScenarioActionTypeEnum action,
                              String reason);
+
+    /**
+     * Sends given {@link AclScenario} to LM.
+     *
+     * @param scenario {@link AclScenario} instance
+     */
+    void sendToLm(AclScenario scenario);
 }

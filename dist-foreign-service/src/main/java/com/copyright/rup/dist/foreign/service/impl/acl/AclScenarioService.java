@@ -223,6 +223,12 @@ public class AclScenarioService implements IAclScenarioService {
         aclScenarioAuditService.logAction(scenario.getId(), action, reason);
     }
 
+    @Override
+    @Transactional
+    public void sendToLm(AclScenario scenario) {
+        //TODO will implement later
+    }
+
     private void populateScenario(AclScenario aclScenario, String userName, String scenarioId) {
         aclScenario.setId(scenarioId);
         aclScenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);

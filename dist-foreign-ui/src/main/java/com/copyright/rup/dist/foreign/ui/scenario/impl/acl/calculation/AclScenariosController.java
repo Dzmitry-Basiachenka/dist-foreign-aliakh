@@ -270,6 +270,20 @@ public class AclScenariosController extends CommonController<IAclScenariosWidget
         refreshWidget();
     }
 
+    @Override
+    public void sendToLm() {
+        AclScenario scenario = getWidget().getSelectedScenario();
+        Windows.showConfirmDialog(ForeignUi.getMessage("window.send_scenario", scenario.getName()),
+            () -> {
+                try {
+                    aclScenarioService.sendToLm(scenario);
+                } catch (RuntimeException e) {
+                    Windows.showNotificationWindow(e.getMessage());
+                }
+                getWidget().refresh();
+            });
+    }
+
     /**
      * Initializes handlers for actions.
      */
