@@ -126,4 +126,12 @@ public interface IUdmReportRepository {
      * @param outputStream instance of {@link OutputStream}
      */
     void writeUdmUsagesByStatusCsvReport(Integer period, OutputStream outputStream);
+
+    /**
+     * Writes UDM Baseline Value Updates Report into csv output stream.
+     *
+     * @param reportFilter instance of {@link UdmReportFilter}
+     * @param outputStream instance of {@link OutputStream}
+     */
+    void writeUdmBaselineValueUpdatesCsvReport(UdmReportFilter reportFilter, OutputStream outputStream);
 }

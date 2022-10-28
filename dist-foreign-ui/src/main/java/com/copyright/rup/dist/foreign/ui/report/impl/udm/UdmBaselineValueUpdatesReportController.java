@@ -4,6 +4,7 @@ import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmValueAuditService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmValueService;
 import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
+import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmCommonUserNamesReportWidget;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -42,7 +43,12 @@ public class UdmBaselineValueUpdatesReportController extends UdmCommonUserNamesR
 
     @Override
     public IStreamSource getCsvStreamSource() {
-        //TODO {dbasiachenka} implement
-        return new ByteArrayStreamSource("baseline_value_updates_report_", os -> {});
+        return new ByteArrayStreamSource("baseline_value_updates_report_",
+            os -> getUdmReportService().writeUdmBaselineValueUpdatesCsvReport(getWidget().getReportFilter(), os));
+    }
+
+    @Override
+    protected IUdmCommonUserNamesReportWidget instantiateWidget() {
+        return new UdmCommonUserNamesReportWidget("label.updated_date_from", "label.updated_date_to");
     }
 }

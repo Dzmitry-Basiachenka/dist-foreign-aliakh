@@ -142,6 +142,11 @@ public class UdmReportRepository extends CommonReportRepository implements IUdmR
         }
     }
 
+    @Override
+    public void writeUdmBaselineValueUpdatesCsvReport(UdmReportFilter reportFilter, OutputStream outputStream) {
+        //TODO {dbasiachenka} implement
+    }
+
     private void writeUdmUsageCsvReport(UdmUsageFilter filter, BaseCsvReportHandler handler) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
         parameters.put("filter", escapeSqlLikePattern(Objects.requireNonNull(filter)));

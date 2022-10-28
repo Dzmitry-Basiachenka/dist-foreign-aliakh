@@ -1,9 +1,9 @@
 package com.copyright.rup.dist.foreign.ui.report.impl.udm;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
-import com.copyright.rup.dist.foreign.service.api.acl.IUdmReportService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageService;
 import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
+import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmCommonUserNamesReportWidget;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -26,8 +26,6 @@ import java.util.List;
 public class CompletedAssignmentsReportController extends UdmCommonUserNamesReportController {
 
     @Autowired
-    private IUdmReportService udmReportService;
-    @Autowired
     private IUdmUsageService udmUsageService;
 
     @Override
@@ -43,6 +41,11 @@ public class CompletedAssignmentsReportController extends UdmCommonUserNamesRepo
     @Override
     public IStreamSource getCsvStreamSource() {
         return new ByteArrayStreamSource("completed_assignments_by_employee_report_",
-            os -> udmReportService.writeUdmCompletedAssignmentsCsvReport(getWidget().getReportFilter(), os));
+            os -> getUdmReportService().writeUdmCompletedAssignmentsCsvReport(getWidget().getReportFilter(), os));
+    }
+
+    @Override
+    protected IUdmCommonUserNamesReportWidget instantiateWidget() {
+        return new UdmCommonUserNamesReportWidget("label.from_date", "label.to_date");
     }
 }
