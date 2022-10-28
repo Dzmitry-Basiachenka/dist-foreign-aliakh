@@ -260,10 +260,6 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
         scenarioGrid.addColumn(scenario -> scenario.isEditableFlag() ? "Y" : "N")
             .setCaption(ForeignUi.getMessage("table.column.editable"))
             .setWidth(100);
-        scenarioGrid.addColumn(scenario -> toShortFormat(scenario.getCreateDate()))
-            .setCaption(ForeignUi.getMessage("table.column.created_date"))
-            .setComparator((scenario1, scenario2) -> scenario1.getCreateDate().compareTo(scenario2.getCreateDate()))
-            .setWidth(120);
         scenarioGrid.addColumn(scenario -> scenario.getStatus().name())
             .setCaption(ForeignUi.getMessage("table.column.status"))
             .setWidth(130);
