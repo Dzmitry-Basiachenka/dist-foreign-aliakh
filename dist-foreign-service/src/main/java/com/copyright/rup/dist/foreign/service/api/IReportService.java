@@ -286,12 +286,14 @@ public interface IReportService {
     /**
      * Writes Tax Notification Report into the output stream in CSV format.
      *
-     * @param scenarioIds  set of scenario ids
-     * @param numberOfDays TBOs who received notification within last {@code numberOfDays} won't be included in the
-     *                     result
-     * @param outputStream instance of {@link OutputStream}
+     * @param productFamily product family
+     * @param scenarioIds   set of scenario ids
+     * @param numberOfDays  TBOs who received notification within last {@code numberOfDays} won't be included in the
+     *                      result
+     * @param outputStream  instance of {@link OutputStream}
      */
-    void writeTaxNotificationCsvReport(Set<String> scenarioIds, int numberOfDays, OutputStream outputStream);
+    void writeTaxNotificationCsvReport(String productFamily, Set<String> scenarioIds, int numberOfDays,
+                                       OutputStream outputStream);
 
     /**
      * Writes SAL Liabilities Summary by Rightsholder and Work Report into the output stream in CSV format.
