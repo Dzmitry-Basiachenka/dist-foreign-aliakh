@@ -96,6 +96,7 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
     private final Button submitButton = Buttons.createButton(ForeignUi.getMessage("button.submit"));
     private final Button rejectButton = Buttons.createButton(ForeignUi.getMessage("button.reject"));
     private final Button approveButton = Buttons.createButton(ForeignUi.getMessage("button.approve"));
+    private final Button sendToLmButton = Buttons.createButton(ForeignUi.getMessage("button.send_to_lm"));
     private final String userName = RupContextUtils.getUserName();
 
     private IAclScenariosController aclScenariosController;
@@ -156,6 +157,7 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
         mediator.setApproveButton(approveButton);
         mediator.setRejectButton(rejectButton);
         mediator.setSubmitButton(submitButton);
+        mediator.setSentToLmButton(sendToLmButton);
         mediator.selectedScenarioChanged(getSelectedScenario());
         return mediator;
     }
@@ -204,9 +206,9 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
         addButtonsListeners();
         HorizontalLayout buttonsLayout =
             new HorizontalLayout(createButton, viewButton, deleteButton, pubTypeWeights, submitButton, rejectButton,
-                approveButton);
+                approveButton, sendToLmButton);
         VaadinUtils.setButtonsAutoDisabled(createButton, viewButton, deleteButton, pubTypeWeights, submitButton,
-            rejectButton, approveButton);
+            rejectButton, approveButton, sendToLmButton);
         buttonsLayout.setMargin(true);
         VaadinUtils.addComponentStyle(buttonsLayout, "acl-scenario-buttons-layout");
         return buttonsLayout;
@@ -229,6 +231,7 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
         submitButton.addClickListener(event -> aclScenariosController.handleAction(ScenarioActionTypeEnum.SUBMITTED));
         rejectButton.addClickListener(event -> aclScenariosController.handleAction(ScenarioActionTypeEnum.REJECTED));
         approveButton.addClickListener(event -> aclScenariosController.handleAction(ScenarioActionTypeEnum.APPROVED));
+        sendToLmButton.addClickListener(event -> aclScenariosController.sendToLm());
     }
 
     private void insertAclPubTypes(List<AclPublicationType> publicationTypes) {

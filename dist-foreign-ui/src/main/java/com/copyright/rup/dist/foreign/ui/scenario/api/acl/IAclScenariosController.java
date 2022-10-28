@@ -218,4 +218,9 @@ public interface IAclScenariosController extends IController<IAclScenariosWidget
      * @param actionType scenario action type
      */
     void handleAction(ScenarioActionTypeEnum actionType);
+
+    /**
+     * Handles send to LM action.
+     */
+    void sendToLm();
 }

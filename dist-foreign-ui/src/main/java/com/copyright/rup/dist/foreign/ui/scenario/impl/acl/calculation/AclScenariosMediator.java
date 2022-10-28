@@ -27,17 +27,20 @@ class AclScenariosMediator implements IMediator {
     private Button submitButton;
     private Button rejectButton;
     private Button approveButton;
+    private Button sentToLmButton;
 
     @Override
     public void applyPermissions() {
         boolean hasSpecialistOrManagerPermission =
             ForeignSecurityUtils.hasSpecialistPermission() || ForeignSecurityUtils.hasManagerPermission();
+        boolean hasSpecialistPermission = ForeignSecurityUtils.hasSpecialistPermission();
         createButton.setVisible(hasSpecialistOrManagerPermission);
         deleteButton.setVisible(hasSpecialistOrManagerPermission);
-        pubTypeWeights.setVisible(ForeignSecurityUtils.hasSpecialistPermission());
+        pubTypeWeights.setVisible(hasSpecialistPermission);
         submitButton.setVisible(ForeignSecurityUtils.hasManagerPermission());
         rejectButton.setVisible(ForeignSecurityUtils.hasApproverPermission());
         approveButton.setVisible(ForeignSecurityUtils.hasApproverPermission());
+        sentToLmButton.setVisible(hasSpecialistPermission);
     }
 
     /**
@@ -47,20 +50,23 @@ class AclScenariosMediator implements IMediator {
      */
     public void selectedScenarioChanged(AclScenario aclScenario) {
         if (Objects.nonNull(aclScenario)) {
-            boolean inProgressStatus = ScenarioStatusEnum.IN_PROGRESS == aclScenario.getStatus();
             viewButton.setEnabled(true);
+            ScenarioStatusEnum status = aclScenario.getStatus();
+            boolean inProgressStatus = ScenarioStatusEnum.IN_PROGRESS == status;
             deleteButton.setEnabled(
                 inProgressStatus && (ForeignSecurityUtils.hasSpecialistPermission() || aclScenario.isEditableFlag()));
             submitButton.setEnabled(inProgressStatus && !aclScenario.isEditableFlag());
-            boolean isSubmittedState = ScenarioStatusEnum.SUBMITTED == aclScenario.getStatus();
+            boolean isSubmittedState = ScenarioStatusEnum.SUBMITTED == status;
             rejectButton.setEnabled(isSubmittedState);
             approveButton.setEnabled(isSubmittedState);
+            sentToLmButton.setEnabled(ScenarioStatusEnum.APPROVED == status);
         } else {
             viewButton.setEnabled(false);
             deleteButton.setEnabled(false);
             submitButton.setEnabled(false);
             rejectButton.setEnabled(false);
             approveButton.setEnabled(false);
+            sentToLmButton.setEnabled(false);
         }
     }
 
@@ -90,5 +96,9 @@ class AclScenariosMediator implements IMediator {
 
     public void setApproveButton(Button approveButton) {
         this.approveButton = approveButton;
+    }
+
+    public void setSentToLmButton(Button sentToLmButton) {
+        this.sentToLmButton = sentToLmButton;
     }
 }
