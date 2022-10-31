@@ -148,7 +148,7 @@ public interface IUsageArchiveRepository {
      * Copies usages related to specified scenario to archive table with {@link UsageStatusEnum#SENT_TO_LM} status.
      *
      * @param scenarioId {@link com.copyright.rup.dist.foreign.domain.Scenario} identifier
-     * @param userName   name of user who peforms action
+     * @param userName   name of user who performs action
      * @return list of moved usage ids
      */
     List<String> copyToArchiveByScenarioId(String scenarioId, String userName);

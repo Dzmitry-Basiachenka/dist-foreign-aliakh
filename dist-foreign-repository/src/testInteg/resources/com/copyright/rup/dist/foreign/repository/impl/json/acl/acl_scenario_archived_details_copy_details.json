@@ -1,0 +1,117 @@
+[
+  {
+    "scenarioId": "326d59f3-bdea-4579-9100-63d0e76386fe",
+    "period": 202212,
+    "originalDetailId": "OGN674GHHSB107",
+    "wrWrkInst": 122813964,
+    "systemTitle": "Aerospace America",
+    "detailLicenseeClass": {
+      "id": 1,
+      "description": "Food and Tobacco",
+      "aggregateLicenseeClass": {
+      }
+    },
+    "aggregateLicenseeClassId": 51,
+    "aggregateLicenseeClassName": "Materials",
+    "publicationType": {
+      "id": "73876e58-2e87-485e-b6f3-7e23792dd214",
+      "name": "BK",
+      "description": "Book",
+      "weight": 1.00
+    },
+    "price": 10.0000000000,
+    "priceFlag": true,
+    "content": 11.0000000000,
+    "contentFlag": true,
+    "contentUnitPrice": 2.0000000000,
+    "contentUnitPriceFlag": true,
+    "numberOfCopies": 1.00000,
+    "usageAgeWeight": 1.00000,
+    "weightedCopies": 1.0000000000,
+    "surveyCountry": "United States",
+    "reportedTypeOfUse": "COPY_FOR_MYSELF",
+    "typeOfUse": "DIGITAL",
+    "scenarioShareDetails": [
+      {
+        "rhAccountNumber": 1000002859,
+        "payeeAccountNumber": 1000002859,
+        "typeOfUse": "DIGITAL",
+        "volumeWeight": 1.0000000000,
+        "valueWeight": 1.0000000000,
+        "valueShare": 0.1000000000,
+        "volumeShare": 0.0000000001,
+        "detailShare": 0.9000000000,
+        "volumeWeightDenominator": 1.0000000000,
+        "valueWeightDenominator": 1.0000000000,
+        "netAmount": 168.0000000000,
+        "serviceFeeAmount": 32.0000000000,
+        "grossAmount": 200.0000000000
+      }
+    ]
+  },
+  {
+    "scenarioId": "326d59f3-bdea-4579-9100-63d0e76386fe",
+    "period": 202206,
+    "originalDetailId": "OGN674GHHSB108",
+    "wrWrkInst": 122820638,
+    "systemTitle": "Technology review",
+    "detailLicenseeClass": {
+      "id": 1,
+      "description": "Food and Tobacco",
+      "aggregateLicenseeClass": {
+      }
+    },
+    "aggregateLicenseeClassId": 51,
+    "aggregateLicenseeClassName": "Materials",
+    "publicationType": {
+      "id": "73876e58-2e87-485e-b6f3-7e23792dd214",
+      "name": "BK",
+      "description": "Book",
+      "weight": 2.00
+    },
+    "price": 4.0000000000,
+    "priceFlag": true,
+    "content": 2.0000000000,
+    "contentFlag": true,
+    "contentUnitPrice": 3.0000000000,
+    "contentUnitPriceFlag": true,
+    "numberOfCopies": 2.00000,
+    "usageAgeWeight": 0.99000,
+    "weightedCopies": 0.9000000000,
+    "surveyCountry": "Germany",
+    "reportedTypeOfUse": "EMAIL_COPY",
+    "typeOfUse": "DIGITAL",
+    "scenarioShareDetails": [
+      {
+        "rhAccountNumber": 1000002859,
+        "payeeAccountNumber": 1000002859,
+        "typeOfUse": "DIGITAL",
+        "volumeWeight": 1.0000000000,
+        "valueWeight": 1.0000000000,
+        "valueShare": 0.2000000000,
+        "volumeShare": 0.0000000002,
+        "detailShare": 0.8000000000,
+        "volumeWeightDenominator": 1.0000000000,
+        "valueWeightDenominator": 1.0000000000,
+        "netAmount": 6.0000000000,
+        "serviceFeeAmount": 4.0000000000,
+        "grossAmount": 10.0000000000
+      },
+      {
+        "rhAccountNumber": 1000002859,
+        "payeeAccountNumber": 1000002859,
+        "typeOfUse": "PRINT",
+        "volumeWeight": 1.0000000000,
+        "valueWeight": 1.0000000000,
+        "valueShare": 0.1000000000,
+        "volumeShare": 0.0000000001,
+        "detailShare": 1.0000000000,
+        "volumeWeightDenominator": 1.0000000000,
+        "valueWeightDenominator": 1.0000000000,
+        "netAmount": 84.0000000000,
+        "serviceFeeAmount": 16.0000000000,
+        "grossAmount": 100.0000000000
+      }
+    ]
+  }
+]
