@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.report.api.acl;
 
+import com.copyright.rup.dist.foreign.ui.report.api.ITaxNotificationReportController;
 import com.copyright.rup.vaadin.widget.api.IController;
 
 /**
@@ -27,4 +28,9 @@ public interface IAclReportController extends IController<IAclReportWidget> {
      * @return ACL Liabilities by Rightsholder report controller.
      */
     IAclCommonReportController getAclLiabilitiesByRhReportController();
+
+    /**
+     * @return tax notification report controller.
+     */
+    ITaxNotificationReportController getTaxNotificationReportController();
 }

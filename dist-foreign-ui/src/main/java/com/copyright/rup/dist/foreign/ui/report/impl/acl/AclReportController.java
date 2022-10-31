@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.report.impl.acl;
 
+import com.copyright.rup.dist.foreign.ui.report.api.ITaxNotificationReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.acl.IAclCommonReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.acl.IAclReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.acl.IAclReportWidget;
@@ -33,6 +34,8 @@ public class AclReportController extends CommonController<IAclReportWidget> impl
     @Autowired
     @Qualifier("df.aclLiabilitiesByRhReportController")
     private IAclCommonReportController liabilitiesByRhReportController;
+    @Autowired
+    private ITaxNotificationReportController taxNotificationReportController;
 
     @Override
     public IAclCommonReportController getAclLiabilitiesByAggLicClassReportController() {
@@ -47,6 +50,11 @@ public class AclReportController extends CommonController<IAclReportWidget> impl
     @Override
     public IAclCommonReportController getAclLiabilitiesByRhReportController() {
         return liabilitiesByRhReportController;
+    }
+
+    @Override
+    public ITaxNotificationReportController getTaxNotificationReportController() {
+        return taxNotificationReportController;
     }
 
     @Override

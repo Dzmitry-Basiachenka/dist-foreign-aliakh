@@ -121,7 +121,8 @@ public class RhTaxService implements IRhTaxService {
             result.sort(Comparator
                 .comparing(RhTaxInformation::getTypeOfForm, Comparator.nullsFirst(String::compareToIgnoreCase))
                 .thenComparing(RhTaxInformation::getPayeeName, Comparator.nullsFirst(String::compareToIgnoreCase))
-                .thenComparing(RhTaxInformation::getRhName, Comparator.nullsFirst(String::compareToIgnoreCase)));
+                .thenComparing(RhTaxInformation::getRhName, Comparator.nullsFirst(String::compareToIgnoreCase))
+                .thenComparing(RhTaxInformation::getProductFamily));
             return result;
         } else {
             return Collections.emptyList();
