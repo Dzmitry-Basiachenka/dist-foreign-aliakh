@@ -1,3 +1,23 @@
+16.0.10
+-
+* B-74414 FDA: Delete Calculation Tab Usage Batch: implement view window and menu item
+* B-74414 FDA: Delete Calculation Tab Usage Batch: implement backend logic to delete ACL Usage Batch
+* B-57804 FDA: Submit and Approve an ACL scenario: create Approve, Submit and Reject buttons
+* B-57804 FDA: Submit and Approve an ACL scenario: implement logic to validate scenario
+* B-57804 FDA: Submit and Approve an ACL scenario: implement logic to update scenario state in database
+* B-57804 FDA: Submit and Approve an ACL scenario: implement logic to apply permissions for new buttons
+* B-61502 FDA: Tax Notification Report for ACL: implementation of reading necessary scenarios
+* B-61502 FDA: Tax Notification Report for ACL: implement reading rightsholders and payees information
+* B-61502 FDA: Tax Notification Report for ACL: refactor the existing report service to use ACL rightsholders and payees information
+* B-57685 FDA: Baseline Value updates report: implement backend logic to generate report
+* B-57685 FDA: Baseline Value updates report: implement backend logic to populate report filters
+* B-57685 FDA: Baseline Value updates report: implement window to generate report and add report button to UDM report tab
+* B-57685 FDA: Baseline Value updates report: implement query to retrieve information from database to generate report
+* B-57810 FDA: Send ACL scenario to LM: Add Sent to LM button and apply permission
+* B-57810 FDA: Send ACL scenario to LM: add new archived tables for scenario details
+* B-75349 FDA: Add filters for ACL scenarios view: remove Created Date column from Scenarios view
+* B-75349 FDA: Add filters for ACL scenarios view: implement ACL Scenario Filter domain object
+
 16.0.9
 -
 * B-75009 FDA: Liabilities by RH Report: display the newest payee in case of difference in chosen scenarios
