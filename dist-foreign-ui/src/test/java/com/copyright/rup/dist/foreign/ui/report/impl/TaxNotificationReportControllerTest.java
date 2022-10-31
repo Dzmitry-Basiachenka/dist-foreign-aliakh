@@ -101,7 +101,7 @@ public class TaxNotificationReportControllerTest {
         expectLastCall().once();
         replay(OffsetDateTime.class, widget, reportService, productFamilyProvider);
         IStreamSource streamSource = controller.getCsvStreamSource();
-        assertEquals("tax_notification_01_02_2019_03_04.csv", streamSource.getSource().getKey().get());
+        assertEquals("tax_notification_report_01_02_2019_03_04.csv", streamSource.getSource().getKey().get());
         assertNotNull(streamSource.getSource().getValue().get());
         assertNotNull(osCapture.getValue());
         verify(OffsetDateTime.class, widget, reportService, productFamilyProvider);

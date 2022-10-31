@@ -62,7 +62,7 @@ public class TaxNotificationReportController extends CommonController<ITaxNotifi
     @Override
     public IStreamSource getCsvStreamSource() {
         String productFamily = productFamilyProvider.getSelectedProductFamily();
-        return new ByteArrayStreamSource("tax_notification_",
+        return new ByteArrayStreamSource("tax_notification_report_",
             os -> reportService.writeTaxNotificationCsvReport(productFamily, getWidget().getSelectedScenarioIds(),
                 getWidget().getNumberOfDays(), os));
     }
