@@ -90,6 +90,17 @@
         <result property="count" column="count"/>
     </resultMap>
 
+    <resultMap id="udmBaselineValueUpdatesReportDtoResultMap" type="UdmBaselineValueUpdatesReportDto">
+        <result property="valueId" column="df_udm_value_uid"/>
+        <result property="actionType" column="action_type_ind"/>
+        <result property="actionReason" column="action_reason"/>
+        <result property="wrWrkInst" column="wr_wrk_inst"/>
+        <result property="systemTitle" column="system_title"/>
+        <result property="period" column="period"/>
+        <result property="updateDate" column="updated_datetime"/>
+        <result property="updateUser" column="updated_by_user"/>
+    </resultMap>
+
     <sql id="commonUdmFilterWhereClauses">
         <where>
             <if test="null != channel">
@@ -388,5 +399,47 @@
         </if>
         group by status_ind, assignee
         order by status_ind, assignee
+    </select>
+
+    <select id="findUdmBaselineValueUpdatesReportDtos" resultMap="udmBaselineValueUpdatesReportDtoResultMap">
+        with publish_to_baseline as (
+            select
+                min(va.updated_datetime) as updated_datetime,
+                va.df_udm_value_uid
+            from ${schema}.df_udm_value_audit va
+            where va.action_type_ind = 'PUBLISH_TO_BASELINE'
+            group by va.df_udm_value_uid
+        )
+        select
+            v.df_udm_value_uid,
+            va.action_type_ind,
+            va.action_reason,
+            v.wr_wrk_inst,
+            v.system_title,
+            v.period,
+            va.updated_datetime,
+            va.updated_by_user
+        from ${schema}.df_udm_value_audit va
+        join ${schema}.df_udm_value v on v.df_udm_value_uid = va.df_udm_value_uid
+        join publish_to_baseline ptb on ptb.df_udm_value_uid = va.df_udm_value_uid
+        <where>
+            va.updated_datetime > ptb.updated_datetime and va.action_type_ind = 'VALUE_EDIT'
+            <if test="periods.size() > 0">
+                and
+                <foreach collection="periods" item="period" open="(" separator=" or " close=")">
+                    v.period = #{period}
+                </foreach>
+            </if>
+            <if test="userNames.size() > 0">
+                and
+                <foreach collection="userNames" item="userName" open="(" separator=" or " close=")">
+                    va.updated_by_user = #{userName}
+                </foreach>
+            </if>
+            <if test="null != dateFrom and null != dateTo">
+                and va.updated_datetime::date between #{dateFrom} and #{dateTo}
+            </if>
+        </where>
+        order by v.updated_datetime desc, v.df_udm_value_uid asc, va.updated_datetime desc
     </select>
 </mapper>
