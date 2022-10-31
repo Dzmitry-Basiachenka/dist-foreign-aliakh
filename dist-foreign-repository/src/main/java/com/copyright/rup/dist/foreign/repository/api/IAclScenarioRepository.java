@@ -172,7 +172,7 @@ public interface IAclScenarioRepository {
      *
      * @param licenseType scenario license type
      * @param period      period
-     * @return <code>true</code> if scenario is not exists with license type, period and status
+     * @return <code>true</code> if scenario is exists with license type, period and status
      * otherwise <code>false</code>
      */
     boolean submittedScenarioExistWithLicenseTypeAndPeriod(String licenseType, Integer period);

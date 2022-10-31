@@ -206,7 +206,7 @@ public class AclScenarioService implements IAclScenarioService {
     }
 
     @Override
-    public boolean isExistsSubmittedScenario(AclScenario selectedScenario) {
+    public boolean isNotExistsSubmittedScenario(AclScenario selectedScenario) {
         return !aclScenarioRepository.submittedScenarioExistWithLicenseTypeAndPeriod(selectedScenario.getLicenseType(),
             selectedScenario.getPeriodEndDate());
     }

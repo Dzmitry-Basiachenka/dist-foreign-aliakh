@@ -183,7 +183,7 @@ public interface IAclScenarioService {
      * @return <code>true</code> if scenario is not exists with license type, period and
      * SUBMITTED, APPROVED, ARCHIVED statuses otherwise <code>false</code>
      */
-    boolean isExistsSubmittedScenario(AclScenario scenario);
+    boolean isNotExistsSubmittedScenario(AclScenario scenario);
 
     /**
      * Change scenario state {@link AclScenario}.

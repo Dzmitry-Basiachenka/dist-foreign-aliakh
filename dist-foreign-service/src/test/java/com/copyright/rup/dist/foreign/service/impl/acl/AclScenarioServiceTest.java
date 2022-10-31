@@ -287,7 +287,7 @@ public class AclScenarioServiceTest {
         expect(aclScenarioRepository.submittedScenarioExistWithLicenseTypeAndPeriod("ACL", 202212)).andReturn(false)
             .once();
         replay(aclScenarioRepository);
-        assertTrue(aclScenarioService.isExistsSubmittedScenario(scenario));
+        assertTrue(aclScenarioService.isNotExistsSubmittedScenario(scenario));
         verify(aclScenarioRepository);
     }
 
