@@ -2,7 +2,6 @@ package com.copyright.rup.dist.foreign.ui.scenario.impl.acl.calculation;
 
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.capture;
-import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.newCapture;
@@ -10,6 +9,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
+import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
@@ -57,7 +57,6 @@ import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.powermock.api.easymock.PowerMock;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
@@ -423,7 +422,7 @@ public class AclScenariosControllerTest {
     @Test
     public void testHandleAction() {
         expect(scenariosWidget.getSelectedScenario()).andReturn(aclScenario).once();
-        expect(aclScenarioService.isExistsSubmittedScenario(aclScenario)).andReturn(true).once();
+        expect(aclScenarioService.isNotExistsSubmittedScenario(aclScenario)).andReturn(true).once();
         mockStatic(Windows.class);
         Windows.showConfirmDialogWithReason(eq("Confirm action"), eq("Are you sure you want to perform action?"),
             eq("Yes"), eq("Cancel"), anyObject(ConfirmActionDialogWindow.IListener.class), anyObject(Validator.class));
@@ -436,7 +435,7 @@ public class AclScenariosControllerTest {
     @Test
     public void testHandleActionApproved() {
         expect(scenariosWidget.getSelectedScenario()).andReturn(aclScenario).once();
-        expect(aclScenarioService.isExistsSubmittedScenario(aclScenario)).andReturn(true).once();
+        expect(aclScenarioService.isNotExistsSubmittedScenario(aclScenario)).andReturn(true).once();
         mockStatic(Windows.class);
         Windows.showConfirmDialogWithReason(eq("Confirm action"), eq("Are you sure you want to perform action?"),
             eq("Yes"), eq("Cancel"), anyObject(ConfirmActionDialogWindow.IListener.class), anyObject(Validator.class));
@@ -449,7 +448,7 @@ public class AclScenariosControllerTest {
     @Test
     public void testHandleActionRejected() {
         expect(scenariosWidget.getSelectedScenario()).andReturn(aclScenario).once();
-        expect(aclScenarioService.isExistsSubmittedScenario(aclScenario)).andReturn(true).once();
+        expect(aclScenarioService.isNotExistsSubmittedScenario(aclScenario)).andReturn(true).once();
         mockStatic(Windows.class);
         Windows.showConfirmDialogWithReason(eq("Confirm action"), eq("Are you sure you want to perform action?"),
             eq("Yes"), eq("Cancel"), anyObject(ConfirmActionDialogWindow.IListener.class), anyObject(Validator.class));
@@ -464,7 +463,7 @@ public class AclScenariosControllerTest {
         expect(scenariosWidget.getSelectedScenario()).andReturn(aclScenario).once();
         scenariosWidget.refresh();
         expectLastCall().once();
-        IAclScenarioActionHandler handler = PowerMock.createMock(IAclScenarioActionHandler.class);
+        IAclScenarioActionHandler handler = createMock(IAclScenarioActionHandler.class);
         handler.handleAction(aclScenario, "reason");
         expectLastCall().once();
         replay(scenariosWidget, handler);
@@ -475,7 +474,7 @@ public class AclScenariosControllerTest {
     @Test
     public void testHandleActionNull() {
         expect(scenariosWidget.getSelectedScenario()).andReturn(aclScenario).once();
-        expect(aclScenarioService.isExistsSubmittedScenario(aclScenario)).andReturn(true).once();
+        expect(aclScenarioService.isNotExistsSubmittedScenario(aclScenario)).andReturn(true).once();
         mockStatic(Windows.class);
         replay(scenariosWidget, Windows.class, aclScenarioService);
         aclScenariosController.handleAction(null);
@@ -485,7 +484,7 @@ public class AclScenariosControllerTest {
     @Test
     public void testHandleActionSubmittedScenario() {
         expect(scenariosWidget.getSelectedScenario()).andReturn(aclScenario).once();
-        expect(aclScenarioService.isExistsSubmittedScenario(aclScenario)).andReturn(false).once();
+        expect(aclScenarioService.isNotExistsSubmittedScenario(aclScenario)).andReturn(false).once();
         mockStatic(Windows.class);
         Windows.showNotificationWindow(
             eq("This scenario cannot be submitted for approval because scenario in 202212 period " +

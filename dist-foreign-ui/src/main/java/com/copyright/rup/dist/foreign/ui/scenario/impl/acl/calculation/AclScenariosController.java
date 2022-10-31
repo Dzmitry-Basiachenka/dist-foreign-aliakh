@@ -239,7 +239,7 @@ public class AclScenariosController extends CommonController<IAclScenariosWidget
     public void handleAction(ScenarioActionTypeEnum actionType) {
         AclScenario scenario = getWidget().getSelectedScenario();
         if (ScenarioStatusEnum.SUBMITTED.equals(scenario.getStatus())
-            || aclScenarioService.isExistsSubmittedScenario(scenario)) {
+            || aclScenarioService.isNotExistsSubmittedScenario(scenario)) {
             IAclScenarioActionHandler actionHandler = actionHandlers.get(actionType);
             if (Objects.nonNull(actionHandler)) {
                 Windows.showConfirmDialogWithReason(
