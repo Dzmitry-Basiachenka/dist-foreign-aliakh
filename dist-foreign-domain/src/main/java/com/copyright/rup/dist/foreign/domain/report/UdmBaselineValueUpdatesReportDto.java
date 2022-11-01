@@ -1,7 +1,7 @@
 package com.copyright.rup.dist.foreign.domain.report;
 
 import com.copyright.rup.dist.common.domain.StoredEntity;
-import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
+import com.copyright.rup.dist.foreign.domain.UdmValueActionTypeEnum;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -19,7 +19,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 public class UdmBaselineValueUpdatesReportDto extends StoredEntity<String> {
 
     private String valueId;
-    private UsageActionTypeEnum actionType;
+    private UdmValueActionTypeEnum actionType;
     private String actionReason;
     private Long wrWrkInst;
     private String systemTitle;
@@ -33,11 +33,11 @@ public class UdmBaselineValueUpdatesReportDto extends StoredEntity<String> {
         this.valueId = valueId;
     }
 
-    public UsageActionTypeEnum getActionType() {
+    public UdmValueActionTypeEnum getActionType() {
         return actionType;
     }
 
-    public void setActionType(UsageActionTypeEnum actionType) {
+    public void setActionType(UdmValueActionTypeEnum actionType) {
         this.actionType = actionType;
     }
 

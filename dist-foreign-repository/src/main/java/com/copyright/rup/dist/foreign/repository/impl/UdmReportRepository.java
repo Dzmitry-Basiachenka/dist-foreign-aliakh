@@ -8,6 +8,7 @@ import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUdmReportRepository;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmAssigneesByStatusReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmBaselineUsageCsvReportHandler;
+import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmBaselineValueUpdatesReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmCompletedAssignmentsReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmProxyValueCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmSurveyLicenseeReportHandler;
@@ -144,7 +145,10 @@ public class UdmReportRepository extends CommonReportRepository implements IUdmR
 
     @Override
     public void writeUdmBaselineValueUpdatesCsvReport(UdmReportFilter reportFilter, OutputStream outputStream) {
-        //TODO {dbasiachenka} implement
+        try (UdmBaselineValueUpdatesReportHandler handler =
+                 new UdmBaselineValueUpdatesReportHandler(Objects.requireNonNull(outputStream))) {
+            getTemplate().select("IUdmReportMapper.findUdmBaselineValueUpdatesReportDtos", reportFilter, handler);
+        }
     }
 
     private void writeUdmUsageCsvReport(UdmUsageFilter filter, BaseCsvReportHandler handler) {
