@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.repository.api;
 
 import com.copyright.rup.dist.foreign.domain.AclScenarioDetail;
+import com.copyright.rup.dist.foreign.domain.AclScenarioLiabilityDetail;
 
 import java.util.List;
 
@@ -40,4 +41,12 @@ public interface IAclScenarioUsageArchiveRepository {
      * @return list of {@link AclScenarioDetail}s
      */
     List<AclScenarioDetail> findByScenarioId(String scenarioId);
+
+    /**
+     * Finds {@link AclScenarioLiabilityDetail} info for sending to LM.
+     *
+     * @param scenarioId scenario id
+     * @return list of found {@link AclScenarioLiabilityDetail}s
+     */
+    List<AclScenarioLiabilityDetail> findForSendToLmByScenarioId(String scenarioId);
 }

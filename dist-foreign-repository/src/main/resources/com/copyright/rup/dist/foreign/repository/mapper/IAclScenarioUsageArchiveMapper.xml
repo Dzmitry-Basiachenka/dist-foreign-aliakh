@@ -47,6 +47,20 @@
         </collection>
     </resultMap>
 
+    <resultMap id="archivedScenarioLiabilitiesResultMap" type="AclScenarioLiabilityDetail">
+        <result property="liabilityDetailId" column="df_acl_share_detail_archived_uid"/>
+        <result property="rhAccountNumber" column="rh_account_number"/>
+        <result property="wrWrkInst" column="wr_wrk_inst"/>
+        <result property="systemTitle" column="system_title"/>
+        <result property="typeOfUse" column="type_of_use"/>
+        <result property="licenseType" column="license_type"/>
+        <result property="aggregateLicenseeClassName" column="detail_licensee_class_name"/>
+        <result property="productFamily" column="product_family"/>
+        <result property="netAmount" column="net_amount"/>
+        <result property="serviceFeeAmount" column="service_fee_amount"/>
+        <result property="grossAmount" column="gross_amount"/>
+    </resultMap>
+
     <select id="copyScenarioDetailsToArchiveByScenarioId" parameterType="map" resultType="string">
         insert into ${schema}.df_acl_scenario_detail_archived (
             df_acl_scenario_detail_archived_uid,
@@ -196,5 +210,25 @@
         join ${schema}.df_aggregate_licensee_class alc on slc.aggregate_licensee_class_id = alc.aggregate_licensee_class_id
         where sda.df_acl_scenario_uid = #{scenarioId}
         order by original_detail_id, shda.type_of_use
+    </select>
+
+    <select id="findForSendToLmByScenarioId" resultMap="archivedScenarioLiabilitiesResultMap">
+        select
+            df_acl_share_detail_archived_uid,
+            sda.wr_wrk_inst,
+            sda.system_title,
+            rh_account_number,
+            shda.type_of_use,
+            case when shda.type_of_use = 'DIGITAL' then 'ACLDIGITAL' else 'ACLPRINT' end as product_family,
+            s.license_type,
+            alc.description detail_licensee_class_name,
+            gross_amount,
+            service_fee_amount,
+            net_amount
+        from ${schema}.df_acl_share_detail_archived shda
+        join ${schema}.df_acl_scenario_detail_archived sda on shda.df_acl_scenario_detail_archived_uid = sda.df_acl_scenario_detail_archived_uid
+        join ${schema}.df_acl_scenario s on shda.df_acl_scenario_uid = s.df_acl_scenario_uid
+        join ${schema}.df_aggregate_licensee_class alc on shda.aggregate_licensee_class_id = alc.aggregate_licensee_class_id
+        where sda.df_acl_scenario_uid = #{scenarioId}
     </select>
 </mapper>

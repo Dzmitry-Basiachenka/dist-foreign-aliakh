@@ -1,0 +1,41 @@
+[
+  {
+    "liabilityDetailId": "2f55e6df-7be6-4a34-966d-6b53222f4e4b",
+    "rhAccountNumber": 1000002859,
+    "wrWrkInst": 122813964,
+    "systemTitle": "Aerospace America",
+    "typeOfUse": "DIGITAL",
+    "licenseType": "ACL",
+    "aggregateLicenseeClassName": "Food and Tobacco",
+    "productFamily": "ACLDIGITAL",
+    "netAmount": 168.0000000000,
+    "serviceFeeAmount": 32.0000000000,
+    "grossAmount": 200.0000000000
+  },
+  {
+    "liabilityDetailId": "a7cf7f7c-8884-48e1-a6d8-a1315f27dc6f",
+    "rhAccountNumber": 1000002859,
+    "wrWrkInst": 122820638,
+    "systemTitle": "Technology review",
+    "typeOfUse": "PRINT",
+    "licenseType": "ACL",
+    "aggregateLicenseeClassName": "Food and Tobacco",
+    "productFamily": "ACLPRINT",
+    "netAmount": 84.0000000000,
+    "serviceFeeAmount": 16.0000000000,
+    "grossAmount": 100.0000000000
+  },
+  {
+    "liabilityDetailId": "f250cc16-e95b-4e66-a31a-13068b67d247",
+    "rhAccountNumber": 1000002859,
+    "wrWrkInst": 122820638,
+    "systemTitle": "Technology review",
+    "typeOfUse": "DIGITAL",
+    "licenseType": "ACL",
+    "aggregateLicenseeClassName": "Food and Tobacco",
+    "productFamily": "ACLDIGITAL",
+    "netAmount": 6.0000000000,
+    "serviceFeeAmount": 4.0000000000,
+    "grossAmount": 10.0000000000
+  }
+]

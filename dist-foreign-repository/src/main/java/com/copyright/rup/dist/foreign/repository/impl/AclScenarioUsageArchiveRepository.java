@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
 import com.copyright.rup.dist.foreign.domain.AclScenarioDetail;
+import com.copyright.rup.dist.foreign.domain.AclScenarioLiabilityDetail;
 import com.copyright.rup.dist.foreign.repository.api.IAclScenarioUsageArchiveRepository;
 
 import com.google.common.collect.Maps;
@@ -46,5 +47,10 @@ public class AclScenarioUsageArchiveRepository extends AclBaseRepository impleme
     @Override
     public List<AclScenarioDetail> findByScenarioId(String scenarioId) {
         return selectList("IAclScenarioUsageArchiveMapper.findScenarioDetailsByScenarioId", scenarioId);
+    }
+
+    @Override
+    public List<AclScenarioLiabilityDetail> findForSendToLmByScenarioId(String scenarioId) {
+        return selectList("IAclScenarioUsageArchiveMapper.findForSendToLmByScenarioId", scenarioId);
     }
 }
