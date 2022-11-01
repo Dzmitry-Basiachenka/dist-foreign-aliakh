@@ -383,18 +383,21 @@
         select name
         from ${schema}.df_acl_scenario
         where df_acl_usage_batch_uid = #{usageBatchId}
+        order by name
     </select>
 
     <select id="findScenarioNamesByFundPoolId" parameterType="string" resultType="string">
         select name
         from ${schema}.df_acl_scenario
         where df_acl_fund_pool_uid = #{fundPoolId}
+        order by name
     </select>
 
     <select id="findScenarioNamesByGrantSetId" parameterType="string" resultType="string">
         select name
         from ${schema}.df_acl_scenario
         where df_acl_grant_set_uid = #{grantSetId}
+        order by name
     </select>
 
     <select id="findUsageAgeWeightsByScenarioId" parameterType="string" resultMap="UsageAgeResultMap">

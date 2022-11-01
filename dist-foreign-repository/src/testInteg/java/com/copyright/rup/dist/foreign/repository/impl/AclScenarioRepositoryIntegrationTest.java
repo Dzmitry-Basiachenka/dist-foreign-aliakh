@@ -169,8 +169,11 @@ public class AclScenarioRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FOLDER_NAME + "find-scenario-names-by-usage-batch-id.groovy")
     public void testFindScenarioNamesByUsageBatchId() {
-        assertEquals(2,
-            aclScenarioRepository.findScenarioNamesByUsageBatchId("b52b5b2d-77b3-42f1-89a1-85a0c083fd0a").size());
+        List<String> expectedScenarioNames = Arrays.asList("ACL Scenario 202112 find by Usage Batch id 1",
+            "ACL Scenario 202112 find by Usage Batch id 2");
+        List<String> actualScenarioNames =
+            aclScenarioRepository.findScenarioNamesByUsageBatchId("b52b5b2d-77b3-42f1-89a1-85a0c083fd0a");
+        verifyScenarioNames(expectedScenarioNames, actualScenarioNames);
         assertTrue(CollectionUtils.isEmpty(
             aclScenarioRepository.findScenarioNamesByUsageBatchId("818d564a-2db7-431f-8ea1-fe74dfdd0973")));
     }
@@ -178,8 +181,11 @@ public class AclScenarioRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FOLDER_NAME + "find-scenario-names-by-fund-pool-id.groovy")
     public void testFindScenarioNamesByFundPoolId() {
-        assertEquals(2,
-            aclScenarioRepository.findScenarioNamesByFundPoolId("f8e623b0-7e18-4a06-a754-0a81decff96f").size());
+        List<String> expectedScenarioNames = Arrays.asList("ACL Scenario 202112 find by Fund Pool id 1",
+            "ACL Scenario 202112 find by Fund Pool id 2");
+        List<String> actualScenarioNames =
+            aclScenarioRepository.findScenarioNamesByFundPoolId("f8e623b0-7e18-4a06-a754-0a81decff96f");
+        verifyScenarioNames(expectedScenarioNames, actualScenarioNames);
         assertTrue(CollectionUtils.isEmpty(
             aclScenarioRepository.findScenarioNamesByFundPoolId("7df8b1ec-c464-42a8-aa28-52bb5bc7cb7b")));
     }
@@ -187,8 +193,11 @@ public class AclScenarioRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FOLDER_NAME + "find-scenario-names-by-grant-set-id.groovy")
     public void testFindScenarioNamesByGrantSetId() {
-        assertEquals(2,
-            aclScenarioRepository.findScenarioNamesByGrantSetId("60e31e39-bac9-4e51-8d5d-009f1ec334fa").size());
+        List<String> expectedScenarioNames = Arrays.asList("ACL Scenario 202212 find by Grant Set id 1",
+            "ACL Scenario 202212 find by Grant Set id 2");
+        List<String> actualScenarioNames =
+            aclScenarioRepository.findScenarioNamesByGrantSetId("60e31e39-bac9-4e51-8d5d-009f1ec334fa");
+        verifyScenarioNames(expectedScenarioNames, actualScenarioNames);
         assertTrue(CollectionUtils.isEmpty(
             aclScenarioRepository.findScenarioNamesByGrantSetId("f71caf7b-410d-4a8e-b933-e93922067269")));
     }
@@ -408,5 +417,10 @@ public class AclScenarioRepositoryIntegrationTest {
             actualDetailLicenseeClass.getAggregateLicenseeClass().getId());
         assertEquals(expectedDetailLicenseeClass.getAggregateLicenseeClass().getDescription(),
             actualDetailLicenseeClass.getAggregateLicenseeClass().getDescription());
+    }
+
+    private void verifyScenarioNames(List<String> expectedScenarioNames, List<String> actualScenarioNames) {
+        assertEquals(expectedScenarioNames.size(), actualScenarioNames.size());
+        assertEquals(expectedScenarioNames, actualScenarioNames);
     }
 }

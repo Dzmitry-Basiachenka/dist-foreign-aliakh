@@ -139,10 +139,10 @@ public interface IAclUsageController extends IController<IAclUsageWidget> {
     void deleteAclUsageBatch(AclUsageBatch usageBatch);
 
     /**
-     * Gets AclScenario names associated with grant set.
+     * Gets AclScenario names associated with usage batch.
      *
      * @param usageBatchId usage batch id
-     * @return AclScenario names associated with grant set
+     * @return AclScenario names associated with usage batch
      */
     List<String> getScenarioNamesAssociatedWithUsageBatch(String usageBatchId);
 }
