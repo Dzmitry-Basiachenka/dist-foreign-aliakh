@@ -193,4 +193,22 @@ databaseChangeLog {
             //automatic rollback
         }
     }
+
+    changeSet(id: '2022-10-31-02', author: 'Anton Azarenka <aazarenka@copyright.com>') {
+        comment("B-57810 FDA: Send ACL scenario to LM: rename usage_quantity column to number_of_copies in " +
+                "df_acl_scenario_detail_archived table")
+
+        modifyDataType(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_detail_archived', columnName: 'usage_quantity', newDataType: 'numeric(38,5)')
+
+        renameColumn(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_detail_archived', oldColumnName: 'usage_quantity',
+                newColumnName: 'number_of_copies', columnDataType: 'NUMERIC(38,5)')
+
+        rollback {
+
+            renameColumn(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_detail_archived', oldColumnName: 'number_of_copies',
+                    newColumnName: 'usage_quantity', columnDataType: 'NUMERIC(38, 5)')
+
+            modifyDataType(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_detail_archived', columnName: 'usage_quantity', newDataType: 'numeric(38)')
+        }
+    }
 }

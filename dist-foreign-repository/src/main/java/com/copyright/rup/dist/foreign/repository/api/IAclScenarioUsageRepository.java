@@ -90,7 +90,7 @@ public interface IAclScenarioUsageRepository {
     /**
      * Finds {@link AclRightsholderTotalsHolder}s based on ACL scenario id.
      *
-     * @param scenarioId  scenario id
+     * @param scenarioId scenario id
      * @return list of {@link AclRightsholderTotalsHolder}s
      */
     List<AclRightsholderTotalsHolder> findAclRightsholderTotalsHoldersByScenarioId(String scenarioId);
