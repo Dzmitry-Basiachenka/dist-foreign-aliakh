@@ -176,7 +176,8 @@ public class DomainVerifierTest {
             {AclLiabilitiesByRhReportDto.class},
             {RightsholderTypeOfUsePair.class},
             {AclScenarioFilter.class},
-            {UdmBaselineValueUpdatesReportDto.class}
+            {UdmBaselineValueUpdatesReportDto.class},
+            {AclScenarioLiabilityDetail.class}
         };
         return Arrays.asList(testData);
     }
