@@ -1,0 +1,8 @@
+Value ID,Action Type,Action Reason,Wr Wrk Inst,System Title,Value Period,Updated Date,Updated By
+01a40ecd-b06e-4658-9a66-cb48ac53c1ea,VALUE_EDIT,The field 'CUP Flag' was edited. Old Value is 'N'. New Value is 'Y',306985899,"Tenside, surfactants, detergents",202206,02/16/2022 7:20 AM,jjohn@copyright.com
+01a40ecd-b06e-4658-9a66-cb48ac53c1ea,VALUE_EDIT,The field 'Content Unit Price' was edited. Old Value is not specified. New Value is '6.00',306985899,"Tenside, surfactants, detergents",202206,02/16/2022 7:20 AM,jjohn@copyright.com
+01a40ecd-b06e-4658-9a66-cb48ac53c1ea,VALUE_EDIT,The field 'Content' was edited. Old Value is not specified. New Value is '2',306985899,"Tenside, surfactants, detergents",202206,02/16/2022 7:20 AM,jjohn@copyright.com
+01a40ecd-b06e-4658-9a66-cb48ac53c1ea,VALUE_EDIT,The field 'Content Source' was edited. Old Value is not specified. New Value is 'Book',306985899,"Tenside, surfactants, detergents",202206,02/16/2022 7:20 AM,jjohn@copyright.com
+01a40ecd-b06e-4658-9a66-cb48ac53c1ea,VALUE_EDIT,The field 'Content Flag' was edited. Old Value is 'N'. New Value is 'Y',306985899,"Tenside, surfactants, detergents",202206,02/16/2022 7:20 AM,jjohn@copyright.com
+01a40ecd-b06e-4658-9a66-cb48ac53c1ea,VALUE_EDIT,The field 'Pub Type' was edited. Old Value is not specified. New Value is 'BK2 - Book series',306985899,"Tenside, surfactants, detergents",202206,02/16/2022 7:10 AM,jjohn@copyright.com
+c61fae87-8e77-4c60-a21b-ea4ffc3812eb,VALUE_EDIT,The field 'Pub Type' was edited. Old Value was 'NL - Newsletter'. New Value is 'NP - Newsletter',823333788,Redfords and Mitchells,202206,02/16/2022 7:10 AM,ajohn@copyright.com

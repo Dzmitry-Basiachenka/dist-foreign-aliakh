@@ -63,6 +63,8 @@ public class UdmCsvReportsIntegrationTest extends CsvReportsTestHelper {
         FOLDER_NAME + "write-values-by-status-csv-report.groovy";
     private static final String WRITE_USAGES_BY_STATUS_CSV_REPORT =
         FOLDER_NAME + "write-usages-by-status-csv-report.groovy";
+    private static final String WRITE_BASELINE_VALUE_UPDATES_CSV_REPORT =
+        FOLDER_NAME + "write-baseline-value-updates-csv-report.groovy";
 
     @Autowired
     private IUdmReportRepository udmReportRepository;
@@ -357,5 +359,31 @@ public class UdmCsvReportsIntegrationTest extends CsvReportsTestHelper {
         assertFilesWithExecutor(
             outputStream -> udmReportRepository.writeUdmUsagesByStatusCsvReport(202212, outputStream),
             "udm/common_status_empty_report.csv");
+    }
+
+    @Test
+    @TestData(fileName = WRITE_BASELINE_VALUE_UPDATES_CSV_REPORT)
+    public void testWriteBaselineValueUpdatesCsvReport() throws IOException {
+        UdmReportFilter reportFilter = new UdmReportFilter();
+        reportFilter.setPeriods(Collections.singleton(202206));
+        reportFilter.setUserNames(Sets.newHashSet("ajohn@copyright.com", "jjohn@copyright.com"));
+        reportFilter.setDateFrom(LocalDate.of(2022, 2, 10));
+        reportFilter.setDateTo(LocalDate.of(2022, 2, 17));
+        assertFilesWithExecutor(
+            outputStream -> udmReportRepository.writeUdmBaselineValueUpdatesCsvReport(reportFilter, outputStream),
+            "udm/baseline_value_updates_report.csv");
+    }
+
+    @Test
+    @TestData(fileName = WRITE_BASELINE_VALUE_UPDATES_CSV_REPORT)
+    public void testWriteBaselineValueUpdatesEmptyCsvReport() throws IOException {
+        UdmReportFilter reportFilter = new UdmReportFilter();
+        reportFilter.setPeriods(Collections.singleton(202206));
+        reportFilter.setUserNames(Collections.singleton("user@copyright.com"));
+        reportFilter.setDateFrom(LocalDate.of(2020, 4, 16));
+        reportFilter.setDateTo(LocalDate.of(2020, 4, 17));
+        assertFilesWithExecutor(
+            outputStream -> udmReportRepository.writeUdmBaselineValueUpdatesCsvReport(reportFilter, outputStream),
+            "udm/baseline_value_updates_empty_report.csv");
     }
 }
