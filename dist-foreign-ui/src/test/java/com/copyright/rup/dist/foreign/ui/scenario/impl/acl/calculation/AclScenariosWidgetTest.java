@@ -53,6 +53,7 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
@@ -121,6 +122,8 @@ public class AclScenariosWidgetTest {
             createMock(Supplier.class))).once();
         expect(controller.getExportAclSummaryOfWorkSharesByAggLcStreamSource()).andReturn(streamSource).once();
         expect(ForeignSecurityUtils.hasSpecialistPermission()).andReturn(true).times(2);
+        expect(controller.initAclScenariosFilterWidget())
+            .andReturn(new AclScenariosFilterWidget(new AclScenariosFilterController())).once();
         replay(controller, streamSource, ForeignSecurityUtils.class);
         scenariosWidget.init();
         scenariosWidget.initMediator();
@@ -132,23 +135,33 @@ public class AclScenariosWidgetTest {
     @Test
     public void testComponentStructure() {
         scenario.setEditableFlag(true);
-        assertEquals(2, scenariosWidget.getComponentCount());
-        verifyButtonsLayout((HorizontalLayout) scenariosWidget.getComponent(0));
-        Component component = scenariosWidget.getComponent(1);
+        assertEquals(1, scenariosWidget.getComponentCount());
+        Component component = scenariosWidget.getComponent(0);
         assertThat(component, instanceOf(HorizontalLayout.class));
-        HorizontalLayout layout = (HorizontalLayout) component;
-        assertEquals(2, layout.getComponentCount());
-        component = layout.getComponent(0);
-        assertThat(component, instanceOf(Grid.class));
-        verifyGrid((Grid) component);
-        component = layout.getComponent(1);
+        HorizontalLayout horizontalLayout = (HorizontalLayout) component;
+        assertEquals(2, horizontalLayout.getComponentCount());
+        HorizontalSplitPanel splitPanel = (HorizontalSplitPanel) horizontalLayout.getComponent(0);
+        assertThat(splitPanel, instanceOf(HorizontalSplitPanel.class));
+        assertEquals(2, splitPanel.getComponentCount());
+        assertThat(splitPanel.getFirstComponent(), instanceOf(AclScenariosFilterWidget.class));
+        VerticalLayout mainLayout = (VerticalLayout) splitPanel.getSecondComponent();
+        assertThat(mainLayout, instanceOf(VerticalLayout.class));
+        HorizontalLayout buttons = (HorizontalLayout) mainLayout.getComponent(0);
+        assertThat(buttons, instanceOf(HorizontalLayout.class));
+        verifyButtonsLayout(buttons);
+        Grid grid = (Grid) mainLayout.getComponent(1);
+        verifyGrid(grid);
+        component = horizontalLayout.getComponent(1);
         assertThat(component, instanceOf(Panel.class));
         verifyPanel((Panel) component);
     }
 
     @Test
     public void testGridValues() {
-        Grid<?> grid = (Grid<?>) ((HorizontalLayout) scenariosWidget.getComponent(1)).getComponent(0);
+        HorizontalSplitPanel splitPanel =
+            (HorizontalSplitPanel) ((HorizontalLayout) scenariosWidget.getComponent(0)).getComponent(0);
+        VerticalLayout mainLayout = (VerticalLayout) splitPanel.getSecondComponent();
+        Grid<?> grid = (Grid<?>) mainLayout.getComponent(1);
         Object[][] expectedCells = {
             {"ACL Scenario name", "ACL", 202212, "N", "IN_PROGRESS"}
         };
@@ -377,7 +390,7 @@ public class AclScenariosWidgetTest {
     }
 
     private Panel getMetaDataPanel() {
-        return (Panel) ((VerticalLayout) (((Panel) ((HorizontalLayout) scenariosWidget.getComponent(1)).getComponent(1))
+        return (Panel) ((VerticalLayout) (((Panel) ((HorizontalLayout) scenariosWidget.getComponent(0)).getComponent(1))
             .getContent())).getComponent(0);
     }
 
@@ -420,7 +433,7 @@ public class AclScenariosWidgetTest {
     }
 
     private void verifyScenarioMetadataPanel() {
-        Panel mainPanel = (Panel) ((HorizontalLayout) scenariosWidget.getComponent(1)).getComponent(1);
+        Panel mainPanel = (Panel) ((HorizontalLayout) scenariosWidget.getComponent(0)).getComponent(1);
         Panel metadataPanel = getMetaDataPanel();
         Component content = metadataPanel.getContent();
         assertThat(content, instanceOf(VerticalLayout.class));

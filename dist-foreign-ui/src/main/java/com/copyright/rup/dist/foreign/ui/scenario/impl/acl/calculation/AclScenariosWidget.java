@@ -40,6 +40,7 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
@@ -99,6 +100,7 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
     private final String userName = RupContextUtils.getUserName();
 
     private IAclScenariosController aclScenariosController;
+    private HorizontalSplitPanel splitPanel;
     private Grid<AclScenario> scenarioGrid;
     private Panel mainPanel;
     private VerticalLayout mainLayout;
@@ -132,14 +134,13 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
     @SuppressWarnings("unchecked")
     public IAclScenariosWidget init() {
         setSizeFull();
+        initSplitPanel();
         initMainPanel();
-        initGrid();
-        HorizontalLayout buttonsLayout = initButtonsLayout();
-        HorizontalLayout horizontalLayout = new HorizontalLayout(scenarioGrid, mainPanel);
+        HorizontalLayout horizontalLayout = new HorizontalLayout(splitPanel, mainPanel);
         horizontalLayout.setSizeFull();
-        horizontalLayout.setExpandRatio(scenarioGrid, 0.7f);
+        horizontalLayout.setExpandRatio(splitPanel, 0.7f);
         horizontalLayout.setExpandRatio(mainPanel, 0.3f);
-        addComponents(buttonsLayout, horizontalLayout);
+        addComponents(horizontalLayout);
         setExpandRatio(horizontalLayout, 1);
         setSpacing(false);
         setMargin(false);
@@ -189,7 +190,24 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
         return reportInfo;
     }
 
-    private void initGrid() {
+    private void initSplitPanel() {
+        splitPanel = new HorizontalSplitPanel();
+        splitPanel.addComponents(aclScenariosController.initAclScenariosFilterWidget(), initMainLayout());
+        splitPanel.setSplitPosition(180, Unit.PIXELS);
+        splitPanel.setLocked(true);
+    }
+
+    private VerticalLayout initMainLayout() {
+        VerticalLayout layout = new VerticalLayout(initButtonsLayout(), initGrid());
+        layout.setSizeFull();
+        layout.setMargin(false);
+        layout.setSpacing(false);
+        layout.setExpandRatio(scenarioGrid, 1);
+        VaadinUtils.addComponentStyle(layout, "acl-scenarios-layout");
+        return layout;
+    }
+
+    private Grid<AclScenario> initGrid() {
         List<AclScenario> scenarios = aclScenariosController.getScenarios();
         dataProvider = DataProvider.ofCollection(scenarios);
         scenarioGrid = new Grid<>(dataProvider);
@@ -198,6 +216,7 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
         scenarioGrid.getColumns().forEach(column -> column.setSortable(true));
         scenarioGrid.addSelectionListener(event -> onItemChanged(event.getFirstSelectedItem().orElse(null)));
         VaadinUtils.addComponentStyle(scenarioGrid, "acl-scenarios-table");
+        return scenarioGrid;
     }
 
     private HorizontalLayout initButtonsLayout() {

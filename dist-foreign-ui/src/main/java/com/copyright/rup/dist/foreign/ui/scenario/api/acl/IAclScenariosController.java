@@ -13,8 +13,12 @@ import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
+import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.vaadin.widget.api.IController;
 
+import com.vaadin.util.ReflectTools;
+
+import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Set;
 
@@ -28,6 +32,26 @@ import java.util.Set;
  * @author Dzmitry Basiachenka
  */
 public interface IAclScenariosController extends IController<IAclScenariosWidget> {
+
+    /**
+     * {@link #onFilterChanged(FilterChangedEvent)}.
+     */
+    Method ON_FILTER_CHANGED =
+        ReflectTools.findMethod(IAclScenariosController.class, "onFilterChanged", FilterChangedEvent.class);
+
+    /**
+        * Initializes {@link IAclScenariosFilterWidget}.
+        *
+        * @return initialized {@link IAclScenariosFilterWidget}
+     */
+    IAclScenariosFilterWidget initAclScenariosFilterWidget();
+
+    /**
+     * Handles changes of filter.
+     *
+     * @param event event
+     */
+    void onFilterChanged(FilterChangedEvent event);
 
     /**
      * Gets {@link AclScenarioDto} by scenario id.
