@@ -32,9 +32,9 @@ public interface IAclFundPoolController extends IController<IAclFundPoolWidget> 
         ReflectTools.findMethod(IAclFundPoolController.class, "onFilterChanged", FilterChangedEvent.class);
 
     /**
-     * Initializes {@link IAclUsageFilterWidget}.
+     * Initializes {@link IAclFundPoolFilterWidget}.
      *
-     * @return initialized {@link IAclUsageFilterWidget}
+     * @return initialized {@link IAclFundPoolFilterWidget}
      */
     IAclFundPoolFilterWidget initAclFundPoolFilterWidget();
 

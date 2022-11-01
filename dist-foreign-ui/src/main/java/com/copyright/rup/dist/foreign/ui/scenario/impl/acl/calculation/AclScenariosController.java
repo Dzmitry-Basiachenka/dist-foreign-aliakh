@@ -30,7 +30,10 @@ import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioActionHand
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioHistoryController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenariosController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenariosFilterController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenariosFilterWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenariosWidget;
+import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.vaadin.security.SecurityUtils;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.widget.api.CommonController;
@@ -89,6 +92,8 @@ public class AclScenariosController extends CommonController<IAclScenariosWidget
     private IStreamSourceHandler streamSourceHandler;
     @Autowired
     private IAclCalculationReportService aclCalculationReportService;
+    @Autowired
+    private IAclScenariosFilterController aclScenariosFilterController;
 
     @Override
     public List<AclScenario> getScenarios() {
@@ -304,6 +309,18 @@ public class AclScenariosController extends CommonController<IAclScenariosWidget
     @Override
     protected IAclScenariosWidget instantiateWidget() {
         return new AclScenariosWidget(this, aclScenarioHistoryController);
+    }
+
+    @Override
+    public IAclScenariosFilterWidget initAclScenariosFilterWidget() {
+        IAclScenariosFilterWidget widget = aclScenariosFilterController.initWidget();
+        widget.addListener(FilterChangedEvent.class, this, IAclScenariosController.ON_FILTER_CHANGED);
+        return widget;
+    }
+
+    @Override
+    public void onFilterChanged(FilterChangedEvent event) {
+        getWidget().refresh();
     }
 
     private void appendCriterionMessage(StringBuilder builder, String criterionName, Object values) {

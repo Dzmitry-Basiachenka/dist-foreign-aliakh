@@ -42,6 +42,7 @@ import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageService;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioActionHandler;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenariosFilterController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenariosWidget;
 import com.copyright.rup.vaadin.security.SecurityUtils;
 import com.copyright.rup.vaadin.ui.component.window.ConfirmActionDialogWindow;
@@ -124,6 +125,7 @@ public class AclScenariosControllerTest {
         aclScenarioController = createMock(IAclScenarioController.class);
         streamSourceHandler = createMock(IStreamSourceHandler.class);
         aclCalculationReportService = createMock(IAclCalculationReportService.class);
+        IAclScenariosFilterController aclScenariosFilterController = createMock(IAclScenariosFilterController.class);
         aclScenario = buildAclScenario();
         aclScenariosController.initActionHandlers();
         mockStatic(SecurityUtils.class);
@@ -142,6 +144,7 @@ public class AclScenariosControllerTest {
         Whitebox.setInternalState(aclScenariosController, aclScenarioController);
         Whitebox.setInternalState(aclScenariosController, streamSourceHandler);
         Whitebox.setInternalState(aclScenariosController, aclCalculationReportService);
+        Whitebox.setInternalState(aclScenariosController, aclScenariosFilterController);
     }
 
     @Test
