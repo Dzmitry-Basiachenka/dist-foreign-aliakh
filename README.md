@@ -1,3 +1,12 @@
+16.0.11
+-
+* B-61502 FDA: Tax Notification Report for ACL: implement report menu item
+* B-61502 FDA: Tax Notification Report for ACL: implement report file name
+* B-57804 FDA: Submit and Approve an ACL scenario: make changes based on comments in code review
+* B-57810 FDA: Send ACL scenario to LM: Implement logic to move scenario details to archive tables
+* B-75349 FDA: Add filters for ACL scenarios view: implement ACL Scenario Filter widget and controller
+* B-57685 FDA: Baseline Value updates report: implement data handler to generate CSV report
+
 16.0.10
 -
 * B-74414 FDA: Delete Calculation Tab Usage Batch: implement view window and menu item
