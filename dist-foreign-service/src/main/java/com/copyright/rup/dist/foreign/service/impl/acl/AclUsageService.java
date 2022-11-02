@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.OutputStream;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -95,6 +96,13 @@ public class AclUsageService implements IAclUsageService {
     public int getCountInvalidUsages(String batchId, String grantSetId, Integer distributionPeriod,
                                      List<Integer> periodPriors) {
         return aclUsageRepository.findCountInvalidUsages(batchId, grantSetId, distributionPeriod, periodPriors);
+    }
+
+    @Override
+    public void writeInvalidUsagesCsvReport(String batchId, String grantSetId, Integer distributionPeriod,
+                                            List<Integer> periodPriors, OutputStream outputStream) {
+        aclUsageRepository.writeInvalidUsagesCsvReport(batchId, grantSetId, distributionPeriod, periodPriors,
+            outputStream);
     }
 
     @Override

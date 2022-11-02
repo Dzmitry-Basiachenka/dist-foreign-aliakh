@@ -28,6 +28,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
+import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
@@ -47,8 +48,10 @@ import java.util.Set;
 public class AclUsageServiceTest {
 
     private static final String USER_NAME = "user@copyright.com";
-    private static final String ACL_BATCH_UID = "73408702-2d7c-48c6-ae7e-a62aa3940ee0";
-    private static final String ACL_GRANT_SET_UID = "6fbd9c98-c119-448a-b0a7-3795319dce00";
+    private static final String BATCH_UID = "73408702-2d7c-48c6-ae7e-a62aa3940ee0";
+    private static final String GRANT_SET_UID = "6fbd9c98-c119-448a-b0a7-3795319dce00";
+    private static final int DISTRIBUTION_PERIOD = 202212;
+    private static final List<Integer> PERIOD_PRIORS = Collections.singletonList(0);
 
     private IAclUsageService aclUsageService;
     private IAclUsageRepository aclUsageRepository;
@@ -154,12 +157,24 @@ public class AclUsageServiceTest {
     }
 
     @Test
-    public void testGetCountWithNullPubTypeOrContentUnitPriceByBatchId() {
-        expect(aclUsageRepository.findCountInvalidUsages(ACL_BATCH_UID, ACL_GRANT_SET_UID, 202212,
-            Collections.singletonList(0))).andReturn(0).once();
+    public void testGetCountInvalidUsages() {
+        expect(aclUsageRepository.findCountInvalidUsages(BATCH_UID, GRANT_SET_UID, DISTRIBUTION_PERIOD,
+            PERIOD_PRIORS)).andReturn(0).once();
         replay(aclUsageRepository);
-        assertEquals(0, aclUsageService.getCountInvalidUsages(
-            ACL_BATCH_UID, ACL_GRANT_SET_UID, 202212, Collections.singletonList(0)));
+        assertEquals(0, aclUsageService.getCountInvalidUsages(BATCH_UID, GRANT_SET_UID, DISTRIBUTION_PERIOD,
+            PERIOD_PRIORS));
+        verify(aclUsageRepository);
+    }
+
+    @Test
+    public void testWriteInvalidUsagesCsvReport() {
+        OutputStream outputStream = createMock(OutputStream.class);
+        aclUsageRepository.writeInvalidUsagesCsvReport(BATCH_UID, GRANT_SET_UID, DISTRIBUTION_PERIOD,
+            PERIOD_PRIORS, outputStream);
+        expectLastCall().once();
+        replay(aclUsageRepository);
+        aclUsageService.writeInvalidUsagesCsvReport(BATCH_UID, GRANT_SET_UID, DISTRIBUTION_PERIOD,
+            PERIOD_PRIORS, outputStream);
         verify(aclUsageRepository);
     }
 
