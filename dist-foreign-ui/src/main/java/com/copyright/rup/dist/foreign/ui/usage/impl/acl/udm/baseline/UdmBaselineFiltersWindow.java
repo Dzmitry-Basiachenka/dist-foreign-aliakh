@@ -88,7 +88,7 @@ public class UdmBaselineFiltersWindow extends CommonAclFiltersWindow {
         setCaption(ForeignUi.getMessage("window.udm_baseline_additional_filters"));
         setResizable(false);
         setWidth(600, Unit.PIXELS);
-        setHeight(355, Unit.PIXELS);
+        setHeight(400, Unit.PIXELS);
         VaadinUtils.addComponentStyle(this, "udm-baseline-additional-filters-window");
     }
 
