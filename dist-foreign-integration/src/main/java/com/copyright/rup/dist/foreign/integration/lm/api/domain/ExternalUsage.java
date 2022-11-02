@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.integration.lm.api.domain;
 
+import com.copyright.rup.dist.foreign.domain.AclScenarioLiabilityDetail;
 import com.copyright.rup.dist.foreign.domain.Usage;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -11,9 +12,9 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 /**
  * Represents usage data object for external systems.
@@ -52,6 +53,15 @@ public class ExternalUsage {
     @JsonProperty("work_title")
     private String workTitle;
 
+    @JsonProperty("aggregate_licensee_class_description")
+    private String aggregateLicenseeClassName;
+
+    @JsonProperty("license_type")
+    private String licenseType;
+
+    @JsonProperty("type_of_use")
+    private String typeOfUse;
+
     /**
      * Constructs new external usage based on {@link Usage}.
      *
@@ -62,10 +72,29 @@ public class ExternalUsage {
         this.productFamily = usage.getProductFamily();
         this.usageId = usage.getId();
         this.workTitle = usage.getSystemTitle();
-        this.royaltyAmount = usage.getNetAmount().setScale(2, BigDecimal.ROUND_HALF_UP);
-        this.serviceFeeAmount = usage.getServiceFeeAmount().setScale(2, BigDecimal.ROUND_HALF_UP);
-        this.collectedAmount = usage.getGrossAmount().setScale(2, BigDecimal.ROUND_HALF_UP);
+        this.royaltyAmount = usage.getNetAmount().setScale(2, RoundingMode.HALF_UP);
+        this.serviceFeeAmount = usage.getServiceFeeAmount().setScale(2, RoundingMode.HALF_UP);
+        this.collectedAmount = usage.getGrossAmount().setScale(2, RoundingMode.HALF_UP);
         this.wrWrkInst = usage.getWrWrkInst();
+    }
+
+    /**
+     * Constructs new external usage based on {@link AclScenarioLiabilityDetail}.
+     *
+     * @param liabilityDetail base scenario share detail
+     */
+    public ExternalUsage(AclScenarioLiabilityDetail liabilityDetail) {
+        this.rhId = liabilityDetail.getRhAccountNumber();
+        this.productFamily = liabilityDetail.getProductFamily();
+        this.usageId = liabilityDetail.getLiabilityDetailId();
+        this.wrWrkInst = liabilityDetail.getWrWrkInst();
+        this.workTitle = liabilityDetail.getSystemTitle();
+        this.royaltyAmount = liabilityDetail.getNetAmount().setScale(2, RoundingMode.HALF_UP);
+        this.serviceFeeAmount = liabilityDetail.getServiceFeeAmount().setScale(2, RoundingMode.HALF_UP);
+        this.collectedAmount = liabilityDetail.getGrossAmount().setScale(2, RoundingMode.HALF_UP);
+        this.aggregateLicenseeClassName = liabilityDetail.getAggregateLicenseeClassName();
+        this.licenseType = liabilityDetail.getLicenseType();
+        this.typeOfUse = liabilityDetail.getTypeOfUse();
     }
 
     public String getRhId() {
@@ -132,6 +161,30 @@ public class ExternalUsage {
         this.workTitle = workTitle;
     }
 
+    public String getAggregateLicenseeClassName() {
+        return aggregateLicenseeClassName;
+    }
+
+    public void setAggregateLicenseeClassName(String aggregateLicenseeClassName) {
+        this.aggregateLicenseeClassName = aggregateLicenseeClassName;
+    }
+
+    public String getLicenseType() {
+        return licenseType;
+    }
+
+    public void setLicenseType(String licenseType) {
+        this.licenseType = licenseType;
+    }
+
+    public String getTypeOfUse() {
+        return typeOfUse;
+    }
+
+    public void setTypeOfUse(String typeOfUse) {
+        this.typeOfUse = typeOfUse;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -150,6 +203,9 @@ public class ExternalUsage {
             .append(collectedAmount, that.collectedAmount)
             .append(wrWrkInst, that.wrWrkInst)
             .append(workTitle, that.workTitle)
+            .append(aggregateLicenseeClassName, that.aggregateLicenseeClassName)
+            .append(licenseType, that.licenseType)
+            .append(typeOfUse, that.typeOfUse)
             .isEquals();
     }
 
@@ -164,12 +220,15 @@ public class ExternalUsage {
             .append(collectedAmount)
             .append(wrWrkInst)
             .append(workTitle)
+            .append(aggregateLicenseeClassName)
+            .append(licenseType)
+            .append(typeOfUse)
             .toHashCode();
     }
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+        return new ToStringBuilder(this)
             .append("rhId", rhId)
             .append("productFamily", productFamily)
             .append("usageId", usageId)
@@ -178,6 +237,9 @@ public class ExternalUsage {
             .append("collectedAmount", collectedAmount)
             .append("wrWrkInst", wrWrkInst)
             .append("workTitle", workTitle)
+            .append("aggregateLicenseeClassName", aggregateLicenseeClassName)
+            .append("licenseType", licenseType)
+            .append("typeOfUse", typeOfUse)
             .toString();
     }
 }
