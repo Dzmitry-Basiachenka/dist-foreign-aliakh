@@ -226,7 +226,7 @@ public class FasCsvReportsIntegrationTest extends CsvReportsTestHelper {
 
     @Test
     @TestData(fileName = WRITE_EXCLUDE_DETAILS_BY_PAYEE_CSV_REPORT)
-    public void testWriteExcludeDetailsByPayeeCsvReportNoData() throws IOException {
+    public void testWriteExcludeDetailsByPayeeCsvEmptyReport() throws IOException {
         ExcludePayeeFilter filter = new ExcludePayeeFilter();
         filter.setScenarioIds(Collections.singleton("d13ecc44-6795-4b75-90f0-4a3fc191f1b9"));
         assertFilesWithExecutor(outputStream -> reportRepository.writeFasExcludeDetailsByPayeeCsvReport(filter,

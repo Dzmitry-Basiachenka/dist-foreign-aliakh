@@ -225,7 +225,7 @@ public class AaclCsvReportsIntegrationTest extends CsvReportsTestHelper {
 
     @Test
     @TestData(fileName = WRITE_EXCLUDE_DETAILS_BY_PAYEE_CSV_REPORT)
-    public void testWriteExcludeDetailsByPayeeCsvReportNoData() throws IOException {
+    public void testWriteExcludeDetailsByPayeeCsvEmptyReport() throws IOException {
         ExcludePayeeFilter filter = new ExcludePayeeFilter();
         filter.setScenarioIds(Collections.singleton("2373ef30-1952-4e78-890d-d6b3087de59c"));
         assertFilesWithExecutor(outputStream -> reportRepository.writeAaclExcludeDetailsByPayeeCsvReport(filter,

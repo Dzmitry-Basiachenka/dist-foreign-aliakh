@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl.acl.calculation;
 
+import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.domain.AclFundPool;
 import com.copyright.rup.dist.foreign.domain.AclFundPoolDetailDto;
 import com.copyright.rup.dist.foreign.domain.AclGrantSet;
@@ -16,6 +17,7 @@ import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenariosController;
 import com.copyright.rup.dist.foreign.ui.usage.impl.AclAggregateLicenseeClassMappingEditWindow;
 import com.copyright.rup.dist.foreign.ui.usage.impl.AclUsageAgeWeightWindow;
+import com.copyright.rup.dist.foreign.ui.usage.impl.ErrorUploadWindow;
 import com.copyright.rup.dist.foreign.ui.usage.impl.ScenarioParameterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.impl.acl.AclPublicationTypeWeightsParameterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.impl.acl.AclPublicationTypeWeightsWindow;
@@ -348,7 +350,8 @@ public class CreateAclScenarioWindow extends Window implements IDateFormatter {
                     ExceptionUtils.printRootCauseStackTrace(e);
                 }
             } else {
-                Windows.showNotificationWindow(ForeignUi.getMessage("message.error.create_acl_scenario"));
+                Windows.showModalWindow(new ErrorUploadWindow(getInvalidUsagesStreamSource(),
+                    ForeignUi.getMessage("message.error.create_acl_scenario")));
             }
         } else {
             Windows.showValidationErrorWindow(Arrays.asList(scenarioNameField, periodComboBox, licenseTypeComboBox,
@@ -441,6 +444,11 @@ public class CreateAclScenarioWindow extends Window implements IDateFormatter {
     private boolean isValidUsageBatch() {
         return controller.isValidUsageBatch(usageBatchComboBox.getValue().getId(), grantSetComboBox.getValue().getId(),
             periodComboBox.getValue(), getPeriodPriorsWithWeightAboveZero());
+    }
+
+    private IStreamSource getInvalidUsagesStreamSource() {
+        return controller.getInvalidUsagesStreamSource(usageBatchComboBox.getValue().getId(),
+            grantSetComboBox.getValue().getId(), periodComboBox.getValue(), getPeriodPriorsWithWeightAboveZero());
     }
 
     private List<Integer> getPeriodPriorsWithWeightAboveZero() {
