@@ -79,6 +79,7 @@ public class AclUsageRepositoryIntegrationTest extends CsvReportsTestHelper {
     private static final UdmUsageOriginEnum USAGE_ORIGIN = UdmUsageOriginEnum.RFA;
     private static final UdmChannelEnum CHANNEL = UdmChannelEnum.CCC;
     private static final Set<Integer> PERIODS = Collections.singleton(202112);
+    private static final int DISTRIBUTION_PERIOD = 202212;
     private static final List<Integer> PERIOD_PRIORS = Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11);
     private static final Set<DetailLicenseeClass> DETAIL_LICENSEE_CLASSES =
         Collections.singleton(buildDetailLicenseeClass(2, "Textiles, Apparel, etc."));
@@ -722,10 +723,10 @@ public class AclUsageRepositoryIntegrationTest extends CsvReportsTestHelper {
     @Test
     @TestData(fileName = FOLDER_NAME + "find-count-non-valid-usages.groovy")
     public void testFindCountInvalidUsages() {
-        assertEquals(0, aclUsageRepository.findCountInvalidUsages(ACL_USAGE_BATCH_UID_1, ACL_GRANT_SET_UID_1, 202212,
-            PERIOD_PRIORS));
-        assertEquals(3, aclUsageRepository.findCountInvalidUsages(ACL_USAGE_BATCH_UID_2, ACL_GRANT_SET_UID_2, 202212,
-            PERIOD_PRIORS));
+        assertEquals(0, aclUsageRepository.findCountInvalidUsages(ACL_USAGE_BATCH_UID_1, ACL_GRANT_SET_UID_1,
+            DISTRIBUTION_PERIOD, PERIOD_PRIORS));
+        assertEquals(3, aclUsageRepository.findCountInvalidUsages(ACL_USAGE_BATCH_UID_2, ACL_GRANT_SET_UID_2,
+            DISTRIBUTION_PERIOD, PERIOD_PRIORS));
     }
 
     @Test
@@ -733,7 +734,7 @@ public class AclUsageRepositoryIntegrationTest extends CsvReportsTestHelper {
     public void testWriteInvalidUsagesCsvReport() throws IOException {
         assertFilesWithExecutor(
             outputStream -> aclUsageRepository.writeInvalidUsagesCsvReport(ACL_USAGE_BATCH_UID_2, ACL_GRANT_SET_UID_2,
-                202212, PERIOD_PRIORS, outputStream),
+                DISTRIBUTION_PERIOD, PERIOD_PRIORS, outputStream),
             "acl/detail_ids_missing_values.csv");
     }
 
@@ -742,7 +743,7 @@ public class AclUsageRepositoryIntegrationTest extends CsvReportsTestHelper {
     public void testWriteInvalidUsagesCsvEmptyReport() throws IOException {
         assertFilesWithExecutor(
             outputStream -> aclUsageRepository.writeInvalidUsagesCsvReport(ACL_USAGE_BATCH_UID_1, ACL_GRANT_SET_UID_1,
-                202212, PERIOD_PRIORS, outputStream),
+                DISTRIBUTION_PERIOD, PERIOD_PRIORS, outputStream),
             "acl/detail_ids_missing_values_empty.csv");
     }
 
