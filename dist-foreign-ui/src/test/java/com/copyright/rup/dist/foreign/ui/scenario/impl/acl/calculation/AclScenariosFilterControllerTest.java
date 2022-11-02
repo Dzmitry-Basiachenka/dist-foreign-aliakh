@@ -1,8 +1,20 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl.acl.calculation;
 
+import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
 
+import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioService;
+
+import org.junit.Before;
 import org.junit.Test;
+import org.powermock.reflect.Whitebox;
+
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Verifies {@link AclScenariosFilterController}.
@@ -15,7 +27,14 @@ import org.junit.Test;
  */
 public class AclScenariosFilterControllerTest {
 
+    private IAclScenarioService scenarioService;
     private final AclScenariosFilterController controller = new AclScenariosFilterController();
+
+    @Before
+    public void setUp() {
+        scenarioService = createMock(IAclScenarioService.class);
+        Whitebox.setInternalState(controller, scenarioService);
+    }
 
     @Test
     public void testInstantiateWidget() {
@@ -24,6 +43,10 @@ public class AclScenariosFilterControllerTest {
 
     @Test
     public void testGetPeriods() {
-        //TODO will be implemented
+        List<Integer> periods = Collections.singletonList(202212);
+        expect(scenarioService.getScenarioPeriods()).andReturn(periods).once();
+        replay(scenarioService);
+        assertSame(periods, controller.getPeriods());
+        verify(scenarioService);
     }
 }

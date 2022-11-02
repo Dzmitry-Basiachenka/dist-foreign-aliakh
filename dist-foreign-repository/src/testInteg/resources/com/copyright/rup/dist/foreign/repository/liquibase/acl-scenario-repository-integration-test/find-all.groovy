@@ -89,6 +89,49 @@ databaseChangeLog {
             column(name: 'updated_datetime', value: '2022-02-14 12:00:00+00')
         }
 
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_fund_pool') {
+            column(name: 'df_acl_fund_pool_uid', value: '5c6bd993-f4eb-4611-9672-0e2d7ebaf4be')
+            column(name: 'name', value: 'ACL Fund Pool 202312')
+            column(name: 'period', value: 202312)
+            column(name: 'license_type', value: 'VGW')
+            column(name: 'is_manual', value: true)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_usage_batch') {
+            column(name: 'df_acl_usage_batch_uid', value: '5bb8c4fe-d140-465f-9f65-807ab258f7c1')
+            column(name: 'name', value: 'ACL Usage Batch 202312')
+            column(name: 'distribution_period', value: 202312)
+            column(name: 'periods', value: '[202206, 202212]')
+            column(name: 'is_editable', value: true)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_grant_set') {
+            column(name: 'df_acl_grant_set_uid', value: 'd0016882-547f-499a-b90b-8c8dbfc50525')
+            column(name: 'name', value: 'ACL Grant Set 202312')
+            column(name: 'grant_period', value: 202312)
+            column(name: 'periods', value: '[202206, 202212]')
+            column(name: 'license_type', value: 'VGW')
+            column(name: 'is_editable', value: true)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_scenario') {
+            column(name: 'df_acl_scenario_uid', value: '071fa861-a837-433f-827f-4644f27709f7')
+            column(name: 'df_acl_fund_pool_uid', value: '5c6bd993-f4eb-4611-9672-0e2d7ebaf4be')
+            column(name: 'df_acl_usage_batch_uid', value: '5bb8c4fe-d140-465f-9f65-807ab258f7c1')
+            column(name: 'df_acl_grant_set_uid', value: 'd0016882-547f-499a-b90b-8c8dbfc50525')
+            column(name: 'name', value: 'ACL Scenario 202312')
+            column(name: 'period_end_date', value: 202312)
+            column(name: 'status_ind', value: 'SUBMITTED')
+            column(name: 'description', value: 'Description')
+            column(name: 'license_type', value: 'VGW')
+            column(name: 'is_editable', value: true)
+            column(name: 'copied_from', value: "Copied Scenario Name")
+            column(name: 'created_by_user', value: 'buser@copyright.com')
+            column(name: 'updated_by_user', value: 'buser@copyright.com')
+            column(name: 'created_datetime', value: '2023-02-14 12:00:00+00')
+            column(name: 'updated_datetime', value: '2023-02-14 12:00:00+00')
+        }
+
         insert(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_usage_age_weight') {
             column(name: 'df_acl_scenario_usage_age_weight_uid', value: 'eb80bec3-6b46-414a-83a8-40a8b94642c0')
             column(name: 'df_acl_scenario_uid', value: '1995d50d-41c6-4e81-8c82-51a983bbecf8')

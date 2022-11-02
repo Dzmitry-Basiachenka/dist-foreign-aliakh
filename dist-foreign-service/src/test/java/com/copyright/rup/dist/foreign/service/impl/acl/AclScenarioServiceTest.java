@@ -19,6 +19,7 @@ import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
+import com.copyright.rup.dist.foreign.domain.filter.AclScenarioFilter;
 import com.copyright.rup.dist.foreign.repository.api.IAclScenarioRepository;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclFundPoolService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioAuditService;
@@ -89,10 +90,11 @@ public class AclScenarioServiceTest {
 
     @Test
     public void testGetScenarios() {
+        AclScenarioFilter filter = new AclScenarioFilter();
         List<AclScenario> scenarios = Collections.singletonList(buildAclScenario());
-        expect(aclScenarioRepository.findAll()).andReturn(scenarios).once();
+        expect(aclScenarioRepository.findByFilter(filter)).andReturn(scenarios).once();
         replay(aclScenarioRepository);
-        assertSame(scenarios, aclScenarioService.getScenarios());
+        assertSame(scenarios, aclScenarioService.getScenarios(filter));
         verify(aclScenarioRepository);
     }
 

@@ -13,6 +13,7 @@ import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.domain.common.util.ForeignLogUtils;
+import com.copyright.rup.dist.foreign.domain.filter.AclScenarioFilter;
 import com.copyright.rup.dist.foreign.repository.api.IAclScenarioRepository;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclFundPoolService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioAuditService;
@@ -110,8 +111,8 @@ public class AclScenarioService implements IAclScenarioService {
     }
 
     @Override
-    public List<AclScenario> getScenarios() {
-        return aclScenarioRepository.findAll();
+    public List<AclScenario> getScenarios(AclScenarioFilter filter) {
+        return aclScenarioRepository.findByFilter(filter);
     }
 
     @Override

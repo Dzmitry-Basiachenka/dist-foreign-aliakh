@@ -6,6 +6,7 @@ import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
+import com.copyright.rup.dist.foreign.domain.filter.AclScenarioFilter;
 
 import java.util.List;
 import java.util.Set;
@@ -22,11 +23,12 @@ import java.util.Set;
 public interface IAclScenarioRepository {
 
     /**
-     * Finds list of {@link AclScenario}s.
+     * Finds list of {@link AclScenario}s based on applied filter.
      *
+     * @param filter instance of {@link AclScenarioFilter}
      * @return list of {@link AclScenario}s
      */
-    List<AclScenario> findAll();
+    List<AclScenario> findByFilter(AclScenarioFilter filter);
 
     /**
      * Finds list of {@link AclScenario}s for specified period.

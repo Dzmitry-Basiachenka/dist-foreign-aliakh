@@ -315,7 +315,7 @@
         )
     </insert>
 
-    <select id="findAll" resultMap="aclScenarioResultMap">
+    <select id="findByFilter" resultMap="aclScenarioResultMap" parameterType="AclScenarioFilter">
         select
             df_acl_scenario_uid,
             df_acl_usage_batch_uid,
@@ -330,6 +330,26 @@
             copied_from,
             <include refid="StoredEntityMapper.additionalColumns"/>
         from ${schema}.df_acl_scenario
+        <where>
+            <if test="periods.size() > 0">
+                and
+                <foreach collection="periods" item="period" open="(" separator=" or " close=")">
+                    period_end_date = #{period}
+                </foreach>
+            </if>
+            <if test="licenseTypes.size() > 0">
+                and
+                <foreach collection="licenseTypes" item="licenseType" open="(" separator=" or " close=")">
+                    license_type = #{licenseType}
+                </foreach>
+            </if>
+            <if test="null != editable">
+                and is_editable = #{editable}
+            </if>
+            <if test="null != status">
+                and status_ind = #{status}
+            </if>
+        </where>
         order by updated_datetime desc
     </select>
 
