@@ -30,6 +30,7 @@ import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
+import com.copyright.rup.dist.foreign.domain.filter.AclScenarioFilter;
 import com.copyright.rup.dist.foreign.service.api.ILicenseeClassService;
 import com.copyright.rup.dist.foreign.service.api.IPublicationTypeService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclCalculationReportService;
@@ -43,6 +44,7 @@ import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioActionHandler;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenariosFilterController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenariosFilterWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenariosWidget;
 import com.copyright.rup.vaadin.security.SecurityUtils;
 import com.copyright.rup.vaadin.ui.component.window.ConfirmActionDialogWindow;
@@ -108,6 +110,7 @@ public class AclScenariosControllerTest {
     private IAclUsageService aclUsageService;
     private IStreamSourceHandler streamSourceHandler;
     private IAclCalculationReportService aclCalculationReportService;
+    private IAclScenariosFilterController aclScenariosFilterController;
     private AclScenario aclScenario;
 
     @Before
@@ -125,7 +128,7 @@ public class AclScenariosControllerTest {
         aclScenarioController = createMock(IAclScenarioController.class);
         streamSourceHandler = createMock(IStreamSourceHandler.class);
         aclCalculationReportService = createMock(IAclCalculationReportService.class);
-        IAclScenariosFilterController aclScenariosFilterController = createMock(IAclScenariosFilterController.class);
+        aclScenariosFilterController = createMock(IAclScenariosFilterController.class);
         aclScenario = buildAclScenario();
         aclScenariosController.initActionHandlers();
         mockStatic(SecurityUtils.class);
@@ -149,11 +152,15 @@ public class AclScenariosControllerTest {
 
     @Test
     public void testGetScenarios() {
+        AclScenarioFilter filter = new AclScenarioFilter();
         List<AclScenario> scenarios = Collections.singletonList(buildAclScenario());
-        expect(aclScenarioService.getScenarios()).andReturn(scenarios).once();
-        replay(aclScenarioService);
+        IAclScenariosFilterWidget aclScenariosFilterWidget = createMock(IAclScenariosFilterWidget.class);
+        expect(aclScenariosFilterController.getWidget()).andReturn(aclScenariosFilterWidget).once();
+        expect(aclScenariosFilterWidget.getAppliedFilter()).andReturn(filter).once();
+        expect(aclScenarioService.getScenarios(filter)).andReturn(scenarios).once();
+        replay(aclScenariosFilterController, aclScenariosFilterWidget, aclScenarioService);
         assertSame(scenarios, aclScenariosController.getScenarios());
-        verify(aclScenarioService);
+        verify(aclScenariosFilterController, aclScenariosFilterWidget, aclScenarioService);
     }
 
     @Test

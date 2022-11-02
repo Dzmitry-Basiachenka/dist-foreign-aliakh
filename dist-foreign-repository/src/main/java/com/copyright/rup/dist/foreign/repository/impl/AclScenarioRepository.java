@@ -10,6 +10,7 @@ import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
+import com.copyright.rup.dist.foreign.domain.filter.AclScenarioFilter;
 import com.copyright.rup.dist.foreign.repository.api.IAclScenarioRepository;
 
 import com.google.common.collect.Maps;
@@ -38,8 +39,8 @@ public class AclScenarioRepository extends BaseRepository implements IAclScenari
     private static final String UPDATE_USER_KEY = "updateUser";
 
     @Override
-    public List<AclScenario> findAll() {
-        return selectList("IAclScenarioMapper.findAll");
+    public List<AclScenario> findByFilter(AclScenarioFilter filter) {
+        return selectList("IAclScenarioMapper.findByFilter", Objects.requireNonNull(filter));
     }
 
     @Override

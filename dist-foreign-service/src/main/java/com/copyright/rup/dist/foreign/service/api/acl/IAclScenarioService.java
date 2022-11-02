@@ -8,6 +8,7 @@ import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
+import com.copyright.rup.dist.foreign.domain.filter.AclScenarioFilter;
 
 import java.util.List;
 import java.util.Set;
@@ -61,9 +62,10 @@ public interface IAclScenarioService {
     /**
      * Gets list of {@link AclScenario}s.
      *
+     * @param filter applied {@link AclScenarioFilter}
      * @return list of {@link AclScenario}s
      */
-    List<AclScenario> getScenarios();
+    List<AclScenario> getScenarios(AclScenarioFilter filter);
 
     /**
      * Gets list of {@link AclScenario}s for specified period.

@@ -14,6 +14,7 @@ import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
+import com.copyright.rup.dist.foreign.domain.filter.AclScenarioFilter;
 import com.copyright.rup.dist.foreign.repository.api.IAclScenarioRepository;
 import com.copyright.rup.dist.foreign.repository.api.IAclScenarioUsageRepository;
 
@@ -66,6 +67,10 @@ public class AclScenarioRepositoryIntegrationTest {
         "2a173b41-75e3-4478-80ef-157527b18996", "65b930f1-777d-4a51-b878-bea3c68624d8",
         "83e881cf-b258-42c1-849e-b2ec32b302b5", "ACL Scenario 202112", null, ScenarioStatusEnum.IN_PROGRESS,
         false, 202112, LICENSE_TYPE_ACL, "auser@copyright.com", "2021-02-14T12:00:00+00:00");
+    private final AclScenario scenario3 = buildAclScenario("071fa861-a837-433f-827f-4644f27709f7",
+        "5c6bd993-f4eb-4611-9672-0e2d7ebaf4be", "5bb8c4fe-d140-465f-9f65-807ab258f7c1",
+        "d0016882-547f-499a-b90b-8c8dbfc50525", "ACL Scenario 202312", DESCRIPTION, ScenarioStatusEnum.SUBMITTED,
+        true, 202312, "VGW", "buser@copyright.com", "2023-02-14T12:00:00+00:00");
 
     @Autowired
     private IAclScenarioRepository aclScenarioRepository;
@@ -74,11 +79,33 @@ public class AclScenarioRepositoryIntegrationTest {
 
     @Test
     @TestData(fileName = FOLDER_NAME + FIND_ALL_FILE)
-    public void testFindAll() {
-        List<AclScenario> scenarios = aclScenarioRepository.findAll();
-        assertEquals(2, CollectionUtils.size(scenarios));
-        verifyAclScenario(scenario1, scenarios.get(0));
-        verifyAclScenario(scenario2, scenarios.get(1));
+    public void testFindByFilter() {
+        AclScenarioFilter filterByPeriods = new AclScenarioFilter();
+        filterByPeriods.setPeriods(Collections.singleton(202112));
+        List<AclScenario> scenariosByPeriod = aclScenarioRepository.findByFilter(filterByPeriods);
+        assertEquals(1, CollectionUtils.size(scenariosByPeriod));
+        verifyAclScenario(scenario2, scenariosByPeriod.get(0));
+        AclScenarioFilter filterByLicenseTypes = new AclScenarioFilter();
+        filterByLicenseTypes.setLicenseTypes(Collections.singleton("VGW"));
+        List<AclScenario> scenariosByLicenseTypes = aclScenarioRepository.findByFilter(filterByLicenseTypes);
+        assertEquals(1, CollectionUtils.size(scenariosByLicenseTypes));
+        verifyAclScenario(scenario3, scenariosByLicenseTypes.get(0));
+        AclScenarioFilter filterByEditable = new AclScenarioFilter();
+        filterByEditable.setEditable(false);
+        List<AclScenario> scenariosByEditable = aclScenarioRepository.findByFilter(filterByEditable);
+        assertEquals(1, CollectionUtils.size(scenariosByEditable));
+        verifyAclScenario(scenario2, scenariosByEditable.get(0));
+        AclScenarioFilter filterByStatus = new AclScenarioFilter();
+        filterByStatus.setStatus(ScenarioStatusEnum.SUBMITTED);
+        List<AclScenario> scenariosByStatus = aclScenarioRepository.findByFilter(filterByStatus);
+        assertEquals(1, CollectionUtils.size(scenariosByStatus));
+        verifyAclScenario(scenario3, scenariosByStatus.get(0));
+        AclScenarioFilter emptyFilter = new AclScenarioFilter();
+        List<AclScenario> allScenarios = aclScenarioRepository.findByFilter(emptyFilter);
+        assertEquals(3, CollectionUtils.size(allScenarios));
+        verifyAclScenario(scenario3, allScenarios.get(0));
+        verifyAclScenario(scenario1, allScenarios.get(1));
+        verifyAclScenario(scenario2, allScenarios.get(2));
     }
 
     @Test
@@ -102,7 +129,7 @@ public class AclScenarioRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FOLDER_NAME + FIND_ALL_FILE)
     public void testPeriods() {
-        assertEquals(Arrays.asList(202212, 202112), aclScenarioRepository.findPeriods());
+        assertEquals(Arrays.asList(202312, 202212, 202112), aclScenarioRepository.findPeriods());
     }
 
     @Test

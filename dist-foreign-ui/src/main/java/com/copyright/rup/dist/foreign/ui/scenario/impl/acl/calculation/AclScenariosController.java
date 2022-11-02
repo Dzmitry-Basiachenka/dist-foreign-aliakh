@@ -97,7 +97,7 @@ public class AclScenariosController extends CommonController<IAclScenariosWidget
 
     @Override
     public List<AclScenario> getScenarios() {
-        return aclScenarioService.getScenarios();
+        return aclScenarioService.getScenarios(aclScenariosFilterController.getWidget().getAppliedFilter());
     }
 
     @Override
