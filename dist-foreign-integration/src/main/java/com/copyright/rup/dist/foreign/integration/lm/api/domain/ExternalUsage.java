@@ -84,7 +84,7 @@ public class ExternalUsage {
      * @param liabilityDetail base scenario share detail
      */
     public ExternalUsage(AclScenarioLiabilityDetail liabilityDetail) {
-        this.rhId = liabilityDetail.getRhAccountNumber();
+        this.rhId = liabilityDetail.getRightsholderId();
         this.productFamily = liabilityDetail.getProductFamily();
         this.usageId = liabilityDetail.getLiabilityDetailId();
         this.wrWrkInst = liabilityDetail.getWrWrkInst();

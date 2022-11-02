@@ -18,7 +18,7 @@ import java.math.BigDecimal;
 public class AclScenarioLiabilityDetail {
 
     private String liabilityDetailId;
-    private String rhAccountNumber;
+    private String rightsholderId;
     private Long wrWrkInst;
     private String systemTitle;
     private String typeOfUse;
@@ -37,12 +37,12 @@ public class AclScenarioLiabilityDetail {
         this.liabilityDetailId = liabilityDetailId;
     }
 
-    public String getRhAccountNumber() {
-        return rhAccountNumber;
+    public String getRightsholderId() {
+        return rightsholderId;
     }
 
-    public void setRhAccountNumber(String rhAccountNumber) {
-        this.rhAccountNumber = rhAccountNumber;
+    public void setRightsholderId(String rightsholderId) {
+        this.rightsholderId = rightsholderId;
     }
 
     public Long getWrWrkInst() {
@@ -128,7 +128,7 @@ public class AclScenarioLiabilityDetail {
         AclScenarioLiabilityDetail that = (AclScenarioLiabilityDetail) obj;
         return new EqualsBuilder()
             .append(liabilityDetailId, that.liabilityDetailId)
-            .append(rhAccountNumber, that.rhAccountNumber)
+            .append(rightsholderId, that.rightsholderId)
             .append(wrWrkInst, that.wrWrkInst)
             .append(systemTitle, that.systemTitle)
             .append(typeOfUse, that.typeOfUse)
@@ -145,7 +145,7 @@ public class AclScenarioLiabilityDetail {
     public int hashCode() {
         return new HashCodeBuilder()
             .append(liabilityDetailId)
-            .append(rhAccountNumber)
+            .append(rightsholderId)
             .append(wrWrkInst)
             .append(systemTitle)
             .append(typeOfUse)
@@ -162,7 +162,7 @@ public class AclScenarioLiabilityDetail {
     public String toString() {
         return new ToStringBuilder(this)
             .append("liabilityDetailId", liabilityDetailId)
-            .append("rhAccountNumber", rhAccountNumber)
+            .append("rightsholderId", rightsholderId)
             .append("wrWrkInst", wrWrkInst)
             .append("systemTitle", systemTitle)
             .append("typeOfUse", typeOfUse)

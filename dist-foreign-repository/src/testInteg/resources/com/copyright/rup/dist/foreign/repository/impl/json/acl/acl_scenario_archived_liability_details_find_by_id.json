@@ -1,7 +1,7 @@
 [
   {
     "liabilityDetailId": "2f55e6df-7be6-4a34-966d-6b53222f4e4b",
-    "rhAccountNumber": 1000002859,
+    "rightsholderId": "a5989f7c-fc6f-4e8c-88d4-2fe7bcce8d1f",
     "wrWrkInst": 122813964,
     "systemTitle": "Aerospace America",
     "typeOfUse": "DIGITAL",
@@ -14,7 +14,7 @@
   },
   {
     "liabilityDetailId": "a7cf7f7c-8884-48e1-a6d8-a1315f27dc6f",
-    "rhAccountNumber": 1000002859,
+    "rightsholderId": "a5989f7c-fc6f-4e8c-88d4-2fe7bcce8d1f",
     "wrWrkInst": 122820638,
     "systemTitle": "Technology review",
     "typeOfUse": "PRINT",
@@ -27,7 +27,7 @@
   },
   {
     "liabilityDetailId": "f250cc16-e95b-4e66-a31a-13068b67d247",
-    "rhAccountNumber": 1000002859,
+    "rightsholderId": "a5989f7c-fc6f-4e8c-88d4-2fe7bcce8d1f",
     "wrWrkInst": 122820638,
     "systemTitle": "Technology review",
     "typeOfUse": "DIGITAL",

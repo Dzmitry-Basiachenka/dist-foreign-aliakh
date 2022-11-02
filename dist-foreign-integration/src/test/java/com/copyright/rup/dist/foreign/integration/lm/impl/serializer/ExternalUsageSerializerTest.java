@@ -115,7 +115,7 @@ public class ExternalUsageSerializerTest {
     private ExternalUsage buildExternalUsage(String usageId, String typeOfUse) {
         AclScenarioLiabilityDetail liabilityDetail = new AclScenarioLiabilityDetail();
         liabilityDetail.setLiabilityDetailId(usageId);
-        liabilityDetail.setRhAccountNumber("07529566-6ce4-11e9-a923-1681be663d3e");
+        liabilityDetail.setRightsholderId("07529566-6ce4-11e9-a923-1681be663d3e");
         liabilityDetail.setNetAmount(new BigDecimal("100.00"));
         liabilityDetail.setServiceFeeAmount(new BigDecimal("20.00"));
         liabilityDetail.setGrossAmount(new BigDecimal("120.00"));

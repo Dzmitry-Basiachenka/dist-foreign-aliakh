@@ -49,7 +49,7 @@
 
     <resultMap id="archivedScenarioLiabilitiesResultMap" type="AclScenarioLiabilityDetail">
         <result property="liabilityDetailId" column="df_acl_share_detail_archived_uid"/>
-        <result property="rhAccountNumber" column="rh_account_number"/>
+        <result property="rightsholderId" column="rh_id"/>
         <result property="wrWrkInst" column="wr_wrk_inst"/>
         <result property="systemTitle" column="system_title"/>
         <result property="typeOfUse" column="type_of_use"/>
@@ -217,7 +217,7 @@
             df_acl_share_detail_archived_uid,
             sda.wr_wrk_inst,
             sda.system_title,
-            rh_account_number,
+            rh.df_rightsholder_uid rh_id,
             shda.type_of_use,
             case when shda.type_of_use = 'DIGITAL' then 'ACLDIGITAL' else 'ACLPRINT' end as product_family,
             s.license_type,
@@ -226,6 +226,7 @@
             service_fee_amount,
             net_amount
         from ${schema}.df_acl_share_detail_archived shda
+        left join ${schema}.df_rightsholder rh on rh.rh_account_number = shda.rh_account_number
         join ${schema}.df_acl_scenario_detail_archived sda on shda.df_acl_scenario_detail_archived_uid = sda.df_acl_scenario_detail_archived_uid
         join ${schema}.df_acl_scenario s on shda.df_acl_scenario_uid = s.df_acl_scenario_uid
         join ${schema}.df_aggregate_licensee_class alc on shda.aggregate_licensee_class_id = alc.aggregate_licensee_class_id

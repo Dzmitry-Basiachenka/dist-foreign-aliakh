@@ -7,6 +7,7 @@ import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolderDto;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDetailDto;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
+import com.copyright.rup.dist.foreign.domain.AclScenarioLiabilityDetail;
 import com.copyright.rup.dist.foreign.domain.RightsholderPayeeProductFamilyHolder;
 import com.copyright.rup.dist.foreign.domain.filter.RightsholderResultsFilter;
 
@@ -74,7 +75,7 @@ public interface IAclScenarioUsageService {
     /**
      * Gets {@link AclRightsholderTotalsHolder}s based on ACL scenario id.
      *
-     * @param scenarioId  scenario id
+     * @param scenarioId scenario id
      * @return list of {@link AclRightsholderTotalsHolder}s
      */
     List<AclRightsholderTotalsHolder> getAclRightsholderTotalsHoldersByScenarioId(String scenarioId);
@@ -152,4 +153,20 @@ public interface IAclScenarioUsageService {
      */
     List<RightsholderPayeeProductFamilyHolder> getRightsholderPayeeProductFamilyHoldersByAclScenarioIds(
         Set<String> scenarioIds);
+
+    /**
+     * Moves ACL scenario details to the archive for given {@link AclScenario}.
+     *
+     * @param scenario {@link AclScenario}
+     * @param userName user name
+     */
+    void moveToArchive(AclScenario scenario, String userName);
+
+    /**
+     * Gets list of archived {@link AclScenarioLiabilityDetail}s for sending to LM by specified scenario id.
+     *
+     * @param scenarioId unique identifier of scenario
+     * @return list of {@link AclScenarioLiabilityDetail}s
+     */
+    List<AclScenarioLiabilityDetail> getArchivedLiabilityDetailsForSendToLmByIds(String scenarioId);
 }
