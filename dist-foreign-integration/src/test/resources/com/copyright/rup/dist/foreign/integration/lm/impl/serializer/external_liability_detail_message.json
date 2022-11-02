@@ -1,0 +1,27 @@
+{
+  "details" : [ {
+    "rh_uid" : "07529566-6ce4-11e9-a923-1681be663d3e",
+    "product_family" : "ACLPRINT",
+    "detail_id" : "bb5de01e-3375-4226-b484-d5f2c6f109c4",
+    "royalty_amount" : 100.00,
+    "service_fee_amount" : 20.00,
+    "collected_amount" : 120.00,
+    "wr_wrk_inst" : "123456789",
+    "work_title" : "System title",
+    "aggregate_licensee_class_description" : "Materials",
+    "license_type" : "ACL",
+    "type_of_use" : "PRINT"
+  }, {
+    "rh_uid" : "07529566-6ce4-11e9-a923-1681be663d3e",
+    "product_family" : "ACLDIGITAL",
+    "detail_id" : "53b7f67e-d891-415d-82da-029f21b45802",
+    "royalty_amount" : 100.00,
+    "service_fee_amount" : 20.00,
+    "collected_amount" : 120.00,
+    "wr_wrk_inst" : "123456789",
+    "work_title" : "System title",
+    "aggregate_licensee_class_description" : "Materials",
+    "license_type" : "ACL",
+    "type_of_use" : "DIGITAL"
+  } ]
+}
