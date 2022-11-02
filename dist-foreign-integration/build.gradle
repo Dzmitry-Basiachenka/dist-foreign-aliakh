@@ -10,7 +10,7 @@ dependencies {
     compile("org.apache.logging.log4j:log4j-api:${log4jVersion}")
     compile("com.ibm.icu:icu4j:${icu4jVersion}")
     compile("com.copyright.rup.es.api:rup-es-api:${rupEsApiVersion}")
-    //updated jackson-databind version due to vulnerability CVE-2020-36518 in com.fasterxml.jackson.core:jackson-databind:2.10.0
+    //updated jackson-databind version due to vulnerability CVE-2022-42003 in com.fasterxml.jackson.core:jackson-databind:2.13.4
     compile("com.fasterxml.jackson.core:jackson-databind:${jacksonDatabindVersion}")
     compile("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${rupCamel.standardDependencies.jackson.version}")
     //dependency to avoid vulnerability CVE-2016-7051 (severity: MEDIUM) associated with 'com.fasterxml.jackson.module:jackson-module-jaxb-annotations:2.8.3'

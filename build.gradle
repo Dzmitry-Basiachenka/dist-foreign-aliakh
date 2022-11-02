@@ -12,7 +12,6 @@ buildscript {
         // TODO remove explicitly specifying these dependencies when RUP plugins provide non-conflicting versions of them
         classpath("com.google.guava:guava:${guavaVersion}")
         classpath("com.fasterxml.jackson.core:jackson-core:${jacksonVersion}")
-        classpath("com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}")
         classpath("com.fasterxml.jackson.core:jackson-annotations:${jacksonVersion}")
     }
 }
