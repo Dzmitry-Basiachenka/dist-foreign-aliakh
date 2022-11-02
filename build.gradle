@@ -2,7 +2,7 @@ buildscript {
     repositories {
         maven { url rupRepoExtUrl }
         ivy { url rupRepoReleaseUrl }
-        if ( project.hasProperty('developPlugins') ) {
+        if (project.hasProperty('developPlugins')) {
             ivy { url file(System.getProperty('user.home') + '/.ivylocal') }
         }
     }
@@ -21,7 +21,7 @@ apply plugin: 'rup-java'
 apply plugin: 'rup-idea'
 
 allprojects {
-    group='com.copyright.rup.dist.foreign'
+    group = 'com.copyright.rup.dist.foreign'
 }
 
 //force all dependencies with group 'org.springframework.security' to use version 5.7.2
@@ -63,6 +63,10 @@ subprojects {
 
     tasks.test {
         maxHeapSize = '2G'
+    }
+
+    tasks.test.rupCodeCoverage {
+        preInstrument = true
     }
 
     tasks.withType(Test) {
