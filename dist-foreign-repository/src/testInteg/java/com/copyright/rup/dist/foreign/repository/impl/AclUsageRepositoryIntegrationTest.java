@@ -20,6 +20,7 @@ import com.copyright.rup.dist.foreign.domain.filter.FilterExpression;
 import com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum;
 import com.copyright.rup.dist.foreign.repository.api.IAclUsageRepository;
 
+import com.copyright.rup.dist.foreign.repository.impl.csv.CsvReportsTestHelper;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -58,7 +59,7 @@ import java.util.stream.IntStream;
     mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS,
     listeners = {LiquibaseTestExecutionListener.class}
 )
-public class AclUsageRepositoryIntegrationTest {
+public class AclUsageRepositoryIntegrationTest extends CsvReportsTestHelper {
 
     private static final String FOLDER_NAME = "acl-usage-repository-integration-test/";
     private static final String FIND_DTOS_BY_FILTER = FOLDER_NAME + "find-dtos-by-filter.groovy";
@@ -720,11 +721,29 @@ public class AclUsageRepositoryIntegrationTest {
 
     @Test
     @TestData(fileName = FOLDER_NAME + "find-count-non-valid-usages.groovy")
-    public void testFindCountNonValidUsages() {
+    public void testFindCountInvalidUsages() {
         assertEquals(0, aclUsageRepository.findCountInvalidUsages(ACL_USAGE_BATCH_UID_1, ACL_GRANT_SET_UID_1, 202212,
             PERIOD_PRIORS));
         assertEquals(3, aclUsageRepository.findCountInvalidUsages(ACL_USAGE_BATCH_UID_2, ACL_GRANT_SET_UID_2, 202212,
             PERIOD_PRIORS));
+    }
+
+    @Test
+    @TestData(fileName = FOLDER_NAME + "find-count-non-valid-usages.groovy")
+    public void testWriteInvalidUsagesCsvReport() throws IOException {
+        assertFilesWithExecutor(
+            outputStream -> aclUsageRepository.writeInvalidUsagesCsvReport(ACL_USAGE_BATCH_UID_2, ACL_GRANT_SET_UID_2,
+                202212, PERIOD_PRIORS, outputStream),
+            "acl/detail_ids_missing_values.csv");
+    }
+
+    @Test
+    @TestData(fileName = FOLDER_NAME + "find-count-non-valid-usages.groovy")
+    public void testWriteInvalidUsagesCsvEmptyReport() throws IOException {
+        assertFilesWithExecutor(
+            outputStream -> aclUsageRepository.writeInvalidUsagesCsvReport(ACL_USAGE_BATCH_UID_1, ACL_GRANT_SET_UID_1,
+                202212, PERIOD_PRIORS, outputStream),
+            "acl/detail_ids_missing_values_empty.csv");
     }
 
     @Test

@@ -7,11 +7,13 @@ import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.domain.filter.AclUsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IAclUsageRepository;
 
+import com.copyright.rup.dist.foreign.repository.impl.csv.acl.AclUsageCsvReportHandler;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 
 import org.springframework.stereotype.Repository;
 
+import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -103,6 +105,20 @@ public class AclUsageRepository extends AclBaseRepository implements IAclUsageRe
         params.put("distributionPeriod", Objects.requireNonNull(distributionPeriod));
         params.put("grantStatuses", ELIGIBLE_GRANT_STATUSES);
         return selectOne("IAclUsageMapper.findCountInvalidUsages", params);
+    }
+
+    @Override
+    public void writeInvalidUsagesCsvReport(String batchId, String grantSetId, Integer distributionPeriod,
+                                            List<Integer> periodPriors, OutputStream outputStream) {
+        try (AclUsageCsvReportHandler handler = new AclUsageCsvReportHandler(Objects.requireNonNull(outputStream))) {
+            Map<String, Object> params = Maps.newHashMapWithExpectedSize(5);
+            params.put("batchId", Objects.requireNonNull(batchId));
+            params.put("grantSetId", Objects.requireNonNull(grantSetId));
+            params.put("periodPriors", Objects.requireNonNull(periodPriors));
+            params.put("distributionPeriod", Objects.requireNonNull(distributionPeriod));
+            params.put("grantStatuses", ELIGIBLE_GRANT_STATUSES);
+            getTemplate().select("IAclUsageMapper.findInvalidUsagesDtos", Objects.requireNonNull(params), handler);
+        }
     }
 
     @Override
