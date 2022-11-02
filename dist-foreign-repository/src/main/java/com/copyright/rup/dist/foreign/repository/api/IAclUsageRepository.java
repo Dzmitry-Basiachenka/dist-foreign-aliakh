@@ -6,6 +6,7 @@ import com.copyright.rup.dist.foreign.domain.AclUsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.domain.filter.AclUsageFilter;
 
+import java.io.OutputStream;
 import java.util.List;
 import java.util.Set;
 
@@ -90,17 +91,30 @@ public interface IAclUsageRepository {
     List<UsageAge> findDefaultUsageAgesWeights();
 
     /**
-     * Finds count of {@link AclUsageDto}s by ACL batch id where publication type or content unit price is null.
-     * Check only eligible, granted, with usage age weight > 0 and quantity < 2000 usages
+     * Finds count of invalid ACL usages (publication type or content unit price is null).
+     * Checks only ACL usages that are eligible, granted, with usage age weight > 0 and quantity < 2000.
      *
      * @param batchId            ACL batch id
      * @param grantSetId         ACL grant set id
      * @param periodPriors       list of period priors
      * @param distributionPeriod distribution period
-     * @return count of {@link AclUsageDto}s
+     * @return count of invalid ACL usages
      */
     int findCountInvalidUsages(String batchId, String grantSetId, Integer distributionPeriod,
                                List<Integer> periodPriors);
+
+    /**
+     * Writes invalid ACL usages (publication type or content unit price is null) into CSV output stream.
+     * Checks only ACL usages that are eligible, granted, with usage age weight > 0 and quantity < 2000.
+     *
+     * @param batchId            ACL batch id
+     * @param grantSetId         ACL grant set id
+     * @param periodPriors       list of period priors
+     * @param distributionPeriod distribution period
+     * @param outputStream       instance of {@link OutputStream}
+     */
+    void writeInvalidUsagesCsvReport(String batchId, String grantSetId, Integer distributionPeriod,
+                                     List<Integer> periodPriors, OutputStream outputStream);
 
     /**
      * Copies ACL usages by ACL usage batch id.

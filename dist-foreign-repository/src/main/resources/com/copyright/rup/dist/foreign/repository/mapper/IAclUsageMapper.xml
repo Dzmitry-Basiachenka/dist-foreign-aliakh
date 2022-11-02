@@ -71,8 +71,8 @@
         channel,
         period,
         original_detail_id,
-        wr_wrk_inst,
-        system_title,
+        u.wr_wrk_inst,
+        u.system_title,
         u.detail_licensee_class_id,
         dlc.description detail_licensee_class_name,
         alc.aggregate_licensee_class_id,
@@ -88,7 +88,7 @@
         content_unit_price,
         content_unit_price_flag,
         reported_type_of_use,
-        type_of_use,
+        u.type_of_use,
         annualized_copies,
         u.quantity,
         is_editable,
@@ -432,11 +432,7 @@
         ) / 6
     </sql>
 
-    <select id="findCountInvalidUsages" parameterType="map" resultType="int">
-        select count(1)
-        from ${schema}.df_acl_usage u
-        join ${schema}.df_acl_usage_batch ub on u.df_acl_usage_batch_uid  = ub.df_acl_usage_batch_uid
-        <include refid="grantDetailJoinSql"/>
+    <sql id="invalidUsagesWhereClause">
         where u.df_acl_usage_batch_uid = #{batchId}
             and (u.publication_type_uid is null or u.content_unit_price is null)
             and
@@ -448,6 +444,26 @@
                     )
                 </foreach>
             and u.annualized_copies &lt; 2000
+    </sql>
+
+    <select id="findCountInvalidUsages" parameterType="map" resultType="int">
+        select count(1)
+        from ${schema}.df_acl_usage u
+        join ${schema}.df_acl_usage_batch ub on u.df_acl_usage_batch_uid = ub.df_acl_usage_batch_uid
+        <include refid="grantDetailJoinSql"/>
+        <include refid="invalidUsagesWhereClause"/>
+    </select>
+
+    <select id="findInvalidUsagesDtos" parameterType="map" resultMap="aclUsageDtoResultMap">
+        select
+            <include refid="IAclUsageMapper.aclUsageDtoColumns"/>
+        from ${schema}.df_acl_usage u
+        join ${schema}.df_acl_usage_batch ub on u.df_acl_usage_batch_uid = ub.df_acl_usage_batch_uid
+        join ${schema}.df_detail_licensee_class dlc on u.detail_licensee_class_id = dlc.detail_licensee_class_id
+        join ${schema}.df_aggregate_licensee_class alc on dlc.aggregate_licensee_class_id = alc.aggregate_licensee_class_id
+        left join ${schema}.df_publication_type pt on u.publication_type_uid = pt.df_publication_type_uid
+        <include refid="grantDetailJoinSql"/>
+        <include refid="invalidUsagesWhereClause"/>
     </select>
 
     <select id="copyAclUsages" parameterType="map" resultType="string">
