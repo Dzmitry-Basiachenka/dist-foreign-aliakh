@@ -6,7 +6,7 @@ dependencies {
     compile project(':dist-foreign-domain')
 
     compile("com.copyright.rup.dist.common:dist-common-repository:${distCommonVersion}")
-    //updated jackson-databind version due to vulnerability CVE-2020-36518 in com.fasterxml.jackson.core:jackson-databind:2.10.0
+    //updated jackson-databind version due to vulnerability CVE-2022-42003 in com.fasterxml.jackson.core:jackson-databind:2.13.4
     compile("com.fasterxml.jackson.core:jackson-databind:${jacksonDatabindVersion}")
     //dependency to avoid vulnerability CVE-2016-7051 (severity: MEDIUM) associated with 'com.fasterxml.jackson.module:jackson-module-jaxb-annotations:2.8.3'
     compile("com.fasterxml.jackson.module:jackson-module-jaxb-annotations:${rupCamel.standardDependencies.jackson.version}")
