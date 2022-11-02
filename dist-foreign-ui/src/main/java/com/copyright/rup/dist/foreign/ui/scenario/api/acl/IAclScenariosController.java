@@ -40,9 +40,9 @@ public interface IAclScenariosController extends IController<IAclScenariosWidget
         ReflectTools.findMethod(IAclScenariosController.class, "onFilterChanged", FilterChangedEvent.class);
 
     /**
-        * Initializes {@link IAclScenariosFilterWidget}.
-        *
-        * @return initialized {@link IAclScenariosFilterWidget}
+     * Initializes {@link IAclScenariosFilterWidget}.
+     *
+     * @return initialized {@link IAclScenariosFilterWidget}
      */
     IAclScenariosFilterWidget initAclScenariosFilterWidget();
 
@@ -145,13 +145,25 @@ public interface IAclScenariosController extends IController<IAclScenariosWidget
      * Verifies ACL batch is valid for creation of ACL scenario.
      *
      * @param batchId            ACL batch id
-     * @param grantSetId         ACL grant set  id
+     * @param grantSetId         ACL grant set id
      * @param periodPriors       list of period
      * @param distributionPeriod distribution period
      * @return {@code true} - if ACL batch is valid, {@code false} - otherwise
      */
     boolean isValidUsageBatch(String batchId, String grantSetId, Integer distributionPeriod,
                               List<Integer> periodPriors);
+
+    /**
+     * Return instance of {@link IStreamSource} for invalid ACL usages.
+     *
+     * @param batchId            ACL batch id
+     * @param grantSetId         ACL grant set id
+     * @param periodPriors       list of period
+     * @param distributionPeriod distribution period
+     * @return instance of {@link IStreamSource}
+     */
+    IStreamSource getInvalidUsagesStreamSource(String batchId, String grantSetId, Integer distributionPeriod,
+                                               List<Integer> periodPriors);
 
     /**
      * Gets list of all ACL publication types.
