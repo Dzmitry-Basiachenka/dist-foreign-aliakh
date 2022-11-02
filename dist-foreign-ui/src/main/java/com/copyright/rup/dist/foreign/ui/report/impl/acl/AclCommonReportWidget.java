@@ -42,7 +42,7 @@ public class AclCommonReportWidget extends Window implements IAclCommonReportWid
     public IAclCommonReportWidget init() {
         setContent(initRootLayout());
         setResizable(false);
-        setWidth(270, Unit.PIXELS);
+        setWidth(350, Unit.PIXELS);
         setHeight(145, Unit.PIXELS);
         VaadinUtils.addComponentStyle(this, "acl-report-window");
         return this;

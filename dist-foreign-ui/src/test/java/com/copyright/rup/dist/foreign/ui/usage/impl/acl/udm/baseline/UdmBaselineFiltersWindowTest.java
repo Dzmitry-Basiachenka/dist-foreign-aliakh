@@ -86,7 +86,7 @@ public class UdmBaselineFiltersWindowTest {
 
     @Test
     public void testConstructor() {
-        verifyWindow(window, "UDM baseline additional filters", 600, 355, Unit.PIXELS);
+        verifyWindow(window, "UDM baseline additional filters", 600, 400, Unit.PIXELS);
         verifyRootLayout(window.getContent());
     }
 

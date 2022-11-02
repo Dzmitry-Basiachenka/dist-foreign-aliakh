@@ -72,7 +72,7 @@ public class AclCommonReportWidgetTest {
     public void testInit() {
         replay(controller, streamSource);
         widget.init();
-        verifyWindow(widget, StringUtils.EMPTY, 270, 145, Sizeable.Unit.PIXELS);
+        verifyWindow(widget, StringUtils.EMPTY, 350, 145, Sizeable.Unit.PIXELS);
         assertEquals("acl-report-window", widget.getStyleName());
         assertEquals("acl-report-window", widget.getId());
         assertEquals(VerticalLayout.class, widget.getContent().getClass());
