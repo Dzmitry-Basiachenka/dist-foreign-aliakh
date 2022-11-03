@@ -153,21 +153,48 @@ public class AclScenarioUsageServiceTest {
     @Test
     public void testGetAclRightsholderTotalsHoldersByScenarioId() {
         List<AclRightsholderTotalsHolder> holders = Collections.singletonList(new AclRightsholderTotalsHolder());
-        expect(aclScenarioUsageRepository.findAclRightsholderTotalsHoldersByScenarioId(SCENARIO_UID))
-            .andReturn(holders).once();
+        expect(aclScenarioUsageRepository.findAclRightsholderTotalsHoldersByScenarioId(SCENARIO_UID)).andReturn(holders)
+            .once();
         replay(aclScenarioUsageRepository);
-        assertSame(holders, aclScenarioUsageService.getAclRightsholderTotalsHoldersByScenarioId(SCENARIO_UID));
+        assertSame(holders, aclScenarioUsageService.getAclRightsholderTotalsHoldersByScenarioId(SCENARIO_UID,
+            ScenarioStatusEnum.IN_PROGRESS));
         verify(aclScenarioUsageRepository);
+    }
+
+    @Test
+    public void testGetAclRightsholderTotalsHoldersByArchivedScenarioId() {
+        List<AclRightsholderTotalsHolder> holders = Collections.singletonList(new AclRightsholderTotalsHolder());
+        expect(aclScenarioUsageArchiveRepository.findAclRightsholderTotalsHoldersByScenarioId(SCENARIO_UID)).andReturn(
+            holders).once();
+        replay(aclScenarioUsageArchiveRepository);
+        assertSame(holders, aclScenarioUsageService.getAclRightsholderTotalsHoldersByScenarioId(SCENARIO_UID,
+            ScenarioStatusEnum.ARCHIVED));
+        verify(aclScenarioUsageArchiveRepository);
     }
 
     @Test
     public void testGetScenarioWithAmountsAndLastAction() {
         AclScenarioDto scenario = new AclScenarioDto();
         scenario.setId(SCENARIO_UID);
+        scenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);
         expect(aclScenarioUsageRepository.findWithAmountsAndLastAction(scenario.getId())).andReturn(scenario).once();
         replay(aclScenarioUsageRepository);
-        assertSame(scenario, aclScenarioUsageService.getAclScenarioWithAmountsAndLastAction(scenario.getId()));
+        assertSame(scenario,
+            aclScenarioUsageService.getAclScenarioWithAmountsAndLastAction(scenario.getId(), scenario.getStatus()));
         verify(aclScenarioUsageRepository);
+    }
+
+    @Test
+    public void testGetArchivedScenarioWithAmountsAndLastAction() {
+        AclScenarioDto scenario = new AclScenarioDto();
+        scenario.setId(SCENARIO_UID);
+        scenario.setStatus(ScenarioStatusEnum.ARCHIVED);
+        expect(aclScenarioUsageArchiveRepository.findWithAmountsAndLastAction(scenario.getId())).andReturn(scenario)
+            .once();
+        replay(aclScenarioUsageArchiveRepository);
+        assertSame(scenario,
+            aclScenarioUsageService.getAclScenarioWithAmountsAndLastAction(scenario.getId(), scenario.getStatus()));
+        verify(aclScenarioUsageArchiveRepository);
     }
 
     @Test

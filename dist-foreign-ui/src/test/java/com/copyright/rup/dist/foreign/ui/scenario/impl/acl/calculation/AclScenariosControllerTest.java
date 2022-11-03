@@ -177,10 +177,12 @@ public class AclScenariosControllerTest {
     public void testGetScenarioWithAmountsAndLastAction() {
         AclScenarioDto scenario = new AclScenarioDto();
         scenario.setId(SCENARIO_UID);
-        expect(aclScenarioUsageService.getAclScenarioWithAmountsAndLastAction(scenario.getId())).andReturn(scenario)
-            .once();
+        scenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);
+        expect(aclScenarioUsageService.getAclScenarioWithAmountsAndLastAction(scenario.getId(),
+            scenario.getStatus())).andReturn(scenario).once();
         replay(aclScenarioUsageService);
-        assertSame(scenario, aclScenariosController.getAclScenarioWithAmountsAndLastAction(scenario.getId()));
+        assertSame(scenario,
+            aclScenariosController.getAclScenarioWithAmountsAndLastAction(scenario.getId(), scenario.getStatus()));
         verify(aclScenarioUsageService);
     }
 

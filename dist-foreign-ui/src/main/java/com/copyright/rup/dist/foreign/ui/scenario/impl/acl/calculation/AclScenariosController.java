@@ -101,8 +101,8 @@ public class AclScenariosController extends CommonController<IAclScenariosWidget
     }
 
     @Override
-    public AclScenarioDto getAclScenarioWithAmountsAndLastAction(String scenarioId) {
-        return scenarioUsageService.getAclScenarioWithAmountsAndLastAction(scenarioId);
+    public AclScenarioDto getAclScenarioWithAmountsAndLastAction(String scenarioId, ScenarioStatusEnum status) {
+        return scenarioUsageService.getAclScenarioWithAmountsAndLastAction(scenarioId, status);
     }
 
     @Override
