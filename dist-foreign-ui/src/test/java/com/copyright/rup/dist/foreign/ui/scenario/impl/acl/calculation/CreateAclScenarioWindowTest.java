@@ -10,6 +10,7 @@ import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
@@ -345,6 +346,49 @@ public class CreateAclScenarioWindowTest {
         ComboBox<AclScenario> copyFromComboBox = Whitebox.getInternalState(window, "aclCopyFromScenarioComboBox");
         copyFromComboBox.setValue(aclScenario);
         verifyCreateScenarioWindowFields();
+        verify(controller, ForeignSecurityUtils.class);
+    }
+
+    @Test
+    public void testResetUsageBatchFundPoolGrantSetAfterChangeEditableBox() {
+        expect(controller.aclScenarioExists(SCENARIO_NAME)).andReturn(false).once();
+        expect(controller.getAclHistoricalPublicationTypes()).andReturn(publicationTypes).once();
+        expect(ForeignSecurityUtils.hasSpecialistPermission()).andReturn(false);
+        expect(controller.getUsageBatchesByPeriod(202206, true))
+            .andReturn(Collections.singletonList(buildAclUsageBatch())).times(2);
+        expect(controller.getUsageBatchesByPeriod(202206, false))
+            .andReturn(Collections.singletonList(buildAclUsageBatch())).once();
+        expect(controller.getFundPoolsByLicenseTypeAndPeriod(LICENSE_TYPE, 202206))
+            .andReturn(Collections.singletonList(buildAclFundPool())).times(3);
+        expect(controller.getGrantSetsByLicenseTypeAndPeriod(LICENSE_TYPE, 202206, true))
+            .andReturn(Collections.singletonList(buildAclGrantSet())).times(2);
+        expect(controller.getGrantSetsByLicenseTypeAndPeriod(LICENSE_TYPE, 202206, false))
+            .andReturn(Collections.singletonList(buildAclGrantSet())).once();
+        replay(controller, ForeignSecurityUtils.class);
+        window = new CreateAclScenarioWindow(controller, createButtonClickListener);
+        ComboBox<Integer> periodComboBox = Whitebox.getInternalState(window, "periodComboBox");
+        ComboBox<String> licenseTypeComboBox = Whitebox.getInternalState(window, "licenseTypeComboBox");
+        CheckBox editableCheckBox = Whitebox.getInternalState(window, EDITABLE_CHECKBOX_FIELD_NAME);
+        ComboBox<AclUsageBatch> usageBatchComboBox = Whitebox.getInternalState(window, "usageBatchComboBox");
+        ComboBox<AclFundPool> fundPoolComboBox = Whitebox.getInternalState(window, "fundPoolComboBox");
+        ComboBox<AclGrantSet> grantSetComboBox = Whitebox.getInternalState(window, "grantSetComboBox");
+        periodComboBox.setSelectedItem(202206);
+        licenseTypeComboBox.setSelectedItem(LICENSE_TYPE);
+        assertTrue(editableCheckBox.getValue());
+        usageBatchComboBox.setSelectedItem(buildAclUsageBatch());
+        fundPoolComboBox.setSelectedItem(buildAclFundPool());
+        grantSetComboBox.setSelectedItem(buildAclGrantSet());
+        editableCheckBox.setValue(false);
+        assertNull(usageBatchComboBox.getValue());
+        assertNull(fundPoolComboBox.getValue());
+        assertNull(grantSetComboBox.getValue());
+        usageBatchComboBox.setSelectedItem(buildAclUsageBatch());
+        fundPoolComboBox.setSelectedItem(buildAclFundPool());
+        grantSetComboBox.setSelectedItem(buildAclGrantSet());
+        editableCheckBox.setValue(true);
+        assertNull(usageBatchComboBox.getValue());
+        assertNull(fundPoolComboBox.getValue());
+        assertNull(grantSetComboBox.getValue());
         verify(controller, ForeignSecurityUtils.class);
     }
 

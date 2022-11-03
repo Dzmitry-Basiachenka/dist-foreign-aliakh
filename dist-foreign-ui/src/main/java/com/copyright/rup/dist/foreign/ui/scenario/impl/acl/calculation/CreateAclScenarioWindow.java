@@ -317,6 +317,9 @@ public class CreateAclScenarioWindow extends Window implements IDateFormatter {
         this.usageBatches = controller.getUsageBatchesByPeriod(period, editableFlag);
         this.fundPools = controller.getFundPoolsByLicenseTypeAndPeriod(licenseType, period);
         this.grantSets = controller.getGrantSetsByLicenseTypeAndPeriod(licenseType, period, editableFlag);
+        usageBatchComboBox.clear();
+        fundPoolComboBox.clear();
+        grantSetComboBox.clear();
         usageBatchComboBox.setItems(usageBatches);
         fundPoolComboBox.setItems(fundPools);
         grantSetComboBox.setItems(grantSets);
