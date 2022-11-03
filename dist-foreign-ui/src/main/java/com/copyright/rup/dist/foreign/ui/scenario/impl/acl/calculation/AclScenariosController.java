@@ -175,6 +175,14 @@ public class AclScenariosController extends CommonController<IAclScenariosWidget
     }
 
     @Override
+    public IStreamSource getInvalidUsagesStreamSource(String batchId, String grantSetId, Integer distributionPeriod,
+                                                      List<Integer> periodPriors) {
+        return streamSourceHandler.getCsvStreamSource(() -> "detail_ids_missing_values_",
+            pos -> aclUsageService.writeInvalidUsagesCsvReport(batchId, grantSetId, distributionPeriod, periodPriors,
+                pos));
+    }
+
+    @Override
     public List<PublicationType> getPublicationTypes() {
         return publicationTypeService.getPublicationTypes(FdaConstants.ACL_PRODUCT_FAMILY);
     }

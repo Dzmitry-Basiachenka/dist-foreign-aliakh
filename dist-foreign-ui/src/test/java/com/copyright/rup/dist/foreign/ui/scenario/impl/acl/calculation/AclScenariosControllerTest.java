@@ -94,6 +94,9 @@ public class AclScenariosControllerTest {
 
     private static final String SCENARIO_UID = "7ed0e17d-6baf-454c-803f-1d9be3cb3192";
     private static final String BATCH_UID = "47b4d40a-a6bd-4fe1-b463-4aa52bf0e56f";
+    private static final String GRANT_SET_ID = "38931a03-d5a3-4576-99d3-722ef1ae49f9";
+    private static final int DISTRIBUTION_PERIOD = 202212;
+    private static final List<Integer> PERIOD_PRIORS = Collections.singletonList(0);
     private static final String LICENSE_TYPE = "ACL";
     private static final String ACL_PRODUCT_FAMILY = "ACL";
 
@@ -209,18 +212,20 @@ public class AclScenariosControllerTest {
     @Test
     public void testGetFundPoolsByLicenseTypeAndPeriod() {
         List<AclFundPool> fundPools = Collections.singletonList(buildFundPool());
-        expect(fundPoolService.getFundPoolsByLicenseTypeAndPeriod(LICENSE_TYPE, 202212)).andReturn(fundPools).once();
+        expect(fundPoolService.getFundPoolsByLicenseTypeAndPeriod(LICENSE_TYPE, DISTRIBUTION_PERIOD))
+            .andReturn(fundPools).once();
         replay(fundPoolService);
-        assertSame(fundPools, aclScenariosController.getFundPoolsByLicenseTypeAndPeriod(LICENSE_TYPE, 202212));
+        assertSame(fundPools, aclScenariosController.getFundPoolsByLicenseTypeAndPeriod(LICENSE_TYPE,
+            DISTRIBUTION_PERIOD));
         verify(fundPoolService);
     }
 
     @Test
     public void testGetUsageBatchesByPeriod() {
         List<AclUsageBatch> usageBatches = Collections.singletonList(buildAclUsageBatch());
-        expect(usageBatchService.getUsageBatchesByPeriod(202212, true)).andReturn(usageBatches).once();
+        expect(usageBatchService.getUsageBatchesByPeriod(DISTRIBUTION_PERIOD, true)).andReturn(usageBatches).once();
         replay(usageBatchService);
-        assertSame(usageBatches, aclScenariosController.getUsageBatchesByPeriod(202212, true));
+        assertSame(usageBatches, aclScenariosController.getUsageBatchesByPeriod(DISTRIBUTION_PERIOD, true));
         verify(usageBatchService);
     }
 
@@ -235,10 +240,11 @@ public class AclScenariosControllerTest {
     @Test
     public void testGetGrantSetsByLicenseTypeAndPeriod() {
         List<AclGrantSet> grantSets = Collections.singletonList(buildAclGrantSet());
-        expect(grantSetService.getGrantSetsByLicenseTypeAndPeriod(LICENSE_TYPE, 202212, true)).andReturn(grantSets)
-            .once();
+        expect(grantSetService.getGrantSetsByLicenseTypeAndPeriod(LICENSE_TYPE, DISTRIBUTION_PERIOD, true))
+            .andReturn(grantSets).once();
         replay(grantSetService);
-        assertSame(grantSets, aclScenariosController.getGrantSetsByLicenseTypeAndPeriod(LICENSE_TYPE, 202212, true));
+        assertSame(grantSets, aclScenariosController.getGrantSetsByLicenseTypeAndPeriod(LICENSE_TYPE,
+            DISTRIBUTION_PERIOD, true));
         verify(grantSetService);
     }
 
@@ -288,12 +294,38 @@ public class AclScenariosControllerTest {
 
     @Test
     public void testIsValidUsageBatch() {
-        expect(aclUsageService.getCountInvalidUsages(BATCH_UID, "38931a03-d5a3-4576-99d3-722ef1ae49f9", 202212,
-            Collections.singletonList(0))).andReturn(0).once();
+        expect(aclUsageService.getCountInvalidUsages(BATCH_UID, GRANT_SET_ID, DISTRIBUTION_PERIOD,
+            PERIOD_PRIORS)).andReturn(0).once();
         replay(aclUsageService);
-        assertTrue(aclScenariosController.isValidUsageBatch(BATCH_UID, "38931a03-d5a3-4576-99d3-722ef1ae49f9", 202212,
-            Collections.singletonList(0)));
+        assertTrue(aclScenariosController.isValidUsageBatch(BATCH_UID, GRANT_SET_ID, DISTRIBUTION_PERIOD,
+            PERIOD_PRIORS));
         verify(aclUsageService);
+    }
+
+    @Test
+    public void testGetCsvStreamSource() {
+        OffsetDateTime now = OffsetDateTime.of(2022, 1, 2, 3, 4, 5, 6, ZoneOffset.ofHours(0));
+        mockStatic(OffsetDateTime.class);
+        expect(OffsetDateTime.now()).andReturn(now).once();
+        Capture<Supplier<String>> fileNameSupplierCapture = newCapture();
+        Capture<Consumer<PipedOutputStream>> posConsumerCapture = newCapture();
+        String fileName = "detail_ids_missing_values_";
+        Supplier<String> fileNameSupplier = () -> fileName;
+        Supplier<InputStream> inputStreamSupplier =
+            () -> IOUtils.toInputStream(StringUtils.EMPTY, StandardCharsets.UTF_8);
+        expect(streamSourceHandler.getCsvStreamSource(capture(fileNameSupplierCapture), capture(posConsumerCapture)))
+            .andReturn(new StreamSource(fileNameSupplier, "csv", inputStreamSupplier)).once();
+        PipedOutputStream pos = new PipedOutputStream();
+        aclUsageService.writeInvalidUsagesCsvReport(BATCH_UID, GRANT_SET_ID, DISTRIBUTION_PERIOD, PERIOD_PRIORS, pos);
+        expectLastCall().once();
+        replay(OffsetDateTime.class, streamSourceHandler, aclUsageService);
+        IStreamSource streamSource = aclScenariosController.getInvalidUsagesStreamSource(BATCH_UID, GRANT_SET_ID,
+            DISTRIBUTION_PERIOD, PERIOD_PRIORS);
+        assertEquals("detail_ids_missing_values_01_02_2022_03_04.csv", streamSource.getSource().getKey().get());
+        assertEquals(fileName, fileNameSupplierCapture.getValue().get());
+        Consumer<PipedOutputStream> posConsumer = posConsumerCapture.getValue();
+        posConsumer.accept(pos);
+        verify(OffsetDateTime.class, streamSourceHandler, aclUsageService);
     }
 
     @Test
@@ -512,7 +544,7 @@ public class AclScenariosControllerTest {
         scenario.setDescription("Description");
         scenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);
         scenario.setEditableFlag(false);
-        scenario.setPeriodEndDate(202212);
+        scenario.setPeriodEndDate(DISTRIBUTION_PERIOD);
         scenario.setLicenseType(LICENSE_TYPE);
         scenario.setCreateDate(Date.from(LocalDate.of(2022, 6, 1).atStartOfDay(ZoneId.systemDefault()).toInstant()));
         scenario.setCreateUser("user@copyright.com");
