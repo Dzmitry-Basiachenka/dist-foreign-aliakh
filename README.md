@@ -1,3 +1,19 @@
+16.0.12
+-
+* B-74414 FDA: Delete Calculation Tab Usage Batch: make changes based on comments in code review
+* B-75349 FDA: Add filters for ACL scenarios view: implement backend logic to retrieve data for scenario filters and to retrieve data for scenario by filter
+* B-74476 FDA: Export for Detail ID (Usages with no Pub Type/CUP): implement the report repository
+* B-74476 FDA: Export for Detail ID (Usages with no Pub Type/CUP): implement the report service
+* B-57810 FDA: Send ACL scenario to LM: adjust logic for creating message for sending to LM
+* B-57810 FDA: Send ACL scenario to LM: Implement logic to get scenario details to send to LM
+* B-57810 FDA: Send ACL scenario to LM: implement backend logic to send details to LM
+* B-57810 FDA: Send ACL scenario to LM: implement logic to delete scenario details
+* B-74821 Tech Debt: FDA: update size for ACL report window, for UDM filter window
+* B-74821 Tech Debt: FDA: revert code coverage gradle config
+* B-74821 Tech Debt: FDA: update size for ACL report window, for UDM filter window
+* B-74821 Tech Debt: FDA: revert code coverage gradle config
+* B-74821 Tech Debt: FDA: fix security vulnerability CVE-2022-42003
+
 16.0.11
 -
 * B-61502 FDA: Tax Notification Report for ACL: implement report menu item
