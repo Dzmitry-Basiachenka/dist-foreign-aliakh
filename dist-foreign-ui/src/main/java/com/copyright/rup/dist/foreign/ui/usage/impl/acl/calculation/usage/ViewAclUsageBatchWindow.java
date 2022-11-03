@@ -53,6 +53,7 @@ public class ViewAclUsageBatchWindow extends Window implements SearchWidget.ISea
         searchWidget.setPrompt(ForeignUi.getMessage("field.prompt.view_batch.search.udm"));
         initUsageBatchGrid();
         HorizontalLayout buttonsLayout = initButtons();
+        initMediator();
         VerticalLayout layout = new VerticalLayout(searchWidget, grid, buttonsLayout);
         layout.setSizeFull();
         layout.setExpandRatio(grid, 1);
@@ -121,6 +122,12 @@ public class ViewAclUsageBatchWindow extends Window implements SearchWidget.ISea
         VaadinUtils.setButtonsAutoDisabled(deleteButton);
         VaadinUtils.addComponentStyle(layout, "view-acl-usage-batch-buttons");
         return layout;
+    }
+
+    private void initMediator() {
+        ViewAclUsageBatchMediator mediator = new ViewAclUsageBatchMediator();
+        mediator.setDeleteButton(deleteButton);
+        mediator.applyPermissions();
     }
 
     private void deleteUsageBatch(AclUsageBatch usageBatch) {

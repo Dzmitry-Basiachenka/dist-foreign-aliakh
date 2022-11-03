@@ -36,11 +36,15 @@ public class AclUsageMediatorTest {
     private final MenuBar aclUsageBatchMenuBar = new MenuBar();
     private final Button editButton = new Button("Edit");
     private AclUsageMediator mediator;
+    private MenuBar.MenuItem createMenuItem;
+    private MenuBar.MenuItem viewMenuItem;
 
     @Before
     public void setUp() {
         mediator = new AclUsageMediator();
-        mediator.setAclUsageBatchMenuBar(aclUsageBatchMenuBar);
+        createMenuItem = aclUsageBatchMenuBar.addItem("Create");
+        viewMenuItem = aclUsageBatchMenuBar.addItem("View");
+        mediator.setCreateUsageBatchMenuItem(createMenuItem);
         mediator.setEditButton(editButton);
     }
 
@@ -51,17 +55,21 @@ public class AclUsageMediatorTest {
         replay(SecurityUtils.class);
         mediator.applyPermissions();
         assertTrue(aclUsageBatchMenuBar.isVisible());
+        assertTrue(createMenuItem.isVisible());
+        assertTrue(viewMenuItem.isVisible());
         assertTrue(editButton.isVisible());
         verify(SecurityUtils.class);
     }
 
     @Test
-    public void testApplyManagerOrViewOnlyPermissions() {
+    public void testApplyOtherPermissions() {
         mockStatic(SecurityUtils.class);
         expect(SecurityUtils.hasPermission(FDA_SPECIALIST_PERMISSION)).andReturn(false).times(1);
         replay(SecurityUtils.class);
         mediator.applyPermissions();
-        assertFalse(aclUsageBatchMenuBar.isVisible());
+        assertTrue(aclUsageBatchMenuBar.isVisible());
+        assertFalse(createMenuItem.isVisible());
+        assertTrue(viewMenuItem.isVisible());
         assertFalse(editButton.isVisible());
         verify(SecurityUtils.class);
     }

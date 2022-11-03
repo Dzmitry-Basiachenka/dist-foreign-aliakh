@@ -55,6 +55,7 @@ public class AclUsageWidget extends HorizontalSplitPanel implements IAclUsageWid
     private Grid<AclUsageDto> aclUsagesGrid;
     private DataProvider<AclUsageDto, Void> dataProvider;
     private MenuBar aclUsageBatchMenuBar;
+    private MenuBar.MenuItem createMenuItem;
     private Button editButton;
     private MultiSelectionModelImpl<AclUsageDto> gridSelectionModel;
 
@@ -83,7 +84,7 @@ public class AclUsageWidget extends HorizontalSplitPanel implements IAclUsageWid
     @Override
     public IMediator initMediator() {
         AclUsageMediator mediator = new AclUsageMediator();
-        mediator.setAclUsageBatchMenuBar(aclUsageBatchMenuBar);
+        mediator.setCreateUsageBatchMenuItem(createMenuItem);
         mediator.setEditButton(editButton);
         return mediator;
     }
@@ -125,7 +126,7 @@ public class AclUsageWidget extends HorizontalSplitPanel implements IAclUsageWid
         aclUsageBatchMenuBar = new MenuBar();
         MenuBar.MenuItem menuItem =
             aclUsageBatchMenuBar.addItem(ForeignUi.getMessage("menu.caption.usage_batch"), null, null);
-        menuItem.addItem(ForeignUi.getMessage("menu.item.create"), null,
+        createMenuItem = menuItem.addItem(ForeignUi.getMessage("menu.item.create"), null,
             item -> Windows.showModalWindow(new CreateAclUsageBatchWindow(controller)));
         menuItem.addItem(ForeignUi.getMessage("menu.item.view"), null,
             item -> Windows.showModalWindow(new ViewAclUsageBatchWindow(controller)));

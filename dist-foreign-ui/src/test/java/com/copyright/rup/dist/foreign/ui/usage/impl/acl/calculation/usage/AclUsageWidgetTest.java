@@ -108,13 +108,13 @@ public class AclUsageWidgetTest {
     @Test
     public void testWidgetStructureForManager() {
         setManagerExpectations();
-        verifyWidgetStructure(NoSelectionModel.class, false, false, true);
+        verifyWidgetStructure(NoSelectionModel.class, true, false, true);
     }
 
     @Test
     public void testWidgetStructureForViewOnly() {
         setViewOnlyExpectations();
-        verifyWidgetStructure(NoSelectionModel.class, false, false, true);
+        verifyWidgetStructure(NoSelectionModel.class, true, false, true);
     }
 
     @Test

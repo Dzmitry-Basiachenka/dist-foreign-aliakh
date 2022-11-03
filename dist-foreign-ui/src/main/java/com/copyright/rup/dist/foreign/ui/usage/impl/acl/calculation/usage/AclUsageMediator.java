@@ -5,6 +5,7 @@ import com.copyright.rup.vaadin.widget.api.IMediator;
 
 import com.vaadin.ui.Button;
 import com.vaadin.ui.MenuBar;
+import com.vaadin.ui.MenuBar.MenuItem;
 
 /**
  * Mediator for the ACL usage widget.
@@ -17,18 +18,18 @@ import com.vaadin.ui.MenuBar;
  */
 public class AclUsageMediator implements IMediator {
 
-    private MenuBar aclUsageBatchMenuBar;
+    private MenuBar.MenuItem createUsageBatchMenuItem;
     private Button editButton;
 
     @Override
     public void applyPermissions() {
         boolean isSpecialist = ForeignSecurityUtils.hasSpecialistPermission();
-        aclUsageBatchMenuBar.setVisible(isSpecialist);
+        createUsageBatchMenuItem.setVisible(isSpecialist);
         editButton.setVisible(isSpecialist);
     }
 
-    public void setAclUsageBatchMenuBar(MenuBar aclUsageBatchMenuBar) {
-        this.aclUsageBatchMenuBar = aclUsageBatchMenuBar;
+    public void setCreateUsageBatchMenuItem(MenuItem createUsageBatchMenuItem) {
+        this.createUsageBatchMenuItem = createUsageBatchMenuItem;
     }
 
     public void setEditButton(Button editButton) {
