@@ -7,6 +7,7 @@ import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.AclFundPoolDetailDto;
 import com.copyright.rup.dist.foreign.domain.AclPublicationType;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
+import com.copyright.rup.dist.foreign.domain.AclScenarioLiabilityDetail;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
@@ -14,6 +15,8 @@ import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.domain.common.util.ForeignLogUtils;
 import com.copyright.rup.dist.foreign.domain.filter.AclScenarioFilter;
+import com.copyright.rup.dist.foreign.integration.lm.api.ILmIntegrationService;
+import com.copyright.rup.dist.foreign.integration.lm.api.domain.ExternalUsage;
 import com.copyright.rup.dist.foreign.repository.api.IAclScenarioRepository;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclFundPoolService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioAuditService;
@@ -21,10 +24,13 @@ import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioUsageService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageService;
 
+import com.google.common.collect.Iterables;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,6 +57,8 @@ public class AclScenarioService implements IAclScenarioService {
 
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
+    @Value("$RUP{dist.foreign.usages.batch_size}")
+    private int batchSize;
     @Autowired
     private IAclScenarioRepository aclScenarioRepository;
     @Autowired
@@ -61,6 +69,8 @@ public class AclScenarioService implements IAclScenarioService {
     private IAclFundPoolService aclFundPoolService;
     @Autowired
     private IAclUsageService aclUsageService;
+    @Autowired
+    private ILmIntegrationService lmIntegrationService;
 
     @Override
     @Transactional
@@ -213,6 +223,7 @@ public class AclScenarioService implements IAclScenarioService {
     }
 
     @Override
+    @Transactional
     public void changeScenarioState(AclScenario scenario, ScenarioStatusEnum status, ScenarioActionTypeEnum action,
                                     String reason) {
         String userName = RupContextUtils.getUserName();
@@ -227,7 +238,19 @@ public class AclScenarioService implements IAclScenarioService {
     @Override
     @Transactional
     public void sendToLm(AclScenario scenario) {
-        //TODO will implement later
+        String userName = RupContextUtils.getUserName();
+        LOGGER.info("Send ACL scenario to LM. Started. {}, User={}", ForeignLogUtils.aclScenario(scenario), userName);
+        aclScenarioUsageService.moveToArchive(scenario, userName);
+        List<AclScenarioLiabilityDetail> archivedLiabilityDetails =
+            aclScenarioUsageService.getArchivedLiabilityDetailsForSendToLmByIds(scenario.getId());
+        Iterables.partition(archivedLiabilityDetails, batchSize)
+            .forEach(partition -> lmIntegrationService.sendToLm(partition.stream()
+                .map(ExternalUsage::new)
+                .collect(Collectors.toList())));
+        aclScenarioAuditService.logAction(scenario.getId(), ScenarioActionTypeEnum.SENT_TO_LM, StringUtils.EMPTY);
+        changeScenarioState(scenario, ScenarioStatusEnum.ARCHIVED, ScenarioActionTypeEnum.ARCHIVED, StringUtils.EMPTY);
+        LOGGER.info("Send ACL scenario to LM. Finished. {}, User={}", ForeignLogUtils.aclScenario(scenario),
+            userName);
     }
 
     private void populateScenario(AclScenario aclScenario, String userName, String scenarioId) {

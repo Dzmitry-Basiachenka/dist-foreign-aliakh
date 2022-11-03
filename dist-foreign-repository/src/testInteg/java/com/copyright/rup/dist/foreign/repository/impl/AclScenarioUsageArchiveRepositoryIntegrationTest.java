@@ -123,7 +123,7 @@ public class AclScenarioUsageArchiveRepositoryIntegrationTest {
     private void verifyAclScenarioLiabilityDetail(AclScenarioLiabilityDetail expectedDetail,
                                                   AclScenarioLiabilityDetail actualDetail) {
         assertEquals(expectedDetail.getLiabilityDetailId(), actualDetail.getLiabilityDetailId());
-        assertEquals(expectedDetail.getRhAccountNumber(), actualDetail.getRhAccountNumber());
+        assertEquals(expectedDetail.getRightsholderId(), actualDetail.getRightsholderId());
         assertEquals(expectedDetail.getWrWrkInst(), actualDetail.getWrWrkInst());
         assertEquals(expectedDetail.getSystemTitle(), actualDetail.getSystemTitle());
         assertEquals(expectedDetail.getTypeOfUse(), actualDetail.getTypeOfUse());

@@ -14,20 +14,25 @@ import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.AclFundPoolDetailDto;
 import com.copyright.rup.dist.foreign.domain.AclPublicationType;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
+import com.copyright.rup.dist.foreign.domain.AclScenarioLiabilityDetail;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.domain.filter.AclScenarioFilter;
+import com.copyright.rup.dist.foreign.integration.lm.api.ILmIntegrationService;
+import com.copyright.rup.dist.foreign.integration.lm.api.domain.ExternalUsage;
 import com.copyright.rup.dist.foreign.repository.api.IAclScenarioRepository;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclFundPoolService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioAuditService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioService;
+import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioUsageService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageService;
 
 import com.google.common.collect.Sets;
 
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -70,10 +75,12 @@ public class AclScenarioServiceTest {
     private static final String PRINT_TOU = "PRINT";
 
     private IAclScenarioService aclScenarioService;
+    private IAclScenarioUsageService aclScenarioUsageService;
     private IAclScenarioRepository aclScenarioRepository;
     private IAclFundPoolService aclFundPoolService;
     private IAclUsageService aclUsageService;
     private IAclScenarioAuditService aclScenarioAuditService;
+    private ILmIntegrationService lmIntegrationService;
 
     @Before
     public void setUp() {
@@ -81,11 +88,16 @@ public class AclScenarioServiceTest {
         aclFundPoolService = createMock(IAclFundPoolService.class);
         aclUsageService = createMock(IAclUsageService.class);
         aclScenarioAuditService = createMock(IAclScenarioAuditService.class);
+        aclScenarioUsageService = createMock(IAclScenarioUsageService.class);
+        lmIntegrationService = createMock(ILmIntegrationService.class);
         aclScenarioService = new AclScenarioService();
         Whitebox.setInternalState(aclScenarioService, aclScenarioRepository);
         Whitebox.setInternalState(aclScenarioService, aclFundPoolService);
         Whitebox.setInternalState(aclScenarioService, aclUsageService);
+        Whitebox.setInternalState(aclScenarioService, aclScenarioUsageService);
         Whitebox.setInternalState(aclScenarioService, aclScenarioAuditService);
+        Whitebox.setInternalState(aclScenarioService, lmIntegrationService);
+        Whitebox.setInternalState(aclScenarioService, "batchSize", 1);
     }
 
     @Test
@@ -308,6 +320,30 @@ public class AclScenarioServiceTest {
         verify(aclScenarioRepository, aclScenarioAuditService, RupContextUtils.class);
     }
 
+    @Test
+    public void testSendToLm() {
+        AclScenarioLiabilityDetail liabilityDetail = buildLiabilityDetail();
+        AclScenario aclScenario = buildAclScenario();
+        aclScenarioUsageService.moveToArchive(aclScenario, "SYSTEM");
+        expectLastCall().once();
+        expect(aclScenarioUsageService.getArchivedLiabilityDetailsForSendToLmByIds(aclScenario.getId()))
+            .andReturn(Collections.singletonList(liabilityDetail)).once();
+        lmIntegrationService.sendToLm(Collections.singletonList(new ExternalUsage(liabilityDetail)));
+        expectLastCall().once();
+        aclScenarioAuditService.logAction(aclScenario.getId(), ScenarioActionTypeEnum.SENT_TO_LM, StringUtils.EMPTY);
+        expectLastCall().once();
+        aclScenarioRepository.updateStatus(aclScenario);
+        expectLastCall().once();
+        aclScenarioAuditService.logAction(aclScenario.getId(), ScenarioActionTypeEnum.ARCHIVED, StringUtils.EMPTY);
+        expectLastCall().once();
+        replay(aclScenarioRepository, aclScenarioAuditService, aclScenarioUsageService, lmIntegrationService,
+            RupContextUtils.class);
+        aclScenarioService.sendToLm(aclScenario);
+        assertEquals(ScenarioStatusEnum.ARCHIVED, aclScenario.getStatus());
+        verify(aclScenarioRepository, aclScenarioAuditService, aclScenarioUsageService, lmIntegrationService,
+            RupContextUtils.class);
+    }
+
     private AclScenario buildAclScenario() {
         AclScenario aclScenario = new AclScenario();
         aclScenario.setId(SCENARIO_UID);
@@ -350,5 +386,21 @@ public class AclScenarioServiceTest {
         detail.getAggregateLicenseeClass().setId(aggregateClassId);
         detail.setTypeOfUse(typeOfUse);
         return detail;
+    }
+
+    private AclScenarioLiabilityDetail buildLiabilityDetail() {
+        AclScenarioLiabilityDetail liabilityDetail = new AclScenarioLiabilityDetail();
+        liabilityDetail.setLiabilityDetailId("0128f1fd-e2ae-4179-8e7e-12fd2a1c590d");
+        liabilityDetail.setRightsholderId("07529566-6ce4-11e9-a923-1681be663d3e");
+        liabilityDetail.setNetAmount(new BigDecimal("100.00"));
+        liabilityDetail.setServiceFeeAmount(new BigDecimal("20.00"));
+        liabilityDetail.setGrossAmount(new BigDecimal("120.00"));
+        liabilityDetail.setSystemTitle("System title");
+        liabilityDetail.setWrWrkInst(123456789L);
+        liabilityDetail.setProductFamily("ACLPRINT");
+        liabilityDetail.setTypeOfUse("PRINT");
+        liabilityDetail.setLicenseType("ACL");
+        liabilityDetail.setAggregateLicenseeClassName("Materials");
+        return liabilityDetail;
     }
 }

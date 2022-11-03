@@ -15,11 +15,13 @@ import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolderDto;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDetailDto;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
+import com.copyright.rup.dist.foreign.domain.AclScenarioLiabilityDetail;
 import com.copyright.rup.dist.foreign.domain.RightsholderPayeeProductFamilyHolder;
 import com.copyright.rup.dist.foreign.domain.RightsholderTypeOfUsePair;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.RightsholderResultsFilter;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
+import com.copyright.rup.dist.foreign.repository.api.IAclScenarioUsageArchiveRepository;
 import com.copyright.rup.dist.foreign.repository.api.IAclScenarioUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioUsageService;
@@ -57,6 +59,7 @@ public class AclScenarioUsageServiceTest {
 
     private IAclScenarioUsageService aclScenarioUsageService;
     private IAclScenarioUsageRepository aclScenarioUsageRepository;
+    private IAclScenarioUsageArchiveRepository aclScenarioUsageArchiveRepository;
     private IRightsholderService rightsholderService;
     private IPrmIntegrationService prmIntegrationService;
 
@@ -66,7 +69,9 @@ public class AclScenarioUsageServiceTest {
         aclScenarioUsageRepository = createMock(IAclScenarioUsageRepository.class);
         rightsholderService = createMock(IRightsholderService.class);
         prmIntegrationService = createMock(IPrmIntegrationService.class);
+        aclScenarioUsageArchiveRepository = createMock(IAclScenarioUsageArchiveRepository.class);
         Whitebox.setInternalState(aclScenarioUsageService, aclScenarioUsageRepository);
+        Whitebox.setInternalState(aclScenarioUsageService, aclScenarioUsageArchiveRepository);
         Whitebox.setInternalState(aclScenarioUsageService, rightsholderService);
         Whitebox.setInternalState(aclScenarioUsageService, prmIntegrationService);
     }
@@ -232,6 +237,34 @@ public class AclScenarioUsageServiceTest {
         verify(aclScenarioUsageRepository);
     }
 
+    @Test
+    public void testMoveToArchive() {
+        AclScenario scenario = new AclScenario();
+        scenario.setId(SCENARIO_UID);
+        scenario.setName("Scenario name");
+        scenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);
+        List<String> detailsIds = Collections.singletonList("88ab9d5c-2353-4301-bf9d-7e203ab20917");
+        List<String> sharesIds = Collections.singletonList("047db7d1-945f-485a-bbed-26480f7bdd72");
+        expect(aclScenarioUsageArchiveRepository.copyScenarioSharesToArchiveByScenarioId(SCENARIO_UID, USER_NAME))
+            .andReturn(sharesIds).once();
+        expect(aclScenarioUsageArchiveRepository.copyScenarioDetailsToArchiveByScenarioId(SCENARIO_UID, USER_NAME))
+            .andReturn(detailsIds);
+        replay(aclScenarioUsageArchiveRepository);
+        aclScenarioUsageService.moveToArchive(scenario, USER_NAME);
+        verify(aclScenarioUsageArchiveRepository);
+    }
+
+    @Test
+    public void testGetArchivedLiabilityDetailsForSendToLmByIds() {
+        AclScenarioLiabilityDetail liabilityDetail = buildLiabilityDetail();
+        expect(aclScenarioUsageArchiveRepository.findForSendToLmByScenarioId(SCENARIO_UID)).andReturn(
+            Collections.singletonList(liabilityDetail)).once();
+        replay(aclScenarioUsageArchiveRepository);
+        assertEquals(liabilityDetail,
+            aclScenarioUsageService.getArchivedLiabilityDetailsForSendToLmByIds(SCENARIO_UID).get(0));
+        verify(aclScenarioUsageArchiveRepository);
+    }
+
     private AclScenario buildAclScenario() {
         AclScenario aclScenario = new AclScenario();
         aclScenario.setId(SCENARIO_UID);
@@ -282,5 +315,21 @@ public class AclScenarioUsageServiceTest {
         rightsholderTypeOfUsePair.setRightsholder(buildRightsholder(accountNumber));
         rightsholderTypeOfUsePair.setTypeOfUse("PRINT");
         return rightsholderTypeOfUsePair;
+    }
+
+    private AclScenarioLiabilityDetail buildLiabilityDetail() {
+        AclScenarioLiabilityDetail liabilityDetail = new AclScenarioLiabilityDetail();
+        liabilityDetail.setLiabilityDetailId("0128f1fd-e2ae-4179-8e7e-12fd2a1c590d");
+        liabilityDetail.setRightsholderId("07529566-6ce4-11e9-a923-1681be663d3e");
+        liabilityDetail.setNetAmount(new BigDecimal("100.00"));
+        liabilityDetail.setServiceFeeAmount(new BigDecimal("20.00"));
+        liabilityDetail.setGrossAmount(new BigDecimal("120.00"));
+        liabilityDetail.setSystemTitle("System title");
+        liabilityDetail.setWrWrkInst(123456789L);
+        liabilityDetail.setProductFamily("ACLPRINT");
+        liabilityDetail.setTypeOfUse("PRINT");
+        liabilityDetail.setLicenseType("ACL");
+        liabilityDetail.setAggregateLicenseeClassName("Materials");
+        return liabilityDetail;
     }
 }

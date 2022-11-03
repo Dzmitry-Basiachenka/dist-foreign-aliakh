@@ -5,16 +5,20 @@ import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.integration.rest.prm.PrmRollUpService;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
+import com.copyright.rup.dist.common.util.LogUtils;
 import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolderDto;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDetailDto;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
+import com.copyright.rup.dist.foreign.domain.AclScenarioLiabilityDetail;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.RightsholderPayeeProductFamilyHolder;
 import com.copyright.rup.dist.foreign.domain.RightsholderTypeOfUsePair;
+import com.copyright.rup.dist.foreign.domain.common.util.ForeignLogUtils;
 import com.copyright.rup.dist.foreign.domain.filter.RightsholderResultsFilter;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
+import com.copyright.rup.dist.foreign.repository.api.IAclScenarioUsageArchiveRepository;
 import com.copyright.rup.dist.foreign.repository.api.IAclScenarioUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioUsageService;
@@ -46,6 +50,8 @@ public class AclScenarioUsageService implements IAclScenarioUsageService {
 
     @Autowired
     private IAclScenarioUsageRepository aclScenarioUsageRepository;
+    @Autowired
+    private IAclScenarioUsageArchiveRepository archiveRepository;
     @Autowired
     private IRightsholderService rightsholderService;
     @Autowired
@@ -148,5 +154,22 @@ public class AclScenarioUsageService implements IAclScenarioUsageService {
     public List<RightsholderPayeeProductFamilyHolder> getRightsholderPayeeProductFamilyHoldersByAclScenarioIds(
         Set<String> scenarioIds) {
         return aclScenarioUsageRepository.findRightsholderPayeeProductFamilyHoldersByAclScenarioIds(scenarioIds);
+    }
+
+    @Override
+    @Transactional
+    public void moveToArchive(AclScenario scenario, String userName) {
+        LOGGER.info("Move ACL details to archive. Started. {}", ForeignLogUtils.aclScenario(scenario));
+        String scenarioId = scenario.getId();
+        List<String> shareIds = archiveRepository.copyScenarioSharesToArchiveByScenarioId(scenarioId, userName);
+        List<String> detailIds = archiveRepository.copyScenarioDetailsToArchiveByScenarioId(scenarioId, userName);
+        //todo will be added remove from scenario
+        LOGGER.info("Move ACL details to archive. Finished. {}, DetailsCount={}, SharesCount={}",
+            ForeignLogUtils.aclScenario(scenario), LogUtils.size(detailIds), LogUtils.size(shareIds));
+    }
+
+    @Override
+    public List<AclScenarioLiabilityDetail> getArchivedLiabilityDetailsForSendToLmByIds(String scenarioId) {
+        return archiveRepository.findForSendToLmByScenarioId(scenarioId);
     }
 }

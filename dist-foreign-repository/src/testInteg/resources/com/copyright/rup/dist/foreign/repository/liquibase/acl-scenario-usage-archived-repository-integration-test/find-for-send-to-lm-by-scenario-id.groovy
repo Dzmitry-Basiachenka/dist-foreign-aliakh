@@ -3,6 +3,12 @@ databaseChangeLog {
 
     changeSet(id: '2022-11-01-00', author: 'Anton Azarenka <aazarenka@copyright.com>') {
 
+        insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
+            column(name: 'df_rightsholder_uid', value: 'a5989f7c-fc6f-4e8c-88d4-2fe7bcce8d1f')
+            column(name: 'rh_account_number', value: 1000002859)
+            column(name: 'name', value: 'John Wiley & Sons - Books')
+        }
+
         insert(schemaName: dbAppsSchema, tableName: 'df_acl_fund_pool') {
             column(name: 'df_acl_fund_pool_uid', value: '9873fcfc-5a59-48bc-ab8d-96d1129a2c95')
             column(name: 'name', value: 'ACL Fund Pool 202212')
