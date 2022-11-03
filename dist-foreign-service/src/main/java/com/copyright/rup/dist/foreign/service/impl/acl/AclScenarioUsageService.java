@@ -163,7 +163,7 @@ public class AclScenarioUsageService implements IAclScenarioUsageService {
         String scenarioId = scenario.getId();
         List<String> shareIds = archiveRepository.copyScenarioSharesToArchiveByScenarioId(scenarioId, userName);
         List<String> detailIds = archiveRepository.copyScenarioDetailsToArchiveByScenarioId(scenarioId, userName);
-        //todo will be added remove from scenario
+        aclScenarioUsageRepository.deleteByScenarioId(scenarioId);
         LOGGER.info("Move ACL details to archive. Finished. {}, DetailsCount={}, SharesCount={}",
             ForeignLogUtils.aclScenario(scenario), LogUtils.size(detailIds), LogUtils.size(shareIds));
     }

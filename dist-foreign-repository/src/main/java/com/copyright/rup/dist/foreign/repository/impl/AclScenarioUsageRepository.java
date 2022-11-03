@@ -183,4 +183,9 @@ public class AclScenarioUsageRepository extends AclBaseRepository implements IAc
         return selectList("IAclScenarioUsageMapper.findRightsholderPayeeProductFamilyHoldersByAclScenarioIds",
             Objects.requireNonNull(scenarioIds));
     }
+
+    @Override
+    public void deleteByScenarioId(String scenarioId) {
+        delete("IAclScenarioUsageMapper.deleteByScenarioId", Objects.requireNonNull(scenarioId));
+    }
 }

@@ -249,9 +249,11 @@ public class AclScenarioUsageServiceTest {
             .andReturn(sharesIds).once();
         expect(aclScenarioUsageArchiveRepository.copyScenarioDetailsToArchiveByScenarioId(SCENARIO_UID, USER_NAME))
             .andReturn(detailsIds);
-        replay(aclScenarioUsageArchiveRepository);
+        aclScenarioUsageRepository.deleteByScenarioId(SCENARIO_UID);
+        expectLastCall().once();
+        replay(aclScenarioUsageArchiveRepository, aclScenarioUsageRepository);
         aclScenarioUsageService.moveToArchive(scenario, USER_NAME);
-        verify(aclScenarioUsageArchiveRepository);
+        verify(aclScenarioUsageArchiveRepository, aclScenarioUsageRepository);
     }
 
     @Test
