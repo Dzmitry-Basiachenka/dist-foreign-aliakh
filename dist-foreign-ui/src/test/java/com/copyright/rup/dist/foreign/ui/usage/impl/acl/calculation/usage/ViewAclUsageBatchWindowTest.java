@@ -21,6 +21,7 @@ import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.foreign.domain.AclUsageBatch;
+import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclUsageController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.widget.SearchWidget;
@@ -59,7 +60,7 @@ import java.util.List;
  * @author Mikita Maistrenka
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest(Windows.class)
+@PrepareForTest({Windows.class, ForeignSecurityUtils.class})
 public class ViewAclUsageBatchWindowTest {
 
     private static final String USAGE_BATCH_ID = "598f47d0-0ecf-4c69-85ac-25bb481313dd";
@@ -71,14 +72,16 @@ public class ViewAclUsageBatchWindowTest {
 
     @Before
     public void setUp() {
+        mockStatic(ForeignSecurityUtils.class);
         controller = createMock(IAclUsageController.class);
         aclUsageBatchGrid = createMock(Grid.class);
         expect(controller.getAllAclUsageBatches()).andReturn(Collections.singletonList(buildAclUsageBatch()));
-        replay(controller);
+        expect(ForeignSecurityUtils.hasSpecialistPermission()).andReturn(true).once();
+        replay(ForeignSecurityUtils.class, controller);
         window = new ViewAclUsageBatchWindow(controller);
         Whitebox.setInternalState(window, "grid", aclUsageBatchGrid);
-        verify(controller);
-        reset(controller);
+        verify(ForeignSecurityUtils.class, controller);
+        reset(ForeignSecurityUtils.class, controller);
     }
 
     @Test
