@@ -19,7 +19,6 @@ import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolderDto;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDetailDto;
-import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.RightsholderResultsFilter;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclCalculationReportService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioUsageService;
@@ -183,7 +182,7 @@ public class AclScenarioControllerTest {
         expect(OffsetDateTime.now()).andReturn(DATE).once();
         expect(streamSourceHandler.getCsvStreamSource(capture(fileNameSupplierCapture), capture(posConsumerCapture)))
             .andReturn(new StreamSource(fileNameSupplier, "csv", inputStreamSupplier)).once();
-        aclCalculationReportService.writeAclScenarioRightsholderTotalsCsvReport(scenario, pos);
+        aclCalculationReportService.writeAclScenarioRightsholderTotalsCsvReport(scenario.getId(), pos);
         expectLastCall().once();
         replay(OffsetDateTime.class, streamSourceHandler, aclCalculationReportService);
         IStreamSource streamSource = controller.getExportAclScenarioRightsholderTotalsStreamSource();
@@ -198,7 +197,6 @@ public class AclScenarioControllerTest {
         AclScenario aclScenario = new AclScenario();
         aclScenario.setId(SCENARIO_UID);
         aclScenario.setName("Scenario name");
-        aclScenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);
         return aclScenario;
     }
 
