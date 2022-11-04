@@ -97,8 +97,8 @@ public class AclScenarioControllerTest {
     @Test
     public void testGetAclRightsholderTotalsHoldersByScenarioId() {
         List<AclRightsholderTotalsHolder> holders = Collections.singletonList(new AclRightsholderTotalsHolder());
-        expect(aclScenarioUsageService.getAclRightsholderTotalsHoldersByScenarioId(scenario.getId(),
-            scenario.getStatus())).andReturn(holders).once();
+        expect(aclScenarioUsageService.getAclRightsholderTotalsHoldersByScenarioId(scenario.getId()))
+            .andReturn(holders).once();
         replay(aclScenarioUsageService);
         List<AclRightsholderTotalsHolder> result = controller.getAclRightsholderTotalsHolders();
         assertNotNull(result);
@@ -121,7 +121,7 @@ public class AclScenarioControllerTest {
         String fileName = scenario.getName() + "_Details_";
         Supplier<String> fileNameSupplier = () -> fileName;
         Supplier<InputStream> inputStreamSupplier =
-            () -> IOUtils.toInputStream(StringUtils.EMPTY, StandardCharsets.UTF_8);
+                () -> IOUtils.toInputStream(StringUtils.EMPTY, StandardCharsets.UTF_8);
         PipedOutputStream pos = new PipedOutputStream();
         expect(OffsetDateTime.now()).andReturn(DATE).once();
         expect(streamSourceHandler.getCsvStreamSource(capture(fileNameSupplierCapture), capture(posConsumerCapture)))
@@ -177,7 +177,7 @@ public class AclScenarioControllerTest {
         String fileName = scenario.getName() + "_";
         Supplier<String> fileNameSupplier = () -> fileName;
         Supplier<InputStream> inputStreamSupplier =
-            () -> IOUtils.toInputStream(StringUtils.EMPTY, StandardCharsets.UTF_8);
+                () -> IOUtils.toInputStream(StringUtils.EMPTY, StandardCharsets.UTF_8);
         PipedOutputStream pos = new PipedOutputStream();
         expect(OffsetDateTime.now()).andReturn(DATE).once();
         expect(streamSourceHandler.getCsvStreamSource(capture(fileNameSupplierCapture), capture(posConsumerCapture)))

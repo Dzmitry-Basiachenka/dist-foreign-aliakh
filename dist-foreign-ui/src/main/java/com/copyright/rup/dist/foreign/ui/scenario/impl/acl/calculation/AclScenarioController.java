@@ -56,8 +56,7 @@ public class AclScenarioController extends CommonController<IAclScenarioWidget> 
 
     @Override
     public List<AclRightsholderTotalsHolder> getAclRightsholderTotalsHolders() {
-        return scenarioUsageService.getAclRightsholderTotalsHoldersByScenarioId(aclScenario.getId(),
-            aclScenario.getStatus());
+        return scenarioUsageService.getAclRightsholderTotalsHoldersByScenarioId(aclScenario.getId());
     }
 
     @Override

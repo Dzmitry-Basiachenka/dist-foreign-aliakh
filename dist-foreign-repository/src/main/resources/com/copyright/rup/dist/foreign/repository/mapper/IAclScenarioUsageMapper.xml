@@ -345,9 +345,9 @@
         from (
             with works as (
                 select
-                    ${detail_uid_column},
+                    df_acl_scenario_detail_uid,
                     wr_wrk_inst
-                from ${schema}.${details_table}
+                from ${schema}.df_acl_scenario_detail
                 where df_acl_scenario_uid = #{scenarioId}
             )
             select
@@ -363,9 +363,9 @@
                 count(distinct wr_wrk_inst) number_of_titles,
                 count(distinct aggregate_licensee_class_id) number_of_agg_lc_classes,
                 s.license_type
-            from ${schema}.${shares_table} shd
+            from ${schema}.df_acl_share_detail shd
             join ${schema}.df_acl_scenario s on s.df_acl_scenario_uid = #{scenarioId}
-            join works w on w.${detail_uid_column} = shd.${detail_uid_column}
+            join works w on w.df_acl_scenario_detail_uid = shd.df_acl_scenario_detail_uid
             where shd.df_acl_scenario_uid = #{scenarioId}
             group by shd.rh_account_number, s.license_type
         ) shd
@@ -608,16 +608,12 @@
     </delete>
 
     <select id="findAclRightsholderTotalsHoldersByScenarioId" parameterType="map" resultMap="aclRightsholderTotalsHolderResultMap">
-        <include refid="IAclScenarioUsageMapper.findAclRightsholderTotalsHoldersByScenarioIdSql">
-            <property name="details_table" value="df_acl_scenario_detail"/>
-            <property name="shares_table" value="df_acl_share_detail"/>
-            <property name="detail_uid_column" value="df_acl_scenario_detail_uid"/>
-        </include>
+        <include refid="IAclScenarioUsageMapper.findAclRightsholderTotalsHoldersByScenarioIdSql"/>
     </select>
 
-    <sql id="findWithAmountsAndLastActionSql">
+    <select id="findWithAmountsAndLastAction" parameterType="string" resultMap="aclScenarioDtoResultMap">
         select
-            <include refid="IAclScenarioUsageMapper.aclScenarioWithAmountsAndLastActionColumns"/>
+            <include refid="aclScenarioWithAmountsAndLastActionColumns"/>
         from (
             select
                 s.df_acl_scenario_uid,
@@ -628,8 +624,8 @@
                 count(distinct scd.wr_wrk_inst) number_of_works,
                 shd.type_of_use
             from ${schema}.df_acl_scenario s
-            left join ${schema}.${shares_table} shd on shd.df_acl_scenario_uid = s.df_acl_scenario_uid
-            left join ${schema}.${details_table} scd on scd.${detail_uid_column} = shd.${detail_uid_column}
+            left join ${schema}.df_acl_share_detail shd on shd.df_acl_scenario_uid = s.df_acl_scenario_uid
+            left join ${schema}.df_acl_scenario_detail scd on scd.df_acl_scenario_detail_uid = shd.df_acl_scenario_detail_uid
             where s.df_acl_scenario_uid = #{scenarioId}
             group by s.df_acl_scenario_uid, shd.type_of_use
         ) as groups
@@ -641,14 +637,6 @@
                 where df_acl_scenario_uid = s.df_acl_scenario_uid
             )
         group by s.df_acl_scenario_uid, sa.df_acl_scenario_audit_uid
-    </sql>
-
-    <select id="findWithAmountsAndLastAction" parameterType="string" resultMap="aclScenarioDtoResultMap">
-        <include refid="IAclScenarioUsageMapper.findWithAmountsAndLastActionSql">
-            <property name="details_table" value="df_acl_scenario_detail"/>
-            <property name="shares_table" value="df_acl_share_detail"/>
-            <property name="detail_uid_column" value="df_acl_scenario_detail_uid"/>
-        </include>
     </select>
 
     <select id="findByScenarioIdAndRhAccountNumber" parameterType="map" resultMap="aclScenarioDetailDtoResultMap">
