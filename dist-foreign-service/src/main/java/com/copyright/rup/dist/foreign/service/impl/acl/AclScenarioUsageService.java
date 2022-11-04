@@ -15,7 +15,6 @@ import com.copyright.rup.dist.foreign.domain.AclScenarioLiabilityDetail;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.RightsholderPayeeProductFamilyHolder;
 import com.copyright.rup.dist.foreign.domain.RightsholderTypeOfUsePair;
-import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.common.util.ForeignLogUtils;
 import com.copyright.rup.dist.foreign.domain.filter.RightsholderResultsFilter;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
@@ -52,7 +51,7 @@ public class AclScenarioUsageService implements IAclScenarioUsageService {
     @Autowired
     private IAclScenarioUsageRepository aclScenarioUsageRepository;
     @Autowired
-    private IAclScenarioUsageArchiveRepository aclarchiveScenarioUsageRepository;
+    private IAclScenarioUsageArchiveRepository archiveRepository;
     @Autowired
     private IRightsholderService rightsholderService;
     @Autowired
@@ -91,18 +90,13 @@ public class AclScenarioUsageService implements IAclScenarioUsageService {
     }
 
     @Override
-    public List<AclRightsholderTotalsHolder> getAclRightsholderTotalsHoldersByScenarioId(String scenarioId,
-                                                                                         ScenarioStatusEnum status) {
-        return ScenarioStatusEnum.ARCHIVED.equals(status)
-            ? aclarchiveScenarioUsageRepository.findAclRightsholderTotalsHoldersByScenarioId(scenarioId)
-            : aclScenarioUsageRepository.findAclRightsholderTotalsHoldersByScenarioId(scenarioId);
+    public List<AclRightsholderTotalsHolder> getAclRightsholderTotalsHoldersByScenarioId(String scenarioId) {
+        return aclScenarioUsageRepository.findAclRightsholderTotalsHoldersByScenarioId(scenarioId);
     }
 
     @Override
-    public AclScenarioDto getAclScenarioWithAmountsAndLastAction(String scenarioId, ScenarioStatusEnum status) {
-        return ScenarioStatusEnum.ARCHIVED.equals(status)
-            ? aclarchiveScenarioUsageRepository.findWithAmountsAndLastAction(scenarioId)
-            : aclScenarioUsageRepository.findWithAmountsAndLastAction(scenarioId);
+    public AclScenarioDto getAclScenarioWithAmountsAndLastAction(String scenarioId) {
+        return aclScenarioUsageRepository.findWithAmountsAndLastAction(scenarioId);
     }
 
     @Override
@@ -167,10 +161,8 @@ public class AclScenarioUsageService implements IAclScenarioUsageService {
     public void moveToArchive(AclScenario scenario, String userName) {
         LOGGER.info("Move ACL details to archive. Started. {}", ForeignLogUtils.aclScenario(scenario));
         String scenarioId = scenario.getId();
-        List<String> shareIds =
-            aclarchiveScenarioUsageRepository.copyScenarioSharesToArchiveByScenarioId(scenarioId, userName);
-        List<String> detailIds =
-            aclarchiveScenarioUsageRepository.copyScenarioDetailsToArchiveByScenarioId(scenarioId, userName);
+        List<String> shareIds = archiveRepository.copyScenarioSharesToArchiveByScenarioId(scenarioId, userName);
+        List<String> detailIds = archiveRepository.copyScenarioDetailsToArchiveByScenarioId(scenarioId, userName);
         aclScenarioUsageRepository.deleteByScenarioId(scenarioId);
         LOGGER.info("Move ACL details to archive. Finished. {}, DetailsCount={}, SharesCount={}",
             ForeignLogUtils.aclScenario(scenario), LogUtils.size(detailIds), LogUtils.size(shareIds));
@@ -178,6 +170,6 @@ public class AclScenarioUsageService implements IAclScenarioUsageService {
 
     @Override
     public List<AclScenarioLiabilityDetail> getArchivedLiabilityDetailsForSendToLmByIds(String scenarioId) {
-        return aclarchiveScenarioUsageRepository.findForSendToLmByScenarioId(scenarioId);
+        return archiveRepository.findForSendToLmByScenarioId(scenarioId);
     }
 }

@@ -1,8 +1,6 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
-import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDetail;
-import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
 import com.copyright.rup.dist.foreign.domain.AclScenarioLiabilityDetail;
 import com.copyright.rup.dist.foreign.repository.api.IAclScenarioUsageArchiveRepository;
 
@@ -54,17 +52,5 @@ public class AclScenarioUsageArchiveRepository extends AclBaseRepository impleme
     @Override
     public List<AclScenarioLiabilityDetail> findForSendToLmByScenarioId(String scenarioId) {
         return selectList("IAclScenarioUsageArchiveMapper.findForSendToLmByScenarioId", scenarioId);
-    }
-
-    @Override
-    public List<AclRightsholderTotalsHolder> findAclRightsholderTotalsHoldersByScenarioId(String scenarioId) {
-        return selectList("IAclScenarioUsageArchiveMapper.findAclRightsholderTotalsHoldersByScenarioId",
-            Objects.requireNonNull(scenarioId));
-    }
-
-    @Override
-    public AclScenarioDto findWithAmountsAndLastAction(String scenarioId) {
-        return selectOne("IAclScenarioUsageArchiveMapper.findWithAmountsAndLastAction",
-            Objects.requireNonNull(scenarioId));
     }
 }
