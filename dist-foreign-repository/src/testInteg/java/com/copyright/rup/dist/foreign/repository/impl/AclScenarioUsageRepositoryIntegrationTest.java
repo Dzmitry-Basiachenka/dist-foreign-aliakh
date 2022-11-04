@@ -82,7 +82,6 @@ public class AclScenarioUsageRepositoryIntegrationTest {
     private static final String SCENARIO_UID_3 = "53a1c4e8-f1fe-4b17-877e-2d721b2059b5";
     private static final String SCENARIO_UID_4 = "f473fa64-12ea-4db6-9d30-94087fe500fd";
     private static final String SCENARIO_UID_5 = "2a75aa1c-7bfa-4d8b-9e27-d2e17f3bd8da";
-    private static final String SCENARIO_UID_6 = "f5808122-3784-4055-90f8-1c420e67fd0a";
     private static final String LICENSE_TYPE_ACL = "ACL";
     private static final Long RH_ACCOUNT_NUMBER_1 = 1000002859L;
     private static final Long RH_ACCOUNT_NUMBER_2 = 1000000001L;
@@ -562,28 +561,25 @@ public class AclScenarioUsageRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FOLDER_NAME + "update-payee-by-account-number.groovy")
     public void testUpdatePayeeByAccountNumber() {
+        String scenarioId = "f5808122-3784-4055-90f8-1c420e67fd0a";
         List<AclScenarioShareDetail> expectedShareDetailsWithoutPayee = loadExpectedAclScenarioShareDetailDto(
             "json/acl/acl_scenario_share_detail_without_payee.json");
         List<AclScenarioShareDetail> actualShareDetails =
-            aclScenarioUsageRepository.findScenarioDetailsByScenarioId(SCENARIO_UID_6).stream()
+            aclScenarioUsageRepository.findScenarioDetailsByScenarioId(scenarioId).stream()
                 .flatMap(e -> e.getScenarioShareDetails().stream()).collect(Collectors.toList());
         assertEquals(4, actualShareDetails.size());
         assertEquals(expectedShareDetailsWithoutPayee.size(), actualShareDetails.size());
         IntStream.range(0, expectedShareDetailsWithoutPayee.size()).forEach(i ->
             verifyAclScenarioShareDetails(expectedShareDetailsWithoutPayee.get(i), actualShareDetails.get(i)));
-        aclScenarioUsageRepository.updatePayeeByAccountNumber(RH_ACCOUNT_NUMBER_1, SCENARIO_UID_6, 2015489976L,
-            "PRINT");
-        aclScenarioUsageRepository.updatePayeeByAccountNumber(RH_ACCOUNT_NUMBER_1, SCENARIO_UID_6, 1000489976L,
-            "DIGITAL");
-        aclScenarioUsageRepository.updatePayeeByAccountNumber(RH_ACCOUNT_NUMBER_2, SCENARIO_UID_6, 2878895976L,
-            "PRINT");
-        aclScenarioUsageRepository.updatePayeeByAccountNumber(RH_ACCOUNT_NUMBER_2, SCENARIO_UID_6, 1526489976L,
-            "DIGITAL");
+        aclScenarioUsageRepository.updatePayeeByAccountNumber(RH_ACCOUNT_NUMBER_1, scenarioId, 2015489976L, "PRINT");
+        aclScenarioUsageRepository.updatePayeeByAccountNumber(RH_ACCOUNT_NUMBER_1, scenarioId, 1000489976L, "DIGITAL");
+        aclScenarioUsageRepository.updatePayeeByAccountNumber(RH_ACCOUNT_NUMBER_2, scenarioId, 2878895976L, "PRINT");
+        aclScenarioUsageRepository.updatePayeeByAccountNumber(RH_ACCOUNT_NUMBER_2, scenarioId, 1526489976L, "DIGITAL");
         List<AclScenarioShareDetail> expectedShareDetails = loadExpectedAclScenarioShareDetailDto(
             "json/acl/acl_scenario_share_detail.json");
         IntStream.range(0, expectedShareDetails.size()).forEach(
             i -> verifyAclScenarioShareDetails(expectedShareDetails.get(i),
-                aclScenarioUsageRepository.findScenarioDetailsByScenarioId(SCENARIO_UID_6).stream()
+                aclScenarioUsageRepository.findScenarioDetailsByScenarioId(scenarioId).stream()
                     .flatMap(e -> e.getScenarioShareDetails().stream()).collect(Collectors.toList()).get(i)));
     }
 
@@ -605,16 +601,6 @@ public class AclScenarioUsageRepositoryIntegrationTest {
         verifyRightsholderPayeeProductFamilyHolders(
             loadExpectedRightsholderPayeeProductFamilyHolders("json/acl/rh_payee_product_family_holders.json"),
             actual);
-    }
-
-    @Test
-    @TestData(fileName = FOLDER_NAME + "delete-by-scenario-id.groovy")
-    public void testDeleteByScenarioId() {
-        List<AclScenarioDetail> details =
-            aclScenarioUsageRepository.findScenarioDetailsByScenarioId(SCENARIO_UID_6);
-        assertEquals(2, details.size());
-        aclScenarioUsageRepository.deleteByScenarioId(SCENARIO_UID_6);
-        assertEquals(0, aclScenarioUsageRepository.findScenarioDetailsByScenarioId(SCENARIO_UID_6).size());
     }
 
     private void verifyAclScenarioDetail(AclScenarioDetail expectedScenarioDetail,

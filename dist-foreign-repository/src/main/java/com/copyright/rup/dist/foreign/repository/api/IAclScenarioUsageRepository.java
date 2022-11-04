@@ -174,11 +174,4 @@ public interface IAclScenarioUsageRepository {
      */
     List<RightsholderPayeeProductFamilyHolder> findRightsholderPayeeProductFamilyHoldersByAclScenarioIds(
         Set<String> scenarioIds);
-
-    /**
-     * Deletes all ACL details and shares for specified scenario.
-     *
-     * @param scenarioId scenario identifier
-     */
-    void deleteByScenarioId(String scenarioId);
 }
