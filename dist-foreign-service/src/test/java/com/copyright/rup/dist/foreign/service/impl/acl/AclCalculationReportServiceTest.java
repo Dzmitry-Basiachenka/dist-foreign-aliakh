@@ -5,6 +5,8 @@ import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 
+import com.copyright.rup.dist.foreign.domain.AclScenario;
+import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.AclFundPoolDetailFilter;
 import com.copyright.rup.dist.foreign.domain.filter.AclGrantDetailFilter;
 import com.copyright.rup.dist.foreign.domain.filter.AclUsageFilter;
@@ -30,6 +32,7 @@ import java.io.PipedOutputStream;
  */
 public class AclCalculationReportServiceTest {
 
+    private static final String SCENARIO_UID = "21cb2569-0579-4d66-89ef-0efa44ba7446";
     private final IAclCalculationReportService aclCalculationReportService = new AclCalculationReportService();
     private IAclCalculationReportRepository aclCalculationReportRepository;
 
@@ -95,6 +98,28 @@ public class AclCalculationReportServiceTest {
     }
 
     @Test
+    public void writeAclScenarioRightsholderTotalsCsvReport() {
+        PipedOutputStream outputStream = createMock(PipedOutputStream.class);
+        aclCalculationReportRepository.writeAclScenarioRightsholderTotalsCsvReport(SCENARIO_UID, outputStream);
+        expectLastCall().once();
+        replay(aclCalculationReportRepository);
+        aclCalculationReportService.writeAclScenarioRightsholderTotalsCsvReport(
+            buildScenario(ScenarioStatusEnum.IN_PROGRESS), outputStream);
+        verify(aclCalculationReportRepository);
+    }
+
+    @Test
+    public void writeAclScenarioRightsholderTotalsCsvReportArchived() {
+        PipedOutputStream outputStream = createMock(PipedOutputStream.class);
+        aclCalculationReportRepository.writeAclArchivedScenarioRightsholderTotalsCsvReport(SCENARIO_UID, outputStream);
+        expectLastCall().once();
+        replay(aclCalculationReportRepository);
+        aclCalculationReportService.writeAclScenarioRightsholderTotalsCsvReport(
+            buildScenario(ScenarioStatusEnum.ARCHIVED), outputStream);
+        verify(aclCalculationReportRepository);
+    }
+
+    @Test
     public void testWriteAclLiabilityDetailsReport() {
         AclCalculationReportsInfoDto reportInfo = new AclCalculationReportsInfoDto();
         OutputStream outputStream = createMock(OutputStream.class);
@@ -125,5 +150,12 @@ public class AclCalculationReportServiceTest {
         replay(aclCalculationReportRepository);
         aclCalculationReportService.writeAclLiabilitiesByRhReport(reportInfo, outputStream);
         verify(aclCalculationReportRepository);
+    }
+
+    private AclScenario buildScenario(ScenarioStatusEnum status) {
+        AclScenario scenario = new AclScenario();
+        scenario.setStatus(status);
+        scenario.setId(SCENARIO_UID);
+        return scenario;
     }
 }

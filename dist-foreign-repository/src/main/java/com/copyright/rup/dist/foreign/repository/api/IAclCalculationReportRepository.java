@@ -63,6 +63,15 @@ public interface IAclCalculationReportRepository {
     void writeAclScenarioRightsholderTotalsCsvReport(String scenarioId, PipedOutputStream pipedOutputStream);
 
     /**
+     * Finds ACL ARCHIVED scenario rightsholder totals by scenario id and writes them to the output stream in CSV
+     * format.
+     *
+     * @param scenarioId        scenario id
+     * @param pipedOutputStream instance of {@link PipedOutputStream}
+     */
+    void writeAclArchivedScenarioRightsholderTotalsCsvReport(String scenarioId, PipedOutputStream pipedOutputStream);
+
+    /**
      * Finds AclSummaryOfWorkSharesByAggLcReportDto and writes Summary of Work Shares by Aggregate Licensee Class Report
      * into csv output stream.
      *
