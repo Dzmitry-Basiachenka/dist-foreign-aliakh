@@ -12,6 +12,7 @@ import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
+import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.vaadin.widget.api.IController;
@@ -57,9 +58,10 @@ public interface IAclScenariosController extends IController<IAclScenariosWidget
      * Gets {@link AclScenarioDto} by scenario id.
      *
      * @param scenarioId scenario id
+     * @param status     scenario status
      * @return instance of {@link AclScenarioDto}
      */
-    AclScenarioDto getAclScenarioWithAmountsAndLastAction(String scenarioId);
+    AclScenarioDto getAclScenarioWithAmountsAndLastAction(String scenarioId, ScenarioStatusEnum status);
 
     /**
      * @return HTML filter representation for selected scenario.

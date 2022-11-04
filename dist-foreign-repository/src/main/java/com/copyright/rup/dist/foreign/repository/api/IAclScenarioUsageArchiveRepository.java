@@ -1,6 +1,8 @@
 package com.copyright.rup.dist.foreign.repository.api;
 
+import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDetail;
+import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
 import com.copyright.rup.dist.foreign.domain.AclScenarioLiabilityDetail;
 
 import java.util.List;
@@ -49,4 +51,20 @@ public interface IAclScenarioUsageArchiveRepository {
      * @return list of found {@link AclScenarioLiabilityDetail}s
      */
     List<AclScenarioLiabilityDetail> findForSendToLmByScenarioId(String scenarioId);
+
+    /**
+     * Finds {@link AclRightsholderTotalsHolder}s based on ACL scenario id.
+     *
+     * @param scenarioId scenario id
+     * @return list of {@link AclRightsholderTotalsHolder}s
+     */
+    List<AclRightsholderTotalsHolder> findAclRightsholderTotalsHoldersByScenarioId(String scenarioId);
+
+    /**
+     * Finds {@link AclScenarioDto} by scenario id.
+     *
+     * @param scenarioId scenario id
+     * @return instance of {@link AclScenarioDto}
+     */
+    AclScenarioDto findWithAmountsAndLastAction(String scenarioId);
 }

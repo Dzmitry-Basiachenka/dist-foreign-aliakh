@@ -9,6 +9,7 @@ import com.copyright.rup.dist.foreign.domain.AclScenarioDetailDto;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
 import com.copyright.rup.dist.foreign.domain.AclScenarioLiabilityDetail;
 import com.copyright.rup.dist.foreign.domain.RightsholderPayeeProductFamilyHolder;
+import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.RightsholderResultsFilter;
 
 import java.util.List;
@@ -76,17 +77,20 @@ public interface IAclScenarioUsageService {
      * Gets {@link AclRightsholderTotalsHolder}s based on ACL scenario id.
      *
      * @param scenarioId scenario id
+     * @param status     scenario status
      * @return list of {@link AclRightsholderTotalsHolder}s
      */
-    List<AclRightsholderTotalsHolder> getAclRightsholderTotalsHoldersByScenarioId(String scenarioId);
+    List<AclRightsholderTotalsHolder> getAclRightsholderTotalsHoldersByScenarioId(String scenarioId,
+                                                                                  ScenarioStatusEnum status);
 
     /**
      * Gets {@link AclScenarioDto} by scenario id.
      *
      * @param scenarioId scenario id
+     * @param status     scenario status
      * @return instance of {@link AclScenarioDto}
      */
-    AclScenarioDto getAclScenarioWithAmountsAndLastAction(String scenarioId);
+    AclScenarioDto getAclScenarioWithAmountsAndLastAction(String scenarioId, ScenarioStatusEnum status);
 
     /**
      * Gets list of {@link AclScenarioDetailDto}s based on ACL scenario id and rightsholder account number.

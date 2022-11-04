@@ -1,13 +1,21 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.common.test.liquibase.LiquibaseTestExecutionListener;
 import com.copyright.rup.dist.common.test.liquibase.TestData;
+import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDetail;
+import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
 import com.copyright.rup.dist.foreign.domain.AclScenarioLiabilityDetail;
 import com.copyright.rup.dist.foreign.domain.AclScenarioShareDetail;
+import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
+import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
+import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IAclScenarioUsageArchiveRepository;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -23,6 +31,7 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -44,8 +53,15 @@ import java.util.stream.IntStream;
 public class AclScenarioUsageArchiveRepositoryIntegrationTest {
 
     private static final String FOLDER_NAME = "acl-scenario-usage-archived-repository-integration-test/";
+    private static final String FIND_ACL_RH_TOTALS_HOLDERS_BY_SCENARIO_ID =
+        FOLDER_NAME + "find-acl-rh-totals-holders-by-scenario-id.groovy";
     private static final String SCENARIO_UID = "326d59f3-bdea-4579-9100-63d0e76386fe";
     private static final String SCENARIO_UID_1 = "3ac016af-eb68-41b0-a031-7477e623a443";
+    private static final String SCENARIO_UID_2 = "0d0041a3-833e-463e-8ad4-f28461dc961d";
+    private static final String SCENARIO_UID_3 = "53a1c4e8-f1fe-4b17-877e-2d721b2059b5";
+    private static final String SCENARIO_UID_4 = "d18d7cab-8a69-4b60-af5a-0a0c99b8a4d3";
+    private static final String LICENSE_TYPE_ACL = "ACL";
+    private static final String RH_NAME = "John Wiley & Sons - Books";
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     static {
@@ -120,6 +136,89 @@ public class AclScenarioUsageArchiveRepositoryIntegrationTest {
             .forEach(i -> verifyAclScenarioLiabilityDetail(expectedDetails.get(i), actualDetails.get(i)));
     }
 
+    @Test
+    @TestData(fileName = FIND_ACL_RH_TOTALS_HOLDERS_BY_SCENARIO_ID)
+    public void testFindAclRightsholderTotalsHoldersByScenarioIdEmptySearchValue() {
+        List<AclRightsholderTotalsHolder> holders =
+            archiveRepository.findAclRightsholderTotalsHoldersByScenarioId(SCENARIO_UID_2);
+        assertEquals(2, holders.size());
+        verifyAclRightsholderTotalsHolder(buildAclRightsholderTotalsHolder(1000002859L, RH_NAME, 7000873612L,
+            "Brewin Books Ltd", 1000000001L, "Rothchild Consultants", 150.00, 24.00, 126.00, 220.00, 35.00, 178.00,
+            3, 3), holders.get(0));
+        verifyAclRightsholderTotalsHolder(buildAclRightsholderTotalsHolder(1000000026L, null, 7000873612L,
+            "Brewin Books Ltd", null, null, 20.00, 3.00, 10.00, 0.00, 0.00, 0.00, 1, 1), holders.get(1));
+    }
+
+    @Test
+    @TestData(fileName = FOLDER_NAME + "find-with-amounts-and-last-action.groovy")
+    public void testFindWithAmountsAndLastAction() {
+        AclScenarioDto scenario = archiveRepository.findWithAmountsAndLastAction(SCENARIO_UID_4);
+        assertNotNull(scenario);
+        assertEquals(SCENARIO_UID_4, scenario.getId());
+        assertEquals("1b48301c-e953-4af1-8ccb-8b3f9ed31544", scenario.getFundPoolId());
+        assertEquals("30d8a41f-9b01-42cd-8041-ce840512a040", scenario.getUsageBatchId());
+        assertEquals("b175a252-2fb9-47da-8d40-8ad82107f546", scenario.getGrantSetId());
+        assertEquals("ACL Scenario 202012", scenario.getName());
+        assertEquals("some description", scenario.getDescription());
+        assertEquals("Another Scenario", scenario.getCopiedFrom());
+        assertEquals(ScenarioStatusEnum.ARCHIVED, scenario.getStatus());
+        assertFalse(scenario.isEditableFlag());
+        assertEquals(202012, scenario.getPeriodEndDate().intValue());
+        assertEquals(LICENSE_TYPE_ACL, scenario.getLicenseType());
+        ScenarioAuditItem auditItem = scenario.getAuditItem();
+        assertNotNull(auditItem);
+        assertEquals(ScenarioActionTypeEnum.SUBMITTED, auditItem.getActionType());
+        assertEquals("Scenario submitted for approval", auditItem.getActionReason());
+        assertEquals(new BigDecimal("300.0000000000"), scenario.getGrossTotal());
+        assertEquals(new BigDecimal("100.0000000000"), scenario.getGrossTotalPrint());
+        assertEquals(new BigDecimal("200.0000000000"), scenario.getGrossTotalDigital());
+        assertEquals(new BigDecimal("48.0000000000"), scenario.getServiceFeeTotal());
+        assertEquals(new BigDecimal("16.0000000000"), scenario.getServiceFeeTotalPrint());
+        assertEquals(new BigDecimal("32.0000000000"), scenario.getServiceFeeTotalDigital());
+        assertEquals(new BigDecimal("252.0000000000"), scenario.getNetTotal());
+        assertEquals(new BigDecimal("84.0000000000"), scenario.getNetTotalPrint());
+        assertEquals(new BigDecimal("168.0000000000"), scenario.getNetTotalDigital());
+        assertEquals(1, scenario.getNumberOfRhsPrint());
+        assertEquals(1, scenario.getNumberOfRhsDigital());
+        assertEquals(1, scenario.getNumberOfWorksPrint());
+        assertEquals(1, scenario.getNumberOfWorksDigital());
+    }
+
+    @Test
+    @TestData(fileName = FOLDER_NAME + "find-with-amounts-and-last-action.groovy")
+    public void testFindWithAmountsAndLastActionEmpty() {
+        AclScenarioDto scenario = archiveRepository.findWithAmountsAndLastAction(SCENARIO_UID_3);
+        assertNotNull(scenario);
+        assertEquals(SCENARIO_UID_3, scenario.getId());
+        assertEquals("e8a591d8-2803-4f9e-8cf5-4cd6257917e8", scenario.getFundPoolId());
+        assertEquals("794481d7-41e5-44b5-929b-87f379b28ffa", scenario.getUsageBatchId());
+        assertEquals("fb637adf-04a6-4bee-b195-8cbde93bf672", scenario.getGrantSetId());
+        assertEquals("ACL Scenario 202112", scenario.getName());
+        assertEquals("another description", scenario.getDescription());
+        assertEquals("Another Scenario", scenario.getCopiedFrom());
+        assertEquals(ScenarioStatusEnum.ARCHIVED, scenario.getStatus());
+        assertFalse(scenario.isEditableFlag());
+        assertEquals(202112, scenario.getPeriodEndDate().intValue());
+        assertEquals(LICENSE_TYPE_ACL, scenario.getLicenseType());
+        ScenarioAuditItem auditItem = scenario.getAuditItem();
+        assertNotNull(auditItem);
+        assertNull(auditItem.getActionType());
+        assertNull(auditItem.getActionReason());
+        assertEquals(BigDecimal.ZERO, scenario.getGrossTotal());
+        assertEquals(BigDecimal.ZERO, scenario.getGrossTotalPrint());
+        assertEquals(BigDecimal.ZERO, scenario.getGrossTotalDigital());
+        assertEquals(BigDecimal.ZERO, scenario.getServiceFeeTotal());
+        assertEquals(BigDecimal.ZERO, scenario.getServiceFeeTotalPrint());
+        assertEquals(BigDecimal.ZERO, scenario.getServiceFeeTotalDigital());
+        assertEquals(BigDecimal.ZERO, scenario.getNetTotal());
+        assertEquals(BigDecimal.ZERO, scenario.getNetTotalPrint());
+        assertEquals(BigDecimal.ZERO, scenario.getNetTotalDigital());
+        assertEquals(0, scenario.getNumberOfRhsPrint());
+        assertEquals(0, scenario.getNumberOfRhsDigital());
+        assertEquals(0, scenario.getNumberOfWorksPrint());
+        assertEquals(0, scenario.getNumberOfWorksDigital());
+    }
+
     private void verifyAclScenarioLiabilityDetail(AclScenarioLiabilityDetail expectedDetail,
                                                   AclScenarioLiabilityDetail actualDetail) {
         assertEquals(expectedDetail.getLiabilityDetailId(), actualDetail.getLiabilityDetailId());
@@ -181,6 +280,65 @@ public class AclScenarioUsageArchiveRepositoryIntegrationTest {
         assertEquals(expectedDetail.getGrossAmount(), actualDetail.getGrossAmount());
         assertEquals(expectedDetail.getNetAmount(), actualDetail.getNetAmount());
         assertEquals(expectedDetail.getServiceFeeAmount(), actualDetail.getServiceFeeAmount());
+    }
+
+    private void verifyAclRightsholderTotalsHolder(AclRightsholderTotalsHolder expectedHolder,
+                                                   AclRightsholderTotalsHolder actualHolder) {
+        assertEquals(
+            expectedHolder.getRightsholder().getAccountNumber(), actualHolder.getRightsholder().getAccountNumber());
+        assertEquals(expectedHolder.getRightsholder().getName(), actualHolder.getRightsholder().getName());
+        assertEquals(expectedHolder.getPrintPayeeAccountNumber(), actualHolder.getPrintPayeeAccountNumber());
+        assertEquals(expectedHolder.getPrintPayeeName(), actualHolder.getPrintPayeeName());
+        assertEquals(expectedHolder.getDigitalPayeeAccountNumber(), actualHolder.getDigitalPayeeAccountNumber());
+        assertEquals(expectedHolder.getDigitalPayeeName(), actualHolder.getDigitalPayeeName());
+        assertEquals(expectedHolder.getGrossTotalPrint(),
+            actualHolder.getGrossTotalPrint().setScale(10, BigDecimal.ROUND_HALF_UP));
+        assertEquals(expectedHolder.getServiceFeeTotalPrint(),
+            actualHolder.getServiceFeeTotalPrint().setScale(10, BigDecimal.ROUND_HALF_UP));
+        assertEquals(expectedHolder.getNetTotalPrint(),
+            actualHolder.getNetTotalPrint().setScale(10, BigDecimal.ROUND_HALF_UP));
+        assertEquals(expectedHolder.getGrossTotalDigital(),
+            actualHolder.getGrossTotalDigital().setScale(10, BigDecimal.ROUND_HALF_UP));
+        assertEquals(expectedHolder.getServiceFeeTotalDigital(),
+            actualHolder.getServiceFeeTotalDigital().setScale(10, BigDecimal.ROUND_HALF_UP));
+        assertEquals(expectedHolder.getNetTotalDigital(),
+            actualHolder.getNetTotalDigital().setScale(10, BigDecimal.ROUND_HALF_UP));
+        assertEquals(expectedHolder.getNumberOfTitles(), actualHolder.getNumberOfTitles());
+        assertEquals(expectedHolder.getNumberOfAggLcClasses(), actualHolder.getNumberOfAggLcClasses());
+        assertEquals(expectedHolder.getLicenseType(), actualHolder.getLicenseType());
+    }
+
+    private AclRightsholderTotalsHolder buildAclRightsholderTotalsHolder(Long rhAccountNumber, String rhName,
+                                                                         Long printPayeeAccountNumber,
+                                                                         String printPayeeName,
+                                                                         Long digitalPayeeAccountNumber,
+                                                                         String digitalPayeeName,
+                                                                         Double grossTotalPrint,
+                                                                         Double serviceFeeTotalPrint,
+                                                                         Double netTotalPrint, Double grossTotalDigital,
+                                                                         Double serviceFeeTotalDigital,
+                                                                         Double netTotalDigital,
+                                                                         int numberOfTitles, int numberOfAggLcClasses) {
+        AclRightsholderTotalsHolder holder = new AclRightsholderTotalsHolder();
+        holder.getRightsholder().setAccountNumber(rhAccountNumber);
+        holder.getRightsholder().setName(rhName);
+        holder.setPrintPayeeAccountNumber(printPayeeAccountNumber);
+        holder.setPrintPayeeName(printPayeeName);
+        holder.setDigitalPayeeAccountNumber(digitalPayeeAccountNumber);
+        holder.setDigitalPayeeName(digitalPayeeName);
+        holder.setGrossTotalPrint(BigDecimal.valueOf(grossTotalPrint).setScale(10, BigDecimal.ROUND_HALF_UP));
+        holder.setServiceFeeTotalPrint(
+            BigDecimal.valueOf(serviceFeeTotalPrint).setScale(10, BigDecimal.ROUND_HALF_UP));
+        holder.setNetTotalPrint(BigDecimal.valueOf(netTotalPrint).setScale(10, BigDecimal.ROUND_HALF_UP));
+        holder.setGrossTotalDigital(
+            BigDecimal.valueOf(grossTotalDigital).setScale(10, BigDecimal.ROUND_HALF_UP));
+        holder.setServiceFeeTotalDigital(
+            BigDecimal.valueOf(serviceFeeTotalDigital).setScale(10, BigDecimal.ROUND_HALF_UP));
+        holder.setNetTotalDigital(BigDecimal.valueOf(netTotalDigital).setScale(10, BigDecimal.ROUND_HALF_UP));
+        holder.setNumberOfTitles(numberOfTitles);
+        holder.setNumberOfAggLcClasses(numberOfAggLcClasses);
+        holder.setLicenseType(LICENSE_TYPE_ACL);
+        return holder;
     }
 
     private List<AclScenarioDetail> loadExpectedAclScenarioDetails(String fileName) {

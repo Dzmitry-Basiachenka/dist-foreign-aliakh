@@ -427,7 +427,7 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
     private void onItemChanged(AclScenario scenario) {
         if (Objects.nonNull(scenario)) {
             AclScenarioDto scenarioWithAmounts =
-                aclScenariosController.getAclScenarioWithAmountsAndLastAction(scenario.getId());
+                aclScenariosController.getAclScenarioWithAmountsAndLastAction(scenario.getId(), scenario.getStatus());
             updateScenarioMetadata(scenarioWithAmounts);
             ScenarioAuditItem lastAction = scenarioWithAmounts.getAuditItem();
             if (Objects.nonNull(lastAction)) {

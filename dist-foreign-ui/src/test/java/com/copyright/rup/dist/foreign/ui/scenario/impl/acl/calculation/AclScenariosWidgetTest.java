@@ -113,7 +113,8 @@ public class AclScenariosWidgetTest {
         mockStatic(ForeignSecurityUtils.class);
         scenariosWidget = new AclScenariosWidget(controller, createMock(IAclScenarioHistoryController.class));
         expect(controller.getScenarios()).andReturn(Collections.singletonList(scenario)).times(2);
-        expect(controller.getAclScenarioWithAmountsAndLastAction(SCENARIO_UID)).andReturn(scenarioDto).times(2);
+        expect(controller.getAclScenarioWithAmountsAndLastAction(SCENARIO_UID, scenario.getStatus())).andReturn(
+            scenarioDto).times(2);
         expect(controller.getCriteriaHtmlRepresentation()).andReturn(SELECTION_CRITERIA).times(2);
         expect(controller.getUsageAgeWeights()).andReturn(Collections.emptyList()).once();
         expect(controller.getDetailLicenseeClasses()).andReturn(Collections.emptyList()).once();
@@ -171,11 +172,13 @@ public class AclScenariosWidgetTest {
     @Test
     public void testRefresh() {
         reset(controller, ForeignSecurityUtils.class);
-        expect(controller.getAclScenarioWithAmountsAndLastAction(SCENARIO_UID)).andReturn(scenarioDto).once();
+        expect(controller.getAclScenarioWithAmountsAndLastAction(SCENARIO_UID, scenario.getStatus())).andReturn(
+            scenarioDto).once();
         expect(controller.getCriteriaHtmlRepresentation()).andReturn(SELECTION_CRITERIA).once();
         expect(ForeignSecurityUtils.hasSpecialistPermission()).andReturn(true).times(2);
         expect(controller.getScenarios()).andReturn(Collections.singletonList(scenario)).once();
-        expect(controller.getAclScenarioWithAmountsAndLastAction(SCENARIO_UID)).andReturn(scenarioDto).once();
+        expect(controller.getAclScenarioWithAmountsAndLastAction(SCENARIO_UID, scenario.getStatus())).andReturn(
+            scenarioDto).once();
         expect(controller.getCriteriaHtmlRepresentation()).andReturn(SELECTION_CRITERIA).once();
         replay(controller, ForeignSecurityUtils.class);
         scenariosWidget.refresh();
@@ -189,7 +192,8 @@ public class AclScenariosWidgetTest {
         Grid grid = Whitebox.getInternalState(scenariosWidget, SCENARIO_GRID);
         grid.deselectAll();
         assertTrue(CollectionUtils.isEmpty(grid.getSelectedItems()));
-        expect(controller.getAclScenarioWithAmountsAndLastAction(scenarioDto.getId())).andReturn(scenarioDto).once();
+        expect(controller.getAclScenarioWithAmountsAndLastAction(scenarioDto.getId(), scenario.getStatus())).andReturn(
+            scenarioDto).once();
         expect(controller.getCriteriaHtmlRepresentation()).andReturn(StringUtils.EMPTY).once();
         replay(controller, ForeignSecurityUtils.class);
         scenariosWidget.selectScenario(scenario);
@@ -204,7 +208,8 @@ public class AclScenariosWidgetTest {
         Grid grid = createMock(Grid.class);
         Whitebox.setInternalState(scenariosWidget, SCENARIO_GRID, grid);
         expect(grid.getSelectedItems()).andReturn(Collections.singleton(scenario)).once();
-        expect(controller.getAclScenarioWithAmountsAndLastAction(scenarioDto.getId())).andReturn(scenarioDto).once();
+        expect(controller.getAclScenarioWithAmountsAndLastAction(scenarioDto.getId(), scenario.getStatus())).andReturn(
+            scenarioDto).once();
         expect(controller.getCriteriaHtmlRepresentation()).andReturn(SELECTION_CRITERIA).once();
         replay(controller, grid, ForeignSecurityUtils.class);
         scenariosWidget.refreshSelectedScenario();
