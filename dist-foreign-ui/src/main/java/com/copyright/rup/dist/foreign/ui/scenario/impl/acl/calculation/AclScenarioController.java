@@ -89,7 +89,7 @@ public class AclScenarioController extends CommonController<IAclScenarioWidget> 
     @Override
     public IStreamSource getExportAclScenarioRightsholderTotalsStreamSource() {
         return streamSourceHandler.getCsvStreamSource(() -> aclScenario.getName() + "_",
-            pos -> aclCalculationReportService.writeAclScenarioRightsholderTotalsCsvReport(aclScenario.getId(), pos));
+            pos -> aclCalculationReportService.writeAclScenarioRightsholderTotalsCsvReport(aclScenario, pos));
     }
 
     @Override
