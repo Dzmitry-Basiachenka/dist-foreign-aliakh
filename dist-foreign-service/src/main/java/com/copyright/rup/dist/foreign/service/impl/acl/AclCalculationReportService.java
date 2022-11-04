@@ -1,7 +1,5 @@
 package com.copyright.rup.dist.foreign.service.impl.acl;
 
-import com.copyright.rup.dist.foreign.domain.AclScenario;
-import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.AclFundPoolDetailFilter;
 import com.copyright.rup.dist.foreign.domain.filter.AclGrantDetailFilter;
 import com.copyright.rup.dist.foreign.domain.filter.AclUsageFilter;
@@ -51,14 +49,8 @@ public class AclCalculationReportService implements IAclCalculationReportService
     }
 
     @Override
-    public void writeAclScenarioRightsholderTotalsCsvReport(AclScenario scenario, PipedOutputStream pipedOutputStream) {
-        if (ScenarioStatusEnum.ARCHIVED.equals(scenario.getStatus())) {
-            aclCalculationReportRepository.writeAclArchivedScenarioRightsholderTotalsCsvReport(scenario.getId(),
-                pipedOutputStream);
-        } else {
-            aclCalculationReportRepository.writeAclScenarioRightsholderTotalsCsvReport(scenario.getId(),
-                pipedOutputStream);
-        }
+    public void writeAclScenarioRightsholderTotalsCsvReport(String scenarioId, PipedOutputStream pipedOutputStream) {
+        aclCalculationReportRepository.writeAclScenarioRightsholderTotalsCsvReport(scenarioId, pipedOutputStream);
     }
 
     @Override

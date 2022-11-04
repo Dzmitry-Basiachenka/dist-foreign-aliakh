@@ -91,19 +91,6 @@ public class AclCalculationReportRepository extends CommonReportRepository imple
     }
 
     @Override
-    public void writeAclArchivedScenarioRightsholderTotalsCsvReport(String scenarioId,
-                                                                    PipedOutputStream pipedOutputStream) {
-        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
-        parameters.put("scenarioId", Objects.requireNonNull(scenarioId));
-        parameters.put("sort", new Sort("rightsholder.accountNumber", Direction.ASC));
-        try (AclScenarioRightsholderTotalsCsvReportHandler handler =
-                 new AclScenarioRightsholderTotalsCsvReportHandler(Objects.requireNonNull(pipedOutputStream))) {
-            getTemplate().select("IAclCalculationReportMapper.findAclArchivedRightsholderTotalsHoldersReportDtos",
-                parameters, handler);
-        }
-    }
-
-    @Override
     public void writeSummaryOfWorkSharesByAggLcCsvReport(AclCalculationReportsInfoDto reportInfo,
                                                          OutputStream outputStream) {
         String scenarioId = Objects.requireNonNull(reportInfo.getScenarios().get(0).getId());
