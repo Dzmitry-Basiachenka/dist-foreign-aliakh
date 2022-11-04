@@ -464,6 +464,7 @@
         left join ${schema}.df_publication_type pt on u.publication_type_uid = pt.df_publication_type_uid
         <include refid="grantDetailJoinSql"/>
         <include refid="invalidUsagesWhereClause"/>
+        order by updated_datetime desc, df_acl_usage_uid
     </select>
 
     <select id="copyAclUsages" parameterType="map" resultType="string">

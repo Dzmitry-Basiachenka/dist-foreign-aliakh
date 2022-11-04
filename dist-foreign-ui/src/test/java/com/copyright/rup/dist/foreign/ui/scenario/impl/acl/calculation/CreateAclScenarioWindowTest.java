@@ -4,8 +4,8 @@ import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.validateField
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyCheckBox;
 
+import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.expectLastCall;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -14,11 +14,14 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
+import static org.powermock.api.easymock.PowerMock.expectLastCall;
+import static org.powermock.api.easymock.PowerMock.expectNew;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.common.date.RupDateUtils;
+import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.AclFundPool;
 import com.copyright.rup.dist.foreign.domain.AclFundPoolDetailDto;
@@ -33,6 +36,7 @@ import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenariosController;
 import com.copyright.rup.dist.foreign.ui.usage.UiTestHelper;
+import com.copyright.rup.dist.foreign.ui.usage.impl.ErrorUploadWindow;
 import com.copyright.rup.dist.foreign.ui.usage.impl.ScenarioParameterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.impl.acl.AclPublicationTypeWeightsParameterWidget;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
@@ -80,7 +84,7 @@ import java.util.stream.Collectors;
  * @author Anton Azarenka
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({Windows.class, ForeignSecurityUtils.class})
+@PrepareForTest({CreateAclScenarioWindow.class, Windows.class, ForeignSecurityUtils.class})
 public class CreateAclScenarioWindowTest {
 
     private static final String DATE =
@@ -88,7 +92,11 @@ public class CreateAclScenarioWindowTest {
     private static final String SCENARIO_ID = "36ea5499-85f0-48b8-ba50-52a4ed76574f";
     private static final String SCENARIO_NAME = "ACL Distribution " + DATE;
     private static final String LICENSE_TYPE = "ACL";
-    private static final String ACL_BATCH_UID = "df36a701-8630-45aa-994d-35e3f019192a";
+    private static final String BATCH_UID = "df36a701-8630-45aa-994d-35e3f019192a";
+    private static final String FUND_POOL_ID = "304795bf-9bd1-4377-9b5f-ce247d88f8b2";
+    private static final String GRANT_SET_ID = "f5e558ce-2261-4998-8434-fc04d432c1a5";
+    private static final int PERIOD = 202206;
+    private static final List<Integer> PERIOD_PRIORS = Collections.singletonList(1);
     private static final String DESCRIPTION = "Description";
     private static final String EDITABLE_CHECKBOX_FIELD_NAME = "editableCheckBox";
 
@@ -107,7 +115,7 @@ public class CreateAclScenarioWindowTest {
         controller = createMock(IAclScenariosController.class);
         createButtonClickListener = createMock(ClickListener.class);
         mockStatic(ForeignSecurityUtils.class);
-        expect(controller.getAllPeriods()).andReturn(Collections.singletonList(202206));
+        expect(controller.getAllPeriods()).andReturn(Collections.singletonList(PERIOD)).once();
         expect(controller.getAclHistoricalPublicationTypes()).andReturn(publicationTypes).once();
         expect(controller.getDetailLicenseeClasses()).andReturn(detailLicenseeClasses).once();
         expect(controller.getUsageAgeWeights()).andReturn(usageAges).once();
@@ -117,7 +125,7 @@ public class CreateAclScenarioWindowTest {
     @Test
     public void testComponentStructure() {
         expect(controller.aclScenarioExists(SCENARIO_NAME)).andReturn(false).once();
-        expect(ForeignSecurityUtils.hasSpecialistPermission()).andReturn(true);
+        expect(ForeignSecurityUtils.hasSpecialistPermission()).andReturn(true).once();
         replay(controller, ForeignSecurityUtils.class);
         window = new CreateAclScenarioWindow(controller, createButtonClickListener);
         assertEquals("Create Scenario", window.getCaption());
@@ -128,7 +136,7 @@ public class CreateAclScenarioWindowTest {
         assertTrue(content.isSpacing());
         assertEquals(13, content.getComponentCount());
         verifyScenarioNameField(content.getComponent(0));
-        UiTestHelper.verifyComboBox(content.getComponent(1), "Period", true, 202206);
+        UiTestHelper.verifyComboBox(content.getComponent(1), "Period", true, PERIOD);
         UiTestHelper.verifyComboBox(content.getComponent(2), "License Type", true,
             ImmutableSet.of("ACL", "MACL", "VGW", "JACDCL"));
         verifyComboBox(content.getComponent(3), "Usage Batch");
@@ -182,7 +190,7 @@ public class CreateAclScenarioWindowTest {
         expectedScenario.setFundPoolId(aclFundPool.getId());
         expectedScenario.setGrantSetId(aclGrantSet.getId());
         expectedScenario.setName(SCENARIO_NAME);
-        expectedScenario.setPeriodEndDate(202206);
+        expectedScenario.setPeriodEndDate(PERIOD);
         expectedScenario.setEditableFlag(true);
         expectedScenario.setDescription(DESCRIPTION);
         expectedScenario.setLicenseType(LICENSE_TYPE);
@@ -190,15 +198,15 @@ public class CreateAclScenarioWindowTest {
         expectedScenario.setDetailLicenseeClasses(detailLicenseeClasses);
         expectedScenario.setUsageAges(usageAges);
         expect(controller.aclScenarioExists(SCENARIO_NAME)).andReturn(false).times(4);
-        expect(controller.getUsageBatchesByPeriod(202206, true)).andReturn(Collections.singletonList(aclUsageBatch))
+        expect(controller.getUsageBatchesByPeriod(PERIOD, true)).andReturn(Collections.singletonList(aclUsageBatch))
             .once();
-        expect(controller.getFundPoolsByLicenseTypeAndPeriod(LICENSE_TYPE, 202206))
-            .andReturn(Collections.singletonList(aclFundPool));
-        expect(controller.getGrantSetsByLicenseTypeAndPeriod(LICENSE_TYPE, 202206, true))
-            .andReturn(Collections.singletonList(aclGrantSet));
-        expect(controller.isValidUsageBatch(ACL_BATCH_UID, aclGrantSet.getId(), 202206,
-            Collections.singletonList(1))).andReturn(true);
-        expect(controller.getFundPoolDetailsNotToBeDistributed(ACL_BATCH_UID, aclFundPool.getId(), aclGrantSet.getId(),
+        expect(controller.getFundPoolsByLicenseTypeAndPeriod(LICENSE_TYPE, PERIOD))
+            .andReturn(Collections.singletonList(aclFundPool)).once();
+        expect(controller.getGrantSetsByLicenseTypeAndPeriod(LICENSE_TYPE, PERIOD, true))
+            .andReturn(Collections.singletonList(aclGrantSet)).once();
+        expect(controller.isValidUsageBatch(BATCH_UID, aclGrantSet.getId(), PERIOD, PERIOD_PRIORS))
+            .andReturn(true).once();
+        expect(controller.getFundPoolDetailsNotToBeDistributed(BATCH_UID, aclFundPool.getId(), aclGrantSet.getId(),
             detailLicenseeClasses)).andReturn(Collections.emptySet()).once();
         controller.createAclScenario(expectedScenario);
         expectLastCall().once();
@@ -208,26 +216,31 @@ public class CreateAclScenarioWindowTest {
     }
 
     @Test
-    public void testNotificationMessageOnConfirmButtonClick() {
+    public void testConfirmButtonClickListenerWithInvalidUsages() throws Exception {
         mockStatic(Windows.class);
         AclUsageBatch aclUsageBatch = buildAclUsageBatch();
         AclFundPool aclFundPool = buildAclFundPool();
         AclGrantSet aclGrantSet = buildAclGrantSet();
         expect(controller.aclScenarioExists(SCENARIO_NAME)).andReturn(false).times(2);
-        expect(controller.getUsageBatchesByPeriod(202206, true)).andReturn(Collections.singletonList(aclUsageBatch))
+        expect(controller.getUsageBatchesByPeriod(PERIOD, true)).andReturn(Collections.singletonList(aclUsageBatch))
             .once();
-        expect(controller.getFundPoolsByLicenseTypeAndPeriod(LICENSE_TYPE, 202206))
-            .andReturn(Collections.singletonList(aclFundPool));
-        expect(controller.getGrantSetsByLicenseTypeAndPeriod(LICENSE_TYPE, 202206, true))
-            .andReturn(Collections.singletonList(aclGrantSet));
-        expect(controller.isValidUsageBatch(ACL_BATCH_UID, "f5e558ce-2261-4998-8434-fc04d432c1a5", 202206,
-            Collections.singletonList(1))).andReturn(false);
-        Windows.showNotificationWindow(
-            "System found usages missing Pub Type and/or CUP. Please update the missing data");
+        expect(controller.getFundPoolsByLicenseTypeAndPeriod(LICENSE_TYPE, PERIOD))
+            .andReturn(Collections.singletonList(aclFundPool)).once();
+        expect(controller.getGrantSetsByLicenseTypeAndPeriod(LICENSE_TYPE, PERIOD, true))
+            .andReturn(Collections.singletonList(aclGrantSet)).once();
+        expect(controller.isValidUsageBatch(BATCH_UID, GRANT_SET_ID, PERIOD, PERIOD_PRIORS))
+            .andReturn(false).once();
+        IStreamSource streamSource = createMock(IStreamSource.class);
+        expect(controller.getInvalidUsagesStreamSource(BATCH_UID, GRANT_SET_ID, PERIOD, PERIOD_PRIORS))
+            .andReturn(streamSource).once();
+        ErrorUploadWindow mockWindow = createMock(ErrorUploadWindow.class);
+        String windowText = "System found usages missing Pub Type and/or CUP.<br>Please update the missing data.";
+        expectNew(ErrorUploadWindow.class, eq(streamSource), eq(windowText)).andReturn(mockWindow).once();
+        Windows.showModalWindow(mockWindow);
         expectLastCall().once();
-        replay(controller, Windows.class);
+        replay(controller, streamSource, Windows.class, ErrorUploadWindow.class);
         populateCreateScenarioWindowAndClickConfirmButton(aclUsageBatch, aclFundPool, aclGrantSet);
-        verify(controller, Windows.class);
+        verify(controller, streamSource, Windows.class, ErrorUploadWindow.class);
     }
 
     @Test
@@ -237,18 +250,18 @@ public class CreateAclScenarioWindowTest {
         AclFundPool aclFundPool = buildAclFundPool();
         AclGrantSet aclGrantSet = buildAclGrantSet();
         expect(controller.aclScenarioExists(SCENARIO_NAME)).andReturn(false).times(4);
-        expect(controller.getUsageBatchesByPeriod(202206, true)).andReturn(Collections.singletonList(aclUsageBatch))
+        expect(controller.getUsageBatchesByPeriod(PERIOD, true)).andReturn(Collections.singletonList(aclUsageBatch))
             .once();
-        expect(controller.getFundPoolsByLicenseTypeAndPeriod(LICENSE_TYPE, 202206))
-            .andReturn(Collections.singletonList(aclFundPool));
-        expect(controller.getGrantSetsByLicenseTypeAndPeriod(LICENSE_TYPE, 202206, true))
-            .andReturn(Collections.singletonList(aclGrantSet));
-        expect(controller.isValidUsageBatch(ACL_BATCH_UID, aclGrantSet.getId(), 202206,
-            Collections.singletonList(1))).andReturn(true);
+        expect(controller.getFundPoolsByLicenseTypeAndPeriod(LICENSE_TYPE, PERIOD))
+            .andReturn(Collections.singletonList(aclFundPool)).once();
+        expect(controller.getGrantSetsByLicenseTypeAndPeriod(LICENSE_TYPE, PERIOD, true))
+            .andReturn(Collections.singletonList(aclGrantSet)).once();
+        expect(controller.isValidUsageBatch(BATCH_UID, aclGrantSet.getId(), PERIOD, PERIOD_PRIORS))
+            .andReturn(true).once();
         LinkedHashSet<AclFundPoolDetailDto> invalidDetails = Sets.newLinkedHashSet();
         invalidDetails.add(buildAclFundPoolDetailDto(1, 1, "Food and Tobacco", "PRINT"));
         invalidDetails.add(buildAclFundPoolDetailDto(2, 51, "Materials", "DIGITAL"));
-        expect(controller.getFundPoolDetailsNotToBeDistributed(ACL_BATCH_UID, aclFundPool.getId(), aclGrantSet.getId(),
+        expect(controller.getFundPoolDetailsNotToBeDistributed(BATCH_UID, aclFundPool.getId(), aclGrantSet.getId(),
             detailLicenseeClasses)).andReturn(invalidDetails).once();
         Windows.showNotificationWindow(
             "Scenario cannot be created. There are no usages for the following Aggregate Licensee Class(es):" +
@@ -263,7 +276,7 @@ public class CreateAclScenarioWindowTest {
     public void testEditableCheckBoxUnchecked() {
         expect(controller.aclScenarioExists(SCENARIO_NAME)).andReturn(false).once();
         expect(controller.getAclHistoricalPublicationTypes()).andReturn(publicationTypes).once();
-        expect(ForeignSecurityUtils.hasSpecialistPermission()).andReturn(true);
+        expect(ForeignSecurityUtils.hasSpecialistPermission()).andReturn(true).once();
         replay(controller, ForeignSecurityUtils.class);
         window = new CreateAclScenarioWindow(controller, createButtonClickListener);
         CheckBox editableCheckBox = Whitebox.getInternalState(window, EDITABLE_CHECKBOX_FIELD_NAME);
@@ -272,9 +285,9 @@ public class CreateAclScenarioWindowTest {
         assertTrue(editableCheckBox.getValue());
         assertEquals(publicationTypes, pubTypeWeightWidget.getAppliedParameters());
         List<AclPublicationType> pubTypes = new ArrayList<>(pubTypeWeightWidget.getAppliedParameters());
-        pubTypes.add(buildAclPublicationType(202206));
+        pubTypes.add(buildAclPublicationType(PERIOD));
         pubTypeWeightWidget.setAppliedParameters(pubTypes);
-        assertEquals(Arrays.asList(buildAclPublicationType(201506), buildAclPublicationType(202206)),
+        assertEquals(Arrays.asList(buildAclPublicationType(201506), buildAclPublicationType(PERIOD)),
             pubTypeWeightWidget.getAppliedParameters());
         editableCheckBox.setValue(false);
         assertEquals(publicationTypes, pubTypeWeightWidget.getAppliedParameters());
@@ -284,11 +297,11 @@ public class CreateAclScenarioWindowTest {
     @Test
     public void testEditableCheckBoxEnabledForSpecialist() {
         expect(controller.aclScenarioExists(SCENARIO_NAME)).andReturn(false).once();
-        expect(ForeignSecurityUtils.hasSpecialistPermission()).andReturn(true);
-        expect(controller.getUsageBatchesByPeriod(202206, true)).andReturn(new ArrayList<>()).times(2);
-        expect(controller.getFundPoolsByLicenseTypeAndPeriod(LICENSE_TYPE, 202206)).andReturn(new ArrayList<>())
+        expect(ForeignSecurityUtils.hasSpecialistPermission()).andReturn(true).once();
+        expect(controller.getUsageBatchesByPeriod(PERIOD, true)).andReturn(new ArrayList<>()).times(2);
+        expect(controller.getFundPoolsByLicenseTypeAndPeriod(LICENSE_TYPE, PERIOD)).andReturn(new ArrayList<>())
             .times(2);
-        expect(controller.getGrantSetsByLicenseTypeAndPeriod(LICENSE_TYPE, 202206, true)).andReturn(new ArrayList<>())
+        expect(controller.getGrantSetsByLicenseTypeAndPeriod(LICENSE_TYPE, PERIOD, true)).andReturn(new ArrayList<>())
             .times(2);
         expect(controller.getScenarioById(SCENARIO_ID)).andReturn(buildAclScenario()).once();
         replay(controller, ForeignSecurityUtils.class);
@@ -305,18 +318,18 @@ public class CreateAclScenarioWindowTest {
     @Test
     public void testEditableCheckBoxDisabledForManager() {
         expect(controller.aclScenarioExists(SCENARIO_NAME)).andReturn(false).once();
-        expect(ForeignSecurityUtils.hasSpecialistPermission()).andReturn(false);
-        expect(controller.getUsageBatchesByPeriod(202206, true)).andReturn(new ArrayList<>()).times(2);
-        expect(controller.getFundPoolsByLicenseTypeAndPeriod(LICENSE_TYPE, 202206)).andReturn(new ArrayList<>())
+        expect(ForeignSecurityUtils.hasSpecialistPermission()).andReturn(false).once();
+        expect(controller.getUsageBatchesByPeriod(PERIOD, true)).andReturn(new ArrayList<>()).times(2);
+        expect(controller.getFundPoolsByLicenseTypeAndPeriod(LICENSE_TYPE, PERIOD)).andReturn(new ArrayList<>())
             .times(2);
-        expect(controller.getGrantSetsByLicenseTypeAndPeriod(LICENSE_TYPE, 202206, true)).andReturn(new ArrayList<>())
+        expect(controller.getGrantSetsByLicenseTypeAndPeriod(LICENSE_TYPE, PERIOD, true)).andReturn(new ArrayList<>())
             .times(2);
         expect(controller.getScenarioById(SCENARIO_ID)).andReturn(buildAclScenario()).once();
         replay(controller, ForeignSecurityUtils.class);
         window = new CreateAclScenarioWindow(controller, createButtonClickListener);
         CheckBox editableCheckBox = Whitebox.getInternalState(window, EDITABLE_CHECKBOX_FIELD_NAME);
         ComboBox<Integer> periodComboBox = Whitebox.getInternalState(window, "periodComboBox");
-        periodComboBox.setSelectedItem(202206);
+        periodComboBox.setSelectedItem(PERIOD);
         assertFalse(editableCheckBox.isEnabled());
         ComboBox<String> licenseTypeComboBox = Whitebox.getInternalState(window, "licenseTypeComboBox");
         licenseTypeComboBox.setSelectedItem("ACL");
@@ -333,14 +346,14 @@ public class CreateAclScenarioWindowTest {
     public void testFillInFieldsFromCopyScenario() {
         AclScenario aclScenario = buildAclScenario();
         expect(controller.aclScenarioExists(SCENARIO_NAME)).andReturn(false).once();
-        expect(controller.getUsageBatchesByPeriod(202206, true))
+        expect(controller.getUsageBatchesByPeriod(PERIOD, true))
             .andReturn(Collections.singletonList(buildAclUsageBatch())).times(2);
-        expect(controller.getFundPoolsByLicenseTypeAndPeriod(LICENSE_TYPE, 202206))
+        expect(controller.getFundPoolsByLicenseTypeAndPeriod(LICENSE_TYPE, PERIOD))
             .andReturn(Collections.singletonList(buildAclFundPool())).times(2);
-        expect(controller.getGrantSetsByLicenseTypeAndPeriod(LICENSE_TYPE, 202206, true))
+        expect(controller.getGrantSetsByLicenseTypeAndPeriod(LICENSE_TYPE, PERIOD, true))
             .andReturn(Collections.singletonList(buildAclGrantSet())).times(2);
         expect(controller.getScenarioById(SCENARIO_ID)).andReturn(aclScenario).once();
-        expect(ForeignSecurityUtils.hasSpecialistPermission()).andReturn(true);
+        expect(ForeignSecurityUtils.hasSpecialistPermission()).andReturn(true).once();
         replay(controller, ForeignSecurityUtils.class);
         window = new CreateAclScenarioWindow(controller, createButtonClickListener);
         ComboBox<AclScenario> copyFromComboBox = Whitebox.getInternalState(window, "aclCopyFromScenarioComboBox");
@@ -396,7 +409,7 @@ public class CreateAclScenarioWindowTest {
         TextField scenarioNameField = Whitebox.getInternalState(window, "scenarioNameField");
         assertEquals(SCENARIO_NAME, scenarioNameField.getValue());
         ComboBox<Integer> periodComboBox = Whitebox.getInternalState(window, "periodComboBox");
-        assertEquals(Integer.valueOf(202206), periodComboBox.getValue());
+        assertEquals(Integer.valueOf(PERIOD), periodComboBox.getValue());
         assertFalse(periodComboBox.isEnabled());
         ComboBox<String> licenseTypeComboBox = Whitebox.getInternalState(window, "licenseTypeComboBox");
         assertEquals(LICENSE_TYPE, licenseTypeComboBox.getValue());
@@ -469,14 +482,14 @@ public class CreateAclScenarioWindowTest {
 
     private AclUsageBatch buildAclUsageBatch() {
         AclUsageBatch usageBatch = new AclUsageBatch();
-        usageBatch.setId(ACL_BATCH_UID);
+        usageBatch.setId(BATCH_UID);
         usageBatch.setName("Usage Batch");
         return usageBatch;
     }
 
     private AclFundPool buildAclFundPool() {
         AclFundPool aclFundPool = new AclFundPool();
-        aclFundPool.setId("304795bf-9bd1-4377-9b5f-ce247d88f8b2");
+        aclFundPool.setId(FUND_POOL_ID);
         aclFundPool.setName("Fund Pool");
         return aclFundPool;
     }
@@ -493,7 +506,7 @@ public class CreateAclScenarioWindowTest {
 
     private AclGrantSet buildAclGrantSet() {
         AclGrantSet aclGrantSet = new AclGrantSet();
-        aclGrantSet.setId("f5e558ce-2261-4998-8434-fc04d432c1a5");
+        aclGrantSet.setId(GRANT_SET_ID);
         aclGrantSet.setName("Grant Set");
         return aclGrantSet;
     }
@@ -528,7 +541,7 @@ public class CreateAclScenarioWindowTest {
         window = new CreateAclScenarioWindow(controller, createButtonClickListener);
         VerticalLayout content = (VerticalLayout) window.getContent();
         ComboBox<Integer> periodComboBox = (ComboBox<Integer>) content.getComponent(1);
-        periodComboBox.setSelectedItem(202206);
+        periodComboBox.setSelectedItem(PERIOD);
         ComboBox<String> licenseTypeComboBox = (ComboBox<String>) content.getComponent(2);
         licenseTypeComboBox.setSelectedItem(LICENSE_TYPE);
         ComboBox<AclUsageBatch> usageBatchComboBox = (ComboBox<AclUsageBatch>) content.getComponent(3);
@@ -548,20 +561,19 @@ public class CreateAclScenarioWindowTest {
     private AclScenario buildAclScenario() {
         AclScenario scenario = new AclScenario();
         scenario.setId(SCENARIO_ID);
-        scenario.setFundPoolId("304795bf-9bd1-4377-9b5f-ce247d88f8b2");
-        scenario.setUsageBatchId(ACL_BATCH_UID);
-        scenario.setGrantSetId("f5e558ce-2261-4998-8434-fc04d432c1a5");
+        scenario.setFundPoolId(FUND_POOL_ID);
+        scenario.setUsageBatchId(BATCH_UID);
+        scenario.setGrantSetId(GRANT_SET_ID);
         scenario.setName("ACL Scenario 202206");
         scenario.setDescription(DESCRIPTION);
         scenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);
         scenario.setEditableFlag(true);
-        scenario.setPeriodEndDate(202206);
+        scenario.setPeriodEndDate(PERIOD);
         scenario.setLicenseType(LICENSE_TYPE);
         scenario.setCreateUser("username");
         scenario.setUpdateUser("username");
         scenario.setDetailLicenseeClasses(Collections.singletonList(buildAclDetailLicenseeClass()));
-        scenario.setPublicationTypes(Collections.singletonList(
-            buildAclPublicationType(201506)));
+        scenario.setPublicationTypes(Collections.singletonList(buildAclPublicationType(201506)));
         scenario.setUsageAges(Collections.singletonList(buildUsageAge()));
         return scenario;
     }
