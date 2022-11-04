@@ -743,13 +743,4 @@
         left join ${schema}.df_rightsholder rh on shd.rh_account_number = rh.rh_account_number
         left join ${schema}.df_rightsholder payee on shd.payee_account_number = payee.rh_account_number
     </select>
-
-    <delete id="deleteByScenarioId" parameterType="string">
-        with deleted_acl_share_detail as (
-            delete from ${schema}.df_acl_share_detail
-            where df_acl_scenario_uid = #{scenarioId}
-        )
-        delete from ${schema}.df_acl_scenario_detail
-        where df_acl_scenario_uid = #{scenarioId}
-    </delete>
 </mapper>
