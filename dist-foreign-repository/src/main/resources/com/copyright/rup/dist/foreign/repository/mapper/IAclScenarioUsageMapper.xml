@@ -777,5 +777,6 @@
         join ${schema}.df_acl_scenario s on shda.df_acl_scenario_uid = s.df_acl_scenario_uid
         join ${schema}.df_aggregate_licensee_class alc on shda.aggregate_licensee_class_id = alc.aggregate_licensee_class_id
         where sda.df_acl_scenario_uid = #{scenarioId}
+        order by df_acl_share_detail_uid
     </select>
 </mapper>
