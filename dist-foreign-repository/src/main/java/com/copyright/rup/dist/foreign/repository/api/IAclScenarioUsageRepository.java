@@ -8,6 +8,7 @@ import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDetail;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDetailDto;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
+import com.copyright.rup.dist.foreign.domain.AclScenarioLiabilityDetail;
 import com.copyright.rup.dist.foreign.domain.RightsholderPayeeProductFamilyHolder;
 import com.copyright.rup.dist.foreign.domain.filter.RightsholderResultsFilter;
 
@@ -174,4 +175,12 @@ public interface IAclScenarioUsageRepository {
      */
     List<RightsholderPayeeProductFamilyHolder> findRightsholderPayeeProductFamilyHoldersByAclScenarioIds(
         Set<String> scenarioIds);
+
+    /**
+     * Finds {@link AclScenarioLiabilityDetail} info for sending to LM.
+     *
+     * @param scenarioId scenario id
+     * @return list of found {@link AclScenarioLiabilityDetail}s
+     */
+    List<AclScenarioLiabilityDetail> findForSendToLmByScenarioId(String scenarioId);
 }

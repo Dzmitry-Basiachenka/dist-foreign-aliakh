@@ -21,7 +21,6 @@ import com.copyright.rup.dist.foreign.domain.RightsholderTypeOfUsePair;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.RightsholderResultsFilter;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
-import com.copyright.rup.dist.foreign.repository.api.IAclScenarioUsageArchiveRepository;
 import com.copyright.rup.dist.foreign.repository.api.IAclScenarioUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioUsageService;
@@ -59,7 +58,6 @@ public class AclScenarioUsageServiceTest {
 
     private IAclScenarioUsageService aclScenarioUsageService;
     private IAclScenarioUsageRepository aclScenarioUsageRepository;
-    private IAclScenarioUsageArchiveRepository aclScenarioUsageArchiveRepository;
     private IRightsholderService rightsholderService;
     private IPrmIntegrationService prmIntegrationService;
 
@@ -69,9 +67,7 @@ public class AclScenarioUsageServiceTest {
         aclScenarioUsageRepository = createMock(IAclScenarioUsageRepository.class);
         rightsholderService = createMock(IRightsholderService.class);
         prmIntegrationService = createMock(IPrmIntegrationService.class);
-        aclScenarioUsageArchiveRepository = createMock(IAclScenarioUsageArchiveRepository.class);
         Whitebox.setInternalState(aclScenarioUsageService, aclScenarioUsageRepository);
-        Whitebox.setInternalState(aclScenarioUsageService, aclScenarioUsageArchiveRepository);
         Whitebox.setInternalState(aclScenarioUsageService, rightsholderService);
         Whitebox.setInternalState(aclScenarioUsageService, prmIntegrationService);
     }
@@ -238,31 +234,14 @@ public class AclScenarioUsageServiceTest {
     }
 
     @Test
-    public void testMoveToArchive() {
-        AclScenario scenario = new AclScenario();
-        scenario.setId(SCENARIO_UID);
-        scenario.setName("Scenario name");
-        scenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);
-        List<String> detailsIds = Collections.singletonList("88ab9d5c-2353-4301-bf9d-7e203ab20917");
-        List<String> sharesIds = Collections.singletonList("047db7d1-945f-485a-bbed-26480f7bdd72");
-        expect(aclScenarioUsageArchiveRepository.copyScenarioSharesToArchiveByScenarioId(SCENARIO_UID, USER_NAME))
-            .andReturn(sharesIds).once();
-        expect(aclScenarioUsageArchiveRepository.copyScenarioDetailsToArchiveByScenarioId(SCENARIO_UID, USER_NAME))
-            .andReturn(detailsIds);
-        replay(aclScenarioUsageArchiveRepository);
-        aclScenarioUsageService.moveToArchive(scenario, USER_NAME);
-        verify(aclScenarioUsageArchiveRepository);
-    }
-
-    @Test
     public void testGetArchivedLiabilityDetailsForSendToLmByIds() {
         AclScenarioLiabilityDetail liabilityDetail = buildLiabilityDetail();
-        expect(aclScenarioUsageArchiveRepository.findForSendToLmByScenarioId(SCENARIO_UID)).andReturn(
+        expect(aclScenarioUsageRepository.findForSendToLmByScenarioId(SCENARIO_UID)).andReturn(
             Collections.singletonList(liabilityDetail)).once();
-        replay(aclScenarioUsageArchiveRepository);
+        replay(aclScenarioUsageRepository);
         assertEquals(liabilityDetail,
-            aclScenarioUsageService.getArchivedLiabilityDetailsForSendToLmByIds(SCENARIO_UID).get(0));
-        verify(aclScenarioUsageArchiveRepository);
+            aclScenarioUsageService.getLiabilityDetailsForSendToLmByIds(SCENARIO_UID).get(0));
+        verify(aclScenarioUsageRepository);
     }
 
     private AclScenario buildAclScenario() {

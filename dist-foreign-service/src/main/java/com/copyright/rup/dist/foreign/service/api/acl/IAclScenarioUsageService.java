@@ -155,18 +155,10 @@ public interface IAclScenarioUsageService {
         Set<String> scenarioIds);
 
     /**
-     * Moves ACL scenario details to the archive for given {@link AclScenario}.
-     *
-     * @param scenario {@link AclScenario}
-     * @param userName user name
-     */
-    void moveToArchive(AclScenario scenario, String userName);
-
-    /**
      * Gets list of archived {@link AclScenarioLiabilityDetail}s for sending to LM by specified scenario id.
      *
      * @param scenarioId unique identifier of scenario
      * @return list of {@link AclScenarioLiabilityDetail}s
      */
-    List<AclScenarioLiabilityDetail> getArchivedLiabilityDetailsForSendToLmByIds(String scenarioId);
+    List<AclScenarioLiabilityDetail> getLiabilityDetailsForSendToLmByIds(String scenarioId);
 }

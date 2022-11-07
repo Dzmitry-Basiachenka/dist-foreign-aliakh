@@ -240,10 +240,9 @@ public class AclScenarioService implements IAclScenarioService {
     public void sendToLm(AclScenario scenario) {
         String userName = RupContextUtils.getUserName();
         LOGGER.info("Send ACL scenario to LM. Started. {}, User={}", ForeignLogUtils.aclScenario(scenario), userName);
-        aclScenarioUsageService.moveToArchive(scenario, userName);
-        List<AclScenarioLiabilityDetail> archivedLiabilityDetails =
-            aclScenarioUsageService.getArchivedLiabilityDetailsForSendToLmByIds(scenario.getId());
-        Iterables.partition(archivedLiabilityDetails, batchSize)
+        List<AclScenarioLiabilityDetail> liabilityDetails =
+            aclScenarioUsageService.getLiabilityDetailsForSendToLmByIds(scenario.getId());
+        Iterables.partition(liabilityDetails, batchSize)
             .forEach(partition -> lmIntegrationService.sendToLm(partition.stream()
                 .map(ExternalUsage::new)
                 .collect(Collectors.toList())));
