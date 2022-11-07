@@ -139,6 +139,20 @@
         <result property="aggregateLicenseeClass.description" column="aggregate_licensee_class_name"/>
     </resultMap>
 
+    <resultMap id="scenarioLiabilitiesResultMap" type="AclScenarioLiabilityDetail">
+        <result property="liabilityDetailId" column="df_acl_share_detail_uid"/>
+        <result property="rightsholderId" column="rh_id"/>
+        <result property="wrWrkInst" column="wr_wrk_inst"/>
+        <result property="systemTitle" column="system_title"/>
+        <result property="typeOfUse" column="type_of_use"/>
+        <result property="licenseType" column="license_type"/>
+        <result property="aggregateLicenseeClassName" column="detail_licensee_class_name"/>
+        <result property="productFamily" column="product_family"/>
+        <result property="netAmount" column="net_amount"/>
+        <result property="serviceFeeAmount" column="service_fee_amount"/>
+        <result property="grossAmount" column="gross_amount"/>
+    </resultMap>
+
     <sql id="periodPriorSql">
         <!--Gets period_prior for each usage 'years interval * 12 + month interval / 6'  for example: 202212 and 202012 returns 4-->
         select (
@@ -742,5 +756,26 @@
         ) shd
         left join ${schema}.df_rightsholder rh on shd.rh_account_number = rh.rh_account_number
         left join ${schema}.df_rightsholder payee on shd.payee_account_number = payee.rh_account_number
+    </select>
+
+    <select id="findForSendToLmByScenarioId" resultMap="scenarioLiabilitiesResultMap">
+        select
+            df_acl_share_detail_uid,
+            sda.wr_wrk_inst,
+            sda.system_title,
+            rh.df_rightsholder_uid rh_id,
+            shda.type_of_use,
+            case when shda.type_of_use = 'DIGITAL' then 'ACLDIGITAL' else 'ACLPRINT' end as product_family,
+            s.license_type,
+            alc.description detail_licensee_class_name,
+            gross_amount,
+            service_fee_amount,
+            net_amount
+        from ${schema}.df_acl_share_detail shda
+        left join ${schema}.df_rightsholder rh on rh.rh_account_number = shda.rh_account_number
+        join ${schema}.df_acl_scenario_detail sda on shda.df_acl_scenario_detail_uid = sda.df_acl_scenario_detail_uid
+        join ${schema}.df_acl_scenario s on shda.df_acl_scenario_uid = s.df_acl_scenario_uid
+        join ${schema}.df_aggregate_licensee_class alc on shda.aggregate_licensee_class_id = alc.aggregate_licensee_class_id
+        where sda.df_acl_scenario_uid = #{scenarioId}
     </select>
 </mapper>

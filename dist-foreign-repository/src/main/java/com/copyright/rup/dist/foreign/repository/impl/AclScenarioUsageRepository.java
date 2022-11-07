@@ -8,6 +8,7 @@ import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDetail;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDetailDto;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
+import com.copyright.rup.dist.foreign.domain.AclScenarioLiabilityDetail;
 import com.copyright.rup.dist.foreign.domain.RightsholderPayeeProductFamilyHolder;
 import com.copyright.rup.dist.foreign.domain.filter.RightsholderResultsFilter;
 import com.copyright.rup.dist.foreign.repository.api.IAclScenarioUsageRepository;
@@ -182,5 +183,10 @@ public class AclScenarioUsageRepository extends AclBaseRepository implements IAc
         Set<String> scenarioIds) {
         return selectList("IAclScenarioUsageMapper.findRightsholderPayeeProductFamilyHoldersByAclScenarioIds",
             Objects.requireNonNull(scenarioIds));
+    }
+
+    @Override
+    public List<AclScenarioLiabilityDetail> findForSendToLmByScenarioId(String scenarioId) {
+        return selectList("IAclScenarioUsageMapper.findForSendToLmByScenarioId", scenarioId);
     }
 }

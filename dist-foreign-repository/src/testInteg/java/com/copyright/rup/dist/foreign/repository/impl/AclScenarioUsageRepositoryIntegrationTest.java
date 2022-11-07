@@ -17,6 +17,7 @@ import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDetail;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDetailDto;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
+import com.copyright.rup.dist.foreign.domain.AclScenarioLiabilityDetail;
 import com.copyright.rup.dist.foreign.domain.AclScenarioShareDetail;
 import com.copyright.rup.dist.foreign.domain.RightsholderPayeeProductFamilyHolder;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
@@ -603,6 +604,18 @@ public class AclScenarioUsageRepositoryIntegrationTest {
             actual);
     }
 
+    @Test
+    @TestData(fileName = FOLDER_NAME + "find-for-send-to-lm-by-scenario-id.groovy")
+    public void testFindForSendToLmByScenarioId() {
+        List<AclScenarioLiabilityDetail> expectedDetails =
+            loadExpectedAclScenarioLiabilityDetails("json/acl/acl_scenario_liability_details_find_by_id.json");
+        List<AclScenarioLiabilityDetail> actualDetails =
+            aclScenarioUsageRepository.findForSendToLmByScenarioId("3ac016af-eb68-41b0-a031-7477e623a443");
+        assertEquals(3, actualDetails.size());
+        IntStream.range(0, expectedDetails.size())
+            .forEach(i -> verifyAclScenarioLiabilityDetail(expectedDetails.get(i), actualDetails.get(i)));
+    }
+
     private void verifyAclScenarioDetail(AclScenarioDetail expectedScenarioDetail,
                                          AclScenarioDetail actualScenarioDetail) {
         assertEquals(expectedScenarioDetail.getScenarioId(), actualScenarioDetail.getScenarioId());
@@ -690,6 +703,21 @@ public class AclScenarioUsageRepositoryIntegrationTest {
         assertEquals(expected.getNetTotalDigital(), actual.getNetTotalDigital());
         assertEquals(expected.getGrossTotal(), actual.getGrossTotal());
         assertEquals(expected.getNetTotal(), actual.getNetTotal());
+    }
+
+    private void verifyAclScenarioLiabilityDetail(AclScenarioLiabilityDetail expectedDetail,
+                                                  AclScenarioLiabilityDetail actualDetail) {
+        assertEquals(expectedDetail.getLiabilityDetailId(), actualDetail.getLiabilityDetailId());
+        assertEquals(expectedDetail.getRightsholderId(), actualDetail.getRightsholderId());
+        assertEquals(expectedDetail.getWrWrkInst(), actualDetail.getWrWrkInst());
+        assertEquals(expectedDetail.getSystemTitle(), actualDetail.getSystemTitle());
+        assertEquals(expectedDetail.getTypeOfUse(), actualDetail.getTypeOfUse());
+        assertEquals(expectedDetail.getLicenseType(), actualDetail.getLicenseType());
+        assertEquals(expectedDetail.getAggregateLicenseeClassName(), actualDetail.getAggregateLicenseeClassName());
+        assertEquals(expectedDetail.getProductFamily(), actualDetail.getProductFamily());
+        assertEquals(expectedDetail.getNetAmount(), actualDetail.getNetAmount());
+        assertEquals(expectedDetail.getServiceFeeAmount(), actualDetail.getServiceFeeAmount());
+        assertEquals(expectedDetail.getGrossAmount(), actualDetail.getGrossAmount());
     }
 
     private AclScenario buildAclScenario(String id, String fundPoolId, String usageBatchId, String grantSetId,
@@ -922,6 +950,16 @@ public class AclScenarioUsageRepositoryIntegrationTest {
         try {
             String content = TestUtils.fileToString(this.getClass(), fileName);
             return OBJECT_MAPPER.readValue(content, new TypeReference<List<RightsholderPayeeProductFamilyHolder>>() {
+            });
+        } catch (IOException e) {
+            throw new AssertionError(e);
+        }
+    }
+
+    private List<AclScenarioLiabilityDetail> loadExpectedAclScenarioLiabilityDetails(String fileName) {
+        try {
+            String content = TestUtils.fileToString(this.getClass(), fileName);
+            return OBJECT_MAPPER.readValue(content, new TypeReference<List<AclScenarioLiabilityDetail>>() {
             });
         } catch (IOException e) {
             throw new AssertionError(e);

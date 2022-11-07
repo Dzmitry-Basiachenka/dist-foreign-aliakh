@@ -324,9 +324,7 @@ public class AclScenarioServiceTest {
     public void testSendToLm() {
         AclScenarioLiabilityDetail liabilityDetail = buildLiabilityDetail();
         AclScenario aclScenario = buildAclScenario();
-        aclScenarioUsageService.moveToArchive(aclScenario, "SYSTEM");
-        expectLastCall().once();
-        expect(aclScenarioUsageService.getArchivedLiabilityDetailsForSendToLmByIds(aclScenario.getId()))
+        expect(aclScenarioUsageService.getLiabilityDetailsForSendToLmByIds(aclScenario.getId()))
             .andReturn(Collections.singletonList(liabilityDetail)).once();
         lmIntegrationService.sendToLm(Collections.singletonList(new ExternalUsage(liabilityDetail)));
         expectLastCall().once();
