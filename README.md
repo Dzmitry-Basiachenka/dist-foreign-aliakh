@@ -1,3 +1,14 @@
+16.0.13
+-
+* CDP-1101 FDA: ACL: Create Scenario window: Non-editable scenario can be created with editable Usage Batch and Grant Set if Editable checkbox is deselected after populating usage batch and grant set fields
+* B-74476 FDA: Export for Detail ID (Usages with no Pub Type/CUP): implement the report controller
+* B-74476 FDA: Export for Detail ID (Usages with no Pub Type/CUP): implement the report widget
+* B-74414 FDA: Delete Calculation Tab Usage Batch: adjust permissions for view/delete Usage Batch
+* B-57810 FDA: Send ACL scenario to LM: adjust logic to display metadata panel and view window for archived scenarios
+* B-57810 FDA: Send ACL scenario to LM: adjust logic to export scenario rightsholder for ARCHIVED scenarios
+* B-57810 FDA: Send ACL scenario to LM: remove logic for archiving details after sending to LM
+* B-74821 Tech Debt: FDA: fix security vulnerabilities CVE-2022-31690, CVE-2022-31692
+
 16.0.12
 -
 * B-74414 FDA: Delete Calculation Tab Usage Batch: make changes based on comments in code review
