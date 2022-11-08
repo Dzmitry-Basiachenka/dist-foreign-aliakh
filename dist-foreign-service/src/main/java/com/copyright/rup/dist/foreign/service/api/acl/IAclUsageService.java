@@ -88,16 +88,15 @@ public interface IAclUsageService {
      */
     List<UsageAge> getDefaultUsageAgesWeights();
 
-
     /**
-     * Gets count of {@link AclUsageDto}s by ACL batch id where publication type or content unit price is null.
-     * Check only eligible, granted, with usage age weight > 0 and quantity < 2000 usages
+     * Gets count of invalid ACL usages (publication type or content unit price is null).
+     * Checks only ACL usages that are eligible, granted, with usage age weight > 0 and quantity < 2000.
      *
      * @param batchId            ACL batch id
      * @param grantSetId         ACL grant set id
      * @param periodPriors       list of period priors
      * @param distributionPeriod distribution period
-     * @return count of {@link AclUsageDto}s
+     * @return count of invalid ACL usages
      */
     int getCountInvalidUsages(String batchId, String grantSetId, Integer distributionPeriod,
                               List<Integer> periodPriors);

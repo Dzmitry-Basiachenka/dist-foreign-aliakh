@@ -7,6 +7,13 @@ import com.copyright.rup.dist.common.domain.BaseEntity;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
 import com.copyright.rup.dist.common.test.mock.aws.SqsClientMock;
+import com.copyright.rup.dist.foreign.domain.AclFundPool;
+import com.copyright.rup.dist.foreign.domain.AclGrantSet;
+import com.copyright.rup.dist.foreign.domain.AclPublicationType;
+import com.copyright.rup.dist.foreign.domain.AclScenario;
+import com.copyright.rup.dist.foreign.domain.AclUsageBatch;
+import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.UdmBatch;
 import com.copyright.rup.dist.foreign.domain.UdmUsage;
@@ -15,11 +22,19 @@ import com.copyright.rup.dist.foreign.domain.UdmValueAuditItem;
 import com.copyright.rup.dist.foreign.domain.UdmValueBaselineDto;
 import com.copyright.rup.dist.foreign.domain.UdmValueDto;
 import com.copyright.rup.dist.foreign.domain.UdmValueStatusEnum;
+import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineValueFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UdmValueFilter;
+import com.copyright.rup.dist.foreign.service.api.ILicenseeClassService;
+import com.copyright.rup.dist.foreign.service.api.IPublicationTypeService;
+import com.copyright.rup.dist.foreign.service.api.acl.IAclFundPoolService;
+import com.copyright.rup.dist.foreign.service.api.acl.IAclGrantSetService;
+import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioService;
+import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageBatchService;
+import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmBaselineValueService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmBatchService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmProxyValueService;
@@ -77,11 +92,23 @@ public class AclWorkflowIntegrationTestBuilder implements Builder<Runner> {
     private CsvProcessorFactory csvProcessorFactory;
     @Autowired
     private IUdmProxyValueService udmProxyValueService;
+    @Autowired
+    private IAclUsageBatchService aclUsageBatchService;
+    @Autowired
+    private IAclFundPoolService aclFundPoolService;
+    @Autowired
+    private IAclGrantSetService aclGrantSetService;
+    @Autowired
+    private IAclScenarioService aclScenarioService;
+    @Autowired
+    private IAclUsageService aclUsageService;
+    @Autowired
+    private IPublicationTypeService publicationTypeService;
+    @Autowired
+    private ILicenseeClassService licenseeClassService;
+
     private List<UdmUsageDto> udmUsageDtos;
     private UdmBatch expectedUdmBatch;
-    private int expectedCountOfPublishedUsages;
-    private int expectedCountOfPopulatedValues;
-    private int expectedCountOfPublishedValues;
     private String pathToUsagesToUpload;
     private String pathToExpectedUsages;
     private String pathToExpectedValues;
@@ -91,21 +118,17 @@ public class AclWorkflowIntegrationTestBuilder implements Builder<Runner> {
     private List<String> pathsToExpectedUdmValueAuditItems = new ArrayList<>();
     private Map<String, String> expectedRmsRequestToResponseMap = new HashMap<>();
     private Map<Long, String> expectedPrmAccountNumberToResponseMap = new HashMap<>();
-
-    public AclWorkflowIntegrationTestBuilder withExpectedCountOfPublishedUsages(int countOfPublishedUsages) {
-        this.expectedCountOfPublishedUsages = countOfPublishedUsages;
-        return this;
-    }
-
-    public AclWorkflowIntegrationTestBuilder withExpectedCountOfPopulatedValues(int countOfPopulatedValues) {
-        this.expectedCountOfPopulatedValues = countOfPopulatedValues;
-        return this;
-    }
-
-    public AclWorkflowIntegrationTestBuilder withExpectedCountOfPublishedValues(int countOfPublishedValues) {
-        this.expectedCountOfPublishedValues = countOfPublishedValues;
-        return this;
-    }
+    private String expectedIneligibleParentCallJson;
+    private String expectedRollupsJson;
+    private List<String> expectedRollupsRightholderIds = new ArrayList<>();
+    private AclUsageBatch aclUsageBatch;
+    private String pathToExpectedLdmtFundPoolDetails;
+    private AclFundPool aclFundPool;
+    private AclGrantSet aclGrantSet;
+    private List<UsageAge> usageAges = new ArrayList<>();
+    private List<AclPublicationType> publicationTypes = new ArrayList<>();
+    private List<DetailLicenseeClass> detailLicenseeClasses = new ArrayList<>();
+    private AclScenario aclScenario;
 
     public AclWorkflowIntegrationTestBuilder withUdmBatch(UdmBatch udmBatch) {
         this.expectedUdmBatch = udmBatch;
@@ -142,6 +165,17 @@ public class AclWorkflowIntegrationTestBuilder implements Builder<Runner> {
         return this;
     }
 
+    public AclWorkflowIntegrationTestBuilder withPrmIneligibleParentCall(String ineligibleParentCallJson) {
+        this.expectedIneligibleParentCallJson = ineligibleParentCallJson;
+        return this;
+    }
+
+    public AclWorkflowIntegrationTestBuilder withPrmRollups(String rollupsJson, String... rollupsRightsholdersIds) {
+        this.expectedRollupsJson = rollupsJson;
+        this.expectedRollupsRightholderIds = Arrays.asList(rollupsRightsholdersIds);
+        return this;
+    }
+
     public AclWorkflowIntegrationTestBuilder withUdmUsageAuditItems(List<String> pathsToAuditItems) {
         this.pathsToExpectedUdmUsageAuditItems = pathsToAuditItems;
         return this;
@@ -152,10 +186,47 @@ public class AclWorkflowIntegrationTestBuilder implements Builder<Runner> {
         return this;
     }
 
+    public AclWorkflowIntegrationTestBuilder withAclUsageBatch(AclUsageBatch usageBatch) {
+        this.aclUsageBatch = usageBatch;
+        return this;
+    }
+
+    public AclWorkflowIntegrationTestBuilder withLdmtFundPoolDetails(String pathToLdmtFundPoolDetails) {
+        this.pathToExpectedLdmtFundPoolDetails = pathToLdmtFundPoolDetails;
+        return this;
+    }
+
+    public AclWorkflowIntegrationTestBuilder withAclFundPool(AclFundPool fundPool) {
+        this.aclFundPool = fundPool;
+        return this;
+    }
+
+    public AclWorkflowIntegrationTestBuilder withAclGrantSet(AclGrantSet grantSet) {
+        this.aclGrantSet = grantSet;
+        return this;
+    }
+
+    public AclWorkflowIntegrationTestBuilder withDefaultAclScenarioUsageAges() {
+        this.usageAges = aclUsageService.getDefaultUsageAgesWeights();
+        return this;
+    }
+
+    public AclWorkflowIntegrationTestBuilder withDefaultAclScenarioPubTypes() {
+        this.publicationTypes = publicationTypeService.getAclHistoricalPublicationTypes();
+        return this;
+    }
+
+    public AclWorkflowIntegrationTestBuilder withDefaultAclScenarioDetLicClasses() {
+        this.detailLicenseeClasses = licenseeClassService.getDetailLicenseeClasses(FdaConstants.ACL_PRODUCT_FAMILY);
+        return this;
+    }
+
+    public AclWorkflowIntegrationTestBuilder withAclScenario(AclScenario scenario) {
+        this.aclScenario = scenario;
+        return this;
+    }
+
     void reset() {
-        this.expectedCountOfPublishedUsages = 0;
-        this.expectedCountOfPopulatedValues = 0;
-        this.expectedCountOfPublishedValues = 0;
         this.expectedUdmBatch = null;
         this.pathToUsagesToUpload = null;
         this.pathToExpectedUsages = null;
@@ -165,8 +236,19 @@ public class AclWorkflowIntegrationTestBuilder implements Builder<Runner> {
         this.uploadedUdmValuesIds.clear();
         this.expectedRmsRequestToResponseMap.clear();
         this.expectedPrmAccountNumberToResponseMap.clear();
+        this.expectedIneligibleParentCallJson = null;
+        this.expectedRollupsJson = null;
+        this.expectedRollupsRightholderIds.clear();
         this.pathsToExpectedUdmUsageAuditItems.clear();
         this.pathsToExpectedUdmValueAuditItems.clear();
+        this.aclUsageBatch = null;
+        this.pathToExpectedLdmtFundPoolDetails = null;
+        this.aclFundPool = null;
+        this.aclGrantSet = null;
+        this.usageAges.clear();
+        this.publicationTypes.clear();
+        this.detailLicenseeClasses.clear();
+        this.aclScenario = null;
         this.sqsClientMock.reset();
     }
 
@@ -185,6 +267,8 @@ public class AclWorkflowIntegrationTestBuilder implements Builder<Runner> {
             testHelper.expectGetRmsRights(expectedRmsRequestToResponseMap);
             expectedPrmAccountNumberToResponseMap.forEach(
                 (accountNumber, response) -> testHelper.expectPrmCall(response, accountNumber));
+            testHelper.expectPrmIneligibleParentCall(expectedIneligibleParentCallJson);
+            testHelper.expectGetRollups(expectedRollupsJson, expectedRollupsRightholderIds);
             loadUdmBatch();
             assignUsages();
             publishUsagesToBaseline();
@@ -195,6 +279,11 @@ public class AclWorkflowIntegrationTestBuilder implements Builder<Runner> {
             assertUdmValuesBaseline();
             assertUdmUsageAudit();
             assertUdmValueAudit();
+            createAclUsageBatch();
+            createAclFundPool();
+            createAclGrantSet();
+            createAclScenario();
+            //TODO: implement full ACL workflow
             testHelper.verifyRestServer();
         }
 
@@ -227,13 +316,11 @@ public class AclWorkflowIntegrationTestBuilder implements Builder<Runner> {
                     return udmUsageDto;
                 }, udmUsageDto -> Collections.emptyList()));
             udmUsageService.updateUsages(dtoToActionReasonsMap, false, "Reason");
-            assertEquals(expectedCountOfPublishedUsages,
-                udmUsageService.publishUdmUsagesToBaseline(expectedUdmBatch.getPeriod()));
+            udmUsageService.publishUdmUsagesToBaseline(expectedUdmBatch.getPeriod());
         }
 
         private void populateValueBatch() {
-            assertEquals(expectedCountOfPopulatedValues,
-                udmValueService.populateValueBatch(expectedUdmBatch.getPeriod()));
+            udmValueService.populateValueBatch(expectedUdmBatch.getPeriod());
         }
 
         private void publishValuesToBaseline() {
@@ -263,8 +350,7 @@ public class AclWorkflowIntegrationTestBuilder implements Builder<Runner> {
                     udmValueService.updateValue(udmValueDto, actionReasons);
                 });
             udmProxyValueService.calculateProxyValues(202006);
-            assertEquals(expectedCountOfPublishedValues,
-                udmValueService.publishToBaseline(expectedUdmBatch.getPeriod()));
+            udmValueService.publishToBaseline(expectedUdmBatch.getPeriod());
         }
 
         private void assertUdmUsages() throws IOException {
@@ -308,6 +394,35 @@ public class AclWorkflowIntegrationTestBuilder implements Builder<Runner> {
                     testHelper.loadExpectedUdmValueAuditItems(pathsToExpectedUdmValueAuditItems.get(index));
                 testHelper.assertUdmValueAudit(uploadedUdmValuesIds.get(index), udmValueAuditItems);
             }
+        }
+
+        private void createAclUsageBatch() {
+            aclUsageBatchService.insert(aclUsageBatch);
+        }
+
+        private void createAclFundPool() throws InterruptedException {
+            if (!aclFundPool.isManualUploadFlag()) {
+                testHelper.receiveLdtmDetailsFromOracle(Objects.requireNonNull(pathToExpectedLdmtFundPoolDetails));
+            }
+            aclFundPoolService.insertLdmtAclFundPool(aclFundPool);
+        }
+
+        private void createAclGrantSet() {
+            aclGrantSetService.insert(aclGrantSet);
+        }
+
+        private void createAclScenario() {
+            aclScenario.setUsageBatchId(aclUsageBatch.getId());
+            aclScenario.setFundPoolId(aclFundPool.getId());
+            aclScenario.setGrantSetId(aclGrantSet.getId());
+            aclScenario.setUsageAges(usageAges);
+            aclScenario.setPublicationTypes(publicationTypes);
+            aclScenario.setDetailLicenseeClasses(detailLicenseeClasses);
+            assertTrue(aclScenarioService.getFundPoolDetailsNotToBeDistributed(
+                aclScenario.getUsageBatchId(), aclScenario.getFundPoolId(),
+                aclScenario.getGrantSetId(), aclScenario.getDetailLicenseeClasses())
+                .isEmpty());
+            aclScenarioService.insertScenario(aclScenario);
         }
     }
 }
