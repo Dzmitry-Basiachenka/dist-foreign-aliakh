@@ -141,7 +141,21 @@ databaseChangeLog {
             column(name: 'df_acl_grant_set_uid', value: 'c5d66bb6-99c5-4fb5-a30b-22555dd685ea')
             column(name: 'grant_status', value: 'GRANT')
             column(name: 'type_of_use', value: 'DIGITAL')
-            column(name: 'type_of_use_status', value: 'Digital Only')
+            column(name: 'type_of_use_status', value: 'Print&Digital')
+            column(name: 'wr_wrk_inst', value: 227738245)
+            column(name: 'system_title', value: 'Technology review')
+            column(name: 'rh_account_number', value: 1000028511)
+            column(name: 'is_eligible', value: true)
+            column(name: 'created_datetime', value: '2021-01-30T00:00:00-04:00')
+            column(name: 'updated_datetime', value: '2021-01-31T00:00:00-04:00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_grant_detail') {
+            column(name: 'df_acl_grant_detail_uid', value: '0b7ba03d-c51e-4ed5-bf3a-3744d0e653cc')
+            column(name: 'df_acl_grant_set_uid', value: 'c5d66bb6-99c5-4fb5-a30b-22555dd685ea')
+            column(name: 'grant_status', value: 'GRANT')
+            column(name: 'type_of_use', value: 'PRINT')
+            column(name: 'type_of_use_status', value: 'Print&Digital')
             column(name: 'wr_wrk_inst', value: 227738245)
             column(name: 'system_title', value: 'Technology review')
             column(name: 'rh_account_number', value: 1000028511)

@@ -456,6 +456,7 @@
 
     <select id="findInvalidUsagesDtos" parameterType="map" resultMap="aclUsageDtoResultMap">
         select
+            distinct on (df_acl_usage_uid)
             <include refid="IAclUsageMapper.aclUsageDtoColumns"/>
         from ${schema}.df_acl_usage u
         join ${schema}.df_acl_usage_batch ub on u.df_acl_usage_batch_uid = ub.df_acl_usage_batch_uid
@@ -464,7 +465,7 @@
         left join ${schema}.df_publication_type pt on u.publication_type_uid = pt.df_publication_type_uid
         <include refid="grantDetailJoinSql"/>
         <include refid="invalidUsagesWhereClause"/>
-        order by updated_datetime desc, df_acl_usage_uid
+        order by df_acl_usage_uid
     </select>
 
     <select id="copyAclUsages" parameterType="map" resultType="string">

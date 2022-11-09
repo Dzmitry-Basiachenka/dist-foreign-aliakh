@@ -725,7 +725,7 @@ public class AclUsageRepositoryIntegrationTest extends CsvReportsTestHelper {
     public void testFindCountInvalidUsages() {
         assertEquals(0, aclUsageRepository.findCountInvalidUsages(ACL_USAGE_BATCH_UID_1, ACL_GRANT_SET_UID_1,
             DISTRIBUTION_PERIOD, PERIOD_PRIORS));
-        assertEquals(3, aclUsageRepository.findCountInvalidUsages(ACL_USAGE_BATCH_UID_2, ACL_GRANT_SET_UID_2,
+        assertEquals(4, aclUsageRepository.findCountInvalidUsages(ACL_USAGE_BATCH_UID_2, ACL_GRANT_SET_UID_2,
             DISTRIBUTION_PERIOD, PERIOD_PRIORS));
     }
 
