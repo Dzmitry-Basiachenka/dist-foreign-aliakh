@@ -1,3 +1,7 @@
+16.0.14
+-
+* CDP-1102 FDA: Export usages without Pub Type/CUP: Records in the exported file are duplicated for usages having 2 eligible grants (Print&Digital)
+
 16.0.13
 -
 * CDP-1101 FDA: ACL: Create Scenario window: Non-editable scenario can be created with editable Usage Batch and Grant Set if Editable checkbox is deselected after populating usage batch and grant set fields
