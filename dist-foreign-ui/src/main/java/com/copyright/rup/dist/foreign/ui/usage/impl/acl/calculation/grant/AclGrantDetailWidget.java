@@ -104,7 +104,7 @@ public class AclGrantDetailWidget extends HorizontalSplitPanel implements IAclGr
                 } else {
                     aclGrantDetailsGrid.addStyleName(EMPTY_STYLE_NAME);
                 }
-                aclGrantDetailsGrid.getFooterRow(0).getCell("licenseType").setText(String.format(FOOTER_LABEL, size));
+                aclGrantDetailsGrid.getFooterRow(0).getCell("grantSetName").setText(String.format(FOOTER_LABEL, size));
                 return size;
             }, AclGrantDetailDto::getId);
         aclGrantDetailsGrid = new Grid<>(dataProvider);
