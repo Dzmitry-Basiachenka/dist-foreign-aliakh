@@ -390,6 +390,43 @@
     </sql>
 
     <insert id="addToScenario" parameterType="map">
+        with usages as materialized (
+            select distinct on (u.df_acl_usage_uid)
+                uuid_generate_v4() df_acl_scenario_detail_uid,
+                #{scenario.id} df_acl_scenario_uid,
+                u.period period_end_date,
+                original_detail_id,
+                u.wr_wrk_inst,
+                reported_type_of_use,
+                u.type_of_use,
+                u.system_title,
+                detail_licensee_class_id,
+                publication_type_uid,
+                price,
+                price_flag,
+                content,
+                content_flag,
+                content_unit_price,
+                content_unit_price_flag,
+                annualized_copies,
+                uaw.weight usage_age_weight,
+                survey_country,
+                uaw.weight * annualized_copies weighted_copies
+            from ${schema}.df_acl_usage u
+            <include refid="grantDetailJoinSql">
+                <property name="wrWrkInst" value="u.wr_wrk_inst"/>
+                <property name="typeOfUse" value="u.type_of_use"/>
+            </include>
+            join ${schema}.df_acl_scenario_usage_age_weight uaw on uaw.df_acl_scenario_uid = #{scenario.id}
+                and uaw.period_prior = (
+                    <include refid="periodPriorSql">
+                        <property name="period" value="#{scenario.periodEndDate}"/>
+                    </include>
+                )
+            where df_acl_usage_batch_uid = #{scenario.usageBatchId}
+                and uaw.weight > 0
+                and annualized_copies &lt; 2000
+        )
         insert into ${schema}.df_acl_scenario_detail (
             df_acl_scenario_detail_uid,
             df_acl_scenario_uid,
@@ -413,45 +450,31 @@
             weighted_copies,
             <include refid="StoredEntityMapper.additionalColumns"/>
         )
-        select distinct on (u.df_acl_usage_uid)
-            uuid_generate_v4() df_acl_scenario_detail_uid,
-            #{scenario.id} df_acl_scenario_uid,
-            u.period period_end_date,
-            original_detail_id,
-            u.wr_wrk_inst,
-            reported_type_of_use,
-            u.type_of_use,
-            u.system_title,
-            detail_licensee_class_id,
-            publication_type_uid,
-            price,
-            price_flag,
-            content,
-            content_flag,
-            content_unit_price,
-            content_unit_price_flag,
-            annualized_copies,
-            uaw.weight usage_age_weight,
-            survey_country,
-            uaw.weight * annualized_copies weighted_copies,
+        select usages.*,
             <include refid="StoredEntityMapper.insert"/>
-        from ${schema}.df_acl_usage u
-        <include refid="grantDetailJoinSql">
-            <property name="wrWrkInst" value="u.wr_wrk_inst"/>
-            <property name="typeOfUse" value="u.type_of_use"/>
-        </include>
-        join ${schema}.df_acl_scenario_usage_age_weight uaw on uaw.df_acl_scenario_uid = #{scenario.id}
-            and uaw.period_prior = (
-                <include refid="periodPriorSql">
-                    <property name="period" value="#{scenario.periodEndDate}"/>
-                </include>
-            )
-        where df_acl_usage_batch_uid = #{scenario.usageBatchId}
-            and uaw.weight > 0
-            and annualized_copies &lt; 2000
+        from usages
     </insert>
 
     <insert id="addScenarioShares" parameterType="map">
+        with shares as materialized (
+            select
+                uuid_generate_v4() df_acl_share_detail_uid,
+                #{scenario.id} df_acl_scenario_uid,
+                sd.df_acl_scenario_detail_uid,
+                gd.type_of_use,
+                gd.rh_account_number,
+                slc.aggregate_licensee_class_id,
+                number_of_copies * usage_age_weight volume_weight,
+                number_of_copies * usage_age_weight * content_unit_price * pub_type_weight value_weight
+            from ${schema}.df_acl_scenario_detail sd
+            join ${schema}.df_acl_scenario_licensee_class slc on sd.df_acl_scenario_uid = slc.df_acl_scenario_uid
+                and sd.detail_licensee_class_id = slc.detail_licensee_class_id
+            <include refid="grantDetailJoinSql">
+                <property name="wrWrkInst" value="sd.wr_wrk_inst"/>
+                <property name="typeOfUse" value="sd.type_of_use"/>
+            </include>
+            where sd.df_acl_scenario_uid = #{scenario.id}
+        )
         insert into ${schema}.df_acl_share_detail (
             df_acl_share_detail_uid,
             df_acl_scenario_uid,
@@ -463,24 +486,9 @@
             value_weight,
             <include refid="StoredEntityMapper.additionalColumns"/>
         )
-        select
-            uuid_generate_v4() df_acl_share_detail_uid,
-            #{scenario.id} df_acl_scenario_uid,
-            sd.df_acl_scenario_detail_uid,
-            gd.type_of_use,
-            gd.rh_account_number,
-            slc.aggregate_licensee_class_id,
-            number_of_copies * usage_age_weight volume_weight,
-            number_of_copies * usage_age_weight * content_unit_price * pub_type_weight value_weight,
+        select shares.*,
             <include refid="StoredEntityMapper.insert"/>
-        from ${schema}.df_acl_scenario_detail sd
-        join ${schema}.df_acl_scenario_licensee_class slc on sd.df_acl_scenario_uid = slc.df_acl_scenario_uid
-            and sd.detail_licensee_class_id = slc.detail_licensee_class_id
-        <include refid="grantDetailJoinSql">
-            <property name="wrWrkInst" value="sd.wr_wrk_inst"/>
-            <property name="typeOfUse" value="sd.type_of_use"/>
-        </include>
-        where sd.df_acl_scenario_uid = #{scenario.id}
+        from shares
     </insert>
 
     <update id="populatePubTypeWeights" parameterType="map">
