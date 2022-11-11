@@ -162,7 +162,7 @@ public class AclGrantDetailWidgetTest {
         verifyGridItems(grid, grantDetails, expectedCells);
         verify(JavaScript.class, ForeignSecurityUtils.class, controller, streamSource);
         Object[][] expectedFooterColumns = {
-            {"licenseType", "Grant Details Count: 1", null},
+            {"grantSetName", "Grant Details Count: 1", null},
         };
         verifyFooterItems(grid, expectedFooterColumns);
     }
