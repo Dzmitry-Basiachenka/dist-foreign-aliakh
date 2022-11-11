@@ -1,3 +1,9 @@
+16.0.15
+-
+* CDP 1103: FDA: ACL Grant Set tab: Grant Details Count always displays '0' value
+* B-74821 Tech Debt: FDA: add materialization for queries to insert details and shares during scenario creation
+* B-74821 Tech Debt: FDA: add index by df_acl_grant_set_uid for df_acl_grant_detail table
+
 16.0.14
 -
 * CDP-1102 FDA: Export usages without Pub Type/CUP: Records in the exported file are duplicated for usages having 2 eligible grants (Print&Digital)
