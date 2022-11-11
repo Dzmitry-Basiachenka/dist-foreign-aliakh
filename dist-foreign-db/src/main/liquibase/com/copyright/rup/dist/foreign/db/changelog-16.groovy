@@ -33,4 +33,17 @@ databaseChangeLog {
             dropColumn(schemaName: dbAppsSchema, tableName: 'df_acl_share_detail', columnName: 'payee_account_number')
         }
     }
+
+    changeSet(id: '2022-11-11-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
+        comment("B-74821 Tech Debt: FDA: add index by df_acl_grant_set_uid for df_acl_grant_detail table")
+
+        createIndex(indexName: 'ix_df_acl_grant_detail_df_acl_grant_set_uid', schemaName: dbAppsSchema,
+                tableName: 'df_acl_grant_detail', tablespace: dbIndexTablespace) {
+            column(name: 'df_acl_grant_set_uid')
+        }
+
+        rollback {
+            sql("drop index ${dbAppsSchema}.ix_df_acl_grant_detail_df_acl_grant_set_uid")
+        }
+    }
 }
