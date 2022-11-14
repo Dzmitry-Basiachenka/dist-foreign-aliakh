@@ -1,0 +1,49 @@
+{
+  "works": [
+    {
+      "wr_wrk_inst": 243618757,
+      "period_end_date": "06/30/2020",
+      "status": [
+        "GRANT",
+        "DENY"
+      ],
+      "type_of_use": [
+        "PRINT",
+        "DIGITAL"
+      ],
+      "license_type": [
+        "ACL"
+      ]
+    },
+    {
+      "wr_wrk_inst": 876543213,
+      "period_end_date": "06/30/2020",
+      "status": [
+        "GRANT",
+        "DENY"
+      ],
+      "type_of_use": [
+        "PRINT",
+        "DIGITAL"
+      ],
+      "license_type": [
+        "ACL"
+      ]
+    },
+    {
+      "wr_wrk_inst": 876543212,
+      "period_end_date": "06/30/2020",
+      "status": [
+        "GRANT",
+        "DENY"
+      ],
+      "type_of_use": [
+        "PRINT",
+        "DIGITAL"
+      ],
+      "license_type": [
+        "ACL"
+      ]
+    }
+  ]
+}

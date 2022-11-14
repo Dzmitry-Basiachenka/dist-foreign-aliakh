@@ -1,0 +1,54 @@
+{
+  "response": {
+    "status": {
+      "code": "SUCCESS",
+      "message": "OK"
+    },
+    "content": {
+      "@class": "com.copyright.rup.rms.rights.domain.GrantWorksResponse",
+      "requestedWorkCount": "3",
+      "processedWorkCount": "3",
+      "foundWorkCount": "2",
+      "rights": [
+        {
+          "wr_wrk_inst": "123059057",
+          "status": "GRANT",
+          "type_of_use": "DIGITAL",
+          "market": "CORPORATE",
+          "distribution": "INTERNAL",
+          "region": "WORLDWIDE",
+          "right_begin_date": "07/29/2010",
+          "right_end_date": "12/31/3000",
+          "publication_begin_date": "01/01/1000",
+          "publication_end_date": "12/31/3000",
+          "agreement_begin_date": "07/29/2010",
+          "agreement_end_date": "12/31/3000",
+          "wg_owner_org_number": "1000010079",
+          "right_id": "37ccd71e-a4d7-4afb-98cc-ae1ecf8e1cc2",
+          "license_type": "ACL",
+          "product_family": "ACL",
+          "rh_account_number": "1000010079"
+        },
+        {
+          "wr_wrk_inst": "123059057",
+          "status": "GRANT",
+          "type_of_use": "PRINT",
+          "market": "CORPORATE",
+          "distribution": "INTERNAL",
+          "region": "WORLDWIDE",
+          "right_begin_date": "08/16/1995",
+          "right_end_date": "12/31/3000",
+          "publication_begin_date": "01/01/1000",
+          "publication_end_date": "12/31/3000",
+          "agreement_begin_date": "08/16/1995",
+          "agreement_end_date": "12/31/3000",
+          "wg_owner_org_number": "1000010079",
+          "right_id": "35448f3f-f449-4070-b2f5-1646cc750c07",
+          "license_type": "ACL",
+          "product_family": "ACL",
+          "rh_account_number": "1000010079"
+        }
+      ]
+    }
+  }
+}

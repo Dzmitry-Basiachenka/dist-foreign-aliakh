@@ -1,0 +1,33 @@
+{
+  "response": {
+    "status": {
+      "code": "SUCCESS",
+      "message": "OK"
+    },
+    "content": [
+      "java.util.ArrayList",
+      [
+        {
+          "@class": "com.copyright.rup.party.domain.preference.OrganizationPreferenceRollup",
+          "relatedOrganizationUid": "1180895b-04e3-4052-b11a-ec4b1a612a35",
+          "relatedExternalOrganizationKey": "1000010079",
+          "pmLicenseProductUid": "ACLPRINT",
+          "preferenceCode": "PAYEE",
+          "preferenceValue": "true",
+          "rollupOrganizationUid": "1180895b-04e3-4052-b11a-ec4b1a612a35",
+          "rollupExternalOrganizationKey": "1000010079"
+        },
+        {
+          "@class": "com.copyright.rup.party.domain.preference.OrganizationPreferenceRollup",
+          "relatedOrganizationUid": "1180895b-04e3-4052-b11a-ec4b1a612a35",
+          "relatedExternalOrganizationKey": "1000010079",
+          "pmLicenseProductUid": "ACLDIGITAL",
+          "preferenceCode": "PAYEE",
+          "preferenceValue": "true",
+          "rollupOrganizationUid": "1180895b-04e3-4052-b11a-ec4b1a612a35",
+          "rollupExternalOrganizationKey": "1000010079"
+        }
+      ]
+    ]
+  }
+}

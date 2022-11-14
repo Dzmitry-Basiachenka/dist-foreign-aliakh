@@ -1,0 +1,39 @@
+{
+  "response": {
+    "status": {
+      "code": "SUCCESS",
+      "message": "OK"
+    },
+    "content": [
+      "java.util.ArrayList",
+      [
+        {
+          "@class": "com.copyright.rup.party.domain.organization.Organization",
+          "version": 3,
+          "createDate": "2013-03-23T02:19:31-0400",
+          "updateDate": "2018-11-29T09:20:23-0500",
+          "createUser": "pmOrganizationLoad",
+          "updateUser": "Stephanie Grevelis",
+          "id": "1180895b-04e3-4052-b11a-ec4b1a612a35",
+          "name": "Walter de Gruyter and Company",
+          "extOrgKey": "1000010079",
+          "extOrgSource": "EBUSINESS",
+          "defaultCurrencyID": "USD",
+          "defaultLanguageID": "en",
+          "notForProfit": "false",
+          "organizationTypeID": "RH",
+          "articleSearchAllowed": true,
+          "csPublisherUid": "wdg_TDM",
+          "permissionDirectLinking": true,
+          "requestArticleFromLibraryFlag": false,
+          "agreementManagerFlag": false,
+          "taxAddressLine1": "Genthiner Strasse 13",
+          "taxAddressCity": "Berlin",
+          "taxAddressCountry": "DE",
+          "taxAddressZipCode": "D-10785",
+          "organizationSubType": "COMPANY"
+        }
+      ]
+    ]
+  }
+}
