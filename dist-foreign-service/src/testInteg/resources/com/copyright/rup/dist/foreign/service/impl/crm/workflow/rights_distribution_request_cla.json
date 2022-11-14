@@ -8,12 +8,12 @@
         "payeeAccountNumber": "2000017000",
         "royaltyAmount": 68.0000000000,
         "currency": "USD",
-        "licenseCreateDate": "04-12-2018T09:32:38 AM",
+        "licenseCreateDate": "11-14-2022T07:13:13 AM",
         "serviceFeeAmount": 32.0000000000,
         "wrWrkInst": "243904752",
         "publicationName": "100 ROAD MOVIES",
         "chapterArticleTitle": "DIN EN 779:2013",
-        "omOrderDetailNumber": "86cc9216-80d2-4e9b-b381-b89f1880af08",
+        "omOrderDetailNumber": "60b76646-9dd4-4002-83e5-ae0a397a4a40",
         "totalAmount": 100.0000000000,
         "periodEndDate": "04/11/2018",
         "adjustmentFlag": false,
@@ -24,7 +24,8 @@
         "arAccountNumber": "5000581901",
         "serviceNameReporting": "FAS",
         "createUser": "FDA Distribution",
-        "status": "D - Distributed"
+        "status": "D - Distributed",
+        "distributionDate": "04-07-2018T08:00:00 PM"
       },
       {
         "cccEventId": "53255",
@@ -33,7 +34,7 @@
         "payeeAccountNumber": "2000017000",
         "royaltyAmount": 35.8200000000,
         "currency": "USD",
-        "licenseCreateDate": "04-12-2018T09:32:38 AM",
+        "licenseCreateDate": "11-14-2022T07:13:12 AM",
         "serviceFeeAmount": 3.9800000000,
         "wrWrkInst": "100009840",
         "publicationName": "Journal of human lactation : official journal of International Lactation Consultant Association (1985- )",
@@ -50,7 +51,8 @@
         "arAccountNumber": "2000017000",
         "serviceNameReporting": "FAS",
         "createUser": "FDA Distribution",
-        "status": "D - Distributed"
+        "status": "D - Distributed",
+        "distributionDate": "04-07-2018T08:00:00 PM"
       },
       {
         "cccEventId": "53256",
@@ -59,7 +61,7 @@
         "payeeAccountNumber": "2000184640",
         "royaltyAmount": 27.0600000000,
         "currency": "USD",
-        "licenseCreateDate": "04-12-2018T09:32:38 AM",
+        "licenseCreateDate": "11-14-2022T07:13:12 AM",
         "serviceFeeAmount": 12.7400000000,
         "wrWrkInst": "100010768",
         "publicationName": "Reclaiming youth at risk : our hope for the future",
@@ -76,7 +78,8 @@
         "arAccountNumber": "2000017000",
         "serviceNameReporting": "FAS",
         "createUser": "FDA Distribution",
-        "status": "D - Distributed"
+        "status": "D - Distributed",
+        "distributionDate": "04-07-2018T08:00:00 PM"
       },
       {
         "cccEventId": "53257",
@@ -85,7 +88,7 @@
         "payeeAccountNumber": "7000405588",
         "royaltyAmount": 27.0600000000,
         "currency": "USD",
-        "licenseCreateDate": "04-12-2018T09:32:38 AM",
+        "licenseCreateDate": "11-14-2022T07:13:12 AM",
         "serviceFeeAmount": 12.7400000000,
         "wrWrkInst": "100011725",
         "publicationName": "Journal of human lactation : official journal of International Lactation Consultant Association (1985- )",
@@ -102,7 +105,8 @@
         "arAccountNumber": "2000017000",
         "serviceNameReporting": "FAS",
         "createUser": "FDA Distribution",
-        "status": "D - Distributed"
+        "status": "D - Distributed",
+        "distributionDate": "04-07-2018T08:00:00 PM"
       },
       {
         "cccEventId": "53258",
@@ -111,7 +115,7 @@
         "payeeAccountNumber": "1000015778",
         "royaltyAmount": 27.0600000000,
         "currency": "USD",
-        "licenseCreateDate": "04-12-2018T09:32:38 AM",
+        "licenseCreateDate": "11-14-2022T07:13:12 AM",
         "serviceFeeAmount": 12.7400000000,
         "wrWrkInst": "100011821",
         "publicationName": "True directions : living your sacred instructions",
@@ -129,7 +133,8 @@
         "arAccountNumber": "2000017000",
         "serviceNameReporting": "FAS",
         "createUser": "FDA Distribution",
-        "status": "D - Distributed"
+        "status": "D - Distributed",
+        "distributionDate": "04-07-2018T08:00:00 PM"
       },
       {
         "cccEventId": "53259",
@@ -138,7 +143,7 @@
         "payeeAccountNumber": "2000017000",
         "royaltyAmount": 17.9100000000,
         "currency": "USD",
-        "licenseCreateDate": "04-12-2018T09:32:38 AM",
+        "licenseCreateDate": "11-14-2022T07:13:12 AM",
         "serviceFeeAmount": 1.9900000000,
         "wrWrkInst": "100012905",
         "publicationName": "At-risk youth : a comprehensive response : for counselors teachers psychologists and human service professionals",
@@ -156,7 +161,8 @@
         "arAccountNumber": "2000017000",
         "serviceNameReporting": "FAS",
         "createUser": "FDA Distribution",
-        "status": "D - Distributed"
+        "status": "D - Distributed",
+        "distributionDate": "04-07-2018T08:00:00 PM"
       },
       {
         "cccEventId": "53260",
@@ -165,13 +171,13 @@
         "payeeAccountNumber": "1000024950",
         "royaltyAmount": 17.9100000000,
         "currency": "USD",
-        "licenseCreateDate": "04-12-2018T09:32:38 AM",
+        "licenseCreateDate": "11-14-2022T07:13:13 AM",
         "serviceFeeAmount": 1.9900000000,
         "wrWrkInst": "100012905",
         "publicationName": "At-risk youth : a comprehensive response : for counselors teachers psychologists and human service professionals",
         "author": "Aarseth Espen J.",
         "chapterArticleTitle": "Ch.1 An Introduction to At-Risk Issues",
-        "omOrderDetailNumber": "7615a947-bad0-4b66-a6c3-8887ee8a7603",
+        "omOrderDetailNumber": "f4dd8fd9-3a58-4513-a8a7-9a645f2e7731",
         "totalAmount": 19.9000000000,
         "periodEndDate": "05/21/2018",
         "publicationDate": "12/12/3000",
@@ -183,7 +189,8 @@
         "arAccountNumber": "2000017000",
         "serviceNameReporting": "FAS",
         "createUser": "FDA Distribution",
-        "status": "D - Distributed"
+        "status": "D - Distributed",
+        "distributionDate": "05-17-2018T08:00:00 PM"
       }
     ]
   }

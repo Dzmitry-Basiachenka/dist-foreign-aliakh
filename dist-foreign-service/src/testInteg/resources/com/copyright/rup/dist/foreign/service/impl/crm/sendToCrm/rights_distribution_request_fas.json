@@ -2,7 +2,7 @@
   "list": {
     "rightsDistribution": [
       {
-        "cccEventId": "140918",
+        "cccEventId": "53256",
         "product": "FAS",
         "rorAccountNumber": "1000002859",
         "payeeAccountNumber": "1000002859",
@@ -14,7 +14,7 @@
         "publicationName": "100 ROAD MOVIES",
         "author": "Philippe de Mézières",
         "chapterArticleTitle": "DIN EN 779:2012",
-        "omOrderDetailNumber": "675fd69f-6c81-4469-83a6-38ba40a081b5",
+        "omOrderDetailNumber": "0d1829eb-de35-4f93-bb36-2a7435263051",
         "totalAmount": 500.0000000000,
         "periodEndDate": "03/11/2016",
         "publicationDate": "11/03/2016",
@@ -27,35 +27,8 @@
         "arAccountNumber": "1000005413",
         "serviceNameReporting": "FAS",
         "createUser": "FDA Distribution",
-        "status": "D - Distributed"
-      },
-      {
-        "cccEventId": "141029",
-        "product": "FAS",
-        "rorAccountNumber": "1000002859",
-        "payeeAccountNumber": "1000002859",
-        "royaltyAmount": 420.0000000000,
-        "currency": "USD",
-        "licenseCreateDate": "03-11-2016T12:00:00 AM",
-        "serviceFeeAmount": 80.0000000000,
-        "wrWrkInst": "243904752",
-        "publicationName": "100 ROAD MOVIES",
-        "author": "Philippe de Mézières",
-        "chapterArticleTitle": "DIN EN 779:2012",
-        "omOrderDetailNumber": "53496a2f-fb52-4b5b-9f60-9034cceb69b9",
-        "totalAmount": 500.0000000000,
-        "periodEndDate": "03/11/2016",
-        "publicationDate": "11/03/2016",
-        "numberOfCopies": 100,
-        "adjustmentFlag": false,
-        "passThroughFlag": true,
-        "market": "Doc Del",
-        "marketPeriodFrom": 2013,
-        "marketPeriodTo": 2016,
-        "arAccountNumber": "1000005413",
-        "serviceNameReporting": "FAS",
-        "createUser": "FDA Distribution",
-        "status": "D - Distributed"
+        "status": "D - Distributed",
+        "distributionDate": "03-11-2016T12:00:00 AM"
       },
       {
         "cccEventId": "152130",
@@ -83,10 +56,11 @@
         "arAccountNumber": "1000005413",
         "serviceNameReporting": "FAS",
         "createUser": "FDA Distribution",
-        "status": "D - Distributed"
+        "status": "D - Distributed",
+        "distributionDate": "03-11-2016T12:00:00 AM"
       },
       {
-        "cccEventId": "53256",
+        "cccEventId": "141029",
         "product": "FAS",
         "rorAccountNumber": "1000002859",
         "payeeAccountNumber": "1000002859",
@@ -98,7 +72,7 @@
         "publicationName": "100 ROAD MOVIES",
         "author": "Philippe de Mézières",
         "chapterArticleTitle": "DIN EN 779:2012",
-        "omOrderDetailNumber": "0d1829eb-de35-4f93-bb36-2a7435263051",
+        "omOrderDetailNumber": "53496a2f-fb52-4b5b-9f60-9034cceb69b9",
         "totalAmount": 500.0000000000,
         "periodEndDate": "03/11/2016",
         "publicationDate": "11/03/2016",
@@ -111,7 +85,37 @@
         "arAccountNumber": "1000005413",
         "serviceNameReporting": "FAS",
         "createUser": "FDA Distribution",
-        "status": "D - Distributed"
+        "status": "D - Distributed",
+        "distributionDate": "03-11-2016T12:00:00 AM"
+      },
+      {
+        "cccEventId": "140918",
+        "product": "FAS",
+        "rorAccountNumber": "1000002859",
+        "payeeAccountNumber": "1000002859",
+        "royaltyAmount": 420.0000000000,
+        "currency": "USD",
+        "licenseCreateDate": "03-11-2016T12:00:00 AM",
+        "serviceFeeAmount": 80.0000000000,
+        "wrWrkInst": "243904752",
+        "publicationName": "100 ROAD MOVIES",
+        "author": "Philippe de Mézières",
+        "chapterArticleTitle": "DIN EN 779:2012",
+        "omOrderDetailNumber": "675fd69f-6c81-4469-83a6-38ba40a081b5",
+        "totalAmount": 500.0000000000,
+        "periodEndDate": "03/11/2016",
+        "publicationDate": "11/03/2016",
+        "numberOfCopies": 100,
+        "adjustmentFlag": false,
+        "passThroughFlag": true,
+        "market": "Doc Del",
+        "marketPeriodFrom": 2013,
+        "marketPeriodTo": 2016,
+        "arAccountNumber": "1000005413",
+        "serviceNameReporting": "FAS",
+        "createUser": "FDA Distribution",
+        "status": "D - Distributed",
+        "distributionDate": "03-11-2016T12:00:00 AM"
       },
       {
         "cccEventId": "156665",
@@ -139,7 +143,8 @@
         "arAccountNumber": "1000005413",
         "serviceNameReporting": "FAS",
         "createUser": "FDA Distribution",
-        "status": "D - Distributed"
+        "status": "D - Distributed",
+        "distributionDate": "03-11-2018T12:00:00 AM"
       }
     ]
   }

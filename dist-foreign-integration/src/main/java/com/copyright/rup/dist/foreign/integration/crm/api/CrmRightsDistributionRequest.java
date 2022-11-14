@@ -3,12 +3,14 @@ package com.copyright.rup.dist.foreign.integration.crm.api;
 import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
+import com.copyright.rup.dist.foreign.domain.SalDetailTypeEnum;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -135,6 +137,13 @@ public class CrmRightsDistributionRequest {
     @JsonProperty("publicationIssueDate")
     private String publicationIssueDate;
 
+    @JsonProperty("distributionDate")
+    @JsonFormat(pattern = "MM-dd-yyyy'T'hh:mm:ss a")
+    private OffsetDateTime distributionDate;
+
+    @JsonProperty("typeOfUse")
+    private String typeOfUse;
+
     /**
      * Constructor for creating request to the CRM service.
      *
@@ -161,6 +170,7 @@ public class CrmRightsDistributionRequest {
         this.marketPeriodFrom = usage.getMarketPeriodFrom();
         this.marketPeriodTo = usage.getMarketPeriodTo();
         this.arAccountNumber = usage.getRroAccountNumber();
+        this.distributionDate = usage.getDistributionDate();
         if (FdaConstants.FAS_FAS2_PRODUCT_FAMILY_SET.contains(usage.getProductFamily())) {
             this.serviceNameReporting = "FAS";
             this.author = usage.getAuthor();
@@ -178,6 +188,8 @@ public class CrmRightsDistributionRequest {
             this.state = usage.getSalUsage().getStates();
             this.assessmentType = usage.getSalUsage().getAssessmentType();
             this.publicationIssueDate = usage.getSalUsage().getReportedPublicationDate();
+            this.typeOfUse = SalDetailTypeEnum.IB == usage.getSalUsage().getDetailType()
+                ? "Assessment Item Bank" : "Assessment";
         }
     }
 
@@ -437,6 +449,22 @@ public class CrmRightsDistributionRequest {
         this.publicationIssueDate = publicationIssueDate;
     }
 
+    public OffsetDateTime getDistributionDate() {
+        return distributionDate;
+    }
+
+    public void setDistributionDate(OffsetDateTime distributionDate) {
+        this.distributionDate = distributionDate;
+    }
+
+    public String getTypeOfUse() {
+        return typeOfUse;
+    }
+
+    public void setTypeOfUse(String typeOfUse) {
+        this.typeOfUse = typeOfUse;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -479,6 +507,8 @@ public class CrmRightsDistributionRequest {
             .append(this.state, that.state)
             .append(this.assessmentType, that.assessmentType)
             .append(this.publicationIssueDate, that.publicationIssueDate)
+            .append(this.distributionDate, that.distributionDate)
+            .append(this.typeOfUse, that.typeOfUse)
             .isEquals();
     }
 
@@ -517,6 +547,8 @@ public class CrmRightsDistributionRequest {
             .append(state)
             .append(assessmentType)
             .append(publicationIssueDate)
+            .append(distributionDate)
+            .append(typeOfUse)
             .toHashCode();
     }
 
@@ -555,6 +587,8 @@ public class CrmRightsDistributionRequest {
             .append("state", state)
             .append("assessmentType", assessmentType)
             .append("publicationIssueDate", publicationIssueDate)
+            .append("distributionDate", distributionDate)
+            .append("typeOfUse", typeOfUse)
             .toString();
     }
 }
