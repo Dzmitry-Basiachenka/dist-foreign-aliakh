@@ -274,19 +274,18 @@ public class SalUsageService implements ISalUsageService {
 
     @Override
     @Transactional
-    public void updateToEligibleWithRhAccountNumber(String usageId, Long rhAccountNumber, String reason) {
+    public void updateToEligibleWithRhAccountNumber(Set<String> usageIds, Long rhAccountNumber, String reason) {
         String userName = RupContextUtils.getUserName();
-        LOGGER.info("Update RH for SAL detail. Started. UsageId={}, RhAccountNumber={}, Reason={}, UserName={}",
-            usageId, rhAccountNumber, reason, userName);
-        //TODO: refactor the service to use a list of usage ids
-        salUsageRepository.updateRhAccountNumberAndStatusByIds(Collections.singleton(usageId), rhAccountNumber,
-            UsageStatusEnum.ELIGIBLE, userName);
-        usageAuditService.logAction(usageId, UsageActionTypeEnum.RH_UPDATED, reason);
-        usageAuditService.logAction(usageId, UsageActionTypeEnum.ELIGIBLE, "Usage has become eligible. " +
+        LOGGER.info("Update RH for SAL detail. Started. UsageIds={}, RhAccountNumber={}, Reason={}, UserName={}",
+            usageIds, rhAccountNumber, reason, userName);
+        salUsageRepository.updateRhAccountNumberAndStatusByIds(usageIds, rhAccountNumber, UsageStatusEnum.ELIGIBLE,
+            userName);
+        usageAuditService.logAction(usageIds, UsageActionTypeEnum.RH_UPDATED, reason);
+        usageAuditService.logAction(usageIds, UsageActionTypeEnum.ELIGIBLE, "Usage has become eligible. " +
             "RH was updated to " + rhAccountNumber);
         rightsholderService.updateRighstholdersAsync(Collections.singleton(rhAccountNumber));
-        LOGGER.info("Update RH for SAL detail. Finished. UsageId={}, RhAccountNumber={}, Reason={}, UserName={}",
-            usageId, rhAccountNumber, reason, userName);
+        LOGGER.info("Update RH for SAL detail. Finished. UsageIds={}, RhAccountNumber={}, Reason={}, UserName={}",
+            usageIds, rhAccountNumber, reason, userName);
     }
 
     @Override

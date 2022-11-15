@@ -12,6 +12,7 @@ import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.service.api.IPaidUsageService;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Interface for SAL usages service.
@@ -199,11 +200,11 @@ public interface ISalUsageService extends IPaidUsageService {
      * and {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#ELIGIBLE} status,
      * writes audit with specified reason.
      *
-     * @param usageId         usage id
+     * @param usageId         set of usage ids
      * @param rhAccountNumber RH account number
      * @param reason          reason for RH update
      */
-    void updateToEligibleWithRhAccountNumber(String usageId, Long rhAccountNumber, String reason);
+    void updateToEligibleWithRhAccountNumber(Set<String> usageId, Long rhAccountNumber, String reason);
 
     /**
      * Gets count of {@link UsageDto}s by {@link AuditFilter}.

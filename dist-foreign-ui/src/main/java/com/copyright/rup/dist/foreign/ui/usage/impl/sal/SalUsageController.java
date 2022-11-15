@@ -39,6 +39,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -247,7 +248,8 @@ public class SalUsageController extends CommonUsageController implements ISalUsa
 
     @Override
     public void updateToEligibleWithRhAccountNumber(String usageId, Long rhAccountNumber, String reason) {
-        salUsageService.updateToEligibleWithRhAccountNumber(usageId, rhAccountNumber, reason);
+        //TODO: refactor the controller to use a list of usage ids
+        salUsageService.updateToEligibleWithRhAccountNumber(Collections.singleton(usageId), rhAccountNumber, reason);
     }
 
     @Override

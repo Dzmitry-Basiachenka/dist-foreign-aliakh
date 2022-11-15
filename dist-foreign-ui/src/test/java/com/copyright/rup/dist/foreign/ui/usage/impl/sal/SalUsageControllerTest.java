@@ -81,6 +81,9 @@ public class SalUsageControllerTest {
     private static final OffsetDateTime DATE = OffsetDateTime.of(2020, 1, 2, 3, 4, 5, 6, ZoneOffset.ofHours(0));
     private static final String FUND_POOL_ID = "76b16c8d-0bea-4135-9611-6c52e53bfbea";
     private static final String SCENARIO_NAME = "SAL Scenario 2020";
+    private static final String USAGE_ID = "05e79246-1289-4652-aac6-d69fec90c091";
+    private static final Long RH_ACCOUNT_NUMBER = 123456785L;
+    private static final String REASON = "Manual RH update";
 
     private ISalUsageService salUsageService;
     private IUsageService usageService;
@@ -449,13 +452,11 @@ public class SalUsageControllerTest {
     }
 
     @Test
-    public void testUpdateUsageRighstholder() {
-        salUsageService.updateToEligibleWithRhAccountNumber("05e79246-1289-4652-aac6-d69fec90c091", 123456785L,
-            "Manual RH update");
+    public void testUpdateToEligibleWithRhAccountNumber() {
+        salUsageService.updateToEligibleWithRhAccountNumber(Collections.singleton(USAGE_ID), RH_ACCOUNT_NUMBER, REASON);
         expectLastCall().once();
         replay(salUsageService);
-        controller.updateToEligibleWithRhAccountNumber("05e79246-1289-4652-aac6-d69fec90c091", 123456785L,
-            "Manual RH update");
+        controller.updateToEligibleWithRhAccountNumber(USAGE_ID, RH_ACCOUNT_NUMBER, REASON);
         verify(salUsageService);
     }
 }

@@ -51,6 +51,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Verifies {@link SalUsageService}.
@@ -68,16 +69,19 @@ public class SalUsageServiceTest {
     private static final String USER_NAME = "user@copyright.com";
     private static final String USAGE_ID_1 = "d7d15c9f-39f5-4d51-b72b-48a80f7f5388";
     private static final String USAGE_ID_2 = "c72554d7-687e-4173-8406-dbddef74da98";
-    private static final String USAGE_ID_3 = "64923002-0873-4175-be01-4a9d64aeb99d";
+    private static final Long RH_ACCOUNT_NUMBER = 1000009422L;
     private static final String RIGHTSHOLDER_ID = "4914f51d-866c-4e48-8b03-fb4b29b1a5f3";
     private static final String SCENARIO_ID = "2d50e235-34cd-4c38-9e4c-ecd2e748e9ff";
     private static final String SEARCH = "search";
+    private static final String REASON = "Manual update";
     private final ISalUsageService salUsageService = new SalUsageService();
 
     private IUsageRepository usageRepository;
     private ISalUsageRepository salUsageRepository;
     private IUsageAuditService usageAuditService;
     private IChainExecutor<Usage> chainExecutor;
+    private IPrmIntegrationService prmIntegrationService;
+    private IRightsholderService rightsholderService;
     private IUsageArchiveRepository usageArchiveRepository;
 
     @Before
@@ -87,11 +91,15 @@ public class SalUsageServiceTest {
         usageAuditService = createMock(IUsageAuditService.class);
         usageArchiveRepository = createMock(IUsageArchiveRepository.class);
         chainExecutor = createMock(IChainExecutor.class);
+        prmIntegrationService = createMock(IPrmIntegrationService.class);
+        rightsholderService = createMock(IRightsholderService.class);
         Whitebox.setInternalState(salUsageService, usageRepository);
         Whitebox.setInternalState(salUsageService, salUsageRepository);
         Whitebox.setInternalState(salUsageService, usageArchiveRepository);
         Whitebox.setInternalState(salUsageService, usageAuditService);
         Whitebox.setInternalState(salUsageService, chainExecutor);
+        Whitebox.setInternalState(salUsageService, prmIntegrationService);
+        Whitebox.setInternalState(salUsageService, rightsholderService);
         Whitebox.setInternalState(salUsageService, "usagesBatchSize", 100);
     }
 
@@ -250,10 +258,6 @@ public class SalUsageServiceTest {
 
     @Test
     public void testPopulatePayees() {
-        IRightsholderService rightsholderService = createMock(IRightsholderService.class);
-        IPrmIntegrationService prmIntegrationService = createMock(IPrmIntegrationService.class);
-        Whitebox.setInternalState(salUsageService, rightsholderService);
-        Whitebox.setInternalState(salUsageService, prmIntegrationService);
         String scenarioId = "fe08f50c-bea8-4856-8787-3e3e9e46669c";
         expect(rightsholderService.getByScenarioId(scenarioId)).andReturn(
             Collections.singletonList(buildRightsholder(RIGHTSHOLDER_ID, 2000073957L))).once();
@@ -353,21 +357,20 @@ public class SalUsageServiceTest {
     @Test
     public void testUpdateToEligibleWithRhAccountNumber() {
         mockStatic(RupContextUtils.class);
-        IRightsholderService rightsholderService = createMock(IRightsholderService.class);
-        Whitebox.setInternalState(salUsageService, rightsholderService);
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
-        salUsageRepository.updateRhAccountNumberAndStatusByIds(Collections.singleton(USAGE_ID_3),
-            1000023401L, UsageStatusEnum.ELIGIBLE, USER_NAME);
+        Set<String> usageIds = Collections.singleton(USAGE_ID_1);
+        salUsageRepository.updateRhAccountNumberAndStatusByIds(usageIds, RH_ACCOUNT_NUMBER, UsageStatusEnum.ELIGIBLE,
+            USER_NAME);
         expectLastCall().once();
-        usageAuditService.logAction(USAGE_ID_3, UsageActionTypeEnum.RH_UPDATED, "Manual update");
+        usageAuditService.logAction(usageIds, UsageActionTypeEnum.RH_UPDATED, REASON);
         expectLastCall().once();
-        usageAuditService.logAction(USAGE_ID_3, UsageActionTypeEnum.ELIGIBLE,
-            "Usage has become eligible. RH was updated to 1000023401");
+        usageAuditService.logAction(usageIds, UsageActionTypeEnum.ELIGIBLE,
+            "Usage has become eligible. RH was updated to 1000009422");
         expectLastCall().once();
-        rightsholderService.updateRighstholdersAsync(Collections.singleton(1000023401L));
+        rightsholderService.updateRighstholdersAsync(Collections.singleton(RH_ACCOUNT_NUMBER));
         expectLastCall().once();
         replay(RupContextUtils.class, salUsageRepository, usageAuditService, rightsholderService);
-        salUsageService.updateToEligibleWithRhAccountNumber(USAGE_ID_3, 1000023401L, "Manual update");
+        salUsageService.updateToEligibleWithRhAccountNumber(usageIds, RH_ACCOUNT_NUMBER, REASON);
         verify(RupContextUtils.class, salUsageRepository, usageAuditService, rightsholderService);
     }
 
