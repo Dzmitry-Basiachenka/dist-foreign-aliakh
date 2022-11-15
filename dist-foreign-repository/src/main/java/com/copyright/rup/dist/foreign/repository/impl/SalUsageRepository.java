@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
+import static com.google.common.base.Preconditions.checkArgument;
+
 import com.copyright.rup.dist.common.repository.BaseRepository;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
@@ -16,12 +18,14 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * Implementation of {@link ISalUsageRepository}.
@@ -198,14 +202,17 @@ public class SalUsageRepository extends BaseRepository implements ISalUsageRepos
     }
 
     @Override
-    public void updateRhAccountNumberAndStatusById(String usageId, Long rhAccountNumber, UsageStatusEnum status,
-                                                   String userName) {
+    public void updateRhAccountNumberAndStatusByIds(Set<String> usageIds, Long rhAccountNumber, UsageStatusEnum status,
+                                                    String userName) {
+        checkArgument(CollectionUtils.isNotEmpty(usageIds));
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(4);
-        parameters.put("usageId", Objects.requireNonNull(usageId));
         parameters.put("status", Objects.requireNonNull(status));
         parameters.put("rhAccountNumber", Objects.requireNonNull(rhAccountNumber));
         parameters.put(UPDATE_USER_KEY, Objects.requireNonNull(userName));
-        update("ISalUsageMapper.updateRhAccountNumberAndStatusById", parameters);
+        Iterables.partition(usageIds, MAX_VARIABLES_COUNT).forEach(partition -> {
+            parameters.put("usageIds", partition);
+            update("ISalUsageMapper.updateRhAccountNumberAndStatusByIds", parameters);
+        });
     }
 
     @Override

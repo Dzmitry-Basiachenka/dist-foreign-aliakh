@@ -25,6 +25,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import org.apache.commons.collections4.CollectionUtils;
 import org.junit.Test;
@@ -79,6 +80,7 @@ public class SalUsageRepositoryIntegrationTest {
     private static final String USAGE_ID_7 = "c75305bc-9458-40bc-9926-004a47b072fc";
     private static final String USAGE_ID_8 = "870ee1dc-8596-409f-8ffe-717d17a33c9e";
     private static final String USAGE_ID_9 = "a85d26e1-deb6-4f3f-96fa-58b4175825f4";
+    private static final String USAGE_ID_10 = "497ef524-242b-49b3-9b47-c64082f6895d";
     private static final String WORK_PORTION_ID_1 = "1101001IB2361";
     private static final String SAL_PRODUCT_FAMILY = "SAL";
     private static final String DETAIL_ID_KEY = "detailId";
@@ -413,15 +415,19 @@ public class SalUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = FOLDER_NAME + "update-rh-account-number-and-status-by-id.groovy")
-    public void testUpdateRhAccountNumberAndStatusById() {
-        salUsageRepository.findByIds(Collections.singletonList(USAGE_ID_5)).forEach(usage -> {
+    @TestData(fileName = FOLDER_NAME + "update-rh-account-number-and-status-by-ids.groovy")
+    public void testUpdateRhAccountNumberAndStatusByIds() {
+        List<Usage> usages = salUsageRepository.findByIds(Arrays.asList(USAGE_ID_5, USAGE_ID_10));
+        assertEquals(2, usages.size());
+        usages.forEach(usage -> {
             assertNull(usage.getRightsholder().getAccountNumber());
             assertEquals(UsageStatusEnum.WORK_NOT_GRANTED, usage.getStatus());
         });
-        salUsageRepository.updateRhAccountNumberAndStatusById(USAGE_ID_5, 1234567856L, UsageStatusEnum.ELIGIBLE,
-            "user@copyright.com");
-        salUsageRepository.findByIds(Collections.singletonList(USAGE_ID_5)).forEach(usage -> {
+        salUsageRepository.updateRhAccountNumberAndStatusByIds(ImmutableSet.of(USAGE_ID_5, USAGE_ID_10),
+            1234567856L, UsageStatusEnum.ELIGIBLE, "user@copyright.com");
+        usages = salUsageRepository.findByIds(Arrays.asList(USAGE_ID_5, USAGE_ID_10));
+        assertEquals(2, usages.size());
+        usages.forEach(usage -> {
             assertEquals(Long.valueOf(1234567856L), usage.getRightsholder().getAccountNumber());
             assertEquals(UsageStatusEnum.ELIGIBLE, usage.getStatus());
             assertEquals("user@copyright.com", usage.getUpdateUser());

@@ -356,8 +356,8 @@ public class SalUsageServiceTest {
         IRightsholderService rightsholderService = createMock(IRightsholderService.class);
         Whitebox.setInternalState(salUsageService, rightsholderService);
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
-        salUsageRepository.updateRhAccountNumberAndStatusById(USAGE_ID_3, 1000023401L, UsageStatusEnum.ELIGIBLE,
-            USER_NAME);
+        salUsageRepository.updateRhAccountNumberAndStatusByIds(Collections.singleton(USAGE_ID_3),
+            1000023401L, UsageStatusEnum.ELIGIBLE, USER_NAME);
         expectLastCall().once();
         usageAuditService.logAction(USAGE_ID_3, UsageActionTypeEnum.RH_UPDATED, "Manual update");
         expectLastCall().once();
