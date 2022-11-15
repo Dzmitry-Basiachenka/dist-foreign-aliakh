@@ -192,11 +192,11 @@ public interface ISalUsageController extends ICommonUsageController {
      * Updates usage with provided RH account number
      * and changes status to {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#ELIGIBLE}.
      *
-     * @param usageId         usage id
+     * @param usageIds        set of usage ids
      * @param rhAccountNumber RH account number
      * @param reason          reason for RH update
      */
-    void updateToEligibleWithRhAccountNumber(String usageId, Long rhAccountNumber, String reason);
+    void updateToEligibleWithRhAccountNumber(Set<String> usageIds, Long rhAccountNumber, String reason);
 
     /**
      * Verifies whether status filter is applied

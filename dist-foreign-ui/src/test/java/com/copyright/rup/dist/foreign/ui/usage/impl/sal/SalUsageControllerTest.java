@@ -456,7 +456,7 @@ public class SalUsageControllerTest {
         salUsageService.updateToEligibleWithRhAccountNumber(Collections.singleton(USAGE_ID), RH_ACCOUNT_NUMBER, REASON);
         expectLastCall().once();
         replay(salUsageService);
-        controller.updateToEligibleWithRhAccountNumber(USAGE_ID, RH_ACCOUNT_NUMBER, REASON);
+        controller.updateToEligibleWithRhAccountNumber(Collections.singleton(USAGE_ID), RH_ACCOUNT_NUMBER, REASON);
         verify(salUsageService);
     }
 }

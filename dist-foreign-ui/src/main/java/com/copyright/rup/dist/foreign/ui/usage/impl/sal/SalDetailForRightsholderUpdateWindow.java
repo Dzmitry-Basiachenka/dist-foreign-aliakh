@@ -24,6 +24,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * Window to display SAL IB details for RH update.
@@ -87,7 +88,7 @@ class SalDetailForRightsholderUpdateWindow extends Window implements IRefreshabl
         dataProvider = DataProvider.ofCollection(controller.getUsageDtosForRhUpdate());
         usagesGrid = new Grid<>(dataProvider);
         usagesGrid.setSizeFull();
-        usagesGrid.setSelectionMode(Grid.SelectionMode.SINGLE);
+        usagesGrid.setSelectionMode(Grid.SelectionMode.MULTI);
         addGridColumns();
         usagesGrid.addSelectionListener(event ->
             updateRightsholderButton.setEnabled(CollectionUtils.isNotEmpty(event.getAllSelectedItems())));
@@ -121,7 +122,7 @@ class SalDetailForRightsholderUpdateWindow extends Window implements IRefreshabl
         updateRightsholderButton = Buttons.createButton(ForeignUi.getMessage("button.update_rightsholder"));
         updateRightsholderButton.addClickListener(event ->
             Windows.showModalWindow(new SalUpdateRighstholderWindow(controller, this,
-                usagesGrid.getSelectedItems().stream().findFirst().orElse(null))));
+                usagesGrid.getSelectedItems().stream().map(UsageDto::getId).collect(Collectors.toSet()))));
         updateRightsholderButton.setEnabled(false);
         Button closeButton = Buttons.createCloseButton(this);
         buttonsLayout.addComponents(updateRightsholderButton, closeButton);
