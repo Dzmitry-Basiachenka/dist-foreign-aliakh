@@ -278,8 +278,9 @@ public class SalUsageService implements ISalUsageService {
         String userName = RupContextUtils.getUserName();
         LOGGER.info("Update RH for SAL detail. Started. UsageId={}, RhAccountNumber={}, Reason={}, UserName={}",
             usageId, rhAccountNumber, reason, userName);
-        salUsageRepository.updateRhAccountNumberAndStatusById(usageId, rhAccountNumber, UsageStatusEnum.ELIGIBLE,
-            userName);
+        //TODO: refactor the service to use a list of usage ids
+        salUsageRepository.updateRhAccountNumberAndStatusByIds(Collections.singleton(usageId), rhAccountNumber,
+            UsageStatusEnum.ELIGIBLE, userName);
         usageAuditService.logAction(usageId, UsageActionTypeEnum.RH_UPDATED, reason);
         usageAuditService.logAction(usageId, UsageActionTypeEnum.ELIGIBLE, "Usage has become eligible. " +
             "RH was updated to " + rhAccountNumber);

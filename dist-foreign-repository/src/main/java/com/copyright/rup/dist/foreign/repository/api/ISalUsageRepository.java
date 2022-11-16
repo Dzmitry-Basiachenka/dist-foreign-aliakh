@@ -10,6 +10,7 @@ import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Interface for SAL usages repository.
@@ -191,13 +192,13 @@ public interface ISalUsageRepository {
     /**
      * Updates {@link Usage} RH account number and status by provided id.
      *
-     * @param usageId         {@link Usage} identifier
+     * @param usageIds        set of usage ids
      * @param rhAccountNumber RH account number
      * @param status          {@link UsageStatusEnum} instance
      * @param userName        user name
      */
-    void updateRhAccountNumberAndStatusById(String usageId, Long rhAccountNumber, UsageStatusEnum status,
-                                            String userName);
+    void updateRhAccountNumberAndStatusByIds(Set<String> usageIds, Long rhAccountNumber, UsageStatusEnum status,
+                                             String userName);
 
     /**
      * Finds count of {@link UsageDto}s by {@link AuditFilter}.

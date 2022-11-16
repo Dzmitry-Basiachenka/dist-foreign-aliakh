@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.service.impl;
+package com.copyright.rup.dist.foreign.service.impl.nts;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -13,7 +13,8 @@ import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.nts.INtsUsageService;
-import com.copyright.rup.dist.foreign.service.impl.CreateNtsBatchIntegrationTestBuilder.Runner;
+import com.copyright.rup.dist.foreign.service.impl.ServiceTestHelper;
+import com.copyright.rup.dist.foreign.service.impl.nts.CreateNtsBatchIntegrationTestBuilder.Runner;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.builder.Builder;

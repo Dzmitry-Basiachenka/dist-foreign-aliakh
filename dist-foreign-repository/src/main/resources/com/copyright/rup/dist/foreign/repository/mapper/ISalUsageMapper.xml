@@ -1170,12 +1170,15 @@
         where u.df_usage_uid = ga.df_usage_uid
     </update>
 
-    <update id="updateRhAccountNumberAndStatusById" parameterType="map">
+    <update id="updateRhAccountNumberAndStatusByIds" parameterType="map">
         update ${schema}.df_usage
         set
             status_ind = #{status},
             rh_account_number = #{rhAccountNumber},
             <include refid="StoredEntityMapper.update"/>
-        where df_usage_uid = #{usageId}
+        where df_usage_uid in
+        <foreach collection="usageIds" item="usageId" separator="," open="(" close=")">
+            #{usageId}
+        </foreach>
     </update>
 </mapper>
