@@ -8,6 +8,7 @@ import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.newCapture;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
@@ -47,6 +48,8 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Set;
 
 /**
  * Verifies {@link SalUpdateRighstholderWindow}.
@@ -61,7 +64,8 @@ import java.util.Collection;
 @PrepareForTest({Windows.class, SalUpdateRighstholderWindowTest.class})
 public class SalUpdateRighstholderWindowTest {
 
-    private static final String RH_ACCOUNT_NUMBER = "2000047356";
+    private static final Set<String> USAGE_IDS = Collections.singleton("ebad7d68-b213-433f-8dbe-a581f6ba55a3");
+    private static final Long RH_ACCOUNT_NUMBER = 2000047356L;
     private static final String RH_NAME = "National Geographic Partners";
     private static final String REASON = "Reason";
     private static final String RH_ACCOUNT_NUMBER_FIELD_NAME = "rhAccountNumberField";
@@ -77,9 +81,8 @@ public class SalUpdateRighstholderWindowTest {
 
     @Test
     public void testConstructor() {
-        UsageDto usage = new UsageDto();
         replay(usageController);
-        window = new SalUpdateRighstholderWindow(usageController, detailsWindow, usage);
+        window = new SalUpdateRighstholderWindow(usageController, detailsWindow, USAGE_IDS);
         assertEquals("Update Rightsholder", window.getCaption());
         assertEquals(440, window.getWidth(), 0);
         assertEquals(Sizeable.Unit.PIXELS, window.getWidthUnits());
@@ -98,14 +101,13 @@ public class SalUpdateRighstholderWindowTest {
 
     @Test
     public void testVerifyButtonClick() {
-        UsageDto usage = new UsageDto();
         Rightsholder rh = new Rightsholder();
-        rh.setAccountNumber(2000047356L);
+        rh.setAccountNumber(RH_ACCOUNT_NUMBER);
         rh.setName(RH_NAME);
-        expect(usageController.getRightsholder(2000047356L)).andReturn(rh).once();
+        expect(usageController.getRightsholder(RH_ACCOUNT_NUMBER)).andReturn(rh).once();
         expect(usageController.getRightsholder(20000170L)).andReturn(new Rightsholder()).once();
         replay(usageController);
-        window = new SalUpdateRighstholderWindow(usageController, detailsWindow, usage);
+        window = new SalUpdateRighstholderWindow(usageController, detailsWindow, USAGE_IDS);
         Component content = window.getContent();
         VerticalLayout rootLayout = (VerticalLayout) content;
         assertEquals(2, rootLayout.getComponentCount());
@@ -122,12 +124,10 @@ public class SalUpdateRighstholderWindowTest {
     public void testSaveButtonClickNotSetValues() {
         mockStatic(Windows.class);
         Button.ClickEvent clickEvent = createMock(Button.ClickEvent.class);
-        UsageDto usage = new UsageDto();
-        usage.setId("ebad7d68-b213-433f-8dbe-a581f6ba55a3");
         Rightsholder rh = new Rightsholder();
-        rh.setAccountNumber(Long.valueOf(RH_ACCOUNT_NUMBER));
+        rh.setAccountNumber(RH_ACCOUNT_NUMBER);
         rh.setName(RH_NAME);
-        window = new SalUpdateRighstholderWindow(usageController, detailsWindow, usage);
+        window = new SalUpdateRighstholderWindow(usageController, detailsWindow, USAGE_IDS);
         Whitebox.setInternalState(window, "rh", rh);
         Collection<? extends AbstractField<?>> fields = Lists.newArrayList(
             Whitebox.getInternalState(window, RH_ACCOUNT_NUMBER_FIELD_NAME),
@@ -154,24 +154,22 @@ public class SalUpdateRighstholderWindowTest {
     public void testSaveButtonClick() {
         mockStatic(Windows.class);
         Button.ClickEvent clickEvent = createMock(Button.ClickEvent.class);
-        UsageDto usage = new UsageDto();
-        usage.setId("ebad7d68-b213-433f-8dbe-a581f6ba55a3");
         Rightsholder rh = new Rightsholder();
-        rh.setAccountNumber(Long.valueOf(RH_ACCOUNT_NUMBER));
+        rh.setAccountNumber(RH_ACCOUNT_NUMBER);
         rh.setName(RH_NAME);
         Binder<UsageDto> binder = createMock(Binder.class);
-        window = new SalUpdateRighstholderWindow(usageController, detailsWindow, usage);
+        window = new SalUpdateRighstholderWindow(usageController, detailsWindow, USAGE_IDS);
         Whitebox.setInternalState(window, "usageBinder", binder);
         Whitebox.setInternalState(window, RH_ACCOUNT_NUMBER_FIELD_NAME,
-            new TextField("RH Account #", RH_ACCOUNT_NUMBER));
+            new TextField("RH Account #", RH_ACCOUNT_NUMBER.toString()));
         Whitebox.setInternalState(window, "rh", rh);
-        Capture<ConfirmActionDialogWindow.IListener> actionDialogListenerCapture = new Capture<>();
+        Capture<ConfirmActionDialogWindow.IListener> actionDialogListenerCapture = newCapture();
         expect(binder.isValid()).andReturn(true).once();
         Windows.showConfirmDialogWithReason(eq("Confirm action"),
             eq("Are you sure you want to update selected detail with RH 2000047356?"), eq("Yes"), eq("Cancel"),
                 capture(actionDialogListenerCapture), anyObject(Validator.class));
         expectLastCall().once();
-        usageController.updateToEligibleWithRhAccountNumber(usage.getId(), 2000047356L, REASON);
+        usageController.updateToEligibleWithRhAccountNumber(USAGE_IDS, RH_ACCOUNT_NUMBER, REASON);
         expectLastCall().once();
         usageController.refreshWidget();
         expectLastCall().once();
@@ -198,13 +196,11 @@ public class SalUpdateRighstholderWindowTest {
     public void testSaveButtonClickRhWithSpaces() {
         mockStatic(Windows.class);
         Button.ClickEvent clickEvent = createMock(Button.ClickEvent.class);
-        UsageDto usage = new UsageDto();
-        usage.setId("ebad7d68-b213-433f-8dbe-a581f6ba55a3");
         Rightsholder rh = new Rightsholder();
         rh.setAccountNumber(38042L);
         rh.setName("Hopkins and Carley");
         Binder<UsageDto> binder = createMock(Binder.class);
-        window = new SalUpdateRighstholderWindow(usageController, detailsWindow, usage);
+        window = new SalUpdateRighstholderWindow(usageController, detailsWindow, USAGE_IDS);
         Whitebox.setInternalState(window, "usageBinder", binder);
         Whitebox.setInternalState(window, RH_ACCOUNT_NUMBER_FIELD_NAME,
             new TextField("RH Account #", "  38042  "));
@@ -215,7 +211,7 @@ public class SalUpdateRighstholderWindowTest {
             eq("Are you sure you want to update selected detail with RH 38042?"), eq("Yes"), eq("Cancel"),
             capture(actionDialogListenerCapture), anyObject(Validator.class));
         expectLastCall().once();
-        usageController.updateToEligibleWithRhAccountNumber(usage.getId(), 38042L, REASON);
+        usageController.updateToEligibleWithRhAccountNumber(USAGE_IDS, 38042L, REASON);
         expectLastCall().once();
         usageController.refreshWidget();
         expectLastCall().once();
@@ -241,7 +237,7 @@ public class SalUpdateRighstholderWindowTest {
     @Test
     public void testRhAccountNumberValidation() {
         replay(usageController);
-        window = new SalUpdateRighstholderWindow(usageController, detailsWindow, new UsageDto());
+        window = new SalUpdateRighstholderWindow(usageController, detailsWindow, USAGE_IDS);
         Binder binder = Whitebox.getInternalState(window, "usageBinder");
         TextField rhAccountNumberField = Whitebox.getInternalState(window, "rhAccountNumberField");
         validateFieldAndVerifyErrorMessage(

@@ -2,7 +2,6 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.sal;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.Usage;
-import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.ui.common.validator.RequiredValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageController;
@@ -23,6 +22,7 @@ import com.vaadin.ui.Window;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * Window for RH update for SAL IB detail.
@@ -36,7 +36,7 @@ import java.util.Objects;
 class SalUpdateRighstholderWindow extends Window {
 
     private final ISalUsageController salUsageController;
-    private final UsageDto selectedUsage;
+    private final Set<String> usageIds;
     private final Binder<Usage> usageBinder = new Binder<>();
     private final SalDetailForRightsholderUpdateWindow detailsWindow;
     private TextField rhAccountNumberField;
@@ -48,13 +48,13 @@ class SalUpdateRighstholderWindow extends Window {
      *
      * @param salUsageController {@link ISalUsageController} instance
      * @param detailsWindow      {@link SalDetailForRightsholderUpdateWindow} instance
-     * @param selectedUsage      selected {@link UsageDto}
+     * @param usageIds           set of usage ids
      */
     SalUpdateRighstholderWindow(ISalUsageController salUsageController,
-                                SalDetailForRightsholderUpdateWindow detailsWindow, UsageDto selectedUsage) {
+                                SalDetailForRightsholderUpdateWindow detailsWindow, Set<String> usageIds) {
         this.salUsageController = salUsageController;
         this.detailsWindow = detailsWindow;
-        this.selectedUsage = selectedUsage;
+        this.usageIds = usageIds;
         setContent(initRootLayout());
         setCaption(ForeignUi.getMessage("window.update_rightsholder"));
         setResizable(false);
@@ -147,8 +147,7 @@ class SalUpdateRighstholderWindow extends Window {
                     ForeignUi.getMessage("button.yes"),
                     ForeignUi.getMessage("button.cancel"),
                     reason -> {
-                        salUsageController.updateToEligibleWithRhAccountNumber(selectedUsage.getId(), rhAccountNumber,
-                            reason);
+                        salUsageController.updateToEligibleWithRhAccountNumber(usageIds, rhAccountNumber, reason);
                         salUsageController.refreshWidget();
                         detailsWindow.refreshDataProvider();
                         this.close();
