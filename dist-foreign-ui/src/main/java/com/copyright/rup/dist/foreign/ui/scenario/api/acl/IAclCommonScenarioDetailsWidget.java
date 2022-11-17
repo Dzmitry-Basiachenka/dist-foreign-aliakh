@@ -3,7 +3,7 @@ package com.copyright.rup.dist.foreign.ui.scenario.api.acl;
 import com.copyright.rup.vaadin.widget.api.IWidget;
 
 /**
- * Interface for drill down by rightsholder widget for ACL product family.
+ * Common interface for ACL scenario details widgets.
  * <p>
  * Copyright (C) 2022 copyright.com
  * <p>
@@ -11,7 +11,7 @@ import com.copyright.rup.vaadin.widget.api.IWidget;
  *
  * @author Dzmitry Basiachenka
  */
-public interface IAclDrillDownByRightsholderWidget extends IWidget<IAclDrillDownByRightsholderController> {
+public interface IAclCommonScenarioDetailsWidget extends IWidget<IAclCommonScenarioDetailsController> {
 
     /**
      * @return value from search field.

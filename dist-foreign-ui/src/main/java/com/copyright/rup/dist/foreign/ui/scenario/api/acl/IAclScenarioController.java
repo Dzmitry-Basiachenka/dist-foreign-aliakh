@@ -49,9 +49,9 @@ public interface IAclScenarioController extends IController<IAclScenarioWidget> 
     void onRightsholderAccountNumberClicked(Long accountNumber, String rightsholderName);
 
     /**
-     * @return instance of {@link IStreamSource} for export details.
+     * Handles click on "View Details" button.
      */
-    IStreamSource getExportAclScenarioDetailsStreamSource();
+    void onViewDetailsClicked();
 
     /**
      * Gets list of {@link AclScenarioDetailDto}s based on {@link AclScenario} identifier,

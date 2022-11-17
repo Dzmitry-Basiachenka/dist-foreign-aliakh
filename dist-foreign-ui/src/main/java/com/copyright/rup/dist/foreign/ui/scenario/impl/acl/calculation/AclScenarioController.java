@@ -9,8 +9,9 @@ import com.copyright.rup.dist.foreign.domain.AclScenarioDetailDto;
 import com.copyright.rup.dist.foreign.domain.filter.RightsholderResultsFilter;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclCalculationReportService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioUsageService;
-import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclDrillDownByRightsholderController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioDetailsByRightsholderController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioDetailsController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioWidget;
 import com.copyright.rup.vaadin.widget.api.CommonController;
 
@@ -37,7 +38,9 @@ public class AclScenarioController extends CommonController<IAclScenarioWidget> 
     @Autowired
     private IAclScenarioUsageService scenarioUsageService;
     @Autowired
-    private IAclDrillDownByRightsholderController drillDownByRightsholderController;
+    private IAclScenarioDetailsByRightsholderController scenarioDetailsByRightsholderController;
+    @Autowired
+    private IAclScenarioDetailsController scenarioDetailsController;
     @Autowired
     private IStreamSourceHandler streamSourceHandler;
     @Autowired
@@ -61,13 +64,12 @@ public class AclScenarioController extends CommonController<IAclScenarioWidget> 
 
     @Override
     public void onRightsholderAccountNumberClicked(Long accountNumber, String rightsholderName) {
-        drillDownByRightsholderController.showWidget(accountNumber, rightsholderName, aclScenario);
+        scenarioDetailsByRightsholderController.showWidget(accountNumber, rightsholderName, aclScenario);
     }
 
     @Override
-    public IStreamSource getExportAclScenarioDetailsStreamSource() {
-        return streamSourceHandler.getCsvStreamSource(() -> aclScenario.getName() + "_Details_",
-            pos -> aclCalculationReportService.writeAclScenarioDetailsCsvReport(aclScenario.getId(), pos));
+    public void onViewDetailsClicked() {
+        scenarioDetailsController.showWidget(aclScenario);
     }
 
     @Override

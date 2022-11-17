@@ -7,10 +7,8 @@ import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDetailDto;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioUsageService;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
-import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclDrillDownByRightsholderController;
-import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclDrillDownByRightsholderWidget;
+import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioDetailsByRightsholderController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
-import com.copyright.rup.vaadin.widget.api.CommonController;
 
 import com.vaadin.data.provider.QuerySortOrder;
 import com.vaadin.shared.data.sort.SortDirection;
@@ -27,7 +25,7 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Implementation of {@link IAclDrillDownByRightsholderController}.
+ * Implementation of {@link IAclScenarioDetailsByRightsholderController}.
  * <p>
  * Copyright (C) 2022 copyright.com
  * <p>
@@ -37,8 +35,8 @@ import java.util.Objects;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class AclDrillDownByRightsholderController extends CommonController<IAclDrillDownByRightsholderWidget>
-    implements IAclDrillDownByRightsholderController {
+public class AclScenarioDetailsByRightsholderController extends AclCommonScenarioDetailsController
+    implements IAclScenarioDetailsByRightsholderController {
 
     @Autowired
     private IAclScenarioUsageService aclScenarioUsageService;
@@ -66,14 +64,14 @@ public class AclDrillDownByRightsholderController extends CommonController<IAclD
     public void showWidget(Long accountNumber, String rhName, AclScenario scenario) {
         selectedRightsholderAccountNumber = Objects.requireNonNull(accountNumber);
         selectedScenario = Objects.requireNonNull(scenario);
-        Window drillDownWindow = (Window) initWidget();
-        drillDownWindow.setCaption(ForeignUi.getMessage("table.foreign.rightsholder.format",
+        Window windowByRightsholder = (Window) initWidget();
+        windowByRightsholder.setCaption(ForeignUi.getMessage("table.foreign.rightsholder.format",
             StringUtils.defaultString(rhName), accountNumber));
-        Windows.showModalWindow(drillDownWindow);
+        Windows.showModalWindow(windowByRightsholder);
     }
 
     @Override
-    protected IAclDrillDownByRightsholderWidget instantiateWidget() {
-        return new AclDrillDownByRightsholderWidget();
+    protected AclScenarioDetailsByRightsholderWidget instantiateWidget() {
+        return new AclScenarioDetailsByRightsholderWidget();
     }
 }

@@ -1,6 +1,5 @@
 package com.copyright.rup.dist.foreign.ui.scenario.api.acl;
 
-import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDetailDto;
 import com.copyright.rup.vaadin.widget.api.IController;
 
@@ -9,7 +8,7 @@ import com.vaadin.data.provider.QuerySortOrder;
 import java.util.List;
 
 /**
- * Controller interface for {@link IAclDrillDownByRightsholderWidget}.
+ * Controller interface for {@link IAclCommonScenarioDetailsWidget}.
  * <p>
  * Copyright (C) 2022 copyright.com
  * <p>
@@ -17,7 +16,7 @@ import java.util.List;
  *
  * @author Dzmitry Basiachenka
  */
-public interface IAclDrillDownByRightsholderController extends IController<IAclDrillDownByRightsholderWidget> {
+public interface IAclCommonScenarioDetailsController extends IController<IAclCommonScenarioDetailsWidget> {
 
     /**
      * Loads specified number of beans from the storage with given start index.
@@ -33,14 +32,4 @@ public interface IAclDrillDownByRightsholderController extends IController<IAclD
      * @return number of items.
      */
     int getSize();
-
-    /**
-     * Initializes and shows the widget.
-     * Sets selected {@link AclScenario} to the widget.
-     *
-     * @param accountNumber selected account number
-     * @param rhName        rightsholder name
-     * @param scenario      selected {@link AclScenario}
-     */
-    void showWidget(Long accountNumber, String rhName, AclScenario scenario);
 }
