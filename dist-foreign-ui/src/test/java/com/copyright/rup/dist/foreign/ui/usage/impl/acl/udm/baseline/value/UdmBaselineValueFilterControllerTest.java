@@ -4,8 +4,9 @@ import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
 
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
@@ -46,7 +47,7 @@ public class UdmBaselineValueFilterControllerTest {
 
     @Test
     public void testInstantiateWidget() {
-        assertNotNull(controller.instantiateWidget());
+        assertThat(controller.instantiateWidget(), instanceOf(UdmBaselineValueFilterWidget.class));
     }
 
     @Test
