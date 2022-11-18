@@ -5,7 +5,9 @@ import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.newCapture;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 import static org.powermock.api.easymock.PowerMock.createPartialMock;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
@@ -17,8 +19,8 @@ import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDetailDto;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioUsageService;
-import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclDrillDownByRightsholderController;
-import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclDrillDownByRightsholderWidget;
+import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclCommonScenarioDetailsController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclCommonScenarioDetailsWidget;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
 import com.vaadin.data.provider.QuerySortOrder;
@@ -37,17 +39,17 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Verifies {@link AclDrillDownByRightsholderController}.
+ * Verifies {@link AclScenarioDetailsByRightsholderController}.
  * <p>
  * Copyright (C) 2022 copyright.com
  * <p>
- * Date: 07/14/2022
+ * Date: 11/17/2022
  *
- * @author Dzmitry Basiachenka
+ * @author Mikita Maistrenka
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({AclDrillDownByRightsholderController.class, Windows.class})
-public class AclDrillDownByRightsholderControllerTest {
+@PrepareForTest({AclScenarioDetailsByRightsholderController.class, Windows.class})
+public class AclScenarioDetailsByRightsholderControllerTest {
 
     private static final Long RH_ACCOUNT_NUMBER = 100000001L;
     private static final String RH_NAME = "Rothchild Consultants";
@@ -57,14 +59,13 @@ public class AclDrillDownByRightsholderControllerTest {
     private static final int COUNT = 10;
     private static final String SORT_PROPERTY = "detailId";
 
-    private AclDrillDownByRightsholderController controller;
+    private AclScenarioDetailsByRightsholderController controller;
     private IAclScenarioUsageService aclScenarioUsageService;
 
     @Before
     public void setUp() {
-        AclScenario scenario = new AclScenario();
-        scenario.setId(SCENARIO_UID);
-        controller = createPartialMock(AclDrillDownByRightsholderController.class, "initWidget", "getWidget");
+        AclScenario scenario = buildAclScenario();
+        controller = createPartialMock(AclScenarioDetailsByRightsholderController.class, "initWidget", "getWidget");
         aclScenarioUsageService = createMock(IAclScenarioUsageService.class);
         Whitebox.setInternalState(controller, aclScenarioUsageService);
         Whitebox.setInternalState(controller, scenario);
@@ -112,7 +113,19 @@ public class AclDrillDownByRightsholderControllerTest {
         verify(controller, Windows.class);
     }
 
-    private static class WidgetMock extends Window implements IAclDrillDownByRightsholderWidget {
+    @Test
+    public void testInstantiateWidget() {
+        assertThat(controller.instantiateWidget(), instanceOf(AclScenarioDetailsByRightsholderWidget.class));
+    }
+
+    private AclScenario buildAclScenario() {
+        AclScenario aclScenario = new AclScenario();
+        aclScenario.setId(SCENARIO_UID);
+        aclScenario.setName("Scenario name");
+        return aclScenario;
+    }
+
+    private static class WidgetMock extends Window implements IAclCommonScenarioDetailsWidget {
 
         @Override
         public String getSearchValue() {
@@ -120,12 +133,12 @@ public class AclDrillDownByRightsholderControllerTest {
         }
 
         @Override
-        public IAclDrillDownByRightsholderWidget init() {
+        public IAclCommonScenarioDetailsWidget init() {
             return this;
         }
 
         @Override
-        public void setController(IAclDrillDownByRightsholderController controller) {
+        public void setController(IAclCommonScenarioDetailsController controller) {
             // do nothing
         }
     }

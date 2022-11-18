@@ -98,8 +98,7 @@ public class AclScenarioWidgetTest {
         List<AclRightsholderTotalsHolder> holders = Collections.singletonList(buildAclRightsholderTotalsHolder());
         expect(controller.getAclRightsholderTotalsHolders()).andReturn(holders).once();
         expect(streamSource.getSource()).andReturn(new SimpleImmutableEntry(createMock(Supplier.class),
-            createMock(Supplier.class))).times(2);
-        expect(controller.getExportAclScenarioDetailsStreamSource()).andReturn(streamSource).once();
+            createMock(Supplier.class))).once();
         expect(controller.getExportAclScenarioRightsholderTotalsStreamSource()).andReturn(streamSource).once();
         expect(controller.getScenario()).andReturn(scenario).once();
         replay(controller, streamSource);
@@ -117,7 +116,7 @@ public class AclScenarioWidgetTest {
         assertEquals(3, content.getComponentCount());
         verifySearchWidget(content.getComponent(0));
         verifyGrid((Grid) content.getComponent(1));
-        verifyButtonsLayout(content.getComponent(2), "Export Details", "Export", "Close");
+        verifyButtonsLayout(content.getComponent(2), "View Details", "Export", "Close");
     }
 
     @Test

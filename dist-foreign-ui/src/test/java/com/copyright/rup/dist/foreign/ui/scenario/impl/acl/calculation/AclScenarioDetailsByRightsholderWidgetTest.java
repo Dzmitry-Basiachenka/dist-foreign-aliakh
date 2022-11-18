@@ -19,7 +19,6 @@ import static org.powermock.api.easymock.PowerMock.verify;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDetailDto;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
-import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclDrillDownByRightsholderController;
 import com.copyright.rup.dist.foreign.ui.usage.UiTestHelper;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
@@ -50,25 +49,31 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Verifies {@link AclDrillDownByRightsholderWidget}.
+ * Verifies {@link AclScenarioDetailsByRightsholderWidget}.
  * <p>
  * Copyright (C) 2022 copyright.com
  * <p>
- * Date: 07/14/2022
+ * Date: 11/17/2022
  *
- * @author Dzmitry Basiachenka
+ * @author Mikita Maistrenka
  */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(JavaScript.class)
-public class AclDrillDownByRightsholderWidgetTest {
+public class AclScenarioDetailsByRightsholderWidgetTest {
 
-    private AclDrillDownByRightsholderWidget widget;
-    private IAclDrillDownByRightsholderController controller;
+    private static final String RH_NAME = "American Chemical Society";
+    private static final String PAYEE_NAME = "John Wiley & Sons - Books";
+    private static final String SEARCH_VALUE = "search";
+    private static final String USAGE_BATCH_NAME = "Usage Batch Name";
+    private static final String Y = "Y";
+
+    private AclScenarioDetailsByRightsholderWidget widget;
+    private AclScenarioDetailsByRightsholderController controller;
 
     @Before
     public void setUp() {
-        controller = createMock(IAclDrillDownByRightsholderController.class);
-        widget = new AclDrillDownByRightsholderWidget();
+        controller = createMock(AclScenarioDetailsByRightsholderController.class);
+        widget = new AclScenarioDetailsByRightsholderWidget();
         widget.setController(controller);
         widget.init();
         reset(controller);
@@ -76,10 +81,10 @@ public class AclDrillDownByRightsholderWidgetTest {
 
     @Test
     public void testComponentStructure() {
-        assertEquals("acl-drill-down-by-rightsholder-widget", widget.getId());
+        assertEquals("acl-scenario-details-widget", widget.getId());
         verifyWindow(widget, StringUtils.EMPTY, 1280, 600, Unit.PIXELS);
         VerticalLayout content = (VerticalLayout) widget.getContent();
-        assertEquals(new MarginInfo(false, true, true, true), content.getMargin());
+        assertEquals(new MarginInfo(true, true, true, true), content.getMargin());
         assertEquals(3, content.getComponentCount());
         verifySearchWidget(content.getComponent(0));
         verifyTable(content.getComponent(1));
@@ -87,11 +92,11 @@ public class AclDrillDownByRightsholderWidgetTest {
     }
 
     @Test
-    public void testGetSearchValue() {
+    public void testGetSearchValueByScenario() {
         SearchWidget searchWidget = new SearchWidget(() -> {/*stub*/});
-        searchWidget.setSearchValue("search");
+        searchWidget.setSearchValue(SEARCH_VALUE);
         Whitebox.setInternalState(widget, searchWidget);
-        assertEquals("search", widget.getSearchValue());
+        assertEquals(SEARCH_VALUE, widget.getSearchValue());
     }
 
     @Test
@@ -106,11 +111,11 @@ public class AclDrillDownByRightsholderWidgetTest {
         DataProvider dataProvider = grid.getDataProvider();
         dataProvider.refreshAll();
         Object[][] expectedCells = {
-            {"73eb89d8-68e7-4f5c-a6a6-1c8c551e6de3", "Usage Detail Id", "ACL", "Usage Batch Name", 202206, 123090280L,
-                "Langmuir", 1000009767L, "American Chemical Society", 1000009767L, "American Chemical",
-                202206, "1.00", 22, "Banks/Ins/RE/Holding Cos", 56, "Financial", "Belgium", "EMAIL_COPY", "DIGITAL",
-                "4.0001", "2.00001", "STND", "3.00", "120.54", "N", "4.00001", "N", "5.0123456789", "N", "6.01", "7.10",
-                "8.123", "9.12", "10.123", "11.00001", "12.0000000009", "13.00", "14.00"}
+            {"73eb89d8-68e7-4f5c-a6a6-1c8c551e6de3", "Usage Detail Id", "ACL", USAGE_BATCH_NAME, 202206, 123090280L,
+                "Langmuir", 1000009767L, RH_NAME, 1000009767L, RH_NAME, 202206, "1.00", 22, "Banks/Ins/RE/Holding Cos",
+                56, "Financial", "Belgium", "EMAIL_COPY", "DIGITAL", "4.0001", "2.00001", "STND", "3.00", "120.54",
+                Y, "4.00001", Y, "5.0123456789", Y, "6.01", "7.10", "8.123", "9.12", "10.123", "11.00001",
+                "12.0000000009", "13.00", "14.00"}
         };
         verifyGridItems(grid, scenarioDetails, expectedCells);
         verify(JavaScript.class, controller);
@@ -135,7 +140,7 @@ public class AclDrillDownByRightsholderWidgetTest {
         assertNotNull(component);
         assertThat(component, instanceOf(Grid.class));
         Grid<UsageDto> grid = (Grid<UsageDto>) component;
-        assertTrue(grid.getStyleName().contains("acl-drill-down-by-rightsholder-table"));
+        assertTrue(grid.getStyleName().contains("acl-scenario-details-grid"));
         verifyGrid(grid, Arrays.asList(
             Triple.of("Detail ID", 130.0, -1),
             Triple.of("Usage Detail ID", 130.0, -1),
@@ -193,14 +198,18 @@ public class AclDrillDownByRightsholderWidgetTest {
         scenarioDetail.setId("73eb89d8-68e7-4f5c-a6a6-1c8c551e6de3");
         scenarioDetail.setOriginalDetailId("Usage Detail Id");
         scenarioDetail.setProductFamily("ACL");
-        scenarioDetail.setUsageBatchName("Usage Batch Name");
+        scenarioDetail.setUsageBatchName(USAGE_BATCH_NAME);
         scenarioDetail.setPeriodEndPeriod(202206);
         scenarioDetail.setWrWrkInst(123090280L);
         scenarioDetail.setSystemTitle("Langmuir");
         scenarioDetail.setRhAccountNumberPrint(1000009767L);
-        scenarioDetail.setRhNamePrint("American Chemical Society");
+        scenarioDetail.setRhNamePrint(RH_NAME);
+        scenarioDetail.setPayeeAccountNumberPrint(1000002859L);
+        scenarioDetail.setPayeeNamePrint(PAYEE_NAME);
         scenarioDetail.setRhAccountNumberDigital(1000009767L);
-        scenarioDetail.setRhNameDigital("American Chemical");
+        scenarioDetail.setRhNameDigital(RH_NAME);
+        scenarioDetail.setPayeeAccountNumberDigital(1000002859L);
+        scenarioDetail.setPayeeNameDigital(PAYEE_NAME);
         scenarioDetail.setUsagePeriod(202206);
         scenarioDetail.setUsageAgeWeight(new BigDecimal("1.00000"));
         scenarioDetail.setDetailLicenseeClassId(22);
@@ -214,11 +223,11 @@ public class AclDrillDownByRightsholderWidgetTest {
         scenarioDetail.setWeightedCopies(new BigDecimal("2.00001"));
         scenarioDetail.setPublicationType(pubType);
         scenarioDetail.setPrice(new BigDecimal("120.5400000000"));
-        scenarioDetail.setPriceFlag(false);
+        scenarioDetail.setPriceFlag(true);
         scenarioDetail.setContent(new BigDecimal("4.0000100000"));
-        scenarioDetail.setContentFlag(false);
+        scenarioDetail.setContentFlag(true);
         scenarioDetail.setContentUnitPrice(new BigDecimal("5.0123456789"));
-        scenarioDetail.setContentUnitPriceFlag(false);
+        scenarioDetail.setContentUnitPriceFlag(true);
         scenarioDetail.setValueSharePrint(new BigDecimal("6.0100000000"));
         scenarioDetail.setVolumeSharePrint(new BigDecimal("7.1000000000"));
         scenarioDetail.setDetailSharePrint(new BigDecimal("8.1230000000"));

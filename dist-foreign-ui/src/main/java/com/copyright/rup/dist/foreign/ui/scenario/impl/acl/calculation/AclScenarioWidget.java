@@ -245,15 +245,14 @@ public class AclScenarioWidget extends Window implements IAclScenarioWidget, Sea
     }
 
     private HorizontalLayout initButtons() {
-        Button exportDetailsButton = Buttons.createButton(ForeignUi.getMessage("button.export_details"));
-        OnDemandFileDownloader exportDetailsFileDownloader =
-            new OnDemandFileDownloader(controller.getExportAclScenarioDetailsStreamSource().getSource());
-        exportDetailsFileDownloader.extend(exportDetailsButton);
+        Button viewDetails = Buttons.createButton(ForeignUi.getMessage("button.view_details"));
+        viewDetails.addClickListener(event -> controller.onViewDetailsClicked());
+        VaadinUtils.setButtonsAutoDisabled(viewDetails);
         Button exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
         OnDemandFileDownloader exportScenarioFileDownloader = new OnDemandFileDownloader(
             controller.getExportAclScenarioRightsholderTotalsStreamSource().getSource());
         exportScenarioFileDownloader.extend(exportButton);
-        HorizontalLayout buttons = new HorizontalLayout(exportDetailsButton, exportButton,
+        HorizontalLayout buttons = new HorizontalLayout(viewDetails, exportButton,
             Buttons.createCloseButton(this));
         VaadinUtils.addComponentStyle(buttons, "acl-scenario-buttons-layout");
         buttons.setMargin(new MarginInfo(false, true, true, false));

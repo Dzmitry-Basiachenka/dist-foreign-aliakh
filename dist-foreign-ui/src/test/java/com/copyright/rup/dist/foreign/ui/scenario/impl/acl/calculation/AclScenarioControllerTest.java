@@ -22,6 +22,8 @@ import com.copyright.rup.dist.foreign.domain.AclScenarioDetailDto;
 import com.copyright.rup.dist.foreign.domain.filter.RightsholderResultsFilter;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclCalculationReportService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioUsageService;
+import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioDetailsByRightsholderController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioDetailsController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioWidget;
 
 import org.apache.commons.io.IOUtils;
@@ -69,6 +71,8 @@ public class AclScenarioControllerTest {
     private AclScenario scenario;
     private IStreamSourceHandler streamSourceHandler;
     private IAclCalculationReportService aclCalculationReportService;
+    private IAclScenarioDetailsByRightsholderController scenarioDetailsByRightsholderController;
+    private IAclScenarioDetailsController scenarioDetailsController;
 
     @Before
     public void setUp() {
@@ -78,9 +82,13 @@ public class AclScenarioControllerTest {
         streamSourceHandler = createMock(IStreamSourceHandler.class);
         aclCalculationReportService = createMock(IAclCalculationReportService.class);
         aclScenarioUsageService = createMock(IAclScenarioUsageService.class);
+        scenarioDetailsByRightsholderController = createMock(IAclScenarioDetailsByRightsholderController.class);
+        scenarioDetailsController = createMock(IAclScenarioDetailsController.class);
         Whitebox.setInternalState(controller, streamSourceHandler);
         Whitebox.setInternalState(controller, aclCalculationReportService);
         Whitebox.setInternalState(controller, aclScenarioUsageService);
+        Whitebox.setInternalState(controller, scenarioDetailsByRightsholderController);
+        Whitebox.setInternalState(controller, scenarioDetailsController);
     }
 
     @Test
@@ -111,30 +119,6 @@ public class AclScenarioControllerTest {
         IAclScenarioWidget widget = controller.instantiateWidget();
         assertNotNull(widget);
         assertEquals(AclScenarioWidget.class, widget.getClass());
-    }
-
-    @Test
-    public void testGetExportAclScenarioDetailsStreamSource() {
-        mockStatic(OffsetDateTime.class);
-        Capture<Supplier<String>> fileNameSupplierCapture = newCapture();
-        Capture<Consumer<PipedOutputStream>> posConsumerCapture = newCapture();
-        String fileName = scenario.getName() + "_Details_";
-        Supplier<String> fileNameSupplier = () -> fileName;
-        Supplier<InputStream> inputStreamSupplier =
-                () -> IOUtils.toInputStream(StringUtils.EMPTY, StandardCharsets.UTF_8);
-        PipedOutputStream pos = new PipedOutputStream();
-        expect(OffsetDateTime.now()).andReturn(DATE).once();
-        expect(streamSourceHandler.getCsvStreamSource(capture(fileNameSupplierCapture), capture(posConsumerCapture)))
-            .andReturn(new StreamSource(fileNameSupplier, "csv", inputStreamSupplier)).once();
-        aclCalculationReportService.writeAclScenarioDetailsCsvReport(scenario.getId(), pos);
-        expectLastCall().once();
-        replay(OffsetDateTime.class, streamSourceHandler, aclCalculationReportService);
-        IStreamSource streamSource = controller.getExportAclScenarioDetailsStreamSource();
-        assertEquals("Scenario_name_Details_01_02_2019_03_04.csv", streamSource.getSource().getKey().get());
-        assertEquals(fileName, fileNameSupplierCapture.getValue().get());
-        Consumer<PipedOutputStream> posConsumer = posConsumerCapture.getValue();
-        posConsumer.accept(pos);
-        verify(OffsetDateTime.class, streamSourceHandler, aclCalculationReportService);
     }
 
     @Test
@@ -191,6 +175,25 @@ public class AclScenarioControllerTest {
         Consumer<PipedOutputStream> posConsumer = posConsumerCapture.getValue();
         posConsumer.accept(pos);
         verify(OffsetDateTime.class, streamSourceHandler, aclCalculationReportService);
+    }
+
+    @Test
+    public void testOnRightsholderAccountNumberClicked() {
+        scenarioDetailsByRightsholderController.showWidget(
+            1000009767L, "American Chemical Society", buildAclScenario());
+        expectLastCall().once();
+        replay(scenarioDetailsByRightsholderController);
+        controller.onRightsholderAccountNumberClicked(1000009767L, "American Chemical Society");
+        verify(scenarioDetailsByRightsholderController);
+    }
+
+    @Test
+    public void testOnViewDetailsClicked() {
+        scenarioDetailsController.showWidget(buildAclScenario());
+        expectLastCall().once();
+        replay(scenarioDetailsController);
+        controller.onViewDetailsClicked();
+        verify(scenarioDetailsController);
     }
 
     private AclScenario buildAclScenario() {
