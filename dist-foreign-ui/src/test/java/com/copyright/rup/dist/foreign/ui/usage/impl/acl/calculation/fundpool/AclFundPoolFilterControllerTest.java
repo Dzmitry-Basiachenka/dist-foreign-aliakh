@@ -4,8 +4,9 @@ import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
-import static org.junit.Assert.assertNotNull;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertThat;
 
 import com.copyright.rup.dist.foreign.domain.AclFundPool;
 import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
@@ -47,7 +48,7 @@ public class AclFundPoolFilterControllerTest {
 
     @Test
     public void testInstantiateWidget() {
-        assertNotNull(controller.instantiateWidget());
+        assertThat(controller.instantiateWidget(), instanceOf(AclFundPoolFilterWidget.class));
     }
 
     @Test

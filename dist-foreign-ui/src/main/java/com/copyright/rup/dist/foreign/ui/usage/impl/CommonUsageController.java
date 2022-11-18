@@ -138,7 +138,6 @@ public abstract class CommonUsageController extends CommonController<ICommonUsag
         return scenarioService;
     }
 
-
     /**
      * @return {@link IFundPoolService} instance.
      */

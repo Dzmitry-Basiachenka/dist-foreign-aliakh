@@ -4,8 +4,9 @@ import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
@@ -56,7 +57,7 @@ public class FasNtsUsageFilterControllerTest {
 
     @Test
     public void testInstantiateWidget() {
-        assertNotNull(controller.instantiateWidget());
+        assertThat(controller.instantiateWidget(), instanceOf(FasNtsUsageFilterWidget.class));
     }
 
     @Test
