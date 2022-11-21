@@ -76,6 +76,7 @@ public class AclScenarioUsageRepositoryIntegrationTest {
         FOLDER_NAME + "find-acl-rh-totals-holders-by-scenario-id.groovy";
     private static final String FIND_BY_SCENARIO_ID_AND_RH_ACCOUNT_NUMBER =
         FOLDER_NAME + "find-by-scenario-id-and-rh-account-number.groovy";
+    private static final String FIND_BY_SCENARIO_ID = FOLDER_NAME + "find-by-scenario-id.groovy";
     private static final String FIND_RIGHTSHOLDER_TITLE_RESULTS =
         FOLDER_NAME + "find-rightsholder-title-results.groovy";
     private static final String SCENARIO_UID_1 = "0d0041a3-833e-463e-8ad4-f28461dc961d";
@@ -83,9 +84,12 @@ public class AclScenarioUsageRepositoryIntegrationTest {
     private static final String SCENARIO_UID_3 = "53a1c4e8-f1fe-4b17-877e-2d721b2059b5";
     private static final String SCENARIO_UID_4 = "f473fa64-12ea-4db6-9d30-94087fe500fd";
     private static final String SCENARIO_UID_5 = "2a75aa1c-7bfa-4d8b-9e27-d2e17f3bd8da";
+    private static final String SCENARIO_UID_6 = "8e93510e-a90c-4808-8d7c-f0b151f2c4a1";
     private static final String LICENSE_TYPE_ACL = "ACL";
     private static final Long RH_ACCOUNT_NUMBER_1 = 1000002859L;
     private static final Long RH_ACCOUNT_NUMBER_2 = 1000000001L;
+    private static final String RH_ACCOUNT_NUMBER = "1000002859";
+    private static final String INCOMPLETE_RH_ACCOUNT_NUMBER = "1000002";
     private static final String RH_NAME = "John Wiley & Sons - Books";
     private static final String SYSTEM_TITLE = "Technology review";
     private static final String USER_NAME = "user@copyright.com";
@@ -481,6 +485,277 @@ public class AclScenarioUsageRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = FIND_BY_SCENARIO_ID)
+    public void testFindByScenarioIdNullSearchValue() {
+        assertEquals(0, aclScenarioUsageRepository.findByScenarioId(SCENARIO_UID_1, null,
+            null, null).size());
+        List<AclScenarioDetailDto> scenarioDetailDtos = aclScenarioUsageRepository.findByScenarioId(
+            SCENARIO_UID_6, null, null, null);
+        assertEquals(2, scenarioDetailDtos.size());
+        AclScenarioDetailDto scenarioDetailDto1 = buildAclScenarioDetailDto1FindByScenarioId();
+        AclScenarioDetailDto scenarioDetailDto2 = buildAclScenarioDetailDto2FindByScenarioId();
+        verifyAclScenarioDetailDto(scenarioDetailDto1, scenarioDetailDtos.get(0));
+        verifyAclScenarioDetailDto(scenarioDetailDto2, scenarioDetailDtos.get(1));
+    }
+
+    @Test
+    @TestData(fileName = FIND_BY_SCENARIO_ID)
+    public void testFindCountByScenarioIdNullSearchValue() {
+        assertEquals(0, aclScenarioUsageRepository.findCountByScenarioId(SCENARIO_UID_1, null));
+        assertEquals(2, aclScenarioUsageRepository.findCountByScenarioId(SCENARIO_UID_6, null));
+    }
+
+    @Test
+    @TestData(fileName = FIND_BY_SCENARIO_ID)
+    public void testFindByScenarioIdSearchUsageDetailId() {
+        List<AclScenarioDetailDto> scenarioDetailDtos =
+            Collections.singletonList(buildAclScenarioDetailDto1FindByScenarioId());
+        verifyFindByScenarioIdSearch(scenarioDetailDtos, "OGN674GHHSB107");
+        verifyFindByScenarioIdSearch(scenarioDetailDtos, "ogN674ghhSB107");
+        verifyFindByScenarioIdSearch(Collections.emptyList(), "ogN674gh hSB107");
+    }
+
+    @Test
+    @TestData(fileName = FIND_BY_SCENARIO_ID)
+    public void testFindCountByScenarioIdSearchUsageDetailId() {
+        verifyFindCountByScenarioIdSearch(1, "OGN674GHHSB107");
+        verifyFindCountByScenarioIdSearch(1, "ogN674ghhSB107");
+        verifyFindCountByScenarioIdSearch(0, "ogN674gh hSB107");
+    }
+
+    @Test
+    @TestData(fileName = FIND_BY_SCENARIO_ID)
+    public void testFindByScenarioIdSearchWrWrkInst() {
+        List<AclScenarioDetailDto> scenarioDetailDtos =
+            Collections.singletonList(buildAclScenarioDetailDto1FindByScenarioId());
+        verifyFindByScenarioIdSearch(scenarioDetailDtos, "122813964");
+        verifyFindByScenarioIdSearch(scenarioDetailDtos, "12281");
+        verifyFindByScenarioIdSearch(Collections.emptyList(), "12281 3964");
+    }
+
+    @Test
+    @TestData(fileName = FIND_BY_SCENARIO_ID)
+    public void testFindCountByScenarioIdSearchWrWrkInst() {
+        verifyFindCountByScenarioIdSearch(1, "122813964");
+        verifyFindCountByScenarioIdSearch(1, "12281");
+        verifyFindCountByScenarioIdSearch(0, "12281 3964");
+    }
+
+    @Test
+    @TestData(fileName = FIND_BY_SCENARIO_ID)
+    public void testFindByScenarioIdSearchSystemTitle() {
+        List<AclScenarioDetailDto> scenarioDetailDtos =
+            Collections.singletonList(buildAclScenarioDetailDto1FindByScenarioId());
+        verifyFindByScenarioIdSearch(scenarioDetailDtos, "Aerospace America");
+        verifyFindByScenarioIdSearch(scenarioDetailDtos, "AeROspAce AmeRICa");
+        verifyFindByScenarioIdSearch(Collections.emptyList(), "AeR OpAce AmeRICa");
+    }
+
+    @Test
+    @TestData(fileName = FIND_BY_SCENARIO_ID)
+    public void testFindCountByScenarioIdSearchSystemTitle() {
+        verifyFindCountByScenarioIdSearch(1, "Aerospace America");
+        verifyFindCountByScenarioIdSearch(1, "AeROspAce AmeRICa");
+        verifyFindCountByScenarioIdSearch(0, "AeR OpAce AmeRICa");
+    }
+
+    @Test
+    @TestData(fileName = FIND_BY_SCENARIO_ID)
+    public void testFindByScenarioIdSearchRhAccountNumberPrint() {
+        List<AclScenarioDetailDto> scenarioDetailDtos =
+            Collections.singletonList(buildAclScenarioDetailDto1FindByScenarioId());
+        verifyFindByScenarioIdSearch(scenarioDetailDtos, RH_ACCOUNT_NUMBER);
+        verifyFindByScenarioIdSearch(scenarioDetailDtos, INCOMPLETE_RH_ACCOUNT_NUMBER);
+        verifyFindByScenarioIdSearch(Collections.emptyList(), "10 00002859");
+    }
+
+    @Test
+    @TestData(fileName = FIND_BY_SCENARIO_ID)
+    public void testFindCountByScenarioIdSearchRhAccountNumberPrint() {
+        verifyFindCountByScenarioIdSearch(1, RH_ACCOUNT_NUMBER);
+        verifyFindCountByScenarioIdSearch(1, INCOMPLETE_RH_ACCOUNT_NUMBER);
+        verifyFindCountByScenarioIdSearch(0, "10 00002859");
+    }
+
+    @Test
+    @TestData(fileName = FIND_BY_SCENARIO_ID)
+    public void testFindByScenarioIdSearchRhNamePrint() {
+        List<AclScenarioDetailDto> scenarioDetailDtos =
+            Collections.singletonList(buildAclScenarioDetailDto1FindByScenarioId());
+        verifyFindByScenarioIdSearch(scenarioDetailDtos, RH_NAME);
+        verifyFindByScenarioIdSearch(scenarioDetailDtos, "John WILEY");
+        verifyFindByScenarioIdSearch(Collections.emptyList(), "Jo hn Wiley & Sons - Books");
+    }
+
+    @Test
+    @TestData(fileName = FIND_BY_SCENARIO_ID)
+    public void testFindCountByScenarioIdSearchRhNamePrint() {
+        verifyFindCountByScenarioIdSearch(1, RH_NAME);
+        verifyFindCountByScenarioIdSearch(1, "John WILEY");
+        verifyFindCountByScenarioIdSearch(0, "Jo hn Wiley & Sons - Books");
+    }
+
+    @Test
+    @TestData(fileName = FIND_BY_SCENARIO_ID)
+    public void testFindByScenarioIdSearchPayeeAccountNumberPrint() {
+        List<AclScenarioDetailDto> scenarioDetailDtos =
+            Collections.singletonList(buildAclScenarioDetailDto1FindByScenarioId());
+        verifyFindByScenarioIdSearch(scenarioDetailDtos, "1000005413");
+        verifyFindByScenarioIdSearch(scenarioDetailDtos, "1000005");
+        verifyFindByScenarioIdSearch(Collections.emptyList(), "100 0005413");
+    }
+
+    @Test
+    @TestData(fileName = FIND_BY_SCENARIO_ID)
+    public void testFindCountByScenarioIdSearchPayeeAccountNumberPrint() {
+        verifyFindCountByScenarioIdSearch(1, "1000005413");
+        verifyFindCountByScenarioIdSearch(1, "1000005");
+        verifyFindCountByScenarioIdSearch(0, "100 0005413");
+    }
+
+    @Test
+    @TestData(fileName = FIND_BY_SCENARIO_ID)
+    public void testFindByScenarioIdSearchPayeeNamePrint() {
+        List<AclScenarioDetailDto> scenarioDetailDtos =
+            Collections.singletonList(buildAclScenarioDetailDto1FindByScenarioId());
+        verifyFindByScenarioIdSearch(scenarioDetailDtos, "Kluwer Academic Publishers - Dordrecht");
+        verifyFindByScenarioIdSearch(scenarioDetailDtos, "KluWer ACADemic");
+        verifyFindByScenarioIdSearch(Collections.emptyList(), "Klu wer Academic Publishers - Dordrecht");
+    }
+
+    @Test
+    @TestData(fileName = FIND_BY_SCENARIO_ID)
+    public void testFindCountByScenarioIdSearchPayeeNamePrint() {
+        verifyFindCountByScenarioIdSearch(1, "Kluwer Academic Publishers - Dordrecht");
+        verifyFindCountByScenarioIdSearch(1, "KluWer ACADemic");
+        verifyFindCountByScenarioIdSearch(0, "Klu wer Academic Publishers - Dordrecht");
+    }
+
+    @Test
+    @TestData(fileName = FIND_BY_SCENARIO_ID)
+    public void testFindByScenarioIdSearchRhAccountNumberDigital() {
+        List<AclScenarioDetailDto> scenarioDetailDtos =
+            Collections.singletonList(buildAclScenarioDetailDto1FindByScenarioId());
+        verifyFindByScenarioIdSearch(scenarioDetailDtos, "1000000001");
+        verifyFindByScenarioIdSearch(scenarioDetailDtos, "1000000");
+        verifyFindByScenarioIdSearch(Collections.emptyList(), "10000 00001");
+    }
+
+    @Test
+    @TestData(fileName = FIND_BY_SCENARIO_ID)
+    public void testFindCountByScenarioIdSearchRhAccountNumberDigital() {
+        verifyFindCountByScenarioIdSearch(1, "1000000001");
+        verifyFindCountByScenarioIdSearch(1, "1000000");
+        verifyFindCountByScenarioIdSearch(0, "10000 00001");
+    }
+
+    @Test
+    @TestData(fileName = FIND_BY_SCENARIO_ID)
+    public void testFindByScenarioIdSearchRhNameDigital() {
+        List<AclScenarioDetailDto> scenarioDetailDtos =
+            Collections.singletonList(buildAclScenarioDetailDto1FindByScenarioId());
+        verifyFindByScenarioIdSearch(scenarioDetailDtos, "Rothchild Consultants");
+        verifyFindByScenarioIdSearch(scenarioDetailDtos, "RoTHchild");
+        verifyFindByScenarioIdSearch(Collections.emptyList(), "Roth child Consultants");
+    }
+
+    @Test
+    @TestData(fileName = FIND_BY_SCENARIO_ID)
+    public void testFindCountByScenarioIdSearchRhNameDigital() {
+        verifyFindCountByScenarioIdSearch(1, "Rothchild Consultants");
+        verifyFindCountByScenarioIdSearch(1, "RoTHchild");
+        verifyFindCountByScenarioIdSearch(0, "Roth child Consultants");
+    }
+
+    @Test
+    @TestData(fileName = FIND_BY_SCENARIO_ID)
+    public void testFindByScenarioIdSearchPayeeAccountNumberDigital() {
+        List<AclScenarioDetailDto> scenarioDetailDtos =
+            Collections.singletonList(buildAclScenarioDetailDto1FindByScenarioId());
+        verifyFindByScenarioIdSearch(scenarioDetailDtos, "2000017010");
+        verifyFindByScenarioIdSearch(scenarioDetailDtos, "2000");
+        verifyFindByScenarioIdSearch(Collections.emptyList(), "20000 17010");
+    }
+
+    @Test
+    @TestData(fileName = FIND_BY_SCENARIO_ID)
+    public void testFindCountByScenarioIdSearchPayeeAccountNumberDigital() {
+        verifyFindCountByScenarioIdSearch(1, "2000017010");
+        verifyFindCountByScenarioIdSearch(1, "2000");
+        verifyFindCountByScenarioIdSearch(0, "20000 17010");
+    }
+
+    @Test
+    @TestData(fileName = FIND_BY_SCENARIO_ID)
+    public void testFindByScenarioIdSearchPayeeNameDigital() {
+        List<AclScenarioDetailDto> scenarioDetailDtos =
+            Collections.singletonList(buildAclScenarioDetailDto1FindByScenarioId());
+        verifyFindByScenarioIdSearch(scenarioDetailDtos,
+            "JAC, Japan Academic Association for Copyright Clearance, Inc.");
+        verifyFindByScenarioIdSearch(scenarioDetailDtos, "JAC, JaPan Academic AsSOCiation");
+        verifyFindByScenarioIdSearch(Collections.emptyList(),
+            "JAC, Jap an Academic Association for Copyright Clearance, Inc.");
+    }
+
+    @Test
+    @TestData(fileName = FIND_BY_SCENARIO_ID)
+    public void testFindCountByScenarioIdSearchPayeeNameDigital() {
+        verifyFindCountByScenarioIdSearch(1, "JAC, Japan Academic Association for Copyright Clearance, Inc.");
+        verifyFindCountByScenarioIdSearch(1, "JAC, JaPan Academic AsSOCiation");
+        verifyFindCountByScenarioIdSearch(0, "JAC, Jap an Academic Association for Copyright Clearance, Inc.");
+    }
+
+    @Test
+    @TestData(fileName = FIND_BY_SCENARIO_ID)
+    public void testSortingFindByScenarioId() {
+        AclScenarioDetailDto detail1 = buildAclScenarioDetailDto1FindByScenarioId();
+        AclScenarioDetailDto detail2 = buildAclScenarioDetailDto2FindByScenarioId();
+        assertSortingAclScenarioDetailDtoFindByScenarioId(detail1, detail2, "detailId");
+        assertSortingAclScenarioDetailDtoFindByScenarioId(detail1, detail2, "usageDetailId");
+        assertSortingAclScenarioDetailDtoFindByScenarioId(detail1, detail1, "productFamily");
+        assertSortingAclScenarioDetailDtoFindByScenarioId(detail1, detail1, "usageBatchName");
+        assertSortingAclScenarioDetailDtoFindByScenarioId(detail1, detail1, "periodEndDate");
+        assertSortingAclScenarioDetailDtoFindByScenarioId(detail1, detail2, "wrWrkInst");
+        assertSortingAclScenarioDetailDtoFindByScenarioId(detail1, detail2, "systemTitle");
+        assertSortingAclScenarioDetailDtoFindByScenarioId(detail1, detail2, "rhAccountNumberPrint");
+        assertSortingAclScenarioDetailDtoFindByScenarioId(detail2, detail1, "rhNamePrint");
+        assertSortingAclScenarioDetailDtoFindByScenarioId(detail1, detail2, "payeeAccountNumberPrint");
+        assertSortingAclScenarioDetailDtoFindByScenarioId(detail2, detail1, "payeeNamePrint");
+        assertSortingAclScenarioDetailDtoFindByScenarioId(detail1, detail2, "rhAccountNumberDigital");
+        assertSortingAclScenarioDetailDtoFindByScenarioId(detail2, detail1, "rhNameDigital");
+        assertSortingAclScenarioDetailDtoFindByScenarioId(detail1, detail2, "payeeAccountNumberDigital");
+        assertSortingAclScenarioDetailDtoFindByScenarioId(detail2, detail1, "payeeNameDigital");
+        assertSortingAclScenarioDetailDtoFindByScenarioId(detail2, detail1, "usagePeriod");
+        assertSortingAclScenarioDetailDtoFindByScenarioId(detail2, detail1, "usageAgeWeight");
+        assertSortingAclScenarioDetailDtoFindByScenarioId(detail1, detail2, "detailLicenseeClassId");
+        assertSortingAclScenarioDetailDtoFindByScenarioId(detail1, detail2, "detailLicenseeClassName");
+        assertSortingAclScenarioDetailDtoFindByScenarioId(detail1, detail2, "aggregateLicenseeClassId");
+        assertSortingAclScenarioDetailDtoFindByScenarioId(detail1, detail2, "aggregateLicenseeClassName");
+        assertSortingAclScenarioDetailDtoFindByScenarioId(detail2, detail1, "surveyCountry");
+        assertSortingAclScenarioDetailDtoFindByScenarioId(detail2, detail1, "reportedTypeOfUse");
+        assertSortingAclScenarioDetailDtoFindByScenarioId(detail2, detail1, "typeOfUse");
+        assertSortingAclScenarioDetailDtoFindByScenarioId(detail1, detail2, "numberOfCopies");
+        assertSortingAclScenarioDetailDtoFindByScenarioId(detail2, detail1, "weightedCopies");
+        assertSortingAclScenarioDetailDtoFindByScenarioId(detail1, detail2, "publicationType");
+        assertSortingAclScenarioDetailDtoFindByScenarioId(detail1, detail2, "pubTypeWeight");
+        assertSortingAclScenarioDetailDtoFindByScenarioId(detail2, detail1, "price");
+        assertSortingAclScenarioDetailDtoFindByScenarioId(detail1, detail2, "priceFlag");
+        assertSortingAclScenarioDetailDtoFindByScenarioId(detail2, detail1, "content");
+        assertSortingAclScenarioDetailDtoFindByScenarioId(detail1, detail2, "contentFlag");
+        assertSortingAclScenarioDetailDtoFindByScenarioId(detail1, detail2, "contentUnitPrice");
+        assertSortingAclScenarioDetailDtoFindByScenarioId(detail1, detail2, "contentUnitPriceFlag");
+        assertSortingAclScenarioDetailDtoFindByScenarioId(detail1, detail2, "valueSharePrint");
+        assertSortingAclScenarioDetailDtoFindByScenarioId(detail1, detail2, "volumeSharePrint");
+        assertSortingAclScenarioDetailDtoFindByScenarioId(detail2, detail1, "detailSharePrint");
+        assertSortingAclScenarioDetailDtoFindByScenarioId(detail1, detail2, "netAmountPrint");
+        assertSortingAclScenarioDetailDtoFindByScenarioId(detail1, detail2, "valueShareDigital");
+        assertSortingAclScenarioDetailDtoFindByScenarioId(detail1, detail2, "volumeShareDigital");
+        assertSortingAclScenarioDetailDtoFindByScenarioId(detail1, detail2, "detailShareDigital");
+        assertSortingAclScenarioDetailDtoFindByScenarioId(detail1, detail2, "netAmountDigital");
+        assertSortingAclScenarioDetailDtoFindByScenarioId(detail1, detail2, "combinedNetAmount");
+    }
+
+    @Test
     @TestData(fileName = FOLDER_NAME + "find-rightsholder-details-results.groovy")
     public void testFindRightsholderDetailsResults() {
         List<AclScenarioDetailDto> expectedScenarioDetails =
@@ -660,8 +935,12 @@ public class AclScenarioUsageRepositoryIntegrationTest {
         assertEquals(expectedDetail.getSystemTitle(), actualDetail.getSystemTitle());
         assertEquals(expectedDetail.getRhAccountNumberPrint(), actualDetail.getRhAccountNumberPrint());
         assertEquals(expectedDetail.getRhNamePrint(), actualDetail.getRhNamePrint());
+        assertEquals(expectedDetail.getPayeeAccountNumberPrint(), actualDetail.getPayeeAccountNumberPrint());
+        assertEquals(expectedDetail.getPayeeNamePrint(), actualDetail.getPayeeNamePrint());
         assertEquals(expectedDetail.getRhAccountNumberDigital(), actualDetail.getRhAccountNumberDigital());
         assertEquals(expectedDetail.getRhNameDigital(), actualDetail.getRhNameDigital());
+        assertEquals(expectedDetail.getPayeeAccountNumberDigital(), actualDetail.getPayeeAccountNumberDigital());
+        assertEquals(expectedDetail.getPayeeNameDigital(), actualDetail.getPayeeNameDigital());
         assertEquals(expectedDetail.getUsagePeriod(), actualDetail.getUsagePeriod());
         assertEquals(expectedDetail.getUsageAgeWeight(), actualDetail.getUsageAgeWeight());
         assertEquals(expectedDetail.getDetailLicenseeClassId(), actualDetail.getDetailLicenseeClassId());
@@ -879,6 +1158,33 @@ public class AclScenarioUsageRepositoryIntegrationTest {
         verifyAclScenarioDetailDto(detailDesc, scenarioDetailDtos.get(0));
     }
 
+    private void verifyFindByScenarioIdSearch(List<AclScenarioDetailDto> expectedScenarioDetailDtos,
+                                              String searchValue) {
+        List<AclScenarioDetailDto> scenarioDetailDtos = aclScenarioUsageRepository.findByScenarioId(
+            SCENARIO_UID_6, searchValue, null, null);
+        assertEquals(expectedScenarioDetailDtos.size(), scenarioDetailDtos.size());
+        if (!expectedScenarioDetailDtos.isEmpty()) {
+            for (int i = 0; i < scenarioDetailDtos.size(); i++) {
+                verifyAclScenarioDetailDto(expectedScenarioDetailDtos.get(i), scenarioDetailDtos.get(i));
+            }
+        }
+    }
+
+    private void verifyFindCountByScenarioIdSearch(int expectedSize, String searchValue) {
+        assertEquals(expectedSize, aclScenarioUsageRepository.findCountByScenarioId(SCENARIO_UID_6, searchValue));
+    }
+
+    private void assertSortingAclScenarioDetailDtoFindByScenarioId(AclScenarioDetailDto detailAsc,
+                                                                   AclScenarioDetailDto detailDesc,
+                                                                   String sortProperty) {
+        List<AclScenarioDetailDto> scenarioDetailDtos = aclScenarioUsageRepository.findByScenarioId(
+            SCENARIO_UID_6, StringUtils.EMPTY, null, new Sort(sortProperty, Sort.Direction.ASC));
+        verifyAclScenarioDetailDto(detailAsc, scenarioDetailDtos.get(0));
+        scenarioDetailDtos = aclScenarioUsageRepository.findByScenarioId(
+            SCENARIO_UID_6, StringUtils.EMPTY, null, new Sort(sortProperty, Sort.Direction.DESC));
+        verifyAclScenarioDetailDto(detailDesc, scenarioDetailDtos.get(0));
+    }
+
     private void verifyRightsholderPayeeProductFamilyHolders(List<RightsholderPayeeProductFamilyHolder> expected,
                                                              List<RightsholderPayeeProductFamilyHolder> actual) {
         assertEquals(expected.size(), actual.size());
@@ -903,6 +1209,14 @@ public class AclScenarioUsageRepositoryIntegrationTest {
 
     private AclScenarioDetailDto buildPrintDigitalAclScenarioDetailDto() {
         return loadExpectedAclScenarioDetailDto("json/acl/acl_scenario_detail_dto_print_digital.json").get(0);
+    }
+
+    private AclScenarioDetailDto buildAclScenarioDetailDto1FindByScenarioId() {
+        return loadExpectedAclScenarioDetailDto("json/acl/acl_scenario_detail_dto_1_find_by_scenario.json").get(0);
+    }
+
+    private AclScenarioDetailDto buildAclScenarioDetailDto2FindByScenarioId() {
+        return loadExpectedAclScenarioDetailDto("json/acl/acl_scenario_detail_dto_2_find_by_scenario.json").get(0);
     }
 
     private List<AclScenarioDetail> loadExpectedAclScenarioDetails(String fileName) {

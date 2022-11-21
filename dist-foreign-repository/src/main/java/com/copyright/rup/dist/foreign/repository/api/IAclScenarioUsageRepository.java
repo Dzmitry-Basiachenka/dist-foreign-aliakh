@@ -130,6 +130,26 @@ public interface IAclScenarioUsageRepository {
     int findCountByScenarioIdAndRhAccountNumber(Long accountNumber, String scenarioId, String searchValue);
 
     /**
+     * Finds list of {@link AclScenarioDetailDto}s based on {@link AclScenario} identifier.
+     *
+     * @param scenarioId    {@link AclScenario} identifier
+     * @param searchValue   search value
+     * @param pageable      instance of {@link Pageable}
+     * @param sort          instance of {@link Sort}
+     * @return list of {@link AclScenarioDetailDto}s
+     */
+    List<AclScenarioDetailDto> findByScenarioId(String scenarioId, String searchValue, Pageable pageable, Sort sort);
+
+    /**
+     * Finds count of {@link AclScenarioDetailDto}s based on {@link AclScenario} identifier.
+     *
+     * @param scenarioId    {@link AclScenario} identifier
+     * @param searchValue   search value
+     * @return count of usage details
+     */
+    int findCountByScenarioId(String scenarioId, String searchValue);
+
+    /**
      * Finds list of {@link AclScenarioDetailDto}s based on {@link AclScenario} identifier,
      * rightsholder account number, title, and aggregate licensee class id.
      *

@@ -189,6 +189,26 @@ public class AclScenarioUsageServiceTest {
     }
 
     @Test
+    public void testGetByScenarioId() {
+        List<AclScenarioDetailDto> scenarioDetailDtos = Collections.singletonList(new AclScenarioDetailDto());
+        Pageable pageable = new Pageable(0, 2);
+        expect(aclScenarioUsageRepository.findByScenarioId(SCENARIO_UID, SEARCH_VALUE, pageable, null))
+            .andReturn(scenarioDetailDtos).once();
+        replay(aclScenarioUsageRepository);
+        assertSame(scenarioDetailDtos, aclScenarioUsageService.getByScenarioId(SCENARIO_UID, SEARCH_VALUE,
+            pageable, null));
+        verify(aclScenarioUsageRepository);
+    }
+
+    @Test
+    public void testGetCountByScenarioId() {
+        expect(aclScenarioUsageRepository.findCountByScenarioId(SCENARIO_UID, SEARCH_VALUE)).andReturn(1).once();
+        replay(aclScenarioUsageRepository);
+        assertEquals(1, aclScenarioUsageService.getCountByScenarioId(SCENARIO_UID, SEARCH_VALUE));
+        verify(aclScenarioUsageRepository);
+    }
+
+    @Test
     public void testGetRightsholderDetailsResults() {
         RightsholderResultsFilter filter = new RightsholderResultsFilter();
         List<AclScenarioDetailDto> scenarioDetails = new ArrayList<>();

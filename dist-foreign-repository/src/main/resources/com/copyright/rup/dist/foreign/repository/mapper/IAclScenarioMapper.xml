@@ -98,6 +98,20 @@
         digital_details.rh_name ilike '%' || #{searchValue} || '%')
     </sql>
 
+    <sql id="viewDetailsSearchWhereClause">
+        (original_detail_id ilike '%' || #{searchValue} || '%' or
+        cast(scd.wr_wrk_inst as text) like '%' || #{searchValue} || '%' or
+        system_title ilike '%' || #{searchValue} || '%' or
+        cast(print_details.rh_account_number as text) like '%' || #{searchValue} || '%' or
+        print_details.rh_name ilike '%' || #{searchValue} || '%' or
+        cast(digital_details.rh_account_number as text) like '%' || #{searchValue} || '%' or
+        digital_details.rh_name ilike '%' || #{searchValue} || '%' or
+        cast(print_details.payee_account_number as text) like '%' || #{searchValue} || '%' or
+        print_details.payee_name ilike '%' || #{searchValue} || '%' or
+        cast(digital_details.payee_account_number as text) like '%' || #{searchValue} || '%' or
+        digital_details.payee_name ilike '%' || #{searchValue} || '%')
+    </sql>
+
     <sql id="ifSortable">
         order by
         <choose>
@@ -142,11 +156,23 @@
             <when test="sort.property == 'rhNamePrint'">
                 rh_name_print <include refid="IUsageMapper.direction"/>
             </when>
+            <when test="sort.property == 'payeeAccountNumberPrint'">
+                payee_account_number_print <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'payeeNamePrint'">
+                payee_name_print <include refid="IUsageMapper.direction"/>
+            </when>
             <when test="sort.property == 'rhAccountNumberDigital'">
                 rh_account_number_digital <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'rhNameDigital'">
                 rh_name_digital <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'payeeAccountNumberDigital'">
+                payee_account_number_digital <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'payeeNameDigital'">
+                payee_name_digital <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'usagePeriod'">
                 scd.period_end_date <include refid="IUsageMapper.direction"/>
