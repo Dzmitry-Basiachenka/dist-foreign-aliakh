@@ -25,7 +25,8 @@ public class ForeignUiMediator implements IMediator {
 
     private static final Set<String> PRODUCT_FAMILIES = ImmutableSet.of(
         FdaConstants.FAS_PRODUCT_FAMILY, FdaConstants.CLA_FAS_PRODUCT_FAMILY, FdaConstants.NTS_PRODUCT_FAMILY,
-        FdaConstants.AACL_PRODUCT_FAMILY, FdaConstants.SAL_PRODUCT_FAMILY, FdaConstants.ACL_PRODUCT_FAMILY);
+        FdaConstants.AACL_PRODUCT_FAMILY, FdaConstants.SAL_PRODUCT_FAMILY, FdaConstants.ACL_PRODUCT_FAMILY,
+        FdaConstants.ACLCI_PRODUCT_FAMILY);
 
     private ComboBox<String> productFamilyComboBox;
     private IReportController reportController;

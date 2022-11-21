@@ -73,6 +73,16 @@ public enum ReportMenuBuilder implements IReportMenuBuilder {
     ACL(false) {
         @Override
         public void addItems(IReportController controller, IReportWidget widget, MenuItem rootItem) {
+            // showing ACL reports tabs are implemented in ForeignUi.initAclReportWidgets
+        }
+    },
+
+    /**
+     * Report builder for ACLCI product family
+     */
+    ACLCI(false) {
+        @Override
+        public void addItems(IReportController controller, IReportWidget widget, MenuItem rootItem) {
             //TODO: implement on scope of corresponding story
         }
     };
