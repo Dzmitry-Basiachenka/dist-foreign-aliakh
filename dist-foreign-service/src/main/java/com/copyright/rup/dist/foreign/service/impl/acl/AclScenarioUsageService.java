@@ -25,7 +25,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -112,14 +111,12 @@ public class AclScenarioUsageService implements IAclScenarioUsageService {
     @Override
     public List<AclScenarioDetailDto> getByScenarioId(String scenarioId, String searchValue, Pageable pageable,
                                                       Sort sort) {
-        //TODO stub will be implemented with backend logic
-        return Collections.emptyList();
+        return aclScenarioUsageRepository.findByScenarioId(scenarioId, searchValue, pageable, sort);
     }
 
     @Override
     public int getCountByScenarioId(String scenarioId, String searchValue) {
-        //TODO stub will be implemented with backend logic
-        return 0;
+        return aclScenarioUsageRepository.findCountByScenarioId(scenarioId, searchValue);
     }
 
     @Override

@@ -681,6 +681,24 @@
         </if>
     </select>
 
+    <select id="findByScenarioId" parameterType="map" resultMap="aclScenarioDetailDtoResultMap">
+        <include refid="IAclScenarioUsageMapper.selectScenarioDetailDtosSql"/>
+        where s.df_acl_scenario_uid = #{scenarioId}
+        <if test="null != searchValue">
+            and <include refid="IAclScenarioMapper.viewDetailsSearchWhereClause"/>
+        </if>
+        <include refid="IAclScenarioMapper.ifSortable"/>
+        <include refid="IUsageMapper.ifPageable"/>
+    </select>
+
+    <select id="findCountByScenarioId" parameterType="map" resultType="int">
+        <include refid="IAclScenarioUsageMapper.selectScenarioDetailDtosCountSql"/>
+        where s.df_acl_scenario_uid = #{scenarioId}
+        <if test="null != searchValue">
+            and <include refid="IAclScenarioMapper.viewDetailsSearchWhereClause"/>
+        </if>
+    </select>
+
     <select id="findRightsholderDetailsResults" parameterType="map" resultMap="aclScenarioDetailDtoResultMap">
         <include refid="IAclScenarioUsageMapper.selectScenarioDetailDtosSql"/>
         where s.df_acl_scenario_uid = #{scenarioId}

@@ -97,7 +97,7 @@
             </property>
             <!--TODO: optimize UsageDto, Usage classes-->
             <property name="classReportLevel">
-                <value>97</value>
+                <value>102</value>
             </property>
         </properties>
     </rule>
