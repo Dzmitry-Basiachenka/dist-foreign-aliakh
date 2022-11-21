@@ -1,3 +1,13 @@
+16.0.16
+-
+* B-72659 FDA: Allow multi-edit when making non-granted works Eligible: refactor the usages repository
+* B-72659 FDA: Allow multi-edit when making non-granted works Eligible: refactor the usages service
+* B-72659 FDA: Allow multi-edit when making non-granted works Eligible: refactor the widgets
+* B-74646 FDA: View all scenario specific usage details: implement common window for ACL scenario details by rightsholder and all ACL scenario details, replace export details button
+* B-74646 FDA: View all scenario specific usage details: implement backend logic
+* B-68554 FDA: ACLCI UI usage view: implement ACLCI filter widget and controller
+* B-68554 FDA: ACLCI UI usage view: implement ACLCI usage widget and controller
+
 16.0.15
 -
 * CDP 1103: FDA: ACL Grant Set tab: Grant Details Count always displays '0' value
