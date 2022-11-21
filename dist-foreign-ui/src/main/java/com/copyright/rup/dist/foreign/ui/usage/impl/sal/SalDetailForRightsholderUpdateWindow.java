@@ -20,9 +20,12 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
+import com.vaadin.ui.components.grid.MultiSelectionModel.SelectAllCheckBoxVisibility;
+import com.vaadin.ui.components.grid.MultiSelectionModelImpl;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -39,6 +42,7 @@ class SalDetailForRightsholderUpdateWindow extends Window implements IRefreshabl
 
     private SearchWidget searchWidget;
     private Grid<UsageDto> usagesGrid;
+    private MultiSelectionModelImpl<UsageDto> gridSelectionModel;
     private ListDataProvider<UsageDto> dataProvider;
     private Button updateRightsholderButton;
     private final ISalUsageController controller;
@@ -66,7 +70,12 @@ class SalDetailForRightsholderUpdateWindow extends Window implements IRefreshabl
      * Refreshes data provider and updates usages grid.
      */
     void refreshDataProvider() {
-        usagesGrid.setItems(controller.getUsageDtosForRhUpdate());
+        List<UsageDto> usages = controller.getUsageDtosForRhUpdate();
+        dataProvider = DataProvider.ofCollection(usages);
+        usagesGrid.setDataProvider(dataProvider);
+        gridSelectionModel.setSelectAllCheckBoxVisibility(
+            usages.isEmpty() ? SelectAllCheckBoxVisibility.HIDDEN : SelectAllCheckBoxVisibility.VISIBLE);
+        gridSelectionModel.beforeClientResponse(false);
         dataProvider.refreshAll();
     }
 
@@ -88,7 +97,7 @@ class SalDetailForRightsholderUpdateWindow extends Window implements IRefreshabl
         dataProvider = DataProvider.ofCollection(controller.getUsageDtosForRhUpdate());
         usagesGrid = new Grid<>(dataProvider);
         usagesGrid.setSizeFull();
-        usagesGrid.setSelectionMode(Grid.SelectionMode.MULTI);
+        gridSelectionModel = (MultiSelectionModelImpl<UsageDto>) usagesGrid.setSelectionMode(Grid.SelectionMode.MULTI);
         addGridColumns();
         usagesGrid.addSelectionListener(event ->
             updateRightsholderButton.setEnabled(CollectionUtils.isNotEmpty(event.getAllSelectedItems())));

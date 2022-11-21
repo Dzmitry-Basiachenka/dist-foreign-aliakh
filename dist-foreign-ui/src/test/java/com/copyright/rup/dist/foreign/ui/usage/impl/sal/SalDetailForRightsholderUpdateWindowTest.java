@@ -9,6 +9,7 @@ import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
+import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.foreign.domain.UsageDto;
@@ -23,6 +24,8 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.components.grid.MultiSelectionModel.SelectAllCheckBoxVisibility;
+import com.vaadin.ui.components.grid.MultiSelectionModelImpl;
 import org.apache.commons.collections.CollectionUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -60,6 +63,7 @@ public class SalDetailForRightsholderUpdateWindowTest {
         replay(salUsageController);
         window = new SalDetailForRightsholderUpdateWindow(salUsageController);
         verify(salUsageController);
+        reset(salUsageController);
     }
 
     @Test
@@ -99,9 +103,32 @@ public class SalDetailForRightsholderUpdateWindowTest {
         expect(usagesGrid.getSelectedItems()).andReturn(Collections.singleton(selectedUsage)).once();
         Windows.showModalWindow(anyObject(SalUpdateRighstholderWindow.class));
         expectLastCall().once();
-        replay(usagesGrid, salUsageController, Windows.class);
+        replay(usagesGrid, Windows.class);
         listener.buttonClick(null);
-        verify(usagesGrid, salUsageController, Windows.class);
+        verify(usagesGrid, Windows.class);
+    }
+
+    @Test
+    public void testRefreshDataProviderSelectAllCheckBoxVisibilityVisible() {
+        expect(salUsageController.getUsageDtosForRhUpdate()).andReturn(Collections.singletonList(new UsageDto()))
+            .once();
+        replay(salUsageController);
+        window.refreshDataProvider();
+        Grid<UsageDto> grid = Whitebox.getInternalState(window, "usagesGrid");
+        MultiSelectionModelImpl<UsageDto> selectionModel = (MultiSelectionModelImpl<UsageDto>) grid.getSelectionModel();
+        assertEquals(SelectAllCheckBoxVisibility.VISIBLE, selectionModel.getSelectAllCheckBoxVisibility());
+        verify(salUsageController);
+    }
+
+    @Test
+    public void testRefreshDataProviderSelectAllCheckBoxVisibilityHidden() {
+        expect(salUsageController.getUsageDtosForRhUpdate()).andReturn(Collections.emptyList()).once();
+        replay(salUsageController);
+        window.refreshDataProvider();
+        Grid<UsageDto> grid = Whitebox.getInternalState(window, "usagesGrid");
+        MultiSelectionModelImpl<UsageDto> selectionModel = (MultiSelectionModelImpl<UsageDto>) grid.getSelectionModel();
+        assertEquals(SelectAllCheckBoxVisibility.HIDDEN, selectionModel.getSelectAllCheckBoxVisibility());
+        verify(salUsageController);
     }
 
     private void verifySize(Component component, float width, Unit widthUnit, float height, Unit heightUnit) {
