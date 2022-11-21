@@ -7,8 +7,10 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.isNull;
 import static org.easymock.EasyMock.newCapture;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
@@ -105,7 +107,7 @@ public class UdmBaselineControllerTest {
 
     @Test
     public void testInstantiateWidget() {
-        assertNotNull(udmBaselineController.instantiateWidget());
+        assertThat(udmBaselineController.instantiateWidget(), instanceOf(UdmBaselineWidget.class));
     }
 
     @Test

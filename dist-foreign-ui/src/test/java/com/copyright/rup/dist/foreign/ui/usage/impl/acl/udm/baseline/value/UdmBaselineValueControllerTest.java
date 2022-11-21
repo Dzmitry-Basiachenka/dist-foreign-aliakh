@@ -8,9 +8,10 @@ import static org.easymock.EasyMock.isNull;
 import static org.easymock.EasyMock.newCapture;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertThat;
 
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.domain.UdmValueBaselineDto;
@@ -61,7 +62,7 @@ public class UdmBaselineValueControllerTest {
 
     @Test
     public void testInstantiateWidget() {
-        assertNotNull(controller.instantiateWidget());
+        assertThat(controller.instantiateWidget(), instanceOf(UdmBaselineValueWidget.class));
     }
 
     @Test
