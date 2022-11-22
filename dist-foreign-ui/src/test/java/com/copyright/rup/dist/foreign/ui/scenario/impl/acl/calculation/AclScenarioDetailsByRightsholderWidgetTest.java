@@ -166,7 +166,7 @@ public class AclScenarioDetailsByRightsholderWidgetTest {
             Triple.of("# of Weighted Copies", 150.0, -1),
             Triple.of("Pub Type", 120.0, -1),
             Triple.of("Pub Type Weight", 120.0, -1),
-            Triple.of("Price", 100.0, -1),
+            Triple.of("Price", 130.0, -1),
             Triple.of("Price Flag", 110.0, -1),
             Triple.of("Content", 100.0, -1),
             Triple.of("Content Flag", 110.0, -1),

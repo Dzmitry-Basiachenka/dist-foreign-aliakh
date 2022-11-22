@@ -142,7 +142,7 @@ public class AclScenarioDrillDownUsageDetailsWindow extends Window {
             "publicationType", true, 75);
         addBigDecimalColumn(detail -> detail.getPublicationType().getWeight(), "table.column.publication_type_weight",
             "pubTypeWeight", 120);
-        addBigDecimalColumn(AclScenarioDetailDto::getPrice, "table.column.price", "price", 100);
+        addBigDecimalColumn(AclScenarioDetailDto::getPrice, "table.column.price", "price", 130);
         addBooleanColumn(AclScenarioDetailDto::isPriceFlag, "table.column.price_flag", "priceFlag", 100);
         addBigDecimalColumn(AclScenarioDetailDto::getContent, "table.column.content", "content", 100);
         addBooleanColumn(AclScenarioDetailDto::isContentFlag, "table.column.content_flag", "contentFlag", 100);

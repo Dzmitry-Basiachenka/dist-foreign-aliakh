@@ -60,14 +60,14 @@ public class AclScenarioDetailsWidget extends AclCommonScenarioDetailsWidget imp
             "rhAccountNumberPrint", true, 140);
         addColumn(AclScenarioDetailDto::getRhNamePrint, "table.column.print_rh_name", "rhNamePrint", true, 150);
         addColumn(AclScenarioDetailDto::getPayeeAccountNumberPrint, "table.column.print_payee_account_number",
-            "payeeAccountNumberPrint", true, 140);
+            "payeeAccountNumberPrint", true, 160);
         addColumn(AclScenarioDetailDto::getPayeeNamePrint, "table.column.print_payee_name",
             "payeeNamePrint", true, 150);
         addColumn(AclScenarioDetailDto::getRhAccountNumberDigital, "table.column.digital_rh_account_number",
             "rhAccountNumberDigital", true, 140);
         addColumn(AclScenarioDetailDto::getRhNameDigital, "table.column.digital_rh_name", "rhNameDigital", true, 150);
         addColumn(AclScenarioDetailDto::getPayeeAccountNumberDigital, "table.column.digital_payee_account_number",
-            "payeeAccountNumberDigital", true, 140);
+            "payeeAccountNumberDigital", true, 160);
         addColumn(AclScenarioDetailDto::getPayeeNameDigital, "table.column.digital_payee_name",
             "payeeNameDigital", true, 150);
         addColumn(AclScenarioDetailDto::getUsagePeriod, "table.column.usage_period", "usagePeriod", true, 100);
@@ -93,7 +93,7 @@ public class AclScenarioDetailsWidget extends AclCommonScenarioDetailsWidget imp
             true, 120);
         addBigDecimalColumn(detail -> detail.getPublicationType().getWeight(), "table.column.publication_type_weight",
             "pubTypeWeight", 120);
-        addBigDecimalColumn(AclScenarioDetailDto::getPrice, "table.column.price", "price", 100);
+        addBigDecimalColumn(AclScenarioDetailDto::getPrice, "table.column.price", "price", 130);
         addBooleanColumn(AclScenarioDetailDto::isPriceFlag, "table.column.price_flag", "priceFlag", 110);
         addBigDecimalColumn(AclScenarioDetailDto::getContent, "table.column.content", "content", 100);
         addBooleanColumn(AclScenarioDetailDto::isContentFlag, "table.column.content_flag", "contentFlag", 110);
