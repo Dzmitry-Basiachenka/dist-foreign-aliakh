@@ -5,7 +5,6 @@ import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
 import com.copyright.rup.dist.common.test.TestUtils;
-import com.copyright.rup.dist.common.test.mock.aws.SqsClientMock;
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
@@ -30,8 +29,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import org.apache.commons.collections4.CollectionUtils;
@@ -77,7 +74,6 @@ public class SalWorkflowIntegrationTestBuilder implements Builder<Runner> {
     private String productFamily;
     private UsageBatch usageBatch;
     private String expectedUsagesJsonFile;
-    private int expectedLmDetailsMessagesCount;
     private List<String> expectedLmDetailsJsonFiles;
     private String expectedPaidUsagesJsonFile;
     private List<String> expectedPaidUsageLmDetailIds;
@@ -99,8 +95,6 @@ public class SalWorkflowIntegrationTestBuilder implements Builder<Runner> {
     private IUsageArchiveRepository usageArchiveRepository;
     @Autowired
     private IUsageService usageService;
-    @Autowired
-    private SqsClientMock sqsClientMock;
     @Autowired
     private ServiceTestHelper testHelper;
     @Autowired
@@ -160,8 +154,7 @@ public class SalWorkflowIntegrationTestBuilder implements Builder<Runner> {
         return this;
     }
 
-    SalWorkflowIntegrationTestBuilder expectLmDetails(int messagesCount, String... lmDetailsJsonFile) {
-        this.expectedLmDetailsMessagesCount = messagesCount;
+    SalWorkflowIntegrationTestBuilder expectLmDetails(String... lmDetailsJsonFile) {
         this.expectedLmDetailsJsonFiles = Arrays.asList(lmDetailsJsonFile);
         return this;
     }
@@ -207,8 +200,7 @@ public class SalWorkflowIntegrationTestBuilder implements Builder<Runner> {
         this.expectedArchivedUsagesJsonFile = null;
         this.expectedCrmRequestJsonFile = null;
         this.expectedCrmResponseJsonFile = null;
-        this.expectedLmDetailsMessagesCount = 0;
-        this.sqsClientMock.reset();
+        testHelper.reset();
     }
 
     @Override
@@ -303,11 +295,7 @@ public class SalWorkflowIntegrationTestBuilder implements Builder<Runner> {
 
         private void sendScenarioToLm() {
             salScenarioService.sendToLm(scenario);
-            List<String> lmUsageMessages = Lists.newArrayListWithExpectedSize(expectedLmDetailsMessagesCount);
-            expectedLmDetailsJsonFiles.forEach(lmDetailsFile ->
-                lmUsageMessages.add(TestUtils.fileToString(this.getClass(), lmDetailsFile)));
-            sqsClientMock.assertSendMessages("fda-test-sf-detail.fifo", lmUsageMessages,
-                Collections.singletonList("detail_id"), ImmutableMap.of("source", "FDA"));
+            testHelper.sendScenarioToLm(expectedLmDetailsJsonFiles);
         }
 
         private void receivePaidUsagesFromLm() throws InterruptedException {

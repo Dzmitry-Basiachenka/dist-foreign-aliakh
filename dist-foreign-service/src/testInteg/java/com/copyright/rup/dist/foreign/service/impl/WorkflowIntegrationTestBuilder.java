@@ -5,7 +5,6 @@ import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
 import com.copyright.rup.dist.common.test.TestUtils;
-import com.copyright.rup.dist.common.test.mock.aws.SqsClientMock;
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
@@ -28,8 +27,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import org.apache.commons.collections4.CollectionUtils;
@@ -40,7 +37,6 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -77,8 +73,6 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
     @Autowired
     private IUsageAuditService usageAuditService;
     @Autowired
-    private SqsClientMock sqsClientMock;
-    @Autowired
     private ServiceTestHelper testHelper;
 
     private String usagesCsvFile;
@@ -91,7 +85,6 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
     private List<String> expectedPreferencesRightholderIds;
     private String expectedRollupsJson;
     private List<String> expectedRollupsRightsholdersIds;
-    private int expectedLmDetailsMessagesCount;
     private List<String> expectedLmDetailsJsonFiles;
     private String expectedPaidUsagesJsonFile;
     private List<String> expectedPaidUsageLmDetailids;
@@ -137,8 +130,7 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
         return this;
     }
 
-    WorkflowIntegrationTestBuilder expectLmDetails(int messagesCount, String... lmDetailsJsonFile) {
-        this.expectedLmDetailsMessagesCount = messagesCount;
+    WorkflowIntegrationTestBuilder expectLmDetails(String... lmDetailsJsonFile) {
         this.expectedLmDetailsJsonFiles = Arrays.asList(lmDetailsJsonFile);
         return this;
     }
@@ -178,7 +170,7 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
     void reset() {
         this.expectedUsageLmDetailIdToAuditMap.clear();
         this.expectedRmsRequestsToResponses.clear();
-        this.sqsClientMock.reset();
+        testHelper.reset();
     }
 
     @Override
@@ -241,11 +233,7 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
 
         void sendScenarioToLm() {
             fasScenarioService.sendToLm(scenario);
-            List<String> lmUsageMessages = Lists.newArrayListWithExpectedSize(expectedLmDetailsMessagesCount);
-            expectedLmDetailsJsonFiles.forEach(lmDetailsFile ->
-                lmUsageMessages.add(TestUtils.fileToString(this.getClass(), lmDetailsFile)));
-            sqsClientMock.assertSendMessages("fda-test-sf-detail.fifo", lmUsageMessages,
-                Collections.emptyList(), ImmutableMap.of("source", "FDA"));
+            testHelper.sendScenarioToLm(expectedLmDetailsJsonFiles);
         }
 
         private void receivePaidUsagesFromLm() throws InterruptedException {

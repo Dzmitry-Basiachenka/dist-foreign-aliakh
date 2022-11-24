@@ -106,6 +106,9 @@ public class AclWorkflowIntegrationTest {
             .withDefaultAclScenarioPubTypes()
             .withDefaultAclScenarioDetLicClasses()
             .withAclScenario(buildAclScenario())
+            .withLmDetails("details/acl_details_to_lm.json")
+            .withExpectedAclScenario("acl/scenario/acl_workflow_scenario.json")
+            .withExpectedAclScenarioDetails("acl/scenario/acl_workflow_scenario_details.json")
             .build()
             .run();
     }
@@ -152,6 +155,7 @@ public class AclWorkflowIntegrationTest {
     private AclScenario buildAclScenario() {
         AclScenario scenario = new AclScenario();
         scenario.setName("Test ACL Scenario");
+        scenario.setDescription("some description");
         scenario.setPeriodEndDate(202006);
         scenario.setLicenseType("ACL");
         scenario.setEditableFlag(false);

@@ -108,7 +108,7 @@ public class AaclWorkflowIntegrationTest {
                 "rights/aacl/rms_grants_response_workflow.json")
             .expectRmsRights("rights/aacl/rms_grants_123456789_request_workflow.json",
                 "rights/rms_grants_empty_response.json")
-            .expectLmDetails(1, "details/aacl_details_to_lm.json")
+            .expectLmDetails("details/aacl_details_to_lm.json")
             .expectPaidUsagesFromLm("lm/paid_usages_aacl_workflow.json")
             .expectPaidUsageLmDetailIds("b86a63d6-48c3-4291-b5bc-3bc9ddef0e66", "11ca9410-8ae0-4e7e-bd66-b2c9b9211269")
             .expectCrmReporting("crm/workflow/rights_distribution_request_aacl.json",
@@ -152,7 +152,7 @@ public class AaclWorkflowIntegrationTest {
                 "60080587-a225-439c-81af-f016cb33aeac", "a02af8f9-2ee4-4045-8bb5-79529fc087a6")
             .expectScenario(buildExpectedScenario(FUND_POOL_ID_2), 4)
             .withPayeesToExclude(7001508482L)
-            .expectLmDetails(1, "details/aacl_details_to_lm2.json")
+            .expectLmDetails("details/aacl_details_to_lm2.json")
             .expectPaidUsagesFromLm("lm/paid_usages_aacl_workflow_excluded.json")
             .expectPaidUsageLmDetailIds("c8bb25a2-0b65-41ee-ad50-32711e7bea97", "6311542c-0f26-4b15-bd70-c82d6b74800b")
             .expectCrmReporting("crm/workflow/rights_distribution_request_aacl-excluded.json",

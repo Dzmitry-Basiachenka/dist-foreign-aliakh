@@ -94,7 +94,7 @@ public class WorkflowIntegrationTest {
                 RIGHTHOLDER_ID_2, RIGHTHOLDER_ID_4, RIGHTHOLDER_ID_1, RIGHTHOLDER_ID_5, RIGHTHOLDER_ID_3)
             .expectPreferences("prm/not_found_response.json", "a5989f7c-fc6f-4e8c-88d4-2fe7bcce8d1f", RIGHTHOLDER_ID_2,
                 RIGHTHOLDER_ID_4, RIGHTHOLDER_ID_1, RIGHTHOLDER_ID_5, RIGHTHOLDER_ID_3)
-            .expectLmDetails(2, "details/cla_details_to_lm1.json", "details/cla_details_to_lm2.json")
+            .expectLmDetails("details/cla_details_to_lm1.json", "details/cla_details_to_lm2.json")
             .expectPaidUsagesFromLm("lm/paid_usages_cla.json")
             .expectPaidUsageLmDetailIds(USAGE_LM_DETAIL_ID_1, USAGE_LM_DETAIL_ID_2, USAGE_LM_DETAIL_ID_3,
                 USAGE_LM_DETAIL_ID_4, USAGE_LM_DETAIL_ID_5, USAGE_LM_DETAIL_ID_6, USAGE_LM_DETAIL_ID_7)

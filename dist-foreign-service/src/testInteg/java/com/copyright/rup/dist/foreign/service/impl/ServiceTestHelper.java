@@ -35,6 +35,7 @@ import com.copyright.rup.dist.foreign.service.api.IScenarioAuditService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.aacl.IAaclUsageService;
+import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioAuditService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmValueAuditService;
 import com.copyright.rup.dist.foreign.service.api.sal.ISalUsageService;
@@ -47,6 +48,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.common.base.Joiner;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -112,6 +114,8 @@ public class ServiceTestHelper {
     private ISalUsageService salUsageService;
     @Autowired
     private IScenarioAuditService scenarioAuditService;
+    @Autowired
+    private IAclScenarioAuditService aclScenarioAuditService;
     @Autowired
     private AsyncRestTemplate asyncRestTemplate;
     @Value("$RUP{dist.foreign.rest.prm.rightsholder.async}")
@@ -262,6 +266,15 @@ public class ServiceTestHelper {
             .andRespond(MockRestResponseCreators.withSuccess(responseBody, MediaType.APPLICATION_JSON));
     }
 
+    public void sendScenarioToLm(List<String> lmDetailsJsonFiles) {
+        List<String> lmDetailsMessages = lmDetailsJsonFiles
+            .stream()
+            .map(fileName -> TestUtils.fileToString(this.getClass(), fileName))
+            .collect(Collectors.toList());
+        sqsClientMock.assertSendMessages("fda-test-sf-detail.fifo", lmDetailsMessages,
+            Collections.singletonList("detail_id"), ImmutableMap.of("source", "FDA"));
+    }
+
     public void receivePaidUsagesFromLm(String paidUsagesMessageFile) throws InterruptedException {
         doReceivePaidUsagesFromLm(TestUtils.fileToString(this.getClass(), paidUsagesMessageFile));
     }
@@ -329,6 +342,13 @@ public class ServiceTestHelper {
 
     public void assertScenarioAudit(String scenarioId, List<Pair<ScenarioActionTypeEnum, String>> expectedAudit) {
         assertEquals(expectedAudit, scenarioAuditService.getActions(scenarioId).stream()
+            .sorted(Comparator.comparing(ScenarioAuditItem::getCreateDate))
+            .map(a -> Pair.of(a.getActionType(), a.getActionReason()))
+            .collect(Collectors.toList()));
+    }
+
+    public void assertAclScenarioAudit(String scenarioId, List<Pair<ScenarioActionTypeEnum, String>> expectedAudit) {
+        assertEquals(expectedAudit, aclScenarioAuditService.getActions(scenarioId).stream()
             .sorted(Comparator.comparing(ScenarioAuditItem::getCreateDate))
             .map(a -> Pair.of(a.getActionType(), a.getActionReason()))
             .collect(Collectors.toList()));
@@ -554,6 +574,15 @@ public class ServiceTestHelper {
         String content = TestUtils.fileToString(this.getClass(), fileName);
         ObjectMapper mapper = new ObjectMapper();
         return mapper.readValue(content, new TypeReference<List<AclFundPoolDetail>>() {
+        });
+    }
+
+    public AclScenario loadExpectedAclScenario(String fileName) throws IOException {
+        String content = TestUtils.fileToString(this.getClass(), fileName);
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        mapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
+        return mapper.readValue(content, new TypeReference<AclScenario>() {
         });
     }
 

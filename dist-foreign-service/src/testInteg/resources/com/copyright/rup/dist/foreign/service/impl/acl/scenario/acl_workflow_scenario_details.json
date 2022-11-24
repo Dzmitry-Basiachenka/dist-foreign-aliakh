@@ -1,0 +1,88 @@
+[
+  {
+    "period": 202006,
+    "originalDetailId": "OGN674GHHSB003",
+    "wrWrkInst": 123059057,
+    "systemTitle": "BIOCHEMISTRY (MOSCOW)",
+    "detailLicenseeClass": {
+      "id": 2,
+      "description": "Textiles, Apparel, etc."
+    },
+    "aggregateLicenseeClassId": 51,
+    "aggregateLicenseeClassName": "Materials",
+    "publicationType": {
+      "id": "076f2c40-f524-405d-967a-3840df2b57df",
+      "weight": 3.50
+    },
+    "price": 150.0000000000,
+    "priceFlag": true,
+    "content": 10.0000000000,
+    "contentFlag": true,
+    "contentUnitPrice": 15.0000000000,
+    "contentUnitPriceFlag": false,
+    "numberOfCopies": 1.00000,
+    "usageAgeWeight": 1.00000,
+    "weightedCopies": 1.0000000000,
+    "surveyCountry": "United States",
+    "reportedTypeOfUse": "EMAIL_COPY",
+    "typeOfUse": "DIGITAL",
+    "scenarioShareDetails": [
+      {
+        "rhAccountNumber": 1000010079,
+        "payeeAccountNumber": 1000010079,
+        "typeOfUse": "PRINT",
+        "volumeWeight": 1.0000000000,
+        "valueWeight": 52.5000000000,
+        "valueShare": 0.5000000000,
+        "volumeShare": 0.5000000000,
+        "detailShare": 0.5000000000,
+        "netAmount": 225399.9400000000,
+        "serviceFeeAmount": 91810.3000000000,
+        "grossAmount": 317210.2400000000
+      }
+    ]
+  },
+  {
+    "period": 202006,
+    "originalDetailId": "OGN674GHHSB006",
+    "wrWrkInst": 243618757,
+    "systemTitle": "Midbus",
+    "detailLicenseeClass": {
+      "id": 2,
+      "description": "Textiles, Apparel, etc."
+    },
+    "aggregateLicenseeClassId": 51,
+    "aggregateLicenseeClassName": "Materials",
+    "publicationType": {
+      "id": "076f2c40-f524-405d-967a-3840df2b57df",
+      "weight": 3.50
+    },
+    "price": 150.0000000000,
+    "priceFlag": true,
+    "content": 10.0000000000,
+    "contentFlag": true,
+    "contentUnitPrice": 15.0000000000,
+    "contentUnitPriceFlag": false,
+    "numberOfCopies": 1.00000,
+    "usageAgeWeight": 1.00000,
+    "weightedCopies": 1.0000000000,
+    "surveyCountry": "United States",
+    "reportedTypeOfUse": "EMAIL_COPY",
+    "typeOfUse": "DIGITAL",
+    "scenarioShareDetails": [
+      {
+        "rhAccountNumber": 1000010079,
+        "payeeAccountNumber": 1000010079,
+        "typeOfUse": "PRINT",
+        "volumeWeight": 1.0000000000,
+        "valueWeight": 52.5000000000,
+        "valueShare": 0.5000000000,
+        "volumeShare": 0.5000000000,
+        "detailShare": 0.5000000000,
+        "netAmount": 225399.9400000000,
+        "serviceFeeAmount": 91810.3000000000,
+        "grossAmount": 317210.2400000000
+      }
+    ]
+  }
+]
