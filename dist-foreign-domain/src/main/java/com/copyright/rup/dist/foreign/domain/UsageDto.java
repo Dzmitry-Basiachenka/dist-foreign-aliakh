@@ -64,6 +64,7 @@ public class UsageDto extends StoredEntity<String> {
     private String comment;
     private AaclUsage aaclUsage;
     private SalUsage salUsage;
+    private AclciUsage aclciUsage;
 
     public String getBatchName() {
         return batchName;
@@ -385,6 +386,14 @@ public class UsageDto extends StoredEntity<String> {
         this.salUsage = salUsage;
     }
 
+    public AclciUsage getAclciUsage() {
+        return aclciUsage;
+    }
+
+    public void setAclciUsage(AclciUsage aclciUsage) {
+        this.aclciUsage = aclciUsage;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj == this) {
@@ -436,6 +445,7 @@ public class UsageDto extends StoredEntity<String> {
             .append(this.comment, that.comment)
             .append(this.aaclUsage, that.aaclUsage)
             .append(this.salUsage, that.salUsage)
+            .append(this.aclciUsage, that.aclciUsage)
             .isEquals();
     }
 
@@ -483,6 +493,7 @@ public class UsageDto extends StoredEntity<String> {
             .append(comment)
             .append(aaclUsage)
             .append(salUsage)
+            .append(aclciUsage)
             .toHashCode();
     }
 
@@ -530,6 +541,7 @@ public class UsageDto extends StoredEntity<String> {
             .append("comment", comment)
             .append("aaclUsage", aaclUsage)
             .append("salUsage", salUsage)
+            .append("aclciUsage", aclciUsage)
             .toString();
     }
 }
