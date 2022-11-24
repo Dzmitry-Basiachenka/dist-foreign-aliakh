@@ -225,7 +225,7 @@ public class AclScenarioDrillDownUsageDetailsWindow extends Window {
         FooterRow row = grid.getFooterRow(0);
         row.setStyleName("table-ext-footer");
         row.join("detailId", "usageDetailId", "usagePeriod", "usageAgeWeight", "surveyCountry",
-                "detailLicenseeClassId", "detailLicenseeClassName", "reportedTypeOfUse", "numberOfCopies",
+                "detailLicenseeClassId", "detailLicenseeClassName", "reportedTypeOfUse", "typeOfUse", "numberOfCopies",
                 "weightedCopies", "publicationType", "pubTypeWeight", "price", "priceFlag", "content", "contentFlag",
                 "contentUnitPrice", "contentUnitPriceFlag")
             .setText("Totals");
