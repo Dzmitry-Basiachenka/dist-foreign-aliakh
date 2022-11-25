@@ -1,3 +1,11 @@
+16.0.17
+-
+* B-68554 FDA: ACLCI UI usage view: implement ACLCI tab
+* B-68554 FDA: ACLCI UI usage view: implement ACLCI grid
+* B-72659 FDA: Allow multi-edit when making non-granted works Eligible: hide the Select All checkbox in the grid is empty
+* B-74646 FDA: View all scenario specific usage details: increase columns width for Print/Digital Payee Account # and Price
+* B-74822 Tech Debt: FDA: add TOU column id for footer joining on Results by Rightsholder: Usage Details window
+
 16.0.16
 -
 * B-72659 FDA: Allow multi-edit when making non-granted works Eligible: refactor the usages repository
