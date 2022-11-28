@@ -59,12 +59,15 @@ public class AclScenarioAuditRepositoryIntegrationTest {
     @TestData(fileName = FOLDER_NAME + "find-by-acl-scenario-id.groovy")
     public void testFindByScenarioId() {
         assertEquals(0, CollectionUtils.size(aclScenarioAuditRepository.findByScenarioId(SCENARIO_UID_1)));
-        ScenarioAuditItem auditItem = buildScenarioAuditItem(SCENARIO_UID_1);
-        aclScenarioAuditRepository.insert(auditItem);
+        ScenarioAuditItem auditItem1 = buildScenarioAuditItem(SCENARIO_UID_1);
+        aclScenarioAuditRepository.insert(auditItem1);
+        ScenarioAuditItem auditItem2 = buildScenarioAuditItem(SCENARIO_UID_1);
+        aclScenarioAuditRepository.insert(auditItem2);
         aclScenarioAuditRepository.insert(buildScenarioAuditItem(SCENARIO_UID_2));
         List<ScenarioAuditItem> auditItems = aclScenarioAuditRepository.findByScenarioId(SCENARIO_UID_1);
-        assertEquals(1, CollectionUtils.size(auditItems));
-        assertEquals(auditItem, auditItems.get(0));
+        assertEquals(2, CollectionUtils.size(auditItems));
+        assertEquals(auditItem2, auditItems.get(0));
+        assertEquals(auditItem1, auditItems.get(1));
     }
 
     @Test

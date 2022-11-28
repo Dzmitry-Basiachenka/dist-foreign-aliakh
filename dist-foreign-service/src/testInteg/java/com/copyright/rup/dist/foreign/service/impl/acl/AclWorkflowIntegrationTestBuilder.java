@@ -487,11 +487,11 @@ public class AclWorkflowIntegrationTestBuilder implements Builder<Runner> {
 
         private void verifyAclScenarioAudit() {
             List<Pair<ScenarioActionTypeEnum, String>> expectedAudit = Arrays.asList(
-                Pair.of(ScenarioActionTypeEnum.ADDED_USAGES, ""),
-                Pair.of(ScenarioActionTypeEnum.SUBMITTED, "Submitting scenario for testing purposes"),
-                Pair.of(ScenarioActionTypeEnum.APPROVED, "Approving scenario for testing purposes"),
+                Pair.of(ScenarioActionTypeEnum.ARCHIVED, ""),
                 Pair.of(ScenarioActionTypeEnum.SENT_TO_LM, ""),
-                Pair.of(ScenarioActionTypeEnum.ARCHIVED, ""));
+                Pair.of(ScenarioActionTypeEnum.APPROVED, "Approving scenario for testing purposes"),
+                Pair.of(ScenarioActionTypeEnum.SUBMITTED, "Submitting scenario for testing purposes"),
+                Pair.of(ScenarioActionTypeEnum.ADDED_USAGES, ""));
             testHelper.assertAclScenarioAudit(aclScenario.getId(), expectedAudit);
         }
     }
