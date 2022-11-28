@@ -23,7 +23,9 @@
         "issueVolumeSeries": "55(2)",
         "grade": "5",
         "academicYear": "2014-2016",
-        "publicationIssueDate": "7/9/2010"
+        "publicationIssueDate": "7/9/2010",
+        "distributionDate": "01-14-2017T12:00:00 AM",
+        "typeOfUse": "Assessment Item Bank"
       },
       {
         "cccEventId": "83291",
@@ -46,7 +48,9 @@
         "status": "D - Distributed",
         "issueVolumeSeries": "55(2)",
         "academicYear": "2015-2016",
-        "publicationIssueDate": "7/8/2010"
+        "publicationIssueDate": "7/8/2010",
+        "distributionDate": "01-14-2017T12:00:00 AM",
+        "typeOfUse": "Assessment Item Bank"
       },
       {
         "cccEventId": "83291",
@@ -70,7 +74,9 @@
         "issueVolumeSeries": "55(2)",
         "grade": "K",
         "academicYear": "2014-2016",
-        "publicationIssueDate": "7/7/2010"
+        "publicationIssueDate": "7/7/2010",
+        "distributionDate": "01-14-2017T12:00:00 AM",
+        "typeOfUse": "Assessment Item Bank"
       },
       {
         "cccEventId": "3356215",
@@ -95,7 +101,9 @@
         "issueVolumeSeries": "Vol 17, Issue 2",
         "grade": "5",
         "academicYear": "2019-2020",
-        "publicationIssueDate": "2015-01-02"
+        "publicationIssueDate": "2015-01-02",
+        "distributionDate": "01-14-2017T12:00:00 AM",
+        "typeOfUse": "Assessment Item Bank"
       }
     ]
   }

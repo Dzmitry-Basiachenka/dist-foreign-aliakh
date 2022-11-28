@@ -19,7 +19,8 @@
         "adjustmentFlag": false,
         "passThroughFlag": true,
         "createUser": "FDA Distribution",
-        "status": "D - Distributed"
+        "status": "D - Distributed",
+        "distributionDate": "01-14-2017T12:00:00 AM"
       },
       {
         "cccEventId": "99854",
@@ -39,7 +40,8 @@
         "adjustmentFlag": false,
         "passThroughFlag": true,
         "createUser": "FDA Distribution",
-        "status": "D - Distributed"
+        "status": "D - Distributed",
+        "distributionDate": "01-14-2019T12:00:00 AM"
       }
     ]
   }

@@ -24,7 +24,9 @@
         "issueVolumeSeries": "Vol 17, Issue 2",
         "grade": "5",
         "academicYear": "2019-2020",
-        "publicationIssueDate": "2015-01-02"
+        "publicationIssueDate": "2015-01-02",
+        "distributionDate": "04-03-2020T12:00:00 AM",
+        "typeOfUse": "Assessment Item Bank"
       },
       {
         "cccEventId": "3356214",
@@ -51,7 +53,9 @@
         "academicYear": "2019-2020",
         "state": "CA;WV",
         "assessmentType": "ELA",
-        "publicationIssueDate": "2015-01-02"
+        "publicationIssueDate": "2015-01-02",
+        "distributionDate": "04-03-2020T12:00:00 AM",
+        "typeOfUse": "Assessment"
       }
     ]
   }
