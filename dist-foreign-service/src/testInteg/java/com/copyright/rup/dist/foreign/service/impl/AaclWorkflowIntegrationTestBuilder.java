@@ -5,7 +5,6 @@ import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
 import com.copyright.rup.dist.common.test.TestUtils;
-import com.copyright.rup.dist.common.test.mock.aws.SqsClientMock;
 import com.copyright.rup.dist.foreign.domain.AaclClassifiedUsage;
 import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
@@ -42,8 +41,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
@@ -96,7 +93,6 @@ public class AaclWorkflowIntegrationTestBuilder implements Builder<Runner> {
     private List<FundPoolDetail> fundPoolDetails;
     private String expectedRollupsJson;
     private List<String> expectedRollupsRightholderIds;
-    private int expectedLmDetailsMessagesCount;
     private List<String> expectedLmDetailsJsonFiles;
     private Scenario expectedScenario;
     private String classifiedUsagesCsvFile;
@@ -106,8 +102,6 @@ public class AaclWorkflowIntegrationTestBuilder implements Builder<Runner> {
     private int expectCountScenarioUsages;
     private List<Pair<ScenarioActionTypeEnum, String>> expectedScenarioAudit;
 
-    @Autowired
-    private SqsClientMock sqsClientMock;
     @Autowired
     private CsvProcessorFactory csvProcessorFactory;
     @Autowired
@@ -225,8 +219,7 @@ public class AaclWorkflowIntegrationTestBuilder implements Builder<Runner> {
         return this;
     }
 
-    AaclWorkflowIntegrationTestBuilder expectLmDetails(int messagesCount, String... lmDetailsJsonFile) {
-        this.expectedLmDetailsMessagesCount = messagesCount;
+    AaclWorkflowIntegrationTestBuilder expectLmDetails(String... lmDetailsJsonFile) {
         this.expectedLmDetailsJsonFiles = Arrays.asList(lmDetailsJsonFile);
         return this;
     }
@@ -242,7 +235,7 @@ public class AaclWorkflowIntegrationTestBuilder implements Builder<Runner> {
         expectedRmsRequestsToResponses.clear();
         expectedUsagesJsonFile = null;
         classifiedUsagesCsvFile = null;
-        this.sqsClientMock.reset();
+        testHelper.reset();
     }
 
     @Override
@@ -345,11 +338,7 @@ public class AaclWorkflowIntegrationTestBuilder implements Builder<Runner> {
 
         private void sendScenarioToLm() {
             aaclScenarioService.sendToLm(scenario);
-            List<String> lmUsageMessages = Lists.newArrayListWithExpectedSize(expectedLmDetailsMessagesCount);
-            expectedLmDetailsJsonFiles.forEach(lmDetailsFile ->
-                lmUsageMessages.add(TestUtils.fileToString(this.getClass(), lmDetailsFile)));
-            sqsClientMock.assertSendMessages("fda-test-sf-detail.fifo", lmUsageMessages,
-                Collections.singletonList("detail_id"), ImmutableMap.of("source", "FDA"));
+            testHelper.sendScenarioToLm(expectedLmDetailsJsonFiles);
         }
 
         private void receivePaidUsagesFromLm() throws InterruptedException {

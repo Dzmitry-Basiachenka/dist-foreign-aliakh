@@ -5,8 +5,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
-import com.copyright.rup.dist.common.test.TestUtils;
-import com.copyright.rup.dist.common.test.mock.aws.SqsClientMock;
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Scenario.NtsFields;
@@ -22,8 +20,6 @@ import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.nts.INtsScenarioService;
 import com.copyright.rup.dist.foreign.service.api.nts.INtsUsageService;
 import com.copyright.rup.dist.foreign.service.impl.NtsWorkflowIntegrationTestBuilder.Runner;
-
-import com.google.common.collect.ImmutableMap;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.builder.Builder;
@@ -65,8 +61,6 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
     private INtsUsageService ntsUsageService;
     @Autowired
     private IUsageArchiveRepository usageArchiveRepository;
-    @Autowired
-    private SqsClientMock sqsClientMock;
     @Autowired
     private ServiceTestHelper testHelper;
 
@@ -164,7 +158,7 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
         expectedLmDetailsJsonFile = null;
         expectedRollupsJson = null;
         expectedRollupsRightholderId = null;
-        this.sqsClientMock.reset();
+        testHelper.reset();
     }
 
     /**
@@ -220,9 +214,7 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
 
         private void sendScenarioToLm() {
             ntsScenarioService.sendToLm(actualScenario);
-            sqsClientMock.assertSendMessages("fda-test-sf-detail.fifo",
-                Collections.singletonList(TestUtils.fileToString(this.getClass(), expectedLmDetailsJsonFile)),
-                Collections.singletonList("detail_id"), ImmutableMap.of("source", "FDA"));
+            testHelper.sendScenarioToLm(Collections.singletonList(expectedLmDetailsJsonFile));
         }
 
         private void receivePaidUsagesFromLm() throws InterruptedException {

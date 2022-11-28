@@ -73,7 +73,7 @@ public class SalWorkflowIntegrationTest {
             .expectRmsRights("rights/rms_grants_122769471_request.json", "rights/rms_grants_122769471_response.json")
             .expectRollups("prm/sal_workflow_rollups_response.json", "85f864f2-30a5-4215-ac4f-f1f541901218")
             .expectUsages("usage/sal/sal_expected_details_for_workflow_1.json")
-            .expectLmDetails(1, "details/sal_details_to_lm.json")
+            .expectLmDetails("details/sal_details_to_lm.json")
             .expectPaidUsagesFromLm("lm/paid_usages_sal_workflow.json")
             .expectPaidUsageLmDetailIds("e79ca5fe-9239-45f3-9c48-998f4748d68a", "b1fc2be4-204d-43a2-8f0c-76af9e012cf2",
                 "5c5d105f-1d13-4691-b11d-8d1abb4027f1", "4375bee0-24f0-4e6c-a808-c62814dd93ae")
@@ -105,7 +105,7 @@ public class SalWorkflowIntegrationTest {
             .expectRmsRights("rights/rms_grants_122769471_request.json", "rights/rms_grants_122769471_response.json")
             .expectRollups("prm/sal_workflow_rollups_response.json", "85f864f2-30a5-4215-ac4f-f1f541901218")
             .expectUsages("usage/sal/sal_expected_details_for_workflow_2.json")
-            .expectLmDetails(2, "details/sal_details_to_lm_2.json", "details/sal_usage_data_to_lm.json")
+            .expectLmDetails("details/sal_details_to_lm_2.json", "details/sal_usage_data_to_lm.json")
             .expectPaidUsagesFromLm("lm/paid_usages_sal_workflow_2.json")
             .expectPaidUsageLmDetailIds("16199b1d-a5a6-4c25-9bd5-2446fff60675", "7a6b0bff-2c6f-4d97-8c15-987639e2c773",
                 "00fa7d60-0752-4b47-9925-b59128064bce", "46b729b4-1f0b-4d03-abb6-5750acf3724b",

@@ -1,0 +1,401 @@
+{
+  "usageBatchId": "9802c9e6-7b7c-4919-a5c6-5b17f47e7322",
+  "fundPoolId": "7462f044-2505-4674-b0cd-b8666b27aca3",
+  "grantSetId": "3ea7471f-a9bf-42ec-a695-8f5b553bf841",
+  "name": "Test ACL Scenario",
+  "description": "some description",
+  "status": "ARCHIVED",
+  "editableFlag": false,
+  "periodEndDate": 202006,
+  "licenseType": "ACL",
+  "publicationTypes": [
+    {
+      "id": "73876e58-2e87-485e-b6f3-7e23792dd214",
+      "weight": 1.00,
+      "period": 201506
+    },
+    {
+      "id": "f1f523ca-1b46-4d3a-842d-99252785187c",
+      "weight": 1.00,
+      "period": 201506
+    },
+    {
+      "id": "aef4304b-6722-4047-86e0-8c84c72f096d",
+      "weight": 1.90,
+      "period": 201506
+    },
+    {
+      "id": "076f2c40-f524-405d-967a-3840df2b57df",
+      "weight": 3.50,
+      "period": 201506
+    },
+    {
+      "id": "ad8df236-5200-4acf-be55-cf82cd342f14",
+      "weight": 1.00,
+      "period": 201506
+    },
+    {
+      "id": "34574f62-7922-48b9-b798-73bf5c3163da",
+      "weight": 1.30,
+      "period": 201506
+    },
+    {
+      "id": "9c5c6797-a861-44ae-ada9-438acb20334d",
+      "weight": 1.00,
+      "period": 201506
+    },
+    {
+      "id": "c0db0a37-9854-495f-99b7-1e3486c232cb",
+      "weight": 1.90,
+      "period": 201506
+    },
+    {
+      "id": "0a4bcf78-95cb-445e-928b-e48ad12acfd2",
+      "weight": 1.90,
+      "period": 201506
+    },
+    {
+      "id": "56e31ea2-2f32-43a5-a0a7-9b1ecb1e73fe",
+      "weight": 2.70,
+      "period": 201506
+    }
+  ],
+  "usageAges": [
+    {
+      "period": 0,
+      "weight": 1.00000
+    },
+    {
+      "period": 1,
+      "weight": 1.00000
+    },
+    {
+      "period": 2,
+      "weight": 0.80000
+    },
+    {
+      "period": 3,
+      "weight": 0.80000
+    },
+    {
+      "period": 4,
+      "weight": 0.60000
+    },
+    {
+      "period": 5,
+      "weight": 0.60000
+    },
+    {
+      "period": 6,
+      "weight": 0.40000
+    },
+    {
+      "period": 7,
+      "weight": 0.40000
+    },
+    {
+      "period": 8,
+      "weight": 0.20000
+    },
+    {
+      "period": 9,
+      "weight": 0.20000
+    },
+    {
+      "period": 10,
+      "weight": 0.10000
+    },
+    {
+      "period": 11,
+      "weight": 0.05000
+    },
+    {
+      "period": 12,
+      "weight": 0.00000
+    },
+    {
+      "period": 13,
+      "weight": 0.00000
+    },
+    {
+      "period": 14,
+      "weight": 0.00000
+    },
+    {
+      "period": 15,
+      "weight": 0.00000
+    }
+  ],
+  "detailLicenseeClasses": [
+    {
+      "id": 1,
+      "aggregateLicenseeClass": {
+        "id": 1
+      }
+    },
+    {
+      "id": 2,
+      "aggregateLicenseeClass": {
+        "id": 51
+      }
+    },
+    {
+      "id": 3,
+      "aggregateLicenseeClass": {
+        "id": 51
+      }
+    },
+    {
+      "id": 4,
+      "aggregateLicenseeClass": {
+        "id": 57
+      }
+    },
+    {
+      "id": 5,
+      "aggregateLicenseeClass": {
+        "id": 51
+      }
+    },
+    {
+      "id": 6,
+      "aggregateLicenseeClass": {
+        "id": 52
+      }
+    },
+    {
+      "id": 7,
+      "aggregateLicenseeClass": {
+        "id": 51
+      }
+    },
+    {
+      "id": 8,
+      "aggregateLicenseeClass": {
+        "id": 51
+      }
+    },
+    {
+      "id": 9,
+      "aggregateLicenseeClass": {
+        "id": 51
+      }
+    },
+    {
+      "id": 10,
+      "aggregateLicenseeClass": {
+        "id": 53
+      }
+    },
+    {
+      "id": 11,
+      "aggregateLicenseeClass": {
+        "id": 53
+      }
+    },
+    {
+      "id": 12,
+      "aggregateLicenseeClass": {
+        "id": 12
+      }
+    },
+    {
+      "id": 13,
+      "aggregateLicenseeClass": {
+        "id": 13
+      }
+    },
+    {
+      "id": 14,
+      "aggregateLicenseeClass": {
+        "id": 54
+      }
+    },
+    {
+      "id": 15,
+      "aggregateLicenseeClass": {
+        "id": 54
+      }
+    },
+    {
+      "id": 16,
+      "aggregateLicenseeClass": {
+        "id": 54
+      }
+    },
+    {
+      "id": 17,
+      "aggregateLicenseeClass": {
+        "id": 55
+      }
+    },
+    {
+      "id": 18,
+      "aggregateLicenseeClass": {
+        "id": 18
+      }
+    },
+    {
+      "id": 19,
+      "aggregateLicenseeClass": {
+        "id": 51
+      }
+    },
+    {
+      "id": 20,
+      "aggregateLicenseeClass": {
+        "id": 54
+      }
+    },
+    {
+      "id": 21,
+      "aggregateLicenseeClass": {
+        "id": 57
+      }
+    },
+    {
+      "id": 22,
+      "aggregateLicenseeClass": {
+        "id": 56
+      }
+    },
+    {
+      "id": 23,
+      "aggregateLicenseeClass": {
+        "id": 23
+      }
+    },
+    {
+      "id": 24,
+      "aggregateLicenseeClass": {
+        "id": 52
+      }
+    },
+    {
+      "id": 25,
+      "aggregateLicenseeClass": {
+        "id": 25
+      }
+    },
+    {
+      "id": 26,
+      "aggregateLicenseeClass": {
+        "id": 26
+      }
+    },
+    {
+      "id": 27,
+      "aggregateLicenseeClass": {
+        "id": 55
+      }
+    },
+    {
+      "id": 28,
+      "aggregateLicenseeClass": {
+        "id": 28
+      }
+    },
+    {
+      "id": 29,
+      "aggregateLicenseeClass": {
+        "id": 29
+      }
+    },
+    {
+      "id": 31,
+      "aggregateLicenseeClass": {
+        "id": 51
+      }
+    },
+    {
+      "id": 32,
+      "aggregateLicenseeClass": {
+        "id": 51
+      }
+    },
+    {
+      "id": 34,
+      "aggregateLicenseeClass": {
+        "id": 56
+      }
+    },
+    {
+      "id": 35,
+      "aggregateLicenseeClass": {
+        "id": 13
+      }
+    },
+    {
+      "id": 36,
+      "aggregateLicenseeClass": {
+        "id": 52
+      }
+    },
+    {
+      "id": 39,
+      "aggregateLicenseeClass": {
+        "id": 39
+      }
+    },
+    {
+      "id": 41,
+      "aggregateLicenseeClass": {
+        "id": 39
+      }
+    },
+    {
+      "id": 42,
+      "aggregateLicenseeClass": {
+        "id": 39
+      }
+    },
+    {
+      "id": 43,
+      "aggregateLicenseeClass": {
+        "id": 39
+      }
+    },
+    {
+      "id": 93,
+      "aggregateLicenseeClass": {
+        "id": 25
+      }
+    },
+    {
+      "id": 94,
+      "aggregateLicenseeClass": {
+        "id": 51
+      }
+    },
+    {
+      "id": 95,
+      "aggregateLicenseeClass": {
+        "id": 54
+      }
+    },
+    {
+      "id": 97,
+      "aggregateLicenseeClass": {
+        "id": 56
+      }
+    },
+    {
+      "id": 98,
+      "aggregateLicenseeClass": {
+        "id": 52
+      }
+    },
+    {
+      "id": 99,
+      "aggregateLicenseeClass": {
+        "id": 52
+      }
+    },
+    {
+      "id": 100,
+      "aggregateLicenseeClass": {
+        "id": 52
+      }
+    }
+  ]
+}

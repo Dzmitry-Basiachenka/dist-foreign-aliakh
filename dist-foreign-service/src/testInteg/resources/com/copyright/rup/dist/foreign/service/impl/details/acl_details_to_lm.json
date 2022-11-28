@@ -1,0 +1,30 @@
+{
+  "details": [
+    {
+      "rh_uid": "1180895b-04e3-4052-b11a-ec4b1a612a35",
+      "product_family": "ACLPRINT",
+      "detail_id": "ac28903f-8d2d-488d-a49b-b5fdc3a37f12",
+      "royalty_amount": 225399.94,
+      "service_fee_amount": 91810.30,
+      "collected_amount": 317210.24,
+      "wr_wrk_inst": "123059057",
+      "work_title": "BIOCHEMISTRY (MOSCOW)",
+      "aggregate_licensee_class_description": "Materials",
+      "license_type": "ACL",
+      "type_of_use": "PRINT"
+    },
+    {
+      "rh_uid": "1180895b-04e3-4052-b11a-ec4b1a612a35",
+      "product_family": "ACLPRINT",
+      "detail_id": "c4e7b2d1-e49b-42f3-9c94-8f28feb3ae67",
+      "royalty_amount": 225399.94,
+      "service_fee_amount": 91810.30,
+      "collected_amount": 317210.24,
+      "wr_wrk_inst": "243618757",
+      "work_title": "Midbus",
+      "aggregate_licensee_class_description": "Materials",
+      "license_type": "ACL",
+      "type_of_use": "PRINT"
+    }
+  ]
+}

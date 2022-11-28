@@ -6,15 +6,17 @@ import static org.junit.Assert.assertTrue;
 import com.copyright.rup.dist.common.domain.BaseEntity;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
-import com.copyright.rup.dist.common.test.mock.aws.SqsClientMock;
 import com.copyright.rup.dist.foreign.domain.AclFundPool;
 import com.copyright.rup.dist.foreign.domain.AclGrantSet;
 import com.copyright.rup.dist.foreign.domain.AclPublicationType;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
+import com.copyright.rup.dist.foreign.domain.AclScenarioDetail;
 import com.copyright.rup.dist.foreign.domain.AclUsageBatch;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
+import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
+import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.UdmBatch;
 import com.copyright.rup.dist.foreign.domain.UdmUsage;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
@@ -28,6 +30,7 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineValueFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UdmValueFilter;
+import com.copyright.rup.dist.foreign.repository.api.IAclScenarioUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.ILicenseeClassService;
 import com.copyright.rup.dist.foreign.service.api.IPublicationTypeService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclFundPoolService;
@@ -48,6 +51,7 @@ import com.copyright.rup.dist.foreign.service.impl.csv.UdmCsvProcessor;
 import com.google.common.collect.ImmutableSet;
 
 import org.apache.commons.lang3.builder.Builder;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -87,8 +91,6 @@ public class AclWorkflowIntegrationTestBuilder implements Builder<Runner> {
     @Autowired
     private ServiceTestHelper testHelper;
     @Autowired
-    private SqsClientMock sqsClientMock;
-    @Autowired
     private CsvProcessorFactory csvProcessorFactory;
     @Autowired
     private IUdmProxyValueService udmProxyValueService;
@@ -106,6 +108,8 @@ public class AclWorkflowIntegrationTestBuilder implements Builder<Runner> {
     private IPublicationTypeService publicationTypeService;
     @Autowired
     private ILicenseeClassService licenseeClassService;
+    @Autowired
+    private IAclScenarioUsageRepository aclScenarioUsageRepository;
 
     private List<UdmUsageDto> udmUsageDtos;
     private UdmBatch expectedUdmBatch;
@@ -129,6 +133,9 @@ public class AclWorkflowIntegrationTestBuilder implements Builder<Runner> {
     private List<AclPublicationType> publicationTypes = new ArrayList<>();
     private List<DetailLicenseeClass> detailLicenseeClasses = new ArrayList<>();
     private AclScenario aclScenario;
+    private List<String> expectedLmDetailsJson = new ArrayList<>();
+    private String pathToExpectedAclScenario;
+    private String pathToExpectedAclScenarioDetails;
 
     public AclWorkflowIntegrationTestBuilder withUdmBatch(UdmBatch udmBatch) {
         this.expectedUdmBatch = udmBatch;
@@ -226,6 +233,21 @@ public class AclWorkflowIntegrationTestBuilder implements Builder<Runner> {
         return this;
     }
 
+    public AclWorkflowIntegrationTestBuilder withLmDetails(String... lmDetailsJson) {
+        this.expectedLmDetailsJson = Arrays.asList(lmDetailsJson);
+        return this;
+    }
+
+    public AclWorkflowIntegrationTestBuilder withExpectedAclScenario(String pathToAclScenario) {
+        this.pathToExpectedAclScenario = pathToAclScenario;
+        return this;
+    }
+
+    public AclWorkflowIntegrationTestBuilder withExpectedAclScenarioDetails(String pathToAclScenarioDetails) {
+        this.pathToExpectedAclScenarioDetails = pathToAclScenarioDetails;
+        return this;
+    }
+
     void reset() {
         this.expectedUdmBatch = null;
         this.pathToUsagesToUpload = null;
@@ -249,7 +271,10 @@ public class AclWorkflowIntegrationTestBuilder implements Builder<Runner> {
         this.publicationTypes.clear();
         this.detailLicenseeClasses.clear();
         this.aclScenario = null;
-        this.sqsClientMock.reset();
+        this.expectedLmDetailsJson.clear();
+        this.pathToExpectedAclScenario = null;
+        this.pathToExpectedAclScenarioDetails = null;
+        testHelper.reset();
     }
 
     @Override
@@ -283,7 +308,12 @@ public class AclWorkflowIntegrationTestBuilder implements Builder<Runner> {
             createAclFundPool();
             createAclGrantSet();
             createAclScenario();
-            //TODO: implement full ACL workflow
+            submitAclScenario();
+            approveAclScenario();
+            sendAclScenarioToLm();
+            verifyAclScenario();
+            verifyAclScenarioDetails();
+            verifyAclScenarioAudit();
             testHelper.verifyRestServer();
         }
 
@@ -423,6 +453,46 @@ public class AclWorkflowIntegrationTestBuilder implements Builder<Runner> {
                 aclScenario.getGrantSetId(), aclScenario.getDetailLicenseeClasses())
                 .isEmpty());
             aclScenarioService.insertScenario(aclScenario);
+        }
+
+        private void submitAclScenario() {
+            aclScenarioService.changeScenarioState(aclScenario, ScenarioStatusEnum.SUBMITTED,
+                ScenarioActionTypeEnum.SUBMITTED, "Submitting scenario for testing purposes");
+        }
+
+        private void approveAclScenario() {
+            aclScenarioService.changeScenarioState(aclScenario, ScenarioStatusEnum.APPROVED,
+                ScenarioActionTypeEnum.APPROVED, "Approving scenario for testing purposes");
+        }
+
+        private void sendAclScenarioToLm() {
+            aclScenarioService.sendToLm(aclScenario);
+            testHelper.sendScenarioToLm(expectedLmDetailsJson);
+        }
+
+        private void verifyAclScenario() throws IOException {
+            AclScenario expectedScenario = testHelper.loadExpectedAclScenario(pathToExpectedAclScenario);
+            AclScenario actualScenario = aclScenarioService.getScenarioById(aclScenario.getId());
+            actualScenario.setFundPoolId(expectedScenario.getFundPoolId());
+            actualScenario.setUsageBatchId(expectedScenario.getUsageBatchId());
+            actualScenario.setGrantSetId(expectedScenario.getGrantSetId());
+            testHelper.verifyAclScenario(expectedScenario, actualScenario);
+        }
+
+        private void verifyAclScenarioDetails() throws IOException {
+            List<AclScenarioDetail> scenarioDetails =
+                aclScenarioUsageRepository.findScenarioDetailsByScenarioId(aclScenario.getId());
+            testHelper.verifyAclScenarioDetails(pathToExpectedAclScenarioDetails, scenarioDetails);
+        }
+
+        private void verifyAclScenarioAudit() {
+            List<Pair<ScenarioActionTypeEnum, String>> expectedAudit = Arrays.asList(
+                Pair.of(ScenarioActionTypeEnum.ADDED_USAGES, ""),
+                Pair.of(ScenarioActionTypeEnum.SUBMITTED, "Submitting scenario for testing purposes"),
+                Pair.of(ScenarioActionTypeEnum.APPROVED, "Approving scenario for testing purposes"),
+                Pair.of(ScenarioActionTypeEnum.SENT_TO_LM, ""),
+                Pair.of(ScenarioActionTypeEnum.ARCHIVED, ""));
+            testHelper.assertAclScenarioAudit(aclScenario.getId(), expectedAudit);
         }
     }
 }
