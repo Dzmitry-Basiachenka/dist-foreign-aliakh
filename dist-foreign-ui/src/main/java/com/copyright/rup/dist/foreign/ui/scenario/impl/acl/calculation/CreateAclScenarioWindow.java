@@ -148,7 +148,7 @@ public class CreateAclScenarioWindow extends Window implements IDateFormatter {
         scenarioNameField.setRequiredIndicatorVisible(true);
         scenarioBinder.forField(scenarioNameField)
             .withValidator(new RequiredValidator())
-            .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.length", 50), 0, 50))
+            .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.length", 255), 0, 255))
             .withValidator(value -> !controller.aclScenarioExists(StringUtils.trimToEmpty(value)),
                 ForeignUi.getMessage("message.error.unique_name", "ACL Scenario"))
             .bind(AclScenario::getName, AclScenario::setName);

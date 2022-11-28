@@ -162,8 +162,8 @@ public class CreateAclScenarioWindowTest {
         String emptyFieldValidationMessage = "Field value should be specified";
         validateFieldAndVerifyErrorMessage(scenarioName, StringUtils.EMPTY, binder, emptyFieldValidationMessage, false);
         validateFieldAndVerifyErrorMessage(scenarioName, "   ", binder, emptyFieldValidationMessage, false);
-        validateFieldAndVerifyErrorMessage(scenarioName, StringUtils.repeat('a', 51), binder,
-            "Field value should not exceed 50 characters", false);
+        validateFieldAndVerifyErrorMessage(scenarioName, StringUtils.repeat('a', 256), binder,
+            "Field value should not exceed 255 characters", false);
         validateFieldAndVerifyErrorMessage(scenarioName, SCENARIO_NAME, binder, null, true);
         verify(controller);
     }
