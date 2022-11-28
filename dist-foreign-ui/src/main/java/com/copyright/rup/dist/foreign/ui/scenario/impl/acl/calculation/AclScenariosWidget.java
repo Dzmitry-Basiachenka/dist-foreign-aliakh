@@ -275,16 +275,16 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
             .setExpandRatio(1);
         scenarioGrid.addColumn(AclScenario::getLicenseType)
             .setCaption(ForeignUi.getMessage("table.column.license_type"))
-            .setWidth(110);
+            .setWidth(100);
         scenarioGrid.addColumn(AclScenario::getPeriodEndDate)
             .setCaption(ForeignUi.getMessage("table.column.period"))
-            .setWidth(100);
+            .setWidth(70);
         scenarioGrid.addColumn(scenario -> scenario.isEditableFlag() ? "Y" : "N")
             .setCaption(ForeignUi.getMessage("table.column.editable"))
-            .setWidth(100);
+            .setWidth(90);
         scenarioGrid.addColumn(scenario -> scenario.getStatus().name())
             .setCaption(ForeignUi.getMessage("table.column.status"))
-            .setWidth(130);
+            .setWidth(150);
     }
 
     private VerticalLayout initGrossTotalLayout() {

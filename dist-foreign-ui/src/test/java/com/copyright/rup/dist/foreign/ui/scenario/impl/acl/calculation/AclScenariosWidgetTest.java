@@ -403,10 +403,10 @@ public class AclScenariosWidgetTest {
         assertEquals("acl-scenarios-table", grid.getId());
         UiTestHelper.verifyGrid(grid, Arrays.asList(
             Triple.of("Name", -1.0, 1),
-            Triple.of("License Type", 110.0, -1),
-            Triple.of("Period", 100.0, -1),
-            Triple.of("Editable", 100.0, -1),
-            Triple.of("Status", 130.0, -1)
+            Triple.of("License Type", 100.0, -1),
+            Triple.of("Period", 70.0, -1),
+            Triple.of("Editable", 90.0, -1),
+            Triple.of("Status", 150.0, -1)
         ));
         assertNotNull(((Column) grid.getColumns().get(2)).getComparator(SortDirection.ASCENDING));
     }
