@@ -21,9 +21,15 @@
 
     <insert id="insert" parameterType="ScenarioAuditItem">
         insert into ${schema}.df_acl_scenario_audit(
-            <include refid="scenarioAuditItemColumns"/>
+            df_acl_scenario_audit_uid,
+            df_acl_scenario_audit_id,
+            df_acl_scenario_uid,
+            action_type_ind,
+            action_reason,
+            <include refid="StoredEntityMapper.additionalColumns"/>
         ) values (
             #{id},
+            nextval('df_acl_scenario_audit_seq'),
             #{scenarioId},
             #{actionType},
             #{actionReason},
@@ -36,7 +42,7 @@
             <include refid="scenarioAuditItemColumns"/>
         from ${schema}.df_acl_scenario_audit
         where df_acl_scenario_uid = #{scenarioId}
-        order by created_datetime desc
+        order by created_datetime desc, df_acl_scenario_audit_id desc
     </select>
 
     <delete id="deleteByScenarioId" parameterType="string">

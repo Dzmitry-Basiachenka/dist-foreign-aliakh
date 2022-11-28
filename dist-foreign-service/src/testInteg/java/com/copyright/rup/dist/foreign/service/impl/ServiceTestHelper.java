@@ -343,14 +343,14 @@ public class ServiceTestHelper {
     public void assertScenarioAudit(String scenarioId, List<Pair<ScenarioActionTypeEnum, String>> expectedAudit) {
         assertEquals(expectedAudit, scenarioAuditService.getActions(scenarioId).stream()
             .sorted(Comparator.comparing(ScenarioAuditItem::getCreateDate))
-            .map(a -> Pair.of(a.getActionType(), a.getActionReason()))
+            .map(auditItem -> Pair.of(auditItem.getActionType(), auditItem.getActionReason()))
             .collect(Collectors.toList()));
     }
 
     public void assertAclScenarioAudit(String scenarioId, List<Pair<ScenarioActionTypeEnum, String>> expectedAudit) {
-        assertEquals(expectedAudit, aclScenarioAuditService.getActions(scenarioId).stream()
-            .sorted(Comparator.comparing(ScenarioAuditItem::getCreateDate))
-            .map(a -> Pair.of(a.getActionType(), a.getActionReason()))
+        assertEquals(expectedAudit, aclScenarioAuditService.getActions(scenarioId)
+            .stream()
+            .map(auditItem -> Pair.of(auditItem.getActionType(), auditItem.getActionReason()))
             .collect(Collectors.toList()));
     }
 

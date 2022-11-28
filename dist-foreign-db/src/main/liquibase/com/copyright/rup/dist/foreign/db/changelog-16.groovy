@@ -46,4 +46,19 @@ databaseChangeLog {
             sql("drop index ${dbAppsSchema}.ix_df_acl_grant_detail_df_acl_grant_set_uid")
         }
     }
+
+    changeSet(id: '2022-11-28-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
+        comment("B-74822 Tech Debt: FDA: implement insertion order in table df_acl_scenario_audit")
+
+        createSequence(schemaName: dbPublicSchema, sequenceName: 'df_acl_scenario_audit_seq')
+
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_audit') {
+            column(name: 'df_acl_scenario_audit_id', type: 'NUMERIC(38)', remarks: 'The sequential identifier of ACL scenario audit action')
+        }
+
+        rollback {
+            dropColumn(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_audit', columnName: 'df_acl_scenario_audit_id')
+            dropSequence(schemaName: dbPublicSchema, sequenceName: 'df_acl_scenario_audit_seq')
+        }
+    }
 }

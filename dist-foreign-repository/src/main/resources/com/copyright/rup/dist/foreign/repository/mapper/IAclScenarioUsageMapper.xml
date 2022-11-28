@@ -653,10 +653,12 @@
         ) as groups
         join ${schema}.df_acl_scenario s on s.df_acl_scenario_uid = groups.df_acl_scenario_uid
         left join ${schema}.df_acl_scenario_audit sa on sa.df_acl_scenario_uid = s.df_acl_scenario_uid
-            and sa.created_datetime = (
-                select max(created_datetime)
+            and sa.df_acl_scenario_audit_uid = (
+                select df_acl_scenario_audit_uid
                 from ${schema}.df_acl_scenario_audit
                 where df_acl_scenario_uid = s.df_acl_scenario_uid
+                order by created_datetime desc, df_acl_scenario_audit_id desc
+                limit 1
             )
         group by s.df_acl_scenario_uid, sa.df_acl_scenario_audit_uid
     </select>
