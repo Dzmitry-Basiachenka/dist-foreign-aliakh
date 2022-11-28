@@ -1,3 +1,9 @@
+16.0.18
+-
+* B-74623 FDA: Send distribution date to the Datamart: Adjust logic to send distribution date and TOU to the CRM
+* B-74822 Tech Debt: FDA: implement AclWorkflowIntegrationTest
+* B-74822 Tech Debt: FDA: refine columns width on ACL scenarios tab
+
 16.0.17
 -
 * B-68554 FDA: ACLCI UI usage view: implement ACLCI tab
