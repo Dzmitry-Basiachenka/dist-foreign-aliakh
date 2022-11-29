@@ -61,4 +61,17 @@ databaseChangeLog {
             dropSequence(schemaName: dbPublicSchema, sequenceName: 'df_acl_scenario_audit_seq')
         }
     }
+
+    changeSet(id: '2022-11-29-00', author: 'Dzmitry Basiachenka <dbasiachenka@copyright.com>') {
+        comment("B-74822 Tech Debt: FDA: add index by ccc_event_id for df_usage_archive table")
+
+        createIndex(indexName: 'ix_df_usage_archive_ccc_event_id', schemaName: dbAppsSchema,
+                tableName: 'df_usage_archive', tablespace: dbIndexTablespace) {
+            column(name: 'ccc_event_id')
+        }
+
+        rollback {
+            sql("drop index ${dbAppsSchema}.ix_df_usage_archive_ccc_event_id")
+        }
+    }
 }
