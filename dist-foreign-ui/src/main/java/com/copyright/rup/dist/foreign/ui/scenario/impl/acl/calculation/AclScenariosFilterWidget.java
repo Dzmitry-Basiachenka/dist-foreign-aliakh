@@ -89,7 +89,8 @@ public class AclScenariosFilterWidget extends VerticalLayout implements IAclScen
             appliedFilterWidget);
         setExpandRatio(appliedFilterWidget, 1f);
         editableComboBox.setItems(FilterOperatorEnum.Y, FilterOperatorEnum.N);
-        statusTypeComboBox.setItems(ScenarioStatusEnum.values());
+        statusTypeComboBox.setItems(ScenarioStatusEnum.IN_PROGRESS, ScenarioStatusEnum.SUBMITTED,
+            ScenarioStatusEnum.APPROVED, ScenarioStatusEnum.ARCHIVED);
         VaadinUtils.setMaxComponentsWidth(this);
         VaadinUtils.addComponentStyle(this, "acl-scenarios-filter-widget");
         return this;

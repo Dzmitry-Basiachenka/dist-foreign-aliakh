@@ -134,7 +134,8 @@ public class AclScenariosFilterWidgetTest {
         verifyComboBox(verticalLayout.getComponent(3), "Editable", true,
             Arrays.asList(FilterOperatorEnum.Y, FilterOperatorEnum.N));
         verifyComboBox(verticalLayout.getComponent(4), "Status", true,
-            ScenarioStatusEnum.values());
+            ScenarioStatusEnum.IN_PROGRESS, ScenarioStatusEnum.SUBMITTED, ScenarioStatusEnum.APPROVED,
+            ScenarioStatusEnum.ARCHIVED);
     }
 
     private Button getApplyButton() {
