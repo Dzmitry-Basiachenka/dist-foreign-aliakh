@@ -177,9 +177,6 @@ public class CrmRightsDistributionRequest {
             this.chapterArticleTitle = usage.getArticle();
         }
         if (FdaConstants.SAL_PRODUCT_FAMILY.equals(usage.getProductFamily())) {
-            this.omOrderDetailNumber = this.omOrderDetailNumber
-                .concat("_")
-                .concat(usage.getSalUsage().getDetailType().name());
             this.chapterArticleTitle = usage.getSalUsage().getReportedArticle();
             this.issueVolumeSeries = usage.getSalUsage().getReportedVolNumberSeries();
             this.grade = usage.getSalUsage().getGrade();
