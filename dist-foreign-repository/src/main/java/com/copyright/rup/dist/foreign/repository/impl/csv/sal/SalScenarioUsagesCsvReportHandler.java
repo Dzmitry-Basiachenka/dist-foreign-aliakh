@@ -26,9 +26,10 @@ public class SalScenarioUsagesCsvReportHandler extends BaseCsvReportHandler<Usag
             "Payee Name", "Wr Wrk Inst", "System Title", "Standard Number", "Standard Number Type", "Gross Amt in USD",
             "Service Fee Amount", "Net Amt in USD", "Service Fee %", "Assessment Name", "Assessment Type",
             "Date of Scored Assessment", "Reported Work Portion ID", "Reported Title",
-            "Reported Article or Chapter Title", "Reported Standard Number", "Reported Author", "Reported Publisher",
-            "Reported Publication Date", "Reported Page Range", "Reported Vol/Number/Series", "Reported Media Type",
-            "Coverage Year", "Question Identifier", "Grade", "Grade Group", "States", "Number of Views", "Comment");
+            "Reported Article or Chapter Title", "Reported Standard Number or Image ID Number", "Reported Author",
+            "Reported Publisher", "Reported Publication Date", "Reported Page Range", "Reported Vol/Number/Series",
+            "Reported Media Type", "Coverage Year", "Question Identifier", "Grade", "Grade Group", "States",
+            "Number of Views", "Comment");
 
     /**
      * Constructor.

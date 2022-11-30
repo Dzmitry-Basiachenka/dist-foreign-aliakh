@@ -101,7 +101,8 @@ public class SalUsageWidget extends CommonUsageWidget implements ISalUsageWidget
         addColumn(usageDto -> usageDto.getSalUsage().getReportedArticle(), "table.column.reported_article",
             "reportedArticle", true, 240);
         addColumn(usageDto -> usageDto.getSalUsage().getReportedStandardNumber(),
-            "table.column.reported_standard_number", "reportedStandardNumber", true, 200);
+            "table.column.reported_standard_number_or_image_id_number", "reportedStandardNumber",
+            true, 315);
         addColumn(usageDto -> usageDto.getSalUsage().getReportedAuthor(), "table.column.reported_author",
             "reportedAuthor", true, 150);
         addColumn(usageDto -> usageDto.getSalUsage().getReportedPublisher(), "table.column.reported_publisher",

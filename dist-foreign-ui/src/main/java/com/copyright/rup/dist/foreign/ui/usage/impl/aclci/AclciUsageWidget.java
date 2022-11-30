@@ -53,8 +53,8 @@ public class AclciUsageWidget extends CommonUsageWidget implements IAclciUsageWi
             "mediaTypeWeight", true, 130);
         addColumn(usage -> usage.getAclciUsage().getReportedArticle(), "table.column.reported_article",
             "reportedArticle", true, 240);
-        addColumn(usage -> usage.getAclciUsage().getReportedStandardNumber(), "table.column.reported_standard_number",
-            "reportedStandardNumber", true, 200);
+        addColumn(usage -> usage.getAclciUsage().getReportedStandardNumber(),
+            "table.column.reported_standard_number_or_image_id_number", "reportedStandardNumber", true, 315);
         addColumn(usage -> usage.getAclciUsage().getReportedAuthor(), "table.column.reported_author",
             "reportedAuthor", true, 150);
         addColumn(usage -> usage.getAclciUsage().getReportedPublisher(), "table.column.reported_publisher",

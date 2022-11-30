@@ -79,7 +79,7 @@ public class AclciUsageWidgetTest {
             Triple.of("Reported Media Type", 150.0, -1),
             Triple.of("Media Type Weight", 130.0, -1),
             Triple.of("Reported Article or Chapter Title", 240.0, -1),
-            Triple.of("Reported Standard Number", 200.0, -1),
+            Triple.of("Reported Standard Number or Image ID Number", 315.0, -1),
             Triple.of("Reported Author", 150.0, -1),
             Triple.of("Reported Publisher", 150.0, -1),
             Triple.of("Reported Publication Date", 200.0, -1),
