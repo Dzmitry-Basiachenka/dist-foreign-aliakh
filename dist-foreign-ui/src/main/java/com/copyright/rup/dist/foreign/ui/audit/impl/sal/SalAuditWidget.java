@@ -75,7 +75,7 @@ public class SalAuditWidget extends CommonAuditWidget implements ISalAuditWidget
         addColumn(usageDto -> usageDto.getSalUsage().getReportedWorkPortionId(),
             "table.column.reported_work_portion_id", "reportedWorkPortionId", 180);
         addColumn(usageDto -> usageDto.getSalUsage().getReportedStandardNumber(),
-            "table.column.reported_standard_number", "reportedStandardNumber", 200);
+            "table.column.reported_standard_number_or_image_id_number", "reportedStandardNumber", 315);
         addColumn(UsageDto::getWorkTitle, "table.column.reported_title", "workTitle", 300);
         addColumn(usageDto -> usageDto.getSalUsage().getReportedMediaType(), "table.column.reported_media_type",
             "reportedMediaType", 150);

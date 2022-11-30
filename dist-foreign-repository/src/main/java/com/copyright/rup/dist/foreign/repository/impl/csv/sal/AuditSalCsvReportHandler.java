@@ -26,9 +26,9 @@ public class AuditSalCsvReportHandler extends BaseCsvReportHandler<UsageDto> {
             "Period End Date", "RH Account #", "RH Name", "Payee Account #", "Payee Name", "Wr Wrk Inst",
             "System Title", "Standard Number", "Standard Number Type", "Gross Amt in USD", "Service Fee Amount",
             "Net Amt in USD", "Scenario Name", "Check #", "Check Date", "Event ID", "Dist. Name", "Dist. Date",
-            "Reported Work Portion ID", "Reported Standard Number", "Reported Title", "Reported Media Type",
-            "Media Type Weight", "Reported Article or Chapter Title", "Reported Author", "Reported Publisher",
-            "Reported Publication Date", "Reported Page Range", "Reported Vol/Number/Series",
+            "Reported Work Portion ID", "Reported Standard Number or Image ID Number", "Reported Title",
+            "Reported Media Type", "Media Type Weight", "Reported Article or Chapter Title", "Reported Author",
+            "Reported Publisher", "Reported Publication Date", "Reported Page Range", "Reported Vol/Number/Series",
             "Date of Scored Assessment", "Assessment Name", "Coverage Year", "Grade", "Grade Group", "Assessment Type",
             "Question Identifier", "States", "Number of Views", "Comment");
 

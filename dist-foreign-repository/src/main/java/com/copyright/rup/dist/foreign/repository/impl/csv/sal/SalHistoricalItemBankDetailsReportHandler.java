@@ -23,7 +23,8 @@ public class SalHistoricalItemBankDetailsReportHandler
     private static final List<String> HEADERS = ImmutableList.of("Detail ID", "Item Bank Name", "Period End Date",
         "Licensee Account #", "Licensee Name", "RH Account #", "RH Name", "Wr Wrk Inst", "System Title",
         "Standard Number", "Standard Number Type", "Assessment Name", "Reported Work Portion ID", "Reported Title",
-        "Reported Article or Chapter", "Reported Standard Number", "Reported Media Type", "Coverage Year", "Grade");
+        "Reported Article or Chapter", "Reported Standard Number or Image ID Number", "Reported Media Type",
+        "Coverage Year", "Grade");
 
     /**
      * Constructor.
