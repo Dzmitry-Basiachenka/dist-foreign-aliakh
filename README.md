@@ -1,3 +1,12 @@
+16.0.19
+-
+* B-73331 FDA: Provide TOU information to RC for SAL details: remove IB/UD postfix after uid for SAL
+* B-74822 Tech Debt: FDA: fix audit records order for sending scenario to LM
+* B-74822 Tech Debt: FDA: update Scenario name validation to allow 255 length
+* B-74822 Tech Debt: FDA: remove SENT TO LM status from ‘Status’ filter on Calculations Scenarios tab
+* B-74822 Tech Debt: FDA: add index by ccc_event_id for df_usage_archive table
+* B-74822 Tech Debt: FDA: rename Reported Standard Number to Reported Standard Number or Image ID Number for SAL and ACLCI PF
+
 16.0.18
 -
 * B-74623 FDA: Send distribution date to the Datamart: Adjust logic to send distribution date and TOU to the CRM
