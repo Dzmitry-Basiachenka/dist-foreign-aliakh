@@ -25,7 +25,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -42,14 +41,13 @@ import java.util.List;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-test-context.xml")
-//TODO: split test data into separate files for each test method
-@TestData(fileName = "usage-service-data-init.groovy")
 @TestExecutionListeners(
     mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS,
     listeners = {LiquibaseTestExecutionListener.class}
 )
-@Transactional
 public class UsageServiceIntegrationTest {
+
+    private static final String FOLDER_NAME = "usage-service-integration-test/";
 
     @Autowired
     private IUsageService usageService;
@@ -63,6 +61,7 @@ public class UsageServiceIntegrationTest {
     private IUsageAuditRepository usageAuditRepository;
 
     @Test
+    @TestData(fileName = FOLDER_NAME + "test-delete-from-scenario.groovy")
     public void testDeleteFromScenario() {
         Scenario scenario = new Scenario();
         scenario.setId("12ec845f-0e76-4d1c-85cd-bb3fb7ca260e");
@@ -79,6 +78,7 @@ public class UsageServiceIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = FOLDER_NAME + "test-delete-archived-by-batch-id.groovy")
     public void testDeleteArchivedByBatchId() {
         String usageId = "8b09419a-89d1-47ca-8c5a-5ee206e0b0e0";
         String batchId = "0dc1cff9-fc33-47ef-866c-c97de0203f9c";

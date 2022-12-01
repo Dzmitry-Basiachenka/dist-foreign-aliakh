@@ -54,14 +54,13 @@ import java.util.stream.IntStream;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-test-context.xml")
-//TODO: split test data into separate files for each test method
-@TestData(fileName = "send-scenario-to-lm-data-init.groovy")
 @TestExecutionListeners(
     mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS,
     listeners = {LiquibaseTestExecutionListener.class}
 )
 public class SendScenarioToLmTest {
 
+    private static final String FOLDER_NAME = "send-scenario-to-lm-integration-test/";
     private static final String FAS_SCENARIO_ID = "4c014547-06f3-4840-94ff-6249730d537d";
     private static final String NTS_SCENARIO_ID = "67027e15-17c6-4b9b-b7f0-12ec414ad344";
     private static final String AACL_SCENARIO_ID = "d92e3c8e-7ecc-4080-bf3f-b541f51c9a06";
@@ -96,6 +95,7 @@ public class SendScenarioToLmTest {
     }
 
     @Test
+    @TestData(fileName = FOLDER_NAME + "test-sent-to-lm-sal.groovy")
     public void testSendToLmSal() throws IOException {
         Scenario scenario = new Scenario();
         scenario.setId(SAL_SCENARIO_ID);
@@ -119,6 +119,7 @@ public class SendScenarioToLmTest {
     }
 
     @Test
+    @TestData(fileName = FOLDER_NAME + "test-sent-to-lm-fas.groovy")
     public void testSendToLmFas() throws IOException {
         Scenario scenario = new Scenario();
         scenario.setId(FAS_SCENARIO_ID);
@@ -135,6 +136,7 @@ public class SendScenarioToLmTest {
     }
 
     @Test
+    @TestData(fileName = FOLDER_NAME + "test-sent-to-lm-nts.groovy")
     public void testSendToLmNts() throws IOException {
         assertNtsFundPoolUsages(UsageStatusEnum.TO_BE_DISTRIBUTED);
         Scenario scenario = new Scenario();
@@ -153,6 +155,7 @@ public class SendScenarioToLmTest {
     }
 
     @Test
+    @TestData(fileName = FOLDER_NAME + "test-sent-to-lm-aacl.groovy")
     public void testSendToLmAacl() throws IOException {
         Scenario scenario = new Scenario();
         scenario.setId(AACL_SCENARIO_ID);
