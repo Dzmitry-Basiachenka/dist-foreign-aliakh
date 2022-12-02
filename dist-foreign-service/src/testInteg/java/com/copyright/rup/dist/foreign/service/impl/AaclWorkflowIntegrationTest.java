@@ -45,14 +45,13 @@ import java.util.List;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-test-context.xml")
-//TODO: split test data into separate files for each test method
-@TestData(fileName = "aacl-workflow-data-init.groovy")
 @TestExecutionListeners(
     mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS,
     listeners = {LiquibaseTestExecutionListener.class}
 )
 public class AaclWorkflowIntegrationTest {
 
+    private static final String FOLDER_NAME = "aacl-workflow-integration-test/";
     private static final String USAGE_ID_1 = "157b5b4e-cf77-48f5-aeb0-bd3ac75d8585";
     private static final String USAGE_ID_2 = "30930c3f-e3d0-492d-a1af-587a8e9201bb";
     private static final String USAGE_ID_3 = "91b42694-5057-4a6a-99df-b10599549653";
@@ -90,6 +89,7 @@ public class AaclWorkflowIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = FOLDER_NAME + "test-aacl-workflow.groovy")
     public void testAaclWorkflow() throws Exception {
         testBuilder
             .withProductFamily(AACL_PRODUCT_FAMILY)
@@ -133,6 +133,7 @@ public class AaclWorkflowIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = FOLDER_NAME + "test-aacl-workflow-with-excluded-usages-by-payees.groovy")
     public void testAaclWorkflowWithExcludedUsagesByPayees() throws Exception {
         testBuilder
             .withProductFamily(AACL_PRODUCT_FAMILY)
