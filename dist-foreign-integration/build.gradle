@@ -9,7 +9,12 @@ dependencies {
     //transitive dependency of rup-es-api to avoid CVE-2020-9488, CVE-2020-21913
     compile("org.apache.logging.log4j:log4j-api:${log4jVersion}")
     compile("com.ibm.icu:icu4j:${icu4jVersion}")
-    compile("com.copyright.rup.es.api:rup-es-api:${rupEsApiVersion}")
+    compile("com.copyright.rup.es.api:rup-es-api:${rupEsApiVersion}") {
+        exclude group: 'org.yaml'
+    }
+    //TODO check after migration to open search
+    //dependency to avoid vulnerabilities CVE-2022-25857, CVE-2022-38749, CVE-2022-38750, CVE-2022-38751, CVE-2022-38752, CVE-2022-41854 (severity: MEDIUM) associated with 'org.yaml:snakeyaml:1.26'
+    compile("org.yaml:snakeyaml:${snakeyamlVersion}")
     //updated jackson-databind version due to vulnerability CVE-2022-42003 in com.fasterxml.jackson.core:jackson-databind:2.13.4
     compile("com.fasterxml.jackson.core:jackson-databind:${jacksonDatabindVersion}")
     compile("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${rupCamel.standardDependencies.jackson.version}")
