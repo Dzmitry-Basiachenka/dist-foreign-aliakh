@@ -177,5 +177,6 @@
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IAclScenarioAuditMapper.xml"/>
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IAclScenarioMapper.xml"/>
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IAclScenarioUsageMapper.xml"/>
+        <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IAclciUsageMapper.xml"/>
     </mappers>
 </configuration>
