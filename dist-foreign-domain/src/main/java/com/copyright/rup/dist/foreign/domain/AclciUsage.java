@@ -18,10 +18,10 @@ import java.math.BigDecimal;
  */
 public class AclciUsage {
 
-    private String detailType;
-    private String coveragePeriod;
     private Long licenseeAccountNumber;
     private String licenseeName;
+    private String coveragePeriod;
+    private String licenseType;
     private String reportedMediaType;
     private BigDecimal mediaTypeWeight;
     private String reportedArticle;
@@ -32,22 +32,7 @@ public class AclciUsage {
     private String reportedPageRange;
     private String reportedVolNumberSeries;
     private String reportedGrade;
-
-    public String getDetailType() {
-        return detailType;
-    }
-
-    public void setDetailType(String detailType) {
-        this.detailType = detailType;
-    }
-
-    public String getCoveragePeriod() {
-        return coveragePeriod;
-    }
-
-    public void setCoveragePeriod(String coveragePeriod) {
-        this.coveragePeriod = coveragePeriod;
-    }
+    private String gradeGroup;
 
     public Long getLicenseeAccountNumber() {
         return licenseeAccountNumber;
@@ -63,6 +48,22 @@ public class AclciUsage {
 
     public void setLicenseeName(String licenseeName) {
         this.licenseeName = licenseeName;
+    }
+
+    public String getCoveragePeriod() {
+        return coveragePeriod;
+    }
+
+    public void setCoveragePeriod(String coveragePeriod) {
+        this.coveragePeriod = coveragePeriod;
+    }
+
+    public String getLicenseType() {
+        return licenseType;
+    }
+
+    public void setLicenseType(String licenseType) {
+        this.licenseType = licenseType;
     }
 
     public String getReportedMediaType() {
@@ -145,6 +146,14 @@ public class AclciUsage {
         this.reportedGrade = reportedGrade;
     }
 
+    public String getGradeGroup() {
+        return gradeGroup;
+    }
+
+    public void setGradeGroup(String gradeGroup) {
+        this.gradeGroup = gradeGroup;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -155,10 +164,10 @@ public class AclciUsage {
         }
         AclciUsage that = (AclciUsage) obj;
         return new EqualsBuilder()
-            .append(detailType, that.detailType)
-            .append(coveragePeriod, that.coveragePeriod)
             .append(licenseeAccountNumber, that.licenseeAccountNumber)
             .append(licenseeName, that.licenseeName)
+            .append(coveragePeriod, that.coveragePeriod)
+            .append(licenseType, that.licenseType)
             .append(reportedMediaType, that.reportedMediaType)
             .append(mediaTypeWeight, that.mediaTypeWeight)
             .append(reportedArticle, that.reportedArticle)
@@ -169,16 +178,17 @@ public class AclciUsage {
             .append(reportedPageRange, that.reportedPageRange)
             .append(reportedVolNumberSeries, that.reportedVolNumberSeries)
             .append(reportedGrade, that.reportedGrade)
+            .append(gradeGroup, that.gradeGroup)
             .isEquals();
     }
 
     @Override
     public int hashCode() {
         return new HashCodeBuilder()
-            .append(detailType)
-            .append(coveragePeriod)
             .append(licenseeAccountNumber)
             .append(licenseeName)
+            .append(coveragePeriod)
+            .append(licenseType)
             .append(reportedMediaType)
             .append(mediaTypeWeight)
             .append(reportedArticle)
@@ -189,16 +199,17 @@ public class AclciUsage {
             .append(reportedPageRange)
             .append(reportedVolNumberSeries)
             .append(reportedGrade)
+            .append(gradeGroup)
             .toHashCode();
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-            .append("detailType", detailType)
-            .append("coveragePeriod", coveragePeriod)
             .append("licenseeAccountNumber", licenseeAccountNumber)
             .append("licenseeName", licenseeName)
+            .append("coveragePeriod", coveragePeriod)
+            .append("licenseType", licenseType)
             .append("reportedMediaType", reportedMediaType)
             .append("mediaTypeWeight", mediaTypeWeight)
             .append("reportedArticle", reportedArticle)
@@ -209,6 +220,7 @@ public class AclciUsage {
             .append("reportedPageRange", reportedPageRange)
             .append("reportedVolNumberSeries", reportedVolNumberSeries)
             .append("reportedGrade", reportedGrade)
+            .append("gradeGroup", gradeGroup)
             .toString();
     }
 }

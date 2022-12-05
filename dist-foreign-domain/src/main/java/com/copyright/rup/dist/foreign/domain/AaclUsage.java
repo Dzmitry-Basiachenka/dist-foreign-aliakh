@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.domain;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -209,7 +210,7 @@ public class AaclUsage {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this)
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
             .append("detailLicenseeClass", detailLicenseeClass)
             .append("publicationType", publicationType)
             .append("originalPublicationType", originalPublicationType)

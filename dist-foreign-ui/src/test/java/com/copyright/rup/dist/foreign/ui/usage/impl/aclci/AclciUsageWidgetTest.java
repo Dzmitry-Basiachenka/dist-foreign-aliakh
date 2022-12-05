@@ -62,7 +62,7 @@ public class AclciUsageWidgetTest {
         verifyGrid(grid, Arrays.asList(
             Triple.of("Detail ID", 130.0, -1),
             Triple.of("Detail Status", 115.0, -1),
-            Triple.of("Detail Type", 115.0, -1),
+            Triple.of("License Type", 115.0, -1),
             Triple.of("Product Family", 125.0, -1),
             Triple.of("Usage Batch Name", 145.0, -1),
             Triple.of("Period End Date", 115.0, -1),
