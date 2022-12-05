@@ -22,7 +22,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.Date;
@@ -40,15 +39,13 @@ import java.util.Set;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-test-context.xml")
-//TODO: split test data into separate files for each test method
-@TestData(fileName = "work-classification-data-init.groovy")
 @TestExecutionListeners(
     mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS,
     listeners = {LiquibaseTestExecutionListener.class}
 )
-@Transactional
 public class WorkClassificationIntegrationTest {
 
+    private static final String FOLDER_NAME = "work-classification-integration-test/";
     private static final Set<String> BATCHES_IDS = Collections.singleton("e17ebc80-e74e-436d-ba6e-acf3d355b7ff");
     private static final Long WR_WRK_INST_1 = 180382914L;
     private static final Long WR_WRK_INST_2 = 243904752L;
@@ -67,6 +64,7 @@ public class WorkClassificationIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = FOLDER_NAME + "apply-stm-classification.groovy")
     public void testApplyStmClassification() {
         assertAndGetUsages(1, UsageStatusEnum.ELIGIBLE);
         assertAndGetUsages(1, UsageStatusEnum.UNCLASSIFIED);
@@ -84,6 +82,7 @@ public class WorkClassificationIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = FOLDER_NAME + "apply-non-stm-classification.groovy")
     public void testApplyNonStmClassification() {
         assertAndGetUsages(1, UsageStatusEnum.ELIGIBLE);
         assertAndGetUsages(1, UsageStatusEnum.UNCLASSIFIED);
@@ -103,6 +102,7 @@ public class WorkClassificationIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = FOLDER_NAME + "apply-belletristic-classification.groovy")
     public void testApplyBelletristicClassification() {
         assertAndGetUsages(1, UsageStatusEnum.ELIGIBLE);
         assertAndGetUsages(1, UsageStatusEnum.UNCLASSIFIED);
@@ -115,6 +115,7 @@ public class WorkClassificationIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = FOLDER_NAME + "remove-classification.groovy")
     public void testRemoveClassification() {
         assertAndGetUsages(1, UsageStatusEnum.ELIGIBLE);
         assertAndGetUsages(1, UsageStatusEnum.UNCLASSIFIED);
