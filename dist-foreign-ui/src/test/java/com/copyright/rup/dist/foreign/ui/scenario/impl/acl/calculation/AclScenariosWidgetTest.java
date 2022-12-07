@@ -119,8 +119,9 @@ public class AclScenariosWidgetTest {
         expect(controller.getDetailLicenseeClasses()).andReturn(Collections.emptyList()).once();
         IStreamSource streamSource = createMock(IStreamSource.class);
         expect(streamSource.getSource()).andReturn(new SimpleImmutableEntry(createMock(Supplier.class),
-            createMock(Supplier.class))).once();
+            createMock(Supplier.class))).times(2);
         expect(controller.getExportAclSummaryOfWorkSharesByAggLcStreamSource()).andReturn(streamSource).once();
+        expect(controller.getExportAclWorkSharesByAggLcStreamSource()).andReturn(streamSource).once();
         expect(ForeignSecurityUtils.hasSpecialistPermission()).andReturn(true).times(2);
         expect(controller.initAclScenariosFilterWidget())
             .andReturn(new AclScenariosFilterWidget(new AclScenariosFilterController())).once();
@@ -491,8 +492,11 @@ public class AclScenariosWidgetTest {
         verifyLabel(lastActionLayout.getComponent(3), "<b>Reason:</b> some reason");
         UiTestHelper.verifyButton(lastActionLayout.getComponent(4), "View All Actions", true);
         VerticalLayout reportLayout = (VerticalLayout) ((VerticalLayout) mainPanel.getContent()).getComponent(1);
+        assertEquals(2, reportLayout.getComponentCount());
         UiTestHelper.verifyButton(
             reportLayout.getComponent(0), "Summary of Work Shares by Aggregate Licensee Class Report", true);
+        UiTestHelper.verifyButton(
+            reportLayout.getComponent(1), "Work Shares by Aggregate Licensee Class Report", true);
     }
 
     private void verifyScenarioParameterWidget(Component component, String expectedCaption) {

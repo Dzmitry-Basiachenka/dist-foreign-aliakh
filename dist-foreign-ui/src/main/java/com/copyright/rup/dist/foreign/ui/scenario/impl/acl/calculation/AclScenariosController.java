@@ -238,6 +238,12 @@ public class AclScenariosController extends CommonController<IAclScenariosWidget
     }
 
     @Override
+    public IStreamSource getExportAclWorkSharesByAggLcStreamSource() {
+        return streamSourceHandler.getCsvStreamSource(
+            () -> "summary_of_work_shares_by_aggregate_licensee_class_report_", os -> {});
+    }
+
+    @Override
     public void onDeleteButtonClicked() {
         AclScenario aclScenario = getWidget().getSelectedScenario();
         Windows.showConfirmDialog(

@@ -249,6 +249,11 @@ public interface IAclScenariosController extends IController<IAclScenariosWidget
     IStreamSource getExportAclSummaryOfWorkSharesByAggLcStreamSource();
 
     /**
+     * @return instance of {@link IStreamSource} for export Work Shares by Aggregate Licensee Class Report.
+     */
+    IStreamSource getExportAclWorkSharesByAggLcStreamSource();
+
+    /**
      * Handles actions with {@link AclScenario}.
      *
      * @param actionType scenario action type

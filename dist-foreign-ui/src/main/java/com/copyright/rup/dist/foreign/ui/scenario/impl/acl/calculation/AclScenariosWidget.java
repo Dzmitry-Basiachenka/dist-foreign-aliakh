@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl.acl.calculation;
 
+import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.AclPublicationType;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
@@ -412,16 +413,22 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
     }
 
     private VerticalLayout initReportButtonLayout() {
-        Button button = Buttons.createButton(
-            ForeignUi.getMessage("menu.report.summary_of_work_shares_by_agg_lc_report"));
+        Button summaryOfWorkSharesButton = buildReportButton("menu.report.summary_of_work_shares_by_agg_lc_report",
+            aclScenariosController.getExportAclSummaryOfWorkSharesByAggLcStreamSource());
+        Button workSharesButton = buildReportButton("menu.report.work_shares_by_agg_lc_class",
+            aclScenariosController.getExportAclWorkSharesByAggLcStreamSource());
+        VerticalLayout reportLayout = new VerticalLayout(summaryOfWorkSharesButton, workSharesButton);
+        reportLayout.setHeight(60, Unit.PIXELS);
+        return reportLayout;
+    }
+
+    private Button buildReportButton(String buttonName, IStreamSource streamSource) {
+        Button button = Buttons.createButton(ForeignUi.getMessage(buttonName));
         button.addStyleName(ValoTheme.BUTTON_LINK);
-        OnDemandFileDownloader downloader = new OnDemandFileDownloader(
-            aclScenariosController.getExportAclSummaryOfWorkSharesByAggLcStreamSource().getSource());
+        OnDemandFileDownloader downloader = new OnDemandFileDownloader(streamSource.getSource());
         downloader.extend(button);
         VaadinUtils.setButtonsAutoDisabled(button);
-        VerticalLayout reportLayout = new VerticalLayout(button);
-        reportLayout.setHeight(40, Unit.PIXELS);
-        return reportLayout;
+        return button;
     }
 
     private void onItemChanged(AclScenario scenario) {
