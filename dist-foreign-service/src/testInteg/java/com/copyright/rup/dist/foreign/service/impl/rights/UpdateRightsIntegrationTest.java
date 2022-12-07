@@ -220,6 +220,11 @@ public class UpdateRightsIntegrationTest {
         testHelper.verifyRestServer();
     }
 
+    @Test
+    public void testUpdateAclciRights() {
+        //TODO {dbasiachenka} implement later
+    }
+
     private Usage buildUsage(String usageId, String productFamily, Long wrWrkInst) {
         Usage usage = new Usage();
         usage.setId(usageId);
