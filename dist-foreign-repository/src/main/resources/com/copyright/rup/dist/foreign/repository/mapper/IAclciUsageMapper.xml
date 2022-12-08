@@ -33,6 +33,7 @@
         <result property="aclciUsage.reportedPublicationDate" column="reported_publication_date"/>
         <result property="aclciUsage.reportedGrade" column="reported_grade"/>
         <result property="aclciUsage.gradeGroup" column="grade_group"/>
+        <result property="aclciUsage.batchPeriodEndDate" column="batch_period_end_date"/>
     </resultMap>
 
     <sql id="aclciUsageColumns">
@@ -63,6 +64,7 @@
         uaclci.reported_publication_date,
         uaclci.reported_grade,
         uaclci.grade_group,
+        ub.payment_date batch_period_end_date,
         u.created_datetime,
         u.updated_datetime,
         u.created_by_user,

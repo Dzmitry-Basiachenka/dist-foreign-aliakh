@@ -6,6 +6,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 /**
  * Represents ACLCI specific usage details.
@@ -33,6 +34,7 @@ public class AclciUsage {
     private String reportedVolNumberSeries;
     private String reportedGrade;
     private String gradeGroup;
+    private LocalDate batchPeriodEndDate;
 
     public Long getLicenseeAccountNumber() {
         return licenseeAccountNumber;
@@ -154,6 +156,14 @@ public class AclciUsage {
         this.gradeGroup = gradeGroup;
     }
 
+    public LocalDate getBatchPeriodEndDate() {
+        return batchPeriodEndDate;
+    }
+
+    public void setBatchPeriodEndDate(LocalDate batchPeriodEndDate) {
+        this.batchPeriodEndDate = batchPeriodEndDate;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -179,6 +189,7 @@ public class AclciUsage {
             .append(reportedVolNumberSeries, that.reportedVolNumberSeries)
             .append(reportedGrade, that.reportedGrade)
             .append(gradeGroup, that.gradeGroup)
+            .append(batchPeriodEndDate, that.batchPeriodEndDate)
             .isEquals();
     }
 
@@ -200,6 +211,7 @@ public class AclciUsage {
             .append(reportedVolNumberSeries)
             .append(reportedGrade)
             .append(gradeGroup)
+            .append(batchPeriodEndDate)
             .toHashCode();
     }
 
@@ -221,6 +233,7 @@ public class AclciUsage {
             .append("reportedVolNumberSeries", reportedVolNumberSeries)
             .append("reportedGrade", reportedGrade)
             .append("gradeGroup", gradeGroup)
+            .append("batchPeriodEndDate", batchPeriodEndDate)
             .toString();
     }
 }

@@ -100,6 +100,7 @@ public class AclciUsageRepositoryIntegrationTest {
         assertEquals(expectedUsage.getReportedVolNumberSeries(), actualUsage.getReportedVolNumberSeries());
         assertEquals(expectedUsage.getReportedGrade(), actualUsage.getReportedGrade());
         assertEquals(expectedUsage.getGradeGroup(), actualUsage.getGradeGroup());
+        assertEquals(expectedUsage.getBatchPeriodEndDate(), actualUsage.getBatchPeriodEndDate());
     }
 
     private List<Usage> loadExpectedUsages(List<String> fileNames) {
