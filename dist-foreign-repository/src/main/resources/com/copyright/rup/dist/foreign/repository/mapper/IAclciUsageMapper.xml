@@ -1,0 +1,142 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="IAclciUsageMapper">
+
+    <resultMap id="aclciUsageResultMap" type="Usage" extends="StoredEntityMapper.storedEntityResult">
+        <result property="id" column="df_usage_uid"/>
+        <result property="batchId" column="df_usage_batch_uid"/>
+        <result property="scenarioId" column="df_scenario_uid"/>
+        <result property="status" column="status_ind"/>
+        <result property="productFamily" column="product_family"/>
+        <result property="wrWrkInst" column="wr_wrk_inst"/>
+        <result property="workTitle" column="work_title"/>
+        <result property="rightsholder.id" column="rh_id"/>
+        <result property="rightsholder.accountNumber" column="rh_account_number"/>
+        <result property="rightsholder.name" column="rh_name"/>
+        <result property="standardNumber" column="standard_number"/>
+        <result property="standardNumberType" column="standard_number_type"/>
+        <result property="grossAmount" column="gross_amount"/>
+        <result property="serviceFeeAmount" column="service_fee_amount"/>
+        <result property="netAmount" column="net_amount"/>
+        <result property="serviceFee" column="service_fee"/>
+        <result property="comment" column="comment"/>
+        <result property="aclciUsage.coveragePeriod" column="coverage_period"/>
+        <result property="aclciUsage.licenseType" column="license_type"/>
+        <result property="aclciUsage.reportedMediaType" column="reported_media_type"/>
+        <result property="aclciUsage.mediaTypeWeight" column="media_type_weight"/>
+        <result property="aclciUsage.reportedArticle" column="reported_article"/>
+        <result property="aclciUsage.reportedStandardNumber" column="reported_standard_number"/>
+        <result property="aclciUsage.reportedAuthor" column="reported_author"/>
+        <result property="aclciUsage.reportedPublisher" column="reported_publisher"/>
+        <result property="aclciUsage.reportedPublicationDate" column="reported_publication_date"/>
+        <result property="aclciUsage.reportedGrade" column="reported_grade"/>
+        <result property="aclciUsage.gradeGroup" column="grade_group"/>
+    </resultMap>
+
+    <sql id="aclciUsageColumns">
+        u.df_usage_batch_uid,
+        u.df_scenario_uid,
+        u.status_ind,
+        u.product_family,
+        u.wr_wrk_inst,
+        u.work_title,
+        u.standard_number,
+        u.standard_number_type,
+        u.rh_account_number,
+        rh.name rh_name,
+        rh.df_rightsholder_uid rh_id,
+        u.gross_amount,
+        u.service_fee_amount,
+        u.net_amount,
+        u.service_fee,
+        u.comment,
+        uaclci.coverage_period,
+        uaclci.license_type,
+        uaclci.reported_media_type,
+        uaclci.media_type_weight,
+        uaclci.reported_article,
+        uaclci.reported_standard_number,
+        uaclci.reported_author,
+        uaclci.reported_publisher,
+        uaclci.reported_publication_date,
+        uaclci.reported_grade,
+        uaclci.grade_group,
+        u.created_datetime,
+        u.updated_datetime,
+        u.created_by_user,
+        u.updated_by_user,
+        u.record_version
+    </sql>
+
+    <insert id="insert" parameterType="Usage">
+        with u as (
+            insert into ${schema}.df_usage (
+                df_usage_uid,
+                df_usage_batch_uid,
+                wr_wrk_inst,
+                work_title,
+                status_ind,
+                product_family,
+                comment,
+                <include refid="StoredEntityMapper.additionalColumns"/>
+            )
+            values (
+                #{id},
+                #{batchId},
+                #{wrWrkInst},
+                #{workTitle},
+                #{status},
+                #{productFamily},
+                #{comment},
+                <include refid="StoredEntityMapper.insert"/>
+            )
+        )
+        insert into ${schema}.df_usage_aclci (
+            df_usage_aclci_uid,
+            coverage_period,
+            license_type,
+            reported_media_type,
+            media_type_weight,
+            reported_article,
+            reported_standard_number,
+            reported_author,
+            reported_publisher,
+            reported_publication_date,
+            reported_grade,
+            grade_group,
+            <include refid="StoredEntityMapper.additionalColumns"/>
+        )
+        values (
+            #{id},
+            #{aclciUsage.coveragePeriod},
+            #{aclciUsage.licenseType},
+            #{aclciUsage.reportedMediaType},
+            #{aclciUsage.mediaTypeWeight},
+            #{aclciUsage.reportedArticle},
+            #{aclciUsage.reportedStandardNumber},
+            #{aclciUsage.reportedAuthor},
+            #{aclciUsage.reportedPublisher},
+            #{aclciUsage.reportedPublicationDate},
+            #{aclciUsage.reportedGrade},
+            #{aclciUsage.gradeGroup},
+            <include refid="StoredEntityMapper.insert"/>
+        )
+    </insert>
+
+    <select id="findByIds" resultMap="aclciUsageResultMap">
+        select
+            u.df_usage_uid,
+            <include refid="IAclciUsageMapper.aclciUsageColumns"/>
+        from ${schema}.df_usage u
+        join ${schema}.df_usage_aclci uaclci on u.df_usage_uid = uaclci.df_usage_aclci_uid
+        join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
+        left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
+        where u.df_usage_uid in
+        <foreach collection="list" item="usageId" open="(" separator="," close=")">
+            #{usageId}
+        </foreach>
+        order by u.df_usage_uid
+    </select>
+</mapper>
