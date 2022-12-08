@@ -24,6 +24,11 @@ public interface IUdmReportController extends IController<IUdmReportWidget> {
     IUdmSurveyLicenseeReportController getUdmSurveyLicenseeReportController();
 
     /**
+     * @return UDM Survey Dashboard Report controller.
+     */
+    IUdmSurveyDashboardReportController getUdmSurveyDashboardReportController();
+
+    /**
      * @return UDM Completed Assignments Report controller.
      */
     IUdmCommonUserNamesReportController getCompletedAssignmentsReportController();

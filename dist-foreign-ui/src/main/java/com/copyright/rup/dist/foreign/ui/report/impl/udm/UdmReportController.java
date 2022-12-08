@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.ui.report.impl.udm;
 import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmCommonUserNamesReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmReportWidget;
+import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmSurveyDashboardReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmSurveyLicenseeReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmUsableDetailsByCountryReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmUsageEditsInBaselineReportController;
@@ -39,6 +40,8 @@ public class UdmReportController extends CommonController<IUdmReportWidget> impl
     @Autowired
     private IUdmSurveyLicenseeReportController udmSurveyLicenseeReportController;
     @Autowired
+    private IUdmSurveyDashboardReportController udmSurveyDashboardReportController;
+    @Autowired
     private IUdmVerifiedDetailsBySourceReportController udmVerifiedDetailsBySourceReportController;
     @Autowired
     private IUdmUsableDetailsByCountryReportController udmUsableDetailsByCountryReportController;
@@ -60,6 +63,11 @@ public class UdmReportController extends CommonController<IUdmReportWidget> impl
     @Override
     public IUdmSurveyLicenseeReportController getUdmSurveyLicenseeReportController() {
         return udmSurveyLicenseeReportController;
+    }
+
+    @Override
+    public IUdmSurveyDashboardReportController getUdmSurveyDashboardReportController() {
+        return udmSurveyDashboardReportController;
     }
 
     @Override

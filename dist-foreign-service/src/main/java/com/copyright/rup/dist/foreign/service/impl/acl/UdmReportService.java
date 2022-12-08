@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.OutputStream;
 import java.io.PipedOutputStream;
+import java.util.Set;
 
 /**
  * Implements {@link IUdmReportService}.
@@ -96,5 +97,10 @@ public class UdmReportService implements IUdmReportService {
     @Override
     public void writeUdmBaselineValueUpdatesCsvReport(UdmReportFilter reportFilter, OutputStream outputStream) {
         udmReportRepository.writeUdmBaselineValueUpdatesCsvReport(reportFilter, outputStream);
+    }
+
+    @Override
+    public void writeUdmSurveyDashboardCsvReport(Set<Integer> periods, OutputStream outputStream) {
+        //TODO will implement later
     }
 }
