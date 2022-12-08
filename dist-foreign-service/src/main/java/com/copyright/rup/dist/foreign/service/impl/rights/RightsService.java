@@ -378,6 +378,11 @@ public class RightsService implements IRightsService {
         }
     }
 
+    @Override
+    public void updateAclciRights(List<Usage> usages) {
+        //TODO {dbasiachenka} implement later
+    }
+
     private RmsGrant findGrantByTypeOfUse(Set<RmsGrant> grants, String typeOfUse) {
         return grants.stream()
             .filter(rmsGrant -> typeOfUse.equals(rmsGrant.getTypeOfUse()))

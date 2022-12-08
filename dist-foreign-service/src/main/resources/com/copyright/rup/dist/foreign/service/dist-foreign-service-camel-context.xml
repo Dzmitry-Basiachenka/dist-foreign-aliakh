@@ -283,6 +283,10 @@
                     <simple>${headers.productFamily} == ${type:com.copyright.rup.dist.foreign.domain.FdaConstants.SAL_PRODUCT_FAMILY}</simple>
                     <bean ref="df.service.salRightsConsumer"/>
                 </when>
+                <when>
+                    <simple>${headers.productFamily} == ${type:com.copyright.rup.dist.foreign.domain.FdaConstants.ACLCI_PRODUCT_FAMILY}</simple>
+                    <bean ref="df.service.aclciRightsConsumer"/>
+                </when>
             </choice>
 
             <onException useOriginalMessage="true">

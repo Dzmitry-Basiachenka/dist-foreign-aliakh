@@ -85,4 +85,11 @@
         <property name="usageStatus" value="WORK_FOUND"/>
         <property name="successProcessor" ref="df.service.commonEligibilityProcessor"/>
     </bean>
+
+    <!-- ACLCI processor -->
+
+    <bean id="df.service.aclciRightsProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.RightsProcessor">
+        <property name="usageStatus" value="WORK_FOUND"/>
+        <property name="successProcessor" ref="df.service.commonEligibilityProcessor"/>
+    </bean>
 </beans>
