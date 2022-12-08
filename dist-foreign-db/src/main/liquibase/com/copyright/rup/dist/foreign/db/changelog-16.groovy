@@ -74,4 +74,61 @@ databaseChangeLog {
             sql("drop index ${dbAppsSchema}.ix_df_usage_archive_ccc_event_id")
         }
     }
+
+    changeSet(id: '2022-12-08-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
+        comment("B-68555 FDA: Load ACLCI usage batch: create df_usage_aclci table")
+
+        createTable(tableName: 'df_usage_aclci', schemaName: dbAppsSchema, tablespace: dbDataTablespace,
+                remarks: 'Table for storing specific fields of usages with ACLCI product family') {
+
+            column(name: 'df_usage_aclci_uid', type: 'VARCHAR(255)', remarks: 'The identifier of usage')
+            column(name: 'coverage_period', type: 'VARCHAR(9)', remarks: 'The coverage period') {
+                constraints(nullable: false)
+            }
+            column(name: 'license_type', type: 'VARCHAR(32)', remarks: 'The license type') {
+                constraints(nullable: false)
+            }
+            column(name: 'reported_media_type', type: 'VARCHAR(16)', remarks: 'The reported media type') {
+                constraints(nullable: false)
+            }
+            column(name: 'media_type_weight', type: 'NUMERIC(38,1)', remarks: 'The media type weight') {
+                constraints(nullable: false)
+            }
+            column(name: 'reported_article', type: 'VARCHAR(1000)', remarks: 'The reported article or chapter title')
+            column(name: 'reported_standard_number', type: 'VARCHAR(1000)', remarks: 'The reported_standard_number')
+            column(name: 'reported_author', type: 'VARCHAR(1000)', remarks: 'The reported author')
+            column(name: 'reported_publisher', type: 'VARCHAR(1000)', remarks: 'The reported publisher')
+            column(name: 'reported_publication_date', type: 'VARCHAR(100)', remarks: 'The reported publication date')
+            column(name: 'reported_grade', type: 'VARCHAR(32)', remarks: 'The reported grade') {
+                constraints(nullable: false)
+            }
+            column(name: 'grade_group', type: 'VARCHAR(32)', remarks: 'The grade group') {
+                constraints(nullable: false)
+            }
+            column(name: 'record_version', type: 'INTEGER', defaultValue: '1',
+                    remarks: 'The latest version of this record, used for optimistic locking') {
+                constraints(nullable: false)
+            }
+            column(name: 'created_by_user', type: 'VARCHAR(320)', defaultValue: 'SYSTEM',
+                    remarks: 'The user name who created this record') {
+                constraints(nullable: false)
+            }
+            column(name: 'created_datetime', type: 'TIMESTAMPTZ', defaultValueDate: 'now()',
+                    remarks: 'The date and time this record was created') {
+                constraints(nullable: false)
+            }
+            column(name: 'updated_by_user', type: 'VARCHAR(320)', defaultValue: 'SYSTEM',
+                    remarks: 'The user name who updated this record; when a record is first created, this will be the same as the created_by_user') {
+                constraints(nullable: false)
+            }
+            column(name: 'updated_datetime', type: 'TIMESTAMPTZ', defaultValueDate: 'now()',
+                    remarks: 'The date and time this record was created; when a record is first created, this will be the same as the created_datetime') {
+                constraints(nullable: false)
+            }
+        }
+
+        rollback {
+            dropTable(tableName: 'df_usage_aclci', schemaName: dbAppsSchema)
+        }
+    }
 }
