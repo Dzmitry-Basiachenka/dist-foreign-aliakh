@@ -4,7 +4,7 @@ import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.common.repository.impl.csv.BaseCsvReportHandler;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.report.AclCalculationReportsInfoDto;
-import com.copyright.rup.dist.foreign.domain.report.AclSummaryOfWorkSharesByAggLcReportDto;
+import com.copyright.rup.dist.foreign.domain.report.AclWorkSharesByAggLcReportDto;
 
 import com.google.common.collect.ImmutableList;
 
@@ -17,29 +17,31 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Implementation of {@link BaseCsvReportHandler} to write Summary of Work Shares by Aggregate Licensee Class Report.
+ * Implementation of {@link BaseCsvReportHandler} to write Work Shares by Aggregate Licensee Class Report.
  * <p/>
  * Copyright (C) 2022 copyright.com
  * <p/>
- * Date: 10/05/2022
+ * Date: 12/08/2022
  *
- * @author Mikita Maistrenka
+ * @author Ihar Suvorau
  */
-public class AclSummaryOfWorkSharesByAggLcCsvReportHandler extends
-    BaseCsvReportHandler<AclSummaryOfWorkSharesByAggLcReportDto> {
+public class AclWorkSharesByAggLcCsvReportHandler extends BaseCsvReportHandler<AclWorkSharesByAggLcReportDto> {
 
     private static final List<String> HEADERS =
-        ImmutableList.of("Agg LC ID", "Agg LC Name", "Total Shares Print", "Total Shares Digital");
+        ImmutableList.of("Agg LC ID", "Agg LC Name", "WrWrkInst", "Work Title", "Print RH Account #", "Print RH Name",
+            "Digital RH Account #", "Digital RH Name", "Print Total Share", "Print Value Share", "Print Volume Share",
+            "Print Net Amount", "Digital Total Share", "Digital Value Share", "Digital Volume Share",
+            "Digital Net Amount", "Net Amount Total");
     private static final List<String> METADATA_HEADERS =
         ImmutableList.of("Report Name", "Scenario Name", "License Type", "Report Period", "User", "Report Date");
-    private static final String REPORT_NAME = "Summary of Work Shares by Aggregate Licensee Class Report";
+    private static final String REPORT_NAME = "Work Shares by Aggregate Licensee Class Report";
 
     /**
      * Constructor.
      *
      * @param outputStream {@link OutputStream} instance
      */
-    public AclSummaryOfWorkSharesByAggLcCsvReportHandler(OutputStream outputStream) {
+    public AclWorkSharesByAggLcCsvReportHandler(OutputStream outputStream) {
         super(outputStream);
     }
 
@@ -59,12 +61,25 @@ public class AclSummaryOfWorkSharesByAggLcCsvReportHandler extends
     }
 
     @Override
-    protected List<String> getBeanProperties(AclSummaryOfWorkSharesByAggLcReportDto bean) {
+    protected List<String> getBeanProperties(AclWorkSharesByAggLcReportDto bean) {
         List<String> beanProperties = new ArrayList<>();
         beanProperties.add(getBeanPropertyAsString(bean.getAggregateLicenseeClassId()));
         beanProperties.add(bean.getAggregateLicenseeClassName());
-        beanProperties.add(getBeanBigDecimal(bean.getTotalDetailSharePrint()));
-        beanProperties.add(getBeanBigDecimal(bean.getTotalDetailShareDigital()));
+        beanProperties.add(getBeanPropertyAsString(bean.getWrWrkInst()));
+        beanProperties.add(bean.getWorkTitle());
+        beanProperties.add(getBeanPropertyAsString(bean.getPrintRhAccountNumber()));
+        beanProperties.add(bean.getPrintRhName());
+        beanProperties.add(getBeanPropertyAsString(bean.getDigitalRhAccountNumber()));
+        beanProperties.add(bean.getDigitalRhName());
+        beanProperties.add(getBeanBigDecimal(bean.getPrintTotalShare()));
+        beanProperties.add(getBeanBigDecimal(bean.getPrintValueShare()));
+        beanProperties.add(getBeanBigDecimal(bean.getPrintVolumeShare()));
+        beanProperties.add(getBeanBigDecimal(bean.getPrintNetAmount()));
+        beanProperties.add(getBeanBigDecimal(bean.getDigitalTotalShare()));
+        beanProperties.add(getBeanBigDecimal(bean.getDigitalValueShare()));
+        beanProperties.add(getBeanBigDecimal(bean.getDigitalVolumeShare()));
+        beanProperties.add(getBeanBigDecimal(bean.getDigitalNetAmount()));
+        beanProperties.add(getBeanBigDecimal(bean.getTotalNetAmount()));
         return beanProperties;
     }
 

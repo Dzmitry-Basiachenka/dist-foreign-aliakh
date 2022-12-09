@@ -23,6 +23,7 @@ import com.copyright.rup.dist.foreign.domain.report.AclLiabilitiesByRhReportDto;
 import com.copyright.rup.dist.foreign.domain.report.AclLiabilityDetailsReportDto;
 import com.copyright.rup.dist.foreign.domain.report.AclReportTotalAmountsDto;
 import com.copyright.rup.dist.foreign.domain.report.AclSummaryOfWorkSharesByAggLcReportDto;
+import com.copyright.rup.dist.foreign.domain.report.AclWorkSharesByAggLcReportDto;
 import com.copyright.rup.dist.foreign.domain.report.BatchStatistic;
 import com.copyright.rup.dist.foreign.domain.report.FasBatchSummaryReportDto;
 import com.copyright.rup.dist.foreign.domain.report.FasServiceFeeTrueUpReportDto;
@@ -170,6 +171,7 @@ public class DomainVerifierTest {
             {RightsholderResultsFilter.class},
             {AclCalculationReportsInfoDto.class},
             {AclSummaryOfWorkSharesByAggLcReportDto.class},
+            {AclWorkSharesByAggLcReportDto.class},
             {AclLiabilityDetailsReportDto.class},
             {AclLiabilitiesByAggLicClassReportDto.class},
             {AclReportTotalAmountsDto.class},
