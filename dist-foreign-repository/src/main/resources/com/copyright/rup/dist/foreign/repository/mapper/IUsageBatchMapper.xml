@@ -15,6 +15,7 @@
         <result property="grossAmount" column="gross_amount"/>
         <result property="ntsFields" column="nts_fields" typeHandler="NtsBatchFieldsTypeHandler"/>
         <result property="salFields" column="sal_fields" typeHandler="SalBatchFieldsTypeHandler"/>
+        <result property="aclciFields" column="aclci_fields" typeHandler="AclciBatchFieldsTypeHandler"/>
         <result property="numberOfBaselineYears" column="baseline_years"/>
         <result property="initialUsagesCount" column="initial_usages_count"/>
     </resultMap>
@@ -40,6 +41,7 @@
         ub.gross_amount,
         ub.nts_fields,
         ub.sal_fields,
+        ub.aclci_fields,
         ub.baseline_years,
         ub.initial_usages_count,
         ub.created_datetime,
@@ -60,6 +62,7 @@
             gross_amount,
             nts_fields,
             sal_fields,
+            aclci_fields,
             baseline_years,
             initial_usages_count,
             <include refid="StoredEntityMapper.additionalColumns"/>
@@ -73,6 +76,7 @@
             #{grossAmount},
             #{ntsFields, typeHandler=NtsBatchFieldsTypeHandler},
             #{salFields, typeHandler=SalBatchFieldsTypeHandler},
+            #{aclciFields, typeHandler=AclciBatchFieldsTypeHandler},
             #{numberOfBaselineYears},
             #{initialUsagesCount},
             <include refid="StoredEntityMapper.insert"/>

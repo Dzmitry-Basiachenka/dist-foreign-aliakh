@@ -131,4 +131,16 @@ databaseChangeLog {
             dropTable(tableName: 'df_usage_aclci', schemaName: dbAppsSchema)
         }
     }
+
+    changeSet(id: '2022-12-09-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
+        comment("B-68555 FDA: Load ACLCI usage batch: add aclci_fields column to df_usage_batch table")
+
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
+            column(name: 'aclci_fields', type: 'JSONB', remarks: 'The fields of ACLCI usage batches')
+        }
+
+        rollback {
+            dropColumn(schemaName: dbAppsSchema, tableName: 'df_usage_batch', columnName: 'aclci_fields')
+        }
+    }    
 }

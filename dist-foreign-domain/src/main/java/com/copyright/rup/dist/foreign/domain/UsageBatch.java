@@ -32,6 +32,7 @@ public class UsageBatch extends StoredEntity<String> {
     private BigDecimal grossAmount;
     private NtsFields ntsFields;
     private SalFields salFields;
+    private AclciFields aclciFields;
     private Integer numberOfBaselineYears;
     private int initialUsagesCount;
 
@@ -99,6 +100,14 @@ public class UsageBatch extends StoredEntity<String> {
         this.salFields = salFields;
     }
 
+    public AclciFields getAclciFields() {
+        return aclciFields;
+    }
+
+    public void setAclciFields(AclciFields aclciFields) {
+        this.aclciFields = aclciFields;
+    }
+
     public Integer getNumberOfBaselineYears() {
         return numberOfBaselineYears;
     }
@@ -134,6 +143,7 @@ public class UsageBatch extends StoredEntity<String> {
             .append(this.grossAmount, that.grossAmount)
             .append(this.ntsFields, that.ntsFields)
             .append(this.salFields, that.salFields)
+            .append(this.aclciFields, that.aclciFields)
             .append(this.numberOfBaselineYears, that.numberOfBaselineYears)
             .append(this.initialUsagesCount, that.initialUsagesCount)
             .isEquals();
@@ -151,6 +161,7 @@ public class UsageBatch extends StoredEntity<String> {
             .append(grossAmount)
             .append(ntsFields)
             .append(salFields)
+            .append(aclciFields)
             .append(numberOfBaselineYears)
             .append(initialUsagesCount)
             .toHashCode();
@@ -168,6 +179,7 @@ public class UsageBatch extends StoredEntity<String> {
             .append("grossAmount", grossAmount)
             .append("ntsFields", ntsFields)
             .append("salFields", salFields)
+            .append("aclciFields", aclciFields)
             .append("numberOfBaselineYears", numberOfBaselineYears)
             .append("initialUsagesCount", initialUsagesCount)
             .toString();
@@ -334,6 +346,62 @@ public class UsageBatch extends StoredEntity<String> {
                 return false;
             }
             SalFields that = (SalFields) obj;
+            return new EqualsBuilder()
+                .append(licenseeAccountNumber, that.licenseeAccountNumber)
+                .append(licenseeName, that.licenseeName)
+                .isEquals();
+        }
+
+        @Override
+        public int hashCode() {
+            return new HashCodeBuilder()
+                .append(licenseeAccountNumber)
+                .append(licenseeName)
+                .toHashCode();
+        }
+
+        @Override
+        public String toString() {
+            return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("licenseeAccountNumber", licenseeAccountNumber)
+                .append("licenseeName", licenseeName)
+                .toString();
+        }
+    }
+
+    /**
+     * Represents ACLCI specific fields.
+     */
+    public static class AclciFields {
+
+        private Long licenseeAccountNumber;
+        private String licenseeName;
+
+        public Long getLicenseeAccountNumber() {
+            return licenseeAccountNumber;
+        }
+
+        public void setLicenseeAccountNumber(Long licenseeAccountNumber) {
+            this.licenseeAccountNumber = licenseeAccountNumber;
+        }
+
+        public String getLicenseeName() {
+            return licenseeName;
+        }
+
+        public void setLicenseeName(String licenseeName) {
+            this.licenseeName = licenseeName;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (null == obj || getClass() != obj.getClass()) {
+                return false;
+            }
+            AclciFields that = (AclciFields) obj;
             return new EqualsBuilder()
                 .append(licenseeAccountNumber, that.licenseeAccountNumber)
                 .append(licenseeName, that.licenseeName)

@@ -5,12 +5,13 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.test.liquibase.LiquibaseTestExecutionListener;
 import com.copyright.rup.dist.common.test.liquibase.TestData;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
+import com.copyright.rup.dist.foreign.domain.UsageBatch.AclciFields;
 import com.copyright.rup.dist.foreign.domain.UsageBatch.NtsFields;
+import com.copyright.rup.dist.foreign.domain.UsageBatch.SalFields;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.report.SalLicensee;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
@@ -54,18 +55,25 @@ import java.util.stream.Collectors;
 public class UsageBatchRepositoryIntegrationTest {
 
     private static final String FOLDER_NAME = "usage-batch-repository-integration-test/";
-    private static final String USAGE_BATCH_NAME_1 = "Test batch";
-    private static final String USAGE_BATCH_NAME_2 = "Test batch with fund pool";
+    private static final String ROLLBACK_ONLY = "rollback-only.groovy";
+    private static final String FAS_USAGE_BATCH_NAME = "Test FAS batch";
+    private static final String NTS_USAGE_BATCH_NAME = "Test NTS batch";
+    private static final String SAL_USAGE_BATCH_NAME = "Test SAL batch";
+    private static final String ACLCI_USAGE_BATCH_NAME = "Test ACLCI batch";
     private static final Integer FISCAL_YEAR_2017 = 2017;
     private static final Long RRO_ACCOUNT_NUMBER = 123456789L;
     private static final BigDecimal GROSS_AMOUNT = new BigDecimal("23.53");
     private static final LocalDate PAYMENT_DATE = LocalDate.of(2017, 2, 23);
     private static final String FAS_PRODUCT_FAMILY = "FAS";
     private static final String NTS_PRODUCT_FAMILY = "NTS";
+    private static final String SAL_PRODUCT_FAMILY = "SAL";
+    private static final String ACLCI_PRODUCT_FAMILY = "ACLCI";
     private static final String NTS_BATCH_NAME = "NTS Batch without STM usages";
     private static final String NTS_USAGE_BATCH_ID_1 = "e92f9fcd-9eec-4170-960c-f9f8d6cabd2d";
     private static final String NTS_USAGE_BATCH_ID_2 = "99725b90-c4da-414d-9159-f1c8c83c5e19";
     private static final String NTS_USAGE_BATCH_ID_3 = "3da5944b-dab1-47a4-a29d-2dbecc6737e0";
+    private static final Long LICENSEE_ACCOUNT_NUMBER = 1000008985L;
+    private static final String LICENSEE_NAME = "FarmField Inc.";
 
     @Autowired
     private UsageBatchRepository usageBatchRepository;
@@ -89,15 +97,16 @@ public class UsageBatchRepositoryIntegrationTest {
     public void testFindCountByName() {
         assertEquals(1, usageBatchRepository.findCountByName("JAACC_11Dec16"));
         assertEquals(1, usageBatchRepository.findCountByName("JaAcC_11dec16"));
-        assertEquals(0, usageBatchRepository.findCountByName(USAGE_BATCH_NAME_1));
+        assertEquals(0, usageBatchRepository.findCountByName(FAS_USAGE_BATCH_NAME));
     }
 
     @Test
-    @TestData(fileName = "rollback-only.groovy")
-    public void testInsertUsageBatch() {
-        usageBatchRepository.insert(buildUsageBatch());
-        UsageBatch usageBatch = usageBatchRepository.findByName(USAGE_BATCH_NAME_1);
+    @TestData(fileName = ROLLBACK_ONLY)
+    public void testInsertFasUsageBatch() {
+        usageBatchRepository.insert(buildFasUsageBatch());
+        UsageBatch usageBatch = usageBatchRepository.findByName(FAS_USAGE_BATCH_NAME);
         assertNotNull(usageBatch);
+        assertEquals(FAS_USAGE_BATCH_NAME, usageBatch.getName());
         assertEquals(FAS_PRODUCT_FAMILY, usageBatch.getProductFamily());
         assertEquals(RRO_ACCOUNT_NUMBER, usageBatch.getRro().getAccountNumber());
         assertEquals(PAYMENT_DATE, usageBatch.getPaymentDate());
@@ -105,19 +114,23 @@ public class UsageBatchRepositoryIntegrationTest {
         assertEquals(GROSS_AMOUNT, usageBatch.getGrossAmount());
         assertEquals(1000, usageBatch.getInitialUsagesCount());
         assertNull(usageBatch.getNtsFields());
+        assertNull(usageBatch.getSalFields());
+        assertNull(usageBatch.getAclciFields());
     }
 
     @Test
-    @TestData(fileName = "rollback-only.groovy")
-    public void testInsertUsageBatchWithFundPool() {
-        usageBatchRepository.insert(buildUsageBatchWithFundPool());
-        UsageBatch usageBatch = usageBatchRepository.findByName(USAGE_BATCH_NAME_2);
+    @TestData(fileName = ROLLBACK_ONLY)
+    public void testInsertNtsUsageBatch() {
+        usageBatchRepository.insert(buildNtsUsageBatch());
+        UsageBatch usageBatch = usageBatchRepository.findByName(NTS_USAGE_BATCH_NAME);
         assertNotNull(usageBatch);
+        assertEquals(NTS_USAGE_BATCH_NAME, usageBatch.getName());
         assertEquals(NTS_PRODUCT_FAMILY, usageBatch.getProductFamily());
         assertEquals(RRO_ACCOUNT_NUMBER, usageBatch.getRro().getAccountNumber());
         assertEquals(PAYMENT_DATE, usageBatch.getPaymentDate());
         assertEquals(FISCAL_YEAR_2017, usageBatch.getFiscalYear());
         assertEquals(1000, usageBatch.getInitialUsagesCount());
+        assertNotNull(usageBatch.getNtsFields());
         NtsFields ntsFields = usageBatch.getNtsFields();
         assertEquals(2017, ntsFields.getFundPoolPeriodFrom().intValue());
         assertEquals(2018, ntsFields.getFundPoolPeriodTo().intValue());
@@ -127,19 +140,55 @@ public class UsageBatchRepositoryIntegrationTest {
         assertEquals(new BigDecimal("400.44"), ntsFields.getNonStmMinimumAmount());
         assertEquals(ImmutableSet.of("Edu", "Gov"), ntsFields.getMarkets());
         assertTrue(ntsFields.isExcludingStm());
+        assertNull(usageBatch.getSalFields());
+        assertNull(usageBatch.getAclciFields());
     }
 
     @Test
-    @TestData(fileName = "rollback-only.groovy")
+    @TestData(fileName = ROLLBACK_ONLY)
+    public void testInsertSalItemBank() {
+        usageBatchRepository.insert(buildSalItemBank());
+        UsageBatch itemBank = usageBatchRepository.findByName(SAL_USAGE_BATCH_NAME);
+        assertNotNull(itemBank);
+        assertEquals(SAL_USAGE_BATCH_NAME, itemBank.getName());
+        assertEquals(SAL_PRODUCT_FAMILY, itemBank.getProductFamily());
+        assertEquals(PAYMENT_DATE, itemBank.getPaymentDate());
+        assertNull(itemBank.getNtsFields());
+        assertNotNull(itemBank.getSalFields());
+        SalFields salFields = itemBank.getSalFields();
+        assertEquals(LICENSEE_ACCOUNT_NUMBER, salFields.getLicenseeAccountNumber());
+        assertEquals(LICENSEE_NAME, salFields.getLicenseeName());
+        assertNull(itemBank.getAclciFields());
+    }
+
+    @Test
+    @TestData(fileName = ROLLBACK_ONLY)
+    public void testInsertAclciUsageBatch() {
+        usageBatchRepository.insert(buildAclciUsageBatch());
+        UsageBatch usageBatch = usageBatchRepository.findByName(ACLCI_USAGE_BATCH_NAME);
+        assertNotNull(usageBatch);
+        assertEquals(ACLCI_USAGE_BATCH_NAME, usageBatch.getName());
+        assertEquals(ACLCI_PRODUCT_FAMILY, usageBatch.getProductFamily());
+        assertEquals(PAYMENT_DATE, usageBatch.getPaymentDate());
+        assertNull(usageBatch.getNtsFields());
+        assertNull(usageBatch.getSalFields());
+        assertNotNull(usageBatch.getAclciFields());
+        AclciFields aclciFields = usageBatch.getAclciFields();
+        assertEquals(LICENSEE_ACCOUNT_NUMBER, aclciFields.getLicenseeAccountNumber());
+        assertEquals(LICENSEE_NAME, aclciFields.getLicenseeName());
+    }
+
+    @Test
+    @TestData(fileName = ROLLBACK_ONLY)
     public void testUpdateInitialUsagesCount() {
-        UsageBatch batch = buildUsageBatchWithFundPool();
+        UsageBatch batch = buildNtsUsageBatch();
         batch.setInitialUsagesCount(0);
         usageBatchRepository.insert(batch);
-        UsageBatch usageBatch = usageBatchRepository.findByName(USAGE_BATCH_NAME_2);
+        UsageBatch usageBatch = usageBatchRepository.findByName(NTS_USAGE_BATCH_NAME);
         assertNotNull(usageBatch);
         assertEquals(0, usageBatch.getInitialUsagesCount());
         usageBatchRepository.updateInitialUsagesCount(1000, usageBatch.getId(), "user@copyright.com");
-        usageBatch = usageBatchRepository.findByName(USAGE_BATCH_NAME_2);
+        usageBatch = usageBatchRepository.findByName(NTS_USAGE_BATCH_NAME);
         assertNotNull(usageBatch);
         assertEquals(1000, usageBatch.getInitialUsagesCount());
         assertEquals("user@copyright.com", usageBatch.getUpdateUser());
@@ -324,11 +373,11 @@ public class UsageBatchRepositoryIntegrationTest {
         assertEquals(Collections.singletonList(2015), usageBatchRepository.findSalUsagePeriods());
     }
 
-    private UsageBatch buildUsageBatch() {
+    private UsageBatch buildFasUsageBatch() {
         UsageBatch usageBatch = new UsageBatch();
-        usageBatch.setId(RupPersistUtils.generateUuid());
+        usageBatch.setId("db33ef27-c65b-4b8d-a57e-745b0dd782b6");
         usageBatch.setProductFamily(FAS_PRODUCT_FAMILY);
-        usageBatch.setName(USAGE_BATCH_NAME_1);
+        usageBatch.setName(FAS_USAGE_BATCH_NAME);
         Rightsholder rightsholder = new Rightsholder();
         rightsholder.setAccountNumber(RRO_ACCOUNT_NUMBER);
         usageBatch.setRro(rightsholder);
@@ -339,11 +388,11 @@ public class UsageBatchRepositoryIntegrationTest {
         return usageBatch;
     }
 
-    private UsageBatch buildUsageBatchWithFundPool() {
+    private UsageBatch buildNtsUsageBatch() {
         UsageBatch usageBatch = new UsageBatch();
-        usageBatch.setId(RupPersistUtils.generateUuid());
+        usageBatch.setId("460fd312-1b23-485e-a3d8-11fbd8049a82");
         usageBatch.setProductFamily(NTS_PRODUCT_FAMILY);
-        usageBatch.setName(USAGE_BATCH_NAME_2);
+        usageBatch.setName(NTS_USAGE_BATCH_NAME);
         usageBatch.setFiscalYear(FISCAL_YEAR_2017);
         usageBatch.setInitialUsagesCount(1000);
         Rightsholder rightsholder = new Rightsholder();
@@ -365,5 +414,39 @@ public class UsageBatchRepositoryIntegrationTest {
         ntsFields.setMarkets(ImmutableSet.of("Edu", "Gov"));
         ntsFields.setExcludingStm(true);
         return ntsFields;
+    }
+
+    private UsageBatch buildSalItemBank() {
+        UsageBatch itemBank = new UsageBatch();
+        itemBank.setId("10e71aa2-9cc8-4920-bcc7-4a05ad0f62cb");
+        itemBank.setProductFamily(SAL_PRODUCT_FAMILY);
+        itemBank.setName(SAL_USAGE_BATCH_NAME);
+        itemBank.setPaymentDate(PAYMENT_DATE);
+        itemBank.setSalFields(buildSalFields());
+        return itemBank;
+    }
+
+    private SalFields buildSalFields() {
+        SalFields salFields = new SalFields();
+        salFields.setLicenseeAccountNumber(LICENSEE_ACCOUNT_NUMBER);
+        salFields.setLicenseeName(LICENSEE_NAME);
+        return salFields;
+    }
+
+    private UsageBatch buildAclciUsageBatch() {
+        UsageBatch usageBatch = new UsageBatch();
+        usageBatch.setId("7f420db2-e3f2-4d4f-b057-2d9b4b5e2a4d");
+        usageBatch.setProductFamily(ACLCI_PRODUCT_FAMILY);
+        usageBatch.setName(ACLCI_USAGE_BATCH_NAME);
+        usageBatch.setPaymentDate(PAYMENT_DATE);
+        usageBatch.setAclciFields(buildAclciFields());
+        return usageBatch;
+    }
+
+    private AclciFields buildAclciFields() {
+        AclciFields aclciFields = new AclciFields();
+        aclciFields.setLicenseeAccountNumber(LICENSEE_ACCOUNT_NUMBER);
+        aclciFields.setLicenseeName(LICENSEE_NAME);
+        return aclciFields;
     }
 }
