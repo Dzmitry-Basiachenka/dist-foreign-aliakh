@@ -1,0 +1,54 @@
+[
+  {
+    "id": "5262bc87-e5b4-447b-9294-122e41f01c7e",
+    "createDate": 1539353929742,
+    "updateDate": 1539353929742,
+    "createUser": "SYSTEM",
+    "updateUser": "SYSTEM",
+    "batchId": "2d3f2f15-901e-4d7b-bb6c-4af542d3e504",
+    "status": "NEW",
+    "productFamily": "ACLCI",
+    "wrWrkInst": 109060602,
+    "workTitle": "Steam engines",
+    "comment": "some comment",
+    "aclciUsage": {
+      "coveragePeriod": "2021-2022",
+      "licenseType": "CURR_REPUB_K12",
+      "reportedMediaType": "TEXT",
+      "mediaTypeWeight": 1,
+      "reportedArticle": "The Bronze Statue",
+      "reportedStandardNumber": "978-0-7614-1880-1",
+      "reportedAuthor": "Hugh Lupton",
+      "reportedPublisher": "Barefoot Books",
+      "reportedPublicationDate": "2021-02-03",
+      "reportedGrade": "6",
+      "gradeGroup": "GRADE6_8"
+    }
+  },
+  {
+    "id": "0a11d705-9c5e-459a-ba0d-fb22d4b5ff96",
+    "createDate": 1539353929742,
+    "updateDate": 1539353929742,
+    "createUser": "SYSTEM",
+    "updateUser": "SYSTEM",
+    "batchId": "2d3f2f15-901e-4d7b-bb6c-4af542d3e504",
+    "status": "NEW",
+    "productFamily": "ACLCI",
+    "wrWrkInst": 368440556,
+    "workTitle": "The Inuit",
+    "comment": "another comment",
+    "aclciUsage": {
+      "coveragePeriod": "2020-2021",
+      "licenseType": "CURR_REUSE_K12",
+      "reportedMediaType": "IMAGE",
+      "mediaTypeWeight": 1,
+      "reportedArticle": "Traveling Hunters",
+      "reportedStandardNumber": "978-0-7565-0640-7",
+      "reportedAuthor": "Natalie M. Rosinsky",
+      "reportedPublisher": "Compass Point Books",
+      "reportedPublicationDate": "2021-02-03",
+      "reportedGrade": "9",
+      "gradeGroup": "GRADE6_8"
+    }
+  }
+]

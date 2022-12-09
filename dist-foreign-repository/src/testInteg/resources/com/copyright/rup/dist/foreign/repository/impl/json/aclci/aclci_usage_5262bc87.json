@@ -8,7 +8,7 @@
     "workTitle": "Steam engines",
     "comment": "some comment",
     "aclciUsage": {
-      "coveragePeriod": "2022-2022",
+      "coveragePeriod": "2021-2022",
       "licenseType": "CURR_REPUB_K12",
       "reportedMediaType": "TEXT",
       "mediaTypeWeight": 1.0,
@@ -17,7 +17,7 @@
       "reportedAuthor": "Hugh Lupton",
       "reportedPublisher": "Barefoot Books",
       "reportedPublicationDate": "2020-01-02",
-      "reportedGrade": "7",
+      "reportedGrade": "6",
       "gradeGroup": "GRADE6_8",
       "batchPeriodEndDate": "2022-06-30"
     }
