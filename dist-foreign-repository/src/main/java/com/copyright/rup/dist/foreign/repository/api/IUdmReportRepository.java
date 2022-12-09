@@ -7,6 +7,7 @@ import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
 
 import java.io.OutputStream;
 import java.io.PipedOutputStream;
+import java.util.Set;
 
 /**
  * Represents interface of repository for UDM reports.
@@ -134,4 +135,12 @@ public interface IUdmReportRepository {
      * @param outputStream instance of {@link OutputStream}
      */
     void writeUdmBaselineValueUpdatesCsvReport(UdmReportFilter reportFilter, OutputStream outputStream);
+
+    /**
+     * Writes UDM Survey Dashboard Report into csv output stream.
+     *
+     * @param periods set of periods
+     * @param outputStream instance of {@link OutputStream}
+     */
+    void writeUdmSurveyDashboardCsvReport(Set<Integer> periods, OutputStream outputStream);
 }

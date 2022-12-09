@@ -101,6 +101,6 @@ public class UdmReportService implements IUdmReportService {
 
     @Override
     public void writeUdmSurveyDashboardCsvReport(Set<Integer> periods, OutputStream outputStream) {
-        //TODO will implement later
+        udmReportRepository.writeUdmSurveyDashboardCsvReport(periods, outputStream);
     }
 }

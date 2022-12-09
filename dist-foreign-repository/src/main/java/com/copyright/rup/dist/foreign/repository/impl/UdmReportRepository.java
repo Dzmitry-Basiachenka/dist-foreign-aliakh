@@ -28,6 +28,7 @@ import java.io.OutputStream;
 import java.io.PipedOutputStream;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * Implementation of {@link IUdmReportRepository}.
@@ -149,6 +150,11 @@ public class UdmReportRepository extends CommonReportRepository implements IUdmR
                  new UdmBaselineValueUpdatesReportHandler(Objects.requireNonNull(outputStream))) {
             getTemplate().select("IUdmReportMapper.findUdmBaselineValueUpdatesReportDtos", reportFilter, handler);
         }
+    }
+
+    @Override
+    public void writeUdmSurveyDashboardCsvReport(Set<Integer> periods, OutputStream outputStream) {
+        //TODO will implement later
     }
 
     private void writeUdmUsageCsvReport(UdmUsageFilter filter, BaseCsvReportHandler handler) {
