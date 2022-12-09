@@ -22,7 +22,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.io.PipedOutputStream;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Verifies {@link UdmReportService}.
@@ -212,6 +215,17 @@ public class UdmReportServiceTest {
         expectLastCall().once();
         replay(udmReportRepository);
         udmReportService.writeUdmBaselineValueUpdatesCsvReport(filter, outputStream);
+        verify(udmReportRepository);
+    }
+
+    @Test
+    public void testWriteSurveyDashboardCsvRepor() {
+        Set<Integer> periods = new HashSet<>(Arrays.asList(202106, 202212));
+        OutputStream outputStream = new ByteArrayOutputStream();
+        udmReportRepository.writeUdmSurveyDashboardCsvReport(periods, outputStream);
+        expectLastCall().once();
+        replay(udmReportRepository);
+        udmReportService.writeUdmSurveyDashboardCsvReport(periods, outputStream);
         verify(udmReportRepository);
     }
 }
