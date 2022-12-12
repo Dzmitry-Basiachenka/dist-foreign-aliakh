@@ -16,6 +16,7 @@ import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.aacl.IAaclUsageService;
+import com.copyright.rup.dist.foreign.service.api.aclci.IAclciUsageService;
 import com.copyright.rup.dist.foreign.service.api.fas.IFasUsageService;
 import com.copyright.rup.dist.foreign.service.api.nts.INtsUsageService;
 import com.copyright.rup.dist.foreign.service.api.sal.ISalUsageService;
@@ -69,13 +70,15 @@ public class UsageBatchService implements IUsageBatchService {
     @Autowired
     private IUsageService usageService;
     @Autowired
+    private IFasUsageService fasUsageService;
+    @Autowired
     private INtsUsageService ntsUsageService;
     @Autowired
-    private IFasUsageService fasUsageService;
+    private ISalUsageService salUsageService;
     @Autowired
     private IAaclUsageService aaclUsageService;
     @Autowired
-    private ISalUsageService salUsageService;
+    private IAclciUsageService aclciUsageService;
     @Autowired
     private IRightsholderService rightsholderService;
 
@@ -299,6 +302,24 @@ public class UsageBatchService implements IUsageBatchService {
     @Override
     public List<Integer> getSalUsagePeriods() {
         return usageBatchRepository.findSalUsagePeriods();
+    }
+
+    @Override
+    @Transactional
+    public List<String> insertAclciBatch(UsageBatch usageBatch, List<Usage> usages) {
+        String userName = RupContextUtils.getUserName();
+        usageBatch.setId(RupPersistUtils.generateUuid());
+        usageBatch.setCreateUser(userName);
+        usageBatch.setUpdateUser(userName);
+        LOGGER.info("Insert ACLCI batch. Started. UsageBatchName={}, UserName={}", usageBatch.getName(), userName);
+        usageBatchRepository.insert(usageBatch);
+        aclciUsageService.insertUsages(usageBatch, usages);
+        usageBatchRepository.updateInitialUsagesCount(usages.size(), usageBatch.getId(), userName);
+        LOGGER.info("Insert ACLCI batch. Finished. UsageBatchName={}, UserName={}, UploadedCount={}",
+            usageBatch.getName(), userName, LogUtils.size(usages));
+        return usages.stream()
+            .map(Usage::getId)
+            .collect(Collectors.toList());
     }
 
     private void populateTitlesStandardNumberAndType(List<Usage> usages) {

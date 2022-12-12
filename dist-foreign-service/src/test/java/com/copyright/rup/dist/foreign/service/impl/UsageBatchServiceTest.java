@@ -5,6 +5,7 @@ import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
+import static org.easymock.EasyMock.newCapture;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -31,6 +32,7 @@ import com.copyright.rup.dist.foreign.repository.api.IUsageBatchRepository;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.aacl.IAaclUsageService;
+import com.copyright.rup.dist.foreign.service.api.aclci.IAclciUsageService;
 import com.copyright.rup.dist.foreign.service.api.fas.IFasUsageService;
 import com.copyright.rup.dist.foreign.service.api.nts.INtsUsageService;
 import com.copyright.rup.dist.foreign.service.api.sal.ISalUsageService;
@@ -66,48 +68,52 @@ import java.util.Set;
  * @author Aliaksandr Radkevich
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest(RupContextUtils.class)
+@PrepareForTest({RupContextUtils.class, RupPersistUtils.class})
 public class UsageBatchServiceTest {
 
     private static final Integer FISCAL_YEAR = 2017;
     private static final String BATCH_NAME = "JAACC_11Dec16";
-    private static final String BATCH_UID = RupPersistUtils.generateUuid();
+    private static final String BATCH_UID = "80fa89fe-460b-413e-a192-8685fe36bde1";
+    private static final String USAGE_UID = "36beb0f6-11a3-47b0-bb11-81d6342e8ae9";
     private static final String USER_NAME = "User Name";
     private static final Long RRO_ACCOUNT_NUMBER = 123456789L;
     private static final String RRO_NAME = "RRO Name";
     private static final String FAS_PRODUCT_FAMILY = "FAS";
     private static final String NTS_PRODUCT_FAMILY = "NTS";
 
-    private IAaclUsageService aaclUsageService;
+    private IPiIntegrationService piIntegrationService;
     private IUsageBatchRepository usageBatchRepository;
     private IUsageService usageService;
-    private INtsUsageService ntsUsageService;
     private IFasUsageService fasUsageService;
+    private INtsUsageService ntsUsageService;
+    private ISalUsageService salUsageService;
+    private IAclciUsageService aclciUsageService;
+    private IAaclUsageService aaclUsageService;
     private IRightsholderService rightsholderService;
     private UsageBatchService usageBatchService;
-    private IPiIntegrationService piIntegrationService;
-    private ISalUsageService salUsageService;
 
     @Before
     @SuppressWarnings("unchecked")
     public void setUp() {
+        piIntegrationService = createMock(IPiIntegrationService.class);
         usageBatchRepository = createMock(IUsageBatchRepository.class);
-        aaclUsageService = createMock(IAaclUsageService.class);
         usageService = createMock(IUsageService.class);
         fasUsageService = createMock(IFasUsageService.class);
         ntsUsageService = createMock(INtsUsageService.class);
-        rightsholderService = createMock(IRightsholderService.class);
-        piIntegrationService = createMock(IPiIntegrationService.class);
         salUsageService = createMock(ISalUsageService.class);
+        aaclUsageService = createMock(IAaclUsageService.class);
+        aclciUsageService = createMock(IAclciUsageService.class);
+        rightsholderService = createMock(IRightsholderService.class);
         usageBatchService = new UsageBatchService();
         Whitebox.setInternalState(usageBatchService, piIntegrationService);
         Whitebox.setInternalState(usageBatchService, usageBatchRepository);
-        Whitebox.setInternalState(usageBatchService, aaclUsageService);
         Whitebox.setInternalState(usageBatchService, usageService);
         Whitebox.setInternalState(usageBatchService, fasUsageService);
         Whitebox.setInternalState(usageBatchService, ntsUsageService);
-        Whitebox.setInternalState(usageBatchService, rightsholderService);
         Whitebox.setInternalState(usageBatchService, salUsageService);
+        Whitebox.setInternalState(usageBatchService, aaclUsageService);
+        Whitebox.setInternalState(usageBatchService, aclciUsageService);
+        Whitebox.setInternalState(usageBatchService, rightsholderService);
     }
 
     @Test
@@ -366,7 +372,7 @@ public class UsageBatchServiceTest {
     public void testDeleteUsageBatch() {
         mockStatic(RupContextUtils.class);
         UsageBatch usageBatch = new UsageBatch();
-        usageBatch.setId(RupPersistUtils.generateUuid());
+        usageBatch.setId(BATCH_UID);
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
         usageService.deleteUsageBatchDetails(usageBatch);
         expectLastCall().once();
@@ -381,7 +387,7 @@ public class UsageBatchServiceTest {
     public void testDeleteAaclUsageBatch() {
         mockStatic(RupContextUtils.class);
         UsageBatch usageBatch = new UsageBatch();
-        usageBatch.setId(RupPersistUtils.generateUuid());
+        usageBatch.setId(BATCH_UID);
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
         aaclUsageService.deleteUsageBatchDetails(usageBatch);
         expectLastCall().once();
@@ -479,7 +485,7 @@ public class UsageBatchServiceTest {
     public void testDeleteSalUsageBatch() {
         mockStatic(RupContextUtils.class);
         UsageBatch usageBatch = new UsageBatch();
-        usageBatch.setId("4094fb3c-2554-4cab-842f-7fcb99d8983d");
+        usageBatch.setId(BATCH_UID);
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
         salUsageService.deleteUsageBatchDetails(usageBatch);
         expectLastCall().once();
@@ -506,6 +512,34 @@ public class UsageBatchServiceTest {
         replay(usageBatchRepository);
         assertSame(licensees, usageBatchService.getSalLicensees());
         verify(usageBatchRepository);
+    }
+
+    @Test
+    public void testInsertAclciBatch() {
+        mockStatic(RupContextUtils.class);
+        expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
+        mockStatic(RupPersistUtils.class);
+        expect(RupPersistUtils.generateUuid()).andReturn(BATCH_UID).once();
+        UsageBatch usageBatch = new UsageBatch();
+        usageBatch.setName(BATCH_NAME);
+        usageBatch.setPaymentDate(LocalDate.of(2022, 6, 30));
+        Usage usage = new Usage();
+        usage.setId(USAGE_UID);
+        List<Usage> usages = Collections.singletonList(usage);
+        Capture<UsageBatch> usageBatchCapture = newCapture();
+        usageBatchRepository.insert(capture(usageBatchCapture));
+        expectLastCall().once();
+        aclciUsageService.insertUsages(usageBatch, usages);
+        expectLastCall().once();
+        usageBatchRepository.updateInitialUsagesCount(eq(1), eq(BATCH_UID), eq(USER_NAME));
+        expectLastCall().once();
+        replay(RupContextUtils.class, RupPersistUtils.class, aclciUsageService, usageBatchRepository);
+        assertEquals(Collections.singletonList(USAGE_UID), usageBatchService.insertAclciBatch(usageBatch, usages));
+        UsageBatch insertedUsageBatch = usageBatchCapture.getValue();
+        assertEquals(BATCH_UID, insertedUsageBatch.getId());
+        assertEquals(USER_NAME, insertedUsageBatch.getCreateUser());
+        assertEquals(USER_NAME, insertedUsageBatch.getUpdateUser());
+        verify(RupContextUtils.class, RupPersistUtils.class, aclciUsageService, usageBatchRepository);
     }
 
     private Rightsholder buildRro() {
