@@ -211,4 +211,13 @@ public interface IUsageBatchService {
      * @return list of SAL usage periods
      */
     List<Integer> getSalUsagePeriods();
+
+    /**
+     * Inserts ACLCI batch and its usages.
+     *
+     * @param usageBatch {@link UsageBatch} to insert
+     * @param usages     list of {@link Usage}s
+     * @return ids of inserted usages
+     */
+    List<String> insertAclciBatch(UsageBatch usageBatch, List<Usage> usages);
 }
