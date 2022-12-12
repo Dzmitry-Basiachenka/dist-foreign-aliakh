@@ -23,4 +23,20 @@ public interface IAclciUsageService {
      * @param usages     list of {@link Usage}s
      */
     void insertUsages(UsageBatch usageBatch, List<Usage> usages);
+
+    /**
+     * Finds ACLCI usages by their ids and sends them on queue for PI matching process.
+     *
+     * @param usageIds  list of usages ids
+     * @param batchName batch name
+     */
+    void sendForMatching(List<String> usageIds, String batchName);
+
+    /**
+     * Gets list of {@link Usage}s by specified {@link Usage} ids.
+     *
+     * @param usageIds list of {@link Usage} ids
+     * @return list of {@link Usage}s
+     */
+    List<Usage> getUsagesByIds(List<String> usageIds);
 }

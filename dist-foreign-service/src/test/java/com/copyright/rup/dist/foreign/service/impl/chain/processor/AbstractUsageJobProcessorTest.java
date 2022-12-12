@@ -15,6 +15,7 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.aacl.IAaclUsageService;
+import com.copyright.rup.dist.foreign.service.api.aclci.IAclciUsageService;
 import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 import com.copyright.rup.dist.foreign.service.api.processor.IChainProcessor;
 import com.copyright.rup.dist.foreign.service.api.sal.ISalUsageService;
@@ -47,6 +48,7 @@ public class AbstractUsageJobProcessorTest {
     private IUsageService usageService;
     private IAaclUsageService aaclUsageService;
     private ISalUsageService salUsageService;
+    private IAclciUsageService aclciUsageService;
     private IChainProcessor<Usage> successProcessor;
     private IChainProcessor<Usage> failureProcessor;
 
@@ -58,12 +60,14 @@ public class AbstractUsageJobProcessorTest {
         usageService = createMock(IUsageService.class);
         aaclUsageService = createMock(IAaclUsageService.class);
         salUsageService = createMock(ISalUsageService.class);
+        aclciUsageService = createMock(IAclciUsageService.class);
         successProcessor = createMock(IChainProcessor.class);
         failureProcessor = createMock(IChainProcessor.class);
         processor.setUsagesBatchSize(1000);
         Whitebox.setInternalState(processor, usageService);
         Whitebox.setInternalState(processor, aaclUsageService);
         Whitebox.setInternalState(processor, salUsageService);
+        Whitebox.setInternalState(processor, aclciUsageService);
         processor.setSuccessProcessor(successProcessor);
         processor.setFailureProcessor(failureProcessor);
         processor.setUsageStatus(UsageStatusEnum.NEW);
@@ -161,6 +165,24 @@ public class AbstractUsageJobProcessorTest {
     }
 
     @Test
+    public void testJobProcessForAclci() {
+        Usage usage1 = buildUsage("08fbb27f-f175-41e2-aeb9-af3692b47cb1");
+        Usage usage2 = buildUsage("f06668f7-acbc-45bf-bb2f-2acacf84091b");
+        List<String> usageIds = Arrays.asList(usage1.getId(), usage2.getId());
+        expect(usageService.getUsageIdsByStatusAndProductFamily(UsageStatusEnum.NEW, "ACLCI"))
+            .andReturn(usageIds).once();
+        expect(aclciUsageService.getUsagesByIds(eq(usageIds))).andReturn(Arrays.asList(usage1, usage2)).once();
+        usageConsumer.accept(Collections.singletonList(usage1));
+        expectLastCall().once();
+        usageConsumer.accept(Collections.singletonList(usage2));
+        expectLastCall().once();
+        replay(usageService, usageConsumer, aclciUsageService);
+        assertEquals(new JobInfo(JobStatusEnum.FINISHED, "ProductFamily=ACLCI, UsagesCount=2"),
+            processor.jobProcess("ACLCI"));
+        verify(usageService, usageConsumer, aclciUsageService);
+    }
+
+    @Test
     public void testJobProcessForUnknownProductFamily() {
         replay(usageService, usageConsumer, aaclUsageService, salUsageService, successProcessor, failureProcessor);
         try {
@@ -168,7 +190,7 @@ public class AbstractUsageJobProcessorTest {
             fail();
         } catch (IllegalArgumentException e) {
             assertEquals("Product family is not registered. ProductFamily=CNTPUR, " +
-                "RegisteredProductFamilies=[FAS, FAS2, NTS, AACL, SAL]", e.getMessage());
+                "RegisteredProductFamilies=[FAS, FAS2, NTS, AACL, SAL, ACLCI]", e.getMessage());
         }
         verify(usageService, usageConsumer, aaclUsageService, successProcessor, failureProcessor);
     }

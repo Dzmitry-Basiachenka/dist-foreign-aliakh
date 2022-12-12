@@ -9,6 +9,7 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.aacl.IAaclUsageService;
+import com.copyright.rup.dist.foreign.service.api.aclci.IAclciUsageService;
 import com.copyright.rup.dist.foreign.service.api.processor.IJobProcessor;
 import com.copyright.rup.dist.foreign.service.api.sal.ISalUsageService;
 
@@ -47,6 +48,8 @@ abstract class AbstractUsageJobProcessor extends AbstractChainProcessor<Usage> i
     private IAaclUsageService aaclUsageService;
     @Autowired
     private ISalUsageService salUsageService;
+    @Autowired
+    private IAclciUsageService aclciUsageService;
     @Value("$RUP{dist.foreign.usages.batch_size}")
     private Integer usagesBatchSize;
 
@@ -91,13 +94,14 @@ abstract class AbstractUsageJobProcessor extends AbstractChainProcessor<Usage> i
     @PostConstruct
     void init() {
         Function<List<String>, List<Usage>> fasNtsUsageLoader = ids -> usageService.getUsagesByIds(ids);
-        productFamilyToUsageLoaderMap = ImmutableMap.of(
-            FdaConstants.FAS_PRODUCT_FAMILY, fasNtsUsageLoader,
-            FdaConstants.CLA_FAS_PRODUCT_FAMILY, fasNtsUsageLoader,
-            FdaConstants.NTS_PRODUCT_FAMILY, fasNtsUsageLoader,
-            FdaConstants.AACL_PRODUCT_FAMILY, ids -> aaclUsageService.getUsagesByIds(ids),
-            FdaConstants.SAL_PRODUCT_FAMILY, ids -> salUsageService.getUsagesByIds(ids)
-        );
+        productFamilyToUsageLoaderMap = ImmutableMap.<String, Function<List<String>, List<Usage>>>builder()
+            .put(FdaConstants.FAS_PRODUCT_FAMILY, fasNtsUsageLoader)
+            .put(FdaConstants.CLA_FAS_PRODUCT_FAMILY, fasNtsUsageLoader)
+            .put(FdaConstants.NTS_PRODUCT_FAMILY, fasNtsUsageLoader)
+            .put(FdaConstants.AACL_PRODUCT_FAMILY, ids -> aaclUsageService.getUsagesByIds(ids))
+            .put(FdaConstants.SAL_PRODUCT_FAMILY, ids -> salUsageService.getUsagesByIds(ids))
+            .put(FdaConstants.ACLCI_PRODUCT_FAMILY, ids -> aclciUsageService.getUsagesByIds(ids))
+            .build();
     }
 
     private void checkProductFamilyIsSupported(String productFamily) {

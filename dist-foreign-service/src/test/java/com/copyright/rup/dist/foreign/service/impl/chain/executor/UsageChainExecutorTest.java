@@ -17,6 +17,7 @@ import com.copyright.rup.dist.foreign.service.api.processor.IJobProcessor;
 import com.copyright.rup.dist.foreign.service.impl.chain.processor.AbstractChainProcessor;
 
 import com.google.common.collect.ImmutableMap;
+
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -43,6 +44,7 @@ public class UsageChainExecutorTest {
     private IChainProcessor<Usage> ntsProcessor;
     private IChainProcessor<Usage> aaclProcessor;
     private IChainProcessor<Usage> salProcessor;
+    private IChainProcessor<Usage> aclciProcessor;
     private IChainProcessor<Usage> fasEligibilityProcessor;
 
     @Before
@@ -53,11 +55,13 @@ public class UsageChainExecutorTest {
         ntsProcessor = createMock(IChainProcessor.class);
         aaclProcessor = createMock(IChainProcessor.class);
         salProcessor = createMock(IChainProcessor.class);
+        aclciProcessor = createMock(IChainProcessor.class);
         fasEligibilityProcessor = createMock(IChainProcessor.class);
         Whitebox.setInternalState(executor, "fasProcessor", fasProcessor);
         Whitebox.setInternalState(executor, "ntsProcessor", ntsProcessor);
         Whitebox.setInternalState(executor, "aaclProcessor", aaclProcessor);
         Whitebox.setInternalState(executor, "salProcessor", salProcessor);
+        Whitebox.setInternalState(executor, "aclciProcessor", aclciProcessor);
         Whitebox.setInternalState(executor, "chunkSize", 1);
         executor.postConstruct();
     }
@@ -67,6 +71,7 @@ public class UsageChainExecutorTest {
         assertEquals("FAS2", executor.getProductFamilyFunction().apply(buildUsage("FAS2")));
         assertEquals("SAL", executor.getProductFamilyFunction().apply(buildUsage("SAL")));
         assertEquals("NTS", executor.getProductFamilyFunction().apply(buildUsage("NTS")));
+        assertEquals("ACLCI", executor.getProductFamilyFunction().apply(buildUsage("ACLCI")));
         assertEquals(StringUtils.EMPTY, executor.getProductFamilyFunction().apply(buildUsage(StringUtils.EMPTY)));
         assertNull(executor.getProductFamilyFunction().apply(buildUsage(null)));
     }
@@ -74,8 +79,14 @@ public class UsageChainExecutorTest {
     @Test
     public void testGetProductFamilyToProcessorMap() {
         Map<String, IChainProcessor<Usage>> expectedProductFamilyToProcessorMap =
-            ImmutableMap.of("FAS", fasProcessor, "FAS2", fasProcessor, "NTS", ntsProcessor, "AACL", aaclProcessor,
-                "SAL", salProcessor);
+            ImmutableMap.<String, IChainProcessor<Usage>>builder()
+                .put("FAS", fasProcessor)
+                .put("FAS2", fasProcessor)
+                .put("NTS", ntsProcessor)
+                .put("AACL", aaclProcessor)
+                .put("SAL", salProcessor)
+                .put("ACLCI", aclciProcessor)
+                .build();
         Map<String, IChainProcessor<Usage>> actualProductFamilyToProcessorMap =
             executor.getProductFamilyToProcessorMap();
         expectedProductFamilyToProcessorMap.entrySet().forEach((entry) ->
@@ -99,6 +110,9 @@ public class UsageChainExecutorTest {
         expect(salProcessor.getSuccessProcessor())
             .andReturn(new MockProcessor(JobStatusEnum.SKIPPED, "ProductFamily=SAL, Reason=There are no usages"))
             .once();
+        expect(aclciProcessor.getSuccessProcessor())
+            .andReturn(new MockProcessor(JobStatusEnum.SKIPPED, "ProductFamily=ACLCI, Reason=There are no usages"))
+            .once();
         expect(fasProcessor.getFailureProcessor())
             .andReturn(new MockProcessor())
             .times(2);
@@ -111,13 +125,16 @@ public class UsageChainExecutorTest {
         expect(salProcessor.getFailureProcessor())
             .andReturn(new MockProcessor())
             .once();
-        replay(fasProcessor, ntsProcessor, aaclProcessor, salProcessor);
+        expect(aclciProcessor.getFailureProcessor())
+            .andReturn(new MockProcessor())
+            .once();
+        replay(fasProcessor, ntsProcessor, aaclProcessor, salProcessor, aclciProcessor);
         assertEquals(new JobInfo(JobStatusEnum.FINISHED,
                 "ProductFamily=FAS, UsagesCount=2; ProductFamily=FAS2, UsagesCount=5; " +
                     "ProductFamily=NTS, Reason=There are no usages; ProductFamily=AACL, Reason=There are no usages; " +
-                    "ProductFamily=SAL, Reason=There are no usages"),
+                    "ProductFamily=SAL, Reason=There are no usages; ProductFamily=ACLCI, Reason=There are no usages"),
             executor.execute(ChainProcessorTypeEnum.RIGHTS));
-        verify(fasProcessor, ntsProcessor, aaclProcessor, salProcessor);
+        verify(fasProcessor, ntsProcessor, aaclProcessor, salProcessor, aclciProcessor);
     }
 
     @Test

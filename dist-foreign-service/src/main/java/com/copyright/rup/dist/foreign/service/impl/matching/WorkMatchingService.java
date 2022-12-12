@@ -137,6 +137,17 @@ public class WorkMatchingService implements IWorkMatchingService {
         });
     }
 
+    @Override
+    @Transactional
+    public void matchingAclciUsages(List<Usage> usages) {
+        usages.forEach(usage -> {
+            matchByWrWrkInst(usage);
+            LOGGER.trace(
+                "Consume ACLCI usages for matching processing. Processed. UsageId={}, WrWrkInst={}, UsageStatus={}",
+                usage.getId(), usage.getWrWrkInst(), usage.getStatus());
+        });
+    }
+
     private void matchByStandardNumber(Usage usage) {
         Work work = doMatchByStandardNumber(usage);
         if (UsageStatusEnum.WORK_FOUND == usage.getStatus()) {

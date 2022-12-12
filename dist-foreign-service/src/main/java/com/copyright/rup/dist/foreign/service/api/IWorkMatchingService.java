@@ -43,4 +43,11 @@ public interface IWorkMatchingService {
      * @param usages list of {@link UdmUsage}'s
      */
     void matchingUdmUsages(List<UdmUsage> usages);
+
+    /**
+     * Finds Wr Wrk Inst for all usages for ACLCI product family.
+     *
+     * @param usages list of {@link Usage}'s
+     */
+    void matchingAclciUsages(List<Usage> usages);
 }
