@@ -5,6 +5,7 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.service.api.processor.IChainProcessor;
 
 import com.google.common.collect.ImmutableMap;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -37,15 +38,20 @@ public class UsageChainExecutor extends AbstractUsageChainExecutor<Usage> {
     @Autowired
     @Qualifier("df.service.salMatchingProcessor")
     private IChainProcessor<Usage> salProcessor;
+    @Autowired
+    @Qualifier("df.service.aclciMatchingProcessor")
+    private IChainProcessor<Usage> aclciProcessor;
 
     @Override
     Map<String, IChainProcessor<Usage>> getProductFamilyToProcessorMap() {
-        return ImmutableMap.of(
-            FdaConstants.FAS_PRODUCT_FAMILY, fasProcessor,
-            FdaConstants.CLA_FAS_PRODUCT_FAMILY, fasProcessor,
-            FdaConstants.NTS_PRODUCT_FAMILY, ntsProcessor,
-            FdaConstants.AACL_PRODUCT_FAMILY, aaclProcessor,
-            FdaConstants.SAL_PRODUCT_FAMILY, salProcessor);
+        return ImmutableMap.<String, IChainProcessor<Usage>>builder()
+            .put(FdaConstants.FAS_PRODUCT_FAMILY, fasProcessor)
+            .put(FdaConstants.CLA_FAS_PRODUCT_FAMILY, fasProcessor)
+            .put(FdaConstants.NTS_PRODUCT_FAMILY, ntsProcessor)
+            .put(FdaConstants.AACL_PRODUCT_FAMILY, aaclProcessor)
+            .put(FdaConstants.SAL_PRODUCT_FAMILY, salProcessor)
+            .put(FdaConstants.ACLCI_PRODUCT_FAMILY, aclciProcessor)
+            .build();
     }
 
     @Override

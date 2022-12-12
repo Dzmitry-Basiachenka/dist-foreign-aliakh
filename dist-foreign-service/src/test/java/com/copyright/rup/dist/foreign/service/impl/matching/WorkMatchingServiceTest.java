@@ -428,6 +428,44 @@ public class WorkMatchingServiceTest {
         verify(piIntegrationService, udmUsageService, udmAuditService);
     }
 
+    @Test
+    public void testMatchAclciUsages() {
+        Usage usage = buildUsage(112930820L);
+        expect(piIntegrationService.findWorkByWrWrkInst(112930820L))
+            .andReturn(new Work(112930820L, TITLE, STANDARD_NUMBER, VALISSN)).once();
+        usageService.updateProcessedUsage(usage);
+        expectLastCall().once();
+        auditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND, WORK_FOUND_REASON);
+        expectLastCall().once();
+        replay(piIntegrationService, usageRepository, auditService);
+        workMatchingService.matchingAclciUsages(Collections.singletonList(usage));
+        assertEquals(UsageStatusEnum.WORK_FOUND, usage.getStatus());
+        assertEquals(112930820L, usage.getWrWrkInst(), 0);
+        assertEquals(TITLE, usage.getSystemTitle());
+        assertEquals(STANDARD_NUMBER, usage.getStandardNumber());
+        assertEquals(VALISSN, usage.getStandardNumberType());
+        verify(piIntegrationService, usageRepository, auditService);
+    }
+
+    @Test
+    public void testMatchByWrWrkInstWithWorkNotFoundForAclci() {
+        Usage usage = buildUsage(112930821L);
+        expect(piIntegrationService.findWorkByWrWrkInst(112930821L)).andReturn(new Work()).once();
+        usageService.updateProcessedUsage(usage);
+        expectLastCall().once();
+        auditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_NOT_FOUND,
+            "Wr Wrk Inst 112930821 was not found in PI");
+        expectLastCall().once();
+        replay(piIntegrationService, usageRepository, auditService);
+        workMatchingService.matchingAclciUsages(Collections.singletonList(usage));
+        assertEquals(UsageStatusEnum.WORK_NOT_FOUND, usage.getStatus());
+        assertEquals(112930821L, usage.getWrWrkInst(), 0);
+        assertNull(usage.getSystemTitle());
+        assertNull(usage.getStandardNumber());
+        assertNull(usage.getStandardNumberType());
+        verify(piIntegrationService, usageRepository, auditService);
+    }
+
     private Usage buildUsage(Long wrWrkInst) {
         Usage usage = buildUsage(null, null);
         usage.setWrWrkInst(wrWrkInst);

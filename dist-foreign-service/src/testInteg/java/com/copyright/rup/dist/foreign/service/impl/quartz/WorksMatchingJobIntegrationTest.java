@@ -12,6 +12,7 @@ import com.copyright.rup.dist.common.test.liquibase.LiquibaseTestExecutionListen
 import com.copyright.rup.dist.common.test.liquibase.TestData;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageService;
 import com.copyright.rup.dist.foreign.service.impl.ServiceTestHelper;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -70,6 +71,7 @@ public class WorksMatchingJobIntegrationTest {
             "ProductFamily=FAS2, Reason=There are no usages; " +
             "ProductFamily=AACL, Reason=There are no usages; " +
             "ProductFamily=SAL, Reason=There are no usages; " +
+            "ProductFamily=ACLCI, Reason=There are no usages; " +
             "ProductFamily=ACL_UDM, UsagesCount=1");
         jobExecutionContext.setResult(jobInfo);
         expectLastCall().once();

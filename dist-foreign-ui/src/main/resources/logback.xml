@@ -48,6 +48,7 @@
     <logger name="com.copyright.rup.dist.foreign.service.impl.matching.AaclMatchingConsumer" level="${logLevelUsageProcessing}"/>
     <logger name="com.copyright.rup.dist.foreign.service.impl.matching.SalMatchingConsumer" level="${logLevelUsageProcessing}"/>
     <logger name="com.copyright.rup.dist.foreign.service.impl.matching.UdmMatchingConsumer" level="${logLevelUsageProcessing}"/>
+    <logger name="com.copyright.rup.dist.foreign.service.impl.matching.AclciMatchingConsumer" level="${logLevelUsageProcessing}"/>
     <logger name="com.copyright.rup.dist.foreign.service.impl.rights.FasRightsConsumer" level="${logLevelUsageProcessing}"/>
     <logger name="com.copyright.rup.dist.foreign.service.impl.rights.NtsRightsConsumer" level="${logLevelUsageProcessing}"/>
     <logger name="com.copyright.rup.dist.foreign.service.impl.rights.AaclRightsConsumer" level="${logLevelUsageProcessing}"/>
