@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.service.impl.common;
 import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.dist.common.integration.util.JsonUtils;
 import com.copyright.rup.dist.foreign.domain.AaclUsage;
+import com.copyright.rup.dist.foreign.domain.AclciUsage;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.SalUsage;
 import com.copyright.rup.dist.foreign.domain.Usage;
@@ -78,6 +79,11 @@ public class CommonUsageDeserializer extends JsonDeserializer<List<Usage>> {
         } else if (FdaConstants.SAL_PRODUCT_FAMILY.equals(usage.getProductFamily())) {
             usage.setSalUsage(new SalUsage());
             usage.getSalUsage()
+                .setBatchPeriodEndDate(JsonUtils.getLocalDateValue(jsonNode.get("batch_period_end_date")));
+        } else if (FdaConstants.ACLCI_PRODUCT_FAMILY.equals(usage.getProductFamily())) {
+            usage.setAclciUsage(new AclciUsage());
+            usage.getAclciUsage().setLicenseType(JsonUtils.getStringValue(jsonNode.get("license_type")));
+            usage.getAclciUsage()
                 .setBatchPeriodEndDate(JsonUtils.getLocalDateValue(jsonNode.get("batch_period_end_date")));
         }
         usage.setVersion(JsonUtils.getIntegerValue(jsonNode.get("record_version")));

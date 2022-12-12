@@ -342,45 +342,37 @@ public class RightsService implements IRightsService {
                     ImmutableSet.of(DIGITAL_TYPE_OF_USE), getLicenseTypes(productFamily))
                     .stream()
                     .collect(Collectors.groupingBy(RmsGrant::getWrWrkInst));
-                groupedUsages.forEach(usage -> {
-                    Long wrWrkInst = usage.getWrWrkInst();
-                    Set<RmsGrant> eligibleGrants = wrWrkInstToGrants
-                        .getOrDefault(wrWrkInst, Collections.emptyList())
-                        .stream()
-                        .filter(grant -> FdaConstants.SAL_PRODUCT_FAMILY.equals(grant.getProductFamily()))
-                        .collect(Collectors.toSet());
-                    RmsGrant grant = ObjectUtils.defaultIfNull(
-                        findGrantByStatus(eligibleGrants, FdaConstants.RIGHT_STATUS_GRANT),
-                        findGrantByStatus(eligibleGrants, FdaConstants.RIGHT_STATUS_DENY));
-                    if (Objects.nonNull(grant)) {
-                        Long rhAccountNumber = grant.getWorkGroupOwnerOrgNumber().longValueExact();
-                        if (FdaConstants.RIGHT_STATUS_GRANT.equals(grant.getRightStatus())) {
-                            usage.setRightsholder(buildRightsholder(rhAccountNumber));
-                            usage.setStatus(UsageStatusEnum.RH_FOUND);
-                            usageService.updateProcessedUsage(usage);
-                            logAction(Collections.singleton(usage.getId()), UsageActionTypeEnum.RH_FOUND,
-                                String.format(RH_FOUND_REASON_FORMAT, rhAccountNumber), true);
-                        } else {
-                            usage.setStatus(UsageStatusEnum.WORK_NOT_GRANTED);
-                            usageService.updateProcessedUsage(usage);
-                            logAction(Collections.singleton(usage.getId()), UsageActionTypeEnum.WORK_NOT_GRANTED,
-                                String.format("Right for %s is denied for rightsholder account %s",
-                                    wrWrkInst, rhAccountNumber), true);
-                        }
-                    } else {
-                        usage.setStatus(UsageStatusEnum.RH_NOT_FOUND);
-                        usageService.updateProcessedUsage(usage);
-                        logAction(Collections.singleton(usage.getId()), UsageActionTypeEnum.RH_NOT_FOUND,
-                            String.format("Rightsholder account for %s was not found in RMS", wrWrkInst), true);
-                    }
-                });
+                parseRmsGrantsAndUpdateUsages(groupedUsages, wrWrkInstToGrants, FdaConstants.SAL_PRODUCT_FAMILY);
             });
         }
     }
 
     @Override
     public void updateAclciRights(List<Usage> usages) {
-        //TODO {dbasiachenka} implement later
+        if (CollectionUtils.isNotEmpty(usages)) {
+            validateAndGetProductFamily(usages);
+            Map<LocalDate, List<Usage>> batchPeriodEndDatesToUsages = usages
+                .stream()
+                .collect(Collectors.groupingBy(usage -> usage.getAclciUsage().getBatchPeriodEndDate()));
+            batchPeriodEndDatesToUsages.forEach((batchPeriodEndDate, groupedUsagesByPeriodAndDate) -> {
+                Map<String, List<Usage>> licenseTypeToUsages = groupedUsagesByPeriodAndDate
+                    .stream()
+                    .collect(Collectors.groupingBy(usage -> usage.getAclciUsage().getLicenseType()));
+                licenseTypeToUsages.forEach((licenseType, groupedUsagesByLicenseType) -> {
+                    List<Long> wrWrkInsts = groupedUsagesByLicenseType
+                        .stream()
+                        .map(Usage::getWrWrkInst)
+                        .distinct()
+                        .collect(Collectors.toList());
+                    Map<Long, List<RmsGrant>> wrWrkInstToGrants = rmsRightsService.getGrants(wrWrkInsts,
+                        batchPeriodEndDate, productFamilyToRightStatusesMap.get(FdaConstants.ACLCI_PRODUCT_FAMILY),
+                        ImmutableSet.of(licenseType), ImmutableSet.of(licenseType))
+                        .stream()
+                        .collect(Collectors.groupingBy(RmsGrant::getWrWrkInst));
+                    parseRmsGrantsAndUpdateUsages(groupedUsagesByLicenseType, wrWrkInstToGrants, licenseType);
+                });
+            });
+        }
     }
 
     private RmsGrant findGrantByTypeOfUse(Set<RmsGrant> grants, String typeOfUse) {
@@ -467,5 +459,41 @@ public class RightsService implements IRightsService {
         int year = period / 100;
         int month = period % 100;
         return 6 == month ? LocalDate.of(year, month, 30) : LocalDate.of(year, month, 31);
+    }
+
+    private void parseRmsGrantsAndUpdateUsages(List<Usage> usages, Map<Long, List<RmsGrant>> wrWrkInstToGrants,
+                                               String productFamily) {
+        usages.forEach(usage -> {
+            Long wrWrkInst = usage.getWrWrkInst();
+            Set<RmsGrant> eligibleGrants = wrWrkInstToGrants
+                .getOrDefault(wrWrkInst, Collections.emptyList())
+                .stream()
+                .filter(grant -> productFamily.equals(grant.getProductFamily()))
+                .collect(Collectors.toSet());
+            RmsGrant grant = ObjectUtils.defaultIfNull(
+                findGrantByStatus(eligibleGrants, FdaConstants.RIGHT_STATUS_GRANT),
+                findGrantByStatus(eligibleGrants, FdaConstants.RIGHT_STATUS_DENY));
+            if (Objects.nonNull(grant)) {
+                Long rhAccountNumber = grant.getWorkGroupOwnerOrgNumber().longValueExact();
+                if (FdaConstants.RIGHT_STATUS_GRANT.equals(grant.getRightStatus())) {
+                    usage.setRightsholder(buildRightsholder(rhAccountNumber));
+                    usage.setStatus(UsageStatusEnum.RH_FOUND);
+                    usageService.updateProcessedUsage(usage);
+                    logAction(Collections.singleton(usage.getId()), UsageActionTypeEnum.RH_FOUND,
+                        String.format(RH_FOUND_REASON_FORMAT, rhAccountNumber), true);
+                } else {
+                    usage.setStatus(UsageStatusEnum.WORK_NOT_GRANTED);
+                    usageService.updateProcessedUsage(usage);
+                    logAction(Collections.singleton(usage.getId()), UsageActionTypeEnum.WORK_NOT_GRANTED,
+                        String.format("Right for %s is denied for rightsholder account %s",
+                            wrWrkInst, rhAccountNumber), true);
+                }
+            } else {
+                usage.setStatus(UsageStatusEnum.RH_NOT_FOUND);
+                usageService.updateProcessedUsage(usage);
+                logAction(Collections.singleton(usage.getId()), UsageActionTypeEnum.RH_NOT_FOUND,
+                    String.format("Rightsholder account for %s was not found in RMS", wrWrkInst), true);
+            }
+        });
     }
 }

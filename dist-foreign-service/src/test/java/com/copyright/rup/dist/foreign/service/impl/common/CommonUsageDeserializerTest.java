@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.AaclUsage;
+import com.copyright.rup.dist.foreign.domain.AclciUsage;
 import com.copyright.rup.dist.foreign.domain.SalUsage;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
@@ -42,26 +43,29 @@ public class CommonUsageDeserializerTest {
 
     @Test
     public void testDeserializeMessageFas() throws Exception {
-        JsonParser parser = new JsonFactory().createParser(
-            TestUtils.fileToString(this.getClass(), "usage_message_fas.json"));
-        parser.setCodec(new ObjectMapper());
-        assertEquals(buildFasUsages(), deserializer.deserialize(parser, null));
+        testDeserializeMessage(buildFasUsages(), "usage_message_fas.json");
     }
 
     @Test
     public void testDeserializeMessageAacl() throws Exception {
-        JsonParser parser = new JsonFactory().createParser(
-            TestUtils.fileToString(this.getClass(), "usage_message_aacl.json"));
-        parser.setCodec(new ObjectMapper());
-        assertEquals(buildAaclUsages(), deserializer.deserialize(parser, null));
+        testDeserializeMessage(buildAaclUsages(), "usage_message_aacl.json");
     }
 
     @Test
     public void testDeserializeMessageSal() throws Exception {
+        testDeserializeMessage(buildSalUsages(), "usage_message_sal.json");
+    }
+
+    @Test
+    public void testDeserializeMessageAclci() throws Exception {
+        testDeserializeMessage(buildAclciUsages(), "usage_message_aclci.json");
+    }
+
+    private void testDeserializeMessage(List<Usage> usages, String filePath) throws Exception {
         JsonParser parser = new JsonFactory().createParser(
-            TestUtils.fileToString(this.getClass(), "usage_message_sal.json"));
+            TestUtils.fileToString(this.getClass(), filePath));
         parser.setCodec(new ObjectMapper());
-        assertEquals(buildSalUsages(), deserializer.deserialize(parser, null));
+        assertEquals(usages, deserializer.deserialize(parser, null));
     }
 
     private List<Usage> buildFasUsages() {
@@ -84,6 +88,15 @@ public class CommonUsageDeserializerTest {
         usage.setProductFamily("SAL");
         usage.setSalUsage(new SalUsage());
         usage.getSalUsage().setBatchPeriodEndDate(LocalDate.of(2019, 6, 30));
+        return Collections.singletonList(usage);
+    }
+
+    private List<Usage> buildAclciUsages() {
+        Usage usage = buildUsage();
+        usage.setProductFamily("ACLCI");
+        usage.setAclciUsage(new AclciUsage());
+        usage.getAclciUsage().setLicenseType("CURR_REUSE_K12");
+        usage.getAclciUsage().setBatchPeriodEndDate(LocalDate.of(2019, 6, 30));
         return Collections.singletonList(usage);
     }
 
