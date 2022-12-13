@@ -10,6 +10,7 @@ import com.copyright.rup.dist.common.domain.job.JobStatusEnum;
 import com.copyright.rup.dist.common.test.liquibase.LiquibaseTestExecutionListener;
 import com.copyright.rup.dist.common.test.liquibase.TestData;
 import com.copyright.rup.dist.foreign.domain.AaclUsage;
+import com.copyright.rup.dist.foreign.domain.AclciUsage;
 import com.copyright.rup.dist.foreign.domain.SalUsage;
 import com.copyright.rup.dist.foreign.domain.UdmUsage;
 import com.copyright.rup.dist.foreign.domain.UdmValue;
@@ -17,13 +18,14 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IAaclUsageRepository;
+import com.copyright.rup.dist.foreign.repository.api.IAclciUsageRepository;
 import com.copyright.rup.dist.foreign.repository.api.ISalUsageRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IRightsService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageService;
-
 import com.copyright.rup.dist.foreign.service.impl.ServiceTestHelper;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.junit.Before;
@@ -74,6 +76,8 @@ public class UpdateRightsIntegrationTest {
     private IAaclUsageRepository aaclUsageRepository;
     @Autowired
     private ISalUsageRepository salUsageRepository;
+    @Autowired
+    private IAclciUsageRepository aclciUsageRepository;
     @Autowired
     private IRightsService rightsService;
     @Autowired
@@ -222,7 +226,24 @@ public class UpdateRightsIntegrationTest {
 
     @Test
     public void testUpdateAclciRights() {
-        //TODO {dbasiachenka} implement later
+        testHelper.createRestServer();
+        testHelper.expectGetRmsRights("rights/aclci/rms_grants_request_1.json",
+            "rights/aclci/rms_grants_response_1.json");
+        testHelper.expectGetRmsRights("rights/aclci/rms_grants_140160102_request.json", RMS_GRANTS_EMPTY_RESPONSE_JSON);
+        testHelper.expectPrmCall(PRM_RIGHTSHOLDER_1000000322_RESPONSE_JSON, 1000000322L);
+        rightsService.updateAclciRights(Arrays.asList(
+            buildAclciUsage("019af1aa-c178-467c-9015-c2d18db85229", 122769471, "CURR_REPUB_K12"),
+            buildAclciUsage("db86af7e-c2ae-4cc6-b797-6214298b7113", 243618757, "CURR_REPUB_K12")));
+        rightsService.updateAclciRights(Collections.singletonList(
+            buildAclciUsage("65d36e80-8b5c-42cf-b543-4b9ee0aed0cb", 140160102, "CURR_REPUB_HE")));
+        assertAclciUsage("019af1aa-c178-467c-9015-c2d18db85229", UsageStatusEnum.RH_FOUND, 1000000322L);
+        assertAclciUsage("db86af7e-c2ae-4cc6-b797-6214298b7113", UsageStatusEnum.WORK_NOT_GRANTED, null);
+        assertAclciUsage("65d36e80-8b5c-42cf-b543-4b9ee0aed0cb", UsageStatusEnum.RH_NOT_FOUND, null);
+        assertAudit("019af1aa-c178-467c-9015-c2d18db85229", RH_FOUND_REASON);
+        assertAudit("db86af7e-c2ae-4cc6-b797-6214298b7113",
+            "Right for 243618757 is denied for rightsholder account 1000000322");
+        assertAudit("65d36e80-8b5c-42cf-b543-4b9ee0aed0cb", "Rightsholder account for 140160102 was not found in RMS");
+        testHelper.verifyRestServer();
     }
 
     private Usage buildUsage(String usageId, String productFamily, Long wrWrkInst) {
@@ -262,6 +283,14 @@ public class UpdateRightsIntegrationTest {
         return udmUsage;
     }
 
+    private Usage buildAclciUsage(String usageId, long wrWrkInst, String licenseType) {
+        Usage usage = buildUsage(usageId, "ACLCI", wrWrkInst);
+        usage.setAclciUsage(new AclciUsage());
+        usage.getAclciUsage().setLicenseType(licenseType);
+        usage.getAclciUsage().setBatchPeriodEndDate(LocalDate.of(2022, 6, 30));
+        return usage;
+    }
+
     private void assertUdmUsage(String usageId, UsageStatusEnum expectedStatus, Long expectedRhAccountNumber) {
         UdmUsage udmUsage = udmUsageService.getUdmUsagesByIds(Collections.singletonList(usageId)).get(0);
         assertEquals(expectedStatus, udmUsage.getStatus());
@@ -284,6 +313,12 @@ public class UpdateRightsIntegrationTest {
 
     private void assertUsage(String usageId, UsageStatusEnum expectedStatus, Long expectedRhAccountNumber) {
         Usage usage = usageRepository.findByIds(Collections.singletonList(usageId)).get(0);
+        assertEquals(expectedStatus, usage.getStatus());
+        assertEquals(expectedRhAccountNumber, usage.getRightsholder().getAccountNumber());
+    }
+
+    private void assertAclciUsage(String usageId, UsageStatusEnum expectedStatus, Long expectedRhAccountNumber) {
+        Usage usage = aclciUsageRepository.findByIds(Collections.singletonList(usageId)).get(0);
         assertEquals(expectedStatus, usage.getStatus());
         assertEquals(expectedRhAccountNumber, usage.getRightsholder().getAccountNumber());
     }

@@ -1,0 +1,11 @@
+{
+  "works": [
+    {
+      "status": ["GRANT", "DENY"],
+      "wr_wrk_inst": 140160102,
+      "period_end_date": "06/30/2022",
+      "type_of_use": ["CURR_REPUB_HE"],
+      "license_type": ["CURR_REPUB_HE"]
+    }
+  ]
+}

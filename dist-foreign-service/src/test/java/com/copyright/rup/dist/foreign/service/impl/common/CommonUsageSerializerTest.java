@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNotNull;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.AaclUsage;
+import com.copyright.rup.dist.foreign.domain.AclciUsage;
 import com.copyright.rup.dist.foreign.domain.SalUsage;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
@@ -46,38 +47,22 @@ public class CommonUsageSerializerTest {
 
     @Test
     public void testSerializeMessageFas() throws Exception {
-        StringWriter stringWriter = new StringWriter();
-        JsonGenerator jsonGenerator = new JsonFactory().createGenerator(stringWriter);
-        jsonGenerator.setPrettyPrinter(new DefaultPrettyPrinter());
-        serializer.serialize(buildFasUsages(), jsonGenerator, new DefaultSerializerProvider.Impl());
-        jsonGenerator.close();
-        assertNotNull(stringWriter);
-        assertEquals(StringUtils.strip(TestUtils.fileToString(this.getClass(), "usage_message_fas.json")),
-            stringWriter.toString());
+        testSerializeMessage(buildFasUsages(), "usage_message_fas.json");
     }
 
     @Test
     public void testSerializeMessageAacl() throws Exception {
-        StringWriter stringWriter = new StringWriter();
-        JsonGenerator jsonGenerator = new JsonFactory().createGenerator(stringWriter);
-        jsonGenerator.setPrettyPrinter(new DefaultPrettyPrinter());
-        serializer.serialize(buildAaclUsages(), jsonGenerator, new DefaultSerializerProvider.Impl());
-        jsonGenerator.close();
-        assertNotNull(stringWriter);
-        assertEquals(StringUtils.strip(TestUtils.fileToString(this.getClass(), "usage_message_aacl.json")),
-            stringWriter.toString());
+        testSerializeMessage(buildAaclUsages(), "usage_message_aacl.json");
     }
 
     @Test
     public void testSerializeMessageSal() throws Exception {
-        StringWriter stringWriter = new StringWriter();
-        JsonGenerator jsonGenerator = new JsonFactory().createGenerator(stringWriter);
-        jsonGenerator.setPrettyPrinter(new DefaultPrettyPrinter());
-        serializer.serialize(buildSalUsages(), jsonGenerator, new DefaultSerializerProvider.Impl());
-        jsonGenerator.close();
-        assertNotNull(stringWriter);
-        assertEquals(StringUtils.strip(TestUtils.fileToString(this.getClass(), "usage_message_sal.json")),
-            stringWriter.toString());
+        testSerializeMessage(buildSalUsages(), "usage_message_sal.json");
+    }
+
+    @Test
+    public void testSerializeMessageAclci() throws Exception {
+        testSerializeMessage(buildAclciUsages(), "usage_message_aclci.json");
     }
 
     @Test
@@ -88,6 +73,17 @@ public class CommonUsageSerializerTest {
         jsonGenerator.close();
         assertNotNull(stringWriter);
         assertEquals("{\"usages\":[]}", stringWriter.toString());
+    }
+
+    private void testSerializeMessage(List<Usage> usages, String filePath) throws Exception {
+        StringWriter stringWriter = new StringWriter();
+        JsonGenerator jsonGenerator = new JsonFactory().createGenerator(stringWriter);
+        jsonGenerator.setPrettyPrinter(new DefaultPrettyPrinter());
+        serializer.serialize(usages, jsonGenerator, new DefaultSerializerProvider.Impl());
+        jsonGenerator.close();
+        assertNotNull(stringWriter);
+        assertEquals(StringUtils.strip(TestUtils.fileToString(this.getClass(), filePath)),
+            stringWriter.toString());
     }
 
     private List<Usage> buildFasUsages() {
@@ -110,6 +106,15 @@ public class CommonUsageSerializerTest {
         usage.setProductFamily("SAL");
         usage.setSalUsage(new SalUsage());
         usage.getSalUsage().setBatchPeriodEndDate(LocalDate.of(2019, 6, 30));
+        return Collections.singletonList(usage);
+    }
+
+    private List<Usage> buildAclciUsages() {
+        Usage usage = buildUsage();
+        usage.setProductFamily("ACLCI");
+        usage.setAclciUsage(new AclciUsage());
+        usage.getAclciUsage().setLicenseType("CURR_REUSE_K12");
+        usage.getAclciUsage().setBatchPeriodEndDate(LocalDate.of(2019, 6, 30));
         return Collections.singletonList(usage);
     }
 

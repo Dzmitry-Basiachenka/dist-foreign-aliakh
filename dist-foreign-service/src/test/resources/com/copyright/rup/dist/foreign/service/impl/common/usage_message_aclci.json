@@ -1,0 +1,19 @@
+{
+  "usages" : [ {
+    "id" : "ac00c194-5363-463a-a718-ff02643aebf3",
+    "rh_uid" : "4c4d1354-bff2-4f70-987b-f996bade22ba",
+    "rh_account_number" : 2000017005,
+    "standard_number" : "12345XX-190048",
+    "standard_number_type" : "STDID",
+    "wr_wrk_inst" : 100010768,
+    "work_title" : "True directions : living your sacred instructions",
+    "system_title" : "True directions : living your sacred instructions",
+    "batch_id" : "5da597e4-f418-4b70-b43a-7990e82e6367",
+    "gross_amount" : 50.00,
+    "status" : "WORK_FOUND",
+    "product_family" : "ACLCI",
+    "license_type" : "CURR_REUSE_K12",
+    "batch_period_end_date" : "06/30/2019",
+    "record_version" : 5
+  } ]
+}
