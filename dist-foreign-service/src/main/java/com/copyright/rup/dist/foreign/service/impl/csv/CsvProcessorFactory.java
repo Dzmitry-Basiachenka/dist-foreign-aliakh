@@ -189,4 +189,11 @@ public class CsvProcessorFactory {
             new AclDetailsLicenseeClassValidator(licenseeClassService));
         return processor;
     }
+
+    /**
+     * @return instance of {@link AclciUsageCsvProcessor}.
+     */
+    public AclciUsageCsvProcessor getAclciUsageCsvProcessor() {
+        return new AclciUsageCsvProcessor();
+    }
 }
