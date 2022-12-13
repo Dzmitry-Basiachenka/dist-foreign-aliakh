@@ -16,6 +16,7 @@ import com.copyright.rup.dist.foreign.repository.impl.csv.acl.AclScenarioDetailC
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.AclScenarioRightsholderTotalsCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.AclSummaryOfWorkSharesByAggLcCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.AclUsageCsvReportHandler;
+import com.copyright.rup.dist.foreign.repository.impl.csv.acl.AclWorkSharesByAggLcCsvReportHandler;
 
 import com.google.common.collect.Maps;
 
@@ -98,6 +99,16 @@ public class AclCalculationReportRepository extends CommonReportRepository imple
                  new AclSummaryOfWorkSharesByAggLcCsvReportHandler(Objects.requireNonNull(outputStream))) {
             getTemplate().select("IAclCalculationReportMapper.findSummaryOfWorkSharesByAggLcReportDtos",
                 scenarioId, handler);
+            handler.writeMetadata(reportInfo);
+        }
+    }
+
+    @Override
+    public void writeWorkSharesByAggLcCsvReport(AclCalculationReportsInfoDto reportInfo, OutputStream outputStream) {
+        String scenarioId = Objects.requireNonNull(reportInfo.getScenarios().get(0).getId());
+        try (AclWorkSharesByAggLcCsvReportHandler handler =
+                 new AclWorkSharesByAggLcCsvReportHandler(Objects.requireNonNull(outputStream))) {
+            getTemplate().select("IAclCalculationReportMapper.findWorkSharesByAggLcReportDtos", scenarioId, handler);
             handler.writeMetadata(reportInfo);
         }
     }

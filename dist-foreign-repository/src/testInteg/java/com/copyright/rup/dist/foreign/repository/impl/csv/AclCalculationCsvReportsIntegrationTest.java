@@ -54,6 +54,8 @@ public class AclCalculationCsvReportsIntegrationTest extends CsvReportsTestHelpe
         FOLDER_NAME + "write-scenario-rightsholder-totals-csv-report.groovy";
     private static final String WRITE_SCENARIO_SUMMARY_OF_WORK_SHARES_BY_AGG_LC_CSV_REPORT =
         FOLDER_NAME + "write-scenario-summary-of-work-shares-by-agg-lc-csv-report.groovy";
+    private static final String WRITE_SCENARIO_WORK_SHARES_BY_AGG_LC_CSV_REPORT =
+        FOLDER_NAME + "write-scenario-work-shares-by-agg-lc-csv-report.groovy";
     private static final String WRITE_LIABILITIES_BY_AGG_LIC_CLASS_CSV_REPORT =
         FOLDER_NAME + "write-liabilities-by-agg-lic-class-csv-report.groovy";
     private static final String WRITE_LIABILITY_DETAILS_CSV_REPORT =
@@ -168,25 +170,33 @@ public class AclCalculationCsvReportsIntegrationTest extends CsvReportsTestHelpe
     @Test
     @TestData(fileName = WRITE_SCENARIO_SUMMARY_OF_WORK_SHARES_BY_AGG_LC_CSV_REPORT)
     public void testWriteSummaryOfWorkSharesByAggLcCsvReport() throws IOException {
-        AclCalculationReportsInfoDto reportsInfoDto = new AclCalculationReportsInfoDto();
         AclScenario scenario = buildScenario("a0162659-86af-40ab-bc55-2ae0cdebc2a4", ACL_SCENARIO_NAME);
         scenario.setLicenseType("ACL");
         scenario.setPeriodEndDate(202212);
+        AclCalculationReportsInfoDto reportsInfoDto = buildReportInfo();
         reportsInfoDto.setScenarios(Collections.singletonList(scenario));
-        reportsInfoDto.setUser("user@copyright.com");
-        reportsInfoDto.setReportDateTime(OffsetDateTime.of(2022, 10, 5, 14, 30, 30, 30, ZoneOffset.ofHours(0)));
         assertFilesWithExecutor(outputStream ->
             aclCalculationReportRepository.writeSummaryOfWorkSharesByAggLcCsvReport(reportsInfoDto, outputStream),
             "acl/summary_work_shares_agg_lc_report.csv");
     }
 
     @Test
+    @TestData(fileName = WRITE_SCENARIO_WORK_SHARES_BY_AGG_LC_CSV_REPORT)
+    public void testWriteWorkSharesByAggLcCsvReport() throws IOException {
+        AclScenario scenario = buildScenario("a0ffe3b2-2fe6-4eea-8ed9-9200b24973ea", ACL_SCENARIO_NAME);
+        scenario.setLicenseType("ACL");
+        scenario.setPeriodEndDate(202212);
+        AclCalculationReportsInfoDto reportsInfoDto = buildReportInfo();
+        reportsInfoDto.setScenarios(Collections.singletonList(scenario));
+        assertFilesWithExecutor(outputStream ->
+            aclCalculationReportRepository.writeWorkSharesByAggLcCsvReport(reportsInfoDto, outputStream),
+            "acl/work_shares_agg_lc_report.csv");
+    }
+
+    @Test
     @TestData(fileName = WRITE_LIABILITIES_BY_AGG_LIC_CLASS_CSV_REPORT)
     public void testWriteAclLiabilitiesByAggLicClassReport() throws IOException {
-        AclCalculationReportsInfoDto reportsInfoDto = new AclCalculationReportsInfoDto();
-        reportsInfoDto.setPeriod(202212);
-        reportsInfoDto.setUser("user@copyright.com");
-        reportsInfoDto.setReportDateTime(OffsetDateTime.of(2022, 10, 5, 14, 30, 30, 30, ZoneOffset.ofHours(0)));
+        AclCalculationReportsInfoDto reportsInfoDto = buildReportInfo();
         reportsInfoDto.setScenarios(Arrays.asList(
             buildScenario("06fee547-bfc4-4f2a-9578-58c03821e217", ACL_SCENARIO_NAME),
             buildScenario("6dbd30f7-91f6-4949-a74c-cfbac5e466ac", "MCL Scenario 10/05/202212"),
@@ -200,12 +210,10 @@ public class AclCalculationCsvReportsIntegrationTest extends CsvReportsTestHelpe
     @Test
     @TestData(fileName = WRITE_LIABILITY_DETAILS_CSV_REPORT)
     public void testWriteAclLiabilityDetailsReport() throws IOException {
-        AclCalculationReportsInfoDto reportsInfoDto = new AclCalculationReportsInfoDto();
-        reportsInfoDto.setPeriod(202212);
+        AclCalculationReportsInfoDto reportsInfoDto = buildReportInfo();
         reportsInfoDto.setScenarios(Arrays.asList(
             buildScenario("06fee547-bfc4-4f2a-9578-58c03821e217", ACL_SCENARIO_NAME),
             buildScenario("d86f2c59-a50c-4e54-826a-ee50aeb98904", "JACDCL Scenario 10/05/202212")));
-        reportsInfoDto.setReportDateTime(OffsetDateTime.of(2022, 10, 5, 14, 30, 30, 30, ZoneOffset.ofHours(0)));
         assertFilesWithExecutor(outputStream ->
             aclCalculationReportRepository.writeAclLiabilityDetailsReport(reportsInfoDto, outputStream),
             "acl/liability_details_report.csv");
@@ -214,10 +222,7 @@ public class AclCalculationCsvReportsIntegrationTest extends CsvReportsTestHelpe
     @Test
     @TestData(fileName = WRITE_LIABILITIES_BY_RH_CSV_REPORT)
     public void testWriteAclLiabilitiesByRhReport() throws IOException {
-        AclCalculationReportsInfoDto reportsInfoDto = new AclCalculationReportsInfoDto();
-        reportsInfoDto.setPeriod(202212);
-        reportsInfoDto.setUser("user@copyright.com");
-        reportsInfoDto.setReportDateTime(OffsetDateTime.of(2022, 10, 5, 14, 30, 30, 30, ZoneOffset.ofHours(0)));
+        AclCalculationReportsInfoDto reportsInfoDto = buildReportInfo();
         reportsInfoDto.setScenarios(Arrays.asList(
             buildScenario("ae0910b1-1fb0-420a-96c9-76a18ebca229", ACL_SCENARIO_NAME),
             buildScenario("49c52e95-ca96-400e-a73c-d5732a5d1301", "MACL Scenario 10/05/202212"),
@@ -233,5 +238,13 @@ public class AclCalculationCsvReportsIntegrationTest extends CsvReportsTestHelpe
         scenario.setId(id);
         scenario.setName(name);
         return scenario;
+    }
+
+    private AclCalculationReportsInfoDto buildReportInfo() {
+        AclCalculationReportsInfoDto reportsInfoDto = new AclCalculationReportsInfoDto();
+        reportsInfoDto.setPeriod(202212);
+        reportsInfoDto.setUser("user@copyright.com");
+        reportsInfoDto.setReportDateTime(OffsetDateTime.of(2022, 10, 5, 14, 30, 30, 30, ZoneOffset.ofHours(0)));
+        return reportsInfoDto;
     }
 }

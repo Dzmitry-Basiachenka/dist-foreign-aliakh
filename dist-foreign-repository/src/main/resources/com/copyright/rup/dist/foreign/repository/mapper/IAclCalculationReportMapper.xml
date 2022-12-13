@@ -11,6 +11,26 @@
         <result property="totalDetailShareDigital" column="total_shares_digital"/>
     </resultMap>
 
+    <resultMap id="aclWorkSharesByAggLcReportDtoResultMap" type="AclWorkSharesByAggLcReportDto">
+        <result property="aggregateLicenseeClassId" column="aggregate_licensee_class_id"/>
+        <result property="aggregateLicenseeClassName" column="description"/>
+        <result property="title" column="system_title"/>
+        <result property="wrWrkInst" column="wr_wrk_inst"/>
+        <result property="printRhAccountNumber" column="print_rh_account_number"/>
+        <result property="printRhName" column="print_rh_name"/>
+        <result property="digitalRhAccountNumber" column="digital_rh_account_number"/>
+        <result property="digitalRhName" column="digital_rh_name"/>
+        <result property="printTotalShare" column="print_total_share"/>
+        <result property="printValueShare" column="print_value_share"/>
+        <result property="printVolumeShare" column="print_volume_share"/>
+        <result property="printNetAmount" column="print_net_amount"/>
+        <result property="digitalTotalShare" column="digital_total_share"/>
+        <result property="digitalValueShare" column="digital_value_share"/>
+        <result property="digitalVolumeShare" column="digital_volume_share"/>
+        <result property="digitalNetAmount" column="digital_net_amount"/>
+        <result property="totalNetAmount" column="total_net_amount"/>
+    </resultMap>
+
     <resultMap id="aclLiabilitiesByAggLicClassReportDtoResultMap" type="AclLiabilitiesByAggLicClassReportDto">
         <result property="aggregateLicenseeClassId" column="aggregate_licensee_class_id"/>
         <result property="aggregateLicenseeClassName" column="description"/>
@@ -130,6 +150,34 @@
         where df_acl_scenario_uid = #{scenarioId}
         group by shd.aggregate_licensee_class_id, description
         order by shd.aggregate_licensee_class_id
+    </select>
+
+    <select id="findWorkSharesByAggLcReportDtos" parameterType="string" resultMap="aclWorkSharesByAggLcReportDtoResultMap">
+        select
+            shd.aggregate_licensee_class_id,
+            agg.description,
+            sd.wr_wrk_inst,
+            sd.system_title,
+            min(case when shd.type_of_use = 'PRINT' then shd.rh_account_number end) as print_rh_account_number,
+            min(case when shd.type_of_use = 'PRINT' then rh.name end) as print_rh_name,
+            min(case when shd.type_of_use = 'DIGITAL' then shd.rh_account_number end) as digital_rh_account_number,
+            min(case when shd.type_of_use = 'DIGITAL' then rh.name end) as digital_rh_name,
+            sum(case when shd.type_of_use = 'PRINT' then coalesce(detail_share, 0) else 0 end) as print_total_share,
+            sum(case when shd.type_of_use = 'PRINT' then coalesce(volume_share, 0) else 0 end) as print_volume_share,
+            sum(case when shd.type_of_use = 'PRINT' then coalesce(value_share, 0) else 0 end) as print_value_share,
+            sum(case when shd.type_of_use = 'PRINT' then coalesce(net_amount, 0) else 0 end) as print_net_amount,
+            sum(case when shd.type_of_use = 'DIGITAL' then coalesce(detail_share , 0) else 0 end) as digital_total_share,
+            sum(case when shd.type_of_use = 'DIGITAL' then coalesce(volume_share, 0) else 0 end) as digital_volume_share,
+            sum(case when shd.type_of_use = 'DIGITAL' then coalesce(value_share, 0) else 0 end) as digital_value_share,
+            sum(case when shd.type_of_use = 'DIGITAL' then coalesce(net_amount, 0) else 0 end) as digital_net_amount,
+            sum(net_amount) as total_net_amount
+        from ${schema}.df_acl_scenario_detail sd
+        join ${schema}.df_acl_share_detail shd on shd.df_acl_scenario_detail_uid = sd.df_acl_scenario_detail_uid
+        join ${schema}.df_aggregate_licensee_class agg on shd.aggregate_licensee_class_id  = agg.aggregate_licensee_class_id
+        left join ${schema}.df_rightsholder rh on rh.rh_account_number = shd.rh_account_number
+        where sd.df_acl_scenario_uid = #{scenarioId}
+        group by shd.aggregate_licensee_class_id, agg.description, sd.wr_wrk_inst, sd.system_title
+        order by shd.aggregate_licensee_class_id, sd.wr_wrk_inst
     </select>
 
     <select id="findAclScenarioDetailsReportDtos" parameterType="map" resultMap="aclScenarioDetailsReportDtoResultMap">

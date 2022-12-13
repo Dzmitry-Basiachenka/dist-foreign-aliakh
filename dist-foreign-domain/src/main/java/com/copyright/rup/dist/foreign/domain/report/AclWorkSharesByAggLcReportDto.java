@@ -22,7 +22,7 @@ public class AclWorkSharesByAggLcReportDto extends StoredEntity<String> {
     private Integer aggregateLicenseeClassId;
     private String aggregateLicenseeClassName;
     private Long wrWrkInst;
-    private String workTitle;
+    private String title;
     private Long printRhAccountNumber;
     private String printRhName;
     private Long digitalRhAccountNumber;
@@ -61,12 +61,12 @@ public class AclWorkSharesByAggLcReportDto extends StoredEntity<String> {
         this.wrWrkInst = wrWrkInst;
     }
 
-    public String getWorkTitle() {
-        return workTitle;
+    public String getTitle() {
+        return title;
     }
 
-    public void setWorkTitle(String workTitle) {
-        this.workTitle = workTitle;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public Long getPrintRhAccountNumber() {
@@ -187,7 +187,7 @@ public class AclWorkSharesByAggLcReportDto extends StoredEntity<String> {
             .append(aggregateLicenseeClassId, that.aggregateLicenseeClassId)
             .append(aggregateLicenseeClassName, that.aggregateLicenseeClassName)
             .append(wrWrkInst, that.wrWrkInst)
-            .append(workTitle, that.workTitle)
+            .append(title, that.title)
             .append(printRhAccountNumber, that.printRhAccountNumber)
             .append(printRhName, that.printRhName)
             .append(digitalRhAccountNumber, that.digitalRhAccountNumber)
@@ -211,7 +211,7 @@ public class AclWorkSharesByAggLcReportDto extends StoredEntity<String> {
             .append(aggregateLicenseeClassId)
             .append(aggregateLicenseeClassName)
             .append(wrWrkInst)
-            .append(workTitle)
+            .append(title)
             .append(printRhAccountNumber)
             .append(printRhName)
             .append(digitalRhAccountNumber)
@@ -235,7 +235,7 @@ public class AclWorkSharesByAggLcReportDto extends StoredEntity<String> {
             .append("aggregateLicenseeClassId", aggregateLicenseeClassId)
             .append("aggregateLicenseeClassName", aggregateLicenseeClassName)
             .append("wrWrkInst", wrWrkInst)
-            .append("workTitle", workTitle)
+            .append("title", title)
             .append("printRhAccountNumber", printRhAccountNumber)
             .append("printRhName", printRhName)
             .append("digitalRhAccountNumber", digitalRhAccountNumber)
