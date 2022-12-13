@@ -357,7 +357,7 @@ public class RightsService implements IRightsService {
             batchPeriodEndDatesToUsages.forEach((batchPeriodEndDate, groupedUsagesByPeriodAndDate) -> {
                 Map<String, List<Usage>> licenseTypeToUsages = groupedUsagesByPeriodAndDate
                     .stream()
-                    .collect(Collectors.groupingBy(usage -> usage.getAclciUsage().getLicenseType()));
+                    .collect(Collectors.groupingBy(usage -> usage.getAclciUsage().getLicenseType().name()));
                 licenseTypeToUsages.forEach((licenseType, groupedUsagesByLicenseType) -> {
                     List<Long> wrWrkInsts = groupedUsagesByLicenseType
                         .stream()

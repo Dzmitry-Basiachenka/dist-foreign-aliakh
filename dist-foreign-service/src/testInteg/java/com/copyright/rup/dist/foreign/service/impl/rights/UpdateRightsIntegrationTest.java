@@ -10,6 +10,7 @@ import com.copyright.rup.dist.common.domain.job.JobStatusEnum;
 import com.copyright.rup.dist.common.test.liquibase.LiquibaseTestExecutionListener;
 import com.copyright.rup.dist.common.test.liquibase.TestData;
 import com.copyright.rup.dist.foreign.domain.AaclUsage;
+import com.copyright.rup.dist.foreign.domain.AclciLicenseTypeEnum;
 import com.copyright.rup.dist.foreign.domain.AclciUsage;
 import com.copyright.rup.dist.foreign.domain.SalUsage;
 import com.copyright.rup.dist.foreign.domain.UdmUsage;
@@ -232,10 +233,10 @@ public class UpdateRightsIntegrationTest {
         testHelper.expectGetRmsRights("rights/aclci/rms_grants_140160102_request.json", RMS_GRANTS_EMPTY_RESPONSE_JSON);
         testHelper.expectPrmCall(PRM_RIGHTSHOLDER_1000000322_RESPONSE_JSON, 1000000322L);
         rightsService.updateAclciRights(Arrays.asList(
-            buildAclciUsage("019af1aa-c178-467c-9015-c2d18db85229", 122769471, "CURR_REPUB_K12"),
-            buildAclciUsage("db86af7e-c2ae-4cc6-b797-6214298b7113", 243618757, "CURR_REPUB_K12")));
+            buildAclciUsage("019af1aa-c178-467c-9015-c2d18db85229", 122769471, AclciLicenseTypeEnum.CURR_REPUB_K12),
+            buildAclciUsage("db86af7e-c2ae-4cc6-b797-6214298b7113", 243618757, AclciLicenseTypeEnum.CURR_REPUB_K12)));
         rightsService.updateAclciRights(Collections.singletonList(
-            buildAclciUsage("65d36e80-8b5c-42cf-b543-4b9ee0aed0cb", 140160102, "CURR_REPUB_HE")));
+            buildAclciUsage("65d36e80-8b5c-42cf-b543-4b9ee0aed0cb", 140160102, AclciLicenseTypeEnum.CURR_REPUB_HE)));
         assertAclciUsage("019af1aa-c178-467c-9015-c2d18db85229", UsageStatusEnum.RH_FOUND, 1000000322L);
         assertAclciUsage("db86af7e-c2ae-4cc6-b797-6214298b7113", UsageStatusEnum.WORK_NOT_GRANTED, null);
         assertAclciUsage("65d36e80-8b5c-42cf-b543-4b9ee0aed0cb", UsageStatusEnum.RH_NOT_FOUND, null);
@@ -283,7 +284,7 @@ public class UpdateRightsIntegrationTest {
         return udmUsage;
     }
 
-    private Usage buildAclciUsage(String usageId, long wrWrkInst, String licenseType) {
+    private Usage buildAclciUsage(String usageId, long wrWrkInst, AclciLicenseTypeEnum licenseType) {
         Usage usage = buildUsage(usageId, "ACLCI", wrWrkInst);
         usage.setAclciUsage(new AclciUsage());
         usage.getAclciUsage().setLicenseType(licenseType);
