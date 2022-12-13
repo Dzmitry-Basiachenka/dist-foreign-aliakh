@@ -11,6 +11,7 @@ import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmBaselineUsageCs
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmBaselineValueUpdatesReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmCompletedAssignmentsReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmProxyValueCsvReportHandler;
+import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmSurveyDashboardCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmSurveyLicenseeReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmUsableDetailsByCountryReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmUsageCsvReportHandlerResearcher;
@@ -20,6 +21,7 @@ import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmUsageEditsInBas
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmVerifiedDetailsBySourceReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmWeeklySurveyReportHandler;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 
 import org.springframework.stereotype.Repository;
@@ -154,7 +156,11 @@ public class UdmReportRepository extends CommonReportRepository implements IUdmR
 
     @Override
     public void writeUdmSurveyDashboardCsvReport(Set<Integer> periods, OutputStream outputStream) {
-        //TODO will implement later
+        try (UdmSurveyDashboardCsvReportHandler handler =
+                 new UdmSurveyDashboardCsvReportHandler(Objects.requireNonNull(outputStream))) {
+            getTemplate().select("IUdmReportMapper.findUdmSurveyDashboardReportDtos",
+                ImmutableMap.of("periods", Objects.requireNonNull(periods)), handler);
+        }
     }
 
     private void writeUdmUsageCsvReport(UdmUsageFilter filter, BaseCsvReportHandler handler) {

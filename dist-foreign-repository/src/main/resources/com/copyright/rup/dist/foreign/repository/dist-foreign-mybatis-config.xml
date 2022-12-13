@@ -117,6 +117,7 @@
         <typeAlias alias="UdmBaselineValueUpdatesReportDto" type="com.copyright.rup.dist.foreign.domain.report.UdmBaselineValueUpdatesReportDto"/>
         <typeAlias alias="AclScenarioLiabilityDetail" type="com.copyright.rup.dist.foreign.domain.AclScenarioLiabilityDetail"/>
         <typeAlias alias="AclScenarioFilter" type="com.copyright.rup.dist.foreign.domain.filter.AclScenarioFilter"/>
+        <typeAlias alias="UdmSurveyDashboardReportDto" type="com.copyright.rup.dist.foreign.domain.report.UdmSurveyDashboardReportDto"/>
     </typeAliases>
 
     <typeHandlers>
