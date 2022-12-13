@@ -60,6 +60,11 @@ public class AclCalculationReportService implements IAclCalculationReportService
     }
 
     @Override
+    public void writeWorkSharesByAggLcCsvReport(AclCalculationReportsInfoDto reportInfo, OutputStream outputStream) {
+        aclCalculationReportRepository.writeWorkSharesByAggLcCsvReport(reportInfo, outputStream);
+    }
+
+    @Override
     public void writeAclLiabilityDetailsReport(AclCalculationReportsInfoDto reportInfo, OutputStream outputStream) {
         aclCalculationReportRepository.writeAclLiabilityDetailsReport(reportInfo, outputStream);
     }
