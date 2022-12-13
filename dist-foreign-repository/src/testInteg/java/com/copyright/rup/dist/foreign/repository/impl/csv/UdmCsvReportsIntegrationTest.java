@@ -24,7 +24,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
 
 /**
  * Integration tests for csv reports for UDM product family.
@@ -65,6 +68,8 @@ public class UdmCsvReportsIntegrationTest extends CsvReportsTestHelper {
         FOLDER_NAME + "write-usages-by-status-csv-report.groovy";
     private static final String WRITE_BASELINE_VALUE_UPDATES_CSV_REPORT =
         FOLDER_NAME + "write-baseline-value-updates-csv-report.groovy";
+    private static final String WRITE_SURVEY_DASHBOARD_CSV_REPORT =
+        FOLDER_NAME + "write-survey_dashboard-csv-report.groovy";
 
     @Autowired
     private IUdmReportRepository udmReportRepository;
@@ -385,5 +390,23 @@ public class UdmCsvReportsIntegrationTest extends CsvReportsTestHelper {
         assertFilesWithExecutor(
             outputStream -> udmReportRepository.writeUdmBaselineValueUpdatesCsvReport(reportFilter, outputStream),
             "udm/baseline_value_updates_empty_report.csv");
+    }
+
+    @Test
+    @TestData(fileName = WRITE_SURVEY_DASHBOARD_CSV_REPORT)
+    public void testWriteSurveyDashboardCsvReport() throws IOException {
+        List<Integer> periods = Arrays.asList(202106, 202112);
+        assertFilesWithExecutor(
+            outputStream -> udmReportRepository.writeUdmSurveyDashboardCsvReport(new HashSet<>(periods), outputStream),
+            "udm/survey_dashboard_report.csv");
+    }
+
+    @Test
+    @TestData(fileName = WRITE_SURVEY_DASHBOARD_CSV_REPORT)
+    public void testWriteSurveyDashboardEmptyCsvReport() throws IOException {
+        List<Integer> periods = Arrays.asList(201706, 201812);
+        assertFilesWithExecutor(
+            outputStream -> udmReportRepository.writeUdmSurveyDashboardCsvReport(new HashSet<>(periods), outputStream),
+            "udm/survey_dashboard_empty_report.csv");
     }
 }

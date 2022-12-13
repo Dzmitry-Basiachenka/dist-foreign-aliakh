@@ -101,6 +101,23 @@
         <result property="updateUser" column="updated_by_user"/>
     </resultMap>
 
+    <resultMap id="udmSurveyDashboardReportDtoResultMap" type="UdmSurveyDashboardReportDto">
+        <result property="usageOrigin" column="usage_origin"/>
+        <result property="channel" column="channel"/>
+        <result property="period" column="period"/>
+        <result property="companyId" column="company_id"/>
+        <result property="companyName" column="company_name"/>
+        <result property="detailLicenseeClassId" column="detail_licensee_class_id"/>
+        <result property="detailLicenseeClassName" column="detail_licensee_class_name"/>
+        <result property="surveyStartDate" column="survey_start_date"/>
+        <result property="unadjustedUniqueUsers" column="unadjusted_unique_user"/>
+        <result property="adjustedUniqueUsers" column="adjusted_unique_user"/>
+        <result property="numberOfLoadedDetails" column="details_loaded"/>
+        <result property="numberOfUsableLoadedDetails" column="usable_details_loaded"/>
+        <result property="numberOfSurveys" column="surveys"/>
+        <result property="periodMonthOrder" column="period_month_order"/>
+    </resultMap>
+
     <sql id="commonUdmFilterWhereClauses">
         <where>
             <if test="null != channel">
@@ -441,5 +458,38 @@
             </if>
         </where>
         order by v.updated_datetime desc, v.df_udm_value_uid asc, va.updated_datetime desc
+    </select>
+
+    <select id="findUdmSurveyDashboardReportDtos" resultMap="udmSurveyDashboardReportDtoResultMap" parameterType="map">
+        select
+            ub.usage_origin,
+            ub.channel,
+            ub.period,
+            u.company_id,
+            u.company_name,
+            u.detail_licensee_class_id,
+            dlc.description detail_licensee_class_name,
+            min(u.survey_start_date) survey_start_date,
+            count(distinct(survey_respondent)) unadjusted_unique_user,
+            case when usage_origin = 'RFA' then count(distinct(survey_respondent)) else 1 end as adjusted_unique_user,
+            count(1) details_loaded,
+            sum(case when u.reported_title ilike 'none' or u.reported_title is null then 0 else 1 end) usable_details_loaded,
+            <!--# of surveys. We don't count of surveys. Just hardcoded the value for each group.-->
+            1 surveys,
+            <!--for month of the period set the order. Ex. JJ: December=1, January=2,... May=6. JD: June=1, July=2... November=6 -->
+            case when extract(month from min(u.survey_start_date)) &lt; 6 then
+                extract(month from min(u.survey_start_date)) + 1 else
+                case when extract(month from min(u.survey_start_date)) = 12 then 1 else
+                    extract(month from min(u.survey_start_date)) - 5 end end period_month_order
+        from ${schema}.df_udm_usage u
+        join ${schema}.df_udm_usage_batch ub on u.df_udm_usage_batch_uid = ub.df_udm_usage_batch_uid
+        join ${schema}.df_detail_licensee_class dlc on u.detail_licensee_class_id = dlc.detail_licensee_class_id
+        where ub.period in
+            <foreach collection="periods" item="period" open="(" separator="," close=")">
+                #{period}
+            </foreach>
+        group by u.detail_licensee_class_id, dlc.description, ub.usage_origin, ub.channel, u.company_id,
+            u.company_name, ub.period
+        order by ub.period desc, ub.usage_origin, ub.channel, u.company_id
     </select>
 </mapper>

@@ -1,0 +1,4 @@
+Usage Origin,Channel,Period,Company ID,Company Name,Det LC ID,Det LC Name,Survey Start Date,Unadjusted Unique Users,Adjusted Unique Users,# Details Loaded,# Usable Details Loaded,# Surveys,Period Month Order
+SS,CCC,202112,1136,Albany International Corp.,5,Chemicals,09/10/2021,1,1,1,1,1,4
+SS,CCC,202112,1137,Albany International Corp.,5,Chemicals,05/10/2021,0,1,3,0,1,6
+RFA,Rightsdirect,202106,1136,Albany International Corp.,3,"Lumber, Paper, etc.",12/10/2015,3,3,3,3,1,1
