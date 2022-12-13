@@ -66,7 +66,7 @@ public class AclWorkSharesByAggLcCsvReportHandler extends BaseCsvReportHandler<A
         beanProperties.add(getBeanPropertyAsString(bean.getAggregateLicenseeClassId()));
         beanProperties.add(bean.getAggregateLicenseeClassName());
         beanProperties.add(getBeanPropertyAsString(bean.getWrWrkInst()));
-        beanProperties.add(bean.getWorkTitle());
+        beanProperties.add(bean.getTitle());
         beanProperties.add(getBeanPropertyAsString(bean.getPrintRhAccountNumber()));
         beanProperties.add(bean.getPrintRhName());
         beanProperties.add(getBeanPropertyAsString(bean.getDigitalRhAccountNumber()));
