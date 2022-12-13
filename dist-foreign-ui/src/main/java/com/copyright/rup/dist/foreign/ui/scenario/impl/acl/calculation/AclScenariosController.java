@@ -232,15 +232,15 @@ public class AclScenariosController extends CommonController<IAclScenariosWidget
     @Override
     public IStreamSource getExportAclSummaryOfWorkSharesByAggLcStreamSource() {
         return streamSourceHandler.getCsvStreamSource(
-            () -> "summary_of_work_shares_by_aggregate_licensee_class_report_",
-            os -> aclCalculationReportService.writeSummaryOfWorkSharesByAggLcCsvReport(
-                getWidget().getReportInfo(), os));
+            () -> "summary_of_work_shares_by_aggregate_licensee_class_report_", os ->
+                aclCalculationReportService.writeSummaryOfWorkSharesByAggLcCsvReport(getWidget().getReportInfo(), os));
     }
 
     @Override
     public IStreamSource getExportAclWorkSharesByAggLcStreamSource() {
         return streamSourceHandler.getCsvStreamSource(
-            () -> "summary_of_work_shares_by_aggregate_licensee_class_report_", os -> {});
+            () -> "work_shares_by_aggregate_licensee_class_report_",
+            os -> aclCalculationReportService.writeWorkSharesByAggLcCsvReport(getWidget().getReportInfo(), os));
     }
 
     @Override

@@ -68,6 +68,14 @@ public interface IAclCalculationReportService {
     void writeSummaryOfWorkSharesByAggLcCsvReport(AclCalculationReportsInfoDto reportInfo, OutputStream outputStream);
 
     /**
+     * Writes Work Shares by Aggregate Licensee Class report into csv output stream.
+     *
+     * @param reportInfo   instance of {@link AclCalculationReportsInfoDto}
+     * @param outputStream instance of {@link OutputStream}
+     */
+    void writeWorkSharesByAggLcCsvReport(AclCalculationReportsInfoDto reportInfo, OutputStream outputStream);
+
+    /**
      * Writes ACL Liability Details Report into csv output stream.
      *
      * @param reportInfo   meta information regarding report
