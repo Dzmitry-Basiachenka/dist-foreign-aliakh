@@ -171,10 +171,10 @@ public class UdmUsageControllerTest {
 
     @Test
     public void testGetUdmUsageCsvProcessor() {
-        UdmCsvProcessor processorMock = createMock(UdmCsvProcessor.class);
-        expect(csvProcessorFactory.getUdmCsvProcessor()).andReturn(processorMock).once();
+        UdmCsvProcessor processor = createMock(UdmCsvProcessor.class);
+        expect(csvProcessorFactory.getUdmCsvProcessor()).andReturn(processor).once();
         replay(csvProcessorFactory);
-        assertSame(processorMock, controller.getCsvProcessor());
+        assertSame(processor, controller.getCsvProcessor());
         verify(csvProcessorFactory);
     }
 
