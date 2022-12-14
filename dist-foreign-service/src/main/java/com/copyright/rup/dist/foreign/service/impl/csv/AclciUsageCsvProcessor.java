@@ -7,13 +7,16 @@ import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor;
 import com.copyright.rup.dist.common.service.impl.csv.validator.LengthValidator;
 import com.copyright.rup.dist.common.service.impl.csv.validator.PositiveNumberValidator;
 import com.copyright.rup.dist.common.service.impl.csv.validator.RequiredValidator;
+import com.copyright.rup.dist.foreign.domain.AclciLicenseTypeEnum;
 import com.copyright.rup.dist.foreign.domain.AclciUsage;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.service.impl.csv.validator.AclciLicenseTypeValidator;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -45,7 +48,7 @@ public class AclciUsageCsvProcessor extends DistCsvProcessor<Usage> {
         LengthValidator lengthValidator1000 = new LengthValidator(1000);
         PositiveNumberValidator positiveNumberValidator = new PositiveNumberValidator();
         addPlainValidators(Header.COVERAGE_PERIOD, requiredValidator, new LengthValidator(9));
-        addPlainValidators(Header.LICENSE_TYPE, requiredValidator, new LengthValidator(32));
+        addPlainValidators(Header.LICENSE_TYPE, requiredValidator, new AclciLicenseTypeValidator());
         addPlainValidators(Header.REPORTED_GRADE, requiredValidator, new LengthValidator(32));
         addPlainValidators(Header.WR_WRK_INST, requiredValidator, positiveNumberValidator, new LengthValidator(9));
         addPlainValidators(Header.REPORTED_WORK_TITLE, new LengthValidator(2000));
@@ -110,7 +113,8 @@ public class AclciUsageCsvProcessor extends DistCsvProcessor<Usage> {
             result.setComment(getString(row, Header.COMMENT, headers));
             AclciUsage aclciUsage = new AclciUsage();
             aclciUsage.setCoveragePeriod(getString(row, Header.COVERAGE_PERIOD, headers));
-            aclciUsage.setLicenseType(getString(row, Header.LICENSE_TYPE, headers));
+            String licenseType = getString(row, Header.LICENSE_TYPE, headers).toUpperCase(Locale.ROOT);
+            aclciUsage.setLicenseType(AclciLicenseTypeEnum.valueOf(licenseType));
             aclciUsage.setReportedGrade(getString(row, Header.REPORTED_GRADE, headers));
             aclciUsage.setGradeGroup("GRADE6_8"); //TODO: will be implemented in a separate story
             aclciUsage.setReportedStandardNumber(getString(row, Header.REPORTED_STANDARD_NUMBER, headers));

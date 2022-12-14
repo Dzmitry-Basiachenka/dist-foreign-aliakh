@@ -22,7 +22,7 @@ public class AclciUsage {
     private Long licenseeAccountNumber;
     private String licenseeName;
     private String coveragePeriod;
-    private String licenseType;
+    private AclciLicenseTypeEnum licenseType;
     private String reportedMediaType;
     private BigDecimal mediaTypeWeight;
     private String reportedArticle;
@@ -60,11 +60,11 @@ public class AclciUsage {
         this.coveragePeriod = coveragePeriod;
     }
 
-    public String getLicenseType() {
+    public AclciLicenseTypeEnum getLicenseType() {
         return licenseType;
     }
 
-    public void setLicenseType(String licenseType) {
+    public void setLicenseType(AclciLicenseTypeEnum licenseType) {
         this.licenseType = licenseType;
     }
 

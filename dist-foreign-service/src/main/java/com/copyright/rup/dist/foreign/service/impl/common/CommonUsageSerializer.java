@@ -75,7 +75,7 @@ public class CommonUsageSerializer extends StdSerializer<List<Usage>> {
             } else if (FdaConstants.SAL_PRODUCT_FAMILY.equals(usage.getProductFamily())) {
                 writeNotNullField(jsonGenerator, "batch_period_end_date", usage.getSalUsage().getBatchPeriodEndDate());
             } else if (FdaConstants.ACLCI_PRODUCT_FAMILY.equals(usage.getProductFamily())) {
-                writeNotNullField(jsonGenerator, "license_type", usage.getAclciUsage().getLicenseType());
+                writeNotNullField(jsonGenerator, "license_type", usage.getAclciUsage().getLicenseType().name());
                 writeNotNullField(jsonGenerator, "batch_period_end_date",
                     usage.getAclciUsage().getBatchPeriodEndDate());
             }

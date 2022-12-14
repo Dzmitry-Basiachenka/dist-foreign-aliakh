@@ -2,8 +2,9 @@ Coverage Period,License Type,Reported Grade,Wr Wrk Inst,Reported Work Title,Repo
 ,,,,,,,,,,,
 123456789,CURR_REPUB_K12,6,109060602,Steam engines,978-0-7614-1880-1,The Bronze Statue,Hugh Lupton,Barefoot Books,2021-02-03,TEXT,some comment
 1234567890,CURR_REPUB_K12,6,109060602,Steam engines,978-0-7614-1880-1,The Bronze Statue,Hugh Lupton,Barefoot Books,2021-02-03,TEXT,some comment
-2021-2022,string_32_characters_long_______,6,109060602,Steam engines,978-0-7614-1880-1,The Bronze Statue,Hugh Lupton,Barefoot Books,2021-02-03,TEXT,some comment
-2021-2022,string_33_characters_long________,6,109060602,Steam engines,978-0-7614-1880-1,The Bronze Statue,Hugh Lupton,Barefoot Books,2021-02-03,TEXT,some comment
+2021-2022,CURR_REPUB_K12,6,109060602,Steam engines,978-0-7614-1880-1,The Bronze Statue,Hugh Lupton,Barefoot Books,2021-02-03,TEXT,some comment
+2021-2022,curr_repub_k12,6,109060602,Steam engines,978-0-7614-1880-1,The Bronze Statue,Hugh Lupton,Barefoot Books,2021-02-03,TEXT,some comment
+2021-2022,not_an_enum,6,109060602,Steam engines,978-0-7614-1880-1,The Bronze Statue,Hugh Lupton,Barefoot Books,2021-02-03,TEXT,some comment
 2021-2022,CURR_REPUB_K12,string_32_characters_long_______,109060602,Steam engines,978-0-7614-1880-1,The Bronze Statue,Hugh Lupton,Barefoot Books,2021-02-03,TEXT,some comment
 2021-2022,CURR_REPUB_K12,string_33_characters_long________,109060602,Steam engines,978-0-7614-1880-1,The Bronze Statue,Hugh Lupton,Barefoot Books,2021-02-03,TEXT,some comment
 2021-2022,CURR_REPUB_K12,6,not_a_number,Steam engines,978-0-7614-1880-1,The Bronze Statue,Hugh Lupton,Barefoot Books,2021-02-03,TEXT,some comment

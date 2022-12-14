@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.AaclUsage;
+import com.copyright.rup.dist.foreign.domain.AclciLicenseTypeEnum;
 import com.copyright.rup.dist.foreign.domain.AclciUsage;
 import com.copyright.rup.dist.foreign.domain.SalUsage;
 import com.copyright.rup.dist.foreign.domain.Usage;
@@ -95,7 +96,7 @@ public class CommonUsageDeserializerTest {
         Usage usage = buildUsage();
         usage.setProductFamily("ACLCI");
         usage.setAclciUsage(new AclciUsage());
-        usage.getAclciUsage().setLicenseType("CURR_REUSE_K12");
+        usage.getAclciUsage().setLicenseType(AclciLicenseTypeEnum.CURR_REUSE_K12);
         usage.getAclciUsage().setBatchPeriodEndDate(LocalDate.of(2019, 6, 30));
         return Collections.singletonList(usage);
     }
