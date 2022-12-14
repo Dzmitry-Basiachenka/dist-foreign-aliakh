@@ -1,3 +1,29 @@
+16.0.20
+-
+B-68557 FDA: ACLCI Retrieve from PI Index: implement ACLCI matching consumer and service logic to retrieve data for matching
+B-68556 FDA: Find RH information for ACLCI usages (get grants): implement logic for getting rights
+B-68556 FDA: Find RH information for ACLCI usages (get grants): implement consumer and processor for getting rights
+B-68556 FDA: Find RH information for ACLCI usages (get grants): update AclciUsage domain with batch period and date field
+B-71444 FDA: Eligible Annual Copies Report (for Power BI): implement UI logic to generate report
+B-71444 FDA: Eligible Annual Copies Report (for Power BI): implement backend logic to generate report
+B-71444 FDA: Eligible Annual Copies Report (for Power BI): implement backend logic to get information from DB for generationg report
+B-74953 FDA: Work Shares by Aggregate Licensee Class: implement SQL query to generate report
+B-74953 FDA: Work Shares by Aggregate Licensee Class: add button to generate report on metadata panel
+B-74953 FDA: Work Shares by Aggregate Licensee Class: implement domain object and report data handler
+B-74953 FDA: Work Shares by Aggregate Licensee Class: implement service layer to generate report
+B-68555 FDA: Load ACLCI usage batch: implement Liquibase script
+B-68555 FDA: Load ACLCI usage batch: implement domain objects
+B-68555 FDA: Load ACLCI usage batch: implement repository for usages
+B-68555 FDA: Load ACLCI usage batch: implement services for usage batches and usages
+B-68555 FDA: Load ACLCI usage batch: implement CSV processor for the uploaded usages
+B-68555 FDA: Load ACLCI usage batch: refactor usage license type from string to enum
+B-68555 FDA: Load ACLCI usage batch: implement repository for ACLCI usage batch fields
+B-68555 FDA: Load ACLCI usage batch: implement workflow test
+B-74822 Tech Debt: FDA: split test data into separate files for each test method
+B-74822 Tech Debt: FDA: split test data for WorkClassificationIntegrationTest into separate test methods
+B-74822 Tech Debt: FDA: split test data into separate files for each test method
+B-74822 Tech Debt: FDA: fix security vulnerabilities CVE-2022-25857, CVE-2022-38749, CVE-2022-38750, CVE-2022-38751, CVE-2022-38752, CVE-2022-41854
+
 16.0.19
 -
 * B-73331 FDA: Provide TOU information to RC for SAL details: remove IB/UD postfix after uid for SAL
