@@ -137,113 +137,113 @@ public class AclWorkflowIntegrationTestBuilder implements Builder<Runner> {
     private String pathToExpectedAclScenario;
     private String pathToExpectedAclScenarioDetails;
 
-    public AclWorkflowIntegrationTestBuilder withUdmBatch(UdmBatch udmBatch) {
+    AclWorkflowIntegrationTestBuilder withUdmBatch(UdmBatch udmBatch) {
         this.expectedUdmBatch = udmBatch;
         return this;
     }
 
-    public AclWorkflowIntegrationTestBuilder withExpectedUsages(String pathToUsages) {
+    AclWorkflowIntegrationTestBuilder withExpectedUsages(String pathToUsages) {
         this.pathToExpectedUsages = pathToUsages;
         return this;
     }
 
-    public AclWorkflowIntegrationTestBuilder withExpectedValues(String pathToValues) {
+    AclWorkflowIntegrationTestBuilder withExpectedValues(String pathToValues) {
         this.pathToExpectedValues = pathToValues;
         return this;
     }
 
-    public AclWorkflowIntegrationTestBuilder withExpectedValuesBaseline(String pathToValuesBaseline) {
+    AclWorkflowIntegrationTestBuilder withExpectedValuesBaseline(String pathToValuesBaseline) {
         this.pathToExpectedValuesBaseline = pathToValuesBaseline;
         return this;
     }
 
-    public AclWorkflowIntegrationTestBuilder withUsagesToUpload(String usagesToUpload) {
+    AclWorkflowIntegrationTestBuilder withUsagesToUpload(String usagesToUpload) {
         this.pathToUsagesToUpload = usagesToUpload;
         return this;
     }
 
-    public AclWorkflowIntegrationTestBuilder withRmsRequests(Map<String, String> rmsRequestToResponseMap) {
+    AclWorkflowIntegrationTestBuilder withRmsRequests(Map<String, String> rmsRequestToResponseMap) {
         this.expectedRmsRequestToResponseMap = rmsRequestToResponseMap;
         return this;
     }
 
-    public AclWorkflowIntegrationTestBuilder withPrmRequests(Map<Long, String> prmAccountNumberToResponse) {
+    AclWorkflowIntegrationTestBuilder withPrmRequests(Map<Long, String> prmAccountNumberToResponse) {
         this.expectedPrmAccountNumberToResponseMap = prmAccountNumberToResponse;
         return this;
     }
 
-    public AclWorkflowIntegrationTestBuilder withPrmIneligibleParentCall(String ineligibleParentCallJson) {
+    AclWorkflowIntegrationTestBuilder withPrmIneligibleParentCall(String ineligibleParentCallJson) {
         this.expectedIneligibleParentCallJson = ineligibleParentCallJson;
         return this;
     }
 
-    public AclWorkflowIntegrationTestBuilder withPrmRollups(String rollupsJson, String... rollupsRightsholdersIds) {
+    AclWorkflowIntegrationTestBuilder withPrmRollups(String rollupsJson, String... rollupsRightsholdersIds) {
         this.expectedRollupsJson = rollupsJson;
         this.expectedRollupsRightholderIds = Arrays.asList(rollupsRightsholdersIds);
         return this;
     }
 
-    public AclWorkflowIntegrationTestBuilder withUdmUsageAuditItems(List<String> pathsToAuditItems) {
+    AclWorkflowIntegrationTestBuilder withUdmUsageAuditItems(List<String> pathsToAuditItems) {
         this.pathsToExpectedUdmUsageAuditItems = pathsToAuditItems;
         return this;
     }
 
-    public AclWorkflowIntegrationTestBuilder withUdmValueAuditItems(List<String> pathsToAuditItems) {
+    AclWorkflowIntegrationTestBuilder withUdmValueAuditItems(List<String> pathsToAuditItems) {
         this.pathsToExpectedUdmValueAuditItems = pathsToAuditItems;
         return this;
     }
 
-    public AclWorkflowIntegrationTestBuilder withAclUsageBatch(AclUsageBatch usageBatch) {
+    AclWorkflowIntegrationTestBuilder withAclUsageBatch(AclUsageBatch usageBatch) {
         this.aclUsageBatch = usageBatch;
         return this;
     }
 
-    public AclWorkflowIntegrationTestBuilder withLdmtFundPoolDetails(String pathToLdmtFundPoolDetails) {
+    AclWorkflowIntegrationTestBuilder withLdmtFundPoolDetails(String pathToLdmtFundPoolDetails) {
         this.pathToExpectedLdmtFundPoolDetails = pathToLdmtFundPoolDetails;
         return this;
     }
 
-    public AclWorkflowIntegrationTestBuilder withAclFundPool(AclFundPool fundPool) {
+    AclWorkflowIntegrationTestBuilder withAclFundPool(AclFundPool fundPool) {
         this.aclFundPool = fundPool;
         return this;
     }
 
-    public AclWorkflowIntegrationTestBuilder withAclGrantSet(AclGrantSet grantSet) {
+    AclWorkflowIntegrationTestBuilder withAclGrantSet(AclGrantSet grantSet) {
         this.aclGrantSet = grantSet;
         return this;
     }
 
-    public AclWorkflowIntegrationTestBuilder withDefaultAclScenarioUsageAges() {
+    AclWorkflowIntegrationTestBuilder withDefaultAclScenarioUsageAges() {
         this.usageAges = aclUsageService.getDefaultUsageAgesWeights();
         return this;
     }
 
-    public AclWorkflowIntegrationTestBuilder withDefaultAclScenarioPubTypes() {
+    AclWorkflowIntegrationTestBuilder withDefaultAclScenarioPubTypes() {
         this.publicationTypes = publicationTypeService.getAclHistoricalPublicationTypes();
         return this;
     }
 
-    public AclWorkflowIntegrationTestBuilder withDefaultAclScenarioDetLicClasses() {
+    AclWorkflowIntegrationTestBuilder withDefaultAclScenarioDetLicClasses() {
         this.detailLicenseeClasses = licenseeClassService.getDetailLicenseeClasses(FdaConstants.ACL_PRODUCT_FAMILY);
         return this;
     }
 
-    public AclWorkflowIntegrationTestBuilder withAclScenario(AclScenario scenario) {
+    AclWorkflowIntegrationTestBuilder withAclScenario(AclScenario scenario) {
         this.aclScenario = scenario;
         return this;
     }
 
-    public AclWorkflowIntegrationTestBuilder withLmDetails(String... lmDetailsJson) {
+    AclWorkflowIntegrationTestBuilder withLmDetails(String... lmDetailsJson) {
         this.expectedLmDetailsJson = Arrays.asList(lmDetailsJson);
         return this;
     }
 
-    public AclWorkflowIntegrationTestBuilder withExpectedAclScenario(String pathToAclScenario) {
+    AclWorkflowIntegrationTestBuilder withExpectedAclScenario(String pathToAclScenario) {
         this.pathToExpectedAclScenario = pathToAclScenario;
         return this;
     }
 
-    public AclWorkflowIntegrationTestBuilder withExpectedAclScenarioDetails(String pathToAclScenarioDetails) {
+    AclWorkflowIntegrationTestBuilder withExpectedAclScenarioDetails(String pathToAclScenarioDetails) {
         this.pathToExpectedAclScenarioDetails = pathToAclScenarioDetails;
         return this;
     }

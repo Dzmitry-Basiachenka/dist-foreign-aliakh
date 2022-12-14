@@ -1,0 +1,22 @@
+[
+  {
+    "status": "NEW",
+    "productFamily": "ACLCI",
+    "wrWrkInst": 109060602,
+    "workTitle": "Steam engines",
+    "comment": "some comment",
+    "aclciUsage": {
+      "coveragePeriod": "2021-2022",
+      "licenseType": "CURR_REPUB_K12",
+      "reportedMediaType": "TEXT",
+      "mediaTypeWeight": 1,
+      "reportedArticle": "The Bronze Statue",
+      "reportedStandardNumber": "978-0-7614-1880-1",
+      "reportedAuthor": "Hugh Lupton",
+      "reportedPublisher": "Barefoot Books",
+      "reportedPublicationDate": "2021-02-03",
+      "reportedGrade": "6",
+      "gradeGroup": "GRADE6_8"
+    }
+  }
+]
