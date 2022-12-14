@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.aclci;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGrid;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
+
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
@@ -13,10 +14,13 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.foreign.ui.usage.api.aclci.IAclciUsageController;
+import com.copyright.rup.dist.foreign.ui.usage.api.aclci.IAclciUsageFilterController;
+
 import com.vaadin.server.Sizeable;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.VerticalLayout;
+
 import org.apache.commons.lang3.tuple.Triple;
 import org.junit.Before;
 import org.junit.Test;
@@ -40,7 +44,8 @@ public class AclciUsageWidgetTest {
     @Before
     public void setUp() {
         controller = createMock(IAclciUsageController.class);
-        expect(controller.initUsagesFilterWidget()).andReturn(new AclciUsageFilterWidget()).once();
+        expect(controller.initUsagesFilterWidget()).andReturn(new AclciUsageFilterWidget(
+            createMock(IAclciUsageFilterController.class))).once();
         widget = new AclciUsageWidget();
         widget.setController(controller);
         replay(controller);
