@@ -1,16 +1,25 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.aclci;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
+import com.copyright.rup.dist.common.reporting.api.IStreamSourceHandler;
+import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
+import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.integration.telesales.api.ITelesalesService;
+import com.copyright.rup.dist.foreign.service.impl.aclci.AclciUsageService;
+import com.copyright.rup.dist.foreign.service.impl.csv.AclciUsageCsvProcessor;
+import com.copyright.rup.dist.foreign.service.impl.csv.CsvProcessorFactory;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.aclci.IAclciUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.aclci.IAclciUsageFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.impl.CommonUsageController;
+import com.google.common.io.Files;
 import com.vaadin.data.provider.QuerySortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -33,6 +42,15 @@ public class AclciUsageController extends CommonUsageController implements IAclc
 
     @Autowired
     private IAclciUsageFilterController aclciUsageFilterController;
+    @Autowired
+    private CsvProcessorFactory csvProcessorFactory;
+    @Autowired
+    private IStreamSourceHandler streamSourceHandler;
+    @Autowired
+    private AclciUsageService aclciUsageService;
+    @Autowired
+    @Qualifier("df.integration.telesalesCacheService")
+    private ITelesalesService telesalesService;
 
     @Override
     public int getBeansCount() {
@@ -67,6 +85,30 @@ public class AclciUsageController extends CommonUsageController implements IAclc
     @Override
     public void deleteUsageBatch(UsageBatch usageBatch) {
         //TODO: implement
+    }
+
+    @Override
+    public AclciUsageCsvProcessor getAclciUsageCsvProcessor() {
+        return csvProcessorFactory.getAclciUsageCsvProcessor();
+    }
+
+    @Override
+    public void loadAclciUsageBatch(UsageBatch usageBatch, List<Usage> usages) {
+        List<String> insertedUsageIds = getUsageBatchService().insertAclciBatch(usageBatch, usages);
+        aclciUsageService.sendForMatching(insertedUsageIds, usageBatch.getName());
+        getUsageFilterController().getWidget().clearFilter();
+    }
+
+    @Override
+    public IStreamSource getErrorResultStreamSource(String fileName, ProcessingResult<Usage> processingResult) {
+        return streamSourceHandler.getCsvStreamSource(
+            () -> String.format("Error_for_%s", Files.getNameWithoutExtension(fileName)), null,
+            processingResult::writeToFile);
+    }
+
+    @Override
+    public String getLicenseeName(Long licenseeAccountNumber) {
+        return telesalesService.getLicenseeName(licenseeAccountNumber);
     }
 
     @Override

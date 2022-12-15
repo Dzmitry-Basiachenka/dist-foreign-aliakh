@@ -221,11 +221,11 @@ public class FasUsageControllerTest {
 
     @Test
     public void testGetResearchedUsagesCsvProcessor() {
-        ResearchedUsagesCsvProcessor processorMock = createMock(ResearchedUsagesCsvProcessor.class);
-        expect(csvProcessorFactory.getResearchedUsagesCsvProcessor()).andReturn(processorMock).once();
+        ResearchedUsagesCsvProcessor processor = createMock(ResearchedUsagesCsvProcessor.class);
+        expect(csvProcessorFactory.getResearchedUsagesCsvProcessor()).andReturn(processor).once();
         replay(csvProcessorFactory);
-        assertSame(processorMock, controller.getResearchedUsagesCsvProcessor());
-        replay(csvProcessorFactory);
+        assertSame(processor, controller.getResearchedUsagesCsvProcessor());
+        verify(csvProcessorFactory);
     }
 
     @Test

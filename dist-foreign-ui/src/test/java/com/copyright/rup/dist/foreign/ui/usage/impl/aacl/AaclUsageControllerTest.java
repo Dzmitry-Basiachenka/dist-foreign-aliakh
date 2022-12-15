@@ -371,11 +371,11 @@ public class AaclUsageControllerTest {
 
     @Test
     public void testGetClassifiedUsageCsvProcessor() {
-        ClassifiedUsageCsvProcessor processorMock = createMock(ClassifiedUsageCsvProcessor.class);
-        expect(csvProcessorFactory.getClassifiedUsageCsvProcessor()).andReturn(processorMock).once();
+        ClassifiedUsageCsvProcessor processor = createMock(ClassifiedUsageCsvProcessor.class);
+        expect(csvProcessorFactory.getClassifiedUsageCsvProcessor()).andReturn(processor).once();
         replay(csvProcessorFactory);
-        assertSame(processorMock, controller.getClassifiedUsageCsvProcessor());
-        replay(csvProcessorFactory);
+        assertSame(processor, controller.getClassifiedUsageCsvProcessor());
+        verify(csvProcessorFactory);
     }
 
     @Test
@@ -405,7 +405,7 @@ public class AaclUsageControllerTest {
         expect(csvProcessorFactory.getAaclFundPoolCsvProcessor()).andReturn(processor).once();
         replay(csvProcessorFactory);
         assertSame(processor, controller.getAaclFundPoolCsvProcessor());
-        replay(csvProcessorFactory);
+        verify(csvProcessorFactory);
     }
 
     @Test
