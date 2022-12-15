@@ -280,12 +280,14 @@ public final class UiTestHelper {
      * @param component button component
      * @param caption   header of button
      * @param isVisible {@code true} if button is visible, {@code false} otherwise
+     * @return instance of {@link Button}
      */
-    public static void verifyButton(Component component, String caption, boolean isVisible) {
+    public static Button verifyButton(Component component, String caption, boolean isVisible) {
         assertThat(component, instanceOf(Button.class));
         Button button = (Button) component;
         assertEquals(caption, button.getCaption());
         assertEquals(isVisible, button.isVisible());
+        return button;
     }
 
     /**

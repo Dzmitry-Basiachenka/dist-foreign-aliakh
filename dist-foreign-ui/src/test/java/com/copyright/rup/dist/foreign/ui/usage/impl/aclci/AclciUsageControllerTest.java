@@ -48,8 +48,8 @@ import java.util.List;
 public class AclciUsageControllerTest {
 
     private static final String USAGE_BATCH_NAME = "ACLCI Usage Batch";
-    private static final Long LICENSEE_ACCOUNT_NUMBER = 1000008985L;
-    private static final String LICENSEE_NAME = "FarmField Inc.";
+    private static final Long LICENSEE_ACCOUNT_NUMBER = 1111L;
+    private static final String LICENSEE_NAME = "Acuson Corporation";
 
     private AclciUsageController controller;
     private IAclciUsageFilterController filterController;

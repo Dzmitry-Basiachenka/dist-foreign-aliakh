@@ -125,6 +125,6 @@ public class AclciUsageController extends CommonUsageController implements IAclc
 
     @Override
     protected ICommonUsageWidget instantiateWidget() {
-        return new AclciUsageWidget();
+        return new AclciUsageWidget(this);
     }
 }

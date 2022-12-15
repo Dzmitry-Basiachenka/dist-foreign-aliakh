@@ -3,11 +3,16 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.aclci;
 import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
+import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
+import com.copyright.rup.dist.foreign.ui.usage.api.aclci.IAclciUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.aclci.IAclciUsageWidget;
 import com.copyright.rup.dist.foreign.ui.usage.impl.CommonUsageWidget;
+import com.copyright.rup.vaadin.ui.component.window.Windows;
+import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.api.IMediator;
 
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.MenuBar;
 
 /**
  * Implementation of {@link IAclciUsageWidget}.
@@ -20,9 +25,24 @@ import com.vaadin.ui.HorizontalLayout;
  */
 public class AclciUsageWidget extends CommonUsageWidget implements IAclciUsageWidget {
 
+    private MenuBar usageBatchMenuBar;
+    private MenuBar.MenuItem loadUsageBatchMenuItem;
+    private final IAclciUsageController controller;
+
+    /**
+     * Controller.
+     *
+     * @param controller {@link IAclciUsageController} instance
+     */
+    AclciUsageWidget(IAclciUsageController controller) {
+        this.controller = controller;
+    }
+
     @Override
     public IMediator initMediator() {
-        return new AclciUsageMediator();
+        AclciUsageMediator mediator = new AclciUsageMediator();
+        mediator.setLoadUsageBatchMenuItem(loadUsageBatchMenuItem);
+        return mediator;
     }
 
     @Override
@@ -70,11 +90,25 @@ public class AclciUsageWidget extends CommonUsageWidget implements IAclciUsageWi
 
     @Override
     protected HorizontalLayout initButtonsLayout() {
-        return new HorizontalLayout(); //TODO: implement
+        initUsageBatchMenuBar();
+        HorizontalLayout layout = new HorizontalLayout(usageBatchMenuBar);
+        layout.setMargin(true);
+        VaadinUtils.addComponentStyle(layout, "usages-buttons");
+        return layout;
     }
 
     @Override
     protected String getProductFamilySpecificScenarioValidationMessage() {
         return null; //TODO: implement
+    }
+
+    private void initUsageBatchMenuBar() {
+        usageBatchMenuBar = new MenuBar();
+        MenuBar.MenuItem menuItem =
+            usageBatchMenuBar.addItem(ForeignUi.getMessage("menu.caption.usage_batch"), null, null);
+        loadUsageBatchMenuItem = menuItem.addItem(ForeignUi.getMessage("menu.item.load"), null,
+            item -> Windows.showModalWindow(new AclciUsageBatchUploadWindow(controller)));
+        VaadinUtils.addComponentStyle(usageBatchMenuBar, "usage-batch-menu-bar");
+        VaadinUtils.addComponentStyle(usageBatchMenuBar, "v-menubar-df");
     }
 }
