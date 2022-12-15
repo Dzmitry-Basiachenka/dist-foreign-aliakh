@@ -8,7 +8,7 @@ import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.integration.telesales.api.ITelesalesService;
-import com.copyright.rup.dist.foreign.service.impl.aclci.AclciUsageService;
+import com.copyright.rup.dist.foreign.service.api.aclci.IAclciUsageService;
 import com.copyright.rup.dist.foreign.service.impl.csv.AclciUsageCsvProcessor;
 import com.copyright.rup.dist.foreign.service.impl.csv.CsvProcessorFactory;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageFilterController;
@@ -47,7 +47,7 @@ public class AclciUsageController extends CommonUsageController implements IAclc
     @Autowired
     private IStreamSourceHandler streamSourceHandler;
     @Autowired
-    private AclciUsageService aclciUsageService;
+    private IAclciUsageService aclciUsageService;
     @Autowired
     @Qualifier("df.integration.telesalesCacheService")
     private ITelesalesService telesalesService;
