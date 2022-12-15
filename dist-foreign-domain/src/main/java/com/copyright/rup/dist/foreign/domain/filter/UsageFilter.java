@@ -1,9 +1,11 @@
 package com.copyright.rup.dist.foreign.domain.filter;
 
+import com.copyright.rup.dist.foreign.domain.AclciLicenseTypeEnum;
 import com.copyright.rup.dist.foreign.domain.SalDetailTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 
 import com.google.common.collect.Sets;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -11,6 +13,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.springframework.util.CollectionUtils;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -33,6 +36,7 @@ public class UsageFilter {
     private Integer fiscalYear;
     private Integer usagePeriod;
     private SalDetailTypeEnum salDetailType;
+    private Set<AclciLicenseTypeEnum> licenseTypes = new HashSet<>();
 
     /**
      * Default constructor.
@@ -56,6 +60,7 @@ public class UsageFilter {
             setProductFamily(filter.getProductFamily());
             setUsagePeriod(filter.getUsagePeriod());
             setSalDetailType(filter.getSalDetailType());
+            setLicenseTypes(filter.getLicenseTypes());
         }
     }
 
@@ -139,6 +144,14 @@ public class UsageFilter {
         this.salDetailType = salDetailType;
     }
 
+    public Set<AclciLicenseTypeEnum> getLicenseTypes() {
+        return licenseTypes;
+    }
+
+    public void setLicenseTypes(Set<AclciLicenseTypeEnum> licenseTypes) {
+        this.licenseTypes = licenseTypes;
+    }
+
     /**
      * @return {@code true} if filter does not contain any criteria except Product Family, otherwise {@code false}.
      */
@@ -149,7 +162,8 @@ public class UsageFilter {
             && null == fiscalYear
             && null == usageStatus
             && null == usagePeriod
-            && null == salDetailType;
+            && null == salDetailType
+            && CollectionUtils.isEmpty(licenseTypes);
     }
 
     @Override
@@ -170,6 +184,7 @@ public class UsageFilter {
             .append(this.fiscalYear, that.fiscalYear)
             .append(this.usagePeriod, that.usagePeriod)
             .append(this.salDetailType, that.salDetailType)
+            .append(this.licenseTypes, that.licenseTypes)
             .isEquals();
     }
 
@@ -184,6 +199,7 @@ public class UsageFilter {
             .append(fiscalYear)
             .append(usagePeriod)
             .append(salDetailType)
+            .append(licenseTypes)
             .toHashCode();
     }
 
@@ -198,6 +214,7 @@ public class UsageFilter {
             .append("fiscalYear", fiscalYear)
             .append("usagePeriod", usagePeriod)
             .append("salDetailType", salDetailType)
+            .append("licenseTypes", licenseTypes)
             .toString();
     }
 }

@@ -21,6 +21,6 @@ public class AclciUsageFilterController extends CommonUsageFilterController impl
 
     @Override
     public AclciUsageFilterWidget instantiateWidget() {
-        return new AclciUsageFilterWidget();
+        return new AclciUsageFilterWidget(this);
     }
 }
