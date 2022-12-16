@@ -473,7 +473,7 @@
             count(distinct(survey_respondent)) unadjusted_unique_user,
             case when usage_origin = 'RFA' then count(distinct(survey_respondent)) else 1 end as adjusted_unique_user,
             count(1) details_loaded,
-            sum(case when u.reported_title ilike 'none' or u.reported_title is null then 0 else 1 end) usable_details_loaded,
+            sum(case when u.reported_title ilike 'none' then 0 else 1 end) usable_details_loaded,
             <!--# of surveys. We don't count of surveys. Just hardcoded the value for each group.-->
             1 surveys,
             <!--for month of the period set the order. Ex. JJ: December=1, January=2,... May=6. JD: June=1, July=2... November=6 -->

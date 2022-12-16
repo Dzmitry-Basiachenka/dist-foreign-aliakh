@@ -81,4 +81,9 @@ public class UdmBatchService implements IUdmBatchService {
     public boolean isUdmBatchContainsBaselineUsages(String udmBatchId) {
         return udmBatchRepository.isUdmBatchContainsBaselineUsages(udmBatchId);
     }
+
+    @Override
+    public List<Integer> getPeriods() {
+        return udmBatchRepository.findPeriods();
+    }
 }

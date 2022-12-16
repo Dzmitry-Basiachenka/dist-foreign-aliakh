@@ -13,8 +13,8 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
+import com.copyright.rup.dist.foreign.service.api.acl.IUdmBatchService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmReportService;
-import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageService;
 import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
 import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmSurveyDashboardReportWidget;
 
@@ -47,15 +47,15 @@ import java.util.Set;
 public class UdmSurveyDashboardReportControllerTest {
 
     private UdmSurveyDashboardReportController controller;
-    private IUdmUsageService udmUsageService;
+    private IUdmBatchService udmBatchService;
     private IUdmReportService udmReportService;
 
     @Before
     public void setUp() {
         controller = new UdmSurveyDashboardReportController();
-        udmUsageService = createMock(IUdmUsageService.class);
+        udmBatchService = createMock(IUdmBatchService.class);
         udmReportService = createMock(IUdmReportService.class);
-        Whitebox.setInternalState(controller, udmUsageService);
+        Whitebox.setInternalState(controller, udmBatchService);
         Whitebox.setInternalState(controller, udmReportService);
     }
 
@@ -69,10 +69,10 @@ public class UdmSurveyDashboardReportControllerTest {
     @Test
     public void testGetPeriods() {
         List<Integer> periods = Collections.singletonList(202112);
-        expect(udmUsageService.getPeriods()).andReturn(periods).once();
-        replay(udmUsageService);
+        expect(udmBatchService.getPeriods()).andReturn(periods).once();
+        replay(udmBatchService);
         assertEquals(periods, controller.getPeriods());
-        verify(udmUsageService);
+        verify(udmBatchService);
     }
 
     @Test

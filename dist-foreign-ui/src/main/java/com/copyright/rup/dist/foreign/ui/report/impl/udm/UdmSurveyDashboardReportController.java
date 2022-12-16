@@ -1,8 +1,8 @@
 package com.copyright.rup.dist.foreign.ui.report.impl.udm;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
+import com.copyright.rup.dist.foreign.service.api.acl.IUdmBatchService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmReportService;
-import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageService;
 import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
 import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmSurveyDashboardReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmSurveyDashboardReportWidget;
@@ -30,13 +30,13 @@ public class UdmSurveyDashboardReportController extends CommonController<IUdmSur
     implements IUdmSurveyDashboardReportController {
 
     @Autowired
-    private IUdmUsageService udmUsageService;
+    private IUdmBatchService udmBatchService;
     @Autowired
     private IUdmReportService udmReportService;
 
     @Override
     public List<Integer> getPeriods() {
-        return udmUsageService.getPeriods();
+        return udmBatchService.getPeriods();
     }
 
     @Override
