@@ -1,13 +1,22 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
 import com.copyright.rup.dist.common.repository.BaseRepository;
+import com.copyright.rup.dist.common.repository.api.Pageable;
+import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.Usage;
+import com.copyright.rup.dist.foreign.domain.UsageDto;
+import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IAclciUsageRepository;
+
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Maps;
+
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -23,6 +32,9 @@ import java.util.Objects;
 public class AclciUsageRepository extends BaseRepository implements IAclciUsageRepository {
 
     private static final int MAX_VARIABLES_COUNT = 32000;
+    private static final String FILTER_KEY = "filter";
+    private static final String PAGEABLE_KEY = "pageable";
+    private static final String SORT_KEY = "sort";
 
     @Override
     public void insert(Usage usage) {
@@ -35,5 +47,20 @@ public class AclciUsageRepository extends BaseRepository implements IAclciUsageR
         Iterables.partition(Objects.requireNonNull(usageIds), MAX_VARIABLES_COUNT)
             .forEach(partition -> result.addAll(selectList("IAclciUsageMapper.findByIds", partition)));
         return result;
+    }
+
+    @Override
+    public int findCountByFilter(UsageFilter filter) {
+        return selectOne("IAclciUsageMapper.findCountByFilter",
+            ImmutableMap.of(FILTER_KEY, Objects.requireNonNull(filter)));
+    }
+
+    @Override
+    public List<UsageDto> findDtosByFilter(UsageFilter filter, Pageable pageable, Sort sort) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
+        parameters.put(FILTER_KEY, Objects.requireNonNull(filter));
+        parameters.put(PAGEABLE_KEY, pageable);
+        parameters.put(SORT_KEY, sort);
+        return selectList("IAclciUsageMapper.findDtosByFilter", parameters);
     }
 }

@@ -1,16 +1,25 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.aclci;
 
+import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
+import static org.easymock.EasyMock.isNull;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.hamcrest.Matchers.instanceOf;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThat;
 
+import com.copyright.rup.dist.common.repository.api.Pageable;
+import com.copyright.rup.dist.foreign.domain.AclciLicenseTypeEnum;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
+import com.copyright.rup.dist.foreign.domain.UsageDto;
+import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.integration.telesales.api.ITelesalesService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.impl.aclci.AclciUsageService;
@@ -18,6 +27,8 @@ import com.copyright.rup.dist.foreign.service.impl.csv.AclciUsageCsvProcessor;
 import com.copyright.rup.dist.foreign.service.impl.csv.CsvProcessorFactory;
 import com.copyright.rup.dist.foreign.ui.usage.api.aclci.IAclciUsageFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.aclci.IAclciUsageFilterWidget;
+
+import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
@@ -47,6 +58,7 @@ public class AclciUsageControllerTest {
     private CsvProcessorFactory csvProcessorFactory;
     private AclciUsageService aclciUsageService;
     private ITelesalesService telesalesService;
+    private UsageFilter usageFilter;
 
     @Before
     public void setUp() {
@@ -62,6 +74,7 @@ public class AclciUsageControllerTest {
         Whitebox.setInternalState(controller, csvProcessorFactory);
         Whitebox.setInternalState(controller, aclciUsageService);
         Whitebox.setInternalState(controller, telesalesService);
+        usageFilter = new UsageFilter();
     }
 
     @Test
@@ -81,12 +94,31 @@ public class AclciUsageControllerTest {
 
     @Test
     public void testGetBeansCount() {
-        //TODO: implement
+        usageFilter.setLicenseTypes(Collections.singleton(AclciLicenseTypeEnum.CURR_REPUB_K12));
+        expect(filterController.getWidget()).andReturn(filterWidget).once();
+        expect(filterWidget.getAppliedFilter()).andReturn(usageFilter).once();
+        expect(aclciUsageService.getUsagesCount(usageFilter)).andReturn(1).once();
+        replay(filterWidget, aclciUsageService, filterController);
+        assertEquals(1, controller.getBeansCount());
+        verify(filterWidget, aclciUsageService, filterController);
     }
 
     @Test
     public void testLoadBeans() {
-        //TODO: implement
+        usageFilter.setLicenseTypes(Collections.singleton(AclciLicenseTypeEnum.CURR_REPUB_K12));
+        expect(filterController.getWidget()).andReturn(filterWidget).once();
+        expect(filterWidget.getAppliedFilter()).andReturn(usageFilter).once();
+        Capture<Pageable> pageableCapture = new Capture<>();
+        expect(aclciUsageService.getUsageDtos(eq(usageFilter), capture(pageableCapture), isNull()))
+            .andReturn(Collections.singletonList(new UsageDto())).once();
+        replay(filterWidget, aclciUsageService, filterController);
+        List<UsageDto> result = controller.loadBeans(10, 150, null);
+        Pageable pageable = pageableCapture.getValue();
+        assertEquals(10, pageable.getOffset());
+        assertEquals(150, pageable.getLimit());
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        verify(filterWidget, aclciUsageService, filterController);
     }
 
     @Test

@@ -2,16 +2,25 @@ package com.copyright.rup.dist.foreign.repository.impl;
 
 import static org.junit.Assert.assertEquals;
 
+import com.copyright.rup.dist.common.repository.api.Sort;
+import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.common.test.liquibase.LiquibaseTestExecutionListener;
 import com.copyright.rup.dist.common.test.liquibase.TestData;
+import com.copyright.rup.dist.foreign.domain.AclciLicenseTypeEnum;
 import com.copyright.rup.dist.foreign.domain.AclciUsage;
 import com.copyright.rup.dist.foreign.domain.Usage;
+import com.copyright.rup.dist.foreign.domain.UsageDto;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IAclciUsageRepository;
+
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.google.common.collect.ImmutableSet;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +32,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Integration test for {@link AclciUsageRepository}.
@@ -42,7 +52,11 @@ import java.util.List;
 public class AclciUsageRepositoryIntegrationTest {
 
     private static final String FOLDER_NAME = "aclci-usage-repository-integration-test/";
+    private static final String ACLCI_PRODUCT_FAMILY = "ACLCI";
     private static final String USAGE_ID_1 = "5262bc87-e5b4-447b-9294-122e41f01c7e";
+    private static final String USAGE_BATCH_ID_1 = "228c1b83-a69d-4935-9940-4ec51192b140";
+    private static final String USAGE_BATCH_ID_2 = "a6b4c77e-7ee3-48db-b845-202fe6884899";
+    private static final String DETAIL_ID_KEY = "detailId";
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
@@ -65,6 +79,90 @@ public class AclciUsageRepositoryIntegrationTest {
         verifyUsage(expectedUsage, actualUsages.get(0));
     }
 
+    @Test
+    @TestData(fileName = FOLDER_NAME + "find-dtos-by-filter.groovy")
+    public void testFindCountDtosByFilter() {
+        assertEquals(1, aclciUsageRepository.findCountByFilter(buildUsageFilter(
+            Collections.singleton(USAGE_BATCH_ID_1), UsageStatusEnum.NEW, ACLCI_PRODUCT_FAMILY,
+            Collections.singleton(AclciLicenseTypeEnum.CURR_REPUB_K12))));
+    }
+
+    @Test
+    @TestData(fileName = FOLDER_NAME + "find-dtos-by-filter.groovy")
+    public void testFindDtosByFilter() throws IOException {
+        verifyAclciUsageDto(
+            loadExpectedUsageDtos(Collections.singletonList("json/aclci/aclci_usage_dto_1_find_by_filter.json")).get(0),
+            aclciUsageRepository.findDtosByFilter(buildUsageFilter(Collections.singleton(USAGE_BATCH_ID_1),
+                    UsageStatusEnum.NEW, ACLCI_PRODUCT_FAMILY,
+                    Collections.singleton(AclciLicenseTypeEnum.CURR_REPUB_K12)),
+                null, new Sort(DETAIL_ID_KEY, Direction.ASC)).get(0));
+    }
+
+    @Test
+    @TestData(fileName = FOLDER_NAME + "find-dtos-by-filter.groovy")
+    public void testSortingDtosFindByFilter() {
+        UsageDto dto1 = buildUsageDto1FindByFilter();
+        UsageDto dto2 = buildUsageDto2FindByFilter();
+        assertSortingUsageDto(dto1, dto2, "detailId");
+        assertSortingUsageDto(dto1, dto1, "status");
+        assertSortingUsageDto(dto1, dto2, "licenseType");
+        assertSortingUsageDto(dto1, dto1, "productFamily");
+        assertSortingUsageDto(dto1, dto2, "batchName");
+        assertSortingUsageDto(dto2, dto1, "periodEndDate");
+        assertSortingUsageDto(dto2, dto1, "coveragePeriod");
+        assertSortingUsageDto(dto2, dto1, "licenseeAccountNumber");
+        assertSortingUsageDto(dto1, dto2, "licenseeName");
+        assertSortingUsageDto(dto1, dto2, "rhAccountNumber");
+        assertSortingUsageDto(dto2, dto1, "rhName");
+        assertSortingUsageDto(dto2, dto1, "wrWrkInst");
+        assertSortingUsageDto(dto2, dto1, "systemTitle");
+        assertSortingUsageDto(dto2, dto1, "standardNumber");
+        assertSortingUsageDto(dto1, dto2, "standardNumberType");
+        assertSortingUsageDto(dto2, dto1, "workTitle");
+        assertSortingUsageDto(dto1, dto2, "reportedMediaType");
+        assertSortingUsageDto(dto1, dto2, "mediaTypeWeight");
+        assertSortingUsageDto(dto2, dto1, "reportedArticle");
+        assertSortingUsageDto(dto1, dto2, "reportedStandardNumber");
+        assertSortingUsageDto(dto2, dto1, "reportedAuthor");
+        assertSortingUsageDto(dto2, dto1, "reportedPublisher");
+        assertSortingUsageDto(dto2, dto1, "reportedPublicationDate");
+        assertSortingUsageDto(dto1, dto2, "reportedGrade");
+        assertSortingUsageDto(dto1, dto2, "comment");
+    }
+
+    private UsageFilter buildUsageFilter(Set<String> usageBatchIds, UsageStatusEnum status, String productFamily,
+                                         Set<AclciLicenseTypeEnum> licenseTypes) {
+        UsageFilter usageFilter = new UsageFilter();
+        usageFilter.setUsageBatchesIds(usageBatchIds);
+        usageFilter.setUsageStatus(status);
+        usageFilter.setProductFamily(productFamily);
+        usageFilter.setLicenseTypes(licenseTypes);
+        return usageFilter;
+    }
+
+    private void assertSortingUsageDto(UsageDto detailAsc, UsageDto detailDesc, String sortProperty) {
+        List<UsageDto> usageDtos = aclciUsageRepository.findDtosByFilter(buildUsageFilter(
+            ImmutableSet.of(USAGE_BATCH_ID_1, USAGE_BATCH_ID_2), UsageStatusEnum.NEW, ACLCI_PRODUCT_FAMILY,
+                ImmutableSet.of(AclciLicenseTypeEnum.CURR_REPUB_K12, AclciLicenseTypeEnum.CURR_REUSE_K12)),
+            null, new Sort(sortProperty, Direction.ASC));
+        verifyAclciUsageDto(detailAsc, usageDtos.get(0));
+        usageDtos = aclciUsageRepository.findDtosByFilter(buildUsageFilter(
+                ImmutableSet.of(USAGE_BATCH_ID_1, USAGE_BATCH_ID_2), UsageStatusEnum.NEW, ACLCI_PRODUCT_FAMILY,
+                ImmutableSet.of(AclciLicenseTypeEnum.CURR_REPUB_K12, AclciLicenseTypeEnum.CURR_REUSE_K12)),
+            null, new Sort(sortProperty, Direction.DESC));
+        verifyAclciUsageDto(detailDesc, usageDtos.get(0));
+    }
+
+    private UsageDto buildUsageDto1FindByFilter() {
+        return loadExpectedUsageDtos(
+            Collections.singletonList("json/aclci/aclci_usage_dto_1_find_by_filter.json")).get(0);
+    }
+
+    private UsageDto buildUsageDto2FindByFilter() {
+        return loadExpectedUsageDtos(
+            Collections.singletonList("json/aclci/aclci_usage_dto_2_find_by_filter.json")).get(0);
+    }
+
     private void verifyUsage(Usage expectedUsage, Usage actualUsage) {
         assertEquals(expectedUsage.getId(), actualUsage.getId());
         verifyUsageIgnoringId(expectedUsage, actualUsage);
@@ -84,6 +182,23 @@ public class AclciUsageRepositoryIntegrationTest {
         verifyAclciUsage(expectedUsage.getAclciUsage(), actualUsage.getAclciUsage());
     }
 
+    private void verifyAclciUsageDto(UsageDto expected, UsageDto actual) {
+        assertEquals(expected.getId(), actual.getId());
+        assertEquals(expected.getStatus(), actual.getStatus());
+        assertEquals(expected.getProductFamily(), actual.getProductFamily());
+        assertEquals(expected.getBatchName(), actual.getBatchName());
+        assertEquals(expected.getPeriodEndDate(), actual.getPeriodEndDate());
+        assertEquals(expected.getRhAccountNumber(), actual.getRhAccountNumber());
+        assertEquals(expected.getRhName(), actual.getRhName());
+        assertEquals(expected.getWrWrkInst(), actual.getWrWrkInst());
+        assertEquals(expected.getSystemTitle(), actual.getSystemTitle());
+        assertEquals(expected.getStandardNumber(), actual.getStandardNumber());
+        assertEquals(expected.getStandardNumberType(), actual.getStandardNumberType());
+        assertEquals(expected.getWorkTitle(), actual.getWorkTitle());
+        assertEquals(expected.getComment(), actual.getComment());
+        verifyAclciUsage(expected.getAclciUsage(), actual.getAclciUsage());
+    }
+
     private void verifyAclciUsage(AclciUsage expectedUsage, AclciUsage actualUsage)  {
         assertEquals(expectedUsage.getLicenseeAccountNumber(), actualUsage.getLicenseeAccountNumber());
         assertEquals(expectedUsage.getLicenseeName(), actualUsage.getLicenseeName());
@@ -96,8 +211,6 @@ public class AclciUsageRepositoryIntegrationTest {
         assertEquals(expectedUsage.getReportedAuthor(), actualUsage.getReportedAuthor());
         assertEquals(expectedUsage.getReportedPublisher(), actualUsage.getReportedPublisher());
         assertEquals(expectedUsage.getReportedPublicationDate(), actualUsage.getReportedPublicationDate());
-        assertEquals(expectedUsage.getReportedPageRange(), actualUsage.getReportedPageRange());
-        assertEquals(expectedUsage.getReportedVolNumberSeries(), actualUsage.getReportedVolNumberSeries());
         assertEquals(expectedUsage.getReportedGrade(), actualUsage.getReportedGrade());
         assertEquals(expectedUsage.getGradeGroup(), actualUsage.getGradeGroup());
         assertEquals(expectedUsage.getBatchPeriodEndDate(), actualUsage.getBatchPeriodEndDate());
@@ -115,5 +228,19 @@ public class AclciUsageRepositoryIntegrationTest {
             }
         });
         return usages;
+    }
+
+    private List<UsageDto> loadExpectedUsageDtos(List<String> fileNames) {
+        List<UsageDto> usageDtos = new ArrayList<>();
+        fileNames.forEach(fileName -> {
+            try {
+                String content = TestUtils.fileToString(this.getClass(), fileName);
+                usageDtos.addAll(OBJECT_MAPPER.readValue(content, new TypeReference<List<UsageDto>>() {
+                }));
+            } catch (IOException e) {
+                throw new AssertionError(e);
+            }
+        });
+        return usageDtos;
     }
 }

@@ -1,0 +1,32 @@
+[
+  {
+    "id": "37b078c7-ce89-46d7-8403-977fa84bccb4",
+    "status": "NEW",
+    "productFamily": "ACLCI",
+    "batchName": "ACLCI usage batch 1",
+    "rhAccountNumber": 1000000026,
+    "rhName": "Georgia State University Business Press [C]",
+    "wrWrkInst": 269040891,
+    "systemTitle": "Telling stories",
+    "standardNumber": "09639292",
+    "standardNumberType": "VALISSN",
+    "workTitle": "Science News for students",
+    "periodEndDate": "2022-06-30",
+    "comment": "1 comment",
+    "aclciUsage": {
+      "licenseeAccountNumber": 7001293454,
+      "licenseeName":  "Synergy Publishers",
+      "coveragePeriod": "2021-2022",
+      "licenseType": "CURR_REPUB_K12",
+      "reportedMediaType": "Image",
+      "mediaTypeWeight": 0.3,
+      "reportedArticle": "The Bronze Statue",
+      "reportedStandardNumber": "978-0-7614-1880-1",
+      "reportedAuthor": "Hugh Lupton",
+      "reportedPublisher": "Barefoot Books",
+      "reportedPublicationDate": "2022-02-14",
+      "reportedGrade": "6",
+      "gradeGroup": "GRADE6_8"
+    }
+  }
+]

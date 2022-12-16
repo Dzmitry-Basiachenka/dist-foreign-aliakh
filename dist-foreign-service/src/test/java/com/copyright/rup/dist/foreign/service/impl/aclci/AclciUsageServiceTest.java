@@ -10,11 +10,15 @@ import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.dist.common.repository.api.Pageable;
+import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
+import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IAclciUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
@@ -86,14 +90,6 @@ public class AclciUsageServiceTest {
         verify(RupContextUtils.class, aclciUsageRepository, usageAuditService);
     }
 
-    private UsageBatch buildUsageBatch() {
-        UsageBatch usageBatch = new UsageBatch();
-        usageBatch.setId(BATCH_ID);
-        usageBatch.setName(BATCH_NAME);
-        usageBatch.setPaymentDate(LocalDate.of(2022, 6, 30));
-        return usageBatch;
-    }
-
     @Test
     public void testSendForMatching() {
         List<String> usageIds = Arrays.asList(USAGE_ID_1, USAGE_ID_2);
@@ -125,5 +121,36 @@ public class AclciUsageServiceTest {
         replay(aclciUsageRepository);
         assertEquals(usages, aclciUsageService.getUsagesByIds(usageIds));
         verify(aclciUsageRepository);
+    }
+
+    @Test
+    public void testGetUsagesCount() {
+        UsageFilter filter = new UsageFilter();
+        filter.setUsageStatus(UsageStatusEnum.NEW);
+        expect(aclciUsageRepository.findCountByFilter(filter)).andReturn(1).once();
+        replay(aclciUsageRepository);
+        assertEquals(1, aclciUsageService.getUsagesCount(filter));
+        verify(aclciUsageRepository);
+    }
+
+    @Test
+    public void testGetUsageDtos() {
+        UsageFilter filter = new UsageFilter();
+        filter.setUsageStatus(UsageStatusEnum.NEW);
+        Pageable pageable = new Pageable(0, 1);
+        Sort sort = new Sort("detailId", Sort.Direction.ASC);
+        List<UsageDto> usages = Collections.singletonList(new UsageDto());
+        expect(aclciUsageRepository.findDtosByFilter(filter, pageable, sort)).andReturn(usages).once();
+        replay(aclciUsageRepository);
+        assertEquals(usages, aclciUsageService.getUsageDtos(filter, pageable, sort));
+        verify(aclciUsageRepository);
+    }
+
+    private UsageBatch buildUsageBatch() {
+        UsageBatch usageBatch = new UsageBatch();
+        usageBatch.setId(BATCH_ID);
+        usageBatch.setName(BATCH_NAME);
+        usageBatch.setPaymentDate(LocalDate.of(2022, 6, 30));
+        return usageBatch;
     }
 }

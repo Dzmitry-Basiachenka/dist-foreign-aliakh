@@ -30,8 +30,6 @@ public class AclciUsage {
     private String reportedAuthor;
     private String reportedPublisher;
     private String reportedPublicationDate;
-    private String reportedPageRange;
-    private String reportedVolNumberSeries;
     private String reportedGrade;
     private String gradeGroup;
     private LocalDate batchPeriodEndDate;
@@ -124,22 +122,6 @@ public class AclciUsage {
         this.reportedPublicationDate = reportedPublicationDate;
     }
 
-    public String getReportedPageRange() {
-        return reportedPageRange;
-    }
-
-    public void setReportedPageRange(String reportedPageRange) {
-        this.reportedPageRange = reportedPageRange;
-    }
-
-    public String getReportedVolNumberSeries() {
-        return reportedVolNumberSeries;
-    }
-
-    public void setReportedVolNumberSeries(String reportedVolNumberSeries) {
-        this.reportedVolNumberSeries = reportedVolNumberSeries;
-    }
-
     public String getReportedGrade() {
         return reportedGrade;
     }
@@ -185,8 +167,6 @@ public class AclciUsage {
             .append(reportedAuthor, that.reportedAuthor)
             .append(reportedPublisher, that.reportedPublisher)
             .append(reportedPublicationDate, that.reportedPublicationDate)
-            .append(reportedPageRange, that.reportedPageRange)
-            .append(reportedVolNumberSeries, that.reportedVolNumberSeries)
             .append(reportedGrade, that.reportedGrade)
             .append(gradeGroup, that.gradeGroup)
             .append(batchPeriodEndDate, that.batchPeriodEndDate)
@@ -207,8 +187,6 @@ public class AclciUsage {
             .append(reportedAuthor)
             .append(reportedPublisher)
             .append(reportedPublicationDate)
-            .append(reportedPageRange)
-            .append(reportedVolNumberSeries)
             .append(reportedGrade)
             .append(gradeGroup)
             .append(batchPeriodEndDate)
@@ -229,8 +207,6 @@ public class AclciUsage {
             .append("reportedAuthor", reportedAuthor)
             .append("reportedPublisher", reportedPublisher)
             .append("reportedPublicationDate", reportedPublicationDate)
-            .append("reportedPageRange", reportedPageRange)
-            .append("reportedVolNumberSeries", reportedVolNumberSeries)
             .append("reportedGrade", reportedGrade)
             .append("gradeGroup", gradeGroup)
             .append("batchPeriodEndDate", batchPeriodEndDate)
