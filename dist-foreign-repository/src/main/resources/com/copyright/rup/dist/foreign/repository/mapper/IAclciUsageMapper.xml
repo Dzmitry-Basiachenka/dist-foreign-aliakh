@@ -36,6 +36,35 @@
         <result property="aclciUsage.batchPeriodEndDate" column="batch_period_end_date"/>
     </resultMap>
 
+    <resultMap id="aclciUsageDtoResultMap" type="UsageDto" extends="StoredEntityMapper.storedEntityResult">
+        <result property="id" column="df_usage_uid"/>
+        <result property="batchName" column="batch_name"/>
+        <result property="wrWrkInst" column="wr_wrk_inst"/>
+        <result property="workTitle" column="work_title"/>
+        <result property="systemTitle" column="system_title"/>
+        <result property="standardNumber" column="standard_number"/>
+        <result property="standardNumberType" column="standard_number_type"/>
+        <result property="rhAccountNumber" column="rh_account_number"/>
+        <result property="rhName" column="rh_name"/>
+        <result property="status" column="status_ind"/>
+        <result property="productFamily" column="product_family"/>
+        <result property="periodEndDate" column="batch_period_end_date"/>
+        <result property="comment" column="comment"/>
+        <result property="aclciUsage.licenseeAccountNumber" column="licensee_account_number"/>
+        <result property="aclciUsage.licenseeName" column="licensee_name"/>
+        <result property="aclciUsage.coveragePeriod" column="coverage_period"/>
+        <result property="aclciUsage.licenseType" column="license_type"/>
+        <result property="aclciUsage.reportedMediaType" column="reported_media_type"/>
+        <result property="aclciUsage.mediaTypeWeight" column="media_type_weight"/>
+        <result property="aclciUsage.reportedArticle" column="reported_article"/>
+        <result property="aclciUsage.reportedStandardNumber" column="reported_standard_number"/>
+        <result property="aclciUsage.reportedAuthor" column="reported_author"/>
+        <result property="aclciUsage.reportedPublisher" column="reported_publisher"/>
+        <result property="aclciUsage.reportedPublicationDate" column="reported_publication_date"/>
+        <result property="aclciUsage.reportedGrade" column="reported_grade"/>
+        <result property="aclciUsage.gradeGroup" column="grade_group"/>
+    </resultMap>
+
     <sql id="aclciUsageColumns">
         u.df_usage_batch_uid,
         u.df_scenario_uid,
@@ -52,6 +81,7 @@
         u.service_fee_amount,
         u.net_amount,
         u.service_fee,
+        u.system_title,
         u.comment,
         uaclci.coverage_period,
         uaclci.license_type,
@@ -64,12 +94,133 @@
         uaclci.reported_publication_date,
         uaclci.reported_grade,
         uaclci.grade_group,
+        ub.name batch_name,
         ub.payment_date batch_period_end_date,
+        ub.aclci_fields->>'licensee_account_number' licensee_account_number,
+        ub.aclci_fields->>'licensee_name' licensee_name,
         u.created_datetime,
         u.updated_datetime,
         u.created_by_user,
         u.updated_by_user,
         u.record_version
+    </sql>
+
+    <sql id="chooseSortProperty">
+        <choose>
+            <when test="sort.property == 'detailId'">
+                ${detail_uid} <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'status'">
+                u.status_ind <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'licenseType'">
+                uaclci.license_type <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'productFamily'">
+                u.product_family <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'batchName'">
+                ub.name <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'periodEndDate'">
+                batch_period_end_date <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'coveragePeriod'">
+                uaclci.coverage_period <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'licenseeAccountNumber'">
+                licensee_account_number <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'licenseeName'">
+                licensee_name <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'rhAccountNumber'">
+                u.rh_account_number <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'rhName'">
+                rh.name <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'wrWrkInst'">
+                u.wr_wrk_inst <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'systemTitle'">
+                u.system_title <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'standardNumber'">
+                u.standard_number <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'standardNumberType'">
+                u.standard_number_type <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'workTitle'">
+                u.work_title <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'reportedMediaType'">
+                uaclci.reported_media_type <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'mediaTypeWeight'">
+                uaclci.media_type_weight <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'reportedArticle'">
+                uaclci.reported_article <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'reportedStandardNumber'">
+                uaclci.reported_standard_number <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'reportedAuthor'">
+                uaclci.reported_author <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'reportedPublisher'">
+                uaclci.reported_publisher <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'reportedPublicationDate'">
+                uaclci.reported_publication_date <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'reportedGrade'">
+                uaclci.reported_grade <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'comment'">
+                u.comment <include refid="IUsageMapper.direction"/>
+            </when>
+        </choose>
+    </sql>
+
+    <sql id="ifSortable">
+        order by
+        <choose>
+            <when test="null != sort">
+                <include refid="IAclciUsageMapper.chooseSortProperty">
+                    <property name="detail_uid" value="u.df_usage_uid"/>
+                </include>
+            </when>
+            <otherwise>
+                updated_datetime desc
+            </otherwise>
+        </choose>,
+        df_usage_uid
+    </sql>
+
+    <sql id="usageFilter">
+        <where>
+            <if test="filter.usageBatchesIds.size() > 0">
+                and
+                <foreach collection="filter.usageBatchesIds" item="usageBatchId" open="(" separator=" or " close=")">
+                    u.df_usage_batch_uid = #{usageBatchId}
+                </foreach>
+            </if>
+            <if test="null != filter.productFamily">
+                and u.product_family = #{filter.productFamily}
+            </if>
+            <if test="null != filter.usageStatus">
+                and u.status_ind = #{filter.usageStatus}
+            </if>
+            <if test="filter.licenseTypes.size() > 0">
+                and
+                <foreach collection="filter.licenseTypes" item="licenseType" open="(" separator=" or " close=")">
+                    uaclci.license_type = #{licenseType}
+                </foreach>
+            </if>
+        </where>
     </sql>
 
     <insert id="insert" parameterType="Usage">
@@ -140,5 +291,29 @@
             #{usageId}
         </foreach>
         order by u.df_usage_uid
+    </select>
+
+    <select id="findCountByFilter" parameterType="map" resultType="int">
+        select count(1)
+        from ${schema}.df_usage u
+        join ${schema}.df_usage_aclci uaclci on u.df_usage_uid = uaclci.df_usage_aclci_uid
+        join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
+        left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
+        <include refid="IAclciUsageMapper.usageFilter"/>
+            and u.df_scenario_uid is null
+    </select>
+
+    <select id="findDtosByFilter" resultMap="aclciUsageDtoResultMap" parameterType="map" fetchSize="${usageSelectFetchSize}">
+        select
+            u.df_usage_uid,
+            <include refid="IAclciUsageMapper.aclciUsageColumns"/>
+        from ${schema}.df_usage u
+        join ${schema}.df_usage_aclci uaclci on u.df_usage_uid = uaclci.df_usage_aclci_uid
+        join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
+        left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
+        <include refid="IAclciUsageMapper.usageFilter"/>
+            and u.df_scenario_uid is null
+        <include refid="IAclciUsageMapper.ifSortable"/>
+        <include refid="IUsageMapper.ifPageable"/>
     </select>
 </mapper>

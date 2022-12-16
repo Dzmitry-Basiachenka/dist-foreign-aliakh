@@ -173,8 +173,6 @@ public class AclciUsageCsvProcessorIntegrationTest {
         assertEquals(expectedUsage.getReportedAuthor(), actualUsage.getReportedAuthor());
         assertEquals(expectedUsage.getReportedPublisher(), actualUsage.getReportedPublisher());
         assertEquals(expectedUsage.getReportedPublicationDate(), actualUsage.getReportedPublicationDate());
-        assertEquals(expectedUsage.getReportedPageRange(), actualUsage.getReportedPageRange());
-        assertEquals(expectedUsage.getReportedVolNumberSeries(), actualUsage.getReportedVolNumberSeries());
         assertEquals(expectedUsage.getReportedGrade(), actualUsage.getReportedGrade());
         assertEquals(expectedUsage.getGradeGroup(), actualUsage.getGradeGroup());
         assertEquals(expectedUsage.getBatchPeriodEndDate(), actualUsage.getBatchPeriodEndDate());

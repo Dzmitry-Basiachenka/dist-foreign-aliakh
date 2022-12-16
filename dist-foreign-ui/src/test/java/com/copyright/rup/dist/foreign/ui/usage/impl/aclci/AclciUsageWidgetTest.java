@@ -88,8 +88,6 @@ public class AclciUsageWidgetTest {
             Triple.of("Reported Author", 150.0, -1),
             Triple.of("Reported Publisher", 150.0, -1),
             Triple.of("Reported Publication Date", 200.0, -1),
-            Triple.of("Reported Page Range", 150.0, -1),
-            Triple.of("Reported Vol/Number/Series", 200.0, -1),
             Triple.of("Reported Grade", 150.0, -1),
             Triple.of("Comment", 115.0, -1)));
         assertEquals(1, layout.getExpandRatio(grid), 0);

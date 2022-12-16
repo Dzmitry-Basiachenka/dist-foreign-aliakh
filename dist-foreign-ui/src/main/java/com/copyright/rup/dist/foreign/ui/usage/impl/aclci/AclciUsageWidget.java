@@ -6,6 +6,7 @@ import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.ui.usage.api.aclci.IAclciUsageWidget;
 import com.copyright.rup.dist.foreign.ui.usage.impl.CommonUsageWidget;
 import com.copyright.rup.vaadin.widget.api.IMediator;
+
 import com.vaadin.ui.HorizontalLayout;
 
 /**
@@ -62,10 +63,6 @@ public class AclciUsageWidget extends CommonUsageWidget implements IAclciUsageWi
             "reportedPublisher", true, 150);
         addColumn(usage -> usage.getAclciUsage().getReportedPublicationDate(), "table.column.reported_publication_date",
             "reportedPublicationDate", true, 200);
-        addColumn(usage -> usage.getAclciUsage().getReportedPageRange(), "table.column.reported_page_range",
-            "reportedPageRange", true, 150);
-        addColumn(usage -> usage.getAclciUsage().getReportedVolNumberSeries(),
-            "table.column.reported_vol_number_series", "reportedVolNumberSeries", true, 200);
         addColumn(usage -> usage.getAclciUsage().getReportedGrade(), "table.column.reported_grade",
             "reportedGrade", true, 150);
         addColumn(UsageDto::getComment, "table.column.comment", "comment", true, 115);

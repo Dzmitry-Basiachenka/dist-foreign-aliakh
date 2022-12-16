@@ -1,10 +1,14 @@
 package com.copyright.rup.dist.foreign.service.impl.aclci;
 
 import com.copyright.rup.common.logging.RupLogUtils;
+import com.copyright.rup.dist.common.repository.api.Pageable;
+import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
+import com.copyright.rup.dist.foreign.domain.UsageDto;
+import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IAclciUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.aclci.IAclciUsageService;
@@ -87,6 +91,18 @@ public class AclciUsageService implements IAclciUsageService {
     public List<Usage> getUsagesByIds(List<String> usageIds) {
         return CollectionUtils.isNotEmpty(usageIds)
             ? aclciUsageRepository.findByIds(usageIds)
+            : Collections.emptyList();
+    }
+
+    @Override
+    public int getUsagesCount(UsageFilter filter) {
+        return !filter.isEmpty() ? aclciUsageRepository.findCountByFilter(filter) : 0;
+    }
+
+    @Override
+    public List<UsageDto> getUsageDtos(UsageFilter filter, Pageable pageable, Sort sort) {
+        return !filter.isEmpty()
+            ? aclciUsageRepository.findDtosByFilter(filter, pageable, sort)
             : Collections.emptyList();
     }
 }
