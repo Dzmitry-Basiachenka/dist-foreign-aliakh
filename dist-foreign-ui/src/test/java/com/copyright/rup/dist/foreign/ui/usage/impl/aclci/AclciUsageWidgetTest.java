@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.aclci;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGrid;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyMenuBar;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
 import static org.easymock.EasyMock.createMock;
@@ -19,6 +20,7 @@ import com.copyright.rup.dist.foreign.ui.usage.api.aclci.IAclciUsageFilterContro
 import com.vaadin.server.Sizeable;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 
 import org.apache.commons.lang3.tuple.Triple;
@@ -26,6 +28,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 /**
  * Verifies {@link AclciUsageWidget}.
@@ -46,7 +49,7 @@ public class AclciUsageWidgetTest {
         controller = createMock(IAclciUsageController.class);
         expect(controller.initUsagesFilterWidget()).andReturn(new AclciUsageFilterWidget(
             createMock(IAclciUsageFilterController.class))).once();
-        widget = new AclciUsageWidget();
+        widget = new AclciUsageWidget(controller);
         widget.setController(controller);
         replay(controller);
         widget.init();
@@ -63,6 +66,7 @@ public class AclciUsageWidgetTest {
         VerticalLayout layout = (VerticalLayout) secondComponent;
         verifyWindow(layout, null, 100, 100, Sizeable.Unit.PERCENTAGE);
         assertEquals(2, layout.getComponentCount());
+        verifyButtonsLayout((HorizontalLayout) layout.getComponent(0));
         Grid grid = (Grid) layout.getComponent(1);
         verifyGrid(grid, Arrays.asList(
             Triple.of("Detail ID", 130.0, -1),
@@ -107,5 +111,10 @@ public class AclciUsageWidgetTest {
     @Test
     public void testInitMediator() {
         //TODO: implement
+    }
+
+    private void verifyButtonsLayout(HorizontalLayout layout) {
+        assertEquals(1, layout.getComponentCount());
+        verifyMenuBar(layout.getComponent(0), "Usage Batch", true, Collections.singletonList("Load"));
     }
 }
