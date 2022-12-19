@@ -1,3 +1,12 @@
+16.0.21
+-
+* B-75669 FDA: ACLCI UI usage view filters: implement widget, controller and add LicenseTypes filed to UsageFilter
+* B-75669 FDA: ACLCI UI usage view filters: implement backend logic to retrieve usages to display and delete Reported Page Range and Reported VolNumberSeries
+* B-71444 FDA: Eligible Annual Copies Report: adjust logic to get periods from UDM usage batch and adjust query to generate report
+* B-68556 FDA: Find RH information for ACLCI usages: make changes based on comments
+* B-68555 FDA: Load ACLCI usage batch: implement load batch dialog
+* B-68555 FDA: Load ACLCI usage batch: implement usage controller
+
 16.0.20
 -
 * B-68557 FDA: ACLCI Retrieve from PI Index: implement ACLCI matching consumer and service logic to retrieve data for matching
