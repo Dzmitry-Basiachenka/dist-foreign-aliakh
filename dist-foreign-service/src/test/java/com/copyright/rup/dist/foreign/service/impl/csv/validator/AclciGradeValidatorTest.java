@@ -12,16 +12,16 @@ import java.util.Arrays;
 import java.util.Collection;
 
 /**
- * Verifies {@link AclciLicenseTypeValidator}.
+ * Verifies {@link AclciGradeValidator}.
  * <p>
  * Copyright (C) 2022 copyright.com
  * <p>
- * Date: 12/14/2022
+ * Date: 12/19/2022
  *
  * @author Aliaksandr Liakh
  */
 @RunWith(Parameterized.class)
-public class AclciLicenseTypeValidatorTest {
+public class AclciGradeValidatorTest {
 
     private final String value;
     private final boolean expectedResult;
@@ -32,7 +32,7 @@ public class AclciLicenseTypeValidatorTest {
      * @param value          expected value
      * @param expectedResult expected result
      */
-    public AclciLicenseTypeValidatorTest(String value, boolean expectedResult) {
+    public AclciGradeValidatorTest(String value, boolean expectedResult) {
         this.value = value;
         this.expectedResult = expectedResult;
     }
@@ -43,23 +43,29 @@ public class AclciLicenseTypeValidatorTest {
             {null, false},
             {StringUtils.EMPTY, false},
             {" ", false},
-            {"CURR_REPUB_K12", true},
-            {"CURR_REPUB_HE", true},
-            {"CURR_REUSE_K12", true},
-            {"CURR_SHARE_K12", true},
-            {"curr_repub_k12", true},
-            {"curr_repub_he", true},
-            {"curr_reuse_k12", true},
-            {"curr_share_k12", true},
+            {"K", true},
+            {"0", false},
+            {"1", true},
+            {"2", true},
+            {"3", true},
+            {"4", true},
+            {"5", true},
+            {"6", true},
+            {"7", true},
+            {"8", true},
+            {"10", true},
+            {"11", true},
+            {"12", true},
+            {"13", false},
+            {"HE", true},
             {"error", false}
         });
     }
 
     @Test
     public void testGetErrorMessage() {
-        AclciLicenseTypeValidator validator = new AclciLicenseTypeValidator();
+        AclciGradeValidator validator = new AclciGradeValidator();
         assertEquals(expectedResult, validator.isValid(value));
-        assertEquals("Field value should be any of: [CURR_REPUB_K12, CURR_REPUB_HE, CURR_REUSE_K12, CURR_SHARE_K12]",
-            validator.getErrorMessage());
+        assertEquals("Field value should be any of: K, 1-12, HE", validator.getErrorMessage());
     }
 }
