@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.aclci;
 
+import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.vaadin.widget.api.IMediator;
 import com.vaadin.ui.MenuBar;
 
@@ -18,7 +19,7 @@ class AclciUsageMediator implements IMediator {
 
     @Override
     public void applyPermissions() {
-        loadUsageBatchMenuItem.setVisible(true); //TODO{aliakh}: implement permissions
+        loadUsageBatchMenuItem.setVisible(ForeignSecurityUtils.hasLoadUsagePermission());
     }
 
     public void setLoadUsageBatchMenuItem(MenuBar.MenuItem loadUsageBatchMenuItem) {
