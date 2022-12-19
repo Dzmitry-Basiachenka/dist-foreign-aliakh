@@ -3,12 +3,12 @@ package com.copyright.rup.dist.foreign.service.impl.aclci;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import com.copyright.rup.dist.common.domain.BaseEntity;
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
+import com.copyright.rup.dist.foreign.service.api.aclci.IAclciUsageService;
 import com.copyright.rup.dist.foreign.service.impl.ServiceTestHelper;
 import com.copyright.rup.dist.foreign.service.impl.aclci.AclciWorkflowIntegrationTestBuilder.Runner;
 import com.copyright.rup.dist.foreign.service.impl.csv.AclciUsageCsvProcessor;
@@ -19,8 +19,11 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
+import java.util.stream.IntStream;
 
 /**
  * Builder for {@link AclciWorkflowIntegrationTest}.
@@ -37,14 +40,17 @@ public class AclciWorkflowIntegrationTestBuilder implements Builder<Runner> {
     @Autowired
     private IUsageBatchService usageBatchService;
     @Autowired
+    private IAclciUsageService aclciUsageService;
+    @Autowired
     private ServiceTestHelper testHelper;
     @Autowired
     private CsvProcessorFactory csvProcessorFactory;
 
     private UsageBatch expectedUsageBatch;
     private String pathToUsagesToUpload;
+    private Map<String, String> expectedRmsRequestToResponseMap = new HashMap<>();
+    private Map<Long, String> expectedPrmAccountNumberToResponseMap = new HashMap<>();
     private String pathToExpectedUsages;
-    private List<String> uploadedUsagesIds = new ArrayList<>();
     private List<String> pathsToExpectedUsageAuditItems = new ArrayList<>();
 
     AclciWorkflowIntegrationTestBuilder withUsageBatch(UsageBatch usageBatch) {
@@ -54,6 +60,16 @@ public class AclciWorkflowIntegrationTestBuilder implements Builder<Runner> {
 
     AclciWorkflowIntegrationTestBuilder withUsagesToUpload(String pathToUsages) {
         this.pathToUsagesToUpload = pathToUsages;
+        return this;
+    }
+
+    AclciWorkflowIntegrationTestBuilder withRmsRequests(Map<String, String> rmsRequestToResponseMap) {
+        this.expectedRmsRequestToResponseMap = rmsRequestToResponseMap;
+        return this;
+    }
+
+    AclciWorkflowIntegrationTestBuilder withPrmRequests(Map<Long, String> prmAccountNumberToResponse) {
+        this.expectedPrmAccountNumberToResponseMap = prmAccountNumberToResponse;
         return this;
     }
 
@@ -70,8 +86,9 @@ public class AclciWorkflowIntegrationTestBuilder implements Builder<Runner> {
     void reset() {
         this.expectedUsageBatch = null;
         this.pathToUsagesToUpload = null;
+        this.expectedRmsRequestToResponseMap.clear();
+        this.expectedPrmAccountNumberToResponseMap.clear();
         this.pathToExpectedUsages = null;
-        this.uploadedUsagesIds.clear();
         this.pathsToExpectedUsageAuditItems.clear();
         testHelper.reset();
     }
@@ -87,37 +104,44 @@ public class AclciWorkflowIntegrationTestBuilder implements Builder<Runner> {
     public class Runner {
 
         public void run() throws IOException, InterruptedException {
-            loadUsageBatch();
-            assignUsages();
-            assertUsagesAudit();
+            testHelper.createRestServer();
+            testHelper.expectGetRmsRights(expectedRmsRequestToResponseMap);
+            expectedPrmAccountNumberToResponseMap.forEach((accountNumber, response) ->
+                testHelper.expectPrmCall(response, accountNumber));
+            List<String> usageIds = loadUsageBatch();
+            testHelper.verifyRestServer();
+            assignUsages(usageIds);
+            assertUsagesAudit(usageIds);
             //TODO: complete when the workflow is fully implemented
         }
 
-        private void loadUsageBatch() throws IOException {
+        private List<String> loadUsageBatch() throws IOException {
             AclciUsageCsvProcessor processor = csvProcessorFactory.getAclciUsageCsvProcessor();
             ProcessingResult<Usage> result = processor.process(testHelper.getCsvOutputStream(pathToUsagesToUpload));
             assertTrue(result.isSuccessful());
             List<Usage> usages = result.get();
-            usageBatchService.insertAclciBatch(expectedUsageBatch, usages);
-            //usageService.sendForMatching(usages); TODO: will be implemented in a separate story
-            uploadedUsagesIds = usages.stream().map(BaseEntity::getId).collect(Collectors.toList());
+            List<String> usageIds = usageBatchService.insertAclciBatch(expectedUsageBatch, usages);
+            aclciUsageService.sendForMatching(usageIds, expectedUsageBatch.getName());
+            return usageIds;
         }
 
-        private void assignUsages() throws IOException {
-            //TODO implement when reading ACLCI usages by filter is implemented
+        private void assignUsages(List<String> usageIds) throws IOException {
             List<Usage> expectedUsages = testHelper.loadExpectedUsages(pathToExpectedUsages);
-            expectedUsages.forEach(expectedUsage -> {
-                testHelper.assertUsage(expectedUsage, expectedUsage);
-                //TODO implement testHelper.assertAclciUsage
+            assertEquals(expectedUsages.size(), usageIds.size());
+            IntStream.range(0, expectedUsages.size()).forEach(i -> {
+                Usage expectedUsage = expectedUsages.get(i);
+                Usage actualUsage = aclciUsageService.getUsagesByIds(Collections.singletonList(usageIds.get(i))).get(0);
+                testHelper.assertUsage(expectedUsage, actualUsage);
+                testHelper.assertAclciUsage(expectedUsage.getAclciUsage(), actualUsage.getAclciUsage());
             });
         }
 
-        private void assertUsagesAudit() throws IOException {
-            assertEquals(pathsToExpectedUsageAuditItems.size(), uploadedUsagesIds.size());
-            for (int index = 0; index < pathsToExpectedUsageAuditItems.size(); index++) {
+        private void assertUsagesAudit(List<String> usageIds) throws IOException {
+            assertEquals(pathsToExpectedUsageAuditItems.size(), usageIds.size());
+            for (int i = 0; i < pathsToExpectedUsageAuditItems.size(); i++) {
                 List<UsageAuditItem> usageAuditItems =
-                    testHelper.loadExpectedUsageAuditItems(pathsToExpectedUsageAuditItems.get(index));
-                testHelper.assertAudit(uploadedUsagesIds.get(index), usageAuditItems);
+                    testHelper.loadExpectedUsageAuditItems(pathsToExpectedUsageAuditItems.get(i));
+                testHelper.assertAudit(usageIds.get(i), usageAuditItems);
             }
         }
     }
