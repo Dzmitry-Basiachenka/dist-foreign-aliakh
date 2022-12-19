@@ -5,6 +5,7 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
@@ -137,6 +138,15 @@ public class UdmBatchServiceTest {
         expect(udmBatchRepository.isUdmBatchContainsBaselineUsages(UDM_BATCH_UID)).andReturn(true).once();
         replay(udmBatchRepository);
         assertTrue(udmBatchService.isUdmBatchContainsBaselineUsages(UDM_BATCH_UID));
+        verify(udmBatchRepository);
+    }
+
+    @Test
+    public void testGetPeriods() {
+        List<Integer> periods = Arrays.asList(202106, 202206);
+        expect(udmBatchRepository.findPeriods()).andReturn(periods).once();
+        replay(udmBatchRepository);
+        assertSame(periods, udmBatchService.getPeriods());
         verify(udmBatchRepository);
     }
 

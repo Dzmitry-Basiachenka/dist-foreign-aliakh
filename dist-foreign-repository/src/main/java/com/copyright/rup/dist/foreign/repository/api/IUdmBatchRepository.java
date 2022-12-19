@@ -70,4 +70,11 @@ public interface IUdmBatchRepository {
      * @return {@code true} - if UDM batch doesn't have usages in baseline, {@code false} - otherwise
      */
     boolean isUdmBatchContainsBaselineUsages(String udmBatchId);
+
+    /**
+     * Finds list of periods from UDM batches.
+     *
+     * @return list of periods
+     */
+    List<Integer> findPeriods();
 }

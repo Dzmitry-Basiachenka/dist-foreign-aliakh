@@ -63,4 +63,9 @@ public class UdmBatchRepository extends BaseRepository implements IUdmBatchRepos
     public boolean isUdmBatchContainsBaselineUsages(String udmBatchId) {
         return selectOne("IUdmBatchMapper.isUdmBatchContainsBaselineUsages", udmBatchId);
     }
+
+    @Override
+    public List<Integer> findPeriods() {
+        return selectList("IUdmBatchMapper.findPeriods");
+    }
 }
