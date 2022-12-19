@@ -1,20 +1,25 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.aclci;
 
 import static org.easymock.EasyMock.capture;
-import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.isNull;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.verify;
+import static org.easymock.EasyMock.newCapture;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThat;
+import static org.powermock.api.easymock.PowerMock.createMock;
+import static org.powermock.api.easymock.PowerMock.expectLastCall;
+import static org.powermock.api.easymock.PowerMock.replay;
+import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.dist.common.reporting.api.IStreamSource;
+import com.copyright.rup.dist.common.reporting.api.IStreamSourceHandler;
+import com.copyright.rup.dist.common.reporting.impl.StreamSource;
 import com.copyright.rup.dist.common.repository.api.Pageable;
+import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
 import com.copyright.rup.dist.foreign.domain.AclciLicenseTypeEnum;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
@@ -28,13 +33,23 @@ import com.copyright.rup.dist.foreign.service.impl.csv.CsvProcessorFactory;
 import com.copyright.rup.dist.foreign.ui.usage.api.aclci.IAclciUsageFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.aclci.IAclciUsageFilterWidget;
 
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
+import java.io.InputStream;
+import java.io.PipedOutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 /**
  * Verifies {@link AclciUsageController}.
@@ -45,6 +60,8 @@ import java.util.List;
  *
  * @author Aliaksanr Liakh
  */
+@RunWith(PowerMockRunner.class)
+@PrepareForTest(ProcessingResult.class)
 public class AclciUsageControllerTest {
 
     private static final String USAGE_BATCH_NAME = "ACLCI Usage Batch";
@@ -56,6 +73,7 @@ public class AclciUsageControllerTest {
     private IAclciUsageFilterWidget filterWidget;
     private IUsageBatchService usageBatchService;
     private CsvProcessorFactory csvProcessorFactory;
+    private IStreamSourceHandler streamSourceHandler;
     private AclciUsageService aclciUsageService;
     private ITelesalesService telesalesService;
     private UsageFilter usageFilter;
@@ -67,11 +85,13 @@ public class AclciUsageControllerTest {
         filterWidget = createMock(IAclciUsageFilterWidget.class);
         usageBatchService = createMock(IUsageBatchService.class);
         csvProcessorFactory = createMock(CsvProcessorFactory.class);
+        streamSourceHandler = createMock(IStreamSourceHandler.class);
         aclciUsageService = createMock(AclciUsageService.class);
         telesalesService = createMock(ITelesalesService.class);
         Whitebox.setInternalState(controller, filterController);
         Whitebox.setInternalState(controller, usageBatchService);
         Whitebox.setInternalState(controller, csvProcessorFactory);
+        Whitebox.setInternalState(controller, streamSourceHandler);
         Whitebox.setInternalState(controller, aclciUsageService);
         Whitebox.setInternalState(controller, telesalesService);
         usageFilter = new UsageFilter();
@@ -169,7 +189,27 @@ public class AclciUsageControllerTest {
 
     @Test
     public void testGetErrorResultStreamSource() {
-        //TODO{aliakh} implement after implementing AclciUsageBatchUploadWindow
+        Capture<Supplier<String>> fileNameSupplierCapture = newCapture();
+        Capture<Consumer<PipedOutputStream>> posConsumerCapture = newCapture();
+        String fileName = "Error_for_aclci usages";
+        Supplier<String> fileNameSupplier = () -> fileName;
+        Supplier<InputStream> inputStreamSupplier =
+            () -> IOUtils.toInputStream(StringUtils.EMPTY, StandardCharsets.UTF_8);
+        PipedOutputStream pos = new PipedOutputStream();
+        expect(streamSourceHandler.getCsvStreamSource(
+            capture(fileNameSupplierCapture), eq(null), capture(posConsumerCapture)))
+            .andReturn(new StreamSource(fileNameSupplier, null, "csv", inputStreamSupplier)).once();
+        ProcessingResult<Usage> processingResult = createMock(ProcessingResult.class);
+        processingResult.writeToFile(pos);
+        expectLastCall().once();
+        replay(streamSourceHandler, processingResult);
+        IStreamSource streamSource = controller.getErrorResultStreamSource("aclci usages.csv", processingResult);
+        assertEquals("Error_for_aclci_usages.csv", streamSource.getSource().getKey().get());
+        assertEquals(fileName, fileNameSupplierCapture.getValue().get());
+        Consumer<PipedOutputStream> posConsumer = posConsumerCapture.getValue();
+        posConsumer.accept(pos);
+        assertNotNull(posConsumer);
+        verify(streamSourceHandler, processingResult);
     }
 
     @Test
