@@ -285,10 +285,10 @@ public class RightsService implements IRightsService {
     public void updateAaclRights(List<Usage> usages) {
         if (CollectionUtils.isNotEmpty(usages)) {
             String productFamily = validateAndGetProductFamily(usages);
-            Map<LocalDate, List<Usage>> batchPeriodEndDatesToUsages = usages
+            Map<LocalDate, List<Usage>> batchPeriodEndDatesToUsagesMap = usages
                 .stream()
                 .collect(Collectors.groupingBy(usage -> usage.getAaclUsage().getBatchPeriodEndDate()));
-            batchPeriodEndDatesToUsages.forEach((batchPeriodEndDate, groupedUsages) -> {
+            batchPeriodEndDatesToUsagesMap.forEach((batchPeriodEndDate, groupedUsages) -> {
                 List<Long> wrWrkInsts = groupedUsages
                     .stream()
                     .map(Usage::getWrWrkInst)
@@ -329,10 +329,10 @@ public class RightsService implements IRightsService {
     public void updateSalRights(List<Usage> usages) {
         if (CollectionUtils.isNotEmpty(usages)) {
             String productFamily = validateAndGetProductFamily(usages);
-            Map<LocalDate, List<Usage>> batchPeriodEndDatesToUsages = usages
+            Map<LocalDate, List<Usage>> batchPeriodEndDatesToUsagesMap = usages
                 .stream()
                 .collect(Collectors.groupingBy(usage -> usage.getSalUsage().getBatchPeriodEndDate()));
-            batchPeriodEndDatesToUsages.forEach((batchPeriodEndDate, groupedUsages) -> {
+            batchPeriodEndDatesToUsagesMap.forEach((batchPeriodEndDate, groupedUsages) -> {
                 List<Long> wrWrkInsts = groupedUsages
                     .stream()
                     .map(Usage::getWrWrkInst)
@@ -351,14 +351,14 @@ public class RightsService implements IRightsService {
     public void updateAclciRights(List<Usage> usages) {
         if (CollectionUtils.isNotEmpty(usages)) {
             validateAndGetProductFamily(usages);
-            Map<LocalDate, List<Usage>> batchPeriodEndDatesToUsages = usages
+            Map<LocalDate, List<Usage>> batchPeriodEndDatesToUsagesMap = usages
                 .stream()
                 .collect(Collectors.groupingBy(usage -> usage.getAclciUsage().getBatchPeriodEndDate()));
-            batchPeriodEndDatesToUsages.forEach((batchPeriodEndDate, groupedUsagesByPeriodAndDate) -> {
-                Map<String, List<Usage>> licenseTypeToUsages = groupedUsagesByPeriodAndDate
+            batchPeriodEndDatesToUsagesMap.forEach((batchPeriodEndDate, groupedUsagesByPeriodAndDate) -> {
+                Map<String, List<Usage>> licenseTypeToUsagesMap = groupedUsagesByPeriodAndDate
                     .stream()
                     .collect(Collectors.groupingBy(usage -> usage.getAclciUsage().getLicenseType().name()));
-                licenseTypeToUsages.forEach((licenseType, groupedUsagesByLicenseType) -> {
+                licenseTypeToUsagesMap.forEach((licenseType, groupedUsagesByLicenseType) -> {
                     List<Long> wrWrkInsts = groupedUsagesByLicenseType
                         .stream()
                         .map(Usage::getWrWrkInst)

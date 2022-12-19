@@ -627,7 +627,7 @@ databaseChangeLog {
     }
 
     changeSet(id: '2022-12-09-00', author: 'Dzmitry Basiachenka<dbasiachenka@copyright.com>') {
-        comment('Inserting test data for testUpdateAclciRights test')
+        comment('Inserting test data for testUpdateAclciRights')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: '3b9aaa5a-0fef-4b89-859a-3e9c620c7f88')
