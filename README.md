@@ -1,3 +1,9 @@
+16.0.22
+-
+* B-68555 FDA: Load ACLCI usage batch: implement permissions
+* B-68555 FDA: Load ACLCI usage batch: implement grade validator
+* B-76548 FDA: ACLCI Media Type Weights: update the CSV processor to set Media Type Weight
+
 16.0.21
 -
 * B-75669 FDA: ACLCI UI usage view filters: implement widget, controller and add LicenseTypes filed to UsageFilter
