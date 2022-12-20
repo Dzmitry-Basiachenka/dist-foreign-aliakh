@@ -102,6 +102,8 @@ public class AclciUsageCsvProcessor extends DistCsvProcessor<Usage> {
      */
     private class AclciUsageConverter extends CommonCsvConverter<Usage> {
 
+        private static final String IMAGE_MEDIA_TYPE = "IMAGE";
+
         @Override
         public Usage convert(String... row) {
             List<String> headers = getActualHeaders();
@@ -124,7 +126,8 @@ public class AclciUsageCsvProcessor extends DistCsvProcessor<Usage> {
             aclciUsage.setReportedPublisher(getString(row, Header.REPORTED_PUBLISHER, headers));
             aclciUsage.setReportedPublicationDate(getString(row, Header.REPORTED_PUBLICATION_DATE, headers));
             aclciUsage.setReportedMediaType(getString(row, Header.REPORTED_MEDIA_TYPE, headers));
-            aclciUsage.setMediaTypeWeight(BigDecimal.ONE); //TODO: will be implemented in a separate story
+            aclciUsage.setMediaTypeWeight(IMAGE_MEDIA_TYPE.equalsIgnoreCase(aclciUsage.getReportedMediaType())
+                ? new BigDecimal("0.3") : BigDecimal.ONE);
             result.setAclciUsage(aclciUsage);
             return result;
         }
