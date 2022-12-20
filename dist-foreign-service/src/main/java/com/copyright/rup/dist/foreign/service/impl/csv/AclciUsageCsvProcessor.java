@@ -12,6 +12,7 @@ import com.copyright.rup.dist.foreign.domain.AclciUsage;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.service.impl.csv.validator.AclciGradeValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.AclciLicenseTypeValidator;
 
 import java.math.BigDecimal;
@@ -49,7 +50,7 @@ public class AclciUsageCsvProcessor extends DistCsvProcessor<Usage> {
         PositiveNumberValidator positiveNumberValidator = new PositiveNumberValidator();
         addPlainValidators(Header.COVERAGE_PERIOD, requiredValidator, new LengthValidator(9));
         addPlainValidators(Header.LICENSE_TYPE, requiredValidator, new AclciLicenseTypeValidator());
-        addPlainValidators(Header.REPORTED_GRADE, requiredValidator, new LengthValidator(32));
+        addPlainValidators(Header.REPORTED_GRADE, requiredValidator, new AclciGradeValidator());
         addPlainValidators(Header.WR_WRK_INST, requiredValidator, positiveNumberValidator, new LengthValidator(9));
         addPlainValidators(Header.REPORTED_WORK_TITLE, new LengthValidator(2000));
         addPlainValidators(Header.REPORTED_STANDARD_NUMBER, lengthValidator1000);
