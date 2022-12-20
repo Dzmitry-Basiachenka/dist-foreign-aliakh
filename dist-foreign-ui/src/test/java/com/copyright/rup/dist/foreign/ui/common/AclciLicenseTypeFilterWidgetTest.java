@@ -38,7 +38,6 @@ import java.util.Set;
 @PrepareForTest({Windows.class})
 public class AclciLicenseTypeFilterWidgetTest {
 
-
     private static final Set<AclciLicenseTypeEnum> LICENSE_TYPES =
         ImmutableSet.of(AclciLicenseTypeEnum.CURR_REPUB_HE, AclciLicenseTypeEnum.CURR_REPUB_K12,
             AclciLicenseTypeEnum.CURR_REUSE_K12, AclciLicenseTypeEnum.CURR_SHARE_K12);
