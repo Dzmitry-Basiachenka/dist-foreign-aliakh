@@ -69,20 +69,20 @@ public class AclciUsageWidgetTest {
         verifyButtonsLayout((HorizontalLayout) layout.getComponent(0));
         Grid grid = (Grid) layout.getComponent(1);
         verifyGrid(grid, Arrays.asList(
-            Triple.of("Detail ID", 130.0, -1),
-            Triple.of("Detail Status", 115.0, -1),
-            Triple.of("License Type", 115.0, -1),
+            Triple.of("Detail ID", 200.0, -1),
+            Triple.of("Detail Status", 165.0, -1),
+            Triple.of("License Type", 150.0, -1),
             Triple.of("Product Family", 125.0, -1),
-            Triple.of("Usage Batch Name", 145.0, -1),
+            Triple.of("Usage Batch Name", 200.0, -1),
             Triple.of("Period End Date", 115.0, -1),
-            Triple.of("Coverage Period", 300.0, -1),
+            Triple.of("Coverage Period", 130.0, -1),
             Triple.of("Licensee Account #", 150.0, -1),
             Triple.of("Licensee Name", 300.0, -1),
             Triple.of("RH Account #", 115.0, -1),
             Triple.of("RH Name", 300.0, -1),
             Triple.of("Wr Wrk Inst", 110.0, -1),
             Triple.of("System Title", 300.0, -1),
-            Triple.of("Standard Number", 140.0, -1),
+            Triple.of("Standard Number", 210.0, -1),
             Triple.of("Standard Number Type", 155.0, -1),
             Triple.of("Reported Title", 300.0, -1),
             Triple.of("Reported Media Type", 150.0, -1),
@@ -92,7 +92,7 @@ public class AclciUsageWidgetTest {
             Triple.of("Reported Author", 150.0, -1),
             Triple.of("Reported Publisher", 150.0, -1),
             Triple.of("Reported Publication Date", 200.0, -1),
-            Triple.of("Reported Grade", 150.0, -1),
+            Triple.of("Reported Grade", 120.0, -1),
             Triple.of("Comment", 115.0, -1)));
         assertEquals(1, layout.getExpandRatio(grid), 0);
         verify(controller);
