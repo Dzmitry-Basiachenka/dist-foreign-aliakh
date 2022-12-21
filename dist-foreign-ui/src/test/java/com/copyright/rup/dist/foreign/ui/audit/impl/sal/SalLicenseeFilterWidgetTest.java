@@ -5,6 +5,7 @@ import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
+import static org.easymock.EasyMock.newCapture;
 import static org.easymock.EasyMock.same;
 import static org.junit.Assert.assertEquals;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
@@ -84,7 +85,7 @@ public class SalLicenseeFilterWidgetTest {
     public void testShowFilterWindow() {
         FilterWindow<SalLicensee> filterWindow = createMock(FilterWindow.class);
         mockStatic(Windows.class);
-        Capture<ValueProvider<SalLicensee, List<String>>> providerCapture = new Capture<>();
+        Capture<ValueProvider<SalLicensee, List<String>>> providerCapture = newCapture();
         Windows.showFilterWindow(eq("Licensees filter"), same(salLicenseeFilterWidget), capture(providerCapture));
         expectLastCall().andReturn(filterWindow).once();
         filterWindow.setSelectedItemsIds(new HashSet<>());

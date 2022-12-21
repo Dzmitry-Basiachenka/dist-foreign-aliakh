@@ -4,6 +4,7 @@ import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
+import static org.easymock.EasyMock.newCapture;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
@@ -99,7 +100,7 @@ public class RightsholderServiceTest {
     public void testUpdateRighstholdersAsync() {
         ExecutorService executorService = createMock(ExecutorService.class);
         Whitebox.setInternalState(rightsholderService, executorService);
-        Capture<Runnable> runnableCapture = new Capture<>();
+        Capture<Runnable> runnableCapture = newCapture();
         Set<Long> accountNumbers = Collections.singleton(ACCOUNT_NUMBER_2);
         executorService.execute(capture(runnableCapture));
         expectLastCall().once();
@@ -113,7 +114,7 @@ public class RightsholderServiceTest {
     public void testUpdateUsagesPayeesAsync() {
         ExecutorService executorService = createMock(ExecutorService.class);
         Whitebox.setInternalState(rightsholderService, executorService);
-        Capture<Runnable> runnableCapture = new Capture<>();
+        Capture<Runnable> runnableCapture = newCapture();
         Usage usage = new Usage();
         usage.getPayee().setAccountNumber(ACCOUNT_NUMBER_2);
         List<Usage> usages = Collections.singletonList(usage);

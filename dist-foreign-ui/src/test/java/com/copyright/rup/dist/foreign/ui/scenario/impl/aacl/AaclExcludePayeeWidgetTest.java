@@ -9,6 +9,7 @@ import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
+import static org.easymock.EasyMock.newCapture;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
@@ -136,7 +137,7 @@ public class AaclExcludePayeeWidgetTest {
     public void testExcludeDetailsButtonClick() {
         mockStatic(Windows.class);
         Button.ClickEvent clickEvent = createMock(Button.ClickEvent.class);
-        Capture<IListener> actionDialogListenerCapture = new Capture<>();
+        Capture<IListener> actionDialogListenerCapture = newCapture();
         expect(payeesGrid.getSelectedItems())
             .andReturn(buildPayeeTotalHolder(Collections.singleton(PAYEE_ACCOUNT_NUMBER_2))).once();
         AggregateLicenseeClass aggregateLicenseeClass = buildAggregateLicenseeClass(171, "EXGP", "Arts & Humanities");

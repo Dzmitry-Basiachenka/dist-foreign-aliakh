@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.service.impl.aacl;
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.newCapture;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -424,7 +425,7 @@ public class AaclUsageServiceTest {
         usage2.setStatus(UsageStatusEnum.NEW);
         List<Usage> usages = Arrays.asList(usage1, usage2);
         expect(aaclUsageRepository.findByIds(usageIds)).andReturn(usages).once();
-        Capture<Runnable> captureRunnable = new Capture<>();
+        Capture<Runnable> captureRunnable = newCapture();
         chainExecutor.execute(capture(captureRunnable));
         expectLastCall().once();
         chainExecutor.execute(usages, ChainProcessorTypeEnum.MATCHING);

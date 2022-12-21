@@ -5,6 +5,7 @@ import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
+import static org.easymock.EasyMock.newCapture;
 import static org.easymock.EasyMock.same;
 import static org.junit.Assert.assertEquals;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
@@ -98,7 +99,7 @@ public class RightsholderFilterWidgetTest {
     public void testShowFilterWindow() {
         FilterWindow filterWindow = createMock(FilterWindow.class);
         mockStatic(Windows.class);
-        Capture<ValueProvider<Rightsholder, List<String>>> providerCapture = new Capture<>();
+        Capture<ValueProvider<Rightsholder, List<String>>> providerCapture = newCapture();
         Windows.showFilterWindow(eq("Rightsholders filter"), same(rightsholderFilterWidget),
             capture(providerCapture));
         expectLastCall().andReturn(filterWindow).once();

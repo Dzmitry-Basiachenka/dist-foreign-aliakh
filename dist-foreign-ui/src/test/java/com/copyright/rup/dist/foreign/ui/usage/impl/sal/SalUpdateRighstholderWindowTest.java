@@ -205,7 +205,7 @@ public class SalUpdateRighstholderWindowTest {
         Whitebox.setInternalState(window, RH_ACCOUNT_NUMBER_FIELD_NAME,
             new TextField("RH Account #", "  38042  "));
         Whitebox.setInternalState(window, "rh", rh);
-        Capture<ConfirmActionDialogWindow.IListener> actionDialogListenerCapture = new Capture<>();
+        Capture<ConfirmActionDialogWindow.IListener> actionDialogListenerCapture = newCapture();
         expect(binder.isValid()).andReturn(true).once();
         Windows.showConfirmDialogWithReason(eq("Confirm action"),
             eq("Are you sure you want to update selected detail with RH 38042?"), eq("Yes"), eq("Cancel"),

@@ -418,7 +418,7 @@ public class AclScenariosControllerTest {
     @Test
     public void testOnDeleteButtonClicked() {
         mockStatic(Windows.class);
-        Capture<IListener> listenerCapture = new Capture<>();
+        Capture<IListener> listenerCapture = newCapture();
         AclScenario scenario = buildAclScenario();
         expect(scenariosWidget.getSelectedScenario()).andReturn(scenario).once();
         expect(Windows.showConfirmDialog(

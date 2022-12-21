@@ -4,6 +4,7 @@ import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
+import static org.easymock.EasyMock.newCapture;
 import static org.easymock.EasyMock.same;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -86,7 +87,7 @@ public class SalLiabilitiesSummaryByRhAndWorkReportControllerTest {
         List<Scenario> scenarios = Collections.singletonList(new Scenario());
         ICommonScenariosReportWidget widget = createMock(ICommonScenariosReportWidget.class);
         Whitebox.setInternalState(controller, widget);
-        Capture<OutputStream> osCapture = new Capture<>();
+        Capture<OutputStream> osCapture = newCapture();
         expect(OffsetDateTime.now()).andReturn(now).once();
         expect(widget.getSelectedScenarios()).andReturn(scenarios).once();
         reportService.writeSalLiabilitiesSummaryByRhAndWorkCsvReport(same(scenarios), capture(osCapture));

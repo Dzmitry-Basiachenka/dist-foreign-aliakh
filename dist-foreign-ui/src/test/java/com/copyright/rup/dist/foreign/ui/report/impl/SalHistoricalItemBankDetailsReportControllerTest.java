@@ -5,6 +5,7 @@ import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
+import static org.easymock.EasyMock.newCapture;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
@@ -73,7 +74,7 @@ public class SalHistoricalItemBankDetailsReportControllerTest {
         Integer periodEndYearTo = 2020;
         ISalHistoricalItemBankDetailsReportWidget widget = createMock(ISalHistoricalItemBankDetailsReportWidget.class);
         Whitebox.setInternalState(controller, widget);
-        Capture<OutputStream> osCapture = new Capture<>();
+        Capture<OutputStream> osCapture = newCapture();
         expect(OffsetDateTime.now()).andReturn(now).once();
         expect(widget.getLicenseeAccountNumber()).andReturn(licenseeAccountNumber).once();
         expect(widget.getPeriodEndYearFrom()).andReturn(periodEndYearFrom).once();

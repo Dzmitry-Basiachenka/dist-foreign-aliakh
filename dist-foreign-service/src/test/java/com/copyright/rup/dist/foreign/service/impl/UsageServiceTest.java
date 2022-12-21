@@ -4,6 +4,7 @@ import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.newCapture;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -676,7 +677,7 @@ public class UsageServiceTest {
         usage1.setStatus(UsageStatusEnum.NEW);
         Usage usage2 = new Usage();
         usage2.setStatus(UsageStatusEnum.WORK_NOT_FOUND);
-        Capture<Runnable> captureRunnable = new Capture<>();
+        Capture<Runnable> captureRunnable = newCapture();
         chainExecutor.execute(capture(captureRunnable));
         expectLastCall().once();
         chainExecutor.execute(Collections.singletonList(usage1), ChainProcessorTypeEnum.MATCHING);
@@ -696,7 +697,7 @@ public class UsageServiceTest {
         usage1.setStatus(UsageStatusEnum.WORK_FOUND);
         Usage usage2 = new Usage();
         usage2.setStatus(UsageStatusEnum.WORK_NOT_FOUND);
-        Capture<Runnable> captureRunnable = new Capture<>();
+        Capture<Runnable> captureRunnable = newCapture();
         chainExecutor.execute(capture(captureRunnable));
         expectLastCall().once();
         chainExecutor.execute(Collections.singletonList(usage1), ChainProcessorTypeEnum.RIGHTS);

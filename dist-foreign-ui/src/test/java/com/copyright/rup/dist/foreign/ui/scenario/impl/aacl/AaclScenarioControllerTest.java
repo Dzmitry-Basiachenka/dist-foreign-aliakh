@@ -6,6 +6,7 @@ import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.isNull;
+import static org.easymock.EasyMock.newCapture;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
@@ -98,9 +99,9 @@ public class AaclScenarioControllerTest {
 
     @Test
     public void testLoadBeans() {
-        Capture<Pageable> pageableCapture = new Capture<>();
-        Capture<Supplier<String>> fileNameSupplierCapture = new Capture<>();
-        Capture<Consumer<PipedOutputStream>> posConsumerCapture = new Capture<>();
+        Capture<Pageable> pageableCapture = newCapture();
+        Capture<Supplier<String>> fileNameSupplierCapture = newCapture();
+        Capture<Consumer<PipedOutputStream>> posConsumerCapture = newCapture();
         IStreamSource streamSource = createMock(IStreamSource.class);
         expect(usageService.getRightsholderTotalsHoldersByScenario(eq(scenario), anyString(),
             capture(pageableCapture), isNull())).andReturn(Collections.emptyList()).once();
@@ -125,8 +126,8 @@ public class AaclScenarioControllerTest {
 
     @Test
     public void testGetSize() {
-        Capture<Supplier<String>> fileNameSupplierCapture = new Capture<>();
-        Capture<Consumer<PipedOutputStream>> posConsumerCapture = new Capture<>();
+        Capture<Supplier<String>> fileNameSupplierCapture = newCapture();
+        Capture<Consumer<PipedOutputStream>> posConsumerCapture = newCapture();
         IStreamSource streamSource = createMock(IStreamSource.class);
         expect(streamSource.getSource())
             .andReturn(new SimpleImmutableEntry(createMock(Supplier.class), createMock(Supplier.class))).times(2);
@@ -145,8 +146,8 @@ public class AaclScenarioControllerTest {
     @Test
     public void testGetExportScenarioRightsholderTotalsStreamSource() {
         mockStatic(OffsetDateTime.class);
-        Capture<Supplier<String>> fileNameSupplierCapture = new Capture<>();
-        Capture<Consumer<PipedOutputStream>> posConsumerCapture = new Capture<>();
+        Capture<Supplier<String>> fileNameSupplierCapture = newCapture();
+        Capture<Consumer<PipedOutputStream>> posConsumerCapture = newCapture();
         String fileName = scenario.getName() + "_";
         Supplier<String> fileNameSupplier = () -> fileName;
         Supplier<InputStream> inputStreamSupplier =

@@ -6,6 +6,7 @@ import static org.easymock.EasyMock.createStrictMock;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
+import static org.easymock.EasyMock.newCapture;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
@@ -59,8 +60,8 @@ public class OracleRhTaxInformationServiceTest {
 
     @Test
     public void testGetRhTaxInformation() {
-        Capture<String> urlCapture = new Capture<>();
-        Capture<HttpEntity<String>> requestCapture = new Capture<>();
+        Capture<String> urlCapture = newCapture();
+        Capture<HttpEntity<String>> requestCapture = newCapture();
         restTemplate.setErrorHandler(anyObject(DefaultResponseErrorHandler.class));
         expectLastCall().once();
         expect(restTemplate.postForObject(capture(urlCapture), capture(requestCapture), eq(String.class)))
@@ -92,8 +93,8 @@ public class OracleRhTaxInformationServiceTest {
 
     @Test
     public void testGetRhTaxInformationResponseNotArray() {
-        Capture<String> urlCapture = new Capture<>();
-        Capture<HttpEntity<String>> requestCapture = new Capture<>();
+        Capture<String> urlCapture = newCapture();
+        Capture<HttpEntity<String>> requestCapture = newCapture();
         restTemplate.setErrorHandler(anyObject(DefaultResponseErrorHandler.class));
         expectLastCall().once();
         expect(restTemplate.postForObject(capture(urlCapture), capture(requestCapture), eq(String.class)))
@@ -115,8 +116,8 @@ public class OracleRhTaxInformationServiceTest {
 
     @Test
     public void testGetRhTaxInformationNullPaidDate() {
-        Capture<String> urlCapture = new Capture<>();
-        Capture<HttpEntity<String>> requestCapture = new Capture<>();
+        Capture<String> urlCapture = newCapture();
+        Capture<HttpEntity<String>> requestCapture = newCapture();
         restTemplate.setErrorHandler(anyObject(DefaultResponseErrorHandler.class));
         expectLastCall().once();
         expect(restTemplate.postForObject(capture(urlCapture), capture(requestCapture), eq(String.class)))

@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.ui.scenario.impl.aacl;
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.newCapture;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
@@ -152,7 +153,7 @@ public class AaclScenariosControllerTest {
     public void testSendScenarioToLm() {
         mockStatic(Windows.class);
         expect(scenariosWidget.getSelectedScenario()).andReturn(scenario).once();
-        Capture<IListener> listenerCapture = new Capture<>();
+        Capture<IListener> listenerCapture = newCapture();
         expect(Windows.showConfirmDialog(
             eq("Are you sure that you want to send scenario <i><b>" + SCENARIO_NAME + "</b></i> to Liability Manager?"),
             capture(listenerCapture))).andReturn(new Window());

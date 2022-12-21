@@ -11,6 +11,7 @@ import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
+import static org.easymock.EasyMock.newCapture;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
@@ -135,7 +136,7 @@ public class FasExcludePayeeWidgetTest {
     public void testExcludeDetailsButtonClick() {
         mockStatic(Windows.class);
         Button.ClickEvent clickEvent = createMock(Button.ClickEvent.class);
-        Capture<ConfirmActionDialogWindow.IListener> actionDialogListenerCapture = new Capture<>();
+        Capture<ConfirmActionDialogWindow.IListener> actionDialogListenerCapture = newCapture();
         expect(payeesGrid.getSelectedItems()).andReturn(buildPayeeTotalHolder()).once();
         expect(controller.getAccountNumbersInvalidForExclude(Collections.singleton(PAYEE_ACCOUNT_NUMBER)))
             .andReturn(Collections.emptySet()).once();
@@ -182,7 +183,7 @@ public class FasExcludePayeeWidgetTest {
     public void testRedesignateDetailsButtonClick() {
         mockStatic(Windows.class);
         Button.ClickEvent clickEvent = createMock(Button.ClickEvent.class);
-        Capture<ConfirmActionDialogWindow.IListener> actionDialogListenerCapture = new Capture<>();
+        Capture<ConfirmActionDialogWindow.IListener> actionDialogListenerCapture = newCapture();
         expect(payeesGrid.getSelectedItems()).andReturn(buildPayeeTotalHolder()).once();
         expect(controller.getAccountNumbersInvalidForExclude(Collections.singleton(PAYEE_ACCOUNT_NUMBER)))
             .andReturn(Collections.emptySet()).once();

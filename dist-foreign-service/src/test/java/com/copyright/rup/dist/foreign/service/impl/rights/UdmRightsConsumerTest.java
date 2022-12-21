@@ -4,6 +4,7 @@ import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expectLastCall;
+import static org.easymock.EasyMock.newCapture;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.reset;
 import static org.easymock.EasyMock.verify;
@@ -52,7 +53,7 @@ public class UdmRightsConsumerTest {
         Whitebox.setInternalState(udmRightsConsumer, new RightsServiceMock(1000005289L));
         UdmUsage udmUsage = buildUdmUsage();
         List<UdmUsage> udmUsages = Collections.singletonList(udmUsage);
-        Capture<Predicate<UdmUsage>> predicateCapture = new Capture<>();
+        Capture<Predicate<UdmUsage>> predicateCapture = newCapture();
         udmRightsProcessor.executeNextChainProcessor(eq(udmUsages), capture(predicateCapture));
         expectLastCall().once();
         replay(udmRightsProcessor);
@@ -67,7 +68,7 @@ public class UdmRightsConsumerTest {
         Whitebox.setInternalState(udmRightsConsumer, new RightsServiceMock(null));
         UdmUsage udmUsage = buildUdmUsage();
         List<UdmUsage> udmUsages = Collections.singletonList(udmUsage);
-        Capture<Predicate<UdmUsage>> predicateCapture = new Capture<>();
+        Capture<Predicate<UdmUsage>> predicateCapture = newCapture();
         udmRightsProcessor.executeNextChainProcessor(eq(udmUsages), capture(predicateCapture));
         expectLastCall().once();
         replay(udmRightsProcessor);

@@ -5,6 +5,7 @@ import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.isNull;
+import static org.easymock.EasyMock.newCapture;
 import static org.easymock.EasyMock.same;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
@@ -166,7 +167,7 @@ public class AaclUsageControllerTest {
         usageFilter.setFiscalYear(2017);
         expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
         expect(filterWidgetMock.getAppliedFilter()).andReturn(usageFilter).once();
-        Capture<Pageable> pageableCapture = new Capture<>();
+        Capture<Pageable> pageableCapture = newCapture();
         expect(aaclUsageService.getUsageDtos(eq(usageFilter), capture(pageableCapture), isNull()))
             .andReturn(Collections.emptyList()).once();
         replay(filterWidgetMock, aaclUsageService, filterController);
@@ -321,7 +322,7 @@ public class AaclUsageControllerTest {
     public void testGetSendForClassificationUsagesStreamSource() throws IOException {
         UsageFilter filter = new UsageFilter();
         filter.setProductFamily("FAS");
-        Capture<OutputStream> outputStreamCapture = new Capture<>();
+        Capture<OutputStream> outputStreamCapture = newCapture();
         OffsetDateTime date = OffsetDateTime.parse("2020-01-21T02:10:37-05:00");
         mockStatic(OffsetDateTime.class);
         expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
@@ -345,8 +346,8 @@ public class AaclUsageControllerTest {
     public void testGetExportUsagesStreamSource() {
         mockStatic(OffsetDateTime.class);
         usageFilter.setProductFamily(AACL_PRODUCT_FAMILY);
-        Capture<Supplier<String>> fileNameSupplierCapture = new Capture<>();
-        Capture<Consumer<PipedOutputStream>> posConsumerCapture = new Capture<>();
+        Capture<Supplier<String>> fileNameSupplierCapture = newCapture();
+        Capture<Consumer<PipedOutputStream>> posConsumerCapture = newCapture();
         String fileName = "export_usage_";
         Supplier<String> fileNameSupplier = () -> fileName;
         Supplier<InputStream> inputStreamSupplier =

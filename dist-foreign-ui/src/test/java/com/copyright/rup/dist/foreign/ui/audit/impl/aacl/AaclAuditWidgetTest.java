@@ -6,6 +6,7 @@ import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.newCapture;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -104,7 +105,7 @@ public class AaclAuditWidgetTest {
         mockStatic(JavaScript.class);
         expect(JavaScript.getCurrent()).andReturn(createMock(JavaScript.class)).times(2);
         List<UsageDto> liabilities = Lists.newArrayList(new UsageDto());
-        Capture<List<QuerySortOrder>> orderCapture = new Capture<>();
+        Capture<List<QuerySortOrder>> orderCapture = newCapture();
         expect(controller.getSize()).andReturn(1).once();
         expect(controller.loadBeans(eq(0), eq(1), capture(orderCapture))).andReturn(liabilities).once();
         replay(controller, JavaScript.class);

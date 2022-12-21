@@ -5,6 +5,7 @@ import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
+import static org.easymock.EasyMock.newCapture;
 import static org.junit.Assert.assertEquals;
 import static org.powermock.api.easymock.PowerMock.createPartialMock;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
@@ -73,8 +74,8 @@ public class AaclDrillDownByRightsholderControllerTest {
     @Test
     public void testLoadBeans() {
         List<UsageDto> usageDtos = Collections.singletonList(new UsageDto());
-        Capture<Pageable> pageableCapture = new Capture<>();
-        Capture<Sort> sortCapture = new Capture<>();
+        Capture<Pageable> pageableCapture = newCapture();
+        Capture<Sort> sortCapture = newCapture();
         expect(controller.getWidget()).andReturn(new AaclDrillDownByRightsholderControllerTest.WidgetMock()).once();
         expect(usageService.getByScenarioAndRhAccountNumber(eq(scenario), eq(RH_ACCOUNT_NUMBER), eq(SEARCH),
             capture(pageableCapture), capture(sortCapture)))

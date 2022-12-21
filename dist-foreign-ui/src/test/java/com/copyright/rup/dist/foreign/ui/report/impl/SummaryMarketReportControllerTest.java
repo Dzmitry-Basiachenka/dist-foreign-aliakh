@@ -5,6 +5,7 @@ import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
+import static org.easymock.EasyMock.newCapture;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
@@ -86,8 +87,8 @@ public class SummaryMarketReportControllerTest {
         List<UsageBatch> batches = Collections.emptyList();
         ISummaryMarketReportWidget widget = createMock(ISummaryMarketReportWidget.class);
         Whitebox.setInternalState(controller, widget);
-        Capture<List<UsageBatch>> batchesCapture = new Capture<>();
-        Capture<OutputStream> osCapture = new Capture<>();
+        Capture<List<UsageBatch>> batchesCapture = newCapture();
+        Capture<OutputStream> osCapture = newCapture();
         expect(OffsetDateTime.now()).andReturn(now).once();
         expect(widget.getBatches()).andReturn(batches).once();
         reportService.writeSummaryMarkerCsvReport(capture(batchesCapture), capture(osCapture));

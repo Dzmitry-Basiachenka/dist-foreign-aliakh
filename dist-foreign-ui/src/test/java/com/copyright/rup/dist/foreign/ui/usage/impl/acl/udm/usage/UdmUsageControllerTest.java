@@ -426,8 +426,8 @@ public class UdmUsageControllerTest {
     private void testGetExportUsagesStreamSource(Supplier<IStreamSource> streamSourceSupplier,
                                                  Consumer<PipedOutputStream> consumer) {
         mockStatic(OffsetDateTime.class);
-        Capture<Supplier<String>> fileNameSupplierCapture = new Capture<>();
-        Capture<Consumer<PipedOutputStream>> posConsumerCapture = new Capture<>();
+        Capture<Supplier<String>> fileNameSupplierCapture = newCapture();
+        Capture<Consumer<PipedOutputStream>> posConsumerCapture = newCapture();
         String fileName = "export_udm_usage_";
         Supplier<String> fileNameSupplier = () -> fileName;
         Supplier<InputStream> inputStreamSupplier =

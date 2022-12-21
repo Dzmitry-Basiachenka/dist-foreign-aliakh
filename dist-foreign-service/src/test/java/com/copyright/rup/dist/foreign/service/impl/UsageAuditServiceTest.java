@@ -4,6 +4,7 @@ import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
+import static org.easymock.EasyMock.newCapture;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
@@ -60,7 +61,7 @@ public class UsageAuditServiceTest {
 
     @Test
     public void testLogAction() {
-        Capture<UsageAuditItem> usageAuditItemCapture = new Capture<>();
+        Capture<UsageAuditItem> usageAuditItemCapture = newCapture();
         usageAuditRepository.insert(capture(usageAuditItemCapture));
         expectLastCall().once();
         replay(usageAuditRepository);
@@ -71,10 +72,10 @@ public class UsageAuditServiceTest {
 
     @Test
     public void testLogActionWithUsageIds() {
-        Capture<UsageAuditItem> usageAuditItemCapture1 = new Capture<>();
+        Capture<UsageAuditItem> usageAuditItemCapture1 = newCapture();
         usageAuditRepository.insert(capture(usageAuditItemCapture1));
         expectLastCall().once();
-        Capture<UsageAuditItem> usageAuditItemCapture2 = new Capture<>();
+        Capture<UsageAuditItem> usageAuditItemCapture2 = newCapture();
         usageAuditRepository.insert(capture(usageAuditItemCapture2));
         expectLastCall().once();
         replay(usageAuditRepository);

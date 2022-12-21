@@ -9,6 +9,7 @@ import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expectLastCall;
+import static org.easymock.EasyMock.newCapture;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.hamcrest.Matchers.instanceOf;
@@ -135,7 +136,7 @@ public class PublicationTypeWeightsWindowTest {
         Button saveButton = (Button) buttonsLayout.getComponent(0);
         IParametersSaveListener<List<PublicationType>> listener = createMock(IParametersSaveListener.class);
         window.addListener(ParametersSaveEvent.class, listener, IParametersSaveListener.SAVE_HANDLER);
-        Capture<ParametersSaveEvent<List<PublicationType>>> event = new Capture<>();
+        Capture<ParametersSaveEvent<List<PublicationType>>> event = newCapture();
         listener.onSave(capture(event));
         expectLastCall().once();
         replay(listener);

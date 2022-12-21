@@ -4,6 +4,7 @@ import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
+import static org.easymock.EasyMock.newCapture;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
@@ -90,8 +91,8 @@ public class WorkClassificationServiceTest {
 
     @Test
     public void testInsertOrUpdateClassifications() throws ParseException {
-        Capture<WorkClassification> classificationCapture1 = new Capture<>();
-        Capture<WorkClassification> classificationCapture2 = new Capture<>();
+        Capture<WorkClassification> classificationCapture1 = newCapture();
+        Capture<WorkClassification> classificationCapture2 = newCapture();
         workClassificationRepository.insertOrUpdate(capture(classificationCapture1));
         expectLastCall().once();
         workClassificationRepository.insertOrUpdate(capture(classificationCapture2));

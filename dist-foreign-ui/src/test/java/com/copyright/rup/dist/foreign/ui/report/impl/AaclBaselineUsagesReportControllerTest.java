@@ -5,6 +5,7 @@ import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
+import static org.easymock.EasyMock.newCapture;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
@@ -57,7 +58,7 @@ public class AaclBaselineUsagesReportControllerTest {
         mockStatic(OffsetDateTime.class);
         IAaclBaselineUsagesReportWidget widget = createMock(IAaclBaselineUsagesReportWidget.class);
         Whitebox.setInternalState(controller, widget);
-        Capture<OutputStream> osCapture = new Capture<>();
+        Capture<OutputStream> osCapture = newCapture();
         expect(OffsetDateTime.now()).andReturn(now).once();
         expect(widget.getNumberOfBaselineYears()).andReturn(3).once();
         reportService.writeAaclBaselineUsagesCsvReport(eq(3), capture(osCapture));
