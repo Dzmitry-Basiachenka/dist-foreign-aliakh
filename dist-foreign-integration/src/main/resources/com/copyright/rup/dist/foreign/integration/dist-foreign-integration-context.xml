@@ -10,7 +10,7 @@
            http://www.springframework.org/schema/util
            http://www.springframework.org/schema/util/spring-util.xsd
            http://camel.apache.org/schema/spring
-           http://camel.apache.org/schema/spring/camel-spring-2.18.3.xsd">
+           http://camel.apache.org/schema/spring/camel-spring.xsd">
 
     <import resource="classpath:/com/copyright/rup/common/config/rup-properties-config.xml"/>
     <import resource="classpath:/com/copyright/rup/dist/common/integration/aws/dist-common-sns-context.xml"/>
@@ -142,11 +142,11 @@
                                  redeliveryDelay="60000"/> <!-- 1 min -->
 
         <route>
-            <from ref="df.integration.internal.usage.endpoint"/>
+            <from uri="ref:df.integration.internal.usage.endpoint"/>
             <marshal>
                 <custom ref="df.integration.externalUsageMarshaller"/>
             </marshal>
-            <to ref="df.integration.lm.detail.endpoint"/>
+            <to uri="ref:df.integration.lm.detail.endpoint"/>
         </route>
     </camelContext>
 </beans>

@@ -5,7 +5,7 @@
             http://www.springframework.org/schema/beans
             http://www.springframework.org/schema/beans/spring-beans.xsd
             http://camel.apache.org/schema/spring
-            http://camel.apache.org/schema/spring/camel-spring-2.18.3.xsd">
+            http://camel.apache.org/schema/spring/camel-spring.xsd">
 
     <import resource="classpath:/com/copyright/rup/dist/common/service/dist-common-job-status-context.xml"/>
 
@@ -125,15 +125,15 @@
         </onException>
 
         <route id="jobStatusRoute">
-            <from ref="df.producer.job.status.internal"/>
+            <from uri="ref:df.producer.job.status.internal"/>
             <marshal>
                 <custom ref="common.jobStatusMarshaller"/>
             </marshal>
-            <to ref="df.producer.job.status.sns"/>
+            <to uri="ref:df.producer.job.status.sns"/>
         </route>
 
         <route id="df.service.paidUsageRoute">
-            <from ref="df.service.lm.detail.paid.endpoint"/>
+            <from uri="ref:df.service.lm.detail.paid.endpoint"/>
             <unmarshal>
                 <json library="Jackson"/>
             </unmarshal>
@@ -159,7 +159,7 @@
         </route>
 
         <route id="df.service.ldmtDetailsRoute">
-            <from ref="sf.service.ldmt.details.endpoint"/>
+            <from uri="ref:sf.service.ldmt.details.endpoint"/>
             <log message="Consume LDMT details from Oracle. Body: ${body}"
                  loggingLevel="INFO" logName="com.copyright.rup.dist"/>
             <bean ref="df.service.ldmtDetailsJsonValidator"/>
@@ -184,15 +184,15 @@
         <!--chunk-based routes started -->
 
         <route id="df.service.matchingInternalRoute">
-            <from ref="df.service.internal.matching.chunk.endpoint"/>
+            <from uri="ref:df.service.internal.matching.chunk.endpoint"/>
             <marshal>
                 <custom ref="df.service.commonUsageMarshaller"/>
             </marshal>
-            <to ref="df.service.matching.chunk.endpoint"/>
+            <to uri="ref:df.service.matching.chunk.endpoint"/>
         </route>
 
         <route id="df.service.matchingRoute">
-            <from ref="df.service.matching.chunk.endpoint"/>
+            <from uri="ref:df.service.matching.chunk.endpoint"/>
             <unmarshal>
                 <custom ref="df.service.commonUsageUnmarshaller"/>
             </unmarshal>
@@ -230,15 +230,15 @@
         </route>
 
         <route id="df.service.matchingInternalUdmRoute">
-            <from ref="df.service.internal.matching.endpoint.udm"/>
+            <from uri="ref:df.service.internal.matching.endpoint.udm"/>
             <marshal>
                 <custom ref="df.service.commonUdmUsageMarshaller"/>
             </marshal>
-            <to ref="df.service.matching.endpoint.udm"/>
+            <to uri="ref:df.service.matching.endpoint.udm"/>
         </route>
 
         <route id="df.service.matchingUdmRoute">
-            <from ref="df.service.matching.endpoint.udm"/>
+            <from uri="ref:df.service.matching.endpoint.udm"/>
             <unmarshal>
                 <custom ref="df.service.commonUdmUsageUnmarshaller"/>
             </unmarshal>
@@ -254,15 +254,15 @@
         </route>
 
         <route id="df.service.rightsInternalRoute">
-            <from ref="df.service.internal.rights.chunk.endpoint"/>
+            <from uri="ref:df.service.internal.rights.chunk.endpoint"/>
             <marshal>
                 <custom ref="df.service.commonUsageMarshaller"/>
             </marshal>
-            <to ref="df.service.rights.chunk.endpoint"/>
+            <to uri="ref:df.service.rights.chunk.endpoint"/>
         </route>
 
         <route id="df.service.rightsRoute">
-            <from ref="df.service.rights.chunk.endpoint"/>
+            <from uri="ref:df.service.rights.chunk.endpoint"/>
             <unmarshal>
                 <custom ref="df.service.commonUsageUnmarshaller"/>
             </unmarshal>
@@ -304,15 +304,15 @@
         </route>
 
         <route id="df.service.udmRightsInternalRoute">
-            <from ref="df.service.internal.rights.endpoint.udm"/>
+            <from uri="ref:df.service.internal.rights.endpoint.udm"/>
             <marshal>
                 <custom ref="df.service.commonUdmUsageMarshaller"/>
             </marshal>
-            <to ref="df.service.rights.endpoint.udm"/>
+            <to uri="ref:df.service.rights.endpoint.udm"/>
         </route>
 
         <route id="df.service.udmRightsRoute">
-            <from ref="df.service.rights.endpoint.udm"/>
+            <from uri="ref:df.service.rights.endpoint.udm"/>
             <unmarshal>
                 <custom ref="df.service.commonUdmUsageUnmarshaller"/>
             </unmarshal>
@@ -330,15 +330,15 @@
         </route>
 
         <route id="df.service.taxInternalRoute">
-            <from ref="df.service.internal.tax.chunk.endpoint"/>
+            <from uri="ref:df.service.internal.tax.chunk.endpoint"/>
             <marshal>
                 <custom ref="df.service.commonUsageMarshaller"/>
             </marshal>
-            <to ref="df.service.rh.tax.chunk.endpoint"/>
+            <to uri="ref:df.service.rh.tax.chunk.endpoint"/>
         </route>
 
         <route id="df.service.taxRoute">
-            <from ref="df.service.rh.tax.chunk.endpoint"/>
+            <from uri="ref:df.service.rh.tax.chunk.endpoint"/>
             <unmarshal>
                 <custom ref="df.service.commonUsageUnmarshaller"/>
             </unmarshal>
@@ -355,15 +355,15 @@
         </route>
 
         <route id="df.service.stmRhInternalRoute">
-            <from ref="df.service.internal.stm.rh.chunk.endpoint"/>
+            <from uri="ref:df.service.internal.stm.rh.chunk.endpoint"/>
             <marshal>
                 <custom ref="df.service.commonUsageMarshaller"/>
             </marshal>
-            <to ref="df.service.stm.rh.chunk.endpoint"/>
+            <to uri="ref:df.service.stm.rh.chunk.endpoint"/>
         </route>
 
         <route id="df.service.stmRhRoute">
-            <from ref="df.service.stm.rh.chunk.endpoint"/>
+            <from uri="ref:df.service.stm.rh.chunk.endpoint"/>
             <unmarshal>
                 <custom ref="df.service.commonUsageUnmarshaller"/>
             </unmarshal>
@@ -380,15 +380,15 @@
         </route>
 
         <route id="df.service.eligibilityInternalRoute">
-            <from ref="df.service.internal.eligibility.chunk.endpoint"/>
+            <from uri="ref:df.service.internal.eligibility.chunk.endpoint"/>
             <marshal>
                 <custom ref="df.service.commonUsageMarshaller"/>
             </marshal>
-            <to ref="df.service.rh.eligibility.chunk.endpoint"/>
+            <to uri="ref:df.service.rh.eligibility.chunk.endpoint"/>
         </route>
 
         <route id="df.service.eligibilityRoute">
-            <from ref="df.service.rh.eligibility.chunk.endpoint"/>
+            <from uri="ref:df.service.rh.eligibility.chunk.endpoint"/>
             <unmarshal>
                 <custom ref="df.service.commonUsageUnmarshaller"/>
             </unmarshal>

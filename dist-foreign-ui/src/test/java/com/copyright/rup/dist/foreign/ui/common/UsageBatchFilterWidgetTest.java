@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.ui.common;
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.newCapture;
 import static org.easymock.EasyMock.same;
 import static org.junit.Assert.assertEquals;
 import static org.powermock.api.easymock.PowerMock.createMock;
@@ -78,7 +79,7 @@ public class UsageBatchFilterWidgetTest {
     public void testShowFilterWindow() {
         FilterWindow filterWindow = createMock(FilterWindow.class);
         mockStatic(Windows.class);
-        Capture<ValueProvider<UsageBatch, List<String>>> providerCapture = new Capture<>();
+        Capture<ValueProvider<UsageBatch, List<String>>> providerCapture = newCapture();
         Windows.showFilterWindow(eq("Batches filter"), same(usageBatchFilterWidget), capture(providerCapture));
         expectLastCall().andReturn(filterWindow).once();
         filterWindow.setSelectedItemsIds(new HashSet<>());

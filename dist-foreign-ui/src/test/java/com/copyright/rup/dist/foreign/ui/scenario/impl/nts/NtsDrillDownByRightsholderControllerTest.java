@@ -4,6 +4,7 @@ import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
+import static org.easymock.EasyMock.newCapture;
 import static org.junit.Assert.assertEquals;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.createPartialMock;
@@ -72,8 +73,8 @@ public class NtsDrillDownByRightsholderControllerTest {
         Scenario scenario = new Scenario();
         Whitebox.setInternalState(controller, scenario);
         Whitebox.setInternalState(controller, RH_ACCOUNT_NUMBER);
-        Capture<Pageable> pageableCapture = new Capture<>();
-        Capture<Sort> sortCapture = new Capture<>();
+        Capture<Pageable> pageableCapture = newCapture();
+        Capture<Sort> sortCapture = newCapture();
         expect(controller.getWidget()).andReturn(new WidgetMock()).once();
         expect(usageServiceMock.getByScenarioAndRhAccountNumber(eq(RH_ACCOUNT_NUMBER), eq(scenario), eq(SEARCH_VALUE),
             capture(pageableCapture), capture(sortCapture)))

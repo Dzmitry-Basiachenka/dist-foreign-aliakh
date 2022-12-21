@@ -7,6 +7,7 @@ import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
+import static org.easymock.EasyMock.newCapture;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -169,7 +170,7 @@ public class WorkClassificationWindowTest {
         grid.setItems(classifications);
         grid.getSelectionModel().select(new WorkClassification());
         Button button = (Button) ((HorizontalLayout) content.getComponent(3)).getComponent(0);
-        Capture<IListener> confirmListener = new Capture<>();
+        Capture<IListener> confirmListener = newCapture();
         expect(workClassificationController.getCountToUpdate(classifications)).andReturn(2).once();
         expect(Windows.showConfirmDialog(eq("2 usages will be updated. Are you sure you want to confirm action?"),
             capture(confirmListener))).andReturn(confirmWindowCapture).once();
@@ -192,7 +193,7 @@ public class WorkClassificationWindowTest {
         grid.setItems(classifications);
         grid.getSelectionModel().select(new WorkClassification());
         Button button = (Button) ((HorizontalLayout) content.getComponent(3)).getComponent(0);
-        Capture<IListener> confirmListener = new Capture<>();
+        Capture<IListener> confirmListener = newCapture();
         expect(workClassificationController.getCountToUpdate(classifications)).andReturn(0).once();
         expect(Windows.showConfirmDialog(eq("Are you sure you want to perform action?"), capture(confirmListener)))
             .andReturn(confirmWindowCapture).once();

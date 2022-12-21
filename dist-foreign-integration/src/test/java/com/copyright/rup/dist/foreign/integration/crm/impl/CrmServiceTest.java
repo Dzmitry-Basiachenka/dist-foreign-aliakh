@@ -5,6 +5,7 @@ import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createStrictMock;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.newCapture;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
@@ -69,7 +70,7 @@ public class CrmServiceTest {
     public void testInsertRightsDistribution() throws IOException {
         String expectedBody = formatJson(TestUtils.fileToString(CrmServiceTest.class,
             "crm_rights_distribution_request.json"));
-        Capture<HttpEntity> httpEntityCapture = new Capture<>();
+        Capture<HttpEntity> httpEntityCapture = newCapture();
         expect(restTemplate.postForObject(anyObject(String.class), capture(httpEntityCapture), eq(String.class)))
             .andReturn(TestUtils.fileToString(CrmServiceTest.class, "crm_rights_distribution_response.json")).once();
         replay(restTemplate);
@@ -86,7 +87,7 @@ public class CrmServiceTest {
     public void testInsertRightsDistributionIntegrationConnectionException() throws IOException {
         String expectedBody =
             formatJson(TestUtils.fileToString(CrmServiceTest.class, "crm_rights_distribution_request.json"));
-        Capture<HttpEntity> httpEntityCapture = new Capture<>();
+        Capture<HttpEntity> httpEntityCapture = newCapture();
         expect(restTemplate.postForObject(anyObject(String.class), capture(httpEntityCapture), eq(String.class)))
             .andThrow(new HttpClientErrorException(HttpStatus.BAD_GATEWAY)).once();
         replay(restTemplate);

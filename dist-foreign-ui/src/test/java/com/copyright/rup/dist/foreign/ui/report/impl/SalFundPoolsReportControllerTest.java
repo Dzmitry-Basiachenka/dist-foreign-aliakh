@@ -5,6 +5,7 @@ import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
+import static org.easymock.EasyMock.newCapture;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
@@ -57,7 +58,7 @@ public class SalFundPoolsReportControllerTest {
         mockStatic(OffsetDateTime.class);
         ISalFundPoolsReportWidget widget = createMock(ISalFundPoolsReportWidget.class);
         Whitebox.setInternalState(controller, widget);
-        Capture<OutputStream> osCapture = new Capture<>();
+        Capture<OutputStream> osCapture = newCapture();
         expect(OffsetDateTime.now()).andReturn(now).once();
         expect(widget.getDistributionYear()).andReturn(2020).once();
         reportService.writeSalFundPoolsCsvReport(eq(2020), capture(osCapture));

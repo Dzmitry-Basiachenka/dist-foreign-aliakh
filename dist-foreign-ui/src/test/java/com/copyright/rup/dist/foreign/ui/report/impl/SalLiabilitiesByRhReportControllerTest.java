@@ -5,6 +5,7 @@ import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
+import static org.easymock.EasyMock.newCapture;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
@@ -77,7 +78,7 @@ public class SalLiabilitiesByRhReportControllerTest {
         mockStatic(OffsetDateTime.class);
         ICommonScenariosReportWidget widget = createMock(ICommonScenariosReportWidget.class);
         Whitebox.setInternalState(controller, widget);
-        Capture<OutputStream> outputStreamCapture = new Capture<>();
+        Capture<OutputStream> outputStreamCapture = newCapture();
         List<Scenario> scenarios = Collections.singletonList(new Scenario());
         expect(OffsetDateTime.now()).andReturn(now).once();
         expect(widget.getSelectedScenarios()).andReturn(scenarios).once();

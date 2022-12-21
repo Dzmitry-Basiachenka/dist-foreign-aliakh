@@ -20,7 +20,8 @@ dependencies {
     compile("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${rupCamel.standardDependencies.jackson.version}")
     //dependency to avoid vulnerability CVE-2016-7051 (severity: MEDIUM) associated with 'com.fasterxml.jackson.module:jackson-module-jaxb-annotations:2.8.3'
     compile("com.fasterxml.jackson.module:jackson-module-jaxb-annotations:${rupCamel.standardDependencies.jackson.version}")
-    compile("org.apache.camel:camel-aws:${rupCamel.standardDependencies.camel.version}") { transitive = false }
+    compile("org.apache.camel:camel-aws-sns:${rupCamel.standardDependencies.camel.version}")
+    compile("org.apache.camel:camel-aws-sqs:${rupCamel.standardDependencies.camel.version}")
     compile("org.apache.commons:commons-collections4:${commonsCollectionsVersion}")
     compile("org.apache.httpcomponents:httpasyncclient:${httpAsyncClientVersion}")
     compile("org.springframework:spring-web:${rupJava.standardDependencies.spring.version}")

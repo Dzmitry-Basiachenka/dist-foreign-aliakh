@@ -8,6 +8,7 @@ import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyTextFie
 
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.newCapture;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -250,7 +251,7 @@ public class FundPoolLoadWindowTest {
     @Test
     public void testOnUploadClickedValidFields() {
         mockStatic(Windows.class);
-        Capture<UsageBatch> usageBatchCapture = new Capture<>();
+        Capture<UsageBatch> usageBatchCapture = newCapture();
         window = createPartialMock(FundPoolLoadWindow.class, "isValid");
         Whitebox.setInternalState(window, "usagesController", usagesController);
         initUploadComponents();
@@ -282,7 +283,7 @@ public class FundPoolLoadWindowTest {
     @Test
     public void testOnUploadClickedValidFieldsNoRecords() {
         mockStatic(Windows.class);
-        Capture<UsageBatch> usageBatchCapture = new Capture<>();
+        Capture<UsageBatch> usageBatchCapture = newCapture();
         window = createPartialMock(FundPoolLoadWindow.class, "isValid");
         Whitebox.setInternalState(window, "usagesController", usagesController);
         initUploadComponents();

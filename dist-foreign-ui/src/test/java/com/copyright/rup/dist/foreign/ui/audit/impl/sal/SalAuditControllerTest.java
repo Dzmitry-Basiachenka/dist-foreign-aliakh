@@ -5,6 +5,7 @@ import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
+import static org.easymock.EasyMock.newCapture;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -131,8 +132,8 @@ public class SalAuditControllerTest {
 
     @Test
     public void testLoadBeans() {
-        Capture<Pageable> pageableCapture = new Capture<>();
-        Capture<Sort> sortCapture = new Capture<>();
+        Capture<Pageable> pageableCapture = newCapture();
+        Capture<Sort> sortCapture = newCapture();
         AuditFilter filter = new AuditFilter();
         filter.setStatuses(EnumSet.of(UsageStatusEnum.ELIGIBLE));
         expect(auditFilterController.getWidget()).andReturn(filterWidget).once();
@@ -160,7 +161,7 @@ public class SalAuditControllerTest {
     @Test
     public void testShowUsageHistory() {
         mockStatic(Windows.class);
-        Capture<UsageHistoryWindow> windowCapture = new Capture<>();
+        Capture<UsageHistoryWindow> windowCapture = newCapture();
         String usageId = "ddc391df-87e6-4b10-92ea-1cc2e295b487";
         String detailId = "11960c0e-1374-4eba-8658-bfe5e11bb304";
         List<UsageAuditItem> items = Collections.emptyList();
@@ -178,8 +179,8 @@ public class SalAuditControllerTest {
         OffsetDateTime now = OffsetDateTime.of(2019, 1, 2, 3, 4, 5, 6, ZoneOffset.ofHours(0));
         mockStatic(OffsetDateTime.class);
         AuditFilter filter = new AuditFilter();
-        Capture<Supplier<String>> fileNameSupplierCapture = new Capture<>();
-        Capture<Consumer<PipedOutputStream>> posConsumerCapture = new Capture<>();
+        Capture<Supplier<String>> fileNameSupplierCapture = newCapture();
+        Capture<Consumer<PipedOutputStream>> posConsumerCapture = newCapture();
         String fileName = "export_usage_audit_";
         Supplier<String> fileNameSupplier = () -> fileName;
         Supplier<InputStream> inputStreamSupplier =

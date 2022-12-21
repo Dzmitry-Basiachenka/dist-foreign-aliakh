@@ -8,6 +8,7 @@ import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.isNull;
+import static org.easymock.EasyMock.newCapture;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
@@ -108,12 +109,12 @@ public class FasScenarioControllerTest {
 
     @Test
     public void testLoadBeans() {
-        Capture<Pageable> pageableCapture = new Capture<>();
+        Capture<Pageable> pageableCapture = newCapture();
         expect(usageService.getRightsholderTotalsHoldersByScenario(eq(scenario), anyString(),
             capture(pageableCapture), isNull())).andReturn(Collections.emptyList()).once();
         expect(scenarioService.getScenarioWithAmountsAndLastAction(scenario)).andReturn(scenario).once();
-        Capture<Supplier<String>> fileNameSupplierCapture = new Capture<>();
-        Capture<Consumer<PipedOutputStream>> posConsumerCapture = new Capture<>();
+        Capture<Supplier<String>> fileNameSupplierCapture = newCapture();
+        Capture<Consumer<PipedOutputStream>> posConsumerCapture = newCapture();
         IStreamSource streamSource = createMock(IStreamSource.class);
         expect(streamSource.getSource()).andReturn(new SimpleImmutableEntry(createMock(Supplier.class),
             createMock(Supplier.class))).times(2);
@@ -138,8 +139,8 @@ public class FasScenarioControllerTest {
         expect(usageService.getRightsholderTotalsHolderCountByScenario(scenario, StringUtils.EMPTY)).andReturn(1)
             .once();
         expect(controller.getScenarioWithAmountsAndLastAction()).andReturn(scenario).once();
-        Capture<Supplier<String>> fileNameSupplierCapture = new Capture<>();
-        Capture<Consumer<PipedOutputStream>> posConsumerCapture = new Capture<>();
+        Capture<Supplier<String>> fileNameSupplierCapture = newCapture();
+        Capture<Consumer<PipedOutputStream>> posConsumerCapture = newCapture();
         IStreamSource streamSource = createMock(IStreamSource.class);
         expect(streamSource.getSource()).andReturn(new SimpleImmutableEntry(createMock(Supplier.class),
             createMock(Supplier.class))).times(2);
@@ -193,8 +194,8 @@ public class FasScenarioControllerTest {
     @Test
     public void testGetExportScenarioUsagesStreamSource() {
         mockStatic(OffsetDateTime.class);
-        Capture<Supplier<String>> fileNameSupplierCapture = new Capture<>();
-        Capture<Consumer<PipedOutputStream>> posConsumerCapture = new Capture<>();
+        Capture<Supplier<String>> fileNameSupplierCapture = newCapture();
+        Capture<Consumer<PipedOutputStream>> posConsumerCapture = newCapture();
         String fileName = scenario.getName() + "_Details_";
         Supplier<String> fileNameSupplier = () -> fileName;
         Supplier<InputStream> inputStreamSupplier =
@@ -217,8 +218,8 @@ public class FasScenarioControllerTest {
     @Test
     public void testGetExportScenarioRightsholderTotalsStreamSource() {
         mockStatic(OffsetDateTime.class);
-        Capture<Supplier<String>> fileNameSupplierCapture = new Capture<>();
-        Capture<Consumer<PipedOutputStream>> posConsumerCapture = new Capture<>();
+        Capture<Supplier<String>> fileNameSupplierCapture = newCapture();
+        Capture<Consumer<PipedOutputStream>> posConsumerCapture = newCapture();
         String fileName = scenario.getName() + "_";
         Supplier<String> fileNameSupplier = () -> fileName;
         Supplier<InputStream> inputStreamSupplier =

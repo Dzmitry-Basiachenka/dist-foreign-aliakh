@@ -180,7 +180,7 @@ public class UsageBatchServiceTest {
     @Test
     public void testInsertFasBatch() {
         mockStatic(RupContextUtils.class);
-        Capture<UsageBatch> captureUsageBatch = new Capture<>();
+        Capture<UsageBatch> captureUsageBatch = newCapture();
         UsageBatch usageBatch = new UsageBatch();
         Rightsholder rro = buildRro();
         usageBatch.setRro(rro);
@@ -212,7 +212,7 @@ public class UsageBatchServiceTest {
 
     @Test
     public void testInsertNtsBatch() {
-        Capture<UsageBatch> captureUsageBatch = new Capture<>();
+        Capture<UsageBatch> captureUsageBatch = newCapture();
         UsageBatch usageBatch = new UsageBatch();
         usageBatch.setRro(buildRro());
         List<String> usageIds = Collections.singletonList("c1965b73-7800-455c-beb3-98a430512f20");
@@ -237,7 +237,7 @@ public class UsageBatchServiceTest {
     @Test
     public void testInsertAaclBatch() {
         mockStatic(RupContextUtils.class);
-        Capture<UsageBatch> captureUsageBatch = new Capture<>();
+        Capture<UsageBatch> captureUsageBatch = newCapture();
         UsageBatch usageBatch = new UsageBatch();
         usageBatch.setName(BATCH_NAME);
         usageBatch.setPaymentDate(LocalDate.of(2019, 6, 30));
@@ -267,7 +267,7 @@ public class UsageBatchServiceTest {
     @Test
     public void testInsertAaclBatchWithZeroBaselineYears() {
         mockStatic(RupContextUtils.class);
-        Capture<UsageBatch> captureUsageBatch = new Capture<>();
+        Capture<UsageBatch> captureUsageBatch = newCapture();
         UsageBatch usageBatch = new UsageBatch();
         usageBatch.setName(BATCH_NAME);
         usageBatch.setPaymentDate(LocalDate.of(2019, 6, 30));
@@ -295,7 +295,7 @@ public class UsageBatchServiceTest {
     @Test
     public void testInsertAaclBatchWithNoBaselineUsagesInserted() {
         mockStatic(RupContextUtils.class);
-        Capture<UsageBatch> captureUsageBatch = new Capture<>();
+        Capture<UsageBatch> captureUsageBatch = newCapture();
         UsageBatch usageBatch = new UsageBatch();
         usageBatch.setName(BATCH_NAME);
         usageBatch.setPaymentDate(LocalDate.of(2019, 6, 30));
@@ -324,7 +324,7 @@ public class UsageBatchServiceTest {
     @Test
     public void testInsertSalBatch() {
         mockStatic(RupContextUtils.class);
-        Capture<UsageBatch> captureUsageBatch = new Capture<>();
+        Capture<UsageBatch> captureUsageBatch = newCapture();
         UsageBatch usageBatch = new UsageBatch();
         usageBatch.setName(BATCH_NAME);
         usageBatch.setPaymentDate(LocalDate.of(2019, 6, 30));

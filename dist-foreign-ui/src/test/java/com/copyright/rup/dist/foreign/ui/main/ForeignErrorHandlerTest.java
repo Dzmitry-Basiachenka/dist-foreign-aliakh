@@ -4,6 +4,7 @@ import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expectLastCall;
+import static org.easymock.EasyMock.newCapture;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
@@ -61,7 +62,7 @@ public class ForeignErrorHandlerTest {
     @Test
     public void testErrorWithIntegrationConnectionException() {
         ForeignErrorHandler errorHandler = new ForeignErrorHandler(ui);
-        Capture<Window> captureErrorWindow = new Capture<>();
+        Capture<Window> captureErrorWindow = newCapture();
         ui.addWindow(capture(captureErrorWindow));
         expectLastCall().once();
         replay(ui);
@@ -75,7 +76,7 @@ public class ForeignErrorHandlerTest {
     @Test
     public void testCauseFileDownloadException() {
         ForeignErrorHandler errorHandler = new ForeignErrorHandler(ui);
-        Capture<Window> captureErrorWindow = new Capture<>();
+        Capture<Window> captureErrorWindow = newCapture();
         ui.addWindow(capture(captureErrorWindow));
         expectLastCall().once();
         replay(ui);
@@ -89,7 +90,7 @@ public class ForeignErrorHandlerTest {
     @Test
     public void testCausePrmConfigurationException() {
         ForeignErrorHandler errorHandler = new ForeignErrorHandler(ui);
-        Capture<Window> captureErrorWindow = new Capture<>();
+        Capture<Window> captureErrorWindow = newCapture();
         ui.addWindow(capture(captureErrorWindow));
         expectLastCall().once();
         replay(ui);

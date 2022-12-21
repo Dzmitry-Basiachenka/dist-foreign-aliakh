@@ -7,6 +7,7 @@ import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.newCapture;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -113,7 +114,7 @@ public class ViewAdditionalFundsWindowTest {
     @Test
     public void testDeleteClickListener() {
         mockStatic(Windows.class);
-        Capture<IListener> listenerCapture = new Capture<>();
+        Capture<IListener> listenerCapture = newCapture();
         Window confirmWindowCapture = PowerMock.createMock(Window.class);
         VerticalLayout content = (VerticalLayout) viewWindow.getContent();
         Grid grid = (Grid) content.getComponent(1);

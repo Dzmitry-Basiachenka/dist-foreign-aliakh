@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.service.impl.nts;
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.newCapture;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
@@ -265,7 +266,7 @@ public class NtsUsageServiceTest {
         usage2.setStatus(UsageStatusEnum.WORK_NOT_FOUND);
         List<Usage> usages = Arrays.asList(usage1, usage2);
         expect(usageService.getUsagesByIds(usageIds)).andReturn(usages).once();
-        Capture<Runnable> captureRunnable = new Capture<>();
+        Capture<Runnable> captureRunnable = newCapture();
         chainExecutor.execute(capture(captureRunnable));
         expectLastCall().once();
         chainExecutor.execute(Collections.singletonList(usage1), ChainProcessorTypeEnum.RIGHTS);

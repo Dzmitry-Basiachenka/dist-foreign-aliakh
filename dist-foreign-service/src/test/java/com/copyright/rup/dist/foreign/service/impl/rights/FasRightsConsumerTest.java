@@ -4,6 +4,7 @@ import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expectLastCall;
+import static org.easymock.EasyMock.newCapture;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.reset;
 import static org.easymock.EasyMock.verify;
@@ -78,7 +79,7 @@ public class FasRightsConsumerTest {
         Whitebox.setInternalState(fasRightsConsumer, new RightsServiceMock(foundRhAccountNumber));
         Usage usage = buildUsage(productFamily);
         List<Usage> usages = Collections.singletonList(usage);
-        Capture<Predicate<Usage>> predicateCapture = new Capture<>();
+        Capture<Predicate<Usage>> predicateCapture = newCapture();
         fasRightsProcessor.executeNextChainProcessor(eq(usages), capture(predicateCapture));
         expectLastCall().once();
         replay(fasRightsProcessor);

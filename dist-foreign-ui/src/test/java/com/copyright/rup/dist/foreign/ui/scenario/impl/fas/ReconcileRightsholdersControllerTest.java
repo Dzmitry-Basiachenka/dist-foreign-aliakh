@@ -5,6 +5,7 @@ import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.isNull;
+import static org.easymock.EasyMock.newCapture;
 import static org.easymock.EasyMock.same;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
@@ -114,7 +115,7 @@ public class ReconcileRightsholdersControllerTest {
 
     @Test
     public void testLoadBeans() {
-        Capture<Pageable> pageableCapture = new Capture<>();
+        Capture<Pageable> pageableCapture = newCapture();
         List<RightsholderDiscrepancy> discrepancies = Collections.singletonList(new RightsholderDiscrepancy());
         expect(rightsholderDiscrepancyService.getByScenarioIdAndStatus(same(scenario.getId()),
             same(RightsholderDiscrepancyStatusEnum.DRAFT), capture(pageableCapture), isNull()))
@@ -131,8 +132,8 @@ public class ReconcileRightsholdersControllerTest {
     public void testGetCsvStreamSource() {
         OffsetDateTime now = OffsetDateTime.of(2019, 1, 2, 3, 4, 5, 6, ZoneOffset.ofHours(0));
         mockStatic(OffsetDateTime.class);
-        Capture<Supplier<String>> fileNameSupplierCapture = new Capture<>();
-        Capture<Consumer<PipedOutputStream>> posConsumerCapture = new Capture<>();
+        Capture<Supplier<String>> fileNameSupplierCapture = newCapture();
+        Capture<Consumer<PipedOutputStream>> posConsumerCapture = newCapture();
         String fileName = String.format("ownership_adjustment_report_%s_", scenario.getName());
         Supplier<String> fileNameSupplier = () -> fileName;
         Supplier<InputStream> inputStreamSupplier =

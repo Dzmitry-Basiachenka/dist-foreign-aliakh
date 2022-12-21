@@ -7,6 +7,7 @@ import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.newCapture;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -349,7 +350,7 @@ public class AaclUsageWidgetTest {
         mockStatic(Windows.class);
         ClickEvent clickEvent = createMock(ClickEvent.class);
         CloseEvent closeEvent = createMock(CloseEvent.class);
-        Capture<Window> notificationWindowCapture = new Capture<>();
+        Capture<Window> notificationWindowCapture = newCapture();
         Button sendForClassificationButton =
             (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
                 .getComponent(0)).getComponent(2);

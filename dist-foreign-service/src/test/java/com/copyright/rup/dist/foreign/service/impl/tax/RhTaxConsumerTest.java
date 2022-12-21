@@ -6,6 +6,7 @@ import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expectLastCall;
+import static org.easymock.EasyMock.newCapture;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 
@@ -54,7 +55,7 @@ public class RhTaxConsumerTest {
     public void testConsumeWithUsUsageRh() {
         Usage usage = buildUsage(USAGE_ID_1);
         List<Usage> usages = Collections.singletonList(usage);
-        Capture<Predicate<Usage>> predicateCapture = new Capture<>();
+        Capture<Predicate<Usage>> predicateCapture = newCapture();
         rhTaxProcessor.executeNextChainProcessor(eq(usages), capture(predicateCapture));
         expectLastCall().once();
         replay(rhTaxProcessor);
@@ -67,7 +68,7 @@ public class RhTaxConsumerTest {
     public void testConsumeWithoutUsUsageRh() {
         Usage usage = buildUsage(USAGE_ID_2);
         List<Usage> usages = Collections.singletonList(usage);
-        Capture<Predicate<Usage>> predicateCapture = new Capture<>();
+        Capture<Predicate<Usage>> predicateCapture = newCapture();
         rhTaxProcessor.executeNextChainProcessor(eq(usages), capture(predicateCapture));
         expectLastCall().once();
         replay(rhTaxProcessor);

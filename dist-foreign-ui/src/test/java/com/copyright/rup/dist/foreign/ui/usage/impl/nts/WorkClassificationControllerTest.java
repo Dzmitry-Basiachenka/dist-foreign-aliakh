@@ -4,6 +4,7 @@ import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.isNull;
+import static org.easymock.EasyMock.newCapture;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 import static org.powermock.api.easymock.PowerMock.createMock;
@@ -67,7 +68,7 @@ public class WorkClassificationControllerTest {
 
     @Test
     public void testGetClassifications() {
-        Capture<Pageable> pageableCapture = new Capture<>();
+        Capture<Pageable> pageableCapture = newCapture();
         List<WorkClassification> classifications = Collections.singletonList(new WorkClassification());
         expect(workClassificationService.getClassifications(eq(BATCHES_IDS), eq(SEARCH_VALUE),
             capture(pageableCapture), isNull())).andReturn(classifications).once();

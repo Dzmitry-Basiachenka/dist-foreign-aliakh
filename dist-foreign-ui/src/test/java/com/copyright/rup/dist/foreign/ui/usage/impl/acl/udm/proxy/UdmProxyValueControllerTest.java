@@ -4,6 +4,7 @@ import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
+import static org.easymock.EasyMock.newCapture;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
@@ -99,8 +100,8 @@ public class UdmProxyValueControllerTest {
     @Test
     public void testGetExportUdmProxyValuesStreamSource() {
         mockStatic(OffsetDateTime.class);
-        Capture<Supplier<String>> fileNameSupplierCapture = new Capture<>();
-        Capture<Consumer<PipedOutputStream>> posConsumerCapture = new Capture<>();
+        Capture<Supplier<String>> fileNameSupplierCapture = newCapture();
+        Capture<Consumer<PipedOutputStream>> posConsumerCapture = newCapture();
         String fileName = "export_udm_proxy_value_";
         Supplier<InputStream> inputStreamSupplier =
                 () -> IOUtils.toInputStream(StringUtils.EMPTY, StandardCharsets.UTF_8);

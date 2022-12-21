@@ -5,6 +5,7 @@ import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
+import static org.easymock.EasyMock.newCapture;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertFalse;
@@ -69,7 +70,7 @@ public class StmRhConsumerTest {
     public void testConsumeNotExcludingStm() {
         Usage usage = buildUsage(USAGE_ID_1);
         List<Usage> usages = Collections.singletonList(usage);
-        Capture<Predicate<Usage>> predicateCapture = new Capture<>();
+        Capture<Predicate<Usage>> predicateCapture = newCapture();
         expect(batchService.getUsageBatchById(BATCH_ID)).andReturn(buildUsageBatch(buildNtsFields(false))).once();
         stmRhProcessor.executeNextChainProcessor(eq(usages), capture(predicateCapture));
         expectLastCall().once();
@@ -83,7 +84,7 @@ public class StmRhConsumerTest {
     public void testConsumeExcludingStmWithNonStmRightsholder() {
         Usage usage = buildUsage(USAGE_ID_1);
         List<Usage> usages = Collections.singletonList(usage);
-        Capture<Predicate<Usage>> predicateCapture = new Capture<>();
+        Capture<Predicate<Usage>> predicateCapture = newCapture();
         expect(batchService.getUsageBatchById(BATCH_ID)).andReturn(buildUsageBatch(buildNtsFields(true))).once();
         stmRhService.processStmRhs(usages, NTS_PRODUCT_FAMILY);
         expectLastCall().andDelegateTo(new MockStmRhService()).once();
@@ -99,7 +100,7 @@ public class StmRhConsumerTest {
     public void testConsumeExcludingStmWithStmRightsholder() {
         Usage usage = buildUsage(USAGE_ID_2);
         List<Usage> usages = Collections.singletonList(usage);
-        Capture<Predicate<Usage>> predicateCapture = new Capture<>();
+        Capture<Predicate<Usage>> predicateCapture = newCapture();
         expect(batchService.getUsageBatchById(BATCH_ID)).andReturn(buildUsageBatch(buildNtsFields(true))).once();
         stmRhService.processStmRhs(usages, NTS_PRODUCT_FAMILY);
         expectLastCall().andDelegateTo(new MockStmRhService()).once();

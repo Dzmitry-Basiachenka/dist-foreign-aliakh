@@ -46,8 +46,6 @@ dependencies {
     testCompile("com.copyright.rup.dist.common:dist-common-test:${distCommonVersion}")
     testCompile("org.apache.commons:commons-text:${commonsTextVersion}")
 
-    testRuntime("cglib:cglib-nodep:${cglibNodepVersion}")
-
     testIntegRuntime("com.jayway.jsonpath:json-path:${jsonPathVersion}")
     testIntegRuntime("org.skyscreamer:jsonassert:${jsonassertVersion}")
 }

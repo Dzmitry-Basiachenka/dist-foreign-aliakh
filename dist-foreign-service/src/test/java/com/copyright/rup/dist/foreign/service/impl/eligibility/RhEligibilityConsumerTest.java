@@ -8,6 +8,7 @@ import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
+import static org.easymock.EasyMock.newCapture;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 
@@ -56,7 +57,7 @@ public class RhEligibilityConsumerTest {
     public void testConsumeUsageWithEligibleRightsholder() {
         Usage usage = buildUsage();
         List<Usage> usages = Collections.singletonList(usage);
-        Capture<Predicate<Usage>> predicateCapture = new Capture<>();
+        Capture<Predicate<Usage>> predicateCapture = newCapture();
         expect(prmIntegrationService.isRightsholderEligibleForNtsDistribution(RH_ID)).andReturn(true).once();
         rhEligibilityProcessor.executeNextChainProcessor(eq(usages), capture(predicateCapture));
         expectLastCall().once();
@@ -70,7 +71,7 @@ public class RhEligibilityConsumerTest {
     public void testConsumeUsageWithIneligibleRightsholder() {
         Usage usage = buildUsage();
         List<Usage> usages = Collections.singletonList(usage);
-        Capture<Predicate<Usage>> predicateCapture = new Capture<>();
+        Capture<Predicate<Usage>> predicateCapture = newCapture();
         expect(prmIntegrationService.isRightsholderEligibleForNtsDistribution(RH_ID)).andReturn(false).once();
         rhEligibilityProcessor.executeNextChainProcessor(eq(usages), capture(predicateCapture));
         expectLastCall().once();

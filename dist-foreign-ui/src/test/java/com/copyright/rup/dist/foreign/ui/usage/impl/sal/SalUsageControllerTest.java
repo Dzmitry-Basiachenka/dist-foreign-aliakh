@@ -5,6 +5,7 @@ import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.isNull;
+import static org.easymock.EasyMock.newCapture;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -185,7 +186,7 @@ public class SalUsageControllerTest {
         usageFilter.setSalDetailType(SalDetailTypeEnum.IB);
         expect(filterController.getWidget()).andReturn(filterWidget).once();
         expect(filterWidget.getAppliedFilter()).andReturn(usageFilter).once();
-        Capture<Pageable> pageableCapture = new Capture<>();
+        Capture<Pageable> pageableCapture = newCapture();
         expect(salUsageService.getUsageDtos(eq(usageFilter), capture(pageableCapture), isNull()))
             .andReturn(Collections.singletonList(new UsageDto())).once();
         replay(filterWidget, salUsageService, filterController);
@@ -202,8 +203,8 @@ public class SalUsageControllerTest {
     public void testGetExportUsagesStreamSource() {
         mockStatic(OffsetDateTime.class);
         usageFilter.setProductFamily("SAL");
-        Capture<Supplier<String>> fileNameSupplierCapture = new Capture<>();
-        Capture<Consumer<PipedOutputStream>> posConsumerCapture = new Capture<>();
+        Capture<Supplier<String>> fileNameSupplierCapture = newCapture();
+        Capture<Consumer<PipedOutputStream>> posConsumerCapture = newCapture();
         String fileName = "export_usage_";
         Supplier<String> fileNameSupplier = () -> fileName;
         Supplier<InputStream> inputStreamSupplier =

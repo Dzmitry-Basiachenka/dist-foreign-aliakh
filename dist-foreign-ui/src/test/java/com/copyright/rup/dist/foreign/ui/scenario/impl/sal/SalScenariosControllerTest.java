@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.ui.scenario.impl.sal;
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.newCapture;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.powermock.api.easymock.PowerMock.createMock;
@@ -97,7 +98,7 @@ public class SalScenariosControllerTest {
     @Test
     public void testSendScenarioToLm() {
         mockStatic(Windows.class);
-        Capture<ConfirmDialogWindow.IListener> listenerCapture = new Capture<>();
+        Capture<ConfirmDialogWindow.IListener> listenerCapture = newCapture();
         expect(Windows.showConfirmDialog(
             eq("Are you sure that you want to send the following scenarios to Liability Manager: <ul><li><i><b>" +
                 SCENARIO_NAME_1 + "<br><li>" + SCENARIO_NAME_2 + "</b></i></ul>"),
@@ -155,7 +156,7 @@ public class SalScenariosControllerTest {
     @Test
     public void testOnDeleteButtonClicked() {
         mockStatic(Windows.class);
-        Capture<IListener> listenerCapture = new Capture<>();
+        Capture<IListener> listenerCapture = newCapture();
         expect(scenariosWidget.getSelectedScenario()).andReturn(scenario1).once();
         expect(Windows.showConfirmDialog(
             eq("Are you sure you want to delete <i><b>'" + SCENARIO_NAME_1 + "'</b></i> scenario?"),

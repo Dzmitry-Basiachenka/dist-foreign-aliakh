@@ -4,8 +4,6 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
            http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <import resource="classpath:/com/copyright/rup/dist/foreign/ui/dist-foreign-ui-rest-context.xml"/>
-
     <bean id="dm.service.schedulerServiceMock" class="org.easymock.EasyMock" factory-method="createMock" primary="true">
         <constructor-arg type="java.lang.Class" value="com.copyright.rup.dist.common.service.api.scheduler.ISchedulerService"/>
     </bean>
@@ -25,4 +23,6 @@
     <bean id="dm.repository.usageArchiveRepositoryMock" class="org.easymock.EasyMock" factory-method="createMock" primary="true">
         <constructor-arg type="java.lang.Class" value="com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository"/>
     </bean>
+
+    <import resource="classpath:/com/copyright/rup/dist/foreign/ui/dist-foreign-ui-rest-context.xml"/>
 </beans>

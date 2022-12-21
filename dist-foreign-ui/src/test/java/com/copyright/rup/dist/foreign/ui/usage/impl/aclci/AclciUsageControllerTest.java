@@ -128,7 +128,7 @@ public class AclciUsageControllerTest {
         usageFilter.setLicenseTypes(Collections.singleton(AclciLicenseTypeEnum.CURR_REPUB_K12));
         expect(filterController.getWidget()).andReturn(filterWidget).once();
         expect(filterWidget.getAppliedFilter()).andReturn(usageFilter).once();
-        Capture<Pageable> pageableCapture = new Capture<>();
+        Capture<Pageable> pageableCapture = newCapture();
         expect(aclciUsageService.getUsageDtos(eq(usageFilter), capture(pageableCapture), isNull()))
             .andReturn(Collections.singletonList(new UsageDto())).once();
         replay(filterWidget, aclciUsageService, filterController);

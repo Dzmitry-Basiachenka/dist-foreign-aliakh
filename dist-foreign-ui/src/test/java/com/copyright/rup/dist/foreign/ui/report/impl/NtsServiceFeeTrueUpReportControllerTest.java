@@ -4,6 +4,7 @@ import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
+import static org.easymock.EasyMock.newCapture;
 import static org.easymock.EasyMock.same;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -77,7 +78,7 @@ public class NtsServiceFeeTrueUpReportControllerTest {
         Scenario scenario = new Scenario();
         ICommonScenarioReportWidget widget = createMock(ICommonScenarioReportWidget.class);
         Whitebox.setInternalState(controller, widget);
-        Capture<OutputStream> osCapture = new Capture<>();
+        Capture<OutputStream> osCapture = newCapture();
         expect(OffsetDateTime.now()).andReturn(now).once();
         expect(widget.getScenario()).andReturn(scenario).once();
         reportService.writeNtsServiceFeeTrueUpCsvReport(same(scenario), capture(osCapture));

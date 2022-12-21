@@ -5,6 +5,7 @@ import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.isNull;
+import static org.easymock.EasyMock.newCapture;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
@@ -60,7 +61,7 @@ public class SalAuditFilterControllerTest {
     @Test
     public void testLoadBeans() {
         List<Rightsholder> rightsholders = Collections.emptyList();
-        Capture<Pageable> pageableCapture = new Capture<>();
+        Capture<Pageable> pageableCapture = newCapture();
         expect(rightsholderService.getAllWithSearch(eq(SEARCH_VALUE), capture(pageableCapture), isNull()))
             .andReturn(rightsholders).once();
         replay(rightsholderService);

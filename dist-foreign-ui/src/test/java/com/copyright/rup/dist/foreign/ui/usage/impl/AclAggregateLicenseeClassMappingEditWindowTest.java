@@ -7,6 +7,7 @@ import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expectLastCall;
+import static org.easymock.EasyMock.newCapture;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
@@ -106,7 +107,7 @@ public class AclAggregateLicenseeClassMappingEditWindowTest {
         Button saveButton = (Button) buttonsLayout.getComponent(0);
         IParametersSaveListener<List<DetailLicenseeClass>> listener = createMock(IParametersSaveListener.class);
         window.addListener(ParametersSaveEvent.class, listener, IParametersSaveListener.SAVE_HANDLER);
-        Capture<ParametersSaveEvent<List<DetailLicenseeClass>>> event = new Capture<>();
+        Capture<ParametersSaveEvent<List<DetailLicenseeClass>>> event = newCapture();
         listener.onSave(capture(event));
         expectLastCall().once();
         replay(listener);
