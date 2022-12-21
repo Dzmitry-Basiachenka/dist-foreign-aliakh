@@ -1,22 +1,56 @@
 [
   {
-    "status": "NEW",
+    "status": "ELIGIBLE",
     "productFamily": "ACLCI",
-    "wrWrkInst": 109060602,
-    "workTitle": "Steam engines",
+    "wrWrkInst": 854030732,
+    "workTitle": "Technical Journal",
+    "rightsholder": {
+      "accountNumber": 1000000322
+    },
+    "grossAmount": 0.0000000000,
+    "netAmount": 0.0000000000,
+    "serviceFeeAmount": 0.0000000000,
     "comment": "some comment",
     "aclciUsage": {
       "coveragePeriod": "2021-2022",
       "licenseType": "CURR_REPUB_K12",
       "reportedMediaType": "TEXT",
-      "mediaTypeWeight": 1,
+      "mediaTypeWeight": 1.0,
       "reportedArticle": "The Bronze Statue",
-      "reportedStandardNumber": "978-0-7614-1880-1",
+      "reportedStandardNumber": "978-0-7695-2365-1",
       "reportedAuthor": "Hugh Lupton",
       "reportedPublisher": "Barefoot Books",
       "reportedPublicationDate": "2021-02-03",
       "reportedGrade": "6",
-      "gradeGroup": "GRADE6_8"
+      "gradeGroup": "GRADE6_8",
+      "batchPeriodEndDate": "2022-06-30"
+    }
+  },
+  {
+    "status": "ELIGIBLE",
+    "productFamily": "ACLCI",
+    "wrWrkInst": 658824345,
+    "workTitle": "Medical Journal",
+    "rightsholder": {
+      "accountNumber": 1000009522
+    },
+    "grossAmount": 0.0000000000,
+    "netAmount": 0.0000000000,
+    "serviceFeeAmount": 0.0000000000,
+    "comment": "another comment",
+    "aclciUsage": {
+      "coveragePeriod": "2020-2021",
+      "licenseType": "CURR_REUSE_K12",
+      "reportedMediaType": "IMAGE",
+      "mediaTypeWeight": 0.3,
+      "reportedArticle": "Traveling Hunters",
+      "reportedStandardNumber": "978-0-7695-2365-2",
+      "reportedAuthor": "Natalie M. Rosinsky",
+      "reportedPublisher": "Compass Point Books",
+      "reportedPublicationDate": "2020-01-02",
+      "reportedGrade": "9",
+      "gradeGroup": "GRADE6_8",
+      "batchPeriodEndDate": "2022-06-30"
     }
   }
 ]

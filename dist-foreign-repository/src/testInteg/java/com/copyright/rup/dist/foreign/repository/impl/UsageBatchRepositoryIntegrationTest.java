@@ -72,8 +72,8 @@ public class UsageBatchRepositoryIntegrationTest {
     private static final String NTS_USAGE_BATCH_ID_1 = "e92f9fcd-9eec-4170-960c-f9f8d6cabd2d";
     private static final String NTS_USAGE_BATCH_ID_2 = "99725b90-c4da-414d-9159-f1c8c83c5e19";
     private static final String NTS_USAGE_BATCH_ID_3 = "3da5944b-dab1-47a4-a29d-2dbecc6737e0";
-    private static final Long LICENSEE_ACCOUNT_NUMBER = 1000008985L;
-    private static final String LICENSEE_NAME = "FarmField Inc.";
+    private static final Long LICENSEE_ACCOUNT_NUMBER = 1111L;
+    private static final String LICENSEE_NAME = "Acuson Corporation";
 
     @Autowired
     private UsageBatchRepository usageBatchRepository;

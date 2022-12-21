@@ -13,6 +13,7 @@ import com.copyright.rup.dist.foreign.domain.AclFundPoolDetail;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDetail;
 import com.copyright.rup.dist.foreign.domain.AclScenarioShareDetail;
+import com.copyright.rup.dist.foreign.domain.AclciUsage;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
@@ -725,6 +726,23 @@ public class ServiceTestHelper {
         assertEquals(expectedUsage.getNumberOfViews(), actualUsage.getNumberOfViews());
         assertEquals(expectedUsage.getScoredAssessmentDate(), actualUsage.getScoredAssessmentDate());
         assertEquals(expectedUsage.getQuestionIdentifier(), actualUsage.getQuestionIdentifier());
+    }
+
+    public void assertAclciUsage(AclciUsage expectedUsage, AclciUsage actualUsage)  {
+        assertEquals(expectedUsage.getLicenseeAccountNumber(), actualUsage.getLicenseeAccountNumber());
+        assertEquals(expectedUsage.getLicenseeName(), actualUsage.getLicenseeName());
+        assertEquals(expectedUsage.getCoveragePeriod(), actualUsage.getCoveragePeriod());
+        assertEquals(expectedUsage.getLicenseType(), actualUsage.getLicenseType());
+        assertEquals(expectedUsage.getReportedMediaType(), actualUsage.getReportedMediaType());
+        assertEquals(expectedUsage.getMediaTypeWeight(), actualUsage.getMediaTypeWeight());
+        assertEquals(expectedUsage.getReportedArticle(), actualUsage.getReportedArticle());
+        assertEquals(expectedUsage.getReportedStandardNumber(), actualUsage.getReportedStandardNumber());
+        assertEquals(expectedUsage.getReportedAuthor(), actualUsage.getReportedAuthor());
+        assertEquals(expectedUsage.getReportedPublisher(), actualUsage.getReportedPublisher());
+        assertEquals(expectedUsage.getReportedPublicationDate(), actualUsage.getReportedPublicationDate());
+        assertEquals(expectedUsage.getReportedGrade(), actualUsage.getReportedGrade());
+        assertEquals(expectedUsage.getGradeGroup(), actualUsage.getGradeGroup());
+        assertEquals(expectedUsage.getBatchPeriodEndDate(), actualUsage.getBatchPeriodEndDate());
     }
 
     public void verifyAclScenario(AclScenario expectedAclScenario, AclScenario actualAclScenario) {

@@ -1,0 +1,11 @@
+{
+  "works": [
+    {
+      "wr_wrk_inst": 658824345,
+      "period_end_date": "06/30/2022",
+      "status": ["GRANT", "DENY"],
+      "type_of_use": ["CURR_REUSE_K12"],
+      "license_type": ["CURR_REUSE_K12"]
+    }
+  ]
+}
