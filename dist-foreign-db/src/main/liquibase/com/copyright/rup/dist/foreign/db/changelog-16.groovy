@@ -142,5 +142,15 @@ databaseChangeLog {
         rollback {
             dropColumn(schemaName: dbAppsSchema, tableName: 'df_usage_batch', columnName: 'aclci_fields')
         }
-    }    
+    }
+
+    changeSet(id: '2022-12-20-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
+        comment("B-68555 FDA: Load ACLCI usage batch: expand coverage_period column")
+
+        modifyDataType(schemaName: dbAppsSchema, tableName: 'df_usage_aclci', columnName: 'coverage_period', newDataType: 'VARCHAR(100)')
+
+        rollback {
+            modifyDataType(schemaName: dbAppsSchema, tableName: 'df_usage_aclci', columnName: 'coverage_period', newDataType: 'VARCHAR(9)')
+        }
+    }
 }
