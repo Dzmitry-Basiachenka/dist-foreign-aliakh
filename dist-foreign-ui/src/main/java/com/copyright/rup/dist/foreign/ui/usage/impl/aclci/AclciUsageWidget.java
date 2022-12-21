@@ -47,16 +47,16 @@ public class AclciUsageWidget extends CommonUsageWidget implements IAclciUsageWi
 
     @Override
     protected void addGridColumns() {
-        addColumn(UsageDto::getId, "table.column.detail_id", "detailId", false, 130);
-        addColumn(UsageDto::getStatus, "table.column.usage_status", "status", true, 115);
+        addColumn(UsageDto::getId, "table.column.detail_id", "detailId", false, 200);
+        addColumn(UsageDto::getStatus, "table.column.usage_status", "status", true, 165);
         addColumn(usage -> usage.getAclciUsage().getLicenseType(), "table.column.license_type",
-            "licenseType", true, 115);
+            "licenseType", true, 150);
         addColumn(UsageDto::getProductFamily, "table.column.product_family", "productFamily", true, 125);
-        addColumn(UsageDto::getBatchName, "table.column.batch_name", "batchName", true, 145);
+        addColumn(UsageDto::getBatchName, "table.column.batch_name", "batchName", true, 200);
         addColumn(usage -> CommonDateUtils.format(usage.getPeriodEndDate(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT),
             "table.column.period_end_date", "periodEndDate", true, 115);
         addColumn(usage -> usage.getAclciUsage().getCoveragePeriod(), "table.column.coverage_period",
-            "coveragePeriod", true, 300);
+            "coveragePeriod", true, 130);
         addColumn(usage -> usage.getAclciUsage().getLicenseeAccountNumber(), "table.column.licensee_account_number",
             "licenseeAccountNumber", true, 150);
         addColumn(usage -> usage.getAclciUsage().getLicenseeName(), "table.column.licensee_name",
@@ -65,7 +65,7 @@ public class AclciUsageWidget extends CommonUsageWidget implements IAclciUsageWi
         addColumn(UsageDto::getRhName, "table.column.rh_account_name", "rhName", true, 300);
         addColumn(UsageDto::getWrWrkInst, "table.column.wr_wrk_inst", "wrWrkInst", true, 110);
         addColumn(UsageDto::getSystemTitle, "table.column.system_title", "systemTitle", true, 300);
-        addColumn(UsageDto::getStandardNumber, "table.column.standard_number", "standardNumber", true, 140);
+        addColumn(UsageDto::getStandardNumber, "table.column.standard_number", "standardNumber", true, 210);
         addColumn(UsageDto::getStandardNumberType, "table.column.standard_number_type",
             "standardNumberType", true, 155);
         addColumn(UsageDto::getWorkTitle, "table.column.reported_title", "workTitle", true, 300);
@@ -84,7 +84,7 @@ public class AclciUsageWidget extends CommonUsageWidget implements IAclciUsageWi
         addColumn(usage -> usage.getAclciUsage().getReportedPublicationDate(), "table.column.reported_publication_date",
             "reportedPublicationDate", true, 200);
         addColumn(usage -> usage.getAclciUsage().getReportedGrade(), "table.column.reported_grade",
-            "reportedGrade", true, 150);
+            "reportedGrade", true, 120);
         addColumn(UsageDto::getComment, "table.column.comment", "comment", true, 115);
     }
 
