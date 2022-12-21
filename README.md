@@ -1,3 +1,11 @@
+16.0.23
+-
+* B-75669 FDA: ACLCI UI usage view filters: make changes based on comments in code review
+* B-68555 FDA: Load ACLCI usage batch: expand coverage_period column
+* B-68555 FDA: Load ACLCI usage batch: implement workflow integration test
+* B-68612 Tech Debt: FDA: change column width on ACLCI usage widget
+* CDP-1100 FDA: Upgrade to Java 11
+
 16.0.22
 -
 * B-68555 FDA: Load ACLCI usage batch: implement permissions
