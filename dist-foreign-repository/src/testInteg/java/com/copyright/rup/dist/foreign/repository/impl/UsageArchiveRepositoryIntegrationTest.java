@@ -15,10 +15,10 @@ import com.copyright.rup.dist.common.test.liquibase.LiquibaseTestExecutionListen
 import com.copyright.rup.dist.common.test.liquibase.TestData;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.AaclUsage;
-import com.copyright.rup.dist.foreign.domain.GradeGroupEnum;
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.SalDetailTypeEnum;
+import com.copyright.rup.dist.foreign.domain.SalGradeGroupEnum;
 import com.copyright.rup.dist.foreign.domain.SalUsage;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
@@ -1014,7 +1014,7 @@ public class UsageArchiveRepositoryIntegrationTest {
         SalUsage salUsage = new SalUsage();
         salUsage.setDetailType(SalDetailTypeEnum.IB);
         salUsage.setGrade("5");
-        salUsage.setGradeGroup(GradeGroupEnum.ITEM_BANK);
+        salUsage.setGradeGroup(SalGradeGroupEnum.ITEM_BANK);
         salUsage.setAssessmentName("FY16 AIR");
         salUsage.setReportedWorkPortionId("1101001IB2368");
         salUsage.setReportedArticle("Learning in Your Sleep");

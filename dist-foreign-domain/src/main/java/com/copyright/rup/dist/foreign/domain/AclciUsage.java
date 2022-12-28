@@ -31,7 +31,7 @@ public class AclciUsage {
     private String reportedPublisher;
     private String reportedPublicationDate;
     private String reportedGrade;
-    private String gradeGroup;
+    private AclciGradeGroupEnum gradeGroup;
     private LocalDate batchPeriodEndDate;
 
     public Long getLicenseeAccountNumber() {
@@ -130,11 +130,11 @@ public class AclciUsage {
         this.reportedGrade = reportedGrade;
     }
 
-    public String getGradeGroup() {
+    public AclciGradeGroupEnum getGradeGroup() {
         return gradeGroup;
     }
 
-    public void setGradeGroup(String gradeGroup) {
+    public void setGradeGroup(AclciGradeGroupEnum gradeGroup) {
         this.gradeGroup = gradeGroup;
     }
 

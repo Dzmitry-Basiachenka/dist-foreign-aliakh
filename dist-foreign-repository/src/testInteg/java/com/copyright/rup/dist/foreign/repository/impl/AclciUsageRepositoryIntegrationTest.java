@@ -126,7 +126,7 @@ public class AclciUsageRepositoryIntegrationTest {
         assertSortingUsageDto(dto2, dto1, "reportedAuthor");
         assertSortingUsageDto(dto2, dto1, "reportedPublisher");
         assertSortingUsageDto(dto2, dto1, "reportedPublicationDate");
-        assertSortingUsageDto(dto1, dto2, "reportedGrade");
+        assertSortingUsageDto(dto2, dto1, "reportedGrade");
         assertSortingUsageDto(dto1, dto2, "comment");
     }
 

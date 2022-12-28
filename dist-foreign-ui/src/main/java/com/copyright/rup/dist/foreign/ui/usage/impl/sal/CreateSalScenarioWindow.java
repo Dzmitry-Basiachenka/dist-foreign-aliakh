@@ -3,7 +3,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.sal;
 import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.FundPool;
-import com.copyright.rup.dist.foreign.domain.GradeGroupEnum;
+import com.copyright.rup.dist.foreign.domain.SalGradeGroupEnum;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.ui.common.validator.RequiredValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
@@ -156,18 +156,18 @@ class CreateSalScenarioWindow extends Window {
     }
 
     private boolean isValidGradeGroups(FundPool fundPool) {
-        List<GradeGroupEnum> existingGradeGroups = controller.getUsageDataGradeGroups();
-        Map<GradeGroupEnum, BigDecimal> gradeGroupAmountMap = Maps.newHashMapWithExpectedSize(3);
-        gradeGroupAmountMap.put(GradeGroupEnum.GRADEK_5, fundPool.getSalFields().getGradeKto5GrossAmount());
-        gradeGroupAmountMap.put(GradeGroupEnum.GRADE6_8, fundPool.getSalFields().getGrade6to8GrossAmount());
-        gradeGroupAmountMap.put(GradeGroupEnum.GRADE9_12, fundPool.getSalFields().getGrade9to12GrossAmount());
+        List<SalGradeGroupEnum> existingGradeGroups = controller.getUsageDataGradeGroups();
+        Map<SalGradeGroupEnum, BigDecimal> gradeGroupAmountMap = Maps.newHashMapWithExpectedSize(3);
+        gradeGroupAmountMap.put(SalGradeGroupEnum.GRADEK_5, fundPool.getSalFields().getGradeKto5GrossAmount());
+        gradeGroupAmountMap.put(SalGradeGroupEnum.GRADE6_8, fundPool.getSalFields().getGrade6to8GrossAmount());
+        gradeGroupAmountMap.put(SalGradeGroupEnum.GRADE9_12, fundPool.getSalFields().getGrade9to12GrossAmount());
         return isValidGradeGroupAmounts(gradeGroupAmountMap, existingGradeGroups)
             && isValidGradeGroupDetails(gradeGroupAmountMap, existingGradeGroups);
     }
 
-    private boolean isValidGradeGroupAmounts(Map<GradeGroupEnum, BigDecimal> gradeGroupAmountMap,
-                                             List<GradeGroupEnum> existingGradeGroups) {
-        List<GradeGroupEnum> invalidGradeGroupDetails = gradeGroupAmountMap.entrySet()
+    private boolean isValidGradeGroupAmounts(Map<SalGradeGroupEnum, BigDecimal> gradeGroupAmountMap,
+                                             List<SalGradeGroupEnum> existingGradeGroups) {
+        List<SalGradeGroupEnum> invalidGradeGroupDetails = gradeGroupAmountMap.entrySet()
             .stream()
             .filter(entry -> 0 > BigDecimal.ZERO.compareTo(entry.getValue())
                 && !existingGradeGroups.contains(entry.getKey()))
@@ -180,9 +180,9 @@ class CreateSalScenarioWindow extends Window {
         return CollectionUtils.isEmpty(invalidGradeGroupDetails);
     }
 
-    private boolean isValidGradeGroupDetails(Map<GradeGroupEnum, BigDecimal> gradeGroupAmountMap,
-                                             List<GradeGroupEnum> existingGradeGroups) {
-        List<GradeGroupEnum> invalidGradeGroupAmounts = existingGradeGroups.stream()
+    private boolean isValidGradeGroupDetails(Map<SalGradeGroupEnum, BigDecimal> gradeGroupAmountMap,
+                                             List<SalGradeGroupEnum> existingGradeGroups) {
+        List<SalGradeGroupEnum> invalidGradeGroupAmounts = existingGradeGroups.stream()
             .filter(gradeGroup -> 0 == BigDecimal.ZERO.compareTo(gradeGroupAmountMap.get(gradeGroup)))
             .sorted()
             .collect(Collectors.toList());
@@ -192,8 +192,8 @@ class CreateSalScenarioWindow extends Window {
         return CollectionUtils.isEmpty(invalidGradeGroupAmounts);
     }
 
-    private void showGradeGroupErrorWindow(List<GradeGroupEnum> invalidGradeGroups, String errorMessage) {
+    private void showGradeGroupErrorWindow(List<SalGradeGroupEnum> invalidGradeGroups, String errorMessage) {
         Windows.showNotificationWindow(ForeignUi.getMessage(errorMessage,
-            invalidGradeGroups.stream().map(GradeGroupEnum::name).collect(Collectors.joining(", "))));
+            invalidGradeGroups.stream().map(SalGradeGroupEnum::name).collect(Collectors.joining(", "))));
     }
 }

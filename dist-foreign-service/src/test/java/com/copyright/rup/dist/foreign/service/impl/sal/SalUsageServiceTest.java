@@ -17,7 +17,7 @@ import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
-import com.copyright.rup.dist.foreign.domain.GradeGroupEnum;
+import com.copyright.rup.dist.foreign.domain.SalGradeGroupEnum;
 import com.copyright.rup.dist.foreign.domain.SalUsage;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
@@ -38,6 +38,7 @@ import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEn
 import com.copyright.rup.dist.foreign.service.api.sal.ISalUsageService;
 
 import com.google.common.collect.ImmutableMap;
+
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
@@ -250,7 +251,7 @@ public class SalUsageServiceTest {
     public void testGetUsageDataGradeGroups() {
         UsageFilter filter = new UsageFilter();
         filter.setUsageBatchesIds(Collections.singleton("cdd46087-87b9-4ecd-ab6f-9b5dcf0f82bf"));
-        List<GradeGroupEnum> gradeGroups = Collections.singletonList(GradeGroupEnum.ITEM_BANK);
+        List<SalGradeGroupEnum> gradeGroups = Collections.singletonList(SalGradeGroupEnum.ITEM_BANK);
         expect(salUsageRepository.findUsageDataGradeGroups(filter)).andReturn(gradeGroups).once();
         replay(salUsageRepository);
         assertSame(gradeGroups, salUsageService.getUsageDataGradeGroups(filter));

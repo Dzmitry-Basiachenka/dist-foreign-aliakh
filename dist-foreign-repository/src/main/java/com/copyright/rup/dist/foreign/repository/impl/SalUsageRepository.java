@@ -5,8 +5,8 @@ import static com.google.common.base.Preconditions.checkArgument;
 import com.copyright.rup.dist.common.repository.BaseRepository;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
-import com.copyright.rup.dist.foreign.domain.GradeGroupEnum;
 import com.copyright.rup.dist.foreign.domain.SalDetailTypeEnum;
+import com.copyright.rup.dist.foreign.domain.SalGradeGroupEnum;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
@@ -130,7 +130,7 @@ public class SalUsageRepository extends BaseRepository implements ISalUsageRepos
     }
 
     @Override
-    public List<GradeGroupEnum> findUsageDataGradeGroups(UsageFilter filter) {
+    public List<SalGradeGroupEnum> findUsageDataGradeGroups(UsageFilter filter) {
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(2);
         params.put(FILTER_KEY, Objects.requireNonNull(filter));
         params.put(DETAIL_TYPE_KEY, SalDetailTypeEnum.UD);

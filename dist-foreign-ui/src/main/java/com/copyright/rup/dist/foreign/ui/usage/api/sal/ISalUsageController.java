@@ -3,7 +3,7 @@ package com.copyright.rup.dist.foreign.ui.usage.api.sal;
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
 import com.copyright.rup.dist.foreign.domain.FundPool;
-import com.copyright.rup.dist.foreign.domain.GradeGroupEnum;
+import com.copyright.rup.dist.foreign.domain.SalGradeGroupEnum;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
@@ -66,9 +66,9 @@ public interface ISalUsageController extends ICommonUsageController {
     /**
      * Gets presented grade groups from filtered UD usages.
      *
-     * @return list of {@link GradeGroupEnum}
+     * @return list of {@link SalGradeGroupEnum}
      */
-    List<GradeGroupEnum> getUsageDataGradeGroups();
+    List<SalGradeGroupEnum> getUsageDataGradeGroups();
 
     /**
      * Gets SAL usage data CSV processor.

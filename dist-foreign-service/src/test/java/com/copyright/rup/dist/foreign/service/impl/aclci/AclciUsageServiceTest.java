@@ -14,6 +14,8 @@ import static org.powermock.api.easymock.PowerMock.verify;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
+import com.copyright.rup.dist.foreign.domain.AclciGradeGroupEnum;
+import com.copyright.rup.dist.foreign.domain.AclciUsage;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
@@ -80,6 +82,8 @@ public class AclciUsageServiceTest {
         mockStatic(RupContextUtils.class);
         Usage usage = new Usage();
         usage.setProductFamily(ACLCI_PRODUCT_FAMILY);
+        usage.setAclciUsage(new AclciUsage());
+        usage.getAclciUsage().setReportedGrade("HE");
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
         aclciUsageRepository.insert(usage);
         expectLastCall().once();
@@ -88,6 +92,7 @@ public class AclciUsageServiceTest {
         expectLastCall().once();
         replay(RupContextUtils.class, aclciUsageRepository, usageAuditService);
         aclciUsageService.insertUsages(buildUsageBatch(), Collections.singletonList(usage));
+        assertEquals(AclciGradeGroupEnum.GRADE_HE, usage.getAclciUsage().getGradeGroup());
         verify(RupContextUtils.class, aclciUsageRepository, usageAuditService);
     }
 

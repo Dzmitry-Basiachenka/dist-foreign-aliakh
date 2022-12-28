@@ -95,8 +95,8 @@ databaseChangeLog {
             column(name: 'reported_author', value: 'Associated Press')
             column(name: 'reported_publisher', value: 'Associated Press')
             column(name: 'reported_publication_date', value: '2021-02-14')
-            column(name: 'reported_grade', value: 'K')
-            column(name: 'grade_group', value: 'GRADEK_5')
+            column(name: 'reported_grade', value: '6')
+            column(name: 'grade_group', value: 'GRADE6_5')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
@@ -138,8 +138,8 @@ databaseChangeLog {
             column(name: 'reported_author', value: 'Associated Press')
             column(name: 'reported_publisher', value: 'Associated Press')
             column(name: 'reported_publication_date', value: '2021-02-14')
-            column(name: 'reported_grade', value: 'K')
-            column(name: 'grade_group', value: 'GRADEK_5')
+            column(name: 'reported_grade', value: '3')
+            column(name: 'grade_group', value: 'GRADE3_5')
         }
 
         rollback {

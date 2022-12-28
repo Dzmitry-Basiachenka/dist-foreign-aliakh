@@ -12,8 +12,8 @@ import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.common.test.liquibase.LiquibaseTestExecutionListener;
 import com.copyright.rup.dist.common.test.liquibase.TestData;
-import com.copyright.rup.dist.foreign.domain.GradeGroupEnum;
 import com.copyright.rup.dist.foreign.domain.SalDetailTypeEnum;
+import com.copyright.rup.dist.foreign.domain.SalGradeGroupEnum;
 import com.copyright.rup.dist.foreign.domain.SalUsage;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
@@ -21,12 +21,14 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.ISalUsageRepository;
+
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -313,10 +315,10 @@ public class SalUsageRepositoryIntegrationTest {
     public void testFindUsageDataGradeGroups() {
         UsageFilter filter = new UsageFilter();
         filter.setUsageBatchesIds(Collections.singleton(USAGE_BATCH_ID_1));
-        assertEquals(Collections.singletonList(GradeGroupEnum.GRADE9_12),
+        assertEquals(Collections.singletonList(SalGradeGroupEnum.GRADE9_12),
             salUsageRepository.findUsageDataGradeGroups(filter));
         filter.setUsageBatchesIds(Collections.singleton(USAGE_BATCH_ID_2));
-        assertEquals(Collections.singletonList(GradeGroupEnum.GRADE6_8),
+        assertEquals(Collections.singletonList(SalGradeGroupEnum.GRADE6_8),
             salUsageRepository.findUsageDataGradeGroups(filter));
     }
 

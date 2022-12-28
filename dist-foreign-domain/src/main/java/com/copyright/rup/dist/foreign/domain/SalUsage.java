@@ -23,7 +23,7 @@ public class SalUsage {
     private String licenseeName;
     private SalDetailTypeEnum detailType;
     private String grade;
-    private GradeGroupEnum gradeGroup;
+    private SalGradeGroupEnum gradeGroup;
     private String assessmentName;
     private String assessmentType;
     private String reportedWorkPortionId;
@@ -75,11 +75,11 @@ public class SalUsage {
         this.grade = grade;
     }
 
-    public GradeGroupEnum getGradeGroup() {
+    public SalGradeGroupEnum getGradeGroup() {
         return gradeGroup;
     }
 
-    public void setGradeGroup(GradeGroupEnum gradeGroup) {
+    public void setGradeGroup(SalGradeGroupEnum gradeGroup) {
         this.gradeGroup = gradeGroup;
     }
 
