@@ -20,7 +20,7 @@ import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.FundPool.SalFields;
-import com.copyright.rup.dist.foreign.domain.GradeGroupEnum;
+import com.copyright.rup.dist.foreign.domain.SalGradeGroupEnum;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.ui.usage.api.ScenarioCreateEvent;
@@ -133,7 +133,7 @@ public class CreateSalScenarioWindowTest {
         expect(controller.scenarioExists(SCENARIO_NAME)).andReturn(false).times(2);
         expect(controller.getSelectedUsageBatch()).andReturn(usageBatch).once();
         expect(controller.getUsageDataGradeGroups())
-            .andReturn(Collections.singletonList(GradeGroupEnum.GRADE6_8)).once();
+            .andReturn(Collections.singletonList(SalGradeGroupEnum.GRADE6_8)).once();
         expect(controller.createSalScenario(SCENARIO_NAME, FUND_POOL_ID, StringUtils.EMPTY)).andReturn(scenario).once();
         replay(controller, filterController);
         TestCreateSalScenarioWindow createScenarioWindow = new TestCreateSalScenarioWindow(controller);
@@ -172,7 +172,7 @@ public class CreateSalScenarioWindowTest {
         expect(controller.scenarioExists(SCENARIO_NAME)).andReturn(false).times(2);
         expect(controller.getSelectedUsageBatch()).andReturn(usageBatch).once();
         expect(controller.getUsageDataGradeGroups())
-            .andReturn(Collections.singletonList(GradeGroupEnum.GRADE6_8)).once();
+            .andReturn(Collections.singletonList(SalGradeGroupEnum.GRADE6_8)).once();
         Windows.showNotificationWindow("There are no usage details for GRADEK_5, GRADE9_12 grade group(s)");
         expectLastCall().once();
         replay(controller, filterController, Windows.class);
@@ -187,7 +187,7 @@ public class CreateSalScenarioWindowTest {
         expect(controller.scenarioExists(SCENARIO_NAME)).andReturn(false).times(2);
         expect(controller.getSelectedUsageBatch()).andReturn(usageBatch).once();
         expect(controller.getUsageDataGradeGroups()).andReturn(
-            Arrays.asList(GradeGroupEnum.GRADEK_5, GradeGroupEnum.GRADE6_8, GradeGroupEnum.GRADE9_12)).once();
+            Arrays.asList(SalGradeGroupEnum.GRADEK_5, SalGradeGroupEnum.GRADE6_8, SalGradeGroupEnum.GRADE9_12)).once();
         Windows.showNotificationWindow("Gross amount for GRADEK_5, GRADE9_12 grade group(s) should be greater than 0");
         expectLastCall().once();
         replay(controller, filterController, Windows.class);

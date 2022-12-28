@@ -4,6 +4,7 @@ import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
+import com.copyright.rup.dist.foreign.domain.AclciGradeGroupEnum;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
@@ -64,6 +65,8 @@ public class AclciUsageService implements IAclciUsageService {
             usage.setBatchId(usageBatch.getId());
             usage.setCreateUser(userName);
             usage.setUpdateUser(userName);
+            usage.getAclciUsage().setGradeGroup(
+                AclciGradeGroupEnum.getGroupByGrade(usage.getAclciUsage().getReportedGrade()));
             aclciUsageRepository.insert(usage);
         });
         String loadedReason = "Uploaded in '" + usageBatch.getName() + "' Batch";

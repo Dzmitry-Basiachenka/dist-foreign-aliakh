@@ -8,8 +8,8 @@ import com.copyright.rup.dist.common.service.impl.csv.validator.LengthValidator;
 import com.copyright.rup.dist.common.service.impl.csv.validator.PositiveNumberValidator;
 import com.copyright.rup.dist.common.service.impl.csv.validator.RequiredValidator;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
-import com.copyright.rup.dist.foreign.domain.GradeGroupEnum;
 import com.copyright.rup.dist.foreign.domain.SalDetailTypeEnum;
+import com.copyright.rup.dist.foreign.domain.SalGradeGroupEnum;
 import com.copyright.rup.dist.foreign.domain.SalUsage;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
@@ -132,7 +132,7 @@ public class SalItemBankCsvProcessor extends DistCsvProcessor<Usage> {
             salUsage.setAssessmentName(getString(row, Header.ASSESSMENT_NAME, headers));
             salUsage.setCoverageYear(getString(row, Header.COVERAGE_YEAR, headers));
             salUsage.setGrade(getString(row, Header.GRADE, headers));
-            salUsage.setGradeGroup(GradeGroupEnum.ITEM_BANK);
+            salUsage.setGradeGroup(SalGradeGroupEnum.ITEM_BANK);
             salUsage.setReportedWorkPortionId(getString(row, Header.REPORTED_WORK_PORTION_ID, headers));
             salUsage.setReportedStandardNumber(getString(row, Header.REPORTED_STANDARD_NUMBER, headers));
             salUsage.setReportedMediaType(getString(row, Header.REPORTED_MEDIA_TYPE, headers));

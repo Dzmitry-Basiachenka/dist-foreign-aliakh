@@ -119,7 +119,6 @@ public class AclciUsageCsvProcessor extends DistCsvProcessor<Usage> {
             String licenseType = getString(row, Header.LICENSE_TYPE, headers).toUpperCase(Locale.ROOT);
             aclciUsage.setLicenseType(AclciLicenseTypeEnum.valueOf(licenseType));
             aclciUsage.setReportedGrade(getString(row, Header.REPORTED_GRADE, headers));
-            aclciUsage.setGradeGroup("GRADE6_8"); //TODO: will be implemented in a separate story
             aclciUsage.setReportedStandardNumber(getString(row, Header.REPORTED_STANDARD_NUMBER, headers));
             aclciUsage.setReportedArticle(getString(row, Header.REPORTED_ARTICLE, headers));
             aclciUsage.setReportedAuthor(getString(row, Header.REPORTED_AUTHOR, headers));

@@ -10,8 +10,8 @@ import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.common.util.LogUtils;
 import com.copyright.rup.dist.common.util.LogUtils.ILogWrapper;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
-import com.copyright.rup.dist.foreign.domain.GradeGroupEnum;
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
+import com.copyright.rup.dist.foreign.domain.SalGradeGroupEnum;
 import com.copyright.rup.dist.foreign.domain.SalUsage;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Usage;
@@ -139,7 +139,7 @@ public class SalUsageService implements ISalUsageService {
             if (Objects.isNull(salUsage.getGrade())) {
                 salUsage.setGrade(getItemBankDetailGradeByWorkPortionId(salUsage.getReportedWorkPortionId()));
             }
-            usage.getSalUsage().setGradeGroup(GradeGroupEnum.getGroupByGrade(usage.getSalUsage().getGrade()));
+            usage.getSalUsage().setGradeGroup(SalGradeGroupEnum.getGroupByGrade(usage.getSalUsage().getGrade()));
             usage.setCreateUser(userName);
             usage.setUpdateUser(userName);
             salUsageRepository.insertUsageDataDetail(usage);
@@ -228,7 +228,7 @@ public class SalUsageService implements ISalUsageService {
     }
 
     @Override
-    public List<GradeGroupEnum> getUsageDataGradeGroups(UsageFilter filter) {
+    public List<SalGradeGroupEnum> getUsageDataGradeGroups(UsageFilter filter) {
         return salUsageRepository.findUsageDataGradeGroups(filter);
     }
 

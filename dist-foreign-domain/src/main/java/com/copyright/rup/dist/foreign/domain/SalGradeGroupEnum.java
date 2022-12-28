@@ -11,7 +11,7 @@ import com.google.common.collect.Range;
  *
  * @author Ihar Suvorau
  */
-public enum GradeGroupEnum {
+public enum SalGradeGroupEnum {
     /**
      * 'Item Bank' grade group.
      */
@@ -35,13 +35,13 @@ public enum GradeGroupEnum {
     private static final Range<Integer> GRADE_RANGE_9_12 = Range.closed(9, 12);
 
     /**
-     * Gets {@link GradeGroupEnum} by provided grade.
+     * Gets {@link SalGradeGroupEnum} by provided grade.
      *
      * @param grade grade
-     * @return {@link GradeGroupEnum} instance
+     * @return {@link SalGradeGroupEnum} instance
      */
-    public static GradeGroupEnum getGroupByGrade(String grade) {
-        GradeGroupEnum result = null;
+    public static SalGradeGroupEnum getGroupByGrade(String grade) {
+        SalGradeGroupEnum result = null;
         if (GRADE_K.equals(grade)) {
             result = GRADEK_5;
         } else {

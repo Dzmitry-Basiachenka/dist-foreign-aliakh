@@ -2,7 +2,7 @@ package com.copyright.rup.dist.foreign.repository.api;
 
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
-import com.copyright.rup.dist.foreign.domain.GradeGroupEnum;
+import com.copyright.rup.dist.foreign.domain.SalGradeGroupEnum;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
@@ -114,9 +114,9 @@ public interface ISalUsageRepository {
      * Finds grade groups from filtered UD usages.
      *
      * @param filter instance of {@link UsageFilter}
-     * @return list of {@link GradeGroupEnum}
+     * @return list of {@link SalGradeGroupEnum}
      */
-    List<GradeGroupEnum> findUsageDataGradeGroups(UsageFilter filter);
+    List<SalGradeGroupEnum> findUsageDataGradeGroups(UsageFilter filter);
 
     /**
      * Attaches usages to scenario.

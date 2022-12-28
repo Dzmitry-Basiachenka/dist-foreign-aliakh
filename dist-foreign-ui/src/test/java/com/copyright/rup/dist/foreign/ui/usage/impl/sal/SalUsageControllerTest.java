@@ -23,8 +23,8 @@ import com.copyright.rup.dist.common.reporting.api.IStreamSourceHandler;
 import com.copyright.rup.dist.common.reporting.impl.StreamSource;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.domain.FundPool;
-import com.copyright.rup.dist.foreign.domain.GradeGroupEnum;
 import com.copyright.rup.dist.foreign.domain.SalDetailTypeEnum;
+import com.copyright.rup.dist.foreign.domain.SalGradeGroupEnum;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
@@ -301,7 +301,7 @@ public class SalUsageControllerTest {
     public void testGetUsageDataGradeGroups() {
         expect(filterController.getWidget()).andReturn(filterWidget).once();
         expect(filterWidget.getAppliedFilter()).andReturn(usageFilter).once();
-        List<GradeGroupEnum> gradeGroups = Collections.singletonList(GradeGroupEnum.ITEM_BANK);
+        List<SalGradeGroupEnum> gradeGroups = Collections.singletonList(SalGradeGroupEnum.ITEM_BANK);
         expect(salUsageService.getUsageDataGradeGroups(usageFilter)).andReturn(gradeGroups).once();
         replay(filterController, filterWidget, salUsageService);
         assertSame(gradeGroups, controller.getUsageDataGradeGroups());
