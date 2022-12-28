@@ -16,13 +16,19 @@ import com.vaadin.ui.MenuBar;
 class AclciUsageMediator implements IMediator {
 
     private MenuBar.MenuItem loadUsageBatchMenuItem;
+    private MenuBar.MenuItem loadFundPoolMenuItem;
 
     @Override
     public void applyPermissions() {
         loadUsageBatchMenuItem.setVisible(ForeignSecurityUtils.hasLoadUsagePermission());
+        loadFundPoolMenuItem.setVisible(ForeignSecurityUtils.hasLoadFundPoolPermission());
     }
 
     public void setLoadUsageBatchMenuItem(MenuBar.MenuItem loadUsageBatchMenuItem) {
         this.loadUsageBatchMenuItem = loadUsageBatchMenuItem;
+    }
+
+    public void setLoadFundPoolMenuItem(MenuBar.MenuItem loadFundPoolMenuItem) {
+        this.loadFundPoolMenuItem = loadFundPoolMenuItem;
     }
 }

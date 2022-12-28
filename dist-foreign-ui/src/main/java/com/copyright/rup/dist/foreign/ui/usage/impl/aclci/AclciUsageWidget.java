@@ -33,6 +33,8 @@ public class AclciUsageWidget extends CommonUsageWidget implements IAclciUsageWi
     private final IAclciUsageController controller;
     private MenuBar usageBatchMenuBar;
     private MenuBar.MenuItem loadUsageBatchMenuItem;
+    private MenuBar fundPoolMenuBar;
+    private MenuBar.MenuItem loadFundPoolMenuItem;
     private Button updateUsagesButton;
 
     /**
@@ -48,6 +50,7 @@ public class AclciUsageWidget extends CommonUsageWidget implements IAclciUsageWi
     public IMediator initMediator() {
         AclciUsageMediator mediator = new AclciUsageMediator();
         mediator.setLoadUsageBatchMenuItem(loadUsageBatchMenuItem);
+        mediator.setLoadFundPoolMenuItem(loadFundPoolMenuItem);
         return mediator;
     }
 
@@ -97,9 +100,10 @@ public class AclciUsageWidget extends CommonUsageWidget implements IAclciUsageWi
     @Override
     protected HorizontalLayout initButtonsLayout() {
         initUsageBatchMenuBar();
+        initFundPoolMenuBar();
         initUpdateUsagesButton();
         VaadinUtils.setButtonsAutoDisabled(updateUsagesButton);
-        HorizontalLayout layout = new HorizontalLayout(usageBatchMenuBar, updateUsagesButton);
+        HorizontalLayout layout = new HorizontalLayout(usageBatchMenuBar, fundPoolMenuBar, updateUsagesButton);
         layout.setMargin(true);
         VaadinUtils.addComponentStyle(layout, "usages-buttons");
         return layout;
@@ -118,6 +122,16 @@ public class AclciUsageWidget extends CommonUsageWidget implements IAclciUsageWi
             item -> Windows.showModalWindow(new AclciUsageBatchUploadWindow(controller)));
         VaadinUtils.addComponentStyle(usageBatchMenuBar, "usage-batch-menu-bar");
         VaadinUtils.addComponentStyle(usageBatchMenuBar, "v-menubar-df");
+    }
+
+    private void initFundPoolMenuBar() {
+        fundPoolMenuBar = new MenuBar();
+        MenuBar.MenuItem menuItem =
+            fundPoolMenuBar.addItem(ForeignUi.getMessage("menu.caption.fund_pool"), null, null);
+        loadFundPoolMenuItem = menuItem.addItem(ForeignUi.getMessage("menu.item.load"), null,
+            item -> Windows.showModalWindow(new AclciFundPoolLoadWindow()));
+        VaadinUtils.addComponentStyle(fundPoolMenuBar, "fund-pool-menu-bar");
+        VaadinUtils.addComponentStyle(fundPoolMenuBar, "v-menubar-df");
     }
 
     private void initUpdateUsagesButton() {
