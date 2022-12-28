@@ -29,6 +29,7 @@ public class FundPool extends StoredEntity<String> {
     private BigDecimal serviceFeeAmount = BigDecimal.ZERO.setScale(2, BigDecimal.ROUND_HALF_UP);
     private BigDecimal netAmount = BigDecimal.ZERO.setScale(2, BigDecimal.ROUND_HALF_UP);
     private SalFields salFields;
+    private AclciFields aclciFields;
 
     public String getProductFamily() {
         return productFamily;
@@ -86,6 +87,14 @@ public class FundPool extends StoredEntity<String> {
         this.salFields = salFields;
     }
 
+    public AclciFields getAclciFields() {
+        return aclciFields;
+    }
+
+    public void setAclciFields(AclciFields aclciFields) {
+        this.aclciFields = aclciFields;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -104,6 +113,7 @@ public class FundPool extends StoredEntity<String> {
             .append(serviceFeeAmount, that.serviceFeeAmount)
             .append(netAmount, that.netAmount)
             .append(salFields, that.salFields)
+            .append(aclciFields, that.aclciFields)
             .isEquals();
     }
 
@@ -118,6 +128,7 @@ public class FundPool extends StoredEntity<String> {
             .append(serviceFeeAmount)
             .append(netAmount)
             .append(salFields)
+            .append(aclciFields)
             .toHashCode();
     }
 
@@ -132,6 +143,7 @@ public class FundPool extends StoredEntity<String> {
             .append("serviceFeeAmount", serviceFeeAmount)
             .append("netAmount", netAmount)
             .append("salFields", salFields)
+            .append("aclciFields", aclciFields)
             .toString();
     }
 
@@ -219,22 +231,6 @@ public class FundPool extends StoredEntity<String> {
             this.grossAmount = grossAmount;
         }
 
-        public BigDecimal getItemBankSplitPercent() {
-            return itemBankSplitPercent;
-        }
-
-        public void setItemBankSplitPercent(BigDecimal itemBankSplitPercent) {
-            this.itemBankSplitPercent = itemBankSplitPercent;
-        }
-
-        public BigDecimal getServiceFee() {
-            return serviceFee;
-        }
-
-        public void setServiceFee(BigDecimal serviceFee) {
-            this.serviceFee = serviceFee;
-        }
-
         public BigDecimal getItemBankGrossAmount() {
             return itemBankGrossAmount;
         }
@@ -265,6 +261,22 @@ public class FundPool extends StoredEntity<String> {
 
         public void setGrade9to12GrossAmount(BigDecimal grade9to12GrossAmount) {
             this.grade9to12GrossAmount = grade9to12GrossAmount;
+        }
+
+        public BigDecimal getItemBankSplitPercent() {
+            return itemBankSplitPercent;
+        }
+
+        public void setItemBankSplitPercent(BigDecimal itemBankSplitPercent) {
+            this.itemBankSplitPercent = itemBankSplitPercent;
+        }
+
+        public BigDecimal getServiceFee() {
+            return serviceFee;
+        }
+
+        public void setServiceFee(BigDecimal serviceFee) {
+            this.serviceFee = serviceFee;
         }
 
         @Override
@@ -316,7 +328,7 @@ public class FundPool extends StoredEntity<String> {
 
         @Override
         public String toString() {
-            return new ToStringBuilder(this)
+            return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("dateReceived", dateReceived)
                 .append("assessmentName", assessmentName)
                 .append("licenseeName", licenseeName)
@@ -330,6 +342,217 @@ public class FundPool extends StoredEntity<String> {
                 .append("grade6to8GrossAmount", grade6to8GrossAmount)
                 .append("grade9to12GrossAmount", grade9to12GrossAmount)
                 .append("itemBankSplitPercent", itemBankSplitPercent)
+                .append("serviceFee", serviceFee)
+                .toString();
+        }
+    }
+
+    /**
+     * Represents ACLCI specific fields.
+     */
+    public static class AclciFields {
+
+        private String coverageYears;
+        private int gradeKto2NumberOfStudents;
+        private int grade3to5NumberOfStudents;
+        private int grade6to8NumberOfStudents;
+        private int grade9to12NumberOfStudents;
+        private int gradeHeNumberOfStudents;
+        private BigDecimal grossAmount = BigDecimal.ZERO;
+        private BigDecimal curriculumGrossAmount = BigDecimal.ZERO;
+        private BigDecimal gradeKto2GrossAmount = BigDecimal.ZERO;
+        private BigDecimal grade3to5GrossAmount = BigDecimal.ZERO;
+        private BigDecimal grade6to8GrossAmount = BigDecimal.ZERO;
+        private BigDecimal grade9to12GrossAmount = BigDecimal.ZERO;
+        private BigDecimal gradeHeGrossAmount = BigDecimal.ZERO;
+        private BigDecimal curriculumSplitPercent = BigDecimal.ZERO;
+        private BigDecimal serviceFee = BigDecimal.ZERO;
+
+        public String getCoverageYears() {
+            return coverageYears;
+        }
+
+        public void setCoverageYears(String coverageYears) {
+            this.coverageYears = coverageYears;
+        }
+
+        public int getGradeKto2NumberOfStudents() {
+            return gradeKto2NumberOfStudents;
+        }
+
+        public void setGradeKto2NumberOfStudents(int gradeKto2NumberOfStudents) {
+            this.gradeKto2NumberOfStudents = gradeKto2NumberOfStudents;
+        }
+
+        public int getGrade3to5NumberOfStudents() {
+            return grade3to5NumberOfStudents;
+        }
+
+        public void setGrade3to5NumberOfStudents(int grade3to5NumberOfStudents) {
+            this.grade3to5NumberOfStudents = grade3to5NumberOfStudents;
+        }
+
+        public int getGrade6to8NumberOfStudents() {
+            return grade6to8NumberOfStudents;
+        }
+
+        public void setGrade6to8NumberOfStudents(int grade6to8NumberOfStudents) {
+            this.grade6to8NumberOfStudents = grade6to8NumberOfStudents;
+        }
+
+        public int getGrade9to12NumberOfStudents() {
+            return grade9to12NumberOfStudents;
+        }
+
+        public void setGrade9to12NumberOfStudents(int grade9to12NumberOfStudents) {
+            this.grade9to12NumberOfStudents = grade9to12NumberOfStudents;
+        }
+
+        public int getGradeHeNumberOfStudents() {
+            return gradeHeNumberOfStudents;
+        }
+
+        public void setGradeHeNumberOfStudents(int gradeHeNumberOfStudents) {
+            this.gradeHeNumberOfStudents = gradeHeNumberOfStudents;
+        }
+
+        public BigDecimal getGrossAmount() {
+            return grossAmount;
+        }
+
+        public void setGrossAmount(BigDecimal grossAmount) {
+            this.grossAmount = grossAmount;
+        }
+
+        public BigDecimal getCurriculumGrossAmount() {
+            return curriculumGrossAmount;
+        }
+
+        public void setCurriculumGrossAmount(BigDecimal curriculumGrossAmount) {
+            this.curriculumGrossAmount = curriculumGrossAmount;
+        }
+
+        public BigDecimal getGradeKto2GrossAmount() {
+            return gradeKto2GrossAmount;
+        }
+
+        public void setGradeKto2GrossAmount(BigDecimal gradeKto2GrossAmount) {
+            this.gradeKto2GrossAmount = gradeKto2GrossAmount;
+        }
+
+        public BigDecimal getGrade3to5GrossAmount() {
+            return grade3to5GrossAmount;
+        }
+
+        public void setGrade3to5GrossAmount(BigDecimal grade3to5GrossAmount) {
+            this.grade3to5GrossAmount = grade3to5GrossAmount;
+        }
+
+        public BigDecimal getGrade6to8GrossAmount() {
+            return grade6to8GrossAmount;
+        }
+
+        public void setGrade6to8GrossAmount(BigDecimal grade6to8GrossAmount) {
+            this.grade6to8GrossAmount = grade6to8GrossAmount;
+        }
+
+        public BigDecimal getGrade9to12GrossAmount() {
+            return grade9to12GrossAmount;
+        }
+
+        public void setGrade9to12GrossAmount(BigDecimal grade9to12GrossAmount) {
+            this.grade9to12GrossAmount = grade9to12GrossAmount;
+        }
+
+        public BigDecimal getGradeHeGrossAmount() {
+            return gradeHeGrossAmount;
+        }
+
+        public void setGradeHeGrossAmount(BigDecimal gradeHeGrossAmount) {
+            this.gradeHeGrossAmount = gradeHeGrossAmount;
+        }
+
+        public BigDecimal getCurriculumSplitPercent() {
+            return curriculumSplitPercent;
+        }
+
+        public void setCurriculumSplitPercent(BigDecimal curriculumSplitPercent) {
+            this.curriculumSplitPercent = curriculumSplitPercent;
+        }
+
+        public BigDecimal getServiceFee() {
+            return serviceFee;
+        }
+
+        public void setServiceFee(BigDecimal serviceFee) {
+            this.serviceFee = serviceFee;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (null == obj || getClass() != obj.getClass()) {
+                return false;
+            }
+            AclciFields that = (AclciFields) obj;
+            return new EqualsBuilder()
+                .append(coverageYears, that.coverageYears)
+                .append(gradeKto2NumberOfStudents, that.gradeKto2NumberOfStudents)
+                .append(grade3to5NumberOfStudents, that.grade3to5NumberOfStudents)
+                .append(grade6to8NumberOfStudents, that.grade6to8NumberOfStudents)
+                .append(grade9to12NumberOfStudents, that.grade9to12NumberOfStudents)
+                .append(gradeHeNumberOfStudents, that.gradeHeNumberOfStudents)
+                .append(grossAmount, that.grossAmount)
+                .append(curriculumGrossAmount, that.curriculumGrossAmount)
+                .append(gradeKto2GrossAmount, that.gradeKto2GrossAmount)
+                .append(grade3to5GrossAmount, that.grade3to5GrossAmount)
+                .append(grade6to8GrossAmount, that.grade6to8GrossAmount)
+                .append(grade9to12GrossAmount, that.grade9to12GrossAmount)
+                .append(gradeHeGrossAmount, that.gradeHeGrossAmount)
+                .append(curriculumSplitPercent, that.curriculumSplitPercent)
+                .append(serviceFee, that.serviceFee).isEquals();
+        }
+
+        @Override
+        public int hashCode() {
+            return new HashCodeBuilder()
+                .append(coverageYears)
+                .append(gradeKto2NumberOfStudents)
+                .append(grade3to5NumberOfStudents)
+                .append(grade6to8NumberOfStudents)
+                .append(grade9to12NumberOfStudents)
+                .append(gradeHeNumberOfStudents)
+                .append(grossAmount)
+                .append(curriculumGrossAmount)
+                .append(gradeKto2GrossAmount)
+                .append(grade3to5GrossAmount)
+                .append(grade6to8GrossAmount)
+                .append(grade9to12GrossAmount)
+                .append(gradeHeGrossAmount)
+                .append(curriculumSplitPercent)
+                .append(serviceFee)
+                .toHashCode();
+        }
+
+        @Override
+        public String toString() {
+            return new ToStringBuilder(this)
+                .append("coverageYears", coverageYears)
+                .append("gradeKto2NumberOfStudents", gradeKto2NumberOfStudents)
+                .append("grade3to5NumberOfStudents", grade3to5NumberOfStudents)
+                .append("grade6to8NumberOfStudents", grade6to8NumberOfStudents)
+                .append("grade9to12NumberOfStudents", grade9to12NumberOfStudents)
+                .append("gradeHeNumberOfStudents", gradeHeNumberOfStudents)
+                .append("grossAmount", grossAmount)
+                .append("curriculumGrossAmount", curriculumGrossAmount)
+                .append("gradeKto2GrossAmount", gradeKto2GrossAmount)
+                .append("grade3to5GrossAmount", grade3to5GrossAmount)
+                .append("grade6to8GrossAmount", grade6to8GrossAmount)
+                .append("grade9to12GrossAmount", grade9to12GrossAmount)
+                .append("gradeHeGrossAmount", gradeHeGrossAmount)
+                .append("curriculumSplitPercent", curriculumSplitPercent)
                 .append("serviceFee", serviceFee)
                 .toString();
         }
