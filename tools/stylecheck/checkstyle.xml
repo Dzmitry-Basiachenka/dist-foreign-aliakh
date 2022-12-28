@@ -712,7 +712,7 @@
             <property name="excludes"
                       value="com.google.common.base.Preconditions.*,org.junit.Assert.*,org.junit.Assume.*,org.easymock.EasyMock.*,
                             org.powermock.api.easymock.PowerMock.*,junit.framework.TestCase.*,org.hamcrest.Matchers.*,
-                            com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.*"/>
+                            com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.*,org.hamcrest.MatcherAssert.*"/>
         </module>
 
         <!-- Checks for imports from a set of illegal packages. !-->

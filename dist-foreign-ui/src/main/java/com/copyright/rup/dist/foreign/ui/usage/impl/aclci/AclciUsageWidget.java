@@ -3,16 +3,21 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.aclci;
 import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.aclci.IAclciUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.aclci.IAclciUsageWidget;
 import com.copyright.rup.dist.foreign.ui.usage.impl.CommonUsageWidget;
+import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.api.IMediator;
 
+import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.MenuBar;
+
+import java.util.Objects;
 
 /**
  * Implementation of {@link IAclciUsageWidget}.
@@ -25,9 +30,10 @@ import com.vaadin.ui.MenuBar;
  */
 public class AclciUsageWidget extends CommonUsageWidget implements IAclciUsageWidget {
 
+    private final IAclciUsageController controller;
     private MenuBar usageBatchMenuBar;
     private MenuBar.MenuItem loadUsageBatchMenuItem;
-    private final IAclciUsageController controller;
+    private Button updateUsagesButton;
 
     /**
      * Controller.
@@ -91,7 +97,9 @@ public class AclciUsageWidget extends CommonUsageWidget implements IAclciUsageWi
     @Override
     protected HorizontalLayout initButtonsLayout() {
         initUsageBatchMenuBar();
-        HorizontalLayout layout = new HorizontalLayout(usageBatchMenuBar);
+        initUpdateUsagesButton();
+        VaadinUtils.setButtonsAutoDisabled(updateUsagesButton);
+        HorizontalLayout layout = new HorizontalLayout(usageBatchMenuBar, updateUsagesButton);
         layout.setMargin(true);
         VaadinUtils.addComponentStyle(layout, "usages-buttons");
         return layout;
@@ -110,5 +118,24 @@ public class AclciUsageWidget extends CommonUsageWidget implements IAclciUsageWi
             item -> Windows.showModalWindow(new AclciUsageBatchUploadWindow(controller)));
         VaadinUtils.addComponentStyle(usageBatchMenuBar, "usage-batch-menu-bar");
         VaadinUtils.addComponentStyle(usageBatchMenuBar, "v-menubar-df");
+    }
+
+    private void initUpdateUsagesButton() {
+        updateUsagesButton = Buttons.createButton(ForeignUi.getMessage("button.update_usages"));
+        updateUsagesButton.addClickListener(event -> onUpdateUsagesButtonClicked());
+    }
+
+    private void onUpdateUsagesButtonClicked() {
+        String message = null;
+        if (!controller.isValidStatusFilterApplied()) {
+            message = ForeignUi.getMessage("message.error.status_not_applied_or_incorrect",
+                UsageStatusEnum.RH_NOT_FOUND, UsageStatusEnum.WORK_NOT_GRANTED);
+        } else if (0 == controller.getBeansCount()) {
+            message = ForeignUi.getMessage("message.error.update.empty_usages");
+        }
+        //TODO {dbasiachenka} add check to open window to update usages
+        if (!Objects.isNull(message)) {
+            Windows.showNotificationWindow(message);
+        }
     }
 }

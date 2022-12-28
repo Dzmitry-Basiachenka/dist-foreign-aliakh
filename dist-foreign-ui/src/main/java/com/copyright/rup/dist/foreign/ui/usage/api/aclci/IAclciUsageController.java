@@ -75,4 +75,13 @@ public interface IAclciUsageController extends ICommonUsageController {
      * @param fundPool instance of {@link FundPool}
      */
     void createAclciFundPool(FundPool fundPool);
+
+    /**
+     * Verifies whether status filter is applied
+     * and has value {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#RH_NOT_FOUND}
+     * or {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#WORK_NOT_GRANTED}.
+     *
+     * @return {@code true} - if status filter is applied, {@code false} - otherwise
+     */
+    boolean isValidStatusFilterApplied();
 }

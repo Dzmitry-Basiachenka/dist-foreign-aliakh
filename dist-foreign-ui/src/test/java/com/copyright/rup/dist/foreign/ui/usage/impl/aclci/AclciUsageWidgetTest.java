@@ -1,23 +1,31 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.aclci;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButton;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGrid;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyMenuBar;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
-import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.verify;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
+import static org.powermock.api.easymock.PowerMock.createMock;
+import static org.powermock.api.easymock.PowerMock.expectLastCall;
+import static org.powermock.api.easymock.PowerMock.mockStatic;
+import static org.powermock.api.easymock.PowerMock.replay;
+import static org.powermock.api.easymock.PowerMock.reset;
+import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.foreign.ui.usage.api.aclci.IAclciUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.aclci.IAclciUsageFilterController;
+import com.copyright.rup.vaadin.ui.component.window.Windows;
 
 import com.vaadin.server.Sizeable;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
@@ -26,8 +34,12 @@ import com.vaadin.ui.VerticalLayout;
 import org.apache.commons.lang3.tuple.Triple;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 
 /**
@@ -39,6 +51,8 @@ import java.util.Collections;
  *
  * @author Aliaksanr Liakh
  */
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({AclciUsageWidget.class, Windows.class})
 public class AclciUsageWidgetTest {
 
     private AclciUsageWidget widget;
@@ -53,6 +67,8 @@ public class AclciUsageWidgetTest {
         widget.setController(controller);
         replay(controller);
         widget.init();
+        verify(controller);
+        reset(controller);
     }
 
     @Test
@@ -95,7 +111,6 @@ public class AclciUsageWidgetTest {
             Triple.of("Reported Grade", 120.0, -1),
             Triple.of("Comment", 115.0, -1)));
         assertEquals(1, layout.getExpandRatio(grid), 0);
-        verify(controller);
     }
 
     @Test
@@ -113,8 +128,51 @@ public class AclciUsageWidgetTest {
         //TODO: implement
     }
 
+    @Test
+    public void testUpdateUsagesButtonClickListener() {
+        //TODO {dbasiachenka} implement
+    }
+
+    @Test
+    public void testUpdateUsagesButtonClickListenerNoUsages() {
+        mockStatic(Windows.class);
+        ClickEvent clickEvent = createMock(ClickEvent.class);
+        expect(controller.isValidStatusFilterApplied()).andReturn(true).once();
+        expect(controller.getBeansCount()).andReturn(0).once();
+        Windows.showNotificationWindow("There are no usages to update");
+        expectLastCall().once();
+        replay(controller, clickEvent, Windows.class);
+        Button updateUsagesButton =
+            (Button) ((HorizontalLayout) ((VerticalLayout) widget.getSecondComponent())
+                .getComponent(0)).getComponent(1);
+        Collection<?> listeners = updateUsagesButton.getListeners(ClickEvent.class);
+        assertEquals(2, listeners.size());
+        ClickListener clickListener = (ClickListener) listeners.iterator().next();
+        clickListener.buttonClick(clickEvent);
+        verify(controller, clickEvent, Windows.class);
+    }
+
+    @Test
+    public void testUpdateUsagesButtonClickListenerStatusNotApplied() {
+        mockStatic(Windows.class);
+        ClickEvent clickEvent = createMock(ClickEvent.class);
+        expect(controller.isValidStatusFilterApplied()).andReturn(false).once();
+        Windows.showNotificationWindow("RH_NOT_FOUND or WORK_NOT_GRANTED status filter should be applied");
+        expectLastCall().once();
+        replay(controller, clickEvent, Windows.class);
+        Button updateUsagesButton =
+            (Button) ((HorizontalLayout) ((VerticalLayout) widget.getSecondComponent())
+                .getComponent(0)).getComponent(1);
+        Collection<?> listeners = updateUsagesButton.getListeners(ClickEvent.class);
+        assertEquals(2, listeners.size());
+        ClickListener clickListener = (ClickListener) listeners.iterator().next();
+        clickListener.buttonClick(clickEvent);
+        verify(controller, clickEvent, Windows.class);
+    }
+
     private void verifyButtonsLayout(HorizontalLayout layout) {
-        assertEquals(1, layout.getComponentCount());
+        assertEquals(2, layout.getComponentCount());
         verifyMenuBar(layout.getComponent(0), "Usage Batch", true, Collections.singletonList("Load"));
+        verifyButton(layout.getComponent(1), "Update Usages", true);
     }
 }
