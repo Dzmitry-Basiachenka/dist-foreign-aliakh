@@ -35,6 +35,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Implementation of {@link IAclciUsageController}.
@@ -141,6 +142,13 @@ public class AclciUsageController extends CommonUsageController implements IAclc
     @Override
     public void createAclciFundPool(FundPool fundPool) {
         //TODO: implement: fundPoolService.createAclciFundPool(fundPool);
+    }
+
+    @Override
+    public boolean isValidStatusFilterApplied() {
+        UsageStatusEnum appliedStatus = getUsageFilterController().getWidget().getAppliedFilter().getUsageStatus();
+        return Objects.nonNull(appliedStatus)
+            && (UsageStatusEnum.RH_NOT_FOUND == appliedStatus || UsageStatusEnum.WORK_NOT_GRANTED == appliedStatus);
     }
 
     @Override

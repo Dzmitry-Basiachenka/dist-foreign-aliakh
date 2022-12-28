@@ -7,6 +7,7 @@ import static org.easymock.EasyMock.isNull;
 import static org.easymock.EasyMock.newCapture;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThat;
@@ -25,6 +26,7 @@ import com.copyright.rup.dist.foreign.domain.AclciLicenseTypeEnum;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.integration.telesales.api.ITelesalesService;
 import com.copyright.rup.dist.foreign.service.api.IFundPoolService;
@@ -243,5 +245,35 @@ public class AclciUsageControllerTest {
     @Test
     public void testCreateAclciFundPool() {
         //TODO: implement
+    }
+
+    @Test
+    public void testIsValidStatusFilterAppliedRhNotFound() {
+        usageFilter.setUsageStatus(UsageStatusEnum.RH_NOT_FOUND);
+        expect(filterController.getWidget()).andReturn(filterWidget).once();
+        expect(filterWidget.getAppliedFilter()).andReturn(usageFilter).once();
+        replay(filterController, filterWidget);
+        assertTrue(controller.isValidStatusFilterApplied());
+        verify(filterController, filterWidget);
+    }
+
+    @Test
+    public void testIsValidStatusFilterAppliedWorkNotGranted() {
+        usageFilter.setUsageStatus(UsageStatusEnum.WORK_NOT_GRANTED);
+        expect(filterController.getWidget()).andReturn(filterWidget).once();
+        expect(filterWidget.getAppliedFilter()).andReturn(usageFilter).once();
+        replay(filterController, filterWidget);
+        assertTrue(controller.isValidStatusFilterApplied());
+        verify(filterController, filterWidget);
+    }
+
+    @Test
+    public void testIsValidStatusFilterAppliedWorkEligible() {
+        usageFilter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
+        expect(filterController.getWidget()).andReturn(filterWidget).once();
+        expect(filterWidget.getAppliedFilter()).andReturn(usageFilter).once();
+        replay(filterController, filterWidget);
+        assertFalse(controller.isValidStatusFilterApplied());
+        verify(filterController, filterWidget);
     }
 }
