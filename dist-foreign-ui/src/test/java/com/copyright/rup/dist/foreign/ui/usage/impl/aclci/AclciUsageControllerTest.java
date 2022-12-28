@@ -10,6 +10,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
 import static org.powermock.api.easymock.PowerMock.replay;
@@ -26,6 +27,7 @@ import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.integration.telesales.api.ITelesalesService;
+import com.copyright.rup.dist.foreign.service.api.IFundPoolService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.impl.aclci.AclciUsageService;
 import com.copyright.rup.dist.foreign.service.impl.csv.AclciUsageCsvProcessor;
@@ -65,6 +67,8 @@ import java.util.function.Supplier;
 public class AclciUsageControllerTest {
 
     private static final String USAGE_BATCH_NAME = "ACLCI Usage Batch";
+    private static final String FUND_POOL_NAME = "ACLCI Fund Pool";
+    private static final String ACLCI_PRODUCT_FAMILY = "ACLCI";
     private static final Long LICENSEE_ACCOUNT_NUMBER = 1111L;
     private static final String LICENSEE_NAME = "Acuson Corporation";
 
@@ -76,6 +80,7 @@ public class AclciUsageControllerTest {
     private IStreamSourceHandler streamSourceHandler;
     private AclciUsageService aclciUsageService;
     private ITelesalesService telesalesService;
+    private IFundPoolService fundPoolService;
     private UsageFilter usageFilter;
 
     @Before
@@ -88,12 +93,14 @@ public class AclciUsageControllerTest {
         streamSourceHandler = createMock(IStreamSourceHandler.class);
         aclciUsageService = createMock(AclciUsageService.class);
         telesalesService = createMock(ITelesalesService.class);
+        fundPoolService = createMock(IFundPoolService.class);
         Whitebox.setInternalState(controller, filterController);
         Whitebox.setInternalState(controller, usageBatchService);
         Whitebox.setInternalState(controller, csvProcessorFactory);
         Whitebox.setInternalState(controller, streamSourceHandler);
         Whitebox.setInternalState(controller, aclciUsageService);
         Whitebox.setInternalState(controller, telesalesService);
+        Whitebox.setInternalState(controller, fundPoolService);
         usageFilter = new UsageFilter();
     }
 
@@ -218,5 +225,23 @@ public class AclciUsageControllerTest {
         replay(telesalesService);
         assertSame(LICENSEE_NAME, controller.getLicenseeName(LICENSEE_ACCOUNT_NUMBER));
         verify(telesalesService);
+    }
+
+    @Test
+    public void testAclciFundPoolExists() {
+        expect(fundPoolService.fundPoolExists(ACLCI_PRODUCT_FAMILY, FUND_POOL_NAME)).andReturn(true).once();
+        replay(fundPoolService);
+        assertTrue(controller.aclciFundPoolExists(FUND_POOL_NAME));
+        verify(fundPoolService);
+    }
+
+    @Test
+    public void testCalculateAclciFundPoolAmounts() {
+        //TODO: implement
+    }
+
+    @Test
+    public void testCreateAclciFundPool() {
+        //TODO: implement
     }
 }

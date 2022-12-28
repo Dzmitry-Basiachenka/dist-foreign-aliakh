@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.usage.api.aclci;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
+import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.service.impl.csv.AclciUsageCsvProcessor;
@@ -51,4 +52,27 @@ public interface IAclciUsageController extends ICommonUsageController {
      * @return licensee name
      */
     String getLicenseeName(Long licenseeAccountNumber);
+
+    /**
+     * Checks whether ACLCI fund pool with the name already exists.
+     *
+     * @param name ACLCI fund pool name
+     * @return {@code true} if fund pool exists, otherwise {@code false}
+     */
+    boolean aclciFundPoolExists(String name);
+
+    /**
+     * Calculates amounts for the ACLCI fund pool.
+     *
+     * @param fundPool instance of {@link FundPool} to calculate
+     * @return calculated ACLCI fund pool
+     */
+    FundPool calculateAclciFundPoolAmounts(FundPool fundPool);
+
+    /**
+     * Creates ACLCI fund pool.
+     *
+     * @param fundPool instance of {@link FundPool}
+     */
+    void createAclciFundPool(FundPool fundPool);
 }

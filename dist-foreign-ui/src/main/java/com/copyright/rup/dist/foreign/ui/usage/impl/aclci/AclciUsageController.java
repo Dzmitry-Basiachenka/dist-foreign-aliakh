@@ -6,11 +6,14 @@ import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
+import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.integration.telesales.api.ITelesalesService;
+import com.copyright.rup.dist.foreign.service.api.IFundPoolService;
 import com.copyright.rup.dist.foreign.service.api.aclci.IAclciUsageService;
 import com.copyright.rup.dist.foreign.service.impl.csv.AclciUsageCsvProcessor;
 import com.copyright.rup.dist.foreign.service.impl.csv.CsvProcessorFactory;
@@ -57,6 +60,8 @@ public class AclciUsageController extends CommonUsageController implements IAclc
     @Autowired
     @Qualifier("df.integration.telesalesCacheService")
     private ITelesalesService telesalesService;
+    @Autowired
+    private IFundPoolService fundPoolService;
 
     @Override
     public int getBeansCount() {
@@ -121,6 +126,21 @@ public class AclciUsageController extends CommonUsageController implements IAclc
     @Override
     public String getLicenseeName(Long licenseeAccountNumber) {
         return telesalesService.getLicenseeName(licenseeAccountNumber);
+    }
+
+    @Override
+    public boolean aclciFundPoolExists(String name) {
+        return fundPoolService.fundPoolExists(FdaConstants.ACLCI_PRODUCT_FAMILY, name);
+    }
+
+    @Override
+    public FundPool calculateAclciFundPoolAmounts(FundPool fundPool) {
+        return null;//TODO: implement: fundPoolService.calculateAclciFundPoolAmounts(fundPool);
+    }
+
+    @Override
+    public void createAclciFundPool(FundPool fundPool) {
+        //TODO: implement: fundPoolService.createAclciFundPool(fundPool);
     }
 
     @Override
