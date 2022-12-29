@@ -94,6 +94,8 @@ public class AclciUsageWidget extends CommonUsageWidget implements IAclciUsageWi
             "reportedPublicationDate", true, 200);
         addColumn(usage -> usage.getAclciUsage().getReportedGrade(), "table.column.reported_grade",
             "reportedGrade", true, 120);
+        addColumn(usageDto -> usageDto.getAclciUsage().getGradeGroup(), "table.column.grade_group", "gradeGroup", true,
+            115);
         addColumn(UsageDto::getComment, "table.column.comment", "comment", true, 115);
     }
 
