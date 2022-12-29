@@ -5,6 +5,7 @@ import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.Processin
 import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
+import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.service.impl.csv.AclciUsageCsvProcessor;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageController;
 
@@ -84,4 +85,11 @@ public interface IAclciUsageController extends ICommonUsageController {
      * @return {@code true} - if status filter is applied, {@code false} - otherwise
      */
     boolean isValidStatusFilterApplied();
+
+    /**
+     * Gets list of {@link UsageDto}s for updating.
+     *
+     * @return list of found {@link UsageDto}s
+     */
+    List<UsageDto> getUsageDtosToUpdate();
 }

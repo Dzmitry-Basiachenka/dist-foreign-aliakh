@@ -34,6 +34,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -149,6 +150,12 @@ public class AclciUsageController extends CommonUsageController implements IAclc
         UsageStatusEnum appliedStatus = getUsageFilterController().getWidget().getAppliedFilter().getUsageStatus();
         return Objects.nonNull(appliedStatus)
             && (UsageStatusEnum.RH_NOT_FOUND == appliedStatus || UsageStatusEnum.WORK_NOT_GRANTED == appliedStatus);
+    }
+
+    @Override
+    public List<UsageDto> getUsageDtosToUpdate() {
+        //TODO: {dbasiachenka} implement
+        return Collections.emptyList();
     }
 
     @Override

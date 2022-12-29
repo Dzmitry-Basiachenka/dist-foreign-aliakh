@@ -5,6 +5,7 @@ import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGrid;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyMenuBar;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
+import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.expect;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
@@ -18,6 +19,7 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.ui.usage.api.aclci.IAclciUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.aclci.IAclciUsageFilterController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
@@ -131,7 +133,22 @@ public class AclciUsageWidgetTest {
 
     @Test
     public void testUpdateUsagesButtonClickListener() {
-        //TODO {dbasiachenka} implement
+        mockStatic(Windows.class);
+        ClickEvent clickEvent = createMock(ClickEvent.class);
+        expect(controller.isValidStatusFilterApplied()).andReturn(true).once();
+        expect(controller.getBeansCount()).andReturn(1).once();
+        expect(controller.getUsageDtosToUpdate()).andReturn(Collections.singletonList(new UsageDto())).once();
+        Windows.showModalWindow(anyObject(AclciUsageUpdateWindow.class));
+        expectLastCall().once();
+        replay(controller, clickEvent, Windows.class);
+        Button updateUsagesButton =
+            (Button) ((HorizontalLayout) ((VerticalLayout) widget.getSecondComponent())
+                .getComponent(0)).getComponent(2);
+        Collection<?> listeners = updateUsagesButton.getListeners(ClickEvent.class);
+        assertEquals(2, listeners.size());
+        ClickListener clickListener = (ClickListener) listeners.iterator().next();
+        clickListener.buttonClick(clickEvent);
+        verify(controller, clickEvent, Windows.class);
     }
 
     @Test
