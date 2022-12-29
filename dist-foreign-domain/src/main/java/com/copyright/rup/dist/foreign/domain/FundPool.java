@@ -366,7 +366,6 @@ public class FundPool extends StoredEntity<String> {
         private BigDecimal grade9to12GrossAmount = BigDecimal.ZERO;
         private BigDecimal gradeHeGrossAmount = BigDecimal.ZERO;
         private BigDecimal curriculumSplitPercent = BigDecimal.ZERO;
-        private BigDecimal serviceFee = BigDecimal.ZERO;
 
         public String getCoverageYears() {
             return coverageYears;
@@ -480,14 +479,6 @@ public class FundPool extends StoredEntity<String> {
             this.curriculumSplitPercent = curriculumSplitPercent;
         }
 
-        public BigDecimal getServiceFee() {
-            return serviceFee;
-        }
-
-        public void setServiceFee(BigDecimal serviceFee) {
-            this.serviceFee = serviceFee;
-        }
-
         @Override
         public boolean equals(Object obj) {
             if (this == obj) {
@@ -511,8 +502,7 @@ public class FundPool extends StoredEntity<String> {
                 .append(grade6to8GrossAmount, that.grade6to8GrossAmount)
                 .append(grade9to12GrossAmount, that.grade9to12GrossAmount)
                 .append(gradeHeGrossAmount, that.gradeHeGrossAmount)
-                .append(curriculumSplitPercent, that.curriculumSplitPercent)
-                .append(serviceFee, that.serviceFee).isEquals();
+                .append(curriculumSplitPercent, that.curriculumSplitPercent).isEquals();
         }
 
         @Override
@@ -532,7 +522,6 @@ public class FundPool extends StoredEntity<String> {
                 .append(grade9to12GrossAmount)
                 .append(gradeHeGrossAmount)
                 .append(curriculumSplitPercent)
-                .append(serviceFee)
                 .toHashCode();
         }
 
@@ -553,7 +542,6 @@ public class FundPool extends StoredEntity<String> {
                 .append("grade9to12GrossAmount", grade9to12GrossAmount)
                 .append("gradeHeGrossAmount", gradeHeGrossAmount)
                 .append("curriculumSplitPercent", curriculumSplitPercent)
-                .append("serviceFee", serviceFee)
                 .toString();
         }
     }
