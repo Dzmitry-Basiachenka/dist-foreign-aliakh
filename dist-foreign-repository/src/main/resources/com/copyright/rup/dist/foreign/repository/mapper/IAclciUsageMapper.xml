@@ -316,4 +316,19 @@
         <include refid="IAclciUsageMapper.ifSortable"/>
         <include refid="IUsageMapper.ifPageable"/>
     </select>
+
+    <update id="updateToEligibleByIds" parameterType="map">
+        update ${schema}.df_usage
+        set
+            status_ind = #{status},
+            rh_account_number = #{rhAccountNumber},
+            <if test="null != wrWrkInst">
+                wr_wrk_inst = #{wrWrkInst},
+            </if>
+            <include refid="StoredEntityMapper.update"/>
+        where df_usage_uid in
+            <foreach collection="usageIds" item="usageId" separator="," open="(" close=")">
+                #{usageId}
+            </foreach>
+    </update>
 </mapper>

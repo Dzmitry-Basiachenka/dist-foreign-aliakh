@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
@@ -19,7 +20,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.google.common.collect.ImmutableSet;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,7 +30,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -54,9 +53,12 @@ public class AclciUsageRepositoryIntegrationTest {
     private static final String FOLDER_NAME = "aclci-usage-repository-integration-test/";
     private static final String ACLCI_PRODUCT_FAMILY = "ACLCI";
     private static final String USAGE_ID_1 = "5262bc87-e5b4-447b-9294-122e41f01c7e";
+    private static final String USAGE_ID_2 = "4c81e637-3fe4-4777-a486-5dd8e43215b8";
+    private static final String USAGE_ID_3 = "50fe503f-3cf9-49f4-a4ae-817e979eb613";
     private static final String USAGE_BATCH_ID_1 = "228c1b83-a69d-4935-9940-4ec51192b140";
     private static final String USAGE_BATCH_ID_2 = "a6b4c77e-7ee3-48db-b845-202fe6884899";
     private static final String DETAIL_ID_KEY = "detailId";
+    private static final String USER_NAME = "user@copyright.com";
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
@@ -71,38 +73,64 @@ public class AclciUsageRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FOLDER_NAME + "insert.groovy")
     public void testInsert() {
-        Usage expectedUsage =
-            loadExpectedUsages(Collections.singletonList("json/aclci/aclci_usage_5262bc87.json")).get(0);
+        Usage expectedUsage = loadExpectedUsages(List.of("json/aclci/aclci_usage_5262bc87.json")).get(0);
         aclciUsageRepository.insert(expectedUsage);
-        List<Usage> actualUsages = aclciUsageRepository.findByIds(Collections.singletonList(USAGE_ID_1));
+        List<Usage> actualUsages = aclciUsageRepository.findByIds(List.of(USAGE_ID_1));
         assertEquals(1, actualUsages.size());
         verifyUsage(expectedUsage, actualUsages.get(0));
     }
 
     @Test
+    @TestData(fileName = FOLDER_NAME + "update-to-eligible-by-ids.groovy")
+    public void testUpdateToEligibleByIdsNoWorkUpdates() {
+        Set<String> usageIds = Set.of(USAGE_ID_2, USAGE_ID_3);
+        aclciUsageRepository.updateToEligibleByIds(usageIds, 1000011450L, null, USER_NAME);
+        List<Usage> actualUsages = aclciUsageRepository.findByIds(new ArrayList<>(usageIds));
+        assertEquals(2, actualUsages.size());
+        actualUsages.forEach(usage -> {
+            assertEquals(UsageStatusEnum.ELIGIBLE, usage.getStatus());
+            assertEquals(1000011450L, usage.getRightsholder().getAccountNumber(), 0);
+            assertNotNull(usage.getWrWrkInst());
+        });
+    }
+
+    @Test
+    @TestData(fileName = FOLDER_NAME + "update-to-eligible-by-ids.groovy")
+    public void testUpdateToEligibleByIdsWithWorkUpdates() {
+        Set<String> usageIds = Set.of(USAGE_ID_2, USAGE_ID_3);
+        aclciUsageRepository.updateToEligibleByIds(usageIds, 1000011450L, 269040891L, USER_NAME);
+        List<Usage> actualUsages = aclciUsageRepository.findByIds(new ArrayList<>(usageIds));
+        assertEquals(2, actualUsages.size());
+        actualUsages.forEach(usage -> {
+            assertEquals(UsageStatusEnum.ELIGIBLE, usage.getStatus());
+            assertEquals(1000011450L, usage.getRightsholder().getAccountNumber(), 0);
+            assertEquals(269040891L, usage.getWrWrkInst(), 0);
+        });
+    }
+
+    @Test
     @TestData(fileName = FOLDER_NAME + "find-dtos-by-filter.groovy")
     public void testFindCountDtosByFilter() {
-        assertEquals(1, aclciUsageRepository.findCountByFilter(buildUsageFilter(
-            Collections.singleton(USAGE_BATCH_ID_1), UsageStatusEnum.NEW, ACLCI_PRODUCT_FAMILY,
-            Collections.singleton(AclciLicenseTypeEnum.CURR_REPUB_K12))));
+        assertEquals(1, aclciUsageRepository.findCountByFilter(
+            buildUsageFilter(Set.of(USAGE_BATCH_ID_1), UsageStatusEnum.NEW, ACLCI_PRODUCT_FAMILY,
+                Set.of(AclciLicenseTypeEnum.CURR_REPUB_K12))));
     }
 
     @Test
     @TestData(fileName = FOLDER_NAME + "find-dtos-by-filter.groovy")
     public void testFindDtosByFilter() throws IOException {
         verifyAclciUsageDto(
-            loadExpectedUsageDtos(Collections.singletonList("json/aclci/aclci_usage_dto_1_find_by_filter.json")).get(0),
-            aclciUsageRepository.findDtosByFilter(buildUsageFilter(Collections.singleton(USAGE_BATCH_ID_1),
-                    UsageStatusEnum.NEW, ACLCI_PRODUCT_FAMILY,
-                    Collections.singleton(AclciLicenseTypeEnum.CURR_REPUB_K12)),
-                null, new Sort(DETAIL_ID_KEY, Direction.ASC)).get(0));
+            loadExpectedUsageDtos(List.of("json/aclci/aclci_usage_dto_1_find_by_filter.json")).get(0),
+            aclciUsageRepository.findDtosByFilter(buildUsageFilter(Set.of(USAGE_BATCH_ID_1), UsageStatusEnum.NEW,
+                ACLCI_PRODUCT_FAMILY, Set.of(AclciLicenseTypeEnum.CURR_REPUB_K12)), null,
+                new Sort(DETAIL_ID_KEY, Direction.ASC)).get(0));
     }
 
     @Test
     @TestData(fileName = FOLDER_NAME + "find-dtos-by-filter.groovy")
     public void testSortingDtosFindByFilter() {
-        UsageDto dto1 = buildUsageDto1FindByFilter();
-        UsageDto dto2 = buildUsageDto2FindByFilter();
+        UsageDto dto1 = loadExpectedUsageDtos(List.of("json/aclci/aclci_usage_dto_1_find_by_filter.json")).get(0);
+        UsageDto dto2 = loadExpectedUsageDtos(List.of("json/aclci/aclci_usage_dto_2_find_by_filter.json")).get(0);
         assertSortingUsageDto(dto1, dto2, "detailId");
         assertSortingUsageDto(dto1, dto1, "status");
         assertSortingUsageDto(dto1, dto2, "licenseType");
@@ -142,25 +170,15 @@ public class AclciUsageRepositoryIntegrationTest {
 
     private void assertSortingUsageDto(UsageDto detailAsc, UsageDto detailDesc, String sortProperty) {
         List<UsageDto> usageDtos = aclciUsageRepository.findDtosByFilter(buildUsageFilter(
-            ImmutableSet.of(USAGE_BATCH_ID_1, USAGE_BATCH_ID_2), UsageStatusEnum.NEW, ACLCI_PRODUCT_FAMILY,
-                ImmutableSet.of(AclciLicenseTypeEnum.CURR_REPUB_K12, AclciLicenseTypeEnum.CURR_REUSE_K12)),
+            Set.of(USAGE_BATCH_ID_1, USAGE_BATCH_ID_2), UsageStatusEnum.NEW, ACLCI_PRODUCT_FAMILY,
+            Set.of(AclciLicenseTypeEnum.CURR_REPUB_K12, AclciLicenseTypeEnum.CURR_REUSE_K12)),
             null, new Sort(sortProperty, Direction.ASC));
         verifyAclciUsageDto(detailAsc, usageDtos.get(0));
         usageDtos = aclciUsageRepository.findDtosByFilter(buildUsageFilter(
-                ImmutableSet.of(USAGE_BATCH_ID_1, USAGE_BATCH_ID_2), UsageStatusEnum.NEW, ACLCI_PRODUCT_FAMILY,
-                ImmutableSet.of(AclciLicenseTypeEnum.CURR_REPUB_K12, AclciLicenseTypeEnum.CURR_REUSE_K12)),
+            Set.of(USAGE_BATCH_ID_1, USAGE_BATCH_ID_2), UsageStatusEnum.NEW, ACLCI_PRODUCT_FAMILY,
+            Set.of(AclciLicenseTypeEnum.CURR_REPUB_K12, AclciLicenseTypeEnum.CURR_REUSE_K12)),
             null, new Sort(sortProperty, Direction.DESC));
         verifyAclciUsageDto(detailDesc, usageDtos.get(0));
-    }
-
-    private UsageDto buildUsageDto1FindByFilter() {
-        return loadExpectedUsageDtos(
-            Collections.singletonList("json/aclci/aclci_usage_dto_1_find_by_filter.json")).get(0);
-    }
-
-    private UsageDto buildUsageDto2FindByFilter() {
-        return loadExpectedUsageDtos(
-            Collections.singletonList("json/aclci/aclci_usage_dto_2_find_by_filter.json")).get(0);
     }
 
     private void verifyUsage(Usage expectedUsage, Usage actualUsage) {
@@ -199,7 +217,7 @@ public class AclciUsageRepositoryIntegrationTest {
         verifyAclciUsage(expected.getAclciUsage(), actual.getAclciUsage());
     }
 
-    private void verifyAclciUsage(AclciUsage expectedUsage, AclciUsage actualUsage)  {
+    private void verifyAclciUsage(AclciUsage expectedUsage, AclciUsage actualUsage) {
         assertEquals(expectedUsage.getLicenseeAccountNumber(), actualUsage.getLicenseeAccountNumber());
         assertEquals(expectedUsage.getLicenseeName(), actualUsage.getLicenseeName());
         assertEquals(expectedUsage.getCoveragePeriod(), actualUsage.getCoveragePeriod());

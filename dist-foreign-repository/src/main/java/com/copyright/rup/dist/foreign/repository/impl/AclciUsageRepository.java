@@ -5,6 +5,7 @@ import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IAclciUsageRepository;
 
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * Implementation of {@link IAclciUsageRepository}.
@@ -62,5 +64,18 @@ public class AclciUsageRepository extends BaseRepository implements IAclciUsageR
         parameters.put(PAGEABLE_KEY, pageable);
         parameters.put(SORT_KEY, sort);
         return selectList("IAclciUsageMapper.findDtosByFilter", parameters);
+    }
+
+    @Override
+    public void updateToEligibleByIds(Set<String> usageIds, Long rhAccountNumber, Long wrWrkInst, String userName) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(4);
+        parameters.put("rhAccountNumber", Objects.requireNonNull(rhAccountNumber));
+        parameters.put("wrWrkInst", wrWrkInst);
+        parameters.put("status", UsageStatusEnum.ELIGIBLE);
+        parameters.put("updateUser", Objects.requireNonNull(userName));
+        Iterables.partition(Objects.requireNonNull(usageIds), MAX_VARIABLES_COUNT).forEach(partition -> {
+            parameters.put("usageIds", partition);
+            update("IAclciUsageMapper.updateToEligibleByIds", parameters);
+        });
     }
 }
