@@ -144,7 +144,7 @@ public class AclciUsageWidgetTest {
         replay(controller, clickEvent, Windows.class);
         Button updateUsagesButton =
             (Button) ((HorizontalLayout) ((VerticalLayout) widget.getSecondComponent())
-                .getComponent(0)).getComponent(1);
+                .getComponent(0)).getComponent(2);
         Collection<?> listeners = updateUsagesButton.getListeners(ClickEvent.class);
         assertEquals(2, listeners.size());
         ClickListener clickListener = (ClickListener) listeners.iterator().next();
@@ -162,7 +162,7 @@ public class AclciUsageWidgetTest {
         replay(controller, clickEvent, Windows.class);
         Button updateUsagesButton =
             (Button) ((HorizontalLayout) ((VerticalLayout) widget.getSecondComponent())
-                .getComponent(0)).getComponent(1);
+                .getComponent(0)).getComponent(2);
         Collection<?> listeners = updateUsagesButton.getListeners(ClickEvent.class);
         assertEquals(2, listeners.size());
         ClickListener clickListener = (ClickListener) listeners.iterator().next();
@@ -171,8 +171,9 @@ public class AclciUsageWidgetTest {
     }
 
     private void verifyButtonsLayout(HorizontalLayout layout) {
-        assertEquals(2, layout.getComponentCount());
+        assertEquals(3, layout.getComponentCount());
         verifyMenuBar(layout.getComponent(0), "Usage Batch", true, Collections.singletonList("Load"));
-        verifyButton(layout.getComponent(1), "Update Usages", true);
+        verifyMenuBar(layout.getComponent(1), "Fund Pool", true, Collections.singletonList("Load"));
+        verifyButton(layout.getComponent(2), "Update Usages", true);
     }
 }

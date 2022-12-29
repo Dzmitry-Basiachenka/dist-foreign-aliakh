@@ -32,14 +32,19 @@ public class AclciUsageMediatorTest {
 
     private MenuBar usageBatchMenuBar;
     private MenuBar.MenuItem loadUsageBatchMenuItem;
+    private MenuBar fundPoolMenuBar;
+    private MenuBar.MenuItem loadFundPoolMenuItem;
     private AclciUsageMediator mediator;
 
     @Before
     public void setUp() {
         usageBatchMenuBar = new MenuBar();
         loadUsageBatchMenuItem = usageBatchMenuBar.new MenuItem(StringUtils.EMPTY, null, null);
+        fundPoolMenuBar = new MenuBar();
+        loadFundPoolMenuItem = fundPoolMenuBar.new MenuItem(StringUtils.EMPTY, null, null);
         mediator = new AclciUsageMediator();
         mediator.setLoadUsageBatchMenuItem(loadUsageBatchMenuItem);
+        mediator.setLoadFundPoolMenuItem(loadFundPoolMenuItem);
     }
 
     @Test
@@ -49,6 +54,8 @@ public class AclciUsageMediatorTest {
         mediator.applyPermissions();
         assertTrue(usageBatchMenuBar.isVisible());
         assertFalse(loadUsageBatchMenuItem.isVisible());
+        assertTrue(fundPoolMenuBar.isVisible());
+        assertFalse(loadFundPoolMenuItem.isVisible());
         verify(SecurityUtils.class);
     }
 
@@ -59,6 +66,8 @@ public class AclciUsageMediatorTest {
         mediator.applyPermissions();
         assertTrue(usageBatchMenuBar.isVisible());
         assertFalse(loadUsageBatchMenuItem.isVisible());
+        assertTrue(fundPoolMenuBar.isVisible());
+        assertFalse(loadFundPoolMenuItem.isVisible());
         verify(SecurityUtils.class);
     }
 
@@ -69,6 +78,8 @@ public class AclciUsageMediatorTest {
         mediator.applyPermissions();
         assertTrue(usageBatchMenuBar.isVisible());
         assertTrue(loadUsageBatchMenuItem.isVisible());
+        assertTrue(fundPoolMenuBar.isVisible());
+        assertTrue(loadFundPoolMenuItem.isVisible());
         verify(SecurityUtils.class);
     }
 

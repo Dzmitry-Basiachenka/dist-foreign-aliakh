@@ -81,7 +81,7 @@ class SalFundPoolLoadWindow extends Window {
     SalFundPoolLoadWindow(ISalUsageController usagesController) {
         this.usagesController = usagesController;
         setContent(initRootLayout());
-        setCaption("Load Fund Pool");
+        setCaption(ForeignUi.getMessage("window.load_fund_pool"));
         setResizable(false);
         setWidth(500, Unit.PIXELS);
         setHeight(530, Unit.PIXELS);
