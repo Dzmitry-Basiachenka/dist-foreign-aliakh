@@ -147,8 +147,9 @@ public class AclciUsageWidget extends CommonUsageWidget implements IAclciUsageWi
         } else if (0 == controller.getBeansCount()) {
             message = ForeignUi.getMessage("message.error.update.empty_usages");
         }
-        //TODO {dbasiachenka} add check to open window to update usages
-        if (!Objects.isNull(message)) {
+        if (Objects.isNull(message)) {
+            Windows.showModalWindow(new AclciUsageUpdateWindow(controller));
+        } else {
             Windows.showNotificationWindow(message);
         }
     }

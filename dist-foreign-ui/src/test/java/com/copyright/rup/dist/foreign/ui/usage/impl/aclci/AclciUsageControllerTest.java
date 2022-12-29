@@ -5,12 +5,12 @@ import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.isNull;
 import static org.easymock.EasyMock.newCapture;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
@@ -275,5 +275,10 @@ public class AclciUsageControllerTest {
         replay(filterController, filterWidget);
         assertFalse(controller.isValidStatusFilterApplied());
         verify(filterController, filterWidget);
+    }
+
+    @Test
+    public void testGetUsageDtosToUpdate() {
+        //TODO: {dbasiachenka} implement
     }
 }
