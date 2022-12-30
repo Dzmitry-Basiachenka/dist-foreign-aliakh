@@ -53,6 +53,7 @@
         <typeAlias alias="SalBatchFieldsTypeHandler" type="com.copyright.rup.dist.foreign.repository.impl.converter.SalBatchFieldsTypeHandler"/>
         <typeAlias alias="AclciBatchFieldsTypeHandler" type="com.copyright.rup.dist.foreign.repository.impl.converter.AclciBatchFieldsTypeHandler"/>
         <typeAlias alias="SalFundPoolFieldsTypeHandler" type="com.copyright.rup.dist.foreign.repository.impl.converter.SalFundPoolFieldsTypeHandler"/>
+        <typeAlias alias="AclciFundPoolFieldsTypeHandler" type="com.copyright.rup.dist.foreign.repository.impl.converter.AclciFundPoolFieldsTypeHandler"/>
         <typeAlias alias="UsageStatistic" type="com.copyright.rup.dist.foreign.domain.report.UsageStatistic"/>
         <typeAlias alias="WorkClassification" type="com.copyright.rup.dist.foreign.domain.WorkClassification"/>
         <typeAlias alias="FundPool" type="com.copyright.rup.dist.foreign.domain.FundPool"/>

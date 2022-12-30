@@ -11,6 +11,7 @@ import com.copyright.rup.dist.common.test.liquibase.LiquibaseTestExecutionListen
 import com.copyright.rup.dist.common.test.liquibase.TestData;
 import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.FundPool;
+import com.copyright.rup.dist.foreign.domain.FundPool.AclciFields;
 import com.copyright.rup.dist.foreign.domain.FundPoolDetail;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -56,13 +57,16 @@ public class FundPoolRepositoryIntegrationTest {
     private static final String NTS_FUND_POOL_ID_3 = "6fe5044d-15a3-47fe-913e-69f3bf353bef";
     private static final String AACL_FUND_POOL_ID = "ce9c1258-6d29-4224-a4e6-6f03b6aeef53";
     private static final String SAL_FUND_POOL_ID = "8b1ba84d-4f51-4072-bb6f-55ab6a65a1e1";
+    private static final String ACLCI_FUND_POOL_ID = "8e8319da-ea31-401a-8b13-16a8d1ef9d28";
     private static final String NAME_1 = "Q1 2019 100%";
     private static final String NAME_2 = "NTS Q2 2019";
+    private static final String ACLCI_FUND_POOL_NAME = "ACLCIC Fund Pool";
     private static final String COMMENT_1 = "some comment";
     private static final String COMMENT_2 = "other comment";
     private static final String SAL_PRODUCT_FAMILY = "SAL";
     private static final String NTS_PRODUCT_FAMILY = "NTS";
     private static final String AACL_PRODUCT_FAMILY = "AACL";
+    private static final String ACLCI_PRODUCT_FAMILY = "ACLCI";
     private static final String USER_NAME = "user@copyright.com";
 
     @Autowired
@@ -108,6 +112,30 @@ public class FundPoolRepositoryIntegrationTest {
         assertEquals(COMMENT_2, insertedFundPool.getComment());
         assertEquals(totalAmount, insertedFundPool.getTotalAmount());
         assertEquals(salFields, insertedFundPool.getSalFields());
+    }
+
+    @Test
+    @TestData(fileName = "rollback-only.groovy")
+    public void testInsertAclciFundPool() {
+        assertNull(fundPoolRepository.findById(ACLCI_FUND_POOL_ID));
+        FundPool.AclciFields aclciFields = buildAclciFields();
+        BigDecimal totalAmount = new BigDecimal("2000.00");
+        FundPool fundPool = new FundPool();
+        fundPool.setId(ACLCI_FUND_POOL_ID);
+        fundPool.setProductFamily(ACLCI_PRODUCT_FAMILY);
+        fundPool.setName(ACLCI_FUND_POOL_NAME);
+        fundPool.setComment(COMMENT_2);
+        fundPool.setTotalAmount(totalAmount);
+        fundPool.setAclciFields(aclciFields);
+        fundPoolRepository.insert(fundPool);
+        FundPool insertedFundPool = fundPoolRepository.findById(ACLCI_FUND_POOL_ID);
+        assertNotNull(insertedFundPool);
+        assertEquals(ACLCI_FUND_POOL_ID, insertedFundPool.getId());
+        assertEquals(ACLCI_PRODUCT_FAMILY, insertedFundPool.getProductFamily());
+        assertEquals(ACLCI_FUND_POOL_NAME, insertedFundPool.getName());
+        assertEquals(COMMENT_2, insertedFundPool.getComment());
+        assertEquals(totalAmount, insertedFundPool.getTotalAmount());
+        assertEquals(aclciFields, insertedFundPool.getAclciFields());
     }
 
     @Test
@@ -303,5 +331,24 @@ public class FundPoolRepositoryIntegrationTest {
         salFields.setItemBankSplitPercent(new BigDecimal("0.02000"));
         salFields.setServiceFee(new BigDecimal("0.25000"));
         return salFields;
+    }
+
+    private FundPool.AclciFields buildAclciFields() {
+        FundPool.AclciFields aclciFields = new AclciFields();
+        aclciFields.setCoverageYears("2022-2023");
+        aclciFields.setGradeKto2NumberOfStudents(2);
+        aclciFields.setGrade3to5NumberOfStudents(5);
+        aclciFields.setGrade6to8NumberOfStudents(8);
+        aclciFields.setGrade9to12NumberOfStudents(12);
+        aclciFields.setGradeHeNumberOfStudents(20);
+        aclciFields.setGrossAmount(new BigDecimal("1000.0"));
+        aclciFields.setCurriculumGrossAmount(new BigDecimal("200.0"));
+        aclciFields.setGradeKto2GrossAmount(new BigDecimal("34.04"));
+        aclciFields.setGrade3to5GrossAmount(new BigDecimal("85.11"));
+        aclciFields.setGrade6to8GrossAmount(new BigDecimal("136.17"));
+        aclciFields.setGrade9to12GrossAmount(new BigDecimal("204.26"));
+        aclciFields.setGradeHeGrossAmount(new BigDecimal("340.43"));
+        aclciFields.setCurriculumSplitPercent(new BigDecimal("0.2"));
+        return aclciFields;
     }
 }
