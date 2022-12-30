@@ -281,4 +281,9 @@ public class AclciUsageControllerTest {
     public void testGetUsageDtosToUpdate() {
         //TODO: {dbasiachenka} implement
     }
+
+    @Test
+    public void testUpdateToEligibleByIds() {
+        //TODO: {dbasiachenka} implement
+    }
 }

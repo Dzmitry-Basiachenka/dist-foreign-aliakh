@@ -37,6 +37,7 @@ import org.springframework.stereotype.Component;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * Implementation of {@link IAclciUsageController}.
@@ -156,6 +157,11 @@ public class AclciUsageController extends CommonUsageController implements IAclc
     public List<UsageDto> getUsageDtosToUpdate() {
         //TODO: {dbasiachenka} implement
         return Collections.emptyList();
+    }
+
+    @Override
+    public void updateToEligibleByIds(Set<String> usageIds, Long rhAccountNumber, Long wrWrkInst, String userName) {
+        //TODO: {dbasiachenka} implement
     }
 
     @Override
