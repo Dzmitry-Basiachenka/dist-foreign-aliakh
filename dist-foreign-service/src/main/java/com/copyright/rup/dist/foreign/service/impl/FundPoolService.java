@@ -123,6 +123,18 @@ public class FundPoolService implements IFundPoolService {
     }
 
     @Override
+    public void createAclciFundPool(FundPool fundPool) {
+        String userName = RupContextUtils.getUserName();
+        LOGGER.info("Insert ACLCI fund pool. Started. FundPoolName={}, UserName={}", fundPool.getName(), userName);
+        fundPool.setId(RupPersistUtils.generateUuid());
+        fundPool.setProductFamily(FdaConstants.ACLCI_PRODUCT_FAMILY);
+        fundPool.setCreateUser(userName);
+        fundPool.setUpdateUser(userName);
+        fundPoolRepository.insert(fundPool);
+        LOGGER.info("Insert ACLCI fund pool. Finished. FundPoolName={}, UserName={}", fundPool.getName(), userName);
+    }
+
+    @Override
     public List<FundPool> getNtsNotAttachedToScenario() {
         return fundPoolRepository.findNtsNotAttachedToScenario();
     }

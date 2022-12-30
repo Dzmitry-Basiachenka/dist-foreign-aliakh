@@ -316,6 +316,21 @@ public class FundPoolServiceTest {
         verify(RupContextUtils.class, fundPoolRepository);
     }
 
+    @Test
+    public void testCreateAclciFundPool() {
+        mockStatic(RupContextUtils.class);
+        expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
+        FundPool fundPool = new FundPool();
+        fundPoolRepository.insert(fundPool);
+        expectLastCall().once();
+        replay(RupContextUtils.class, fundPoolRepository);
+        fundPoolService.createAclciFundPool(fundPool);
+        assertEquals(fundPool.getCreateUser(), USER_NAME);
+        assertEquals(fundPool.getUpdateUser(), USER_NAME);
+        assertNotNull(fundPool.getId());
+        verify(RupContextUtils.class, fundPoolRepository);
+    }
+
     private void verifyDetail(FundPoolDetail expected, FundPoolDetail actual) {
         assertEquals(expected.getId(), actual.getId());
         AggregateLicenseeClass expectedAggregate = expected.getAggregateLicenseeClass();
