@@ -4,6 +4,7 @@ import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.aclci.IAclciUsageController;
 import com.copyright.rup.vaadin.ui.Buttons;
+import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 import com.copyright.rup.vaadin.widget.api.IRefreshable;
@@ -26,6 +27,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * Window to display ACLCI usages to update.
@@ -128,9 +130,9 @@ class AclciUsageUpdateWindow extends Window implements IRefreshable {
     private HorizontalLayout buildButtonsLayout() {
         HorizontalLayout buttonsLayout = new HorizontalLayout();
         multipleEditButton = Buttons.createButton(ForeignUi.getMessage("button.edit_multiple_usage"));
-        multipleEditButton.addClickListener(event -> {
-            //TODO: {dbasiachenka} implement window to update usages
-        });
+        multipleEditButton.addClickListener(event -> Windows.showModalWindow(
+            new AclciMultipleEditUsagesWindow(controller, this,
+                usagesGrid.getSelectedItems().stream().map(UsageDto::getId).collect(Collectors.toSet()))));
         multipleEditButton.setEnabled(false);
         Button closeButton = Buttons.createCloseButton(this);
         buttonsLayout.addComponents(multipleEditButton, closeButton);
