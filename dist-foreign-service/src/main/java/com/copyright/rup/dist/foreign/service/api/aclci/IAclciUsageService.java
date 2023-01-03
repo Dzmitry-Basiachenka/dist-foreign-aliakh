@@ -8,6 +8,7 @@ import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Interface for ACLCI usage service.
@@ -61,4 +62,15 @@ public interface IAclciUsageService {
      * @return the list of {@link UsageDto}
      */
     List<UsageDto> getUsageDtos(UsageFilter filter, Pageable pageable, Sort sort);
+
+    /**
+     * Updates usages to {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#ELIGIBLE}, sets new RH Account #
+     * and Wr Wrk Inst by provided identifiers.
+     *
+     * @param usageIds        usage ids to update
+     * @param rhAccountNumber rh account number to set
+     * @param wrWrkInst       wr wrk inst to set (can be {@code null}
+     * @param reason          action reason
+     */
+    void updateToEligibleByIds(Set<String> usageIds, Long rhAccountNumber, Long wrWrkInst, String reason);
 }

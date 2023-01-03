@@ -50,8 +50,8 @@ import org.powermock.reflect.Whitebox;
 import java.io.InputStream;
 import java.io.PipedOutputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -123,7 +123,7 @@ public class AclciUsageControllerTest {
 
     @Test
     public void testGetBeansCount() {
-        usageFilter.setLicenseTypes(Collections.singleton(AclciLicenseTypeEnum.CURR_REPUB_K12));
+        usageFilter.setLicenseTypes(Set.of(AclciLicenseTypeEnum.CURR_REPUB_K12));
         expect(filterController.getWidget()).andReturn(filterWidget).once();
         expect(filterWidget.getAppliedFilter()).andReturn(usageFilter).once();
         expect(aclciUsageService.getUsagesCount(usageFilter)).andReturn(1).once();
@@ -134,12 +134,12 @@ public class AclciUsageControllerTest {
 
     @Test
     public void testLoadBeans() {
-        usageFilter.setLicenseTypes(Collections.singleton(AclciLicenseTypeEnum.CURR_REPUB_K12));
+        usageFilter.setLicenseTypes(Set.of(AclciLicenseTypeEnum.CURR_REPUB_K12));
         expect(filterController.getWidget()).andReturn(filterWidget).once();
         expect(filterWidget.getAppliedFilter()).andReturn(usageFilter).once();
         Capture<Pageable> pageableCapture = newCapture();
         expect(aclciUsageService.getUsageDtos(eq(usageFilter), capture(pageableCapture), isNull()))
-            .andReturn(Collections.singletonList(new UsageDto())).once();
+            .andReturn(List.of(new UsageDto())).once();
         replay(filterWidget, aclciUsageService, filterController);
         List<UsageDto> result = controller.loadBeans(10, 150, null);
         Pageable pageable = pageableCapture.getValue();
@@ -183,8 +183,8 @@ public class AclciUsageControllerTest {
     public void testLoadAclciUsageBatch() {
         UsageBatch usageBatch = new UsageBatch();
         usageBatch.setName(USAGE_BATCH_NAME);
-        List<Usage> usages = Collections.singletonList(new Usage());
-        List<String> insertedUsageIds = Collections.singletonList("407be4e7-4f2e-4d5f-8610-09070c37880f");
+        List<Usage> usages = List.of(new Usage());
+        List<String> insertedUsageIds = List.of("407be4e7-4f2e-4d5f-8610-09070c37880f");
         expect(usageBatchService.insertAclciBatch(usageBatch, usages)).andReturn(insertedUsageIds).once();
         aclciUsageService.sendForMatching(insertedUsageIds, USAGE_BATCH_NAME);
         expectLastCall().once();
@@ -279,11 +279,24 @@ public class AclciUsageControllerTest {
 
     @Test
     public void testGetUsageDtosToUpdate() {
-        //TODO: {dbasiachenka} implement
+        expect(filterController.getWidget()).andReturn(filterWidget).once();
+        expect(filterWidget.getAppliedFilter()).andReturn(usageFilter).once();
+        expect(aclciUsageService.getUsageDtos(usageFilter, null, null)).andReturn(List.of(new UsageDto())).once();
+        replay(filterWidget, aclciUsageService, filterController);
+        List<UsageDto> result = controller.getUsageDtosToUpdate();
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        verify(filterWidget, aclciUsageService, filterController);
     }
 
     @Test
     public void testUpdateToEligibleByIds() {
-        //TODO: {dbasiachenka} implement
+        Set<String> usageIds = Set.of("ed475bf5-afd5-4241-809d-77c00a860247");
+        String reason = "invalid work";
+        aclciUsageService.updateToEligibleByIds(usageIds, 2000017001L, null, reason);
+        expectLastCall().once();
+        replay(aclciUsageService);
+        controller.updateToEligibleByIds(usageIds,  2000017001L, null, reason);
+        verify(aclciUsageService);
     }
 }

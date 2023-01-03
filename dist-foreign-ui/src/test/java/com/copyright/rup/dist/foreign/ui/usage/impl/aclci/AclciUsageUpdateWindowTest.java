@@ -158,7 +158,7 @@ public class AclciUsageUpdateWindowTest {
         assertTrue(buttonsLayout.isSpacing());
         assertEquals(new MarginInfo(false), buttonsLayout.getMargin());
         assertEquals(2, buttonsLayout.getComponentCount());
-        assertEquals("Multiple Edit", buttonsLayout.getComponent(0).getCaption());
+        assertEquals("Update", buttonsLayout.getComponent(0).getCaption());
         assertEquals("Close", buttonsLayout.getComponent(1).getCaption());
     }
 }

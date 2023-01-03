@@ -23,6 +23,7 @@ import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IAclciUsageRepository;
+import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
 import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
@@ -39,6 +40,7 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Verifies {@link AclciUsageService}.
@@ -63,6 +65,7 @@ public class AclciUsageServiceTest {
     private final AclciUsageService aclciUsageService = new AclciUsageService();
 
     private IAclciUsageRepository aclciUsageRepository;
+    private IRightsholderService rightsholderService;
     private IUsageAuditService usageAuditService;
     private IChainExecutor<Usage> chainExecutor;
 
@@ -71,9 +74,11 @@ public class AclciUsageServiceTest {
         aclciUsageRepository = createMock(IAclciUsageRepository.class);
         usageAuditService = createMock(IUsageAuditService.class);
         chainExecutor = createMock(IChainExecutor.class);
+        rightsholderService = createMock(IRightsholderService.class);
         Whitebox.setInternalState(aclciUsageService, aclciUsageRepository);
         Whitebox.setInternalState(aclciUsageService, usageAuditService);
         Whitebox.setInternalState(aclciUsageService, chainExecutor);
+        Whitebox.setInternalState(aclciUsageService, rightsholderService);
         Whitebox.setInternalState(aclciUsageService, "usagesBatchSize", 1000);
     }
 
@@ -150,6 +155,26 @@ public class AclciUsageServiceTest {
         replay(aclciUsageRepository);
         assertEquals(usages, aclciUsageService.getUsageDtos(filter, pageable, sort));
         verify(aclciUsageRepository);
+    }
+
+    @Test
+    public void testUpdateToEligibleByIds() {
+        mockStatic(RupContextUtils.class);
+        expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
+        Set<String> usageIds = Collections.singleton(USAGE_ID_1);
+        String reason = "invalid Wr Wrk Inst";
+        aclciUsageRepository.updateToEligibleByIds(usageIds, 20000170001L, 559815489L, USER_NAME);
+        expectLastCall().once();
+        usageAuditService.logAction(usageIds, UsageActionTypeEnum.RH_UPDATED, reason);
+        expectLastCall().once();
+        usageAuditService.logAction(usageIds, UsageActionTypeEnum.ELIGIBLE,
+            "Usage has become eligible. RH and Wr Wrk Inst were updated. Reason=invalid Wr Wrk Inst");
+        expectLastCall().once();
+        rightsholderService.updateRighstholdersAsync(Set.of(20000170001L));
+        expectLastCall().once();
+        replay(RupContextUtils.class, aclciUsageRepository, usageAuditService, rightsholderService);
+        aclciUsageService.updateToEligibleByIds(usageIds, 20000170001L, 559815489L, reason);
+        verify(RupContextUtils.class, aclciUsageRepository, usageAuditService, rightsholderService);
     }
 
     private UsageBatch buildUsageBatch() {

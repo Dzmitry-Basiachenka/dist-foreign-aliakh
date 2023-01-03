@@ -34,7 +34,6 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -155,13 +154,12 @@ public class AclciUsageController extends CommonUsageController implements IAclc
 
     @Override
     public List<UsageDto> getUsageDtosToUpdate() {
-        //TODO: {dbasiachenka} implement
-        return Collections.emptyList();
+        return aclciUsageService.getUsageDtos(getUsageFilterController().getWidget().getAppliedFilter(), null, null);
     }
 
     @Override
-    public void updateToEligibleByIds(Set<String> usageIds, Long rhAccountNumber, Long wrWrkInst, String userName) {
-        //TODO: {dbasiachenka} implement
+    public void updateToEligibleByIds(Set<String> usageIds, Long rhAccountNumber, Long wrWrkInst, String reason) {
+        aclciUsageService.updateToEligibleByIds(usageIds, rhAccountNumber, wrWrkInst, reason);
     }
 
     @Override

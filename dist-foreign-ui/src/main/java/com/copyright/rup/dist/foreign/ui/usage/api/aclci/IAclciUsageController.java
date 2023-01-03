@@ -101,7 +101,7 @@ public interface IAclciUsageController extends ICommonUsageController {
      * @param usageIds        usage ids to update
      * @param rhAccountNumber rh account number to set
      * @param wrWrkInst       wr wrk inst to set (can be {@code null}
-     * @param userName        updated username
+     * @param reason          action reason
      */
-    void updateToEligibleByIds(Set<String> usageIds, Long rhAccountNumber, Long wrWrkInst, String userName);
+    void updateToEligibleByIds(Set<String> usageIds, Long rhAccountNumber, Long wrWrkInst, String reason);
 }

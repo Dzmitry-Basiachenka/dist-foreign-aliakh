@@ -45,7 +45,7 @@ class AclciUsageUpdateWindow extends Window implements IRefreshable {
     private Grid<UsageDto> usagesGrid;
     private MultiSelectionModelImpl<UsageDto> gridSelectionModel;
     private ListDataProvider<UsageDto> dataProvider;
-    private Button multipleEditButton;
+    private Button updateButton;
 
     /**
      * Constructor.
@@ -101,7 +101,7 @@ class AclciUsageUpdateWindow extends Window implements IRefreshable {
         gridSelectionModel = (MultiSelectionModelImpl<UsageDto>) usagesGrid.setSelectionMode(Grid.SelectionMode.MULTI);
         addGridColumns();
         usagesGrid.addSelectionListener(event ->
-            multipleEditButton.setEnabled(CollectionUtils.isNotEmpty(event.getAllSelectedItems())));
+            updateButton.setEnabled(CollectionUtils.isNotEmpty(event.getAllSelectedItems())));
         usagesGrid.getColumns().forEach(column -> column.setSortable(true));
         VaadinUtils.addComponentStyle(usagesGrid, "update_aclci_usages-grid");
     }
@@ -129,13 +129,12 @@ class AclciUsageUpdateWindow extends Window implements IRefreshable {
 
     private HorizontalLayout buildButtonsLayout() {
         HorizontalLayout buttonsLayout = new HorizontalLayout();
-        multipleEditButton = Buttons.createButton(ForeignUi.getMessage("button.edit_multiple_usage"));
-        multipleEditButton.addClickListener(event -> Windows.showModalWindow(
-            new AclciMultipleEditUsagesWindow(controller, this,
-                usagesGrid.getSelectedItems().stream().map(UsageDto::getId).collect(Collectors.toSet()))));
-        multipleEditButton.setEnabled(false);
+        updateButton = Buttons.createButton(ForeignUi.getMessage("button.update"));
+        updateButton.addClickListener(event -> Windows.showModalWindow(new AclciMultipleEditUsagesWindow(controller,
+            this, usagesGrid.getSelectedItems().stream().map(UsageDto::getId).collect(Collectors.toSet()))));
+        updateButton.setEnabled(false);
         Button closeButton = Buttons.createCloseButton(this);
-        buttonsLayout.addComponents(multipleEditButton, closeButton);
+        buttonsLayout.addComponents(updateButton, closeButton);
         return buttonsLayout;
     }
 
