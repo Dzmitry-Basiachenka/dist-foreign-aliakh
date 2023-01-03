@@ -2,9 +2,9 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.baseline;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
 
 import com.copyright.rup.dist.foreign.domain.UdmBaselineDto;
 import com.copyright.rup.dist.foreign.domain.UdmChannelEnum;

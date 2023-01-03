@@ -1,9 +1,9 @@
 package com.copyright.rup.dist.foreign.ui.report.impl.acl;
 
 import static org.easymock.EasyMock.createMock;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertThat;
 
 import com.copyright.rup.dist.foreign.ui.report.api.ITaxNotificationReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.acl.IAclCommonReportController;
