@@ -131,7 +131,7 @@ public class AclciUsageWidget extends CommonUsageWidget implements IAclciUsageWi
         MenuBar.MenuItem menuItem =
             fundPoolMenuBar.addItem(ForeignUi.getMessage("menu.caption.fund_pool"), null, null);
         loadFundPoolMenuItem = menuItem.addItem(ForeignUi.getMessage("menu.item.load"), null,
-            item -> Windows.showModalWindow(new AclciFundPoolLoadWindow()));
+            item -> Windows.showModalWindow(new AclciFundPoolLoadWindow(controller)));
         VaadinUtils.addComponentStyle(fundPoolMenuBar, "fund-pool-menu-bar");
         VaadinUtils.addComponentStyle(fundPoolMenuBar, "v-menubar-df");
     }

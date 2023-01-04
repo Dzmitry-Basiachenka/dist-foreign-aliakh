@@ -45,7 +45,7 @@ import java.util.Objects;
  */
 public class AclciUsageBatchUploadWindow extends Window {
 
-    private final IAclciUsageController usagesController;
+    private final IAclciUsageController usageController;
     private final Binder<UsageBatch> binder = new Binder<>();
     private final Binder<String> uploadBinder = new Binder<>();
     private TextField usageBatchNameField;
@@ -57,10 +57,10 @@ public class AclciUsageBatchUploadWindow extends Window {
     /**
      * Constructor.
      *
-     * @param usagesController usages controller
+     * @param usageController instance of {@link IAclciUsageController}
      */
-    AclciUsageBatchUploadWindow(IAclciUsageController usagesController) {
-        this.usagesController = usagesController;
+    AclciUsageBatchUploadWindow(IAclciUsageController usageController) {
+        this.usageController = usageController;
         setContent(initRootLayout());
         setCaption(ForeignUi.getMessage("window.upload_usage_batch"));
         setResizable(false);
@@ -75,23 +75,23 @@ public class AclciUsageBatchUploadWindow extends Window {
     void onUploadClicked() {
         if (isValid()) {
             try {
-                AclciUsageCsvProcessor processor = usagesController.getAclciUsageCsvProcessor();
+                AclciUsageCsvProcessor processor = usageController.getAclciUsageCsvProcessor();
                 ProcessingResult<Usage> processingResult = processor.process(uploadField.getStreamToUploadedFile());
                 if (processingResult.isSuccessful()) {
                     List<Usage> usages = processingResult.get();
-                    usagesController.loadAclciUsageBatch(binder.getBean(), usages);
+                    usageController.loadAclciUsageBatch(binder.getBean(), usages);
                     close();
                     Windows.showNotificationWindow(ForeignUi.getMessage("message.upload_completed", usages.size()));
                 } else {
                     Windows.showModalWindow(
                         new ErrorUploadWindow(
-                            usagesController.getErrorResultStreamSource(uploadField.getValue(), processingResult),
+                            usageController.getErrorResultStreamSource(uploadField.getValue(), processingResult),
                             ForeignUi.getMessage("message.error.upload")));
                 }
             } catch (ThresholdExceededException e) {
                 Windows.showModalWindow(
                     new ErrorUploadWindow(
-                        usagesController.getErrorResultStreamSource(uploadField.getValue(), e.getProcessingResult()),
+                        usageController.getErrorResultStreamSource(uploadField.getValue(), e.getProcessingResult()),
                         String.format("%s%s", e.getMessage(),
                             ForeignUi.getMessage("message.error.upload.threshold.exceeded"))));
             } catch (ValidationException e) {
@@ -160,7 +160,7 @@ public class AclciUsageBatchUploadWindow extends Window {
         binder.forField(usageBatchNameField)
             .withValidator(new RequiredValidator())
             .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.length", 50), 0, 50))
-            .withValidator(value -> !usagesController.usageBatchExists(StringUtils.trimToEmpty(value)),
+            .withValidator(value -> !usageController.usageBatchExists(StringUtils.trimToEmpty(value)),
                 ForeignUi.getMessage("message.error.unique_name", "Usage Batch"))
             .bind(UsageBatch::getName, UsageBatch::setName);
         usageBatchNameField.setSizeFull();
@@ -236,7 +236,7 @@ public class AclciUsageBatchUploadWindow extends Window {
         button.addClickListener(event -> {
             if (Objects.isNull(licenseeAccountNumberField.getErrorMessage())) {
                 Long licenseeAccountNumber = Long.valueOf(StringUtils.trim(licenseeAccountNumberField.getValue()));
-                String licenseeName = usagesController.getLicenseeName(licenseeAccountNumber);
+                String licenseeName = usageController.getLicenseeName(licenseeAccountNumber);
                 if (StringUtils.isNotBlank(licenseeName)) {
                     licenseeNameField.setValue(licenseeName);
                 } else {

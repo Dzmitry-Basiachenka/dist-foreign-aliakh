@@ -138,7 +138,7 @@ public class AclciUsageController extends CommonUsageController implements IAclc
 
     @Override
     public FundPool calculateAclciFundPoolAmounts(FundPool fundPool) {
-        return null;//TODO: implement: fundPoolService.calculateAclciFundPoolAmounts(fundPool);
+        return fundPool;//TODO: implement: fundPoolService.calculateAclciFundPoolAmounts(fundPool);
     }
 
     @Override
