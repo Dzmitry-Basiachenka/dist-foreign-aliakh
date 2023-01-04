@@ -26,7 +26,6 @@ import com.copyright.rup.dist.foreign.ui.usage.UiTestHelper;
 import com.copyright.rup.dist.foreign.ui.usage.impl.ScenarioParameterWidget.IParametersSaveListener;
 import com.copyright.rup.dist.foreign.ui.usage.impl.ScenarioParameterWidget.ParametersSaveEvent;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.vaadin.data.Binder;
 import com.vaadin.server.Sizeable.Unit;
@@ -68,10 +67,10 @@ public class PublicationTypeWeightsWindowTest {
     private static final String WEIGHT_2 = "1.50";
     private static final String WEIGHT_3 = "2.00";
 
-    private final List<PublicationType> defaultParams = ImmutableList.of(
+    private final List<PublicationType> defaultParams = List.of(
         buildPublicationType("2fe9c0a0-7672-4b56-bc64-9d4125fecf6e", NAME_1, WEIGHT_1),
         buildPublicationType("68fd94c0-a8c0-4a59-bfe3-6674c4b12199", NAME_2, WEIGHT_2));
-    private final List<PublicationType> appliedParams = ImmutableList.of(
+    private final List<PublicationType> appliedParams = List.of(
         buildPublicationType("2fe9c0a0-7672-4b56-bc64-9d4125fecf6e", NAME_1, WEIGHT_1),
         buildPublicationType("68fd94c0-a8c0-4a59-bfe3-6674c4b12199", NAME_2, WEIGHT_3));
     private PublicationTypeWeightsWindow window;

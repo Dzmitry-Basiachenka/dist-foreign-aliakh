@@ -6,8 +6,6 @@ import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.report.AclCalculationReportsInfoDto;
 import com.copyright.rup.dist.foreign.domain.report.AclSummaryOfWorkSharesByAggLcReportDto;
 
-import com.google.common.collect.ImmutableList;
-
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.OutputStream;
@@ -29,9 +27,9 @@ public class AclSummaryOfWorkSharesByAggLcCsvReportHandler extends
     BaseCsvReportHandler<AclSummaryOfWorkSharesByAggLcReportDto> {
 
     private static final List<String> HEADERS =
-        ImmutableList.of("Agg LC ID", "Agg LC Name", "Total Shares Print", "Total Shares Digital");
+        List.of("Agg LC ID", "Agg LC Name", "Total Shares Print", "Total Shares Digital");
     private static final List<String> METADATA_HEADERS =
-        ImmutableList.of("Report Name", "Scenario Name", "License Type", "Report Period", "User", "Report Date");
+        List.of("Report Name", "Scenario Name", "License Type", "Report Period", "User", "Report Date");
     private static final String REPORT_NAME = "Summary of Work Shares by Aggregate Licensee Class Report";
 
     /**

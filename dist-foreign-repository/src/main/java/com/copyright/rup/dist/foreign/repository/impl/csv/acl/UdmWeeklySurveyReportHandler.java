@@ -2,7 +2,6 @@ package com.copyright.rup.dist.foreign.repository.impl.csv.acl;
 
 import com.copyright.rup.dist.common.repository.impl.csv.BaseCsvReportHandler;
 import com.copyright.rup.dist.foreign.domain.report.UdmWeeklySurveyReportDto;
-import com.google.common.collect.ImmutableList;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.OutputStream;
@@ -21,7 +20,7 @@ import java.util.Objects;
  */
 public class UdmWeeklySurveyReportHandler extends BaseCsvReportHandler<UdmWeeklySurveyReportDto> {
 
-    private static final List<String> HEADERS = ImmutableList.of("Period", "Date Received", "Channel ", "Usage Origin",
+    private static final List<String> HEADERS = List.of("Period", "Date Received", "Channel ", "Usage Origin",
         "Company ID", "Company Name", "Det LC ID", "Det LC Name", "Total Details", "Usable Details", "% Usable Data",
         "# of registered users", "# of rows reported by registered users",
         "# of usable rows reported by registered users", "% Usable from registered users",

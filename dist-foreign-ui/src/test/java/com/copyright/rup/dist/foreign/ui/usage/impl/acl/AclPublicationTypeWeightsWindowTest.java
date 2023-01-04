@@ -24,7 +24,6 @@ import com.copyright.rup.dist.foreign.ui.usage.UiTestHelper;
 import com.copyright.rup.dist.foreign.ui.usage.impl.ScenarioParameterWidget.IParametersSaveListener;
 import com.copyright.rup.dist.foreign.ui.usage.impl.ScenarioParameterWidget.ParametersSaveEvent;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Button;
@@ -55,7 +54,7 @@ import java.util.List;
  */
 public class AclPublicationTypeWeightsWindowTest {
 
-    private final List<AclPublicationType> appliedParams = ImmutableList.of(
+    private final List<AclPublicationType> appliedParams = List.of(
         buildAclPublicationType("2fe9c0a0-7672-4b56-bc64-9d4125fecf6e", "BK", "Book", "1.00", 201506),
         buildAclPublicationType("68fd94c0-a8c0-4a59-bfe3-6674c4b12199", "OT", "Other",  "2.00", 201512));
 

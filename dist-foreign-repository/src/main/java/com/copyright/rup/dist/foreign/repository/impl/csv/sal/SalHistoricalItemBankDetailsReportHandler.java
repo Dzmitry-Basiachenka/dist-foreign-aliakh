@@ -2,7 +2,6 @@ package com.copyright.rup.dist.foreign.repository.impl.csv.sal;
 
 import com.copyright.rup.dist.common.repository.impl.csv.BaseCsvReportHandler;
 import com.copyright.rup.dist.foreign.domain.report.SalHistoricalItemBankDetailsReportDto;
-import com.google.common.collect.ImmutableList;
 
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -20,7 +19,7 @@ import java.util.List;
 public class SalHistoricalItemBankDetailsReportHandler
     extends BaseCsvReportHandler<SalHistoricalItemBankDetailsReportDto> {
 
-    private static final List<String> HEADERS = ImmutableList.of("Detail ID", "Item Bank Name", "Period End Date",
+    private static final List<String> HEADERS = List.of("Detail ID", "Item Bank Name", "Period End Date",
         "Licensee Account #", "Licensee Name", "RH Account #", "RH Name", "Wr Wrk Inst", "System Title",
         "Standard Number", "Standard Number Type", "Assessment Name", "Reported Work Portion ID", "Reported Title",
         "Reported Article or Chapter", "Reported Standard Number or Image ID Number", "Reported Media Type",

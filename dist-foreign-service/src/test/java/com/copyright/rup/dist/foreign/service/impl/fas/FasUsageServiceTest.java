@@ -34,7 +34,6 @@ import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
 import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Sets;
 import com.google.common.collect.Table;
@@ -277,7 +276,7 @@ public class FasUsageServiceTest {
         String usageId2 = "9c07f6dd-382e-4cbb-8cd1-ab9f51413e0a";
         ResearchedUsage researchedUsage1 = buildResearchedUsage(usageId1, "Title1", "742354894", 987654321L);
         ResearchedUsage researchedUsage2 = buildResearchedUsage(usageId2, "Title2", "879456165", 876543210L);
-        List<ResearchedUsage> researchedUsages = ImmutableList.of(researchedUsage1, researchedUsage2);
+        List<ResearchedUsage> researchedUsages = List.of(researchedUsage1, researchedUsage2);
         expect(piIntegrationService.findWorkByWrWrkInst(987654321L)).andReturn(buildWork("VALISSN")).once();
         expect(piIntegrationService.findWorkByWrWrkInst(876543210L)).andReturn(new Work()).once();
         fasUsageRepository.updateResearchedUsages(researchedUsages);

@@ -3,8 +3,6 @@ package com.copyright.rup.dist.foreign.repository.impl.csv.acl;
 import com.copyright.rup.dist.common.repository.impl.csv.BaseCsvReportHandler;
 import com.copyright.rup.dist.foreign.domain.report.UdmUsableDetailsByCountryReportDto;
 
-import com.google.common.collect.ImmutableList;
-
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +18,7 @@ import java.util.List;
  */
 public class UdmUsableDetailsByCountryReportHandler extends BaseCsvReportHandler<UdmUsableDetailsByCountryReportDto> {
 
-    private static final List<String> HEADERS = ImmutableList.of("Period", "Channel", "Usage Origin", "Country",
+    private static final List<String> HEADERS = List.of("Period", "Channel", "Usage Origin", "Country",
         "Det LC ID", "Det LC Name", "Total Count");
 
     /**

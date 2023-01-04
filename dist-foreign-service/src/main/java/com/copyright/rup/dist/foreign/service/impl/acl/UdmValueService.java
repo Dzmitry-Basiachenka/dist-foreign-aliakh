@@ -19,8 +19,6 @@ import com.copyright.rup.dist.foreign.service.api.IRightsService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmValueAuditService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmValueService;
 
-import com.google.common.collect.ImmutableList;
-
 import org.apache.commons.collections4.MapUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,7 +76,7 @@ public class UdmValueService implements IUdmValueService {
 
     @Override
     public List<Currency> getAllCurrencies() {
-        return ImmutableList.copyOf(currencyCodesToCurrencyNamesMap
+        return List.copyOf(currencyCodesToCurrencyNamesMap
             .entrySet()
             .stream()
             .map(entry -> new Currency(entry.getKey(), entry.getValue()))

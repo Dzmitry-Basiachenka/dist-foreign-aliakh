@@ -4,8 +4,6 @@ import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.common.repository.impl.csv.BaseCsvReportHandler;
 import com.copyright.rup.dist.foreign.domain.report.UdmBaselineValueUpdatesReportDto;
 
-import com.google.common.collect.ImmutableList;
-
 import org.apache.commons.lang3.time.DateFormatUtils;
 
 import java.io.OutputStream;
@@ -23,7 +21,7 @@ import java.util.List;
  */
 public class UdmBaselineValueUpdatesReportHandler extends BaseCsvReportHandler<UdmBaselineValueUpdatesReportDto> {
 
-    private static final List<String> HEADERS = ImmutableList.of("Value ID", "Action Type", "Action Reason",
+    private static final List<String> HEADERS = List.of("Value ID", "Action Type", "Action Reason",
         "Wr Wrk Inst", "System Title", "Value Period", "Updated Date", "Updated By");
 
     /**

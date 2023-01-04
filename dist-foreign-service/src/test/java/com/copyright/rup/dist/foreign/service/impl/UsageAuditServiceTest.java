@@ -17,7 +17,6 @@ import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.domain.report.BatchStatistic;
 import com.copyright.rup.dist.foreign.repository.impl.UsageAuditRepository;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
 import org.easymock.Capture;
@@ -218,6 +217,6 @@ public class UsageAuditServiceTest {
         statistic.setPaidCount(0);
         statistic.setPaidAmount(AMOUNT_ZERO);
         statistic.setPaidPercent(AMOUNT_ZERO);
-        return ImmutableList.of(statistic);
+        return List.of(statistic);
     }
 }

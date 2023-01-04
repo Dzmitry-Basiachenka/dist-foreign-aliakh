@@ -3,7 +3,6 @@ package com.copyright.rup.dist.foreign.repository.impl.csv.sal;
 import com.copyright.rup.dist.common.repository.impl.csv.BaseCsvReportHandler;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.report.SalLiabilitiesSummaryByRhAndWorkReportDto;
-import com.google.common.collect.ImmutableList;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.OutputStream;
@@ -23,7 +22,7 @@ import java.util.List;
 public class SalLiabilitiesSummaryByRhAndWorkReportHandler
     extends BaseCsvReportHandler<SalLiabilitiesSummaryByRhAndWorkReportDto> {
 
-    private static final List<String> HEADERS = ImmutableList.of("RH Account #", "RH Name", "Wr Wrk Inst",
+    private static final List<String> HEADERS = List.of("RH Account #", "RH Name", "Wr Wrk Inst",
         "System Title", "Gross Amount", "Service Fee Amount", "Net Amount");
 
     /**

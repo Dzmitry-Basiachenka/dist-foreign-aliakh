@@ -3,7 +3,6 @@ package com.copyright.rup.dist.foreign.repository.impl.csv.acl;
 import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.common.repository.impl.csv.BaseCsvReportHandler;
 import com.copyright.rup.dist.foreign.domain.report.UdmUsageEditsInBaselineReportDto;
-import com.google.common.collect.ImmutableList;
 import org.apache.commons.lang3.time.DateFormatUtils;
 
 import java.io.OutputStream;
@@ -21,7 +20,7 @@ import java.util.List;
  */
 public class UdmUsageEditsInBaselineReportHandler extends BaseCsvReportHandler<UdmUsageEditsInBaselineReportDto> {
 
-    private static final List<String> HEADERS = ImmutableList.of("Detail ID", "Action Type", "Action Reason",
+    private static final List<String> HEADERS = List.of("Detail ID", "Action Type", "Action Reason",
         "Wr Wrk Inst", "System Title", "Usage Period", "Updated Date", "Updated By");
 
     /**
