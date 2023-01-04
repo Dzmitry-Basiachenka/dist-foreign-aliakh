@@ -423,7 +423,7 @@ public class SalFundPoolLoadWindowTest {
 
     private FundPool buildFundPool() {
         FundPool fundPool = new FundPool();
-        fundPool.setName("SAL Fund Pool");
+        fundPool.setName(FUND_POOL_NAME);
         FundPool.SalFields salFields = new FundPool.SalFields();
         salFields.setDateReceived(LocalDate.of(2020, 12, 12));
         salFields.setAssessmentName("FY2020 COG");

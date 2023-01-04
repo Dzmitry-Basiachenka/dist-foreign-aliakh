@@ -46,9 +46,9 @@ import java.util.Objects;
  */
 class SalFundPoolLoadWindow extends Window {
 
-    private static final String NOT_NUMERIC_MESSAGE = "field.error.not_numeric";
+    private static final String NOT_NUMERIC_MESSAGE = ForeignUi.getMessage("field.error.not_numeric");
     private static final BigDecimal HUNDRED = new BigDecimal("100");
-    private static final int DEFAULT_SCALE = 2;
+    private static final int SCALE_2 = 2;
     private static final int SCALE_5 = 5;
 
     private final ISalUsageController usagesController;
@@ -123,7 +123,7 @@ class SalFundPoolLoadWindow extends Window {
         rootLayout.setComponentAlignment(buttonsLayout, Alignment.BOTTOM_RIGHT);
         binder.validate();
         binder.addStatusChangeListener(event -> {
-            if (areNotEmptyRequiredFields() && event.getBinder().isValid()) {
+            if (areRequiredFieldsNotEmpty() && event.getBinder().isValid()) {
                 FundPool fundPool = usagesController.calculateFundPoolAmounts(buildFundPool());
                 totalAmount.setValue(fundPool.getTotalAmount().toString());
                 itemBankGrossAmount.setValue(fundPool.getSalFields().getItemBankGrossAmount().toString());
@@ -191,7 +191,7 @@ class SalFundPoolLoadWindow extends Window {
         binder.forField(grossAmountField)
             .withValidator(new RequiredValidator())
             .withValidator(new AmountZeroValidator())
-            .withConverter(new StringToBigDecimalConverter(ForeignUi.getMessage(NOT_NUMERIC_MESSAGE)))
+            .withConverter(new StringToBigDecimalConverter(NOT_NUMERIC_MESSAGE))
             .bind(fundPool -> fundPool.getSalFields().getGrossAmount(),
                 (fundPool, amount) -> fundPool.getSalFields().setGrossAmount(amount));
         grossAmountField.setRequiredIndicatorVisible(true);
@@ -204,7 +204,7 @@ class SalFundPoolLoadWindow extends Window {
         itemBankSplitPercent = new TextField(ForeignUi.getMessage("label.fund_pool.item_bank_split_percent"));
         binder.forField(itemBankSplitPercent)
             .withValidator(new RequiredValidator())
-            .withConverter(new StringToBigDecimalConverter(ForeignUi.getMessage(NOT_NUMERIC_MESSAGE)))
+            .withConverter(new StringToBigDecimalConverter(NOT_NUMERIC_MESSAGE))
             .withValidator(itemBankSplitPercentValidator(),
                 ForeignUi.getMessage("field.error.range_and_one_decimal_place"))
             .bind(fundPool -> fundPool.getSalFields().getItemBankSplitPercent(),
@@ -222,9 +222,9 @@ class SalFundPoolLoadWindow extends Window {
         gradeKto5NumberOfStudentsBinding = binder.forField(gradeKto5NumberOfStudents)
             .withValidator(new RequiredValidator())
             .withValidator(new AmountValidator())
-            .withConverter(new StringToIntegerConverter(ForeignUi.getMessage(NOT_NUMERIC_MESSAGE)))
+            .withConverter(new StringToIntegerConverter(NOT_NUMERIC_MESSAGE))
             .withValidator(gradeNumberOfStudentsAllZeroValidator(),
-                ForeignUi.getMessage("field.error.number_of_students_zero"))
+                ForeignUi.getMessage("field.error.number_of_students_not_zero_when_item_bank_split_percent_100"))
             .withValidator(gradeNumberOfStudentsAtLeastOneNotZeroValidator(),
                 ForeignUi.getMessage("field.error.number_of_students_not_all_zero"))
             .bind(fundPool -> fundPool.getSalFields().getGradeKto5NumberOfStudents(),
@@ -242,9 +242,9 @@ class SalFundPoolLoadWindow extends Window {
         grade6to8NumberOfStudentsBinding = binder.forField(grade6to8NumberOfStudents)
             .withValidator(new RequiredValidator())
             .withValidator(new AmountValidator())
-            .withConverter(new StringToIntegerConverter(ForeignUi.getMessage(NOT_NUMERIC_MESSAGE)))
+            .withConverter(new StringToIntegerConverter(NOT_NUMERIC_MESSAGE))
             .withValidator(gradeNumberOfStudentsAllZeroValidator(),
-                ForeignUi.getMessage("field.error.number_of_students_zero"))
+                ForeignUi.getMessage("field.error.number_of_students_not_zero_when_item_bank_split_percent_100"))
             .withValidator(gradeNumberOfStudentsAtLeastOneNotZeroValidator(),
                 ForeignUi.getMessage("field.error.number_of_students_not_all_zero"))
             .bind(fundPool -> fundPool.getSalFields().getGrade6to8NumberOfStudents(),
@@ -263,9 +263,9 @@ class SalFundPoolLoadWindow extends Window {
         grade9to12NumberOfStudentsBinding = binder.forField(grade9to12NumberOfStudents)
             .withValidator(new RequiredValidator())
             .withValidator(new AmountValidator())
-            .withConverter(new StringToIntegerConverter(ForeignUi.getMessage(NOT_NUMERIC_MESSAGE)))
+            .withConverter(new StringToIntegerConverter(NOT_NUMERIC_MESSAGE))
             .withValidator(gradeNumberOfStudentsAllZeroValidator(),
-                ForeignUi.getMessage("field.error.number_of_students_zero"))
+                ForeignUi.getMessage("field.error.number_of_students_not_zero_when_item_bank_split_percent_100"))
             .withValidator(gradeNumberOfStudentsAtLeastOneNotZeroValidator(),
                 ForeignUi.getMessage("field.error.number_of_students_not_all_zero"))
             .bind(fundPool -> fundPool.getSalFields().getGrade9to12NumberOfStudents(),
@@ -357,8 +357,7 @@ class SalFundPoolLoadWindow extends Window {
         binder.forField(accountNumberField)
             .withValidator(new RequiredValidator())
             .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.number_length", 10), 0, 10))
-            .withValidator(value -> StringUtils.isNumeric(StringUtils.trim(value)),
-                ForeignUi.getMessage("field.error.not_numeric"))
+            .withValidator(value -> StringUtils.isNumeric(StringUtils.trim(value)), NOT_NUMERIC_MESSAGE)
             .bind(fundPool -> fundPool.getSalFields().getLicenseeAccountNumber().toString(),
                 (fundPool, string) -> fundPool.getSalFields().setLicenseeAccountNumber(Long.valueOf(string)));
         VaadinUtils.setMaxComponentsWidth(accountNumberField);
@@ -441,7 +440,7 @@ class SalFundPoolLoadWindow extends Window {
         FundPool.SalFields salFields = new FundPool.SalFields();
         salFields.setAssessmentName(StringUtils.trimToEmpty(assessmentName.getValue()));
         salFields.setGrossAmount(new BigDecimal(StringUtils.trimToEmpty(grossAmountField.getValue()))
-            .setScale(DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP));
+            .setScale(SCALE_2, BigDecimal.ROUND_HALF_UP));
         salFields.setItemBankSplitPercent(new BigDecimal(StringUtils.trimToEmpty(itemBankSplitPercent.getValue()))
             .divide(HUNDRED, SCALE_5, BigDecimal.ROUND_HALF_UP));
         salFields.setDateReceived(dateReceived.getValue());
@@ -457,7 +456,7 @@ class SalFundPoolLoadWindow extends Window {
         return fundPool;
     }
 
-    private boolean areNotEmptyRequiredFields() {
+    private boolean areRequiredFieldsNotEmpty() {
         return StringUtils.isNotBlank(fundPoolNameField.getValue())
             && StringUtils.isNotBlank(assessmentName.getValue())
             && StringUtils.isNotBlank(grossAmountField.getValue())
