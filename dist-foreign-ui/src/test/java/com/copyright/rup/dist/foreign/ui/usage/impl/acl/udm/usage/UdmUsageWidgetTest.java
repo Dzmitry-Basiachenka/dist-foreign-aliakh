@@ -40,7 +40,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.google.common.collect.ImmutableList;
 import com.vaadin.data.provider.CallbackDataProvider;
 import com.vaadin.data.provider.DataProvider;
 import com.vaadin.data.provider.Query;
@@ -565,7 +564,7 @@ public class UdmUsageWidgetTest {
     public void testSelectAllCheckBoxVisible() {
         mockStatic(JavaScript.class);
         setSpecialistExpectations();
-        List<UdmUsageDto> udmUsageDtos = ImmutableList.of(new UdmUsageDto(), new UdmUsageDto());
+        List<UdmUsageDto> udmUsageDtos = List.of(new UdmUsageDto(), new UdmUsageDto());
         expect(JavaScript.getCurrent()).andReturn(createMock(JavaScript.class)).times(2);
         expect(controller.loadBeans(0, 2, Collections.emptyList())).andReturn(udmUsageDtos).once();
         expect(controller.getBeansCount()).andReturn(UDM_RECORD_THRESHOLD).once();
@@ -588,7 +587,7 @@ public class UdmUsageWidgetTest {
     public void testSelectAllCheckBoxNotVisible() {
         mockStatic(JavaScript.class);
         setSpecialistExpectations();
-        List<UdmUsageDto> udmUsageDtos = ImmutableList.of(new UdmUsageDto(), new UdmUsageDto());
+        List<UdmUsageDto> udmUsageDtos = List.of(new UdmUsageDto(), new UdmUsageDto());
         expect(JavaScript.getCurrent()).andReturn(createMock(JavaScript.class)).times(2);
         expect(controller.loadBeans(0, 2, Collections.emptyList())).andReturn(udmUsageDtos).once();
         expect(controller.getBeansCount()).andReturn(EXCEEDED_UDM_RECORD_THRESHOLD).once();

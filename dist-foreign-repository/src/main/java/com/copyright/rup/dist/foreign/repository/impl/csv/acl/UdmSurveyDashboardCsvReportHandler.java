@@ -3,8 +3,6 @@ package com.copyright.rup.dist.foreign.repository.impl.csv.acl;
 import com.copyright.rup.dist.common.repository.impl.csv.BaseCsvReportHandler;
 import com.copyright.rup.dist.foreign.domain.report.UdmSurveyDashboardReportDto;
 
-import com.google.common.collect.ImmutableList;
-
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +19,7 @@ import java.util.List;
 public class UdmSurveyDashboardCsvReportHandler extends BaseCsvReportHandler<UdmSurveyDashboardReportDto> {
 
     private static final List<String> HEADERS =
-        ImmutableList.of("Usage Origin", "Channel ", "Period", "Company ID", "Company Name", "Det LC ID", "Det LC Name",
+        List.of("Usage Origin", "Channel ", "Period", "Company ID", "Company Name", "Det LC ID", "Det LC Name",
             "Survey Start Date", "Unadjusted Unique Users", "Adjusted Unique Users", "# Details Loaded",
             "# Usable Details Loaded", "# Surveys", "Period Month Order");
 

@@ -7,8 +7,6 @@ import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.report.AclCalculationReportsInfoDto;
 import com.copyright.rup.dist.foreign.domain.report.AclReportTotalAmountsDto;
 
-import com.google.common.collect.ImmutableList;
-
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.OutputStream;
@@ -30,7 +28,7 @@ import java.util.stream.Collectors;
 public abstract class AclCommonCalculationsCsvReportHandler<T extends StoredEntity<?>> extends BaseCsvReportHandler<T> {
 
     private static final List<String> METADATA_HEADERS =
-        ImmutableList.of("Report Name", "Report Period", "User", "Report Date", "Scenarios");
+        List.of("Report Name", "Report Period", "User", "Report Date", "Scenarios");
     private final String reportName;
     private final DateTimeFormatter formatter =
         DateTimeFormatter.ofPattern(RupDateUtils.US_DATETIME_FORMAT_PATTERN_LONG);

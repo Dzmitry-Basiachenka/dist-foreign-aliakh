@@ -39,7 +39,6 @@ import com.copyright.rup.dist.foreign.ui.usage.impl.ScenarioParameterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.impl.UsageAgeWeightWindow;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.ContentMode;
@@ -450,7 +449,7 @@ public class AaclScenariosWidgetTest {
     }
 
     private List<PublicationType> buildPublicationTypes() {
-        return ImmutableList.of(
+        return List.of(
             buildPublicationType("2fe9c0a0-7672-4b56-bc64-9d4125fecf6e", "Book", "1.00"),
             buildPublicationType("68fd94c0-a8c0-4a59-bfe3-6674c4b12199", "Business or Trade Journal", "1.50"),
             buildPublicationType("46634907-882e-4f91-b1ad-f57db945aff7", "Consumer Magazine", "1.00"),
@@ -467,7 +466,7 @@ public class AaclScenariosWidgetTest {
     }
 
     private List<UsageAge> buildUsageAges() {
-        return ImmutableList.of(
+        return List.of(
             buildUsageAge(2019, new BigDecimal("1.00")),
             buildUsageAge(2018, new BigDecimal("0.75")));
     }

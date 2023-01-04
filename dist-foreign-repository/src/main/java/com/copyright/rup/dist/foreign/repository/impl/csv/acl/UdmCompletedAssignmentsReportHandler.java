@@ -3,8 +3,6 @@ package com.copyright.rup.dist.foreign.repository.impl.csv.acl;
 import com.copyright.rup.dist.common.repository.impl.csv.BaseCsvReportHandler;
 import com.copyright.rup.dist.foreign.domain.report.UdmCompletedAssignmentsReportDto;
 
-import com.google.common.collect.ImmutableList;
-
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +19,7 @@ import java.util.List;
 public class UdmCompletedAssignmentsReportHandler extends BaseCsvReportHandler<UdmCompletedAssignmentsReportDto> {
 
     private static final List<String> HEADERS =
-        ImmutableList.of("User Name", "# of Usages Completed ", "# of Values Completed");
+        List.of("User Name", "# of Usages Completed ", "# of Values Completed");
 
     /**
      * Constructor.

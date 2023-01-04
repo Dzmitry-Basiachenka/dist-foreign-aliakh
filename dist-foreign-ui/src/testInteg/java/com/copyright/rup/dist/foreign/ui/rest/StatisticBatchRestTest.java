@@ -10,8 +10,6 @@ import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.report.BatchStatistic;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 
-import com.google.common.collect.ImmutableList;
-
 import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.core.StringStartsWith;
 import org.junit.Before;
@@ -206,7 +204,7 @@ public class StatisticBatchRestTest {
         statistic.setPaidCount(0);
         statistic.setPaidAmount(AMOUNT_ZERO);
         statistic.setPaidPercent(AMOUNT_ZERO);
-        return ImmutableList.of(statistic);
+        return List.of(statistic);
     }
 
     private String loadJson() {

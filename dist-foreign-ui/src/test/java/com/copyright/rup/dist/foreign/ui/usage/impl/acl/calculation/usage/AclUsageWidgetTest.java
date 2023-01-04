@@ -30,7 +30,6 @@ import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclUsageFilterController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Sets;
 import com.vaadin.data.provider.CallbackDataProvider;
 import com.vaadin.data.provider.DataProvider;
@@ -148,7 +147,7 @@ public class AclUsageWidgetTest {
     public void testSelectAllCheckBoxVisible() {
         mockStatic(JavaScript.class);
         setSpecialistExpectations();
-        List<AclUsageDto> aclUsageDtos = ImmutableList.of(new AclUsageDto(), new AclUsageDto());
+        List<AclUsageDto> aclUsageDtos = List.of(new AclUsageDto(), new AclUsageDto());
         expect(JavaScript.getCurrent()).andReturn(createMock(JavaScript.class)).times(2);
         expect(controller.loadBeans(0, 2, Collections.emptyList())).andReturn(aclUsageDtos).once();
         expect(controller.getBeansCount()).andReturn(aclUsageDtos.size()).once();
@@ -171,7 +170,7 @@ public class AclUsageWidgetTest {
     public void testSelectAllCheckBoxNotVisible() {
         mockStatic(JavaScript.class);
         setSpecialistExpectations();
-        List<AclUsageDto> aclUsageDtos = ImmutableList.of(new AclUsageDto(), new AclUsageDto());
+        List<AclUsageDto> aclUsageDtos = List.of(new AclUsageDto(), new AclUsageDto());
         expect(JavaScript.getCurrent()).andReturn(createMock(JavaScript.class)).times(2);
         expect(controller.loadBeans(0, 2, Collections.emptyList())).andReturn(aclUsageDtos).once();
         expect(controller.getBeansCount()).andReturn(EXCEEDED_RECORD_THRESHOLD).once();

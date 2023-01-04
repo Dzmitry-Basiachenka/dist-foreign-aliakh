@@ -3,8 +3,6 @@ package com.copyright.rup.dist.foreign.service.impl.csv;
 import com.copyright.rup.dist.common.repository.impl.csv.BaseCsvReportWriter;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 
-import com.google.common.collect.ImmutableList;
-
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +18,7 @@ import java.util.List;
  */
 public class NtsWithdrawnBatchesCsvReportWriter extends BaseCsvReportWriter<UsageBatch> {
 
-    private static final List<String> HEADERS = ImmutableList.of("Usage Batch Name", "Gross NTS Withdrawn Amount");
+    private static final List<String> HEADERS = List.of("Usage Batch Name", "Gross NTS Withdrawn Amount");
 
     /**
      * Constructor.

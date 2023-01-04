@@ -3,8 +3,6 @@ package com.copyright.rup.dist.foreign.repository.impl.csv.sal;
 import com.copyright.rup.dist.common.repository.impl.csv.BaseCsvReportHandler;
 import com.copyright.rup.dist.foreign.domain.report.SalFundPoolReportDto;
 
-import com.google.common.collect.ImmutableList;
-
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +18,7 @@ import java.util.List;
  */
 public class SalFundPoolsReportHandler extends BaseCsvReportHandler<SalFundPoolReportDto> {
 
-    private static final List<String> HEADERS = ImmutableList.of("Fund Pool Name", "Scenario Name",
+    private static final List<String> HEADERS = List.of("Fund Pool Name", "Scenario Name",
         "Date Received", "Assessment Name", "Licensee Account #", "Licensee Name", "Gross Amount", "Net Amount",
         "Service Fee %", "Item Bank Split %", "Grade K-5 Number of Students", "Grade 6-8 Number of Students",
         "Grade 9-12 Number of Students", "Item Bank Gross Amount", "Grade K-5 Gross Amount", "Grade 6-8 Gross Amount",

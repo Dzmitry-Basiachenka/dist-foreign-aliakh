@@ -41,7 +41,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.vaadin.data.provider.DataProvider;
 import com.vaadin.server.Extension;
@@ -246,7 +245,7 @@ public class NtsUsageWidgetTest {
         expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
         expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
         expect(controller.getProcessingBatchesNames(Collections.singleton(batchId)))
-            .andReturn(ImmutableList.of("batch name 1", "batch name 2")).once();
+            .andReturn(List.of("batch name 1", "batch name 2")).once();
         Windows.showNotificationWindow("Please wait while batch(es) processing is completed:" +
             "<ul><li><i><b>batch name 1<br><li>batch name 2</b></i></ul>");
         expectLastCall().once();
