@@ -68,6 +68,7 @@ public class AclciUsageBatchUploadWindowTest {
     private static final Long LICENSEE_ACCOUNT_NUMBER = 1111L;
     private static final String LICENSEE_NAME = "Acuson Corporation";
     private static final Integer PERIOD_END_DATE = 2022;
+    private static final String BINDER = "binder";
     private static final String USAGE_BATCH_NAME_FIELD = "usageBatchNameField";
     private static final String UPLOAD_FIELD = "uploadField";
     private static final String LICENSEE_ACCOUNT_NUMBER_FIELD = "licenseeAccountNumberField";
@@ -175,17 +176,17 @@ public class AclciUsageBatchUploadWindowTest {
     @Test
     public void testUsageBatchNameFieldValidation() {
         expect(aclciUsageController.usageBatchExists(USAGE_BATCH_NAME)).andReturn(true).times(2);
-        expect(aclciUsageController.usageBatchExists("Usage Batch")).andReturn(false).times(3);
+        expect(aclciUsageController.usageBatchExists(USAGE_BATCH_NAME)).andReturn(false).times(1);
         replay(aclciUsageController);
         window = new AclciUsageBatchUploadWindow(aclciUsageController);
-        Binder binder = Whitebox.getInternalState(window, "binder");
+        Binder<?> binder = Whitebox.getInternalState(window, BINDER);
         TextField textField = Whitebox.getInternalState(window, USAGE_BATCH_NAME_FIELD);
         validateFieldAndVerifyErrorMessage(textField, StringUtils.EMPTY, binder, EMPTY_FIELD_ERROR, false);
         validateFieldAndVerifyErrorMessage(textField, SPACES_STRING, binder, EMPTY_FIELD_ERROR, false);
         validateFieldAndVerifyErrorMessage(textField,
             StringUtils.repeat('a', 51), binder, FIELD_LENGTH_EXCEEDS_50_ERROR, false);
         validateFieldAndVerifyErrorMessage(textField, USAGE_BATCH_NAME, binder, USAGE_BATCH_EXISTS_ERROR, false);
-        validateFieldAndVerifyErrorMessage(textField, "Usage Batch", binder, null, true);
+        validateFieldAndVerifyErrorMessage(textField, USAGE_BATCH_NAME, binder, null, true);
         verify(aclciUsageController);
     }
 
@@ -205,7 +206,7 @@ public class AclciUsageBatchUploadWindowTest {
     public void testLicenseeAccountNumberValidation() {
         replay(aclciUsageController);
         window = new AclciUsageBatchUploadWindow(aclciUsageController);
-        Binder binder = Whitebox.getInternalState(window, "binder");
+        Binder<?> binder = Whitebox.getInternalState(window, BINDER);
         TextField textField = Whitebox.getInternalState(window, LICENSEE_ACCOUNT_NUMBER_FIELD);
         validateFieldAndVerifyErrorMessage(textField, StringUtils.EMPTY, binder, EMPTY_FIELD_ERROR, false);
         validateFieldAndVerifyErrorMessage(textField, SPACES_STRING, binder, EMPTY_FIELD_ERROR, false);
@@ -221,7 +222,7 @@ public class AclciUsageBatchUploadWindowTest {
     public void testPeriodEndDateValidation() {
         replay(aclciUsageController);
         window = new AclciUsageBatchUploadWindow(aclciUsageController);
-        Binder binder = Whitebox.getInternalState(window, "binder");
+        Binder<?> binder = Whitebox.getInternalState(window, BINDER);
         TextField textField = Whitebox.getInternalState(window, PERIOD_END_DATE_FIELD);
         validateFieldAndVerifyErrorMessage(textField, StringUtils.EMPTY, binder, EMPTY_FIELD_ERROR, false);
         validateFieldAndVerifyErrorMessage(textField, SPACES_STRING, binder, EMPTY_FIELD_ERROR, false);
