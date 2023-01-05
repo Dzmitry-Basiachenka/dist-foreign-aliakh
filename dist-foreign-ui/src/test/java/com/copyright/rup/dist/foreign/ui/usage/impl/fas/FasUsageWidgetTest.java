@@ -192,8 +192,7 @@ public class FasUsageWidgetTest {
         expectLastCall().once();
         expect(ForeignSecurityUtils.hasDeleteUsagePermission()).andReturn(true).once();
         expect(controller.getSelectedProductFamily()).andReturn(FAS_PRODUCT_FAMILY).once();
-        expect(controller.getUsageBatches(FAS_PRODUCT_FAMILY))
-            .andReturn(Collections.singletonList(new UsageBatch())).once();
+        expect(controller.getUsageBatches(FAS_PRODUCT_FAMILY)).andReturn(List.of(new UsageBatch())).once();
         Windows.showModalWindow(anyObject(ViewUsageBatchWindow.class));
         expectLastCall().once();
         replay(controller, Windows.class, ForeignSecurityUtils.class);
@@ -279,7 +278,7 @@ public class FasUsageWidgetTest {
         prepareCreateScenarioExpectation();
         expect(controller.getBeansCount()).andReturn(1).once();
         expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
-        expect(controller.getInvalidRightsholders()).andReturn(Collections.singletonList(1000000001L)).once();
+        expect(controller.getInvalidRightsholders()).andReturn(List.of(1000000001L)).once();
         Windows.showNotificationWindow("Scenario cannot be created. The following rightsholder(s) are absent " +
             "in PRM: <i><b>[1000000001]</b></i>");
         expectLastCall().once();

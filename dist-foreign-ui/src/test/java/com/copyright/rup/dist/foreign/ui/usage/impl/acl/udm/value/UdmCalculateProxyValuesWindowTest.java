@@ -30,6 +30,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.util.Collections;
+import java.util.List;
 
 /**
  * Verifies {@link UdmCalculateProxyValuesWindow}.
@@ -68,7 +69,7 @@ public class UdmCalculateProxyValuesWindowTest {
     @Test
     @SuppressWarnings("unchecked")
     public void testClickContinueButton() {
-        expect(controller.getPeriods()).andReturn(Collections.singletonList(202106)).once();
+        expect(controller.getPeriods()).andReturn(List.of(202106)).once();
         expect(controller.calculateProxyValues(202106)).andReturn(2).once();
         Windows.showNotificationWindow("Proxy values calculating completed: 2 record(s) were updated");
         expectLastCall().once();

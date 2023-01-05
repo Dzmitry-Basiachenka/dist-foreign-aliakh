@@ -333,7 +333,7 @@ public class UdmValueWidgetTest {
     public void testCalculateProxyValuesButtonClick() {
         mockStatic(Windows.class);
         setSpecialistExpectations();
-        expect(controller.getPeriods()).andReturn(Collections.singletonList(202006)).once();
+        expect(controller.getPeriods()).andReturn(List.of(202006)).once();
         Windows.showModalWindow(anyObject(UdmCalculateProxyValuesWindow.class));
         expectLastCall().once();
         replay(controller, Windows.class, ForeignSecurityUtils.class, RupContextUtils.class);
@@ -348,7 +348,7 @@ public class UdmValueWidgetTest {
     public void testPublishButtonClick() {
         mockStatic(Windows.class);
         setSpecialistExpectations();
-        expect(controller.getPeriods()).andReturn(Collections.singletonList(202006)).once();
+        expect(controller.getPeriods()).andReturn(List.of(202006)).once();
         Windows.showModalWindow(anyObject(UdmPublishToBaselineWindow.class));
         expectLastCall().once();
         replay(controller, Windows.class, ForeignSecurityUtils.class, RupContextUtils.class);

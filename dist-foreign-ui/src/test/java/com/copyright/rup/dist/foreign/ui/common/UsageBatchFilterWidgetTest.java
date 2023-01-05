@@ -91,7 +91,7 @@ public class UsageBatchFilterWidgetTest {
         expectLastCall().once();
         replay(filterWindow, Windows.class);
         usageBatchFilterWidget.showFilterWindow();
-        assertEquals(Collections.singletonList(USAGE_BATCH_NAME), providerCapture.getValue().apply(buildUsageBatch()));
+        assertEquals(List.of(USAGE_BATCH_NAME), providerCapture.getValue().apply(buildUsageBatch()));
         verify(filterWindow, Windows.class);
     }
 

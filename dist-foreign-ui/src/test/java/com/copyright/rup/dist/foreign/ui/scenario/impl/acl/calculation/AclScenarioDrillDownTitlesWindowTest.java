@@ -47,7 +47,6 @@ import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -212,7 +211,7 @@ public class AclScenarioDrillDownTitlesWindowTest {
         holder.setNetTotalDigital(new BigDecimal("2000.0000000001"));
         holder.setGrossTotal(new BigDecimal("2500.0000000002"));
         holder.setNetTotal(new BigDecimal("10300.0000000002"));
-        return Collections.singletonList(holder);
+        return List.of(holder);
     }
 
     private void verifyMetaInfoLayout(Component component) {

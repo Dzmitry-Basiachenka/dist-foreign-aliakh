@@ -93,8 +93,7 @@ public class PeriodFilterWidgetTest {
         expectLastCall().once();
         replay(filterWindow, Windows.class);
         periodFilterWidget.showFilterWindow();
-        assertEquals(Collections.singletonList(String.valueOf(PERIOD)),
-            providerCapture.getValue().apply(PERIOD));
+        assertEquals(List.of(String.valueOf(PERIOD)), providerCapture.getValue().apply(PERIOD));
         verify(filterWindow, Windows.class);
     }
 

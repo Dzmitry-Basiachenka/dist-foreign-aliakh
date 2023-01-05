@@ -33,7 +33,6 @@ import org.powermock.reflect.Whitebox;
 import java.io.OutputStream;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -79,7 +78,7 @@ public class SalLiabilitiesByRhReportControllerTest {
         ICommonScenariosReportWidget widget = createMock(ICommonScenariosReportWidget.class);
         Whitebox.setInternalState(controller, widget);
         Capture<OutputStream> outputStreamCapture = newCapture();
-        List<Scenario> scenarios = Collections.singletonList(new Scenario());
+        List<Scenario> scenarios = List.of(new Scenario());
         expect(OffsetDateTime.now()).andReturn(now).once();
         expect(widget.getSelectedScenarios()).andReturn(scenarios).once();
         reportService
@@ -95,7 +94,7 @@ public class SalLiabilitiesByRhReportControllerTest {
 
     @Test
     public void testGetScenarios() {
-        List<Scenario> scenarios = Collections.singletonList(new Scenario());
+        List<Scenario> scenarios = List.of(new Scenario());
         expect(productFamilyProvider.getSelectedProductFamily()).andReturn("SAL").once();
         expect(scenarioService.getScenariosByProductFamiliesAndStatuses(Sets.newHashSet("SAL"),
             Sets.newHashSet(ScenarioStatusEnum.values()))).andReturn(scenarios).once();

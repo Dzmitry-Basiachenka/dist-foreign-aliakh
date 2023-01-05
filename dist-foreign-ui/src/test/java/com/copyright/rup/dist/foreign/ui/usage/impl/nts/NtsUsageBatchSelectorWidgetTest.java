@@ -78,7 +78,7 @@ public class NtsUsageBatchSelectorWidgetTest {
 
     @Test
     public void testLoadBeans() {
-        List<UsageBatch> batches = Collections.singletonList(buildUsageBatch());
+        List<UsageBatch> batches = List.of(buildUsageBatch());
         expect(usagesController.getSelectedProductFamily()).andReturn(FAS_PRODUCT_FAMILY).once();
         expect(usagesController.getUsageBatches(FAS_PRODUCT_FAMILY)).andReturn(batches).once();
         replay(usagesController);
@@ -122,7 +122,7 @@ public class NtsUsageBatchSelectorWidgetTest {
     public void testShowFilterWindow() {
         mockStatic(Windows.class);
         expect(usagesController.getSelectedProductFamily()).andReturn(FAS_PRODUCT_FAMILY).once();
-        List<UsageBatch> batches = Collections.singletonList(buildUsageBatch());
+        List<UsageBatch> batches = List.of(buildUsageBatch());
         expect(usagesController.getUsageBatches(FAS_PRODUCT_FAMILY)).andReturn(batches).once();
         Windows.showModalWindow(anyObject(Window.class));
         replay(Windows.class, usagesController);
@@ -156,7 +156,7 @@ public class NtsUsageBatchSelectorWidgetTest {
         CheckBoxGroup checkBoxGroup = (CheckBoxGroup) panel.getContent();
         DataProvider dataProvider = checkBoxGroup.getDataProvider();
         Stream<?> stream = dataProvider.fetch(new Query<>());
-        assertEquals(Collections.singletonList(buildUsageBatch()), stream.collect(Collectors.toList()));
+        assertEquals(List.of(buildUsageBatch()), stream.collect(Collectors.toList()));
     }
 
     private void verifyButtonsLayout(Component component) {

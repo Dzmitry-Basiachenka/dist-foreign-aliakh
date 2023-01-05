@@ -245,7 +245,7 @@ public class FasScenarioControllerTest {
         Windows.showModalWindow(anyObject(FasExcludeSourceRroWindow.class));
         expectLastCall().once();
         expect(fasScenarioService.getSourceRros(SCENARIO_ID)).andReturn(
-            Collections.singletonList(buildRightsholder(1000009522L, "Societa Italiana Autori ed Editori (SIAE)")))
+            List.of(buildRightsholder(1000009522L, "Societa Italiana Autori ed Editori (SIAE)")))
             .once();
         replay(fasScenarioService, Windows.class);
         controller.onExcludeByRroClicked();
@@ -256,7 +256,7 @@ public class FasScenarioControllerTest {
     public void testGetSourceRros() {
         Whitebox.setInternalState(controller, "scenarioService", scenarioService);
         expect(fasScenarioService.getSourceRros(SCENARIO_ID)).andReturn(
-            Collections.singletonList(buildRightsholder(1000009522L, "Societa Italiana Autori ed Editori (SIAE)")))
+            List.of(buildRightsholder(1000009522L, "Societa Italiana Autori ed Editori (SIAE)")))
             .once();
         replay(fasScenarioService);
         List<Rightsholder> rros = controller.getSourceRros();
@@ -280,7 +280,7 @@ public class FasScenarioControllerTest {
     public void testGetRightsholdersPayeePairs() {
         Whitebox.setInternalState(controller, "scenarioService", scenarioService);
         expect(fasScenarioService.getRightsholdersByScenarioAndSourceRro(SCENARIO_ID, 1000009522L))
-            .andReturn(Collections.singletonList(buildRightsholderPayeePair())).once();
+            .andReturn(List.of(buildRightsholderPayeePair())).once();
         replay(fasScenarioService);
         List<RightsholderPayeePair> pairs = controller.getRightsholdersPayeePairs(1000009522L);
         assertEquals(1, CollectionUtils.size(pairs));

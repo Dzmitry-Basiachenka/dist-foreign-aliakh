@@ -35,7 +35,6 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -73,7 +72,7 @@ public class AaclDrillDownByRightsholderControllerTest {
 
     @Test
     public void testLoadBeans() {
-        List<UsageDto> usageDtos = Collections.singletonList(new UsageDto());
+        List<UsageDto> usageDtos = List.of(new UsageDto());
         Capture<Pageable> pageableCapture = newCapture();
         Capture<Sort> sortCapture = newCapture();
         expect(controller.getWidget()).andReturn(new AaclDrillDownByRightsholderControllerTest.WidgetMock()).once();
@@ -82,7 +81,7 @@ public class AaclDrillDownByRightsholderControllerTest {
             .andReturn(usageDtos).once();
         replay(usageService, controller);
         List<UsageDto> actualUsageDtos = controller.loadBeans(OFFSET, COUNT,
-            Collections.singletonList(new QuerySortOrder(SORT_PROPERTY, SortDirection.DESCENDING)));
+            List.of(new QuerySortOrder(SORT_PROPERTY, SortDirection.DESCENDING)));
         verify(usageService, controller);
         assertEquals(OFFSET, pageableCapture.getValue().getOffset());
         assertEquals(COUNT, pageableCapture.getValue().getLimit());

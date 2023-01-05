@@ -89,7 +89,7 @@ public class CommonUsageControllerTest {
 
     @Test
     public void testGetScenariosNamesAssociatedWithUsageBatch() {
-        List<String> names = Collections.singletonList(SCENARIO_NAME);
+        List<String> names = List.of(SCENARIO_NAME);
         expect(scenarioService.getScenariosNamesByUsageBatchId(USAGE_BATCH_ID))
             .andReturn(names).once();
         replay(scenarioService);
@@ -133,7 +133,7 @@ public class CommonUsageControllerTest {
 
     @Test
     public void testGetInvalidRightsholders() {
-        List<Long> invalidRhs = Collections.singletonList(1000017527L);
+        List<Long> invalidRhs = List.of(1000017527L);
         expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
         expect(filterWidgetMock.getAppliedFilter()).andReturn(usageFilter).once();
         expect(usageService.getInvalidRightsholdersByFilter(usageFilter)).andReturn(invalidRhs).once();

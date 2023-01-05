@@ -71,7 +71,7 @@ public class AclGrantDetailControllerTest {
 
     private static final String GRANT_SET_NAME = "Grant Set Name";
     private static final String GRANT_SET_ID = "4bbe8d57-c37a-40c0-b99b-cdeea5ceb54b";
-    private static final List<String> ACL_SCENARIO_NAME = Collections.singletonList("ACL Scenario");
+    private static final List<String> ACL_SCENARIO_NAME = List.of("ACL Scenario");
 
     private final AclGrantDetailController controller = new AclGrantDetailController();
     private final AclGrantDetailFilter aclGrantDetailFilter = new AclGrantDetailFilter();
@@ -126,7 +126,7 @@ public class AclGrantDetailControllerTest {
     @Test
     public void testLoadBeans() {
         AclGrantDetailFilter filter = new AclGrantDetailFilter();
-        List<AclGrantDetailDto> grantDetails = Collections.singletonList(new AclGrantDetailDto());
+        List<AclGrantDetailDto> grantDetails = List.of(new AclGrantDetailDto());
         Capture<Pageable> pageableCapture = newCapture();
         expect(aclGrantDetailFilterController.getWidget()).andReturn(aclGrantDetailFilterWidget).once();
         expect(aclGrantDetailFilterWidget.getAppliedFilter()).andReturn(filter).once();
@@ -148,7 +148,7 @@ public class AclGrantDetailControllerTest {
 
     @Test
     public void testGetBaselinePeriods() {
-        List<Integer> expectedPeriods = Collections.singletonList(202106);
+        List<Integer> expectedPeriods = List.of(202106);
         expect(udmBaselineService.getPeriods()).andReturn(expectedPeriods).once();
         replay(udmBaselineService);
         List<Integer> periods = controller.getBaselinePeriods();
@@ -192,7 +192,7 @@ public class AclGrantDetailControllerTest {
 
     @Test
     public void testGetAllAclGrantSets() {
-        List<AclGrantSet> grantSets = Collections.singletonList(new AclGrantSet());
+        List<AclGrantSet> grantSets = List.of(new AclGrantSet());
         expect(aclGrantSetService.getAll()).andReturn(grantSets).once();
         replay(aclGrantSetService);
         assertEquals(grantSets, controller.getAllAclGrantSets());

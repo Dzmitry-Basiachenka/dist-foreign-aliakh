@@ -13,7 +13,6 @@ import com.vaadin.data.ValueProvider;
 
 import org.apache.commons.collections4.CollectionUtils;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -78,7 +77,7 @@ public class AclGrantSetFilterWidget extends BaseItemsFilterWidget<AclGrantSet>
     public FilterWindow<AclGrantSet> showFilterWindow() {
         FilterWindow<AclGrantSet> filterWindow =
             Windows.showFilterWindow(ForeignUi.getMessage("window.grant_sets_filter"), this,
-                (ValueProvider<AclGrantSet, List<String>>) bean -> Collections.singletonList(bean.getName()));
+                (ValueProvider<AclGrantSet, List<String>>) bean -> List.of(bean.getName()));
         filterWindow.setSelectedItemsIds(selectedItemsIds);
         filterWindow.setSelectAllButtonVisible();
         filterWindow.setSearchPromptString(ForeignUi.getMessage("prompt.grant_set"));

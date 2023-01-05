@@ -96,7 +96,7 @@ public class AclScenariosControllerTest {
     private static final String BATCH_UID = "47b4d40a-a6bd-4fe1-b463-4aa52bf0e56f";
     private static final String GRANT_SET_ID = "38931a03-d5a3-4576-99d3-722ef1ae49f9";
     private static final int DISTRIBUTION_PERIOD = 202212;
-    private static final List<Integer> PERIOD_PRIORS = Collections.singletonList(0);
+    private static final List<Integer> PERIOD_PRIORS = List.of(0);
     private static final String LICENSE_TYPE = "ACL";
     private static final String ACL_PRODUCT_FAMILY = "ACL";
 
@@ -156,7 +156,7 @@ public class AclScenariosControllerTest {
     @Test
     public void testGetScenarios() {
         AclScenarioFilter filter = new AclScenarioFilter();
-        List<AclScenario> scenarios = Collections.singletonList(buildAclScenario());
+        List<AclScenario> scenarios = List.of(buildAclScenario());
         IAclScenariosFilterWidget aclScenariosFilterWidget = createMock(IAclScenariosFilterWidget.class);
         expect(aclScenariosFilterController.getWidget()).andReturn(aclScenariosFilterWidget).once();
         expect(aclScenariosFilterWidget.getAppliedFilter()).andReturn(filter).once();
@@ -211,7 +211,7 @@ public class AclScenariosControllerTest {
 
     @Test
     public void testGetFundPoolsByLicenseTypeAndPeriod() {
-        List<AclFundPool> fundPools = Collections.singletonList(buildFundPool());
+        List<AclFundPool> fundPools = List.of(buildFundPool());
         expect(fundPoolService.getFundPoolsByLicenseTypeAndPeriod(LICENSE_TYPE, DISTRIBUTION_PERIOD))
             .andReturn(fundPools).once();
         replay(fundPoolService);
@@ -222,7 +222,7 @@ public class AclScenariosControllerTest {
 
     @Test
     public void testGetUsageBatchesByPeriod() {
-        List<AclUsageBatch> usageBatches = Collections.singletonList(buildAclUsageBatch());
+        List<AclUsageBatch> usageBatches = List.of(buildAclUsageBatch());
         expect(usageBatchService.getUsageBatchesByPeriod(DISTRIBUTION_PERIOD, true)).andReturn(usageBatches).once();
         replay(usageBatchService);
         assertSame(usageBatches, aclScenariosController.getUsageBatchesByPeriod(DISTRIBUTION_PERIOD, true));
@@ -239,7 +239,7 @@ public class AclScenariosControllerTest {
 
     @Test
     public void testGetGrantSetsByLicenseTypeAndPeriod() {
-        List<AclGrantSet> grantSets = Collections.singletonList(buildAclGrantSet());
+        List<AclGrantSet> grantSets = List.of(buildAclGrantSet());
         expect(grantSetService.getGrantSetsByLicenseTypeAndPeriod(LICENSE_TYPE, DISTRIBUTION_PERIOD, true))
             .andReturn(grantSets).once();
         replay(grantSetService);
@@ -250,7 +250,7 @@ public class AclScenariosControllerTest {
 
     @Test
     public void testGetAclUsagePeriods() {
-        List<Integer> periods = Collections.singletonList(202106);
+        List<Integer> periods = List.of(202106);
         expect(usageBatchService.getPeriods()).andReturn(periods).once();
         replay(usageBatchService);
         assertEquals(periods, aclScenariosController.getAllPeriods());
@@ -259,7 +259,7 @@ public class AclScenariosControllerTest {
 
     @Test
     public void testGetDetailLicenseeClasses() {
-        List<DetailLicenseeClass> licenseeClasses = Collections.singletonList(new DetailLicenseeClass());
+        List<DetailLicenseeClass> licenseeClasses = List.of(new DetailLicenseeClass());
         expect(licenseeClassService.getDetailLicenseeClasses(ACL_PRODUCT_FAMILY)).andReturn(licenseeClasses).once();
         replay(licenseeClassService);
         assertSame(licenseeClasses, aclScenariosController.getDetailLicenseeClasses());
@@ -268,7 +268,7 @@ public class AclScenariosControllerTest {
 
     @Test
     public void testGetAggregateLicenseeClasses() {
-        List<AggregateLicenseeClass> licenseeClasses = Collections.singletonList(new AggregateLicenseeClass());
+        List<AggregateLicenseeClass> licenseeClasses = List.of(new AggregateLicenseeClass());
         expect(licenseeClassService.getAggregateLicenseeClasses(ACL_PRODUCT_FAMILY)).andReturn(licenseeClasses).once();
         replay(licenseeClassService);
         assertSame(licenseeClasses, aclScenariosController.getAggregateLicenseeClasses());
@@ -349,7 +349,7 @@ public class AclScenariosControllerTest {
     @Test
     public void testGetUsageAgeWeights() {
         UsageAge usageAge = buildUsageAge();
-        expect(aclUsageService.getDefaultUsageAgesWeights()).andReturn(Collections.singletonList(usageAge)).once();
+        expect(aclUsageService.getDefaultUsageAgesWeights()).andReturn(List.of(usageAge)).once();
         replay(aclUsageService);
         assertSame(usageAge, aclScenariosController.getUsageAgeWeights().get(0));
         verify(aclUsageService);
@@ -371,11 +371,10 @@ public class AclScenariosControllerTest {
         String fundPoolId = "b9f283cf-5d48-4c69-960a-cc30c24d2282";
         DetailLicenseeClass detailLicenseeClass = new DetailLicenseeClass();
         expect(aclScenarioService.getFundPoolDetailsNotToBeDistributed(BATCH_UID, fundPoolId, grantSetId,
-            Collections.singletonList(detailLicenseeClass))).andReturn(Collections.emptySet()).once();
+            List.of(detailLicenseeClass))).andReturn(Collections.emptySet()).once();
         replay(aclScenarioService);
-        assertEquals(Collections.emptySet(),
-            aclScenariosController.getFundPoolDetailsNotToBeDistributed(BATCH_UID, fundPoolId, grantSetId,
-                Collections.singletonList(detailLicenseeClass)));
+        assertEquals(Collections.emptySet(), aclScenariosController.getFundPoolDetailsNotToBeDistributed(
+            BATCH_UID, fundPoolId, grantSetId, List.of(detailLicenseeClass)));
         verify(aclScenarioService);
     }
 

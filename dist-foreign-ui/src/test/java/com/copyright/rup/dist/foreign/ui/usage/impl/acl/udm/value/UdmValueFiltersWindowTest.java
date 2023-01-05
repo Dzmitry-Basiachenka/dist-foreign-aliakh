@@ -111,8 +111,7 @@ public class UdmValueFiltersWindowTest {
     @Before
     public void setUp() {
         IUdmValueFilterController controller = createMock(IUdmValueFilterController.class);
-        expect(controller.getPublicationTypes()).andReturn(
-            new ArrayList<>(Collections.singletonList(buildPublicationType()))).once();
+        expect(controller.getPublicationTypes()).andReturn(new ArrayList<>(List.of(buildPublicationType()))).once();
         expect(controller.getAllCurrencies()).andReturn(CURRENCIES).once();
         replay(controller);
         window = new UdmValueFiltersWindow(controller, new UdmValueFilter());
@@ -161,8 +160,7 @@ public class UdmValueFiltersWindowTest {
         valueFilter.setCommentExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, COMMENT, null));
         valueFilter.setLastCommentExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, LAST_COMMENT, null));
         IUdmValueFilterController controller = createMock(IUdmValueFilterController.class);
-        expect(controller.getPublicationTypes()).andReturn(
-            new ArrayList<>(Collections.singletonList(buildPublicationType()))).once();
+        expect(controller.getPublicationTypes()).andReturn(new ArrayList<>(List.of(buildPublicationType()))).once();
         expect(controller.getAllCurrencies()).andReturn(CURRENCIES).once();
         replay(controller);
         window = new UdmValueFiltersWindow(controller, valueFilter);

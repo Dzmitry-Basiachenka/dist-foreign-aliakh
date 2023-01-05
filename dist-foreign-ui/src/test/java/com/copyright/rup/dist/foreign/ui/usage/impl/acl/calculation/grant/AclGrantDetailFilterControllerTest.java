@@ -16,7 +16,6 @@ import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -47,7 +46,7 @@ public class AclGrantDetailFilterControllerTest {
 
     @Test
     public void testGetAllAclGrantSets() {
-        List<AclGrantSet> grantSets = Collections.singletonList(new AclGrantSet());
+        List<AclGrantSet> grantSets = List.of(new AclGrantSet());
         expect(aclGrantSetService.getAll()).andReturn(grantSets).once();
         replay(aclGrantSetService);
         assertSame(grantSets, controller.getAllAclGrantSets());

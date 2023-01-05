@@ -43,7 +43,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Collections;
+import java.util.List;
 
 /**
  * Verifies {@link AclUsageFilterWidget}.
@@ -74,7 +74,7 @@ public class AclUsageFilterWidgetTest {
 
     @Test
     public void testInit() {
-        expect(controller.getAllAclUsageBatches()).andReturn(Collections.singletonList(buildAclUsageBatch())).once();
+        expect(controller.getAllAclUsageBatches()).andReturn(List.of(buildAclUsageBatch())).once();
         replay(controller);
         assertSame(widget, widget.init());
         assertEquals(4, widget.getComponentCount());
@@ -88,7 +88,7 @@ public class AclUsageFilterWidgetTest {
 
     @Test
     public void testApplyFilter() {
-        expect(controller.getAllAclUsageBatches()).andReturn(Collections.singletonList(buildAclUsageBatch())).times(2);
+        expect(controller.getAllAclUsageBatches()).andReturn(List.of(buildAclUsageBatch())).times(2);
         appliedFilterWidget.refreshFilterPanel(anyObject());
         expectLastCall();
         replay(controller, appliedFilterWidget);
@@ -112,7 +112,7 @@ public class AclUsageFilterWidgetTest {
 
     @Test
     public void testFilterChangedEmptyFilter() {
-        expect(controller.getAllAclUsageBatches()).andReturn(Collections.singletonList(buildAclUsageBatch())).once();
+        expect(controller.getAllAclUsageBatches()).andReturn(List.of(buildAclUsageBatch())).once();
         replay(controller);
         widget.init();
         Button applyButton = getApplyButton();
@@ -124,7 +124,7 @@ public class AclUsageFilterWidgetTest {
 
     @Test
     public void testClearFilter() {
-        expect(controller.getAllAclUsageBatches()).andReturn(Collections.singletonList(buildAclUsageBatch())).times(2);
+        expect(controller.getAllAclUsageBatches()).andReturn(List.of(buildAclUsageBatch())).times(2);
         appliedFilterWidget.refreshFilterPanel(anyObject());
         expectLastCall().times(2);
         replay(controller, appliedFilterWidget);
@@ -147,7 +147,7 @@ public class AclUsageFilterWidgetTest {
 
     @Test
     public void verifyMoreFiltersButtonClickListener() {
-        expect(controller.getAllAclUsageBatches()).andReturn(Collections.singletonList(buildAclUsageBatch())).once();
+        expect(controller.getAllAclUsageBatches()).andReturn(List.of(buildAclUsageBatch())).once();
         mockStatic(Windows.class);
         ClickEvent clickEvent = createMock(ClickEvent.class);
         Windows.showModalWindow(anyObject(AclUsageFiltersWindow.class));
@@ -162,7 +162,7 @@ public class AclUsageFilterWidgetTest {
 
     @Test
     public void testMoreFiltersButton() {
-        expect(controller.getAllAclUsageBatches()).andReturn(Collections.singletonList(buildAclUsageBatch())).once();
+        expect(controller.getAllAclUsageBatches()).andReturn(List.of(buildAclUsageBatch())).once();
         replay(controller);
         widget.init();
         Button moreFiltersButton = getMoreFiltersButton();
@@ -189,8 +189,7 @@ public class AclUsageFilterWidgetTest {
         VerticalLayout verticalLayout = (VerticalLayout) layout;
         assertEquals(3, verticalLayout.getComponentCount());
         verifyFiltersLabel(verticalLayout.getComponent(0));
-        verifyComboBox(verticalLayout.getComponent(1), "Usage Batch Name", true,
-            Collections.singletonList(ACL_USAGE_BATCH_NAME));
+        verifyComboBox(verticalLayout.getComponent(1), "Usage Batch Name", true, List.of(ACL_USAGE_BATCH_NAME));
         verifyMoreFiltersButton(verticalLayout.getComponent(2), 2);
     }
 

@@ -102,8 +102,7 @@ public class AclGrantDetailFiltersWindowTest {
     public void testConstructorWithPopulatedFilter() {
         AclGrantDetailFilter aclGrantDetailFilter = buildExpectedFilter();
         IAclGrantDetailFilterController controller = createMock(IAclGrantDetailFilterController.class);
-        expect(controller.getGrantPeriods()).andReturn(
-            new ArrayList<>(Collections.singletonList(GRANT_SET_PERIOD))).once();
+        expect(controller.getGrantPeriods()).andReturn(new ArrayList<>(List.of(GRANT_SET_PERIOD))).once();
         replay(controller);
         window = new AclGrantDetailFiltersWindow(controller, aclGrantDetailFilter);
         verify(controller);

@@ -53,7 +53,6 @@ import org.powermock.reflect.Whitebox;
 import java.math.BigDecimal;
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -95,7 +94,7 @@ public class AclScenarioWidgetTest {
         scenarioWidget.setController(controller);
         AclScenarioDto scenario = buildAclScenarioDto();
         IStreamSource streamSource = createMock(IStreamSource.class);
-        List<AclRightsholderTotalsHolder> holders = Collections.singletonList(buildAclRightsholderTotalsHolder());
+        List<AclRightsholderTotalsHolder> holders = List.of(buildAclRightsholderTotalsHolder());
         expect(controller.getAclRightsholderTotalsHolders()).andReturn(holders).once();
         expect(streamSource.getSource()).andReturn(new SimpleImmutableEntry(createMock(Supplier.class),
             createMock(Supplier.class))).once();
@@ -130,7 +129,7 @@ public class AclScenarioWidgetTest {
                 DIGITAL_PAYEE_NAME, "20,000.00", "6,400.00", "13,600.00", "1,000.00", SERVICE_FEE_TOTAL_DIGITAL,
                 NET_TOTAL_DIGITAL, "1", "1", "ACL"}
         };
-        verifyGridItems(grid, Collections.singletonList(buildAclRightsholderTotalsHolder()), expectedCells);
+        verifyGridItems(grid, List.of(buildAclRightsholderTotalsHolder()), expectedCells);
         verify(controller);
         Object[][] expectedFooterColumns = {
             {"grossTotalPrint", "20,000.00", STYLE_ALIGN_RIGHT},

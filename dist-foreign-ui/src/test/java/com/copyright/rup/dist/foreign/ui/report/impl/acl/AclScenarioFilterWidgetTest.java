@@ -84,7 +84,7 @@ public class AclScenarioFilterWidgetTest {
         expectLastCall().once();
         replay(filterWindow, Windows.class);
         scenarioFilterWidget.showFilterWindow();
-        assertEquals(Collections.singletonList(SCENARIO_NAME), providerCapture.getValue().apply(buildScenario()));
+        assertEquals(List.of(SCENARIO_NAME), providerCapture.getValue().apply(buildScenario()));
         verify(filterWindow, Windows.class);
     }
 

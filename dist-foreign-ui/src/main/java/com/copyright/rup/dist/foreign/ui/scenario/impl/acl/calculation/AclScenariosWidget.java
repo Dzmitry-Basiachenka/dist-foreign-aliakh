@@ -187,7 +187,7 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
     @Override
     public AclCalculationReportsInfoDto getReportInfo() {
         AclCalculationReportsInfoDto reportInfo = new AclCalculationReportsInfoDto();
-        reportInfo.setScenarios(Collections.singletonList(getSelectedScenario()));
+        reportInfo.setScenarios(List.of(getSelectedScenario()));
         reportInfo.setUser(userName);
         reportInfo.setReportDateTime(OffsetDateTime.now());
         return reportInfo;

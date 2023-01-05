@@ -14,7 +14,6 @@ import com.vaadin.data.ValueProvider;
 
 import org.apache.commons.collections4.CollectionUtils;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
@@ -78,7 +77,7 @@ public class ScenarioFilterWidget extends BaseItemsFilterWidget<Scenario>
     public FilterWindow<Scenario> showFilterWindow() {
         FilterWindow<Scenario> filterWindow =
             Windows.showFilterWindow(ForeignUi.getMessage("window.scenarios_filter"), this,
-                (ValueProvider<Scenario, List<String>>) scenario -> Collections.singletonList(scenario.getName()));
+                (ValueProvider<Scenario, List<String>>) scenario -> List.of(scenario.getName()));
         filterWindow.setSelectedItemsIds(selectedItemsIds);
         filterWindow.setSearchPromptString(ForeignUi.getMessage("prompt.scenario"));
         VaadinUtils.addComponentStyle(filterWindow, "scenarios-filter-window");

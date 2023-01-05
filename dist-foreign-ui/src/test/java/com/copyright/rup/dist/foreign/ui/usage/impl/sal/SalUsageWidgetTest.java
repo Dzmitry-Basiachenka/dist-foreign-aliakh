@@ -56,6 +56,7 @@ import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.function.Supplier;
 
 /**
@@ -192,7 +193,7 @@ public class SalUsageWidgetTest {
         ClickEvent clickEvent = createMock(ClickEvent.class);
         expect(controller.isValidStatusFilterApplied()).andReturn(true).once();
         expect(controller.getBeansCount()).andReturn(1).once();
-        expect(controller.getUsageDtosForRhUpdate()).andReturn(Collections.singletonList(new UsageDto())).once();
+        expect(controller.getUsageDtosForRhUpdate()).andReturn(List.of(new UsageDto())).once();
         Windows.showModalWindow(anyObject(SalDetailForRightsholderUpdateWindow.class));
         expectLastCall().once();
         replay(controller, clickEvent, Windows.class);
@@ -296,7 +297,7 @@ public class SalUsageWidgetTest {
         expect(controller.getBeansCount()).andReturn(1).once();
         prepareCreateScenarioExpectation();
         expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
-        expect(controller.getInvalidRightsholders()).andReturn(Collections.singletonList(700000000L)).once();
+        expect(controller.getInvalidRightsholders()).andReturn(List.of(700000000L)).once();
         Windows.showNotificationWindow(
             "Scenario cannot be created. The following rightsholder(s) are absent in PRM: <i><b>[700000000]</b></i>");
         expectLastCall().once();
@@ -362,7 +363,7 @@ public class SalUsageWidgetTest {
         expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
         expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
         expect(controller.getProcessingBatchesNames(Collections.singleton(BATCH_ID)))
-            .andReturn(Collections.singletonList("Batch Name")).once();
+            .andReturn(List.of("Batch Name")).once();
         prepareCreateScenarioExpectation();
         Windows.showNotificationWindow("Please wait while batch(es) processing is completed:" +
             "<ul><li><i><b>Batch Name</b></i></ul>");
@@ -382,7 +383,7 @@ public class SalUsageWidgetTest {
         expect(controller.getProcessingBatchesNames(Collections.singleton(BATCH_ID)))
             .andReturn(Collections.emptyList()).once();
         expect(controller.getIneligibleBatchesNames(Collections.singleton(BATCH_ID)))
-            .andReturn(Collections.singletonList("Batch Name")).once();
+            .andReturn(List.of("Batch Name")).once();
         prepareCreateScenarioExpectation();
         Windows.showNotificationWindow("The following batches have usages that are not in ELIGIBLE status:" +
             "<ul><li><i><b>Batch Name</b></i></ul>");
@@ -418,8 +419,7 @@ public class SalUsageWidgetTest {
 
     private void prepareCreateScenarioExpectation() {
         expect(controller.getSelectedProductFamily()).andReturn(SAL_PRODUCT_FAMILY).once();
-        expect(controller.getFundPoolsNotAttachedToScenario())
-            .andReturn(Collections.singletonList(new FundPool())).once();
+        expect(controller.getFundPoolsNotAttachedToScenario()).andReturn(List.of(new FundPool())).once();
         expect(controller.scenarioExists(SAL_SCENARIO_NAME_PREFIX + DATE)).andReturn(true).once();
     }
 

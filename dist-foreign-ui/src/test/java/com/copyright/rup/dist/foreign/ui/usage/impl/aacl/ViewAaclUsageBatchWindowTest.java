@@ -43,6 +43,7 @@ import org.powermock.reflect.Whitebox;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * Verifies {@link ViewAaclUsageBatchWindow}.
@@ -69,7 +70,7 @@ public class ViewAaclUsageBatchWindowTest {
         controller = createMock(IAaclUsageController.class);
         expect(ForeignSecurityUtils.hasDeleteUsagePermission()).andReturn(true).once();
         expect(controller.getSelectedProductFamily()).andReturn("AACL").once();
-        expect(controller.getUsageBatches("AACL")).andReturn(Collections.singletonList(new UsageBatch())).once();
+        expect(controller.getUsageBatches("AACL")).andReturn(List.of(new UsageBatch())).once();
         replay(controller, ForeignSecurityUtils.class);
         viewaAaclUsageBatchWindow = new ViewAaclUsageBatchWindow(controller);
         verify(controller, ForeignSecurityUtils.class);

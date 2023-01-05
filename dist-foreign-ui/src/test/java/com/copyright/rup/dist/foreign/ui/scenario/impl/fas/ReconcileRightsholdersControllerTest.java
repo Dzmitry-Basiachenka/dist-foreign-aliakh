@@ -116,7 +116,7 @@ public class ReconcileRightsholdersControllerTest {
     @Test
     public void testLoadBeans() {
         Capture<Pageable> pageableCapture = newCapture();
-        List<RightsholderDiscrepancy> discrepancies = Collections.singletonList(new RightsholderDiscrepancy());
+        List<RightsholderDiscrepancy> discrepancies = List.of(new RightsholderDiscrepancy());
         expect(rightsholderDiscrepancyService.getByScenarioIdAndStatus(same(scenario.getId()),
             same(RightsholderDiscrepancyStatusEnum.DRAFT), capture(pageableCapture), isNull()))
             .andReturn(discrepancies).once();

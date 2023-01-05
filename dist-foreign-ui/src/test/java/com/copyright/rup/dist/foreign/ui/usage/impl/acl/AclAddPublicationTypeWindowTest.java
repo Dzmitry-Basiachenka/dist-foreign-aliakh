@@ -47,7 +47,6 @@ import org.powermock.reflect.Whitebox;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.EventObject;
 import java.util.List;
 
@@ -78,7 +77,7 @@ public class AclAddPublicationTypeWindowTest {
     private static final String DECIMAL_VALIDATION_MESSAGE =
         "Field value should be positive number or zero and should not exceed 10 digits";
 
-    private final List<PublicationType> publicationTypes = Collections.singletonList(buildPublicationType());
+    private final List<PublicationType> publicationTypes = List.of(buildPublicationType());
     private IAclScenariosController controller;
 
     @Before

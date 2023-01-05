@@ -67,6 +67,7 @@ import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.function.Supplier;
 
 /**
@@ -226,7 +227,7 @@ public class AaclUsageWidgetTest {
         prepareCreateScenarioExpectation();
         expect(controller.getBeansCount()).andReturn(1).once();
         expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
-        expect(controller.getInvalidRightsholders()).andReturn(Collections.singletonList(700000000L)).once();
+        expect(controller.getInvalidRightsholders()).andReturn(List.of(700000000L)).once();
         Windows.showNotificationWindow(
             "Scenario cannot be created. The following rightsholder(s) are absent in PRM: <i><b>[700000000]</b></i>");
         expectLastCall().once();
@@ -249,7 +250,7 @@ public class AaclUsageWidgetTest {
         expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
         expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
         expect(controller.getProcessingBatchesNames(Collections.singleton(BATCH_ID)))
-            .andReturn(Collections.singletonList("Batch Name")).once();
+            .andReturn(List.of("Batch Name")).once();
         Windows.showNotificationWindow("Please wait while batch(es) processing is completed:" +
             "<ul><li><i><b>Batch Name</b></i></ul>");
         expectLastCall().once();
@@ -301,7 +302,7 @@ public class AaclUsageWidgetTest {
         expect(controller.getBatchesNamesToScenariosNames(Collections.singleton(BATCH_ID)))
             .andReturn(Collections.emptyMap()).once();
         expect(controller.getIneligibleBatchesNames(Collections.singleton(BATCH_ID)))
-            .andReturn(Collections.singletonList("Batch Name")).once();
+            .andReturn(List.of("Batch Name")).once();
         Windows.showNotificationWindow("The following batches have usages that are not in ELIGIBLE status:" +
             "<ul><li><i><b>Batch Name</b></i></ul>");
         expectLastCall().once();
@@ -425,12 +426,10 @@ public class AaclUsageWidgetTest {
 
     private void prepareCreateScenarioExpectation() {
         expect(controller.getSelectedProductFamily()).andReturn(AACL_PRODUCT_FAMILY).once();
-        expect(controller.getUsageAges()).andReturn(Collections.singletonList(new UsageAge())).once();
-        expect(controller.getPublicationTypes()).andReturn(Collections.singletonList(new PublicationType())).once();
-        expect(controller.getDetailLicenseeClasses())
-            .andReturn(Collections.singletonList(new DetailLicenseeClass())).once();
-        expect(controller.getFundPoolsNotAttachedToScenario())
-            .andReturn(Collections.singletonList(new FundPool())).once();
+        expect(controller.getUsageAges()).andReturn(List.of(new UsageAge())).once();
+        expect(controller.getPublicationTypes()).andReturn(List.of(new PublicationType())).once();
+        expect(controller.getDetailLicenseeClasses()).andReturn(List.of(new DetailLicenseeClass())).once();
+        expect(controller.getFundPoolsNotAttachedToScenario()).andReturn(List.of(new FundPool())).once();
         expect(controller.scenarioExists(AACL_SCENARIO_NAME_PREFIX + DATE)).andReturn(false).once();
     }
 

@@ -51,6 +51,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -92,7 +93,7 @@ public class CreateAclGrantSetWindowTest {
     @Before
     public void setUp() {
         controller = createMock(IAclGrantDetailController.class);
-        expect(controller.getAllAclGrantSets()).andReturn(Collections.singletonList(buildAclGrantSet())).once();
+        expect(controller.getAllAclGrantSets()).andReturn(List.of(buildAclGrantSet())).once();
     }
 
     @Test

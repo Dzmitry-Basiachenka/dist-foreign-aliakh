@@ -32,7 +32,7 @@ import org.powermock.reflect.Whitebox;
 import java.math.BigDecimal;
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Arrays;
-import java.util.Collections;
+import java.util.List;
 import java.util.function.Supplier;
 
 /**
@@ -58,7 +58,7 @@ public class AclFundPoolWidgetTest {
             new AclFundPoolFilterWidget(createMock(IAclFundPoolFilterController.class));
         Whitebox.setInternalState(widget, controller);
         expect(controller.initAclFundPoolFilterWidget()).andReturn(filterWidget).once();
-        expect(controller.getDtos()).andReturn(Collections.singletonList(buildAclFundPoolDetailDto())).once();
+        expect(controller.getDtos()).andReturn(List.of(buildAclFundPoolDetailDto())).once();
         streamSource = createMock(IStreamSource.class);
         expect(streamSource.getSource()).andReturn(new SimpleImmutableEntry(createMock(Supplier.class),
             createMock(Supplier.class))).once();
@@ -74,7 +74,7 @@ public class AclFundPoolWidgetTest {
             {"ACL Fund Pool", 202212, "ACL", "Manual", 22, "Banks/Ins/RE/Holding Cos", 56, "Financial", "PRINT",
                 "1,000.00", "700.00"}
         };
-        verifyGridItems(grid, Collections.singletonList(buildAclFundPoolDetailDto()), expectedCells);
+        verifyGridItems(grid, List.of(buildAclFundPoolDetailDto()), expectedCells);
         verify(controller);
     }
 

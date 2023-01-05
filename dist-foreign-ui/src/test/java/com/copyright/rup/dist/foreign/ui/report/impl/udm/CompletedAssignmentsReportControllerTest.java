@@ -68,7 +68,7 @@ public class CompletedAssignmentsReportControllerTest {
 
     @Test
     public void testGetAllPeriods() {
-        List<Integer> periods = Collections.singletonList(202112);
+        List<Integer> periods = List.of(202112);
         expect(udmUsageService.getPeriods()).andReturn(periods).once();
         replay(udmUsageService);
         assertEquals(periods, controller.getAllPeriods());
@@ -77,7 +77,7 @@ public class CompletedAssignmentsReportControllerTest {
 
     @Test
     public void testGetUserNames() {
-        List<String> userNames = Collections.singletonList("user@copyrigt.com");
+        List<String> userNames = List.of("user@copyrigt.com");
         expect(udmUsageService.getUserNames()).andReturn(userNames).once();
         replay(udmUsageService);
         assertEquals(userNames, controller.getUserNames());

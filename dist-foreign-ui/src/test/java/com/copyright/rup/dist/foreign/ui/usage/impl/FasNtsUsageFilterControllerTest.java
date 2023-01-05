@@ -22,7 +22,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -63,8 +62,7 @@ public class FasNtsUsageFilterControllerTest {
     @Test
     public void testGetFiscalYears() {
         expect(productFamilyProvider.getSelectedProductFamily()).andReturn(FAS_PRODUCT_FAMILY).once();
-        expect(usageBatchService.getFiscalYears(FAS_PRODUCT_FAMILY))
-            .andReturn(Collections.singletonList(FISCAL_YEAR)).once();
+        expect(usageBatchService.getFiscalYears(FAS_PRODUCT_FAMILY)).andReturn(List.of(FISCAL_YEAR)).once();
         replay(usageBatchService, productFamilyProvider);
         List<Integer> fiscalYears = controller.getFiscalYears();
         assertEquals(1, CollectionUtils.size(fiscalYears));

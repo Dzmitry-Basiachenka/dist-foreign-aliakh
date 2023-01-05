@@ -97,7 +97,7 @@ public class UdmBaselineWidgetTest {
     @Test
     public void testGridValues() {
         mockStatic(JavaScript.class);
-        List<UdmBaselineDto> udmBaselines = Collections.singletonList(buildUdmBaselineDto());
+        List<UdmBaselineDto> udmBaselines = List.of(buildUdmBaselineDto());
         expect(JavaScript.getCurrent()).andReturn(createMock(JavaScript.class)).times(2);
         expect(controller.getBeansCount()).andReturn(1).once();
         expect(controller.loadBeans(0, Integer.MAX_VALUE, Collections.emptyList())).andReturn(udmBaselines).once();

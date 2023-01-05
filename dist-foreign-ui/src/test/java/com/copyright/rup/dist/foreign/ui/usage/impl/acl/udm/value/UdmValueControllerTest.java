@@ -118,7 +118,7 @@ public class UdmValueControllerTest {
 
     @Test
     public void testLoadBeans() {
-        List<UdmValueDto> udmValues = Collections.singletonList(new UdmValueDto());
+        List<UdmValueDto> udmValues = List.of(new UdmValueDto());
         Capture<Pageable> pageableCapture = newCapture();
         expect(udmValueFilterController.getWidget()).andReturn(udmValueFilterWidget).once();
         expect(udmValueFilterWidget.getAppliedFilter()).andReturn(udmValueFilter).once();
@@ -218,7 +218,7 @@ public class UdmValueControllerTest {
 
     @Test
     public void testGetAllCurrencies() {
-        List<Currency> currencies = Collections.singletonList(new Currency("USD", "US Dollar"));
+        List<Currency> currencies = List.of(new Currency("USD", "US Dollar"));
         expect(valueService.getAllCurrencies()).andReturn(currencies).once();
         replay(valueService);
         assertEquals(currencies, controller.getAllCurrencies());
@@ -227,7 +227,7 @@ public class UdmValueControllerTest {
 
     @Test
     public void testGetAllPublicationTypes() {
-        List<PublicationType> pubTypes = Collections.singletonList(buildPublicationType("Book", "1.00"));
+        List<PublicationType> pubTypes = List.of(buildPublicationType("Book", "1.00"));
         expect(publicationTypeService.getPublicationTypes(ACL_PRODUCT_FAMILY)).andReturn(pubTypes).once();
         replay(publicationTypeService);
         assertEquals(pubTypes, controller.getAllPublicationTypes());

@@ -15,7 +15,6 @@ import com.vaadin.data.ValueProvider;
 import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -79,7 +78,7 @@ public class UdmProxyValuePubTypeCodeFilterWidget extends BaseItemsFilterWidget<
     public FilterWindow<String> showFilterWindow() {
         UdmCommonProxyValueFilterWindow<String> filterWindow =
             new UdmCommonProxyValueFilterWindow<>(ForeignUi.getMessage("window.pub_type_codes_filter"), this,
-                (ValueProvider<String, List<String>>) bean -> Collections.singletonList(String.valueOf(bean)));
+                (ValueProvider<String, List<String>>) bean -> List.of(String.valueOf(bean)));
         filterWindow.setSelectedItemsIds(selectedItemsIds);
         filterWindow.setSelectAllButtonVisible();
         filterWindow.setSearchPromptString(ForeignUi.getMessage("prompt.pub_type_code"));

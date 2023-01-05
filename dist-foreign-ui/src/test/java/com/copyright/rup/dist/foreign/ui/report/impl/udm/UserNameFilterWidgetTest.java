@@ -42,7 +42,7 @@ public class UserNameFilterWidgetTest {
 
     private static final String USER_NAME = "user@copyright.com";
     private final UserNameFilterWidget userNameFilterWidget =
-        new UserNameFilterWidget(() -> Collections.singletonList(USER_NAME));
+        new UserNameFilterWidget(() -> List.of(USER_NAME));
 
     @Test
     public void testLoadBeans() {
@@ -88,7 +88,7 @@ public class UserNameFilterWidgetTest {
         expectLastCall().once();
         replay(filterWindow, Windows.class);
         userNameFilterWidget.showFilterWindow();
-        assertEquals(Collections.singletonList(USER_NAME), providerCapture.getValue().apply(USER_NAME));
+        assertEquals(List.of(USER_NAME), providerCapture.getValue().apply(USER_NAME));
         verify(filterWindow, Windows.class);
     }
 }

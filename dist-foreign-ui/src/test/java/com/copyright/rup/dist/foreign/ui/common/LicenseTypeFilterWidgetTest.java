@@ -42,7 +42,7 @@ public class LicenseTypeFilterWidgetTest {
 
     private static final String LICENSE_TYPE = "ACL";
     private final LicenseTypeFilterWidget licenseTypeFilterWidget =
-        new LicenseTypeFilterWidget(() -> Collections.singletonList(LICENSE_TYPE), Collections.emptySet());
+        new LicenseTypeFilterWidget(() -> List.of(LICENSE_TYPE), Collections.emptySet());
 
     @Test
     public void testLoadBeans() {
@@ -88,7 +88,7 @@ public class LicenseTypeFilterWidgetTest {
         expectLastCall().once();
         replay(filterWindow, Windows.class);
         licenseTypeFilterWidget.showFilterWindow();
-        assertEquals(Collections.singletonList(LICENSE_TYPE), providerCapture.getValue().apply(LICENSE_TYPE));
+        assertEquals(List.of(LICENSE_TYPE), providerCapture.getValue().apply(LICENSE_TYPE));
         verify(filterWindow, Windows.class);
     }
 }

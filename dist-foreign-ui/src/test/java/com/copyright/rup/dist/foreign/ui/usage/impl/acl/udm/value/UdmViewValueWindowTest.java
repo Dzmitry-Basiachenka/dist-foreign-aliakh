@@ -41,8 +41,8 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Verifies {@link UdmViewValueWindow}.
@@ -113,7 +113,7 @@ public class UdmViewValueWindowTest {
         buildUdmValueDto();
         mockStatic(ForeignSecurityUtils.class);
         controller = createMock(IUdmValueController.class);
-        expect(controller.getAllCurrencies()).andReturn(Collections.singletonList(CURRENCY)).once();
+        expect(controller.getAllCurrencies()).andReturn(List.of(CURRENCY)).once();
     }
 
     @Test

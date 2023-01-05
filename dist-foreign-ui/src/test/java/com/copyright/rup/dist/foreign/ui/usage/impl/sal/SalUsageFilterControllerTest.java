@@ -17,7 +17,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -56,8 +55,7 @@ public class SalUsageFilterControllerTest {
         expect(productFamilyProvider.getSelectedProductFamily()).andReturn(SAL_PRODUCT_FAMILY).once();
         UsageBatch usageBatch = new UsageBatch();
         usageBatch.setName("name");
-        expect(usageBatchService.getUsageBatches(SAL_PRODUCT_FAMILY))
-            .andReturn(Collections.singletonList(usageBatch)).once();
+        expect(usageBatchService.getUsageBatches(SAL_PRODUCT_FAMILY)).andReturn(List.of(usageBatch)).once();
         replay(usageBatchService, productFamilyProvider);
         List<UsageBatch> usageBatches = controller.getUsageBatches();
         assertEquals(1, CollectionUtils.size(usageBatches));

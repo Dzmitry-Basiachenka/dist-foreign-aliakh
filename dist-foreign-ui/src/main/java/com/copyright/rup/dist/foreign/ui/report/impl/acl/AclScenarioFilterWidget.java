@@ -13,7 +13,6 @@ import com.vaadin.data.ValueProvider;
 
 import org.apache.commons.collections4.CollectionUtils;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -78,7 +77,7 @@ public class AclScenarioFilterWidget extends BaseItemsFilterWidget<AclScenario>
     public FilterWindow<AclScenario> showFilterWindow() {
         FilterWindow<AclScenario> filterWindow =
             Windows.showFilterWindow(ForeignUi.getMessage("window.scenarios_filter"), this,
-                (ValueProvider<AclScenario, List<String>>) scenario -> Collections.singletonList(scenario.getName()));
+                (ValueProvider<AclScenario, List<String>>) scenario -> List.of(scenario.getName()));
         filterWindow.setSelectedItemsIds(scenarios);
         filterWindow.setSelectAllButtonVisible();
         filterWindow.setSearchPromptString(ForeignUi.getMessage("prompt.scenario"));

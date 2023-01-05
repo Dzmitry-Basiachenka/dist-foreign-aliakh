@@ -78,7 +78,7 @@ public class ViewAaclFundPoolWindowTest {
         mockStatic(ForeignSecurityUtils.class);
         controller = createMock(IAaclUsageController.class);
         expect(ForeignSecurityUtils.hasDeleteFundPoolPermission()).andReturn(true).once();
-        expect(controller.getFundPools()).andReturn(Collections.singletonList(fundPool)).once();
+        expect(controller.getFundPools()).andReturn(List.of(fundPool)).once();
         replay(controller, ForeignSecurityUtils.class);
         viewAaclFundPoolWindow = new ViewAaclFundPoolWindow(controller);
         verify(controller, ForeignSecurityUtils.class);
@@ -212,7 +212,7 @@ public class ViewAaclFundPoolWindowTest {
         FundPoolDetail fundPoolDetail = new FundPoolDetail();
         fundPoolDetail.setAggregateLicenseeClass(buildAggregateLicenseeClass(108, "EXGP", "Life Sciences"));
         fundPoolDetail.setGrossAmount(BigDecimal.ONE);
-        return Collections.singletonList(fundPoolDetail);
+        return List.of(fundPoolDetail);
     }
 
     private AggregateLicenseeClass buildAggregateLicenseeClass(Integer id, String enrollmentProfile,

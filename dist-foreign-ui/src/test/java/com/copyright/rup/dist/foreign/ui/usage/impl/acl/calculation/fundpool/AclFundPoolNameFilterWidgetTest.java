@@ -91,8 +91,7 @@ public class AclFundPoolNameFilterWidgetTest {
         expectLastCall().once();
         replay(filterWindow, Windows.class);
         aclFundPoolNameFilterWidget.showFilterWindow();
-        assertEquals(Collections.singletonList(FUND_POOL_NAME),
-            providerCapture.getValue().apply(buildAclFundPool()));
+        assertEquals(List.of(FUND_POOL_NAME), providerCapture.getValue().apply(buildAclFundPool()));
         verify(filterWindow, Windows.class);
     }
 

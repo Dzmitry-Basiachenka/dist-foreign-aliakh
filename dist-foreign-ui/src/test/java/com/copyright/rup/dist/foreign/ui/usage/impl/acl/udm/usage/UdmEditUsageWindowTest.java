@@ -155,7 +155,7 @@ public class UdmEditUsageWindowTest {
         mockStatic(ForeignSecurityUtils.class);
         controller = createMock(IUdmUsageController.class);
         saveButtonClickListener = createMock(ClickListener.class);
-        expect(controller.getAllActionReasons()).andReturn(Collections.singletonList(ACTION_REASON)).once();
+        expect(controller.getAllActionReasons()).andReturn(List.of(ACTION_REASON)).once();
     }
 
     @Test
@@ -683,8 +683,7 @@ public class UdmEditUsageWindowTest {
         verifyTextFieldLayout(verticalLayout.getComponent(14), "Publication Format", true, false);
         verifyTextFieldLayout(verticalLayout.getComponent(15), "Article", true, false);
         verifyTextFieldLayout(verticalLayout.getComponent(16), "Language", true, false);
-        verifyComboBoxLayout(verticalLayout.getComponent(17), "Action Reason", false, true,
-            Collections.singletonList(ACTION_REASON));
+        verifyComboBoxLayout(verticalLayout.getComponent(17), "Action Reason", false, true, List.of(ACTION_REASON));
         verifyTextFieldLayout(verticalLayout.getComponent(18), "Comment", false, true);
         verifyTextFieldLayout(verticalLayout.getComponent(19), "Research URL", false, true);
         verifyCompanyIdLayout(verticalLayout.getComponent(20));
@@ -704,7 +703,7 @@ public class UdmEditUsageWindowTest {
         verifyTextFieldLayout(verticalLayout.getComponent(33), "Quantity", false, true);
         verifyTextFieldLayout(verticalLayout.getComponent(34), "Annualized Copies", true, true);
         verifyComboBoxLayout(verticalLayout.getComponent(35), "Ineligible Reason", true, true,
-            Collections.singletonList(INELIGIBLE_REASON));
+            List.of(INELIGIBLE_REASON));
         verifyTextFieldLayout(verticalLayout.getComponent(36), "Load Date", true, false);
         verifyTextFieldLayout(verticalLayout.getComponent(37), "Updated By", true, false);
         verifyTextFieldLayout(verticalLayout.getComponent(38), "Updated Date", true, false);
@@ -734,8 +733,7 @@ public class UdmEditUsageWindowTest {
         verifyTextFieldLayout(verticalLayout.getComponent(13), "Publication Format", true, false);
         verifyTextFieldLayout(verticalLayout.getComponent(14), "Article", true, false);
         verifyTextFieldLayout(verticalLayout.getComponent(15), "Language", true, false);
-        verifyComboBoxLayout(verticalLayout.getComponent(16), "Action Reason", false, true,
-            Collections.singletonList(ACTION_REASON));
+        verifyComboBoxLayout(verticalLayout.getComponent(16), "Action Reason", false, true, List.of(ACTION_REASON));
         verifyTextFieldLayout(verticalLayout.getComponent(17), "Comment", false, true);
         verifyTextFieldLayout(verticalLayout.getComponent(18), "Research URL", false, true);
         verifyTextFieldLayout(verticalLayout.getComponent(19), "Detail Licensee Class", true, false);
@@ -915,13 +913,13 @@ public class UdmEditUsageWindowTest {
     private void setSpecialistExpectations() {
         setPermissionsExpectations(true, false, false);
         expect(controller.getIdsToDetailLicenseeClasses()).andReturn(ID_TO_LICENSEE_CLASS).once();
-        expect(controller.getAllIneligibleReasons()).andReturn(Collections.singletonList(INELIGIBLE_REASON)).once();
+        expect(controller.getAllIneligibleReasons()).andReturn(List.of(INELIGIBLE_REASON)).once();
     }
 
     private void setManagerExpectations() {
         setPermissionsExpectations(false, true, false);
         expect(controller.getIdsToDetailLicenseeClasses()).andReturn(ID_TO_LICENSEE_CLASS).once();
-        expect(controller.getAllIneligibleReasons()).andReturn(Collections.singletonList(INELIGIBLE_REASON)).once();
+        expect(controller.getAllIneligibleReasons()).andReturn(List.of(INELIGIBLE_REASON)).once();
     }
 
     private void setResearcherExpectations() {

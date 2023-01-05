@@ -26,7 +26,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -75,7 +74,7 @@ public class UdmBaselineValueControllerTest {
 
     @Test
     public void testLoadBeans() {
-        List<UdmValueBaselineDto> udmValues = Collections.singletonList(new UdmValueBaselineDto());
+        List<UdmValueBaselineDto> udmValues = List.of(new UdmValueBaselineDto());
         Capture<Pageable> pageableCapture = newCapture();
         expect(filterController.getWidget()).andReturn(filterWidget).once();
         expect(filterWidget.getAppliedFilter()).andReturn(udmValueFilter).once();

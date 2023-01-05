@@ -72,7 +72,7 @@ public class SummaryMarketReportControllerTest {
 
     @Test
     public void testGetUsageBatches() {
-        List<UsageBatch> batches = Collections.singletonList(new UsageBatch());
+        List<UsageBatch> batches = List.of(new UsageBatch());
         expect(productFamilyProvider.getSelectedProductFamily()).andReturn("NTS").once();
         expect(usageBatchService.getUsageBatches(eq("NTS"))).andReturn(batches).once();
         replay(reportService, usageBatchService, productFamilyProvider);

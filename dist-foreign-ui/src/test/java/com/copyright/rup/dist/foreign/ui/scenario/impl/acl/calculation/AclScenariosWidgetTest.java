@@ -112,7 +112,7 @@ public class AclScenariosWidgetTest {
         scenarioDto = buildAclScenarioDto();
         mockStatic(ForeignSecurityUtils.class);
         scenariosWidget = new AclScenariosWidget(controller, createMock(IAclScenarioHistoryController.class));
-        expect(controller.getScenarios()).andReturn(Collections.singletonList(scenario)).times(2);
+        expect(controller.getScenarios()).andReturn(List.of(scenario)).times(2);
         expect(controller.getAclScenarioWithAmountsAndLastAction(SCENARIO_UID)).andReturn(scenarioDto).times(2);
         expect(controller.getCriteriaHtmlRepresentation()).andReturn(SELECTION_CRITERIA).times(2);
         expect(controller.getUsageAgeWeights()).andReturn(Collections.emptyList()).once();
@@ -166,7 +166,7 @@ public class AclScenariosWidgetTest {
         Object[][] expectedCells = {
             {"ACL Scenario name", "ACL", 202212, "N", "IN_PROGRESS"}
         };
-        verifyGridItems(grid, Collections.singletonList(scenario), expectedCells);
+        verifyGridItems(grid, List.of(scenario), expectedCells);
     }
 
     @Test
@@ -175,7 +175,7 @@ public class AclScenariosWidgetTest {
         expect(controller.getAclScenarioWithAmountsAndLastAction(SCENARIO_UID)).andReturn(scenarioDto).once();
         expect(controller.getCriteriaHtmlRepresentation()).andReturn(SELECTION_CRITERIA).once();
         expect(ForeignSecurityUtils.hasSpecialistPermission()).andReturn(true).times(2);
-        expect(controller.getScenarios()).andReturn(Collections.singletonList(scenario)).once();
+        expect(controller.getScenarios()).andReturn(List.of(scenario)).once();
         expect(controller.getAclScenarioWithAmountsAndLastAction(SCENARIO_UID)).andReturn(scenarioDto).once();
         expect(controller.getCriteriaHtmlRepresentation()).andReturn(SELECTION_CRITERIA).once();
         replay(controller, ForeignSecurityUtils.class);
@@ -368,7 +368,7 @@ public class AclScenariosWidgetTest {
         UsageAge usageAge = new UsageAge();
         usageAge.setPeriod(0);
         usageAge.setWeight(new BigDecimal("1.00"));
-        return Collections.singletonList(usageAge);
+        return List.of(usageAge);
     }
 
     private List<AclPublicationType> buildPublicationTypes() {
@@ -376,7 +376,7 @@ public class AclScenariosWidgetTest {
         publicationType.setName("BK");
         publicationType.setWeight(new BigDecimal("1.00"));
         publicationType.setPeriod(202012);
-        return Collections.singletonList(publicationType);
+        return List.of(publicationType);
     }
 
     private List<DetailLicenseeClass> buildDetailLicenseeClasses() {
@@ -387,7 +387,7 @@ public class AclScenariosWidgetTest {
         aggregateLicenseeClass.setId(51);
         aggregateLicenseeClass.setDescription("Materials");
         detailLicenseeClass.setAggregateLicenseeClass(aggregateLicenseeClass);
-        return Collections.singletonList(detailLicenseeClass);
+        return List.of(detailLicenseeClass);
     }
 
     private Panel getMetaDataPanel() {

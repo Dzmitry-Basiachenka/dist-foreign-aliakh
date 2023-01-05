@@ -76,7 +76,7 @@ public class ViewAclGrantSetWindowTest {
         controller = createMock(IAclGrantDetailController.class);
         aclGrantSetGrid = createMock(Grid.class);
         expect(ForeignSecurityUtils.hasSpecialistPermission()).andReturn(true).once();
-        expect(controller.getAllAclGrantSets()).andReturn(Collections.singletonList(buildAclGrantSet()));
+        expect(controller.getAllAclGrantSets()).andReturn(List.of(buildAclGrantSet()));
         replay(ForeignSecurityUtils.class, controller);
         window = new ViewAclGrantSetWindow(controller);
         Whitebox.setInternalState(window, "grid", aclGrantSetGrid);
@@ -86,7 +86,7 @@ public class ViewAclGrantSetWindowTest {
 
     @Test
     public void testGridValues() {
-        List<AclGrantSet> grantSets = Collections.singletonList(buildAclGrantSet());
+        List<AclGrantSet> grantSets = List.of(buildAclGrantSet());
         Grid grid = (Grid) ((VerticalLayout) window.getContent()).getComponent(1);
         Object[][] expectedCells = {
             {"ACL Grant Set 2021", 202112, "ACL", "202112, 202006", "Y"}

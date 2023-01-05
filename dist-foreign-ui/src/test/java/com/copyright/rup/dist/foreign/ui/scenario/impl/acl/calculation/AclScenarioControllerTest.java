@@ -43,7 +43,6 @@ import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -104,7 +103,7 @@ public class AclScenarioControllerTest {
 
     @Test
     public void testGetAclRightsholderTotalsHoldersByScenarioId() {
-        List<AclRightsholderTotalsHolder> holders = Collections.singletonList(new AclRightsholderTotalsHolder());
+        List<AclRightsholderTotalsHolder> holders = List.of(new AclRightsholderTotalsHolder());
         expect(aclScenarioUsageService.getAclRightsholderTotalsHoldersByScenarioId(scenario.getId()))
             .andReturn(holders).once();
         replay(aclScenarioUsageService);
@@ -133,8 +132,7 @@ public class AclScenarioControllerTest {
 
     @Test
     public void testGetRightsholderTitleResults() {
-        List<AclRightsholderTotalsHolderDto> holderDtos =
-            Collections.singletonList(buildAclRightsholderTotalsHolderDto());
+        List<AclRightsholderTotalsHolderDto> holderDtos = List.of(buildAclRightsholderTotalsHolderDto());
         RightsholderResultsFilter filter = buildRightsholderResultsFilter();
         expect(aclScenarioUsageService.getRightsholderTitleResults(filter)).andReturn(holderDtos).once();
         replay(aclScenarioUsageService);
@@ -144,8 +142,7 @@ public class AclScenarioControllerTest {
 
     @Test
     public void testGetRightsholderAggregateLicenseeClassResults() {
-        List<AclRightsholderTotalsHolderDto> holderDtos =
-            Collections.singletonList(buildAclRightsholderTotalsHolderDto());
+        List<AclRightsholderTotalsHolderDto> holderDtos = List.of(buildAclRightsholderTotalsHolderDto());
         RightsholderResultsFilter filter = buildRightsholderResultsFilter();
         expect(aclScenarioUsageService.getRightsholderAggLcClassResults(filter)).andReturn(holderDtos).once();
         replay(aclScenarioUsageService);

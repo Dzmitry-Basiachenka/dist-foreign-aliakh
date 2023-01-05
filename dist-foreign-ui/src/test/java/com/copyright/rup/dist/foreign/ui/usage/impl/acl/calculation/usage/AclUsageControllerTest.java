@@ -72,7 +72,7 @@ public class AclUsageControllerTest {
 
     private static final String ACL_USAGE_BATCH_NAME = "ACL Usage Batch 2021";
     private static final String ACL_USAGE_BATCH_ID = "6367638f-a447-456c-98e3-90d38b5d1f10";
-    private static final List<String> ACL_SCENARIO_NAME = Collections.singletonList("ACL Scenario");
+    private static final List<String> ACL_SCENARIO_NAME = List.of("ACL Scenario");
 
     private final AclUsageController controller = new AclUsageController();
 
@@ -112,7 +112,7 @@ public class AclUsageControllerTest {
 
     @Test
     public void testLoadBeans() {
-        List<AclUsageDto> aclUsageDtos = Collections.singletonList(new AclUsageDto());
+        List<AclUsageDto> aclUsageDtos = List.of(new AclUsageDto());
         AclUsageFilter filter = buildAclUsageFilter();
         Capture<Pageable> pageableCapture = newCapture();
         expect(aclUsageFilterController.getWidget()).andReturn(aclUsageFilterWidget).once();
@@ -138,7 +138,7 @@ public class AclUsageControllerTest {
 
     @Test
     public void testGetAllPeriods() {
-        List<Integer> periods = Collections.singletonList(202106);
+        List<Integer> periods = List.of(202106);
         expect(udmUsageService.getPeriods()).andReturn(periods).once();
         replay(udmUsageService);
         assertEquals(periods, controller.getAllPeriods());
@@ -204,7 +204,7 @@ public class AclUsageControllerTest {
 
     @Test
     public void testGetPublicationTypes() {
-        List<PublicationType> pubTypes = Collections.singletonList(buildPublicationType());
+        List<PublicationType> pubTypes = List.of(buildPublicationType());
         expect(publicationTypeService.getPublicationTypes("ACL")).andReturn(pubTypes).once();
         replay(publicationTypeService);
         assertSame(pubTypes, controller.getPublicationTypes());
@@ -213,7 +213,7 @@ public class AclUsageControllerTest {
 
     @Test
     public void testGetDetailLicenseeClasses() {
-        List<DetailLicenseeClass> licenseeClasses = Collections.singletonList(new DetailLicenseeClass());
+        List<DetailLicenseeClass> licenseeClasses = List.of(new DetailLicenseeClass());
         expect(licenseeClassService.getDetailLicenseeClasses("ACL")).andReturn(licenseeClasses).once();
         replay(licenseeClassService);
         assertSame(licenseeClasses, controller.getDetailLicenseeClasses());
@@ -239,7 +239,7 @@ public class AclUsageControllerTest {
 
     @Test
     public void testGetAllAclUsageBatches() {
-        List<AclUsageBatch> batches = Collections.singletonList(new AclUsageBatch());
+        List<AclUsageBatch> batches = List.of(new AclUsageBatch());
         expect(aclUsageBatchService.getAll()).andReturn(batches).once();
         replay(aclUsageBatchService);
         assertSame(batches, controller.getAllAclUsageBatches());

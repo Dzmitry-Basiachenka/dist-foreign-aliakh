@@ -31,6 +31,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.util.Collections;
+import java.util.List;
 
 /**
  * Verifies {@link UdmPopulateValueBatchWindow}.
@@ -67,7 +68,7 @@ public class UdmPopulateValueBatchWindowTest {
     @Test
     @SuppressWarnings("unchecked")
     public void testClickContinueButton() {
-        expect(controller.getBaselinePeriods()).andReturn(Collections.singletonList(202106)).once();
+        expect(controller.getBaselinePeriods()).andReturn(List.of(202106)).once();
         expect(controller.populatesValueBatch(202106)).andReturn(5).once();
         Windows.showNotificationWindow("Value batch populating completed: 5 record(s) were populated");
         expectLastCall().once();

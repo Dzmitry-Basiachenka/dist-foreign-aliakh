@@ -15,7 +15,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -45,11 +44,11 @@ public class StatisticUsageRest implements StatisticUsageApiDelegate {
         if (null != statistic) {
             return new ResponseEntity<>(buildResponse(statistic), HttpStatus.OK);
         } else {
-            List<Usage> usages = usageRepository.findByIds(Collections.singletonList(usageId));
+            List<Usage> usages = usageRepository.findByIds(List.of(usageId));
             if (CollectionUtils.isNotEmpty(usages)) {
                 return new ResponseEntity<>(buildResponse(usages.get(0)), HttpStatus.OK);
             }
-            usages = usageArchiveRepository.findByIds(Collections.singletonList(usageId));
+            usages = usageArchiveRepository.findByIds(List.of(usageId));
             if (CollectionUtils.isNotEmpty(usages)) {
                 return new ResponseEntity<>(buildResponse(usages.get(0)), HttpStatus.OK);
             }

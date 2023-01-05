@@ -42,7 +42,7 @@ public class PublicationFormatFilterWidgetTest {
 
     private static final String PUBLICATION_FORMAT = "Digital";
     private final PublicationFormatFilterWidget publicationFormatFilterWidget =
-        new PublicationFormatFilterWidget(() -> Collections.singletonList(PUBLICATION_FORMAT), Collections.emptySet());
+        new PublicationFormatFilterWidget(() -> List.of(PUBLICATION_FORMAT), Collections.emptySet());
 
     @Test
     public void testLoadBeans() {
@@ -88,8 +88,7 @@ public class PublicationFormatFilterWidgetTest {
         expectLastCall().once();
         replay(filterWindow, Windows.class);
         publicationFormatFilterWidget.showFilterWindow();
-        assertEquals(Collections.singletonList(PUBLICATION_FORMAT),
-            providerCapture.getValue().apply(PUBLICATION_FORMAT));
+        assertEquals(List.of(PUBLICATION_FORMAT), providerCapture.getValue().apply(PUBLICATION_FORMAT));
         verify(filterWindow, Windows.class);
     }
 }

@@ -232,7 +232,7 @@ public class AclUsageWidgetTest {
     @Test
     public void testGridValues() {
         mockStatic(JavaScript.class);
-        List<AclUsageDto> usages = Collections.singletonList(buildAclUsageDto());
+        List<AclUsageDto> usages = List.of(buildAclUsageDto());
         setSpecialistExpectations();
         expect(JavaScript.getCurrent()).andReturn(createMock(JavaScript.class)).times(2);
         expect(controller.getBeansCount()).andReturn(1).once();

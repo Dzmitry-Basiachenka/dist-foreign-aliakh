@@ -44,8 +44,7 @@ public class AggregateLicenseeClassFilterWidgetTest {
 
     private final AggregateLicenseeClass aggregateLicenseeClass = buildAggregateLicenseeClass();
     private final AggregateLicenseeClassFilterWidget aggregateLicenseeClassFilterWidget =
-        new AggregateLicenseeClassFilterWidget(() -> Collections.singletonList(aggregateLicenseeClass),
-            Collections.emptySet());
+        new AggregateLicenseeClassFilterWidget(() -> List.of(aggregateLicenseeClass), Collections.emptySet());
 
     @Test
     public void testLoadBeans() {

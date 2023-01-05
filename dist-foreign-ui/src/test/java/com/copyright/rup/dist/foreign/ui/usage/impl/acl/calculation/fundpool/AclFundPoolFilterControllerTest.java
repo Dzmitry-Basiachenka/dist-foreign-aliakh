@@ -18,7 +18,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -53,7 +52,7 @@ public class AclFundPoolFilterControllerTest {
 
     @Test
     public void testGetFundPoolNames() {
-        List<AclFundPool> aclFundPools = Collections.singletonList(new AclFundPool());
+        List<AclFundPool> aclFundPools = List.of(new AclFundPool());
         expect(fundPoolService.getAll()).andReturn(aclFundPools).once();
         replay(fundPoolService);
         assertSame(aclFundPools, controller.getFundPoolNames());
@@ -62,7 +61,7 @@ public class AclFundPoolFilterControllerTest {
 
     @Test
     public void testGetPeriods() {
-        List<Integer> periods = Collections.singletonList(202212);
+        List<Integer> periods = List.of(202212);
         expect(fundPoolService.getPeriods()).andReturn(periods).once();
         replay(fundPoolService);
         assertSame(periods, controller.getPeriods());
@@ -71,7 +70,7 @@ public class AclFundPoolFilterControllerTest {
 
     @Test
     public void testGetDetailLicenseeClasses() {
-        List<DetailLicenseeClass> licenseeClasses = Collections.singletonList(new DetailLicenseeClass());
+        List<DetailLicenseeClass> licenseeClasses = List.of(new DetailLicenseeClass());
         expect(licenseeClassService.getDetailLicenseeClasses(ACL_PRODUCT_FAMILY)).andReturn(licenseeClasses).once();
         replay(licenseeClassService);
         assertSame(licenseeClasses, controller.getDetailLicenseeClasses());
@@ -80,7 +79,7 @@ public class AclFundPoolFilterControllerTest {
 
     @Test
     public void testGetAggregateLicenseeClasses() {
-        List<AggregateLicenseeClass> licenseeClasses = Collections.singletonList(new AggregateLicenseeClass());
+        List<AggregateLicenseeClass> licenseeClasses = List.of(new AggregateLicenseeClass());
         expect(licenseeClassService.getAggregateLicenseeClasses(ACL_PRODUCT_FAMILY)).andReturn(licenseeClasses).once();
         replay(licenseeClassService);
         assertSame(licenseeClasses, controller.getAggregateLicenseeClasses());

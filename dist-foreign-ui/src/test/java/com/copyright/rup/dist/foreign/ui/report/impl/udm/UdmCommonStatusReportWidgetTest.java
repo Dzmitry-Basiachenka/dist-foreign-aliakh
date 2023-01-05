@@ -20,7 +20,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 
 import java.util.AbstractMap.SimpleImmutableEntry;
-import java.util.Collections;
+import java.util.List;
 import java.util.function.Supplier;
 
 /**
@@ -39,7 +39,7 @@ public class UdmCommonStatusReportWidgetTest {
         IUdmUsagesByStatusReportController controller = createMock(IUdmUsagesByStatusReportController.class);
         UdmCommonStatusReportWidget widget = new UdmCommonStatusReportWidget();
         widget.setController(controller);
-        expect(controller.getPeriods()).andReturn(Collections.singletonList(202012)).once();
+        expect(controller.getPeriods()).andReturn(List.of(202012)).once();
         IStreamSource streamSource = createMock(IStreamSource.class);
         expect(streamSource.getSource()).andReturn(new SimpleImmutableEntry(createMock(Supplier.class),
             createMock(Supplier.class))).once();

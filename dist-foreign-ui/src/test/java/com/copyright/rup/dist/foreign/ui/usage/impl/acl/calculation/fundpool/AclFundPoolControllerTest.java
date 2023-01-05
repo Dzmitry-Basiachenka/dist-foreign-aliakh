@@ -45,7 +45,6 @@ import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -65,7 +64,7 @@ public class AclFundPoolControllerTest {
 
     private static final String LICENSE_TYPE = "ACL";
     private static final String FUND_POOL_ID = "1c62b986-5766-441d-9888-fa3af6b6b4f7";
-    private static final List<String> ACL_SCENARIO_NAME = Collections.singletonList("ACL Scenario");
+    private static final List<String> ACL_SCENARIO_NAME = List.of("ACL Scenario");
 
     private final AclFundPoolController controller = new AclFundPoolController();
     private CsvProcessorFactory csvProcessorFactory;
@@ -128,11 +127,11 @@ public class AclFundPoolControllerTest {
     @Test
     public void testLoadManualFundPool() {
         AclFundPool fundPool = buildFundPool(true);
-        fundPoolService.insertManualAclFundPool(fundPool, Collections.singletonList(buildFundPoolDetail()));
+        fundPoolService.insertManualAclFundPool(fundPool, List.of(buildFundPoolDetail()));
         expectLastCall().once();
         expect(fundPoolFilterController.getWidget()).andReturn(aclFundPoolFilterWidget).once();
         replay(fundPoolService, fundPoolFilterController);
-        int count = controller.loadManualFundPool(fundPool, Collections.singletonList(buildFundPoolDetail()));
+        int count = controller.loadManualFundPool(fundPool, List.of(buildFundPoolDetail()));
         assertEquals(1, count);
         verify(fundPoolService, fundPoolFilterController);
     }
@@ -150,7 +149,7 @@ public class AclFundPoolControllerTest {
     @Test
     public void testGetDtos() {
         AclFundPoolDetailFilter filter = new AclFundPoolDetailFilter();
-        List<AclFundPoolDetailDto> grantDetails = Collections.singletonList(new AclFundPoolDetailDto());
+        List<AclFundPoolDetailDto> grantDetails = List.of(new AclFundPoolDetailDto());
         IAclFundPoolFilterWidget fundPoolFilterWidget = createMock(IAclFundPoolFilterWidget.class);
         expect(fundPoolFilterController.getWidget()).andReturn(fundPoolFilterWidget).once();
         expect(fundPoolFilterWidget.getAppliedFilter()).andReturn(filter).once();

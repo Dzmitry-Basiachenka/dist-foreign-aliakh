@@ -99,7 +99,7 @@ public class UdmEditMultipleUsagesResearcherWindowTest {
         controller = createMock(IUdmUsageController.class);
         saveButtonClickListener = createMock(ClickListener.class);
         udmUsages = Collections.EMPTY_SET;
-        expect(controller.getAllActionReasons()).andReturn(Collections.singletonList(ACTION_REASON)).once();
+        expect(controller.getAllActionReasons()).andReturn(List.of(ACTION_REASON)).once();
     }
 
     @Test
@@ -271,8 +271,7 @@ public class UdmEditMultipleUsagesResearcherWindowTest {
         verifyComboBoxLayout(verticalLayout.getComponent(0), "Detail Status", false,
             Arrays.asList(UsageStatusEnum.NEW, UsageStatusEnum.OPS_REVIEW, UsageStatusEnum.SPECIALIST_REVIEW));
         verifyTextFieldLayout(verticalLayout.getComponent(1), "Wr Wrk Inst");
-        verifyComboBoxLayout(verticalLayout.getComponent(2), "Action Reason", true,
-            Collections.singletonList(ACTION_REASON));
+        verifyComboBoxLayout(verticalLayout.getComponent(2), "Action Reason", true, List.of(ACTION_REASON));
         verifyTextFieldLayout(verticalLayout.getComponent(3), "Comment");
         verifyButtonsLayout(verticalLayout.getComponent(4), "Save", "Discard", "Close");
     }

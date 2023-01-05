@@ -15,7 +15,6 @@ import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -46,7 +45,7 @@ public class AclCommonReportControllerTest {
 
     @Test
     public void testGetScenarios() {
-        List<AclScenario> scenarios = Collections.singletonList(new AclScenario());
+        List<AclScenario> scenarios = List.of(new AclScenario());
         expect(scenarioService.getScenariosByPeriod(202212)).andReturn(scenarios).once();
         replay(scenarioService);
         assertSame(scenarios, controller.getScenarios(202212));

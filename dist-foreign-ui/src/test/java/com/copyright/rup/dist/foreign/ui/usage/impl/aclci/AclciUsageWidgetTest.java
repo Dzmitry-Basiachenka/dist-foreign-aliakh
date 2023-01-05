@@ -42,7 +42,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
+import java.util.List;
 
 /**
  * Verifies {@link AclciUsageWidget}.
@@ -137,7 +137,7 @@ public class AclciUsageWidgetTest {
         ClickEvent clickEvent = createMock(ClickEvent.class);
         expect(controller.isValidStatusFilterApplied()).andReturn(true).once();
         expect(controller.getBeansCount()).andReturn(1).once();
-        expect(controller.getUsageDtosToUpdate()).andReturn(Collections.singletonList(new UsageDto())).once();
+        expect(controller.getUsageDtosToUpdate()).andReturn(List.of(new UsageDto())).once();
         Windows.showModalWindow(anyObject(AclciUsageUpdateWindow.class));
         expectLastCall().once();
         replay(controller, clickEvent, Windows.class);
@@ -190,8 +190,8 @@ public class AclciUsageWidgetTest {
 
     private void verifyButtonsLayout(HorizontalLayout layout) {
         assertEquals(3, layout.getComponentCount());
-        verifyMenuBar(layout.getComponent(0), "Usage Batch", true, Collections.singletonList("Load"));
-        verifyMenuBar(layout.getComponent(1), "Fund Pool", true, Collections.singletonList("Load"));
+        verifyMenuBar(layout.getComponent(0), "Usage Batch", true, List.of("Load"));
+        verifyMenuBar(layout.getComponent(1), "Fund Pool", true, List.of("Load"));
         verifyButton(layout.getComponent(2), "Update Usages", true);
     }
 }

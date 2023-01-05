@@ -53,6 +53,7 @@ import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Verifies {@link NtsScenariosWidget}.
@@ -79,7 +80,7 @@ public class NtsScenariosWidgetTest {
         controller = createMock(INtsScenariosController.class);
         scenariosWidget = new NtsScenariosWidget(controller, new ScenarioHistoryController());
         scenario = buildScenario();
-        expect(controller.getScenarios()).andReturn(Collections.singletonList(scenario)).once();
+        expect(controller.getScenarios()).andReturn(List.of(scenario)).once();
         replay(controller);
         scenariosWidget.init();
         scenariosWidget.initMediator();
@@ -116,7 +117,7 @@ public class NtsScenariosWidgetTest {
     public void testGridValues() {
         Grid<?> grid = (Grid<?>) ((HorizontalLayout) scenariosWidget.getComponent(1)).getComponent(0);
         Object[][] expectedCells = {{"Scenario nts 20", "09/13/2022", "IN_PROGRESS"}};
-        verifyGridItems(grid, Collections.singletonList(scenario), expectedCells);
+        verifyGridItems(grid, List.of(scenario), expectedCells);
     }
 
     @Test
@@ -126,7 +127,7 @@ public class NtsScenariosWidgetTest {
 
     @Test
     public void testRefresh() {
-        expect(controller.getScenarios()).andReturn(Collections.singletonList(scenario)).once();
+        expect(controller.getScenarios()).andReturn(List.of(scenario)).once();
         expect(controller.getScenarioWithAmountsAndLastAction(scenario)).andReturn(scenario).times(2);
         expect(controller.getCriteriaHtmlRepresentation()).andReturn(SELECTION_CRITERIA).times(2);
         replay(controller);

@@ -84,7 +84,7 @@ public class SalLiabilitiesSummaryByRhAndWorkReportControllerTest {
     public void testGetCsvStreamSource() {
         OffsetDateTime now = OffsetDateTime.of(2019, 1, 2, 3, 4, 5, 6, ZoneOffset.ofHours(0));
         mockStatic(OffsetDateTime.class);
-        List<Scenario> scenarios = Collections.singletonList(new Scenario());
+        List<Scenario> scenarios = List.of(new Scenario());
         ICommonScenariosReportWidget widget = createMock(ICommonScenariosReportWidget.class);
         Whitebox.setInternalState(controller, widget);
         Capture<OutputStream> osCapture = newCapture();

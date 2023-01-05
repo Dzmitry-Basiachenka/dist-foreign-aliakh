@@ -26,7 +26,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -94,10 +93,8 @@ public class SalSendToLmWindowTest {
     private void verifyGrid(Grid grid) {
         assertNull(grid.getCaption());
         List<Column> columns = grid.getColumns();
-        assertEquals(Collections.singletonList("Scenario Name"),
-            columns.stream().map(Column::getCaption).collect(Collectors.toList()));
-        assertEquals(Collections.singletonList(-1.0),
-            columns.stream().map(Column::getWidth).collect(Collectors.toList()));
+        assertEquals(List.of("Scenario Name"), columns.stream().map(Column::getCaption).collect(Collectors.toList()));
+        assertEquals(List.of(-1.0), columns.stream().map(Column::getWidth).collect(Collectors.toList()));
     }
 
     private void verifyButtonsLayout(HorizontalLayout buttonsLayout) {

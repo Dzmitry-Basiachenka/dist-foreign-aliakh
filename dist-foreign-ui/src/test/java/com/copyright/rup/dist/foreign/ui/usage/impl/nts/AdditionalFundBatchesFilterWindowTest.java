@@ -29,7 +29,7 @@ import com.vaadin.ui.VerticalLayout;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -50,7 +50,7 @@ public class AdditionalFundBatchesFilterWindowTest {
     @Test
     public void testConstructor() {
         IFilterWindowController<UsageBatch> controller = createMock(IFilterWindowController.class);
-        expect(controller.loadBeans()).andReturn(Collections.singletonList(buildUsageBatch())).once();
+        expect(controller.loadBeans()).andReturn(List.of(buildUsageBatch())).once();
         replay(controller);
         AdditionalFundBatchesFilterWindow window =
             new AdditionalFundBatchesFilterWindow(controller);
@@ -84,7 +84,7 @@ public class AdditionalFundBatchesFilterWindowTest {
         CheckBoxGroup checkBoxGroup = (CheckBoxGroup) panel.getContent();
         DataProvider dataProvider = checkBoxGroup.getDataProvider();
         Stream<?> stream = dataProvider.fetch(new Query<>());
-        assertEquals(Collections.singletonList(buildUsageBatch()), stream.collect(Collectors.toList()));
+        assertEquals(List.of(buildUsageBatch()), stream.collect(Collectors.toList()));
     }
 
     private void verifyButtonsLayout(Component component) {

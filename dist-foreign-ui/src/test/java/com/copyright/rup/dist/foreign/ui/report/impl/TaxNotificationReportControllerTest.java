@@ -109,7 +109,7 @@ public class TaxNotificationReportControllerTest {
 
     @Test
     public void testGetScenariosFas() {
-        List<Scenario> scenarios = Collections.singletonList(new Scenario());
+        List<Scenario> scenarios = List.of(new Scenario());
         expect(productFamilyProvider.getSelectedProductFamily()).andReturn("FAS").once();
         expect(
             scenarioService.getScenariosByProductFamiliesAndStatuses(Sets.newHashSet("FAS", "FAS2"), SCENARIO_STATUSES))
@@ -121,7 +121,7 @@ public class TaxNotificationReportControllerTest {
 
     @Test
     public void testGetScenariosFas2() {
-        List<Scenario> scenarios = Collections.singletonList(new Scenario());
+        List<Scenario> scenarios = List.of(new Scenario());
         expect(productFamilyProvider.getSelectedProductFamily()).andReturn("FAS2").once();
         expect(
             scenarioService.getScenariosByProductFamiliesAndStatuses(Sets.newHashSet("FAS", "FAS2"), SCENARIO_STATUSES))
@@ -133,7 +133,7 @@ public class TaxNotificationReportControllerTest {
 
     @Test
     public void testGetScenariosNts() {
-        List<Scenario> scenarios = Collections.singletonList(new Scenario());
+        List<Scenario> scenarios = List.of(new Scenario());
         expect(productFamilyProvider.getSelectedProductFamily()).andReturn("NTS").once();
         expect(
             scenarioService.getScenariosByProductFamiliesAndStatuses(Collections.singleton("NTS"), SCENARIO_STATUSES))
@@ -145,7 +145,7 @@ public class TaxNotificationReportControllerTest {
 
     @Test
     public void testGetScenariosAcl() {
-        List<Scenario> scenarios = Collections.singletonList(new Scenario());
+        List<Scenario> scenarios = List.of(new Scenario());
         expect(productFamilyProvider.getSelectedProductFamily()).andReturn(PRODUCT_FAMILY_ACL).once();
         expect(aclScenarioService.getAclScenariosByStatuses(SCENARIO_STATUSES)).andReturn(scenarios).once();
         replay(aclScenarioService, productFamilyProvider);

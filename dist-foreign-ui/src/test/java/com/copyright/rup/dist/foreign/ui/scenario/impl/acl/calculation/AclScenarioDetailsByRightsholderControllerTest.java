@@ -35,7 +35,6 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -74,7 +73,7 @@ public class AclScenarioDetailsByRightsholderControllerTest {
 
     @Test
     public void testLoadBeans() {
-        List<AclScenarioDetailDto> scenarioDetailDtos = Collections.singletonList(new AclScenarioDetailDto());
+        List<AclScenarioDetailDto> scenarioDetailDtos = List.of(new AclScenarioDetailDto());
         Capture<Pageable> pageableCapture = newCapture();
         Capture<Sort> sortCapture = newCapture();
         expect(controller.getWidget()).andReturn(new WidgetMock()).once();
@@ -82,7 +81,7 @@ public class AclScenarioDetailsByRightsholderControllerTest {
             eq(SEARCH_VALUE), capture(pageableCapture), capture(sortCapture))).andReturn(scenarioDetailDtos).once();
         replay(controller, aclScenarioUsageService);
         List<AclScenarioDetailDto> actualScenarioDetailDtos = controller.loadBeans(OFFSET, COUNT,
-            Collections.singletonList(new QuerySortOrder(SORT_PROPERTY, SortDirection.DESCENDING)));
+            List.of(new QuerySortOrder(SORT_PROPERTY, SortDirection.DESCENDING)));
         assertEquals(OFFSET, pageableCapture.getValue().getOffset());
         assertEquals(COUNT, pageableCapture.getValue().getLimit());
         assertEquals(SORT_PROPERTY, sortCapture.getValue().getProperty());

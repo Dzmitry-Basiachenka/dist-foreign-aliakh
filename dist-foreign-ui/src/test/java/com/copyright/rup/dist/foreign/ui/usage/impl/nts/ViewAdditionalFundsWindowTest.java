@@ -52,7 +52,7 @@ import org.powermock.reflect.Whitebox;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
+import java.util.List;
 
 /**
  * Verifies {@link ViewAdditionalFundsWindow}.
@@ -77,7 +77,7 @@ public class ViewAdditionalFundsWindowTest {
     public void setUp() {
         fundPool = buildFundPool();
         controller = createMock(INtsUsageController.class);
-        expect(controller.getAdditionalFunds()).andReturn(Collections.singletonList(fundPool)).once();
+        expect(controller.getAdditionalFunds()).andReturn(List.of(fundPool)).once();
         replay(controller);
         viewWindow = new ViewAdditionalFundsWindow(controller);
         verify(controller);
@@ -108,7 +108,7 @@ public class ViewAdditionalFundsWindowTest {
     public void testGridValues() {
         Grid<?> grid = (Grid<?>) ((VerticalLayout) viewWindow.getContent()).getComponent(1);
         Object[][] expectedCells = {{"Test Fund", "1,201,933.17", "user@copyright.com", "comment", "Delete"}};
-        verifyGridItems(grid, Collections.singletonList(fundPool), expectedCells);
+        verifyGridItems(grid, List.of(fundPool), expectedCells);
     }
 
     @Test

@@ -43,7 +43,6 @@ import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Collections;
 import java.util.EventObject;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -77,8 +76,7 @@ public class CreateNtsScenarioWindowTest {
         preServiceFeeFund = new FundPool();
         preServiceFeeFund.setName("Pre-Service Fee Fund 1");
         expect(controller.getSelectedProductFamily()).andReturn(NTS_PRODUCT_FAMILY).anyTimes();
-        expect(controller.getAdditionalFundsNotAttachedToScenario())
-            .andReturn(Collections.singletonList(preServiceFeeFund)).once();
+        expect(controller.getAdditionalFundsNotAttachedToScenario()).andReturn(List.of(preServiceFeeFund)).once();
     }
 
     @Test

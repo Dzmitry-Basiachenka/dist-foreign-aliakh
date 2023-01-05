@@ -49,7 +49,7 @@ public class SalLicenseeFilterWidgetTest {
 
     @Before
     public void setUp() {
-        salLicenseeFilterWidget = new SalLicenseeFilterWidget(() -> Collections.singletonList(buildLicensee()));
+        salLicenseeFilterWidget = new SalLicenseeFilterWidget(() -> List.of(buildLicensee()));
     }
 
     @Test

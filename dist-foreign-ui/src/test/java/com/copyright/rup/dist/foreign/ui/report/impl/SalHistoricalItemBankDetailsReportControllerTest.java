@@ -31,7 +31,6 @@ import org.powermock.reflect.Whitebox;
 import java.io.OutputStream;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -95,7 +94,7 @@ public class SalHistoricalItemBankDetailsReportControllerTest {
     public void testGetSalLicensees() {
         IUsageBatchService usageBatchService = createMock(IUsageBatchService.class);
         Whitebox.setInternalState(controller, usageBatchService);
-        List<SalLicensee> licensees = Collections.singletonList(new SalLicensee());
+        List<SalLicensee> licensees = List.of(new SalLicensee());
         expect(usageBatchService.getSalLicensees()).andReturn(licensees).once();
         replay(usageBatchService);
         assertSame(licensees, controller.getSalLicensees());

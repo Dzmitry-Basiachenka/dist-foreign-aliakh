@@ -51,7 +51,6 @@ import org.powermock.reflect.Whitebox;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.EventObject;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -92,7 +91,7 @@ public class CreateSalScenarioWindowTest {
         controller = createMock(ISalUsageController.class);
         filterController = createMock(ISalUsageFilterController.class);
         expect(controller.getSelectedProductFamily()).andReturn(SAL_PRODUCT_FAMILY).anyTimes();
-        expect(controller.getFundPoolsNotAttachedToScenario()).andReturn(Collections.singletonList(fundPool)).once();
+        expect(controller.getFundPoolsNotAttachedToScenario()).andReturn(List.of(fundPool)).once();
     }
 
     @Test
@@ -132,8 +131,7 @@ public class CreateSalScenarioWindowTest {
         UsageBatch usageBatch = buildUsageBatch(7001293454L);
         expect(controller.scenarioExists(SCENARIO_NAME)).andReturn(false).times(2);
         expect(controller.getSelectedUsageBatch()).andReturn(usageBatch).once();
-        expect(controller.getUsageDataGradeGroups())
-            .andReturn(Collections.singletonList(SalGradeGroupEnum.GRADE6_8)).once();
+        expect(controller.getUsageDataGradeGroups()).andReturn(List.of(SalGradeGroupEnum.GRADE6_8)).once();
         expect(controller.createSalScenario(SCENARIO_NAME, FUND_POOL_ID, StringUtils.EMPTY)).andReturn(scenario).once();
         replay(controller, filterController);
         TestCreateSalScenarioWindow createScenarioWindow = new TestCreateSalScenarioWindow(controller);
@@ -171,8 +169,7 @@ public class CreateSalScenarioWindowTest {
         fundPool.getSalFields().setGrade9to12GrossAmount(BigDecimal.TEN);
         expect(controller.scenarioExists(SCENARIO_NAME)).andReturn(false).times(2);
         expect(controller.getSelectedUsageBatch()).andReturn(usageBatch).once();
-        expect(controller.getUsageDataGradeGroups())
-            .andReturn(Collections.singletonList(SalGradeGroupEnum.GRADE6_8)).once();
+        expect(controller.getUsageDataGradeGroups()).andReturn(List.of(SalGradeGroupEnum.GRADE6_8)).once();
         Windows.showNotificationWindow("There are no usage details for GRADEK_5, GRADE9_12 grade group(s)");
         expectLastCall().once();
         replay(controller, filterController, Windows.class);

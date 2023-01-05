@@ -44,6 +44,7 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -107,8 +108,8 @@ public class EditAclUsagesWindowTest {
     public void setUp() {
         controller = createMock(IAclUsageController.class);
         saveButtonClickListener = createMock(ClickListener.class);
-        expect(controller.getPublicationTypes()).andReturn(Collections.singletonList(PUBLICATION_TYPE)).once();
-        expect(controller.getDetailLicenseeClasses()).andReturn(Collections.singletonList(LICENSEE_CLASS)).once();
+        expect(controller.getPublicationTypes()).andReturn(List.of(PUBLICATION_TYPE)).once();
+        expect(controller.getDetailLicenseeClasses()).andReturn(List.of(LICENSEE_CLASS)).once();
     }
 
     @Test
@@ -255,12 +256,10 @@ public class EditAclUsagesWindowTest {
         assertEquals(8, verticalLayout.getComponentCount());
         verifyTextFieldLayout(verticalLayout.getComponent(0), "Period (YYYYMM)");
         verifyTextFieldLayout(verticalLayout.getComponent(1), "Wr Wrk Inst");
-        verifyComboBoxLayout(verticalLayout.getComponent(2), "Pub Type", true,
-            Collections.singletonList(PUBLICATION_TYPE));
+        verifyComboBoxLayout(verticalLayout.getComponent(2), "Pub Type", true, List.of(PUBLICATION_TYPE));
         verifyComboBoxLayout(verticalLayout.getComponent(3), "Type of Use", true,
             Arrays.asList("PRINT","DIGITAL"));
-        verifyComboBoxLayout(verticalLayout.getComponent(4), "Detail Licensee Class", true,
-            Collections.singletonList(LICENSEE_CLASS));
+        verifyComboBoxLayout(verticalLayout.getComponent(4), "Detail Licensee Class", true, List.of(LICENSEE_CLASS));
         verifyTextFieldLayout(verticalLayout.getComponent(5), "Annualized Copies");
         verifyTextFieldLayout(verticalLayout.getComponent(6), "Content Unit Price");
         verifyButtonsLayout(verticalLayout.getComponent(7), "Save", "Discard", "Close");

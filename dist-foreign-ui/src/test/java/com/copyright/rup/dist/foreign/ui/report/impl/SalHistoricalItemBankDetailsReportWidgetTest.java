@@ -57,7 +57,7 @@ public class SalHistoricalItemBankDetailsReportWidgetTest {
         ISalHistoricalItemBankDetailsReportController controller = new SalHistoricalItemBankDetailsReportController();
         IUsageBatchService usageBatchService = createMock(IUsageBatchService.class);
         Whitebox.setInternalState(controller, usageBatchService);
-        List<SalLicensee> licensees = Collections.singletonList(buildSalLicensee());
+        List<SalLicensee> licensees = List.of(buildSalLicensee());
         expect(usageBatchService.getSalLicensees()).andReturn(licensees).once();
         replay(usageBatchService);
         SalHistoricalItemBankDetailsReportWidget widget =

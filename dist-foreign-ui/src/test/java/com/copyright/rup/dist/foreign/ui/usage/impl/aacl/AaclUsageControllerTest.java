@@ -197,10 +197,9 @@ public class AaclUsageControllerTest {
         usageFilter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
         expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
         expect(filterWidgetMock.getAppliedFilter()).andReturn(usageFilter).once();
-        expect(aaclUsageService.getInvalidRightsholdersByFilter(usageFilter))
-            .andReturn(Collections.singletonList(7000000001L)).once();
+        expect(aaclUsageService.getInvalidRightsholdersByFilter(usageFilter)).andReturn(List.of(7000000001L)).once();
         replay(filterController, filterWidgetMock, aaclUsageService);
-        assertEquals(Collections.singletonList(7000000001L), controller.getInvalidRightsholders());
+        assertEquals(List.of(7000000001L), controller.getInvalidRightsholders());
         verify(filterController, filterWidgetMock, aaclUsageService);
     }
 
@@ -223,7 +222,7 @@ public class AaclUsageControllerTest {
     public void testLoadUsageBatch() {
         UsageBatch usageBatch = new UsageBatch();
         usageBatch.setName("AACL Batch");
-        List<Usage> usages = Collections.singletonList(new Usage());
+        List<Usage> usages = List.of(new Usage());
         List<String> insertedUsageIds =
             Arrays.asList("2ad91b97-5288-47f4-a454-ed3a4388993b", "7c8f870f-97e6-4f9e-a8f8-e4b088dad057");
         expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
@@ -248,7 +247,7 @@ public class AaclUsageControllerTest {
 
     @Test
     public void testGetFundPools() {
-        List<FundPool> fundPools = Collections.singletonList(new FundPool());
+        List<FundPool> fundPools = List.of(new FundPool());
         expect(fundPoolService.getFundPools(AACL_PRODUCT_FAMILY)).andReturn(fundPools).once();
         replay(fundPoolService);
         assertEquals(fundPools, controller.getFundPools());
@@ -257,7 +256,7 @@ public class AaclUsageControllerTest {
 
     @Test
     public void testGetFundPoolsNotAttachedToScenario() {
-        List<FundPool> fundPools = Collections.singletonList(new FundPool());
+        List<FundPool> fundPools = List.of(new FundPool());
         expect(fundPoolService.getAaclNotAttachedToScenario()).andReturn(fundPools).once();
         replay(fundPoolService);
         assertEquals(fundPools, controller.getFundPoolsNotAttachedToScenario());
@@ -266,7 +265,7 @@ public class AaclUsageControllerTest {
 
     @Test
     public void testGetFundPoolDetails() {
-        List<FundPoolDetail> details = Collections.singletonList(new FundPoolDetail());
+        List<FundPoolDetail> details = List.of(new FundPoolDetail());
         expect(fundPoolService.getDetailsByFundPoolId(FUND_POOL_ID)).andReturn(details).once();
         replay(fundPoolService);
         assertEquals(details, controller.getFundPoolDetails(FUND_POOL_ID));
@@ -412,7 +411,7 @@ public class AaclUsageControllerTest {
     @Test
     public void testInsertFundPool() {
         FundPool fundPool = new FundPool();
-        List<FundPoolDetail> details = Collections.singletonList(new FundPoolDetail());
+        List<FundPoolDetail> details = List.of(new FundPoolDetail());
         expect(fundPoolService.createAaclFundPool(fundPool, details)).andReturn(1).once();
         replay(fundPoolService);
         assertEquals(1, controller.insertFundPool(fundPool, details));
@@ -442,7 +441,7 @@ public class AaclUsageControllerTest {
     @Test
     public void testGetProcessingBatchesNames() {
         Set<String> batchIds = Collections.singleton("5d4f7674-4f0a-404e-ad23-7096b667402b");
-        List<String> batchNames = Collections.singletonList("batch name");
+        List<String> batchNames = List.of("batch name");
         expect(usageBatchService.getProcessingAaclBatchesNames(batchIds)).andReturn(batchNames).once();
         replay(usageBatchService);
         assertEquals(batchNames, controller.getProcessingBatchesNames(batchIds));
@@ -452,7 +451,7 @@ public class AaclUsageControllerTest {
     @Test
     public void testGetIneligibleBatchesNames() {
         Set<String> batchIds = Collections.singleton("5d4f7674-4f0a-404e-ad23-7096b667402b");
-        List<String> batchNames = Collections.singletonList("batch name");
+        List<String> batchNames = List.of("batch name");
         expect(usageBatchService.getIneligibleBatchesNames(batchIds)).andReturn(batchNames).once();
         replay(usageBatchService);
         assertEquals(batchNames, controller.getIneligibleBatchesNames(batchIds));
@@ -491,7 +490,7 @@ public class AaclUsageControllerTest {
 
     @Test
     public void testGetPublicationTypes() {
-        List<PublicationType> pubTypes = Collections.singletonList(buildPublicationType("Book", "1.00"));
+        List<PublicationType> pubTypes = List.of(buildPublicationType("Book", "1.00"));
         expect(publicationTypeService.getPublicationTypes(AACL_PRODUCT_FAMILY)).andReturn(pubTypes).once();
         replay(publicationTypeService);
         assertEquals(pubTypes, controller.getPublicationTypes());
@@ -500,7 +499,7 @@ public class AaclUsageControllerTest {
 
     @Test
     public void testGetDetailLicenseeClasses() {
-        List<DetailLicenseeClass> detailLicenseeClasses = Collections.singletonList(new DetailLicenseeClass());
+        List<DetailLicenseeClass> detailLicenseeClasses = List.of(new DetailLicenseeClass());
         expect(licenseeClassService.getDetailLicenseeClasses(AACL_PRODUCT_FAMILY))
             .andReturn(detailLicenseeClasses).once();
         replay(licenseeClassService);
@@ -510,8 +509,8 @@ public class AaclUsageControllerTest {
 
     @Test
     public void testGetAggregateClassesNotToBeDistributed() {
-        List<DetailLicenseeClass> detailLicenseeClasses = Collections.singletonList(new DetailLicenseeClass());
-        List<AggregateLicenseeClass> aggregateLicenseeClasses = Collections.singletonList(new AggregateLicenseeClass());
+        List<DetailLicenseeClass> detailLicenseeClasses = List.of(new DetailLicenseeClass());
+        List<AggregateLicenseeClass> aggregateLicenseeClasses = List.of(new AggregateLicenseeClass());
         expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
         expect(filterWidgetMock.getAppliedFilter()).andReturn(usageFilter).once();
         expect(

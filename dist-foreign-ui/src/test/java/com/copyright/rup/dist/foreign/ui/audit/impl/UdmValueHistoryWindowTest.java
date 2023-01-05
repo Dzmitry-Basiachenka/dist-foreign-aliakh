@@ -24,7 +24,7 @@ import org.apache.commons.lang3.tuple.Triple;
 import org.junit.Test;
 
 import java.util.Arrays;
-import java.util.Collections;
+import java.util.List;
 
 /**
  * Verifies {@link UdmValueHistoryWindow}.
@@ -44,7 +44,7 @@ public class UdmValueHistoryWindowTest {
         auditItem.setActionReason("Action reason");
         auditItem.setActionType(UdmValueActionTypeEnum.CREATED);
         String udmValueId = RupPersistUtils.generateUuid();
-        UdmValueHistoryWindow window = new UdmValueHistoryWindow(udmValueId, Collections.singletonList(auditItem));
+        UdmValueHistoryWindow window = new UdmValueHistoryWindow(udmValueId, List.of(auditItem));
         verifyWindow(window, "History for UDM value " + udmValueId, 700, 300, Sizeable.Unit.PIXELS);
         assertTrue(window.isResizable());
         Component content = window.getContent();

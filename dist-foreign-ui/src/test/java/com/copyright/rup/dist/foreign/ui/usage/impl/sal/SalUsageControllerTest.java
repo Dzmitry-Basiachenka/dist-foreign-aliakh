@@ -144,7 +144,7 @@ public class SalUsageControllerTest {
     public void testLoadItemBank() {
         UsageBatch itemBank = new UsageBatch();
         List<String> usageIds = new ArrayList<>();
-        List<Usage> usages = Collections.singletonList(new Usage());
+        List<Usage> usages = List.of(new Usage());
         expect(usageBatchService.insertSalBatch(itemBank, usages)).andReturn(usageIds).once();
         salUsageService.sendForMatching(usageIds, itemBank.getName());
         expectLastCall().once();
@@ -159,7 +159,7 @@ public class SalUsageControllerTest {
     @Test
     public void testLoadUsageData() {
         UsageBatch itemBank = new UsageBatch();
-        List<Usage> usages = Collections.singletonList(new Usage());
+        List<Usage> usages = List.of(new Usage());
         usageBatchService.addUsageDataToSalBatch(itemBank, usages);
         expectLastCall().once();
         expect(filterController.getWidget()).andReturn(filterWidget).once();
@@ -188,7 +188,7 @@ public class SalUsageControllerTest {
         expect(filterWidget.getAppliedFilter()).andReturn(usageFilter).once();
         Capture<Pageable> pageableCapture = newCapture();
         expect(salUsageService.getUsageDtos(eq(usageFilter), capture(pageableCapture), isNull()))
-            .andReturn(Collections.singletonList(new UsageDto())).once();
+            .andReturn(List.of(new UsageDto())).once();
         replay(filterWidget, salUsageService, filterController);
         List<UsageDto> result = controller.loadBeans(10, 150, null);
         Pageable pageable = pageableCapture.getValue();
@@ -271,7 +271,7 @@ public class SalUsageControllerTest {
     @Test
     public void testGetIneligibleBatchesNames() {
         Set<String> batchIds = Collections.singleton("0ddb1cbf-4516-40b2-bffa-33d8876fa774");
-        List<String> batchNames = Collections.singletonList("batch name");
+        List<String> batchNames = List.of("batch name");
         expect(usageBatchService.getIneligibleBatchesNames(batchIds)).andReturn(batchNames).once();
         replay(usageBatchService);
         assertEquals(batchNames, controller.getIneligibleBatchesNames(batchIds));
@@ -281,7 +281,7 @@ public class SalUsageControllerTest {
     @Test
     public void testGetProcessingBatchesNames() {
         Set<String> batchIds = Collections.singleton("7709a5ef-72b7-406c-8428-3422833f6e46");
-        List<String> batchNames = Collections.singletonList("batch name");
+        List<String> batchNames = List.of("batch name");
         expect(usageBatchService.getProcessingSalBatchesNames(batchIds)).andReturn(batchNames).once();
         replay(usageBatchService);
         assertEquals(batchNames, controller.getProcessingBatchesNames(batchIds));
@@ -290,7 +290,7 @@ public class SalUsageControllerTest {
 
     @Test
     public void testGetFundPoolsNotAttachedToScenario() {
-        List<FundPool> fundPools = Collections.singletonList(new FundPool());
+        List<FundPool> fundPools = List.of(new FundPool());
         expect(fundPoolService.getSalNotAttachedToScenario()).andReturn(fundPools).once();
         replay(fundPoolService);
         assertEquals(fundPools, controller.getFundPoolsNotAttachedToScenario());
@@ -301,7 +301,7 @@ public class SalUsageControllerTest {
     public void testGetUsageDataGradeGroups() {
         expect(filterController.getWidget()).andReturn(filterWidget).once();
         expect(filterWidget.getAppliedFilter()).andReturn(usageFilter).once();
-        List<SalGradeGroupEnum> gradeGroups = Collections.singletonList(SalGradeGroupEnum.ITEM_BANK);
+        List<SalGradeGroupEnum> gradeGroups = List.of(SalGradeGroupEnum.ITEM_BANK);
         expect(salUsageService.getUsageDataGradeGroups(usageFilter)).andReturn(gradeGroups).once();
         replay(filterController, filterWidget, salUsageService);
         assertSame(gradeGroups, controller.getUsageDataGradeGroups());
@@ -310,7 +310,7 @@ public class SalUsageControllerTest {
 
     @Test
     public void testGetFundPools() {
-        List<FundPool> fundPools = Collections.singletonList(new FundPool());
+        List<FundPool> fundPools = List.of(new FundPool());
         expect(fundPoolService.getFundPools("SAL")).andReturn(fundPools).once();
         replay(fundPoolService);
         assertEquals(fundPools, controller.getFundPools());
@@ -384,7 +384,7 @@ public class SalUsageControllerTest {
 
     @Test
     public void testGetBatchesNotAttachedToScenario() {
-        List<UsageBatch> batches = Collections.singletonList(new UsageBatch());
+        List<UsageBatch> batches = List.of(new UsageBatch());
         expect(usageBatchService.getSalNotAttachedToScenario()).andReturn(batches).once();
         replay(usageBatchService);
         assertEquals(batches, controller.getBatchesNotAttachedToScenario());
@@ -446,7 +446,7 @@ public class SalUsageControllerTest {
         expect(filterController.getWidget()).andReturn(filterWidget).once();
         expect(filterWidget.getAppliedFilter()).andReturn(usageFilter).once();
         expect(salUsageService.getUsageDtos(eq(usageFilter), isNull(), isNull()))
-            .andReturn(Collections.singletonList(new UsageDto())).once();
+            .andReturn(List.of(new UsageDto())).once();
         replay(filterWidget, salUsageService, filterController);
         List<UsageDto> result = controller.getUsageDtosForRhUpdate();
         assertNotNull(result);
