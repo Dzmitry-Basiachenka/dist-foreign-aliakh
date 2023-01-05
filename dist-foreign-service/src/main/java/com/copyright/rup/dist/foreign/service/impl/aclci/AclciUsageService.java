@@ -11,6 +11,7 @@ import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IAclciUsageRepository;
+import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.aclci.IAclciUsageService;
 import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
@@ -28,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -48,6 +50,8 @@ public class AclciUsageService implements IAclciUsageService {
     private IAclciUsageRepository aclciUsageRepository;
     @Autowired
     private IUsageAuditService usageAuditService;
+    @Autowired
+    private IRightsholderService rightsholderService;
     @Autowired
     @Qualifier("usageChainExecutor")
     private IChainExecutor<Usage> chainExecutor;
@@ -107,5 +111,20 @@ public class AclciUsageService implements IAclciUsageService {
         return !filter.isEmpty()
             ? aclciUsageRepository.findDtosByFilter(filter, pageable, sort)
             : Collections.emptyList();
+    }
+
+    @Override
+    @Transactional
+    public void updateToEligibleByIds(Set<String> usageIds, Long rhAccountNumber, Long wrWrkInst, String reason) {
+        String userName = RupContextUtils.getUserName();
+        LOGGER.info("Update RH for SAL detail. Started. UsageIds={}, RhAccountNumber={}, Reason={}, UserName={}",
+            usageIds, rhAccountNumber, reason, userName);
+        aclciUsageRepository.updateToEligibleByIds(usageIds, rhAccountNumber, wrWrkInst, userName);
+        usageAuditService.logAction(usageIds, UsageActionTypeEnum.RH_UPDATED, reason);
+        usageAuditService.logAction(usageIds, UsageActionTypeEnum.ELIGIBLE,
+            "Usage has become eligible. RH and Wr Wrk Inst were updated. Reason=" + reason);
+        rightsholderService.updateRighstholdersAsync(Set.of(rhAccountNumber));
+        LOGGER.info("Update RH for SAL detail. Finished. UsageIds={}, RhAccountNumber={}, Reason={}, UserName={}",
+            usageIds, rhAccountNumber, reason, userName);
     }
 }
