@@ -769,7 +769,7 @@ public class AclUsageRepositoryIntegrationTest extends CsvReportsTestHelper {
     @Test
     @TestData(fileName = FOLDER_NAME + "delete-by-usage-batch-id.groovy")
     public void testDeleteByUsageBatchId() {
-        List<String> usageIds = Collections.singletonList("52c239cf-a09a-4c96-9ec1-986fec4266cf");
+        List<String> usageIds = List.of("52c239cf-a09a-4c96-9ec1-986fec4266cf");
         assertEquals(1, aclUsageRepository.findByIds(usageIds).size());
         aclUsageRepository.deleteByUsageBatchId("8b81ce3e-6342-42a7-a3eb-c955d5e7ebba");
         assertEquals(0, aclUsageRepository.findByIds(usageIds).size());

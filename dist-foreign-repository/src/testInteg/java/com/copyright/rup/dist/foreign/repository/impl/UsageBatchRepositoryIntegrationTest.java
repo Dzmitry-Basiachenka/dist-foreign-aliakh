@@ -342,7 +342,7 @@ public class UsageBatchRepositoryIntegrationTest {
             .map(UsageBatch::getId)
             .sorted()
             .collect(Collectors.toList());
-        assertEquals(Collections.singletonList("930caf5f-839f-4926-bebe-bde38d90b0e1"), actualNotAttachedBatchIds);
+        assertEquals(List.of("930caf5f-839f-4926-bebe-bde38d90b0e1"), actualNotAttachedBatchIds);
     }
 
     @Test
@@ -370,7 +370,7 @@ public class UsageBatchRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FOLDER_NAME + "find-sal-usage-periods.groovy")
     public void testFindSalUsagePeriods() {
-        assertEquals(Collections.singletonList(2015), usageBatchRepository.findSalUsagePeriods());
+        assertEquals(List.of(2015), usageBatchRepository.findSalUsagePeriods());
     }
 
     private UsageBatch buildFasUsageBatch() {

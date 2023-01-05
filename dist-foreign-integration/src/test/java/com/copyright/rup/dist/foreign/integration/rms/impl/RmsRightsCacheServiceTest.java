@@ -60,7 +60,7 @@ public class RmsRightsCacheServiceTest {
 
     @Test
     public void testGetAllRmsGrants() {
-        List<Long> wrWrkInst1 = Collections.singletonList(WR_WRK_INST_1);
+        List<Long> wrWrkInst1 = List.of(WR_WRK_INST_1);
         List<Long> wrWrkInst2 = Arrays.asList(WR_WRK_INST_2, WR_WRK_INST_3);
         Set<RmsGrant> expectedRmsGrants1 = Sets.newHashSet(buildRmsGrant(WR_WRK_INST_1, RH_ACCOUNT_NUMBER_1));
         Set<RmsGrant> expectedRmsGrants2 = Sets.newHashSet(buildRmsGrant(WR_WRK_INST_2, RH_ACCOUNT_NUMBER_2),

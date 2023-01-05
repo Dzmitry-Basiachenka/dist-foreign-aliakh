@@ -376,11 +376,11 @@ public class AclScenarioRepositoryIntegrationTest {
         scenario.setUpdateUser(user);
         scenario.setCreateDate(Date.from(OffsetDateTime.parse(date).toInstant()));
         scenario.setUpdateDate(Date.from(OffsetDateTime.parse(date).toInstant()));
-        scenario.setDetailLicenseeClasses(Collections.singletonList(
+        scenario.setDetailLicenseeClasses(List.of(
             buildDetailLicenseeClass(43, "Other - Govt", 1, "Food and Tobacco")));
-        scenario.setPublicationTypes(Collections.singletonList(
+        scenario.setPublicationTypes(List.of(
             buildAclPublicationType("73876e58-2e87-485e-b6f3-7e23792dd214", "BK", "Book", "1.00", 201512)));
-        scenario.setUsageAges(Collections.singletonList(buildUsageAge(0, "1.00000")));
+        scenario.setUsageAges(List.of(buildUsageAge(0, "1.00000")));
         scenario.setCopiedFrom("Copied Scenario Name");
         return scenario;
     }

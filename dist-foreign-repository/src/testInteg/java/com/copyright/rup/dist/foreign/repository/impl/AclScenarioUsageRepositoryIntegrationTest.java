@@ -133,7 +133,7 @@ public class AclScenarioUsageRepositoryIntegrationTest {
             aclScenarioUsageRepository.findScenarioDetailsByScenarioId("17d43251-6637-41cb-8831-1bce47a7da85");
         assertEquals(2, scenarioDetails.size());
         Map<String, List<AclScenarioShareDetail>> detailSharesMap = new HashMap<>();
-        detailSharesMap.put("df038efe-72c1-4081-88e7-17fa4fa5ff6a", Collections.singletonList(
+        detailSharesMap.put("df038efe-72c1-4081-88e7-17fa4fa5ff6a", List.of(
             buildAclScenarioShareDetail(1000028511L, PRINT_TOU, 6.0, 3.0)));
         detailSharesMap.put("8827d6c6-16d8-4102-b257-ce861ce77491", Arrays.asList(
             buildAclScenarioShareDetail(1000028511L, DIGITAL_TOU, 9.5, 5.0),
@@ -169,14 +169,14 @@ public class AclScenarioUsageRepositoryIntegrationTest {
             aclScenarioUsageRepository.findScenarioDetailsByScenarioId("8c855d2e-5bb6-435d-9da2-7a937c74cb6d");
         assertEquals(4, scenarioDetails.size());
         Map<String, List<AclScenarioShareDetail>> detailSharesMap = new HashMap<>();
-        detailSharesMap.put("7edfc465-4588-4c70-b62b-4c9f194e5d06", Collections.singletonList(
+        detailSharesMap.put("7edfc465-4588-4c70-b62b-4c9f194e5d06", List.of(
             buildAclScenarioShareDetail(1000028511L, PRINT_TOU, 6.0, 3.0, 1.0, 1.0, 1.0)));
         detailSharesMap.put("fe8ba41d-01af-42e4-b400-d88733b3271f", Arrays.asList(
             buildAclScenarioShareDetail(1000028511L, DIGITAL_TOU, 59.85, 5.0, 1.0, 1.0, 1.0),
             buildAclScenarioShareDetail(2580011451L, PRINT_TOU, 59.85, 5.0, 0.2861035422, 0.5, 0.3930517711)));
-        detailSharesMap.put("7cb1ebeb-ee71-4ec4-bd0c-611d078dbe4b", Collections.singletonList(
+        detailSharesMap.put("7cb1ebeb-ee71-4ec4-bd0c-611d078dbe4b", List.of(
             buildAclScenarioShareDetail(2580011451L, PRINT_TOU, 119.7, 3.0, 0.5722070845, 0.3, 0.4361035422)));
-        detailSharesMap.put("d7e066bb-2df4-45fe-b767-c716954e5af5", Collections.singletonList(
+        detailSharesMap.put("d7e066bb-2df4-45fe-b767-c716954e5af5", List.of(
             buildAclScenarioShareDetail(2580011451L, PRINT_TOU, 29.64, 2.0, 0.1416893733, 0.2, 0.1708446866)));
         scenarioDetails.forEach(actualDetail -> {
             List<AclScenarioShareDetail> actualShareDetails = actualDetail.getScenarioShareDetails();
@@ -195,17 +195,17 @@ public class AclScenarioUsageRepositoryIntegrationTest {
             aclScenarioUsageRepository.findScenarioDetailsByScenarioId("742c3061-50b6-498a-a440-17c3ba5bf7eb");
         assertEquals(4, scenarioDetails.size());
         Map<String, List<AclScenarioShareDetail>> detailSharesMap = new HashMap<>();
-        detailSharesMap.put("9a30d051-24e8-4fb2-8e9a-31fce9653be7", Collections.singletonList(
+        detailSharesMap.put("9a30d051-24e8-4fb2-8e9a-31fce9653be7", List.of(
             buildAclScenarioShareDetail(1000028511L, PRINT_TOU, 6.0, 3.0, 1.0, 1.0, 1.0, 1550.51, 1200.26, 350.25)));
         detailSharesMap.put("fdac5a59-0e8f-4416-bee6-f6883a80a917", Arrays.asList(
             buildAclScenarioShareDetail(1000028511L, DIGITAL_TOU, 59.85, 5.0, 1.0, 1.0, 1.0, 27895.51, 20500.26,
                 7395.25),
             buildAclScenarioShareDetail(2580011451L, PRINT_TOU, 59.85, 5.0, 0.2861035422, 0.5, 0.3930517711,
                 71846.5581916850, 55813.4772727668, 16033.0809189183)));
-        detailSharesMap.put("f1a8dd33-2a1d-4a5a-8354-5b15eb39ec9a", Collections.singletonList(
+        detailSharesMap.put("f1a8dd33-2a1d-4a5a-8354-5b15eb39ec9a", List.of(
             buildAclScenarioShareDetail(2580011451L, PRINT_TOU, 119.7, 3.0, 0.5722070845, 0.3, 0.4361035422,
                 79716.0598833701, 61926.8425455335, 17789.2173378366)));
-        detailSharesMap.put("e8ebc3f7-9075-4bf4-bdb3-00e9d3f780f4", Collections.singletonList(
+        detailSharesMap.put("e8ebc3f7-9075-4bf4-bdb3-00e9d3f780f4", List.of(
             buildAclScenarioShareDetail(2580011451L, PRINT_TOU, 29.64, 2.0, 0.1416893733, 0.2, 0.1708446866,
                 31228.9719066657, 24260.0001674997, 6968.9717391660)));
         scenarioDetails.forEach(actualDetail -> {
@@ -354,7 +354,7 @@ public class AclScenarioUsageRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FIND_BY_SCENARIO_ID_AND_RH_ACCOUNT_NUMBER)
     public void testFindByScenarioIdAndRhAccountNumberSearchByUsageDetailId() {
-        List<AclScenarioDetailDto> scenarioDetailDtos = Collections.singletonList(buildDigitalAclScenarioDetailDto());
+        List<AclScenarioDetailDto> scenarioDetailDtos = List.of(buildDigitalAclScenarioDetailDto());
         verifyFindByScenarioIdAndRhSearch(scenarioDetailDtos, "OGN674GHHSB108");
         verifyFindByScenarioIdAndRhSearch(scenarioDetailDtos, "ogN674ghhSB108");
         verifyFindByScenarioIdAndRhSearch(Collections.emptyList(), "ogN674gh hSB108");
@@ -371,7 +371,7 @@ public class AclScenarioUsageRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FIND_BY_SCENARIO_ID_AND_RH_ACCOUNT_NUMBER)
     public void testFindByScenarioIdAndRhAccountNumberSearchByWrWrkInst() {
-        List<AclScenarioDetailDto> scenarioDetailDtos = Collections.singletonList(buildDigitalAclScenarioDetailDto());
+        List<AclScenarioDetailDto> scenarioDetailDtos = List.of(buildDigitalAclScenarioDetailDto());
         verifyFindByScenarioIdAndRhSearch(scenarioDetailDtos, "122820638");
         verifyFindByScenarioIdAndRhSearch(scenarioDetailDtos, "12282");
         verifyFindByScenarioIdAndRhSearch(Collections.emptyList(), "12282 0638");
@@ -388,7 +388,7 @@ public class AclScenarioUsageRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FIND_BY_SCENARIO_ID_AND_RH_ACCOUNT_NUMBER)
     public void testFindByScenarioIdAndRhAccountNumberSearchSystemTitle() {
-        List<AclScenarioDetailDto> scenarioDetailDtos = Collections.singletonList(buildDigitalAclScenarioDetailDto());
+        List<AclScenarioDetailDto> scenarioDetailDtos = List.of(buildDigitalAclScenarioDetailDto());
         verifyFindByScenarioIdAndRhSearch(scenarioDetailDtos, SYSTEM_TITLE);
         verifyFindByScenarioIdAndRhSearch(scenarioDetailDtos, "TeCHNoLOGY REV");
         verifyFindByScenarioIdAndRhSearch(Collections.emptyList(), "Techn ology review");
@@ -509,7 +509,7 @@ public class AclScenarioUsageRepositoryIntegrationTest {
     @TestData(fileName = FIND_BY_SCENARIO_ID)
     public void testFindByScenarioIdSearchUsageDetailId() {
         List<AclScenarioDetailDto> scenarioDetailDtos =
-            Collections.singletonList(buildAclScenarioDetailDto1FindByScenarioId());
+            List.of(buildAclScenarioDetailDto1FindByScenarioId());
         verifyFindByScenarioIdSearch(scenarioDetailDtos, "OGN674GHHSB107");
         verifyFindByScenarioIdSearch(scenarioDetailDtos, "ogN674ghhSB107");
         verifyFindByScenarioIdSearch(Collections.emptyList(), "ogN674gh hSB107");
@@ -527,7 +527,7 @@ public class AclScenarioUsageRepositoryIntegrationTest {
     @TestData(fileName = FIND_BY_SCENARIO_ID)
     public void testFindByScenarioIdSearchWrWrkInst() {
         List<AclScenarioDetailDto> scenarioDetailDtos =
-            Collections.singletonList(buildAclScenarioDetailDto1FindByScenarioId());
+            List.of(buildAclScenarioDetailDto1FindByScenarioId());
         verifyFindByScenarioIdSearch(scenarioDetailDtos, "122813964");
         verifyFindByScenarioIdSearch(scenarioDetailDtos, "12281");
         verifyFindByScenarioIdSearch(Collections.emptyList(), "12281 3964");
@@ -545,7 +545,7 @@ public class AclScenarioUsageRepositoryIntegrationTest {
     @TestData(fileName = FIND_BY_SCENARIO_ID)
     public void testFindByScenarioIdSearchSystemTitle() {
         List<AclScenarioDetailDto> scenarioDetailDtos =
-            Collections.singletonList(buildAclScenarioDetailDto1FindByScenarioId());
+            List.of(buildAclScenarioDetailDto1FindByScenarioId());
         verifyFindByScenarioIdSearch(scenarioDetailDtos, "Aerospace America");
         verifyFindByScenarioIdSearch(scenarioDetailDtos, "AeROspAce AmeRICa");
         verifyFindByScenarioIdSearch(Collections.emptyList(), "AeR OpAce AmeRICa");
@@ -563,7 +563,7 @@ public class AclScenarioUsageRepositoryIntegrationTest {
     @TestData(fileName = FIND_BY_SCENARIO_ID)
     public void testFindByScenarioIdSearchRhAccountNumberPrint() {
         List<AclScenarioDetailDto> scenarioDetailDtos =
-            Collections.singletonList(buildAclScenarioDetailDto1FindByScenarioId());
+            List.of(buildAclScenarioDetailDto1FindByScenarioId());
         verifyFindByScenarioIdSearch(scenarioDetailDtos, RH_ACCOUNT_NUMBER);
         verifyFindByScenarioIdSearch(scenarioDetailDtos, INCOMPLETE_RH_ACCOUNT_NUMBER);
         verifyFindByScenarioIdSearch(Collections.emptyList(), "10 00002859");
@@ -581,7 +581,7 @@ public class AclScenarioUsageRepositoryIntegrationTest {
     @TestData(fileName = FIND_BY_SCENARIO_ID)
     public void testFindByScenarioIdSearchRhNamePrint() {
         List<AclScenarioDetailDto> scenarioDetailDtos =
-            Collections.singletonList(buildAclScenarioDetailDto1FindByScenarioId());
+            List.of(buildAclScenarioDetailDto1FindByScenarioId());
         verifyFindByScenarioIdSearch(scenarioDetailDtos, RH_NAME);
         verifyFindByScenarioIdSearch(scenarioDetailDtos, "John WILEY");
         verifyFindByScenarioIdSearch(Collections.emptyList(), "Jo hn Wiley & Sons - Books");
@@ -599,7 +599,7 @@ public class AclScenarioUsageRepositoryIntegrationTest {
     @TestData(fileName = FIND_BY_SCENARIO_ID)
     public void testFindByScenarioIdSearchPayeeAccountNumberPrint() {
         List<AclScenarioDetailDto> scenarioDetailDtos =
-            Collections.singletonList(buildAclScenarioDetailDto1FindByScenarioId());
+            List.of(buildAclScenarioDetailDto1FindByScenarioId());
         verifyFindByScenarioIdSearch(scenarioDetailDtos, "1000005413");
         verifyFindByScenarioIdSearch(scenarioDetailDtos, "1000005");
         verifyFindByScenarioIdSearch(Collections.emptyList(), "100 0005413");
@@ -617,7 +617,7 @@ public class AclScenarioUsageRepositoryIntegrationTest {
     @TestData(fileName = FIND_BY_SCENARIO_ID)
     public void testFindByScenarioIdSearchPayeeNamePrint() {
         List<AclScenarioDetailDto> scenarioDetailDtos =
-            Collections.singletonList(buildAclScenarioDetailDto1FindByScenarioId());
+            List.of(buildAclScenarioDetailDto1FindByScenarioId());
         verifyFindByScenarioIdSearch(scenarioDetailDtos, "Kluwer Academic Publishers - Dordrecht");
         verifyFindByScenarioIdSearch(scenarioDetailDtos, "KluWer ACADemic");
         verifyFindByScenarioIdSearch(Collections.emptyList(), "Klu wer Academic Publishers - Dordrecht");
@@ -635,7 +635,7 @@ public class AclScenarioUsageRepositoryIntegrationTest {
     @TestData(fileName = FIND_BY_SCENARIO_ID)
     public void testFindByScenarioIdSearchRhAccountNumberDigital() {
         List<AclScenarioDetailDto> scenarioDetailDtos =
-            Collections.singletonList(buildAclScenarioDetailDto1FindByScenarioId());
+            List.of(buildAclScenarioDetailDto1FindByScenarioId());
         verifyFindByScenarioIdSearch(scenarioDetailDtos, "1000000001");
         verifyFindByScenarioIdSearch(scenarioDetailDtos, "1000000");
         verifyFindByScenarioIdSearch(Collections.emptyList(), "10000 00001");
@@ -653,7 +653,7 @@ public class AclScenarioUsageRepositoryIntegrationTest {
     @TestData(fileName = FIND_BY_SCENARIO_ID)
     public void testFindByScenarioIdSearchRhNameDigital() {
         List<AclScenarioDetailDto> scenarioDetailDtos =
-            Collections.singletonList(buildAclScenarioDetailDto1FindByScenarioId());
+            List.of(buildAclScenarioDetailDto1FindByScenarioId());
         verifyFindByScenarioIdSearch(scenarioDetailDtos, "Rothchild Consultants");
         verifyFindByScenarioIdSearch(scenarioDetailDtos, "RoTHchild");
         verifyFindByScenarioIdSearch(Collections.emptyList(), "Roth child Consultants");
@@ -671,7 +671,7 @@ public class AclScenarioUsageRepositoryIntegrationTest {
     @TestData(fileName = FIND_BY_SCENARIO_ID)
     public void testFindByScenarioIdSearchPayeeAccountNumberDigital() {
         List<AclScenarioDetailDto> scenarioDetailDtos =
-            Collections.singletonList(buildAclScenarioDetailDto1FindByScenarioId());
+            List.of(buildAclScenarioDetailDto1FindByScenarioId());
         verifyFindByScenarioIdSearch(scenarioDetailDtos, "2000017010");
         verifyFindByScenarioIdSearch(scenarioDetailDtos, "2000");
         verifyFindByScenarioIdSearch(Collections.emptyList(), "20000 17010");
@@ -689,7 +689,7 @@ public class AclScenarioUsageRepositoryIntegrationTest {
     @TestData(fileName = FIND_BY_SCENARIO_ID)
     public void testFindByScenarioIdSearchPayeeNameDigital() {
         List<AclScenarioDetailDto> scenarioDetailDtos =
-            Collections.singletonList(buildAclScenarioDetailDto1FindByScenarioId());
+            List.of(buildAclScenarioDetailDto1FindByScenarioId());
         verifyFindByScenarioIdSearch(scenarioDetailDtos,
             "JAC, Japan Academic Association for Copyright Clearance, Inc.");
         verifyFindByScenarioIdSearch(scenarioDetailDtos, "JAC, JaPan Academic AsSOCiation");

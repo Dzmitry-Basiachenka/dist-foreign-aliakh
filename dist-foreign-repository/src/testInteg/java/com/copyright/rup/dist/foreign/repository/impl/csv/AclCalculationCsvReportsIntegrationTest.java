@@ -25,6 +25,7 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * Integration tests for csv reports for ACL calculation.
@@ -174,7 +175,7 @@ public class AclCalculationCsvReportsIntegrationTest extends CsvReportsTestHelpe
         scenario.setLicenseType("ACL");
         scenario.setPeriodEndDate(202212);
         AclCalculationReportsInfoDto reportsInfoDto = buildReportInfo();
-        reportsInfoDto.setScenarios(Collections.singletonList(scenario));
+        reportsInfoDto.setScenarios(List.of(scenario));
         assertFilesWithExecutor(outputStream ->
             aclCalculationReportRepository.writeSummaryOfWorkSharesByAggLcCsvReport(reportsInfoDto, outputStream),
             "acl/summary_work_shares_agg_lc_report.csv");
@@ -187,7 +188,7 @@ public class AclCalculationCsvReportsIntegrationTest extends CsvReportsTestHelpe
         scenario.setLicenseType("ACL");
         scenario.setPeriodEndDate(202212);
         AclCalculationReportsInfoDto reportsInfoDto = buildReportInfo();
-        reportsInfoDto.setScenarios(Collections.singletonList(scenario));
+        reportsInfoDto.setScenarios(List.of(scenario));
         assertFilesWithExecutor(outputStream ->
             aclCalculationReportRepository.writeWorkSharesByAggLcCsvReport(reportsInfoDto, outputStream),
             "acl/work_shares_agg_lc_report.csv");

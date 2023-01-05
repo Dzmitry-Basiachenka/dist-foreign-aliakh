@@ -85,7 +85,7 @@ public class PrmIntegrationServiceTest {
         Set<Long> accountNumbers = Sets.newHashSet(ACCOUNT_NUMBER);
         Rightsholder rightsholder = buildRightsholder();
         expect(prmRightsholderService.getRightsholders(accountNumbers))
-            .andReturn(Collections.singletonList(rightsholder)).once();
+            .andReturn(List.of(rightsholder)).once();
         replay(prmRightsholderService);
         List<Rightsholder> actualResult = prmIntegrationService.getRightsholders(accountNumbers);
         assertFalse(actualResult.isEmpty());
@@ -105,7 +105,7 @@ public class PrmIntegrationServiceTest {
     @Test
     public void testGetRightsholderName() {
         expect(prmRightsholderService.getRightsholders(Sets.newHashSet(ACCOUNT_NUMBER)))
-            .andReturn(Collections.singletonList(buildRightsholder())).once();
+            .andReturn(List.of(buildRightsholder())).once();
         replay(prmRightsholderService);
         Rightsholder rightsholder = prmIntegrationService.getRightsholder(ACCOUNT_NUMBER);
         assertEquals(ACCOUNT_NUMBER, rightsholder.getAccountNumber(), 0);

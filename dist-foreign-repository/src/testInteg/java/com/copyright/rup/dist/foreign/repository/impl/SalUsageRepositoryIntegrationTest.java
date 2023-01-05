@@ -152,7 +152,7 @@ public class SalUsageRepositoryIntegrationTest {
         Usage expectedUsage = loadExpectedUsages("json/sal/sal_usage_3883a15d.json").get(0);
         salUsageRepository.insertItemBankDetail(expectedUsage);
         List<Usage> actualUsages =
-            salUsageRepository.findByIds(Collections.singletonList("3883a15d-53d3-4e51-af30-b8d8abfcbd4d"));
+            salUsageRepository.findByIds(List.of("3883a15d-53d3-4e51-af30-b8d8abfcbd4d"));
         assertEquals(1, actualUsages.size());
         verifyUsage(expectedUsage, actualUsages.get(0));
     }
@@ -164,7 +164,7 @@ public class SalUsageRepositoryIntegrationTest {
         Usage expectedUsage = loadExpectedUsages("json/sal/expected_sal_usage_e42e0321.json").get(0);
         salUsageRepository.insertUsageDataDetail(usageToInsert);
         List<Usage> actualUsages =
-            salUsageRepository.findByIds(Collections.singletonList("e42e0321-772c-49b8-b3bf-b73b6d784089"));
+            salUsageRepository.findByIds(List.of("e42e0321-772c-49b8-b3bf-b73b6d784089"));
         assertEquals(1, actualUsages.size());
         verifyUsage(expectedUsage, actualUsages.get(0));
     }
@@ -315,10 +315,10 @@ public class SalUsageRepositoryIntegrationTest {
     public void testFindUsageDataGradeGroups() {
         UsageFilter filter = new UsageFilter();
         filter.setUsageBatchesIds(Collections.singleton(USAGE_BATCH_ID_1));
-        assertEquals(Collections.singletonList(SalGradeGroupEnum.GRADE9_12),
+        assertEquals(List.of(SalGradeGroupEnum.GRADE9_12),
             salUsageRepository.findUsageDataGradeGroups(filter));
         filter.setUsageBatchesIds(Collections.singleton(USAGE_BATCH_ID_2));
-        assertEquals(Collections.singletonList(SalGradeGroupEnum.GRADE6_8),
+        assertEquals(List.of(SalGradeGroupEnum.GRADE6_8),
             salUsageRepository.findUsageDataGradeGroups(filter));
     }
 
@@ -356,7 +356,7 @@ public class SalUsageRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FOLDER_NAME + "delete-from-scenario.groovy")
     public void testDeleteFromScenario() {
-        List<Usage> usages = salUsageRepository.findByIds(Collections.singletonList(USAGE_ID_4));
+        List<Usage> usages = salUsageRepository.findByIds(List.of(USAGE_ID_4));
         assertEquals(1, usages.size());
         usages.forEach(usage -> {
             assertEquals(UsageStatusEnum.LOCKED, usage.getStatus());
@@ -369,7 +369,7 @@ public class SalUsageRepositoryIntegrationTest {
             assertEquals("SYSTEM", usage.getUpdateUser());
         });
         salUsageRepository.deleteFromScenario("c0b30809-4a38-46cc-a0dc-641924d1fc43", USER_NAME);
-        usages = salUsageRepository.findByIds(Collections.singletonList(USAGE_ID_4));
+        usages = salUsageRepository.findByIds(List.of(USAGE_ID_4));
         assertEquals(1, usages.size());
         usages.forEach(usage -> {
             assertEquals(UsageStatusEnum.ELIGIBLE, usage.getStatus());

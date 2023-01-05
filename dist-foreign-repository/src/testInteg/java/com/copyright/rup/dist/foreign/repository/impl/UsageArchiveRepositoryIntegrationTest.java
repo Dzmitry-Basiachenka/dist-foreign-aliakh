@@ -47,7 +47,6 @@ import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
@@ -133,11 +132,11 @@ public class UsageArchiveRepositoryIntegrationTest {
     @TestData(fileName = FOLDER_NAME + "delete-by-batch-id.groovy")
     public void testDeleteByBatchId() {
         assertTrue(CollectionUtils.isNotEmpty(
-            usageArchiveRepository.findByIdAndStatus(Collections.singletonList(ARCHIVED_USAGE_ID),
+            usageArchiveRepository.findByIdAndStatus(List.of(ARCHIVED_USAGE_ID),
                 UsageStatusEnum.ARCHIVED)));
         usageArchiveRepository.deleteByBatchId("f043c988-3344-4c0f-bce9-120af0027d09");
         assertTrue(CollectionUtils.isEmpty(
-            usageArchiveRepository.findByIdAndStatus(Collections.singletonList(ARCHIVED_USAGE_ID),
+            usageArchiveRepository.findByIdAndStatus(List.of(ARCHIVED_USAGE_ID),
                 UsageStatusEnum.ARCHIVED)));
         assertEquals(0, usageRepository.findReferencedUsagesCountByIds(ARCHIVED_USAGE_ID));
     }
@@ -324,7 +323,7 @@ public class UsageArchiveRepositoryIntegrationTest {
     @TestData(fileName = FIND_SAL_BY_SCENARIO_ID_AND_RN_ACCOUNT_NUMBER)
     public void testFindSalByScenarioIdAndRhAccountNumberWithEmptySearch() {
         List<UsageDto> expectedUsageDtos =
-            loadExpectedUsageDtos(Collections.singletonList("json/sal/sal_archived_usage_dto_678a3e29.json"));
+            loadExpectedUsageDtos(List.of("json/sal/sal_archived_usage_dto_678a3e29.json"));
         List<UsageDto> actualUsageDtos =
             usageArchiveRepository.findSalByScenarioIdAndRhAccountNumber(SAL_SCENARIO_ID, 2000017010L, null,
                 null, null);
@@ -344,7 +343,7 @@ public class UsageArchiveRepositoryIntegrationTest {
     @TestData(fileName = FIND_AACL_BY_SCENARIO_ID_AND_RH_ACCOUNT_NUMBER)
     public void testFindAaclByScenarioIdAndRhAccountNumberWithEmptySearch() {
         List<UsageDto> expectedUsageDtos =
-            loadExpectedUsageDtos(Collections.singletonList("json/aacl/aacl_archived_usage_dtos.json"));
+            loadExpectedUsageDtos(List.of("json/aacl/aacl_archived_usage_dtos.json"));
         List<UsageDto> actualUsageDtos =
             usageArchiveRepository.findAaclByScenarioIdAndRhAccountNumber(AACL_SCENARIO_ID, 1000009997L, null,
                 null, null);
@@ -440,7 +439,7 @@ public class UsageArchiveRepositoryIntegrationTest {
     @TestData(fileName = FIND_PAID_USAGES)
     public void testFindByIdsAndStatus() {
         List<PaidUsage> paidUsages =
-            usageArchiveRepository.findByIdAndStatus(Collections.singletonList(PAID_USAGE_ID), UsageStatusEnum.PAID);
+            usageArchiveRepository.findByIdAndStatus(List.of(PAID_USAGE_ID), UsageStatusEnum.PAID);
         assertTrue(CollectionUtils.isNotEmpty(paidUsages));
         assertEquals(1, paidUsages.size());
         PaidUsage paidUsage = paidUsages.get(0);
@@ -467,7 +466,7 @@ public class UsageArchiveRepositoryIntegrationTest {
         assertEquals(PAID_DATE, paidUsage.getDistributionDate());
         assertEquals(LM_DETAIL_ID, paidUsage.getLmDetailId());
         assertTrue(CollectionUtils.isEmpty(
-            usageArchiveRepository.findByIdAndStatus(Collections.singletonList(PAID_USAGE_ID),
+            usageArchiveRepository.findByIdAndStatus(List.of(PAID_USAGE_ID),
                 UsageStatusEnum.ARCHIVED)));
     }
 
@@ -489,7 +488,7 @@ public class UsageArchiveRepositoryIntegrationTest {
                 UsageStatusEnum.LOCKED);
         actualUsages.sort(Comparator.comparing(Usage::getId));
         verifyPaidUsages(
-            Collections.singletonList("json/aacl/aacl_archived_usage_6e8172d6.json"), actualUsages,
+            List.of("json/aacl/aacl_archived_usage_6e8172d6.json"), actualUsages,
             this::verifyPaidUsage);
     }
 
@@ -501,7 +500,7 @@ public class UsageArchiveRepositoryIntegrationTest {
                 Arrays.asList("13704648-838e-444f-8987-c4f1dc3aa38d", "2c2cf124-8c96-4662-8949-c56002247f39"),
                 UsageStatusEnum.PAID);
         actualUsages.sort(Comparator.comparing(Usage::getId));
-        verifyPaidUsages(Collections.singletonList("json/sal/sal_archived_usage_13704648.json"), actualUsages,
+        verifyPaidUsages(List.of("json/sal/sal_archived_usage_13704648.json"), actualUsages,
             this::verifyPaidUsage);
     }
 
@@ -517,28 +516,28 @@ public class UsageArchiveRepositoryIntegrationTest {
     @TestData(fileName = "rollback-only.groovy")
     public void testInsertPaidAacl() {
         List<PaidUsage> paidUsages =
-            loadExpectedPaidUsages(Collections.singletonList("json/aacl/aacl_paid_usage_278adb86.json"));
+            loadExpectedPaidUsages(List.of("json/aacl/aacl_paid_usage_278adb86.json"));
         usageArchiveRepository.insertAaclPaid(paidUsages.get(0));
         List<PaidUsage> actualUsages =
-            usageArchiveRepository.findByIdAndStatus(Collections.singletonList("278adb86-792d-417f-aa6b-0ee2254c356f"),
+            usageArchiveRepository.findByIdAndStatus(List.of("278adb86-792d-417f-aa6b-0ee2254c356f"),
                 UsageStatusEnum.PAID);
         assertEquals(1, actualUsages.size());
         verifyPaidUsages(
-            Collections.singletonList("json/aacl/aacl_paid_usage_278adb86.json"), actualUsages, this::verifyPaidUsage);
+            List.of("json/aacl/aacl_paid_usage_278adb86.json"), actualUsages, this::verifyPaidUsage);
     }
 
     @Test
     @TestData(fileName = "rollback-only.groovy")
     public void testInsertPaidSal() {
         List<PaidUsage> paidUsages =
-            loadExpectedPaidUsages(Collections.singletonList("json/sal/sal_paid_usages.json"));
+            loadExpectedPaidUsages(List.of("json/sal/sal_paid_usages.json"));
         paidUsages.forEach(paidUsage -> usageArchiveRepository.insertSalPaid(paidUsage));
         List<PaidUsage> actualUsages =
             usageArchiveRepository.findByIdAndStatus(Arrays.asList("b8a76b66-1a9f-4208-94fa-2191237b73ef",
                 "6d7cc92d-4662-4665-af57-0c8fdc417b01"), UsageStatusEnum.PAID);
         actualUsages.sort(Comparator.comparing(Usage::getId));
         assertEquals(2, actualUsages.size());
-        verifyPaidUsages(Collections.singletonList("json/sal/expected_sal_paid_usages.json"), actualUsages,
+        verifyPaidUsages(List.of("json/sal/expected_sal_paid_usages.json"), actualUsages,
             this::verifyPaidUsage);
     }
 
@@ -596,7 +595,7 @@ public class UsageArchiveRepositoryIntegrationTest {
     public void testFindSalByIds() {
         PaidUsage paidUsage = buildPaidUsage();
         usageArchiveRepository.insertPaid(paidUsage);
-        List<Usage> usages = usageArchiveRepository.findByIds(Collections.singletonList(paidUsage.getId()));
+        List<Usage> usages = usageArchiveRepository.findByIds(List.of(paidUsage.getId()));
         assertTrue(CollectionUtils.isNotEmpty(usages));
         assertEquals(1, CollectionUtils.size(usages));
         verifyUsage(paidUsage, usages.get(0));
@@ -606,7 +605,7 @@ public class UsageArchiveRepositoryIntegrationTest {
     @TestData(fileName = FIND_SAL_BY_IDS)
     public void testFindSalUsageByIds() {
         PaidUsage paidUsage = buildSalPaidUsage();
-        List<Usage> usages = usageArchiveRepository.findSalByIds(Collections.singletonList(paidUsage.getId()));
+        List<Usage> usages = usageArchiveRepository.findSalByIds(List.of(paidUsage.getId()));
         assertTrue(CollectionUtils.isNotEmpty(usages));
         assertEquals(1, CollectionUtils.size(usages));
         verifyUsage(paidUsage, usages.get(0));
@@ -615,20 +614,20 @@ public class UsageArchiveRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FOLDER_NAME + "find-for-send-to-lm-by-ids.groovy")
     public void testFindForSendToLmByIds() {
-        List<Usage> expectedUsages = loadExpectedUsages(Collections.singletonList("json/usage_for_send_to_lm.json"));
+        List<Usage> expectedUsages = loadExpectedUsages(List.of("json/usage_for_send_to_lm.json"));
         List<Usage> actualUsages =
             usageArchiveRepository.findForSendToLmByIds(
-                Collections.singletonList("37ea653f-c748-4cb9-b4a3-7b11d434244a"));
+                List.of("37ea653f-c748-4cb9-b4a3-7b11d434244a"));
         assertEquals(expectedUsages, actualUsages);
     }
 
     private void assertUsagePaidInformation(PaidUsage expectedPaidUsage) {
-        List<Usage> usages = usageArchiveRepository.findByIds(Collections.singletonList(expectedPaidUsage.getId()));
+        List<Usage> usages = usageArchiveRepository.findByIds(List.of(expectedPaidUsage.getId()));
         assertTrue(CollectionUtils.isNotEmpty(usages));
         assertEquals(1, CollectionUtils.size(usages));
         verifyUsage(expectedPaidUsage, usages.get(0));
         List<PaidUsage> paidUsages =
-            usageArchiveRepository.findByIdAndStatus(Collections.singletonList(expectedPaidUsage.getId()),
+            usageArchiveRepository.findByIdAndStatus(List.of(expectedPaidUsage.getId()),
                 UsageStatusEnum.PAID);
         assertTrue(CollectionUtils.isNotEmpty(paidUsages));
         assertEquals(1, CollectionUtils.size(paidUsages));
@@ -661,7 +660,7 @@ public class UsageArchiveRepositoryIntegrationTest {
     private void assertUsagePaidInformation(PaidUsage expectedPaidUsage, String scenarioId, Long scenarioPayee,
                                             UsageStatusEnum status) {
         List<PaidUsage> paidUsages =
-            usageArchiveRepository.findByIdAndStatus(Collections.singletonList(expectedPaidUsage.getId()), status);
+            usageArchiveRepository.findByIdAndStatus(List.of(expectedPaidUsage.getId()), status);
         assertEquals(1, CollectionUtils.size(paidUsages));
         PaidUsage actualPaidUsage = paidUsages.get(0);
         assertUsagePaidInformation(expectedPaidUsage, actualPaidUsage);
