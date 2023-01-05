@@ -5,6 +5,7 @@ import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.FundPool.AclciFields;
 import com.copyright.rup.dist.foreign.ui.common.validator.AmountValidator;
 import com.copyright.rup.dist.foreign.ui.common.validator.AmountZeroValidator;
+import com.copyright.rup.dist.foreign.ui.common.validator.CoverageYearsValidator;
 import com.copyright.rup.dist.foreign.ui.common.validator.RequiredValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.aclci.IAclciUsageController;
@@ -74,6 +75,7 @@ class AclciFundPoolLoadWindow extends Window {
     private TextField gradeHeGrossAmount;
     private TextField curriculumDbGrossAmount;
     private TextField totalGrossAmount;
+    //TODO: try to remove
     private Binder.Binding<FundPool, Integer> gradeKto2NumberOfStudentsBinding;
     private Binder.Binding<FundPool, Integer> grade3to5NumberOfStudentsBinding;
     private Binder.Binding<FundPool, Integer> grade6to8NumberOfStudentsBinding;
@@ -167,12 +169,11 @@ class AclciFundPoolLoadWindow extends Window {
         return fundPoolName;
     }
 
-    //TODO: implement YYYY-YYYY validator
     private TextField initCoverageYearsField() {
         coverageYears = new TextField(ForeignUi.getMessage("label.fund_pool.coverage_years"));
         binder.forField(coverageYears)
             .withValidator(new RequiredValidator())
-            .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.length", 9), 0, 9))
+            .withValidator(new CoverageYearsValidator(ForeignUi.getMessage("field.error.coverage_years")))
             .bind(fundPool -> fundPool.getAclciFields().getCoverageYears(),
                 (fundPool, string) -> fundPool.getAclciFields().setCoverageYears(string));
         coverageYears.setRequiredIndicatorVisible(true);

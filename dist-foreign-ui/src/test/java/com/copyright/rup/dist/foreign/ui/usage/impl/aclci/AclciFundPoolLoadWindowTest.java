@@ -24,7 +24,6 @@ import com.copyright.rup.dist.foreign.ui.usage.api.aclci.IAclciUsageController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.google.common.collect.Lists;
 import com.vaadin.data.Binder;
-import com.vaadin.data.HasValue;
 import com.vaadin.server.Sizeable;
 import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.AbstractField;
@@ -65,7 +64,7 @@ public class AclciFundPoolLoadWindowTest {
     private static final Integer GRADE_6_TO_8_NUMBER_OF_STUDENTS = 3;
     private static final Integer GRADE_9_TO_12_NUMBER_OF_STUDENTS = 4;
     private static final Integer GRADE_HE_NUMBER_OF_STUDENTS = 5;
-    private static final String BINDER_FIELD = "binder";
+    private static final String BINDER = "binder";
     private static final String FUND_POOL_NAME_FIELD = "fundPoolName";
     private static final String COVERAGE_YEARS_FIELD = "coverageYears";
     private static final String GROSS_AMOUNT_FIELD = "grossAmount";
@@ -97,36 +96,38 @@ public class AclciFundPoolLoadWindowTest {
     private static final String NUMBER_OF_STUDENTS_NOT_ALL_ZERO_ERROR =
         "Number of students should be entered for at least one grade group";
     private static final String CHARACTERS_LENGTH_ERROR = "Field value should not exceed %d characters";
+    private static final String COVERAGE_YEARS_ERROR =
+        "Coverage years should be in the range 1950-2099, with the second year being greater than the first";
 
     private AclciFundPoolLoadWindow window;
-    private IAclciUsageController usagesController;
+    private IAclciUsageController usageController;
 
     @Before
     public void setUp() {
-        usagesController = createMock(IAclciUsageController.class);
-        window = new AclciFundPoolLoadWindow(usagesController);
+        usageController = createMock(IAclciUsageController.class);
+        window = new AclciFundPoolLoadWindow(usageController);
     }
 
     @Test
     public void testConstructor() {
-        replay(usagesController);
+        replay(usageController);
         assertEquals("Load Fund Pool", window.getCaption());
         assertEquals(500, window.getWidth(), 0);
         assertEquals(Sizeable.Unit.PIXELS, window.getWidthUnits());
         assertEquals(495, window.getHeight(), 0);
         assertEquals(Sizeable.Unit.PIXELS, window.getHeightUnits());
         verifyRootLayout(window.getContent());
-        verify(usagesController);
+        verify(usageController);
     }
 
     @Test
     public void testIsValid() {
         FundPool fundPool = new FundPool();
         fundPool.setAclciFields(new AclciFields());
-        expect(usagesController.aclciFundPoolExists(FUND_POOL_NAME)).andReturn(false).times(46);
-        expect(usagesController.calculateAclciFundPoolAmounts(anyObject(FundPool.class))).andReturn(fundPool).times(30);
-        replay(usagesController);
-        Binder<FundPool> binder = Whitebox.getInternalState(window, BINDER_FIELD);
+        expect(usageController.aclciFundPoolExists(FUND_POOL_NAME)).andReturn(false).times(46);
+        expect(usageController.calculateAclciFundPoolAmounts(anyObject(FundPool.class))).andReturn(fundPool).times(30);
+        replay(usageController);
+        Binder<FundPool> binder = Whitebox.getInternalState(window, BINDER);
         assertFalse(binder.isValid());
         setTextFieldValue(window, FUND_POOL_NAME_FIELD, FUND_POOL_NAME);
         setTextFieldValue(window, COVERAGE_YEARS_FIELD, COVERAGE_YEARS);
@@ -138,15 +139,15 @@ public class AclciFundPoolLoadWindowTest {
         setTextFieldValue(window, GRADE_9_TO_12_NUMBER_OF_STUDENTS_FIELD, GRADE_9_TO_12_NUMBER_OF_STUDENTS.toString());
         setTextFieldValue(window, GRADE_HE_NUMBER_OF_STUDENTS_FIELD, GRADE_HE_NUMBER_OF_STUDENTS.toString());
         assertTrue(binder.isValid());
-        verify(usagesController);
+        verify(usageController);
     }
 
     @Test
     public void testFundPoolNameFieldValidation() {
-        expect(usagesController.aclciFundPoolExists(FUND_POOL_NAME)).andReturn(true).times(2);
-        expect(usagesController.aclciFundPoolExists(FUND_POOL_NAME)).andReturn(false).times(1);
-        replay(usagesController);
-        Binder<?> binder = Whitebox.getInternalState(window, BINDER_FIELD);
+        expect(usageController.aclciFundPoolExists(FUND_POOL_NAME)).andReturn(true).times(2);
+        expect(usageController.aclciFundPoolExists(FUND_POOL_NAME)).andReturn(false).times(1);
+        replay(usageController);
+        Binder<?> binder = Whitebox.getInternalState(window, BINDER);
         TextField textField = Whitebox.getInternalState(window, FUND_POOL_NAME_FIELD);
         validateFieldAndVerifyErrorMessage(textField, StringUtils.EMPTY, binder, EMPTY_FIELD_ERROR, false);
         validateFieldAndVerifyErrorMessage(textField, SPACES_STRING, binder, EMPTY_FIELD_ERROR, false);
@@ -154,26 +155,35 @@ public class AclciFundPoolLoadWindowTest {
             "a".repeat(51), binder, String.format(CHARACTERS_LENGTH_ERROR, 50), false);
         validateFieldAndVerifyErrorMessage(textField, FUND_POOL_NAME, binder, FUND_POOL_EXISTS_ERROR, false);
         validateFieldAndVerifyErrorMessage(textField, FUND_POOL_NAME, binder, null, true);
-        verify(usagesController);
+        verify(usageController);
     }
 
-    @Test //TODO: implement YYYY-YYYY validation
+    @Test
     public void testCoverageYearsFieldValidation() {
-        replay(usagesController);
-        Binder<?> binder = Whitebox.getInternalState(window, BINDER_FIELD);
+        replay(usageController);
+        Binder<?> binder = Whitebox.getInternalState(window, BINDER);
         TextField textField = Whitebox.getInternalState(window, COVERAGE_YEARS_FIELD);
         validateFieldAndVerifyErrorMessage(textField, StringUtils.EMPTY, binder, EMPTY_FIELD_ERROR, false);
         validateFieldAndVerifyErrorMessage(textField, SPACES_STRING, binder, EMPTY_FIELD_ERROR, false);
-        validateFieldAndVerifyErrorMessage(textField,
-            "a".repeat(10), binder, String.format(CHARACTERS_LENGTH_ERROR, 9), false);
+        validateFieldAndVerifyErrorMessage(textField, "12345678", binder, COVERAGE_YEARS_ERROR, false);
+        validateFieldAndVerifyErrorMessage(textField, "123456789", binder, COVERAGE_YEARS_ERROR, false);
+        validateFieldAndVerifyErrorMessage(textField, "1234567890", binder, COVERAGE_YEARS_ERROR, false);
+        validateFieldAndVerifyErrorMessage(textField, "1950 2099", binder, COVERAGE_YEARS_ERROR, false);
+        validateFieldAndVerifyErrorMessage(textField, "1949-2099", binder, COVERAGE_YEARS_ERROR, false);
+        validateFieldAndVerifyErrorMessage(textField, "1950-2100", binder, COVERAGE_YEARS_ERROR, false);
+        validateFieldAndVerifyErrorMessage(textField, "1950-2099", binder, null, true);
+        validateFieldAndVerifyErrorMessage(textField, "2022-2021", binder, COVERAGE_YEARS_ERROR, false);
+        validateFieldAndVerifyErrorMessage(textField, "2021-2021", binder, COVERAGE_YEARS_ERROR, false);
+        validateFieldAndVerifyErrorMessage(textField, "2021-2022", binder, null, true);
+        validateFieldAndVerifyErrorMessage(textField, "  2021-2022  ", binder, null, true);
         validateFieldAndVerifyErrorMessage(textField, COVERAGE_YEARS, binder, null, true);
-        verify(usagesController);
+        verify(usageController);
     }
 
     @Test
     public void testGrossAmountFieldValidation() {
-        replay(usagesController);
-        Binder<?> binder = Whitebox.getInternalState(window, BINDER_FIELD);
+        replay(usageController);
+        Binder<?> binder = Whitebox.getInternalState(window, BINDER);
         TextField textField = Whitebox.getInternalState(window, GROSS_AMOUNT_FIELD);
         validateFieldAndVerifyErrorMessage(textField, StringUtils.EMPTY, binder, EMPTY_FIELD_ERROR, false);
         validateFieldAndVerifyErrorMessage(textField, SPACES_STRING, binder, EMPTY_FIELD_ERROR, false);
@@ -188,13 +198,13 @@ public class AclciFundPoolLoadWindowTest {
         validateFieldAndVerifyErrorMessage(textField, "1234567890.1234567890", binder, null, true);
         validateFieldAndVerifyErrorMessage(textField,
             "12345678901.1234567890", binder, POSITIVE_AND_LENGTH_ERROR, false);
-        verify(usagesController);
+        verify(usageController);
     }
 
     @Test
     public void testIsValidCurriculumDbSplitPercent() {
-        replay(usagesController);
-        Binder<?> binder = Whitebox.getInternalState(window, BINDER_FIELD);
+        replay(usageController);
+        Binder<?> binder = Whitebox.getInternalState(window, BINDER);
         TextField textField = Whitebox.getInternalState(window, CURRICULUM_DB_SPLIT_PERCENT_FIELD);
         validateFieldAndVerifyErrorMessage(textField, StringUtils.EMPTY, binder, EMPTY_FIELD_ERROR, false);
         validateFieldAndVerifyErrorMessage(textField, SPACES_STRING, binder, EMPTY_FIELD_ERROR, false);
@@ -208,146 +218,45 @@ public class AclciFundPoolLoadWindowTest {
         validateFieldAndVerifyErrorMessage(textField, "100", binder, null, true);
         validateFieldAndVerifyErrorMessage(textField, "101", binder, SPLIT_PERCENT_ERROR, false);
         validateFieldAndVerifyErrorMessage(textField, "100.00", binder, SPLIT_PERCENT_ERROR, false);
-        verify(usagesController);
+        verify(usageController);
     }
 
-    //TODO: simplify the number of students tests
     @Test
     public void testGradeKto2NumberOfStudentsFieldValidation() {
-        replay(usagesController);
-        Binder<?> binder = Whitebox.getInternalState(window, BINDER_FIELD);
-        setTextFieldValue(window, CURRICULUM_DB_SPLIT_PERCENT_FIELD, CURRICULUM_DB_SPLIT_PERCENT.toString());
-        setTextFieldValue(window, GRADE_K_TO_2_NUMBER_OF_STUDENTS_FIELD, StringUtils.EMPTY);
-        verifyFieldErrorMessage(binder, GRADE_K_TO_2_NUMBER_OF_STUDENTS_FIELD, EMPTY_FIELD_ERROR);
-        setTextFieldValue(window, GRADE_K_TO_2_NUMBER_OF_STUDENTS_FIELD, SPACES_STRING);
-        verifyFieldErrorMessage(binder, GRADE_K_TO_2_NUMBER_OF_STUDENTS_FIELD, EMPTY_FIELD_ERROR);
-        setTextFieldValue(window, GRADE_K_TO_2_NUMBER_OF_STUDENTS_FIELD, INTEGER_WITH_11_DIGITS);
-        verifyFieldErrorMessage(binder, GRADE_K_TO_2_NUMBER_OF_STUDENTS_FIELD, POSITIVE_OR_ZERO_AND_LENGTH_ERROR);
-        setTextFieldValue(window, GRADE_K_TO_2_NUMBER_OF_STUDENTS_FIELD, ZERO);
-        setTextFieldValue(window, GRADE_3_TO_5_NUMBER_OF_STUDENTS_FIELD, ZERO);
-        setTextFieldValue(window, GRADE_6_TO_8_NUMBER_OF_STUDENTS_FIELD, ZERO);
-        setTextFieldValue(window, GRADE_9_TO_12_NUMBER_OF_STUDENTS_FIELD, ZERO);
-        setTextFieldValue(window, GRADE_HE_NUMBER_OF_STUDENTS_FIELD, ZERO);
-        verifyFieldErrorMessage(binder, GRADE_K_TO_2_NUMBER_OF_STUDENTS_FIELD, NUMBER_OF_STUDENTS_NOT_ALL_ZERO_ERROR);
-        setTextFieldValue(window, GRADE_K_TO_2_NUMBER_OF_STUDENTS_FIELD, ONE);
-        setTextFieldValue(window, CURRICULUM_DB_SPLIT_PERCENT_FIELD, HUNDRED);
-        verifyFieldErrorMessage(binder, GRADE_K_TO_2_NUMBER_OF_STUDENTS_FIELD, NUMBER_OF_STUDENTS_NOT_ZERO_ERROR);
-        setTextFieldValue(window, CURRICULUM_DB_SPLIT_PERCENT_FIELD, CURRICULUM_DB_SPLIT_PERCENT.toString());
-        verifyFieldIsValid(binder, GRADE_K_TO_2_NUMBER_OF_STUDENTS_FIELD, ONE);
-        verify(usagesController);
+        testGradeNumberOfStudentsFieldValidation(GRADE_K_TO_2_NUMBER_OF_STUDENTS_FIELD);
     }
 
     @Test
     public void testGrade3to5NumberOfStudentsFieldValidation() {
-        replay(usagesController);
-        Binder<?> binder = Whitebox.getInternalState(window, BINDER_FIELD);
-        setTextFieldValue(window, CURRICULUM_DB_SPLIT_PERCENT_FIELD, CURRICULUM_DB_SPLIT_PERCENT.toString());
-        setTextFieldValue(window, GRADE_3_TO_5_NUMBER_OF_STUDENTS_FIELD, StringUtils.EMPTY);
-        verifyFieldErrorMessage(binder, GRADE_3_TO_5_NUMBER_OF_STUDENTS_FIELD, EMPTY_FIELD_ERROR);
-        setTextFieldValue(window, GRADE_3_TO_5_NUMBER_OF_STUDENTS_FIELD, SPACES_STRING);
-        verifyFieldErrorMessage(binder, GRADE_3_TO_5_NUMBER_OF_STUDENTS_FIELD, EMPTY_FIELD_ERROR);
-        setTextFieldValue(window, GRADE_3_TO_5_NUMBER_OF_STUDENTS_FIELD, INTEGER_WITH_11_DIGITS);
-        verifyFieldErrorMessage(binder, GRADE_3_TO_5_NUMBER_OF_STUDENTS_FIELD, POSITIVE_OR_ZERO_AND_LENGTH_ERROR);
-        setTextFieldValue(window, GRADE_K_TO_2_NUMBER_OF_STUDENTS_FIELD, ZERO);
-        setTextFieldValue(window, GRADE_3_TO_5_NUMBER_OF_STUDENTS_FIELD, ZERO);
-        setTextFieldValue(window, GRADE_6_TO_8_NUMBER_OF_STUDENTS_FIELD, ZERO);
-        setTextFieldValue(window, GRADE_9_TO_12_NUMBER_OF_STUDENTS_FIELD, ZERO);
-        setTextFieldValue(window, GRADE_HE_NUMBER_OF_STUDENTS_FIELD, ZERO);
-        verifyFieldErrorMessage(binder, GRADE_3_TO_5_NUMBER_OF_STUDENTS_FIELD, NUMBER_OF_STUDENTS_NOT_ALL_ZERO_ERROR);
-        setTextFieldValue(window, GRADE_3_TO_5_NUMBER_OF_STUDENTS_FIELD, ONE);
-        setTextFieldValue(window, CURRICULUM_DB_SPLIT_PERCENT_FIELD, HUNDRED);
-        verifyFieldErrorMessage(binder, GRADE_3_TO_5_NUMBER_OF_STUDENTS_FIELD, NUMBER_OF_STUDENTS_NOT_ZERO_ERROR);
-        setTextFieldValue(window, CURRICULUM_DB_SPLIT_PERCENT_FIELD, CURRICULUM_DB_SPLIT_PERCENT.toString());
-        verifyFieldIsValid(binder, GRADE_3_TO_5_NUMBER_OF_STUDENTS_FIELD, ONE);
-        verify(usagesController);
+        testGradeNumberOfStudentsFieldValidation(GRADE_3_TO_5_NUMBER_OF_STUDENTS_FIELD);
     }
 
     @Test
     public void testGrade6to8NumberOfStudentsFieldValidation() {
-        replay(usagesController);
-        Binder<?> binder = Whitebox.getInternalState(window, BINDER_FIELD);
-        setTextFieldValue(window, CURRICULUM_DB_SPLIT_PERCENT_FIELD, CURRICULUM_DB_SPLIT_PERCENT.toString());
-        setTextFieldValue(window, GRADE_6_TO_8_NUMBER_OF_STUDENTS_FIELD, StringUtils.EMPTY);
-        verifyFieldErrorMessage(binder, GRADE_6_TO_8_NUMBER_OF_STUDENTS_FIELD, EMPTY_FIELD_ERROR);
-        setTextFieldValue(window, GRADE_6_TO_8_NUMBER_OF_STUDENTS_FIELD, SPACES_STRING);
-        verifyFieldErrorMessage(binder, GRADE_6_TO_8_NUMBER_OF_STUDENTS_FIELD, EMPTY_FIELD_ERROR);
-        setTextFieldValue(window, GRADE_6_TO_8_NUMBER_OF_STUDENTS_FIELD, INTEGER_WITH_11_DIGITS);
-        verifyFieldErrorMessage(binder, GRADE_6_TO_8_NUMBER_OF_STUDENTS_FIELD, POSITIVE_OR_ZERO_AND_LENGTH_ERROR);
-        setTextFieldValue(window, GRADE_K_TO_2_NUMBER_OF_STUDENTS_FIELD, ZERO);
-        setTextFieldValue(window, GRADE_3_TO_5_NUMBER_OF_STUDENTS_FIELD, ZERO);
-        setTextFieldValue(window, GRADE_6_TO_8_NUMBER_OF_STUDENTS_FIELD, ZERO);
-        setTextFieldValue(window, GRADE_9_TO_12_NUMBER_OF_STUDENTS_FIELD, ZERO);
-        setTextFieldValue(window, GRADE_HE_NUMBER_OF_STUDENTS_FIELD, ZERO);
-        verifyFieldErrorMessage(binder, GRADE_6_TO_8_NUMBER_OF_STUDENTS_FIELD, NUMBER_OF_STUDENTS_NOT_ALL_ZERO_ERROR);
-        setTextFieldValue(window, GRADE_6_TO_8_NUMBER_OF_STUDENTS_FIELD, ONE);
-        setTextFieldValue(window, CURRICULUM_DB_SPLIT_PERCENT_FIELD, HUNDRED);
-        verifyFieldErrorMessage(binder, GRADE_6_TO_8_NUMBER_OF_STUDENTS_FIELD, NUMBER_OF_STUDENTS_NOT_ZERO_ERROR);
-        setTextFieldValue(window, CURRICULUM_DB_SPLIT_PERCENT_FIELD, CURRICULUM_DB_SPLIT_PERCENT.toString());
-        verifyFieldIsValid(binder, GRADE_6_TO_8_NUMBER_OF_STUDENTS_FIELD, ONE);
-        verify(usagesController);
+        testGradeNumberOfStudentsFieldValidation(GRADE_6_TO_8_NUMBER_OF_STUDENTS_FIELD);
     }
 
     @Test
     public void testGrade9to12NumberOfStudentsFieldValidation() {
-        replay(usagesController);
-        Binder<?> binder = Whitebox.getInternalState(window, BINDER_FIELD);
-        setTextFieldValue(window, CURRICULUM_DB_SPLIT_PERCENT_FIELD, CURRICULUM_DB_SPLIT_PERCENT.toString());
-        setTextFieldValue(window, GRADE_9_TO_12_NUMBER_OF_STUDENTS_FIELD, StringUtils.EMPTY);
-        verifyFieldErrorMessage(binder, GRADE_9_TO_12_NUMBER_OF_STUDENTS_FIELD, EMPTY_FIELD_ERROR);
-        setTextFieldValue(window, GRADE_9_TO_12_NUMBER_OF_STUDENTS_FIELD, SPACES_STRING);
-        verifyFieldErrorMessage(binder, GRADE_9_TO_12_NUMBER_OF_STUDENTS_FIELD, EMPTY_FIELD_ERROR);
-        setTextFieldValue(window, GRADE_9_TO_12_NUMBER_OF_STUDENTS_FIELD, INTEGER_WITH_11_DIGITS);
-        verifyFieldErrorMessage(binder, GRADE_9_TO_12_NUMBER_OF_STUDENTS_FIELD, POSITIVE_OR_ZERO_AND_LENGTH_ERROR);
-        setTextFieldValue(window, GRADE_K_TO_2_NUMBER_OF_STUDENTS_FIELD, ZERO);
-        setTextFieldValue(window, GRADE_3_TO_5_NUMBER_OF_STUDENTS_FIELD, ZERO);
-        setTextFieldValue(window, GRADE_6_TO_8_NUMBER_OF_STUDENTS_FIELD, ZERO);
-        setTextFieldValue(window, GRADE_9_TO_12_NUMBER_OF_STUDENTS_FIELD, ZERO);
-        setTextFieldValue(window, GRADE_HE_NUMBER_OF_STUDENTS_FIELD, ZERO);
-        verifyFieldErrorMessage(binder, GRADE_9_TO_12_NUMBER_OF_STUDENTS_FIELD, NUMBER_OF_STUDENTS_NOT_ALL_ZERO_ERROR);
-        setTextFieldValue(window, GRADE_9_TO_12_NUMBER_OF_STUDENTS_FIELD, ONE);
-        setTextFieldValue(window, CURRICULUM_DB_SPLIT_PERCENT_FIELD, HUNDRED);
-        verifyFieldErrorMessage(binder, GRADE_9_TO_12_NUMBER_OF_STUDENTS_FIELD, NUMBER_OF_STUDENTS_NOT_ZERO_ERROR);
-        setTextFieldValue(window, CURRICULUM_DB_SPLIT_PERCENT_FIELD, CURRICULUM_DB_SPLIT_PERCENT.toString());
-        verifyFieldIsValid(binder, GRADE_9_TO_12_NUMBER_OF_STUDENTS_FIELD, ONE);
-        verify(usagesController);
+        testGradeNumberOfStudentsFieldValidation(GRADE_9_TO_12_NUMBER_OF_STUDENTS_FIELD);
     }
 
     @Test
     public void testGradeHeNumberOfStudentsFieldValidation() {
-        replay(usagesController);
-        Binder<?> binder = Whitebox.getInternalState(window, BINDER_FIELD);
-        setTextFieldValue(window, CURRICULUM_DB_SPLIT_PERCENT_FIELD, CURRICULUM_DB_SPLIT_PERCENT.toString());
-        setTextFieldValue(window, GRADE_HE_NUMBER_OF_STUDENTS_FIELD, StringUtils.EMPTY);
-        verifyFieldErrorMessage(binder, GRADE_HE_NUMBER_OF_STUDENTS_FIELD, EMPTY_FIELD_ERROR);
-        setTextFieldValue(window, GRADE_HE_NUMBER_OF_STUDENTS_FIELD, SPACES_STRING);
-        verifyFieldErrorMessage(binder, GRADE_HE_NUMBER_OF_STUDENTS_FIELD, EMPTY_FIELD_ERROR);
-        setTextFieldValue(window, GRADE_HE_NUMBER_OF_STUDENTS_FIELD, INTEGER_WITH_11_DIGITS);
-        verifyFieldErrorMessage(binder, GRADE_HE_NUMBER_OF_STUDENTS_FIELD, POSITIVE_OR_ZERO_AND_LENGTH_ERROR);
-        setTextFieldValue(window, GRADE_K_TO_2_NUMBER_OF_STUDENTS_FIELD, ZERO);
-        setTextFieldValue(window, GRADE_3_TO_5_NUMBER_OF_STUDENTS_FIELD, ZERO);
-        setTextFieldValue(window, GRADE_6_TO_8_NUMBER_OF_STUDENTS_FIELD, ZERO);
-        setTextFieldValue(window, GRADE_9_TO_12_NUMBER_OF_STUDENTS_FIELD, ZERO);
-        setTextFieldValue(window, GRADE_HE_NUMBER_OF_STUDENTS_FIELD, ZERO);
-        verifyFieldErrorMessage(binder, GRADE_HE_NUMBER_OF_STUDENTS_FIELD, NUMBER_OF_STUDENTS_NOT_ALL_ZERO_ERROR);
-        setTextFieldValue(window, GRADE_HE_NUMBER_OF_STUDENTS_FIELD, ONE);
-        setTextFieldValue(window, CURRICULUM_DB_SPLIT_PERCENT_FIELD, HUNDRED);
-        verifyFieldErrorMessage(binder, GRADE_HE_NUMBER_OF_STUDENTS_FIELD, NUMBER_OF_STUDENTS_NOT_ZERO_ERROR);
-        setTextFieldValue(window, CURRICULUM_DB_SPLIT_PERCENT_FIELD, CURRICULUM_DB_SPLIT_PERCENT.toString());
-        verifyFieldIsValid(binder, GRADE_HE_NUMBER_OF_STUDENTS_FIELD, ONE);
-        verify(usagesController);
+        testGradeNumberOfStudentsFieldValidation(GRADE_HE_NUMBER_OF_STUDENTS_FIELD);
     }
 
     @Test
     public void testOnUploadButtonClick() {
         mockStatic(Windows.class);
         FundPool fundPool = buildFundPool();
-        expect(usagesController.aclciFundPoolExists(FUND_POOL_NAME)).andReturn(false).times(46);
-        expect(usagesController.calculateAclciFundPoolAmounts(anyObject(FundPool.class))).andReturn(fundPool).times(31);
-        usagesController.createAclciFundPool(fundPool);
+        expect(usageController.aclciFundPoolExists(FUND_POOL_NAME)).andReturn(false).times(46);
+        expect(usageController.calculateAclciFundPoolAmounts(anyObject(FundPool.class))).andReturn(fundPool).times(31);
+        usageController.createAclciFundPool(fundPool);
         expectLastCall().once();
         Windows.showNotificationWindow("Upload has been successfully completed");
         expectLastCall().once();
-        replay(usagesController, Windows.class);
+        replay(usageController, Windows.class);
         setTextFieldValue(window, FUND_POOL_NAME_FIELD, FUND_POOL_NAME);
         setTextFieldValue(window, COVERAGE_YEARS_FIELD, COVERAGE_YEARS);
         setTextFieldValue(window, GROSS_AMOUNT_FIELD, GROSS_AMOUNT.toString());
@@ -361,7 +270,7 @@ public class AclciFundPoolLoadWindowTest {
         HorizontalLayout buttonsLayout = (HorizontalLayout) rootLayout.getComponent(9);
         Button uploadButton = (Button) buttonsLayout.getComponent(0);
         uploadButton.click();
-        verify(usagesController, Windows.class);
+        verify(usageController, Windows.class);
     }
 
     private void verifyRootLayout(Component component) {
@@ -369,7 +278,7 @@ public class AclciFundPoolLoadWindowTest {
         VerticalLayout verticalLayout = (VerticalLayout) component;
         assertEquals(10, verticalLayout.getComponentCount());
         verifyTextFieldComponent(verticalLayout.getComponent(0), "Fund Pool Name", false);
-        verifyTextFieldComponent(verticalLayout.getComponent(1), "Coverage Years", false);
+        verifyTextFieldComponent(verticalLayout.getComponent(1), "Coverage Years (YYYY-YYYY)", false);
         HorizontalLayout grossAmountLayout = (HorizontalLayout) verticalLayout.getComponent(2);
         verifyAmountFieldComponent(grossAmountLayout.getComponent(0), "Gross Amount", false);
         verifyAmountFieldComponent(grossAmountLayout.getComponent(1), "Curriculum DB Split %", false);
@@ -438,12 +347,32 @@ public class AclciFundPoolLoadWindowTest {
         binder.validate();
         AbstractComponent textField = Whitebox.getInternalState(window, fieldName);
         assertNull(textField.getErrorMessage());
-        HasValue<?> actual = binder
-            .getFields()
-            .filter(actualField -> actualField.equals(textField))
-            .findFirst()
-            .orElseThrow();
-        assertEquals(expectedValue, ((AbstractField<?>) actual).getValue()); // TODO
+        assertEquals(expectedValue, ((AbstractField<?>) textField).getValue());
+    }
+
+    //TODO: simplify the number of students tests
+    private void testGradeNumberOfStudentsFieldValidation(String fieldName) {
+        replay(usageController);
+        Binder<?> binder = Whitebox.getInternalState(window, BINDER);
+        setTextFieldValue(window, CURRICULUM_DB_SPLIT_PERCENT_FIELD, CURRICULUM_DB_SPLIT_PERCENT.toString());
+        setTextFieldValue(window, fieldName, StringUtils.EMPTY);
+        verifyFieldErrorMessage(binder, fieldName, EMPTY_FIELD_ERROR);
+        setTextFieldValue(window, fieldName, SPACES_STRING);
+        verifyFieldErrorMessage(binder, fieldName, EMPTY_FIELD_ERROR);
+        setTextFieldValue(window, fieldName, INTEGER_WITH_11_DIGITS);
+        verifyFieldErrorMessage(binder, fieldName, POSITIVE_OR_ZERO_AND_LENGTH_ERROR);
+        setTextFieldValue(window, GRADE_K_TO_2_NUMBER_OF_STUDENTS_FIELD, ZERO);
+        setTextFieldValue(window, GRADE_3_TO_5_NUMBER_OF_STUDENTS_FIELD, ZERO);
+        setTextFieldValue(window, GRADE_6_TO_8_NUMBER_OF_STUDENTS_FIELD, ZERO);
+        setTextFieldValue(window, GRADE_9_TO_12_NUMBER_OF_STUDENTS_FIELD, ZERO);
+        setTextFieldValue(window, GRADE_HE_NUMBER_OF_STUDENTS_FIELD, ZERO);
+        verifyFieldErrorMessage(binder, fieldName, NUMBER_OF_STUDENTS_NOT_ALL_ZERO_ERROR);
+        setTextFieldValue(window, fieldName, ONE);
+        setTextFieldValue(window, CURRICULUM_DB_SPLIT_PERCENT_FIELD, HUNDRED);
+        verifyFieldErrorMessage(binder, fieldName, NUMBER_OF_STUDENTS_NOT_ZERO_ERROR);
+        setTextFieldValue(window, CURRICULUM_DB_SPLIT_PERCENT_FIELD, CURRICULUM_DB_SPLIT_PERCENT.toString());
+        verifyFieldIsValid(binder, fieldName, ONE);
+        verify(usageController);
     }
 
     private FundPool buildFundPool() {
