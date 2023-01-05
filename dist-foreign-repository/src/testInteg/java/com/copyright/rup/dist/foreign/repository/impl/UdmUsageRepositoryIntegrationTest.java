@@ -158,7 +158,7 @@ public class UdmUsageRepositoryIntegrationTest {
     public void testInsert() {
         UdmUsage usageToInsert = buildUdmUsage();
         udmUsageRepository.insert(usageToInsert);
-        List<UdmUsage> udmUsages = udmUsageRepository.findByIds(Collections.singletonList(UDM_USAGE_UID_1));
+        List<UdmUsage> udmUsages = udmUsageRepository.findByIds(List.of(UDM_USAGE_UID_1));
         assertEquals(1, udmUsages.size());
         UdmUsage udmUsage = udmUsages.get(0);
         assertNotNull(udmUsage);
@@ -212,7 +212,7 @@ public class UdmUsageRepositoryIntegrationTest {
     public void testFindByIds() {
         UdmUsage usageToInsert = loadExpectedUsage("json/udm/udm_usage_587dfefd.json").get(0);
         List<UdmUsage> actualUsages =
-            udmUsageRepository.findByIds(Collections.singletonList("587dfefd-3cf8-4853-8b1b-d59b5cd163e9"));
+            udmUsageRepository.findByIds(List.of("587dfefd-3cf8-4853-8b1b-d59b5cd163e9"));
         assertEquals(1, actualUsages.size());
         verifyUsage(usageToInsert, actualUsages.get(0));
     }
@@ -1368,7 +1368,7 @@ public class UdmUsageRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FOLDER_NAME + "update-processed-usage.groovy")
     public void testUpdateProcessedUsage() {
-        List<UdmUsage> udmUsages = udmUsageRepository.findByIds(Collections.singletonList(UDM_USAGE_UID_2));
+        List<UdmUsage> udmUsages = udmUsageRepository.findByIds(List.of(UDM_USAGE_UID_2));
         assertEquals(1, CollectionUtils.size(udmUsages));
         UdmUsage udmUsage = udmUsages.get(0);
         udmUsage.setStatus(UsageStatusEnum.RH_FOUND);
@@ -1377,7 +1377,7 @@ public class UdmUsageRepositoryIntegrationTest {
         udmUsage.setSystemTitle("Wissenschaft & Forschung France");
         udmUsage.setStandardNumber(STANDARD_NUMBER);
         assertNotNull(udmUsageRepository.updateProcessedUsage(udmUsage));
-        List<UdmUsage> updatedUdmUsages = udmUsageRepository.findByIds(Collections.singletonList(UDM_USAGE_UID_2));
+        List<UdmUsage> updatedUdmUsages = udmUsageRepository.findByIds(List.of(UDM_USAGE_UID_2));
         assertEquals(1, CollectionUtils.size(updatedUdmUsages));
         UdmUsage updatedUdmUsage = updatedUdmUsages.get(0);
         assertEquals(RH_ACCOUNT_NUMBER, updatedUdmUsage.getRightsholder().getAccountNumber());

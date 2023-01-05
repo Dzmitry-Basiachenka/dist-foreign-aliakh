@@ -41,6 +41,7 @@ import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -74,7 +75,7 @@ public class CrmServiceTest {
         expect(restTemplate.postForObject(anyObject(String.class), capture(httpEntityCapture), eq(String.class)))
             .andReturn(TestUtils.fileToString(CrmServiceTest.class, "crm_rights_distribution_response.json")).once();
         replay(restTemplate);
-        CrmResult actualResult = crmService.insertRightsDistribution(Collections.singletonList(buildRequest()));
+        CrmResult actualResult = crmService.insertRightsDistribution(List.of(buildRequest()));
         assertEquals(CrmResultStatusEnum.SUCCESS, actualResult.getStatus());
         assertTrue(CollectionUtils.isEmpty(actualResult.getInvalidUsageIds()));
         HttpEntity httpEntity = httpEntityCapture.getValue();
@@ -92,7 +93,7 @@ public class CrmServiceTest {
             .andThrow(new HttpClientErrorException(HttpStatus.BAD_GATEWAY)).once();
         replay(restTemplate);
         try {
-            crmService.insertRightsDistribution(Collections.singletonList(buildRequest()));
+            crmService.insertRightsDistribution(List.of(buildRequest()));
             fail();
         } catch (IntegrationConnectionException e) {
             assertEquals("Could not connect to the CRM system", e.getMessage());

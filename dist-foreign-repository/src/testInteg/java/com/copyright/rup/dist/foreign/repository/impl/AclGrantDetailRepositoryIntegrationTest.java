@@ -89,7 +89,7 @@ public class AclGrantDetailRepositoryIntegrationTest {
         AclGrantDetail grantDetail = buildAclGrantDetail();
         aclGrantDetailRepository.insert(grantDetail);
         List<AclGrantDetail> actualGrantDetails =
-            aclGrantDetailRepository.findByIds(Collections.singletonList(ACL_GRANT_DETAIL_UID_1));
+            aclGrantDetailRepository.findByIds(List.of(ACL_GRANT_DETAIL_UID_1));
         assertEquals(1, actualGrantDetails.size());
         AclGrantDetail actualGrantDetail = actualGrantDetails.get(0);
         assertNotNull(actualGrantDetail);
@@ -410,7 +410,7 @@ public class AclGrantDetailRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FOLDER_NAME + "delete-by-grant-set-id.groovy")
     public void testDeleteByGrantSetId() {
-        List<String> grantDetailIds = Collections.singletonList("a532c96d-895a-40ba-b123-5d775ff67397");
+        List<String> grantDetailIds = List.of("a532c96d-895a-40ba-b123-5d775ff67397");
         assertEquals(1, aclGrantDetailRepository.findByIds(grantDetailIds).size());
         aclGrantDetailRepository.deleteByGrantSetId("0d651beb-e536-4854-aed7-50f068c369ba");
         assertEquals(0, aclGrantDetailRepository.findByIds(grantDetailIds).size());

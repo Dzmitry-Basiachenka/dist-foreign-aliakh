@@ -96,7 +96,7 @@ public class FasUsageRepositoryIntegrationTest {
         Usage expectedUsage = loadExpectedUsages().get(0);
         expectedUsage.setNetAmount(expectedUsage.getNetAmount().setScale(10, RoundingMode.HALF_UP));
         fasUsageRepository.insert(expectedUsage);
-        List<Usage> usages = usageRepository.findByIds(Collections.singletonList(expectedUsage.getId()));
+        List<Usage> usages = usageRepository.findByIds(List.of(expectedUsage.getId()));
         assertEquals(1, CollectionUtils.size(usages));
         verifyFasUsage(expectedUsage, usages.get(0));
     }
@@ -340,7 +340,7 @@ public class FasUsageRepositoryIntegrationTest {
 
     private void verifyUsage(String usageId, String title, Long wrWrkInst, String standardNumber,
                              String standardNumberType, UsageStatusEnum status) {
-        List<Usage> usages = usageRepository.findByIds(Collections.singletonList(usageId));
+        List<Usage> usages = usageRepository.findByIds(List.of(usageId));
         assertEquals(1, CollectionUtils.size(usages));
         Usage usage = usages.get(0);
         assertEquals(status, usage.getStatus());

@@ -273,7 +273,7 @@ public class UsageRepositoryIntegrationTest {
             buildUsageFilter(Collections.emptySet(), Collections.singleton(USAGE_BATCH_ID_1),
                 null, UsageStatusEnum.ELIGIBLE, null, null);
         assertTrue(CollectionUtils.isEmpty(usageRepository.findInvalidRightsholdersByFilter(usageFilter)));
-        List<Usage> usages = usageRepository.findByIds(Collections.singletonList(USAGE_ID_18));
+        List<Usage> usages = usageRepository.findByIds(List.of(USAGE_ID_18));
         usages.get(0).getRightsholder().setAccountNumber(1000000003L);
         usageRepository.update(usages);
         List<Long> accountNumbers = usageRepository.findInvalidRightsholdersByFilter(usageFilter);
@@ -415,8 +415,8 @@ public class UsageRepositoryIntegrationTest {
     @TestData(fileName = FIND_BY_SCENARIO_ID_AND_RH)
     public void testFindCountByScenarioIdAndRhAccountNumberNullSearchValue() {
         populateScenario();
-        Usage usage = usageRepository.findByIds(Collections.singletonList(USAGE_ID_18)).get(0);
-        usageRepository.addToScenario(Collections.singletonList(usage));
+        Usage usage = usageRepository.findByIds(List.of(USAGE_ID_18)).get(0);
+        usageRepository.addToScenario(List.of(usage));
         assertEquals(1, usageRepository.findCountByScenarioIdAndRhAccountNumber(1000009997L, SCENARIO_ID, null));
         assertEquals(3, usageRepository.findCountByScenarioIdAndRhAccountNumber(1000002859L, SCENARIO_ID, null));
     }
@@ -578,7 +578,7 @@ public class UsageRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FOLDER_NAME + "add-to-scenario.groovy")
     public void testAddToScenario() {
-        List<Usage> usages = usageRepository.findByIds(Collections.singletonList(USAGE_ID_3));
+        List<Usage> usages = usageRepository.findByIds(List.of(USAGE_ID_3));
         assertEquals(1, CollectionUtils.size(usages));
         Usage usage = usages.get(0);
         verifyFasUsage(usage, UsageStatusEnum.ELIGIBLE, null, StoredEntity.DEFAULT_USER, null);
@@ -593,8 +593,8 @@ public class UsageRepositoryIntegrationTest {
         usage.setServiceFee(SERVICE_FEE);
         usage.setRhParticipating(true);
         usage.setPayeeParticipating(true);
-        usageRepository.addToScenario(Collections.singletonList(usage));
-        usages = usageRepository.findByIds(Collections.singletonList(USAGE_ID_3));
+        usageRepository.addToScenario(List.of(usage));
+        usages = usageRepository.findByIds(List.of(USAGE_ID_3));
         assertEquals(1, CollectionUtils.size(usages));
         verifyFasUsage(usages.get(0), UsageStatusEnum.LOCKED, SCENARIO_ID, USER_NAME, 2000017004L);
         assertEquals(SERVICE_FEE, usage.getServiceFee());
@@ -607,11 +607,11 @@ public class UsageRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FOLDER_NAME + "delete-from-scenario.groovy")
     public void testDeleteFromScenario() {
-        List<Usage> usages = usageRepository.findByIds(Collections.singletonList(USAGE_ID_8));
+        List<Usage> usages = usageRepository.findByIds(List.of(USAGE_ID_8));
         assertEquals(1, CollectionUtils.size(usages));
         verifyFasUsage(usages.get(0), UsageStatusEnum.LOCKED, SCENARIO_ID, StoredEntity.DEFAULT_USER, 1000002859L);
         usageRepository.deleteFromScenario(SCENARIO_ID, USER_NAME);
-        verifyUsageExcludedFromScenario(usageRepository.findByIds(Collections.singletonList(USAGE_ID_8)).get(0),
+        verifyUsageExcludedFromScenario(usageRepository.findByIds(List.of(USAGE_ID_8)).get(0),
             FAS_PRODUCT_FAMILY, UsageStatusEnum.ELIGIBLE);
     }
 
@@ -626,9 +626,9 @@ public class UsageRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FOLDER_NAME + "find-ids-by-scenario-id-and-rh-account-number.groovy")
     public void testFindByScenarioIdAndRhAccountNumbers() {
-        Usage usage = usageRepository.findByIds(Collections.singletonList(USAGE_ID_18)).get(0);
+        Usage usage = usageRepository.findByIds(List.of(USAGE_ID_18)).get(0);
         usage.setScenarioId(SCENARIO_ID);
-        usageRepository.addToScenario(Collections.singletonList(usage));
+        usageRepository.addToScenario(List.of(usage));
         List<String> usagesIds = usageRepository.findIdsByScenarioIdRroAccountNumberRhAccountNumbers(
             SCENARIO_ID, 2000017010L, Lists.newArrayList(1000002859L, 7000813806L));
         assertEquals(2, usagesIds.size());
@@ -973,7 +973,7 @@ public class UsageRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FOLDER_NAME + "update.groovy")
     public void testUpdate() {
-        List<Usage> usages = usageRepository.findByIds(Collections.singletonList(USAGE_ID_8));
+        List<Usage> usages = usageRepository.findByIds(List.of(USAGE_ID_8));
         assertEquals(1, CollectionUtils.size(usages));
         Usage usage = usages.get(0);
         verifyUsageAmountsAccountNumberAndParticipating(1000002859L, new BigDecimal("16437.4000000000"),
@@ -984,8 +984,8 @@ public class UsageRepositoryIntegrationTest {
         usage.setServiceFeeAmount(new BigDecimal("2630.0000000000"));
         usage.setRhParticipating(true);
         usage.setPayeeParticipating(true);
-        usageRepository.update(Collections.singletonList(usage));
-        usages = usageRepository.findByIds(Collections.singletonList(USAGE_ID_8));
+        usageRepository.update(List.of(usage));
+        usages = usageRepository.findByIds(List.of(USAGE_ID_8));
         assertEquals(1, CollectionUtils.size(usages));
         verifyUsageAmountsAccountNumberAndParticipating(1000000001L, new BigDecimal("16437.4000000000"),
             new BigDecimal("13807.4000000000"), new BigDecimal("2630.0000000000"), new BigDecimal("0.16000"), true,
@@ -1005,7 +1005,7 @@ public class UsageRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FOLDER_NAME + "update-processed-usage.groovy")
     public void testUpdateProcessedUsage() {
-        List<Usage> usages = usageRepository.findByIds(Collections.singletonList(USAGE_ID_24));
+        List<Usage> usages = usageRepository.findByIds(List.of(USAGE_ID_24));
         assertEquals(1, CollectionUtils.size(usages));
         Usage usage = usages.get(0);
         usage.setStatus(UsageStatusEnum.RH_FOUND);
@@ -1017,7 +1017,7 @@ public class UsageRepositoryIntegrationTest {
         usage.setStandardNumberType("VALISBN10");
         usage.setStandardNumber(STANDARD_NUMBER);
         assertNotNull(usageRepository.updateProcessedUsage(usage));
-        List<Usage> updatedUsages = usageRepository.findByIds(Collections.singletonList(USAGE_ID_24));
+        List<Usage> updatedUsages = usageRepository.findByIds(List.of(USAGE_ID_24));
         assertEquals(1, CollectionUtils.size(updatedUsages));
         Usage updatedUsage = updatedUsages.get(0);
         assertEquals(RH_ACCOUNT_NUMBER, updatedUsage.getRightsholder().getAccountNumber());
@@ -1217,19 +1217,19 @@ public class UsageRepositoryIntegrationTest {
 
     private void populateScenario() {
         List<Usage> usages = Lists.newArrayListWithExpectedSize(3);
-        Usage usage = usageRepository.findByIds(Collections.singletonList(USAGE_ID_1)).get(0);
+        Usage usage = usageRepository.findByIds(List.of(USAGE_ID_1)).get(0);
         usage.getPayee().setAccountNumber(1000009997L);
         usage.setScenarioId(SCENARIO_ID);
         usage.setServiceFee(SERVICE_FEE);
         calculateAmounts(usage);
         usages.add(usage);
-        usage = usageRepository.findByIds(Collections.singletonList(USAGE_ID_2)).get(0);
+        usage = usageRepository.findByIds(List.of(USAGE_ID_2)).get(0);
         usage.getPayee().setAccountNumber(1000002859L);
         usage.setScenarioId(SCENARIO_ID);
         usage.setServiceFee(SERVICE_FEE);
         calculateAmounts(usage);
         usages.add(usage);
-        usage = usageRepository.findByIds(Collections.singletonList(USAGE_ID_3)).get(0);
+        usage = usageRepository.findByIds(List.of(USAGE_ID_3)).get(0);
         usage.getPayee().setAccountNumber(7000813806L);
         usage.setScenarioId(SCENARIO_ID);
         usage.setServiceFee(SERVICE_FEE);

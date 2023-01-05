@@ -16,7 +16,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -44,7 +43,7 @@ public class CrmIntegrationServiceTest {
     public void testInsertRightsDistribution() {
         CrmResult result = new CrmResult(CrmResultStatusEnum.SUCCESS);
         CrmRightsDistributionRequest request = new CrmRightsDistributionRequest(new PaidUsage());
-        List<CrmRightsDistributionRequest> requests = Collections.singletonList(request);
+        List<CrmRightsDistributionRequest> requests = List.of(request);
         expect(crmService.insertRightsDistribution(requests)).andReturn(result).once();
         replay(crmService);
         assertSame(result, crmIntegrationService.insertRightsDistribution(requests));

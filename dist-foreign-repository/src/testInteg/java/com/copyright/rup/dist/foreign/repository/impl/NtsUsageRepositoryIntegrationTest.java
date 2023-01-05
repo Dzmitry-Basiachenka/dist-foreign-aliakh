@@ -136,9 +136,9 @@ public class NtsUsageRepositoryIntegrationTest {
             usages.stream().map(Usage::getGrossAmount).reduce(BigDecimal::add).get());
         assertEquals(SERVICE_FEE_AMOUNT,
             usages.stream().map(Usage::getServiceFeeAmount).reduce(BigDecimal::add).get());
-        usages = usageRepository.findByIds(Collections.singletonList("56f91295-db33-4440-b550-9bb515239750"));
+        usages = usageRepository.findByIds(List.of("56f91295-db33-4440-b550-9bb515239750"));
         Usage expectedUsage1 = usages.get(0);
-        usages = usageRepository.findByIds(Collections.singletonList("4604c954-e43b-4606-809a-665c81514dbf"));
+        usages = usageRepository.findByIds(List.of("4604c954-e43b-4606-809a-665c81514dbf"));
         Usage expectedUsage2 = usages.get(0);
         assertEquals(new BigDecimal("294.0000000000"), expectedUsage1.getNetAmount());
         assertEquals(new BigDecimal("336.0000000000"), expectedUsage2.getNetAmount());
@@ -148,9 +148,9 @@ public class NtsUsageRepositoryIntegrationTest {
             Arrays.asList("56f91295-db33-4440-b550-9bb515239750", "4604c954-e43b-4606-809a-665c81514dbf"));
         assertEquals(new BigDecimal("800.0000000000"),
             usages.stream().map(Usage::getNetAmount).reduce(BigDecimal::add).get());
-        usages = usageRepository.findByIds(Collections.singletonList("56f91295-db33-4440-b550-9bb515239750"));
+        usages = usageRepository.findByIds(List.of("56f91295-db33-4440-b550-9bb515239750"));
         Usage actualUsage1 = usages.get(0);
-        usages = usageRepository.findByIds(Collections.singletonList("4604c954-e43b-4606-809a-665c81514dbf"));
+        usages = usageRepository.findByIds(List.of("4604c954-e43b-4606-809a-665c81514dbf"));
         Usage actualUsage2 = usages.get(0);
         assertEquals(new BigDecimal("373.3333333333"), actualUsage1.getNetAmount());
         assertEquals(new BigDecimal("426.6666666667"), actualUsage2.getNetAmount());
@@ -266,13 +266,13 @@ public class NtsUsageRepositoryIntegrationTest {
     @TestData(fileName = FOLDER_NAME + "delete-from-nts-fund-pool.groovy")
     public void testDeleteFromNtsFundPool() {
         String fundPoolId = "3fef25b0-c0d1-4819-887f-4c6acc01390e";
-        List<Usage> usages = usageRepository.findByIds(Collections.singletonList(USAGE_ID_1));
+        List<Usage> usages = usageRepository.findByIds(List.of(USAGE_ID_1));
         assertEquals(1, usages.size());
         Usage usage = usages.get(0);
         assertEquals(UsageStatusEnum.TO_BE_DISTRIBUTED, usage.getStatus());
         assertEquals(fundPoolId, usage.getFundPoolId());
         ntsUsageRepository.deleteFromNtsFundPool(fundPoolId, USER_NAME);
-        usage = usageRepository.findByIds(Collections.singletonList(USAGE_ID_1)).get(0);
+        usage = usageRepository.findByIds(List.of(USAGE_ID_1)).get(0);
         assertEquals(UsageStatusEnum.NTS_WITHDRAWN, usage.getStatus());
         assertNull(usage.getFundPoolId());
     }
@@ -282,10 +282,10 @@ public class NtsUsageRepositoryIntegrationTest {
     public void testDeleteBelletristicByScenarioId() {
         String scenarioId = "dd4fca1d-eac8-4b76-85e4-121b7971d049";
         verifyUsageIdsInScenario(Arrays.asList(USAGE_ID_BELLETRISTIC, USAGE_ID_STM, USAGE_ID_UNCLASSIFIED), scenarioId);
-        assertEquals(1, usageRepository.findByIds(Collections.singletonList(USAGE_ID_BELLETRISTIC)).size());
+        assertEquals(1, usageRepository.findByIds(List.of(USAGE_ID_BELLETRISTIC)).size());
         ntsUsageRepository.deleteBelletristicByScenarioId(scenarioId);
         verifyUsageIdsInScenario(Arrays.asList(USAGE_ID_STM, USAGE_ID_UNCLASSIFIED), scenarioId);
-        assertEquals(0, usageRepository.findByIds(Collections.singletonList(USAGE_ID_BELLETRISTIC)).size());
+        assertEquals(0, usageRepository.findByIds(List.of(USAGE_ID_BELLETRISTIC)).size());
         assertEquals(0, usageRepository.findReferencedUsagesCountByIds(USAGE_ID_BELLETRISTIC));
     }
 
@@ -336,7 +336,7 @@ public class NtsUsageRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FOLDER_NAME + "add-withdrawn-usages-to-nts-fund-pool.groovy")
     public void testAddWithdrawnUsagesToNtsFundPool() {
-        List<String> usageIds = Collections.singletonList("4dd8cdf8-ca10-422e-bdd5-3220105e6379");
+        List<String> usageIds = List.of("4dd8cdf8-ca10-422e-bdd5-3220105e6379");
         List<Usage> usages = usageRepository.findByIds(usageIds);
         assertEquals(1, usages.size());
         Usage usage = usages.get(0);
@@ -409,7 +409,7 @@ public class NtsUsageRepositoryIntegrationTest {
 
     private void assertUsageAmounts(String usageId, BigDecimal grossAmount, BigDecimal netAmount,
                                     BigDecimal serviceFee, BigDecimal serviceFeeAmount, BigDecimal reportedValue) {
-        Usage usage = usageRepository.findByIds(Collections.singletonList(usageId)).get(0);
+        Usage usage = usageRepository.findByIds(List.of(usageId)).get(0);
         assertAmounts(usage, grossAmount, netAmount, serviceFee, serviceFeeAmount, reportedValue);
     }
 
@@ -417,7 +417,7 @@ public class NtsUsageRepositoryIntegrationTest {
                                                        BigDecimal serviceFee, BigDecimal serviceFeeAmount,
                                                        BigDecimal reportedValue, Long payeeAccountNumber,
                                                        boolean rhParticipating) {
-        Usage usage = usageRepository.findByIds(Collections.singletonList(usageId)).get(0);
+        Usage usage = usageRepository.findByIds(List.of(usageId)).get(0);
         assertEquals(rhParticipating, usage.isRhParticipating());
         assertEquals(payeeAccountNumber, usage.getPayee().getAccountNumber());
         assertAmounts(usage, grossAmount, netAmount, serviceFee, serviceFeeAmount, reportedValue);

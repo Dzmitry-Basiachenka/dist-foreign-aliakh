@@ -16,7 +16,6 @@ import org.apache.camel.ProducerTemplate;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -47,7 +46,7 @@ public class ExternalUsageProducerTest {
 
     @Test
     public void testSendMessage() {
-        List<ExternalUsage> externalUsages = Collections.singletonList(new ExternalUsage(new Usage()));
+        List<ExternalUsage> externalUsages = List.of(new ExternalUsage(new Usage()));
         template.sendBodyAndHeaders(END_POINT, new ExternalUsageWrapper(externalUsages), HEADERS);
         expectLastCall().once();
         replay(template);

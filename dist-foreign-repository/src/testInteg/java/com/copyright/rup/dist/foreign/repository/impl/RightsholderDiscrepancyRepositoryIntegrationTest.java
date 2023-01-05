@@ -20,7 +20,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -54,7 +53,7 @@ public class RightsholderDiscrepancyRepositoryIntegrationTest {
                 RightsholderDiscrepancyStatusEnum.DRAFT, null, null);
         assertNotNull(discrepancies);
         assertEquals(3, discrepancies.size());
-        rightsholderDiscrepancyRepository.insertAll(Collections.singletonList(buildRightsholderDiscrepancy()),
+        rightsholderDiscrepancyRepository.insertAll(List.of(buildRightsholderDiscrepancy()),
             SCENARIO_ID);
         discrepancies = rightsholderDiscrepancyRepository.findByScenarioIdAndStatus(SCENARIO_ID,
             RightsholderDiscrepancyStatusEnum.DRAFT, null, null);

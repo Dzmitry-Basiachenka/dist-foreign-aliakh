@@ -633,11 +633,11 @@ public class UdmBaselineRepositoryIntegrationTest {
     @TestData(fileName = FOLDER_NAME + "remove-udm-usage-from-baseline-by-id.groovy")
     public void testRemoveUdmUsageFromBaselineById() {
         List<UdmUsage> udmUsages =
-            udmUsageRepository.findByIds(Collections.singletonList("38ac4213-0515-42f5-a1bc-d4794f4eea8f"));
+            udmUsageRepository.findByIds(List.of("38ac4213-0515-42f5-a1bc-d4794f4eea8f"));
         assertEquals(1, udmUsages.size());
         assertTrue(udmUsages.get(0).isBaselineFlag());
         baselineRepository.removeUdmUsageFromBaselineById("38ac4213-0515-42f5-a1bc-d4794f4eea8f");
-        udmUsages = udmUsageRepository.findByIds(Collections.singletonList("38ac4213-0515-42f5-a1bc-d4794f4eea8f"));
+        udmUsages = udmUsageRepository.findByIds(List.of("38ac4213-0515-42f5-a1bc-d4794f4eea8f"));
         assertEquals(1, udmUsages.size());
         assertFalse(udmUsages.get(0).isBaselineFlag());
     }

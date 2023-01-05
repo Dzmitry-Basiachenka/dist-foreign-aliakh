@@ -118,9 +118,9 @@ public class AaclUsageRepositoryIntegrationTest {
     @TestData(fileName = FOLDER_NAME + "insert.groovy")
     public void testInsert() {
         Usage expectedUsage =
-            loadExpectedUsages(Collections.singletonList("json/aacl/aacl_usage_5b41d618.json")).get(0);
+            loadExpectedUsages(List.of("json/aacl/aacl_usage_5b41d618.json")).get(0);
         aaclUsageRepository.insert(expectedUsage);
-        List<Usage> actualUsages = aaclUsageRepository.findByIds(Collections.singletonList(USAGE_ID_3));
+        List<Usage> actualUsages = aaclUsageRepository.findByIds(List.of(USAGE_ID_3));
         assertEquals(1, actualUsages.size());
         verifyUsage(expectedUsage, actualUsages.get(0));
     }
@@ -143,7 +143,7 @@ public class AaclUsageRepositoryIntegrationTest {
     @TestData(fileName = FOLDER_NAME + "update-classified-usages.groovy")
     public void testUpdateClassifiedUsages() {
         List<Usage> usages =
-            aaclUsageRepository.findByIds(Collections.singletonList("8315e53b-0a7e-452a-a62c-17fe959f3f84"));
+            aaclUsageRepository.findByIds(List.of("8315e53b-0a7e-452a-a62c-17fe959f3f84"));
         assertEquals(1, usages.size());
         Usage expectedUsage = usages.get(0);
         assertEquals(UsageStatusEnum.WORK_RESEARCH, expectedUsage.getStatus());
@@ -151,10 +151,10 @@ public class AaclUsageRepositoryIntegrationTest {
         assertNull(expectedUsage.getAaclUsage().getDetailLicenseeClass().getDiscipline());
         assertNull(expectedUsage.getAaclUsage().getDetailLicenseeClass().getEnrollmentProfile());
         assertEquals(0, getNumberOfUsagesWithNotEmptyClassificationData());
-        aaclUsageRepository.updateClassifiedUsages(Collections.singletonList(buildAaclClassifiedUsage()), USER_NAME);
+        aaclUsageRepository.updateClassifiedUsages(List.of(buildAaclClassifiedUsage()), USER_NAME);
         assertEquals(1, getNumberOfUsagesWithNotEmptyClassificationData());
-        verifyUsages(Collections.singletonList("json/aacl/aacl_classified_usage_8315e53b.json"),
-            aaclUsageRepository.findByIds(Collections.singletonList("8315e53b-0a7e-452a-a62c-17fe959f3f84")),
+        verifyUsages(List.of("json/aacl/aacl_classified_usage_8315e53b.json"),
+            aaclUsageRepository.findByIds(List.of("8315e53b-0a7e-452a-a62c-17fe959f3f84")),
             this::verifyUsage);
     }
 
@@ -162,19 +162,19 @@ public class AaclUsageRepositoryIntegrationTest {
     @TestData(fileName = FOLDER_NAME + "delete-by-id.groovy")
     public void testDeleteById() {
         Usage expectedUsage =
-            loadExpectedUsages(Collections.singletonList("json/aacl/aacl_usage_5b41d618.json")).get(0);
+            loadExpectedUsages(List.of("json/aacl/aacl_usage_5b41d618.json")).get(0);
         aaclUsageRepository.insert(expectedUsage);
-        List<Usage> actualUsages = aaclUsageRepository.findByIds(Collections.singletonList(USAGE_ID_3));
+        List<Usage> actualUsages = aaclUsageRepository.findByIds(List.of(USAGE_ID_3));
         assertEquals(1, actualUsages.size());
         aaclUsageRepository.deleteById(USAGE_ID_3);
-        assertTrue(CollectionUtils.isEmpty(aaclUsageRepository.findByIds(Collections.singletonList(USAGE_ID_3))));
+        assertTrue(CollectionUtils.isEmpty(aaclUsageRepository.findByIds(List.of(USAGE_ID_3))));
         assertEquals(0, aaclUsageRepository.findReferencedAaclUsagesCountByIds(USAGE_ID_3));
     }
 
     @Test
     @TestData(fileName = FOLDER_NAME + "update-processed-usage.groovy")
     public void testUpdateProcessedUsage() {
-        List<Usage> usages = aaclUsageRepository.findByIds(Collections.singletonList(USAGE_ID_1));
+        List<Usage> usages = aaclUsageRepository.findByIds(List.of(USAGE_ID_1));
         assertEquals(1, CollectionUtils.size(usages));
         Usage usage = usages.get(0);
         usage.setStatus(UsageStatusEnum.RH_FOUND);
@@ -184,7 +184,7 @@ public class AaclUsageRepositoryIntegrationTest {
         usage.setStandardNumber(STANDARD_NUMBER);
         usage.getAaclUsage().setRightLimitation(RIGHT_LIMITATION);
         assertNotNull(aaclUsageRepository.updateProcessedUsage(usage));
-        List<Usage> updatedUsages = aaclUsageRepository.findByIds(Collections.singletonList(USAGE_ID_1));
+        List<Usage> updatedUsages = aaclUsageRepository.findByIds(List.of(USAGE_ID_1));
         assertEquals(1, CollectionUtils.size(updatedUsages));
         Usage updatedUsage = updatedUsages.get(0);
         assertEquals(RH_ACCOUNT_NUMBER, updatedUsage.getRightsholder().getAccountNumber());
@@ -215,7 +215,7 @@ public class AaclUsageRepositoryIntegrationTest {
     public void testFindDtosByBatchFilter() {
         UsageFilter usageFilter = buildUsageFilter();
         usageFilter.setUsageBatchesIds(Collections.singleton("38e3190a-cf2b-4a2a-8a14-1f6e5f09011c"));
-        verifyUsageDtos(Collections.singletonList("json/aacl/aacl_usage_dto_ce439b92.json"),
+        verifyUsageDtos(List.of("json/aacl/aacl_usage_dto_ce439b92.json"),
             aaclUsageRepository.findDtosByFilter(usageFilter, null, null));
     }
 
@@ -236,7 +236,7 @@ public class AaclUsageRepositoryIntegrationTest {
     public void testFindDtosByPeriodFilter() {
         UsageFilter usageFilter = buildUsageFilter();
         usageFilter.setUsagePeriod(2018);
-        verifyUsageDtos(Collections.singletonList("json/aacl/aacl_usage_dto_ce439b92.json"),
+        verifyUsageDtos(List.of("json/aacl/aacl_usage_dto_ce439b92.json"),
             aaclUsageRepository.findDtosByFilter(usageFilter, null, null));
     }
 
@@ -422,10 +422,10 @@ public class AaclUsageRepositoryIntegrationTest {
         usageFilter.setUsagePeriod(2019);
         assertEquals(Collections.emptyList(), aaclUsageRepository.findInvalidRightsholdersByFilter(usageFilter));
         usageFilter.setUsagePeriod(2017);
-        assertEquals(Collections.singletonList(7000000001L),
+        assertEquals(List.of(7000000001L),
             aaclUsageRepository.findInvalidRightsholdersByFilter(usageFilter));
         usageFilter.setUsagePeriod(2015);
-        assertEquals(Collections.singletonList(7000000002L),
+        assertEquals(List.of(7000000002L),
             aaclUsageRepository.findInvalidRightsholdersByFilter(usageFilter));
     }
 
@@ -478,7 +478,7 @@ public class AaclUsageRepositoryIntegrationTest {
                 assertEquals(UsageStatusEnum.LOCKED, actualUsage.getStatus());
                 assertEquals(USER_NAME, actualUsage.getUpdateUser());
             });
-        aaclUsageRepository.findByIds(Collections.singletonList("e21bcd1f-8040-4b44-93c7-4af732ac1916"))
+        aaclUsageRepository.findByIds(List.of("e21bcd1f-8040-4b44-93c7-4af732ac1916"))
             .forEach(actualUsage -> {
                 assertNull(actualUsage.getScenarioId());
                 assertEquals(UsageStatusEnum.RH_FOUND, actualUsage.getStatus());
@@ -493,7 +493,7 @@ public class AaclUsageRepositoryIntegrationTest {
         usageFilter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
         usageFilter.setUsagePeriod(2019);
         aaclUsageRepository.addToScenario(SCENARIO_ID_1, usageFilter, USER_NAME);
-        aaclUsageRepository.findByIds(Collections.singletonList("0cd30b3e-ae74-466a-a7b1-a2d891b2123e"))
+        aaclUsageRepository.findByIds(List.of("0cd30b3e-ae74-466a-a7b1-a2d891b2123e"))
             .forEach(actualUsage -> {
                 assertEquals(SCENARIO_ID_1, actualUsage.getScenarioId());
                 assertEquals(USER_NAME, actualUsage.getUpdateUser());
@@ -600,7 +600,7 @@ public class AaclUsageRepositoryIntegrationTest {
     public void testFindForAudit() {
         AuditFilter filter = new AuditFilter();
         filter.setSearchValue(USAGE_ID_5);
-        verifyUsageDtosForAudit(loadExpectedUsageDtos(Collections.singletonList("json/aacl/aacl_audit_usage_dto.json")),
+        verifyUsageDtosForAudit(loadExpectedUsageDtos(List.of("json/aacl/aacl_audit_usage_dto.json")),
             aaclUsageRepository.findForAudit(filter, null, null));
     }
 
@@ -610,7 +610,7 @@ public class AaclUsageRepositoryIntegrationTest {
         AuditFilter filter = new AuditFilter();
         filter.setSearchValue(USAGE_ID_6);
         verifyUsageDtosForAudit(
-            loadExpectedUsageDtos(Collections.singletonList("json/aacl/aacl_archived_audit_usage_dto.json")),
+            loadExpectedUsageDtos(List.of("json/aacl/aacl_archived_audit_usage_dto.json")),
             aaclUsageRepository.findForAudit(filter, null, null));
     }
 
@@ -689,11 +689,11 @@ public class AaclUsageRepositoryIntegrationTest {
         UsageFilter usageFilter = buildUsageFilter();
         usageFilter.setUsageBatchesIds(Collections.singleton("5ceb887e-502e-463a-ae94-f925feff35d8"));
         Usage usage1 =
-            aaclUsageRepository.findByIds(Collections.singletonList("248add96-93d0-428d-9fe2-2e46c237a88b")).get(0);
+            aaclUsageRepository.findByIds(List.of("248add96-93d0-428d-9fe2-2e46c237a88b")).get(0);
         Usage usage2 =
-            aaclUsageRepository.findByIds(Collections.singletonList("161652a5-d822-493b-8242-d35dc881646f")).get(0);
+            aaclUsageRepository.findByIds(List.of("161652a5-d822-493b-8242-d35dc881646f")).get(0);
         Usage usage3 =
-            aaclUsageRepository.findByIds(Collections.singletonList("61b7dc5a-aaec-482c-8c16-fe48a9464059")).get(0);
+            aaclUsageRepository.findByIds(List.of("61b7dc5a-aaec-482c-8c16-fe48a9464059")).get(0);
         assertNull(usage1.getAaclUsage().getPublicationType().getWeight());
         assertEquals(new BigDecimal("10.12"), usage2.getAaclUsage().getPublicationType().getWeight());
         assertEquals(new BigDecimal("1.71"), usage3.getAaclUsage().getPublicationType().getWeight());
@@ -743,7 +743,7 @@ public class AaclUsageRepositoryIntegrationTest {
     @TestData(fileName = FOLDER_NAME + "find-by-scenario-id-and-rh-account-number.groovy")
     public void testFindByScenarioIdAndRhAccountNumber() {
         List<UsageDto> expectedUsageDtos =
-            loadExpectedUsageDtos(Collections.singletonList("json/aacl/aacl_usage_dtos.json"));
+            loadExpectedUsageDtos(List.of("json/aacl/aacl_usage_dtos.json"));
         List<UsageDto> actualUsageDtos = aaclUsageRepository
             .findByScenarioIdAndRhAccountNumber("20bed3d9-8da3-470f-95d7-d839a41488d4", 1000011450L, null, null, null);
         assertEquals(expectedUsageDtos.size(), actualUsageDtos.size());
@@ -816,7 +816,7 @@ public class AaclUsageRepositoryIntegrationTest {
         List<Usage> usageList = aaclUsageRepository.findByIds(
             Arrays.asList("9c8ae08e-60a9-4819-b445-eb2bbc50635d", "8eb9dbbc-3535-42cc-8094-2d90849952e2"));
         assertEquals(2, usageList.size());
-        verifyUsages(Collections.singletonList("json/aacl/aacl_usage_delete_scenario.json"), usageList,
+        verifyUsages(List.of("json/aacl/aacl_usage_delete_scenario.json"), usageList,
             this::verifyUsageForDeleteScenario);
     }
 

@@ -157,7 +157,7 @@ public class AclFundPoolRepositoryIntegrationTest {
         List<AclFundPoolDetailDto> details = repository.findDtosByFilter(filter);
         assertEquals(1, details.size());
         verifyFundPoolDetail(
-            loadExpectedDetails(Collections.singletonList("json/acl/acl_fund_pool_detail_find_by_filter.json")).get(0),
+            loadExpectedDetails(List.of("json/acl/acl_fund_pool_detail_find_by_filter.json")).get(0),
             details.get(0));
     }
 
@@ -168,7 +168,7 @@ public class AclFundPoolRepositoryIntegrationTest {
             repository.findDetailDtosByFundPoolId("8c2e21f0-c1f8-4bd8-8676-968e98617480");
         assertEquals(3, actualDetails.size());
         List<AclFundPoolDetailDto> expectedDetails = loadExpectedDetails(
-            Collections.singletonList("json/acl/acl_fund_pool_detail_find_by_grant_set_id.json"));
+            List.of("json/acl/acl_fund_pool_detail_find_by_grant_set_id.json"));
         IntStream.range(0, expectedDetails.size())
             .forEach(index -> verifyFundPoolDetail(expectedDetails.get(index), actualDetails.get(index)));
     }
