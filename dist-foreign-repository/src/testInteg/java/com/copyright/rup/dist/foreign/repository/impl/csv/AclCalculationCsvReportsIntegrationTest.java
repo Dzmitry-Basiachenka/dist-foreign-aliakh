@@ -23,7 +23,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.io.IOException;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -198,7 +197,7 @@ public class AclCalculationCsvReportsIntegrationTest extends CsvReportsTestHelpe
     @TestData(fileName = WRITE_LIABILITIES_BY_AGG_LIC_CLASS_CSV_REPORT)
     public void testWriteAclLiabilitiesByAggLicClassReport() throws IOException {
         AclCalculationReportsInfoDto reportsInfoDto = buildReportInfo();
-        reportsInfoDto.setScenarios(Arrays.asList(
+        reportsInfoDto.setScenarios(List.of(
             buildScenario("06fee547-bfc4-4f2a-9578-58c03821e217", ACL_SCENARIO_NAME),
             buildScenario("6dbd30f7-91f6-4949-a74c-cfbac5e466ac", "MCL Scenario 10/05/202212"),
             buildScenario("ca1c5532-eb1c-440a-8fbc-8e595dbea5cb", "VGW Scenario 10/05/202212"),
@@ -212,7 +211,7 @@ public class AclCalculationCsvReportsIntegrationTest extends CsvReportsTestHelpe
     @TestData(fileName = WRITE_LIABILITY_DETAILS_CSV_REPORT)
     public void testWriteAclLiabilityDetailsReport() throws IOException {
         AclCalculationReportsInfoDto reportsInfoDto = buildReportInfo();
-        reportsInfoDto.setScenarios(Arrays.asList(
+        reportsInfoDto.setScenarios(List.of(
             buildScenario("06fee547-bfc4-4f2a-9578-58c03821e217", ACL_SCENARIO_NAME),
             buildScenario("d86f2c59-a50c-4e54-826a-ee50aeb98904", "JACDCL Scenario 10/05/202212")));
         assertFilesWithExecutor(outputStream ->
@@ -224,7 +223,7 @@ public class AclCalculationCsvReportsIntegrationTest extends CsvReportsTestHelpe
     @TestData(fileName = WRITE_LIABILITIES_BY_RH_CSV_REPORT)
     public void testWriteAclLiabilitiesByRhReport() throws IOException {
         AclCalculationReportsInfoDto reportsInfoDto = buildReportInfo();
-        reportsInfoDto.setScenarios(Arrays.asList(
+        reportsInfoDto.setScenarios(List.of(
             buildScenario("ae0910b1-1fb0-420a-96c9-76a18ebca229", ACL_SCENARIO_NAME),
             buildScenario("49c52e95-ca96-400e-a73c-d5732a5d1301", "MACL Scenario 10/05/202212"),
             buildScenario("3ecfcf3b-1be0-4bfa-bc55-44add8432df9", "VGW Scenario 10/05/202212"),
