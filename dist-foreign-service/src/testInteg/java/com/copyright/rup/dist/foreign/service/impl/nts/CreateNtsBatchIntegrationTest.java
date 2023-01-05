@@ -246,7 +246,7 @@ public class CreateNtsBatchIntegrationTest {
     @Test
     public void testCreateNtsBatchZeroStmAmount() {
         testBuilder
-            .withUsageBatch(buildUsageBatch(buildNtsFields("Edu", new BigDecimal("0.000"), false)))
+            .withUsageBatch(buildUsageBatch(buildNtsFields("Edu", new BigDecimal("0.0"), false)))
             .withInitialUsagesCount(1)
             .expectRmsRights(ImmutableMap.of(RMS_GRANTS_65882434_REQUEST, RMS_GRANTS_65882434_RESPONSE))
             .expectPrmCall(ImmutableMap.of(

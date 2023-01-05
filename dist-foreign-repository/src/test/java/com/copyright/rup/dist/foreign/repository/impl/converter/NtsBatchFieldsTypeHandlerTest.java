@@ -10,8 +10,6 @@ import static org.junit.Assert.assertNull;
 
 import com.copyright.rup.dist.foreign.domain.UsageBatch.NtsFields;
 
-import com.google.common.collect.ImmutableSet;
-
 import org.junit.Test;
 import org.postgresql.util.PGobject;
 
@@ -20,6 +18,7 @@ import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Set;
 
 /**
  * Verifies {@link NtsBatchFieldsTypeHandler}.
@@ -104,7 +103,7 @@ public class NtsBatchFieldsTypeHandlerTest {
         ntsFields.setNonStmAmount(new BigDecimal(200));
         ntsFields.setStmMinimumAmount(new BigDecimal(300));
         ntsFields.setNonStmMinimumAmount(new BigDecimal(400));
-        ntsFields.setMarkets(ImmutableSet.of("Edu", "Gov"));
+        ntsFields.setMarkets(Set.of("Edu", "Gov"));
         return ntsFields;
     }
 }

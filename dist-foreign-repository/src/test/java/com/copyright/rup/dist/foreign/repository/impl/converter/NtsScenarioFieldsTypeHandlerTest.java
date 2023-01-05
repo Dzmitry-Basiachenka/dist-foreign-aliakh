@@ -96,7 +96,9 @@ public class NtsScenarioFieldsTypeHandlerTest {
 
     private NtsFields buildNtsFields() {
         NtsFields ntsFields = new NtsFields();
-        ntsFields.setRhMinimumAmount(new BigDecimal("300.00"));
+        ntsFields.setRhMinimumAmount(new BigDecimal("300.0"));
+        ntsFields.setPreServiceFeeAmount(new BigDecimal("500.0"));
+        ntsFields.setPostServiceFeeAmount(new BigDecimal("1000.0"));
         return ntsFields;
     }
 }

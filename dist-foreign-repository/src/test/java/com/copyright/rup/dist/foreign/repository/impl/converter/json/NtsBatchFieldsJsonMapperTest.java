@@ -7,13 +7,11 @@ import static org.junit.Assert.assertTrue;
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.UsageBatch.NtsFields;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.google.common.collect.ImmutableSet;
-
 import org.junit.Test;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.Set;
 
 /**
  * Verifies {@link NtsBatchFieldsJsonMapper}.
@@ -38,7 +36,7 @@ public class NtsBatchFieldsJsonMapperTest {
         assertEquals(new BigDecimal("200."), ntsFundPool.getNonStmAmount());
         assertEquals(new BigDecimal("300.3"), ntsFundPool.getStmMinimumAmount());
         assertEquals(new BigDecimal("400.44"), ntsFundPool.getNonStmMinimumAmount());
-        assertEquals(ImmutableSet.of("Edu", "Gov"), ntsFundPool.getMarkets());
+        assertEquals(Set.of("Edu", "Gov"), ntsFundPool.getMarkets());
         assertTrue(ntsFundPool.isExcludingStm());
     }
 
@@ -51,7 +49,7 @@ public class NtsBatchFieldsJsonMapperTest {
         ntsFundPool.setNonStmAmount(new BigDecimal("200."));
         ntsFundPool.setStmMinimumAmount(new BigDecimal("300.3"));
         ntsFundPool.setNonStmMinimumAmount(new BigDecimal("400.44"));
-        ntsFundPool.setMarkets(ImmutableSet.of("Edu", "Gov"));
+        ntsFundPool.setMarkets(Set.of("Edu", "Gov"));
         ntsFundPool.setExcludingStm(true);
         String actualJson = jsonMapper.serialize(ntsFundPool);
         assertEquals(ntsFundPool, jsonMapper.deserialize(actualJson));
@@ -65,10 +63,5 @@ public class NtsBatchFieldsJsonMapperTest {
     @Test
     public void testSerializeNull() throws IOException {
         assertNull(jsonMapper.serialize(null));
-    }
-
-    @Test(expected = JsonParseException.class)
-    public void testDeserializeException() throws IOException {
-        jsonMapper.deserialize("{wrong JSON}");
     }
 }

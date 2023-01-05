@@ -102,13 +102,13 @@ public class SalFundPoolFieldsTypeHandlerTest {
         salFields.setLicenseeName("FarmField Inc.");
         salFields.setGradeKto5NumberOfStudents(10);
         salFields.setGrade6to8NumberOfStudents(5);
-        salFields.setGrossAmount(new BigDecimal("1000.00"));
+        salFields.setGrossAmount(new BigDecimal("1000.0"));
         salFields.setItemBankGrossAmount(new BigDecimal("20.01"));
         salFields.setGradeKto5GrossAmount(new BigDecimal("653.33"));
         salFields.setGrade6to8GrossAmount(new BigDecimal("326.66"));
-        salFields.setGrade9to12GrossAmount(new BigDecimal("0.00"));
-        salFields.setItemBankSplitPercent(new BigDecimal("0.02000"));
-        salFields.setServiceFee(new BigDecimal("0.25000"));
+        salFields.setGrade9to12GrossAmount(new BigDecimal("0.0"));
+        salFields.setItemBankSplitPercent(new BigDecimal("0.02"));
+        salFields.setServiceFee(new BigDecimal("0.25"));
         return salFields;
     }
 }

@@ -207,7 +207,7 @@ public class CreateScenarioIntegrationTest {
                 buildScenarioExcludedUsage("6402d5c8-ba80-4966-a7cc-34ba1fdc1d9c", 1000001820L),
                 buildScenarioExcludedUsage("e001c596-a66f-4fd3-b34c-5ef65a215d68", 1000002562L)))
             .expectScenario(buildScenario("323.00", "475.00", "152.00",
-                buildNtsFields(new BigDecimal("100.00"), new BigDecimal("255.00"), BigDecimal.ZERO,
+                buildNtsFields(new BigDecimal("100.00"), new BigDecimal("255.0"), BigDecimal.ZERO,
                     "c7ca1ca1-7cd8-49cc-aaeb-ac53fe62d903")))
             .expectScenarioAudit(Collections.singletonList(
                 Pair.of(ScenarioActionTypeEnum.ADDED_USAGES, StringUtils.EMPTY)))
