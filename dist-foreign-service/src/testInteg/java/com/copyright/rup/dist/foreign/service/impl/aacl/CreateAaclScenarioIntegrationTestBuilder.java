@@ -27,7 +27,6 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.IntStream;
@@ -158,8 +157,7 @@ public class CreateAaclScenarioIntegrationTestBuilder {
         private void assertUsages() throws IOException {
             List<Usage> expectedUsages = testHelper.loadExpectedUsages(expectedUsagesJsonFile);
             expectedUsages.forEach(expectedUsage -> {
-                List<Usage> actualUsages =
-                    aaclUsageService.getUsagesByIds(Collections.singletonList(expectedUsage.getId()));
+                List<Usage> actualUsages = aaclUsageService.getUsagesByIds(List.of(expectedUsage.getId()));
                 assertEquals(1, actualUsages.size());
                 assertUsage(expectedUsage, actualUsages.get(0));
             });

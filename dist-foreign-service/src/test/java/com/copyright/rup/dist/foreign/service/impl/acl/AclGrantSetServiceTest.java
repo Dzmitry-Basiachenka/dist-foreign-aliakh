@@ -92,14 +92,14 @@ public class AclGrantSetServiceTest {
         expect(udmBaselineService.getWrWrkInstToSystemTitles(grantSet.getPeriods()))
             .andReturn(ImmutableMap.of(WR_WRK_INST, SYSTEM_TITLE)).once();
         expect(aclGrantService.createAclGrantDetails(grantSet, ImmutableMap.of(WR_WRK_INST, SYSTEM_TITLE), USER_NAME))
-            .andReturn(Collections.singletonList(grantDetail)).once();
+            .andReturn(List.of(grantDetail)).once();
         aclGrantSetRepository.insert(grantSet);
         expectLastCall().once();
         grantDetail.setSystemTitle(SYSTEM_TITLE);
         aclGrantDetailService.insert(eq(Lists.newArrayList(grantDetail)));
         expectLastCall().once();
         expect(rightsholderService.updateRightsholders(Collections.singleton(7000813806L)))
-            .andReturn(Collections.singletonList(new Rightsholder()));
+            .andReturn(List.of(new Rightsholder()));
         replay(RupContextUtils.class, udmBaselineService, aclGrantService, aclGrantSetRepository,
             aclGrantDetailService);
         assertEquals(1, aclGrantSetService.insert(grantSet));
@@ -117,7 +117,7 @@ public class AclGrantSetServiceTest {
 
     @Test
     public void testGetAll() {
-        List<AclGrantSet> grantSets = Collections.singletonList(new AclGrantSet());
+        List<AclGrantSet> grantSets = List.of(new AclGrantSet());
         expect(aclGrantSetRepository.findAll()).andReturn(grantSets).once();
         replay(aclGrantSetRepository);
         assertSame(grantSets, aclGrantSetService.getAll());
@@ -150,7 +150,7 @@ public class AclGrantSetServiceTest {
 
     @Test
     public void testGetGrantSetsByLicenseTypeAndPeriod() {
-        List<AclGrantSet> grantSets = Collections.singletonList(buildAclGrantSet());
+        List<AclGrantSet> grantSets = List.of(buildAclGrantSet());
         expect(aclGrantSetRepository.findGrantSetsByLicenseTypeAndPeriod("ACL", 202212, true)).andReturn(grantSets)
             .once();
         replay(aclGrantSetRepository);

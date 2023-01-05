@@ -154,7 +154,7 @@ public class UsageServiceTest {
 
     @Test
     public void testGetUsagesByScenario() {
-        List<Usage> usages = Collections.singletonList(new Usage());
+        List<Usage> usages = List.of(new Usage());
         expect(usageRepository.findByScenarioId(scenario.getId())).andReturn(usages).once();
         replay(usageRepository);
         assertSame(usages, usageService.getUsagesByScenarioId(scenario.getId()));
@@ -163,7 +163,7 @@ public class UsageServiceTest {
 
     @Test
     public void testGetUsagesByScenarioIdForRefresh() {
-        List<Usage> usages = Collections.singletonList(new Usage());
+        List<Usage> usages = List.of(new Usage());
         expect(usageRepository.findByScenarioId(scenario.getId())).andReturn(usages).once();
         replay(usageRepository);
         assertSame(usages, usageService.getUsagesByScenarioId(scenario.getId()));
@@ -182,8 +182,7 @@ public class UsageServiceTest {
 
     @Test
     public void testGetRightsholderTotalsHoldersBySentToLmScenario() {
-        List<RightsholderTotalsHolder> rightsholderTotalsHolders =
-            Collections.singletonList(new RightsholderTotalsHolder());
+        List<RightsholderTotalsHolder> rightsholderTotalsHolders = List.of(new RightsholderTotalsHolder());
         Pageable pageable = new Pageable(0, 1);
         expect(usageRepository.findRightsholderTotalsHoldersByScenarioId(SCENARIO_ID, StringUtils.EMPTY, pageable,
             null)).andReturn(rightsholderTotalsHolders).once();
@@ -283,7 +282,7 @@ public class UsageServiceTest {
         List<String> usagesIds = Arrays.asList(RupPersistUtils.generateUuid(), RupPersistUtils.generateUuid());
         mockStatic(RupContextUtils.class);
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
-        List<Long> accountNumbers = Collections.singletonList(RH_ACCOUNT_NUMBER);
+        List<Long> accountNumbers = List.of(RH_ACCOUNT_NUMBER);
         usageRepository.deleteFromScenario(usagesIds, USER_NAME);
         expectLastCall().once();
         expect(usageRepository.findIdsByScenarioIdRroAccountNumberRhAccountNumbers(scenario.getId(), 2000017011L,
@@ -336,7 +335,7 @@ public class UsageServiceTest {
             "Usage has been paid according to information from the LM");
         expectLastCall().once();
         replay(usageArchiveRepository, usageAuditService, rightsholderService);
-        usageService.updatePaidInfo(Collections.singletonList(usage));
+        usageService.updatePaidInfo(List.of(usage));
         verify(usageArchiveRepository, usageAuditService, rightsholderService);
     }
 
@@ -362,7 +361,7 @@ public class UsageServiceTest {
                 " with RH change from 1000001534 to 7000481360");
         expectLastCall().once();
         replay(usageArchiveRepository, usageAuditService, rightsholderService);
-        usageService.updatePaidInfo(Collections.singletonList(newUsage));
+        usageService.updatePaidInfo(List.of(newUsage));
         verify(usageArchiveRepository, usageAuditService, rightsholderService);
     }
 
@@ -388,7 +387,7 @@ public class UsageServiceTest {
             "Scenario has been updated after Split process");
         expectLastCall().once();
         replay(usageArchiveRepository, usageAuditService, scenarioAuditService, rightsholderService);
-        usageService.updatePaidInfo(Collections.singletonList(usage));
+        usageService.updatePaidInfo(List.of(usage));
         verify(usageArchiveRepository, usageAuditService, scenarioAuditService, rightsholderService);
     }
 
@@ -411,7 +410,7 @@ public class UsageServiceTest {
             "Usage has been adjusted based on Split process");
         expectLastCall().once();
         replay(usageArchiveRepository, usageAuditService, scenarioAuditService, rightsholderService);
-        usageService.updatePaidInfo(Collections.singletonList(usage));
+        usageService.updatePaidInfo(List.of(usage));
         verify(usageArchiveRepository, usageAuditService, scenarioAuditService, rightsholderService);
     }
 
@@ -441,7 +440,7 @@ public class UsageServiceTest {
             "Scenario has been updated after Split process");
         expectLastCall().once();
         replay(usageArchiveRepository, usageAuditService, scenarioAuditService, rightsholderService);
-        usageService.updatePaidInfo(Collections.singletonList(newUsage));
+        usageService.updatePaidInfo(List.of(newUsage));
         verify(usageArchiveRepository, usageAuditService, scenarioAuditService, rightsholderService);
     }
 
@@ -467,7 +466,7 @@ public class UsageServiceTest {
             "Usage has been created based on Split process");
         expectLastCall().once();
         replay(usageArchiveRepository, usageAuditService, rightsholderService, RupPersistUtils.class);
-        usageService.updatePaidInfo(Collections.singletonList(usageFromLm));
+        usageService.updatePaidInfo(List.of(usageFromLm));
         verify(usageArchiveRepository, usageAuditService, rightsholderService, RupPersistUtils.class);
     }
 
@@ -493,7 +492,7 @@ public class UsageServiceTest {
             "Usage has been created based on Post-Distribution process");
         expectLastCall().once();
         replay(usageArchiveRepository, usageAuditService, rightsholderService, RupPersistUtils.class);
-        usageService.updatePaidInfo(Collections.singletonList(usageFromLm));
+        usageService.updatePaidInfo(List.of(usageFromLm));
         verify(usageArchiveRepository, usageAuditService, rightsholderService, RupPersistUtils.class);
     }
 
@@ -519,7 +518,7 @@ public class UsageServiceTest {
             "Usage has been created based on Post-Distribution and Split processes");
         expectLastCall().once();
         replay(usageArchiveRepository, usageAuditService, rightsholderService, RupPersistUtils.class);
-        usageService.updatePaidInfo(Collections.singletonList(usageFromLm));
+        usageService.updatePaidInfo(List.of(usageFromLm));
         verify(usageArchiveRepository, usageAuditService, rightsholderService, RupPersistUtils.class);
     }
 
@@ -545,7 +544,7 @@ public class UsageServiceTest {
             "Usage has been created based on Post-Distribution and Split processes");
         expectLastCall().once();
         replay(usageArchiveRepository, usageAuditService, rightsholderService, RupPersistUtils.class);
-        usageService.updatePaidInfo(Collections.singletonList(usageFromLm));
+        usageService.updatePaidInfo(List.of(usageFromLm));
         verify(usageArchiveRepository, usageAuditService, rightsholderService, RupPersistUtils.class);
     }
 
@@ -556,14 +555,14 @@ public class UsageServiceTest {
         expect(usageArchiveRepository.findByIds(List.of(USAGE_ID_1)))
             .andReturn(Collections.emptyList()).once();
         replay(usageArchiveRepository, rightsholderService);
-        usageService.updatePaidInfo(Collections.singletonList(paidUsage));
+        usageService.updatePaidInfo(List.of(paidUsage));
         verify(usageArchiveRepository, rightsholderService);
     }
 
     @Test
     public void testGetUsagesByIds() {
-        List<String> usageIds = Collections.singletonList(USAGE_ID_1);
-        List<Usage> usages = Collections.singletonList(buildUsage(USAGE_ID_1));
+        List<String> usageIds = List.of(USAGE_ID_1);
+        List<Usage> usages = List.of(buildUsage(USAGE_ID_1));
         expect(usageRepository.findByIds(eq(usageIds))).andReturn(usages).once();
         replay(usageRepository);
         assertEquals(usages, usageService.getUsagesByIds(usageIds));
@@ -579,8 +578,8 @@ public class UsageServiceTest {
 
     @Test
     public void testGetArchivedUsagesForSendToLmByIds() {
-        List<String> usageIds = Collections.singletonList(USAGE_ID_1);
-        List<Usage> usages = Collections.singletonList(buildUsage(USAGE_ID_1));
+        List<String> usageIds = List.of(USAGE_ID_1);
+        List<Usage> usages = List.of(buildUsage(USAGE_ID_1));
         expect(usageArchiveRepository.findForSendToLmByIds(eq(usageIds))).andReturn(usages).once();
         replay(usageArchiveRepository);
         assertEquals(usages, usageService.getArchivedUsagesForSendToLmByIds(usageIds));
@@ -596,7 +595,7 @@ public class UsageServiceTest {
 
     @Test
     public void testGetUsageIdsByStatusAndProductFamily() {
-        List<String> usageIds = Collections.singletonList(USAGE_ID_1);
+        List<String> usageIds = List.of(USAGE_ID_1);
         expect(usageRepository.findIdsByStatusAndProductFamily(UsageStatusEnum.NEW, FAS_PRODUCT_FAMILY))
             .andReturn(usageIds)
             .once();
@@ -608,7 +607,7 @@ public class UsageServiceTest {
 
     @Test
     public void testGetUsagesByStatusAndProductFamily() {
-        List<Usage> usages = Collections.singletonList(buildUsage(USAGE_ID_1));
+        List<Usage> usages = List.of(buildUsage(USAGE_ID_1));
         expect(usageRepository.findByStatusAndProductFamily(UsageStatusEnum.NEW, FAS_PRODUCT_FAMILY))
             .andReturn(usages)
             .once();
@@ -679,7 +678,7 @@ public class UsageServiceTest {
         Capture<Runnable> captureRunnable = newCapture();
         chainExecutor.execute(capture(captureRunnable));
         expectLastCall().once();
-        chainExecutor.execute(Collections.singletonList(usage1), ChainProcessorTypeEnum.MATCHING);
+        chainExecutor.execute(List.of(usage1), ChainProcessorTypeEnum.MATCHING);
         expectLastCall().once();
         replay(chainExecutor);
         usageService.sendForMatching(Arrays.asList(usage1, usage2));
@@ -699,7 +698,7 @@ public class UsageServiceTest {
         Capture<Runnable> captureRunnable = newCapture();
         chainExecutor.execute(capture(captureRunnable));
         expectLastCall().once();
-        chainExecutor.execute(Collections.singletonList(usage1), ChainProcessorTypeEnum.RIGHTS);
+        chainExecutor.execute(List.of(usage1), ChainProcessorTypeEnum.RIGHTS);
         expectLastCall().once();
         replay(chainExecutor);
         usageService.sendForGettingRights(Arrays.asList(usage1, usage2), "Batch name");
@@ -713,8 +712,7 @@ public class UsageServiceTest {
     @Test
     public void testGetRightsholderPayeeProductFamilyHoldersByScenarioIds() {
         Set<String> scenarioIds = Collections.singleton(SCENARIO_ID);
-        List<RightsholderPayeeProductFamilyHolder> holders =
-            Collections.singletonList(new RightsholderPayeeProductFamilyHolder());
+        List<RightsholderPayeeProductFamilyHolder> holders = List.of(new RightsholderPayeeProductFamilyHolder());
         expect(usageRepository.findRightsholderPayeeProductFamilyHoldersByScenarioIds(scenarioIds))
             .andReturn(holders).once();
         replay(usageRepository);

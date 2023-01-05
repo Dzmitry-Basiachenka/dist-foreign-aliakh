@@ -255,7 +255,7 @@ public class UdmUsageServiceTest {
         udmUsageAuditService.logAction(USAGE_UID, UsageActionTypeEnum.UNASSIGN,
             "Usage was unassigned from 'wjohn@copyright.com'");
         expectLastCall().once();
-        List<String> actionReasons = Collections.singletonList(
+        List<String> actionReasons = List.of(
             "The field 'Detail Status' was edited. Old Value is 'WORK_NOT_FOUND'. New Value is 'NEW'");
         udmUsageDto.setStatus(UsageStatusEnum.NEW);
         udmUsageRepository.update(udmUsageDto);
@@ -278,7 +278,7 @@ public class UdmUsageServiceTest {
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
         UdmUsageDto udmUsageDto = buildUsageDto(UsageStatusEnum.WORK_NOT_FOUND);
         udmUsageDto.setAssignee(ASSIGNEE);
-        List<String> actionReasons = Collections.singletonList(
+        List<String> actionReasons = List.of(
             "The field 'Detail Status' was edited. Old Value is 'WORK_NOT_FOUND'. New Value is 'OPS_REVIEW'");
         udmUsageDto.setStatus(UsageStatusEnum.OPS_REVIEW);
         udmUsageRepository.update(udmUsageDto);
@@ -335,7 +335,7 @@ public class UdmUsageServiceTest {
     public void testGetUsageDtos() {
         UdmUsageDto udmUsageDto = new UdmUsageDto();
         udmUsageDto.setUsageOrigin(UdmUsageOriginEnum.SS);
-        List<UdmUsageDto> udmUsages = Collections.singletonList(udmUsageDto);
+        List<UdmUsageDto> udmUsages = List.of(udmUsageDto);
         Pageable pageable = new Pageable(0, 1);
         Sort sort = new Sort("detailId", Sort.Direction.ASC);
         UdmUsageFilter filter = new UdmUsageFilter();
@@ -379,7 +379,7 @@ public class UdmUsageServiceTest {
         Capture<Runnable> captureRunnable = newCapture();
         chainExecutor.execute(capture(captureRunnable));
         expectLastCall().once();
-        chainExecutor.execute(Collections.singletonList(usage1), ChainProcessorTypeEnum.MATCHING);
+        chainExecutor.execute(List.of(usage1), ChainProcessorTypeEnum.MATCHING);
         expectLastCall().once();
         replay(chainExecutor);
         udmUsageService.sendForMatching(Arrays.asList(usage1, usage2));

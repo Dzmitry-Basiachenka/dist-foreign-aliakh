@@ -15,6 +15,7 @@ import com.copyright.rup.dist.foreign.service.api.ILicenseeClassService;
 import org.junit.Test;
 
 import java.util.Collections;
+import java.util.List;
 
 /**
  * Validates {@link AggregateLicenseeClassValidator}.
@@ -33,7 +34,7 @@ public class AggregateLicenseeClassValidatorTest {
     public void testIsValidTrue() {
         ILicenseeClassService licenseeClassService = createMock(ILicenseeClassService.class);
         expect(licenseeClassService.getAggregateLicenseeClasses(AACL_PRODUCT_FAMILY))
-            .andReturn(Collections.singletonList(buildAggregateLicenseeClass(108))).once();
+            .andReturn(List.of(buildAggregateLicenseeClass(108))).once();
         replay(licenseeClassService);
         assertTrue(new AggregateLicenseeClassValidator(licenseeClassService, AACL_PRODUCT_FAMILY).isValid(
             buildFundPoolDetail(108)));
@@ -44,7 +45,7 @@ public class AggregateLicenseeClassValidatorTest {
     public void testIsValidFalse() {
         ILicenseeClassService licenseeClassService = createMock(ILicenseeClassService.class);
         expect(licenseeClassService.getAggregateLicenseeClasses(AACL_PRODUCT_FAMILY))
-            .andReturn(Collections.singletonList(buildAggregateLicenseeClass(108))).once();
+            .andReturn(List.of(buildAggregateLicenseeClass(108))).once();
         replay(licenseeClassService);
         assertFalse(new AggregateLicenseeClassValidator(licenseeClassService, AACL_PRODUCT_FAMILY).isValid(
             buildFundPoolDetail(666)));

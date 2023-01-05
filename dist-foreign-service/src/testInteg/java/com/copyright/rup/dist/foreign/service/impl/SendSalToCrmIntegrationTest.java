@@ -60,7 +60,7 @@ public class SendSalToCrmIntegrationTest {
                 "52604648-838e-333f-8987-c4f1dc3aa38a", Collections.emptyList(),
                 "563cf124-8c96-4662-8529-c56002247f39", Collections.emptyList()))
             .expectScenarioAudit(ImmutableMap.of(
-                "183c0b55-3665-4863-a28c-0370feccad24", Collections.singletonList(
+                "183c0b55-3665-4863-a28c-0370feccad24", List.of(
                     Pair.of(ScenarioActionTypeEnum.ARCHIVED, "All usages from scenario have been sent to CRM"))))
             .build()
             .run();
@@ -78,6 +78,6 @@ public class SendSalToCrmIntegrationTest {
         UsageAuditItem auditItem = new UsageAuditItem();
         auditItem.setActionType(UsageActionTypeEnum.ARCHIVED);
         auditItem.setActionReason("Usage was sent to CRM");
-        return Collections.singletonList(auditItem);
+        return List.of(auditItem);
     }
 }

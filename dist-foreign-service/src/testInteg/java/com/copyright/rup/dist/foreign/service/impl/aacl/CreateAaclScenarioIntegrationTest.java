@@ -71,8 +71,7 @@ public class CreateAaclScenarioIntegrationTest {
             .withScenario(SCENARIO_NAME, SCENARIO_DESCRIPTION, buildAaclFields())
             .expectScenario(buildExpectedScenario())
             .expectScenarioFilter(new ScenarioUsageFilter(buildUsageFilter()))
-            .expectScenarioAudit(Collections.singletonList(
-                Pair.of(ScenarioActionTypeEnum.ADDED_USAGES, StringUtils.EMPTY)))
+            .expectScenarioAudit(List.of(Pair.of(ScenarioActionTypeEnum.ADDED_USAGES, StringUtils.EMPTY)))
             .expectUsages("usage/aacl/aacl_expected_usages_for_create_scenario.json")
             .build()
             .run();

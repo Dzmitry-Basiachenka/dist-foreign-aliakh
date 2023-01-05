@@ -74,12 +74,11 @@ public class FasScenarioServiceTest {
 
     @Test
     public void testSendToLm() {
-        List<String> usageIds = Collections.singletonList("3d81a2d6-c4b4-48d1-b59c-41e67b3719ac");
+        List<String> usageIds = List.of("3d81a2d6-c4b4-48d1-b59c-41e67b3719ac");
         Usage usage = new Usage();
         expect(fasUsageService.moveToArchive(scenario)).andReturn(usageIds).once();
-        expect(usageService.getArchivedUsagesForSendToLmByIds(usageIds))
-            .andReturn(Collections.singletonList(usage)).once();
-        lmIntegrationService.sendToLm(Collections.singletonList(new ExternalUsage(usage)));
+        expect(usageService.getArchivedUsagesForSendToLmByIds(usageIds)).andReturn(List.of(usage)).once();
+        lmIntegrationService.sendToLm(List.of(new ExternalUsage(usage)));
         expectLastCall().once();
         scenarioRepository.updateStatus(scenario);
         expectLastCall().once();
@@ -106,7 +105,7 @@ public class FasScenarioServiceTest {
         Usage usage = new Usage();
         usage.setWrWrkInst(1L);
         usage.getRightsholder().setAccountNumber(2000017010L);
-        List<Usage> usages = Collections.singletonList(usage);
+        List<Usage> usages = List.of(usage);
         expect(usageService.getUsagesByScenarioId(SCENARIO_ID)).andReturn(usages).once();
         fasUsageService.updateRhPayeeAmountsAndParticipating(usages);
         expectLastCall().once();

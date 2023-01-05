@@ -21,7 +21,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -56,7 +55,7 @@ public class RhEligibilityConsumerTest {
     @Test
     public void testConsumeUsageWithEligibleRightsholder() {
         Usage usage = buildUsage();
-        List<Usage> usages = Collections.singletonList(usage);
+        List<Usage> usages = List.of(usage);
         Capture<Predicate<Usage>> predicateCapture = newCapture();
         expect(prmIntegrationService.isRightsholderEligibleForNtsDistribution(RH_ID)).andReturn(true).once();
         rhEligibilityProcessor.executeNextChainProcessor(eq(usages), capture(predicateCapture));
@@ -70,7 +69,7 @@ public class RhEligibilityConsumerTest {
     @Test
     public void testConsumeUsageWithIneligibleRightsholder() {
         Usage usage = buildUsage();
-        List<Usage> usages = Collections.singletonList(usage);
+        List<Usage> usages = List.of(usage);
         Capture<Predicate<Usage>> predicateCapture = newCapture();
         expect(prmIntegrationService.isRightsholderEligibleForNtsDistribution(RH_ID)).andReturn(false).once();
         rhEligibilityProcessor.executeNextChainProcessor(eq(usages), capture(predicateCapture));

@@ -65,9 +65,9 @@ public class AbstractUdmUsageJobProcessorTest {
         List<String> usageIds = Arrays.asList(usage1.getId(), usage2.getId());
         expect(udmUsageService.getUdmUsageIdsByStatus(UsageStatusEnum.NEW)).andReturn(usageIds).once();
         expect(udmUsageService.getUdmUsagesByIds(usageIds)).andReturn(Arrays.asList(usage1, usage2)).once();
-        usageConsumer.accept(Collections.singletonList(usage1));
+        usageConsumer.accept(List.of(usage1));
         expectLastCall().once();
-        usageConsumer.accept(Collections.singletonList(usage2));
+        usageConsumer.accept(List.of(usage2));
         expectLastCall().once();
         replay(udmUsageService, usageConsumer, successProcessor, failureProcessor);
         assertEquals(new JobInfo(JobStatusEnum.FINISHED, "ProductFamily=ACL_UDM, UsagesCount=2"),

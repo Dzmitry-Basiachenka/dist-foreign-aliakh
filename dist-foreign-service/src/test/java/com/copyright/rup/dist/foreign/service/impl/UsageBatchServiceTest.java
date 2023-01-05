@@ -119,7 +119,7 @@ public class UsageBatchServiceTest {
     @Test
     public void testGetFiscalYears() {
         expect(usageBatchRepository.findFiscalYearsByProductFamily(FAS_PRODUCT_FAMILY))
-            .andReturn(Collections.singletonList(FISCAL_YEAR)).once();
+            .andReturn(List.of(FISCAL_YEAR)).once();
         replay(usageBatchRepository);
         List<Integer> result = usageBatchService.getFiscalYears(FAS_PRODUCT_FAMILY);
         assertNotNull(result);
@@ -130,7 +130,7 @@ public class UsageBatchServiceTest {
 
     @Test
     public void testGetUsageBatches() {
-        List<UsageBatch> usageBatches = Collections.singletonList(new UsageBatch());
+        List<UsageBatch> usageBatches = List.of(new UsageBatch());
         expect(usageBatchRepository.findAll()).andReturn(usageBatches).once();
         replay(usageBatchRepository);
         assertEquals(usageBatches, usageBatchService.getUsageBatches());
@@ -215,7 +215,7 @@ public class UsageBatchServiceTest {
         Capture<UsageBatch> captureUsageBatch = newCapture();
         UsageBatch usageBatch = new UsageBatch();
         usageBatch.setRro(buildRro());
-        List<String> usageIds = Collections.singletonList("c1965b73-7800-455c-beb3-98a430512f20");
+        List<String> usageIds = List.of("c1965b73-7800-455c-beb3-98a430512f20");
         usageBatchRepository.insert(capture(captureUsageBatch));
         expectLastCall().once();
         rightsholderService.updateRighstholdersAsync(Collections.singleton(RRO_ACCOUNT_NUMBER));
@@ -244,14 +244,14 @@ public class UsageBatchServiceTest {
         usageBatch.setNumberOfBaselineYears(3);
         Usage uploadedUsage = new Usage();
         uploadedUsage.setId("8e12b833-af38-4d49-96d0-221d2665f0dc");
-        List<Usage> uploadedUsages = Collections.singletonList(uploadedUsage);
+        List<Usage> uploadedUsages = List.of(uploadedUsage);
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
         usageBatchRepository.insert(capture(captureUsageBatch));
         expectLastCall().once();
         aaclUsageService.insertUsages(usageBatch, uploadedUsages);
         expectLastCall().once();
         expect(aaclUsageService.insertUsagesFromBaseline(usageBatch))
-            .andReturn(Collections.singletonList("b3f2727e-b023-49f0-970a-94dd3537ec6e")).once();
+            .andReturn(List.of("b3f2727e-b023-49f0-970a-94dd3537ec6e")).once();
         usageBatchRepository.updateInitialUsagesCount(eq(2), anyString(), eq(USER_NAME));
         expectLastCall().once();
         replay(usageBatchRepository, aaclUsageService, RupContextUtils.class);
@@ -274,7 +274,7 @@ public class UsageBatchServiceTest {
         usageBatch.setNumberOfBaselineYears(0);
         Usage uploadedUsage = new Usage();
         uploadedUsage.setId("086ce041-c11a-45af-8229-824ca897cc97");
-        List<Usage> uploadedUsages = Collections.singletonList(uploadedUsage);
+        List<Usage> uploadedUsages = List.of(uploadedUsage);
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
         usageBatchRepository.insert(capture(captureUsageBatch));
         expectLastCall().once();
@@ -283,7 +283,7 @@ public class UsageBatchServiceTest {
         usageBatchRepository.updateInitialUsagesCount(eq(1), anyString(), eq(USER_NAME));
         expectLastCall().once();
         replay(usageBatchRepository, aaclUsageService, RupContextUtils.class);
-        assertEquals(Collections.singletonList("086ce041-c11a-45af-8229-824ca897cc97"),
+        assertEquals(List.of("086ce041-c11a-45af-8229-824ca897cc97"),
             usageBatchService.insertAaclBatch(usageBatch, uploadedUsages));
         UsageBatch insertedUsageBatch = captureUsageBatch.getValue();
         assertNotNull(insertedUsageBatch.getId());
@@ -302,7 +302,7 @@ public class UsageBatchServiceTest {
         usageBatch.setNumberOfBaselineYears(3);
         Usage uploadedUsage = new Usage();
         uploadedUsage.setId("abc1a3de-151b-465e-8b90-9fedd13d6e79");
-        List<Usage> uploadedUsages = Collections.singletonList(uploadedUsage);
+        List<Usage> uploadedUsages = List.of(uploadedUsage);
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
         usageBatchRepository.insert(capture(captureUsageBatch));
         expectLastCall().once();
@@ -312,7 +312,7 @@ public class UsageBatchServiceTest {
         usageBatchRepository.updateInitialUsagesCount(eq(1), anyString(), eq(USER_NAME));
         expectLastCall().once();
         replay(usageBatchRepository, aaclUsageService, RupContextUtils.class);
-        assertEquals(Collections.singletonList("abc1a3de-151b-465e-8b90-9fedd13d6e79"),
+        assertEquals(List.of("abc1a3de-151b-465e-8b90-9fedd13d6e79"),
             usageBatchService.insertAaclBatch(usageBatch, uploadedUsages));
         UsageBatch insertedUsageBatch = captureUsageBatch.getValue();
         assertNotNull(insertedUsageBatch.getId());
@@ -330,7 +330,7 @@ public class UsageBatchServiceTest {
         usageBatch.setPaymentDate(LocalDate.of(2019, 6, 30));
         Usage uploadedUsage = new Usage();
         uploadedUsage.setId("945b9f3c-f878-44a2-9570-19e2053c529a");
-        List<Usage> uploadedUsages = Collections.singletonList(uploadedUsage);
+        List<Usage> uploadedUsages = List.of(uploadedUsage);
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
         usageBatchRepository.insert(capture(captureUsageBatch));
         expectLastCall().once();
@@ -339,7 +339,7 @@ public class UsageBatchServiceTest {
         usageBatchRepository.updateInitialUsagesCount(eq(1), anyString(), eq(USER_NAME));
         expectLastCall().once();
         replay(usageBatchRepository, salUsageService, RupContextUtils.class);
-        assertEquals(Collections.singletonList("945b9f3c-f878-44a2-9570-19e2053c529a"),
+        assertEquals(List.of("945b9f3c-f878-44a2-9570-19e2053c529a"),
             usageBatchService.insertSalBatch(usageBatch, uploadedUsages));
         UsageBatch insertedItemBank = captureUsageBatch.getValue();
         assertNotNull(insertedItemBank.getId());
@@ -357,7 +357,7 @@ public class UsageBatchServiceTest {
         usageBatch.setInitialUsagesCount(2);
         Usage uploadedUsage = new Usage();
         uploadedUsage.setId("3d394b30-66ad-49f7-9531-211b1fa35e9b");
-        List<Usage> uploadedUsages = Collections.singletonList(uploadedUsage);
+        List<Usage> uploadedUsages = List.of(uploadedUsage);
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
         salUsageService.insertUsageDataDetails(usageBatch, uploadedUsages, USER_NAME);
         expectLastCall().once();
@@ -402,7 +402,7 @@ public class UsageBatchServiceTest {
     public void testGetBatchNamesWithUnclassifiedWorks() {
         Set<String> batchIds = Collections.singleton(BATCH_UID);
         expect(usageBatchRepository.findBatchNamesWithoutUsagesForClassification(batchIds, null))
-            .andReturn(Collections.singletonList("Batch with unclassified usages")).once();
+            .andReturn(List.of("Batch with unclassified usages")).once();
         replay(usageBatchRepository);
         usageBatchService.getBatchNamesWithUnclassifiedWorks(Collections.singleton(BATCH_UID));
         verify(usageBatchRepository);
@@ -412,7 +412,7 @@ public class UsageBatchServiceTest {
     public void testGetClassifcationToBatchNamesWithoutUsagesForStmOrNonStm() {
         Set<String> batchIds = Collections.singleton(BATCH_UID);
         expect(usageBatchRepository.findBatchNamesWithoutUsagesForClassification(batchIds, "STM"))
-            .andReturn(Collections.singletonList("Batch without STM usages")).once();
+            .andReturn(List.of("Batch without STM usages")).once();
         expect(usageBatchRepository.findBatchNamesWithoutUsagesForClassification(batchIds, "NON-STM"))
             .andReturn(Collections.emptyList()).once();
         replay(usageBatchRepository);
@@ -423,7 +423,7 @@ public class UsageBatchServiceTest {
     @Test
     public void testGetProcessingNtsBatchesNames() {
         Set<String> batchesIds = Collections.singleton(RupPersistUtils.generateUuid());
-        List<String> batchesNames = Collections.singletonList(BATCH_NAME);
+        List<String> batchesNames = List.of(BATCH_NAME);
         EnumSet<UsageStatusEnum> processingStatuses =
             EnumSet.of(UsageStatusEnum.ELIGIBLE, UsageStatusEnum.UNCLASSIFIED, UsageStatusEnum.LOCKED,
                 UsageStatusEnum.SCENARIO_EXCLUDED);
@@ -437,7 +437,7 @@ public class UsageBatchServiceTest {
     @Test
     public void testGetProcessingAaclBatchesNames() {
         Set<String> batchesIds = Collections.singleton(RupPersistUtils.generateUuid());
-        List<String> batchesNames = Collections.singletonList(BATCH_NAME);
+        List<String> batchesNames = List.of(BATCH_NAME);
         EnumSet<UsageStatusEnum> processingStatuses =
             EnumSet.of(UsageStatusEnum.ELIGIBLE, UsageStatusEnum.WORK_RESEARCH, UsageStatusEnum.RH_FOUND,
                 UsageStatusEnum.WORK_NOT_FOUND, UsageStatusEnum.LOCKED, UsageStatusEnum.SCENARIO_EXCLUDED);
@@ -451,7 +451,7 @@ public class UsageBatchServiceTest {
     @Test
     public void testGetIneligibleBatchesNames() {
         Set<String> batchesIds = Collections.singleton(RupPersistUtils.generateUuid());
-        List<String> batchesNames = Collections.singletonList(BATCH_NAME);
+        List<String> batchesNames = List.of(BATCH_NAME);
         expect(
             usageBatchRepository.findIneligibleForScenarioBatchNames(batchesIds, EnumSet.of(UsageStatusEnum.ELIGIBLE)))
             .andReturn(batchesNames).once();
@@ -474,7 +474,7 @@ public class UsageBatchServiceTest {
 
     @Test
     public void testGetBatchNamesForRightsAssignment() {
-        List<String> expectedList = Collections.singletonList("FAS Batch");
+        List<String> expectedList = List.of("FAS Batch");
         expect(usageBatchRepository.findBatchNamesForRightsAssignment()).andReturn(expectedList).once();
         replay(usageBatchRepository);
         assertEquals(expectedList, usageBatchService.getBatchNamesForRightsAssignment());
@@ -498,7 +498,7 @@ public class UsageBatchServiceTest {
 
     @Test
     public void testGetSalNotAttachedToScenario() {
-        List<UsageBatch> expectedList = Collections.singletonList(new UsageBatch());
+        List<UsageBatch> expectedList = List.of(new UsageBatch());
         expect(usageBatchRepository.findSalNotAttachedToScenario()).andReturn(expectedList).once();
         replay(usageBatchRepository);
         assertEquals(expectedList, usageBatchService.getSalNotAttachedToScenario());
@@ -507,7 +507,7 @@ public class UsageBatchServiceTest {
 
     @Test
     public void testGetSalLicensees() {
-        List<SalLicensee> licensees = Collections.singletonList(new SalLicensee());
+        List<SalLicensee> licensees = List.of(new SalLicensee());
         expect(usageBatchRepository.findSalLicensees()).andReturn(licensees).once();
         replay(usageBatchRepository);
         assertSame(licensees, usageBatchService.getSalLicensees());
@@ -525,7 +525,7 @@ public class UsageBatchServiceTest {
         usageBatch.setPaymentDate(LocalDate.of(2022, 6, 30));
         Usage usage = new Usage();
         usage.setId(USAGE_UID);
-        List<Usage> usages = Collections.singletonList(usage);
+        List<Usage> usages = List.of(usage);
         Capture<UsageBatch> usageBatchCapture = newCapture();
         usageBatchRepository.insert(capture(usageBatchCapture));
         expectLastCall().once();
@@ -534,7 +534,7 @@ public class UsageBatchServiceTest {
         usageBatchRepository.updateInitialUsagesCount(eq(1), eq(BATCH_UID), eq(USER_NAME));
         expectLastCall().once();
         replay(RupContextUtils.class, RupPersistUtils.class, aclciUsageService, usageBatchRepository);
-        assertEquals(Collections.singletonList(USAGE_UID), usageBatchService.insertAclciBatch(usageBatch, usages));
+        assertEquals(List.of(USAGE_UID), usageBatchService.insertAclciBatch(usageBatch, usages));
         UsageBatch insertedUsageBatch = usageBatchCapture.getValue();
         assertEquals(BATCH_UID, insertedUsageBatch.getId());
         assertEquals(USER_NAME, insertedUsageBatch.getCreateUser());

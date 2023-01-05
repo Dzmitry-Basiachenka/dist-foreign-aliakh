@@ -75,11 +75,11 @@ public class SendToCrmIntegrationTest {
                 SAL_SCENARIO_UID, ScenarioStatusEnum.ARCHIVED))
             .expectUsageAudit(buildExpectedUsageAuditMap())
             .expectScenarioAudit(ImmutableMap.of(
-                AACL_SCENARIO_UID, Collections.singletonList(
+                AACL_SCENARIO_UID, List.of(
                     Pair.of(ScenarioActionTypeEnum.ARCHIVED, "All usages from scenario have been sent to CRM")),
-                FAS_SCENARIO_UID, Collections.singletonList(
+                FAS_SCENARIO_UID, List.of(
                     Pair.of(ScenarioActionTypeEnum.ARCHIVED, "All usages from scenario have been sent to CRM")),
-                SAL_SCENARIO_UID, Collections.singletonList(
+                SAL_SCENARIO_UID, List.of(
                     Pair.of(ScenarioActionTypeEnum.ARCHIVED, "All usages from scenario have been sent to CRM")),
                 NTS_SCENARIO_UID, Collections.emptyList()))
             .build()
@@ -110,6 +110,6 @@ public class SendToCrmIntegrationTest {
         UsageAuditItem auditItem = new UsageAuditItem();
         auditItem.setActionType(UsageActionTypeEnum.ARCHIVED);
         auditItem.setActionReason("Usage was sent to CRM");
-        return Collections.singletonList(auditItem);
+        return List.of(auditItem);
     }
 }

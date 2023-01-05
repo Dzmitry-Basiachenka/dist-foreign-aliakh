@@ -82,9 +82,9 @@ public class AbstractUsageJobProcessorTest {
         expect(usageService.getUsageIdsByStatusAndProductFamily(eq(UsageStatusEnum.NEW), eq(FAS_PRODUCT_FAMILY)))
             .andReturn(usageIds).once();
         expect(usageService.getUsagesByIds(usageIds)).andReturn(Arrays.asList(usage1, usage2)).once();
-        usageConsumer.accept(Collections.singletonList(usage1));
+        usageConsumer.accept(List.of(usage1));
         expectLastCall().once();
-        usageConsumer.accept(Collections.singletonList(usage2));
+        usageConsumer.accept(List.of(usage2));
         expectLastCall().once();
         replay(usageService, usageConsumer, aaclUsageService, successProcessor, failureProcessor);
         assertEquals(new JobInfo(JobStatusEnum.FINISHED, "ProductFamily=FAS, UsagesCount=2"),
@@ -100,9 +100,9 @@ public class AbstractUsageJobProcessorTest {
         expect(usageService.getUsageIdsByStatusAndProductFamily(UsageStatusEnum.NEW, "FAS2"))
             .andReturn(usageIds).once();
         expect(usageService.getUsagesByIds(eq(usageIds))).andReturn(Arrays.asList(usage1, usage2)).once();
-        usageConsumer.accept(Collections.singletonList(usage1));
+        usageConsumer.accept(List.of(usage1));
         expectLastCall().once();
-        usageConsumer.accept(Collections.singletonList(usage2));
+        usageConsumer.accept(List.of(usage2));
         expectLastCall().once();
         replay(usageService, usageConsumer, aaclUsageService, successProcessor, failureProcessor);
         assertEquals(new JobInfo(JobStatusEnum.FINISHED, "ProductFamily=FAS2, UsagesCount=2"),
@@ -118,9 +118,9 @@ public class AbstractUsageJobProcessorTest {
         expect(usageService.getUsageIdsByStatusAndProductFamily(UsageStatusEnum.NEW, "NTS"))
             .andReturn(usageIds).once();
         expect(usageService.getUsagesByIds(eq(usageIds))).andReturn(Arrays.asList(usage1, usage2)).once();
-        usageConsumer.accept(Collections.singletonList(usage1));
+        usageConsumer.accept(List.of(usage1));
         expectLastCall().once();
-        usageConsumer.accept(Collections.singletonList(usage2));
+        usageConsumer.accept(List.of(usage2));
         expectLastCall().once();
         replay(usageService, usageConsumer, aaclUsageService, successProcessor, failureProcessor);
         assertEquals(new JobInfo(JobStatusEnum.FINISHED, "ProductFamily=NTS, UsagesCount=2"),
@@ -136,9 +136,9 @@ public class AbstractUsageJobProcessorTest {
         expect(usageService.getUsageIdsByStatusAndProductFamily(UsageStatusEnum.NEW, "AACL"))
             .andReturn(usageIds).once();
         expect(aaclUsageService.getUsagesByIds(eq(usageIds))).andReturn(Arrays.asList(usage1, usage2)).once();
-        usageConsumer.accept(Collections.singletonList(usage1));
+        usageConsumer.accept(List.of(usage1));
         expectLastCall().once();
-        usageConsumer.accept(Collections.singletonList(usage2));
+        usageConsumer.accept(List.of(usage2));
         expectLastCall().once();
         replay(usageService, usageConsumer, aaclUsageService, successProcessor, failureProcessor);
         assertEquals(new JobInfo(JobStatusEnum.FINISHED, "ProductFamily=AACL, UsagesCount=2"),
@@ -154,9 +154,9 @@ public class AbstractUsageJobProcessorTest {
         expect(usageService.getUsageIdsByStatusAndProductFamily(UsageStatusEnum.NEW, "SAL"))
             .andReturn(usageIds).once();
         expect(salUsageService.getUsagesByIds(eq(usageIds))).andReturn(Arrays.asList(usage1, usage2)).once();
-        usageConsumer.accept(Collections.singletonList(usage1));
+        usageConsumer.accept(List.of(usage1));
         expectLastCall().once();
-        usageConsumer.accept(Collections.singletonList(usage2));
+        usageConsumer.accept(List.of(usage2));
         expectLastCall().once();
         replay(usageService, usageConsumer, salUsageService);
         assertEquals(new JobInfo(JobStatusEnum.FINISHED, "ProductFamily=SAL, UsagesCount=2"),
@@ -172,9 +172,9 @@ public class AbstractUsageJobProcessorTest {
         expect(usageService.getUsageIdsByStatusAndProductFamily(UsageStatusEnum.NEW, "ACLCI"))
             .andReturn(usageIds).once();
         expect(aclciUsageService.getUsagesByIds(eq(usageIds))).andReturn(Arrays.asList(usage1, usage2)).once();
-        usageConsumer.accept(Collections.singletonList(usage1));
+        usageConsumer.accept(List.of(usage1));
         expectLastCall().once();
-        usageConsumer.accept(Collections.singletonList(usage2));
+        usageConsumer.accept(List.of(usage2));
         expectLastCall().once();
         replay(usageService, usageConsumer, aclciUsageService);
         assertEquals(new JobInfo(JobStatusEnum.FINISHED, "ProductFamily=ACLCI, UsagesCount=2"),

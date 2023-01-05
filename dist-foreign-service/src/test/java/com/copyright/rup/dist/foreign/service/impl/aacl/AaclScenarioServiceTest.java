@@ -30,7 +30,6 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -104,12 +103,11 @@ public class AaclScenarioServiceTest {
 
     @Test
     public void testSendToLm() {
-        List<String> usageIds = Collections.singletonList(RupPersistUtils.generateUuid());
+        List<String> usageIds = List.of(RupPersistUtils.generateUuid());
         Usage usage = new Usage();
         expect(aaclUsageService.moveToArchive(scenario)).andReturn(usageIds).once();
-        expect(usageService.getArchivedUsagesForSendToLmByIds(usageIds))
-            .andReturn(Collections.singletonList(usage)).once();
-        lmIntegrationService.sendToLm(Collections.singletonList(new ExternalUsage(usage)));
+        expect(usageService.getArchivedUsagesForSendToLmByIds(usageIds)).andReturn(List.of(usage)).once();
+        lmIntegrationService.sendToLm(List.of(new ExternalUsage(usage)));
         expectLastCall().once();
         scenarioRepository.updateStatus(scenario);
         expectLastCall().once();

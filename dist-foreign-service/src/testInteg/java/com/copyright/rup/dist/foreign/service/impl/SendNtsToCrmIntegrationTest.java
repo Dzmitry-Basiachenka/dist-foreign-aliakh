@@ -20,7 +20,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -60,7 +59,7 @@ public class SendNtsToCrmIntegrationTest {
                 "adcd15c4-eb44-4e67-847a-7f386082646a", buildArchivedUsageAudit(),
                 "6fa92092-5cd3-4a12-bbf4-762f7ff6f815", buildArchivedUsageAudit()))
             .expectScenarioAudit(ImmutableMap.of(
-                "67027e15-17c6-4b9b-b7f0-12ec414ad344", Collections.singletonList(
+                "67027e15-17c6-4b9b-b7f0-12ec414ad344", List.of(
                     Pair.of(ScenarioActionTypeEnum.ARCHIVED, "All usages from scenario have been sent to CRM"))))
             .build()
             .run();
@@ -78,6 +77,6 @@ public class SendNtsToCrmIntegrationTest {
         UsageAuditItem auditItem = new UsageAuditItem();
         auditItem.setActionType(UsageActionTypeEnum.ARCHIVED);
         auditItem.setActionReason("Usage was sent to CRM");
-        return Collections.singletonList(auditItem);
+        return List.of(auditItem);
     }
 }

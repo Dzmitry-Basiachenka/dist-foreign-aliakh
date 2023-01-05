@@ -21,7 +21,6 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -148,8 +147,7 @@ public class CreateSalScenarioIntegrationTestBuilder {
         private void assertUsages() throws IOException {
             List<Usage> expectedUsages = testHelper.loadExpectedUsages(expectedUsagesJsonFile);
             expectedUsages.forEach(expectedUsage -> {
-                List<Usage> actualUsages =
-                    salUsageService.getUsagesByIds(Collections.singletonList(expectedUsage.getId()));
+                List<Usage> actualUsages = salUsageService.getUsagesByIds(List.of(expectedUsage.getId()));
                 assertEquals(1, actualUsages.size());
                 assertUsage(expectedUsage, actualUsages.get(0));
             });

@@ -53,7 +53,7 @@ public class StmRhServiceTest {
     @Test
     public void testProcessStmRhsWithNonStmRh() {
         Usage usage = buildUsage();
-        List<Usage> usages = Collections.singletonList(usage);
+        List<Usage> usages = List.of(usage);
         expect(prmIntegrationService.getStmRightsholderPreferenceMap(Collections.singleton(RH_ID), NTS_PRODUCT_FAMILY))
             .andReturn(ImmutableMap.of(RH_ID, false)).once();
         usageServiceMock.updateProcessedUsage(usage);
@@ -67,7 +67,7 @@ public class StmRhServiceTest {
     @Test
     public void testProcessStmRhsWithStmRh() {
         Usage usage = buildUsage();
-        List<Usage> usages = Collections.singletonList(usage);
+        List<Usage> usages = List.of(usage);
         expect(prmIntegrationService.getStmRightsholderPreferenceMap(Collections.singleton(RH_ID), NTS_PRODUCT_FAMILY))
             .andReturn(ImmutableMap.of(RH_ID, true)).once();
         replay(prmIntegrationService, usageServiceMock);

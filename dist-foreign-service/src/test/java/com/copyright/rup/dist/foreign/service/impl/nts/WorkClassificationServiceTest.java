@@ -101,16 +101,14 @@ public class WorkClassificationServiceTest {
         Usage usage1 = new Usage();
         usage1.setId(RupPersistUtils.generateUuid());
         Usage usage2 = new Usage();
-        usage1.setId(RupPersistUtils.generateUuid());
+        usage2.setId(RupPersistUtils.generateUuid());
         expect(ntsUsageRepository.findUsageIdsForClassificationUpdate())
             .andReturn(Arrays.asList(usage1.getId(), usage2.getId())).once();
-        expect(usageRepository.findByIds(Collections.singletonList(usage1.getId())))
-            .andReturn(Collections.singletonList(usage1)).once();
-        nonBelletristicProcessorMock.process(Collections.singletonList(usage1));
+        expect(usageRepository.findByIds(List.of(usage1.getId()))).andReturn(List.of(usage1)).once();
+        nonBelletristicProcessorMock.process(List.of(usage1));
         expectLastCall().once();
-        expect(usageRepository.findByIds(Collections.singletonList(usage2.getId())))
-            .andReturn(Collections.singletonList(usage2)).once();
-        nonBelletristicProcessorMock.process(Collections.singletonList(usage2));
+        expect(usageRepository.findByIds(List.of(usage2.getId()))).andReturn(List.of(usage2)).once();
+        nonBelletristicProcessorMock.process(List.of(usage2));
         expectLastCall().once();
         replay(workClassificationRepository, ntsUsageRepository, usageRepository, nonBelletristicProcessorMock);
         workClassificationService.insertOrUpdateClassifications(
@@ -166,7 +164,7 @@ public class WorkClassificationServiceTest {
     @Test
     public void testGetClassifications() {
         Set<String> batchesIds = Collections.singleton(BATCH_ID);
-        List<WorkClassification> classifications = Collections.singletonList(new WorkClassification());
+        List<WorkClassification> classifications = List.of(new WorkClassification());
         expect(workClassificationRepository.findByBatchIds(batchesIds, SEARCH_VALUE, null, null))
             .andReturn(classifications).once();
         replay(workClassificationRepository);
@@ -178,7 +176,7 @@ public class WorkClassificationServiceTest {
     @Test
     public void testGetClassificationsEmptyBatchesIds() {
         Set<String> batchesIds = Collections.emptySet();
-        List<WorkClassification> classifications = Collections.singletonList(new WorkClassification());
+        List<WorkClassification> classifications = List.of(new WorkClassification());
         expect(workClassificationRepository.findBySearch(SEARCH_VALUE, null, null))
             .andReturn(classifications).once();
         replay(workClassificationRepository);

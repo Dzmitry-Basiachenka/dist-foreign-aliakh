@@ -478,7 +478,7 @@ public class ReportServiceTest {
         PipedOutputStream pos = new PipedOutputStream();
         PipedInputStream pis = new PipedInputStream(pos);
         new ReportService().writeNtsWithdrawnBatchesCsvReport(
-            Collections.singletonList(buildUsageBatch()), USAGE_BATCH_GROSS_AMOUNT, pos);
+            List.of(buildUsageBatch()), USAGE_BATCH_GROSS_AMOUNT, pos);
         reportTestUtils.assertCsvReport("batches_nts_withdrawn.csv", pis);
     }
 
@@ -589,7 +589,7 @@ public class ReportServiceTest {
     @Test
     public void testWriteSalLiabilitiesSummaryByRhAndWorkCsvReport() {
         PipedOutputStream outputStream = createMock(PipedOutputStream.class);
-        List<Scenario> scenarios = Collections.singletonList(new Scenario());
+        List<Scenario> scenarios = List.of(new Scenario());
         salReportRepository.writeSalLiabilitiesSummaryByRhAndWorkCsvReport(scenarios, outputStream);
         expectLastCall().once();
         replay(salReportRepository);

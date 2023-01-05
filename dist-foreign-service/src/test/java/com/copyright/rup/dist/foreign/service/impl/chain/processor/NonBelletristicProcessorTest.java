@@ -17,7 +17,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Collections;
+import java.util.List;
 
 /**
  * Verifies {@link NonBelletristicProcessor}.
@@ -56,9 +56,9 @@ public class NonBelletristicProcessorTest {
         Usage usage2 = buildUsage("ac261ab4-2447-4304-9a10-b6c584490208", WR_WRK_INST_2);
         expect(workClassificationService.getClassification(WR_WRK_INST_1)).andReturn("STM").once();
         expect(workClassificationService.getClassification(WR_WRK_INST_2)).andReturn("BELLETRISTIC").once();
-        eligibilityProcessor.process(Collections.singletonList(usage1));
+        eligibilityProcessor.process(List.of(usage1));
         expectLastCall().once();
-        deleteProcessor.process(Collections.singletonList(usage2));
+        deleteProcessor.process(List.of(usage2));
         expectLastCall().once();
         replay(workClassificationService, eligibilityProcessor, deleteProcessor);
         nonBelletristicProcessor.process(Lists.newArrayList(usage1, usage2));

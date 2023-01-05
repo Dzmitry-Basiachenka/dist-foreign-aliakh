@@ -21,7 +21,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -122,7 +121,7 @@ public class RefreshScenarioTest {
     }
 
     private List<Pair<ScenarioActionTypeEnum, String>> buildScenarioAudit() {
-        return Collections.singletonList(Pair.of(ScenarioActionTypeEnum.ADDED_USAGES, StringUtils.EMPTY));
+        return List.of(Pair.of(ScenarioActionTypeEnum.ADDED_USAGES, StringUtils.EMPTY));
     }
 
     private Usage buildUsage(String usageId, Long rhAccountNumber, Long payeeAccountNumber, String serviceFeeAmount,

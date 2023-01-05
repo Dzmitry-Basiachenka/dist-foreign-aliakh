@@ -180,8 +180,7 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
             expectedRhIdToPrmResponseMap.forEach((rightsholderIds, response) ->
                 testHelper.expectGetPreferences(response, rightsholderIds));
             if (Objects.nonNull(expectedRollupsJson)) {
-                testHelper.expectGetRollups(expectedRollupsJson,
-                    Collections.singletonList(expectedRollupsRightholderId));
+                testHelper.expectGetRollups(expectedRollupsJson, List.of(expectedRollupsRightholderId));
             }
             testHelper.expectCrmCall(Objects.requireNonNull(expectedCrmRequest), Objects.requireNonNull(crmResponse),
                 Arrays.asList("omOrderDetailNumber", "licenseCreateDate"));
@@ -214,12 +213,11 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
 
         private void sendScenarioToLm() {
             ntsScenarioService.sendToLm(actualScenario);
-            testHelper.sendScenarioToLm(Collections.singletonList(expectedLmDetailsJsonFile));
+            testHelper.sendScenarioToLm(List.of(expectedLmDetailsJsonFile));
         }
 
         private void receivePaidUsagesFromLm() throws InterruptedException {
-            testHelper.receivePaidUsagesFromLm(expectedPaidUsages,
-                Collections.singletonList(getArchivedUsages().get(0).getId()));
+            testHelper.receivePaidUsagesFromLm(expectedPaidUsages, List.of(getArchivedUsages().get(0).getId()));
         }
 
         private void assertScenario() {

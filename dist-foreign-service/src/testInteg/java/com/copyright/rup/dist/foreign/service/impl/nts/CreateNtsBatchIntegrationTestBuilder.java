@@ -21,7 +21,6 @@ import org.apache.commons.lang3.builder.Builder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -211,7 +210,7 @@ public class CreateNtsBatchIntegrationTestBuilder implements Builder<Runner> {
         private void assertAudit() {
             actualUsageIds.forEach(Objects.isNull(expectedAudit)
                 ? usageId -> assertTrue(CollectionUtils.isEmpty(usageAuditService.getUsageAudit(usageId)))
-                : usageId -> testHelper.assertAudit(usageId, Collections.singletonList(expectedAudit)));
+                : usageId -> testHelper.assertAudit(usageId, List.of(expectedAudit)));
         }
     }
 }

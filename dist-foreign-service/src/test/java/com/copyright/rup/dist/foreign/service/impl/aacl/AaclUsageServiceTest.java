@@ -161,7 +161,7 @@ public class AaclUsageServiceTest {
         usageAuditService.logAction(usage.getId(), UsageActionTypeEnum.LOADED, "Uploaded in 'AACL Batch' Batch");
         expectLastCall().once();
         replay(aaclUsageRepository, usageAuditService, RupContextUtils.class);
-        aaclUsageService.insertUsages(buildUsageBatch(), Collections.singletonList(usage));
+        aaclUsageService.insertUsages(buildUsageBatch(), List.of(usage));
         verify(aaclUsageRepository, usageAuditService, RupContextUtils.class);
     }
 
@@ -173,12 +173,12 @@ public class AaclUsageServiceTest {
         expect(aaclUsageRepository.findBaselinePeriods(2019, 3))
             .andReturn(baselinePeriods).once();
         expect(aaclUsageRepository.insertFromBaseline(baselinePeriods, BATCH_ID, USER_NAME))
-            .andReturn(Collections.singletonList(USAGE_ID)).once();
+            .andReturn(List.of(USAGE_ID)).once();
         usageAuditService.logAction(Collections.singleton(USAGE_ID), UsageActionTypeEnum.LOADED,
             "Pulled from baseline for 'AACL Batch' Batch");
         expectLastCall().once();
         replay(aaclUsageRepository, usageAuditService, RupContextUtils.class);
-        assertEquals(Collections.singletonList(USAGE_ID), aaclUsageService.insertUsagesFromBaseline(buildUsageBatch()));
+        assertEquals(List.of(USAGE_ID), aaclUsageService.insertUsagesFromBaseline(buildUsageBatch()));
         verify(aaclUsageRepository, usageAuditService, RupContextUtils.class);
     }
 
@@ -214,7 +214,7 @@ public class AaclUsageServiceTest {
         expectLastCall().once();
         usageAuditService.deleteActionsByUsageId(USAGE_ID);
         expectLastCall().once();
-        aaclUsageRepository.updateClassifiedUsages(Collections.singletonList(usage1), USER_NAME);
+        aaclUsageRepository.updateClassifiedUsages(List.of(usage1), USER_NAME);
         expectLastCall().once();
         usageAuditService.logAction(usage1.getDetailId(), UsageActionTypeEnum.ELIGIBLE,
             "Usages has become eligible after classification");
@@ -267,8 +267,8 @@ public class AaclUsageServiceTest {
 
     @Test
     public void testGetUsagesByIds() {
-        List<String> usageIds = Collections.singletonList(USAGE_ID);
-        List<Usage> usages = Collections.singletonList(new Usage());
+        List<String> usageIds = List.of(USAGE_ID);
+        List<Usage> usages = List.of(new Usage());
         expect(aaclUsageRepository.findByIds(usageIds)).andReturn(usages).once();
         replay(aaclUsageRepository);
         assertEquals(usages, aaclUsageService.getUsagesByIds(usageIds));
@@ -284,7 +284,7 @@ public class AaclUsageServiceTest {
 
     @Test
     public void testGetUsageDtos() {
-        List<UsageDto> usagesWithBatch = Collections.singletonList(new UsageDto());
+        List<UsageDto> usagesWithBatch = List.of(new UsageDto());
         Pageable pageable = new Pageable(0, 1);
         Sort sort = new Sort("detailId", Sort.Direction.ASC);
         UsageFilter filter = new UsageFilter();
@@ -306,7 +306,7 @@ public class AaclUsageServiceTest {
 
     @Test
     public void testGetUsagePeriods() {
-        List<Integer> usagePeriods = Collections.singletonList(2020);
+        List<Integer> usagePeriods = List.of(2020);
         expect(aaclUsageRepository.findUsagePeriods()).andReturn(usagePeriods).once();
         replay(aaclUsageRepository);
         assertEquals(usagePeriods, aaclUsageService.getUsagePeriods());
@@ -343,10 +343,9 @@ public class AaclUsageServiceTest {
     @Test
     public void testGetInvalidRightsholdersByFilter() {
         UsageFilter filter = new UsageFilter();
-        expect(aaclUsageRepository.findInvalidRightsholdersByFilter(filter))
-            .andReturn(Collections.singletonList(7000000001L)).once();
+        expect(aaclUsageRepository.findInvalidRightsholdersByFilter(filter)).andReturn(List.of(7000000001L)).once();
         replay(aaclUsageRepository);
-        assertEquals(Collections.singletonList(7000000001L), aaclUsageService.getInvalidRightsholdersByFilter(filter));
+        assertEquals(List.of(7000000001L), aaclUsageService.getInvalidRightsholdersByFilter(filter));
         verify(aaclUsageRepository);
     }
 
@@ -468,8 +467,7 @@ public class AaclUsageServiceTest {
         Rightsholder rightsholder = new Rightsholder();
         rightsholder.setId("378cafcf-cf21-4036-b223-5bd48b09c41f");
         rightsholder.setAccountNumber(2000073957L);
-        expect(rightsholderService.getByScenarioId(SCENARIO_ID))
-            .andReturn(Collections.singletonList(rightsholder)).once();
+        expect(rightsholderService.getByScenarioId(SCENARIO_ID)).andReturn(List.of(rightsholder)).once();
         expect(prmIntegrationService.getRollUps(Collections.singleton("378cafcf-cf21-4036-b223-5bd48b09c41f")))
             .andReturn(Collections.emptyMap()).once();
         aaclUsageRepository.updatePayeeByAccountNumber(2000073957L, SCENARIO_ID, 2000073957L, "SYSTEM");
@@ -522,7 +520,7 @@ public class AaclUsageServiceTest {
         List<AggregateLicenseeClass> result =
             aaclUsageService.getAggregateClassesNotToBeDistributed(FUND_POOL_ID, usageFilter, classes);
         verify(licenseeClassService, fundPoolService, aaclUsageRepository);
-        assertEquals(Collections.singletonList(ALC_4), result);
+        assertEquals(List.of(ALC_4), result);
     }
 
     @Test
@@ -544,7 +542,7 @@ public class AaclUsageServiceTest {
         List<AggregateLicenseeClass> result =
             aaclUsageService.getAggregateClassesNotToBeDistributed(FUND_POOL_ID, usageFilter, classes);
         verify(licenseeClassService, fundPoolService, aaclUsageRepository);
-        assertEquals(Collections.singletonList(ALC_2), result);
+        assertEquals(List.of(ALC_2), result);
     }
 
     @Test
@@ -583,7 +581,7 @@ public class AaclUsageServiceTest {
     public void testGetPayeeTotalHoldersByFilter() {
         ExcludePayeeFilter filter = new ExcludePayeeFilter();
         filter.setNetAmountMinThreshold(BigDecimal.TEN);
-        List<PayeeTotalHolder> payeeTotalHolders = Collections.singletonList(new PayeeTotalHolder());
+        List<PayeeTotalHolder> payeeTotalHolders = List.of(new PayeeTotalHolder());
         expect(aaclUsageRepository.findPayeeTotalHoldersByFilter(filter)).andReturn(payeeTotalHolders).once();
         replay(aaclUsageRepository);
         assertSame(payeeTotalHolders, aaclUsageService.getPayeeTotalHoldersByFilter(filter));
@@ -619,7 +617,7 @@ public class AaclUsageServiceTest {
         Scenario scenario = new Scenario();
         scenario.setId(SCENARIO_ID);
         scenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);
-        List<UsageDto> usageDtos = Collections.singletonList(new UsageDto());
+        List<UsageDto> usageDtos = List.of(new UsageDto());
         expect(aaclUsageRepository.findByScenarioIdAndRhAccountNumber(SCENARIO_ID, 1000009422L, SEARCH, null, null))
             .andReturn(usageDtos).once();
         replay(aaclUsageRepository);
@@ -633,7 +631,7 @@ public class AaclUsageServiceTest {
         Scenario scenario = new Scenario();
         scenario.setId(SCENARIO_ID);
         scenario.setStatus(ScenarioStatusEnum.SENT_TO_LM);
-        List<UsageDto> usageDtos = Collections.singletonList(new UsageDto());
+        List<UsageDto> usageDtos = List.of(new UsageDto());
         expect(
             usageArchiveRepository.findAaclByScenarioIdAndRhAccountNumber(SCENARIO_ID, 1000009422L, SEARCH, null, null))
             .andReturn(usageDtos).once();
@@ -650,7 +648,7 @@ public class AaclUsageServiceTest {
         scenario.setId(SCENARIO_ID);
         scenario.setName("Scenario name");
         scenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);
-        List<String> usageIds = Collections.singletonList(USAGE_ID);
+        List<String> usageIds = List.of(USAGE_ID);
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
         aaclUsageRepository.addToBaselineByScenarioId(SCENARIO_ID, USER_NAME);
         expectLastCall().once();

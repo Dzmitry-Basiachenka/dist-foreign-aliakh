@@ -65,7 +65,7 @@ public class SendFasToCrmIntegrationTest {
                 "0d1829eb-de35-4f93-bb36-2a7435263051", buildArchivedUsageAudit(),
                 "48189e92-b9d2-46be-94a4-c2adf83f21ce", buildArchivedUsageAudit()))
             .expectScenarioAudit(ImmutableMap.of(
-                "cb7e3237-50c3-46a5-938e-46afd8c1e0bf", Collections.singletonList(
+                "cb7e3237-50c3-46a5-938e-46afd8c1e0bf", List.of(
                     Pair.of(ScenarioActionTypeEnum.ARCHIVED, "All usages from scenario have been sent to CRM")),
                 "221c5a30-1937-4bf6-977f-93741f9b20f1", Collections.emptyList()))
             .build()
@@ -84,6 +84,6 @@ public class SendFasToCrmIntegrationTest {
         UsageAuditItem auditItem = new UsageAuditItem();
         auditItem.setActionType(UsageActionTypeEnum.ARCHIVED);
         auditItem.setActionReason("Usage was sent to CRM");
-        return Collections.singletonList(auditItem);
+        return List.of(auditItem);
     }
 }

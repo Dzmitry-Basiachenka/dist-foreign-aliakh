@@ -26,7 +26,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -87,11 +86,9 @@ public class CreateNtsBatchIntegrationTest {
             .expectPrmCall(ImmutableMap.of(
                 2000017001L, PRM_RH_2000017001_RESPONSE,
                 1000023401L, PRM_RH_1000023401_RESPONSE))
-            .expectOracleCall(ImmutableMap.of(
-                Collections.singletonList(1000023401L), ORACLE_RH_TAX_1000023401_US_RESPONSE))
-            .expectPreferences(ImmutableMap.of(
-                Collections.singletonList(RH_ID_1), PRM_ELIGIBLE_RH_1000023401_RESPONSE))
-            .expectUsages(Collections.singletonList(buildUsage(BUS_MARKET, UsageStatusEnum.ELIGIBLE, 658824345L)))
+            .expectOracleCall(ImmutableMap.of(List.of(1000023401L), ORACLE_RH_TAX_1000023401_US_RESPONSE))
+            .expectPreferences(ImmutableMap.of(List.of(RH_ID_1), PRM_ELIGIBLE_RH_1000023401_RESPONSE))
+            .expectUsages(List.of(buildUsage(BUS_MARKET, UsageStatusEnum.ELIGIBLE, 658824345L)))
             .expectAudit(getEligibleUsageAuditItem())
             .build()
             .run();
@@ -172,11 +169,9 @@ public class CreateNtsBatchIntegrationTest {
             .expectPrmCall(ImmutableMap.of(
                 2000017001L, PRM_RH_2000017001_RESPONSE,
                 1000023401L, PRM_RH_1000023401_RESPONSE))
-            .expectOracleCall(ImmutableMap.of(
-                Collections.singletonList(1000023401L), ORACLE_RH_TAX_1000023401_US_RESPONSE))
-            .expectPreferences(ImmutableMap.of(
-                Collections.singletonList(RH_ID_1), PRM_ELIGIBLE_RH_1000023401_RESPONSE))
-            .expectUsages(Collections.singletonList(buildUsage("Gov", UsageStatusEnum.UNCLASSIFIED, 576324545L)))
+            .expectOracleCall(ImmutableMap.of(List.of(1000023401L), ORACLE_RH_TAX_1000023401_US_RESPONSE))
+            .expectPreferences(ImmutableMap.of(List.of(RH_ID_1), PRM_ELIGIBLE_RH_1000023401_RESPONSE))
+            .expectUsages(List.of(buildUsage("Gov", UsageStatusEnum.UNCLASSIFIED, 576324545L)))
             .build()
             .run();
     }
@@ -190,10 +185,8 @@ public class CreateNtsBatchIntegrationTest {
             .expectPrmCall(ImmutableMap.of(
                 2000017001L, PRM_RH_2000017001_RESPONSE,
                 1000023401L, PRM_RH_1000023401_RESPONSE))
-            .expectOracleCall(ImmutableMap.of(
-                Collections.singletonList(1000023401L), ORACLE_RH_TAX_1000023401_US_RESPONSE))
-            .expectPreferences(ImmutableMap.of(
-                Collections.singletonList(RH_ID_1), "preferences/rh_1000023401_ineligible_response.json"))
+            .expectOracleCall(ImmutableMap.of(List.of(1000023401L), ORACLE_RH_TAX_1000023401_US_RESPONSE))
+            .expectPreferences(ImmutableMap.of(List.of(RH_ID_1), "preferences/rh_1000023401_ineligible_response.json"))
             .build()
             .run();
     }
@@ -207,8 +200,7 @@ public class CreateNtsBatchIntegrationTest {
             .expectPrmCall(ImmutableMap.of(
                 2000017001L, PRM_RH_2000017001_RESPONSE,
                 1000023401L, "prm/rightsholder_1000023401_response.json"))
-            .expectOracleCall(ImmutableMap.of(
-                Collections.singletonList(1000023401L), "tax/rh_1000023401_tax_country_fr_response.json"))
+            .expectOracleCall(ImmutableMap.of(List.of(1000023401L), "tax/rh_1000023401_tax_country_fr_response.json"))
             .build()
             .run();
     }
@@ -234,10 +226,9 @@ public class CreateNtsBatchIntegrationTest {
             .expectPrmCall(ImmutableMap.of(
                 2000017001L, PRM_RH_2000017001_RESPONSE,
                 1000023401L, PRM_RH_1000023401_RESPONSE))
-            .expectOracleCall(
-                ImmutableMap.of(Collections.singletonList(1000023401L), ORACLE_RH_TAX_1000023401_US_RESPONSE))
-            .expectPreferences(ImmutableMap.of(Collections.singletonList(RH_ID_1), PRM_ELIGIBLE_RH_1000023401_RESPONSE))
-            .expectUsages(Collections.singletonList(buildUsage("Lib", UsageStatusEnum.ELIGIBLE, 658824345L)))
+            .expectOracleCall(ImmutableMap.of(List.of(1000023401L), ORACLE_RH_TAX_1000023401_US_RESPONSE))
+            .expectPreferences(ImmutableMap.of(List.of(RH_ID_1), PRM_ELIGIBLE_RH_1000023401_RESPONSE))
+            .expectUsages(List.of(buildUsage("Lib", UsageStatusEnum.ELIGIBLE, 658824345L)))
             .expectAudit(getEligibleUsageAuditItem())
             .build()
             .run();
@@ -252,10 +243,9 @@ public class CreateNtsBatchIntegrationTest {
             .expectPrmCall(ImmutableMap.of(
                 2000017001L, PRM_RH_2000017001_RESPONSE,
                 1000023401L, PRM_RH_1000023401_RESPONSE))
-            .expectOracleCall(
-                ImmutableMap.of(Collections.singletonList(1000023401L), ORACLE_RH_TAX_1000023401_US_RESPONSE))
-            .expectPreferences(ImmutableMap.of(Collections.singletonList(RH_ID_1), PRM_ELIGIBLE_RH_1000023401_RESPONSE))
-            .expectUsages(Collections.singletonList(buildUsage("Edu", UsageStatusEnum.ELIGIBLE, 658824345L)))
+            .expectOracleCall(ImmutableMap.of(List.of(1000023401L), ORACLE_RH_TAX_1000023401_US_RESPONSE))
+            .expectPreferences(ImmutableMap.of(List.of(RH_ID_1), PRM_ELIGIBLE_RH_1000023401_RESPONSE))
+            .expectUsages(List.of(buildUsage("Edu", UsageStatusEnum.ELIGIBLE, 658824345L)))
             .expectAudit(getEligibleUsageAuditItem())
             .build()
             .run();

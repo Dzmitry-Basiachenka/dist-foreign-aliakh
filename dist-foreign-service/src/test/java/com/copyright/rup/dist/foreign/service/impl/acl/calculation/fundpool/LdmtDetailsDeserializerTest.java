@@ -11,7 +11,6 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -41,6 +40,6 @@ public class LdmtDetailsDeserializerTest {
         ldmtDetail.setTypeOfUse("PRINT");
         ldmtDetail.setGrossAmount(new BigDecimal("634420.48"));
         ldmtDetail.setNetAmount(new BigDecimal("450799.88"));
-        return Collections.singletonList(ldmtDetail);
+        return List.of(ldmtDetail);
     }
 }

@@ -12,7 +12,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,7 +46,7 @@ public class CommonUsageProducerTest {
     public void testSendMessage() {
         Usage usage = new Usage();
         usage.setProductFamily(PRODUCT_FAMILY);
-        List<Usage> usages = Collections.singletonList(usage);
+        List<Usage> usages = List.of(usage);
         Map<String, Object> headers = new HashMap<>();
         headers.put("productFamily", PRODUCT_FAMILY);
         template.sendBodyAndHeaders(END_POINT, usages, headers);

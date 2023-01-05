@@ -15,7 +15,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -64,6 +63,6 @@ public class RhEligibilityProcessorTest {
         usage.setWrWrkInst(854030733L);
         usage.setProductFamily("NTS");
         usage.setStatus(UsageStatusEnum.US_TAX_COUNTRY);
-        return Collections.singletonList(usage);
+        return List.of(usage);
     }
 }

@@ -20,7 +20,6 @@ import org.junit.Test;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -72,7 +71,7 @@ public class CommonUsageDeserializerTest {
     private List<Usage> buildFasUsages() {
         Usage usage = buildUsage();
         usage.setProductFamily("FAS");
-        return Collections.singletonList(usage);
+        return List.of(usage);
     }
 
     private List<Usage> buildAaclUsages() {
@@ -81,7 +80,7 @@ public class CommonUsageDeserializerTest {
         usage.setAaclUsage(new AaclUsage());
         usage.getAaclUsage().setBatchPeriodEndDate(LocalDate.of(2019, 6, 30));
         usage.getAaclUsage().setBaselineId("e98d77bf-af0a-4c40-a46a-f211607e239f");
-        return Collections.singletonList(usage);
+        return List.of(usage);
     }
 
     private List<Usage> buildSalUsages() {
@@ -89,7 +88,7 @@ public class CommonUsageDeserializerTest {
         usage.setProductFamily("SAL");
         usage.setSalUsage(new SalUsage());
         usage.getSalUsage().setBatchPeriodEndDate(LocalDate.of(2019, 6, 30));
-        return Collections.singletonList(usage);
+        return List.of(usage);
     }
 
     private List<Usage> buildAclciUsages() {
@@ -98,7 +97,7 @@ public class CommonUsageDeserializerTest {
         usage.setAclciUsage(new AclciUsage());
         usage.getAclciUsage().setLicenseType(AclciLicenseTypeEnum.CURR_REUSE_K12);
         usage.getAclciUsage().setBatchPeriodEndDate(LocalDate.of(2019, 6, 30));
-        return Collections.singletonList(usage);
+        return List.of(usage);
     }
 
     private Usage buildUsage() {

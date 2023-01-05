@@ -40,7 +40,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -128,10 +127,9 @@ public class UpdateRightsIntegrationTest {
             buildUsage("b77e72d6-ef71-4f4b-a00b-5800e43e5bee", FAS, 254030731L),
             buildUsage("8aded52d-9507-4883-ab4c-fd2e029298af", FAS, 254030731L),
             buildUsage("74ded52a-4454-1225-ab4c-fA2e029298af", FAS, 658824345L)), true);
-        rightsService.updateRights(Collections.singletonList(
-            buildUsage("3a6b6f25-9f68-4da7-be4f-dd65574f5168", FAS, 488824345L)), true);
+        rightsService.updateRights(List.of(buildUsage("3a6b6f25-9f68-4da7-be4f-dd65574f5168", FAS, 488824345L)), true);
         rightsService.updateRights(
-            Collections.singletonList(buildUsage("ede81bc0-a756-43a2-b236-05a0184384f4", "NTS", 786768461L)), false);
+            List.of(buildUsage("ede81bc0-a756-43a2-b236-05a0184384f4", "NTS", 786768461L)), false);
         assertUsage("ede81bc0-a756-43a2-b236-05a0184384f4", UsageStatusEnum.RH_FOUND, 1000023401L);
         assertUsage("b77e72d6-ef71-4f4b-a00b-5800e43e5bee", UsageStatusEnum.RH_FOUND, 1000010077L);
         assertUsage("8aded52d-9507-4883-ab4c-fd2e029298af", UsageStatusEnum.RH_FOUND, 1000010077L);
@@ -156,8 +154,7 @@ public class UpdateRightsIntegrationTest {
         rightsService.updateAaclRights(Arrays.asList(
             buildAaclUsage("b23cb103-9242-4d58-a65d-2634b3e5a8cf", 122803735),
             buildAaclUsage("7e7b97d1-ad60-4d47-915b-2834c5cc056a", 130297955)));
-        rightsService.updateAaclRights(Collections.singletonList(
-            buildAaclUsage("10c9a60f-28b6-466c-975c-3ea930089a9e", 200208329)));
+        rightsService.updateAaclRights(List.of(buildAaclUsage("10c9a60f-28b6-466c-975c-3ea930089a9e", 200208329)));
         assertAaclUsage("b23cb103-9242-4d58-a65d-2634b3e5a8cf", UsageStatusEnum.RH_FOUND, 1000000322L, "ALL");
         assertAaclUsage("7e7b97d1-ad60-4d47-915b-2834c5cc056a", UsageStatusEnum.RH_FOUND, 1000023401L, "PRINT");
         assertAaclUsage("10c9a60f-28b6-466c-975c-3ea930089a9e", UsageStatusEnum.NEW, null, null);
@@ -178,7 +175,7 @@ public class UpdateRightsIntegrationTest {
         rightsService.updateUdmRights(Arrays.asList(
             buildUdmUsage("acb53a42-7e8d-4a4a-8d72-6f794be2731c", 122769421, "DIGITAL"),
             buildUdmUsage("1b348196-2193-46d7-b9df-2ba835189131", 210001133, "PRINT")));
-        rightsService.updateUdmRights(Collections.singletonList(
+        rightsService.updateUdmRights(List.of(
             buildUdmUsage("074749c5-08fa-4f57-8c3b-ecbc334a5c2a", 210001899, "DIGITAL")));
         assertUdmUsage("acb53a42-7e8d-4a4a-8d72-6f794be2731c", UsageStatusEnum.RH_FOUND, 1000023401L);
         assertUdmUsage("1b348196-2193-46d7-b9df-2ba835189131", UsageStatusEnum.RH_FOUND, 1000000322L);
@@ -213,8 +210,7 @@ public class UpdateRightsIntegrationTest {
         rightsService.updateSalRights(Arrays.asList(
             buildSalUsage("dcb53a42-7e8d-4a4a-8d72-6f794be2731c", 122769471),
             buildSalUsage("094749c5-08fa-4f57-8c3b-ecbc334a5c2a", 243618757)));
-        rightsService.updateSalRights(Collections.singletonList(
-            buildSalUsage("ecf46bea-2baa-40c1-a5e1-769c78865b2c", 140160102)));
+        rightsService.updateSalRights(List.of(buildSalUsage("ecf46bea-2baa-40c1-a5e1-769c78865b2c", 140160102)));
         assertSalUsage("dcb53a42-7e8d-4a4a-8d72-6f794be2731c", UsageStatusEnum.RH_FOUND, 1000000322L);
         assertSalUsage("094749c5-08fa-4f57-8c3b-ecbc334a5c2a", UsageStatusEnum.WORK_NOT_GRANTED, null);
         assertSalUsage("ecf46bea-2baa-40c1-a5e1-769c78865b2c", UsageStatusEnum.RH_NOT_FOUND, null);
@@ -235,7 +231,7 @@ public class UpdateRightsIntegrationTest {
         rightsService.updateAclciRights(Arrays.asList(
             buildAclciUsage("019af1aa-c178-467c-9015-c2d18db85229", 122769471, AclciLicenseTypeEnum.CURR_REPUB_K12),
             buildAclciUsage("db86af7e-c2ae-4cc6-b797-6214298b7113", 243618757, AclciLicenseTypeEnum.CURR_REPUB_K12)));
-        rightsService.updateAclciRights(Collections.singletonList(
+        rightsService.updateAclciRights(List.of(
             buildAclciUsage("65d36e80-8b5c-42cf-b543-4b9ee0aed0cb", 140160102, AclciLicenseTypeEnum.CURR_REPUB_HE)));
         assertAclciUsage("019af1aa-c178-467c-9015-c2d18db85229", UsageStatusEnum.RH_FOUND, 1000000322L);
         assertAclciUsage("db86af7e-c2ae-4cc6-b797-6214298b7113", UsageStatusEnum.WORK_NOT_GRANTED, null);
@@ -293,33 +289,33 @@ public class UpdateRightsIntegrationTest {
     }
 
     private void assertUdmUsage(String usageId, UsageStatusEnum expectedStatus, Long expectedRhAccountNumber) {
-        UdmUsage udmUsage = udmUsageService.getUdmUsagesByIds(Collections.singletonList(usageId)).get(0);
+        UdmUsage udmUsage = udmUsageService.getUdmUsagesByIds(List.of(usageId)).get(0);
         assertEquals(expectedStatus, udmUsage.getStatus());
         assertEquals(expectedRhAccountNumber, udmUsage.getRightsholder().getAccountNumber());
     }
 
     private void assertAaclUsage(String usageId, UsageStatusEnum expectedStatus, Long expectedRhAccountNumber,
                                  String expectedRightLimitation) {
-        Usage usage = aaclUsageRepository.findByIds(Collections.singletonList(usageId)).get(0);
+        Usage usage = aaclUsageRepository.findByIds(List.of(usageId)).get(0);
         assertEquals(expectedStatus, usage.getStatus());
         assertEquals(expectedRhAccountNumber, usage.getRightsholder().getAccountNumber());
         assertEquals(expectedRightLimitation, usage.getAaclUsage().getRightLimitation());
     }
 
     private void assertSalUsage(String usageId, UsageStatusEnum expectedStatus, Long expectedRhAccountNumber) {
-        Usage usage = salUsageRepository.findByIds(Collections.singletonList(usageId)).get(0);
+        Usage usage = salUsageRepository.findByIds(List.of(usageId)).get(0);
         assertEquals(expectedStatus, usage.getStatus());
         assertEquals(expectedRhAccountNumber, usage.getRightsholder().getAccountNumber());
     }
 
     private void assertUsage(String usageId, UsageStatusEnum expectedStatus, Long expectedRhAccountNumber) {
-        Usage usage = usageRepository.findByIds(Collections.singletonList(usageId)).get(0);
+        Usage usage = usageRepository.findByIds(List.of(usageId)).get(0);
         assertEquals(expectedStatus, usage.getStatus());
         assertEquals(expectedRhAccountNumber, usage.getRightsholder().getAccountNumber());
     }
 
     private void assertAclciUsage(String usageId, UsageStatusEnum expectedStatus, Long expectedRhAccountNumber) {
-        Usage usage = aclciUsageRepository.findByIds(Collections.singletonList(usageId)).get(0);
+        Usage usage = aclciUsageRepository.findByIds(List.of(usageId)).get(0);
         assertEquals(expectedStatus, usage.getStatus());
         assertEquals(expectedRhAccountNumber, usage.getRightsholder().getAccountNumber());
     }

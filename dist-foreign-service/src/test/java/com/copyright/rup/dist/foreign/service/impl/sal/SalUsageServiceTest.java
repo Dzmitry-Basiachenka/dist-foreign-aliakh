@@ -126,7 +126,7 @@ public class SalUsageServiceTest {
         filter.setFiscalYear(2020);
         Pageable pageable = new Pageable(0, 1);
         Sort sort = new Sort("detailId", Sort.Direction.ASC);
-        List<UsageDto> usages = Collections.singletonList(new UsageDto());
+        List<UsageDto> usages = List.of(new UsageDto());
         expect(salUsageRepository.findDtosByFilter(filter, pageable, sort)).andReturn(usages).once();
         replay(salUsageRepository);
         assertEquals(usages, salUsageService.getUsageDtos(filter, pageable, sort));
@@ -169,7 +169,7 @@ public class SalUsageServiceTest {
         usageAuditService.logAction(usage.getId(), UsageActionTypeEnum.LOADED, "Uploaded in 'SAL Batch' Batch");
         expectLastCall().once();
         replay(salUsageRepository, usageAuditService, RupContextUtils.class);
-        salUsageService.insertItemBankDetails(buildUsageBatch(), Collections.singletonList(usage));
+        salUsageService.insertItemBankDetails(buildUsageBatch(), List.of(usage));
         verify(salUsageRepository, usageAuditService, RupContextUtils.class);
     }
 
@@ -198,8 +198,8 @@ public class SalUsageServiceTest {
 
     @Test
     public void testGetUsagesByIds() {
-        List<String> usageIds = Collections.singletonList(USAGE_ID_1);
-        List<Usage> usages = Collections.singletonList(new Usage());
+        List<String> usageIds = List.of(USAGE_ID_1);
+        List<Usage> usages = List.of(new Usage());
         expect(salUsageRepository.findByIds(usageIds)).andReturn(usages).once();
         replay(salUsageRepository);
         assertEquals(usages, salUsageService.getUsagesByIds(usageIds));
@@ -251,7 +251,7 @@ public class SalUsageServiceTest {
     public void testGetUsageDataGradeGroups() {
         UsageFilter filter = new UsageFilter();
         filter.setUsageBatchesIds(Collections.singleton("cdd46087-87b9-4ecd-ab6f-9b5dcf0f82bf"));
-        List<SalGradeGroupEnum> gradeGroups = Collections.singletonList(SalGradeGroupEnum.ITEM_BANK);
+        List<SalGradeGroupEnum> gradeGroups = List.of(SalGradeGroupEnum.ITEM_BANK);
         expect(salUsageRepository.findUsageDataGradeGroups(filter)).andReturn(gradeGroups).once();
         replay(salUsageRepository);
         assertSame(gradeGroups, salUsageService.getUsageDataGradeGroups(filter));
@@ -262,7 +262,7 @@ public class SalUsageServiceTest {
     public void testPopulatePayees() {
         String scenarioId = "fe08f50c-bea8-4856-8787-3e3e9e46669c";
         expect(rightsholderService.getByScenarioId(scenarioId)).andReturn(
-            Collections.singletonList(buildRightsholder(RIGHTSHOLDER_ID, 2000073957L))).once();
+            List.of(buildRightsholder(RIGHTSHOLDER_ID, 2000073957L))).once();
         expect(prmIntegrationService.getRollUps(Collections.singleton(RIGHTSHOLDER_ID)))
             .andReturn(buildRollupsMap()).once();
         salUsageRepository.updatePayeeByAccountNumber(2000073957L, scenarioId, 1000005413L, "SYSTEM");
@@ -303,7 +303,7 @@ public class SalUsageServiceTest {
         Scenario scenario = new Scenario();
         scenario.setId(SCENARIO_ID);
         scenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);
-        List<UsageDto> usageDtos = Collections.singletonList(new UsageDto());
+        List<UsageDto> usageDtos = List.of(new UsageDto());
         expect(salUsageRepository.findByScenarioIdAndRhAccountNumber(SCENARIO_ID, 1000009422L, SEARCH, null, null))
             .andReturn(usageDtos).once();
         replay(salUsageRepository);
@@ -317,7 +317,7 @@ public class SalUsageServiceTest {
         Scenario scenario = new Scenario();
         scenario.setId(SCENARIO_ID);
         scenario.setStatus(ScenarioStatusEnum.SENT_TO_LM);
-        List<UsageDto> usageDtos = Collections.singletonList(new UsageDto());
+        List<UsageDto> usageDtos = List.of(new UsageDto());
         expect(
             usageArchiveRepository.findSalByScenarioIdAndRhAccountNumber(SCENARIO_ID, 1000009422L, SEARCH, null, null))
             .andReturn(usageDtos).once();
@@ -348,7 +348,7 @@ public class SalUsageServiceTest {
         scenario.setStatus(ScenarioStatusEnum.APPROVED);
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
         expect(usageArchiveRepository.copyToArchiveByScenarioId(SCENARIO_ID, USER_NAME))
-            .andReturn(Collections.singletonList(USAGE_ID_1)).once();
+            .andReturn(List.of(USAGE_ID_1)).once();
         usageRepository.deleteByScenarioId(SCENARIO_ID);
         expectLastCall().once();
         replay(RupContextUtils.class, usageArchiveRepository, usageRepository);

@@ -23,7 +23,6 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -83,7 +82,7 @@ public class GetRightsJobIntegrationTest {
         testHelper.assertAudit("29ab73e6-2256-429d-bf36-e52315303165",
             testHelper.loadExpectedUsageAuditItems("quartz/usage_audit_876543210.json"));
         testHelper.assertUdmUsages(testHelper.loadExpectedUdmUsages("quartz/usage_658824345.json"),
-            udmUsageService.getUdmUsagesByIds(Collections.singletonList("748223ba-cabd-481f-8c05-4fcdea550cb7")));
+            udmUsageService.getUdmUsagesByIds(List.of("748223ba-cabd-481f-8c05-4fcdea550cb7")));
         testHelper.assertUdmUsageAudit("748223ba-cabd-481f-8c05-4fcdea550cb7",
             testHelper.loadExpectedUsageAuditItems("quartz/usage_audit_658824345.json"));
         testHelper.verifyRestServer();

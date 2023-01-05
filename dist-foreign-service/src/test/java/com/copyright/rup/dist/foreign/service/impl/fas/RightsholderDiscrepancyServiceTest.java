@@ -19,7 +19,6 @@ import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -46,7 +45,7 @@ public class RightsholderDiscrepancyServiceTest {
 
     @Test
     public void testInsertDiscrepancies() {
-        List<RightsholderDiscrepancy> discrepancies = Collections.singletonList(new RightsholderDiscrepancy());
+        List<RightsholderDiscrepancy> discrepancies = List.of(new RightsholderDiscrepancy());
         rightsholderDiscrepancyRepository.insertAll(discrepancies, SCENARIO_ID);
         expectLastCall().once();
         replay(rightsholderDiscrepancyRepository);
@@ -85,7 +84,7 @@ public class RightsholderDiscrepancyServiceTest {
 
     @Test
     public void testGetByScenarioIdAndStatus() {
-        List<RightsholderDiscrepancy> discrepancies = Collections.singletonList(new RightsholderDiscrepancy());
+        List<RightsholderDiscrepancy> discrepancies = List.of(new RightsholderDiscrepancy());
         expect(rightsholderDiscrepancyRepository.findByScenarioIdAndStatus(SCENARIO_ID,
             RightsholderDiscrepancyStatusEnum.DRAFT, null, null)).andReturn(discrepancies).once();
         replay(rightsholderDiscrepancyRepository);

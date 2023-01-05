@@ -20,7 +20,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
@@ -68,7 +67,7 @@ public class NtsRightsConsumerTest {
     private void testConsume(Long foundRhAccountNumber, boolean expectedPredicateResult) {
         Whitebox.setInternalState(ntsRightsConsumer, new RightsServiceMock(foundRhAccountNumber));
         Usage usage = buildUsage();
-        List<Usage> usages = Collections.singletonList(usage);
+        List<Usage> usages = List.of(usage);
         Capture<Predicate<Usage>> predicateCapture = newCapture();
         ntsRightsProcessor.executeNextChainProcessor(eq(usages), capture(predicateCapture));
         expectLastCall().once();

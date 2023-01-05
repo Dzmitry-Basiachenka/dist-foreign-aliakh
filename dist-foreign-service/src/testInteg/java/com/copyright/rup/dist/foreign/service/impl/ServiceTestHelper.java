@@ -155,7 +155,7 @@ public class ServiceTestHelper {
             .andExpect(MockRestRequestMatchers.method(HttpMethod.POST))
             .andExpect(MockRestRequestMatchers.content()
                 .string(new JsonMatcher(TestUtils.fileToString(this.getClass(), expectedRmsRequest),
-                    Collections.singletonList("period_end_date"))))
+                    List.of("period_end_date"))))
             .andRespond(MockRestResponseCreators.withSuccess(TestUtils.fileToString(this.getClass(),
                 expectedRmsResponse), MediaType.APPLICATION_JSON));
     }
@@ -273,7 +273,7 @@ public class ServiceTestHelper {
             .map(fileName -> TestUtils.fileToString(this.getClass(), fileName))
             .collect(Collectors.toList());
         sqsClientMock.assertSendMessages("fda-test-sf-detail.fifo", lmDetailsMessages,
-            Collections.singletonList("detail_id"), ImmutableMap.of("source", "FDA"));
+            List.of("detail_id"), ImmutableMap.of("source", "FDA"));
     }
 
     public void receivePaidUsagesFromLm(String paidUsagesMessageFile) throws InterruptedException {
@@ -357,7 +357,7 @@ public class ServiceTestHelper {
 
     public void assertUsages(List<Usage> expectedUsages) {
         expectedUsages.forEach(expectedUsage -> {
-            List<Usage> actualUsages = usageRepository.findByIds(Collections.singletonList(expectedUsage.getId()));
+            List<Usage> actualUsages = usageRepository.findByIds(List.of(expectedUsage.getId()));
             assertUsage(expectedUsage, actualUsages.get(0));
         });
     }

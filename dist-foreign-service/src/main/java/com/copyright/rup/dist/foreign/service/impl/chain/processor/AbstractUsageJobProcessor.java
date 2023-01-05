@@ -21,7 +21,6 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -68,7 +67,7 @@ abstract class AbstractUsageJobProcessor extends AbstractChainProcessor<Usage> i
             Function<List<String>, List<Usage>> usageLoader = productFamilyToUsageLoaderMap.get(productFamily);
             Iterables.partition(usageIds, usagesBatchSize)
                 .forEach(partition -> usageLoader.apply(partition)
-                    .forEach(usage -> process(Collections.singletonList(usage))));
+                    .forEach(usage -> process(List.of(usage))));
             String message = "ProductFamily=" + productFamily + ", UsagesCount=" + usagesCount;
             LOGGER.info("Send {} usages for processing. Finished. {}", usageStatus, message);
             jobInfo = new JobInfo(JobStatusEnum.FINISHED, message);

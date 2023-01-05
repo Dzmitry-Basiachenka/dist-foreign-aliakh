@@ -51,7 +51,7 @@ public class AclUsageServiceTest {
     private static final String BATCH_UID = "73408702-2d7c-48c6-ae7e-a62aa3940ee0";
     private static final String GRANT_SET_UID = "6fbd9c98-c119-448a-b0a7-3795319dce00";
     private static final int DISTRIBUTION_PERIOD = 202212;
-    private static final List<Integer> PERIOD_PRIORS = Collections.singletonList(0);
+    private static final List<Integer> PERIOD_PRIORS = List.of(0);
 
     private IAclUsageService aclUsageService;
     private IAclUsageRepository aclUsageRepository;
@@ -68,7 +68,7 @@ public class AclUsageServiceTest {
         String usageBatchId = "3e85d243-63a6-4145-9df6-91f6b2cada53";
         Set<Integer> periods = Collections.singleton(202106);
         String userName = "user@copyright.com";
-        List<String> usageIds = Collections.singletonList("8b705e49-85fe-4851-a051-08109d159c7d");
+        List<String> usageIds = List.of("8b705e49-85fe-4851-a051-08109d159c7d");
         expect(aclUsageRepository.populateAclUsages(usageBatchId, periods, userName)).andReturn(usageIds).once();
         replay(aclUsageRepository);
         assertEquals(usageIds.size(), aclUsageService.populateAclUsages(usageBatchId, periods, userName));
@@ -104,7 +104,7 @@ public class AclUsageServiceTest {
 
     @Test
     public void testGetDtos() {
-        List<AclUsageDto> aclUsageDtos = Collections.singletonList(new AclUsageDto());
+        List<AclUsageDto> aclUsageDtos = List.of(new AclUsageDto());
         Pageable pageable = new Pageable(0, 1);
         Sort sort = new Sort("detailId", Sort.Direction.ASC);
         AclUsageFilter filter = buildAclUsageFilter();
@@ -123,7 +123,7 @@ public class AclUsageServiceTest {
 
     @Test
     public void testGetPeriods() {
-        List<Integer> periods = Collections.singletonList(202006);
+        List<Integer> periods = List.of(202006);
         expect(aclUsageRepository.findPeriods()).andReturn(periods).once();
         replay(aclUsageRepository);
         assertSame(periods, aclUsageService.getPeriods());
@@ -150,7 +150,7 @@ public class AclUsageServiceTest {
     @Test
     public void testGetDefaultUsageAgesWeights() {
         UsageAge usageAge = buildUsageAge(0, new BigDecimal("1.00"));
-        expect(aclUsageRepository.findDefaultUsageAgesWeights()).andReturn(Collections.singletonList(usageAge)).once();
+        expect(aclUsageRepository.findDefaultUsageAgesWeights()).andReturn(List.of(usageAge)).once();
         replay(aclUsageRepository);
         assertSame(usageAge, aclUsageService.getDefaultUsageAgesWeights().get(0));
         verify(aclUsageRepository);

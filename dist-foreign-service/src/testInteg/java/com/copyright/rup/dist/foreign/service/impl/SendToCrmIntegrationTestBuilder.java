@@ -124,8 +124,7 @@ public class SendToCrmIntegrationTestBuilder implements Builder<Runner> {
 
         private void verifyUsages() {
             usageIdToExpectedStatus.forEach((usageId, expectedStatus) -> {
-                List<PaidUsage> usages =
-                    usageArchiveRepository.findByIdAndStatus(Collections.singletonList(usageId), expectedStatus);
+                List<PaidUsage> usages = usageArchiveRepository.findByIdAndStatus(List.of(usageId), expectedStatus);
                 assertEquals(1, usages.size());
             });
         }

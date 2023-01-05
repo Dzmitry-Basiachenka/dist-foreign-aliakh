@@ -37,7 +37,6 @@ import org.powermock.reflect.Whitebox;
 
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -91,7 +90,7 @@ public class AclciUsageServiceTest {
             "Uploaded in 'ACLCI Usage Batch' Batch");
         expectLastCall().once();
         replay(RupContextUtils.class, aclciUsageRepository, usageAuditService);
-        aclciUsageService.insertUsages(buildUsageBatch(), Collections.singletonList(usage));
+        aclciUsageService.insertUsages(buildUsageBatch(), List.of(usage));
         assertEquals(AclciGradeGroupEnum.GRADE_HE, usage.getAclciUsage().getGradeGroup());
         verify(RupContextUtils.class, aclciUsageRepository, usageAuditService);
     }
@@ -121,8 +120,8 @@ public class AclciUsageServiceTest {
 
     @Test
     public void testGetUsagesByIds() {
-        List<String> usageIds = Collections.singletonList(USAGE_ID_1);
-        List<Usage> usages = Collections.singletonList(new Usage());
+        List<String> usageIds = List.of(USAGE_ID_1);
+        List<Usage> usages = List.of(new Usage());
         expect(aclciUsageRepository.findByIds(usageIds)).andReturn(usages).once();
         replay(aclciUsageRepository);
         assertEquals(usages, aclciUsageService.getUsagesByIds(usageIds));
@@ -145,7 +144,7 @@ public class AclciUsageServiceTest {
         filter.setUsageStatus(UsageStatusEnum.NEW);
         Pageable pageable = new Pageable(0, 1);
         Sort sort = new Sort("detailId", Sort.Direction.ASC);
-        List<UsageDto> usages = Collections.singletonList(new UsageDto());
+        List<UsageDto> usages = List.of(new UsageDto());
         expect(aclciUsageRepository.findDtosByFilter(filter, pageable, sort)).andReturn(usages).once();
         replay(aclciUsageRepository);
         assertEquals(usages, aclciUsageService.getUsageDtos(filter, pageable, sort));

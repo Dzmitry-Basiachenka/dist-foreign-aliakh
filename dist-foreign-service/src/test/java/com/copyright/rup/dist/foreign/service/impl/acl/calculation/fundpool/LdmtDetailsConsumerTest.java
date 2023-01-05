@@ -26,7 +26,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -58,7 +57,7 @@ public class LdmtDetailsConsumerTest {
         String id = "58289ebc-4377-4f28-85a7-ad2e0599c5d0";
         expect(RupPersistUtils.generateUuid()).andReturn(id).once();
         LdmtDetail ldmtDetail = buildLdmtDetail(id);
-        List<LdmtDetail> ldmtDetails = Collections.singletonList(ldmtDetail);
+        List<LdmtDetail> ldmtDetails = List.of(ldmtDetail);
         Capture<List<AclFundPoolDetail>> fundPoolDetailsCapture = newCapture();
         aclFundPoolService.insertAclFundPoolDetails(capture(fundPoolDetailsCapture));
         expectLastCall();

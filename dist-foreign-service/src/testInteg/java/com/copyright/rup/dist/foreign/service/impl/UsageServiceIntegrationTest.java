@@ -27,7 +27,6 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -84,11 +83,11 @@ public class UsageServiceIntegrationTest {
         String batchId = "0dc1cff9-fc33-47ef-866c-c97de0203f9c";
         assertEquals(3, CollectionUtils.size(usageAuditRepository.findByUsageId(usageId)));
         assertEquals(1, CollectionUtils.size(
-            usageArchiveRepository.findByIdAndStatus(Collections.singletonList(usageId), UsageStatusEnum.ARCHIVED)));
+            usageArchiveRepository.findByIdAndStatus(List.of(usageId), UsageStatusEnum.ARCHIVED)));
         usageService.deleteArchivedByBatchId(batchId);
         assertTrue(CollectionUtils.isEmpty(usageAuditRepository.findByUsageId(usageId)));
         assertTrue(CollectionUtils.isEmpty(
-            usageArchiveRepository.findByIdAndStatus(Collections.singletonList(usageId), UsageStatusEnum.ARCHIVED)));
+            usageArchiveRepository.findByIdAndStatus(List.of(usageId), UsageStatusEnum.ARCHIVED)));
     }
 
     @Test

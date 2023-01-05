@@ -105,7 +105,7 @@ public class SendToRightsAssignmentJobIntegrationTest {
     }
 
     private void verifyFasUsageStatus(String usageId, UsageStatusEnum status) {
-        Usage usage = usageRepository.findByIds(Collections.singletonList(usageId))
+        Usage usage = usageRepository.findByIds(List.of(usageId))
             .stream()
             .filter(u -> u.getId().equals(usageId))
             .findFirst()
@@ -114,7 +114,7 @@ public class SendToRightsAssignmentJobIntegrationTest {
     }
 
     private void verifySalUsageStatus(String usageId, UsageStatusEnum status) {
-        Usage usage = salUsageRepository.findByIds(Collections.singletonList(usageId))
+        Usage usage = salUsageRepository.findByIds(List.of(usageId))
             .stream()
             .filter(u -> u.getId().equals(usageId))
             .findFirst()

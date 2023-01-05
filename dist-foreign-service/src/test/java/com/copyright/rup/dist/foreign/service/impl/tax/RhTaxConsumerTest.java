@@ -20,7 +20,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -54,7 +53,7 @@ public class RhTaxConsumerTest {
     @Test
     public void testConsumeWithUsUsageRh() {
         Usage usage = buildUsage(USAGE_ID_1);
-        List<Usage> usages = Collections.singletonList(usage);
+        List<Usage> usages = List.of(usage);
         Capture<Predicate<Usage>> predicateCapture = newCapture();
         rhTaxProcessor.executeNextChainProcessor(eq(usages), capture(predicateCapture));
         expectLastCall().once();
@@ -67,7 +66,7 @@ public class RhTaxConsumerTest {
     @Test
     public void testConsumeWithoutUsUsageRh() {
         Usage usage = buildUsage(USAGE_ID_2);
-        List<Usage> usages = Collections.singletonList(usage);
+        List<Usage> usages = List.of(usage);
         Capture<Predicate<Usage>> predicateCapture = newCapture();
         rhTaxProcessor.executeNextChainProcessor(eq(usages), capture(predicateCapture));
         expectLastCall().once();
