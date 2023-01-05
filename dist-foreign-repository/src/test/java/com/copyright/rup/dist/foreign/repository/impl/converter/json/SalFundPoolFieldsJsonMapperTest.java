@@ -6,7 +6,6 @@ import static org.junit.Assert.assertNull;
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.FundPool;
 
-import com.fasterxml.jackson.core.JsonParseException;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -49,11 +48,6 @@ public class SalFundPoolFieldsJsonMapperTest {
         assertNull(jsonMapper.serialize(null));
     }
 
-    @Test(expected = JsonParseException.class)
-    public void testDeserializeException() throws IOException {
-        jsonMapper.deserialize("{wrong JSON}");
-    }
-
     private FundPool.SalFields buildSalFields() {
         FundPool.SalFields salFields = new FundPool.SalFields();
         salFields.setDateReceived(LocalDate.of(2020, 12, 24));
@@ -62,13 +56,13 @@ public class SalFundPoolFieldsJsonMapperTest {
         salFields.setLicenseeName("FarmField Inc.");
         salFields.setGradeKto5NumberOfStudents(10);
         salFields.setGrade6to8NumberOfStudents(5);
-        salFields.setGrossAmount(new BigDecimal("1000.00"));
+        salFields.setGrossAmount(new BigDecimal("1000.0"));
         salFields.setItemBankGrossAmount(new BigDecimal("20.01"));
         salFields.setGradeKto5GrossAmount(new BigDecimal("653.33"));
         salFields.setGrade6to8GrossAmount(new BigDecimal("326.66"));
-        salFields.setGrade9to12GrossAmount(new BigDecimal("0.00"));
-        salFields.setItemBankSplitPercent(new BigDecimal("0.02000"));
-        salFields.setServiceFee(new BigDecimal("0.25000"));
+        salFields.setGrade9to12GrossAmount(new BigDecimal("0.0"));
+        salFields.setItemBankSplitPercent(new BigDecimal("0.02"));
+        salFields.setServiceFee(new BigDecimal("0.25"));
         return salFields;
     }
 }

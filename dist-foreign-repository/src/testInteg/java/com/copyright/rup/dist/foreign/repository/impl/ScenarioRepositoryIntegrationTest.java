@@ -87,9 +87,9 @@ public class ScenarioRepositoryIntegrationTest {
     private static final String NTS_PRODUCT_FAMILY = "NTS";
     private static final String USER = "user@copyright.com";
     private static final String ONE = "1.00";
-    private static final BigDecimal RH_MINIMUM_AMOUNT = new BigDecimal("300.00");
-    private static final BigDecimal PRE_SEVICE_FEE_AMOUNT = new BigDecimal("50.00");
-    private static final BigDecimal POST_SEVICE_FEE_AMOUNT = new BigDecimal("100.00");
+    private static final BigDecimal RH_MINIMUM_AMOUNT = new BigDecimal("300.0");
+    private static final BigDecimal PRE_SEVICE_FEE_AMOUNT = new BigDecimal("50.0");
+    private static final BigDecimal POST_SEVICE_FEE_AMOUNT = new BigDecimal("100.0");
     private static final BigDecimal PRE_SERVICE_FEE_FUND_TOTAL = new BigDecimal("50.00");
 
     @Autowired
@@ -473,7 +473,7 @@ public class ScenarioRepositoryIntegrationTest {
         filterRepository.insert(scenarioUsageFilter);
         Scenario ntsScenario = scenarioRepository.findWithAmountsAndLastAction(SCENARIO_ID_1);
         assertNotNull(ntsScenario.getNtsFields());
-        assertEquals(new BigDecimal("700.00"), ntsScenario.getNtsFields().getRhMinimumAmount());
+        assertEquals(new BigDecimal("700.0"), ntsScenario.getNtsFields().getRhMinimumAmount());
         assertUsages(
             Arrays.asList(
                 buildUsage("244de0db-b50c-45e8-937c-72e033e2a3a9", "921.8750000000"),

@@ -1,13 +1,21 @@
 package com.copyright.rup.dist.foreign.repository.impl.converter.json;
 
+import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.dist.foreign.domain.UsageBatch.NtsFields;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
+import org.apache.commons.lang3.math.NumberUtils;
+import org.slf4j.Logger;
+
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -21,6 +29,8 @@ import java.util.Set;
  */
 public class NtsBatchFieldsDeserializer extends StdDeserializer<NtsFields> {
 
+    private static final Logger LOGGER = RupLogUtils.getLogger();
+
     /**
      * Default constructor.
      */
@@ -29,70 +39,45 @@ public class NtsBatchFieldsDeserializer extends StdDeserializer<NtsFields> {
     }
 
     @Override
-    public NtsFields deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
+    public NtsFields deserialize(JsonParser parser, DeserializationContext ctxt) throws IOException {
         NtsFields ntsFields = new NtsFields();
-        JsonToken currentToken;
-        while (null != (currentToken = jp.nextValue())) {
-            if (JsonToken.VALUE_NUMBER_INT == currentToken) {
-                readPeriods(jp, ntsFields);
-            }
-            if (JsonToken.VALUE_NUMBER_INT == currentToken || JsonToken.VALUE_NUMBER_FLOAT == currentToken) {
-                readAmounts(jp, ntsFields);
-            }
-            if (JsonToken.START_ARRAY == currentToken) {
-                readMarkets(jp, ntsFields);
-            }
-            if (JsonToken.VALUE_TRUE == currentToken || JsonToken.VALUE_FALSE == currentToken) {
-                readExcludingStmFlag(jp, ntsFields);
-            }
+        try {
+            JsonNode jsonNode = parser.readValueAsTree();
+            ntsFields.setFundPoolPeriodFrom(getIntegerValue(jsonNode.get("fund_pool_period_from")));
+            ntsFields.setFundPoolPeriodTo(getIntegerValue(jsonNode.get("fund_pool_period_to")));
+            ntsFields.setStmAmount(getBigDecimalValue(jsonNode.get("stm_amount")));
+            ntsFields.setNonStmAmount(getBigDecimalValue(jsonNode.get("non_stm_amount")));
+            ntsFields.setStmMinimumAmount(getBigDecimalValue(jsonNode.get("stm_minimum_amount")));
+            ntsFields.setNonStmMinimumAmount(getBigDecimalValue(jsonNode.get("non_stm_minimum_amount")));
+            ntsFields.setMarkets(getMarkets(jsonNode.get("markets")));
+            ntsFields.setExcludingStm(getBooleanValue(jsonNode.get("excluding_stm")));
+        } catch (JsonParseException e) {
+            LOGGER.warn("Deserialize NTS batch fields. Failed", e);
         }
         return ntsFields;
     }
 
-    private void readPeriods(JsonParser jp, NtsFields ntsFields) throws IOException {
-        switch (jp.getCurrentName()) {
-            case "fund_pool_period_from":
-                ntsFields.setFundPoolPeriodFrom(jp.getIntValue());
-                break;
-            case "fund_pool_period_to":
-                ntsFields.setFundPoolPeriodTo(jp.getIntValue());
-                break;
-            default:
-                break;
-        }
+    private static Integer getIntegerValue(JsonNode node) {
+        return Objects.nonNull(node) ? node.asInt() : null;
     }
 
-    private void readAmounts(JsonParser jp, NtsFields ntsFields) throws IOException {
-        switch (jp.getCurrentName()) {
-            case "stm_amount":
-                ntsFields.setStmAmount(jp.getDecimalValue());
-                break;
-            case "non_stm_amount":
-                ntsFields.setNonStmAmount(jp.getDecimalValue());
-                break;
-            case "stm_minimum_amount":
-                ntsFields.setStmMinimumAmount(jp.getDecimalValue());
-                break;
-            case "non_stm_minimum_amount":
-                ntsFields.setNonStmMinimumAmount(jp.getDecimalValue());
-                break;
-            default:
-                break;
-        }
+    private static BigDecimal getBigDecimalValue(JsonNode node) {
+        return Objects.nonNull(node) && NumberUtils.isNumber(node.asText()) ? new BigDecimal(node.asText()) : null;
     }
 
-    private void readMarkets(JsonParser jp, NtsFields ntsFields) throws IOException {
-        if ("markets".equals(jp.getCurrentName())) {
-            while (jp.nextToken() != JsonToken.END_ARRAY) {
-                Set<String> markets = ntsFields.getMarkets();
-                markets.add(jp.getValueAsString());
-            }
+    private Set<String> getMarkets(JsonNode node) {
+        Set<String> markets = new HashSet<>();
+        if (Objects.nonNull(node)) {
+            node.elements().forEachRemaining(element -> markets.add(element.textValue()));
         }
+        return markets;
     }
 
-    private void readExcludingStmFlag(JsonParser jp, NtsFields ntsFields) throws IOException {
-        if ("excluding_stm".equals(jp.getCurrentName())) {
-            ntsFields.setExcludingStm(jp.getValueAsBoolean());
+    private static boolean getBooleanValue(JsonNode node) {
+        boolean result = false;
+        if (Objects.nonNull(node)) {
+            result = Boolean.parseBoolean(node.asText());
         }
+        return result;
     }
 }

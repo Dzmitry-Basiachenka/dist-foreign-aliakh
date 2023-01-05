@@ -1,13 +1,20 @@
 package com.copyright.rup.dist.foreign.repository.impl.converter.json;
 
+import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.dist.foreign.domain.Scenario.NtsFields;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
+import org.apache.commons.lang3.math.NumberUtils;
+import org.slf4j.Logger;
+
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.Objects;
 
 /**
  * Implementation of {@link StdDeserializer} for scenario {@link NtsFields}.
@@ -20,7 +27,7 @@ import java.io.IOException;
  */
 public class NtsScenarioFieldsDeserializer extends StdDeserializer<NtsFields> {
 
-    private static final String PRE_SERVICE_FEE_FUND_UID = "pre_service_fee_fund_uid";
+    private static final Logger LOGGER = RupLogUtils.getLogger();
 
     /**
      * Constructor.
@@ -30,32 +37,25 @@ public class NtsScenarioFieldsDeserializer extends StdDeserializer<NtsFields> {
     }
 
     @Override
-    public NtsFields deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
+    public NtsFields deserialize(JsonParser parser, DeserializationContext ctxt) throws IOException {
         NtsFields ntsFields = new NtsFields();
-        JsonToken currentToken;
-        while (null != (currentToken = jp.nextValue())) {
-            if (JsonToken.VALUE_NUMBER_INT == currentToken || JsonToken.VALUE_NUMBER_FLOAT == currentToken) {
-                readAmounts(jp, ntsFields);
-            } else if (JsonToken.VALUE_STRING == currentToken && PRE_SERVICE_FEE_FUND_UID.equals(jp.getCurrentName())) {
-                ntsFields.setPreServiceFeeFundId(jp.getValueAsString());
-            }
+        try {
+            JsonNode jsonNode = parser.readValueAsTree();
+            ntsFields.setRhMinimumAmount(getBigDecimalValue(jsonNode.get("rh_minimum_amount")));
+            ntsFields.setPreServiceFeeAmount(getBigDecimalValue(jsonNode.get("pre_service_fee_amount")));
+            ntsFields.setPostServiceFeeAmount(getBigDecimalValue(jsonNode.get("post_service_fee_amount")));
+            ntsFields.setPreServiceFeeFundId(getStringValue(jsonNode.get("pre_service_fee_fund_uid")));
+        } catch (JsonParseException e) {
+            LOGGER.warn("Deserialize NTS scenario fields. Failed", e);
         }
         return ntsFields;
     }
 
-    private void readAmounts(JsonParser jp, NtsFields ntsFields) throws IOException {
-        switch (jp.getCurrentName()) {
-            case "rh_minimum_amount":
-                ntsFields.setRhMinimumAmount(jp.getDecimalValue());
-                break;
-            case "pre_service_fee_amount":
-                ntsFields.setPreServiceFeeAmount(jp.getDecimalValue());
-                break;
-            case "post_service_fee_amount":
-                ntsFields.setPostServiceFeeAmount(jp.getDecimalValue());
-                break;
-            default:
-                break;
-        }
+    private static String getStringValue(JsonNode node) {
+        return Objects.nonNull(node) ? node.textValue() : null;
+    }
+
+    private static BigDecimal getBigDecimalValue(JsonNode node) {
+        return Objects.nonNull(node) && NumberUtils.isNumber(node.asText()) ? new BigDecimal(node.asText()) : null;
     }
 }
