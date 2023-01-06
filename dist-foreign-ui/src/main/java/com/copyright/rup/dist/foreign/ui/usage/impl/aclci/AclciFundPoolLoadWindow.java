@@ -206,13 +206,13 @@ class AclciFundPoolLoadWindow extends Window {
             .withConverter(new StringToBigDecimalConverter(NOT_NUMERIC_MESSAGE))
             .withValidator(curriculumSplitPercentValidator(),
                 ForeignUi.getMessage("field.error.range_and_one_decimal_place"))
-            .bind(fundPool -> fundPool.getAclciFields().getCurriculumSplitPercent(),
-                (fundPool, value) -> fundPool.getAclciFields().setCurriculumSplitPercent(value));
+            .bind(fundPool -> fundPool.getAclciFields().getCurriculumDbSplitPercent(),
+                (fundPool, value) -> fundPool.getAclciFields().setCurriculumDbSplitPercent(value));
         curriculumDbSplitPercent.setRequiredIndicatorVisible(true);
         curriculumDbSplitPercent.setSizeFull();
         curriculumDbSplitPercent.addValueChangeListener(event -> validateGradeNumberOfStudentsFields());
         VaadinUtils.setMaxComponentsWidth(curriculumDbSplitPercent);
-        VaadinUtils.addComponentStyle(curriculumDbSplitPercent, "curriculum-split-percent-field");
+        VaadinUtils.addComponentStyle(curriculumDbSplitPercent, "curriculum-db-split-percent-field");
         return curriculumDbSplitPercent;
     }
 
@@ -422,7 +422,7 @@ class AclciFundPoolLoadWindow extends Window {
         FundPool fundPool = binder.getBean();
         AclciFields aclciFields = fundPool.getAclciFields();
         aclciFields.setGrossAmount(aclciFields.getGrossAmount().setScale(SCALE_2, BigDecimal.ROUND_HALF_UP));
-        aclciFields.setCurriculumSplitPercent(aclciFields.getCurriculumSplitPercent()
+        aclciFields.setCurriculumDbSplitPercent(aclciFields.getCurriculumDbSplitPercent()
             .divide(HUNDRED, SCALE_5, BigDecimal.ROUND_HALF_UP));
         return fundPool;
     }
@@ -435,7 +435,7 @@ class AclciFundPoolLoadWindow extends Window {
             grade6to8GrossAmount.setValue(fundPool.getAclciFields().getGrade6to8GrossAmount().toString());
             grade9to12GrossAmount.setValue(fundPool.getAclciFields().getGrade9to12GrossAmount().toString());
             gradeHeGrossAmount.setValue(fundPool.getAclciFields().getGradeHeGrossAmount().toString());
-            curriculumDbGrossAmount.setValue(fundPool.getAclciFields().getCurriculumGrossAmount().toString());
+            curriculumDbGrossAmount.setValue(fundPool.getAclciFields().getCurriculumDbGrossAmount().toString());
             totalGrossAmount.setValue(fundPool.getTotalAmount().toString());
         } else {
             gradeKto2GrossAmount.clear();

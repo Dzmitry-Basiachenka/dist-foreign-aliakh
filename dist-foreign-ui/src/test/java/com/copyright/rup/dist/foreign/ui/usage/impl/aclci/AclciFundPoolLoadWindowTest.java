@@ -381,7 +381,7 @@ public class AclciFundPoolLoadWindowTest {
         AclciFields aclciFields = new AclciFields();
         aclciFields.setCoverageYears(COVERAGE_YEARS);
         aclciFields.setGrossAmount(new BigDecimal("1000.12"));
-        aclciFields.setCurriculumSplitPercent(new BigDecimal("0.20000"));
+        aclciFields.setCurriculumDbSplitPercent(new BigDecimal("0.20000"));
         aclciFields.setGradeKto2NumberOfStudents(GRADE_K_TO_2_NUMBER_OF_STUDENTS);
         aclciFields.setGrade3to5NumberOfStudents(GRADE_3_TO_5_NUMBER_OF_STUDENTS);
         aclciFields.setGrade6to8NumberOfStudents(GRADE_6_TO_8_NUMBER_OF_STUDENTS);
