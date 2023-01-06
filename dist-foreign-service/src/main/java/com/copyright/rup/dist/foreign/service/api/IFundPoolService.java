@@ -139,4 +139,12 @@ public interface IFundPoolService {
      * @return calculated SAL {@link FundPool}
      */
     FundPool calculateSalFundPoolAmounts(FundPool fundPool);
+
+    /**
+     * Calculates amounts for the ACLCI fund pool.
+     *
+     * @param fundPool instance of {@link FundPool} to calculate
+     * @return calculated ACLCI fund pool
+     */
+    FundPool calculateAclciFundPoolAmounts(FundPool fundPool);
 }

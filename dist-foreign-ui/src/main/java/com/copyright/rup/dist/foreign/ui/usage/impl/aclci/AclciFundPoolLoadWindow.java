@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.aclci;
 
 import com.copyright.rup.common.exception.RupRuntimeException;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.FundPool.AclciFields;
 import com.copyright.rup.dist.foreign.ui.common.validator.AmountValidator;
@@ -131,6 +132,7 @@ class AclciFundPoolLoadWindow extends Window {
         VaadinUtils.setMaxComponentsWidth(rootLayout);
         rootLayout.setComponentAlignment(buttonsLayout, Alignment.BOTTOM_RIGHT);
         FundPool fundPool = new FundPool();
+        fundPool.setProductFamily(FdaConstants.ACLCI_PRODUCT_FAMILY);
         fundPool.setAclciFields(new AclciFields());
         binder.setBean(fundPool);
         binder.validate();
@@ -175,7 +177,7 @@ class AclciFundPoolLoadWindow extends Window {
             .withValidator(new RequiredValidator())
             .withValidator(new CoverageYearsValidator(ForeignUi.getMessage("field.error.coverage_years")))
             .bind(fundPool -> fundPool.getAclciFields().getCoverageYears(),
-                (fundPool, string) -> fundPool.getAclciFields().setCoverageYears(string));
+                (fundPool, value) -> fundPool.getAclciFields().setCoverageYears(value));
         coverageYears.setRequiredIndicatorVisible(true);
         coverageYears.setSizeFull();
         VaadinUtils.setMaxComponentsWidth(coverageYears);
@@ -205,7 +207,7 @@ class AclciFundPoolLoadWindow extends Window {
             .withValidator(curriculumSplitPercentValidator(),
                 ForeignUi.getMessage("field.error.range_and_one_decimal_place"))
             .bind(fundPool -> fundPool.getAclciFields().getCurriculumSplitPercent(),
-                (fundPool, percent) -> fundPool.getAclciFields().setCurriculumSplitPercent(percent));
+                (fundPool, value) -> fundPool.getAclciFields().setCurriculumSplitPercent(value));
         curriculumDbSplitPercent.setRequiredIndicatorVisible(true);
         curriculumDbSplitPercent.setSizeFull();
         curriculumDbSplitPercent.addValueChangeListener(event -> validateGradeNumberOfStudentsFields());

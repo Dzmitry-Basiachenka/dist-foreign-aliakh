@@ -48,7 +48,7 @@ public class AclciUsageCsvProcessor extends DistCsvProcessor<Usage> {
         LengthValidator lengthValidator100 = new LengthValidator(100);
         LengthValidator lengthValidator1000 = new LengthValidator(1000);
         PositiveNumberValidator positiveNumberValidator = new PositiveNumberValidator();
-        addPlainValidators(Header.COVERAGE_PERIOD, requiredValidator, new LengthValidator(100));
+        addPlainValidators(Header.COVERAGE_PERIOD, requiredValidator, lengthValidator100);
         addPlainValidators(Header.LICENSE_TYPE, requiredValidator, new AclciLicenseTypeValidator());
         addPlainValidators(Header.REPORTED_GRADE, requiredValidator, new AclciGradeValidator());
         addPlainValidators(Header.WR_WRK_INST, requiredValidator, positiveNumberValidator, new LengthValidator(9));

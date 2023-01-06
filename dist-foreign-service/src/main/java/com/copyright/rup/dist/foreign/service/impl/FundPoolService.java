@@ -7,6 +7,8 @@ import com.copyright.rup.dist.common.util.LogUtils;
 import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.FundPool;
+import com.copyright.rup.dist.foreign.domain.FundPool.AclciFields;
+import com.copyright.rup.dist.foreign.domain.FundPool.SalFields;
 import com.copyright.rup.dist.foreign.domain.FundPoolDetail;
 import com.copyright.rup.dist.foreign.repository.api.IFundPoolRepository;
 import com.copyright.rup.dist.foreign.service.api.IFundPoolService;
@@ -195,17 +197,17 @@ public class FundPoolService implements IFundPoolService {
 
     @Override
     public FundPool calculateSalFundPoolAmounts(FundPool fundPool) {
-        FundPool.SalFields salFields = fundPool.getSalFields();
-        BigDecimal itemBankSplitPercent = salFields.getItemBankSplitPercent();
+        SalFields salFields = fundPool.getSalFields();
+        BigDecimal splitPercent = salFields.getItemBankSplitPercent();
         salFields.setServiceFee(salServiceFee);
-        if (0 == BigDecimal.ONE.compareTo(itemBankSplitPercent)) {
+        if (0 == BigDecimal.ONE.compareTo(splitPercent)) {
             fundPool.setTotalAmount(salFields.getGrossAmount());
             salFields.setItemBankGrossAmount(salFields.getGrossAmount());
             salFields.setGradeKto5GrossAmount(ZERO);
             salFields.setGrade6to8GrossAmount(ZERO);
             salFields.setGrade9to12GrossAmount(ZERO);
         } else {
-            BigDecimal multiplier = salFields.getGrossAmount().multiply(BigDecimal.ONE.subtract(itemBankSplitPercent));
+            BigDecimal multiplier = salFields.getGrossAmount().multiply(BigDecimal.ONE.subtract(splitPercent));
             BigDecimal totalStudents = BigDecimal.valueOf(
                 salFields.getGradeKto5NumberOfStudents()
                     + salFields.getGrade6to8NumberOfStudents()
@@ -221,9 +223,55 @@ public class FundPoolService implements IFundPoolService {
                     .subtract(salFields.getGrade6to8GrossAmount())
                     .subtract(salFields.getGrade9to12GrossAmount()));
             fundPool.setTotalAmount(salFields.getItemBankGrossAmount()
-                .add(salFields.getGradeKto5GrossAmount()
-                    .add(salFields.getGrade6to8GrossAmount())
-                    .add(salFields.getGrade9to12GrossAmount())));
+                .add(salFields.getGradeKto5GrossAmount())
+                .add(salFields.getGrade6to8GrossAmount())
+                .add(salFields.getGrade9to12GrossAmount()));
+        }
+        return fundPool;
+    }
+
+    @Override
+    public FundPool calculateAclciFundPoolAmounts(FundPool fundPool) {
+        AclciFields aclciFields = fundPool.getAclciFields();
+        BigDecimal splitPercent = aclciFields.getCurriculumSplitPercent();
+        if (0 == BigDecimal.ONE.compareTo(splitPercent)) {
+            fundPool.setTotalAmount(aclciFields.getGrossAmount());
+            aclciFields.setCurriculumGrossAmount(aclciFields.getGrossAmount());
+            aclciFields.setGradeKto2GrossAmount(ZERO);
+            aclciFields.setGrade3to5GrossAmount(ZERO);
+            aclciFields.setGrade6to8GrossAmount(ZERO);
+            aclciFields.setGrade9to12GrossAmount(ZERO);
+            aclciFields.setGradeHeGrossAmount(ZERO);
+        } else {
+            BigDecimal multiplier = aclciFields.getGrossAmount().multiply(BigDecimal.ONE.subtract(splitPercent));
+            BigDecimal totalStudents = BigDecimal.valueOf(
+                aclciFields.getGradeKto2NumberOfStudents() +
+                aclciFields.getGrade3to5NumberOfStudents() +
+                aclciFields.getGrade6to8NumberOfStudents() +
+                aclciFields.getGrade9to12NumberOfStudents() +
+                aclciFields.getGradeHeNumberOfStudents());
+            aclciFields.setGradeKto2GrossAmount(
+                calculateGradeAmount(multiplier, totalStudents, aclciFields.getGradeKto2NumberOfStudents()));
+            aclciFields.setGrade3to5GrossAmount(
+                calculateGradeAmount(multiplier, totalStudents, aclciFields.getGrade3to5NumberOfStudents()));
+            aclciFields.setGrade6to8GrossAmount(
+                calculateGradeAmount(multiplier, totalStudents, aclciFields.getGrade6to8NumberOfStudents()));
+            aclciFields.setGrade9to12GrossAmount(
+                calculateGradeAmount(multiplier, totalStudents, aclciFields.getGrade9to12NumberOfStudents()));
+            aclciFields.setGradeHeGrossAmount(
+                calculateGradeAmount(multiplier, totalStudents, aclciFields.getGradeHeNumberOfStudents()));
+            aclciFields.setCurriculumGrossAmount(aclciFields.getGrossAmount()
+                .subtract(aclciFields.getGradeKto2GrossAmount())
+                .subtract(aclciFields.getGrade3to5GrossAmount())
+                .subtract(aclciFields.getGrade6to8GrossAmount())
+                .subtract(aclciFields.getGrade9to12GrossAmount())
+                .subtract(aclciFields.getGradeHeGrossAmount()));
+            fundPool.setTotalAmount(aclciFields.getCurriculumGrossAmount()
+                .add(aclciFields.getGradeKto2GrossAmount())
+                .add(aclciFields.getGrade3to5GrossAmount())
+                .add(aclciFields.getGrade6to8GrossAmount())
+                .add(aclciFields.getGrade9to12GrossAmount())
+                .add(aclciFields.getGradeHeGrossAmount()));
         }
         return fundPool;
     }

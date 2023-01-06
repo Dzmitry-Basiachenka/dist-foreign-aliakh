@@ -23,6 +23,7 @@ import com.copyright.rup.dist.common.reporting.impl.StreamSource;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
 import com.copyright.rup.dist.foreign.domain.AclciLicenseTypeEnum;
+import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
@@ -239,7 +240,11 @@ public class AclciUsageControllerTest {
 
     @Test
     public void testCalculateAclciFundPoolAmounts() {
-        //TODO: implement
+        FundPool fundPool = new FundPool();
+        expect(fundPoolService.calculateAclciFundPoolAmounts(fundPool)).andReturn(fundPool).once();
+        replay(fundPoolService);
+        assertSame(fundPool, controller.calculateAclciFundPoolAmounts(fundPool));
+        verify(fundPoolService);
     }
 
     @Test

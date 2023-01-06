@@ -17,6 +17,8 @@ import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.FundPool;
+import com.copyright.rup.dist.foreign.domain.FundPool.AclciFields;
+import com.copyright.rup.dist.foreign.domain.FundPool.SalFields;
 import com.copyright.rup.dist.foreign.domain.FundPoolDetail;
 import com.copyright.rup.dist.foreign.repository.api.IFundPoolRepository;
 import com.copyright.rup.dist.foreign.service.api.ILicenseeClassService;
@@ -61,12 +63,16 @@ public class FundPoolServiceTest {
         buildAggregateLicenseeClass(111, "HGP", "Life Sciences");
     private static final AggregateLicenseeClass AGG_LICENSEE_CLASS_113 =
         buildAggregateLicenseeClass(113, "MU", "Life Sciences");
+    private static final String FUND_POOL_NAME = "Fund Pool";
     private static final String FUND_POOL_ID = "ce468e8a-fdea-4d0c-a8f2-0e8c9f479bc3";
     private static final String BATCH_POOL_ID = "d3da0c18-e6af-4e7c-8b67-795f93e38e90";
     private static final String NTS_PRODUCT_FAMILY = "NTS";
-    private static final String FUND_POOL_NAME = "FAS Q3 2019";
+    private static final String SAL_PRODUCT_FAMILY = "SAL";
+    private static final String AACL_PRODUCT_FAMILY = "AACL";
+    private static final String ACLCI_PRODUCT_FAMILY = "ACLCI";
+    private static final String COVERAGE_YEARS = "2021-2022";
     private static final String USER_NAME = "User Name";
-    private static final String AMOUNT_1000 = "1000.00";
+    private static final BigDecimal AMOUNT_1000 = new BigDecimal("1000.00");
     private static final BigDecimal SAL_SERVICE_FEE = new BigDecimal("0.25");
 
     private FundPoolService fundPoolService;
@@ -231,7 +237,7 @@ public class FundPoolServiceTest {
         List<FundPoolDetail> expectedDetails =
             Arrays.asList(detail1, buildZeroDetail(AGG_LICENSEE_CLASS_110), detail2, buildZeroDetail(
                 AGG_LICENSEE_CLASS_113));
-        expect(licenseeClassService.getAggregateLicenseeClasses("AACL"))
+        expect(licenseeClassService.getAggregateLicenseeClasses(AACL_PRODUCT_FAMILY))
             .andReturn(Arrays.asList(AGG_LICENSEE_CLASS_108, AGG_LICENSEE_CLASS_110,
                 AGG_LICENSEE_CLASS_111, AGG_LICENSEE_CLASS_113)).once();
         expect(fundPoolRepository.findDetailsByFundPoolId(FUND_POOL_ID))
@@ -267,13 +273,13 @@ public class FundPoolServiceTest {
     @Test
     public void testCalculateSalFundPool() {
         BigDecimal splitPercent = new BigDecimal("0.10");
-        FundPool fundPool = fundPoolService.calculateSalFundPoolAmounts(buildFundPool(splitPercent, 9, 6, 3));
-        assertEquals(new BigDecimal(AMOUNT_1000), fundPool.getTotalAmount());
+        FundPool fundPool = fundPoolService.calculateSalFundPoolAmounts(buildSalFundPool(splitPercent, 9, 6, 3));
+        assertEquals(AMOUNT_1000, fundPool.getTotalAmount());
         assertEquals(new BigDecimal("100.00"), fundPool.getSalFields().getItemBankGrossAmount());
         assertEquals(new BigDecimal("450.00"), fundPool.getSalFields().getGradeKto5GrossAmount());
         assertEquals(new BigDecimal("300.00"), fundPool.getSalFields().getGrade6to8GrossAmount());
         assertEquals(new BigDecimal("150.00"), fundPool.getSalFields().getGrade9to12GrossAmount());
-        assertEquals(new BigDecimal(AMOUNT_1000), fundPool.getSalFields().getGrossAmount());
+        assertEquals(AMOUNT_1000, fundPool.getSalFields().getGrossAmount());
         assertEquals(splitPercent, fundPool.getSalFields().getItemBankSplitPercent());
         assertEquals(9, fundPool.getSalFields().getGradeKto5NumberOfStudents());
         assertEquals(6, fundPool.getSalFields().getGrade6to8NumberOfStudents());
@@ -286,13 +292,13 @@ public class FundPoolServiceTest {
     public void testCalculateSalFundPoolSplitPercentIsHundred() {
         BigDecimal splitPercent = new BigDecimal("1.00");
         BigDecimal gradeGrossAmount = new BigDecimal("0.00");
-        FundPool fundPool = fundPoolService.calculateSalFundPoolAmounts(buildFundPool(splitPercent, 0, 0, 0));
-        assertEquals(new BigDecimal(AMOUNT_1000), fundPool.getTotalAmount());
-        assertEquals(new BigDecimal(AMOUNT_1000), fundPool.getSalFields().getItemBankGrossAmount());
+        FundPool fundPool = fundPoolService.calculateSalFundPoolAmounts(buildSalFundPool(splitPercent, 0, 0, 0));
+        assertEquals(AMOUNT_1000, fundPool.getTotalAmount());
+        assertEquals(AMOUNT_1000, fundPool.getSalFields().getItemBankGrossAmount());
         assertEquals(gradeGrossAmount, fundPool.getSalFields().getGradeKto5GrossAmount());
         assertEquals(gradeGrossAmount, fundPool.getSalFields().getGrade6to8GrossAmount());
         assertEquals(gradeGrossAmount, fundPool.getSalFields().getGrade9to12GrossAmount());
-        assertEquals(new BigDecimal(AMOUNT_1000), fundPool.getSalFields().getGrossAmount());
+        assertEquals(AMOUNT_1000, fundPool.getSalFields().getGrossAmount());
         assertEquals(splitPercent, fundPool.getSalFields().getItemBankSplitPercent());
         assertEquals(0, fundPool.getSalFields().getGradeKto5NumberOfStudents());
         assertEquals(0, fundPool.getSalFields().getGrade6to8NumberOfStudents());
@@ -314,6 +320,55 @@ public class FundPoolServiceTest {
         assertEquals(fundPool.getUpdateUser(), USER_NAME);
         assertNotNull(fundPool.getId());
         verify(RupContextUtils.class, fundPoolRepository);
+    }
+
+    @Test
+    public void testCalculateAclciFundPool() {
+        BigDecimal splitPercent = new BigDecimal("0.10");
+        FundPool fundPool = fundPoolService.calculateAclciFundPoolAmounts(
+            buildAclciFundPool(splitPercent, 8, 4, 3, 2, 1));
+        assertEquals(ACLCI_PRODUCT_FAMILY, fundPool.getProductFamily());
+        assertEquals(FUND_POOL_NAME, fundPool.getName());
+        assertEquals(AMOUNT_1000, fundPool.getTotalAmount());
+        assertEquals(COVERAGE_YEARS, fundPool.getAclciFields().getCoverageYears());
+        assertEquals(8, fundPool.getAclciFields().getGradeKto2NumberOfStudents());
+        assertEquals(4, fundPool.getAclciFields().getGrade3to5NumberOfStudents());
+        assertEquals(3, fundPool.getAclciFields().getGrade6to8NumberOfStudents());
+        assertEquals(2, fundPool.getAclciFields().getGrade9to12NumberOfStudents());
+        assertEquals(1, fundPool.getAclciFields().getGradeHeNumberOfStudents());
+        assertEquals(AMOUNT_1000, fundPool.getAclciFields().getGrossAmount());
+        assertEquals(splitPercent, fundPool.getAclciFields().getCurriculumSplitPercent());
+        assertEquals(new BigDecimal("400.00"), fundPool.getAclciFields().getGradeKto2GrossAmount());
+        assertEquals(new BigDecimal("200.00"), fundPool.getAclciFields().getGrade3to5GrossAmount());
+        assertEquals(new BigDecimal("150.00"), fundPool.getAclciFields().getGrade6to8GrossAmount());
+        assertEquals(new BigDecimal("100.00"), fundPool.getAclciFields().getGrade9to12GrossAmount());
+        assertEquals(new BigDecimal("50.00"), fundPool.getAclciFields().getGradeHeGrossAmount());
+        assertEquals(new BigDecimal("100.00"), fundPool.getAclciFields().getCurriculumGrossAmount());
+    }
+
+    @Test
+    public void testCalculateAclciFundPoolSplitPercentIsHundred() {
+        BigDecimal splitPercent = new BigDecimal("1.00");
+        BigDecimal gradeGrossAmount = new BigDecimal("0.00");
+        FundPool fundPool = fundPoolService.calculateAclciFundPoolAmounts(
+            buildAclciFundPool(splitPercent, 0, 0, 0, 0, 0));
+        assertEquals(ACLCI_PRODUCT_FAMILY, fundPool.getProductFamily());
+        assertEquals(FUND_POOL_NAME, fundPool.getName());
+        assertEquals(AMOUNT_1000, fundPool.getTotalAmount());
+        assertEquals(COVERAGE_YEARS, fundPool.getAclciFields().getCoverageYears());
+        assertEquals(0, fundPool.getAclciFields().getGradeKto2NumberOfStudents());
+        assertEquals(0, fundPool.getAclciFields().getGrade3to5NumberOfStudents());
+        assertEquals(0, fundPool.getAclciFields().getGrade6to8NumberOfStudents());
+        assertEquals(0, fundPool.getAclciFields().getGrade9to12NumberOfStudents());
+        assertEquals(0, fundPool.getAclciFields().getGradeHeNumberOfStudents());
+        assertEquals(AMOUNT_1000, fundPool.getAclciFields().getGrossAmount());
+        assertEquals(splitPercent, fundPool.getAclciFields().getCurriculumSplitPercent());
+        assertEquals(gradeGrossAmount, fundPool.getAclciFields().getGradeKto2GrossAmount());
+        assertEquals(gradeGrossAmount, fundPool.getAclciFields().getGrade3to5GrossAmount());
+        assertEquals(gradeGrossAmount, fundPool.getAclciFields().getGrade6to8GrossAmount());
+        assertEquals(gradeGrossAmount, fundPool.getAclciFields().getGrade9to12GrossAmount());
+        assertEquals(gradeGrossAmount, fundPool.getAclciFields().getGradeHeGrossAmount());
+        assertEquals(AMOUNT_1000, fundPool.getAclciFields().getCurriculumGrossAmount());
     }
 
     @Test
@@ -353,7 +408,7 @@ public class FundPoolServiceTest {
     private FundPool buildAaclFundPool() {
         FundPool fundPool = new FundPool();
         fundPool.setId(FUND_POOL_ID);
-        fundPool.setProductFamily("AACL");
+        fundPool.setProductFamily(AACL_PRODUCT_FAMILY);
         fundPool.setName(FUND_POOL_NAME);
         fundPool.setTotalAmount(BigDecimal.TEN);
         return fundPool;
@@ -362,7 +417,7 @@ public class FundPoolServiceTest {
     private FundPool buildSalFundPool() {
         FundPool fundPool = new FundPool();
         fundPool.setId(FUND_POOL_ID);
-        fundPool.setProductFamily("SAL");
+        fundPool.setProductFamily(SAL_PRODUCT_FAMILY);
         fundPool.setName(FUND_POOL_NAME);
         fundPool.setTotalAmount(BigDecimal.TEN);
         return fundPool;
@@ -383,10 +438,10 @@ public class FundPoolServiceTest {
         return detail;
     }
 
-    private FundPool buildFundPool(BigDecimal splitPercent, int gradeKto5NumberOfStudents,
-                                   int grade6to8NumberOfStudents, int grade9to12NumberOfStudents) {
+    private FundPool buildSalFundPool(BigDecimal splitPercent, int gradeKto5NumberOfStudents,
+                                      int grade6to8NumberOfStudents, int grade9to12NumberOfStudents) {
         FundPool fundPool = new FundPool();
-        FundPool.SalFields salFields = new FundPool.SalFields();
+        SalFields salFields = new SalFields();
         salFields.setDateReceived(LocalDate.of(2020, 12, 24));
         salFields.setAssessmentName("FY2020 COG");
         salFields.setLicenseeAccountNumber(1000008985L);
@@ -394,10 +449,29 @@ public class FundPoolServiceTest {
         salFields.setGradeKto5NumberOfStudents(gradeKto5NumberOfStudents);
         salFields.setGrade6to8NumberOfStudents(grade6to8NumberOfStudents);
         salFields.setGrade9to12NumberOfStudents(grade9to12NumberOfStudents);
-        salFields.setGrossAmount(new BigDecimal(AMOUNT_1000));
+        salFields.setGrossAmount(AMOUNT_1000);
         salFields.setItemBankSplitPercent(splitPercent);
         salFields.setServiceFee(SAL_SERVICE_FEE);
         fundPool.setSalFields(salFields);
+        return fundPool;
+    }
+
+    private FundPool buildAclciFundPool(BigDecimal splitPercent, int gradeKto2NumberOfStudents,
+                                        int grade3to5NumberOfStudents, int grade6to8NumberOfStudents,
+                                        int grade9to12NumberOfStudents, int gradeHeNumberOfStudents) {
+        FundPool fundPool = new FundPool();
+        fundPool.setProductFamily(ACLCI_PRODUCT_FAMILY);
+        fundPool.setName(FUND_POOL_NAME);
+        AclciFields aclciFields = new AclciFields();
+        aclciFields.setCoverageYears(COVERAGE_YEARS);
+        aclciFields.setGradeKto2NumberOfStudents(gradeKto2NumberOfStudents);
+        aclciFields.setGrade3to5NumberOfStudents(grade3to5NumberOfStudents);
+        aclciFields.setGrade6to8NumberOfStudents(grade6to8NumberOfStudents);
+        aclciFields.setGrade9to12NumberOfStudents(grade9to12NumberOfStudents);
+        aclciFields.setGradeHeNumberOfStudents(gradeHeNumberOfStudents);
+        aclciFields.setGrossAmount(AMOUNT_1000);
+        aclciFields.setCurriculumSplitPercent(splitPercent);
+        fundPool.setAclciFields(aclciFields);
         return fundPool;
     }
 }
