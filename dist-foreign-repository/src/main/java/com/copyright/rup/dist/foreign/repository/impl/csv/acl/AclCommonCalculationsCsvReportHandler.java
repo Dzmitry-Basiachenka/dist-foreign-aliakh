@@ -50,11 +50,12 @@ public abstract class AclCommonCalculationsCsvReportHandler<T extends StoredEnti
      * @param metadata ACL calculation report metadata
      */
     public void writeMetadata(AclCalculationReportsInfoDto metadata) {
+        String scenarioNames = metadata.getScenarios().stream().map(AclScenario::getName)
+            .sorted(String::compareToIgnoreCase).collect(Collectors.joining(", "));
         writeStringRow(Arrays.asList(StringUtils.EMPTY, StringUtils.EMPTY));
         writeStringRow(METADATA_HEADERS);
-        writeStringRow(Arrays.asList(reportName, String.valueOf(metadata.getPeriod()), metadata.getUser(),
-            metadata.getReportDateTime().format(formatter),
-            metadata.getScenarios().stream().map(AclScenario::getName).collect(Collectors.joining(", "))));
+        writeStringRow(List.of(reportName, String.valueOf(metadata.getPeriod()), metadata.getUser(),
+            metadata.getReportDateTime().format(formatter), scenarioNames));
     }
 
     /**
