@@ -45,7 +45,7 @@ public class PublicationTypeFilterWidgetTest {
 
     private final PublicationType publicationType = buildPublicationType();
     private final PublicationTypeFilterWidget publicationTypeFilterWidget =
-        new PublicationTypeFilterWidget(() -> Collections.singletonList(publicationType));
+        new PublicationTypeFilterWidget(() -> List.of(publicationType));
 
     @Test
     public void testLoadBeans() {
@@ -101,7 +101,7 @@ public class PublicationTypeFilterWidgetTest {
     public void testConstructorWithSelectedItems() {
         Set<PublicationType> selectedPublicationTypes = Collections.singleton(publicationType);
         PublicationTypeFilterWidget pubTypeFilterWidget =
-            new PublicationTypeFilterWidget(() -> Collections.singletonList(publicationType), selectedPublicationTypes);
+            new PublicationTypeFilterWidget(() -> List.of(publicationType), selectedPublicationTypes);
         assertEquals(selectedPublicationTypes, pubTypeFilterWidget.getSelectedItemsIds());
         assertEquals("Pub Types", pubTypeFilterWidget.getComponent(1).getCaption());
     }

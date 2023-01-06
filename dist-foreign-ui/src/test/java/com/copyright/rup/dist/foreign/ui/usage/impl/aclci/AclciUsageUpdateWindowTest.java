@@ -113,7 +113,7 @@ public class AclciUsageUpdateWindowTest {
 
     @Test
     public void testRefreshDataProviderSelectAllCheckBoxVisibilityVisible() {
-        expect(controller.getUsageDtosToUpdate()).andReturn(Collections.singletonList(new UsageDto())).once();
+        expect(controller.getUsageDtosToUpdate()).andReturn(List.of(new UsageDto())).once();
         replay(controller);
         window.refreshDataProvider();
         Grid<UsageDto> grid = Whitebox.getInternalState(window, "usagesGrid");

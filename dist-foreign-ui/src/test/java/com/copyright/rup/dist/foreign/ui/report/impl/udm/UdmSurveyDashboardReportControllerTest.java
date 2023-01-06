@@ -68,7 +68,7 @@ public class UdmSurveyDashboardReportControllerTest {
 
     @Test
     public void testGetPeriods() {
-        List<Integer> periods = Collections.singletonList(202112);
+        List<Integer> periods = List.of(202112);
         expect(udmBatchService.getPeriods()).andReturn(periods).once();
         replay(udmBatchService);
         assertEquals(periods, controller.getPeriods());

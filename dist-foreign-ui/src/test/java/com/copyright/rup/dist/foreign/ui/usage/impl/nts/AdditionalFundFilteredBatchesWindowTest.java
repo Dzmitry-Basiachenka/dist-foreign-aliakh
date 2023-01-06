@@ -30,7 +30,6 @@ import org.junit.Test;
 import java.math.BigDecimal;
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -52,7 +51,7 @@ public class AdditionalFundFilteredBatchesWindowTest {
     @Test
     public void testConstructor() {
         INtsUsageController controller = createMock(INtsUsageController.class);
-        List<UsageBatch> batches = Collections.singletonList(buildUsageBatch());
+        List<UsageBatch> batches = List.of(buildUsageBatch());
         IStreamSource streamSource = createMock(IStreamSource.class);
         expect(streamSource.getSource()).andReturn(new SimpleImmutableEntry(createMock(Supplier.class),
             createMock(Supplier.class))).once();

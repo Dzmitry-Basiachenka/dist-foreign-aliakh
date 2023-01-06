@@ -19,7 +19,6 @@ import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -56,7 +55,7 @@ public class UdmBaselineFilterControllerTest {
 
     @Test
     public void testGetDetailLicenseeClasses() {
-        List<DetailLicenseeClass> licenseeClasses = Collections.singletonList(new DetailLicenseeClass());
+        List<DetailLicenseeClass> licenseeClasses = List.of(new DetailLicenseeClass());
         expect(licenseeClassService.getDetailLicenseeClasses("ACL")).andReturn(licenseeClasses).once();
         replay(licenseeClassService);
         assertSame(licenseeClasses, controller.getDetailLicenseeClasses());
@@ -65,7 +64,7 @@ public class UdmBaselineFilterControllerTest {
 
     @Test
     public void testGetAggregateLicenseeClasses() {
-        List<AggregateLicenseeClass> licenseeClasses = Collections.singletonList(new AggregateLicenseeClass());
+        List<AggregateLicenseeClass> licenseeClasses = List.of(new AggregateLicenseeClass());
         expect(licenseeClassService.getAggregateLicenseeClasses("ACL")).andReturn(licenseeClasses).once();
         replay(licenseeClassService);
         assertSame(licenseeClasses, controller.getAggregateLicenseeClasses());
@@ -74,7 +73,7 @@ public class UdmBaselineFilterControllerTest {
 
     @Test
     public void testGetReportedTypeOfUses() {
-        List<String> reportedTypeOfUses = Collections.singletonList("PRINT_COPIES");
+        List<String> reportedTypeOfUses = List.of("PRINT_COPIES");
         expect(udmTypeOfUseService.getAllUdmTous()).andReturn(reportedTypeOfUses).once();
         replay(udmTypeOfUseService);
         assertSame(reportedTypeOfUses, controller.getReportedTypeOfUses());

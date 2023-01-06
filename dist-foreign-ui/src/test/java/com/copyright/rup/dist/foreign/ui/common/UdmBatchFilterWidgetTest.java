@@ -92,7 +92,7 @@ public class UdmBatchFilterWidgetTest {
         expectLastCall().once();
         replay(filterWindow, Windows.class);
         udmBatchFilterWidget.showFilterWindow();
-        assertEquals(Collections.singletonList(UDM_BATCH_NAME), providerCapture.getValue().apply(buildUdmBatch()));
+        assertEquals(List.of(UDM_BATCH_NAME), providerCapture.getValue().apply(buildUdmBatch()));
         verify(filterWindow, Windows.class);
     }
 

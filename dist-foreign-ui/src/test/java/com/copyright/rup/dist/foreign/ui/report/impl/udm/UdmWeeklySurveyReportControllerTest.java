@@ -74,7 +74,7 @@ public class UdmWeeklySurveyReportControllerTest {
 
     @Test
     public void testGetAllPeriods() {
-        List<Integer> periods = Collections.singletonList(202112);
+        List<Integer> periods = List.of(202112);
         expect(udmUsageService.getPeriods()).andReturn(periods).once();
         replay(udmReportService, udmUsageService);
         assertEquals(periods, controller.getAllPeriods());

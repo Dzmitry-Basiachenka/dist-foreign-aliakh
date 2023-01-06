@@ -52,6 +52,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Verifies {@link ViewUdmBatchWindow}.
@@ -79,7 +80,7 @@ public class ViewUdmBatchWindowTest {
         controller = createMock(IUdmUsageController.class);
         udmBatchGrid = createMock(Grid.class);
         expect(ForeignSecurityUtils.hasResearcherPermission()).andReturn(true).once();
-        expect(controller.getUdmBatches()).andReturn(Collections.singletonList(buildUdmBatch()));
+        expect(controller.getUdmBatches()).andReturn(List.of(buildUdmBatch()));
         replay(controller, ForeignSecurityUtils.class);
         viewUdmBatchWindow = new ViewUdmBatchWindow(controller);
         Whitebox.setInternalState(viewUdmBatchWindow, "grid", udmBatchGrid);
@@ -94,7 +95,7 @@ public class ViewUdmBatchWindowTest {
             {UDM_BATCH_NAME, 202006, UdmUsageOriginEnum.SS, UdmChannelEnum.CCC, "user@copyright.com",
                 "09/01/2022 12:00 AM"}
         };
-        verifyGridItems(grid, Collections.singletonList(buildUdmBatch()), expectedCells);
+        verifyGridItems(grid, List.of(buildUdmBatch()), expectedCells);
     }
 
     @Test

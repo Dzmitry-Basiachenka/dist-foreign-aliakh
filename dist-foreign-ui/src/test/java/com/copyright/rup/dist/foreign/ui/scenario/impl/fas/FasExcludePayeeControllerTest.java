@@ -108,7 +108,7 @@ public class FasExcludePayeeControllerTest {
     public void testGetPayeeTotalHolders() {
         IFasExcludePayeeWidget widget = createMock(IFasExcludePayeeWidget.class);
         Whitebox.setInternalState(controller, widget);
-        List<PayeeTotalHolder> payeeTotalHolders = Collections.singletonList(new PayeeTotalHolder());
+        List<PayeeTotalHolder> payeeTotalHolders = List.of(new PayeeTotalHolder());
         ExcludePayeeFilter filter = new ExcludePayeeFilter();
         expect(filterController.getWidget()).andReturn(filterWidget).once();
         expect(filterWidget.getAppliedFilter()).andReturn(filter).once();

@@ -19,7 +19,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -59,7 +58,7 @@ public class UdmUsageFilterControllerTest {
 
     @Test
     public void testGetPeriods() {
-        List<Integer> periods = Collections.singletonList(202006);
+        List<Integer> periods = List.of(202006);
         expect(udmUsageService.getPeriods()).andReturn(periods).once();
         replay(udmUsageService);
         assertSame(periods, controller.getPeriods());
@@ -68,7 +67,7 @@ public class UdmUsageFilterControllerTest {
 
     @Test
     public void testGetUdmBatchesForFilter() {
-        List<UdmBatch> udmBatches = Collections.singletonList(new UdmBatch());
+        List<UdmBatch> udmBatches = List.of(new UdmBatch());
         expect(udmBatchService.getUdmBatches()).andReturn(udmBatches).once();
         replay(udmBatchService);
         assertSame(udmBatches, controller.getUdmBatches());
@@ -77,7 +76,7 @@ public class UdmUsageFilterControllerTest {
 
     @Test
     public void testGetAssignees() {
-        List<String> assignees = Collections.singletonList("user@copyright.com");
+        List<String> assignees = List.of("user@copyright.com");
         expect(udmUsageService.getAssignees()).andReturn(assignees).once();
         replay(udmUsageService);
         assertSame(assignees, controller.getAssignees());
@@ -86,7 +85,7 @@ public class UdmUsageFilterControllerTest {
 
     @Test
     public void testGetPublicationFormats() {
-        List<String> pubFormats = Collections.singletonList("Digital");
+        List<String> pubFormats = List.of("Digital");
         expect(udmUsageService.getPublicationFormats()).andReturn(pubFormats).once();
         replay(udmUsageService);
         assertSame(pubFormats, controller.getPublicationFormats());
@@ -95,7 +94,7 @@ public class UdmUsageFilterControllerTest {
 
     @Test
     public void testGetPublicationTypes() {
-        List<String> pubTypes = Collections.singletonList("Book");
+        List<String> pubTypes = List.of("Book");
         expect(udmUsageService.getPublicationTypes()).andReturn(pubTypes).once();
         replay(udmUsageService);
         assertSame(pubTypes, controller.getPublicationTypes());
@@ -104,7 +103,7 @@ public class UdmUsageFilterControllerTest {
 
     @Test
     public void testGetDetailLicenseeClasses() {
-        List<DetailLicenseeClass> licenseeClasses = Collections.singletonList(new DetailLicenseeClass());
+        List<DetailLicenseeClass> licenseeClasses = List.of(new DetailLicenseeClass());
         expect(licenseeClassService.getDetailLicenseeClasses("ACL")).andReturn(licenseeClasses).once();
         replay(licenseeClassService);
         assertSame(licenseeClasses, controller.getDetailLicenseeClasses());
@@ -113,7 +112,7 @@ public class UdmUsageFilterControllerTest {
 
     @Test
     public void testGetReportedTypeOfUses() {
-        List<String> reportedTypeOfUses = Collections.singletonList("PRINT_COPIES");
+        List<String> reportedTypeOfUses = List.of("PRINT_COPIES");
         expect(udmTypeOfUseService.getAllUdmTous()).andReturn(reportedTypeOfUses).once();
         replay(udmTypeOfUseService);
         assertSame(reportedTypeOfUses, controller.getReportedTypeOfUses());

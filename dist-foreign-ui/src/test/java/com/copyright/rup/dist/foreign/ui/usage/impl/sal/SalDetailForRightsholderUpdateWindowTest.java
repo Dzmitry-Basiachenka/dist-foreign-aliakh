@@ -110,8 +110,7 @@ public class SalDetailForRightsholderUpdateWindowTest {
 
     @Test
     public void testRefreshDataProviderSelectAllCheckBoxVisibilityVisible() {
-        expect(salUsageController.getUsageDtosForRhUpdate()).andReturn(Collections.singletonList(new UsageDto()))
-            .once();
+        expect(salUsageController.getUsageDtosForRhUpdate()).andReturn(List.of(new UsageDto())).once();
         replay(salUsageController);
         window.refreshDataProvider();
         Grid<UsageDto> grid = Whitebox.getInternalState(window, "usagesGrid");

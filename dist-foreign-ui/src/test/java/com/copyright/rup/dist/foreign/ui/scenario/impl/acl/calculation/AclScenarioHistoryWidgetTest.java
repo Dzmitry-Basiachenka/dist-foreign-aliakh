@@ -29,7 +29,6 @@ import org.junit.Test;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -76,7 +75,7 @@ public class AclScenarioHistoryWidgetTest {
 
     @Test
     public void testGridValues() {
-        List<ScenarioAuditItem> auditItems = Collections.singletonList(buildScenarioAuditItem());
+        List<ScenarioAuditItem> auditItems = List.of(buildScenarioAuditItem());
         expect(controller.getActions(SCENARIO_ID)).andReturn(auditItems).once();
         replay(controller);
         widget.populateHistory(buildAclScenario());

@@ -14,7 +14,7 @@ import com.google.common.collect.Sets;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -35,7 +35,7 @@ public class AdditionalFundBatchesFilterWidgetTest {
 
     @Before
     public void setUp() {
-        widget = new AdditionalFundBatchesFilterWidget(() -> Collections.singletonList(buildUsageBatch()));
+        widget = new AdditionalFundBatchesFilterWidget(() -> List.of(buildUsageBatch()));
     }
 
     @Test

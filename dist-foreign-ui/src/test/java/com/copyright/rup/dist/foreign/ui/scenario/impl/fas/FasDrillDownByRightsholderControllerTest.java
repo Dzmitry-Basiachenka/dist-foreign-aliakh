@@ -34,7 +34,6 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -69,7 +68,7 @@ public class FasDrillDownByRightsholderControllerTest {
 
     @Test
     public void testLoadBeans() {
-        List<UsageDto> usageDtos = Collections.singletonList(new UsageDto());
+        List<UsageDto> usageDtos = List.of(new UsageDto());
         Scenario scenario = new Scenario();
         Whitebox.setInternalState(controller, scenario);
         Whitebox.setInternalState(controller, RH_ACCOUNT_NUMBER);
@@ -81,7 +80,7 @@ public class FasDrillDownByRightsholderControllerTest {
             .andReturn(usageDtos).once();
         replayAll();
         List<UsageDto> actualUsageDtos = controller.loadBeans(OFFSET, COUNT,
-            Collections.singletonList(new QuerySortOrder(SORT_PROPERTY, SortDirection.DESCENDING)));
+            List.of(new QuerySortOrder(SORT_PROPERTY, SortDirection.DESCENDING)));
         verifyAll();
         assertEquals(OFFSET, pageableCapture.getValue().getOffset());
         assertEquals(COUNT, pageableCapture.getValue().getLimit());

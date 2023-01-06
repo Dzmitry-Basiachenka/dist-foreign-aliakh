@@ -47,7 +47,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.util.Collection;
-import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -82,7 +82,7 @@ public class FasNtsUsageFilterWidgetTest {
         usagesFilterController = createMock(IFasNtsUsageFilterController.class);
         widget = new FasNtsUsageFilterWidget(usagesFilterController);
         widget.setController(usagesFilterController);
-        expect(usagesFilterController.getFiscalYears()).andReturn(Collections.singletonList(FISCAL_YEAR)).once();
+        expect(usagesFilterController.getFiscalYears()).andReturn(List.of(FISCAL_YEAR)).once();
     }
 
     @Test
@@ -100,7 +100,7 @@ public class FasNtsUsageFilterWidgetTest {
     @Test
     public void testApplyFilter() {
         expect(usagesFilterController.getSelectedProductFamily()).andReturn(FAS_PRODUCT_FAMILY).times(4);
-        expect(usagesFilterController.getFiscalYears()).andReturn(Collections.singletonList(FISCAL_YEAR)).once();
+        expect(usagesFilterController.getFiscalYears()).andReturn(List.of(FISCAL_YEAR)).once();
         replay(usagesFilterController);
         widget.init();
         widget.clearFilter();
@@ -136,7 +136,7 @@ public class FasNtsUsageFilterWidgetTest {
     @Test
     public void testClearFilter() {
         expect(usagesFilterController.getSelectedProductFamily()).andReturn(FAS_PRODUCT_FAMILY).times(4);
-        expect(usagesFilterController.getFiscalYears()).andReturn(Collections.singletonList(FISCAL_YEAR)).once();
+        expect(usagesFilterController.getFiscalYears()).andReturn(List.of(FISCAL_YEAR)).once();
         replay(usagesFilterController);
         widget.init();
         Button applyButton = getApplyButton();
@@ -183,7 +183,7 @@ public class FasNtsUsageFilterWidgetTest {
     public void verifyButtonClickListener() {
         expect(usagesFilterController.getSelectedProductFamily()).andReturn(FAS_PRODUCT_FAMILY).times(4);
         ClickEvent clickEvent = createMock(ClickEvent.class);
-        expect(usagesFilterController.getFiscalYears()).andReturn(Collections.singletonList(FISCAL_YEAR)).once();
+        expect(usagesFilterController.getFiscalYears()).andReturn(List.of(FISCAL_YEAR)).once();
         replay(clickEvent, usagesFilterController);
         widget.init();
         Set<Long> accountNumbers = Sets.newHashSet(ACCOUNT_NUMBER);
@@ -210,7 +210,7 @@ public class FasNtsUsageFilterWidgetTest {
     @Test
     public void testGetAvailableStatusesNtsProductFamily() {
         expect(usagesFilterController.getSelectedProductFamily()).andReturn("NTS").times(3);
-        expect(usagesFilterController.getFiscalYears()).andReturn(Collections.singletonList(FISCAL_YEAR)).once();
+        expect(usagesFilterController.getFiscalYears()).andReturn(List.of(FISCAL_YEAR)).once();
         replay(usagesFilterController);
         widget.init();
         assertEquals(NTS_STATUSES, getGetStatuses());

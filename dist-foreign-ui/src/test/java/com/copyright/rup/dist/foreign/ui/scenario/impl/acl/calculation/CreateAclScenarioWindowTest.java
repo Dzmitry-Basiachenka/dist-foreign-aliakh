@@ -96,15 +96,13 @@ public class CreateAclScenarioWindowTest {
     private static final String FUND_POOL_ID = "304795bf-9bd1-4377-9b5f-ce247d88f8b2";
     private static final String GRANT_SET_ID = "f5e558ce-2261-4998-8434-fc04d432c1a5";
     private static final int PERIOD = 202206;
-    private static final List<Integer> PERIOD_PRIORS = Collections.singletonList(1);
+    private static final List<Integer> PERIOD_PRIORS = List.of(1);
     private static final String DESCRIPTION = "Description";
     private static final String EDITABLE_CHECKBOX_FIELD_NAME = "editableCheckBox";
 
-    private final List<UsageAge> usageAges = Collections.singletonList(buildUsageAge());
-    private final List<AclPublicationType> publicationTypes =
-        Collections.singletonList(buildAclPublicationType(201506));
-    private final List<DetailLicenseeClass> detailLicenseeClasses =
-        Collections.singletonList(buildAclDetailLicenseeClass());
+    private final List<UsageAge> usageAges = List.of(buildUsageAge());
+    private final List<AclPublicationType> publicationTypes = List.of(buildAclPublicationType(201506));
+    private final List<DetailLicenseeClass> detailLicenseeClasses = List.of(buildAclDetailLicenseeClass());
 
     private IAclScenariosController controller;
     private CreateAclScenarioWindow window;
@@ -115,11 +113,11 @@ public class CreateAclScenarioWindowTest {
         controller = createMock(IAclScenariosController.class);
         createButtonClickListener = createMock(ClickListener.class);
         mockStatic(ForeignSecurityUtils.class);
-        expect(controller.getAllPeriods()).andReturn(Collections.singletonList(PERIOD)).once();
+        expect(controller.getAllPeriods()).andReturn(List.of(PERIOD)).once();
         expect(controller.getAclHistoricalPublicationTypes()).andReturn(publicationTypes).once();
         expect(controller.getDetailLicenseeClasses()).andReturn(detailLicenseeClasses).once();
         expect(controller.getUsageAgeWeights()).andReturn(usageAges).once();
-        expect(controller.getScenarios()).andReturn(Collections.singletonList(buildAclScenario())).once();
+        expect(controller.getScenarios()).andReturn(List.of(buildAclScenario())).once();
     }
 
     @Test
@@ -198,12 +196,11 @@ public class CreateAclScenarioWindowTest {
         expectedScenario.setDetailLicenseeClasses(detailLicenseeClasses);
         expectedScenario.setUsageAges(usageAges);
         expect(controller.aclScenarioExists(SCENARIO_NAME)).andReturn(false).times(4);
-        expect(controller.getUsageBatchesByPeriod(PERIOD, true)).andReturn(Collections.singletonList(aclUsageBatch))
-            .once();
+        expect(controller.getUsageBatchesByPeriod(PERIOD, true)).andReturn(List.of(aclUsageBatch)).once();
         expect(controller.getFundPoolsByLicenseTypeAndPeriod(LICENSE_TYPE, PERIOD))
-            .andReturn(Collections.singletonList(aclFundPool)).once();
+            .andReturn(List.of(aclFundPool)).once();
         expect(controller.getGrantSetsByLicenseTypeAndPeriod(LICENSE_TYPE, PERIOD, true))
-            .andReturn(Collections.singletonList(aclGrantSet)).once();
+            .andReturn(List.of(aclGrantSet)).once();
         expect(controller.isValidUsageBatch(BATCH_UID, aclGrantSet.getId(), PERIOD, PERIOD_PRIORS))
             .andReturn(true).once();
         expect(controller.getFundPoolDetailsNotToBeDistributed(BATCH_UID, aclFundPool.getId(), aclGrantSet.getId(),
@@ -222,12 +219,11 @@ public class CreateAclScenarioWindowTest {
         AclFundPool aclFundPool = buildAclFundPool();
         AclGrantSet aclGrantSet = buildAclGrantSet();
         expect(controller.aclScenarioExists(SCENARIO_NAME)).andReturn(false).times(2);
-        expect(controller.getUsageBatchesByPeriod(PERIOD, true)).andReturn(Collections.singletonList(aclUsageBatch))
-            .once();
+        expect(controller.getUsageBatchesByPeriod(PERIOD, true)).andReturn(List.of(aclUsageBatch)).once();
         expect(controller.getFundPoolsByLicenseTypeAndPeriod(LICENSE_TYPE, PERIOD))
-            .andReturn(Collections.singletonList(aclFundPool)).once();
+            .andReturn(List.of(aclFundPool)).once();
         expect(controller.getGrantSetsByLicenseTypeAndPeriod(LICENSE_TYPE, PERIOD, true))
-            .andReturn(Collections.singletonList(aclGrantSet)).once();
+            .andReturn(List.of(aclGrantSet)).once();
         expect(controller.isValidUsageBatch(BATCH_UID, GRANT_SET_ID, PERIOD, PERIOD_PRIORS))
             .andReturn(false).once();
         IStreamSource streamSource = createMock(IStreamSource.class);
@@ -250,12 +246,11 @@ public class CreateAclScenarioWindowTest {
         AclFundPool aclFundPool = buildAclFundPool();
         AclGrantSet aclGrantSet = buildAclGrantSet();
         expect(controller.aclScenarioExists(SCENARIO_NAME)).andReturn(false).times(4);
-        expect(controller.getUsageBatchesByPeriod(PERIOD, true)).andReturn(Collections.singletonList(aclUsageBatch))
-            .once();
+        expect(controller.getUsageBatchesByPeriod(PERIOD, true)).andReturn(List.of(aclUsageBatch)).once();
         expect(controller.getFundPoolsByLicenseTypeAndPeriod(LICENSE_TYPE, PERIOD))
-            .andReturn(Collections.singletonList(aclFundPool)).once();
+            .andReturn(List.of(aclFundPool)).once();
         expect(controller.getGrantSetsByLicenseTypeAndPeriod(LICENSE_TYPE, PERIOD, true))
-            .andReturn(Collections.singletonList(aclGrantSet)).once();
+            .andReturn(List.of(aclGrantSet)).once();
         expect(controller.isValidUsageBatch(BATCH_UID, aclGrantSet.getId(), PERIOD, PERIOD_PRIORS))
             .andReturn(true).once();
         LinkedHashSet<AclFundPoolDetailDto> invalidDetails = Sets.newLinkedHashSet();
@@ -346,12 +341,11 @@ public class CreateAclScenarioWindowTest {
     public void testFillInFieldsFromCopyScenario() {
         AclScenario aclScenario = buildAclScenario();
         expect(controller.aclScenarioExists(SCENARIO_NAME)).andReturn(false).once();
-        expect(controller.getUsageBatchesByPeriod(PERIOD, true))
-            .andReturn(Collections.singletonList(buildAclUsageBatch())).times(2);
+        expect(controller.getUsageBatchesByPeriod(PERIOD, true)).andReturn(List.of(buildAclUsageBatch())).times(2);
         expect(controller.getFundPoolsByLicenseTypeAndPeriod(LICENSE_TYPE, PERIOD))
-            .andReturn(Collections.singletonList(buildAclFundPool())).times(2);
+            .andReturn(List.of(buildAclFundPool())).times(2);
         expect(controller.getGrantSetsByLicenseTypeAndPeriod(LICENSE_TYPE, PERIOD, true))
-            .andReturn(Collections.singletonList(buildAclGrantSet())).times(2);
+            .andReturn(List.of(buildAclGrantSet())).times(2);
         expect(controller.getScenarioById(SCENARIO_ID)).andReturn(aclScenario).once();
         expect(ForeignSecurityUtils.hasSpecialistPermission()).andReturn(true).once();
         replay(controller, ForeignSecurityUtils.class);
@@ -367,16 +361,14 @@ public class CreateAclScenarioWindowTest {
         expect(controller.aclScenarioExists(SCENARIO_NAME)).andReturn(false).once();
         expect(controller.getAclHistoricalPublicationTypes()).andReturn(publicationTypes).once();
         expect(ForeignSecurityUtils.hasSpecialistPermission()).andReturn(false);
-        expect(controller.getUsageBatchesByPeriod(202206, true))
-            .andReturn(Collections.singletonList(buildAclUsageBatch())).times(2);
-        expect(controller.getUsageBatchesByPeriod(202206, false))
-            .andReturn(Collections.singletonList(buildAclUsageBatch())).once();
+        expect(controller.getUsageBatchesByPeriod(202206, true)).andReturn(List.of(buildAclUsageBatch())).times(2);
+        expect(controller.getUsageBatchesByPeriod(202206, false)).andReturn(List.of(buildAclUsageBatch())).once();
         expect(controller.getFundPoolsByLicenseTypeAndPeriod(LICENSE_TYPE, 202206))
-            .andReturn(Collections.singletonList(buildAclFundPool())).times(3);
+            .andReturn(List.of(buildAclFundPool())).times(3);
         expect(controller.getGrantSetsByLicenseTypeAndPeriod(LICENSE_TYPE, 202206, true))
-            .andReturn(Collections.singletonList(buildAclGrantSet())).times(2);
+            .andReturn(List.of(buildAclGrantSet())).times(2);
         expect(controller.getGrantSetsByLicenseTypeAndPeriod(LICENSE_TYPE, 202206, false))
-            .andReturn(Collections.singletonList(buildAclGrantSet())).once();
+            .andReturn(List.of(buildAclGrantSet())).once();
         replay(controller, ForeignSecurityUtils.class);
         window = new CreateAclScenarioWindow(controller, createButtonClickListener);
         ComboBox<Integer> periodComboBox = Whitebox.getInternalState(window, "periodComboBox");
@@ -572,9 +564,9 @@ public class CreateAclScenarioWindowTest {
         scenario.setLicenseType(LICENSE_TYPE);
         scenario.setCreateUser("username");
         scenario.setUpdateUser("username");
-        scenario.setDetailLicenseeClasses(Collections.singletonList(buildAclDetailLicenseeClass()));
-        scenario.setPublicationTypes(Collections.singletonList(buildAclPublicationType(201506)));
-        scenario.setUsageAges(Collections.singletonList(buildUsageAge()));
+        scenario.setDetailLicenseeClasses(List.of(buildAclDetailLicenseeClass()));
+        scenario.setPublicationTypes(List.of(buildAclPublicationType(201506)));
+        scenario.setUsageAges(List.of(buildUsageAge()));
         return scenario;
     }
 }

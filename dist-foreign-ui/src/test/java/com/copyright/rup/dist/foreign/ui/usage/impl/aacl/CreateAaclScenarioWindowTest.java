@@ -107,10 +107,10 @@ public class CreateAaclScenarioWindowTest {
         aggregateLicenseeClass.setDiscipline("Life Sciences");
         detailLicenseeClass.setAggregateLicenseeClass(aggregateLicenseeClass);
         expect(controller.getSelectedProductFamily()).andReturn(AACL_PRODUCT_FAMILY).anyTimes();
-        expect(controller.getFundPoolsNotAttachedToScenario()).andReturn(Collections.singletonList(fundPool)).once();
-        expect(controller.getUsageAges()).andReturn(Collections.singletonList(usageAge)).once();
-        expect(controller.getPublicationTypes()).andReturn(Collections.singletonList(publicationType)).once();
-        expect(controller.getDetailLicenseeClasses()).andReturn(Collections.singletonList(detailLicenseeClass)).once();
+        expect(controller.getFundPoolsNotAttachedToScenario()).andReturn(List.of(fundPool)).once();
+        expect(controller.getUsageAges()).andReturn(List.of(usageAge)).once();
+        expect(controller.getPublicationTypes()).andReturn(List.of(publicationType)).once();
+        expect(controller.getDetailLicenseeClasses()).andReturn(List.of(detailLicenseeClass)).once();
     }
 
     @Test
@@ -137,9 +137,9 @@ public class CreateAaclScenarioWindowTest {
 
     @Test
     public void testConfirmButtonClickListener() {
-        List<UsageAge> usageAges = Collections.singletonList(usageAge);
-        List<PublicationType> publicationTypes = Collections.singletonList(publicationType);
-        List<DetailLicenseeClass> detailLicenseeClasses = Collections.singletonList(detailLicenseeClass);
+        List<UsageAge> usageAges = List.of(usageAge);
+        List<PublicationType> publicationTypes = List.of(publicationType);
+        List<DetailLicenseeClass> detailLicenseeClasses = List.of(detailLicenseeClass);
         AaclFields expectedAaclFields = new AaclFields();
         expectedAaclFields.setFundPoolId(FUND_POOL_ID);
         expectedAaclFields.setUsageAges(usageAges);
@@ -173,9 +173,8 @@ public class CreateAaclScenarioWindowTest {
     public void testConfirmButtonClickListenerWithInvalidMapping() {
         mockStatic(Windows.class);
         expect(controller.scenarioExists(SCENARIO_NAME)).andReturn(false).times(2);
-        expect(controller.getAggregateClassesNotToBeDistributed(FUND_POOL_ID,
-            Collections.singletonList(detailLicenseeClass)))
-            .andReturn(Collections.singletonList(aggregateLicenseeClass)).once();
+        expect(controller.getAggregateClassesNotToBeDistributed(FUND_POOL_ID, List.of(detailLicenseeClass)))
+            .andReturn(List.of(aggregateLicenseeClass)).once();
         Windows.showNotificationWindow(
             "Scenario cannot be created. There are no usages for the following Aggregate Licensee Class(es):" +
                 "<ul><li><i><b>143 (EXGP - Life Sciences)</b></i></ul>");

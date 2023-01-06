@@ -23,7 +23,6 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.math.BigDecimal;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -41,7 +40,7 @@ public class AclPublicationTypeWeightsParameterWidgetTest {
 
     private static final String CAPTION = "Pub Type Weights";
 
-    private final List<AclPublicationType> defaultParameters = Collections.singletonList(
+    private final List<AclPublicationType> defaultParameters = List.of(
         buildAclPublicationType("2fe9c0a0-7672-4b56-bc64-9d4125fecf6e", "Book", "1.00", 201506));
     private AclPublicationTypeWeightsParameterWidget widget;
     private AclPublicationTypeWeightsWindow window;
@@ -67,7 +66,7 @@ public class AclPublicationTypeWeightsParameterWidgetTest {
         expectLastCall().once();
         replay(Windows.class);
         button.click();
-        List<AclPublicationType> appliedParameters = Collections.singletonList(
+        List<AclPublicationType> appliedParameters = List.of(
             buildAclPublicationType("2fe9c0a0-7672-4b56-bc64-9d4125fecf6e", "Book", "2.00", 201506));
         window.fireParametersSaveEvent(new ParametersSaveEvent<>(window, appliedParameters));
         assertNotNull(window.getListeners(ParametersSaveEvent.class).iterator().next());

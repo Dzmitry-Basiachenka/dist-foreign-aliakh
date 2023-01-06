@@ -132,7 +132,7 @@ public class UdmUsageControllerTest {
 
     @Test
     public void testLoadBeans() {
-        List<UdmUsageDto> udmUsages = Collections.singletonList(new UdmUsageDto());
+        List<UdmUsageDto> udmUsages = List.of(new UdmUsageDto());
         Capture<Pageable> pageableCapture = newCapture();
         expect(udmUsageFilterController.getWidget()).andReturn(udmUsageFilterWidget).once();
         expect(udmUsageFilterWidget.getAppliedFilter()).andReturn(udmUsageFilter).once();
@@ -180,7 +180,7 @@ public class UdmUsageControllerTest {
 
     @Test
     public void testGetPeriods() {
-        List<Integer> expectedPeriods = Collections.singletonList(202106);
+        List<Integer> expectedPeriods = List.of(202106);
         expect(udmUsageService.getPeriods()).andReturn(expectedPeriods).once();
         replay(udmUsageService);
         List<Integer> periods = controller.getPeriods();
@@ -343,7 +343,7 @@ public class UdmUsageControllerTest {
 
     @Test
     public void testGetUdmBathes() {
-        List<UdmBatch> udmBatches = Collections.singletonList(new UdmBatch());
+        List<UdmBatch> udmBatches = List.of(new UdmBatch());
         expect(udmBatchService.getUdmBatches()).andReturn(udmBatches).once();
         replay(udmBatchService);
         assertEquals(udmBatches, controller.getUdmBatches());

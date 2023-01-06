@@ -167,8 +167,7 @@ public class NtsUsageWidgetTest {
         expectLastCall().once();
         expect(ForeignSecurityUtils.hasDeleteUsagePermission()).andReturn(true).once();
         expect(controller.getSelectedProductFamily()).andReturn(NTS_PRODUCT_FAMILY).once();
-        expect(controller.getUsageBatches(NTS_PRODUCT_FAMILY))
-            .andReturn(Collections.singletonList(new UsageBatch())).once();
+        expect(controller.getUsageBatches(NTS_PRODUCT_FAMILY)).andReturn(List.of(new UsageBatch())).once();
         Windows.showModalWindow(anyObject(ViewFundPoolWindow.class));
         expectLastCall().once();
         replay(controller, Windows.class, ForeignSecurityUtils.class);
@@ -299,7 +298,7 @@ public class NtsUsageWidgetTest {
         expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
         expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
         expect(controller.getBatchNamesWithUnclassifiedWorks(filterWidget.getAppliedFilter().getUsageBatchesIds()))
-            .andReturn(Collections.singletonList("Batch with unclassified usages")).once();
+            .andReturn(List.of("Batch with unclassified usages")).once();
         expect(controller.getProcessingBatchesNames(Collections.singleton(batchId)))
             .andReturn(Collections.emptyList()).once();
         expect(controller.getBatchesNamesToScenariosNames(Collections.singleton(batchId)))
@@ -336,7 +335,7 @@ public class NtsUsageWidgetTest {
             .andReturn(Collections.emptyMap()).once();
         expect(controller.getBatchNamesWithInvalidStmOrNonStmUsagesState(
             filterWidget.getAppliedFilter().getUsageBatchesIds()))
-            .andReturn(ImmutableMap.of("STM", Collections.singletonList("Batch without STM RHs"))).once();
+            .andReturn(ImmutableMap.of("STM", List.of("Batch without STM RHs"))).once();
         Windows.showNotificationWindow("There are no STM rightsholders in the following batches: " +
             "<ul><li><i><b>Batch without STM RHs</b></i></ul>");
         expectLastCall().once();
@@ -369,8 +368,8 @@ public class NtsUsageWidgetTest {
             .andReturn(Collections.emptyList()).once();
         expect(controller.getBatchNamesWithInvalidStmOrNonStmUsagesState(
             filterWidget.getAppliedFilter().getUsageBatchesIds()))
-            .andReturn(ImmutableMap.of("STM", Collections.singletonList("Batch without STM RHs"),
-                "NON-STM", Collections.singletonList("Batch without NON-STM RHs"))).once();
+            .andReturn(ImmutableMap.of("STM", List.of("Batch without STM RHs"),
+                "NON-STM", List.of("Batch without NON-STM RHs"))).once();
         Windows.showNotificationWindow("There are no STM rightsholders in the following batches: " +
             "<ul><li><i><b>Batch without STM RHs</b></i></ul>There are no NON-STM rightsholders " +
             "in the following batches: <ul><li><i><b>Batch without NON-STM RHs</b></i></ul>");

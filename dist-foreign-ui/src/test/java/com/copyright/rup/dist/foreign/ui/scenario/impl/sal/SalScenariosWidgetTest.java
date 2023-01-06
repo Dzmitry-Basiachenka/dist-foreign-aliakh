@@ -49,6 +49,7 @@ import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Verifies {@link SalScenariosWidget}.
@@ -89,7 +90,7 @@ public class SalScenariosWidgetTest {
         SalFields salFields = new SalFields();
         salFields.setFundPoolId(FUND_POOL_ID);
         scenario.setSalFields(salFields);
-        expect(controller.getScenarios()).andReturn(Collections.singletonList(scenario)).once();
+        expect(controller.getScenarios()).andReturn(List.of(scenario)).once();
         replay(controller, usageController);
         scenariosWidget.init();
         scenariosWidget.initMediator();
@@ -130,7 +131,7 @@ public class SalScenariosWidgetTest {
 
     @Test
     public void testRefresh() {
-        expect(controller.getScenarios()).andReturn(Collections.singletonList(scenario)).once();
+        expect(controller.getScenarios()).andReturn(List.of(scenario)).once();
         expect(controller.getScenarioWithAmountsAndLastAction(scenario)).andReturn(scenario).times(2);
         expect(controller.getCriteriaHtmlRepresentation()).andReturn(SELECTION_CRITERIA).times(2);
         expect(controller.getFundPoolName(FUND_POOL_ID)).andReturn(FUND_POOL_NAME).times(2);

@@ -18,7 +18,6 @@ import com.google.common.collect.Sets;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
@@ -49,7 +48,7 @@ public class FasExcludePayeeFilterControllerTest {
     public void testGetScenarios() {
         IScenarioService scenarioService = createMock(IScenarioService.class);
         Whitebox.setInternalState(controller, scenarioService);
-        List<Scenario> scenarios = Collections.singletonList(buildScenario());
+        List<Scenario> scenarios = List.of(buildScenario());
         expect(scenarioService.getScenariosByProductFamiliesAndStatuses(Sets.newHashSet("FAS", "FAS2"),
             EnumSet.of(ScenarioStatusEnum.IN_PROGRESS))).andReturn(scenarios);
         replay(scenarioService);

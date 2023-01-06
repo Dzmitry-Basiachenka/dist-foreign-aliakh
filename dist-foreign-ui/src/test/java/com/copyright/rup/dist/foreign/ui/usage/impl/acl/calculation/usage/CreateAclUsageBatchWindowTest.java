@@ -49,6 +49,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -91,7 +92,7 @@ public class CreateAclUsageBatchWindowTest {
     @Before
     public void setUp() {
         controller = createMock(IAclUsageController.class);
-        expect(controller.getAllAclUsageBatches()).andReturn(Collections.singletonList(buildAclUsageBatch())).once();
+        expect(controller.getAllAclUsageBatches()).andReturn(List.of(buildAclUsageBatch())).once();
     }
 
     @Test

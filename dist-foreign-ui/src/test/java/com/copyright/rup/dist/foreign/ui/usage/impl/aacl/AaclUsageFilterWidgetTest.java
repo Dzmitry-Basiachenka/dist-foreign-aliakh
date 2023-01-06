@@ -42,7 +42,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -78,7 +78,7 @@ public class AaclUsageFilterWidgetTest {
 
     @Test
     public void testInit() {
-        expect(usagesFilterController.getUsagePeriods()).andReturn(Collections.singletonList(USAGE_PERIOD)).once();
+        expect(usagesFilterController.getUsagePeriods()).andReturn(List.of(USAGE_PERIOD)).once();
         expect(usagesFilterController.getSelectedProductFamily()).andReturn(AACL_PRODUCT_FAMILY).once();
         replay(usagesFilterController);
         assertSame(widget, widget.init());
@@ -91,7 +91,7 @@ public class AaclUsageFilterWidgetTest {
 
     @Test
     public void testApplyFilter() {
-        expect(usagesFilterController.getUsagePeriods()).andReturn(Collections.singletonList(USAGE_PERIOD)).times(2);
+        expect(usagesFilterController.getUsagePeriods()).andReturn(List.of(USAGE_PERIOD)).times(2);
         expect(usagesFilterController.getSelectedProductFamily()).andReturn(AACL_PRODUCT_FAMILY).times(2);
         replay(usagesFilterController);
         widget.init();
@@ -115,7 +115,7 @@ public class AaclUsageFilterWidgetTest {
 
     @Test
     public void testFilterChangedEmptyFilter() {
-        expect(usagesFilterController.getUsagePeriods()).andReturn(Collections.singletonList(USAGE_PERIOD)).once();
+        expect(usagesFilterController.getUsagePeriods()).andReturn(List.of(USAGE_PERIOD)).once();
         expect(usagesFilterController.getSelectedProductFamily()).andReturn(AACL_PRODUCT_FAMILY).once();
         replay(usagesFilterController);
         widget.init();
@@ -128,7 +128,7 @@ public class AaclUsageFilterWidgetTest {
 
     @Test
     public void testClearFilter() {
-        expect(usagesFilterController.getUsagePeriods()).andReturn(Collections.singletonList(USAGE_PERIOD)).times(2);
+        expect(usagesFilterController.getUsagePeriods()).andReturn(List.of(USAGE_PERIOD)).times(2);
         expect(usagesFilterController.getSelectedProductFamily()).andReturn(AACL_PRODUCT_FAMILY).times(2);
         replay(usagesFilterController);
         widget.init();
@@ -158,7 +158,7 @@ public class AaclUsageFilterWidgetTest {
 
     @Test
     public void verifyApplyButtonClickListener() {
-        expect(usagesFilterController.getUsagePeriods()).andReturn(Collections.singletonList(USAGE_PERIOD)).once();
+        expect(usagesFilterController.getUsagePeriods()).andReturn(List.of(USAGE_PERIOD)).once();
         expect(usagesFilterController.getSelectedProductFamily()).andReturn(AACL_PRODUCT_FAMILY).once();
         mockStatic(Windows.class);
         ClickEvent clickEvent = createMock(ClickEvent.class);
@@ -173,7 +173,7 @@ public class AaclUsageFilterWidgetTest {
 
     @Test
     public void verifyButtonClickListener() {
-        expect(usagesFilterController.getUsagePeriods()).andReturn(Collections.singletonList(USAGE_PERIOD)).times(2);
+        expect(usagesFilterController.getUsagePeriods()).andReturn(List.of(USAGE_PERIOD)).times(2);
         expect(usagesFilterController.getSelectedProductFamily()).andReturn(AACL_PRODUCT_FAMILY).times(2);
         ClickEvent clickEvent = createMock(ClickEvent.class);
         replay(clickEvent, usagesFilterController);

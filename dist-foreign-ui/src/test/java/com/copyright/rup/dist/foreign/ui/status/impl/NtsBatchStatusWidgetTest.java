@@ -29,7 +29,6 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -94,7 +93,7 @@ public class NtsBatchStatusWidgetTest {
     @Test
     public void testRefresh() {
         batchStatusWidget.init();
-        expect(controller.getBatchStatuses()).andReturn(Collections.singletonList(new UsageBatchStatus())).once();
+        expect(controller.getBatchStatuses()).andReturn(List.of(new UsageBatchStatus())).once();
         replay(controller);
         batchStatusWidget.refresh();
         assertEquals(1, batchStatusWidget.getComponentCount());

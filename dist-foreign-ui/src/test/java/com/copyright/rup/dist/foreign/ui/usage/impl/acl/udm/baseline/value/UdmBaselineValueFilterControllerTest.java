@@ -18,7 +18,6 @@ import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -52,7 +51,7 @@ public class UdmBaselineValueFilterControllerTest {
 
     @Test
     public void testGetPeriods() {
-        List<Integer> periods = Collections.singletonList(202006);
+        List<Integer> periods = List.of(202006);
         expect(udmBaselineValueService.getPeriods()).andReturn(periods).once();
         replay(udmBaselineValueService);
         assertEquals(periods, controller.getPeriods());
@@ -61,7 +60,7 @@ public class UdmBaselineValueFilterControllerTest {
 
     @Test
     public void testGetPublicationTypes() {
-        List<PublicationType> pubTypes = Collections.singletonList(buildPublicationType("Book", "1.00"));
+        List<PublicationType> pubTypes = List.of(buildPublicationType("Book", "1.00"));
         expect(publicationTypeService.getPublicationTypes(FdaConstants.ACL_PRODUCT_FAMILY)).andReturn(pubTypes).once();
         replay(publicationTypeService);
         assertEquals(pubTypes, controller.getPublicationTypes());

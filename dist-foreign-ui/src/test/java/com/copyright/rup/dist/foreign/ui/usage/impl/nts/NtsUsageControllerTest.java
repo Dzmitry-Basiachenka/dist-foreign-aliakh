@@ -284,7 +284,7 @@ public class NtsUsageControllerTest {
 
     @Test
     public void testGetMarkets() {
-        List<String> markets = Collections.singletonList("Bus");
+        List<String> markets = List.of("Bus");
         expect(ntsUsageService.getMarkets()).andReturn(markets).once();
         replay(ntsUsageService);
         assertEquals(markets, controller.getMarkets());
@@ -315,7 +315,7 @@ public class NtsUsageControllerTest {
 
     @Test
     public void testGetPreServiceSeeFunds() {
-        List<FundPool> additionalFunds = Collections.singletonList(new FundPool());
+        List<FundPool> additionalFunds = List.of(new FundPool());
         IProductFamilyProvider productFamilyProvider = createMock(IProductFamilyProvider.class);
         Whitebox.setInternalState(controller, productFamilyProvider);
         expect(controller.getSelectedProductFamily()).andReturn("NTS").once();
@@ -327,7 +327,7 @@ public class NtsUsageControllerTest {
 
     @Test
     public void testGetAdditionalFundsNotAttachedToScenario() {
-        List<FundPool> additionalFunds = Collections.singletonList(new FundPool());
+        List<FundPool> additionalFunds = List.of(new FundPool());
         expect(fundPoolService.getNtsNotAttachedToScenario()).andReturn(additionalFunds).once();
         replay(fundPoolService);
         assertEquals(additionalFunds, controller.getAdditionalFundsNotAttachedToScenario());
@@ -398,12 +398,11 @@ public class NtsUsageControllerTest {
         expect(OffsetDateTime.now()).andReturn(DATE).once();
         expect(streamSourceHandler.getCsvStreamSource(capture(fileNameSupplierCapture), capture(posConsumerCapture)))
             .andReturn(new StreamSource(fileNameSupplier, "csv", inputStreamSupplier)).once();
-        reportService.writeNtsWithdrawnBatchesCsvReport(
-            Collections.singletonList(new UsageBatch()), BigDecimal.ONE, pos);
+        reportService.writeNtsWithdrawnBatchesCsvReport(List.of(new UsageBatch()), BigDecimal.ONE, pos);
         expectLastCall().once();
         replay(OffsetDateTime.class, streamSourceHandler, reportService);
         IStreamSource streamSource = controller.getAdditionalFundBatchesStreamSource(
-            Collections.singletonList(new UsageBatch()), BigDecimal.ONE);
+            List.of(new UsageBatch()), BigDecimal.ONE);
         assertEquals("pre_service_fee_fund_batches_01_02_2019_03_04.csv",
             streamSource.getSource().getKey().get());
         assertEquals(fileName, fileNameSupplierCapture.getValue().get());
@@ -415,7 +414,7 @@ public class NtsUsageControllerTest {
     @Test
     public void testGetBatchNamesWithUnclassifiedUsages() {
         expect(usageBatchService.getBatchNamesWithUnclassifiedWorks(Collections.singleton(USAGE_BATCH_ID)))
-            .andReturn(Collections.singletonList("Batch with unclassified usages")).once();
+            .andReturn(List.of("Batch with unclassified usages")).once();
         replay(usageBatchService);
         controller.getBatchNamesWithUnclassifiedWorks(Collections.singleton(USAGE_BATCH_ID));
         verify(usageBatchService);

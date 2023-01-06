@@ -69,7 +69,7 @@ public class WorkClassificationControllerTest {
     @Test
     public void testGetClassifications() {
         Capture<Pageable> pageableCapture = newCapture();
-        List<WorkClassification> classifications = Collections.singletonList(new WorkClassification());
+        List<WorkClassification> classifications = List.of(new WorkClassification());
         expect(workClassificationService.getClassifications(eq(BATCHES_IDS), eq(SEARCH_VALUE),
             capture(pageableCapture), isNull())).andReturn(classifications).once();
         replay(workClassificationService);

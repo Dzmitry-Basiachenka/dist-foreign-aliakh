@@ -74,7 +74,7 @@ public class UdmBaselineValueUpdatesReportControllerTest {
 
     @Test
     public void testGetAllPeriods() {
-        List<Integer> periods = Collections.singletonList(202112);
+        List<Integer> periods = List.of(202112);
         expect(udmValueService.getPeriods()).andReturn(periods).once();
         replay(udmValueService);
         assertEquals(periods, controller.getAllPeriods());
@@ -83,7 +83,7 @@ public class UdmBaselineValueUpdatesReportControllerTest {
 
     @Test
     public void testGetUserNames() {
-        List<String> userNames = Collections.singletonList(USER_NAME);
+        List<String> userNames = List.of(USER_NAME);
         expect(udmValueAuditService.getUserNames()).andReturn(userNames).once();
         replay(udmValueAuditService);
         assertEquals(userNames, controller.getUserNames());

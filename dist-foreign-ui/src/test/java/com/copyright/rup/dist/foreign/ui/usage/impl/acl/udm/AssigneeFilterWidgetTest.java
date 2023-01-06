@@ -44,7 +44,7 @@ public class AssigneeFilterWidgetTest {
     private static final String UNASSIGNED = "Unassigned";
 
     private final AssigneeFilterWidget assigneeFilterWidget =
-        new AssigneeFilterWidget(() -> Collections.singletonList(ASSIGNEE), Collections.emptySet());
+        new AssigneeFilterWidget(() -> List.of(ASSIGNEE), Collections.emptySet());
 
     @Test
     public void testLoadBeans() {
@@ -91,7 +91,7 @@ public class AssigneeFilterWidgetTest {
         expectLastCall().once();
         replay(filterWindow, Windows.class);
         assigneeFilterWidget.showFilterWindow();
-        assertEquals(Collections.singletonList(ASSIGNEE), providerCapture.getValue().apply(ASSIGNEE));
+        assertEquals(List.of(ASSIGNEE), providerCapture.getValue().apply(ASSIGNEE));
         verify(filterWindow, Windows.class);
     }
 }

@@ -145,7 +145,7 @@ public class AclGrantDetailWidgetTest {
     @Test
     public void testGridValues() {
         mockStatic(JavaScript.class);
-        List<AclGrantDetailDto> grantDetails = Collections.singletonList(buildAclGrantDetailDto());
+        List<AclGrantDetailDto> grantDetails = List.of(buildAclGrantDetailDto());
         setSpecialistExpectations();
         expect(JavaScript.getCurrent()).andReturn(createMock(JavaScript.class)).times(2);
         expect(controller.getBeansCount()).andReturn(1).once();

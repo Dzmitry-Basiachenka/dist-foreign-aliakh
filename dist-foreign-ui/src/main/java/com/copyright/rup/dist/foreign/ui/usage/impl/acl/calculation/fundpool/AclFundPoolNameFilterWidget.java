@@ -13,7 +13,6 @@ import com.vaadin.data.ValueProvider;
 
 import org.apache.commons.collections4.CollectionUtils;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -78,7 +77,7 @@ public class AclFundPoolNameFilterWidget extends BaseItemsFilterWidget<AclFundPo
     public FilterWindow<AclFundPool> showFilterWindow() {
         FilterWindow<AclFundPool> filterWindow =
             Windows.showFilterWindow(ForeignUi.getMessage("window.fund_pool_names_filter"), this,
-                (ValueProvider<AclFundPool, List<String>>) bean -> Collections.singletonList(bean.getName()));
+                (ValueProvider<AclFundPool, List<String>>) bean -> List.of(bean.getName()));
         filterWindow.setSelectedItemsIds(selectedItemsIds);
         filterWindow.setSelectAllButtonVisible();
         filterWindow.setSearchPromptString(ForeignUi.getMessage("prompt.fund_pool_name"));

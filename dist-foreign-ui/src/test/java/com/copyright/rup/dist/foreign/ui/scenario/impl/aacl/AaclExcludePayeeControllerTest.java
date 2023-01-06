@@ -63,7 +63,7 @@ public class AaclExcludePayeeControllerTest {
     public void testGetPayeeTotalHolders() {
         IAaclExcludePayeeWidget widget = createMock(IAaclExcludePayeeWidget.class);
         Whitebox.setInternalState(controller, widget);
-        List<PayeeTotalHolder> payeeTotalHolders = Collections.singletonList(new PayeeTotalHolder());
+        List<PayeeTotalHolder> payeeTotalHolders = List.of(new PayeeTotalHolder());
         ExcludePayeeFilter filter = new ExcludePayeeFilter();
         expect(filterController.getWidget()).andReturn(filterWidget).once();
         expect(filterWidget.getAppliedFilter()).andReturn(filter).once();

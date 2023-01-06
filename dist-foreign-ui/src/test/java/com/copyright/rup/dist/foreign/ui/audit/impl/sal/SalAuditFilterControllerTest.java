@@ -99,7 +99,7 @@ public class SalAuditFilterControllerTest {
 
     @Test
     public void testGetSalLicensees() {
-        List<SalLicensee> licensees = Collections.singletonList(new SalLicensee());
+        List<SalLicensee> licensees = List.of(new SalLicensee());
         expect(usageBatchService.getSalLicensees()).andReturn(licensees).once();
         replay(usageBatchService);
         assertSame(licensees, controller.getSalLicensees());

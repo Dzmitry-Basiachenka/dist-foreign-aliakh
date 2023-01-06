@@ -14,7 +14,6 @@ import com.vaadin.data.ValueProvider;
 import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -78,7 +77,7 @@ public class UdmProxyValuePeriodFilterWidget extends BaseItemsFilterWidget<Integ
     public CommonFilterWindow<Integer> showFilterWindow() {
         UdmCommonProxyValueFilterWindow<Integer> filterWindow =
             new UdmCommonProxyValueFilterWindow<>(ForeignUi.getMessage("window.periods_filter"), this,
-                (ValueProvider<Integer, List<String>>) bean -> Collections.singletonList(String.valueOf(bean)));
+                (ValueProvider<Integer, List<String>>) bean -> List.of(String.valueOf(bean)));
         filterWindow.setSelectedItemsIds(selectedItemsIds);
         filterWindow.setSelectAllButtonVisible();
         filterWindow.setSearchPromptString(ForeignUi.getMessage("prompt.period"));

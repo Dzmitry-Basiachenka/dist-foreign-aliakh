@@ -35,7 +35,7 @@ public class LastValuePeriodFilterWidgetTest {
     private static final String IS_NOT_NULL = "IS_NOT_NULL";
 
     private final LastValuePeriodFilterWidget lastValuePeriodFilterWidget =
-        new LastValuePeriodFilterWidget(() -> Collections.singletonList(LAST_VALUE_PERIOD), Collections.emptySet());
+        new LastValuePeriodFilterWidget(() -> List.of(LAST_VALUE_PERIOD), Collections.emptySet());
 
     @Test
     public void testLoadBeans() {

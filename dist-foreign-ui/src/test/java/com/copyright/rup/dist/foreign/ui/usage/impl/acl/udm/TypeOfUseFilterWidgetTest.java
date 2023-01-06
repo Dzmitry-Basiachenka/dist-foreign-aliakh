@@ -42,7 +42,7 @@ public class TypeOfUseFilterWidgetTest {
 
     private static final String REPORTED_TYPE_OF_USE = "COPY_FOR_MYSELF";
     private final TypeOfUseFilterWidget typeOfUseFilterWidget =
-        new TypeOfUseFilterWidget(() -> Collections.singletonList(REPORTED_TYPE_OF_USE), Collections.emptySet());
+        new TypeOfUseFilterWidget(() -> List.of(REPORTED_TYPE_OF_USE), Collections.emptySet());
 
     @Test
     public void testLoadBeans() {
@@ -88,8 +88,7 @@ public class TypeOfUseFilterWidgetTest {
         expectLastCall().once();
         replay(filterWindow, Windows.class);
         typeOfUseFilterWidget.showFilterWindow();
-        assertEquals(Collections.singletonList(REPORTED_TYPE_OF_USE),
-            providerCapture.getValue().apply(REPORTED_TYPE_OF_USE));
+        assertEquals(List.of(REPORTED_TYPE_OF_USE), providerCapture.getValue().apply(REPORTED_TYPE_OF_USE));
         verify(filterWindow, Windows.class);
     }
 }

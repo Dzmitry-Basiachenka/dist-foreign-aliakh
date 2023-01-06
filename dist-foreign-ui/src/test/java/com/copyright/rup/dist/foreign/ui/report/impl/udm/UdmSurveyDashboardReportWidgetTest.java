@@ -32,6 +32,7 @@ import org.junit.Test;
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.function.Supplier;
 
 /**
@@ -72,7 +73,7 @@ public class UdmSurveyDashboardReportWidgetTest {
         assertEquals(2, content.getComponentCount());
         Component grid = content.getComponent(0);
         assertThat(grid, instanceOf(Grid.class));
-        verifyGrid((Grid) grid, Collections.singletonList(Triple.of("Periods", -1.0, -1)));
+        verifyGrid((Grid) grid, List.of(Triple.of("Periods", -1.0, -1)));
         verifyButtonsLayout(content.getComponent(1), "Export", "Close");
     }
 

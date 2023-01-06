@@ -42,7 +42,7 @@ public class GrantStatusFilterWidgetTest {
 
     private static final String GRANT_STATUS = "GRANT";
     private final GrantStatusFilterWidget grantStatusFilterWidget =
-        new GrantStatusFilterWidget(() -> Collections.singletonList(GRANT_STATUS), Collections.emptySet());
+        new GrantStatusFilterWidget(() -> List.of(GRANT_STATUS), Collections.emptySet());
 
     @Test
     public void testLoadBeans() {
@@ -88,7 +88,7 @@ public class GrantStatusFilterWidgetTest {
         expectLastCall().once();
         replay(filterWindow, Windows.class);
         grantStatusFilterWidget.showFilterWindow();
-        assertEquals(Collections.singletonList(GRANT_STATUS), providerCapture.getValue().apply(GRANT_STATUS));
+        assertEquals(List.of(GRANT_STATUS), providerCapture.getValue().apply(GRANT_STATUS));
         verify(filterWindow, Windows.class);
     }
 }

@@ -11,7 +11,6 @@ import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.vaadin.data.ValueProvider;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -65,7 +64,7 @@ public class NtsUsageBatchSelectorWidget implements IFilterWindowController<Usag
     public FilterWindow<UsageBatch> showFilterWindow() {
         FilterWindow<UsageBatch> filterWindow =
             new FilterWindow<>(ForeignUi.getMessage("window.batches_filter"), this, "Continue", null,
-                (ValueProvider<UsageBatch, List<String>>) bean -> Collections.singletonList(bean.getName()));
+                (ValueProvider<UsageBatch, List<String>>) bean -> List.of(bean.getName()));
         Windows.showModalWindow(filterWindow);
         filterWindow.setSearchPromptString(ForeignUi.getMessage("prompt.batch"));
         return filterWindow;

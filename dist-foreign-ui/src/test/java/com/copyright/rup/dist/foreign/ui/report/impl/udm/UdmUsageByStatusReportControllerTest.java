@@ -31,7 +31,6 @@ import org.powermock.reflect.Whitebox;
 import java.io.OutputStream;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -67,7 +66,7 @@ public class UdmUsageByStatusReportControllerTest {
 
     @Test
     public void testGetPeriods() {
-        List<Integer> periods = Collections.singletonList(202112);
+        List<Integer> periods = List.of(202112);
         expect(udmUsageService.getPeriods()).andReturn(periods).once();
         replay(udmUsageService);
         assertEquals(periods, controller.getPeriods());

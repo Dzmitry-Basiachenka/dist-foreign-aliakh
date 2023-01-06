@@ -68,7 +68,7 @@ public class ViewSalUsageBatchWindowTest {
         controller = createMock(ISalUsageController.class);
         expect(ForeignSecurityUtils.hasDeleteUsagePermission()).andReturn(true).times(2);
         expect(controller.getSelectedProductFamily()).andReturn("SAL").once();
-        expect(controller.getUsageBatches("SAL")).andReturn(Collections.singletonList(new UsageBatch())).once();
+        expect(controller.getUsageBatches("SAL")).andReturn(List.of(new UsageBatch())).once();
         replay(controller, ForeignSecurityUtils.class);
         viewSalUsageBatchWindow = new ViewSalUsageBatchWindow(controller);
         verify(controller, ForeignSecurityUtils.class);

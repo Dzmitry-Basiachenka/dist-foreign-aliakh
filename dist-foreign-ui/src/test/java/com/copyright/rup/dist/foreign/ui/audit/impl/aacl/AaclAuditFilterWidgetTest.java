@@ -36,7 +36,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Collections;
+import java.util.List;
 
 /**
  * Verifies {@link AaclAuditFilterWidget}.
@@ -57,7 +57,7 @@ public class AaclAuditFilterWidgetTest {
     public void setUp() {
         IAaclAuditFilterController auditFilterController = createMock(IAaclAuditFilterController.class);
         expect(auditFilterController.getProductFamily()).andReturn("AACL").times(2);
-        expect(auditFilterController.getUsagePeriods()).andReturn(Collections.singletonList(USAGE_PERIOD)).once();
+        expect(auditFilterController.getUsagePeriods()).andReturn(List.of(USAGE_PERIOD)).once();
         replay(auditFilterController);
         widget = new AaclAuditFilterWidget(auditFilterController);
         widget.setController(auditFilterController);

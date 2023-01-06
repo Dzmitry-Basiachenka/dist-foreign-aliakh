@@ -51,6 +51,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Verifies {@link ViewUsageBatchWindow}.
@@ -79,7 +80,7 @@ public class ViewUsageBatchWindowTest {
         grid = createMock(Grid.class);
         expect(ForeignSecurityUtils.hasDeleteUsagePermission()).andReturn(true).once();
         expect(controller.getSelectedProductFamily()).andReturn("FAS").once();
-        expect(controller.getUsageBatches("FAS")).andReturn(Collections.singletonList(buildUsageBatch())).once();
+        expect(controller.getUsageBatches("FAS")).andReturn(List.of(buildUsageBatch())).once();
         replay(controller, ForeignSecurityUtils.class);
         viewUsageBatchWindow = new ViewUsageBatchWindow(controller);
         Whitebox.setInternalState(viewUsageBatchWindow, "grid", grid);
@@ -117,7 +118,7 @@ public class ViewUsageBatchWindowTest {
             {"FAS batch", 1000000008L, "ProLitteris", LocalDate.of(2022, 9, 12), "FY2022", new BigDecimal("5000.00"),
                 "user@copyright.com", "09/01/2022 12:00 AM"}
         };
-        verifyGridItems(usageBatchGrid, Collections.singletonList(buildUsageBatch()), expectedCells);
+        verifyGridItems(usageBatchGrid, List.of(buildUsageBatch()), expectedCells);
     }
 
     @Test

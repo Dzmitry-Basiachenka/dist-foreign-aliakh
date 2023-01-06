@@ -34,6 +34,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.util.Collections;
+import java.util.List;
 
 /**
  * Verifies {@link UdmPublishToBaselineWindow}.
@@ -76,7 +77,7 @@ public class UdmPublishToBaselineWindowTest {
     @Test
     @SuppressWarnings("unchecked")
     public void testClickContinueButton() {
-        expect(controller.getPeriods()).andReturn(Collections.singletonList(202106)).once();
+        expect(controller.getPeriods()).andReturn(List.of(202106)).once();
         expect(controller.isAllowedForPublishing(202106)).andReturn(true).once();
         expect(controller.publishToBaseline(202106)).andReturn(5).once();
         Windows.showNotificationWindow("Value batch publishing completed: 5 record(s) were published");
@@ -96,7 +97,7 @@ public class UdmPublishToBaselineWindowTest {
     @Test
     @SuppressWarnings("unchecked")
     public void testClickContinueButtonWhenPublishingNotAllowed() {
-        expect(controller.getPeriods()).andReturn(Collections.singletonList(202106)).once();
+        expect(controller.getPeriods()).andReturn(List.of(202106)).once();
         expect(controller.isAllowedForPublishing(202106)).andReturn(false).once();
         Windows.showNotificationWindow(PUBLISHING_NOT_ALLOWED);
         expectLastCall().once();

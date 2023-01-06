@@ -75,7 +75,7 @@ public class ViewAclUsageBatchWindowTest {
         mockStatic(ForeignSecurityUtils.class);
         controller = createMock(IAclUsageController.class);
         aclUsageBatchGrid = createMock(Grid.class);
-        expect(controller.getAllAclUsageBatches()).andReturn(Collections.singletonList(buildAclUsageBatch()));
+        expect(controller.getAllAclUsageBatches()).andReturn(List.of(buildAclUsageBatch()));
         expect(ForeignSecurityUtils.hasSpecialistPermission()).andReturn(true).once();
         replay(ForeignSecurityUtils.class, controller);
         window = new ViewAclUsageBatchWindow(controller);
@@ -86,7 +86,7 @@ public class ViewAclUsageBatchWindowTest {
 
     @Test
     public void testGridValues() {
-        List<AclUsageBatch> usageBatches = Collections.singletonList(buildAclUsageBatch());
+        List<AclUsageBatch> usageBatches = List.of(buildAclUsageBatch());
         Grid grid = (Grid) ((VerticalLayout) window.getContent()).getComponent(1);
         Object[][] expectedCells = {
             {"ACL Usage Batch", 202212, "202112, 202106", "Y"}

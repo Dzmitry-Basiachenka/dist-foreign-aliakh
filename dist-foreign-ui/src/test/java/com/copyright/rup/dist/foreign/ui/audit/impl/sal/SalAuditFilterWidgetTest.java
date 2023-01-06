@@ -149,6 +149,6 @@ public class SalAuditFilterWidgetTest {
     }
 
     private List<Integer> buildUsagePeriods() {
-        return Collections.singletonList(2020);
+        return List.of(2020);
     }
 }

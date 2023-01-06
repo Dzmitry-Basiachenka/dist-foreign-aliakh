@@ -20,7 +20,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -72,7 +71,7 @@ public class AaclUsageFilterControllerTest {
 
     @Test
     public void testGetUsagePeriods() {
-        List<Integer> usagePeriods = Collections.singletonList(2020);
+        List<Integer> usagePeriods = List.of(2020);
         expect(aaclUsageService.getUsagePeriods()).andReturn(usagePeriods).once();
         replay(aaclUsageService);
         assertEquals(usagePeriods, controller.getUsagePeriods());

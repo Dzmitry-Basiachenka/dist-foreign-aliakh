@@ -77,7 +77,7 @@ public class UsageDataUploadWindowTest {
     @Test
     public void testConstructor() {
         UsageBatch batch = buildUsageBatch();
-        expect(controller.getBatchesNotAttachedToScenario()).andReturn(Collections.singletonList(batch)).once();
+        expect(controller.getBatchesNotAttachedToScenario()).andReturn(List.of(batch)).once();
         replay(controller);
         window = new UsageDataUploadWindow(controller);
         verify(controller);
@@ -92,7 +92,7 @@ public class UsageDataUploadWindowTest {
     @Test
     public void testIsValidOnNewlyOpenedWindow() {
         UsageBatch batch = buildUsageBatch();
-        expect(controller.getBatchesNotAttachedToScenario()).andReturn(Collections.singletonList(batch)).once();
+        expect(controller.getBatchesNotAttachedToScenario()).andReturn(List.of(batch)).once();
         replay(controller);
         window = new UsageDataUploadWindow(controller);
         verify(controller);
@@ -102,7 +102,7 @@ public class UsageDataUploadWindowTest {
     @Test
     public void testIsValidWithValidFields() {
         UsageBatch batch = buildUsageBatch();
-        expect(controller.getBatchesNotAttachedToScenario()).andReturn(Collections.singletonList(batch)).once();
+        expect(controller.getBatchesNotAttachedToScenario()).andReturn(List.of(batch)).once();
         replay(controller);
         window = new UsageDataUploadWindow(controller);
         verify(controller);
@@ -114,7 +114,7 @@ public class UsageDataUploadWindowTest {
     @Test
     public void testIsValidWithEmptyItemBank() {
         UsageBatch batch = buildUsageBatch();
-        expect(controller.getBatchesNotAttachedToScenario()).andReturn(Collections.singletonList(batch)).once();
+        expect(controller.getBatchesNotAttachedToScenario()).andReturn(List.of(batch)).once();
         replay(controller);
         window = new UsageDataUploadWindow(controller);
         verify(controller);
@@ -126,7 +126,7 @@ public class UsageDataUploadWindowTest {
     @Test
     public void testIsValidWithEmptyUploadFile() {
         UsageBatch batch = buildUsageBatch();
-        expect(controller.getBatchesNotAttachedToScenario()).andReturn(Collections.singletonList(batch)).once();
+        expect(controller.getBatchesNotAttachedToScenario()).andReturn(List.of(batch)).once();
         replay(controller);
         window = new UsageDataUploadWindow(controller);
         verify(controller);
@@ -170,7 +170,7 @@ public class UsageDataUploadWindowTest {
         expect(window.isValid()).andReturn(true).once();
         expect(controller.usageDataExists(BATCH_ID)).andReturn(false).once();
         expect(controller.getIneligibleBatchesNames(Collections.singleton(BATCH_ID)))
-            .andReturn(Collections.singletonList(BATCH_NAME)).once();
+            .andReturn(List.of(BATCH_NAME)).once();
         Windows.showNotificationWindow("Selected Item Bank has usages that are not in ELIGIBLE status");
         expectLastCall().once();
         replay(window, controller, Windows.class);
@@ -215,20 +215,20 @@ public class UsageDataUploadWindowTest {
     }
 
     private UsageDataUploadWindow createWindowMock(UsageBatch batch) {
-        expect(controller.getBatchesNotAttachedToScenario()).andReturn(Collections.singletonList(batch)).once();
+        expect(controller.getBatchesNotAttachedToScenario()).andReturn(List.of(batch)).once();
         replay(controller);
         UsageDataUploadWindow windowMock = createPartialMock(UsageDataUploadWindow.class,
-            Collections.singletonList("isValid").toArray(new String[]{}), controller);
+            List.of("isValid").toArray(new String[]{}), controller);
         verify(controller);
         reset(controller);
         return windowMock;
     }
 
     private UsageDataUploadWindow createWindowMock(UsageBatch batch, UploadField uploadField) {
-        expect(controller.getBatchesNotAttachedToScenario()).andReturn(Collections.singletonList(batch)).once();
+        expect(controller.getBatchesNotAttachedToScenario()).andReturn(List.of(batch)).once();
         replay(controller);
         UsageDataUploadWindow windowMock = createPartialMock(UsageDataUploadWindow.class,
-            Collections.singletonList("isValid").toArray(new String[]{}), controller);
+            List.of("isValid").toArray(new String[]{}), controller);
         Whitebox.setInternalState(windowMock, "uploadField", uploadField);
         verify(controller);
         reset(controller);

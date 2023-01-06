@@ -30,7 +30,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -81,7 +80,7 @@ public class ForeignUiMediatorTest {
         replay(SecurityUtils.class, controller, reportController);
         mediator.applyPermissions();
         Collection<String> products = ((ListDataProvider<String>) productFamilyComboBox.getDataProvider()).getItems();
-        assertEquals(Collections.singletonList(FdaConstants.ACL_PRODUCT_FAMILY), products);
+        assertEquals(List.of(FdaConstants.ACL_PRODUCT_FAMILY), products);
         assertEquals(FdaConstants.ACL_PRODUCT_FAMILY, productFamilyComboBox.getValue());
         assertEquals(FdaConstants.ACL_PRODUCT_FAMILY, productFamilyProvider.getSelectedProductFamily());
         verify(SecurityUtils.class, controller, reportController);

@@ -62,7 +62,7 @@ public class UdmCommonProxyValueFilterWindowTest {
         expect(controllerMock.loadBeans()).andReturn(Arrays.asList(PUB_TYPE_CODES)).once();
         replay(controllerMock);
         filterWindow = new UdmCommonProxyValueFilterWindow<>("Filter window", controllerMock,
-            (ValueProvider<String, List<String>>) bean -> Collections.singletonList(bean));
+            (ValueProvider<String, List<String>>) List::of);
         verify(controllerMock);
         reset(controllerMock);
     }

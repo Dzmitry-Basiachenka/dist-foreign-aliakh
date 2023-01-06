@@ -153,7 +153,7 @@ public class RefreshScenarioWindowTest {
         Button okButton = (Button) buttonsLayout.getComponent(0);
         mockStatic(Windows.class);
         ClickEvent clickEvent = createMock(ClickEvent.class);
-        expect(controller.getInvalidRightsholders()).andReturn(Collections.singletonList(100000000L)).once();
+        expect(controller.getInvalidRightsholders()).andReturn(List.of(100000000L)).once();
         Windows.showNotificationWindow("Scenario cannot be refreshed. The following rightsholder(s) are absent in " +
             "PRM: <i><b>[100000000]</b></i>");
         replay(controller, clickEvent, Windows.class);

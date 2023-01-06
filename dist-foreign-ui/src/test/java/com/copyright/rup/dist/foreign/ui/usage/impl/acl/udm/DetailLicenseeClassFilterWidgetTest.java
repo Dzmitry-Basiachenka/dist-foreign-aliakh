@@ -44,7 +44,7 @@ public class DetailLicenseeClassFilterWidgetTest {
 
     private final DetailLicenseeClass detailLicenseeClass = buildDetailLicenseeClass();
     private final DetailLicenseeClassFilterWidget detailLcFilterWidget = new DetailLicenseeClassFilterWidget(() ->
-        Collections.singletonList(detailLicenseeClass), Collections.emptySet());
+        List.of(detailLicenseeClass), Collections.emptySet());
 
     @Test
     public void testLoadBeans() {

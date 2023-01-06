@@ -20,7 +20,6 @@ import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -55,7 +54,7 @@ public class UdmValueFilterControllerTest {
 
     @Test
     public void testGetAssignees() {
-        List<String> assignees = Collections.singletonList("wjohn@copyright.com");
+        List<String> assignees = List.of("wjohn@copyright.com");
         expect(udmValueService.getAssignees()).andReturn(assignees).once();
         replay(udmValueService);
         assertEquals(assignees, controller.getAssignees());
@@ -64,7 +63,7 @@ public class UdmValueFilterControllerTest {
 
     @Test
     public void testGetLastValuePeriods() {
-        List<String> periods = Collections.singletonList("202106");
+        List<String> periods = List.of("202106");
         expect(udmValueService.getLastValuePeriods()).andReturn(periods).once();
         replay(udmValueService);
         assertEquals(periods, controller.getLastValuePeriods());
@@ -82,7 +81,7 @@ public class UdmValueFilterControllerTest {
 
     @Test
     public void testGetPublicationTypes() {
-        List<PublicationType> pubTypes = Collections.singletonList(buildPublicationType("Book", "1.00"));
+        List<PublicationType> pubTypes = List.of(buildPublicationType("Book", "1.00"));
         expect(publicationTypeService.getPublicationTypes(FdaConstants.ACL_PRODUCT_FAMILY)).andReturn(pubTypes).once();
         replay(publicationTypeService);
         assertEquals(pubTypes, controller.getPublicationTypes());
@@ -91,7 +90,7 @@ public class UdmValueFilterControllerTest {
 
     @Test
     public void testGetAllCurrencies() {
-        List<Currency> currencies = Collections.singletonList(new Currency("USD", "US Dollar"));
+        List<Currency> currencies = List.of(new Currency("USD", "US Dollar"));
         expect(udmValueService.getAllCurrencies()).andReturn(currencies).once();
         replay(udmValueService);
         assertEquals(currencies, controller.getAllCurrencies());

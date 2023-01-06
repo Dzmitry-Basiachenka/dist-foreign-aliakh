@@ -48,6 +48,7 @@ import org.powermock.reflect.Whitebox;
 import java.io.ByteArrayOutputStream;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * Verifies {@link UploadGrantDetailWindow}.
@@ -82,7 +83,7 @@ public class UploadGrantDetailWindowTest {
     @Test
     @SuppressWarnings("unchecked")
     public void testIsValid() {
-        expect(controller.getAllAclGrantSets()).andReturn(Collections.singletonList(grantSet)).once();
+        expect(controller.getAllAclGrantSets()).andReturn(List.of(grantSet)).once();
         replay(controller);
         window = new UploadGrantDetailWindow(controller);
         verify(controller);

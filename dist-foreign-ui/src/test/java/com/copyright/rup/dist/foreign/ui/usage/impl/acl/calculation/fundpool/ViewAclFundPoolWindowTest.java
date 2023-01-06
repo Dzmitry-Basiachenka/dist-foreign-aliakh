@@ -79,7 +79,7 @@ public class ViewAclFundPoolWindowTest {
         controller = createMock(IAclFundPoolController.class);
         aclFundPoolGrid = createMock(Grid.class);
         expect(ForeignSecurityUtils.hasSpecialistPermission()).andReturn(true).once();
-        expect(controller.getAllAclFundPools()).andReturn(Collections.singletonList(buildAclFundPool(true)));
+        expect(controller.getAllAclFundPools()).andReturn(List.of(buildAclFundPool(true)));
         replay(ForeignSecurityUtils.class, controller);
         window = new ViewAclFundPoolWindow(controller);
         Whitebox.setInternalState(window, "grid", aclFundPoolGrid);
@@ -89,7 +89,7 @@ public class ViewAclFundPoolWindowTest {
 
     @Test
     public void testGridValues() {
-        List<AclFundPool> fundPools = Collections.singletonList(buildAclFundPool(true));
+        List<AclFundPool> fundPools = List.of(buildAclFundPool(true));
         Grid<?> grid = (Grid<?>) ((VerticalLayout) window.getContent()).getComponent(1);
         Object[][] expectedCells = {
             {"ACL Fund Pool 2021", "ACL", new BigDecimal("26618664.46"), new BigDecimal("18370661.72"), "Manual",

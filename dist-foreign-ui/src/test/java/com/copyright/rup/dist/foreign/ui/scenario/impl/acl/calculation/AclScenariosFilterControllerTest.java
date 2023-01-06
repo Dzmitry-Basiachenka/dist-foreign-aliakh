@@ -13,7 +13,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -43,7 +42,7 @@ public class AclScenariosFilterControllerTest {
 
     @Test
     public void testGetPeriods() {
-        List<Integer> periods = Collections.singletonList(202212);
+        List<Integer> periods = List.of(202212);
         expect(scenarioService.getScenarioPeriods()).andReturn(periods).once();
         replay(scenarioService);
         assertSame(periods, controller.getPeriods());

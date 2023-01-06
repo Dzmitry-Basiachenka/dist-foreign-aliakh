@@ -40,6 +40,7 @@ import org.powermock.reflect.Whitebox;
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.function.Supplier;
 
 /**
@@ -100,8 +101,7 @@ public class TaxNotificationReportWidgetTest {
         assertThat(numberOfDaysField, instanceOf(TextField.class));
         Component grid = content.getComponent(1);
         assertThat(grid, instanceOf(Grid.class));
-        verifyGrid((Grid) content.getComponent(1),
-            Collections.singletonList(Triple.of("Scenario Name", -1.0, -1)));
+        verifyGrid((Grid) content.getComponent(1), List.of(Triple.of("Scenario Name", -1.0, -1)));
         verifyNumberOfDaysField((TextField) numberOfDaysField);
         verifyButtonsLayout(content.getComponent(3), "Export", "Close");
     }

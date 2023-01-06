@@ -113,7 +113,7 @@ public class AclScenarioDetailsWidgetTest {
     public void testGridValues() {
         mockStatic(JavaScript.class);
         expect(JavaScript.getCurrent()).andReturn(createMock(JavaScript.class)).times(2);
-        List<AclScenarioDetailDto> scenarioDetails = Collections.singletonList(buildAclScenarioDetailDto());
+        List<AclScenarioDetailDto> scenarioDetails = List.of(buildAclScenarioDetailDto());
         expect(controller.getSize()).andReturn(1).once();
         expect(controller.loadBeans(0, Integer.MAX_VALUE, Collections.emptyList())).andReturn(scenarioDetails).once();
         replay(JavaScript.class, controller);

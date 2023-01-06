@@ -22,7 +22,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -66,7 +65,7 @@ public class AclUsageFilterControllerTest {
 
     @Test
     public void testGetAllAclUsageBatches() {
-        List<AclUsageBatch> aclUsageBatches = Collections.singletonList(new AclUsageBatch());
+        List<AclUsageBatch> aclUsageBatches = List.of(new AclUsageBatch());
         expect(aclUsageBatchService.getAll()).andReturn(aclUsageBatches).once();
         replay(aclUsageBatchService);
         assertSame(aclUsageBatches, controller.getAllAclUsageBatches());
@@ -75,7 +74,7 @@ public class AclUsageFilterControllerTest {
 
     @Test
     public void testGetPeriods() {
-        List<Integer> periods = Collections.singletonList(202006);
+        List<Integer> periods = List.of(202006);
         expect(aclUsageService.getPeriods()).andReturn(periods).once();
         replay(aclUsageService);
         assertSame(periods, controller.getPeriods());
@@ -84,7 +83,7 @@ public class AclUsageFilterControllerTest {
 
     @Test
     public void testGetDetailLicenseeClasses() {
-        List<DetailLicenseeClass> licenseeClasses = Collections.singletonList(new DetailLicenseeClass());
+        List<DetailLicenseeClass> licenseeClasses = List.of(new DetailLicenseeClass());
         expect(licenseeClassService.getDetailLicenseeClasses(ACL_PRODUCT_FAMILY)).andReturn(licenseeClasses).once();
         replay(licenseeClassService);
         assertSame(licenseeClasses, controller.getDetailLicenseeClasses());
@@ -93,7 +92,7 @@ public class AclUsageFilterControllerTest {
 
     @Test
     public void testGetAggregateLicenseeClasses() {
-        List<AggregateLicenseeClass> licenseeClasses = Collections.singletonList(new AggregateLicenseeClass());
+        List<AggregateLicenseeClass> licenseeClasses = List.of(new AggregateLicenseeClass());
         expect(licenseeClassService.getAggregateLicenseeClasses(ACL_PRODUCT_FAMILY)).andReturn(licenseeClasses).once();
         replay(licenseeClassService);
         assertSame(licenseeClasses, controller.getAggregateLicenseeClasses());
@@ -102,7 +101,7 @@ public class AclUsageFilterControllerTest {
 
     @Test
     public void testGetPublicationTypes() {
-        List<PublicationType> pubTypes = Collections.singletonList(buildPublicationType());
+        List<PublicationType> pubTypes = List.of(buildPublicationType());
         expect(publicationTypeService.getPublicationTypes(ACL_PRODUCT_FAMILY)).andReturn(pubTypes).once();
         replay(publicationTypeService);
         assertSame(pubTypes, controller.getPublicationTypes());
@@ -111,7 +110,7 @@ public class AclUsageFilterControllerTest {
 
     @Test
     public void testGetReportedTypeOfUses() {
-        List<String> reportedTypeOfUses = Collections.singletonList("PRINT_COPIES");
+        List<String> reportedTypeOfUses = List.of("PRINT_COPIES");
         expect(udmTypeOfUseService.getAllUdmTous()).andReturn(reportedTypeOfUses).once();
         replay(udmTypeOfUseService);
         assertSame(reportedTypeOfUses, controller.getReportedTypeOfUses());

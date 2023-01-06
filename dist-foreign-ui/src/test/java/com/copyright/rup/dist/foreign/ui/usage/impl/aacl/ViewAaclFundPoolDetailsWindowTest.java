@@ -23,7 +23,7 @@ import org.junit.Test;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
-import java.util.Collections;
+import java.util.List;
 
 /**
  * Verifies {@link ViewAaclFundPoolDetailsWindow}.
@@ -42,7 +42,7 @@ public class ViewAaclFundPoolDetailsWindowTest {
 
     @Before
     public void setUp() {
-        window = new ViewAaclFundPoolDetailsWindow(buildFundPool(), Collections.singletonList(buildFundPoolDetail()));
+        window = new ViewAaclFundPoolDetailsWindow(buildFundPool(), List.of(buildFundPoolDetail()));
     }
 
     @Test

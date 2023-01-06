@@ -61,7 +61,6 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -152,10 +151,10 @@ public class UdmEditValueWindowTest {
         mockStatic(ForeignSecurityUtils.class);
         controller = createMock(IUdmValueController.class);
         saveButtonClickListener = createMock(ClickListener.class);
-        expect(controller.getAllPublicationTypes()).andReturn(Collections.singletonList(PUBLICATION_TYPE)).once();
-        expect(controller.getAllCurrencies()).andReturn(Collections.singletonList(CURRENCY)).once();
-        expect(controller.getAllPriceTypes()).andReturn(Collections.singletonList(PRICE_TYPE)).once();
-        expect(controller.getAllPriceAccessTypes()).andReturn(Collections.singletonList(PRICE_ACCESS_TYPE)).once();
+        expect(controller.getAllPublicationTypes()).andReturn(List.of(PUBLICATION_TYPE)).once();
+        expect(controller.getAllCurrencies()).andReturn(List.of(CURRENCY)).once();
+        expect(controller.getAllPriceTypes()).andReturn(List.of(PRICE_TYPE)).once();
+        expect(controller.getAllPriceAccessTypes()).andReturn(List.of(PRICE_ACCESS_TYPE)).once();
     }
 
     @Test
@@ -654,14 +653,12 @@ public class UdmEditValueWindowTest {
         VerticalLayout priceContent = (VerticalLayout) pricePanel.getContent();
         assertEquals(15, priceContent.getComponentCount());
         verifyTextFieldLayout(priceContent.getComponent(0), "Price", false, true);
-        verifyComboBoxLayout(priceContent.getComponent(1), "Currency", true, true, Collections.singletonList(CURRENCY));
+        verifyComboBoxLayout(priceContent.getComponent(1), "Currency", true, true, List.of(CURRENCY));
         verifyTextFieldLayout(priceContent.getComponent(2), "Currency Exchange Rate", true, false);
         verifyTextFieldLayout(priceContent.getComponent(3), "Currency Exchange Rate Date", true, false);
         verifyTextFieldLayout(priceContent.getComponent(4), "Price in USD", true, false);
-        verifyComboBoxLayout(priceContent.getComponent(5), "Price Type", true, true,
-            Collections.singletonList(PRICE_TYPE));
-        verifyComboBoxLayout(priceContent.getComponent(6), "Price Access Type", true, true,
-            Collections.singletonList(PRICE_ACCESS_TYPE));
+        verifyComboBoxLayout(priceContent.getComponent(5), "Price Type", true, true, List.of(PRICE_TYPE));
+        verifyComboBoxLayout(priceContent.getComponent(6), "Price Access Type", true, true, List.of(PRICE_ACCESS_TYPE));
         verifyTextFieldLayout(priceContent.getComponent(7), "Price Year", false, true);
         verifyTextFieldLayout(priceContent.getComponent(8), "Price Source", false, true);
         verifyTextFieldLayout(priceContent.getComponent(9), "Price Comment", false, true);
@@ -690,8 +687,7 @@ public class UdmEditValueWindowTest {
         assertEquals("Publication Type", pubTypePanel.getCaption());
         VerticalLayout pubTypeContent = (VerticalLayout) pubTypePanel.getContent();
         assertEquals(2, pubTypeContent.getComponentCount());
-        verifyComboBoxLayout(pubTypeContent.getComponent(0), "Pub Type", true, true,
-            Collections.singletonList(PUBLICATION_TYPE));
+        verifyComboBoxLayout(pubTypeContent.getComponent(0), "Pub Type", true, true, List.of(PUBLICATION_TYPE));
         verifyTextFieldLayout(pubTypeContent.getComponent(1), "Last Pub Type", true, false);
         Panel contentPanel = (Panel) row2.getComponent(2);
         assertEquals("Content", contentPanel.getCaption());

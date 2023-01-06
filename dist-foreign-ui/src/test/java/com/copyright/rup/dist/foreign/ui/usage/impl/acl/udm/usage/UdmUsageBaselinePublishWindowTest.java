@@ -35,6 +35,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.util.Collections;
+import java.util.List;
 
 /**
  * Verifies {@link UdmUsageBaselinePublishWindow}.
@@ -72,7 +73,7 @@ public class UdmUsageBaselinePublishWindowTest {
 
     @Test
     public void testClickPublishButton() {
-        expect(controller.getPeriods()).andReturn(Collections.singletonList(202106)).once();
+        expect(controller.getPeriods()).andReturn(List.of(202106)).once();
         expect(controller.publishUdmUsagesToBaseline(202106)).andReturn(10).once();
         Windows.showNotificationWindow(eq("Publish completed: 10 record(s) were published to baseline"));
         expectLastCall().once();

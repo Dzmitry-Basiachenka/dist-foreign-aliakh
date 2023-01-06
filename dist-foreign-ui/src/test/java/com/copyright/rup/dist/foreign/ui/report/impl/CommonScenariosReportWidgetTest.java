@@ -34,6 +34,7 @@ import org.junit.Test;
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.function.Supplier;
 
 /**
@@ -82,8 +83,7 @@ public class CommonScenariosReportWidgetTest {
         assertEquals(3, content.getComponentCount());
         Component searchWidget = content.getComponent(0);
         assertThat(searchWidget, instanceOf(SearchWidget.class));
-        UiTestHelper.verifyGrid((Grid) content.getComponent(1), Collections.singletonList(
-            Triple.of("Scenario Name", -1.0, -1)));
+        UiTestHelper.verifyGrid((Grid) content.getComponent(1), List.of(Triple.of("Scenario Name", -1.0, -1)));
         verifyButtonsLayout(content.getComponent(2), "Export", "Close");
     }
 
@@ -106,7 +106,7 @@ public class CommonScenariosReportWidgetTest {
         VerticalLayout content = (VerticalLayout) widget.getContent();
         Grid<Scenario> grid = (Grid<Scenario>) content.getComponent(1);
         grid.select(scenario1);
-        assertEquals(Collections.singletonList(scenario1), widget.getSelectedScenarios());
+        assertEquals(List.of(scenario1), widget.getSelectedScenarios());
         grid.select(scenario2);
         assertEquals(Arrays.asList(scenario1, scenario2), widget.getSelectedScenarios());
         grid.deselectAll();

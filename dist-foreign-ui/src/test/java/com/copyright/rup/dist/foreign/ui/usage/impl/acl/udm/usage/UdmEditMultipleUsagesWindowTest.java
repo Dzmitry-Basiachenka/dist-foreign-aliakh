@@ -169,9 +169,9 @@ public class UdmEditMultipleUsagesWindowTest {
     public void setUp() {
         controller = createMock(IUdmUsageController.class);
         saveButtonClickListener = createMock(ClickListener.class);
-        expect(controller.getAllActionReasons()).andReturn(Collections.singletonList(ACTION_REASON)).once();
+        expect(controller.getAllActionReasons()).andReturn(List.of(ACTION_REASON)).once();
         expect(controller.getIdsToDetailLicenseeClasses()).andReturn(ImmutableMap.of(DET_LC_ID, LICENSEE_CLASS)).once();
-        expect(controller.getAllIneligibleReasons()).andReturn(Collections.singletonList(INELIGIBLE_REASON)).once();
+        expect(controller.getAllIneligibleReasons()).andReturn(List.of(INELIGIBLE_REASON)).once();
     }
 
     @Test
@@ -751,10 +751,8 @@ public class UdmEditMultipleUsagesWindowTest {
         verifyTextFieldLayout(verticalLayout.getComponent(8), ANNUAL_MULTIPLIER_FIELD);
         verifyTextFieldLayout(verticalLayout.getComponent(9), STATISTICAL_MULTIPLIER_FIELD);
         verifyTextFieldLayout(verticalLayout.getComponent(10), QUANTITY_FIELD);
-        verifyComboBoxLayout(verticalLayout.getComponent(11), "Action Reason", true,
-            Collections.singletonList(ACTION_REASON));
-        verifyComboBoxLayout(verticalLayout.getComponent(12), "Ineligible Reason", true,
-            Collections.singletonList(INELIGIBLE_REASON));
+        verifyComboBoxLayout(verticalLayout.getComponent(11), "Action Reason", true, List.of(ACTION_REASON));
+        verifyComboBoxLayout(verticalLayout.getComponent(12), "Ineligible Reason", true, List.of(INELIGIBLE_REASON));
         verifyTextFieldLayout(verticalLayout.getComponent(13), "Comment");
         verifyButtonsLayout(verticalLayout.getComponent(14), "Save", "Discard", "Close");
     }

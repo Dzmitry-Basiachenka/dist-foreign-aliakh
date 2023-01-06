@@ -52,6 +52,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Verifies {@link ViewFundPoolWindow}.
@@ -80,7 +81,7 @@ public class ViewFundPoolWindowTest {
         grid = createMock(Grid.class);
         expect(ForeignSecurityUtils.hasDeleteUsagePermission()).andReturn(true).once();
         expect(controller.getSelectedProductFamily()).andReturn("NTS").once();
-        expect(controller.getUsageBatches("NTS")).andReturn(Collections.singletonList(buildUsageBatch())).once();
+        expect(controller.getUsageBatches("NTS")).andReturn(List.of(buildUsageBatch())).once();
         replay(controller, ForeignSecurityUtils.class);
         viewFundPoolWindow = new ViewFundPoolWindow(controller);
         Whitebox.setInternalState(viewFundPoolWindow, "grid", grid);
@@ -126,7 +127,7 @@ public class ViewFundPoolWindowTest {
                 new BigDecimal("500000"), new BigDecimal("50"), new BigDecimal("7"), "Bus", 2000, 2010,
                 "user@copyright.com", "09/01/2022 12:00 AM"}
         };
-        verifyGridItems(usageBatchGrid, Collections.singletonList(buildUsageBatch()), expectedCells);
+        verifyGridItems(usageBatchGrid, List.of(buildUsageBatch()), expectedCells);
     }
 
     @Test

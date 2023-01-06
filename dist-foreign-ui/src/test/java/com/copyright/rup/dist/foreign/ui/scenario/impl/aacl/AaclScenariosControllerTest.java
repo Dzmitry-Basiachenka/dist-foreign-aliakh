@@ -119,7 +119,7 @@ public class AaclScenariosControllerTest {
     @Test
     public void testGetDetailLicenseeClassesByScenarioId() {
         String scenarioId = "43e6b6e8-4c80-40ba-9836-7b27b2bbca5f";
-        List<DetailLicenseeClass> detailLicenseeClasses = Collections.singletonList(new DetailLicenseeClass());
+        List<DetailLicenseeClass> detailLicenseeClasses = List.of(new DetailLicenseeClass());
         expect(licenseeClassService.getDetailLicenseeClassesByScenarioId(scenarioId))
             .andReturn(detailLicenseeClasses).once();
         replay(licenseeClassService);

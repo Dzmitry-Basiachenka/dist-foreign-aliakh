@@ -101,7 +101,7 @@ public class AaclScenariosWidgetTest {
         scenariosWidget = new AaclScenariosWidget(controller, new ScenarioHistoryController(), usageController);
         scenariosWidget.setController(controller);
         scenario = buildAaclScenario();
-        expect(controller.getScenarios()).andReturn(Collections.singletonList(scenario)).once();
+        expect(controller.getScenarios()).andReturn(List.of(scenario)).once();
         expect(usageController.getPublicationTypes()).andReturn(buildPublicationTypes()).once();
         replay(controller, usageController);
         scenariosWidget.init();
@@ -144,7 +144,7 @@ public class AaclScenariosWidgetTest {
     public void testRefresh() {
         FundPool fundPool = buildFundPool();
         List<FundPoolDetail> fundPoolDetails = buildFundPoolDetail();
-        expect(controller.getScenarios()).andReturn(Collections.singletonList(scenario)).once();
+        expect(controller.getScenarios()).andReturn(List.of(scenario)).once();
         expect(controller.getScenarioWithAmountsAndLastAction(scenario)).andReturn(scenario).times(2);
         expect(controller.getDetailLicenseeClassesByScenarioId(SCENARIO_ID)).andReturn(buildDetailLicenseeClasses())
             .times(2);
@@ -418,7 +418,7 @@ public class AaclScenariosWidgetTest {
         FundPoolDetail fundPoolDetail = new FundPoolDetail();
         fundPoolDetail.setAggregateLicenseeClass(buildAggregateLicenseeClass(108, "EXGP", "Life Sciences"));
         fundPoolDetail.setGrossAmount(BigDecimal.ONE);
-        return Collections.singletonList(fundPoolDetail);
+        return List.of(fundPoolDetail);
     }
 
     private AggregateLicenseeClass buildAggregateLicenseeClass(Integer id, String enrollmentProfile,
@@ -437,7 +437,7 @@ public class AaclScenariosWidgetTest {
         detailLicenseeClass.setEnrollmentProfile("EXGP");
         detailLicenseeClass.setDiscipline("Life Sciences");
         detailLicenseeClass.setAggregateLicenseeClass(aggregateLicenseeClass);
-        return Collections.singletonList(detailLicenseeClass);
+        return List.of(detailLicenseeClass);
     }
 
     private AaclFields buildAaclFields() {

@@ -72,7 +72,7 @@ public class ViewSalFundPoolWindowTest {
         mockStatic(ForeignSecurityUtils.class);
         controller = createMock(ISalUsageController.class);
         expect(ForeignSecurityUtils.hasDeleteFundPoolPermission()).andReturn(true).once();
-        expect(controller.getFundPools()).andReturn(Collections.singletonList(fundPool)).once();
+        expect(controller.getFundPools()).andReturn(List.of(fundPool)).once();
         replay(controller, ForeignSecurityUtils.class);
         viewSalFundPoolWindow = new ViewSalFundPoolWindow(controller);
         verify(controller, ForeignSecurityUtils.class);

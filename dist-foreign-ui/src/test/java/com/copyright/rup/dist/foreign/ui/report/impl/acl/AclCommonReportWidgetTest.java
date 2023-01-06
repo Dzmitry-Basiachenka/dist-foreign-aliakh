@@ -38,6 +38,7 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
 
@@ -61,7 +62,7 @@ public class AclCommonReportWidgetTest {
     @Before
     public void setUp() {
         widget.setController(controller);
-        expect(controller.getPeriods()).andReturn(Collections.singletonList(202012)).once();
+        expect(controller.getPeriods()).andReturn(List.of(202012)).once();
         expect(streamSource.getSource()).andReturn(new SimpleImmutableEntry(createMock(Supplier.class),
             createMock(Supplier.class))).once();
         expect(controller.getCsvStreamSource()).andReturn(streamSource).once();

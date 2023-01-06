@@ -39,7 +39,7 @@ import org.powermock.reflect.Whitebox;
 
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Collection;
-import java.util.Collections;
+import java.util.List;
 import java.util.function.Supplier;
 
 /**
@@ -65,7 +65,7 @@ public class CommonScenarioReportWidgetTest {
         Whitebox.setInternalState(controller, productFamilyProvider);
         IStreamSource streamSource = createMock(IStreamSource.class);
         expect(productFamilyProvider.getSelectedProductFamily()).andReturn("AACL").once();
-        expect(scenarioService.getScenarios("AACL")).andReturn(Collections.singletonList(scenario)).once();
+        expect(scenarioService.getScenarios("AACL")).andReturn(List.of(scenario)).once();
         expect(streamSource.getSource()).andReturn(
             new SimpleImmutableEntry(createMock(Supplier.class), createMock(Supplier.class))).once();
         IStreamSourceHandler streamSourceHandler = createMock(IStreamSourceHandler.class);

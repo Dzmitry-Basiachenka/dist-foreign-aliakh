@@ -42,7 +42,7 @@ public class ReportedPubTypeFilterWidgetTest {
 
     private static final String REPORTED_PUB_TYPE = "Journal";
     private final ReportedPubTypeFilterWidget reportedPubTypeFilterWidget =
-        new ReportedPubTypeFilterWidget(() -> Collections.singletonList(REPORTED_PUB_TYPE), Collections.emptySet());
+        new ReportedPubTypeFilterWidget(() -> List.of(REPORTED_PUB_TYPE), Collections.emptySet());
 
     @Test
     public void testLoadBeans() {
@@ -88,7 +88,7 @@ public class ReportedPubTypeFilterWidgetTest {
         expectLastCall().once();
         replay(filterWindow, Windows.class);
         reportedPubTypeFilterWidget.showFilterWindow();
-        assertEquals(Collections.singletonList(REPORTED_PUB_TYPE), providerCapture.getValue().apply(REPORTED_PUB_TYPE));
+        assertEquals(List.of(REPORTED_PUB_TYPE), providerCapture.getValue().apply(REPORTED_PUB_TYPE));
         verify(filterWindow, Windows.class);
     }
 }

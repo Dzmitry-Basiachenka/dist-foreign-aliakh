@@ -30,7 +30,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.util.Collections;
+import java.util.List;
 
 /**
  * Verifies {@link StatisticUsageRest}.
@@ -93,12 +93,9 @@ public class StatisticUsageRestTest {
 
     @Test
     public void testGetUsageStatisticWrongUsageId() throws Exception {
-        expect(usageAuditRepository.getUsageStatistic(TEST_USAGE_ID))
-            .andReturn(null).once();
-        expect(usageRepository.findByIds(Collections.singletonList(TEST_USAGE_ID)))
-            .andReturn(null).once();
-        expect(usageArchiveRepository.findByIds(Collections.singletonList(TEST_USAGE_ID)))
-            .andReturn(null).once();
+        expect(usageAuditRepository.getUsageStatistic(TEST_USAGE_ID)).andReturn(null).once();
+        expect(usageRepository.findByIds(List.of(TEST_USAGE_ID))).andReturn(null).once();
+        expect(usageArchiveRepository.findByIds(List.of(TEST_USAGE_ID))).andReturn(null).once();
         replay(usageAuditRepository);
         mockMvc.perform(MockMvcRequestBuilders.get(PATH + TEST_USAGE_ID)
             .contentType(MediaType.APPLICATION_JSON))

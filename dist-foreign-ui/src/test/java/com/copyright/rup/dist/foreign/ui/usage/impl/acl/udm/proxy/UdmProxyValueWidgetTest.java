@@ -39,7 +39,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import java.math.BigDecimal;
 import java.util.AbstractMap;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -76,7 +75,7 @@ public class UdmProxyValueWidgetTest {
 
     @Test
     public void testGridValues() {
-        List<UdmProxyValueDto> udmProxyValues = Collections.singletonList(buildUdmProxyValueDto());
+        List<UdmProxyValueDto> udmProxyValues = List.of(buildUdmProxyValueDto());
         expect(controller.getProxyValues()).andReturn(udmProxyValues).once();
         replay(controller, streamSource);
         initWidget();
