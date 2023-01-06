@@ -16,7 +16,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -88,6 +87,6 @@ public class UdmRightsProcessorTest {
         UdmUsage udmUsage = new UdmUsage();
         udmUsage.setId("14348f5e-cbf5-46b5-8289-d31942f6338e");
         udmUsage.setStatus(status);
-        return Collections.singletonList(udmUsage);
+        return List.of(udmUsage);
     }
 }

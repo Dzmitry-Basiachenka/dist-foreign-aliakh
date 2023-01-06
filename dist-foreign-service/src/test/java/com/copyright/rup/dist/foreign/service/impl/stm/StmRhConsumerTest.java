@@ -27,7 +27,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -69,7 +68,7 @@ public class StmRhConsumerTest {
     @Test
     public void testConsumeNotExcludingStm() {
         Usage usage = buildUsage(USAGE_ID_1);
-        List<Usage> usages = Collections.singletonList(usage);
+        List<Usage> usages = List.of(usage);
         Capture<Predicate<Usage>> predicateCapture = newCapture();
         expect(batchService.getUsageBatchById(BATCH_ID)).andReturn(buildUsageBatch(buildNtsFields(false))).once();
         stmRhProcessor.executeNextChainProcessor(eq(usages), capture(predicateCapture));
@@ -83,7 +82,7 @@ public class StmRhConsumerTest {
     @Test
     public void testConsumeExcludingStmWithNonStmRightsholder() {
         Usage usage = buildUsage(USAGE_ID_1);
-        List<Usage> usages = Collections.singletonList(usage);
+        List<Usage> usages = List.of(usage);
         Capture<Predicate<Usage>> predicateCapture = newCapture();
         expect(batchService.getUsageBatchById(BATCH_ID)).andReturn(buildUsageBatch(buildNtsFields(true))).once();
         stmRhService.processStmRhs(usages, NTS_PRODUCT_FAMILY);
@@ -99,7 +98,7 @@ public class StmRhConsumerTest {
     @Test
     public void testConsumeExcludingStmWithStmRightsholder() {
         Usage usage = buildUsage(USAGE_ID_2);
-        List<Usage> usages = Collections.singletonList(usage);
+        List<Usage> usages = List.of(usage);
         Capture<Predicate<Usage>> predicateCapture = newCapture();
         expect(batchService.getUsageBatchById(BATCH_ID)).andReturn(buildUsageBatch(buildNtsFields(true))).once();
         stmRhService.processStmRhs(usages, NTS_PRODUCT_FAMILY);

@@ -28,7 +28,6 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -106,8 +105,7 @@ public class LoadSalUsageDataIntegrationTest {
     }
 
     private void assertAudit() {
-        List<UsageAuditItem> expectedAudit =
-            Collections.singletonList(buildUsageAuditItem(UsageActionTypeEnum.LOADED, UPLOADED_REASON));
+        List<UsageAuditItem> expectedAudit = List.of(buildUsageAuditItem(UsageActionTypeEnum.LOADED, UPLOADED_REASON));
         testHelper.assertAudit(commentToUsageIdMap.get("SAL usage data comment 1"), expectedAudit);
         testHelper.assertAudit(commentToUsageIdMap.get("SAL usage data comment 2"), expectedAudit);
         testHelper.assertAudit(commentToUsageIdMap.get("SAL usage data comment 3"), expectedAudit);

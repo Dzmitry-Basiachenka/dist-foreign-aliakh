@@ -103,7 +103,7 @@ public class AclScenarioServiceTest {
     @Test
     public void testGetScenarios() {
         AclScenarioFilter filter = new AclScenarioFilter();
-        List<AclScenario> scenarios = Collections.singletonList(buildAclScenario());
+        List<AclScenario> scenarios = List.of(buildAclScenario());
         expect(aclScenarioRepository.findByFilter(filter)).andReturn(scenarios).once();
         replay(aclScenarioRepository);
         assertSame(scenarios, aclScenarioService.getScenarios(filter));
@@ -112,7 +112,7 @@ public class AclScenarioServiceTest {
 
     @Test
     public void testGetScenariosByPeriod() {
-        List<AclScenario> scenarios = Collections.singletonList(buildAclScenario());
+        List<AclScenario> scenarios = List.of(buildAclScenario());
         expect(aclScenarioRepository.findByPeriod(202012)).andReturn(scenarios).once();
         replay(aclScenarioRepository);
         assertSame(scenarios, aclScenarioService.getScenariosByPeriod(202012));
@@ -121,7 +121,7 @@ public class AclScenarioServiceTest {
 
     @Test
     public void testGetScenarioPeriods() {
-        List<Integer> periods = Collections.singletonList(202112);
+        List<Integer> periods = List.of(202112);
         expect(aclScenarioRepository.findPeriods()).andReturn(periods).once();
         replay(aclScenarioRepository);
         assertSame(periods, aclScenarioService.getScenarioPeriods());
@@ -134,8 +134,7 @@ public class AclScenarioServiceTest {
         aclScenarioRepository.insertAclScenarioPubTypeWeight(publicationType, SCENARIO_UID, USER_NAME);
         expectLastCall().once();
         replay(aclScenarioRepository);
-        aclScenarioService.insertAclScenarioPubTypeWeights(Collections.singletonList(publicationType), SCENARIO_UID,
-            USER_NAME);
+        aclScenarioService.insertAclScenarioPubTypeWeights(List.of(publicationType), SCENARIO_UID, USER_NAME);
         verify(aclScenarioRepository);
     }
 
@@ -145,8 +144,7 @@ public class AclScenarioServiceTest {
         aclScenarioRepository.insertAclScenarioLicenseeClass(licenseeClass, SCENARIO_UID, USER_NAME);
         expectLastCall().once();
         replay(aclScenarioRepository);
-        aclScenarioService.insertAclScenarioLicenseeClasses(Collections.singletonList(licenseeClass), SCENARIO_UID,
-            USER_NAME);
+        aclScenarioService.insertAclScenarioLicenseeClasses(List.of(licenseeClass), SCENARIO_UID, USER_NAME);
         verify(aclScenarioRepository);
     }
 
@@ -156,8 +154,7 @@ public class AclScenarioServiceTest {
         aclScenarioRepository.insertAclScenarioUsageAgeWeight(usageAge, SCENARIO_UID, USER_NAME);
         expectLastCall().once();
         replay(aclScenarioRepository);
-        aclScenarioService.insertAclScenarioUsageAgeWeights(Collections.singletonList(usageAge), SCENARIO_UID,
-            USER_NAME);
+        aclScenarioService.insertAclScenarioUsageAgeWeights(List.of(usageAge), SCENARIO_UID, USER_NAME);
         verify(aclScenarioRepository);
     }
 
@@ -171,7 +168,7 @@ public class AclScenarioServiceTest {
 
     @Test
     public void testGetScenarioNamesByUsageBatchId() {
-        List<String> scenarioNames = Collections.singletonList(SCENARIO_NAME);
+        List<String> scenarioNames = List.of(SCENARIO_NAME);
         expect(aclScenarioRepository.findScenarioNamesByUsageBatchId(BATCH_UID)).andReturn(scenarioNames).once();
         replay(aclScenarioRepository);
         assertSame(scenarioNames, aclScenarioRepository.findScenarioNamesByUsageBatchId(BATCH_UID));
@@ -180,7 +177,7 @@ public class AclScenarioServiceTest {
 
     @Test
     public void testGetScenarioNamesByFundPoolId() {
-        List<String> scenarioNames = Collections.singletonList(SCENARIO_NAME);
+        List<String> scenarioNames = List.of(SCENARIO_NAME);
         expect(aclScenarioRepository.findScenarioNamesByFundPoolId(FUND_POOL_ID)).andReturn(scenarioNames).once();
         replay(aclScenarioRepository);
         assertSame(scenarioNames, aclScenarioRepository.findScenarioNamesByFundPoolId(FUND_POOL_ID));
@@ -189,7 +186,7 @@ public class AclScenarioServiceTest {
 
     @Test
     public void testGetScenarioNamesByGrantSetId() {
-        List<String> scenarioNames = Collections.singletonList(SCENARIO_NAME);
+        List<String> scenarioNames = List.of(SCENARIO_NAME);
         expect(aclScenarioRepository.findScenarioNamesByGrantSetId(GRANT_SET_ID)).andReturn(scenarioNames).once();
         replay(aclScenarioRepository);
         assertSame(scenarioNames, aclScenarioRepository.findScenarioNamesByGrantSetId(GRANT_SET_ID));
@@ -287,7 +284,7 @@ public class AclScenarioServiceTest {
 
     @Test
     public void testGetAclScenariosByStatuses() {
-        List<Scenario> scenarios = Collections.singletonList(new Scenario());
+        List<Scenario> scenarios = List.of(new Scenario());
         expect(aclScenarioRepository.findAclScenariosByStatuses(EnumSet.of(ScenarioStatusEnum.IN_PROGRESS)))
             .andReturn(scenarios).once();
         replay(aclScenarioRepository);
@@ -325,8 +322,8 @@ public class AclScenarioServiceTest {
         AclScenarioLiabilityDetail liabilityDetail = buildLiabilityDetail();
         AclScenario aclScenario = buildAclScenario();
         expect(aclScenarioUsageService.getLiabilityDetailsForSendToLmByIds(aclScenario.getId()))
-            .andReturn(Collections.singletonList(liabilityDetail)).once();
-        lmIntegrationService.sendToLm(Collections.singletonList(new ExternalUsage(liabilityDetail)));
+            .andReturn(List.of(liabilityDetail)).once();
+        lmIntegrationService.sendToLm(List.of(new ExternalUsage(liabilityDetail)));
         expectLastCall().once();
         aclScenarioAuditService.logAction(aclScenario.getId(), ScenarioActionTypeEnum.SENT_TO_LM, StringUtils.EMPTY);
         expectLastCall().once();

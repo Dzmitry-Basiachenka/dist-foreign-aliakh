@@ -103,7 +103,7 @@ public class NtsUsageServiceTest {
         mockStatic(RupContextUtils.class);
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
         UsageBatch usageBatch = new UsageBatch();
-        List<String> usageIds = Collections.singletonList("92acae56-e328-4cb9-b2ab-ad696a01d71c");
+        List<String> usageIds = List.of("92acae56-e328-4cb9-b2ab-ad696a01d71c");
         expect(ntsUsageRepository.insertUsages(usageBatch, USER_NAME)).andReturn(usageIds).once();
         replay(RupContextUtils.class, ntsUsageRepository);
         assertEquals(usageIds, ntsUsageService.insertUsages(usageBatch));
@@ -231,7 +231,7 @@ public class NtsUsageServiceTest {
         mockStatic(RupContextUtils.class);
         Scenario scenario = new Scenario();
         scenario.setId("96768299-4996-4ad1-b0af-7580412a72ea");
-        List<String> usageIds = Collections.singletonList(RupPersistUtils.generateUuid());
+        List<String> usageIds = List.of(RupPersistUtils.generateUuid());
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
         expect(usageArchiveRepository.copyNtsToArchiveByScenarioId(scenario.getId(), USER_NAME))
             .andReturn(usageIds).once();
@@ -269,7 +269,7 @@ public class NtsUsageServiceTest {
         Capture<Runnable> captureRunnable = newCapture();
         chainExecutor.execute(capture(captureRunnable));
         expectLastCall().once();
-        chainExecutor.execute(Collections.singletonList(usage1), ChainProcessorTypeEnum.RIGHTS);
+        chainExecutor.execute(List.of(usage1), ChainProcessorTypeEnum.RIGHTS);
         expectLastCall().once();
         replay(chainExecutor, usageService);
         ntsUsageService.sendForGettingRights(usageIds, "Batch name");

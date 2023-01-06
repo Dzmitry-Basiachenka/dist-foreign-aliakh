@@ -16,7 +16,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -90,6 +89,6 @@ public class MatchingProcessorTest {
         usage.setId("0aa431c7-0bb4-414b-a6b8-797b55912da2");
         usage.setStatus(status);
         usage.setProductFamily("FAS");
-        return Collections.singletonList(usage);
+        return List.of(usage);
     }
 }

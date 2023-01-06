@@ -91,14 +91,14 @@ public class SendToCrmJobIntegrationTest {
         testHelper.assertAudit("68ffad13-55c9-424c-88f7-a4289504d217", Collections.emptyList());
         testHelper.assertAudit("ac4ccfee-5fb6-4f9f-870d-35b2997f288f",
             testHelper.loadExpectedUsageAuditItems("quartz/usage_audit_sent_to_crm.json"));
-        testHelper.assertScenarioAudit("27755cf6-66fc-4636-862e-3d9c9f4e7a94", Collections.singletonList(
+        testHelper.assertScenarioAudit("27755cf6-66fc-4636-862e-3d9c9f4e7a94", List.of(
             Pair.of(ScenarioActionTypeEnum.ARCHIVED, "All usages from scenario have been sent to CRM")));
         testHelper.assertScenarioAudit("612b1a40-411b-4819-9b67-cb4f6abc18eb", Collections.emptyList());
         testHelper.verifyRestServer();
     }
 
     private void verifyUsageStatus(String usageId, UsageStatusEnum status) {
-        List<PaidUsage> usages = usageArchiveRepository.findByIdAndStatus(Collections.singletonList(usageId), status);
+        List<PaidUsage> usages = usageArchiveRepository.findByIdAndStatus(List.of(usageId), status);
         assertEquals(1, usages.size());
     }
 

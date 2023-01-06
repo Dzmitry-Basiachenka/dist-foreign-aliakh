@@ -25,7 +25,6 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -136,7 +135,7 @@ class CreateScenarioIntegrationTestBuilder {
 
         Runner() {
             expectedUsages.forEach(usage -> usage.setReportedValue(
-                usageRepository.findByIds(Collections.singletonList(usage.getId())).get(0).getReportedValue()));
+                usageRepository.findByIds(List.of(usage.getId())).get(0).getReportedValue()));
         }
 
         void run() {

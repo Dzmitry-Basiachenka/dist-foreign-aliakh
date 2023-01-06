@@ -63,7 +63,7 @@ public class UdmBaselineServiceTest {
     public void testGetBaselineUsageDtos() {
         UdmBaselineFilter filter = new UdmBaselineFilter();
         filter.setPeriods(Collections.singleton(202012));
-        List<UdmBaselineDto> udmBaselineDtos = Collections.singletonList(new UdmBaselineDto());
+        List<UdmBaselineDto> udmBaselineDtos = List.of(new UdmBaselineDto());
         expect(baselineRepository.findDtosByFilter(filter, null, null)).andReturn(udmBaselineDtos).once();
         replay(baselineRepository);
         assertEquals(udmBaselineDtos, udmBaselineService.getBaselineUsageDtos(filter, null, null));

@@ -102,7 +102,7 @@ public class SendScenarioToLmTest {
         scenario.setProductFamily("SAL");
         salScenarioService.sendToLm(scenario);
         sqsClientMock.assertSendMessages(QUEUE_NAME,
-            Collections.singletonList(TestUtils.fileToString(this.getClass(), "details/details_to_lm_sal.json")),
+            List.of(TestUtils.fileToString(this.getClass(), "details/details_to_lm_sal.json")),
             Collections.emptyList(), SOURCE_MAP);
         List<UsageDto> usageDtos = usageService.getRightsholderTotalsHoldersByScenario(scenario, null, null, null)
             .stream()
@@ -126,7 +126,7 @@ public class SendScenarioToLmTest {
         scenario.setProductFamily("FAS");
         fasScenarioService.sendToLm(scenario);
         sqsClientMock.assertSendMessages(QUEUE_NAME,
-            Collections.singletonList(TestUtils.fileToString(this.getClass(), "details/details_to_lm_fas.json")),
+            List.of(TestUtils.fileToString(this.getClass(), "details/details_to_lm_fas.json")),
             Collections.emptyList(), SOURCE_MAP);
         List<UsageDto> usageDtos = findUsageDtos(scenario);
         List<UsageDto> expectedUsageDtos = testHelper.loadExpectedUsageDtos("usage/archived_usage_dtos_fas.json");
@@ -144,8 +144,8 @@ public class SendScenarioToLmTest {
         scenario.setProductFamily("NTS");
         ntsScenarioService.sendToLm(scenario);
         sqsClientMock.assertSendMessages(QUEUE_NAME,
-            Collections.singletonList(TestUtils.fileToString(this.getClass(), "details/details_to_lm_nts.json")),
-            Collections.singletonList("detail_id"), SOURCE_MAP);
+            List.of(TestUtils.fileToString(this.getClass(), "details/details_to_lm_nts.json")),
+            List.of("detail_id"), SOURCE_MAP);
         List<UsageDto> usageDtos = findUsageDtos(scenario);
         List<UsageDto> expectedUsageDtos = testHelper.loadExpectedUsageDtos("usage/archived_usage_dtos_nts.json");
         assertEquals(CollectionUtils.size(expectedUsageDtos), CollectionUtils.size(usageDtos));
@@ -162,7 +162,7 @@ public class SendScenarioToLmTest {
         scenario.setProductFamily("AACL");
         aaclScenarioService.sendToLm(scenario);
         sqsClientMock.assertSendMessages(QUEUE_NAME,
-            Collections.singletonList(TestUtils.fileToString(this.getClass(), "details/details_to_lm_aacl.json")),
+            List.of(TestUtils.fileToString(this.getClass(), "details/details_to_lm_aacl.json")),
             Collections.emptyList(), SOURCE_MAP);
         List<UsageDto> actualUsageDtos = usageArchiveRepository.findAaclDtosByScenarioId(AACL_SCENARIO_ID);
         List<UsageDto> expectedUsageDtos = testHelper.loadExpectedUsageDtos("usage/aacl/aacl_archived_usage_dtos.json");

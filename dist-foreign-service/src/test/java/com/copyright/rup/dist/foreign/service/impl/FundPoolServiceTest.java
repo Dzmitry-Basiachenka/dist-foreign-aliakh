@@ -161,7 +161,7 @@ public class FundPoolServiceTest {
 
     @Test
     public void testGetFundPools() {
-        List<FundPool> funds = Collections.singletonList(buildNtsFundPool());
+        List<FundPool> funds = List.of(buildNtsFundPool());
         expect(fundPoolRepository.findByProductFamily(NTS_PRODUCT_FAMILY)).andReturn(funds).once();
         replay(fundPoolRepository);
         assertEquals(funds, fundPoolService.getFundPools(NTS_PRODUCT_FAMILY));
@@ -170,7 +170,7 @@ public class FundPoolServiceTest {
 
     @Test
     public void testGetNtsNotAttachedToScenario() {
-        List<FundPool> funds = Collections.singletonList(buildNtsFundPool());
+        List<FundPool> funds = List.of(buildNtsFundPool());
         expect(fundPoolRepository.findNtsNotAttachedToScenario()).andReturn(funds).once();
         replay(fundPoolRepository);
         assertEquals(funds, fundPoolService.getNtsNotAttachedToScenario());
@@ -179,7 +179,7 @@ public class FundPoolServiceTest {
 
     @Test
     public void testGetAaclNotAttachedToScenario() {
-        List<FundPool> funds = Collections.singletonList(buildAaclFundPool());
+        List<FundPool> funds = List.of(buildAaclFundPool());
         expect(fundPoolRepository.findAaclNotAttachedToScenario()).andReturn(funds).once();
         replay(fundPoolRepository);
         assertEquals(funds, fundPoolService.getAaclNotAttachedToScenario());
@@ -188,7 +188,7 @@ public class FundPoolServiceTest {
 
     @Test
     public void testGetSalNotAttachedToScenario() {
-        List<FundPool> funds = Collections.singletonList(buildSalFundPool());
+        List<FundPool> funds = List.of(buildSalFundPool());
         expect(fundPoolRepository.findSalNotAttachedToScenario()).andReturn(funds).once();
         replay(fundPoolRepository);
         assertEquals(funds, fundPoolService.getSalNotAttachedToScenario());

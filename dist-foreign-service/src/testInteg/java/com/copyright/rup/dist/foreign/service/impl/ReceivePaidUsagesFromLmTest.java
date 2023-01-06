@@ -19,7 +19,6 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -88,7 +87,7 @@ public class ReceivePaidUsagesFromLmTest {
         assertTrue(CollectionUtils.isEmpty(usageArchiveRepository.findPaidIds()));
         testHelper.receivePaidUsagesFromLm("lm/paid_split_usages_aacl.json");
         testHelper.assertPaidAaclUsages(testHelper.loadExpectedPaidUsages("usage/aacl/aacl_paid_split_usages.json"));
-        testHelper.assertScenarioAudit("de1d65f6-10c6-462c-bd97-44fcfc976934", Collections.singletonList(
+        testHelper.assertScenarioAudit("de1d65f6-10c6-462c-bd97-44fcfc976934", List.of(
             Pair.of(ScenarioActionTypeEnum.UPDATED_AFTER_SPLIT, "Scenario has been updated after Split process")));
     }
 
@@ -99,7 +98,7 @@ public class ReceivePaidUsagesFromLmTest {
         assertTrue(CollectionUtils.isEmpty(usageArchiveRepository.findPaidIds()));
         testHelper.receivePaidUsagesFromLm("lm/paid_split_usages_fas.json");
         testHelper.assertPaidUsages(testHelper.loadExpectedPaidUsages("usage/paid_split_usages_fas.json"));
-        testHelper.assertScenarioAudit("4924da00-ee87-41b3-9aed-caa5c5ba94f1", Collections.singletonList(
+        testHelper.assertScenarioAudit("4924da00-ee87-41b3-9aed-caa5c5ba94f1", List.of(
             Pair.of(ScenarioActionTypeEnum.UPDATED_AFTER_SPLIT, "Scenario has been updated after Split process")));
     }
 

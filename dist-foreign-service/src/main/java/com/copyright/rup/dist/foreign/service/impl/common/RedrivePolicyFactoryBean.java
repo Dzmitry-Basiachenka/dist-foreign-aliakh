@@ -9,7 +9,7 @@ import org.apache.camel.component.aws.sqs.SqsConfiguration;
 import org.apache.camel.component.aws.sqs.SqsEndpoint;
 import org.springframework.beans.factory.FactoryBean;
 
-import java.util.Collections;
+import java.util.List;
 
 /**
  * Factory bean that produces AWS SQS Redrive Policy.
@@ -62,8 +62,7 @@ public class RedrivePolicyFactoryBean implements FactoryBean<String> {
     }
 
     private String findQueueArn(AmazonSQS client, String queueUrl) {
-        GetQueueAttributesResult result =
-            client.getQueueAttributes(queueUrl, Collections.singletonList(QUEUE_ARN_ATTRIBUTE));
+        GetQueueAttributesResult result = client.getQueueAttributes(queueUrl, List.of(QUEUE_ARN_ATTRIBUTE));
         return result.getAttributes().get(QUEUE_ARN_ATTRIBUTE);
     }
 }

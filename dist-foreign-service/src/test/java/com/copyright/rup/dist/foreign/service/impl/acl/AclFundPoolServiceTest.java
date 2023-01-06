@@ -27,7 +27,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -66,7 +65,7 @@ public class AclFundPoolServiceTest {
         fundPoolRepository.insertDetail(fundPoolDetail);
         expectLastCall().once();
         replay(RupContextUtils.class, fundPoolRepository);
-        service.insertManualAclFundPool(fundPool, Collections.singletonList(fundPoolDetail));
+        service.insertManualAclFundPool(fundPool, List.of(fundPoolDetail));
         verify(RupContextUtils.class, fundPoolRepository);
     }
 
@@ -95,7 +94,7 @@ public class AclFundPoolServiceTest {
         fundPoolRepository.insertDetail(fundPoolDetail);
         expectLastCall().once();
         replay(RupContextUtils.class, fundPoolRepository);
-        service.insertAclFundPoolDetails(Collections.singletonList(fundPoolDetail));
+        service.insertAclFundPoolDetails(List.of(fundPoolDetail));
         verify(RupContextUtils.class, fundPoolRepository);
     }
 
@@ -117,7 +116,7 @@ public class AclFundPoolServiceTest {
 
     @Test
     public void testGetDtos() {
-        List<AclFundPoolDetailDto> fundPoolDetails = Collections.singletonList(new AclFundPoolDetailDto());
+        List<AclFundPoolDetailDto> fundPoolDetails = List.of(new AclFundPoolDetailDto());
         AclFundPoolDetailFilter filter = new AclFundPoolDetailFilter();
         filter.setLicenseType(LICENSE_TYPE);
         expect(fundPoolRepository.findDtosByFilter(filter)).andReturn(fundPoolDetails).once();
@@ -135,7 +134,7 @@ public class AclFundPoolServiceTest {
 
     @Test
     public void testGetAll() {
-        List<AclFundPool> fundPools = Collections.singletonList(buildFundPool());
+        List<AclFundPool> fundPools = List.of(buildFundPool());
         expect(fundPoolRepository.findAll()).andReturn(fundPools).once();
         replay(fundPoolRepository);
         assertSame(fundPools, service.getAll());
@@ -144,7 +143,7 @@ public class AclFundPoolServiceTest {
 
     @Test
     public void testGetPeriods() {
-        List<Integer> periods = Collections.singletonList(202006);
+        List<Integer> periods = List.of(202006);
         expect(fundPoolRepository.findPeriods()).andReturn(periods).once();
         replay(fundPoolRepository);
         assertSame(periods, service.getPeriods());
@@ -167,7 +166,7 @@ public class AclFundPoolServiceTest {
 
     @Test
     public void testGetFundPoolsByLicenseTypeAndPeriod() {
-        List<AclFundPool> fundPools = Collections.singletonList(buildFundPool());
+        List<AclFundPool> fundPools = List.of(buildFundPool());
         expect(fundPoolRepository.findFundPoolsByLicenseTypeAndPeriod("ACl", 202212)).andReturn(fundPools).once();
         replay(fundPoolRepository);
         assertSame(fundPools, service.getFundPoolsByLicenseTypeAndPeriod("ACl", 202212));

@@ -20,7 +20,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -59,7 +58,7 @@ public class SendAaclToCrmIntegrationTest {
                 "8ab89fcc-abf9-432e-b653-e84f2605697f", buildArchivedUsageAudit(),
                 "e5ae9237-05a0-4c82-b607-0f91f19b2f24", buildArchivedUsageAudit()))
             .expectScenarioAudit(ImmutableMap.of(
-                "351e585c-0b08-429d-9e31-bea283ba33de", Collections.singletonList(
+                "351e585c-0b08-429d-9e31-bea283ba33de", List.of(
                     Pair.of(ScenarioActionTypeEnum.ARCHIVED, "All usages from scenario have been sent to CRM"))))
             .build()
             .run();
@@ -77,6 +76,6 @@ public class SendAaclToCrmIntegrationTest {
         UsageAuditItem auditItem = new UsageAuditItem();
         auditItem.setActionType(UsageActionTypeEnum.ARCHIVED);
         auditItem.setActionReason("Usage was sent to CRM");
-        return Collections.singletonList(auditItem);
+        return List.of(auditItem);
     }
 }

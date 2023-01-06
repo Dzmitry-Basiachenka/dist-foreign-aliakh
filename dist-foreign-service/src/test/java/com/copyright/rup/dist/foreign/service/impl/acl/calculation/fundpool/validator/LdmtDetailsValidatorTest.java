@@ -17,7 +17,7 @@ import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
-import java.util.Collections;
+import java.util.List;
 
 /**
  * Verifies {@link LdmtDetailsValidator}.
@@ -50,7 +50,7 @@ public class LdmtDetailsValidatorTest {
     public void testValidateSuccess() {
         expect(licenseeClassService.aclDetailLicenseeClassExists(DETAIL_LICENSEE_CLASS_ID)).andReturn(true).once();
         replay(licenseeClassService);
-        validator.validate(Collections.singletonList(buildLdmtDetail()));
+        validator.validate(List.of(buildLdmtDetail()));
         verify(licenseeClassService);
     }
 
@@ -86,7 +86,7 @@ public class LdmtDetailsValidatorTest {
         expect(licenseeClassService.aclDetailLicenseeClassExists(DETAIL_LICENSEE_CLASS_ID)).andReturn(false).once();
         replay(licenseeClassService);
         try {
-            validator.validate(Collections.singletonList(buildLdmtDetail()));
+            validator.validate(List.of(buildLdmtDetail()));
             fail();
         } catch (ValidationException e) {
             assertEquals("LDMT detail #0 is not valid: [Detail Licensee Class is not valid: 1]", e.getMessage());
@@ -101,7 +101,7 @@ public class LdmtDetailsValidatorTest {
         try {
             LdmtDetail ldmtDetail = buildLdmtDetail();
             ldmtDetail.setLicenseType(INVALID_LICENSE_TYPE);
-            validator.validate(Collections.singletonList(ldmtDetail));
+            validator.validate(List.of(ldmtDetail));
             fail();
         } catch (ValidationException e) {
             assertEquals("LDMT detail #0 is not valid: [License Type is not valid: ACLPRINT]", e.getMessage());
@@ -116,7 +116,7 @@ public class LdmtDetailsValidatorTest {
         try {
             LdmtDetail ldmtDetail = buildLdmtDetail();
             ldmtDetail.setTypeOfUse(INVALID_TYPE_OF_USE);
-            validator.validate(Collections.singletonList(ldmtDetail));
+            validator.validate(List.of(ldmtDetail));
             fail();
         } catch (ValidationException e) {
             assertEquals("LDMT detail #0 is not valid: [Type of Use is not valid: EMAIL_COPY]", e.getMessage());
@@ -131,7 +131,7 @@ public class LdmtDetailsValidatorTest {
         try {
             LdmtDetail ldmtDetail = buildLdmtDetail();
             ldmtDetail.setNetAmount(ldmtDetail.getGrossAmount().add(BigDecimal.ONE));
-            validator.validate(Collections.singletonList(ldmtDetail));
+            validator.validate(List.of(ldmtDetail));
             fail();
         } catch (ValidationException e) {
             assertEquals(LDMT_DETAIL_0_IS_NOT_VALID +

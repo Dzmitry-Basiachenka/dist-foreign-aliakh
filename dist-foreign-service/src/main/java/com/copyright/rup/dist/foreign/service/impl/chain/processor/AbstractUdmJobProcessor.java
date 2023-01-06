@@ -16,7 +16,6 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -50,7 +49,7 @@ abstract class AbstractUdmJobProcessor extends AbstractChainProcessor<UdmUsage>
                 usagesCount);
             Iterables.partition(usageIds, usagesBatchSize)
                 .forEach(partition -> udmUsageService.getUdmUsagesByIds(partition)
-                    .forEach(usage -> process(Collections.singletonList(usage))));
+                    .forEach(usage -> process(List.of(usage))));
             String message = "ProductFamily=ACL_UDM, UsagesCount=" + usagesCount;
             LOGGER.info("Send {} usages for processing. Finished. {}", usageStatus, message);
             jobInfo = new JobInfo(JobStatusEnum.FINISHED, message);

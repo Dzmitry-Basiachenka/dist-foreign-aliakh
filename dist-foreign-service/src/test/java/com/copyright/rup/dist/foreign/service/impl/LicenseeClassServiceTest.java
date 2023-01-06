@@ -18,7 +18,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -48,7 +47,7 @@ public class LicenseeClassServiceTest {
 
     @Test
     public void testGetAggregateLicenseeClasses() {
-        List<AggregateLicenseeClass> aggregateLicenseeClasses = Collections.singletonList(new AggregateLicenseeClass());
+        List<AggregateLicenseeClass> aggregateLicenseeClasses = List.of(new AggregateLicenseeClass());
         expect(licenseeClassRepository.findAggregateLicenseeClassesByProductFamily(AACL_PRODUCT_FAMILY))
             .andReturn(aggregateLicenseeClasses).once();
         replay(licenseeClassRepository);
@@ -58,7 +57,7 @@ public class LicenseeClassServiceTest {
 
     @Test
     public void testGetDetailLicenseeClasses() {
-        List<DetailLicenseeClass> detailLicenseeClasses = Collections.singletonList(new DetailLicenseeClass());
+        List<DetailLicenseeClass> detailLicenseeClasses = List.of(new DetailLicenseeClass());
         expect(licenseeClassRepository.findDetailLicenseeClassesByProductFamily(AACL_PRODUCT_FAMILY))
             .andReturn(detailLicenseeClasses).once();
         replay(licenseeClassRepository);
@@ -69,7 +68,7 @@ public class LicenseeClassServiceTest {
     @Test
     public void testGetDetailLicenseeClassesByScenarioId() {
         String scenarioId = "43e6b6e8-4c80-40ba-9836-7b27b2bbca5f";
-        List<DetailLicenseeClass> detailLicenseeClasses = Collections.singletonList(new DetailLicenseeClass());
+        List<DetailLicenseeClass> detailLicenseeClasses = List.of(new DetailLicenseeClass());
         expect(licenseeClassRepository.findDetailLicenseeClassesByScenarioId(scenarioId))
             .andReturn(detailLicenseeClasses).once();
         replay(licenseeClassRepository);

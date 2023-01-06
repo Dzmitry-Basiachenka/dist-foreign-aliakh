@@ -33,7 +33,6 @@ import org.powermock.reflect.Whitebox;
 
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -92,7 +91,7 @@ public class UdmBatchServiceTest {
 
     @Test
     public void testGetUdmBathes() {
-        List<UdmBatch> udmBatches = Collections.singletonList(new UdmBatch());
+        List<UdmBatch> udmBatches = List.of(new UdmBatch());
         expect(udmBatchRepository.findAll()).andReturn(udmBatches).once();
         replay(udmBatchRepository);
         assertEquals(udmBatches, udmBatchService.getUdmBatches());

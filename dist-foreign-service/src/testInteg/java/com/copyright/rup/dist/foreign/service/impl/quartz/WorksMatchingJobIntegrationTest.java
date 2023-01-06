@@ -23,7 +23,6 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -82,7 +81,7 @@ public class WorksMatchingJobIntegrationTest {
         testHelper.assertAudit("03f307ac-81d1-4ab5-b037-9bd2ca899aab",
             testHelper.loadExpectedUsageAuditItems("quartz/usage_audit_292891647.json"));
         testHelper.assertUdmUsages(testHelper.loadExpectedUdmUsages("quartz/usage_854030732.json"),
-            udmUsageService.getUdmUsagesByIds(Collections.singletonList("e6343e5a-2075-45e0-96da-5f9f4ba15f5c")));
+            udmUsageService.getUdmUsagesByIds(List.of("e6343e5a-2075-45e0-96da-5f9f4ba15f5c")));
         testHelper.assertUdmUsageAudit("e6343e5a-2075-45e0-96da-5f9f4ba15f5c",
             testHelper.loadExpectedUsageAuditItems("quartz/usage_audit_854030732.json"));
         testHelper.verifyRestServer();

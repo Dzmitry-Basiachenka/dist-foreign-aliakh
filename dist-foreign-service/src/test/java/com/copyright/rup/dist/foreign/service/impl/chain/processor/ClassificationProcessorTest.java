@@ -17,7 +17,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Collections;
+import java.util.List;
 
 /**
  * Verifies {@link ClassificationProcessor}.
@@ -56,9 +56,9 @@ public class ClassificationProcessorTest {
         Usage usage2 = buildUsage("f3c42fd7-6893-462a-ab12-923db420273b", WR_WRK_INST_2);
         expect(workClassificationService.getClassification(WR_WRK_INST_1)).andReturn("STM").once();
         expect(workClassificationService.getClassification(WR_WRK_INST_2)).andReturn(null).once();
-        nonBelletristicProcessor.process(Collections.singletonList(usage1));
+        nonBelletristicProcessor.process(List.of(usage1));
         expectLastCall().once();
-        unclassifiedStatusProcessor.process(Collections.singletonList(usage2));
+        unclassifiedStatusProcessor.process(List.of(usage2));
         expectLastCall().once();
         replay(workClassificationService, nonBelletristicProcessor, unclassifiedStatusProcessor);
         classificationProcessor.process(Lists.newArrayList(usage1, usage2));

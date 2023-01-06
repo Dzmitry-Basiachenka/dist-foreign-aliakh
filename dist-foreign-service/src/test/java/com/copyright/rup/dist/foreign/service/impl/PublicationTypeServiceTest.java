@@ -19,7 +19,6 @@ import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -63,7 +62,7 @@ public class PublicationTypeServiceTest {
 
     @Test
     public void testGetPublicationTypes() {
-        List<PublicationType> pubTypes = Collections.singletonList(buildPublicationType(PUB_TYPE, "1.00"));
+        List<PublicationType> pubTypes = List.of(buildPublicationType(PUB_TYPE, "1.00"));
         expect(publicationTypeRepository.findByProductFamily(AACL_PRODUCT_FAMILY)).andReturn(pubTypes).once();
         replay(publicationTypeRepository);
         assertEquals(pubTypes, publicationTypeService.getPublicationTypes(AACL_PRODUCT_FAMILY));
@@ -72,7 +71,7 @@ public class PublicationTypeServiceTest {
 
     @Test
     public void testGetHistoryPublicationTypes() {
-        List<AclPublicationType> pubTypes = Collections.singletonList(buildAclPublicationType(PUB_TYPE, "1.00"));
+        List<AclPublicationType> pubTypes = List.of(buildAclPublicationType(PUB_TYPE, "1.00"));
         expect(publicationTypeRepository.findAclHistoricalPublicationTypes()).andReturn(pubTypes).once();
         replay(publicationTypeRepository);
         assertEquals(pubTypes, publicationTypeService.getAclHistoricalPublicationTypes());

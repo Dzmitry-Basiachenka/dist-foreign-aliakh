@@ -14,7 +14,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -45,7 +44,7 @@ public class UdmUsageChainExecutorTest {
 
     @Test
     public void testExecuteProcessor() {
-        List<UdmUsage> udmUsages = Collections.singletonList(buildUdmUsage());
+        List<UdmUsage> udmUsages = List.of(buildUdmUsage());
         expect(udmMatchingProcessor.getChainProcessorType())
             .andReturn(ChainProcessorTypeEnum.MATCHING)
             .once();

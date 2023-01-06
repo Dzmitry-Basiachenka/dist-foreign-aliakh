@@ -15,7 +15,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -62,6 +61,6 @@ public class StmRhProcessorTest {
         usage.setId("2e321a33-c0b0-424b-8977-d07600285a7e");
         usage.setProductFamily("NTS");
         usage.setStatus(UsageStatusEnum.US_TAX_COUNTRY);
-        return Collections.singletonList(usage);
+        return List.of(usage);
     }
 }

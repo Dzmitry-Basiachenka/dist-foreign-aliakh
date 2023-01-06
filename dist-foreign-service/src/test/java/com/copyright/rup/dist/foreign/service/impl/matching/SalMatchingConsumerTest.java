@@ -18,7 +18,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -51,7 +50,7 @@ public class SalMatchingConsumerTest {
         usage.setId("49ead60e-97f4-47c8-8ebe-d19d07457cca");
         usage.setWrWrkInst(123456789L);
         usage.setStatus(UsageStatusEnum.NEW);
-        List<Usage> usages = Collections.singletonList(usage);
+        List<Usage> usages = List.of(usage);
         matchingService.matchingSalUsages(usages);
         expectLastCall().once();
         Capture<Predicate<Usage>> predicateCapture = newCapture();

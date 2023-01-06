@@ -22,7 +22,6 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -70,7 +69,7 @@ public class AclScenarioAuditServiceTest {
 
     @Test
     public void testGetActions() {
-        List<ScenarioAuditItem> auditItems = Collections.singletonList(new ScenarioAuditItem());
+        List<ScenarioAuditItem> auditItems = List.of(new ScenarioAuditItem());
         expect(aclScenarioAuditRepository.findByScenarioId(SCENARIO_UID)).andReturn(auditItems).once();
         replay(aclScenarioAuditRepository);
         assertSame(auditItems, aclScenarioAuditService.getActions(SCENARIO_UID));

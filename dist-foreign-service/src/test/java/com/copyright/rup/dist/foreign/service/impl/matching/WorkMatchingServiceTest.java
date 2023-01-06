@@ -27,7 +27,7 @@ import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
-import java.util.Collections;
+import java.util.List;
 
 /**
  * Verifies {@link WorkMatchingService}.
@@ -81,7 +81,7 @@ public class WorkMatchingServiceTest {
             "Wr Wrk Inst 112930820 was found by standard number 000043122-1");
         expectLastCall().once();
         replay(piIntegrationService, usageRepository, auditService, usageService);
-        workMatchingService.matchingFasUsages(Collections.singletonList(usage));
+        workMatchingService.matchingFasUsages(List.of(usage));
         assertEquals(UsageStatusEnum.WORK_FOUND, usage.getStatus());
         assertEquals(VALISBN10, usage.getStandardNumberType());
         assertEquals(STANDARD_NUMBER, usage.getStandardNumber());
@@ -101,7 +101,7 @@ public class WorkMatchingServiceTest {
             "Wr Wrk Inst 112930820 was found by host IDNO 000043122-1");
         expectLastCall().once();
         replay(piIntegrationService, usageRepository, auditService, usageService);
-        workMatchingService.matchingFasUsages(Collections.singletonList(usage));
+        workMatchingService.matchingFasUsages(List.of(usage));
         assertEquals(UsageStatusEnum.WORK_FOUND, usage.getStatus());
         assertEquals(VALISBN10, usage.getStandardNumberType());
         assertEquals(STANDARD_NUMBER, usage.getStandardNumber());
@@ -121,7 +121,7 @@ public class WorkMatchingServiceTest {
             "Wr Wrk Inst 112930820 was found by host IDNO 2192-3558");
         expectLastCall().once();
         replay(piIntegrationService, udmUsageService, udmAuditService);
-        workMatchingService.matchingUdmUsages(Collections.singletonList(usage));
+        workMatchingService.matchingUdmUsages(List.of(usage));
         assertEquals(UsageStatusEnum.WORK_FOUND, usage.getStatus());
         assertEquals("2192-3558", usage.getStandardNumber());
         assertEquals(112930820L, usage.getWrWrkInst(), 0);
@@ -145,7 +145,7 @@ public class WorkMatchingServiceTest {
                 "is less than $100");
         expectLastCall().once();
         replay(piIntegrationService, usageRepository, auditService);
-        workMatchingService.matchingFasUsages(Collections.singletonList(usage));
+        workMatchingService.matchingFasUsages(List.of(usage));
         assertEquals(UsageStatusEnum.NTS_WITHDRAWN, usage.getStatus());
         assertEquals("FAS", usage.getProductFamily());
         verify(piIntegrationService, usageRepository, auditService);
@@ -162,7 +162,7 @@ public class WorkMatchingServiceTest {
             "Wr Wrk Inst 112930820 was found by standard number 000043122-1");
         expectLastCall().once();
         replay(piIntegrationService, udmUsageService, udmAuditService);
-        workMatchingService.matchingUdmUsages(Collections.singletonList(usage));
+        workMatchingService.matchingUdmUsages(List.of(usage));
         assertEquals(UsageStatusEnum.WORK_FOUND, usage.getStatus());
         assertEquals(STANDARD_NUMBER, usage.getStandardNumber());
         assertEquals(112930820L, usage.getWrWrkInst(), 0);
@@ -179,7 +179,7 @@ public class WorkMatchingServiceTest {
             "Wr Wrk Inst was not found by standard number 000043122-1");
         expectLastCall().once();
         replay(piIntegrationService, udmUsageService, udmAuditService);
-        workMatchingService.matchingUdmUsages(Collections.singletonList(usage));
+        workMatchingService.matchingUdmUsages(List.of(usage));
         assertEquals(UsageStatusEnum.WORK_NOT_FOUND, usage.getStatus());
         assertNull(usage.getStandardNumber());
         assertNull(usage.getWrWrkInst());
@@ -198,7 +198,7 @@ public class WorkMatchingServiceTest {
             "Multiple results were found by standard number 000043122-1");
         expectLastCall().once();
         replay(piIntegrationService, udmUsageService, udmAuditService);
-        workMatchingService.matchingUdmUsages(Collections.singletonList(usage));
+        workMatchingService.matchingUdmUsages(List.of(usage));
         assertEquals(UsageStatusEnum.WORK_NOT_FOUND, usage.getStatus());
         assertNull(usage.getStandardNumber());
         assertNull(usage.getWrWrkInst());
@@ -217,7 +217,7 @@ public class WorkMatchingServiceTest {
             "Wr Wrk Inst 112930820 was found by title \"The theological roots of Pentecostalism\"");
         expectLastCall().once();
         replay(piIntegrationService, usageRepository, auditService);
-        workMatchingService.matchingFasUsages(Collections.singletonList(usage));
+        workMatchingService.matchingFasUsages(List.of(usage));
         assertEquals(UsageStatusEnum.WORK_FOUND, usage.getStatus());
         assertEquals(112930820L, usage.getWrWrkInst(), 0);
         assertEquals(VALISSN, usage.getStandardNumberType());
@@ -237,7 +237,7 @@ public class WorkMatchingServiceTest {
             "Wr Wrk Inst 112930820 was found by host IDNO 00485772");
         expectLastCall().once();
         replay(piIntegrationService, usageRepository, auditService);
-        workMatchingService.matchingFasUsages(Collections.singletonList(usage));
+        workMatchingService.matchingFasUsages(List.of(usage));
         assertEquals(UsageStatusEnum.WORK_FOUND, usage.getStatus());
         assertEquals(112930820L, usage.getWrWrkInst(), 0);
         assertEquals(VALISSN, usage.getStandardNumberType());
@@ -257,7 +257,7 @@ public class WorkMatchingServiceTest {
             "Wr Wrk Inst 112930820 was found by host IDNO 00583721");
         expectLastCall().once();
         replay(piIntegrationService, udmUsageService, udmAuditService);
-        workMatchingService.matchingUdmUsages(Collections.singletonList(usage));
+        workMatchingService.matchingUdmUsages(List.of(usage));
         assertEquals(UsageStatusEnum.WORK_FOUND, usage.getStatus());
         assertEquals("00583721", usage.getStandardNumber());
         assertEquals(112930820L, usage.getWrWrkInst(), 0);
@@ -275,7 +275,7 @@ public class WorkMatchingServiceTest {
             "Wr Wrk Inst 112930820 was found by title \"The theological roots of Pentecostalism\"");
         expectLastCall().once();
         replay(piIntegrationService, udmUsageService, udmAuditService);
-        workMatchingService.matchingUdmUsages(Collections.singletonList(usage));
+        workMatchingService.matchingUdmUsages(List.of(usage));
         assertEquals(UsageStatusEnum.WORK_FOUND, usage.getStatus());
         assertEquals(STANDARD_NUMBER, usage.getStandardNumber());
         assertEquals(112930820L, usage.getWrWrkInst(), 0);
@@ -292,7 +292,7 @@ public class WorkMatchingServiceTest {
             "Wr Wrk Inst was not found by title \"The theological roots of Pentecostalism\"");
         expectLastCall().once();
         replay(piIntegrationService, udmUsageService, udmAuditService);
-        workMatchingService.matchingUdmUsages(Collections.singletonList(usage));
+        workMatchingService.matchingUdmUsages(List.of(usage));
         assertEquals(UsageStatusEnum.WORK_NOT_FOUND, usage.getStatus());
         assertNull(usage.getStandardNumber());
         assertNull(usage.getWrWrkInst());
@@ -311,7 +311,7 @@ public class WorkMatchingServiceTest {
             "Multiple results were found by title \"The theological roots of Pentecostalism\"");
         expectLastCall().once();
         replay(piIntegrationService, udmUsageService, udmAuditService);
-        workMatchingService.matchingUdmUsages(Collections.singletonList(usage));
+        workMatchingService.matchingUdmUsages(List.of(usage));
         assertEquals(UsageStatusEnum.WORK_NOT_FOUND, usage.getStatus());
         assertNull(usage.getStandardNumber());
         assertNull(usage.getWrWrkInst());
@@ -328,7 +328,7 @@ public class WorkMatchingServiceTest {
         auditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND, WORK_FOUND_REASON);
         expectLastCall().once();
         replay(piIntegrationService, usageRepository, auditService);
-        workMatchingService.matchingSalUsages(Collections.singletonList(usage));
+        workMatchingService.matchingSalUsages(List.of(usage));
         assertEquals(UsageStatusEnum.WORK_FOUND, usage.getStatus());
         assertEquals(112930820L, usage.getWrWrkInst(), 0);
         assertEquals(TITLE, usage.getSystemTitle());
@@ -347,7 +347,7 @@ public class WorkMatchingServiceTest {
             "Wr Wrk Inst 112930820 was not found in PI");
         expectLastCall().once();
         replay(piIntegrationService, usageRepository, auditService);
-        workMatchingService.matchingSalUsages(Collections.singletonList(usage));
+        workMatchingService.matchingSalUsages(List.of(usage));
         assertEquals(UsageStatusEnum.WORK_NOT_FOUND, usage.getStatus());
         assertEquals(112930820L, usage.getWrWrkInst(), 0);
         assertNull(usage.getSystemTitle());
@@ -366,7 +366,7 @@ public class WorkMatchingServiceTest {
         auditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND, WORK_FOUND_REASON);
         expectLastCall().once();
         replay(piIntegrationService, usageRepository, auditService);
-        workMatchingService.matchingAaclUsages(Collections.singletonList(usage));
+        workMatchingService.matchingAaclUsages(List.of(usage));
         assertEquals(UsageStatusEnum.WORK_FOUND, usage.getStatus());
         assertEquals(112930820L, usage.getWrWrkInst(), 0);
         assertEquals(TITLE, usage.getSystemTitle());
@@ -385,7 +385,7 @@ public class WorkMatchingServiceTest {
             "Wr Wrk Inst 112930820 was not found in PI");
         expectLastCall().once();
         replay(piIntegrationService, usageRepository, auditService);
-        workMatchingService.matchingAaclUsages(Collections.singletonList(usage));
+        workMatchingService.matchingAaclUsages(List.of(usage));
         assertEquals(UsageStatusEnum.WORK_NOT_FOUND, usage.getStatus());
         assertEquals(112930820L, usage.getWrWrkInst(), 0);
         assertNull(usage.getSystemTitle());
@@ -404,7 +404,7 @@ public class WorkMatchingServiceTest {
         udmAuditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND, WORK_FOUND_REASON);
         expectLastCall().once();
         replay(piIntegrationService, udmUsageService, udmAuditService);
-        workMatchingService.matchingUdmUsages(Collections.singletonList(usage));
+        workMatchingService.matchingUdmUsages(List.of(usage));
         assertEquals(UsageStatusEnum.WORK_FOUND, usage.getStatus());
         assertEquals(STANDARD_NUMBER, usage.getStandardNumber());
         assertEquals(112930820L, usage.getWrWrkInst(), 0);
@@ -421,7 +421,7 @@ public class WorkMatchingServiceTest {
             "Wr Wrk Inst 112930820 was not found in PI");
         expectLastCall().once();
         replay(piIntegrationService, udmUsageService, udmAuditService);
-        workMatchingService.matchingUdmUsages(Collections.singletonList(usage));
+        workMatchingService.matchingUdmUsages(List.of(usage));
         assertEquals(UsageStatusEnum.WORK_NOT_FOUND, usage.getStatus());
         assertNull(usage.getStandardNumber());
         assertEquals(112930820L, usage.getWrWrkInst(), 0);
@@ -438,7 +438,7 @@ public class WorkMatchingServiceTest {
         auditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND, WORK_FOUND_REASON);
         expectLastCall().once();
         replay(piIntegrationService, usageRepository, auditService);
-        workMatchingService.matchingAclciUsages(Collections.singletonList(usage));
+        workMatchingService.matchingAclciUsages(List.of(usage));
         assertEquals(UsageStatusEnum.WORK_FOUND, usage.getStatus());
         assertEquals(112930820L, usage.getWrWrkInst(), 0);
         assertEquals(TITLE, usage.getSystemTitle());
@@ -457,7 +457,7 @@ public class WorkMatchingServiceTest {
             "Wr Wrk Inst 112930821 was not found in PI");
         expectLastCall().once();
         replay(piIntegrationService, usageRepository, auditService);
-        workMatchingService.matchingAclciUsages(Collections.singletonList(usage));
+        workMatchingService.matchingAclciUsages(List.of(usage));
         assertEquals(UsageStatusEnum.WORK_NOT_FOUND, usage.getStatus());
         assertEquals(112930821L, usage.getWrWrkInst(), 0);
         assertNull(usage.getSystemTitle());

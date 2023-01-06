@@ -11,7 +11,6 @@ import org.apache.camel.ProducerTemplate;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -33,7 +32,7 @@ public class CommonUdmUsageProducerTest {
         CommonUdmUsageProducer producer = new CommonUdmUsageProducer();
         producer.setEndPoint(END_POINT);
         Whitebox.setInternalState(producer, template);
-        List<UdmUsage> usages = Collections.singletonList(new UdmUsage());
+        List<UdmUsage> usages = List.of(new UdmUsage());
         template.sendBody(END_POINT, usages);
         expectLastCall().once();
         replay(template);

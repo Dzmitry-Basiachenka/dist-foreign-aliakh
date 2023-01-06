@@ -29,7 +29,6 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -90,7 +89,7 @@ public class AclUsageBatchServiceTest {
 
     @Test
     public void testGetAll() {
-        List<AclUsageBatch> usageBatches = Collections.singletonList(buildAclUsageBatch());
+        List<AclUsageBatch> usageBatches = List.of(buildAclUsageBatch());
         expect(aclUsageBatchRepository.findAll()).andReturn(usageBatches).once();
         replay(aclUsageBatchRepository);
         assertSame(usageBatches, aclUsageBatchService.getAll());
@@ -99,7 +98,7 @@ public class AclUsageBatchServiceTest {
 
     @Test
     public void testGetUsageBatchesByPeriod() {
-        List<AclUsageBatch> usageBatches = Collections.singletonList(buildAclUsageBatch());
+        List<AclUsageBatch> usageBatches = List.of(buildAclUsageBatch());
         expect(aclUsageBatchRepository.findUsageBatchesByPeriod(202212, true)).andReturn(usageBatches).once();
         replay(aclUsageBatchRepository);
         assertSame(usageBatches, aclUsageBatchService.getUsageBatchesByPeriod(202212, true));
@@ -108,7 +107,7 @@ public class AclUsageBatchServiceTest {
 
     @Test
     public void testGetPeriods() {
-        List<Integer> periods = Collections.singletonList(202006);
+        List<Integer> periods = List.of(202006);
         expect(aclUsageBatchRepository.findPeriods()).andReturn(periods).once();
         replay(aclUsageBatchRepository);
         assertSame(periods, aclUsageBatchService.getPeriods());

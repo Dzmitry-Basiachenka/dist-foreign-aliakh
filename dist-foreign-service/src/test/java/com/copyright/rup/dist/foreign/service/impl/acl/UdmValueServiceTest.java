@@ -130,7 +130,7 @@ public class UdmValueServiceTest {
 
     @Test
     public void testGetValueDtos() {
-        List<UdmValueDto> udmValues = Collections.singletonList(new UdmValueDto());
+        List<UdmValueDto> udmValues = List.of(new UdmValueDto());
         Pageable pageable = new Pageable(0, 1);
         Sort sort = new Sort("valueId", Sort.Direction.ASC);
         UdmValueFilter filter = new UdmValueFilter();
@@ -211,7 +211,7 @@ public class UdmValueServiceTest {
 
     @Test
     public void testGetAssignees() {
-        List<String> assignees = Collections.singletonList("wjohn@copyright.com");
+        List<String> assignees = List.of("wjohn@copyright.com");
         expect(udmValueRepository.findAssignees()).andReturn(assignees).once();
         replay(udmValueRepository);
         assertEquals(assignees, udmValueService.getAssignees());
@@ -287,7 +287,7 @@ public class UdmValueServiceTest {
         mockStatic(RupContextUtils.class);
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
         expect(udmValueRepository.publishToBaseline(202012, USER_NAME))
-            .andReturn(Collections.singletonList("c1e388e9-6571-46df-9982-11b849b92424")).once();
+            .andReturn(List.of("c1e388e9-6571-46df-9982-11b849b92424")).once();
         replay(udmValueRepository, RupContextUtils.class);
         assertEquals(1, udmValueService.publishToBaseline(202012));
         verify(udmValueRepository, RupContextUtils.class);

@@ -21,7 +21,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
@@ -52,7 +51,7 @@ public class UdmRightsConsumerTest {
     public void testConsumeUdmUsageRhFound() {
         Whitebox.setInternalState(udmRightsConsumer, new RightsServiceMock(1000005289L));
         UdmUsage udmUsage = buildUdmUsage();
-        List<UdmUsage> udmUsages = Collections.singletonList(udmUsage);
+        List<UdmUsage> udmUsages = List.of(udmUsage);
         Capture<Predicate<UdmUsage>> predicateCapture = newCapture();
         udmRightsProcessor.executeNextChainProcessor(eq(udmUsages), capture(predicateCapture));
         expectLastCall().once();
@@ -67,7 +66,7 @@ public class UdmRightsConsumerTest {
     public void testConsumeUdmUsageRhNotFound() {
         Whitebox.setInternalState(udmRightsConsumer, new RightsServiceMock(null));
         UdmUsage udmUsage = buildUdmUsage();
-        List<UdmUsage> udmUsages = Collections.singletonList(udmUsage);
+        List<UdmUsage> udmUsages = List.of(udmUsage);
         Capture<Predicate<UdmUsage>> predicateCapture = newCapture();
         udmRightsProcessor.executeNextChainProcessor(eq(udmUsages), capture(predicateCapture));
         expectLastCall().once();

@@ -23,7 +23,6 @@ import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -57,7 +56,7 @@ public class UdmBaselineValueServiceTest {
 
     @Test
     public void testGetValueDtos() {
-        List<UdmValueBaselineDto> baselineValues = Collections.singletonList(new UdmValueBaselineDto());
+        List<UdmValueBaselineDto> baselineValues = List.of(new UdmValueBaselineDto());
         Pageable pageable = new Pageable(0, 1);
         Sort sort = new Sort("valueId", Sort.Direction.ASC);
         UdmBaselineValueFilter filter = new UdmBaselineValueFilter();

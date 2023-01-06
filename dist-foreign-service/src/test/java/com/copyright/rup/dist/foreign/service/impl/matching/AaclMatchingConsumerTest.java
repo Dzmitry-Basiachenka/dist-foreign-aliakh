@@ -19,7 +19,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -55,7 +54,7 @@ public class AaclMatchingConsumerTest {
         usage.setId(RupPersistUtils.generateUuid());
         usage.setWrWrkInst(VALID_WR_WRK_INST);
         usage.setStatus(UsageStatusEnum.NEW);
-        List<Usage> usages = Collections.singletonList(usage);
+        List<Usage> usages = List.of(usage);
         matchingService.matchingAaclUsages(usages);
         expectLastCall().once();
         Capture<Predicate<Usage>> predicateCapture = newCapture();

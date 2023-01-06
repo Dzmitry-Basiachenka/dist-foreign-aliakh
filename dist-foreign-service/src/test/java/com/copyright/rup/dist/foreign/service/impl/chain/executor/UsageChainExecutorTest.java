@@ -23,7 +23,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -139,7 +138,7 @@ public class UsageChainExecutorTest {
 
     @Test
     public void testExecuteProcessor() {
-        List<Usage> usages = Collections.singletonList(buildUsage("FAS"));
+        List<Usage> usages = List.of(buildUsage("FAS"));
         expect(fasProcessor.getChainProcessorType())
             .andReturn(ChainProcessorTypeEnum.RIGHTS)
             .once();

@@ -113,7 +113,7 @@ public class FasUsageServiceTest {
 
     @Test
     public void testUpdateNtsWithdrawnUsagesAndGetIds() {
-        List<String> ids = Collections.singletonList("55e6ab53-3fb2-494f-8cb2-94ebf8a9f8d3");
+        List<String> ids = List.of("55e6ab53-3fb2-494f-8cb2-94ebf8a9f8d3");
         expect(fasUsageRepository.updateNtsWithdrawnUsagesAndGetIds()).andReturn(ids).once();
         replay(fasUsageRepository);
         assertEquals(ids, fasUsageRepository.updateNtsWithdrawnUsagesAndGetIds());
@@ -137,7 +137,7 @@ public class FasUsageServiceTest {
 
     @Test
     public void testGetUsagesForReconcile() {
-        List<Usage> usages = Collections.singletonList(new Usage());
+        List<Usage> usages = List.of(new Usage());
         expect(fasUsageRepository.findForReconcile(scenario.getId())).andReturn(usages).once();
         replay(fasUsageRepository);
         assertSame(usages, usageService.getUsagesForReconcile(scenario.getId()));
@@ -151,14 +151,13 @@ public class FasUsageServiceTest {
         Usage usage2 = buildUsageWithPayee("314157b6-c497-4b64-9a8f-a9e485eed79f");
         expect(fasUsageRepository.findRightsholdersInformation(scenario.getId()))
             .andReturn(ImmutableMap.of(usage2.getRightsholder().getAccountNumber(), usage2)).once();
-        expect(fasUsageRepository.findWithAmountsAndRightsholders(filter)).andReturn(Collections.singletonList(usage1))
-            .once();
+        expect(fasUsageRepository.findWithAmountsAndRightsholders(filter)).andReturn(List.of(usage1)).once();
         expect(prmIntegrationService.getRollUps(Collections.emptySet())).andReturn(Collections.emptyMap()).once();
         expect(prmIntegrationService.getPreferences(Collections.emptySet())).andReturn(Collections.emptyMap()).once();
         expect(prmIntegrationService.getRhParticipatingServiceFee(false)).andReturn(new BigDecimal("0.32")).once();
-        usageRepository.addToScenario(Collections.singletonList(usage1));
+        usageRepository.addToScenario(List.of(usage1));
         expectLastCall().once();
-        rightsholderService.updateUsagesPayeesAsync(Collections.singletonList(usage1));
+        rightsholderService.updateUsagesPayeesAsync(List.of(usage1));
         expectLastCall().once();
         replay(usageRepository, prmIntegrationService, rightsholderService, fasUsageRepository);
         usageService.recalculateUsagesForRefresh(filter, scenario);
@@ -199,8 +198,7 @@ public class FasUsageServiceTest {
     public void testGetUsagesWithAmounts() {
         UsageFilter usageFilter = new UsageFilter();
         Usage usage = buildUsage("0f6c7f4d-b31b-48e6-a851-c02a0ce16c2d");
-        expect(fasUsageRepository.findWithAmountsAndRightsholders(usageFilter))
-            .andReturn(Collections.singletonList(usage)).once();
+        expect(fasUsageRepository.findWithAmountsAndRightsholders(usageFilter)).andReturn(List.of(usage)).once();
         replay(fasUsageRepository);
         assertTrue(CollectionUtils.isNotEmpty(usageService.getUsagesWithAmounts(usageFilter)));
         verify(fasUsageRepository);
@@ -208,7 +206,7 @@ public class FasUsageServiceTest {
 
     @Test
     public void testGetUsageDtos() {
-        List<UsageDto> usagesWithBatch = Collections.singletonList(new UsageDto());
+        List<UsageDto> usagesWithBatch = List.of(new UsageDto());
         Pageable pageable = new Pageable(0, 1);
         Sort sort = new Sort("detailId", Sort.Direction.ASC);
         UsageFilter filter = new UsageFilter();
@@ -303,7 +301,7 @@ public class FasUsageServiceTest {
     @Test
     public void testMoveToArchivedFas() {
         mockStatic(RupContextUtils.class);
-        List<String> usageIds = Collections.singletonList(RupPersistUtils.generateUuid());
+        List<String> usageIds = List.of(RupPersistUtils.generateUuid());
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
         expect(usageArchiveRepository.copyToArchiveByScenarioId(scenario.getId(), USER_NAME))
             .andReturn(usageIds).once();

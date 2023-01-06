@@ -16,7 +16,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -90,6 +89,6 @@ public class RightsProcessorTest {
         usage.setId("50f1c35f-40db-443b-a19e-f5fab1f7362e");
         usage.setProductFamily("NTS");
         usage.setStatus(status);
-        return Collections.singletonList(usage);
+        return List.of(usage);
     }
 }

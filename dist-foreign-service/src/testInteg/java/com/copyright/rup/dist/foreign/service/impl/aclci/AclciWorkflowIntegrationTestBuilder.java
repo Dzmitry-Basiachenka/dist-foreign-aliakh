@@ -19,7 +19,6 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -130,7 +129,7 @@ public class AclciWorkflowIntegrationTestBuilder implements Builder<Runner> {
             assertEquals(expectedUsages.size(), usageIds.size());
             IntStream.range(0, expectedUsages.size()).forEach(i -> {
                 Usage expectedUsage = expectedUsages.get(i);
-                Usage actualUsage = aclciUsageService.getUsagesByIds(Collections.singletonList(usageIds.get(i))).get(0);
+                Usage actualUsage = aclciUsageService.getUsagesByIds(List.of(usageIds.get(i))).get(0);
                 testHelper.assertUsage(expectedUsage, actualUsage);
                 testHelper.assertAclciUsage(expectedUsage.getAclciUsage(), actualUsage.getAclciUsage());
             });

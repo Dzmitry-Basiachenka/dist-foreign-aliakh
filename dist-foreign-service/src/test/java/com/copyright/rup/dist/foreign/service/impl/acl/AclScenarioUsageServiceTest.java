@@ -76,7 +76,7 @@ public class AclScenarioUsageServiceTest {
     public void testPopulatePayees() {
         RightsholderTypeOfUsePair rightsholderTypeOfUsePair = buildRightsholderTypeOfUsePair(2000073957L);
         expect(rightsholderService.getByAclScenarioId(SCENARIO_UID)).andReturn(
-            Collections.singletonList(rightsholderTypeOfUsePair)).once();
+            List.of(rightsholderTypeOfUsePair)).once();
         expect(prmIntegrationService.getRollUps(Collections.singleton(RH_UID)))
             .andReturn(Collections.emptyMap()).once();
         aclScenarioUsageRepository.updatePayeeByAccountNumber(2000073957L, SCENARIO_UID, 2000073957L, "PRINT");
@@ -148,7 +148,7 @@ public class AclScenarioUsageServiceTest {
 
     @Test
     public void testGetAclRightsholderTotalsHoldersByScenarioId() {
-        List<AclRightsholderTotalsHolder> holders = Collections.singletonList(new AclRightsholderTotalsHolder());
+        List<AclRightsholderTotalsHolder> holders = List.of(new AclRightsholderTotalsHolder());
         expect(aclScenarioUsageRepository.findAclRightsholderTotalsHoldersByScenarioId(SCENARIO_UID))
             .andReturn(holders).once();
         replay(aclScenarioUsageRepository);
@@ -168,7 +168,7 @@ public class AclScenarioUsageServiceTest {
 
     @Test
     public void testGetByScenarioIdAndRhAccountNumber() {
-        List<AclScenarioDetailDto> scenarioDetailDtos = Collections.singletonList(new AclScenarioDetailDto());
+        List<AclScenarioDetailDto> scenarioDetailDtos = List.of(new AclScenarioDetailDto());
         Pageable pageable = new Pageable(0, 2);
         expect(aclScenarioUsageRepository.findByScenarioIdAndRhAccountNumber(RH_ACCOUNT_NUMBER, SCENARIO_UID,
             SEARCH_VALUE, pageable, null)).andReturn(scenarioDetailDtos).once();
@@ -190,7 +190,7 @@ public class AclScenarioUsageServiceTest {
 
     @Test
     public void testGetByScenarioId() {
-        List<AclScenarioDetailDto> scenarioDetailDtos = Collections.singletonList(new AclScenarioDetailDto());
+        List<AclScenarioDetailDto> scenarioDetailDtos = List.of(new AclScenarioDetailDto());
         Pageable pageable = new Pageable(0, 2);
         expect(aclScenarioUsageRepository.findByScenarioId(SCENARIO_UID, SEARCH_VALUE, pageable, null))
             .andReturn(scenarioDetailDtos).once();
@@ -220,8 +220,7 @@ public class AclScenarioUsageServiceTest {
 
     @Test
     public void testFindRightsholderTitleResults() {
-        List<AclRightsholderTotalsHolderDto> holderDtos =
-            Collections.singletonList(buildAclRightsholderTotalsHolderDto());
+        List<AclRightsholderTotalsHolderDto> holderDtos = List.of(buildAclRightsholderTotalsHolderDto());
         RightsholderResultsFilter filter = buildRightsholderResultsFilter();
         expect(aclScenarioUsageRepository.findRightsholderTitleResults(filter)).andReturn(holderDtos).once();
         replay(aclScenarioUsageRepository);
@@ -231,8 +230,7 @@ public class AclScenarioUsageServiceTest {
 
     @Test
     public void testFindRightsholderAggLcClassResults() {
-        List<AclRightsholderTotalsHolderDto> holderDtos =
-            Collections.singletonList(buildAclRightsholderTotalsHolderDto());
+        List<AclRightsholderTotalsHolderDto> holderDtos = List.of(buildAclRightsholderTotalsHolderDto());
         RightsholderResultsFilter filter = buildRightsholderResultsFilter();
         expect(aclScenarioUsageRepository.findRightsholderAggLcClassResults(filter)).andReturn(holderDtos).once();
         replay(aclScenarioUsageRepository);
@@ -243,8 +241,7 @@ public class AclScenarioUsageServiceTest {
     @Test
     public void testGetRightsholderPayeeProductFamilyHoldersByAclScenarioIds() {
         Set<String> scenarioIds = Collections.singleton(SCENARIO_UID);
-        List<RightsholderPayeeProductFamilyHolder> holders =
-            Collections.singletonList(new RightsholderPayeeProductFamilyHolder());
+        List<RightsholderPayeeProductFamilyHolder> holders = List.of(new RightsholderPayeeProductFamilyHolder());
         expect(aclScenarioUsageRepository.findRightsholderPayeeProductFamilyHoldersByAclScenarioIds(scenarioIds))
             .andReturn(holders).once();
         replay(aclScenarioUsageRepository);
@@ -257,7 +254,7 @@ public class AclScenarioUsageServiceTest {
     public void testGetArchivedLiabilityDetailsForSendToLmByIds() {
         AclScenarioLiabilityDetail liabilityDetail = buildLiabilityDetail();
         expect(aclScenarioUsageRepository.findForSendToLmByScenarioId(SCENARIO_UID)).andReturn(
-            Collections.singletonList(liabilityDetail)).once();
+            List.of(liabilityDetail)).once();
         replay(aclScenarioUsageRepository);
         assertEquals(liabilityDetail,
             aclScenarioUsageService.getLiabilityDetailsForSendToLmByIds(SCENARIO_UID).get(0));

@@ -31,7 +31,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -94,7 +93,7 @@ public class AaclWorkflowIntegrationTest {
         testBuilder
             .withProductFamily(AACL_PRODUCT_FAMILY)
             .withFundPool(buildFundPool("Fund pool"))
-            .withFundPoolDetails(Collections.singletonList(buildFundPoolDetail(FUND_POOL_ID_1)))
+            .withFundPoolDetails(List.of(buildFundPoolDetail(FUND_POOL_ID_1)))
             .withUsageFilter(buildUsageFilter())
             .withAaclFields(buildAaclFields(FUND_POOL_ID_1))
             .withUsagesCsvFile("usage/aacl/aacl_usages_for_workflow.csv", 6, USAGE_ID_1, USAGE_ID_2, USAGE_ID_3)
@@ -138,7 +137,7 @@ public class AaclWorkflowIntegrationTest {
         testBuilder
             .withProductFamily(AACL_PRODUCT_FAMILY)
             .withFundPool(buildFundPool("Fund pool-2"))
-            .withFundPoolDetails(Collections.singletonList(buildFundPoolDetail(FUND_POOL_ID_2)))
+            .withFundPoolDetails(List.of(buildFundPoolDetail(FUND_POOL_ID_2)))
             .withUsageFilter(buildUsageFilter())
             .withAaclFields(buildAaclFields(FUND_POOL_ID_2))
             .withUsagesCsvFile("usage/aacl/aacl_usages_for_workflow_excluded.csv", 4, USAGE_ID_4, USAGE_ID_5,

@@ -58,7 +58,7 @@ public class RightsholderServiceTest {
 
     @Test
     public void testGetRros() {
-        List<Rightsholder> rros = Collections.singletonList(new Rightsholder());
+        List<Rightsholder> rros = List.of(new Rightsholder());
         expect(rightsholderRepository.findRros("FAS")).andReturn(rros).once();
         replay(rightsholderRepository);
         assertEquals(rros, rightsholderService.getRros("FAS"));
@@ -117,7 +117,7 @@ public class RightsholderServiceTest {
         Capture<Runnable> runnableCapture = newCapture();
         Usage usage = new Usage();
         usage.getPayee().setAccountNumber(ACCOUNT_NUMBER_2);
-        List<Usage> usages = Collections.singletonList(usage);
+        List<Usage> usages = List.of(usage);
         executorService.execute(capture(runnableCapture));
         expectLastCall().once();
         replay(executorService);
