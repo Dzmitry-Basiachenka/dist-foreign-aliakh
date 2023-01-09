@@ -28,8 +28,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Verifies AACL scenario creation.
@@ -105,7 +105,7 @@ public class CreateAaclScenarioIntegrationTest {
     private UsageFilter buildUsageFilter() {
         UsageFilter filter = new UsageFilter();
         filter.setProductFamily("AACL");
-        filter.setUsageBatchesIds(Collections.singleton("ea7b6e8d-8454-4052-b639-c0fdb0a3145c"));
+        filter.setUsageBatchesIds(Set.of("ea7b6e8d-8454-4052-b639-c0fdb0a3145c"));
         filter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
         return filter;
     }

@@ -206,12 +206,12 @@ public class RightsService implements IRightsService {
                     usage.setRightsholder(buildRightsholder(rhAccountNumber));
                     usage.setStatus(UsageStatusEnum.RH_FOUND);
                     usageService.updateProcessedUsage(usage);
-                    logAction(Collections.singleton(usage.getId()), UsageActionTypeEnum.RH_FOUND,
+                    logAction(Set.of(usage.getId()), UsageActionTypeEnum.RH_FOUND,
                         String.format(RH_FOUND_REASON_FORMAT, rhAccountNumber), logAction);
                 } else {
                     usage.setStatus(UsageStatusEnum.RH_NOT_FOUND);
                     usageService.updateProcessedUsage(usage);
-                    logAction(Collections.singleton(usage.getId()), UsageActionTypeEnum.RH_NOT_FOUND,
+                    logAction(Set.of(usage.getId()), UsageActionTypeEnum.RH_NOT_FOUND,
                         String.format("Rightsholder account for %s was not found in RMS", wrWrkInst), logAction);
                 }
             });
@@ -314,7 +314,7 @@ public class RightsService implements IRightsService {
                         usage.getAaclUsage().setRightLimitation(
                             DIGITAL_TYPE_OF_USE.equals(grant.getTypeOfUse()) ? "ALL" : PRINT_TYPE_OF_USE);
                         aaclUsageService.updateProcessedUsage(usage);
-                        logAction(Collections.singleton(usage.getId()), UsageActionTypeEnum.RH_FOUND,
+                        logAction(Set.of(usage.getId()), UsageActionTypeEnum.RH_FOUND,
                             String.format(RH_FOUND_REASON_FORMAT, rhAccountNumber), true);
                     } else {
                         usage.setStatus(UsageStatusEnum.RH_NOT_FOUND);
@@ -410,8 +410,7 @@ public class RightsService implements IRightsService {
     }
 
     private Rightsholder buildRightsholder(Long rhAccountNumber) {
-        List<Rightsholder> rightsholders =
-            rightsholderService.updateRightsholders(Collections.singleton(rhAccountNumber));
+        List<Rightsholder> rightsholders = rightsholderService.updateRightsholders(Set.of(rhAccountNumber));
         Rightsholder rightsholder = new Rightsholder();
         if (CollectionUtils.isNotEmpty(rightsholders)) {
             rightsholder = rightsholders.get(0);
@@ -479,19 +478,19 @@ public class RightsService implements IRightsService {
                     usage.setRightsholder(buildRightsholder(rhAccountNumber));
                     usage.setStatus(UsageStatusEnum.RH_FOUND);
                     usageService.updateProcessedUsage(usage);
-                    logAction(Collections.singleton(usage.getId()), UsageActionTypeEnum.RH_FOUND,
+                    logAction(Set.of(usage.getId()), UsageActionTypeEnum.RH_FOUND,
                         String.format(RH_FOUND_REASON_FORMAT, rhAccountNumber), true);
                 } else {
                     usage.setStatus(UsageStatusEnum.WORK_NOT_GRANTED);
                     usageService.updateProcessedUsage(usage);
-                    logAction(Collections.singleton(usage.getId()), UsageActionTypeEnum.WORK_NOT_GRANTED,
-                        String.format("Right for %s is denied for rightsholder account %s",
-                            wrWrkInst, rhAccountNumber), true);
+                    logAction(Set.of(usage.getId()), UsageActionTypeEnum.WORK_NOT_GRANTED,
+                        String.format("Right for %s is denied for rightsholder account %s", wrWrkInst, rhAccountNumber),
+                        true);
                 }
             } else {
                 usage.setStatus(UsageStatusEnum.RH_NOT_FOUND);
                 usageService.updateProcessedUsage(usage);
-                logAction(Collections.singleton(usage.getId()), UsageActionTypeEnum.RH_NOT_FOUND,
+                logAction(Set.of(usage.getId()), UsageActionTypeEnum.RH_NOT_FOUND,
                     String.format("Rightsholder account for %s was not found in RMS", wrWrkInst), true);
             }
         });

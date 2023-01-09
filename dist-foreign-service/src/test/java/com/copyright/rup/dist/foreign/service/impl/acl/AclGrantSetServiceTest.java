@@ -38,8 +38,8 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Verifies {@link AclGrantSetService}.
@@ -98,7 +98,7 @@ public class AclGrantSetServiceTest {
         grantDetail.setSystemTitle(SYSTEM_TITLE);
         aclGrantDetailService.insert(eq(Lists.newArrayList(grantDetail)));
         expectLastCall().once();
-        expect(rightsholderService.updateRightsholders(Collections.singleton(7000813806L)))
+        expect(rightsholderService.updateRightsholders(Set.of(7000813806L)))
             .andReturn(List.of(new Rightsholder()));
         replay(RupContextUtils.class, udmBaselineService, aclGrantService, aclGrantSetRepository,
             aclGrantDetailService);

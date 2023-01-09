@@ -15,11 +15,12 @@ import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 
 import com.google.common.collect.Lists;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Collections;
+import java.util.Set;
 
 /**
  * Verifies {@link BaselineEligibilityProcessor}.
@@ -50,10 +51,9 @@ public class BaselineEligibilityProcessorTest {
     public void testProcess() {
         Usage usage1 = buildUsage("0aa431c7-0bb4-414b-a6b8-797b55912da2", "5fd68081-9629-40be-8f7e-6e965d610448");
         Usage usage2 = buildUsage(null, null);
-        usageRepository.updateStatus(Collections.singleton(usage1.getId()), UsageStatusEnum.ELIGIBLE);
+        usageRepository.updateStatus(Set.of(usage1.getId()), UsageStatusEnum.ELIGIBLE);
         expectLastCall().once();
-        usageAuditService.logAction(Collections.singleton(usage1.getId()), UsageActionTypeEnum.ELIGIBLE,
-            "Usage has become eligible");
+        usageAuditService.logAction(Set.of(usage1.getId()), UsageActionTypeEnum.ELIGIBLE, "Usage has become eligible");
         expectLastCall().once();
         replay(usageRepository, usageAuditService);
         baselineEligibilityProcessor.process(Lists.newArrayList(usage1, usage2));

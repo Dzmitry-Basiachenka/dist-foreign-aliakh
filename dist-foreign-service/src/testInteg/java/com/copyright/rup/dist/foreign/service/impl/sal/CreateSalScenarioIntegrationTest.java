@@ -23,8 +23,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Verifies SAL scenario creation.
@@ -90,7 +90,7 @@ public class CreateSalScenarioIntegrationTest {
     private UsageFilter buildUsageFilter() {
         UsageFilter filter = new UsageFilter();
         filter.setProductFamily("SAL");
-        filter.setUsageBatchesIds(Collections.singleton("85df79f3-7e3f-4d74-9931-9aa513195815"));
+        filter.setUsageBatchesIds(Set.of("85df79f3-7e3f-4d74-9931-9aa513195815"));
         filter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
         return filter;
     }

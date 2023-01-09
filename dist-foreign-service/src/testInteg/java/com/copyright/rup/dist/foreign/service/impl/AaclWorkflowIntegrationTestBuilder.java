@@ -54,7 +54,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -310,7 +309,7 @@ public class AaclWorkflowIntegrationTestBuilder implements Builder<Runner> {
         }
 
         private void addToScenario() {
-            usageFilter.setUsageBatchesIds(Collections.singleton(usageBatch.getId()));
+            usageFilter.setUsageBatchesIds(Set.of(usageBatch.getId()));
             usageFilter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
             aaclFields.setFundPoolId(fundPoolService.getAaclNotAttachedToScenario().get(0).getId());
             scenario = aaclScenarioService.createScenario("Test AACL Scenario", aaclFields, "Test Scenario Description",
@@ -372,8 +371,8 @@ public class AaclWorkflowIntegrationTestBuilder implements Builder<Runner> {
         private void verifyUsages() throws IOException {
             AuditFilter filter = new AuditFilter();
             filter.setProductFamily(productFamily);
-            filter.setBatchesIds(Collections.singleton(usageBatch.getId()));
-            filter.setStatuses(Collections.singleton(UsageStatusEnum.SENT_TO_LM));
+            filter.setBatchesIds(Set.of(usageBatch.getId()));
+            filter.setStatuses(Set.of(UsageStatusEnum.SENT_TO_LM));
             actualCommentsToUsages = aaclUsageService.getForAudit(filter, null, null).stream()
                 .collect(Collectors.toMap(UsageDto::getComment, usageDto -> usageDto));
             List<UsageDto> expectedUsages = testHelper.loadExpectedUsageDtos(expectedUsagesJsonFile);
@@ -451,7 +450,7 @@ public class AaclWorkflowIntegrationTestBuilder implements Builder<Runner> {
         private void verifyUsageAudit() {
             AuditFilter filter = new AuditFilter();
             filter.setProductFamily(productFamily);
-            filter.setBatchesIds(Collections.singleton(usageBatch.getId()));
+            filter.setBatchesIds(Set.of(usageBatch.getId()));
             actualCommentsToUsages = aaclUsageService.getForAudit(filter, null, null).stream()
                 .collect(Collectors.toMap(UsageDto::getComment, usageDto -> usageDto));
             expectedUsageCommentToAuditMap.forEach((comment, expectedAudit) ->

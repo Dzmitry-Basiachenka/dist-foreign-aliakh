@@ -144,7 +144,7 @@ public class UsageBatchService implements IUsageBatchService {
         usageBatch.setCreateUser(userName);
         usageBatch.setUpdateUser(userName);
         usageBatchRepository.insert(usageBatch);
-        rightsholderService.updateRighstholdersAsync(Collections.singleton(usageBatch.getRro().getAccountNumber()));
+        rightsholderService.updateRighstholdersAsync(Set.of(usageBatch.getRro().getAccountNumber()));
         List<String> ntsUsageIds = ntsUsageService.insertUsages(usageBatch);
         usageBatchRepository.updateInitialUsagesCount(ntsUsageIds.size(), usageBatch.getId(), userName);
         LOGGER.info("Insert NTS batch. Finished. UsageBatchName={}, UserName={}, UsagesCount={}",
@@ -275,8 +275,7 @@ public class UsageBatchService implements IUsageBatchService {
 
     @Override
     public List<String> getIneligibleBatchesNames(Set<String> batchesIds) {
-        return usageBatchRepository
-            .findIneligibleForScenarioBatchNames(batchesIds, Collections.singleton(UsageStatusEnum.ELIGIBLE));
+        return usageBatchRepository.findIneligibleForScenarioBatchNames(batchesIds, Set.of(UsageStatusEnum.ELIGIBLE));
     }
 
     @Override

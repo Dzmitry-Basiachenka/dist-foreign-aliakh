@@ -49,7 +49,6 @@ import org.powermock.reflect.Whitebox;
 
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -250,7 +249,7 @@ public class SalUsageServiceTest {
     @Test
     public void testGetUsageDataGradeGroups() {
         UsageFilter filter = new UsageFilter();
-        filter.setUsageBatchesIds(Collections.singleton("cdd46087-87b9-4ecd-ab6f-9b5dcf0f82bf"));
+        filter.setUsageBatchesIds(Set.of("cdd46087-87b9-4ecd-ab6f-9b5dcf0f82bf"));
         List<SalGradeGroupEnum> gradeGroups = List.of(SalGradeGroupEnum.ITEM_BANK);
         expect(salUsageRepository.findUsageDataGradeGroups(filter)).andReturn(gradeGroups).once();
         replay(salUsageRepository);
@@ -263,11 +262,10 @@ public class SalUsageServiceTest {
         String scenarioId = "fe08f50c-bea8-4856-8787-3e3e9e46669c";
         expect(rightsholderService.getByScenarioId(scenarioId)).andReturn(
             List.of(buildRightsholder(RIGHTSHOLDER_ID, 2000073957L))).once();
-        expect(prmIntegrationService.getRollUps(Collections.singleton(RIGHTSHOLDER_ID)))
-            .andReturn(buildRollupsMap()).once();
+        expect(prmIntegrationService.getRollUps(Set.of(RIGHTSHOLDER_ID))).andReturn(buildRollupsMap()).once();
         salUsageRepository.updatePayeeByAccountNumber(2000073957L, scenarioId, 1000005413L, "SYSTEM");
         expectLastCall().once();
-        rightsholderService.updateRighstholdersAsync(Collections.singleton(1000005413L));
+        rightsholderService.updateRighstholdersAsync(Set.of(1000005413L));
         expectLastCall().once();
         replay(salUsageRepository, rightsholderService, prmIntegrationService);
         salUsageService.populatePayees(scenarioId);
@@ -360,7 +358,7 @@ public class SalUsageServiceTest {
     public void testUpdateToEligibleWithRhAccountNumber() {
         mockStatic(RupContextUtils.class);
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
-        Set<String> usageIds = Collections.singleton(USAGE_ID_1);
+        Set<String> usageIds = Set.of(USAGE_ID_1);
         salUsageRepository.updateRhAccountNumberAndStatusByIds(usageIds, RH_ACCOUNT_NUMBER, UsageStatusEnum.ELIGIBLE,
             USER_NAME);
         expectLastCall().once();
@@ -369,7 +367,7 @@ public class SalUsageServiceTest {
         usageAuditService.logAction(usageIds, UsageActionTypeEnum.ELIGIBLE,
             "Usage has become eligible. RH was updated to 1000009422");
         expectLastCall().once();
-        rightsholderService.updateRighstholdersAsync(Collections.singleton(RH_ACCOUNT_NUMBER));
+        rightsholderService.updateRighstholdersAsync(Set.of(RH_ACCOUNT_NUMBER));
         expectLastCall().once();
         replay(RupContextUtils.class, salUsageRepository, usageAuditService, rightsholderService);
         salUsageService.updateToEligibleWithRhAccountNumber(usageIds, RH_ACCOUNT_NUMBER, REASON);

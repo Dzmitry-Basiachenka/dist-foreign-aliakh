@@ -23,8 +23,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Verifies ACL workflow.
@@ -126,7 +126,7 @@ public class AclWorkflowIntegrationTest {
         AclUsageBatch usageBatch = new AclUsageBatch();
         usageBatch.setName("Test ACL Usage Batch");
         usageBatch.setDistributionPeriod(202006);
-        usageBatch.setPeriods(Collections.singleton(202006));
+        usageBatch.setPeriods(Set.of(202006));
         usageBatch.setEditable(false);
         return usageBatch;
     }
@@ -146,7 +146,7 @@ public class AclWorkflowIntegrationTest {
         AclGrantSet grantSet = new AclGrantSet();
         grantSet.setName("Test ACl Grant Set");
         grantSet.setGrantPeriod(202006);
-        grantSet.setPeriods(Collections.singleton(202006));
+        grantSet.setPeriods(Set.of(202006));
         grantSet.setLicenseType("ACL");
         grantSet.setEditable(false);
         return grantSet;

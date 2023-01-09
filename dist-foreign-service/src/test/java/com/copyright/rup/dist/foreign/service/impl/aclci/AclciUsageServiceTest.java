@@ -38,7 +38,6 @@ import org.powermock.reflect.Whitebox;
 
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -161,7 +160,7 @@ public class AclciUsageServiceTest {
     public void testUpdateToEligibleByIds() {
         mockStatic(RupContextUtils.class);
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
-        Set<String> usageIds = Collections.singleton(USAGE_ID_1);
+        Set<String> usageIds = Set.of(USAGE_ID_1);
         String reason = "invalid Wr Wrk Inst";
         aclciUsageRepository.updateToEligibleByIds(usageIds, 20000170001L, 559815489L, USER_NAME);
         expectLastCall().once();

@@ -65,6 +65,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -330,7 +331,7 @@ public class AclWorkflowIntegrationTestBuilder implements Builder<Runner> {
 
         private void assignUsages() {
             UdmUsageFilter filter = new UdmUsageFilter();
-            filter.setPeriods(Collections.singleton(expectedUdmBatch.getPeriod()));
+            filter.setPeriods(Set.of(expectedUdmBatch.getPeriod()));
             filter.setUsageStatus(UsageStatusEnum.RH_FOUND);
             udmUsageDtos = udmUsageService.getUsageDtos(filter, null, null)
                 .stream()
@@ -400,7 +401,7 @@ public class AclWorkflowIntegrationTestBuilder implements Builder<Runner> {
 
         private void assertUdmValuesBaseline() throws IOException {
             UdmBaselineValueFilter filter = new UdmBaselineValueFilter();
-            filter.setPeriods(Collections.singleton(expectedUdmBatch.getPeriod()));
+            filter.setPeriods(Set.of(expectedUdmBatch.getPeriod()));
             List<UdmValueBaselineDto> actualUdmValues = udmBaselineValueService.getValueDtos(filter, null,
                 new Sort("wrWrkInst", Sort.Direction.ASC));
             List<UdmValueBaselineDto> expectedUdmValues =

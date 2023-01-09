@@ -168,13 +168,13 @@ public class AaclUsageServiceTest {
     @Test
     public void testInsertUsagesFromBaseline() {
         mockStatic(RupContextUtils.class);
-        Set<Integer> baselinePeriods = Collections.singleton(2019);
+        Set<Integer> baselinePeriods = Set.of(2019);
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
         expect(aaclUsageRepository.findBaselinePeriods(2019, 3))
             .andReturn(baselinePeriods).once();
         expect(aaclUsageRepository.insertFromBaseline(baselinePeriods, BATCH_ID, USER_NAME))
             .andReturn(List.of(USAGE_ID)).once();
-        usageAuditService.logAction(Collections.singleton(USAGE_ID), UsageActionTypeEnum.LOADED,
+        usageAuditService.logAction(Set.of(USAGE_ID), UsageActionTypeEnum.LOADED,
             "Pulled from baseline for 'AACL Batch' Batch");
         expectLastCall().once();
         replay(aaclUsageRepository, usageAuditService, RupContextUtils.class);
@@ -321,7 +321,7 @@ public class AaclUsageServiceTest {
     @Test
     public void testGetUsageAges() {
         UsageFilter filter = new UsageFilter();
-        filter.setUsageBatchesIds(Collections.singleton("8adb441e-a709-4f58-8dc0-9264bfac2e23"));
+        filter.setUsageBatchesIds(Set.of("8adb441e-a709-4f58-8dc0-9264bfac2e23"));
         expect(aaclUsageRepository.findUsagePeriodsByFilter(filter)).andReturn(buildUsagePeriods()).once();
         replay(aaclUsageRepository);
         verifyUsageAges(aaclUsageService.getUsageAges(filter));
@@ -355,8 +355,7 @@ public class AaclUsageServiceTest {
         Set<String> ids =
             Sets.newHashSet("5377be35-29f2-4cc3-95e6-d024f3e91852", "11916ea7-9b3d-484c-9160-fe4fc9b31e52");
         String reason = "Exclude reason";
-        expect(
-            aaclUsageRepository.excludeFromScenarioByPayees(SCENARIO_ID, Collections.singleton(7000000001L), USER_NAME))
+        expect(aaclUsageRepository.excludeFromScenarioByPayees(SCENARIO_ID, Set.of(7000000001L), USER_NAME))
             .andReturn(ids).once();
         usageAuditService.logAction(ids, UsageActionTypeEnum.EXCLUDED_FROM_SCENARIO, reason);
         expectLastCall().once();
@@ -364,7 +363,7 @@ public class AaclUsageServiceTest {
         expectLastCall().once();
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
         replay(aaclUsageRepository, usageAuditService, RupContextUtils.class);
-        aaclUsageService.excludeDetailsFromScenarioByPayees(SCENARIO_ID, Collections.singleton(7000000001L), reason);
+        aaclUsageService.excludeDetailsFromScenarioByPayees(SCENARIO_ID, Set.of(7000000001L), reason);
         verify(aaclUsageRepository, usageAuditService, RupContextUtils.class);
     }
 
@@ -468,11 +467,11 @@ public class AaclUsageServiceTest {
         rightsholder.setId("378cafcf-cf21-4036-b223-5bd48b09c41f");
         rightsholder.setAccountNumber(2000073957L);
         expect(rightsholderService.getByScenarioId(SCENARIO_ID)).andReturn(List.of(rightsholder)).once();
-        expect(prmIntegrationService.getRollUps(Collections.singleton("378cafcf-cf21-4036-b223-5bd48b09c41f")))
+        expect(prmIntegrationService.getRollUps(Set.of("378cafcf-cf21-4036-b223-5bd48b09c41f")))
             .andReturn(Collections.emptyMap()).once();
         aaclUsageRepository.updatePayeeByAccountNumber(2000073957L, SCENARIO_ID, 2000073957L, "SYSTEM");
         expectLastCall().once();
-        rightsholderService.updateRighstholdersAsync(Collections.singleton(2000073957L));
+        rightsholderService.updateRighstholdersAsync(Set.of(2000073957L));
         expectLastCall().once();
         replay(aaclUsageRepository, rightsholderService, prmIntegrationService);
         aaclUsageService.populatePayees(SCENARIO_ID);

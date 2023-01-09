@@ -25,6 +25,7 @@ import com.copyright.rup.dist.foreign.service.api.ILicenseeClassService;
 import com.copyright.rup.dist.foreign.service.api.nts.INtsUsageService;
 
 import com.google.common.collect.Lists;
+
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
@@ -37,7 +38,6 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.IntStream;
@@ -114,7 +114,7 @@ public class FundPoolServiceTest {
     public void testCreateNtsFundPool() {
         mockStatic(RupContextUtils.class);
         FundPool fund = buildNtsFundPool();
-        Set<String> batchIds = Collections.singleton(RupPersistUtils.generateUuid());
+        Set<String> batchIds = Set.of(RupPersistUtils.generateUuid());
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
         fundPoolRepository.insert(fund);
         expectLastCall().once();
