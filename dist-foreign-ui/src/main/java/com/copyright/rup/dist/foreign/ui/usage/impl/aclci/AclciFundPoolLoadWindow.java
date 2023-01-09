@@ -76,7 +76,6 @@ class AclciFundPoolLoadWindow extends Window {
     private TextField gradeHeGrossAmount;
     private TextField curriculumDbGrossAmount;
     private TextField totalGrossAmount;
-    //TODO: try to remove
     private Binder.Binding<FundPool, Integer> gradeKto2NumberOfStudentsBinding;
     private Binder.Binding<FundPool, Integer> grade3to5NumberOfStudentsBinding;
     private Binder.Binding<FundPool, Integer> grade6to8NumberOfStudentsBinding;
@@ -378,23 +377,23 @@ class AclciFundPoolLoadWindow extends Window {
     }
 
     private SerializablePredicate<Integer> gradeNumberOfStudentsAllZeroValidator() {
-        return value -> isNotCurriculumSplitPercentEqualToHundred() || 0 == value;
+        return value -> isCurriculumDbSplitPercentNotEqualToHundred() || 0 == value;
     }
 
     //TODO: check if can be simplified
     private SerializablePredicate<Integer> gradeNumberOfStudentsAtLeastOneNotZeroValidator() {
         return value -> {
-            String gradeKto2NumOfStudents = gradeKto2NumberOfStudents.getValue();
-            String grade3to5NumOfStudents = grade3to5NumberOfStudents.getValue();
-            String grade6to8NumOfStudents = grade6to8NumberOfStudents.getValue();
-            String grade9to12NumOfStudents = grade9to12NumberOfStudents.getValue();
-            String gradeHeNumOfStudents = gradeHeNumberOfStudents.getValue();
-            if (isNotCurriculumSplitPercentEqualToHundred()
-                && StringUtils.isNumeric(gradeKto2NumOfStudents) && 10 >= StringUtils.length(gradeKto2NumOfStudents)
-                && StringUtils.isNumeric(grade3to5NumOfStudents) && 10 >= StringUtils.length(grade3to5NumOfStudents)
-                && StringUtils.isNumeric(grade6to8NumOfStudents) && 10 >= StringUtils.length(grade6to8NumOfStudents)
-                && StringUtils.isNumeric(grade9to12NumOfStudents) && 10 >= StringUtils.length(grade6to8NumOfStudents)
-                && StringUtils.isNumeric(gradeHeNumOfStudents) && 10 >= StringUtils.length(gradeHeNumOfStudents)) {
+            String gradeKto2Number = gradeKto2NumberOfStudents.getValue();
+            String grade3to5Number = grade3to5NumberOfStudents.getValue();
+            String grade6to8Number = grade6to8NumberOfStudents.getValue();
+            String grade9to12Number = grade9to12NumberOfStudents.getValue();
+            String gradeHeNumber = gradeHeNumberOfStudents.getValue();
+            if (isCurriculumDbSplitPercentNotEqualToHundred()
+                && StringUtils.isNumeric(gradeKto2Number) && 10 >= StringUtils.length(gradeKto2Number)
+                && StringUtils.isNumeric(grade3to5Number) && 10 >= StringUtils.length(grade3to5Number)
+                && StringUtils.isNumeric(grade6to8Number) && 10 >= StringUtils.length(grade6to8Number)
+                && StringUtils.isNumeric(grade9to12Number) && 10 >= StringUtils.length(grade6to8Number)
+                && StringUtils.isNumeric(gradeHeNumber) && 10 >= StringUtils.length(gradeHeNumber)) {
                 return 0 < Integer.parseInt(gradeKto2NumberOfStudents.getValue()) ||
                     0 < Integer.parseInt(grade3to5NumberOfStudents.getValue()) ||
                     0 < Integer.parseInt(grade6to8NumberOfStudents.getValue()) ||
@@ -407,7 +406,7 @@ class AclciFundPoolLoadWindow extends Window {
     }
 
     //TODO: check if can be simplified
-    private boolean isNotCurriculumSplitPercentEqualToHundred() {
+    private boolean isCurriculumDbSplitPercentNotEqualToHundred() {
         if (StringUtils.isNotBlank(curriculumDbSplitPercent.getValue())) {
             Result<BigDecimal> decimalResult = new StringToBigDecimalConverter(StringUtils.EMPTY)
                 .convertToModel(curriculumDbSplitPercent.getValue(), new ValueContext());
@@ -419,7 +418,7 @@ class AclciFundPoolLoadWindow extends Window {
     }
 
     private FundPool buildFundPool() {
-        FundPool fundPool = binder.getBean();
+        FundPool fundPool = new FundPool(binder.getBean());
         AclciFields aclciFields = fundPool.getAclciFields();
         aclciFields.setGrossAmount(aclciFields.getGrossAmount().setScale(SCALE_2, BigDecimal.ROUND_HALF_UP));
         aclciFields.setCurriculumDbSplitPercent(aclciFields.getCurriculumDbSplitPercent()
@@ -430,12 +429,13 @@ class AclciFundPoolLoadWindow extends Window {
     private void binderStatusChangeListener(StatusChangeEvent event) {
         if (areRequiredFieldsNotEmpty() && event.getBinder().isValid()) {
             FundPool fundPool = usageController.calculateAclciFundPoolAmounts(buildFundPool());
-            gradeKto2GrossAmount.setValue(fundPool.getAclciFields().getGradeKto2GrossAmount().toString());
-            grade3to5GrossAmount.setValue(fundPool.getAclciFields().getGrade3to5GrossAmount().toString());
-            grade6to8GrossAmount.setValue(fundPool.getAclciFields().getGrade6to8GrossAmount().toString());
-            grade9to12GrossAmount.setValue(fundPool.getAclciFields().getGrade9to12GrossAmount().toString());
-            gradeHeGrossAmount.setValue(fundPool.getAclciFields().getGradeHeGrossAmount().toString());
-            curriculumDbGrossAmount.setValue(fundPool.getAclciFields().getCurriculumDbGrossAmount().toString());
+            AclciFields aclciFields = fundPool.getAclciFields();
+            gradeKto2GrossAmount.setValue(aclciFields.getGradeKto2GrossAmount().toString());
+            grade3to5GrossAmount.setValue(aclciFields.getGrade3to5GrossAmount().toString());
+            grade6to8GrossAmount.setValue(aclciFields.getGrade6to8GrossAmount().toString());
+            grade9to12GrossAmount.setValue(aclciFields.getGrade9to12GrossAmount().toString());
+            gradeHeGrossAmount.setValue(aclciFields.getGradeHeGrossAmount().toString());
+            curriculumDbGrossAmount.setValue(aclciFields.getCurriculumDbGrossAmount().toString());
             totalGrossAmount.setValue(fundPool.getTotalAmount().toString());
         } else {
             gradeKto2GrossAmount.clear();

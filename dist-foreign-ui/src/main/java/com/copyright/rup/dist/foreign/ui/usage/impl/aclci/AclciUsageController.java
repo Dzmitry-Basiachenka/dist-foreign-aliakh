@@ -142,7 +142,7 @@ public class AclciUsageController extends CommonUsageController implements IAclc
 
     @Override
     public void createAclciFundPool(FundPool fundPool) {
-        //TODO: implement: fundPoolService.createAclciFundPool(fundPool);
+        fundPoolService.createAclciFundPool(fundPool);
     }
 
     @Override

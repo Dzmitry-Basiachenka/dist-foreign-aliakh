@@ -402,7 +402,7 @@ class SalFundPoolLoadWindow extends Window {
     }
 
     private SerializablePredicate<Integer> gradeNumberOfStudentsAllZeroValidator() {
-        return value -> isNotItemBankSplitPercentEqualToHundred() || 0 == value;
+        return value -> isItemBankSplitPercentNotEqualToHundred() || 0 == value;
     }
 
     private SerializablePredicate<Integer> gradeNumberOfStudentsAtLeastOneNotZeroValidator() {
@@ -410,7 +410,7 @@ class SalFundPoolLoadWindow extends Window {
             String gradeKto5NumOfStudents = gradeKto5NumberOfStudents.getValue();
             String grade6to8NumOfStudents = grade6to8NumberOfStudents.getValue();
             String grade9to12NumOfStudents = grade9to12NumberOfStudents.getValue();
-            if (isNotItemBankSplitPercentEqualToHundred()
+            if (isItemBankSplitPercentNotEqualToHundred()
                 && StringUtils.isNumeric(gradeKto5NumOfStudents) && 10 >= StringUtils.length(gradeKto5NumOfStudents)
                 && StringUtils.isNumeric(grade6to8NumOfStudents) && 10 >= StringUtils.length(grade6to8NumOfStudents)
                 && StringUtils.isNumeric(grade9to12NumOfStudents) && 10 >= StringUtils.length(grade6to8NumOfStudents)) {
@@ -423,7 +423,7 @@ class SalFundPoolLoadWindow extends Window {
         };
     }
 
-    private boolean isNotItemBankSplitPercentEqualToHundred() {
+    private boolean isItemBankSplitPercentNotEqualToHundred() {
         if (StringUtils.isNotBlank(itemBankSplitPercent.getValue())) {
             Result<BigDecimal> decimalResult = new StringToBigDecimalConverter(StringUtils.EMPTY)
                 .convertToModel(itemBankSplitPercent.getValue(), new ValueContext());
