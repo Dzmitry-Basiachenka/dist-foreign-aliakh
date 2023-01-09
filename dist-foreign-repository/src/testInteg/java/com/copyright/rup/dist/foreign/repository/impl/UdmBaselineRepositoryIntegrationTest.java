@@ -25,8 +25,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-
 import com.google.common.collect.Sets;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,9 +38,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.IntStream;
 
@@ -103,12 +103,12 @@ public class UdmBaselineRepositoryIntegrationTest {
     @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindCountByAllFilters() {
         UdmBaselineFilter filter = new UdmBaselineFilter();
-        filter.setPeriods(Collections.singleton(202012));
+        filter.setPeriods(Set.of(202012));
         filter.setChannel(UdmChannelEnum.CCC);
         filter.setUdmUsageOrigin(UdmUsageOriginEnum.SS);
-        filter.setDetailLicenseeClasses(Collections.singleton(buildDetailLicenseeClass(22)));
-        filter.setAggregateLicenseeClasses(Collections.singleton(buildAggregateLicenseeClass(56)));
-        filter.setReportedTypeOfUses(Collections.singleton(REPORTED_TYPE_OF_USE_1));
+        filter.setDetailLicenseeClasses(Set.of(buildDetailLicenseeClass(22)));
+        filter.setAggregateLicenseeClasses(Set.of(buildAggregateLicenseeClass(56)));
+        filter.setReportedTypeOfUses(Set.of(REPORTED_TYPE_OF_USE_1));
         filter.setTypeOfUse(TYPE_OF_USE_2);
         filter.setSurveyCountryExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, SURVEY_COUNTRY_1, null));
         filter.setWrWrkInstExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 20008506L, null));
@@ -152,13 +152,13 @@ public class UdmBaselineRepositoryIntegrationTest {
     @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindCountByFilterDetailLicenseeClasses() {
         verifyFilteringFindCountByFilter(filter ->
-            filter.setDetailLicenseeClasses(Collections.singleton(buildDetailLicenseeClass(22))), 1);
+            filter.setDetailLicenseeClasses(Set.of(buildDetailLicenseeClass(22))), 1);
         verifyFilteringFindCountByFilter(filter ->
-            filter.setDetailLicenseeClasses(Collections.singleton(buildDetailLicenseeClass(24))), 0);
+            filter.setDetailLicenseeClasses(Set.of(buildDetailLicenseeClass(24))), 0);
         verifyFilteringFindCountByFilter(filter ->
-            filter.setAggregateLicenseeClasses(Collections.singleton(buildAggregateLicenseeClass(56))), 1);
+            filter.setAggregateLicenseeClasses(Set.of(buildAggregateLicenseeClass(56))), 1);
         verifyFilteringFindCountByFilter(filter ->
-            filter.setAggregateLicenseeClasses(Collections.singleton(buildAggregateLicenseeClass(82))), 0);
+            filter.setAggregateLicenseeClasses(Set.of(buildAggregateLicenseeClass(82))), 0);
     }
 
     @Test
@@ -328,12 +328,12 @@ public class UdmBaselineRepositoryIntegrationTest {
     @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindDtosByAllFilters() {
         UdmBaselineFilter filter = new UdmBaselineFilter();
-        filter.setPeriods(Collections.singleton(202012));
+        filter.setPeriods(Set.of(202012));
         filter.setChannel(UdmChannelEnum.CCC);
         filter.setUdmUsageOrigin(UdmUsageOriginEnum.SS);
-        filter.setDetailLicenseeClasses(Collections.singleton(buildDetailLicenseeClass(22)));
-        filter.setAggregateLicenseeClasses(Collections.singleton(buildAggregateLicenseeClass(56)));
-        filter.setReportedTypeOfUses(Collections.singleton(REPORTED_TYPE_OF_USE_1));
+        filter.setDetailLicenseeClasses(Set.of(buildDetailLicenseeClass(22)));
+        filter.setAggregateLicenseeClasses(Set.of(buildAggregateLicenseeClass(56)));
+        filter.setReportedTypeOfUses(Set.of(REPORTED_TYPE_OF_USE_1));
         filter.setTypeOfUse(TYPE_OF_USE_2);
         filter.setSurveyCountryExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, SURVEY_COUNTRY_1, null));
         filter.setWrWrkInstExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 20008506L, null));
@@ -380,13 +380,13 @@ public class UdmBaselineRepositoryIntegrationTest {
     @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindDtosByFilterDetailLicenseeClasses() {
         verifyFilteringFindDtosByFilter(filter ->
-            filter.setDetailLicenseeClasses(Collections.singleton(buildDetailLicenseeClass(22))), USAGE_ID_1);
+            filter.setDetailLicenseeClasses(Set.of(buildDetailLicenseeClass(22))), USAGE_ID_1);
         verifyFilteringFindDtosByFilter(filter ->
-            filter.setDetailLicenseeClasses(Collections.singleton(buildDetailLicenseeClass(24))));
+            filter.setDetailLicenseeClasses(Set.of(buildDetailLicenseeClass(24))));
         verifyFilteringFindDtosByFilter(filter ->
-            filter.setAggregateLicenseeClasses(Collections.singleton(buildAggregateLicenseeClass(56))), USAGE_ID_1);
+            filter.setAggregateLicenseeClasses(Set.of(buildAggregateLicenseeClass(56))), USAGE_ID_1);
         verifyFilteringFindDtosByFilter(filter ->
-            filter.setAggregateLicenseeClasses(Collections.singleton(buildAggregateLicenseeClass(82))));
+            filter.setAggregateLicenseeClasses(Set.of(buildAggregateLicenseeClass(82))));
     }
 
     @Test
@@ -621,10 +621,10 @@ public class UdmBaselineRepositoryIntegrationTest {
             38908778L, "436be73d-82c9-4e53-bda6-b882e528bed7");
         assertEquals(3, baselineRepository.populateValueId(211512, wrWrkInstToValueIdMap, USER_NAME));
         UdmBaselineFilter filter = new UdmBaselineFilter();
-        filter.setPeriods(Collections.singleton(211512));
+        filter.setPeriods(Set.of(211512));
         verifyUdmBaselineDto(loadExpectedBaselineDto("json/udm/udm_baseline_dto_211512.json"),
             baselineRepository.findDtosByFilter(filter, null, null));
-        filter.setPeriods(Collections.singleton(211412));
+        filter.setPeriods(Set.of(211412));
         verifyUdmBaselineDto(loadExpectedBaselineDto("json/udm/udm_baseline_dto_211412.json"),
             baselineRepository.findDtosByFilter(filter, null, null));
     }
@@ -679,7 +679,7 @@ public class UdmBaselineRepositoryIntegrationTest {
 
     private void verifyFilteringFindCountByFilter(Consumer<UdmBaselineFilter> consumer, int count) {
         UdmBaselineFilter filter = new UdmBaselineFilter();
-        filter.setPeriods(Collections.singleton(202012));
+        filter.setPeriods(Set.of(202012));
         consumer.accept(filter);
         int usagesCount = baselineRepository.findCountByFilter(filter);
         assertEquals(count, usagesCount);
@@ -687,7 +687,7 @@ public class UdmBaselineRepositoryIntegrationTest {
 
     private void verifyFilteringFindDtosByFilter(Consumer<UdmBaselineFilter> consumer, String... usageIds) {
         UdmBaselineFilter filter = new UdmBaselineFilter();
-        filter.setPeriods(Collections.singleton(202012));
+        filter.setPeriods(Set.of(202012));
         consumer.accept(filter);
         List<UdmBaselineDto> usages = baselineRepository.findDtosByFilter(filter, null, null);
         assertEquals(usageIds.length, usages.size());
@@ -697,7 +697,7 @@ public class UdmBaselineRepositoryIntegrationTest {
 
     private void verifySortingFindDtosByFilter(String detailIdAsc, String detailIdDesc, String sortProperty) {
         UdmBaselineFilter filter = new UdmBaselineFilter();
-        filter.setPeriods(Collections.singleton(201906));
+        filter.setPeriods(Set.of(201906));
         List<UdmBaselineDto> usageDtos =
             baselineRepository.findDtosByFilter(filter, null, new Sort(sortProperty, Sort.Direction.ASC));
         assertEquals(detailIdAsc, usageDtos.get(0).getId());

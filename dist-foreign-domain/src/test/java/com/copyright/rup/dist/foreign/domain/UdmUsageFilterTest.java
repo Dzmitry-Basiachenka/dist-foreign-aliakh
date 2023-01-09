@@ -8,7 +8,6 @@ import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
 
 import org.junit.Test;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -23,8 +22,8 @@ import java.util.Set;
  */
 public class UdmUsageFilterTest {
 
-    private static final Set<String> USAGE_BATCH_IDS = Collections.singleton("Usage Batch Id");
-    private static final Set<Integer> PERIODS = Collections.singleton(202012);
+    private static final Set<String> USAGE_BATCH_IDS = Set.of("Usage Batch Id");
+    private static final Set<Integer> PERIODS = Set.of(202012);
 
     @Test
     public void testIsEmpty() {
@@ -45,7 +44,7 @@ public class UdmUsageFilterTest {
         assertFalse(udmUsageFilter.isEmpty());
         udmUsageFilter.setUdmUsageOrigin(null);
         assertTrue(udmUsageFilter.isEmpty());
-        udmUsageFilter.setUdmBatchesIds(Collections.singleton("63f3942c-0174-4d91-adf3-c310cb2c5c9f"));
+        udmUsageFilter.setUdmBatchesIds(Set.of("63f3942c-0174-4d91-adf3-c310cb2c5c9f"));
         assertFalse(udmUsageFilter.isEmpty());
     }
 

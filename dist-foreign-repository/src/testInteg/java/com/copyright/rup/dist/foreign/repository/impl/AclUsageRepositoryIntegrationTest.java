@@ -19,8 +19,8 @@ import com.copyright.rup.dist.foreign.domain.filter.AclUsageFilter;
 import com.copyright.rup.dist.foreign.domain.filter.FilterExpression;
 import com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum;
 import com.copyright.rup.dist.foreign.repository.api.IAclUsageRepository;
-
 import com.copyright.rup.dist.foreign.repository.impl.csv.CsvReportsTestHelper;
+
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -38,7 +38,6 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -78,15 +77,15 @@ public class AclUsageRepositoryIntegrationTest extends CsvReportsTestHelper {
     private static final String DIGITAL_TOU = "DIGITAL";
     private static final UdmUsageOriginEnum USAGE_ORIGIN = UdmUsageOriginEnum.RFA;
     private static final UdmChannelEnum CHANNEL = UdmChannelEnum.CCC;
-    private static final Set<Integer> PERIODS = Collections.singleton(202112);
+    private static final Set<Integer> PERIODS = Set.of(202112);
     private static final int DISTRIBUTION_PERIOD = 202212;
     private static final List<Integer> PERIOD_PRIORS = Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11);
     private static final Set<DetailLicenseeClass> DETAIL_LICENSEE_CLASSES =
-        Collections.singleton(buildDetailLicenseeClass(2, "Textiles, Apparel, etc."));
+        Set.of(buildDetailLicenseeClass(2, "Textiles, Apparel, etc."));
     private static final Set<AggregateLicenseeClass> AGGREGATE_LICENSEE_CLASSES =
-        Collections.singleton(buildAggregateLicenseeClass(51));
-    private static final Set<PublicationType> PUB_TYPES = Collections.singleton(buildPubType());
-    private static final Set<String> REPORTED_TYPE_OF_USES = Collections.singleton("PRINT_COPIES");
+        Set.of(buildAggregateLicenseeClass(51));
+    private static final Set<PublicationType> PUB_TYPES = Set.of(buildPubType());
+    private static final Set<String> REPORTED_TYPE_OF_USES = Set.of("PRINT_COPIES");
     private static final String TYPE_OF_USE = "PRINT";
     private static final String USAGE_DETAIL_ID = "OGN674GHHHB0111";
     private static final String USAGE_DETAIL_ID_DIFFERENT_CASE = "ogn674ghhhb0111";
@@ -709,9 +708,9 @@ public class AclUsageRepositoryIntegrationTest extends CsvReportsTestHelper {
         assertFalse(aclUsageRepository.usageExistForLicenseeClassesAndTypeOfUse(batchId, grantSetId,
             Sets.newHashSet(1, 3), PRINT_TOU));
         assertFalse(aclUsageRepository.usageExistForLicenseeClassesAndTypeOfUse(batchId, grantSetId,
-            Collections.singleton(2), DIGITAL_TOU));
+            Set.of(2), DIGITAL_TOU));
         assertTrue(aclUsageRepository.usageExistForLicenseeClassesAndTypeOfUse(batchId, grantSetId,
-            Collections.singleton(2), PRINT_TOU));
+            Set.of(2), PRINT_TOU));
     }
 
     @Test

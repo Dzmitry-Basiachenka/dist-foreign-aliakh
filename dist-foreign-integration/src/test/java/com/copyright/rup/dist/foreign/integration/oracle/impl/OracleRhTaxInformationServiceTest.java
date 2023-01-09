@@ -30,8 +30,8 @@ import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.Collections;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Verifies {@link OracleRhTaxInformationService}.
@@ -69,8 +69,7 @@ public class OracleRhTaxInformationServiceTest {
                 TestUtils.fileToString(OracleRhTaxInformationServiceTest.class, "rh_tax_information_response.json"))
             .once();
         replay(restTemplate);
-        Map<Long, RhTaxInformation> rhTaxInformationMap =
-            oracleRhTaxInformationService.getRhTaxInformation(Collections.singleton(
+        Map<Long, RhTaxInformation> rhTaxInformationMap = oracleRhTaxInformationService.getRhTaxInformation(Set.of(
                 new OracleRhTaxInformationRequest(EXPECTED_ACCOUNT_NUMBER, EXPECTED_ACCOUNT_NUMBER)));
         assertNotNull(rhTaxInformationMap);
         assertEquals(1, rhTaxInformationMap.size());
@@ -101,8 +100,7 @@ public class OracleRhTaxInformationServiceTest {
             .andReturn(TestUtils.fileToString(OracleRhTaxInformationServiceTest.class, "response_not_array.json"))
             .once();
         replay(restTemplate);
-        Map<Long, RhTaxInformation> rhTaxInformationMap =
-            oracleRhTaxInformationService.getRhTaxInformation(Collections.singleton(
+        Map<Long, RhTaxInformation> rhTaxInformationMap = oracleRhTaxInformationService.getRhTaxInformation(Set.of(
                 new OracleRhTaxInformationRequest(EXPECTED_ACCOUNT_NUMBER, EXPECTED_ACCOUNT_NUMBER)));
         assertNotNull(rhTaxInformationMap);
         assertTrue(rhTaxInformationMap.isEmpty());
@@ -124,8 +122,7 @@ public class OracleRhTaxInformationServiceTest {
             .andReturn(TestUtils.fileToString(OracleRhTaxInformationServiceTest.class, "response_null_node.json"))
             .once();
         replay(restTemplate);
-        Map<Long, RhTaxInformation> rhTaxInformationMap =
-            oracleRhTaxInformationService.getRhTaxInformation(Collections.singleton(
+        Map<Long, RhTaxInformation> rhTaxInformationMap = oracleRhTaxInformationService.getRhTaxInformation(Set.of(
                 new OracleRhTaxInformationRequest(EXPECTED_ACCOUNT_NUMBER, EXPECTED_ACCOUNT_NUMBER)));
         assertNotNull(rhTaxInformationMap);
         assertTrue(urlCapture.getValue().contains(RH_TAX_INFO_URL));

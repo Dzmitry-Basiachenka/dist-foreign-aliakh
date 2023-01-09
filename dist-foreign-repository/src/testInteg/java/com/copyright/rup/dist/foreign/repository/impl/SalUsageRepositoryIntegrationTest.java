@@ -40,7 +40,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.List;
@@ -173,16 +172,15 @@ public class SalUsageRepositoryIntegrationTest {
     @TestData(fileName = FOLDER_NAME + "find-dtos-by-filter.groovy")
     public void testFindCountByFilter() {
         assertEquals(1, salUsageRepository.findCountByFilter(buildUsageFilter(
-            Collections.singleton(USAGE_BATCH_ID_1), UsageStatusEnum.NEW, SAL_PRODUCT_FAMILY, SalDetailTypeEnum.IB)));
+            Set.of(USAGE_BATCH_ID_1), UsageStatusEnum.NEW, SAL_PRODUCT_FAMILY, SalDetailTypeEnum.IB)));
     }
 
     @Test
     @TestData(fileName = FOLDER_NAME + "find-dtos-by-filter.groovy")
     public void testFindDtosByFilter() throws IOException {
         verifyUsageDtos(loadExpectedUsageDtos("json/sal/sal_usage_dto_5ab5e80b.json"),
-            salUsageRepository.findDtosByFilter(buildUsageFilter(
-                Collections.singleton(USAGE_BATCH_ID_1), UsageStatusEnum.NEW, SAL_PRODUCT_FAMILY, SalDetailTypeEnum.IB),
-                null, new Sort(DETAIL_ID_KEY, Direction.ASC)));
+            salUsageRepository.findDtosByFilter(buildUsageFilter(Set.of(USAGE_BATCH_ID_1), UsageStatusEnum.NEW,
+                SAL_PRODUCT_FAMILY, SalDetailTypeEnum.IB), null, new Sort(DETAIL_ID_KEY, Direction.ASC)));
     }
 
     @Test
@@ -291,8 +289,7 @@ public class SalUsageRepositoryIntegrationTest {
     @TestData(fileName = FOLDER_NAME + "delete-usage-data.groovy")
     public void testDeleteUsageData() {
         assertTrue(salUsageRepository.usageDataExist(USAGE_BATCH_ID_3));
-        UsageFilter usageFilter =
-            buildUsageFilter(Collections.singleton(USAGE_BATCH_ID_3), UsageStatusEnum.NEW,
+        UsageFilter usageFilter = buildUsageFilter(Set.of(USAGE_BATCH_ID_3), UsageStatusEnum.NEW,
                 SAL_PRODUCT_FAMILY, null);
         assertEquals(3, salUsageRepository.findDtosByFilter(usageFilter, null, null).size());
         salUsageRepository.deleteUsageData(USAGE_BATCH_ID_3);
@@ -304,7 +301,7 @@ public class SalUsageRepositoryIntegrationTest {
     @TestData(fileName = FOLDER_NAME + "delete-by-batch-id.groovy")
     public void testDeleteByBatchId() {
         UsageFilter filter = new UsageFilter();
-        filter.setUsageBatchesIds(Collections.singleton("b54293db-bfb9-478a-bc13-d70aef5d3ecb"));
+        filter.setUsageBatchesIds(Set.of("b54293db-bfb9-478a-bc13-d70aef5d3ecb"));
         assertEquals(2, salUsageRepository.findCountByFilter(filter));
         salUsageRepository.deleteByBatchId("b54293db-bfb9-478a-bc13-d70aef5d3ecb");
         assertEquals(0, salUsageRepository.findCountByFilter(filter));
@@ -314,10 +311,10 @@ public class SalUsageRepositoryIntegrationTest {
     @TestData(fileName = FOLDER_NAME + "find-usage-data-grade-groups.groovy")
     public void testFindUsageDataGradeGroups() {
         UsageFilter filter = new UsageFilter();
-        filter.setUsageBatchesIds(Collections.singleton(USAGE_BATCH_ID_1));
+        filter.setUsageBatchesIds(Set.of(USAGE_BATCH_ID_1));
         assertEquals(List.of(SalGradeGroupEnum.GRADE9_12),
             salUsageRepository.findUsageDataGradeGroups(filter));
-        filter.setUsageBatchesIds(Collections.singleton(USAGE_BATCH_ID_2));
+        filter.setUsageBatchesIds(Set.of(USAGE_BATCH_ID_2));
         assertEquals(List.of(SalGradeGroupEnum.GRADE6_8),
             salUsageRepository.findUsageDataGradeGroups(filter));
     }
@@ -342,9 +339,8 @@ public class SalUsageRepositoryIntegrationTest {
             assertNull(usage.getScenarioId());
             assertEquals(UsageStatusEnum.ELIGIBLE, usage.getStatus());
         });
-        UsageFilter usageFilter =
-            buildUsageFilter(Collections.singleton("87a8b327-6fcc-417f-8fd6-bb6615103b53"), UsageStatusEnum.ELIGIBLE,
-                SAL_PRODUCT_FAMILY, null);
+        UsageFilter usageFilter = buildUsageFilter(Set.of("87a8b327-6fcc-417f-8fd6-bb6615103b53"),
+            UsageStatusEnum.ELIGIBLE, SAL_PRODUCT_FAMILY, null);
         salUsageRepository.addToScenario(SCENARIO_ID_1, usageFilter, USER_NAME);
         salUsageRepository.findByIds(usageIds).forEach(usage -> {
             assertEquals(SCENARIO_ID_1, usage.getScenarioId());
@@ -458,7 +454,7 @@ public class SalUsageRepositoryIntegrationTest {
     @TestData(fileName = FIND_FOR_AUDIT)
     public void testFindForAuditByRightsholder() {
         AuditFilter filter = new AuditFilter();
-        filter.setRhAccountNumbers(Collections.singleton(2000173934L));
+        filter.setRhAccountNumbers(Set.of(2000173934L));
         assertEquals(1, salUsageRepository.findCountForAudit(filter));
         List<UsageDto> usages = salUsageRepository.findForAudit(filter, new Pageable(0, 10), null);
         verifyUsageDtos(usages, USAGE_ID_6);
@@ -468,7 +464,7 @@ public class SalUsageRepositoryIntegrationTest {
     @TestData(fileName = FIND_FOR_AUDIT)
     public void testFindForAuditByLicensee() {
         AuditFilter filter = new AuditFilter();
-        filter.setLicenseeAccountNumbers(Collections.singleton(2000017003L));
+        filter.setLicenseeAccountNumbers(Set.of(2000017003L));
         assertEquals(2, salUsageRepository.findCountForAudit(filter));
         List<UsageDto> usages = salUsageRepository.findForAudit(filter, new Pageable(0, 10), null);
         verifyUsageDtos(usages, USAGE_ID_8, USAGE_ID_9);
@@ -478,7 +474,7 @@ public class SalUsageRepositoryIntegrationTest {
     @TestData(fileName = FIND_FOR_AUDIT)
     public void testFindForAuditByBatch() {
         AuditFilter filter = new AuditFilter();
-        filter.setBatchesIds(Collections.singleton(USAGE_BATCH_ID_4));
+        filter.setBatchesIds(Set.of(USAGE_BATCH_ID_4));
         assertEquals(2, salUsageRepository.findCountForAudit(filter));
         List<UsageDto> usages = salUsageRepository.findForAudit(filter, new Pageable(0, 10), null);
         verifyUsageDtos(usages, USAGE_ID_6, USAGE_ID_7);
@@ -547,7 +543,7 @@ public class SalUsageRepositoryIntegrationTest {
     @TestData(fileName = FIND_FOR_AUDIT)
     public void testFindForAuditSortingByCommonUsageInfo() {
         AuditFilter filter = new AuditFilter();
-        filter.setBatchesIds(Collections.singleton(USAGE_BATCH_ID_4));
+        filter.setBatchesIds(Set.of(USAGE_BATCH_ID_4));
         verifyFindForAuditSort(filter, DETAIL_ID_KEY, Direction.ASC, USAGE_ID_6, USAGE_ID_7);
         verifyFindForAuditSort(filter, DETAIL_ID_KEY, Direction.DESC, USAGE_ID_7, USAGE_ID_6);
         verifyFindForAuditSort(filter, STATUS_KEY, Direction.ASC, USAGE_ID_6, USAGE_ID_7);
@@ -584,7 +580,7 @@ public class SalUsageRepositoryIntegrationTest {
     @TestData(fileName = FIND_FOR_AUDIT)
     public void testFindForAuditSortingBySalUsageInfo() {
         AuditFilter filter = new AuditFilter();
-        filter.setBatchesIds(Collections.singleton(USAGE_BATCH_ID_4));
+        filter.setBatchesIds(Set.of(USAGE_BATCH_ID_4));
         verifyFindForAuditSort(filter, DETAIL_TYPE_KEY, Direction.ASC, USAGE_ID_6, USAGE_ID_7);
         verifyFindForAuditSort(filter, DETAIL_TYPE_KEY, Direction.DESC, USAGE_ID_7, USAGE_ID_6);
         verifyFindForAuditSort(filter, REPORTED_WORK_PORTION_ID_KEY, Direction.ASC, USAGE_ID_6, USAGE_ID_7);
@@ -631,7 +627,7 @@ public class SalUsageRepositoryIntegrationTest {
     @TestData(fileName = FIND_FOR_AUDIT)
     public void testFindForAuditSortingByBatchInfo() {
         AuditFilter filter = new AuditFilter();
-        filter.setBatchesIds(Collections.singleton(USAGE_BATCH_ID_4));
+        filter.setBatchesIds(Set.of(USAGE_BATCH_ID_4));
         verifyFindForAuditSort(filter, BATCH_NAME_KEY, Direction.DESC, USAGE_ID_6, USAGE_ID_7);
         verifyFindForAuditSort(filter, BATCH_NAME_KEY, Direction.ASC, USAGE_ID_6, USAGE_ID_7);
         verifyFindForAuditSort(filter, BATCH_PERIOD_END_DATE_KEY, Direction.ASC, USAGE_ID_6, USAGE_ID_7);
@@ -642,7 +638,7 @@ public class SalUsageRepositoryIntegrationTest {
     @TestData(fileName = FIND_FOR_AUDIT)
     public void testFindForAuditSortingByPaidInfo() {
         AuditFilter filter = new AuditFilter();
-        filter.setBatchesIds(Collections.singleton("a375c049-1289-4c85-994b-b2bd8ac043cf"));
+        filter.setBatchesIds(Set.of("a375c049-1289-4c85-994b-b2bd8ac043cf"));
         verifyFindForAuditSort(filter, PAYEE_ACCOUNT_NUMBER_KEY, Direction.ASC, USAGE_ID_8, USAGE_ID_9);
         verifyFindForAuditSort(filter, PAYEE_ACCOUNT_NUMBER_KEY, Direction.DESC, USAGE_ID_8, USAGE_ID_9);
         verifyFindForAuditSort(filter, PAYEE_NAME_KEY, Direction.ASC, USAGE_ID_8, USAGE_ID_9);

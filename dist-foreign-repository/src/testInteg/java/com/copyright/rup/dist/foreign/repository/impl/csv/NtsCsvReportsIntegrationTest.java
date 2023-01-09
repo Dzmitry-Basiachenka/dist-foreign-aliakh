@@ -20,7 +20,7 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
-import java.util.Collections;
+import java.util.Set;
 
 /**
  * Integration test for {@link com.copyright.rup.dist.foreign.repository.impl.NtsReportRepository}.
@@ -60,7 +60,7 @@ public class NtsCsvReportsIntegrationTest extends CsvReportsTestHelper {
     @TestData(fileName = WRITE_AUDIT_CSV_REPORT)
     public void testWriteAuditCsvReport() throws Exception {
         AuditFilter auditFilter = new AuditFilter();
-        auditFilter.setBatchesIds(Collections.singleton("0c0a379a-461c-4e84-8062-326ece3c1f65"));
+        auditFilter.setBatchesIds(Set.of("0c0a379a-461c-4e84-8062-326ece3c1f65"));
         auditFilter.setProductFamily("NTS");
         assertFilesWithExecutor(outputStream -> reportRepository.writeAuditNtsCsvReport(auditFilter, outputStream),
             "nts/audit_usages_report.csv");
@@ -181,16 +181,15 @@ public class NtsCsvReportsIntegrationTest extends CsvReportsTestHelper {
     @TestData(fileName = WRITE_WORK_CLASSIFICATION_CSV_REPORT)
     public void testWriteWorkClassificationCsvReportWithBatchIds() throws Exception {
         assertFilesWithExecutor(outputStream ->
-                reportRepository.writeWorkClassificationCsvReport(
-                    Collections.singleton("e17ebc80-e74e-436d-ba6e-acf3d355b7ff"), "987654321", outputStream),
-            "nts/work_classification_report_by_batch_ids.csv");
+                reportRepository.writeWorkClassificationCsvReport(Set.of("e17ebc80-e74e-436d-ba6e-acf3d355b7ff"),
+                    "987654321", outputStream), "nts/work_classification_report_by_batch_ids.csv");
     }
 
     @Test
     @TestData(fileName = WRITE_WORK_CLASSIFICATION_CSV_REPORT)
     public void testWriteWorkClassificationCsvReportWithEmptyBatchIds() throws Exception {
         assertFilesWithExecutor(outputStream ->
-            reportRepository.writeWorkClassificationCsvReport(Collections.singleton("not-existing-uid"),
+            reportRepository.writeWorkClassificationCsvReport(Set.of("not-existing-uid"),
                 null, outputStream), "nts/work_classification_report_empty.csv");
     }
 

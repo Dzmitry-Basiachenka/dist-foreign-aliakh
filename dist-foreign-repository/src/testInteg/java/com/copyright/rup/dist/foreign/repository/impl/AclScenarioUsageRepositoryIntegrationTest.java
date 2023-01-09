@@ -868,7 +868,7 @@ public class AclScenarioUsageRepositoryIntegrationTest {
             .thenComparing(RightsholderPayeeProductFamilyHolder::getPayee,
                 Comparator.comparing(Rightsholder::getAccountNumber))
             .thenComparing(RightsholderPayeeProductFamilyHolder::getProductFamily);
-        Set<String> scenarioIds = Collections.singleton("f146c64c-6cf7-4d8d-9011-132ee6bf2f3b");
+        Set<String> scenarioIds = Set.of("f146c64c-6cf7-4d8d-9011-132ee6bf2f3b");
         List<RightsholderPayeeProductFamilyHolder> actual =
             aclScenarioUsageRepository.findRightsholderPayeeProductFamilyHoldersByAclScenarioIds(scenarioIds)
                 .stream()

@@ -30,8 +30,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.IntStream;
 
@@ -100,11 +100,11 @@ public class AclGrantDetailRepositoryIntegrationTest {
     @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindCountByAllFilter() {
         AclGrantDetailFilter filter = new AclGrantDetailFilter();
-        filter.setGrantSetNames(Collections.singleton(ACL_GRANT_SET_NAME));
+        filter.setGrantSetNames(Set.of(ACL_GRANT_SET_NAME));
         filter.setGrantSetPeriod(202106);
-        filter.setGrantStatuses(Collections.singleton(GRANT_STATUS));
-        filter.setLicenseTypes(Collections.singleton("ACL"));
-        filter.setTypeOfUses(Collections.singleton(PRINT_TOU));
+        filter.setGrantStatuses(Set.of(GRANT_STATUS));
+        filter.setLicenseTypes(Set.of("ACL"));
+        filter.setTypeOfUses(Set.of(PRINT_TOU));
         filter.setWrWrkInstExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, WR_WRK_INST, null));
         filter.setRhAccountNumberExpression(new FilterExpression<>(FilterOperatorEnum.CONTAINS, 28511, null));
         filter.setRhNameExpression(new FilterExpression<>(FilterOperatorEnum.CONTAINS, "Greenleaf", null));
@@ -116,16 +116,15 @@ public class AclGrantDetailRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindCountByBasicFilters() {
-        assertFilteringFindCountByFilter(
-            filter -> filter.setGrantSetNames(Collections.singleton(ACL_GRANT_SET_NAME)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setGrantSetNames(Set.of(ACL_GRANT_SET_NAME)), 1);
     }
 
     @Test
     @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindCountByAdditionalFilter() {
-        assertFilteringFindCountByFilter(filter -> filter.setLicenseTypes(Collections.singleton(ACL_LICENSE_TYPE)), 1);
-        assertFilteringFindCountByFilter(filter -> filter.setGrantStatuses(Collections.singleton(GRANT_STATUS)), 3);
-        assertFilteringFindCountByFilter(filter -> filter.setTypeOfUses(Collections.singleton(PRINT_TOU)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setLicenseTypes(Set.of(ACL_LICENSE_TYPE)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setGrantStatuses(Set.of(GRANT_STATUS)), 3);
+        assertFilteringFindCountByFilter(filter -> filter.setTypeOfUses(Set.of(PRINT_TOU)), 1);
         assertFilteringFindCountByFilter(filter -> filter.setGrantSetPeriod(202206), 1);
     }
 
@@ -218,11 +217,11 @@ public class AclGrantDetailRepositoryIntegrationTest {
     @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindDtosByAllFilters() {
         AclGrantDetailFilter filter = new AclGrantDetailFilter();
-        filter.setGrantSetNames(Collections.singleton(ACL_GRANT_SET_NAME));
+        filter.setGrantSetNames(Set.of(ACL_GRANT_SET_NAME));
         filter.setGrantSetPeriod(202106);
-        filter.setGrantStatuses(Collections.singleton(GRANT_STATUS));
-        filter.setLicenseTypes(Collections.singleton(ACL_LICENSE_TYPE));
-        filter.setTypeOfUses(Collections.singleton(PRINT_TOU));
+        filter.setGrantStatuses(Set.of(GRANT_STATUS));
+        filter.setLicenseTypes(Set.of(ACL_LICENSE_TYPE));
+        filter.setTypeOfUses(Set.of(PRINT_TOU));
         filter.setWrWrkInstExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, WR_WRK_INST, null));
         filter.setRhAccountNumberExpression(new FilterExpression<>(FilterOperatorEnum.CONTAINS, 28511, null));
         filter.setRhNameExpression(new FilterExpression<>(FilterOperatorEnum.CONTAINS, "Greenleaf", null));
@@ -236,18 +235,18 @@ public class AclGrantDetailRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindDtosByBasicFilters() {
-        assertFilteringFindDtosByFilter(filter -> filter.setGrantSetNames(Collections.singleton(ACL_GRANT_SET_NAME)),
+        assertFilteringFindDtosByFilter(filter -> filter.setGrantSetNames(Set.of(ACL_GRANT_SET_NAME)),
             ACL_GRANT_DETAIL_UID_3);
     }
 
     @Test
     @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindDtosByAdditionalFilter() {
-        assertFilteringFindDtosByFilter(filter -> filter.setLicenseTypes(Collections.singleton(ACL_LICENSE_TYPE)),
+        assertFilteringFindDtosByFilter(filter -> filter.setLicenseTypes(Set.of(ACL_LICENSE_TYPE)),
             ACL_GRANT_DETAIL_UID_3);
-        assertFilteringFindDtosByFilter(filter -> filter.setGrantStatuses(Collections.singleton(GRANT_STATUS)),
+        assertFilteringFindDtosByFilter(filter -> filter.setGrantStatuses(Set.of(GRANT_STATUS)),
             ACL_GRANT_DETAIL_UID_4, ACL_GRANT_DETAIL_UID_3, ACL_GRANT_DETAIL_UID_2);
-        assertFilteringFindDtosByFilter(filter -> filter.setTypeOfUses(Collections.singleton(PRINT_TOU)),
+        assertFilteringFindDtosByFilter(filter -> filter.setTypeOfUses(Set.of(PRINT_TOU)),
             ACL_GRANT_DETAIL_UID_3);
         assertFilteringFindDtosByFilter(filter -> filter.setGrantSetPeriod(202206), ACL_GRANT_DETAIL_UID_2);
     }
@@ -382,7 +381,7 @@ public class AclGrantDetailRepositoryIntegrationTest {
         AclGrantDetailDto expectedGrantDetailDto = loadExpectedDtos("json/acl/acl_grant_detail_for_update.json").get(0);
         aclGrantDetailRepository.updateGrant(expectedGrantDetailDto);
         AclGrantDetailFilter aclGrantDetailFilter = new AclGrantDetailFilter();
-        aclGrantDetailFilter.setGrantSetNames(Collections.singleton("ACL Grant Set 2022"));
+        aclGrantDetailFilter.setGrantSetNames(Set.of("ACL Grant Set 2022"));
         aclGrantDetailFilter.setWrWrkInstExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, WR_WRK_INST, null));
         aclGrantDetailFilter.setRhAccountNumberExpression(

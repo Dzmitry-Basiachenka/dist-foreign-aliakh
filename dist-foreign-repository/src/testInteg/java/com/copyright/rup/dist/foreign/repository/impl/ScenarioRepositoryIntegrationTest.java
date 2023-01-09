@@ -44,11 +44,11 @@ import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -590,7 +590,7 @@ public class ScenarioRepositoryIntegrationTest {
         usageFilter.setUsageBatchesIds(Sets.newHashSet("7c8f48fe-3429-43fd-9389-d9b77fa9f3a0",
             "ac9bae73-9bd7-477c-bc95-e73daee455ee", "5769e9fe-1b4b-4399-841c-73108893f7d2",
             "d8baa8e6-10fd-4c3c-8851-b1e6883e8cde", "f8f23728-75ac-4114-b910-2d7abc061217"));
-        usageFilter.setRhAccountNumbers(Collections.singleton(2000017001L));
+        usageFilter.setRhAccountNumbers(Set.of(2000017001L));
         usageFilter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
         usageFilter.setProductFamily(NTS_PRODUCT_FAMILY);
         usageFilter.setPaymentDate(LocalDate.of(2020, 1, 1));

@@ -31,8 +31,8 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.IntStream;
 
 /**
@@ -153,7 +153,7 @@ public class AclFundPoolRepositoryIntegrationTest {
     public void testFindDtosByFilter() {
         AclFundPoolDetailFilter filter = new AclFundPoolDetailFilter();
         filter.setLicenseType("ACL");
-        filter.setAggregateLicenseeClasses(Collections.singleton(buildAggregateLicenseeClass(51)));
+        filter.setAggregateLicenseeClasses(Set.of(buildAggregateLicenseeClass(51)));
         List<AclFundPoolDetailDto> details = repository.findDtosByFilter(filter);
         assertEquals(1, details.size());
         verifyFundPoolDetail(

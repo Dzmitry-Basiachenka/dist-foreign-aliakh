@@ -214,7 +214,7 @@ public class AaclUsageRepositoryIntegrationTest {
     @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindDtosByBatchFilter() {
         UsageFilter usageFilter = buildUsageFilter();
-        usageFilter.setUsageBatchesIds(Collections.singleton("38e3190a-cf2b-4a2a-8a14-1f6e5f09011c"));
+        usageFilter.setUsageBatchesIds(Set.of("38e3190a-cf2b-4a2a-8a14-1f6e5f09011c"));
         verifyUsageDtos(List.of("json/aacl/aacl_usage_dto_ce439b92.json"),
             aaclUsageRepository.findDtosByFilter(usageFilter, null, null));
     }
@@ -244,7 +244,7 @@ public class AaclUsageRepositoryIntegrationTest {
     @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindDtosByBatchFilterWithScenarioUsages() {
         UsageFilter usageFilter = buildUsageFilter();
-        usageFilter.setUsageBatchesIds(Collections.singleton("a87b82ca-cfca-463d-96e9-fa856618c389"));
+        usageFilter.setUsageBatchesIds(Set.of("a87b82ca-cfca-463d-96e9-fa856618c389"));
         assertEquals(Collections.emptyList(), aaclUsageRepository.findDtosByFilter(usageFilter, null, null));
     }
 
@@ -260,21 +260,21 @@ public class AaclUsageRepositoryIntegrationTest {
     @TestData(fileName = FOLDER_NAME + "find-count-by-filter.groovy")
     public void testFindCountByFilterWithScenarioUsages() {
         UsageFilter usageFilter = buildUsageFilter();
-        usageFilter.setUsageBatchesIds(Collections.singleton("a87b82ca-cfca-463d-96e9-fa856618c389"));
+        usageFilter.setUsageBatchesIds(Set.of("a87b82ca-cfca-463d-96e9-fa856618c389"));
         assertEquals(0, aaclUsageRepository.findCountByFilter(usageFilter));
     }
 
     @Test
     @TestData(fileName = FIND_BASELINE_PERIODS)
     public void testFindBaselinePeriodsStartingFromPeriodWithoutUsages() {
-        assertEquals(Collections.singleton(2019), aaclUsageRepository.findBaselinePeriods(2020, 1));
+        assertEquals(Set.of(2019), aaclUsageRepository.findBaselinePeriods(2020, 1));
         assertEquals(Sets.newHashSet(2019, 2018, 2016), aaclUsageRepository.findBaselinePeriods(2020, 3));
     }
 
     @Test
     @TestData(fileName = FIND_BASELINE_PERIODS)
     public void testFindBaselinePeriodsStartingFromPeriodWithUsages() {
-        assertEquals(Collections.singleton(2019), aaclUsageRepository.findBaselinePeriods(2019, 1));
+        assertEquals(Set.of(2019), aaclUsageRepository.findBaselinePeriods(2019, 1));
         assertEquals(Sets.newHashSet(2019, 2018, 2016), aaclUsageRepository.findBaselinePeriods(2019, 3));
     }
 
@@ -304,7 +304,7 @@ public class AaclUsageRepositoryIntegrationTest {
     @TestData(fileName = IS_VALID_FILTERED_USAGE_STATUS)
     public void testIsValidFilteredUsageStatusFilteringByBatchWithUsagesInCorrectStatusOnly() {
         UsageFilter usageFilter = buildUsageFilter();
-        usageFilter.setUsageBatchesIds(Collections.singleton("6e6f656a-e080-4426-b8ea-985b69f8814d"));
+        usageFilter.setUsageBatchesIds(Set.of("6e6f656a-e080-4426-b8ea-985b69f8814d"));
         assertTrue(aaclUsageRepository.isValidFilteredUsageStatus(usageFilter, UsageStatusEnum.RH_FOUND));
     }
 
@@ -312,7 +312,7 @@ public class AaclUsageRepositoryIntegrationTest {
     @TestData(fileName = IS_VALID_FILTERED_USAGE_STATUS)
     public void testIsValidFilteredUsageStatusFilteringByBatchWithUsagesInDifferentStatusOnly() {
         UsageFilter usageFilter = buildUsageFilter();
-        usageFilter.setUsageBatchesIds(Collections.singleton("38e3190a-cf2b-4a2a-8a14-1f6e5f09011c"));
+        usageFilter.setUsageBatchesIds(Set.of("38e3190a-cf2b-4a2a-8a14-1f6e5f09011c"));
         assertFalse(aaclUsageRepository.isValidFilteredUsageStatus(usageFilter, UsageStatusEnum.RH_FOUND));
     }
 
@@ -320,7 +320,7 @@ public class AaclUsageRepositoryIntegrationTest {
     @TestData(fileName = IS_VALID_FILTERED_USAGE_STATUS)
     public void testIsValidFilteredUsageStatusFilteringByBatchWithMixedUsageStatuses() {
         UsageFilter usageFilter = buildUsageFilter();
-        usageFilter.setUsageBatchesIds(Collections.singleton(BATCH_ID_3));
+        usageFilter.setUsageBatchesIds(Set.of(BATCH_ID_3));
         assertFalse(aaclUsageRepository.isValidFilteredUsageStatus(usageFilter, UsageStatusEnum.RH_FOUND));
     }
 
@@ -328,7 +328,7 @@ public class AaclUsageRepositoryIntegrationTest {
     @TestData(fileName = IS_VALID_FILTERED_USAGE_STATUS)
     public void testAreValidFilteredUsageStatusesFilteringByBatchAndCorrectStatus() {
         UsageFilter usageFilter = buildUsageFilter();
-        usageFilter.setUsageBatchesIds(Collections.singleton(BATCH_ID_3));
+        usageFilter.setUsageBatchesIds(Set.of(BATCH_ID_3));
         usageFilter.setUsageStatus(UsageStatusEnum.RH_FOUND);
         assertTrue(aaclUsageRepository.isValidFilteredUsageStatus(usageFilter, UsageStatusEnum.RH_FOUND));
     }
@@ -337,7 +337,7 @@ public class AaclUsageRepositoryIntegrationTest {
     @TestData(fileName = IS_VALID_FILTERED_USAGE_STATUS)
     public void testIsValidFilteredUsageStatusFilteringByBatchAndDifferentStatus() {
         UsageFilter usageFilter = buildUsageFilter();
-        usageFilter.setUsageBatchesIds(Collections.singleton(BATCH_ID_3));
+        usageFilter.setUsageBatchesIds(Set.of(BATCH_ID_3));
         usageFilter.setUsageStatus(UsageStatusEnum.WORK_NOT_FOUND);
         assertFalse(aaclUsageRepository.isValidFilteredUsageStatus(usageFilter, UsageStatusEnum.RH_FOUND));
     }
@@ -346,7 +346,7 @@ public class AaclUsageRepositoryIntegrationTest {
     @TestData(fileName = IS_VALID_FILTERED_USAGE_STATUS)
     public void testIsValidFilteredUsageStatusFilteringByBatchAndStatusAndCorrectUsagePeriod() {
         UsageFilter usageFilter = buildUsageFilter();
-        usageFilter.setUsageBatchesIds(Collections.singleton(BATCH_ID_3));
+        usageFilter.setUsageBatchesIds(Set.of(BATCH_ID_3));
         usageFilter.setUsageStatus(UsageStatusEnum.RH_FOUND);
         usageFilter.setUsagePeriod(2020);
         assertTrue(aaclUsageRepository.isValidFilteredUsageStatus(usageFilter, UsageStatusEnum.RH_FOUND));
@@ -356,7 +356,7 @@ public class AaclUsageRepositoryIntegrationTest {
     @TestData(fileName = IS_VALID_FILTERED_USAGE_STATUS)
     public void testIsValidFilteredUsageStatusFilteringByBatchAndStatusAndDifferentUsagePeriod() {
         UsageFilter usageFilter = buildUsageFilter();
-        usageFilter.setUsageBatchesIds(Collections.singleton(BATCH_ID_3));
+        usageFilter.setUsageBatchesIds(Set.of(BATCH_ID_3));
         usageFilter.setUsageStatus(UsageStatusEnum.RH_FOUND);
         usageFilter.setUsagePeriod(2012);
         assertTrue(aaclUsageRepository.isValidFilteredUsageStatus(usageFilter, UsageStatusEnum.RH_FOUND));
@@ -366,7 +366,7 @@ public class AaclUsageRepositoryIntegrationTest {
     @TestData(fileName = IS_VALID_FILTERED_USAGE_STATUS)
     public void testIsValidFilteredUsageStatusFilteringByBatchAndStatusWithNoUsages() {
         UsageFilter usageFilter = buildUsageFilter();
-        usageFilter.setUsageBatchesIds(Collections.singleton(BATCH_ID_3));
+        usageFilter.setUsageBatchesIds(Set.of(BATCH_ID_3));
         usageFilter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
         assertTrue(aaclUsageRepository.isValidFilteredUsageStatus(usageFilter, UsageStatusEnum.RH_FOUND));
     }
@@ -375,7 +375,7 @@ public class AaclUsageRepositoryIntegrationTest {
     @TestData(fileName = IS_VALID_FOR_CLASSIFICATION)
     public void testIsValidForClassification() {
         UsageFilter usageFilter = buildUsageFilter();
-        usageFilter.setUsageBatchesIds(Collections.singleton("38718bfe-08bd-4af7-8481-0fe16dcf2750"));
+        usageFilter.setUsageBatchesIds(Set.of("38718bfe-08bd-4af7-8481-0fe16dcf2750"));
         assertTrue(aaclUsageRepository.isValidForClassification(usageFilter));
     }
 
@@ -383,7 +383,7 @@ public class AaclUsageRepositoryIntegrationTest {
     @TestData(fileName = IS_VALID_FOR_CLASSIFICATION)
     public void testIsValidForClassificationWithEligibleStatus() {
         UsageFilter usageFilter = buildUsageFilter();
-        usageFilter.setUsageBatchesIds(Collections.singleton("38718bfe-08bd-4af7-8481-0fe16dcf2750"));
+        usageFilter.setUsageBatchesIds(Set.of("38718bfe-08bd-4af7-8481-0fe16dcf2750"));
         usageFilter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
         assertFalse(aaclUsageRepository.isValidForClassification(usageFilter));
     }
@@ -392,7 +392,7 @@ public class AaclUsageRepositoryIntegrationTest {
     @TestData(fileName = IS_VALID_FOR_CLASSIFICATION)
     public void testIsValidForClassificationWithUsagesFromBaseline() {
         UsageFilter usageFilter = buildUsageFilter();
-        usageFilter.setUsageBatchesIds(Collections.singleton("52d9c8b9-0de9-4578-915a-60ec01243fc4"));
+        usageFilter.setUsageBatchesIds(Set.of("52d9c8b9-0de9-4578-915a-60ec01243fc4"));
         assertFalse(aaclUsageRepository.isValidForClassification(usageFilter));
     }
 
@@ -400,7 +400,7 @@ public class AaclUsageRepositoryIntegrationTest {
     @TestData(fileName = IS_VALID_FOR_CLASSIFICATION)
     public void testIsValidForClassificationWithEligibleStatusAndUsagesFromBaseline() {
         UsageFilter usageFilter = buildUsageFilter();
-        usageFilter.setUsageBatchesIds(Collections.singleton("52d9c8b9-0de9-4578-915a-60ec01243fc4"));
+        usageFilter.setUsageBatchesIds(Set.of("52d9c8b9-0de9-4578-915a-60ec01243fc4"));
         usageFilter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
         assertFalse(aaclUsageRepository.isValidForClassification(usageFilter));
     }
@@ -409,7 +409,7 @@ public class AaclUsageRepositoryIntegrationTest {
     @TestData(fileName = FOLDER_NAME + "find-invalid-rightsholders-by-filter.groovy")
     public void testFindInvalidRightsholdersByFilterWithBatchFilter() {
         UsageFilter usageFilter = buildUsageFilter();
-        usageFilter.setUsageBatchesIds(Collections.singleton("70a96dc1-b0a8-433f-a7f4-c5d94ee75a9e"));
+        usageFilter.setUsageBatchesIds(Set.of("70a96dc1-b0a8-433f-a7f4-c5d94ee75a9e"));
         assertEquals(Arrays.asList(7000000001L, 7000000002L),
             aaclUsageRepository.findInvalidRightsholdersByFilter(usageFilter));
     }
@@ -418,7 +418,7 @@ public class AaclUsageRepositoryIntegrationTest {
     @TestData(fileName = FOLDER_NAME + "find-invalid-rightsholders-by-filter.groovy")
     public void testFindInvalidRightsholdersByFilterWithBatchAndPeriodFilter() {
         UsageFilter usageFilter = buildUsageFilter();
-        usageFilter.setUsageBatchesIds(Collections.singleton("70a96dc1-b0a8-433f-a7f4-c5d94ee75a9e"));
+        usageFilter.setUsageBatchesIds(Set.of("70a96dc1-b0a8-433f-a7f4-c5d94ee75a9e"));
         usageFilter.setUsagePeriod(2019);
         assertEquals(Collections.emptyList(), aaclUsageRepository.findInvalidRightsholdersByFilter(usageFilter));
         usageFilter.setUsagePeriod(2017);
@@ -468,7 +468,7 @@ public class AaclUsageRepositoryIntegrationTest {
     @TestData(fileName = FOLDER_NAME + "add-to-scenario.groovy")
     public void testAddToScenarioByBatchAndStatusFilter() {
         UsageFilter usageFilter = buildUsageFilter();
-        usageFilter.setUsageBatchesIds(Collections.singleton("5ceb887e-502e-463a-ae94-f925feff35d8"));
+        usageFilter.setUsageBatchesIds(Set.of("5ceb887e-502e-463a-ae94-f925feff35d8"));
         usageFilter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
         aaclUsageRepository.addToScenario(SCENARIO_ID_1, usageFilter, USER_NAME);
         aaclUsageRepository.findByIds(
@@ -489,7 +489,7 @@ public class AaclUsageRepositoryIntegrationTest {
     @TestData(fileName = FOLDER_NAME + "add-to-scenario.groovy")
     public void testAddToScenarioByBatchAndStatusAndPeriodFilter() {
         UsageFilter usageFilter = buildUsageFilter();
-        usageFilter.setUsageBatchesIds(Collections.singleton("5ceb887e-502e-463a-ae94-f925feff35d8"));
+        usageFilter.setUsageBatchesIds(Set.of("5ceb887e-502e-463a-ae94-f925feff35d8"));
         usageFilter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
         usageFilter.setUsagePeriod(2019);
         aaclUsageRepository.addToScenario(SCENARIO_ID_1, usageFilter, USER_NAME);
@@ -510,7 +510,7 @@ public class AaclUsageRepositoryIntegrationTest {
         Set<String> excludedIds =
             Sets.newHashSet("9ccf8b43-4ad5-4199-8c7f-c5884f27e44f", "ccb115c7-3444-4dbb-9540-7541961febdf");
         assertEquals(excludedIds, aaclUsageRepository.excludeFromScenarioByPayees(SCENARIO_ID_3,
-            Collections.singleton(1000000026L), USER_NAME));
+            Set.of(1000000026L), USER_NAME));
         List<Usage> excludedUsages = aaclUsageRepository.findByIds(new ArrayList<>(excludedIds));
         assertEquals(2, excludedUsages.size());
         excludedUsages.forEach(usage -> {
@@ -562,7 +562,7 @@ public class AaclUsageRepositoryIntegrationTest {
     @TestData(fileName = FOLDER_NAME + "find-payee-total-holders-by-filter.groovy")
     public void testFindPayeeTotalHoldersByFilter() {
         ExcludePayeeFilter filter = new ExcludePayeeFilter();
-        filter.setScenarioIds(Collections.singleton(SCENARIO_ID_5));
+        filter.setScenarioIds(Set.of(SCENARIO_ID_5));
         List<PayeeTotalHolder> payeeTotalHolders = aaclUsageRepository.findPayeeTotalHoldersByFilter(filter);
         assertEquals(2, payeeTotalHolders.size());
         verifyPayeeTotalHolder(payeeTotalHolders.get(0), 2580011451L, "Delmar Learning, a division of Cengage Learning",
@@ -575,7 +575,7 @@ public class AaclUsageRepositoryIntegrationTest {
     @TestData(fileName = FOLDER_NAME + "find-payee-total-holders-by-filter.groovy")
     public void testFindPayeeTotalHoldersByFilterWithSearchByName() {
         ExcludePayeeFilter filter = new ExcludePayeeFilter();
-        filter.setScenarioIds(Collections.singleton(SCENARIO_ID_5));
+        filter.setScenarioIds(Set.of(SCENARIO_ID_5));
         filter.setSearchValue("Delmar");
         List<PayeeTotalHolder> payeeTotalHolders = aaclUsageRepository.findPayeeTotalHoldersByFilter(filter);
         assertEquals(1, payeeTotalHolders.size());
@@ -587,7 +587,7 @@ public class AaclUsageRepositoryIntegrationTest {
     @TestData(fileName = FOLDER_NAME + "find-payee-total-holders-by-filter.groovy")
     public void testFindPayeeTotalHoldersByFilterWithSearchByAccountNumber() {
         ExcludePayeeFilter filter = new ExcludePayeeFilter();
-        filter.setScenarioIds(Collections.singleton(SCENARIO_ID_5));
+        filter.setScenarioIds(Set.of(SCENARIO_ID_5));
         filter.setSearchValue("10000");
         List<PayeeTotalHolder> payeeTotalHolders = aaclUsageRepository.findPayeeTotalHoldersByFilter(filter);
         assertEquals(1, payeeTotalHolders.size());
@@ -628,7 +628,7 @@ public class AaclUsageRepositoryIntegrationTest {
     @TestData(fileName = FIND_FOR_AUDIT)
     public void testFindForAuditByBatch() {
         AuditFilter filter = new AuditFilter();
-        filter.setBatchesIds(Collections.singleton("9e0f99e4-1e95-488d-a0c5-ff1353c84e39"));
+        filter.setBatchesIds(Set.of("9e0f99e4-1e95-488d-a0c5-ff1353c84e39"));
         assertEquals(3, aaclUsageRepository.findCountForAudit(filter));
         List<UsageDto> usages = aaclUsageRepository.findForAudit(filter, new Pageable(0, 10), null);
         verifyUsageDtos(usages, USAGE_ID_5, USAGE_ID_4, USAGE_ID_6);
@@ -687,13 +687,10 @@ public class AaclUsageRepositoryIntegrationTest {
         aaclUsageRepository.updatePublicationTypeWeight(SCENARIO_ID_2, "1f6f1925-7aa1-4b1a-b3a8-8903acc3d18e",
             new BigDecimal("10.12"), USER_NAME);
         UsageFilter usageFilter = buildUsageFilter();
-        usageFilter.setUsageBatchesIds(Collections.singleton("5ceb887e-502e-463a-ae94-f925feff35d8"));
-        Usage usage1 =
-            aaclUsageRepository.findByIds(List.of("248add96-93d0-428d-9fe2-2e46c237a88b")).get(0);
-        Usage usage2 =
-            aaclUsageRepository.findByIds(List.of("161652a5-d822-493b-8242-d35dc881646f")).get(0);
-        Usage usage3 =
-            aaclUsageRepository.findByIds(List.of("61b7dc5a-aaec-482c-8c16-fe48a9464059")).get(0);
+        usageFilter.setUsageBatchesIds(Set.of("5ceb887e-502e-463a-ae94-f925feff35d8"));
+        Usage usage1 = aaclUsageRepository.findByIds(List.of("248add96-93d0-428d-9fe2-2e46c237a88b")).get(0);
+        Usage usage2 = aaclUsageRepository.findByIds(List.of("161652a5-d822-493b-8242-d35dc881646f")).get(0);
+        Usage usage3 = aaclUsageRepository.findByIds(List.of("61b7dc5a-aaec-482c-8c16-fe48a9464059")).get(0);
         assertNull(usage1.getAaclUsage().getPublicationType().getWeight());
         assertEquals(new BigDecimal("10.12"), usage2.getAaclUsage().getPublicationType().getWeight());
         assertEquals(new BigDecimal("1.71"), usage3.getAaclUsage().getPublicationType().getWeight());
@@ -703,7 +700,7 @@ public class AaclUsageRepositoryIntegrationTest {
     @TestData(fileName = FOLDER_NAME + "usages-exist-by-detail-licensee-class-and-filter.groovy")
     public void testUsagesExistByDetailLicenseeClassAndFilterWithBatchAndStatusFilter() {
         UsageFilter usageFilter = buildUsageFilter();
-        usageFilter.setUsageBatchesIds(Collections.singleton("d1108958-44cc-4bb4-9bb5-66fcf5b42104"));
+        usageFilter.setUsageBatchesIds(Set.of("d1108958-44cc-4bb4-9bb5-66fcf5b42104"));
         usageFilter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
         assertTrue(aaclUsageRepository.usagesExistByDetailLicenseeClassAndFilter(usageFilter, 108));
         assertFalse(aaclUsageRepository.usagesExistByDetailLicenseeClassAndFilter(usageFilter, 110));
@@ -713,7 +710,7 @@ public class AaclUsageRepositoryIntegrationTest {
     @TestData(fileName = FOLDER_NAME + "usages-exist-by-detail-licensee-class-and-filter.groovy")
     public void testUsagesExistByDetailLicenseeClassAndFilterWithBatchAndStatusAndPeriodFilter() {
         UsageFilter usageFilter = buildUsageFilter();
-        usageFilter.setUsageBatchesIds(Collections.singleton("d1108958-44cc-4bb4-9bb5-66fcf5b42104"));
+        usageFilter.setUsageBatchesIds(Set.of("d1108958-44cc-4bb4-9bb5-66fcf5b42104"));
         usageFilter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
         usageFilter.setUsagePeriod(2015);
         assertTrue(aaclUsageRepository.usagesExistByDetailLicenseeClassAndFilter(usageFilter, 113));
@@ -724,7 +721,7 @@ public class AaclUsageRepositoryIntegrationTest {
     @TestData(fileName = FOLDER_NAME + "update-payee-by-account-number.groovy")
     public void testUpdatePayeeByAccountNumber() {
         AuditFilter auditFilter = new AuditFilter();
-        auditFilter.setBatchesIds(Collections.singleton("a87b82ca-cfca-463d-96e9-fa856618c389"));
+        auditFilter.setBatchesIds(Set.of("a87b82ca-cfca-463d-96e9-fa856618c389"));
         aaclUsageRepository.findForAudit(auditFilter, null, null)
             .forEach(usage -> assertNull(usage.getPayeeAccountNumber()));
         aaclUsageRepository.updatePayeeByAccountNumber(1000000026L, SCENARIO_ID_2, RH_ACCOUNT_NUMBER, USER_NAME);
@@ -916,7 +913,7 @@ public class AaclUsageRepositoryIntegrationTest {
     private void assertFindForAuditSearchByPeriodDate(int periodDate, String... usageIds) {
         AuditFilter filter = new AuditFilter();
         filter.setProductFamily("AACL");
-        filter.setBatchesIds(Collections.singleton("9e0f99e4-1e95-488d-a0c5-ff1353c84e39"));
+        filter.setBatchesIds(Set.of("9e0f99e4-1e95-488d-a0c5-ff1353c84e39"));
         filter.setUsagePeriod(periodDate);
         assertEquals(usageIds.length, aaclUsageRepository.findCountForAudit(filter));
         verifyUsageDtos(aaclUsageRepository.findForAudit(filter, null, null), usageIds);

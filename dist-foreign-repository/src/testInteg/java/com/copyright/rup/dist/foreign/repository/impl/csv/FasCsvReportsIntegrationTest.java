@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Set;
 
 /**
  * Integration test for {@link com.copyright.rup.dist.foreign.repository.impl.FasReportRepository}.
@@ -228,7 +229,7 @@ public class FasCsvReportsIntegrationTest extends CsvReportsTestHelper {
     @TestData(fileName = WRITE_EXCLUDE_DETAILS_BY_PAYEE_CSV_REPORT)
     public void testWriteExcludeDetailsByPayeeCsvEmptyReport() throws IOException {
         ExcludePayeeFilter filter = new ExcludePayeeFilter();
-        filter.setScenarioIds(Collections.singleton("d13ecc44-6795-4b75-90f0-4a3fc191f1b9"));
+        filter.setScenarioIds(Set.of("d13ecc44-6795-4b75-90f0-4a3fc191f1b9"));
         assertFilesWithExecutor(outputStream -> reportRepository.writeFasExcludeDetailsByPayeeCsvReport(filter,
             Collections.emptySet(), outputStream), "fas/exclude_by_payee_report_empty.csv");
     }
@@ -244,17 +245,16 @@ public class FasCsvReportsIntegrationTest extends CsvReportsTestHelper {
     @TestData(fileName = WRITE_EXCLUDE_DETAILS_BY_PAYEE_CSV_REPORT)
     public void testWriteExcludeDetailsByPayeeCsvReport() throws IOException {
         ExcludePayeeFilter filter = new ExcludePayeeFilter();
-        filter.setScenarioIds(Collections.singleton("e13ecc44-6795-4b75-90f0-4a3fc191f1b9"));
+        filter.setScenarioIds(Set.of("e13ecc44-6795-4b75-90f0-4a3fc191f1b9"));
         assertFilesWithExecutor(outputStream -> reportRepository.writeFasExcludeDetailsByPayeeCsvReport(filter,
-            Collections.singleton(7000813806L), outputStream), "fas/exclude_by_payee_report.csv");
+            Set.of(7000813806L), outputStream), "fas/exclude_by_payee_report.csv");
     }
 
     @Test
     @TestData(fileName = WRITE_OWNERSHIP_ADJUSTMENT_CSV_REPORT)
     public void testWriteOwnershipAdjustmentCsvReport() throws Exception {
         assertFiles(outputStream -> reportRepository.writeOwnershipAdjustmentCsvReport(
-            "3210b236-1239-4a60-9fab-888b84199321",
-            Collections.singleton(RightsholderDiscrepancyStatusEnum.APPROVED), outputStream),
+            "3210b236-1239-4a60-9fab-888b84199321", Set.of(RightsholderDiscrepancyStatusEnum.APPROVED), outputStream),
             "fas/ownership_adjustment_report.csv");
     }
 
@@ -262,8 +262,7 @@ public class FasCsvReportsIntegrationTest extends CsvReportsTestHelper {
     @TestData(fileName = WRITE_OWNERSHIP_ADJUSTMENT_CSV_REPORT)
     public void testWriteOwnershipAdjustmentCsvEmptyReport() throws IOException {
         assertFiles(outputStream -> reportRepository.writeOwnershipAdjustmentCsvReport(
-            "3210b236-1239-4a60-9fab-888b84199321",
-            Collections.singleton(RightsholderDiscrepancyStatusEnum.DRAFT), outputStream),
+            "3210b236-1239-4a60-9fab-888b84199321", Set.of(RightsholderDiscrepancyStatusEnum.DRAFT), outputStream),
             "fas/ownership_adjustment_report_empty.csv");
     }
 

@@ -12,7 +12,6 @@ import com.google.common.collect.Sets;
 import org.junit.Test;
 
 import java.time.LocalDate;
-import java.util.Collections;
 import java.util.Set;
 
 /**
@@ -26,8 +25,8 @@ import java.util.Set;
  */
 public class UsageFilterTest {
 
-    private static final Set<Long> RH_ACCOUNT_NUMBERS = Collections.singleton(12345678L);
-    private static final Set<String> USAGE_BATCH_IDS = Collections.singleton("Usage Batch Id");
+    private static final Set<Long> RH_ACCOUNT_NUMBERS = Set.of(12345678L);
+    private static final Set<String> USAGE_BATCH_IDS = Set.of("Usage Batch Id");
     private static final LocalDate PAYMENT_DATE = LocalDate.of(2016, 10, 22);
     private static final int FISCAL_YEAR = 2016;
 
