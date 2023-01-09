@@ -105,7 +105,7 @@ public class AclGrantDetailServiceTest {
     @Test
     public void testGetCount() {
         AclGrantDetailFilter filter = new AclGrantDetailFilter();
-        filter.setGrantSetNames(Collections.singleton(ACL_GRANT_SET_NAME));
+        filter.setGrantSetNames(Set.of(ACL_GRANT_SET_NAME));
         expect(aclGrantDetailRepository.findCountByFilter(filter)).andReturn(1).once();
         replay(aclGrantDetailRepository);
         assertEquals(1, aclGrantDetailService.getCount(filter));
@@ -123,7 +123,7 @@ public class AclGrantDetailServiceTest {
         Pageable pageable = new Pageable(0, 1);
         Sort sort = new Sort("licenseType", Sort.Direction.ASC);
         AclGrantDetailFilter filter = new AclGrantDetailFilter();
-        filter.setGrantSetNames(Collections.singleton(ACL_GRANT_SET_NAME));
+        filter.setGrantSetNames(Set.of(ACL_GRANT_SET_NAME));
         expect(aclGrantDetailRepository.findDtosByFilter(filter, pageable, sort)).andReturn(grantDetails).once();
         replay(aclGrantDetailRepository);
         assertSame(grantDetails, aclGrantDetailService.getDtos(filter, pageable, sort));
@@ -146,7 +146,7 @@ public class AclGrantDetailServiceTest {
         aclGrantDetailRepository.updateGrant(grantDetailDto);
         expectLastCall().once();
         replay(aclGrantDetailRepository, RupContextUtils.class);
-        aclGrantDetailService.updateGrants(Collections.singleton(grantDetailDto), false);
+        aclGrantDetailService.updateGrants(Set.of(grantDetailDto), false);
         assertEquals(USER_NAME, grantDetailDto.getUpdateUser());
         verify(aclGrantDetailRepository, RupContextUtils.class);
     }
@@ -166,7 +166,7 @@ public class AclGrantDetailServiceTest {
             buildGrantDto(ACL_GRANT_ID_3, 232167525L, null, 1000014080L, DIGITAL_TOU, GRANT_STATUS, false));
         AclGrantSet grantSet = buildGrantSet();
         expect(prmIntegrationService.getIneligibleRightsholders(LocalDate.of(2021, 12, 31), ACL))
-            .andReturn(Collections.singleton(buildIneligibleRightsholder())).once();
+            .andReturn(Set.of(buildIneligibleRightsholder())).once();
         aclGrantDetailRepository.insert(capture(grant1));
         expectLastCall().once();
         aclGrantDetailRepository.insert(capture(grant2));
@@ -240,8 +240,7 @@ public class AclGrantDetailServiceTest {
         expectLastCall().once();
         aclGrantDetailRepository.updateGrant(capture(grant6));
         expectLastCall().once();
-        expect(rightsholderService.updateRightsholders(Collections.singleton(2000072827L)))
-            .andReturn(Collections.emptyList()).once();
+        expect(rightsholderService.updateRightsholders(Set.of(2000072827L))).andReturn(Collections.emptyList()).once();
         replay(aclGrantDetailRepository, rightsholderService, RupContextUtils.class);
         List<AclGrantDetailDto> aclGrantDetailDtos = Arrays.asList(
             buildGrantDto(ACL_GRANT_ID_2, 123456789L, PRINT_DIGITAL_TOU_STATUS, 2000072827L, DIGITAL_TOU, GRANT_STATUS,
@@ -280,10 +279,9 @@ public class AclGrantDetailServiceTest {
         expectLastCall().once();
         aclGrantDetailRepository.updateGrant(capture(grantDetailDtoCapture2));
         expectLastCall().once();
-        expect(rightsholderService.updateRightsholders(Collections.singleton(2000072827L)))
-            .andReturn(Collections.emptyList()).once();
+        expect(rightsholderService.updateRightsholders(Set.of(2000072827L))).andReturn(Collections.emptyList()).once();
         replay(aclGrantDetailRepository, rightsholderService, RupContextUtils.class);
-        aclGrantDetailService.updateGrants(Collections.singleton(buildGrantDto(ACL_GRANT_ID_2, 123456789L,
+        aclGrantDetailService.updateGrants(Set.of(buildGrantDto(ACL_GRANT_ID_2, 123456789L,
             PRINT_DIGITAL_TOU_STATUS, 2000072827L, DIGITAL_TOU, "DENY", true)), true);
         verifyGrantDtoCapture(grantDetailDtoCapture2,
             buildGrantDto(ACL_GRANT_ID_1, 123456789L, "Print Only", 2000072827L, PRINT_TOU, GRANT_STATUS, true));
@@ -304,14 +302,14 @@ public class AclGrantDetailServiceTest {
         AclGrantDetailDto expectedGrantForUpdate =
             buildGrantDto(ACL_GRANT_ID_2, 123456789L, PRINT_DIGITAL_TOU_STATUS, 2000072827L, DIGITAL_TOU, "DENY", true);
         replay(aclGrantDetailRepository, RupContextUtils.class);
-        aclGrantDetailService.updateGrants(Collections.singleton(expectedGrantForUpdate), true);
+        aclGrantDetailService.updateGrants(Set.of(expectedGrantForUpdate), true);
         verifyGrantDtoCapture(grantDetailDtoCapture1, expectedGrantForUpdate);
         verify(aclGrantDetailRepository, RupContextUtils.class);
     }
 
     @Test
     public void testSetEligibleFlag() {
-        Set<AclIneligibleRightsholder> ineligibleRightsholders = Collections.singleton(buildIneligibleRightsholder());
+        Set<AclIneligibleRightsholder> ineligibleRightsholders = Set.of(buildIneligibleRightsholder());
         expect(prmIntegrationService.getIneligibleRightsholders(LocalDate.of(2020, 1, 1), ACL))
             .andReturn(ineligibleRightsholders).once();
         List<AclGrantDetail> grantDetailDtos = Arrays.asList(

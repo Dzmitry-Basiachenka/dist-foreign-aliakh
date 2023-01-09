@@ -30,7 +30,6 @@ import org.powermock.reflect.Whitebox;
 
 import java.io.OutputStream;
 import java.math.BigDecimal;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -66,7 +65,7 @@ public class AclUsageServiceTest {
     @Test
     public void testPopulateAclUsages() {
         String usageBatchId = "3e85d243-63a6-4145-9df6-91f6b2cada53";
-        Set<Integer> periods = Collections.singleton(202106);
+        Set<Integer> periods = Set.of(202106);
         String userName = "user@copyright.com";
         List<String> usageIds = List.of("8b705e49-85fe-4851-a051-08109d159c7d");
         expect(aclUsageRepository.populateAclUsages(usageBatchId, periods, userName)).andReturn(usageIds).once();
@@ -83,7 +82,7 @@ public class AclUsageServiceTest {
         aclUsageRepository.update(aclUsageDto);
         expectLastCall().once();
         replay(aclUsageRepository, RupContextUtils.class);
-        aclUsageService.updateUsages(Collections.singleton(aclUsageDto));
+        aclUsageService.updateUsages(Set.of(aclUsageDto));
         assertEquals(USER_NAME, aclUsageDto.getUpdateUser());
         verify(aclUsageRepository, RupContextUtils.class);
     }
@@ -134,7 +133,7 @@ public class AclUsageServiceTest {
     public void testUsageExistForLicenseeClassesAndTypeOfUse() {
         String usageBatchId = "ab3602c3-41d7-449b-be4d-e59e28bb46ee";
         String grantSetId = "914fd4af-cd98-4c34-a629-b78b12cf5c7e";
-        Set<Integer> licenseeClassIds = Collections.singleton(2);
+        Set<Integer> licenseeClassIds = Set.of(2);
         expect(aclUsageRepository.usageExistForLicenseeClassesAndTypeOfUse(usageBatchId, grantSetId, licenseeClassIds,
             "PRINT")).andReturn(true).once();
         expect(aclUsageRepository.usageExistForLicenseeClassesAndTypeOfUse(usageBatchId, grantSetId, licenseeClassIds,

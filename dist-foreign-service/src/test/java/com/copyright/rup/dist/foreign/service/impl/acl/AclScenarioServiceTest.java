@@ -201,7 +201,7 @@ public class AclScenarioServiceTest {
             Arrays.asList(buildAclFundPoolDetailDto(1, 1, PRINT_TOU), buildAclFundPoolDetailDto(2, 51, DIGITAL_TOU));
         expect(aclFundPoolService.getDetailDtosByFundPoolId(FUND_POOL_UID)).andReturn(fundPoolDetails).once();
         expect(aclUsageService.usageExistForLicenseeClassesAndTypeOfUse(BATCH_UID, GRANT_SET_UID,
-            Collections.singleton(1), PRINT_TOU)).andReturn(true).once();
+            Set.of(1), PRINT_TOU)).andReturn(true).once();
         expect(aclUsageService.usageExistForLicenseeClassesAndTypeOfUse(BATCH_UID, GRANT_SET_UID,
             Sets.newHashSet(2, 3), DIGITAL_TOU)).andReturn(true).once();
         replay(aclFundPoolService, aclUsageService);
@@ -220,7 +220,7 @@ public class AclScenarioServiceTest {
             noUsagesDetail, buildAclFundPoolDetailDto(3, 51, DIGITAL_TOU));
         expect(aclFundPoolService.getDetailDtosByFundPoolId(FUND_POOL_UID)).andReturn(fundPoolDetails).once();
         expect(aclUsageService.usageExistForLicenseeClassesAndTypeOfUse(BATCH_UID, GRANT_SET_UID,
-            Collections.singleton(1), PRINT_TOU)).andReturn(true).once();
+            Set.of(1), PRINT_TOU)).andReturn(true).once();
         expect(aclUsageService.usageExistForLicenseeClassesAndTypeOfUse(BATCH_UID, GRANT_SET_UID,
             Sets.newHashSet(2, 3), DIGITAL_TOU)).andReturn(false).once();
         replay(aclFundPoolService, aclUsageService);

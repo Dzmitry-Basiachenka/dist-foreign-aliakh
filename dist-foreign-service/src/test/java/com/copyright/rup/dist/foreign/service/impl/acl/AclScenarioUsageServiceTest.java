@@ -77,11 +77,10 @@ public class AclScenarioUsageServiceTest {
         RightsholderTypeOfUsePair rightsholderTypeOfUsePair = buildRightsholderTypeOfUsePair(2000073957L);
         expect(rightsholderService.getByAclScenarioId(SCENARIO_UID)).andReturn(
             List.of(rightsholderTypeOfUsePair)).once();
-        expect(prmIntegrationService.getRollUps(Collections.singleton(RH_UID)))
-            .andReturn(Collections.emptyMap()).once();
+        expect(prmIntegrationService.getRollUps(Set.of(RH_UID))).andReturn(Collections.emptyMap()).once();
         aclScenarioUsageRepository.updatePayeeByAccountNumber(2000073957L, SCENARIO_UID, 2000073957L, "PRINT");
         expectLastCall().once();
-        rightsholderService.updateRighstholdersAsync(Collections.singleton(2000073957L));
+        rightsholderService.updateRighstholdersAsync(Set.of(2000073957L));
         expectLastCall().once();
         replay(aclScenarioUsageRepository, rightsholderService, prmIntegrationService);
         aclScenarioUsageService.populatePayees(SCENARIO_UID);
@@ -240,7 +239,7 @@ public class AclScenarioUsageServiceTest {
 
     @Test
     public void testGetRightsholderPayeeProductFamilyHoldersByAclScenarioIds() {
-        Set<String> scenarioIds = Collections.singleton(SCENARIO_UID);
+        Set<String> scenarioIds = Set.of(SCENARIO_UID);
         List<RightsholderPayeeProductFamilyHolder> holders = List.of(new RightsholderPayeeProductFamilyHolder());
         expect(aclScenarioUsageRepository.findRightsholderPayeeProductFamilyHoldersByAclScenarioIds(scenarioIds))
             .andReturn(holders).once();

@@ -101,7 +101,7 @@ public class RightsholderServiceTest {
         ExecutorService executorService = createMock(ExecutorService.class);
         Whitebox.setInternalState(rightsholderService, executorService);
         Capture<Runnable> runnableCapture = newCapture();
-        Set<Long> accountNumbers = Collections.singleton(ACCOUNT_NUMBER_2);
+        Set<Long> accountNumbers = Set.of(ACCOUNT_NUMBER_2);
         executorService.execute(capture(runnableCapture));
         expectLastCall().once();
         replay(executorService);

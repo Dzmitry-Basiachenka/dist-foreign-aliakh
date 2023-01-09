@@ -22,7 +22,6 @@ import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
 import java.time.LocalDate;
-import java.util.Collections;
 import java.util.Set;
 
 /**
@@ -42,8 +41,8 @@ public class ScenarioUsageFilterServiceTest {
     private static final UsageStatusEnum USAGE_STATUS = UsageStatusEnum.ELIGIBLE;
     private static final LocalDate PAYMENT_DATE = LocalDate.now();
     private static final Integer FISCAL_YEAR = LocalDate.now().getYear();
-    private static final Set<Long> RH_ACCOUNT_NUMBERS = Collections.singleton(2000017004L);
-    private static final Set<String> USAGE_BATCHES_IDS = Collections.singleton("e1c64cac-3f2b-4105-8056-6660e1ec461a");
+    private static final Set<Long> RH_ACCOUNT_NUMBERS = Set.of(2000017004L);
+    private static final Set<String> USAGE_BATCHES_IDS = Set.of("e1c64cac-3f2b-4105-8056-6660e1ec461a");
 
     private ScenarioUsageFilterService scenarioUsageFilterService;
     private IScenarioUsageFilterRepository scenarioUsageFilterRepository;

@@ -24,8 +24,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Verifies correctness of creating a scenario.
@@ -301,7 +301,7 @@ public class CreateScenarioIntegrationTest {
 
     private UsageFilter buildUsageFilter(String batchId, String productFamily) {
         UsageFilter filter = new UsageFilter();
-        filter.setUsageBatchesIds(Collections.singleton(batchId));
+        filter.setUsageBatchesIds(Set.of(batchId));
         filter.setProductFamily(productFamily);
         filter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
         return filter;

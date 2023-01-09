@@ -54,7 +54,6 @@ import org.powermock.reflect.Whitebox;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -137,7 +136,7 @@ public class UdmUsageServiceTest {
     @Test
     public void testPublishUdmUsageToBaseline() {
         mockStatic(RupContextUtils.class);
-        Set<String> usageIds = Collections.singleton("367233a7-702f-4a88-82b4-b95a5508ab52");
+        Set<String> usageIds = Set.of("367233a7-702f-4a88-82b4-b95a5508ab52");
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
         expect(udmUsageRepository.publishUdmUsagesToBaseline(202106, USER_NAME)).andReturn(usageIds).once();
         udmUsageAuditService.logAction("367233a7-702f-4a88-82b4-b95a5508ab52", UsageActionTypeEnum.PUBLISH_TO_BASELINE,
@@ -400,7 +399,7 @@ public class UdmUsageServiceTest {
         expectLastCall().once();
         replay(chainExecutor);
         UdmUsageDto udmUsageDto = buildUsageDto(UsageStatusEnum.NEW);
-        udmUsageService.sendForMatching(Collections.singleton(udmUsageDto));
+        udmUsageService.sendForMatching(Set.of(udmUsageDto));
         Runnable runnable = captureRunnable.getValue();
         assertNotNull(runnable);
         runnable.run();
@@ -544,9 +543,9 @@ public class UdmUsageServiceTest {
         UdmUsageDto udmUsage = new UdmUsageDto();
         udmUsage.setId(UDM_USAGE_UID_1);
         udmUsage.setAssignee(ASSIGNEE);
-        Set<UdmUsageDto> udmUsages = Collections.singleton(udmUsage);
+        Set<UdmUsageDto> udmUsages = Set.of(udmUsage);
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
-        udmUsageRepository.updateAssignee(Collections.singleton(udmUsage.getId()), null, USER_NAME);
+        udmUsageRepository.updateAssignee(Set.of(udmUsage.getId()), null, USER_NAME);
         expectLastCall().once();
         udmUsageAuditService.logAction(udmUsage.getId(), UsageActionTypeEnum.UNASSIGN,
             "Usage was unassigned from 'wjohn@copyright.com'");

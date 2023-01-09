@@ -23,7 +23,6 @@ import java.io.OutputStream;
 import java.io.PipedOutputStream;
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -111,7 +110,7 @@ public class UdmReportServiceTest {
         filter.setUsageOrigin(UdmUsageOriginEnum.RFA);
         filter.setDateFrom(LocalDate.of(2021, 11, 21));
         filter.setChannel(UdmChannelEnum.CCC);
-        filter.setPeriods(Collections.singleton(202112));
+        filter.setPeriods(Set.of(202112));
         udmReportRepository.writeUdmWeeklySurveyCsvReport(filter, outputStream);
         expectLastCall().once();
         replay(udmReportRepository);
@@ -123,7 +122,7 @@ public class UdmReportServiceTest {
     public void testWriteUdmSurveyLicenseeCsvReport() {
         OutputStream outputStream = new ByteArrayOutputStream();
         UdmReportFilter filter = new UdmReportFilter();
-        filter.setPeriods(Collections.singleton(202112));
+        filter.setPeriods(Set.of(202112));
         udmReportRepository.writeUdmSurveyLicenseeCsvReport(filter, outputStream);
         expectLastCall().once();
         replay(udmReportRepository);
@@ -135,7 +134,7 @@ public class UdmReportServiceTest {
     public void testWriteCompletedAssignmentsReport() {
         OutputStream outputStream = new ByteArrayOutputStream();
         UdmReportFilter filter = new UdmReportFilter();
-        filter.setPeriods(Collections.singleton(202112));
+        filter.setPeriods(Set.of(202112));
         udmReportRepository.writeUdmCompletedAssignmentsCsvReport(filter, outputStream);
         expectLastCall().once();
         replay(udmReportRepository);
@@ -147,7 +146,7 @@ public class UdmReportServiceTest {
     public void testUdmVerifiedDetailsBySourceReport() {
         OutputStream outputStream = new ByteArrayOutputStream();
         UdmReportFilter filter = new UdmReportFilter();
-        filter.setPeriods(Collections.singleton(202112));
+        filter.setPeriods(Set.of(202112));
         udmReportRepository.writeUdmVerifiedDetailsBySourceReport(filter, outputStream);
         expectLastCall().once();
         replay(udmReportRepository);
@@ -159,7 +158,7 @@ public class UdmReportServiceTest {
     public void testWriteUdmUsageEditsInBaselineCsvReport() {
         OutputStream outputStream = new ByteArrayOutputStream();
         UdmReportFilter filter = new UdmReportFilter();
-        filter.setPeriods(Collections.singleton(202112));
+        filter.setPeriods(Set.of(202112));
         filter.setDateFrom(LocalDate.of(2021, 11, 21));
         filter.setDateTo(LocalDate.of(2021, 11, 28));
         udmReportRepository.writeUdmUsageEditsInBaselineCsvReport(filter, outputStream);
@@ -173,7 +172,7 @@ public class UdmReportServiceTest {
     public void testWriteUdmUsableDetailsByCountryCsvReport() {
         OutputStream outputStream = new ByteArrayOutputStream();
         UdmReportFilter filter = new UdmReportFilter();
-        filter.setPeriods(Collections.singleton(202112));
+        filter.setPeriods(Set.of(202112));
         filter.setDateFrom(LocalDate.of(2021, 11, 21));
         filter.setDateTo(LocalDate.of(2021, 11, 28));
         udmReportRepository.writeUdmUsableDetailsByCountryCsvReport(filter, outputStream);
@@ -206,8 +205,8 @@ public class UdmReportServiceTest {
     @Test
     public void testWriteUdmBaselineValueUpdatesCsvRepor() {
         UdmReportFilter filter = new UdmReportFilter();
-        filter.setPeriods(Collections.singleton(202112));
-        filter.setUserNames(Collections.singleton("user@copyright.com"));
+        filter.setPeriods(Set.of(202112));
+        filter.setUserNames(Set.of("user@copyright.com"));
         filter.setDateFrom(LocalDate.of(2021, 11, 21));
         filter.setDateTo(LocalDate.of(2021, 11, 28));
         OutputStream outputStream = new ByteArrayOutputStream();

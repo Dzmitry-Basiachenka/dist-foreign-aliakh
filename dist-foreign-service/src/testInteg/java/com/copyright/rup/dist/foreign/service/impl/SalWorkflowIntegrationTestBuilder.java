@@ -39,12 +39,12 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -285,7 +285,7 @@ public class SalWorkflowIntegrationTestBuilder implements Builder<Runner> {
 
         private void addToScenario() {
             UsageFilter filter = new UsageFilter();
-            filter.setUsageBatchesIds(Collections.singleton(usageBatch.getId()));
+            filter.setUsageBatchesIds(Set.of(usageBatch.getId()));
             filter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
             filter.setProductFamily(productFamily);
             scenario = salScenarioService.createScenario("Test SAL Scenario", fundPoolId,

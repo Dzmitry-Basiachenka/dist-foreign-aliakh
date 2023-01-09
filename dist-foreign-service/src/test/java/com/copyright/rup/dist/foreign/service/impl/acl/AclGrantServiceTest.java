@@ -31,7 +31,6 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -81,7 +80,7 @@ public class AclGrantServiceTest {
         LocalDate periodEndDate = LocalDate.of(2021, 6, 30);
         expect(
             rmsRightsService.getGrants(new ArrayList<>(wrWrkInstToSystemTitles.keySet()), periodEndDate, STATUS,
-                TYPE_OF_USES, Collections.singleton(ACL))).andReturn(buildRmsGrants()).once();
+                TYPE_OF_USES, Set.of(ACL))).andReturn(buildRmsGrants()).once();
         grantDetailService.setEligibleFlag(capture(detailsCapture), eq(periodEndDate), eq(ACL));
         expectLastCall().once();
         replay(rmsRightsService, grantDetailService);

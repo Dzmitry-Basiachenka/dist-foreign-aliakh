@@ -38,7 +38,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -197,9 +196,9 @@ public class UdmValueServiceTest {
         UdmValueDto udmValue = new UdmValueDto();
         udmValue.setId(UDM_VALUE_UID_1);
         udmValue.setAssignee(ASSIGNEE);
-        Set<UdmValueDto> udmValues = Collections.singleton(udmValue);
+        Set<UdmValueDto> udmValues = Set.of(udmValue);
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
-        udmValueRepository.updateAssignee(Collections.singleton(udmValue.getId()), null, USER_NAME);
+        udmValueRepository.updateAssignee(Set.of(udmValue.getId()), null, USER_NAME);
         expectLastCall().once();
         udmValueAuditService.logAction(udmValue.getId(), UdmValueActionTypeEnum.UNASSIGN,
             "Value was unassigned from 'wjohn@copyright.com'");

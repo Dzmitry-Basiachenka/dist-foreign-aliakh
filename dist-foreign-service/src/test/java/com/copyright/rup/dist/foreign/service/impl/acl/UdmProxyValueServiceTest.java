@@ -26,8 +26,8 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Verifies {@link UdmProxyValueService}.
@@ -94,7 +94,7 @@ public class UdmProxyValueServiceTest {
     @Test
     public void testGetDtosByFilter() {
         UdmProxyValueFilter filter = new UdmProxyValueFilter();
-        filter.setPeriods(Collections.singleton(202012));
+        filter.setPeriods(Set.of(202012));
         List<UdmProxyValueDto> valueDtos = Arrays.asList(new UdmProxyValueDto(), new UdmProxyValueDto());
         expect(udmProxyValueRepository.findDtosByFilter(filter)).andReturn(valueDtos).once();
         replay(udmProxyValueRepository);

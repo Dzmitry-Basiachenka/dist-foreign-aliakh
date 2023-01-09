@@ -23,6 +23,7 @@ import com.copyright.rup.dist.foreign.service.api.processor.IChainProcessor;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
@@ -145,7 +146,7 @@ public class WorkClassificationServiceTest {
 
     @Test
     public void testGetClassificationCount() {
-        Set<String> batchesIds = Collections.singleton(BATCH_ID);
+        Set<String> batchesIds = Set.of(BATCH_ID);
         expect(workClassificationRepository.findCountByBatchIds(batchesIds, SEARCH_VALUE)).andReturn(2).once();
         replay(workClassificationRepository);
         assertEquals(2, workClassificationService.getClassificationCount(batchesIds, SEARCH_VALUE));
@@ -163,7 +164,7 @@ public class WorkClassificationServiceTest {
 
     @Test
     public void testGetClassifications() {
-        Set<String> batchesIds = Collections.singleton(BATCH_ID);
+        Set<String> batchesIds = Set.of(BATCH_ID);
         List<WorkClassification> classifications = List.of(new WorkClassification());
         expect(workClassificationRepository.findByBatchIds(batchesIds, SEARCH_VALUE, null, null))
             .andReturn(classifications).once();

@@ -15,12 +15,13 @@ import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 
 import com.google.common.collect.ImmutableMap;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Verifies {@link StmRhService}.
@@ -54,7 +55,7 @@ public class StmRhServiceTest {
     public void testProcessStmRhsWithNonStmRh() {
         Usage usage = buildUsage();
         List<Usage> usages = List.of(usage);
-        expect(prmIntegrationService.getStmRightsholderPreferenceMap(Collections.singleton(RH_ID), NTS_PRODUCT_FAMILY))
+        expect(prmIntegrationService.getStmRightsholderPreferenceMap(Set.of(RH_ID), NTS_PRODUCT_FAMILY))
             .andReturn(ImmutableMap.of(RH_ID, false)).once();
         usageServiceMock.updateProcessedUsage(usage);
         expectLastCall().once();
@@ -68,7 +69,7 @@ public class StmRhServiceTest {
     public void testProcessStmRhsWithStmRh() {
         Usage usage = buildUsage();
         List<Usage> usages = List.of(usage);
-        expect(prmIntegrationService.getStmRightsholderPreferenceMap(Collections.singleton(RH_ID), NTS_PRODUCT_FAMILY))
+        expect(prmIntegrationService.getStmRightsholderPreferenceMap(Set.of(RH_ID), NTS_PRODUCT_FAMILY))
             .andReturn(ImmutableMap.of(RH_ID, true)).once();
         replay(prmIntegrationService, usageServiceMock);
         stmRhService.processStmRhs(usages, NTS_PRODUCT_FAMILY);

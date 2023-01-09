@@ -711,7 +711,7 @@ public class UsageServiceTest {
 
     @Test
     public void testGetRightsholderPayeeProductFamilyHoldersByScenarioIds() {
-        Set<String> scenarioIds = Collections.singleton(SCENARIO_ID);
+        Set<String> scenarioIds = Set.of(SCENARIO_ID);
         List<RightsholderPayeeProductFamilyHolder> holders = List.of(new RightsholderPayeeProductFamilyHolder());
         expect(usageRepository.findRightsholderPayeeProductFamilyHoldersByScenarioIds(scenarioIds))
             .andReturn(holders).once();

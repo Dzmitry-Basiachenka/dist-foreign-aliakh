@@ -43,7 +43,6 @@ import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -132,9 +131,9 @@ public class NtsUsageServiceTest {
         NtsFields ntsFields = new NtsFields();
         ntsFields.setFundPoolPeriodFrom(2019);
         ntsFields.setFundPoolPeriodTo(2020);
-        ntsFields.setMarkets(Collections.singleton("Edu"));
+        ntsFields.setMarkets(Set.of("Edu"));
         usageBatch.setNtsFields(ntsFields);
-        expect(ntsUsageRepository.findCountForBatch(2019, 2020, Collections.singleton("Edu")))
+        expect(ntsUsageRepository.findCountForBatch(2019, 2020, Set.of("Edu")))
             .andReturn(1).once();
         replay(ntsUsageRepository);
         assertEquals(1, ntsUsageService.getUsagesCountForBatch(usageBatch));
@@ -219,7 +218,7 @@ public class NtsUsageServiceTest {
 
     @Test
     public void testGetUnclassifiedUsagesCount() {
-        Set<Long> wrWrkInsts = Collections.singleton(987654321L);
+        Set<Long> wrWrkInsts = Set.of(987654321L);
         expect(ntsUsageRepository.findUnclassifiedUsagesCountByWrWrkInsts(wrWrkInsts)).andReturn(2).once();
         replay(ntsUsageRepository);
         ntsUsageService.getUnclassifiedUsagesCount(wrWrkInsts);
@@ -249,7 +248,7 @@ public class NtsUsageServiceTest {
     @Test
     public void testAddWithdrawnUsagesToNtsFundPool() {
         String fundId = "e6042ad1-51e8-48d8-8b06-f8b2e684d993";
-        Set<String> batchIds = Collections.singleton(BATCH_ID);
+        Set<String> batchIds = Set.of(BATCH_ID);
         ntsUsageRepository.addWithdrawnUsagesToNtsFundPool(fundId, batchIds, USER_NAME);
         expectLastCall().once();
         replay(ntsUsageRepository);

@@ -20,7 +20,6 @@ import org.powermock.reflect.Whitebox;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -37,7 +36,7 @@ public class UsageBatchStatusServiceTest {
 
     private static final long NUMBER_OF_DAYS = 7;
     private static final String BATCH_ID = "364401b8-18cd-4b1d-baa1-998aaf39a386";
-    private final Set<String> batchIds = Collections.singleton(BATCH_ID);
+    private final Set<String> batchIds = Set.of(BATCH_ID);
     private final List<UsageBatchStatus> batchStatuses = new ArrayList<>();
     private IUsageBatchStatusService usageBatchStatusService;
     private IUsageBatchStatusRepository usageBatchStatusRepository;

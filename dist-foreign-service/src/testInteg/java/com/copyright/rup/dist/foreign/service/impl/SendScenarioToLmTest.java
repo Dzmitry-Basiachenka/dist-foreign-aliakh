@@ -40,6 +40,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -191,7 +192,7 @@ public class SendScenarioToLmTest {
 
     private void assertNtsFundPoolUsages(UsageStatusEnum status) {
         AuditFilter filter = new AuditFilter();
-        filter.setBatchesIds(Collections.singleton("a3af8396-acf3-432b-9f23-7554e3d8f50d"));
+        filter.setBatchesIds(Set.of("a3af8396-acf3-432b-9f23-7554e3d8f50d"));
         List<UsageDto> usages = usageService.getForAudit(filter, null, null);
         assertEquals(2, usages.size());
         usages.forEach(usage -> assertEquals(status, usage.getStatus()));

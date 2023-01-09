@@ -20,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,7 +60,7 @@ public class AclGrantService implements IAclGrantService {
         Map<Long, List<RmsGrant>> wrWrkInstToGrants = new HashMap<>();
         Iterables.partition(wrWrkInstToSystemTitles.keySet(), rightsPartitionSize).forEach(wrWrkInstsPart ->
             wrWrkInstToGrants.putAll(rmsRightsService.getGrants(wrWrkInstsPart, periodEndDate, STATUSES, TYPE_OF_USES,
-                    ImmutableSet.copyOf(Collections.singleton(grantSet.getLicenseType())))
+                    ImmutableSet.copyOf(Set.of(grantSet.getLicenseType())))
                 .stream()
                 .collect(Collectors.groupingBy(RmsGrant::getWrWrkInst))));
         List<AclGrantDetail> grantDetails = new ArrayList<>();

@@ -218,7 +218,7 @@ public class UsageBatchServiceTest {
         List<String> usageIds = List.of("c1965b73-7800-455c-beb3-98a430512f20");
         usageBatchRepository.insert(capture(captureUsageBatch));
         expectLastCall().once();
-        rightsholderService.updateRighstholdersAsync(Collections.singleton(RRO_ACCOUNT_NUMBER));
+        rightsholderService.updateRighstholdersAsync(Set.of(RRO_ACCOUNT_NUMBER));
         expectLastCall().once();
         expect(ntsUsageService.insertUsages(usageBatch)).andReturn(usageIds).once();
         usageBatchRepository.updateInitialUsagesCount(eq(usageIds.size()), anyString(), eq(USER_NAME));
@@ -400,17 +400,17 @@ public class UsageBatchServiceTest {
 
     @Test
     public void testGetBatchNamesWithUnclassifiedWorks() {
-        Set<String> batchIds = Collections.singleton(BATCH_UID);
+        Set<String> batchIds = Set.of(BATCH_UID);
         expect(usageBatchRepository.findBatchNamesWithoutUsagesForClassification(batchIds, null))
             .andReturn(List.of("Batch with unclassified usages")).once();
         replay(usageBatchRepository);
-        usageBatchService.getBatchNamesWithUnclassifiedWorks(Collections.singleton(BATCH_UID));
+        usageBatchService.getBatchNamesWithUnclassifiedWorks(Set.of(BATCH_UID));
         verify(usageBatchRepository);
     }
 
     @Test
     public void testGetClassifcationToBatchNamesWithoutUsagesForStmOrNonStm() {
-        Set<String> batchIds = Collections.singleton(BATCH_UID);
+        Set<String> batchIds = Set.of(BATCH_UID);
         expect(usageBatchRepository.findBatchNamesWithoutUsagesForClassification(batchIds, "STM"))
             .andReturn(List.of("Batch without STM usages")).once();
         expect(usageBatchRepository.findBatchNamesWithoutUsagesForClassification(batchIds, "NON-STM"))
@@ -422,7 +422,7 @@ public class UsageBatchServiceTest {
 
     @Test
     public void testGetProcessingNtsBatchesNames() {
-        Set<String> batchesIds = Collections.singleton(RupPersistUtils.generateUuid());
+        Set<String> batchesIds = Set.of(RupPersistUtils.generateUuid());
         List<String> batchesNames = List.of(BATCH_NAME);
         EnumSet<UsageStatusEnum> processingStatuses =
             EnumSet.of(UsageStatusEnum.ELIGIBLE, UsageStatusEnum.UNCLASSIFIED, UsageStatusEnum.LOCKED,
@@ -436,7 +436,7 @@ public class UsageBatchServiceTest {
 
     @Test
     public void testGetProcessingAaclBatchesNames() {
-        Set<String> batchesIds = Collections.singleton(RupPersistUtils.generateUuid());
+        Set<String> batchesIds = Set.of(RupPersistUtils.generateUuid());
         List<String> batchesNames = List.of(BATCH_NAME);
         EnumSet<UsageStatusEnum> processingStatuses =
             EnumSet.of(UsageStatusEnum.ELIGIBLE, UsageStatusEnum.WORK_RESEARCH, UsageStatusEnum.RH_FOUND,
@@ -450,7 +450,7 @@ public class UsageBatchServiceTest {
 
     @Test
     public void testGetIneligibleBatchesNames() {
-        Set<String> batchesIds = Collections.singleton(RupPersistUtils.generateUuid());
+        Set<String> batchesIds = Set.of(RupPersistUtils.generateUuid());
         List<String> batchesNames = List.of(BATCH_NAME);
         expect(
             usageBatchRepository.findIneligibleForScenarioBatchNames(batchesIds, EnumSet.of(UsageStatusEnum.ELIGIBLE)))
@@ -463,7 +463,7 @@ public class UsageBatchServiceTest {
     @Test
     public void testGetBatchesNamesToScenariosNames() {
         String batchId = RupPersistUtils.generateUuid();
-        Set<String> batchesIds = Collections.singleton(batchId);
+        Set<String> batchesIds = Set.of(batchId);
         Map<String, String> batchesNamesToScenariosNames = ImmutableMap.of(BATCH_NAME, "test scenario name");
         expect(usageBatchRepository.findBatchesNamesToScenariosNames(batchesIds))
             .andReturn(batchesNamesToScenariosNames).once();

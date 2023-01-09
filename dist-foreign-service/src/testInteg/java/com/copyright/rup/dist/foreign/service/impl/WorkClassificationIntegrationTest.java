@@ -23,7 +23,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -46,7 +45,7 @@ import java.util.Set;
 public class WorkClassificationIntegrationTest {
 
     private static final String FOLDER_NAME = "work-classification-integration-test/";
-    private static final Set<String> BATCHES_IDS = Collections.singleton("e17ebc80-e74e-436d-ba6e-acf3d355b7ff");
+    private static final Set<String> BATCHES_IDS = Set.of("e17ebc80-e74e-436d-ba6e-acf3d355b7ff");
     private static final Long WR_WRK_INST_1 = 180382914L;
     private static final Long WR_WRK_INST_2 = 243904752L;
     private static final String STM = "STM";

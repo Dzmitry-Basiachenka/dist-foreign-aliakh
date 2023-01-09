@@ -485,8 +485,7 @@ public class ReportServiceTest {
     @Test
     public void testWriteOwnershipAdjustmentCsvReport() {
         String scenarioId = "12b3c369-3084-41ad-92b5-62197660d642";
-        Set<RightsholderDiscrepancyStatusEnum> statuses =
-            Collections.singleton(RightsholderDiscrepancyStatusEnum.APPROVED);
+        Set<RightsholderDiscrepancyStatusEnum> statuses = Set.of(RightsholderDiscrepancyStatusEnum.APPROVED);
         PipedOutputStream outputStream = createMock(PipedOutputStream.class);
         fasReportRepository.writeOwnershipAdjustmentCsvReport(scenarioId, statuses, outputStream);
         expectLastCall().once();
@@ -497,7 +496,7 @@ public class ReportServiceTest {
 
     @Test
     public void testWriteWorkClassificationCsvReportWithBatchIds() {
-        Set<String> batchIds = Collections.singleton("batch-uid-1293213");
+        Set<String> batchIds = Set.of("batch-uid-1293213");
         String search = "search";
         PipedOutputStream outputStream = createMock(PipedOutputStream.class);
         ntsReportRepository.writeWorkClassificationCsvReport(batchIds, search, outputStream);
@@ -576,7 +575,7 @@ public class ReportServiceTest {
 
     @Test
     public void writeTaxNotificationCsvReport() throws IOException {
-        Set<String> scenarioIds = Collections.singleton("629c078f-462f-4ba6-bebd-8d558ccc12aa");
+        Set<String> scenarioIds = Set.of("629c078f-462f-4ba6-bebd-8d558ccc12aa");
         expect(rhTaxService.getRhTaxInformation(FAS_PRODUCT_FAMILY, scenarioIds, 15))
             .andReturn(loadExpectedRhTaxInformation("json/rh_tax_information_for_tax_notification_report.json")).once();
         replay(rhTaxService);
