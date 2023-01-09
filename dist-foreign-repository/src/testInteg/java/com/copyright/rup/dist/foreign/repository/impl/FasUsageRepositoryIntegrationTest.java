@@ -109,8 +109,8 @@ public class FasUsageRepositoryIntegrationTest {
                 "730d7964-f399-4971-9403-dbedc9d7a180"));
         assertEquals(3, CollectionUtils.size(usagesBeforeExclude));
         usagesBeforeExclude.forEach(usage -> assertEquals(SCENARIO_ID_2, usage.getScenarioId()));
-        Set<String> excludedIds = fasUsageRepository.deleteFromScenarioByPayees(Collections.singleton(SCENARIO_ID_2),
-            Collections.singleton(7000813806L), USER_NAME);
+        Set<String> excludedIds = fasUsageRepository.deleteFromScenarioByPayees(Set.of(SCENARIO_ID_2),
+            Set.of(7000813806L), USER_NAME);
         assertEquals(2, CollectionUtils.size(excludedIds));
         assertTrue(excludedIds.contains("730d7964-f399-4971-9403-dbedc9d7a180"));
         List<Usage> usages = usageRepository.findByIds(
@@ -133,9 +133,8 @@ public class FasUsageRepositoryIntegrationTest {
                 "72f6abdb-c82d-4cee-aadf-570942cf0093"));
         assertEquals(3, CollectionUtils.size(usagesBeforeExclude));
         usagesBeforeExclude.forEach(usage -> assertEquals(SCENARIO_ID_3, usage.getScenarioId()));
-        Set<String> excludedIds =
-            fasUsageRepository.redesignateToNtsWithdrawnByPayees(Collections.singleton(SCENARIO_ID_3),
-                Collections.singleton(7000813806L), USER_NAME);
+        Set<String> excludedIds = fasUsageRepository.redesignateToNtsWithdrawnByPayees(Set.of(SCENARIO_ID_3),
+                Set.of(7000813806L), USER_NAME);
         assertEquals(2, CollectionUtils.size(excludedIds));
         assertTrue(excludedIds.contains("72f6abdb-c82d-4cee-aadf-570942cf0093"));
         List<Usage> usages = usageRepository.findByIds(
@@ -153,10 +152,10 @@ public class FasUsageRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FOLDER_NAME + "find-account-numbers-invalid-for-exclude.groovy")
     public void testFindAccountNumbersInvalidForExclude() {
-        assertEquals(Collections.singleton(7000813806L), fasUsageRepository.findAccountNumbersInvalidForExclude(
+        assertEquals(Set.of(7000813806L), fasUsageRepository.findAccountNumbersInvalidForExclude(
             Sets.newHashSet(SCENARIO_ID_2, SCENARIO_ID_3), Sets.newHashSet(7000813806L, 1000002859L)));
         assertTrue(fasUsageRepository.findAccountNumbersInvalidForExclude(Sets.newHashSet(SCENARIO_ID_2, SCENARIO_ID_3),
-            Collections.singleton(1000002859L)).isEmpty());
+            Set.of(1000002859L)).isEmpty());
     }
 
     @Test
@@ -216,8 +215,7 @@ public class FasUsageRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FIND_WITH_AMOUNTS_AND_RIGHTSHOLDERS)
     public void testFindWithAmountsAndRightsholders() {
-        UsageFilter usageFilter =
-            buildUsageFilter(Collections.singleton(RH_ACCOUNT_NUMBER), Collections.singleton(USAGE_BATCH_ID_1),
+        UsageFilter usageFilter = buildUsageFilter(Set.of(RH_ACCOUNT_NUMBER), Set.of(USAGE_BATCH_ID_1),
                 UsageStatusEnum.ELIGIBLE, PAYMENT_DATE, FISCAL_YEAR);
         verifyUsages(fasUsageRepository.findWithAmountsAndRightsholders(usageFilter), 1, USAGE_ID_1);
     }
@@ -225,8 +223,7 @@ public class FasUsageRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FIND_WITH_AMOUNTS_AND_RIGHTSHOLDERS)
     public void testVerifyFindWithAmountsAndRightsholders() {
-        UsageFilter usageFilter =
-            buildUsageFilter(Collections.singleton(RH_ACCOUNT_NUMBER), Collections.singleton(USAGE_BATCH_ID_1),
+        UsageFilter usageFilter = buildUsageFilter(Set.of(RH_ACCOUNT_NUMBER), Set.of(USAGE_BATCH_ID_1),
                 UsageStatusEnum.ELIGIBLE, PAYMENT_DATE, FISCAL_YEAR);
         List<Usage> usages = fasUsageRepository.findWithAmountsAndRightsholders(usageFilter);
         assertEquals(1, usages.size());
@@ -250,7 +247,7 @@ public class FasUsageRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FIND_WITH_AMOUNTS_AND_RIGHTSHOLDERS)
     public void testFindWithAmountsAndRightsholdersByUsageBatchFilter() {
-        UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Collections.singleton(USAGE_BATCH_ID_1),
+        UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Set.of(USAGE_BATCH_ID_1),
             UsageStatusEnum.ELIGIBLE, null, null);
         verifyUsages(fasUsageRepository.findWithAmountsAndRightsholders(usageFilter), 1, USAGE_ID_1);
     }
@@ -258,7 +255,7 @@ public class FasUsageRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FIND_WITH_AMOUNTS_AND_RIGHTSHOLDERS)
     public void testFindWithAmountsAndRightsholdersByRhAccountNumberFilter() {
-        UsageFilter usageFilter = buildUsageFilter(Collections.singleton(RH_ACCOUNT_NUMBER), Collections.emptySet(),
+        UsageFilter usageFilter = buildUsageFilter(Set.of(RH_ACCOUNT_NUMBER), Collections.emptySet(),
             UsageStatusEnum.ELIGIBLE, null, null);
         verifyUsages(fasUsageRepository.findWithAmountsAndRightsholders(usageFilter), 1, USAGE_ID_1);
     }

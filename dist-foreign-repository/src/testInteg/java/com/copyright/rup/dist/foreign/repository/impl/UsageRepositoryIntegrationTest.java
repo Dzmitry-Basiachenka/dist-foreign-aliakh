@@ -159,16 +159,14 @@ public class UsageRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindCountByFilter() {
-        assertEquals(1, usageRepository.findCountByFilter(
-            buildUsageFilter(Collections.singleton(RH_ACCOUNT_NUMBER), Collections.singleton(USAGE_BATCH_ID_1),
-                FAS_PRODUCT_FAMILY, UsageStatusEnum.ELIGIBLE, PAYMENT_DATE, FISCAL_YEAR)));
+        assertEquals(1, usageRepository.findCountByFilter(buildUsageFilter(Set.of(RH_ACCOUNT_NUMBER),
+            Set.of(USAGE_BATCH_ID_1), FAS_PRODUCT_FAMILY, UsageStatusEnum.ELIGIBLE, PAYMENT_DATE, FISCAL_YEAR)));
     }
 
     @Test
     @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindDtosByFilter() {
-        UsageFilter usageFilter =
-            buildUsageFilter(Collections.singleton(RH_ACCOUNT_NUMBER), Collections.singleton(USAGE_BATCH_ID_1),
+        UsageFilter usageFilter = buildUsageFilter(Set.of(RH_ACCOUNT_NUMBER), Set.of(USAGE_BATCH_ID_1),
                 FAS_PRODUCT_FAMILY, UsageStatusEnum.ELIGIBLE, PAYMENT_DATE, FISCAL_YEAR);
         verifyUsageDtos(usageRepository.findDtosByFilter(usageFilter, null,
             new Sort(DETAIL_ID_KEY, Sort.Direction.ASC)), USAGE_ID_1);
@@ -194,7 +192,7 @@ public class UsageRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindDtosByUsageBatchFilter() {
-        UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Collections.singleton(USAGE_BATCH_ID_1),
+        UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Set.of(USAGE_BATCH_ID_1),
             null, null, null, null);
         verifyUsageDtos(usageRepository.findDtosByFilter(usageFilter, null,
             new Sort(DETAIL_ID_KEY, Sort.Direction.ASC)), USAGE_ID_1);
@@ -203,7 +201,7 @@ public class UsageRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindDtosByRhAccountNumberFilter() {
-        UsageFilter usageFilter = buildUsageFilter(Collections.singleton(RH_ACCOUNT_NUMBER), Collections.emptySet(),
+        UsageFilter usageFilter = buildUsageFilter(Set.of(RH_ACCOUNT_NUMBER), Collections.emptySet(),
             null, null, null, null);
         verifyUsageDtos(usageRepository.findDtosByFilter(usageFilter, null,
             new Sort(DETAIL_ID_KEY, Sort.Direction.ASC)), USAGE_ID_1);
@@ -269,8 +267,7 @@ public class UsageRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FOLDER_NAME + "find-invalid-rh-by-filter.groovy")
     public void testFindInvalidRightsholdersByFilter() {
-        UsageFilter usageFilter =
-            buildUsageFilter(Collections.emptySet(), Collections.singleton(USAGE_BATCH_ID_1),
+        UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Set.of(USAGE_BATCH_ID_1),
                 null, UsageStatusEnum.ELIGIBLE, null, null);
         assertTrue(CollectionUtils.isEmpty(usageRepository.findInvalidRightsholdersByFilter(usageFilter)));
         List<Usage> usages = usageRepository.findByIds(List.of(USAGE_ID_18));
@@ -285,7 +282,7 @@ public class UsageRepositoryIntegrationTest {
     @TestData(fileName = FIND_PAYEE_TOTAL_HOLDER_BY_FILTER)
     public void testFindPayeeTotalHoldersByScenarioFilter() {
         ExcludePayeeFilter filter = new ExcludePayeeFilter();
-        filter.setScenarioIds(Collections.singleton(SCENARIO_ID_2));
+        filter.setScenarioIds(Set.of(SCENARIO_ID_2));
         List<PayeeTotalHolder> payeeTotalHolders = usageRepository.findPayeeTotalHoldersByFilter(filter);
         assertEquals(2, CollectionUtils.size(payeeTotalHolders));
         verifyPayeeTotalsHolder(7000813806L, RH_ACCOUNT_NAME_4, new BigDecimal("100.0000000000"),
@@ -299,7 +296,7 @@ public class UsageRepositoryIntegrationTest {
     @TestData(fileName = FIND_PAYEE_TOTAL_HOLDER_BY_FILTER)
     public void testFindPayeeTotalHoldersByScenarioFilterAndSearch() {
         ExcludePayeeFilter filter = new ExcludePayeeFilter();
-        filter.setScenarioIds(Collections.singleton(SCENARIO_ID_2));
+        filter.setScenarioIds(Set.of(SCENARIO_ID_2));
         filter.setSearchValue("Administracion");
         List<PayeeTotalHolder> payeeTotalHolders = usageRepository.findPayeeTotalHoldersByFilter(filter);
         assertEquals(1, CollectionUtils.size(payeeTotalHolders));
@@ -311,7 +308,7 @@ public class UsageRepositoryIntegrationTest {
     @TestData(fileName = FIND_PAYEE_TOTAL_HOLDER_BY_FILTER)
     public void testFindPayeeTotalHoldersByScenarioFilterAndThreshold() {
         ExcludePayeeFilter filter = new ExcludePayeeFilter();
-        filter.setScenarioIds(Collections.singleton(SCENARIO_ID_2));
+        filter.setScenarioIds(Set.of(SCENARIO_ID_2));
         filter.setNetAmountMinThreshold(new BigDecimal(150));
         List<PayeeTotalHolder> payeeTotalHolders = usageRepository.findPayeeTotalHoldersByFilter(filter);
         assertEquals(1, CollectionUtils.size(payeeTotalHolders));
@@ -323,7 +320,7 @@ public class UsageRepositoryIntegrationTest {
     @TestData(fileName = FIND_PAYEE_TOTAL_HOLDER_BY_FILTER)
     public void testFindPayeeTotalHoldersByScenarioFilterAndParticipationStatus() {
         ExcludePayeeFilter filter = new ExcludePayeeFilter();
-        filter.setScenarioIds(Collections.singleton(SCENARIO_ID_2));
+        filter.setScenarioIds(Set.of(SCENARIO_ID_2));
         filter.setPayeeParticipating(false);
         List<PayeeTotalHolder> payeeTotalHolders = usageRepository.findPayeeTotalHoldersByFilter(filter);
         assertEquals(1, CollectionUtils.size(payeeTotalHolders));
@@ -708,7 +705,7 @@ public class UsageRepositoryIntegrationTest {
     @TestData(fileName = FIND_FOR_AUDIT)
     public void testFindForAuditByBatch() {
         AuditFilter filter = new AuditFilter();
-        filter.setBatchesIds(Collections.singleton(BATCH_ID));
+        filter.setBatchesIds(Set.of(BATCH_ID));
         assertEquals(2, usageRepository.findCountForAudit(filter));
         List<UsageDto> usages = usageRepository.findForAudit(filter, new Pageable(0, 10), null);
         verifyUsageDtos(usages, USAGE_ID_5, USAGE_ID_4);
@@ -718,7 +715,7 @@ public class UsageRepositoryIntegrationTest {
     @TestData(fileName = FIND_FOR_AUDIT)
     public void testFindForAuditByRightsholders() {
         AuditFilter filter = new AuditFilter();
-        filter.setRhAccountNumbers(Collections.singleton(1000002475L));
+        filter.setRhAccountNumbers(Set.of(1000002475L));
         assertEquals(1, usageRepository.findCountForAudit(filter));
         List<UsageDto> usages = usageRepository.findForAudit(filter, new Pageable(0, 10), null);
         verifyUsageDtos(usages, USAGE_ID_5);
@@ -770,7 +767,7 @@ public class UsageRepositoryIntegrationTest {
     @TestData(fileName = FIND_FOR_AUDIT)
     public void testFindForAuditPageable() {
         AuditFilter filter = new AuditFilter();
-        filter.setBatchesIds(Collections.singleton(BATCH_ID));
+        filter.setBatchesIds(Set.of(BATCH_ID));
         assertEquals(2, usageRepository.findCountForAudit(filter));
         List<UsageDto> usages = usageRepository.findForAudit(filter, new Pageable(0, 1), null);
         verifyUsageDtos(usages, USAGE_ID_5);
@@ -851,7 +848,7 @@ public class UsageRepositoryIntegrationTest {
     @TestData(fileName = FIND_FOR_AUDIT)
     public void testFindForAuditSortingByCommonUsageInfo() {
         AuditFilter filter = new AuditFilter();
-        filter.setBatchesIds(Collections.singleton(BATCH_ID));
+        filter.setBatchesIds(Set.of(BATCH_ID));
         verifyFindForAuditSort(filter, DETAIL_ID_KEY, Direction.ASC, USAGE_ID_5, USAGE_ID_4);
         verifyFindForAuditSort(filter, DETAIL_ID_KEY, Direction.DESC, USAGE_ID_4, USAGE_ID_5);
         verifyFindForAuditSort(filter, STATUS_KEY, Direction.ASC, USAGE_ID_5, USAGE_ID_4);
@@ -895,7 +892,7 @@ public class UsageRepositoryIntegrationTest {
     @TestData(fileName = FIND_FOR_AUDIT)
     public void testFindForAuditSortingByPaidInfo() {
         AuditFilter filter = new AuditFilter();
-        filter.setBatchesIds(Collections.singleton("48bfe456-fbc1-436e-8762-baca46a0e09c"));
+        filter.setBatchesIds(Set.of("48bfe456-fbc1-436e-8762-baca46a0e09c"));
         verifyFindForAuditSort(filter, "payeeAccountNumber", Direction.ASC, USAGE_ID_16, USAGE_ID_15);
         verifyFindForAuditSort(filter, "payeeAccountNumber", Direction.DESC, USAGE_ID_15, USAGE_ID_16);
         verifyFindForAuditSort(filter, "payeeName", Direction.ASC, USAGE_ID_16, USAGE_ID_15);
@@ -996,7 +993,7 @@ public class UsageRepositoryIntegrationTest {
     @TestData(fileName = FOLDER_NAME + "is-valid-filtered-usage-status.groovy")
     public void testIsValidFilteredUsageStatus() {
         UsageFilter usageFilter = new UsageFilter();
-        usageFilter.setUsageBatchesIds(Collections.singleton("ee575916-f6d0-4c3c-b589-32663e0f4793"));
+        usageFilter.setUsageBatchesIds(Set.of("ee575916-f6d0-4c3c-b589-32663e0f4793"));
         assertFalse(usageRepository.isValidFilteredUsageStatus(usageFilter, UsageStatusEnum.WORK_NOT_FOUND));
         usageFilter.setUsageStatus(UsageStatusEnum.WORK_NOT_FOUND);
         assertTrue(usageRepository.isValidFilteredUsageStatus(usageFilter, UsageStatusEnum.WORK_NOT_FOUND));

@@ -20,6 +20,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.Set;
 
 /**
  * Integration test for {@link com.copyright.rup.dist.foreign.repository.impl.AaclReportRepository}.
@@ -66,7 +67,7 @@ public class AaclCsvReportsIntegrationTest extends CsvReportsTestHelper {
     @TestData(fileName = WRITE_AUDIT_CSV_REPORT)
     public void testWriteAuditCsvReport() throws Exception {
         AuditFilter auditFilter = new AuditFilter();
-        auditFilter.setBatchesIds(Collections.singleton("29689635-c6ff-483c-972d-09eb2febb9e0"));
+        auditFilter.setBatchesIds(Set.of("29689635-c6ff-483c-972d-09eb2febb9e0"));
         auditFilter.setProductFamily("AACL");
         assertFilesWithExecutor(outputStream -> reportRepository.writeAuditAaclCsvReport(auditFilter, outputStream),
             "aacl/audit_usages_report.csv");
@@ -111,7 +112,7 @@ public class AaclCsvReportsIntegrationTest extends CsvReportsTestHelper {
         UsageFilter usageFilter = new UsageFilter();
         usageFilter.setProductFamily("AACL");
         usageFilter.setUsageStatus(UsageStatusEnum.RH_FOUND);
-        usageFilter.setUsageBatchesIds(Collections.singleton("aed882d5-7625-4039-8781-a6676e11c579"));
+        usageFilter.setUsageBatchesIds(Set.of("aed882d5-7625-4039-8781-a6676e11c579"));
         assertFiles(outputStream -> reportRepository.writeUsagesForClassificationAndFindIds(usageFilter, outputStream),
             "aacl/usages_for_classification.csv");
     }
@@ -128,7 +129,7 @@ public class AaclCsvReportsIntegrationTest extends CsvReportsTestHelper {
     @TestData(fileName = WRITE_USAGES_CSV_REPORT)
     public void testWriteUsagesCsvReport() throws IOException {
         UsageFilter usageFilter = new UsageFilter();
-        usageFilter.setUsageBatchesIds(Collections.singleton("600ad926-e7dd-4086-b283-87e6579395ce"));
+        usageFilter.setUsageBatchesIds(Set.of("600ad926-e7dd-4086-b283-87e6579395ce"));
         usageFilter.setProductFamily("AACL");
         assertFilesWithExecutor(outputStream -> reportRepository.writeAaclUsagesCsvReport(usageFilter, outputStream),
             "aacl/usages_report.csv");
@@ -227,7 +228,7 @@ public class AaclCsvReportsIntegrationTest extends CsvReportsTestHelper {
     @TestData(fileName = WRITE_EXCLUDE_DETAILS_BY_PAYEE_CSV_REPORT)
     public void testWriteExcludeDetailsByPayeeCsvEmptyReport() throws IOException {
         ExcludePayeeFilter filter = new ExcludePayeeFilter();
-        filter.setScenarioIds(Collections.singleton("2373ef30-1952-4e78-890d-d6b3087de59c"));
+        filter.setScenarioIds(Set.of("2373ef30-1952-4e78-890d-d6b3087de59c"));
         assertFilesWithExecutor(outputStream -> reportRepository.writeAaclExcludeDetailsByPayeeCsvReport(filter,
             Collections.emptySet(), outputStream), "aacl/exclude_by_payee_report_empty.csv");
     }
@@ -244,8 +245,8 @@ public class AaclCsvReportsIntegrationTest extends CsvReportsTestHelper {
     @TestData(fileName = WRITE_EXCLUDE_DETAILS_BY_PAYEE_CSV_REPORT)
     public void testWriteExcludeDetailsByPayeeCsvReport() throws IOException {
         ExcludePayeeFilter filter = new ExcludePayeeFilter();
-        filter.setScenarioIds(Collections.singleton("281ee7fa-7a94-48f9-9865-10ff69e94f07"));
+        filter.setScenarioIds(Set.of("281ee7fa-7a94-48f9-9865-10ff69e94f07"));
         assertFilesWithExecutor(outputStream -> reportRepository.writeAaclExcludeDetailsByPayeeCsvReport(filter,
-            Collections.singleton(1000011881L), outputStream), "aacl/exclude_by_payee_report.csv");
+            Set.of(1000011881L), outputStream), "aacl/exclude_by_payee_report.csv");
     }
 }

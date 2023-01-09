@@ -18,8 +18,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Integration test for {@link com.copyright.rup.dist.foreign.repository.impl.SalReportRepository}.
@@ -127,7 +127,7 @@ public class SalCsvReportsIntegrationTest extends CsvReportsTestHelper {
     @TestData(fileName = WRITE_AUDIT_CSV_REPORT)
     public void testWriteAuditCsvReport() throws Exception {
         AuditFilter auditFilter = new AuditFilter();
-        auditFilter.setBatchesIds(Collections.singleton("a375c049-1289-4c85-994b-b2bd8ac043cf"));
+        auditFilter.setBatchesIds(Set.of("a375c049-1289-4c85-994b-b2bd8ac043cf"));
         auditFilter.setProductFamily("SAL");
         assertFilesWithExecutor(outputStream -> reportRepository.writeAuditSalCsvReport(auditFilter, outputStream),
             "sal/audit_usages_report.csv");
@@ -137,7 +137,7 @@ public class SalCsvReportsIntegrationTest extends CsvReportsTestHelper {
     @TestData(fileName = WRITE_USAGES_CSV_REPORT)
     public void testWriteUsagesCsvReport() throws IOException {
         UsageFilter usageFilter = new UsageFilter();
-        usageFilter.setUsageBatchesIds(Collections.singleton("da616e09-ca76-4815-b178-637abf32a76e"));
+        usageFilter.setUsageBatchesIds(Set.of("da616e09-ca76-4815-b178-637abf32a76e"));
         assertFilesWithExecutor(outputStream -> reportRepository.writeSalUsagesCsvReport(usageFilter, outputStream),
             "sal/usages_report.csv");
     }

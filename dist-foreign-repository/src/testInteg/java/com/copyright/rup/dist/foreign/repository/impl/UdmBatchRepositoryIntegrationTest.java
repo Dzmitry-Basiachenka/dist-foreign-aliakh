@@ -24,8 +24,8 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Verifies {@link UdmBatchRepository}.
@@ -93,8 +93,7 @@ public class UdmBatchRepositoryIntegrationTest {
     public void testIsUdmBatchProcessingCompleted() {
         assertFalse(udmBatchRepository.isUdmBatchProcessingCompleted(UDM_BATCH_UID_2,
             Sets.newHashSet(UsageStatusEnum.NEW, UsageStatusEnum.WORK_FOUND)));
-        assertTrue(udmBatchRepository.isUdmBatchProcessingCompleted(UDM_BATCH_UID_2,
-            Collections.singleton(UsageStatusEnum.RH_FOUND)));
+        assertTrue(udmBatchRepository.isUdmBatchProcessingCompleted(UDM_BATCH_UID_2, Set.of(UsageStatusEnum.RH_FOUND)));
     }
 
     @Test

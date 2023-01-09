@@ -12,8 +12,8 @@ import com.copyright.rup.dist.foreign.domain.filter.UdmValueFilter;
 import org.junit.Test;
 
 import java.math.BigDecimal;
-import java.util.Collections;
 import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Verifies {@link UdmValueFilter}.
@@ -59,7 +59,7 @@ public class UdmValueFilterTest {
     public void testIsEmpty() {
         UdmValueFilter valueFilter = new UdmValueFilter();
         assertTrue(valueFilter.isEmpty());
-        valueFilter.setPeriods(Collections.singleton(PERIOD));
+        valueFilter.setPeriods(Set.of(PERIOD));
         assertFalse(valueFilter.isEmpty());
         valueFilter.setPeriods(new HashSet<>());
         assertTrue(valueFilter.isEmpty());
@@ -73,19 +73,19 @@ public class UdmValueFilterTest {
         assertFalse(valueFilter.isEmpty());
         valueFilter.setCurrency(null);
         assertTrue(valueFilter.isEmpty());
-        valueFilter.setAssignees(new HashSet<>(Collections.singleton(ASSIGNEE)));
+        valueFilter.setAssignees(new HashSet<>(Set.of(ASSIGNEE)));
         assertFalse(valueFilter.isEmpty());
         valueFilter.setAssignees(new HashSet<>());
         assertTrue(valueFilter.isEmpty());
         valueFilter.setAssignees(null);
         assertTrue(valueFilter.isEmpty());
-        valueFilter.setLastValuePeriods(Collections.singleton(LAST_VALUE_PERIOD));
+        valueFilter.setLastValuePeriods(Set.of(LAST_VALUE_PERIOD));
         assertFalse(valueFilter.isEmpty());
         valueFilter.setLastValuePeriods(new HashSet<>());
         assertTrue(valueFilter.isEmpty());
         valueFilter.setLastValuePeriods(null);
         assertTrue(valueFilter.isEmpty());
-        valueFilter.setPubTypes(Collections.singleton(PUB_TYPE));
+        valueFilter.setPubTypes(Set.of(PUB_TYPE));
         assertFalse(valueFilter.isEmpty());
         valueFilter.setPubTypes(new HashSet<>());
         assertTrue(valueFilter.isEmpty());

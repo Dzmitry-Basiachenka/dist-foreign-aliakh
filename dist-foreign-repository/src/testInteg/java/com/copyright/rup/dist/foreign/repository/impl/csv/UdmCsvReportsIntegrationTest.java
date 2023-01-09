@@ -25,9 +25,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Integration tests for csv reports for UDM product family.
@@ -103,7 +103,7 @@ public class UdmCsvReportsIntegrationTest extends CsvReportsTestHelper {
     @TestData(fileName = WRITE_USAGE_CSV_REPORT)
     public void testWriteUsageCsvReportSpecialistManager() throws IOException {
         UdmUsageFilter udmUsageFilter = new UdmUsageFilter();
-        udmUsageFilter.setUdmBatchesIds(Collections.singleton("a23681ae-1cf7-44ee-b09b-6fc06779e05c"));
+        udmUsageFilter.setUdmBatchesIds(Set.of("a23681ae-1cf7-44ee-b09b-6fc06779e05c"));
         assertFilesWithExecutor(outputStream ->
                 udmReportRepository.writeUdmUsageCsvReportSpecialistManager(udmUsageFilter, outputStream),
             "udm/usages_report_specialist_manager.csv");
@@ -121,7 +121,7 @@ public class UdmCsvReportsIntegrationTest extends CsvReportsTestHelper {
     @TestData(fileName = WRITE_USAGE_CSV_REPORT)
     public void testWriteUsageCsvReportResearcher() throws IOException {
         UdmUsageFilter udmUsageFilter = new UdmUsageFilter();
-        udmUsageFilter.setUdmBatchesIds(Collections.singleton("94b644cb-ab57-4825-b985-c51734a5aa1e"));
+        udmUsageFilter.setUdmBatchesIds(Set.of("94b644cb-ab57-4825-b985-c51734a5aa1e"));
         assertFilesWithExecutor(outputStream ->
                 udmReportRepository.writeUdmUsageCsvReportResearcher(udmUsageFilter, outputStream),
             "udm/usages_report_researcher.csv");
@@ -139,7 +139,7 @@ public class UdmCsvReportsIntegrationTest extends CsvReportsTestHelper {
     @TestData(fileName = WRITE_USAGE_CSV_REPORT)
     public void testWriteUsageCsvReportView() throws IOException {
         UdmUsageFilter udmUsageFilter = new UdmUsageFilter();
-        udmUsageFilter.setUdmBatchesIds(Collections.singleton("a524f8a9-2c95-43ea-8c25-b9f38b1c758e"));
+        udmUsageFilter.setUdmBatchesIds(Set.of("a524f8a9-2c95-43ea-8c25-b9f38b1c758e"));
         assertFilesWithExecutor(outputStream ->
                 udmReportRepository.writeUdmUsageCsvReportView(udmUsageFilter, outputStream),
             "udm/usages_report_view.csv");
@@ -157,10 +157,10 @@ public class UdmCsvReportsIntegrationTest extends CsvReportsTestHelper {
     @TestData(fileName = WRITE_BASELINE_USAGE_CSV_REPORT)
     public void testWriteBaselineUsageCsvReport() throws IOException {
         UdmBaselineFilter udmBaselineFilter = new UdmBaselineFilter();
-        udmBaselineFilter.setPeriods(Collections.singleton(202106));
+        udmBaselineFilter.setPeriods(Set.of(202106));
         udmBaselineFilter.setChannel(UdmChannelEnum.CCC);
         udmBaselineFilter.setUdmUsageOrigin(UdmUsageOriginEnum.SS);
-        udmBaselineFilter.setReportedTypeOfUses(Collections.singleton("EMAIL_COPY"));
+        udmBaselineFilter.setReportedTypeOfUses(Set.of("EMAIL_COPY"));
         assertFilesWithExecutor(outputStream ->
                 udmReportRepository.writeUdmBaselineUsageCsvReport(udmBaselineFilter, outputStream),
             "udm/baseline_usages_report.csv");
@@ -194,7 +194,7 @@ public class UdmCsvReportsIntegrationTest extends CsvReportsTestHelper {
         UdmReportFilter reportFilter = new UdmReportFilter();
         reportFilter.setUsageOrigin(UdmUsageOriginEnum.RFA);
         reportFilter.setChannel(UdmChannelEnum.Rightsdirect);
-        reportFilter.setPeriods(Collections.singleton(202112));
+        reportFilter.setPeriods(Set.of(202112));
         assertFilesWithExecutor(
             outputStream -> udmReportRepository.writeUdmWeeklySurveyCsvReport(reportFilter, outputStream),
             "udm/weekly_survey_empty_report.csv");
@@ -204,7 +204,7 @@ public class UdmCsvReportsIntegrationTest extends CsvReportsTestHelper {
     @TestData(fileName = WRITE_SURVEY_LICENSEE_CSV_REPORT)
     public void testWriteSurveyLicenseeCsvReport() throws IOException {
         UdmReportFilter reportFilter = new UdmReportFilter();
-        reportFilter.setPeriods(Collections.singleton(202206));
+        reportFilter.setPeriods(Set.of(202206));
         reportFilter.setUsageOrigin(UdmUsageOriginEnum.RFA);
         reportFilter.setChannel(UdmChannelEnum.CCC);
         reportFilter.setDateFrom(LocalDate.of(2022, 3, 1));
@@ -220,7 +220,7 @@ public class UdmCsvReportsIntegrationTest extends CsvReportsTestHelper {
         UdmReportFilter reportFilter = new UdmReportFilter();
         reportFilter.setUsageOrigin(UdmUsageOriginEnum.RFA);
         reportFilter.setChannel(UdmChannelEnum.Rightsdirect);
-        reportFilter.setPeriods(Collections.singleton(202112));
+        reportFilter.setPeriods(Set.of(202112));
         assertFilesWithExecutor(
             outputStream -> udmReportRepository.writeUdmSurveyLicenseeCsvReport(reportFilter, outputStream),
             "udm/survey_licensee_empty_report.csv");
@@ -230,7 +230,7 @@ public class UdmCsvReportsIntegrationTest extends CsvReportsTestHelper {
     @TestData(fileName = WRITE_VERIFIED_DETAILS_BY_SOURCE_CSV_REPORT)
     public void testVerifiedDetailsBySourceReport() throws IOException {
         UdmReportFilter reportFilter = new UdmReportFilter();
-        reportFilter.setPeriods(Collections.singleton(202006));
+        reportFilter.setPeriods(Set.of(202006));
         reportFilter.setChannel(UdmChannelEnum.CCC);
         reportFilter.setUsageOrigin(UdmUsageOriginEnum.SS);
         reportFilter.setDateFrom(LocalDate.of(2020, 2, 1));
@@ -244,7 +244,7 @@ public class UdmCsvReportsIntegrationTest extends CsvReportsTestHelper {
     @TestData(fileName = WRITE_VERIFIED_DETAILS_BY_SOURCE_CSV_REPORT)
     public void testVerifiedDetailsBySourceReportByPeriod() throws IOException {
         UdmReportFilter reportFilter = new UdmReportFilter();
-        reportFilter.setPeriods(Collections.singleton(202006));
+        reportFilter.setPeriods(Set.of(202006));
         assertFilesWithExecutor(
             outputStream -> udmReportRepository.writeUdmVerifiedDetailsBySourceReport(reportFilter, outputStream),
             "udm/verified_details_by_source_report_by_period.csv");
@@ -267,7 +267,7 @@ public class UdmCsvReportsIntegrationTest extends CsvReportsTestHelper {
     @TestData(fileName = WRITE_COMPLETED_ASSIGNMENTS_CSV_REPORT)
     public void testCompletedAssignmentsReport() throws IOException {
         UdmReportFilter reportFilter = new UdmReportFilter();
-        reportFilter.setPeriods(Collections.singleton(202006));
+        reportFilter.setPeriods(Set.of(202006));
         reportFilter.setUserNames(Sets.newHashSet("ajohn@copyright.com", "jjohn@copyright.com", "wjohn@copyright.com"));
         reportFilter.setDateFrom(LocalDate.of(2020, 7, 1));
         reportFilter.setDateTo(LocalDate.of(2020, 8, 1));
@@ -280,7 +280,7 @@ public class UdmCsvReportsIntegrationTest extends CsvReportsTestHelper {
     @TestData(fileName = WRITE_COMPLETED_ASSIGNMENTS_CSV_REPORT)
     public void testCompletedAssignmentsEmptyReport() throws IOException {
         UdmReportFilter reportFilter = new UdmReportFilter();
-        reportFilter.setPeriods(Collections.singleton(202112));
+        reportFilter.setPeriods(Set.of(202112));
         assertFilesWithExecutor(
             outputStream -> udmReportRepository.writeUdmCompletedAssignmentsCsvReport(reportFilter, outputStream),
             "udm/completed_assignments_empty_report.csv");
@@ -290,7 +290,7 @@ public class UdmCsvReportsIntegrationTest extends CsvReportsTestHelper {
     @TestData(fileName = WRITE_USAGE_EDITS_IN_BASELINE_CSV_REPORT)
     public void testWriteUsageEditsInBaselineCsvReport() throws IOException {
         UdmReportFilter reportFilter = new UdmReportFilter();
-        reportFilter.setPeriods(Collections.singleton(202106));
+        reportFilter.setPeriods(Set.of(202106));
         reportFilter.setDateFrom(LocalDate.of(2020, 4, 15));
         reportFilter.setDateTo(LocalDate.of(2020, 4, 16));
         assertFilesWithExecutor(
@@ -302,7 +302,7 @@ public class UdmCsvReportsIntegrationTest extends CsvReportsTestHelper {
     @TestData(fileName = WRITE_USAGE_EDITS_IN_BASELINE_CSV_REPORT)
     public void testWriteUsageEditsInBaselineEmptyCsvReport() throws IOException {
         UdmReportFilter reportFilter = new UdmReportFilter();
-        reportFilter.setPeriods(Collections.singleton(202106));
+        reportFilter.setPeriods(Set.of(202106));
         reportFilter.setDateFrom(LocalDate.of(2020, 4, 16));
         reportFilter.setDateTo(LocalDate.of(2020, 4, 17));
         assertFilesWithExecutor(
@@ -326,7 +326,7 @@ public class UdmCsvReportsIntegrationTest extends CsvReportsTestHelper {
     @TestData(fileName = WRITE_USABLE_DETAILS_BY_COUNTRY_CSV_REPORT)
     public void testUsableDetailsByCountryEmptyReport() throws IOException {
         UdmReportFilter reportFilter = new UdmReportFilter();
-        reportFilter.setPeriods(Collections.singleton(202006));
+        reportFilter.setPeriods(Set.of(202006));
         reportFilter.setDateFrom(LocalDate.of(2018, 2, 1));
         reportFilter.setDateTo(LocalDate.of(2019, 1, 1));
         assertFilesWithExecutor(
@@ -370,7 +370,7 @@ public class UdmCsvReportsIntegrationTest extends CsvReportsTestHelper {
     @TestData(fileName = WRITE_BASELINE_VALUE_UPDATES_CSV_REPORT)
     public void testWriteBaselineValueUpdatesCsvReport() throws IOException {
         UdmReportFilter reportFilter = new UdmReportFilter();
-        reportFilter.setPeriods(Collections.singleton(202206));
+        reportFilter.setPeriods(Set.of(202206));
         reportFilter.setUserNames(Sets.newHashSet("ajohn@copyright.com", "jjohn@copyright.com"));
         reportFilter.setDateFrom(LocalDate.of(2022, 2, 10));
         reportFilter.setDateTo(LocalDate.of(2022, 2, 17));
@@ -383,8 +383,8 @@ public class UdmCsvReportsIntegrationTest extends CsvReportsTestHelper {
     @TestData(fileName = WRITE_BASELINE_VALUE_UPDATES_CSV_REPORT)
     public void testWriteBaselineValueUpdatesEmptyCsvReport() throws IOException {
         UdmReportFilter reportFilter = new UdmReportFilter();
-        reportFilter.setPeriods(Collections.singleton(202206));
-        reportFilter.setUserNames(Collections.singleton("user@copyright.com"));
+        reportFilter.setPeriods(Set.of(202206));
+        reportFilter.setUserNames(Set.of("user@copyright.com"));
         reportFilter.setDateFrom(LocalDate.of(2020, 4, 16));
         reportFilter.setDateTo(LocalDate.of(2020, 4, 17));
         assertFilesWithExecutor(

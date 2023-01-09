@@ -43,7 +43,6 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -169,7 +168,7 @@ public class UdmUsageRepositoryIntegrationTest {
     @TestData(fileName = FOLDER_NAME + "update.groovy")
     public void testUpdate() {
         UdmUsageFilter filter = new UdmUsageFilter();
-        filter.setUdmBatchesIds(Collections.singleton("2e92041d-42d1-44f2-b6bd-2e6e8a131831"));
+        filter.setUdmBatchesIds(Set.of("2e92041d-42d1-44f2-b6bd-2e6e8a131831"));
         UdmUsageDto originalUsage = udmUsageRepository.findDtosByFilter(filter, null, null).get(0);
         originalUsage.setStatus(UsageStatusEnum.INELIGIBLE);
         originalUsage.setPeriod(202512);
@@ -221,13 +220,13 @@ public class UdmUsageRepositoryIntegrationTest {
     @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindDtosByAllFilters() {
         UdmUsageFilter filter = new UdmUsageFilter();
-        filter.setUdmBatchesIds(Collections.singleton(UDM_BATCH_UID_4));
-        filter.setAssignees(Collections.singleton(ASSIGNEE_1));
-        filter.setDetailLicenseeClasses(Collections.singleton(buildDetailLicenseeClass(22)));
-        filter.setReportedPubTypes(Collections.singleton(PUB_TYPE_NOT_SHARED));
-        filter.setReportedTypeOfUses(Collections.singleton(REPORTED_TYPE_OF_USE));
+        filter.setUdmBatchesIds(Set.of(UDM_BATCH_UID_4));
+        filter.setAssignees(Set.of(ASSIGNEE_1));
+        filter.setDetailLicenseeClasses(Set.of(buildDetailLicenseeClass(22)));
+        filter.setReportedPubTypes(Set.of(PUB_TYPE_NOT_SHARED));
+        filter.setReportedTypeOfUses(Set.of(REPORTED_TYPE_OF_USE));
         filter.setTypeOfUse(TYPE_OF_USE);
-        filter.setPubFormats(Collections.singleton(PUBLICATION_FORMAT));
+        filter.setPubFormats(Set.of(PUBLICATION_FORMAT));
         filter.setUsageDateFrom(LocalDate.of(2020, 4, 12));
         filter.setUsageDateTo(LocalDate.of(2020, 6, 20));
         filter.setSurveyStartDateFrom(LocalDate.of(2020, 3, 12));
@@ -255,7 +254,7 @@ public class UdmUsageRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindDtosByFilterPeriods() {
-        assertFilteringFindDtosByFilter(filter -> filter.setPeriods(Collections.singleton(202106)), UDM_USAGE_UID_5,
+        assertFilteringFindDtosByFilter(filter -> filter.setPeriods(Set.of(202106)), UDM_USAGE_UID_5,
             UDM_USAGE_UID_6, UDM_USAGE_UID_7);
     }
 
@@ -271,42 +270,37 @@ public class UdmUsageRepositoryIntegrationTest {
     public void testFindDtosByFilterAssignees() {
         assertFilteringFindDtosByFilter(filter -> filter.setAssignees(Sets.newHashSet(ASSIGNEE_1, UNASSIGNED)),
             UDM_USAGE_UID_5, UDM_USAGE_UID_6);
-        assertFilteringFindDtosByFilter(filter -> filter.setAssignees(Collections.singleton(ASSIGNEE_1)),
-            UDM_USAGE_UID_6);
-        assertFilteringFindDtosByFilter(filter -> filter.setAssignees(Collections.singleton(ASSIGNEE_2)),
-            UDM_USAGE_UID_7);
-        assertFilteringFindDtosByFilter(filter -> filter.setAssignees(Collections.singleton(UNASSIGNED)),
-            UDM_USAGE_UID_5);
+        assertFilteringFindDtosByFilter(filter -> filter.setAssignees(Set.of(ASSIGNEE_1)), UDM_USAGE_UID_6);
+        assertFilteringFindDtosByFilter(filter -> filter.setAssignees(Set.of(ASSIGNEE_2)), UDM_USAGE_UID_7);
+        assertFilteringFindDtosByFilter(filter -> filter.setAssignees(Set.of(UNASSIGNED)), UDM_USAGE_UID_5);
     }
 
     @Test
     @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindDtosByFilterReportedPubTypes() {
-        assertFilteringFindDtosByFilter(
-            filter -> filter.setReportedPubTypes(Collections.singleton(PUB_TYPE_NOT_SHARED)),
-            UDM_USAGE_UID_6, UDM_USAGE_UID_7);
+        assertFilteringFindDtosByFilter(filter ->
+            filter.setReportedPubTypes(Set.of(PUB_TYPE_NOT_SHARED)), UDM_USAGE_UID_6, UDM_USAGE_UID_7);
     }
 
     @Test
     @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindDtosByFilterPubFormats() {
-        assertFilteringFindDtosByFilter(filter -> filter.setPubFormats(Collections.singleton(PUBLICATION_FORMAT)),
-            UDM_USAGE_UID_5, UDM_USAGE_UID_6, UDM_USAGE_UID_7);
+        assertFilteringFindDtosByFilter(filter ->
+            filter.setPubFormats(Set.of(PUBLICATION_FORMAT)), UDM_USAGE_UID_5, UDM_USAGE_UID_6, UDM_USAGE_UID_7);
     }
 
     @Test
     @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindDtosByFilterDetailLicenseeClasses() {
         assertFilteringFindDtosByFilter(filter ->
-            filter.setDetailLicenseeClasses(Collections.singleton(buildDetailLicenseeClass(2))), UDM_USAGE_UID_7);
+            filter.setDetailLicenseeClasses(Set.of(buildDetailLicenseeClass(2))), UDM_USAGE_UID_7);
     }
 
     @Test
     @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindDtosByFilterReportedTypeOfUses() {
         assertFilteringFindDtosByFilter(filter ->
-                filter.setReportedTypeOfUses(Collections.singleton(REPORTED_TYPE_OF_USE)), UDM_USAGE_UID_5,
-            UDM_USAGE_UID_6);
+            filter.setReportedTypeOfUses(Set.of(REPORTED_TYPE_OF_USE)), UDM_USAGE_UID_5, UDM_USAGE_UID_6);
     }
 
     @Test
@@ -843,7 +837,7 @@ public class UdmUsageRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindCountByFilterPeriods() {
-        assertFilteringFindCountByFilter(filter -> filter.setPeriods(Collections.singleton(202106)), 3);
+        assertFilteringFindCountByFilter(filter -> filter.setPeriods(Set.of(202106)), 3);
     }
 
     @Test
@@ -856,36 +850,34 @@ public class UdmUsageRepositoryIntegrationTest {
     @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindCountByFilterAssignees() {
         assertFilteringFindCountByFilter(filter -> filter.setAssignees(Sets.newHashSet(ASSIGNEE_1, UNASSIGNED)), 2);
-        assertFilteringFindCountByFilter(filter -> filter.setAssignees(Collections.singleton(ASSIGNEE_1)), 1);
-        assertFilteringFindCountByFilter(filter -> filter.setAssignees(Collections.singleton(ASSIGNEE_2)), 1);
-        assertFilteringFindCountByFilter(filter -> filter.setAssignees(Collections.singleton(UNASSIGNED)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setAssignees(Set.of(ASSIGNEE_1)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setAssignees(Set.of(ASSIGNEE_2)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setAssignees(Set.of(UNASSIGNED)), 1);
     }
 
     @Test
     @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindCountByFilterReportedPubTypes() {
-        assertFilteringFindCountByFilter(
-            filter -> filter.setReportedPubTypes(Collections.singleton(PUB_TYPE_NOT_SHARED)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setReportedPubTypes(Set.of(PUB_TYPE_NOT_SHARED)), 2);
     }
 
     @Test
     @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindCountByFilterPubFormats() {
-        assertFilteringFindCountByFilter(filter -> filter.setPubFormats(Collections.singleton(PUBLICATION_FORMAT)), 3);
+        assertFilteringFindCountByFilter(filter -> filter.setPubFormats(Set.of(PUBLICATION_FORMAT)), 3);
     }
 
     @Test
     @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindCountByFilterDetailLicenseeClasses() {
         assertFilteringFindCountByFilter(filter ->
-            filter.setDetailLicenseeClasses(Collections.singleton(buildDetailLicenseeClass(2))), 1);
+            filter.setDetailLicenseeClasses(Set.of(buildDetailLicenseeClass(2))), 1);
     }
 
     @Test
     @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindCountByFilterReportedTypeOfUses() {
-        assertFilteringFindCountByFilter(filter ->
-            filter.setReportedTypeOfUses(Collections.singleton(REPORTED_TYPE_OF_USE)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setReportedTypeOfUses(Set.of(REPORTED_TYPE_OF_USE)), 2);
     }
 
     @Test
@@ -1329,13 +1321,13 @@ public class UdmUsageRepositoryIntegrationTest {
     @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindCountByAllFilters() {
         UdmUsageFilter filter = new UdmUsageFilter();
-        filter.setUdmBatchesIds(Collections.singleton(UDM_BATCH_UID_4));
-        filter.setAssignees(Collections.singleton(ASSIGNEE_1));
-        filter.setDetailLicenseeClasses(Collections.singleton(buildDetailLicenseeClass(22)));
-        filter.setReportedPubTypes(Collections.singleton(PUB_TYPE_NOT_SHARED));
-        filter.setReportedTypeOfUses(Collections.singleton(REPORTED_TYPE_OF_USE));
+        filter.setUdmBatchesIds(Set.of(UDM_BATCH_UID_4));
+        filter.setAssignees(Set.of(ASSIGNEE_1));
+        filter.setDetailLicenseeClasses(Set.of(buildDetailLicenseeClass(22)));
+        filter.setReportedPubTypes(Set.of(PUB_TYPE_NOT_SHARED));
+        filter.setReportedTypeOfUses(Set.of(REPORTED_TYPE_OF_USE));
         filter.setTypeOfUse(TYPE_OF_USE);
-        filter.setPubFormats(Collections.singleton(PUBLICATION_FORMAT));
+        filter.setPubFormats(Set.of(PUBLICATION_FORMAT));
         filter.setUsageDateFrom(LocalDate.of(2020, 4, 12));
         filter.setUsageDateTo(LocalDate.of(2020, 6, 20));
         filter.setSurveyStartDateFrom(LocalDate.of(2020, 3, 12));
@@ -1533,7 +1525,7 @@ public class UdmUsageRepositoryIntegrationTest {
     @TestData(fileName = FOLDER_NAME + "delete-by-batch-id.groovy")
     public void testDeleteByBatchId() {
         UdmUsageFilter filter = new UdmUsageFilter();
-        filter.setUdmBatchesIds(Collections.singleton("2e92041d-42d1-44f2-b6bd-2e6e8a131831"));
+        filter.setUdmBatchesIds(Set.of("2e92041d-42d1-44f2-b6bd-2e6e8a131831"));
         assertEquals(1, udmUsageRepository.findCountByFilter(filter));
         udmUsageRepository.deleteByBatchId("2e92041d-42d1-44f2-b6bd-2e6e8a131831");
         assertEquals(0, udmUsageRepository.findCountByFilter(filter));
@@ -1546,8 +1538,7 @@ public class UdmUsageRepositoryIntegrationTest {
         filter.setSearchValue("OGN674GHHHB0117");
         UdmUsageDto udmUsagedto = udmUsageRepository.findDtosByFilter(filter, null, null).get(0);
         assertNull(udmUsagedto.getAssignee());
-        udmUsageRepository
-            .updateAssignee(Collections.singleton("22241298-5c9e-4222-8fc1-5ee80c0e48f1"), ASSIGNEE_3, USER_NAME);
+        udmUsageRepository.updateAssignee(Set.of("22241298-5c9e-4222-8fc1-5ee80c0e48f1"), ASSIGNEE_3, USER_NAME);
         udmUsagedto = udmUsageRepository.findDtosByFilter(filter, null, null).get(0);
         assertEquals(ASSIGNEE_3, udmUsagedto.getAssignee());
     }
@@ -1559,8 +1550,7 @@ public class UdmUsageRepositoryIntegrationTest {
         filter.setSearchValue("OGN674GHHHB0116");
         UdmUsageDto udmUsagedto = udmUsageRepository.findDtosByFilter(filter, null, null).get(0);
         assertEquals(ASSIGNEE_1, udmUsagedto.getAssignee());
-        udmUsageRepository
-            .updateAssignee(Collections.singleton("d247235f-3595-4b74-b091-f6f91fba2e7d"), null, USER_NAME);
+        udmUsageRepository.updateAssignee(Set.of("d247235f-3595-4b74-b091-f6f91fba2e7d"), null, USER_NAME);
         udmUsagedto = udmUsageRepository.findDtosByFilter(filter, null, null).get(0);
         assertNull(udmUsagedto.getAssignee());
     }
@@ -1569,13 +1559,13 @@ public class UdmUsageRepositoryIntegrationTest {
     @TestData(fileName = FOLDER_NAME + "publish-udm-usages-to-baseline.groovy")
     public void testPublishUdmUsageToBaseline() {
         UdmUsageFilter filter = new UdmUsageFilter();
-        filter.setUdmBatchesIds(Collections.singleton("9608ee69-ea5d-4a80-b31d-399514a4f51e"));
+        filter.setUdmBatchesIds(Set.of("9608ee69-ea5d-4a80-b31d-399514a4f51e"));
         List<UdmUsageDto> usageDtos = udmUsageRepository.findDtosByFilter(filter, null, null);
         assertEquals(3, usageDtos.size());
         usageDtos.forEach(usageDto -> assertFalse(usageDto.isBaselineFlag()));
         Set<String> udmUsageIds = udmUsageRepository.publishUdmUsagesToBaseline(202106, USER_NAME);
         assertEquals(1, udmUsageIds.size());
-        filter.setPeriods(Collections.singleton(202106));
+        filter.setPeriods(Set.of(202106));
         assertEquals(1, udmUsageRepository.findDtosByFilter(filter, null, null)
             .stream()
             .filter(UdmUsageDto::isBaselineFlag)
@@ -1613,7 +1603,7 @@ public class UdmUsageRepositoryIntegrationTest {
 
     private void assertFilteringFindDtosByFilter(Consumer<UdmUsageFilter> consumer, String... usageIds) {
         UdmUsageFilter filter = new UdmUsageFilter();
-        filter.setUdmBatchesIds(Collections.singleton(UDM_BATCH_UID_4));
+        filter.setUdmBatchesIds(Set.of(UDM_BATCH_UID_4));
         consumer.accept(filter);
         List<UdmUsageDto> usages = udmUsageRepository.findDtosByFilter(filter, null, buildSort());
         assertEquals(usageIds.length, usages.size());
@@ -1623,7 +1613,7 @@ public class UdmUsageRepositoryIntegrationTest {
 
     private void assertFilteringFindCountByFilter(Consumer<UdmUsageFilter> consumer, int count) {
         UdmUsageFilter filter = new UdmUsageFilter();
-        filter.setUdmBatchesIds(Collections.singleton(UDM_BATCH_UID_4));
+        filter.setUdmBatchesIds(Set.of(UDM_BATCH_UID_4));
         consumer.accept(filter);
         int usagesCount = udmUsageRepository.findCountByFilter(filter);
         assertEquals(count, usagesCount);

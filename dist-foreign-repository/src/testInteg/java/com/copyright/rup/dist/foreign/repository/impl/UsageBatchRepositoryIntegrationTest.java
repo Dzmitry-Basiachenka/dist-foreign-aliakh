@@ -30,10 +30,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -232,7 +232,7 @@ public class UsageBatchRepositoryIntegrationTest {
         assertEquals(BigDecimal.ZERO, ntsFields.getNonStmAmount());
         assertEquals(new BigDecimal("50"), ntsFields.getStmMinimumAmount());
         assertEquals(new BigDecimal("7"), ntsFields.getNonStmMinimumAmount());
-        assertEquals(Collections.singleton("Univ"), ntsFields.getMarkets());
+        assertEquals(Set.of("Univ"), ntsFields.getMarkets());
         assertTrue(ntsFields.isExcludingStm());
     }
 
@@ -259,7 +259,7 @@ public class UsageBatchRepositoryIntegrationTest {
     @TestData(fileName = FOLDER_NAME + "find-batch-names-without-usages-for-classification.groovy")
     public void testFindBatchNamesWithoutUsagesForClassificationStm() {
         List<String> batchNames = usageBatchRepository.findBatchNamesWithoutUsagesForClassification(
-            Collections.singleton(NTS_USAGE_BATCH_ID_1), "STM");
+            Set.of(NTS_USAGE_BATCH_ID_1), "STM");
         assertTrue(CollectionUtils.isNotEmpty(batchNames));
         assertEquals(1, batchNames.size());
         assertEquals(NTS_BATCH_NAME, batchNames.get(0));
@@ -275,7 +275,7 @@ public class UsageBatchRepositoryIntegrationTest {
     @TestData(fileName = FOLDER_NAME + "find-batch-names-without-usages-for-classification.groovy")
     public void testFindBatchNamesWithoutUsagesForClassificationNonStm() {
         List<String> batchNames = usageBatchRepository.findBatchNamesWithoutUsagesForClassification(
-            Collections.singleton(NTS_USAGE_BATCH_ID_1), "NON-STM");
+            Set.of(NTS_USAGE_BATCH_ID_1), "NON-STM");
         assertTrue(CollectionUtils.isEmpty(batchNames));
         batchNames = usageBatchRepository.findBatchNamesWithoutUsagesForClassification(
             Sets.newHashSet(NTS_USAGE_BATCH_ID_1, NTS_USAGE_BATCH_ID_2, NTS_USAGE_BATCH_ID_3), "NON-STM");
@@ -288,7 +288,7 @@ public class UsageBatchRepositoryIntegrationTest {
     @TestData(fileName = FOLDER_NAME + "find-batch-names-without-usages-for-classification.groovy")
     public void testFindBatchNamesWithoutUsagesForClassificationUnclassified() {
         List<String> batchNames = usageBatchRepository.findBatchNamesWithoutUsagesForClassification(
-            Collections.singleton(NTS_USAGE_BATCH_ID_1), null);
+            Set.of(NTS_USAGE_BATCH_ID_1), null);
         assertEquals(1, batchNames.size());
         assertEquals(NTS_BATCH_NAME, batchNames.get(0));
         batchNames = usageBatchRepository.findBatchNamesWithoutUsagesForClassification(

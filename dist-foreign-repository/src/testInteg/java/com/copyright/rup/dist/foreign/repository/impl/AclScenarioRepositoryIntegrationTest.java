@@ -29,10 +29,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Integration test for {@link AclScenarioRepository}.
@@ -81,12 +81,12 @@ public class AclScenarioRepositoryIntegrationTest {
     @TestData(fileName = FOLDER_NAME + FIND_ALL_FILE)
     public void testFindByFilter() {
         AclScenarioFilter filterByPeriods = new AclScenarioFilter();
-        filterByPeriods.setPeriods(Collections.singleton(202112));
+        filterByPeriods.setPeriods(Set.of(202112));
         List<AclScenario> scenariosByPeriod = aclScenarioRepository.findByFilter(filterByPeriods);
         assertEquals(1, CollectionUtils.size(scenariosByPeriod));
         verifyAclScenario(scenario2, scenariosByPeriod.get(0));
         AclScenarioFilter filterByLicenseTypes = new AclScenarioFilter();
-        filterByLicenseTypes.setLicenseTypes(Collections.singleton("VGW"));
+        filterByLicenseTypes.setLicenseTypes(Set.of("VGW"));
         List<AclScenario> scenariosByLicenseTypes = aclScenarioRepository.findByFilter(filterByLicenseTypes);
         assertEquals(1, CollectionUtils.size(scenariosByLicenseTypes));
         verifyAclScenario(scenario3, scenariosByLicenseTypes.get(0));

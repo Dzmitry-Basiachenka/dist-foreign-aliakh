@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
 import com.google.common.collect.Sets;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -8,7 +9,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.apache.ibatis.session.ResultContext;
 import org.apache.ibatis.session.ResultHandler;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -35,7 +35,7 @@ class WrWrkInstToUsageIdResultHandler implements ResultHandler {
             usageIds.add(holder.getUsageId());
             wrWrkInstToUsageIdsMap.put(wrWrkInst, usageIds);
         } else {
-            wrWrkInstToUsageIdsMap.put(holder.getWrWrkInst(), Collections.singleton(holder.getUsageId()));
+            wrWrkInstToUsageIdsMap.put(holder.getWrWrkInst(), Set.of(holder.getUsageId()));
         }
     }
 

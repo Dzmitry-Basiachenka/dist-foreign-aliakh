@@ -20,8 +20,8 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.time.LocalDate;
-import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Verifies {@link UsageBatchStatusRepository}.
@@ -110,14 +110,14 @@ public class UsageBatchStatusRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FOLDER_NAME + "find-batch-ids-eligible-for-statistic.groovy")
     public void testFindFasUsageBatchIdsEligibleForStatistic() {
-        assertEquals(Collections.singleton("515a78e7-2a92-4b15-859a-fd9f70e80982"),
+        assertEquals(Set.of("515a78e7-2a92-4b15-859a-fd9f70e80982"),
             usageBatchStatusRepository.findFasUsageBatchIdsEligibleForStatistic("FAS", LocalDate.of(2021, 2, 14)));
     }
 
     @Test
     @TestData(fileName = FOLDER_NAME + "find-batch-ids-eligible-for-statistic.groovy")
     public void testFindUsageBatchIdsEligibleForStatistic() {
-        assertEquals(Collections.singleton("359de82f-374b-4d53-88ab-0be3982b22aa"),
+        assertEquals(Set.of("359de82f-374b-4d53-88ab-0be3982b22aa"),
             usageBatchStatusRepository.findUsageBatchIdsEligibleForStatistic("NTS", LocalDate.of(2021, 2, 14)));
     }
 

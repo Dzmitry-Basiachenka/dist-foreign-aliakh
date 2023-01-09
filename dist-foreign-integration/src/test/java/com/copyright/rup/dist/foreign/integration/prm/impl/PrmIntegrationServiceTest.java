@@ -125,7 +125,7 @@ public class PrmIntegrationServiceTest {
     @Test
     public void testGetRollUps() {
         String rightsholderId = RupPersistUtils.generateUuid();
-        Set<String> rightsholdersIds = Collections.singleton(rightsholderId);
+        Set<String> rightsholdersIds = Set.of(rightsholderId);
         Map<String, Map<String, Rightsholder>> result = new HashMap<>();
         result.put(rightsholderId, ImmutableMap.of(FAS_PRODUCT_FAMILY, buildRightsholder()));
         expect(prmRollUpService.getRollUps(rightsholdersIds)).andReturn(result).once();
@@ -138,7 +138,7 @@ public class PrmIntegrationServiceTest {
     public void testGetRollUpsWithAsyncImpl() {
         Whitebox.setInternalState(prmIntegrationService, "prmRollUpAsync", true);
         String rightsholderId = RupPersistUtils.generateUuid();
-        Set<String> rightsholdersIds = Collections.singleton(rightsholderId);
+        Set<String> rightsholdersIds = Set.of(rightsholderId);
         Map<String, Map<String, Rightsholder>> result = new HashMap<>();
         result.put(rightsholderId, ImmutableMap.of(FAS_PRODUCT_FAMILY, buildRightsholder()));
         expect(prmRollUpAsyncService.getRollUps(rightsholdersIds)).andReturn(result).once();
@@ -163,7 +163,7 @@ public class PrmIntegrationServiceTest {
     public void testIsRightsholderEligibleForNtsDistributionTrue() {
         Table<String, String, Object> preferencesTable = HashBasedTable.create();
         preferencesTable.put("NTS", FdaConstants.IS_RH_DIST_INELIGIBLE_CODE, true);
-        expect(prmPreferenceService.getPreferencesMap(Collections.singleton(RIGHTSHOLDER_ID)))
+        expect(prmPreferenceService.getPreferencesMap(Set.of(RIGHTSHOLDER_ID)))
             .andReturn(ImmutableMap.of(RIGHTSHOLDER_ID, preferencesTable)).once();
         replay(prmPreferenceService);
         assertFalse(prmIntegrationService.isRightsholderEligibleForNtsDistribution(RIGHTSHOLDER_ID));
@@ -174,7 +174,7 @@ public class PrmIntegrationServiceTest {
     public void testIsRightsholderEligibleForNtsDistributionFalse() {
         Table<String, String, Object> preferencesTable = HashBasedTable.create();
         preferencesTable.put("NTS", FdaConstants.IS_RH_DIST_INELIGIBLE_CODE, false);
-        expect(prmPreferenceService.getPreferencesMap(Collections.singleton(RIGHTSHOLDER_ID)))
+        expect(prmPreferenceService.getPreferencesMap(Set.of(RIGHTSHOLDER_ID)))
             .andReturn(ImmutableMap.of(RIGHTSHOLDER_ID, preferencesTable)).once();
         replay(prmPreferenceService);
         assertTrue(prmIntegrationService.isRightsholderEligibleForNtsDistribution(RIGHTSHOLDER_ID));
@@ -185,7 +185,7 @@ public class PrmIntegrationServiceTest {
     public void testIsRightsholderEligibleForNtsDistributionAllProductsTrue() {
         Table<String, String, Object> preferencesTable = HashBasedTable.create();
         preferencesTable.put("*", FdaConstants.IS_RH_DIST_INELIGIBLE_CODE, true);
-        expect(prmPreferenceService.getPreferencesMap(Collections.singleton(RIGHTSHOLDER_ID)))
+        expect(prmPreferenceService.getPreferencesMap(Set.of(RIGHTSHOLDER_ID)))
             .andReturn(ImmutableMap.of(RIGHTSHOLDER_ID, preferencesTable)).once();
         replay(prmPreferenceService);
         assertFalse(prmIntegrationService.isRightsholderEligibleForNtsDistribution(RIGHTSHOLDER_ID));
@@ -196,7 +196,7 @@ public class PrmIntegrationServiceTest {
     public void testIsRightsholderEligibleForNtsDistributionAllProductsFalse() {
         Table<String, String, Object> preferencesTable = HashBasedTable.create();
         preferencesTable.put("*", FdaConstants.IS_RH_DIST_INELIGIBLE_CODE, false);
-        expect(prmPreferenceService.getPreferencesMap(Collections.singleton(RIGHTSHOLDER_ID)))
+        expect(prmPreferenceService.getPreferencesMap(Set.of(RIGHTSHOLDER_ID)))
             .andReturn(ImmutableMap.of(RIGHTSHOLDER_ID, preferencesTable)).once();
         replay(prmPreferenceService);
         assertTrue(prmIntegrationService.isRightsholderEligibleForNtsDistribution(RIGHTSHOLDER_ID));
@@ -227,7 +227,7 @@ public class PrmIntegrationServiceTest {
     public void testIsStmRightsholderTrue() {
         Table<String, String, Object> preferencesTable = HashBasedTable.create();
         preferencesTable.put(NTS_PRODUCT_FAMILY, FdaConstants.IS_RH_STM_IPRO_CODE, true);
-        expect(prmPreferenceService.getPreferencesMap(Collections.singleton(RIGHTSHOLDER_ID)))
+        expect(prmPreferenceService.getPreferencesMap(Set.of(RIGHTSHOLDER_ID)))
             .andReturn(ImmutableMap.of(RIGHTSHOLDER_ID, preferencesTable)).once();
         replay(prmPreferenceService);
         assertTrue(prmIntegrationService.isStmRightsholder(RIGHTSHOLDER_ID, NTS_PRODUCT_FAMILY));
@@ -238,7 +238,7 @@ public class PrmIntegrationServiceTest {
     public void testIsStmRightsholderFalse() {
         Table<String, String, Object> preferencesTable = HashBasedTable.create();
         preferencesTable.put(NTS_PRODUCT_FAMILY, FdaConstants.IS_RH_STM_IPRO_CODE, false);
-        expect(prmPreferenceService.getPreferencesMap(Collections.singleton(RIGHTSHOLDER_ID)))
+        expect(prmPreferenceService.getPreferencesMap(Set.of(RIGHTSHOLDER_ID)))
             .andReturn(ImmutableMap.of(RIGHTSHOLDER_ID, preferencesTable)).once();
         replay(prmPreferenceService);
         assertFalse(prmIntegrationService.isStmRightsholder(RIGHTSHOLDER_ID, NTS_PRODUCT_FAMILY));
@@ -249,7 +249,7 @@ public class PrmIntegrationServiceTest {
     public void testIsStmRightsholderAllProductsTrue() {
         Table<String, String, Object> preferencesTable = HashBasedTable.create();
         preferencesTable.put(ALL_PRODUCTS, FdaConstants.IS_RH_STM_IPRO_CODE, true);
-        expect(prmPreferenceService.getPreferencesMap(Collections.singleton(RIGHTSHOLDER_ID)))
+        expect(prmPreferenceService.getPreferencesMap(Set.of(RIGHTSHOLDER_ID)))
             .andReturn(ImmutableMap.of(RIGHTSHOLDER_ID, preferencesTable)).once();
         replay(prmPreferenceService);
         assertTrue(prmIntegrationService.isStmRightsholder(RIGHTSHOLDER_ID, NTS_PRODUCT_FAMILY));
@@ -260,7 +260,7 @@ public class PrmIntegrationServiceTest {
     public void testIsStmRightsholderAllProductsFalse() {
         Table<String, String, Object> preferencesTable = HashBasedTable.create();
         preferencesTable.put(ALL_PRODUCTS, FdaConstants.IS_RH_STM_IPRO_CODE, false);
-        expect(prmPreferenceService.getPreferencesMap(Collections.singleton(RIGHTSHOLDER_ID)))
+        expect(prmPreferenceService.getPreferencesMap(Set.of(RIGHTSHOLDER_ID)))
             .andReturn(ImmutableMap.of(RIGHTSHOLDER_ID, preferencesTable)).once();
         replay(prmPreferenceService);
         assertFalse(prmIntegrationService.isStmRightsholder(RIGHTSHOLDER_ID, NTS_PRODUCT_FAMILY));
@@ -271,7 +271,7 @@ public class PrmIntegrationServiceTest {
     public void testIsStmRightsholderDefaultFalse() {
         Table<String, String, Object> preferencesTable = HashBasedTable.create();
         preferencesTable.put(FAS_PRODUCT_FAMILY, FdaConstants.IS_RH_STM_IPRO_CODE, true);
-        expect(prmPreferenceService.getPreferencesMap(Collections.singleton(RIGHTSHOLDER_ID)))
+        expect(prmPreferenceService.getPreferencesMap(Set.of(RIGHTSHOLDER_ID)))
             .andReturn(ImmutableMap.of(RIGHTSHOLDER_ID, preferencesTable)).once();
         replay(prmPreferenceService);
         assertFalse(prmIntegrationService.isStmRightsholder(RIGHTSHOLDER_ID, NTS_PRODUCT_FAMILY));
@@ -282,7 +282,7 @@ public class PrmIntegrationServiceTest {
     public void testIsRightsholderTaxBeneficialOwnerTrue() {
         Table<String, String, Object> preferencesTable = HashBasedTable.create();
         preferencesTable.put(FAS_PRODUCT_FAMILY, FdaConstants.TAX_BENEFICIAL_OWNER_CODE, true);
-        expect(prmPreferenceService.getPreferencesMap(Collections.singleton(RIGHTSHOLDER_ID)))
+        expect(prmPreferenceService.getPreferencesMap(Set.of(RIGHTSHOLDER_ID)))
             .andReturn(ImmutableMap.of(RIGHTSHOLDER_ID, preferencesTable)).once();
         replay(prmPreferenceService);
         assertTrue(prmIntegrationService.isRightsholderTaxBeneficialOwner(RIGHTSHOLDER_ID, FAS_PRODUCT_FAMILY));
@@ -293,7 +293,7 @@ public class PrmIntegrationServiceTest {
     public void testIsRightsholderTaxBeneficialOwnerFalse() {
         Table<String, String, Object> preferencesTable = HashBasedTable.create();
         preferencesTable.put(FAS_PRODUCT_FAMILY, FdaConstants.TAX_BENEFICIAL_OWNER_CODE, false);
-        expect(prmPreferenceService.getPreferencesMap(Collections.singleton(RIGHTSHOLDER_ID)))
+        expect(prmPreferenceService.getPreferencesMap(Set.of(RIGHTSHOLDER_ID)))
             .andReturn(ImmutableMap.of(RIGHTSHOLDER_ID, preferencesTable)).once();
         replay(prmPreferenceService);
         assertFalse(prmIntegrationService.isRightsholderTaxBeneficialOwner(RIGHTSHOLDER_ID, FAS_PRODUCT_FAMILY));
@@ -304,7 +304,7 @@ public class PrmIntegrationServiceTest {
     public void testIsRightsholderTaxBeneficialOwnerAllProductsTrue() {
         Table<String, String, Object> preferencesTable = HashBasedTable.create();
         preferencesTable.put(ALL_PRODUCTS, FdaConstants.TAX_BENEFICIAL_OWNER_CODE, true);
-        expect(prmPreferenceService.getPreferencesMap(Collections.singleton(RIGHTSHOLDER_ID)))
+        expect(prmPreferenceService.getPreferencesMap(Set.of(RIGHTSHOLDER_ID)))
             .andReturn(ImmutableMap.of(RIGHTSHOLDER_ID, preferencesTable)).once();
         replay(prmPreferenceService);
         assertTrue(prmIntegrationService.isRightsholderTaxBeneficialOwner(RIGHTSHOLDER_ID, FAS_PRODUCT_FAMILY));
@@ -315,7 +315,7 @@ public class PrmIntegrationServiceTest {
     public void testIsRightsholderTaxBeneficialOwnerAllProductsFalse() {
         Table<String, String, Object> preferencesTable = HashBasedTable.create();
         preferencesTable.put(ALL_PRODUCTS, FdaConstants.TAX_BENEFICIAL_OWNER_CODE, false);
-        expect(prmPreferenceService.getPreferencesMap(Collections.singleton(RIGHTSHOLDER_ID)))
+        expect(prmPreferenceService.getPreferencesMap(Set.of(RIGHTSHOLDER_ID)))
             .andReturn(ImmutableMap.of(RIGHTSHOLDER_ID, preferencesTable)).once();
         replay(prmPreferenceService);
         assertFalse(prmIntegrationService.isRightsholderTaxBeneficialOwner(RIGHTSHOLDER_ID, FAS_PRODUCT_FAMILY));
@@ -327,7 +327,7 @@ public class PrmIntegrationServiceTest {
         Table<String, String, Object> preferencesTable = HashBasedTable.create();
         preferencesTable.put(ALL_PRODUCTS, FdaConstants.TAX_BENEFICIAL_OWNER_CODE, true);
         preferencesTable.put(FAS_PRODUCT_FAMILY, FdaConstants.TAX_BENEFICIAL_OWNER_CODE, false);
-        expect(prmPreferenceService.getPreferencesMap(Collections.singleton(RIGHTSHOLDER_ID)))
+        expect(prmPreferenceService.getPreferencesMap(Set.of(RIGHTSHOLDER_ID)))
             .andReturn(ImmutableMap.of(RIGHTSHOLDER_ID, preferencesTable)).once();
         replay(prmPreferenceService);
         assertFalse(prmIntegrationService.isRightsholderTaxBeneficialOwner(RIGHTSHOLDER_ID, FAS_PRODUCT_FAMILY));
@@ -338,7 +338,7 @@ public class PrmIntegrationServiceTest {
     public void testIsRightsholderTaxBeneficialOwnerDefaultFalse() {
         Table<String, String, Object> preferencesTable = HashBasedTable.create();
         preferencesTable.put(NTS_PRODUCT_FAMILY, FdaConstants.TAX_BENEFICIAL_OWNER_CODE, true);
-        expect(prmPreferenceService.getPreferencesMap(Collections.singleton(RIGHTSHOLDER_ID)))
+        expect(prmPreferenceService.getPreferencesMap(Set.of(RIGHTSHOLDER_ID)))
             .andReturn(ImmutableMap.of(RIGHTSHOLDER_ID, preferencesTable)).once();
         replay(prmPreferenceService);
         assertFalse(prmIntegrationService.isRightsholderTaxBeneficialOwner(RIGHTSHOLDER_ID, FAS_PRODUCT_FAMILY));
@@ -348,7 +348,7 @@ public class PrmIntegrationServiceTest {
     @Test
     public void testGetIneligibleRightsholder() {
         AclIneligibleRightsholder expectedRightsholder = buildIneligibleRightsholder();
-        Set<AclIneligibleRightsholder> ineligibleRightsholders = Collections.singleton(expectedRightsholder);
+        Set<AclIneligibleRightsholder> ineligibleRightsholders = Set.of(expectedRightsholder);
         expect(ineligibleRightsholderService.getIneligibleRightsholders(LocalDate.now(), "ACL")).andReturn(
             ineligibleRightsholders);
         replay(ineligibleRightsholderService);

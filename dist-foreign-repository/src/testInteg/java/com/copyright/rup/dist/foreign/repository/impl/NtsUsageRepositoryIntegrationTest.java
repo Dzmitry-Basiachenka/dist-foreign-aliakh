@@ -32,7 +32,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
@@ -209,8 +208,7 @@ public class NtsUsageRepositoryIntegrationTest {
         assertEquals(2,
             ntsUsageRepository.findUnclassifiedUsagesCountByWrWrkInsts(
                 Sets.newHashSet(987632764L, 12318778798L)));
-        assertEquals(0,
-            ntsUsageRepository.findUnclassifiedUsagesCountByWrWrkInsts(Collections.singleton(1L)));
+        assertEquals(0, ntsUsageRepository.findUnclassifiedUsagesCountByWrWrkInsts(Set.of(1L)));
     }
 
     @Test
@@ -343,7 +341,7 @@ public class NtsUsageRepositoryIntegrationTest {
         assertEquals(UsageStatusEnum.NTS_WITHDRAWN, usage.getStatus());
         assertNull(usage.getFundPoolId());
         String fundPoolId = "3fef25b0-c0d1-4819-887f-4c6acc01390e";
-        Set<String> batchIds = Collections.singleton("cb597f4e-f636-447f-8710-0436d8994d10");
+        Set<String> batchIds = Set.of("cb597f4e-f636-447f-8710-0436d8994d10");
         ntsUsageRepository.addWithdrawnUsagesToNtsFundPool(fundPoolId, batchIds, StoredEntity.DEFAULT_USER);
         usages = usageRepository.findByIds(usageIds);
         assertEquals(1, usages.size());

@@ -23,8 +23,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.io.IOException;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Integration tests for csv reports for ACL calculation.
@@ -86,7 +86,7 @@ public class AclCalculationCsvReportsIntegrationTest extends CsvReportsTestHelpe
     @TestData(fileName = WRITE_GRANT_DETAIL_CSV_REPORT)
     public void testWriteGrantDetailEmptyCsvReport() throws IOException {
         AclGrantDetailFilter filter = new AclGrantDetailFilter();
-        filter.setGrantSetNames(Collections.singleton("Empty"));
+        filter.setGrantSetNames(Set.of("Empty"));
         filter.setGrantSetPeriod(202212);
         assertFilesWithExecutor(
             outputStream -> aclCalculationReportRepository.writeAclGrantDetailCsvReport(filter, outputStream),

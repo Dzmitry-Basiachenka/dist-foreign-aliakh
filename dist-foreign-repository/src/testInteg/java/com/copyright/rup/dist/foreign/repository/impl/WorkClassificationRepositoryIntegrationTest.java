@@ -26,8 +26,8 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.IntStream;
 
 /**
@@ -116,11 +116,9 @@ public class WorkClassificationRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FOLDER_NAME + "find-by-batch-ids.groovy")
     public void testFindCountByBatchIds() {
-        assertEquals(3,
-            workClassificationRepository.findCountByBatchIds(Collections.singleton(BATCH_UID), StringUtils.EMPTY));
-        assertEquals(1,
-            workClassificationRepository.findCountByBatchIds(Collections.singleton(BATCH_UID), "243904752"));
-        assertEquals(2, workClassificationRepository.findCountByBatchIds(Collections.singleton(BATCH_UID),
+        assertEquals(3, workClassificationRepository.findCountByBatchIds(Set.of(BATCH_UID), StringUtils.EMPTY));
+        assertEquals(1, workClassificationRepository.findCountByBatchIds(Set.of(BATCH_UID), "243904752"));
+        assertEquals(2, workClassificationRepository.findCountByBatchIds(Set.of(BATCH_UID),
             "John Wiley & Sons - Books"));
     }
 
@@ -155,9 +153,8 @@ public class WorkClassificationRepositoryIntegrationTest {
 
     private void findByBatchIdsAndAssertResult(List<WorkClassification> expectedClassifications, Pageable pageable,
                                                int count) {
-        List<WorkClassification> actualClassifications =
-            workClassificationRepository.findByBatchIds(Collections.singleton(BATCH_UID), StringUtils.EMPTY, pageable,
-                new Sort("wrWrkInst", Direction.ASC));
+        List<WorkClassification> actualClassifications = workClassificationRepository.findByBatchIds(Set.of(BATCH_UID),
+            StringUtils.EMPTY, pageable, new Sort("wrWrkInst", Direction.ASC));
         assertEquals(count, actualClassifications.size());
         IntStream.range(0, actualClassifications.size())
             .forEach(i -> assertClassification(expectedClassifications.get(i), actualClassifications.get(i)));

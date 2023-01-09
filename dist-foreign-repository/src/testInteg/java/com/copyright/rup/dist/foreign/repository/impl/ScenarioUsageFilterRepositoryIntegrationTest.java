@@ -19,7 +19,6 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.time.LocalDate;
-import java.util.Collections;
 import java.util.Set;
 
 /**
@@ -47,8 +46,8 @@ public class ScenarioUsageFilterRepositoryIntegrationTest {
     private static final LocalDate PAYMENT_DATE = LocalDate.now();
     private static final Integer FISCAL_YEAR = LocalDate.now().getYear();
     private static final Integer USAGE_PERIOD = LocalDate.now().getYear();
-    private static final Set<Long> RH_ACCOUNT_NUMBERS = Collections.singleton(2000017004L);
-    private static final Set<String> USAGE_BATCHES_IDS = Collections.singleton("e1c64cac-3f2b-4105-8056-6660e1ec461a");
+    private static final Set<Long> RH_ACCOUNT_NUMBERS = Set.of(2000017004L);
+    private static final Set<String> USAGE_BATCHES_IDS = Set.of("e1c64cac-3f2b-4105-8056-6660e1ec461a");
 
     @Autowired
     private IScenarioUsageFilterRepository scenarioUsageFilterRepository;

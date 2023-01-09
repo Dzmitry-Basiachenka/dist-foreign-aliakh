@@ -58,7 +58,7 @@ public class OracleRhTaxCountryCacheServiceTest {
         replay(oracleRhTaxCountryService);
         assertEquals(resultMap, oracleRhTaxCountryCacheService.getAccountNumbersToUsTaxCountryFlags(ACCOUNT_NUMBERS));
         assertEquals(ImmutableMap.of(7001413934L, Boolean.TRUE),
-            oracleRhTaxCountryCacheService.getAccountNumbersToUsTaxCountryFlags(Collections.singleton(7001413934L)));
+            oracleRhTaxCountryCacheService.getAccountNumbersToUsTaxCountryFlags(Set.of(7001413934L)));
         verify(oracleRhTaxCountryService);
     }
 
