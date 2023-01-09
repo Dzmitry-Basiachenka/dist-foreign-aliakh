@@ -29,7 +29,6 @@ import org.powermock.reflect.Whitebox;
 import java.io.OutputStream;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -79,7 +78,7 @@ public class UdmSurveyDashboardReportControllerTest {
     public void testGetCsvStreamSource() {
         OffsetDateTime now = OffsetDateTime.of(2022, 3, 10, 3, 4, 5, 6, ZoneOffset.ofHours(0));
         mockStatic(OffsetDateTime.class);
-        Set<Integer> periods = Collections.singleton(202112);
+        Set<Integer> periods = Set.of(202112);
         IUdmSurveyDashboardReportWidget widget = createMock(IUdmSurveyDashboardReportWidget.class);
         Whitebox.setInternalState(controller, widget);
         Capture<Set<Integer>> periodsCapture = newCapture();

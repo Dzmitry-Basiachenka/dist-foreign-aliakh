@@ -55,7 +55,7 @@ public final class ForeignSecurityUtilsTest {
             "FDA_DELETE_FUND_POOL", "FDA_LOAD_RESEARCHED_USAGE", "FDA_CREATE_DELETE_FUND", "FDA_ASSIGN_CLASSIFICATION",
             "FDA_DELETE_SCENARIO", "FDA_EXCLUDE_FROM_SCENARIO", "FDA_SEND_FOR_WORK_RESEARCH",
             "FDA_SEND_FOR_CLASSIFICATION", "FDA_LOAD_CLASSIFIED_USAGE", "FDA_SPECIALIST_PERMISSION")};
-        Object[] researcherRole = {Collections.singleton("FDA_RESEARCHER_PERMISSION")};
+        Object[] researcherRole = {Set.of("FDA_RESEARCHER_PERMISSION")};
         Object[] roleWithoutPermissions = {Collections.emptySet()};
         return Arrays.asList(
             viewOnlyRole,

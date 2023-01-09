@@ -41,6 +41,7 @@ import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Supplier;
 
 /**
@@ -131,7 +132,7 @@ public class TaxNotificationReportWidgetTest {
         VerticalLayout content = (VerticalLayout) widget.getContent();
         Grid<Scenario> grid = (Grid<Scenario>) content.getComponent(1);
         grid.select(SCENARIO_1);
-        assertEquals(Collections.singleton(SCENARIO_ID_1), widget.getSelectedScenarioIds());
+        assertEquals(Set.of(SCENARIO_ID_1), widget.getSelectedScenarioIds());
         grid.select(SCENARIO_2);
         assertEquals(Sets.newHashSet(SCENARIO_ID_1, SCENARIO_ID_2), widget.getSelectedScenarioIds());
         grid.deselectAll();

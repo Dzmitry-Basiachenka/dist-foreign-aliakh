@@ -26,6 +26,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Verifies {@link UserNameFilterWidget}.
@@ -64,7 +65,7 @@ public class UserNameFilterWidgetTest {
     @Test
     public void testOnSave() {
         FilterSaveEvent filterSaveEvent = createMock(FilterSaveEvent.class);
-        expect(filterSaveEvent.getSelectedItemsIds()).andReturn(Collections.singleton(USER_NAME)).once();
+        expect(filterSaveEvent.getSelectedItemsIds()).andReturn(Set.of(USER_NAME)).once();
         replay(filterSaveEvent);
         userNameFilterWidget.onSave(filterSaveEvent);
         verify(filterSaveEvent);

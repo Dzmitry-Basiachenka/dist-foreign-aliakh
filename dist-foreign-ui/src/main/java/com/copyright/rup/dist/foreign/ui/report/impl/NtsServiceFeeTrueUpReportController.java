@@ -16,8 +16,8 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Implementation of {@link ICommonScenarioReportController} for Service Fee True-up report for NTS.
@@ -47,8 +47,7 @@ public class NtsServiceFeeTrueUpReportController extends CommonController<ICommo
     @Override
     public List<Scenario> getScenarios() {
         return scenarioService.getScenariosByProductFamiliesAndStatuses(
-            Collections.singleton(FdaConstants.NTS_PRODUCT_FAMILY),
-            Collections.singleton(ScenarioStatusEnum.SENT_TO_LM));
+            Set.of(FdaConstants.NTS_PRODUCT_FAMILY), Set.of(ScenarioStatusEnum.SENT_TO_LM));
     }
 
     @Override

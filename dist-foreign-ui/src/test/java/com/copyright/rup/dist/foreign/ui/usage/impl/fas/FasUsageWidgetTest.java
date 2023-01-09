@@ -70,6 +70,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Supplier;
 
 /**
@@ -99,7 +100,7 @@ public class FasUsageWidgetTest {
         controller = createMock(IFasUsageController.class);
         FasNtsUsageFilterWidget filterWidget =
             new FasNtsUsageFilterWidget(createMock(IFasNtsUsageFilterController.class));
-        filterWidget.getFilter().setUsageBatchesIds(Collections.singleton("3a070817-03ae-4ebd-b25f-dd3168a7ffb0"));
+        filterWidget.getFilter().setUsageBatchesIds(Set.of("3a070817-03ae-4ebd-b25f-dd3168a7ffb0"));
         usagesWidget = new FasUsageWidget(controller);
         usagesWidget.setController(controller);
         expect(controller.initUsagesFilterWidget()).andReturn(filterWidget).once();

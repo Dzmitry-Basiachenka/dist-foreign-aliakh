@@ -70,12 +70,12 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -689,7 +689,7 @@ public class UdmEditUsageWindowTest {
         verifyCompanyIdLayout(verticalLayout.getComponent(20));
         verifyTextFieldLayout(verticalLayout.getComponent(21), "Company Name", true, true);
         verifyComboBoxLayout(verticalLayout.getComponent(22), "Detail Licensee Class", true, false,
-            Collections.singleton(LICENSEE_CLASS));
+            Set.of(LICENSEE_CLASS));
         verifyTextFieldLayout(verticalLayout.getComponent(23), "Survey Respondent", true, false);
         verifyTextFieldLayout(verticalLayout.getComponent(24), "IP Address", true, false);
         verifyTextFieldLayout(verticalLayout.getComponent(25), "Survey Country", true, false);

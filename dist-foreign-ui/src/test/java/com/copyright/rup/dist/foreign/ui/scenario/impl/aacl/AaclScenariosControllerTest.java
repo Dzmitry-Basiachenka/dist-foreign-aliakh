@@ -41,6 +41,7 @@ import org.powermock.reflect.Whitebox;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Verifies {@link AaclScenariosController}.
@@ -138,7 +139,7 @@ public class AaclScenariosControllerTest {
         UsageBatch usageBatch = new UsageBatch();
         usageBatch.setId("batchId");
         usageBatch.setName("BatchName");
-        scenarioUsageFilter.setUsageBatches(Collections.singleton(usageBatch));
+        scenarioUsageFilter.setUsageBatches(Set.of(usageBatch));
         expect(scenarioUsageFilterService.getByScenarioId(SCENARIO_ID)).andReturn(scenarioUsageFilter).once();
         replay(scenariosWidget, scenarioUsageFilterService);
         assertEquals("<b>Selection Criteria:</b><ul>" +

@@ -29,6 +29,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Verifies {@link ScenarioFilterWidget}.
@@ -66,7 +67,7 @@ public class ScenarioFilterWidgetTest {
     @Test
     public void testOnSave() {
         FilterSaveEvent filterSaveEvent = createMock(FilterSaveEvent.class);
-        expect(filterSaveEvent.getSelectedItemsIds()).andReturn(Collections.singleton(SCENARIO_NAME)).once();
+        expect(filterSaveEvent.getSelectedItemsIds()).andReturn(Set.of(SCENARIO_NAME)).once();
         replay(filterSaveEvent);
         scenarioFilterWidget.onSave(filterSaveEvent);
         verify(filterSaveEvent);

@@ -42,7 +42,7 @@ import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
-import java.util.Collections;
+import java.util.Set;
 import java.util.stream.IntStream;
 
 /**
@@ -363,9 +363,9 @@ public class UdmBaselineFiltersWindowTest {
         aggregateLicenseeClass.setId(26);
         aggregateLicenseeClass.setDescription(LC_DESCRIPTION);
         UdmBaselineFilter filter = new UdmBaselineFilter();
-        filter.setDetailLicenseeClasses(Collections.singleton(detailLicenseeClass));
-        filter.setAggregateLicenseeClasses(Collections.singleton(aggregateLicenseeClass));
-        filter.setReportedTypeOfUses(Collections.singleton("COPY_FOR_MYSELF"));
+        filter.setDetailLicenseeClasses(Set.of(detailLicenseeClass));
+        filter.setAggregateLicenseeClasses(Set.of(aggregateLicenseeClass));
+        filter.setReportedTypeOfUses(Set.of("COPY_FOR_MYSELF"));
         filter.setTypeOfUse(DIGITAL_TYPE_OF_USE);
         filter.setWrWrkInstExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 243904752L, null));
         filter.setSystemTitleExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE, null));
@@ -430,9 +430,9 @@ public class UdmBaselineFiltersWindowTest {
         aggregateLicenseeClass.setId(26);
         aggregateLicenseeClass.setDescription(LC_DESCRIPTION);
         UdmBaselineFilter baselineFilter = Whitebox.getInternalState(window, "baselineFilter");
-        baselineFilter.setDetailLicenseeClasses(Collections.singleton(detailLicenseeClass));
-        baselineFilter.setAggregateLicenseeClasses(Collections.singleton(aggregateLicenseeClass));
-        baselineFilter.setReportedTypeOfUses(Collections.singleton("COPY_FOR_MYSELF"));
+        baselineFilter.setDetailLicenseeClasses(Set.of(detailLicenseeClass));
+        baselineFilter.setAggregateLicenseeClasses(Set.of(aggregateLicenseeClass));
+        baselineFilter.setReportedTypeOfUses(Set.of("COPY_FOR_MYSELF"));
         populateComboBox("typeOfUseComboBox", DIGITAL_TYPE_OF_USE);
         populateTextField("wrWrkInstFromField", "243904752");
         populateComboBox("wrWrkInstOperatorComboBox", FilterOperatorEnum.EQUALS);

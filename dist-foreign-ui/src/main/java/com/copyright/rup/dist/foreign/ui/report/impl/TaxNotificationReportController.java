@@ -18,7 +18,6 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
@@ -51,7 +50,7 @@ public class TaxNotificationReportController extends CommonController<ITaxNotifi
         String productFamily = productFamilyProvider.getSelectedProductFamily();
         Set<String> productFamilies = FdaConstants.FAS_FAS2_PRODUCT_FAMILY_SET.contains(productFamily)
             ? FdaConstants.FAS_FAS2_PRODUCT_FAMILY_SET
-            : Collections.singleton(productFamily);
+            : Set.of(productFamily);
         Set<ScenarioStatusEnum> statuses = EnumSet.of(ScenarioStatusEnum.IN_PROGRESS, ScenarioStatusEnum.SUBMITTED,
             ScenarioStatusEnum.APPROVED);
         return FdaConstants.ACL_PRODUCT_FAMILY.equals(productFamily)

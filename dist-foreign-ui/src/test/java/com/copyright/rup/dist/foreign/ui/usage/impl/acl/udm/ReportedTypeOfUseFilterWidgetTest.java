@@ -15,7 +15,9 @@ import static org.powermock.api.easymock.PowerMock.verify;
 import com.copyright.rup.vaadin.ui.component.filter.CommonFilterWindow.FilterSaveEvent;
 import com.copyright.rup.vaadin.ui.component.filter.FilterWindow;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
+
 import com.vaadin.data.ValueProvider;
+
 import org.easymock.Capture;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,6 +26,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Verifies {@link ReportedTypeOfUseFilterWidget}.
@@ -63,7 +66,7 @@ public class ReportedTypeOfUseFilterWidgetTest {
     @Test
     public void testOnSave() {
         FilterSaveEvent filterSaveEvent = createMock(FilterSaveEvent.class);
-        expect(filterSaveEvent.getSelectedItemsIds()).andReturn(Collections.singleton(REPORTED_TYPE_OF_USE)).once();
+        expect(filterSaveEvent.getSelectedItemsIds()).andReturn(Set.of(REPORTED_TYPE_OF_USE)).once();
         replay(filterSaveEvent);
         widget.onSave(filterSaveEvent);
         verify(filterSaveEvent);

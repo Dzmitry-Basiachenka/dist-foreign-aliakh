@@ -34,7 +34,7 @@ import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
 import java.util.Arrays;
-import java.util.Collections;
+import java.util.Set;
 
 /**
  * Verifies {@link AclScenariosFilterWidget}.
@@ -82,7 +82,7 @@ public class AclScenariosFilterWidgetTest {
         assertFalse(applyButton.isEnabled());
         assertTrue(widget.getAppliedFilter().isEmpty());
         assertTrue(widget.getFilter().isEmpty());
-        widget.getFilter().setLicenseTypes(Collections.singleton(LICENSE_TYPE));
+        widget.getFilter().setLicenseTypes(Set.of(LICENSE_TYPE));
         assertNotEquals(widget.getFilter(), widget.getAppliedFilter());
         applyButton.setEnabled(true);
         assertFalse(widget.getFilter().isEmpty());
@@ -112,7 +112,7 @@ public class AclScenariosFilterWidgetTest {
         Button applyButton = getApplyButton();
         assertTrue(widget.getFilter().isEmpty());
         assertTrue(widget.getAppliedFilter().isEmpty());
-        widget.getFilter().setLicenseTypes(Collections.singleton(LICENSE_TYPE));
+        widget.getFilter().setLicenseTypes(Set.of(LICENSE_TYPE));
         applyButton.setEnabled(true);
         applyButton.click();
         assertFalse(widget.getFilter().isEmpty());

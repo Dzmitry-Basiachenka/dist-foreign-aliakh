@@ -40,7 +40,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -462,7 +461,7 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
     }
 
     private void initUsageWindowForResearcher(UdmUsageDto selectedUsage) {
-        if (isEditAllowedForResearcher(Collections.singleton(selectedUsage))) {
+        if (isEditAllowedForResearcher(Set.of(selectedUsage))) {
             showEditWindow(selectedUsage);
         } else {
             UdmViewUsageWindow viewWindow = new UdmViewUsageWindow(selectedUsage);
@@ -472,7 +471,7 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
     }
 
     private void initSingleEditWindow(UdmUsageDto selectedUsage) {
-        if (isUsagesProcessingCompleted(Collections.singleton(selectedUsage))) {
+        if (isUsagesProcessingCompleted(Set.of(selectedUsage))) {
             showEditWindow(selectedUsage);
         } else {
             Windows.showNotificationWindow(ForeignUi.getMessage(USAGES_PROCESSING_ERROR_MESSAGE));

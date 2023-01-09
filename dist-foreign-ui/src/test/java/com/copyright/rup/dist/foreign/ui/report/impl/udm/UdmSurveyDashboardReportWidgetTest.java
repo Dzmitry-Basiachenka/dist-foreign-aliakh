@@ -33,6 +33,7 @@ import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Supplier;
 
 /**
@@ -82,7 +83,7 @@ public class UdmSurveyDashboardReportWidgetTest {
         VerticalLayout content = (VerticalLayout) widget.getContent();
         Grid<Integer> grid = (Grid<Integer>) content.getComponent(0);
         grid.select(202106);
-        assertEquals(Collections.singleton(202106), widget.getSelectedPeriods());
+        assertEquals(Set.of(202106), widget.getSelectedPeriods());
         grid.select(202212);
         assertEquals(Sets.newHashSet(202106, 202212), widget.getSelectedPeriods());
         grid.deselectAll();

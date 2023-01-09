@@ -43,7 +43,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.io.ByteArrayOutputStream;
-import java.util.Collections;
+import java.util.Set;
 
 /**
  * Verifies {@link ResearchedUsagesUploadWindow}.
@@ -125,6 +125,6 @@ public class ResearchedUsagesUploadWindowTest {
         verifyUploadComponent(verticalLayout.getComponent(0));
         verifyButtonsLayout(verticalLayout.getComponent(1), "Upload", "Close");
         Button loadButton = (Button) ((HorizontalLayout) (verticalLayout.getComponent(1))).getComponent(0);
-        verifyLoadClickListener(loadButton, Collections.singleton(Whitebox.getInternalState(window, "uploadField")));
+        verifyLoadClickListener(loadButton, Set.of((UploadField) Whitebox.getInternalState(window, "uploadField")));
     }
 }

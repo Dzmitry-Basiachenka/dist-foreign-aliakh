@@ -12,13 +12,14 @@ import com.copyright.rup.dist.foreign.ui.report.api.ICommonScenariosReportWidget
 import com.copyright.rup.vaadin.widget.api.CommonController;
 
 import com.google.common.collect.Sets;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Implementation of {@link ICommonScenariosReportController}.
@@ -44,7 +45,7 @@ public class SalLiabilitiesByRhReportController extends CommonController<ICommon
     @Override
     public List<Scenario> getScenarios() {
         return scenarioService.getScenariosByProductFamiliesAndStatuses(
-            Collections.singleton(productFamilyProvider.getSelectedProductFamily()),
+            Set.of(productFamilyProvider.getSelectedProductFamily()),
             Sets.newHashSet(ScenarioStatusEnum.values()));
     }
 

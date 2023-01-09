@@ -35,6 +35,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Collections;
+import java.util.Set;
 
 /**
  * Verifies {@link EditAclGrantDetailWindow}.
@@ -69,13 +70,12 @@ public class EditAclGrantDetailWindowTest {
         AclGrantDetailDto grantDetailDto = new AclGrantDetailDto();
         grantDetailDto.setId("884c8968-28fa-48ef-b13e-01571a8902fa");
         grantDetailDto.setEditable(true);
-        controller.updateAclGrants(Collections.singleton(grantDetailDto), false);
+        controller.updateAclGrants(Set.of(grantDetailDto), false);
         expectLastCall().once();
         saveButtonClickListener.buttonClick(anyObject(ClickEvent.class));
         expectLastCall().once();
         replay(controller, saveButtonClickListener);
-        window =
-            new EditAclGrantDetailWindow(Collections.singleton(grantDetailDto), controller, saveButtonClickListener);
+        window = new EditAclGrantDetailWindow(Set.of(grantDetailDto), controller, saveButtonClickListener);
         HorizontalLayout buttonsLayout = (HorizontalLayout) ((VerticalLayout) window.getContent()).getComponent(4);
         Button saveButton = (Button) buttonsLayout.getComponent(0);
         saveButton.setEnabled(true);
@@ -116,8 +116,7 @@ public class EditAclGrantDetailWindowTest {
         rightsholder.setName("Hachette Books Group");
         expect(controller.getRightsholder(1000006530L)).andReturn(rightsholder).once();
         replay(controller);
-        window =
-            new EditAclGrantDetailWindow(Collections.singleton(grantDetailDto), controller, saveButtonClickListener);
+        window = new EditAclGrantDetailWindow(Set.of(grantDetailDto), controller, saveButtonClickListener);
         HorizontalLayout rhLayout = (HorizontalLayout) ((VerticalLayout) window.getContent()).getComponent(1);
         TextField rhAccountNumberField = (TextField) rhLayout.getComponent(0);
         Button verifyButton = (Button) rhLayout.getComponent(1);

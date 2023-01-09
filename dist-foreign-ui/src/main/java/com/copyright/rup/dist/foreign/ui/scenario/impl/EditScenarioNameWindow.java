@@ -19,7 +19,7 @@ import com.vaadin.ui.Window;
 
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.Collections;
+import java.util.Set;
 
 /**
  * Modal window for editing {@link Scenario} name.
@@ -93,7 +93,7 @@ class EditScenarioNameWindow extends Window {
             controller.getWidget().refresh();
             close();
         } else {
-            Windows.showValidationErrorWindow(Collections.singleton(scenarioNameField));
+            Windows.showValidationErrorWindow(Set.of(scenarioNameField));
         }
     }
 }

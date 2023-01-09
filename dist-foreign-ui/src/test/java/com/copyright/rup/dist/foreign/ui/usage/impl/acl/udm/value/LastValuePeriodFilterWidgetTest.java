@@ -16,6 +16,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Verifies {@link LastValuePeriodFilterWidget}.
@@ -59,7 +60,7 @@ public class LastValuePeriodFilterWidgetTest {
     @Test
     public void testOnSave() {
         FilterSaveEvent<String> filterSaveEvent = createMock(FilterSaveEvent.class);
-        expect(filterSaveEvent.getSelectedItemsIds()).andReturn(Collections.singleton(LAST_VALUE_PERIOD)).once();
+        expect(filterSaveEvent.getSelectedItemsIds()).andReturn(Set.of(LAST_VALUE_PERIOD)).once();
         replay(filterSaveEvent);
         lastValuePeriodFilterWidget.onSave(filterSaveEvent);
         verify(filterSaveEvent);

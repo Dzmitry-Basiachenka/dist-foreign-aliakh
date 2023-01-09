@@ -52,6 +52,7 @@ import org.powermock.reflect.Whitebox;
 import java.time.LocalDate;
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Collections;
+import java.util.Set;
 import java.util.function.Supplier;
 
 /**
@@ -269,7 +270,7 @@ public class FasScenariosControllerTest {
         UsageBatch usageBatch = new UsageBatch();
         usageBatch.setId("batchId");
         usageBatch.setName("BatchName");
-        scenarioUsageFilter.setUsageBatches(Collections.singleton(usageBatch));
+        scenarioUsageFilter.setUsageBatches(Set.of(usageBatch));
         expect(scenarioUsageFilterService.getByScenarioId(SCENARIO_ID)).andReturn(scenarioUsageFilter).once();
         IRightsholderService rightsholderService = createMock(IRightsholderService.class);
         Whitebox.setInternalState(scenariosController, rightsholderService);

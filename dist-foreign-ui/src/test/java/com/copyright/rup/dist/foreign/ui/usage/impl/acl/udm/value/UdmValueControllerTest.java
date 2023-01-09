@@ -36,9 +36,10 @@ import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueWidget;
-
 import com.copyright.rup.vaadin.ui.component.window.Windows;
+
 import com.vaadin.ui.Window;
+
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
@@ -163,7 +164,7 @@ public class UdmValueControllerTest {
 
     @Test
     public void testAssignValues() {
-        Set<UdmValueDto> udmValues = Collections.singleton(new UdmValueDto());
+        Set<UdmValueDto> udmValues = Set.of(new UdmValueDto());
         valueService.assignValues(udmValues);
         expectLastCall().once();
         replay(valueService);
@@ -173,7 +174,7 @@ public class UdmValueControllerTest {
 
     @Test
     public void testUnassignValues() {
-        Set<UdmValueDto> udmValues = Collections.singleton(new UdmValueDto());
+        Set<UdmValueDto> udmValues = Set.of(new UdmValueDto());
         valueService.unassignValues(udmValues);
         expectLastCall().once();
         replay(valueService);

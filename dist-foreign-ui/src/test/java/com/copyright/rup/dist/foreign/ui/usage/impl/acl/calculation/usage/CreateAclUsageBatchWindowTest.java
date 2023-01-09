@@ -48,7 +48,6 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -70,7 +69,7 @@ public class CreateAclUsageBatchWindowTest {
     private static final String DISTRIBUTION_PERIOD_YEAR = "2021";
     private static final String DISTRIBUTION_PERIOD_MONTH = "06";
     private static final Integer DISTRIBUTION_PERIOD = 202106;
-    private static final Set<Integer> PERIODS = Collections.singleton(202112);
+    private static final Set<Integer> PERIODS = Set.of(202112);
     private static final String PERIODS_COUNT = String.valueOf(PERIODS.size());
     private static final String USAGE_BATCH_NAME_FIELD = "usageBatchNameFiled";
     private static final String DISTRIBUTION_PERIOD_YEAR_FIELD = "distributionPeriodYearField";

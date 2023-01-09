@@ -18,7 +18,6 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -60,7 +59,7 @@ public class AaclExcludePayeeController extends CommonController<IAaclExcludePay
     @Override
     public List<PayeeTotalHolder> getPayeeTotalHolders() {
         ExcludePayeeFilter appliedFilter = payeesFilterController.getWidget().getAppliedFilter();
-        appliedFilter.setScenarioIds(Collections.singleton(selectedScenario.getId()));
+        appliedFilter.setScenarioIds(Set.of(selectedScenario.getId()));
         return usageService.getPayeeTotalHoldersByFilter(appliedFilter);
     }
 

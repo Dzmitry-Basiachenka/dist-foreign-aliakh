@@ -26,6 +26,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Verifies {@link TypeOfUseFilterWidget}.
@@ -64,7 +65,7 @@ public class TypeOfUseFilterWidgetTest {
     @Test
     public void testOnSave() {
         FilterSaveEvent filterSaveEvent = createMock(FilterSaveEvent.class);
-        expect(filterSaveEvent.getSelectedItemsIds()).andReturn(Collections.singleton(REPORTED_TYPE_OF_USE)).once();
+        expect(filterSaveEvent.getSelectedItemsIds()).andReturn(Set.of(REPORTED_TYPE_OF_USE)).once();
         replay(filterSaveEvent);
         typeOfUseFilterWidget.onSave(filterSaveEvent);
         verify(filterSaveEvent);

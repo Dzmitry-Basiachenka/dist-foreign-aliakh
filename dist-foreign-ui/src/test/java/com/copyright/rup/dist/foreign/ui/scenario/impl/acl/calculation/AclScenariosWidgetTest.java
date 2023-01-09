@@ -79,6 +79,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -204,7 +205,7 @@ public class AclScenariosWidgetTest {
         expect(ForeignSecurityUtils.hasSpecialistPermission()).andReturn(true).once();
         Grid grid = createMock(Grid.class);
         Whitebox.setInternalState(scenariosWidget, SCENARIO_GRID, grid);
-        expect(grid.getSelectedItems()).andReturn(Collections.singleton(scenario)).once();
+        expect(grid.getSelectedItems()).andReturn(Set.of(scenario)).once();
         expect(controller.getAclScenarioWithAmountsAndLastAction(scenarioDto.getId())).andReturn(scenarioDto).once();
         expect(controller.getCriteriaHtmlRepresentation()).andReturn(SELECTION_CRITERIA).once();
         replay(controller, grid, ForeignSecurityUtils.class);
@@ -217,7 +218,7 @@ public class AclScenariosWidgetTest {
     public void testGetSelectedScenario() {
         Grid grid = createMock(Grid.class);
         Whitebox.setInternalState(scenariosWidget, SCENARIO_GRID, grid);
-        expect(grid.getSelectedItems()).andReturn(Collections.singleton(scenario)).once();
+        expect(grid.getSelectedItems()).andReturn(Set.of(scenario)).once();
         replay(grid);
         assertEquals(scenario, scenariosWidget.getSelectedScenario());
         verify(grid);
@@ -303,7 +304,7 @@ public class AclScenariosWidgetTest {
         mockStatic(OffsetDateTime.class);
         Grid grid = createMock(Grid.class);
         Whitebox.setInternalState(scenariosWidget, SCENARIO_GRID, grid);
-        expect(grid.getSelectedItems()).andReturn(Collections.singleton(scenario)).once();
+        expect(grid.getSelectedItems()).andReturn(Set.of(scenario)).once();
         expect(OffsetDateTime.now()).andReturn(now).once();
         replay(controller, grid, OffsetDateTime.class);
         AclCalculationReportsInfoDto reportInfo = scenariosWidget.getReportInfo();

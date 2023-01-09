@@ -51,6 +51,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Verifies {@link ViewAaclFundPoolWindow}.
@@ -111,7 +112,7 @@ public class ViewAaclFundPoolWindowTest {
         Grid<FundPool> grid = createMock(Grid.class);
         Whitebox.setInternalState(viewAaclFundPoolWindow, "grid", grid);
         Button.ClickListener listener = getButtonClickListener(0);
-        expect(grid.getSelectedItems()).andReturn(Collections.singleton(fundPool)).once();
+        expect(grid.getSelectedItems()).andReturn(Set.of(fundPool)).once();
         expectNew(ViewAaclFundPoolDetailsWindow.class, fundPool, fundPoolDetails).andReturn(viewDetailsWindowMock)
             .once();
         Windows.showModalWindow(viewDetailsWindowMock);
@@ -129,7 +130,7 @@ public class ViewAaclFundPoolWindowTest {
         Grid<FundPool> grid = createMock(Grid.class);
         Whitebox.setInternalState(viewAaclFundPoolWindow, "grid", grid);
         Button.ClickListener listener = getButtonClickListener(1);
-        expect(grid.getSelectedItems()).andReturn(Collections.singleton(fundPool)).once();
+        expect(grid.getSelectedItems()).andReturn(Set.of(fundPool)).once();
         expect(controller.getScenarioNameAssociatedWithFundPool(FUND_POOL_ID)).andReturn(null).once();
         expect(
             Windows.showConfirmDialog(
@@ -147,7 +148,7 @@ public class ViewAaclFundPoolWindowTest {
         Grid<FundPool> grid = createMock(Grid.class);
         Whitebox.setInternalState(viewAaclFundPoolWindow, "grid", grid);
         Button.ClickListener listener = getButtonClickListener(1);
-        expect(grid.getSelectedItems()).andReturn(Collections.singleton(fundPool)).once();
+        expect(grid.getSelectedItems()).andReturn(Set.of(fundPool)).once();
         expect(controller.getScenarioNameAssociatedWithFundPool(FUND_POOL_ID)).andReturn("Scenario 1").once();
         Windows.showNotificationWindow(
             eq("Fund pool cannot be deleted because it is associated with the following scenario: Scenario 1"));

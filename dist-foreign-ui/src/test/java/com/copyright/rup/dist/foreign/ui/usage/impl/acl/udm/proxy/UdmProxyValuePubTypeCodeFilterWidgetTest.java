@@ -8,12 +8,13 @@ import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmProxyValueFilterController;
 import com.copyright.rup.vaadin.ui.component.filter.CommonFilterWindow.FilterSaveEvent;
+
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Verifies {@link UdmProxyValuePeriodFilterWidget}.
@@ -58,7 +59,7 @@ public class UdmProxyValuePubTypeCodeFilterWidgetTest {
     @SuppressWarnings("unchecked")
     public void testOnSave() {
         FilterSaveEvent<String> filterSaveEvent = createMock(FilterSaveEvent.class);
-        expect(filterSaveEvent.getSelectedItemsIds()).andReturn(Collections.singleton("NP")).once();
+        expect(filterSaveEvent.getSelectedItemsIds()).andReturn(Set.of("NP")).once();
         replay(filterSaveEvent);
         pubTypeCodeFilterWidget.onSave(filterSaveEvent);
         verify(filterSaveEvent);

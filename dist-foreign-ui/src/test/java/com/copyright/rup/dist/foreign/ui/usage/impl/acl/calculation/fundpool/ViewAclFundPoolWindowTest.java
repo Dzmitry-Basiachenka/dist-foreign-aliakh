@@ -52,6 +52,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Verifies {@link ViewAclFundPoolWindow}.
@@ -126,7 +127,7 @@ public class ViewAclFundPoolWindowTest {
         mockStatic(Windows.class);
         Window confirmWindowCapture = createMock(Window.class);
         Button.ClickListener listener = getDeleteButtonClickListener();
-        expect(aclFundPoolGrid.getSelectedItems()).andReturn(Collections.singleton(buildAclFundPool(true))).once();
+        expect(aclFundPoolGrid.getSelectedItems()).andReturn(Set.of(buildAclFundPool(true))).once();
         expect(controller.getScenarioNamesAssociatedWithFundPool(FUND_POOL_ID))
             .andReturn(Collections.EMPTY_LIST).once();
         expect(Windows.showConfirmDialog(
@@ -142,7 +143,7 @@ public class ViewAclFundPoolWindowTest {
         mockStatic(Windows.class);
         Window confirmWindowCapture = createMock(Window.class);
         Button.ClickListener listener = getDeleteButtonClickListener();
-        expect(aclFundPoolGrid.getSelectedItems()).andReturn(Collections.singleton(buildAclFundPool(false))).once();
+        expect(aclFundPoolGrid.getSelectedItems()).andReturn(Set.of(buildAclFundPool(false))).once();
         expect(controller.getScenarioNamesAssociatedWithFundPool(FUND_POOL_ID))
             .andReturn(Collections.EMPTY_LIST).once();
         expect(Windows.showConfirmDialog(
@@ -160,7 +161,7 @@ public class ViewAclFundPoolWindowTest {
         mockStatic(Windows.class);
         Window confirmWindowCapture = createMock(Window.class);
         Button.ClickListener listener = getDeleteButtonClickListener();
-        expect(aclFundPoolGrid.getSelectedItems()).andReturn(Collections.singleton(buildAclFundPool(true))).once();
+        expect(aclFundPoolGrid.getSelectedItems()).andReturn(Set.of(buildAclFundPool(true))).once();
         expect(controller.getScenarioNamesAssociatedWithFundPool(FUND_POOL_ID))
             .andReturn(SCENARIO_NAMES).once();
         Windows.showNotificationWindow(

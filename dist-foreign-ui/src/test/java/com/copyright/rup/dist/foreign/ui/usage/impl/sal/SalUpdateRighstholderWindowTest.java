@@ -48,7 +48,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Set;
 
 /**
@@ -64,7 +63,7 @@ import java.util.Set;
 @PrepareForTest({Windows.class, SalUpdateRighstholderWindowTest.class})
 public class SalUpdateRighstholderWindowTest {
 
-    private static final Set<String> USAGE_IDS = Collections.singleton("ebad7d68-b213-433f-8dbe-a581f6ba55a3");
+    private static final Set<String> USAGE_IDS = Set.of("ebad7d68-b213-433f-8dbe-a581f6ba55a3");
     private static final Long RH_ACCOUNT_NUMBER = 2000047356L;
     private static final String RH_NAME = "National Geographic Partners";
     private static final String REASON = "Reason";

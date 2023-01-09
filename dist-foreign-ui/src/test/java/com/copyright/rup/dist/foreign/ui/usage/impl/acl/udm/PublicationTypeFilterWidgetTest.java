@@ -68,7 +68,7 @@ public class PublicationTypeFilterWidgetTest {
     @SuppressWarnings("unchecked")
     public void testOnSave() {
         FilterSaveEvent filterSaveEvent = createMock(FilterSaveEvent.class);
-        expect(filterSaveEvent.getSelectedItemsIds()).andReturn(Collections.singleton(publicationType)).once();
+        expect(filterSaveEvent.getSelectedItemsIds()).andReturn(Set.of(publicationType)).once();
         replay(filterSaveEvent);
         publicationTypeFilterWidget.onSave(filterSaveEvent);
         verify(filterSaveEvent);
@@ -99,7 +99,7 @@ public class PublicationTypeFilterWidgetTest {
 
     @Test
     public void testConstructorWithSelectedItems() {
-        Set<PublicationType> selectedPublicationTypes = Collections.singleton(publicationType);
+        Set<PublicationType> selectedPublicationTypes = Set.of(publicationType);
         PublicationTypeFilterWidget pubTypeFilterWidget =
             new PublicationTypeFilterWidget(() -> List.of(publicationType), selectedPublicationTypes);
         assertEquals(selectedPublicationTypes, pubTypeFilterWidget.getSelectedItemsIds());

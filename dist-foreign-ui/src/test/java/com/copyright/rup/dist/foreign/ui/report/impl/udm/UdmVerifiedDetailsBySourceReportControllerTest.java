@@ -33,7 +33,7 @@ import java.io.OutputStream;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-import java.util.Collections;
+import java.util.Set;
 
 /**
  * Verifies {@link UdmVerifiedDetailsBySourceReportController}.
@@ -76,7 +76,7 @@ public class UdmVerifiedDetailsBySourceReportControllerTest {
         filter.setUsageOrigin(UdmUsageOriginEnum.RFA);
         filter.setDateFrom(LocalDate.of(2021, 11, 21));
         filter.setChannel(UdmChannelEnum.CCC);
-        filter.setPeriods(Collections.singleton(202112));
+        filter.setPeriods(Set.of(202112));
         IUdmCommonReportWidget widget = createMock(IUdmCommonReportWidget.class);
         Whitebox.setInternalState(controller, widget);
         Capture<UdmReportFilter> reportFilterCapture = newCapture();

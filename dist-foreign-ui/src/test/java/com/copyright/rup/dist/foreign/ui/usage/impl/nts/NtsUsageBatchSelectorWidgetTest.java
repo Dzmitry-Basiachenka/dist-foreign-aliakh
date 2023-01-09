@@ -44,7 +44,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.util.AbstractMap.SimpleImmutableEntry;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
@@ -102,11 +101,10 @@ public class NtsUsageBatchSelectorWidgetTest {
         IWorkClassificationController workClassificationController = createMock(IWorkClassificationController.class);
         FilterSaveEvent<UsageBatch> filterSaveEvent = createMock(FilterSaveEvent.class);
         IStreamSource streamSource = createMock(IStreamSource.class);
-        expect(filterSaveEvent.getSelectedItemsIds()).andReturn(Collections.singleton(buildUsageBatch())).once();
+        expect(filterSaveEvent.getSelectedItemsIds()).andReturn(Set.of(buildUsageBatch())).once();
         expect(usagesController.getWorkClassificationController()).andReturn(workClassificationController).once();
         expect(workClassificationController.getWorkClassificationThreshold()).andReturn(5).once();
-        expect(workClassificationController.getClassificationCount(Collections.singleton(USAGE_BATCH_ID), null))
-            .andReturn(10).once();
+        expect(workClassificationController.getClassificationCount(Set.of(USAGE_BATCH_ID), null)).andReturn(10).once();
         expect(workClassificationController.getExportWorkClassificationStreamSource(
             anyObject(Set.class), anyObject(Supplier.class))).andReturn(streamSource).once();
         expect(streamSource.getSource())

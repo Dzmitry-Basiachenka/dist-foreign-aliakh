@@ -440,7 +440,7 @@ public class AaclUsageControllerTest {
 
     @Test
     public void testGetProcessingBatchesNames() {
-        Set<String> batchIds = Collections.singleton("5d4f7674-4f0a-404e-ad23-7096b667402b");
+        Set<String> batchIds = Set.of("5d4f7674-4f0a-404e-ad23-7096b667402b");
         List<String> batchNames = List.of("batch name");
         expect(usageBatchService.getProcessingAaclBatchesNames(batchIds)).andReturn(batchNames).once();
         replay(usageBatchService);
@@ -450,7 +450,7 @@ public class AaclUsageControllerTest {
 
     @Test
     public void testGetIneligibleBatchesNames() {
-        Set<String> batchIds = Collections.singleton("5d4f7674-4f0a-404e-ad23-7096b667402b");
+        Set<String> batchIds = Set.of("5d4f7674-4f0a-404e-ad23-7096b667402b");
         List<String> batchNames = List.of("batch name");
         expect(usageBatchService.getIneligibleBatchesNames(batchIds)).andReturn(batchNames).once();
         replay(usageBatchService);
@@ -460,7 +460,7 @@ public class AaclUsageControllerTest {
 
     @Test
     public void testGetBatchesNamesToScenariosNames() {
-        Set<String> batchIds = Collections.singleton("5d4f7674-4f0a-404e-ad23-7096b667402b");
+        Set<String> batchIds = Set.of("5d4f7674-4f0a-404e-ad23-7096b667402b");
         Map<String, String> batchToScenarioNames = Collections.singletonMap("batch name", "scenario name");
         expect(usageBatchService.getBatchesNamesToScenariosNames(batchIds)).andReturn(batchToScenarioNames).once();
         replay(usageBatchService);

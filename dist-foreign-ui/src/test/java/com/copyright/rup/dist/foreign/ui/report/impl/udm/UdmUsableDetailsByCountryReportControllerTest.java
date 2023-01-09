@@ -32,8 +32,8 @@ import java.io.OutputStream;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Verifies {@link UdmUsableDetailsByCountryReportController}.
@@ -86,7 +86,7 @@ public class UdmUsableDetailsByCountryReportControllerTest {
         UdmReportFilter filter = new UdmReportFilter();
         filter.setDateTo(LocalDate.of(2021, 11, 28));
         filter.setDateFrom(LocalDate.of(2021, 11, 21));
-        filter.setPeriods(Collections.singleton(202112));
+        filter.setPeriods(Set.of(202112));
         IUdmUsableDetailsByCountryReportWidget widget = createMock(IUdmUsableDetailsByCountryReportWidget.class);
         Whitebox.setInternalState(controller, widget);
         Capture<UdmReportFilter> reportFilterCapture = newCapture();

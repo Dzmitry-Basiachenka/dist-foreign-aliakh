@@ -53,6 +53,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Verifies {@link ViewUdmBatchWindow}.
@@ -126,7 +127,7 @@ public class ViewUdmBatchWindowTest {
         mockStatic(Windows.class);
         Window confirmWindowCapture = createMock(Window.class);
         Button.ClickListener listener = getDeleteButtonClickListener();
-        expect(udmBatchGrid.getSelectedItems()).andReturn(Collections.singleton(buildUdmBatch())).once();
+        expect(udmBatchGrid.getSelectedItems()).andReturn(Set.of(buildUdmBatch())).once();
         expect(controller.isUdmBatchProcessingCompleted(UDM_BATCH_UID)).andReturn(false).once();
         Windows.showNotificationWindow(
             "'UDM Batch 2021 June' batch cannot be deleted because processing is not completed yet");
@@ -142,7 +143,7 @@ public class ViewUdmBatchWindowTest {
         mockStatic(Windows.class);
         Window confirmWindowCapture = createMock(Window.class);
         Button.ClickListener listener = getDeleteButtonClickListener();
-        expect(udmBatchGrid.getSelectedItems()).andReturn(Collections.singleton(buildUdmBatch())).once();
+        expect(udmBatchGrid.getSelectedItems()).andReturn(Set.of(buildUdmBatch())).once();
         expect(controller.isUdmBatchProcessingCompleted(UDM_BATCH_UID)).andReturn(true).once();
         expect(controller.isUdmBatchContainsBaselineUsages(UDM_BATCH_UID)).andReturn(true).once();
         Windows.showNotificationWindow(
@@ -159,7 +160,7 @@ public class ViewUdmBatchWindowTest {
         mockStatic(Windows.class);
         Window confirmWindowCapture = createMock(Window.class);
         Button.ClickListener listener = getDeleteButtonClickListener();
-        expect(udmBatchGrid.getSelectedItems()).andReturn(Collections.singleton(buildUdmBatch())).once();
+        expect(udmBatchGrid.getSelectedItems()).andReturn(Set.of(buildUdmBatch())).once();
         expect(controller.isUdmBatchProcessingCompleted(UDM_BATCH_UID)).andReturn(true).once();
         expect(controller.isUdmBatchContainsBaselineUsages(UDM_BATCH_UID)).andReturn(false).once();
         expect(Windows.showConfirmDialog(

@@ -285,7 +285,7 @@ public class UdmUsageWidgetTest {
             capture(windowListenerCapture)))
             .andReturn(confirmWindowMock)
             .once();
-        controller.assignUsages(Collections.singleton(udmUsageDto));
+        controller.assignUsages(Set.of(udmUsageDto));
         expectLastCall().once();
         Windows.showNotificationWindow("1 usage(s) were successfully assigned to you");
         expectLastCall().once();
@@ -319,7 +319,7 @@ public class UdmUsageWidgetTest {
             capture(windowListenerCapture)))
             .andReturn(confirmWindowMock)
             .once();
-        controller.unassignUsages(Collections.singleton(udmUsageDto));
+        controller.unassignUsages(Set.of(udmUsageDto));
         expectLastCall().once();
         Windows.showNotificationWindow("1 usage(s) were successfully unassigned");
         expectLastCall().once();

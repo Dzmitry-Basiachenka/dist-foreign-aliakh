@@ -49,7 +49,6 @@ import org.powermock.reflect.Whitebox;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -162,7 +161,7 @@ public class UdmValueFilterWidgetTest {
         assertFalse(applyButton.isEnabled());
         assertTrue(widget.getAppliedFilter().getPeriods().isEmpty());
         assertTrue(widget.getFilter().getPeriods().isEmpty());
-        widget.getFilter().setPeriods(Collections.singleton(202106));
+        widget.getFilter().setPeriods(Set.of(202106));
         assertNotEquals(widget.getFilter(), widget.getAppliedFilter());
         applyButton.setEnabled(true);
         assertTrue(widget.getAppliedFilter().getPeriods().isEmpty());

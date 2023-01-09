@@ -36,7 +36,6 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
-import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
@@ -379,7 +378,7 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
     }
 
     private void initValueWindowForResearcher(UdmValueDto selectedValue) {
-        if (checkHasValuesAssignee(Collections.singleton(selectedValue))) {
+        if (checkHasValuesAssignee(Set.of(selectedValue))) {
             showEditWindow(selectedValue);
         } else {
             UdmViewValueWindow viewWindow = new UdmViewValueWindow(controller, selectedValue);

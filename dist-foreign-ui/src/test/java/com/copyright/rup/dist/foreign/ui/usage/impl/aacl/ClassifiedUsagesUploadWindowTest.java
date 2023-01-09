@@ -46,8 +46,8 @@ import org.powermock.reflect.Whitebox;
 
 import java.io.ByteArrayOutputStream;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Verifies {@link ClassifiedUsagesUploadWindow}.
@@ -137,8 +137,7 @@ public class ClassifiedUsagesUploadWindowTest {
         verifyUploadComponent(verticalLayout.getComponent(0));
         verifyButtonsLayout(verticalLayout.getComponent(1), "Upload", "Close");
         Button loadButton = (Button) ((HorizontalLayout) verticalLayout.getComponent(1)).getComponent(0);
-        verifyLoadClickListener(loadButton,
-            Collections.singleton(Whitebox.getInternalState(window, "uploadField")));
+        verifyLoadClickListener(loadButton, Set.of((UploadField) Whitebox.getInternalState(window, "uploadField")));
     }
 
     private ProcessingResult<AaclClassifiedUsage> buildCsvProcessingResult(List<AaclClassifiedUsage> classifiedUsages) {

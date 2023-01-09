@@ -33,6 +33,7 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Verifies {@link NtsServiceFeeTrueUpReportController}.
@@ -64,8 +65,7 @@ public class NtsServiceFeeTrueUpReportControllerTest {
     public void testGetScenarios() {
         List<Scenario> scenarios = Collections.emptyList();
         expect(scenarioService.getScenariosByProductFamiliesAndStatuses(
-            Collections.singleton("NTS"), Collections.singleton(ScenarioStatusEnum.SENT_TO_LM)))
-            .andReturn(scenarios).once();
+            Set.of("NTS"), Set.of(ScenarioStatusEnum.SENT_TO_LM))).andReturn(scenarios).once();
         replay(scenarioService);
         assertEquals(scenarios, controller.getScenarios());
         verify(scenarioService);

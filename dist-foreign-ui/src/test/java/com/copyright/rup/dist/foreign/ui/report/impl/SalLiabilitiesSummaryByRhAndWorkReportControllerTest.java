@@ -36,6 +36,7 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Verifies {@link SalLiabilitiesSummaryByRhAndWorkReportController}.
@@ -73,8 +74,7 @@ public class SalLiabilitiesSummaryByRhAndWorkReportControllerTest {
         List<Scenario> scenarios = Collections.emptyList();
         expect(productFamilyProvider.getSelectedProductFamily()).andReturn(SAL_PRODUCT_FAMILY).once();
         expect(scenarioService.getScenariosByProductFamiliesAndStatuses(
-            Collections.singleton(SAL_PRODUCT_FAMILY), Sets.newHashSet(ScenarioStatusEnum.values())))
-            .andReturn(scenarios).once();
+            Set.of(SAL_PRODUCT_FAMILY), Sets.newHashSet(ScenarioStatusEnum.values()))).andReturn(scenarios).once();
         replay(scenarioService, productFamilyProvider);
         assertEquals(scenarios, controller.getScenarios());
         verify(scenarioService, productFamilyProvider);

@@ -18,8 +18,8 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Implementation of {@link ICommonScenariosReportController} for Liabilities Summary by Rightsholder and Work Report.
@@ -45,8 +45,7 @@ public class SalLiabilitiesSummaryByRhAndWorkReportController extends CommonCont
     @Override
     public List<Scenario> getScenarios() {
         return scenarioService.getScenariosByProductFamiliesAndStatuses(
-            Collections.singleton(productFamilyProvider.getSelectedProductFamily()),
-            Sets.newHashSet(ScenarioStatusEnum.values()));
+            Set.of(productFamilyProvider.getSelectedProductFamily()), Sets.newHashSet(ScenarioStatusEnum.values()));
     }
 
     @Override

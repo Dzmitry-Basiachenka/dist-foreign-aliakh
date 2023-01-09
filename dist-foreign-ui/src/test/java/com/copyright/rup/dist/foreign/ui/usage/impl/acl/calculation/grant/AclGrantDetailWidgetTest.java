@@ -126,7 +126,7 @@ public class AclGrantDetailWidgetTest {
         grantDetailDto.setId("884c8968-28fa-48ef-b13e-01571a8902fa");
         grantDetailDto.setEditable(true);
         EditAclGrantDetailWindow mockWindow = createMock(EditAclGrantDetailWindow.class);
-        Set<AclGrantDetailDto> grants = Collections.singleton(grantDetailDto);
+        Set<AclGrantDetailDto> grants = Set.of(grantDetailDto);
         expectNew(EditAclGrantDetailWindow.class, eq(grants), eq(controller), anyObject(ClickListener.class))
             .andReturn(mockWindow).once();
         Windows.showModalWindow(mockWindow);

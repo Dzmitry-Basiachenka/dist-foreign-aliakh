@@ -44,6 +44,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Verifies {@link ViewAaclUsageBatchWindow}.
@@ -104,7 +105,7 @@ public class ViewAaclUsageBatchWindowTest {
         Grid<UsageBatch> grid = createMock(Grid.class);
         Whitebox.setInternalState(viewaAaclUsageBatchWindow, "grid", grid);
         Button.ClickListener listener = getDeleteButtonClickListener();
-        expect(grid.getSelectedItems()).andReturn(Collections.singleton(buildUsageBatch())).once();
+        expect(grid.getSelectedItems()).andReturn(Set.of(buildUsageBatch())).once();
         expect(controller.getAdditionalFundNamesByUsageBatchId(USAGE_BATCH_ID))
             .andReturn(Collections.emptyList()).once();
         expect(controller.getScenariosNamesAssociatedWithUsageBatch(USAGE_BATCH_ID))
@@ -125,7 +126,7 @@ public class ViewAaclUsageBatchWindowTest {
         Grid<UsageBatch> grid = createMock(Grid.class);
         Whitebox.setInternalState(viewaAaclUsageBatchWindow, "grid", grid);
         Button.ClickListener listener = getDeleteButtonClickListener();
-        expect(grid.getSelectedItems()).andReturn(Collections.singleton(buildUsageBatch())).once();
+        expect(grid.getSelectedItems()).andReturn(Set.of(buildUsageBatch())).once();
         expect(controller.getAdditionalFundNamesByUsageBatchId(USAGE_BATCH_ID))
             .andReturn(Collections.emptyList()).once();
         expect(controller.getScenariosNamesAssociatedWithUsageBatch(USAGE_BATCH_ID))
@@ -145,7 +146,7 @@ public class ViewAaclUsageBatchWindowTest {
         Grid<UsageBatch> grid = createMock(Grid.class);
         Whitebox.setInternalState(viewaAaclUsageBatchWindow, "grid", grid);
         Button.ClickListener listener = getDeleteButtonClickListener();
-        expect(grid.getSelectedItems()).andReturn(Collections.singleton(buildUsageBatch())).once();
+        expect(grid.getSelectedItems()).andReturn(Set.of(buildUsageBatch())).once();
         expect(controller.getAdditionalFundNamesByUsageBatchId(USAGE_BATCH_ID))
             .andReturn(Collections.emptyList()).once();
         expect(controller.getScenariosNamesAssociatedWithUsageBatch(USAGE_BATCH_ID))

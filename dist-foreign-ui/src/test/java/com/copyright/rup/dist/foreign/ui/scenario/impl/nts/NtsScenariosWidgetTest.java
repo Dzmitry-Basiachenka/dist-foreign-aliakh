@@ -54,6 +54,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Verifies {@link NtsScenariosWidget}.
@@ -153,7 +154,7 @@ public class NtsScenariosWidgetTest {
     public void testRefreshSelectedScenario() {
         Grid grid = createMock(Grid.class);
         Whitebox.setInternalState(scenariosWidget, GRID_ID, grid);
-        expect(grid.getSelectedItems()).andReturn(Collections.singleton(scenario)).once();
+        expect(grid.getSelectedItems()).andReturn(Set.of(scenario)).once();
         expect(controller.getScenarioWithAmountsAndLastAction(scenario)).andReturn(scenario).once();
         expect(controller.getCriteriaHtmlRepresentation()).andReturn(SELECTION_CRITERIA).once();
         replay(controller, grid);
@@ -167,7 +168,7 @@ public class NtsScenariosWidgetTest {
     public void testGetSelectedScenario() {
         Grid grid = createMock(Grid.class);
         Whitebox.setInternalState(scenariosWidget, GRID_ID, grid);
-        expect(grid.getSelectedItems()).andReturn(Collections.singleton(scenario)).once();
+        expect(grid.getSelectedItems()).andReturn(Set.of(scenario)).once();
         replay(grid);
         assertEquals(scenario, scenariosWidget.getSelectedScenario());
         verify(grid);

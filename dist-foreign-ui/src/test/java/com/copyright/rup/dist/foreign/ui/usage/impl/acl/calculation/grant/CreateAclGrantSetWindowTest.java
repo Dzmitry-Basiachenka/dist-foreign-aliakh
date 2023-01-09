@@ -50,7 +50,6 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -74,7 +73,7 @@ public class CreateAclGrantSetWindowTest {
     private static final String GRANT_SET_NAME_2022 = "Grant Set Name 2022";
     private static final Integer GRANT_SET_GRANT_PERIOD = 202206;
     private static final String ACL = "ACL";
-    private static final Set<Integer> PERIODS = Collections.singleton(202112);
+    private static final Set<Integer> PERIODS = Set.of(202112);
     private static final String SPACES_STRING = "   ";
     private static final String GRANT_SET_NAME_FIELD = "grantSetNameFiled";
     private static final String GRANT_PERIOD_YEAR_FIELD = "grantPeriodYearField";

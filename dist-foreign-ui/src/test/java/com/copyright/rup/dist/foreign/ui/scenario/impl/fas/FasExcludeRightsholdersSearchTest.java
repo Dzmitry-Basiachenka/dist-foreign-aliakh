@@ -12,10 +12,10 @@ import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasScenarioController
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
 import com.google.common.collect.Sets;
-
 import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.server.SerializablePredicate;
 import com.vaadin.ui.Grid;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -64,16 +64,16 @@ public class FasExcludeRightsholdersSearchTest {
     @Parameters
     public static Collection<Object[]> data() {
         return Arrays.asList(
-            new Object[][]{{"Times Mirror Magazines, Inc. [T]", Collections.singleton(CONTAINER_DATA.get(0))},
-                {"Klasing", Collections.singleton(CONTAINER_DATA.get(1))},
+            new Object[][]{{"Times Mirror Magazines, Inc. [T]", Set.of(CONTAINER_DATA.get(0))},
+                {"Klasing", Set.of(CONTAINER_DATA.get(1))},
                 {"Invalid name", Collections.emptySet()},
                 {"Bru ggemann US Inc.", Collections.emptySet()},
-                {"BruGgemAnn us Inc.", Collections.singleton(CONTAINER_DATA.get(3))},
-                {"Spectator Limited", Collections.singleton(CONTAINER_DATA.get(0))},
-                {"State College", Collections.singleton(CONTAINER_DATA.get(3))},
-                {"desktop coMmUniCations", Collections.singleton(CONTAINER_DATA.get(2))},
+                {"BruGgemAnn us Inc.", Set.of(CONTAINER_DATA.get(3))},
+                {"Spectator Limited", Set.of(CONTAINER_DATA.get(0))},
+                {"State College", Set.of(CONTAINER_DATA.get(3))},
+                {"desktop coMmUniCations", Set.of(CONTAINER_DATA.get(2))},
                 {"Keith-St evens Inc", Collections.emptySet()},
-                {"7000427902", Collections.singleton(CONTAINER_DATA.get(3))},
+                {"7000427902", Set.of(CONTAINER_DATA.get(3))},
                 {"70004 27902", Collections.emptySet()},
                 {"10000", Sets.newHashSet(CONTAINER_DATA.get(0), CONTAINER_DATA.get(1))},
                 {"42", Sets.newHashSet(CONTAINER_DATA.get(1), CONTAINER_DATA.get(2), CONTAINER_DATA.get(3))},

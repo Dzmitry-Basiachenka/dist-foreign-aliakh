@@ -42,8 +42,8 @@ import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -143,7 +143,7 @@ public class ReconcileRightsholdersControllerTest {
         expect(streamSourceHandler.getCsvStreamSource(capture(fileNameSupplierCapture), capture(posConsumerCapture)))
             .andReturn(new StreamSource(fileNameSupplier, "csv", inputStreamSupplier)).once();
         reportService.writeOwnershipAdjustmentCsvReport(scenario.getId(),
-            Collections.singleton(RightsholderDiscrepancyStatusEnum.DRAFT), pos);
+            Set.of(RightsholderDiscrepancyStatusEnum.DRAFT), pos);
         expectLastCall().once();
         replay(OffsetDateTime.class, streamSourceHandler, reportService);
         IStreamSource streamSource = controller.getCsvStreamSource();

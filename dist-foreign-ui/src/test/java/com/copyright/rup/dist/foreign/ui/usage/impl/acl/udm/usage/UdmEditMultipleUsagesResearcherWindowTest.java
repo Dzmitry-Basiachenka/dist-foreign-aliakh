@@ -171,7 +171,7 @@ public class UdmEditMultipleUsagesResearcherWindowTest {
         UdmUsageDto expectedUdmUsages = buildExpectedUdmUsageDto();
         Map<UdmUsageDto, UdmUsageAuditFieldToValuesMap> udmUsageDtoToFieldValuesMap =
             ImmutableMap.of(expectedUdmUsages, fieldToValuesMap);
-        udmUsages = Collections.singleton(buildUdmUsageDto());
+        udmUsages = Set.of(buildUdmUsageDto());
         binder = createMock(Binder.class);
         binder.writeBean(expectedUdmUsages);
         expectLastCall().once();
@@ -203,7 +203,7 @@ public class UdmEditMultipleUsagesResearcherWindowTest {
         expectedUdmUsage.setStatus(UsageStatusEnum.INELIGIBLE);
         Map<UdmUsageDto, UdmUsageAuditFieldToValuesMap> udmUsageDtoToFieldValuesMap =
             ImmutableMap.of(expectedUdmUsage, fieldToValuesMap);
-        udmUsages = Collections.singleton(buildUdmUsageDto());
+        udmUsages = Set.of(buildUdmUsageDto());
         binder = createMock(Binder.class);
         binder.writeBean(expectedUdmUsage);
         expectLastCall().once();

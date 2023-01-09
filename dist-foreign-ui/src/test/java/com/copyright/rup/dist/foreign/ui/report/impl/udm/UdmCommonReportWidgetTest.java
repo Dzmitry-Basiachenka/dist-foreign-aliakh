@@ -31,7 +31,6 @@ import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
 import java.time.LocalDate;
-import java.util.Collections;
 import java.util.Set;
 
 /**
@@ -84,7 +83,7 @@ public class UdmCommonReportWidgetTest {
         ComboBox<UdmUsageOriginEnum> usageOriginComboBox = Whitebox.getInternalState(widget, "usageOriginComboBox");
         channelComboBox.setSelectedItem(UdmChannelEnum.CCC);
         usageOriginComboBox.setSelectedItem(UdmUsageOriginEnum.RFA);
-        Set<Integer> periods = Collections.singleton(202112);
+        Set<Integer> periods = Set.of(202112);
         Whitebox.setInternalState(widget, "periods", periods);
         LocalDateWidget dateFromWidget = createMock(LocalDateWidget.class);
         Whitebox.setInternalState(widget, "dateFromWidget", dateFromWidget);

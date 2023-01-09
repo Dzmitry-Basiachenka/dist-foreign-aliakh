@@ -53,6 +53,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Verifies {@link ViewFundPoolWindow}.
@@ -135,7 +136,7 @@ public class ViewFundPoolWindowTest {
     public void testDeleteClickListenerAssociatedFunds() {
         mockStatic(Windows.class);
         Button.ClickListener listener = getDeleteButtonClickListener();
-        expect(grid.getSelectedItems()).andReturn(Collections.singleton(buildUsageBatch())).once();
+        expect(grid.getSelectedItems()).andReturn(Set.of(buildUsageBatch())).once();
         expect(controller.getAdditionalFundNamesByUsageBatchId(anyString()))
             .andReturn(Arrays.asList("Fund 1", "Fund 2")).once();
         Windows.showNotificationWindow("Fund pool cannot be deleted because it is associated with the following " +
@@ -151,7 +152,7 @@ public class ViewFundPoolWindowTest {
     public void testDeleteClickListenerWithAssociatedScenarios() {
         mockStatic(Windows.class);
         Button.ClickListener listener = getDeleteButtonClickListener();
-        expect(grid.getSelectedItems()).andReturn(Collections.singleton(buildUsageBatch())).once();
+        expect(grid.getSelectedItems()).andReturn(Set.of(buildUsageBatch())).once();
         expect(controller.getAdditionalFundNamesByUsageBatchId(USAGE_BATCH_ID))
             .andReturn(Collections.emptyList()).once();
         expect(controller.getScenariosNamesAssociatedWithUsageBatch(USAGE_BATCH_ID))
@@ -170,7 +171,7 @@ public class ViewFundPoolWindowTest {
         mockStatic(Windows.class);
         Window confirmWindowCapture = createMock(Window.class);
         Button.ClickListener listener = getDeleteButtonClickListener();
-        expect(grid.getSelectedItems()).andReturn(Collections.singleton(buildUsageBatch())).once();
+        expect(grid.getSelectedItems()).andReturn(Set.of(buildUsageBatch())).once();
         expect(controller.getAdditionalFundNamesByUsageBatchId(USAGE_BATCH_ID))
             .andReturn(Collections.emptyList()).once();
         expect(controller.getScenariosNamesAssociatedWithUsageBatch(USAGE_BATCH_ID))
@@ -190,7 +191,7 @@ public class ViewFundPoolWindowTest {
         mockStatic(Windows.class);
         Window confirmWindowCapture = createMock(Window.class);
         Button.ClickListener listener = getDeleteButtonClickListener();
-        expect(grid.getSelectedItems()).andReturn(Collections.singleton(buildUsageBatch())).once();
+        expect(grid.getSelectedItems()).andReturn(Set.of(buildUsageBatch())).once();
         expect(controller.getAdditionalFundNamesByUsageBatchId(USAGE_BATCH_ID))
             .andReturn(Collections.emptyList()).once();
         expect(controller.getScenariosNamesAssociatedWithUsageBatch(USAGE_BATCH_ID))
@@ -245,7 +246,7 @@ public class ViewFundPoolWindowTest {
         ntsFields.setNonStmAmount(new BigDecimal("500000"));
         ntsFields.setStmMinimumAmount(new BigDecimal("50"));
         ntsFields.setNonStmMinimumAmount(new BigDecimal("7"));
-        ntsFields.setMarkets(Collections.singleton("Bus"));
+        ntsFields.setMarkets(Set.of("Bus"));
         ntsFields.setFundPoolPeriodFrom(2000);
         ntsFields.setFundPoolPeriodTo(2010);
         return ntsFields;

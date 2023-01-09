@@ -28,6 +28,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Verifies {@link AggregateLicenseeClassFilterWidget}.
@@ -67,7 +68,7 @@ public class AggregateLicenseeClassFilterWidgetTest {
     @SuppressWarnings("unchecked")
     public void testOnSave() {
         FilterSaveEvent<AggregateLicenseeClass> filterSaveEvent = createMock(FilterSaveEvent.class);
-        expect(filterSaveEvent.getSelectedItemsIds()).andReturn(Collections.singleton(aggregateLicenseeClass)).once();
+        expect(filterSaveEvent.getSelectedItemsIds()).andReturn(Set.of(aggregateLicenseeClass)).once();
         replay(filterSaveEvent);
         aggregateLicenseeClassFilterWidget.onSave(filterSaveEvent);
         verify(filterSaveEvent);

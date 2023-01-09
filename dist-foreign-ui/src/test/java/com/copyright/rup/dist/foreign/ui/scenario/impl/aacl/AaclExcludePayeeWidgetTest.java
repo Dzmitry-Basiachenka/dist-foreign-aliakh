@@ -139,7 +139,7 @@ public class AaclExcludePayeeWidgetTest {
         Button.ClickEvent clickEvent = createMock(Button.ClickEvent.class);
         Capture<IListener> actionDialogListenerCapture = newCapture();
         expect(payeesGrid.getSelectedItems())
-            .andReturn(buildPayeeTotalHolder(Collections.singleton(PAYEE_ACCOUNT_NUMBER_2))).once();
+            .andReturn(buildPayeeTotalHolder(Set.of(PAYEE_ACCOUNT_NUMBER_2))).once();
         AggregateLicenseeClass aggregateLicenseeClass = buildAggregateLicenseeClass(171, "EXGP", "Arts & Humanities");
         List<PayeeAccountAggregateLicenseeClassesPair> pairs =
             Arrays.asList(buildPayeeAggLcPair(PAYEE_ACCOUNT_NUMBER_1, aggregateLicenseeClass),

@@ -51,8 +51,8 @@ import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -228,10 +228,10 @@ public class AclGrantDetailControllerTest {
 
     @Test
     public void testUpdateAclGrantDetails() {
-        aclGrantDetailService.updateGrants(Collections.singleton(new AclGrantDetailDto()), true);
+        aclGrantDetailService.updateGrants(Set.of(new AclGrantDetailDto()), true);
         expectLastCall().once();
         replay(aclGrantDetailService);
-        controller.updateAclGrants(Collections.singleton(new AclGrantDetailDto()), true);
+        controller.updateAclGrants(Set.of(new AclGrantDetailDto()), true);
         verify(aclGrantDetailService);
     }
 
@@ -310,7 +310,7 @@ public class AclGrantDetailControllerTest {
         AclGrantSet aclGrantSet = new AclGrantSet();
         aclGrantSet.setName(GRANT_SET_NAME);
         aclGrantSet.setGrantPeriod(202012);
-        aclGrantSet.setPeriods(Collections.singleton(202112));
+        aclGrantSet.setPeriods(Set.of(202112));
         aclGrantSet.setLicenseType("ACL");
         aclGrantSet.setEditable(true);
         return aclGrantSet;

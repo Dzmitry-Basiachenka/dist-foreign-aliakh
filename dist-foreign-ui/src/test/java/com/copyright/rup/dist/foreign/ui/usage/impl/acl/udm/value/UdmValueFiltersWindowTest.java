@@ -46,8 +46,8 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Verifies {@link UdmValueFiltersWindow}.
@@ -129,8 +129,8 @@ public class UdmValueFiltersWindowTest {
     @Test
     public void testConstructorWithPopulatedFilter() {
         UdmValueFilter valueFilter = buildExpectedFilter();
-        valueFilter.setAssignees(Collections.singleton(ASSIGNEE));
-        valueFilter.setLastValuePeriods(Collections.singleton(LAST_VALUE_PERIOD));
+        valueFilter.setAssignees(Set.of(ASSIGNEE));
+        valueFilter.setLastValuePeriods(Set.of(LAST_VALUE_PERIOD));
         valueFilter.setWrWrkInstExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, WR_WRK_INST, null));
         valueFilter.setSystemTitleExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE, null));
         valueFilter.setSystemStandardNumberExpression(
@@ -636,8 +636,8 @@ public class UdmValueFiltersWindowTest {
 
     private UdmValueFilter buildExpectedFilter() {
         UdmValueFilter valueFilter = new UdmValueFilter();
-        valueFilter.setAssignees(Collections.singleton(ASSIGNEE));
-        valueFilter.setLastValuePeriods(Collections.singleton(LAST_VALUE_PERIOD));
+        valueFilter.setAssignees(Set.of(ASSIGNEE));
+        valueFilter.setLastValuePeriods(Set.of(LAST_VALUE_PERIOD));
         valueFilter.setWrWrkInstExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, WR_WRK_INST, null));
         valueFilter.setSystemTitleExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE, null));
         valueFilter.setSystemStandardNumberExpression(
@@ -743,8 +743,8 @@ public class UdmValueFiltersWindowTest {
     @SuppressWarnings(UNCHECKED)
     private void populateData() {
         UdmValueFilter valueFilter = Whitebox.getInternalState(window, "valueFilter");
-        valueFilter.setAssignees(Collections.singleton(ASSIGNEE));
-        valueFilter.setLastValuePeriods(Collections.singleton(LAST_VALUE_PERIOD));
+        valueFilter.setAssignees(Set.of(ASSIGNEE));
+        valueFilter.setLastValuePeriods(Set.of(LAST_VALUE_PERIOD));
         populateTextField("wrWrkInstFromField", String.valueOf(WR_WRK_INST));
         populateComboBox("wrWrkInstOperatorComboBox", FilterOperatorEnum.EQUALS);
         populateTextField("systemTitleField", SYSTEM_TITLE);
