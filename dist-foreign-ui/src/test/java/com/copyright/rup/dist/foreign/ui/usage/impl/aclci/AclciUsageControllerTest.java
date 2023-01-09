@@ -249,7 +249,12 @@ public class AclciUsageControllerTest {
 
     @Test
     public void testCreateAclciFundPool() {
-        //TODO: implement
+        FundPool fundPool = new FundPool();
+        fundPoolService.createAclciFundPool(fundPool);
+        expectLastCall().once();
+        replay(fundPoolService);
+        controller.createAclciFundPool(fundPool);
+        verify(fundPoolService);
     }
 
     @Test

@@ -9,6 +9,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Objects;
 
 /**
  * Domain object to represent Fund Pool.
@@ -30,6 +31,28 @@ public class FundPool extends StoredEntity<String> {
     private BigDecimal netAmount = BigDecimal.ZERO.setScale(2, BigDecimal.ROUND_HALF_UP);
     private SalFields salFields;
     private AclciFields aclciFields;
+
+    /**
+     * Constructor.
+     */
+    public FundPool() {
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param fundPool instance of {@link FundPool}
+     */
+    public FundPool(FundPool fundPool) {
+        this.productFamily = fundPool.productFamily;
+        this.name = fundPool.name;
+        this.comment = fundPool.comment;
+        this.totalAmount = fundPool.totalAmount;
+        this.serviceFeeAmount = fundPool.serviceFeeAmount;
+        this.netAmount = fundPool.netAmount;
+        this.salFields = fundPool.salFields;
+        this.aclciFields = Objects.nonNull(fundPool.aclciFields) ? new AclciFields(fundPool.aclciFields) : null;
+    }
 
     public String getProductFamily() {
         return productFamily;
@@ -366,6 +389,34 @@ public class FundPool extends StoredEntity<String> {
         private BigDecimal grade9to12GrossAmount = BigDecimal.ZERO;
         private BigDecimal gradeHeGrossAmount = BigDecimal.ZERO;
         private BigDecimal curriculumDbGrossAmount = BigDecimal.ZERO;
+
+        /**
+         * Constructor.
+         */
+        public AclciFields() {
+        }
+
+        /**
+         * Constructor.
+         *
+         * @param aclciFields instance of {@link AclciFields}
+         */
+        public AclciFields(AclciFields aclciFields) {
+            this.coverageYears = aclciFields.coverageYears;
+            this.gradeKto2NumberOfStudents = aclciFields.gradeKto2NumberOfStudents;
+            this.grade3to5NumberOfStudents = aclciFields.grade3to5NumberOfStudents;
+            this.grade6to8NumberOfStudents = aclciFields.grade6to8NumberOfStudents;
+            this.grade9to12NumberOfStudents = aclciFields.grade9to12NumberOfStudents;
+            this.gradeHeNumberOfStudents = aclciFields.gradeHeNumberOfStudents;
+            this.grossAmount = aclciFields.grossAmount;
+            this.curriculumDbSplitPercent = aclciFields.curriculumDbSplitPercent;
+            this.gradeKto2GrossAmount = aclciFields.gradeKto2GrossAmount;
+            this.grade3to5GrossAmount = aclciFields.grade3to5GrossAmount;
+            this.grade6to8GrossAmount = aclciFields.grade6to8GrossAmount;
+            this.grade9to12GrossAmount = aclciFields.grade9to12GrossAmount;
+            this.gradeHeGrossAmount = aclciFields.gradeHeGrossAmount;
+            this.curriculumDbGrossAmount = aclciFields.curriculumDbGrossAmount;
+        }
 
         public String getCoverageYears() {
             return coverageYears;

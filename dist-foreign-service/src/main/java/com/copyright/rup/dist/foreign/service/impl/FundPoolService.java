@@ -218,10 +218,10 @@ public class FundPoolService implements IFundPoolService {
                 calculateGradeAmount(multiplier, totalStudents, salFields.getGrade6to8NumberOfStudents()));
             salFields.setGrade9to12GrossAmount(
                 calculateGradeAmount(multiplier, totalStudents, salFields.getGrade9to12NumberOfStudents()));
-            salFields.setItemBankGrossAmount(
-                salFields.getGrossAmount().subtract(salFields.getGradeKto5GrossAmount())
-                    .subtract(salFields.getGrade6to8GrossAmount())
-                    .subtract(salFields.getGrade9to12GrossAmount()));
+            salFields.setItemBankGrossAmount(salFields.getGrossAmount()
+                .subtract(salFields.getGradeKto5GrossAmount())
+                .subtract(salFields.getGrade6to8GrossAmount())
+                .subtract(salFields.getGrade9to12GrossAmount()));
             fundPool.setTotalAmount(salFields.getItemBankGrossAmount()
                 .add(salFields.getGradeKto5GrossAmount())
                 .add(salFields.getGrade6to8GrossAmount())

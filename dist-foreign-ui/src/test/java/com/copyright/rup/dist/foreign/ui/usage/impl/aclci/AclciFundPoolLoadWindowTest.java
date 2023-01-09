@@ -350,7 +350,6 @@ public class AclciFundPoolLoadWindowTest {
         assertEquals(expectedValue, ((AbstractField<?>) textField).getValue());
     }
 
-    //TODO: simplify the number of students tests
     private void testGradeNumberOfStudentsFieldValidation(String fieldName) {
         replay(usageController);
         Binder<?> binder = Whitebox.getInternalState(window, BINDER);
