@@ -179,6 +179,9 @@
             <when test="sort.property == 'reportedGrade'">
                 uaclci.reported_grade <include refid="IUsageMapper.direction"/>
             </when>
+            <when test="sort.property == 'gradeGroup'">
+                uaclci.grade_group <include refid="IUsageMapper.direction"/>
+            </when>
             <when test="sort.property == 'comment'">
                 u.comment <include refid="IUsageMapper.direction"/>
             </when>
