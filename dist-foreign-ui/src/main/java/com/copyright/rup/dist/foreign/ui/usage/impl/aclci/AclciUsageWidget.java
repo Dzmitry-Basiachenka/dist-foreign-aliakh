@@ -51,6 +51,7 @@ public class AclciUsageWidget extends CommonUsageWidget implements IAclciUsageWi
         AclciUsageMediator mediator = new AclciUsageMediator();
         mediator.setLoadUsageBatchMenuItem(loadUsageBatchMenuItem);
         mediator.setLoadFundPoolMenuItem(loadFundPoolMenuItem);
+        mediator.setUpdateUsagesButton(updateUsagesButton);
         return mediator;
     }
 
