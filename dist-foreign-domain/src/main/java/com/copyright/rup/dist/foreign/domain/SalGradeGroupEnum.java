@@ -1,6 +1,8 @@
 package com.copyright.rup.dist.foreign.domain;
 
-import com.google.common.collect.Range;
+import com.google.common.collect.ImmutableMap;
+
+import java.util.Map;
 
 /**
  * Represents enum for SAL Grade Group.
@@ -29,10 +31,22 @@ public enum SalGradeGroupEnum {
      */
     GRADE9_12;
 
-    private static final String GRADE_K = "K";
-    private static final Range<Integer> GRADE_RANGE_1_5 = Range.closed(1, 5);
-    private static final Range<Integer> GRADE_RANGE_6_8 = Range.closed(6, 8);
-    private static final Range<Integer> GRADE_RANGE_9_12 = Range.closed(9, 12);
+    private static final Map<String, SalGradeGroupEnum> GRADE_GROUP_MAP =
+        ImmutableMap.<String, SalGradeGroupEnum>builder()
+            .put("K", GRADEK_5)
+            .put("1", GRADEK_5)
+            .put("2", GRADEK_5)
+            .put("3", GRADEK_5)
+            .put("4", GRADEK_5)
+            .put("5", GRADEK_5)
+            .put("6", GRADE6_8)
+            .put("7", GRADE6_8)
+            .put("8", GRADE6_8)
+            .put("9", GRADE9_12)
+            .put("10", GRADE9_12)
+            .put("11", GRADE9_12)
+            .put("12", GRADE9_12)
+            .build();
 
     /**
      * Gets {@link SalGradeGroupEnum} by provided grade.
@@ -41,19 +55,6 @@ public enum SalGradeGroupEnum {
      * @return {@link SalGradeGroupEnum} instance
      */
     public static SalGradeGroupEnum getGroupByGrade(String grade) {
-        SalGradeGroupEnum result = null;
-        if (GRADE_K.equals(grade)) {
-            result = GRADEK_5;
-        } else {
-            Integer convertedGrade = Integer.parseInt(grade);
-            if (GRADE_RANGE_1_5.contains(convertedGrade)) {
-                result = GRADEK_5;
-            } else if (GRADE_RANGE_6_8.contains(convertedGrade)) {
-                result = GRADE6_8;
-            } else if (GRADE_RANGE_9_12.contains(convertedGrade)) {
-                result = GRADE9_12;
-            }
-        }
-        return result;
+        return GRADE_GROUP_MAP.get(grade);
     }
 }
