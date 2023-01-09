@@ -117,14 +117,14 @@ public class AclciUsageService implements IAclciUsageService {
     @Transactional
     public void updateToEligibleByIds(Set<String> usageIds, Long rhAccountNumber, Long wrWrkInst, String reason) {
         String userName = RupContextUtils.getUserName();
-        LOGGER.info("Update RH for SAL detail. Started. UsageIds={}, RhAccountNumber={}, Reason={}, UserName={}",
+        LOGGER.info("Update RH for ACLCI usage. Started. UsageIds={}, RhAccountNumber={}, Reason={}, UserName={}",
             usageIds, rhAccountNumber, reason, userName);
         aclciUsageRepository.updateToEligibleByIds(usageIds, rhAccountNumber, wrWrkInst, userName);
         usageAuditService.logAction(usageIds, UsageActionTypeEnum.RH_UPDATED, reason);
         usageAuditService.logAction(usageIds, UsageActionTypeEnum.ELIGIBLE,
             "Usage has become eligible. RH and Wr Wrk Inst were updated. Reason=" + reason);
         rightsholderService.updateRighstholdersAsync(Set.of(rhAccountNumber));
-        LOGGER.info("Update RH for SAL detail. Finished. UsageIds={}, RhAccountNumber={}, Reason={}, UserName={}",
+        LOGGER.info("Update RH for ACLCI usage. Finished. UsageIds={}, RhAccountNumber={}, Reason={}, UserName={}",
             usageIds, rhAccountNumber, reason, userName);
     }
 }

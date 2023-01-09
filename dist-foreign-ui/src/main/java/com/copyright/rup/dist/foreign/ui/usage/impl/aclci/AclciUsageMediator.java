@@ -2,6 +2,8 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.aclci;
 
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.vaadin.widget.api.IMediator;
+
+import com.vaadin.ui.Button;
 import com.vaadin.ui.MenuBar;
 
 /**
@@ -17,11 +19,13 @@ class AclciUsageMediator implements IMediator {
 
     private MenuBar.MenuItem loadUsageBatchMenuItem;
     private MenuBar.MenuItem loadFundPoolMenuItem;
+    private Button updateUsagesButton;
 
     @Override
     public void applyPermissions() {
         loadUsageBatchMenuItem.setVisible(ForeignSecurityUtils.hasLoadUsagePermission());
         loadFundPoolMenuItem.setVisible(ForeignSecurityUtils.hasLoadFundPoolPermission());
+        updateUsagesButton.setVisible(ForeignSecurityUtils.hasUpdateRightsholderPermission());
     }
 
     public void setLoadUsageBatchMenuItem(MenuBar.MenuItem loadUsageBatchMenuItem) {
@@ -30,5 +34,9 @@ class AclciUsageMediator implements IMediator {
 
     public void setLoadFundPoolMenuItem(MenuBar.MenuItem loadFundPoolMenuItem) {
         this.loadFundPoolMenuItem = loadFundPoolMenuItem;
+    }
+
+    public void setUpdateUsagesButton(Button updateUsagesButton) {
+        this.updateUsagesButton = updateUsagesButton;
     }
 }

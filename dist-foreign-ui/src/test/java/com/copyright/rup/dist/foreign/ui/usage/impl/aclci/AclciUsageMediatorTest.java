@@ -9,6 +9,8 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.vaadin.security.SecurityUtils;
+
+import com.vaadin.ui.Button;
 import com.vaadin.ui.MenuBar;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
@@ -30,6 +32,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 @PrepareForTest(SecurityUtils.class)
 public class AclciUsageMediatorTest {
 
+    private final Button updateUsagesButton = new Button();
     private MenuBar usageBatchMenuBar;
     private MenuBar.MenuItem loadUsageBatchMenuItem;
     private MenuBar fundPoolMenuBar;
@@ -45,6 +48,7 @@ public class AclciUsageMediatorTest {
         mediator = new AclciUsageMediator();
         mediator.setLoadUsageBatchMenuItem(loadUsageBatchMenuItem);
         mediator.setLoadFundPoolMenuItem(loadFundPoolMenuItem);
+        mediator.setUpdateUsagesButton(updateUsagesButton);
     }
 
     @Test
@@ -56,6 +60,7 @@ public class AclciUsageMediatorTest {
         assertFalse(loadUsageBatchMenuItem.isVisible());
         assertTrue(fundPoolMenuBar.isVisible());
         assertFalse(loadFundPoolMenuItem.isVisible());
+        assertFalse(updateUsagesButton.isVisible());
         verify(SecurityUtils.class);
     }
 
@@ -68,6 +73,7 @@ public class AclciUsageMediatorTest {
         assertFalse(loadUsageBatchMenuItem.isVisible());
         assertTrue(fundPoolMenuBar.isVisible());
         assertFalse(loadFundPoolMenuItem.isVisible());
+        assertFalse(updateUsagesButton.isVisible());
         verify(SecurityUtils.class);
     }
 
@@ -80,6 +86,7 @@ public class AclciUsageMediatorTest {
         assertTrue(loadUsageBatchMenuItem.isVisible());
         assertTrue(fundPoolMenuBar.isVisible());
         assertTrue(loadFundPoolMenuItem.isVisible());
+        assertTrue(updateUsagesButton.isVisible());
         verify(SecurityUtils.class);
     }
 
@@ -105,5 +112,6 @@ public class AclciUsageMediatorTest {
         expect(SecurityUtils.hasPermission("FDA_SEND_FOR_WORK_RESEARCH")).andReturn(true).anyTimes();
         expect(SecurityUtils.hasPermission("FDA_SEND_FOR_CLASSIFICATION")).andReturn(true).anyTimes();
         expect(SecurityUtils.hasPermission("FDA_LOAD_CLASSIFIED_USAGE")).andReturn(true).anyTimes();
+        expect(SecurityUtils.hasPermission("FDA_UPDATE_RIGHTSHOLDER")).andReturn(true).anyTimes();
     }
 }

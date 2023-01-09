@@ -6,7 +6,11 @@ import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyLoadCli
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyTextField;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
+import static org.easymock.EasyMock.anyObject;
+import static org.easymock.EasyMock.capture;
+import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.newCapture;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
@@ -18,13 +22,16 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.ui.usage.UiTestHelper;
 import com.copyright.rup.dist.foreign.ui.usage.api.aclci.IAclciUsageController;
+import com.copyright.rup.vaadin.ui.component.window.ConfirmActionDialogWindow.IListener;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
 import com.google.common.collect.Lists;
 import com.vaadin.data.Binder;
 import com.vaadin.data.HasValue;
+import com.vaadin.data.Validator;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.AbstractField;
 import com.vaadin.ui.Button;
@@ -36,6 +43,7 @@ import com.vaadin.ui.VerticalLayout;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -44,7 +52,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.util.Collection;
-import java.util.Collections;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -60,7 +68,7 @@ import java.util.Set;
 @PrepareForTest(Windows.class)
 public class AclciMultipleEditUsagesWindowTest {
 
-    private static final Set<String> USAGE_IDS = Collections.singleton("d9070305-6bc3-46b8-903c-d4310aeedd9b");
+    private static final Set<String> USAGE_IDS = Set.of("d9070305-6bc3-46b8-903c-d4310aeedd9b");
     private static final Long RH_ACCOUNT_NUMBER = 2000047356L;
     private static final String RH_NAME = "National Geographic Partners";
     private static final String RH_ACCOUNT_NUMBER_FIELD_NAME = "rhAccountNumberField";
@@ -171,7 +179,12 @@ public class AclciMultipleEditUsagesWindowTest {
 
     @Test
     public void testSaveButtonClick() {
-        //TODO: {dbasiachenka} implement
+        verifySaveButtonClick(210001899L);
+    }
+
+    @Test
+    public void testSaveButtonClickEmptyWrWrlInst() {
+        verifySaveButtonClick(null);
     }
 
     private void verifyRhAccountNumberLayout(Component component) {
@@ -225,5 +238,47 @@ public class AclciMultipleEditUsagesWindowTest {
         rh.setAccountNumber(RH_ACCOUNT_NUMBER);
         rh.setName(RH_NAME);
         return rh;
+    }
+
+    @SuppressWarnings("unchecked")
+    private void verifySaveButtonClick(Long wrWrkInst) {
+        mockStatic(Windows.class);
+        Button.ClickEvent clickEvent = createMock(Button.ClickEvent.class);
+        Rightsholder rh = new Rightsholder();
+        rh.setAccountNumber(RH_ACCOUNT_NUMBER);
+        rh.setName(RH_NAME);
+        Binder<UsageDto> binder = createMock(Binder.class);
+        window = new AclciMultipleEditUsagesWindow(controller, usageUpdateWindow, USAGE_IDS);
+        Whitebox.setInternalState(window, "binder", binder);
+        Whitebox.setInternalState(window, RH_ACCOUNT_NUMBER_FIELD_NAME,
+            new TextField("RH Account #", RH_ACCOUNT_NUMBER.toString()));
+        Whitebox.setInternalState(window, WR_WRK_INST_FIELD_NAME,
+            new TextField("Wr Wrk Inst", Objects.isNull(wrWrkInst) ? StringUtils.EMPTY : wrWrkInst.toString()));
+        Whitebox.setInternalState(window, "rh", rh);
+        Capture<IListener> actionDialogListenerCapture = newCapture();
+        expect(binder.isValid()).andReturn(true).once();
+        Windows.showConfirmDialogWithReason(eq("Confirm action"),
+            eq("Are you sure you want to update selected usage(s)?"), eq("Yes"), eq("Cancel"),
+            capture(actionDialogListenerCapture), anyObject(Validator.class));
+        expectLastCall().once();
+        controller.updateToEligibleByIds(USAGE_IDS, RH_ACCOUNT_NUMBER, wrWrkInst, "Reason");
+        expectLastCall().once();
+        controller.refreshWidget();
+        expectLastCall().once();
+        usageUpdateWindow.refreshDataProvider();
+        expectLastCall().once();
+        replay(clickEvent, controller, usageUpdateWindow, binder, Windows.class);
+        Component content = window.getContent();
+        assertThat(content, instanceOf(VerticalLayout.class));
+        VerticalLayout contentLayout = (VerticalLayout) content;
+        assertEquals(4, contentLayout.getComponentCount());
+        HorizontalLayout buttonsLayout = (HorizontalLayout) contentLayout.getComponent(3);
+        Button saveButton = (Button) buttonsLayout.getComponent(0);
+        Collection<?> listeners = saveButton.getListeners(Button.ClickEvent.class);
+        assertEquals(1, listeners.size());
+        Button.ClickListener clickListener = (Button.ClickListener) listeners.iterator().next();
+        clickListener.buttonClick(clickEvent);
+        actionDialogListenerCapture.getValue().onActionConfirmed("Reason");
+        verify(clickEvent, controller, usageUpdateWindow, binder, Windows.class);
     }
 }
