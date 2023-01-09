@@ -233,10 +233,10 @@ public class FundPoolService implements IFundPoolService {
     @Override
     public FundPool calculateAclciFundPoolAmounts(FundPool fundPool) {
         AclciFields aclciFields = fundPool.getAclciFields();
-        BigDecimal splitPercent = aclciFields.getCurriculumSplitPercent();
+        BigDecimal splitPercent = aclciFields.getCurriculumDbSplitPercent();
         if (0 == BigDecimal.ONE.compareTo(splitPercent)) {
             fundPool.setTotalAmount(aclciFields.getGrossAmount());
-            aclciFields.setCurriculumGrossAmount(aclciFields.getGrossAmount());
+            aclciFields.setCurriculumDbGrossAmount(aclciFields.getGrossAmount());
             aclciFields.setGradeKto2GrossAmount(ZERO);
             aclciFields.setGrade3to5GrossAmount(ZERO);
             aclciFields.setGrade6to8GrossAmount(ZERO);
@@ -260,13 +260,13 @@ public class FundPoolService implements IFundPoolService {
                 calculateGradeAmount(multiplier, totalStudents, aclciFields.getGrade9to12NumberOfStudents()));
             aclciFields.setGradeHeGrossAmount(
                 calculateGradeAmount(multiplier, totalStudents, aclciFields.getGradeHeNumberOfStudents()));
-            aclciFields.setCurriculumGrossAmount(aclciFields.getGrossAmount()
+            aclciFields.setCurriculumDbGrossAmount(aclciFields.getGrossAmount()
                 .subtract(aclciFields.getGradeKto2GrossAmount())
                 .subtract(aclciFields.getGrade3to5GrossAmount())
                 .subtract(aclciFields.getGrade6to8GrossAmount())
                 .subtract(aclciFields.getGrade9to12GrossAmount())
                 .subtract(aclciFields.getGradeHeGrossAmount()));
-            fundPool.setTotalAmount(aclciFields.getCurriculumGrossAmount()
+            fundPool.setTotalAmount(aclciFields.getCurriculumDbGrossAmount()
                 .add(aclciFields.getGradeKto2GrossAmount())
                 .add(aclciFields.getGrade3to5GrossAmount())
                 .add(aclciFields.getGrade6to8GrossAmount())

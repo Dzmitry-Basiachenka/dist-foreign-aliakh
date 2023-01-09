@@ -56,13 +56,13 @@ public class AclciFundPoolFieldsDeserializer extends StdDeserializer<FundPool.Ac
         aclciFields.setGrade9to12NumberOfStudents(getIntegerValue(jsonNode.get("grade_9_12_number_of_students")));
         aclciFields.setGradeHeNumberOfStudents(getIntegerValue(jsonNode.get("grade_he_number_of_students")));
         aclciFields.setGrossAmount(getBigDecimalValue(jsonNode.get("gross_amount")));
-        aclciFields.setCurriculumGrossAmount(getBigDecimalValue(jsonNode.get("curriculum_gross_amount")));
+        aclciFields.setCurriculumDbGrossAmount(getBigDecimalValue(jsonNode.get("curriculum_db_gross_amount")));
         aclciFields.setGradeKto2GrossAmount(getBigDecimalValue(jsonNode.get("grade_K_2_gross_amount")));
         aclciFields.setGrade3to5GrossAmount(getBigDecimalValue(jsonNode.get("grade_3_5_gross_amount")));
         aclciFields.setGrade6to8GrossAmount(getBigDecimalValue(jsonNode.get("grade_6_8_gross_amount")));
         aclciFields.setGrade9to12GrossAmount(getBigDecimalValue(jsonNode.get("grade_9_12_gross_amount")));
         aclciFields.setGradeHeGrossAmount(getBigDecimalValue(jsonNode.get("grade_he_gross_amount")));
-        aclciFields.setCurriculumSplitPercent(getBigDecimalValue(jsonNode.get("curriculum_split_percent")));
+        aclciFields.setCurriculumDbSplitPercent(getBigDecimalValue(jsonNode.get("curriculum_db_split_percent")));
         return aclciFields;
     }
 

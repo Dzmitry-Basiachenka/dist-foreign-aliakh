@@ -342,13 +342,13 @@ public class FundPoolRepositoryIntegrationTest {
         aclciFields.setGrade9to12NumberOfStudents(12);
         aclciFields.setGradeHeNumberOfStudents(20);
         aclciFields.setGrossAmount(new BigDecimal("1000.0"));
-        aclciFields.setCurriculumGrossAmount(new BigDecimal("200.0"));
+        aclciFields.setCurriculumDbGrossAmount(new BigDecimal("200.0"));
         aclciFields.setGradeKto2GrossAmount(new BigDecimal("34.04"));
         aclciFields.setGrade3to5GrossAmount(new BigDecimal("85.11"));
         aclciFields.setGrade6to8GrossAmount(new BigDecimal("136.17"));
         aclciFields.setGrade9to12GrossAmount(new BigDecimal("204.26"));
         aclciFields.setGradeHeGrossAmount(new BigDecimal("340.43"));
-        aclciFields.setCurriculumSplitPercent(new BigDecimal("0.2"));
+        aclciFields.setCurriculumDbSplitPercent(new BigDecimal("0.2"));
         return aclciFields;
     }
 }

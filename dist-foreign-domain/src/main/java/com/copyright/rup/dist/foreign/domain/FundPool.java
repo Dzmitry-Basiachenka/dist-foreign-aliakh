@@ -359,13 +359,13 @@ public class FundPool extends StoredEntity<String> {
         private int grade9to12NumberOfStudents;
         private int gradeHeNumberOfStudents;
         private BigDecimal grossAmount = BigDecimal.ZERO;
-        private BigDecimal curriculumSplitPercent = BigDecimal.ZERO;
+        private BigDecimal curriculumDbSplitPercent = BigDecimal.ZERO;
         private BigDecimal gradeKto2GrossAmount = BigDecimal.ZERO;
         private BigDecimal grade3to5GrossAmount = BigDecimal.ZERO;
         private BigDecimal grade6to8GrossAmount = BigDecimal.ZERO;
         private BigDecimal grade9to12GrossAmount = BigDecimal.ZERO;
         private BigDecimal gradeHeGrossAmount = BigDecimal.ZERO;
-        private BigDecimal curriculumGrossAmount = BigDecimal.ZERO;
+        private BigDecimal curriculumDbGrossAmount = BigDecimal.ZERO;
 
         public String getCoverageYears() {
             return coverageYears;
@@ -423,12 +423,12 @@ public class FundPool extends StoredEntity<String> {
             this.grossAmount = grossAmount;
         }
 
-        public BigDecimal getCurriculumSplitPercent() {
-            return curriculumSplitPercent;
+        public BigDecimal getCurriculumDbSplitPercent() {
+            return curriculumDbSplitPercent;
         }
 
-        public void setCurriculumSplitPercent(BigDecimal curriculumSplitPercent) {
-            this.curriculumSplitPercent = curriculumSplitPercent;
+        public void setCurriculumDbSplitPercent(BigDecimal curriculumDbSplitPercent) {
+            this.curriculumDbSplitPercent = curriculumDbSplitPercent;
         }
 
         public BigDecimal getGradeKto2GrossAmount() {
@@ -471,12 +471,12 @@ public class FundPool extends StoredEntity<String> {
             this.gradeHeGrossAmount = gradeHeGrossAmount;
         }
 
-        public BigDecimal getCurriculumGrossAmount() {
-            return curriculumGrossAmount;
+        public BigDecimal getCurriculumDbGrossAmount() {
+            return curriculumDbGrossAmount;
         }
 
-        public void setCurriculumGrossAmount(BigDecimal curriculumGrossAmount) {
-            this.curriculumGrossAmount = curriculumGrossAmount;
+        public void setCurriculumDbGrossAmount(BigDecimal curriculumDbGrossAmount) {
+            this.curriculumDbGrossAmount = curriculumDbGrossAmount;
         }
 
         @Override
@@ -496,13 +496,13 @@ public class FundPool extends StoredEntity<String> {
                 .append(grade9to12NumberOfStudents, that.grade9to12NumberOfStudents)
                 .append(gradeHeNumberOfStudents, that.gradeHeNumberOfStudents)
                 .append(grossAmount, that.grossAmount)
-                .append(curriculumSplitPercent, that.curriculumSplitPercent)
+                .append(curriculumDbSplitPercent, that.curriculumDbSplitPercent)
                 .append(gradeKto2GrossAmount, that.gradeKto2GrossAmount)
                 .append(grade3to5GrossAmount, that.grade3to5GrossAmount)
                 .append(grade6to8GrossAmount, that.grade6to8GrossAmount)
                 .append(grade9to12GrossAmount, that.grade9to12GrossAmount)
                 .append(gradeHeGrossAmount, that.gradeHeGrossAmount)
-                .append(curriculumGrossAmount, that.curriculumGrossAmount)
+                .append(curriculumDbGrossAmount, that.curriculumDbGrossAmount)
                 .isEquals();
         }
 
@@ -516,13 +516,13 @@ public class FundPool extends StoredEntity<String> {
                 .append(grade9to12NumberOfStudents)
                 .append(gradeHeNumberOfStudents)
                 .append(grossAmount)
-                .append(curriculumSplitPercent)
+                .append(curriculumDbSplitPercent)
                 .append(gradeKto2GrossAmount)
                 .append(grade3to5GrossAmount)
                 .append(grade6to8GrossAmount)
                 .append(grade9to12GrossAmount)
                 .append(gradeHeGrossAmount)
-                .append(curriculumGrossAmount)
+                .append(curriculumDbGrossAmount)
                 .toHashCode();
         }
 
@@ -536,13 +536,13 @@ public class FundPool extends StoredEntity<String> {
                 .append("grade9to12NumberOfStudents", grade9to12NumberOfStudents)
                 .append("gradeHeNumberOfStudents", gradeHeNumberOfStudents)
                 .append("grossAmount", grossAmount)
-                .append("curriculumSplitPercent", curriculumSplitPercent)
+                .append("curriculumDbSplitPercent", curriculumDbSplitPercent)
                 .append("gradeKto2GrossAmount", gradeKto2GrossAmount)
                 .append("grade3to5GrossAmount", grade3to5GrossAmount)
                 .append("grade6to8GrossAmount", grade6to8GrossAmount)
                 .append("grade9to12GrossAmount", grade9to12GrossAmount)
                 .append("gradeHeGrossAmount", gradeHeGrossAmount)
-                .append("curriculumGrossAmount", curriculumGrossAmount)
+                .append("curriculumDbGrossAmount", curriculumDbGrossAmount)
                 .toString();
         }
     }

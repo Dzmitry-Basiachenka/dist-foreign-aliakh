@@ -6,11 +6,11 @@
   "grade_9_12_number_of_students": 12,
   "grade_he_number_of_students": 20,
   "gross_amount": 1000.00,
-  "curriculum_gross_amount": 200.00,
+  "curriculum_db_gross_amount": 200.00,
   "grade_K_2_gross_amount": 34.04,
   "grade_3_5_gross_amount": 85.11,
   "grade_6_8_gross_amount": 136.17,
   "grade_9_12_gross_amount": 204.26,
   "grade_he_gross_amount": 340.43,
-  "curriculum_split_percent": 0.20
+  "curriculum_db_split_percent": 0.20
 }

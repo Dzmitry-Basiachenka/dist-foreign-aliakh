@@ -337,13 +337,13 @@ public class FundPoolServiceTest {
         assertEquals(2, fundPool.getAclciFields().getGrade9to12NumberOfStudents());
         assertEquals(1, fundPool.getAclciFields().getGradeHeNumberOfStudents());
         assertEquals(AMOUNT_1000, fundPool.getAclciFields().getGrossAmount());
-        assertEquals(splitPercent, fundPool.getAclciFields().getCurriculumSplitPercent());
+        assertEquals(splitPercent, fundPool.getAclciFields().getCurriculumDbSplitPercent());
         assertEquals(new BigDecimal("400.00"), fundPool.getAclciFields().getGradeKto2GrossAmount());
         assertEquals(new BigDecimal("200.00"), fundPool.getAclciFields().getGrade3to5GrossAmount());
         assertEquals(new BigDecimal("150.00"), fundPool.getAclciFields().getGrade6to8GrossAmount());
         assertEquals(new BigDecimal("100.00"), fundPool.getAclciFields().getGrade9to12GrossAmount());
         assertEquals(new BigDecimal("50.00"), fundPool.getAclciFields().getGradeHeGrossAmount());
-        assertEquals(new BigDecimal("100.00"), fundPool.getAclciFields().getCurriculumGrossAmount());
+        assertEquals(new BigDecimal("100.00"), fundPool.getAclciFields().getCurriculumDbGrossAmount());
     }
 
     @Test
@@ -362,13 +362,13 @@ public class FundPoolServiceTest {
         assertEquals(0, fundPool.getAclciFields().getGrade9to12NumberOfStudents());
         assertEquals(0, fundPool.getAclciFields().getGradeHeNumberOfStudents());
         assertEquals(AMOUNT_1000, fundPool.getAclciFields().getGrossAmount());
-        assertEquals(splitPercent, fundPool.getAclciFields().getCurriculumSplitPercent());
+        assertEquals(splitPercent, fundPool.getAclciFields().getCurriculumDbSplitPercent());
         assertEquals(gradeGrossAmount, fundPool.getAclciFields().getGradeKto2GrossAmount());
         assertEquals(gradeGrossAmount, fundPool.getAclciFields().getGrade3to5GrossAmount());
         assertEquals(gradeGrossAmount, fundPool.getAclciFields().getGrade6to8GrossAmount());
         assertEquals(gradeGrossAmount, fundPool.getAclciFields().getGrade9to12GrossAmount());
         assertEquals(gradeGrossAmount, fundPool.getAclciFields().getGradeHeGrossAmount());
-        assertEquals(AMOUNT_1000, fundPool.getAclciFields().getCurriculumGrossAmount());
+        assertEquals(AMOUNT_1000, fundPool.getAclciFields().getCurriculumDbGrossAmount());
     }
 
     @Test
@@ -470,7 +470,7 @@ public class FundPoolServiceTest {
         aclciFields.setGrade9to12NumberOfStudents(grade9to12NumberOfStudents);
         aclciFields.setGradeHeNumberOfStudents(gradeHeNumberOfStudents);
         aclciFields.setGrossAmount(AMOUNT_1000);
-        aclciFields.setCurriculumSplitPercent(splitPercent);
+        aclciFields.setCurriculumDbSplitPercent(splitPercent);
         fundPool.setAclciFields(aclciFields);
         return fundPool;
     }
