@@ -30,7 +30,6 @@ import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -57,7 +56,7 @@ public class UdmPopulateValueBatchWindowTest {
 
     @Test
     public void testConstructor() {
-        expect(controller.getBaselinePeriods()).andReturn(Collections.emptyList()).once();
+        expect(controller.getBaselinePeriods()).andReturn(List.of()).once();
         replay(controller);
         window = new UdmPopulateValueBatchWindow(controller);
         verify(controller);

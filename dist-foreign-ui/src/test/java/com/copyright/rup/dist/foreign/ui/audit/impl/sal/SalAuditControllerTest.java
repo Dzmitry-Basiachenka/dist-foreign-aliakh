@@ -34,6 +34,7 @@ import com.copyright.rup.dist.foreign.ui.audit.api.sal.ISalAuditFilterWidget;
 import com.copyright.rup.dist.foreign.ui.audit.api.sal.ISalAuditWidget;
 import com.copyright.rup.dist.foreign.ui.audit.impl.UsageHistoryWindow;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
+
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.easymock.Capture;
@@ -49,7 +50,6 @@ import java.io.PipedOutputStream;
 import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.function.Consumer;
@@ -140,10 +140,10 @@ public class SalAuditControllerTest {
         expect(filterWidget.getAppliedFilter()).andReturn(filter).once();
         expect(auditWidget.getSearchValue()).andReturn(StringUtils.EMPTY).once();
         expect(salUsageService.getForAudit(eq(filter), capture(pageableCapture), capture(sortCapture)))
-            .andReturn(Collections.emptyList()).once();
+            .andReturn(List.of()).once();
         replay(filterWidget, auditWidget, auditFilterController, salUsageService);
         List<UsageDto> result = controller.loadBeans(0, 10, null);
-        assertEquals(Collections.emptyList(), result);
+        assertEquals(List.of(), result);
         verify(filterWidget, auditWidget, auditFilterController, salUsageService);
     }
 
@@ -154,7 +154,7 @@ public class SalAuditControllerTest {
         expect(filterWidget.getAppliedFilter()).andReturn(filter).once();
         expect(auditWidget.getSearchValue()).andReturn(StringUtils.EMPTY).once();
         replay(filterWidget, auditWidget, auditFilterController, usageService);
-        assertEquals(Collections.emptyList(), controller.loadBeans(0, 10, null));
+        assertEquals(List.of(), controller.loadBeans(0, 10, null));
         verify(filterWidget, auditWidget, auditFilterController, usageService);
     }
 
@@ -164,7 +164,7 @@ public class SalAuditControllerTest {
         Capture<UsageHistoryWindow> windowCapture = newCapture();
         String usageId = "ddc391df-87e6-4b10-92ea-1cc2e295b487";
         String detailId = "11960c0e-1374-4eba-8658-bfe5e11bb304";
-        List<UsageAuditItem> items = Collections.emptyList();
+        List<UsageAuditItem> items = List.of();
         expect(usageAuditService.getUsageAudit(usageId)).andReturn(items).once();
         Windows.showModalWindow(capture(windowCapture));
         expectLastCall().once();

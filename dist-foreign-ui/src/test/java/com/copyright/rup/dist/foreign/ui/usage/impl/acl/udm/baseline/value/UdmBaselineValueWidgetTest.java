@@ -38,7 +38,6 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -72,7 +71,7 @@ public class UdmBaselineValueWidgetTest {
         List<UdmValueBaselineDto> udmValueBaselines = List.of(buildUdmValueBaselineDto());
         expect(JavaScript.getCurrent()).andReturn(createMock(JavaScript.class)).times(2);
         expect(controller.getBeansCount()).andReturn(1).once();
-        expect(controller.loadBeans(0, Integer.MAX_VALUE, Collections.emptyList())).andReturn(udmValueBaselines).once();
+        expect(controller.loadBeans(0, Integer.MAX_VALUE, List.of())).andReturn(udmValueBaselines).once();
         replay(JavaScript.class, controller);
         initWidget();
         Grid grid = (Grid) ((VerticalLayout) udmBaselineValueWidget.getSecondComponent()).getComponent(0);

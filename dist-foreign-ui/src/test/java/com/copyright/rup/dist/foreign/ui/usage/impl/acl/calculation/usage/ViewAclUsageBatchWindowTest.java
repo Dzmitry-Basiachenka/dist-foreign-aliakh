@@ -163,7 +163,7 @@ public class ViewAclUsageBatchWindowTest {
     public void testPerformSearch() {
         SearchWidget searchWidget = createMock(SearchWidget.class);
         Whitebox.setInternalState(window, searchWidget);
-        expect(aclUsageBatchGrid.getDataProvider()).andReturn(new ListDataProvider(Collections.emptyList())).once();
+        expect(aclUsageBatchGrid.getDataProvider()).andReturn(new ListDataProvider(List.of())).once();
         expect(searchWidget.getSearchValue()).andReturn("Search").once();
         aclUsageBatchGrid.recalculateColumnWidths();
         expectLastCall().once();

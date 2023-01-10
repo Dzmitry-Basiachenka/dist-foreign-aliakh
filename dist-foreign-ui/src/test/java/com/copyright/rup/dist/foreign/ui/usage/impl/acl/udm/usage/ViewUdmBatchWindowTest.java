@@ -50,7 +50,6 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -188,7 +187,7 @@ public class ViewUdmBatchWindowTest {
     public void testPerformSearch() {
         SearchWidget searchWidget = createMock(SearchWidget.class);
         Whitebox.setInternalState(viewUdmBatchWindow, searchWidget);
-        expect(udmBatchGrid.getDataProvider()).andReturn(new ListDataProvider(Collections.emptyList())).once();
+        expect(udmBatchGrid.getDataProvider()).andReturn(new ListDataProvider(List.of())).once();
         expect(searchWidget.getSearchValue()).andReturn("Search").once();
         udmBatchGrid.recalculateColumnWidths();
         expectLastCall().once();

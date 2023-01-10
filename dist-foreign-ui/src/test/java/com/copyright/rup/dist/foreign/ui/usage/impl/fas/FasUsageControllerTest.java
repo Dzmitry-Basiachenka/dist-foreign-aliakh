@@ -67,7 +67,6 @@ import java.io.PipedOutputStream;
 import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -148,7 +147,7 @@ public class FasUsageControllerTest {
         expect(filterWidgetMock.getAppliedFilter()).andReturn(usageFilter).once();
         Capture<Pageable> pageableCapture = newCapture();
         expect(fasUsageService.getUsageDtos(eq(usageFilter), capture(pageableCapture), isNull()))
-            .andReturn(Collections.emptyList()).once();
+            .andReturn(List.of()).once();
         replay(filterWidgetMock, usageService, fasUsageService, filterController);
         List<UsageDto> result = controller.loadBeans(10, 150, null);
         Pageable pageable = pageableCapture.getValue();

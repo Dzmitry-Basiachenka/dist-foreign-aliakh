@@ -34,7 +34,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Collections;
+import java.util.List;
 
 /**
  * Window for uploading AACL usage batch with usages.
@@ -96,7 +96,7 @@ public class AaclUsageBatchUploadWindow extends Window {
                     }
                 } else {
                     int baselineUsagesCount =
-                        usagesController.loadUsageBatch(buildUsageBatch(), Collections.emptyList());
+                        usagesController.loadUsageBatch(buildUsageBatch(), List.of());
                     close();
                     Windows.showNotificationWindow(
                         ForeignUi.getMessage("message.upload_aacl_batch_completed", 0, baselineUsagesCount));

@@ -188,7 +188,7 @@ public class ViewAclFundPoolWindowTest {
     public void testPerformSearch() {
         SearchWidget searchWidget = createMock(SearchWidget.class);
         Whitebox.setInternalState(window, searchWidget);
-        expect(aclFundPoolGrid.getDataProvider()).andReturn(new ListDataProvider(Collections.emptyList())).once();
+        expect(aclFundPoolGrid.getDataProvider()).andReturn(new ListDataProvider(List.of())).once();
         expect(searchWidget.getSearchValue()).andReturn("Search").once();
         aclFundPoolGrid.recalculateColumnWidths();
         expectLastCall().once();

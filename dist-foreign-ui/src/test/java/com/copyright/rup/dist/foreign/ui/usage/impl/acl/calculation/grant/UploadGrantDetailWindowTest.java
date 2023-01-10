@@ -47,7 +47,6 @@ import org.powermock.reflect.Whitebox;
 
 import java.io.ByteArrayOutputStream;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -101,7 +100,7 @@ public class UploadGrantDetailWindowTest {
         UploadField uploadField = createPartialMock(UploadField.class, "getStreamToUploadedFile", "getValue");
         AclGrantDetailCsvProcessor processor = createMock(AclGrantDetailCsvProcessor.class);
         ProcessingResult<AclGrantDetailDto> result = buildProcessingResult();
-        expect(controller.getAllAclGrantSets()).andReturn(Collections.emptyList()).once();
+        expect(controller.getAllAclGrantSets()).andReturn(List.of()).once();
         replay(controller);
         window = createPartialMock(UploadGrantDetailWindow.class, new String[]{"isValid"}, controller);
         verify(controller);

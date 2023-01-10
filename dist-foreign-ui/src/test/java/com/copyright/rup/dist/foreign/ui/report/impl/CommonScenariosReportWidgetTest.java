@@ -33,7 +33,6 @@ import org.junit.Test;
 
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -110,7 +109,7 @@ public class CommonScenariosReportWidgetTest {
         grid.select(scenario2);
         assertEquals(Arrays.asList(scenario1, scenario2), widget.getSelectedScenarios());
         grid.deselectAll();
-        assertEquals(Collections.emptyList(), widget.getSelectedScenarios());
+        assertEquals(List.of(), widget.getSelectedScenarios());
     }
 
     private static Scenario buildScenario(String id, String name) {

@@ -166,10 +166,10 @@ public class AaclUsageWidgetTest {
         expect(controller.getBeansCount()).andReturn(1).once();
         prepareCreateScenarioExpectation();
         expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
-        expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
-        expect(controller.getProcessingBatchesNames(Set.of(BATCH_ID))).andReturn(Collections.emptyList()).once();
+        expect(controller.getInvalidRightsholders()).andReturn(List.of()).once();
+        expect(controller.getProcessingBatchesNames(Set.of(BATCH_ID))).andReturn(List.of()).once();
         expect(controller.getBatchesNamesToScenariosNames(Set.of(BATCH_ID))).andReturn(Collections.emptyMap()).once();
-        expect(controller.getIneligibleBatchesNames(Set.of(BATCH_ID))).andReturn(Collections.emptyList()).once();
+        expect(controller.getIneligibleBatchesNames(Set.of(BATCH_ID))).andReturn(List.of()).once();
         Windows.showModalWindow(anyObject(CreateAaclScenarioWindow.class));
         expectLastCall().once();
         replay(controller, clickEvent, Windows.class);
@@ -247,7 +247,7 @@ public class AaclUsageWidgetTest {
         prepareCreateScenarioExpectation();
         expect(controller.getBeansCount()).andReturn(1).once();
         expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
-        expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
+        expect(controller.getInvalidRightsholders()).andReturn(List.of()).once();
         expect(controller.getProcessingBatchesNames(Set.of(BATCH_ID))).andReturn(List.of("Batch Name")).once();
         Windows.showNotificationWindow("Please wait while batch(es) processing is completed:" +
             "<ul><li><i><b>Batch Name</b></i></ul>");
@@ -269,9 +269,8 @@ public class AaclUsageWidgetTest {
         prepareCreateScenarioExpectation();
         expect(controller.getBeansCount()).andReturn(1).once();
         expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
-        expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
-        expect(controller.getProcessingBatchesNames(Set.of(BATCH_ID)))
-            .andReturn(Collections.emptyList()).once();
+        expect(controller.getInvalidRightsholders()).andReturn(List.of()).once();
+        expect(controller.getProcessingBatchesNames(Set.of(BATCH_ID))).andReturn(List.of()).once();
         expect(controller.getBatchesNamesToScenariosNames(Set.of(BATCH_ID)))
             .andReturn(Map.of("Batch Name", "Scenario Name")).once();
         Windows.showNotificationWindow("The following batch(es) already associated with scenario(s):" +
@@ -294,8 +293,8 @@ public class AaclUsageWidgetTest {
         prepareCreateScenarioExpectation();
         expect(controller.getBeansCount()).andReturn(1).once();
         expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
-        expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
-        expect(controller.getProcessingBatchesNames(Set.of(BATCH_ID))).andReturn(Collections.emptyList()).once();
+        expect(controller.getInvalidRightsholders()).andReturn(List.of()).once();
+        expect(controller.getProcessingBatchesNames(Set.of(BATCH_ID))).andReturn(List.of()).once();
         expect(controller.getBatchesNamesToScenariosNames(Set.of(BATCH_ID))).andReturn(Collections.emptyMap()).once();
         expect(controller.getIneligibleBatchesNames(Set.of(BATCH_ID))).andReturn(List.of("Batch Name")).once();
         Windows.showNotificationWindow("The following batches have usages that are not in ELIGIBLE status:" +

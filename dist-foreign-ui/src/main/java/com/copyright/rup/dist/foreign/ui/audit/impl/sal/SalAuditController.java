@@ -12,15 +12,16 @@ import com.copyright.rup.dist.foreign.ui.audit.api.ICommonAuditWidget;
 import com.copyright.rup.dist.foreign.ui.audit.api.sal.ISalAuditController;
 import com.copyright.rup.dist.foreign.ui.audit.api.sal.ISalAuditFilterController;
 import com.copyright.rup.dist.foreign.ui.audit.impl.CommonAuditController;
+
 import com.vaadin.data.provider.QuerySortOrder;
 import com.vaadin.shared.data.sort.SortDirection;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -73,6 +74,6 @@ public class SalAuditController extends CommonAuditController implements ISalAud
         }
         return !filter.isEmpty()
             ? salUsageService.getForAudit(filter, new Pageable(startIndex, count), sort)
-            : Collections.emptyList();
+            : List.of();
     }
 }

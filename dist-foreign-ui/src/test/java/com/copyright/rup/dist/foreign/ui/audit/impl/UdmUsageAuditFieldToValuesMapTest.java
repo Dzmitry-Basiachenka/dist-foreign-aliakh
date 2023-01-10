@@ -8,10 +8,10 @@ import com.copyright.rup.dist.foreign.domain.UdmIneligibleReason;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.domain.UdmValueDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+
 import org.junit.Test;
 
 import java.math.BigDecimal;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -70,7 +70,7 @@ public class UdmUsageAuditFieldToValuesMapTest {
     public void testStatus() {
         UdmUsageDto usageDto = new UdmUsageDto();
         UdmUsageAuditFieldToValuesMap fieldToValuesMap = new UdmUsageAuditFieldToValuesMap(usageDto);
-        assertEquals(Collections.emptyList(), fieldToValuesMap.getActionReasons());
+        assertEquals(List.of(), fieldToValuesMap.getActionReasons());
         fieldToValuesMap.updateFieldValue("Detail Status", STATUS_OLD.toString());
         assertEquals(List.of("The field 'Detail Status' was edited. " +
             "Old Value is not specified. New Value is 'OPS_REVIEW'"), fieldToValuesMap.getActionReasons());
@@ -90,7 +90,7 @@ public class UdmUsageAuditFieldToValuesMapTest {
     public void testPeriod() {
         UdmUsageDto usageDto = new UdmUsageDto();
         UdmUsageAuditFieldToValuesMap fieldToValuesMap = new UdmUsageAuditFieldToValuesMap(usageDto);
-        assertEquals(Collections.emptyList(), fieldToValuesMap.getActionReasons());
+        assertEquals(List.of(), fieldToValuesMap.getActionReasons());
         fieldToValuesMap.updateFieldValue("Period", PERIOD_OLD.toString());
         assertEquals(List.of("The field 'Period' was edited. " +
             "Old Value is not specified. New Value is '202106'"), fieldToValuesMap.getActionReasons());
@@ -110,7 +110,7 @@ public class UdmUsageAuditFieldToValuesMapTest {
     public void testWrWrkInst() {
         UdmUsageDto usageDto = new UdmUsageDto();
         UdmUsageAuditFieldToValuesMap fieldToValuesMap = new UdmUsageAuditFieldToValuesMap(usageDto);
-        assertEquals(Collections.emptyList(), fieldToValuesMap.getActionReasons());
+        assertEquals(List.of(), fieldToValuesMap.getActionReasons());
         fieldToValuesMap.updateFieldValue("Wr Wrk Inst", WR_WRK_INST_OLD.toString());
         assertEquals(List.of("The field 'Wr Wrk Inst' was edited. " +
             "Old Value is not specified. New Value is '122853920'"), fieldToValuesMap.getActionReasons());
@@ -130,7 +130,7 @@ public class UdmUsageAuditFieldToValuesMapTest {
     public void testReportedTitle() {
         UdmUsageDto usageDto = new UdmUsageDto();
         UdmUsageAuditFieldToValuesMap fieldToValuesMap = new UdmUsageAuditFieldToValuesMap(usageDto);
-        assertEquals(Collections.emptyList(), fieldToValuesMap.getActionReasons());
+        assertEquals(List.of(), fieldToValuesMap.getActionReasons());
         fieldToValuesMap.updateFieldValue("Reported Title", REPORTED_TITLE_OLD);
         assertEquals(List.of("The field 'Reported Title' was edited. " +
                 "Old Value is not specified. New Value is 'reported title 1'"),
@@ -153,7 +153,7 @@ public class UdmUsageAuditFieldToValuesMapTest {
     public void testReportedStandardNumber() {
         UdmUsageDto usageDto = new UdmUsageDto();
         UdmUsageAuditFieldToValuesMap fieldToValuesMap = new UdmUsageAuditFieldToValuesMap(usageDto);
-        assertEquals(Collections.emptyList(), fieldToValuesMap.getActionReasons());
+        assertEquals(List.of(), fieldToValuesMap.getActionReasons());
         fieldToValuesMap.updateFieldValue("Reported Standard Number", REPORTED_STANDARD_NUMBER_OLD);
         assertEquals(List.of("The field 'Reported Standard Number' was edited. " +
             "Old Value is not specified. New Value is '0927-7765'"), fieldToValuesMap.getActionReasons());
@@ -173,7 +173,7 @@ public class UdmUsageAuditFieldToValuesMapTest {
     public void testReportedPubType() {
         UdmUsageDto usageDto = new UdmUsageDto();
         UdmUsageAuditFieldToValuesMap fieldToValuesMap = new UdmUsageAuditFieldToValuesMap(usageDto);
-        assertEquals(Collections.emptyList(), fieldToValuesMap.getActionReasons());
+        assertEquals(List.of(), fieldToValuesMap.getActionReasons());
         fieldToValuesMap.updateFieldValue("Reported Pub Type", REPORTED_PUB_TYPE_OLD);
         assertEquals(List.of("The field 'Reported Pub Type' was edited. " +
             "Old Value is not specified. New Value is 'BK'"), fieldToValuesMap.getActionReasons());
@@ -193,7 +193,7 @@ public class UdmUsageAuditFieldToValuesMapTest {
     public void testActionReason() {
         UdmUsageDto usageDto = new UdmUsageDto();
         UdmUsageAuditFieldToValuesMap fieldToValuesMap = new UdmUsageAuditFieldToValuesMap(usageDto);
-        assertEquals(Collections.emptyList(), fieldToValuesMap.getActionReasons());
+        assertEquals(List.of(), fieldToValuesMap.getActionReasons());
         fieldToValuesMap.updateFieldValue("Action Reason", ACTION_REASON_OLD.getReason());
         assertEquals(List.of("The field 'Action Reason' was edited. " +
                 "Old Value is not specified. New Value is 'Aggregated Content'"),
@@ -216,7 +216,7 @@ public class UdmUsageAuditFieldToValuesMapTest {
     public void testComment() {
         UdmValueDto valueDto = new UdmValueDto();
         UdmValueAuditFieldToValuesMap fieldToValuesMap = new UdmValueAuditFieldToValuesMap(valueDto);
-        assertEquals(Collections.emptyList(), fieldToValuesMap.getActionReasons());
+        assertEquals(List.of(), fieldToValuesMap.getActionReasons());
         fieldToValuesMap.updateFieldValue("Comment", COMMENT_OLD);
         assertEquals(List.of("The field 'Comment' was edited. " +
             "Old Value is not specified. New Value is 'comment 1'"), fieldToValuesMap.getActionReasons());
@@ -236,7 +236,7 @@ public class UdmUsageAuditFieldToValuesMapTest {
     public void testResearchUrl() {
         UdmUsageDto usageDto = new UdmUsageDto();
         UdmUsageAuditFieldToValuesMap fieldToValuesMap = new UdmUsageAuditFieldToValuesMap(usageDto);
-        assertEquals(Collections.emptyList(), fieldToValuesMap.getActionReasons());
+        assertEquals(List.of(), fieldToValuesMap.getActionReasons());
         fieldToValuesMap.updateFieldValue("Research URL", RESEARCH_URL_OLD);
         assertEquals(List.of("The field 'Research URL' was edited. " +
             "Old Value is not specified. New Value is 'google.com'"), fieldToValuesMap.getActionReasons());
@@ -256,7 +256,7 @@ public class UdmUsageAuditFieldToValuesMapTest {
     public void testCompanyId() {
         UdmUsageDto usageDto = new UdmUsageDto();
         UdmUsageAuditFieldToValuesMap fieldToValuesMap = new UdmUsageAuditFieldToValuesMap(usageDto);
-        assertEquals(Collections.emptyList(), fieldToValuesMap.getActionReasons());
+        assertEquals(List.of(), fieldToValuesMap.getActionReasons());
         fieldToValuesMap.updateFieldValue("Company ID", COMPANY_ID_OLD.toString());
         assertEquals(List.of("The field 'Company ID' was edited. " +
             "Old Value is not specified. New Value is '1136'"), fieldToValuesMap.getActionReasons());
@@ -276,7 +276,7 @@ public class UdmUsageAuditFieldToValuesMapTest {
     public void testCompanyName() {
         UdmUsageDto usageDto = new UdmUsageDto();
         UdmUsageAuditFieldToValuesMap fieldToValuesMap = new UdmUsageAuditFieldToValuesMap(usageDto);
-        assertEquals(Collections.emptyList(), fieldToValuesMap.getActionReasons());
+        assertEquals(List.of(), fieldToValuesMap.getActionReasons());
         fieldToValuesMap.updateFieldValue("Company Name", COMPANY_NAME_OLD);
         assertEquals(List.of("The field 'Company Name' was edited. " +
                 "Old Value is not specified. New Value is 'Albany International Corp.'"),
@@ -299,7 +299,7 @@ public class UdmUsageAuditFieldToValuesMapTest {
     public void testDetailLicenseeClass() {
         UdmUsageDto usageDto = new UdmUsageDto();
         UdmUsageAuditFieldToValuesMap fieldToValuesMap = new UdmUsageAuditFieldToValuesMap(usageDto);
-        assertEquals(Collections.emptyList(), fieldToValuesMap.getActionReasons());
+        assertEquals(List.of(), fieldToValuesMap.getActionReasons());
         fieldToValuesMap.updateFieldValue("Detail Licensee Class", DETAIL_LICENSEE_CLASS_OLD.getIdAndDescription());
         assertEquals(List.of("The field 'Detail Licensee Class' was edited. " +
                 "Old Value is not specified. New Value is '2 - Textiles, Apparel, etc.'"),
@@ -322,7 +322,7 @@ public class UdmUsageAuditFieldToValuesMapTest {
     public void testAnnualMultiplier() {
         UdmUsageDto usageDto = new UdmUsageDto();
         UdmUsageAuditFieldToValuesMap fieldToValuesMap = new UdmUsageAuditFieldToValuesMap(usageDto);
-        assertEquals(Collections.emptyList(), fieldToValuesMap.getActionReasons());
+        assertEquals(List.of(), fieldToValuesMap.getActionReasons());
         fieldToValuesMap.updateFieldValue("Annual Multiplier", ANNUAL_MULTIPLIER_OLD.toString());
         assertEquals(List.of("The field 'Annual Multiplier' was edited. " +
             "Old Value is not specified. New Value is '25'"), fieldToValuesMap.getActionReasons());
@@ -342,7 +342,7 @@ public class UdmUsageAuditFieldToValuesMapTest {
     public void testStatisticalMultiplier() {
         UdmUsageDto usageDto = new UdmUsageDto();
         UdmUsageAuditFieldToValuesMap fieldToValuesMap = new UdmUsageAuditFieldToValuesMap(usageDto);
-        assertEquals(Collections.emptyList(), fieldToValuesMap.getActionReasons());
+        assertEquals(List.of(), fieldToValuesMap.getActionReasons());
         fieldToValuesMap.updateFieldValue("Statistical Multiplier", STATISTICAL_MULTIPLIER_OLD.toString());
         assertEquals(List.of("The field 'Statistical Multiplier' was edited. " +
             "Old Value is not specified. New Value is '1.00000'"), fieldToValuesMap.getActionReasons());
@@ -362,7 +362,7 @@ public class UdmUsageAuditFieldToValuesMapTest {
     public void testQuantity() {
         UdmUsageDto usageDto = new UdmUsageDto();
         UdmUsageAuditFieldToValuesMap fieldToValuesMap = new UdmUsageAuditFieldToValuesMap(usageDto);
-        assertEquals(Collections.emptyList(), fieldToValuesMap.getActionReasons());
+        assertEquals(List.of(), fieldToValuesMap.getActionReasons());
         fieldToValuesMap.updateFieldValue("Quantity", QUANTITY_OLD.toString());
         assertEquals(List.of("The field 'Quantity' was edited. " +
             "Old Value is not specified. New Value is '10'"), fieldToValuesMap.getActionReasons());
@@ -382,7 +382,7 @@ public class UdmUsageAuditFieldToValuesMapTest {
     public void testAnnualizedCopies() {
         UdmUsageDto usageDto = new UdmUsageDto();
         UdmUsageAuditFieldToValuesMap fieldToValuesMap = new UdmUsageAuditFieldToValuesMap(usageDto);
-        assertEquals(Collections.emptyList(), fieldToValuesMap.getActionReasons());
+        assertEquals(List.of(), fieldToValuesMap.getActionReasons());
         fieldToValuesMap.updateFieldValue("Annualized Copies", ANNUALIZED_COPIES_OLD.toString());
         assertEquals(List.of("The field 'Annualized Copies' was edited. " +
             "Old Value is not specified. New Value is '250.00000'"), fieldToValuesMap.getActionReasons());
@@ -402,7 +402,7 @@ public class UdmUsageAuditFieldToValuesMapTest {
     public void testIneligibleReason() {
         UdmUsageDto usageDto = new UdmUsageDto();
         UdmUsageAuditFieldToValuesMap fieldToValuesMap = new UdmUsageAuditFieldToValuesMap(usageDto);
-        assertEquals(Collections.emptyList(), fieldToValuesMap.getActionReasons());
+        assertEquals(List.of(), fieldToValuesMap.getActionReasons());
         fieldToValuesMap.updateFieldValue("Ineligible Reason", INELIGIBLE_REASON_OLD.getReason());
         assertEquals(List.of("The field 'Ineligible Reason' was edited. " +
             "Old Value is not specified. New Value is 'Public Domain'"), fieldToValuesMap.getActionReasons());

@@ -34,7 +34,6 @@ import org.powermock.reflect.Whitebox;
 import java.io.OutputStream;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -71,7 +70,7 @@ public class SalLiabilitiesSummaryByRhAndWorkReportControllerTest {
 
     @Test
     public void testGetScenarios() {
-        List<Scenario> scenarios = Collections.emptyList();
+        List<Scenario> scenarios = List.of();
         expect(productFamilyProvider.getSelectedProductFamily()).andReturn(SAL_PRODUCT_FAMILY).once();
         expect(scenarioService.getScenariosByProductFamiliesAndStatuses(
             Set.of(SAL_PRODUCT_FAMILY), Sets.newHashSet(ScenarioStatusEnum.values()))).andReturn(scenarios).once();

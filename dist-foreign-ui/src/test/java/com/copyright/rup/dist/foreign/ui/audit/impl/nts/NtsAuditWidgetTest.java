@@ -57,7 +57,6 @@ import org.powermock.reflect.Whitebox;
 import java.io.IOException;
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -97,7 +96,7 @@ public class NtsAuditWidgetTest {
         initWidget();
         mockStatic(JavaScript.class);
         expect(JavaScript.getCurrent()).andReturn(createMock(JavaScript.class)).times(2);
-        expect(controller.loadBeans(0, Integer.MAX_VALUE, Collections.emptyList())).andReturn(usages).once();
+        expect(controller.loadBeans(0, Integer.MAX_VALUE, List.of())).andReturn(usages).once();
         expect(controller.getSize()).andReturn(1).once();
         replay(JavaScript.class, controller);
         Grid<?> grid = (Grid<?>) ((VerticalLayout) widget.getSecondComponent()).getComponent(1);
@@ -139,7 +138,7 @@ public class NtsAuditWidgetTest {
         Grid<?> grid = widget.getAuditGrid();
         CallbackDataProvider<?, ?> dataProvider = (CallbackDataProvider) grid.getDataProvider();
         assertEquals(1, dataProvider.size(new Query<>()));
-        Stream<?> stream = dataProvider.fetch(new Query<>(0, 1, Collections.emptyList(), null, null));
+        Stream<?> stream = dataProvider.fetch(new Query<>(0, 1, List.of(), null, null));
         assertEquals(liabilities, stream.collect(Collectors.toList()));
         assertFalse(grid.getStyleName().contains("empty-audit-grid"));
         assertEquals(0, orderCapture.getValue().size());

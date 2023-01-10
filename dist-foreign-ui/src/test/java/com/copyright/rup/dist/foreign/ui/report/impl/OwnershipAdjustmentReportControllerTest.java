@@ -23,6 +23,7 @@ import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
 import com.copyright.rup.dist.foreign.ui.report.api.ICommonScenarioReportWidget;
 
 import com.google.common.collect.ImmutableSet;
+
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.easymock.Capture;
@@ -37,7 +38,6 @@ import java.io.PipedOutputStream;
 import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -63,7 +63,7 @@ public class OwnershipAdjustmentReportControllerTest {
         Whitebox.setInternalState(controller, scenarioService);
         Whitebox.setInternalState(controller, productFamilyProvider);
         expect(productFamilyProvider.getSelectedProductFamily()).andReturn("FAS").once();
-        List<Scenario> scenarios = Collections.emptyList();
+        List<Scenario> scenarios = List.of();
         expect(scenarioService.getScenarios("FAS")).andReturn(scenarios).once();
         replay(scenarioService, productFamilyProvider);
         assertEquals(scenarios, controller.getScenarios());

@@ -40,7 +40,6 @@ import org.powermock.reflect.Whitebox;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -64,7 +63,7 @@ public class AclciUsageUpdateWindowTest {
     @Before
     public void setUp() {
         controller = createMock(IAclciUsageController.class);
-        expect(controller.getUsageDtosToUpdate()).andReturn(Collections.emptyList()).once();
+        expect(controller.getUsageDtosToUpdate()).andReturn(List.of()).once();
         replay(controller);
         window = new AclciUsageUpdateWindow(controller);
         verify(controller);
@@ -125,7 +124,7 @@ public class AclciUsageUpdateWindowTest {
 
     @Test
     public void testRefreshDataProviderSelectAllCheckBoxVisibilityHidden() {
-        expect(controller.getUsageDtosToUpdate()).andReturn(Collections.emptyList()).once();
+        expect(controller.getUsageDtosToUpdate()).andReturn(List.of()).once();
         replay(controller);
         window.refreshDataProvider();
         Grid<UsageDto> grid = Whitebox.getInternalState(window, "usagesGrid");

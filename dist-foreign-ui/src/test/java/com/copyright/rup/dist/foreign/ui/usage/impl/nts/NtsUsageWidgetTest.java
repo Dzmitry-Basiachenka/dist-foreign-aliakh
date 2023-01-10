@@ -140,7 +140,7 @@ public class NtsUsageWidgetTest {
     public void testGridValues() {
         mockStatic(JavaScript.class);
         expect(JavaScript.getCurrent()).andReturn(createMock(JavaScript.class)).times(2);
-        expect(controller.loadBeans(0, Integer.MAX_VALUE, Collections.emptyList())).andReturn(usages).once();
+        expect(controller.loadBeans(0, Integer.MAX_VALUE, List.of())).andReturn(usages).once();
         expect(controller.getBeansCount()).andReturn(1).once();
         replay(JavaScript.class, controller);
         Grid<?> grid = (Grid<?>) ((VerticalLayout) usagesWidget.getSecondComponent()).getComponent(1);
@@ -184,10 +184,10 @@ public class NtsUsageWidgetTest {
     @Test
     public void testSelectAdditionalFundsMenuItems() {
         mockStatic(Windows.class);
-        expect(controller.getAdditionalFunds()).andReturn(Collections.emptyList()).once();
+        expect(controller.getAdditionalFunds()).andReturn(List.of()).once();
         Windows.showModalWindow(anyObject(AdditionalFundBatchesFilterWindow.class));
         expectLastCall().once();
-        expect(controller.getUsageBatchesForAdditionalFunds()).andReturn(Collections.emptyList()).once();
+        expect(controller.getUsageBatchesForAdditionalFunds()).andReturn(List.of()).once();
         Windows.showModalWindow(anyObject(ViewAdditionalFundsWindow.class));
         expectLastCall().once();
         replay(controller, Windows.class);
@@ -211,14 +211,14 @@ public class NtsUsageWidgetTest {
         prepareCreateScenarioExpectation();
         expect(controller.getBeansCount()).andReturn(1).once();
         expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
-        expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
-        expect(controller.getProcessingBatchesNames(Set.of(batchId))).andReturn(Collections.emptyList()).once();
+        expect(controller.getInvalidRightsholders()).andReturn(List.of()).once();
+        expect(controller.getProcessingBatchesNames(Set.of(batchId))).andReturn(List.of()).once();
         expect(controller.getBatchesNamesToScenariosNames(Set.of(batchId))).andReturn(Collections.emptyMap()).once();
         expect(controller.getBatchNamesWithUnclassifiedWorks(filterWidget.getAppliedFilter().getUsageBatchesIds()))
-            .andReturn(Collections.emptyList()).once();
+            .andReturn(List.of()).once();
         expect(controller.getBatchNamesWithInvalidStmOrNonStmUsagesState(
             filterWidget.getAppliedFilter().getUsageBatchesIds()))
-            .andReturn(ImmutableMap.of("STM", Collections.emptyList(), "NON-STM", Collections.emptyList())).once();
+            .andReturn(ImmutableMap.of("STM", List.of(), "NON-STM", List.of())).once();
         Windows.showModalWindow(anyObject(CreateNtsScenarioWindow.class));
         expectLastCall().once();
         replay(controller, clickEvent, Windows.class);
@@ -241,7 +241,7 @@ public class NtsUsageWidgetTest {
         prepareCreateScenarioExpectation();
         expect(controller.getBeansCount()).andReturn(1).once();
         expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
-        expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
+        expect(controller.getInvalidRightsholders()).andReturn(List.of()).once();
         expect(controller.getProcessingBatchesNames(Set.of(batchId)))
             .andReturn(List.of("batch name 1", "batch name 2")).once();
         Windows.showNotificationWindow("Please wait while batch(es) processing is completed:" +
@@ -267,8 +267,8 @@ public class NtsUsageWidgetTest {
         prepareCreateScenarioExpectation();
         expect(controller.getBeansCount()).andReturn(1).once();
         expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
-        expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
-        expect(controller.getProcessingBatchesNames(Set.of(batchId))).andReturn(Collections.emptyList()).once();
+        expect(controller.getInvalidRightsholders()).andReturn(List.of()).once();
+        expect(controller.getProcessingBatchesNames(Set.of(batchId))).andReturn(List.of()).once();
         expect(controller.getBatchesNamesToScenariosNames(Set.of(batchId)))
             .andReturn(ImmutableMap.of("batch name", "scenario name")).once();
         Windows.showNotificationWindow("The following batch(es) already associated with scenario(s):" +
@@ -294,10 +294,10 @@ public class NtsUsageWidgetTest {
         expect(controller.getBeansCount()).andReturn(1).once();
         prepareCreateScenarioExpectation();
         expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
-        expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
+        expect(controller.getInvalidRightsholders()).andReturn(List.of()).once();
         expect(controller.getBatchNamesWithUnclassifiedWorks(filterWidget.getAppliedFilter().getUsageBatchesIds()))
             .andReturn(List.of("Batch with unclassified usages")).once();
-        expect(controller.getProcessingBatchesNames(Set.of(batchId))).andReturn(Collections.emptyList()).once();
+        expect(controller.getProcessingBatchesNames(Set.of(batchId))).andReturn(List.of()).once();
         expect(controller.getBatchesNamesToScenariosNames(Set.of(batchId))).andReturn(Collections.emptyMap()).once();
         Windows.showNotificationWindow(
             "The following batches have unclassified works:<ul><li><i><b>Batch with unclassified usages</b></i></ul>");
@@ -322,10 +322,10 @@ public class NtsUsageWidgetTest {
         expect(controller.getBeansCount()).andReturn(1).once();
         prepareCreateScenarioExpectation();
         expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
-        expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
+        expect(controller.getInvalidRightsholders()).andReturn(List.of()).once();
         expect(controller.getBatchNamesWithUnclassifiedWorks(filterWidget.getAppliedFilter().getUsageBatchesIds()))
-            .andReturn(Collections.emptyList()).once();
-        expect(controller.getProcessingBatchesNames(Set.of(batchId))).andReturn(Collections.emptyList()).once();
+            .andReturn(List.of()).once();
+        expect(controller.getProcessingBatchesNames(Set.of(batchId))).andReturn(List.of()).once();
         expect(controller.getBatchesNamesToScenariosNames(Set.of(batchId))).andReturn(Collections.emptyMap()).once();
         expect(controller.getBatchNamesWithInvalidStmOrNonStmUsagesState(
             filterWidget.getAppliedFilter().getUsageBatchesIds()))
@@ -353,11 +353,11 @@ public class NtsUsageWidgetTest {
         prepareCreateScenarioExpectation();
         expect(controller.getBeansCount()).andReturn(1).once();
         expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
-        expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
-        expect(controller.getProcessingBatchesNames(Set.of(batchId))).andReturn(Collections.emptyList()).once();
+        expect(controller.getInvalidRightsholders()).andReturn(List.of()).once();
+        expect(controller.getProcessingBatchesNames(Set.of(batchId))).andReturn(List.of()).once();
         expect(controller.getBatchesNamesToScenariosNames(Set.of(batchId))).andReturn(Collections.emptyMap()).once();
         expect(controller.getBatchNamesWithUnclassifiedWorks(filterWidget.getAppliedFilter().getUsageBatchesIds()))
-            .andReturn(Collections.emptyList()).once();
+            .andReturn(List.of()).once();
         expect(controller.getBatchNamesWithInvalidStmOrNonStmUsagesState(
             filterWidget.getAppliedFilter().getUsageBatchesIds()))
             .andReturn(ImmutableMap.of("STM", List.of("Batch without STM RHs"),
@@ -423,7 +423,7 @@ public class NtsUsageWidgetTest {
     private void prepareCreateScenarioExpectation() {
         expect(controller.getSelectedProductFamily()).andReturn(NTS_PRODUCT_FAMILY).once();
         expect(controller.scenarioExists(NTS_SCENARIO_NAME_PREFIX + DATE)).andReturn(true).once();
-        expect(controller.getAdditionalFundsNotAttachedToScenario()).andReturn(Collections.emptyList()).once();
+        expect(controller.getAdditionalFundsNotAttachedToScenario()).andReturn(List.of()).once();
     }
 
     private List<MenuItem> getMenuBarItems(int menuBarIndex) {

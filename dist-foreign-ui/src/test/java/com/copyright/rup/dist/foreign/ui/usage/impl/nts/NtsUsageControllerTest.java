@@ -158,7 +158,7 @@ public class NtsUsageControllerTest {
         expect(filterWidgetMock.getAppliedFilter()).andReturn(usageFilter).once();
         Capture<Pageable> pageableCapture = newCapture();
         expect(fasUsageService.getUsageDtos(eq(usageFilter), capture(pageableCapture), isNull()))
-            .andReturn(Collections.emptyList()).once();
+            .andReturn(List.of()).once();
         replay(filterWidgetMock, usageService, fasUsageService, filterController);
         List<UsageDto> result = controller.loadBeans(10, 150, null);
         Pageable pageable = pageableCapture.getValue();
@@ -276,7 +276,7 @@ public class NtsUsageControllerTest {
 
     @Test
     public void testGetUsageBatchesForAdditionalFunds() {
-        expect(usageBatchService.getUsageBatchesForNtsFundPool()).andReturn(Collections.emptyList()).once();
+        expect(usageBatchService.getUsageBatchesForNtsFundPool()).andReturn(List.of()).once();
         replay(usageBatchService);
         controller.getUsageBatchesForAdditionalFunds();
         verify(usageBatchService);

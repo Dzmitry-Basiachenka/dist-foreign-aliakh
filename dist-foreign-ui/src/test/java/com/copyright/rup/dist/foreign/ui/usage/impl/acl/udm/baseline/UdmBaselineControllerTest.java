@@ -25,7 +25,9 @@ import com.copyright.rup.dist.foreign.service.api.acl.IUdmBaselineService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmReportService;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineFilterWidget;
+
 import com.google.common.collect.ImmutableSet;
+
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.easymock.Capture;
@@ -42,7 +44,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -97,7 +99,7 @@ public class UdmBaselineControllerTest {
         expect(udmBaselineFilterController.getWidget()).andReturn(udmBaselineFilterWidget).once();
         expect(udmBaselineFilterWidget.getAppliedFilter()).andReturn(baselineFilter).once();
         expect(udmBaselineService.getBaselineUsageDtos(eq(baselineFilter), capture(pageableCapture), isNull()))
-            .andReturn(Collections.emptyList()).once();
+            .andReturn(List.of()).once();
         replay(udmBaselineService, udmBaselineFilterController, udmBaselineFilterWidget);
         assertEquals(new ArrayList<>(), udmBaselineController.loadBeans(0, 10, null));
         verify(udmBaselineService, udmBaselineFilterController, udmBaselineFilterWidget);

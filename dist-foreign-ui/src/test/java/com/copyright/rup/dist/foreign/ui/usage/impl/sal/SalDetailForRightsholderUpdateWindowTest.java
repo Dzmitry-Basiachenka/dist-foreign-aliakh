@@ -38,7 +38,6 @@ import org.powermock.reflect.Whitebox;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -62,7 +61,7 @@ public class SalDetailForRightsholderUpdateWindowTest {
     @Before
     public void setUp() {
         salUsageController = createMock(ISalUsageController.class);
-        expect(salUsageController.getUsageDtosForRhUpdate()).andReturn(Collections.emptyList()).once();
+        expect(salUsageController.getUsageDtosForRhUpdate()).andReturn(List.of()).once();
         replay(salUsageController);
         window = new SalDetailForRightsholderUpdateWindow(salUsageController);
         verify(salUsageController);
@@ -124,7 +123,7 @@ public class SalDetailForRightsholderUpdateWindowTest {
 
     @Test
     public void testRefreshDataProviderSelectAllCheckBoxVisibilityHidden() {
-        expect(salUsageController.getUsageDtosForRhUpdate()).andReturn(Collections.emptyList()).once();
+        expect(salUsageController.getUsageDtosForRhUpdate()).andReturn(List.of()).once();
         replay(salUsageController);
         window.refreshDataProvider();
         Grid<UsageDto> grid = Whitebox.getInternalState(window, "usagesGrid");

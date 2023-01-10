@@ -55,7 +55,6 @@ import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.AbstractMap.SimpleImmutableEntry;
-import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -111,7 +110,7 @@ public class FasScenarioControllerTest {
     public void testLoadBeans() {
         Capture<Pageable> pageableCapture = newCapture();
         expect(usageService.getRightsholderTotalsHoldersByScenario(eq(scenario), anyString(),
-            capture(pageableCapture), isNull())).andReturn(Collections.emptyList()).once();
+            capture(pageableCapture), isNull())).andReturn(List.of()).once();
         expect(scenarioService.getScenarioWithAmountsAndLastAction(scenario)).andReturn(scenario).once();
         Capture<Supplier<String>> fileNameSupplierCapture = newCapture();
         Capture<Consumer<PipedOutputStream>> posConsumerCapture = newCapture();

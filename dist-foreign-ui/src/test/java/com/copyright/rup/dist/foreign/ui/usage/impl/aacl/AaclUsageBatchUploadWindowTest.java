@@ -50,7 +50,7 @@ import org.powermock.reflect.Whitebox;
 import java.io.ByteArrayOutputStream;
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Collections;
+import java.util.List;
 
 /**
  * Verifies {@link AaclUsageBatchUploadWindow}.
@@ -201,8 +201,7 @@ public class AaclUsageBatchUploadWindowTest {
         expect(uploadField.getValue()).andReturn(null);
         expect(usagesController.getCsvProcessor()).andReturn(processor).once();
         expect(usagesController.usageBatchExists(USAGE_BATCH_NAME)).andReturn(false).once();
-        expect(usagesController.loadUsageBatch(buildUsageBatch(), Collections.emptyList()))
-            .andReturn(1).once();
+        expect(usagesController.loadUsageBatch(buildUsageBatch(), List.of())).andReturn(1).once();
         Windows.showNotificationWindow(
             "Upload completed: 0 record(s) were uploaded, 1 record(s) were pulled from baseline");
         expectLastCall().once();

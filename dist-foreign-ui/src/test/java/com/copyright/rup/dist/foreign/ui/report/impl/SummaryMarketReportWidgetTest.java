@@ -26,7 +26,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.AbstractMap.SimpleImmutableEntry;
-import java.util.Collections;
+import java.util.List;
 import java.util.function.Supplier;
 
 /**
@@ -49,7 +49,7 @@ public class SummaryMarketReportWidgetTest {
         expect(streamSource.getSource())
             .andReturn(new SimpleImmutableEntry(createMock(Supplier.class), createMock(Supplier.class))).once();
         expect(controller.getCsvStreamSource()).andReturn(streamSource).once();
-        expect(controller.getUsageBatches()).andReturn(Collections.emptyList()).once();
+        expect(controller.getUsageBatches()).andReturn(List.of()).once();
         replay(controller, streamSource);
         widget = new SummaryMarketReportWidget();
         widget.setController(controller);

@@ -51,7 +51,6 @@ import java.io.PipedOutputStream;
 import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.function.Consumer;
@@ -142,10 +141,10 @@ public class AaclAuditControllerTest {
         expect(filterWidget.getAppliedFilter()).andReturn(filter).once();
         expect(auditWidget.getSearchValue()).andReturn(StringUtils.EMPTY).once();
         expect(aaclUsageService.getForAudit(eq(filter), capture(pageableCapture), capture(sortCapture)))
-            .andReturn(Collections.emptyList()).once();
+            .andReturn(List.of()).once();
         replay(filterWidget, auditWidget, auditFilterController, aaclUsageService);
         List<UsageDto> result = controller.loadBeans(0, 10, null);
-        assertEquals(Collections.emptyList(), result);
+        assertEquals(List.of(), result);
         verify(filterWidget, auditWidget, auditFilterController, aaclUsageService);
     }
 
@@ -156,7 +155,7 @@ public class AaclAuditControllerTest {
         expect(filterWidget.getAppliedFilter()).andReturn(filter).once();
         expect(auditWidget.getSearchValue()).andReturn(StringUtils.EMPTY).once();
         replay(filterWidget, auditWidget, auditFilterController, usageService);
-        assertEquals(Collections.emptyList(), controller.loadBeans(0, 10, null));
+        assertEquals(List.of(), controller.loadBeans(0, 10, null));
         verify(filterWidget, auditWidget, auditFilterController, usageService);
     }
 
@@ -166,7 +165,7 @@ public class AaclAuditControllerTest {
         Capture<UsageHistoryWindow> windowCapture = newCapture();
         String usageId = RupPersistUtils.generateUuid();
         String detailId = RupPersistUtils.generateUuid();
-        List<UsageAuditItem> items = Collections.emptyList();
+        List<UsageAuditItem> items = List.of();
         expect(usageAuditService.getUsageAudit(usageId)).andReturn(items).once();
         Windows.showModalWindow(capture(windowCapture));
         expectLastCall().once();

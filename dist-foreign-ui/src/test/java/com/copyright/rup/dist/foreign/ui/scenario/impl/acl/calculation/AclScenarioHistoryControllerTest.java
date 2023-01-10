@@ -10,11 +10,11 @@ import static org.junit.Assert.assertSame;
 
 import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioAuditService;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -41,7 +41,7 @@ public class AclScenarioHistoryControllerTest {
     @Test
     public void testGetActions() {
         String scenarioId = "84087646-0586-43a3-b309-6d50a3618f87";
-        List<ScenarioAuditItem> auditItems = Collections.emptyList();
+        List<ScenarioAuditItem> auditItems = List.of();
         expect(aclScenarioAuditService.getActions(scenarioId)).andReturn(auditItems).once();
         replay(aclScenarioAuditService);
         assertSame(auditItems, controller.getActions(scenarioId));

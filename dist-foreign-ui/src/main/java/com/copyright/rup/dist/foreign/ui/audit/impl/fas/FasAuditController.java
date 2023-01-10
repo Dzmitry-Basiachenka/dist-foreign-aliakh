@@ -21,7 +21,6 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -72,6 +71,6 @@ public class FasAuditController extends CommonAuditController implements IFasAud
         }
         return !filter.isEmpty()
             ? getUsageService().getForAudit(filter, new Pageable(startIndex, count), sort)
-            : Collections.emptyList();
+            : List.of();
     }
 }

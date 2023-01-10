@@ -47,7 +47,6 @@ import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.AbstractMap.SimpleImmutableEntry;
-import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -104,7 +103,7 @@ public class AaclScenarioControllerTest {
         Capture<Consumer<PipedOutputStream>> posConsumerCapture = newCapture();
         IStreamSource streamSource = createMock(IStreamSource.class);
         expect(usageService.getRightsholderTotalsHoldersByScenario(eq(scenario), anyString(),
-            capture(pageableCapture), isNull())).andReturn(Collections.emptyList()).once();
+            capture(pageableCapture), isNull())).andReturn(List.of()).once();
         expect(scenarioService.getScenarioWithAmountsAndLastAction(scenario)).andReturn(scenario).once();
         expect(streamSource.getSource())
             .andReturn(new SimpleImmutableEntry(createMock(Supplier.class), createMock(Supplier.class))).times(2);

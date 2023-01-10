@@ -22,7 +22,6 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -75,6 +74,6 @@ public class AaclAuditController extends CommonAuditController implements IAaclA
         }
         return !filter.isEmpty()
             ? aaclUsageService.getForAudit(filter, new Pageable(startIndex, count), sort)
-            : Collections.emptyList();
+            : List.of();
     }
 }

@@ -77,7 +77,6 @@ import java.io.IOException;
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -159,7 +158,7 @@ public class UdmUsageWidgetTest {
         mockStatic(JavaScript.class);
         List<UdmUsageDto> udmUsages = loadExpectedUdmUsageDto("udm_usage_dto_b989e02b.json");
         expect(JavaScript.getCurrent()).andReturn(createMock(JavaScript.class)).times(2);
-        expect(controller.loadBeans(0, Integer.MAX_VALUE, Collections.emptyList())).andReturn(udmUsages).once();
+        expect(controller.loadBeans(0, Integer.MAX_VALUE, List.of())).andReturn(udmUsages).once();
         expect(controller.getBeansCount()).andReturn(1).once();
         expect(controller.getUdmRecordThreshold()).andReturn(UDM_RECORD_THRESHOLD).once();
         setSpecialistExpectations();
@@ -566,7 +565,7 @@ public class UdmUsageWidgetTest {
         setSpecialistExpectations();
         List<UdmUsageDto> udmUsageDtos = List.of(new UdmUsageDto(), new UdmUsageDto());
         expect(JavaScript.getCurrent()).andReturn(createMock(JavaScript.class)).times(2);
-        expect(controller.loadBeans(0, 2, Collections.emptyList())).andReturn(udmUsageDtos).once();
+        expect(controller.loadBeans(0, 2, List.of())).andReturn(udmUsageDtos).once();
         expect(controller.getBeansCount()).andReturn(UDM_RECORD_THRESHOLD).once();
         expect(controller.getUdmRecordThreshold()).andReturn(UDM_RECORD_THRESHOLD).once();
         replay(controller, streamSource, RupContextUtils.class, ForeignSecurityUtils.class, JavaScript.class);
@@ -574,7 +573,7 @@ public class UdmUsageWidgetTest {
         Grid<UdmUsageDto> grid =
             (Grid<UdmUsageDto>) ((VerticalLayout) usagesWidget.getSecondComponent()).getComponent(1);
         CallbackDataProvider<?, ?> dataProvider = (CallbackDataProvider) grid.getDataProvider();
-        assertEquals(udmUsageDtos, dataProvider.fetch(new Query<>(0, 2, Collections.emptyList(), null,
+        assertEquals(udmUsageDtos, dataProvider.fetch(new Query<>(0, 2, List.of(), null,
             null)).collect(Collectors.toList()));
         assertEquals(UDM_RECORD_THRESHOLD, dataProvider.size(new Query<>()));
         assertThat(grid.getSelectionModel(), instanceOf(MultiSelectionModelImpl.class));
@@ -589,7 +588,7 @@ public class UdmUsageWidgetTest {
         setSpecialistExpectations();
         List<UdmUsageDto> udmUsageDtos = List.of(new UdmUsageDto(), new UdmUsageDto());
         expect(JavaScript.getCurrent()).andReturn(createMock(JavaScript.class)).times(2);
-        expect(controller.loadBeans(0, 2, Collections.emptyList())).andReturn(udmUsageDtos).once();
+        expect(controller.loadBeans(0, 2, List.of())).andReturn(udmUsageDtos).once();
         expect(controller.getBeansCount()).andReturn(EXCEEDED_UDM_RECORD_THRESHOLD).once();
         expect(controller.getUdmRecordThreshold()).andReturn(UDM_RECORD_THRESHOLD).once();
         replay(controller, streamSource, RupContextUtils.class, ForeignSecurityUtils.class, JavaScript.class);
@@ -597,7 +596,7 @@ public class UdmUsageWidgetTest {
         Grid<UdmUsageDto> grid =
             (Grid<UdmUsageDto>) ((VerticalLayout) usagesWidget.getSecondComponent()).getComponent(1);
         CallbackDataProvider<?, ?> dataProvider = (CallbackDataProvider) grid.getDataProvider();
-        assertEquals(udmUsageDtos, dataProvider.fetch(new Query<>(0, 2, Collections.emptyList(), null,
+        assertEquals(udmUsageDtos, dataProvider.fetch(new Query<>(0, 2, List.of(), null,
             null)).collect(Collectors.toList()));
         assertEquals(EXCEEDED_UDM_RECORD_THRESHOLD, dataProvider.size(new Query<>()));
         assertThat(grid.getSelectionModel(), instanceOf(MultiSelectionModelImpl.class));
@@ -611,14 +610,14 @@ public class UdmUsageWidgetTest {
         mockStatic(JavaScript.class);
         setSpecialistExpectations();
         expect(JavaScript.getCurrent()).andReturn(createMock(JavaScript.class)).times(2);
-        expect(controller.loadBeans(0, 2, Collections.emptyList())).andReturn(Collections.emptyList()).once();
+        expect(controller.loadBeans(0, 2, List.of())).andReturn(List.of()).once();
         expect(controller.getBeansCount()).andReturn(0).once();
         replay(controller, streamSource, RupContextUtils.class, ForeignSecurityUtils.class, JavaScript.class);
         initWidget();
         Grid<UdmUsageDto> grid =
             (Grid<UdmUsageDto>) ((VerticalLayout) usagesWidget.getSecondComponent()).getComponent(1);
         CallbackDataProvider<?, ?> dataProvider = (CallbackDataProvider) grid.getDataProvider();
-        assertEquals(Collections.emptyList(), dataProvider.fetch(new Query<>(0, 2, Collections.emptyList(), null,
+        assertEquals(List.of(), dataProvider.fetch(new Query<>(0, 2, List.of(), null,
             null)).collect(Collectors.toList()));
         assertEquals(0, dataProvider.size(new Query<>()));
         assertThat(grid.getSelectionModel(), instanceOf(MultiSelectionModelImpl.class));

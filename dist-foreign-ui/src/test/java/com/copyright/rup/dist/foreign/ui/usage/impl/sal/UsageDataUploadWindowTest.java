@@ -46,7 +46,6 @@ import org.powermock.reflect.Whitebox;
 
 import java.io.ByteArrayOutputStream;
 import java.time.LocalDate;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -189,7 +188,7 @@ public class UsageDataUploadWindowTest {
         window = createWindowMock(batch, uploadField);
         expect(window.isValid()).andReturn(true).once();
         expect(controller.usageDataExists(BATCH_ID)).andReturn(false).once();
-        expect(controller.getIneligibleBatchesNames(Set.of(BATCH_ID))).andReturn(Collections.emptyList()).once();
+        expect(controller.getIneligibleBatchesNames(Set.of(BATCH_ID))).andReturn(List.of()).once();
         expect(controller.getSalUsageDataCsvProcessor(BATCH_ID)).andReturn(processor).once();
         expect(processor.process(anyObject())).andReturn(processingResult).once();
         controller.loadUsageData(batch, processingResult.get());

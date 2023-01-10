@@ -59,7 +59,6 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -149,7 +148,7 @@ public class AclUsageWidgetTest {
         setSpecialistExpectations();
         List<AclUsageDto> aclUsageDtos = List.of(new AclUsageDto(), new AclUsageDto());
         expect(JavaScript.getCurrent()).andReturn(createMock(JavaScript.class)).times(2);
-        expect(controller.loadBeans(0, 2, Collections.emptyList())).andReturn(aclUsageDtos).once();
+        expect(controller.loadBeans(0, 2, List.of())).andReturn(aclUsageDtos).once();
         expect(controller.getBeansCount()).andReturn(aclUsageDtos.size()).once();
         expect(controller.getRecordThreshold()).andReturn(RECORD_THRESHOLD).once();
         replay(controller, streamSource, ForeignSecurityUtils.class, JavaScript.class);
@@ -157,7 +156,7 @@ public class AclUsageWidgetTest {
         Grid<AclUsageDto> grid =
             (Grid<AclUsageDto>) ((VerticalLayout) aclUsageWidget.getSecondComponent()).getComponent(1);
         CallbackDataProvider<?, ?> dataProvider = (CallbackDataProvider) grid.getDataProvider();
-        assertEquals(aclUsageDtos, dataProvider.fetch(new Query<>(0, 2, Collections.emptyList(), null,
+        assertEquals(aclUsageDtos, dataProvider.fetch(new Query<>(0, 2, List.of(), null,
             null)).collect(Collectors.toList()));
         assertEquals(aclUsageDtos.size(), dataProvider.size(new Query<>()));
         assertThat(grid.getSelectionModel(), instanceOf(MultiSelectionModelImpl.class));
@@ -172,7 +171,7 @@ public class AclUsageWidgetTest {
         setSpecialistExpectations();
         List<AclUsageDto> aclUsageDtos = List.of(new AclUsageDto(), new AclUsageDto());
         expect(JavaScript.getCurrent()).andReturn(createMock(JavaScript.class)).times(2);
-        expect(controller.loadBeans(0, 2, Collections.emptyList())).andReturn(aclUsageDtos).once();
+        expect(controller.loadBeans(0, 2, List.of())).andReturn(aclUsageDtos).once();
         expect(controller.getBeansCount()).andReturn(EXCEEDED_RECORD_THRESHOLD).once();
         expect(controller.getRecordThreshold()).andReturn(RECORD_THRESHOLD).once();
         replay(controller, streamSource, ForeignSecurityUtils.class, JavaScript.class);
@@ -180,7 +179,7 @@ public class AclUsageWidgetTest {
         Grid<AclUsageDto> grid =
             (Grid<AclUsageDto>) ((VerticalLayout) aclUsageWidget.getSecondComponent()).getComponent(1);
         CallbackDataProvider<?, ?> dataProvider = (CallbackDataProvider) grid.getDataProvider();
-        assertEquals(aclUsageDtos, dataProvider.fetch(new Query<>(0, 2, Collections.emptyList(), null,
+        assertEquals(aclUsageDtos, dataProvider.fetch(new Query<>(0, 2, List.of(), null,
             null)).collect(Collectors.toList()));
         assertEquals(EXCEEDED_RECORD_THRESHOLD, dataProvider.size(new Query<>()));
         assertThat(grid.getSelectionModel(), instanceOf(MultiSelectionModelImpl.class));
@@ -194,14 +193,14 @@ public class AclUsageWidgetTest {
         mockStatic(JavaScript.class);
         setSpecialistExpectations();
         expect(JavaScript.getCurrent()).andReturn(createMock(JavaScript.class)).times(2);
-        expect(controller.loadBeans(0, 2, Collections.emptyList())).andReturn(Collections.emptyList()).once();
+        expect(controller.loadBeans(0, 2, List.of())).andReturn(List.of()).once();
         expect(controller.getBeansCount()).andReturn(0).once();
         replay(controller, streamSource, ForeignSecurityUtils.class, JavaScript.class);
         initWidget();
         Grid<AclUsageDto> grid =
             (Grid<AclUsageDto>) ((VerticalLayout) aclUsageWidget.getSecondComponent()).getComponent(1);
         CallbackDataProvider<?, ?> dataProvider = (CallbackDataProvider) grid.getDataProvider();
-        assertEquals(Collections.emptyList(), dataProvider.fetch(new Query<>(0, 2, Collections.emptyList(), null,
+        assertEquals(List.of(), dataProvider.fetch(new Query<>(0, 2, List.of(), null,
             null)).collect(Collectors.toList()));
         assertEquals(0, dataProvider.size(new Query<>()));
         assertThat(grid.getSelectionModel(), instanceOf(MultiSelectionModelImpl.class));
@@ -236,7 +235,7 @@ public class AclUsageWidgetTest {
         setSpecialistExpectations();
         expect(JavaScript.getCurrent()).andReturn(createMock(JavaScript.class)).times(2);
         expect(controller.getBeansCount()).andReturn(1).once();
-        expect(controller.loadBeans(0, Integer.MAX_VALUE, Collections.emptyList())).andReturn(usages).once();
+        expect(controller.loadBeans(0, Integer.MAX_VALUE, List.of())).andReturn(usages).once();
         expect(controller.getRecordThreshold()).andReturn(RECORD_THRESHOLD).once();
         replay(JavaScript.class, ForeignSecurityUtils.class, controller, streamSource);
         initWidget();

@@ -68,7 +68,6 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -271,7 +270,7 @@ public class UdmUsageControllerTest {
         Window.CloseListener closeListener = createMock(Window.CloseListener.class);
         Capture<UsageHistoryWindow> windowCapture = newCapture();
         String udmUsageId = "432320b8-5029-47dd-8137-99007cb69bf1";
-        List<UsageAuditItem> auditItems = Collections.emptyList();
+        List<UsageAuditItem> auditItems = List.of();
         expect(udmUsageAuditService.getUdmUsageAudit(udmUsageId)).andReturn(auditItems).once();
         Windows.showModalWindow(capture(windowCapture));
         expectLastCall().once();

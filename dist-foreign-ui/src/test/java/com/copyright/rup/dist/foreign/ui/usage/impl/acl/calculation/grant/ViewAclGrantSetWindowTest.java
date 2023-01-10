@@ -164,7 +164,7 @@ public class ViewAclGrantSetWindowTest {
     public void testPerformSearch() {
         SearchWidget searchWidget = createMock(SearchWidget.class);
         Whitebox.setInternalState(window, searchWidget);
-        expect(aclGrantSetGrid.getDataProvider()).andReturn(new ListDataProvider(Collections.emptyList())).once();
+        expect(aclGrantSetGrid.getDataProvider()).andReturn(new ListDataProvider(List.of())).once();
         expect(searchWidget.getSearchValue()).andReturn("Search").once();
         aclGrantSetGrid.recalculateColumnWidths();
         expectLastCall().once();

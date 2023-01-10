@@ -53,7 +53,6 @@ import java.time.ZoneId;
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.function.Supplier;
@@ -100,7 +99,7 @@ public class UdmBaselineWidgetTest {
         List<UdmBaselineDto> udmBaselines = List.of(buildUdmBaselineDto());
         expect(JavaScript.getCurrent()).andReturn(createMock(JavaScript.class)).times(2);
         expect(controller.getBeansCount()).andReturn(1).once();
-        expect(controller.loadBeans(0, Integer.MAX_VALUE, Collections.emptyList())).andReturn(udmBaselines).once();
+        expect(controller.loadBeans(0, Integer.MAX_VALUE, List.of())).andReturn(udmBaselines).once();
         expect(controller.getUdmRecordThreshold()).andReturn(UDM_RECORD_THRESHOLD).once();
         replay(JavaScript.class, ForeignSecurityUtils.class, controller, streamSource);
         udmBaselineWidget.init();

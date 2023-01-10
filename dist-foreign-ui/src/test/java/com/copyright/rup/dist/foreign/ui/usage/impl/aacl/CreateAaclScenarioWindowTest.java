@@ -53,7 +53,6 @@ import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Collections;
 import java.util.EventObject;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -149,7 +148,7 @@ public class CreateAaclScenarioWindowTest {
         expect(controller.createAaclScenario(SCENARIO_NAME, expectedAaclFields, "")).andReturn(scenario).once();
         expect(controller.scenarioExists(SCENARIO_NAME)).andReturn(false).times(2);
         expect(controller.getAggregateClassesNotToBeDistributed(FUND_POOL_ID, detailLicenseeClasses))
-            .andReturn(Collections.emptyList()).once();
+            .andReturn(List.of()).once();
         replay(controller);
         TestCreateAaclScenarioWindow createScenarioWindow = new TestCreateAaclScenarioWindow(controller);
         VerticalLayout content = (VerticalLayout) createScenarioWindow.getContent();

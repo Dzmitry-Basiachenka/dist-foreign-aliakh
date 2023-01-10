@@ -51,7 +51,6 @@ import org.powermock.reflect.Whitebox;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -296,7 +295,7 @@ public class UdmValueControllerTest {
         Window.CloseListener closeListener = createMock(Window.CloseListener.class);
         Capture<UdmValueHistoryWindow> windowCapture = newCapture();
         String udmValueId = "432320b8-5029-47dd-8137-99007cb69bf1";
-        List<UdmValueAuditItem> auditItems = Collections.emptyList();
+        List<UdmValueAuditItem> auditItems = List.of();
         expect(udmValueAuditService.getUdmValueAudit(udmValueId)).andReturn(auditItems).once();
         Windows.showModalWindow(capture(windowCapture));
         expectLastCall().once();

@@ -30,7 +30,6 @@ import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
 import java.util.AbstractMap;
-import java.util.Collections;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -77,7 +76,7 @@ public class SalHistoricalItemBankDetailsReportWidgetTest {
             createMock(Supplier.class))).once();
         expect(controller.getWidget()).andReturn(widget).once();
         expect(controller.getCsvStreamSource()).andReturn(streamSource).once();
-        expect(controller.getSalLicensees()).andReturn(Collections.emptyList()).once();
+        expect(controller.getSalLicensees()).andReturn(List.of()).once();
         widget.setController(controller);
         replay(controller, streamSource);
         widget.init();
