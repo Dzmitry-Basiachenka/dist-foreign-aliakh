@@ -11,6 +11,7 @@ import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 
 import com.google.common.collect.ImmutableMap;
+
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,7 +20,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -57,8 +57,8 @@ public class SendSalToCrmIntegrationTest {
             .expectUsageAudit(ImmutableMap.of(
                 "14704648-838e-444f-8987-c4f1dc3aa38d", buildArchivedUsageAudit(),
                 "2b2cf124-8c96-4662-8949-c56002247f39", buildArchivedUsageAudit(),
-                "52604648-838e-333f-8987-c4f1dc3aa38a", Collections.emptyList(),
-                "563cf124-8c96-4662-8529-c56002247f39", Collections.emptyList()))
+                "52604648-838e-333f-8987-c4f1dc3aa38a", List.of(),
+                "563cf124-8c96-4662-8529-c56002247f39", List.of()))
             .expectScenarioAudit(ImmutableMap.of(
                 "183c0b55-3665-4863-a28c-0370feccad24", List.of(
                     Pair.of(ScenarioActionTypeEnum.ARCHIVED, "All usages from scenario have been sent to CRM"))))

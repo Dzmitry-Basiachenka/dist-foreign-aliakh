@@ -23,7 +23,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -66,9 +65,9 @@ public class FasScenarioServiceTest {
 
     @Test
     public void testGetSourceRros() {
-        expect(scenarioRepository.findSourceRros(SCENARIO_ID)).andReturn(Collections.emptyList()).once();
+        expect(scenarioRepository.findSourceRros(SCENARIO_ID)).andReturn(List.of()).once();
         replay(scenarioRepository);
-        assertEquals(Collections.emptyList(), fasScenarioService.getSourceRros(SCENARIO_ID));
+        assertEquals(List.of(), fasScenarioService.getSourceRros(SCENARIO_ID));
         verify(scenarioRepository);
     }
 
@@ -93,10 +92,9 @@ public class FasScenarioServiceTest {
     @Test
     public void testGetRightsholdersByScenarioAndSourceRro() {
         expect(scenarioRepository.findRightsholdersByScenarioIdAndSourceRro(SCENARIO_ID, 2000017010L))
-            .andReturn(Collections.emptyList()).once();
+            .andReturn(List.of()).once();
         replay(scenarioRepository);
-        assertEquals(Collections.emptyList(),
-            fasScenarioService.getRightsholdersByScenarioAndSourceRro(SCENARIO_ID, 2000017010L));
+        assertEquals(List.of(), fasScenarioService.getRightsholdersByScenarioAndSourceRro(SCENARIO_ID, 2000017010L));
         verify(scenarioRepository);
     }
 

@@ -245,7 +245,7 @@ public class AaclUsageRepositoryIntegrationTest {
     public void testFindDtosByBatchFilterWithScenarioUsages() {
         UsageFilter usageFilter = buildUsageFilter();
         usageFilter.setUsageBatchesIds(Set.of("a87b82ca-cfca-463d-96e9-fa856618c389"));
-        assertEquals(Collections.emptyList(), aaclUsageRepository.findDtosByFilter(usageFilter, null, null));
+        assertEquals(List.of(), aaclUsageRepository.findDtosByFilter(usageFilter, null, null));
     }
 
     @Test
@@ -420,7 +420,7 @@ public class AaclUsageRepositoryIntegrationTest {
         UsageFilter usageFilter = buildUsageFilter();
         usageFilter.setUsageBatchesIds(Set.of("70a96dc1-b0a8-433f-a7f4-c5d94ee75a9e"));
         usageFilter.setUsagePeriod(2019);
-        assertEquals(Collections.emptyList(), aaclUsageRepository.findInvalidRightsholdersByFilter(usageFilter));
+        assertEquals(List.of(), aaclUsageRepository.findInvalidRightsholdersByFilter(usageFilter));
         usageFilter.setUsagePeriod(2017);
         assertEquals(List.of(7000000001L),
             aaclUsageRepository.findInvalidRightsholdersByFilter(usageFilter));

@@ -51,7 +51,6 @@ import org.powermock.reflect.Whitebox;
 
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
@@ -139,7 +138,7 @@ public class UsageBatchServiceTest {
 
     @Test
     public void testGetUsageBatchesByProductFamily() {
-        expect(usageBatchRepository.findByProductFamily(FAS_PRODUCT_FAMILY)).andReturn(Collections.emptyList()).once();
+        expect(usageBatchRepository.findByProductFamily(FAS_PRODUCT_FAMILY)).andReturn(List.of()).once();
         replay(usageBatchRepository);
         usageBatchService.getUsageBatches(FAS_PRODUCT_FAMILY);
         verify(usageBatchRepository);
@@ -155,7 +154,7 @@ public class UsageBatchServiceTest {
 
     @Test
     public void testGetUsageBatchesForNtsFundPool() {
-        expect(usageBatchRepository.findUsageBatchesForNtsFundPool()).andReturn(Collections.emptyList()).once();
+        expect(usageBatchRepository.findUsageBatchesForNtsFundPool()).andReturn(List.of()).once();
         replay(usageBatchRepository);
         usageBatchService.getUsageBatchesForNtsFundPool();
         verify(usageBatchRepository);
@@ -308,7 +307,7 @@ public class UsageBatchServiceTest {
         expectLastCall().once();
         aaclUsageService.insertUsages(usageBatch, uploadedUsages);
         expectLastCall().once();
-        expect(aaclUsageService.insertUsagesFromBaseline(usageBatch)).andReturn(Collections.emptyList()).once();
+        expect(aaclUsageService.insertUsagesFromBaseline(usageBatch)).andReturn(List.of()).once();
         usageBatchRepository.updateInitialUsagesCount(eq(1), anyString(), eq(USER_NAME));
         expectLastCall().once();
         replay(usageBatchRepository, aaclUsageService, RupContextUtils.class);
@@ -414,7 +413,7 @@ public class UsageBatchServiceTest {
         expect(usageBatchRepository.findBatchNamesWithoutUsagesForClassification(batchIds, "STM"))
             .andReturn(List.of("Batch without STM usages")).once();
         expect(usageBatchRepository.findBatchNamesWithoutUsagesForClassification(batchIds, "NON-STM"))
-            .andReturn(Collections.emptyList()).once();
+            .andReturn(List.of()).once();
         replay(usageBatchRepository);
         usageBatchService.getClassifcationToBatchNamesWithoutUsagesForStmOrNonStm(batchIds);
         verify(usageBatchRepository);

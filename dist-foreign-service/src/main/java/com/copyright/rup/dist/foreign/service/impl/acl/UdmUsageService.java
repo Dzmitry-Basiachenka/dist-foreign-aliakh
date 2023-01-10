@@ -38,7 +38,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -159,7 +158,7 @@ public class UdmUsageService implements IUdmUsageService {
     public List<UdmUsageDto> getUsageDtos(UdmUsageFilter filter, Pageable pageable, Sort sort) {
         return !filter.isEmpty()
             ? udmUsageRepository.findDtosByFilter(filter, pageable, sort)
-            : Collections.emptyList();
+            : List.of();
     }
 
     @Override

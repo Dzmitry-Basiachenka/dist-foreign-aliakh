@@ -11,6 +11,7 @@ import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 
 import com.google.common.collect.ImmutableMap;
+
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,7 +20,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -81,7 +81,7 @@ public class SendToCrmIntegrationTest {
                     Pair.of(ScenarioActionTypeEnum.ARCHIVED, "All usages from scenario have been sent to CRM")),
                 SAL_SCENARIO_UID, List.of(
                     Pair.of(ScenarioActionTypeEnum.ARCHIVED, "All usages from scenario have been sent to CRM")),
-                NTS_SCENARIO_UID, Collections.emptyList()))
+                NTS_SCENARIO_UID, List.of()))
             .build()
             .run();
     }
@@ -93,8 +93,8 @@ public class SendToCrmIntegrationTest {
         expectedUsageAudit.put(NTS_USAGE_UID, buildArchivedUsageAudit());
         expectedUsageAudit.put(SAL_USAGE_UID_1, buildArchivedUsageAudit());
         expectedUsageAudit.put(SAL_USAGE_UID_2, buildArchivedUsageAudit());
-        expectedUsageAudit.put("52604648-838e-333f-8987-c4f1dc3aa38a", Collections.emptyList());
-        expectedUsageAudit.put("563cf124-8c96-4662-8529-c56002247f39", Collections.emptyList());
+        expectedUsageAudit.put("52604648-838e-333f-8987-c4f1dc3aa38a", List.of());
+        expectedUsageAudit.put("563cf124-8c96-4662-8529-c56002247f39", List.of());
         return expectedUsageAudit;
     }
 

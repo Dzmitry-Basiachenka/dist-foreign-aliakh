@@ -115,8 +115,7 @@ public class PrmIntegrationServiceTest {
 
     @Test
     public void testGetRightsholderNameNotPresentedInPrm() {
-        expect(prmRightsholderService.getRightsholders(Sets.newHashSet(ACCOUNT_NUMBER)))
-            .andReturn(Collections.emptyList()).once();
+        expect(prmRightsholderService.getRightsholders(Sets.newHashSet(ACCOUNT_NUMBER))).andReturn(List.of()).once();
         replay(prmRightsholderService);
         assertNull(prmIntegrationService.getRightsholder(ACCOUNT_NUMBER));
         verify(prmRightsholderService);

@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -62,6 +61,6 @@ public class UdmProxyValueService implements IUdmProxyValueService {
 
     @Override
     public List<UdmProxyValueDto> getDtosByFilter(UdmProxyValueFilter filter) {
-        return !filter.isEmpty() ? udmProxyValueRepository.findDtosByFilter(filter) : Collections.emptyList();
+        return !filter.isEmpty() ? udmProxyValueRepository.findDtosByFilter(filter) : List.of();
     }
 }

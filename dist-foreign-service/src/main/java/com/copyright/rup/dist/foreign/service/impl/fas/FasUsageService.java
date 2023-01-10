@@ -40,7 +40,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -123,7 +122,7 @@ public class FasUsageService implements IFasUsageService {
     public List<UsageDto> getUsageDtos(UsageFilter filter, Pageable pageable, Sort sort) {
         return !filter.isEmpty()
             ? usageRepository.findDtosByFilter(filter, pageable, sort)
-            : Collections.emptyList();
+            : List.of();
     }
 
     @Override

@@ -14,7 +14,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mybatis.spring.SqlSessionTemplate;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -46,7 +45,7 @@ public class UsageRepositoryTest {
     public void testFindIdsByScenarioIdRroAccountNumberRhAccountNumbers() {
         List<Long> accountNumbers = LongStream.range(1000000000, 1000032001).boxed().collect(Collectors.toList());
         expect(sqlSessionTemplate.selectList(eq("IUsageMapper.findIdsByScenarioIdRroAccountNumberRhAccountNumbers"),
-            notNull(List.class))).andReturn(Collections.emptyList()).times(2);
+            notNull(List.class))).andReturn(List.of()).times(2);
         replay(sqlSessionTemplate);
         usageRepository.findIdsByScenarioIdRroAccountNumberRhAccountNumbers("b1f0b236-3ae9-4a60-9fab-61db84199d6f",
             1000000000L, accountNumbers);

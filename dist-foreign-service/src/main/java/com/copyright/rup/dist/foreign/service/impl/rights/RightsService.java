@@ -300,7 +300,7 @@ public class RightsService implements IRightsService {
                     .collect(Collectors.groupingBy(RmsGrant::getWrWrkInst));
                 groupedUsages.forEach(usage -> {
                     Set<RmsGrant> eligibleGrants = wrWrkInstToGrants
-                        .getOrDefault(usage.getWrWrkInst(), Collections.emptyList())
+                        .getOrDefault(usage.getWrWrkInst(), List.of())
                         .stream()
                         .filter(grant -> FdaConstants.AACL_PRODUCT_FAMILY.equals(grant.getProductFamily()))
                         .collect(Collectors.toSet());
@@ -465,7 +465,7 @@ public class RightsService implements IRightsService {
         usages.forEach(usage -> {
             Long wrWrkInst = usage.getWrWrkInst();
             Set<RmsGrant> eligibleGrants = wrWrkInstToGrants
-                .getOrDefault(wrWrkInst, Collections.emptyList())
+                .getOrDefault(wrWrkInst, List.of())
                 .stream()
                 .filter(grant -> productFamily.equals(grant.getProductFamily()))
                 .collect(Collectors.toSet());

@@ -54,7 +54,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
@@ -150,7 +149,7 @@ public class AaclUsageService implements IAaclUsageService {
             LOGGER.info(INSERT_BASELINE_FINISHED_LOG_MESSAGE_FORMAT,
                 usageBatch.getName(), period, numberOfYears, LogUtils.size(usageIds), userName);
         } else {
-            usageIds = Collections.emptyList();
+            usageIds = List.of();
             LOGGER.info(INSERT_BASELINE_SKIPPED_LOG_MESSAGE_FORMAT,
                 usageBatch.getName(), period, numberOfYears, userName);
         }
@@ -185,14 +184,14 @@ public class AaclUsageService implements IAaclUsageService {
     public List<Usage> getUsagesByIds(List<String> usageIds) {
         return CollectionUtils.isNotEmpty(usageIds)
             ? aaclUsageRepository.findByIds(usageIds)
-            : Collections.emptyList();
+            : List.of();
     }
 
     @Override
     public List<UsageDto> getUsageDtos(UsageFilter filter, Pageable pageable, Sort sort) {
         return !filter.isEmpty()
             ? aaclUsageRepository.findDtosByFilter(filter, pageable, sort)
-            : Collections.emptyList();
+            : List.of();
     }
 
     @Override

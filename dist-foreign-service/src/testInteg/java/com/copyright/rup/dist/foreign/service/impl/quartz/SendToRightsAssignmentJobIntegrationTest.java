@@ -16,6 +16,7 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.ISalUsageRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.impl.ServiceTestHelper;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,7 +27,6 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -97,10 +97,10 @@ public class SendToRightsAssignmentJobIntegrationTest {
             testHelper.loadExpectedUsageAuditItems("quartz/usage_audit_sent_for_rights_assignment.json"));
         testHelper.assertAudit("7b997ecc-e427-43da-806c-979d85e27bd7",
             testHelper.loadExpectedUsageAuditItems("quartz/usage_audit_sent_for_rights_assignment.json"));
-        testHelper.assertAudit("9f32b35f-27cd-4f32-b775-ac3f8dab59d2", Collections.emptyList());
-        testHelper.assertAudit("7e3f875a-1dc0-4aed-bd7e-2626b1338aa5", Collections.emptyList());
-        testHelper.assertAudit("b0526981-0751-4953-9506-8cb2790e7f6d", Collections.emptyList());
-        testHelper.assertAudit("2f8f9bdc-7cf1-4b94-af3f-b31b61ab85d4", Collections.emptyList());
+        testHelper.assertAudit("9f32b35f-27cd-4f32-b775-ac3f8dab59d2", List.of());
+        testHelper.assertAudit("7e3f875a-1dc0-4aed-bd7e-2626b1338aa5", List.of());
+        testHelper.assertAudit("b0526981-0751-4953-9506-8cb2790e7f6d", List.of());
+        testHelper.assertAudit("2f8f9bdc-7cf1-4b94-af3f-b31b61ab85d4", List.of());
         testHelper.verifyRestServer();
     }
 

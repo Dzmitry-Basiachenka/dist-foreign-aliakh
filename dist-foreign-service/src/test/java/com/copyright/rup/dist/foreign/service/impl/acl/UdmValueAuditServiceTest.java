@@ -20,7 +20,6 @@ import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -63,7 +62,7 @@ public class UdmValueAuditServiceTest {
 
     @Test
     public void testGetUdmValueAudit() {
-        List<UdmValueAuditItem> auditItems = Collections.emptyList();
+        List<UdmValueAuditItem> auditItems = List.of();
         expect(udmValueAuditRepository.findByUdmValueId(UDM_VALUE_UID)).andReturn(auditItems).once();
         replay(udmValueAuditRepository);
         assertSame(auditItems, udmValueAuditService.getUdmValueAudit(UDM_VALUE_UID));

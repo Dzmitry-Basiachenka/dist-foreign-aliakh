@@ -26,7 +26,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -97,7 +96,7 @@ public class LoadClassifiedUsagesIntegrationTest {
             UsageActionTypeEnum.RH_FOUND, RH_FOUND_REASON,
             UsageActionTypeEnum.WORK_FOUND, WORK_FOUND_REASON,
             UsageActionTypeEnum.LOADED, UPLOADED_REASON)));
-        assertEquals(Collections.emptyList(), auditService.getUsageAudit(USAGE_ID_2));
+        assertEquals(List.of(), auditService.getUsageAudit(USAGE_ID_2));
     }
 
     private List<UsageAuditItem> buildUsageAuditItems(String usageId, Map<UsageActionTypeEnum, String> map) {

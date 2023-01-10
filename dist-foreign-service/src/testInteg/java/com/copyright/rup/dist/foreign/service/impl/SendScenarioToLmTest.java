@@ -35,7 +35,6 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -103,8 +102,7 @@ public class SendScenarioToLmTest {
         scenario.setProductFamily("SAL");
         salScenarioService.sendToLm(scenario);
         sqsClientMock.assertSendMessages(QUEUE_NAME,
-            List.of(TestUtils.fileToString(this.getClass(), "details/details_to_lm_sal.json")),
-            Collections.emptyList(), SOURCE_MAP);
+            List.of(TestUtils.fileToString(this.getClass(), "details/details_to_lm_sal.json")), List.of(), SOURCE_MAP);
         List<UsageDto> usageDtos = usageService.getRightsholderTotalsHoldersByScenario(scenario, null, null, null)
             .stream()
             .map(RightsholderTotalsHolder::getRightsholder)
@@ -127,8 +125,7 @@ public class SendScenarioToLmTest {
         scenario.setProductFamily("FAS");
         fasScenarioService.sendToLm(scenario);
         sqsClientMock.assertSendMessages(QUEUE_NAME,
-            List.of(TestUtils.fileToString(this.getClass(), "details/details_to_lm_fas.json")),
-            Collections.emptyList(), SOURCE_MAP);
+            List.of(TestUtils.fileToString(this.getClass(), "details/details_to_lm_fas.json")), List.of(), SOURCE_MAP);
         List<UsageDto> usageDtos = findUsageDtos(scenario);
         List<UsageDto> expectedUsageDtos = testHelper.loadExpectedUsageDtos("usage/archived_usage_dtos_fas.json");
         assertEquals(CollectionUtils.size(expectedUsageDtos), CollectionUtils.size(usageDtos));
@@ -163,8 +160,7 @@ public class SendScenarioToLmTest {
         scenario.setProductFamily("AACL");
         aaclScenarioService.sendToLm(scenario);
         sqsClientMock.assertSendMessages(QUEUE_NAME,
-            List.of(TestUtils.fileToString(this.getClass(), "details/details_to_lm_aacl.json")),
-            Collections.emptyList(), SOURCE_MAP);
+            List.of(TestUtils.fileToString(this.getClass(), "details/details_to_lm_aacl.json")), List.of(), SOURCE_MAP);
         List<UsageDto> actualUsageDtos = usageArchiveRepository.findAaclDtosByScenarioId(AACL_SCENARIO_ID);
         List<UsageDto> expectedUsageDtos = testHelper.loadExpectedUsageDtos("usage/aacl/aacl_archived_usage_dtos.json");
         assertEquals(CollectionUtils.size(expectedUsageDtos), CollectionUtils.size(actualUsageDtos));

@@ -26,7 +26,6 @@ import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -115,7 +114,7 @@ public class UsageAuditServiceTest {
     @Test
     public void testGetUsageAudit() {
         String usageId = RupPersistUtils.generateUuid();
-        List<UsageAuditItem> items = Collections.emptyList();
+        List<UsageAuditItem> items = List.of();
         expect(usageAuditRepository.findByUsageId(usageId)).andReturn(items).once();
         replay(usageAuditRepository);
         assertSame(items, usageAuditService.getUsageAudit(usageId));

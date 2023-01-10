@@ -176,7 +176,7 @@ public class PrmIneligibleRightsholderService implements IPrmIneligibleRightshol
 
         @Override
         protected List<AclIneligibleRightsholder> getDefaultValue() {
-            return Collections.emptyList();
+            return List.of();
         }
 
         private void setTypeOfUse(String typeOfUse) {

@@ -20,7 +20,6 @@ import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -77,8 +76,7 @@ public class AbstractUdmUsageJobProcessorTest {
 
     @Test
     public void testJobProcessSkipped() {
-        expect(udmUsageService.getUdmUsageIdsByStatus(UsageStatusEnum.NEW))
-            .andReturn(Collections.emptyList()).once();
+        expect(udmUsageService.getUdmUsageIdsByStatus(UsageStatusEnum.NEW)).andReturn(List.of()).once();
         replay(udmUsageService, usageConsumer, successProcessor, failureProcessor);
         assertEquals(new JobInfo(JobStatusEnum.SKIPPED, "ProductFamily=ACL_UDM, Reason=There are no usages"),
             processor.jobProcess(ACL_PRODUCT_FAMILY));

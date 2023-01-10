@@ -18,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.OutputStream;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -67,7 +66,7 @@ public class AclUsageService implements IAclUsageService {
     public List<AclUsageDto> getDtos(AclUsageFilter filter, Pageable pageable, Sort sort) {
         return !filter.isEmpty()
             ? aclUsageRepository.findDtosByFilter(filter, pageable, sort)
-            : Collections.emptyList();
+            : List.of();
     }
 
     @Override

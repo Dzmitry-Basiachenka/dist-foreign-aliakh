@@ -119,7 +119,7 @@ public class PiIntegrationServiceTest {
         expect(searchResponse.getResults()).andReturn(searchResults).times(6);
         expect(searchResults.getHits()).andReturn(List.of(searchHit1)).once();
         expect(searchHit1.getFields()).andReturn(ImmutableMap.of("hostIdno", List.of(IDNO_2))).once();
-        expect(searchResults.getHits()).andReturn(Collections.emptyList()).times(4);
+        expect(searchResults.getHits()).andReturn(List.of()).times(4);
         expect(searchResults.getHits()).andReturn(Arrays.asList(searchHit2, searchHit3)).once();
         expect(rupEsApi.search(capture(requestCapture))).andReturn(searchResponse).times(6);
         replay(rupEsApi, searchResponse, searchResults, searchHit1, searchHit2, searchHit3);
@@ -188,7 +188,7 @@ public class PiIntegrationServiceTest {
         expect(searchResults.getHits()).andReturn(List.of(searchHit1)).once();
         expect(searchResults.getHits()).andReturn(List.of(searchHit2)).once();
         expect(searchResults.getHits()).andReturn(List.of(searchHit3)).once();
-        expect(searchResults.getHits()).andReturn(Collections.emptyList()).once();
+        expect(searchResults.getHits()).andReturn(List.of()).once();
         expectSearchHitSource(searchHit1, SEARCH_HIT_1);
         expectSearchHitSource(searchHit2, SEARCH_HIT_2);
         expectSearchHitSource(searchHit3, SEARCH_HIT_3);
@@ -198,8 +198,8 @@ public class PiIntegrationServiceTest {
         expect(searchResponse.getResults()).andReturn(searchResults).times(6);
         expect(searchResults.getHits()).andReturn(List.of(searchHit1)).once();
         expect(searchResults.getHits()).andReturn(List.of(searchHit2)).once();
-        expect(searchResults.getHits()).andReturn(Collections.emptyList()).once();
-        expect(searchResults.getHits()).andReturn(Collections.emptyList()).once();
+        expect(searchResults.getHits()).andReturn(List.of()).once();
+        expect(searchResults.getHits()).andReturn(List.of()).once();
         expect(searchResults.getHits()).andReturn(List.of(searchHit5)).once();
         expect(searchResults.getHits()).andReturn(List.of(searchHit6)).once();
         expect(rupEsApi.search(capture(requestCapture))).andReturn(searchResponse).times(6);
@@ -227,7 +227,7 @@ public class PiIntegrationServiceTest {
 
     private void expectGetResponseWithIsbn10() {
         expect(searchResponse.getResults()).andReturn(searchResults).times(2);
-        expect(searchResults.getHits()).andReturn(Collections.emptyList()).once();
+        expect(searchResults.getHits()).andReturn(List.of()).once();
         expect(searchResults.getHits()).andReturn(List.of(searchHit2)).once();
         expectSearchHitSourceWithEmptyFields(searchHit2, SEARCH_HIT_2);
         expect(rupEsApi.search(capture(requestCapture))).andReturn(searchResponse).times(2);
@@ -235,8 +235,8 @@ public class PiIntegrationServiceTest {
 
     private void expectGetResponseWithIsbn13() {
         expect(searchResponse.getResults()).andReturn(searchResults).times(3);
-        expect(searchResults.getHits()).andReturn(Collections.emptyList()).once();
-        expect(searchResults.getHits()).andReturn(Collections.emptyList()).once();
+        expect(searchResults.getHits()).andReturn(List.of()).once();
+        expect(searchResults.getHits()).andReturn(List.of()).once();
         expect(searchResults.getHits()).andReturn(List.of(searchHit3)).once();
         expectSearchHitSourceWithEmptyFields(searchHit3, SEARCH_HIT_3);
         expect(rupEsApi.search(capture(requestCapture))).andReturn(searchResponse).times(3);
@@ -265,7 +265,7 @@ public class PiIntegrationServiceTest {
 
     private void expectEmptySearchResponseByStdId() {
         expect(searchResponse.getResults()).andReturn(searchResults).times(5);
-        expect(searchResults.getHits()).andReturn(Collections.emptyList()).times(5);
+        expect(searchResults.getHits()).andReturn(List.of()).times(5);
         expect(rupEsApi.search(capture(requestCapture))).andReturn(searchResponse).times(5);
     }
 
