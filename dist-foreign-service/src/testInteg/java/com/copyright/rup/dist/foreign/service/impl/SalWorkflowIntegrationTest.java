@@ -37,6 +37,7 @@ import java.util.List;
 )
 public class SalWorkflowIntegrationTest {
 
+    private static final String FOLDER_NAME = "sal-workflow-integration-test/";
     private static final String IB_USAGE_ID_1 = "6c59d64f-a56e-4ca8-a914-a8ac299c6082";
     private static final String IB_USAGE_ID_2 = "98d17e37-2900-4478-b105-6dd99f48d22b";
     private static final String IB_USAGE_ID_3 = "cd5dabe8-bada-42ca-8329-12ac72d10ad8";
@@ -61,8 +62,7 @@ public class SalWorkflowIntegrationTest {
     }
 
     @Test
-    //TODO: split test data into separate files for each test method
-    @TestData(fileName = "sal-workflow-data-init.groovy")
+    @TestData(fileName = FOLDER_NAME + "test-sal-workflow-without-usage-data.groovy")
     public void testSalWorkflowWithoutUsageData() throws IOException, InterruptedException {
         testBuilder
             .withProductFamily(SAL_PRODUCT_FAMILY)
@@ -91,8 +91,7 @@ public class SalWorkflowIntegrationTest {
     }
 
     @Test
-    //TODO: split test data into separate files for each test method
-    @TestData(fileName = "sal-workflow-data-init.groovy")
+    @TestData(fileName = FOLDER_NAME + "test-sal-workflow-with-usage-data.groovy")
     public void testSalWorkflowWithUsageData() throws IOException, InterruptedException {
         testBuilder
             .withProductFamily(SAL_PRODUCT_FAMILY)

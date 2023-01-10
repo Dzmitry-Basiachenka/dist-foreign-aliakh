@@ -38,7 +38,7 @@ import java.util.List;
 )
 public class ReceivePaidUsagesFromLmTest {
 
-    private static final String TEST_DATA = "receive-paid-usages-from-lm-data-init.groovy";
+    private static final String FOLDER_NAME = "recieve-paid-usages-from-lm-test/";
 
     @Autowired
     private IUsageArchiveRepository usageArchiveRepository;
@@ -54,8 +54,7 @@ public class ReceivePaidUsagesFromLmTest {
     }
 
     @Test
-    //TODO: split test data into separate files for each test method
-    @TestData(fileName = TEST_DATA)
+    @TestData(fileName = FOLDER_NAME + "test-receive-paid-fas-usages-from-lm.groovy")
     public void testReceivePaidFasUsagesFromLm() throws InterruptedException, IOException {
         assertTrue(CollectionUtils.isEmpty(usageArchiveRepository.findPaidIds()));
         testHelper.receivePaidUsagesFromLm("lm/paid_usages_fas.json");
@@ -63,8 +62,7 @@ public class ReceivePaidUsagesFromLmTest {
     }
 
     @Test
-    //TODO: split test data into separate files for each test method
-    @TestData(fileName = TEST_DATA)
+    @TestData(fileName = FOLDER_NAME + "test-receive-paid-nts-usages-from-lm.groovy")
     public void testReceivePaidNtsUsagesFromLm() throws InterruptedException, IOException {
         assertTrue(CollectionUtils.isEmpty(usageArchiveRepository.findPaidIds()));
         testHelper.receivePaidUsagesFromLm("lm/paid_usages_nts_receive_paid_from_lm_test.json");
@@ -72,8 +70,7 @@ public class ReceivePaidUsagesFromLmTest {
     }
 
     @Test
-    //TODO: split test data into separate files for each test method
-    @TestData(fileName = TEST_DATA)
+    @TestData(fileName = FOLDER_NAME + "test-receive-paid-aacl-usages-from-lm.groovy")
     public void testReceivePaidAaclUsagesFromLm() throws InterruptedException, IOException {
         assertTrue(CollectionUtils.isEmpty(usageArchiveRepository.findPaidIds()));
         testHelper.receivePaidUsagesFromLm("lm/paid_usages_aacl.json");
@@ -81,8 +78,7 @@ public class ReceivePaidUsagesFromLmTest {
     }
 
     @Test
-    //TODO: split test data into separate files for each test method
-    @TestData(fileName = TEST_DATA)
+    @TestData(fileName = FOLDER_NAME + "test-receive-paid-split-aacl-usages-from-lm.groovy")
     public void testReceivePaidSplitAaclUsagesFromLm() throws InterruptedException, IOException {
         assertTrue(CollectionUtils.isEmpty(usageArchiveRepository.findPaidIds()));
         testHelper.receivePaidUsagesFromLm("lm/paid_split_usages_aacl.json");
@@ -92,8 +88,7 @@ public class ReceivePaidUsagesFromLmTest {
     }
 
     @Test
-    //TODO: split test data into separate files for each test method
-    @TestData(fileName = TEST_DATA)
+    @TestData(fileName = FOLDER_NAME + "test-receive-paid-split-usages-from-lm.groovy")
     public void testReceivePaidSplitUsagesFromLm() throws InterruptedException, IOException {
         assertTrue(CollectionUtils.isEmpty(usageArchiveRepository.findPaidIds()));
         testHelper.receivePaidUsagesFromLm("lm/paid_split_usages_fas.json");
@@ -103,8 +98,7 @@ public class ReceivePaidUsagesFromLmTest {
     }
 
     @Test
-    //TODO: split test data into separate files for each test method
-    @TestData(fileName = TEST_DATA)
+    @TestData(fileName = FOLDER_NAME + "test-receive-post-distribution-usage-from-lm.groovy")
     public void testReceivePostDistributionUsageFromLm() throws InterruptedException, IOException {
         assertTrue(CollectionUtils.isEmpty(usageArchiveRepository.findPaidIds()));
         testHelper.receivePaidUsagesFromLm("lm/post_distribution_paid_usages_fas.json");
@@ -112,8 +106,7 @@ public class ReceivePaidUsagesFromLmTest {
     }
 
     @Test
-    //TODO: split test data into separate files for each test method
-    @TestData(fileName = TEST_DATA)
+    @TestData(fileName = FOLDER_NAME + "test-receive-post-distribution-aacl-usage-from-lm.groovy")
     public void testReceivePostDistributionAaclUsageFromLm() throws InterruptedException, IOException {
         assertTrue(CollectionUtils.isEmpty(usageArchiveRepository.findPaidIds()));
         testHelper.receivePaidUsagesFromLm("lm/post_distribution_paid_usages_aacl.json");
@@ -122,8 +115,7 @@ public class ReceivePaidUsagesFromLmTest {
     }
 
     @Test
-    //TODO: split test data into separate files for each test method
-    @TestData(fileName = TEST_DATA)
+    @TestData(fileName = FOLDER_NAME + "test-receive-post-distribution-split-usage-from-lm.groovy")
     public void testReceivePostDistributionSplitUsageFromLm() throws InterruptedException, IOException {
         assertTrue(CollectionUtils.isEmpty(usageArchiveRepository.findPaidIds()));
         testHelper.receivePaidUsagesFromLm("lm/post_distribution_split_paid_usages_fas.json");
@@ -136,8 +128,7 @@ public class ReceivePaidUsagesFromLmTest {
      * usages in one message.
      */
     @Test
-    //TODO: split test data into separate files for each test method
-    @TestData(fileName = TEST_DATA)
+    @TestData(fileName = FOLDER_NAME + "test-receive-paid-information-from-lm.groovy")
     public void testReceivePaidInformationFromLm() throws InterruptedException, IOException {
         assertTrue(CollectionUtils.isEmpty(usageArchiveRepository.findPaidIds()));
         testHelper.receivePaidUsagesFromLm("lm/paid_usages.json");
