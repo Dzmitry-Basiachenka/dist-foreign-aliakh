@@ -24,7 +24,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -58,7 +57,7 @@ public class AaclAuditFilterControllerTest {
 
     @Test
     public void testLoadBeans() {
-        List<Rightsholder> rightsholders = Collections.emptyList();
+        List<Rightsholder> rightsholders = List.of();
         Capture<Pageable> pageableCapture = newCapture();
         expect(rightsholderService.getAllWithSearch(eq("search"), capture(pageableCapture), isNull()))
             .andReturn(rightsholders).once();
@@ -80,7 +79,7 @@ public class AaclAuditFilterControllerTest {
     @Test
     public void testGetUsageBatches() {
         expect(productFamilyProvider.getSelectedProductFamily()).andReturn(AACL_PRODUCT_FAMILY).once();
-        List<UsageBatch> usageBatches = Collections.emptyList();
+        List<UsageBatch> usageBatches = List.of();
         expect(usageBatchService.getUsageBatches(AACL_PRODUCT_FAMILY)).andReturn(usageBatches).once();
         replay(usageBatchService, productFamilyProvider);
         assertSame(usageBatches, controller.getUsageBatches());

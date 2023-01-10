@@ -116,8 +116,8 @@ public class AclScenariosWidgetTest {
         expect(controller.getScenarios()).andReturn(List.of(scenario)).times(2);
         expect(controller.getAclScenarioWithAmountsAndLastAction(SCENARIO_UID)).andReturn(scenarioDto).times(2);
         expect(controller.getCriteriaHtmlRepresentation()).andReturn(SELECTION_CRITERIA).times(2);
-        expect(controller.getUsageAgeWeights()).andReturn(Collections.emptyList()).once();
-        expect(controller.getDetailLicenseeClasses()).andReturn(Collections.emptyList()).once();
+        expect(controller.getUsageAgeWeights()).andReturn(List.of()).once();
+        expect(controller.getDetailLicenseeClasses()).andReturn(List.of()).once();
         IStreamSource streamSource = createMock(IStreamSource.class);
         expect(streamSource.getSource()).andReturn(new SimpleImmutableEntry(createMock(Supplier.class),
             createMock(Supplier.class))).times(2);

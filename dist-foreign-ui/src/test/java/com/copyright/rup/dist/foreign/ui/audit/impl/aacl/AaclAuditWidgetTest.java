@@ -51,7 +51,6 @@ import org.powermock.reflect.Whitebox;
 
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -113,7 +112,7 @@ public class AaclAuditWidgetTest {
         Grid<?> grid = widget.getAuditGrid();
         CallbackDataProvider<?, ?> dataProvider = (CallbackDataProvider) grid.getDataProvider();
         assertEquals(1, dataProvider.size(new Query<>()));
-        Stream<?> stream = dataProvider.fetch(new Query<>(0, 1, Collections.emptyList(), null, null));
+        Stream<?> stream = dataProvider.fetch(new Query<>(0, 1, List.of(), null, null));
         assertEquals(liabilities, stream.collect(Collectors.toList()));
         assertFalse(grid.getStyleName().contains("empty-audit-grid"));
         assertEquals(0, orderCapture.getValue().size());

@@ -77,7 +77,6 @@ import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -169,7 +168,7 @@ public class AaclUsageControllerTest {
         expect(filterWidgetMock.getAppliedFilter()).andReturn(usageFilter).once();
         Capture<Pageable> pageableCapture = newCapture();
         expect(aaclUsageService.getUsageDtos(eq(usageFilter), capture(pageableCapture), isNull()))
-            .andReturn(Collections.emptyList()).once();
+            .andReturn(List.of()).once();
         replay(filterWidgetMock, aaclUsageService, filterController);
         List<UsageDto> result = controller.loadBeans(10, 150, null);
         Pageable pageable = pageableCapture.getValue();

@@ -31,7 +31,6 @@ import org.powermock.reflect.Whitebox;
 import java.io.OutputStream;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -84,7 +83,7 @@ public class SummaryMarketReportControllerTest {
     public void testGetCsvStreamSource() {
         OffsetDateTime now = OffsetDateTime.of(2019, 1, 2, 3, 4, 5, 6, ZoneOffset.ofHours(0));
         mockStatic(OffsetDateTime.class);
-        List<UsageBatch> batches = Collections.emptyList();
+        List<UsageBatch> batches = List.of();
         ISummaryMarketReportWidget widget = createMock(ISummaryMarketReportWidget.class);
         Whitebox.setInternalState(controller, widget);
         Capture<List<UsageBatch>> batchesCapture = newCapture();

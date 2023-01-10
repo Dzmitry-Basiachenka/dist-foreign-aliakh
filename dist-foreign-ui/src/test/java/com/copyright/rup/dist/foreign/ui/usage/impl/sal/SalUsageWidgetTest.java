@@ -252,9 +252,9 @@ public class SalUsageWidgetTest {
         prepareCreateScenarioExpectation();
         expect(controller.getBeansCount()).andReturn(1).once();
         expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
-        expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
-        expect(controller.getProcessingBatchesNames(Set.of(BATCH_ID))).andReturn(Collections.emptyList()).once();
-        expect(controller.getIneligibleBatchesNames(Set.of(BATCH_ID))).andReturn(Collections.emptyList()).once();
+        expect(controller.getInvalidRightsholders()).andReturn(List.of()).once();
+        expect(controller.getProcessingBatchesNames(Set.of(BATCH_ID))).andReturn(List.of()).once();
+        expect(controller.getIneligibleBatchesNames(Set.of(BATCH_ID))).andReturn(List.of()).once();
         Windows.showModalWindow(anyObject(CreateSalScenarioWindow.class));
         expectLastCall().once();
         replay(controller, clickEvent, Windows.class);
@@ -313,7 +313,7 @@ public class SalUsageWidgetTest {
         expect(controller.getBeansCount()).andReturn(1).once();
         prepareCreateScenarioExpectation();
         expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
-        expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
+        expect(controller.getInvalidRightsholders()).andReturn(List.of()).once();
         Windows.showNotificationWindow("Please apply Batches Filter to create a scenario");
         expectLastCall().once();
         replay(controller, clickEvent, Windows.class);
@@ -330,7 +330,7 @@ public class SalUsageWidgetTest {
         expect(controller.getBeansCount()).andReturn(1).once();
         prepareCreateScenarioExpectation();
         expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
-        expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
+        expect(controller.getInvalidRightsholders()).andReturn(List.of()).once();
         Windows.showNotificationWindow("Only one usage batch can be associated with scenario");
         expectLastCall().once();
         replay(controller, clickEvent, Windows.class);
@@ -346,7 +346,7 @@ public class SalUsageWidgetTest {
         expect(controller.getBeansCount()).andReturn(1).once();
         prepareCreateScenarioExpectation();
         expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
-        expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
+        expect(controller.getInvalidRightsholders()).andReturn(List.of()).once();
         Windows.showNotificationWindow("Detail Type filter should not be applied to create scenario");
         expectLastCall().once();
         replay(controller, clickEvent, Windows.class);
@@ -360,7 +360,7 @@ public class SalUsageWidgetTest {
         ClickEvent clickEvent = createMock(ClickEvent.class);
         expect(controller.getBeansCount()).andReturn(1).once();
         expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
-        expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
+        expect(controller.getInvalidRightsholders()).andReturn(List.of()).once();
         expect(controller.getProcessingBatchesNames(Set.of(BATCH_ID))).andReturn(List.of("Batch Name")).once();
         prepareCreateScenarioExpectation();
         Windows.showNotificationWindow("Please wait while batch(es) processing is completed:" +
@@ -377,8 +377,8 @@ public class SalUsageWidgetTest {
         ClickEvent clickEvent = createMock(ClickEvent.class);
         expect(controller.getBeansCount()).andReturn(1).once();
         expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
-        expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
-        expect(controller.getProcessingBatchesNames(Set.of(BATCH_ID))).andReturn(Collections.emptyList()).once();
+        expect(controller.getInvalidRightsholders()).andReturn(List.of()).once();
+        expect(controller.getProcessingBatchesNames(Set.of(BATCH_ID))).andReturn(List.of()).once();
         expect(controller.getIneligibleBatchesNames(Set.of(BATCH_ID))).andReturn(List.of("Batch Name")).once();
         prepareCreateScenarioExpectation();
         Windows.showNotificationWindow("The following batches have usages that are not in ELIGIBLE status:" +

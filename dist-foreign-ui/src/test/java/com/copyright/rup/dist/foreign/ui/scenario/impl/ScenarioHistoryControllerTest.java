@@ -10,11 +10,11 @@ import static org.junit.Assert.assertSame;
 
 import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
 import com.copyright.rup.dist.foreign.service.api.IScenarioAuditService;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -41,7 +41,7 @@ public class ScenarioHistoryControllerTest {
     @Test
     public void testGetActions() {
         String scenarioId = "61ecb141-89a9-463b-aee6-2a4581cb8f18";
-        List<ScenarioAuditItem> auditItems = Collections.emptyList();
+        List<ScenarioAuditItem> auditItems = List.of();
         expect(scenarioAuditService.getActions(scenarioId)).andReturn(auditItems).once();
         replay(scenarioAuditService);
         assertSame(auditItems, controller.getActions(scenarioId));

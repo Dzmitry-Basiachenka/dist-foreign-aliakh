@@ -144,8 +144,7 @@ public class ViewUsageBatchWindowTest {
         mockStatic(Windows.class);
         Button.ClickListener listener = getDeleteButtonClickListener();
         expect(grid.getSelectedItems()).andReturn(Set.of(buildUsageBatch())).once();
-        expect(controller.getAdditionalFundNamesByUsageBatchId(USAGE_BATCH_ID))
-            .andReturn(Collections.emptyList()).once();
+        expect(controller.getAdditionalFundNamesByUsageBatchId(USAGE_BATCH_ID)).andReturn(List.of()).once();
         expect(controller.getScenariosNamesAssociatedWithUsageBatch(USAGE_BATCH_ID))
             .andReturn(Arrays.asList("Scenario 1", "Scenario 2")).once();
         Windows.showNotificationWindow("Usage batch cannot be deleted because it is associated with the following " +
@@ -163,10 +162,8 @@ public class ViewUsageBatchWindowTest {
         Window confirmWindowCapture = createMock(Window.class);
         Button.ClickListener listener = getDeleteButtonClickListener();
         expect(grid.getSelectedItems()).andReturn(Set.of(buildUsageBatch())).once();
-        expect(controller.getAdditionalFundNamesByUsageBatchId(USAGE_BATCH_ID))
-            .andReturn(Collections.emptyList()).once();
-        expect(controller.getScenariosNamesAssociatedWithUsageBatch(USAGE_BATCH_ID))
-            .andReturn(Collections.emptyList()).once();
+        expect(controller.getAdditionalFundNamesByUsageBatchId(USAGE_BATCH_ID)).andReturn(List.of()).once();
+        expect(controller.getScenariosNamesAssociatedWithUsageBatch(USAGE_BATCH_ID)).andReturn(List.of()).once();
         expect(controller.isBatchProcessingCompleted(USAGE_BATCH_ID)).andReturn(false).once();
         Windows.showNotificationWindow("'FAS batch' batch cannot be deleted because processing is not completed yet");
         expectLastCall().once();
@@ -182,10 +179,8 @@ public class ViewUsageBatchWindowTest {
         Window confirmWindowCapture = createMock(Window.class);
         Button.ClickListener listener = getDeleteButtonClickListener();
         expect(grid.getSelectedItems()).andReturn(Set.of(buildUsageBatch())).once();
-        expect(controller.getAdditionalFundNamesByUsageBatchId(USAGE_BATCH_ID))
-            .andReturn(Collections.emptyList()).once();
-        expect(controller.getScenariosNamesAssociatedWithUsageBatch(USAGE_BATCH_ID))
-            .andReturn(Collections.emptyList()).once();
+        expect(controller.getAdditionalFundNamesByUsageBatchId(USAGE_BATCH_ID)).andReturn(List.of()).once();
+        expect(controller.getScenariosNamesAssociatedWithUsageBatch(USAGE_BATCH_ID)).andReturn(List.of()).once();
         expect(controller.isBatchProcessingCompleted(USAGE_BATCH_ID)).andReturn(true).once();
         expect(Windows.showConfirmDialog(eq("Are you sure you want to delete <i><b>'FAS batch'</b></i> usage batch?"),
             anyObject())).andReturn(confirmWindowCapture).once();

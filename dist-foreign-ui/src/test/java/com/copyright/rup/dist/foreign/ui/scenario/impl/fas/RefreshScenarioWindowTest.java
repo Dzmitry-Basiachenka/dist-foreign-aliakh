@@ -45,7 +45,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -133,7 +132,7 @@ public class RefreshScenarioWindowTest {
         HorizontalLayout buttonsLayout = (HorizontalLayout) layout.getComponent(2);
         Button okButton = (Button) buttonsLayout.getComponent(0);
         ClickEvent clickEvent = createMock(ClickEvent.class);
-        expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
+        expect(controller.getInvalidRightsholders()).andReturn(List.of()).once();
         controller.refreshScenario();
         expectLastCall().once();
         replay(controller, clickEvent);

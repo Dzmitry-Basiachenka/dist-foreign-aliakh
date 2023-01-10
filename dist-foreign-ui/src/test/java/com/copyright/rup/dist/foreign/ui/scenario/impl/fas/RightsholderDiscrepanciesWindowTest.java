@@ -39,7 +39,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import java.io.IOException;
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -103,8 +102,7 @@ public class RightsholderDiscrepanciesWindowTest {
     public void testGridValues() {
         mockStatic(JavaScript.class);
         expect(JavaScript.getCurrent()).andReturn(createMock(JavaScript.class)).times(2);
-        expect(controller.loadBeans(0, Integer.MAX_VALUE, Collections.emptyList()))
-            .andReturn(rightsholderDiscrepancies).once();
+        expect(controller.loadBeans(0, Integer.MAX_VALUE, List.of())).andReturn(rightsholderDiscrepancies).once();
         expect(controller.getBeansCount()).andReturn(1).once();
         replay(JavaScript.class, controller);
         Grid<?> grid = (Grid<?>) ((VerticalLayout) window.getContent()).getComponent(0);

@@ -33,7 +33,6 @@ import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -66,7 +65,7 @@ public class UdmPublishToBaselineWindowTest {
 
     @Test
     public void testConstructor() {
-        expect(controller.getPeriods()).andReturn(Collections.emptyList()).once();
+        expect(controller.getPeriods()).andReturn(List.of()).once();
         replay(controller);
         window = new UdmPublishToBaselineWindow(controller, publishButtonClickListener);
         verifyWindow(window, "Publish to Baseline", 280, 120, Unit.PIXELS);

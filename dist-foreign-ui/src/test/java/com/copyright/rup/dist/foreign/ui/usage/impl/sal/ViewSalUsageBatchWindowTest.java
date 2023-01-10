@@ -123,8 +123,7 @@ public class ViewSalUsageBatchWindowTest {
         Whitebox.setInternalState(viewSalUsageBatchWindow, GRID, grid);
         Button.ClickListener listener = getDeleteButtonClickListener(0);
         expect(grid.getSelectedItems()).andReturn(Set.of(buildUsageBatch())).once();
-        expect(controller.getScenariosNamesAssociatedWithUsageBatch(USAGE_BATCH_ID))
-            .andReturn(Collections.emptyList()).once();
+        expect(controller.getScenariosNamesAssociatedWithUsageBatch(USAGE_BATCH_ID)).andReturn(List.of()).once();
         expect(controller.isBatchProcessingCompleted(USAGE_BATCH_ID)).andReturn(true).once();
         expect(Windows.showConfirmDialog(eq("Are you sure you want to delete <i><b>'SAL batch'</b></i> usage batch?"),
             anyObject())).andReturn(confirmWindowCapture).once();
@@ -141,8 +140,7 @@ public class ViewSalUsageBatchWindowTest {
         Whitebox.setInternalState(viewSalUsageBatchWindow, GRID, grid);
         Button.ClickListener listener = getDeleteButtonClickListener(0);
         expect(grid.getSelectedItems()).andReturn(Set.of(buildUsageBatch())).once();
-        expect(controller.getScenariosNamesAssociatedWithUsageBatch(USAGE_BATCH_ID))
-            .andReturn(Collections.emptyList()).once();
+        expect(controller.getScenariosNamesAssociatedWithUsageBatch(USAGE_BATCH_ID)).andReturn(List.of()).once();
         expect(controller.isBatchProcessingCompleted(USAGE_BATCH_ID)).andReturn(false).once();
         Windows.showNotificationWindow("'SAL batch' batch cannot be deleted because processing is not completed yet");
         expectLastCall().once();
@@ -179,8 +177,7 @@ public class ViewSalUsageBatchWindowTest {
         Button.ClickListener listener = getDeleteButtonClickListener(1);
         expect(grid.getSelectedItems()).andReturn(Set.of(buildUsageBatch())).once();
         expect(controller.usageDataExists(USAGE_BATCH_ID)).andReturn(true).once();
-        expect(controller.getScenariosNamesAssociatedWithUsageBatch(USAGE_BATCH_ID))
-            .andReturn(Collections.emptyList()).once();
+        expect(controller.getScenariosNamesAssociatedWithUsageBatch(USAGE_BATCH_ID)).andReturn(List.of()).once();
         expect(controller.isBatchProcessingCompleted(USAGE_BATCH_ID)).andReturn(false).once();
         Windows.showNotificationWindow("'SAL batch' batch cannot be deleted because processing is not completed yet");
         expectLastCall().once();
@@ -200,8 +197,7 @@ public class ViewSalUsageBatchWindowTest {
         expect(grid.getSelectedItems()).andReturn(Set.of(buildUsageBatch())).once();
         expect(controller.usageDataExists(USAGE_BATCH_ID))
             .andReturn(true).once();
-        expect(controller.getScenariosNamesAssociatedWithUsageBatch(USAGE_BATCH_ID))
-            .andReturn(Collections.emptyList()).once();
+        expect(controller.getScenariosNamesAssociatedWithUsageBatch(USAGE_BATCH_ID)).andReturn(List.of()).once();
         expect(controller.isBatchProcessingCompleted(USAGE_BATCH_ID)).andReturn(true).once();
         expect(Windows.showConfirmDialog(eq("Are you sure you want to delete <i><b>'SAL batch'</b></i> usage details?"),
             anyObject())).andReturn(confirmWindowCapture).once();

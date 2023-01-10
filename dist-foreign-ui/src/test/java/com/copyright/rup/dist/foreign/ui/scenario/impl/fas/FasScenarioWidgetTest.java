@@ -53,7 +53,6 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -118,8 +117,7 @@ public class FasScenarioWidgetTest {
     public void testGridValues() {
         mockStatic(JavaScript.class);
         expect(JavaScript.getCurrent()).andReturn(createMock(JavaScript.class)).times(2);
-        expect(controller.loadBeans(0, Integer.MAX_VALUE, Collections.emptyList()))
-            .andReturn(rightsholderTotalsHolders).once();
+        expect(controller.loadBeans(0, Integer.MAX_VALUE, List.of())).andReturn(rightsholderTotalsHolders).once();
         expect(controller.getSize()).andReturn(1).once();
         replay(JavaScript.class, controller);
         Grid<?> grid = (Grid<?>) ((VerticalLayout) scenarioWidget.getContent()).getComponent(1);

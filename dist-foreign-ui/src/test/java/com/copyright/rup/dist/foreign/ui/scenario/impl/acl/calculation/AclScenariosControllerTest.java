@@ -277,7 +277,7 @@ public class AclScenariosControllerTest {
 
     @Test
     public void testCreateAclScenario() {
-        List<UsageAge> usageAges = Collections.emptyList();
+        List<UsageAge> usageAges = List.of();
         AclScenario scenario = new AclScenario();
         scenario.setUsageAges(usageAges);
         aclScenarioService.insertScenario(scenario);
@@ -330,7 +330,7 @@ public class AclScenariosControllerTest {
 
     @Test
     public void testGetPublicationTypes() {
-        List<PublicationType> publicationTypes = Collections.emptyList();
+        List<PublicationType> publicationTypes = List.of();
         expect(publicationTypeService.getPublicationTypes(ACL_PRODUCT_FAMILY)).andReturn(publicationTypes).once();
         replay(publicationTypeService);
         assertSame(publicationTypes, aclScenariosController.getPublicationTypes());
@@ -339,7 +339,7 @@ public class AclScenariosControllerTest {
 
     @Test
     public void testGetAclHistoricalPublicationTypes() {
-        List<AclPublicationType> publicationTypes = Collections.emptyList();
+        List<AclPublicationType> publicationTypes = List.of();
         expect(publicationTypeService.getAclHistoricalPublicationTypes()).andReturn(publicationTypes).once();
         replay(publicationTypeService);
         assertSame(publicationTypes, aclScenariosController.getAclHistoricalPublicationTypes());
@@ -389,7 +389,7 @@ public class AclScenariosControllerTest {
 
     @Test
     public void testGetUsageAgeWeightsByScenarioId() {
-        List<UsageAge> usageAges = Collections.emptyList();
+        List<UsageAge> usageAges = List.of();
         expect(aclScenarioService.getUsageAgeWeightsByScenarioId(SCENARIO_UID)).andReturn(usageAges).once();
         replay(aclScenarioService);
         assertSame(usageAges, aclScenariosController.getUsageAgeWeightsByScenarioId(SCENARIO_UID));
@@ -398,7 +398,7 @@ public class AclScenariosControllerTest {
 
     @Test
     public void testGetAclPublicationTypesByScenarioId() {
-        List<AclPublicationType> publicationTypes = Collections.emptyList();
+        List<AclPublicationType> publicationTypes = List.of();
         expect(aclScenarioService.getAclPublicationTypesByScenarioId(SCENARIO_UID)).andReturn(publicationTypes).once();
         replay(aclScenarioService);
         assertSame(publicationTypes, aclScenariosController.getAclPublicationTypesByScenarioId(SCENARIO_UID));
@@ -407,7 +407,7 @@ public class AclScenariosControllerTest {
 
     @Test
     public void testGetDetailLicenseeClassesByScenarioId() {
-        List<DetailLicenseeClass> licenseeClasses = Collections.emptyList();
+        List<DetailLicenseeClass> licenseeClasses = List.of();
         expect(aclScenarioService.getDetailLicenseeClassesByScenarioId(SCENARIO_UID)).andReturn(licenseeClasses).once();
         replay(aclScenarioService);
         assertSame(licenseeClasses, aclScenariosController.getDetailLicenseeClassesByScenarioId(SCENARIO_UID));

@@ -42,7 +42,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.time.LocalDate;
-import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -96,9 +96,9 @@ public class NtsScenariosControllerTest {
     @Test
     public void testGetScenarios() {
         expect(productFamilyProvider.getSelectedProductFamily()).andReturn(NTS_PRODUCT_FAMILY).once();
-        expect(scenarioService.getScenarios(NTS_PRODUCT_FAMILY)).andReturn(Collections.emptyList()).once();
+        expect(scenarioService.getScenarios(NTS_PRODUCT_FAMILY)).andReturn(List.of()).once();
         replay(scenarioService, productFamilyProvider);
-        assertEquals(Collections.emptyList(), scenariosController.getScenarios());
+        assertEquals(List.of(), scenariosController.getScenarios());
         verify(scenarioService, productFamilyProvider);
     }
 

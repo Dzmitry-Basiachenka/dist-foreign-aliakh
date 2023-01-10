@@ -41,7 +41,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -211,7 +210,7 @@ public class ForeignUiTest {
 
         @Override
         public Authentication getAuthentication() {
-            return new UsernamePasswordAuthenticationToken(USER_NAME, null, Collections.emptyList());
+            return new UsernamePasswordAuthenticationToken(USER_NAME, null, List.of());
         }
 
         @Override

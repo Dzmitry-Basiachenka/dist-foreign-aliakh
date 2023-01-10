@@ -61,7 +61,6 @@ import java.io.IOException;
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
@@ -134,7 +133,7 @@ public class WorkClassificationWindowTest {
         expect(JavaScript.getCurrent()).andReturn(createMock(JavaScript.class)).times(2);
         expect(workClassificationController.getClassificationCount(batchesIds, "")).andReturn(1).once();
         expect(workClassificationController.getClassifications(batchesIds, "", 0, Integer.MAX_VALUE,
-            Collections.emptyList())).andReturn(workClassifications).once();
+            List.of())).andReturn(workClassifications).once();
         replay(JavaScript.class, workClassificationController);
         Grid<?> grid = (Grid<?>) ((VerticalLayout) window.getContent()).getComponent(2);
         Object[][] expectedCells = {

@@ -24,6 +24,7 @@ import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.api.IMediator;
+
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
@@ -34,7 +35,6 @@ import com.vaadin.ui.themes.ValoTheme;
 
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -127,14 +127,13 @@ public class AaclScenariosWidget extends CommonScenariosWidget implements IAaclS
         fundPoolButton.addClickListener(event ->
             Windows.showModalWindow(new ViewAaclFundPoolDetailsWindow(fundPool, fundPoolDetails)));
         usageAgeWeightWidget = new ScenarioParameterWidget<>(
-            ForeignUi.getMessage("button.usage_age_weights"),
-            Collections.emptyList(), () -> new UsageAgeWeightWindow(false));
+            ForeignUi.getMessage("button.usage_age_weights"), List.of(), () -> new UsageAgeWeightWindow(false));
         publicationTypeWeightWidget = new ScenarioParameterWidget<>(
             ForeignUi.getMessage("button.publication_type_weights"),
             usageController.getPublicationTypes(), () -> new PublicationTypeWeightsWindow(false));
         licenseeClassMappingWidget = new ScenarioParameterWidget<>(
             ForeignUi.getMessage("button.licensee_class_mapping"),
-            Collections.emptyList(), () -> new AggregateLicenseeClassMappingWindow(false));
+            List.of(), () -> new AggregateLicenseeClassMappingWindow(false));
         descriptionLabel.setStyleName("v-label-white-space-normal");
         VerticalLayout metadataLayout =
             new VerticalLayout(ownerLabel, grossTotalLabel, serviceFeeTotalLabel, netTotalLabel, descriptionLabel,

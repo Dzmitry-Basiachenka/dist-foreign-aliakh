@@ -45,7 +45,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -120,7 +119,7 @@ public class NtsDrillDownByRightsholderWidgetTest {
     public void testGridValues() {
         mockStatic(JavaScript.class);
         expect(JavaScript.getCurrent()).andReturn(createMock(JavaScript.class)).times(2);
-        expect(controller.loadBeans(0, Integer.MAX_VALUE, Collections.emptyList())).andReturn(usages).once();
+        expect(controller.loadBeans(0, Integer.MAX_VALUE, List.of())).andReturn(usages).once();
         expect(controller.getSize()).andReturn(1).once();
         replay(JavaScript.class, controller);
         Grid<?> grid = (Grid<?>) ((VerticalLayout) widget.getContent()).getComponent(1);

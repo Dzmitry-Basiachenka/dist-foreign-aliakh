@@ -45,7 +45,6 @@ import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -105,7 +104,7 @@ public class AclScenarioDetailsByRightsholderWidgetTest {
         expect(JavaScript.getCurrent()).andReturn(createMock(JavaScript.class)).times(2);
         List<AclScenarioDetailDto> scenarioDetails = List.of(buildAclScenarioDetailDto());
         expect(controller.getSize()).andReturn(1).once();
-        expect(controller.loadBeans(0, Integer.MAX_VALUE, Collections.emptyList())).andReturn(scenarioDetails).once();
+        expect(controller.loadBeans(0, Integer.MAX_VALUE, List.of())).andReturn(scenarioDetails).once();
         replay(JavaScript.class, controller);
         Grid grid = (Grid) ((VerticalLayout) widget.getContent()).getComponent(1);
         DataProvider dataProvider = grid.getDataProvider();

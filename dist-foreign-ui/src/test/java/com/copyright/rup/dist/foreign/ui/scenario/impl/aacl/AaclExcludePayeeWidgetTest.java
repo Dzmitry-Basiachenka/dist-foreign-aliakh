@@ -56,7 +56,6 @@ import org.powermock.reflect.Whitebox;
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -225,7 +224,7 @@ public class AaclExcludePayeeWidgetTest {
             createMock(Supplier.class))).once();
         expect(controller.getCsvStreamSource()).andReturn(streamSource).once();
         expect(controller.getExcludePayeesFilterController()).andReturn(filterController).once();
-        expect(controller.getPayeeTotalHolders()).andReturn(Collections.emptyList()).once();
+        expect(controller.getPayeeTotalHolders()).andReturn(List.of()).once();
         expect(filterController.initWidget()).andReturn(filterWidget).once();
         replay(controller, filterController, streamSource);
         widget.init();

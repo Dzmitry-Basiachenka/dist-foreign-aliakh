@@ -35,7 +35,6 @@ import java.io.PipedOutputStream;
 import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -61,7 +60,7 @@ public class WorkSharesByAggLcClassReportControllerTest {
         Whitebox.setInternalState(controller, scenarioService);
         Whitebox.setInternalState(controller, productFamilyProvider);
         expect(productFamilyProvider.getSelectedProductFamily()).andReturn("AACL").once();
-        List<Scenario> scenarios = Collections.emptyList();
+        List<Scenario> scenarios = List.of();
         expect(scenarioService.getScenarios("AACL")).andReturn(scenarios).once();
         replay(scenarioService, productFamilyProvider);
         assertEquals(scenarios, controller.getScenarios());

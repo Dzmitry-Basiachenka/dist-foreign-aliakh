@@ -87,7 +87,7 @@ public class FasExcludeSourceRroSearchTest {
     @Before
     public void setUp() {
         IFasScenarioController scenarioController = createMock(IFasScenarioController.class);
-        expect(scenarioController.getSourceRros()).andReturn(Collections.emptyList()).once();
+        expect(scenarioController.getSourceRros()).andReturn(List.of()).once();
         replay(scenarioController);
         window = new FasExcludeSourceRroWindow(scenarioController);
         verify(scenarioController);

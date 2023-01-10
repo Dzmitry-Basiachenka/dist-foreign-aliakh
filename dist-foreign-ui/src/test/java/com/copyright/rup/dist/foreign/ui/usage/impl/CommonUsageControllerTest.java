@@ -35,7 +35,6 @@ import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -99,7 +98,7 @@ public class CommonUsageControllerTest {
 
     @Test
     public void testGetUsageBatches() {
-        expect(usageBatchService.getUsageBatches(FAS_PRODUCT_FAMILY)).andReturn(Collections.emptyList()).once();
+        expect(usageBatchService.getUsageBatches(FAS_PRODUCT_FAMILY)).andReturn(List.of()).once();
         replay(usageBatchService);
         controller.getUsageBatches(FAS_PRODUCT_FAMILY);
         verify(usageBatchService);

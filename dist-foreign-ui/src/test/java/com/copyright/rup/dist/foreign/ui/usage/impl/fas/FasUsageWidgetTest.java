@@ -68,7 +68,6 @@ import java.time.LocalDate;
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
@@ -165,7 +164,7 @@ public class FasUsageWidgetTest {
     public void testGridValues() {
         mockStatic(JavaScript.class);
         expect(JavaScript.getCurrent()).andReturn(createMock(JavaScript.class)).times(2);
-        expect(controller.loadBeans(0, Integer.MAX_VALUE, Collections.emptyList())).andReturn(usages).once();
+        expect(controller.loadBeans(0, Integer.MAX_VALUE, List.of())).andReturn(usages).once();
         expect(controller.getBeansCount()).andReturn(1).once();
         replay(JavaScript.class, controller);
         Grid<?> grid = (Grid<?>) ((VerticalLayout) usagesWidget.getSecondComponent()).getComponent(1);
@@ -302,7 +301,7 @@ public class FasUsageWidgetTest {
         assertTrue(addToScenarioButton.isDisableOnClick());
         expect(controller.getBeansCount()).andReturn(1).once();
         expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
-        expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
+        expect(controller.getInvalidRightsholders()).andReturn(List.of()).once();
         prepareCreateScenarioExpectation();
         Windows.showModalWindow(anyObject(CreateScenarioWindow.class));
         expectLastCall().once();

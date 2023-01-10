@@ -51,7 +51,7 @@ import org.powermock.reflect.Whitebox;
 
 import java.time.LocalDate;
 import java.util.AbstractMap.SimpleImmutableEntry;
-import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
 
@@ -113,9 +113,9 @@ public class FasScenariosControllerTest {
     @Test
     public void testGetScenarios() {
         expect(productFamilyProvider.getSelectedProductFamily()).andReturn(FAS_PRODUCT_FAMILY).once();
-        expect(scenarioService.getScenarios(FAS_PRODUCT_FAMILY)).andReturn(Collections.emptyList()).once();
+        expect(scenarioService.getScenarios(FAS_PRODUCT_FAMILY)).andReturn(List.of()).once();
         replay(scenarioService, productFamilyProvider);
-        assertEquals(Collections.emptyList(), scenariosController.getScenarios());
+        assertEquals(List.of(), scenariosController.getScenarios());
         verify(scenarioService, productFamilyProvider);
     }
 

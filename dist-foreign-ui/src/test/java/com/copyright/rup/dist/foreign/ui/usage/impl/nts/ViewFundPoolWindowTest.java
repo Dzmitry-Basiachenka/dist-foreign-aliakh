@@ -153,8 +153,7 @@ public class ViewFundPoolWindowTest {
         mockStatic(Windows.class);
         Button.ClickListener listener = getDeleteButtonClickListener();
         expect(grid.getSelectedItems()).andReturn(Set.of(buildUsageBatch())).once();
-        expect(controller.getAdditionalFundNamesByUsageBatchId(USAGE_BATCH_ID))
-            .andReturn(Collections.emptyList()).once();
+        expect(controller.getAdditionalFundNamesByUsageBatchId(USAGE_BATCH_ID)).andReturn(List.of()).once();
         expect(controller.getScenariosNamesAssociatedWithUsageBatch(USAGE_BATCH_ID))
             .andReturn(Arrays.asList("Scenario 1", "Scenario 2")).once();
         Windows.showNotificationWindow("Fund pool cannot be deleted because it is associated with the following " +
@@ -172,10 +171,8 @@ public class ViewFundPoolWindowTest {
         Window confirmWindowCapture = createMock(Window.class);
         Button.ClickListener listener = getDeleteButtonClickListener();
         expect(grid.getSelectedItems()).andReturn(Set.of(buildUsageBatch())).once();
-        expect(controller.getAdditionalFundNamesByUsageBatchId(USAGE_BATCH_ID))
-            .andReturn(Collections.emptyList()).once();
-        expect(controller.getScenariosNamesAssociatedWithUsageBatch(USAGE_BATCH_ID))
-            .andReturn(Collections.emptyList()).once();
+        expect(controller.getAdditionalFundNamesByUsageBatchId(USAGE_BATCH_ID)).andReturn(List.of()).once();
+        expect(controller.getScenariosNamesAssociatedWithUsageBatch(USAGE_BATCH_ID)).andReturn(List.of()).once();
         expect(controller.isBatchProcessingCompleted(USAGE_BATCH_ID)).andReturn(false).once();
         Windows.showNotificationWindow("'NTS batch' batch cannot be deleted because processing is not completed yet");
         expectLastCall().once();
@@ -192,10 +189,8 @@ public class ViewFundPoolWindowTest {
         Window confirmWindowCapture = createMock(Window.class);
         Button.ClickListener listener = getDeleteButtonClickListener();
         expect(grid.getSelectedItems()).andReturn(Set.of(buildUsageBatch())).once();
-        expect(controller.getAdditionalFundNamesByUsageBatchId(USAGE_BATCH_ID))
-            .andReturn(Collections.emptyList()).once();
-        expect(controller.getScenariosNamesAssociatedWithUsageBatch(USAGE_BATCH_ID))
-            .andReturn(Collections.emptyList()).once();
+        expect(controller.getAdditionalFundNamesByUsageBatchId(USAGE_BATCH_ID)).andReturn(List.of()).once();
+        expect(controller.getScenariosNamesAssociatedWithUsageBatch(USAGE_BATCH_ID)).andReturn(List.of()).once();
         expect(controller.isBatchProcessingCompleted(USAGE_BATCH_ID)).andReturn(true).once();
         expect(Windows.showConfirmDialog(eq("Are you sure you want to delete <i><b>'NTS batch'</b></i> fund pool?"),
             anyObject())).andReturn(confirmWindowCapture).once();

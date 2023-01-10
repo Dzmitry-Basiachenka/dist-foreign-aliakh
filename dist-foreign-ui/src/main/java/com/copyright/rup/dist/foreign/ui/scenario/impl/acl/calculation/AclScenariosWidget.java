@@ -54,7 +54,6 @@ import org.apache.commons.lang3.StringUtils;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.OffsetDateTime;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -371,7 +370,7 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
     private Component initPublicationTypeWeightWidget() {
         publicationTypeWeightWidget = new AclPublicationTypeWeightsParameterWidget(
             ForeignUi.getMessage("button.publication_type_weights"),
-            Collections.emptyList(),
+            List.of(),
             () -> {
                 publicationTypeWeightWidget.setAppliedParameters(
                     aclScenariosController.getAclPublicationTypesByScenarioId(getSelectedScenario().getId()));
