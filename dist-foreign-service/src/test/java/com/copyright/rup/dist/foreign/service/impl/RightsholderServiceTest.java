@@ -25,7 +25,6 @@ import org.powermock.api.easymock.PowerMock;
 import org.powermock.reflect.Whitebox;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
@@ -80,11 +79,9 @@ public class RightsholderServiceTest {
     @Test
     public void testGetAllWithSearch() {
         Pageable pageable = new Pageable(0, 10);
-        expect(rightsholderRepository.findAllWithSearch("10001", pageable, null))
-            .andReturn(Collections.emptyList()).once();
+        expect(rightsholderRepository.findAllWithSearch("10001", pageable, null)).andReturn(List.of()).once();
         replay(rightsholderRepository);
-        assertEquals(Collections.emptyList(),
-            rightsholderService.getAllWithSearch("10001", pageable, null));
+        assertEquals(List.of(), rightsholderService.getAllWithSearch("10001", pageable, null));
         verify(rightsholderRepository);
     }
 
@@ -150,10 +147,9 @@ public class RightsholderServiceTest {
 
     @Test
     public void testGetRightsholdersByScenarioId() {
-        expect(rightsholderRepository.findRhPayeePairByScenarioId(SCENARIO_ID)).andReturn(Collections.emptyList())
-            .once();
+        expect(rightsholderRepository.findRhPayeePairByScenarioId(SCENARIO_ID)).andReturn(List.of()).once();
         PowerMock.replay(rightsholderRepository);
-        assertEquals(Collections.emptyList(), rightsholderService.getRhPayeePairByScenarioId(SCENARIO_ID));
+        assertEquals(List.of(), rightsholderService.getRhPayeePairByScenarioId(SCENARIO_ID));
         PowerMock.verify(rightsholderRepository);
     }
 

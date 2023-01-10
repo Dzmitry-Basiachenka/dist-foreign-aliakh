@@ -25,7 +25,6 @@ import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -198,7 +197,7 @@ public class AbstractUsageJobProcessorTest {
     @Test
     public void testJobProcessSkipped() {
         expect(usageService.getUsageIdsByStatusAndProductFamily(UsageStatusEnum.NEW, FAS_PRODUCT_FAMILY))
-            .andReturn(Collections.emptyList()).once();
+            .andReturn(List.of()).once();
         replay(usageService, usageConsumer, aaclUsageService, salUsageService, successProcessor, failureProcessor);
         assertEquals(new JobInfo(JobStatusEnum.SKIPPED, "ProductFamily=FAS, Reason=There are no usages"),
             processor.jobProcess(FAS_PRODUCT_FAMILY));

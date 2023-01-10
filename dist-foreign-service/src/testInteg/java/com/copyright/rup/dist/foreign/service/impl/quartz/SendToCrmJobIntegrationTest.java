@@ -20,6 +20,7 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IScenarioRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
 import com.copyright.rup.dist.foreign.service.impl.ServiceTestHelper;
+
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Before;
 import org.junit.Test;
@@ -31,7 +32,6 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -72,7 +72,7 @@ public class SendToCrmJobIntegrationTest {
     public void testExecuteInternal() throws IOException {
         testHelper.createRestServer();
         testHelper.expectCrmCall("crm/quartz/rights_distribution_request.json",
-            "crm/quartz/rights_distribution_response.json", Collections.emptyList());
+            "crm/quartz/rights_distribution_response.json", List.of());
         JobExecutionContext jobExecutionContext = createMock(JobExecutionContext.class);
         JobInfo jobInfo = new JobInfo(JobStatusEnum.FINISHED,
             "PaidUsagesCount=2, ArchivedUsagesCount=2, NotReportedUsagesCount=0, ArchivedScenariosCount=1");
@@ -88,12 +88,12 @@ public class SendToCrmJobIntegrationTest {
         verifyScenarioStatus("612b1a40-411b-4819-9b67-cb4f6abc18eb", ScenarioStatusEnum.SENT_TO_LM);
         testHelper.assertAudit("06eae1b7-6132-4e19-b8ee-864a5ad65924",
             testHelper.loadExpectedUsageAuditItems("quartz/usage_audit_sent_to_crm.json"));
-        testHelper.assertAudit("68ffad13-55c9-424c-88f7-a4289504d217", Collections.emptyList());
+        testHelper.assertAudit("68ffad13-55c9-424c-88f7-a4289504d217", List.of());
         testHelper.assertAudit("ac4ccfee-5fb6-4f9f-870d-35b2997f288f",
             testHelper.loadExpectedUsageAuditItems("quartz/usage_audit_sent_to_crm.json"));
         testHelper.assertScenarioAudit("27755cf6-66fc-4636-862e-3d9c9f4e7a94", List.of(
             Pair.of(ScenarioActionTypeEnum.ARCHIVED, "All usages from scenario have been sent to CRM")));
-        testHelper.assertScenarioAudit("612b1a40-411b-4819-9b67-cb4f6abc18eb", Collections.emptyList());
+        testHelper.assertScenarioAudit("612b1a40-411b-4819-9b67-cb4f6abc18eb", List.of());
         testHelper.verifyRestServer();
     }
 

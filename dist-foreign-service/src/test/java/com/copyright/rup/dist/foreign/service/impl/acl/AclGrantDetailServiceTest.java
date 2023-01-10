@@ -42,7 +42,6 @@ import org.powermock.reflect.Whitebox;
 
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -189,7 +188,7 @@ public class AclGrantDetailServiceTest {
         aclGrantDetailRepository.updateGrant(capture(grantDto4));
         expectLastCall().once();
         expect(rightsholderService.updateRightsholders(Sets.newHashSet(1000014080L, 2000072827L, 2000070936L)))
-            .andReturn(Collections.emptyList()).once();
+            .andReturn(List.of()).once();
         replay(aclGrantDetailRepository, rightsholderService, udmBaselineService, prmIntegrationService);
         aclGrantDetailService.addToGrantSet(grantSet, aclGrantDetailDtos);
         verifyGrantCapture(grant1,
@@ -240,7 +239,7 @@ public class AclGrantDetailServiceTest {
         expectLastCall().once();
         aclGrantDetailRepository.updateGrant(capture(grant6));
         expectLastCall().once();
-        expect(rightsholderService.updateRightsholders(Set.of(2000072827L))).andReturn(Collections.emptyList()).once();
+        expect(rightsholderService.updateRightsholders(Set.of(2000072827L))).andReturn(List.of()).once();
         replay(aclGrantDetailRepository, rightsholderService, RupContextUtils.class);
         List<AclGrantDetailDto> aclGrantDetailDtos = Arrays.asList(
             buildGrantDto(ACL_GRANT_ID_2, 123456789L, PRINT_DIGITAL_TOU_STATUS, 2000072827L, DIGITAL_TOU, GRANT_STATUS,
@@ -279,7 +278,7 @@ public class AclGrantDetailServiceTest {
         expectLastCall().once();
         aclGrantDetailRepository.updateGrant(capture(grantDetailDtoCapture2));
         expectLastCall().once();
-        expect(rightsholderService.updateRightsholders(Set.of(2000072827L))).andReturn(Collections.emptyList()).once();
+        expect(rightsholderService.updateRightsholders(Set.of(2000072827L))).andReturn(List.of()).once();
         replay(aclGrantDetailRepository, rightsholderService, RupContextUtils.class);
         aclGrantDetailService.updateGrants(Set.of(buildGrantDto(ACL_GRANT_ID_2, 123456789L,
             PRINT_DIGITAL_TOU_STATUS, 2000072827L, DIGITAL_TOU, "DENY", true)), true);

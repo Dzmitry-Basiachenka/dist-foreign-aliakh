@@ -20,7 +20,6 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -107,7 +106,7 @@ public class SendToCrmIntegrationTestBuilder implements Builder<Runner> {
 
         public void run() {
             testHelper.createRestServer();
-            testHelper.expectCrmCall(expectedCrmRequest, crmResponse, Collections.emptyList());
+            testHelper.expectCrmCall(expectedCrmRequest, crmResponse, List.of());
             JobInfo jobInfo = usageService.sendToCrm();
             verifyJobInfo(jobInfo);
             verifyUsages();

@@ -14,7 +14,6 @@ import com.copyright.rup.dist.foreign.service.api.ILicenseeClassService;
 
 import org.junit.Test;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -55,8 +54,7 @@ public class AggregateLicenseeClassValidatorTest {
     @Test
     public void testGetErrorMessage() {
         ILicenseeClassService licenseeClassService = createMock(ILicenseeClassService.class);
-        expect(licenseeClassService.getAggregateLicenseeClasses(AACL_PRODUCT_FAMILY))
-            .andReturn(Collections.emptyList()).once();
+        expect(licenseeClassService.getAggregateLicenseeClasses(AACL_PRODUCT_FAMILY)).andReturn(List.of()).once();
         replay(licenseeClassService);
         assertEquals("Aggregate Licensee Class with such ID doesn't exist in the system",
             new AggregateLicenseeClassValidator(licenseeClassService, AACL_PRODUCT_FAMILY).getErrorMessage());

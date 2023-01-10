@@ -189,7 +189,7 @@ public class AaclUsageServiceTest {
         expect(aaclUsageRepository.findBaselinePeriods(2019, 3))
             .andReturn(Collections.emptySet()).once();
         replay(aaclUsageRepository, usageAuditService, RupContextUtils.class);
-        assertEquals(Collections.emptyList(), aaclUsageService.insertUsagesFromBaseline(buildUsageBatch()));
+        assertEquals(List.of(), aaclUsageService.insertUsagesFromBaseline(buildUsageBatch()));
         verify(aaclUsageRepository, usageAuditService, RupContextUtils.class);
     }
 
@@ -278,7 +278,7 @@ public class AaclUsageServiceTest {
     @Test
     public void testGetUsagesByIdsWithEmptyUsages() {
         replay(aaclUsageRepository);
-        assertEquals(Collections.emptyList(), aaclUsageService.getUsagesByIds(Collections.emptyList()));
+        assertEquals(List.of(), aaclUsageService.getUsagesByIds(List.of()));
         verify(aaclUsageRepository);
     }
 
@@ -497,7 +497,7 @@ public class AaclUsageServiceTest {
         List<AggregateLicenseeClass> result =
             aaclUsageService.getAggregateClassesNotToBeDistributed(FUND_POOL_ID, usageFilter, classes);
         verify(licenseeClassService, fundPoolService, aaclUsageRepository);
-        assertEquals(Collections.emptyList(), result);
+        assertEquals(List.of(), result);
     }
 
     @Test

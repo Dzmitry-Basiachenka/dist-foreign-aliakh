@@ -17,8 +17,8 @@ import com.copyright.rup.dist.foreign.integration.oracle.api.domain.OracleRhTaxI
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.service.api.IRhTaxService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
-
 import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioUsageService;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -125,7 +124,7 @@ public class RhTaxService implements IRhTaxService {
                 .thenComparing(RhTaxInformation::getProductFamily));
             return result;
         } else {
-            return Collections.emptyList();
+            return List.of();
         }
     }
 

@@ -44,7 +44,6 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.List;
@@ -242,7 +241,7 @@ public class AclScenarioServiceTest {
 
     @Test
     public void testGetUsageAgeWeightsByScenarioId() {
-        List<UsageAge> usageAges = Collections.emptyList();
+        List<UsageAge> usageAges = List.of();
         expect(aclScenarioRepository.findUsageAgeWeightsByScenarioId(SCENARIO_UID)).andReturn(usageAges).once();
         replay(aclScenarioRepository);
         assertSame(usageAges, aclScenarioService.getUsageAgeWeightsByScenarioId(SCENARIO_UID));
@@ -251,7 +250,7 @@ public class AclScenarioServiceTest {
 
     @Test
     public void testGetAclPublicationTypesByScenarioId() {
-        List<AclPublicationType> publicationTypes = Collections.emptyList();
+        List<AclPublicationType> publicationTypes = List.of();
         expect(aclScenarioRepository.findAclPublicationTypesByScenarioId(SCENARIO_UID)).andReturn(publicationTypes)
             .once();
         replay(aclScenarioRepository);
@@ -261,7 +260,7 @@ public class AclScenarioServiceTest {
 
     @Test
     public void testGetDetailLicenseeClassesByScenarioId() {
-        List<DetailLicenseeClass> licenseeClasses = Collections.emptyList();
+        List<DetailLicenseeClass> licenseeClasses = List.of();
         expect(aclScenarioRepository.findDetailLicenseeClassesByScenarioId(SCENARIO_UID)).andReturn(licenseeClasses)
             .once();
         replay(aclScenarioRepository);

@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -39,7 +38,7 @@ public class UsageBatchStatusService implements IUsageBatchStatusService {
             productFamily, LocalDate.now().minusDays(numberOfDays));
         return !batchIds.isEmpty()
             ? usageBatchStatusRepository.findUsageBatchStatusesFas(batchIds)
-            : Collections.emptyList();
+            : List.of();
     }
 
     @Override
@@ -48,7 +47,7 @@ public class UsageBatchStatusService implements IUsageBatchStatusService {
             FdaConstants.NTS_PRODUCT_FAMILY, LocalDate.now().minusDays(numberOfDays));
         return !batchIds.isEmpty()
             ? usageBatchStatusRepository.findUsageBatchStatusesNts(batchIds)
-            : Collections.emptyList();
+            : List.of();
     }
 
     @Override
@@ -57,7 +56,7 @@ public class UsageBatchStatusService implements IUsageBatchStatusService {
             FdaConstants.AACL_PRODUCT_FAMILY, LocalDate.now().minusDays(numberOfDays));
         return !batchIds.isEmpty()
             ? usageBatchStatusRepository.findUsageBatchStatusesAacl(batchIds)
-            : Collections.emptyList();
+            : List.of();
     }
 
     @Override
@@ -66,7 +65,7 @@ public class UsageBatchStatusService implements IUsageBatchStatusService {
             FdaConstants.SAL_PRODUCT_FAMILY, LocalDate.now().minusDays(numberOfDays));
         return !batchIds.isEmpty()
             ? usageBatchStatusRepository.findUsageBatchStatusesSal(batchIds)
-            : Collections.emptyList();
+            : List.of();
     }
 
     @Override

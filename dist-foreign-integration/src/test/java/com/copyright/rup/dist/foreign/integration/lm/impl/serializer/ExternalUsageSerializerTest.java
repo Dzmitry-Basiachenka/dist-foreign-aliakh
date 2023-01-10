@@ -25,7 +25,7 @@ import java.io.StringWriter;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
-import java.util.Collections;
+import java.util.List;
 
 /**
  * Verifies {@link ExternalUsageSerializer}.
@@ -79,7 +79,7 @@ public class ExternalUsageSerializerTest {
     public void testSerializeEmptyMessage() throws Exception {
         StringWriter stringWriter = new StringWriter();
         JsonGenerator jsonGenerator = new JsonFactory().createGenerator(stringWriter);
-        externalUsageSerializer.serialize(new ExternalUsageWrapper(Collections.emptyList()), jsonGenerator,
+        externalUsageSerializer.serialize(new ExternalUsageWrapper(List.of()), jsonGenerator,
             new DefaultSerializerProvider.Impl());
         jsonGenerator.close();
         assertNotNull(stringWriter);

@@ -26,7 +26,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -92,7 +91,7 @@ public class UdmValueService implements IUdmValueService {
     public List<UdmValueDto> getValueDtos(UdmValueFilter filter, Pageable pageable, Sort sort) {
         return !filter.isEmpty()
             ? udmValueRepository.findDtosByFilter(filter, pageable, sort)
-            : Collections.emptyList();
+            : List.of();
     }
 
     @Override

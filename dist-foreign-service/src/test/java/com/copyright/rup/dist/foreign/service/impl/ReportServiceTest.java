@@ -466,10 +466,10 @@ public class ReportServiceTest {
     @Test
     public void testWriteSummaryMarketCsvReport() {
         PipedOutputStream outputStream = createMock(PipedOutputStream.class);
-        fasReportRepository.writeSummaryMarketCsvReport(Collections.emptyList(), outputStream);
+        fasReportRepository.writeSummaryMarketCsvReport(List.of(), outputStream);
         expectLastCall().once();
         replay(fasReportRepository);
-        reportService.writeSummaryMarkerCsvReport(Collections.emptyList(), outputStream);
+        reportService.writeSummaryMarkerCsvReport(List.of(), outputStream);
         verify(fasReportRepository);
     }
 

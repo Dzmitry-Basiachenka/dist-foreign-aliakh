@@ -58,7 +58,6 @@ import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -312,9 +311,9 @@ public class UsageServiceTest {
         AuditFilter filter = new AuditFilter();
         Pageable pageable = new Pageable(0, 10);
         Sort sort = new Sort("detailId", Direction.DESC);
-        expect(usageRepository.findForAudit(filter, pageable, sort)).andReturn(Collections.emptyList()).once();
+        expect(usageRepository.findForAudit(filter, pageable, sort)).andReturn(List.of()).once();
         replay(usageRepository);
-        assertEquals(Collections.emptyList(), usageService.getForAudit(filter, pageable, sort));
+        assertEquals(List.of(), usageService.getForAudit(filter, pageable, sort));
         verify(usageRepository);
     }
 
@@ -552,8 +551,7 @@ public class UsageServiceTest {
     public void testUpdatePaidInfoNotFoundUsage() {
         PaidUsage paidUsage = new PaidUsage();
         paidUsage.setId(USAGE_ID_1);
-        expect(usageArchiveRepository.findByIds(List.of(USAGE_ID_1)))
-            .andReturn(Collections.emptyList()).once();
+        expect(usageArchiveRepository.findByIds(List.of(USAGE_ID_1))).andReturn(List.of()).once();
         replay(usageArchiveRepository, rightsholderService);
         usageService.updatePaidInfo(List.of(paidUsage));
         verify(usageArchiveRepository, rightsholderService);
@@ -572,7 +570,7 @@ public class UsageServiceTest {
     @Test
     public void testGetUsagesByIdsEmptyIds() {
         replay(usageRepository);
-        assertEquals(Collections.emptyList(), usageService.getUsagesByIds(Collections.emptyList()));
+        assertEquals(List.of(), usageService.getUsagesByIds(List.of()));
         verify(usageRepository);
     }
 
@@ -589,7 +587,7 @@ public class UsageServiceTest {
     @Test
     public void testGetArchivedUsagesForSendToLmByIdsEmptyIds() {
         replay(usageArchiveRepository);
-        assertEquals(Collections.emptyList(), usageService.getArchivedUsagesForSendToLmByIds(Collections.emptyList()));
+        assertEquals(List.of(), usageService.getArchivedUsagesForSendToLmByIds(List.of()));
         verify(usageArchiveRepository);
     }
 

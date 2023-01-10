@@ -11,6 +11,7 @@ import com.copyright.rup.dist.common.domain.job.JobStatusEnum;
 import com.copyright.rup.dist.common.test.liquibase.LiquibaseTestExecutionListener;
 import com.copyright.rup.dist.common.test.liquibase.TestData;
 import com.copyright.rup.dist.foreign.service.impl.ServiceTestHelper;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,7 +22,6 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -71,7 +71,7 @@ public class GetRightsSentForRaJobIntegrationTest {
         testHelper.assertUsages(testHelper.loadExpectedUsages("quartz/usages_122824345_465159524.json"));
         testHelper.assertAuditIgnoringOrder("14c3d141-5475-4789-8fe4-ecae63a2d262",
             testHelper.loadExpectedUsageAuditItems("quartz/usage_audit_122824345.json"));
-        testHelper.assertAudit("e878dfa2-31d8-4506-a7fd-1f4778d406e6", Collections.emptyList());
+        testHelper.assertAudit("e878dfa2-31d8-4506-a7fd-1f4778d406e6", List.of());
         testHelper.verifyRestServer();
     }
 }

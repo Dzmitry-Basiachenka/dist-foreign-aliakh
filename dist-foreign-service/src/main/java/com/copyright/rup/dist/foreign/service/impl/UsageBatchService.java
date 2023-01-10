@@ -30,7 +30,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
@@ -164,7 +163,7 @@ public class UsageBatchService implements IUsageBatchService {
         aaclUsageService.insertUsages(usageBatch, uploadedUsages);
         List<String> baselineUsageIds = 0 < Objects.requireNonNull(usageBatch.getNumberOfBaselineYears())
             ? aaclUsageService.insertUsagesFromBaseline(usageBatch)
-            : Collections.emptyList();
+            : List.of();
         usageBatchRepository.updateInitialUsagesCount(uploadedUsages.size() + baselineUsageIds.size(),
             usageBatch.getId(), userName);
         LOGGER.info("Insert AACL batch. Finished. UsageBatchName={}, UserName={}, UploadedCount={}, BaselineCount={}",

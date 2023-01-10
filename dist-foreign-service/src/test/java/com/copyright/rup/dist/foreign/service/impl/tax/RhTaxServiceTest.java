@@ -42,7 +42,6 @@ import org.powermock.reflect.Whitebox;
 import java.io.IOException;
 import java.time.OffsetDateTime;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -206,9 +205,9 @@ public class RhTaxServiceTest {
     @Test
     public void testGetRhTaxInformationWithNoUsagesInScenariosFasFas2() {
         expect(usageService.getRightsholderPayeeProductFamilyHoldersByScenarioIds(SCENARIO_IDS))
-            .andReturn(Collections.emptyList()).once();
+            .andReturn(List.of()).once();
         replay(usageService, prmIntegrationService, oracleRhTaxInformationService);
-        assertEquals(Collections.emptyList(), rhTaxService.getRhTaxInformation(FAS_PRODUCT_FAMILY, SCENARIO_IDS, 1));
+        assertEquals(List.of(), rhTaxService.getRhTaxInformation(FAS_PRODUCT_FAMILY, SCENARIO_IDS, 1));
         verify(usageService, prmIntegrationService, oracleRhTaxInformationService);
     }
 
@@ -279,9 +278,9 @@ public class RhTaxServiceTest {
     @Test
     public void testGetRhTaxInformationWithNoUsagesInScenariosAcl() {
         expect(aclScenarioUsageService.getRightsholderPayeeProductFamilyHoldersByAclScenarioIds(SCENARIO_IDS))
-            .andReturn(Collections.emptyList()).once();
+            .andReturn(List.of()).once();
         replay(aclScenarioUsageService, prmIntegrationService, oracleRhTaxInformationService);
-        assertEquals(Collections.emptyList(), rhTaxService.getRhTaxInformation(ACL_PRODUCT_FAMILY, SCENARIO_IDS, 1));
+        assertEquals(List.of(), rhTaxService.getRhTaxInformation(ACL_PRODUCT_FAMILY, SCENARIO_IDS, 1));
         verify(aclScenarioUsageService, prmIntegrationService, oracleRhTaxInformationService);
     }
 

@@ -12,9 +12,10 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IRightsService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
-
 import com.copyright.rup.dist.foreign.service.impl.ServiceTestHelper;
+
 import com.google.common.collect.Sets;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,7 +24,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -89,8 +89,7 @@ public class RightsAssignmentServiceIntegrationTest {
             List<UsageAuditItem> auditItems = usageAuditService.getUsageAudit(usageId);
             assertEquals(AUDIT_MESSAGE, auditItems.get(0).getActionReason());
         });
-        assertEquals(Collections.emptyList(),
-            usageRepository.findIdsByStatusAndProductFamily(UsageStatusEnum.NTS_WITHDRAWN, "SAL"));
+        assertEquals(List.of(), usageRepository.findIdsByStatusAndProductFamily(UsageStatusEnum.NTS_WITHDRAWN, "SAL"));
     }
 
     private void assertSentForRaUsages() {
@@ -102,7 +101,6 @@ public class RightsAssignmentServiceIntegrationTest {
                 List<UsageAuditItem> auditItems = usageAuditService.getUsageAudit(usageId);
                 assertEquals("Sent for RA: job name 'SENT_FOR_RA_TEST'", auditItems.get(0).getActionReason());
             });
-        assertEquals(Collections.emptyList(),
-            usageRepository.findIdsByStatusAndProductFamily(UsageStatusEnum.SENT_FOR_RA, "SAL"));
+        assertEquals(List.of(), usageRepository.findIdsByStatusAndProductFamily(UsageStatusEnum.SENT_FOR_RA, "SAL"));
     }
 }

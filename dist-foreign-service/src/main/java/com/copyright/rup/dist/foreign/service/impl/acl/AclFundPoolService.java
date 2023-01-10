@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -88,7 +87,7 @@ public class AclFundPoolService implements IAclFundPoolService {
 
     @Override
     public List<AclFundPoolDetailDto> getDtosByFilter(AclFundPoolDetailFilter filter) {
-        return !filter.isEmpty() ? fundPoolRepository.findDtosByFilter(filter) : Collections.emptyList();
+        return !filter.isEmpty() ? fundPoolRepository.findDtosByFilter(filter) : List.of();
     }
 
     @Override

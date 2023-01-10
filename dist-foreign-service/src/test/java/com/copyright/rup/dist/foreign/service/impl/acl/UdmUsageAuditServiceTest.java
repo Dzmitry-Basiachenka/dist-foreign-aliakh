@@ -19,7 +19,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -63,7 +62,7 @@ public class UdmUsageAuditServiceTest {
 
     @Test
     public void testGetUdmUsageAudit() {
-        List<UsageAuditItem> auditItems = Collections.emptyList();
+        List<UsageAuditItem> auditItems = List.of();
         expect(udmUsageAuditRepository.findByUdmUsageId(UDM_USAGE_UID)).andReturn(auditItems).once();
         replay(udmUsageAuditRepository);
         assertSame(auditItems, udmUsageAuditService.getUdmUsageAudit(UDM_USAGE_UID));

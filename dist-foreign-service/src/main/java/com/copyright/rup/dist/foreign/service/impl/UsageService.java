@@ -49,7 +49,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -168,7 +167,7 @@ public class UsageService implements IUsageService {
     public List<PayeeTotalHolder> getPayeeTotalHoldersByFilter(ExcludePayeeFilter filter) {
         return !filter.isEmpty()
             ? usageRepository.findPayeeTotalHoldersByFilter(filter)
-            : Collections.emptyList();
+            : List.of();
     }
 
     @Override
@@ -345,21 +344,21 @@ public class UsageService implements IUsageService {
     public List<Usage> getUsagesByIds(List<String> usageIds) {
         return CollectionUtils.isNotEmpty(usageIds)
             ? usageRepository.findByIds(usageIds)
-            : Collections.emptyList();
+            : List.of();
     }
 
     @Override
     public List<Usage> getArchivedUsagesByIds(List<String> usageIds) {
         return CollectionUtils.isNotEmpty(usageIds)
             ? usageArchiveRepository.findByIds(usageIds)
-            : Collections.emptyList();
+            : List.of();
     }
 
     @Override
     public List<Usage> getArchivedUsagesForSendToLmByIds(List<String> usageIds) {
         return CollectionUtils.isNotEmpty(usageIds)
             ? usageArchiveRepository.findForSendToLmByIds(usageIds)
-            : Collections.emptyList();
+            : List.of();
     }
 
     @Override

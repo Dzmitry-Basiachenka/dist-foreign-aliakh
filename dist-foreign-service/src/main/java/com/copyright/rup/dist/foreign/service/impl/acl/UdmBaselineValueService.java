@@ -10,7 +10,6 @@ import com.copyright.rup.dist.foreign.service.api.acl.IUdmBaselineValueService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -37,7 +36,7 @@ public class UdmBaselineValueService implements IUdmBaselineValueService {
     public List<UdmValueBaselineDto> getValueDtos(UdmBaselineValueFilter filter, Pageable pageable, Sort sort) {
         return !filter.isEmpty()
             ? repository.findDtosByFilter(filter, pageable, sort)
-            : Collections.emptyList();
+            : List.of();
     }
 
     @Override

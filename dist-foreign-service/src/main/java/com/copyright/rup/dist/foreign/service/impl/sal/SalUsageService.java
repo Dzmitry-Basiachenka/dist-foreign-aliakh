@@ -43,7 +43,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -95,7 +94,7 @@ public class SalUsageService implements ISalUsageService {
     public List<UsageDto> getUsageDtos(UsageFilter filter, Pageable pageable, Sort sort) {
         return !filter.isEmpty()
             ? salUsageRepository.findDtosByFilter(filter, pageable, sort)
-            : Collections.emptyList();
+            : List.of();
     }
 
     @Override
@@ -192,7 +191,7 @@ public class SalUsageService implements ISalUsageService {
     public List<Usage> getUsagesByIds(List<String> usageIds) {
         return CollectionUtils.isNotEmpty(usageIds)
             ? salUsageRepository.findByIds(usageIds)
-            : Collections.emptyList();
+            : List.of();
     }
 
     @Override
