@@ -23,7 +23,6 @@ import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -176,7 +175,7 @@ public class AaclUsageRepository extends BaseRepository implements IAaclUsageRep
     @Override
     public List<Long> findInvalidRightsholdersByFilter(UsageFilter filter) {
         return selectList("IAaclUsageMapper.findInvalidRightsholdersByFilter",
-            Collections.singletonMap(FILTER_KEY, Objects.requireNonNull(filter)));
+            Map.of(FILTER_KEY, Objects.requireNonNull(filter)));
     }
 
     @Override
@@ -311,7 +310,7 @@ public class AaclUsageRepository extends BaseRepository implements IAaclUsageRep
     @Override
     public void deleteLockedByScenarioId(String scenarioId) {
         delete("IAaclUsageMapper.deleteLockedByScenarioId",
-            Collections.singletonMap(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId)));
+            Map.of(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId)));
     }
 
     @Override

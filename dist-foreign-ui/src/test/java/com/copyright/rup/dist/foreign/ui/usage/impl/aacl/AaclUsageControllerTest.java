@@ -461,7 +461,7 @@ public class AaclUsageControllerTest {
     @Test
     public void testGetBatchesNamesToScenariosNames() {
         Set<String> batchIds = Set.of("5d4f7674-4f0a-404e-ad23-7096b667402b");
-        Map<String, String> batchToScenarioNames = Collections.singletonMap("batch name", "scenario name");
+        Map<String, String> batchToScenarioNames = Map.of("batch name", "scenario name");
         expect(usageBatchService.getBatchesNamesToScenariosNames(batchIds)).andReturn(batchToScenarioNames).once();
         replay(usageBatchService);
         assertEquals(batchToScenarioNames, controller.getBatchesNamesToScenariosNames(batchIds));

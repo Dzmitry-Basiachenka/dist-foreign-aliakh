@@ -152,7 +152,7 @@ public class PrmIntegrationServiceTest {
         Country country = new Country();
         country.setIsoCode("BLR");
         country.setName("Belarus");
-        Map<String, Country> countries = Collections.singletonMap("BY", country);
+        Map<String, Country> countries = Map.of("BY", country);
         expect(prmCountryService.getCountries()).andReturn(countries);
         replay(prmCountryService);
         assertEquals(countries, prmIntegrationService.getCountries());
