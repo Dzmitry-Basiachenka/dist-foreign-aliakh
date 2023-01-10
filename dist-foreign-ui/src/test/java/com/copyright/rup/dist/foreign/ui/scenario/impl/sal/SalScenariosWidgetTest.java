@@ -50,6 +50,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Verifies {@link SalScenariosWidget}.
@@ -157,7 +158,7 @@ public class SalScenariosWidgetTest {
     public void testRefreshSelectedScenario() {
         Grid grid = createMock(Grid.class);
         Whitebox.setInternalState(scenariosWidget, GRID_ID, grid);
-        expect(grid.getSelectedItems()).andReturn(Collections.singleton(scenario)).once();
+        expect(grid.getSelectedItems()).andReturn(Set.of(scenario)).once();
         expect(controller.getScenarioWithAmountsAndLastAction(scenario)).andReturn(scenario).once();
         expect(controller.getCriteriaHtmlRepresentation()).andReturn(SELECTION_CRITERIA).once();
         expect(controller.getFundPoolName(FUND_POOL_ID)).andReturn(FUND_POOL_NAME).once();
@@ -171,7 +172,7 @@ public class SalScenariosWidgetTest {
     public void testGetSelectedScenario() {
         Grid grid = createMock(Grid.class);
         Whitebox.setInternalState(scenariosWidget, GRID_ID, grid);
-        expect(grid.getSelectedItems()).andReturn(Collections.singleton(scenario)).once();
+        expect(grid.getSelectedItems()).andReturn(Set.of(scenario)).once();
         replay(grid);
         assertEquals(scenario, scenariosWidget.getSelectedScenario());
         verify(grid);

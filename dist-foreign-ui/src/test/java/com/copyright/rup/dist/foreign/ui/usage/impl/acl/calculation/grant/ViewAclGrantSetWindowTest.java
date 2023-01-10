@@ -49,6 +49,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Verifies {@link ViewAclGrantSetWindow}.
@@ -120,7 +121,7 @@ public class ViewAclGrantSetWindowTest {
         mockStatic(Windows.class);
         Window confirmWindowCapture = createMock(Window.class);
         Button.ClickListener listener = getDeleteButtonClickListener();
-        expect(aclGrantSetGrid.getSelectedItems()).andReturn(Collections.singleton(buildAclGrantSet())).once();
+        expect(aclGrantSetGrid.getSelectedItems()).andReturn(Set.of(buildAclGrantSet())).once();
         expect(controller.getScenarioNamesAssociatedWithGrantSet(GRANT_SET_ID))
             .andReturn(Collections.EMPTY_LIST).once();
         expect(Windows.showConfirmDialog(
@@ -136,7 +137,7 @@ public class ViewAclGrantSetWindowTest {
         mockStatic(Windows.class);
         Window confirmWindowCapture = createMock(Window.class);
         Button.ClickListener listener = getDeleteButtonClickListener();
-        expect(aclGrantSetGrid.getSelectedItems()).andReturn(Collections.singleton(buildAclGrantSet())).once();
+        expect(aclGrantSetGrid.getSelectedItems()).andReturn(Set.of(buildAclGrantSet())).once();
         expect(controller.getScenarioNamesAssociatedWithGrantSet(GRANT_SET_ID))
             .andReturn(SCENARIO_NAMES).once();
         Windows.showNotificationWindow(

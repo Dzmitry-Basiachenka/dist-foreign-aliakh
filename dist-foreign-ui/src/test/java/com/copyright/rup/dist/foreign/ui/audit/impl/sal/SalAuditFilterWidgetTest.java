@@ -37,8 +37,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Verifies {@link SalAuditFilterWidget}.
@@ -102,10 +102,10 @@ public class SalAuditFilterWidgetTest {
         AuditFilter auditFilter = new AuditFilter();
         auditFilter.setProductFamily("SAL");
         assertEquals(auditFilter, widget.getAppliedFilter());
-        auditFilter.setRhAccountNumbers(Collections.singleton(1000018380L));
-        auditFilter.setLicenseeAccountNumbers(Collections.singleton(1114L));
-        auditFilter.setBatchesIds(Collections.singleton("8f8fbc50-4ad9-4103-af71-7d96b558a81a"));
-        auditFilter.setStatuses(Collections.singleton(UsageStatusEnum.ELIGIBLE));
+        auditFilter.setRhAccountNumbers(Set.of(1000018380L));
+        auditFilter.setLicenseeAccountNumbers(Set.of(1114L));
+        auditFilter.setBatchesIds(Set.of("8f8fbc50-4ad9-4103-af71-7d96b558a81a"));
+        auditFilter.setStatuses(Set.of(UsageStatusEnum.ELIGIBLE));
         auditFilter.setCccEventId("53256");
         auditFilter.setDistributionName("SAL December 2020");
         auditFilter.setSearchValue("Limited");

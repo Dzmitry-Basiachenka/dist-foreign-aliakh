@@ -65,7 +65,7 @@ public class AclFundPoolNameFilterWidgetTest {
     @Test
     public void testOnSave() {
         FilterSaveEvent<AclFundPool> filterSaveEvent = createMock(FilterSaveEvent.class);
-        Set<AclFundPool> fundPools = Collections.singleton(new AclFundPool());
+        Set<AclFundPool> fundPools = Set.of(new AclFundPool());
         expect(filterSaveEvent.getSelectedItemsIds()).andReturn(fundPools).once();
         replay(filterSaveEvent);
         aclFundPoolNameFilterWidget.onSave(filterSaveEvent);

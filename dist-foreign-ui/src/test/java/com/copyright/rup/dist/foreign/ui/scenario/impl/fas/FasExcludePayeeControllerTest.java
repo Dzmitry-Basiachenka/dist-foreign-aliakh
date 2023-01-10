@@ -23,7 +23,6 @@ import org.junit.runner.RunWith;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -61,8 +60,8 @@ public class FasExcludePayeeControllerTest {
 
     @Test
     public void testRedesignateDetails() {
-        Set<Long> accountNumbers = Collections.singleton(2000017566L);
-        Set<String> scenarioIds = Collections.singleton(SCENARIO_ID);
+        Set<Long> accountNumbers = Set.of(2000017566L);
+        Set<String> scenarioIds = Set.of(SCENARIO_ID);
         ExcludePayeeFilter filter = new ExcludePayeeFilter();
         filter.setScenarioIds(scenarioIds);
         expect(filterController.getWidget()).andReturn(filterWidget).once();
@@ -76,8 +75,8 @@ public class FasExcludePayeeControllerTest {
 
     @Test
     public void testExcludeDetails() {
-        Set<Long> accountNumbers = Collections.singleton(2000017566L);
-        Set<String> scenarioIds = Collections.singleton(SCENARIO_ID);
+        Set<Long> accountNumbers = Set.of(2000017566L);
+        Set<String> scenarioIds = Set.of(SCENARIO_ID);
         ExcludePayeeFilter filter = new ExcludePayeeFilter();
         filter.setScenarioIds(scenarioIds);
         expect(filterController.getWidget()).andReturn(filterWidget).once();
@@ -91,8 +90,8 @@ public class FasExcludePayeeControllerTest {
 
     @Test
     public void testGetAccountNumbersInvalidForExclude() {
-        Set<Long> accountNumbers = Collections.singleton(2000017566L);
-        Set<String> scenarioIds = Collections.singleton(SCENARIO_ID);
+        Set<Long> accountNumbers = Set.of(2000017566L);
+        Set<String> scenarioIds = Set.of(SCENARIO_ID);
         ExcludePayeeFilter filter = new ExcludePayeeFilter();
         filter.setScenarioIds(scenarioIds);
         expect(filterController.getWidget()).andReturn(filterWidget).once();

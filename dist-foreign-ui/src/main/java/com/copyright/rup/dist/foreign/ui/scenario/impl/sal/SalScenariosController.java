@@ -24,7 +24,6 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -58,8 +57,7 @@ public class SalScenariosController extends CommonScenariosController implements
     @Override
     public List<Scenario> getApprovedScenarios() {
         return getScenarioService().getScenariosByProductFamiliesAndStatuses(
-            Collections.singleton(getProductFamilyProvider().getSelectedProductFamily()),
-            Collections.singleton(ScenarioStatusEnum.APPROVED));
+            Set.of(getProductFamilyProvider().getSelectedProductFamily()), Set.of(ScenarioStatusEnum.APPROVED));
     }
 
     @Override

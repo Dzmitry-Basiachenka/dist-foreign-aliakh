@@ -23,7 +23,6 @@ import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -70,7 +69,7 @@ public class AaclExcludePayeeControllerTest {
         expect(usageService.getPayeeTotalHoldersByFilter(filter)).andReturn(payeeTotalHolders).once();
         replay(usageService, widget, filterWidget, filterController);
         assertEquals(payeeTotalHolders, controller.getPayeeTotalHolders());
-        assertEquals(Collections.singleton(scenario.getId()), filter.getScenarioIds());
+        assertEquals(Set.of(scenario.getId()), filter.getScenarioIds());
         verify(usageService, widget, filterWidget, filterController);
     }
 
@@ -86,7 +85,7 @@ public class AaclExcludePayeeControllerTest {
 
     @Test
     public void testExcludeDetails() {
-        Set<Long> payees = Collections.singleton(2000017002L);
+        Set<Long> payees = Set.of(2000017002L);
         String reason = "REASON";
         usageService.excludeDetailsFromScenarioByPayees(SCENARIO_ID, payees, reason);
         expectLastCall().once();

@@ -31,6 +31,7 @@ import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -45,6 +46,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -105,7 +107,7 @@ public class ViewSalFundPoolWindowTest {
         Grid<FundPool> grid = createMock(Grid.class);
         Whitebox.setInternalState(viewSalFundPoolWindow, "grid", grid);
         Button.ClickListener listener = getButtonClickListener(0);
-        expect(grid.getSelectedItems()).andReturn(Collections.singleton(fundPool)).once();
+        expect(grid.getSelectedItems()).andReturn(Set.of(fundPool)).once();
         expect(controller.getScenarioNameAssociatedWithFundPool(FUND_POOL_ID)).andReturn(null).once();
         expect(Windows.showConfirmDialog(
             eq("Are you sure you want to delete <i><b>'SAL Fund Pool'</b></i> fund pool?"), anyObject()))
@@ -121,7 +123,7 @@ public class ViewSalFundPoolWindowTest {
         Grid<FundPool> grid = createMock(Grid.class);
         Whitebox.setInternalState(viewSalFundPoolWindow, "grid", grid);
         Button.ClickListener listener = getButtonClickListener(0);
-        expect(grid.getSelectedItems()).andReturn(Collections.singleton(fundPool)).once();
+        expect(grid.getSelectedItems()).andReturn(Set.of(fundPool)).once();
         expect(controller.getScenarioNameAssociatedWithFundPool(FUND_POOL_ID)).andReturn("Scenario 1").once();
         Windows.showNotificationWindow(
             eq("Fund pool cannot be deleted because it is associated with the following scenario: Scenario 1"));

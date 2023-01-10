@@ -41,8 +41,8 @@ import org.powermock.reflect.Whitebox;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Verifies {@link AclGrantDetailFiltersWindow}.
@@ -331,9 +331,9 @@ public class AclGrantDetailFiltersWindowTest {
 
     private AclGrantDetailFilter buildExpectedFilter() {
         AclGrantDetailFilter aclGrantDetailFilter = new AclGrantDetailFilter();
-        aclGrantDetailFilter.setLicenseTypes(Collections.singleton(LICENSE_TYPE));
-        aclGrantDetailFilter.setGrantStatuses(Collections.singleton(GRANT_STATUS));
-        aclGrantDetailFilter.setTypeOfUses(Collections.singleton(TYPE_OF_USE));
+        aclGrantDetailFilter.setLicenseTypes(Set.of(LICENSE_TYPE));
+        aclGrantDetailFilter.setGrantStatuses(Set.of(GRANT_STATUS));
+        aclGrantDetailFilter.setTypeOfUses(Set.of(TYPE_OF_USE));
         aclGrantDetailFilter.setGrantSetPeriod(GRANT_SET_PERIOD);
         aclGrantDetailFilter.setWrWrkInstExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, WR_WRK_INST, null));
@@ -390,9 +390,9 @@ public class AclGrantDetailFiltersWindowTest {
     @SuppressWarnings(UNCHECKED)
     private void populateData() {
         AclGrantDetailFilter aclGrantDetailFilter = Whitebox.getInternalState(window, "aclGrantDetailFilter");
-        aclGrantDetailFilter.setLicenseTypes(Collections.singleton(LICENSE_TYPE));
-        aclGrantDetailFilter.setGrantStatuses(Collections.singleton(GRANT_STATUS));
-        aclGrantDetailFilter.setTypeOfUses(Collections.singleton(TYPE_OF_USE));
+        aclGrantDetailFilter.setLicenseTypes(Set.of(LICENSE_TYPE));
+        aclGrantDetailFilter.setGrantStatuses(Set.of(GRANT_STATUS));
+        aclGrantDetailFilter.setTypeOfUses(Set.of(TYPE_OF_USE));
         populateComboBox("grantSetPeriodComboBox", GRANT_SET_PERIOD);
         populateTextField("wrWrkInstFromField", String.valueOf(WR_WRK_INST));
         populateComboBox("wrWrkInstOperatorComboBox", FilterOperatorEnum.EQUALS);

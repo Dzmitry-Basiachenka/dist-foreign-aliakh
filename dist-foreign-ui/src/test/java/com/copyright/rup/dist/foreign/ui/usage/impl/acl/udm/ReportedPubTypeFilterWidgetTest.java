@@ -26,6 +26,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Verifies {@link ReportedPubTypeFilterWidget}.
@@ -64,7 +65,7 @@ public class ReportedPubTypeFilterWidgetTest {
     @Test
     public void testOnSave() {
         FilterSaveEvent filterSaveEvent = createMock(FilterSaveEvent.class);
-        expect(filterSaveEvent.getSelectedItemsIds()).andReturn(Collections.singleton(REPORTED_PUB_TYPE)).once();
+        expect(filterSaveEvent.getSelectedItemsIds()).andReturn(Set.of(REPORTED_PUB_TYPE)).once();
         replay(filterSaveEvent);
         reportedPubTypeFilterWidget.onSave(filterSaveEvent);
         verify(filterSaveEvent);

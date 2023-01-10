@@ -28,8 +28,8 @@ import com.vaadin.ui.Window;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Window for uploading a SAL usage data.
@@ -70,7 +70,7 @@ public class UsageDataUploadWindow extends Window {
         if (isValid()) {
             UsageBatch batch = itemBankComboBox.getSelectedItem().get();
             if (!usagesController.usageDataExists(batch.getId())) {
-                if (usagesController.getIneligibleBatchesNames(Collections.singleton(batch.getId())).isEmpty()) {
+                if (usagesController.getIneligibleBatchesNames(Set.of(batch.getId())).isEmpty()) {
                     uploadUsageData();
                 } else {
                     Windows.showNotificationWindow(

@@ -69,7 +69,6 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -385,7 +384,7 @@ public class UdmEditMultipleUsagesWindowTest {
         Map<UdmUsageDto, UdmUsageAuditFieldToValuesMap> udmUsageDtoToFieldValuesMap =
             ImmutableMap.of(udmUsageDto, fieldToValuesMap);
         CompanyInformation companyInformation = buildCompanyInformation();
-        udmUsages = Collections.singleton(buildUdmUsageDto());
+        udmUsages = Set.of(buildUdmUsageDto());
         mockStatic(ForeignSecurityUtils.class);
         expect(ForeignSecurityUtils.hasResearcherPermission()).andStubReturn(false);
         binder = createMock(Binder.class);
@@ -442,7 +441,7 @@ public class UdmEditMultipleUsagesWindowTest {
         CompanyInformation companyInformation = buildCompanyInformation();
         UdmUsageDto selectedUsage = buildUdmUsageDto();
         selectedUsage.setBaselineFlag(true);
-        udmUsages = Collections.singleton(selectedUsage);
+        udmUsages = Set.of(selectedUsage);
         mockStatic(Windows.class);
         mockStatic(ForeignSecurityUtils.class);
         expect(ForeignSecurityUtils.hasResearcherPermission()).andStubReturn(false);
@@ -741,8 +740,7 @@ public class UdmEditMultipleUsagesWindowTest {
             Arrays.asList(UsageStatusEnum.NEW, UsageStatusEnum.ELIGIBLE, UsageStatusEnum.INELIGIBLE,
                 UsageStatusEnum.OPS_REVIEW, UsageStatusEnum.SPECIALIST_REVIEW));
         verifyTextFieldLayout(verticalLayout.getComponent(1), "Period (YYYYMM)");
-        verifyComboBoxLayout(verticalLayout.getComponent(2), "Detail Licensee Class", true,
-            Collections.singleton(LICENSEE_CLASS));
+        verifyComboBoxLayout(verticalLayout.getComponent(2), "Detail Licensee Class", true, Set.of(LICENSEE_CLASS));
         verifyCompanyIdLayout(verticalLayout.getComponent(3));
         verifyTextFieldLayout(verticalLayout.getComponent(4), "Company Name");
         verifyTextFieldLayout(verticalLayout.getComponent(5), "Wr Wrk Inst");
@@ -893,7 +891,7 @@ public class UdmEditMultipleUsagesWindowTest {
     private void setExpectedData(UdmUsageDto actualUsage, UdmUsageDto newUsage,
                                  UdmUsageAuditFieldToValuesMap fieldToValuesMap)
         throws ValidationException {
-        udmUsages = Collections.singleton(actualUsage);
+        udmUsages = Set.of(actualUsage);
         mockStatic(ForeignSecurityUtils.class);
         expect(ForeignSecurityUtils.hasResearcherPermission()).andStubReturn(false);
         binder = createMock(Binder.class);

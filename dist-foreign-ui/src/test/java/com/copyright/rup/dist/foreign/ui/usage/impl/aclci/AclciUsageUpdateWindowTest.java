@@ -42,6 +42,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -103,7 +104,7 @@ public class AclciUsageUpdateWindowTest {
         assertEquals(1, CollectionUtils.size(listeners));
         Button.ClickListener listener = (Button.ClickListener) listeners.iterator().next();
         UsageDto selectedUsage = new UsageDto();
-        expect(usagesGrid.getSelectedItems()).andReturn(Collections.singleton(selectedUsage)).once();
+        expect(usagesGrid.getSelectedItems()).andReturn(Set.of(selectedUsage)).once();
         Windows.showModalWindow(anyObject(AclciMultipleEditUsagesWindow.class));
         expectLastCall().once();
         replay(usagesGrid, Windows.class);

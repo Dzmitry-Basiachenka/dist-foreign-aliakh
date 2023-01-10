@@ -62,7 +62,6 @@ import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -270,7 +269,7 @@ public class SalUsageControllerTest {
 
     @Test
     public void testGetIneligibleBatchesNames() {
-        Set<String> batchIds = Collections.singleton("0ddb1cbf-4516-40b2-bffa-33d8876fa774");
+        Set<String> batchIds = Set.of("0ddb1cbf-4516-40b2-bffa-33d8876fa774");
         List<String> batchNames = List.of("batch name");
         expect(usageBatchService.getIneligibleBatchesNames(batchIds)).andReturn(batchNames).once();
         replay(usageBatchService);
@@ -280,7 +279,7 @@ public class SalUsageControllerTest {
 
     @Test
     public void testGetProcessingBatchesNames() {
-        Set<String> batchIds = Collections.singleton("7709a5ef-72b7-406c-8428-3422833f6e46");
+        Set<String> batchIds = Set.of("7709a5ef-72b7-406c-8428-3422833f6e46");
         List<String> batchNames = List.of("batch name");
         expect(usageBatchService.getProcessingSalBatchesNames(batchIds)).andReturn(batchNames).once();
         replay(usageBatchService);
@@ -413,7 +412,7 @@ public class SalUsageControllerTest {
     @Test
     public void testGetSelectedUsageBatch() {
         String batchId = "5b5793c4-6efc-494c-be2a-ffd1b0564bf8";
-        usageFilter.setUsageBatchesIds(Collections.singleton(batchId));
+        usageFilter.setUsageBatchesIds(Set.of(batchId));
         expect(filterController.getWidget()).andReturn(filterWidget).once();
         expect(filterWidget.getAppliedFilter()).andReturn(usageFilter).once();
         UsageBatch usageBatch = new UsageBatch();
@@ -442,7 +441,7 @@ public class SalUsageControllerTest {
 
     @Test
     public void testGetUsageDtosForRhUpdate() {
-        usageFilter.setUsageBatchesIds(Collections.singleton("05e79246-1289-4652-aac6-d69fec90c091"));
+        usageFilter.setUsageBatchesIds(Set.of("05e79246-1289-4652-aac6-d69fec90c091"));
         expect(filterController.getWidget()).andReturn(filterWidget).once();
         expect(filterWidget.getAppliedFilter()).andReturn(usageFilter).once();
         expect(salUsageService.getUsageDtos(eq(usageFilter), isNull(), isNull()))
@@ -456,10 +455,10 @@ public class SalUsageControllerTest {
 
     @Test
     public void testUpdateToEligibleWithRhAccountNumber() {
-        salUsageService.updateToEligibleWithRhAccountNumber(Collections.singleton(USAGE_ID), RH_ACCOUNT_NUMBER, REASON);
+        salUsageService.updateToEligibleWithRhAccountNumber(Set.of(USAGE_ID), RH_ACCOUNT_NUMBER, REASON);
         expectLastCall().once();
         replay(salUsageService);
-        controller.updateToEligibleWithRhAccountNumber(Collections.singleton(USAGE_ID), RH_ACCOUNT_NUMBER, REASON);
+        controller.updateToEligibleWithRhAccountNumber(Set.of(USAGE_ID), RH_ACCOUNT_NUMBER, REASON);
         verify(salUsageService);
     }
 }

@@ -70,6 +70,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Verifies {@link AaclScenariosWidget}.
@@ -187,7 +188,7 @@ public class AaclScenariosWidgetTest {
         Whitebox.setInternalState(scenariosWidget, GRID_ID, grid);
         FundPool fundPool = buildFundPool();
         List<FundPoolDetail> fundPoolDetails = buildFundPoolDetail();
-        expect(grid.getSelectedItems()).andReturn(Collections.singleton(scenario)).once();
+        expect(grid.getSelectedItems()).andReturn(Set.of(scenario)).once();
         expect(controller.getScenarioWithAmountsAndLastAction(scenario)).andReturn(scenario).once();
         expect(controller.getDetailLicenseeClassesByScenarioId(SCENARIO_ID)).andReturn(buildDetailLicenseeClasses())
             .once();
@@ -207,7 +208,7 @@ public class AaclScenariosWidgetTest {
     public void testGetSelectedScenario() {
         Grid grid = createMock(Grid.class);
         Whitebox.setInternalState(scenariosWidget, GRID_ID, grid);
-        expect(grid.getSelectedItems()).andReturn(Collections.singleton(scenario)).once();
+        expect(grid.getSelectedItems()).andReturn(Set.of(scenario)).once();
         replay(grid);
         assertEquals(scenario, scenariosWidget.getSelectedScenario());
         verify(grid);
@@ -229,7 +230,7 @@ public class AaclScenariosWidgetTest {
         Grid grid = createMock(Grid.class);
         Whitebox.setInternalState(scenariosWidget, GRID_ID, grid);
         List<UsageAge> usageAges = scenario.getAaclFields().getUsageAges();
-        expect(grid.getSelectedItems()).andReturn(Collections.singleton(scenario)).once();
+        expect(grid.getSelectedItems()).andReturn(Set.of(scenario)).once();
         expect(controller.getScenarioWithAmountsAndLastAction(scenario)).andReturn(scenario).once();
         expect(controller.getCriteriaHtmlRepresentation()).andReturn(SELECTION_CRITERIA).once();
         expect(controller.getDetailLicenseeClassesByScenarioId(SCENARIO_ID))
@@ -260,7 +261,7 @@ public class AaclScenariosWidgetTest {
         Grid grid = createMock(Grid.class);
         Whitebox.setInternalState(scenariosWidget, GRID_ID, grid);
         List<PublicationType> publicationTypes = scenario.getAaclFields().getPublicationTypes();
-        expect(grid.getSelectedItems()).andReturn(Collections.singleton(scenario)).once();
+        expect(grid.getSelectedItems()).andReturn(Set.of(scenario)).once();
         expect(controller.getScenarioWithAmountsAndLastAction(scenario)).andReturn(scenario).once();
         expect(controller.getCriteriaHtmlRepresentation()).andReturn(SELECTION_CRITERIA).once();
         expect(controller.getDetailLicenseeClassesByScenarioId(SCENARIO_ID))
@@ -291,7 +292,7 @@ public class AaclScenariosWidgetTest {
         Grid grid = createMock(Grid.class);
         Whitebox.setInternalState(scenariosWidget, GRID_ID, grid);
         List<DetailLicenseeClass> detailLicenseeClasses = buildDetailLicenseeClasses();
-        expect(grid.getSelectedItems()).andReturn(Collections.singleton(scenario)).once();
+        expect(grid.getSelectedItems()).andReturn(Set.of(scenario)).once();
         expect(controller.getScenarioWithAmountsAndLastAction(scenario)).andReturn(scenario).once();
         expect(controller.getCriteriaHtmlRepresentation()).andReturn(SELECTION_CRITERIA).once();
         expect(controller.getDetailLicenseeClassesByScenarioId(SCENARIO_ID))

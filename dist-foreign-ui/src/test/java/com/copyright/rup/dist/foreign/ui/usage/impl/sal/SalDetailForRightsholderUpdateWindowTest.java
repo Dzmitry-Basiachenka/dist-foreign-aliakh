@@ -16,6 +16,7 @@ import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.widget.SearchWidget;
+
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
@@ -26,6 +27,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.components.grid.MultiSelectionModel.SelectAllCheckBoxVisibility;
 import com.vaadin.ui.components.grid.MultiSelectionModelImpl;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -38,6 +40,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -100,7 +103,7 @@ public class SalDetailForRightsholderUpdateWindowTest {
         assertEquals(1, CollectionUtils.size(listeners));
         Button.ClickListener listener = (Button.ClickListener) listeners.iterator().next();
         UsageDto selectedUsage = new UsageDto();
-        expect(usagesGrid.getSelectedItems()).andReturn(Collections.singleton(selectedUsage)).once();
+        expect(usagesGrid.getSelectedItems()).andReturn(Set.of(selectedUsage)).once();
         Windows.showModalWindow(anyObject(SalUpdateRighstholderWindow.class));
         expectLastCall().once();
         replay(usagesGrid, Windows.class);

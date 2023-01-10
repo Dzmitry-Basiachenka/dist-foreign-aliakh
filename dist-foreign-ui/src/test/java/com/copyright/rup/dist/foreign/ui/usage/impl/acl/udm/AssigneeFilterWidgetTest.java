@@ -26,6 +26,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Verifies {@link AssigneeFilterWidget}.
@@ -67,7 +68,7 @@ public class AssigneeFilterWidgetTest {
     @Test
     public void testOnSave() {
         FilterSaveEvent<String> filterSaveEvent = createMock(FilterSaveEvent.class);
-        expect(filterSaveEvent.getSelectedItemsIds()).andReturn(Collections.singleton(ASSIGNEE)).once();
+        expect(filterSaveEvent.getSelectedItemsIds()).andReturn(Set.of(ASSIGNEE)).once();
         replay(filterSaveEvent);
         assigneeFilterWidget.onSave(filterSaveEvent);
         verify(filterSaveEvent);

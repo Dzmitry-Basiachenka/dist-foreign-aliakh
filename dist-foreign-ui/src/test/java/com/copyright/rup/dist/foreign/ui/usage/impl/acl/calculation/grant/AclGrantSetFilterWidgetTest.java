@@ -67,7 +67,7 @@ public class AclGrantSetFilterWidgetTest {
     @Test
     public void testOnSave() {
         FilterSaveEvent<AclGrantSet> filterSaveEvent = createMock(FilterSaveEvent.class);
-        Set<AclGrantSet> grantSets = Collections.singleton(new AclGrantSet());
+        Set<AclGrantSet> grantSets = Set.of(new AclGrantSet());
         expect(filterSaveEvent.getSelectedItemsIds()).andReturn(grantSets).once();
         replay(filterSaveEvent);
         aclGrantSetFilterWidget.onSave(filterSaveEvent);

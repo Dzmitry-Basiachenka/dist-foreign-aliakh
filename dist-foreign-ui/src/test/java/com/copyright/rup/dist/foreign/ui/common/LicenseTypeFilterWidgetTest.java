@@ -26,6 +26,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Verifies {@link LicenseTypeFilterWidget}.
@@ -64,7 +65,7 @@ public class LicenseTypeFilterWidgetTest {
     @Test
     public void testOnSave() {
         FilterSaveEvent filterSaveEvent = createMock(FilterSaveEvent.class);
-        expect(filterSaveEvent.getSelectedItemsIds()).andReturn(Collections.singleton(LICENSE_TYPE)).once();
+        expect(filterSaveEvent.getSelectedItemsIds()).andReturn(Set.of(LICENSE_TYPE)).once();
         replay(filterSaveEvent);
         licenseTypeFilterWidget.onSave(filterSaveEvent);
         verify(filterSaveEvent);

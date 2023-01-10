@@ -44,8 +44,8 @@ import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Verifies {@link AclUsageFiltersWindow}.
@@ -313,11 +313,11 @@ public class AclUsageFiltersWindowTest {
         publicationType.setName("BK");
         publicationType.setDescription("Book");
         AclUsageFilter filter = Whitebox.getInternalState(window, USAGE_FILTER);
-        filter.setPeriods(Collections.singleton(202206));
-        filter.setDetailLicenseeClasses(Collections.singleton(detailLicenseeClass));
-        filter.setAggregateLicenseeClasses(Collections.singleton(aggregateLicenseeClass));
-        filter.setPubTypes(Collections.singleton(publicationType));
-        filter.setReportedTypeOfUses(Collections.singleton(REPORTED_TYPE_OF_USE));
+        filter.setPeriods(Set.of(202206));
+        filter.setDetailLicenseeClasses(Set.of(detailLicenseeClass));
+        filter.setAggregateLicenseeClasses(Set.of(aggregateLicenseeClass));
+        filter.setPubTypes(Set.of(publicationType));
+        filter.setReportedTypeOfUses(Set.of(REPORTED_TYPE_OF_USE));
         filter.setUsageOrigin(RFA_USAGE_ORIGIN);
         filter.setChannel(CCC_CHANNEL);
         filter.setTypeOfUse(TYPE_OF_USE);

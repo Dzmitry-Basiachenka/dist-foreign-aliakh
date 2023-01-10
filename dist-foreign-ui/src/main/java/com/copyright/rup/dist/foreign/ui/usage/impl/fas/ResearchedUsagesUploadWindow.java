@@ -25,7 +25,7 @@ import com.vaadin.ui.Window;
 
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.Collections;
+import java.util.Set;
 
 /**
  * Window for uploading researched usage details.
@@ -86,7 +86,7 @@ class ResearchedUsagesUploadWindow extends Window {
                 Windows.showNotificationWindow(ForeignUi.getMessage("window.error"), e.getHtmlMessage());
             }
         } else {
-            Windows.showValidationErrorWindow(Collections.singleton(uploadField));
+            Windows.showValidationErrorWindow(Set.of(uploadField));
         }
     }
 

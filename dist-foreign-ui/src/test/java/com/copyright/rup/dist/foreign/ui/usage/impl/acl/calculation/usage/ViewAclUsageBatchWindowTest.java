@@ -49,6 +49,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Verifies {@link ViewAclUsageBatchWindow}.
@@ -119,7 +120,7 @@ public class ViewAclUsageBatchWindowTest {
         mockStatic(Windows.class);
         Window confirmWindowCapture = createMock(Window.class);
         Button.ClickListener listener = getDeleteButtonClickListener();
-        expect(aclUsageBatchGrid.getSelectedItems()).andReturn(Collections.singleton(buildAclUsageBatch())).once();
+        expect(aclUsageBatchGrid.getSelectedItems()).andReturn(Set.of(buildAclUsageBatch())).once();
         expect(controller.getScenarioNamesAssociatedWithUsageBatch(USAGE_BATCH_ID))
             .andReturn(Collections.EMPTY_LIST).once();
         expect(Windows.showConfirmDialog(
@@ -135,7 +136,7 @@ public class ViewAclUsageBatchWindowTest {
         mockStatic(Windows.class);
         Window confirmWindowCapture = createMock(Window.class);
         Button.ClickListener listener = getDeleteButtonClickListener();
-        expect(aclUsageBatchGrid.getSelectedItems()).andReturn(Collections.singleton(buildAclUsageBatch())).once();
+        expect(aclUsageBatchGrid.getSelectedItems()).andReturn(Set.of(buildAclUsageBatch())).once();
         expect(controller.getScenarioNamesAssociatedWithUsageBatch(USAGE_BATCH_ID))
             .andReturn(SCENARIO_NAMES).once();
         Windows.showNotificationWindow(

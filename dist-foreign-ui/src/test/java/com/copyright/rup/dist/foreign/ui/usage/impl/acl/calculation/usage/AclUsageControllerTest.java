@@ -52,8 +52,8 @@ import java.io.PipedOutputStream;
 import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -222,10 +222,10 @@ public class AclUsageControllerTest {
 
     @Test
     public void testUpdateUsages() {
-        aclUsageService.updateUsages(Collections.singleton(new AclUsageDto()));
+        aclUsageService.updateUsages(Set.of(new AclUsageDto()));
         expectLastCall().once();
         replay(aclUsageService);
-        controller.updateUsages(Collections.singleton(new AclUsageDto()));
+        controller.updateUsages(Set.of(new AclUsageDto()));
         verify(aclUsageService);
     }
 

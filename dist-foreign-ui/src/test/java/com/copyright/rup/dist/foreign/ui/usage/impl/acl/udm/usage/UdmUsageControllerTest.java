@@ -283,7 +283,7 @@ public class UdmUsageControllerTest {
 
     @Test
     public void testAssignUsages() {
-        Set<UdmUsageDto> udmUsages = Collections.singleton(new UdmUsageDto());
+        Set<UdmUsageDto> udmUsages = Set.of(new UdmUsageDto());
         udmUsageService.assignUsages(udmUsages);
         expectLastCall().once();
         replay(udmUsageService);
@@ -293,7 +293,7 @@ public class UdmUsageControllerTest {
 
     @Test
     public void testUnassignUsages() {
-        Set<UdmUsageDto> udmUsages = Collections.singleton(new UdmUsageDto());
+        Set<UdmUsageDto> udmUsages = Set.of(new UdmUsageDto());
         udmUsageService.unassignUsages(udmUsages);
         expectLastCall().once();
         replay(udmUsageService);
@@ -307,7 +307,7 @@ public class UdmUsageControllerTest {
         List<String> actionReasons = new ArrayList<>();
         udmUsageService.updateUsage(udmUsageDto, actionReasons, false, REASON);
         expectLastCall().once();
-        udmUsageService.sendForMatching(Collections.singleton(udmUsageDto));
+        udmUsageService.sendForMatching(Set.of(udmUsageDto));
         expectLastCall().once();
         replay(udmUsageService);
         controller.updateUsage(udmUsageDto, actionReasons, false, REASON);
@@ -321,7 +321,7 @@ public class UdmUsageControllerTest {
             ImmutableMap.of(udmUsageDto, new UdmUsageAuditFieldToValuesMap().getActionReasons());
         udmUsageService.updateUsages(dtoToActionReasonsMap, false, REASON);
         expectLastCall().once();
-        udmUsageService.sendForMatching(Collections.singleton(udmUsageDto));
+        udmUsageService.sendForMatching(Set.of(udmUsageDto));
         expectLastCall().once();
         replay(udmUsageService);
         controller.updateUsages(dtoToActionReasonsMap, false, REASON);

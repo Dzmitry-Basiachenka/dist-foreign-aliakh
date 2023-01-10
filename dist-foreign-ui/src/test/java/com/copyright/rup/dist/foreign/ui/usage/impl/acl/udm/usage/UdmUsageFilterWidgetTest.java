@@ -47,7 +47,6 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Collections;
 import java.util.Set;
 
 /**
@@ -178,10 +177,10 @@ public class UdmUsageFilterWidgetTest {
         assertFalse(applyButton.isEnabled());
         assertTrue(widget.getAppliedFilter().getUdmBatchesIds().isEmpty());
         assertTrue(widget.getFilter().getUdmBatchesIds().isEmpty());
-        widget.getFilter().setUdmBatchesIds(Collections.singleton("87a2f5f4-5663-4ae7-8765-3515c2a82918"));
+        widget.getFilter().setUdmBatchesIds(Set.of("87a2f5f4-5663-4ae7-8765-3515c2a82918"));
         assertTrue(widget.getAppliedFilter().getPeriods().isEmpty());
         assertTrue(widget.getFilter().getPeriods().isEmpty());
-        widget.getFilter().setPeriods(Collections.singleton(202106));
+        widget.getFilter().setPeriods(Set.of(202106));
         assertNotEquals(widget.getFilter(), widget.getAppliedFilter());
         applyButton.setEnabled(true);
         assertTrue(widget.getAppliedFilter().getUdmBatchesIds().isEmpty());

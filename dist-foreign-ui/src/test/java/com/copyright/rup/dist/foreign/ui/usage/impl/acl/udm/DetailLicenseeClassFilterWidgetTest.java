@@ -28,6 +28,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Verifies {@link DetailLicenseeClassFilterWidget}.
@@ -66,7 +67,7 @@ public class DetailLicenseeClassFilterWidgetTest {
     @Test
     public void testOnSave() {
         FilterSaveEvent filterSaveEvent = createMock(FilterSaveEvent.class);
-        expect(filterSaveEvent.getSelectedItemsIds()).andReturn(Collections.singleton(detailLicenseeClass)).once();
+        expect(filterSaveEvent.getSelectedItemsIds()).andReturn(Set.of(detailLicenseeClass)).once();
         replay(filterSaveEvent);
         detailLcFilterWidget.onSave(filterSaveEvent);
         verify(filterSaveEvent);

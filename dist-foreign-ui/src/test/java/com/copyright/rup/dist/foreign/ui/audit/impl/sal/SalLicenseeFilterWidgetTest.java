@@ -27,7 +27,6 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -74,7 +73,7 @@ public class SalLicenseeFilterWidgetTest {
     @Test
     public void testOnSave() {
         FilterSaveEvent<SalLicensee> filterSaveEvent = createMock(FilterSaveEvent.class);
-        Set<SalLicensee> accountNumbers = Collections.singleton(buildLicensee());
+        Set<SalLicensee> accountNumbers = Set.of(buildLicensee());
         expect(filterSaveEvent.getSelectedItemsIds()).andReturn(accountNumbers).once();
         replay(filterSaveEvent);
         salLicenseeFilterWidget.onSave(filterSaveEvent);

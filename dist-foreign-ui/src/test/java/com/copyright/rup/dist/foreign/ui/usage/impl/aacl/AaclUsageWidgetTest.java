@@ -68,6 +68,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Supplier;
 
 /**
@@ -96,7 +97,7 @@ public class AaclUsageWidgetTest {
     public void setUp() {
         controller = createMock(IAaclUsageController.class);
         AaclUsageFilterWidget filterWidget = new AaclUsageFilterWidget(createMock(IAaclUsageFilterController.class));
-        filterWidget.getAppliedFilter().setUsageBatchesIds(Collections.singleton(BATCH_ID));
+        filterWidget.getAppliedFilter().setUsageBatchesIds(Set.of(BATCH_ID));
         usagesWidget = new AaclUsageWidget(controller);
         usagesWidget.setController(controller);
         expect(controller.initUsagesFilterWidget()).andReturn(filterWidget).once();
@@ -165,12 +166,9 @@ public class AaclUsageWidgetTest {
         prepareCreateScenarioExpectation();
         expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
         expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
-        expect(controller.getProcessingBatchesNames(Collections.singleton(BATCH_ID)))
-            .andReturn(Collections.emptyList()).once();
-        expect(controller.getBatchesNamesToScenariosNames(Collections.singleton(BATCH_ID)))
-            .andReturn(Collections.emptyMap()).once();
-        expect(controller.getIneligibleBatchesNames(Collections.singleton(BATCH_ID)))
-            .andReturn(Collections.emptyList()).once();
+        expect(controller.getProcessingBatchesNames(Set.of(BATCH_ID))).andReturn(Collections.emptyList()).once();
+        expect(controller.getBatchesNamesToScenariosNames(Set.of(BATCH_ID))).andReturn(Collections.emptyMap()).once();
+        expect(controller.getIneligibleBatchesNames(Set.of(BATCH_ID))).andReturn(Collections.emptyList()).once();
         Windows.showModalWindow(anyObject(CreateAaclScenarioWindow.class));
         expectLastCall().once();
         replay(controller, clickEvent, Windows.class);
@@ -249,8 +247,7 @@ public class AaclUsageWidgetTest {
         expect(controller.getBeansCount()).andReturn(1).once();
         expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
         expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
-        expect(controller.getProcessingBatchesNames(Collections.singleton(BATCH_ID)))
-            .andReturn(List.of("Batch Name")).once();
+        expect(controller.getProcessingBatchesNames(Set.of(BATCH_ID))).andReturn(List.of("Batch Name")).once();
         Windows.showNotificationWindow("Please wait while batch(es) processing is completed:" +
             "<ul><li><i><b>Batch Name</b></i></ul>");
         expectLastCall().once();
@@ -272,9 +269,9 @@ public class AaclUsageWidgetTest {
         expect(controller.getBeansCount()).andReturn(1).once();
         expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
         expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
-        expect(controller.getProcessingBatchesNames(Collections.singleton(BATCH_ID)))
+        expect(controller.getProcessingBatchesNames(Set.of(BATCH_ID)))
             .andReturn(Collections.emptyList()).once();
-        expect(controller.getBatchesNamesToScenariosNames(Collections.singleton(BATCH_ID)))
+        expect(controller.getBatchesNamesToScenariosNames(Set.of(BATCH_ID)))
             .andReturn(Collections.singletonMap("Batch Name", "Scenario Name")).once();
         Windows.showNotificationWindow("The following batch(es) already associated with scenario(s):" +
             "<ul><li><i><b>Batch Name : Scenario Name</b></i></ul>");
@@ -297,12 +294,9 @@ public class AaclUsageWidgetTest {
         expect(controller.getBeansCount()).andReturn(1).once();
         expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
         expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
-        expect(controller.getProcessingBatchesNames(Collections.singleton(BATCH_ID)))
-            .andReturn(Collections.emptyList()).once();
-        expect(controller.getBatchesNamesToScenariosNames(Collections.singleton(BATCH_ID)))
-            .andReturn(Collections.emptyMap()).once();
-        expect(controller.getIneligibleBatchesNames(Collections.singleton(BATCH_ID)))
-            .andReturn(List.of("Batch Name")).once();
+        expect(controller.getProcessingBatchesNames(Set.of(BATCH_ID))).andReturn(Collections.emptyList()).once();
+        expect(controller.getBatchesNamesToScenariosNames(Set.of(BATCH_ID))).andReturn(Collections.emptyMap()).once();
+        expect(controller.getIneligibleBatchesNames(Set.of(BATCH_ID))).andReturn(List.of("Batch Name")).once();
         Windows.showNotificationWindow("The following batches have usages that are not in ELIGIBLE status:" +
             "<ul><li><i><b>Batch Name</b></i></ul>");
         expectLastCall().once();

@@ -26,6 +26,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Verifies {@link GrantStatusFilterWidget}.
@@ -64,7 +65,7 @@ public class GrantStatusFilterWidgetTest {
     @Test
     public void testOnSave() {
         FilterSaveEvent filterSaveEvent = createMock(FilterSaveEvent.class);
-        expect(filterSaveEvent.getSelectedItemsIds()).andReturn(Collections.singleton(GRANT_STATUS)).once();
+        expect(filterSaveEvent.getSelectedItemsIds()).andReturn(Set.of(GRANT_STATUS)).once();
         replay(filterSaveEvent);
         grantStatusFilterWidget.onSave(filterSaveEvent);
         verify(filterSaveEvent);

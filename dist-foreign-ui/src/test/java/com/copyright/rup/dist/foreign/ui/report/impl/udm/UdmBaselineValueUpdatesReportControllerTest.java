@@ -31,8 +31,8 @@ import java.io.OutputStream;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Verifies {@link UdmBaselineValueUpdatesReportController}.
@@ -95,8 +95,8 @@ public class UdmBaselineValueUpdatesReportControllerTest {
         OffsetDateTime now = OffsetDateTime.of(2021, 1, 2, 3, 4, 5, 6, ZoneOffset.ofHours(0));
         mockStatic(OffsetDateTime.class);
         UdmReportFilter filter = new UdmReportFilter();
-        filter.setPeriods(Collections.singleton(202112));
-        filter.setUserNames(Collections.singleton(USER_NAME));
+        filter.setPeriods(Set.of(202112));
+        filter.setUserNames(Set.of(USER_NAME));
         filter.setDateFrom(LocalDate.of(2021, 11, 21));
         filter.setDateTo(LocalDate.of(2021, 11, 28));
         IUdmCommonUserNamesReportWidget widget = createMock(IUdmCommonUserNamesReportWidget.class);

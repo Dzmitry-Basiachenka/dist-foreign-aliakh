@@ -69,7 +69,7 @@ public class PeriodFilterWidgetTest {
     @Test
     public void testOnSave() {
         FilterSaveEvent filterSaveEvent = createMock(FilterSaveEvent.class);
-        expect(filterSaveEvent.getSelectedItemsIds()).andReturn(Collections.singleton(PERIOD)).once();
+        expect(filterSaveEvent.getSelectedItemsIds()).andReturn(Set.of(PERIOD)).once();
         replay(filterSaveEvent);
         periodFilterWidget.onSave(filterSaveEvent);
         verify(filterSaveEvent);
@@ -99,7 +99,7 @@ public class PeriodFilterWidgetTest {
 
     @Test
     public void testConstructorWithSelectedItems() {
-        Set<Integer> selectedPeriods = Collections.singleton(PERIOD);
+        Set<Integer> selectedPeriods = Set.of(PERIOD);
         PeriodFilterWidget widget = new PeriodFilterWidget(() -> PERIODS, selectedPeriods);
         assertEquals(selectedPeriods, widget.getSelectedItemsIds());
         assertEquals("Periods", widget.getComponent(1).getCaption());

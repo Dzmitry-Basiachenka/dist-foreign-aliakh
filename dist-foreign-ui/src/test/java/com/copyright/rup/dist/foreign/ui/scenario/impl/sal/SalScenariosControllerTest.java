@@ -41,6 +41,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.util.Collections;
+import java.util.Set;
 
 /**
  * Verifies {@link SalScenariosController}.
@@ -182,7 +183,7 @@ public class SalScenariosControllerTest {
         UsageBatch usageBatch = new UsageBatch();
         usageBatch.setId("batchId");
         usageBatch.setName("BatchName");
-        scenarioUsageFilter.setUsageBatches(Collections.singleton(usageBatch));
+        scenarioUsageFilter.setUsageBatches(Set.of(usageBatch));
         expect(scenarioUsageFilterService.getByScenarioId(SCENARIO_ID_1)).andReturn(scenarioUsageFilter).once();
         replay(scenariosWidget, scenarioUsageFilterService);
         assertEquals("<b>Selection Criteria:</b><ul>" +

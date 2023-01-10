@@ -22,8 +22,8 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
-import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Implementation of {@link IReconcileRightsholdersController}.
@@ -91,6 +91,6 @@ public class ReconcileRightsholdersController implements IReconcileRightsholders
         return streamSourceHandler.getCsvStreamSource(
             () -> String.format("ownership_adjustment_report_%s_", scenario.getName()),
             pos -> reportService.writeOwnershipAdjustmentCsvReport(scenario.getId(),
-                Collections.singleton(RightsholderDiscrepancyStatusEnum.DRAFT), pos));
+                Set.of(RightsholderDiscrepancyStatusEnum.DRAFT), pos));
     }
 }

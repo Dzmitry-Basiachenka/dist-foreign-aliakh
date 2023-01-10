@@ -39,7 +39,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Set;
 
 /**
  * Verifies {@link AclGrantDetailFilterWidget}.
@@ -91,7 +91,7 @@ public class AclGrantDetailFilterWidgetTest {
         assertFalse(applyButton.isEnabled());
         assertTrue(widget.getAppliedFilter().isEmpty());
         assertTrue(widget.getFilter().isEmpty());
-        widget.getFilter().setGrantSetNames(Collections.singleton(ACL_GRANT_SET_NAME));
+        widget.getFilter().setGrantSetNames(Set.of(ACL_GRANT_SET_NAME));
         assertTrue(widget.getAppliedFilter().getGrantSetNames().isEmpty());
         assertFalse(widget.getFilter().isEmpty());
         applyButton.setEnabled(true);
@@ -121,7 +121,7 @@ public class AclGrantDetailFilterWidgetTest {
         Button applyButton = getApplyButton();
         assertTrue(widget.getFilter().isEmpty());
         assertTrue(widget.getAppliedFilter().isEmpty());
-        widget.getFilter().setGrantSetNames(Collections.singleton(ACL_GRANT_SET_NAME));
+        widget.getFilter().setGrantSetNames(Set.of(ACL_GRANT_SET_NAME));
         applyButton.setEnabled(true);
         applyButton.click();
         assertFalse(widget.getFilter().isEmpty());

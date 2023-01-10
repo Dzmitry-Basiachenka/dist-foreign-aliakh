@@ -71,6 +71,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -167,7 +168,7 @@ public class UdmValueWidgetTest {
             capture(windowListenerCapture)))
             .andReturn(confirmWindowMock)
             .once();
-        controller.assignValues(Collections.singleton(udmValueDto));
+        controller.assignValues(Set.of(udmValueDto));
         expectLastCall().once();
         Windows.showNotificationWindow("1 value(s) were successfully assigned to you");
         expectLastCall().once();
@@ -220,7 +221,7 @@ public class UdmValueWidgetTest {
             capture(windowListenerCapture)))
             .andReturn(confirmWindowMock)
             .once();
-        controller.unassignValues(Collections.singleton(udmValueDto));
+        controller.unassignValues(Set.of(udmValueDto));
         expectLastCall().once();
         Windows.showNotificationWindow("1 value(s) were successfully unassigned");
         expectLastCall().once();

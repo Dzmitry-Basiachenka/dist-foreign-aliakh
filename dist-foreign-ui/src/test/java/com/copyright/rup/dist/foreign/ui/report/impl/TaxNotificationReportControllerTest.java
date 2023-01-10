@@ -36,7 +36,6 @@ import org.powermock.reflect.Whitebox;
 import java.io.OutputStream;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
@@ -88,7 +87,7 @@ public class TaxNotificationReportControllerTest {
     public void testGetCsvStreamSource() {
         OffsetDateTime now = OffsetDateTime.of(2019, 1, 2, 3, 4, 5, 6, ZoneOffset.ofHours(0));
         mockStatic(OffsetDateTime.class);
-        Set<String> scenarioIds = Collections.singleton("090bdd49-099b-4613-a979-9a3ac014231b");
+        Set<String> scenarioIds = Set.of("090bdd49-099b-4613-a979-9a3ac014231b");
         Capture<OutputStream> osCapture = newCapture();
         ITaxNotificationReportWidget widget = createMock(ITaxNotificationReportWidget.class);
         Whitebox.setInternalState(controller, widget);
@@ -136,7 +135,7 @@ public class TaxNotificationReportControllerTest {
         List<Scenario> scenarios = List.of(new Scenario());
         expect(productFamilyProvider.getSelectedProductFamily()).andReturn("NTS").once();
         expect(
-            scenarioService.getScenariosByProductFamiliesAndStatuses(Collections.singleton("NTS"), SCENARIO_STATUSES))
+            scenarioService.getScenariosByProductFamiliesAndStatuses(Set.of("NTS"), SCENARIO_STATUSES))
             .andReturn(scenarios).once();
         replay(scenarioService, productFamilyProvider);
         assertEquals(scenarios, controller.getScenarios());

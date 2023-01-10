@@ -43,7 +43,6 @@ import org.powermock.reflect.Whitebox;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -222,7 +221,7 @@ public class EditAclUsagesWindowTest {
 
     @Test
     public void testSaveButtonClickListener() throws Exception {
-        aclUsages = Collections.singleton(buildAclUsageDto());
+        aclUsages = Set.of(buildAclUsageDto());
         AclUsageDto expectedAclUsageDto = buildExpectedAclUsageDto();
         binder = createMock(Binder.class);
         binder.writeBean(buildExpectedAclUsageDto());

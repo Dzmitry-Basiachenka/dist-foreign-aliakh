@@ -80,7 +80,7 @@ import java.util.stream.Collectors;
 @PrepareForTest({Windows.class, JavaScript.class})
 public class WorkClassificationWindowTest {
 
-    private final Set<String> batchesIds = Collections.singleton(RupPersistUtils.generateUuid());
+    private final Set<String> batchesIds = Set.of(RupPersistUtils.generateUuid());
     private WorkClassificationWindow window;
     private IWorkClassificationController workClassificationController;
 

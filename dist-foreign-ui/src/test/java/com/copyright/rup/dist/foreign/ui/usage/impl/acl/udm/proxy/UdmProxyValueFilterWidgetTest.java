@@ -30,7 +30,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Collections;
+import java.util.Set;
 
 /**
  * Verifies {@link UdmProxyValueFilterWidget}.
@@ -75,7 +75,7 @@ public class UdmProxyValueFilterWidgetTest {
         assertFalse(applyButton.isEnabled());
         assertTrue(widget.getAppliedFilter().isEmpty());
         assertTrue(widget.getFilter().isEmpty());
-        widget.getFilter().setPeriods(Collections.singleton(202106));
+        widget.getFilter().setPeriods(Set.of(202106));
         assertTrue(widget.getAppliedFilter().getPeriods().isEmpty());
         assertFalse(widget.getFilter().isEmpty());
         applyButton.setEnabled(true);

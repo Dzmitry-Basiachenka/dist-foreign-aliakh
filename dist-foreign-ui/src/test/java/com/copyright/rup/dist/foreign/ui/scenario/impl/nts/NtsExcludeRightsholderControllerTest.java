@@ -19,7 +19,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -54,7 +53,7 @@ public class NtsExcludeRightsholderControllerTest {
 
     @Test
     public void testExcludeDetails() {
-        Set<Long> accountNumbers = Collections.singleton(2000017566L);
+        Set<Long> accountNumbers = Set.of(2000017566L);
         ntsUsageService.deleteFromScenarioByRightsholders(SCENARIO_ID, accountNumbers, REASON);
         expectLastCall().once();
         replay(ntsUsageService);

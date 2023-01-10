@@ -57,6 +57,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Supplier;
 
 /**
@@ -87,7 +88,7 @@ public class SalUsageWidgetTest {
         usagesWidget = new SalUsageWidget(controller);
         usagesWidget.setController(controller);
         filterWidget = new SalUsageFilterWidget(createMock(ISalUsageFilterController.class));
-        filterWidget.getAppliedFilter().setUsageBatchesIds(Collections.singleton(BATCH_ID));
+        filterWidget.getAppliedFilter().setUsageBatchesIds(Set.of(BATCH_ID));
         expect(controller.initUsagesFilterWidget()).andReturn(filterWidget).once();
         IStreamSource streamSource = createMock(IStreamSource.class);
         expect(streamSource.getSource()).andReturn(new SimpleImmutableEntry(createMock(Supplier.class),
@@ -252,10 +253,8 @@ public class SalUsageWidgetTest {
         expect(controller.getBeansCount()).andReturn(1).once();
         expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
         expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
-        expect(controller.getProcessingBatchesNames(Collections.singleton(BATCH_ID)))
-            .andReturn(Collections.emptyList()).once();
-        expect(controller.getIneligibleBatchesNames(Collections.singleton(BATCH_ID)))
-            .andReturn(Collections.emptyList()).once();
+        expect(controller.getProcessingBatchesNames(Set.of(BATCH_ID))).andReturn(Collections.emptyList()).once();
+        expect(controller.getIneligibleBatchesNames(Set.of(BATCH_ID))).andReturn(Collections.emptyList()).once();
         Windows.showModalWindow(anyObject(CreateSalScenarioWindow.class));
         expectLastCall().once();
         replay(controller, clickEvent, Windows.class);
@@ -362,8 +361,7 @@ public class SalUsageWidgetTest {
         expect(controller.getBeansCount()).andReturn(1).once();
         expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
         expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
-        expect(controller.getProcessingBatchesNames(Collections.singleton(BATCH_ID)))
-            .andReturn(List.of("Batch Name")).once();
+        expect(controller.getProcessingBatchesNames(Set.of(BATCH_ID))).andReturn(List.of("Batch Name")).once();
         prepareCreateScenarioExpectation();
         Windows.showNotificationWindow("Please wait while batch(es) processing is completed:" +
             "<ul><li><i><b>Batch Name</b></i></ul>");
@@ -380,10 +378,8 @@ public class SalUsageWidgetTest {
         expect(controller.getBeansCount()).andReturn(1).once();
         expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
         expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
-        expect(controller.getProcessingBatchesNames(Collections.singleton(BATCH_ID)))
-            .andReturn(Collections.emptyList()).once();
-        expect(controller.getIneligibleBatchesNames(Collections.singleton(BATCH_ID)))
-            .andReturn(List.of("Batch Name")).once();
+        expect(controller.getProcessingBatchesNames(Set.of(BATCH_ID))).andReturn(Collections.emptyList()).once();
+        expect(controller.getIneligibleBatchesNames(Set.of(BATCH_ID))).andReturn(List.of("Batch Name")).once();
         prepareCreateScenarioExpectation();
         Windows.showNotificationWindow("The following batches have usages that are not in ELIGIBLE status:" +
             "<ul><li><i><b>Batch Name</b></i></ul>");

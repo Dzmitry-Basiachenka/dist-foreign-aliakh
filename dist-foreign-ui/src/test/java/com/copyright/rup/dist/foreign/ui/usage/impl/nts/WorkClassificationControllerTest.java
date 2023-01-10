@@ -22,7 +22,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -38,7 +37,7 @@ import java.util.Set;
 public class WorkClassificationControllerTest {
 
     private static final String SEARCH_VALUE = "test";
-    private static final Set<String> BATCHES_IDS = Collections.singleton(RupPersistUtils.generateUuid());
+    private static final Set<String> BATCHES_IDS = Set.of(RupPersistUtils.generateUuid());
     private IWorkClassificationService workClassificationService;
     private IWorkClassificationController controller;
 

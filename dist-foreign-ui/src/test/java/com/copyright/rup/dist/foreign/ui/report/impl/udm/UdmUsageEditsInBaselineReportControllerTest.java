@@ -19,6 +19,7 @@ import com.copyright.rup.dist.foreign.service.api.acl.IUdmReportService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageService;
 import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
 import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmUsageEditsInBaselineReportWidget;
+
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
@@ -31,8 +32,8 @@ import java.io.OutputStream;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Verifies {@link UdmUsageEditsInBaselineReportController}.
@@ -79,7 +80,7 @@ public class UdmUsageEditsInBaselineReportControllerTest {
         OffsetDateTime now = OffsetDateTime.of(2021, 1, 2, 3, 4, 5, 6, ZoneOffset.ofHours(0));
         mockStatic(OffsetDateTime.class);
         UdmReportFilter filter = new UdmReportFilter();
-        filter.setPeriods(Collections.singleton(202112));
+        filter.setPeriods(Set.of(202112));
         filter.setDateFrom(LocalDate.of(2021, 11, 21));
         filter.setDateTo(LocalDate.of(2021, 11, 28));
         IUdmUsageEditsInBaselineReportWidget widget = createMock(IUdmUsageEditsInBaselineReportWidget.class);

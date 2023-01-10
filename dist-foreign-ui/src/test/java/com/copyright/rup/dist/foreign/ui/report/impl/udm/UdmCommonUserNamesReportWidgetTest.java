@@ -26,7 +26,6 @@ import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
 import java.time.LocalDate;
-import java.util.Collections;
 import java.util.Set;
 
 /**
@@ -72,9 +71,9 @@ public class UdmCommonUserNamesReportWidgetTest {
 
     @Test
     public void testGetReportFilter() {
-        Set<Integer> periods = Collections.singleton(202112);
+        Set<Integer> periods = Set.of(202112);
         Whitebox.setInternalState(widget, "periods", periods);
-        Set<String> userNames = Collections.singleton("user@copyright.com");
+        Set<String> userNames = Set.of("user@copyright.com");
         Whitebox.setInternalState(widget, "userNames", userNames);
         LocalDateWidget dateFromWidget = createMock(LocalDateWidget.class);
         Whitebox.setInternalState(widget, "dateFromWidget", dateFromWidget);

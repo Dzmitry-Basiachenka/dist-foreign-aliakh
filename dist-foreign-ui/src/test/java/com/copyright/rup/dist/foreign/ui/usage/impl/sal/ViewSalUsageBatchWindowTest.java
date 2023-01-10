@@ -40,6 +40,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -121,7 +122,7 @@ public class ViewSalUsageBatchWindowTest {
         Grid<UsageBatch> grid = createMock(Grid.class);
         Whitebox.setInternalState(viewSalUsageBatchWindow, GRID, grid);
         Button.ClickListener listener = getDeleteButtonClickListener(0);
-        expect(grid.getSelectedItems()).andReturn(Collections.singleton(buildUsageBatch())).once();
+        expect(grid.getSelectedItems()).andReturn(Set.of(buildUsageBatch())).once();
         expect(controller.getScenariosNamesAssociatedWithUsageBatch(USAGE_BATCH_ID))
             .andReturn(Collections.emptyList()).once();
         expect(controller.isBatchProcessingCompleted(USAGE_BATCH_ID)).andReturn(true).once();
@@ -139,7 +140,7 @@ public class ViewSalUsageBatchWindowTest {
         Grid<UsageBatch> grid = createMock(Grid.class);
         Whitebox.setInternalState(viewSalUsageBatchWindow, GRID, grid);
         Button.ClickListener listener = getDeleteButtonClickListener(0);
-        expect(grid.getSelectedItems()).andReturn(Collections.singleton(buildUsageBatch())).once();
+        expect(grid.getSelectedItems()).andReturn(Set.of(buildUsageBatch())).once();
         expect(controller.getScenariosNamesAssociatedWithUsageBatch(USAGE_BATCH_ID))
             .andReturn(Collections.emptyList()).once();
         expect(controller.isBatchProcessingCompleted(USAGE_BATCH_ID)).andReturn(false).once();
@@ -157,7 +158,7 @@ public class ViewSalUsageBatchWindowTest {
         Grid<UsageBatch> grid = createMock(Grid.class);
         Whitebox.setInternalState(viewSalUsageBatchWindow, GRID, grid);
         Button.ClickListener listener = getDeleteButtonClickListener(0);
-        expect(grid.getSelectedItems()).andReturn(Collections.singleton(buildUsageBatch())).once();
+        expect(grid.getSelectedItems()).andReturn(Set.of(buildUsageBatch())).once();
         expect(controller.getScenariosNamesAssociatedWithUsageBatch(USAGE_BATCH_ID))
             .andReturn(Arrays.asList("Scenario 1", "Scenario 2")).once();
         Windows.showNotificationWindow("Usage batch cannot be deleted because it is associated with the following " +
@@ -176,7 +177,7 @@ public class ViewSalUsageBatchWindowTest {
         Grid<UsageBatch> grid = createMock(Grid.class);
         Whitebox.setInternalState(viewSalUsageBatchWindow, GRID, grid);
         Button.ClickListener listener = getDeleteButtonClickListener(1);
-        expect(grid.getSelectedItems()).andReturn(Collections.singleton(buildUsageBatch())).once();
+        expect(grid.getSelectedItems()).andReturn(Set.of(buildUsageBatch())).once();
         expect(controller.usageDataExists(USAGE_BATCH_ID)).andReturn(true).once();
         expect(controller.getScenariosNamesAssociatedWithUsageBatch(USAGE_BATCH_ID))
             .andReturn(Collections.emptyList()).once();
@@ -196,7 +197,7 @@ public class ViewSalUsageBatchWindowTest {
         Grid<UsageBatch> grid = createMock(Grid.class);
         Whitebox.setInternalState(viewSalUsageBatchWindow, GRID, grid);
         Button.ClickListener listener = getDeleteButtonClickListener(1);
-        expect(grid.getSelectedItems()).andReturn(Collections.singleton(buildUsageBatch())).once();
+        expect(grid.getSelectedItems()).andReturn(Set.of(buildUsageBatch())).once();
         expect(controller.usageDataExists(USAGE_BATCH_ID))
             .andReturn(true).once();
         expect(controller.getScenariosNamesAssociatedWithUsageBatch(USAGE_BATCH_ID))
@@ -217,7 +218,7 @@ public class ViewSalUsageBatchWindowTest {
         Grid<UsageBatch> grid = createMock(Grid.class);
         Whitebox.setInternalState(viewSalUsageBatchWindow, GRID, grid);
         Button.ClickListener listener = getDeleteButtonClickListener(1);
-        expect(grid.getSelectedItems()).andReturn(Collections.singleton(buildUsageBatch())).once();
+        expect(grid.getSelectedItems()).andReturn(Set.of(buildUsageBatch())).once();
         expect(controller.usageDataExists(USAGE_BATCH_ID))
             .andReturn(true).once();
         expect(controller.getScenariosNamesAssociatedWithUsageBatch(USAGE_BATCH_ID))
@@ -238,7 +239,7 @@ public class ViewSalUsageBatchWindowTest {
         Grid<UsageBatch> grid = createMock(Grid.class);
         Whitebox.setInternalState(viewSalUsageBatchWindow, GRID, grid);
         Button.ClickListener listener = getDeleteButtonClickListener(1);
-        expect(grid.getSelectedItems()).andReturn(Collections.singleton(buildUsageBatch())).once();
+        expect(grid.getSelectedItems()).andReturn(Set.of(buildUsageBatch())).once();
         expect(controller.usageDataExists(USAGE_BATCH_ID))
             .andReturn(false).once();
         Windows.showNotificationWindow("There are no usage details in the Item Bank");

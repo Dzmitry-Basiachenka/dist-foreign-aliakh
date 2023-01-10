@@ -46,7 +46,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
-import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -163,7 +162,7 @@ public class UdmUsageController extends CommonController<IUdmUsageWidget> implem
     @Override
     public void updateUsage(UdmUsageDto newUsageDto, List<String> actionReasons, boolean isResearcher, String reason) {
         udmUsageService.updateUsage(newUsageDto, actionReasons, isResearcher, reason);
-        udmUsageService.sendForMatching(Collections.singleton(newUsageDto));
+        udmUsageService.sendForMatching(Set.of(newUsageDto));
     }
 
     @Override

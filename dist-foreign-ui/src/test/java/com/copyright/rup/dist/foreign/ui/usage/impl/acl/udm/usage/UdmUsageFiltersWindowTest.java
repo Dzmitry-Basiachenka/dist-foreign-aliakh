@@ -51,8 +51,8 @@ import org.powermock.reflect.Whitebox;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Verifies {@link UdmUsageFiltersWindow}.
@@ -120,15 +120,15 @@ public class UdmUsageFiltersWindowTest {
     @Test
     public void testConstructorWithPopulatedFilter() {
         UdmUsageFilter usageFilter = buildExpectedFilter();
-        usageFilter.setAssignees(Collections.singleton("user@copyright.com"));
+        usageFilter.setAssignees(Set.of("user@copyright.com"));
         usageFilter.setPubFormats(Sets.newHashSet("Digital", "Not Specified"));
         usageFilter.setReportedPubTypes(Sets.newHashSet("Book", "Not Shared"));
-        usageFilter.setReportedTypeOfUses(Collections.singleton(REPORTED_TYPE_OF_USE));
+        usageFilter.setReportedTypeOfUses(Set.of(REPORTED_TYPE_OF_USE));
         usageFilter.setTypeOfUse(TYPE_OF_USE);
         DetailLicenseeClass licenseeClass = new DetailLicenseeClass();
         licenseeClass.setId(26);
         licenseeClass.setDescription("Law Firms");
-        usageFilter.setDetailLicenseeClasses(Collections.singleton(licenseeClass));
+        usageFilter.setDetailLicenseeClasses(Set.of(licenseeClass));
         replay(ForeignSecurityUtils.class);
         window = new UdmUsageFiltersWindow(createMock(IUdmUsageFilterController.class), usageFilter);
         verifyFiltersData();
@@ -617,12 +617,12 @@ public class UdmUsageFiltersWindowTest {
         detailLicenseeClass.setId(26);
         detailLicenseeClass.setDescription(LC_DESCRIPTION);
         UdmUsageFilter filter = Whitebox.getInternalState(window, USAGE_FILTER);
-        filter.setAssignees(Collections.singleton(ASSIGNEE));
-        filter.setDetailLicenseeClasses(Collections.singleton(detailLicenseeClass));
-        filter.setReportedPubTypes(Collections.singleton(REPORTED_PUB_TYPES));
-        filter.setReportedTypeOfUses(Collections.singleton(REPORTED_TYPE_OF_USE));
+        filter.setAssignees(Set.of(ASSIGNEE));
+        filter.setDetailLicenseeClasses(Set.of(detailLicenseeClass));
+        filter.setReportedPubTypes(Set.of(REPORTED_PUB_TYPES));
+        filter.setReportedTypeOfUses(Set.of(REPORTED_TYPE_OF_USE));
         filter.setTypeOfUse(TYPE_OF_USE);
-        filter.setPubFormats(Collections.singleton(PUBLICATION_FORMATS));
+        filter.setPubFormats(Set.of(PUBLICATION_FORMATS));
         filter.setUsageDateFrom(DATE_FROM);
         filter.setUsageDateTo(DATE_TO);
         filter.setSurveyStartDateFrom(DATE_FROM);
@@ -725,12 +725,12 @@ public class UdmUsageFiltersWindowTest {
         detailLicenseeClass.setId(26);
         detailLicenseeClass.setDescription(LC_DESCRIPTION);
         UdmUsageFilter filter = Whitebox.getInternalState(window, USAGE_FILTER);
-        filter.setAssignees(Collections.singleton(ASSIGNEE));
-        filter.setDetailLicenseeClasses(Collections.singleton(detailLicenseeClass));
-        filter.setReportedPubTypes(Collections.singleton(REPORTED_PUB_TYPES));
-        filter.setReportedTypeOfUses(Collections.singleton(REPORTED_TYPE_OF_USE));
+        filter.setAssignees(Set.of(ASSIGNEE));
+        filter.setDetailLicenseeClasses(Set.of(detailLicenseeClass));
+        filter.setReportedPubTypes(Set.of(REPORTED_PUB_TYPES));
+        filter.setReportedTypeOfUses(Set.of(REPORTED_TYPE_OF_USE));
         filter.setTypeOfUse(TYPE_OF_USE);
-        filter.setPubFormats(Collections.singleton(PUBLICATION_FORMATS));
+        filter.setPubFormats(Set.of(PUBLICATION_FORMATS));
         populateLocalDateWidget("usageDateFromWidget", DATE_FROM);
         populateLocalDateWidget("usageDateToWidget", DATE_TO);
         populateLocalDateWidget("surveyStartDateFromWidget", DATE_FROM);

@@ -67,7 +67,7 @@ public class UdmBatchFilterWidgetTest {
     @Test
     public void testOnSave() {
         FilterSaveEvent filterSaveEvent = createMock(FilterSaveEvent.class);
-        Set usageBatches = Collections.singleton(UDM_BATCH_NAME);
+        Set usageBatches = Set.of(UDM_BATCH_NAME);
         expect(filterSaveEvent.getSelectedItemsIds()).andReturn(usageBatches).once();
         replay(filterSaveEvent);
         udmBatchFilterWidget.onSave(filterSaveEvent);

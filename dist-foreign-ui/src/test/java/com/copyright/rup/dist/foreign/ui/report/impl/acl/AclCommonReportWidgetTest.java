@@ -37,7 +37,6 @@ import org.powermock.reflect.Whitebox;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.AbstractMap.SimpleImmutableEntry;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
@@ -94,7 +93,7 @@ public class AclCommonReportWidgetTest {
         mockStatic(OffsetDateTime.class);
         mockStatic(RupContextUtils.class);
         AclScenarioFilterWidget filterWidget = createMock(AclScenarioFilterWidget.class);
-        Set<AclScenario> scenarios = Collections.singleton(new AclScenario());
+        Set<AclScenario> scenarios = Set.of(new AclScenario());
         expect(filterWidget.getSelectedItems()).andReturn(scenarios).once();
         expect(OffsetDateTime.now()).andReturn(now).once();
         expect(RupContextUtils.getUserName()).andReturn("jjohn@copyright.com").once();

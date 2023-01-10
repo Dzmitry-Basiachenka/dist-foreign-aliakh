@@ -413,16 +413,16 @@ public class NtsUsageControllerTest {
 
     @Test
     public void testGetBatchNamesWithUnclassifiedUsages() {
-        expect(usageBatchService.getBatchNamesWithUnclassifiedWorks(Collections.singleton(USAGE_BATCH_ID)))
+        expect(usageBatchService.getBatchNamesWithUnclassifiedWorks(Set.of(USAGE_BATCH_ID)))
             .andReturn(List.of("Batch with unclassified usages")).once();
         replay(usageBatchService);
-        controller.getBatchNamesWithUnclassifiedWorks(Collections.singleton(USAGE_BATCH_ID));
+        controller.getBatchNamesWithUnclassifiedWorks(Set.of(USAGE_BATCH_ID));
         verify(usageBatchService);
     }
 
     @Test
     public void testGetBatchNamesWithInvalidStmOrNonStmUsagesState() {
-        Set<String> batchIds = Collections.singleton(USAGE_BATCH_ID);
+        Set<String> batchIds = Set.of(USAGE_BATCH_ID);
         expect(usageBatchService.getClassifcationToBatchNamesWithoutUsagesForStmOrNonStm(batchIds))
             .andReturn(Collections.emptyMap()).once();
         replay(usageBatchService);
