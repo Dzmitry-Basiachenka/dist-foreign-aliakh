@@ -313,7 +313,7 @@ public class RhTaxServiceTest {
         Country country = new Country();
         country.setIsoCode("USA");
         country.setName("United States");
-        return Collections.singletonMap("US", country);
+        return Map.of("US", country);
     }
 
     private Map<Long, RhTaxInformation> loadOracleRhTaxInformation(String fileName) throws IOException {

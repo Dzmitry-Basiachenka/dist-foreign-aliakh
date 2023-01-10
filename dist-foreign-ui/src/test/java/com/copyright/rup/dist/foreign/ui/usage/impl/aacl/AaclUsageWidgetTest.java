@@ -68,6 +68,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.Supplier;
 
@@ -272,7 +273,7 @@ public class AaclUsageWidgetTest {
         expect(controller.getProcessingBatchesNames(Set.of(BATCH_ID)))
             .andReturn(Collections.emptyList()).once();
         expect(controller.getBatchesNamesToScenariosNames(Set.of(BATCH_ID)))
-            .andReturn(Collections.singletonMap("Batch Name", "Scenario Name")).once();
+            .andReturn(Map.of("Batch Name", "Scenario Name")).once();
         Windows.showNotificationWindow("The following batch(es) already associated with scenario(s):" +
             "<ul><li><i><b>Batch Name : Scenario Name</b></i></ul>");
         expectLastCall().once();
