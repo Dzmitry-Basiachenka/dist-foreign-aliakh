@@ -34,14 +34,13 @@ import java.util.List;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-test-context.xml")
-//TODO: split test data into separate files for each test method
-@TestData(fileName = "refresh-scenario-service-data-init.groovy")
 @TestExecutionListeners(
     mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS,
     listeners = {LiquibaseTestExecutionListener.class}
 )
 public class RefreshScenarioTest {
 
+    private static final String FOLDER_NAME = "refresh-scenario-test/";
     private static final String RIGHTHOLDER_ID_1 = "019acfde-91be-43aa-8871-6305642bcb2c";
     private static final String RIGHTHOLDER_ID_2 = "37338ed1-7083-45e2-a96b-5872a7de3a98";
     private static final String RIGHTHOLDER_ID_3 = "624dcf73-a30f-4381-b6aa-c86d17198bd5";
@@ -60,6 +59,7 @@ public class RefreshScenarioTest {
     }
 
     @Test
+    @TestData(fileName = FOLDER_NAME + "test-refresh-fas-scenario.groovy")
     public void testRefreshFasScenario() {
         testBuilder
             .withProductFamily(FAS_PRODUCT_FAMILY)
@@ -86,6 +86,7 @@ public class RefreshScenarioTest {
     }
 
     @Test
+    @TestData(fileName = FOLDER_NAME + "test-refresh-cla-scenario.groovy")
     public void testRefreshClaScenario() {
         testBuilder
             .withProductFamily(FAS2_PRODUCT_FAMILY)

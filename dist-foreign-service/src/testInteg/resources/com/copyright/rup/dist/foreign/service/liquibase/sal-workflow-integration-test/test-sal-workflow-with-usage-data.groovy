@@ -1,8 +1,8 @@
 databaseChangeLog {
     property(file: 'database-testInteg.properties')
 
-    changeSet(id: '2020-08-21-00', author: 'Stanislau Rudak <srudak@copyright.com>') {
-        comment('Inserting data for testSalWorkflow')
+    changeSet(id: '2023-01-06-00', author: 'Mikita Maistrenka <mmaistrenka@copyright.com>') {
+        comment('Inserting data for testSalWorkflowWithUsageData')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
             column(name: 'df_rightsholder_uid', value: '85f864f2-30a5-4215-ac4f-f1f541901218')
@@ -37,14 +37,6 @@ databaseChangeLog {
                     '"grade_9_12_number_of_students": 5, "gross_amount": 1000.00, "item_bank_gross_amount": 200.00, "grade_K_5_gross_amount": 600.00, ' +
                     '"grade_6_8_gross_amount": 0.00, "grade_9_12_gross_amount": 200.00, "item_bank_split_percent": 0.20000, "service_fee": 0.25000}')
         }
-
-        rollback {
-            dbRollback
-        }
-    }
-
-    changeSet(id: '2020-12-23-00', author: 'Anton Azarenka <azarenka@copyright.com>') {
-        comment('Inserting data for testSalWorkflowWithoutUsageData')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_fund_pool') {
             column(name: 'df_fund_pool_uid', value: 'd90108a1-2225-4c81-9442-8522be284e66')

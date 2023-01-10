@@ -21,7 +21,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -39,15 +38,13 @@ import java.util.List;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:com/copyright/rup/dist/foreign/service/dist-foreign-service-test-context.xml")
-//TODO: split test data into separate files for each test method
-@TestData(fileName = "create-nts-batch-data-init.groovy")
 @TestExecutionListeners(
     mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS,
     listeners = {LiquibaseTestExecutionListener.class}
 )
-@Transactional
 public class CreateNtsBatchIntegrationTest {
 
+    private static final String FOLDER_NAME = "create-nts-batch-integration-test/";
     private static final LocalDate DATE = LocalDate.of(2017, 2, 1);
     private static final String BUS_MARKET = "Bus";
     private static final String DOC_DEL_MARKET = "Doc Del";
@@ -77,6 +74,7 @@ public class CreateNtsBatchIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = FOLDER_NAME + "test-create-nts-batch.groovy")
     public void testCreateNtsBatch() {
         testBuilder
             .withUsageBatch(buildUsageBatch(buildNtsFields(BUS_MARKET, STM_AMOUNT, false)))
@@ -95,6 +93,7 @@ public class CreateNtsBatchIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = FOLDER_NAME + "test-create-nts-batch-excluding-stm-with-stm-rh.groovy")
     public void testCreateNtsBatchExcludingStmWithStmRh() {
         testBuilder
             .withUsageBatch(buildUsageBatch(buildNtsFields(DOC_DEL_MARKET, STM_AMOUNT, true)))
@@ -114,6 +113,7 @@ public class CreateNtsBatchIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = FOLDER_NAME + "test-create-nts-batch-excluding-stm-without-stm-rh.groovy")
     public void testCreateNtsBatchExcludingStmWithoutStmRh() {
         testBuilder
             .withUsageBatch(buildUsageBatch(buildNtsFields(DOC_DEL_MARKET, STM_AMOUNT, true)))
@@ -138,6 +138,7 @@ public class CreateNtsBatchIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = FOLDER_NAME + "test-create-nts-batch-excluding-stm-with-stm-rh-for-another-product.groovy")
     public void testCreateNtsBatchExcludingStmWithStmRhForAnotherProduct() {
         testBuilder
             .withUsageBatch(buildUsageBatch(buildNtsFields(DOC_DEL_MARKET, STM_AMOUNT, true)))
@@ -160,6 +161,7 @@ public class CreateNtsBatchIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = FOLDER_NAME + "test-create-nts-batch-with-unclassified.groovy")
     public void testCreateNtsBatchWithUnclassified() {
         testBuilder
             .withUsageBatch(buildUsageBatch(buildNtsFields("Gov", STM_AMOUNT, false)))
@@ -177,6 +179,7 @@ public class CreateNtsBatchIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = FOLDER_NAME + "test-create-nts-batch-with-ineligible-rh.groovy")
     public void testCreateNtsBatchWithIneligibleRh() {
         testBuilder
             .withUsageBatch(buildUsageBatch(buildNtsFields(BUS_MARKET, STM_AMOUNT, false)))
@@ -192,6 +195,7 @@ public class CreateNtsBatchIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = FOLDER_NAME + "test-create-nts-batch-with-non-us-rh-tax-country.groovy")
     public void testCreateNtsBatchWithNonUsRhTaxCountry() {
         testBuilder
             .withUsageBatch(buildUsageBatch(buildNtsFields(BUS_MARKET, STM_AMOUNT, false)))
@@ -206,6 +210,7 @@ public class CreateNtsBatchIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = FOLDER_NAME + "test-create-nts-batch-with-rh-not-found.groovy")
     public void testCreateNtsBatchWithRhNotFound() {
         testBuilder
             .withUsageBatch(buildUsageBatch(buildNtsFields("Univ", STM_AMOUNT, false)))
@@ -218,6 +223,7 @@ public class CreateNtsBatchIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = FOLDER_NAME + "test-create-nts-batch-with-usage-under-minimum.groovy")
     public void testCreateNtsBatchWithUsageUnderMinimum() {
         testBuilder
             .withUsageBatch(buildUsageBatch(buildNtsFields("Lib", STM_AMOUNT, false)))
@@ -235,6 +241,7 @@ public class CreateNtsBatchIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = FOLDER_NAME + "test-create-nts-batch-zero-stm-amount.groovy")
     public void testCreateNtsBatchZeroStmAmount() {
         testBuilder
             .withUsageBatch(buildUsageBatch(buildNtsFields("Edu", new BigDecimal("0.0"), false)))

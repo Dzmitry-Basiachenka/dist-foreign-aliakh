@@ -36,7 +36,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -53,15 +52,13 @@ import java.util.List;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-test-context.xml")
-//TODO: split test data into separate files for each test method
-@TestData(fileName = "update-rights-data-init.groovy")
 @TestExecutionListeners(
     mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS,
     listeners = {LiquibaseTestExecutionListener.class}
 )
-@Transactional
 public class UpdateRightsIntegrationTest {
 
+    private static final String FOLDER_NAME = "update-rights-integration-test/";
     private static final Long RH_ACCOUNT_NUMBER_1 = 1000023401L;
     private static final Long RH_ACCOUNT_NUMBER_2 = 1000000322L;
     private static final String FAS = "FAS";
@@ -95,6 +92,7 @@ public class UpdateRightsIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = FOLDER_NAME + "test-update-rights-sent-for-ra-usages.groovy")
     public void testUpdateRightsSentForRaUsages() {
         testHelper.createRestServer();
         testHelper.expectGetRmsRights("rights/rms_grants_sent_for_ra_request.json",
@@ -115,6 +113,7 @@ public class UpdateRightsIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = FOLDER_NAME + "test-update-rights.groovy")
     public void testUpdateRights() {
         testHelper.createRestServer();
         testHelper.expectGetRmsRights("rights/fas/rms_grants_request_1.json",
@@ -144,6 +143,7 @@ public class UpdateRightsIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = FOLDER_NAME + "test-update-aacl-rights.groovy")
     public void testUpdateAaclRights() {
         testHelper.createRestServer();
         testHelper.expectGetRmsRights("rights/aacl/rms_grants_request_1.json",
@@ -165,6 +165,7 @@ public class UpdateRightsIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = FOLDER_NAME + "test-update-udm-rights.groovy")
     public void testUpdateUdmRights() {
         testHelper.createRestServer();
         testHelper.expectGetRmsRights("rights/udm/usage/rms_grants_request_1.json",
@@ -184,6 +185,7 @@ public class UpdateRightsIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = FOLDER_NAME + "test-update-udm-values-rights.groovy")
     public void testUpdateUdmValuesRights() {
         testHelper.createRestServer();
         testHelper.expectGetRmsRights("rights/udm/value/rms_grants_202112_1_request.json",
@@ -202,6 +204,7 @@ public class UpdateRightsIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = FOLDER_NAME + "test-update-sal-rights.groovy")
     public void testUpdateSalRights() {
         testHelper.createRestServer();
         testHelper.expectGetRmsRights("rights/sal/rms_grants_request_1.json", "rights/sal/rms_grants_response_1.json");
@@ -222,6 +225,7 @@ public class UpdateRightsIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = FOLDER_NAME + "test-update-aclci-rights.groovy")
     public void testUpdateAclciRights() {
         testHelper.createRestServer();
         testHelper.expectGetRmsRights("rights/aclci/rms_grants_request_1.json",
