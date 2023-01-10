@@ -116,6 +116,13 @@ public interface IFundPoolService {
     void deleteSalFundPool(FundPool fundPool);
 
     /**
+     * Deletes ACLCI {@link FundPool}.
+     *
+     * @param fundPool {@link FundPool} to delete
+     */
+    void deleteAclciFundPool(FundPool fundPool);
+
+    /**
      * Gets NTS fund pool names associated with batch identifier.
      *
      * @param batchId batch identifier
