@@ -33,6 +33,7 @@ import com.copyright.rup.dist.foreign.service.api.fas.IFasUsageService;
 import com.copyright.rup.dist.foreign.service.api.fas.IRightsholderDiscrepancyService;
 
 import com.google.common.collect.Iterables;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -42,7 +43,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -133,7 +133,7 @@ public class FasScenarioService implements IFasScenarioService {
                 commonDiscrepancyService.getDiscrepancies(
                     entries.stream().flatMap(entry -> entry.getValue().stream()).collect(Collectors.toList()),
                     Usage::getWrWrkInst, productFamily, productFamilyToRightStatusesMap.get(productFamily),
-                    Collections.emptySet(), licenseTypes, new DiscrepancyBuilder(userName));
+                    Set.of(), licenseTypes, new DiscrepancyBuilder(userName));
             if (CollectionUtils.isNotEmpty(discrepancies)) {
                 rightsholderDiscrepancyService.insertDiscrepancies(discrepancies, scenario.getId());
                 rightsholderService.updateRighstholdersAsync(

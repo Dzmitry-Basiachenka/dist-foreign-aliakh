@@ -72,9 +72,9 @@ import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -371,9 +371,9 @@ public class AclScenariosControllerTest {
         String fundPoolId = "b9f283cf-5d48-4c69-960a-cc30c24d2282";
         DetailLicenseeClass detailLicenseeClass = new DetailLicenseeClass();
         expect(aclScenarioService.getFundPoolDetailsNotToBeDistributed(BATCH_UID, fundPoolId, grantSetId,
-            List.of(detailLicenseeClass))).andReturn(Collections.emptySet()).once();
+            List.of(detailLicenseeClass))).andReturn(Set.of()).once();
         replay(aclScenarioService);
-        assertEquals(Collections.emptySet(), aclScenariosController.getFundPoolDetailsNotToBeDistributed(
+        assertEquals(Set.of(), aclScenariosController.getFundPoolDetailsNotToBeDistributed(
             BATCH_UID, fundPoolId, grantSetId, List.of(detailLicenseeClass)));
         verify(aclScenarioService);
     }

@@ -31,7 +31,7 @@ import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
-import java.util.Collections;
+import java.util.Set;
 
 /**
  * Verifies {@link CreateAdditionalFundWindow}.
@@ -63,9 +63,8 @@ public class CreateAdditionalFundWindowTest {
     @Before
     public void setUp() {
         usagesController = createMock(INtsUsageController.class);
-        window = new CreateAdditionalFundWindow(usagesController,
-            Collections.emptySet(), BigDecimal.ONE, createMock(AdditionalFundBatchesFilterWindow.class),
-            createMock(AdditionalFundFilteredBatchesWindow.class));
+        window = new CreateAdditionalFundWindow(usagesController, Set.of(), BigDecimal.ONE,
+            createMock(AdditionalFundBatchesFilterWindow.class), createMock(AdditionalFundFilteredBatchesWindow.class));
     }
 
     @Test

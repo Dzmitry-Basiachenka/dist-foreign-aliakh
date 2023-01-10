@@ -35,9 +35,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Verifies {@link UdmCommonProxyValueFilterWindow}.
@@ -93,7 +93,7 @@ public class UdmCommonProxyValueFilterWindowTest {
     @Test
     public void testSetSelectedItemsIdsWithEmptySet() {
         assertTrue(filterWindow.getSelectedItemsIds().isEmpty());
-        filterWindow.setSelectedItemsIds(Collections.emptySet());
+        filterWindow.setSelectedItemsIds(Set.of());
         assertEquals(Sets.newHashSet(PUB_TYPE_CODES), filterWindow.getSelectedItemsIds());
     }
 

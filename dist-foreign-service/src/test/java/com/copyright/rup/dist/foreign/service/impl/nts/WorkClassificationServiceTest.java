@@ -35,7 +35,6 @@ import org.powermock.reflect.Whitebox;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
@@ -155,7 +154,7 @@ public class WorkClassificationServiceTest {
 
     @Test
     public void testGetClassificationCountEmptyBatchesIds() {
-        Set<String> batchesIds = Collections.emptySet();
+        Set<String> batchesIds = Set.of();
         expect(workClassificationRepository.findCountBySearch(SEARCH_VALUE)).andReturn(2).once();
         replay(workClassificationRepository);
         assertEquals(2, workClassificationService.getClassificationCount(batchesIds, SEARCH_VALUE));
@@ -176,7 +175,7 @@ public class WorkClassificationServiceTest {
 
     @Test
     public void testGetClassificationsEmptyBatchesIds() {
-        Set<String> batchesIds = Collections.emptySet();
+        Set<String> batchesIds = Set.of();
         List<WorkClassification> classifications = List.of(new WorkClassification());
         expect(workClassificationRepository.findBySearch(SEARCH_VALUE, null, null))
             .andReturn(classifications).once();

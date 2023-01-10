@@ -42,7 +42,6 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -221,7 +220,7 @@ public class UdmValueRepositoryIntegrationTest {
         filter.setContentUnitPriceExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, CONTENT_UNIT_PRICE, null));
         filter.setContentUnitPriceFlagExpression(new FilterExpression<>(FilterOperatorEnum.Y));
-        filter.setPubTypes(Collections.emptySet());
+        filter.setPubTypes(Set.of());
         filter.setLastPubType(null);
         filter.setCommentExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, COMMENT, null));
         filter.setLastCommentExpression(new FilterExpression<>());
@@ -256,7 +255,7 @@ public class UdmValueRepositoryIntegrationTest {
         filter.setContentUnitPriceExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, CONTENT_UNIT_PRICE, null));
         filter.setContentUnitPriceFlagExpression(new FilterExpression<>(FilterOperatorEnum.Y));
-        filter.setPubTypes(Collections.emptySet());
+        filter.setPubTypes(Set.of());
         filter.setLastPubType(null);
         filter.setCommentExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, COMMENT, null));
         filter.setLastCommentExpression(new FilterExpression<>());

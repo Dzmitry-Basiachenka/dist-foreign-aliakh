@@ -186,8 +186,7 @@ public class AaclUsageServiceTest {
     public void testInsertUsagesFromBaselineWithNoUsages() {
         mockStatic(RupContextUtils.class);
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
-        expect(aaclUsageRepository.findBaselinePeriods(2019, 3))
-            .andReturn(Collections.emptySet()).once();
+        expect(aaclUsageRepository.findBaselinePeriods(2019, 3)).andReturn(Set.of()).once();
         replay(aaclUsageRepository, usageAuditService, RupContextUtils.class);
         assertEquals(List.of(), aaclUsageService.insertUsagesFromBaseline(buildUsageBatch()));
         verify(aaclUsageRepository, usageAuditService, RupContextUtils.class);

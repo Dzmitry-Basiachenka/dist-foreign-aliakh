@@ -34,7 +34,6 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -247,7 +246,7 @@ public class FasUsageRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FIND_WITH_AMOUNTS_AND_RIGHTSHOLDERS)
     public void testFindWithAmountsAndRightsholdersByUsageBatchFilter() {
-        UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Set.of(USAGE_BATCH_ID_1),
+        UsageFilter usageFilter = buildUsageFilter(Set.of(), Set.of(USAGE_BATCH_ID_1),
             UsageStatusEnum.ELIGIBLE, null, null);
         verifyUsages(fasUsageRepository.findWithAmountsAndRightsholders(usageFilter), 1, USAGE_ID_1);
     }
@@ -255,7 +254,7 @@ public class FasUsageRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FIND_WITH_AMOUNTS_AND_RIGHTSHOLDERS)
     public void testFindWithAmountsAndRightsholdersByRhAccountNumberFilter() {
-        UsageFilter usageFilter = buildUsageFilter(Set.of(RH_ACCOUNT_NUMBER), Collections.emptySet(),
+        UsageFilter usageFilter = buildUsageFilter(Set.of(RH_ACCOUNT_NUMBER), Set.of(),
             UsageStatusEnum.ELIGIBLE, null, null);
         verifyUsages(fasUsageRepository.findWithAmountsAndRightsholders(usageFilter), 1, USAGE_ID_1);
     }
@@ -263,8 +262,7 @@ public class FasUsageRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FIND_WITH_AMOUNTS_AND_RIGHTSHOLDERS)
     public void testFindWithAmountsAndRightsholdersByProductFamiliesFilter() {
-        UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Collections.emptySet(),
-            UsageStatusEnum.ELIGIBLE, null, null);
+        UsageFilter usageFilter = buildUsageFilter(Set.of(), Set.of(), UsageStatusEnum.ELIGIBLE, null, null);
         verifyUsages(fasUsageRepository.findWithAmountsAndRightsholders(usageFilter), 3, USAGE_ID_1, USAGE_ID_3,
             USAGE_ID_2);
     }
@@ -272,8 +270,7 @@ public class FasUsageRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FIND_WITH_AMOUNTS_AND_RIGHTSHOLDERS)
     public void testFindWithAmountsAndRightsholdersByStatusFilter() {
-        UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Collections.emptySet(),
-            UsageStatusEnum.ELIGIBLE, null, null);
+        UsageFilter usageFilter = buildUsageFilter(Set.of(), Set.of(), UsageStatusEnum.ELIGIBLE, null, null);
         verifyUsages(fasUsageRepository.findWithAmountsAndRightsholders(usageFilter), 3, USAGE_ID_1, USAGE_ID_3,
             USAGE_ID_2);
     }
@@ -281,8 +278,7 @@ public class FasUsageRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FIND_WITH_AMOUNTS_AND_RIGHTSHOLDERS)
     public void testFindWithAmountsAndRightsholdersByPaymentDateFilter() {
-        UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Collections.emptySet(),
-            UsageStatusEnum.ELIGIBLE, PAYMENT_DATE, null);
+        UsageFilter usageFilter = buildUsageFilter(Set.of(), Set.of(), UsageStatusEnum.ELIGIBLE, PAYMENT_DATE, null);
         verifyUsages(fasUsageRepository.findWithAmountsAndRightsholders(usageFilter), 3, USAGE_ID_1, USAGE_ID_3,
             USAGE_ID_2);
     }
@@ -290,8 +286,7 @@ public class FasUsageRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FIND_WITH_AMOUNTS_AND_RIGHTSHOLDERS)
     public void testFindWithAmountsAndRightsholdersByFiscalYearFilter() {
-        UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Collections.emptySet(),
-            UsageStatusEnum.ELIGIBLE, null, FISCAL_YEAR);
+        UsageFilter usageFilter = buildUsageFilter(Set.of(), Set.of(), UsageStatusEnum.ELIGIBLE, null, FISCAL_YEAR);
         verifyUsages(fasUsageRepository.findWithAmountsAndRightsholders(usageFilter), 3, USAGE_ID_1, USAGE_ID_3,
             USAGE_ID_2);
     }

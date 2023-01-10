@@ -24,7 +24,6 @@ import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -43,7 +42,7 @@ public class LicenseTypeFilterWidgetTest {
 
     private static final String LICENSE_TYPE = "ACL";
     private final LicenseTypeFilterWidget licenseTypeFilterWidget =
-        new LicenseTypeFilterWidget(() -> List.of(LICENSE_TYPE), Collections.emptySet());
+        new LicenseTypeFilterWidget(() -> List.of(LICENSE_TYPE), Set.of());
 
     @Test
     public void testLoadBeans() {
@@ -78,7 +77,7 @@ public class LicenseTypeFilterWidgetTest {
         Capture<ValueProvider<String, List<String>>> providerCapture = newCapture();
         expect(Windows.showFilterWindow(eq("License Types filter"), same(licenseTypeFilterWidget),
             capture(providerCapture))).andReturn(filterWindow).once();
-        filterWindow.setSelectedItemsIds(Collections.emptySet());
+        filterWindow.setSelectedItemsIds(Set.of());
         expectLastCall().once();
         expect(filterWindow.getId()).andReturn("id").once();
         filterWindow.addStyleName("license-type-filter-window");

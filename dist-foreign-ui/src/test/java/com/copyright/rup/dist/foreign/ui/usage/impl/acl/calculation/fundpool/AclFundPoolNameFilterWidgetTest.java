@@ -80,7 +80,7 @@ public class AclFundPoolNameFilterWidgetTest {
         Capture<ValueProvider<AclFundPool, List<String>>> providerCapture = newCapture();
         expect(Windows.showFilterWindow(eq("Fund Pool Names filter"), same(aclFundPoolNameFilterWidget),
             capture(providerCapture))).andReturn(filterWindow).once();
-        filterWindow.setSelectedItemsIds(Collections.emptySet());
+        filterWindow.setSelectedItemsIds(Set.of());
         expectLastCall().once();
         expect(filterWindow.getId()).andReturn("id").once();
         filterWindow.addStyleName("acl-fund-pool-name-filter-window");

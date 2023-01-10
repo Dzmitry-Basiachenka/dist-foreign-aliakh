@@ -76,7 +76,6 @@ import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -228,7 +227,7 @@ public class AclScenariosWidgetTest {
     public void testGetNotSelectedScenario() {
         Grid grid = createMock(Grid.class);
         Whitebox.setInternalState(scenariosWidget, SCENARIO_GRID, grid);
-        expect(grid.getSelectedItems()).andReturn(Collections.emptySet()).once();
+        expect(grid.getSelectedItems()).andReturn(Set.of()).once();
         replay(grid);
         assertNull(scenariosWidget.getSelectedScenario());
         verify(grid);

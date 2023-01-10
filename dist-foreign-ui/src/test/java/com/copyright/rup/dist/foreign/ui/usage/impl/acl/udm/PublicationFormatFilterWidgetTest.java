@@ -24,7 +24,6 @@ import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -43,7 +42,7 @@ public class PublicationFormatFilterWidgetTest {
 
     private static final String PUBLICATION_FORMAT = "Digital";
     private final PublicationFormatFilterWidget publicationFormatFilterWidget =
-        new PublicationFormatFilterWidget(() -> List.of(PUBLICATION_FORMAT), Collections.emptySet());
+        new PublicationFormatFilterWidget(() -> List.of(PUBLICATION_FORMAT), Set.of());
 
     @Test
     public void testLoadBeans() {
@@ -78,7 +77,7 @@ public class PublicationFormatFilterWidgetTest {
         Capture<ValueProvider<String, List<String>>> providerCapture = newCapture();
         expect(Windows.showFilterWindow(eq("Publication Formats filter"), same(publicationFormatFilterWidget),
             capture(providerCapture))).andReturn(filterWindow).once();
-        filterWindow.setSelectedItemsIds(Collections.emptySet());
+        filterWindow.setSelectedItemsIds(Set.of());
         expectLastCall().once();
         expect(filterWindow.getId()).andReturn("id").once();
         filterWindow.addStyleName("publication-format-filter-window");

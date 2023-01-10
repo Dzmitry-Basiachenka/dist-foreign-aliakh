@@ -31,7 +31,6 @@ import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
 import java.time.LocalDate;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -98,7 +97,7 @@ public class PrmIntegrationServiceTest {
     public void testGetRightsholdersForEmptySet() {
         expect(prmRightsholderService.getRightsholders(Sets.newHashSet())).andReturn(Lists.newArrayList()).once();
         replay(prmRightsholderService);
-        assertTrue(prmIntegrationService.getRightsholders(Collections.emptySet()).isEmpty());
+        assertTrue(prmIntegrationService.getRightsholders(Set.of()).isEmpty());
         verify(prmRightsholderService);
     }
 

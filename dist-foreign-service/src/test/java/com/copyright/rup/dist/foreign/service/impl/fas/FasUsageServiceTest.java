@@ -152,8 +152,8 @@ public class FasUsageServiceTest {
         expect(fasUsageRepository.findRightsholdersInformation(scenario.getId()))
             .andReturn(ImmutableMap.of(usage2.getRightsholder().getAccountNumber(), usage2)).once();
         expect(fasUsageRepository.findWithAmountsAndRightsholders(filter)).andReturn(List.of(usage1)).once();
-        expect(prmIntegrationService.getRollUps(Collections.emptySet())).andReturn(Collections.emptyMap()).once();
-        expect(prmIntegrationService.getPreferences(Collections.emptySet())).andReturn(Collections.emptyMap()).once();
+        expect(prmIntegrationService.getRollUps(Set.of())).andReturn(Collections.emptyMap()).once();
+        expect(prmIntegrationService.getPreferences(Set.of())).andReturn(Collections.emptyMap()).once();
         expect(prmIntegrationService.getRhParticipatingServiceFee(false)).andReturn(new BigDecimal("0.32")).once();
         usageRepository.addToScenario(List.of(usage1));
         expectLastCall().once();

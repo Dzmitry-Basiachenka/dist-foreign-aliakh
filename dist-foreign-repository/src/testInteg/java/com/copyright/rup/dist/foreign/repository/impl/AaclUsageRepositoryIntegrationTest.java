@@ -46,7 +46,6 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.List;
@@ -287,7 +286,7 @@ public class AaclUsageRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FIND_BASELINE_PERIODS)
     public void testFindBaselinePeriodsWithNonExistentPeriod() {
-        assertEquals(Collections.emptySet(), aaclUsageRepository.findBaselinePeriods(2014, 2));
+        assertEquals(Set.of(), aaclUsageRepository.findBaselinePeriods(2014, 2));
     }
 
     @Test

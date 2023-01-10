@@ -47,7 +47,6 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.HashSet;
@@ -192,8 +191,7 @@ public class UsageRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindDtosByUsageBatchFilter() {
-        UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Set.of(USAGE_BATCH_ID_1),
-            null, null, null, null);
+        UsageFilter usageFilter = buildUsageFilter(Set.of(), Set.of(USAGE_BATCH_ID_1), null, null, null, null);
         verifyUsageDtos(usageRepository.findDtosByFilter(usageFilter, null,
             new Sort(DETAIL_ID_KEY, Sort.Direction.ASC)), USAGE_ID_1);
     }
@@ -201,8 +199,7 @@ public class UsageRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindDtosByRhAccountNumberFilter() {
-        UsageFilter usageFilter = buildUsageFilter(Set.of(RH_ACCOUNT_NUMBER), Collections.emptySet(),
-            null, null, null, null);
+        UsageFilter usageFilter = buildUsageFilter(Set.of(RH_ACCOUNT_NUMBER), Set.of(), null, null, null, null);
         verifyUsageDtos(usageRepository.findDtosByFilter(usageFilter, null,
             new Sort(DETAIL_ID_KEY, Sort.Direction.ASC)), USAGE_ID_1);
     }
@@ -210,8 +207,7 @@ public class UsageRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FIND_DTOS_BY_PRODUCT_FAMILY_FILTER)
     public void testFindDtosByProductFamilyFasFilter() {
-        UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Collections.emptySet(),
-            FAS_PRODUCT_FAMILY, null, null, null);
+        UsageFilter usageFilter = buildUsageFilter(Set.of(), Set.of(), FAS_PRODUCT_FAMILY, null, null, null);
         verifyUsageDtos(usageRepository.findDtosByFilter(usageFilter, null,
             new Sort(DETAIL_ID_KEY, Sort.Direction.ASC)), USAGE_ID_14, USAGE_ID_1, USAGE_ID_23, USAGE_ID_21,
             USAGE_ID_12, USAGE_ID_3, USAGE_ID_6, USAGE_ID_13, USAGE_ID_11, USAGE_ID_2, USAGE_ID_17, USAGE_ID_22,
@@ -221,8 +217,7 @@ public class UsageRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FIND_DTOS_BY_PRODUCT_FAMILY_FILTER)
     public void testFindDtosByProductFamilyFas2Filter() {
-        UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Collections.emptySet(),
-            FAS2_PRODUCT_FAMILY, null, null, null);
+        UsageFilter usageFilter = buildUsageFilter(Set.of(), Set.of(), FAS2_PRODUCT_FAMILY, null, null, null);
         verifyUsageDtos(usageRepository.findDtosByFilter(usageFilter, null,
             new Sort(DETAIL_ID_KEY, Sort.Direction.ASC)), USAGE_ID_24);
     }
@@ -230,8 +225,7 @@ public class UsageRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FIND_DTOS_BY_PRODUCT_FAMILY_FILTER)
     public void testFindDtosByProductFamilyNtsFilter() {
-        UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Collections.emptySet(),
-            NTS_PRODUCT_FAMILY, null, null, null);
+        UsageFilter usageFilter = buildUsageFilter(Set.of(), Set.of(), NTS_PRODUCT_FAMILY, null, null, null);
         verifyUsageDtos(usageRepository.findDtosByFilter(usageFilter, null,
             new Sort(DETAIL_ID_KEY, Sort.Direction.ASC)), "2255188f-d582-4516-8c08-835cfe1d68c2",
             "4dd8cdf8-ca10-422e-bdd5-3220105e6379", "f5eb98ce-ab59-44c8-9a50-1afea2b5ae15");
@@ -240,8 +234,7 @@ public class UsageRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FIND_DTOS_BY_PRODUCT_FAMILY_FILTER)
     public void testFindDtosByStatusFilter() {
-        UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Collections.emptySet(),
-            null, UsageStatusEnum.ELIGIBLE, null, null);
+        UsageFilter usageFilter = buildUsageFilter(Set.of(), Set.of(), null, UsageStatusEnum.ELIGIBLE, null, null);
         verifyUsageDtos(usageRepository.findDtosByFilter(usageFilter, null, new Sort(DETAIL_ID_KEY,
             Sort.Direction.ASC)), USAGE_ID_1, USAGE_ID_3, USAGE_ID_2);
     }
@@ -249,8 +242,7 @@ public class UsageRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FIND_DTOS_BY_PRODUCT_FAMILY_FILTER)
     public void testFindDtosByPaymentDateFilterSortByWorkTitle() {
-        UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Collections.emptySet(),
-            null, null, PAYMENT_DATE, null);
+        UsageFilter usageFilter = buildUsageFilter(Set.of(), Set.of(), null, null, PAYMENT_DATE, null);
         verifyUsageDtos(usageRepository.findDtosByFilter(usageFilter, null, new Sort(WORK_TITLE_KEY,
             Sort.Direction.ASC)), USAGE_ID_3, USAGE_ID_2, USAGE_ID_1);
     }
@@ -258,8 +250,7 @@ public class UsageRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FIND_DTOS_BY_PRODUCT_FAMILY_FILTER)
     public void testFindDtosByFiscalYearFilterSortByArticle() {
-        UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Collections.emptySet(),
-            null, null, null, FISCAL_YEAR);
+        UsageFilter usageFilter = buildUsageFilter(Set.of(), Set.of(), null, null, null, FISCAL_YEAR);
         verifyUsageDtos(usageRepository.findDtosByFilter(usageFilter, null, new Sort("article", Sort.Direction.ASC)),
             USAGE_ID_3, USAGE_ID_1, USAGE_ID_2);
     }
@@ -267,8 +258,8 @@ public class UsageRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FOLDER_NAME + "find-invalid-rh-by-filter.groovy")
     public void testFindInvalidRightsholdersByFilter() {
-        UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Set.of(USAGE_BATCH_ID_1),
-                null, UsageStatusEnum.ELIGIBLE, null, null);
+        UsageFilter usageFilter = buildUsageFilter(Set.of(), Set.of(USAGE_BATCH_ID_1),
+            null, UsageStatusEnum.ELIGIBLE, null, null);
         assertTrue(CollectionUtils.isEmpty(usageRepository.findInvalidRightsholdersByFilter(usageFilter)));
         List<Usage> usages = usageRepository.findByIds(List.of(USAGE_ID_18));
         usages.get(0).getRightsholder().setAccountNumber(1000000003L);
@@ -778,7 +769,7 @@ public class UsageRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FOLDER_NAME + "find-dtos-by-filter-sort.groovy")
     public void testFindByFilterSortingByBatchInfo() {
-        UsageFilter filter = buildUsageFilter(Sets.newHashSet(2000017000L, 7000896777L), Collections.emptySet(),
+        UsageFilter filter = buildUsageFilter(Sets.newHashSet(2000017000L, 7000896777L), Set.of(),
             null, null, null, null);
         verifyFindByFilterSort(filter, BATCH_NAME_KEY, Direction.ASC, USAGE_ID_23, USAGE_ID_24);
         verifyFindByFilterSort(filter, BATCH_NAME_KEY, Direction.DESC, USAGE_ID_24, USAGE_ID_23);
@@ -799,7 +790,7 @@ public class UsageRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FOLDER_NAME + "find-dtos-by-filter-sort.groovy")
     public void testFindByFilterSortingByUsageInfo() {
-        UsageFilter filter = buildUsageFilter(Sets.newHashSet(2000017000L, 7000896777L), Collections.emptySet(),
+        UsageFilter filter = buildUsageFilter(Sets.newHashSet(2000017000L, 7000896777L), Set.of(),
             null, null, null, null);
         verifyFindByFilterSort(filter, "productFamily", Direction.ASC, USAGE_ID_23, USAGE_ID_24);
         verifyFindByFilterSort(filter, "productFamily", Direction.DESC, USAGE_ID_24, USAGE_ID_23);
@@ -828,7 +819,7 @@ public class UsageRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FOLDER_NAME + "find-dtos-by-filter-sort.groovy")
     public void testFindByFilterSortingByWorkInfo() {
-        UsageFilter filter = buildUsageFilter(Sets.newHashSet(2000017000L, 7000896777L), Collections.emptySet(),
+        UsageFilter filter = buildUsageFilter(Sets.newHashSet(2000017000L, 7000896777L), Set.of(),
             null, null, null, null);
         verifyFindByFilterSort(filter, STANDARD_NUMBER_KEY, Direction.ASC, USAGE_ID_23, USAGE_ID_24);
         verifyFindByFilterSort(filter, STANDARD_NUMBER_KEY, Direction.DESC, USAGE_ID_24, USAGE_ID_23);

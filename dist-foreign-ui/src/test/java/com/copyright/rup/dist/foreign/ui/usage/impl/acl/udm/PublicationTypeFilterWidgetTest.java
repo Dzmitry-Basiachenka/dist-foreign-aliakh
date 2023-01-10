@@ -26,7 +26,6 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -82,7 +81,7 @@ public class PublicationTypeFilterWidgetTest {
         Capture<ValueProvider<PublicationType, List<String>>> providerCapture = newCapture();
         expect(Windows.showFilterWindow(eq("Pub Types filter"), same(publicationTypeFilterWidget),
             capture(providerCapture))).andReturn(filterWindow).once();
-        filterWindow.setSelectedItemsIds(Collections.emptySet());
+        filterWindow.setSelectedItemsIds(Set.of());
         expectLastCall().once();
         expect(filterWindow.getId()).andReturn("id").once();
         filterWindow.addStyleName("publication-type-filter-window");

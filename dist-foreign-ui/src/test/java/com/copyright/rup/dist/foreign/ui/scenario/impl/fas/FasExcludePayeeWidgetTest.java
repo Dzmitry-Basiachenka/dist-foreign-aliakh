@@ -56,7 +56,6 @@ import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Supplier;
@@ -138,8 +137,7 @@ public class FasExcludePayeeWidgetTest {
         Button.ClickEvent clickEvent = createMock(Button.ClickEvent.class);
         Capture<ConfirmActionDialogWindow.IListener> actionDialogListenerCapture = newCapture();
         expect(payeesGrid.getSelectedItems()).andReturn(buildPayeeTotalHolder()).once();
-        expect(controller.getAccountNumbersInvalidForExclude(Set.of(PAYEE_ACCOUNT_NUMBER)))
-            .andReturn(Collections.emptySet()).once();
+        expect(controller.getAccountNumbersInvalidForExclude(Set.of(PAYEE_ACCOUNT_NUMBER))).andReturn(Set.of()).once();
         Windows.showConfirmDialogWithReason(eq("Confirm action"),
             eq("Are you sure you want to exclude details with selected Payees?"),
             eq("Yes"), eq("Cancel"), capture(actionDialogListenerCapture), anyObject(Validator.class));
@@ -173,7 +171,7 @@ public class FasExcludePayeeWidgetTest {
         Button.ClickEvent clickEvent = createMock(Button.ClickEvent.class);
         Windows.showNotificationWindow("Please select at least one Payee");
         expectLastCall().once();
-        expect(payeesGrid.getSelectedItems()).andReturn(Collections.emptySet()).once();
+        expect(payeesGrid.getSelectedItems()).andReturn(Set.of()).once();
         replay(clickEvent, controller, payeesGrid, Windows.class);
         buttonClick(0, clickEvent);
         verify(clickEvent, controller, payeesGrid, Windows.class);
@@ -185,8 +183,7 @@ public class FasExcludePayeeWidgetTest {
         Button.ClickEvent clickEvent = createMock(Button.ClickEvent.class);
         Capture<ConfirmActionDialogWindow.IListener> actionDialogListenerCapture = newCapture();
         expect(payeesGrid.getSelectedItems()).andReturn(buildPayeeTotalHolder()).once();
-        expect(controller.getAccountNumbersInvalidForExclude(Set.of(PAYEE_ACCOUNT_NUMBER)))
-            .andReturn(Collections.emptySet()).once();
+        expect(controller.getAccountNumbersInvalidForExclude(Set.of(PAYEE_ACCOUNT_NUMBER))).andReturn(Set.of()).once();
         Windows.showConfirmDialogWithReason(eq("Confirm action"),
             eq("Are you sure you want to redesignate details with selected Payees?"),
             eq("Yes"), eq("Cancel"), capture(actionDialogListenerCapture), anyObject(Validator.class));
@@ -220,7 +217,7 @@ public class FasExcludePayeeWidgetTest {
         Button.ClickEvent clickEvent = createMock(Button.ClickEvent.class);
         Windows.showNotificationWindow("Please select at least one Payee");
         expectLastCall().once();
-        expect(payeesGrid.getSelectedItems()).andReturn(Collections.emptySet()).once();
+        expect(payeesGrid.getSelectedItems()).andReturn(Set.of()).once();
         replay(clickEvent, controller, payeesGrid, Windows.class);
         buttonClick(1, clickEvent);
         verify(clickEvent, controller, payeesGrid, Windows.class);

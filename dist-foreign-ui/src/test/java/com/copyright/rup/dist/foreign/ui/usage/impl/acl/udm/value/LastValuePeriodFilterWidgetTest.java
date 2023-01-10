@@ -14,7 +14,6 @@ import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -36,7 +35,7 @@ public class LastValuePeriodFilterWidgetTest {
     private static final String IS_NOT_NULL = "IS_NOT_NULL";
 
     private final LastValuePeriodFilterWidget lastValuePeriodFilterWidget =
-        new LastValuePeriodFilterWidget(() -> List.of(LAST_VALUE_PERIOD), Collections.emptySet());
+        new LastValuePeriodFilterWidget(() -> List.of(LAST_VALUE_PERIOD), Set.of());
 
     @Test
     public void testLoadBeans() {

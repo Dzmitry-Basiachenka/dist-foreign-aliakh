@@ -24,7 +24,6 @@ import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -43,7 +42,7 @@ public class GrantStatusFilterWidgetTest {
 
     private static final String GRANT_STATUS = "GRANT";
     private final GrantStatusFilterWidget grantStatusFilterWidget =
-        new GrantStatusFilterWidget(() -> List.of(GRANT_STATUS), Collections.emptySet());
+        new GrantStatusFilterWidget(() -> List.of(GRANT_STATUS), Set.of());
 
     @Test
     public void testLoadBeans() {
@@ -78,7 +77,7 @@ public class GrantStatusFilterWidgetTest {
         Capture<ValueProvider<String, List<String>>> providerCapture = newCapture();
         expect(Windows.showFilterWindow(eq("Grant Statuses filter"), same(grantStatusFilterWidget),
             capture(providerCapture))).andReturn(filterWindow).once();
-        filterWindow.setSelectedItemsIds(Collections.emptySet());
+        filterWindow.setSelectedItemsIds(Set.of());
         expectLastCall().once();
         expect(filterWindow.getId()).andReturn("id").once();
         filterWindow.addStyleName("grant-status-filter-window");

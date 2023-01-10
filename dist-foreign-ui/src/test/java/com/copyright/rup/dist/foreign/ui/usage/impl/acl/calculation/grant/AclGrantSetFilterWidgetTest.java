@@ -82,7 +82,7 @@ public class AclGrantSetFilterWidgetTest {
         Capture<ValueProvider<AclGrantSet, List<String>>> providerCapture = newCapture();
         expect(Windows.showFilterWindow(eq("Grant Sets filter"), same(aclGrantSetFilterWidget),
             capture(providerCapture))).andReturn(filterWindow).once();
-        filterWindow.setSelectedItemsIds(Collections.emptySet());
+        filterWindow.setSelectedItemsIds(Set.of());
         expectLastCall().once();
         expect(filterWindow.getId()).andReturn("id").once();
         filterWindow.addStyleName("acl-grant-sets-filter-window");

@@ -24,7 +24,6 @@ import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -43,7 +42,7 @@ public class ReportedPubTypeFilterWidgetTest {
 
     private static final String REPORTED_PUB_TYPE = "Journal";
     private final ReportedPubTypeFilterWidget reportedPubTypeFilterWidget =
-        new ReportedPubTypeFilterWidget(() -> List.of(REPORTED_PUB_TYPE), Collections.emptySet());
+        new ReportedPubTypeFilterWidget(() -> List.of(REPORTED_PUB_TYPE), Set.of());
 
     @Test
     public void testLoadBeans() {
@@ -78,7 +77,7 @@ public class ReportedPubTypeFilterWidgetTest {
         Capture<ValueProvider<String, List<String>>> providerCapture = newCapture();
         expect(Windows.showFilterWindow(eq("Reported Pub Types filter"), same(reportedPubTypeFilterWidget),
             capture(providerCapture))).andReturn(filterWindow).once();
-        filterWindow.setSelectedItemsIds(Collections.emptySet());
+        filterWindow.setSelectedItemsIds(Set.of());
         expectLastCall().once();
         expect(filterWindow.getId()).andReturn("id").once();
         filterWindow.addStyleName("reported-pub-type-filter-window");

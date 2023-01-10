@@ -24,7 +24,6 @@ import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -45,7 +44,7 @@ public class AssigneeFilterWidgetTest {
     private static final String UNASSIGNED = "Unassigned";
 
     private final AssigneeFilterWidget assigneeFilterWidget =
-        new AssigneeFilterWidget(() -> List.of(ASSIGNEE), Collections.emptySet());
+        new AssigneeFilterWidget(() -> List.of(ASSIGNEE), Set.of());
 
     @Test
     public void testLoadBeans() {
@@ -81,7 +80,7 @@ public class AssigneeFilterWidgetTest {
         Capture<ValueProvider<String, List<String>>> providerCapture = newCapture();
         expect(Windows.showFilterWindow(eq("Assignees filter"), same(assigneeFilterWidget), capture(providerCapture)))
             .andReturn(filterWindow).once();
-        filterWindow.setSelectedItemsIds(Collections.emptySet());
+        filterWindow.setSelectedItemsIds(Set.of());
         expectLastCall().once();
         expect(filterWindow.getId()).andReturn("id").once();
         filterWindow.addStyleName("assignee-filter-window");

@@ -27,7 +27,6 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -82,7 +81,7 @@ public class PeriodFilterWidgetTest {
         Capture<ValueProvider<Integer, List<String>>> providerCapture = newCapture();
         expect(Windows.showFilterWindow(eq("Periods filter"), same(periodFilterWidget),
             capture(providerCapture))).andReturn(filterWindow).once();
-        filterWindow.setSelectedItemsIds(Collections.emptySet());
+        filterWindow.setSelectedItemsIds(Set.of());
         expectLastCall().once();
         expect(filterWindow.getId()).andReturn("id").once();
         filterWindow.addStyleName("udm-values-periods-filter-window");

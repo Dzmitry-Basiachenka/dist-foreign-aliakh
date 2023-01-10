@@ -81,9 +81,7 @@ public class ResearchServiceTest {
     public void testSendForResearchNoUsages() {
         UsageFilter filter = new UsageFilter();
         OutputStream outputStream = new ByteArrayOutputStream();
-        expect(fasReportRepository.writeUsagesForResearchAndFindIds(filter, outputStream))
-            .andReturn(Collections.emptySet())
-            .once();
+        expect(fasReportRepository.writeUsagesForResearchAndFindIds(filter, outputStream)).andReturn(Set.of()).once();
         replay(fasReportRepository, usageAuditService);
         researchService.sendForResearch(filter, outputStream);
         verify(fasReportRepository, usageAuditService);
@@ -117,8 +115,7 @@ public class ResearchServiceTest {
     public void testSendForClassificationNoUsages() {
         UsageFilter filter = new UsageFilter();
         OutputStream outputStream = new ByteArrayOutputStream();
-        expect(aaclReportRepository.writeUsagesForClassificationAndFindIds(filter, outputStream))
-            .andReturn(Collections.emptySet())
+        expect(aaclReportRepository.writeUsagesForClassificationAndFindIds(filter, outputStream)).andReturn(Set.of())
             .once();
         replay(aaclReportRepository, usageAuditService);
         researchService.sendForClassification(filter, outputStream);
