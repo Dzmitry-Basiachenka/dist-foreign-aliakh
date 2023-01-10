@@ -271,6 +271,16 @@ public class FundPoolServiceTest {
     }
 
     @Test
+    public void testDeleteAclciFundPoolById() {
+        FundPool fundPool = new FundPool();
+        fundPool.setId(FUND_POOL_ID);
+        expect(fundPoolRepository.delete(fundPool.getId())).andReturn(1).once();
+        replay(fundPoolRepository);
+        fundPoolService.deleteAclciFundPool(fundPool);
+        verify(fundPoolRepository);
+    }
+
+    @Test
     public void testCalculateSalFundPool() {
         BigDecimal splitPercent = new BigDecimal("0.10");
         FundPool fundPool = fundPoolService.calculateSalFundPoolAmounts(buildSalFundPool(splitPercent, 9, 6, 3));
