@@ -49,7 +49,6 @@ import org.powermock.reflect.Whitebox;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -181,7 +180,7 @@ public class ViewAaclFundPoolWindowTest {
         Grid grid = createMock(Grid.class);
         Whitebox.setInternalState(viewAaclFundPoolWindow, searchWidget);
         Whitebox.setInternalState(viewAaclFundPoolWindow, grid);
-        expect(grid.getDataProvider()).andReturn(new ListDataProvider(Collections.EMPTY_LIST)).once();
+        expect(grid.getDataProvider()).andReturn(new ListDataProvider(List.of())).once();
         expect(searchWidget.getSearchValue()).andReturn("Search").once();
         grid.recalculateColumnWidths();
         expectLastCall().once();

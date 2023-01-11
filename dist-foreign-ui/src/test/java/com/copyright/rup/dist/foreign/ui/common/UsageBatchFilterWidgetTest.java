@@ -27,7 +27,6 @@ import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -52,7 +51,7 @@ public class UsageBatchFilterWidgetTest {
 
     @Before
     public void setUp() {
-        usageBatchFilterWidget = new UsageBatchFilterWidget(Collections::emptyList);
+        usageBatchFilterWidget = new UsageBatchFilterWidget(List::of);
     }
 
     @Test

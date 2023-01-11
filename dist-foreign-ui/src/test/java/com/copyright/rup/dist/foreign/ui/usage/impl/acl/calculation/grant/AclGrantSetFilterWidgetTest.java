@@ -27,7 +27,6 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -51,7 +50,7 @@ public class AclGrantSetFilterWidgetTest {
 
     @Before
     public void setUp() {
-        aclGrantSetFilterWidget = new AclGrantSetFilterWidget(Collections::emptyList);
+        aclGrantSetFilterWidget = new AclGrantSetFilterWidget(List::of);
     }
 
     @Test

@@ -49,7 +49,6 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -128,8 +127,7 @@ public class ViewAclFundPoolWindowTest {
         Window confirmWindowCapture = createMock(Window.class);
         Button.ClickListener listener = getDeleteButtonClickListener();
         expect(aclFundPoolGrid.getSelectedItems()).andReturn(Set.of(buildAclFundPool(true))).once();
-        expect(controller.getScenarioNamesAssociatedWithFundPool(FUND_POOL_ID))
-            .andReturn(Collections.EMPTY_LIST).once();
+        expect(controller.getScenarioNamesAssociatedWithFundPool(FUND_POOL_ID)).andReturn(List.of()).once();
         expect(Windows.showConfirmDialog(
             eq("Are you sure you want to delete <i><b>'ACL Fund Pool 2021'</b></i> fund pool?"),
             anyObject())).andReturn(confirmWindowCapture).once();
@@ -144,8 +142,7 @@ public class ViewAclFundPoolWindowTest {
         Window confirmWindowCapture = createMock(Window.class);
         Button.ClickListener listener = getDeleteButtonClickListener();
         expect(aclFundPoolGrid.getSelectedItems()).andReturn(Set.of(buildAclFundPool(false))).once();
-        expect(controller.getScenarioNamesAssociatedWithFundPool(FUND_POOL_ID))
-            .andReturn(Collections.EMPTY_LIST).once();
+        expect(controller.getScenarioNamesAssociatedWithFundPool(FUND_POOL_ID)).andReturn(List.of()).once();
         expect(Windows.showConfirmDialog(
             eq("You are about to delete an <span style='color: red'>LDMT</span> <i><b>'ACL Fund Pool 2021'</b></i>" +
                 " fund pool, the data relating to the fund pool will no longer be available." +

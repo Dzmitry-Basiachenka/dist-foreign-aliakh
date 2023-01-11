@@ -49,7 +49,6 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -194,7 +193,7 @@ public class ViewUsageBatchWindowTest {
     public void testPerformSearch() {
         SearchWidget searchWidget = createMock(SearchWidget.class);
         Whitebox.setInternalState(viewUsageBatchWindow, searchWidget);
-        expect(grid.getDataProvider()).andReturn(new ListDataProvider(Collections.EMPTY_LIST)).once();
+        expect(grid.getDataProvider()).andReturn(new ListDataProvider(List.of())).once();
         expect(searchWidget.getSearchValue()).andReturn("Search").once();
         grid.recalculateColumnWidths();
         expectLastCall().once();

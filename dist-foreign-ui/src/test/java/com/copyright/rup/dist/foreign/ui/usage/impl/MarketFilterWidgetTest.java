@@ -21,8 +21,8 @@ import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 
 /**
  * Verifies {@link MarketFilterWidget}.
@@ -43,7 +43,7 @@ public class MarketFilterWidgetTest {
 
     @Before
     public void setUp() {
-        marketFilterWidget = new MarketFilterWidget(Collections::emptyList);
+        marketFilterWidget = new MarketFilterWidget(List::of);
     }
 
     @Test

@@ -27,7 +27,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -73,8 +72,7 @@ public class UdmBaselineServiceTest {
     @Test
     public void testGetBaselineUsageDtosEmptyFilter() {
         replay(baselineRepository);
-        assertEquals(Collections.EMPTY_LIST,
-            udmBaselineService.getBaselineUsageDtos(new UdmBaselineFilter(), null, null));
+        assertEquals(List.of(), udmBaselineService.getBaselineUsageDtos(new UdmBaselineFilter(), null, null));
         verify(baselineRepository);
     }
 

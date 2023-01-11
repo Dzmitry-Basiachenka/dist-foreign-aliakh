@@ -30,7 +30,6 @@ import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 
@@ -92,7 +91,7 @@ public class FasExcludeSourceRroWindowTest {
         Whitebox.setInternalState(window, searchWidget);
         Grid grid = createMock(Grid.class);
         Whitebox.setInternalState(window, grid);
-        ListDataProvider provider = new ListDataProvider(Collections.EMPTY_LIST);
+        ListDataProvider provider = new ListDataProvider(List.of());
         expect(grid.getDataProvider()).andReturn(provider).once();
         expect(searchWidget.getSearchValue()).andReturn("Access").once();
         replay(searchWidget, grid);
