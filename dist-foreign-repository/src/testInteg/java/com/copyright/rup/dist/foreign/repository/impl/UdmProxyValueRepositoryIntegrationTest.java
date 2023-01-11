@@ -31,10 +31,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -127,10 +127,10 @@ public class UdmProxyValueRepositoryIntegrationTest {
         filter.setPubTypeNames(ImmutableSet.of("NP", "BK"));
         verifyProxyValueDtos(loadExpectedProxyValueDtos("json/udm/udm_proxy_value_dto_find_by_filter_1.json"),
             udmProxyValueRepository.findDtosByFilter(filter));
-        filter.setPeriods(Collections.emptySet());
+        filter.setPeriods(Set.of());
         verifyProxyValueDtos(loadExpectedProxyValueDtos("json/udm/udm_proxy_value_dto_find_by_filter_2.json"),
             udmProxyValueRepository.findDtosByFilter(filter));
-        filter.setPubTypeNames(Collections.emptySet());
+        filter.setPubTypeNames(Set.of());
     }
 
     private void verifyProxyValueDtos(List<UdmProxyValueDto> expectedValues, List<UdmProxyValueDto> actualValues) {

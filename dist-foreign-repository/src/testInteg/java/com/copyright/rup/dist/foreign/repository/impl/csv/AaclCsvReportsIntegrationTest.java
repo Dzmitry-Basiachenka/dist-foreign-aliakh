@@ -19,7 +19,6 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.Set;
 
 /**
@@ -230,15 +229,14 @@ public class AaclCsvReportsIntegrationTest extends CsvReportsTestHelper {
         ExcludePayeeFilter filter = new ExcludePayeeFilter();
         filter.setScenarioIds(Set.of("2373ef30-1952-4e78-890d-d6b3087de59c"));
         assertFilesWithExecutor(outputStream -> reportRepository.writeAaclExcludeDetailsByPayeeCsvReport(filter,
-            Collections.emptySet(), outputStream), "aacl/exclude_by_payee_report_empty.csv");
+            Set.of(), outputStream), "aacl/exclude_by_payee_report_empty.csv");
     }
 
     @Test
     @TestData(fileName = WRITE_EXCLUDE_DETAILS_BY_PAYEE_CSV_REPORT)
     public void testWriteExcludeDetailsByPayeeCsvReportEmptyFilter() throws IOException {
         assertFilesWithExecutor(outputStream -> reportRepository.writeAaclExcludeDetailsByPayeeCsvReport(
-            new ExcludePayeeFilter(), Collections.emptySet(), outputStream),
-            "aacl/exclude_by_payee_report_empty.csv");
+            new ExcludePayeeFilter(), Set.of(), outputStream), "aacl/exclude_by_payee_report_empty.csv");
     }
 
     @Test

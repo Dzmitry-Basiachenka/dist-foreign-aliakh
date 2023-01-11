@@ -66,19 +66,19 @@ public class FasExcludeRightsholdersSearchTest {
         return Arrays.asList(
             new Object[][]{{"Times Mirror Magazines, Inc. [T]", Set.of(CONTAINER_DATA.get(0))},
                 {"Klasing", Set.of(CONTAINER_DATA.get(1))},
-                {"Invalid name", Collections.emptySet()},
-                {"Bru ggemann US Inc.", Collections.emptySet()},
+                {"Invalid name", Set.of()},
+                {"Bru ggemann US Inc.", Set.of()},
                 {"BruGgemAnn us Inc.", Set.of(CONTAINER_DATA.get(3))},
                 {"Spectator Limited", Set.of(CONTAINER_DATA.get(0))},
                 {"State College", Set.of(CONTAINER_DATA.get(3))},
                 {"desktop coMmUniCations", Set.of(CONTAINER_DATA.get(2))},
-                {"Keith-St evens Inc", Collections.emptySet()},
+                {"Keith-St evens Inc", Set.of()},
                 {"7000427902", Set.of(CONTAINER_DATA.get(3))},
-                {"70004 27902", Collections.emptySet()},
+                {"70004 27902", Set.of()},
                 {"10000", Sets.newHashSet(CONTAINER_DATA.get(0), CONTAINER_DATA.get(1))},
                 {"42", Sets.newHashSet(CONTAINER_DATA.get(1), CONTAINER_DATA.get(2), CONTAINER_DATA.get(3))},
                 {"7000425807", Sets.newHashSet(CONTAINER_DATA.get(2))},
-                {"100000 4271", Collections.emptySet()}
+                {"100000 4271", Set.of()}
             }
         );
     }

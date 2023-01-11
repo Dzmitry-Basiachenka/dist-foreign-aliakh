@@ -45,7 +45,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -198,7 +197,7 @@ public class RightsService implements IRightsService {
             Set<String> licenseTypes = getLicenseTypes(productFamily);
             Map<Long, Long> wrWrkInstToRhAccountNumberMap =
                 rmsGrantProcessorCacheService.getAccountNumbersByWrWrkInsts(wrWrkInsts, LocalDate.now(), productFamily,
-                    productFamilyToRightStatusesMap.get(productFamily), Collections.emptySet(), licenseTypes);
+                    productFamilyToRightStatusesMap.get(productFamily), Set.of(), licenseTypes);
             usages.forEach(usage -> {
                 Long wrWrkInst = usage.getWrWrkInst();
                 Long rhAccountNumber = wrWrkInstToRhAccountNumberMap.get(wrWrkInst);
@@ -233,7 +232,7 @@ public class RightsService implements IRightsService {
                 Map<Long, Long> wrWrkInstToRhAccountNumberMap = rmsGrantProcessorCacheService
                     .getAccountNumbersByWrWrkInsts(wrWrkInsts, periodEndDate, FdaConstants.ACL_UDM_USAGE_PRODUCT_FAMILY,
                         productFamilyToRightStatusesMap.get(FdaConstants.ACL_UDM_USAGE_PRODUCT_FAMILY),
-                        Collections.emptySet(), licenseTypes);
+                        Set.of(), licenseTypes);
                 groupedUdmUsages.forEach(usage -> {
                     Long wrWrkInst = usage.getWrWrkInst();
                     Long rhAccountNumber = wrWrkInstToRhAccountNumberMap.get(wrWrkInst);
@@ -268,7 +267,7 @@ public class RightsService implements IRightsService {
             Iterables.partition(wrWrkInsts, rightsPartitionSize).forEach(wrWrkInstsPart ->
                 wrWrkInstToRhAccountNumberMap.putAll(rmsGrantProcessorService.getAccountNumbersByWrWrkInsts(
                     wrWrkInstsPart, periodEndDate, FdaConstants.ACL_UDM_VALUE_PRODUCT_FAMILY, rightsStatuses,
-                    Collections.emptySet(), licenseTypes)));
+                    Set.of(), licenseTypes)));
             udmValues.forEach(value -> {
                 Long rhAccountNumber = wrWrkInstToRhAccountNumberMap.get(value.getWrWrkInst());
                 if (Objects.nonNull(rhAccountNumber)) {
@@ -426,7 +425,7 @@ public class RightsService implements IRightsService {
             .collect(Collectors.groupingBy(Usage::getWrWrkInst));
         Map<Long, Long> wrWrkInstToAccountNumber = rmsGrantProcessorCacheService.getAccountNumbersByWrWrkInsts(
             new ArrayList<>(wrWrkInstToUsagesMap.keySet()), LocalDate.now(), productFamily,
-            productFamilyToRightStatusesMap.get(productFamily), Collections.emptySet(), getLicenseTypes(productFamily));
+            productFamilyToRightStatusesMap.get(productFamily), Set.of(), getLicenseTypes(productFamily));
         wrWrkInstToAccountNumber.forEach((wrWrkInst, rhAccountNumber) -> {
             List<Usage> usagesToUpdate = wrWrkInstToUsagesMap.get(wrWrkInst);
             Set<String> usageIds = usagesToUpdate.stream().map(Usage::getId).collect(Collectors.toSet());

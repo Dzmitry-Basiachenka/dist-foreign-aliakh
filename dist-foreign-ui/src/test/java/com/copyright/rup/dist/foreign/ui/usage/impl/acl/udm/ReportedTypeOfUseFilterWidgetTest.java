@@ -24,7 +24,6 @@ import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -44,7 +43,7 @@ public class ReportedTypeOfUseFilterWidgetTest {
     private static final String REPORTED_TYPE_OF_USE = "COPY_FOR_MYSELF";
 
     private final ReportedTypeOfUseFilterWidget widget = new ReportedTypeOfUseFilterWidget(
-        () -> List.of(REPORTED_TYPE_OF_USE), Collections.emptySet());
+        () -> List.of(REPORTED_TYPE_OF_USE), Set.of());
 
     @Test
     public void testLoadBeans() {
@@ -79,7 +78,7 @@ public class ReportedTypeOfUseFilterWidgetTest {
         Capture<ValueProvider<String, List<String>>> providerCapture = newCapture();
         expect(Windows.showFilterWindow(eq("Reported Types of Use filter"), same(widget),
             capture(providerCapture))).andReturn(filterWindow).once();
-        filterWindow.setSelectedItemsIds(Collections.emptySet());
+        filterWindow.setSelectedItemsIds(Set.of());
         expectLastCall().once();
         expect(filterWindow.getId()).andReturn("id").once();
         filterWindow.addStyleName("reported-type-of-use-filter-window");

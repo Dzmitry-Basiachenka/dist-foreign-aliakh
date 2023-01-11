@@ -26,7 +26,6 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -45,7 +44,7 @@ public class DetailLicenseeClassFilterWidgetTest {
 
     private final DetailLicenseeClass detailLicenseeClass = buildDetailLicenseeClass();
     private final DetailLicenseeClassFilterWidget detailLcFilterWidget = new DetailLicenseeClassFilterWidget(() ->
-        List.of(detailLicenseeClass), Collections.emptySet());
+        List.of(detailLicenseeClass), Set.of());
 
     @Test
     public void testLoadBeans() {
@@ -80,7 +79,7 @@ public class DetailLicenseeClassFilterWidgetTest {
         Capture<ValueProvider<DetailLicenseeClass, List<String>>> providerCapture = newCapture();
         expect(Windows.showFilterWindow(eq("Detail Licensee Classes filter"), same(detailLcFilterWidget),
             capture(providerCapture))).andReturn(filterWindow).once();
-        filterWindow.setSelectedItemsIds(Collections.emptySet());
+        filterWindow.setSelectedItemsIds(Set.of());
         expectLastCall().once();
         expect(filterWindow.getId()).andReturn("id").once();
         filterWindow.addStyleName("detail-licensee-class-filter-window");

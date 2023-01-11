@@ -43,7 +43,6 @@ import java.io.PipedOutputStream;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -513,14 +512,14 @@ public class ReportServiceTest {
         ntsReportRepository.writeWorkClassificationCsvReport(search, outputStream);
         expectLastCall().once();
         replay(ntsReportRepository);
-        reportService.writeWorkClassificationCsvReport(Collections.emptySet(), search, outputStream);
+        reportService.writeWorkClassificationCsvReport(Set.of(), search, outputStream);
         verify(ntsReportRepository);
     }
 
     @Test
     public void testFasWriteExcludeDetailsByPayeeCsvReport() {
         ExcludePayeeFilter filter = new ExcludePayeeFilter();
-        Set<Long> selectedAccountNumbers = Collections.emptySet();
+        Set<Long> selectedAccountNumbers = Set.of();
         PipedOutputStream outputStream = createMock(PipedOutputStream.class);
         fasReportRepository.writeFasExcludeDetailsByPayeeCsvReport(filter, selectedAccountNumbers, outputStream);
         expectLastCall().once();
@@ -532,7 +531,7 @@ public class ReportServiceTest {
     @Test
     public void testAaclWriteExcludeDetailsByPayeeCsvReport() {
         ExcludePayeeFilter filter = new ExcludePayeeFilter();
-        Set<Long> selectedAccountNumbers = Collections.emptySet();
+        Set<Long> selectedAccountNumbers = Set.of();
         PipedOutputStream outputStream = createMock(PipedOutputStream.class);
         aaclReportRepository.writeAaclExcludeDetailsByPayeeCsvReport(filter, selectedAccountNumbers, outputStream);
         expectLastCall().once();

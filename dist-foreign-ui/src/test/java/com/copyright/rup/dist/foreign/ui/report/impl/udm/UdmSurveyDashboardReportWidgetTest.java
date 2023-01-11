@@ -31,7 +31,6 @@ import org.junit.Test;
 
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
@@ -87,7 +86,7 @@ public class UdmSurveyDashboardReportWidgetTest {
         grid.select(202212);
         assertEquals(Sets.newHashSet(202106, 202212), widget.getSelectedPeriods());
         grid.deselectAll();
-        assertEquals(Collections.emptySet(), widget.getSelectedPeriods());
+        assertEquals(Set.of(), widget.getSelectedPeriods());
     }
 
     @Test

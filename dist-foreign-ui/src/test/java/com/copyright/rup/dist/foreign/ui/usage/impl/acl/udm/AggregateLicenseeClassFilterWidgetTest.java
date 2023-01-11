@@ -26,7 +26,6 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -45,7 +44,7 @@ public class AggregateLicenseeClassFilterWidgetTest {
 
     private final AggregateLicenseeClass aggregateLicenseeClass = buildAggregateLicenseeClass();
     private final AggregateLicenseeClassFilterWidget aggregateLicenseeClassFilterWidget =
-        new AggregateLicenseeClassFilterWidget(() -> List.of(aggregateLicenseeClass), Collections.emptySet());
+        new AggregateLicenseeClassFilterWidget(() -> List.of(aggregateLicenseeClass), Set.of());
 
     @Test
     public void testLoadBeans() {
@@ -82,7 +81,7 @@ public class AggregateLicenseeClassFilterWidgetTest {
         Capture<ValueProvider<AggregateLicenseeClass, List<String>>> providerCapture = newCapture();
         expect(Windows.showFilterWindow(eq("Aggregate Licensee Classes filter"),
             same(aggregateLicenseeClassFilterWidget), capture(providerCapture))).andReturn(filterWindow).once();
-        filterWindow.setSelectedItemsIds(Collections.emptySet());
+        filterWindow.setSelectedItemsIds(Set.of());
         expectLastCall().once();
         expect(filterWindow.getId()).andReturn("id").once();
         filterWindow.addStyleName("baseline-aggregate-licensee-class-filter-window");

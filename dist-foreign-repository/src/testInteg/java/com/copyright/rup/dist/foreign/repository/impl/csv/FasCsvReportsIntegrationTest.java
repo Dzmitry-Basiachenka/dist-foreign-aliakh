@@ -23,7 +23,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Set;
 
 /**
@@ -231,14 +230,14 @@ public class FasCsvReportsIntegrationTest extends CsvReportsTestHelper {
         ExcludePayeeFilter filter = new ExcludePayeeFilter();
         filter.setScenarioIds(Set.of("d13ecc44-6795-4b75-90f0-4a3fc191f1b9"));
         assertFilesWithExecutor(outputStream -> reportRepository.writeFasExcludeDetailsByPayeeCsvReport(filter,
-            Collections.emptySet(), outputStream), "fas/exclude_by_payee_report_empty.csv");
+            Set.of(), outputStream), "fas/exclude_by_payee_report_empty.csv");
     }
 
     @Test
     @TestData(fileName = WRITE_EXCLUDE_DETAILS_BY_PAYEE_CSV_REPORT)
     public void testWriteExcludeDetailsByPayeeCsvReportEmptyFilter() throws IOException {
         assertFilesWithExecutor(outputStream -> reportRepository.writeFasExcludeDetailsByPayeeCsvReport(
-            new ExcludePayeeFilter(), Collections.emptySet(), outputStream), "fas/exclude_by_payee_report_empty.csv");
+            new ExcludePayeeFilter(), Set.of(), outputStream), "fas/exclude_by_payee_report_empty.csv");
     }
 
     @Test

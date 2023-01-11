@@ -22,7 +22,6 @@ import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import java.util.Collections;
 import java.util.Set;
 
 /**
@@ -42,7 +41,7 @@ public class AclciLicenseTypeFilterWidgetTest {
         ImmutableSet.of(AclciLicenseTypeEnum.CURR_REPUB_HE, AclciLicenseTypeEnum.CURR_REPUB_K12,
             AclciLicenseTypeEnum.CURR_REUSE_K12, AclciLicenseTypeEnum.CURR_SHARE_K12);
     private final AclciLicenseTypeFilterWidget licenseTypeFilterWidget =
-        new AclciLicenseTypeFilterWidget(LICENSE_TYPES, Collections.emptySet());
+        new AclciLicenseTypeFilterWidget(LICENSE_TYPES, Set.of());
 
     @Test
     public void testLoadBeans() {
@@ -76,7 +75,7 @@ public class AclciLicenseTypeFilterWidgetTest {
         FilterWindow filterWindow = createMock(FilterWindow.class);
         expect(Windows.showFilterWindow(eq("License Types filter"), same(licenseTypeFilterWidget)))
             .andReturn(filterWindow).once();
-        filterWindow.setSelectedItemsIds(Collections.emptySet());
+        filterWindow.setSelectedItemsIds(Set.of());
         expectLastCall().once();
         expect(filterWindow.getId()).andReturn("id").once();
         filterWindow.addStyleName("aclci-license-type-filter-window");

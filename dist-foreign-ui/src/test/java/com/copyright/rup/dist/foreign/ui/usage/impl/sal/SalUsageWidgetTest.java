@@ -55,7 +55,6 @@ import java.time.LocalDate;
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
@@ -308,7 +307,7 @@ public class SalUsageWidgetTest {
     @Test
     public void testAddToScenarioButtonClickListenerWithEmptyBatchFilter() {
         mockStatic(Windows.class);
-        filterWidget.getAppliedFilter().setUsageBatchesIds(Collections.emptySet());
+        filterWidget.getAppliedFilter().setUsageBatchesIds(Set.of());
         ClickEvent clickEvent = createMock(ClickEvent.class);
         expect(controller.getBeansCount()).andReturn(1).once();
         prepareCreateScenarioExpectation();

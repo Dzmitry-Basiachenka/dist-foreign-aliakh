@@ -69,9 +69,9 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -204,7 +204,7 @@ public class CreateAclScenarioWindowTest {
         expect(controller.isValidUsageBatch(BATCH_UID, aclGrantSet.getId(), PERIOD, PERIOD_PRIORS))
             .andReturn(true).once();
         expect(controller.getFundPoolDetailsNotToBeDistributed(BATCH_UID, aclFundPool.getId(), aclGrantSet.getId(),
-            detailLicenseeClasses)).andReturn(Collections.emptySet()).once();
+            detailLicenseeClasses)).andReturn(Set.of()).once();
         controller.createAclScenario(expectedScenario);
         expectLastCall().once();
         replay(controller);

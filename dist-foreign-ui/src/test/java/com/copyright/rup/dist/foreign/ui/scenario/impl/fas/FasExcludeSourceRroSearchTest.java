@@ -66,12 +66,12 @@ public class FasExcludeSourceRroSearchTest {
         return Arrays.asList(
             new Object[][]{{"Times Mirror Magazines, Inc. [T]", Set.of(CONTAINER_DATA.get(0))},
                 {"Klasing", Set.of(CONTAINER_DATA.get(1))},
-                {"Invalid name", Collections.emptySet()},
-                {"Bru ggemann US Inc.", Collections.emptySet()},
+                {"Invalid name", Set.of()},
+                {"Bru ggemann US Inc.", Set.of()},
                 {"BruGgemAnn us Inc.", Set.of(CONTAINER_DATA.get(3))},
                 {"7000427902", Set.of(CONTAINER_DATA.get(3))},
-                {"70004 27902", Collections.emptySet()},
-                {"7000427905", Collections.emptySet()},
+                {"70004 27902", Set.of()},
+                {"7000427905", Set.of()},
                 {"10000", Sets.newHashSet(CONTAINER_DATA.get(0), CONTAINER_DATA.get(1))}
             }
         );
