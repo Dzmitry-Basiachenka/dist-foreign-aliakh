@@ -25,7 +25,6 @@ import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -46,7 +45,7 @@ public class AclScenarioFilterWidgetTest {
     private static final String SCENARIO_NAME = "MACL Scenario 202212";
     private static final String SCENARIO_ID = "17a915c3-3f78-412b-8a00-29e7f5e9b965";
 
-    private final AclScenarioFilterWidget scenarioFilterWidget = new AclScenarioFilterWidget(Collections::emptyList);
+    private final AclScenarioFilterWidget scenarioFilterWidget = new AclScenarioFilterWidget(List::of);
 
     @Test
     public void testGetBeanClass() {

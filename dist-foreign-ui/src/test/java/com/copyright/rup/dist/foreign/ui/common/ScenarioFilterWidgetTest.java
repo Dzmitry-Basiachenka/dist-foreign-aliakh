@@ -26,7 +26,6 @@ import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -51,7 +50,7 @@ public class ScenarioFilterWidgetTest {
 
     @Before
     public void setUp() {
-        scenarioFilterWidget = new ScenarioFilterWidget(Collections::emptyList);
+        scenarioFilterWidget = new ScenarioFilterWidget(List::of);
     }
 
     @Test

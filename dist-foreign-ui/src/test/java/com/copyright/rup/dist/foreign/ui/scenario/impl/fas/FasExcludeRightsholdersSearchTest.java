@@ -25,7 +25,6 @@ import org.powermock.reflect.Whitebox;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -118,7 +117,7 @@ public class FasExcludeRightsholdersSearchTest {
         Whitebox.setInternalState(window, searchWidget);
         Grid grid = createMock(Grid.class);
         Whitebox.setInternalState(window, grid);
-        ListDataProvider provider = new ListDataProvider(Collections.EMPTY_LIST);
+        ListDataProvider provider = new ListDataProvider(List.of());
         expect(grid.getDataProvider()).andReturn(provider).once();
         expect(searchWidget.getSearchValue()).andReturn(value).once();
         replay(searchWidget, grid);

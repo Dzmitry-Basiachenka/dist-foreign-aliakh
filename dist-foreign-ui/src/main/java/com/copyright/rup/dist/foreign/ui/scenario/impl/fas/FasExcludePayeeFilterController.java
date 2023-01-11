@@ -9,14 +9,14 @@ import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasExcludePayeeFilter
 import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasExcludePayeeFilterWidget;
 import com.copyright.rup.vaadin.widget.api.CommonController;
 
+import com.google.common.collect.ImmutableMap;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
 import java.util.EnumSet;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -34,19 +34,16 @@ import java.util.Map;
 public class FasExcludePayeeFilterController extends CommonController<IFasExcludePayeeFilterWidget>
     implements IFasExcludePayeeFilterController {
 
-    private static final Map<String, Boolean> PARTICIPATING_STATUSES = new LinkedHashMap<>();
+    private static final Map<String, Boolean> PARTICIPATING_STATUSES =
+        ImmutableMap.of(ForeignUi.getMessage("label.participating"), Boolean.TRUE,
+                        ForeignUi.getMessage("label.not_participating"), Boolean.FALSE);
 
     @Autowired
     private IScenarioService scenarioService;
 
-    static {
-        PARTICIPATING_STATUSES.put(ForeignUi.getMessage("label.participating"), Boolean.TRUE);
-        PARTICIPATING_STATUSES.put(ForeignUi.getMessage("label.not_participating"), Boolean.FALSE);
-    }
-
     @Override
     public Map<String, Boolean> getParticipatingStatuses() {
-        return Collections.unmodifiableMap(PARTICIPATING_STATUSES);
+        return PARTICIPATING_STATUSES;
     }
 
     @Override

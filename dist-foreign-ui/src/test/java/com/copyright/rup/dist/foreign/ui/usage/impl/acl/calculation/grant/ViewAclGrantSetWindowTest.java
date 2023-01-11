@@ -46,7 +46,6 @@ import org.powermock.reflect.Whitebox;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -122,8 +121,7 @@ public class ViewAclGrantSetWindowTest {
         Window confirmWindowCapture = createMock(Window.class);
         Button.ClickListener listener = getDeleteButtonClickListener();
         expect(aclGrantSetGrid.getSelectedItems()).andReturn(Set.of(buildAclGrantSet())).once();
-        expect(controller.getScenarioNamesAssociatedWithGrantSet(GRANT_SET_ID))
-            .andReturn(Collections.EMPTY_LIST).once();
+        expect(controller.getScenarioNamesAssociatedWithGrantSet(GRANT_SET_ID)).andReturn(List.of()).once();
         expect(Windows.showConfirmDialog(
             eq("Are you sure you want to delete <i><b>'ACL Grant Set 2021'</b></i> grant set?"),
             anyObject())).andReturn(confirmWindowCapture).once();

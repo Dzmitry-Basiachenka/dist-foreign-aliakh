@@ -42,7 +42,6 @@ import org.powermock.reflect.Whitebox;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -161,7 +160,7 @@ public class ViewAaclUsageBatchWindowTest {
         Grid grid = createMock(Grid.class);
         Whitebox.setInternalState(viewaAaclUsageBatchWindow, searchWidget);
         Whitebox.setInternalState(viewaAaclUsageBatchWindow, grid);
-        expect(grid.getDataProvider()).andReturn(new ListDataProvider(Collections.EMPTY_LIST)).once();
+        expect(grid.getDataProvider()).andReturn(new ListDataProvider(List.of())).once();
         expect(searchWidget.getSearchValue()).andReturn("Search").once();
         grid.recalculateColumnWidths();
         expectLastCall().once();

@@ -34,7 +34,6 @@ import com.vaadin.ui.VerticalLayout;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Collections;
 import java.util.Set;
 
 /**
@@ -56,7 +55,7 @@ public class EditAclGrantDetailWindowTest {
     public void setUp() {
         controller = createMock(IAclGrantDetailController.class);
         saveButtonClickListener = createMock(ClickListener.class);
-        window = new EditAclGrantDetailWindow(Collections.EMPTY_SET, controller, saveButtonClickListener);
+        window = new EditAclGrantDetailWindow(Set.of(), controller, saveButtonClickListener);
     }
 
     @Test

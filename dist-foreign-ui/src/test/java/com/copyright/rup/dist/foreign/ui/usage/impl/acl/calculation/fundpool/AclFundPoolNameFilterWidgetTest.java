@@ -27,7 +27,6 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 /**
@@ -49,7 +48,7 @@ public class AclFundPoolNameFilterWidgetTest {
 
     @Before
     public void setUp() {
-        aclFundPoolNameFilterWidget = new AclFundPoolNameFilterWidget(Collections::emptyList);
+        aclFundPoolNameFilterWidget = new AclFundPoolNameFilterWidget(List::of);
     }
 
     @Test

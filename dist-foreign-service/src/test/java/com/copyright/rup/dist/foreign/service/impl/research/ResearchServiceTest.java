@@ -21,8 +21,6 @@ import org.powermock.reflect.Whitebox;
 
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -61,8 +59,7 @@ public class ResearchServiceTest {
         OutputStream outputStream = new ByteArrayOutputStream();
         String usageId1 = RupPersistUtils.generateUuid();
         String usageId2 = RupPersistUtils.generateUuid();
-        Set<String> usageIds = new HashSet<>();
-        Collections.addAll(usageIds, usageId1, usageId2);
+        Set<String> usageIds = Set.of(usageId1, usageId2);
         expect(fasReportRepository.writeUsagesForResearchAndFindIds(filter, outputStream))
             .andReturn(usageIds)
             .once();
@@ -93,8 +90,7 @@ public class ResearchServiceTest {
         OutputStream outputStream = new ByteArrayOutputStream();
         String usageId1 = RupPersistUtils.generateUuid();
         String usageId2 = RupPersistUtils.generateUuid();
-        Set<String> usageIds = new HashSet<>();
-        Collections.addAll(usageIds, usageId1, usageId2);
+        Set<String> usageIds = Set.of(usageId1, usageId2);
         expect(aaclReportRepository.writeUsagesForClassificationAndFindIds(filter, outputStream))
             .andReturn(usageIds)
             .once();

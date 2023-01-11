@@ -46,7 +46,6 @@ import org.powermock.reflect.Whitebox;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -121,8 +120,7 @@ public class ViewAclUsageBatchWindowTest {
         Window confirmWindowCapture = createMock(Window.class);
         Button.ClickListener listener = getDeleteButtonClickListener();
         expect(aclUsageBatchGrid.getSelectedItems()).andReturn(Set.of(buildAclUsageBatch())).once();
-        expect(controller.getScenarioNamesAssociatedWithUsageBatch(USAGE_BATCH_ID))
-            .andReturn(Collections.EMPTY_LIST).once();
+        expect(controller.getScenarioNamesAssociatedWithUsageBatch(USAGE_BATCH_ID)).andReturn(List.of()).once();
         expect(Windows.showConfirmDialog(
             eq("Are you sure you want to delete <i><b>'ACL Usage Batch'</b></i> usage batch?"),
             anyObject())).andReturn(confirmWindowCapture).once();

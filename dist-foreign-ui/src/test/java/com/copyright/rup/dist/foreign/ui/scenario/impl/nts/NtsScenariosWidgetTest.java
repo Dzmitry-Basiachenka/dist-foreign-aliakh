@@ -51,7 +51,6 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -178,7 +177,7 @@ public class NtsScenariosWidgetTest {
     public void testGetNotSelectedScenario() {
         Grid grid = createMock(Grid.class);
         Whitebox.setInternalState(scenariosWidget, GRID_ID, grid);
-        expect(grid.getSelectedItems()).andReturn(Collections.EMPTY_SET).once();
+        expect(grid.getSelectedItems()).andReturn(Set.of()).once();
         replay(grid);
         assertNull(scenariosWidget.getSelectedScenario());
         verify(grid);
