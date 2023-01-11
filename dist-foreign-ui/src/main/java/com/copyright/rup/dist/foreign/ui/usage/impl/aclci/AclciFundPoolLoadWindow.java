@@ -1,7 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.aclci;
 
 import com.copyright.rup.common.exception.RupRuntimeException;
-import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.FundPool.AclciFields;
 import com.copyright.rup.dist.foreign.ui.common.validator.AmountValidator;
@@ -15,7 +14,6 @@ import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.vaadin.data.Binder;
 import com.vaadin.data.Result;
-import com.vaadin.data.StatusChangeEvent;
 import com.vaadin.data.ValueContext;
 import com.vaadin.data.converter.StringToBigDecimalConverter;
 import com.vaadin.data.converter.StringToIntegerConverter;
@@ -35,7 +33,7 @@ import org.apache.commons.lang3.math.NumberUtils;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Objects;
+import java.util.function.Predicate;
 
 /**
  * Window for loading ACLCI fund pool.
@@ -54,11 +52,14 @@ class AclciFundPoolLoadWindow extends Window {
     private static final String NUMBER_OF_STUDENTS_NOT_ALL_ZERO_MESSAGE =
         ForeignUi.getMessage("field.error.number_of_students_not_all_zero");
     private static final BigDecimal HUNDRED = new BigDecimal("100");
+    private static final String ZERO = "0";
     private static final int SCALE_2 = 2;
     private static final int SCALE_5 = 5;
 
     private final IAclciUsageController usageController;
     private final Binder<FundPool> binder = new Binder<>();
+    private final Binder<FundPool> amountsBinder = new Binder<>();
+    private FundPool fundPool;
 
     private TextField fundPoolName;
     private TextField coverageYears;
@@ -76,11 +77,6 @@ class AclciFundPoolLoadWindow extends Window {
     private TextField gradeHeGrossAmount;
     private TextField curriculumDbGrossAmount;
     private TextField totalGrossAmount;
-    private Binder.Binding<FundPool, Integer> gradeKto2NumberOfStudentsBinding;
-    private Binder.Binding<FundPool, Integer> grade3to5NumberOfStudentsBinding;
-    private Binder.Binding<FundPool, Integer> grade6to8NumberOfStudentsBinding;
-    private Binder.Binding<FundPool, Integer> grade9to12NumberOfStudentsBinding;
-    private Binder.Binding<FundPool, Integer> gradeHeNumberOfStudentsBinding;
 
     /**
      * Constructor.
@@ -89,6 +85,8 @@ class AclciFundPoolLoadWindow extends Window {
      */
     AclciFundPoolLoadWindow(IAclciUsageController usageController) {
         this.usageController = usageController;
+        this.fundPool = new FundPool();
+        this.fundPool.setAclciFields(new AclciFields());
         setContent(initRootLayout());
         setCaption(ForeignUi.getMessage("window.load_fund_pool"));
         setResizable(false);
@@ -101,9 +99,8 @@ class AclciFundPoolLoadWindow extends Window {
      * Handles Upload button click.
      */
     void onUploadClicked() {
-        if (binder.isValid()) {
-            FundPool calculatedFundPool = usageController.calculateAclciFundPoolAmounts(buildFundPool());
-            usageController.createAclciFundPool(calculatedFundPool);
+        if (binder.writeBeanIfValid(fundPool) && amountsBinder.isValid()) {
+            usageController.createAclciFundPool(usageController.calculateAclciFundPoolAmounts(scaleAmounts(fundPool)));
             close();
             Windows.showNotificationWindow(ForeignUi.getMessage("message.upload_successfully_completed"));
         } else {
@@ -130,12 +127,8 @@ class AclciFundPoolLoadWindow extends Window {
         rootLayout.setMargin(new MarginInfo(true, true, false, true));
         VaadinUtils.setMaxComponentsWidth(rootLayout);
         rootLayout.setComponentAlignment(buttonsLayout, Alignment.BOTTOM_RIGHT);
-        FundPool fundPool = new FundPool();
-        fundPool.setProductFamily(FdaConstants.ACLCI_PRODUCT_FAMILY);
-        fundPool.setAclciFields(new AclciFields());
-        binder.setBean(fundPool);
         binder.validate();
-        binder.addStatusChangeListener(this::binderStatusChangeListener);
+        amountsBinder.validate();
         return rootLayout;
     }
 
@@ -175,8 +168,8 @@ class AclciFundPoolLoadWindow extends Window {
         binder.forField(coverageYears)
             .withValidator(new RequiredValidator())
             .withValidator(new CoverageYearsValidator(ForeignUi.getMessage("field.error.coverage_years")))
-            .bind(fundPool -> fundPool.getAclciFields().getCoverageYears(),
-                (fundPool, value) -> fundPool.getAclciFields().setCoverageYears(value));
+            .bind(bean -> bean.getAclciFields().getCoverageYears(),
+                (bean, value) -> bean.getAclciFields().setCoverageYears(value));
         coverageYears.setRequiredIndicatorVisible(true);
         coverageYears.setSizeFull();
         VaadinUtils.setMaxComponentsWidth(coverageYears);
@@ -186,12 +179,13 @@ class AclciFundPoolLoadWindow extends Window {
 
     private TextField initGrossAmountField() {
         grossAmount = new TextField(ForeignUi.getMessage("label.gross_amount"));
-        binder.forField(grossAmount)
+        amountsBinder.forField(grossAmount)
             .withValidator(new RequiredValidator())
             .withValidator(new AmountZeroValidator())
-            .bind(fundPool -> Objects.toString(fundPool.getAclciFields().getGrossAmount(), StringUtils.EMPTY),
-                (fundPool, value) -> fundPool.getAclciFields().setGrossAmount(
+            .bind(fundPool -> String.valueOf(fundPool.getAclciFields().getGrossAmount()),
+                (bean, value) -> bean.getAclciFields().setGrossAmount(
                     NumberUtils.createBigDecimal(StringUtils.trimToNull(value))));
+        grossAmount.addValueChangeListener(event -> calculateFundPool());
         grossAmount.setRequiredIndicatorVisible(true);
         VaadinUtils.setMaxComponentsWidth(grossAmount);
         VaadinUtils.addComponentStyle(grossAmount, "gross-amount-field");
@@ -200,16 +194,18 @@ class AclciFundPoolLoadWindow extends Window {
 
     private TextField initCurriculumDbSplitPercentField() {
         curriculumDbSplitPercent = new TextField(ForeignUi.getMessage("label.fund_pool.curriculum_db_split_percent"));
-        binder.forField(curriculumDbSplitPercent)
+        curriculumDbSplitPercent.setValue("20");
+        amountsBinder.forField(curriculumDbSplitPercent)
             .withValidator(new RequiredValidator())
-            .withConverter(new StringToBigDecimalConverter(NOT_NUMERIC_MESSAGE))
-            .withValidator(curriculumSplitPercentValidator(),
+            .withValidator(
+                value -> curriculumDbSplitPercentValidator(NumberUtils.createBigDecimal(StringUtils.trimToNull(value))),
                 ForeignUi.getMessage("field.error.range_and_one_decimal_place"))
-            .bind(fundPool -> fundPool.getAclciFields().getCurriculumDbSplitPercent(),
-                (fundPool, value) -> fundPool.getAclciFields().setCurriculumDbSplitPercent(value));
+            .bind(fundPool -> String.valueOf(fundPool.getAclciFields().getCurriculumDbSplitPercent()),
+                (bean, value) -> bean.getAclciFields().setCurriculumDbSplitPercent(
+                    NumberUtils.createBigDecimal(StringUtils.trimToNull(value))));
+        curriculumDbSplitPercent.addValueChangeListener(event -> calculateFundPool());
         curriculumDbSplitPercent.setRequiredIndicatorVisible(true);
         curriculumDbSplitPercent.setSizeFull();
-        curriculumDbSplitPercent.addValueChangeListener(event -> validateGradeNumberOfStudentsFields());
         VaadinUtils.setMaxComponentsWidth(curriculumDbSplitPercent);
         VaadinUtils.addComponentStyle(curriculumDbSplitPercent, "curriculum-db-split-percent-field");
         return curriculumDbSplitPercent;
@@ -217,15 +213,15 @@ class AclciFundPoolLoadWindow extends Window {
 
     private TextField initGradeKto2NumberOfStudentsField() {
         gradeKto2NumberOfStudents = new TextField(ForeignUi.getMessage("label.fund_pool.grade_k_2_number_of_students"));
-        gradeKto2NumberOfStudentsBinding = binder.forField(gradeKto2NumberOfStudents)
+        amountsBinder.forField(gradeKto2NumberOfStudents)
             .withValidator(new RequiredValidator())
             .withValidator(new AmountValidator())
             .withConverter(new StringToIntegerConverter(NOT_NUMERIC_MESSAGE))
             .withValidator(gradeNumberOfStudentsAllZeroValidator(), NUMBER_OF_STUDENTS_NOT_ZERO_MESSAGE)
             .withValidator(gradeNumberOfStudentsAtLeastOneNotZeroValidator(), NUMBER_OF_STUDENTS_NOT_ALL_ZERO_MESSAGE)
             .bind(fundPool -> fundPool.getAclciFields().getGradeKto2NumberOfStudents(),
-                (fundPool, value) -> fundPool.getAclciFields().setGradeKto2NumberOfStudents(value));
-        gradeKto2NumberOfStudents.addValueChangeListener(event -> validateGradeNumberOfStudentsFields());
+                (bean, value) -> bean.getAclciFields().setGradeKto2NumberOfStudents(value));
+        gradeKto2NumberOfStudents.addValueChangeListener(event -> calculateFundPool());
         gradeKto2NumberOfStudents.setRequiredIndicatorVisible(true);
         gradeKto2NumberOfStudents.setSizeFull();
         VaadinUtils.setMaxComponentsWidth(gradeKto2NumberOfStudents);
@@ -235,15 +231,15 @@ class AclciFundPoolLoadWindow extends Window {
 
     private TextField initGrade3to5NumberOfStudentsField() {
         grade3to5NumberOfStudents = new TextField(ForeignUi.getMessage("label.fund_pool.grade_3_5_number_of_students"));
-        grade3to5NumberOfStudentsBinding = binder.forField(grade3to5NumberOfStudents)
+        amountsBinder.forField(grade3to5NumberOfStudents)
             .withValidator(new RequiredValidator())
             .withValidator(new AmountValidator())
             .withConverter(new StringToIntegerConverter(NOT_NUMERIC_MESSAGE))
             .withValidator(gradeNumberOfStudentsAllZeroValidator(), NUMBER_OF_STUDENTS_NOT_ZERO_MESSAGE)
             .withValidator(gradeNumberOfStudentsAtLeastOneNotZeroValidator(), NUMBER_OF_STUDENTS_NOT_ALL_ZERO_MESSAGE)
             .bind(fundPool -> fundPool.getAclciFields().getGrade3to5NumberOfStudents(),
-                (fundPool, value) -> fundPool.getAclciFields().setGrade3to5NumberOfStudents(value));
-        grade3to5NumberOfStudents.addValueChangeListener(event -> validateGradeNumberOfStudentsFields());
+                (bean, value) -> bean.getAclciFields().setGrade3to5NumberOfStudents(value));
+        grade3to5NumberOfStudents.addValueChangeListener(event -> calculateFundPool());
         grade3to5NumberOfStudents.setRequiredIndicatorVisible(true);
         grade3to5NumberOfStudents.setSizeFull();
         VaadinUtils.setMaxComponentsWidth(grade3to5NumberOfStudents);
@@ -253,15 +249,15 @@ class AclciFundPoolLoadWindow extends Window {
 
     private TextField initGrade6to8NumberOfStudentsField() {
         grade6to8NumberOfStudents = new TextField(ForeignUi.getMessage("label.fund_pool.grade_6_8_number_of_students"));
-        grade6to8NumberOfStudentsBinding = binder.forField(grade6to8NumberOfStudents)
+        amountsBinder.forField(grade6to8NumberOfStudents)
             .withValidator(new RequiredValidator())
             .withValidator(new AmountValidator())
             .withConverter(new StringToIntegerConverter(NOT_NUMERIC_MESSAGE))
             .withValidator(gradeNumberOfStudentsAllZeroValidator(), NUMBER_OF_STUDENTS_NOT_ZERO_MESSAGE)
             .withValidator(gradeNumberOfStudentsAtLeastOneNotZeroValidator(), NUMBER_OF_STUDENTS_NOT_ALL_ZERO_MESSAGE)
             .bind(fundPool -> fundPool.getAclciFields().getGrade6to8NumberOfStudents(),
-                (fundPool, value) -> fundPool.getAclciFields().setGrade6to8NumberOfStudents(value));
-        grade6to8NumberOfStudents.addValueChangeListener(event -> validateGradeNumberOfStudentsFields());
+                (bean, value) -> bean.getAclciFields().setGrade6to8NumberOfStudents(value));
+        grade6to8NumberOfStudents.addValueChangeListener(event -> calculateFundPool());
         grade6to8NumberOfStudents.setRequiredIndicatorVisible(true);
         grade6to8NumberOfStudents.setSizeFull();
         VaadinUtils.setMaxComponentsWidth(grade6to8NumberOfStudents);
@@ -272,15 +268,15 @@ class AclciFundPoolLoadWindow extends Window {
     private TextField initGrade9to12NumberOfStudentsField() {
         grade9to12NumberOfStudents =
             new TextField(ForeignUi.getMessage("label.fund_pool.grade_9_12_number_of_students"));
-        grade9to12NumberOfStudentsBinding = binder.forField(grade9to12NumberOfStudents)
+        amountsBinder.forField(grade9to12NumberOfStudents)
             .withValidator(new RequiredValidator())
             .withValidator(new AmountValidator())
             .withConverter(new StringToIntegerConverter(NOT_NUMERIC_MESSAGE))
             .withValidator(gradeNumberOfStudentsAllZeroValidator(), NUMBER_OF_STUDENTS_NOT_ZERO_MESSAGE)
             .withValidator(gradeNumberOfStudentsAtLeastOneNotZeroValidator(), NUMBER_OF_STUDENTS_NOT_ALL_ZERO_MESSAGE)
             .bind(fundPool -> fundPool.getAclciFields().getGrade9to12NumberOfStudents(),
-                (fundPool, value) -> fundPool.getAclciFields().setGrade9to12NumberOfStudents(value));
-        grade9to12NumberOfStudents.addValueChangeListener(event -> validateGradeNumberOfStudentsFields());
+                (bean, value) -> bean.getAclciFields().setGrade9to12NumberOfStudents(value));
+        grade9to12NumberOfStudents.addValueChangeListener(event -> calculateFundPool());
         grade9to12NumberOfStudents.setRequiredIndicatorVisible(true);
         grade9to12NumberOfStudents.setSizeFull();
         VaadinUtils.setMaxComponentsWidth(grade9to12NumberOfStudents);
@@ -289,17 +285,16 @@ class AclciFundPoolLoadWindow extends Window {
     }
 
     private TextField initGradeHeNumberOfStudentsField() {
-        gradeHeNumberOfStudents =
-            new TextField(ForeignUi.getMessage("label.fund_pool.grade_he_number_of_students"));
-        gradeHeNumberOfStudentsBinding = binder.forField(gradeHeNumberOfStudents)
+        gradeHeNumberOfStudents = new TextField(ForeignUi.getMessage("label.fund_pool.grade_he_number_of_students"));
+        amountsBinder.forField(gradeHeNumberOfStudents)
             .withValidator(new RequiredValidator())
             .withValidator(new AmountValidator())
             .withConverter(new StringToIntegerConverter(NOT_NUMERIC_MESSAGE))
             .withValidator(gradeNumberOfStudentsAllZeroValidator(), NUMBER_OF_STUDENTS_NOT_ZERO_MESSAGE)
             .withValidator(gradeNumberOfStudentsAtLeastOneNotZeroValidator(), NUMBER_OF_STUDENTS_NOT_ALL_ZERO_MESSAGE)
             .bind(fundPool -> fundPool.getAclciFields().getGradeHeNumberOfStudents(),
-                (fundPool, value) -> fundPool.getAclciFields().setGradeHeNumberOfStudents(value));
-        gradeHeNumberOfStudents.addValueChangeListener(event -> validateGradeNumberOfStudentsFields());
+                (bean, value) -> bean.getAclciFields().setGradeHeNumberOfStudents(value));
+        gradeHeNumberOfStudents.addValueChangeListener(event -> calculateFundPool());
         gradeHeNumberOfStudents.setRequiredIndicatorVisible(true);
         gradeHeNumberOfStudents.setSizeFull();
         VaadinUtils.setMaxComponentsWidth(gradeHeNumberOfStudents);
@@ -311,6 +306,10 @@ class AclciFundPoolLoadWindow extends Window {
         gradeKto2GrossAmount = new TextField(ForeignUi.getMessage("label.fund_pool.grade_k_2_gross_amount"));
         gradeKto2GrossAmount.setSizeFull();
         gradeKto2GrossAmount.setReadOnly(true);
+        amountsBinder.forField(gradeKto2GrossAmount)
+            .bind(fundPool -> String.valueOf(fundPool.getAclciFields().getGradeKto2GrossAmount()),
+                (bean, value) -> bean.getAclciFields().setGradeKto2GrossAmount(
+                    new BigDecimal(StringUtils.defaultIfBlank(value, ZERO))));
         VaadinUtils.setMaxComponentsWidth(gradeKto2GrossAmount);
         VaadinUtils.addComponentStyle(gradeKto2GrossAmount, "grade-k-2-gross-amount-field");
         return gradeKto2GrossAmount;
@@ -320,6 +319,10 @@ class AclciFundPoolLoadWindow extends Window {
         grade3to5GrossAmount = new TextField(ForeignUi.getMessage("label.fund_pool.grade_3_5_gross_amount"));
         grade3to5GrossAmount.setSizeFull();
         grade3to5GrossAmount.setReadOnly(true);
+        amountsBinder.forField(grade3to5GrossAmount)
+            .bind(fundPool -> String.valueOf(fundPool.getAclciFields().getGrade3to5GrossAmount()),
+                (bean, value) -> bean.getAclciFields().setGrade3to5GrossAmount(
+                    new BigDecimal(StringUtils.defaultIfBlank(value, ZERO))));
         VaadinUtils.setMaxComponentsWidth(grade3to5GrossAmount);
         VaadinUtils.addComponentStyle(grade3to5GrossAmount, "grade-3-5-gross-amount-field");
         return grade3to5GrossAmount;
@@ -329,6 +332,10 @@ class AclciFundPoolLoadWindow extends Window {
         grade6to8GrossAmount = new TextField(ForeignUi.getMessage("label.fund_pool.grade_6_8_gross_amount"));
         grade6to8GrossAmount.setSizeFull();
         grade6to8GrossAmount.setReadOnly(true);
+        amountsBinder.forField(grade6to8GrossAmount)
+            .bind(fundPool -> String.valueOf(fundPool.getAclciFields().getGrade6to8GrossAmount()),
+                (bean, value) -> bean.getAclciFields().setGrade6to8GrossAmount(
+                    new BigDecimal(StringUtils.defaultIfBlank(value, ZERO))));
         VaadinUtils.setMaxComponentsWidth(grade6to8GrossAmount);
         VaadinUtils.addComponentStyle(grade6to8GrossAmount, "grade-6-8-gross-amount-field");
         return grade6to8GrossAmount;
@@ -338,6 +345,10 @@ class AclciFundPoolLoadWindow extends Window {
         grade9to12GrossAmount = new TextField(ForeignUi.getMessage("label.fund_pool.grade_9_12_gross_amount"));
         grade9to12GrossAmount.setSizeFull();
         grade9to12GrossAmount.setReadOnly(true);
+        amountsBinder.forField(grade9to12GrossAmount)
+            .bind(fundPool -> String.valueOf(fundPool.getAclciFields().getGrade9to12GrossAmount()),
+                (bean, value) -> bean.getAclciFields().setGrade9to12GrossAmount(
+                    new BigDecimal(StringUtils.defaultIfBlank(value, ZERO))));
         VaadinUtils.setMaxComponentsWidth(grade9to12GrossAmount);
         VaadinUtils.addComponentStyle(grade9to12GrossAmount, "grade-9-12-gross-amount-field");
         return grade9to12GrossAmount;
@@ -347,6 +358,10 @@ class AclciFundPoolLoadWindow extends Window {
         gradeHeGrossAmount = new TextField(ForeignUi.getMessage("label.fund_pool.grade_he_gross_amount"));
         gradeHeGrossAmount.setSizeFull();
         gradeHeGrossAmount.setReadOnly(true);
+        amountsBinder.forField(gradeHeGrossAmount)
+            .bind(fundPool -> String.valueOf(fundPool.getAclciFields().getGradeHeGrossAmount()),
+                (bean, value) -> bean.getAclciFields().setGradeHeGrossAmount(
+                    new BigDecimal(StringUtils.defaultIfBlank(value, ZERO))));
         VaadinUtils.setMaxComponentsWidth(gradeHeGrossAmount);
         VaadinUtils.addComponentStyle(gradeHeGrossAmount, "grade-he-gross-amount-field");
         return gradeHeGrossAmount;
@@ -356,6 +371,10 @@ class AclciFundPoolLoadWindow extends Window {
         curriculumDbGrossAmount = new TextField(ForeignUi.getMessage("label.fund_pool.curriculum_db_gross_amount"));
         curriculumDbGrossAmount.setSizeFull();
         curriculumDbGrossAmount.setReadOnly(true);
+        amountsBinder.forField(curriculumDbGrossAmount)
+            .bind(fundPool -> String.valueOf(fundPool.getAclciFields().getCurriculumDbGrossAmount()),
+                (bean, value) -> bean.getAclciFields()
+                    .setCurriculumDbGrossAmount(new BigDecimal(StringUtils.defaultIfBlank(value, ZERO))));
         VaadinUtils.setMaxComponentsWidth(curriculumDbGrossAmount);
         VaadinUtils.addComponentStyle(curriculumDbGrossAmount, "curriculum-db-gross-amount-field");
         return curriculumDbGrossAmount;
@@ -365,13 +384,16 @@ class AclciFundPoolLoadWindow extends Window {
         totalGrossAmount = new TextField(ForeignUi.getMessage("label.total_gross_amount"));
         totalGrossAmount.setSizeFull();
         totalGrossAmount.setReadOnly(true);
+        amountsBinder.forField(totalGrossAmount)
+            .bind(fundPool -> String.valueOf(fundPool.getTotalAmount()),
+                (bean, value) -> bean.setTotalAmount(new BigDecimal(StringUtils.defaultIfBlank(value, "0.00"))));
         VaadinUtils.setMaxComponentsWidth(totalGrossAmount);
         VaadinUtils.addComponentStyle(totalGrossAmount, "total-gross-amount-field");
         return totalGrossAmount;
     }
 
-    private SerializablePredicate<BigDecimal> curriculumSplitPercentValidator() {
-        return value -> 0 > BigDecimal.ZERO.compareTo(value)
+    private boolean curriculumDbSplitPercentValidator(BigDecimal value) {
+        return 0 > BigDecimal.ZERO.compareTo(value)
             && 0 <= HUNDRED.compareTo(value)
             && 1 >= value.scale();
     }
@@ -380,63 +402,51 @@ class AclciFundPoolLoadWindow extends Window {
         return value -> isCurriculumDbSplitPercentNotEqualToHundred() || 0 == value;
     }
 
-    //TODO: check if can be simplified
     private SerializablePredicate<Integer> gradeNumberOfStudentsAtLeastOneNotZeroValidator() {
         return value -> {
-            String gradeKto2Number = gradeKto2NumberOfStudents.getValue();
-            String grade3to5Number = grade3to5NumberOfStudents.getValue();
-            String grade6to8Number = grade6to8NumberOfStudents.getValue();
-            String grade9to12Number = grade9to12NumberOfStudents.getValue();
-            String gradeHeNumber = gradeHeNumberOfStudents.getValue();
+            String gradeKto2Number = gradeKto2NumberOfStudents.getValue().trim();
+            String grade3to5Number = grade3to5NumberOfStudents.getValue().trim();
+            String grade6to8Number = grade6to8NumberOfStudents.getValue().trim();
+            String grade9to12Number = grade9to12NumberOfStudents.getValue().trim();
+            String gradeHeNumber = gradeHeNumberOfStudents.getValue().trim();
+            Predicate<String> validator = number -> StringUtils.isNumeric(number) && 10 >= StringUtils.length(number);
             if (isCurriculumDbSplitPercentNotEqualToHundred()
-                && StringUtils.isNumeric(gradeKto2Number) && 10 >= StringUtils.length(gradeKto2Number)
-                && StringUtils.isNumeric(grade3to5Number) && 10 >= StringUtils.length(grade3to5Number)
-                && StringUtils.isNumeric(grade6to8Number) && 10 >= StringUtils.length(grade6to8Number)
-                && StringUtils.isNumeric(grade9to12Number) && 10 >= StringUtils.length(grade6to8Number)
-                && StringUtils.isNumeric(gradeHeNumber) && 10 >= StringUtils.length(gradeHeNumber)) {
-                return 0 < Integer.parseInt(gradeKto2NumberOfStudents.getValue()) ||
-                    0 < Integer.parseInt(grade3to5NumberOfStudents.getValue()) ||
-                    0 < Integer.parseInt(grade6to8NumberOfStudents.getValue()) ||
-                    0 < Integer.parseInt(grade9to12NumberOfStudents.getValue()) ||
-                    0 < Integer.parseInt(gradeHeNumberOfStudents.getValue());
+                && validator.test(gradeKto2Number)
+                && validator.test(grade3to5Number)
+                && validator.test(grade6to8Number)
+                && validator.test(grade9to12Number)
+                && validator.test(gradeHeNumber)) {
+                return 0 < Integer.parseInt(gradeKto2Number)
+                    || 0 < Integer.parseInt(grade3to5Number)
+                    || 0 < Integer.parseInt(grade6to8Number)
+                    || 0 < Integer.parseInt(grade9to12Number)
+                    || 0 < Integer.parseInt(gradeHeNumber);
             } else {
                 return true;
             }
         };
     }
 
-    //TODO: check if can be simplified
     private boolean isCurriculumDbSplitPercentNotEqualToHundred() {
-        if (StringUtils.isNotBlank(curriculumDbSplitPercent.getValue())) {
-            Result<BigDecimal> decimalResult = new StringToBigDecimalConverter(StringUtils.EMPTY)
-                .convertToModel(curriculumDbSplitPercent.getValue(), new ValueContext());
-            return decimalResult.isError() ||
-                0 != HUNDRED.compareTo(decimalResult.getOrThrow(s -> new RupRuntimeException()));
+        String value = curriculumDbSplitPercent.getValue().trim();
+        if (StringUtils.isNotBlank(value)) {
+            Result<BigDecimal> result = new StringToBigDecimalConverter(StringUtils.EMPTY)
+                .convertToModel(value, new ValueContext());
+            return result.isError() ||
+                0 != HUNDRED.compareTo(result.getOrThrow(s -> new RupRuntimeException()));
         } else {
             return true;
         }
     }
 
-    private FundPool buildFundPool() {
-        FundPool fundPool = new FundPool(binder.getBean());
-        AclciFields aclciFields = fundPool.getAclciFields();
-        aclciFields.setGrossAmount(aclciFields.getGrossAmount().setScale(SCALE_2, BigDecimal.ROUND_HALF_UP));
-        aclciFields.setCurriculumDbSplitPercent(aclciFields.getCurriculumDbSplitPercent()
-            .divide(HUNDRED, SCALE_5, BigDecimal.ROUND_HALF_UP));
-        return fundPool;
-    }
-
-    private void binderStatusChangeListener(StatusChangeEvent event) {
-        if (areRequiredFieldsNotEmpty() && event.getBinder().isValid()) {
-            FundPool fundPool = usageController.calculateAclciFundPoolAmounts(buildFundPool());
-            AclciFields aclciFields = fundPool.getAclciFields();
-            gradeKto2GrossAmount.setValue(aclciFields.getGradeKto2GrossAmount().toString());
-            grade3to5GrossAmount.setValue(aclciFields.getGrade3to5GrossAmount().toString());
-            grade6to8GrossAmount.setValue(aclciFields.getGrade6to8GrossAmount().toString());
-            grade9to12GrossAmount.setValue(aclciFields.getGrade9to12GrossAmount().toString());
-            gradeHeGrossAmount.setValue(aclciFields.getGradeHeGrossAmount().toString());
-            curriculumDbGrossAmount.setValue(aclciFields.getCurriculumDbGrossAmount().toString());
-            totalGrossAmount.setValue(fundPool.getTotalAmount().toString());
+    private void calculateFundPool() {
+        if (amountsBinder.validate().isOk()) {
+            amountsBinder.writeBeanAsDraft(fundPool);
+            AclciFields aclciFields = new AclciFields(fundPool.getAclciFields());
+            fundPool = usageController.calculateAclciFundPoolAmounts(scaleAmounts(fundPool));
+            fundPool.getAclciFields().setGrossAmount(aclciFields.getGrossAmount());
+            fundPool.getAclciFields().setCurriculumDbSplitPercent(aclciFields.getCurriculumDbSplitPercent());
+            amountsBinder.readBean(fundPool);
         } else {
             gradeKto2GrossAmount.clear();
             grade3to5GrossAmount.clear();
@@ -448,23 +458,11 @@ class AclciFundPoolLoadWindow extends Window {
         }
     }
 
-    private boolean areRequiredFieldsNotEmpty() {
-        return StringUtils.isNotBlank(fundPoolName.getValue())
-            && StringUtils.isNotBlank(coverageYears.getValue())
-            && StringUtils.isNotBlank(grossAmount.getValue())
-            && StringUtils.isNotBlank(curriculumDbSplitPercent.getValue())
-            && StringUtils.isNotBlank(gradeKto2NumberOfStudents.getValue())
-            && StringUtils.isNotBlank(grade3to5NumberOfStudents.getValue())
-            && StringUtils.isNotBlank(grade6to8NumberOfStudents.getValue())
-            && StringUtils.isNotBlank(grade9to12NumberOfStudents.getValue())
-            && StringUtils.isNotBlank(gradeHeNumberOfStudents.getValue());
-    }
-
-    private void validateGradeNumberOfStudentsFields() {
-        gradeKto2NumberOfStudentsBinding.validate();
-        grade3to5NumberOfStudentsBinding.validate();
-        grade6to8NumberOfStudentsBinding.validate();
-        grade9to12NumberOfStudentsBinding.validate();
-        gradeHeNumberOfStudentsBinding.validate();
+    private FundPool scaleAmounts(FundPool source) {
+        AclciFields aclciFields = source.getAclciFields();
+        aclciFields.setGrossAmount(aclciFields.getGrossAmount().setScale(SCALE_2, BigDecimal.ROUND_HALF_UP));
+        aclciFields.setCurriculumDbSplitPercent(aclciFields.getCurriculumDbSplitPercent()
+            .divide(HUNDRED, SCALE_5, BigDecimal.ROUND_HALF_UP));
+        return source;
     }
 }
