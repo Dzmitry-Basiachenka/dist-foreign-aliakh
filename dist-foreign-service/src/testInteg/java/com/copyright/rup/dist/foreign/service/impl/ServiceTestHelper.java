@@ -71,7 +71,6 @@ import org.springframework.web.client.RestTemplate;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
@@ -289,7 +288,7 @@ public class ServiceTestHelper {
     public void receiveLdtmDetailsFromOracle(String fileName) throws InterruptedException {
         ldmtDetailsConsumer.setLatch(new CountDownLatch(1));
         String message = TestUtils.fileToString(this.getClass(), fileName);
-        sqsClientMock.sendMessage("fda-test-ldmt-licensedata", message, Collections.emptyMap());
+        sqsClientMock.sendMessage("fda-test-ldmt-licensedata", message, Map.of());
         assertTrue(ldmtDetailsConsumer.getLatch().await(10, TimeUnit.SECONDS));
         sqsClientMock.assertQueueMessagesReceived("fda-test-ldmt-licensedata");
     }
@@ -603,8 +602,7 @@ public class ServiceTestHelper {
 
     private void doReceivePaidUsagesFromLm(String message) throws InterruptedException {
         paidUsageConsumer.setLatch(new CountDownLatch(1));
-        sqsClientMock.sendMessage("fda-test-df-consumer-sf-detail-paid", SnsMock.wrapBody(message),
-            Collections.emptyMap());
+        sqsClientMock.sendMessage("fda-test-df-consumer-sf-detail-paid", SnsMock.wrapBody(message), Map.of());
         assertTrue(paidUsageConsumer.getLatch().await(10, TimeUnit.SECONDS));
         sqsClientMock.assertQueueMessagesReceived("fda-test-df-consumer-sf-detail-paid");
     }

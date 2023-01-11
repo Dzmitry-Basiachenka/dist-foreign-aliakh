@@ -31,7 +31,6 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Map;
 
 /**
@@ -85,7 +84,7 @@ public class OracleRhTaxInformationService implements IOracleRhTaxInformationSer
         } catch (IOException e) {
             LOGGER.error("Problem with processing (parsing, generating) JSON content", e);
         }
-        return Collections.emptyMap();
+        return Map.of();
     }
 
     private static HttpHeaders getHttpHeaders() {

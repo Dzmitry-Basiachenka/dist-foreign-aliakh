@@ -67,8 +67,8 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -467,7 +467,7 @@ public class AaclUsageServiceTest {
         rightsholder.setAccountNumber(2000073957L);
         expect(rightsholderService.getByScenarioId(SCENARIO_ID)).andReturn(List.of(rightsholder)).once();
         expect(prmIntegrationService.getRollUps(Set.of("378cafcf-cf21-4036-b223-5bd48b09c41f")))
-            .andReturn(Collections.emptyMap()).once();
+            .andReturn(Map.of()).once();
         aaclUsageRepository.updatePayeeByAccountNumber(2000073957L, SCENARIO_ID, 2000073957L, "SYSTEM");
         expectLastCall().once();
         rightsholderService.updateRighstholdersAsync(Set.of(2000073957L));

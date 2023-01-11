@@ -23,8 +23,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Verifies {@link PiIntegrationService}.
@@ -270,7 +270,7 @@ public class PiIntegrationServiceTest {
     }
 
     private void expectSearchHitSourceWithEmptyFields(RupSearchHit searchHit, String sourceFileName) {
-        expect(searchHit.getFields()).andReturn(Collections.emptyMap()).once();
+        expect(searchHit.getFields()).andReturn(Map.of()).once();
         expectSearchHitSource(searchHit, sourceFileName);
     }
 

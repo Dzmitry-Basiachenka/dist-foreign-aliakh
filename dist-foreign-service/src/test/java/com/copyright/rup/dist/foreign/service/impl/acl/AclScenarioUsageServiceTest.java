@@ -33,9 +33,9 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -77,7 +77,7 @@ public class AclScenarioUsageServiceTest {
         RightsholderTypeOfUsePair rightsholderTypeOfUsePair = buildRightsholderTypeOfUsePair(2000073957L);
         expect(rightsholderService.getByAclScenarioId(SCENARIO_UID)).andReturn(
             List.of(rightsholderTypeOfUsePair)).once();
-        expect(prmIntegrationService.getRollUps(Set.of(RH_UID))).andReturn(Collections.emptyMap()).once();
+        expect(prmIntegrationService.getRollUps(Set.of(RH_UID))).andReturn(Map.of()).once();
         aclScenarioUsageRepository.updatePayeeByAccountNumber(2000073957L, SCENARIO_UID, 2000073957L, "PRINT");
         expectLastCall().once();
         rightsholderService.updateRighstholdersAsync(Set.of(2000073957L));

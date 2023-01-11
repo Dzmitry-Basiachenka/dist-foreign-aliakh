@@ -71,8 +71,8 @@ import java.time.LocalDate;
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -213,7 +213,7 @@ public class NtsUsageWidgetTest {
         expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
         expect(controller.getInvalidRightsholders()).andReturn(List.of()).once();
         expect(controller.getProcessingBatchesNames(Set.of(batchId))).andReturn(List.of()).once();
-        expect(controller.getBatchesNamesToScenariosNames(Set.of(batchId))).andReturn(Collections.emptyMap()).once();
+        expect(controller.getBatchesNamesToScenariosNames(Set.of(batchId))).andReturn(Map.of()).once();
         expect(controller.getBatchNamesWithUnclassifiedWorks(filterWidget.getAppliedFilter().getUsageBatchesIds()))
             .andReturn(List.of()).once();
         expect(controller.getBatchNamesWithInvalidStmOrNonStmUsagesState(
@@ -298,7 +298,7 @@ public class NtsUsageWidgetTest {
         expect(controller.getBatchNamesWithUnclassifiedWorks(filterWidget.getAppliedFilter().getUsageBatchesIds()))
             .andReturn(List.of("Batch with unclassified usages")).once();
         expect(controller.getProcessingBatchesNames(Set.of(batchId))).andReturn(List.of()).once();
-        expect(controller.getBatchesNamesToScenariosNames(Set.of(batchId))).andReturn(Collections.emptyMap()).once();
+        expect(controller.getBatchesNamesToScenariosNames(Set.of(batchId))).andReturn(Map.of()).once();
         Windows.showNotificationWindow(
             "The following batches have unclassified works:<ul><li><i><b>Batch with unclassified usages</b></i></ul>");
         expectLastCall().once();
@@ -326,7 +326,7 @@ public class NtsUsageWidgetTest {
         expect(controller.getBatchNamesWithUnclassifiedWorks(filterWidget.getAppliedFilter().getUsageBatchesIds()))
             .andReturn(List.of()).once();
         expect(controller.getProcessingBatchesNames(Set.of(batchId))).andReturn(List.of()).once();
-        expect(controller.getBatchesNamesToScenariosNames(Set.of(batchId))).andReturn(Collections.emptyMap()).once();
+        expect(controller.getBatchesNamesToScenariosNames(Set.of(batchId))).andReturn(Map.of()).once();
         expect(controller.getBatchNamesWithInvalidStmOrNonStmUsagesState(
             filterWidget.getAppliedFilter().getUsageBatchesIds()))
             .andReturn(ImmutableMap.of("STM", List.of("Batch without STM RHs"))).once();
@@ -355,7 +355,7 @@ public class NtsUsageWidgetTest {
         expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
         expect(controller.getInvalidRightsholders()).andReturn(List.of()).once();
         expect(controller.getProcessingBatchesNames(Set.of(batchId))).andReturn(List.of()).once();
-        expect(controller.getBatchesNamesToScenariosNames(Set.of(batchId))).andReturn(Collections.emptyMap()).once();
+        expect(controller.getBatchesNamesToScenariosNames(Set.of(batchId))).andReturn(Map.of()).once();
         expect(controller.getBatchNamesWithUnclassifiedWorks(filterWidget.getAppliedFilter().getUsageBatchesIds()))
             .andReturn(List.of()).once();
         expect(controller.getBatchNamesWithInvalidStmOrNonStmUsagesState(

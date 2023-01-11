@@ -68,8 +68,8 @@ import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -424,7 +424,7 @@ public class NtsUsageControllerTest {
     public void testGetBatchNamesWithInvalidStmOrNonStmUsagesState() {
         Set<String> batchIds = Set.of(USAGE_BATCH_ID);
         expect(usageBatchService.getClassifcationToBatchNamesWithoutUsagesForStmOrNonStm(batchIds))
-            .andReturn(Collections.emptyMap()).once();
+            .andReturn(Map.of()).once();
         replay(usageBatchService);
         controller.getBatchNamesWithInvalidStmOrNonStmUsagesState(batchIds);
         verify(usageBatchService);

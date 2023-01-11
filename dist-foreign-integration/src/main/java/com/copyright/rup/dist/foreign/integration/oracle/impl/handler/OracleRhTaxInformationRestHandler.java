@@ -11,7 +11,6 @@ import com.google.common.collect.Maps;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.OffsetDateTime;
-import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
 
@@ -56,7 +55,7 @@ public class OracleRhTaxInformationRestHandler extends CommonRestHandler<Map<Lon
 
     @Override
     protected Map<Long, RhTaxInformation> getDefaultValue() {
-        return Collections.emptyMap();
+        return Map.of();
     }
 
     private RhTaxInformation buildRhTaxInformation(JsonNode thTaxInformationNode) {
