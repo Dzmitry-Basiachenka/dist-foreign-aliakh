@@ -17,7 +17,6 @@ import org.springframework.web.client.RestTemplate;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -74,7 +73,7 @@ public class PrmIneligibleRightsholderService implements IPrmIneligibleRightshol
 
                 @Override
                 protected Map<String, List<AclIneligibleRightsholder>> getDefaultValue() {
-                    return Collections.emptyMap();
+                    return Map.of();
                 }
             };
         return prmRestHandler.handleResponse(rightsholdersParentUrl);

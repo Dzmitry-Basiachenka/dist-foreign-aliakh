@@ -17,7 +17,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 
@@ -65,7 +64,7 @@ public class OracleRhTaxCountryCacheServiceTest {
     @Test
     public void testGetAccountNumbersToUsTaxCountryFlagsNotFoundResponse() {
         expect(oracleRhTaxCountryService.getAccountNumbersToUsTaxCountryFlags(ACCOUNT_NUMBERS))
-                .andReturn(Collections.emptyMap()).once();
+                .andReturn(Map.of()).once();
         replay(oracleRhTaxCountryService);
         assertTrue(oracleRhTaxCountryCacheService.getAccountNumbersToUsTaxCountryFlags(ACCOUNT_NUMBERS).isEmpty());
         verify(oracleRhTaxCountryService);

@@ -39,9 +39,9 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -107,8 +107,7 @@ public class CrmServiceTest {
     @Test
     public void testParseResponse() throws IOException {
         CrmResult actualResult = crmService.parseResponse(
-            TestUtils.fileToString(CrmServiceTest.class, "crm_rights_distribution_response.json"),
-            Collections.emptyMap());
+            TestUtils.fileToString(CrmServiceTest.class, "crm_rights_distribution_response.json"), Map.of());
         assertEquals(CrmResultStatusEnum.SUCCESS, actualResult.getStatus());
         assertTrue(CollectionUtils.isEmpty(actualResult.getInvalidUsageIds()));
     }
@@ -128,7 +127,7 @@ public class CrmServiceTest {
     @Test
     public void testParseResponseWithNoListElement() {
         try {
-            crmService.parseResponse("{\"elements\":{}}", Collections.emptyMap());
+            crmService.parseResponse("{\"elements\":{}}", Map.of());
             fail();
         } catch (IOException e) {
             assertEquals("Send usages to CRM. Failed. Reason=Couldn't parse response. " +
@@ -138,13 +137,13 @@ public class CrmServiceTest {
 
     @Test(expected = IOException.class)
     public void testParseResponseInvalidJson() throws IOException {
-        crmService.parseResponse("{abc123", Collections.emptyMap());
+        crmService.parseResponse("{abc123", Map.of());
     }
 
     private void assertParseResponseWithInvalidUsages(String fileName, Set<String> expectedUsagesIds)
         throws IOException {
         CrmResult actualResult =
-            crmService.parseResponse(TestUtils.fileToString(CrmServiceTest.class, fileName), Collections.emptyMap());
+            crmService.parseResponse(TestUtils.fileToString(CrmServiceTest.class, fileName), Map.of());
         assertEquals(CrmResultStatusEnum.CRM_ERROR, actualResult.getStatus());
         Set<String> actualInvalidUsageIds = actualResult.getInvalidUsageIds();
         assertTrue(CollectionUtils.isNotEmpty(actualInvalidUsageIds));

@@ -66,7 +66,6 @@ import java.time.LocalDate;
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -168,7 +167,7 @@ public class AaclUsageWidgetTest {
         expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
         expect(controller.getInvalidRightsholders()).andReturn(List.of()).once();
         expect(controller.getProcessingBatchesNames(Set.of(BATCH_ID))).andReturn(List.of()).once();
-        expect(controller.getBatchesNamesToScenariosNames(Set.of(BATCH_ID))).andReturn(Collections.emptyMap()).once();
+        expect(controller.getBatchesNamesToScenariosNames(Set.of(BATCH_ID))).andReturn(Map.of()).once();
         expect(controller.getIneligibleBatchesNames(Set.of(BATCH_ID))).andReturn(List.of()).once();
         Windows.showModalWindow(anyObject(CreateAaclScenarioWindow.class));
         expectLastCall().once();
@@ -295,7 +294,7 @@ public class AaclUsageWidgetTest {
         expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
         expect(controller.getInvalidRightsholders()).andReturn(List.of()).once();
         expect(controller.getProcessingBatchesNames(Set.of(BATCH_ID))).andReturn(List.of()).once();
-        expect(controller.getBatchesNamesToScenariosNames(Set.of(BATCH_ID))).andReturn(Collections.emptyMap()).once();
+        expect(controller.getBatchesNamesToScenariosNames(Set.of(BATCH_ID))).andReturn(Map.of()).once();
         expect(controller.getIneligibleBatchesNames(Set.of(BATCH_ID))).andReturn(List.of("Batch Name")).once();
         Windows.showNotificationWindow("The following batches have usages that are not in ELIGIBLE status:" +
             "<ul><li><i><b>Batch Name</b></i></ul>");
