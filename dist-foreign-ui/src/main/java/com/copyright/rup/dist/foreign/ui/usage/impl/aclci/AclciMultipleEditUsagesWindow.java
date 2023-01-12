@@ -99,7 +99,7 @@ class AclciMultipleEditUsagesWindow extends Window {
             .bind(usage -> usage.getRightsholder().getAccountNumber().toString(),
                 (usage, s) -> usage.getRightsholder().setAccountNumber(Long.valueOf(s)));
         VaadinUtils.setMaxComponentsWidth(rhAccountNumberField);
-        VaadinUtils.addComponentStyle(rhAccountNumberField, "aclci-multiple-edit-rh-account-number-field");
+        VaadinUtils.addComponentStyle(rhAccountNumberField, "rh-account-number-field");
         rhAccountNumberField.addValueChangeListener(event -> rhNameField.setValue(StringUtils.EMPTY));
         return rhAccountNumberField;
     }
@@ -113,7 +113,7 @@ class AclciMultipleEditUsagesWindow extends Window {
             .asRequired(ForeignUi.getMessage("field.error.rro_name.empty"))
             .bind(usage -> usage.getRightsholder().getName(), (usage, s) -> usage.getRightsholder().setName(s));
         VaadinUtils.setMaxComponentsWidth(rhNameField);
-        VaadinUtils.addComponentStyle(rhNameField, "aclci-multiple-edit-rh-name-field");
+        VaadinUtils.addComponentStyle(rhNameField, "rh-name-field");
         return rhNameField;
     }
 
@@ -143,7 +143,7 @@ class AclciMultipleEditUsagesWindow extends Window {
             .bind(usage -> Objects.toString(usage.getWrWrkInst(), StringUtils.EMPTY),
                 (usage, value) -> usage.setWrWrkInst(NumberUtils.createLong(StringUtils.trimToNull(value))));
         wrWrkInstField.addValueChangeListener(event -> binder.validate());
-        VaadinUtils.addComponentStyle(wrWrkInstField, "aclci-multiple-edit-wr-wrk-inst-field");
+        VaadinUtils.addComponentStyle(wrWrkInstField, "wr-wrk-inst-field");
         return wrWrkInstField;
     }
 

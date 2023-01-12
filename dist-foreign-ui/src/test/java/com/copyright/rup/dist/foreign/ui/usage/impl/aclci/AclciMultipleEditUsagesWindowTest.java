@@ -95,7 +95,7 @@ public class AclciMultipleEditUsagesWindowTest {
         assertEquals(4, contentLayout.getComponentCount());
         verifyRhAccountNumberLayout(contentLayout.getComponent(0));
         verifyRhNameField(contentLayout.getComponent(1));
-        verifyTextField(contentLayout.getComponent(2), "Wr Wrk Inst");
+        verifyWrWrkInstField(contentLayout.getComponent(2));
         verifyButtonsLayout(contentLayout.getComponent(3));
         verify(controller);
     }
@@ -198,11 +198,18 @@ public class AclciMultipleEditUsagesWindowTest {
         verifyTextField(numberField, "RH Account #");
         Button verifyButton = verifyButton(horizontalLayout.getComponent(1), "Verify", true);
         assertEquals(1, verifyButton.getListeners(Button.ClickEvent.class).size());
+        assertEquals("rh-account-number-field", numberField.getStyleName());
     }
 
     private void verifyRhNameField(Component component) {
         TextField nameField = verifyTextField(component, "RH Name");
         assertTrue(nameField.isReadOnly());
+        assertEquals("rh-name-field", component.getStyleName());
+    }
+
+    private void verifyWrWrkInstField(Component component) {
+        verifyTextField(component, "Wr Wrk Inst");
+        assertEquals("wr-wrk-inst-field", component.getStyleName());
     }
 
     private void assertVerifyButton(Button verifyButton, TextField numberField, TextField nameField) {
