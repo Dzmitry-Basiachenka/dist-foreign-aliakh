@@ -3,11 +3,11 @@ package com.copyright.rup.dist.foreign.repository.impl.csv.sal;
 import com.copyright.rup.dist.common.repository.impl.csv.BaseCsvReportHandler;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.report.SalLiabilitiesSummaryByRhAndWorkReportDto;
+
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -64,7 +64,7 @@ public class SalLiabilitiesSummaryByRhAndWorkReportHandler
     }
 
     private List<String> buildRow(String firstColumn) {
-        return Arrays.asList(firstColumn, StringUtils.EMPTY, StringUtils.EMPTY, StringUtils.EMPTY,
+        return List.of(firstColumn, StringUtils.EMPTY, StringUtils.EMPTY, StringUtils.EMPTY,
             StringUtils.EMPTY, StringUtils.EMPTY, StringUtils.EMPTY);
     }
 }

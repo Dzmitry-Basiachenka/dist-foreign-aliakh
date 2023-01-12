@@ -5,7 +5,6 @@ import com.copyright.rup.dist.foreign.domain.report.ResearchStatusReportDto;
 
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -21,7 +20,7 @@ import java.util.List;
 public class ResearchStatusReportHandler extends BaseCsvReportHandler<ResearchStatusReportDto> {
 
     private static final List<String> HEADERS =
-        Arrays.asList("Usage Batch Name", "RRO Account Number", "RRO Name", "Payment Date", "# Details Work Not Found",
+        List.of("Usage Batch Name", "RRO Account Number", "RRO Name", "Payment Date", "# Details Work Not Found",
             "Gross USD Work Not Found", "# Details Work Research", "Gross USD Work Research", "# Details Sent for RA",
             "Gross USD Sent for RA", "# Details RH Not Found", "Gross USD RH Not Found");
 

@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -60,7 +59,7 @@ public class GrantPriorityRepositoryIntegrationTest {
         List<GrantPriority> actualGrantPriorities = grantPriorityRepository.findByProductFamily(productFamily);
         assertNotNull(actualGrantPriorities);
         assertEquals(13, CollectionUtils.size(actualGrantPriorities));
-        List<GrantPriority> expectedGrantPriorities = Arrays.asList(
+        List<GrantPriority> expectedGrantPriorities = List.of(
             buildGrantPriority("NGT_PHOTOCOPY", 0, "TRS"),
             buildGrantPriority(PRINT_TYPE_OF_USE, 1, "ACL"),
             buildGrantPriority(PRINT_TYPE_OF_USE, 2, "JACDCL"),

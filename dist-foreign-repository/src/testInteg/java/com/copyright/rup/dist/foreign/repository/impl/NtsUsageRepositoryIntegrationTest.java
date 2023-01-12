@@ -31,7 +31,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
@@ -144,7 +143,7 @@ public class NtsUsageRepositoryIntegrationTest {
         ntsUsageRepository.recalculateAmountsFromExcludedRightshoders(SCENARIO_ID_3,
             Sets.newHashSet(RH_ACCOUNT_NUMBER_3));
         usages = usageRepository.findByIds(
-            Arrays.asList("56f91295-db33-4440-b550-9bb515239750", "4604c954-e43b-4606-809a-665c81514dbf"));
+            List.of("56f91295-db33-4440-b550-9bb515239750", "4604c954-e43b-4606-809a-665c81514dbf"));
         assertEquals(new BigDecimal("800.0000000000"),
             usages.stream().map(Usage::getNetAmount).reduce(BigDecimal::add).get());
         usages = usageRepository.findByIds(List.of("56f91295-db33-4440-b550-9bb515239750"));
@@ -279,10 +278,10 @@ public class NtsUsageRepositoryIntegrationTest {
     @TestData(fileName = FOLDER_NAME + "delete-belletristic-by-scenario-id.groovy")
     public void testDeleteBelletristicByScenarioId() {
         String scenarioId = "dd4fca1d-eac8-4b76-85e4-121b7971d049";
-        verifyUsageIdsInScenario(Arrays.asList(USAGE_ID_BELLETRISTIC, USAGE_ID_STM, USAGE_ID_UNCLASSIFIED), scenarioId);
+        verifyUsageIdsInScenario(List.of(USAGE_ID_BELLETRISTIC, USAGE_ID_STM, USAGE_ID_UNCLASSIFIED), scenarioId);
         assertEquals(1, usageRepository.findByIds(List.of(USAGE_ID_BELLETRISTIC)).size());
         ntsUsageRepository.deleteBelletristicByScenarioId(scenarioId);
-        verifyUsageIdsInScenario(Arrays.asList(USAGE_ID_STM, USAGE_ID_UNCLASSIFIED), scenarioId);
+        verifyUsageIdsInScenario(List.of(USAGE_ID_STM, USAGE_ID_UNCLASSIFIED), scenarioId);
         assertEquals(0, usageRepository.findByIds(List.of(USAGE_ID_BELLETRISTIC)).size());
         assertEquals(0, usageRepository.findReferencedUsagesCountByIds(USAGE_ID_BELLETRISTIC));
     }
@@ -290,7 +289,7 @@ public class NtsUsageRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FOLDER_NAME + "delete-from-scenario.groovy")
     public void testDeleteFromScenario() {
-        List<Usage> usages = usageRepository.findByIds(Arrays.asList(USAGE_ID_2, USAGE_ID_3));
+        List<Usage> usages = usageRepository.findByIds(List.of(USAGE_ID_2, USAGE_ID_3));
         assertEquals(2, usages.size());
         verifyUsage(usages.get(0), UsageStatusEnum.SCENARIO_EXCLUDED, null, false, false, null,
             StoredEntity.DEFAULT_USER, ZERO_AMOUNT, HUNDRED_AMOUNT, null, ZERO_AMOUNT, ZERO_AMOUNT);
@@ -298,7 +297,7 @@ public class NtsUsageRepositoryIntegrationTest {
             StoredEntity.DEFAULT_USER, new BigDecimal("900.0000000000"), new BigDecimal("900.00"),
             new BigDecimal("0.32000"), new BigDecimal("288.0000000000"), new BigDecimal("612.0000000000"));
         ntsUsageRepository.deleteFromScenario(SCENARIO_ID, USER_NAME);
-        usages = usageRepository.findByIds(Arrays.asList(USAGE_ID_2, USAGE_ID_3));
+        usages = usageRepository.findByIds(List.of(USAGE_ID_2, USAGE_ID_3));
         assertEquals(2, usages.size());
         verifyUsage(usages.get(0), UsageStatusEnum.ELIGIBLE, null, false, false, null, USER_NAME, ZERO_AMOUNT,
             HUNDRED_AMOUNT, null, ZERO_AMOUNT, ZERO_AMOUNT);

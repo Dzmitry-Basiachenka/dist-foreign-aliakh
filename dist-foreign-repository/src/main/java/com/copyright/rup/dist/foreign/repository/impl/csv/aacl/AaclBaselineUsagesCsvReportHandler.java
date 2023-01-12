@@ -8,7 +8,6 @@ import org.apache.commons.lang3.time.DateFormatUtils;
 
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -23,7 +22,7 @@ import java.util.List;
 public class AaclBaselineUsagesCsvReportHandler extends BaseCsvReportHandler<UsageDto> {
 
     private static final List<String> HEADERS =
-        Arrays.asList("Detail ID", "Wr Wrk Inst", "Usage Period", "Usage Source", "Number of Copies", "Number of Pages",
+        List.of("Detail ID", "Wr Wrk Inst", "Usage Period", "Usage Source", "Number of Copies", "Number of Pages",
             "Det LC ID", "Det LC Enrollment", "Det LC Discipline", "Pub Type", "Pub Type Weight", "Historical Pub Type",
             "Institution", "Comment", "Update User", "Update Date");
 

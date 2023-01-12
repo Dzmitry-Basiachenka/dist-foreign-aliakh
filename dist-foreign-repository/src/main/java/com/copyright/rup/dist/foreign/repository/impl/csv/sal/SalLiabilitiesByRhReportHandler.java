@@ -8,7 +8,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -22,7 +21,7 @@ import java.util.List;
  */
 public class SalLiabilitiesByRhReportHandler extends BaseCsvReportHandler<SalLiabilitiesByRhReportDto> {
 
-    private static final List<String> HEADERS = Arrays.asList("RH Account #", "RH Name", "Gross Amount",
+    private static final List<String> HEADERS = List.of("RH Account #", "RH Name", "Gross Amount",
         "Service Fee Amount", "Net Amount", "Item Bank Net Amount", "Usage Detail Net Amount", "Count of Passages");
 
     /**
@@ -65,7 +64,7 @@ public class SalLiabilitiesByRhReportHandler extends BaseCsvReportHandler<SalLia
     }
 
     private List<String> buildRow(String firstColumn) {
-        return Arrays.asList(firstColumn, StringUtils.EMPTY, StringUtils.EMPTY, StringUtils.EMPTY,
+        return List.of(firstColumn, StringUtils.EMPTY, StringUtils.EMPTY, StringUtils.EMPTY,
             StringUtils.EMPTY, StringUtils.EMPTY, StringUtils.EMPTY, StringUtils.EMPTY);
     }
 }

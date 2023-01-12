@@ -24,7 +24,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -395,7 +394,7 @@ public class UdmCsvReportsIntegrationTest extends CsvReportsTestHelper {
     @Test
     @TestData(fileName = WRITE_SURVEY_DASHBOARD_CSV_REPORT)
     public void testWriteSurveyDashboardCsvReport() throws IOException {
-        List<Integer> periods = Arrays.asList(202106, 202112);
+        List<Integer> periods = List.of(202106, 202112);
         assertFilesWithExecutor(
             outputStream -> udmReportRepository.writeUdmSurveyDashboardCsvReport(new HashSet<>(periods), outputStream),
             "udm/survey_dashboard_report.csv");
@@ -404,7 +403,7 @@ public class UdmCsvReportsIntegrationTest extends CsvReportsTestHelper {
     @Test
     @TestData(fileName = WRITE_SURVEY_DASHBOARD_CSV_REPORT)
     public void testWriteSurveyDashboardEmptyCsvReport() throws IOException {
-        List<Integer> periods = Arrays.asList(201706, 201812);
+        List<Integer> periods = List.of(201706, 201812);
         assertFilesWithExecutor(
             outputStream -> udmReportRepository.writeUdmSurveyDashboardCsvReport(new HashSet<>(periods), outputStream),
             "udm/survey_dashboard_empty_report.csv");

@@ -7,7 +7,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -22,9 +21,8 @@ import java.util.List;
 public class AclLiabilityDetailsCsvReportHandler
     extends AclCommonCalculationsCsvReportHandler<AclLiabilityDetailsReportDto> {
 
-    private static final List<String> HEADERS =
-        Arrays.asList("RH Account #", "RH Name", "Work Title", "Wr Wrk Inst", "Scenario Name",
-            "License Type", "Dist TOU", "Agg LC ID", "Agg LC Name", "Gross Amount", "Net Amount");
+    private static final List<String> HEADERS = List.of("RH Account #", "RH Name", "Work Title", "Wr Wrk Inst",
+        "Scenario Name", "License Type", "Dist TOU", "Agg LC ID", "Agg LC Name", "Gross Amount", "Net Amount");
 
     /**
      * Constructor.
@@ -55,7 +53,7 @@ public class AclLiabilityDetailsCsvReportHandler
     @Override
     public void writeTotals(AclReportTotalAmountsDto totalAmountsDto) {
         writeStringRow(
-            Arrays.asList("Grand Total", StringUtils.EMPTY, StringUtils.EMPTY, StringUtils.EMPTY, StringUtils.EMPTY,
+            List.of("Grand Total", StringUtils.EMPTY, StringUtils.EMPTY, StringUtils.EMPTY, StringUtils.EMPTY,
                 StringUtils.EMPTY, StringUtils.EMPTY, StringUtils.EMPTY, StringUtils.EMPTY,
                 getBeanBigDecimal(totalAmountsDto.getGrossAmount()),
                 getBeanBigDecimal(totalAmountsDto.getNetAmount())));

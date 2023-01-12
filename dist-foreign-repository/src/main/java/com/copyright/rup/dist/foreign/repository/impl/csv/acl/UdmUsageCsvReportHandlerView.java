@@ -7,7 +7,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -22,7 +21,7 @@ import java.util.Objects;
  */
 public class UdmUsageCsvReportHandlerView extends BaseCsvReportHandler<UdmUsageDto> {
 
-    private static final List<String> HEADERS = Arrays.asList("Detail ID", "Period", "Usage Origin", "Usage Detail ID",
+    private static final List<String> HEADERS = List.of("Detail ID", "Period", "Usage Origin", "Usage Detail ID",
         "Detail Status", "Assignee", "RH Account #", "RH Name", "Wr Wrk Inst", "Reported Title", "System Title",
         "Reported Standard Number", "Standard Number", "Reported Pub Type", "Publication Format", "Article",
         "Language", "Action Reason", "Comment", "Research URL", "Det LC ID", "Det LC Name", "Company ID",

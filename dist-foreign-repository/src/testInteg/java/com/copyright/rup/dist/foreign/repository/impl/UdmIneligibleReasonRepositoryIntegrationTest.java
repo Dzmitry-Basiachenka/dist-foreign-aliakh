@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import com.copyright.rup.dist.foreign.domain.UdmIneligibleReason;
 import com.copyright.rup.dist.foreign.repository.api.IUdmIneligibleReasonRepository;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -34,7 +34,7 @@ public class UdmIneligibleReasonRepositoryIntegrationTest {
 
     @Test
     public void testFindAll() {
-        List<UdmIneligibleReason> expectedIneligibleReasons = Arrays.asList(
+        List<UdmIneligibleReason> expectedIneligibleReasons = List.of(
             new UdmIneligibleReason("b60a726a-39e8-4303-abe1-6816da05b858", "Invalid survey"),
             new UdmIneligibleReason("0d5a129c-0f8f-4e48-98b2-8b980cdb9333", "Misc - See Comments"),
             new UdmIneligibleReason("b040d59b-72c7-42fc-99d2-d406d5ea60f3", "Multiple works found"),

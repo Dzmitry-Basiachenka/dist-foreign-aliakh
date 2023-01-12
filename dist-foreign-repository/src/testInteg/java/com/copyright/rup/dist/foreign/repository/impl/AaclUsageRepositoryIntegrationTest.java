@@ -134,7 +134,7 @@ public class AaclUsageRepositoryIntegrationTest {
             .sorted(Comparator.comparing(usage -> usage.getAaclUsage().getUsageAge().getPeriod()))
             .collect(Collectors.toList());
         verifyUsages(
-            Arrays.asList("json/aacl/aacl_baseline_usage_819ad2fc.json", "json/aacl/aacl_baseline_usage_5bcb69c5.json",
+            List.of("json/aacl/aacl_baseline_usage_819ad2fc.json", "json/aacl/aacl_baseline_usage_5bcb69c5.json",
                 "json/aacl/aacl_baseline_usage_0085ceb9.json"), actualUsages, this::verifyUsageIgnoringId);
     }
 
@@ -204,8 +204,8 @@ public class AaclUsageRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FOLDER_NAME + "find-by-ids.groovy")
     public void testFindByIds() {
-        List<Usage> actualUsages = aaclUsageRepository.findByIds(Arrays.asList(USAGE_ID_1, USAGE_ID_2));
-        verifyUsages(Arrays.asList("json/aacl/aacl_usage_0b5ac9fc.json", "json/aacl/aacl_usage_6c91f04e.json"),
+        List<Usage> actualUsages = aaclUsageRepository.findByIds(List.of(USAGE_ID_1, USAGE_ID_2));
+        verifyUsages(List.of("json/aacl/aacl_usage_0b5ac9fc.json", "json/aacl/aacl_usage_6c91f04e.json"),
             actualUsages, this::verifyUsage);
     }
 
@@ -225,7 +225,7 @@ public class AaclUsageRepositoryIntegrationTest {
         usageFilter.setUsageStatus(UsageStatusEnum.RH_FOUND);
         usageFilter.setUsagePeriod(2019);
         verifyUsageDtos(
-            Arrays.asList("json/aacl/aacl_usage_dto_0b5ac9fc.json", "json/aacl/aacl_usage_dto_6c91f04e.json",
+            List.of("json/aacl/aacl_usage_dto_0b5ac9fc.json", "json/aacl/aacl_usage_dto_6c91f04e.json",
                 "json/aacl/aacl_usage_dto_e21bcd1f.json"),
             aaclUsageRepository.findDtosByFilter(usageFilter, null, null));
     }
@@ -409,7 +409,7 @@ public class AaclUsageRepositoryIntegrationTest {
     public void testFindInvalidRightsholdersByFilterWithBatchFilter() {
         UsageFilter usageFilter = buildUsageFilter();
         usageFilter.setUsageBatchesIds(Set.of("70a96dc1-b0a8-433f-a7f4-c5d94ee75a9e"));
-        assertEquals(Arrays.asList(7000000001L, 7000000002L),
+        assertEquals(List.of(7000000001L, 7000000002L),
             aaclUsageRepository.findInvalidRightsholdersByFilter(usageFilter));
     }
 
@@ -471,7 +471,7 @@ public class AaclUsageRepositoryIntegrationTest {
         usageFilter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
         aaclUsageRepository.addToScenario(SCENARIO_ID_1, usageFilter, USER_NAME);
         aaclUsageRepository.findByIds(
-            Arrays.asList("0cd30b3e-ae74-466a-a7b1-a2d891b2123e", "9342062f-568e-4c27-8f33-c010a2afe61e"))
+            List.of("0cd30b3e-ae74-466a-a7b1-a2d891b2123e", "9342062f-568e-4c27-8f33-c010a2afe61e"))
             .forEach(actualUsage -> {
                 assertEquals(SCENARIO_ID_1, actualUsage.getScenarioId());
                 assertEquals(UsageStatusEnum.LOCKED, actualUsage.getStatus());
@@ -498,7 +498,7 @@ public class AaclUsageRepositoryIntegrationTest {
                 assertEquals(USER_NAME, actualUsage.getUpdateUser());
             });
         aaclUsageRepository.findByIds(
-            Arrays.asList("9342062f-568e-4c27-8f33-c010a2afe61e", "e21bcd1f-8040-4b44-93c7-4af732ac1916"))
+            List.of("9342062f-568e-4c27-8f33-c010a2afe61e", "e21bcd1f-8040-4b44-93c7-4af732ac1916"))
             .forEach(actualUsage -> assertNull(actualUsage.getScenarioId()));
     }
 
@@ -547,7 +547,7 @@ public class AaclUsageRepositoryIntegrationTest {
         assertEquals(6, aaclUsageRepository.findByScenarioId(SCENARIO_ID_3).size());
         aaclUsageRepository.excludeZeroAmountUsages(SCENARIO_ID_3, USER_NAME);
         List<Usage> excludedUsages = aaclUsageRepository.findByIds(
-            Arrays.asList("d88c445f-4b4d-45ef-bc95-fdb9c4ba676d", "335dd803-3763-4fd7-ae78-31821a453fbf"));
+            List.of("d88c445f-4b4d-45ef-bc95-fdb9c4ba676d", "335dd803-3763-4fd7-ae78-31821a453fbf"));
         assertEquals(2, excludedUsages.size());
         excludedUsages.forEach(usage -> {
             assertEquals(UsageStatusEnum.SCENARIO_EXCLUDED, usage.getStatus());
@@ -810,7 +810,7 @@ public class AaclUsageRepositoryIntegrationTest {
         usages.forEach(this::verifyUsagesBeforeDeleteScenario);
         aaclUsageRepository.deleteFromScenario(SCENARIO_ID_4, "SYSTEM");
         List<Usage> usageList = aaclUsageRepository.findByIds(
-            Arrays.asList("9c8ae08e-60a9-4819-b445-eb2bbc50635d", "8eb9dbbc-3535-42cc-8094-2d90849952e2"));
+            List.of("9c8ae08e-60a9-4819-b445-eb2bbc50635d", "8eb9dbbc-3535-42cc-8094-2d90849952e2"));
         assertEquals(2, usageList.size());
         verifyUsages(List.of("json/aacl/aacl_usage_delete_scenario.json"), usageList,
             this::verifyUsageForDeleteScenario);
@@ -824,12 +824,12 @@ public class AaclUsageRepositoryIntegrationTest {
         List<Usage> actualBaselineUsages = aaclUsageRepository.findBaselineUsages();
         assertEquals(4, actualBaselineUsages.size());
         List<Usage> newBaselineUsages = aaclUsageRepository.findBaselineUsages().stream()
-            .filter(usage -> Arrays.asList("Newly uploaded LOCKED usage", "Newly uploaded SCENARIO_EXCLUDED usage")
+            .filter(usage -> List.of("Newly uploaded LOCKED usage", "Newly uploaded SCENARIO_EXCLUDED usage")
                 .contains(usage.getComment()))
             .sorted(Comparator.comparing(Usage::getComment))
             .collect(Collectors.toList());
         assertEquals(2, newBaselineUsages.size());
-        verifyUsages(Arrays.asList("json/aacl/aacl_baseline_for_locked.json",
+        verifyUsages(List.of("json/aacl/aacl_baseline_for_locked.json",
             "json/aacl/aacl_baseline_for_scenario_excluded.json"), newBaselineUsages, this::verifyUsageIgnoringId);
     }
 
@@ -837,9 +837,9 @@ public class AaclUsageRepositoryIntegrationTest {
     @TestData(fileName = FOLDER_NAME + "delete-locked-by-scenario-id.groovy")
     public void testDeleteLockedByScenarioId() {
         List<String> lockedUsageIds =
-            Arrays.asList("f92c8af2-dea6-4243-ac58-01055932187e", "a46b6313-11de-4d6e-a51e-b50dd8239ec7");
+            List.of("f92c8af2-dea6-4243-ac58-01055932187e", "a46b6313-11de-4d6e-a51e-b50dd8239ec7");
         List<String> excludedUsageIds =
-            Arrays.asList("45ad755f-5b8f-4f38-b362-d37de4b520eb", "bb87e43f-b755-467f-abdd-30ac0500aeff");
+            List.of("45ad755f-5b8f-4f38-b362-d37de4b520eb", "bb87e43f-b755-467f-abdd-30ac0500aeff");
         assertEquals(4, aaclUsageRepository.findByIds(ListUtils.union(lockedUsageIds, excludedUsageIds)).size());
         aaclUsageRepository.deleteLockedByScenarioId("45f17838-b5cb-47e2-a57a-8d128fa07edf");
         assertEquals(0, aaclUsageRepository.findByIds(lockedUsageIds).size());
@@ -853,9 +853,9 @@ public class AaclUsageRepositoryIntegrationTest {
     @TestData(fileName = FOLDER_NAME + "delete-excluded-by-scenario-id.groovy")
     public void testDeleteExcludedByScenarioId() {
         List<String> lockedUsageIds =
-            Arrays.asList("f92c8af2-dea6-4243-ac58-01055932187e", "a46b6313-11de-4d6e-a51e-b50dd8239ec7");
+            List.of("f92c8af2-dea6-4243-ac58-01055932187e", "a46b6313-11de-4d6e-a51e-b50dd8239ec7");
         List<String> excludedUsageIds =
-            Arrays.asList("45ad755f-5b8f-4f38-b362-d37de4b520eb", "bb87e43f-b755-467f-abdd-30ac0500aeff");
+            List.of("45ad755f-5b8f-4f38-b362-d37de4b520eb", "bb87e43f-b755-467f-abdd-30ac0500aeff");
         assertEquals(4, aaclUsageRepository.findByIds(ListUtils.union(lockedUsageIds, excludedUsageIds)).size());
         aaclUsageRepository.deleteExcludedByScenarioId("45f17838-b5cb-47e2-a57a-8d128fa07edf");
         assertEquals(2, aaclUsageRepository.findByIds(lockedUsageIds).size());
@@ -869,7 +869,7 @@ public class AaclUsageRepositoryIntegrationTest {
     @TestData(fileName = FOLDER_NAME + "find-payee-agg-classes-pairs-by-scenario-id.groovy")
     public void testFindPayeeAggClassesPairsByScenarioId() {
         AggregateLicenseeClass aggregateLicenseeClass = buildAggregateLicenseeClass(108, "EXGP", "Life Sciences");
-        List<PayeeAccountAggregateLicenseeClassesPair> pairs = Arrays.asList(
+        List<PayeeAccountAggregateLicenseeClassesPair> pairs = List.of(
             buildPayeeAggLcPair(1000000027L, aggregateLicenseeClass),
             buildPayeeAggLcPair(2580011451L, aggregateLicenseeClass,
                 buildAggregateLicenseeClass(113, "MU", "Life Sciences")));
@@ -944,7 +944,7 @@ public class AaclUsageRepositoryIntegrationTest {
         List<String> actualIds = usageDtos.stream()
             .map(UsageDto::getId)
             .collect(Collectors.toList());
-        assertEquals(Arrays.asList(expectedIds), actualIds);
+        assertEquals(List.of(expectedIds), actualIds);
     }
 
     private void verifyUsages(List<String> expectedUsageJsonFiles, List<Usage> actualUsages,

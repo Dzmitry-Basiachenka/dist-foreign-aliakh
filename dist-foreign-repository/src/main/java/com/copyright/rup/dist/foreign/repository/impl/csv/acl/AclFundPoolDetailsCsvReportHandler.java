@@ -5,7 +5,6 @@ import com.copyright.rup.dist.foreign.domain.AclFundPoolDetailDto;
 
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -19,7 +18,7 @@ import java.util.List;
  */
 public class AclFundPoolDetailsCsvReportHandler extends BaseCsvReportHandler<AclFundPoolDetailDto> {
 
-    private static final List<String> HEADERS = Arrays.asList("Fund Pool Name", "Period", "License Type", "Source",
+    private static final List<String> HEADERS = List.of("Fund Pool Name", "Period", "License Type", "Source",
         "Det LC ID", "Det LC Name", "Agg LC ID", "Agg LC Name", "Fund Pool Type", "Gross Amount", "Net Amount");
 
     /**

@@ -46,7 +46,6 @@ import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
@@ -144,8 +143,7 @@ public class UsageArchiveRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FOLDER_NAME + "delete-by-ids.groovy")
     public void testDeleteByIds() {
-        List<String> usageIds =
-            Arrays.asList("7ddb99d9-b6f8-4a34-b730-e6772ccc8052", "a9fac1e1-5a34-416b-9ecb-f2615b24d1c1");
+        List<String> usageIds = List.of("7ddb99d9-b6f8-4a34-b730-e6772ccc8052", "a9fac1e1-5a34-416b-9ecb-f2615b24d1c1");
         assertTrue(
             CollectionUtils.isNotEmpty(usageArchiveRepository.findByIdAndStatus(usageIds, UsageStatusEnum.ARCHIVED)));
         usageArchiveRepository.deleteByIds(usageIds);
@@ -389,7 +387,7 @@ public class UsageArchiveRepositoryIntegrationTest {
     @TestData(fileName = FIND_AACL_BY_SCENARIO_ID_AND_RH_ACCOUNT_NUMBER)
     public void testFindAaclDtosByScenarioId() {
         List<UsageDto> expectedUsageDtos = loadExpectedUsageDtos(
-            Arrays.asList("json/aacl/aacl_archived_usage_dto_927ea8a1.json",
+            List.of("json/aacl/aacl_archived_usage_dto_927ea8a1.json",
                 "json/aacl/aacl_archived_usage_dto_cd1a9398.json", "json/aacl/aacl_archived_usage_dto_cfd3e488.json"));
         List<UsageDto> actualUsageDtos =
             usageArchiveRepository.findAaclDtosByScenarioId(AACL_SCENARIO_ID)
@@ -484,7 +482,7 @@ public class UsageArchiveRepositoryIntegrationTest {
     public void testFindAaclUsagesByIdsAndStatus() {
         List<PaidUsage> actualUsages =
             usageArchiveRepository.findByIdAndStatus(
-                Arrays.asList("6e8172d6-c16f-4522-8606-e55db1b8e5a4", "1537f313-975e-420e-b745-95f2808a388a"),
+                List.of("6e8172d6-c16f-4522-8606-e55db1b8e5a4", "1537f313-975e-420e-b745-95f2808a388a"),
                 UsageStatusEnum.LOCKED);
         actualUsages.sort(Comparator.comparing(Usage::getId));
         verifyPaidUsages(
@@ -497,7 +495,7 @@ public class UsageArchiveRepositoryIntegrationTest {
     public void testFindSalUsagesByIds() {
         List<PaidUsage> actualUsages =
             usageArchiveRepository.findByIdAndStatus(
-                Arrays.asList("13704648-838e-444f-8987-c4f1dc3aa38d", "2c2cf124-8c96-4662-8949-c56002247f39"),
+                List.of("13704648-838e-444f-8987-c4f1dc3aa38d", "2c2cf124-8c96-4662-8949-c56002247f39"),
                 UsageStatusEnum.PAID);
         actualUsages.sort(Comparator.comparing(Usage::getId));
         verifyPaidUsages(List.of("json/sal/sal_archived_usage_13704648.json"), actualUsages,
@@ -533,7 +531,7 @@ public class UsageArchiveRepositoryIntegrationTest {
             loadExpectedPaidUsages(List.of("json/sal/sal_paid_usages.json"));
         paidUsages.forEach(paidUsage -> usageArchiveRepository.insertSalPaid(paidUsage));
         List<PaidUsage> actualUsages =
-            usageArchiveRepository.findByIdAndStatus(Arrays.asList("b8a76b66-1a9f-4208-94fa-2191237b73ef",
+            usageArchiveRepository.findByIdAndStatus(List.of("b8a76b66-1a9f-4208-94fa-2191237b73ef",
                 "6d7cc92d-4662-4665-af57-0c8fdc417b01"), UsageStatusEnum.PAID);
         actualUsages.sort(Comparator.comparing(Usage::getId));
         assertEquals(2, actualUsages.size());
@@ -544,7 +542,7 @@ public class UsageArchiveRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FOLDER_NAME + "move-fund-usages-to-archive.groovy")
     public void testMoveFundUsagesToArchive() {
-        List<String> usageIds = Arrays.asList("677e1740-c791-4929-87f9-e7fc68dd4699",
+        List<String> usageIds = List.of("677e1740-c791-4929-87f9-e7fc68dd4699",
             "2a868c86-a639-400f-b407-0602dd7ec8df", "9abfd0a0-2779-4321-af07-ebabe22627a0");
         assertEquals(0, usageArchiveRepository.findByIds(usageIds).size());
         assertEquals(3, usageRepository.findByIds(usageIds).size());

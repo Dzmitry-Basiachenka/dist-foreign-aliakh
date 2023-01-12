@@ -11,7 +11,6 @@ import org.apache.commons.lang3.StringUtils;
 import java.io.OutputStream;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -51,9 +50,9 @@ public class AclWorkSharesByAggLcCsvReportHandler extends BaseCsvReportHandler<A
     public void writeMetadata(AclCalculationReportsInfoDto metadata) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(RupDateUtils.US_DATETIME_FORMAT_PATTERN_LONG);
         AclScenario scenario = metadata.getScenarios().get(0);
-        writeStringRow(Arrays.asList(StringUtils.EMPTY, StringUtils.EMPTY));
+        writeStringRow(List.of(StringUtils.EMPTY, StringUtils.EMPTY));
         writeStringRow(METADATA_HEADERS);
-        writeStringRow(Arrays.asList(REPORT_NAME, scenario.getName(), scenario.getLicenseType(),
+        writeStringRow(List.of(REPORT_NAME, scenario.getName(), scenario.getLicenseType(),
             String.valueOf(scenario.getPeriodEndDate()), metadata.getUser(),
             metadata.getReportDateTime().format(formatter)));
     }

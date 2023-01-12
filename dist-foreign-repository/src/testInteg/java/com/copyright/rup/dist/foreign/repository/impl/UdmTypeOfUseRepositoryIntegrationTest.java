@@ -11,7 +11,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -50,7 +49,7 @@ public class UdmTypeOfUseRepositoryIntegrationTest {
 
     @Test
     public void testFindAllUdmTous() {
-        List<String> expectedUdmTous = Arrays.asList(COPY_FOR_MYSELF, DIGITAL_SHARING_OTHER, DISPLAY_IN_POWERPOINT,
+        List<String> expectedUdmTous = List.of(COPY_FOR_MYSELF, DIGITAL_SHARING_OTHER, DISPLAY_IN_POWERPOINT,
             DISTRIBUTE_IN_POWERPOINT, EMAIL_COPY, FAX_PHOTOCOPIES, PHOTOCOPY_SHARING_OTHER, PRINT_COPIES,
             SHARE_PHOTOCOPIES, SHARE_SINGLE_ELECTRONIC_COPY, STORE_COPY, SUBMIT_ELECTRONIC_COPY, SUBMIT_PHOTOCOPY);
         List<String> actualUdmTous = udmTypeOfUseRepository.findAllUdmTous();

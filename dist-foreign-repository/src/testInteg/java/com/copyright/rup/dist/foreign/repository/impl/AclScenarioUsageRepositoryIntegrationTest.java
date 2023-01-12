@@ -43,7 +43,6 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.OffsetDateTime;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
@@ -134,7 +133,7 @@ public class AclScenarioUsageRepositoryIntegrationTest {
         Map<String, List<AclScenarioShareDetail>> detailSharesMap = new HashMap<>();
         detailSharesMap.put("df038efe-72c1-4081-88e7-17fa4fa5ff6a", List.of(
             buildAclScenarioShareDetail(1000028511L, PRINT_TOU, 6.0, 3.0)));
-        detailSharesMap.put("8827d6c6-16d8-4102-b257-ce861ce77491", Arrays.asList(
+        detailSharesMap.put("8827d6c6-16d8-4102-b257-ce861ce77491", List.of(
             buildAclScenarioShareDetail(1000028511L, DIGITAL_TOU, 9.5, 5.0),
             buildAclScenarioShareDetail(2580011451L, PRINT_TOU, 9.5, 5.0)));
         scenarioDetails.forEach(actualDetail -> {
@@ -170,7 +169,7 @@ public class AclScenarioUsageRepositoryIntegrationTest {
         Map<String, List<AclScenarioShareDetail>> detailSharesMap = new HashMap<>();
         detailSharesMap.put("7edfc465-4588-4c70-b62b-4c9f194e5d06", List.of(
             buildAclScenarioShareDetail(1000028511L, PRINT_TOU, 6.0, 3.0, 1.0, 1.0, 1.0)));
-        detailSharesMap.put("fe8ba41d-01af-42e4-b400-d88733b3271f", Arrays.asList(
+        detailSharesMap.put("fe8ba41d-01af-42e4-b400-d88733b3271f", List.of(
             buildAclScenarioShareDetail(1000028511L, DIGITAL_TOU, 59.85, 5.0, 1.0, 1.0, 1.0),
             buildAclScenarioShareDetail(2580011451L, PRINT_TOU, 59.85, 5.0, 0.2861035422, 0.5, 0.3930517711)));
         detailSharesMap.put("7cb1ebeb-ee71-4ec4-bd0c-611d078dbe4b", List.of(
@@ -196,7 +195,7 @@ public class AclScenarioUsageRepositoryIntegrationTest {
         Map<String, List<AclScenarioShareDetail>> detailSharesMap = new HashMap<>();
         detailSharesMap.put("9a30d051-24e8-4fb2-8e9a-31fce9653be7", List.of(
             buildAclScenarioShareDetail(1000028511L, PRINT_TOU, 6.0, 3.0, 1.0, 1.0, 1.0, 1550.51, 1200.26, 350.25)));
-        detailSharesMap.put("fdac5a59-0e8f-4416-bee6-f6883a80a917", Arrays.asList(
+        detailSharesMap.put("fdac5a59-0e8f-4416-bee6-f6883a80a917", List.of(
             buildAclScenarioShareDetail(1000028511L, DIGITAL_TOU, 59.85, 5.0, 1.0, 1.0, 1.0, 27895.51, 20500.26,
                 7395.25),
             buildAclScenarioShareDetail(2580011451L, PRINT_TOU, 59.85, 5.0, 0.2861035422, 0.5, 0.3930517711,
@@ -404,7 +403,7 @@ public class AclScenarioUsageRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FIND_BY_SCENARIO_ID_AND_RH_ACCOUNT_NUMBER)
     public void testFindByScenarioIdAndRhAccountNumberSearchRhAccountNumber() {
-        List<AclScenarioDetailDto> scenarioDetailDtos = Arrays.asList(buildDigitalAclScenarioDetailDto(),
+        List<AclScenarioDetailDto> scenarioDetailDtos = List.of(buildDigitalAclScenarioDetailDto(),
             buildPrintDigitalAclScenarioDetailDto());
         verifyFindByScenarioIdAndRhSearch(scenarioDetailDtos, "1000002859");
         verifyFindByScenarioIdAndRhSearch(scenarioDetailDtos, "1000002");
@@ -422,7 +421,7 @@ public class AclScenarioUsageRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FIND_BY_SCENARIO_ID_AND_RH_ACCOUNT_NUMBER)
     public void testFindByScenarioIdAndRhAccountNumberSearchRhName() {
-        List<AclScenarioDetailDto> scenarioDetailDtos = Arrays.asList(buildDigitalAclScenarioDetailDto(),
+        List<AclScenarioDetailDto> scenarioDetailDtos = List.of(buildDigitalAclScenarioDetailDto(),
             buildPrintDigitalAclScenarioDetailDto());
         verifyFindByScenarioIdAndRhSearch(scenarioDetailDtos, "John Wiley & Sons - Books");
         verifyFindByScenarioIdAndRhSearch(scenarioDetailDtos, "JOHN Wiley");

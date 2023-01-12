@@ -5,7 +5,6 @@ import com.copyright.rup.dist.foreign.domain.report.UndistributedLiabilitiesRepo
 
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -20,8 +19,7 @@ import java.util.List;
 public class NtsUndistributedLiabilitiesReportHandler extends BaseCsvReportHandler<UndistributedLiabilitiesReportDto> {
 
     private static final List<String> HEADERS =
-        Arrays.asList("Gross Amount", "Estimated Service Fee %", "Estimated Service Fee Amount",
-            "Estimated Net Amount");
+        List.of("Gross Amount", "Estimated Service Fee %", "Estimated Service Fee Amount", "Estimated Net Amount");
 
     /**
      * Constructor.

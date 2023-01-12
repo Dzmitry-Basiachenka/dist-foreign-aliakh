@@ -5,7 +5,6 @@ import com.copyright.rup.dist.foreign.domain.report.NtsServiceFeeTrueUpReportDto
 
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -20,7 +19,7 @@ import java.util.List;
 public class NtsServiceFeeTrueUpReportHandler extends BaseCsvReportHandler<NtsServiceFeeTrueUpReportDto> {
 
     private static final List<String> HEADERS =
-        Arrays.asList("NTS Fund Pool Amount", "Pre-Service Fee Amount", "Pre-Service Fee Funds",
+        List.of("NTS Fund Pool Amount", "Pre-Service Fee Amount", "Pre-Service Fee Funds",
             "Post-Service Fee Amount", "Gross Amount", "Estimated Service Fee %", "Estimated Service Fee Amount",
             "Estimated Net Amount", "Gross Amount Sent to LM", "Service Fee % Sent to LM",
             "Service Fee Amount Sent to LM", "Net Amount Sent to LM", "Service Fee True-up");

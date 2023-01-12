@@ -7,7 +7,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -22,7 +21,7 @@ import java.util.Objects;
  */
 public class AclUsageCsvReportHandler extends BaseCsvReportHandler<AclUsageDto> {
 
-    private static final List<String> HEADERS = Arrays.asList("Detail ID", "Period", "Usage Origin", "Channel",
+    private static final List<String> HEADERS = List.of("Detail ID", "Period", "Usage Origin", "Channel",
         "Usage Detail ID", "Wr Wrk Inst", "System Title", "Det LC ID", "Det LC Name", "Agg LC ID", "Agg LC Name",
         "Survey Country", "Pub Type", "Content Unit Price", "CUP Flag", "TOU", "Annualized Copies", "Updated By",
         "Updated Date");

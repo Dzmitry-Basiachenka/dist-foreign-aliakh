@@ -29,7 +29,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
@@ -333,7 +332,7 @@ public class UsageBatchRepositoryIntegrationTest {
             .map(UsageBatch::getId)
             .sorted()
             .collect(Collectors.toList());
-        assertEquals(Arrays.asList("4f0a6d1a-4df5-4d29-a1b4-9fc32f031ba5", "930caf5f-839f-4926-bebe-bde38d90b0e1"),
+        assertEquals(List.of("4f0a6d1a-4df5-4d29-a1b4-9fc32f031ba5", "930caf5f-839f-4926-bebe-bde38d90b0e1"),
             actualBatchIds);
         List<UsageBatch> notAttachedBatches = usageBatchRepository.findSalNotAttachedToScenario();
         assertEquals(1, notAttachedBatches.size());
@@ -349,7 +348,7 @@ public class UsageBatchRepositoryIntegrationTest {
     @TestData(fileName = FOLDER_NAME + "find-batch-names-available-for-rights-assignment.groovy")
     public void testFindBatchNamesAvailableForRightsAssignment() {
         List<String> expectedBatches =
-            Arrays.asList("FAS2 Batch With Eligible and RH Not Found usages", "FAS2 Batch With RH Not Found usages");
+            List.of("FAS2 Batch With Eligible and RH Not Found usages", "FAS2 Batch With RH Not Found usages");
         assertEquals(expectedBatches,
             usageBatchRepository.findBatchNamesForRightsAssignment().stream().sorted().collect(Collectors.toList()));
     }

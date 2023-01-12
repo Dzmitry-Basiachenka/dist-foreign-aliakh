@@ -19,7 +19,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -78,7 +77,7 @@ public class AclGrantSetRepositoryIntegrationTest {
     public void testFindGrantPeriods() {
         List<Integer> grantSets = aclGrantSetRepository.findGrantPeriods();
         assertEquals(3, grantSets.size());
-        assertEquals(Arrays.asList(202212, 202112, 202012), grantSets);
+        assertEquals(List.of(202212, 202112, 202012), grantSets);
     }
 
     @Test

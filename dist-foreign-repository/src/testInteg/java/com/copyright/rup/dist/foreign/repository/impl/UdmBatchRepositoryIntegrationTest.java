@@ -23,7 +23,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -106,7 +105,7 @@ public class UdmBatchRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FOLDER_NAME + "find-periods.groovy")
     public void testFindPeriods() {
-        List<Integer> periods = Arrays.asList(202112, 202106);
+        List<Integer> periods = List.of(202112, 202106);
         assertEquals(periods, udmBatchRepository.findPeriods());
     }
 

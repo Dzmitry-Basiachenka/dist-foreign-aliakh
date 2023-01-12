@@ -1381,7 +1381,7 @@ public class UdmUsageRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FIND_FIELDS)
     public void testFindUserNames() {
-        List<String> expectedUserNames = Arrays.asList(ASSIGNEE_3, ASSIGNEE_2, ASSIGNEE_1);
+        List<String> expectedUserNames = List.of(ASSIGNEE_3, ASSIGNEE_2, ASSIGNEE_1);
         List<String> actualUserNames = udmUsageRepository.findUserNames();
         assertFalse(actualUserNames.isEmpty());
         assertEquals(expectedUserNames, actualUserNames);
@@ -1390,7 +1390,7 @@ public class UdmUsageRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FIND_FIELDS)
     public void testFindPeriods() {
-        List<Integer> expectedPeriods = Arrays.asList(202106, 202012, 202006);
+        List<Integer> expectedPeriods = List.of(202106, 202012, 202006);
         List<Integer> actualPeriods = udmUsageRepository.findPeriods();
         assertFalse(actualPeriods.isEmpty());
         assertEquals(expectedPeriods, actualPeriods);
@@ -1399,20 +1399,19 @@ public class UdmUsageRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FIND_FIELDS)
     public void testFindAssignees() {
-        assertEquals(Arrays.asList("jjohn@copyright.com", "wjohn@copyright.com"),
-            udmUsageRepository.findAssignees());
+        assertEquals(List.of("jjohn@copyright.com", "wjohn@copyright.com"), udmUsageRepository.findAssignees());
     }
 
     @Test
     @TestData(fileName = FIND_FIELDS)
     public void testFindPublicationTypes() {
-        assertEquals(Arrays.asList("Book", PUB_TYPE_NOT_SHARED), udmUsageRepository.findPublicationTypes());
+        assertEquals(List.of("Book", PUB_TYPE_NOT_SHARED), udmUsageRepository.findPublicationTypes());
     }
 
     @Test
     @TestData(fileName = FIND_FIELDS)
     public void testFindPublicationFormats() {
-        assertEquals(Arrays.asList("Digital", "Not Specified"), udmUsageRepository.findPublicationFormats());
+        assertEquals(List.of("Digital", "Not Specified"), udmUsageRepository.findPublicationFormats());
     }
 
     @Test
@@ -1501,7 +1500,7 @@ public class UdmUsageRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FOLDER_NAME + "update-status-by-ids.groovy")
     public void testUpdateStatusByIds() {
-        List<UdmUsage> udmUsages = udmUsageRepository.findByIds(Arrays.asList(UDM_USAGE_UID_10, UDM_USAGE_UID_11));
+        List<UdmUsage> udmUsages = udmUsageRepository.findByIds(List.of(UDM_USAGE_UID_10, UDM_USAGE_UID_11));
         assertEquals(2, udmUsages.size());
         UdmUsage udmUsage1 = udmUsages.get(0);
         assertEquals(UsageStatusEnum.NEW, udmUsage1.getStatus());
@@ -1511,7 +1510,7 @@ public class UdmUsageRepositoryIntegrationTest {
         assertEquals(USER_NAME, udmUsage2.getUpdateUser());
         udmUsageRepository.updateStatusByIds(Sets.newHashSet(udmUsage1.getId(), udmUsage2.getId()),
             UsageStatusEnum.WORK_FOUND);
-        udmUsages = udmUsageRepository.findByIds(Arrays.asList(UDM_USAGE_UID_10, UDM_USAGE_UID_11));
+        udmUsages = udmUsageRepository.findByIds(List.of(UDM_USAGE_UID_10, UDM_USAGE_UID_11));
         assertEquals(2, udmUsages.size());
         udmUsage1 = udmUsages.get(0);
         assertEquals(UsageStatusEnum.WORK_FOUND, udmUsage1.getStatus());

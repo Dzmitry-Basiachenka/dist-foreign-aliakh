@@ -5,7 +5,6 @@ import com.copyright.rup.dist.foreign.domain.UdmProxyValueDto;
 
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -20,7 +19,7 @@ import java.util.List;
 public class UdmProxyValueCsvReportHandler extends BaseCsvReportHandler<UdmProxyValueDto> {
 
     private static final List<String> HEADERS =
-        Arrays.asList("Period", "Pub Type Code", "Content Unit Price", "Content Unit Price Count");
+        List.of("Period", "Pub Type Code", "Content Unit Price", "Content Unit Price Count");
 
     /**
      * Constructor.

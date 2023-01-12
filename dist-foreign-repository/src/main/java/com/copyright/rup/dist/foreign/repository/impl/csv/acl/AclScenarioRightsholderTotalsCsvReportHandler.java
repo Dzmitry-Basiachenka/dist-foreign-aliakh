@@ -5,7 +5,6 @@ import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolder;
 
 import java.io.PipedOutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -20,7 +19,7 @@ import java.util.List;
  */
 public class AclScenarioRightsholderTotalsCsvReportHandler extends BaseCsvReportHandler<AclRightsholderTotalsHolder> {
 
-    private static final List<String> HEADERS = Arrays.asList("RH Account #", "RH Name", "Print Payee Account #",
+    private static final List<String> HEADERS = List.of("RH Account #", "RH Name", "Print Payee Account #",
         "Print Payee Name", "Digital Payee Account #", "Digital Payee Name", "Print Gross Amt in USD",
         "Print Service Fee Amt", "Print Net Amt in USD", "Digital Gross Amt in USD", "Digital Service Fee Amt",
         "Digital Net Amt in USD", "# of Titles", "# of Agg Lic Classes", "License Type");

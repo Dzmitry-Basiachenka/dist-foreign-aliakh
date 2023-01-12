@@ -17,7 +17,6 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -56,7 +55,7 @@ public class SalCsvReportsIntegrationTest extends CsvReportsTestHelper {
     @Test
     @TestData(fileName = FOLDER_NAME + "write-liabilities-by-rh-csv-report.groovy")
     public void testWriteLiabilitiesByRhCsvReport() throws IOException {
-        List<Scenario> scenarios = Arrays.asList(
+        List<Scenario> scenarios = List.of(
             buildScenario("5af9a0e6-4156-416d-b95b-f1aeeefa9545", "SAL Liabilities by Rightsholder report Scenario 1"),
             buildScenario("ebe447c1-5314-4075-9781-efc0887b6ffc", "SAL Liabilities by Rightsholder report Scenario 2"));
         assertFiles(outputStream -> reportRepository.writeSalLiabilitiesByRhCsvReport(scenarios, outputStream),
@@ -66,7 +65,7 @@ public class SalCsvReportsIntegrationTest extends CsvReportsTestHelper {
     @Test
     @TestData(fileName = FOLDER_NAME + "write-liabilities-summary-by-rh-and-work-csv-report.groovy")
     public void testWriteLiabilitiesSummaryByRhAndWorkCsvReport() throws IOException {
-        List<Scenario> scenarios = Arrays.asList(
+        List<Scenario> scenarios = List.of(
             buildScenario("c0b30809-4a38-46cc-a0dc-641924d1fc43",
                 "SAL Liabilities Summary by Rightsholder and Work report Scenario 1"),
             buildScenario("0a3b533d-d3ed-48dc-b256-f4f9f6527d91",
