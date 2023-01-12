@@ -1,29 +1,44 @@
+17.0.1
+-
+* B-68554 FDA: ACLCI UI usage view: implement controller to save fund pool
+* B-68554 FDA: ACLCI UI usage view: refactor the dialog
+* B-75591 FDA: ACLCI usage editing: apply permissions for Update Usages button
+* B-77418 Tech Debt: FDA: split test data into separate methods
+* B-77418 Tech Debt: FDA: add service logic to delete ACLCI fund pool
+* B-77418 Tech Debt: FDA: revert parentheses in groovy file
+* B-68612 Tech Debt: FDA: replace Collections.addAll() by constructor initialization, direct static fields calls by methods and change method references
+* B-77418 Tech Debt: FDA: change id fields in AclciMultipleEditUsagesWindow
+* B-68612 Tech Debt: FDA: replace Arrays.asList() by List.of() in packages dist-foreign-domain, dist-foreign-integration, dist-foreign-service
+* B-68612 Tech Debt: FDA: replace Arrays.asList() by List.of()
+* B-68612 Tech Debt: FDA: replace Collections.emptyMap() by Map.of()
+* B-68612 Tech Debt: FDA: replace Collections.emptyList() by List.of()
+
 17.0.0
 -
-B-68577 FDA: Load ACLCI fund pool: implement domain object
-B-68577 FDA: Load ACLCI fund pool: implement Liquibase script to save ACLCI fund pool fields
-B-68577 FDA: Load ACLCI fund pool: implement controllers
-B-68577 FDA: Load ACLCI fund pool: implement MyBatis mapper to save fund pool and repository integration test
-B-68577 FDA: Load ACLCI fund pool: implement service to save fund pool
-B-68577 FDA: Load ACLCI fund pool: implement load fund pool menu item
-B-68577 FDA: Load ACLCI fund pool: implement serializer, deserializer, JSON handler
-B-75591 FDA: ACLCI usage editing: add Update Usages button to ACLCI Usages tab
-B-75591 FDA: ACLCI usage editing: implement window to update usages
-B-75591 FDA: ACLCI usage editing: implement backend logic to update usages
-B-75591 FDA: ACLCI usage editing: implement window to update rightsholder and wr wrk inst
-B-75591 FDA: ACLCI usage editing: implement service logic to update usages
-B-68554 FDA: ACLCI UI usage view: implement load fund pool dialog
-B-68554 FDA: ACLCI UI usage view: implement coverage years validator
-B-68554 FDA: ACLCI UI usage view: implement service to calculate fund pool amounts
-B-68554 FDA: ACLCI UI usage view: rename domain object
-B-68576 FDA: Generate a Grade Group for ACLCI usages: Implement Grade Group column
-B-68576 FDA: Generate a Grade Group for ACLCI usages: add sorting for column Grade Group
-B-68576 FDA: Generate a Grade Group for ACLCI usages: Implement logic to get grade group based on usage grade
-B-77418 Tech Debt: FDA: refactor SalGradeGroupEnum class
-B-77418 Tech Debt: FDA: replace org.junit.Assert.assertThat by org.hamcrest.MatcherAssert.assertThat
-B-77418 Tech Debt: FDA: replace com.google.common.collect.ImmutableList.of() by java.util.List.of()
-B-77418 Tech Debt: FDA: add ordering for scenarios in metadata ACL reports
-B-77418 Tech Debt: FDA: refactor deserialization logic for NTS batch, scenario JSON fields and SAL fund pool fields
+* B-68577 FDA: Load ACLCI fund pool: implement domain object
+* B-68577 FDA: Load ACLCI fund pool: implement Liquibase script to save ACLCI fund pool fields
+* B-68577 FDA: Load ACLCI fund pool: implement controllers
+* B-68577 FDA: Load ACLCI fund pool: implement MyBatis mapper to save fund pool and repository integration test
+* B-68577 FDA: Load ACLCI fund pool: implement service to save fund pool
+* B-68577 FDA: Load ACLCI fund pool: implement load fund pool menu item
+* B-68577 FDA: Load ACLCI fund pool: implement serializer, deserializer, JSON handler
+* B-75591 FDA: ACLCI usage editing: add Update Usages button to ACLCI Usages tab
+* B-75591 FDA: ACLCI usage editing: implement window to update usages
+* B-75591 FDA: ACLCI usage editing: implement backend logic to update usages
+* B-75591 FDA: ACLCI usage editing: implement window to update rightsholder and wr wrk inst
+* B-75591 FDA: ACLCI usage editing: implement service logic to update usages
+* B-68554 FDA: ACLCI UI usage view: implement load fund pool dialog
+* B-68554 FDA: ACLCI UI usage view: implement coverage years validator
+* B-68554 FDA: ACLCI UI usage view: implement service to calculate fund pool amounts
+* B-68554 FDA: ACLCI UI usage view: rename domain object
+* B-68576 FDA: Generate a Grade Group for ACLCI usages: Implement Grade Group column
+* B-68576 FDA: Generate a Grade Group for ACLCI usages: add sorting for column Grade Group
+* B-68576 FDA: Generate a Grade Group for ACLCI usages: Implement logic to get grade group based on usage grade
+* B-77418 Tech Debt: FDA: refactor SalGradeGroupEnum class
+* B-77418 Tech Debt: FDA: replace org.junit.Assert.assertThat by org.hamcrest.MatcherAssert.assertThat
+* B-77418 Tech Debt: FDA: replace com.google.common.collect.ImmutableList.of() by java.util.List.of()
+* B-77418 Tech Debt: FDA: add ordering for scenarios in metadata ACL reports
+* B-77418 Tech Debt: FDA: refactor deserialization logic for NTS batch, scenario JSON fields and SAL fund pool fields
 
 16.0.23
 -
