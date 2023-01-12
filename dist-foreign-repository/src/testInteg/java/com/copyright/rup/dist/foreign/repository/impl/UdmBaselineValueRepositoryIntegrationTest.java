@@ -31,7 +31,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -89,7 +88,7 @@ public class UdmBaselineValueRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindPeriods() {
-        List<Integer> expectedPeriods = Arrays.asList(211212, 211112, 211012);
+        List<Integer> expectedPeriods = List.of(211212, 211112, 211012);
         List<Integer> actualPeriods = udmBaselineValueRepository.findPeriods();
         assertFalse(actualPeriods.isEmpty());
         assertEquals(expectedPeriods, actualPeriods);

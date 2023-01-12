@@ -5,7 +5,6 @@ import com.copyright.rup.dist.foreign.domain.report.FasServiceFeeTrueUpReportDto
 
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -20,7 +19,7 @@ import java.util.List;
 public class FasServiceFeeTrueUpReportHandler extends BaseCsvReportHandler<FasServiceFeeTrueUpReportDto> {
 
     private static final List<String> HEADERS =
-        Arrays.asList("Source RRO Account #", "Source RRO Name", "Payment Date", "Total Gross Amount Sent to LM",
+        List.of("Source RRO Account #", "Source RRO Name", "Payment Date", "Total Gross Amount Sent to LM",
             "Total Actual Service Fee Amount in LM", "Actual Service Fee %", "Net Amount Sent to LM",
             "Estimated Service Fee Amount Sent to LM", "Estimated Service Fee %", "Service Fee True-up",
             "Total Gross Amount Return to CLA", "Estimated CLA Service Fee Amount", "Actual CLA Service Fee Amount",

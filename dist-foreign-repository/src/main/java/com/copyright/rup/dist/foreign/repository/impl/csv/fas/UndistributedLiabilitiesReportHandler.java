@@ -5,7 +5,6 @@ import com.copyright.rup.dist.foreign.domain.report.UndistributedLiabilitiesRepo
 
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -21,7 +20,7 @@ import java.util.List;
 public class UndistributedLiabilitiesReportHandler extends BaseCsvReportHandler<UndistributedLiabilitiesReportDto> {
 
     private static final List<String> HEADERS =
-        Arrays.asList("Source RRO Account #", "Source RRO Name", "Payment Date", "Gross Undistributed Amount in FDA",
+        List.of("Source RRO Account #", "Source RRO Name", "Payment Date", "Gross Undistributed Amount in FDA",
             "Estimated Service Fee Amount", "Net Estimated Payable Amount", "Estimated Service Fee %",
             "Gross Undistributed Withdrawn Amt in FDA");
 

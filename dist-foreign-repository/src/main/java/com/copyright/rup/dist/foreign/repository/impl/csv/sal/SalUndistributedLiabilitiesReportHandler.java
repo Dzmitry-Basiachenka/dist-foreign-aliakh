@@ -5,7 +5,6 @@ import com.copyright.rup.dist.foreign.domain.report.SalUndistributedLiabilitiesR
 
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -21,7 +20,7 @@ import java.util.List;
 public class SalUndistributedLiabilitiesReportHandler
     extends BaseCsvReportHandler<SalUndistributedLiabilitiesReportDto> {
 
-    private static final List<String> HEADERS = Arrays.asList("Date Received", "Fund Pool Name", "Gross Amount",
+    private static final List<String> HEADERS = List.of("Date Received", "Fund Pool Name", "Gross Amount",
         "Service Fee Amount", "Net Amount");
 
     /**

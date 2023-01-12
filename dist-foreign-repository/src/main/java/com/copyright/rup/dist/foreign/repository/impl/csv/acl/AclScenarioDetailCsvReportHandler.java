@@ -5,7 +5,6 @@ import com.copyright.rup.dist.foreign.domain.AclScenarioDetailDto;
 
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -19,7 +18,7 @@ import java.util.List;
  */
 public class AclScenarioDetailCsvReportHandler extends BaseCsvReportHandler<AclScenarioDetailDto> {
 
-    private static final List<String> HEADERS = Arrays.asList("Detail ID", "Usage Detail ID", "Product Family",
+    private static final List<String> HEADERS = List.of("Detail ID", "Usage Detail ID", "Product Family",
         "Usage Batch Name", "Period End Date", "Wr Wrk Inst", "System Title", "Print RH Account #", "Print RH Name",
         "Print Payee Account #", "Print Payee Name", "Digital RH Account #", "Digital RH Name",
         "Digital Payee Account #", "Digital Payee Name", "Usage Period", "Usage Age Weight", "Det LC ID", "Det LC Name",

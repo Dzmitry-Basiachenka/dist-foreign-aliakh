@@ -16,7 +16,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -82,7 +81,7 @@ public class UdmValueAuditRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FIND_USER_NAMES)
     public void testFindUserNames() {
-        List<String> expectedUserNames = Arrays.asList("ajohn@copyright.com", "jjohn@copyright.com");
+        List<String> expectedUserNames = List.of("ajohn@copyright.com", "jjohn@copyright.com");
         List<String> actualUserNames = udmValueAuditRepository.findUserNames();
         assertFalse(actualUserNames.isEmpty());
         assertEquals(expectedUserNames, actualUserNames);

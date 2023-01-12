@@ -21,7 +21,7 @@ import org.springframework.stereotype.Repository;
 import java.io.OutputStream;
 import java.io.PipedOutputStream;
 import java.math.BigDecimal;
-import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -133,7 +133,7 @@ public class NtsReportRepository extends CommonReportRepository implements INtsR
             Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
             parameters.put("estimatedServiceFee", estimatedServiceFee);
             parameters.put(PRODUCT_FAMILY, FdaConstants.NTS_PRODUCT_FAMILY);
-            parameters.put(STATUSES, Arrays.asList(ScenarioStatusEnum.SENT_TO_LM, ScenarioStatusEnum.ARCHIVED));
+            parameters.put(STATUSES, List.of(ScenarioStatusEnum.SENT_TO_LM, ScenarioStatusEnum.ARCHIVED));
             getTemplate().select("INtsReportMapper.findNtsUndistributedLiabilitiesReportDtos", parameters, handler);
         }
     }

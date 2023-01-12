@@ -30,7 +30,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.IntStream;
@@ -186,7 +185,7 @@ public class AclFundPoolRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FOLDER_NAME + "find-periods.groovy")
     public void testFindPeriods() {
-        List<Integer> expectedPeriods = Arrays.asList(202212, 202206);
+        List<Integer> expectedPeriods = List.of(202212, 202206);
         List<Integer> actualPeriods = repository.findPeriods();
         assertFalse(actualPeriods.isEmpty());
         assertEquals(expectedPeriods, actualPeriods);

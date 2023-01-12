@@ -22,7 +22,6 @@ import org.springframework.stereotype.Repository;
 
 import java.io.OutputStream;
 import java.io.PipedOutputStream;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -120,7 +119,7 @@ public class SalReportRepository extends CommonReportRepository implements ISalR
                  new SalUndistributedLiabilitiesReportHandler(Objects.requireNonNull(outputStream))) {
             Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
             parameters.put(PRODUCT_FAMILY, FdaConstants.SAL_PRODUCT_FAMILY);
-            parameters.put(STATUSES, Arrays.asList(ScenarioStatusEnum.IN_PROGRESS, ScenarioStatusEnum.SUBMITTED,
+            parameters.put(STATUSES, List.of(ScenarioStatusEnum.IN_PROGRESS, ScenarioStatusEnum.SUBMITTED,
                 ScenarioStatusEnum.APPROVED));
             getTemplate().select("ISalReportMapper.findSalUndistributedLiabilitiesReportDtos", parameters, handler);
         }

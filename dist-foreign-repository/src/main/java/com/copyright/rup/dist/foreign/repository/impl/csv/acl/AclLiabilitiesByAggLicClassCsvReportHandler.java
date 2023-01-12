@@ -7,7 +7,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -23,7 +22,7 @@ public class AclLiabilitiesByAggLicClassCsvReportHandler
     extends AclCommonCalculationsCsvReportHandler<AclLiabilitiesByAggLicClassReportDto> {
 
     private static final List<String> HEADERS =
-        Arrays.asList("Agg LC ID", "Agg LC Name", "Gross Amount", "Net Amount", "Print Net Amount",
+        List.of("Agg LC ID", "Agg LC Name", "Gross Amount", "Net Amount", "Print Net Amount",
             "Digital Net Amount", "ACL Net Amount", "MACL Net Amount", "VGW Net Amount", "JACDCL Net Amount");
 
     /**
@@ -37,7 +36,7 @@ public class AclLiabilitiesByAggLicClassCsvReportHandler
 
     @Override
     public void writeTotals(AclReportTotalAmountsDto totalAmountsDto) {
-        writeStringRow(Arrays.asList("Grand Total", StringUtils.EMPTY,
+        writeStringRow(List.of("Grand Total", StringUtils.EMPTY,
             getBeanBigDecimal(totalAmountsDto.getGrossAmount()),
             getBeanBigDecimal(totalAmountsDto.getNetAmount()),
             getBeanBigDecimal(totalAmountsDto.getPrintNetAmount()),

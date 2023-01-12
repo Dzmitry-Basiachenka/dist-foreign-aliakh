@@ -8,7 +8,6 @@ import org.apache.commons.lang3.time.DateFormatUtils;
 
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -22,7 +21,7 @@ import java.util.List;
  */
 public class NtsWithdrawnBatchSummaryReportHandler extends BaseCsvReportHandler<NtsWithDrawnBatchSummaryReportDto> {
 
-    private static final List<String> HEADERS = Arrays.asList("Usage Batch Name", "RRO Account Number", "RRO Name",
+    private static final List<String> HEADERS = List.of("Usage Batch Name", "RRO Account Number", "RRO Name",
         "Payment Date", "Load Date", "Gross Fund Pool in USD", "# Details NTS", "Gross USD NTS");
 
     /**

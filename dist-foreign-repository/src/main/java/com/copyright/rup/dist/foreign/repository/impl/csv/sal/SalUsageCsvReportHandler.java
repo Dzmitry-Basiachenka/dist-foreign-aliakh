@@ -5,7 +5,6 @@ import com.copyright.rup.dist.foreign.domain.UsageDto;
 
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -20,7 +19,7 @@ import java.util.List;
 public class SalUsageCsvReportHandler extends BaseCsvReportHandler<UsageDto> {
 
     private static final List<String> HEADERS =
-        Arrays.asList("Detail ID", "Detail Status", "Detail Type", "Product Family", "Usage Batch Name",
+        List.of("Detail ID", "Detail Status", "Detail Type", "Product Family", "Usage Batch Name",
             "Period End Date", "Licensee Account #", "Licensee Name", "RH Account #", "RH Name", "Wr Wrk Inst",
             "System Title", "Standard Number", "Standard Number Type", "Assessment Name", "Assessment Type",
             "Date of Scored Assessment", "Reported Work Portion ID", "Reported Title",

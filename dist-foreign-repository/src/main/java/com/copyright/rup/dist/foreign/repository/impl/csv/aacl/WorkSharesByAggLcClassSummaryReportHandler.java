@@ -6,7 +6,6 @@ import com.copyright.rup.dist.foreign.domain.report.WorkSharesByAggLcClassReport
 import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -23,7 +22,7 @@ public class WorkSharesByAggLcClassSummaryReportHandler
     extends BaseCsvReportHandler<WorkSharesByAggLcClassReportDto> {
 
     private static final List<String> HEADERS =
-        Arrays.asList("Agg LC ID", "Agg LC Enrollment", "Agg LC Discipline", "Total Shares");
+        List.of("Agg LC ID", "Agg LC Enrollment", "Agg LC Discipline", "Total Shares");
 
     /**
      * Constructor.

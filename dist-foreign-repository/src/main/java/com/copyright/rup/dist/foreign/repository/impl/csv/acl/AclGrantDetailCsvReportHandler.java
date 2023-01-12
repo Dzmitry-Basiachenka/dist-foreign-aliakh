@@ -5,7 +5,6 @@ import com.copyright.rup.dist.foreign.domain.AclGrantDetailDto;
 
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -19,7 +18,7 @@ import java.util.List;
  */
 public class AclGrantDetailCsvReportHandler extends BaseCsvReportHandler<AclGrantDetailDto> {
 
-    private static final List<String> HEADERS = Arrays.asList("Grant Set Name", "Grant Period", "License Type",
+    private static final List<String> HEADERS = List.of("Grant Set Name", "Grant Period", "License Type",
         "TOU Status", "Grant Status", "Eligible", "Wr Wrk Inst", "System Title", "RH Account #", "RH Name", "TOU",
         "Created Date", "Updated Date", "Manual Upload Flag");
 

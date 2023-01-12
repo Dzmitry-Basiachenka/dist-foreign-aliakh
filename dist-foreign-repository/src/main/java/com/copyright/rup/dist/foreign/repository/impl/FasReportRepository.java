@@ -35,7 +35,6 @@ import java.io.OutputStream;
 import java.io.PipedOutputStream;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -67,8 +66,7 @@ public class FasReportRepository extends CommonReportRepository implements IFasR
                                                        Set<String> productFamilies) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
         parameters.put("paymentDate", Objects.requireNonNull(paymentDate));
-        parameters.put("withdrawnStatuses",
-            Arrays.asList(UsageStatusEnum.NTS_WITHDRAWN, UsageStatusEnum.TO_BE_DISTRIBUTED));
+        parameters.put("withdrawnStatuses", List.of(UsageStatusEnum.NTS_WITHDRAWN, UsageStatusEnum.TO_BE_DISTRIBUTED));
         parameters.put("defaultEstimatedServiceFee", Objects.requireNonNull(defaultEstimatedServiceFee));
         parameters.put("productFamilies", productFamilies);
         try (UndistributedLiabilitiesReportHandler handler =

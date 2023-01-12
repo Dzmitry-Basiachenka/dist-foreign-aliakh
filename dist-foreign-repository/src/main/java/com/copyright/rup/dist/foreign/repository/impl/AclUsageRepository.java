@@ -6,15 +6,14 @@ import com.copyright.rup.dist.foreign.domain.AclUsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.domain.filter.AclUsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IAclUsageRepository;
-
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.AclUsageCsvReportHandler;
+
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 
 import org.springframework.stereotype.Repository;
 
 import java.io.OutputStream;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -32,7 +31,7 @@ import java.util.Set;
 @Repository
 public class AclUsageRepository extends AclBaseRepository implements IAclUsageRepository {
 
-    private static final List<String> ELIGIBLE_GRANT_STATUSES = Arrays.asList("Print&Digital", "Different RH");
+    private static final List<String> ELIGIBLE_GRANT_STATUSES = List.of("Print&Digital", "Different RH");
     private static final String PAGEABLE_KEY = "pageable";
     private static final String SORT_KEY = "sort";
     private static final String UPDATE_USER = "updateUser";

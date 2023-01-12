@@ -5,7 +5,6 @@ import com.copyright.rup.dist.foreign.domain.WorkClassification;
 
 import java.io.PipedOutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -20,7 +19,7 @@ import java.util.List;
 public class WorkClassificationCsvReportHandler extends BaseCsvReportHandler<WorkClassification> {
 
     private static final List<String> HEADERS =
-        Arrays.asList("Wr Wrk Inst", "System Title", "Classification", "Standard Number", "Standard Number Type",
+        List.of("Wr Wrk Inst", "System Title", "Classification", "Standard Number", "Standard Number Type",
             "RH Account #", "RH Name", "Classification Date", "Classified By");
 
     /**

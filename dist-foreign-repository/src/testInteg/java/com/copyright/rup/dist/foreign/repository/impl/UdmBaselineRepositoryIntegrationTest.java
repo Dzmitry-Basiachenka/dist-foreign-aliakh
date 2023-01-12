@@ -37,7 +37,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -600,7 +599,7 @@ public class UdmBaselineRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FOLDER_NAME + "find-periods.groovy")
     public void testGetPeriods() {
-        assertEquals(Arrays.asList(202106, 202012), baselineRepository.findPeriods());
+        assertEquals(List.of(202106, 202012), baselineRepository.findPeriods());
     }
 
     @Test

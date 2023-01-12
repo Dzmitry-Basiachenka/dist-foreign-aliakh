@@ -5,7 +5,6 @@ import com.copyright.rup.dist.foreign.domain.UsageDto;
 
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -20,7 +19,7 @@ import java.util.List;
 public class AuditAaclCsvReportHandler extends BaseCsvReportHandler<UsageDto> {
 
     private static final List<String> HEADERS =
-        Arrays.asList("Detail ID", "Baseline ID", "Detail Status", "Product Family", "Usage Batch Name",
+        List.of("Detail ID", "Baseline ID", "Detail Status", "Product Family", "Usage Batch Name",
             "Period End Date", "RH Account #", "RH Name", "Payee Account #", "Payee Name", "Wr Wrk Inst",
             "System Title", "Standard Number", "Standard Number Type", "Gross Amt in USD", "Service Fee Amount",
             "Net Amt in USD", "Scenario Name", "Check #", "Check Date", "Event ID", "Dist. Name", "Dist. Date",

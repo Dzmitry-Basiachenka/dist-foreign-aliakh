@@ -37,7 +37,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -79,7 +78,7 @@ public class AclUsageRepositoryIntegrationTest extends CsvReportsTestHelper {
     private static final UdmChannelEnum CHANNEL = UdmChannelEnum.CCC;
     private static final Set<Integer> PERIODS = Set.of(202112);
     private static final int DISTRIBUTION_PERIOD = 202212;
-    private static final List<Integer> PERIOD_PRIORS = Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11);
+    private static final List<Integer> PERIOD_PRIORS = List.of(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11);
     private static final Set<DetailLicenseeClass> DETAIL_LICENSEE_CLASSES =
         Set.of(buildDetailLicenseeClass(2, "Textiles, Apparel, etc."));
     private static final Set<AggregateLicenseeClass> AGGREGATE_LICENSEE_CLASSES =
@@ -692,7 +691,7 @@ public class AclUsageRepositoryIntegrationTest extends CsvReportsTestHelper {
     @Test
     @TestData(fileName = FIND_PERIODS)
     public void testFindPeriods() {
-        List<Integer> expectedPeriods = Arrays.asList(202212, 202112);
+        List<Integer> expectedPeriods = List.of(202212, 202112);
         List<Integer> actualPeriods = aclUsageRepository.findPeriods();
         assertFalse(actualPeriods.isEmpty());
         assertEquals(expectedPeriods, actualPeriods);

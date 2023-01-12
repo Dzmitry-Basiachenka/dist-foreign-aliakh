@@ -5,7 +5,6 @@ import com.copyright.rup.dist.foreign.domain.PayeeTotalHolder;
 
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -20,7 +19,7 @@ import java.util.Set;
  */
 public class AaclExcludeDetailsByPayeeCsvReportHandler extends BaseCsvReportHandler<PayeeTotalHolder> {
 
-    private static final List<String> HEADERS = Arrays.asList("Exclude Status", "Payee Account #", "Payee Name",
+    private static final List<String> HEADERS = List.of("Exclude Status", "Payee Account #", "Payee Name",
         "Gross Amt in USD", "Service Fee Amount", "Net Amt in USD");
 
     private final Set<Long> selectedAccountNumbers;

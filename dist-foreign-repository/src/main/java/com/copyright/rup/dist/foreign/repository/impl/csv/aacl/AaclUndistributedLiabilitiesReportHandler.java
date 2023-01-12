@@ -5,7 +5,6 @@ import com.copyright.rup.dist.foreign.domain.FundPool;
 
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -21,7 +20,7 @@ import java.util.List;
 public class AaclUndistributedLiabilitiesReportHandler extends BaseCsvReportHandler<FundPool> {
 
     private static final List<String> HEADERS =
-        Arrays.asList("Fund Pool Name", "Gross Amount", "Service Fee Amount", "Net Amount");
+        List.of("Fund Pool Name", "Gross Amount", "Service Fee Amount", "Net Amount");
 
     /**
      * Constructor.

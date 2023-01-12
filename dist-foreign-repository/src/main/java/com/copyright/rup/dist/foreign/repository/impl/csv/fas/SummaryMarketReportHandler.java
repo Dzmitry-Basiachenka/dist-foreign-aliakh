@@ -5,7 +5,6 @@ import com.copyright.rup.dist.foreign.domain.report.SummaryMarketReportDto;
 
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -20,9 +19,8 @@ import java.util.List;
  */
 public class SummaryMarketReportHandler extends BaseCsvReportHandler<SummaryMarketReportDto> {
 
-    private static final List<String> HEADERS =
-        Arrays.asList("RRO Account Number", "RRO Name", "Usage Batch Name", "Payment Date", "Market",
-            "Market Total Gross USD", "Total Payment Gross USD");
+    private static final List<String> HEADERS = List.of("RRO Account Number", "RRO Name", "Usage Batch Name",
+        "Payment Date", "Market", "Market Total Gross USD", "Total Payment Gross USD");
 
     /**
      * Constructor.

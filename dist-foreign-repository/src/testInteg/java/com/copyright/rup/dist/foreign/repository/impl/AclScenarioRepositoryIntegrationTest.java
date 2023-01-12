@@ -28,7 +28,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.List;
@@ -129,7 +128,7 @@ public class AclScenarioRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FOLDER_NAME + FIND_ALL_FILE)
     public void testPeriods() {
-        assertEquals(Arrays.asList(202312, 202212, 202112), aclScenarioRepository.findPeriods());
+        assertEquals(List.of(202312, 202212, 202112), aclScenarioRepository.findPeriods());
     }
 
     @Test
@@ -196,7 +195,7 @@ public class AclScenarioRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FOLDER_NAME + "find-scenario-names-by-usage-batch-id.groovy")
     public void testFindScenarioNamesByUsageBatchId() {
-        List<String> expectedScenarioNames = Arrays.asList("ACL Scenario 202112 find by Usage Batch id 1",
+        List<String> expectedScenarioNames = List.of("ACL Scenario 202112 find by Usage Batch id 1",
             "ACL Scenario 202112 find by Usage Batch id 2");
         List<String> actualScenarioNames =
             aclScenarioRepository.findScenarioNamesByUsageBatchId("b52b5b2d-77b3-42f1-89a1-85a0c083fd0a");
@@ -208,7 +207,7 @@ public class AclScenarioRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FOLDER_NAME + "find-scenario-names-by-fund-pool-id.groovy")
     public void testFindScenarioNamesByFundPoolId() {
-        List<String> expectedScenarioNames = Arrays.asList("ACL Scenario 202112 find by Fund Pool id 1",
+        List<String> expectedScenarioNames = List.of("ACL Scenario 202112 find by Fund Pool id 1",
             "ACL Scenario 202112 find by Fund Pool id 2");
         List<String> actualScenarioNames =
             aclScenarioRepository.findScenarioNamesByFundPoolId("f8e623b0-7e18-4a06-a754-0a81decff96f");
@@ -220,7 +219,7 @@ public class AclScenarioRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FOLDER_NAME + "find-scenario-names-by-grant-set-id.groovy")
     public void testFindScenarioNamesByGrantSetId() {
-        List<String> expectedScenarioNames = Arrays.asList("ACL Scenario 202212 find by Grant Set id 1",
+        List<String> expectedScenarioNames = List.of("ACL Scenario 202212 find by Grant Set id 1",
             "ACL Scenario 202212 find by Grant Set id 2");
         List<String> actualScenarioNames =
             aclScenarioRepository.findScenarioNamesByGrantSetId("60e31e39-bac9-4e51-8d5d-009f1ec334fa");

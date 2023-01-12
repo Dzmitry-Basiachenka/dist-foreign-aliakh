@@ -17,7 +17,6 @@ import com.google.common.collect.Maps;
 
 import org.springframework.stereotype.Repository;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -43,7 +42,7 @@ public class AclScenarioUsageRepository extends AclBaseRepository implements IAc
     private static final String SORT_KEY = "sort";
     private static final String UPDATE_USER = "updateUser";
     private static final String CREATE_USER = "createUser";
-    private static final List<String> ELIGIBLE_GRANT_STATUSES = Arrays.asList("Print&Digital", "Different RH");
+    private static final List<String> ELIGIBLE_GRANT_STATUSES = List.of("Print&Digital", "Different RH");
 
     @Override
     public void addToAclScenario(AclScenario scenario, String userName) {

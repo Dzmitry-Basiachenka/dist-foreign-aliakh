@@ -33,7 +33,6 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -104,7 +103,7 @@ public class FasUsageRepositoryIntegrationTest {
     @TestData(fileName = FOLDER_NAME + "delete-from-scenario-by-payees.groovy")
     public void testDeleteFromScenarioByPayees() {
         List<Usage> usagesBeforeExclude = usageRepository.findByIds(
-            Arrays.asList("7234feb4-a59e-483b-985a-e8de2e3eb190", "582c86e2-213e-48ad-a885-f9ff49d48a69",
+            List.of("7234feb4-a59e-483b-985a-e8de2e3eb190", "582c86e2-213e-48ad-a885-f9ff49d48a69",
                 "730d7964-f399-4971-9403-dbedc9d7a180"));
         assertEquals(3, CollectionUtils.size(usagesBeforeExclude));
         usagesBeforeExclude.forEach(usage -> assertEquals(SCENARIO_ID_2, usage.getScenarioId()));
@@ -113,7 +112,7 @@ public class FasUsageRepositoryIntegrationTest {
         assertEquals(2, CollectionUtils.size(excludedIds));
         assertTrue(excludedIds.contains("730d7964-f399-4971-9403-dbedc9d7a180"));
         List<Usage> usages = usageRepository.findByIds(
-            Arrays.asList("730d7964-f399-4971-9403-dbedc9d7a180", "582c86e2-213e-48ad-a885-f9ff49d48a69"));
+            List.of("730d7964-f399-4971-9403-dbedc9d7a180", "582c86e2-213e-48ad-a885-f9ff49d48a69"));
         assertEquals(2, CollectionUtils.size(usages));
         usages.forEach(usage -> verifyUsageExcludedFromScenario(usage, "FAS2", UsageStatusEnum.ELIGIBLE));
         List<String> usageIds = usageRepository.findByScenarioId(SCENARIO_ID_2)
@@ -128,7 +127,7 @@ public class FasUsageRepositoryIntegrationTest {
     @TestData(fileName = FOLDER_NAME + "redesignate-to-nts-withdrawn-by-payees.groovy")
     public void testRedisignateToNtsWithdrawnByPayees() {
         List<Usage> usagesBeforeExclude = usageRepository.findByIds(
-            Arrays.asList("209a960f-5896-43da-b020-fc52981b9633", "1ae671ca-ed5a-4d92-8ab6-a10a53d9884a",
+            List.of("209a960f-5896-43da-b020-fc52981b9633", "1ae671ca-ed5a-4d92-8ab6-a10a53d9884a",
                 "72f6abdb-c82d-4cee-aadf-570942cf0093"));
         assertEquals(3, CollectionUtils.size(usagesBeforeExclude));
         usagesBeforeExclude.forEach(usage -> assertEquals(SCENARIO_ID_3, usage.getScenarioId()));
@@ -137,7 +136,7 @@ public class FasUsageRepositoryIntegrationTest {
         assertEquals(2, CollectionUtils.size(excludedIds));
         assertTrue(excludedIds.contains("72f6abdb-c82d-4cee-aadf-570942cf0093"));
         List<Usage> usages = usageRepository.findByIds(
-            Arrays.asList("72f6abdb-c82d-4cee-aadf-570942cf0093", "1ae671ca-ed5a-4d92-8ab6-a10a53d9884a"));
+            List.of("72f6abdb-c82d-4cee-aadf-570942cf0093", "1ae671ca-ed5a-4d92-8ab6-a10a53d9884a"));
         assertEquals(2, CollectionUtils.size(usages));
         usages.forEach(usage -> verifyUsageExcludedFromScenario(usage, "FAS2", UsageStatusEnum.NTS_WITHDRAWN));
         List<String> usageIds = usageRepository.findByScenarioId(SCENARIO_ID_3)
@@ -164,7 +163,7 @@ public class FasUsageRepositoryIntegrationTest {
         String usageId2 = "9c07f6dd-382e-4cbb-8cd1-ab9f51413e0a";
         verifyUsage(usageId1, null, null, STANDARD_NUMBER, null, UsageStatusEnum.WORK_RESEARCH);
         verifyUsage(usageId2, null, null, null, null, UsageStatusEnum.WORK_RESEARCH);
-        fasUsageRepository.updateResearchedUsages(Arrays.asList(
+        fasUsageRepository.updateResearchedUsages(List.of(
             buildResearchedUsage(usageId1, "Technical Journal", 180382916L, STANDARD_NUMBER, "VALISSN"),
             buildResearchedUsage(usageId2, "Medical Journal", 854030733L, "2192-3566", STANDARD_NUMBER_TYPE)));
         verifyUsage(usageId1, "Technical Journal", 180382916L, STANDARD_NUMBER, "VALISSN", UsageStatusEnum.WORK_FOUND);
@@ -177,7 +176,7 @@ public class FasUsageRepositoryIntegrationTest {
     public void testUpdateNtsWithdrawnUsagesAndGetIds() {
         List<String> ids = fasUsageRepository.updateNtsWithdrawnUsagesAndGetIds();
         assertEquals(3, ids.size());
-        assertTrue(ids.containsAll(Arrays.asList("2f2ca785-a7d3-4a7f-abd9-2bad80ac71dd",
+        assertTrue(ids.containsAll(List.of("2f2ca785-a7d3-4a7f-abd9-2bad80ac71dd",
             "cbd6768d-a424-476e-b502-a832d9dbe85e", "d5e3c637-155a-4c05-999a-31a07e335491")));
         usageRepository.findByIds(ids).forEach(usage -> {
             assertEquals(UsageStatusEnum.NTS_WITHDRAWN, usage.getStatus());

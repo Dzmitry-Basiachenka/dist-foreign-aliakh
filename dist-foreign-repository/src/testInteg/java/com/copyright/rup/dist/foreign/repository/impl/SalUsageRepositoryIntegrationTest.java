@@ -322,8 +322,7 @@ public class SalUsageRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FOLDER_NAME + "update-payee-by-account-number.groovy")
     public void testUpdatePayeeByAccountNumber() {
-        List<String> usageIds =
-            Arrays.asList("d7764071-935f-4281-a643-656354ccf690", "ad4caa00-c95a-453e-9253-f9810d84d269");
+        List<String> usageIds = List.of("d7764071-935f-4281-a643-656354ccf690", "ad4caa00-c95a-453e-9253-f9810d84d269");
         salUsageRepository.findByIds(usageIds).forEach(usage -> assertNull(usage.getPayee().getAccountNumber()));
         salUsageRepository.updatePayeeByAccountNumber(1000000001L, SCENARIO_ID_1, 7000813806L, USER_NAME);
         salUsageRepository.findByIds(usageIds)
@@ -333,8 +332,7 @@ public class SalUsageRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FOLDER_NAME + "add-to-scenario.groovy")
     public void testAddToScenario() {
-        List<String> usageIds =
-            Arrays.asList("e823d079-3e82-4a5c-bdad-a8707b47b665", "9439530a-d7a9-40a9-a881-f892d13eaf9f");
+        List<String> usageIds = List.of("e823d079-3e82-4a5c-bdad-a8707b47b665", "9439530a-d7a9-40a9-a881-f892d13eaf9f");
         salUsageRepository.findByIds(usageIds).forEach(usage -> {
             assertNull(usage.getScenarioId());
             assertEquals(UsageStatusEnum.ELIGIBLE, usage.getStatus());
@@ -415,7 +413,7 @@ public class SalUsageRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FOLDER_NAME + "update-rh-account-number-and-status-by-ids.groovy")
     public void testUpdateRhAccountNumberAndStatusByIds() {
-        List<Usage> usages = salUsageRepository.findByIds(Arrays.asList(USAGE_ID_5, USAGE_ID_10));
+        List<Usage> usages = salUsageRepository.findByIds(List.of(USAGE_ID_5, USAGE_ID_10));
         assertEquals(2, usages.size());
         usages.forEach(usage -> {
             assertNull(usage.getRightsholder().getAccountNumber());
@@ -423,7 +421,7 @@ public class SalUsageRepositoryIntegrationTest {
         });
         salUsageRepository.updateRhAccountNumberAndStatusByIds(ImmutableSet.of(USAGE_ID_5, USAGE_ID_10),
             1234567856L, UsageStatusEnum.ELIGIBLE, "user@copyright.com");
-        usages = salUsageRepository.findByIds(Arrays.asList(USAGE_ID_5, USAGE_ID_10));
+        usages = salUsageRepository.findByIds(List.of(USAGE_ID_5, USAGE_ID_10));
         assertEquals(2, usages.size());
         usages.forEach(usage -> {
             assertEquals(Long.valueOf(1234567856L), usage.getRightsholder().getAccountNumber());
@@ -803,7 +801,7 @@ public class SalUsageRepositoryIntegrationTest {
         List<String> actualIds = usageDtos.stream()
             .map(UsageDto::getId)
             .collect(Collectors.toList());
-        assertEquals(Arrays.asList(expectedIds), actualIds);
+        assertEquals(List.of(expectedIds), actualIds);
     }
 
     private void verifyUsageDtosForAudit(List<UsageDto> expectedUsages, List<UsageDto> actualUsages) {

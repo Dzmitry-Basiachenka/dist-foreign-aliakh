@@ -41,7 +41,6 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -186,7 +185,7 @@ public class UdmValueRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FOLDER_NAME + "find-fields.groovy")
     public void testFindPeriods() {
-        List<Integer> expectedPeriods = Arrays.asList(202112, 202106, 201512, 201506, 201406, 201106, 201006);
+        List<Integer> expectedPeriods = List.of(202112, 202106, 201512, 201506, 201406, 201106, 201006);
         List<Integer> actualPeriods = udmValueRepository.findPeriods();
         assertFalse(actualPeriods.isEmpty());
         assertEquals(expectedPeriods, actualPeriods);
@@ -954,7 +953,7 @@ public class UdmValueRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindDtosByBasicFilter() {
-        assertFilteringFindDtosByFilter(filter -> filter.setPeriods(new HashSet<>(Arrays.asList(201506, 202112))),
+        assertFilteringFindDtosByFilter(filter -> filter.setPeriods(new HashSet<>(List.of(201506, 202112))),
             UDM_VALUE_UID_2, UDM_VALUE_UID_4);
         assertFilteringFindDtosByFilter(filter -> filter.setStatus(UdmValueStatusEnum.PRELIM_RESEARCH_COMPLETE),
             UDM_VALUE_UID_1);
@@ -1565,15 +1564,14 @@ public class UdmValueRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FOLDER_NAME + "find-fields.groovy")
     public void testFindAssignees() {
-        assertEquals(Arrays.asList(ASSIGNEE_3, "djohn@copyright.com", "ejohn@copyright.com",
-            ASSIGNEE_1, ASSIGNEE_2), udmValueRepository.findAssignees());
+        assertEquals(List.of(ASSIGNEE_3, "djohn@copyright.com", "ejohn@copyright.com", ASSIGNEE_1, ASSIGNEE_2),
+            udmValueRepository.findAssignees());
     }
 
     @Test
     @TestData(fileName = FOLDER_NAME + "find-fields.groovy")
     public void testFindLastValuePeriods() {
-        assertEquals(Arrays.asList("202106", "201506", "201406"),
-            udmValueRepository.findLastValuePeriods());
+        assertEquals(List.of("202106", "201506", "201406"), udmValueRepository.findLastValuePeriods());
     }
 
     @Test
@@ -1589,9 +1587,9 @@ public class UdmValueRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FOLDER_NAME + "publish-to-baseline.groovy")
     public void testPublishToBaseline() {
-        assertEquals(Arrays.asList("81226f4a-6a21-4529-97ad-5dab5c92bcce", "97226f4a-ca11-4529-bb59-5dab5c92b8ce"),
+        assertEquals(List.of("81226f4a-6a21-4529-97ad-5dab5c92bcce", "97226f4a-ca11-4529-bb59-5dab5c92b8ce"),
             udmValueRepository.publishToBaseline(211012, USER_NAME));
-        assertEquals(Arrays.asList("fc3e7747-3d3b-4f07-93fb-f66c97d9f737", "2e07c041-79e8-48e5-a875-229d5e0f5259"),
+        assertEquals(List.of("fc3e7747-3d3b-4f07-93fb-f66c97d9f737", "2e07c041-79e8-48e5-a875-229d5e0f5259"),
             udmValueRepository.publishToBaseline(211112, USER_NAME));
         UdmBaselineValueFilter filter = new UdmBaselineValueFilter();
         filter.setPeriods(Set.of(211012));
@@ -1607,14 +1605,14 @@ public class UdmValueRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FOLDER_NAME + "publish-to-baseline-republishing.groovy")
     public void testPublishToBaselineRepublishing() {
-        assertEquals(Arrays.asList("b0cfa83a-6249-4aff-aac8-2567eb15fb9e", "3ee0c4f7-001b-4970-a484-4bf028e5eb27"),
+        assertEquals(List.of("b0cfa83a-6249-4aff-aac8-2567eb15fb9e", "3ee0c4f7-001b-4970-a484-4bf028e5eb27"),
             udmValueRepository.publishToBaseline(202206, USER_NAME));
         UdmBaselineValueFilter filter = new UdmBaselineValueFilter();
         filter.setPeriods(Set.of(202206));
         verifyValueBaselineDto(
             loadExpectedValueBaselineDto("json/udm/udm_value_baseline_dto_republishing.json"),
             udmBaselineValueRepository.findDtosByFilter(filter, null, null));
-        assertEquals(Arrays.asList("b0cfa83a-6249-4aff-aac8-2567eb15fb9e", "3ee0c4f7-001b-4970-a484-4bf028e5eb27"),
+        assertEquals(List.of("b0cfa83a-6249-4aff-aac8-2567eb15fb9e", "3ee0c4f7-001b-4970-a484-4bf028e5eb27"),
             udmValueRepository.publishToBaseline(202206, USER_NAME));
         verifyValueBaselineDto(
             loadExpectedValueBaselineDto("json/udm/udm_value_baseline_dto_republishing.json"),
@@ -1713,7 +1711,7 @@ public class UdmValueRepositoryIntegrationTest {
 
     private void assertSortingFindDtosByFilter(String valueIdAsc, String valueIdDesc, String sortProperty) {
         UdmValueFilter filter = new UdmValueFilter();
-        filter.setAssignees(new HashSet<>(Arrays.asList("djohn@copyright.com", "ejohn@copyright.com")));
+        filter.setAssignees(new HashSet<>(List.of("djohn@copyright.com", "ejohn@copyright.com")));
         List<UdmValueDto> usageDtos =
             udmValueRepository.findDtosByFilter(filter, null, new Sort(sortProperty, Direction.ASC));
         assertEquals(valueIdAsc, usageDtos.get(0).getId());

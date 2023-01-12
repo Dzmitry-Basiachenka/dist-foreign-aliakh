@@ -176,7 +176,7 @@ public class UsageRepositoryIntegrationTest {
     public void testFindIdsByStatusAnsProductFamily() {
         List<String> actualUsageIds =
             usageRepository.findIdsByStatusAndProductFamily(UsageStatusEnum.US_TAX_COUNTRY, NTS_PRODUCT_FAMILY);
-        assertEquals(Arrays.asList("463e2239-1a36-41cc-9a51-ee2a80eae0c7", "bd407b50-6101-4304-8316-6404fe32a800"),
+        assertEquals(List.of("463e2239-1a36-41cc-9a51-ee2a80eae0c7", "bd407b50-6101-4304-8316-6404fe32a800"),
             actualUsageIds);
     }
 
@@ -522,12 +522,12 @@ public class UsageRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FOLDER_NAME + "delete-by-id.groovy")
     public void testDeleteById() {
-        List<Usage> usages = usageRepository.findByIds(Arrays.asList(USAGE_ID_31, USAGE_ID_32));
+        List<Usage> usages = usageRepository.findByIds(List.of(USAGE_ID_31, USAGE_ID_32));
         assertEquals(2, CollectionUtils.size(usages));
         assertEquals(1, usageRepository.findReferencedUsagesCountByIds(USAGE_ID_31));
         assertEquals(1, usageRepository.findReferencedUsagesCountByIds(USAGE_ID_32));
         usageRepository.deleteById(USAGE_ID_31);
-        usages = usageRepository.findByIds(Arrays.asList(USAGE_ID_31, USAGE_ID_32));
+        usages = usageRepository.findByIds(List.of(USAGE_ID_31, USAGE_ID_32));
         assertEquals(1, CollectionUtils.size(usages));
         assertEquals(USAGE_ID_32, usages.get(0).getId());
         assertEquals(0, usageRepository.findReferencedUsagesCountByIds(USAGE_ID_31));
@@ -557,10 +557,9 @@ public class UsageRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FOLDER_NAME + "find-by-ids.groovy")
     public void testFindByIds() {
-        List<Usage> usages = usageRepository.findByIds(Arrays.asList(USAGE_ID_1, USAGE_ID_2));
+        List<Usage> usages = usageRepository.findByIds(List.of(USAGE_ID_1, USAGE_ID_2));
         assertEquals(2, CollectionUtils.size(usages));
-        assertEquals(Arrays.asList(USAGE_ID_1, USAGE_ID_2),
-            usages.stream().map(Usage::getId).collect(Collectors.toList()));
+        assertEquals(List.of(USAGE_ID_1, USAGE_ID_2), usages.stream().map(Usage::getId).collect(Collectors.toList()));
     }
 
     @Test
@@ -916,7 +915,7 @@ public class UsageRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FOLDER_NAME + "update-status.groovy")
     public void testUpdateStatusWithUsageIds() {
-        List<Usage> usages = usageRepository.findByIds(Arrays.asList(USAGE_ID_4, USAGE_ID_6));
+        List<Usage> usages = usageRepository.findByIds(List.of(USAGE_ID_4, USAGE_ID_6));
         assertEquals(2, CollectionUtils.size(usages));
         Usage usage1 = usages.get(0);
         assertEquals(UsageStatusEnum.SENT_FOR_RA, usage1.getStatus());
@@ -925,7 +924,7 @@ public class UsageRepositoryIntegrationTest {
         assertEquals(UsageStatusEnum.WORK_FOUND, usage2.getStatus());
         assertEquals(USER_NAME, usage2.getUpdateUser());
         usageRepository.updateStatus(ImmutableSet.of(usage1.getId(), usage2.getId()), UsageStatusEnum.RH_NOT_FOUND);
-        usages = usageRepository.findByIds(Arrays.asList(USAGE_ID_4, USAGE_ID_6));
+        usages = usageRepository.findByIds(List.of(USAGE_ID_4, USAGE_ID_6));
         assertEquals(2, CollectionUtils.size(usages));
         usage1 = usages.get(0);
         assertEquals(UsageStatusEnum.RH_NOT_FOUND, usage1.getStatus());
@@ -938,7 +937,7 @@ public class UsageRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FOLDER_NAME + "update-status.groovy")
     public void testUpdateStatusAndRhAccountNumber() {
-        List<Usage> usages = usageRepository.findByIds(Arrays.asList(USAGE_ID_4, USAGE_ID_6));
+        List<Usage> usages = usageRepository.findByIds(List.of(USAGE_ID_4, USAGE_ID_6));
         assertEquals(2, CollectionUtils.size(usages));
         Usage usage1 = usages.get(0);
         assertEquals(UsageStatusEnum.SENT_FOR_RA, usage1.getStatus());
@@ -948,7 +947,7 @@ public class UsageRepositoryIntegrationTest {
         assertNull(usage2.getRightsholder().getAccountNumber());
         usageRepository.updateStatusAndRhAccountNumber(ImmutableSet.of(usage1.getId(), usage2.getId()),
             UsageStatusEnum.ELIGIBLE, RH_ACCOUNT_NUMBER);
-        usages = usageRepository.findByIds(Arrays.asList(USAGE_ID_4, USAGE_ID_6));
+        usages = usageRepository.findByIds(List.of(USAGE_ID_4, USAGE_ID_6));
         assertEquals(2, CollectionUtils.size(usages));
         usage1 = usages.get(0);
         assertEquals(UsageStatusEnum.ELIGIBLE, usage1.getStatus());
@@ -1036,7 +1035,7 @@ public class UsageRepositoryIntegrationTest {
             .thenComparing(RightsholderPayeeProductFamilyHolder::getPayee,
                 Comparator.comparing(Rightsholder::getAccountNumber));
         Set<String> scenarioIds = new HashSet<>(
-            Arrays.asList("05ebb365-fa0d-4329-8a47-0b49968c6b82", "642b8342-a322-4b3e-afbd-4446cb218841"));
+            List.of("05ebb365-fa0d-4329-8a47-0b49968c6b82", "642b8342-a322-4b3e-afbd-4446cb218841"));
         List<RightsholderPayeeProductFamilyHolder> actual =
             usageRepository.findRightsholderPayeeProductFamilyHoldersByScenarioIds(scenarioIds).stream()
                 .sorted(comparator)
@@ -1274,7 +1273,7 @@ public class UsageRepositoryIntegrationTest {
         List<String> actualIds = usageDtos.stream()
             .map(UsageDto::getId)
             .collect(Collectors.toList());
-        assertEquals(Arrays.asList(expectedIds), actualIds);
+        assertEquals(List.of(expectedIds), actualIds);
     }
 
     private void assertFindForAuditSearch(String searchValue, String... usageIds) {

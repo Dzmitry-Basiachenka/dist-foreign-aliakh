@@ -29,7 +29,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -190,7 +189,7 @@ public class FundPoolRepositoryIntegrationTest {
             .map(FundPool::getId)
             .collect(Collectors.toList());
         List<String> expectedIds =
-            Arrays.asList("6d38454b-ce71-4b0e-8ecf-436d23dc6c3e", "ce9c1258-6d29-4224-a4e6-6f03b6aeef53",
+            List.of("6d38454b-ce71-4b0e-8ecf-436d23dc6c3e", "ce9c1258-6d29-4224-a4e6-6f03b6aeef53",
                 "100ce91c-49c1-4197-9f7a-23a8210d5706");
         assertEquals(expectedIds, actualIds);
     }
@@ -202,7 +201,7 @@ public class FundPoolRepositoryIntegrationTest {
             .map(FundPool::getId)
             .collect(Collectors.toList());
         List<String> expectedIds =
-            Arrays.asList("1ea65e2a-22c1-4a96-b55b-b6b4fd7d51ed", "15c3023d-1e68-4b7d-bfe3-18e85806b167");
+            List.of("1ea65e2a-22c1-4a96-b55b-b6b4fd7d51ed", "15c3023d-1e68-4b7d-bfe3-18e85806b167");
         assertEquals(expectedIds, actualIds);
     }
 

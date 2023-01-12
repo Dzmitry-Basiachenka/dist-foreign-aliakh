@@ -23,9 +23,9 @@ import org.springframework.stereotype.Repository;
 
 import java.io.OutputStream;
 import java.io.PipedOutputStream;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -53,7 +53,7 @@ public class AaclReportRepository extends CommonReportRepository implements IAac
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
         parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
         parameters.put("status", Objects.requireNonNull(status));
-        parameters.put("archivedStatuses", Arrays.asList(ScenarioStatusEnum.SENT_TO_LM, ScenarioStatusEnum.ARCHIVED));
+        parameters.put("archivedStatuses", List.of(ScenarioStatusEnum.SENT_TO_LM, ScenarioStatusEnum.ARCHIVED));
         try (WorkSharesByAggLcClassSummaryReportHandler handler =
                  new WorkSharesByAggLcClassSummaryReportHandler(Objects.requireNonNull(outputStream))) {
             getTemplate().select("IAaclReportMapper.findWorkSharesByAggLcClassSummaryReportDtos", parameters, handler);
@@ -66,7 +66,7 @@ public class AaclReportRepository extends CommonReportRepository implements IAac
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
         parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
         parameters.put("status", Objects.requireNonNull(status));
-        parameters.put("archivedStatuses", Arrays.asList(ScenarioStatusEnum.SENT_TO_LM, ScenarioStatusEnum.ARCHIVED));
+        parameters.put("archivedStatuses", List.of(ScenarioStatusEnum.SENT_TO_LM, ScenarioStatusEnum.ARCHIVED));
         try (WorkSharesByAggLcClassReportHandler handler =
                  new WorkSharesByAggLcClassReportHandler(Objects.requireNonNull(outputStream))) {
             getTemplate().select("IAaclReportMapper.findWorkSharesByAggLcClassReportDtos", parameters, handler);
@@ -148,7 +148,7 @@ public class AaclReportRepository extends CommonReportRepository implements IAac
             Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
             parameters.put("serviceFee", 0.25);
             parameters.put(PRODUCT_FAMILY, FdaConstants.AACL_PRODUCT_FAMILY);
-            parameters.put(STATUSES, Arrays.asList(ScenarioStatusEnum.IN_PROGRESS,
+            parameters.put(STATUSES, List.of(ScenarioStatusEnum.IN_PROGRESS,
                 ScenarioStatusEnum.SUBMITTED, ScenarioStatusEnum.APPROVED));
             getTemplate().select("IAaclReportMapper.findAaclUndistributedLiabilitiesReportFundPools", parameters,
                 handler);

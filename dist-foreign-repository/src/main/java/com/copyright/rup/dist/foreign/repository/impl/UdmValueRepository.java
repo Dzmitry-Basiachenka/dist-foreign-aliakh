@@ -13,7 +13,6 @@ import com.google.common.collect.Maps;
 
 import org.springframework.stereotype.Repository;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -84,7 +83,7 @@ public class UdmValueRepository extends AclBaseRepository implements IUdmValueRe
     public boolean isAllowedForPublishing(Integer period) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
         parameters.put("period", Objects.requireNonNull(period));
-        parameters.put("statuses", Arrays.asList(UdmValueStatusEnum.NEW, UdmValueStatusEnum.RSCHD_IN_THE_PREV_PERIOD));
+        parameters.put("statuses", List.of(UdmValueStatusEnum.NEW, UdmValueStatusEnum.RSCHD_IN_THE_PREV_PERIOD));
         return selectOne("IUdmValueMapper.isAllowedForPublishing", parameters);
     }
 

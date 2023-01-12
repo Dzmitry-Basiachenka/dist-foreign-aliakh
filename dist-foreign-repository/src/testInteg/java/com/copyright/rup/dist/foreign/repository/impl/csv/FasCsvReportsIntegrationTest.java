@@ -22,7 +22,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -277,7 +277,7 @@ public class FasCsvReportsIntegrationTest extends CsvReportsTestHelper {
     @TestData(fileName = WRITE_BATCH_SUMMARY_CSV_REPORT)
     public void testWriteSummaryMarketCsvReport() throws IOException {
         assertFiles(outputStream -> reportRepository.writeSummaryMarketCsvReport(
-            Arrays.asList("d016d9c2-5460-41bf-837c-8598cf00b651", "d016d9c2-5460-41bf-837c-8598cf00b652",
+            List.of("d016d9c2-5460-41bf-837c-8598cf00b651", "d016d9c2-5460-41bf-837c-8598cf00b652",
                 "f1a40b56-54f1-4a46-90fa-77946c2f7805", "d016d9c2-5460-41bf-837c-8598cf00b658"), outputStream),
             "fas/summary_of_market_report.csv");
     }

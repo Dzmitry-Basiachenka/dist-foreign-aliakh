@@ -11,7 +11,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.OutputStream;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -52,7 +51,7 @@ public abstract class AclCommonCalculationsCsvReportHandler<T extends StoredEnti
     public void writeMetadata(AclCalculationReportsInfoDto metadata) {
         String scenarioNames = metadata.getScenarios().stream().map(AclScenario::getName)
             .sorted(String::compareToIgnoreCase).collect(Collectors.joining(", "));
-        writeStringRow(Arrays.asList(StringUtils.EMPTY, StringUtils.EMPTY));
+        writeStringRow(List.of(StringUtils.EMPTY, StringUtils.EMPTY));
         writeStringRow(METADATA_HEADERS);
         writeStringRow(List.of(reportName, String.valueOf(metadata.getPeriod()), metadata.getUser(),
             metadata.getReportDateTime().format(formatter), scenarioNames));

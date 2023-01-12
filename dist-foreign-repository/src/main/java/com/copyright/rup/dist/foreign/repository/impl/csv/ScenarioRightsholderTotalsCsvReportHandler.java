@@ -5,7 +5,6 @@ import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 
 import java.io.PipedOutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -20,7 +19,7 @@ import java.util.List;
  */
 public class ScenarioRightsholderTotalsCsvReportHandler extends BaseCsvReportHandler<RightsholderTotalsHolder> {
 
-    private static final List<String> HEADERS = Arrays.asList("RH Account #", "RH Name", "Payee Account #",
+    private static final List<String> HEADERS = List.of("RH Account #", "RH Name", "Payee Account #",
         "Payee Name", "Gross Amt in USD", "Service Fee Amount", "Net Amt in USD", "Service Fee %");
 
     /**

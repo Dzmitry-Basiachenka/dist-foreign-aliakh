@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import com.copyright.rup.dist.foreign.domain.UdmActionReason;
 import com.copyright.rup.dist.foreign.repository.api.IUdmActionReasonRepository;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -34,7 +34,7 @@ public class UdmActionReasonRepositoryIntegrationTest {
 
     @Test
     public void testFindAll() {
-        List<UdmActionReason> expectedActionReasons = Arrays.asList(
+        List<UdmActionReason> expectedActionReasons = List.of(
             new UdmActionReason("e27a95b4-2a3a-456c-a39e-5bac4ce2503e",
                 "Accepting reported work based on user location"),
             new UdmActionReason("1c8f6e43-2ca8-468d-8700-ce855e6cd8c0", "Aggregated Content"),

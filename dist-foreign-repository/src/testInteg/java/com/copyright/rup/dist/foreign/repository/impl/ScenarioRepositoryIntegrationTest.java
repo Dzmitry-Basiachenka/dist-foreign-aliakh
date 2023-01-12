@@ -43,7 +43,6 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.EnumSet;
@@ -475,13 +474,13 @@ public class ScenarioRepositoryIntegrationTest {
         assertNotNull(ntsScenario.getNtsFields());
         assertEquals(new BigDecimal("700.0"), ntsScenario.getNtsFields().getRhMinimumAmount());
         assertUsages(
-            Arrays.asList(
+            List.of(
                 buildUsage("244de0db-b50c-45e8-937c-72e033e2a3a9", "921.8750000000"),
                 buildUsage("3caf371f-f2e6-47cd-af6b-1e02b79f6195", "3950.8928571429"),
                 buildUsage("87666035-2bdf-49ef-8c80-1d1b281fdc34", "9877.2321428571")),
             usageRepository.findByScenarioId(SCENARIO_ID_1));
         assertUsages(
-            Arrays.asList(buildScenarioExcludedUsage("0d200064-185a-4c48-bbc9-c67554e7db8e"),
+            List.of(buildScenarioExcludedUsage("0d200064-185a-4c48-bbc9-c67554e7db8e"),
                 buildScenarioExcludedUsage("9bc172f4-edbb-4a62-9ffc-254336e7a56d")),
             usageRepository.findByStatuses(UsageStatusEnum.SCENARIO_EXCLUDED));
     }

@@ -5,7 +5,6 @@ import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancy;
 
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -20,7 +19,7 @@ import java.util.List;
 public class OwnershipAdjustmentReportHandler extends BaseCsvReportHandler<RightsholderDiscrepancy> {
 
     private static final List<String> HEADERS =
-        Arrays.asList("RH Account #", "RH Name", "New RH Account #", "New RH Name", "Wr Wrk Inst", "Title", "Status");
+        List.of("RH Account #", "RH Name", "New RH Account #", "New RH Name", "Wr Wrk Inst", "Title", "Status");
 
     /**
      * Constructor.

@@ -5,7 +5,6 @@ import com.copyright.rup.dist.foreign.domain.UdmBaselineDto;
 
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -19,7 +18,7 @@ import java.util.List;
  */
 public class UdmBaselineUsageCsvReportHandler extends BaseCsvReportHandler<UdmBaselineDto> {
 
-    private static final List<String> HEADERS = Arrays.asList("Detail ID", "Period", "Usage Origin", "Usage Detail ID",
+    private static final List<String> HEADERS = List.of("Detail ID", "Period", "Usage Origin", "Usage Detail ID",
         "Wr Wrk Inst", "System Title", "Det LC ID", "Det LC Name", "Agg LC ID", "Agg LC Name", "Survey Country",
         "Channel", "Reported TOU", "TOU", "Annualized Copies", "Created By", "Created Date", "Updated By",
         "Updated Date");
