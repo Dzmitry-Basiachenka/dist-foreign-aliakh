@@ -217,8 +217,8 @@ public class AclUsageFiltersWindowTest {
         ComboBox<FilterOperatorEnum> annualizedCopiesOperatorComboBox =
             Whitebox.getInternalState(window, "annualizedCopiesOperatorComboBox");
         assertNumericOperatorComboBoxItems(annualizedCopiesOperatorComboBox);
-        verifyAmountValidationZeroNotAllowed(annualizedCopiesFromField, annualizedCopiesToField,
-            annualizedCopiesOperatorComboBox, "Field value should be greater or equal to Annualized Copies From");
+        verifyAmountValidation(annualizedCopiesFromField, annualizedCopiesToField, annualizedCopiesOperatorComboBox,
+            "Field value should be greater or equal to Annualized Copies From");
     }
 
     @Test
@@ -228,8 +228,8 @@ public class AclUsageFiltersWindowTest {
         ComboBox<FilterOperatorEnum> contentUnitPriceComboBox =
             Whitebox.getInternalState(window, "contentUnitPriceOperatorComboBox");
         assertNumericOperatorComboBoxItems(contentUnitPriceComboBox);
-        verifyAmountValidationZeroAllowed(contentUnitPriceFromField, contentUnitPriceToField,
-            contentUnitPriceComboBox, "Field value should be greater or equal to Content Unit Price From");
+        verifyAmountValidation(contentUnitPriceFromField, contentUnitPriceToField, contentUnitPriceComboBox,
+            "Field value should be greater or equal to Content Unit Price From");
     }
 
     private VerticalLayout verifyRootLayout(Component component) {
@@ -498,24 +498,9 @@ public class AclUsageFiltersWindowTest {
         validateFieldAndVerifyErrorMessage(toField, VALID_INTEGER, binder, null, true);
     }
 
-    private void verifyAmountValidationZeroNotAllowed(TextField fromField, TextField toField,
-                                                      ComboBox<FilterOperatorEnum> operatorComboBox,
-                                                      String fieldSpecificErrorMessage) {
-        String numberValidationMessage = "Field value should be positive number and should not exceed 10 digits";
-        verifyCommonOperationValidations(fromField, toField, operatorComboBox, numberValidationMessage);
-        validateFieldAndVerifyErrorMessage(fromField, SPACES_STRING, binder, numberValidationMessage, false);
-        validateFieldAndVerifyErrorMessage(toField, SPACES_STRING, binder, numberValidationMessage, false);
-        validateFieldAndVerifyErrorMessage(fromField, VALID_DECIMAL, binder, null, true);
-        validateFieldAndVerifyErrorMessage(toField, VALID_DECIMAL, binder, null, true);
-        validateFieldAndVerifyErrorMessage(fromField, VALID_DECIMAL, binder, null, true);
-        validateFieldAndVerifyErrorMessage(toField, "1.1345678", binder, fieldSpecificErrorMessage, false);
-        validateFieldAndVerifyErrorMessage(fromField, INVALID_NUMBER, binder, numberValidationMessage, false);
-        validateFieldAndVerifyErrorMessage(toField, INVALID_NUMBER, binder, numberValidationMessage, false);
-    }
-
-    private void verifyAmountValidationZeroAllowed(TextField fromField, TextField toField,
-                                                   ComboBox<FilterOperatorEnum> operatorComboBox,
-                                                   String fieldSpecificErrorMessage) {
+    private void verifyAmountValidation(TextField fromField, TextField toField,
+                                        ComboBox<FilterOperatorEnum> operatorComboBox,
+                                        String fieldSpecificErrorMessage) {
         String numberValidationMessage =
             "Field value should be positive number or zero and should not exceed 10 digits";
         verifyCommonOperationValidations(fromField, toField, operatorComboBox, numberValidationMessage);

@@ -71,7 +71,7 @@ public class UdmBaselineFiltersWindowTest {
     private static final String CAPTION_OPERATOR = "Operator";
     private static final String NUMBER_VALIDATION_MESSAGE = "Field value should contain numeric values only";
     private static final String DECIMAL_VALIDATION_MESSAGE =
-        "Field value should be positive number and should not exceed 10 digits";
+        "Field value should be positive number or zero and should not exceed 10 digits";
     private static final String BETWEEN_OPERATOR_VALIDATION_MESSAGE =
         "Field value should be populated for Between Operator";
 

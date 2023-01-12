@@ -4,7 +4,7 @@ import com.copyright.rup.dist.foreign.domain.UdmChannelEnum;
 import com.copyright.rup.dist.foreign.domain.filter.FilterExpression;
 import com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
-import com.copyright.rup.dist.foreign.ui.common.validator.AmountZeroValidator;
+import com.copyright.rup.dist.foreign.ui.common.validator.AmountValidator;
 import com.copyright.rup.dist.foreign.ui.common.validator.NumericValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
@@ -417,7 +417,7 @@ public class UdmUsageFiltersWindow extends CommonAclFiltersWindow {
         bindFilterOperator(annualizedCopiesOperatorComboBox, UdmUsageFilter::getAnnualizedCopiesExpression);
         annualizedCopiesFromField.addValueChangeListener(event -> filterBinder.validate());
         filterBinder.forField(annualizedCopiesFromField)
-            .withValidator(new AmountZeroValidator())
+            .withValidator(new AmountValidator())
             .withValidator(getBetweenOperatorValidator(annualizedCopiesFromField, annualizedCopiesOperatorComboBox),
                 BETWEEN_OPERATOR_VALIDATION_MESSAGE)
             .bind(filter -> Objects.toString(filter.getAnnualizedCopiesExpression().getFieldFirstValue(),
@@ -425,7 +425,7 @@ public class UdmUsageFiltersWindow extends CommonAclFiltersWindow {
                 (filter, value) -> filter.getAnnualizedCopiesExpression()
                     .setFieldFirstValue(NumberUtils.createBigDecimal(StringUtils.trimToNull(value))));
         filterBinder.forField(annualizedCopiesToField)
-            .withValidator(new AmountZeroValidator())
+            .withValidator(new AmountValidator())
             .withValidator(getBetweenOperatorValidator(annualizedCopiesToField, annualizedCopiesOperatorComboBox),
                 BETWEEN_OPERATOR_VALIDATION_MESSAGE)
             .withValidator(value -> validateBigDecimalFromToValues(annualizedCopiesFromField, annualizedCopiesToField),
@@ -456,7 +456,7 @@ public class UdmUsageFiltersWindow extends CommonAclFiltersWindow {
             updateOperatorField(filterBinder, statisticalMultiplierFromField, statisticalMultiplierToField,
                 event.getValue()));
         filterBinder.forField(statisticalMultiplierFromField)
-            .withValidator(new AmountZeroValidator())
+            .withValidator(new AmountValidator())
             .withValidator(getBetweenOperatorValidator(statisticalMultiplierFromField,
                 statisticalMultiplierOperatorComboBox), BETWEEN_OPERATOR_VALIDATION_MESSAGE)
             .bind(filter -> Objects.toString(filter.getStatisticalMultiplierExpression().getFieldFirstValue(),
@@ -464,7 +464,7 @@ public class UdmUsageFiltersWindow extends CommonAclFiltersWindow {
                 (filter, value) -> filter.getStatisticalMultiplierExpression()
                     .setFieldFirstValue(NumberUtils.createBigDecimal(StringUtils.trimToNull(value))));
         filterBinder.forField(statisticalMultiplierToField)
-            .withValidator(new AmountZeroValidator())
+            .withValidator(new AmountValidator())
             .withValidator(
                 value -> validateBigDecimalFromToValues(statisticalMultiplierFromField, statisticalMultiplierToField),
                 ForeignUi.getMessage(GRATER_OR_EQUAL_VALIDATION_MESSAGE,
