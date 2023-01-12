@@ -16,6 +16,7 @@ import org.junit.Test;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Verifies {@link ForeignLogUtils}.
@@ -50,15 +51,15 @@ public class ForeignLogUtilsTest {
         scenario.setUsageBatchId("05ed8d36-3e98-4aa8-b3ca-862837e04d92");
         scenario.setGrantSetId("94578e03-5581-45d9-b6b6-47cff3806550");
         scenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);
-        scenario.setUsageAges(Arrays.asList(
+        scenario.setUsageAges(List.of(
             buildUsageAge(2019, new BigDecimal("1.00")),
             buildUsageAge(2018, new BigDecimal("0.75"))
         ));
-        scenario.setPublicationTypes(Arrays.asList(
+        scenario.setPublicationTypes(List.of(
             buildAclPublicationType("Book", new BigDecimal("3.12"), 202012),
             buildAclPublicationType("STMA Journal", new BigDecimal("0.99"), 202006)
         ));
-        scenario.setDetailLicenseeClasses(Arrays.asList(
+        scenario.setDetailLicenseeClasses(List.of(
             buildDetailLicenseeClass(108, 141),
             buildDetailLicenseeClass(110, 143)
         ));
@@ -87,15 +88,15 @@ public class ForeignLogUtilsTest {
     public void testAaclFields() {
         AaclFields aaclFields = new AaclFields();
         aaclFields.setFundPoolId("cc3f6787-d8f5-4bbc-a7b1-268ebed28789");
-        aaclFields.setUsageAges(Arrays.asList(
+        aaclFields.setUsageAges(List.of(
             buildUsageAge(2019, new BigDecimal("1.00")),
             buildUsageAge(2018, new BigDecimal("0.75"))
         ));
-        aaclFields.setPublicationTypes(Arrays.asList(
+        aaclFields.setPublicationTypes(List.of(
             buildPublicationType("Book", new BigDecimal("3.12")),
             buildPublicationType("STMA Journal", new BigDecimal("0.99"))
         ));
-        aaclFields.setDetailLicenseeClasses(Arrays.asList(
+        aaclFields.setDetailLicenseeClasses(List.of(
             buildDetailLicenseeClass(108, 141),
             buildDetailLicenseeClass(110, 143)
         ));

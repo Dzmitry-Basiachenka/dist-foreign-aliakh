@@ -36,7 +36,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -94,7 +93,7 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
 
     WorkflowIntegrationTestBuilder withUsagesCsvFile(String csvFile, String... usageIds) {
         this.usagesCsvFile = csvFile;
-        this.predefinedUsageIds = Arrays.asList(usageIds);
+        this.predefinedUsageIds = List.of(usageIds);
         return this;
     }
 
@@ -120,18 +119,18 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
 
     public WorkflowIntegrationTestBuilder expectPreferences(String preferencesJson, String... rightholderIds) {
         this.expectedPreferencesJson = preferencesJson;
-        this.expectedPreferencesRightholderIds = Arrays.asList(rightholderIds);
+        this.expectedPreferencesRightholderIds = List.of(rightholderIds);
         return this;
     }
 
     public WorkflowIntegrationTestBuilder expectRollups(String rollupsJson, String... rollupsRightsholdersIds) {
         this.expectedRollupsJson = rollupsJson;
-        this.expectedRollupsRightsholdersIds = Arrays.asList(rollupsRightsholdersIds);
+        this.expectedRollupsRightsholdersIds = List.of(rollupsRightsholdersIds);
         return this;
     }
 
     WorkflowIntegrationTestBuilder expectLmDetails(String... lmDetailsJsonFile) {
-        this.expectedLmDetailsJsonFiles = Arrays.asList(lmDetailsJsonFile);
+        this.expectedLmDetailsJsonFiles = List.of(lmDetailsJsonFile);
         return this;
     }
 
@@ -141,7 +140,7 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
     }
 
     WorkflowIntegrationTestBuilder expectPaidUsageLmDetailIds(String... usageLmDetailIds) {
-        this.expectedPaidUsageLmDetailids = Arrays.asList(usageLmDetailIds);
+        this.expectedPaidUsageLmDetailids = List.of(usageLmDetailIds);
         return this;
     }
 
@@ -193,7 +192,7 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
             testHelper.expectGetRollups(expectedRollupsJson, expectedRollupsRightsholdersIds);
             testHelper.expectGetPreferences(expectedPreferencesJson, expectedPreferencesRightholderIds);
             testHelper.expectCrmCall(expectedCrmRequestJsonFile, expectedCrmResponseJsonFile,
-                Arrays.asList("omOrderDetailNumber", "licenseCreateDate"));
+                List.of("omOrderDetailNumber", "licenseCreateDate"));
             loadUsageBatch();
             addToScenario();
             scenarioService.submit(scenario, "Submitting scenario for testing purposes");
@@ -281,7 +280,7 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
         }
 
         private List<Pair<ScenarioActionTypeEnum, String>> buildExpectedScenarioAudit() {
-            return Arrays.asList(
+            return List.of(
                 Pair.of(ScenarioActionTypeEnum.ADDED_USAGES, ""),
                 Pair.of(ScenarioActionTypeEnum.SUBMITTED, "Submitting scenario for testing purposes"),
                 Pair.of(ScenarioActionTypeEnum.APPROVED, "Approving scenario for testing purposes"),

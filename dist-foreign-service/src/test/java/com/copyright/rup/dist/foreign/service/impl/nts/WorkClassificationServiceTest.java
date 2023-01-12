@@ -34,7 +34,6 @@ import org.powermock.reflect.Whitebox;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
@@ -103,7 +102,7 @@ public class WorkClassificationServiceTest {
         Usage usage2 = new Usage();
         usage2.setId(RupPersistUtils.generateUuid());
         expect(ntsUsageRepository.findUsageIdsForClassificationUpdate())
-            .andReturn(Arrays.asList(usage1.getId(), usage2.getId())).once();
+            .andReturn(List.of(usage1.getId(), usage2.getId())).once();
         expect(usageRepository.findByIds(List.of(usage1.getId()))).andReturn(List.of(usage1)).once();
         nonBelletristicProcessorMock.process(List.of(usage1));
         expectLastCall().once();

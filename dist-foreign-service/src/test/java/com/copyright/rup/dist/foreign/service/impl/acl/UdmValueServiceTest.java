@@ -37,7 +37,6 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -91,7 +90,7 @@ public class UdmValueServiceTest {
         udmValueDto.setId(UDM_VALUE_UID_1);
         udmValueDto.setPriceComment("old price comment");
         udmValueDto.setContentComment("old content comment");
-        List<String> actionReasons = Arrays.asList(
+        List<String> actionReasons = List.of(
             "The field 'Price Comment' was edited. Old Value is 'old price comment'. New Value is 'new price comment'",
             "The field 'Content Comment' was edited. Old Value is 'old content comment'. New Value is not specified",
             "The field 'Comment' was edited. Old Value is not specified. New Value is 'new comment'");
@@ -114,13 +113,13 @@ public class UdmValueServiceTest {
 
     @Test
     public void testGetAllCurrencies() {
-        assertEquals(Arrays.asList(new Currency("USD", "US Dollar"), new Currency("EUR", "Euro")),
+        assertEquals(List.of(new Currency("USD", "US Dollar"), new Currency("EUR", "Euro")),
             udmValueService.getAllCurrencies());
     }
 
     @Test
     public void testGetPeriods() {
-        List<Integer> periods = Arrays.asList(202006, 202112);
+        List<Integer> periods = List.of(202006, 202112);
         expect(udmValueRepository.findPeriods()).andReturn(periods).once();
         replay(udmValueRepository);
         assertEquals(periods, udmValueService.getPeriods());
@@ -173,9 +172,9 @@ public class UdmValueServiceTest {
         UdmValueDto udmValue3 = new UdmValueDto();
         udmValue3.setId(UDM_VALUE_UID_3);
         udmValue3.setAssignee(USER_NAME);
-        Set<UdmValueDto> udmValues = new LinkedHashSet<>(Arrays.asList(udmValue1, udmValue2, udmValue3));
+        Set<UdmValueDto> udmValues = new LinkedHashSet<>(List.of(udmValue1, udmValue2, udmValue3));
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
-        udmValueRepository.updateAssignee(new HashSet<>(Arrays.asList(udmValue1.getId(), udmValue2.getId())),
+        udmValueRepository.updateAssignee(new HashSet<>(List.of(udmValue1.getId(), udmValue2.getId())),
             USER_NAME, USER_NAME);
         expectLastCall().once();
         udmValueAuditService.logAction(udmValue1.getId(), UdmValueActionTypeEnum.ASSIGNEE_CHANGE,
@@ -223,7 +222,7 @@ public class UdmValueServiceTest {
         mockStatic(RupPersistUtils.class);
         UdmValue value1 = buildUdmValue(2365985896L);
         UdmValue value2 = buildUdmValue(3000985896L);
-        List<UdmValue> values = Arrays.asList(value1, value2);
+        List<UdmValue> values = List.of(value1, value2);
         expect(udmBaselineRepository.findNotPopulatedValuesFromBaseline(202006)).andReturn(values).once();
         rightsService.updateUdmValuesRights(values, 202006);
         expectLastCall().andAnswer(() -> {
@@ -247,7 +246,7 @@ public class UdmValueServiceTest {
         mockStatic(RupPersistUtils.class);
         UdmValue value1 = buildUdmValue(2365985896L);
         UdmValue value2 = buildUdmValue(3000985896L);
-        List<UdmValue> values = Arrays.asList(value1, value2);
+        List<UdmValue> values = List.of(value1, value2);
         expect(udmBaselineRepository.findNotPopulatedValuesFromBaseline(202012)).andReturn(values).once();
         rightsService.updateUdmValuesRights(values, 202012);
         expectLastCall().andAnswer(() -> {
@@ -271,7 +270,7 @@ public class UdmValueServiceTest {
     public void testPopulateValueBatchWhenNoWorksToPopulate() {
         mockStatic(RupContextUtils.class);
         mockStatic(RupPersistUtils.class);
-        List<UdmValue> values = Arrays.asList(buildUdmValue(2365985896L), buildUdmValue(3000985896L));
+        List<UdmValue> values = List.of(buildUdmValue(2365985896L), buildUdmValue(3000985896L));
         expect(udmBaselineRepository.findNotPopulatedValuesFromBaseline(202012)).andReturn(values).once();
         rightsService.updateUdmValuesRights(values, 202012);
         expectLastCall().once();

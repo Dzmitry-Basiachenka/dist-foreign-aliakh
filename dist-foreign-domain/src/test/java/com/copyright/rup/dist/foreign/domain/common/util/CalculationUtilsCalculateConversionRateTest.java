@@ -8,8 +8,8 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Parameterized test that verifies {@link CalculationUtils#calculateConversionRate(BigDecimal, BigDecimal)}.
@@ -43,7 +43,7 @@ public class CalculationUtilsCalculateConversionRateTest {
 
     @Parameters
     public static Collection<Object[]> data() {
-        return Arrays.asList(new Object[][] {
+        return List.of(new Object[][] {
             {new BigDecimal("1.1111111111"), BigDecimal.TEN, new BigDecimal("9.0")},
             {new BigDecimal("0.9090909091"), BigDecimal.TEN, new BigDecimal("11.0")},
             {new BigDecimal("0.1000000000"), new BigDecimal("0.1"), BigDecimal.ONE},

@@ -57,7 +57,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -172,7 +171,7 @@ public class UsageServiceTest {
     @Test
     public void testGetInvalidRightsholdersByFilter() {
         UsageFilter filter = new UsageFilter();
-        List<Long> accountNumbers = Arrays.asList(1000000001L, 1000000002L);
+        List<Long> accountNumbers = List.of(1000000001L, 1000000002L);
         expect(usageRepository.findInvalidRightsholdersByFilter(filter)).andReturn(accountNumbers).once();
         replay(usageRepository);
         assertSame(accountNumbers, usageService.getInvalidRightsholdersByFilter(filter));
@@ -247,7 +246,7 @@ public class UsageServiceTest {
 
     @Test
     public void testGetByScenarioAndRhAccountNumber() {
-        List<UsageDto> usages = Arrays.asList(new UsageDto(), new UsageDto());
+        List<UsageDto> usages = List.of(new UsageDto(), new UsageDto());
         Pageable pageable = new Pageable(0, 2);
         expect(usageRepository.findByScenarioIdAndRhAccountNumber(RH_ACCOUNT_NUMBER, SCENARIO_ID, null, pageable,
             null)).andReturn(usages).once();
@@ -278,7 +277,7 @@ public class UsageServiceTest {
 
     @Test
     public void testDeleteFromScenarioByAccountNumbers() {
-        List<String> usagesIds = Arrays.asList(RupPersistUtils.generateUuid(), RupPersistUtils.generateUuid());
+        List<String> usagesIds = List.of(RupPersistUtils.generateUuid(), RupPersistUtils.generateUuid());
         mockStatic(RupContextUtils.class);
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
         List<Long> accountNumbers = List.of(RH_ACCOUNT_NUMBER);
@@ -679,7 +678,7 @@ public class UsageServiceTest {
         chainExecutor.execute(List.of(usage1), ChainProcessorTypeEnum.MATCHING);
         expectLastCall().once();
         replay(chainExecutor);
-        usageService.sendForMatching(Arrays.asList(usage1, usage2));
+        usageService.sendForMatching(List.of(usage1, usage2));
         assertNotNull(captureRunnable);
         Runnable runnable = captureRunnable.getValue();
         assertNotNull(runnable);
@@ -699,7 +698,7 @@ public class UsageServiceTest {
         chainExecutor.execute(List.of(usage1), ChainProcessorTypeEnum.RIGHTS);
         expectLastCall().once();
         replay(chainExecutor);
-        usageService.sendForGettingRights(Arrays.asList(usage1, usage2), "Batch name");
+        usageService.sendForGettingRights(List.of(usage1, usage2), "Batch name");
         assertNotNull(captureRunnable);
         Runnable runnable = captureRunnable.getValue();
         assertNotNull(runnable);

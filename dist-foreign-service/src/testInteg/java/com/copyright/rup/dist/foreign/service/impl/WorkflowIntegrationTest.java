@@ -20,7 +20,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -104,14 +103,14 @@ public class WorkflowIntegrationTest {
             .expectUsageAudit(USAGE_LM_DETAIL_ID_1, expectedUsageAudit)
             .expectUsageAudit(USAGE_LM_DETAIL_ID_2, expectedUsageAudit)
             .expectUsageAudit(USAGE_LM_DETAIL_ID_3, expectedUsageAudit)
-            .expectUsageAudit(USAGE_LM_DETAIL_ID_4, Arrays.asList(
+            .expectUsageAudit(USAGE_LM_DETAIL_ID_4, List.of(
                 Pair.of(UsageActionTypeEnum.ARCHIVED, AUDIT_USAGE_WAS_SENT_TO_CRM),
                 Pair.of(UsageActionTypeEnum.PAID, "Usage has been paid according to information from the LM"),
                 Pair.of(UsageActionTypeEnum.ELIGIBLE, "Usage has become eligible"),
                 Pair.of(UsageActionTypeEnum.RH_FOUND, "Rightsholder account 1000024950 was found in RMS"),
                 Pair.of(UsageActionTypeEnum.WORK_FOUND, "Usage was uploaded with Wr Wrk Inst"),
                 Pair.of(UsageActionTypeEnum.LOADED, AUDIT_UPLOADED_IN_BATCH)))
-            .expectUsageAudit(USAGE_LM_DETAIL_ID_5, Arrays.asList(
+            .expectUsageAudit(USAGE_LM_DETAIL_ID_5, List.of(
                 Pair.of(UsageActionTypeEnum.ARCHIVED, AUDIT_USAGE_WAS_SENT_TO_CRM),
                 Pair.of(UsageActionTypeEnum.PAID, "Usage has been adjusted based on Split process"),
                 Pair.of(UsageActionTypeEnum.ELIGIBLE, "Usage has become eligible"),
@@ -119,10 +118,10 @@ public class WorkflowIntegrationTest {
                 Pair.of(UsageActionTypeEnum.WORK_FOUND, "Wr Wrk Inst 100012905 was found by standard number " +
                     "12345XX-12978"),
                 Pair.of(UsageActionTypeEnum.LOADED, AUDIT_UPLOADED_IN_BATCH)))
-            .expectUsageAudit(USAGE_LM_DETAIL_ID_6, Arrays.asList(
+            .expectUsageAudit(USAGE_LM_DETAIL_ID_6, List.of(
                 Pair.of(UsageActionTypeEnum.ARCHIVED, AUDIT_USAGE_WAS_SENT_TO_CRM),
                 Pair.of(UsageActionTypeEnum.PAID, "Usage has been created based on Split process")))
-            .expectUsageAudit(USAGE_LM_DETAIL_ID_7, Arrays.asList(
+            .expectUsageAudit(USAGE_LM_DETAIL_ID_7, List.of(
                 Pair.of(UsageActionTypeEnum.ARCHIVED, AUDIT_USAGE_WAS_SENT_TO_CRM),
                 Pair.of(UsageActionTypeEnum.PAID, "Usage has been created based on Post-Distribution process")))
             .build()
@@ -156,7 +155,7 @@ public class WorkflowIntegrationTest {
     }
 
     private List<Pair<UsageActionTypeEnum, String>> buildExpectedUsageAudit() {
-        return Arrays.asList(
+        return List.of(
             Pair.of(UsageActionTypeEnum.ARCHIVED, AUDIT_USAGE_WAS_SENT_TO_CRM),
             Pair.of(UsageActionTypeEnum.PAID, "Usage has been paid according to information from the LM"),
             Pair.of(UsageActionTypeEnum.ELIGIBLE, "Usage was uploaded with Wr Wrk Inst and RH account number"),

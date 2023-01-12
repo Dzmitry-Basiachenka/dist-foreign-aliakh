@@ -8,8 +8,8 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Verifies {@link AclciGradeValidator}.
@@ -39,7 +39,7 @@ public class AclciGradeValidatorTest {
 
     @Parameters
     public static Collection<Object[]> data() {
-        return Arrays.asList(new Object[][]{
+        return List.of(new Object[][]{
             {null, false},
             {StringUtils.EMPTY, false},
             {" ", false},

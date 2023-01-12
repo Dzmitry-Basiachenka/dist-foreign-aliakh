@@ -25,7 +25,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -74,9 +73,8 @@ public class NtsWorkflowIntegrationTest {
                 1000023401L, "prm/rightsholder_1000023401_response.json"))
             .expectPrmCallForUpdateRro(2000017001L, "prm/rightsholder_2000017001_response.json")
             .expectOracleCall(ImmutableMap.of(
-                Arrays.asList(1000009522L, 1000023401L), "tax/rh_tax_country_us_response_1.json"))
-            .expectPreferences(ImmutableMap.of(
-                Arrays.asList(RH_ID_2, RH_ID_1), "preferences/rh_preferences_response_1.json"))
+                List.of(1000009522L, 1000023401L), "tax/rh_tax_country_us_response_1.json"))
+            .expectPreferences(ImmutableMap.of(List.of(RH_ID_2, RH_ID_1), "preferences/rh_preferences_response_1.json"))
             .expectUsage(buildPaidUsage())
             .expectLmDetails("details/nts_details_to_lm.json")
             .expectPaidInfo("lm/paid_usages_nts.json")

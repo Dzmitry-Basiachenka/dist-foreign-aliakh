@@ -11,13 +11,13 @@ import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.ser.DefaultSerializerProvider;
+
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 
 import java.io.StringWriter;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -56,7 +56,7 @@ public class CommonUdmUsageSerializerTest {
     }
 
     private List<UdmUsage> buildUdmUsages() {
-        return Arrays.asList(
+        return List.of(
             buildUdmUsage("acd033da-cba1-4e85-adc9-0bcd00687d9d", 122825347L, "0927-7765", "0927-7761",
                 "Colloids and surfaces", "Colloids and surfaces. C, Biointerfaces"),
             buildUdmUsage("955d8192-c80d-4be1-963e-12616f8e9c41", 100002555L, "2227-7589", "0927-7762",

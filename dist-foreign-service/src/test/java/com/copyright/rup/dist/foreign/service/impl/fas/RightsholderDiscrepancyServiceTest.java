@@ -18,7 +18,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -65,7 +64,7 @@ public class RightsholderDiscrepancyServiceTest {
 
     @Test
     public void testGetProhibitedAccountNumbers() {
-        List<Long> accountNumbers = Arrays.asList(1000000001L, 1000000002L);
+        List<Long> accountNumbers = List.of(1000000001L, 1000000002L);
         expect(rightsholderDiscrepancyRepository.findProhibitedAccountNumbers(SCENARIO_ID))
             .andReturn(accountNumbers).once();
         replay(rightsholderDiscrepancyRepository);

@@ -42,7 +42,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -160,7 +159,7 @@ public class NtsUsageServiceTest {
         expect(prmIntegrationService.getRollUps(rhIds)).andReturn(rollUps).once();
         Map<String, Table<String, String, Object>> preferences = new HashMap<>();
         expect(prmIntegrationService.getPreferences(rhIds)).andReturn(preferences).once();
-        expect(rightsholderService.getByScenarioId(SCENARIO_ID)).andReturn(Arrays.asList(rh1, rh2)).once();
+        expect(rightsholderService.getByScenarioId(SCENARIO_ID)).andReturn(List.of(rh1, rh2)).once();
         expect(prmIntegrationService.isRightsholderParticipating(preferences, rh1.getId(), NTS_PRODUCT_FAMILY))
             .andReturn(true).once();
         expect(prmIntegrationService.isRightsholderParticipating(preferences, rh2.getId(), NTS_PRODUCT_FAMILY))
@@ -258,12 +257,12 @@ public class NtsUsageServiceTest {
 
     @Test
     public void testSendForGettingRights() {
-        List<String> usageIds = Arrays.asList(RupPersistUtils.generateUuid(), RupPersistUtils.generateUuid());
+        List<String> usageIds = List.of(RupPersistUtils.generateUuid(), RupPersistUtils.generateUuid());
         Usage usage1 = new Usage();
         usage1.setStatus(UsageStatusEnum.WORK_FOUND);
         Usage usage2 = new Usage();
         usage2.setStatus(UsageStatusEnum.WORK_NOT_FOUND);
-        List<Usage> usages = Arrays.asList(usage1, usage2);
+        List<Usage> usages = List.of(usage1, usage2);
         expect(usageService.getUsagesByIds(usageIds)).andReturn(usages).once();
         Capture<Runnable> captureRunnable = newCapture();
         chainExecutor.execute(capture(captureRunnable));

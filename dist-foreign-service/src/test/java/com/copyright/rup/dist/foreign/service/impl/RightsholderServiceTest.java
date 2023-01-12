@@ -24,7 +24,6 @@ import org.junit.Test;
 import org.powermock.api.easymock.PowerMock;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
@@ -125,8 +124,7 @@ public class RightsholderServiceTest {
 
     @Test
     public void testGetByScenarioId() {
-        List<Rightsholder> rightsholders =
-            Arrays.asList(buildRightsholder(7000813806L), buildRightsholder(1000009522L));
+        List<Rightsholder> rightsholders = List.of(buildRightsholder(7000813806L), buildRightsholder(1000009522L));
         String scenarioId = RupPersistUtils.generateUuid();
         expect(rightsholderRepository.findByScenarioId(scenarioId)).andReturn(rightsholders).once();
         replay(rightsholderRepository);
@@ -137,7 +135,7 @@ public class RightsholderServiceTest {
     @Test
     public void testGetByAclScenarioId() {
         List<RightsholderTypeOfUsePair> rightsholderTypeOfUsePairs =
-            Arrays.asList(buildRightsholderTypeOfUsePair(7000813806L), buildRightsholderTypeOfUsePair(1000009522L));
+            List.of(buildRightsholderTypeOfUsePair(7000813806L), buildRightsholderTypeOfUsePair(1000009522L));
         String scenarioId = "bf6d4cf2-bb84-455c-877e-6fd3afb4deca";
         expect(rightsholderRepository.findByAclScenarioId(scenarioId)).andReturn(rightsholderTypeOfUsePairs).once();
         replay(rightsholderRepository);

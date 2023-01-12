@@ -24,7 +24,6 @@ import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -60,7 +59,7 @@ public class RmsRightsCacheServiceTest {
     @Test
     public void testGetAllRmsGrants() {
         List<Long> wrWrkInst1 = List.of(WR_WRK_INST_1);
-        List<Long> wrWrkInst2 = Arrays.asList(WR_WRK_INST_2, WR_WRK_INST_3);
+        List<Long> wrWrkInst2 = List.of(WR_WRK_INST_2, WR_WRK_INST_3);
         Set<RmsGrant> expectedRmsGrants1 = Sets.newHashSet(buildRmsGrant(WR_WRK_INST_1, RH_ACCOUNT_NUMBER_1));
         Set<RmsGrant> expectedRmsGrants2 = Sets.newHashSet(buildRmsGrant(WR_WRK_INST_2, RH_ACCOUNT_NUMBER_2),
             buildRmsGrant(WR_WRK_INST_3, RH_ACCOUNT_NUMBER_2));
@@ -83,7 +82,7 @@ public class RmsRightsCacheServiceTest {
 
     @Test
     public void testGetAllRmsGrantsFromCache() {
-        List<Long> wrWrkInsts = Arrays.asList(WR_WRK_INST_1, WR_WRK_INST_2, WR_WRK_INST_3);
+        List<Long> wrWrkInsts = List.of(WR_WRK_INST_1, WR_WRK_INST_2, WR_WRK_INST_3);
         Set<RmsGrant> expectedRmsGrants = Sets.newHashSet(buildRmsGrant(WR_WRK_INST_1, RH_ACCOUNT_NUMBER_1),
             buildRmsGrant(WR_WRK_INST_2, RH_ACCOUNT_NUMBER_2),
             buildRmsGrant(WR_WRK_INST_3, RH_ACCOUNT_NUMBER_2));
@@ -107,7 +106,7 @@ public class RmsRightsCacheServiceTest {
     public void testGetAllRmsGrantsFromCacheWithTypeOfUses() {
         LocalDate periodEndDate = LocalDate.of(2019, 6, 30);
         Set<String> typeOfUses = Sets.newHashSet("PRINT", "DIGITAL");
-        List<Long> wrWrkInsts = Arrays.asList(WR_WRK_INST_1, WR_WRK_INST_2);
+        List<Long> wrWrkInsts = List.of(WR_WRK_INST_1, WR_WRK_INST_2);
         Set<RmsGrant> expectedRmsGrants = Sets.newHashSet(buildRmsGrant(WR_WRK_INST_1, RH_ACCOUNT_NUMBER_1),
             buildRmsGrant(WR_WRK_INST_2, RH_ACCOUNT_NUMBER_2));
         Capture<List<Long>> wrWrkInstsCapture = newCapture();
@@ -128,7 +127,7 @@ public class RmsRightsCacheServiceTest {
 
     @Test
     public void testGetAllRmsGrantsNotFound() {
-        List<Long> wrWrkInsts = Arrays.asList(WR_WRK_INST_1, WR_WRK_INST_3);
+        List<Long> wrWrkInsts = List.of(WR_WRK_INST_1, WR_WRK_INST_3);
         Capture<List<Long>> wrWrkInstsCapture = newCapture();
         expect(rmsService.getGrants(capture(wrWrkInstsCapture), anyObject(), eq(Set.of()),
             eq(Set.of()), eq(Set.of()))).andReturn(new HashSet<>()).once();

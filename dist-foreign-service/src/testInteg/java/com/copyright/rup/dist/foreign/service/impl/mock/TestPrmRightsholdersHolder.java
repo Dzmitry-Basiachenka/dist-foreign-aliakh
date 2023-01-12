@@ -2,7 +2,6 @@ package com.copyright.rup.dist.foreign.service.impl.mock;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -18,7 +17,7 @@ import java.util.stream.Collectors;
  */
 final class TestPrmRightsholdersHolder {
 
-    private static final List<Rightsholder> RIGHTSHOLDERS = Arrays.asList(
+    private static final List<Rightsholder> RIGHTSHOLDERS = List.of(
         buildRightsholder("c929c312-bd36-4469-8989-61b824ecefd6", 1000010022L, "Yale University Press"),
         buildRightsholder("671b8b20-7335-4938-988e-1da803efa6e3", 1000010029L, "Georg Thieme Verlag KG"),
         buildRightsholder("714b1321-210c-4982-a93b-74fc405ef211", 7000864232L,

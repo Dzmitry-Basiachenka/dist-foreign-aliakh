@@ -122,7 +122,7 @@ public class UpdateRightsIntegrationTest {
             RMS_GRANTS_EMPTY_RESPONSE_JSON);
         testHelper.expectGetRmsRights("rights/nts/rms_grants_786768461_request.json",
             "rights/nts/rms_grants_786768461_response.json");
-        rightsService.updateRights(Arrays.asList(
+        rightsService.updateRights(List.of(
             buildUsage("b77e72d6-ef71-4f4b-a00b-5800e43e5bee", FAS, 254030731L),
             buildUsage("8aded52d-9507-4883-ab4c-fd2e029298af", FAS, 254030731L),
             buildUsage("74ded52a-4454-1225-ab4c-fA2e029298af", FAS, 658824345L)), true);
@@ -151,7 +151,7 @@ public class UpdateRightsIntegrationTest {
         testHelper.expectGetRmsRights("rights/aacl/rms_grants_200208329_request.json",
             RMS_GRANTS_EMPTY_RESPONSE_JSON);
         testHelper.expectPrmCall(PRM_RIGHTSHOLDER_1000000322_RESPONSE_JSON, 1000000322L);
-        rightsService.updateAaclRights(Arrays.asList(
+        rightsService.updateAaclRights(List.of(
             buildAaclUsage("b23cb103-9242-4d58-a65d-2634b3e5a8cf", 122803735),
             buildAaclUsage("7e7b97d1-ad60-4d47-915b-2834c5cc056a", 130297955)));
         rightsService.updateAaclRights(List.of(buildAaclUsage("10c9a60f-28b6-466c-975c-3ea930089a9e", 200208329)));
@@ -173,7 +173,7 @@ public class UpdateRightsIntegrationTest {
         testHelper.expectGetRmsRights("rights/udm/usage/rms_grants_210001899_request.json",
             RMS_GRANTS_EMPTY_RESPONSE_JSON);
         testHelper.expectPrmCall(PRM_RIGHTSHOLDER_1000000322_RESPONSE_JSON, 1000000322L);
-        rightsService.updateUdmRights(Arrays.asList(
+        rightsService.updateUdmRights(List.of(
             buildUdmUsage("acb53a42-7e8d-4a4a-8d72-6f794be2731c", 122769421, "DIGITAL"),
             buildUdmUsage("1b348196-2193-46d7-b9df-2ba835189131", 210001133, "PRINT")));
         rightsService.updateUdmRights(List.of(
@@ -193,7 +193,7 @@ public class UpdateRightsIntegrationTest {
         testHelper.expectGetRmsRights("rights/udm/value/rms_grants_202112_2_request.json",
             "rights/udm/value/rms_grants_202112_2_response.json");
         testHelper.expectPrmCall(PRM_RIGHTSHOLDER_1000000322_RESPONSE_JSON, 1000000322L);
-        List<UdmValue> values = Arrays.asList(buildUdmValue(122769421), buildUdmValue(243618757),
+        List<UdmValue> values = List.of(buildUdmValue(122769421), buildUdmValue(243618757),
             buildUdmValue(140160102), buildUdmValue(210001133));
         rightsService.updateUdmValuesRights(values, 202112);
         assertEquals(RH_ACCOUNT_NUMBER_1, values.get(0).getRhAccountNumber());
@@ -210,7 +210,7 @@ public class UpdateRightsIntegrationTest {
         testHelper.expectGetRmsRights("rights/sal/rms_grants_request_1.json", "rights/sal/rms_grants_response_1.json");
         testHelper.expectGetRmsRights("rights/sal/rms_grants_140160102_request.json", RMS_GRANTS_EMPTY_RESPONSE_JSON);
         testHelper.expectPrmCall(PRM_RIGHTSHOLDER_1000000322_RESPONSE_JSON, 1000000322L);
-        rightsService.updateSalRights(Arrays.asList(
+        rightsService.updateSalRights(List.of(
             buildSalUsage("dcb53a42-7e8d-4a4a-8d72-6f794be2731c", 122769471),
             buildSalUsage("094749c5-08fa-4f57-8c3b-ecbc334a5c2a", 243618757)));
         rightsService.updateSalRights(List.of(buildSalUsage("ecf46bea-2baa-40c1-a5e1-769c78865b2c", 140160102)));
@@ -232,7 +232,7 @@ public class UpdateRightsIntegrationTest {
             "rights/aclci/rms_grants_response_1.json");
         testHelper.expectGetRmsRights("rights/aclci/rms_grants_140160102_request.json", RMS_GRANTS_EMPTY_RESPONSE_JSON);
         testHelper.expectPrmCall(PRM_RIGHTSHOLDER_1000000322_RESPONSE_JSON, 1000000322L);
-        rightsService.updateAclciRights(Arrays.asList(
+        rightsService.updateAclciRights(List.of(
             buildAclciUsage("019af1aa-c178-467c-9015-c2d18db85229", 122769471, AclciLicenseTypeEnum.CURR_REPUB_K12),
             buildAclciUsage("db86af7e-c2ae-4cc6-b797-6214298b7113", 243618757, AclciLicenseTypeEnum.CURR_REPUB_K12)));
         rightsService.updateAclciRights(List.of(

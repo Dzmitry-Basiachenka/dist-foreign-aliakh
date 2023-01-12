@@ -10,8 +10,8 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Verifies {@link SurveyDateValidator}.
@@ -44,7 +44,7 @@ public class SurveyDateValidatorTest {
 
     @Parameters
     public static Collection<Object[]> data() {
-        return Arrays.asList(new Object[][]{
+        return List.of(new Object[][]{
             {LocalDate.of(2020, 10, 20), LocalDate.of(2020, 10, 20), true},
             {LocalDate.of(2020, 10, 20), LocalDate.of(2020, 10, 21), true},
             {LocalDate.of(2020, 10, 20), LocalDate.of(2020, 10, 19), false}

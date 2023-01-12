@@ -32,7 +32,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -73,7 +72,7 @@ public class UdmBatchServiceTest {
     public void testInsertUdmBatch() {
         mockStatic(RupContextUtils.class);
         UdmBatch udmBatch = buildUdmBatch();
-        List<UdmUsage> udmUsages = Arrays.asList(
+        List<UdmUsage> udmUsages = List.of(
             buildUdmUsage(UDM_USAGE_UID_1, UDM_USAGE_ORIGIN_UID_1),
             buildUdmUsage(UDM_USAGE_UID_2, UDM_USAGE_ORIGIN_UID_2));
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
@@ -142,7 +141,7 @@ public class UdmBatchServiceTest {
 
     @Test
     public void testGetPeriods() {
-        List<Integer> periods = Arrays.asList(202106, 202206);
+        List<Integer> periods = List.of(202106, 202206);
         expect(udmBatchRepository.findPeriods()).andReturn(periods).once();
         replay(udmBatchRepository);
         assertSame(periods, udmBatchService.getPeriods());

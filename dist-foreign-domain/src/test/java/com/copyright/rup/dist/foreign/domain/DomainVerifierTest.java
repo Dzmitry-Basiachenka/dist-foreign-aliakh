@@ -49,8 +49,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Verifies {@link Object#equals(Object)}, {@link Object#hashCode()},
@@ -187,7 +187,7 @@ public class DomainVerifierTest {
             {AclciUsage.class},
             {UdmSurveyDashboardReportDto.class}
         };
-        return Arrays.asList(testData);
+        return List.of(testData);
     }
 
     @Test

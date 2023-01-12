@@ -20,7 +20,6 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -117,7 +116,7 @@ public class AclGrantServiceIntegrationTest {
         List<AclGrantDetail> actualDetails = grantService.createAclGrantDetails(buildGrantSet(),
             createWrWrkInstToSystemTitleMap(), USER_NAME);
         assertEquals(8, actualDetails.size());
-        List<AclGrantDetail> expectedDetails = Arrays.asList(
+        List<AclGrantDetail> expectedDetails = List.of(
             buildAclGrantDetail(
                 DIGITAL, RH_ACCOUNT_1, WR_WRK_INST_1, DIFFERENT_RH, SYSTEM_TITLE_3, false),
             buildAclGrantDetail(
@@ -147,7 +146,7 @@ public class AclGrantServiceIntegrationTest {
         List<AclGrantDetail> actualDetails = grantService.createAclGrantDetails(buildGrantSet(),
             createWrWrkInstToSystemTitleMap(), USER_NAME);
         assertEquals(8, actualDetails.size());
-        List<AclGrantDetail> expectedDetails = Arrays.asList(
+        List<AclGrantDetail> expectedDetails = List.of(
             buildAclGrantDetail(
                 DIGITAL, RH_ACCOUNT_1, WR_WRK_INST_1, DIFFERENT_RH, SYSTEM_TITLE_3, false),
             buildAclGrantDetail(
@@ -180,7 +179,7 @@ public class AclGrantServiceIntegrationTest {
     }
 
     private List<AclGrantDetail> buildAclGrantDetails() {
-        return Arrays.asList(
+        return List.of(
             buildAclGrantDetail(
                 DIGITAL, RH_ACCOUNT_1, WR_WRK_INST_1, DIFFERENT_RH, SYSTEM_TITLE_3, true),
             buildAclGrantDetail(

@@ -9,8 +9,8 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Verifies {@link MarketPeriodValidator}.
@@ -43,7 +43,7 @@ public class MarketPeriodValidatorTest {
 
     @Parameters
     public static Collection<Object[]> data() {
-        return Arrays.asList(new Object[][]{
+        return List.of(new Object[][]{
             {2000, 2005, true},
             {2000, 2000, true},
             {2000, 1999, false}

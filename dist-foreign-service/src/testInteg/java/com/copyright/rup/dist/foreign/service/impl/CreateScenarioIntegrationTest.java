@@ -23,7 +23,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -89,7 +88,7 @@ public class CreateScenarioIntegrationTest {
                 RIGHTSHOLDER_ID_4, RIGHTSHOLDER_ID_3, RIGHTSHOLDER_ID_1, RIGHTSHOLDER_ID_5, RIGHTSHOLDER_ID_2)
             .expectRollups("prm/fas_rollups_response.json",
                 RIGHTSHOLDER_ID_4, RIGHTSHOLDER_ID_3, RIGHTSHOLDER_ID_1, RIGHTSHOLDER_ID_5, RIGHTSHOLDER_ID_2)
-            .expectUsages(Arrays.asList(
+            .expectUsages(List.of(
                 buildUsage("b1f0b236-3ae9-4a60-9fab-61db84199dss", 7000429266L, 1000009997L, SERVICE_FEE_32,
                     "2871.0528", "6100.9872", "8972.0400000000", 122235134L, FAS_PRODUCT_FAMILY,
                     new BigDecimal("9900.00"), false, false),
@@ -123,7 +122,7 @@ public class CreateScenarioIntegrationTest {
                 RIGHTSHOLDER_ID_4, RIGHTSHOLDER_ID_3, RIGHTSHOLDER_ID_1, RIGHTSHOLDER_ID_5, RIGHTSHOLDER_ID_2)
             .expectRollups("prm/not_found_response.json",
                 RIGHTSHOLDER_ID_4, RIGHTSHOLDER_ID_3, RIGHTSHOLDER_ID_1, RIGHTSHOLDER_ID_5, RIGHTSHOLDER_ID_2)
-            .expectUsages(Arrays.asList(
+            .expectUsages(List.of(
                 buildUsage("b1f0b236-3ae9-4a60-9fab-61db84199dss", 7000429266L, 7000429266L, SERVICE_FEE_32,
                     "2871.0528", "6100.9872", "8972.0400000000", 122235134L, FAS_PRODUCT_FAMILY,
                     new BigDecimal("9900.00"), false, false),
@@ -157,7 +156,7 @@ public class CreateScenarioIntegrationTest {
                 RIGHTSHOLDER_ID_10, RIGHTSHOLDER_ID_6, RIGHTSHOLDER_ID_8)
             .expectRollups("prm/cla_rollups_response.json",
                 RIGHTSHOLDER_ID_9, RIGHTSHOLDER_ID_7, RIGHTSHOLDER_ID_10, RIGHTSHOLDER_ID_6, RIGHTSHOLDER_ID_8)
-            .expectUsages(Arrays.asList(
+            .expectUsages(List.of(
                 buildUsage("8fc81e08-3611-4697-8059-6c970ee5d643", 2000133267L, 2000017000L,
                     new BigDecimal("0.10000"), "897.204", "8074.836", "8972.0400000000", 122235134L,
                     FAS2_PRODUCT_FAMILY, new BigDecimal("9900.00"), false, false),
@@ -186,20 +185,20 @@ public class CreateScenarioIntegrationTest {
             .withFilter(buildUsageFilter("26282dbd-3463-58d7-c927-03d3458a656a", "NTS"))
             .expectRollups("prm/nts_rollups_response.json", RIGHTSHOLDER_ID_5, RIGHTSHOLDER_ID_2)
             .expectPreferences("prm/preferences_response.json", RIGHTSHOLDER_ID_5, RIGHTSHOLDER_ID_2)
-            .expectUsages(Arrays.asList(
+            .expectUsages(List.of(
                 buildUsage(USAGE_ID_6, 7000429266L, 1000009997L, SERVICE_FEE_32, "83.3578205256", "177.1353686169",
                     "260.4931891425", 135632563L, NTS_PRODUCT_FAMILY, new BigDecimal(REPORTED_VALUE_1), false, false),
                 buildUsage(USAGE_ID_7, 1000024497L, 1000024497L, SERVICE_FEE_32, "68.6421794744", "145.8646313831",
                     "214.5068108575", 145632563L, NTS_PRODUCT_FAMILY, new BigDecimal(REPORTED_VALUE_2), false, false)))
             .withFilter(buildUsageFilter("26282dbd-3463-58d7-c927-03d3458a656a", NTS_PRODUCT_FAMILY))
-            .expectUsages(Arrays.asList(
+            .expectUsages(List.of(
                 buildUsage(USAGE_ID_6, 7000429266L, 1000009997L, SERVICE_FEE_32, "83.3578205256",
                     "177.1353686169", "260.4931891425", 135632563L, NTS_PRODUCT_FAMILY,
                     new BigDecimal(REPORTED_VALUE_1), false, false),
                 buildUsage(USAGE_ID_7, 1000024497L, 1000024497L, SERVICE_FEE_32,
                     "68.6421794744", "145.8646313831", "214.5068108575", 145632563L, NTS_PRODUCT_FAMILY,
                     new BigDecimal(REPORTED_VALUE_2), false, false)))
-            .expectScenarioExcludedUsages(Arrays.asList(
+            .expectScenarioExcludedUsages(List.of(
                 buildScenarioExcludedUsage("669cf304-0921-41a2-85d5-c3905e77c696", 1000002859L),
                 buildScenarioExcludedUsage("6402d5c8-ba80-4966-a7cc-34ba1fdc1d9c", 1000001820L),
                 buildScenarioExcludedUsage("e001c596-a66f-4fd3-b34c-5ef65a215d68", 1000002562L)))
@@ -218,21 +217,21 @@ public class CreateScenarioIntegrationTest {
             .withFilter(buildUsageFilter("26282dbd-3463-58d7-c927-03d3458a656a", "NTS"))
             .expectRollups("prm/nts_rollups_response.json", RIGHTSHOLDER_ID_5, RIGHTSHOLDER_ID_2)
             .expectPreferences("prm/preferences_response.json", RIGHTSHOLDER_ID_5, RIGHTSHOLDER_ID_2)
-            .expectUsages(Arrays.asList(
+            .expectUsages(List.of(
                 buildUsage(USAGE_ID_6, 7000429266L, 1000009997L, SERVICE_FEE_32, "5.2647044542",
                     "559.8684143076", "565.1331187618", 135632563L, NTS_PRODUCT_FAMILY,
                     new BigDecimal(REPORTED_VALUE_1), false, false),
                 buildUsage(USAGE_ID_7, 1000024497L, 1000024497L, SERVICE_FEE_32, "4.3352955458",
                     "461.0315856924", "465.3668812382", 145632563L, NTS_PRODUCT_FAMILY,
                     new BigDecimal(REPORTED_VALUE_2), false, false)))
-            .expectUsages(Arrays.asList(
+            .expectUsages(List.of(
                 buildUsage(USAGE_ID_6, 7000429266L, 1000009997L, SERVICE_FEE_32, "5.2647044542",
                     "559.8684143076", "565.1331187618", 135632563L, NTS_PRODUCT_FAMILY,
                     new BigDecimal(REPORTED_VALUE_1), false, false),
                 buildUsage(USAGE_ID_7, 1000024497L, 1000024497L, SERVICE_FEE_32, "4.3352955458",
                     "461.0315856924", "465.3668812382", 145632563L, NTS_PRODUCT_FAMILY,
                     new BigDecimal(REPORTED_VALUE_2), false, false)))
-            .expectScenarioExcludedUsages(Arrays.asList(
+            .expectScenarioExcludedUsages(List.of(
                 buildScenarioExcludedUsage("669cf304-0921-41a2-85d5-c3905e77c696", 1000002859L),
                 buildScenarioExcludedUsage("6402d5c8-ba80-4966-a7cc-34ba1fdc1d9c", 1000001820L),
                 buildScenarioExcludedUsage("e001c596-a66f-4fd3-b34c-5ef65a215d68", 1000002562L)))

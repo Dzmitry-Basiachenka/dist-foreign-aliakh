@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
+import java.util.List;
 
 /**
  * Quartz job to get grants from RMS.
@@ -40,6 +40,6 @@ public class GetRightsJob extends QuartzJobBean {
     public void executeInternal(JobExecutionContext context) {
         JobInfo usageJobInfo = chainExecutor.execute(ChainProcessorTypeEnum.RIGHTS);
         JobInfo udmJobInfo = udmChainExecutor.execute(ChainProcessorTypeEnum.RIGHTS);
-        context.setResult(JobInfoUtils.mergeJobResults(Arrays.asList(usageJobInfo, udmJobInfo)));
+        context.setResult(JobInfoUtils.mergeJobResults(List.of(usageJobInfo, udmJobInfo)));
     }
 }

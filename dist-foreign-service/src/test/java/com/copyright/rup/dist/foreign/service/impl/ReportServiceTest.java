@@ -42,7 +42,6 @@ import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -564,7 +563,7 @@ public class ReportServiceTest {
     public void testWriteSalLiabilitiesByRhReport() {
         PipedOutputStream outputStream = createMock(PipedOutputStream.class);
         List<Scenario> scenarios =
-            Arrays.asList(buildScenario(ScenarioStatusEnum.IN_PROGRESS), buildScenario(ScenarioStatusEnum.SUBMITTED));
+            List.of(buildScenario(ScenarioStatusEnum.IN_PROGRESS), buildScenario(ScenarioStatusEnum.SUBMITTED));
         salReportRepository.writeSalLiabilitiesByRhCsvReport(scenarios, outputStream);
         expectLastCall().once();
         replay(salReportRepository);

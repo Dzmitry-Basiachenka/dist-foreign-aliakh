@@ -48,7 +48,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -167,7 +166,7 @@ public class FasUsageServiceTest {
     public void testAddUsagesToScenario() {
         Usage usage1 = buildUsage("d0167f38-e707-43c2-89a7-09abbf558548");
         Usage usage2 = buildUsage("5e4d4020-7066-4a36-bfe2-9efd710287ae");
-        List<Usage> usages = Arrays.asList(usage1, usage2);
+        List<Usage> usages = List.of(usage1, usage2);
         Map<String, Map<String, Rightsholder>> rollUps = new HashMap<>();
         Rightsholder payee = new Rightsholder();
         payee.setAccountNumber(PAYEE_ACCOUNT_NUMBER);
@@ -186,10 +185,10 @@ public class FasUsageServiceTest {
             .andReturn(true).times(2);
         expect(prmIntegrationService.getRhParticipatingServiceFee(true))
             .andReturn(new BigDecimal("0.16000")).times(2);
-        rightsholderService.updateUsagesPayeesAsync(Arrays.asList(usage1, usage2));
+        rightsholderService.updateUsagesPayeesAsync(List.of(usage1, usage2));
         expectLastCall().once();
         replay(usageRepository, prmIntegrationService, rightsholderService);
-        usageService.addUsagesToScenario(Arrays.asList(usage1, usage2), scenario);
+        usageService.addUsagesToScenario(List.of(usage1, usage2), scenario);
         verify(usageRepository, prmIntegrationService, rightsholderService);
     }
 
@@ -284,10 +283,8 @@ public class FasUsageServiceTest {
         usageAuditService.logAction(usageId2, UsageActionTypeEnum.WORK_FOUND,
             "Wr Wrk Inst 876543210 was added based on research");
         expectLastCall().once();
-        List<Usage> usages = Arrays.asList(buildUsage(usageId1), buildUsage(usageId2));
-        expect(usageRepository.findByIds(Arrays.asList(usageId1, usageId2)))
-            .andReturn(usages)
-            .once();
+        List<Usage> usages = List.of(buildUsage(usageId1), buildUsage(usageId2));
+        expect(usageRepository.findByIds(List.of(usageId1, usageId2))).andReturn(usages).once();
         chainExecutor.execute(usages, ChainProcessorTypeEnum.RIGHTS);
         expectLastCall().once();
         replay(usageRepository, usageAuditService, chainExecutor, piIntegrationService, fasUsageRepository);

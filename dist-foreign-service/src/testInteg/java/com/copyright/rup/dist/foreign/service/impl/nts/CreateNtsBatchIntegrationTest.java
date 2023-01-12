@@ -24,7 +24,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -104,10 +103,10 @@ public class CreateNtsBatchIntegrationTest {
                 1000023401L, PRM_RH_1000023401_RESPONSE,
                 1000023995L, "prm/rightsholder_1000023995_response.json"))
             .expectOracleCall(ImmutableMap.of(
-                Arrays.asList(1000023401L, 1000023995L),
+                List.of(1000023401L, 1000023995L),
                 "tax/rh_1000023401_1000023995_tax_country_us_response.json"))
             .expectPreferences(ImmutableMap.of(
-                Arrays.asList(RH_ID_1, RH_ID_2), "preferences/rh_1000023401_1000023995_stm_nts_response.json"))
+                List.of(RH_ID_1, RH_ID_2), "preferences/rh_1000023401_1000023995_stm_nts_response.json"))
             .build()
             .run();
     }
@@ -124,12 +123,12 @@ public class CreateNtsBatchIntegrationTest {
                 1000023401L, PRM_RH_1000023401_RESPONSE,
                 1000023995L, "prm/rightsholder_1000023995_response.json"))
             .expectOracleCall(ImmutableMap.of(
-                Arrays.asList(1000023401L, 1000023995L),
+                List.of(1000023401L, 1000023995L),
                 "tax/rh_1000023401_1000023995_tax_country_us_response.json"))
             .expectPreferences(ImmutableMap.of(
-                Arrays.asList(RH_ID_1, RH_ID_2),
+                List.of(RH_ID_1, RH_ID_2),
                 "preferences/rh_1000023401_1000023995_stm_fas_response.json"))
-            .expectUsages(Arrays.asList(
+            .expectUsages(List.of(
                 buildUsage(DOC_DEL_MARKET, UsageStatusEnum.ELIGIBLE, 658824345L),
                 buildUsage(DOC_DEL_MARKET, UsageStatusEnum.ELIGIBLE, 958824349L)))
             .expectAudit(getEligibleUsageAuditItem())
@@ -149,10 +148,10 @@ public class CreateNtsBatchIntegrationTest {
                 1000023401L, PRM_RH_1000023401_RESPONSE,
                 1000023995L, "prm/rightsholder_1000023995_response.json"))
             .expectOracleCall(ImmutableMap.of(
-                Arrays.asList(1000023401L, 1000023995L), "tax/rh_1000023401_1000023995_tax_country_us_response.json"))
+                List.of(1000023401L, 1000023995L), "tax/rh_1000023401_1000023995_tax_country_us_response.json"))
             .expectPreferences(ImmutableMap.of(
-                Arrays.asList(RH_ID_1, RH_ID_2), "preferences/rh_1000023401_1000023995_eligible_response.json"))
-            .expectUsages(Arrays.asList(
+                List.of(RH_ID_1, RH_ID_2), "preferences/rh_1000023401_1000023995_eligible_response.json"))
+            .expectUsages(List.of(
                 buildUsage(DOC_DEL_MARKET, UsageStatusEnum.ELIGIBLE, 658824345L),
                 buildUsage(DOC_DEL_MARKET, UsageStatusEnum.ELIGIBLE, 958824349L)))
             .expectAudit(getEligibleUsageAuditItem())

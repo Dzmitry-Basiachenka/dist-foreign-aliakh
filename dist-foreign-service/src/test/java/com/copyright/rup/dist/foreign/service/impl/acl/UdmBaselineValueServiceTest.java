@@ -22,7 +22,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -47,7 +46,7 @@ public class UdmBaselineValueServiceTest {
 
     @Test
     public void testGetPeriods() {
-        List<Integer> periods = Arrays.asList(202006, 202112);
+        List<Integer> periods = List.of(202006, 202112);
         expect(baselineValueRepository.findPeriods()).andReturn(periods).once();
         replay(baselineValueRepository);
         assertEquals(periods, udmBaselineValueService.getPeriods());

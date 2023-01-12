@@ -43,7 +43,6 @@ import org.powermock.reflect.Whitebox;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.List;
@@ -194,10 +193,10 @@ public class AclScenarioServiceTest {
 
     @Test
     public void testGetFundPoolDetailsNotToBeDistributedValidCase() {
-        List<DetailLicenseeClass> mapping = Arrays.asList(
-            buildDetailLicenseeClass(1, 1), buildDetailLicenseeClass(2, 51), buildDetailLicenseeClass(3, 51));
+        List<DetailLicenseeClass> mapping =
+            List.of(buildDetailLicenseeClass(1, 1), buildDetailLicenseeClass(2, 51), buildDetailLicenseeClass(3, 51));
         List<AclFundPoolDetailDto> fundPoolDetails =
-            Arrays.asList(buildAclFundPoolDetailDto(1, 1, PRINT_TOU), buildAclFundPoolDetailDto(2, 51, DIGITAL_TOU));
+            List.of(buildAclFundPoolDetailDto(1, 1, PRINT_TOU), buildAclFundPoolDetailDto(2, 51, DIGITAL_TOU));
         expect(aclFundPoolService.getDetailDtosByFundPoolId(FUND_POOL_UID)).andReturn(fundPoolDetails).once();
         expect(aclUsageService.usageExistForLicenseeClassesAndTypeOfUse(BATCH_UID, GRANT_SET_UID,
             Set.of(1), PRINT_TOU)).andReturn(true).once();
@@ -212,10 +211,10 @@ public class AclScenarioServiceTest {
 
     @Test
     public void testGetFundPoolDetailsNotToBeDistributedInvalidNoUsages() {
-        List<DetailLicenseeClass> mapping = Arrays.asList(buildDetailLicenseeClass(1, 1),
-            buildDetailLicenseeClass(2, 51), buildDetailLicenseeClass(3, 51));
+        List<DetailLicenseeClass> mapping =
+            List.of(buildDetailLicenseeClass(1, 1), buildDetailLicenseeClass(2, 51), buildDetailLicenseeClass(3, 51));
         AclFundPoolDetailDto noUsagesDetail = buildAclFundPoolDetailDto(2, 51, DIGITAL_TOU);
-        List<AclFundPoolDetailDto> fundPoolDetails = Arrays.asList(buildAclFundPoolDetailDto(1, 1, PRINT_TOU),
+        List<AclFundPoolDetailDto> fundPoolDetails = List.of(buildAclFundPoolDetailDto(1, 1, PRINT_TOU),
             noUsagesDetail, buildAclFundPoolDetailDto(3, 51, DIGITAL_TOU));
         expect(aclFundPoolService.getDetailDtosByFundPoolId(FUND_POOL_UID)).andReturn(fundPoolDetails).once();
         expect(aclUsageService.usageExistForLicenseeClassesAndTypeOfUse(BATCH_UID, GRANT_SET_UID,

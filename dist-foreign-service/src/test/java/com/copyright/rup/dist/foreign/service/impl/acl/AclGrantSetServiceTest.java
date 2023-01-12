@@ -37,7 +37,6 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -126,7 +125,7 @@ public class AclGrantSetServiceTest {
 
     @Test
     public void testGetGrantPeriods() {
-        List<Integer> grantPeriods = Arrays.asList(202212, 202206, 202112);
+        List<Integer> grantPeriods = List.of(202212, 202206, 202112);
         expect(aclGrantSetRepository.findGrantPeriods()).andReturn(grantPeriods).once();
         replay(aclGrantSetRepository);
         assertSame(grantPeriods, aclGrantSetService.getGrantPeriods());

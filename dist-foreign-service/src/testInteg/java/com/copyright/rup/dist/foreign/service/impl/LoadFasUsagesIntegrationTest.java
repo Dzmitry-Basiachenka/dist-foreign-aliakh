@@ -33,7 +33,6 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -60,7 +59,7 @@ public class LoadFasUsagesIntegrationTest {
     private static final String USAGE_ID_2 = "5ae4880e-0955-4518-8681-2aeeda667474";
     private static final String USAGE_ID_3 = "afef95d3-d525-49ec-91fe-79fdced6830f";
     private static final String USAGE_ID_4 = "ddc1672e-ef63-4965-a6bc-1d299272c953";
-    private static final List<String> IDS = Arrays.asList(USAGE_ID_1, USAGE_ID_2, USAGE_ID_3, USAGE_ID_4);
+    private static final List<String> IDS = List.of(USAGE_ID_1, USAGE_ID_2, USAGE_ID_3, USAGE_ID_4);
     private static final String UPLOADED_REASON = "Uploaded in 'Test_Batch' Batch";
     private static final String FAS2_PRODUCT_FAMILY = "FAS2";
 
@@ -89,7 +88,7 @@ public class LoadFasUsagesIntegrationTest {
             "rights/rms_grants_100011725_response.json");
         testHelper.expectPrmCall("prm/rightsholder_1000024950_response.json", 1000024950L);
         loadUsageBatch();
-        testHelper.assertUsages(Arrays.asList(
+        testHelper.assertUsages(List.of(
             buildUsage(USAGE_ID_1, UsageStatusEnum.NTS_WITHDRAWN, null, null, FAS2_PRODUCT_FAMILY,
                 new BigDecimal("55.0000000000"), new BigDecimal("50.00")),
             buildUsage(USAGE_ID_2, UsageStatusEnum.WORK_NOT_FOUND,

@@ -7,11 +7,11 @@ import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 
 import com.copyright.rup.dist.foreign.repository.api.IUdmPriceTypeRepository;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -36,7 +36,7 @@ public class UdmPriceTypeServiceTest {
 
     @Test
     public void testGetAllPriceTypes() {
-        List<String> priceTypes = Arrays.asList("Individual", "Institution");
+        List<String> priceTypes = List.of("Individual", "Institution");
         expect(udmPriceTypeRepository.findAllPriceTypes()).andReturn(priceTypes).once();
         replay(udmPriceTypeRepository);
         assertEquals(priceTypes, udmPriceTypeService.getAllPriceTypes());
@@ -45,7 +45,7 @@ public class UdmPriceTypeServiceTest {
 
     @Test
     public void testGetAllPriceAccessTypes() {
-        List<String> priceAccessTypes = Arrays.asList("Print", "Digital");
+        List<String> priceAccessTypes = List.of("Print", "Digital");
         expect(udmPriceTypeRepository.findAllPriceAccessTypes()).andReturn(priceAccessTypes).once();
         replay(udmPriceTypeRepository);
         assertEquals(priceAccessTypes, udmPriceTypeService.getAllPriceAccessTypes());

@@ -27,7 +27,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -92,7 +91,7 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
     }
 
     NtsWorkflowIntegrationTestBuilder expectUsage(PaidUsage... usages) {
-        this.expectedUsages = Arrays.asList(usages);
+        this.expectedUsages = List.of(usages);
         return this;
     }
 
@@ -183,7 +182,7 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
                 testHelper.expectGetRollups(expectedRollupsJson, List.of(expectedRollupsRightholderId));
             }
             testHelper.expectCrmCall(Objects.requireNonNull(expectedCrmRequest), Objects.requireNonNull(crmResponse),
-                Arrays.asList("omOrderDetailNumber", "licenseCreateDate"));
+                List.of("omOrderDetailNumber", "licenseCreateDate"));
             loadNtsBatch();
             createScenario();
             scenarioService.submit(actualScenario, "Submitting actualScenario for testing purposes");

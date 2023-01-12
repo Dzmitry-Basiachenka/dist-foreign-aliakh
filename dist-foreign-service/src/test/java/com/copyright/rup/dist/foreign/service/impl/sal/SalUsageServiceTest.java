@@ -48,7 +48,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -174,12 +173,12 @@ public class SalUsageServiceTest {
 
     @Test
     public void testSendForMatching() {
-        List<String> usageIds = Arrays.asList(USAGE_ID_1, USAGE_ID_2);
+        List<String> usageIds = List.of(USAGE_ID_1, USAGE_ID_2);
         Usage usage1 = new Usage();
         usage1.setStatus(UsageStatusEnum.NEW);
         Usage usage2 = new Usage();
         usage2.setStatus(UsageStatusEnum.NEW);
-        List<Usage> usages = Arrays.asList(usage1, usage2);
+        List<Usage> usages = List.of(usage1, usage2);
         expect(salUsageRepository.findByIds(usageIds)).andReturn(usages).once();
         Capture<Runnable> captureRunnable = newCapture();
         chainExecutor.execute(capture(captureRunnable));
