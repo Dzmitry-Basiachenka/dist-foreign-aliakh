@@ -5,13 +5,13 @@ import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.validateField
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyLoadClickListener;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyTextField;
 import static org.easymock.EasyMock.anyObject;
+import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
@@ -64,7 +64,6 @@ public class AclciFundPoolLoadWindowTest {
     private static final Integer GRADE_6_TO_8_NUMBER_OF_STUDENTS = 3;
     private static final Integer GRADE_9_TO_12_NUMBER_OF_STUDENTS = 4;
     private static final Integer GRADE_HE_NUMBER_OF_STUDENTS = 5;
-    private static final String BINDER = "binder";
     private static final String FUND_POOL_NAME_FIELD = "fundPoolName";
     private static final String COVERAGE_YEARS_FIELD = "coverageYears";
     private static final String GROSS_AMOUNT_FIELD = "grossAmount";
@@ -77,13 +76,8 @@ public class AclciFundPoolLoadWindowTest {
     private static final String SPACES_STRING = "   ";
     private static final String INVALID_NUMBER = "not_a_number";
     private static final String NEGATIVE_NUMBER = "-1";
-    private static final String INTEGER_WITH_SPACES_STRING = " 1 ";
-    private static final String INTEGER_WITH_11_DIGITS = "12345678901";
     private static final String ZERO = "0";
-    private static final String ONE = "1";
-    private static final String HUNDRED = "100";
     private static final String EMPTY_FIELD_ERROR = "Field value should be specified";
-    private static final String INVALID_NUMBER_ERROR = "Field value should contain numeric values only";
     private static final String FUND_POOL_EXISTS_ERROR = "Fund Pool with such name already exists";
     private static final String POSITIVE_AND_LENGTH_ERROR =
         "Field value should be positive number and should not exceed 10 digits";
@@ -99,6 +93,8 @@ public class AclciFundPoolLoadWindowTest {
     private static final String COVERAGE_YEARS_ERROR =
         "Coverage years should be in the range 1950-2099, with the second year being greater than the first";
 
+    private Binder<FundPool> binder;
+    private Binder<FundPool> amountsBinder;
     private AclciFundPoolLoadWindow window;
     private IAclciUsageController usageController;
 
@@ -106,6 +102,8 @@ public class AclciFundPoolLoadWindowTest {
     public void setUp() {
         usageController = createMock(IAclciUsageController.class);
         window = new AclciFundPoolLoadWindow(usageController);
+        binder = Whitebox.getInternalState(window, "binder");
+        amountsBinder = Whitebox.getInternalState(window, "amountsBinder");
     }
 
     @Test
@@ -124,10 +122,9 @@ public class AclciFundPoolLoadWindowTest {
     public void testIsValid() {
         FundPool fundPool = new FundPool();
         fundPool.setAclciFields(new AclciFields());
-        expect(usageController.aclciFundPoolExists(FUND_POOL_NAME)).andReturn(false).times(46);
-        expect(usageController.calculateAclciFundPoolAmounts(anyObject(FundPool.class))).andReturn(fundPool).times(30);
+        expect(usageController.aclciFundPoolExists(FUND_POOL_NAME)).andReturn(false).times(2);
+        expect(usageController.calculateAclciFundPoolAmounts(anyObject(FundPool.class))).andReturn(fundPool).times(2);
         replay(usageController);
-        Binder<FundPool> binder = Whitebox.getInternalState(window, BINDER);
         assertFalse(binder.isValid());
         setTextFieldValue(window, FUND_POOL_NAME_FIELD, FUND_POOL_NAME);
         setTextFieldValue(window, COVERAGE_YEARS_FIELD, COVERAGE_YEARS);
@@ -138,7 +135,8 @@ public class AclciFundPoolLoadWindowTest {
         setTextFieldValue(window, GRADE_6_TO_8_NUMBER_OF_STUDENTS_FIELD, GRADE_6_TO_8_NUMBER_OF_STUDENTS.toString());
         setTextFieldValue(window, GRADE_9_TO_12_NUMBER_OF_STUDENTS_FIELD, GRADE_9_TO_12_NUMBER_OF_STUDENTS.toString());
         setTextFieldValue(window, GRADE_HE_NUMBER_OF_STUDENTS_FIELD, GRADE_HE_NUMBER_OF_STUDENTS.toString());
-        assertTrue(binder.isValid());
+        assertEquals(0, binder.validate().getBeanValidationErrors().size());
+        assertEquals(0, amountsBinder.validate().getBeanValidationErrors().size());
         verify(usageController);
     }
 
@@ -147,7 +145,6 @@ public class AclciFundPoolLoadWindowTest {
         expect(usageController.aclciFundPoolExists(FUND_POOL_NAME)).andReturn(true).times(2);
         expect(usageController.aclciFundPoolExists(FUND_POOL_NAME)).andReturn(false).times(1);
         replay(usageController);
-        Binder<?> binder = Whitebox.getInternalState(window, BINDER);
         TextField textField = Whitebox.getInternalState(window, FUND_POOL_NAME_FIELD);
         validateFieldAndVerifyErrorMessage(textField, StringUtils.EMPTY, binder, EMPTY_FIELD_ERROR, false);
         validateFieldAndVerifyErrorMessage(textField, SPACES_STRING, binder, EMPTY_FIELD_ERROR, false);
@@ -161,7 +158,6 @@ public class AclciFundPoolLoadWindowTest {
     @Test
     public void testCoverageYearsFieldValidation() {
         replay(usageController);
-        Binder<?> binder = Whitebox.getInternalState(window, BINDER);
         TextField textField = Whitebox.getInternalState(window, COVERAGE_YEARS_FIELD);
         validateFieldAndVerifyErrorMessage(textField, StringUtils.EMPTY, binder, EMPTY_FIELD_ERROR, false);
         validateFieldAndVerifyErrorMessage(textField, SPACES_STRING, binder, EMPTY_FIELD_ERROR, false);
@@ -175,50 +171,47 @@ public class AclciFundPoolLoadWindowTest {
         validateFieldAndVerifyErrorMessage(textField, "2022-2021", binder, COVERAGE_YEARS_ERROR, false);
         validateFieldAndVerifyErrorMessage(textField, "2021-2021", binder, COVERAGE_YEARS_ERROR, false);
         validateFieldAndVerifyErrorMessage(textField, "2021-2022", binder, null, true);
-        validateFieldAndVerifyErrorMessage(textField, "  2021-2022  ", binder, null, true);
-        validateFieldAndVerifyErrorMessage(textField, COVERAGE_YEARS, binder, null, true);
+        validateFieldAndVerifyErrorMessage(textField, " 2021-2022 ", binder, null, true);
         verify(usageController);
     }
 
     @Test
     public void testGrossAmountFieldValidation() {
         replay(usageController);
-        Binder<?> binder = Whitebox.getInternalState(window, BINDER);
         TextField textField = Whitebox.getInternalState(window, GROSS_AMOUNT_FIELD);
-        validateFieldAndVerifyErrorMessage(textField, StringUtils.EMPTY, binder, EMPTY_FIELD_ERROR, false);
-        validateFieldAndVerifyErrorMessage(textField, SPACES_STRING, binder, EMPTY_FIELD_ERROR, false);
-        validateFieldAndVerifyErrorMessage(textField, INVALID_NUMBER, binder, POSITIVE_AND_LENGTH_ERROR, false);
-        validateFieldAndVerifyErrorMessage(textField, NEGATIVE_NUMBER, binder, POSITIVE_AND_LENGTH_ERROR, false);
-        validateFieldAndVerifyErrorMessage(textField, ZERO, binder, POSITIVE_AND_LENGTH_ERROR, false);
-        validateFieldAndVerifyErrorMessage(textField, INTEGER_WITH_SPACES_STRING, binder, null, true);
-        validateFieldAndVerifyErrorMessage(textField, "0.1", binder, null, true);
-        validateFieldAndVerifyErrorMessage(textField, "0.1234567890", binder, null, true);
-        validateFieldAndVerifyErrorMessage(textField, "0.12345678901", binder, POSITIVE_AND_LENGTH_ERROR, false);
-        validateFieldAndVerifyErrorMessage(textField, "1.1234567890", binder, null, true);
-        validateFieldAndVerifyErrorMessage(textField, "1234567890.1234567890", binder, null, true);
+        validateFieldAndVerifyErrorMessage(textField, StringUtils.EMPTY, amountsBinder, EMPTY_FIELD_ERROR, false);
+        validateFieldAndVerifyErrorMessage(textField, SPACES_STRING, amountsBinder, EMPTY_FIELD_ERROR, false);
+        validateFieldAndVerifyErrorMessage(textField, INVALID_NUMBER, amountsBinder, POSITIVE_AND_LENGTH_ERROR, false);
+        validateFieldAndVerifyErrorMessage(textField, NEGATIVE_NUMBER, amountsBinder, POSITIVE_AND_LENGTH_ERROR, false);
+        validateFieldAndVerifyErrorMessage(textField, ZERO, amountsBinder, POSITIVE_AND_LENGTH_ERROR, false);
+        validateFieldAndVerifyErrorMessage(textField, "0.1", amountsBinder, null, true);
+        validateFieldAndVerifyErrorMessage(textField, "0.1234567890", amountsBinder, null, true);
+        validateFieldAndVerifyErrorMessage(textField, "0.12345678901", amountsBinder, POSITIVE_AND_LENGTH_ERROR, false);
+        validateFieldAndVerifyErrorMessage(textField, "1.1234567890", amountsBinder, null, true);
+        validateFieldAndVerifyErrorMessage(textField, "1234567890.1234567890", amountsBinder, null, true);
         validateFieldAndVerifyErrorMessage(textField,
-            "12345678901.1234567890", binder, POSITIVE_AND_LENGTH_ERROR, false);
+            "12345678901.1234567890", amountsBinder, POSITIVE_AND_LENGTH_ERROR, false);
+        validateFieldAndVerifyErrorMessage(textField, " 1 ", amountsBinder, null, true);
         verify(usageController);
     }
 
     @Test
     public void testIsValidCurriculumDbSplitPercent() {
         replay(usageController);
-        Binder<?> binder = Whitebox.getInternalState(window, BINDER);
         TextField textField = Whitebox.getInternalState(window, CURRICULUM_DB_SPLIT_PERCENT_FIELD);
-        validateFieldAndVerifyErrorMessage(textField, StringUtils.EMPTY, binder, EMPTY_FIELD_ERROR, false);
-        validateFieldAndVerifyErrorMessage(textField, SPACES_STRING, binder, EMPTY_FIELD_ERROR, false);
-        validateFieldAndVerifyErrorMessage(textField, INVALID_NUMBER, binder, INVALID_NUMBER_ERROR, false);
-        validateFieldAndVerifyErrorMessage(textField, NEGATIVE_NUMBER, binder, SPLIT_PERCENT_ERROR, false);
-        validateFieldAndVerifyErrorMessage(textField, ZERO, binder, SPLIT_PERCENT_ERROR, false);
-        setTextFieldValue(window, CURRICULUM_DB_SPLIT_PERCENT_FIELD, INTEGER_WITH_SPACES_STRING);
-        verifyFieldIsValid(binder, CURRICULUM_DB_SPLIT_PERCENT_FIELD, ONE);
-        validateFieldAndVerifyErrorMessage(textField, "0.1", binder, null, true);
-        validateFieldAndVerifyErrorMessage(textField, "0.10", binder, SPLIT_PERCENT_ERROR, false);
-        validateFieldAndVerifyErrorMessage(textField, "100", binder, null, true);
-        validateFieldAndVerifyErrorMessage(textField, "101", binder, SPLIT_PERCENT_ERROR, false);
-        validateFieldAndVerifyErrorMessage(textField, "100.00", binder, SPLIT_PERCENT_ERROR, false);
+        validateFieldAndVerifyErrorMessage(textField, StringUtils.EMPTY, amountsBinder, EMPTY_FIELD_ERROR, false);
+        validateFieldAndVerifyErrorMessage(textField, SPACES_STRING, amountsBinder, EMPTY_FIELD_ERROR, false);
+        validateFieldAndVerifyErrorMessage(textField, INVALID_NUMBER, amountsBinder, SPLIT_PERCENT_ERROR, false);
+        validateFieldAndVerifyErrorMessage(textField, NEGATIVE_NUMBER, amountsBinder, SPLIT_PERCENT_ERROR, false);
+        validateFieldAndVerifyErrorMessage(textField, ZERO, amountsBinder, SPLIT_PERCENT_ERROR, false);
+        validateFieldAndVerifyErrorMessage(textField, "0.1", amountsBinder, null, true);
+        validateFieldAndVerifyErrorMessage(textField, "0.10", amountsBinder, SPLIT_PERCENT_ERROR, false);
+        validateFieldAndVerifyErrorMessage(textField, "100", amountsBinder, null, true);
+        validateFieldAndVerifyErrorMessage(textField, "101", amountsBinder, SPLIT_PERCENT_ERROR, false);
+        validateFieldAndVerifyErrorMessage(textField, "100.00", amountsBinder, SPLIT_PERCENT_ERROR, false);
+        validateFieldAndVerifyErrorMessage(textField, " 1 ", amountsBinder, null, true);
         verify(usageController);
+
     }
 
     @Test
@@ -249,10 +242,10 @@ public class AclciFundPoolLoadWindowTest {
     @Test
     public void testOnUploadButtonClick() {
         mockStatic(Windows.class);
-        FundPool fundPool = buildFundPool();
-        expect(usageController.aclciFundPoolExists(FUND_POOL_NAME)).andReturn(false).times(46);
-        expect(usageController.calculateAclciFundPoolAmounts(anyObject(FundPool.class))).andReturn(fundPool).times(31);
-        usageController.createAclciFundPool(fundPool);
+        FundPool fundPool = buildFundPoolWithAmountsFields();
+        expect(usageController.aclciFundPoolExists(FUND_POOL_NAME)).andReturn(false).times(3);
+        expect(usageController.calculateAclciFundPoolAmounts(eq(fundPool))).andReturn(fundPool).times(2);
+        usageController.createAclciFundPool(buildFundPool());
         expectLastCall().once();
         Windows.showNotificationWindow("Upload has been successfully completed");
         expectLastCall().once();
@@ -280,20 +273,23 @@ public class AclciFundPoolLoadWindowTest {
         verifyTextFieldComponent(verticalLayout.getComponent(0), "Fund Pool Name", false);
         verifyTextFieldComponent(verticalLayout.getComponent(1), "Coverage Years (YYYY-YYYY)", false);
         HorizontalLayout grossAmountLayout = (HorizontalLayout) verticalLayout.getComponent(2);
-        verifyAmountFieldComponent(grossAmountLayout.getComponent(0), "Gross Amount", false);
-        verifyAmountFieldComponent(grossAmountLayout.getComponent(1), "Curriculum DB Split %", false);
+        verifyTextFieldComponent(grossAmountLayout.getComponent(0), "Gross Amount", false);
+        verifyTextFieldComponent(grossAmountLayout.getComponent(1), "Curriculum DB Split %", "20", false);
         HorizontalLayout gradeKto2Layout = (HorizontalLayout) verticalLayout.getComponent(3);
-        verifyAmountFieldComponent(gradeKto2Layout.getComponent(0), "Grade K-2 Number of Students", false);
+        verifyTextFieldComponent(gradeKto2Layout.getComponent(0), "Grade K-2 Number of Students", false);
         verifyTextFieldComponent(gradeKto2Layout.getComponent(1), "Grade K-2 Gross Amount", true);
         HorizontalLayout grade3to5Layout = (HorizontalLayout) verticalLayout.getComponent(4);
-        verifyAmountFieldComponent(grade3to5Layout.getComponent(0), "Grade 3-5 Number of Students", false);
+        verifyTextFieldComponent(grade3to5Layout.getComponent(0), "Grade 3-5 Number of Students", false);
         verifyTextFieldComponent(grade3to5Layout.getComponent(1), "Grade 3-5 Gross Amount", true);
         HorizontalLayout grade6to8Layout = (HorizontalLayout) verticalLayout.getComponent(5);
-        verifyAmountFieldComponent(grade6to8Layout.getComponent(0), "Grade 6-8 Number of Students", false);
+        verifyTextFieldComponent(grade6to8Layout.getComponent(0), "Grade 6-8 Number of Students", false);
         verifyTextFieldComponent(grade6to8Layout.getComponent(1), "Grade 6-8 Gross Amount", true);
         HorizontalLayout grade9to12Layout = (HorizontalLayout) verticalLayout.getComponent(6);
-        verifyAmountFieldComponent(grade9to12Layout.getComponent(0), "Grade 9-12 Number of Students", false);
+        verifyTextFieldComponent(grade9to12Layout.getComponent(0), "Grade 9-12 Number of Students", false);
         verifyTextFieldComponent(grade9to12Layout.getComponent(1), "Grade 9-12 Gross Amount", true);
+        HorizontalLayout gradeHeLayout = (HorizontalLayout) verticalLayout.getComponent(7);
+        verifyTextFieldComponent(gradeHeLayout.getComponent(0), "Grade HE Number of Students", false);
+        verifyTextFieldComponent(gradeHeLayout.getComponent(1), "Grade HE Gross Amount", true);
         HorizontalLayout totalGrossAmountLayout = (HorizontalLayout) verticalLayout.getComponent(8);
         verifyTextFieldComponent(totalGrossAmountLayout.getComponent(0), "Curriculum DB Gross Amount", true);
         verifyTextFieldComponent(totalGrossAmountLayout.getComponent(1), "Total Gross Amount", true);
@@ -306,10 +302,11 @@ public class AclciFundPoolLoadWindowTest {
         assertEquals(StringUtils.EMPTY, textField.getValue());
     }
 
-    private void verifyAmountFieldComponent(Component component, String caption, boolean isReadonly) {
+    private void verifyTextFieldComponent(Component component, String caption, String expectedValue,
+                                          boolean isReadonly) {
         TextField textField = verifyTextField(component, caption);
         assertEquals(isReadonly, textField.isReadOnly());
-        assertEquals(ZERO, textField.getValue());
+        assertEquals(expectedValue, textField.getValue());
     }
 
     private void verifyButtonsLayout(Component component) {
@@ -337,41 +334,55 @@ public class AclciFundPoolLoadWindowTest {
         return (Button) component;
     }
 
-    private void verifyFieldErrorMessage(Binder<?> binder, String fieldName, String message) {
-        binder.validate();
+    private void verifyFieldErrorMessage(Binder fundPoolBinder, String fieldName, String message) {
+        fundPoolBinder.validate();
         AbstractComponent textField = Whitebox.getInternalState(window, fieldName);
         assertEquals(message, textField.getErrorMessage().toString());
     }
 
-    private void verifyFieldIsValid(Binder<?> binder, String fieldName, Object expectedValue) {
-        binder.validate();
-        AbstractComponent textField = Whitebox.getInternalState(window, fieldName);
+    private void verifyFieldIsValid(Binder fundPoolBinder, String fieldName) {
+        fundPoolBinder.validate();
+        AbstractField<?> textField = Whitebox.getInternalState(window, fieldName);
         assertNull(textField.getErrorMessage());
-        assertEquals(expectedValue, ((AbstractField<?>) textField).getValue());
     }
 
     private void testGradeNumberOfStudentsFieldValidation(String fieldName) {
         replay(usageController);
-        Binder<?> binder = Whitebox.getInternalState(window, BINDER);
         setTextFieldValue(window, CURRICULUM_DB_SPLIT_PERCENT_FIELD, CURRICULUM_DB_SPLIT_PERCENT.toString());
         setTextFieldValue(window, fieldName, StringUtils.EMPTY);
-        verifyFieldErrorMessage(binder, fieldName, EMPTY_FIELD_ERROR);
+        verifyFieldErrorMessage(amountsBinder, fieldName, EMPTY_FIELD_ERROR);
         setTextFieldValue(window, fieldName, SPACES_STRING);
-        verifyFieldErrorMessage(binder, fieldName, EMPTY_FIELD_ERROR);
-        setTextFieldValue(window, fieldName, INTEGER_WITH_11_DIGITS);
-        verifyFieldErrorMessage(binder, fieldName, POSITIVE_OR_ZERO_AND_LENGTH_ERROR);
+        verifyFieldErrorMessage(amountsBinder, fieldName, EMPTY_FIELD_ERROR);
+        setTextFieldValue(window, fieldName, "12345678901");
+        verifyFieldErrorMessage(amountsBinder, fieldName, POSITIVE_OR_ZERO_AND_LENGTH_ERROR);
         setTextFieldValue(window, GRADE_K_TO_2_NUMBER_OF_STUDENTS_FIELD, ZERO);
         setTextFieldValue(window, GRADE_3_TO_5_NUMBER_OF_STUDENTS_FIELD, ZERO);
         setTextFieldValue(window, GRADE_6_TO_8_NUMBER_OF_STUDENTS_FIELD, ZERO);
         setTextFieldValue(window, GRADE_9_TO_12_NUMBER_OF_STUDENTS_FIELD, ZERO);
         setTextFieldValue(window, GRADE_HE_NUMBER_OF_STUDENTS_FIELD, ZERO);
-        verifyFieldErrorMessage(binder, fieldName, NUMBER_OF_STUDENTS_NOT_ALL_ZERO_ERROR);
-        setTextFieldValue(window, fieldName, ONE);
-        setTextFieldValue(window, CURRICULUM_DB_SPLIT_PERCENT_FIELD, HUNDRED);
-        verifyFieldErrorMessage(binder, fieldName, NUMBER_OF_STUDENTS_NOT_ZERO_ERROR);
+        verifyFieldErrorMessage(amountsBinder, fieldName, NUMBER_OF_STUDENTS_NOT_ALL_ZERO_ERROR);
+        setTextFieldValue(window, fieldName, "1");
+        setTextFieldValue(window, CURRICULUM_DB_SPLIT_PERCENT_FIELD, "100");
+        verifyFieldErrorMessage(amountsBinder, fieldName, NUMBER_OF_STUDENTS_NOT_ZERO_ERROR);
         setTextFieldValue(window, CURRICULUM_DB_SPLIT_PERCENT_FIELD, CURRICULUM_DB_SPLIT_PERCENT.toString());
-        verifyFieldIsValid(binder, fieldName, ONE);
+        verifyFieldIsValid(amountsBinder, fieldName);
+        setTextFieldValue(window, CURRICULUM_DB_SPLIT_PERCENT_FIELD, " 20 ");
+        verifyFieldIsValid(amountsBinder, fieldName);
         verify(usageController);
+    }
+
+    private FundPool buildFundPoolWithAmountsFields() {
+        FundPool fundPool = new FundPool();
+        AclciFields aclciFields = new AclciFields();
+        aclciFields.setGrossAmount(new BigDecimal("1000.12"));
+        aclciFields.setCurriculumDbSplitPercent(new BigDecimal("0.20000"));
+        aclciFields.setGradeKto2NumberOfStudents(GRADE_K_TO_2_NUMBER_OF_STUDENTS);
+        aclciFields.setGrade3to5NumberOfStudents(GRADE_3_TO_5_NUMBER_OF_STUDENTS);
+        aclciFields.setGrade6to8NumberOfStudents(GRADE_6_TO_8_NUMBER_OF_STUDENTS);
+        aclciFields.setGrade9to12NumberOfStudents(GRADE_9_TO_12_NUMBER_OF_STUDENTS);
+        aclciFields.setGradeHeNumberOfStudents(GRADE_HE_NUMBER_OF_STUDENTS);
+        fundPool.setAclciFields(aclciFields);
+        return fundPool;
     }
 
     private FundPool buildFundPool() {
