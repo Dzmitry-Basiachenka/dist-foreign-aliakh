@@ -38,7 +38,6 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -102,13 +101,13 @@ public class SalWorkflowIntegrationTestBuilder implements Builder<Runner> {
 
     SalWorkflowIntegrationTestBuilder withItemBankCsvFile(String csvFile, String... usageIds) {
         this.itemBankCsvFile = csvFile;
-        this.predefinedItemBankDetailIds = Arrays.asList(usageIds);
+        this.predefinedItemBankDetailIds = List.of(usageIds);
         return this;
     }
 
     SalWorkflowIntegrationTestBuilder withUsageDataCsvFile(String csvFile, String... usageIds) {
         this.usageDataCsvFile = csvFile;
-        this.predefinedUsageDataDetailIds = Arrays.asList(usageIds);
+        this.predefinedUsageDataDetailIds = List.of(usageIds);
         return this;
     }
 
@@ -134,7 +133,7 @@ public class SalWorkflowIntegrationTestBuilder implements Builder<Runner> {
 
     SalWorkflowIntegrationTestBuilder expectRollups(String rollupsJson, String... rollupsRightsholdersIds) {
         this.expectedRollupsJson = rollupsJson;
-        this.expectedRollupsRightholderIds = Arrays.asList(rollupsRightsholdersIds);
+        this.expectedRollupsRightholderIds = List.of(rollupsRightsholdersIds);
         return this;
     }
 
@@ -155,7 +154,7 @@ public class SalWorkflowIntegrationTestBuilder implements Builder<Runner> {
     }
 
     SalWorkflowIntegrationTestBuilder expectLmDetails(String... lmDetailsJsonFile) {
-        this.expectedLmDetailsJsonFiles = Arrays.asList(lmDetailsJsonFile);
+        this.expectedLmDetailsJsonFiles = List.of(lmDetailsJsonFile);
         return this;
     }
 
@@ -165,7 +164,7 @@ public class SalWorkflowIntegrationTestBuilder implements Builder<Runner> {
     }
 
     SalWorkflowIntegrationTestBuilder expectPaidUsageLmDetailIds(String... usageLmDetailIds) {
-        this.expectedPaidUsageLmDetailIds = Arrays.asList(usageLmDetailIds);
+        this.expectedPaidUsageLmDetailIds = List.of(usageLmDetailIds);
         return this;
     }
 
@@ -222,7 +221,7 @@ public class SalWorkflowIntegrationTestBuilder implements Builder<Runner> {
             testHelper.expectGetRmsRights(expectedRmsRequestsToResponses);
             testHelper.expectGetRollups(expectedRollupsJson, expectedRollupsRightholderIds);
             testHelper.expectCrmCall(expectedCrmRequestJsonFile, expectedCrmResponseJsonFile,
-                Arrays.asList("omOrderDetailNumber", "licenseCreateDate"));
+                List.of("omOrderDetailNumber", "licenseCreateDate"));
             loadItemBank();
             if (Objects.nonNull(usageDataCsvFile)) {
                 loadUsageData();

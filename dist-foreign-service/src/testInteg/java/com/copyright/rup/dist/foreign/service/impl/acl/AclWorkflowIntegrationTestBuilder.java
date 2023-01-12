@@ -58,7 +58,6 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -179,7 +178,7 @@ public class AclWorkflowIntegrationTestBuilder implements Builder<Runner> {
 
     AclWorkflowIntegrationTestBuilder withPrmRollups(String rollupsJson, String... rollupsRightsholdersIds) {
         this.expectedRollupsJson = rollupsJson;
-        this.expectedRollupsRightholderIds = Arrays.asList(rollupsRightsholdersIds);
+        this.expectedRollupsRightholderIds = List.of(rollupsRightsholdersIds);
         return this;
     }
 
@@ -234,7 +233,7 @@ public class AclWorkflowIntegrationTestBuilder implements Builder<Runner> {
     }
 
     AclWorkflowIntegrationTestBuilder withLmDetails(String... lmDetailsJson) {
-        this.expectedLmDetailsJson = Arrays.asList(lmDetailsJson);
+        this.expectedLmDetailsJson = List.of(lmDetailsJson);
         return this;
     }
 
@@ -374,7 +373,7 @@ public class AclWorkflowIntegrationTestBuilder implements Builder<Runner> {
                     udmValueDto.setContentFlag(true);
                     udmValueDto.setContentUnitPrice(new BigDecimal("15"));
                     udmValueDto.setStatus(UdmValueStatusEnum.RESEARCH_COMPLETE);
-                    List<String> actionReasons = Arrays.asList(
+                    List<String> actionReasons = List.of(
                         "The field 'Price' was edited. Old Value is not specified. New Value is '100'",
                         "The field 'Currency' was edited. Old Value is not specified. New Value is 'EUR'");
                     udmValueService.updateValue(udmValueDto, actionReasons);
@@ -486,7 +485,7 @@ public class AclWorkflowIntegrationTestBuilder implements Builder<Runner> {
         }
 
         private void verifyAclScenarioAudit() {
-            List<Pair<ScenarioActionTypeEnum, String>> expectedAudit = Arrays.asList(
+            List<Pair<ScenarioActionTypeEnum, String>> expectedAudit = List.of(
                 Pair.of(ScenarioActionTypeEnum.ARCHIVED, ""),
                 Pair.of(ScenarioActionTypeEnum.SENT_TO_LM, ""),
                 Pair.of(ScenarioActionTypeEnum.APPROVED, "Approving scenario for testing purposes"),

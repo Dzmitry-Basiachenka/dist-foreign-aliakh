@@ -22,7 +22,6 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -86,14 +85,14 @@ public class AclWorkflowIntegrationTest {
             .withExpectedUsages("acl/usage/udm_usages_workflow.json")
             .withExpectedValues("acl/value/udm_value_dto_workflow.json")
             .withExpectedValuesBaseline("acl/value/udm_value_dto_baseline_workflow.json")
-            .withUdmUsageAuditItems(Arrays.asList(
+            .withUdmUsageAuditItems(List.of(
                 "acl/audit/udm_usages_audit_workflow_1.json",
                 "acl/audit/udm_usages_audit_workflow_2.json",
                 "acl/audit/udm_usages_audit_workflow_3.json",
                 "acl/audit/udm_usages_audit_workflow_4.json",
                 "acl/audit/udm_usages_audit_workflow_5.json",
                 "acl/audit/udm_usages_audit_workflow_6.json"))
-            .withUdmValueAuditItems(Arrays.asList(
+            .withUdmValueAuditItems(List.of(
                 "acl/audit/udm_values_audit_workflow_1.json",
                 "acl/audit/udm_values_audit_workflow_2.json",
                 "acl/audit/udm_values_audit_workflow_3.json",

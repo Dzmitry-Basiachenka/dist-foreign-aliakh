@@ -17,7 +17,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -83,7 +82,7 @@ public class SalWorkflowIntegrationTest {
             .expectUsageAudit(IB_USAGE_ID_1, buildExpectedItemBankDetailAudit())
             .expectUsageAudit(IB_USAGE_ID_2, buildExpectedItemBankDetailAudit())
             .expectUsageAudit(IB_USAGE_ID_3, buildExpectedItemBankDetailAudit())
-            .expectPostDistributionUsageAudit(LM_DETAIL_ID, Arrays.asList(
+            .expectPostDistributionUsageAudit(LM_DETAIL_ID, List.of(
                 buildAuditItem(UsageActionTypeEnum.ARCHIVED, "Usage was sent to CRM"),
                 buildAuditItem(UsageActionTypeEnum.PAID, "Usage has been created based on Post-Distribution process")))
             .build()
@@ -133,7 +132,7 @@ public class SalWorkflowIntegrationTest {
     }
 
     private List<UsageAuditItem> buildExpectedItemBankDetailAudit() {
-        return Arrays.asList(
+        return List.of(
             buildAuditItem(UsageActionTypeEnum.ARCHIVED, "Usage was sent to CRM"),
             buildAuditItem(UsageActionTypeEnum.PAID, "Usage has been paid according to information from the LM"),
             buildAuditItem(UsageActionTypeEnum.ELIGIBLE, "Usage has become eligible"),
@@ -144,7 +143,7 @@ public class SalWorkflowIntegrationTest {
     }
 
     private List<UsageAuditItem> buildExpectedUsageDataDetailAudit() {
-        return Arrays.asList(
+        return List.of(
             buildAuditItem(UsageActionTypeEnum.ARCHIVED, "Usage was sent to CRM"),
             buildAuditItem(UsageActionTypeEnum.PAID, "Usage has been paid according to information from the LM"),
             buildAuditItem(UsageActionTypeEnum.LOADED, UPLOADED_REASON));

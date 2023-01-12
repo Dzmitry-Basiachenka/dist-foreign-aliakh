@@ -10,8 +10,8 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Validates {@link WorkTitleStandardNumberValidator}.
@@ -51,7 +51,7 @@ public class WorkTitleStandardNumberValidatorTest {
 
     @Parameters
     public static Collection<Object[]> data() {
-        return Arrays.asList(new Object[][]{
+        return List.of(new Object[][]{
             {null, null, null, true},
             {WR_WRK_INST, WORK_TITLE, STANDARD_NUMBER, true},
             {WR_WRK_INST, WORK_TITLE, null, true},

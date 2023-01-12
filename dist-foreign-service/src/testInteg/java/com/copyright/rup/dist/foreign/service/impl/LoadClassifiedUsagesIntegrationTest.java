@@ -25,7 +25,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -68,7 +67,7 @@ public class LoadClassifiedUsagesIntegrationTest {
 
     @Test
     public void testLoadClassifiedUsages() throws IOException {
-        List<AaclClassifiedUsage> usages = Arrays.asList(
+        List<AaclClassifiedUsage> usages = List.of(
             buildUsage(USAGE_ID_1, 122825976L, "booK", "life sciences", "exgp", "comment"),
             buildUsage(USAGE_ID_2, 122825976L, "DisQualified", "engineering", "Mu", "comment"),
             buildUsage(USAGE_ID_3, 123456789L, "Book", "life sciences", "exgp", "updated comment"));
@@ -112,7 +111,7 @@ public class LoadClassifiedUsagesIntegrationTest {
     }
 
     private void assertUsages() throws IOException {
-        List<Usage> actualUsages = aaclUsageRepository.findByIds(Arrays.asList(USAGE_ID_1, USAGE_ID_2, USAGE_ID_3))
+        List<Usage> actualUsages = aaclUsageRepository.findByIds(List.of(USAGE_ID_1, USAGE_ID_2, USAGE_ID_3))
             .stream()
             .sorted(Comparator.comparing(Usage::getId))
             .collect(Collectors.toList());

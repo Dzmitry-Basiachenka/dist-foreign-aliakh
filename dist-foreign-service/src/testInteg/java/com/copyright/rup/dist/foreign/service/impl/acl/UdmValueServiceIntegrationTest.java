@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -27,7 +26,7 @@ import java.util.List;
 @ContextConfiguration("classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-test-context.xml")
 public class UdmValueServiceIntegrationTest {
 
-    private static final List<Currency> CURRENCIES = Arrays.asList(
+    private static final List<Currency> CURRENCIES = List.of(
         new Currency("USD", "US Dollar"),
         new Currency("AUD", "Australian Dollar"),
         new Currency("CAD", "Canadian Dollar"),

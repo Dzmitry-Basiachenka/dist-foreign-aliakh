@@ -16,7 +16,6 @@ import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -64,7 +63,7 @@ public class LdmtDetailsValidatorTest {
             ldmtDetail.setTypeOfUse(INVALID_TYPE_OF_USE);
             ldmtDetail.setGrossAmount(INVALID_AMOUNT);
             ldmtDetail.setNetAmount(INVALID_AMOUNT);
-            validator.validate(Arrays.asList(ldmtDetail, ldmtDetail));
+            validator.validate(List.of(ldmtDetail, ldmtDetail));
             fail();
         } catch (ValidationException e) {
             assertEquals(LDMT_DETAIL_0_IS_NOT_VALID +
@@ -146,7 +145,7 @@ public class LdmtDetailsValidatorTest {
         replay(licenseeClassService);
         try {
             LdmtDetail ldmtDetail = buildLdmtDetail();
-            validator.validate(Arrays.asList(ldmtDetail, ldmtDetail));
+            validator.validate(List.of(ldmtDetail, ldmtDetail));
             fail();
         } catch (ValidationException e) {
             assertEquals("LDMT details contain duplicate Detail Licensee Class Id, Type of Use pairs: (1, PRINT)",

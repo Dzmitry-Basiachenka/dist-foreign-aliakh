@@ -53,7 +53,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
@@ -78,7 +77,7 @@ import java.util.stream.IntStream;
 public class AaclUsageService implements IAaclUsageService {
 
     private static final List<BigDecimal> DEFAULT_USAGES_AGE_WEIGHTS =
-        Arrays.asList(new BigDecimal("1.00"), new BigDecimal("0.75"), new BigDecimal("0.50"), new BigDecimal("0.25"));
+        List.of(new BigDecimal("1.00"), new BigDecimal("0.75"), new BigDecimal("0.50"), new BigDecimal("0.25"));
     private static final BigDecimal USAGES_AGE_WEIGHT_ZERO = new BigDecimal("0.00");
     private static final String INSERT_BASELINE_FINISHED_LOG_MESSAGE_FORMAT = "Insert AACL usages from baseline. " +
         "Finished. UsageBatchName={}, Period={}, NumberOfYears={}, UsagesCount={}, UserName={}";

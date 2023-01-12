@@ -25,7 +25,6 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -69,8 +68,7 @@ public class UdmProxyValueServiceTest {
         udmProxyValueRepository.clearProxyValues(PERIOD, USER_NAME);
         expectLastCall().once();
         expect(udmProxyValueRepository.applyProxyValues(PERIOD, USER_NAME))
-            .andReturn(Arrays.asList("db9e6182-cf80-4179-ae77-6d9c7d6d1d0d", "e80c332b-068a-4ea0-889a-5f2a89b31035"))
-            .once();
+            .andReturn(List.of("db9e6182-cf80-4179-ae77-6d9c7d6d1d0d", "e80c332b-068a-4ea0-889a-5f2a89b31035")).once();
         udmValueAuditService.logAction("db9e6182-cf80-4179-ae77-6d9c7d6d1d0d", UdmValueActionTypeEnum.PROXY_CALCULATION,
             "Proxy value was applied based on proxy calculation for '202012' period");
         expectLastCall().once();
@@ -84,7 +82,7 @@ public class UdmProxyValueServiceTest {
 
     @Test
     public void testFindPeriods() {
-        List<Integer> periods = Arrays.asList(202012, 202112);
+        List<Integer> periods = List.of(202012, 202112);
         expect(udmProxyValueRepository.findPeriods()).andReturn(periods).once();
         replay(udmProxyValueRepository);
         assertEquals(periods, udmProxyValueService.findPeriods());
@@ -95,7 +93,7 @@ public class UdmProxyValueServiceTest {
     public void testGetDtosByFilter() {
         UdmProxyValueFilter filter = new UdmProxyValueFilter();
         filter.setPeriods(Set.of(202012));
-        List<UdmProxyValueDto> valueDtos = Arrays.asList(new UdmProxyValueDto(), new UdmProxyValueDto());
+        List<UdmProxyValueDto> valueDtos = List.of(new UdmProxyValueDto(), new UdmProxyValueDto());
         expect(udmProxyValueRepository.findDtosByFilter(filter)).andReturn(valueDtos).once();
         replay(udmProxyValueRepository);
         assertEquals(valueDtos, udmProxyValueService.getDtosByFilter(filter));

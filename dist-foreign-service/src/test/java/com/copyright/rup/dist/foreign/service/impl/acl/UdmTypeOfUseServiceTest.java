@@ -18,7 +18,6 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -46,7 +45,7 @@ public class UdmTypeOfUseServiceTest {
 
     @Test
     public void testGetAllUdmTous() {
-        List<String> udmTous = Arrays.asList("UDM_TOU_1", "UDM_TOU_2", "UDM_TOU_3", "UDM_TOU_5", "UDM_TOU_6");
+        List<String> udmTous = List.of("UDM_TOU_1", "UDM_TOU_2", "UDM_TOU_3", "UDM_TOU_5", "UDM_TOU_6");
         expect(udmTypeOfUseRepository.findAllUdmTous()).andReturn(udmTous).once();
         replay(udmTypeOfUseRepository);
         assertEquals(udmTous, udmTypeOfUseService.getAllUdmTous());

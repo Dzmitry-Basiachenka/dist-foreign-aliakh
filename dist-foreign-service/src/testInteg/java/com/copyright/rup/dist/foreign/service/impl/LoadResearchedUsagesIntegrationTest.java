@@ -24,7 +24,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -67,10 +66,10 @@ public class LoadResearchedUsagesIntegrationTest {
         testHelper.createRestServer();
         testHelper.expectGetRmsRights("rights/fas/rms_grants_request_2.json", "rights/fas/rms_grants_response_2.json");
         testHelper.expectPrmCall("prm/rightsholder_1000023401_response.json", 1000023401L);
-        fasUsageService.loadResearchedUsages(Arrays.asList(
+        fasUsageService.loadResearchedUsages(List.of(
             buildResearchedUsage(USAGE_ID_1, 658824345L, "1008902112377654XX", "VALISBN13", "Medical Journal"),
             buildResearchedUsage(USAGE_ID_2, 854030732L, null, null, "Technical Journal")));
-        testHelper.assertUsages(Arrays.asList(buildUsage(USAGE_ID_1, UsageStatusEnum.ELIGIBLE, 658824345L,
+        testHelper.assertUsages(List.of(buildUsage(USAGE_ID_1, UsageStatusEnum.ELIGIBLE, 658824345L,
             1000023401L, "Medical Journal", "1008902112377654XX", "VALISSN"),
             buildUsage(USAGE_ID_2, UsageStatusEnum.RH_NOT_FOUND, 854030732L, null, "Technical Journal",
                 "2998622115929154XX", "VALISSN"),

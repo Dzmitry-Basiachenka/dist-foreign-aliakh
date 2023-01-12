@@ -7,7 +7,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -22,7 +21,7 @@ import java.util.List;
 public class RhTaxInformationCsvReportWriter extends BaseCsvReportWriter<RhTaxInformation> {
 
     private static final List<String> HEADERS =
-        Arrays.asList("Type of Form", "Number of Letter", "Product Family", "Payee Account #", "Payee Name",
+        List.of("Type of Form", "Number of Letter", "Product Family", "Payee Account #", "Payee Name",
             "RH Account #", "RH Name", "TBO Account #", "TBO Name", "Attn:", "Recipient Address1", "Recipient Address2",
             "Recipient Address3", "Recipient Address4", "City", "State", "Zip Code", "Country", "Paygroup",
             "Witholding Indicator");

@@ -10,8 +10,8 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Validates {@link UdmWorkInfoValidator}.
@@ -44,7 +44,7 @@ public class UdmWorkInfoValidatorTest {
 
     @Parameters
     public static Collection<Object[]> data() {
-        return Arrays.asList(new Object[][]{
+        return List.of(new Object[][]{
             {null, null, null, false},
             {WR_WRK_INST, TITLE, STANDARD_NUMBER, true},
             {WR_WRK_INST, TITLE, null, true},

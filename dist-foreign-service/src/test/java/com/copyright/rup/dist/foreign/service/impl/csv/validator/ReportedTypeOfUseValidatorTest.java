@@ -14,7 +14,6 @@ import com.copyright.rup.dist.foreign.service.api.acl.IUdmTypeOfUseService;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -36,7 +35,7 @@ public class ReportedTypeOfUseValidatorTest {
         "'None', otherwise it should be filled in";
     private static final String TOU_NOT_EXIST_ERROR_MESSAGE = "Reported TOU doesn't exist in the system";
 
-    private final List<String> udmTous = Arrays.asList(COPY_FOR_MYSELF, EMAIL_COPY);
+    private final List<String> udmTous = List.of(COPY_FOR_MYSELF, EMAIL_COPY);
 
     private ReportedTypeOfUseValidator validator;
 

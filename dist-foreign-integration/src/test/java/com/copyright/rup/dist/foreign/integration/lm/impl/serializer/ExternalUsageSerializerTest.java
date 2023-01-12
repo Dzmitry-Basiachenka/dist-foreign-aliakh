@@ -24,7 +24,6 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -51,7 +50,7 @@ public class ExternalUsageSerializerTest {
         JsonGenerator jsonGenerator = new JsonFactory().createGenerator(stringWriter);
         jsonGenerator.setPrettyPrinter(new DefaultPrettyPrinter());
         externalUsageSerializer.serialize(
-            new ExternalUsageWrapper(Arrays.asList(
+            new ExternalUsageWrapper(List.of(
                 buildExternalUsage("5bd86764-d57b-443f-9891-adb57adb22fb"),
                 buildExternalUsage("59e217bf-8704-43a7-8272-9ca486ba21e3"))),
             jsonGenerator, new DefaultSerializerProvider.Impl());
@@ -66,7 +65,7 @@ public class ExternalUsageSerializerTest {
         JsonGenerator jsonGenerator = new JsonFactory().createGenerator(stringWriter);
         jsonGenerator.setPrettyPrinter(new DefaultPrettyPrinter());
         externalUsageSerializer.serialize(
-            new ExternalUsageWrapper(Arrays.asList(
+            new ExternalUsageWrapper(List.of(
                 buildExternalUsage("bb5de01e-3375-4226-b484-d5f2c6f109c4", "PRINT"),
                 buildExternalUsage("53b7f67e-d891-415d-82da-029f21b45802", "DIGITAL"))),
             jsonGenerator, new DefaultSerializerProvider.Impl());

@@ -6,7 +6,9 @@ import com.copyright.rup.dist.common.test.liquibase.TestData;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageBatch.AclciFields;
+
 import com.google.common.collect.ImmutableMap;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,7 +18,6 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -63,7 +64,7 @@ public class AclciWorkflowIntegrationTest {
                 1000000322L, "prm/rightsholder_1000000322_response.json",
                 1000009522L, "prm/rightsholder_1000009522_response.json"))
             .withExpectedUsages("aclci/usage/aclci_usages_workflow.json")
-            .withUsageAuditItems(Arrays.asList(
+            .withUsageAuditItems(List.of(
                 "aclci/audit/aclci_usages_audit_workflow_1.json",
                 "aclci/audit/aclci_usages_audit_workflow_2.json"))
             .build()

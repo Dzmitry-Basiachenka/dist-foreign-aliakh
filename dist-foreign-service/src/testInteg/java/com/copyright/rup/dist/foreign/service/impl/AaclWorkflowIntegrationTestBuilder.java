@@ -53,7 +53,6 @@ import org.springframework.stereotype.Component;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -126,7 +125,7 @@ public class AaclWorkflowIntegrationTestBuilder implements Builder<Runner> {
 
     AaclWorkflowIntegrationTestBuilder withUsagesCsvFile(String csvFile, int expectedCount, String... usageIds) {
         this.usagesCsvFile = csvFile;
-        this.predefinedUsageIds = Arrays.asList(usageIds);
+        this.predefinedUsageIds = List.of(usageIds);
         this.expectedUploadedCount = expectedCount;
         return this;
     }
@@ -193,7 +192,7 @@ public class AaclWorkflowIntegrationTestBuilder implements Builder<Runner> {
 
     AaclWorkflowIntegrationTestBuilder expectRollups(String rollupsJson, String... rollupsRightsholdersIds) {
         this.expectedRollupsJson = rollupsJson;
-        this.expectedRollupsRightholderIds = Arrays.asList(rollupsRightsholdersIds);
+        this.expectedRollupsRightholderIds = List.of(rollupsRightsholdersIds);
         return this;
     }
 
@@ -208,7 +207,7 @@ public class AaclWorkflowIntegrationTestBuilder implements Builder<Runner> {
     }
 
     AaclWorkflowIntegrationTestBuilder expectPaidUsageLmDetailIds(String... usageLmDetailIds) {
-        this.expectedPaidUsageLmDetailIds = Arrays.asList(usageLmDetailIds);
+        this.expectedPaidUsageLmDetailIds = List.of(usageLmDetailIds);
         return this;
     }
 
@@ -219,7 +218,7 @@ public class AaclWorkflowIntegrationTestBuilder implements Builder<Runner> {
     }
 
     AaclWorkflowIntegrationTestBuilder expectLmDetails(String... lmDetailsJsonFile) {
-        this.expectedLmDetailsJsonFiles = Arrays.asList(lmDetailsJsonFile);
+        this.expectedLmDetailsJsonFiles = List.of(lmDetailsJsonFile);
         return this;
     }
 
@@ -256,7 +255,7 @@ public class AaclWorkflowIntegrationTestBuilder implements Builder<Runner> {
             testHelper.expectGetRmsRights(expectedRmsRequestsToResponses);
             testHelper.expectGetRollups(expectedRollupsJson, expectedRollupsRightholderIds);
             testHelper.expectCrmCall(expectedCrmRequestJsonFile, expectedCrmResponseJsonFile,
-                Arrays.asList("omOrderDetailNumber", "licenseCreateDate"));
+                List.of("omOrderDetailNumber", "licenseCreateDate"));
             loadUsageBatch();
             fundPoolService.createAaclFundPool(fundPool, fundPoolDetails);
             sendForClassification();

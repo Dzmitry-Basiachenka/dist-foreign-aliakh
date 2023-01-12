@@ -41,7 +41,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -159,7 +158,7 @@ public class AclGrantDetailServiceTest {
         Capture<AclGrantDetailDto> grantDto2 = EasyMock.newCapture();
         Capture<AclGrantDetailDto> grantDto3 = EasyMock.newCapture();
         Capture<AclGrantDetailDto> grantDto4 = EasyMock.newCapture();
-        List<AclGrantDetailDto> aclGrantDetailDtos = Arrays.asList(
+        List<AclGrantDetailDto> aclGrantDetailDtos = List.of(
             buildGrantDto(ACL_GRANT_ID_1, 123456789L, null, 2000072827L, DIGITAL_TOU, GRANT_STATUS, true),
             buildGrantDto(ACL_GRANT_ID_2, 123456789L, null, 2000070936L, PRINT_TOU, GRANT_STATUS, true),
             buildGrantDto(ACL_GRANT_ID_3, 232167525L, null, 1000014080L, DIGITAL_TOU, GRANT_STATUS, false));
@@ -241,7 +240,7 @@ public class AclGrantDetailServiceTest {
         expectLastCall().once();
         expect(rightsholderService.updateRightsholders(Set.of(2000072827L))).andReturn(List.of()).once();
         replay(aclGrantDetailRepository, rightsholderService, RupContextUtils.class);
-        List<AclGrantDetailDto> aclGrantDetailDtos = Arrays.asList(
+        List<AclGrantDetailDto> aclGrantDetailDtos = List.of(
             buildGrantDto(ACL_GRANT_ID_2, 123456789L, PRINT_DIGITAL_TOU_STATUS, 2000072827L, DIGITAL_TOU, GRANT_STATUS,
                 true),
             buildGrantDto("cb75a763-9317-4b8f-9f1c-d2c5f6c59a0c", 306985867L, PRINT_DIGITAL_TOU_STATUS, 2000072827L,
@@ -311,7 +310,7 @@ public class AclGrantDetailServiceTest {
         Set<AclIneligibleRightsholder> ineligibleRightsholders = Set.of(buildIneligibleRightsholder());
         expect(prmIntegrationService.getIneligibleRightsholders(LocalDate.of(2020, 1, 1), ACL))
             .andReturn(ineligibleRightsholders).once();
-        List<AclGrantDetail> grantDetailDtos = Arrays.asList(
+        List<AclGrantDetail> grantDetailDtos = List.of(
             buildGrant("20f14f70-8f35-478d-98d9-dde62ab5754c", 1000000001L, "100 ROAD MOVIES", 1000014080L, DIGITAL_TOU,
                 true),
             buildGrant("52cc9af9-4e35-45ac-91f8-4882af975044", 1000025853L, "I've discovered energy!", 144114260L,

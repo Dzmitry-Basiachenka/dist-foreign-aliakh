@@ -13,14 +13,13 @@ import com.copyright.rup.dist.foreign.repository.api.IScenarioRepository;
 import com.copyright.rup.dist.foreign.service.api.IScenarioUsageFilterService;
 import com.copyright.rup.dist.foreign.service.api.sal.ISalScenarioService;
 import com.copyright.rup.dist.foreign.service.api.sal.ISalUsageService;
-
 import com.copyright.rup.dist.foreign.service.impl.ServiceTestHelper;
+
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -64,7 +63,7 @@ public class CreateSalScenarioIntegrationTestBuilder {
 
     CreateSalScenarioIntegrationTestBuilder expectRollups(String rollupsJson, String... rollupsRightsholdersIds) {
         this.expectedRollupsJson = rollupsJson;
-        this.expectedRollupsRightholderIds = Arrays.asList(rollupsRightsholdersIds);
+        this.expectedRollupsRightholderIds = List.of(rollupsRightsholdersIds);
         return this;
     }
 

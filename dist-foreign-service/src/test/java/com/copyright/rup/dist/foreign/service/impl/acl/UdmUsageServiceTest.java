@@ -53,7 +53,6 @@ import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -157,7 +156,7 @@ public class UdmUsageServiceTest {
         udmUsage2.setIneligibleReasonId(NO_REPORTED_USE_UID);
         udmUsage2.setReportedTypeOfUse(null);
         udmUsage2.setReportedTitle("None");
-        List<UdmUsage> udmUsages = Arrays.asList(udmUsage1, udmUsage2);
+        List<UdmUsage> udmUsages = List.of(udmUsage1, udmUsage2);
         CompanyInformation companyInformation = new CompanyInformation();
         companyInformation.setId(45489489L);
         companyInformation.setName("Skadden, Arps, Slate, Meagher & Flom LLP");
@@ -202,7 +201,7 @@ public class UdmUsageServiceTest {
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
         UdmUsageDto udmUsageDto = buildUsageDto(UsageStatusEnum.WORK_NOT_FOUND);
         udmUsageDto.setAssignee(ASSIGNEE);
-        List<String> actionReasons = Arrays.asList(ACTION_REASON_1, ACTION_REASON_2, ACTION_REASON_3);
+        List<String> actionReasons = List.of(ACTION_REASON_1, ACTION_REASON_2, ACTION_REASON_3);
         udmUsageRepository.update(udmUsageDto);
         expectLastCall().once();
         udmUsageAuditService.logAction(USAGE_UID, UsageActionTypeEnum.USAGE_EDIT, ACTION_REASON_1);
@@ -226,7 +225,7 @@ public class UdmUsageServiceTest {
         UdmUsageDto udmUsageDto = buildUsageDto(UsageStatusEnum.ELIGIBLE);
         udmUsageDto.setAssignee(ASSIGNEE);
         udmUsageDto.setBaselineFlag(true);
-        List<String> actionReasons = Arrays.asList(ACTION_REASON_1, ACTION_REASON_2, ACTION_REASON_3);
+        List<String> actionReasons = List.of(ACTION_REASON_1, ACTION_REASON_2, ACTION_REASON_3);
         baselineService.deleteFromBaseline(ImmutableSet.of(USAGE_UID), REASON, USER_NAME);
         expectLastCall().once();
         udmUsageRepository.update(udmUsageDto);
@@ -311,7 +310,7 @@ public class UdmUsageServiceTest {
 
     @Test
     public void testGetUdmUsageIdsByStatus() {
-        List<String> udmUsageIds = Arrays.asList(UDM_USAGE_UID_1, UDM_USAGE_UID_2);
+        List<String> udmUsageIds = List.of(UDM_USAGE_UID_1, UDM_USAGE_UID_2);
         expect(udmUsageRepository.findIdsByStatus(UsageStatusEnum.WORK_FOUND)).andReturn(udmUsageIds).once();
         replay(udmUsageRepository);
         assertEquals(udmUsageIds, udmUsageService.getUdmUsageIdsByStatus(UsageStatusEnum.WORK_FOUND));
@@ -320,10 +319,10 @@ public class UdmUsageServiceTest {
 
     @Test
     public void testGetUdmUsagesByIds() {
-        List<String> udmUsageIds = Arrays.asList(UDM_USAGE_UID_1, UDM_USAGE_UID_2);
+        List<String> udmUsageIds = List.of(UDM_USAGE_UID_1, UDM_USAGE_UID_2);
         UdmUsage udmUsage1 = buildUdmUsage(UDM_USAGE_UID_1, UDM_USAGE_ORIGIN_UID_1);
         UdmUsage udmUsage2 = buildUdmUsage(UDM_USAGE_UID_2, UDM_USAGE_ORIGIN_UID_2);
-        List<UdmUsage> udmUsages = Arrays.asList(udmUsage1, udmUsage2);
+        List<UdmUsage> udmUsages = List.of(udmUsage1, udmUsage2);
         expect(udmUsageRepository.findByIds(udmUsageIds)).andReturn(udmUsages).once();
         replay(udmUsageRepository);
         assertEquals(udmUsages, udmUsageService.getUdmUsagesByIds(udmUsageIds));
@@ -381,7 +380,7 @@ public class UdmUsageServiceTest {
         chainExecutor.execute(List.of(usage1), ChainProcessorTypeEnum.MATCHING);
         expectLastCall().once();
         replay(chainExecutor);
-        udmUsageService.sendForMatching(Arrays.asList(usage1, usage2));
+        udmUsageService.sendForMatching(List.of(usage1, usage2));
         assertNotNull(captureRunnable);
         Runnable runnable = captureRunnable.getValue();
         assertNotNull(runnable);
@@ -431,7 +430,7 @@ public class UdmUsageServiceTest {
 
     @Test
     public void testGetPeriods() {
-        List<Integer> periods = Arrays.asList(202006, 202112);
+        List<Integer> periods = List.of(202006, 202112);
         expect(udmUsageRepository.findPeriods()).andReturn(periods).once();
         replay(udmUsageRepository);
         assertEquals(periods, udmUsageService.getPeriods());
@@ -440,7 +439,7 @@ public class UdmUsageServiceTest {
 
     @Test
     public void testGetUserNames() {
-        List<String> userNames = Arrays.asList("jjohn@copyright.com", "wjohn@copyright.com");
+        List<String> userNames = List.of("jjohn@copyright.com", "wjohn@copyright.com");
         expect(udmUsageRepository.findUserNames()).andReturn(userNames).once();
         replay(udmUsageRepository);
         assertEquals(userNames, udmUsageService.getUserNames());
@@ -449,7 +448,7 @@ public class UdmUsageServiceTest {
 
     @Test
     public void testGetAssignees() {
-        List<String> assignees = Arrays.asList("jjohn@copyright.com", "wjohn@copyright.com");
+        List<String> assignees = List.of("jjohn@copyright.com", "wjohn@copyright.com");
         expect(udmUsageRepository.findAssignees()).andReturn(assignees).once();
         replay(udmUsageRepository);
         assertEquals(assignees, udmUsageService.getAssignees());
@@ -458,7 +457,7 @@ public class UdmUsageServiceTest {
 
     @Test
     public void testGetPublicationTypes() {
-        List<String> pubTypes = Arrays.asList("Book", "Not Shared");
+        List<String> pubTypes = List.of("Book", "Not Shared");
         expect(udmUsageRepository.findPublicationTypes()).andReturn(pubTypes).once();
         replay(udmUsageRepository);
         assertEquals(pubTypes, udmUsageService.getPublicationTypes());
@@ -467,7 +466,7 @@ public class UdmUsageServiceTest {
 
     @Test
     public void testGetPublicationFormats() {
-        List<String> pubFormats = Arrays.asList("Digital", "Not Specified");
+        List<String> pubFormats = List.of("Digital", "Not Specified");
         expect(udmUsageRepository.findPublicationFormats()).andReturn(pubFormats).once();
         replay(udmUsageRepository);
         assertEquals(pubFormats, udmUsageService.getPublicationFormats());
@@ -476,7 +475,7 @@ public class UdmUsageServiceTest {
 
     @Test
     public void testGetAllActionReasons() {
-        List<UdmActionReason> actionReasons = Arrays.asList(
+        List<UdmActionReason> actionReasons = List.of(
             new UdmActionReason("1c8f6e43-2ca8-468d-8700-ce855e6cd8c0", "Aggregated Content"),
             new UdmActionReason("97fd8093-7f36-4a09-99f1-1bfe36a5c3f4", "Arbitrary RFA search result order"));
         expect(udmActionReasonRepository.findAll()).andReturn(actionReasons).once();
@@ -487,7 +486,7 @@ public class UdmUsageServiceTest {
 
     @Test
     public void testGetAllIneligibleReasons() {
-        List<UdmIneligibleReason> ineligibleReasons = Arrays.asList(
+        List<UdmIneligibleReason> ineligibleReasons = List.of(
             new UdmIneligibleReason("b60a726a-39e8-4303-abe1-6816da05b858", "Invalid survey"),
             new UdmIneligibleReason("0d5a129c-0f8f-4e48-98b2-8b980cdb9333", "Misc - See Comments"));
         expect(udmIneligibleReasonRepository.findAll()).andReturn(ineligibleReasons).once();
@@ -520,9 +519,9 @@ public class UdmUsageServiceTest {
         UdmUsageDto udmUsage3 = new UdmUsageDto();
         udmUsage3.setId(UDM_USAGE_UID_3);
         udmUsage3.setAssignee(USER_NAME);
-        Set<UdmUsageDto> udmUsages = new LinkedHashSet<>(Arrays.asList(udmUsage1, udmUsage2, udmUsage3));
+        Set<UdmUsageDto> udmUsages = new LinkedHashSet<>(List.of(udmUsage1, udmUsage2, udmUsage3));
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
-        udmUsageRepository.updateAssignee(new HashSet<>(Arrays.asList(udmUsage1.getId(), udmUsage2.getId())),
+        udmUsageRepository.updateAssignee(new HashSet<>(List.of(udmUsage1.getId(), udmUsage2.getId())),
             USER_NAME, USER_NAME);
         expectLastCall().once();
         udmUsageAuditService.logAction(udmUsage1.getId(), UsageActionTypeEnum.ASSIGNEE_CHANGE,

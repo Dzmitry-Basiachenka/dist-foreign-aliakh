@@ -27,7 +27,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -89,13 +88,13 @@ public class CreateAaclScenarioIntegrationTest {
     private AaclFields buildAaclFields() {
         AaclFields aaclFields = new AaclFields();
         aaclFields.setFundPoolId("753bd683-1db2-47ec-8332-136139c512d0");
-        aaclFields.setUsageAges(Arrays.asList(
+        aaclFields.setUsageAges(List.of(
             buildUsageAge(2019, new BigDecimal("1.00")),
             buildUsageAge(2017, new BigDecimal("0.75"))));
-        aaclFields.setPublicationTypes(Arrays.asList(
+        aaclFields.setPublicationTypes(List.of(
             buildPublicationType("1f6f1925-7aa1-4b1a-b3a8-8903acc3d18e", new BigDecimal("1.24")),
             buildPublicationType("2fe9c0a0-7672-4b56-bc64-9d4125fecf6e", new BigDecimal("4.37"))));
-        aaclFields.setDetailLicenseeClasses(Arrays.asList(
+        aaclFields.setDetailLicenseeClasses(List.of(
             buildDetailClass(108, 141),
             buildDetailClass(113, 141),
             buildDetailClass(110, 143)));

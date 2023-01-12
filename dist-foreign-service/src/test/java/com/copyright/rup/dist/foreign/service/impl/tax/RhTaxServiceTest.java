@@ -41,7 +41,6 @@ import org.powermock.reflect.Whitebox;
 
 import java.io.IOException;
 import java.time.OffsetDateTime;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -118,7 +117,7 @@ public class RhTaxServiceTest {
     public void testProcessTaxCountryCode() {
         Usage usTaxUsage = buildUsage(ACC_NUMBER_2);
         Usage notUsTaxUsage = buildUsage(ACC_NUMBER_3);
-        List<Usage> usages = Arrays.asList(usTaxUsage, notUsTaxUsage);
+        List<Usage> usages = List.of(usTaxUsage, notUsTaxUsage);
         expect(oracleRhTaxCountryService.getAccountNumbersToUsTaxCountryFlags(
                 Sets.newHashSet(ACC_NUMBER_2, ACC_NUMBER_3)))
             .andReturn(ImmutableMap.of(ACC_NUMBER_2, Boolean.TRUE, ACC_NUMBER_3, Boolean.FALSE))
@@ -138,7 +137,7 @@ public class RhTaxServiceTest {
         Rightsholder rh2 = buildRightsholder(RH_ID_2, ACC_NUMBER_2, RH_NAME_2);
         Rightsholder rh3 = buildRightsholder(RH_ID_3, ACC_NUMBER_3, RH_NAME_3);
         Rightsholder rh4 = buildRightsholder(RH_ID_4, ACC_NUMBER_4, RH_NAME_4);
-        List<RightsholderPayeeProductFamilyHolder> holders = Arrays.asList(
+        List<RightsholderPayeeProductFamilyHolder> holders = List.of(
             buildHolder(rh2, rh2, FAS_PRODUCT_FAMILY),   // TBO = RH_2, included in the result
             buildHolder(rh1, rh2, FAS_PRODUCT_FAMILY),   // TBO = RH_1, included in the result
             buildHolder(rh1, rh2, FAS2_PRODUCT_FAMILY),  // TBO = RH_2, included in the result
@@ -173,7 +172,7 @@ public class RhTaxServiceTest {
         Rightsholder rh2 = buildRightsholder(RH_ID_2, ACC_NUMBER_2, RH_NAME_2);
         Rightsholder rh3 = buildRightsholder(RH_ID_3, ACC_NUMBER_3, RH_NAME_3);
         Rightsholder rh4 = buildRightsholder(RH_ID_4, ACC_NUMBER_4, RH_NAME_4);
-        List<RightsholderPayeeProductFamilyHolder> holders = Arrays.asList(
+        List<RightsholderPayeeProductFamilyHolder> holders = List.of(
             buildHolder(rh2, rh2, FAS_PRODUCT_FAMILY),   // TBO = RH_2, excluded as last not. date within numberOfDays
             buildHolder(rh1, rh2, FAS_PRODUCT_FAMILY),   // TBO = RH_1, included in the result
             buildHolder(rh1, rh2, FAS2_PRODUCT_FAMILY),  // TBO = RH_2, excluded as last not. date within numberOfDays
@@ -217,7 +216,7 @@ public class RhTaxServiceTest {
         Rightsholder rh2 = buildRightsholder(RH_ID_2, ACC_NUMBER_2, RH_NAME_2);
         Rightsholder rh3 = buildRightsholder(RH_ID_3, ACC_NUMBER_3, RH_NAME_3);
         Rightsholder rh4 = buildRightsholder(RH_ID_4, ACC_NUMBER_4, RH_NAME_4);
-        List<RightsholderPayeeProductFamilyHolder> holders = Arrays.asList(
+        List<RightsholderPayeeProductFamilyHolder> holders = List.of(
             buildHolder(rh2, rh2, ACLPRINT),    // TBO = RH_2, included in the result
             buildHolder(rh1, rh2, ACLPRINT),    // TBO = RH_1, included in the result
             buildHolder(rh1, rh2, ACLDIGITAL),  // TBO = RH_2, included in the result
@@ -249,7 +248,7 @@ public class RhTaxServiceTest {
         Rightsholder rh2 = buildRightsholder(RH_ID_2, ACC_NUMBER_2, RH_NAME_2);
         Rightsholder rh3 = buildRightsholder(RH_ID_3, ACC_NUMBER_3, RH_NAME_3);
         Rightsholder rh4 = buildRightsholder(RH_ID_4, ACC_NUMBER_4, RH_NAME_4);
-        List<RightsholderPayeeProductFamilyHolder> holders = Arrays.asList(
+        List<RightsholderPayeeProductFamilyHolder> holders = List.of(
             buildHolder(rh2, rh2, ACLPRINT),    // TBO = RH_2, excluded as last not. date within numberOfDays
             buildHolder(rh1, rh2, ACLPRINT),    // TBO = RH_1, included in the result
             buildHolder(rh1, rh2, ACLDIGITAL),  // TBO = RH_2, excluded as last not. date within numberOfDays

@@ -92,7 +92,7 @@ public class UsageServiceIntegrationTest {
 
     @Test
     public void testGetMarkets() {
-        assertEquals(Arrays.asList("Bus", "Doc Del", "Edu", "Gov", "Lib", "Sch", "Univ"), ntsUsageService.getMarkets());
+        assertEquals(List.of("Bus", "Doc Del", "Edu", "Gov", "Lib", "Sch", "Univ"), ntsUsageService.getMarkets());
     }
 
     private void verifyExcludedUsages(Scenario scenario, boolean excluded, Long... accountNumbers) {

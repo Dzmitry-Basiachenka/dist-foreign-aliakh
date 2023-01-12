@@ -30,7 +30,6 @@ import org.powermock.reflect.Whitebox;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -144,7 +143,7 @@ public class AclGrantServiceTest {
     }
 
     private List<AclGrantDetail> buildAclGrantDetails() {
-        return Arrays.asList(
+        return List.of(
             buildAclGrantDetail(
                 PRINT, 1000002760L, 136797639L, "Different RH", "Farewell to the leftist working class", GRANT),
             buildAclGrantDetail(
@@ -162,7 +161,7 @@ public class AclGrantServiceTest {
     }
 
     private Set<RmsGrant> buildRmsGrants() {
-        return new HashSet<>(Arrays.asList(
+        return new HashSet<>(List.of(
             buildRmsGrant(PRINT, new BigDecimal("1000025853"), 144114260L, GRANT, LocalDate.of(2021, 6, 30)),
             buildRmsGrant(DIGITAL, new BigDecimal("2000017000"), 309812565L, GRANT, LocalDate.of(2020, 6, 30)),
             buildRmsGrant(DIGITAL, new BigDecimal("1000004023"), 159246556L, GRANT, LocalDate.of(2019, 6, 30)),

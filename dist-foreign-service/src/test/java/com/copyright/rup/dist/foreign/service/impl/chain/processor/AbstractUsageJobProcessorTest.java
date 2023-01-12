@@ -24,7 +24,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -77,10 +76,10 @@ public class AbstractUsageJobProcessorTest {
     public void testJobProcessForFas() {
         Usage usage1 = buildUsage("5d49ad9e-655f-4998-b034-42904e6c1f52");
         Usage usage2 = buildUsage("23af4961-0a8f-4eac-9cf9-292e03b6c430");
-        List<String> usageIds = Arrays.asList(usage1.getId(), usage2.getId());
+        List<String> usageIds = List.of(usage1.getId(), usage2.getId());
         expect(usageService.getUsageIdsByStatusAndProductFamily(eq(UsageStatusEnum.NEW), eq(FAS_PRODUCT_FAMILY)))
             .andReturn(usageIds).once();
-        expect(usageService.getUsagesByIds(usageIds)).andReturn(Arrays.asList(usage1, usage2)).once();
+        expect(usageService.getUsagesByIds(usageIds)).andReturn(List.of(usage1, usage2)).once();
         usageConsumer.accept(List.of(usage1));
         expectLastCall().once();
         usageConsumer.accept(List.of(usage2));
@@ -95,10 +94,10 @@ public class AbstractUsageJobProcessorTest {
     public void testJobProcessForFas2() {
         Usage usage1 = buildUsage("6ceb3938-1862-4223-a905-068db3353fe2");
         Usage usage2 = buildUsage("f5756692-4b8d-483a-bbc8-a0a8e0ee441a");
-        List<String> usageIds = Arrays.asList(usage1.getId(), usage2.getId());
+        List<String> usageIds = List.of(usage1.getId(), usage2.getId());
         expect(usageService.getUsageIdsByStatusAndProductFamily(UsageStatusEnum.NEW, "FAS2"))
             .andReturn(usageIds).once();
-        expect(usageService.getUsagesByIds(eq(usageIds))).andReturn(Arrays.asList(usage1, usage2)).once();
+        expect(usageService.getUsagesByIds(eq(usageIds))).andReturn(List.of(usage1, usage2)).once();
         usageConsumer.accept(List.of(usage1));
         expectLastCall().once();
         usageConsumer.accept(List.of(usage2));
@@ -113,10 +112,10 @@ public class AbstractUsageJobProcessorTest {
     public void testJobProcessForNts() {
         Usage usage1 = buildUsage("9d092b9d-30d7-401c-908a-72636b3cb890");
         Usage usage2 = buildUsage("9dca0ac3-eb3b-437a-8325-d0cfea5d3601");
-        List<String> usageIds = Arrays.asList(usage1.getId(), usage2.getId());
+        List<String> usageIds = List.of(usage1.getId(), usage2.getId());
         expect(usageService.getUsageIdsByStatusAndProductFamily(UsageStatusEnum.NEW, "NTS"))
             .andReturn(usageIds).once();
-        expect(usageService.getUsagesByIds(eq(usageIds))).andReturn(Arrays.asList(usage1, usage2)).once();
+        expect(usageService.getUsagesByIds(eq(usageIds))).andReturn(List.of(usage1, usage2)).once();
         usageConsumer.accept(List.of(usage1));
         expectLastCall().once();
         usageConsumer.accept(List.of(usage2));
@@ -131,10 +130,10 @@ public class AbstractUsageJobProcessorTest {
     public void testJobProcessForAacl() {
         Usage usage1 = buildUsage("42028bfb-9591-4f8e-b80d-3df6ff2c52ef");
         Usage usage2 = buildUsage("300b2399-4f02-4e3e-ac0f-0e27ab32e865");
-        List<String> usageIds = Arrays.asList(usage1.getId(), usage2.getId());
+        List<String> usageIds = List.of(usage1.getId(), usage2.getId());
         expect(usageService.getUsageIdsByStatusAndProductFamily(UsageStatusEnum.NEW, "AACL"))
             .andReturn(usageIds).once();
-        expect(aaclUsageService.getUsagesByIds(eq(usageIds))).andReturn(Arrays.asList(usage1, usage2)).once();
+        expect(aaclUsageService.getUsagesByIds(eq(usageIds))).andReturn(List.of(usage1, usage2)).once();
         usageConsumer.accept(List.of(usage1));
         expectLastCall().once();
         usageConsumer.accept(List.of(usage2));
@@ -149,10 +148,10 @@ public class AbstractUsageJobProcessorTest {
     public void testJobProcessForSal() {
         Usage usage1 = buildUsage("06df61a8-8d3d-4c37-ae2b-95125abd3a89");
         Usage usage2 = buildUsage("777fff3f-7a06-4aed-9498-ddb83c618b48");
-        List<String> usageIds = Arrays.asList(usage1.getId(), usage2.getId());
+        List<String> usageIds = List.of(usage1.getId(), usage2.getId());
         expect(usageService.getUsageIdsByStatusAndProductFamily(UsageStatusEnum.NEW, "SAL"))
             .andReturn(usageIds).once();
-        expect(salUsageService.getUsagesByIds(eq(usageIds))).andReturn(Arrays.asList(usage1, usage2)).once();
+        expect(salUsageService.getUsagesByIds(eq(usageIds))).andReturn(List.of(usage1, usage2)).once();
         usageConsumer.accept(List.of(usage1));
         expectLastCall().once();
         usageConsumer.accept(List.of(usage2));
@@ -167,10 +166,10 @@ public class AbstractUsageJobProcessorTest {
     public void testJobProcessForAclci() {
         Usage usage1 = buildUsage("08fbb27f-f175-41e2-aeb9-af3692b47cb1");
         Usage usage2 = buildUsage("f06668f7-acbc-45bf-bb2f-2acacf84091b");
-        List<String> usageIds = Arrays.asList(usage1.getId(), usage2.getId());
+        List<String> usageIds = List.of(usage1.getId(), usage2.getId());
         expect(usageService.getUsageIdsByStatusAndProductFamily(UsageStatusEnum.NEW, "ACLCI"))
             .andReturn(usageIds).once();
-        expect(aclciUsageService.getUsagesByIds(eq(usageIds))).andReturn(Arrays.asList(usage1, usage2)).once();
+        expect(aclciUsageService.getUsagesByIds(eq(usageIds))).andReturn(List.of(usage1, usage2)).once();
         usageConsumer.accept(List.of(usage1));
         expectLastCall().once();
         usageConsumer.accept(List.of(usage2));

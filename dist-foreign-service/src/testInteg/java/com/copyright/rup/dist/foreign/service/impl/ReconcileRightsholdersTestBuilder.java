@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -77,7 +76,7 @@ class ReconcileRightsholdersTestBuilder {
 
     ReconcileRightsholdersTestBuilder expectRollups(String rollupsJson, String... rollupsRightsholdersIds) {
         this.expectedRollupsJson = rollupsJson;
-        this.expectedRollupsRightholderIds = Arrays.asList(rollupsRightsholdersIds);
+        this.expectedRollupsRightholderIds = List.of(rollupsRightsholdersIds);
         return this;
     }
 
@@ -88,12 +87,12 @@ class ReconcileRightsholdersTestBuilder {
 
     ReconcileRightsholdersTestBuilder expectPreferences(String preferencesJson, String... rightsholderIds) {
         this.expectedPreferencesJson = preferencesJson;
-        this.expectedPreferencesRightholderIds = Arrays.asList(rightsholderIds);
+        this.expectedPreferencesRightholderIds = List.of(rightsholderIds);
         return this;
     }
 
     ReconcileRightsholdersTestBuilder expectUsages(Usage... usages) {
-        this.expectedUsages = Arrays.asList(usages);
+        this.expectedUsages = List.of(usages);
         return this;
     }
 

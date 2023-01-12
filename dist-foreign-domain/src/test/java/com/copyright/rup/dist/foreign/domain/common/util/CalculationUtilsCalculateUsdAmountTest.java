@@ -8,8 +8,8 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Parameterized test that verifies {@link CalculationUtils#calculateUsdAmount(BigDecimal, BigDecimal)}.
@@ -43,7 +43,7 @@ public class CalculationUtilsCalculateUsdAmountTest {
 
     @Parameters
     public static Collection<Object[]> data() {
-        return Arrays.asList(new Object[][] {
+        return List.of(new Object[][] {
             {new BigDecimal("0.0000000000"), BigDecimal.ZERO, BigDecimal.ONE},
             {new BigDecimal("1.0000000000"), BigDecimal.ONE, BigDecimal.ONE},
             {new BigDecimal("5.0000000000"), BigDecimal.TEN, new BigDecimal("0.5")},

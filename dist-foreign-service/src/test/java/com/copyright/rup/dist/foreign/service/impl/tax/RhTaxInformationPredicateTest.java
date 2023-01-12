@@ -9,8 +9,8 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
 import java.time.OffsetDateTime;
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Verifies {@link RhTaxInformationPredicate}.
@@ -44,7 +44,7 @@ public class RhTaxInformationPredicateTest {
         OffsetDateTime inRangeDate = OffsetDateTime.now().minusDays(numberOfDays - 1);
         Integer notificationsMoreThanMax = MAX_NOTIFICATIONS_SENT + 1;
         Integer notificationsLessThanMax = MAX_NOTIFICATIONS_SENT - 1;
-        return Arrays.asList(new Object[][]{
+        return List.of(new Object[][]{
             {true, buildRhTaxInformation(null, null), numberOfDays},
             {true, buildRhTaxInformation(outOfRangeDate, null), numberOfDays},
             {false, buildRhTaxInformation(inRangeDate, null), numberOfDays},

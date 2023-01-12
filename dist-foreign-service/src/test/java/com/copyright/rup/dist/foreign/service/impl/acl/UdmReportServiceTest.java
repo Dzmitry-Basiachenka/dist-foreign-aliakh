@@ -22,8 +22,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.io.PipedOutputStream;
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -219,7 +219,7 @@ public class UdmReportServiceTest {
 
     @Test
     public void testWriteSurveyDashboardCsvRepor() {
-        Set<Integer> periods = new HashSet<>(Arrays.asList(202106, 202212));
+        Set<Integer> periods = new HashSet<>(List.of(202106, 202212));
         OutputStream outputStream = new ByteArrayOutputStream();
         udmReportRepository.writeUdmSurveyDashboardCsvReport(periods, outputStream);
         expectLastCall().once();

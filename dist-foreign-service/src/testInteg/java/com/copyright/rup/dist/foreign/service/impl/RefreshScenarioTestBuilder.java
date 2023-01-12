@@ -13,7 +13,6 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -47,13 +46,13 @@ class RefreshScenarioTestBuilder {
 
     RefreshScenarioTestBuilder expectRollups(String rollupsJson, String... rollupsRightsholdersIds) {
         this.expectedRollupsJson = rollupsJson;
-        this.expectedRollupsRightholderIds = Arrays.asList(rollupsRightsholdersIds);
+        this.expectedRollupsRightholderIds = List.of(rollupsRightsholdersIds);
         return this;
     }
 
     RefreshScenarioTestBuilder expectPreferences(String preferencesJson, String... rightholderIds) {
         this.expectedPreferencesJson = preferencesJson;
-        this.expectedPreferencesRightholderIds = Arrays.asList(rightholderIds);
+        this.expectedPreferencesRightholderIds = List.of(rightholderIds);
         return this;
     }
 

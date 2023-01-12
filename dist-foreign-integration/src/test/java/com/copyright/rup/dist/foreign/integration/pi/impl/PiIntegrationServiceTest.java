@@ -22,7 +22,6 @@ import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -120,7 +119,7 @@ public class PiIntegrationServiceTest {
         expect(searchResults.getHits()).andReturn(List.of(searchHit1)).once();
         expect(searchHit1.getFields()).andReturn(ImmutableMap.of("hostIdno", List.of(IDNO_2))).once();
         expect(searchResults.getHits()).andReturn(List.of()).times(4);
-        expect(searchResults.getHits()).andReturn(Arrays.asList(searchHit2, searchHit3)).once();
+        expect(searchResults.getHits()).andReturn(List.of(searchHit2, searchHit3)).once();
         expect(rupEsApi.search(capture(requestCapture))).andReturn(searchResponse).times(6);
         replay(rupEsApi, searchResponse, searchResults, searchHit1, searchHit2, searchHit3);
         assertEquals(new Work(), piIntegrationService.findWorkByStandardNumber(IDNO_1));
@@ -131,7 +130,7 @@ public class PiIntegrationServiceTest {
     public void testFindWorkByIdnoWithMultipleHostIndos() {
         expect(searchResponse.getResults()).andReturn(searchResults).once();
         expect(searchResults.getHits()).andReturn(List.of(searchHit1)).once();
-        expect(searchHit1.getFields()).andReturn(ImmutableMap.of("hostIdno", Arrays.asList(IDNO_2, IDNO_3))).once();
+        expect(searchHit1.getFields()).andReturn(ImmutableMap.of("hostIdno", List.of(IDNO_2, IDNO_3))).once();
         expect(rupEsApi.search(capture(requestCapture))).andReturn(searchResponse).once();
         expectSearchHitSource(searchHit1, SEARCH_HIT_1);
         replay(rupEsApi, searchResponse, searchResults, searchHit1);
@@ -244,9 +243,9 @@ public class PiIntegrationServiceTest {
 
     private void expectGetResponseWithDoi() {
         expect(searchResponse.getResults()).andReturn(searchResults).times(4);
-        expect(searchResults.getHits()).andReturn(Arrays.asList(searchHit1, searchHit2)).once();
-        expect(searchResults.getHits()).andReturn(Arrays.asList(searchHit1, searchHit2)).once();
-        expect(searchResults.getHits()).andReturn(Arrays.asList(searchHit1, searchHit2)).once();
+        expect(searchResults.getHits()).andReturn(List.of(searchHit1, searchHit2)).once();
+        expect(searchResults.getHits()).andReturn(List.of(searchHit1, searchHit2)).once();
+        expect(searchResults.getHits()).andReturn(List.of(searchHit1, searchHit2)).once();
         expect(searchResults.getHits()).andReturn(List.of(searchHit4)).once();
         expectSearchHitSourceWithEmptyFields(searchHit4, "pi_search_hit4.json");
         expect(rupEsApi.search(capture(requestCapture))).andReturn(searchResponse).times(4);
@@ -254,10 +253,10 @@ public class PiIntegrationServiceTest {
 
     private void expectGetResponseWithStdId() {
         expect(searchResponse.getResults()).andReturn(searchResults).times(5);
-        expect(searchResults.getHits()).andReturn(Arrays.asList(searchHit1, searchHit2)).once();
-        expect(searchResults.getHits()).andReturn(Arrays.asList(searchHit1, searchHit2)).once();
-        expect(searchResults.getHits()).andReturn(Arrays.asList(searchHit1, searchHit2)).once();
-        expect(searchResults.getHits()).andReturn(Arrays.asList(searchHit1, searchHit2)).once();
+        expect(searchResults.getHits()).andReturn(List.of(searchHit1, searchHit2)).once();
+        expect(searchResults.getHits()).andReturn(List.of(searchHit1, searchHit2)).once();
+        expect(searchResults.getHits()).andReturn(List.of(searchHit1, searchHit2)).once();
+        expect(searchResults.getHits()).andReturn(List.of(searchHit1, searchHit2)).once();
         expect(searchResults.getHits()).andReturn(List.of(searchHit5)).once();
         expectSearchHitSourceWithEmptyFields(searchHit5, "pi_search_hit6.json");
         expect(rupEsApi.search(capture(requestCapture))).andReturn(searchResponse).times(5);

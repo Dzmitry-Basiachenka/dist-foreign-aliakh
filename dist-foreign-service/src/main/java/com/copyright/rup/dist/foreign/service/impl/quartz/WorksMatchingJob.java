@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
+import java.util.List;
 
 /**
  * Quartz job to get works and setting statuses for {@link Usage}s.
@@ -43,6 +43,6 @@ public class WorksMatchingJob extends QuartzJobBean {
     public void executeInternal(JobExecutionContext context) {
         JobInfo usageJobInfo = usageChainExecutor.execute(ChainProcessorTypeEnum.MATCHING);
         JobInfo udmJobInfo = udmChainExecutor.execute(ChainProcessorTypeEnum.MATCHING);
-        context.setResult(JobInfoUtils.mergeJobResults(Arrays.asList(usageJobInfo, udmJobInfo)));
+        context.setResult(JobInfoUtils.mergeJobResults(List.of(usageJobInfo, udmJobInfo)));
     }
 }

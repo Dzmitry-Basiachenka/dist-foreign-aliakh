@@ -50,7 +50,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
@@ -254,7 +253,7 @@ public class UsageBatchServiceTest {
         usageBatchRepository.updateInitialUsagesCount(eq(2), anyString(), eq(USER_NAME));
         expectLastCall().once();
         replay(usageBatchRepository, aaclUsageService, RupContextUtils.class);
-        assertEquals(Arrays.asList("8e12b833-af38-4d49-96d0-221d2665f0dc", "b3f2727e-b023-49f0-970a-94dd3537ec6e"),
+        assertEquals(List.of("8e12b833-af38-4d49-96d0-221d2665f0dc", "b3f2727e-b023-49f0-970a-94dd3537ec6e"),
             usageBatchService.insertAaclBatch(usageBatch, uploadedUsages));
         UsageBatch insertedUsageBatch = captureUsageBatch.getValue();
         assertNotNull(insertedUsageBatch.getId());

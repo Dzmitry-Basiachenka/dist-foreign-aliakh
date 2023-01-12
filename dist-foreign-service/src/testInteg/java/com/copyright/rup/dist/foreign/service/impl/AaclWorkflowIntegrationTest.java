@@ -30,7 +30,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -113,13 +112,13 @@ public class AaclWorkflowIntegrationTest {
             .expectCrmReporting("crm/workflow/rights_distribution_request_aacl.json",
                 "crm/workflow/rights_distribution_response_aacl.json")
             .expectScenarioAudit(buildExpectedScenarioAudit())
-            .expectUsageAudit(BASELINE_USAGE_COMMENT_1, Arrays.asList(
+            .expectUsageAudit(BASELINE_USAGE_COMMENT_1, List.of(
                 buildAuditItem(UsageActionTypeEnum.ELIGIBLE, "Usage has become eligible"),
                 buildAuditItem(UsageActionTypeEnum.RH_FOUND, RH_FOUND_REASON),
                 buildAuditItem(UsageActionTypeEnum.WORK_FOUND, "Wr Wrk Inst 100009840 was found in PI"),
                 buildAuditItem(UsageActionTypeEnum.LOADED, BASELINE_UPLOADED_REASON)
             ))
-            .expectUsageAudit(BASELINE_USAGE_COMMENT_2, Arrays.asList(
+            .expectUsageAudit(BASELINE_USAGE_COMMENT_2, List.of(
                 buildAuditItem(UsageActionTypeEnum.ELIGIBLE, "Usage has become eligible"),
                 buildAuditItem(UsageActionTypeEnum.RH_FOUND, RH_FOUND_REASON),
                 buildAuditItem(UsageActionTypeEnum.WORK_FOUND, "Wr Wrk Inst 100010768 was found in PI"),
@@ -175,7 +174,7 @@ public class AaclWorkflowIntegrationTest {
     }
 
     private List<UsageAuditItem> buildAuditItems(int wrWkrInst, String uploadedRason) {
-        return Arrays.asList(
+        return List.of(
             buildAuditItem(UsageActionTypeEnum.ARCHIVED, ARCHIVED_REASON),
             buildAuditItem(UsageActionTypeEnum.PAID, PAID_REASON),
             buildAuditItem(UsageActionTypeEnum.ELIGIBLE, ELIGIBLE_REASON),
@@ -226,16 +225,16 @@ public class AaclWorkflowIntegrationTest {
     private AaclFields buildAaclFields(String fundPoolId) {
         AaclFields fields = new AaclFields();
         fields.setFundPoolId(fundPoolId);
-        fields.setUsageAges(Arrays.asList(
+        fields.setUsageAges(List.of(
             buildUsageAge(2019, new BigDecimal("4.29")),
             buildUsageAge(2018, new BigDecimal("3.5")),
             buildUsageAge(2020, new BigDecimal("3.5"))));
-        fields.setPublicationTypes(Arrays.asList(
+        fields.setPublicationTypes(List.of(
             buildPublicationType("2fe9c0a0-7672-4b56-bc64-9d4125fecf6e", new BigDecimal("3.5")),
             buildPublicationType("1f6f1925-7aa1-4b1a-b3a8-8903acc3d18e", new BigDecimal("1.24")),
             buildPublicationType("a3dff475-fc06-4d8c-b7cc-f093073ada6f", new BigDecimal("4.29")),
             buildPublicationType("46634907-882e-4f91-b1ad-f57db945aff7", new BigDecimal("2"))));
-        fields.setDetailLicenseeClasses(Arrays.asList(
+        fields.setDetailLicenseeClasses(List.of(
             buildDetailClass(113, 113),
             buildDetailClass(195, 113),
             buildDetailClass(108, 113),
@@ -276,7 +275,7 @@ public class AaclWorkflowIntegrationTest {
     }
 
     private List<Pair<ScenarioActionTypeEnum, String>> buildExpectedScenarioAudit() {
-        return Arrays.asList(
+        return List.of(
             Pair.of(ScenarioActionTypeEnum.ADDED_USAGES, ""),
             Pair.of(ScenarioActionTypeEnum.SUBMITTED, "Submitting scenario for testing purposes"),
             Pair.of(ScenarioActionTypeEnum.APPROVED, "Approving scenario for testing purposes"),
@@ -284,7 +283,7 @@ public class AaclWorkflowIntegrationTest {
     }
 
     private List<Pair<ScenarioActionTypeEnum, String>> buildExpectedScenarioAuditExcluded() {
-        return Arrays.asList(
+        return List.of(
             Pair.of(ScenarioActionTypeEnum.ADDED_USAGES, ""),
             Pair.of(ScenarioActionTypeEnum.SUBMITTED, "Submitting scenario for testing purposes"),
             Pair.of(ScenarioActionTypeEnum.APPROVED, "Approving scenario for testing purposes"),

@@ -37,7 +37,6 @@ import org.powermock.reflect.Whitebox;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.IntStream;
@@ -213,7 +212,7 @@ public class FundPoolServiceTest {
 
     @Test
     public void testGetNtsFundPoolNamesByUsageBatchId() {
-        List<String> names = Arrays.asList("Test 1", "Test 2");
+        List<String> names = List.of("Test 1", "Test 2");
         expect(fundPoolRepository.findNamesByUsageBatchId(BATCH_POOL_ID)).andReturn(names).once();
         replay(fundPoolRepository);
         assertEquals(names, fundPoolService.getNtsFundPoolNamesByUsageBatchId(BATCH_POOL_ID));
@@ -235,13 +234,11 @@ public class FundPoolServiceTest {
         FundPoolDetail detail2 =
             buildDetail("9ce7ad63-c335-477a-a39b-43d5cc9c4cd8", AGG_LICENSEE_CLASS_111, BigDecimal.TEN);
         List<FundPoolDetail> expectedDetails =
-            Arrays.asList(detail1, buildZeroDetail(AGG_LICENSEE_CLASS_110), detail2, buildZeroDetail(
-                AGG_LICENSEE_CLASS_113));
+            List.of(detail1, buildZeroDetail(AGG_LICENSEE_CLASS_110), detail2, buildZeroDetail(AGG_LICENSEE_CLASS_113));
         expect(licenseeClassService.getAggregateLicenseeClasses(AACL_PRODUCT_FAMILY))
-            .andReturn(Arrays.asList(AGG_LICENSEE_CLASS_108, AGG_LICENSEE_CLASS_110,
+            .andReturn(List.of(AGG_LICENSEE_CLASS_108, AGG_LICENSEE_CLASS_110,
                 AGG_LICENSEE_CLASS_111, AGG_LICENSEE_CLASS_113)).once();
-        expect(fundPoolRepository.findDetailsByFundPoolId(FUND_POOL_ID))
-            .andReturn(Arrays.asList(detail1, detail2)).once();
+        expect(fundPoolRepository.findDetailsByFundPoolId(FUND_POOL_ID)).andReturn(List.of(detail1, detail2)).once();
         replay(fundPoolRepository, licenseeClassService);
         List<FundPoolDetail> actualDetails = fundPoolService.getDetailsByFundPoolId(FUND_POOL_ID);
         verify(fundPoolRepository, licenseeClassService);
