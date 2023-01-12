@@ -49,7 +49,6 @@ import org.powermock.reflect.Whitebox;
 
 import java.io.ByteArrayOutputStream;
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -222,7 +221,7 @@ public class AaclUsageBatchUploadWindowTest {
         verifyPeriodEndDateAndBaselineYears(verticalLayout.getComponent(2));
         verifyButtonsLayout(verticalLayout.getComponent(3), "Upload", "Close");
         Button loadButton = (Button) ((HorizontalLayout) verticalLayout.getComponent(3)).getComponent(0);
-        verifyLoadClickListener(loadButton, Arrays.asList(
+        verifyLoadClickListener(loadButton, List.of(
             Whitebox.getInternalState(window, USAGE_BATCH_NAME_FIELD),
             Whitebox.getInternalState(window, "uploadField"),
             Whitebox.getInternalState(window, PERIOD_END_DATE_FIELD),

@@ -21,6 +21,7 @@ import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmProxyValueFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmProxyValueFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmProxyValueWidget;
+
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.easymock.Capture;
@@ -36,7 +37,6 @@ import java.io.PipedOutputStream;
 import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -80,7 +80,7 @@ public class UdmProxyValueControllerTest {
 
     @Test
     public void testGetProxyValues() {
-        List<UdmProxyValueDto> valueDtos = Arrays.asList(new UdmProxyValueDto(), new UdmProxyValueDto());
+        List<UdmProxyValueDto> valueDtos = List.of(new UdmProxyValueDto(), new UdmProxyValueDto());
         UdmProxyValueFilter filter = new UdmProxyValueFilter();
         expect(udmProxyValueFilterController.getWidget()).andReturn(udmProxyValueFilterWidget).once();
         expect(udmProxyValueFilterWidget.getAppliedFilter()).andReturn(filter).once();

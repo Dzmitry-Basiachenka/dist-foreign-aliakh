@@ -32,7 +32,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -188,7 +188,7 @@ class CreateNtsScenarioWindow extends Window {
             close();
         } else {
             Windows.showValidationErrorWindow(
-                Arrays.asList(scenarioNameField, rhMinimumAmountField, preServiceFeeAmountField,
+                List.of(scenarioNameField, rhMinimumAmountField, preServiceFeeAmountField,
                     postServiceFeeAmountField, descriptionArea));
         }
     }

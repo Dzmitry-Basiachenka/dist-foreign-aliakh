@@ -52,7 +52,6 @@ import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
 import java.util.AbstractMap.SimpleImmutableEntry;
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -244,7 +243,7 @@ public class AclScenarioWidgetTest {
     }
 
     private void verifyGrid(Grid grid) {
-        UiTestHelper.verifyGrid(grid, Arrays.asList(
+        UiTestHelper.verifyGrid(grid, List.of(
             Triple.of("RH Account #", -1.0, 1),
             Triple.of("RH Name", -1.0, 2),
             Triple.of("Print Payee Account #", -1.0, 2),

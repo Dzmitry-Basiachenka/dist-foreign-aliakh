@@ -25,7 +25,7 @@ import com.vaadin.ui.Window;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
-import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -152,7 +152,7 @@ public class EditAclGrantDetailWindow extends Window {
                 saveButtonClickListener.buttonClick(event);
                 close();
             } else {
-                Windows.showValidationErrorWindow(Arrays.asList(rhAccountNumberField, rhNameField));
+                Windows.showValidationErrorWindow(List.of(rhAccountNumberField, rhNameField));
             }
         });
         saveButton.setEnabled(false);

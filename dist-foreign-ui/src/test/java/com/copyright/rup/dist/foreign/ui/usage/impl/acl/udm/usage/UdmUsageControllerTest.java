@@ -67,7 +67,6 @@ import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -198,7 +197,7 @@ public class UdmUsageControllerTest {
     @Test
     public void testLoadUdmBatch() {
         UdmBatch udmBatch = new UdmBatch();
-        List<UdmUsage> udmUsages = Arrays.asList(
+        List<UdmUsage> udmUsages = List.of(
             buildUdmUsage(UDM_USAGE_UID_1, UDM_USAGE_ORIGIN_UID_1),
             buildUdmUsage(UDM_USAGE_UID_2, UDM_USAGE_ORIGIN_UID_2));
         expect(udmUsageFilterController.getWidget()).andReturn(udmUsageFilterWidget).once();
@@ -226,7 +225,7 @@ public class UdmUsageControllerTest {
 
     @Test
     public void testGetActionReasons() {
-        List<UdmActionReason> actionReasons = Arrays.asList(
+        List<UdmActionReason> actionReasons = List.of(
             new UdmActionReason("1c8f6e43-2ca8-468d-8700-ce855e6cd8c0", "Aggregated Content"),
             new UdmActionReason("97fd8093-7f36-4a09-99f1-1bfe36a5c3f4", "Arbitrary RFA search result order"));
         expect(udmUsageService.getAllActionReasons()).andReturn(actionReasons).once();
@@ -237,7 +236,7 @@ public class UdmUsageControllerTest {
 
     @Test
     public void testGetIneligibleReasons() {
-        List<UdmIneligibleReason> ineligibleReasons = Arrays.asList(
+        List<UdmIneligibleReason> ineligibleReasons = List.of(
             new UdmIneligibleReason("b60a726a-39e8-4303-abe1-6816da05b858", "Invalid survey"),
             new UdmIneligibleReason("0d5a129c-0f8f-4e48-98b2-8b980cdb9333", "Misc - See Comments"));
         expect(udmUsageService.getAllIneligibleReasons()).andReturn(ineligibleReasons).once();
@@ -255,7 +254,7 @@ public class UdmUsageControllerTest {
         DetailLicenseeClass licenseeClass2 = new DetailLicenseeClass();
         licenseeClass2.setId(2);
         expect(licenseeClassService.getDetailLicenseeClasses("ACL"))
-            .andReturn(Arrays.asList(licenseeClass1, licenseeClass2)).once();
+            .andReturn(List.of(licenseeClass1, licenseeClass2)).once();
         replay(licenseeClassService);
         Map<Integer, DetailLicenseeClass> idsToDetailLicenseeClasses = controller.getIdsToDetailLicenseeClasses();
         assertEquals(2, idsToDetailLicenseeClasses.size());

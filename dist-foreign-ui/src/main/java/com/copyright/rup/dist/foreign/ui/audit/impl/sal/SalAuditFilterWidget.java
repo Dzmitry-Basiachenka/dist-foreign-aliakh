@@ -10,11 +10,13 @@ import com.copyright.rup.dist.foreign.ui.common.UsageBatchFilterWidget;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.vaadin.ui.component.filter.FilterWindow;
 import com.copyright.rup.vaadin.util.VaadinUtils;
+
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.TextField;
+
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -113,7 +115,7 @@ public class SalAuditFilterWidget extends CommonAuditFilterWidget {
             getFilter().setSalDetailType(salDetailTypeComboBox.getValue());
             filterChanged();
         });
-        salDetailTypeComboBox.setItems(Arrays.asList(SalDetailTypeEnum.IB, SalDetailTypeEnum.UD));
+        salDetailTypeComboBox.setItems(List.of(SalDetailTypeEnum.IB, SalDetailTypeEnum.UD));
         VaadinUtils.addComponentStyle(salDetailTypeComboBox, "detail-type-filter");
     }
 

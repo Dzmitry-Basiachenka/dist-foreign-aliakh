@@ -38,7 +38,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.math.BigDecimal;
 import java.util.AbstractMap;
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -104,7 +103,7 @@ public class UdmProxyValueWidgetTest {
         assertEquals(2, layout.getComponentCount());
         verifyButtonsLayout(layout.getComponent(0), "Export");
         Grid grid = (Grid) layout.getComponent(1);
-        verifyGrid(grid, Arrays.asList(
+        verifyGrid(grid, List.of(
             Triple.of("Value Period", -1.0, -1),
             Triple.of("Pub Type Code", -1.0, -1),
             Triple.of("Content Unit Price", -1.0, -1),

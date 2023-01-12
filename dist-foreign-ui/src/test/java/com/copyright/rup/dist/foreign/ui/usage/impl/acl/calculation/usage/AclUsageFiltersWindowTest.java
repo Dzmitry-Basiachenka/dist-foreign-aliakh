@@ -43,7 +43,6 @@ import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -60,8 +59,7 @@ public class AclUsageFiltersWindowTest {
 
     private static final String UNCHECKED = "unchecked";
     private static final String CAPTION_OPERATOR = "Operator";
-    private static final List<FilterOperatorEnum> FLAG_ITEMS =
-        Arrays.asList(FilterOperatorEnum.Y, FilterOperatorEnum.N);
+    private static final List<FilterOperatorEnum> FLAG_ITEMS = List.of(FilterOperatorEnum.Y, FilterOperatorEnum.N);
     private static final String USAGE_FILTER = "usageFilter";
     private static final Integer LC_ID = 26;
     private static final String LC_DESCRIPTION = "Law Firms";
@@ -249,10 +247,10 @@ public class AclUsageFiltersWindowTest {
         verifyItemsFilterLayout(verticalLayout.getComponent(0), "Periods", "Detail Licensee Classes");
         verifyItemsFilterLayout(verticalLayout.getComponent(1), "Aggregate Licensee Classes", "Pub Types");
         verifyItemsFilterWidget(verticalLayout.getComponent(2), "Reported Types of Use");
-        verifyComboBoxLayout(verticalLayout.getComponent(3), "Usage Origin", Arrays.asList(UdmUsageOriginEnum.values()),
-            "Channel", Arrays.asList(UdmChannelEnum.values()));
+        verifyComboBoxLayout(verticalLayout.getComponent(3), "Usage Origin", List.of(UdmUsageOriginEnum.values()),
+            "Channel", List.of(UdmChannelEnum.values()));
         verifyComboBox(verticalLayout.getComponent(4), "Type of Use", Unit.PERCENTAGE, 50, true,
-            Arrays.asList("PRINT", "DIGITAL"));
+            List.of("PRINT", "DIGITAL"));
         verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(5), "Usage Detail ID");
         verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(6), "Wr Wrk Inst From", "Wr Wrk Inst To");
         verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(7), "System Title");
@@ -453,13 +451,12 @@ public class AclUsageFiltersWindowTest {
 
     private void assertTextOperatorComboBoxItems(ComboBox<FilterOperatorEnum> operatorComboBox) {
         verifyComboBox(operatorComboBox, CAPTION_OPERATOR, Unit.PIXELS, 230, false,
-            Arrays.asList(FilterOperatorEnum.EQUALS, FilterOperatorEnum.DOES_NOT_EQUAL,
-                FilterOperatorEnum.CONTAINS));
+            List.of(FilterOperatorEnum.EQUALS, FilterOperatorEnum.DOES_NOT_EQUAL, FilterOperatorEnum.CONTAINS));
     }
 
     private void assertNumericOperatorComboBoxItems(ComboBox<FilterOperatorEnum> operatorComboBox) {
         verifyComboBox(operatorComboBox, CAPTION_OPERATOR, Unit.PIXELS, 230, false,
-            Arrays.asList(FilterOperatorEnum.EQUALS, FilterOperatorEnum.DOES_NOT_EQUAL, FilterOperatorEnum.GREATER_THAN,
+            List.of(FilterOperatorEnum.EQUALS, FilterOperatorEnum.DOES_NOT_EQUAL, FilterOperatorEnum.GREATER_THAN,
                 FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO, FilterOperatorEnum.LESS_THAN,
                 FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO, FilterOperatorEnum.BETWEEN));
     }

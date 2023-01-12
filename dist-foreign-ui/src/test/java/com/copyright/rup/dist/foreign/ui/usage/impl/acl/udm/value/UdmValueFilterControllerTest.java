@@ -19,7 +19,6 @@ import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -72,7 +71,7 @@ public class UdmValueFilterControllerTest {
 
     @Test
     public void testGetPeriods() {
-        List<Integer> periods = Arrays.asList(202006, 202112);
+        List<Integer> periods = List.of(202006, 202112);
         expect(udmValueService.getPeriods()).andReturn(periods).once();
         replay(udmValueService);
         assertEquals(periods, controller.getPeriods());

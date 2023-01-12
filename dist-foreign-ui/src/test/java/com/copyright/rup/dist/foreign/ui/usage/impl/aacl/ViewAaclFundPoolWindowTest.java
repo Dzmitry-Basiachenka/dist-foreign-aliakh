@@ -47,7 +47,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -93,7 +92,7 @@ public class ViewAaclFundPoolWindowTest {
         assertEquals(SearchWidget.class, content.getComponent(0).getClass());
         Component component = content.getComponent(1);
         assertEquals(Grid.class, component.getClass());
-        verifyGrid((Grid) component, Arrays.asList(
+        verifyGrid((Grid) component, List.of(
             Triple.of("Fund Pool Name", -1.0, 1),
             Triple.of("Gross Fund Pool Total", 170.0, -1),
             Triple.of("Created By", 170.0, -1),

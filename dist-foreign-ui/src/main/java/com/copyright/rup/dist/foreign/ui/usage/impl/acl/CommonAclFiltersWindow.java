@@ -20,7 +20,6 @@ import com.vaadin.ui.Window;
 import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
@@ -37,10 +36,9 @@ import java.util.function.Predicate;
  */
 public abstract class CommonAclFiltersWindow extends Window {
 
-    private static final List<FilterOperatorEnum> FLAG_ITEMS =
-        Arrays.asList(FilterOperatorEnum.Y, FilterOperatorEnum.N);
+    private static final List<FilterOperatorEnum> FLAG_ITEMS = List.of(FilterOperatorEnum.Y, FilterOperatorEnum.N);
     private static final List<FilterOperatorEnum> LAST_VALUE_FLAG_ITEMS =
-        Arrays.asList(FilterOperatorEnum.Y, FilterOperatorEnum.N, FilterOperatorEnum.IS_NULL);
+        List.of(FilterOperatorEnum.Y, FilterOperatorEnum.N, FilterOperatorEnum.IS_NULL);
     private static final int ONE = 1;
 
     /**

@@ -29,7 +29,6 @@ import org.junit.Test;
 
 import java.math.BigDecimal;
 import java.util.AbstractMap.SimpleImmutableEntry;
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -73,7 +72,7 @@ public class AdditionalFundFilteredBatchesWindowTest {
         assertEquals(2, verticalLayout.getComponentCount());
         Grid grid = (Grid) verticalLayout.getComponent(0);
         verifyWindow(grid, null, 100, 100, Unit.PERCENTAGE);
-        verifyGrid(grid, Arrays.asList(
+        verifyGrid(grid, List.of(
             Triple.of("Usage Batch Name", -1.0, 1),
             Triple.of("Gross NTS Withdrawn Amount", 200.0, -1)
         ));

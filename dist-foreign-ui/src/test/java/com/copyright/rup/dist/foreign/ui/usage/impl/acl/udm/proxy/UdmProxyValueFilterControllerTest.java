@@ -12,12 +12,12 @@ import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.service.api.IPublicationTypeService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmProxyValueService;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmProxyValueFilterWidget;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -54,16 +54,16 @@ public class UdmProxyValueFilterControllerTest {
     @Test
     public void testGetPublicationTypeCodes() {
         List<PublicationType> pubTypes =
-            Arrays.asList(buildPublicationType("BK", "Book", "1.00"), buildPublicationType("NL", "Newspaper", "1.90"));
+            List.of(buildPublicationType("BK", "Book", "1.00"), buildPublicationType("NL", "Newspaper", "1.90"));
         expect(publicationTypeService.getPublicationTypes(FdaConstants.ACL_PRODUCT_FAMILY)).andReturn(pubTypes).once();
         replay(publicationTypeService);
-        assertEquals(Arrays.asList("BK", "NL"), controller.getPublicationTypeCodes());
+        assertEquals(List.of("BK", "NL"), controller.getPublicationTypeCodes());
         verify(publicationTypeService);
     }
 
     @Test
     public void testFindPeriods() {
-        List<Integer> periods = Arrays.asList(202012, 202112);
+        List<Integer> periods = List.of(202012, 202112);
         expect(udmProxyValueService.findPeriods()).andReturn(periods).once();
         replay(udmProxyValueService);
         assertEquals(periods, controller.getPeriods());

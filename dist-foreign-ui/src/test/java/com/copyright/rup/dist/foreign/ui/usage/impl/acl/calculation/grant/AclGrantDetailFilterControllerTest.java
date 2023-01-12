@@ -15,7 +15,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -55,7 +54,7 @@ public class AclGrantDetailFilterControllerTest {
 
     @Test
     public void testGetGrantPeriods() {
-        List<Integer> grantPeriods = Arrays.asList(202212, 202206, 202112);
+        List<Integer> grantPeriods = List.of(202212, 202206, 202112);
         expect(aclGrantSetService.getGrantPeriods()).andReturn(grantPeriods).once();
         replay(aclGrantSetService);
         assertSame(grantPeriods, controller.getGrantPeriods());

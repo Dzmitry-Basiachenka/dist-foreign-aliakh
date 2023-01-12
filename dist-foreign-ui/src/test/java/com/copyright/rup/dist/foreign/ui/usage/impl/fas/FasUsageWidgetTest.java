@@ -66,7 +66,6 @@ import org.powermock.reflect.Whitebox;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.AbstractMap.SimpleImmutableEntry;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -128,7 +127,7 @@ public class FasUsageWidgetTest {
         verifyButtonsLayout((HorizontalLayout) layout.getComponent(0));
         Grid grid = (Grid) layout.getComponent(1);
         verifyWindow(grid, null, 100, 100, Unit.PERCENTAGE);
-        verifyGrid(grid, Arrays.asList(
+        verifyGrid(grid, List.of(
             Triple.of("Detail ID", 130.0, -1),
             Triple.of("Detail Status", 115.0, -1),
             Triple.of("Product Family", 125.0, -1),
@@ -366,7 +365,7 @@ public class FasUsageWidgetTest {
         assertTrue(layout.isSpacing());
         assertEquals(new MarginInfo(true), layout.getMargin());
         assertEquals(5, layout.getComponentCount());
-        verifyMenuBar(layout.getComponent(0), "Usage Batch", true, Arrays.asList("Load", "View"));
+        verifyMenuBar(layout.getComponent(0), "Usage Batch", true, List.of("Load", "View"));
         assertEquals("Send for Research", layout.getComponent(1).getCaption());
         assertEquals("Load Researched Details", layout.getComponent(2).getCaption());
         assertEquals("Add To Scenario", layout.getComponent(3).getCaption());

@@ -28,7 +28,6 @@ import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -112,7 +111,7 @@ public class RightsholderFilterWidgetTest {
         expectLastCall().once();
         replay(filterWindow, Windows.class);
         rightsholderFilterWidget.showFilterWindow();
-        assertEquals(Arrays.asList(RIGHTSHOLDER_NAME, "12345678"), providerCapture.getValue().apply(rightsholder));
+        assertEquals(List.of(RIGHTSHOLDER_NAME, "12345678"), providerCapture.getValue().apply(rightsholder));
         verify(filterWindow, Windows.class);
     }
 

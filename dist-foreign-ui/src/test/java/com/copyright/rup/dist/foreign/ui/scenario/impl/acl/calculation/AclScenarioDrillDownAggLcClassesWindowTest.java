@@ -49,7 +49,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -110,7 +109,7 @@ public class AclScenarioDrillDownAggLcClassesWindowTest {
         verifyMetaInfoLayout(content.getComponent(0));
         Component component = content.getComponent(1);
         assertThat(component, instanceOf(Grid.class));
-        verifyGrid((Grid) component, Arrays.asList(
+        verifyGrid((Grid) component, List.of(
             Triple.of("Agg LC ID", 110.0, -1),
             Triple.of("Agg LC Name", 400.0, -1),
             Triple.of("Print Gross Amt", -1.0, 1),

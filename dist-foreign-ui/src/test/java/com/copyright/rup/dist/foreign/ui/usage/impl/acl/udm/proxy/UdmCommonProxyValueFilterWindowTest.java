@@ -34,7 +34,6 @@ import com.vaadin.ui.VerticalLayout;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -59,7 +58,7 @@ public class UdmCommonProxyValueFilterWindowTest {
     @SuppressWarnings(UNCHECKED)
     public void setUp() {
         IFilterWindowController<String> controllerMock = createMock(IFilterWindowController.class);
-        expect(controllerMock.loadBeans()).andReturn(Arrays.asList(PUB_TYPE_CODES)).once();
+        expect(controllerMock.loadBeans()).andReturn(List.of(PUB_TYPE_CODES)).once();
         replay(controllerMock);
         filterWindow = new UdmCommonProxyValueFilterWindow<>("Filter window", controllerMock,
             (ValueProvider<String, List<String>>) List::of);

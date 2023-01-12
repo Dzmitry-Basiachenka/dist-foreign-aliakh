@@ -46,7 +46,6 @@ import org.powermock.reflect.Whitebox;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -112,7 +111,7 @@ public class SalScenariosWidgetTest {
         assertThat(component, instanceOf(Grid.class));
         Grid grid = (Grid) component;
         assertEquals("scenarios-table", grid.getId());
-        verifyGrid(grid, Arrays.asList(
+        verifyGrid(grid, List.of(
             Triple.of("Name", -1.0, 1),
             Triple.of("Created Date", 100.0, -1),
             Triple.of("Status", 130.0, -1)

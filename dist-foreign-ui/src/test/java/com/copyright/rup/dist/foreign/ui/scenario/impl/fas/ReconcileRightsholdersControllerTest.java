@@ -41,7 +41,6 @@ import java.io.PipedOutputStream;
 import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -105,7 +104,7 @@ public class ReconcileRightsholdersControllerTest {
 
     @Test
     public void testGetProhibitedAccountNumbers() {
-        List<Long> accountNumbers = Arrays.asList(1000000001L, 1000000002L);
+        List<Long> accountNumbers = List.of(1000000001L, 1000000002L);
         expect(rightsholderDiscrepancyService.getProhibitedAccountNumbers(scenario.getId()))
             .andReturn(accountNumbers).once();
         replay(rightsholderDiscrepancyService);

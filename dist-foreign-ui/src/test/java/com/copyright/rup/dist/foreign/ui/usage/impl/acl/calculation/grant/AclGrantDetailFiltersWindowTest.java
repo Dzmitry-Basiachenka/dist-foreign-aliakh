@@ -40,7 +40,6 @@ import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -57,8 +56,7 @@ public class AclGrantDetailFiltersWindowTest {
 
     private static final String UNCHECKED = "unchecked";
     private static final String CAPTION_OPERATOR = "Operator";
-    private static final List<FilterOperatorEnum> BOOLEAN_ITEMS =
-        Arrays.asList(FilterOperatorEnum.Y, FilterOperatorEnum.N);
+    private static final List<FilterOperatorEnum> BOOLEAN_ITEMS = List.of(FilterOperatorEnum.Y, FilterOperatorEnum.N);
     private static final String LICENSE_TYPE = "MACL";
     private static final String GRANT_STATUS = "DENY";
     private static final String TYPE_OF_USE = "PRINT";
@@ -83,8 +81,7 @@ public class AclGrantDetailFiltersWindowTest {
     @Before
     public void setUp() {
         IAclGrantDetailFilterController controller = createMock(IAclGrantDetailFilterController.class);
-        expect(controller.getGrantPeriods()).andReturn(
-            new ArrayList<>(Arrays.asList(202212, 202112))).once();
+        expect(controller.getGrantPeriods()).andReturn(List.of(202212, 202112)).once();
         replay(controller);
         window = new AclGrantDetailFiltersWindow(controller, new AclGrantDetailFilter());
         binder = Whitebox.getInternalState(window, "filterBinder");
@@ -197,7 +194,7 @@ public class AclGrantDetailFiltersWindowTest {
         assertEquals(6, verticalLayout.getComponentCount());
         verifyItemsFilterLayout(verticalLayout.getComponent(0), "License Types", "Grant Statuses", "Types of Use");
         verifyComboBox(verticalLayout.getComponent(1), "Grant Set Period", Unit.PERCENTAGE, 50, true,
-            Arrays.asList(202212, 202112));
+            List.of(202212, 202112));
         verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(2), "Wr Wrk Inst From", "Wr Wrk Inst To");
         verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(3), "RH Account # From", "RH Account # To");
         verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(4), "RH Name");
@@ -377,12 +374,12 @@ public class AclGrantDetailFiltersWindowTest {
 
     private void assertTextOperatorComboBoxItems(ComboBox<FilterOperatorEnum> operatorComboBox) {
         verifyComboBox(operatorComboBox, CAPTION_OPERATOR, Unit.PIXELS, 230, false,
-            Arrays.asList(FilterOperatorEnum.EQUALS, FilterOperatorEnum.DOES_NOT_EQUAL, FilterOperatorEnum.CONTAINS));
+            List.of(FilterOperatorEnum.EQUALS, FilterOperatorEnum.DOES_NOT_EQUAL, FilterOperatorEnum.CONTAINS));
     }
 
     private void assertNumericOperatorComboBoxItems(ComboBox<FilterOperatorEnum> operatorComboBox) {
         verifyComboBox(operatorComboBox, CAPTION_OPERATOR, Unit.PIXELS, 230, false,
-            Arrays.asList(FilterOperatorEnum.EQUALS, FilterOperatorEnum.DOES_NOT_EQUAL,
+            List.of(FilterOperatorEnum.EQUALS, FilterOperatorEnum.DOES_NOT_EQUAL,
                 FilterOperatorEnum.GREATER_THAN, FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO,
                 FilterOperatorEnum.LESS_THAN, FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO, FilterOperatorEnum.BETWEEN));
     }

@@ -47,7 +47,6 @@ import org.powermock.reflect.Whitebox;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -67,7 +66,7 @@ import java.util.Set;
 public class ViewAclFundPoolWindowTest {
 
     private static final String FUND_POOL_ID = "8e440297-b89e-4cf2-b3cd-0420aea06a9d";
-    private static final List<String> SCENARIO_NAMES = Arrays.asList("ACL Scenario 2021", "ACL Scenario 2022");
+    private static final List<String> SCENARIO_NAMES = List.of("ACL Scenario 2021", "ACL Scenario 2022");
 
     private ViewAclFundPoolWindow window;
     private Grid<AclFundPool> aclFundPoolGrid;
@@ -107,7 +106,7 @@ public class ViewAclFundPoolWindowTest {
         Component component = content.getComponent(1);
         assertThat(component, instanceOf(Grid.class));
         Grid grid = (Grid) component;
-        verifyGrid(grid, Arrays.asList(
+        verifyGrid(grid, List.of(
             Triple.of("Fund Pool Name", -1.0, 1),
             Triple.of("License Type", 100.0, -1),
             Triple.of("Gross Amount", 110.0, -1),

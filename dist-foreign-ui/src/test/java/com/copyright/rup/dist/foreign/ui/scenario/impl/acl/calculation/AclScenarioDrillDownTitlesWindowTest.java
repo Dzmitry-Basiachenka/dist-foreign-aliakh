@@ -46,7 +46,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -99,7 +98,7 @@ public class AclScenarioDrillDownTitlesWindowTest {
         verifySearchWidget(content.getComponent(1));
         Component component = content.getComponent(2);
         assertThat(component, instanceOf(Grid.class));
-        verifyGrid((Grid) component, Arrays.asList(
+        verifyGrid((Grid) component, List.of(
             Triple.of("Wr Wrk Inst", 110.0, -1),
             Triple.of("System Title", 400.0, -1),
             Triple.of("Print Gross Amt", -1.0, 1),

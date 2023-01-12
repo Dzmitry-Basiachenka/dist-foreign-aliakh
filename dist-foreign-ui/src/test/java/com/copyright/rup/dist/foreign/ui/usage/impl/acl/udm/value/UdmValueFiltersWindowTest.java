@@ -45,7 +45,6 @@ import org.powermock.reflect.Whitebox;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -62,10 +61,9 @@ public class UdmValueFiltersWindowTest {
 
     private static final String UNCHECKED = "unchecked";
     private static final String CAPTION_OPERATOR = "Operator";
-    private static final List<FilterOperatorEnum> FLAG_ITEMS =
-        Arrays.asList(FilterOperatorEnum.Y, FilterOperatorEnum.N);
+    private static final List<FilterOperatorEnum> FLAG_ITEMS = List.of(FilterOperatorEnum.Y, FilterOperatorEnum.N);
     private static final List<FilterOperatorEnum> LAST_VALUE_FLAG_ITEMS =
-        Arrays.asList(FilterOperatorEnum.Y, FilterOperatorEnum.N, FilterOperatorEnum.IS_NULL);
+        List.of(FilterOperatorEnum.Y, FilterOperatorEnum.N, FilterOperatorEnum.IS_NULL);
     private static final String ASSIGNEE = "wjohn@copyright.com";
     private static final String LAST_VALUE_PERIOD = "202106";
     private static final Long WR_WRK_INST = 243904752L;
@@ -98,7 +96,7 @@ public class UdmValueFiltersWindowTest {
         "Field value should be populated for Between Operator";
     private static final Currency USD_CURRENCY = new Currency("USD", "US Dollar");
     private static final List<Currency> CURRENCIES =
-        Arrays.asList(USD_CURRENCY, new Currency("AUD", "Australian Dollar"), new Currency("CAD", "Canadian Dollar"),
+        List.of(USD_CURRENCY, new Currency("AUD", "Australian Dollar"), new Currency("CAD", "Canadian Dollar"),
             new Currency("EUR", "Euro"), new Currency("GBP", "Pound Sterling"), new Currency("JPY", "Yen"),
             new Currency("BRL", "Brazilian Real"), new Currency("CNY", "Yuan Renminbi"),
             new Currency("CZK", "Czech Koruna"), new Currency("DKK", "Danish Krone"),
@@ -413,7 +411,7 @@ public class UdmValueFiltersWindowTest {
         verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(4), "RH Account # From", "RH Account # To");
         verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(5), "RH Name");
         verifyComboBoxLayout(verticalLayout.getComponent(6), "Currency", CURRENCIES, "Last Pub Type",
-            Arrays.asList(new PublicationType(), buildPublicationType()));
+            List.of(new PublicationType(), buildPublicationType()));
         verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(7), "Price From", "Price To");
         verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(8), "Price in USD From", "Price in USD To");
         verifyComboBoxLayout(verticalLayout.getComponent(9), "Price Flag", FLAG_ITEMS, "Last Price Flag",
@@ -728,13 +726,13 @@ public class UdmValueFiltersWindowTest {
 
     private void assertTextOperatorComboBoxItems(ComboBox<FilterOperatorEnum> operatorComboBox) {
         verifyComboBox(operatorComboBox, CAPTION_OPERATOR, Unit.PIXELS, 230, false,
-            Arrays.asList(FilterOperatorEnum.EQUALS, FilterOperatorEnum.DOES_NOT_EQUAL,
+            List.of(FilterOperatorEnum.EQUALS, FilterOperatorEnum.DOES_NOT_EQUAL,
                 FilterOperatorEnum.CONTAINS, FilterOperatorEnum.IS_NULL, FilterOperatorEnum.IS_NOT_NULL));
     }
 
     private void assertNumericOperatorComboBoxItems(ComboBox<FilterOperatorEnum> operatorComboBox) {
         verifyComboBox(operatorComboBox, CAPTION_OPERATOR, Unit.PIXELS, 230, false,
-            Arrays.asList(FilterOperatorEnum.EQUALS, FilterOperatorEnum.DOES_NOT_EQUAL,
+            List.of(FilterOperatorEnum.EQUALS, FilterOperatorEnum.DOES_NOT_EQUAL,
                 FilterOperatorEnum.GREATER_THAN, FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO,
                 FilterOperatorEnum.LESS_THAN, FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO,
                 FilterOperatorEnum.BETWEEN, FilterOperatorEnum.IS_NULL, FilterOperatorEnum.IS_NOT_NULL));

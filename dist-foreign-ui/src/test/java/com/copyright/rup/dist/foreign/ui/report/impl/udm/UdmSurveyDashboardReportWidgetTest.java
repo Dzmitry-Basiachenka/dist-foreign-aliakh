@@ -30,7 +30,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.AbstractMap.SimpleImmutableEntry;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
@@ -57,7 +56,7 @@ public class UdmSurveyDashboardReportWidgetTest {
         expect(streamSource.getSource()).andReturn(
             new SimpleImmutableEntry(createMock(Supplier.class), createMock(Supplier.class))).once();
         expect(controller.getCsvStreamSource()).andReturn(streamSource).once();
-        expect(controller.getPeriods()).andReturn(Arrays.asList(202106, 202212)).once();
+        expect(controller.getPeriods()).andReturn(List.of(202106, 202212)).once();
         replay(controller, streamSource);
         widget.init();
         verify(controller, streamSource);

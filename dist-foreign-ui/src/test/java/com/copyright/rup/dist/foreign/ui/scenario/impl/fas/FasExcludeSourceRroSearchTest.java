@@ -23,7 +23,6 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -62,7 +61,7 @@ public class FasExcludeSourceRroSearchTest {
 
     @Parameters
     public static Collection<Object[]> data() {
-        return Arrays.asList(
+        return List.of(
             new Object[][]{{"Times Mirror Magazines, Inc. [T]", Set.of(CONTAINER_DATA.get(0))},
                 {"Klasing", Set.of(CONTAINER_DATA.get(1))},
                 {"Invalid name", Set.of()},

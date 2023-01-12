@@ -29,7 +29,6 @@ import com.vaadin.ui.Window;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,7 +49,7 @@ import java.util.function.Function;
 public class UdmEditMultipleUsagesResearcherWindow extends Window {
 
     private static final List<UsageStatusEnum> EDIT_AVAILABLE_STATUSES =
-        Arrays.asList(UsageStatusEnum.NEW, UsageStatusEnum.OPS_REVIEW, UsageStatusEnum.SPECIALIST_REVIEW);
+        List.of(UsageStatusEnum.NEW, UsageStatusEnum.OPS_REVIEW, UsageStatusEnum.SPECIALIST_REVIEW);
     private final IUdmUsageController controller;
     private final ComboBox<UsageStatusEnum> statusComboBox =
         new ComboBox<>(ForeignUi.getMessage("label.detail_status"));
@@ -171,7 +170,7 @@ public class UdmEditMultipleUsagesResearcherWindow extends Window {
                 saveButtonClickListener.buttonClick(event);
                 close();
             } catch (ValidationException e) {
-                Windows.showValidationErrorWindow(Arrays.asList(statusComboBox, wrWrkInstField, commentField));
+                Windows.showValidationErrorWindow(List.of(statusComboBox, wrWrkInstField, commentField));
             }
         });
         Button discardButton = Buttons.createButton(ForeignUi.getMessage("button.discard"));

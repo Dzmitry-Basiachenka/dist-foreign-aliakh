@@ -68,7 +68,6 @@ import org.powermock.reflect.Whitebox;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -282,7 +281,7 @@ public class CreateAclScenarioWindowTest {
         List<AclPublicationType> pubTypes = new ArrayList<>(pubTypeWeightWidget.getAppliedParameters());
         pubTypes.add(buildAclPublicationType(PERIOD));
         pubTypeWeightWidget.setAppliedParameters(pubTypes);
-        assertEquals(Arrays.asList(buildAclPublicationType(201506), buildAclPublicationType(PERIOD)),
+        assertEquals(List.of(buildAclPublicationType(201506), buildAclPublicationType(PERIOD)),
             pubTypeWeightWidget.getAppliedParameters());
         editableCheckBox.setValue(false);
         assertEquals(publicationTypes, pubTypeWeightWidget.getAppliedParameters());

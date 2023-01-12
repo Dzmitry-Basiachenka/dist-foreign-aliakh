@@ -43,7 +43,6 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -70,7 +69,7 @@ public class RefreshScenarioWindowTest {
         assertEquals(3, content.getComponentCount());
         assertThat(content.getComponent(1), instanceOf(Grid.class));
         Grid grid = (Grid) content.getComponent(1);
-        verifyGrid(grid, Arrays.asList(
+        verifyGrid(grid, List.of(
             Triple.of("Detail ID", 130.0, -1),
             Triple.of("Detail Status", -1.0, -1),
             Triple.of("Product Family", -1.0, -1),

@@ -28,7 +28,6 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -46,7 +45,7 @@ import java.util.List;
 public class ForeignUiMediatorTest {
 
     private static final String FDA_ACCESS_APPLICATION = "FDA_ACCESS_APPLICATION";
-    private static final List<String> PRODUCT_FAMILIES = Arrays.asList(
+    private static final List<String> PRODUCT_FAMILIES = List.of(
         FdaConstants.FAS_PRODUCT_FAMILY, FdaConstants.CLA_FAS_PRODUCT_FAMILY, FdaConstants.NTS_PRODUCT_FAMILY,
         FdaConstants.AACL_PRODUCT_FAMILY, FdaConstants.SAL_PRODUCT_FAMILY, FdaConstants.ACL_PRODUCT_FAMILY,
         FdaConstants.ACLCI_PRODUCT_FAMILY);

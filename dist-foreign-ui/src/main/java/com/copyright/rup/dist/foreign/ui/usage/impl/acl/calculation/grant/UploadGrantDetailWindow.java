@@ -25,7 +25,7 @@ import com.vaadin.ui.Window;
 
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -93,7 +93,7 @@ public class UploadGrantDetailWindow extends Window {
                 Windows.showNotificationWindow(ForeignUi.getMessage("window.error"), e.getHtmlMessage());
             }
         } else {
-            Windows.showValidationErrorWindow(Arrays.asList(comboBox, uploadField));
+            Windows.showValidationErrorWindow(List.of(comboBox, uploadField));
         }
     }
 

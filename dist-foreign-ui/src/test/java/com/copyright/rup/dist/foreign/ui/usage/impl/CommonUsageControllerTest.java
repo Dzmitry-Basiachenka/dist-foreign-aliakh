@@ -34,7 +34,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -115,7 +114,7 @@ public class CommonUsageControllerTest {
     @Test
     public void testGetAdditionalFundNamesByUsageBatchId() {
         String batchId = RupPersistUtils.generateUuid();
-        List<String> names = Arrays.asList("Test 1", "Test 2");
+        List<String> names = List.of("Test 1", "Test 2");
         expect(fundPoolService.getNtsFundPoolNamesByUsageBatchId(batchId)).andReturn(names).once();
         replay(fundPoolService);
         assertEquals(names, controller.getAdditionalFundNamesByUsageBatchId(batchId));

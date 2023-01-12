@@ -41,7 +41,6 @@ import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -256,8 +255,7 @@ public class EditAclUsagesWindowTest {
         verifyTextFieldLayout(verticalLayout.getComponent(0), "Period (YYYYMM)");
         verifyTextFieldLayout(verticalLayout.getComponent(1), "Wr Wrk Inst");
         verifyComboBoxLayout(verticalLayout.getComponent(2), "Pub Type", true, List.of(PUBLICATION_TYPE));
-        verifyComboBoxLayout(verticalLayout.getComponent(3), "Type of Use", true,
-            Arrays.asList("PRINT","DIGITAL"));
+        verifyComboBoxLayout(verticalLayout.getComponent(3), "Type of Use", true, List.of("PRINT","DIGITAL"));
         verifyComboBoxLayout(verticalLayout.getComponent(4), "Detail Licensee Class", true, List.of(LICENSEE_CLASS));
         verifyTextFieldLayout(verticalLayout.getComponent(5), "Annualized Copies");
         verifyTextFieldLayout(verticalLayout.getComponent(6), "Content Unit Price");

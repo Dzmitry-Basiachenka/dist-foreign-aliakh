@@ -24,8 +24,8 @@ import com.vaadin.ui.VerticalLayout;
 
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Verifies {@link AclciUsageAppliedFilterWidget}.
@@ -45,7 +45,7 @@ public class AclciUsageAppliedFilterWidgetTest {
         IAclciUsageFilterController controller = createMock(IAclciUsageFilterController.class);
         widget = new AclciUsageAppliedFilterWidget(controller);
         expect(controller.getUsageBatches()).andReturn(
-            Arrays.asList(buildBatch("2f4fabf5-e154-4421-972f-cdc7b357725a", "ACLCI Batch 2021"),
+            List.of(buildBatch("2f4fabf5-e154-4421-972f-cdc7b357725a", "ACLCI Batch 2021"),
                 buildBatch("e7b3efe7-6036-41aa-889d-590e211bad7f", "ACLCI Batch 2022"),
                 buildBatch("6870b76b-2461-4322-9a65-8fede1b7829e", "1 Batch 2022")));
         replay(controller);
@@ -75,10 +75,10 @@ public class AclciUsageAppliedFilterWidgetTest {
 
     private UsageFilter buildFilter() {
         UsageFilter filter = new UsageFilter();
-        filter.setUsageBatchesIds(new HashSet<>(Arrays.asList("2f4fabf5-e154-4421-972f-cdc7b357725a",
-            "e7b3efe7-6036-41aa-889d-590e211bad7f", "6870b76b-2461-4322-9a65-8fede1b7829e")));
+        filter.setUsageBatchesIds(Set.of("2f4fabf5-e154-4421-972f-cdc7b357725a",
+            "e7b3efe7-6036-41aa-889d-590e211bad7f", "6870b76b-2461-4322-9a65-8fede1b7829e"));
         filter.setUsageStatus(UsageStatusEnum.RH_FOUND);
-        filter.setLicenseTypes(new HashSet<>(Arrays.asList(AclciLicenseTypeEnum.values())));
+        filter.setLicenseTypes(Set.of(AclciLicenseTypeEnum.values()));
         return filter;
     }
 

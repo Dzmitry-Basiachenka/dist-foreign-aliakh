@@ -47,7 +47,6 @@ import org.powermock.reflect.Whitebox;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -182,7 +181,7 @@ public class FasScenariosWidgetTest {
     private void verifyGrid(Grid grid) {
         verifyWindow(grid, null, 100, 100, Unit.PERCENTAGE);
         assertEquals("scenarios-table", grid.getId());
-        UiTestHelper.verifyGrid(grid, Arrays.asList(
+        UiTestHelper.verifyGrid(grid, List.of(
             Triple.of("Name", -1.0, 1),
             Triple.of("Created Date", 100.0, -1),
             Triple.of("Status", 130.0, -1)

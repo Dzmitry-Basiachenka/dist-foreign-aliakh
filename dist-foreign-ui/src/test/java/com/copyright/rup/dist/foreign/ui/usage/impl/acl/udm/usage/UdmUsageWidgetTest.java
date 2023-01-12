@@ -76,8 +76,6 @@ import org.powermock.reflect.Whitebox;
 import java.io.IOException;
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
@@ -98,13 +96,13 @@ import java.util.stream.Collectors;
 public class UdmUsageWidgetTest {
 
     private static final List<String> VISIBLE_COLUMNS_FOR_RESEARCHER =
-        Arrays.asList("Detail ID", "Period", "Usage Detail ID", "Detail Status", "Assignee", "RH Account #",
+        List.of("Detail ID", "Period", "Usage Detail ID", "Detail Status", "Assignee", "RH Account #",
             "RH Name", "Wr Wrk Inst", "Reported Title", "System Title", "Reported Standard Number",
             "Standard Number", "Reported Pub Type", "Publication Format", "Article", "Language", "Action Reason",
             "Comment", "Research URL", "Det LC ID", "Det LC Name", "Channel", "Usage Date", "Survey Start Date",
             "Survey End Date", "Reported TOU", "TOU", "Ineligible Reason", "Load Date", "Updated By", "Updated Date");
     private static final List<String> VISIBLE_COLUMNS_FOR_MANAGER_AND_SPECIALIST =
-        Arrays.asList("Detail ID", "Period", "Usage Origin", "Usage Detail ID", "Detail Status", "Assignee",
+        List.of("Detail ID", "Period", "Usage Origin", "Usage Detail ID", "Detail Status", "Assignee",
             "RH Account #", "RH Name", "Wr Wrk Inst", "Reported Title", "System Title", "Reported Standard Number",
             "Standard Number", "Reported Pub Type", "Publication Format", "Article", "Language", "Action Reason",
             "Comment", "Research URL", "Det LC ID", "Det LC Name", "Company ID", "Company Name", "Survey Respondent",
@@ -112,7 +110,7 @@ public class UdmUsageWidgetTest {
             "Annual Multiplier", "Statistical Multiplier", "Reported TOU", "TOU", "Quantity", "Annualized Copies",
             "Ineligible Reason", "Load Date", "Updated By", "Updated Date");
     private static final List<String> VISIBLE_COLUMNS_FOR_VIEW_ONLY =
-        Arrays.asList("Detail ID", "Period", "Usage Origin", "Usage Detail ID", "Detail Status", "Assignee",
+        List.of("Detail ID", "Period", "Usage Origin", "Usage Detail ID", "Detail Status", "Assignee",
             "RH Account #", "RH Name", "Wr Wrk Inst", "Reported Title", "System Title", "Reported Standard Number",
             "Standard Number", "Reported Pub Type", "Publication Format", "Article", "Language", "Action Reason",
             "Comment", "Research URL", "Det LC ID", "Det LC Name", "Company ID", "Company Name", "Survey Respondent",
@@ -483,7 +481,7 @@ public class UdmUsageWidgetTest {
         udmUsageDtoSecond.setAssignee(USER);
         udmUsageDtoSecond.setStatus(UsageStatusEnum.RH_NOT_FOUND);
         UdmEditMultipleUsagesResearcherWindow mockWindow = createMock(UdmEditMultipleUsagesResearcherWindow.class);
-        Set<UdmUsageDto> udmUsages = new HashSet<>(Arrays.asList(udmUsageDtoFirst, udmUsageDtoSecond));
+        Set<UdmUsageDto> udmUsages = Set.of(udmUsageDtoFirst, udmUsageDtoSecond);
         expectNew(UdmEditMultipleUsagesResearcherWindow.class, eq(controller), eq(udmUsages),
             anyObject(ClickListener.class)).andReturn(mockWindow).once();
         Windows.showModalWindow(mockWindow);
@@ -843,8 +841,8 @@ public class UdmUsageWidgetTest {
         assertTrue(layout.isSpacing());
         assertEquals(new MarginInfo(false), layout.getMargin());
         assertEquals(5, layout.getComponentCount());
-        verifyMenuBar(layout.getComponent(0), "UDM Batch", buttonsVisibility[0], Arrays.asList("Load", "View"));
-        verifyMenuBar(layout.getComponent(1), "Assignment", buttonsVisibility[1], Arrays.asList("Assign", "Unassign"));
+        verifyMenuBar(layout.getComponent(0), "UDM Batch", buttonsVisibility[0], List.of("Load", "View"));
+        verifyMenuBar(layout.getComponent(1), "Assignment", buttonsVisibility[1], List.of("Assign", "Unassign"));
         verifyButton(layout.getComponent(2), "Multiple Edit", buttonsVisibility[2]);
         verifyButton(layout.getComponent(3), "Publish", buttonsVisibility[3]);
         verifyButton(layout.getComponent(4), "Export", buttonsVisibility[4]);
@@ -926,7 +924,7 @@ public class UdmUsageWidgetTest {
         udmUsageDtoSecond.setAssignee(USER);
         udmUsageDtoSecond.setStatus(UsageStatusEnum.RH_NOT_FOUND);
         udmUsageDtoSecond.setBaselineFlag(false);
-        Set<UdmUsageDto> udmUsages = new HashSet<>(Arrays.asList(udmUsageDtoFirst, udmUsageDtoSecond));
+        Set<UdmUsageDto> udmUsages = Set.of(udmUsageDtoFirst, udmUsageDtoSecond);
         Windows.showNotificationWindow(message);
         expectLastCall().once();
         replay(controller, streamSource, Windows.class, RupContextUtils.class, ForeignSecurityUtils.class);

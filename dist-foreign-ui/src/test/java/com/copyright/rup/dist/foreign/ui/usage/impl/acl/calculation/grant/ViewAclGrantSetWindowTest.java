@@ -44,9 +44,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -64,7 +62,7 @@ import java.util.Set;
 public class ViewAclGrantSetWindowTest {
 
     private static final String GRANT_SET_ID = "ef3faf52-4ccf-4eab-9f44-ed4bfa7c4eef";
-    private static final List<String> SCENARIO_NAMES = Arrays.asList("ACL Scenario 2021", "ACL Scenario 2022");
+    private static final List<String> SCENARIO_NAMES = List.of("ACL Scenario 2021", "ACL Scenario 2022");
 
     private ViewAclGrantSetWindow window;
     private Grid<AclGrantSet> aclGrantSetGrid;
@@ -103,7 +101,7 @@ public class ViewAclGrantSetWindowTest {
         Component component = content.getComponent(1);
         assertThat(component, instanceOf(Grid.class));
         Grid grid = (Grid) component;
-        verifyGrid(grid, Arrays.asList(
+        verifyGrid(grid, List.of(
             Triple.of("Grant Set Name", -1.0, 1),
             Triple.of("Grant Period", 110.0, -1),
             Triple.of("License Type", 100.0, -1),
@@ -186,7 +184,7 @@ public class ViewAclGrantSetWindowTest {
         grantSet.setName("ACL Grant Set 2021");
         grantSet.setGrantPeriod(202112);
         grantSet.setLicenseType("ACL");
-        grantSet.setPeriods(new HashSet<>(Arrays.asList(202006, 202112)));
+        grantSet.setPeriods(Set.of(202006, 202112));
         grantSet.setEditable(true);
         return grantSet;
     }

@@ -56,7 +56,6 @@ import org.powermock.reflect.Whitebox;
 
 import java.io.IOException;
 import java.util.AbstractMap.SimpleImmutableEntry;
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -198,7 +197,7 @@ public class NtsAuditWidgetTest {
         Grid grid = (Grid) component;
         verifySize(grid, 100, Unit.PERCENTAGE, 100);
         List<Column> columns = grid.getColumns();
-        assertEquals(Arrays.asList("Detail ID", "Detail Status", "Product Family", "Usage Batch Name", "Payment Date",
+        assertEquals(List.of("Detail ID", "Detail Status", "Product Family", "Usage Batch Name", "Payment Date",
             "RH Account #", "RH Name", "Payee Account #", "Payee Name", "Wr Wrk Inst", "System Title", "Title",
             "Standard Number", "Standard Number Type", "Reported Value", "Gross Amt in USD", "Service Fee %",
             "Scenario Name", "Check #", "Check Date", "Event ID", "Dist. Name", "Dist. Date", "Period Ending",

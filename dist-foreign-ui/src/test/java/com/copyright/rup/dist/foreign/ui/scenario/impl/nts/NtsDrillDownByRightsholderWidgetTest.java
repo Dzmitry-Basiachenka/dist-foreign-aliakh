@@ -44,7 +44,6 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -84,7 +83,7 @@ public class NtsDrillDownByRightsholderWidgetTest {
         Grid<UsageDto> grid = (Grid<UsageDto>) content.getComponent(1);
         assertTrue(grid.getStyleName().contains("drill-down-by-rightsholder-table"));
         verifyWindow(grid, null, 100, 100, Unit.PERCENTAGE);
-        verifyGrid(grid, Arrays.asList(
+        verifyGrid(grid, List.of(
             Triple.of("Detail ID", 130.0, -1),
             Triple.of("Product Family", 125.0, -1),
             Triple.of("Usage Batch Name", 145.0, -1),

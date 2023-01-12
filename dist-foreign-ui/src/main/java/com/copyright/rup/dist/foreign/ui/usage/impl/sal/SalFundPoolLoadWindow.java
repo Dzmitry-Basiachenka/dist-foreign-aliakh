@@ -32,7 +32,7 @@ import com.vaadin.ui.Window;
 import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -98,7 +98,7 @@ class SalFundPoolLoadWindow extends Window {
             close();
             Windows.showNotificationWindow(ForeignUi.getMessage("message.upload_successfully_completed"));
         } else {
-            Windows.showValidationErrorWindow(Arrays.asList(fundPoolNameField, assessmentName, grossAmountField,
+            Windows.showValidationErrorWindow(List.of(fundPoolNameField, assessmentName, grossAmountField,
                 itemBankSplitPercent, accountNumberField, licenseeNameField, dateReceived, gradeKto5NumberOfStudents,
                 grade6to8NumberOfStudents, grade9to12NumberOfStudents));
         }

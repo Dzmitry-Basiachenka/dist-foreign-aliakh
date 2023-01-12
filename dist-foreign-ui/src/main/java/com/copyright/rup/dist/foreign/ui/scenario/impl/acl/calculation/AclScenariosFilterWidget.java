@@ -20,7 +20,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
-import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -121,7 +121,7 @@ public class AclScenariosFilterWidget extends VerticalLayout implements IAclScen
     }
 
     private LicenseTypeFilterWidget buildLicenseTypeFilter() {
-        licenseTypeFilterWidget = new LicenseTypeFilterWidget(() -> Arrays.asList("ACL", "MACL", "VGW", "JACDCL"),
+        licenseTypeFilterWidget = new LicenseTypeFilterWidget(() -> List.of("ACL", "MACL", "VGW", "JACDCL"),
             aclScenarioFilter.getLicenseTypes());
         licenseTypeFilterWidget.addFilterSaveListener((IFilterSaveListener<String>) saveEvent -> {
             aclScenarioFilter.setLicenseTypes(saveEvent.getSelectedItemsIds());

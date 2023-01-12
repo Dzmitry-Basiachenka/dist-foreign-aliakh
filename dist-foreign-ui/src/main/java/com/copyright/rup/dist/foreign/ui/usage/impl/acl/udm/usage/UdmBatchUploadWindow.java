@@ -31,7 +31,7 @@ import com.vaadin.ui.Window;
 
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.Arrays;
+import java.util.List;
 
 /**
  * Window for uploading a UDM usage batch with usages.
@@ -93,7 +93,7 @@ public class UdmBatchUploadWindow extends Window {
             }
         } else {
             Windows.showValidationErrorWindow(
-                Arrays.asList(periodYearField, uploadField, channelField, usageOriginField, monthField));
+                List.of(periodYearField, uploadField, channelField, usageOriginField, monthField));
         }
     }
 

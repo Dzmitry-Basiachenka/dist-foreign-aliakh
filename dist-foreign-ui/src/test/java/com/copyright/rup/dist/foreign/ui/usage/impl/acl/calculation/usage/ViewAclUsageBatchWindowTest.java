@@ -44,9 +44,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -64,7 +62,7 @@ import java.util.Set;
 public class ViewAclUsageBatchWindowTest {
 
     private static final String USAGE_BATCH_ID = "598f47d0-0ecf-4c69-85ac-25bb481313dd";
-    private static final List<String> SCENARIO_NAMES = Arrays.asList("ACL Scenario 2021", "ACL Scenario 2022");
+    private static final List<String> SCENARIO_NAMES = List.of("ACL Scenario 2021", "ACL Scenario 2022");
 
     private ViewAclUsageBatchWindow window;
     private Grid<AclUsageBatch> aclUsageBatchGrid;
@@ -103,7 +101,7 @@ public class ViewAclUsageBatchWindowTest {
         Component component = content.getComponent(1);
         assertThat(component, instanceOf(Grid.class));
         Grid grid = (Grid) component;
-        verifyGrid(grid, Arrays.asList(
+        verifyGrid(grid, List.of(
             Triple.of("Usage Batch Name", -1.0, 1),
             Triple.of("Distribution Period", 150.0, -1),
             Triple.of("Periods", 580.0, -1),
@@ -184,7 +182,7 @@ public class ViewAclUsageBatchWindowTest {
         usageBatch.setId(USAGE_BATCH_ID);
         usageBatch.setName("ACL Usage Batch");
         usageBatch.setDistributionPeriod(202212);
-        usageBatch.setPeriods(new HashSet<>(Arrays.asList(202106, 202112)));
+        usageBatch.setPeriods(Set.of(202106, 202112));
         usageBatch.setEditable(true);
         return usageBatch;
     }

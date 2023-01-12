@@ -14,6 +14,7 @@ import static org.junit.Assert.assertTrue;
 import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.ui.usage.UiTestHelper;
+
 import com.google.common.collect.ImmutableMap;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Component;
@@ -21,12 +22,12 @@ import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
+
 import org.apache.commons.lang3.tuple.Triple;
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -44,10 +45,10 @@ public class AclAggregateLicenseeClassMappingViewWindowTest {
     private static final String MATERIALS = "Materials";
 
     private AclAggregateLicenseeClassMappingViewWindow window;
-    private final List<DetailLicenseeClass> defaultParams = Arrays.asList(
+    private final List<DetailLicenseeClass> defaultParams = List.of(
         buildDetailLicenseeClass(2, "Textiles, Apparel, etc.", 51, MATERIALS),
         buildDetailLicenseeClass(6, "Chemicals", 52, "Medical"));
-    private final List<DetailLicenseeClass> appliedParams = Arrays.asList(
+    private final List<DetailLicenseeClass> appliedParams = List.of(
         buildDetailLicenseeClass(2, "Textiles, Apparel, etc.", 51, MATERIALS),
         buildDetailLicenseeClass(6, "Chemicals", 53, "Metals"));
 
@@ -93,7 +94,7 @@ public class AclAggregateLicenseeClassMappingViewWindowTest {
 
     @SuppressWarnings("unchecked")
     private void verifyGrid(Grid grid) {
-        UiTestHelper.verifyGrid(grid, Arrays.asList(
+        UiTestHelper.verifyGrid(grid, List.of(
             Triple.of("Det LC ID", -1.0, 1),
             Triple.of("Det LC Name", -1.0, 2),
             Triple.of("Default Agg LC ID", -1.0, 1),

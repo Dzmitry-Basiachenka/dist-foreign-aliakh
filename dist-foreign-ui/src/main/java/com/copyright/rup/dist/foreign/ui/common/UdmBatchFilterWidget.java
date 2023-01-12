@@ -13,7 +13,6 @@ import com.vaadin.data.ValueProvider;
 
 import org.apache.commons.collections4.CollectionUtils;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -78,7 +77,7 @@ public class UdmBatchFilterWidget extends BaseItemsFilterWidget<UdmBatch>
     public FilterWindow<UdmBatch> showFilterWindow() {
         FilterWindow<UdmBatch> filterWindow =
             Windows.showFilterWindow(ForeignUi.getMessage("window.batches_filter"), this,
-                (ValueProvider<UdmBatch, List<String>>) bean -> Arrays.asList(bean.getName()));
+                (ValueProvider<UdmBatch, List<String>>) bean -> List.of(bean.getName()));
         filterWindow.setSelectedItemsIds(selectedItemsIds);
         filterWindow.setSelectAllButtonVisible();
         filterWindow.setSearchPromptString(ForeignUi.getMessage("prompt.batch"));

@@ -41,7 +41,6 @@ import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -60,10 +59,10 @@ public class UsageAgeWeightWindowTest {
     private static final String WEIGHT_2 = "0.90";
     private static final String WEIGHT_3 = "0.80";
 
-    private final List<UsageAge> defaultParams = Arrays.asList(
+    private final List<UsageAge> defaultParams = List.of(
         buildUsageAge(2020, new BigDecimal(WEIGHT_1)),
         buildUsageAge(2019, new BigDecimal(WEIGHT_2)));
-    private final List<UsageAge> appliedParams = Arrays.asList(
+    private final List<UsageAge> appliedParams = List.of(
         buildUsageAge(2020, new BigDecimal(WEIGHT_1)),
         buildUsageAge(2019, new BigDecimal(WEIGHT_3)));
     private UsageAgeWeightWindow window;
@@ -200,7 +199,7 @@ public class UsageAgeWeightWindowTest {
 
     @SuppressWarnings("unchecked")
     private void verifyGrid(Grid grid, boolean isEditorEnabled) {
-        UiTestHelper.verifyGrid(grid, Arrays.asList(
+        UiTestHelper.verifyGrid(grid, List.of(
             Triple.of("Usage Period", -1.0, -1),
             Triple.of("Default Weight", -1.0, -1),
             Triple.of("Scenario Weight", -1.0, -1)));

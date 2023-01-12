@@ -50,7 +50,6 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -268,7 +267,7 @@ public class UdmEditMultipleUsagesResearcherWindowTest {
         VerticalLayout verticalLayout = (VerticalLayout) component;
         assertEquals(5, verticalLayout.getComponentCount());
         verifyComboBoxLayout(verticalLayout.getComponent(0), "Detail Status", false,
-            Arrays.asList(UsageStatusEnum.NEW, UsageStatusEnum.OPS_REVIEW, UsageStatusEnum.SPECIALIST_REVIEW));
+            List.of(UsageStatusEnum.NEW, UsageStatusEnum.OPS_REVIEW, UsageStatusEnum.SPECIALIST_REVIEW));
         verifyTextFieldLayout(verticalLayout.getComponent(1), "Wr Wrk Inst");
         verifyComboBoxLayout(verticalLayout.getComponent(2), "Action Reason", true, List.of(ACTION_REASON));
         verifyTextFieldLayout(verticalLayout.getComponent(3), "Comment");

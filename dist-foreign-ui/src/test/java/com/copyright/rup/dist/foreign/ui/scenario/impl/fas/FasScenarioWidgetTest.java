@@ -52,7 +52,6 @@ import org.powermock.reflect.Whitebox;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.AbstractMap.SimpleImmutableEntry;
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -174,7 +173,7 @@ public class FasScenarioWidgetTest {
         assertThat(component, instanceOf(Grid.class));
         Grid grid = (Grid) component;
         List<Column> columns = grid.getColumns();
-        assertEquals(Arrays.asList("RH Account #", "RH Name", "Payee Account #", "Payee Name", "Gross Amt in USD",
+        assertEquals(List.of("RH Account #", "RH Name", "Payee Account #", "Payee Name", "Gross Amt in USD",
                 "Service Fee Amount", "Net Amt in USD", "Service Fee %"),
             columns.stream().map(Column::getCaption).collect(Collectors.toList()));
         assertTrue(grid.isFooterVisible());

@@ -35,8 +35,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.FastDateFormat;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
@@ -247,7 +247,7 @@ public class UdmBaselineWidget extends HorizontalSplitPanel implements IUdmBasel
                 controller.deleteFromBaseline(usageIds, reason);
                 refresh();
             },
-            Arrays.asList(new RequiredValidator(),
+            List.of(new RequiredValidator(),
                 new StringLengthValidator(ForeignUi.getMessage("field.error.length", 1000), 0, 1000)));
     }
 }

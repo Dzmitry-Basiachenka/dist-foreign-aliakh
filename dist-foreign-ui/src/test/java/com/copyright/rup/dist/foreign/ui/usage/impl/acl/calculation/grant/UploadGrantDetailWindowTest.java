@@ -46,7 +46,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.io.ByteArrayOutputStream;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -71,7 +70,7 @@ public class UploadGrantDetailWindowTest {
         AclGrantSet nonEditableGrantSet = buildGrantSet();
         nonEditableGrantSet.setId("0a789e01-7444-42f3-a135-ab259bdf41ff");
         nonEditableGrantSet.setEditable(false);
-        expect(controller.getAllAclGrantSets()).andReturn(Arrays.asList(nonEditableGrantSet, grantSet)).once();
+        expect(controller.getAllAclGrantSets()).andReturn(List.of(nonEditableGrantSet, grantSet)).once();
         replay(controller);
         window = new UploadGrantDetailWindow(controller);
         verify(controller);
@@ -130,7 +129,7 @@ public class UploadGrantDetailWindowTest {
         verifyUploadComponent(verticalLayout.getComponent(1));
         verifyButtonsLayout(verticalLayout.getComponent(2), "Upload", "Close");
         Button loadButton = (Button) ((HorizontalLayout) (verticalLayout.getComponent(2))).getComponent(0);
-        verifyLoadClickListener(loadButton, Arrays.asList(Whitebox.getInternalState(window, "comboBox"),
+        verifyLoadClickListener(loadButton, List.of(Whitebox.getInternalState(window, "comboBox"),
             Whitebox.getInternalState(window, "uploadField")));
     }
 

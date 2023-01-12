@@ -32,7 +32,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.AbstractMap.SimpleImmutableEntry;
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -64,7 +63,7 @@ public class CommonScenariosReportWidgetTest {
         expect(streamSource.getSource())
             .andReturn(new SimpleImmutableEntry(createMock(Supplier.class), createMock(Supplier.class))).once();
         expect(controller.getCsvStreamSource()).andReturn(streamSource).once();
-        expect(controller.getScenarios()).andReturn(Arrays.asList(scenario1, scenario2)).once();
+        expect(controller.getScenarios()).andReturn(List.of(scenario1, scenario2)).once();
         replay(controller, streamSource);
         widget = new CommonScenariosReportWidget();
         widget.setController(controller);
@@ -107,7 +106,7 @@ public class CommonScenariosReportWidgetTest {
         grid.select(scenario1);
         assertEquals(List.of(scenario1), widget.getSelectedScenarios());
         grid.select(scenario2);
-        assertEquals(Arrays.asList(scenario1, scenario2), widget.getSelectedScenarios());
+        assertEquals(List.of(scenario1, scenario2), widget.getSelectedScenarios());
         grid.deselectAll();
         assertEquals(List.of(), widget.getSelectedScenarios());
     }

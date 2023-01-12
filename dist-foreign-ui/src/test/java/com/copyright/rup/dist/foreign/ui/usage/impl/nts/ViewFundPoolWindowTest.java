@@ -48,7 +48,6 @@ import org.powermock.reflect.Whitebox;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -97,7 +96,7 @@ public class ViewFundPoolWindowTest {
         assertEquals(SearchWidget.class, content.getComponent(0).getClass());
         Component component = content.getComponent(1);
         assertEquals(Grid.class, component.getClass());
-        verifyGrid((Grid) component, Arrays.asList(
+        verifyGrid((Grid) component, List.of(
             Triple.of("Fund Pool Name", 150.0, -1),
             Triple.of("RRO Account #", 120.0, -1),
             Triple.of("RRO Name", 150.0, -1),
@@ -137,7 +136,7 @@ public class ViewFundPoolWindowTest {
         Button.ClickListener listener = getDeleteButtonClickListener();
         expect(grid.getSelectedItems()).andReturn(Set.of(buildUsageBatch())).once();
         expect(controller.getAdditionalFundNamesByUsageBatchId(anyString()))
-            .andReturn(Arrays.asList("Fund 1", "Fund 2")).once();
+            .andReturn(List.of("Fund 1", "Fund 2")).once();
         Windows.showNotificationWindow("Fund pool cannot be deleted because it is associated with the following " +
             "additional funds:<ul><li>Fund 1</li><li>Fund 2</li></ul>");
         expectLastCall().once();
@@ -154,7 +153,7 @@ public class ViewFundPoolWindowTest {
         expect(grid.getSelectedItems()).andReturn(Set.of(buildUsageBatch())).once();
         expect(controller.getAdditionalFundNamesByUsageBatchId(USAGE_BATCH_ID)).andReturn(List.of()).once();
         expect(controller.getScenariosNamesAssociatedWithUsageBatch(USAGE_BATCH_ID))
-            .andReturn(Arrays.asList("Scenario 1", "Scenario 2")).once();
+            .andReturn(List.of("Scenario 1", "Scenario 2")).once();
         Windows.showNotificationWindow("Fund pool cannot be deleted because it is associated with the following " +
             "scenarios:<ul><li>Scenario 1</li><li>Scenario 2</li></ul>");
         expectLastCall().once();

@@ -36,7 +36,6 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -157,7 +156,7 @@ public class ViewSalUsageBatchWindowTest {
         Button.ClickListener listener = getDeleteButtonClickListener(0);
         expect(grid.getSelectedItems()).andReturn(Set.of(buildUsageBatch())).once();
         expect(controller.getScenariosNamesAssociatedWithUsageBatch(USAGE_BATCH_ID))
-            .andReturn(Arrays.asList("Scenario 1", "Scenario 2")).once();
+            .andReturn(List.of("Scenario 1", "Scenario 2")).once();
         Windows.showNotificationWindow("Usage batch cannot be deleted because it is associated with the following " +
             "scenarios:<ul><li>Scenario 1</li><li>Scenario 2</li></ul>");
         expectLastCall().once();
@@ -217,7 +216,7 @@ public class ViewSalUsageBatchWindowTest {
         expect(controller.usageDataExists(USAGE_BATCH_ID))
             .andReturn(true).once();
         expect(controller.getScenariosNamesAssociatedWithUsageBatch(USAGE_BATCH_ID))
-            .andReturn(Arrays.asList("Scenario 1", "Scenario 2")).once();
+            .andReturn(List.of("Scenario 1", "Scenario 2")).once();
         Windows.showNotificationWindow(
             "Usage details cannot be deleted because usage batch is associated with the following " +
                 "scenarios:<ul><li>Scenario 1</li><li>Scenario 2</li></ul>");
@@ -270,10 +269,10 @@ public class ViewSalUsageBatchWindowTest {
     private void verifyGrid(Grid grid) {
         assertNull(grid.getCaption());
         List<Column> columns = grid.getColumns();
-        assertEquals(Arrays.asList("Usage Batch Name", "Licensee Account #", "Licensee Name", "Period End Date",
+        assertEquals(List.of("Usage Batch Name", "Licensee Account #", "Licensee Name", "Period End Date",
             "Created By", "Created Date"),
             columns.stream().map(Grid.Column::getCaption).collect(Collectors.toList()));
-        assertEquals(Arrays.asList(-1.0, 180.0, 180.0, 120.0, 170.0, 170.0),
+        assertEquals(List.of(-1.0, 180.0, 180.0, 120.0, 170.0, 170.0),
             columns.stream().map(Grid.Column::getWidth).collect(Collectors.toList()));
     }
 }

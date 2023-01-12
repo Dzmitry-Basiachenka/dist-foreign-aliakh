@@ -38,7 +38,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.io.IOException;
 import java.util.AbstractMap.SimpleImmutableEntry;
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -85,7 +84,7 @@ public class RightsholderDiscrepanciesWindowTest {
         Grid grid = (Grid) content.getComponent(0);
         verifyWindow(grid, null, 100, 100, Unit.PERCENTAGE);
         assertEquals("rightsholder-discrepancies-grid", grid.getId());
-        verifyGrid(grid, Arrays.asList(
+        verifyGrid(grid, List.of(
             Triple.of("RH Account #", 115.0, -1),
             Triple.of("RH Name", -1.0, -1),
             Triple.of("New RH Account #", 140.0, -1),

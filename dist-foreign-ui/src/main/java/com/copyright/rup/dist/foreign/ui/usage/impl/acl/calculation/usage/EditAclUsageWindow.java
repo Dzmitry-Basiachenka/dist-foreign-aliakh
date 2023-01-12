@@ -31,7 +31,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -208,7 +208,7 @@ public class EditAclUsageWindow extends Window {
                 saveButtonClickListener.buttonClick(event);
                 close();
             } catch (ValidationException e) {
-                Windows.showValidationErrorWindow(Arrays.asList(periodField, wrWrkInstField, annualizedCopiesField,
+                Windows.showValidationErrorWindow(List.of(periodField, wrWrkInstField, annualizedCopiesField,
                     contentUnitPriceField));
             }
         });

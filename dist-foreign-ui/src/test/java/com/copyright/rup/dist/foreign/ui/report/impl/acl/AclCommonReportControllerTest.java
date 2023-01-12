@@ -14,7 +14,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -54,7 +53,7 @@ public class AclCommonReportControllerTest {
 
     @Test
     public void testGetPeriods() {
-        List<Integer> periods = Arrays.asList(202212, 202206);
+        List<Integer> periods = List.of(202212, 202206);
         expect(scenarioService.getScenarioPeriods()).andReturn(periods).once();
         replay(scenarioService);
         assertSame(periods, controller.getPeriods());

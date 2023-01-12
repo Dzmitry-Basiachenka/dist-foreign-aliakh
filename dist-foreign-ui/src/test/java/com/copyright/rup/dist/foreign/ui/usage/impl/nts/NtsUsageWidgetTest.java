@@ -69,7 +69,6 @@ import org.powermock.reflect.Whitebox;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.AbstractMap.SimpleImmutableEntry;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -408,8 +407,8 @@ public class NtsUsageWidgetTest {
         assertTrue(layout.isSpacing());
         assertEquals(new MarginInfo(true), layout.getMargin());
         assertEquals(5, layout.getComponentCount());
-        verifyMenuBar(layout.getComponent(0), "Fund Pool", true, Arrays.asList("Load", "View"));
-        verifyMenuBar(layout.getComponent(1), "Additional Funds", true, Arrays.asList("Create", "View"));
+        verifyMenuBar(layout.getComponent(0), "Fund Pool", true, List.of("Load", "View"));
+        verifyMenuBar(layout.getComponent(1), "Additional Funds", true, List.of("Create", "View"));
         assertEquals("Assign Classification", layout.getComponent(2).getCaption());
         assertEquals("Add To Scenario", layout.getComponent(3).getCaption());
         Component component = layout.getComponent(4);
@@ -435,7 +434,7 @@ public class NtsUsageWidgetTest {
 
     private void verifyGrid(Grid grid) {
         List<Column> columns = grid.getColumns();
-        assertEquals(Arrays.asList("Detail ID", "Detail Status", "Product Family", "Usage Batch Name",
+        assertEquals(List.of("Detail ID", "Detail Status", "Product Family", "Usage Batch Name",
             "RRO Account #", "RRO Name", "RH Account #", "RH Name", "Wr Wrk Inst", "System Title", "Standard Number",
             "Standard Number Type", "Fiscal Year", "Payment Date", "Title", "Article", "Publisher", "Pub Date",
             "Number of Copies", "Reported Value", "Gross Amt in USD", "Market", "Market Period From",

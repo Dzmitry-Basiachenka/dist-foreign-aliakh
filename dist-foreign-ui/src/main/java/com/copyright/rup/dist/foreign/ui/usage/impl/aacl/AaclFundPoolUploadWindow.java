@@ -28,7 +28,7 @@ import com.vaadin.ui.Window;
 
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.Arrays;
+import java.util.List;
 
 /**
  * Window for uploading {@link FundPool}.
@@ -84,7 +84,7 @@ public class AaclFundPoolUploadWindow extends Window {
                 Windows.showNotificationWindow(ForeignUi.getMessage("window.error"), e.getHtmlMessage());
             }
         } else {
-            Windows.showValidationErrorWindow(Arrays.asList(fundPoolNameField, uploadField));
+            Windows.showValidationErrorWindow(List.of(fundPoolNameField, uploadField));
         }
     }
 

@@ -47,7 +47,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -125,7 +124,7 @@ public class FasDrillDownByRightsholderWidgetTest {
         assertThat(component, instanceOf(Grid.class));
         Grid<UsageDto> grid = (Grid<UsageDto>) component;
         assertTrue(grid.getStyleName().contains("drill-down-by-rightsholder-table"));
-        verifyGrid(grid, Arrays.asList(
+        verifyGrid(grid, List.of(
             Triple.of("Detail ID", 130.0, -1),
             Triple.of("Product Family", 125.0, -1),
             Triple.of("Usage Batch Name", 145.0, -1),

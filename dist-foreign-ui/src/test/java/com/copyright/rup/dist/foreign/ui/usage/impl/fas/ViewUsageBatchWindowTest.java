@@ -47,7 +47,6 @@ import org.powermock.reflect.Whitebox;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -95,7 +94,7 @@ public class ViewUsageBatchWindowTest {
         assertEquals(3, content.getComponentCount());
         assertEquals(SearchWidget.class, content.getComponent(0).getClass());
         Grid componentGrid = (Grid) content.getComponent(1);
-        verifyGrid(componentGrid, Arrays.asList(
+        verifyGrid(componentGrid, List.of(
             Triple.of("Usage Batch Name", 150.0, -1),
             Triple.of("RRO Account #", 120.0, -1),
             Triple.of("RRO Name", 150.0, -1),
@@ -128,7 +127,7 @@ public class ViewUsageBatchWindowTest {
         Button.ClickListener listener = getDeleteButtonClickListener();
         expect(grid.getSelectedItems()).andReturn(Set.of(buildUsageBatch())).once();
         expect(controller.getAdditionalFundNamesByUsageBatchId(anyString()))
-            .andReturn(Arrays.asList("Batch 1", "Batch 2")).once();
+            .andReturn(List.of("Batch 1", "Batch 2")).once();
         Windows.showNotificationWindow("Usage batch cannot be deleted because it is associated with the following " +
             "additional funds:<ul><li>Batch 1</li><li>Batch 2</li></ul>");
         expectLastCall().once();
@@ -145,7 +144,7 @@ public class ViewUsageBatchWindowTest {
         expect(grid.getSelectedItems()).andReturn(Set.of(buildUsageBatch())).once();
         expect(controller.getAdditionalFundNamesByUsageBatchId(USAGE_BATCH_ID)).andReturn(List.of()).once();
         expect(controller.getScenariosNamesAssociatedWithUsageBatch(USAGE_BATCH_ID))
-            .andReturn(Arrays.asList("Scenario 1", "Scenario 2")).once();
+            .andReturn(List.of("Scenario 1", "Scenario 2")).once();
         Windows.showNotificationWindow("Usage batch cannot be deleted because it is associated with the following " +
             "scenarios:<ul><li>Scenario 1</li><li>Scenario 2</li></ul>");
         expectLastCall().once();

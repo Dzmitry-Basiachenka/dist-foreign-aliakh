@@ -31,7 +31,6 @@ import org.junit.Test;
 import org.powermock.api.easymock.PowerMock;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -109,7 +108,7 @@ public class FasExcludeRightsholdersWindowTest {
         assertEquals(Grid.class, component.getClass());
         Grid grid = (Grid) component;
         List<Column> columns = grid.getColumns();
-        assertEquals(Arrays.asList("Payee Account #", "Payee Name", "RH Account #", "RH Name"),
+        assertEquals(List.of("Payee Account #", "Payee Name", "RH Account #", "RH Name"),
             columns.stream().map(Column::getCaption).collect(Collectors.toList()));
     }
 

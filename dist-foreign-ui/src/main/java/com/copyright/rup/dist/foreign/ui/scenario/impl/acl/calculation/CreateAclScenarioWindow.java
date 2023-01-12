@@ -47,7 +47,6 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -354,7 +353,7 @@ public class CreateAclScenarioWindow extends Window implements IDateFormatter {
                     ForeignUi.getMessage("message.error.create_acl_scenario")));
             }
         } else {
-            Windows.showValidationErrorWindow(Arrays.asList(scenarioNameField, periodComboBox, licenseTypeComboBox,
+            Windows.showValidationErrorWindow(List.of(scenarioNameField, periodComboBox, licenseTypeComboBox,
                 usageBatchComboBox, grantSetComboBox, fundPoolComboBox, descriptionArea));
         }
     }

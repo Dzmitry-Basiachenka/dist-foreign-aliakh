@@ -67,7 +67,6 @@ import org.powermock.reflect.Whitebox;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -737,7 +736,7 @@ public class UdmEditMultipleUsagesWindowTest {
         VerticalLayout verticalLayout = (VerticalLayout) component;
         assertEquals(15, verticalLayout.getComponentCount());
         verifyComboBoxLayout(verticalLayout.getComponent(0), "Detail Status", false,
-            Arrays.asList(UsageStatusEnum.NEW, UsageStatusEnum.ELIGIBLE, UsageStatusEnum.INELIGIBLE,
+            List.of(UsageStatusEnum.NEW, UsageStatusEnum.ELIGIBLE, UsageStatusEnum.INELIGIBLE,
                 UsageStatusEnum.OPS_REVIEW, UsageStatusEnum.SPECIALIST_REVIEW));
         verifyTextFieldLayout(verticalLayout.getComponent(1), "Period (YYYYMM)");
         verifyComboBoxLayout(verticalLayout.getComponent(2), "Detail Licensee Class", true, Set.of(LICENSEE_CLASS));

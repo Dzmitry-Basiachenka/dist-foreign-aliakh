@@ -36,7 +36,6 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -144,7 +143,7 @@ public class SalDetailForRightsholderUpdateWindowTest {
         assertNull(grid.getCaption());
         verifySize(grid, 100, Unit.PERCENTAGE, 100, Unit.PERCENTAGE);
         List<Grid.Column> columns = grid.getColumns();
-        assertEquals(Arrays.asList("Detail ID", "Status", "Usage Batch Name", "Wr Wrk Inst", "System Title"),
+        assertEquals(List.of("Detail ID", "Status", "Usage Batch Name", "Wr Wrk Inst", "System Title"),
             columns.stream().map(Grid.Column::getCaption).collect(Collectors.toList()));
         assertEquals(250, columns.get(0).getWidth(), 0);
         assertEquals(170, columns.get(1).getWidth(), 0);

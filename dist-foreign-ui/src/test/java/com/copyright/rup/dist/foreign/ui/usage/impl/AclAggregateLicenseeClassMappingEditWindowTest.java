@@ -40,7 +40,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -57,11 +56,11 @@ public class AclAggregateLicenseeClassMappingEditWindowTest {
 
     private AclAggregateLicenseeClassMappingEditWindow window;
     private final List<DetailLicenseeClass> defaultParams =
-        Arrays.asList(buildDetailLicenseeClass(1), buildDetailLicenseeClass(2));
+        List.of(buildDetailLicenseeClass(1), buildDetailLicenseeClass(2));
     private final List<DetailLicenseeClass> appliedParams =
-        Arrays.asList(buildDetailLicenseeClass(2), buildDetailLicenseeClass(1));
+        List.of(buildDetailLicenseeClass(2), buildDetailLicenseeClass(1));
     private final List<AggregateLicenseeClass> aggregateLicenseeClasses =
-        Arrays.asList(buildAggregateLicenseeClass(3), buildAggregateLicenseeClass(4));
+        List.of(buildAggregateLicenseeClass(3), buildAggregateLicenseeClass(4));
 
     @Before
     public void setUp() {
@@ -165,7 +164,7 @@ public class AclAggregateLicenseeClassMappingEditWindowTest {
 
     @SuppressWarnings("unchecked")
     private void verifyGrid(Grid grid) {
-        UiTestHelper.verifyGrid(grid, Arrays.asList(
+        UiTestHelper.verifyGrid(grid, List.of(
             Triple.of("Det LC ID", -1.0, 1),
             Triple.of("Det LC Name", -1.0, 2),
             Triple.of("Agg LC ID", -1.0, 1),

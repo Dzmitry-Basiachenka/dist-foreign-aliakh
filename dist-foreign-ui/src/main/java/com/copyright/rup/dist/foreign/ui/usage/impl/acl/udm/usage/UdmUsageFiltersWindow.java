@@ -39,7 +39,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import java.time.LocalDate;
-import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
 
@@ -223,7 +223,7 @@ public class UdmUsageFiltersWindow extends CommonAclFiltersWindow {
     }
 
     private ComboBox<String> initTypeOfUseCombobox() {
-        typeOfUseComboBox.setItems(Arrays.asList("PRINT", "DIGITAL"));
+        typeOfUseComboBox.setItems(List.of("PRINT", "DIGITAL"));
         typeOfUseComboBox.setSelectedItem(usageFilter.getTypeOfUse());
         typeOfUseComboBox.setSizeFull();
         filterBinder.forField(typeOfUseComboBox)
@@ -648,7 +648,7 @@ public class UdmUsageFiltersWindow extends CommonAclFiltersWindow {
                 close();
             } catch (ValidationException e) {
                 Windows.showValidationErrorWindow(
-                    Arrays.asList(usageDateToWidget, surveyStartDateToWidget, wrWrkInstFromField, wrWrkInstToField,
+                    List.of(usageDateToWidget, surveyStartDateToWidget, wrWrkInstFromField, wrWrkInstToField,
                         reportedTitleField, systemTitleField, usageDetailIdField, companyIdFromField, companyIdToField,
                         companyNameField, surveyRespondentField, surveyCountryField, languageField,
                         annualMultiplierFromField, annualMultiplierToField, annualizedCopiesFromField,

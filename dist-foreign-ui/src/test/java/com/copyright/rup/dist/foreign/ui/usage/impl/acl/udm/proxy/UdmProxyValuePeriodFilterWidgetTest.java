@@ -12,7 +12,6 @@ import com.copyright.rup.vaadin.ui.component.filter.CommonFilterWindow.FilterSav
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -39,7 +38,7 @@ public class UdmProxyValuePeriodFilterWidgetTest {
 
     @Test
     public void testLoadBeans() {
-        List<Integer> periods = Arrays.asList(201212, 202012);
+        List<Integer> periods = List.of(201212, 202012);
         expect(filterController.getPeriods()).andReturn(periods).once();
         replay(filterController);
         assertEquals(periods, valuePeriodFilterWidget.loadBeans());
