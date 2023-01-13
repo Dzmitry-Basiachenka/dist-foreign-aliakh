@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.aclci;
 import com.copyright.rup.common.exception.RupRuntimeException;
 import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.FundPool.AclciFields;
+import com.copyright.rup.dist.foreign.ui.common.converter.IntegerConverter;
 import com.copyright.rup.dist.foreign.ui.common.validator.AmountValidator;
 import com.copyright.rup.dist.foreign.ui.common.validator.AmountZeroValidator;
 import com.copyright.rup.dist.foreign.ui.common.validator.CoverageYearsValidator;
@@ -16,7 +17,6 @@ import com.vaadin.data.Binder;
 import com.vaadin.data.Result;
 import com.vaadin.data.ValueContext;
 import com.vaadin.data.converter.StringToBigDecimalConverter;
-import com.vaadin.data.converter.StringToIntegerConverter;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.server.SerializablePredicate;
 import com.vaadin.shared.ui.MarginInfo;
@@ -155,7 +155,7 @@ class AclciFundPoolLoadWindow extends Window {
             .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.length", 50), 0, 50))
             .withValidator(value -> !usageController.aclciFundPoolExists(StringUtils.trimToEmpty(value)),
                 ForeignUi.getMessage("message.error.unique_name", ForeignUi.getMessage("label.fund_pool")))
-            .bind(FundPool::getName, FundPool::setName);
+            .bind(FundPool::getName, (bean, value) -> bean.setName(StringUtils.trim(value)));
         fundPoolName.setRequiredIndicatorVisible(true);
         fundPoolName.setSizeFull();
         VaadinUtils.setMaxComponentsWidth(fundPoolName);
@@ -169,7 +169,7 @@ class AclciFundPoolLoadWindow extends Window {
             .withValidator(new RequiredValidator())
             .withValidator(new CoverageYearsValidator(ForeignUi.getMessage("field.error.coverage_years")))
             .bind(bean -> bean.getAclciFields().getCoverageYears(),
-                (bean, value) -> bean.getAclciFields().setCoverageYears(value));
+                (bean, value) -> bean.getAclciFields().setCoverageYears(StringUtils.trim(value)));
         coverageYears.setRequiredIndicatorVisible(true);
         coverageYears.setSizeFull();
         VaadinUtils.setMaxComponentsWidth(coverageYears);
@@ -216,7 +216,7 @@ class AclciFundPoolLoadWindow extends Window {
         amountsBinder.forField(gradeKto2NumberOfStudents)
             .withValidator(new RequiredValidator())
             .withValidator(new AmountValidator())
-            .withConverter(new StringToIntegerConverter(NOT_NUMERIC_MESSAGE))
+            .withConverter(new IntegerConverter(NOT_NUMERIC_MESSAGE))
             .withValidator(gradeNumberOfStudentsAllZeroValidator(), NUMBER_OF_STUDENTS_NOT_ZERO_MESSAGE)
             .withValidator(gradeNumberOfStudentsAtLeastOneNotZeroValidator(), NUMBER_OF_STUDENTS_NOT_ALL_ZERO_MESSAGE)
             .bind(fundPool -> fundPool.getAclciFields().getGradeKto2NumberOfStudents(),
@@ -234,7 +234,7 @@ class AclciFundPoolLoadWindow extends Window {
         amountsBinder.forField(grade3to5NumberOfStudents)
             .withValidator(new RequiredValidator())
             .withValidator(new AmountValidator())
-            .withConverter(new StringToIntegerConverter(NOT_NUMERIC_MESSAGE))
+            .withConverter(new IntegerConverter(NOT_NUMERIC_MESSAGE))
             .withValidator(gradeNumberOfStudentsAllZeroValidator(), NUMBER_OF_STUDENTS_NOT_ZERO_MESSAGE)
             .withValidator(gradeNumberOfStudentsAtLeastOneNotZeroValidator(), NUMBER_OF_STUDENTS_NOT_ALL_ZERO_MESSAGE)
             .bind(fundPool -> fundPool.getAclciFields().getGrade3to5NumberOfStudents(),
@@ -252,7 +252,7 @@ class AclciFundPoolLoadWindow extends Window {
         amountsBinder.forField(grade6to8NumberOfStudents)
             .withValidator(new RequiredValidator())
             .withValidator(new AmountValidator())
-            .withConverter(new StringToIntegerConverter(NOT_NUMERIC_MESSAGE))
+            .withConverter(new IntegerConverter(NOT_NUMERIC_MESSAGE))
             .withValidator(gradeNumberOfStudentsAllZeroValidator(), NUMBER_OF_STUDENTS_NOT_ZERO_MESSAGE)
             .withValidator(gradeNumberOfStudentsAtLeastOneNotZeroValidator(), NUMBER_OF_STUDENTS_NOT_ALL_ZERO_MESSAGE)
             .bind(fundPool -> fundPool.getAclciFields().getGrade6to8NumberOfStudents(),
@@ -271,7 +271,7 @@ class AclciFundPoolLoadWindow extends Window {
         amountsBinder.forField(grade9to12NumberOfStudents)
             .withValidator(new RequiredValidator())
             .withValidator(new AmountValidator())
-            .withConverter(new StringToIntegerConverter(NOT_NUMERIC_MESSAGE))
+            .withConverter(new IntegerConverter(NOT_NUMERIC_MESSAGE))
             .withValidator(gradeNumberOfStudentsAllZeroValidator(), NUMBER_OF_STUDENTS_NOT_ZERO_MESSAGE)
             .withValidator(gradeNumberOfStudentsAtLeastOneNotZeroValidator(), NUMBER_OF_STUDENTS_NOT_ALL_ZERO_MESSAGE)
             .bind(fundPool -> fundPool.getAclciFields().getGrade9to12NumberOfStudents(),
@@ -289,7 +289,7 @@ class AclciFundPoolLoadWindow extends Window {
         amountsBinder.forField(gradeHeNumberOfStudents)
             .withValidator(new RequiredValidator())
             .withValidator(new AmountValidator())
-            .withConverter(new StringToIntegerConverter(NOT_NUMERIC_MESSAGE))
+            .withConverter(new IntegerConverter(NOT_NUMERIC_MESSAGE))
             .withValidator(gradeNumberOfStudentsAllZeroValidator(), NUMBER_OF_STUDENTS_NOT_ZERO_MESSAGE)
             .withValidator(gradeNumberOfStudentsAtLeastOneNotZeroValidator(), NUMBER_OF_STUDENTS_NOT_ALL_ZERO_MESSAGE)
             .bind(fundPool -> fundPool.getAclciFields().getGradeHeNumberOfStudents(),

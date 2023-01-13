@@ -59,11 +59,11 @@ public class AclciFundPoolLoadWindowTest {
     private static final String COVERAGE_YEARS = "2021-2022";
     private static final BigDecimal GROSS_AMOUNT = new BigDecimal("1000.1234567890");
     private static final BigDecimal CURRICULUM_DB_SPLIT_PERCENT = new BigDecimal("20.0");
-    private static final Integer GRADE_K_TO_2_NUMBER_OF_STUDENTS = 1;
-    private static final Integer GRADE_3_TO_5_NUMBER_OF_STUDENTS = 2;
-    private static final Integer GRADE_6_TO_8_NUMBER_OF_STUDENTS = 3;
-    private static final Integer GRADE_9_TO_12_NUMBER_OF_STUDENTS = 4;
-    private static final Integer GRADE_HE_NUMBER_OF_STUDENTS = 5;
+    private static final Integer GRADE_K_TO_2_NUMBER_OF_STUDENTS = 1000;
+    private static final Integer GRADE_3_TO_5_NUMBER_OF_STUDENTS = 2000;
+    private static final Integer GRADE_6_TO_8_NUMBER_OF_STUDENTS = 3000;
+    private static final Integer GRADE_9_TO_12_NUMBER_OF_STUDENTS = 4000;
+    private static final Integer GRADE_HE_NUMBER_OF_STUDENTS = 5000;
     private static final String FUND_POOL_NAME_FIELD = "fundPoolName";
     private static final String COVERAGE_YEARS_FIELD = "coverageYears";
     private static final String GROSS_AMOUNT_FIELD = "grossAmount";
