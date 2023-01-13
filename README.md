@@ -1,3 +1,9 @@
+17.0.2
+-
+* B-77418 Tech Debt: FDA: replace Amount Zero Validator to Amount Validator for all ACL filters
+* B-68612 Tech Debt: FDA: replace Arrays.asList() by List.of() in dist-foreign-ui package
+* CDP-1115 FDA: ACLCI: Load Fund Pool window: When entering at least 4 numbers into any Grade field the system automatically adds comma as number separator
+
 17.0.1
 -
 * B-68554 FDA: ACLCI UI usage view: implement controller to save fund pool
