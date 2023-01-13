@@ -16,7 +16,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Set;
+import java.util.HashSet;
+import java.util.List;
 
 /**
  * Test for {@link CommonAclAppliedFilterPanel}.
@@ -55,7 +56,7 @@ public class CommonAclAppliedFilterPanelTest {
         expectedLabel.setValue("<li><b><i>Assignees: </i></b>user@copyright.com, john@copyright.com</li>");
         assertNull(filterPanel.createLabelWithMultipleValues(udmUsageFilter.getAssignees(), "label.assignees",
             String::valueOf));
-        udmUsageFilter.setAssignees(Set.of("user@copyright.com", "john@copyright.com"));
+        udmUsageFilter.setAssignees(new HashSet<>(List.of("user@copyright.com", "john@copyright.com")));
         Label actualLabel = filterPanel.createLabelWithMultipleValues(udmUsageFilter.getAssignees(), "label.assignees",
             String::valueOf);
         verifyLabel(actualLabel);
