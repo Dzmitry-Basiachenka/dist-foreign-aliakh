@@ -2,7 +2,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl;
 
 import com.copyright.rup.dist.foreign.domain.filter.FilterExpression;
 import com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum;
-import com.copyright.rup.dist.foreign.ui.common.validator.AmountZeroValidator;
+import com.copyright.rup.dist.foreign.ui.common.validator.AmountValidator;
 import com.copyright.rup.dist.foreign.ui.common.validator.NumericValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.vaadin.util.VaadinUtils;
@@ -410,11 +410,11 @@ public abstract class CommonAclFiltersWindow extends Window {
     protected boolean validateBigDecimalFromToValues(TextField fromField, TextField toField) {
         String fromValue = fromField.getValue();
         String toValue = toField.getValue();
-        AmountZeroValidator amountZeroValidator = new AmountZeroValidator();
+        AmountValidator amountValidator = new AmountValidator();
         return StringUtils.isBlank(fromValue)
             || StringUtils.isBlank(toValue)
-            || !amountZeroValidator.isValid(fromValue)
-            || !amountZeroValidator.isValid(toValue)
+            || !amountValidator.isValid(fromValue)
+            || !amountValidator.isValid(toValue)
             || 0 <= new BigDecimal(toValue.trim()).compareTo(new BigDecimal(fromValue.trim()));
     }
 

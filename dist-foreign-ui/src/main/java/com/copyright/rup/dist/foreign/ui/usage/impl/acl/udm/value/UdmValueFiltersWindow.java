@@ -5,7 +5,6 @@ import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmValueFilter;
 import com.copyright.rup.dist.foreign.ui.common.validator.AmountValidator;
-import com.copyright.rup.dist.foreign.ui.common.validator.AmountZeroValidator;
 import com.copyright.rup.dist.foreign.ui.common.validator.NumericValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueFilterController;
@@ -471,14 +470,14 @@ public class UdmValueFiltersWindow extends CommonAclFiltersWindow {
     private HorizontalLayout initContentLayout() {
         contentToField.setEnabled(false);
         filterBinder.forField(contentFromField)
-            .withValidator(new AmountZeroValidator())
+            .withValidator(new AmountValidator())
             .withValidator(getBetweenOperatorValidator(contentFromField, contentOperatorComboBox),
                 BETWEEN_OPERATOR_VALIDATION_MESSAGE)
             .bind(filter -> Objects.toString(filter.getContentExpression().getFieldFirstValue(), StringUtils.EMPTY),
                 (filter, value) -> filter.getContentExpression()
                     .setFieldFirstValue(NumberUtils.createBigDecimal(StringUtils.trimToNull(value))));
         filterBinder.forField(contentToField)
-            .withValidator(new AmountZeroValidator())
+            .withValidator(new AmountValidator())
             .withValidator(getBetweenOperatorValidator(contentToField, contentOperatorComboBox),
                 BETWEEN_OPERATOR_VALIDATION_MESSAGE)
             .withValidator(value -> validateBigDecimalFromToValues(contentFromField, contentToField),

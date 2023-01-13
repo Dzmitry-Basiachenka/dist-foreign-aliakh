@@ -323,8 +323,8 @@ public class UdmValueFiltersWindowTest {
         ComboBox<FilterOperatorEnum> priceOperatorComboBox =
             Whitebox.getInternalState(window, "priceOperatorComboBox");
         assertNumericOperatorComboBoxItems(priceOperatorComboBox);
-        verifyAmountValidationZeroAllowed(priceFromField, priceToField,
-            priceOperatorComboBox, "Field value should be greater or equal to Price From");
+        verifyAmountValidation(priceFromField, priceToField, priceOperatorComboBox,
+            "Field value should be greater or equal to Price From");
     }
 
     @Test
@@ -334,8 +334,8 @@ public class UdmValueFiltersWindowTest {
         ComboBox<FilterOperatorEnum> priceInUsdOperatorComboBox =
             Whitebox.getInternalState(window, "priceInUsdOperatorComboBox");
         assertNumericOperatorComboBoxItems(priceInUsdOperatorComboBox);
-        verifyAmountValidationZeroAllowed(priceInUsdFromField, priceInUsdToField,
-            priceInUsdOperatorComboBox, "Field value should be greater or equal to Price in USD From");
+        verifyAmountValidation(priceInUsdFromField, priceInUsdToField, priceInUsdOperatorComboBox,
+            "Field value should be greater or equal to Price in USD From");
     }
 
     @Test
@@ -355,8 +355,8 @@ public class UdmValueFiltersWindowTest {
         ComboBox<FilterOperatorEnum> contentOperatorComboBox =
             Whitebox.getInternalState(window, "contentOperatorComboBox");
         assertNumericOperatorComboBoxItems(contentOperatorComboBox);
-        verifyAmountValidationZeroDenied(contentFromField, contentToField,
-            contentOperatorComboBox, "Field value should be greater or equal to Content From");
+        verifyAmountValidation(contentFromField, contentToField, contentOperatorComboBox,
+            "Field value should be greater or equal to Content From");
     }
 
     @Test
@@ -376,8 +376,8 @@ public class UdmValueFiltersWindowTest {
         ComboBox<FilterOperatorEnum> contentUnitPriceComboBox =
             Whitebox.getInternalState(window, "contentUnitPriceOperatorComboBox");
         assertNumericOperatorComboBoxItems(contentUnitPriceComboBox);
-        verifyAmountValidationZeroAllowed(contentUnitPriceFromField, contentUnitPriceToField,
-            contentUnitPriceComboBox, "Field value should be greater or equal to Content Unit Price From");
+        verifyAmountValidation(contentUnitPriceFromField, contentUnitPriceToField, contentUnitPriceComboBox,
+            "Field value should be greater or equal to Content Unit Price From");
     }
 
     @Test
@@ -562,9 +562,9 @@ public class UdmValueFiltersWindowTest {
         validateFieldAndVerifyErrorMessage(toField, VALID_INTEGER, binder, null, true);
     }
 
-    private void verifyAmountValidationZeroAllowed(TextField fromField, TextField toField,
-                                                   ComboBox<FilterOperatorEnum> operatorComboBox,
-                                                   String fieldSpecificErrorMessage) {
+    private void verifyAmountValidation(TextField fromField, TextField toField,
+                                        ComboBox<FilterOperatorEnum> operatorComboBox,
+                                        String fieldSpecificErrorMessage) {
         String numberValidationMessage =
             "Field value should be positive number or zero and should not exceed 10 digits";
         verifyCommonOperationValidations(fromField, toField, operatorComboBox, numberValidationMessage);
@@ -576,51 +576,21 @@ public class UdmValueFiltersWindowTest {
         validateFieldAndVerifyErrorMessage(toField, "1.1345678", binder, fieldSpecificErrorMessage, false);
         validateFieldAndVerifyErrorMessage(fromField, INVALID_NUMBER, binder, numberValidationMessage, false);
         validateFieldAndVerifyErrorMessage(toField, INVALID_NUMBER, binder, numberValidationMessage, false);
-        verifyAmountValidationZeroAllowed(fromField, numberValidationMessage);
-        verifyAmountValidationZeroAllowed(toField, numberValidationMessage);
+        verifyAmountValidation(fromField, numberValidationMessage);
+        verifyAmountValidation(toField, numberValidationMessage);
     }
 
-    private void verifyAmountValidationZeroAllowed(TextField textField,
-                                                   String fieldSpecificErrorMessage) {
+    private void verifyAmountValidation(TextField textField, String fieldSpecificErrorMessage) {
         validateFieldAndVerifyErrorMessage(textField, "0", binder, null, true);
         validateFieldAndVerifyErrorMessage(textField, " 0.004 ", binder, null, true);
-        verifyCommonAmountValidations(textField, fieldSpecificErrorMessage);
-    }
-
-    private void verifyAmountValidationZeroDenied(TextField fromField, TextField toField,
-                                                  ComboBox<FilterOperatorEnum> operatorComboBox,
-                                                  String fieldSpecificErrorMessage) {
-        String numberValidationMessage = "Field value should be positive number and should not exceed 10 digits";
-        verifyCommonOperationValidations(fromField, toField, operatorComboBox, numberValidationMessage);
-        validateFieldAndVerifyErrorMessage(fromField, SPACES_STRING, binder, numberValidationMessage, false);
-        validateFieldAndVerifyErrorMessage(fromField, SPACES_STRING, binder, numberValidationMessage, false);
-        validateFieldAndVerifyErrorMessage(fromField, VALID_DECIMAL, binder, null, true);
-        validateFieldAndVerifyErrorMessage(toField, VALID_DECIMAL, binder, null, true);
-        validateFieldAndVerifyErrorMessage(fromField, VALID_DECIMAL, binder, null, true);
-        validateFieldAndVerifyErrorMessage(toField, "1.1345678", binder, fieldSpecificErrorMessage, false);
-        validateFieldAndVerifyErrorMessage(fromField, INVALID_NUMBER, binder, numberValidationMessage, false);
-        validateFieldAndVerifyErrorMessage(toField, INVALID_NUMBER, binder, numberValidationMessage, false);
-        verifyAmountValidationZeroDenied(fromField, numberValidationMessage);
-        verifyAmountValidationZeroDenied(toField, numberValidationMessage);
-    }
-
-    private void verifyAmountValidationZeroDenied(TextField textField,
-                                                  String fieldSpecificErrorMessage) {
-        validateFieldAndVerifyErrorMessage(textField, "0", binder, fieldSpecificErrorMessage, false);
-        validateFieldAndVerifyErrorMessage(textField, " 0.004 ", binder, fieldSpecificErrorMessage, false);
-        validateFieldAndVerifyErrorMessage(textField, " 0.005 ", binder, null, true);
-        verifyCommonAmountValidations(textField, fieldSpecificErrorMessage);
-    }
-
-    private void verifyCommonAmountValidations(TextField textField, String errorMessage) {
         validateFieldAndVerifyErrorMessage(textField, StringUtils.EMPTY, binder, null, true);
-        validateFieldAndVerifyErrorMessage(textField, SPACES_STRING, binder, errorMessage, false);
+        validateFieldAndVerifyErrorMessage(textField, SPACES_STRING, binder, fieldSpecificErrorMessage, false);
         validateFieldAndVerifyErrorMessage(textField, VALID_DECIMAL, binder, null, true);
         validateFieldAndVerifyErrorMessage(textField, INTEGER_WITH_SPACES_STRING, binder, null, true);
         validateFieldAndVerifyErrorMessage(textField, VALID_INTEGER, binder, null, true);
-        validateFieldAndVerifyErrorMessage(textField, INVALID_NUMBER, binder, errorMessage, false);
-        validateFieldAndVerifyErrorMessage(textField, ".05", binder, errorMessage, false);
-        validateFieldAndVerifyErrorMessage(textField, "99999999999", binder, errorMessage, false);
+        validateFieldAndVerifyErrorMessage(textField, INVALID_NUMBER, binder, fieldSpecificErrorMessage, false);
+        validateFieldAndVerifyErrorMessage(textField, ".05", binder, fieldSpecificErrorMessage, false);
+        validateFieldAndVerifyErrorMessage(textField, "99999999999", binder, fieldSpecificErrorMessage, false);
     }
 
     public void validateCommentField(String fieldName, String operatorComboboxName) {

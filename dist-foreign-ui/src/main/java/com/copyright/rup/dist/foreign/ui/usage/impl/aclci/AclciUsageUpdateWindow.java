@@ -103,7 +103,7 @@ class AclciUsageUpdateWindow extends Window implements IRefreshable {
         usagesGrid.addSelectionListener(event ->
             updateButton.setEnabled(CollectionUtils.isNotEmpty(event.getAllSelectedItems())));
         usagesGrid.getColumns().forEach(column -> column.setSortable(true));
-        VaadinUtils.addComponentStyle(usagesGrid, "update_aclci_usages-grid");
+        VaadinUtils.addComponentStyle(usagesGrid, "update-aclci-usages-grid");
     }
 
     private void initSearchWidget() {

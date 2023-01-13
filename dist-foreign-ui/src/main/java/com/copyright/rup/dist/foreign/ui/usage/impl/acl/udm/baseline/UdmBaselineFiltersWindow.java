@@ -4,7 +4,7 @@ import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineFilter;
-import com.copyright.rup.dist.foreign.ui.common.validator.AmountZeroValidator;
+import com.copyright.rup.dist.foreign.ui.common.validator.AmountValidator;
 import com.copyright.rup.dist.foreign.ui.common.validator.NumericValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineFilterController;
@@ -216,7 +216,7 @@ public class UdmBaselineFiltersWindow extends CommonAclFiltersWindow {
     private HorizontalLayout initAnnualizedCopiesLayout() {
         annualizedCopiesTo.setEnabled(false);
         filterBinder.forField(annualizedCopiesFrom)
-            .withValidator(new AmountZeroValidator())
+            .withValidator(new AmountValidator())
             .withValidator(getBetweenOperatorValidator(annualizedCopiesFrom, annualizedCopiesOperatorComboBox),
                 BETWEEN_OPERATOR_VALIDATION_MESSAGE)
             .bind(filter ->
@@ -224,7 +224,7 @@ public class UdmBaselineFiltersWindow extends CommonAclFiltersWindow {
                 (filter, value) -> filter.getAnnualizedCopiesExpression()
                     .setFieldFirstValue(NumberUtils.createBigDecimal(StringUtils.trimToNull(value))));
         filterBinder.forField(annualizedCopiesTo)
-            .withValidator(new AmountZeroValidator())
+            .withValidator(new AmountValidator())
             .withValidator(getBetweenOperatorValidator(annualizedCopiesTo, annualizedCopiesOperatorComboBox),
                 BETWEEN_OPERATOR_VALIDATION_MESSAGE)
             .withValidator(value -> validateBigDecimalFromToValues(annualizedCopiesFrom, annualizedCopiesTo),
