@@ -10,7 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Verifies {@link IntegerConverter}.
+ * Verifies {@link LongConverter}.
  * <p>
  * Copyright (C) 2023 copyright.com
  * <p>
@@ -18,36 +18,36 @@ import org.junit.Test;
  *
  * @author Aliaksandr Liakh
  */
-public class IntegerConverterTest {
+public class LongConverterTest {
 
     private ValueContext context;
-    private IntegerConverter converter;
+    private LongConverter converter;
 
     @Before
     public void setUp() {
         context = new ValueContext();
-        converter = new IntegerConverter("error message");
+        converter = new LongConverter("error message");
     }
 
     @Test
     public void testConvertToModelSuccess() {
         AssertionError exception = new AssertionError();
-        assertEquals(Integer.valueOf(0), converter.convertToModel("0", context).getOrThrow(s -> exception));
-        assertEquals(Integer.valueOf(0), converter.convertToModel(" 0 ", context).getOrThrow(s -> exception));
+        assertEquals(Long.valueOf(0), converter.convertToModel("0", context).getOrThrow(s -> exception));
+        assertEquals(Long.valueOf(0), converter.convertToModel(" 0 ", context).getOrThrow(s -> exception));
         assertNull(converter.convertToModel("", context).getOrThrow(s -> exception));
         assertNull(converter.convertToModel(" ", context).getOrThrow(s -> exception));
     }
 
     @Test
     public void testConvertToModelError() {
-        Result<Integer> result = converter.convertToModel("not_a_number", context);
+        Result<Long> result = converter.convertToModel("not_a_number", context);
         assertTrue(result.isError());
         assertEquals("error message", result.getMessage().get());
     }
 
     @Test
     public void testConvertToPresentation() {
-        assertEquals("0", converter.convertToPresentation(0, context));
+        assertEquals("0", converter.convertToPresentation(Long.valueOf(0), context));
         assertEquals("", converter.convertToPresentation(null, context));
     }
 }
