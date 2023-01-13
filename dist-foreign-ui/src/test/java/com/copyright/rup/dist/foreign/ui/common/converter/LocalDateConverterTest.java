@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.ui.usage.impl;
+package com.copyright.rup.dist.foreign.ui.common.converter;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;

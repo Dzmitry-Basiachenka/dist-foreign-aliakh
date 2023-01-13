@@ -1,11 +1,11 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl;
 
 import com.copyright.rup.dist.foreign.domain.PublicationType;
+import com.copyright.rup.dist.foreign.ui.common.converter.BigDecimalConverter;
 import com.copyright.rup.dist.foreign.ui.common.validator.AmountValidator;
 import com.copyright.rup.dist.foreign.ui.common.validator.RequiredValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.impl.ScenarioParameterWidget.ParametersSaveEvent;
-import com.copyright.rup.dist.foreign.ui.usage.impl.aacl.BigDecimalConverter;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.util.CurrencyUtils;
 import com.copyright.rup.vaadin.util.VaadinUtils;

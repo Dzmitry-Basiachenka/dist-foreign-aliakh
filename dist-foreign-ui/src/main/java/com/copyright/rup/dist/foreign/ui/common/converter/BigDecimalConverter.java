@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.ui.usage.impl.aacl;
+package com.copyright.rup.dist.foreign.ui.common.converter;
 
 import com.vaadin.data.Converter;
 import com.vaadin.data.Result;
