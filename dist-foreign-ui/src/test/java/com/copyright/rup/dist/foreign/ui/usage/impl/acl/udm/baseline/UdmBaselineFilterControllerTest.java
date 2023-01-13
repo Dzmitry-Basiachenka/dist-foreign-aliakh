@@ -18,7 +18,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -82,7 +81,7 @@ public class UdmBaselineFilterControllerTest {
 
     @Test
     public void testGetPeriods() {
-        List<Integer> periods = Arrays.asList(202012, 201906);
+        List<Integer> periods = List.of(202012, 201906);
         expect(udmBaselineService.getPeriods()).andReturn(periods).once();
         replay(udmBaselineService);
         assertSame(periods, controller.getPeriods());

@@ -33,7 +33,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -132,7 +132,7 @@ public class AclScenariosFilterWidgetTest {
         verifyItemsFilterWidget(verticalLayout.getComponent(1), "Periods");
         verifyItemsFilterWidget(verticalLayout.getComponent(2), "License Types");
         verifyComboBox(verticalLayout.getComponent(3), "Editable", true,
-            Arrays.asList(FilterOperatorEnum.Y, FilterOperatorEnum.N));
+            List.of(FilterOperatorEnum.Y, FilterOperatorEnum.N));
         verifyComboBox(verticalLayout.getComponent(4), "Status", true,
             ScenarioStatusEnum.IN_PROGRESS, ScenarioStatusEnum.SUBMITTED, ScenarioStatusEnum.APPROVED,
             ScenarioStatusEnum.ARCHIVED);

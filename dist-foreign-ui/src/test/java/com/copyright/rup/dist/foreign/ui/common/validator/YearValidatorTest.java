@@ -5,13 +5,14 @@ import static org.junit.Assert.assertEquals;
 
 import com.vaadin.data.ValidationResult;
 import com.vaadin.data.ValueContext;
+
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Verifies {@link YearValidator}.
@@ -41,7 +42,7 @@ public class YearValidatorTest {
 
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
-        return Arrays.asList(new Object[][]{
+        return List.of(new Object[][]{
             {null, false},
             {StringUtils.EMPTY, false},
             {"   ", false},

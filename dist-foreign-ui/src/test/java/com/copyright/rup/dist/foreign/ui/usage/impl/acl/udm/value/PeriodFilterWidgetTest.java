@@ -26,7 +26,6 @@ import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -44,7 +43,7 @@ import java.util.Set;
 public class PeriodFilterWidgetTest {
 
     private static final Integer PERIOD = 202106;
-    private static final List<Integer> PERIODS = Arrays.asList(202212, PERIOD, 202006, 201512);
+    private static final List<Integer> PERIODS = List.of(202212, PERIOD, 202006, 201512);
 
     private final PeriodFilterWidget periodFilterWidget = new PeriodFilterWidget(() -> PERIODS);
 

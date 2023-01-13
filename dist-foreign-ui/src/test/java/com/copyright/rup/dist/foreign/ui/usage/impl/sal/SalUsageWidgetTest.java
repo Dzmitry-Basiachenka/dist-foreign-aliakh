@@ -53,7 +53,6 @@ import org.powermock.reflect.Whitebox;
 
 import java.time.LocalDate;
 import java.util.AbstractMap.SimpleImmutableEntry;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -112,7 +111,7 @@ public class SalUsageWidgetTest {
         assertEquals(2, layout.getComponentCount());
         verifyButtonsLayout((HorizontalLayout) layout.getComponent(0));
         Grid grid = (Grid) layout.getComponent(1);
-        verifyGrid(grid, Arrays.asList(
+        verifyGrid(grid, List.of(
             Triple.of("Detail ID", 130.0, -1),
             Triple.of("Detail Status", 115.0, -1),
             Triple.of("Detail Type", 115.0, -1),
@@ -402,8 +401,8 @@ public class SalUsageWidgetTest {
         assertEquals(new MarginInfo(true), layout.getMargin());
         assertEquals(5, layout.getComponentCount());
         verifyMenuBar(layout.getComponent(0), "Usage Batch", true,
-            Arrays.asList("Load Item Bank", "Load Usage Data", "View"));
-        verifyMenuBar(layout.getComponent(1), "Fund Pool", true, Arrays.asList("Load", "View"));
+            List.of("Load Item Bank", "Load Usage Data", "View"));
+        verifyMenuBar(layout.getComponent(1), "Fund Pool", true, List.of("Load", "View"));
         Button updateRightsholdersButton = (Button) layout.getComponent(2);
         assertEquals("Update Rightsholders", updateRightsholdersButton.getCaption());
         Button addToScenarioButton = (Button) layout.getComponent(3);

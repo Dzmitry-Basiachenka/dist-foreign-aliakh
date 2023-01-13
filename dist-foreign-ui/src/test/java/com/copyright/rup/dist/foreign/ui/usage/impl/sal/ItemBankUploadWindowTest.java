@@ -51,8 +51,8 @@ import org.powermock.reflect.Whitebox;
 
 import java.io.ByteArrayOutputStream;
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Verifies {@link ItemBankUploadWindow}.
@@ -278,7 +278,7 @@ public class ItemBankUploadWindowTest {
         Button loadButton = verifyButton(layout.getComponent(0), "Upload");
         verifyButton(layout.getComponent(1), "Close");
         assertEquals(1, loadButton.getListeners(ClickEvent.class).size());
-        verifyLoadClickListener(loadButton, Arrays.asList(
+        verifyLoadClickListener(loadButton, List.of(
             Whitebox.getInternalState(window, ITEM_BANK_NAME_FIELD),
             Whitebox.getInternalState(window, "uploadField"),
             Whitebox.getInternalState(window, ACCOUNT_NUMBER_FIELD),

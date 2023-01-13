@@ -31,7 +31,7 @@ import com.vaadin.ui.Window;
 import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -99,7 +99,7 @@ class FundPoolLoadWindow extends Window {
             }
         } else {
             Windows.showValidationErrorWindow(
-                Arrays.asList(usageBatchNameField, accountNumberField, accountNameField, paymentDateWidget,
+                List.of(usageBatchNameField, accountNumberField, accountNameField, paymentDateWidget,
                     fundPoolPeriodToField, fundPoolPeriodFromField, marketValidationField, stmAmountField,
                     nonStmAmountField, stmMinAmountField, nonStmMinAmountField));
         }

@@ -42,7 +42,6 @@ import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -190,15 +189,15 @@ public class ViewSalFundPoolWindowTest {
     private void verifyGrid(Grid grid) {
         assertNull(grid.getCaption());
         List<Grid.Column> columns = grid.getColumns();
-        assertEquals(Arrays.asList("Fund Pool Name", "Date Received", "Assessment Name", "Licensee Account #",
+        assertEquals(List.of("Fund Pool Name", "Date Received", "Assessment Name", "Licensee Account #",
             "Licensee Name", "Gross Amount", "Service Fee %", "Item Bank Split %",
             "Grade K-5 Number of Students", "Grade 6-8 Number of Students", "Grade 9-12 Number of Students",
             "Item Bank Gross Amount", "Grade K-5 Gross Amount", "Grade 6-8 Gross Amount", "Grade 9-12 Gross Amount"),
             columns.stream().map(Grid.Column::getCaption).collect(Collectors.toList()));
-        assertEquals(Arrays.asList(-1.0, -1.0, 180.0, 150.0, 300.0, 170.0, 115.0, 150.0, 190.0, 190.0, 190.0, 170.0,
+        assertEquals(List.of(-1.0, -1.0, 180.0, 150.0, 300.0, 170.0, 115.0, 150.0, 190.0, 190.0, 190.0, 170.0,
             170.0, 170.0, 170.0),
             columns.stream().map(Grid.Column::getWidth).collect(Collectors.toList()));
-        assertEquals(Arrays.asList(1, 0, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1),
+        assertEquals(List.of(1, 0, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1),
             columns.stream().map(Grid.Column::getExpandRatio).collect(Collectors.toList()));
         Grid.Column createDateColumn = columns.get(3);
         assertNotNull(createDateColumn.getComparator(SortDirection.ASCENDING));

@@ -50,7 +50,6 @@ import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.EventObject;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -184,7 +183,7 @@ public class CreateSalScenarioWindowTest {
         expect(controller.scenarioExists(SCENARIO_NAME)).andReturn(false).times(2);
         expect(controller.getSelectedUsageBatch()).andReturn(usageBatch).once();
         expect(controller.getUsageDataGradeGroups()).andReturn(
-            Arrays.asList(SalGradeGroupEnum.GRADEK_5, SalGradeGroupEnum.GRADE6_8, SalGradeGroupEnum.GRADE9_12)).once();
+            List.of(SalGradeGroupEnum.GRADEK_5, SalGradeGroupEnum.GRADE6_8, SalGradeGroupEnum.GRADE9_12)).once();
         Windows.showNotificationWindow("Gross amount for GRADEK_5, GRADE9_12 grade group(s) should be greater than 0");
         expectLastCall().once();
         replay(controller, filterController, Windows.class);

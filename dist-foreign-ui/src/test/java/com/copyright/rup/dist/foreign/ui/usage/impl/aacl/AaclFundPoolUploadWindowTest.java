@@ -49,7 +49,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.io.ByteArrayOutputStream;
-import java.util.Arrays;
+import java.util.List;
 
 /**
  * Verifies {@link AaclFundPoolUploadWindow}.
@@ -148,7 +148,7 @@ public class AaclFundPoolUploadWindowTest {
         verifyUploadComponent(verticalLayout.getComponent(1));
         verifyButtonsLayout(verticalLayout.getComponent(2), "Upload", "Close");
         Button loadButton = (Button) ((HorizontalLayout) verticalLayout.getComponent(2)).getComponent(0);
-        verifyLoadClickListener(loadButton, Arrays.asList(
+        verifyLoadClickListener(loadButton, List.of(
             Whitebox.getInternalState(window, FUND_POOL_NAME_FIELD),
             Whitebox.getInternalState(window, "uploadField")));
     }

@@ -13,7 +13,6 @@ import com.vaadin.data.ValueProvider;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -95,7 +94,7 @@ public class PublicationTypeFilterWidget extends BaseUdmItemsFilterWidget<Public
         FilterWindow<PublicationType> filterWindow =
             Windows.showFilterWindow(ForeignUi.getMessage("window.publication_types_filter"), this,
                 (ValueProvider<PublicationType, List<String>>) pubType ->
-                    Arrays.asList(ObjectUtils.defaultIfNull(pubType.getName(), NULL), pubType.getDescription()));
+                    List.of(ObjectUtils.defaultIfNull(pubType.getName(), NULL), pubType.getDescription()));
         filterWindow.setSelectedItemsIds(selectedItemsIds);
         filterWindow.setSelectAllButtonVisible();
         filterWindow.setSearchPromptString(ForeignUi.getMessage("prompt.publication_type"));

@@ -31,7 +31,6 @@ import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
 import java.util.AbstractMap.SimpleImmutableEntry;
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -85,9 +84,9 @@ public class AclFundPoolWidgetTest {
         verifyWindow(widget, null, 100, 100, Unit.PERCENTAGE);
         VerticalLayout layout = (VerticalLayout) widget.getSecondComponent();
         verifyMenuBar(((HorizontalLayout) layout.getComponent(0)).getComponent(0), "Fund Pool", true,
-            Arrays.asList("Create", "View"));
+            List.of("Create", "View"));
         Grid grid = (Grid) layout.getComponent(1);
-        verifyGrid(grid, Arrays.asList(
+        verifyGrid(grid, List.of(
             Triple.of("Fund Pool Name", 250.0, -1),
             Triple.of("Period", 100.0, -1),
             Triple.of("License Type", 100.0, -1),

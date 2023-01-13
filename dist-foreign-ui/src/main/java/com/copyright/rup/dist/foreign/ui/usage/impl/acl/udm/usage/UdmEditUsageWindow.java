@@ -45,7 +45,6 @@ import org.apache.commons.lang3.math.NumberUtils;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -68,9 +67,9 @@ public class UdmEditUsageWindow extends CommonUdmUsageWindow implements IDateFor
     private static final Range<Integer> STATISTICAL_MULTIPLIER_SCALE_RANGE = Range.closed(0, 5);
     private static final Range<Integer> ANNUAL_MULTIPLIER_RANGE = Range.closed(1, 25);
     private static final List<UsageStatusEnum> EDIT_AVAILABLE_STATUSES_RESEARCHER =
-        Arrays.asList(UsageStatusEnum.OPS_REVIEW, UsageStatusEnum.SPECIALIST_REVIEW, UsageStatusEnum.NEW);
+        List.of(UsageStatusEnum.OPS_REVIEW, UsageStatusEnum.SPECIALIST_REVIEW, UsageStatusEnum.NEW);
     private static final List<UsageStatusEnum> EDIT_AVAILABLE_STATUSES_SPECIALIST_AND_MANAGER =
-        Arrays.asList(UsageStatusEnum.NEW, UsageStatusEnum.ELIGIBLE, UsageStatusEnum.INELIGIBLE,
+        List.of(UsageStatusEnum.NEW, UsageStatusEnum.ELIGIBLE, UsageStatusEnum.INELIGIBLE,
             UsageStatusEnum.OPS_REVIEW, UsageStatusEnum.SPECIALIST_REVIEW);
     private static final String NUMBER_VALIDATION_MESSAGE = ForeignUi.getMessage("field.error.not_numeric");
     private final Binder<UdmUsageDto> binder = new Binder<>();
@@ -507,7 +506,7 @@ public class UdmEditUsageWindow extends CommonUdmUsageWindow implements IDateFor
             ForeignUi.getMessage("button.yes"),
             ForeignUi.getMessage("button.cancel"),
             reason -> saveUsage(event, reason),
-            Arrays.asList(new RequiredValidator(),
+            List.of(new RequiredValidator(),
                 new StringLengthValidator(ForeignUi.getMessage("field.error.length", 1000), 0, 1000)));
     }
 
@@ -524,7 +523,7 @@ public class UdmEditUsageWindow extends CommonUdmUsageWindow implements IDateFor
     }
 
     private void showValidationErrorWindow() {
-        Windows.showValidationErrorWindow(Arrays.asList(usageStatusComboBox, wrWrkInstField, reportedTitleField,
+        Windows.showValidationErrorWindow(List.of(usageStatusComboBox, wrWrkInstField, reportedTitleField,
             reportedStandardNumberField, reportedPubTypeField, commentField, researchUrlField,
             companyIdField, companyNameField, detailLicenseeClassComboBox, annualMultiplierField,
             statisticalMultiplierField, quantityField, annualizedCopiesField, ineligibleReasonComboBox));

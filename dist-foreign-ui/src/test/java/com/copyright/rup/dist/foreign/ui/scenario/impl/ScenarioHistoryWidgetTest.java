@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.ui.scenario.impl;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButton;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGrid;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
+
 import static org.easymock.EasyMock.createMock;
 import static org.junit.Assert.assertEquals;
 
@@ -16,7 +17,7 @@ import org.apache.commons.lang3.tuple.Triple;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Arrays;
+import java.util.List;
 
 /**
  * Verifies {@link ScenarioHistoryWidget}.
@@ -46,7 +47,7 @@ public class ScenarioHistoryWidgetTest {
         assertEquals(new MarginInfo(true, true, true, true), content.getMargin());
         assertEquals(2, content.getComponentCount());
         Grid grid = (Grid) content.getComponent(0);
-        verifyGrid(grid, Arrays.asList(
+        verifyGrid(grid, List.of(
             Triple.of("Type", -1.0, -1),
             Triple.of("User", -1.0, -1),
             Triple.of("Date", -1.0, -1),

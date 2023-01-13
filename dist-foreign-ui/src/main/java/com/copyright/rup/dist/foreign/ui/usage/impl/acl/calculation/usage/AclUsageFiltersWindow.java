@@ -38,7 +38,7 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
-import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
 
@@ -198,7 +198,7 @@ public class AclUsageFiltersWindow extends CommonAclFiltersWindow {
     private ComboBox<String> initTypeOfUseComboBox() {
         filterBinder.forField(typeOfUseComboBox)
             .bind(AclUsageFilter::getTypeOfUse, AclUsageFilter::setTypeOfUse);
-        typeOfUseComboBox.setItems(Arrays.asList("PRINT", "DIGITAL"));
+        typeOfUseComboBox.setItems(List.of("PRINT", "DIGITAL"));
         typeOfUseComboBox.setSizeFull();
         typeOfUseComboBox.setWidth(50, Unit.PERCENTAGE);
         VaadinUtils.addComponentStyle(typeOfUseComboBox, "acl-usage-type-of-use-filter");
@@ -409,7 +409,7 @@ public class AclUsageFiltersWindow extends CommonAclFiltersWindow {
                 usageFilter.setReportedTypeOfUses(reportedTypeOfUseFilterWidget.getSelectedItemsIds());
                 close();
             } catch (ValidationException e) {
-                Windows.showValidationErrorWindow(Arrays.asList(usageDetailIdField, wrWrkInstFromField,
+                Windows.showValidationErrorWindow(List.of(usageDetailIdField, wrWrkInstFromField,
                     wrWrkInstToField, systemTitleField, surveyCountryField, contentUnitPriceFromField,
                     contentUnitPriceToField, annualizedCopiesFromField, annualizedCopiesToField));
             }

@@ -31,8 +31,8 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
-import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -138,14 +138,14 @@ public class AclGrantDetailFiltersWindow extends CommonAclFiltersWindow {
     }
 
     private void initLicenseTypeFilterWidget() {
-        licenseTypeFilterWidget = new LicenseTypeFilterWidget(() -> Arrays.asList("ACL", "MACL", "VGW", "JACDCL"),
+        licenseTypeFilterWidget = new LicenseTypeFilterWidget(() -> List.of("ACL", "MACL", "VGW", "JACDCL"),
             aclGrantDetailFilter.getLicenseTypes());
         licenseTypeFilterWidget.addFilterSaveListener((IFilterSaveListener<String>) saveEvent ->
             aclGrantDetailFilter.setLicenseTypes(saveEvent.getSelectedItemsIds()));
     }
 
     private void initGrantStatusFilterWidget() {
-        grantStatusFilterWidget = new GrantStatusFilterWidget(() -> Arrays.asList("GRANT", "DENY"),
+        grantStatusFilterWidget = new GrantStatusFilterWidget(() -> List.of("GRANT", "DENY"),
             aclGrantDetailFilter.getGrantStatuses());
         grantStatusFilterWidget.addFilterSaveListener((IFilterSaveListener<String>) saveEvent ->
             aclGrantDetailFilter.setGrantStatuses(saveEvent.getSelectedItemsIds()));
@@ -153,7 +153,7 @@ public class AclGrantDetailFiltersWindow extends CommonAclFiltersWindow {
 
     private void initTypeOfUseFilterWidget() {
         typeOfUseFilterWidget =
-            new TypeOfUseFilterWidget(() -> Arrays.asList("PRINT", "DIGITAL"), aclGrantDetailFilter.getTypeOfUses());
+            new TypeOfUseFilterWidget(() -> List.of("PRINT", "DIGITAL"), aclGrantDetailFilter.getTypeOfUses());
         typeOfUseFilterWidget.addFilterSaveListener((IFilterSaveListener<String>) saveEvent ->
             aclGrantDetailFilter.setTypeOfUses(saveEvent.getSelectedItemsIds()));
     }
@@ -286,9 +286,8 @@ public class AclGrantDetailFiltersWindow extends CommonAclFiltersWindow {
                 filterBinder.writeBean(aclGrantDetailFilter);
                 close();
             } catch (ValidationException e) {
-                Windows.showValidationErrorWindow(
-                    Arrays.asList(wrWrkInstFromField, wrWrkInstToField, rhAccountNumberFromField,
-                        rhAccountNumberToField, rhNameField));
+                Windows.showValidationErrorWindow(List.of(wrWrkInstFromField, wrWrkInstToField,
+                    rhAccountNumberFromField, rhAccountNumberToField, rhNameField));
             }
         });
         Button clearButton = Buttons.createButton(ForeignUi.getMessage("button.clear"));

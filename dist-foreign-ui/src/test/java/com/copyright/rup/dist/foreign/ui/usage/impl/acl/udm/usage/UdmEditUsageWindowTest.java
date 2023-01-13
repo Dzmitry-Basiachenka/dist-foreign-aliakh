@@ -68,7 +68,6 @@ import org.powermock.reflect.Whitebox;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.LinkedHashSet;
@@ -669,7 +668,7 @@ public class UdmEditUsageWindowTest {
         verifyTextFieldLayout(verticalLayout.getComponent(2), "Usage Origin", true, false);
         verifyTextFieldLayout(verticalLayout.getComponent(3), "Usage Detail ID", true, false);
         verifyComboBoxLayout(verticalLayout.getComponent(4), "Detail Status", true, false,
-            new LinkedHashSet<>(Arrays.asList(UsageStatusEnum.NEW, UsageStatusEnum.ELIGIBLE, UsageStatusEnum.INELIGIBLE,
+            new LinkedHashSet<>(List.of(UsageStatusEnum.NEW, UsageStatusEnum.ELIGIBLE, UsageStatusEnum.INELIGIBLE,
                 UsageStatusEnum.OPS_REVIEW, UsageStatusEnum.SPECIALIST_REVIEW)));
         verifyTextFieldLayout(verticalLayout.getComponent(5), "Assignee", true, false);
         verifyTextFieldLayout(verticalLayout.getComponent(6), "RH Account #", true, false);
@@ -719,7 +718,7 @@ public class UdmEditUsageWindowTest {
         verifyTextFieldLayout(verticalLayout.getComponent(1), "Period", true, false);
         verifyTextFieldLayout(verticalLayout.getComponent(2), "Usage Detail ID", true, false);
         verifyComboBoxLayout(verticalLayout.getComponent(3), "Detail Status", true, false,
-            new LinkedHashSet<>(Arrays.asList(udmUsage.getStatus(), UsageStatusEnum.OPS_REVIEW,
+            new LinkedHashSet<>(List.of(udmUsage.getStatus(), UsageStatusEnum.OPS_REVIEW,
                 UsageStatusEnum.SPECIALIST_REVIEW, UsageStatusEnum.NEW)));
         verifyTextFieldLayout(verticalLayout.getComponent(4), "Assignee", true, false);
         verifyTextFieldLayout(verticalLayout.getComponent(5), "RH Account #", true, false);

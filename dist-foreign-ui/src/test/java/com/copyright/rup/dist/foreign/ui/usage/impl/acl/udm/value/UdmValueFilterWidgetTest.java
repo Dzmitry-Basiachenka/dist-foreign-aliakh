@@ -47,9 +47,9 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -66,7 +66,7 @@ import java.util.Set;
 public class UdmValueFilterWidgetTest {
 
     private static final Set<UdmValueStatusEnum> VALUE_STATUSES =
-        new LinkedHashSet<>(Arrays.asList(UdmValueStatusEnum.NEW,
+        new LinkedHashSet<>(List.of(UdmValueStatusEnum.NEW,
             UdmValueStatusEnum.RSCHD_IN_THE_PREV_PERIOD, UdmValueStatusEnum.PRELIM_RESEARCH_COMPLETE,
             UdmValueStatusEnum.NEEDS_FURTHER_REVIEW, UdmValueStatusEnum.RESEARCH_COMPLETE));
 

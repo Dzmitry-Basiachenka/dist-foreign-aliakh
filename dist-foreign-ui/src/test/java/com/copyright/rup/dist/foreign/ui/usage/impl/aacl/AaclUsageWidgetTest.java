@@ -64,7 +64,6 @@ import org.powermock.reflect.Whitebox;
 
 import java.time.LocalDate;
 import java.util.AbstractMap.SimpleImmutableEntry;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -124,7 +123,7 @@ public class AaclUsageWidgetTest {
         verifyWindow(layout, null, 100, 100, Unit.PERCENTAGE);
         assertEquals(2, layout.getComponentCount());
         verifyButtonsLayout((HorizontalLayout) layout.getComponent(0));
-        verifyGrid((Grid) layout.getComponent(1), Arrays.asList(
+        verifyGrid((Grid) layout.getComponent(1), List.of(
             Triple.of("Detail ID", 130.0, -1),
             Triple.of("Detail Status", 115.0, -1),
             Triple.of("Product Family", 125.0, -1),
@@ -430,8 +429,8 @@ public class AaclUsageWidgetTest {
         assertTrue(layout.isSpacing());
         assertEquals(new MarginInfo(true), layout.getMargin());
         assertEquals(6, layout.getComponentCount());
-        verifyMenuBar(layout.getComponent(0), "Usage Batch", true, Arrays.asList("Load", "View"));
-        verifyMenuBar(layout.getComponent(1), "Fund Pool", true, Arrays.asList("Load", "View"));
+        verifyMenuBar(layout.getComponent(0), "Usage Batch", true, List.of("Load", "View"));
+        verifyMenuBar(layout.getComponent(1), "Fund Pool", true, List.of("Load", "View"));
         Button sendForClassificationButton = (Button) layout.getComponent(2);
         assertEquals("Send for Classification", sendForClassificationButton.getCaption());
         Button loadClassifiedButton = (Button) layout.getComponent(3);

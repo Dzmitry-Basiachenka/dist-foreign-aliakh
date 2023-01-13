@@ -12,7 +12,6 @@ import com.vaadin.data.ValueProvider;
 
 import org.apache.commons.collections4.CollectionUtils;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -82,7 +81,7 @@ public class DetailLicenseeClassFilterWidget extends BaseUdmItemsFilterWidget<De
         FilterWindow<DetailLicenseeClass> filterWindow =
             Windows.showFilterWindow(ForeignUi.getMessage("window.detail_licensee_class_filter"), this,
                 (ValueProvider<DetailLicenseeClass, List<String>>) licenseeClass ->
-                    Arrays.asList(licenseeClass.getId().toString(), licenseeClass.getDescription()));
+                    List.of(licenseeClass.getId().toString(), licenseeClass.getDescription()));
         filterWindow.setSelectedItemsIds(selectedItemsIds);
         filterWindow.setSelectAllButtonVisible();
         filterWindow.setSearchPromptString(ForeignUi.getMessage("prompt.detail_licensee_class"));

@@ -41,7 +41,7 @@ import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.IntStream;
 
@@ -212,7 +212,7 @@ public class UdmBaselineFiltersWindowTest {
         verifyFilterLayout(verticalLayout.getComponent(0), "Detail Licensee Classes", "Aggregate Licensee Classes");
         verifyItemsFilterWidget(verticalLayout.getComponent(1), "Reported Types of Use");
         verifyComboBox(verticalLayout.getComponent(2), "Type of Use", Unit.PERCENTAGE, 50, true,
-            Arrays.asList(PRINT_TYPE_OF_USE, DIGITAL_TYPE_OF_USE));
+            List.of(PRINT_TYPE_OF_USE, DIGITAL_TYPE_OF_USE));
         verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(3), "Wr Wrk Inst From", "Wr Wrk Inst To");
         verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(4), "System Title");
         verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(5), "Usage Detail ID");
@@ -409,7 +409,7 @@ public class UdmBaselineFiltersWindowTest {
 
     private void assertNumericOperatorComboBoxItems(ComboBox<FilterOperatorEnum> operatorComboBox) {
         verifyComboBox(operatorComboBox, CAPTION_OPERATOR, Unit.PIXELS, 230, false,
-            Arrays.asList(FilterOperatorEnum.EQUALS, FilterOperatorEnum.DOES_NOT_EQUAL,
+            List.of(FilterOperatorEnum.EQUALS, FilterOperatorEnum.DOES_NOT_EQUAL,
                 FilterOperatorEnum.GREATER_THAN, FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO,
                 FilterOperatorEnum.LESS_THAN, FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO,
                 FilterOperatorEnum.BETWEEN, FilterOperatorEnum.IS_NULL, FilterOperatorEnum.IS_NOT_NULL));
@@ -417,7 +417,7 @@ public class UdmBaselineFiltersWindowTest {
 
     private void assertTextOperatorComboBoxItems(ComboBox<FilterOperatorEnum> operatorComboBox) {
         verifyComboBox(operatorComboBox, CAPTION_OPERATOR, Unit.PIXELS, 230, false,
-            Arrays.asList(FilterOperatorEnum.EQUALS, FilterOperatorEnum.DOES_NOT_EQUAL, FilterOperatorEnum.CONTAINS,
+            List.of(FilterOperatorEnum.EQUALS, FilterOperatorEnum.DOES_NOT_EQUAL, FilterOperatorEnum.CONTAINS,
                 FilterOperatorEnum.IS_NULL, FilterOperatorEnum.IS_NOT_NULL));
     }
 

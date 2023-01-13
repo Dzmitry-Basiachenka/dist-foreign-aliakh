@@ -33,7 +33,6 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -654,7 +653,7 @@ public class UdmValueFiltersWindow extends CommonAclFiltersWindow {
                 close();
             } catch (ValidationException e) {
                 Windows.showValidationErrorWindow(
-                    Arrays.asList(wrWrkInstFromField, wrWrkInstToField, systemTitleField, systemStandardNumberField,
+                    List.of(wrWrkInstFromField, wrWrkInstToField, systemTitleField, systemStandardNumberField,
                         rhAccountNumberFromField, rhAccountNumberToField, rhNameField, priceFromField, priceToField,
                         priceInUsdFromField, priceInUsdToField, priceCommentField, lastPriceCommentField,
                         contentFromField, contentToField, contentCommentField, lastContentCommentField,

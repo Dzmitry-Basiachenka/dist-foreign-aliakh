@@ -68,7 +68,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -427,7 +426,7 @@ public class UdmValueWidgetTest {
 
     private void verifyGrid(Grid grid) {
         List<Column> columns = grid.getColumns();
-        assertEquals(Arrays.asList("Value ID", "Value Period", "Status", "Assignee", "RH Account #", "RH Name",
+        assertEquals(List.of("Value ID", "Value Period", "Status", "Assignee", "RH Account #", "RH Name",
             "Wr Wrk Inst", "System Title", "System Standard Number", "Last Value Period", "Last Pub Type", "Pub Type",
             "Last Price in USD", "Last Price Flag", "Last Price Source", "Price Source", "Last Price Comment", "Price",
             "Currency", "Price Type", "Price Access Type", "Price Year", "Price Comment", "Price in USD", "Price Flag",
@@ -454,7 +453,7 @@ public class UdmValueWidgetTest {
         assertEquals(new MarginInfo(true), layout.getMargin());
         assertEquals(4, layout.getComponentCount());
         verifyButton(layout.getComponent(0), "Populate Value Batch");
-        verifyMenuBar(layout.getComponent(1), "Assignment", true, Arrays.asList("Assign", "Unassign"));
+        verifyMenuBar(layout.getComponent(1), "Assignment", true, List.of("Assign", "Unassign"));
         verifyButton(layout.getComponent(2), "Calculate Proxies");
         verifyButton(layout.getComponent(3), "Publish");
     }

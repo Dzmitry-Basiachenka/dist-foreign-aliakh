@@ -54,9 +54,9 @@ import org.powermock.reflect.Whitebox;
 import java.math.BigDecimal;
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
 
@@ -109,7 +109,7 @@ public class FasExcludePayeeWidgetTest {
         verifyToolbar(content.getComponent(0));
         assertThat(content.getComponent(1), instanceOf(Grid.class));
         Grid grid = (Grid) content.getComponent(1);
-        verifyGrid(grid, Arrays.asList(
+        verifyGrid(grid, List.of(
             Triple.of("Payee Account #", -1.0, -1),
             Triple.of("Payee Name", -1.0, -1),
             Triple.of("Gross Amt in USD", -1.0, -1),

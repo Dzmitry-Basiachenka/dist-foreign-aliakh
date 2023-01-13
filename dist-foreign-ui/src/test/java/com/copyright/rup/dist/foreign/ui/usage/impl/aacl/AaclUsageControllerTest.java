@@ -76,7 +76,6 @@ import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -223,7 +222,7 @@ public class AaclUsageControllerTest {
         usageBatch.setName("AACL Batch");
         List<Usage> usages = List.of(new Usage());
         List<String> insertedUsageIds =
-            Arrays.asList("2ad91b97-5288-47f4-a454-ed3a4388993b", "7c8f870f-97e6-4f9e-a8f8-e4b088dad057");
+            List.of("2ad91b97-5288-47f4-a454-ed3a4388993b", "7c8f870f-97e6-4f9e-a8f8-e4b088dad057");
         expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
         filterWidgetMock.clearFilter();
         expectLastCall().once();
@@ -379,8 +378,7 @@ public class AaclUsageControllerTest {
 
     @Test
     public void testLoadClassifiedUsages() {
-        List<AaclClassifiedUsage> classifiedUsages =
-            Arrays.asList(new AaclClassifiedUsage(), new AaclClassifiedUsage());
+        List<AaclClassifiedUsage> classifiedUsages = List.of(new AaclClassifiedUsage(), new AaclClassifiedUsage());
         expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
         filterWidgetMock.clearFilter();
         expectLastCall().once();

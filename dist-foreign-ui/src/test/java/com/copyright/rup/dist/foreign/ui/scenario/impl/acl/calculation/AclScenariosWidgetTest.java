@@ -75,7 +75,6 @@ import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.util.AbstractMap.SimpleImmutableEntry;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -402,7 +401,7 @@ public class AclScenariosWidgetTest {
     private void verifyGrid(Grid grid) {
         verifyWindow(grid, null, 100, 100, Unit.PERCENTAGE);
         assertEquals("acl-scenarios-table", grid.getId());
-        UiTestHelper.verifyGrid(grid, Arrays.asList(
+        UiTestHelper.verifyGrid(grid, List.of(
             Triple.of("Name", -1.0, 1),
             Triple.of("License Type", 100.0, -1),
             Triple.of("Period", 70.0, -1),

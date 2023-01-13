@@ -52,7 +52,6 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.function.Supplier;
@@ -133,7 +132,7 @@ public class UdmBaselineWidgetTest {
         verifySize(layout);
         assertEquals(2, layout.getComponentCount());
         verifyButtonsLayout(layout.getComponent(0), "Delete", "Export");
-        verifyGrid((Grid) layout.getComponent(1), Arrays.asList(
+        verifyGrid((Grid) layout.getComponent(1), List.of(
             Triple.of("Detail ID", 250.0, -1),
             Triple.of("Period", 100.0, -1),
             Triple.of("Usage Origin", 100.0, -1),

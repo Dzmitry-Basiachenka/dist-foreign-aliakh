@@ -57,7 +57,6 @@ import org.powermock.reflect.Whitebox;
 
 import java.io.IOException;
 import java.util.AbstractMap.SimpleImmutableEntry;
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -166,7 +165,7 @@ public class FasAuditWidgetTest {
         assertTrue(layout.isSpacing());
         assertEquals(2, layout.getComponentCount());
         verifyToolbar(layout.getComponent(0));
-        UiTestHelper.verifyGrid((Grid) layout.getComponent(1), Arrays.asList(
+        UiTestHelper.verifyGrid((Grid) layout.getComponent(1), List.of(
             Triple.of("Detail ID", 130.0, -1),
             Triple.of("Detail Status", 115.0, -1),
             Triple.of("Product Family", 125.0, -1),

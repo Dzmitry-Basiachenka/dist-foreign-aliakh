@@ -39,7 +39,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -53,10 +52,10 @@ import java.util.List;
  */
 public class AggregateLicenseeClassMappingWindowTest {
 
-    private final List<DetailLicenseeClass> defaultParams = Arrays.asList(
+    private final List<DetailLicenseeClass> defaultParams = List.of(
         buildDetailLicenseeClass(1, "EXGP", "Life Sciences", 51, "HGP", "Social & Behavioral Sciences"),
         buildDetailLicenseeClass(2, "MU", "Business Management", 52, "EXU4", "Medical & Health"));
-    private final List<DetailLicenseeClass> appliedParams = Arrays.asList(
+    private final List<DetailLicenseeClass> appliedParams = List.of(
         buildDetailLicenseeClass(1, "EXGP", "Life Sciences", 51, "HGP", "Social & Behavioral Sciences"),
         buildDetailLicenseeClass(2, "MU", "Business Management", 53, "EXU2", "Education"));
     private AggregateLicenseeClassMappingWindow window;
@@ -166,7 +165,7 @@ public class AggregateLicenseeClassMappingWindowTest {
 
     @SuppressWarnings("unchecked")
     private void verifyGrid(Grid grid) {
-        UiTestHelper.verifyGrid(grid, Arrays.asList(
+        UiTestHelper.verifyGrid(grid, List.of(
             Triple.of("Det LC ID", -1.0, 1),
             Triple.of("Det LC Enrollment", -1.0, 2),
             Triple.of("Det LC Discipline", -1.0, 3),

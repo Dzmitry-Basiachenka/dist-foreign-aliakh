@@ -54,7 +54,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.util.AbstractMap.SimpleImmutableEntry;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -111,7 +110,7 @@ public class AaclExcludePayeeWidgetTest {
         verifyToolbar(content.getComponent(0));
         Grid grid = (Grid) content.getComponent(1);
         assertThat(content.getComponent(1), instanceOf(Grid.class));
-        verifyGrid(grid, Arrays.asList(
+        verifyGrid(grid, List.of(
             Triple.of("Payee Account #", -1.0, -1),
             Triple.of("Payee Name", -1.0, -1),
             Triple.of("Gross Amt in USD", -1.0, -1),
@@ -141,7 +140,7 @@ public class AaclExcludePayeeWidgetTest {
             .andReturn(buildPayeeTotalHolder(Set.of(PAYEE_ACCOUNT_NUMBER_2))).once();
         AggregateLicenseeClass aggregateLicenseeClass = buildAggregateLicenseeClass(171, "EXGP", "Arts & Humanities");
         List<PayeeAccountAggregateLicenseeClassesPair> pairs =
-            Arrays.asList(buildPayeeAggLcPair(PAYEE_ACCOUNT_NUMBER_1, aggregateLicenseeClass),
+            List.of(buildPayeeAggLcPair(PAYEE_ACCOUNT_NUMBER_1, aggregateLicenseeClass),
                 buildPayeeAggLcPair(PAYEE_ACCOUNT_NUMBER_2, aggregateLicenseeClass));
         expect(controller.getPayeeAggClassesPairs()).andReturn(pairs).once();
         Windows.showConfirmDialogWithReason(eq("Confirm action"),
@@ -165,7 +164,7 @@ public class AaclExcludePayeeWidgetTest {
         AggregateLicenseeClass aggregateLicenseeClass1 = buildAggregateLicenseeClass(171, "EXGP", "Arts & Humanities");
         AggregateLicenseeClass aggregateLicenseeClass2 = buildAggregateLicenseeClass(120, "MU", "Business Management");
         List<PayeeAccountAggregateLicenseeClassesPair> pairs =
-            Arrays.asList(buildPayeeAggLcPair(PAYEE_ACCOUNT_NUMBER_1, aggregateLicenseeClass1),
+            List.of(buildPayeeAggLcPair(PAYEE_ACCOUNT_NUMBER_1, aggregateLicenseeClass1),
                 buildPayeeAggLcPair(PAYEE_ACCOUNT_NUMBER_2, aggregateLicenseeClass1, aggregateLicenseeClass2));
         expect(controller.getPayeeAggClassesPairs()).andReturn(pairs).once();
         Windows.showNotificationWindow("1000009094, 7000429266 payee(s) cannot be excluded. " +

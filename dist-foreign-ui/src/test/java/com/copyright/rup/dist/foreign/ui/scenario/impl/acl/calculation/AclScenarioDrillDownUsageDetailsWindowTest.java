@@ -40,7 +40,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -161,7 +160,7 @@ public class AclScenarioDrillDownUsageDetailsWindowTest {
         assertThat(component, instanceOf(Grid.class));
         Grid<?> grid = (Grid<?>) component;
         assertTrue(grid.getStyleName().contains("acl-scenario-drill-down-usage-details-grid"));
-        UiTestHelper.verifyGrid(grid, Arrays.asList(
+        UiTestHelper.verifyGrid(grid, List.of(
             Triple.of("Detail ID", 250.0, -1),
             Triple.of("Usage Detail ID", 170.0, -1),
             Triple.of("Usage Period", 100.0, -1),

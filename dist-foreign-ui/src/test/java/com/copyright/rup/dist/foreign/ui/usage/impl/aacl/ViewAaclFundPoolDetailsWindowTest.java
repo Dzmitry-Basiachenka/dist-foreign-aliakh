@@ -22,7 +22,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -53,7 +52,7 @@ public class ViewAaclFundPoolDetailsWindowTest {
         assertEquals(2, content.getComponentCount());
         Component component = content.getComponent(0);
         assertEquals(Grid.class, component.getClass());
-        verifyGrid((Grid) component, Arrays.asList(
+        verifyGrid((Grid) component, List.of(
             Triple.of("Agg LC ID", -1.0, 1),
             Triple.of("Agg LC Enrollment", -1.0, 2),
             Triple.of("Agg LC Discipline", -1.0, 3),

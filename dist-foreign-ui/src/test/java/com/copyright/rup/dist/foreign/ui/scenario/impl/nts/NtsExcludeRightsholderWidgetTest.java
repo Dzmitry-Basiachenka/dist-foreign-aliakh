@@ -23,7 +23,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -37,7 +36,7 @@ import java.util.List;
  */
 public class NtsExcludeRightsholderWidgetTest {
 
-    private final List<RightsholderPayeePair> rightsholderPayeePairs = Arrays.asList(
+    private final List<RightsholderPayeePair> rightsholderPayeePairs = List.of(
         buildRightsholderPayeePair(
             buildRightsholder(1000033963L, "Alfred R. Lindesmith"),
             buildRightsholder(2000148821L, "ABR Company, Ltd")),
@@ -62,7 +61,7 @@ public class NtsExcludeRightsholderWidgetTest {
         VerticalLayout content = (VerticalLayout) widget.getContent();
         assertEquals(3, content.getComponentCount());
         Grid grid = (Grid) content.getComponent(1);
-        verifyGrid(grid, Arrays.asList(
+        verifyGrid(grid, List.of(
             Triple.of("RH Account #", -1.0, -1),
             Triple.of("RH Name", -1.0, -1),
             Triple.of("Payee Account #", -1.0, -1),

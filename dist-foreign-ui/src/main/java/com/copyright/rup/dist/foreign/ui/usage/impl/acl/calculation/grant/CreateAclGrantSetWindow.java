@@ -26,7 +26,7 @@ import com.vaadin.ui.Window;
 
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -88,7 +88,7 @@ public class CreateAclGrantSetWindow extends Window {
             close();
             Windows.showNotificationWindow(ForeignUi.getMessage("message.creation_completed", grantDetailsCount));
         } else {
-            Windows.showValidationErrorWindow(Arrays.asList(grantSetNameFiled, grantPeriodYearField,
+            Windows.showValidationErrorWindow(List.of(grantSetNameFiled, grantPeriodYearField,
                 grantPeriodMonthComboBox, periodValidationField, licenseTypeComboBox));
         }
     }

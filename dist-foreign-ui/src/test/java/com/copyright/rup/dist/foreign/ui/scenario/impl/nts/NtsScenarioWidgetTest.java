@@ -55,7 +55,6 @@ import org.powermock.reflect.Whitebox;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.AbstractMap.SimpleImmutableEntry;
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -183,7 +182,7 @@ public class NtsScenarioWidgetTest {
 
     private void verifyGrid(Component component) {
         Grid grid = (Grid) component;
-        UiTestHelper.verifyGrid(grid, Arrays.asList(
+        UiTestHelper.verifyGrid(grid, List.of(
             Triple.of("RH Account #", -1.0, 1),
             Triple.of("RH Name", -1.0, 2),
             Triple.of("Payee Account #", -1.0, 1),

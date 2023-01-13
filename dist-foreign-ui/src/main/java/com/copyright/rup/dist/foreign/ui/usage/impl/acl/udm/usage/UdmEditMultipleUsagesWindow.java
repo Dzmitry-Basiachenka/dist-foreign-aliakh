@@ -39,7 +39,6 @@ import org.apache.commons.lang3.math.NumberUtils;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -64,7 +63,7 @@ public class UdmEditMultipleUsagesWindow extends Window {
     private static final Range<Integer> STATISTICAL_MULTIPLIER_SCALE_RANGE = Range.closed(0, 5);
     private static final Range<Integer> ANNUAL_MULTIPLIER_RANGE = Range.closed(1, 25);
     private static final List<UsageStatusEnum> EDIT_AVAILABLE_STATUSES =
-        Arrays.asList(UsageStatusEnum.NEW, UsageStatusEnum.ELIGIBLE, UsageStatusEnum.INELIGIBLE,
+        List.of(UsageStatusEnum.NEW, UsageStatusEnum.ELIGIBLE, UsageStatusEnum.INELIGIBLE,
             UsageStatusEnum.OPS_REVIEW, UsageStatusEnum.SPECIALIST_REVIEW);
     private static final String NUMBER_VALIDATION_MESSAGE = ForeignUi.getMessage("field.error.not_numeric");
     private static final String MAX_LENGTH_FIELD_MESSAGE = "field.error.number_length";
@@ -389,7 +388,7 @@ public class UdmEditMultipleUsagesWindow extends Window {
             ForeignUi.getMessage("button.yes"),
             ForeignUi.getMessage("button.cancel"),
             reason -> saveUsages(event, reason),
-            Arrays.asList(new RequiredValidator(),
+            List.of(new RequiredValidator(),
                 new StringLengthValidator(ForeignUi.getMessage("field.error.length", 1000), 0, 1000)));
     }
 
@@ -409,7 +408,7 @@ public class UdmEditMultipleUsagesWindow extends Window {
 
     private void showValidationErrorWindow() {
         Windows.showValidationErrorWindow(
-            Arrays.asList(statusComboBox, periodField, detailLicenseeClassComboBox, companyIdField,
+            List.of(statusComboBox, periodField, detailLicenseeClassComboBox, companyIdField,
                 companyNameField, wrWrkInstField, reportedStandardNumberField, reportedTitleField,
                 annualMultiplierField, statisticalMultiplierField, quantityField, ineligibleReasonComboBox,
                 commentField));

@@ -22,7 +22,6 @@ import org.apache.commons.lang3.tuple.Triple;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -55,7 +54,7 @@ public class AaclBatchStatusWidgetTest {
         Grid<?> grid = (Grid<?>) component;
         UiTestHelper.verifyWindow(grid, null, 100, 100, Unit.PERCENTAGE);
         assertEquals("batch-status-grid", grid.getId());
-        UiTestHelper.verifyGrid(grid, Arrays.asList(
+        UiTestHelper.verifyGrid(grid, List.of(
             Triple.of("Usage Batch Name", -1.0, -1),
             Triple.of("Total Count", 130.0, -1),
             Triple.of("New", 130.0, -1),

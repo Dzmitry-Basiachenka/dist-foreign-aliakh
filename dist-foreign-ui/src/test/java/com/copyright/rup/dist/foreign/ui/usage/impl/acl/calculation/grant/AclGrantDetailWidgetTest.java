@@ -48,7 +48,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.AbstractMap.SimpleImmutableEntry;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -180,7 +179,7 @@ public class AclGrantDetailWidgetTest {
         assertEquals(2, layout.getComponentCount());
         verifyButtonsLayout((HorizontalLayout) layout.getComponent(0), buttonsVisibility);
         Grid grid = (Grid) layout.getComponent(1);
-        verifyGrid(grid, Arrays.asList(
+        verifyGrid(grid, List.of(
             Triple.of("Grant Set Name", 200.0, -1),
             Triple.of("Grant Period", 110.0, -1),
             Triple.of("License Type", 130.0, -1),
@@ -201,7 +200,7 @@ public class AclGrantDetailWidgetTest {
     }
 
     private void verifyButtonsLayout(HorizontalLayout layout, boolean... buttonsVisibility) {
-        verifyMenuBar(layout.getComponent(0), "Grant Set", buttonsVisibility[0], Arrays.asList("Create", "View"));
+        verifyMenuBar(layout.getComponent(0), "Grant Set", buttonsVisibility[0], List.of("Create", "View"));
         verifyButton(layout.getComponent(1), "Upload", buttonsVisibility[1]);
         verifyButton(layout.getComponent(2), "Edit", buttonsVisibility[2]);
         verifyButton(layout.getComponent(3), "Export", buttonsVisibility[3]);

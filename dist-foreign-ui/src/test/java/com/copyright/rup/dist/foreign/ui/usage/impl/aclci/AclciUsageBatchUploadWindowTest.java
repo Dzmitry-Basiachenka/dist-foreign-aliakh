@@ -6,6 +6,7 @@ import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButton;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyLoadClickListener;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyTextField;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyUploadComponent;
+
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.expect;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -30,6 +31,7 @@ import com.copyright.rup.dist.foreign.ui.usage.api.aclci.IAclciUsageController;
 import com.copyright.rup.vaadin.security.SecurityUtils;
 import com.copyright.rup.vaadin.ui.component.upload.UploadField;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
+
 import com.vaadin.data.Binder;
 import com.vaadin.data.HasValue;
 import com.vaadin.server.Sizeable.Unit;
@@ -38,6 +40,7 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
+
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -48,8 +51,8 @@ import org.powermock.reflect.Whitebox;
 
 import java.io.ByteArrayOutputStream;
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Verifies {@link AclciUsageBatchUploadWindow}.
@@ -278,7 +281,7 @@ public class AclciUsageBatchUploadWindowTest {
         Button loadButton = verifyButton(layout.getComponent(0), "Upload", true);
         verifyButton(layout.getComponent(1), "Close", true);
         assertEquals(1, loadButton.getListeners(Button.ClickEvent.class).size());
-        verifyLoadClickListener(loadButton, Arrays.asList(
+        verifyLoadClickListener(loadButton, List.of(
             Whitebox.getInternalState(window, USAGE_BATCH_NAME_FIELD),
             Whitebox.getInternalState(window, UPLOAD_FIELD),
             Whitebox.getInternalState(window, LICENSEE_ACCOUNT_NUMBER_FIELD),

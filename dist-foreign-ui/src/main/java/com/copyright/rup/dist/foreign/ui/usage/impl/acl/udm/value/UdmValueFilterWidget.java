@@ -22,7 +22,6 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
-import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.List;
 
@@ -154,7 +153,7 @@ public class UdmValueFilterWidget extends VerticalLayout implements IUdmValueFil
     private void initStatusFilter() {
         statusComboBox = new ComboBox<>(ForeignUi.getMessage("label.status"));
         statusComboBox.setPopupWidth("220px");
-        statusComboBox.setItems(new LinkedHashSet<>(Arrays.asList(UdmValueStatusEnum.NEW,
+        statusComboBox.setItems(new LinkedHashSet<>(List.of(UdmValueStatusEnum.NEW,
             UdmValueStatusEnum.RSCHD_IN_THE_PREV_PERIOD, UdmValueStatusEnum.PRELIM_RESEARCH_COMPLETE,
             UdmValueStatusEnum.NEEDS_FURTHER_REVIEW, UdmValueStatusEnum.RESEARCH_COMPLETE)));
         VaadinUtils.setMaxComponentsWidth(statusComboBox);

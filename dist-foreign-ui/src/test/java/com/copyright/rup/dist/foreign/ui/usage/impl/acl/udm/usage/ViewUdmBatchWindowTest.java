@@ -48,7 +48,6 @@ import org.powermock.reflect.Whitebox;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -107,7 +106,7 @@ public class ViewUdmBatchWindowTest {
         Component component = content.getComponent(1);
         assertThat(component, instanceOf(Grid.class));
         Grid grid = (Grid) component;
-        verifyGrid(grid, Arrays.asList(
+        verifyGrid(grid, List.of(
             Triple.of("Usage Batch Name", -1.0, 1),
             Triple.of("Period", 180.0, -1),
             Triple.of("Usage Origin", 180.0, -1),

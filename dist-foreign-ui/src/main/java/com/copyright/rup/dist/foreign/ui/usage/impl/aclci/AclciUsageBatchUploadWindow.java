@@ -17,6 +17,7 @@ import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.upload.UploadField;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
+
 import com.vaadin.data.Binder;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.shared.ui.MarginInfo;
@@ -27,10 +28,10 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
+
 import org.apache.commons.lang3.StringUtils;
 
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -99,7 +100,7 @@ public class AclciUsageBatchUploadWindow extends Window {
             }
         } else {
             Windows.showValidationErrorWindow(
-                Arrays.asList(usageBatchNameField, uploadField, licenseeAccountNumberField, licenseeNameField,
+                List.of(usageBatchNameField, uploadField, licenseeAccountNumberField, licenseeNameField,
                     periodEndDateField));
         }
     }

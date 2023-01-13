@@ -28,7 +28,6 @@ import org.junit.Test;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -64,7 +63,7 @@ public class AclScenarioHistoryWidgetTest {
         assertEquals(new MarginInfo(true, true, true, true), content.getMargin());
         assertEquals(2, content.getComponentCount());
         Grid grid = (Grid) content.getComponent(0);
-        verifyGrid(grid, Arrays.asList(
+        verifyGrid(grid, List.of(
             Triple.of("Type", -1.0, -1),
             Triple.of("User", -1.0, -1),
             Triple.of("Date", -1.0, -1),

@@ -44,7 +44,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -140,7 +139,7 @@ public class AclScenarioDetailsByRightsholderWidgetTest {
         assertThat(component, instanceOf(Grid.class));
         Grid<UsageDto> grid = (Grid<UsageDto>) component;
         assertTrue(grid.getStyleName().contains("acl-scenario-details-grid"));
-        verifyGrid(grid, Arrays.asList(
+        verifyGrid(grid, List.of(
             Triple.of("Detail ID", 130.0, -1),
             Triple.of("Usage Detail ID", 130.0, -1),
             Triple.of("Product Family", 125.0, -1),

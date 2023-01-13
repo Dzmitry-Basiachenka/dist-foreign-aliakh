@@ -41,7 +41,6 @@ import org.apache.commons.lang3.math.NumberUtils;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -331,7 +330,7 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
                 saveButtonClickListener.buttonClick(event);
                 close();
             } catch (ValidationException e) {
-                Windows.showValidationErrorWindow(Arrays.asList(valueStatusComboBox, pubTypeComboBox, priceField,
+                Windows.showValidationErrorWindow(List.of(valueStatusComboBox, pubTypeComboBox, priceField,
                     currencyComboBox, priceTypeComboBox, priceAccessTypeComboBox, priceYearField, priceSourceField,
                     priceCommentField, contentField, contentSourceField, contentCommentField, commentField));
             }

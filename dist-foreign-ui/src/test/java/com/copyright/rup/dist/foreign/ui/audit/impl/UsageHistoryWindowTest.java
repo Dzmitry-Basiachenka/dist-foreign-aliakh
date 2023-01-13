@@ -31,7 +31,6 @@ import org.apache.commons.lang3.tuple.Triple;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -79,7 +78,7 @@ public class UsageHistoryWindowTest {
         Component component = layout.getComponent(0);
         assertEquals(1f, layout.getExpandRatio(component), 0);
         assertThat(component, instanceOf(Grid.class));
-        verifyGrid((Grid) component, Arrays.asList(
+        verifyGrid((Grid) component, List.of(
             Triple.of("Type", -1.0, -1),
             Triple.of("User", -1.0, -1),
             Triple.of("Date", -1.0, -1),

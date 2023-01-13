@@ -26,7 +26,6 @@ import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -96,7 +95,7 @@ public class SalLicenseeFilterWidgetTest {
         expectLastCall().once();
         replay(filterWindow, Windows.class);
         salLicenseeFilterWidget.showFilterWindow();
-        assertEquals(Arrays.asList("Agway, Inc.", "1114"), providerCapture.getValue().apply(buildLicensee()));
+        assertEquals(List.of("Agway, Inc.", "1114"), providerCapture.getValue().apply(buildLicensee()));
         verify(filterWindow, Windows.class);
     }
 

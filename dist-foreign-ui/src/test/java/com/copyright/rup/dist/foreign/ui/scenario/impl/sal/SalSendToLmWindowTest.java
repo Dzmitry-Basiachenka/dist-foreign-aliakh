@@ -22,10 +22,10 @@ import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
+
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -53,7 +53,7 @@ public class SalSendToLmWindowTest {
         scenario1 = buildScenario(SCENARIO_ID_1, "SAL Distribution 10/10/2020");
         scenario2 = buildScenario(SCENARIO_ID_2, "SAL Distribution 10/12/2020");
         ISalScenariosController controller = createMock(ISalScenariosController.class);
-        expect(controller.getApprovedScenarios()).andReturn(Arrays.asList(scenario1, scenario2)).once();
+        expect(controller.getApprovedScenarios()).andReturn(List.of(scenario1, scenario2)).once();
         replay(controller);
         widget = new SalSendToLmWindow(controller);
         verify(controller);

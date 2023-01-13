@@ -30,8 +30,8 @@ import com.vaadin.ui.VerticalLayout;
 import org.junit.Test;
 
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Verifies {@link UdmUsageAppliedFilterWidget}.
@@ -51,7 +51,7 @@ public class UdmUsageAppliedFilterWidgetTest {
         IUdmUsageFilterController controller = createMock(IUdmUsageFilterController.class);
         widget = new UdmUsageAppliedFilterWidget(controller);
         expect(controller.getUdmBatches()).andReturn(
-            Arrays.asList(buildUdmBatch("d7780576-2903-459c-a9ee-75a8d95cd4df", "Udm Batch 2021"),
+            List.of(buildUdmBatch("d7780576-2903-459c-a9ee-75a8d95cd4df", "Udm Batch 2021"),
                 buildUdmBatch("a8711022-8b30-4fa9-be39-c3e25378fd9a", "Udm Batch 2022"),
                 buildUdmBatch("10bacf4f-8b51-48fa-b16e-b1f3968f0381", "batch 2022")));
         replay(controller);
@@ -128,8 +128,8 @@ public class UdmUsageAppliedFilterWidgetTest {
 
     private UdmUsageFilter buildUdmFilter() {
         UdmUsageFilter filter = new UdmUsageFilter();
-        filter.setUdmBatchesIds(new HashSet<>(Arrays.asList("d7780576-2903-459c-a9ee-75a8d95cd4df",
-            "a8711022-8b30-4fa9-be39-c3e25378fd9a", "10bacf4f-8b51-48fa-b16e-b1f3968f0381")));
+        filter.setUdmBatchesIds(Set.of("d7780576-2903-459c-a9ee-75a8d95cd4df",
+            "a8711022-8b30-4fa9-be39-c3e25378fd9a", "10bacf4f-8b51-48fa-b16e-b1f3968f0381"));
         filter.setPeriods(Sets.newHashSet(202106, 202206, 202312));
         filter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
         filter.setUdmUsageOrigin(UdmUsageOriginEnum.SS);

@@ -59,7 +59,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.io.IOException;
 import java.util.AbstractMap.SimpleImmutableEntry;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -227,7 +226,7 @@ public class WorkClassificationWindowTest {
         assertNull(grid.getCaption());
         verifySize(grid, 100, Unit.PERCENTAGE, 100, Unit.PERCENTAGE);
         List<Column> columns = grid.getColumns();
-        assertEquals(Arrays.asList("Wr Wrk Inst", "System Title", "Classification", "Standard Number",
+        assertEquals(List.of("Wr Wrk Inst", "System Title", "Classification", "Standard Number",
             "Standard Number Type", "RH Account #", "RH Name", "Classification Date", "Classified By"),
             columns.stream().map(Column::getCaption).collect(Collectors.toList()));
         assertEquals(100, columns.get(0).getWidth(), 0);

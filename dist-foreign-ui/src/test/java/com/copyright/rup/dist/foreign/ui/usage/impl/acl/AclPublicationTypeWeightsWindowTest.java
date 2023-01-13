@@ -40,7 +40,6 @@ import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -149,7 +148,7 @@ public class AclPublicationTypeWeightsWindowTest {
 
     @SuppressWarnings("unchecked")
     private void verifyGrid(Grid grid) {
-        UiTestHelper.verifyGrid(grid, Arrays.asList(
+        UiTestHelper.verifyGrid(grid, List.of(
             Triple.of("Pub Type", -1.0, -1),
             Triple.of("Period", -1.0, -1),
             Triple.of("Weight", -1.0, -1)));

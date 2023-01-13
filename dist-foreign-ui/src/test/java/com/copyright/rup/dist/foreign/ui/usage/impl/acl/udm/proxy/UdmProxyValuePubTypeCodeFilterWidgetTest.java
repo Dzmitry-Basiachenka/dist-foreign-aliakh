@@ -12,7 +12,6 @@ import com.copyright.rup.vaadin.ui.component.filter.CommonFilterWindow.FilterSav
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -38,7 +37,7 @@ public class UdmProxyValuePubTypeCodeFilterWidgetTest {
 
     @Test
     public void testLoadBeans() {
-        List<String> pubTypeCodes = Arrays.asList("BK", "NP");
+        List<String> pubTypeCodes = List.of("BK", "NP");
         expect(filterController.getPublicationTypeCodes()).andReturn(pubTypeCodes).once();
         replay(filterController);
         assertEquals(pubTypeCodes, pubTypeCodeFilterWidget.loadBeans());

@@ -11,6 +11,7 @@ import com.copyright.rup.dist.foreign.ui.usage.impl.ScenarioParameterWidget.Para
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
+
 import com.vaadin.data.Binder;
 import com.vaadin.data.ValidationException;
 import com.vaadin.data.converter.StringToBigDecimalConverter;
@@ -21,10 +22,11 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
-import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -132,7 +134,7 @@ class AclAddPublicationTypeWindow extends Window {
             fireEvent(new ParametersSaveEvent<>(this, publicationType));
             close();
         } catch (ValidationException e) {
-            Windows.showValidationErrorWindow(Arrays.asList(pubTypeComboBox, pubTypePeriodField, pubTypeWeightField));
+            Windows.showValidationErrorWindow(List.of(pubTypeComboBox, pubTypePeriodField, pubTypeWeightField));
         }
     }
 }

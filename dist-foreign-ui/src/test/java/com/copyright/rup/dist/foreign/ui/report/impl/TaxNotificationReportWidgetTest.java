@@ -38,7 +38,6 @@ import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
 import java.util.AbstractMap.SimpleImmutableEntry;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
@@ -78,7 +77,7 @@ public class TaxNotificationReportWidgetTest {
         expect(streamSource.getSource()).andReturn(
             new SimpleImmutableEntry(createMock(Supplier.class), createMock(Supplier.class))).once();
         expect(controller.getCsvStreamSource()).andReturn(streamSource).once();
-        expect(controller.getScenarios()).andReturn(Arrays.asList(SCENARIO_1, SCENARIO_2)).once();
+        expect(controller.getScenarios()).andReturn(List.of(SCENARIO_1, SCENARIO_2)).once();
         replay(controller, streamSource);
         widget = new TaxNotificationReportWidget();
         widget.setController(controller);

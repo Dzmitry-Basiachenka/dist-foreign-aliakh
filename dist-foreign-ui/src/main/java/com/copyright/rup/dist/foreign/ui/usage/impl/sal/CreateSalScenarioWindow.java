@@ -30,7 +30,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -140,7 +139,7 @@ class CreateSalScenarioWindow extends Window {
                 }
             });
         } else {
-            Windows.showValidationErrorWindow(Arrays.asList(scenarioNameField, fundPoolComboBox, descriptionArea));
+            Windows.showValidationErrorWindow(List.of(scenarioNameField, fundPoolComboBox, descriptionArea));
         }
     }
 

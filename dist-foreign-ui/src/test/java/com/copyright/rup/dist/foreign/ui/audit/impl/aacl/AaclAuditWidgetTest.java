@@ -50,7 +50,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.util.AbstractMap.SimpleImmutableEntry;
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -142,7 +141,7 @@ public class AaclAuditWidgetTest {
         assertThat(layout.getComponent(1), instanceOf(Grid.class));
         Grid grid = (Grid) layout.getComponent(1);
         verifyWindow(grid, null, 100, 100, Unit.PERCENTAGE);
-        verifyGrid(grid, Arrays.asList(
+        verifyGrid(grid, List.of(
             Triple.of("Detail ID", 130.0, -1),
             Triple.of("Baseline ID", 125.0, -1),
             Triple.of("Detail Status", 115.0, -1),

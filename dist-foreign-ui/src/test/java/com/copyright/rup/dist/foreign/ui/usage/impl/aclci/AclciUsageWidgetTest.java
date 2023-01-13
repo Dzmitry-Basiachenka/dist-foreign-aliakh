@@ -40,7 +40,6 @@ import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -86,7 +85,7 @@ public class AclciUsageWidgetTest {
         assertEquals(2, layout.getComponentCount());
         verifyButtonsLayout((HorizontalLayout) layout.getComponent(0));
         Grid grid = (Grid) layout.getComponent(1);
-        verifyGrid(grid, Arrays.asList(
+        verifyGrid(grid, List.of(
             Triple.of("Detail ID", 200.0, -1),
             Triple.of("Detail Status", 165.0, -1),
             Triple.of("License Type", 150.0, -1),

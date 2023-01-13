@@ -45,7 +45,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.io.ByteArrayOutputStream;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -94,7 +93,7 @@ public class ClassifiedUsagesUploadWindowTest {
     public void testOnUploadClickedValidFields() {
         mockStatic(Windows.class);
         List<AaclClassifiedUsage> classifiedUsages =
-            Arrays.asList(new AaclClassifiedUsage(), new AaclClassifiedUsage(), new AaclClassifiedUsage());
+            List.of(new AaclClassifiedUsage(), new AaclClassifiedUsage(), new AaclClassifiedUsage());
         UploadField uploadField = createPartialMock(UploadField.class, "getStreamToUploadedFile");
         ClassifiedUsageCsvProcessor processor = createMock(ClassifiedUsageCsvProcessor.class);
         ProcessingResult<AaclClassifiedUsage> processingResult = buildCsvProcessingResult(classifiedUsages);

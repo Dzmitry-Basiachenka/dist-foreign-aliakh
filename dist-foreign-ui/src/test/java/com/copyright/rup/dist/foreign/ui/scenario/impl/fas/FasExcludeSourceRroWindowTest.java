@@ -29,7 +29,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Arrays;
 import java.util.List;
 
 
@@ -44,7 +43,7 @@ import java.util.List;
  */
 public class FasExcludeSourceRroWindowTest {
 
-    private final List<Rightsholder> rightsholders = Arrays.asList(
+    private final List<Rightsholder> rightsholders = List.of(
         buildRightsholder(2000017004L, "Access Copyright, The Canadian Copyright Agency"),
         buildRightsholder(2000017006L, "CAL, Copyright Agency Limited"));
 
@@ -66,7 +65,7 @@ public class FasExcludeSourceRroWindowTest {
         assertEquals(3, content.getComponentCount());
         assertEquals(Grid.class, content.getComponent(1).getClass());
         Grid grid = (Grid) (content.getComponent(1));
-        verifyGrid(grid, Arrays.asList(
+        verifyGrid(grid, List.of(
             Triple.of("Source RRO Account #", -1.0, 2),
             Triple.of("Source RRO Name", -1.0, 4),
             Triple.of(StringUtils.EMPTY, 95.0, -1)

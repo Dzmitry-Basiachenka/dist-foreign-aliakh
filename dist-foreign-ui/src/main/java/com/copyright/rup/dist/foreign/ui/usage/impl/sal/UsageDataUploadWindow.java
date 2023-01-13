@@ -27,7 +27,6 @@ import com.vaadin.ui.Window;
 
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -81,7 +80,7 @@ public class UsageDataUploadWindow extends Window {
                     ForeignUi.getMessage("message.error.invalid_item_bank.has_usage_data"));
             }
         } else {
-            Windows.showValidationErrorWindow(Arrays.asList(itemBankComboBox, uploadField));
+            Windows.showValidationErrorWindow(List.of(itemBankComboBox, uploadField));
         }
     }
 

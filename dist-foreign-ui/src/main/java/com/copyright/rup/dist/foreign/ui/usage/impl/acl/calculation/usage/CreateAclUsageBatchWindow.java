@@ -26,7 +26,7 @@ import com.vaadin.ui.Window;
 
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -86,7 +86,7 @@ public class CreateAclUsageBatchWindow extends Window {
             close();
             Windows.showNotificationWindow(ForeignUi.getMessage("message.creation_completed", usagesCount));
         } else {
-            Windows.showValidationErrorWindow(Arrays.asList(usageBatchNameFiled, distributionPeriodYearField,
+            Windows.showValidationErrorWindow(List.of(usageBatchNameFiled, distributionPeriodYearField,
                 distributionPeriodMonthComboBox, periodValidationField));
         }
     }

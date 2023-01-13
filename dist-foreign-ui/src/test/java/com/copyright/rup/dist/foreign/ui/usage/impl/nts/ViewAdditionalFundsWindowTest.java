@@ -50,7 +50,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -166,7 +165,7 @@ public class ViewAdditionalFundsWindowTest {
     private void verifyGrid(Grid grid) {
         assertNull(grid.getCaption());
         verifyWindow(grid, null, 100, 100, Unit.PERCENTAGE);
-        UiTestHelper.verifyGrid(grid, Arrays.asList(
+        UiTestHelper.verifyGrid(grid, List.of(
             Triple.of("Fund Name", -1.0, 1),
             Triple.of("Fund Amount", 100.0, -1),
             Triple.of("Created By", 140.0, -1),

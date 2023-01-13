@@ -16,8 +16,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -56,7 +56,7 @@ public final class ForeignSecurityUtilsTest {
             "FDA_SEND_FOR_CLASSIFICATION", "FDA_LOAD_CLASSIFIED_USAGE", "FDA_SPECIALIST_PERMISSION")};
         Object[] researcherRole = {Set.of("FDA_RESEARCHER_PERMISSION")};
         Object[] roleWithoutPermissions = {Set.of()};
-        return Arrays.asList(
+        return List.of(
             viewOnlyRole,
             approverRole,
             managerRole,

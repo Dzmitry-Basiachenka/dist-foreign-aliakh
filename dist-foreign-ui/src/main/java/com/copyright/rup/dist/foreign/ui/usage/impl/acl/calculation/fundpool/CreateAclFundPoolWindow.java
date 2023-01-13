@@ -30,7 +30,7 @@ import com.vaadin.ui.Window;
 
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.Arrays;
+import java.util.List;
 
 /**
  * Window for creating ACL fund pool.
@@ -93,7 +93,7 @@ public class CreateAclFundPoolWindow extends Window {
             }
         } else {
             Windows.showValidationErrorWindow(
-                Arrays.asList(fundPoolNameField, fundPoolPeriodYearField, fundPoolPeriodMonthComboBox,
+                List.of(fundPoolNameField, fundPoolPeriodYearField, fundPoolPeriodMonthComboBox,
                     licenseTypeComboBox, uploadField));
         }
     }

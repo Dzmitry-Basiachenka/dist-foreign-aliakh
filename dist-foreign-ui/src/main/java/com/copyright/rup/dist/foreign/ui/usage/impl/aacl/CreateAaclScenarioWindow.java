@@ -36,7 +36,6 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
@@ -184,7 +183,7 @@ class CreateAaclScenarioWindow extends Window {
                         String.join("<br><li>", formattedAggregateClasses)));
             }
         } else {
-            Windows.showValidationErrorWindow(Arrays.asList(scenarioNameField, fundPoolComboBox, descriptionArea));
+            Windows.showValidationErrorWindow(List.of(scenarioNameField, fundPoolComboBox, descriptionArea));
         }
     }
 }

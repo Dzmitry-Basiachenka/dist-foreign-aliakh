@@ -37,7 +37,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -102,7 +101,7 @@ public class UdmBaselineValueWidgetTest {
         VerticalLayout layout = (VerticalLayout) secondComponent;
         verifyWindow(layout, null, 100, 100, Unit.PERCENTAGE);
         assertEquals(1, layout.getComponentCount());
-        verifyGrid((Grid) layout.getComponent(0), Arrays.asList(
+        verifyGrid((Grid) layout.getComponent(0), List.of(
             Triple.of("Value ID", 200.0, -1),
             Triple.of("Value Period", 120.0, -1),
             Triple.of("Wr Wrk Inst", 120.0, -1),

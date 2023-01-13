@@ -50,7 +50,6 @@ import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -145,7 +144,7 @@ public class UdmValueControllerTest {
 
     @Test
     public void testGetBaselinePeriods() {
-        List<Integer> periods = Arrays.asList(200212, 201912);
+        List<Integer> periods = List.of(200212, 201912);
         expect(baselineService.getPeriods()).andReturn(periods).once();
         replay(baselineService);
         assertEquals(periods, controller.getBaselinePeriods());
@@ -154,7 +153,7 @@ public class UdmValueControllerTest {
 
     @Test
     public void testGetPeriods() {
-        List<Integer> periods = Arrays.asList(200212, 201912);
+        List<Integer> periods = List.of(200212, 201912);
         expect(valueService.getPeriods()).andReturn(periods).once();
         replay(valueService);
         assertEquals(periods, controller.getPeriods());
@@ -244,7 +243,7 @@ public class UdmValueControllerTest {
 
     @Test
     public void testGetAllPriceTypes() {
-        List<String> priceTypes = Arrays.asList("Individual", "Institution");
+        List<String> priceTypes = List.of("Individual", "Institution");
         expect(udmPriceTypeService.getAllPriceTypes()).andReturn(priceTypes).once();
         replay(udmPriceTypeService);
         assertEquals(priceTypes, controller.getAllPriceTypes());
@@ -253,7 +252,7 @@ public class UdmValueControllerTest {
 
     @Test
     public void testGetAllPriceAccessTypes() {
-        List<String> priceAccessTypes = Arrays.asList("Print", "Digital");
+        List<String> priceAccessTypes = List.of("Print", "Digital");
         expect(udmPriceTypeService.getAllPriceAccessTypes()).andReturn(priceAccessTypes).once();
         replay(udmPriceTypeService);
         assertEquals(priceAccessTypes, controller.getAllPriceAccessTypes());

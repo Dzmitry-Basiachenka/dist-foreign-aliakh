@@ -67,7 +67,6 @@ import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -300,7 +299,7 @@ public class NtsUsageControllerTest {
         usage1.setId("d9440e59-4943-4cdc-bb32-84edcb7febbc");
         Usage usage2 = new Usage();
         usage2.setId("43f31060-acde-477a-8f73-80fadbafaa70");
-        List<String> ntsUsageIds = Arrays.asList(usage1.getId(), usage2.getId());
+        List<String> ntsUsageIds = List.of(usage1.getId(), usage2.getId());
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
         expect(usageBatchService.insertNtsBatch(usageBatch, USER_NAME)).andReturn(ntsUsageIds).once();
         ntsUsageService.sendForGettingRights(ntsUsageIds, BATCH_NAME);

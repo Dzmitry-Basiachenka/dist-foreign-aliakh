@@ -26,6 +26,7 @@ import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenariosController;
 import com.copyright.rup.dist.foreign.ui.usage.impl.ScenarioParameterWidget.ParametersSaveEvent;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
+
 import com.vaadin.data.Binder;
 import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.Button;
@@ -35,6 +36,7 @@ import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
+
 import org.apache.commons.lang3.StringUtils;
 import org.easymock.Capture;
 import org.junit.Before;
@@ -45,7 +47,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.EventObject;
 import java.util.List;
@@ -196,8 +197,7 @@ public class AclAddPublicationTypeWindowTest {
         assertNotNull(event);
         assertThat(event, not(instanceOf(ParametersSaveEvent.class)));
         assertFalse(window.isClosed());
-        assertEquals(Arrays.asList(pubTypeComboBox, pubTypePeriodField, pubTypeWeightField),
-            componentsCapture.getValue());
+        assertEquals(List.of(pubTypeComboBox, pubTypePeriodField, pubTypeWeightField), componentsCapture.getValue());
         verify(controller, Windows.class);
     }
 

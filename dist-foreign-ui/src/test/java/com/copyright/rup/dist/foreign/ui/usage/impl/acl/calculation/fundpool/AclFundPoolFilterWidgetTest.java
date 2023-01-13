@@ -31,7 +31,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Arrays;
+import java.util.List;
 
 /**
  * Verifies {@link AclFundPoolFilterWidget}.
@@ -130,10 +130,8 @@ public class AclFundPoolFilterWidgetTest {
         verifyItemsFilterWidget(verticalLayout.getComponent(2), "Periods");
         verifyItemsFilterWidget(verticalLayout.getComponent(3), "Aggregate Licensee Classes");
         verifyItemsFilterWidget(verticalLayout.getComponent(4), "Detail Licensee Classes");
-        verifyComboBox(verticalLayout.getComponent(5), "License Type", true,
-            Arrays.asList("ACL", "VGW", "JACDCL", "MACL"));
-        verifyComboBox(verticalLayout.getComponent(6), "Fund Pool Type", true,
-            Arrays.asList("PRINT", "DIGITAL"));
+        verifyComboBox(verticalLayout.getComponent(5), "License Type", true, List.of("ACL", "VGW", "JACDCL", "MACL"));
+        verifyComboBox(verticalLayout.getComponent(6), "Fund Pool Type", true, List.of("PRINT", "DIGITAL"));
     }
 
     private Button getApplyButton() {

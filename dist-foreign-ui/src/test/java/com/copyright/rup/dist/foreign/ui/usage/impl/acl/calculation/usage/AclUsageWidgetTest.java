@@ -58,7 +58,6 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.AbstractMap.SimpleImmutableEntry;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -271,7 +270,7 @@ public class AclUsageWidgetTest {
         verifyButtonsLayout((HorizontalLayout) layout.getComponent(0), buttonsVisibility);
         Grid grid = (Grid) layout.getComponent(1);
         assertEquals(selectionModel, grid.getSelectionModel().getClass());
-        verifyGrid(grid, Arrays.asList(
+        verifyGrid(grid, List.of(
             Triple.of("Detail ID", 250.0, -1),
             Triple.of("Period", 100.0, -1),
             Triple.of("Usage Origin", 100.0, -1),
@@ -300,7 +299,7 @@ public class AclUsageWidgetTest {
     }
 
     private void verifyButtonsLayout(HorizontalLayout layout, boolean... buttonsVisibility) {
-        verifyMenuBar(layout.getComponent(0), "Usage Batch", buttonsVisibility[0], Arrays.asList("Create", "View"));
+        verifyMenuBar(layout.getComponent(0), "Usage Batch", buttonsVisibility[0], List.of("Create", "View"));
         verifyButton(layout.getComponent(1), "Edit", buttonsVisibility[1]);
         verifyButton(layout.getComponent(2), "Export", buttonsVisibility[2]);
     }

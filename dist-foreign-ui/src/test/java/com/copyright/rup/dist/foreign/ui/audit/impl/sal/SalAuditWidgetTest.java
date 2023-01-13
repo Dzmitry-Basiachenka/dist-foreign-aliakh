@@ -47,7 +47,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.util.AbstractMap.SimpleImmutableEntry;
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -169,7 +168,7 @@ public class SalAuditWidgetTest {
         Grid grid = (Grid) component;
         verifySize(grid, 100, Unit.PERCENTAGE, 100);
         List<Column> columns = grid.getColumns();
-        assertEquals(Arrays.asList("Detail ID", "Detail Type", "Detail Status", "Product Family", "Usage Batch Name",
+        assertEquals(List.of("Detail ID", "Detail Type", "Detail Status", "Product Family", "Usage Batch Name",
             "Period End Date", "RH Account #", "RH Name", "Payee Account #", "Payee Name", "Wr Wrk Inst",
             "System Title", "Standard Number", "Standard Number Type", "Gross Amt in USD", "Service Fee Amount",
             "Net Amt in USD", "Scenario Name", "Check #", "Check Date", "Event ID", "Dist. Name", "Dist. Date",

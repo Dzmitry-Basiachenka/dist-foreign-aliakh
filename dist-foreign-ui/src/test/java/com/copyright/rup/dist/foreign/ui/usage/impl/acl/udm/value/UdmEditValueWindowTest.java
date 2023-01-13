@@ -59,7 +59,6 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -680,7 +679,7 @@ public class UdmEditValueWindowTest {
         verifyTextFieldLayout(generalContent.getComponent(1), "Last Value Period", true, false);
         verifyTextFieldLayout(generalContent.getComponent(2), "Assignee", true, false);
         verifyComboBoxLayout(generalContent.getComponent(3), "Value Status", true, false,
-            Arrays.asList(UdmValueStatusEnum.NEW, UdmValueStatusEnum.RSCHD_IN_THE_PREV_PERIOD,
+            List.of(UdmValueStatusEnum.NEW, UdmValueStatusEnum.RSCHD_IN_THE_PREV_PERIOD,
                 UdmValueStatusEnum.PRELIM_RESEARCH_COMPLETE, UdmValueStatusEnum.NEEDS_FURTHER_REVIEW,
                 UdmValueStatusEnum.RESEARCH_COMPLETE));
         Panel pubTypePanel = (Panel) row2.getComponent(1);

@@ -46,7 +46,6 @@ import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -218,7 +217,7 @@ public class PublicationTypeWeightsWindowTest {
 
     @SuppressWarnings("unchecked")
     private void verifyGrid(Grid grid, boolean isEditorEnabled) {
-        UiTestHelper.verifyGrid(grid, Arrays.asList(
+        UiTestHelper.verifyGrid(grid, List.of(
             Triple.of("Pub Type", -1.0, -1),
             Triple.of("Default Weight", -1.0, -1),
             Triple.of("Scenario Weight", -1.0, -1)));

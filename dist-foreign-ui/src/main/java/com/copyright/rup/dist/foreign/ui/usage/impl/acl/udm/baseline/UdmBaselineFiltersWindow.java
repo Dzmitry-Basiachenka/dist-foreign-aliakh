@@ -33,8 +33,8 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
-import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -149,7 +149,7 @@ public class UdmBaselineFiltersWindow extends CommonAclFiltersWindow {
     }
 
     private ComboBox<String> initTypeOfUseLayout() {
-        typeOfUseComboBox.setItems(Arrays.asList("PRINT", "DIGITAL"));
+        typeOfUseComboBox.setItems(List.of("PRINT", "DIGITAL"));
         typeOfUseComboBox.setSelectedItem(baselineFilter.getTypeOfUse());
         typeOfUseComboBox.setSizeFull();
         typeOfUseComboBox.setWidth(50, Unit.PERCENTAGE);
@@ -298,7 +298,7 @@ public class UdmBaselineFiltersWindow extends CommonAclFiltersWindow {
                 filterBinder.writeBean(baselineFilter);
                 close();
             } catch (ValidationException e) {
-                Windows.showValidationErrorWindow(Arrays.asList(wrWrkInstFromField, wrWrkInstToField, systemTitleField,
+                Windows.showValidationErrorWindow(List.of(wrWrkInstFromField, wrWrkInstToField, systemTitleField,
                     usageDetailIdField, surveyCountryField, annualizedCopiesFrom, annualizedCopiesTo));
             }
         });

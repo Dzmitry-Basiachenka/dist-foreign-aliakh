@@ -26,7 +26,6 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -41,8 +40,7 @@ import java.util.Objects;
  */
 public class UdmBaselineValueFiltersWindow extends CommonAclFiltersWindow {
 
-    private static final List<FilterOperatorEnum> FLAG_ITEMS = Arrays.asList(FilterOperatorEnum.Y,
-        FilterOperatorEnum.N);
+    private static final List<FilterOperatorEnum> FLAG_ITEMS = List.of(FilterOperatorEnum.Y, FilterOperatorEnum.N);
     private static final String LENGTH_VALIDATION_MESSAGE = "field.error.length";
     private static final String BETWEEN_OPERATOR_VALIDATION_MESSAGE =
         ForeignUi.getMessage("field.error.populated_for_between_operator");
@@ -321,7 +319,7 @@ public class UdmBaselineValueFiltersWindow extends CommonAclFiltersWindow {
                 close();
             } catch (ValidationException e) {
                 Windows.showValidationErrorWindow(
-                    Arrays.asList(wrWrkInstFromField, wrWrkInstToField, systemTitleField, priceFromField,
+                    List.of(wrWrkInstFromField, wrWrkInstToField, systemTitleField, priceFromField,
                         priceToField, contentFromField, contentToField, contentUnitPriceFromField,
                         contentUnitPriceToField, commentField));
             }
