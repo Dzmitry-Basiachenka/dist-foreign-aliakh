@@ -1,3 +1,7 @@
+17.0.3
+-
+* B-68577 FDA: Load ACLCI fund pool: extend range of amount of student fields
+
 17.0.2
 -
 * B-77418 Tech Debt: FDA: replace Amount Zero Validator to Amount Validator for all ACL filters
