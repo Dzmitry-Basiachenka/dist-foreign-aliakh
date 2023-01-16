@@ -3,7 +3,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.aclci;
 import com.copyright.rup.common.exception.RupRuntimeException;
 import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.FundPool.AclciFields;
-import com.copyright.rup.dist.foreign.ui.common.converter.IntegerConverter;
+import com.copyright.rup.dist.foreign.ui.common.converter.LongConverter;
 import com.copyright.rup.dist.foreign.ui.common.validator.AmountValidator;
 import com.copyright.rup.dist.foreign.ui.common.validator.AmountZeroValidator;
 import com.copyright.rup.dist.foreign.ui.common.validator.CoverageYearsValidator;
@@ -203,7 +203,7 @@ class AclciFundPoolLoadWindow extends Window {
             .bind(fundPool -> String.valueOf(fundPool.getAclciFields().getCurriculumDbSplitPercent()),
                 (bean, value) -> bean.getAclciFields().setCurriculumDbSplitPercent(
                     NumberUtils.createBigDecimal(StringUtils.trimToNull(value))));
-        curriculumDbSplitPercent.addValueChangeListener(event -> calculateFundPool());
+        curriculumDbSplitPercent.addBlurListener(event -> calculateFundPool());
         curriculumDbSplitPercent.setRequiredIndicatorVisible(true);
         curriculumDbSplitPercent.setSizeFull();
         VaadinUtils.setMaxComponentsWidth(curriculumDbSplitPercent);
@@ -216,7 +216,7 @@ class AclciFundPoolLoadWindow extends Window {
         amountsBinder.forField(gradeKto2NumberOfStudents)
             .withValidator(new RequiredValidator())
             .withValidator(new AmountValidator())
-            .withConverter(new IntegerConverter(NOT_NUMERIC_MESSAGE))
+            .withConverter(new LongConverter(NOT_NUMERIC_MESSAGE))
             .withValidator(gradeNumberOfStudentsAllZeroValidator(), NUMBER_OF_STUDENTS_NOT_ZERO_MESSAGE)
             .withValidator(gradeNumberOfStudentsAtLeastOneNotZeroValidator(), NUMBER_OF_STUDENTS_NOT_ALL_ZERO_MESSAGE)
             .bind(fundPool -> fundPool.getAclciFields().getGradeKto2NumberOfStudents(),
@@ -234,7 +234,7 @@ class AclciFundPoolLoadWindow extends Window {
         amountsBinder.forField(grade3to5NumberOfStudents)
             .withValidator(new RequiredValidator())
             .withValidator(new AmountValidator())
-            .withConverter(new IntegerConverter(NOT_NUMERIC_MESSAGE))
+            .withConverter(new LongConverter(NOT_NUMERIC_MESSAGE))
             .withValidator(gradeNumberOfStudentsAllZeroValidator(), NUMBER_OF_STUDENTS_NOT_ZERO_MESSAGE)
             .withValidator(gradeNumberOfStudentsAtLeastOneNotZeroValidator(), NUMBER_OF_STUDENTS_NOT_ALL_ZERO_MESSAGE)
             .bind(fundPool -> fundPool.getAclciFields().getGrade3to5NumberOfStudents(),
@@ -252,7 +252,7 @@ class AclciFundPoolLoadWindow extends Window {
         amountsBinder.forField(grade6to8NumberOfStudents)
             .withValidator(new RequiredValidator())
             .withValidator(new AmountValidator())
-            .withConverter(new IntegerConverter(NOT_NUMERIC_MESSAGE))
+            .withConverter(new LongConverter(NOT_NUMERIC_MESSAGE))
             .withValidator(gradeNumberOfStudentsAllZeroValidator(), NUMBER_OF_STUDENTS_NOT_ZERO_MESSAGE)
             .withValidator(gradeNumberOfStudentsAtLeastOneNotZeroValidator(), NUMBER_OF_STUDENTS_NOT_ALL_ZERO_MESSAGE)
             .bind(fundPool -> fundPool.getAclciFields().getGrade6to8NumberOfStudents(),
@@ -271,7 +271,7 @@ class AclciFundPoolLoadWindow extends Window {
         amountsBinder.forField(grade9to12NumberOfStudents)
             .withValidator(new RequiredValidator())
             .withValidator(new AmountValidator())
-            .withConverter(new IntegerConverter(NOT_NUMERIC_MESSAGE))
+            .withConverter(new LongConverter(NOT_NUMERIC_MESSAGE))
             .withValidator(gradeNumberOfStudentsAllZeroValidator(), NUMBER_OF_STUDENTS_NOT_ZERO_MESSAGE)
             .withValidator(gradeNumberOfStudentsAtLeastOneNotZeroValidator(), NUMBER_OF_STUDENTS_NOT_ALL_ZERO_MESSAGE)
             .bind(fundPool -> fundPool.getAclciFields().getGrade9to12NumberOfStudents(),
@@ -289,7 +289,7 @@ class AclciFundPoolLoadWindow extends Window {
         amountsBinder.forField(gradeHeNumberOfStudents)
             .withValidator(new RequiredValidator())
             .withValidator(new AmountValidator())
-            .withConverter(new IntegerConverter(NOT_NUMERIC_MESSAGE))
+            .withConverter(new LongConverter(NOT_NUMERIC_MESSAGE))
             .withValidator(gradeNumberOfStudentsAllZeroValidator(), NUMBER_OF_STUDENTS_NOT_ZERO_MESSAGE)
             .withValidator(gradeNumberOfStudentsAtLeastOneNotZeroValidator(), NUMBER_OF_STUDENTS_NOT_ALL_ZERO_MESSAGE)
             .bind(fundPool -> fundPool.getAclciFields().getGradeHeNumberOfStudents(),
@@ -398,11 +398,11 @@ class AclciFundPoolLoadWindow extends Window {
             && 1 >= value.scale();
     }
 
-    private SerializablePredicate<Integer> gradeNumberOfStudentsAllZeroValidator() {
+    private SerializablePredicate<Long> gradeNumberOfStudentsAllZeroValidator() {
         return value -> isCurriculumDbSplitPercentNotEqualToHundred() || 0 == value;
     }
 
-    private SerializablePredicate<Integer> gradeNumberOfStudentsAtLeastOneNotZeroValidator() {
+    private SerializablePredicate<Long> gradeNumberOfStudentsAtLeastOneNotZeroValidator() {
         return value -> {
             String gradeKto2Number = gradeKto2NumberOfStudents.getValue().trim();
             String grade3to5Number = grade3to5NumberOfStudents.getValue().trim();
@@ -416,11 +416,11 @@ class AclciFundPoolLoadWindow extends Window {
                 && validator.test(grade6to8Number)
                 && validator.test(grade9to12Number)
                 && validator.test(gradeHeNumber)) {
-                return 0 < Integer.parseInt(gradeKto2Number)
-                    || 0 < Integer.parseInt(grade3to5Number)
-                    || 0 < Integer.parseInt(grade6to8Number)
-                    || 0 < Integer.parseInt(grade9to12Number)
-                    || 0 < Integer.parseInt(gradeHeNumber);
+                return 0 < Long.parseLong(gradeKto2Number)
+                    || 0 < Long.parseLong(grade3to5Number)
+                    || 0 < Long.parseLong(grade6to8Number)
+                    || 0 < Long.parseLong(grade9to12Number)
+                    || 0 < Long.parseLong(gradeHeNumber);
             } else {
                 return true;
             }

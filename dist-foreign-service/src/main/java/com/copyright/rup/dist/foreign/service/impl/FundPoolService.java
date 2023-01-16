@@ -287,7 +287,7 @@ public class FundPoolService implements IFundPoolService {
     // Used for calculating grade gross amounts.
     // RoundingMode.DOWN is used while calculating to be consistent with current calculation in SC
     private static BigDecimal calculateGradeAmount(BigDecimal multiplier, BigDecimal totalStudentsCount,
-                                                   int studentsCount) {
+                                                   long studentsCount) {
         BigDecimal amount;
         if (0 < studentsCount) {
             amount = multiplier.multiply(BigDecimal.valueOf(studentsCount))

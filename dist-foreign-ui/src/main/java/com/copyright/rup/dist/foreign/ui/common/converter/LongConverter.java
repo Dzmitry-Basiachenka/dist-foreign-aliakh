@@ -9,7 +9,7 @@ import org.apache.commons.lang3.math.NumberUtils;
 import java.util.Objects;
 
 /**
- * Convertor between {@link String} and {@link Integer}.
+ * Convertor between {@link String} and {@link Long}.
  * <p>
  * Copyright (C) 2023 copyright.com
  * <p>
@@ -17,7 +17,7 @@ import java.util.Objects;
  *
  * @author Aliaksandr Liakh
  */
-public class IntegerConverter implements Converter<String, Integer> {
+public class LongConverter implements Converter<String, Long> {
 
     private final String errorMessage;
 
@@ -26,19 +26,19 @@ public class IntegerConverter implements Converter<String, Integer> {
      *
      * @param errorMessage error message
      */
-    public IntegerConverter(String errorMessage) {
+    public LongConverter(String errorMessage) {
         this.errorMessage = errorMessage;
     }
 
     @Override
-    public Result<Integer> convertToModel(String value, ValueContext context) {
+    public Result<Long> convertToModel(String value, ValueContext context) {
         return StringUtils.isBlank(value) || StringUtils.isNumeric(StringUtils.trim(value))
-            ? Result.ok(NumberUtils.createInteger(StringUtils.trimToNull(value)))
+            ? Result.ok(NumberUtils.createLong(StringUtils.trimToNull(value)))
             : Result.error(errorMessage);
     }
 
     @Override
-    public String convertToPresentation(Integer value, ValueContext context) {
+    public String convertToPresentation(Long value, ValueContext context) {
         return Objects.toString(value, StringUtils.EMPTY);
     }
 }

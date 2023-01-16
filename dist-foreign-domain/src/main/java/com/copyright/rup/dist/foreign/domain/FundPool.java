@@ -376,11 +376,11 @@ public class FundPool extends StoredEntity<String> {
     public static class AclciFields {
 
         private String coverageYears;
-        private int gradeKto2NumberOfStudents;
-        private int grade3to5NumberOfStudents;
-        private int grade6to8NumberOfStudents;
-        private int grade9to12NumberOfStudents;
-        private int gradeHeNumberOfStudents;
+        private long gradeKto2NumberOfStudents;
+        private long grade3to5NumberOfStudents;
+        private long grade6to8NumberOfStudents;
+        private long grade9to12NumberOfStudents;
+        private long gradeHeNumberOfStudents;
         private BigDecimal grossAmount = BigDecimal.ZERO;
         private BigDecimal curriculumDbSplitPercent = BigDecimal.ZERO;
         private BigDecimal gradeKto2GrossAmount = BigDecimal.ZERO;
@@ -426,43 +426,43 @@ public class FundPool extends StoredEntity<String> {
             this.coverageYears = coverageYears;
         }
 
-        public int getGradeKto2NumberOfStudents() {
+        public long getGradeKto2NumberOfStudents() {
             return gradeKto2NumberOfStudents;
         }
 
-        public void setGradeKto2NumberOfStudents(int gradeKto2NumberOfStudents) {
+        public void setGradeKto2NumberOfStudents(long gradeKto2NumberOfStudents) {
             this.gradeKto2NumberOfStudents = gradeKto2NumberOfStudents;
         }
 
-        public int getGrade3to5NumberOfStudents() {
+        public long getGrade3to5NumberOfStudents() {
             return grade3to5NumberOfStudents;
         }
 
-        public void setGrade3to5NumberOfStudents(int grade3to5NumberOfStudents) {
+        public void setGrade3to5NumberOfStudents(long grade3to5NumberOfStudents) {
             this.grade3to5NumberOfStudents = grade3to5NumberOfStudents;
         }
 
-        public int getGrade6to8NumberOfStudents() {
+        public long getGrade6to8NumberOfStudents() {
             return grade6to8NumberOfStudents;
         }
 
-        public void setGrade6to8NumberOfStudents(int grade6to8NumberOfStudents) {
+        public void setGrade6to8NumberOfStudents(long grade6to8NumberOfStudents) {
             this.grade6to8NumberOfStudents = grade6to8NumberOfStudents;
         }
 
-        public int getGrade9to12NumberOfStudents() {
+        public long getGrade9to12NumberOfStudents() {
             return grade9to12NumberOfStudents;
         }
 
-        public void setGrade9to12NumberOfStudents(int grade9to12NumberOfStudents) {
+        public void setGrade9to12NumberOfStudents(long grade9to12NumberOfStudents) {
             this.grade9to12NumberOfStudents = grade9to12NumberOfStudents;
         }
 
-        public int getGradeHeNumberOfStudents() {
+        public long getGradeHeNumberOfStudents() {
             return gradeHeNumberOfStudents;
         }
 
-        public void setGradeHeNumberOfStudents(int gradeHeNumberOfStudents) {
+        public void setGradeHeNumberOfStudents(long gradeHeNumberOfStudents) {
             this.gradeHeNumberOfStudents = gradeHeNumberOfStudents;
         }
 
