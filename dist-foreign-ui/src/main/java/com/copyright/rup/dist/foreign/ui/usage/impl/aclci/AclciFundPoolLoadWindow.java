@@ -91,7 +91,7 @@ class AclciFundPoolLoadWindow extends Window {
         setCaption(ForeignUi.getMessage("window.load_fund_pool"));
         setResizable(false);
         setWidth(500, Unit.PIXELS);
-        setHeight(495, Unit.PIXELS);
+        setHeight(485, Unit.PIXELS);
         VaadinUtils.addComponentStyle(this, "fund-pool-upload-window");
     }
 
