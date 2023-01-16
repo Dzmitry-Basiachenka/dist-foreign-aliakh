@@ -112,7 +112,7 @@ public class AclciFundPoolLoadWindowTest {
         assertEquals("Load Fund Pool", window.getCaption());
         assertEquals(500, window.getWidth(), 0);
         assertEquals(Sizeable.Unit.PIXELS, window.getWidthUnits());
-        assertEquals(495, window.getHeight(), 0);
+        assertEquals(485, window.getHeight(), 0);
         assertEquals(Sizeable.Unit.PIXELS, window.getHeightUnits());
         verifyRootLayout(window.getContent());
         verify(usageController);
