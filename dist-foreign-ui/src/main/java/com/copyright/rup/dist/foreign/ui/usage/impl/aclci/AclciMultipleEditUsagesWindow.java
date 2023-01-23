@@ -63,15 +63,15 @@ class AclciMultipleEditUsagesWindow extends Window {
         setCaption(ForeignUi.getMessage("window.multiple.edit_aclci_usage"));
         setResizable(false);
         setWidth(440, Unit.PIXELS);
-        setHeight(235, Unit.PIXELS);
+        setHeight(210, Unit.PIXELS);
         VaadinUtils.addComponentStyle(this, "multiple-edit-aclci-usages-window");
     }
 
     private ComponentContainer initRootLayout() {
         HorizontalLayout buttonsLayout = buildButtonsLayout();
-        buttonsLayout.setMargin(new MarginInfo(true, false, true, false));
         VerticalLayout rootLayout = new VerticalLayout(initRhAccountNumberLayout(), buildRhNameField(),
             buildWrWrkInstField(), buttonsLayout);
+        rootLayout.setMargin(new MarginInfo(true, true, false, true));
         rootLayout.setComponentAlignment(buttonsLayout, Alignment.BOTTOM_RIGHT);
         binder.validate();
         return rootLayout;
