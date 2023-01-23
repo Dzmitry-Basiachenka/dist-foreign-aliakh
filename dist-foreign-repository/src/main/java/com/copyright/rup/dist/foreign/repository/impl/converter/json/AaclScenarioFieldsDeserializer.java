@@ -4,18 +4,18 @@ import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.Scenario.AaclFields;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
+import com.copyright.rup.dist.foreign.repository.impl.converter.json.common.CommonJsonFieldsDeserializer;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Implementation of {@link StdDeserializer} for scenario {@link AaclFields}.
+ * Implementation of {@link CommonJsonFieldsDeserializer} for scenario {@link AaclFields}.
  * <p/>
  * Copyright (C) 2020 copyright.com
  * <p/>
@@ -23,7 +23,7 @@ import java.util.List;
  *
  * @author Aliaksandr Liakh
  */
-public class AaclScenarioFieldsDeserializer extends StdDeserializer<AaclFields> {
+public class AaclScenarioFieldsDeserializer extends CommonJsonFieldsDeserializer<AaclFields> {
 
     private static final String FUND_POOL_ID = "fund_pool_uid";
     private static final String PUBLICATION_TYPES = "publicationTypes";

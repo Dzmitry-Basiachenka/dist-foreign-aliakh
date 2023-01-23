@@ -1,25 +1,20 @@
 package com.copyright.rup.dist.foreign.repository.impl.converter.json;
 
 import com.copyright.rup.common.logging.RupLogUtils;
-import com.copyright.rup.dist.common.util.CommonDateUtils;
-import com.copyright.rup.dist.foreign.domain.FundPool;
+import com.copyright.rup.dist.foreign.domain.FundPool.SalFields;
+import com.copyright.rup.dist.foreign.repository.impl.converter.json.common.CommonJsonFieldsDeserializer;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
-import org.apache.commons.lang3.math.NumberUtils;
 import org.slf4j.Logger;
 
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.Objects;
 
 /**
- * Implementation of {@link StdDeserializer} for {@link FundPool.SalFields}.
+ * Implementation of {@link CommonJsonFieldsDeserializer} for fund pool {@link SalFields}.
  * <p>
  * Copyright (C) 2020 copyright.com
  * <p>
@@ -27,7 +22,7 @@ import java.util.Objects;
  *
  * @author Uladzislau Shalamitski
  */
-public class SalFundPoolFieldsDeserializer extends StdDeserializer<FundPool.SalFields> {
+public class SalFundPoolFieldsDeserializer extends CommonJsonFieldsDeserializer<SalFields> {
 
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
@@ -35,12 +30,12 @@ public class SalFundPoolFieldsDeserializer extends StdDeserializer<FundPool.SalF
      * Default constructor.
      */
     SalFundPoolFieldsDeserializer() {
-        super(FundPool.SalFields.class);
+        super(SalFields.class);
     }
 
     @Override
-    public FundPool.SalFields deserialize(JsonParser parser, DeserializationContext context) throws IOException {
-        FundPool.SalFields salFields = new FundPool.SalFields();
+    public SalFields deserialize(JsonParser parser, DeserializationContext context) throws IOException {
+        SalFields salFields = new SalFields();
         try {
             JsonNode jsonNode = parser.readValueAsTree();
             salFields.setDateReceived(getLocalDateValue(jsonNode.get("date_received")));
@@ -61,27 +56,5 @@ public class SalFundPoolFieldsDeserializer extends StdDeserializer<FundPool.SalF
             LOGGER.warn("Deserialize SAL fund pool fields. Failed", e);
         }
         return salFields;
-    }
-
-    private static LocalDate getLocalDateValue(JsonNode node) {
-        return Objects.nonNull(node) && !node.isNumber()
-            ? CommonDateUtils.parseLocalDate(node.textValue())
-            : CommonDateUtils.getLocalDateFromLong(node.longValue());
-    }
-
-    private static String getStringValue(JsonNode node) {
-        return Objects.nonNull(node) ? node.textValue() : null;
-    }
-
-    private static Long getLongValue(JsonNode node) {
-        return Objects.nonNull(node) ? node.asLong() : null;
-    }
-
-    private static Integer getIntegerValue(JsonNode node) {
-        return Objects.nonNull(node) ? node.asInt() : null;
-    }
-
-    private static BigDecimal getBigDecimalValue(JsonNode node) {
-        return Objects.nonNull(node) && NumberUtils.isNumber(node.asText()) ? new BigDecimal(node.asText()) : null;
     }
 }

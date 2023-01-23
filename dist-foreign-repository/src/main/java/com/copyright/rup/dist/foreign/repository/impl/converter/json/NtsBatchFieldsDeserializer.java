@@ -2,24 +2,22 @@ package com.copyright.rup.dist.foreign.repository.impl.converter.json;
 
 import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.dist.foreign.domain.UsageBatch.NtsFields;
+import com.copyright.rup.dist.foreign.repository.impl.converter.json.common.CommonJsonFieldsDeserializer;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
-import org.apache.commons.lang3.math.NumberUtils;
 import org.slf4j.Logger;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
 /**
- * Implementation of {@link StdDeserializer} for {@link NtsFields}.
+ * Implementation of {@link CommonJsonFieldsDeserializer} for usage batch {@link NtsFields}.
  * <p/>
  * Copyright (C) 2018 copyright.com
  * <p/>
@@ -27,7 +25,7 @@ import java.util.Set;
  *
  * @author Aliaksandr Liakh
  */
-public class NtsBatchFieldsDeserializer extends StdDeserializer<NtsFields> {
+public class NtsBatchFieldsDeserializer extends CommonJsonFieldsDeserializer<NtsFields> {
 
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
@@ -57,27 +55,11 @@ public class NtsBatchFieldsDeserializer extends StdDeserializer<NtsFields> {
         return ntsFields;
     }
 
-    private static Integer getIntegerValue(JsonNode node) {
-        return Objects.nonNull(node) ? node.asInt() : null;
-    }
-
-    private static BigDecimal getBigDecimalValue(JsonNode node) {
-        return Objects.nonNull(node) && NumberUtils.isNumber(node.asText()) ? new BigDecimal(node.asText()) : null;
-    }
-
     private Set<String> getMarkets(JsonNode node) {
         Set<String> markets = new HashSet<>();
         if (Objects.nonNull(node)) {
             node.elements().forEachRemaining(element -> markets.add(element.textValue()));
         }
         return markets;
-    }
-
-    private static boolean getBooleanValue(JsonNode node) {
-        boolean result = false;
-        if (Objects.nonNull(node)) {
-            result = Boolean.parseBoolean(node.asText());
-        }
-        return result;
     }
 }
