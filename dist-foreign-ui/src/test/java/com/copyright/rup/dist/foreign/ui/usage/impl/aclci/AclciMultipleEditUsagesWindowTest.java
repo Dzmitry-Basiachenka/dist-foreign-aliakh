@@ -88,7 +88,7 @@ public class AclciMultipleEditUsagesWindowTest {
     public void testConstructor() {
         replay(controller);
         window = new AclciMultipleEditUsagesWindow(controller, usageUpdateWindow, USAGE_IDS);
-        verifyWindow(window, "Edit multiple ACLCI Usages", 440, 235, Unit.PIXELS);
+        verifyWindow(window, "Edit multiple ACLCI Usages", 440, 210, Unit.PIXELS);
         Component content = window.getContent();
         assertThat(content, instanceOf(VerticalLayout.class));
         VerticalLayout contentLayout = (VerticalLayout) content;
