@@ -2,22 +2,19 @@ package com.copyright.rup.dist.foreign.repository.impl.converter.json;
 
 import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.dist.foreign.domain.Scenario.NtsFields;
+import com.copyright.rup.dist.foreign.repository.impl.converter.json.common.CommonJsonFieldsDeserializer;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
-import org.apache.commons.lang3.math.NumberUtils;
 import org.slf4j.Logger;
 
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.util.Objects;
 
 /**
- * Implementation of {@link StdDeserializer} for scenario {@link NtsFields}.
+ * Implementation of {@link CommonJsonFieldsDeserializer} for scenario {@link NtsFields}.
  * <p/>
  * Copyright (C) 2019 copyright.com
  * <p/>
@@ -25,7 +22,7 @@ import java.util.Objects;
  *
  * @author Aliaksandr Liakh
  */
-public class NtsScenarioFieldsDeserializer extends StdDeserializer<NtsFields> {
+public class NtsScenarioFieldsDeserializer extends CommonJsonFieldsDeserializer<NtsFields> {
 
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
@@ -49,13 +46,5 @@ public class NtsScenarioFieldsDeserializer extends StdDeserializer<NtsFields> {
             LOGGER.warn("Deserialize NTS scenario fields. Failed", e);
         }
         return ntsFields;
-    }
-
-    private static String getStringValue(JsonNode node) {
-        return Objects.nonNull(node) ? node.textValue() : null;
-    }
-
-    private static BigDecimal getBigDecimalValue(JsonNode node) {
-        return Objects.nonNull(node) && NumberUtils.isNumber(node.asText()) ? new BigDecimal(node.asText()) : null;
     }
 }

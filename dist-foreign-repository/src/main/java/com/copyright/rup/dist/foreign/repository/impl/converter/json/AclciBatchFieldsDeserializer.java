@@ -1,15 +1,16 @@
 package com.copyright.rup.dist.foreign.repository.impl.converter.json;
 
 import com.copyright.rup.dist.foreign.domain.UsageBatch.AclciFields;
+import com.copyright.rup.dist.foreign.repository.impl.converter.json.common.CommonJsonFieldsDeserializer;
+
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
 import java.io.IOException;
 
 /**
- * Implementation of {@link StdDeserializer} for {@link AclciFields}.
+ * Implementation of {@link CommonJsonFieldsDeserializer} for usage batch {@link AclciFields}.
  * <p>
  * Copyright (C) 2022 copyright.com
  * <p>
@@ -17,7 +18,7 @@ import java.io.IOException;
  *
  * @author Aliaksandr Liakh
  */
-public class AclciBatchFieldsDeserializer extends StdDeserializer<AclciFields> {
+public class AclciBatchFieldsDeserializer extends CommonJsonFieldsDeserializer<AclciFields> {
 
     private static final String LICENSEE_ACCOUNT_NUMBER = "licensee_account_number";
     private static final String LICENSEE_NAME = "licensee_name";

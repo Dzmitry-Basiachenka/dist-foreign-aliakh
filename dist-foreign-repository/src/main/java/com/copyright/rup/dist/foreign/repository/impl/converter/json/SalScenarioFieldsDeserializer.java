@@ -1,16 +1,16 @@
 package com.copyright.rup.dist.foreign.repository.impl.converter.json;
 
 import com.copyright.rup.dist.foreign.domain.Scenario.SalFields;
+import com.copyright.rup.dist.foreign.repository.impl.converter.json.common.CommonJsonFieldsDeserializer;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
 import java.io.IOException;
 
 /**
- * Implementation of {@link StdDeserializer} for scenario {@link SalFields}.
+ * Implementation of {@link CommonJsonFieldsDeserializer} for scenario {@link SalFields}.
  * <p/>
  * Copyright (C) 2020 copyright.com
  * <p/>
@@ -18,7 +18,7 @@ import java.io.IOException;
  *
  * @author Ihar Suvorau
  */
-public class SalScenarioFieldsDeserializer extends StdDeserializer<SalFields> {
+public class SalScenarioFieldsDeserializer extends CommonJsonFieldsDeserializer<SalFields> {
 
     private static final String FUND_POOL_ID = "fund_pool_uid";
 
