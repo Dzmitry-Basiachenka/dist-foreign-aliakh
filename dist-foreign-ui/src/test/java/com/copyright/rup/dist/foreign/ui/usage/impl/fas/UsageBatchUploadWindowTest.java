@@ -261,7 +261,7 @@ public class UsageBatchUploadWindowTest {
     }
 
     private void verifyUsageBatchNameComponent(Component component) {
-        TextField textField = verifyTextField(component, "Usage Batch Name");
+        TextField textField = verifyTextField(component, "Usage Batch Name", "usage-batch-name-field");
         assertEquals(StringUtils.EMPTY, textField.getValue());
     }
 
@@ -297,15 +297,17 @@ public class UsageBatchUploadWindowTest {
         Component numberComponent = rroAccountLayout.getComponent(0);
         Component productFamilyComponent = rroAccountLayout.getComponent(1);
         Component verifyComponent = horizontalLayout.getComponent(1);
-        TextField numberField = verifyTextField(numberComponent, "RRO Account #");
+        TextField numberField = verifyTextField(numberComponent, "RRO Account #", "rro-account-number-field");
         assertEquals(100, numberField.getWidth(), 0);
         assertEquals(Unit.PERCENTAGE, numberField.getWidthUnits());
         Collection<?> listeners = numberField.getListeners(ValueChangeEvent.class);
         assertTrue(CollectionUtils.isNotEmpty(listeners));
         assertEquals(2, listeners.size());
-        TextField nameField = verifyTextField(verticalLayout.getComponent(1), "RRO Account Name");
+        TextField nameField = verifyTextField(verticalLayout.getComponent(1), "RRO Account Name",
+            "rro-account-name-field");
         assertTrue(nameField.isReadOnly());
-        TextField productFamilyField = verifyTextField(productFamilyComponent, "Product Family");
+        TextField productFamilyField = verifyTextField(productFamilyComponent, "Product Family",
+            "product-family-field");
         assertTrue(productFamilyField.isReadOnly());
         assertVerifyButton(verifyComponent, numberField, nameField, productFamilyField);
     }
@@ -352,7 +354,7 @@ public class UsageBatchUploadWindowTest {
         assertThat(paymentDateComponent, instanceOf(LocalDateWidget.class));
         LocalDateWidget widget = (LocalDateWidget) paymentDateComponent;
         assertEquals("Payment Date", widget.getCaption());
-        TextField fiscalYearField = verifyTextField(fiscalYearComponent, "Fiscal Year");
+        TextField fiscalYearField = verifyTextField(fiscalYearComponent, "Fiscal Year", "fiscal-year-field");
         assertTrue(fiscalYearField.isReadOnly());
         assertEquals(StringUtils.EMPTY, fiscalYearField.getValue());
         widget.setValue(LocalDate.of(2017, 2, 2));
@@ -360,7 +362,7 @@ public class UsageBatchUploadWindowTest {
     }
 
     private void verifyGrossAmountComponent(Component component) {
-        TextField grossAmountField = verifyTextField(component, "Gross Amount in USD");
+        TextField grossAmountField = verifyTextField(component, "Gross Amount in USD", "gross-amount-field");
         assertEquals(100, grossAmountField.getWidth(), 0);
         assertEquals(Unit.PERCENTAGE, grossAmountField.getWidthUnits());
     }

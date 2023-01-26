@@ -250,7 +250,7 @@ public class AclciUsageBatchUploadWindowTest {
     }
 
     private void verifyUsageBatchName(Component component) {
-        TextField textField = verifyTextField(component, "Usage Batch Name");
+        TextField textField = verifyTextField(component, "Usage Batch Name", "usage-batch-name-field");
         assertEquals(StringUtils.EMPTY, textField.getValue());
     }
 
@@ -259,18 +259,20 @@ public class AclciUsageBatchUploadWindowTest {
         VerticalLayout verticalLayout = (VerticalLayout) component;
         assertEquals(2, verticalLayout.getComponentCount());
         HorizontalLayout horizontalLayout = (HorizontalLayout) verticalLayout.getComponent(0);
-        TextField licenseeAccountNumber = verifyTextField(horizontalLayout.getComponent(0), "Licensee Account #");
+        TextField licenseeAccountNumber = verifyTextField(horizontalLayout.getComponent(0), "Licensee Account #",
+            "licensee-account-number-field");
         Collection<?> listeners = licenseeAccountNumber.getListeners(HasValue.ValueChangeEvent.class);
         assertEquals(2, listeners.size());
         Component verifyComponent = horizontalLayout.getComponent(1);
         assertThat(verifyComponent, instanceOf(Button.class));
         assertEquals("Verify", verifyComponent.getCaption());
-        TextField licenseeName = verifyTextField(verticalLayout.getComponent(1), "Licensee Name");
+        TextField licenseeName = verifyTextField(verticalLayout.getComponent(1), "Licensee Name",
+            "licensee-name-field");
         assertTrue(licenseeName.isReadOnly());
     }
 
     private void verifyPeriodEndDate(Component component) {
-        TextField textField = verifyTextField(component, "Period End Date (YYYY)", 40);
+        TextField textField = verifyTextField(component, "Period End Date (YYYY)", 40, "distribution-period-field");
         assertEquals(StringUtils.EMPTY, textField.getValue());
     }
 

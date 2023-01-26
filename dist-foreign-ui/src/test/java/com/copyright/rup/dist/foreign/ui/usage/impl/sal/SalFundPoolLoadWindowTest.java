@@ -332,25 +332,35 @@ public class SalFundPoolLoadWindowTest {
         assertThat(component, instanceOf(VerticalLayout.class));
         VerticalLayout verticalLayout = (VerticalLayout) component;
         assertEquals(10, verticalLayout.getComponentCount());
-        verifyTextFieldComponent(verticalLayout.getComponent(0), "Fund Pool Name", false);
-        verifyTextFieldComponent(verticalLayout.getComponent(1), "Assessment Name", false);
+        verifyTextFieldComponent(verticalLayout.getComponent(0), "Fund Pool Name", false, "fund-pool-name-field");
+        verifyTextFieldComponent(verticalLayout.getComponent(1), "Assessment Name", false, "assessment-name-field");
         HorizontalLayout grossAndSplitPercentLayout = (HorizontalLayout) verticalLayout.getComponent(2);
-        verifyTextFieldComponent(grossAndSplitPercentLayout.getComponent(0), "Gross Amount", false);
-        verifyTextFieldComponent(grossAndSplitPercentLayout.getComponent(1), "Item Bank Split %", false);
+        verifyTextFieldComponent(grossAndSplitPercentLayout.getComponent(0), "Gross Amount", false,
+            "gross-amount-field");
+        verifyTextFieldComponent(grossAndSplitPercentLayout.getComponent(1), "Item Bank Split %", false,
+            "item-bank-split-percent-field");
         verifyLicenseeComponents(verticalLayout.getComponent(3));
         verifyDateComponent(verticalLayout.getComponent(4));
         HorizontalLayout gradeKto5Layout = (HorizontalLayout) verticalLayout.getComponent(5);
-        verifyTextFieldComponent(gradeKto5Layout.getComponent(0), "Grade K-5 Number of Students", false);
-        verifyTextFieldComponent(gradeKto5Layout.getComponent(1), "Grade K-5 Gross Amount", true);
+        verifyTextFieldComponent(gradeKto5Layout.getComponent(0), "Grade K-5 Number of Students", false,
+            "grade-k-5-number-of-students-field");
+        verifyTextFieldComponent(gradeKto5Layout.getComponent(1), "Grade K-5 Gross Amount", true,
+            "grade-k-5-gross-amount-field");
         HorizontalLayout grade6to8Layout = (HorizontalLayout) verticalLayout.getComponent(6);
-        verifyTextFieldComponent(grade6to8Layout.getComponent(0), "Grade 6-8 Number of Students", false);
-        verifyTextFieldComponent(grade6to8Layout.getComponent(1), "Grade 6-8 Gross Amount", true);
+        verifyTextFieldComponent(grade6to8Layout.getComponent(0), "Grade 6-8 Number of Students", false,
+            "grade-6-8-number-of-students-field");
+        verifyTextFieldComponent(grade6to8Layout.getComponent(1), "Grade 6-8 Gross Amount", true,
+            "grade-6-8-gross-amount-field");
         HorizontalLayout grade9to12Layout = (HorizontalLayout) verticalLayout.getComponent(7);
-        verifyTextFieldComponent(grade9to12Layout.getComponent(0), "Grade 9-12 Number of Students", false);
-        verifyTextFieldComponent(grade9to12Layout.getComponent(1), "Grade 9-12 Gross Amount", true);
+        verifyTextFieldComponent(grade9to12Layout.getComponent(0), "Grade 9-12 Number of Students", false,
+            "grade-9-12-number-of-students-field");
+        verifyTextFieldComponent(grade9to12Layout.getComponent(1), "Grade 9-12 Gross Amount", true,
+            "grade-9-12-gross-amount-field");
         HorizontalLayout itemBankAndTotalAmountLayout = (HorizontalLayout) verticalLayout.getComponent(8);
-        verifyTextFieldComponent(itemBankAndTotalAmountLayout.getComponent(0), "Item Bank Gross Amount", true);
-        verifyTextFieldComponent(itemBankAndTotalAmountLayout.getComponent(1), "Total Gross Amount", true);
+        verifyTextFieldComponent(itemBankAndTotalAmountLayout.getComponent(0), "Item Bank Gross Amount", true,
+            "item-bank-amount-field");
+        verifyTextFieldComponent(itemBankAndTotalAmountLayout.getComponent(1), "Total Gross Amount", true,
+            "total-amount-field");
         verifyButtonsLayout(verticalLayout.getComponent(9));
     }
 
@@ -359,11 +369,12 @@ public class SalFundPoolLoadWindowTest {
         VerticalLayout verticalLayout = (VerticalLayout) component;
         assertEquals(2, verticalLayout.getComponentCount());
         HorizontalLayout horizontalLayout = (HorizontalLayout) verticalLayout.getComponent(0);
-        verifyTextFieldComponent(horizontalLayout.getComponent(0), "Licensee Account #", false);
+        verifyTextFieldComponent(horizontalLayout.getComponent(0), "Licensee Account #", false,
+            "licensee-account-number-field");
         Component verifyComponent = horizontalLayout.getComponent(1);
         assertThat(verifyComponent, instanceOf(Button.class));
         assertEquals("Verify", verifyComponent.getCaption());
-        verifyTextFieldComponent(verticalLayout.getComponent(1), "Licensee Name", true);
+        verifyTextFieldComponent(verticalLayout.getComponent(1), "Licensee Name", true, "licensee-name-field");
         assertTrue(((TextField) verticalLayout.getComponent(1)).isReadOnly());
     }
 
@@ -373,8 +384,8 @@ public class SalFundPoolLoadWindowTest {
         assertEquals("Date Received", widget.getCaption());
     }
 
-    private void verifyTextFieldComponent(Component component, String caption, boolean isReadonly) {
-        TextField textField = verifyTextField(component, caption);
+    private void verifyTextFieldComponent(Component component, String caption, boolean isReadonly, String styleName) {
+        TextField textField = verifyTextField(component, caption, styleName);
         assertEquals(isReadonly, textField.isReadOnly());
         assertEquals(StringUtils.EMPTY, textField.getValue());
     }

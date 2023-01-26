@@ -154,7 +154,7 @@ public class AaclFundPoolUploadWindowTest {
     }
 
     private void verifyFundPoolNameComponent(Component component) {
-        TextField textField = verifyTextField(component, "Fund Pool Name");
+        TextField textField = verifyTextField(component, "Fund Pool Name", "aacl-fund-pool-name-field");
         assertEquals(StringUtils.EMPTY, textField.getValue());
     }
 

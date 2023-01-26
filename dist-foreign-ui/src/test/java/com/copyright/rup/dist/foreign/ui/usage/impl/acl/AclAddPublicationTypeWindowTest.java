@@ -97,8 +97,8 @@ public class AclAddPublicationTypeWindowTest {
         VerticalLayout content = (VerticalLayout) window.getContent();
         assertEquals(4, content.getComponentCount());
         verifyComboBox(content.getComponent(0), "Pub Type", false, buildPublicationType());
-        verifyTextField(content.getComponent(1), "Period (YYYYMM)");
-        verifyTextField(content.getComponent(2), "Weight");
+        verifyTextField(content.getComponent(1), "Period (YYYYMM)", "acl-pub-type-period-field");
+        verifyTextField(content.getComponent(2), "Weight", "acl-pub-type-weight-field");
         verifyButtonsLayout(content.getComponent(3), "Confirm", "Cancel");
         verify(controller);
     }

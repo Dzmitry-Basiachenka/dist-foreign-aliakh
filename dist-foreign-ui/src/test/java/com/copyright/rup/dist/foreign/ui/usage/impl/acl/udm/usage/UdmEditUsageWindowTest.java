@@ -663,49 +663,56 @@ public class UdmEditUsageWindowTest {
         assertThat(panelContent, instanceOf(VerticalLayout.class));
         VerticalLayout verticalLayout = (VerticalLayout) panelContent;
         assertEquals(39, verticalLayout.getComponentCount());
-        verifyTextFieldLayout(verticalLayout.getComponent(0), "Detail ID", true, false);
-        verifyTextFieldLayout(verticalLayout.getComponent(1), "Period", true, false);
-        verifyTextFieldLayout(verticalLayout.getComponent(2), "Usage Origin", true, false);
-        verifyTextFieldLayout(verticalLayout.getComponent(3), "Usage Detail ID", true, false);
+        verifyTextFieldLayout(verticalLayout.getComponent(0), "Detail ID", true, false, StringUtils.EMPTY);
+        verifyTextFieldLayout(verticalLayout.getComponent(1), "Period", true, false, StringUtils.EMPTY);
+        verifyTextFieldLayout(verticalLayout.getComponent(2), "Usage Origin", true, false, StringUtils.EMPTY);
+        verifyTextFieldLayout(verticalLayout.getComponent(3), "Usage Detail ID", true, false, StringUtils.EMPTY);
         verifyComboBoxLayout(verticalLayout.getComponent(4), "Detail Status", true, false,
             new LinkedHashSet<>(List.of(UsageStatusEnum.NEW, UsageStatusEnum.ELIGIBLE, UsageStatusEnum.INELIGIBLE,
                 UsageStatusEnum.OPS_REVIEW, UsageStatusEnum.SPECIALIST_REVIEW)));
-        verifyTextFieldLayout(verticalLayout.getComponent(5), "Assignee", true, false);
-        verifyTextFieldLayout(verticalLayout.getComponent(6), "RH Account #", true, false);
-        verifyTextFieldLayout(verticalLayout.getComponent(7), "RH Name", true, false);
-        verifyTextFieldLayout(verticalLayout.getComponent(8), "Wr Wrk Inst", false, true);
-        verifyTextFieldLayout(verticalLayout.getComponent(9), "Reported Title", false, true);
-        verifyTextFieldLayout(verticalLayout.getComponent(10), "System Title", true, false);
-        verifyTextFieldLayout(verticalLayout.getComponent(11), "Reported Standard Number", false, true);
-        verifyTextFieldLayout(verticalLayout.getComponent(12), "Standard Number", true, false);
-        verifyTextFieldLayout(verticalLayout.getComponent(13), "Reported Pub Type", false, true);
-        verifyTextFieldLayout(verticalLayout.getComponent(14), "Publication Format", true, false);
-        verifyTextFieldLayout(verticalLayout.getComponent(15), "Article", true, false);
-        verifyTextFieldLayout(verticalLayout.getComponent(16), "Language", true, false);
+        verifyTextFieldLayout(verticalLayout.getComponent(5), "Assignee", true, false, StringUtils.EMPTY);
+        verifyTextFieldLayout(verticalLayout.getComponent(6), "RH Account #", true, false, StringUtils.EMPTY);
+        verifyTextFieldLayout(verticalLayout.getComponent(7), "RH Name", true, false, StringUtils.EMPTY);
+        verifyTextFieldLayout(verticalLayout.getComponent(8), "Wr Wrk Inst", false, true,
+            "udm-edit-wr-wrk-inst-field");
+        verifyTextFieldLayout(verticalLayout.getComponent(9), "Reported Title", false, true,
+            "udm-edit-reported-title-field");
+        verifyTextFieldLayout(verticalLayout.getComponent(10), "System Title", true, false, StringUtils.EMPTY);
+        verifyTextFieldLayout(verticalLayout.getComponent(11), "Reported Standard Number", false, true,
+            "udm-edit-reported-standard-number-field");
+        verifyTextFieldLayout(verticalLayout.getComponent(12), "Standard Number", true, false, StringUtils.EMPTY);
+        verifyTextFieldLayout(verticalLayout.getComponent(13), "Reported Pub Type", false, true,
+            "udm-edit-reported-pub-type-field");
+        verifyTextFieldLayout(verticalLayout.getComponent(14), "Publication Format", true, false, StringUtils.EMPTY);
+        verifyTextFieldLayout(verticalLayout.getComponent(15), "Article", true, false, StringUtils.EMPTY);
+        verifyTextFieldLayout(verticalLayout.getComponent(16), "Language", true, false, StringUtils.EMPTY);
         verifyComboBoxLayout(verticalLayout.getComponent(17), "Action Reason", false, true, List.of(ACTION_REASON));
-        verifyTextFieldLayout(verticalLayout.getComponent(18), "Comment", false, true);
-        verifyTextFieldLayout(verticalLayout.getComponent(19), "Research URL", false, true);
+        verifyTextFieldLayout(verticalLayout.getComponent(18), "Comment", false, true, "udm-edit-comment-field");
+        verifyTextFieldLayout(verticalLayout.getComponent(19), "Research URL", false, true,
+            "udm-edit-research-url-field");
         verifyCompanyIdLayout(verticalLayout.getComponent(20));
-        verifyTextFieldLayout(verticalLayout.getComponent(21), "Company Name", true, true);
+        verifyTextFieldLayout(verticalLayout.getComponent(21), "Company Name", true, true, StringUtils.EMPTY);
         verifyComboBoxLayout(verticalLayout.getComponent(22), "Detail Licensee Class", true, false,
             Set.of(LICENSEE_CLASS));
-        verifyTextFieldLayout(verticalLayout.getComponent(23), "Survey Respondent", true, false);
-        verifyTextFieldLayout(verticalLayout.getComponent(24), "IP Address", true, false);
-        verifyTextFieldLayout(verticalLayout.getComponent(25), "Survey Country", true, false);
-        verifyTextFieldLayout(verticalLayout.getComponent(26), "Channel", true, false);
-        verifyTextFieldLayout(verticalLayout.getComponent(27), "Usage Date", true, false);
-        verifyTextFieldLayout(verticalLayout.getComponent(28), "Survey Start Date", true, false);
-        verifyTextFieldLayout(verticalLayout.getComponent(29), "Survey End Date", true, false);
-        verifyTextFieldLayout(verticalLayout.getComponent(30), "Annual Multiplier", false, true);
-        verifyTextFieldLayout(verticalLayout.getComponent(31), "Statistical Multiplier", false, true);
-        verifyTextFieldLayout(verticalLayout.getComponent(32), "Reported TOU", true, false);
-        verifyTextFieldLayout(verticalLayout.getComponent(33), "Quantity", false, true);
-        verifyTextFieldLayout(verticalLayout.getComponent(34), "Annualized Copies", true, true);
+        verifyTextFieldLayout(verticalLayout.getComponent(23), "Survey Respondent", true, false, StringUtils.EMPTY);
+        verifyTextFieldLayout(verticalLayout.getComponent(24), "IP Address", true, false, StringUtils.EMPTY);
+        verifyTextFieldLayout(verticalLayout.getComponent(25), "Survey Country", true, false, StringUtils.EMPTY);
+        verifyTextFieldLayout(verticalLayout.getComponent(26), "Channel", true, false, StringUtils.EMPTY);
+        verifyTextFieldLayout(verticalLayout.getComponent(27), "Usage Date", true, false, StringUtils.EMPTY);
+        verifyTextFieldLayout(verticalLayout.getComponent(28), "Survey Start Date", true, false, StringUtils.EMPTY);
+        verifyTextFieldLayout(verticalLayout.getComponent(29), "Survey End Date", true, false, StringUtils.EMPTY);
+        verifyTextFieldLayout(verticalLayout.getComponent(30), "Annual Multiplier", false, true,
+            "udm-edit-annual-multiplier-field");
+        verifyTextFieldLayout(verticalLayout.getComponent(31), "Statistical Multiplier", false, true,
+            "udm-edit-statistical-multiplier-field");
+        verifyTextFieldLayout(verticalLayout.getComponent(32), "Reported TOU", true, false, StringUtils.EMPTY);
+        verifyTextFieldLayout(verticalLayout.getComponent(33), "Quantity", false, true, "udm-edit-quantity-field");
+        verifyTextFieldLayout(verticalLayout.getComponent(34), "Annualized Copies", true, true, StringUtils.EMPTY);
         verifyComboBoxLayout(verticalLayout.getComponent(35), "Ineligible Reason", true, true,
             List.of(INELIGIBLE_REASON));
-        verifyTextFieldLayout(verticalLayout.getComponent(36), "Load Date", true, false);
-        verifyTextFieldLayout(verticalLayout.getComponent(37), "Updated By", true, false);
-        verifyTextFieldLayout(verticalLayout.getComponent(38), "Updated Date", true, false);
+        verifyTextFieldLayout(verticalLayout.getComponent(36), "Load Date", true, false, StringUtils.EMPTY);
+        verifyTextFieldLayout(verticalLayout.getComponent(37), "Updated By", true, false, StringUtils.EMPTY);
+        verifyTextFieldLayout(verticalLayout.getComponent(38), "Updated Date", true, false, StringUtils.EMPTY);
     }
 
     private void verifyPanelResearcher(Component component) {
@@ -714,45 +721,50 @@ public class UdmEditUsageWindowTest {
         assertThat(panelContent, instanceOf(VerticalLayout.class));
         VerticalLayout verticalLayout = (VerticalLayout) panelContent;
         assertEquals(29, verticalLayout.getComponentCount());
-        verifyTextFieldLayout(verticalLayout.getComponent(0), "Detail ID", true, false);
-        verifyTextFieldLayout(verticalLayout.getComponent(1), "Period", true, false);
-        verifyTextFieldLayout(verticalLayout.getComponent(2), "Usage Detail ID", true, false);
+        verifyTextFieldLayout(verticalLayout.getComponent(0), "Detail ID", true, false, StringUtils.EMPTY);
+        verifyTextFieldLayout(verticalLayout.getComponent(1), "Period", true, false, StringUtils.EMPTY);
+        verifyTextFieldLayout(verticalLayout.getComponent(2), "Usage Detail ID", true, false, StringUtils.EMPTY);
         verifyComboBoxLayout(verticalLayout.getComponent(3), "Detail Status", true, false,
             new LinkedHashSet<>(List.of(udmUsage.getStatus(), UsageStatusEnum.OPS_REVIEW,
                 UsageStatusEnum.SPECIALIST_REVIEW, UsageStatusEnum.NEW)));
-        verifyTextFieldLayout(verticalLayout.getComponent(4), "Assignee", true, false);
-        verifyTextFieldLayout(verticalLayout.getComponent(5), "RH Account #", true, false);
-        verifyTextFieldLayout(verticalLayout.getComponent(6), "RH Name", true, false);
-        verifyTextFieldLayout(verticalLayout.getComponent(7), "Wr Wrk Inst", false, true);
-        verifyTextFieldLayout(verticalLayout.getComponent(8), "Reported Title", true, false);
-        verifyTextFieldLayout(verticalLayout.getComponent(9), "System Title", true, false);
-        verifyTextFieldLayout(verticalLayout.getComponent(10), "Reported Standard Number", true, false);
-        verifyTextFieldLayout(verticalLayout.getComponent(11), "Standard Number", true, false);
-        verifyTextFieldLayout(verticalLayout.getComponent(12), "Reported Pub Type", true, false);
-        verifyTextFieldLayout(verticalLayout.getComponent(13), "Publication Format", true, false);
-        verifyTextFieldLayout(verticalLayout.getComponent(14), "Article", true, false);
-        verifyTextFieldLayout(verticalLayout.getComponent(15), "Language", true, false);
+        verifyTextFieldLayout(verticalLayout.getComponent(4), "Assignee", true, false, StringUtils.EMPTY);
+        verifyTextFieldLayout(verticalLayout.getComponent(5), "RH Account #", true, false, StringUtils.EMPTY);
+        verifyTextFieldLayout(verticalLayout.getComponent(6), "RH Name", true, false, StringUtils.EMPTY);
+        verifyTextFieldLayout(verticalLayout.getComponent(7), "Wr Wrk Inst", false, true,
+            "udm-edit-wr-wrk-inst-field");
+        verifyTextFieldLayout(verticalLayout.getComponent(8), "Reported Title", true, false, StringUtils.EMPTY);
+        verifyTextFieldLayout(verticalLayout.getComponent(9), "System Title", true, false, StringUtils.EMPTY);
+        verifyTextFieldLayout(verticalLayout.getComponent(10), "Reported Standard Number", true, false,
+            StringUtils.EMPTY);
+        verifyTextFieldLayout(verticalLayout.getComponent(11), "Standard Number", true, false, StringUtils.EMPTY);
+        verifyTextFieldLayout(verticalLayout.getComponent(12), "Reported Pub Type", true, false, StringUtils.EMPTY);
+        verifyTextFieldLayout(verticalLayout.getComponent(13), "Publication Format", true, false, StringUtils.EMPTY);
+        verifyTextFieldLayout(verticalLayout.getComponent(14), "Article", true, false, StringUtils.EMPTY);
+        verifyTextFieldLayout(verticalLayout.getComponent(15), "Language", true, false, StringUtils.EMPTY);
         verifyComboBoxLayout(verticalLayout.getComponent(16), "Action Reason", false, true, List.of(ACTION_REASON));
-        verifyTextFieldLayout(verticalLayout.getComponent(17), "Comment", false, true);
-        verifyTextFieldLayout(verticalLayout.getComponent(18), "Research URL", false, true);
-        verifyTextFieldLayout(verticalLayout.getComponent(19), "Detail Licensee Class", true, false);
-        verifyTextFieldLayout(verticalLayout.getComponent(20), "Channel", true, false);
-        verifyTextFieldLayout(verticalLayout.getComponent(21), "Usage Date", true, false);
-        verifyTextFieldLayout(verticalLayout.getComponent(22), "Survey Start Date", true, false);
-        verifyTextFieldLayout(verticalLayout.getComponent(23), "Survey End Date", true, false);
-        verifyTextFieldLayout(verticalLayout.getComponent(24), "Reported TOU", true, false);
-        verifyTextFieldLayout(verticalLayout.getComponent(25), "Ineligible Reason", true, false);
-        verifyTextFieldLayout(verticalLayout.getComponent(26), "Load Date", true, false);
-        verifyTextFieldLayout(verticalLayout.getComponent(27), "Updated By", true, false);
-        verifyTextFieldLayout(verticalLayout.getComponent(28), "Updated Date", true, false);
+        verifyTextFieldLayout(verticalLayout.getComponent(17), "Comment", false, true, "udm-edit-comment-field");
+        verifyTextFieldLayout(verticalLayout.getComponent(18), "Research URL", false, true,
+            "udm-edit-research-url-field");
+        verifyTextFieldLayout(verticalLayout.getComponent(19), "Detail Licensee Class", true, false,
+            StringUtils.EMPTY);
+        verifyTextFieldLayout(verticalLayout.getComponent(20), "Channel", true, false, StringUtils.EMPTY);
+        verifyTextFieldLayout(verticalLayout.getComponent(21), "Usage Date", true, false, StringUtils.EMPTY);
+        verifyTextFieldLayout(verticalLayout.getComponent(22), "Survey Start Date", true, false, StringUtils.EMPTY);
+        verifyTextFieldLayout(verticalLayout.getComponent(23), "Survey End Date", true, false, StringUtils.EMPTY);
+        verifyTextFieldLayout(verticalLayout.getComponent(24), "Reported TOU", true, false, StringUtils.EMPTY);
+        verifyTextFieldLayout(verticalLayout.getComponent(25), "Ineligible Reason", true, false, StringUtils.EMPTY);
+        verifyTextFieldLayout(verticalLayout.getComponent(26), "Load Date", true, false, StringUtils.EMPTY);
+        verifyTextFieldLayout(verticalLayout.getComponent(27), "Updated By", true, false, StringUtils.EMPTY);
+        verifyTextFieldLayout(verticalLayout.getComponent(28), "Updated Date", true, false, StringUtils.EMPTY);
     }
 
-    private void verifyTextFieldLayout(Component component, String caption, boolean isReadOnly, boolean isValidated) {
+    private void verifyTextFieldLayout(Component component, String caption, boolean isReadOnly, boolean isValidated,
+                                       String styleName) {
         assertThat(component, instanceOf(HorizontalLayout.class));
         HorizontalLayout layout = (HorizontalLayout) component;
         assertEquals(2, layout.getComponentCount());
         verifyLabel(layout.getComponent(0), caption, ContentMode.TEXT, 165);
-        verifyTextField(layout.getComponent(1), isValidated ? caption : null, isReadOnly);
+        verifyTextField(layout.getComponent(1), isValidated ? caption : null, isReadOnly, styleName);
     }
 
     private void assertTextFieldValue(Component component, String expectedValue) {
@@ -779,12 +791,12 @@ public class UdmEditUsageWindowTest {
         HorizontalLayout layout = (HorizontalLayout) component;
         assertEquals(3, layout.getComponentCount());
         verifyLabel(layout.getComponent(0), "Company ID", ContentMode.TEXT, 165);
-        verifyTextField(layout.getComponent(1), "Company ID", false);
+        verifyTextField(layout.getComponent(1), "Company ID", false, "udm-edit-company-id-field");
         verifyButton(layout.getComponent(2), "Verify");
     }
 
-    private void verifyTextField(Component component, String caption, boolean isReadOnly) {
-        TextField textField = UiTestHelper.verifyTextField(component, caption);
+    private void verifyTextField(Component component, String caption, boolean isReadOnly, String styleName) {
+        TextField textField = UiTestHelper.verifyTextField(component, caption, styleName);
         assertEquals(isReadOnly, textField.isReadOnly());
     }
 

@@ -142,7 +142,7 @@ public class AaclFundPoolUploadWindow extends Window {
                 ForeignUi.getMessage("message.error.unique_name", "Fund Pool"))
             .bind(FundPool::getName, FundPool::setName);
         VaadinUtils.setMaxComponentsWidth(fundPoolNameField);
-        VaadinUtils.addComponentStyle(fundPoolNameField, "aac-fund-pool-name-field");
+        VaadinUtils.addComponentStyle(fundPoolNameField, "aacl-fund-pool-name-field");
         return fundPoolNameField;
     }
 

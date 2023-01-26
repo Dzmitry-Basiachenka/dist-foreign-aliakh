@@ -324,8 +324,8 @@ public final class UiTestHelper {
      * @param caption   caption of field
      * @return instance of {@link TextField}
      */
-    public static TextField verifyTextField(Component component, String caption) {
-        return verifyTextField(component, caption, 100);
+    public static TextField verifyTextField(Component component, String caption, String styleName) {
+        return verifyTextField(component, caption, 100, styleName);
     }
 
     /**
@@ -336,11 +336,12 @@ public final class UiTestHelper {
      * @param width     width
      * @return of {@link TextField}
      */
-    public static TextField verifyTextField(Component component, String caption, float width) {
+    public static TextField verifyTextField(Component component, String caption, float width, String styleName) {
         assertThat(component, instanceOf(TextField.class));
         assertEquals(caption, component.getCaption());
         assertEquals(width, component.getWidth(), 0);
         assertEquals(Unit.PERCENTAGE, component.getWidthUnits());
+        assertEquals(styleName, component.getStyleName());
         return (TextField) component;
     }
 

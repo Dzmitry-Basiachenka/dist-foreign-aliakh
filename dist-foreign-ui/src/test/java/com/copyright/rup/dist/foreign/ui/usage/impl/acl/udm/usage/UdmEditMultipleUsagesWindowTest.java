@@ -738,19 +738,22 @@ public class UdmEditMultipleUsagesWindowTest {
         verifyComboBoxLayout(verticalLayout.getComponent(0), "Detail Status", false,
             List.of(UsageStatusEnum.NEW, UsageStatusEnum.ELIGIBLE, UsageStatusEnum.INELIGIBLE,
                 UsageStatusEnum.OPS_REVIEW, UsageStatusEnum.SPECIALIST_REVIEW));
-        verifyTextFieldLayout(verticalLayout.getComponent(1), "Period (YYYYMM)");
+        verifyTextFieldLayout(verticalLayout.getComponent(1), "Period (YYYYMM)", "udm-multiple-edit-period-field");
         verifyComboBoxLayout(verticalLayout.getComponent(2), "Detail Licensee Class", true, Set.of(LICENSEE_CLASS));
-        verifyCompanyIdLayout(verticalLayout.getComponent(3));
-        verifyTextFieldLayout(verticalLayout.getComponent(4), "Company Name");
-        verifyTextFieldLayout(verticalLayout.getComponent(5), "Wr Wrk Inst");
-        verifyTextFieldLayout(verticalLayout.getComponent(6), REPORTED_STANDARD_NUMBER_FIELD);
-        verifyTextFieldLayout(verticalLayout.getComponent(7), REPORTED_TITLE_FIELD);
-        verifyTextFieldLayout(verticalLayout.getComponent(8), ANNUAL_MULTIPLIER_FIELD);
-        verifyTextFieldLayout(verticalLayout.getComponent(9), STATISTICAL_MULTIPLIER_FIELD);
-        verifyTextFieldLayout(verticalLayout.getComponent(10), QUANTITY_FIELD);
+        verifyCompanyIdLayout(verticalLayout.getComponent(3), "udm-multiple-edit-company-id-field");
+        verifyTextFieldLayout(verticalLayout.getComponent(4), "Company Name", StringUtils.EMPTY);
+        verifyTextFieldLayout(verticalLayout.getComponent(5), "Wr Wrk Inst", "udm-multiple-edit-wr-wrk-inst-field");
+        verifyTextFieldLayout(verticalLayout.getComponent(6), REPORTED_STANDARD_NUMBER_FIELD,
+            "udm-edit-reported-standard-number-field");
+        verifyTextFieldLayout(verticalLayout.getComponent(7), REPORTED_TITLE_FIELD, "udm-edit-reported-title-field");
+        verifyTextFieldLayout(verticalLayout.getComponent(8), ANNUAL_MULTIPLIER_FIELD,
+            "udm-multiple-edit-annual-multiplier-field");
+        verifyTextFieldLayout(verticalLayout.getComponent(9), STATISTICAL_MULTIPLIER_FIELD,
+            "udm-multiple-edit-statistical-multiplier-field");
+        verifyTextFieldLayout(verticalLayout.getComponent(10), QUANTITY_FIELD, "udm-multiple-edit-quantity-field");
         verifyComboBoxLayout(verticalLayout.getComponent(11), "Action Reason", true, List.of(ACTION_REASON));
         verifyComboBoxLayout(verticalLayout.getComponent(12), "Ineligible Reason", true, List.of(INELIGIBLE_REASON));
-        verifyTextFieldLayout(verticalLayout.getComponent(13), "Comment");
+        verifyTextFieldLayout(verticalLayout.getComponent(13), "Comment", "udm-edit-comment-field");
         verifyButtonsLayout(verticalLayout.getComponent(14), "Save", "Discard", "Close");
     }
 
@@ -763,12 +766,12 @@ public class UdmEditMultipleUsagesWindowTest {
         verifyComboBox(layout.getComponent(1), caption, emptySelectionAllowed, expectedItems);
     }
 
-    private void verifyTextFieldLayout(Component component, String caption) {
+    private void verifyTextFieldLayout(Component component, String caption, String styleName) {
         assertThat(component, instanceOf(HorizontalLayout.class));
         HorizontalLayout layout = (HorizontalLayout) component;
         assertEquals(2, layout.getComponentCount());
         verifyLabel(layout.getComponent(0), caption, ContentMode.TEXT, 165);
-        verifyTextField(layout.getComponent(1), caption);
+        verifyTextField(layout.getComponent(1), caption, styleName);
     }
 
     private void verifyButton(Component component, String caption) {
@@ -776,12 +779,12 @@ public class UdmEditMultipleUsagesWindowTest {
         assertEquals(caption, component.getCaption());
     }
 
-    private void verifyCompanyIdLayout(Component component) {
+    private void verifyCompanyIdLayout(Component component, String styleName) {
         assertThat(component, instanceOf(HorizontalLayout.class));
         HorizontalLayout layout = (HorizontalLayout) component;
         assertEquals(3, layout.getComponentCount());
         verifyLabel(layout.getComponent(0), COMPANY_ID_FIELD, ContentMode.TEXT, 165);
-        verifyTextField(layout.getComponent(1), COMPANY_ID_FIELD);
+        verifyTextField(layout.getComponent(1), COMPANY_ID_FIELD, styleName);
         verifyButton(layout.getComponent(2), "Verify");
     }
 

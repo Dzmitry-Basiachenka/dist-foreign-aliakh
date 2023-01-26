@@ -256,11 +256,12 @@ public class SalUpdateRighstholderWindowTest {
         assertEquals(2, verticalLayout.getComponentCount());
         HorizontalLayout horizontalLayout = (HorizontalLayout) verticalLayout.getComponent(0);
         assertEquals(2, horizontalLayout.getComponentCount());
-        TextField numberField = verifyTextField(horizontalLayout.getComponent(0), "RH Account #");
+        TextField numberField = verifyTextField(horizontalLayout.getComponent(0), "RH Account #",
+            "rh-account-number-field");
         Collection<?> listeners = numberField.getListeners(HasValue.ValueChangeEvent.class);
         assertTrue(CollectionUtils.isNotEmpty(listeners));
         assertEquals(2, listeners.size());
-        TextField nameField = verifyTextField(verticalLayout.getComponent(1), "RH Name");
+        TextField nameField = verifyTextField(verticalLayout.getComponent(1), "RH Name", "rh-name-field");
         assertTrue(nameField.isReadOnly());
         Component verifyComponent = horizontalLayout.getComponent(1);
         assertThat(verifyComponent, instanceOf(Button.class));

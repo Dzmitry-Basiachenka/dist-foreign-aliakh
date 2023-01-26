@@ -214,9 +214,12 @@ public class UdmBaselineFiltersWindowTest {
         verifyComboBox(verticalLayout.getComponent(2), "Type of Use", Unit.PERCENTAGE, 50, true,
             List.of(PRINT_TYPE_OF_USE, DIGITAL_TYPE_OF_USE));
         verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(3), "Wr Wrk Inst From", "Wr Wrk Inst To");
-        verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(4), "System Title");
-        verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(5), "Usage Detail ID");
-        verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(6), "Survey Country");
+        verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(4), "System Title",
+            "udm-baseline-system-title-filter");
+        verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(5), "Usage Detail ID",
+            "udm-baseline-usage-detail-id-filter");
+        verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(6), "Survey Country",
+            "udm-baseline-survey-country-filter");
         verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(7), "Annualized Copies From",
             "Annualized Copies To");
         verifyButtonsLayout(verticalLayout.getComponent(8), "Save", "Clear", "Close");
@@ -230,11 +233,11 @@ public class UdmBaselineFiltersWindowTest {
             .forEach(index -> verifyItemsFilterWidget(layout.getComponent(index), captions[index]));
     }
 
-    private void verifyFieldWithTextOperatorComponent(Component component, String caption) {
+    private void verifyFieldWithTextOperatorComponent(Component component, String caption, String styleName) {
         assertThat(component, instanceOf(HorizontalLayout.class));
         HorizontalLayout layout = (HorizontalLayout) component;
         assertEquals(2, layout.getComponentCount());
-        TextField textField = verifyTextField(layout.getComponent(0), caption);
+        TextField textField = verifyTextField(layout.getComponent(0), caption, styleName);
         assertTrue(textField.isEnabled());
         assertThat(layout.getComponent(1), instanceOf(ComboBox.class));
         assertEquals(CAPTION_OPERATOR, layout.getComponent(1).getCaption());

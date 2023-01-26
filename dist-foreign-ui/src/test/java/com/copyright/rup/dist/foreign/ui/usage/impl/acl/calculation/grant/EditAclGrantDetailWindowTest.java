@@ -134,7 +134,7 @@ public class EditAclGrantDetailWindowTest {
         assertEquals(5, verticalLayout.getComponentCount());
         verifyComboBox(((VerticalLayout) component).getComponent(0), "Grant Status", true, "GRANT", "DENY");
         verifyRhAccountNumberLayout(((VerticalLayout) component).getComponent(1));
-        verifyTextField(((VerticalLayout) component).getComponent(2), "RH Name");
+        verifyTextField(((VerticalLayout) component).getComponent(2), "RH Name", "acl-rh-name-field");
         verifyComboBox(((VerticalLayout) component).getComponent(3), "Eligible", true, "Y", "N");
         verifyButtonsLayout(((VerticalLayout) component).getComponent(4), "Save", "Discard", "Close");
     }
@@ -143,7 +143,7 @@ public class EditAclGrantDetailWindowTest {
         assertThat(component, instanceOf(HorizontalLayout.class));
         HorizontalLayout layout = (HorizontalLayout) component;
         assertEquals(2, layout.getComponentCount());
-        verifyTextField(layout.getComponent(0), "RH Account #");
+        verifyTextField(layout.getComponent(0), "RH Account #", "acl-rh-account-number-field");
         verifyButton(layout.getComponent(1), "Verify");
     }
 

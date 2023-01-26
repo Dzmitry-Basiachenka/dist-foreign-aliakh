@@ -233,7 +233,7 @@ public class CreateAclFundPoolWindowTest {
         assertThat(component, instanceOf(VerticalLayout.class));
         VerticalLayout verticalLayout = (VerticalLayout) component;
         assertEquals(6, verticalLayout.getComponentCount());
-        verifyTextField(verticalLayout.getComponent(0), "Fund Pool Name");
+        verifyTextField(verticalLayout.getComponent(0), "Fund Pool Name", "acl-fund-pool-name-field");
         verifyPeriodYearAndPeriodMonthComponents(verticalLayout.getComponent(1));
         verifyComboBox(verticalLayout.getComponent(2), "License Type", true,
             ImmutableSet.of("ACL", "MACL", "VGW", "JACDCL"));
@@ -250,7 +250,7 @@ public class CreateAclFundPoolWindowTest {
         assertThat(component, instanceOf(HorizontalLayout.class));
         HorizontalLayout horizontalLayout = (HorizontalLayout) component;
         assertEquals(2, horizontalLayout.getComponentCount());
-        verifyTextField(horizontalLayout.getComponent(0), "Fund Pool Period Year");
+        verifyTextField(horizontalLayout.getComponent(0), "Fund Pool Period Year", "acl-fund-pool-period-year-field");
         verifyComboBox(horizontalLayout.getComponent(1), "Fund Pool Period Month", true, ImmutableSet.of("06", "12"));
     }
 

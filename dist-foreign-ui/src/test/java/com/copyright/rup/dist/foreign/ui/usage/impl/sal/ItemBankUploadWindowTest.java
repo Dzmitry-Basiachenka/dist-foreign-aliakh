@@ -246,12 +246,12 @@ public class ItemBankUploadWindowTest {
         verifyItemBankNameComponent(verticalLayout.getComponent(0));
         verifyUploadComponent(verticalLayout.getComponent(1));
         verifyLicenseeComponents(verticalLayout.getComponent(2));
-        verifyTextField(verticalLayout.getComponent(3), "Period End Date (YYYY)", 40);
+        verifyTextField(verticalLayout.getComponent(3), "Period End Date (YYYY)", 40, "distribution-period-field");
         verifyButtonsLayout(verticalLayout.getComponent(4));
     }
 
     private void verifyItemBankNameComponent(Component component) {
-        TextField textField = verifyTextField(component, "Item Bank Name");
+        TextField textField = verifyTextField(component, "Item Bank Name", "item-bank-name-field");
         assertEquals(StringUtils.EMPTY, textField.getValue());
     }
 
@@ -260,14 +260,15 @@ public class ItemBankUploadWindowTest {
         VerticalLayout verticalLayout = (VerticalLayout) component;
         assertEquals(2, verticalLayout.getComponentCount());
         HorizontalLayout horizontalLayout = (HorizontalLayout) verticalLayout.getComponent(0);
-        TextField numberField = verifyTextField(horizontalLayout.getComponent(0), "Licensee Account #");
+        TextField numberField = verifyTextField(horizontalLayout.getComponent(0), "Licensee Account #",
+            "licensee-account-number-field");
         Collection<?> listeners = numberField.getListeners(ValueChangeEvent.class);
         assertTrue(CollectionUtils.isNotEmpty(listeners));
         assertEquals(2, listeners.size());
         Component verifyComponent = horizontalLayout.getComponent(1);
         assertThat(verifyComponent, instanceOf(Button.class));
         assertEquals("Verify", verifyComponent.getCaption());
-        TextField nameField = verifyTextField(verticalLayout.getComponent(1), "Licensee Name");
+        TextField nameField = verifyTextField(verticalLayout.getComponent(1), "Licensee Name", "licensee-name-field");
         assertTrue(nameField.isReadOnly());
     }
 

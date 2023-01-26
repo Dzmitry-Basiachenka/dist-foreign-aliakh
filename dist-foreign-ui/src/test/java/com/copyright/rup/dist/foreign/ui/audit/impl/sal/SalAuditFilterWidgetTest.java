@@ -89,8 +89,8 @@ public class SalAuditFilterWidgetTest {
         verifyFilterWidget((CommonStatusFilterWidget) component, "Statuses");
         verifyComboBox(widget.getComponent(5), "Detail Type", true, SalDetailTypeEnum.values());
         verifyComboBox(widget.getComponent(6), "Usage Period", true, buildUsagePeriods());
-        verifyTextField(widget.getComponent(7), "Event ID");
-        verifyTextField(widget.getComponent(8), "Dist. Name");
+        verifyTextField(widget.getComponent(7), "Event ID", "ccc-event-id-filter");
+        verifyTextField(widget.getComponent(8), "Dist. Name", "distribution-name-filter");
         component = widget.getComponent(9);
         assertThat(component, instanceOf(HorizontalLayout.class));
         verifyButtonsLayout((HorizontalLayout) component);
