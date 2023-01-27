@@ -1,10 +1,6 @@
 package com.copyright.rup.dist.foreign.domain;
 
 import com.copyright.rup.dist.common.test.TestUtils;
-import com.copyright.rup.dist.foreign.domain.filter.AclFundPoolDetailFilter;
-import com.copyright.rup.dist.foreign.domain.filter.AclGrantDetailFilter;
-import com.copyright.rup.dist.foreign.domain.filter.AclScenarioFilter;
-import com.copyright.rup.dist.foreign.domain.filter.AclUsageFilter;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.ExcludePayeeFilter;
 import com.copyright.rup.dist.foreign.domain.filter.FilterBetweenExpression;
@@ -12,37 +8,9 @@ import com.copyright.rup.dist.foreign.domain.filter.FilterEqualsExpression;
 import com.copyright.rup.dist.foreign.domain.filter.FilterGreaterThanExpression;
 import com.copyright.rup.dist.foreign.domain.filter.FilterLessThanExpression;
 import com.copyright.rup.dist.foreign.domain.filter.RightsholderResultsFilter;
-import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineValueFilter;
-import com.copyright.rup.dist.foreign.domain.filter.UdmProxyValueFilter;
-import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
-import com.copyright.rup.dist.foreign.domain.filter.UdmValueFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
-import com.copyright.rup.dist.foreign.domain.report.AclCalculationReportsInfoDto;
-import com.copyright.rup.dist.foreign.domain.report.AclLiabilitiesByAggLicClassReportDto;
-import com.copyright.rup.dist.foreign.domain.report.AclLiabilitiesByRhReportDto;
-import com.copyright.rup.dist.foreign.domain.report.AclLiabilityDetailsReportDto;
-import com.copyright.rup.dist.foreign.domain.report.AclReportTotalAmountsDto;
-import com.copyright.rup.dist.foreign.domain.report.AclSummaryOfWorkSharesByAggLcReportDto;
-import com.copyright.rup.dist.foreign.domain.report.AclWorkSharesByAggLcReportDto;
 import com.copyright.rup.dist.foreign.domain.report.BatchStatistic;
-import com.copyright.rup.dist.foreign.domain.report.FasBatchSummaryReportDto;
-import com.copyright.rup.dist.foreign.domain.report.FasServiceFeeTrueUpReportDto;
-import com.copyright.rup.dist.foreign.domain.report.NtsServiceFeeTrueUpReportDto;
-import com.copyright.rup.dist.foreign.domain.report.NtsWithDrawnBatchSummaryReportDto;
 import com.copyright.rup.dist.foreign.domain.report.ResearchStatusReportDto;
-import com.copyright.rup.dist.foreign.domain.report.SalFundPoolReportDto;
-import com.copyright.rup.dist.foreign.domain.report.SalHistoricalItemBankDetailsReportDto;
-import com.copyright.rup.dist.foreign.domain.report.SalLiabilitiesByRhReportDto;
-import com.copyright.rup.dist.foreign.domain.report.SalLiabilitiesSummaryByRhAndWorkReportDto;
-import com.copyright.rup.dist.foreign.domain.report.SalLicensee;
-import com.copyright.rup.dist.foreign.domain.report.SalUndistributedLiabilitiesReportDto;
-import com.copyright.rup.dist.foreign.domain.report.UdmAssigneeStatusReportDto;
-import com.copyright.rup.dist.foreign.domain.report.UdmBaselineValueUpdatesReportDto;
-import com.copyright.rup.dist.foreign.domain.report.UdmSurveyDashboardReportDto;
-import com.copyright.rup.dist.foreign.domain.report.UdmUsableDetailsByCountryReportDto;
-import com.copyright.rup.dist.foreign.domain.report.UdmUsageEditsInBaselineReportDto;
-import com.copyright.rup.dist.foreign.domain.report.UdmVerifiedDetailsBySourceReportDto;
-import com.copyright.rup.dist.foreign.domain.report.UdmWeeklySurveyReportDto;
 import com.copyright.rup.dist.foreign.domain.report.UndistributedLiabilitiesReportDto;
 
 import org.junit.Test;
@@ -58,22 +26,22 @@ import java.util.List;
  * <p>
  * Copyright (C) 2017 copyright.com
  * <p>
- * Date: 01/16/17
+ * Date: 01/16/2017
  *
  * @author Aliaksei Pchelnikau
  */
 @RunWith(Parameterized.class)
 public class DomainVerifierTest {
 
-    private final Class classToVerify;
+    private final Class<?> clazz;
 
     /**
-     * Constructs new test for given class.
+     * Constructor.
      *
-     * @param classToVerify class to verify
+     * @param clazz class to verify
      */
-    public DomainVerifierTest(Class classToVerify) {
-        this.classToVerify = classToVerify;
+    public DomainVerifierTest(Class<?> clazz) {
+        this.clazz = clazz;
     }
 
     @Parameterized.Parameters
@@ -82,16 +50,10 @@ public class DomainVerifierTest {
             {UsageFilter.class},
             {AuditFilter.class},
             {UsageBatch.class},
-            {UsageBatch.NtsFields.class},
-            {UsageBatch.SalFields.class},
-            {UsageBatch.AclciFields.class},
             {Usage.class},
-            {AaclUsage.class},
             {UsageDto.class},
             {PaidUsage.class},
             {Scenario.class},
-            {Scenario.AaclFields.class},
-            {Scenario.NtsFields.class},
             {RightsholderTotalsHolder.class},
             {UsageAuditItem.class},
             {ScenarioAuditItem.class},
@@ -99,99 +61,34 @@ public class DomainVerifierTest {
             {RightsholderDiscrepancy.class},
             {ResearchedUsage.class},
             {UndistributedLiabilitiesReportDto.class},
-            {FasBatchSummaryReportDto.class},
-            {NtsWithDrawnBatchSummaryReportDto.class},
             {ResearchStatusReportDto.class},
-            {FasServiceFeeTrueUpReportDto.class},
-            {NtsServiceFeeTrueUpReportDto.class},
             {BatchStatistic.class},
             {Work.class},
             {WorkClassification.class},
             {FundPool.class},
-            {FundPool.SalFields.class},
-            {FundPool.AclciFields.class},
             {ExcludePayeeFilter.class},
             {PayeeTotalHolder.class},
-            {AaclClassifiedUsage.class},
             {PublicationType.class},
             {DetailLicenseeClass.class},
             {AggregateLicenseeClass.class},
             {FundPoolDetail.class},
             {RhTaxInformation.class},
             {RightsholderPayeeProductFamilyHolder.class},
-            {SalUsage.class},
-            {SalLiabilitiesByRhReportDto.class},
-            {SalLiabilitiesSummaryByRhAndWorkReportDto.class},
-            {SalUndistributedLiabilitiesReportDto.class},
-            {SalFundPoolReportDto.class},
-            {SalLicensee.class},
-            {SalHistoricalItemBankDetailsReportDto.class},
             {UsageBatchStatus.class},
-            {UdmBatch.class},
-            {UdmUsage.class},
-            {UdmUsageDto.class},
-            {UdmUsageFilter.class},
             {FilterEqualsExpression.class},
             {FilterBetweenExpression.class},
             {FilterGreaterThanExpression.class},
             {FilterLessThanExpression.class},
-            {UdmActionReason.class},
-            {UdmIneligibleReason.class},
-            {UdmValueDto.class},
-            {UdmValueFilter.class},
-            {UdmValue.class},
-            {UdmValueAuditItem.class},
-            {UdmValueBaselineDto.class},
-            {UdmBaselineValueFilter.class},
-            {UdmBaselineDto.class},
             {ExchangeRate.class},
-            {UdmProxyValueFilter.class},
-            {UdmWeeklySurveyReportDto.class},
-            {UdmVerifiedDetailsBySourceReportDto.class},
-            {AclGrantSet.class},
-            {AclGrantDetail.class},
-            {AclGrantDetailDto.class},
-            {AclGrantDetailFilter.class},
-            {UdmUsageEditsInBaselineReportDto.class},
-            {UdmUsableDetailsByCountryReportDto.class},
-            {AclUsageBatch.class},
-            {AclUsageDto.class},
-            {AclIneligibleRightsholder.class},
-            {AclUsageFilter.class},
-            {UdmAssigneeStatusReportDto.class},
-            {AclFundPool.class},
-            {AclFundPoolDetail.class},
-            {AclFundPoolDetailDto.class},
             {LdmtDetail.class},
-            {AclFundPoolDetailFilter.class},
-            {AclScenario.class},
-            {AclScenarioDto.class},
-            {AclRightsholderTotalsHolder.class},
-            {AclScenarioDetail.class},
-            {AclScenarioShareDetail.class},
-            {AclPublicationType.class},
-            {AclScenarioDetailDto.class},
-            {AclRightsholderTotalsHolderDto.class},
             {RightsholderResultsFilter.class},
-            {AclCalculationReportsInfoDto.class},
-            {AclSummaryOfWorkSharesByAggLcReportDto.class},
-            {AclWorkSharesByAggLcReportDto.class},
-            {AclLiabilityDetailsReportDto.class},
-            {AclLiabilitiesByAggLicClassReportDto.class},
-            {AclReportTotalAmountsDto.class},
-            {AclLiabilitiesByRhReportDto.class},
             {RightsholderTypeOfUsePair.class},
-            {AclScenarioFilter.class},
-            {UdmBaselineValueUpdatesReportDto.class},
-            {AclScenarioLiabilityDetail.class},
-            {AclciUsage.class},
-            {UdmSurveyDashboardReportDto.class}
         };
         return List.of(testData);
     }
 
     @Test
     public void testPojoStructureAndBehavior() {
-        TestUtils.validatePojo(classToVerify);
+        TestUtils.validatePojo(clazz);
     }
 }
