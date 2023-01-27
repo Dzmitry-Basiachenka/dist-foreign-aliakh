@@ -122,9 +122,9 @@ public class SalHistoricalItemBankDetailsReportWidgetTest {
         Component periodEndDateFrom = horizontalLayout.getComponent(0);
         Component periodEndDateTo = horizontalLayout.getComponent(1);
         assertThat(periodEndDateFrom, instanceOf(TextField.class));
-        verifyTextField(periodEndDateFrom, "Period End Date From");
+        verifyTextField(periodEndDateFrom, "Period End Date From", "period-end-date-from-field");
         assertThat(periodEndDateTo, instanceOf(TextField.class));
-        verifyTextField(periodEndDateTo, "Period End Date To");
+        verifyTextField(periodEndDateTo, "Period End Date To", "period-end-date-to-field");
     }
 
     private SalLicensee buildSalLicensee() {

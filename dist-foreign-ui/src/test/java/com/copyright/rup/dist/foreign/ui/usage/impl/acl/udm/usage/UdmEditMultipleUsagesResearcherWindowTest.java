@@ -268,9 +268,9 @@ public class UdmEditMultipleUsagesResearcherWindowTest {
         assertEquals(5, verticalLayout.getComponentCount());
         verifyComboBoxLayout(verticalLayout.getComponent(0), "Detail Status", false,
             List.of(UsageStatusEnum.NEW, UsageStatusEnum.OPS_REVIEW, UsageStatusEnum.SPECIALIST_REVIEW));
-        verifyTextFieldLayout(verticalLayout.getComponent(1), "Wr Wrk Inst");
+        verifyTextFieldLayout(verticalLayout.getComponent(1), "Wr Wrk Inst", "udm-multiple-edit-wr-wrk-inst-field");
         verifyComboBoxLayout(verticalLayout.getComponent(2), "Action Reason", true, List.of(ACTION_REASON));
-        verifyTextFieldLayout(verticalLayout.getComponent(3), "Comment");
+        verifyTextFieldLayout(verticalLayout.getComponent(3), "Comment", "udm-edit-comment-field");
         verifyButtonsLayout(verticalLayout.getComponent(4), "Save", "Discard", "Close");
     }
 
@@ -283,12 +283,12 @@ public class UdmEditMultipleUsagesResearcherWindowTest {
         verifyComboBox(layout.getComponent(1), caption, emptySelectionAllowed, expectedItems);
     }
 
-    private void verifyTextFieldLayout(Component component, String caption) {
+    private void verifyTextFieldLayout(Component component, String caption, String styleName) {
         assertThat(component, instanceOf(HorizontalLayout.class));
         HorizontalLayout layout = (HorizontalLayout) component;
         assertEquals(2, layout.getComponentCount());
         verifyLabel(layout.getComponent(0), caption, ContentMode.TEXT, 110);
-        verifyTextField(layout.getComponent(1), caption);
+        verifyTextField(layout.getComponent(1), caption, styleName);
     }
 
     private void initEditWindow() {

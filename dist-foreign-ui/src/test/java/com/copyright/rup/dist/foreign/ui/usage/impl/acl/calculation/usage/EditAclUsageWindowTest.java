@@ -54,7 +54,7 @@ import java.util.Set;
  *
  * @author Dzmitry Basiachenka
  */
-public class EditAclUsagesWindowTest {
+public class EditAclUsageWindowTest {
 
     private static final String ACL_USAGE_UID = "e6c08b81-83be-4442-a7ce-a871df372de8";
     private static final String ACL_USAGE_BATCH_UID = "b7724aad-4719-4279-ac2d-39313d254b00";
@@ -252,22 +252,24 @@ public class EditAclUsagesWindowTest {
     private void verifyRootLayout(Component component) {
         VerticalLayout verticalLayout = (VerticalLayout) component;
         assertEquals(8, verticalLayout.getComponentCount());
-        verifyTextFieldLayout(verticalLayout.getComponent(0), "Period (YYYYMM)");
-        verifyTextFieldLayout(verticalLayout.getComponent(1), "Wr Wrk Inst");
+        verifyTextFieldLayout(verticalLayout.getComponent(0), "Period (YYYYMM)", "acl-usage-edit-period-field");
+        verifyTextFieldLayout(verticalLayout.getComponent(1), "Wr Wrk Inst", "acl-usage-edit-wr-wrk-inst-field");
         verifyComboBoxLayout(verticalLayout.getComponent(2), "Pub Type", true, List.of(PUBLICATION_TYPE));
         verifyComboBoxLayout(verticalLayout.getComponent(3), "Type of Use", true, List.of("PRINT","DIGITAL"));
         verifyComboBoxLayout(verticalLayout.getComponent(4), "Detail Licensee Class", true, List.of(LICENSEE_CLASS));
-        verifyTextFieldLayout(verticalLayout.getComponent(5), "Annualized Copies");
-        verifyTextFieldLayout(verticalLayout.getComponent(6), "Content Unit Price");
+        verifyTextFieldLayout(verticalLayout.getComponent(5), "Annualized Copies",
+            "acl-usage-edit-annualized-copies-field");
+        verifyTextFieldLayout(verticalLayout.getComponent(6), "Content Unit Price",
+            "acl-usage-edit-content-unit-price-field");
         verifyButtonsLayout(verticalLayout.getComponent(7), "Save", "Discard", "Close");
     }
 
-    private void verifyTextFieldLayout(Component component, String caption) {
+    private void verifyTextFieldLayout(Component component, String caption, String styleName) {
         assertThat(component, instanceOf(HorizontalLayout.class));
         HorizontalLayout layout = (HorizontalLayout) component;
         assertEquals(2, layout.getComponentCount());
         verifyLabel(layout.getComponent(0), caption, ContentMode.TEXT, 130);
-        verifyTextField(layout.getComponent(1), caption);
+        verifyTextField(layout.getComponent(1), caption, styleName);
     }
 
     private <T> void verifyComboBoxLayout(Component component, String caption, boolean emptySelectionAllowed,

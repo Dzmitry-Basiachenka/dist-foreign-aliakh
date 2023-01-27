@@ -33,6 +33,7 @@ import com.vaadin.ui.Panel;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -357,7 +358,7 @@ public class UdmViewUsageWindowTest {
         HorizontalLayout layout = (HorizontalLayout) component;
         assertEquals(2, layout.getComponentCount());
         verifyLabel(layout.getComponent(0), caption, ContentMode.TEXT, 165);
-        TextField textField = verifyTextField(layout.getComponent(1), null);
+        TextField textField = verifyTextField(layout.getComponent(1), null, StringUtils.EMPTY);
         assertTrue(textField.isReadOnly());
     }
 }

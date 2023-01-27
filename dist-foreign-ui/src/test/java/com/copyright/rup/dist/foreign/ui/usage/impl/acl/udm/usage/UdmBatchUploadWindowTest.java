@@ -174,7 +174,7 @@ public class UdmBatchUploadWindowTest {
         HorizontalLayout horizontalLayout = (HorizontalLayout) component;
         assertEquals(2, horizontalLayout.getComponentCount());
         assertThat(horizontalLayout.getComponent(1), instanceOf(ComboBox.class));
-        verifyTextField(horizontalLayout.getComponent(0), "Period Year");
+        verifyTextField(horizontalLayout.getComponent(0), "Period Year", "period-year-field");
         verifyComboBox(horizontalLayout.getComponent(1), "Period Month", true, ImmutableSet.of("06", "12"));
     }
 

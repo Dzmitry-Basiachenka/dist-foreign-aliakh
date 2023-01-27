@@ -373,7 +373,7 @@ public class FundPoolLoadWindowTest {
     }
 
     private void verifyUsageBatchNameComponent(Component component) {
-        TextField textField = verifyTextField(component, "Usage Batch Name");
+        TextField textField = verifyTextField(component, "Usage Batch Name", "usage-batch-name-field");
         assertEquals(StringUtils.EMPTY, textField.getValue());
     }
 
@@ -411,13 +411,13 @@ public class FundPoolLoadWindowTest {
         Component numberComponent = rroAccountLayout.getComponent(0);
         Component nameComponent = rroAccountLayout.getComponent(1);
         Component verifyComponent = rroAccountLayout.getComponent(2);
-        TextField numberField = verifyTextField(numberComponent, "RRO Account #");
+        TextField numberField = verifyTextField(numberComponent, "RRO Account #", "rro-account-number-field");
         assertEquals(100, numberField.getWidth(), 0);
         assertEquals(Unit.PERCENTAGE, numberField.getWidthUnits());
         Collection<?> listeners = numberField.getListeners(ValueChangeEvent.class);
         assertTrue(CollectionUtils.isNotEmpty(listeners));
         assertEquals(2, listeners.size());
-        TextField nameField = verifyTextField(nameComponent, "RRO Account Name");
+        TextField nameField = verifyTextField(nameComponent, "RRO Account Name", "rro-account-name-field");
         assertTrue(nameField.isReadOnly());
         assertVerifyButton(verifyComponent, numberField, nameField);
     }
@@ -458,29 +458,32 @@ public class FundPoolLoadWindowTest {
         LocalDateWidget widget = (LocalDateWidget) paymentDateComponent;
         assertEquals("Payment Date", widget.getCaption());
         assertThat(fundPoolPeriodFromComponent, instanceOf(TextField.class));
-        verifyTextField(fundPoolPeriodFromComponent, "Fund Pool Period From");
+        verifyTextField(fundPoolPeriodFromComponent, "Fund Pool Period From", "fund-pool-period-from-field");
         assertThat(fundPoolPeriodToComponent, instanceOf(TextField.class));
-        verifyTextField(fundPoolPeriodToComponent, "Fund Pool Period To");
+        verifyTextField(fundPoolPeriodToComponent, "Fund Pool Period To", "fund-pool-period-to-field");
     }
 
     private void verifyAmountsComponent(Component component) {
         assertThat(component, instanceOf(HorizontalLayout.class));
         HorizontalLayout horizontalLayout = (HorizontalLayout) component;
         assertEquals(2, horizontalLayout.getComponentCount());
-        verifyAmountComponent(horizontalLayout.getComponent(0), "STM Amount", "");
-        verifyAmountComponent(horizontalLayout.getComponent(1), "Non-STM Amount", "");
+        verifyAmountComponent(horizontalLayout.getComponent(0), "STM Amount", StringUtils.EMPTY, "stm-amount-field");
+        verifyAmountComponent(horizontalLayout.getComponent(1), "Non-STM Amount", StringUtils.EMPTY,
+            "non-stm-amount-field");
     }
 
     private void verifyMinAmountsComponent(Component component) {
         assertThat(component, instanceOf(HorizontalLayout.class));
         HorizontalLayout horizontalLayout = (HorizontalLayout) component;
         assertEquals(2, horizontalLayout.getComponentCount());
-        verifyAmountComponent(horizontalLayout.getComponent(0), "STM Minimum Amount", "50");
-        verifyAmountComponent(horizontalLayout.getComponent(1), "Non-STM Minimum Amount", "7");
+        verifyAmountComponent(horizontalLayout.getComponent(0), "STM Minimum Amount", "50",
+            "stm-minimum-amount-field");
+        verifyAmountComponent(horizontalLayout.getComponent(1), "Non-STM Minimum Amount", "7",
+            "non-stm-minimum-amount-field");
     }
 
-    private void verifyAmountComponent(Component component, String caption, String defaultValue) {
-        TextField amountField = verifyTextField(component, caption);
+    private void verifyAmountComponent(Component component, String caption, String defaultValue, String styleName) {
+        TextField amountField = verifyTextField(component, caption, styleName);
         assertEquals(100, amountField.getWidth(), 0);
         assertEquals(Unit.PERCENTAGE, amountField.getWidthUnits());
         assertEquals(defaultValue, amountField.getValue());

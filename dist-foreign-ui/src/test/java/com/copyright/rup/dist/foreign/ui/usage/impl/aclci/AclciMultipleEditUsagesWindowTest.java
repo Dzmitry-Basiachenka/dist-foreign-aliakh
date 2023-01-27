@@ -191,25 +191,22 @@ public class AclciMultipleEditUsagesWindowTest {
         assertThat(component, instanceOf(HorizontalLayout.class));
         HorizontalLayout horizontalLayout = (HorizontalLayout) component;
         assertEquals(2, horizontalLayout.getComponentCount());
-        TextField numberField = verifyTextField(horizontalLayout.getComponent(0), "RH Account #");
+        TextField numberField = verifyTextField(horizontalLayout.getComponent(0), "RH Account #",
+            "rh-account-number-field");
         Collection<?> listeners = numberField.getListeners(HasValue.ValueChangeEvent.class);
         assertTrue(CollectionUtils.isNotEmpty(listeners));
         assertEquals(2, listeners.size());
-        verifyTextField(numberField, "RH Account #");
         Button verifyButton = verifyButton(horizontalLayout.getComponent(1), "Verify", true);
         assertEquals(1, verifyButton.getListeners(Button.ClickEvent.class).size());
-        assertEquals("rh-account-number-field", numberField.getStyleName());
     }
 
     private void verifyRhNameField(Component component) {
-        TextField nameField = verifyTextField(component, "RH Name");
+        TextField nameField = verifyTextField(component, "RH Name", "rh-name-field");
         assertTrue(nameField.isReadOnly());
-        assertEquals("rh-name-field", component.getStyleName());
     }
 
     private void verifyWrWrkInstField(Component component) {
-        verifyTextField(component, "Wr Wrk Inst");
-        assertEquals("wr-wrk-inst-field", component.getStyleName());
+        verifyTextField(component, "Wr Wrk Inst", "wr-wrk-inst-field");
     }
 
     private void assertVerifyButton(Button verifyButton, TextField numberField, TextField nameField) {

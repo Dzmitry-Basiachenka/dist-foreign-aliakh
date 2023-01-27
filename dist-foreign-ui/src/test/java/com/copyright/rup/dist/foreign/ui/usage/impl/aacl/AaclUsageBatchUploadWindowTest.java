@@ -229,7 +229,7 @@ public class AaclUsageBatchUploadWindowTest {
     }
 
     private void verifyUsageBatchNameComponent(Component component) {
-        TextField textField = verifyTextField(component, "Usage Batch Name");
+        TextField textField = verifyTextField(component, "Usage Batch Name", "usage-batch-name-field");
         assertEquals(StringUtils.EMPTY, textField.getValue());
     }
 
@@ -237,8 +237,8 @@ public class AaclUsageBatchUploadWindowTest {
         assertThat(component, instanceOf(HorizontalLayout.class));
         HorizontalLayout layout = (HorizontalLayout) component;
         assertEquals(2, layout.getComponentCount());
-        verifyTextField(layout.getComponent(0), "Period End Date (YYYY)");
-        verifyTextField(layout.getComponent(1), "Number of Baseline Years");
+        verifyTextField(layout.getComponent(0), "Period End Date (YYYY)", "distribution-period-field");
+        verifyTextField(layout.getComponent(1), "Number of Baseline Years", "number-of-baseline-years-field");
     }
 
     private UsageBatch buildUsageBatch() {

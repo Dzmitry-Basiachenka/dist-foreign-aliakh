@@ -291,7 +291,7 @@ public class CreateAclGrantSetWindowTest {
     }
 
     private void verifyGrantSetNameComponent(Component component) {
-        TextField textField = verifyTextField(component, "Grant Set Name");
+        TextField textField = verifyTextField(component, "Grant Set Name", "acl-grant-set-name-field");
         assertEquals(StringUtils.EMPTY, textField.getValue());
     }
 
@@ -302,7 +302,7 @@ public class CreateAclGrantSetWindowTest {
         assertEquals(2, horizontalLayout.getComponentCount());
         assertThat(horizontalLayout.getComponent(0), instanceOf(TextField.class));
         assertThat(horizontalLayout.getComponent(1), instanceOf(ComboBox.class));
-        verifyTextField(horizontalLayout.getComponent(0), "Grant Period Year");
+        verifyTextField(horizontalLayout.getComponent(0), "Grant Period Year", "acl-grant-period-year-field");
         verifyComboBox(horizontalLayout.getComponent(1), "Grant Period Month", true, ImmutableSet.of("06", "12"));
     }
 

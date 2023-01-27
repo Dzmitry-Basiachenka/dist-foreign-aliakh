@@ -253,7 +253,7 @@ public class CreateAclUsageBatchWindowTest {
         assertThat(component, instanceOf(VerticalLayout.class));
         VerticalLayout verticalLayout = (VerticalLayout) component;
         assertEquals(6, verticalLayout.getComponentCount());
-        verifyTextField(verticalLayout.getComponent(0), "Usage Batch Name");
+        verifyTextField(verticalLayout.getComponent(0), "Usage Batch Name", "acl-usage-batch-name-field");
         verifyDistributionPeriodYearAndPeriodMonthComponents(verticalLayout.getComponent(1));
         verifyItemsFilterWidget(verticalLayout.getComponent(2), "Periods");
         verifyComboBox(verticalLayout.getComponent(3), "Copy From", true, buildAclUsageBatch());
@@ -265,7 +265,8 @@ public class CreateAclUsageBatchWindowTest {
         assertThat(component, instanceOf(HorizontalLayout.class));
         HorizontalLayout horizontalLayout = (HorizontalLayout) component;
         assertEquals(2, horizontalLayout.getComponentCount());
-        verifyTextField(horizontalLayout.getComponent(0), "Distribution Period Year");
+        verifyTextField(horizontalLayout.getComponent(0), "Distribution Period Year",
+            "acl-distribution-period-year-field");
         verifyComboBox(horizontalLayout.getComponent(1), "Distribution Period Month", true,
             ImmutableSet.of("06", "12"));
     }

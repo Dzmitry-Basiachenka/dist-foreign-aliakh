@@ -642,30 +642,34 @@ public class UdmEditValueWindowTest {
         assertEquals("Work Information", workPanel.getCaption());
         VerticalLayout workContent = (VerticalLayout) workPanel.getContent();
         assertEquals(5, workContent.getComponentCount());
-        verifyTextFieldLayout(workContent.getComponent(0), "System Title", true, false);
-        verifyTextFieldLayout(workContent.getComponent(1), "Wr Wrk Inst", true, false);
-        verifyTextFieldLayout(workContent.getComponent(2), "System Standard Number", true, false);
-        verifyTextFieldLayout(workContent.getComponent(3), "RH Name", true, false);
-        verifyTextFieldLayout(workContent.getComponent(4), "RH Account #", true, false);
+        verifyTextFieldLayout(workContent.getComponent(0), "System Title", true, false, StringUtils.EMPTY);
+        verifyTextFieldLayout(workContent.getComponent(1), "Wr Wrk Inst", true, false, StringUtils.EMPTY);
+        verifyTextFieldLayout(workContent.getComponent(2), "System Standard Number", true, false, StringUtils.EMPTY);
+        verifyTextFieldLayout(workContent.getComponent(3), "RH Name", true, false, StringUtils.EMPTY);
+        verifyTextFieldLayout(workContent.getComponent(4), "RH Account #", true, false, StringUtils.EMPTY);
         Panel pricePanel = (Panel) row1.getComponent(1);
         assertEquals("Price", pricePanel.getCaption());
         VerticalLayout priceContent = (VerticalLayout) pricePanel.getContent();
         assertEquals(15, priceContent.getComponentCount());
-        verifyTextFieldLayout(priceContent.getComponent(0), "Price", false, true);
+        verifyTextFieldLayout(priceContent.getComponent(0), "Price", false, true, "udm-value-edit-price-field");
         verifyComboBoxLayout(priceContent.getComponent(1), "Currency", true, true, List.of(CURRENCY));
-        verifyTextFieldLayout(priceContent.getComponent(2), "Currency Exchange Rate", true, false);
-        verifyTextFieldLayout(priceContent.getComponent(3), "Currency Exchange Rate Date", true, false);
-        verifyTextFieldLayout(priceContent.getComponent(4), "Price in USD", true, false);
+        verifyTextFieldLayout(priceContent.getComponent(2), "Currency Exchange Rate", true, false, StringUtils.EMPTY);
+        verifyTextFieldLayout(priceContent.getComponent(3), "Currency Exchange Rate Date", true, false,
+            StringUtils.EMPTY);
+        verifyTextFieldLayout(priceContent.getComponent(4), "Price in USD", true, false, StringUtils.EMPTY);
         verifyComboBoxLayout(priceContent.getComponent(5), "Price Type", true, true, List.of(PRICE_TYPE));
         verifyComboBoxLayout(priceContent.getComponent(6), "Price Access Type", true, true, List.of(PRICE_ACCESS_TYPE));
-        verifyTextFieldLayout(priceContent.getComponent(7), "Price Year", false, true);
-        verifyTextFieldLayout(priceContent.getComponent(8), "Price Source", false, true);
-        verifyTextFieldLayout(priceContent.getComponent(9), "Price Comment", false, true);
-        verifyTextFieldLayout(priceContent.getComponent(10), "Price Flag", true, false);
-        verifyTextFieldLayout(priceContent.getComponent(11), "Last Price in USD", true, false);
-        verifyTextFieldLayout(priceContent.getComponent(12), "Last Price Source", true, false);
-        verifyTextFieldLayout(priceContent.getComponent(13), "Last Price Comment", true, false);
-        verifyTextFieldLayout(priceContent.getComponent(14), "Last Price Flag", true, false);
+        verifyTextFieldLayout(priceContent.getComponent(7), "Price Year", false, true,
+            "udm-value-edit-price-year-field");
+        verifyTextFieldLayout(priceContent.getComponent(8), "Price Source", false, true,
+            "udm-value-edit-price-source-field");
+        verifyTextFieldLayout(priceContent.getComponent(9), "Price Comment", false, true,
+            "udm-value-edit-price-comment-field");
+        verifyTextFieldLayout(priceContent.getComponent(10), "Price Flag", true, false, StringUtils.EMPTY);
+        verifyTextFieldLayout(priceContent.getComponent(11), "Last Price in USD", true, false, StringUtils.EMPTY);
+        verifyTextFieldLayout(priceContent.getComponent(12), "Last Price Source", true, false, StringUtils.EMPTY);
+        verifyTextFieldLayout(priceContent.getComponent(13), "Last Price Comment", true, false, StringUtils.EMPTY);
+        verifyTextFieldLayout(priceContent.getComponent(14), "Last Price Flag", true, false, StringUtils.EMPTY);
     }
 
     private void verifyRow2(HorizontalLayout horizontalLayout) {
@@ -675,9 +679,9 @@ public class UdmEditValueWindowTest {
         assertEquals("General", generalPanel.getCaption());
         VerticalLayout generalContent = (VerticalLayout) generalPanel.getContent();
         assertEquals(4, generalContent.getComponentCount());
-        verifyTextFieldLayout(generalContent.getComponent(0), "Value Period", true, false);
-        verifyTextFieldLayout(generalContent.getComponent(1), "Last Value Period", true, false);
-        verifyTextFieldLayout(generalContent.getComponent(2), "Assignee", true, false);
+        verifyTextFieldLayout(generalContent.getComponent(0), "Value Period", true, false, StringUtils.EMPTY);
+        verifyTextFieldLayout(generalContent.getComponent(1), "Last Value Period", true, false, StringUtils.EMPTY);
+        verifyTextFieldLayout(generalContent.getComponent(2), "Assignee", true, false, StringUtils.EMPTY);
         verifyComboBoxLayout(generalContent.getComponent(3), "Value Status", true, false,
             List.of(UdmValueStatusEnum.NEW, UdmValueStatusEnum.RSCHD_IN_THE_PREV_PERIOD,
                 UdmValueStatusEnum.PRELIM_RESEARCH_COMPLETE, UdmValueStatusEnum.NEEDS_FURTHER_REVIEW,
@@ -687,40 +691,43 @@ public class UdmEditValueWindowTest {
         VerticalLayout pubTypeContent = (VerticalLayout) pubTypePanel.getContent();
         assertEquals(2, pubTypeContent.getComponentCount());
         verifyComboBoxLayout(pubTypeContent.getComponent(0), "Pub Type", true, true, List.of(PUBLICATION_TYPE));
-        verifyTextFieldLayout(pubTypeContent.getComponent(1), "Last Pub Type", true, false);
+        verifyTextFieldLayout(pubTypeContent.getComponent(1), "Last Pub Type", true, false, StringUtils.EMPTY);
         Panel contentPanel = (Panel) row2.getComponent(2);
         assertEquals("Content", contentPanel.getCaption());
         VerticalLayout contentContent = (VerticalLayout) contentPanel.getContent();
         assertEquals(10, contentContent.getComponentCount());
-        verifyTextFieldLayout(contentContent.getComponent(0), "Content", false, true);
-        verifyTextFieldLayout(contentContent.getComponent(1), "Content Source", false, true);
-        verifyTextFieldLayout(contentContent.getComponent(2), "Content Comment", false, true);
-        verifyTextFieldLayout(contentContent.getComponent(3), "Content Flag", true, false);
-        verifyTextFieldLayout(contentContent.getComponent(4), "Last Content", true, false);
-        verifyTextFieldLayout(contentContent.getComponent(5), "Last Content Source", true, false);
-        verifyTextFieldLayout(contentContent.getComponent(6), "Last Content Comment", true, false);
-        verifyTextFieldLayout(contentContent.getComponent(7), "Last Content Flag", true, false);
-        verifyTextFieldLayout(contentContent.getComponent(8), "Content Unit Price", true, false);
-        verifyTextFieldLayout(contentContent.getComponent(9), "CUP Flag", true, false);
+        verifyTextFieldLayout(contentContent.getComponent(0), "Content", false, true, "udm-value-edit-content-field");
+        verifyTextFieldLayout(contentContent.getComponent(1), "Content Source", false, true,
+            "udm-value-edit-content-source-field");
+        verifyTextFieldLayout(contentContent.getComponent(2), "Content Comment", false, true,
+            "udm-value-edit-content-comment-field");
+        verifyTextFieldLayout(contentContent.getComponent(3), "Content Flag", true, false, StringUtils.EMPTY);
+        verifyTextFieldLayout(contentContent.getComponent(4), "Last Content", true, false, StringUtils.EMPTY);
+        verifyTextFieldLayout(contentContent.getComponent(5), "Last Content Source", true, false, StringUtils.EMPTY);
+        verifyTextFieldLayout(contentContent.getComponent(6), "Last Content Comment", true, false, StringUtils.EMPTY);
+        verifyTextFieldLayout(contentContent.getComponent(7), "Last Content Flag", true, false, StringUtils.EMPTY);
+        verifyTextFieldLayout(contentContent.getComponent(8), "Content Unit Price", true, false, StringUtils.EMPTY);
+        verifyTextFieldLayout(contentContent.getComponent(9), "CUP Flag", true, false, StringUtils.EMPTY);
         Panel commentPanel = (Panel) row2.getComponent(3);
         assertEquals("Comment", commentPanel.getCaption());
         VerticalLayout commentContent = (VerticalLayout) commentPanel.getContent();
         assertEquals(1, commentContent.getComponentCount());
-        verifyTextFieldLayout(commentContent.getComponent(0), "Comment", false, true);
+        verifyTextFieldLayout(commentContent.getComponent(0), "Comment", false, true, "udm-value-edit-comment-field");
         Panel updatePanel = (Panel) row2.getComponent(4);
         assertNull(updatePanel.getCaption());
         VerticalLayout updateContent = (VerticalLayout) updatePanel.getContent();
         assertEquals(2, updateContent.getComponentCount());
-        verifyTextFieldLayout(updateContent.getComponent(0), "Updated By", true, false);
-        verifyTextFieldLayout(updateContent.getComponent(1), "Updated Date", true, false);
+        verifyTextFieldLayout(updateContent.getComponent(0), "Updated By", true, false, StringUtils.EMPTY);
+        verifyTextFieldLayout(updateContent.getComponent(1), "Updated Date", true, false, StringUtils.EMPTY);
     }
 
-    private void verifyTextFieldLayout(Component component, String caption, boolean isReadOnly, boolean isValidated) {
+    private void verifyTextFieldLayout(Component component, String caption, boolean isReadOnly, boolean isValidated,
+                                       String styleName) {
         assertThat(component, instanceOf(HorizontalLayout.class));
         HorizontalLayout layout = (HorizontalLayout) component;
         assertEquals(2, layout.getComponentCount());
         verifyLabel(layout.getComponent(0), caption, ContentMode.TEXT, 175);
-        TextField textField = verifyTextField(layout.getComponent(1), isValidated ? caption : null);
+        TextField textField = verifyTextField(layout.getComponent(1), isValidated ? caption : null, styleName);
         assertEquals(isReadOnly, textField.isReadOnly());
     }
 

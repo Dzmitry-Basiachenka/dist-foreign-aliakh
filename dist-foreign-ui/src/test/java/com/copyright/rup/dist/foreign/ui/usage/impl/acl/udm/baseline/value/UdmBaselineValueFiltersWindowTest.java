@@ -215,34 +215,41 @@ public class UdmBaselineValueFiltersWindowTest {
         assertThat(component, instanceOf(VerticalLayout.class));
         VerticalLayout verticalLayout = (VerticalLayout) component;
         assertEquals(8, verticalLayout.getComponentCount());
-        verifyLayoutWithOperatorComponent(verticalLayout.getComponent(0), "Wr Wrk Inst From", "Wr Wrk Inst To");
-        verifyLayoutWithOperatorComponent(verticalLayout.getComponent(1), "System Title");
+        verifyLayoutWithOperatorComponent(verticalLayout.getComponent(0), "Wr Wrk Inst From", "Wr Wrk Inst To",
+            "udm-baseline-value-wr-wrk-inst-from-filter", "udm-baseline-value-wr-wrk-inst-to-filter");
+        verifyLayoutWithOperatorComponent(verticalLayout.getComponent(1), "System Title",
+            "udm-baseline-value-system-title-filter");
         verifyComboBoxLayout(verticalLayout.getComponent(2), "Price Flag", "Content Flag", "CUP Flag");
         assertComboBoxItems("priceFlagComboBox", "Price Flag", true, FLAG_ITEMS);
         assertComboBoxItems("contentFlagComboBox", "Content Flag", true, FLAG_ITEMS);
         assertComboBoxItems("contentUnitPriceFlagComboBox", "CUP Flag", true, FLAG_ITEMS);
-        verifyLayoutWithOperatorComponent(verticalLayout.getComponent(3), "Price From", "Price To");
-        verifyLayoutWithOperatorComponent(verticalLayout.getComponent(4), "Content From", "Content To");
+        verifyLayoutWithOperatorComponent(verticalLayout.getComponent(3), "Price From", "Price To",
+            "udm-baseline-value-price-from-filter", "udm-baseline-value-price-to-filter");
+        verifyLayoutWithOperatorComponent(verticalLayout.getComponent(4), "Content From", "Content To",
+            "udm-baseline-value-content-from-filter", "udm-baseline-value-content-to-filter");
         verifyLayoutWithOperatorComponent(verticalLayout.getComponent(5), "Content Unit Price From",
-            "Content Unit Price To");
-        verifyLayoutWithOperatorComponent(verticalLayout.getComponent(6), "Comment");
+            "Content Unit Price To", "udm-baseline-value-content-unit-price-from-filter",
+            "udm-baseline-value-content-unit-price-to-filter");
+        verifyLayoutWithOperatorComponent(verticalLayout.getComponent(6), "Comment",
+            "udm-baseline-value-comment-filter");
     }
 
-    private void verifyLayoutWithOperatorComponent(Component component, String caption) {
+    private void verifyLayoutWithOperatorComponent(Component component, String caption, String styleName) {
         assertThat(component, instanceOf(HorizontalLayout.class));
         HorizontalLayout layout = (HorizontalLayout) component;
         assertEquals(2, layout.getComponentCount());
-        verifyTextField(layout.getComponent(0), caption);
+        verifyTextField(layout.getComponent(0), caption, styleName);
         assertThat(layout.getComponent(1), instanceOf(ComboBox.class));
         assertEquals(CAPTION_OPERATOR, layout.getComponent(1).getCaption());
     }
 
-    private void verifyLayoutWithOperatorComponent(Component component, String captionFrom, String captionTo) {
+    private void verifyLayoutWithOperatorComponent(Component component, String captionFrom, String captionTo,
+                                                   String styleNameFromField, String styleNameToField) {
         assertThat(component, instanceOf(HorizontalLayout.class));
         HorizontalLayout layout = (HorizontalLayout) component;
         assertEquals(3, layout.getComponentCount());
-        verifyTextField(layout.getComponent(0), captionFrom);
-        verifyTextField(layout.getComponent(1), captionTo);
+        verifyTextField(layout.getComponent(0), captionFrom, styleNameFromField);
+        verifyTextField(layout.getComponent(1), captionTo, styleNameToField);
         assertThat(layout.getComponent(2), instanceOf(ComboBox.class));
         assertEquals(CAPTION_OPERATOR, layout.getComponent(2).getCaption());
     }
