@@ -179,6 +179,7 @@ public class FasExcludePayeeWidget extends Window implements IFasExcludePayeeWid
             (accountNumbers, reason) -> controller.redesignateDetails(accountNumbers, reason));
         Button clearButton = Buttons.createButton(ForeignUi.getMessage("button.clear"));
         clearButton.addClickListener(event -> payeesGrid.getSelectionModel().deselectAll());
+        VaadinUtils.setButtonsAutoDisabled(excludeDetails , redesignateDetails);
         return new HorizontalLayout(excludeDetails, redesignateDetails, clearButton, Buttons.createCloseButton(this));
     }
 

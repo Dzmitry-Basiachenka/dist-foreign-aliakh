@@ -175,6 +175,7 @@ public class AaclExcludePayeeWidget extends Window implements IAaclExcludePayeeW
     private HorizontalLayout createButtonsLayout() {
         Button excludeDetails = Buttons.createButton(ForeignUi.getMessage("button.exclude_details"));
         excludeDetails.addClickListener(event -> onExcludeDetailsClick());
+        VaadinUtils.setButtonsAutoDisabled(excludeDetails);
         Button clearButton = Buttons.createButton(ForeignUi.getMessage("button.clear"));
         clearButton.addClickListener(event -> payeesGrid.getSelectionModel().deselectAll());
         return new HorizontalLayout(excludeDetails, clearButton, Buttons.createCloseButton(this));

@@ -127,7 +127,7 @@ public class AaclExcludePayeeWidgetTest {
         selectionModel.deselectAll();
         expectLastCall().once();
         replay(clickEvent, payeesGrid);
-        buttonClick(1, clickEvent);
+        buttonClick(1, clickEvent, 1);
         verify(clickEvent, payeesGrid);
     }
 
@@ -150,7 +150,7 @@ public class AaclExcludePayeeWidgetTest {
         controller.excludeDetails(anyObject(), eq(REASON));
         expectLastCall().once();
         replay(clickEvent, controller, payeesGrid, Windows.class);
-        buttonClick(0, clickEvent);
+        buttonClick(0, clickEvent, 2);
         actionDialogListenerCapture.getValue().onActionConfirmed(REASON);
         verify(clickEvent, controller, payeesGrid, Windows.class);
     }
@@ -172,17 +172,17 @@ public class AaclExcludePayeeWidgetTest {
             "<ul><li><i><b>120 (MU - Business Management)<br><li>171 (EXGP - Arts & Humanities)</b></i></ul>");
         expectLastCall().once();
         replay(clickEvent, controller, payeesGrid, Windows.class);
-        buttonClick(0, clickEvent);
+        buttonClick(0, clickEvent, 2);
         verify(clickEvent, controller, payeesGrid, Windows.class);
     }
 
-    private void buttonClick(int buttonIndex, Button.ClickEvent clickEvent) {
+    private void buttonClick(int buttonIndex, Button.ClickEvent clickEvent, int listenersCount) {
         HorizontalSplitPanel splitPanel = (HorizontalSplitPanel) widget.getContent();
         VerticalLayout content = (VerticalLayout) splitPanel.getSecondComponent();
         HorizontalLayout horizontalLayout = (HorizontalLayout) content.getComponent(2);
         Button button = (Button) horizontalLayout.getComponent(buttonIndex);
         Collection<?> listeners = button.getListeners(Button.ClickEvent.class);
-        assertEquals(1, listeners.size());
+        assertEquals(listenersCount, listeners.size());
         Button.ClickListener clickListener = (Button.ClickListener) listeners.iterator().next();
         clickListener.buttonClick(clickEvent);
     }
