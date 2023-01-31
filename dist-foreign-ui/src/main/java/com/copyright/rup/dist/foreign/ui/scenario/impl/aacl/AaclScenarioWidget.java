@@ -97,6 +97,7 @@ public class AaclScenarioWidget extends CommonScenarioWidget implements IAaclSce
         exportScenarioFileDownloader.extend(exportButton);
         excludeByPayeeButton = Buttons.createButton(ForeignUi.getMessage("button.exclude_by_payee"));
         excludeByPayeeButton.addClickListener(event -> scenarioController.onExcludeByPayeeClicked());
+        VaadinUtils.setButtonsAutoDisabled(excludeByPayeeButton);
         HorizontalLayout buttons = new HorizontalLayout(excludeByPayeeButton, exportDetailsButton, exportButton,
             Buttons.createCloseButton(this));
         VaadinUtils.addComponentStyle(buttons, "scenario-buttons-layout");

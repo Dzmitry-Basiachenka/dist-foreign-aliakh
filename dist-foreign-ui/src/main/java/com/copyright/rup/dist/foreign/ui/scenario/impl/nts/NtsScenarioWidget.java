@@ -84,6 +84,7 @@ public class NtsScenarioWidget extends CommonScenarioWidget implements INtsScena
     protected HorizontalLayout initButtons() {
         excludeRhButton = Buttons.createButton(ForeignUi.getMessage("button.exclude_by_rightsholder"));
         excludeRhButton.addClickListener(event -> scenarioController.onExcludeRhButtonClicked());
+        VaadinUtils.setButtonsAutoDisabled(excludeRhButton);
         exportDetailsButton = Buttons.createButton(ForeignUi.getMessage("button.export_details"));
         OnDemandFileDownloader exportDetailsFileDownloader =
             new OnDemandFileDownloader(scenarioController.getExportScenarioUsagesStreamSource().getSource());

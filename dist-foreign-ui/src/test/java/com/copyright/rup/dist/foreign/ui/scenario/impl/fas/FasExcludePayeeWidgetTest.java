@@ -145,7 +145,7 @@ public class FasExcludePayeeWidgetTest {
         controller.excludeDetails(anyObject(), eq(REASON));
         expectLastCall().once();
         replay(clickEvent, controller, payeesGrid, Windows.class);
-        buttonClick(0, clickEvent);
+        buttonClick(0, clickEvent, 2);
         actionDialogListenerCapture.getValue().onActionConfirmed(REASON);
         verify(clickEvent, controller, payeesGrid, Windows.class);
     }
@@ -161,7 +161,7 @@ public class FasExcludePayeeWidgetTest {
             "The following payee(s) have different participation statuses: <i><b>[1000009094]</b></i>");
         expectLastCall().once();
         replay(clickEvent, controller, payeesGrid, Windows.class);
-        buttonClick(0, clickEvent);
+        buttonClick(0, clickEvent, 2);
         verify(clickEvent, controller, payeesGrid, Windows.class);
     }
 
@@ -173,7 +173,7 @@ public class FasExcludePayeeWidgetTest {
         expectLastCall().once();
         expect(payeesGrid.getSelectedItems()).andReturn(Set.of()).once();
         replay(clickEvent, controller, payeesGrid, Windows.class);
-        buttonClick(0, clickEvent);
+        buttonClick(0, clickEvent, 2);
         verify(clickEvent, controller, payeesGrid, Windows.class);
     }
 
@@ -191,7 +191,7 @@ public class FasExcludePayeeWidgetTest {
         controller.redesignateDetails(anyObject(), eq(REASON));
         expectLastCall().once();
         replay(clickEvent, controller, payeesGrid, Windows.class);
-        buttonClick(1, clickEvent);
+        buttonClick(1, clickEvent, 2);
         actionDialogListenerCapture.getValue().onActionConfirmed(REASON);
         verify(clickEvent, controller, payeesGrid, Windows.class);
     }
@@ -207,7 +207,7 @@ public class FasExcludePayeeWidgetTest {
             "The following payee(s) have different participation statuses: <i><b>[1000009094]</b></i>");
         expectLastCall().once();
         replay(clickEvent, controller, payeesGrid, Windows.class);
-        buttonClick(1, clickEvent);
+        buttonClick(1, clickEvent, 2);
         verify(clickEvent, controller, payeesGrid, Windows.class);
     }
 
@@ -219,7 +219,7 @@ public class FasExcludePayeeWidgetTest {
         expectLastCall().once();
         expect(payeesGrid.getSelectedItems()).andReturn(Set.of()).once();
         replay(clickEvent, controller, payeesGrid, Windows.class);
-        buttonClick(1, clickEvent);
+        buttonClick(1, clickEvent, 2);
         verify(clickEvent, controller, payeesGrid, Windows.class);
     }
 
@@ -230,7 +230,7 @@ public class FasExcludePayeeWidgetTest {
         selectionModel.deselectAll();
         expectLastCall().once();
         replay(clickEvent, payeesGrid);
-        buttonClick(2, clickEvent);
+        buttonClick(2, clickEvent, 1);
         verify(clickEvent, payeesGrid);
     }
 
@@ -247,13 +247,13 @@ public class FasExcludePayeeWidgetTest {
         return payeeTotalHolders;
     }
 
-    private void buttonClick(int buttonIndex, Button.ClickEvent clickEvent) {
+    private void buttonClick(int buttonIndex, Button.ClickEvent clickEvent, int listenersCount) {
         HorizontalSplitPanel splitPanel = (HorizontalSplitPanel) widget.getContent();
         VerticalLayout content = (VerticalLayout) splitPanel.getSecondComponent();
         HorizontalLayout horizontalLayout = (HorizontalLayout) content.getComponent(2);
         Button button = (Button) horizontalLayout.getComponent(buttonIndex);
         Collection<?> listeners = button.getListeners(Button.ClickEvent.class);
-        assertEquals(1, listeners.size());
+        assertEquals(listenersCount, listeners.size());
         Button.ClickListener clickListener = (Button.ClickListener) listeners.iterator().next();
         clickListener.buttonClick(clickEvent);
     }

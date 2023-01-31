@@ -117,6 +117,7 @@ public class NtsExcludeRightsholderWidget extends Window implements INtsExcludeR
         Button excludeDetails = Buttons.createButton(ForeignUi.getMessage("button.exclude_details"));
         addClickListener(excludeDetails,
             (accountNumbers, reason) -> controller.excludeDetails(accountNumbers, reason));
+        VaadinUtils.setButtonsAutoDisabled(excludeDetails);
         Button clearButton = Buttons.createButton(ForeignUi.getMessage("button.clear"));
         clearButton.addClickListener(event -> rightsholderPayeePairGrid.getSelectionModel().deselectAll());
         return new HorizontalLayout(excludeDetails, clearButton, Buttons.createCloseButton(this));
