@@ -5,33 +5,25 @@
         {
           "key": "ca9763ab-1ce7-486e-8938-272f6c3392a7",
           "messages": [
-            {
-              "string": [
-                "Required field not provided - CCC Event Identifier",
-                "Required field not provided - Channel",
-                "Required field not provided - Buyer Name",
-                "Required field not provided - Licensee Name",
-                "Required field not provided - Licensee Fee Amount",
-                "Invalid Product value provided",
-                "Invalid Channel value provided"
-              ]
-            }
+            "Required field not provided - CCC Event Identifier",
+            "Required field not provided - Channel",
+            "Required field not provided - Buyer Name",
+            "Required field not provided - Licensee Name",
+            "Required field not provided - Licensee Fee Amount",
+            "Invalid Product value provided",
+            "Invalid Channel value provided"
           ]
         },
         {
           "key": "bbdc5eb3-7396-47b8-bc18-5ec6ad0c4ef1",
           "messages": [
-            {
-              "string": [
-                "Required field not provided - CCC Event Identifier",
-                "Required field not provided - Channel",
-                "Required field not provided - Buyer Name",
-                "Required field not provided - Licensee Name",
-                "Required field not provided - Licensee Fee Amount",
-                "Invalid Product value provided",
-                "Invalid Channel value provided"
-              ]
-            }
+            "Required field not provided - CCC Event Identifier",
+            "Required field not provided - Channel",
+            "Required field not provided - Buyer Name",
+            "Required field not provided - Licensee Name",
+            "Required field not provided - Licensee Fee Amount",
+            "Invalid Product value provided",
+            "Invalid Channel value provided"
           ]
         }
       ]
