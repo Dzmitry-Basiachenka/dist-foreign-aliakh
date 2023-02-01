@@ -126,7 +126,7 @@ public class CrmService implements ICrmService {
                 if (CollectionUtils.isNotEmpty(errorMessageNodes)) {
                     for (JsonNode errorMessageNode : errorMessageNodes) {
                         JsonNode key = errorMessageNode.findValue("key");
-                        List<JsonNode> errorMessages = errorMessageNode.findValues("string");
+                        List<JsonNode> errorMessages = errorMessageNode.findValues("messages");
                         crmResult.addInvalidUsageId(key.asText());
                         LOGGER.warn("Send usages to CRM. Failed. DetailId={}, Request={}, ErrorMessage={}", key,
                             requestMap.get(key.asText()), errorMessages);

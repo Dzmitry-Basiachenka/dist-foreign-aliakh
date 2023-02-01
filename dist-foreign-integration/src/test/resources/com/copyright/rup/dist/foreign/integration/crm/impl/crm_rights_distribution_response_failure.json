@@ -4,17 +4,13 @@
       "error": {
         "key": "2e9747c7-f3e8-4c3c-94cf-4f9ba3d10109",
         "messages": [
-          {
-            "string": [
-              "Required field not provided - CCC Event Identifier",
-              "Required field not provided - Channel",
-              "Required field not provided - Buyer Name",
-              "Required field not provided - Licensee Name",
-              "Required field not provided - Licensee Fee Amount",
-              "Invalid Product value provided",
-              "Invalid Channel value provided"
-            ]
-          }
+          "Required field not provided - CCC Event Identifier",
+          "Required field not provided - Channel",
+          "Required field not provided - Buyer Name",
+          "Required field not provided - Licensee Name",
+          "Required field not provided - Licensee Fee Amount",
+          "Invalid Product value provided",
+          "Invalid Channel value provided"
         ]
       }
     }
