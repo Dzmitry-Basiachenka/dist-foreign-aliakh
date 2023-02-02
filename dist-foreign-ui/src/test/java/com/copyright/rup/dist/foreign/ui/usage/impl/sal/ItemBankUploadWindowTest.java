@@ -278,7 +278,7 @@ public class ItemBankUploadWindowTest {
         assertEquals(2, layout.getComponentCount());
         Button loadButton = verifyButton(layout.getComponent(0), "Upload");
         verifyButton(layout.getComponent(1), "Close");
-        assertEquals(1, loadButton.getListeners(ClickEvent.class).size());
+        assertEquals(2, loadButton.getListeners(ClickEvent.class).size());
         verifyLoadClickListener(loadButton, List.of(
             Whitebox.getInternalState(window, ITEM_BANK_NAME_FIELD),
             Whitebox.getInternalState(window, "uploadField"),

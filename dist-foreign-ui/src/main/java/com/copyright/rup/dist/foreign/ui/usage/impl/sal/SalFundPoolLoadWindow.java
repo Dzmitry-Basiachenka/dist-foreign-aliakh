@@ -145,6 +145,7 @@ class SalFundPoolLoadWindow extends Window {
         Button closeButton = Buttons.createCloseButton(this);
         Button uploadButton = Buttons.createButton(ForeignUi.getMessage("button.upload"));
         uploadButton.addClickListener(event -> onUploadClicked());
+        VaadinUtils.setButtonsAutoDisabled(uploadButton);
         HorizontalLayout horizontalLayout = new HorizontalLayout();
         horizontalLayout.addComponents(uploadButton, closeButton);
         return horizontalLayout;
