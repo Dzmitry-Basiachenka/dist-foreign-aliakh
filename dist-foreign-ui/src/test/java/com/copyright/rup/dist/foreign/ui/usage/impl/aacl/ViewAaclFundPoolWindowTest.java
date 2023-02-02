@@ -109,7 +109,7 @@ public class ViewAaclFundPoolWindowTest {
         ViewAaclFundPoolDetailsWindow viewDetailsWindowMock = createMock(ViewAaclFundPoolDetailsWindow.class);
         Grid<FundPool> grid = createMock(Grid.class);
         Whitebox.setInternalState(viewAaclFundPoolWindow, "grid", grid);
-        Button.ClickListener listener = getButtonClickListener(0);
+        Button.ClickListener listener = getButtonClickListener(0, 2);
         expect(grid.getSelectedItems()).andReturn(Set.of(fundPool)).once();
         expectNew(ViewAaclFundPoolDetailsWindow.class, fundPool, fundPoolDetails).andReturn(viewDetailsWindowMock)
             .once();
@@ -127,7 +127,7 @@ public class ViewAaclFundPoolWindowTest {
         Window confirmWindowMock = createMock(Window.class);
         Grid<FundPool> grid = createMock(Grid.class);
         Whitebox.setInternalState(viewAaclFundPoolWindow, "grid", grid);
-        Button.ClickListener listener = getButtonClickListener(1);
+        Button.ClickListener listener = getButtonClickListener(1, 1);
         expect(grid.getSelectedItems()).andReturn(Set.of(fundPool)).once();
         expect(controller.getScenarioNameAssociatedWithFundPool(FUND_POOL_ID)).andReturn(null).once();
         expect(
@@ -145,7 +145,7 @@ public class ViewAaclFundPoolWindowTest {
         mockStatic(Windows.class);
         Grid<FundPool> grid = createMock(Grid.class);
         Whitebox.setInternalState(viewAaclFundPoolWindow, "grid", grid);
-        Button.ClickListener listener = getButtonClickListener(1);
+        Button.ClickListener listener = getButtonClickListener(1, 1);
         expect(grid.getSelectedItems()).andReturn(Set.of(fundPool)).once();
         expect(controller.getScenarioNameAssociatedWithFundPool(FUND_POOL_ID)).andReturn("Scenario 1").once();
         Windows.showNotificationWindow(
@@ -194,9 +194,9 @@ public class ViewAaclFundPoolWindowTest {
         return (Button) buttonsLayout.getComponent(buttonIndex);
     }
 
-    private Button.ClickListener getButtonClickListener(int buttonIndex) {
+    private Button.ClickListener getButtonClickListener(int buttonIndex, int listenersCount) {
         Collection<?> listeners = getButton(buttonIndex).getListeners(Button.ClickEvent.class);
-        assertEquals(1, CollectionUtils.size(listeners));
+        assertEquals(listenersCount, CollectionUtils.size(listeners));
         return (Button.ClickListener) listeners.iterator().next();
     }
 
