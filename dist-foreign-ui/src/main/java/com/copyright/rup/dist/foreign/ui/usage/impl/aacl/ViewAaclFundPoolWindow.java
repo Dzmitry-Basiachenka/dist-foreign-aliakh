@@ -110,6 +110,7 @@ public class ViewAaclFundPoolWindow extends Window implements SearchWidget.ISear
                 controller.getFundPoolDetails(selectedFundPool.getId())));
         });
         viewButton.setEnabled(false);
+        VaadinUtils.setButtonsAutoDisabled(viewButton);
         HorizontalLayout layout = new HorizontalLayout(viewButton, deleteButton, closeButton);
         layout.setSpacing(true);
         VaadinUtils.addComponentStyle(layout, "view-aacl-fund-pool-buttons");
