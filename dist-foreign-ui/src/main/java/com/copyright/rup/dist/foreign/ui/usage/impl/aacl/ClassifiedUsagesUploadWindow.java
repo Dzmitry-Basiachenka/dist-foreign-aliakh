@@ -117,6 +117,7 @@ public class ClassifiedUsagesUploadWindow extends Window {
         Button uploadButton = Buttons.createButton(ForeignUi.getMessage("button.upload"));
         uploadButton.setWidth(73, Unit.PIXELS);
         uploadButton.addClickListener(event -> onUploadClicked());
+        VaadinUtils.setButtonsAutoDisabled(uploadButton);
         HorizontalLayout horizontalLayout = new HorizontalLayout();
         horizontalLayout.addComponents(uploadButton, closeButton);
         return horizontalLayout;

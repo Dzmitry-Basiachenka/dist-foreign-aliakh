@@ -282,7 +282,7 @@ public class AclciUsageBatchUploadWindowTest {
         assertEquals(2, layout.getComponentCount());
         Button loadButton = verifyButton(layout.getComponent(0), "Upload", true);
         verifyButton(layout.getComponent(1), "Close", true);
-        assertEquals(1, loadButton.getListeners(Button.ClickEvent.class).size());
+        assertEquals(2, loadButton.getListeners(Button.ClickEvent.class).size());
         verifyLoadClickListener(loadButton, List.of(
             Whitebox.getInternalState(window, USAGE_BATCH_NAME_FIELD),
             Whitebox.getInternalState(window, UPLOAD_FIELD),

@@ -329,7 +329,7 @@ public class AclciFundPoolLoadWindowTest {
         assertEquals(2, layout.getComponentCount());
         Button loadButton = verifyButton(layout.getComponent(0), "Upload");
         verifyButton(layout.getComponent(1), "Close");
-        assertEquals(1, loadButton.getListeners(Button.ClickEvent.class).size());
+        assertEquals(2, loadButton.getListeners(Button.ClickEvent.class).size());
         verifyLoadClickListener(loadButton, Lists.newArrayList(
             Whitebox.getInternalState(window, FUND_POOL_NAME_FIELD),
             Whitebox.getInternalState(window, COVERAGE_YEARS_FIELD),
