@@ -85,7 +85,7 @@ public class SalUpdateRighstholderWindowTest {
         assertEquals("Update Rightsholder", window.getCaption());
         assertEquals(440, window.getWidth(), 0);
         assertEquals(Sizeable.Unit.PIXELS, window.getWidthUnits());
-        assertEquals(190, window.getHeight(), 0);
+        assertEquals(165, window.getHeight(), 0);
         assertEquals(Sizeable.Unit.PIXELS, window.getHeightUnits());
         Component content = window.getContent();
         assertThat(content, instanceOf(VerticalLayout.class));
