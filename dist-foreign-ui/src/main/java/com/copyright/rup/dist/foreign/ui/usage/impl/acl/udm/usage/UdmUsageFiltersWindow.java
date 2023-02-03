@@ -656,6 +656,7 @@ public class UdmUsageFiltersWindow extends CommonAclFiltersWindow {
                         quantityFromField, quantityToField));
             }
         });
+        VaadinUtils.setButtonsAutoDisabled(saveButton);
         Button clearButton = Buttons.createButton(ForeignUi.getMessage("button.clear"));
         clearButton.addClickListener(event -> clearFilters());
         return new HorizontalLayout(saveButton, clearButton, closeButton);

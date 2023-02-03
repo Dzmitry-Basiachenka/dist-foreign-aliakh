@@ -156,6 +156,7 @@ class SalUpdateRighstholderWindow extends Window {
                 Windows.showValidationErrorWindow(Lists.newArrayList(rhAccountNumberField, rhNameField));
             }
         });
+        VaadinUtils.setButtonsAutoDisabled(saveButton);
         HorizontalLayout horizontalLayout = new HorizontalLayout();
         horizontalLayout.addComponents(saveButton, closeButton);
         return horizontalLayout;

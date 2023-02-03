@@ -120,6 +120,7 @@ public class AclPublicationTypeWeightsWindow extends Window {
             fireParametersSaveEvent(new ParametersSaveEvent<>(this, currentValues));
             close();
         });
+        VaadinUtils.setButtonsAutoDisabled(saveButton);
         saveButton.setVisible(isEditable);
         return new HorizontalLayout(addButton, saveButton, Buttons.createCloseButton(this));
     }

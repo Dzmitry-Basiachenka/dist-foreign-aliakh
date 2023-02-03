@@ -302,6 +302,7 @@ public class UdmBaselineFiltersWindow extends CommonAclFiltersWindow {
                     usageDetailIdField, surveyCountryField, annualizedCopiesFrom, annualizedCopiesTo));
             }
         });
+        VaadinUtils.setButtonsAutoDisabled(saveButton);
         Button clearButton = Buttons.createButton(ForeignUi.getMessage("button.clear"));
         clearButton.addClickListener(event -> clearFields());
         return new HorizontalLayout(saveButton, clearButton, closeButton);

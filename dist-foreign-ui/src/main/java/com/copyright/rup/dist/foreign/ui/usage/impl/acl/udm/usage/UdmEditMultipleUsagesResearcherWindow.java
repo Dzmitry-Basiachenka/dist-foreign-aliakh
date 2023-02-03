@@ -173,6 +173,7 @@ public class UdmEditMultipleUsagesResearcherWindow extends Window {
                 Windows.showValidationErrorWindow(List.of(statusComboBox, wrWrkInstField, commentField));
             }
         });
+        VaadinUtils.setButtonsAutoDisabled(saveButton);
         Button discardButton = Buttons.createButton(ForeignUi.getMessage("button.discard"));
         discardButton.addClickListener(event -> {
             binder.readBean(null);

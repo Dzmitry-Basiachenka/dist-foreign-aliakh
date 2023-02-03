@@ -362,6 +362,7 @@ public class UdmEditMultipleUsagesWindow extends Window {
                 showValidationErrorWindow();
             }
         });
+        VaadinUtils.setButtonsAutoDisabled(saveButton);
         Button discardButton = Buttons.createButton(ForeignUi.getMessage("button.discard"));
         discardButton.addClickListener(event -> {
             binder.readBean(null);

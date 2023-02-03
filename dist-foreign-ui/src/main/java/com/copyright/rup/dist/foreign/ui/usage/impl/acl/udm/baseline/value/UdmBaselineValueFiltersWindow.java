@@ -324,6 +324,7 @@ public class UdmBaselineValueFiltersWindow extends CommonAclFiltersWindow {
                         contentUnitPriceToField, commentField));
             }
         });
+        VaadinUtils.setButtonsAutoDisabled(saveButton);
         Button clearButton = Buttons.createButton(ForeignUi.getMessage("button.clear"));
         clearButton.addClickListener(event -> filterBinder.readBean(new UdmBaselineValueFilter()));
         return new HorizontalLayout(saveButton, clearButton, closeButton);

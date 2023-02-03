@@ -84,6 +84,7 @@ public class AggregateLicenseeClassMappingWindow extends CommonScenarioParameter
             fireParametersSaveEvent(new ParametersSaveEvent<>(this, currentValues));
             close();
         });
+        VaadinUtils.setButtonsAutoDisabled(saveButton);
         HorizontalLayout layout = new HorizontalLayout(saveButton, Buttons.createCloseButton(this), placeholderLabel,
             defaultButton);
         layout.setSpacing(true);

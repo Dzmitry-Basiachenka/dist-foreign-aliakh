@@ -335,6 +335,7 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
                     priceCommentField, contentField, contentSourceField, contentCommentField, commentField));
             }
         });
+        VaadinUtils.setButtonsAutoDisabled(saveButton);
         Button discardButton = Buttons.createButton(ForeignUi.getMessage("button.discard"));
         discardButton.addClickListener(event -> {
             binder.readBean(udmValue);

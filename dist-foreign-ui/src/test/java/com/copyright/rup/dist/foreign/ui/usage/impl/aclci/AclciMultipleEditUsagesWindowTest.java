@@ -136,7 +136,7 @@ public class AclciMultipleEditUsagesWindowTest {
         HorizontalLayout buttonsLayout = (HorizontalLayout) contentLayout.getComponent(3);
         Button saveButton = (Button) buttonsLayout.getComponent(0);
         Collection<?> listeners = saveButton.getListeners(Button.ClickEvent.class);
-        assertEquals(1, listeners.size());
+        assertEquals(2, listeners.size());
         Button.ClickListener clickListener = (Button.ClickListener) listeners.iterator().next();
         clickListener.buttonClick(clickEvent);
         verify(clickEvent, controller, Windows.class);
@@ -230,7 +230,7 @@ public class AclciMultipleEditUsagesWindowTest {
     private void verifyButtonsLayout(Component component) {
         UiTestHelper.verifyButtonsLayout(component, "Save", "Close");
         Button saveButton = (Button) ((HorizontalLayout) component).getComponent(0);
-        assertEquals(1, saveButton.getListeners(Button.ClickEvent.class).size());
+        assertEquals(2, saveButton.getListeners(Button.ClickEvent.class).size());
         verifyLoadClickListener(saveButton, Lists.newArrayList(
             Whitebox.getInternalState(window, RH_ACCOUNT_NUMBER_FIELD_NAME),
             Whitebox.getInternalState(window, "rhNameField"),
@@ -279,7 +279,7 @@ public class AclciMultipleEditUsagesWindowTest {
         HorizontalLayout buttonsLayout = (HorizontalLayout) contentLayout.getComponent(3);
         Button saveButton = (Button) buttonsLayout.getComponent(0);
         Collection<?> listeners = saveButton.getListeners(Button.ClickEvent.class);
-        assertEquals(1, listeners.size());
+        assertEquals(2, listeners.size());
         Button.ClickListener clickListener = (Button.ClickListener) listeners.iterator().next();
         clickListener.buttonClick(clickEvent);
         actionDialogListenerCapture.getValue().onActionConfirmed("Reason");

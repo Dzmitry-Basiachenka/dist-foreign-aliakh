@@ -290,6 +290,7 @@ public class AclGrantDetailFiltersWindow extends CommonAclFiltersWindow {
                     rhAccountNumberFromField, rhAccountNumberToField, rhNameField));
             }
         });
+        VaadinUtils.setButtonsAutoDisabled(saveButton);
         Button clearButton = Buttons.createButton(ForeignUi.getMessage("button.clear"));
         clearButton.addClickListener(event -> clearFilters());
         return new HorizontalLayout(saveButton, clearButton, closeButton);
