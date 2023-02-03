@@ -59,17 +59,17 @@ class SalUpdateRighstholderWindow extends Window {
         setCaption(ForeignUi.getMessage("window.update_rightsholder"));
         setResizable(false);
         setWidth(440, Unit.PIXELS);
-        setHeight(190, Unit.PIXELS);
+        setHeight(165, Unit.PIXELS);
         VaadinUtils.addComponentStyle(this, "update-rh-window");
     }
 
     private ComponentContainer initRootLayout() {
         HorizontalLayout buttonsLayout = buildButtonsLayout();
         VerticalLayout rhLayout = initRightsholderLayout();
-        buttonsLayout.setMargin(new MarginInfo(true, false, true, false));
         VerticalLayout rootLayout = new VerticalLayout(rhLayout, buttonsLayout);
         rootLayout.setComponentAlignment(rhLayout, Alignment.MIDDLE_CENTER);
         rootLayout.setComponentAlignment(buttonsLayout, Alignment.BOTTOM_RIGHT);
+        rootLayout.setMargin(new MarginInfo(true, true, false, true));
         usageBinder.validate();
         return rootLayout;
     }
