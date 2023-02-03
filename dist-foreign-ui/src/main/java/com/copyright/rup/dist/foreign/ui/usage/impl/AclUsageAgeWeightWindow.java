@@ -132,6 +132,7 @@ public class AclUsageAgeWeightWindow extends CommonScenarioParameterWindow<List<
             fireParametersSaveEvent(new ScenarioParameterWidget.ParametersSaveEvent<>(this, currentValues));
             close();
         });
+        VaadinUtils.setButtonsAutoDisabled(saveButton);
         saveButton.setVisible(isEditable);
         Label placeholderLabel = new Label();
         placeholderLabel.setVisible(isEditable);

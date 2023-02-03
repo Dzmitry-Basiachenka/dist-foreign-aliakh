@@ -413,6 +413,7 @@ public class AclUsageFiltersWindow extends CommonAclFiltersWindow {
                     contentUnitPriceToField, annualizedCopiesFromField, annualizedCopiesToField));
             }
         });
+        VaadinUtils.setButtonsAutoDisabled(saveButton);
         Button clearButton = Buttons.createButton(ForeignUi.getMessage("button.clear"));
         clearButton.addClickListener(event -> clearFilters());
         return new HorizontalLayout(saveButton, clearButton, closeButton);

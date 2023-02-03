@@ -143,7 +143,7 @@ public class SalUpdateRighstholderWindowTest {
         HorizontalLayout buttonsLayout = (HorizontalLayout) contentLayout.getComponent(1);
         Button saveButton = (Button) buttonsLayout.getComponent(0);
         Collection<?> listeners = saveButton.getListeners(Button.ClickEvent.class);
-        assertEquals(1, listeners.size());
+        assertEquals(2, listeners.size());
         Button.ClickListener clickListener = (Button.ClickListener) listeners.iterator().next();
         clickListener.buttonClick(clickEvent);
         verify(clickEvent, usageController, Windows.class);
@@ -184,7 +184,7 @@ public class SalUpdateRighstholderWindowTest {
         HorizontalLayout buttonsLayout = (HorizontalLayout) contentLayout.getComponent(1);
         Button saveButton = (Button) buttonsLayout.getComponent(0);
         Collection<?> listeners = saveButton.getListeners(Button.ClickEvent.class);
-        assertEquals(1, listeners.size());
+        assertEquals(2, listeners.size());
         Button.ClickListener clickListener = (Button.ClickListener) listeners.iterator().next();
         clickListener.buttonClick(clickEvent);
         actionDialogListenerCapture.getValue().onActionConfirmed(REASON);
@@ -226,7 +226,7 @@ public class SalUpdateRighstholderWindowTest {
         HorizontalLayout buttonsLayout = (HorizontalLayout) contentLayout.getComponent(1);
         Button saveButton = (Button) buttonsLayout.getComponent(0);
         Collection<?> listeners = saveButton.getListeners(Button.ClickEvent.class);
-        assertEquals(1, listeners.size());
+        assertEquals(2, listeners.size());
         Button.ClickListener clickListener = (Button.ClickListener) listeners.iterator().next();
         clickListener.buttonClick(clickEvent);
         actionDialogListenerCapture.getValue().onActionConfirmed(REASON);
@@ -294,7 +294,7 @@ public class SalUpdateRighstholderWindowTest {
         assertEquals(2, layout.getComponentCount());
         Button saveButton = verifyButton(layout.getComponent(0), "Save");
         verifyButton(layout.getComponent(1), "Close");
-        assertEquals(1, saveButton.getListeners(Button.ClickEvent.class).size());
+        assertEquals(2, saveButton.getListeners(Button.ClickEvent.class).size());
         verifyLoadClickListener(saveButton, Lists.newArrayList(
             Whitebox.getInternalState(window, RH_ACCOUNT_NUMBER_FIELD_NAME),
             Whitebox.getInternalState(window, "rhNameField")));

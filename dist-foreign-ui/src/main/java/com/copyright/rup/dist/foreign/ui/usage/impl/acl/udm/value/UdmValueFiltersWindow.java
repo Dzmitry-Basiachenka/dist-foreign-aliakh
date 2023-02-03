@@ -659,6 +659,7 @@ public class UdmValueFiltersWindow extends CommonAclFiltersWindow {
                         contentUnitPriceFromField, contentUnitPriceToField, commentField, lastCommentField));
             }
         });
+        VaadinUtils.setButtonsAutoDisabled(saveButton);
         Button clearButton = Buttons.createButton(ForeignUi.getMessage("button.clear"));
         clearButton.addClickListener(event -> clearFilters());
         return new HorizontalLayout(saveButton, clearButton, closeButton);

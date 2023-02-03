@@ -63,6 +63,7 @@ class EditScenarioNameWindow extends Window {
     private HorizontalLayout initButtonsLayout() {
         Button saveButton = Buttons.createButton(ForeignUi.getMessage("button.save"));
         saveButton.addClickListener(listener -> onSaveButtonClicked());
+        VaadinUtils.setButtonsAutoDisabled(saveButton);
         HorizontalLayout layout = new HorizontalLayout(saveButton, Buttons.createCancelButton(this));
         layout.setSpacing(true);
         return layout;

@@ -471,7 +471,7 @@ public class UdmEditMultipleUsagesWindowTest {
         Whitebox.setInternalState(window, binder);
         Button saveButton = Whitebox.getInternalState(window, "saveButton");
         Collection<?> listeners = saveButton.getListeners(Button.ClickEvent.class);
-        assertEquals(1, listeners.size());
+        assertEquals(2, listeners.size());
         Button.ClickListener clickListener = (Button.ClickListener) listeners.iterator().next();
         clickListener.buttonClick(clickEvent);
         actionDialogListenerCapture.getValue().onActionConfirmed("Reason");

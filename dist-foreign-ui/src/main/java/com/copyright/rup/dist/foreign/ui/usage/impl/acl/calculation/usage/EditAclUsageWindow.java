@@ -212,6 +212,7 @@ public class EditAclUsageWindow extends Window {
                     contentUnitPriceField));
             }
         });
+        VaadinUtils.setButtonsAutoDisabled(saveButton);
         saveButton.setEnabled(false);
         Button discardButton = Buttons.createButton(ForeignUi.getMessage("button.discard"));
         discardButton.addClickListener(event -> {

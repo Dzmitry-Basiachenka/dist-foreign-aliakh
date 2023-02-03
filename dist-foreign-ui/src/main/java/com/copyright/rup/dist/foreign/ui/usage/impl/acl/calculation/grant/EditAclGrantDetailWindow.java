@@ -155,6 +155,7 @@ public class EditAclGrantDetailWindow extends Window {
                 Windows.showValidationErrorWindow(List.of(rhAccountNumberField, rhNameField));
             }
         });
+        VaadinUtils.setButtonsAutoDisabled(saveButton);
         saveButton.setEnabled(false);
         Button discardButton = Buttons.createButton(ForeignUi.getMessage("button.discard"));
         discardButton.addClickListener(event -> discardFields());

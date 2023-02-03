@@ -172,6 +172,7 @@ class AclciMultipleEditUsagesWindow extends Window {
                     wrWrkInstField));
             }
         });
+        VaadinUtils.setButtonsAutoDisabled(saveButton);
         HorizontalLayout horizontalLayout = new HorizontalLayout();
         horizontalLayout.addComponents(saveButton, closeButton);
         return horizontalLayout;
