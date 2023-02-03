@@ -87,6 +87,7 @@ class RightsholderDiscrepanciesWindow extends Window {
                     ForeignUi.getMessage("window.prohibition_approval", prohibitedAccountNumbers));
             }
         });
+        VaadinUtils.setButtonsAutoDisabled(approveButton);
         buttonsLayout.addComponents(exportButton, approveButton, Buttons.createCancelButton(this));
         buttonsLayout.setSpacing(true);
         VaadinUtils.addComponentStyle(buttonsLayout, "rightsholder-discrepancies-buttons-layout");
