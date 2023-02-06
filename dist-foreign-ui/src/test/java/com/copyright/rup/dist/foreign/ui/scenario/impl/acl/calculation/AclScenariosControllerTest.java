@@ -6,6 +6,7 @@ import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.newCapture;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
@@ -18,6 +19,7 @@ import static org.powermock.api.easymock.PowerMock.verify;
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.reporting.api.IStreamSourceHandler;
 import com.copyright.rup.dist.common.reporting.impl.StreamSource;
+import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.AclFundPool;
 import com.copyright.rup.dist.foreign.domain.AclGrantSet;
 import com.copyright.rup.dist.foreign.domain.AclPublicationType;
@@ -28,6 +30,7 @@ import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
+import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.domain.filter.AclScenarioFilter;
@@ -43,6 +46,7 @@ import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageService;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioActionHandler;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioHistoryController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenariosFilterController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenariosFilterWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenariosWidget;
@@ -89,7 +93,7 @@ import java.util.function.Supplier;
  */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({Windows.class, ForeignSecurityUtils.class, OffsetDateTime.class, StreamSource.class,
-    SecurityUtils.class})
+    SecurityUtils.class, RupContextUtils.class})
 public class AclScenariosControllerTest {
 
     private static final String SCENARIO_UID = "7ed0e17d-6baf-454c-803f-1d9be3cb3192";
@@ -99,6 +103,7 @@ public class AclScenariosControllerTest {
     private static final List<Integer> PERIOD_PRIORS = List.of(0);
     private static final String LICENSE_TYPE = "ACL";
     private static final String ACL_PRODUCT_FAMILY = "ACL";
+    private static final String USER_NAME = "user@copyright.com";
 
     private IAclScenariosWidget scenariosWidget;
     private AclScenariosController aclScenariosController;
@@ -109,6 +114,7 @@ public class AclScenariosControllerTest {
     private IAclFundPoolService fundPoolService;
     private IPublicationTypeService publicationTypeService;
     private IAclScenarioController aclScenarioController;
+    private IAclScenarioHistoryController aclScenarioHistoryController;
     private ILicenseeClassService licenseeClassService;
     private IAclUsageService aclUsageService;
     private IStreamSourceHandler streamSourceHandler;
@@ -129,6 +135,7 @@ public class AclScenariosControllerTest {
         licenseeClassService = createMock(ILicenseeClassService.class);
         aclUsageService = createMock(IAclUsageService.class);
         aclScenarioController = createMock(IAclScenarioController.class);
+        aclScenarioHistoryController = createMock(IAclScenarioHistoryController.class);
         streamSourceHandler = createMock(IStreamSourceHandler.class);
         aclCalculationReportService = createMock(IAclCalculationReportService.class);
         aclScenariosFilterController = createMock(IAclScenariosFilterController.class);
@@ -148,6 +155,7 @@ public class AclScenariosControllerTest {
         Whitebox.setInternalState(aclScenariosController, licenseeClassService);
         Whitebox.setInternalState(aclScenariosController, aclUsageService);
         Whitebox.setInternalState(aclScenariosController, aclScenarioController);
+        Whitebox.setInternalState(aclScenariosController, aclScenarioHistoryController);
         Whitebox.setInternalState(aclScenariosController, streamSourceHandler);
         Whitebox.setInternalState(aclScenariosController, aclCalculationReportService);
         Whitebox.setInternalState(aclScenariosController, aclScenariosFilterController);
@@ -461,6 +469,47 @@ public class AclScenariosControllerTest {
     }
 
     @Test
+    public void testCanUserApproveAclScenarioUserIsSubmitter() {
+        mockStatic(RupContextUtils.class);
+        expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
+        List<ScenarioAuditItem> auditItems = List.of(
+            buildScenarioAuditItem(ScenarioActionTypeEnum.SUBMITTED, USER_NAME),
+            buildScenarioAuditItem(ScenarioActionTypeEnum.ADDED_USAGES, USER_NAME));
+        expect(aclScenarioHistoryController.getActions(SCENARIO_UID)).andReturn(auditItems).once();
+        replay(RupContextUtils.class, aclScenarioHistoryController);
+        assertFalse(aclScenariosController.canUserApproveAclScenario(SCENARIO_UID));
+        verify(RupContextUtils.class, aclScenarioHistoryController);
+    }
+
+    @Test
+    public void testCanUserApproveAclScenarioUserIsNotSubmitter() {
+        mockStatic(RupContextUtils.class);
+        expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
+        List<ScenarioAuditItem> auditItems = List.of(
+            buildScenarioAuditItem(ScenarioActionTypeEnum.SUBMITTED, "ajohn@copyright.com"),
+            buildScenarioAuditItem(ScenarioActionTypeEnum.ADDED_USAGES, USER_NAME));
+        expect(aclScenarioHistoryController.getActions(SCENARIO_UID)).andReturn(auditItems).once();
+        replay(RupContextUtils.class, aclScenarioHistoryController);
+        assertTrue(aclScenariosController.canUserApproveAclScenario(SCENARIO_UID));
+        verify(RupContextUtils.class, aclScenarioHistoryController);
+    }
+
+    @Test
+    public void testCanUserApproveAclScenarioUserIsNotLastSubmitter() {
+        mockStatic(RupContextUtils.class);
+        expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
+        List<ScenarioAuditItem> auditItems = List.of(
+            buildScenarioAuditItem(ScenarioActionTypeEnum.SUBMITTED, "ajohn@copyright.com"),
+            buildScenarioAuditItem(ScenarioActionTypeEnum.REJECTED, USER_NAME),
+            buildScenarioAuditItem(ScenarioActionTypeEnum.SUBMITTED, USER_NAME),
+            buildScenarioAuditItem(ScenarioActionTypeEnum.ADDED_USAGES, USER_NAME));
+        expect(aclScenarioHistoryController.getActions(SCENARIO_UID)).andReturn(auditItems).once();
+        replay(RupContextUtils.class, aclScenarioHistoryController);
+        assertTrue(aclScenariosController.canUserApproveAclScenario(SCENARIO_UID));
+        verify(RupContextUtils.class, aclScenarioHistoryController);
+    }
+
+    @Test
     public void testHandleAction() {
         expect(scenariosWidget.getSelectedScenario()).andReturn(aclScenario).once();
         expect(aclScenarioService.isNotExistsSubmittedScenario(aclScenario)).andReturn(true).once();
@@ -582,5 +631,12 @@ public class AclScenariosControllerTest {
         usageAge.setPeriod(1);
         usageAge.setWeight(new BigDecimal("0.57"));
         return usageAge;
+    }
+
+    private ScenarioAuditItem buildScenarioAuditItem(ScenarioActionTypeEnum actionType, String createUser) {
+        ScenarioAuditItem auditItem = new ScenarioAuditItem();
+        auditItem.setActionType(actionType);
+        auditItem.setCreateUser(createUser);
+        return auditItem;
     }
 }

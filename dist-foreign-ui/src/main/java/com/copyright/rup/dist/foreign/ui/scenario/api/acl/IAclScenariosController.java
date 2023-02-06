@@ -254,6 +254,14 @@ public interface IAclScenariosController extends IController<IAclScenariosWidget
     IStreamSource getExportAclWorkSharesByAggLcStreamSource();
 
     /**
+     * Checks whether current user can approve ACL scenario.
+     *
+     * @param scenarioId scenario id
+     * @return {@code true} if current user can approve ACL scenario, otherwise {@code false}
+     */
+    boolean canUserApproveAclScenario(String scenarioId);
+
+    /**
      * Handles actions with {@link AclScenario}.
      *
      * @param actionType scenario action type

@@ -107,7 +107,7 @@ public class AclScenariosWidgetTest {
     @Before
     public void setUp() {
         controller = createMock(IAclScenariosController.class);
-        scenario = buildAclScenario();
+        scenario = buildAclScenario(ScenarioStatusEnum.IN_PROGRESS);
         scenarioDto = buildAclScenarioDto();
         mockStatic(ForeignSecurityUtils.class);
         scenariosWidget = new AclScenariosWidget(controller, createMock(IAclScenarioHistoryController.class));
@@ -312,12 +312,30 @@ public class AclScenariosWidgetTest {
         verify(controller, grid, OffsetDateTime.class);
     }
 
-    private AclScenario buildAclScenario() {
+    @Test
+    public void testApproveButtonClickInvalidAclScenarioApprover() {
+        mockStatic(Windows.class);
+        Windows.showNotificationWindow("You can not Submit and Approve the same ACL scenario");
+        expectLastCall().once();
+        Grid grid = createMock(Grid.class);
+        Whitebox.setInternalState(scenariosWidget, SCENARIO_GRID, grid);
+        expect(grid.getSelectedItems()).andReturn(Set.of(buildAclScenario(ScenarioStatusEnum.SUBMITTED))).times(2);
+        expect(controller.getAclScenarioWithAmountsAndLastAction(SCENARIO_UID)).andReturn(buildAclScenarioDto()).once();
+        expect(controller.getCriteriaHtmlRepresentation()).andReturn(SELECTION_CRITERIA).once();
+        expect(controller.canUserApproveAclScenario(SCENARIO_UID)).andReturn(false).once();
+        replay(Windows.class, grid, controller);
+        scenariosWidget.refreshSelectedScenario();
+        Button button = Whitebox.getInternalState(scenariosWidget, "approveButton");
+        button.click();
+        verify(Windows.class, grid, controller);
+    }
+
+    private AclScenario buildAclScenario(ScenarioStatusEnum status) {
         AclScenario aclScenario = new AclScenario();
         aclScenario.setId(SCENARIO_UID);
         aclScenario.setName("ACL Scenario name");
         aclScenario.setDescription("some description");
-        aclScenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);
+        aclScenario.setStatus(status);
         aclScenario.setEditableFlag(false);
         aclScenario.setPeriodEndDate(202212);
         aclScenario.setLicenseType("ACL");
