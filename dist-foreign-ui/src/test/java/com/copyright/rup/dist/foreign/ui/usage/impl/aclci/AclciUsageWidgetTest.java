@@ -10,10 +10,12 @@ import static org.easymock.EasyMock.expect;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
+import static org.powermock.api.easymock.PowerMock.expectNew;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.reset;
@@ -24,6 +26,7 @@ import com.copyright.rup.dist.foreign.ui.usage.api.aclci.IAclciUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.aclci.IAclciUsageFilterController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
+import com.vaadin.data.provider.DataProvider;
 import com.vaadin.server.Sizeable;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -31,6 +34,7 @@ import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.VerticalLayout;
 
 import org.apache.commons.lang3.tuple.Triple;
@@ -39,6 +43,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+import org.powermock.reflect.Whitebox;
 
 import java.util.Collection;
 import java.util.List;
@@ -122,12 +127,30 @@ public class AclciUsageWidgetTest {
 
     @Test
     public void testRefresh() {
-        //TODO: implement
+        DataProvider<?, ?> dataProvider = createMock(DataProvider.class);
+        AclciUsageMediator mediator = createMock(AclciUsageMediator.class);
+        Whitebox.setInternalState(widget, dataProvider);
+        Whitebox.setInternalState(widget, mediator);
+        dataProvider.refreshAll();
+        expectLastCall().once();
+        replay(dataProvider, controller, mediator);
+        widget.refresh();
+        verify(dataProvider, controller, mediator);
     }
 
     @Test
-    public void testInitMediator() {
-        //TODO: implement
+    public void testInitMediator() throws Exception {
+        AclciUsageMediator mediator = createMock(AclciUsageMediator.class);
+        expectNew(AclciUsageMediator.class).andReturn(mediator).once();
+        mediator.setLoadUsageBatchMenuItem(anyObject(MenuBar.MenuItem.class));
+        expectLastCall().once();
+        mediator.setLoadFundPoolMenuItem(anyObject(MenuBar.MenuItem.class));
+        expectLastCall().once();
+        mediator.setUpdateUsagesButton(anyObject(Button.class));
+        expectLastCall().once();
+        replay(AclciUsageMediator.class, mediator, controller);
+        assertNotNull(widget.initMediator());
+        verify(AclciUsageMediator.class, mediator, controller);
     }
 
     @Test
