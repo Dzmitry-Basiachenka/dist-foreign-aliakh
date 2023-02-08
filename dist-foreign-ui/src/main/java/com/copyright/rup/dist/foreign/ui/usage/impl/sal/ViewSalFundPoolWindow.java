@@ -106,7 +106,9 @@ public class ViewSalFundPoolWindow extends Window implements SearchWidget.ISearc
             });
         });
         deleteButton.setEnabled(false);
-        HorizontalLayout layout = new HorizontalLayout(deleteButton, closeButton);
+        Button exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
+        VaadinUtils.setButtonsAutoDisabled(exportButton, deleteButton, closeButton);
+        HorizontalLayout layout = new HorizontalLayout(exportButton, deleteButton, closeButton);
         layout.setSpacing(true);
         VaadinUtils.addComponentStyle(layout, "view-sal-fund-pool-buttons");
         return layout;

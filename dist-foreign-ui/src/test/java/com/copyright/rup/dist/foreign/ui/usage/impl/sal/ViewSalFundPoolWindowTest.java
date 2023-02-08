@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.sal;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
+
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
@@ -91,11 +93,13 @@ public class ViewSalFundPoolWindowTest {
         verifyGrid((Grid) component);
         assertEquals(1, content.getExpandRatio(component), 0);
         HorizontalLayout buttonsLayout = (HorizontalLayout) content.getComponent(2);
-        assertEquals(2, buttonsLayout.getComponentCount());
-        Button deleteButton = (Button) buttonsLayout.getComponent(0);
-        Button closeButton = (Button) buttonsLayout.getComponent(1);
-        assertEquals("Delete", deleteButton.getCaption());
-        assertEquals("Close", closeButton.getCaption());
+        assertEquals(3, buttonsLayout.getComponentCount());
+        verifyButtonsLayout(buttonsLayout, "Export", "Delete", "Close");
+    }
+
+    @Test
+    public void testExportClickListener() {
+        //TODO {skarakhanov} implement later
     }
 
     @Test
@@ -104,7 +108,7 @@ public class ViewSalFundPoolWindowTest {
         Window confirmWindowMock = createMock(Window.class);
         Grid<FundPool> grid = createMock(Grid.class);
         Whitebox.setInternalState(viewSalFundPoolWindow, "grid", grid);
-        Button.ClickListener listener = getButtonClickListener(0);
+        Button.ClickListener listener = getButtonClickListener(1);
         expect(grid.getSelectedItems()).andReturn(Set.of(fundPool)).once();
         expect(controller.getScenarioNameAssociatedWithFundPool(FUND_POOL_ID)).andReturn(null).once();
         expect(Windows.showConfirmDialog(
@@ -120,7 +124,7 @@ public class ViewSalFundPoolWindowTest {
         mockStatic(Windows.class);
         Grid<FundPool> grid = createMock(Grid.class);
         Whitebox.setInternalState(viewSalFundPoolWindow, "grid", grid);
-        Button.ClickListener listener = getButtonClickListener(0);
+        Button.ClickListener listener = getButtonClickListener(1);
         expect(grid.getSelectedItems()).andReturn(Set.of(fundPool)).once();
         expect(controller.getScenarioNameAssociatedWithFundPool(FUND_POOL_ID)).andReturn("Scenario 1").once();
         Windows.showNotificationWindow(
@@ -133,7 +137,7 @@ public class ViewSalFundPoolWindowTest {
 
     @Test
     public void testSelectionChangedListener() {
-        Button deleteButton = getButton(0);
+        Button deleteButton = getButton(1);
         assertFalse(deleteButton.isEnabled());
         Grid<FundPool> grid = (Grid) ((VerticalLayout) viewSalFundPoolWindow.getContent()).getComponent(1);
         grid.select(fundPool);
@@ -211,7 +215,7 @@ public class ViewSalFundPoolWindowTest {
 
     private Button.ClickListener getButtonClickListener(int buttonIndex) {
         Collection<?> listeners = getButton(buttonIndex).getListeners(ClickEvent.class);
-        assertEquals(1, CollectionUtils.size(listeners));
+        assertEquals(2, CollectionUtils.size(listeners));
         return (Button.ClickListener) listeners.iterator().next();
     }
 
