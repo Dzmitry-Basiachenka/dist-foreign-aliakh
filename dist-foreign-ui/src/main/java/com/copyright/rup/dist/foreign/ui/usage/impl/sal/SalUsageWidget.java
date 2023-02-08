@@ -96,7 +96,7 @@ public class SalUsageWidget extends CommonUsageWidget implements ISalUsageWidget
         addColumn(usageDto -> usageDto.getSalUsage().getAssessmentType(), "table.column.assessment_type",
             "assessmentType", true, 150);
         addColumn(usageDto -> CommonDateUtils.format(usageDto.getSalUsage().getScoredAssessmentDate(),
-                RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT), "table.column.scored_assessment_date", "scoredAssessmentDate",
+            RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT), "table.column.scored_assessment_date", "scoredAssessmentDate",
             true, 200);
         addColumn(usageDto -> usageDto.getSalUsage().getReportedWorkPortionId(),
             "table.column.reported_work_portion_id", "reportedWorkPortionId", true, 180);
