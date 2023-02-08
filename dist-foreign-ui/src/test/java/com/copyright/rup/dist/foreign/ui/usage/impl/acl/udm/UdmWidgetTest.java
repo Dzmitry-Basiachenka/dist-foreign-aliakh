@@ -12,6 +12,8 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
+import com.copyright.rup.dist.foreign.ui.status.api.IUdmBatchStatusController;
+import com.copyright.rup.dist.foreign.ui.status.api.IUdmBatchStatusWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineValueController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineValueWidget;
@@ -23,6 +25,7 @@ import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueWidget;
+import com.copyright.rup.vaadin.widget.api.IWidget;
 
 import com.vaadin.ui.TabSheet;
 
@@ -46,29 +49,41 @@ import org.powermock.modules.junit4.PowerMockRunner;
 public class UdmWidgetTest {
 
     private IUdmController controller;
+    private IUdmUsageController udmUsageController;
+    private IUdmUsageWidget udmUsageWidget;
+    private IUdmValueController udmValueController;
+    private IUdmValueWidget udmValueWidget;
+    private IUdmBatchStatusController udmBatchStatusController;
+    private IUdmBatchStatusWidget udmBatchStatusWidget;
 
     @Before
     public void setUp() {
         mockStatic(ForeignSecurityUtils.class);
         controller = createMock(IUdmController.class);
+        udmUsageController = createMock(IUdmUsageController.class);
+        udmUsageWidget = createNiceMock(IUdmUsageWidget.class);
+        expect(udmUsageController.initWidget()).andReturn(udmUsageWidget).once();
+        udmUsageWidget.setController(udmUsageController);
+        expectLastCall().once();
+        expect(controller.getUdmUsageController()).andReturn(udmUsageController).once();
+        udmValueController = createMock(IUdmValueController.class);
+        udmValueWidget = createNiceMock(IUdmValueWidget.class);
+        expect(udmValueController.initWidget()).andReturn(udmValueWidget).once();
+        udmValueWidget.setController(udmValueController);
+        expectLastCall().once();
+        expect(controller.getUdmValueController()).andReturn(udmValueController).once();
+        udmBatchStatusController = createMock(IUdmBatchStatusController.class);
+        udmBatchStatusWidget = createNiceMock(IUdmBatchStatusWidget.class);
+        expect(udmBatchStatusController.initWidget()).andReturn(udmBatchStatusWidget).once();
+        udmBatchStatusWidget.setController(udmBatchStatusController);
+        expectLastCall().once();
+        expect(controller.getUdmBatchStatusController()).andReturn(udmBatchStatusController).once();
     }
 
     @Test
     public void testWidgetStructure() {
         expect(ForeignSecurityUtils.hasSpecialistPermission()).andReturn(true).once();
         expect(ForeignSecurityUtils.hasResearcherPermission()).andReturn(false).once();
-        IUdmUsageController udmUsageController = createMock(IUdmUsageController.class);
-        IUdmUsageWidget udmUsageWidget = createNiceMock(IUdmUsageWidget.class);
-        expect(udmUsageController.initWidget()).andReturn(udmUsageWidget).once();
-        udmUsageWidget.setController(udmUsageController);
-        expectLastCall().once();
-        expect(controller.getUdmUsageController()).andReturn(udmUsageController).once();
-        IUdmValueController udmValueController = createMock(IUdmValueController.class);
-        IUdmValueWidget udmValueWidget = createNiceMock(IUdmValueWidget.class);
-        expect(udmValueController.initWidget()).andReturn(udmValueWidget).once();
-        udmValueWidget.setController(udmValueController);
-        expectLastCall().once();
-        expect(controller.getUdmValueController()).andReturn(udmValueController).once();
         IUdmProxyValueController udmProxyValueController = createMock(IUdmProxyValueController.class);
         IUdmProxyValueWidget udmProxyValueWidget = createNiceMock(IUdmProxyValueWidget.class);
         expect(udmProxyValueController.initWidget()).andReturn(udmProxyValueWidget).once();
@@ -89,81 +104,45 @@ public class UdmWidgetTest {
         expect(controller.getUdmBaselineValueController()).andReturn(udmBaselineValueController).once();
         replay(controller, ForeignSecurityUtils.class, udmUsageController, udmUsageWidget, udmValueController,
             udmValueWidget, udmProxyValueController, udmProxyValueWidget, udmBaselineController, udmBaselineWidget,
-            udmBaselineValueController, udmBaselineValueWidget);
+            udmBaselineValueController, udmBaselineValueWidget, udmBatchStatusController, udmBatchStatusWidget);
         UdmWidget widget = new UdmWidget();
         widget.setController(controller);
         widget.init();
         verify(controller, ForeignSecurityUtils.class, udmUsageController, udmUsageWidget, udmValueController,
             udmValueWidget, udmProxyValueController, udmProxyValueWidget, udmBaselineController, udmBaselineWidget,
-            udmBaselineValueController, udmBaselineValueWidget);
-        assertEquals(5, widget.getComponentCount());
-        TabSheet.Tab tab1 = widget.getTab(0);
-        assertEquals("Usages", tab1.getCaption());
-        assertThat(tab1.getComponent(), instanceOf(IUdmUsageWidget.class));
-        TabSheet.Tab tab2 = widget.getTab(1);
-        assertEquals("Values", tab2.getCaption());
-        assertThat(tab2.getComponent(), instanceOf(IUdmValueWidget.class));
-        TabSheet.Tab tab3 = widget.getTab(2);
-        assertEquals("Proxy Values", tab3.getCaption());
-        assertThat(tab3.getComponent(), instanceOf(IUdmProxyValueWidget.class));
-        TabSheet.Tab tab4 = widget.getTab(3);
-        assertEquals("Baseline", tab4.getCaption());
-        assertThat(tab4.getComponent(), instanceOf(IUdmBaselineWidget.class));
-        TabSheet.Tab tab5 = widget.getTab(4);
-        assertEquals("Baseline Values", tab5.getCaption());
-        assertThat(tab5.getComponent(), instanceOf(IUdmBaselineValueWidget.class));
+            udmBaselineValueController, udmBaselineValueWidget, udmBatchStatusController, udmBatchStatusWidget);
+        assertEquals(6, widget.getComponentCount());
+        verifyTab(widget.getTab(0), "Usages", IUdmUsageWidget.class);
+        verifyTab(widget.getTab(1), "Values", IUdmValueWidget.class);
+        verifyTab(widget.getTab(2), "Proxy Values", IUdmProxyValueWidget.class);
+        verifyTab(widget.getTab(3), "Baseline", IUdmBaselineWidget.class);
+        verifyTab(widget.getTab(4), "Baseline Values", IUdmBaselineValueWidget.class);
+        verifyTab(widget.getTab(5), "Batch Status", IUdmBatchStatusWidget.class);
     }
 
     @Test
     public void testWidgetStructureForResearcher() {
         expect(ForeignSecurityUtils.hasSpecialistPermission()).andReturn(false).once();
         expect(ForeignSecurityUtils.hasResearcherPermission()).andReturn(true).once();
-        IUdmUsageController udmUsageController = createMock(IUdmUsageController.class);
-        IUdmUsageWidget udmUsageWidget = createNiceMock(IUdmUsageWidget.class);
-        expect(udmUsageController.initWidget()).andReturn(udmUsageWidget).once();
-        udmUsageWidget.setController(udmUsageController);
-        expectLastCall().once();
-        expect(controller.getUdmUsageController()).andReturn(udmUsageController).once();
-        IUdmValueController udmValueController = createMock(IUdmValueController.class);
-        IUdmValueWidget udmValueWidget = createNiceMock(IUdmValueWidget.class);
-        expect(udmValueController.initWidget()).andReturn(udmValueWidget).once();
-        udmValueWidget.setController(udmValueController);
-        expectLastCall().once();
-        expect(controller.getUdmValueController()).andReturn(udmValueController).once();
         replay(controller, ForeignSecurityUtils.class, udmUsageController, udmUsageWidget, udmValueController,
-            udmValueWidget);
+            udmValueWidget, udmBatchStatusController, udmBatchStatusWidget);
         UdmWidget widget = new UdmWidget();
         widget.setController(controller);
         widget.init();
         verify(controller, ForeignSecurityUtils.class, udmUsageController, udmUsageWidget, udmValueController,
-            udmValueWidget);
-        assertEquals(2, widget.getComponentCount());
-        TabSheet.Tab tab1 = widget.getTab(0);
-        assertEquals("Usages", tab1.getCaption());
-        assertThat(tab1.getComponent(), instanceOf(IUdmUsageWidget.class));
-        TabSheet.Tab tab2 = widget.getTab(1);
-        assertEquals("Values", tab2.getCaption());
-        assertThat(tab2.getComponent(), instanceOf(IUdmValueWidget.class));
+            udmValueWidget, udmBatchStatusController, udmBatchStatusWidget);
+        assertEquals(3, widget.getComponentCount());
+        verifyTab(widget.getTab(0), "Usages", IUdmUsageWidget.class);
+        verifyTab(widget.getTab(1), "Values", IUdmValueWidget.class);
+        verifyTab(widget.getTab(2), "Batch Status", IUdmBatchStatusWidget.class);
     }
 
     @Test
     public void testRefresh() {
         expect(ForeignSecurityUtils.hasSpecialistPermission()).andReturn(true).once();
         expect(ForeignSecurityUtils.hasResearcherPermission()).andReturn(false).once();
-        IUdmUsageController udmUsageController = createMock(IUdmUsageController.class);
-        IUdmUsageWidget udmUsageWidget = createNiceMock(IUdmUsageWidget.class);
-        expect(udmUsageController.initWidget()).andReturn(udmUsageWidget).once();
-        udmUsageWidget.setController(udmUsageController);
-        expectLastCall().once();
         udmUsageWidget.refresh();
         expectLastCall().once();
-        expect(controller.getUdmUsageController()).andReturn(udmUsageController).once();
-        IUdmValueController udmValueController = createMock(IUdmValueController.class);
-        IUdmValueWidget udmValueWidget = createNiceMock(IUdmValueWidget.class);
-        expect(udmValueController.initWidget()).andReturn(udmValueWidget).once();
-        udmValueWidget.setController(udmValueController);
-        expectLastCall().once();
-        expect(controller.getUdmValueController()).andReturn(udmValueController).once();
         IUdmProxyValueController udmProxyValueController = createMock(IUdmProxyValueController.class);
         IUdmProxyValueWidget udmProxyValueWidget = createNiceMock(IUdmProxyValueWidget.class);
         expect(udmProxyValueController.initWidget()).andReturn(udmProxyValueWidget).once();
@@ -183,14 +162,19 @@ public class UdmWidgetTest {
         expectLastCall().once();
         expect(controller.getUdmBaselineValueController()).andReturn(udmBaselineValueController).once();
         replay(controller, ForeignSecurityUtils.class, udmUsageController, udmUsageWidget, udmValueController,
-            udmValueWidget, udmProxyValueController, udmProxyValueWidget, udmBaselineController,
-            udmBaselineWidget, udmBaselineValueController, udmBaselineValueWidget);
+            udmValueWidget, udmProxyValueController, udmProxyValueWidget, udmBaselineController, udmBaselineWidget,
+            udmBaselineValueController, udmBaselineValueWidget, udmBatchStatusController, udmBatchStatusWidget);
         UdmWidget widget = new UdmWidget();
         widget.setController(controller);
         widget.init();
         widget.refresh();
         verify(controller, ForeignSecurityUtils.class, udmUsageController, udmUsageWidget, udmValueController,
             udmValueWidget, udmProxyValueController, udmProxyValueWidget, udmBaselineController, udmBaselineWidget,
-            udmBaselineValueController, udmBaselineValueWidget);
+            udmBaselineValueController, udmBaselineValueWidget, udmBatchStatusController, udmBatchStatusWidget);
+    }
+
+    private void verifyTab(TabSheet.Tab tab, String expectedCaption, Class<? extends IWidget> clazz) {
+        assertEquals(expectedCaption, tab.getCaption());
+        assertThat(tab.getComponent(), instanceOf(clazz));
     }
 }

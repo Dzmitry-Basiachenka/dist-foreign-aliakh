@@ -31,6 +31,7 @@ public class UsageBatchStatus {
     private int unclassifiedCount;
     private int eligibleCount;
     private int excludedCount;
+    private int ineligibleCount;
     private String status;
 
     public String getBatchName() {
@@ -161,6 +162,14 @@ public class UsageBatchStatus {
         this.excludedCount = excludedCount;
     }
 
+    public int getIneligibleCount() {
+        return ineligibleCount;
+    }
+
+    public void setIneligibleCount(int ineligibleCount) {
+        this.ineligibleCount = ineligibleCount;
+    }
+
     public String getStatus() {
         return status;
     }
@@ -195,6 +204,7 @@ public class UsageBatchStatus {
             .append(unclassifiedCount, that.unclassifiedCount)
             .append(eligibleCount, that.eligibleCount)
             .append(excludedCount, that.excludedCount)
+            .append(ineligibleCount, that.ineligibleCount)
             .append(status, that.status)
             .isEquals();
     }
@@ -218,6 +228,7 @@ public class UsageBatchStatus {
             .append(unclassifiedCount)
             .append(eligibleCount)
             .append(excludedCount)
+            .append(ineligibleCount)
             .append(status)
             .toHashCode();
     }
@@ -241,6 +252,7 @@ public class UsageBatchStatus {
             .append("unclassifiedCount", unclassifiedCount)
             .append("eligibleCount", eligibleCount)
             .append("excludedCount", excludedCount)
+            .append("ineligibleCount", ineligibleCount)
             .append("status", status)
             .toString();
     }

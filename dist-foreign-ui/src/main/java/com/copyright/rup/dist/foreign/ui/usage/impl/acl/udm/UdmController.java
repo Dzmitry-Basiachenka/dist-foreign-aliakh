@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm;
 
+import com.copyright.rup.dist.foreign.ui.status.api.IUdmBatchStatusController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineValueController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmController;
@@ -33,11 +34,12 @@ public class UdmController extends CommonController<IUdmWidget> implements IUdmC
     private IUdmValueController udmValueController;
     @Autowired
     private IUdmProxyValueController udmProxyValueController;
-
     @Autowired
     private IUdmBaselineController udmBaselineController;
     @Autowired
     private IUdmBaselineValueController udmBaselineValueController;
+    @Autowired
+    private IUdmBatchStatusController udmBatchStatusController;
 
     @Override
     public IUdmUsageController getUdmUsageController() {
@@ -62,6 +64,11 @@ public class UdmController extends CommonController<IUdmWidget> implements IUdmC
     @Override
     public IUdmBaselineValueController getUdmBaselineValueController() {
         return udmBaselineValueController;
+    }
+
+    @Override
+    public IUdmBatchStatusController getUdmBatchStatusController() {
+        return udmBatchStatusController;
     }
 
     @Override
