@@ -26,6 +26,8 @@ import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.SalDetailTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
+import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageFilterController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
@@ -89,8 +91,8 @@ public class SalUsageWidgetTest {
         filterWidget.getAppliedFilter().setUsageBatchesIds(Set.of(BATCH_ID));
         expect(controller.initUsagesFilterWidget()).andReturn(filterWidget).once();
         IStreamSource streamSource = createMock(IStreamSource.class);
-        expect(streamSource.getSource()).andReturn(new SimpleImmutableEntry(createMock(Supplier.class),
-            createMock(Supplier.class))).once();
+        expect(streamSource.getSource())
+            .andReturn(new SimpleImmutableEntry(createMock(Supplier.class), createMock(Supplier.class))).once();
         expect(controller.getExportUsagesStreamSource()).andReturn(streamSource).once();
         replay(controller, streamSource);
         usagesWidget.init();
@@ -179,6 +181,8 @@ public class SalUsageWidgetTest {
         expectLastCall().once();
         mediator.setUpdateRightsholdersButton(anyObject(Button.class));
         expectLastCall().once();
+        mediator.setExcludeDetailsButton(anyObject(Button.class));
+        expectLastCall().once();
         mediator.setAddToScenarioButton(anyObject(Button.class));
         expectLastCall().once();
         replay(SalUsageMediator.class, mediator, controller);
@@ -189,64 +193,77 @@ public class SalUsageWidgetTest {
     @Test
     public void testUpdateRightsholdersButtonClickListener() {
         mockStatic(Windows.class);
-        ClickEvent clickEvent = createMock(ClickEvent.class);
         expect(controller.isValidStatusFilterApplied()).andReturn(true).once();
         expect(controller.getBeansCount()).andReturn(1).once();
         expect(controller.getUsageDtosForRhUpdate()).andReturn(List.of(new UsageDto())).once();
         Windows.showModalWindow(anyObject(SalDetailForRightsholderUpdateWindow.class));
         expectLastCall().once();
-        replay(controller, clickEvent, Windows.class);
-        Button updateRightsholdersButton =
-            (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
-                .getComponent(0)).getComponent(2);
+        replay(controller, Windows.class);
+        Button updateRightsholdersButton = (Button) ((HorizontalLayout)
+            ((VerticalLayout) usagesWidget.getSecondComponent()).getComponent(0)).getComponent(2);
         Collection<?> listeners = updateRightsholdersButton.getListeners(ClickEvent.class);
         assertEquals(2, listeners.size());
         ClickListener clickListener = (ClickListener) listeners.iterator().next();
-        clickListener.buttonClick(clickEvent);
-        verify(controller, clickEvent, Windows.class);
+        clickListener.buttonClick(null);
+        verify(controller, Windows.class);
     }
 
     @Test
     public void testUpdateRightsholdersButtonClickListenerNoUsages() {
         mockStatic(Windows.class);
-        ClickEvent clickEvent = createMock(ClickEvent.class);
         expect(controller.isValidStatusFilterApplied()).andReturn(true).once();
         expect(controller.getBeansCount()).andReturn(0).once();
         Windows.showNotificationWindow("There are no usages for RH update");
         expectLastCall().once();
-        replay(controller, clickEvent, Windows.class);
-        Button updateRightsholdersButton =
-            (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
-                .getComponent(0)).getComponent(2);
+        replay(controller, Windows.class);
+        Button updateRightsholdersButton = (Button) ((HorizontalLayout)
+            ((VerticalLayout) usagesWidget.getSecondComponent()).getComponent(0)).getComponent(2);
         Collection<?> listeners = updateRightsholdersButton.getListeners(ClickEvent.class);
         assertEquals(2, listeners.size());
         ClickListener clickListener = (ClickListener) listeners.iterator().next();
-        clickListener.buttonClick(clickEvent);
-        verify(controller, clickEvent, Windows.class);
+        clickListener.buttonClick(null);
+        verify(controller, Windows.class);
     }
 
     @Test
     public void testUpdateRightsholdersButtonClickListenerStatusNotApplied() {
         mockStatic(Windows.class);
-        ClickEvent clickEvent = createMock(ClickEvent.class);
         expect(controller.isValidStatusFilterApplied()).andReturn(false).once();
         Windows.showNotificationWindow("RH_NOT_FOUND or WORK_NOT_GRANTED status filter should be applied");
         expectLastCall().once();
-        replay(controller, clickEvent, Windows.class);
-        Button updateRightsholdersButton =
-            (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
-                .getComponent(0)).getComponent(2);
+        replay(controller, Windows.class);
+        Button updateRightsholdersButton = (Button) ((HorizontalLayout)
+            ((VerticalLayout) usagesWidget.getSecondComponent()).getComponent(0)).getComponent(2);
         Collection<?> listeners = updateRightsholdersButton.getListeners(ClickEvent.class);
         assertEquals(2, listeners.size());
         ClickListener clickListener = (ClickListener) listeners.iterator().next();
-        clickListener.buttonClick(clickEvent);
-        verify(controller, clickEvent, Windows.class);
+        clickListener.buttonClick(null);
+        verify(controller, Windows.class);
+    }
+
+    @Test
+    public void testExcludeDetailsButtonClickListenerInvalidFilter() {
+        mockStatic(Windows.class);
+        ISalUsageFilterController salUsageFilterController = createMock(ISalUsageFilterController.class);
+        ICommonUsageFilterWidget usageFilterWidget = createMock(ICommonUsageFilterWidget.class);
+        expect(controller.getUsageFilterController()).andReturn(salUsageFilterController).once();
+        expect(salUsageFilterController.getWidget()).andReturn(usageFilterWidget).once();
+        expect(usageFilterWidget.getAppliedFilter()).andReturn(new UsageFilter());
+        Windows.showNotificationWindow("Please apply IB Detail Type Filter to exclude details");
+        expectLastCall().once();
+        replay(controller, salUsageFilterController, usageFilterWidget, Windows.class);
+        Button updateRightsholdersButton = (Button) ((HorizontalLayout)
+            ((VerticalLayout) usagesWidget.getSecondComponent()).getComponent(0)).getComponent(3);
+        Collection<?> listeners = updateRightsholdersButton.getListeners(ClickEvent.class);
+        assertEquals(2, listeners.size());
+        ClickListener clickListener = (ClickListener) listeners.iterator().next();
+        clickListener.buttonClick(null);
+        verify(controller, salUsageFilterController, usageFilterWidget, Windows.class);
     }
 
     @Test
     public void testAddToScenarioButtonClickListener() {
         mockStatic(Windows.class);
-        ClickEvent clickEvent = createMock(ClickEvent.class);
         prepareCreateScenarioExpectation();
         expect(controller.getBeansCount()).andReturn(1).once();
         expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
@@ -255,42 +272,39 @@ public class SalUsageWidgetTest {
         expect(controller.getIneligibleBatchesNames(Set.of(BATCH_ID))).andReturn(List.of()).once();
         Windows.showModalWindow(anyObject(CreateSalScenarioWindow.class));
         expectLastCall().once();
-        replay(controller, clickEvent, Windows.class);
-        applyAddToScenarioButtonClick(clickEvent);
-        verify(controller, clickEvent, Windows.class);
+        replay(controller, Windows.class);
+        applyAddToScenarioButtonClick();
+        verify(controller, Windows.class);
     }
 
     @Test
     public void testAddToScenarioButtonClickListenerWithEmptyUsages() {
         mockStatic(Windows.class);
-        ClickEvent clickEvent = createMock(ClickEvent.class);
         expect(controller.getBeansCount()).andReturn(0).once();
         prepareCreateScenarioExpectation();
         Windows.showNotificationWindow("Scenario cannot be created. There are no usages to include into scenario");
         expectLastCall().once();
-        replay(controller, clickEvent, Windows.class);
-        applyAddToScenarioButtonClick(clickEvent);
-        verify(controller, clickEvent, Windows.class);
+        replay(controller, Windows.class);
+        applyAddToScenarioButtonClick();
+        verify(controller, Windows.class);
     }
 
     @Test
     public void testAddToScenarioButtonClickListenerWithInvalidStatus() {
         mockStatic(Windows.class);
-        ClickEvent clickEvent = createMock(ClickEvent.class);
         expect(controller.getBeansCount()).andReturn(1).once();
         prepareCreateScenarioExpectation();
         expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(false).once();
         Windows.showNotificationWindow("Only usages in ELIGIBLE status can be added to scenario");
         expectLastCall().once();
-        replay(controller, clickEvent, Windows.class);
-        applyAddToScenarioButtonClick(clickEvent);
-        verify(controller, clickEvent, Windows.class);
+        replay(controller, Windows.class);
+        applyAddToScenarioButtonClick();
+        verify(controller, Windows.class);
     }
 
     @Test
     public void testAddToScenarioButtonClickListenerWithInvalidRightsholders() {
         mockStatic(Windows.class);
-        ClickEvent clickEvent = createMock(ClickEvent.class);
         expect(controller.getBeansCount()).andReturn(1).once();
         prepareCreateScenarioExpectation();
         expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
@@ -298,25 +312,24 @@ public class SalUsageWidgetTest {
         Windows.showNotificationWindow(
             "Scenario cannot be created. The following rightsholder(s) are absent in PRM: <i><b>[700000000]</b></i>");
         expectLastCall().once();
-        replay(controller, clickEvent, Windows.class);
-        applyAddToScenarioButtonClick(clickEvent);
-        verify(controller, clickEvent, Windows.class);
+        replay(controller, Windows.class);
+        applyAddToScenarioButtonClick();
+        verify(controller, Windows.class);
     }
 
     @Test
     public void testAddToScenarioButtonClickListenerWithEmptyBatchFilter() {
         mockStatic(Windows.class);
         filterWidget.getAppliedFilter().setUsageBatchesIds(Set.of());
-        ClickEvent clickEvent = createMock(ClickEvent.class);
         expect(controller.getBeansCount()).andReturn(1).once();
         prepareCreateScenarioExpectation();
         expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
         expect(controller.getInvalidRightsholders()).andReturn(List.of()).once();
         Windows.showNotificationWindow("Please apply Batches Filter to create a scenario");
         expectLastCall().once();
-        replay(controller, clickEvent, Windows.class);
-        applyAddToScenarioButtonClick(clickEvent);
-        verify(controller, clickEvent, Windows.class);
+        replay(controller,  Windows.class);
+        applyAddToScenarioButtonClick();
+        verify(controller,  Windows.class);
     }
 
     @Test
@@ -324,32 +337,30 @@ public class SalUsageWidgetTest {
         mockStatic(Windows.class);
         filterWidget.getAppliedFilter()
             .setUsageBatchesIds(Sets.newHashSet(BATCH_ID, "437d1f1d-c165-404d-8617-b10ef53426be"));
-        ClickEvent clickEvent = createMock(ClickEvent.class);
         expect(controller.getBeansCount()).andReturn(1).once();
         prepareCreateScenarioExpectation();
         expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
         expect(controller.getInvalidRightsholders()).andReturn(List.of()).once();
         Windows.showNotificationWindow("Only one usage batch can be associated with scenario");
         expectLastCall().once();
-        replay(controller, clickEvent, Windows.class);
-        applyAddToScenarioButtonClick(clickEvent);
-        verify(controller, clickEvent, Windows.class);
+        replay(controller,  Windows.class);
+        applyAddToScenarioButtonClick();
+        verify(controller,  Windows.class);
     }
 
     @Test
     public void testAddToScenarioButtonClickListenerWithDetailTypeFilter() {
         mockStatic(Windows.class);
         filterWidget.getAppliedFilter().setSalDetailType(SalDetailTypeEnum.IB);
-        ClickEvent clickEvent = createMock(ClickEvent.class);
         expect(controller.getBeansCount()).andReturn(1).once();
         prepareCreateScenarioExpectation();
         expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
         expect(controller.getInvalidRightsholders()).andReturn(List.of()).once();
         Windows.showNotificationWindow("Detail Type filter should not be applied to create scenario");
         expectLastCall().once();
-        replay(controller, clickEvent, Windows.class);
-        applyAddToScenarioButtonClick(clickEvent);
-        verify(controller, clickEvent, Windows.class);
+        replay(controller,  Windows.class);
+        applyAddToScenarioButtonClick();
+        verify(controller,  Windows.class);
     }
 
     @Test
@@ -365,14 +376,13 @@ public class SalUsageWidgetTest {
             "<ul><li><i><b>Batch Name</b></i></ul>");
         expectLastCall().once();
         replay(controller, clickEvent, Windows.class);
-        applyAddToScenarioButtonClick(clickEvent);
+        applyAddToScenarioButtonClick();
         verify(controller, clickEvent, Windows.class);
     }
 
     @Test
     public void testAddToScenarioButtonClickListenerWithIneligibleBatches() {
         mockStatic(Windows.class);
-        ClickEvent clickEvent = createMock(ClickEvent.class);
         expect(controller.getBeansCount()).andReturn(1).once();
         expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
         expect(controller.getInvalidRightsholders()).andReturn(List.of()).once();
@@ -382,32 +392,34 @@ public class SalUsageWidgetTest {
         Windows.showNotificationWindow("The following batches have usages that are not in ELIGIBLE status:" +
             "<ul><li><i><b>Batch Name</b></i></ul>");
         expectLastCall().once();
-        replay(controller, clickEvent, Windows.class);
-        applyAddToScenarioButtonClick(clickEvent);
-        verify(controller, clickEvent, Windows.class);
+        replay(controller, Windows.class);
+        applyAddToScenarioButtonClick();
+        verify(controller, Windows.class);
     }
 
-    private void applyAddToScenarioButtonClick(ClickEvent event) {
-        Button addToScenarioButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
-            .getComponent(0)).getComponent(3);
+    private void applyAddToScenarioButtonClick() {
+        Button addToScenarioButton = (Button) ((HorizontalLayout)
+            ((VerticalLayout) usagesWidget.getSecondComponent()).getComponent(0)).getComponent(4);
         Collection<?> listeners = addToScenarioButton.getListeners(ClickEvent.class);
         assertEquals(2, listeners.size());
         ClickListener clickListener = (ClickListener) listeners.iterator().next();
-        clickListener.buttonClick(event);
+        clickListener.buttonClick(null);
     }
 
     private void verifyButtonsLayout(HorizontalLayout layout) {
         assertTrue(layout.isSpacing());
         assertEquals(new MarginInfo(true), layout.getMargin());
-        assertEquals(5, layout.getComponentCount());
+        assertEquals(6, layout.getComponentCount());
         verifyMenuBar(layout.getComponent(0), "Usage Batch", true,
             List.of("Load Item Bank", "Load Usage Data", "View"));
         verifyMenuBar(layout.getComponent(1), "Fund Pool", true, List.of("Load", "View"));
         Button updateRightsholdersButton = (Button) layout.getComponent(2);
         assertEquals("Update Rightsholders", updateRightsholdersButton.getCaption());
-        Button addToScenarioButton = (Button) layout.getComponent(3);
+        Button excludeDetailsButton = (Button) layout.getComponent(3);
+        assertEquals("Exclude Details", excludeDetailsButton.getCaption());
+        Button addToScenarioButton = (Button) layout.getComponent(4);
         assertEquals("Add To Scenario", addToScenarioButton.getCaption());
-        Button exportButton = (Button) layout.getComponent(4);
+        Button exportButton = (Button) layout.getComponent(5);
         assertEquals("Export", exportButton.getCaption());
     }
 
