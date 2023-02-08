@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.scenario.api.sal;
 
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonScenariosController;
 
 import java.util.List;
@@ -27,9 +28,9 @@ public interface ISalScenariosController extends ICommonScenariosController {
 
     /**
      * @return list of {@link Scenario}s in
-     * {@link com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum#APPROVED} status.
+     * @param status scenario staus instance of {@link ScenarioStatusEnum}.
      */
-    List<Scenario> getApprovedScenarios();
+    List<Scenario> getScenariosByStatus(ScenarioStatusEnum status);
 
     /**
      * Sends {@link Scenario}s to LM.

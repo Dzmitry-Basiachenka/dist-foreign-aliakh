@@ -55,9 +55,9 @@ public class SalScenariosController extends CommonScenariosController implements
     private IFundPoolService fundPoolService;
 
     @Override
-    public List<Scenario> getApprovedScenarios() {
+    public List<Scenario> getScenariosByStatus(ScenarioStatusEnum status) {
         return getScenarioService().getScenariosByProductFamiliesAndStatuses(
-            Set.of(getProductFamilyProvider().getSelectedProductFamily()), Set.of(ScenarioStatusEnum.APPROVED));
+            Set.of(getProductFamilyProvider().getSelectedProductFamily()), Set.of(status));
     }
 
     @Override
