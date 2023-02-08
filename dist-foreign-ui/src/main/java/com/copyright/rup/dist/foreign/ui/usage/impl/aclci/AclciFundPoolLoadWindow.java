@@ -59,8 +59,8 @@ class AclciFundPoolLoadWindow extends Window {
     private final IAclciUsageController usageController;
     private final Binder<FundPool> binder = new Binder<>();
     private final Binder<FundPool> amountsBinder = new Binder<>();
-    private FundPool fundPool;
 
+    private FundPool fundPool;
     private TextField fundPoolName;
     private TextField coverageYears;
     private TextField grossAmount;

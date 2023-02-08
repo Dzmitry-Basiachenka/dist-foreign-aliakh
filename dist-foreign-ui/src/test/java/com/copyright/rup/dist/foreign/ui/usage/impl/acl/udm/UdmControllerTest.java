@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 
+import com.copyright.rup.dist.foreign.ui.status.api.IUdmBatchStatusController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineValueController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmProxyValueController;
@@ -34,6 +35,7 @@ public class UdmControllerTest {
     private IUdmProxyValueController udmProxyValueController;
     private IUdmBaselineController udmBaselineController;
     private IUdmBaselineValueController udmBaselineValueController;
+    private IUdmBatchStatusController udmBatchStatusController;
 
     @Before
     public void setUp() {
@@ -42,11 +44,13 @@ public class UdmControllerTest {
         udmProxyValueController = createMock(IUdmProxyValueController.class);
         udmBaselineController = createMock(IUdmBaselineController.class);
         udmBaselineValueController = createMock(IUdmBaselineValueController.class);
+        udmBatchStatusController = createMock(IUdmBatchStatusController.class);
         Whitebox.setInternalState(controller, udmUsageController);
         Whitebox.setInternalState(controller, udmValueController);
         Whitebox.setInternalState(controller, udmProxyValueController);
         Whitebox.setInternalState(controller, udmBaselineController);
         Whitebox.setInternalState(controller, udmBaselineValueController);
+        Whitebox.setInternalState(controller, udmBatchStatusController);
     }
 
     @Test
@@ -72,6 +76,11 @@ public class UdmControllerTest {
     @Test
     public void testGetUdmBaselineValueController() {
         assertSame(udmBaselineValueController, controller.getUdmBaselineValueController());
+    }
+
+    @Test
+    public void testGetUdmBatchStatusController() {
+        assertSame(udmBatchStatusController, controller.getUdmBatchStatusController());
     }
 
     @Test

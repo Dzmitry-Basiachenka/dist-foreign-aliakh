@@ -55,11 +55,11 @@ public class ForeignUi extends CommonUi implements IMediatorProvider {
     private static final String CALCULATIONS_TAB = "Calculations";
 
     private static final String REPORT_MENU_CSS_POSITION = "left: 385px;";
-    private static final String UDM_REPORT_MENU_CSS_POSITION_RESEARCHER = "left: 165px; top: 29px;";
-    private static final String UDM_REPORT_MENU_CSS_POSITION_SPECIALIST = "left: 540px; top: 29px;";
-    private static final String UDM_REPORT_MENU_CSS_POSITION_MANAGER = "left: 415px; top: 29px;";
-    private static final String UDM_REPORT_MENU_CSS_POSITION_VIEW_ONLY = "left: 415px; top: 29px;";
-    private static final String UDM_REPORT_MENU_CSS_POSITION_APPROVER = "left: 415px; top: 29px;";
+    private static final String UDM_REPORT_MENU_CSS_POSITION_RESEARCHER = "left: 290px; top: 29px;";
+    private static final String UDM_REPORT_MENU_CSS_POSITION_SPECIALIST = "left: 665px; top: 29px;";
+    private static final String UDM_REPORT_MENU_CSS_POSITION_MANAGER = "left: 540px; top: 29px;";
+    private static final String UDM_REPORT_MENU_CSS_POSITION_VIEW_ONLY = "left: 540px; top: 29px;";
+    private static final String UDM_REPORT_MENU_CSS_POSITION_APPROVER = "left: 540px; top: 29px;";
     private static final String ACL_REPORT_MENU_CSS_POSITION = "left: 400px; top: 29px;";
 
     @Autowired

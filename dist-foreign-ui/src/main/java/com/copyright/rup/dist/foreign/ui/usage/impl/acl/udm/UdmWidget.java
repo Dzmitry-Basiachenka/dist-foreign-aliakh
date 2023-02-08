@@ -40,6 +40,7 @@ public class UdmWidget extends TabSheet implements IUdmWidget {
             initAndAddTab(() -> udmController.getUdmBaselineController(), "tab.baseline");
             initAndAddTab(() -> udmController.getUdmBaselineValueController(), "tab.baseline_values");
         }
+        initAndAddTab(() -> udmController.getUdmBatchStatusController(), "tab.batch_status");
         setSizeFull();
         return this;
     }
