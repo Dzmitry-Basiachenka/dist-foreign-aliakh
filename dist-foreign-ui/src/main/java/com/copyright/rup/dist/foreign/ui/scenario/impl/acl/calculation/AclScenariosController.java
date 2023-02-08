@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.scenario.impl.acl.calculation;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.reporting.api.IStreamSourceHandler;
+import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.AclFundPool;
 import com.copyright.rup.dist.foreign.domain.AclFundPoolDetailDto;
 import com.copyright.rup.dist.foreign.domain.AclGrantSet;
@@ -335,6 +336,17 @@ public class AclScenariosController extends CommonController<IAclScenariosWidget
     @Override
     public void onFilterChanged(FilterChangedEvent event) {
         getWidget().refresh();
+    }
+
+    @Override
+    public boolean canUserApproveAclScenario(String scenarioId) {
+        String userName = RupContextUtils.getUserName();
+        return aclScenarioHistoryController.getActions(scenarioId)
+            .stream()
+            .filter(auditItem -> ScenarioActionTypeEnum.SUBMITTED == auditItem.getActionType())
+            .findFirst()
+            .filter(auditItem -> userName.equals(auditItem.getCreateUser()))
+            .isEmpty();
     }
 
     private void appendCriterionMessage(StringBuilder builder, String criterionName, Object values) {

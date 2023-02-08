@@ -249,7 +249,13 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
         });
         submitButton.addClickListener(event -> aclScenariosController.handleAction(ScenarioActionTypeEnum.SUBMITTED));
         rejectButton.addClickListener(event -> aclScenariosController.handleAction(ScenarioActionTypeEnum.REJECTED));
-        approveButton.addClickListener(event -> aclScenariosController.handleAction(ScenarioActionTypeEnum.APPROVED));
+        approveButton.addClickListener(event -> {
+            if (aclScenariosController.canUserApproveAclScenario(getSelectedScenario().getId())) {
+                aclScenariosController.handleAction(ScenarioActionTypeEnum.APPROVED);
+            } else {
+                Windows.showNotificationWindow(ForeignUi.getMessage("message.error.invalid_acl_scenario_approver"));
+            }
+        });
         sendToLmButton.addClickListener(event -> aclScenariosController.sendToLm());
     }
 
