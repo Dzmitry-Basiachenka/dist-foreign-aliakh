@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl.sal;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGridItems;
+
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
@@ -12,6 +14,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.ui.scenario.api.sal.ISalScenariosController;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
@@ -53,7 +56,8 @@ public class SalSendToLmWindowTest {
         scenario1 = buildScenario(SCENARIO_ID_1, "SAL Distribution 10/10/2020");
         scenario2 = buildScenario(SCENARIO_ID_2, "SAL Distribution 10/12/2020");
         ISalScenariosController controller = createMock(ISalScenariosController.class);
-        expect(controller.getApprovedScenarios()).andReturn(List.of(scenario1, scenario2)).once();
+        expect(controller.getScenariosByStatus(ScenarioStatusEnum.APPROVED))
+            .andReturn(List.of(scenario1, scenario2)).once();
         replay(controller);
         widget = new SalSendToLmWindow(controller);
         verify(controller);
@@ -63,8 +67,8 @@ public class SalSendToLmWindowTest {
     public void testComponentStructure() {
         assertEquals(500, widget.getWidth(), 0);
         assertEquals(400, widget.getHeight(), 0);
-        assertEquals("send-to-lm-window", widget.getStyleName());
-        assertEquals("send-to-lm-window", widget.getId());
+        assertEquals("sal-choose-scenarios-window", widget.getStyleName());
+        assertEquals("sal-choose-scenarios-window", widget.getId());
         assertEquals(Sizeable.Unit.PIXELS, widget.getWidthUnits());
         assertEquals(VerticalLayout.class, widget.getContent().getClass());
         VerticalLayout content = (VerticalLayout) widget.getContent();
@@ -95,6 +99,11 @@ public class SalSendToLmWindowTest {
         List<Column> columns = grid.getColumns();
         assertEquals(List.of("Scenario Name"), columns.stream().map(Column::getCaption).collect(Collectors.toList()));
         assertEquals(List.of(-1.0), columns.stream().map(Column::getWidth).collect(Collectors.toList()));
+        Object[][] expectedCells = {
+            {"SAL Distribution 10/10/2020"},
+            {"SAL Distribution 10/12/2020"}
+        };
+        verifyGridItems(grid, List.of(scenario1, scenario2), expectedCells);
     }
 
     private void verifyButtonsLayout(HorizontalLayout buttonsLayout) {

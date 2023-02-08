@@ -14,6 +14,7 @@ import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.ScenarioUsageFilter;
@@ -94,6 +95,17 @@ public class SalScenariosControllerTest {
     @Test
     public void testInstantiateWidget() {
         assertNotNull(scenariosController.instantiateWidget());
+    }
+
+    @Test
+    public void testGetScenariosByStatus() {
+        List<Scenario> scenarios = List.of(scenario1);
+        expect(productFamilyProvider.getSelectedProductFamily()).andReturn(SAL_PRODUCT_FAMILY).once();
+        expect(scenarioService.getScenariosByProductFamiliesAndStatuses(
+            Set.of(SAL_PRODUCT_FAMILY), Set.of(ScenarioStatusEnum.APPROVED))).andReturn(scenarios).once();
+        replay(scenarioService, productFamilyProvider);
+        assertEquals(scenarios, scenariosController.getScenariosByStatus(ScenarioStatusEnum.APPROVED));
+        verify(scenarioService, productFamilyProvider);
     }
 
     @Test
