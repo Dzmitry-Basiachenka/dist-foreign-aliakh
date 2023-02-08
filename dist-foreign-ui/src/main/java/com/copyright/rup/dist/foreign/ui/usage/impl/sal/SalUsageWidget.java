@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.sal;
 
 import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
+import com.copyright.rup.dist.foreign.domain.SalDetailTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
@@ -44,6 +45,7 @@ public class SalUsageWidget extends CommonUsageWidget implements ISalUsageWidget
     private MenuBar.MenuItem loadUsageDataMenuItem;
     private MenuBar.MenuItem loadFundPoolMenuItem;
     private Button updateRightsholdersButton;
+    private Button excludeDetailsButton;
     private Button addToScenarioButton;
     private Button exportButton;
 
@@ -63,6 +65,7 @@ public class SalUsageWidget extends CommonUsageWidget implements ISalUsageWidget
         mediator.setLoadUsageDataMenuItem(loadUsageDataMenuItem);
         mediator.setLoadFundPoolMenuItem(loadFundPoolMenuItem);
         mediator.setUpdateRightsholdersButton(updateRightsholdersButton);
+        mediator.setExcludeDetailsButton(excludeDetailsButton);
         mediator.setAddToScenarioButton(addToScenarioButton);
         return mediator;
     }
@@ -93,7 +96,7 @@ public class SalUsageWidget extends CommonUsageWidget implements ISalUsageWidget
         addColumn(usageDto -> usageDto.getSalUsage().getAssessmentType(), "table.column.assessment_type",
             "assessmentType", true, 150);
         addColumn(usageDto -> CommonDateUtils.format(usageDto.getSalUsage().getScoredAssessmentDate(),
-            RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT), "table.column.scored_assessment_date", "scoredAssessmentDate",
+                RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT), "table.column.scored_assessment_date", "scoredAssessmentDate",
             true, 200);
         addColumn(usageDto -> usageDto.getSalUsage().getReportedWorkPortionId(),
             "table.column.reported_work_portion_id", "reportedWorkPortionId", true, 180);
@@ -150,12 +153,13 @@ public class SalUsageWidget extends CommonUsageWidget implements ISalUsageWidget
         initUsageBatchMenuBar();
         initFundPoolMenuBar();
         initUpdateRightsholdersButton();
+        initExcludeDetailsButton();
         initAddToScenarioButton();
         initExportButton();
-        VaadinUtils.setButtonsAutoDisabled(updateRightsholdersButton, addToScenarioButton);
-        HorizontalLayout layout =
-            new HorizontalLayout(usageBatchMenuBar, fundPoolMenuBar, updateRightsholdersButton, addToScenarioButton,
-                exportButton);
+        VaadinUtils.setButtonsAutoDisabled(updateRightsholdersButton, excludeDetailsButton, addToScenarioButton,
+            exportButton);
+        HorizontalLayout layout = new HorizontalLayout(usageBatchMenuBar, fundPoolMenuBar, updateRightsholdersButton,
+            excludeDetailsButton, addToScenarioButton, exportButton);
         layout.setMargin(true);
         VaadinUtils.addComponentStyle(layout, "usages-buttons");
         return layout;
@@ -194,6 +198,11 @@ public class SalUsageWidget extends CommonUsageWidget implements ISalUsageWidget
         updateRightsholdersButton.addClickListener(event -> onUpdateRightsholdersButtonClicked());
     }
 
+    private void initExcludeDetailsButton() {
+        excludeDetailsButton = Buttons.createButton(ForeignUi.getMessage("button.exclude_details"));
+        excludeDetailsButton.addClickListener(event -> onExcludeDetailsButtonClicked());
+    }
+
     private void initAddToScenarioButton() {
         addToScenarioButton = Buttons.createButton(ForeignUi.getMessage("button.add_to_scenario"));
         addToScenarioButton.addClickListener(event -> onAddToScenarioClicked(new CreateSalScenarioWindow(controller)));
@@ -220,6 +229,15 @@ public class SalUsageWidget extends CommonUsageWidget implements ISalUsageWidget
         OnDemandFileDownloader fileDownloader =
             new OnDemandFileDownloader(controller.getExportUsagesStreamSource().getSource());
         fileDownloader.extend(exportButton);
+    }
+
+    private void onExcludeDetailsButtonClicked() {
+        SalDetailTypeEnum selectedDetailType =
+            controller.getUsageFilterController().getWidget().getAppliedFilter().getSalDetailType();
+        //TODO replace with positive condition after main logic will be implemented
+        if (Objects.isNull(selectedDetailType) || SalDetailTypeEnum.UD == selectedDetailType) {
+            Windows.showNotificationWindow(ForeignUi.getMessage("message.error.sal_exclude_details_invalid_filter"));
+        }
     }
 
     private void onUpdateRightsholdersButtonClicked() {
