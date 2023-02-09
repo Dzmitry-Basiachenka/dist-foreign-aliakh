@@ -17,6 +17,7 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageController;
@@ -44,9 +45,11 @@ import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 /**
@@ -73,11 +76,15 @@ public class ViewSalFundPoolWindowTest {
     public void setUp() {
         mockStatic(ForeignSecurityUtils.class);
         controller = createMock(ISalUsageController.class);
+        IStreamSource streamSource = createMock(IStreamSource.class);
+        expect(streamSource.getSource())
+            .andReturn(new SimpleImmutableEntry(createMock(Supplier.class), createMock(Supplier.class))).times(1);
+        expect(controller.getExportFundPoolsStreamSource()).andReturn(streamSource).once();
         expect(ForeignSecurityUtils.hasDeleteFundPoolPermission()).andReturn(true).once();
         expect(controller.getFundPools()).andReturn(List.of(fundPool)).once();
-        replay(controller, ForeignSecurityUtils.class);
+        replay(controller, streamSource, ForeignSecurityUtils.class);
         viewSalFundPoolWindow = new ViewSalFundPoolWindow(controller);
-        verify(controller, ForeignSecurityUtils.class);
+        verify(controller, streamSource, ForeignSecurityUtils.class);
         reset(controller, ForeignSecurityUtils.class);
     }
 
@@ -95,11 +102,7 @@ public class ViewSalFundPoolWindowTest {
         HorizontalLayout buttonsLayout = (HorizontalLayout) content.getComponent(2);
         assertEquals(3, buttonsLayout.getComponentCount());
         verifyButtonsLayout(buttonsLayout, "Export", "Delete", "Close");
-    }
-
-    @Test
-    public void testExportClickListener() {
-        //TODO {skarakhanov} implement later
+        assertEquals(1, buttonsLayout.getComponent(0).getExtensions().size());
     }
 
     @Test

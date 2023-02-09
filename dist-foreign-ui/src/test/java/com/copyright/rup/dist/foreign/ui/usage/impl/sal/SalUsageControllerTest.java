@@ -227,6 +227,31 @@ public class SalUsageControllerTest {
     }
 
     @Test
+    public void testGetExportFundPoolsStreamSource() {
+        mockStatic(OffsetDateTime.class);
+        Capture<Supplier<String>> fileNameSupplierCapture = newCapture();
+        Capture<Consumer<PipedOutputStream>> posConsumerCapture = newCapture();
+        String fileName = "export_fund_pools_";
+        Supplier<String> fileNameSupplier = () -> fileName;
+        Supplier<InputStream> inputStreamSupplier =
+            () -> IOUtils.toInputStream(StringUtils.EMPTY, StandardCharsets.UTF_8);
+        PipedOutputStream pos = new PipedOutputStream();
+        expect(OffsetDateTime.now()).andReturn(DATE).once();
+        expect(streamSourceHandler.getCsvStreamSource(capture(fileNameSupplierCapture), capture(posConsumerCapture)))
+            .andReturn(new StreamSource(fileNameSupplier, "csv", inputStreamSupplier)).once();
+        reportService.writeSalFundPoolsCsvReport(pos);
+        expectLastCall().once();
+        replay(OffsetDateTime.class, streamSourceHandler, reportService);
+        IStreamSource streamSource = controller.getExportFundPoolsStreamSource();
+        assertEquals("export_fund_pools_01_02_2020_03_04.csv", streamSource.getSource().getKey().get());
+        assertEquals(fileName, fileNameSupplierCapture.getValue().get());
+        Consumer<PipedOutputStream> posConsumer = posConsumerCapture.getValue();
+        assertNotNull(posConsumer);
+        posConsumer.accept(pos);
+        verify(OffsetDateTime.class, streamSourceHandler, reportService);
+    }
+
+    @Test
     public void testIsValidFilteredUsageStatus() {
         usageFilter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
         expect(filterController.getWidget()).andReturn(filterWidget).once();

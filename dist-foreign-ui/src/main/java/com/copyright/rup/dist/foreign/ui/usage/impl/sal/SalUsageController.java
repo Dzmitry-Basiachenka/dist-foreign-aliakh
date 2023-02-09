@@ -189,6 +189,12 @@ public class SalUsageController extends CommonUsageController implements ISalUsa
     }
 
     @Override
+    public IStreamSource getExportFundPoolsStreamSource() {
+        return streamSourceHandler.getCsvStreamSource(() -> "export_fund_pools_",
+            pos -> getReportService().writeSalFundPoolsCsvReport(pos));
+    }
+
+    @Override
     public FundPool calculateFundPoolAmounts(FundPool fundPool) {
         return fundPoolService.calculateSalFundPoolAmounts(fundPool);
     }

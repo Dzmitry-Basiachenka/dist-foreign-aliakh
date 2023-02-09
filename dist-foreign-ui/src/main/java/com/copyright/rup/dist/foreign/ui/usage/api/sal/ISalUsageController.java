@@ -88,6 +88,11 @@ public interface ISalUsageController extends ICommonUsageController {
     IStreamSource getErrorResultStreamSource(String fileName, ProcessingResult processingResult);
 
     /**
+     * @return instance of {@link IStreamSource} for export fund pools.
+     */
+    IStreamSource getExportFundPoolsStreamSource();
+
+    /**
      * @return list of existing {@link FundPool}s.
      */
     List<FundPool> getFundPools();
