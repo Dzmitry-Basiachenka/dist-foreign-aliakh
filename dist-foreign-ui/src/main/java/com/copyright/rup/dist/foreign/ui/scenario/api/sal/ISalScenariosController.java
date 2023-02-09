@@ -40,6 +40,11 @@ public interface ISalScenariosController extends ICommonScenariosController {
     void sendToLm(Set<Scenario> scenarios);
 
     /**
+     * Handles click on 'Submit for Approval' button.
+     */
+    void onSubmitForApprovalButtonClicked();
+
+    /**
      * Handles click on 'Send to LM' button.
      */
     void onSendToLmButtonClicked();

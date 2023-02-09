@@ -123,7 +123,7 @@ public class SalScenariosWidget extends CommonScenariosWidget implements ISalSce
         viewButton.addClickListener(event -> controller.onViewButtonClicked());
         editNameButton.addClickListener(event -> onEditNameButtonClicked());
         deleteButton.addClickListener(event -> controller.onDeleteButtonClicked());
-        submitButton.addClickListener(event -> controller.handleAction(ScenarioActionTypeEnum.SUBMITTED));
+        submitButton.addClickListener(event -> controller.onSubmitForApprovalButtonClicked());
         rejectButton.addClickListener(event -> controller.handleAction(ScenarioActionTypeEnum.REJECTED));
         approveButton.addClickListener(event -> controller.handleAction(ScenarioActionTypeEnum.APPROVED));
         chooseScenariosButton.addClickListener(event -> controller.onSendToLmButtonClicked());
