@@ -614,6 +614,16 @@ public class ReportServiceTest {
     }
 
     @Test
+    public void testWriteSalFundPoolsListCsvReport() {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        salReportRepository.writeSalFundPoolsCsvReport(outputStream);
+        expectLastCall().once();
+        replay(salReportRepository);
+        reportService.writeSalFundPoolsCsvReport(outputStream);
+        verify(salReportRepository);
+    }
+
+    @Test
     public void testWriteSalHistoricalItemBankDetailsReport() {
         Long licenseeAccountNumber = 5588L;
         int periodEndYearFrom = 2019;

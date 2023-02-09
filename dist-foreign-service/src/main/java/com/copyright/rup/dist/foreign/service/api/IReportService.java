@@ -315,7 +315,7 @@ public interface IReportService {
      *
      * @param outputStream     instance of {@link OutputStream}
      */
-    void writeSalFundPoolsCsvReport(PipedOutputStream outputStream);
+    void writeSalFundPoolsCsvReport(OutputStream outputStream);
 
     /**
      * Writes SAL Fund Pools Report into the output stream in CSV format.
