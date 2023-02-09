@@ -21,6 +21,11 @@ public class UdmBatchStatusControllerTest {
     private final UdmBatchStatusController controller = new UdmBatchStatusController();
 
     @Test
+    public void testGetBatchStatuses() {
+        // TODO {dbasiachenka} implement
+    }
+
+    @Test
     public void testInstantiateWidget() {
         IUdmBatchStatusWidget udmBatchStatusWidget = controller.instantiateWidget();
         assertNotNull(udmBatchStatusWidget);

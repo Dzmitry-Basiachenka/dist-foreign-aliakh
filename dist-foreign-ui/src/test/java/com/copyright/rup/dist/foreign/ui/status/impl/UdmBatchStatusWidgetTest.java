@@ -3,13 +3,18 @@ package com.copyright.rup.dist.foreign.ui.status.impl;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGrid;
 
 import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 
+import com.copyright.rup.dist.foreign.domain.UsageBatchStatus;
 import com.copyright.rup.dist.foreign.ui.status.api.IUdmBatchStatusController;
 import com.copyright.rup.dist.foreign.ui.usage.UiTestHelper;
 
+import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.data.provider.Query;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Component;
@@ -28,21 +33,24 @@ import java.util.List;
  * <p>
  * Date: 02/08/2023
  *
- * @author Darya Baraukova
+ * @author Dzmitry Basiachenka
  */
 public class UdmBatchStatusWidgetTest {
 
+    private IUdmBatchStatusController controller;
     private UdmBatchStatusWidget batchStatusWidget;
 
     @Before
     public void setUp() {
-        IUdmBatchStatusController controller = createMock(IUdmBatchStatusController.class);
+        controller = createMock(IUdmBatchStatusController.class);
         batchStatusWidget = new UdmBatchStatusWidget();
         batchStatusWidget.setController(controller);
     }
 
     @Test
     public void testComponentStructure() {
+        expect(controller.getBatchStatuses()).andReturn(List.of()).once();
+        replay(controller);
         batchStatusWidget.init();
         assertEquals(1, batchStatusWidget.getComponentCount());
         Component component = batchStatusWidget.getComponent(0);
@@ -66,6 +74,15 @@ public class UdmBatchStatusWidgetTest {
 
     @Test
     public void testRefresh() {
-        // TODO: {dbasiachenka} implement
+        expect(controller.getBatchStatuses()).andReturn(List.of(new UsageBatchStatus())).times(2);
+        replay(controller);
+        batchStatusWidget.init();
+        batchStatusWidget.refresh();
+        assertEquals(1, batchStatusWidget.getComponentCount());
+        Component component = batchStatusWidget.getComponent(0);
+        assertThat(component, instanceOf(Grid.class));
+        Grid<?> grid = (Grid<?>) component;
+        assertEquals(1, ((ListDataProvider<?>) grid.getDataProvider()).getItems().size());
+        verify(controller);
     }
 }
