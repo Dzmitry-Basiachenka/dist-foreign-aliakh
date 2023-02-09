@@ -1,13 +1,16 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.sal;
 
+import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.SalDetailTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.ui.common.RightsholderFilterWidget;
 import com.copyright.rup.dist.foreign.ui.common.UsageBatchFilterWidget;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.impl.CommonUsageFilterWidget;
+import com.copyright.rup.vaadin.ui.component.filter.CommonFilterWindow;
 import com.copyright.rup.vaadin.ui.component.filter.FilterWindow;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
@@ -38,6 +41,7 @@ public class SalUsageFilterWidget extends CommonUsageFilterWidget implements IAa
     private final ISalUsageFilterController controller;
 
     private UsageBatchFilterWidget usageBatchFilterWidget;
+    private RightsholderFilterWidget rightsholderFilterWidget;
     private ComboBox<UsageStatusEnum> statusComboBox;
     private ComboBox<SalDetailTypeEnum> detailTypeComboBox;
 
@@ -59,6 +63,7 @@ public class SalUsageFilterWidget extends CommonUsageFilterWidget implements IAa
     @Override
     protected void clearFilterValues() {
         usageBatchFilterWidget.reset();
+        rightsholderFilterWidget.reset();
         statusComboBox.clear();
         detailTypeComboBox.clear();
     }
@@ -67,8 +72,8 @@ public class SalUsageFilterWidget extends CommonUsageFilterWidget implements IAa
     protected VerticalLayout initFiltersLayout() {
         initStatusFilter();
         initDetailTypeFilter();
-        VerticalLayout verticalLayout =
-            new VerticalLayout(buildFiltersHeaderLabel(), buildUsageBatchFilter(), statusComboBox, detailTypeComboBox);
+        VerticalLayout verticalLayout = new VerticalLayout(buildFiltersHeaderLabel(), buildUsageBatchFilter(),
+            buildRightsholdersFilter(), statusComboBox, detailTypeComboBox);
         verticalLayout.setMargin(false);
         return verticalLayout;
     }
@@ -83,6 +88,21 @@ public class SalUsageFilterWidget extends CommonUsageFilterWidget implements IAa
         });
         VaadinUtils.addComponentStyle(usageBatchFilterWidget, "batches-filter");
         return usageBatchFilterWidget;
+    }
+
+    private HorizontalLayout buildRightsholdersFilter() {
+        rightsholderFilterWidget = new RightsholderFilterWidget(
+            ForeignUi.getMessage("label.rightsholders"), ForeignUi.getMessage("prompt.rightsholder"),
+            ForeignUi.getMessage("message.error.rh_not_found"), controller::getRightsholders);
+        rightsholderFilterWidget.addFilterSaveListener((CommonFilterWindow.IFilterSaveListener<Rightsholder>) event -> {
+            getFilter().setRhAccountNumbers(event.getSelectedItemsIds()
+                .stream()
+                .map(Rightsholder::getAccountNumber)
+                .collect(Collectors.toSet()));
+            filterChanged();
+        });
+        VaadinUtils.addComponentStyle(rightsholderFilterWidget, "rightsholders-filter");
+        return rightsholderFilterWidget;
     }
 
     private void initStatusFilter() {

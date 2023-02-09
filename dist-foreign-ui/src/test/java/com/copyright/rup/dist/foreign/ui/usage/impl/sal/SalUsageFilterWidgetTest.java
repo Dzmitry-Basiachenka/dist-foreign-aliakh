@@ -189,11 +189,12 @@ public class SalUsageFilterWidgetTest {
     private void verifyFiltersLayout(Component layout) {
         assertThat(layout, instanceOf(VerticalLayout.class));
         VerticalLayout verticalLayout = (VerticalLayout) layout;
-        assertEquals(4, verticalLayout.getComponentCount());
+        assertEquals(5, verticalLayout.getComponentCount());
         verifyFiltersLabel(verticalLayout.getComponent(0));
         verifyItemsFilterWidget(verticalLayout.getComponent(1), "Batches");
-        verifyComboBox(verticalLayout.getComponent(2), "Status", true, SAL_STATUSES);
-        verifyComboBox(verticalLayout.getComponent(3), "Detail Type", true, SalDetailTypeEnum.values());
+        verifyItemsFilterWidget(verticalLayout.getComponent(2), "Rightsholders");
+        verifyComboBox(verticalLayout.getComponent(3), "Status", true, SAL_STATUSES);
+        verifyComboBox(verticalLayout.getComponent(4), "Detail Type", true, SalDetailTypeEnum.values());
     }
 
     private void verifyButtonsLayout(Component component) {

@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.repository.impl;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
+import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.repository.BaseRepository;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
@@ -85,6 +86,11 @@ public class SalUsageRepository extends BaseRepository implements ISalUsageRepos
         parameters.put(PAGEABLE_KEY, pageable);
         parameters.put(SORT_KEY, sort);
         return selectList("ISalUsageMapper.findDtosByFilter", parameters);
+    }
+
+    @Override
+    public List<Rightsholder> findRightsholders() {
+        return selectList("ISalUsageMapper.findRightsholders");
     }
 
     @Override

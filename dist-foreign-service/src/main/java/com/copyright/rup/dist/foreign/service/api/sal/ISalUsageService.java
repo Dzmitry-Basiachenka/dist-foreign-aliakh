@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.service.api.sal;
 
+import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.SalGradeGroupEnum;
@@ -76,6 +77,11 @@ public interface ISalUsageService extends IPaidUsageService {
      * @return the list of {@link UsageDto}
      */
     List<UsageDto> getUsageDtos(UsageFilter filter, Pageable pageable, Sort sort);
+
+    /**
+     * @return unique Rightsholders from usages.
+     */
+    List<Rightsholder> getRightsholders();
 
     /**
      * Finds SAL usages by their ids and sends them on queue for PI matching process.

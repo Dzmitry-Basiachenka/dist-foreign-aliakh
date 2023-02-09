@@ -98,7 +98,7 @@ public class FasNtsUsageFilterWidget extends CommonUsageFilterWidget implements 
             ForeignUi.getMessage("label.rros"),
             ForeignUi.getMessage("prompt.rro"),
             ForeignUi.getMessage("message.error.rro_not_found"),
-            () -> controller.getRros());
+            controller::getRros);
         rightsholderFilterWidget.addFilterSaveListener((IFilterSaveListener<Rightsholder>) saveEvent -> {
             getFilter().setRhAccountNumbers(saveEvent.getSelectedItemsIds()
                 .stream()

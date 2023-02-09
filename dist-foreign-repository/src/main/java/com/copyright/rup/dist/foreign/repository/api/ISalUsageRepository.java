@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.repository.api;
 
+import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.SalGradeGroupEnum;
@@ -62,6 +63,11 @@ public interface ISalUsageRepository {
      * @return the list of {@link UsageDto}
      */
     List<UsageDto> findDtosByFilter(UsageFilter filter, Pageable pageable, Sort sort);
+
+    /**
+     * @return the list of unique {@link Rightsholder}s
+     */
+    List<Rightsholder> findRightsholders();
 
     /**
      * Checks whether provided Work Portion ID already exists in the system.

@@ -323,6 +323,12 @@
                     u.df_usage_batch_uid = #{usageBatchId}
                 </foreach>
             </if>
+            <if test="filter.rhAccountNumbers.size() > 0">
+                and
+                <foreach collection="filter.rhAccountNumbers" item="rh_account_number" open="(" separator=" or " close=")">
+                    u.rh_account_number = #{rh_account_number}
+                </foreach>
+            </if>
             <if test="null != filter.productFamily">
                 and u.product_family = #{filter.productFamily}
             </if>
@@ -588,6 +594,15 @@
 
     <select id="findDtosByFilter" resultMap="salUsageDtoResultMap" parameterType="map" fetchSize="${usageSelectFetchSize}">
         <include refid="ISalUsageMapper.selectDtosByFilterSql"/>
+    </select>
+
+    <select id="findRightsholders" resultMap="RightsholderMapper.rightsholderResultMap">
+        select distinct on (u.rh_account_number)
+            u.rh_account_number,
+            rh.name
+        from ${schema}.df_usage u
+        left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
+        where product_family = 'SAL' and u.rh_account_number is not null
     </select>
 
     <sql id="selectCountForAuditSql">
