@@ -92,7 +92,7 @@ public class FasUsageControllerTest {
     private IUsageService usageService;
     private IFasUsageService fasUsageService;
     private IFasNtsUsageFilterController filterController;
-    private IFasNtsUsageFilterWidget filterWidgetMock;
+    private IFasNtsUsageFilterWidget filterWidget;
     private IFasUsageWidget usagesWidget;
     private IUsageBatchService usageBatchService;
     private IPrmIntegrationService prmIntegrationService;
@@ -112,7 +112,7 @@ public class FasUsageControllerTest {
         usagesWidget = createMock(IFasUsageWidget.class);
         prmIntegrationService = createMock(IPrmIntegrationService.class);
         researchService = createMock(IResearchService.class);
-        filterWidgetMock = createMock(IFasNtsUsageFilterWidget.class);
+        filterWidget = createMock(IFasNtsUsageFilterWidget.class);
         reportService = createMock(IReportService.class);
         streamSourceHandler = createMock(IStreamSourceHandler.class);
         csvProcessorFactory = createMock(CsvProcessorFactory.class);
@@ -132,30 +132,30 @@ public class FasUsageControllerTest {
     @Test
     public void testGetBeansCount() {
         usageFilter.setFiscalYear(2017);
-        expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
-        expect(filterWidgetMock.getAppliedFilter()).andReturn(usageFilter).once();
+        expect(filterController.getWidget()).andReturn(filterWidget).once();
+        expect(filterWidget.getAppliedFilter()).andReturn(usageFilter).once();
         expect(fasUsageService.getUsagesCount(usageFilter)).andReturn(1).once();
-        replay(filterWidgetMock, usageService, fasUsageService, filterController);
+        replay(filterWidget, usageService, fasUsageService, filterController);
         assertEquals(1, controller.getBeansCount());
-        verify(filterWidgetMock, usageService, fasUsageService, filterController);
+        verify(filterWidget, usageService, fasUsageService, filterController);
     }
 
     @Test
     public void testLoadBeans() {
         usageFilter.setFiscalYear(2017);
-        expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
-        expect(filterWidgetMock.getAppliedFilter()).andReturn(usageFilter).once();
+        expect(filterController.getWidget()).andReturn(filterWidget).once();
+        expect(filterWidget.getAppliedFilter()).andReturn(usageFilter).once();
         Capture<Pageable> pageableCapture = newCapture();
         expect(fasUsageService.getUsageDtos(eq(usageFilter), capture(pageableCapture), isNull()))
             .andReturn(List.of()).once();
-        replay(filterWidgetMock, usageService, fasUsageService, filterController);
+        replay(filterWidget, usageService, fasUsageService, filterController);
         List<UsageDto> result = controller.loadBeans(10, 150, null);
         Pageable pageable = pageableCapture.getValue();
         assertEquals(10, pageable.getOffset());
         assertEquals(150, pageable.getLimit());
         assertNotNull(result);
         assertEquals(0, result.size());
-        verify(filterWidgetMock, usageService, fasUsageService, filterController);
+        verify(filterWidget, usageService, fasUsageService, filterController);
     }
 
     @Test
@@ -176,12 +176,12 @@ public class FasUsageControllerTest {
         UsageBatch usageBatch = new UsageBatch();
         usageBatchService.deleteUsageBatch(usageBatch);
         expectLastCall().once();
-        expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
-        filterWidgetMock.clearFilter();
+        expect(filterController.getWidget()).andReturn(filterWidget).once();
+        filterWidget.clearFilter();
         expectLastCall().once();
-        replay(usageBatchService, filterController, filterWidgetMock);
+        replay(usageBatchService, filterController, filterWidget);
         controller.deleteUsageBatch(usageBatch);
-        verify(usageBatchService, filterController, filterWidgetMock);
+        verify(usageBatchService, filterController, filterWidget);
     }
 
     @Test
@@ -204,9 +204,9 @@ public class FasUsageControllerTest {
         prepareGetAppliedFilterExpectations(usageFilter);
         researchService.sendForResearch(anyObject(UsageFilter.class), anyObject(OutputStream.class));
         expectLastCall().once();
-        replay(usageService, filterWidgetMock, filterController);
+        replay(usageService, filterWidget, filterController);
         assertNotNull(controller.getSendForResearchUsagesStreamSource().getSource().getValue().get());
-        verify(usageService, filterWidgetMock, filterController);
+        verify(usageService, filterWidget, filterController);
     }
 
     @Test
@@ -236,23 +236,23 @@ public class FasUsageControllerTest {
         String fileName = "export_usage_";
         Supplier<String> fileNameSupplier = () -> fileName;
         Supplier<InputStream> inputStreamSupplier =
-                () -> IOUtils.toInputStream(StringUtils.EMPTY, StandardCharsets.UTF_8);
+            () -> IOUtils.toInputStream(StringUtils.EMPTY, StandardCharsets.UTF_8);
         PipedOutputStream pos = new PipedOutputStream();
         expect(OffsetDateTime.now()).andReturn(DATE).once();
-        expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
-        expect(filterWidgetMock.getAppliedFilter()).andReturn(usageFilter).once();
+        expect(filterController.getWidget()).andReturn(filterWidget).once();
+        expect(filterWidget.getAppliedFilter()).andReturn(usageFilter).once();
         expect(streamSourceHandler.getCsvStreamSource(capture(fileNameSupplierCapture), capture(posConsumerCapture)))
             .andReturn(new StreamSource(fileNameSupplier, "csv", inputStreamSupplier)).once();
         reportService.writeFasUsageCsvReport(usageFilter, pos);
         expectLastCall().once();
-        replay(OffsetDateTime.class, filterWidgetMock, filterController, streamSourceHandler, reportService);
+        replay(OffsetDateTime.class, filterWidget, filterController, streamSourceHandler, reportService);
         IStreamSource streamSource = controller.getExportUsagesStreamSource();
         assertEquals("export_usage_01_02_2019_03_04.csv", streamSource.getSource().getKey().get());
         assertEquals(fileName, fileNameSupplierCapture.getValue().get());
         Consumer<PipedOutputStream> posConsumer = posConsumerCapture.getValue();
         posConsumer.accept(pos);
         assertNotNull(posConsumer);
-        verify(OffsetDateTime.class, filterWidgetMock, filterController, streamSourceHandler, reportService);
+        verify(OffsetDateTime.class, filterWidget, filterController, streamSourceHandler, reportService);
     }
 
     @Test
@@ -268,30 +268,30 @@ public class FasUsageControllerTest {
     public void testLoadUsageBatch() {
         UsageBatch usageBatch = new UsageBatch();
         List<Usage> usages = Lists.newArrayList(new Usage());
-        expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
-        filterWidgetMock.clearFilter();
+        expect(filterController.getWidget()).andReturn(filterWidget).once();
+        filterWidget.clearFilter();
         expectLastCall().once();
         expect(usageBatchService.insertFasBatch(usageBatch, usages)).andReturn(1).once();
         usageService.sendForMatching(usages);
         expectLastCall().once();
         usageService.sendForGettingRights(usages, usageBatch.getName());
         expectLastCall().once();
-        replay(usageBatchService, filterController, filterWidgetMock);
+        replay(usageBatchService, filterController, filterWidget);
         assertEquals(1, controller.loadUsageBatch(usageBatch, usages));
-        verify(usageBatchService, filterController, filterWidgetMock);
+        verify(usageBatchService, filterController, filterWidget);
     }
 
     @Test
     public void testLoadResearchedUsages() {
         List<ResearchedUsage> researchedUsages = Lists.newArrayList(new ResearchedUsage());
-        expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
-        filterWidgetMock.clearFilter();
+        expect(filterController.getWidget()).andReturn(filterWidget).once();
+        filterWidget.clearFilter();
         expectLastCall().once();
         fasUsageService.loadResearchedUsages(researchedUsages);
         expectLastCall().once();
-        replay(fasUsageService, filterController, filterWidgetMock);
+        replay(fasUsageService, filterController, filterWidget);
         controller.loadResearchedUsages(researchedUsages);
-        verify(fasUsageService, filterController, filterWidgetMock);
+        verify(fasUsageService, filterController, filterWidget);
     }
 
     @Test
@@ -329,17 +329,27 @@ public class FasUsageControllerTest {
     @Test
     public void testIsValidFilteredUsageStatus() {
         usageFilter.setUsageStatus(UsageStatusEnum.WORK_NOT_FOUND);
-        expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
-        expect(filterWidgetMock.getAppliedFilter()).andReturn(usageFilter).once();
+        expect(filterController.getWidget()).andReturn(filterWidget).once();
+        expect(filterWidget.getAppliedFilter()).andReturn(usageFilter).once();
         expect(usageService.isValidFilteredUsageStatus(usageFilter, UsageStatusEnum.WORK_NOT_FOUND))
             .andReturn(true).once();
-        replay(filterController, filterWidgetMock, usageService);
+        replay(filterController, filterWidget, usageService);
         assertTrue(controller.isValidFilteredUsageStatus(UsageStatusEnum.WORK_NOT_FOUND));
-        verify(filterController, filterWidgetMock, usageService);
+        verify(filterController, filterWidget, usageService);
+    }
+
+    @Test
+    public void testGetUsageDtosToUpdate() {
+        expect(filterController.getWidget()).andReturn(filterWidget).once();
+        expect(filterWidget.getAppliedFilter()).andReturn(usageFilter).once();
+        expect(fasUsageService.getUsageDtos(usageFilter, null, null)).andReturn(List.of(new UsageDto())).once();
+        replay(filterWidget, fasUsageService, filterController);
+        assertEquals(1, controller.getUsageDtosToUpdate().size());
+        verify(filterWidget, fasUsageService, filterController);
     }
 
     private void prepareGetAppliedFilterExpectations(UsageFilter expectedUsageFilter) {
-        expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
-        expect(filterWidgetMock.getAppliedFilter()).andReturn(expectedUsageFilter).once();
+        expect(filterController.getWidget()).andReturn(filterWidget).once();
+        expect(filterWidget.getAppliedFilter()).andReturn(expectedUsageFilter).once();
     }
 }

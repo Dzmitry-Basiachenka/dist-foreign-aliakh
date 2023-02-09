@@ -224,7 +224,37 @@ public class FasUsageWidgetTest {
 
     @Test
     public void testUpdateUsagesButtonClickListener() {
-        //TODO: implement
+        mockStatic(Windows.class);
+        ClickEvent clickEvent = createMock(ClickEvent.class);
+        expect(controller.getBeansCount()).andReturn(1).once();
+        expect(controller.getUsageDtosToUpdate()).andReturn(List.of(new UsageDto())).once();
+        Windows.showModalWindow(anyObject(FasUsageUpdateWindow.class));
+        expectLastCall().once();
+        replay(controller, clickEvent, Windows.class);
+        Button updateUsagesButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
+            .getComponent(0)).getComponent(3);
+        Collection<?> listeners = updateUsagesButton.getListeners(ClickEvent.class);
+        assertEquals(2, listeners.size());
+        ClickListener clickListener = (ClickListener) listeners.iterator().next();
+        clickListener.buttonClick(clickEvent);
+        verify(controller, clickEvent, Windows.class);
+    }
+
+    @Test
+    public void testUpdateUsagesButtonClickListenerNoUsages() {
+        mockStatic(Windows.class);
+        ClickEvent clickEvent = createMock(ClickEvent.class);
+        expect(controller.getBeansCount()).andReturn(0).once();
+        Windows.showNotificationWindow("There are no usages to update");
+        expectLastCall().once();
+        replay(controller, clickEvent, Windows.class);
+        Button updateUsagesButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
+            .getComponent(0)).getComponent(3);
+        Collection<?> listeners = updateUsagesButton.getListeners(ClickEvent.class);
+        assertEquals(2, listeners.size());
+        ClickListener clickListener = (ClickListener) listeners.iterator().next();
+        clickListener.buttonClick(clickEvent);
+        verify(controller, clickEvent, Windows.class);
     }
 
     @Test
@@ -403,7 +433,7 @@ public class FasUsageWidgetTest {
             ObjectMapper mapper = new ObjectMapper();
             mapper.registerModule(new JavaTimeModule());
             mapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
-            return mapper.readValue(content, new TypeReference<List<UsageDto>>() {
+            return mapper.readValue(content, new TypeReference<>() {
             });
         } catch (IOException e) {
             throw new AssertionError(e);

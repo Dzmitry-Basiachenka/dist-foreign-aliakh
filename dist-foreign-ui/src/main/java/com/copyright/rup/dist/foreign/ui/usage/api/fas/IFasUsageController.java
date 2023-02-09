@@ -5,6 +5,7 @@ import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.Processin
 import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
+import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.service.impl.csv.ResearchedUsagesCsvProcessor;
 import com.copyright.rup.dist.foreign.service.impl.csv.UsageCsvProcessor;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageController;
@@ -71,4 +72,11 @@ public interface IFasUsageController extends ICommonUsageController {
      * @param researchedUsages list of {@link ResearchedUsage}s
      */
     void loadResearchedUsages(List<ResearchedUsage> researchedUsages);
+
+    /**
+     * Gets {@link UsageDto}s for updating.
+     *
+     * @return list of {@link UsageDto}s
+     */
+    List<UsageDto> getUsageDtosToUpdate();
 }
