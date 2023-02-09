@@ -223,13 +223,18 @@ public class FasUsageWidgetTest {
     }
 
     @Test
+    public void testUpdateUsagesButtonClickListener() {
+        //TODO: implement
+    }
+
+    @Test
     public void testAddToScenarioButtonEmptyUsagesTableClickListener() {
         mockStatic(Windows.class);
         Grid grid = new Grid();
         Whitebox.setInternalState(usagesWidget, grid);
         ClickEvent clickEvent = createMock(ClickEvent.class);
         Button addToScenarioButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
-            .getComponent(0)).getComponent(3);
+            .getComponent(0)).getComponent(4);
         assertTrue(addToScenarioButton.isDisableOnClick());
         Windows.showNotificationWindow("Scenario cannot be created. There are no usages to include into scenario");
         expectLastCall().once();
@@ -250,7 +255,7 @@ public class FasUsageWidgetTest {
         Whitebox.setInternalState(usagesWidget, grid);
         ClickEvent clickEvent = createMock(ClickEvent.class);
         Button addToScenarioButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
-            .getComponent(0)).getComponent(3);
+            .getComponent(0)).getComponent(4);
         assertTrue(addToScenarioButton.isDisableOnClick());
         prepareCreateScenarioExpectation();
         expect(controller.getBeansCount()).andReturn(1).once();
@@ -272,7 +277,7 @@ public class FasUsageWidgetTest {
         Whitebox.setInternalState(usagesWidget, grid);
         ClickEvent clickEvent = createMock(ClickEvent.class);
         Button addToScenarioButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
-            .getComponent(0)).getComponent(3);
+            .getComponent(0)).getComponent(4);
         assertTrue(addToScenarioButton.isDisableOnClick());
         prepareCreateScenarioExpectation();
         expect(controller.getBeansCount()).andReturn(1).once();
@@ -296,7 +301,7 @@ public class FasUsageWidgetTest {
         Whitebox.setInternalState(usagesWidget, grid);
         ClickEvent clickEvent = createMock(ClickEvent.class);
         Button addToScenarioButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
-            .getComponent(0)).getComponent(3);
+            .getComponent(0)).getComponent(4);
         assertTrue(addToScenarioButton.isDisableOnClick());
         expect(controller.getBeansCount()).andReturn(1).once();
         expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
@@ -348,13 +353,15 @@ public class FasUsageWidgetTest {
     public void testInitMediator() throws Exception {
         FasUsageMediator mediator = createMock(FasUsageMediator.class);
         expectNew(FasUsageMediator.class).andReturn(mediator).once();
-        mediator.setLoadResearchedUsagesButton(anyObject(Button.class));
-        expectLastCall().once();
-        mediator.setAddToScenarioButton(anyObject(Button.class));
+        mediator.setLoadUsageBatchMenuItem(anyObject(MenuItem.class));
         expectLastCall().once();
         mediator.setSendForResearchButton(anyObject(Button.class));
         expectLastCall().once();
-        mediator.setLoadUsageBatchMenuItem(anyObject(MenuItem.class));
+        mediator.setLoadResearchedUsagesButton(anyObject(Button.class));
+        expectLastCall().once();
+        mediator.setUpdateUsagesButton(anyObject(Button.class));
+        expectLastCall().once();
+        mediator.setAddToScenarioButton(anyObject(Button.class));
         expectLastCall().once();
         replay(FasUsageMediator.class, mediator, controller);
         assertNotNull(usagesWidget.initMediator());
@@ -364,12 +371,13 @@ public class FasUsageWidgetTest {
     private void verifyButtonsLayout(HorizontalLayout layout) {
         assertTrue(layout.isSpacing());
         assertEquals(new MarginInfo(true), layout.getMargin());
-        assertEquals(5, layout.getComponentCount());
+        assertEquals(6, layout.getComponentCount());
         verifyMenuBar(layout.getComponent(0), "Usage Batch", true, List.of("Load", "View"));
         assertEquals("Send for Research", layout.getComponent(1).getCaption());
         assertEquals("Load Researched Details", layout.getComponent(2).getCaption());
-        assertEquals("Add To Scenario", layout.getComponent(3).getCaption());
-        Component component = layout.getComponent(4);
+        assertEquals("Update Usages", layout.getComponent(3).getCaption());
+        assertEquals("Add To Scenario", layout.getComponent(4).getCaption());
+        Component component = layout.getComponent(5);
         assertEquals("Export", component.getCaption());
         Collection<Extension> extensions = component.getExtensions();
         assertTrue(CollectionUtils.isNotEmpty(extensions));

@@ -17,32 +17,38 @@ import com.vaadin.ui.MenuBar;
  */
 class FasUsageMediator implements IMediator {
 
-    private Button loadResearchedUsagesButton;
-    private Button addToScenarioButton;
-    private Button sendForResearchButton;
     private MenuBar.MenuItem loadUsageBatchMenuItem;
+    private Button sendForResearchButton;
+    private Button loadResearchedUsagesButton;
+    private Button updateUsagesButton;
+    private Button addToScenarioButton;
 
     @Override
     public void applyPermissions() {
         loadUsageBatchMenuItem.setVisible(ForeignSecurityUtils.hasLoadUsagePermission());
-        loadResearchedUsagesButton.setVisible(ForeignSecurityUtils.hasLoadResearchedUsagePermission());
-        addToScenarioButton.setVisible(ForeignSecurityUtils.hasCreateEditScenarioPermission());
         sendForResearchButton.setVisible(ForeignSecurityUtils.hasSendForWorkResearchPermission());
+        loadResearchedUsagesButton.setVisible(ForeignSecurityUtils.hasLoadResearchedUsagePermission());
+        updateUsagesButton.setVisible(ForeignSecurityUtils.hasUpdateRightsholderPermission());
+        addToScenarioButton.setVisible(ForeignSecurityUtils.hasCreateEditScenarioPermission());
     }
 
-    void setLoadResearchedUsagesButton(Button loadResearchedUsagesButton) {
-        this.loadResearchedUsagesButton = loadResearchedUsagesButton;
-    }
-
-    void setAddToScenarioButton(Button addToScenarioButton) {
-        this.addToScenarioButton = addToScenarioButton;
+    void setLoadUsageBatchMenuItem(MenuBar.MenuItem loadUsageBatchMenuItem) {
+        this.loadUsageBatchMenuItem = loadUsageBatchMenuItem;
     }
 
     void setSendForResearchButton(Button sendForResearchButton) {
         this.sendForResearchButton = sendForResearchButton;
     }
 
-    void setLoadUsageBatchMenuItem(MenuBar.MenuItem loadUsageBatchMenuItem) {
-        this.loadUsageBatchMenuItem = loadUsageBatchMenuItem;
+    void setLoadResearchedUsagesButton(Button loadResearchedUsagesButton) {
+        this.loadResearchedUsagesButton = loadResearchedUsagesButton;
+    }
+
+    void setUpdateUsagesButton(Button updateUsagesButton) {
+        this.updateUsagesButton = updateUsagesButton;
+    }
+
+    void setAddToScenarioButton(Button addToScenarioButton) {
+        this.addToScenarioButton = addToScenarioButton;
     }
 }

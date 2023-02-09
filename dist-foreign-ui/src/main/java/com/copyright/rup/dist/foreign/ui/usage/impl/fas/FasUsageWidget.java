@@ -33,11 +33,12 @@ import com.vaadin.ui.MenuBar;
  */
 public class FasUsageWidget extends CommonUsageWidget implements IFasUsageWidget {
 
-    private Button loadResearchedUsagesButton;
-    private Button sendForResearchButton;
-    private Button addToScenarioButton;
     private MenuBar usageBatchMenuBar;
     private MenuBar.MenuItem loadUsageBatchMenuItem;
+    private Button sendForResearchButton;
+    private Button loadResearchedUsagesButton;
+    private Button updateUsagesButton;
+    private Button addToScenarioButton;
     private final IFasUsageController controller;
 
     /**
@@ -52,10 +53,11 @@ public class FasUsageWidget extends CommonUsageWidget implements IFasUsageWidget
     @Override
     public IMediator initMediator() {
         FasUsageMediator mediator = new FasUsageMediator();
-        mediator.setLoadResearchedUsagesButton(loadResearchedUsagesButton);
-        mediator.setAddToScenarioButton(addToScenarioButton);
-        mediator.setSendForResearchButton(sendForResearchButton);
         mediator.setLoadUsageBatchMenuItem(loadUsageBatchMenuItem);
+        mediator.setSendForResearchButton(sendForResearchButton);
+        mediator.setLoadResearchedUsagesButton(loadResearchedUsagesButton);
+        mediator.setUpdateUsagesButton(updateUsagesButton);
+        mediator.setAddToScenarioButton(addToScenarioButton);
         return mediator;
     }
 
@@ -124,9 +126,10 @@ public class FasUsageWidget extends CommonUsageWidget implements IFasUsageWidget
             }
         });
         initUsageBatchMenuBar();
-        VaadinUtils.setButtonsAutoDisabled(loadResearchedUsagesButton, addToScenarioButton);
+        initUpdateUsagesButton();
+        VaadinUtils.setButtonsAutoDisabled(loadResearchedUsagesButton, updateUsagesButton, addToScenarioButton);
         HorizontalLayout layout = new HorizontalLayout(usageBatchMenuBar, sendForResearchButton,
-            loadResearchedUsagesButton, addToScenarioButton, exportButton);
+            loadResearchedUsagesButton, updateUsagesButton, addToScenarioButton, exportButton);
         layout.setMargin(true);
         VaadinUtils.addComponentStyle(layout, "usages-buttons");
         return layout;
@@ -147,6 +150,13 @@ public class FasUsageWidget extends CommonUsageWidget implements IFasUsageWidget
             item -> Windows.showModalWindow(new ViewUsageBatchWindow(controller)));
         VaadinUtils.addComponentStyle(usageBatchMenuBar, "usage-batch-menu-bar");
         VaadinUtils.addComponentStyle(usageBatchMenuBar, "v-menubar-df");
+    }
+
+    private void initUpdateUsagesButton() {
+        updateUsagesButton = Buttons.createButton(ForeignUi.getMessage("button.update_usages"));
+        updateUsagesButton.addClickListener(event -> {
+            //TODO: implement
+        });
     }
 
     private static class SendForResearchFileDownloader extends OnDemandFileDownloader {

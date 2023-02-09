@@ -32,25 +32,28 @@ import org.powermock.modules.junit4.PowerMockRunner;
 @PrepareForTest(SecurityUtils.class)
 public class FasUsageMediatorTest {
 
-    private Button loadResearchedUsagesButton;
-    private Button addToScenarioButton;
-    private Button sendForResearchButton;
     private MenuBar usageBatchMenuBar;
     private MenuBar.MenuItem loadUsageBatchMenuItem;
+    private Button sendForResearchButton;
+    private Button loadResearchedUsagesButton;
+    private Button updateUsagesButton;
+    private Button addToScenarioButton;
     private FasUsageMediator mediator;
 
     @Before
     public void setUp() {
-        loadResearchedUsagesButton = new Button();
-        addToScenarioButton = new Button();
-        sendForResearchButton = new Button();
         usageBatchMenuBar = new MenuBar();
         loadUsageBatchMenuItem = usageBatchMenuBar.new MenuItem(StringUtils.EMPTY, null, null);
+        sendForResearchButton = new Button();
+        loadResearchedUsagesButton = new Button();
+        updateUsagesButton = new Button();
+        addToScenarioButton = new Button();
         mediator = new FasUsageMediator();
         mediator.setLoadUsageBatchMenuItem(loadUsageBatchMenuItem);
-        mediator.setLoadResearchedUsagesButton(loadResearchedUsagesButton);
-        mediator.setAddToScenarioButton(addToScenarioButton);
         mediator.setSendForResearchButton(sendForResearchButton);
+        mediator.setLoadResearchedUsagesButton(loadResearchedUsagesButton);
+        mediator.setUpdateUsagesButton(updateUsagesButton);
+        mediator.setAddToScenarioButton(addToScenarioButton);
     }
 
     @Test
@@ -60,9 +63,10 @@ public class FasUsageMediatorTest {
         mediator.applyPermissions();
         assertTrue(usageBatchMenuBar.isVisible());
         assertFalse(loadUsageBatchMenuItem.isVisible());
-        assertFalse(loadResearchedUsagesButton.isVisible());
-        assertFalse(addToScenarioButton.isVisible());
         assertFalse(sendForResearchButton.isVisible());
+        assertFalse(loadResearchedUsagesButton.isVisible());
+        assertFalse(updateUsagesButton.isVisible());
+        assertFalse(addToScenarioButton.isVisible());
         verify(SecurityUtils.class);
     }
 
@@ -73,9 +77,10 @@ public class FasUsageMediatorTest {
         mediator.applyPermissions();
         assertTrue(usageBatchMenuBar.isVisible());
         assertFalse(loadUsageBatchMenuItem.isVisible());
-        assertFalse(loadResearchedUsagesButton.isVisible());
-        assertFalse(addToScenarioButton.isVisible());
         assertFalse(sendForResearchButton.isVisible());
+        assertFalse(loadResearchedUsagesButton.isVisible());
+        assertFalse(updateUsagesButton.isVisible());
+        assertFalse(addToScenarioButton.isVisible());
         verify(SecurityUtils.class);
     }
 
@@ -86,9 +91,10 @@ public class FasUsageMediatorTest {
         mediator.applyPermissions();
         assertTrue(usageBatchMenuBar.isVisible());
         assertTrue(loadUsageBatchMenuItem.isVisible());
-        assertTrue(loadResearchedUsagesButton.isVisible());
-        assertTrue(addToScenarioButton.isVisible());
         assertTrue(sendForResearchButton.isVisible());
+        assertTrue(loadResearchedUsagesButton.isVisible());
+        assertTrue(updateUsagesButton.isVisible());
+        assertTrue(addToScenarioButton.isVisible());
         verify(SecurityUtils.class);
     }
 
@@ -108,8 +114,9 @@ public class FasUsageMediatorTest {
         mockStatic(SecurityUtils.class);
         expect(SecurityUtils.hasPermission("FDA_ACCESS_APPLICATION")).andReturn(true).anyTimes();
         expect(SecurityUtils.hasPermission("FDA_LOAD_USAGE")).andReturn(true).anyTimes();
-        expect(SecurityUtils.hasPermission("FDA_LOAD_RESEARCHED_USAGE")).andReturn(true).anyTimes();
-        expect(SecurityUtils.hasPermission("FDA_CREATE_EDIT_SCENARIO")).andReturn(true).anyTimes();
         expect(SecurityUtils.hasPermission("FDA_SEND_FOR_WORK_RESEARCH")).andReturn(true).anyTimes();
+        expect(SecurityUtils.hasPermission("FDA_LOAD_RESEARCHED_USAGE")).andReturn(true).anyTimes();
+        expect(SecurityUtils.hasPermission("FDA_UPDATE_RIGHTSHOLDER")).andReturn(true).anyTimes();
+        expect(SecurityUtils.hasPermission("FDA_CREATE_EDIT_SCENARIO")).andReturn(true).anyTimes();
     }
 }
