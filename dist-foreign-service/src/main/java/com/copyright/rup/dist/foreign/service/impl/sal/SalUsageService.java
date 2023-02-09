@@ -98,6 +98,11 @@ public class SalUsageService implements ISalUsageService {
     }
 
     @Override
+    public List<Rightsholder> getRightsholders() {
+        return salUsageRepository.findRightsholders();
+    }
+
+    @Override
     public boolean workPortionIdExists(String workPortionId) {
         return salUsageRepository.workPortionIdExists(workPortionId);
     }

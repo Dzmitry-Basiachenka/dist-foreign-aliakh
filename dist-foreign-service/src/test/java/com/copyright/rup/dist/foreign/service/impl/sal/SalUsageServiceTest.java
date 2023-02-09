@@ -139,6 +139,15 @@ public class SalUsageServiceTest {
     }
 
     @Test
+    public void testGetRightsholders() {
+        List<Rightsholder> rightsholders = List.of(new Rightsholder());
+        expect(salUsageRepository.findRightsholders()).andReturn(rightsholders).once();
+        replay(salUsageRepository);
+        assertSame(rightsholders, salUsageService.getRightsholders());
+        verify(salUsageRepository);
+    }
+
+    @Test
     public void testWorkPortionIdExists() {
         expect(salUsageRepository.workPortionIdExists("1201064IB2199")).andReturn(true).once();
         replay(salUsageRepository);

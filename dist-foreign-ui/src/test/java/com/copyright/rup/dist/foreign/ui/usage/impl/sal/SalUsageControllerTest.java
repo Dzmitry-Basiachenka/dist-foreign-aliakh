@@ -207,7 +207,7 @@ public class SalUsageControllerTest {
         String fileName = "export_usage_";
         Supplier<String> fileNameSupplier = () -> fileName;
         Supplier<InputStream> inputStreamSupplier =
-                () -> IOUtils.toInputStream(StringUtils.EMPTY, StandardCharsets.UTF_8);
+            () -> IOUtils.toInputStream(StringUtils.EMPTY, StandardCharsets.UTF_8);
         PipedOutputStream pos = new PipedOutputStream();
         expect(OffsetDateTime.now()).andReturn(DATE).once();
         expect(filterController.getWidget()).andReturn(filterWidget).once();

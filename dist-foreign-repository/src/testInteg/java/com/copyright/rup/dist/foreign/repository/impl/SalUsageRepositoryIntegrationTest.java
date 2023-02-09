@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
@@ -254,6 +255,16 @@ public class SalUsageRepositoryIntegrationTest {
         assertFindDtosByFilterSort(USAGE_ID_3, NUMBER_OF_VIEWS_KEY, Direction.DESC);
         assertFindDtosByFilterSort(USAGE_ID_3, COMMENT_KEY, Direction.ASC);
         assertFindDtosByFilterSort(USAGE_ID_3, COMMENT_KEY, Direction.DESC);
+    }
+
+    @Test
+    @TestData(fileName = FOLDER_NAME + "find-rightsholders.groovy")
+    public void testFindRightsholders() {
+        List<Rightsholder> rightsholders = salUsageRepository.findRightsholders();
+        assertEquals(3, rightsholders.size());
+        assertRightsholder(rightsholders.get(0), 1000000026L, "Georgia State University Business Press [C]");
+        assertRightsholder(rightsholders.get(1), 1000011450L, "Delmar Learning, a division of Cengage Learning");
+        assertRightsholder(rightsholders.get(2), 2000017004L, "Access Copyright, The Canadian Copyright Agency");
     }
 
     @Test
@@ -780,6 +791,11 @@ public class SalUsageRepositoryIntegrationTest {
         filter.setDistributionName(distributionName);
         assertEquals(usageIds.length, salUsageRepository.findCountForAudit(filter));
         verifyUsageDtos(salUsageRepository.findForAudit(filter, null, null), usageIds);
+    }
+
+    private void assertRightsholder(Rightsholder rightsholder, Long expectedAccountNumber, String expectedName) {
+        assertEquals(expectedAccountNumber, rightsholder.getAccountNumber());
+        assertEquals(expectedName, rightsholder.getName());
     }
 
     private void verifyUsageDtos(List<UsageDto> usageDtos, String... usageIds) {

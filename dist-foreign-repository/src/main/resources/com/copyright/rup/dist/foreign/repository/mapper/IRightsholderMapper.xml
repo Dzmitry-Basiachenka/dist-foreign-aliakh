@@ -91,7 +91,7 @@
         </if>
     </select>
 
-    <select id="findAllWithSearch" parameterType="map" resultMap="rightsholderResultMap">
+    <select id="findAllWithSearch" resultMap="rightsholderResultMap" parameterType="map" >
         select distinct on (rh_account_number)
             rh_account_number,
             name
