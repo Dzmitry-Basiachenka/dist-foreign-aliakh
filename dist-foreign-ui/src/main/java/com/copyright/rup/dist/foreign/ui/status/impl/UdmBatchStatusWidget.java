@@ -8,6 +8,7 @@ import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.data.ValueProvider;
 import com.vaadin.data.provider.DataProvider;
+import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.VerticalLayout;
 
@@ -29,6 +30,8 @@ public class UdmBatchStatusWidget extends VerticalLayout implements IUdmBatchSta
     private static final String EMPTY_STYLE_NAME = "empty-batch-status-grid";
 
     private Grid<UsageBatchStatus> batchStatusGrid;
+    private ListDataProvider<UsageBatchStatus> dataProvider;
+    private IUdmBatchStatusController controller;
 
     @SuppressWarnings("unchecked")
     @Override
@@ -42,18 +45,22 @@ public class UdmBatchStatusWidget extends VerticalLayout implements IUdmBatchSta
 
     @Override
     public void setController(IUdmBatchStatusController controller) {
+        this.controller = controller;
     }
 
     @Override
     public void refresh() {
-        // TODO: {dbasiachenka} implement
-        updateGridStyle(List.of());
+        List<UsageBatchStatus> batchStatuses = controller.getBatchStatuses();
+        dataProvider = DataProvider.ofCollection(batchStatuses);
+        batchStatusGrid.setDataProvider(dataProvider);
+        updateGridStyle(batchStatuses);
     }
 
     private void initGrid() {
-        // TODO: {dbasiachenka} implement method for getting batch statuses in controller layer
-        List<UsageBatchStatus> batchStatuses = List.of();
-        batchStatusGrid = new Grid<>(DataProvider.ofCollection(batchStatuses));
+        List<UsageBatchStatus> batchStatuses = controller.getBatchStatuses();
+        dataProvider = DataProvider.ofCollection(batchStatuses);
+        batchStatusGrid = new Grid<>(dataProvider);
+        updateGridStyle(batchStatuses);
         addColumns();
         batchStatusGrid.setSizeFull();
         VaadinUtils.addComponentStyle(batchStatusGrid, "batch-status-grid");
