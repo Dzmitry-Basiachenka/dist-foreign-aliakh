@@ -150,6 +150,11 @@ public class FasUsageController extends CommonUsageController implements IFasUsa
     }
 
     @Override
+    public List<UsageDto> getUsageDtosToUpdate() {
+        return fasUsageService.getUsageDtos(getUsageFilterController().getWidget().getAppliedFilter(), null, null);
+    }
+
+    @Override
     protected ICommonUsageWidget instantiateWidget() {
         return new FasUsageWidget(this);
     }

@@ -155,7 +155,11 @@ public class FasUsageWidget extends CommonUsageWidget implements IFasUsageWidget
     private void initUpdateUsagesButton() {
         updateUsagesButton = Buttons.createButton(ForeignUi.getMessage("button.update_usages"));
         updateUsagesButton.addClickListener(event -> {
-            //TODO: implement
+            if (0 != controller.getBeansCount()) {
+                Windows.showModalWindow(new FasUsageUpdateWindow(controller));
+            } else {
+                Windows.showNotificationWindow(ForeignUi.getMessage("message.error.update.empty_usages"));
+            }
         });
     }
 
