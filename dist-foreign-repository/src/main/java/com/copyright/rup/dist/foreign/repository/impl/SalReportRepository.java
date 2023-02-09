@@ -126,6 +126,11 @@ public class SalReportRepository extends CommonReportRepository implements ISalR
     }
 
     @Override
+    public void writeSalFundPoolsCsvReport(OutputStream outputStream) {
+        //TODO: {skarakhanov} implement later
+    }
+
+    @Override
     public void writeSalFundPoolsCsvReport(int distributionYear, OutputStream outputStream) {
         try (SalFundPoolsReportHandler handler =
                  new SalFundPoolsReportHandler(Objects.requireNonNull(outputStream))) {

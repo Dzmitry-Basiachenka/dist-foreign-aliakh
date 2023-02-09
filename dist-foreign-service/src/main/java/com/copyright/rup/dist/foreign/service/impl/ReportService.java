@@ -277,8 +277,8 @@ public class ReportService implements IReportService {
     }
 
     @Override
-    public void writeSalFundPoolsCsvReport(PipedOutputStream outputStream) {
-        //TODO: {skarakhanov} implement later
+    public void writeSalFundPoolsCsvReport(OutputStream outputStream) {
+        salReportRepository.writeSalFundPoolsCsvReport(outputStream);
     }
 
     @Override
