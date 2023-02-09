@@ -69,6 +69,12 @@ public class UsageBatchStatusService implements IUsageBatchStatusService {
     }
 
     @Override
+    public List<UsageBatchStatus> getUsageBatchStatusesUdm() {
+        // TODO: {dbasiachenka} implement
+        return List.of();
+    }
+
+    @Override
     public boolean isBatchProcessingCompleted(String batchId, Set<UsageStatusEnum> statuses) {
         return usageBatchStatusRepository.isBatchProcessingCompleted(batchId, statuses);
     }

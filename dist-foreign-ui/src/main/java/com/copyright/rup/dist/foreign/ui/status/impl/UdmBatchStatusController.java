@@ -1,10 +1,12 @@
 package com.copyright.rup.dist.foreign.ui.status.impl;
 
 import com.copyright.rup.dist.foreign.domain.UsageBatchStatus;
+import com.copyright.rup.dist.foreign.service.api.IUsageBatchStatusService;
 import com.copyright.rup.dist.foreign.ui.status.api.IUdmBatchStatusController;
 import com.copyright.rup.dist.foreign.ui.status.api.IUdmBatchStatusWidget;
 import com.copyright.rup.vaadin.widget.api.CommonController;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -25,10 +27,12 @@ import java.util.List;
 public class UdmBatchStatusController extends CommonController<IUdmBatchStatusWidget>
     implements IUdmBatchStatusController {
 
+    @Autowired
+    private IUsageBatchStatusService usageBatchStatusService;
+
     @Override
     public List<UsageBatchStatus> getBatchStatuses() {
-        // TODO {dbasiachenka} implement
-        return List.of();
+        return usageBatchStatusService.getUsageBatchStatusesUdm();
     }
 
     @Override

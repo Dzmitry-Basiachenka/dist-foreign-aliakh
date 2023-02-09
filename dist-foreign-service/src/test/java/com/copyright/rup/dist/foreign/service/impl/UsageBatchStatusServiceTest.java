@@ -91,6 +91,11 @@ public class UsageBatchStatusServiceTest {
     }
 
     @Test
+    public void testGetUsageBatchStatusesUdm() {
+        // TODO: {dbasiachenka} implement
+    }
+
+    @Test
     public void testIsBatchProcessingCompleted() {
         Set<UsageStatusEnum> statuses =
             Sets.newHashSet(UsageStatusEnum.NEW, UsageStatusEnum.WORK_FOUND, UsageStatusEnum.RH_FOUND);
