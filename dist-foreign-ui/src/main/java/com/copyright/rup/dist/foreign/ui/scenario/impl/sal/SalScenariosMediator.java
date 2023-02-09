@@ -46,7 +46,6 @@ class SalScenariosMediator implements IScenariosMediator {
             boolean isInProgressState = ScenarioStatusEnum.IN_PROGRESS == status;
             editNameButton.setEnabled(isInProgressState);
             deleteButton.setEnabled(isInProgressState);
-            submitButton.setEnabled(isInProgressState);
             boolean isSubmittedState = ScenarioStatusEnum.SUBMITTED == status;
             rejectButton.setEnabled(isSubmittedState);
             approveButton.setEnabled(isSubmittedState);
@@ -54,7 +53,6 @@ class SalScenariosMediator implements IScenariosMediator {
             viewButton.setEnabled(false);
             editNameButton.setEnabled(false);
             deleteButton.setEnabled(false);
-            submitButton.setEnabled(false);
             rejectButton.setEnabled(false);
             approveButton.setEnabled(false);
         }

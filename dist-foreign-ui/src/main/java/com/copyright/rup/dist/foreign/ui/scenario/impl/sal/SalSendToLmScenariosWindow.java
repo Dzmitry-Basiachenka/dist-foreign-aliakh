@@ -15,7 +15,7 @@ import java.util.Set;
  *
  * @author Uladzislau Shalamitski
  */
-public class SalSendToLmWindow extends SalPerformScenariosActionsCommonWindow {
+public class SalSendToLmScenariosWindow extends SalPerformScenariosActionsCommonWindow {
 
     private final ISalScenariosController controller;
 
@@ -24,7 +24,7 @@ public class SalSendToLmWindow extends SalPerformScenariosActionsCommonWindow {
      *
      * @param controller instance of {@link ISalScenariosController}
      */
-    public SalSendToLmWindow(ISalScenariosController controller) {
+    public SalSendToLmScenariosWindow(ISalScenariosController controller) {
         super(controller,"window.choose_scenarios_to_send_to_lm", "button.send_to_lm",
             ScenarioStatusEnum.APPROVED);
         this.controller = controller;
