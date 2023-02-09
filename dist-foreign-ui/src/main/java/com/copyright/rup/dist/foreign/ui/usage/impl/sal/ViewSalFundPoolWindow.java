@@ -5,6 +5,7 @@ import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageController;
 import com.copyright.rup.vaadin.ui.Buttons;
+import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.CurrencyUtils;
 import com.copyright.rup.vaadin.util.VaadinUtils;
@@ -107,6 +108,9 @@ public class ViewSalFundPoolWindow extends Window implements SearchWidget.ISearc
         });
         deleteButton.setEnabled(false);
         Button exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
+        OnDemandFileDownloader exportScenarioFileDownloader = new OnDemandFileDownloader(
+            controller.getExportFundPoolsStreamSource().getSource());
+        exportScenarioFileDownloader.extend(exportButton);
         VaadinUtils.setButtonsAutoDisabled(exportButton, deleteButton, closeButton);
         HorizontalLayout layout = new HorizontalLayout(exportButton, deleteButton, closeButton);
         layout.setSpacing(true);
