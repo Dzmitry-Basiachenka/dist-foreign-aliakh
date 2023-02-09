@@ -228,7 +228,7 @@ public class FasUsageWidgetTest {
         ClickEvent clickEvent = createMock(ClickEvent.class);
         expect(controller.getBeansCount()).andReturn(1).once();
         expect(controller.getUsageDtosToUpdate()).andReturn(List.of(new UsageDto())).once();
-        Windows.showModalWindow(anyObject(FasUsageUpdateWindow.class));
+        Windows.showModalWindow(anyObject(FasUpdateUsageWindow.class));
         expectLastCall().once();
         replay(controller, clickEvent, Windows.class);
         Button updateUsagesButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())

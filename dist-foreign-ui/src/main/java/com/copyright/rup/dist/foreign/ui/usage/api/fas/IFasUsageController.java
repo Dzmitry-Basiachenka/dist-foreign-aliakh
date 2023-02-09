@@ -11,6 +11,7 @@ import com.copyright.rup.dist.foreign.service.impl.csv.UsageCsvProcessor;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageController;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Interface for FAS/FAS2 usages controller.
@@ -79,4 +80,13 @@ public interface IFasUsageController extends ICommonUsageController {
      * @return list of {@link UsageDto}s
      */
     List<UsageDto> getUsageDtosToUpdate();
+
+    /**
+     * Updates usages Wr Wrk Inst and sends them for PI matching and getting rights.
+     *
+     * @param usageIds  usage ids
+     * @param wrWrkInst Wr Wrk Inst
+     * @param reason    action reason
+     */
+    void updateUsages(Set<String> usageIds, Long wrWrkInst, String reason);
 }
