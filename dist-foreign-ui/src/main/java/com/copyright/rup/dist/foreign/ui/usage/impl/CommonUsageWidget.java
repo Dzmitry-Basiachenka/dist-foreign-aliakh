@@ -13,7 +13,6 @@ import com.copyright.rup.vaadin.util.CurrencyUtils;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.data.ValueProvider;
-import com.vaadin.data.provider.DataProvider;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.HorizontalSplitPanel;
@@ -40,9 +39,8 @@ public abstract class CommonUsageWidget extends HorizontalSplitPanel implements 
     private static final String EMPTY_STYLE_NAME = "empty-usages-grid";
 
     private ICommonUsageController controller;
-    private DataProvider<UsageDto, Void> dataProvider;
-    private Grid<UsageDto> usagesGrid;
     private ICommonUsageFilterWidget usagesFilterWidget;
+    private Grid<UsageDto> usagesGrid;
 
     @Override
     public void fireWidgetEvent(Event event) {
@@ -51,7 +49,7 @@ public abstract class CommonUsageWidget extends HorizontalSplitPanel implements 
 
     @Override
     public void refresh() {
-        dataProvider.refreshAll();
+        usagesGrid.getDataProvider().refreshAll();
     }
 
     @Override
@@ -149,6 +147,35 @@ public abstract class CommonUsageWidget extends HorizontalSplitPanel implements 
     }
 
     /**
+     * Initializes and sets data provided for usages grid.
+     *
+     * @param grid grid to set initialized data provider
+     */
+    protected void initDataProvider(Grid<UsageDto> grid) {
+        grid.setDataProvider(
+            LoadingIndicatorDataProvider.fromCallbacks(
+                query -> controller.loadBeans(query.getOffset(), query.getLimit(), query.getSortOrders()).stream(),
+                query -> {
+                    int size = controller.getBeansCount();
+                    if (0 < size) {
+                        grid.removeStyleName(EMPTY_STYLE_NAME);
+                    } else {
+                        grid.addStyleName(EMPTY_STYLE_NAME);
+                    }
+                    return size;
+                }));
+    }
+
+    /**
+     * Sets grid selection mode. By default {@link Grid.SelectionMode#NONE} is set.
+     *
+     * @param grid grid to set selection mode
+     */
+    protected void setGridSelectionMode(Grid<UsageDto> grid) {
+        grid.setSelectionMode(Grid.SelectionMode.NONE);
+    }
+
+    /**
      * Gets specific validation message.
      *
      * @return message
@@ -191,20 +218,10 @@ public abstract class CommonUsageWidget extends HorizontalSplitPanel implements 
     }
 
     private void initUsagesGrid() {
-        dataProvider = LoadingIndicatorDataProvider.fromCallbacks(
-            query -> controller.loadBeans(query.getOffset(), query.getLimit(), query.getSortOrders()).stream(),
-            query -> {
-                int size = controller.getBeansCount();
-                if (0 < size) {
-                    usagesGrid.removeStyleName(EMPTY_STYLE_NAME);
-                } else {
-                    usagesGrid.addStyleName(EMPTY_STYLE_NAME);
-                }
-                return size;
-            });
-        usagesGrid = new Grid<>(dataProvider);
+        usagesGrid = new Grid<>();
+        initDataProvider(usagesGrid);
+        setGridSelectionMode(usagesGrid);
         addGridColumns();
-        usagesGrid.setSelectionMode(Grid.SelectionMode.NONE);
         usagesGrid.setSizeFull();
         VaadinUtils.addComponentStyle(usagesGrid, "usages-grid");
     }

@@ -127,9 +127,10 @@ public class AclciUsageWidgetTest {
 
     @Test
     public void testRefresh() {
-        DataProvider<?, ?> dataProvider = createMock(DataProvider.class);
+        DataProvider dataProvider = createMock(DataProvider.class);
+        Grid usagesGrid = new Grid(dataProvider);
         AclciUsageMediator mediator = createMock(AclciUsageMediator.class);
-        Whitebox.setInternalState(widget, dataProvider);
+        Whitebox.setInternalState(widget, usagesGrid);
         Whitebox.setInternalState(widget, mediator);
         dataProvider.refreshAll();
         expectLastCall().once();

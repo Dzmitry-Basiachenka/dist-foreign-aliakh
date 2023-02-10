@@ -56,7 +56,7 @@ public class UdmValueService implements IUdmValueService {
     private IUdmBaselineRepository baselineRepository;
     @Autowired
     private IRightsService rightsService;
-    @Value("$RUP{dist.foreign.udm.record.threshold}")
+    @Value("$RUP{dist.foreign.grid.multi.select.record.threshold}")
     private int udmRecordsThreshold;
 
     @Override

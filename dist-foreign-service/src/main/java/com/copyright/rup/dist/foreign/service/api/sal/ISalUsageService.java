@@ -229,4 +229,9 @@ public interface ISalUsageService extends IPaidUsageService {
      * @return list of {@link UsageDto}s
      */
     List<UsageDto> getForAudit(AuditFilter filter, Pageable pageable, Sort sort);
+
+    /**
+     * @return maximum records size to allow Select All button.
+     */
+    int getRecordsThreshold();
 }

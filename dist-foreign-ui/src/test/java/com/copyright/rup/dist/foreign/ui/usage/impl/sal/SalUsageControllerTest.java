@@ -38,6 +38,7 @@ import com.copyright.rup.dist.foreign.service.api.IUsageBatchStatusService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.sal.ISalScenarioService;
 import com.copyright.rup.dist.foreign.service.api.sal.ISalUsageService;
+import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageFilterWidget;
@@ -77,7 +78,7 @@ import java.util.function.Supplier;
  * @author Uladzislau Shalamitski
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({OffsetDateTime.class, StreamSource.class})
+@PrepareForTest({OffsetDateTime.class, ForeignSecurityUtils.class, StreamSource.class})
 public class SalUsageControllerTest {
 
     private static final OffsetDateTime DATE = OffsetDateTime.of(2020, 1, 2, 3, 4, 5, 6, ZoneOffset.ofHours(0));
@@ -127,7 +128,11 @@ public class SalUsageControllerTest {
 
     @Test
     public void testInstantiateWidget() {
+        mockStatic(ForeignSecurityUtils.class);
+        expect(ForeignSecurityUtils.hasSpecialistPermission()).andReturn(true).once();
+        replay(ForeignSecurityUtils.class);
         assertThat(controller.instantiateWidget(), instanceOf(SalUsageWidget.class));
+        verify(ForeignSecurityUtils.class);
     }
 
     @Test
@@ -484,6 +489,14 @@ public class SalUsageControllerTest {
         expectLastCall().once();
         replay(salUsageService);
         controller.updateToEligibleWithRhAccountNumber(Set.of(USAGE_ID), RH_ACCOUNT_NUMBER, REASON);
+        verify(salUsageService);
+    }
+
+    @Test
+    public void testGetGridRecordThreshold() {
+        expect(salUsageService.getRecordsThreshold()).andReturn(10000).once();
+        replay(salUsageService);
+        assertEquals(10000, controller.getGridRecordThreshold());
         verify(salUsageService);
     }
 }

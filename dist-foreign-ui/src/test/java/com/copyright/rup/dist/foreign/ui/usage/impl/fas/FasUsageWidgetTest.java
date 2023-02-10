@@ -369,8 +369,9 @@ public class FasUsageWidgetTest {
     @Test
     public void testRefresh() {
         DataProvider dataProvider = createMock(DataProvider.class);
+        Grid usagesGrid = new Grid(dataProvider);
         FasUsageMediator mediator = createMock(FasUsageMediator.class);
-        Whitebox.setInternalState(usagesWidget, dataProvider);
+        Whitebox.setInternalState(usagesWidget, usagesGrid);
         Whitebox.setInternalState(usagesWidget, mediator);
         dataProvider.refreshAll();
         expectLastCall().once();

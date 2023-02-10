@@ -82,7 +82,7 @@ public class UdmUsageService implements IUdmUsageService {
     @Autowired
     @Qualifier("udmUsageChainExecutor")
     private IChainExecutor<UdmUsage> chainExecutor;
-    @Value("$RUP{dist.foreign.udm.record.threshold}")
+    @Value("$RUP{dist.foreign.grid.multi.select.record.threshold}")
     private int udmRecordsThreshold;
 
     @Override

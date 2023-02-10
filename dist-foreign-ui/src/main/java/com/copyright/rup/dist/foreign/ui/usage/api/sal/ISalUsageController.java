@@ -211,4 +211,9 @@ public interface ISalUsageController extends ICommonUsageController {
      * @return {@code true} - if status filter is applied, {@code false} - otherwise
      */
     boolean isValidStatusFilterApplied();
+
+    /**
+     * @return maximum records size to allow Select All button.
+     */
+    int getGridRecordThreshold();
 }

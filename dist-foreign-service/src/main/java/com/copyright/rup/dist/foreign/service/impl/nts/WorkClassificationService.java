@@ -18,6 +18,7 @@ import com.copyright.rup.dist.foreign.service.api.processor.IChainProcessor;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,8 +61,8 @@ public class WorkClassificationService implements IWorkClassificationService {
     private IChainProcessor<Usage> nonBelletristicProcessor;
     @Value("$RUP{dist.foreign.usages.batch_size}")
     private int usagesBatchSize;
-    @Value("$RUP{dist.foreign.work_classification.threshold}")
-    private int worksThreshold;
+    @Value("$RUP{dist.foreign.grid.multi.select.record.threshold}")
+    private int recordsThreshold;
 
     @Override
     @Transactional
@@ -126,7 +127,7 @@ public class WorkClassificationService implements IWorkClassificationService {
 
     @Override
     public int getWorkClassificationThreshold() {
-        return worksThreshold;
+        return recordsThreshold;
     }
 
     void setWorkClassificationRepository(IWorkClassificationRepository workClassificationRepository) {

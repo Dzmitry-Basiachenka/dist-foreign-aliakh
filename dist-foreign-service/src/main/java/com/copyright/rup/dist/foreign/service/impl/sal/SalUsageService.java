@@ -84,6 +84,8 @@ public class SalUsageService implements ISalUsageService {
     private IUsageService usageService;
     @Value("$RUP{dist.foreign.usages.batch_size}")
     private int usagesBatchSize;
+    @Value("$RUP{dist.foreign.grid.multi.select.record.threshold}")
+    private int recordsThreshold;
 
     @Override
     public int getUsagesCount(UsageFilter filter) {
@@ -307,5 +309,10 @@ public class SalUsageService implements ISalUsageService {
     public void updatePaidInfo(List<PaidUsage> paidUsages) {
         usageService.updatePaidUsages(paidUsages, ids -> usageArchiveRepository.findSalByIds(ids),
             usage -> usageArchiveRepository.insertSalPaid(usage));
+    }
+
+    @Override
+    public int getRecordsThreshold() {
+        return recordsThreshold;
     }
 }

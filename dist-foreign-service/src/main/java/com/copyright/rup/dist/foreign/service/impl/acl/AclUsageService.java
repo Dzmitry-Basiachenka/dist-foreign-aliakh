@@ -37,7 +37,7 @@ public class AclUsageService implements IAclUsageService {
 
     @Autowired
     private IAclUsageRepository aclUsageRepository;
-    @Value("$RUP{dist.foreign.udm.record.threshold}")
+    @Value("$RUP{dist.foreign.grid.multi.select.record.threshold}")
     private int recordsThreshold;
 
     @Override
