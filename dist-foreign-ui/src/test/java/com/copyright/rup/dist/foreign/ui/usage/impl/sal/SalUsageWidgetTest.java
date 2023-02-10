@@ -8,6 +8,7 @@ import static org.easymock.EasyMock.expect;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
@@ -21,19 +22,23 @@ import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
+import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.SalDetailTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
+import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageFilterController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
 import com.google.common.collect.Sets;
+import com.vaadin.data.provider.CallbackDataProvider;
 import com.vaadin.data.provider.DataProvider;
+import com.vaadin.data.provider.Query;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
@@ -42,8 +47,10 @@ import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.JavaScript;
 import com.vaadin.ui.MenuBar.MenuItem;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.components.grid.MultiSelectionModelImpl;
 
 import org.apache.commons.lang3.tuple.Triple;
 import org.junit.Before;
@@ -59,6 +66,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 /**
  * Verifies {@link SalUsageWidget}.
@@ -70,7 +78,7 @@ import java.util.function.Supplier;
  * @author Uladzislau Shalamitski
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({SalUsageWidget.class, Windows.class})
+@PrepareForTest({SalUsageWidget.class, ForeignSecurityUtils.class, JavaScript.class, Windows.class})
 public class SalUsageWidgetTest {
 
     private static final String DATE =
@@ -78,15 +86,17 @@ public class SalUsageWidgetTest {
     private static final String BATCH_ID = "3a070817-03ae-4ebd-b25f-dd3168a7ffb0";
     private static final String SAL_SCENARIO_NAME_PREFIX = "SAL Distribution ";
     private static final String SAL_PRODUCT_FAMILY = "SAL";
+    private static final int RECORD_THRESHOLD = 10000;
+    private static final int EXCEEDED_RECORD_THRESHOLD = 10001;
     private SalUsageWidget usagesWidget;
     private ISalUsageController controller;
     private SalUsageFilterWidget filterWidget;
 
     @Before
     public void setUp() {
+        mockStatic(ForeignSecurityUtils.class);
+        expect(ForeignSecurityUtils.hasSpecialistPermission()).andReturn(true).once();
         controller = createMock(ISalUsageController.class);
-        usagesWidget = new SalUsageWidget(controller);
-        usagesWidget.setController(controller);
         filterWidget = new SalUsageFilterWidget(createMock(ISalUsageFilterController.class));
         filterWidget.getAppliedFilter().setUsageBatchesIds(Set.of(BATCH_ID));
         expect(controller.initUsagesFilterWidget()).andReturn(filterWidget).once();
@@ -94,9 +104,11 @@ public class SalUsageWidgetTest {
         expect(streamSource.getSource())
             .andReturn(new SimpleImmutableEntry(createMock(Supplier.class), createMock(Supplier.class))).once();
         expect(controller.getExportUsagesStreamSource()).andReturn(streamSource).once();
-        replay(controller, streamSource);
+        replay(controller, ForeignSecurityUtils.class, streamSource);
+        usagesWidget = new SalUsageWidget(controller);
+        usagesWidget.setController(controller);
         usagesWidget.init();
-        verify(controller, streamSource);
+        verify(controller, ForeignSecurityUtils.class, streamSource);
         reset(controller);
     }
 
@@ -152,6 +164,48 @@ public class SalUsageWidgetTest {
     }
 
     @Test
+    @SuppressWarnings("UNCHECKED")
+    public void testSelectAllCheckBoxVisible() {
+        mockStatic(JavaScript.class);
+        List<UsageDto> usageDtos = List.of(new UsageDto(), new UsageDto());
+        expect(JavaScript.getCurrent()).andReturn(createMock(JavaScript.class)).times(2);
+        expect(controller.loadBeans(0, 2, List.of())).andReturn(usageDtos).once();
+        expect(controller.getBeansCount()).andReturn(RECORD_THRESHOLD).once();
+        expect(controller.getGridRecordThreshold()).andReturn(RECORD_THRESHOLD).once();
+        replay(controller, RupContextUtils.class, ForeignSecurityUtils.class, JavaScript.class);
+        Grid<UsageDto> grid =
+            (Grid<UsageDto>) ((VerticalLayout) usagesWidget.getSecondComponent()).getComponent(1);
+        CallbackDataProvider<?, ?> dataProvider = (CallbackDataProvider) grid.getDataProvider();
+        assertEquals(usageDtos, dataProvider.fetch(new Query<>(0, 2, List.of(), null,
+            null)).collect(Collectors.toList()));
+        assertEquals(RECORD_THRESHOLD, dataProvider.size(new Query<>()));
+        assertThat(grid.getSelectionModel(), instanceOf(MultiSelectionModelImpl.class));
+        assertTrue(((MultiSelectionModelImpl<?>) grid.getSelectionModel()).isSelectAllCheckBoxVisible());
+        verify(controller, RupContextUtils.class, ForeignSecurityUtils.class, JavaScript.class);
+    }
+
+    @Test
+    @SuppressWarnings("UNCHECKED")
+    public void testSelectAllCheckBoxNotVisible() {
+        mockStatic(JavaScript.class);
+        List<UsageDto> usageDtos = List.of(new UsageDto(), new UsageDto());
+        expect(JavaScript.getCurrent()).andReturn(createMock(JavaScript.class)).times(2);
+        expect(controller.loadBeans(0, 2, List.of())).andReturn(usageDtos).once();
+        expect(controller.getBeansCount()).andReturn(EXCEEDED_RECORD_THRESHOLD).once();
+        expect(controller.getGridRecordThreshold()).andReturn(RECORD_THRESHOLD).once();
+        replay(controller, RupContextUtils.class, ForeignSecurityUtils.class, JavaScript.class);
+        Grid<UsageDto> grid =
+            (Grid<UsageDto>) ((VerticalLayout) usagesWidget.getSecondComponent()).getComponent(1);
+        CallbackDataProvider<?, ?> dataProvider = (CallbackDataProvider) grid.getDataProvider();
+        assertEquals(usageDtos, dataProvider.fetch(new Query<>(0, 2, List.of(), null,
+            null)).collect(Collectors.toList()));
+        assertEquals(EXCEEDED_RECORD_THRESHOLD, dataProvider.size(new Query<>()));
+        assertThat(grid.getSelectionModel(), instanceOf(MultiSelectionModelImpl.class));
+        assertFalse(((MultiSelectionModelImpl<?>) grid.getSelectionModel()).isSelectAllCheckBoxVisible());
+        verify(controller, RupContextUtils.class, ForeignSecurityUtils.class, JavaScript.class);
+    }
+
+    @Test
     public void testGetController() {
         assertSame(controller, usagesWidget.getController());
     }
@@ -159,8 +213,9 @@ public class SalUsageWidgetTest {
     @Test
     public void testRefresh() {
         DataProvider dataProvider = createMock(DataProvider.class);
+        Grid usagesGrid = new Grid(dataProvider);
         SalUsageMediator mediator = createMock(SalUsageMediator.class);
-        Whitebox.setInternalState(usagesWidget, dataProvider);
+        Whitebox.setInternalState(usagesWidget, usagesGrid);
         Whitebox.setInternalState(usagesWidget, mediator);
         dataProvider.refreshAll();
         expectLastCall().once();
@@ -327,9 +382,9 @@ public class SalUsageWidgetTest {
         expect(controller.getInvalidRightsholders()).andReturn(List.of()).once();
         Windows.showNotificationWindow("Please apply Batches Filter to create a scenario");
         expectLastCall().once();
-        replay(controller,  Windows.class);
+        replay(controller, Windows.class);
         applyAddToScenarioButtonClick();
-        verify(controller,  Windows.class);
+        verify(controller, Windows.class);
     }
 
     @Test
@@ -343,9 +398,9 @@ public class SalUsageWidgetTest {
         expect(controller.getInvalidRightsholders()).andReturn(List.of()).once();
         Windows.showNotificationWindow("Only one usage batch can be associated with scenario");
         expectLastCall().once();
-        replay(controller,  Windows.class);
+        replay(controller, Windows.class);
         applyAddToScenarioButtonClick();
-        verify(controller,  Windows.class);
+        verify(controller, Windows.class);
     }
 
     @Test
@@ -358,9 +413,9 @@ public class SalUsageWidgetTest {
         expect(controller.getInvalidRightsholders()).andReturn(List.of()).once();
         Windows.showNotificationWindow("Detail Type filter should not be applied to create scenario");
         expectLastCall().once();
-        replay(controller,  Windows.class);
+        replay(controller, Windows.class);
         applyAddToScenarioButtonClick();
-        verify(controller,  Windows.class);
+        verify(controller, Windows.class);
     }
 
     @Test

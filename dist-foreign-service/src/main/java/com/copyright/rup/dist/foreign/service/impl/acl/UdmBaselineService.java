@@ -34,7 +34,7 @@ public class UdmBaselineService implements IUdmBaselineService {
 
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
-    @Value("$RUP{dist.foreign.udm.record.threshold}")
+    @Value("$RUP{dist.foreign.grid.multi.select.record.threshold}")
     private int udmRecordsThreshold;
     @Autowired
     private IUdmUsageAuditService udmUsageAuditService;

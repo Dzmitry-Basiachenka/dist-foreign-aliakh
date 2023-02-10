@@ -7,18 +7,23 @@ import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
+import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageWidget;
 import com.copyright.rup.dist.foreign.ui.usage.impl.CommonUsageWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
+import com.copyright.rup.vaadin.ui.component.dataprovider.LoadingIndicatorDataProvider;
 import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.api.IMediator;
 
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.MenuBar;
+import com.vaadin.ui.components.grid.MultiSelectionModel.SelectAllCheckBoxVisibility;
+import com.vaadin.ui.components.grid.MultiSelectionModelImpl;
 
 import org.apache.commons.collections4.CollectionUtils;
 
@@ -37,7 +42,10 @@ import java.util.Set;
  */
 public class SalUsageWidget extends CommonUsageWidget implements ISalUsageWidget {
 
+    private static final String EMPTY_STYLE_NAME = "empty-usages-grid";
     private static final int EXPECTED_BATCH_SIZE = 1;
+
+    private final boolean hasSpecialistPermission = ForeignSecurityUtils.hasSpecialistPermission();
     private final ISalUsageController controller;
     private MenuBar usageBatchMenuBar;
     private MenuBar fundPoolMenuBar;
@@ -48,6 +56,7 @@ public class SalUsageWidget extends CommonUsageWidget implements ISalUsageWidget
     private Button excludeDetailsButton;
     private Button addToScenarioButton;
     private Button exportButton;
+    private MultiSelectionModelImpl<UsageDto> gridSelectionModel;
 
     /**
      * Controller.
@@ -68,6 +77,32 @@ public class SalUsageWidget extends CommonUsageWidget implements ISalUsageWidget
         mediator.setExcludeDetailsButton(excludeDetailsButton);
         mediator.setAddToScenarioButton(addToScenarioButton);
         return mediator;
+    }
+
+    @Override
+    protected void setGridSelectionMode(Grid<UsageDto> grid) {
+        if (hasSpecialistPermission) {
+            gridSelectionModel = (MultiSelectionModelImpl<UsageDto>) grid.setSelectionMode(Grid.SelectionMode.MULTI);
+        } else {
+            grid.setSelectionMode(Grid.SelectionMode.NONE);
+        }
+    }
+
+    @Override
+    protected void initDataProvider(Grid<UsageDto> grid) {
+        grid.setDataProvider(
+            LoadingIndicatorDataProvider.fromCallbacks(
+                query -> controller.loadBeans(query.getOffset(), query.getLimit(), query.getSortOrders()).stream(),
+                query -> {
+                    int size = controller.getBeansCount();
+                    if (0 < size) {
+                        grid.removeStyleName(EMPTY_STYLE_NAME);
+                    } else {
+                        grid.addStyleName(EMPTY_STYLE_NAME);
+                    }
+                    switchSelectAllCheckBoxVisibility(size);
+                    return size;
+                }));
     }
 
     @Override
@@ -252,6 +287,16 @@ public class SalUsageWidget extends CommonUsageWidget implements ISalUsageWidget
             Windows.showModalWindow(new SalDetailForRightsholderUpdateWindow(controller));
         } else {
             Windows.showNotificationWindow(message);
+        }
+    }
+
+    private void switchSelectAllCheckBoxVisibility(int beansCount) {
+        if (hasSpecialistPermission) {
+            gridSelectionModel.setSelectAllCheckBoxVisibility(
+                0 == beansCount || beansCount > controller.getGridRecordThreshold()
+                    ? SelectAllCheckBoxVisibility.HIDDEN
+                    : SelectAllCheckBoxVisibility.VISIBLE);
+            gridSelectionModel.beforeClientResponse(false);
         }
     }
 }

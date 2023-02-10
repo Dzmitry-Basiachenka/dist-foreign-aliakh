@@ -150,8 +150,8 @@ public class SalUsageController extends CommonUsageController implements ISalUsa
 
     @Override
     public boolean isValidFilteredUsageStatus(UsageStatusEnum status) {
-        return getUsageService()
-            .isValidFilteredUsageStatus(getUsageFilterController().getWidget().getAppliedFilter(), status);
+        return getUsageService().isValidFilteredUsageStatus(
+            getUsageFilterController().getWidget().getAppliedFilter(), status);
     }
 
     @Override
@@ -254,6 +254,11 @@ public class SalUsageController extends CommonUsageController implements ISalUsa
     @Override
     public void updateToEligibleWithRhAccountNumber(Set<String> usageIds, Long rhAccountNumber, String reason) {
         salUsageService.updateToEligibleWithRhAccountNumber(usageIds, rhAccountNumber, reason);
+    }
+
+    @Override
+    public int getGridRecordThreshold() {
+        return salUsageService.getRecordsThreshold();
     }
 
     @Override
