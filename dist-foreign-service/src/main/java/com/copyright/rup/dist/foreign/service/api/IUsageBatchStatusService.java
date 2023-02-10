@@ -47,6 +47,13 @@ public interface IUsageBatchStatusService {
     List<UsageBatchStatus> getUsageBatchStatusesSal();
 
     /**
+     * Gets list of usage batch statuses for UDM product family.
+     *
+     * @return list of {@link UsageBatchStatus}
+     */
+    List<UsageBatchStatus> getUsageBatchStatusesUdm();
+
+    /**
      * Verifies that batch processing is completed for specified product family specific statuses.
      *
      * @param batchId              batch identifier
