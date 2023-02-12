@@ -116,6 +116,14 @@ public interface IScenarioRepository {
     void updateStatus(Scenario scenario);
 
     /**
+     * Updates {@link Scenario}s status.
+     *
+     * @param scenarios set of {@link Scenario}s to update
+     * @param status    scenario status
+     */
+    void updateStatus(Set<Scenario> scenarios, ScenarioStatusEnum status);
+
+    /**
      * Updates {@link Scenario} name by provided id.
      *
      * @param scenarioId {@link Scenario} identifier

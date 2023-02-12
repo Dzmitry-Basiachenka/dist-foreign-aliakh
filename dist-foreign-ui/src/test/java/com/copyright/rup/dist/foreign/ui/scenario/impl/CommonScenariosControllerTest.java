@@ -154,6 +154,19 @@ public class CommonScenariosControllerTest {
     }
 
     @Test
+    public void testHandleActionWithEmptyScenario() {
+        expect(scenariosWidget.getSelectedScenario()).andReturn(scenario).once();
+        expect(usageService.isScenarioEmpty(scenario)).andReturn(true).once();
+        mockStatic(Windows.class);
+        Windows.showNotificationWindow("This scenario cannot be submitted for approval as it does not contain " +
+            "any usages");
+        expectLastCall().once();
+        replay(Windows.class, usageService, scenariosWidget);
+        scenariosController.handleAction(ScenarioActionTypeEnum.SUBMITTED);
+        verify(Windows.class, usageService, scenariosWidget);
+    }
+
+    @Test
     public void testApplyScenarioAction() {
         expect(scenariosWidget.getSelectedScenario()).andReturn(scenario).once();
         scenariosWidget.refresh();
@@ -169,9 +182,11 @@ public class CommonScenariosControllerTest {
     @Test
     public void testHandleActionNull() {
         mockStatic(Windows.class);
-        replay(Windows.class);
+        expect(scenariosWidget.getSelectedScenario()).andReturn(scenario).once();
+        expect(usageService.isScenarioEmpty(scenario)).andReturn(false).once();
+        replay(Windows.class, usageService, scenariosWidget);
         scenariosController.handleAction(null);
-        verify(Windows.class);
+        verify(Windows.class, usageService, scenariosWidget);
     }
 
     private void buildScenario() {

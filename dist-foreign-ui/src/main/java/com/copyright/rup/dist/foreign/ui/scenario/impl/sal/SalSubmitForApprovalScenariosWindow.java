@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl.sal;
 
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.ui.scenario.api.sal.ISalScenariosController;
 
@@ -17,6 +18,8 @@ import java.util.Set;
  */
 public class SalSubmitForApprovalScenariosWindow extends SalPerformScenariosActionsCommonWindow {
 
+    private final ISalScenariosController controller;
+
     /**
      * Constructor.
      *
@@ -25,10 +28,11 @@ public class SalSubmitForApprovalScenariosWindow extends SalPerformScenariosActi
     public SalSubmitForApprovalScenariosWindow(ISalScenariosController controller) {
         super(controller,"window.choose_scenarios_to_submit_for_approval", "button.submit",
             ScenarioStatusEnum.IN_PROGRESS);
+        this.controller = controller;
     }
 
     @Override
     protected void performAction(Set<Scenario> selectedScenarios) {
-        //TODO will be implemented with backend logic
+        controller.handleAction(ScenarioActionTypeEnum.SUBMITTED, selectedScenarios);
     }
 }

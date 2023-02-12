@@ -4,6 +4,7 @@ import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGridIte
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -14,6 +15,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.ui.scenario.api.sal.ISalScenariosController;
 import com.copyright.rup.vaadin.widget.SearchWidget;
@@ -30,6 +32,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -57,8 +60,11 @@ public class SalSubmitForApprovalScenariosWindowTest {
         ISalScenariosController controller = createMock(ISalScenariosController.class);
         expect(controller.getScenariosByStatus(ScenarioStatusEnum.IN_PROGRESS))
             .andReturn(List.of(scenario1, scenario2)).once();
+        controller.handleAction(ScenarioActionTypeEnum.SUBMITTED, Set.of(scenario1, scenario2));
+        expectLastCall().once();
         replay(controller);
         window = new SalSubmitForApprovalScenariosWindow(controller);
+        window.performAction(Set.of(scenario1, scenario2));
         verify(controller);
     }
 

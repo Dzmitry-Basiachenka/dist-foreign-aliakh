@@ -79,6 +79,7 @@ public class ScenarioRepositoryIntegrationTest {
     private static final String SCENARIO_ID_4 = "8cb9092d-a0f7-474e-a13b-af1a134e4c86";
     private static final String SCENARIO_ID_5 = "8a6a6b15-6922-4fda-b40c-5097fcbd256e";
     private static final String SCENARIO_ID_6 = "3210b236-1239-4a60-9fab-888b84199321";
+    private static final String SCENARIO_ID_7 = "1c8e11d6-262f-43c5-bcc1-d144ed74edf8";
     private static final String SENT_TO_LM_AUDIT = "Sent to LM NTS scenario with audit";
     private static final String AACL_PRODUCT_FAMILY = "AACL";
     private static final String SAL_PRODUCT_FAMILY = "SAL";
@@ -314,6 +315,20 @@ public class ScenarioRepositoryIntegrationTest {
         scenarioRepository.updateStatus(scenario);
         Scenario updatedScenario = scenarioRepository.findArchivedWithAmountsAndLastAction(SCENARIO_ID_6);
         assertNotNull(updatedScenario);
+        assertEquals(ScenarioStatusEnum.SUBMITTED, updatedScenario.getStatus());
+        assertEquals(scenario.getName(), updatedScenario.getName());
+        assertEquals(scenario.getDescription(), updatedScenario.getDescription());
+        assertEquals(scenario.getGrossTotal(), updatedScenario.getGrossTotal());
+        assertEquals(scenario.getNetTotal(), updatedScenario.getNetTotal());
+        assertEquals(scenario.getServiceFeeTotal(), updatedScenario.getServiceFeeTotal());
+    }
+
+    @Test
+    @TestData(fileName = FOLDER_NAME + "update-status-for-set-scenarios.groovy")
+        public void testUpdateStatusForSetScenarios() {
+        Scenario scenario = scenarioRepository.findArchivedWithAmountsAndLastAction(SCENARIO_ID_7);
+        scenarioRepository.updateStatus(Set.of(scenario), ScenarioStatusEnum.SUBMITTED);
+        Scenario updatedScenario = scenarioRepository.findArchivedWithAmountsAndLastAction(SCENARIO_ID_7);
         assertEquals(ScenarioStatusEnum.SUBMITTED, updatedScenario.getStatus());
         assertEquals(scenario.getName(), updatedScenario.getName());
         assertEquals(scenario.getDescription(), updatedScenario.getDescription());

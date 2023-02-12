@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl.sal;
 
+import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
@@ -14,6 +15,7 @@ import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
@@ -21,15 +23,19 @@ import com.copyright.rup.dist.foreign.domain.filter.ScenarioUsageFilter;
 import com.copyright.rup.dist.foreign.service.api.IFundPoolService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioUsageFilterService;
+import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.sal.ISalScenarioService;
 import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
+import com.copyright.rup.dist.foreign.ui.scenario.api.sal.ISalScenarioActionHandler;
 import com.copyright.rup.dist.foreign.ui.scenario.api.sal.ISalScenarioWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.api.sal.ISalScenariosWidget;
 import com.copyright.rup.vaadin.security.SecurityUtils;
+import com.copyright.rup.vaadin.ui.component.window.ConfirmActionDialogWindow;
 import com.copyright.rup.vaadin.ui.component.window.ConfirmDialogWindow;
 import com.copyright.rup.vaadin.ui.component.window.ConfirmDialogWindow.IListener;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
+import com.vaadin.data.Validator;
 import com.vaadin.ui.Window;
 
 import org.apache.commons.compress.utils.Sets;
@@ -54,7 +60,7 @@ import java.util.Set;
  * @author Aliaksandr Liakh
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({Windows.class})
+@PrepareForTest({Windows.class, SecurityUtils.class})
 public class SalScenariosControllerTest {
 
     private static final String SCENARIO_ID_1 = "abc9deb3-8450-4eac-a13d-d157cf5fc057";
@@ -71,6 +77,7 @@ public class SalScenariosControllerTest {
     private ISalScenarioService salScenarioService;
     private SalScenarioController scenarioController;
     private ISalScenarioWidget scenarioWidget;
+    private IUsageService usageService;
     private IProductFamilyProvider productFamilyProvider;
 
     @Before
@@ -82,12 +89,15 @@ public class SalScenariosControllerTest {
         scenariosWidget = createMock(ISalScenariosWidget.class);
         scenariosController = new SalScenariosController();
         scenarioWidget = new SalScenarioWidget(scenarioController);
+        usageService = createMock(IUsageService.class);
+        scenariosController.initActionHandlers();
         scenario1 = buildScenario(SCENARIO_ID_1, SCENARIO_NAME_1);
         scenario2 = buildScenario(SCENARIO_ID_2, SCENARIO_NAME_2);
         Whitebox.setInternalState(scenariosController, "scenarioController", scenarioController);
         Whitebox.setInternalState(scenariosController, "widget", scenariosWidget);
         Whitebox.setInternalState(scenariosController, "scenarioService", scenarioService);
         Whitebox.setInternalState(scenariosController, "salScenarioService", salScenarioService);
+        Whitebox.setInternalState(scenariosController, "usageService", usageService);
         Whitebox.setInternalState(scenariosController, "productFamilyProvider", productFamilyProvider);
         verify(SecurityUtils.class);
     }
@@ -204,6 +214,83 @@ public class SalScenariosControllerTest {
             "<li><b><i>Status </i></b>(ELIGIBLE)</li>" +
             "</ul>", scenariosController.getCriteriaHtmlRepresentation());
         verify(scenariosWidget, scenarioUsageFilterService);
+    }
+
+    @Test
+    public void testHandleActionSubmitted() {
+        mockStatic(Windows.class);
+        expect(usageService.isScenarioEmpty(scenario1)).andReturn(false).once();
+        expect(usageService.isScenarioEmpty(scenario2)).andReturn(false).once();
+        Windows.showConfirmDialogWithReason(eq("Confirm action"), eq("Are you sure you want to perform action?"),
+            eq("Yes"), eq("Cancel"), anyObject(ConfirmActionDialogWindow.IListener.class), anyObject(Validator.class));
+        expectLastCall().once();
+        replay(Windows.class, usageService);
+        scenariosController.handleAction(ScenarioActionTypeEnum.SUBMITTED, Set.of(scenario1, scenario2));
+        verify(Windows.class, usageService);
+    }
+
+    @Test
+    public void testHandleActionApproved() {
+        mockStatic(Windows.class);
+        expect(usageService.isScenarioEmpty(scenario1)).andReturn(false).once();
+        expect(usageService.isScenarioEmpty(scenario2)).andReturn(false).once();
+        Windows.showConfirmDialogWithReason(eq("Confirm action"), eq("Are you sure you want to perform action?"),
+            eq("Yes"), eq("Cancel"), anyObject(ConfirmActionDialogWindow.IListener.class), anyObject(Validator.class));
+        expectLastCall().once();
+        replay(Windows.class, usageService);
+        scenariosController.handleAction(ScenarioActionTypeEnum.APPROVED, Set.of(scenario1, scenario2));
+        verify(Windows.class, usageService);
+    }
+
+    @Test
+    public void testHandleActionRejected() {
+        mockStatic(Windows.class);
+        expect(usageService.isScenarioEmpty(scenario1)).andReturn(false).once();
+        expect(usageService.isScenarioEmpty(scenario2)).andReturn(false).once();
+        Windows.showConfirmDialogWithReason(eq("Confirm action"), eq("Are you sure you want to perform action?"),
+            eq("Yes"), eq("Cancel"), anyObject(ConfirmActionDialogWindow.IListener.class), anyObject(Validator.class));
+        expectLastCall().once();
+        replay(Windows.class, usageService);
+        scenariosController.handleAction(ScenarioActionTypeEnum.REJECTED, Set.of(scenario1, scenario2));
+        verify(Windows.class, usageService);
+    }
+
+    @Test
+    public void testHandleActionWithEmptyScenarios() {
+        mockStatic(Windows.class);
+        expect(usageService.isScenarioEmpty(scenario1)).andReturn(true).once();
+        expect(usageService.isScenarioEmpty(scenario2)).andReturn(true).once();
+        Windows.showNotificationWindow("These scenarios cannot be submitted for approval as they do not contain " +
+            "any usages:<ul><li>SAL Distribution 2019</li><li>SAL Distribution 2020</li></ul>");
+        expectLastCall().once();
+        replay(Windows.class, usageService);
+        scenariosController.handleAction(ScenarioActionTypeEnum.SUBMITTED, Set.of(scenario1, scenario2));
+        verify(Windows.class, usageService);
+    }
+
+    @Test
+    public void testApplyScenarioAction() {
+        mockStatic(SecurityUtils.class);
+        Set<Scenario> scenarios = Set.of(scenario1, scenario2);
+        expect(SecurityUtils.getUserName()).andReturn("user@copyright.com").times(2);
+        scenariosWidget.refresh();
+        expectLastCall().once();
+        ISalScenarioActionHandler handler = createMock(ISalScenarioActionHandler.class);
+        handler.handleAction(scenarios, "reason");
+        expectLastCall().once();
+        replay(SecurityUtils.class, scenariosWidget, handler);
+        scenariosController.applyScenariosAction(handler, scenarios, "reason");
+        verify(SecurityUtils.class, scenariosWidget, handler);
+    }
+
+    @Test
+    public void testHandleActionNull() {
+        mockStatic(Windows.class);
+        expect(usageService.isScenarioEmpty(scenario1)).andReturn(false).once();
+        expect(usageService.isScenarioEmpty(scenario2)).andReturn(false).once();
+        replay(Windows.class, usageService);
+        scenariosController.handleAction(null, Set.of(scenario1, scenario2));
+        verify(Windows.class, usageService);
     }
 
     private Scenario buildScenario(String id, String name) {

@@ -206,6 +206,17 @@
         where df_scenario_uid = #{scenarioId}
     </update>
 
+    <update id="updateStatusByIds" parameterType="map">
+        update ${schema}.df_scenario
+        set
+            status_ind = #{status},
+            <include refid="StoredEntityMapper.update"/>
+        where df_scenario_uid in
+            <foreach collection="scenarios" item="scenario" open="(" separator="," close=")">
+                #{scenario.id}
+            </foreach>
+    </update>
+
     <update id="updateNameById" parameterType="map">
         update ${schema}.df_scenario
         set
