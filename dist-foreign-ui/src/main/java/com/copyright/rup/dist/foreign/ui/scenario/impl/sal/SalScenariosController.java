@@ -129,7 +129,7 @@ public class SalScenariosController extends CommonScenariosController implements
 
     @Override
     public void onRejectButtonClicked() {
-        //TODO stub, implementation will be later
+        Windows.showModalWindow(new SalRejectScenariosWindow(this));
     }
 
     @Override

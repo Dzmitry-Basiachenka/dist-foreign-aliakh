@@ -193,7 +193,7 @@ public class SalScenariosWidgetTest {
         verifyButton(layout.getComponent(1), "Edit Name", false);
         verifyButton(layout.getComponent(2), "Delete", false);
         verifyButton(layout.getComponent(3), "Submit for Approval", true);
-        verifyButton(layout.getComponent(4), "Reject", false);
+        verifyButton(layout.getComponent(4), "Reject", true);
         verifyButton(layout.getComponent(5), "Approve", true);
         verifyButton(layout.getComponent(6), "Send to LM", true);
     }

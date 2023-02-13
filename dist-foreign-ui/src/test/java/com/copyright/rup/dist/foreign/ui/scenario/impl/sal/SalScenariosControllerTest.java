@@ -132,6 +132,19 @@ public class SalScenariosControllerTest {
     }
 
     @Test
+    public void testOnRejectButtonClicked() {
+        mockStatic(Windows.class);
+        List<Scenario> scenarios = List.of(scenario1);
+        expect(productFamilyProvider.getSelectedProductFamily()).andReturn(SAL_PRODUCT_FAMILY).once();
+        expect(scenarioService.getScenariosByProductFamiliesAndStatuses(
+            Set.of(SAL_PRODUCT_FAMILY), Set.of(ScenarioStatusEnum.SUBMITTED))).andReturn(scenarios).once();
+        Windows.showModalWindow(anyObject(SalRejectScenariosWindow.class));
+        replay(Windows.class, scenarioService, productFamilyProvider);
+        scenariosController.onRejectButtonClicked();
+        verify(Windows.class, scenarioService, productFamilyProvider);
+    }
+
+    @Test
     public void testOnApproveButtonClicked() {
         mockStatic(Windows.class);
         List<Scenario> scenarios = List.of(scenario1);
