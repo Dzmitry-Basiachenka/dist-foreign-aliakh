@@ -119,6 +119,45 @@ public class SalScenariosControllerTest {
     }
 
     @Test
+    public void testOnSubmitForApprovalButtonClicked() {
+        mockStatic(Windows.class);
+        List<Scenario> scenarios = List.of(scenario1);
+        expect(productFamilyProvider.getSelectedProductFamily()).andReturn(SAL_PRODUCT_FAMILY).once();
+        expect(scenarioService.getScenariosByProductFamiliesAndStatuses(
+            Set.of(SAL_PRODUCT_FAMILY), Set.of(ScenarioStatusEnum.IN_PROGRESS))).andReturn(scenarios).once();
+        Windows.showModalWindow(anyObject(SalSubmitForApprovalScenariosWindow.class));
+        replay(Windows.class, scenarioService, productFamilyProvider);
+        scenariosController.onSubmitForApprovalButtonClicked();
+        verify(Windows.class, scenarioService, productFamilyProvider);
+    }
+
+    @Test
+    public void testOnApproveButtonClicked() {
+        mockStatic(Windows.class);
+        List<Scenario> scenarios = List.of(scenario1);
+        expect(productFamilyProvider.getSelectedProductFamily()).andReturn(SAL_PRODUCT_FAMILY).once();
+        expect(scenarioService.getScenariosByProductFamiliesAndStatuses(
+            Set.of(SAL_PRODUCT_FAMILY), Set.of(ScenarioStatusEnum.SUBMITTED))).andReturn(scenarios).once();
+        Windows.showModalWindow(anyObject(SalApproveScenariosWindow.class));
+        replay(Windows.class, scenarioService, productFamilyProvider);
+        scenariosController.onApproveButtonClicked();
+        verify(Windows.class, scenarioService, productFamilyProvider);
+    }
+
+    @Test
+    public void testOnSendToLmButtonClicked() {
+        mockStatic(Windows.class);
+        List<Scenario> scenarios = List.of(scenario1);
+        expect(productFamilyProvider.getSelectedProductFamily()).andReturn(SAL_PRODUCT_FAMILY).once();
+        expect(scenarioService.getScenariosByProductFamiliesAndStatuses(
+            Set.of(SAL_PRODUCT_FAMILY), Set.of(ScenarioStatusEnum.APPROVED))).andReturn(scenarios).once();
+        Windows.showModalWindow(anyObject(SalSendToLmScenariosWindow.class));
+        replay(Windows.class, scenarioService, productFamilyProvider);
+        scenariosController.onSendToLmButtonClicked();
+        verify(Windows.class, scenarioService, productFamilyProvider);
+    }
+
+    @Test
     public void testSendScenarioToLm() {
         mockStatic(Windows.class);
         Capture<ConfirmDialogWindow.IListener> listenerCapture = newCapture();
