@@ -67,6 +67,8 @@ public class FasUsageService implements IFasUsageService {
     private BigDecimal claPayeeServiceFee;
     @Value("$RUP{dist.foreign.cla_account_number}")
     private Long claAccountNumber;
+    @Value("$RUP{dist.foreign.grid.multi.select.record.threshold}")
+    private int recordsThreshold;
     @Autowired
     private IFasUsageRepository fasUsageRepository;
     @Autowired
@@ -277,6 +279,11 @@ public class FasUsageService implements IFasUsageService {
     @Override
     public Long getClaAccountNumber() {
         return claAccountNumber;
+    }
+
+    @Override
+    public int getRecordsThreshold() {
+        return recordsThreshold;
     }
 
     private void populateTitlesStandardNumberAndType(List<ResearchedUsage> researchedUsages) {

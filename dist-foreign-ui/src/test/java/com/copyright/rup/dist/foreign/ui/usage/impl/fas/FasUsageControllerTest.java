@@ -349,6 +349,14 @@ public class FasUsageControllerTest {
     }
 
     @Test
+    public void testGetRecordsThreshold() {
+        expect(fasUsageService.getRecordsThreshold()).andReturn(10000).once();
+        replay(fasUsageService);
+        assertEquals(10000, controller.getRecordsThreshold());
+        verify(fasUsageService);
+    }
+
+    @Test
     public void testUpdateUsages() {
         //TODO: implement
     }

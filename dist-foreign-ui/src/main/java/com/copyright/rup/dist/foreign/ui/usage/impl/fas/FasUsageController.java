@@ -155,6 +155,11 @@ public class FasUsageController extends CommonUsageController implements IFasUsa
     }
 
     @Override
+    public int getRecordsThreshold() {
+        return fasUsageService.getRecordsThreshold();
+    }
+
+    @Override
     public List<UsageDto> getUsageDtosToUpdate() {
         return fasUsageService.getUsageDtos(getUsageFilterController().getWidget().getAppliedFilter(), null, null);
     }

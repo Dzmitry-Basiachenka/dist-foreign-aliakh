@@ -82,6 +82,13 @@ public interface IFasUsageController extends ICommonUsageController {
     List<UsageDto> getUsageDtosToUpdate();
 
     /**
+     * Gets records threshold.
+     *
+     * @return records threshold
+     */
+    int getRecordsThreshold();
+
+    /**
      * Updates usages Wr Wrk Inst and sends them for PI matching and getting rights.
      *
      * @param usageIds  usage ids

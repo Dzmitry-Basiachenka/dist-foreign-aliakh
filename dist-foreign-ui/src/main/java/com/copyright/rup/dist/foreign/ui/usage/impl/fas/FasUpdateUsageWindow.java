@@ -72,9 +72,7 @@ class FasUpdateUsageWindow extends Window implements IRefreshable {
         List<UsageDto> usages = controller.getUsageDtosToUpdate();
         dataProvider = DataProvider.ofCollection(usages);
         usagesGrid.setDataProvider(dataProvider);
-        //TODO: implement 100000 records threshold
-        gridSelectionModel.setSelectAllCheckBoxVisibility(
-            usages.isEmpty() ? SelectAllCheckBoxVisibility.HIDDEN : SelectAllCheckBoxVisibility.VISIBLE);
+        switchSelectAllCheckBoxVisibility(usages.size());
         gridSelectionModel.beforeClientResponse(false);
         dataProvider.refreshAll();
     }
@@ -93,11 +91,19 @@ class FasUpdateUsageWindow extends Window implements IRefreshable {
         return content;
     }
 
+    private void initSearchWidget() {
+        searchWidget = new SearchWidget(this::refresh);
+        searchWidget.setPrompt(ForeignUi.getMessage("prompt.rightsholder_update"));
+        searchWidget.setWidth(70, Unit.PERCENTAGE);
+    }
+
     private void initGrid() {
-        dataProvider = DataProvider.ofCollection(controller.getUsageDtosToUpdate());
+        List<UsageDto> usages = controller.getUsageDtosToUpdate();
+        dataProvider = DataProvider.ofCollection(usages);
         usagesGrid = new Grid<>(dataProvider);
         usagesGrid.setSizeFull();
         gridSelectionModel = (MultiSelectionModelImpl<UsageDto>) usagesGrid.setSelectionMode(Grid.SelectionMode.MULTI);
+        switchSelectAllCheckBoxVisibility(usages.size());
         addGridColumns();
         usagesGrid.addSelectionListener(event ->
             updateButton.setEnabled(CollectionUtils.isNotEmpty(event.getAllSelectedItems())));
@@ -105,10 +111,11 @@ class FasUpdateUsageWindow extends Window implements IRefreshable {
         VaadinUtils.addComponentStyle(usagesGrid, "update-fas-usages-grid");
     }
 
-    private void initSearchWidget() {
-        searchWidget = new SearchWidget(this::refresh);
-        searchWidget.setPrompt(ForeignUi.getMessage("prompt.rightsholder_update"));
-        searchWidget.setWidth(70, Unit.PERCENTAGE);
+    private void switchSelectAllCheckBoxVisibility(int beansCount) {
+        gridSelectionModel.setSelectAllCheckBoxVisibility(
+            0 == beansCount || beansCount > controller.getRecordsThreshold()
+                ? SelectAllCheckBoxVisibility.HIDDEN
+                : SelectAllCheckBoxVisibility.VISIBLE);
     }
 
     private void addGridColumns() {

@@ -35,6 +35,8 @@ import org.powermock.reflect.Whitebox;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * Verifies {@link FasUpdateUsageWindow}.
@@ -48,6 +50,9 @@ import java.util.Set;
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(Windows.class)
 public class FasUpdateUsageWindowTest {
+
+    private static final String USAGES_GRID = "usagesGrid";
+    private static final int RECORD_THRESHOLD = 10000;
 
     private IFasUsageController controller;
     private FasUpdateUsageWindow window;
@@ -87,7 +92,7 @@ public class FasUpdateUsageWindowTest {
         Windows.showModalWindow(anyObject(FasEditMultipleUsagesWindow.class));
         expectLastCall().once();
         Grid<UsageDto> usagesGrid = createMock(Grid.class);
-        Whitebox.setInternalState(window, "usagesGrid", usagesGrid);
+        Whitebox.setInternalState(window, USAGES_GRID, usagesGrid);
         VerticalLayout content = (VerticalLayout) window.getContent();
         HorizontalLayout buttonsLayout = (HorizontalLayout) content.getComponent(2);
         Button updateButton = (Button) buttonsLayout.getComponent(0);
@@ -101,22 +106,39 @@ public class FasUpdateUsageWindowTest {
     }
 
     @Test
-    public void testRefreshDataProviderSelectAllCheckBoxVisibilityVisible() {
+    public void testSelectAllCheckBoxVisibilityVisible() {
         expect(controller.getUsageDtosToUpdate()).andReturn(List.of(new UsageDto())).once();
+        expect(controller.getRecordsThreshold()).andReturn(RECORD_THRESHOLD).once();
         replay(controller);
         window.refreshDataProvider();
-        Grid<UsageDto> grid = Whitebox.getInternalState(window, "usagesGrid");
+        Grid<UsageDto> grid = Whitebox.getInternalState(window, USAGES_GRID);
         MultiSelectionModelImpl<UsageDto> selectionModel = (MultiSelectionModelImpl<UsageDto>) grid.getSelectionModel();
         assertEquals(SelectAllCheckBoxVisibility.VISIBLE, selectionModel.getSelectAllCheckBoxVisibility());
         verify(controller);
     }
 
     @Test
-    public void testRefreshDataProviderSelectAllCheckBoxVisibilityHidden() {
+    public void testSelectAllCheckBoxVisibilityHiddenNoUsages() {
         expect(controller.getUsageDtosToUpdate()).andReturn(List.of()).once();
         replay(controller);
         window.refreshDataProvider();
-        Grid<UsageDto> grid = Whitebox.getInternalState(window, "usagesGrid");
+        Grid<UsageDto> grid = Whitebox.getInternalState(window, USAGES_GRID);
+        MultiSelectionModelImpl<UsageDto> selectionModel = (MultiSelectionModelImpl<UsageDto>) grid.getSelectionModel();
+        assertEquals(SelectAllCheckBoxVisibility.HIDDEN, selectionModel.getSelectAllCheckBoxVisibility());
+        verify(controller);
+    }
+
+    @Test
+    public void testSelectAllCheckBoxVisibilityHiddenUsagesThresholdExceeded() {
+        List<UsageDto> usages = IntStream
+            .rangeClosed(0, RECORD_THRESHOLD)
+            .mapToObj(i -> new UsageDto())
+            .collect(Collectors.toList());
+        expect(controller.getUsageDtosToUpdate()).andReturn(usages).once();
+        expect(controller.getRecordsThreshold()).andReturn(RECORD_THRESHOLD).once();
+        replay(controller);
+        window.refreshDataProvider();
+        Grid<UsageDto> grid = Whitebox.getInternalState(window, USAGES_GRID);
         MultiSelectionModelImpl<UsageDto> selectionModel = (MultiSelectionModelImpl<UsageDto>) grid.getSelectionModel();
         assertEquals(SelectAllCheckBoxVisibility.HIDDEN, selectionModel.getSelectAllCheckBoxVisibility());
         verify(controller);
