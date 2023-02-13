@@ -92,7 +92,11 @@ public class UsageBatchStatusServiceTest {
 
     @Test
     public void testGetUsageBatchStatusesUdm() {
-        // TODO: {dbasiachenka} implement
+        expect(usageBatchStatusRepository.findUsageBatchStatusesUdm(LocalDate.now().minusDays(NUMBER_OF_DAYS)))
+            .andReturn(batchStatuses).once();
+        replay(usageBatchStatusRepository);
+        assertSame(batchStatuses, usageBatchStatusService.getUsageBatchStatusesUdm());
+        verify(usageBatchStatusRepository);
     }
 
     @Test
