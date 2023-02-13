@@ -142,11 +142,26 @@ public interface ISalUsageController extends ICommonUsageController {
     boolean usageDataExists(String batchId);
 
     /**
+     * Checks whether usage details exist for any of provided IB details.
+     *
+     * @param itemBankDetails set of IB details
+     * @return {@code true} - if usage detail exist, {@code false} - otherwise
+     */
+    boolean usageDataExists(Set<UsageDto> itemBankDetails);
+
+    /**
      * Deletes {@link Usage}s with detail type UD.
      *
      * @param usageBatch {@link UsageBatch} to delete usage details
      */
     void deleteUsageData(UsageBatch usageBatch);
+
+    /**
+     * Deletes selected usages from IB batch and associated UD details if any.
+     *
+     * @param usagesToExclude selected IB usages
+     */
+    void excludeUsageDetails(Set<UsageDto> usagesToExclude);
 
     /**
      * @return list of SAL {@link UsageBatch}es that are not attached to a scenario.

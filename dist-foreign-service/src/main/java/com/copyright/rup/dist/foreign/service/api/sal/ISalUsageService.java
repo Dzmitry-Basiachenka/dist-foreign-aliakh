@@ -131,11 +131,26 @@ public interface ISalUsageService extends IPaidUsageService {
     boolean usageDataExists(String batchId);
 
     /**
+     * Checks whether usage details exist for any of provided IB details.
+     *
+     * @param itemBankDetails set of IB details
+     * @return {@code true} - if usage detail exist, {@code false} - otherwise
+     */
+    boolean usageDataExists(Set<UsageDto> itemBankDetails);
+
+    /**
      * Deletes {@link Usage}s with detail type UD.
      *
      * @param usageBatch {@link UsageBatch} to delete usage details
      */
     void deleteUsageData(UsageBatch usageBatch);
+
+    /**
+     * Deletes usages from IB batch and associated UD details if any.
+     *
+     * @param usagesToDelete selected IB usages
+     */
+    void deleteItemBankUsages(Set<UsageDto> usagesToDelete);
 
     /**
      * Deletes all {@link Usage}s associated with the given SAL {@link UsageBatch}.

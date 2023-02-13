@@ -377,6 +377,18 @@ public class SalUsageControllerTest {
     }
 
     @Test
+    public void testExcludeUsageDetails() {
+        Set<UsageDto> usages = Set.of(new UsageDto());
+        salUsageService.deleteItemBankUsages(usages);
+        expectLastCall().once();
+        controller.refreshWidget();
+        expectLastCall();
+        replay(salScenarioService);
+        controller.excludeUsageDetails(usages);
+        verify(salScenarioService);
+    }
+
+    @Test
     public void testIsBatchProcessingCompleted() {
         String batchId = "dde634cb-148b-4f1f-bade-6c0b7328b2b9";
         IUsageBatchStatusService usageBatchStatusService = createMock(IUsageBatchStatusService.class);
