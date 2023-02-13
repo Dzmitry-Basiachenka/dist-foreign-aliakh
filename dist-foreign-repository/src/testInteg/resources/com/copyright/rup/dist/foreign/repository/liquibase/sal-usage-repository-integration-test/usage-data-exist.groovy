@@ -2,7 +2,7 @@ databaseChangeLog {
     property(file: 'database-testInteg.properties')
 
     changeSet(id: '2020-09-24-00', author: 'Anton Azarenka <aazarenka@copyright.com>') {
-        comment('Insert test data for testUsageDetailsExist')
+        comment('Insert test data for testUsageDataExistByBatchId, testUsageDataExistByWorkPortionIds')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: 'cb932497-086d-4a7e-9b34-e9a62f17adab4')

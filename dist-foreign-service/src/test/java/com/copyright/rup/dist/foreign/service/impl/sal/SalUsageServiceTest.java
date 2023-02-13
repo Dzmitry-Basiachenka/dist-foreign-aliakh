@@ -69,6 +69,7 @@ public class SalUsageServiceTest {
     private static final String USER_NAME = "user@copyright.com";
     private static final String USAGE_ID_1 = "d7d15c9f-39f5-4d51-b72b-48a80f7f5388";
     private static final String USAGE_ID_2 = "c72554d7-687e-4173-8406-dbddef74da98";
+    private static final String WORK_PORTION_ID = "2401064IB2188";
     private static final Long RH_ACCOUNT_NUMBER = 1000009422L;
     private static final String RIGHTSHOLDER_ID = "4914f51d-866c-4e48-8b03-fb4b29b1a5f3";
     private static final String SCENARIO_ID = "2d50e235-34cd-4c38-9e4c-ecd2e748e9ff";
@@ -215,18 +216,30 @@ public class SalUsageServiceTest {
 
     @Test
     public void testGetItemBankDetailGradeByWorkPortionId() {
-        expect(salUsageRepository.findItemBankDetailGradeByWorkPortionId("2401064IB2188")).andReturn("K").once();
+        expect(salUsageRepository.findItemBankDetailGradeByWorkPortionId(WORK_PORTION_ID)).andReturn("K").once();
         replay(salUsageRepository);
-        assertEquals("K", salUsageService.getItemBankDetailGradeByWorkPortionId("2401064IB2188"));
+        assertEquals("K", salUsageService.getItemBankDetailGradeByWorkPortionId(WORK_PORTION_ID));
         verify(salUsageRepository);
     }
 
     @Test
-    public void testUsageDetailsExist() {
+    public void testUsageDataExistByBatchId() {
         String batchId = "78a76524-ed6e-4998-9833-2e2051830d42";
-        expect(salUsageRepository.usageDataExist(batchId)).andReturn(true).once();
+        expect(salUsageRepository.usageDataExistByBatchId(batchId)).andReturn(true).once();
         replay(salUsageRepository);
         assertTrue(salUsageService.usageDataExists(batchId));
+        verify(salUsageRepository);
+    }
+
+    @Test
+    public void testUsageDataExistByWorkPortionIds() {
+        UsageDto usage = new UsageDto();
+        SalUsage salUsage = new SalUsage();
+        salUsage.setReportedWorkPortionId(WORK_PORTION_ID);
+        usage.setSalUsage(salUsage);
+        expect(salUsageRepository.usageDataExistByWorkPortionIds(Set.of(WORK_PORTION_ID))).andReturn(true).once();
+        replay(salUsageRepository);
+        assertTrue(salUsageService.usageDataExists(Set.of(usage)));
         verify(salUsageRepository);
     }
 

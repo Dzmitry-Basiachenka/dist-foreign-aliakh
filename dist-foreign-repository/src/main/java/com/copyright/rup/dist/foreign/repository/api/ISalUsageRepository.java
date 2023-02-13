@@ -100,7 +100,15 @@ public interface ISalUsageRepository {
      * @param batchId batch id
      * @return {@code true} - if usage details exists, {@code false} - otherwise
      */
-    boolean usageDataExist(String batchId);
+    boolean usageDataExistByBatchId(String batchId);
+
+    /**
+     * Checks whether usage details exists for specified Reported Work Portion Ids.
+     *
+     * @param workPortionIds work portion id
+     * @return {@code true} - if usage details exists, {@code false} - otherwise
+     */
+    boolean usageDataExistByWorkPortionIds(Set<String> workPortionIds);
 
     /**
      * Removes all usage details with detail type UD.

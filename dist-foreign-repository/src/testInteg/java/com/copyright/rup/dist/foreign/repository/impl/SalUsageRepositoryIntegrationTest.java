@@ -284,9 +284,16 @@ public class SalUsageRepositoryIntegrationTest {
 
     @Test
     @TestData(fileName = FOLDER_NAME + "usage-data-exist.groovy")
-    public void testUsageDetailsExist() {
-        assertTrue(salUsageRepository.usageDataExist("cb932497-086d-4a7e-9b34-e9a62f17adab4"));
-        assertFalse(salUsageRepository.usageDataExist("b0e669d2-68d0-4add-9946-34215011f74b"));
+    public void testUsageDataExistByBatchId() {
+        assertTrue(salUsageRepository.usageDataExistByBatchId("cb932497-086d-4a7e-9b34-e9a62f17adab4"));
+        assertFalse(salUsageRepository.usageDataExistByBatchId("b0e669d2-68d0-4add-9946-34215011f74b"));
+    }
+
+    @Test
+    @TestData(fileName = FOLDER_NAME + "usage-data-exist.groovy")
+    public void testUsageDataExistByWorkPortionIds() {
+        assertTrue(salUsageRepository.usageDataExistByWorkPortionIds(Set.of("33064IB2190", "1101024IB2192")));
+        assertFalse(salUsageRepository.usageDataExistByWorkPortionIds(Set.of("33064IB2190")));
     }
 
     @Test
@@ -299,12 +306,12 @@ public class SalUsageRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FOLDER_NAME + "delete-usage-data.groovy")
     public void testDeleteUsageData() {
-        assertTrue(salUsageRepository.usageDataExist(USAGE_BATCH_ID_3));
-        UsageFilter usageFilter = buildUsageFilter(Set.of(USAGE_BATCH_ID_3), UsageStatusEnum.NEW,
-                SAL_PRODUCT_FAMILY, null);
+        assertTrue(salUsageRepository.usageDataExistByBatchId(USAGE_BATCH_ID_3));
+        UsageFilter usageFilter =
+            buildUsageFilter(Set.of(USAGE_BATCH_ID_3), UsageStatusEnum.NEW, SAL_PRODUCT_FAMILY, null);
         assertEquals(3, salUsageRepository.findDtosByFilter(usageFilter, null, null).size());
         salUsageRepository.deleteUsageData(USAGE_BATCH_ID_3);
-        assertFalse(salUsageRepository.usageDataExist(USAGE_BATCH_ID_3));
+        assertFalse(salUsageRepository.usageDataExistByBatchId(USAGE_BATCH_ID_3));
         assertEquals(1, salUsageRepository.findDtosByFilter(usageFilter, null, null).size());
     }
 
