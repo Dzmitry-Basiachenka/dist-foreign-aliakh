@@ -46,6 +46,16 @@ public interface ISalScenariosController extends ICommonScenariosController {
     void onSubmitForApprovalButtonClicked();
 
     /**
+     * Handles click on 'Reject' button.
+     */
+    void onRejectButtonClicked();
+
+    /**
+     * Handles click on 'Approve' button.
+     */
+    void onApproveButtonClicked();
+
+    /**
      * Handles click on 'Send to LM' button.
      */
     void onSendToLmButtonClicked();

@@ -128,6 +128,16 @@ public class SalScenariosController extends CommonScenariosController implements
     }
 
     @Override
+    public void onRejectButtonClicked() {
+        //TODO stub, implementation will be later
+    }
+
+    @Override
+    public void onApproveButtonClicked() {
+        Windows.showModalWindow(new SalApproveScenariosWindow(this));
+    }
+
+    @Override
     public void onSendToLmButtonClicked() {
         Windows.showModalWindow(new SalSendToLmScenariosWindow(this));
     }
