@@ -175,4 +175,11 @@ public interface IFasUsageService {
      * @return CLA account number.
      */
     Long getClaAccountNumber();
+
+    /**
+     * Gets records threshold.
+     *
+     * @return records threshold
+     */
+    int getRecordsThreshold();
 }
