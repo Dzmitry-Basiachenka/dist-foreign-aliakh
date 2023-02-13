@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.service.impl.sal;
 
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
 import static org.powermock.api.easymock.PowerMock.replay;
@@ -9,6 +10,8 @@ import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
+import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IScenarioRepository;
 import com.copyright.rup.dist.foreign.service.api.IScenarioAuditService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioUsageFilterService;
@@ -21,6 +24,8 @@ import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
+
+import java.util.Set;
 
 /**
  * Verifies {@link SalScenarioService}.
@@ -81,5 +86,23 @@ public class SalScenarioServiceTest {
         replay(scenarioRepository, salUsageService, scenarioAuditService, scenarioUsageFilterService);
         salScenarioService.deleteScenario(scenario);
         verify(scenarioRepository, salUsageService, scenarioAuditService, scenarioUsageFilterService);
+    }
+
+    @Test
+    public void testChangeScenariosState() {
+        Scenario scenario = new Scenario();
+        scenario.setId(SCENARIO_ID);
+        Set<Scenario> scenarios = Set.of(scenario);
+        Set<String> scenarioIds = Set.of(scenario.getId());
+        scenarioRepository.updateStatus(scenarios, ScenarioStatusEnum.SUBMITTED);
+        expectLastCall().once();
+        scenarioAuditService.logAction(scenarioIds, ScenarioActionTypeEnum.SUBMITTED, "reason");
+        expectLastCall().once();
+        replay(scenarioRepository, scenarioAuditService);
+        salScenarioService.changeScenariosState(scenarios, ScenarioStatusEnum.SUBMITTED,
+            ScenarioActionTypeEnum.SUBMITTED, "reason");
+        assertTrue(scenarios.stream().allMatch(scenario1 ->
+            scenario1.getStatus().equals(ScenarioStatusEnum.SUBMITTED)));
+        verify(scenarioRepository, scenarioAuditService);
     }
 }

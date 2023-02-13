@@ -38,6 +38,7 @@ public class ScenarioRepository extends BaseRepository implements IScenarioRepos
 
     private static final String SCENARIO_ID_KEY = "scenarioId";
     private static final String UPDATE_USER_KEY = "updateUser";
+    private static final String STATUS_KEY = "status";
 
     @Override
     public void insert(Scenario scenario) {
@@ -49,7 +50,7 @@ public class ScenarioRepository extends BaseRepository implements IScenarioRepos
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(5);
         params.put("scenario", Objects.requireNonNull(scenario));
         params.put("filter", Objects.requireNonNull(filter));
-        params.put("status", UsageStatusEnum.LOCKED);
+        params.put(STATUS_KEY, UsageStatusEnum.LOCKED);
         params.put("createUser", scenario.getCreateUser());
         params.put(UPDATE_USER_KEY, scenario.getUpdateUser());
         insert("IScenarioMapper.insertNtsScenarioAndAddUsages", params);
@@ -128,10 +129,19 @@ public class ScenarioRepository extends BaseRepository implements IScenarioRepos
     @Override
     public void updateStatus(Scenario scenario) {
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(3);
-        params.put("status", Objects.requireNonNull(scenario.getStatus()));
+        params.put(STATUS_KEY, Objects.requireNonNull(scenario.getStatus()));
         params.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenario.getId()));
         params.put(UPDATE_USER_KEY, StoredEntity.DEFAULT_USER);
         update("IScenarioMapper.updateStatusById", params);
+    }
+
+    @Override
+    public void updateStatus(Set<Scenario> scenarios, ScenarioStatusEnum status) {
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(3);
+        params.put(STATUS_KEY, Objects.requireNonNull(status));
+        params.put("scenarios", Objects.requireNonNull(scenarios));
+        params.put(UPDATE_USER_KEY, StoredEntity.DEFAULT_USER);
+        update("IScenarioMapper.updateStatusByIds", params);
     }
 
     @Override
@@ -146,7 +156,7 @@ public class ScenarioRepository extends BaseRepository implements IScenarioRepos
     @Override
     public void updateStatus(List<String> scenarioIds, ScenarioStatusEnum status) {
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(3);
-        params.put("status", Objects.requireNonNull(status));
+        params.put(STATUS_KEY, Objects.requireNonNull(status));
         params.put(UPDATE_USER_KEY, StoredEntity.DEFAULT_USER);
         scenarioIds.forEach(scenarioId -> {
             params.put(SCENARIO_ID_KEY, scenarioId);

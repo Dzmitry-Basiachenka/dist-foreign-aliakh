@@ -21,6 +21,7 @@ import com.copyright.rup.dist.foreign.service.api.sal.ISalScenarioService;
 import com.copyright.rup.dist.foreign.service.api.sal.ISalUsageService;
 
 import com.google.common.collect.Iterables;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -115,6 +118,23 @@ public class SalScenarioService implements ISalScenarioService {
         scenarioAuditService.logAction(scenario.getId(), ScenarioActionTypeEnum.SENT_TO_LM, StringUtils.EMPTY);
         LOGGER.info("Send SAL scenario to LM. Finished. {}, User={}", ForeignLogUtils.scenario(scenario),
             RupContextUtils.getUserName());
+    }
+
+    @Override
+    @Transactional
+    public void changeScenariosState(Set<Scenario> scenarios, ScenarioStatusEnum status, ScenarioActionTypeEnum action,
+                                      String reason) {
+        String userName = RupContextUtils.getUserName();
+        scenarios.forEach(scenario -> {
+            Objects.requireNonNull(scenario);
+            scenario.setStatus(status);
+            scenario.setUpdateUser(userName);
+            LOGGER.info("Change scenario status. {}, User={}, Reason={}", ForeignLogUtils.scenario(scenario), userName,
+                reason);
+        });
+        scenarioRepository.updateStatus(scenarios, status);
+        Set<String> scenarioIds = scenarios.stream().map(Scenario::getId).collect(Collectors.toSet());
+        scenarioAuditService.logAction(scenarioIds, action, reason);
     }
 
     private Scenario buildScenario(String scenarioName, String fundPoolId, String description) {

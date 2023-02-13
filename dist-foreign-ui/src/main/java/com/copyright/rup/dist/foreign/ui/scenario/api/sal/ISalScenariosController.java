@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.scenario.api.sal;
 
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonScenariosController;
 
@@ -48,4 +49,12 @@ public interface ISalScenariosController extends ICommonScenariosController {
      * Handles click on 'Send to LM' button.
      */
     void onSendToLmButtonClicked();
+
+    /**
+     * Handles actions with set of {@link Scenario}.
+     *
+     * @param actionType scenario action type
+     * @param scenarios  scenarios to submit for approval
+     */
+    void handleAction(ScenarioActionTypeEnum actionType, Set<Scenario> scenarios);
 }

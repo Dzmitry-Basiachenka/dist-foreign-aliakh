@@ -1,7 +1,11 @@
 package com.copyright.rup.dist.foreign.service.api.sal;
 
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
+import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
+
+import java.util.Set;
 
 /**
  * Represents service interface for SAL specific scenarios business logic.
@@ -46,4 +50,15 @@ public interface ISalScenarioService {
      * @param scenario instance of {@link Scenario} to send to LM
      */
     void sendToLm(Scenario scenario);
+
+    /**
+     * Change {@link Scenario}s state.
+     *
+     * @param scenarios set of {@link Scenario}s
+     * @param status    new {@link ScenarioStatusEnum} status
+     * @param action    action
+     * @param reason    reason specified by user
+     */
+    void changeScenariosState(Set<Scenario> scenarios, ScenarioStatusEnum status, ScenarioActionTypeEnum action,
+                              String reason);
 }
