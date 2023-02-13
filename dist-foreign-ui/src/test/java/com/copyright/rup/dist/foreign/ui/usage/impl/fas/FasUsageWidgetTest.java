@@ -88,6 +88,7 @@ public class FasUsageWidgetTest {
         CommonDateUtils.format(LocalDate.now(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT);
     private static final String FAS_PRODUCT_FAMILY = "FAS";
     private static final String FAS_SCENARIO_NAME_PREFIX = "FAS Distribution ";
+    private static final int RECORD_THRESHOLD = 10000;
 
     private final List<UsageDto> usages = loadExpectedUsageDtos("usage_dto_05f0385c.json");
     private FasUsageWidget usagesWidget;
@@ -228,6 +229,7 @@ public class FasUsageWidgetTest {
         ClickEvent clickEvent = createMock(ClickEvent.class);
         expect(controller.getBeansCount()).andReturn(1).once();
         expect(controller.getUsageDtosToUpdate()).andReturn(List.of(new UsageDto())).once();
+        expect(controller.getRecordsThreshold()).andReturn(RECORD_THRESHOLD).once();
         Windows.showModalWindow(anyObject(FasUpdateUsageWindow.class));
         expectLastCall().once();
         replay(controller, clickEvent, Windows.class);
