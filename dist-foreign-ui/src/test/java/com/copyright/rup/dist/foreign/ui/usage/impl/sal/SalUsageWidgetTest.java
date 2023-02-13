@@ -4,7 +4,10 @@ import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGrid;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyMenuBar;
 
 import static org.easymock.EasyMock.anyObject;
+import static org.easymock.EasyMock.capture;
+import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.newCapture;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
@@ -33,6 +36,8 @@ import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageFilterController;
+import com.copyright.rup.dist.foreign.ui.usage.impl.CommonUsageWidget;
+import com.copyright.rup.vaadin.ui.component.window.ConfirmDialogWindow.IListener;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
 import com.google.common.collect.Sets;
@@ -50,9 +55,11 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.JavaScript;
 import com.vaadin.ui.MenuBar.MenuItem;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.Window;
 import com.vaadin.ui.components.grid.MultiSelectionModelImpl;
 
 import org.apache.commons.lang3.tuple.Triple;
+import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -215,7 +222,7 @@ public class SalUsageWidgetTest {
         DataProvider dataProvider = createMock(DataProvider.class);
         Grid usagesGrid = new Grid(dataProvider);
         SalUsageMediator mediator = createMock(SalUsageMediator.class);
-        Whitebox.setInternalState(usagesWidget, usagesGrid);
+        Whitebox.setInternalState(usagesWidget, usagesGrid, CommonUsageWidget.class);
         Whitebox.setInternalState(usagesWidget, mediator);
         dataProvider.refreshAll();
         expectLastCall().once();
@@ -254,12 +261,7 @@ public class SalUsageWidgetTest {
         Windows.showModalWindow(anyObject(SalDetailForRightsholderUpdateWindow.class));
         expectLastCall().once();
         replay(controller, Windows.class);
-        Button updateRightsholdersButton = (Button) ((HorizontalLayout)
-            ((VerticalLayout) usagesWidget.getSecondComponent()).getComponent(0)).getComponent(2);
-        Collection<?> listeners = updateRightsholdersButton.getListeners(ClickEvent.class);
-        assertEquals(2, listeners.size());
-        ClickListener clickListener = (ClickListener) listeners.iterator().next();
-        clickListener.buttonClick(null);
+        applyUpdateRightsholdersButtonClick();
         verify(controller, Windows.class);
     }
 
@@ -271,12 +273,7 @@ public class SalUsageWidgetTest {
         Windows.showNotificationWindow("There are no usages for RH update");
         expectLastCall().once();
         replay(controller, Windows.class);
-        Button updateRightsholdersButton = (Button) ((HorizontalLayout)
-            ((VerticalLayout) usagesWidget.getSecondComponent()).getComponent(0)).getComponent(2);
-        Collection<?> listeners = updateRightsholdersButton.getListeners(ClickEvent.class);
-        assertEquals(2, listeners.size());
-        ClickListener clickListener = (ClickListener) listeners.iterator().next();
-        clickListener.buttonClick(null);
+        applyUpdateRightsholdersButtonClick();
         verify(controller, Windows.class);
     }
 
@@ -287,12 +284,7 @@ public class SalUsageWidgetTest {
         Windows.showNotificationWindow("RH_NOT_FOUND or WORK_NOT_GRANTED status filter should be applied");
         expectLastCall().once();
         replay(controller, Windows.class);
-        Button updateRightsholdersButton = (Button) ((HorizontalLayout)
-            ((VerticalLayout) usagesWidget.getSecondComponent()).getComponent(0)).getComponent(2);
-        Collection<?> listeners = updateRightsholdersButton.getListeners(ClickEvent.class);
-        assertEquals(2, listeners.size());
-        ClickListener clickListener = (ClickListener) listeners.iterator().next();
-        clickListener.buttonClick(null);
+        applyUpdateRightsholdersButtonClick();
         verify(controller, Windows.class);
     }
 
@@ -307,13 +299,54 @@ public class SalUsageWidgetTest {
         Windows.showNotificationWindow("Please apply IB Detail Type Filter to exclude details");
         expectLastCall().once();
         replay(controller, salUsageFilterController, usageFilterWidget, Windows.class);
-        Button updateRightsholdersButton = (Button) ((HorizontalLayout)
-            ((VerticalLayout) usagesWidget.getSecondComponent()).getComponent(0)).getComponent(3);
-        Collection<?> listeners = updateRightsholdersButton.getListeners(ClickEvent.class);
-        assertEquals(2, listeners.size());
-        ClickListener clickListener = (ClickListener) listeners.iterator().next();
-        clickListener.buttonClick(null);
+        applyExcludeDetailsButtonClick();
         verify(controller, salUsageFilterController, usageFilterWidget, Windows.class);
+    }
+
+    @Test
+    public void testExcludeDetailsButtonClickListenerNoSelectedUsages() {
+        mockStatic(Windows.class);
+        Grid<UsageDto> usagesGrid = createMock(Grid.class);
+        Whitebox.setInternalState(usagesWidget, usagesGrid);
+        ISalUsageFilterController salUsageFilterController = createMock(ISalUsageFilterController.class);
+        ICommonUsageFilterWidget usageFilterWidget = createMock(ICommonUsageFilterWidget.class);
+        expect(controller.getUsageFilterController()).andReturn(salUsageFilterController).once();
+        expect(salUsageFilterController.getWidget()).andReturn(usageFilterWidget).once();
+        UsageFilter filter = new UsageFilter();
+        filter.setSalDetailType(SalDetailTypeEnum.IB);
+        expect(usageFilterWidget.getAppliedFilter()).andReturn(filter);
+        expect(usagesGrid.getSelectedItems()).andReturn(Set.of()).once();
+        Windows.showNotificationWindow("Please select at least one usage detail");
+        expectLastCall().once();
+        replay(controller, salUsageFilterController, usageFilterWidget, usagesGrid, Windows.class);
+        applyExcludeDetailsButtonClick();
+        verify(controller, salUsageFilterController, usageFilterWidget, usagesGrid, Windows.class);
+    }
+
+    @Test
+    public void testExcludeDetailsButtonClickListenerValid() {
+        mockStatic(Windows.class);
+        Grid<UsageDto> usagesGrid = createMock(Grid.class);
+        Whitebox.setInternalState(usagesWidget, usagesGrid);
+        Capture<IListener> windowListenerCapture = newCapture();
+        ISalUsageFilterController salUsageFilterController = createMock(ISalUsageFilterController.class);
+        ICommonUsageFilterWidget usageFilterWidget = createMock(ICommonUsageFilterWidget.class);
+        expect(controller.getUsageFilterController()).andReturn(salUsageFilterController).once();
+        expect(salUsageFilterController.getWidget()).andReturn(usageFilterWidget).once();
+        UsageFilter filter = new UsageFilter();
+        filter.setSalDetailType(SalDetailTypeEnum.IB);
+        expect(usageFilterWidget.getAppliedFilter()).andReturn(filter);
+        Set<UsageDto> usages = Set.of(new UsageDto());
+        expect(usagesGrid.getSelectedItems()).andReturn(usages).once();
+        expect(controller.usageDataExists(usages)).andReturn(false).once();
+        expect(Windows.showConfirmDialog(eq("Are you sure you want to exclude selected detail(s)?"),
+            capture(windowListenerCapture))).andReturn(new Window()).once();
+        controller.excludeUsageDetails(usages);
+        expectLastCall().once();
+        replay(controller, salUsageFilterController, usageFilterWidget, usagesGrid, Windows.class);
+        applyExcludeDetailsButtonClick();
+        windowListenerCapture.getValue().onActionConfirmed();
+        verify(controller, salUsageFilterController, usageFilterWidget, usagesGrid, Windows.class);
     }
 
     @Test
@@ -452,11 +485,22 @@ public class SalUsageWidgetTest {
         verify(controller, Windows.class);
     }
 
+    private void applyUpdateRightsholdersButtonClick() {
+        applyButtonClick(2);
+    }
+
+    private void applyExcludeDetailsButtonClick() {
+        applyButtonClick(3);
+    }
+
     private void applyAddToScenarioButtonClick() {
-        Button addToScenarioButton = (Button) ((HorizontalLayout)
-            ((VerticalLayout) usagesWidget.getSecondComponent()).getComponent(0)).getComponent(4);
-        Collection<?> listeners = addToScenarioButton.getListeners(ClickEvent.class);
-        assertEquals(2, listeners.size());
+        applyButtonClick(4);
+    }
+
+    private void applyButtonClick(int buttonIndex) {
+        Button excludeDetailsButton = (Button) ((HorizontalLayout)
+            ((VerticalLayout) usagesWidget.getSecondComponent()).getComponent(0)).getComponent(buttonIndex);
+        Collection<?> listeners = excludeDetailsButton.getListeners(ClickEvent.class);
         ClickListener clickListener = (ClickListener) listeners.iterator().next();
         clickListener.buttonClick(null);
     }

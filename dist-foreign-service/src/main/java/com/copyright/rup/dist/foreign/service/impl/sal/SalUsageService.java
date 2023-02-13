@@ -212,6 +212,12 @@ public class SalUsageService implements ISalUsageService {
     }
 
     @Override
+    public boolean usageDataExists(Set<UsageDto> itemBankDetails) {
+        //TODO implement repository logic
+        return false;
+    }
+
+    @Override
     @Transactional
     public void deleteUsageData(UsageBatch usageBatch) {
         String userName = RupContextUtils.getUserName();
@@ -220,6 +226,16 @@ public class SalUsageService implements ISalUsageService {
         usageAuditService.deleteActionsForSalUsageData(usageBatch.getId());
         salUsageRepository.deleteUsageData(usageBatch.getId());
         LOGGER.info("Delete SAL usage data. Finished. BatchName={}, UserName={}", batchName, userName);
+    }
+
+    @Override
+    @Transactional
+    public void deleteItemBankUsages(Set<UsageDto> usagesToDelete) {
+        String userName = RupContextUtils.getUserName();
+        int usagesSize = usagesToDelete.size();
+        LOGGER.info("Delete SAL IB usages. Started. UsagesCount={}, UserName={}", usagesSize, userName);
+        //TODO implement delete functionality
+        LOGGER.info("Delete SAL usage data. Finished. UsagesCount={}, UserName={}", usagesSize, userName);
     }
 
     @Override
@@ -248,16 +264,16 @@ public class SalUsageService implements ISalUsageService {
                                                           Pageable pageable, Sort sort) {
         return FdaConstants.ARCHIVED_SCENARIO_STATUSES.contains(scenario.getStatus())
             ? usageArchiveRepository.findSalByScenarioIdAndRhAccountNumber(scenario.getId(), accountNumber,
-                searchValue, pageable, sort)
+            searchValue, pageable, sort)
             : salUsageRepository.findByScenarioIdAndRhAccountNumber(scenario.getId(), accountNumber, searchValue,
-                pageable, sort);
+            pageable, sort);
     }
 
     @Override
     public int getCountByScenarioAndRhAccountNumber(Scenario scenario, Long accountNumber, String searchValue) {
         return FdaConstants.ARCHIVED_SCENARIO_STATUSES.contains(scenario.getStatus())
             ? usageArchiveRepository.findSalCountByScenarioIdAndRhAccountNumber(scenario.getId(), accountNumber,
-                searchValue)
+            searchValue)
             : salUsageRepository.findCountByScenarioIdAndRhAccountNumber(scenario.getId(), accountNumber, searchValue);
     }
 

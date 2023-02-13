@@ -56,6 +56,7 @@ public class SalUsageWidget extends CommonUsageWidget implements ISalUsageWidget
     private Button excludeDetailsButton;
     private Button addToScenarioButton;
     private Button exportButton;
+    private Grid<UsageDto> usagesGrid;
     private MultiSelectionModelImpl<UsageDto> gridSelectionModel;
 
     /**
@@ -90,6 +91,7 @@ public class SalUsageWidget extends CommonUsageWidget implements ISalUsageWidget
 
     @Override
     protected void initDataProvider(Grid<UsageDto> grid) {
+        this.usagesGrid = grid;
         grid.setDataProvider(
             LoadingIndicatorDataProvider.fromCallbacks(
                 query -> controller.loadBeans(query.getOffset(), query.getLimit(), query.getSortOrders()).stream(),
@@ -269,8 +271,17 @@ public class SalUsageWidget extends CommonUsageWidget implements ISalUsageWidget
     private void onExcludeDetailsButtonClicked() {
         SalDetailTypeEnum selectedDetailType =
             controller.getUsageFilterController().getWidget().getAppliedFilter().getSalDetailType();
-        //TODO replace with positive condition after main logic will be implemented
-        if (Objects.isNull(selectedDetailType) || SalDetailTypeEnum.UD == selectedDetailType) {
+        if (Objects.nonNull(selectedDetailType) && SalDetailTypeEnum.IB == selectedDetailType) {
+            Set<UsageDto> selectedUsages = usagesGrid.getSelectedItems();
+            if (CollectionUtils.isNotEmpty(selectedUsages)) {
+                Windows.showConfirmDialog(controller.usageDataExists(selectedUsages) ?
+                        ForeignUi.getMessage("message.confirm.exclude_details.associated_with_ud") :
+                        ForeignUi.getMessage("message.confirm.exclude_details"),
+                    () -> controller.excludeUsageDetails(selectedUsages));
+            } else {
+                Windows.showNotificationWindow(ForeignUi.getMessage("message.exclude_usage.empty"));
+            }
+        } else {
             Windows.showNotificationWindow(ForeignUi.getMessage("message.error.sal_exclude_details_invalid_filter"));
         }
     }

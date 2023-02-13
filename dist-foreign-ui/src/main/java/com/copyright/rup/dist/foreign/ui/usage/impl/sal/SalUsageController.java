@@ -236,8 +236,19 @@ public class SalUsageController extends CommonUsageController implements ISalUsa
     }
 
     @Override
+    public boolean usageDataExists(Set<UsageDto> itemBankDetails) {
+        return salUsageService.usageDataExists(itemBankDetails);
+    }
+
+    @Override
     public void deleteUsageData(UsageBatch usageBatch) {
         salUsageService.deleteUsageData(usageBatch);
+        refreshWidget();
+    }
+
+    @Override
+    public void excludeUsageDetails(Set<UsageDto> usagesToExclude) {
+        salUsageService.deleteItemBankUsages(usagesToExclude);
         refreshWidget();
     }
 
