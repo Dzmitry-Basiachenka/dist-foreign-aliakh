@@ -1,3 +1,37 @@
+17.0.4
+-
+* B-76657 FDA: Approval restriction: implement prohibition of approving scenario for the user who performed the submitting
+* B-77083 FDA: Add ability to exclude Details: implement Exclude Details button with permissions
+* B-77083 FDA: Add ability to exclude Details: fix checkstyle issue with line length
+* B-77083 FDA: Add ability to exclude Details: implement Rightsholders filter
+* B-77083 FDA: Add ability to exclude Details: implement multi-select functionality
+* B-76695 FDA: Export list of fund pools: create an Export button in SAL fund pool view window
+* B-76695 FDA: Export list of fund pools: implement controller logic to generate Fund Pools export list
+* B-76695 FDA: Export list of fund pools: implement service logic to generate Fund Pools export list
+* B-76695 FDA: Export list of fund pools: create handler to export Fund Pool in csv file
+* B-76695 FDA: Export list of fund pools: implement repository logic to generate Fund Pools export list
+* B-77081 FDA: Allow multi select when approving SAL scenarios: Extract common logic from SalSendToLmWindow and introduce common window
+* B-77081 FDA: Allow multi select when approving SAL scenarios: implement Choose Scenarios to Submit for Approval window
+* B-77081 FDA: Allow multi select when approving SAL scenarios: implement backend logic to handle actions for list of scenarios
+* B-77081 FDA: Allow multi select when approving SAL scenarios: implement Choose Scenarios to Approve window and rename Choose Scenarios button to Send to LM
+* B-76766 FDA: Create Batch Status subtab for UDM tab: add Batch Status subtab on UI
+* B-76766 FDA: Create Batch Status subtab for UDM tab: implement controller logic to get batch statuses
+* B-76766 FDA: Create Batch Status subtab for UDM tab: implement service logic to get batch statuses
+* B-76876 FDA: Edit usage details: implement the Update Usages button
+* B-76876 FDA: Edit usage details: implement the Update Usages window
+* B-76876 FDA: Edit usage details: implement the Edit multiple FAS Usages window
+* B-76876 FDA: Edit usage details: implement validation messages for selected usages count
+* B-68612 Tech Debt: FDA: fix Aclci fund pool load window size
+* B-77924 Tech Debt: FDA: decrease margin at button on update ACLCI usages window
+* B-77924 Tech Debt: FDA: introduce common Deserializer for JsonB fields
+* B-77924 Tech Debt: FDA: add assertion for field style name to verifyTextField in UiTestHelper
+* B-77924 Tech Debt: FDA: split DomainVerifierTest into separate tests
+* B-77924 Tech Debt: FDA: set auto disabled for buttons Exclude by RH, Exclude By Payee, Exclude Details, Redesignate Details
+* B-77924 Tech Debt: FDA: fix key word for error messages in response from CRM
+* B-77924 Tech Debt: FDA: add auto disable to Upload, Approve, View buttons in AACL, ACLCI, FAS, NTS and SAL
+* B-77924 Tech Debt: FDA: fix Sal Update Righstholder Window size
+* B-77924 Tech Debt: FDA: add auto disable to Save button in SAL, ACL, ACLCI, FAS
+
 17.0.3
 -
 * B-68577 FDA: Load ACLCI fund pool: extend range of amount of student fields
