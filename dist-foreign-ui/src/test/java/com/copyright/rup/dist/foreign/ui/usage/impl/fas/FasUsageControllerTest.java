@@ -348,6 +348,11 @@ public class FasUsageControllerTest {
         verify(filterWidget, fasUsageService, filterController);
     }
 
+    @Test
+    public void testUpdateUsages() {
+        //TODO: implement
+    }
+
     private void prepareGetAppliedFilterExpectations(UsageFilter expectedUsageFilter) {
         expect(filterController.getWidget()).andReturn(filterWidget).once();
         expect(filterWidget.getAppliedFilter()).andReturn(expectedUsageFilter).once();

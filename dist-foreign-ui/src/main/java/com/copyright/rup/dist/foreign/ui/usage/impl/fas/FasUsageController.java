@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.fas;
 
+import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.reporting.api.IStreamSourceHandler;
 import com.copyright.rup.dist.common.repository.api.Pageable;
@@ -29,12 +30,14 @@ import com.vaadin.data.provider.QuerySortOrder;
 import com.vaadin.shared.data.sort.SortDirection;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Implementation of {@link IFasUsageController}.
@@ -48,6 +51,8 @@ import java.util.List;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class FasUsageController extends CommonUsageController implements IFasUsageController {
+
+    private static final Logger LOGGER = RupLogUtils.getLogger();
 
     @Autowired
     private CsvProcessorFactory csvProcessorFactory;
@@ -152,6 +157,12 @@ public class FasUsageController extends CommonUsageController implements IFasUsa
     @Override
     public List<UsageDto> getUsageDtosToUpdate() {
         return fasUsageService.getUsageDtos(getUsageFilterController().getWidget().getAppliedFilter(), null, null);
+    }
+
+    @Override
+    public void updateUsages(Set<String> usageIds, Long wrWrkInst, String reason) {
+        //TODO: to suppress PMD warnings until the service is implemented
+        LOGGER.info("Update usages. UsageIds={}, WrWrkInst={}, Reason={}", usageIds, wrWrkInst, reason);
     }
 
     @Override

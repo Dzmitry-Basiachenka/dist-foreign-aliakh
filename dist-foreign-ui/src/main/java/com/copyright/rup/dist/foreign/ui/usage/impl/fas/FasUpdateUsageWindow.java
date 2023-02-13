@@ -4,6 +4,7 @@ import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.fas.IFasUsageController;
 import com.copyright.rup.vaadin.ui.Buttons;
+import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 import com.copyright.rup.vaadin.widget.api.IRefreshable;
@@ -24,6 +25,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * Window to display FAS usages to update.
@@ -34,7 +36,7 @@ import java.util.Objects;
  *
  * @author Aliaksandr Liakh
  */
-class FasUsageUpdateWindow extends Window implements IRefreshable {
+class FasUpdateUsageWindow extends Window implements IRefreshable {
 
     private final IFasUsageController controller;
     private SearchWidget searchWidget;
@@ -48,7 +50,7 @@ class FasUsageUpdateWindow extends Window implements IRefreshable {
      *
      * @param controller instance of {@link IFasUsageController}
      */
-    FasUsageUpdateWindow(IFasUsageController controller) {
+    FasUpdateUsageWindow(IFasUsageController controller) {
         this.controller = controller;
         setWidth(1280, Unit.PIXELS);
         setHeight(530, Unit.PIXELS);
@@ -129,7 +131,8 @@ class FasUsageUpdateWindow extends Window implements IRefreshable {
     private HorizontalLayout buildButtonsLayout() {
         HorizontalLayout buttonsLayout = new HorizontalLayout();
         updateButton = Buttons.createButton(ForeignUi.getMessage("button.update"));
-        //TODO: implement updateButton.addClickListener
+        updateButton.addClickListener(event -> Windows.showModalWindow(new FasEditMultipleUsagesWindow(controller,
+            this, usagesGrid.getSelectedItems().stream().map(UsageDto::getId).collect(Collectors.toSet()))));
         updateButton.setEnabled(false);
         Button closeButton = Buttons.createCloseButton(this);
         buttonsLayout.addComponents(updateButton, closeButton);
