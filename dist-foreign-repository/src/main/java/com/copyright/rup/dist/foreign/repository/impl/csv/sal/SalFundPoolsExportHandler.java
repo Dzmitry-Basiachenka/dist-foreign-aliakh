@@ -1,14 +1,15 @@
 package com.copyright.rup.dist.foreign.repository.impl.csv.sal;
 
 import com.copyright.rup.dist.common.repository.impl.csv.BaseCsvReportHandler;
-import com.copyright.rup.dist.foreign.domain.report.SalFundPoolReportDto;
+import com.copyright.rup.dist.foreign.domain.FundPool;
+import com.copyright.rup.dist.foreign.domain.FundPool.SalFields;
 
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Writes {@link SalFundPoolReportDto} usages to {@link OutputStream}.
+ * Writes {@link FundPool} usages to {@link OutputStream}.
  * <p>
  * Copyright (C) 2023 copyright.com
  * <p>
@@ -16,7 +17,7 @@ import java.util.List;
  *
  * @author Stepan Karakhanov
  */
-public class SalFundPoolsExportHandler extends BaseCsvReportHandler<SalFundPoolReportDto> {
+public class SalFundPoolsExportHandler extends BaseCsvReportHandler<FundPool> {
 
     private static final List<String> HEADERS = List.of("Fund Pool Name", "Date Received", "Assessment Name",
         "Licensee Account #", "Licensee Name", "Gross Amount", "Service Fee %", "Item Bank Split %",
@@ -33,23 +34,24 @@ public class SalFundPoolsExportHandler extends BaseCsvReportHandler<SalFundPoolR
     }
 
     @Override
-    protected List<String> getBeanProperties(SalFundPoolReportDto bean) {
+    protected List<String> getBeanProperties(FundPool bean) {
         List<String> beanProperties = new ArrayList<>();
-        beanProperties.add(bean.getFundPoolName());
-        beanProperties.add(getBeanLocalDate(bean.getDateReceived()));
-        beanProperties.add(bean.getAssessmentName());
-        beanProperties.add(getBeanPropertyAsString(bean.getLicenseeAccountNumber()));
-        beanProperties.add(bean.getLicenseeName());
-        beanProperties.add(getBeanBigDecimal(bean.getGrossAmount()));
-        beanProperties.add(getBeanServiceFeePercent(bean.getServiceFee()));
-        beanProperties.add(getBeanServiceFeePercent(bean.getItemBankSplitPercent()));
-        beanProperties.add(getBeanPropertyAsString(bean.getGradeKto5NumberOfStudents()));
-        beanProperties.add(getBeanPropertyAsString(bean.getGrade6to8NumberOfStudents()));
-        beanProperties.add(getBeanPropertyAsString(bean.getGrade9to12NumberOfStudents()));
-        beanProperties.add(getBeanBigDecimal(bean.getItemBankGrossAmount()));
-        beanProperties.add(getBeanBigDecimal(bean.getGradeKto5GrossAmount()));
-        beanProperties.add(getBeanBigDecimal(bean.getGrade6to8GrossAmount()));
-        beanProperties.add(getBeanBigDecimal(bean.getGrade9to12GrossAmount()));
+        SalFields salFields = bean.getSalFields();
+        beanProperties.add(bean.getName());
+        beanProperties.add(getBeanLocalDate(salFields.getDateReceived()));
+        beanProperties.add(salFields.getAssessmentName());
+        beanProperties.add(getBeanPropertyAsString(salFields.getLicenseeAccountNumber()));
+        beanProperties.add(salFields.getLicenseeName());
+        beanProperties.add(getBeanBigDecimal(salFields.getGrossAmount()));
+        beanProperties.add(getBeanServiceFeePercent(salFields.getServiceFee()));
+        beanProperties.add(getBeanServiceFeePercent(salFields.getItemBankSplitPercent()));
+        beanProperties.add(getBeanPropertyAsString(salFields.getGradeKto5NumberOfStudents()));
+        beanProperties.add(getBeanPropertyAsString(salFields.getGrade6to8NumberOfStudents()));
+        beanProperties.add(getBeanPropertyAsString(salFields.getGrade9to12NumberOfStudents()));
+        beanProperties.add(getBeanBigDecimal(salFields.getItemBankGrossAmount()));
+        beanProperties.add(getBeanBigDecimal(salFields.getGradeKto5GrossAmount()));
+        beanProperties.add(getBeanBigDecimal(salFields.getGrade6to8GrossAmount()));
+        beanProperties.add(getBeanBigDecimal(salFields.getGrade9to12GrossAmount()));
         return beanProperties;
     }
 

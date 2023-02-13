@@ -104,6 +104,10 @@
         order by fund_pool_name
     </select>
 
+    <select id="findSalFundPools" parameterType="map" resultMap="IFundPoolMapper.fundPoolResultMap">
+        <include refid="IFundPoolMapper.selectFundPoolsByProductFamilySql"/>
+    </select>
+
     <select id="findSalLiabilitiesByRhReportDtos" parameterType="map" resultMap="salLiabilitiesByRhReportDtoResultMap">
         select
             nested.rh_account_number,

@@ -8,6 +8,7 @@ import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.ISalReportRepository;
 import com.copyright.rup.dist.foreign.repository.impl.csv.sal.AuditSalCsvReportHandler;
+import com.copyright.rup.dist.foreign.repository.impl.csv.sal.SalFundPoolsExportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.sal.SalFundPoolsReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.sal.SalHistoricalItemBankDetailsReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.sal.SalLiabilitiesByRhReportHandler;
@@ -127,7 +128,11 @@ public class SalReportRepository extends CommonReportRepository implements ISalR
 
     @Override
     public void writeSalFundPoolsCsvReport(OutputStream outputStream) {
-        //TODO: {skarakhanov} implement later
+        try (SalFundPoolsExportHandler handler =
+                 new SalFundPoolsExportHandler(Objects.requireNonNull(outputStream))) {
+            Map<String, Object> parameters = Map.of(PRODUCT_FAMILY, FdaConstants.SAL_PRODUCT_FAMILY);
+            getTemplate().select("ISalReportMapper.findSalFundPools", parameters, handler);
+        }
     }
 
     @Override

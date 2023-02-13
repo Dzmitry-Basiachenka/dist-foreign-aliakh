@@ -55,12 +55,16 @@
         where df_fund_pool_uid = #{fundPoolId}
     </select>
 
-    <select id="findByProductFamily" resultMap="fundPoolResultMap">
+    <sql id="selectFundPoolsByProductFamilySql">
         select
-            <include refid="fundPoolColumns"/>
+            <include refid="IFundPoolMapper.fundPoolColumns"/>
         from ${schema}.df_fund_pool
         where product_family = #{productFamily}
         order by updated_datetime desc
+    </sql>
+
+    <select id="findByProductFamily" resultMap="fundPoolResultMap">
+        <include refid="selectFundPoolsByProductFamilySql"/>
     </select>
 
     <delete id="delete" parameterType="string">
