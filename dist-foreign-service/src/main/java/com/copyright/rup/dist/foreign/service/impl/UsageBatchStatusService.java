@@ -70,8 +70,7 @@ public class UsageBatchStatusService implements IUsageBatchStatusService {
 
     @Override
     public List<UsageBatchStatus> getUsageBatchStatusesUdm() {
-        // TODO: {dbasiachenka} implement
-        return List.of();
+        return usageBatchStatusRepository.findUsageBatchStatusesUdm(LocalDate.now().minusDays(numberOfDays));
     }
 
     @Override

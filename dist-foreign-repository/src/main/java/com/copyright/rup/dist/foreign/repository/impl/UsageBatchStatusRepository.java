@@ -13,6 +13,7 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -26,6 +27,8 @@ import java.util.Set;
  */
 @Repository
 public class UsageBatchStatusRepository extends BaseRepository implements IUsageBatchStatusRepository {
+
+    private static final String START_DATE_KEY = "startDate";
 
     @Override
     public List<UsageBatchStatus> findUsageBatchStatusesFas(Set<String> batchIds) {
@@ -48,10 +51,16 @@ public class UsageBatchStatusRepository extends BaseRepository implements IUsage
     }
 
     @Override
+    public List<UsageBatchStatus> findUsageBatchStatusesUdm(LocalDate startDate) {
+        return selectList("IUsageBatchStatusMapper.findUsageBatchStatusesUdm",
+            Map.of(START_DATE_KEY, Objects.requireNonNull(startDate)));
+    }
+
+    @Override
     public Set<String> findFasUsageBatchIdsEligibleForStatistic(String productFamily, LocalDate startDate) {
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(2);
         params.put("productFamily", productFamily);
-        params.put("startDate", startDate);
+        params.put(START_DATE_KEY, startDate);
         return new HashSet<>(
             selectList("IUsageBatchStatusMapper.findFasUsageBatchIdsEligibleForStatistic", params));
     }
@@ -60,7 +69,7 @@ public class UsageBatchStatusRepository extends BaseRepository implements IUsage
     public Set<String> findUsageBatchIdsEligibleForStatistic(String productFamily, LocalDate startDate) {
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(2);
         params.put("productFamily", productFamily);
-        params.put("startDate", startDate);
+        params.put(START_DATE_KEY, startDate);
         return new HashSet<>(
             selectList("IUsageBatchStatusMapper.findUsageBatchIdsEligibleForStatistic", params));
     }

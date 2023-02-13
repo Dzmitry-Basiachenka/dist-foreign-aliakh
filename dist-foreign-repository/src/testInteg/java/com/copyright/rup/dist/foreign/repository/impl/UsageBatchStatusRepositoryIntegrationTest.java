@@ -108,6 +108,18 @@ public class UsageBatchStatusRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = FOLDER_NAME + "find-usage-batch-statuses-udm.groovy")
+    public void testFindUsageBatchStatusesUdm() {
+        List<UsageBatchStatus> usageBatchStatuses =
+            usageBatchStatusRepository.findUsageBatchStatusesUdm(LocalDate.of(2022, 2, 12));
+        assertEquals(2, usageBatchStatuses.size());
+        assertUsageBatchStatus(buildUsageBatchStatusUdm("UDM Batch 2022", 2, COMPLETED_STATUS, 0, 1, 0, 0, 0, 0),
+            usageBatchStatuses.get(0));
+        assertUsageBatchStatus(buildUsageBatchStatusUdm("UDM Batch 2021", 10, IN_PROGRESS_STATUS, 2, 1, 1, 1, 1, 1),
+            usageBatchStatuses.get(1));
+    }
+
+    @Test
     @TestData(fileName = FOLDER_NAME + "find-batch-ids-eligible-for-statistic.groovy")
     public void testFindFasUsageBatchIdsEligibleForStatistic() {
         assertEquals(Set.of("515a78e7-2a92-4b15-859a-fd9f70e80982"),
@@ -149,6 +161,7 @@ public class UsageBatchStatusRepositoryIntegrationTest {
         assertEquals(expected.getWorkNotGrantedCount(), actual.getWorkNotGrantedCount());
         assertEquals(expected.getSentForRaCount(), actual.getSentForRaCount());
         assertEquals(expected.getEligibleCount(), actual.getEligibleCount());
+        assertEquals(expected.getIneligibleCount(), actual.getIneligibleCount());
     }
 
     private UsageBatchStatus buildUsageBatchStatusFas(String name, int totalCount, String status, int newCount,
@@ -220,6 +233,22 @@ public class UsageBatchStatusRepositoryIntegrationTest {
         batchStatus.setRhNotFoundCount(rhNotFoundCount);
         batchStatus.setRhFoundCount(rhFoundCount);
         batchStatus.setEligibleCount(eligibleCount);
+        return batchStatus;
+    }
+
+    private UsageBatchStatus buildUsageBatchStatusUdm(String name, int totalCount, String status, int newCount,
+                                                      int workNotFoundCount, int workFoundCount, int rhNotFoundCount,
+                                                      int rhFoundCount, int ineligibleCount) {
+        UsageBatchStatus batchStatus = new UsageBatchStatus();
+        batchStatus.setBatchName(name);
+        batchStatus.setTotalCount(totalCount);
+        batchStatus.setStatus(status);
+        batchStatus.setNewCount(newCount);
+        batchStatus.setWorkNotFoundCount(workNotFoundCount);
+        batchStatus.setWorkFoundCount(workFoundCount);
+        batchStatus.setRhNotFoundCount(rhNotFoundCount);
+        batchStatus.setRhFoundCount(rhFoundCount);
+        batchStatus.setIneligibleCount(ineligibleCount);
         return batchStatus;
     }
 }

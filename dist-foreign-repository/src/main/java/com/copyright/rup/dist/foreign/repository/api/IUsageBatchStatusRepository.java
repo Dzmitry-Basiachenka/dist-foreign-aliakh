@@ -51,6 +51,14 @@ public interface IUsageBatchStatusRepository {
     List<UsageBatchStatus> findUsageBatchStatusesSal(Set<String> batchIds);
 
     /**
+     * Finds list of UDM usage batch statuses for specified start date.
+     *
+     * @param startDate start date of batch creation
+     * @return list of {@link UsageBatchStatus}es
+     */
+    List<UsageBatchStatus> findUsageBatchStatusesUdm(LocalDate startDate);
+
+    /**
      * Finds usage batch ids not associated with scenarios and pre-service fee funds for FAS/FAS2 product families
      * and start date.
      *

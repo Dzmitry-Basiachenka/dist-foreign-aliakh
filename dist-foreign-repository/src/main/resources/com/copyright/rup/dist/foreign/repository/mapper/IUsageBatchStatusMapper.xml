@@ -21,6 +21,7 @@
         <result property="unclassifiedCount" column="unclassified_count"/>
         <result property="eligibleCount" column="eligible_count"/>
         <result property="excludedCount" column="excluded_count"/>
+        <result property="ineligibleCount" column="ineligible_count"/>
         <result property="status" column="status"/>
     </resultMap>
 
@@ -171,6 +172,37 @@
         ) nested
         group by name, created_datetime, initial_usages_count
         order by created_datetime desc
+    </select>
+
+    <select id="findUsageBatchStatusesUdm" resultMap="usageBatchStatusMap" parameterType="map">
+        select
+            name batch_name,
+            sum(initial_usages_count) total_count,
+            max(new_count) new_count,
+            max(work_not_found_count) work_not_found_count,
+            max(work_found_count) work_found_count,
+            max(rh_not_found_count) rh_not_found_count,
+            max(rh_found_count) rh_found_count,
+            max(ineligible_count) ineligible_count,
+            case when max(new_count) + max(work_found_count) = 0 then 'COMPLETED' else 'IN_PROGRESS' end status
+        from (
+            select
+                name,
+                b.created_datetime,
+                count(distinct df_udm_usage_uid) initial_usages_count,
+                case when status_ind = 'NEW' then count(1) else 0 end new_count,
+                case when status_ind = 'WORK_NOT_FOUND' then count(1) else 0 end work_not_found_count,
+                case when status_ind = 'WORK_FOUND' then count(1) else 0 end work_found_count,
+                case when status_ind = 'RH_NOT_FOUND' then count(1) else 0 end rh_not_found_count,
+                case when status_ind = 'RH_FOUND' then count(1) else 0 end rh_found_count,
+                case when status_ind = 'INELIGIBLE' then count(1) else 0 end ineligible_count
+            from ${schema}.df_udm_usage u
+            join ${schema}.df_udm_usage_batch b on b.df_udm_usage_batch_uid = u.df_udm_usage_batch_uid
+            where b.created_datetime::date > #{startDate}
+            group by name, b.created_datetime, status_ind
+        ) nested
+        group by name, created_datetime
+        order by created_datetime desc;
     </select>
 
     <select id="findFasUsageBatchIdsEligibleForStatistic" resultType="string" parameterType="map">
