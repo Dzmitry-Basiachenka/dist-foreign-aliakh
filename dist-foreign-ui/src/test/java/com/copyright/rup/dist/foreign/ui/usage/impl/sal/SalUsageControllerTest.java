@@ -415,11 +415,20 @@ public class SalUsageControllerTest {
     }
 
     @Test
-    public void testUsageDataExists() {
+    public void testUsageDataExistsByBatchId() {
         String batchId = "5f59edf0-422b-40fd-8e54-c8e64f2af385";
         expect(salUsageService.usageDataExists(batchId)).andReturn(true).once();
         replay(salUsageService);
         assertTrue(controller.usageDataExists(batchId));
+        verify(salUsageService);
+    }
+
+    @Test
+    public void testUsageDataExistsByItemBankUsages() {
+        Set<UsageDto> usages = Set.of(new UsageDto());
+        expect(salUsageService.usageDataExists(usages)).andReturn(true).once();
+        replay(salUsageService);
+        assertTrue(controller.usageDataExists(usages));
         verify(salUsageService);
     }
 

@@ -208,13 +208,14 @@ public class SalUsageService implements ISalUsageService {
 
     @Override
     public boolean usageDataExists(String batchId) {
-        return salUsageRepository.usageDataExist(batchId);
+        return salUsageRepository.usageDataExistByBatchId(batchId);
     }
 
     @Override
     public boolean usageDataExists(Set<UsageDto> itemBankDetails) {
-        //TODO implement repository logic
-        return false;
+        return salUsageRepository.usageDataExistByWorkPortionIds(itemBankDetails.stream()
+            .map(usage -> usage.getSalUsage().getReportedWorkPortionId())
+            .collect(Collectors.toSet()));
     }
 
     @Override
