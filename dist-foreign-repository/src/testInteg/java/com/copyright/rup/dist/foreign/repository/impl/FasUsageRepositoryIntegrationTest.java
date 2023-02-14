@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.repository.impl;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -66,6 +67,7 @@ public class FasUsageRepositoryIntegrationTest {
     private static final String SCENARIO_ID_2 = "edbcc8b3-8fa4-4c58-9244-a91627cac7a9";
     private static final String SCENARIO_ID_3 = "767a2647-7e6e-4479-b381-e642de480863";
     private static final Long RH_ACCOUNT_NUMBER = 7000813806L;
+    private static final Long WR_WRK_INST = 122820638L;
     private static final String WORK_TITLE = "100 ROAD MOVIES";
     private static final Integer FISCAL_YEAR = 2019;
     private static final String USAGE_ID_1 = "3ab5e80b-89c0-4d78-9675-54c7ab284450";
@@ -288,6 +290,37 @@ public class FasUsageRepositoryIntegrationTest {
         UsageFilter usageFilter = buildUsageFilter(Set.of(), Set.of(), UsageStatusEnum.ELIGIBLE, null, FISCAL_YEAR);
         verifyUsages(fasUsageRepository.findWithAmountsAndRightsholders(usageFilter), 3, USAGE_ID_1, USAGE_ID_3,
             USAGE_ID_2);
+    }
+
+    @Test
+    @TestData(fileName = FOLDER_NAME + "update-usages-wr-wrk-inst-and-status.groovy")
+    public void testUpdateUsagesWrWrkInstAndStatus() {
+        List<String> usageIds = List.of("5be457bd-12c3-42d2-b62e-cc2f3e056566", "da1a1603-ea75-4933-8f63-818e46f2d49a");
+        List<Usage> usages = usageRepository.findByIds(usageIds);
+        assertEquals(2, usages.size());
+        usages.forEach(usage -> {
+            assertNotEquals(WR_WRK_INST, usage.getWrWrkInst());
+            assertNotEquals(UsageStatusEnum.NEW, usage.getStatus());
+            assertNotNull(usage.getWorkTitle());
+            assertNotNull(usage.getSystemTitle());
+            assertNotNull(usage.getRightsholder().getAccountNumber());
+            assertNotNull(usage.getStandardNumber());
+            assertNotNull(usage.getStandardNumberType());
+            assertNotEquals(USER_NAME, usage.getUpdateUser());
+        });
+        fasUsageRepository.updateUsagesWrWrkInstAndStatus(usageIds, WR_WRK_INST, USER_NAME);
+        usages = usageRepository.findByIds(usageIds);
+        assertEquals(2, usages.size());
+        usages.forEach(usage -> {
+            assertEquals(WR_WRK_INST, usage.getWrWrkInst());
+            assertEquals(UsageStatusEnum.NEW, usage.getStatus());
+            assertNull(usage.getWorkTitle());
+            assertNull(usage.getSystemTitle());
+            assertNull(usage.getRightsholder().getAccountNumber());
+            assertNull(usage.getStandardNumber());
+            assertNull(usage.getStandardNumberType());
+            assertEquals(USER_NAME, usage.getUpdateUser());
+        });
     }
 
     private void verifyUsages(List<Usage> usages, int count, String... usageIds) {

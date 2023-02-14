@@ -250,4 +250,21 @@
             and u.status_ind = #{status}
         order by u.df_usage_uid
     </select>
+
+    <update id="updateUsagesWrWrkInstAndStatus" parameterType="map">
+        update ${schema}.df_usage
+        set
+            wr_wrk_inst = #{wrWrkInst},
+            status_ind = #{status},
+            work_title = null,
+            system_title = null,
+            rh_account_number = null,
+            standard_number = null,
+            standard_number_type = null,
+            <include refid="StoredEntityMapper.update"/>
+        where df_usage_uid in
+            <foreach collection="usageIds" item="usageId" separator="," open="(" close=")">
+                #{usageId}
+            </foreach>
+    </update>
 </mapper>
