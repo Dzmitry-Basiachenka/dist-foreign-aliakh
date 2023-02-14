@@ -84,6 +84,13 @@ public class SalCsvReportsIntegrationTest extends CsvReportsTestHelper {
 
     @Test
     @TestData(fileName = FOLDER_NAME + "write-fund-pools-csv-report.groovy")
+    public void testWriteFundPoolsListCsvReport() throws IOException {
+        assertFilesWithExecutor(outputStream ->
+            reportRepository.writeSalFundPoolsCsvReport(outputStream), "sal/fund_pools_list.csv");
+    }
+
+    @Test
+    @TestData(fileName = FOLDER_NAME + "write-fund-pools-csv-report.groovy")
     public void testWriteFundPoolsCsvReport() throws IOException {
         assertFilesWithExecutor(outputStream ->
             reportRepository.writeSalFundPoolsCsvReport(2018, outputStream), "sal/fund_pools_report.csv");
