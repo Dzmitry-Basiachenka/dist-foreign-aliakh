@@ -95,6 +95,11 @@ public class UsageAuditService implements IUsageAuditService {
         usageAuditRepository.deleteForSalUsageDataByBatchId(batchId);
     }
 
+    @Override
+    public void deleteActionsForSalItemBankUsages(Set<String> workPortionIds) {
+        usageAuditRepository.deleteForSalUsageDataByWorkPortionIds(workPortionIds);
+    }
+
     private UsageAuditItem buildUsageAuditItem(String usageId, UsageActionTypeEnum actionType, String actionReason) {
         UsageAuditItem usageAuditItem = new UsageAuditItem();
         usageAuditItem.setId(RupPersistUtils.generateUuid());

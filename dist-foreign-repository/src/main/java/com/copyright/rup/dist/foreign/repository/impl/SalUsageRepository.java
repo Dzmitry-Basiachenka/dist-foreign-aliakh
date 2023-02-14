@@ -139,6 +139,11 @@ public class SalUsageRepository extends BaseRepository implements ISalUsageRepos
     }
 
     @Override
+    public void deleteUsagesByWorkPortionIds(Set<String> workPortionIds) {
+        delete("ISalUsageMapper.deleteUsagesByWorkPortionIds", workPortionIds);
+    }
+
+    @Override
     public void deleteByBatchId(String batchId) {
         delete("ISalUsageMapper.deleteByBatchId", Objects.requireNonNull(batchId));
     }

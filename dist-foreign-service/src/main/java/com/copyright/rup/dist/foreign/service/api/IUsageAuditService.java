@@ -109,4 +109,11 @@ public interface IUsageAuditService {
      * @param batchId batch identifier
      */
     void deleteActionsForSalUsageData(String batchId);
+
+    /**
+     * Deletes SAL {@link UsageAuditItem}s for Item Bank usages by given work portion ids.
+     *
+     * @param workPortionIds set of reported work portion ids
+     */
+    void deleteActionsForSalItemBankUsages(Set<String> workPortionIds);
 }

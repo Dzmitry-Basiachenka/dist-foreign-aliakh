@@ -316,6 +316,16 @@ public class SalUsageRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = FOLDER_NAME + "delete-usages-by-work-portion-ids.groovy")
+    public void testDeleteUsagesByWorkPortionIds() {
+        UsageFilter filter = new UsageFilter();
+        filter.setUsageBatchesIds(Set.of("04f4a53e-a8d9-4f50-a052-25eb051218fe"));
+        assertEquals(3, salUsageRepository.findCountByFilter(filter));
+        salUsageRepository.deleteUsagesByWorkPortionIds(Set.of("1101024IB2192"));
+        assertEquals(1, salUsageRepository.findCountByFilter(filter));
+    }
+
+    @Test
     @TestData(fileName = FOLDER_NAME + "delete-by-batch-id.groovy")
     public void testDeleteByBatchId() {
         UsageFilter filter = new UsageFilter();

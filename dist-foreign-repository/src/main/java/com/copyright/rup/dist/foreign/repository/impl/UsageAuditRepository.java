@@ -19,6 +19,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * Implementation of {@link IUsageAuditRepository}.
@@ -48,6 +49,11 @@ public class UsageAuditRepository extends BaseRepository implements IUsageAuditR
         params.put("batchId", Objects.requireNonNull(batchId));
         params.put("detailType", SalDetailTypeEnum.UD);
         delete("IUsageAuditMapper.deleteForSalUsageDataByBatchId", params);
+    }
+
+    @Override
+    public void deleteForSalUsageDataByWorkPortionIds(Set<String> workPortionIds) {
+        delete("IUsageAuditMapper.deleteForSalUsageDataByWorkPortionIds", workPortionIds);
     }
 
     @Override

@@ -1057,6 +1057,19 @@
         where df_usage_sal_uid in (select df_usage_uid from usage_ids)
     </delete>
 
+    <delete id="deleteUsagesByWorkPortionIds">
+        with usage_ids as (
+            delete from ${schema}.df_usage_sal
+            where reported_work_portion_id in
+                <foreach collection="collection" item="workPortionId" open="(" separator="," close=")">
+                    #{workPortionId}
+                </foreach>
+            returning df_usage_sal_uid
+        )
+        delete from ${schema}.df_usage
+        where df_usage_uid in (select df_usage_sal_uid from usage_ids)
+    </delete>
+
     <delete id="deleteByBatchId" parameterType="string">
         with usage_ids as (
             delete from ${schema}.df_usage
