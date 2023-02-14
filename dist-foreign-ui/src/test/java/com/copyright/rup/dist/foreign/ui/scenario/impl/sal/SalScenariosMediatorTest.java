@@ -113,7 +113,7 @@ public class SalScenariosMediatorTest {
         assertFalse(editNameButton.isEnabled());
         assertFalse(deleteButton.isEnabled());
         assertTrue(submitButton.isEnabled());
-        assertFalse(rejectButton.isEnabled());
+        assertTrue(rejectButton.isEnabled());
         assertTrue(approveButton.isEnabled());
         assertTrue(chooseScenariosButton.isEnabled());
     }
@@ -127,7 +127,7 @@ public class SalScenariosMediatorTest {
         assertTrue(editNameButton.isEnabled());
         assertTrue(deleteButton.isEnabled());
         assertTrue(submitButton.isEnabled());
-        assertFalse(rejectButton.isEnabled());
+        assertTrue(rejectButton.isEnabled());
         assertTrue(approveButton.isEnabled());
         assertTrue(chooseScenariosButton.isEnabled());
     }
@@ -155,7 +155,7 @@ public class SalScenariosMediatorTest {
         assertFalse(editNameButton.isEnabled());
         assertFalse(deleteButton.isEnabled());
         assertTrue(submitButton.isEnabled());
-        assertFalse(rejectButton.isEnabled());
+        assertTrue(rejectButton.isEnabled());
         assertTrue(approveButton.isEnabled());
         assertTrue(chooseScenariosButton.isEnabled());
     }
