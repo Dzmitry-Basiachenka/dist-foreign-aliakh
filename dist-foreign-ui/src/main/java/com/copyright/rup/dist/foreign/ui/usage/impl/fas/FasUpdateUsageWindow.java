@@ -139,7 +139,7 @@ class FasUpdateUsageWindow extends Window implements IRefreshable {
         HorizontalLayout buttonsLayout = new HorizontalLayout();
         updateButton = Buttons.createButton(ForeignUi.getMessage("button.update"));
         updateButton.addClickListener(event -> Windows.showModalWindow(new FasEditMultipleUsagesWindow(controller,
-            this, usagesGrid.getSelectedItems().stream().map(UsageDto::getId).collect(Collectors.toSet()))));
+            this, usagesGrid.getSelectedItems().stream().map(UsageDto::getId).collect(Collectors.toList()))));
         updateButton.setEnabled(false);
         Button closeButton = Buttons.createCloseButton(this);
         buttonsLayout.addComponents(updateButton, closeButton);

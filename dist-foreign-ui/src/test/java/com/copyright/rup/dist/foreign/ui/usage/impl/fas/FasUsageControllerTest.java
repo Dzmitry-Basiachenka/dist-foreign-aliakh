@@ -85,8 +85,11 @@ import java.util.function.Supplier;
 public class FasUsageControllerTest {
 
     private static final OffsetDateTime DATE = OffsetDateTime.of(2019, 1, 2, 3, 4, 5, 6, ZoneOffset.ofHours(0));
+    private static final List<String> USAGE_IDS = List.of("8932b53e-564e-47c2-81fd-5bf421eece0c");
+    private static final Long WR_WRK_INST = 122820638L;
     private static final String RRO_ACCOUNT_NAME = "Account Name";
     private static final Long RRO_ACCOUNT_NUMBER = 12345678L;
+    private static final String REASON = "some reason";
 
     private FasUsageController controller;
     private IUsageService usageService;
@@ -358,7 +361,11 @@ public class FasUsageControllerTest {
 
     @Test
     public void testUpdateUsages() {
-        //TODO: implement
+        fasUsageService.updateUsages(USAGE_IDS, WR_WRK_INST, REASON);
+        expectLastCall().once();
+        replay(fasUsageService);
+        controller.updateUsages(USAGE_IDS, WR_WRK_INST, REASON);
+        verify(fasUsageService);
     }
 
     private void prepareGetAppliedFilterExpectations(UsageFilter expectedUsageFilter) {

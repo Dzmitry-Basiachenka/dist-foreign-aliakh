@@ -182,4 +182,17 @@ public interface IFasUsageService {
      * @return records threshold
      */
     int getRecordsThreshold();
+
+    /**
+     * Updates usages Wr Wrk Inst to the given value and status to
+     * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#NEW}
+     * and then uses PI matching and getting rights to update status to
+     * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#ELIGIBLE}
+     * and update work title, system title, RH account number, standard number, standard number type.
+     *
+     * @param usageIds  list of usage ids
+     * @param wrWrkInst Wr Wrk Inst
+     * @param reason    action reason
+     */
+    void updateUsages(List<String> usageIds, Long wrWrkInst, String reason);
 }

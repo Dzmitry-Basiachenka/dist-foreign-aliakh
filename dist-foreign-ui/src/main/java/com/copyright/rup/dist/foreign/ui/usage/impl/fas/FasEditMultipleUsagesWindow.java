@@ -21,7 +21,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 /**
  * Window to edit multiple FAS usages.
@@ -35,7 +34,7 @@ import java.util.Set;
 class FasEditMultipleUsagesWindow extends Window {
 
     private final IFasUsageController controller;
-    private final Set<String> usageIds;
+    private final List<String> usageIds;
     private final Binder<Usage> binder = new Binder<>();
     private final FasUpdateUsageWindow updateUsageWindow;
     private TextField wrWrkInstField;
@@ -45,10 +44,10 @@ class FasEditMultipleUsagesWindow extends Window {
      *
      * @param controller        {@link IFasUsageController} instance
      * @param updateUsageWindow {@link FasUpdateUsageWindow} instance
-     * @param usageIds          set of usage ids
+     * @param usageIds          list of usage ids
      */
     FasEditMultipleUsagesWindow(IFasUsageController controller, FasUpdateUsageWindow updateUsageWindow,
-                                Set<String> usageIds) {
+                                List<String> usageIds) {
         this.controller = controller;
         this.updateUsageWindow = updateUsageWindow;
         this.usageIds = usageIds;
