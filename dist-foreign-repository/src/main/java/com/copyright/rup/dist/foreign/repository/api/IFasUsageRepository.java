@@ -2,6 +2,8 @@ package com.copyright.rup.dist.foreign.repository.api;
 
 import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.domain.Usage;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.domain.Work;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
 import java.util.List;
@@ -106,12 +108,13 @@ public interface IFasUsageRepository {
     List<String> updateNtsWithdrawnUsagesAndGetIds();
 
     /**
-     * Updates usages Wr Wrk Inst, updates status to {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#NEW}
-     * and cleans work title, system title, RH account number, standard number, standard number type.
+     * Updates usages Wr Wrk Inst, work title, system title, RH account number, standard number, standard number type
+     * from the given {@link Work} and update status to the given value.
      *
-     * @param usageIds  list of usage ids
-     * @param wrWrkInst Wr Wrk Inst
-     * @param userName  user name
+     * @param usageIds list of usage ids
+     * @param work     instance of {@link Work}
+     * @param status   status
+     * @param userName user name
      */
-    void updateUsagesWrWrkInstAndStatus(List<String> usageIds, Long wrWrkInst, String userName);
+    void updateUsagesWorkAndStatus(List<String> usageIds, Work work, UsageStatusEnum status, String userName);
 }

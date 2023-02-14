@@ -13,6 +13,7 @@ import com.copyright.rup.dist.common.test.liquibase.TestData;
 import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.domain.Work;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IFasUsageRepository;
 
@@ -134,7 +135,7 @@ public class FasUsageRepositoryIntegrationTest {
         assertEquals(3, CollectionUtils.size(usagesBeforeExclude));
         usagesBeforeExclude.forEach(usage -> assertEquals(SCENARIO_ID_3, usage.getScenarioId()));
         Set<String> excludedIds = fasUsageRepository.redesignateToNtsWithdrawnByPayees(Set.of(SCENARIO_ID_3),
-                Set.of(7000813806L), USER_NAME);
+            Set.of(7000813806L), USER_NAME);
         assertEquals(2, CollectionUtils.size(excludedIds));
         assertTrue(excludedIds.contains("72f6abdb-c82d-4cee-aadf-570942cf0093"));
         List<Usage> usages = usageRepository.findByIds(
@@ -216,7 +217,7 @@ public class FasUsageRepositoryIntegrationTest {
     @TestData(fileName = FIND_WITH_AMOUNTS_AND_RIGHTSHOLDERS)
     public void testFindWithAmountsAndRightsholders() {
         UsageFilter usageFilter = buildUsageFilter(Set.of(RH_ACCOUNT_NUMBER), Set.of(USAGE_BATCH_ID_1),
-                UsageStatusEnum.ELIGIBLE, PAYMENT_DATE, FISCAL_YEAR);
+            UsageStatusEnum.ELIGIBLE, PAYMENT_DATE, FISCAL_YEAR);
         verifyUsages(fasUsageRepository.findWithAmountsAndRightsholders(usageFilter), 1, USAGE_ID_1);
     }
 
@@ -224,7 +225,7 @@ public class FasUsageRepositoryIntegrationTest {
     @TestData(fileName = FIND_WITH_AMOUNTS_AND_RIGHTSHOLDERS)
     public void testVerifyFindWithAmountsAndRightsholders() {
         UsageFilter usageFilter = buildUsageFilter(Set.of(RH_ACCOUNT_NUMBER), Set.of(USAGE_BATCH_ID_1),
-                UsageStatusEnum.ELIGIBLE, PAYMENT_DATE, FISCAL_YEAR);
+            UsageStatusEnum.ELIGIBLE, PAYMENT_DATE, FISCAL_YEAR);
         List<Usage> usages = fasUsageRepository.findWithAmountsAndRightsholders(usageFilter);
         assertEquals(1, usages.size());
         Usage usage = usages.get(0);
@@ -293,14 +294,46 @@ public class FasUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = FOLDER_NAME + "update-usages-wr-wrk-inst-and-status.groovy")
-    public void testUpdateUsagesWrWrkInstAndStatus() {
+    @TestData(fileName = FOLDER_NAME + "update-usages-work-and-status.groovy")
+    public void testUpdateUsagesWorkAndStatusWorkFound() {
         List<String> usageIds = List.of("5be457bd-12c3-42d2-b62e-cc2f3e056566", "da1a1603-ea75-4933-8f63-818e46f2d49a");
         List<Usage> usages = usageRepository.findByIds(usageIds);
         assertEquals(2, usages.size());
         usages.forEach(usage -> {
             assertNotEquals(WR_WRK_INST, usage.getWrWrkInst());
-            assertNotEquals(UsageStatusEnum.NEW, usage.getStatus());
+            assertNotEquals(UsageStatusEnum.WORK_FOUND, usage.getStatus());
+            assertNotEquals(WORK_TITLE, usage.getWorkTitle());
+            assertNotEquals(WORK_TITLE, usage.getSystemTitle());
+            assertNotNull(usage.getRightsholder().getAccountNumber());
+            assertNotEquals(STANDARD_NUMBER, usage.getStandardNumber());
+            assertNotEquals(STANDARD_NUMBER_TYPE, usage.getStandardNumberType());
+            assertNotEquals(USER_NAME, usage.getUpdateUser());
+        });
+        Work work = new Work(WR_WRK_INST, WORK_TITLE, STANDARD_NUMBER, STANDARD_NUMBER_TYPE);
+        fasUsageRepository.updateUsagesWorkAndStatus(usageIds, work, UsageStatusEnum.WORK_FOUND, USER_NAME);
+        usages = usageRepository.findByIds(usageIds);
+        assertEquals(2, usages.size());
+        usages.forEach(usage -> {
+            assertEquals(WR_WRK_INST, usage.getWrWrkInst());
+            assertEquals(UsageStatusEnum.WORK_FOUND, usage.getStatus());
+            assertEquals(WORK_TITLE, usage.getWorkTitle());
+            assertEquals(WORK_TITLE, usage.getSystemTitle());
+            assertNull(usage.getRightsholder().getAccountNumber());
+            assertEquals(STANDARD_NUMBER, usage.getStandardNumber());
+            assertEquals(STANDARD_NUMBER_TYPE, usage.getStandardNumberType());
+            assertEquals(USER_NAME, usage.getUpdateUser());
+        });
+    }
+
+    @Test
+    @TestData(fileName = FOLDER_NAME + "update-usages-work-and-status.groovy")
+    public void testUpdateUsagesWorkAndStatusWorkNotFound() {
+        List<String> usageIds = List.of("5be457bd-12c3-42d2-b62e-cc2f3e056566", "da1a1603-ea75-4933-8f63-818e46f2d49a");
+        List<Usage> usages = usageRepository.findByIds(usageIds);
+        assertEquals(2, usages.size());
+        usages.forEach(usage -> {
+            assertNotEquals(WR_WRK_INST, usage.getWrWrkInst());
+            assertNotEquals(UsageStatusEnum.WORK_NOT_FOUND, usage.getStatus());
             assertNotNull(usage.getWorkTitle());
             assertNotNull(usage.getSystemTitle());
             assertNotNull(usage.getRightsholder().getAccountNumber());
@@ -308,12 +341,13 @@ public class FasUsageRepositoryIntegrationTest {
             assertNotNull(usage.getStandardNumberType());
             assertNotEquals(USER_NAME, usage.getUpdateUser());
         });
-        fasUsageRepository.updateUsagesWrWrkInstAndStatus(usageIds, WR_WRK_INST, USER_NAME);
+        Work work = new Work(WR_WRK_INST, null, null, null);
+        fasUsageRepository.updateUsagesWorkAndStatus(usageIds, work, UsageStatusEnum.WORK_NOT_FOUND, USER_NAME);
         usages = usageRepository.findByIds(usageIds);
         assertEquals(2, usages.size());
         usages.forEach(usage -> {
             assertEquals(WR_WRK_INST, usage.getWrWrkInst());
-            assertEquals(UsageStatusEnum.NEW, usage.getStatus());
+            assertEquals(UsageStatusEnum.WORK_NOT_FOUND, usage.getStatus());
             assertNull(usage.getWorkTitle());
             assertNull(usage.getSystemTitle());
             assertNull(usage.getRightsholder().getAccountNumber());

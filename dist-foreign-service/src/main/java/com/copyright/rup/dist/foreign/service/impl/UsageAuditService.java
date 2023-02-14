@@ -42,7 +42,7 @@ public class UsageAuditService implements IUsageAuditService {
     }
 
     @Override
-    public void logAction(Set<String> usageIds, UsageActionTypeEnum actionType, String actionReason) {
+    public void logAction(Iterable<String> usageIds, UsageActionTypeEnum actionType, String actionReason) {
         usageIds.forEach(usageId -> logAction(usageId, actionType, actionReason));
     }
 

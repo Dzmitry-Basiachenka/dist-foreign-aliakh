@@ -30,13 +30,13 @@ public interface IUsageAuditService {
     void logAction(String usageId, UsageActionTypeEnum actionType, String actionReason);
 
     /**
-     * Logs usage action for multiple usages based on set of usage identifiers.
+     * Logs usage action for multiple usages based on sequence of usage identifiers.
      *
-     * @param usageIds     set of usage identifiers
+     * @param usageIds     sequence of usage identifiers
      * @param actionType   usage action type
      * @param actionReason action reason
      */
-    void logAction(Set<String> usageIds, UsageActionTypeEnum actionType, String actionReason);
+    void logAction(Iterable<String> usageIds, UsageActionTypeEnum actionType, String actionReason);
 
     /**
      * Deletes usage actions by batch identifier.

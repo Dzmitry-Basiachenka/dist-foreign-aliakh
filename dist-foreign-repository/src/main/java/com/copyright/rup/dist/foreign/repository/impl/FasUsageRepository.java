@@ -7,6 +7,7 @@ import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.domain.Work;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IFasUsageRepository;
 
@@ -140,14 +141,14 @@ public class FasUsageRepository extends BaseRepository implements IFasUsageRepos
     }
 
     @Override
-    public void updateUsagesWrWrkInstAndStatus(List<String> usageIds, Long wrWrkInst, String userName) {
+    public void updateUsagesWorkAndStatus(List<String> usageIds, Work work, UsageStatusEnum status, String userName) {
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(4);
-        params.put("wrWrkInst", Objects.requireNonNull(wrWrkInst));
-        params.put("status", UsageStatusEnum.NEW);
+        params.put("work", work);
+        params.put("status", status);
         params.put("updateUser", Objects.requireNonNull(userName));
         Iterables.partition(Objects.requireNonNull(usageIds), MAX_VARIABLES_COUNT).forEach(partition -> {
             params.put("usageIds", partition);
-            update("IFasUsageMapper.updateUsagesWrWrkInstAndStatus", params);
+            update("IFasUsageMapper.updateUsagesWorkAndStatus", params);
         });
     }
 }
