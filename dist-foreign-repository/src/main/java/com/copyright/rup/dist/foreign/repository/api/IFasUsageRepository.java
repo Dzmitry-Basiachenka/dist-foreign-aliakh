@@ -104,4 +104,14 @@ public interface IFasUsageRepository {
      * @return updated usages ids
      */
     List<String> updateNtsWithdrawnUsagesAndGetIds();
+
+    /**
+     * Updates usages Wr Wrk Inst, updates status to {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#NEW}
+     * and cleans work title, system title, RH account number, standard number, standard number type.
+     *
+     * @param usageIds  list of usage ids
+     * @param wrWrkInst Wr Wrk Inst
+     * @param userName  user name
+     */
+    void updateUsagesWrWrkInstAndStatus(List<String> usageIds, Long wrWrkInst, String userName);
 }

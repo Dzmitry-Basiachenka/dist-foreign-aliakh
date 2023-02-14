@@ -138,4 +138,16 @@ public class FasUsageRepository extends BaseRepository implements IFasUsageRepos
         params.put(UPDATE_USER_KEY, StoredEntity.DEFAULT_USER);
         return selectList("IFasUsageMapper.updateNtsWithdrawnUsagesAndGetIds", params);
     }
+
+    @Override
+    public void updateUsagesWrWrkInstAndStatus(List<String> usageIds, Long wrWrkInst, String userName) {
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(4);
+        params.put("wrWrkInst", Objects.requireNonNull(wrWrkInst));
+        params.put("status", UsageStatusEnum.NEW);
+        params.put("updateUser", Objects.requireNonNull(userName));
+        Iterables.partition(Objects.requireNonNull(usageIds), MAX_VARIABLES_COUNT).forEach(partition -> {
+            params.put("usageIds", partition);
+            update("IFasUsageMapper.updateUsagesWrWrkInstAndStatus", params);
+        });
+    }
 }
