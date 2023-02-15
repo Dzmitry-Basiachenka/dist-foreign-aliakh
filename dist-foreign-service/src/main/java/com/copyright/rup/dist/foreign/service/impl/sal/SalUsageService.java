@@ -235,7 +235,11 @@ public class SalUsageService implements ISalUsageService {
         String userName = RupContextUtils.getUserName();
         int usagesSize = usagesToDelete.size();
         LOGGER.info("Delete SAL IB usages. Started. UsagesCount={}, UserName={}", usagesSize, userName);
-        //TODO implement delete functionality
+        Set<String> workPortionIds = usagesToDelete.stream()
+            .map(usage -> usage.getSalUsage().getReportedWorkPortionId())
+            .collect(Collectors.toSet());
+        usageAuditService.deleteActionsForSalItemBankUsages(workPortionIds);
+        salUsageRepository.deleteUsagesByWorkPortionIds(workPortionIds);
         LOGGER.info("Delete SAL usage data. Finished. UsagesCount={}, UserName={}", usagesSize, userName);
     }
 

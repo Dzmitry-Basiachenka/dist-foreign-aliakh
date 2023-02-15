@@ -6,6 +6,7 @@ import com.copyright.rup.dist.foreign.domain.report.UsageStatistic;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Interface for usage audit repository.
@@ -38,6 +39,13 @@ public interface IUsageAuditRepository {
      * @param batchId batch identifier
      */
     void deleteForSalUsageDataByBatchId(String batchId);
+
+    /**
+     * Deletes SAL {@link UsageAuditItem}s by given work portion ids.
+     *
+     * @param workPortionIds set of reported work portion ids
+     */
+    void deleteForSalUsageDataByWorkPortionIds(Set<String> workPortionIds);
 
     /**
      * Deletes {@link UsageAuditItem}s for archived usages by given batch identifier.

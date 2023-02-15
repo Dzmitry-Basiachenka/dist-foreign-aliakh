@@ -103,6 +103,18 @@
         )
     </delete>
 
+    <delete id="deleteForSalUsageDataByWorkPortionIds">
+        delete from ${schema}.df_usage_audit
+        where df_usage_uid in (
+            select df_usage_sal_uid
+            from ${schema}.df_usage_sal
+            where reported_work_portion_id in
+                <foreach collection="collection" item="workPortionId" open="(" separator="," close=")">
+                    #{workPortionId}
+                </foreach>
+        )
+    </delete>
+
     <delete id="deleteByScenarioId" parameterType="map">
         delete from ${schema}.df_usage_audit
         where df_usage_uid in (

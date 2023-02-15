@@ -105,7 +105,7 @@ public interface ISalUsageRepository {
     /**
      * Checks whether usage details exists for specified Reported Work Portion Ids.
      *
-     * @param workPortionIds work portion id
+     * @param workPortionIds set of work portion ids
      * @return {@code true} - if usage details exists, {@code false} - otherwise
      */
     boolean usageDataExistByWorkPortionIds(Set<String> workPortionIds);
@@ -116,6 +116,13 @@ public interface ISalUsageRepository {
      * @param batchId batch id
      */
     void deleteUsageData(String batchId);
+
+    /**
+     * Deletes ID and UD usages by provided set of work portion IDs.
+     *
+     * @param workPortionIds set of work portion ids
+     */
+    void deleteUsagesByWorkPortionIds(Set<String> workPortionIds);
 
     /**
      * Deletes all {@link Usage}s from the batch with given id.

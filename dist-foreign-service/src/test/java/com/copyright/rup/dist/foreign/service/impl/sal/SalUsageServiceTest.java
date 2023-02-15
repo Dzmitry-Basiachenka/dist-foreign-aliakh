@@ -256,6 +256,22 @@ public class SalUsageServiceTest {
     }
 
     @Test
+    public void testDeleteItemBankUsages() {
+        UsageDto usage = new UsageDto();
+        SalUsage salUsage = new SalUsage();
+        String workPortionId = "5231239E21";
+        salUsage.setReportedWorkPortionId(workPortionId);
+        usage.setSalUsage(salUsage);
+        usageAuditService.deleteActionsForSalItemBankUsages(Set.of(workPortionId));
+        expectLastCall().once();
+        salUsageRepository.deleteUsagesByWorkPortionIds(Set.of(workPortionId));
+        expectLastCall().once();
+        replay(usageAuditService, salUsageRepository);
+        salUsageService.deleteItemBankUsages(Set.of(usage));
+        verify(usageAuditService, salUsageRepository);
+    }
+
+    @Test
     public void testDeleteUsageBatchDetails() {
         UsageBatch usageBatch = buildUsageBatch();
         usageAuditService.deleteActionsByBatchId(usageBatch.getId());

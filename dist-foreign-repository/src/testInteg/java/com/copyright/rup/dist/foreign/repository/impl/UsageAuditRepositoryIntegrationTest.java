@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -31,6 +32,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Integration test for {@link UsageAuditRepository}.
@@ -112,6 +114,22 @@ public class UsageAuditRepositoryIntegrationTest {
             CollectionUtils.size(usageAuditRepository.findByUsageId("51e60822-5b4c-4fa8-9922-05e93065f216")));
         assertTrue(CollectionUtils.isEmpty(usageAuditRepository.findByUsageId("9793bfb8-2628-485a-9ceb-0d7652691a1b")));
         assertTrue(CollectionUtils.isEmpty(usageAuditRepository.findByUsageId("ad91d122-aedc-4b41-a09e-f7f055f5cb85")));
+    }
+
+    @Test
+    @TestData(fileName = FOLDER_NAME + "delete-for-sal-usage-data-by-work-portion-ids.groovy")
+    public void testDeleteForSalUsageDataByWorkPortionIds() {
+        assertFalse(
+            CollectionUtils.isEmpty(usageAuditRepository.findByUsageId("7a87ddf6-1a11-4f6f-8f52-96f520d2f859")));
+        assertFalse(
+            CollectionUtils.isEmpty(usageAuditRepository.findByUsageId("ebb0e28c-6c59-417d-9586-d252025e217d")));
+        assertFalse(
+            CollectionUtils.isEmpty(usageAuditRepository.findByUsageId("078a6760-61d6-4d4e-a283-a67f7766d80c")));
+        usageAuditRepository.deleteForSalUsageDataByWorkPortionIds(Set.of("1101024IB2192"));
+        assertTrue(CollectionUtils.isEmpty(usageAuditRepository.findByUsageId("7a87ddf6-1a11-4f6f-8f52-96f520d2f859")));
+        assertTrue(CollectionUtils.isEmpty(usageAuditRepository.findByUsageId("ebb0e28c-6c59-417d-9586-d252025e217d")));
+        assertFalse(
+            CollectionUtils.isEmpty(usageAuditRepository.findByUsageId("078a6760-61d6-4d4e-a283-a67f7766d80c")));
     }
 
     @Test
