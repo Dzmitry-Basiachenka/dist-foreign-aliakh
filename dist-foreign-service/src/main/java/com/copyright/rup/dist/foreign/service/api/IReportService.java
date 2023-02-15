@@ -335,4 +335,11 @@ public interface IReportService {
      */
     void writeSalHistoricalItemBankDetailsReport(Long licenseeAccountNumber, Integer periodEndYearFrom,
                                                  Integer periodEndYearTo, OutputStream outputStream);
+
+    /**
+     * Writes NTS Fund Pools Report into the output stream in csv format.
+     *
+     * @param outputStream instance of {@link OutputStream}
+     */
+    void writeNtsFundPoolsCsvReport(OutputStream outputStream);
 }

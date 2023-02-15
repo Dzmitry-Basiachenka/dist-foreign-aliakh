@@ -246,6 +246,15 @@ public class ReportWidgetTest {
         verifyAll();
     }
 
+    @Test
+    public void testNtsFundPoolsReportSelected() {
+        expectReportGenerated(reportController.getNtsFundPoolsReportStreamSource());
+        expectProductFamily(FdaConstants.NTS_PRODUCT_FAMILY);
+        replayAll();
+        selectMenuItem(4);
+        verifyAll();
+    }
+
     private void selectMenuItem(int index) {
         reportWidget.init();
         reportWidget.getItems().get(0).getChildren().get(index).getCommand().menuSelected(null);
@@ -288,11 +297,12 @@ public class ReportWidgetTest {
     private void assertReportsMenuNts() {
         assertEquals(1, CollectionUtils.size(reportWidget.getItems()));
         List<MenuItem> menuItems = reportWidget.getItems().get(0).getChildren();
-        assertEquals(4, CollectionUtils.size(menuItems));
+        assertEquals(5, CollectionUtils.size(menuItems));
         assertEquals("NTS Withdrawn Batch Summary Report", menuItems.get(0).getText());
         assertEquals("Undistributed Liabilities Reconciliation Report", menuItems.get(1).getText());
         assertEquals("Tax Notification Report", menuItems.get(2).getText());
         assertEquals("Service Fee True-up Report", menuItems.get(3).getText());
+        assertEquals("NTS Fund Pools Report", menuItems.get(4).getText());
     }
 
     private void assertReportsMenuAacl() {
