@@ -1,0 +1,66 @@
+[
+  {
+    "id": "5be457bd-12c3-42d2-b62e-cc2f3e056566",
+    "batchId": "c6b95aee-9a32-4172-acfc-d1f67013df4a",
+    "wrWrkInst": 854030732,
+    "workTitle": "Technical Journal",
+    "systemTitle": "Technical Journal",
+    "rightsholder": {
+      "id": "85f864f2-30a5-4215-ac4f-f1f541901218",
+      "name": "American College of Physicians - Journals",
+      "accountNumber": 1000023401
+    },
+    "payee": {
+    },
+    "article": "DIN EN 779:2013",
+    "standardNumber": "2998622115929154XX",
+    "standardNumberType": "VALISSN",
+    "publisher": "John Wiley & Sons",
+    "publicationDate": "2011-05-10",
+    "market": "Bus,Doc Del,Edu,Gov,Lib,Sch,Univ",
+    "marketPeriodFrom": 2015,
+    "marketPeriodTo": 2019,
+    "author": "Nanette M. Schwann",
+    "numberOfCopies": 1600,
+    "reportedValue": 1560.00,
+    "netAmount": 0.0000000000,
+    "serviceFeeAmount": 0.0000000000,
+    "grossAmount": 35000.0000000000,
+    "status": "ELIGIBLE",
+    "productFamily": "FAS",
+    "rhParticipating": false,
+    "payeeParticipating": false
+  },
+  {
+    "id": "da1a1603-ea75-4933-8f63-818e46f2d49a",
+    "batchId": "c6b95aee-9a32-4172-acfc-d1f67013df4a",
+    "wrWrkInst": 854030732,
+    "workTitle": "Technical Journal",
+    "systemTitle": "Technical Journal",
+    "rightsholder": {
+      "id": "85f864f2-30a5-4215-ac4f-f1f541901218",
+      "name": "American College of Physicians - Journals",
+      "accountNumber": 1000023401
+    },
+    "payee": {
+    },
+    "article": "DIN EN 779:2012",
+    "standardNumber": "2998622115929154XX",
+    "standardNumberType": "VALISSN",
+    "publisher": "McGraw-Hill",
+    "publicationDate": "2009-12-31",
+    "market": "Edu",
+    "marketPeriodFrom": 2015,
+    "marketPeriodTo": 2019,
+    "author": "Mirjam H. Hüberli",
+    "numberOfCopies": 2630,
+    "reportedValue": 1280.00,
+    "netAmount": 0.0000000000,
+    "serviceFeeAmount": 0.0000000000,
+    "grossAmount": 2125.2400000000,
+    "status": "ELIGIBLE",
+    "productFamily": "FAS",
+    "rhParticipating": false,
+    "payeeParticipating": false
+  }
+]

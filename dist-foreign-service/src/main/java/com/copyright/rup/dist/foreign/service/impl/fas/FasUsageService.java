@@ -293,18 +293,20 @@ public class FasUsageService implements IFasUsageService {
         LOGGER.info("Update FAS usages. Started. UsageIds={}, WrWrkInst={}, Reason={}, UserName={}",
             usageIds, wrWrkInst, reason, userName);
         usageAuditService.logAction(usageIds, UsageActionTypeEnum.USAGE_EDIT, reason);
-        Work work = piIntegrationService.findWorkByWrWrkInst(Objects.requireNonNull(wrWrkInst));
-        if (Objects.nonNull(work) && Objects.nonNull(work.getWrWrkInst())) {
-            usageAuditService.logAction(usageIds, UsageActionTypeEnum.WORK_FOUND,
-                String.format("Wr Wrk Inst %s was found in PI", wrWrkInst));
-            fasUsageRepository.updateUsagesWorkAndStatus(usageIds, work, UsageStatusEnum.WORK_FOUND, userName);
-        } else {
-            usageAuditService.logAction(usageIds, UsageActionTypeEnum.WORK_NOT_FOUND,
-                String.format("Wr Wrk Inst %s was not found in PI", wrWrkInst));
-            work = new Work(wrWrkInst, null, null, null);
-            fasUsageRepository.updateUsagesWorkAndStatus(usageIds, work, UsageStatusEnum.WORK_NOT_FOUND, userName);
-        }
-        //TODO: implement getting rights
+        chainExecutor.execute(() -> {
+            Work work = piIntegrationService.findWorkByWrWrkInst(Objects.requireNonNull(wrWrkInst));
+            if (Objects.nonNull(work) && Objects.nonNull(work.getWrWrkInst())) {
+                usageAuditService.logAction(usageIds, UsageActionTypeEnum.WORK_FOUND,
+                    String.format("Wr Wrk Inst %s was found in PI", wrWrkInst));
+                fasUsageRepository.updateUsagesWorkAndStatus(usageIds, work, UsageStatusEnum.WORK_FOUND, userName);
+                chainExecutor.execute(usageRepository.findByIds(usageIds), ChainProcessorTypeEnum.RIGHTS);
+            } else {
+                usageAuditService.logAction(usageIds, UsageActionTypeEnum.WORK_NOT_FOUND,
+                    String.format("Wr Wrk Inst %s was not found in PI", wrWrkInst));
+                work = new Work(wrWrkInst, null, null, null);
+                fasUsageRepository.updateUsagesWorkAndStatus(usageIds, work, UsageStatusEnum.WORK_NOT_FOUND, userName);
+            }
+        });
         LOGGER.info("Update FAS usages. Finished. UsageIds={}, WrWrkInst={}, Reason={}, UserName={}",
             usageIds, wrWrkInst, reason, userName);
     }
