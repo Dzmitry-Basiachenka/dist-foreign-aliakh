@@ -638,6 +638,15 @@ public class ReportServiceTest {
         verify(salReportRepository);
     }
 
+    @Test
+    public void writeNtsFundPoolsCsvReport() {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        ntsReportRepository.writeNtsFundPoolsCsvReport(outputStream);
+        replay(ntsReportRepository);
+        reportService.writeNtsFundPoolsCsvReport(outputStream);
+        verify(ntsReportRepository);
+    }
+
     private Scenario buildScenario(ScenarioStatusEnum status) {
         Scenario scenario = new Scenario();
         scenario.setId(RupPersistUtils.generateUuid());
