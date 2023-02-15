@@ -35,8 +35,12 @@ import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.impl.aclci.AclciUsageService;
 import com.copyright.rup.dist.foreign.service.impl.csv.AclciUsageCsvProcessor;
 import com.copyright.rup.dist.foreign.service.impl.csv.CsvProcessorFactory;
+import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.aclci.IAclciUsageFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.aclci.IAclciUsageFilterWidget;
+import com.copyright.rup.dist.foreign.ui.usage.api.aclci.IAclciUsageWidget;
+
+import com.vaadin.ui.HorizontalLayout;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -85,6 +89,7 @@ public class AclciUsageControllerTest {
     private ITelesalesService telesalesService;
     private IFundPoolService fundPoolService;
     private UsageFilter usageFilter;
+    private IAclciUsageWidget usagesWidget;
 
     @Before
     public void setUp() {
@@ -97,6 +102,7 @@ public class AclciUsageControllerTest {
         aclciUsageService = createMock(AclciUsageService.class);
         telesalesService = createMock(ITelesalesService.class);
         fundPoolService = createMock(IFundPoolService.class);
+        usagesWidget = createMock(IAclciUsageWidget.class);
         Whitebox.setInternalState(controller, filterController);
         Whitebox.setInternalState(controller, usageBatchService);
         Whitebox.setInternalState(controller, csvProcessorFactory);
@@ -104,6 +110,7 @@ public class AclciUsageControllerTest {
         Whitebox.setInternalState(controller, aclciUsageService);
         Whitebox.setInternalState(controller, telesalesService);
         Whitebox.setInternalState(controller, fundPoolService);
+        Whitebox.setInternalState(controller, usagesWidget);
         usageFilter = new UsageFilter();
     }
 
@@ -114,7 +121,11 @@ public class AclciUsageControllerTest {
 
     @Test
     public void testOnFilterChanged() {
-        //TODO: implement
+        usagesWidget.refresh();
+        expectLastCall().once();
+        replay(usagesWidget);
+        controller.onFilterChanged(new FilterChangedEvent(new HorizontalLayout()));
+        verify(usagesWidget);
     }
 
     @Test
