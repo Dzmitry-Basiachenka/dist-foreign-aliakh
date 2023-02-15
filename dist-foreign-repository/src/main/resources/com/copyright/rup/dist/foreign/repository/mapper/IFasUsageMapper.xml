@@ -251,16 +251,16 @@
         order by u.df_usage_uid
     </select>
 
-    <update id="updateUsagesWrWrkInstAndStatus" parameterType="map">
+    <update id="updateUsagesWorkAndStatus" parameterType="map">
         update ${schema}.df_usage
         set
-            wr_wrk_inst = #{wrWrkInst},
+            wr_wrk_inst = #{work.wrWrkInst},
             status_ind = #{status},
-            work_title = null,
-            system_title = null,
+            work_title = #{work.mainTitle},
+            system_title = #{work.mainTitle},
             rh_account_number = null,
-            standard_number = null,
-            standard_number_type = null,
+            standard_number = #{work.mainIdno},
+            standard_number_type = #{work.mainIdnoType},
             <include refid="StoredEntityMapper.update"/>
         where df_usage_uid in
             <foreach collection="usageIds" item="usageId" separator="," open="(" close=")">

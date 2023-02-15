@@ -290,12 +290,23 @@ public class FasUsageService implements IFasUsageService {
     @Transactional
     public void updateUsages(List<String> usageIds, Long wrWrkInst, String reason) {
         String userName = RupContextUtils.getUserName();
-        LOGGER.info("Update FAS usages. Started. UsageIds={}, Reason={}, UserName={}",
-            usageIds, reason, userName);
-        fasUsageRepository.updateUsagesWrWrkInstAndStatus(usageIds, wrWrkInst, userName);
-        //TODO: implement PI matching and getting rights
-        LOGGER.info("Update FAS usages. Finished. UsageIds={}, Reason={}, UserName={}",
-            usageIds, reason, userName);
+        LOGGER.info("Update FAS usages. Started. UsageIds={}, WrWrkInst={}, Reason={}, UserName={}",
+            usageIds, wrWrkInst, reason, userName);
+        usageAuditService.logAction(usageIds, UsageActionTypeEnum.USAGE_EDIT, reason);
+        Work work = piIntegrationService.findWorkByWrWrkInst(Objects.requireNonNull(wrWrkInst));
+        if (Objects.nonNull(work) && Objects.nonNull(work.getWrWrkInst())) {
+            usageAuditService.logAction(usageIds, UsageActionTypeEnum.WORK_FOUND,
+                String.format("Wr Wrk Inst %s was found in PI", wrWrkInst));
+            fasUsageRepository.updateUsagesWorkAndStatus(usageIds, work, UsageStatusEnum.WORK_FOUND, userName);
+        } else {
+            usageAuditService.logAction(usageIds, UsageActionTypeEnum.WORK_NOT_FOUND,
+                String.format("Wr Wrk Inst %s was not found in PI", wrWrkInst));
+            work = new Work(wrWrkInst, null, null, null);
+            fasUsageRepository.updateUsagesWorkAndStatus(usageIds, work, UsageStatusEnum.WORK_NOT_FOUND, userName);
+        }
+        //TODO: implement getting rights
+        LOGGER.info("Update FAS usages. Finished. UsageIds={}, WrWrkInst={}, Reason={}, UserName={}",
+            usageIds, wrWrkInst, reason, userName);
     }
 
     private void populateTitlesStandardNumberAndType(List<ResearchedUsage> researchedUsages) {
