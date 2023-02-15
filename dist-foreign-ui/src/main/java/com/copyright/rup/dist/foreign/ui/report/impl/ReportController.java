@@ -185,6 +185,12 @@ public class ReportController extends CommonController<IReportWidget> implements
     }
 
     @Override
+    public IStreamSource getNtsFundPoolsReportStreamSource() {
+        return new ByteArrayStreamSource("nts_fund_pools_",
+            outputStream -> reportService.writeNtsFundPoolsCsvReport(outputStream));
+    }
+
+    @Override
     protected IReportWidget instantiateWidget() {
         return new ReportWidget();
     }

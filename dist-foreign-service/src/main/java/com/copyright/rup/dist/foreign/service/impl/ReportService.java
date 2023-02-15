@@ -292,4 +292,9 @@ public class ReportService implements IReportService {
         salReportRepository.writeSalHistoricalItemBankDetailsReport(licenseeAccountNumber, periodEndYearFrom,
             periodEndYearTo, outputStream);
     }
+
+    @Override
+    public void writeNtsFundPoolsCsvReport(OutputStream outputStream) {
+        //TODO will be implemented with backend logic
+    }
 }

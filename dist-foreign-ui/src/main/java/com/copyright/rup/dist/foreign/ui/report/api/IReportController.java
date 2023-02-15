@@ -116,6 +116,11 @@ public interface IReportController extends IController<IReportWidget> {
     IStreamSource getSalUndistributedLiabilitiesReportStreamSource();
 
     /**
+     * @return instance of {@link IStreamSource} for NTS Fund Pools Report.
+     */
+    IStreamSource getNtsFundPoolsReportStreamSource();
+
+    /**
      * @return SAL Historical Item Bank Details Report controller.
      */
     ISalHistoricalItemBankDetailsReportController getSalHistoricalItemBankDetailsReportController();
