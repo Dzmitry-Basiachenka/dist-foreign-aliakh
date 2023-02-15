@@ -202,7 +202,7 @@
             group by name, b.created_datetime, status_ind
         ) nested
         group by name, created_datetime
-        order by created_datetime desc;
+        order by created_datetime desc
     </select>
 
     <select id="findFasUsageBatchIdsEligibleForStatistic" resultType="string" parameterType="map">
