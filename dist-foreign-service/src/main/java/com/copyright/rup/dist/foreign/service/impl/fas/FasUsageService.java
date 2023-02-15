@@ -286,6 +286,18 @@ public class FasUsageService implements IFasUsageService {
         return recordsThreshold;
     }
 
+    @Override
+    @Transactional
+    public void updateUsages(List<String> usageIds, Long wrWrkInst, String reason) {
+        String userName = RupContextUtils.getUserName();
+        LOGGER.info("Update FAS usages. Started. UsageIds={}, Reason={}, UserName={}",
+            usageIds, reason, userName);
+        fasUsageRepository.updateUsagesWrWrkInstAndStatus(usageIds, wrWrkInst, userName);
+        //TODO: implement PI matching and getting rights
+        LOGGER.info("Update FAS usages. Finished. UsageIds={}, Reason={}, UserName={}",
+            usageIds, reason, userName);
+    }
+
     private void populateTitlesStandardNumberAndType(List<ResearchedUsage> researchedUsages) {
         researchedUsages.forEach(researchedUsage -> {
             Work work = piIntegrationService.findWorkByWrWrkInst(researchedUsage.getWrWrkInst());

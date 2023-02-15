@@ -40,7 +40,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.util.Collection;
-import java.util.Set;
+import java.util.List;
 
 /**
  * Verifies {@link FasEditMultipleUsagesWindow}.
@@ -55,7 +55,7 @@ import java.util.Set;
 @PrepareForTest(Windows.class)
 public class FasEditMultipleUsagesWindowTest {
 
-    private static final Set<String> USAGE_IDS = Set.of("232eb540-8dc8-41c6-bd6e-b367eaa16cfa");
+    private static final List<String> USAGE_IDS = List.of("232eb540-8dc8-41c6-bd6e-b367eaa16cfa");
     private static final Long WR_WRK_INST = 210001899L;
     private static final String REASON = "some reason";
     private static final String EMPTY_FIELD_ERROR = "Field value should be specified";
