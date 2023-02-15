@@ -1,3 +1,14 @@
+17.0.5
+-
+* B-77081 FDA: Allow multi select when approving SAL scenarios: implement Choose Scenarios to Reject window
+* B-76695 FDA: Export list of fund pools: create integration test to verify Fund Pools export
+* B-76766 FDA: Create Batch Status subtab for UDM tab: implement repository logic to get batch statuses
+* B-77083 FDA: Add ability to exclude Details: implement backend logic to verify UD details attached to selected usages
+* B-77083 FDA: Add ability to exclude Details: implement backend functionality to delete usages from database
+* B-76876 FDA: Edit usage details: implement usages threshold processing
+* B-76876 FDA: Edit usage details: implement repository to update usages
+* B-76876 FDA: Edit usage details: implement service to update usages
+
 17.0.4
 -
 * B-76657 FDA: Approval restriction: implement prohibition of approving scenario for the user who performed the submitting
