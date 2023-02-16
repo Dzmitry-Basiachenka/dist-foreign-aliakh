@@ -32,6 +32,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.stream.IntStream;
 
 /**
@@ -52,6 +53,7 @@ import java.util.stream.IntStream;
 public class AclFundPoolRepositoryIntegrationTest {
 
     private static final String FOLDER_NAME = "acl-fund-pool-repository-integration-test/";
+    private static final String FILTER_TEST_DATA = FOLDER_NAME + "find-by-filter.groovy";
     private static final String ACL_FUND_POOL_ID = "97efb29e-dac7-4dd9-9942-1508853b8625";
     private static final String ACL_FUND_POOL_NAME = "ACL Fund Pool 2021";
     private static final String USER_NAME = "user@copyright.com";
@@ -147,17 +149,40 @@ public class AclFundPoolRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = FOLDER_NAME + "find-by-filter.groovy")
-    //TODO cover all filters criteria
-    public void testFindDtosByFilter() {
-        AclFundPoolDetailFilter filter = new AclFundPoolDetailFilter();
-        filter.setLicenseType("ACL");
-        filter.setAggregateLicenseeClasses(Set.of(buildAggregateLicenseeClass(51)));
-        List<AclFundPoolDetailDto> details = repository.findDtosByFilter(filter);
-        assertEquals(1, details.size());
-        verifyFundPoolDetail(
-            loadExpectedDetails(List.of("json/acl/acl_fund_pool_detail_find_by_filter.json")).get(0),
-            details.get(0));
+    @TestData(fileName = FILTER_TEST_DATA)
+    public void testFindDtosByFilterFundPoolNames() {
+        assertFilteredDtosFindByFilter(filter -> filter.setFundPoolNames(Set.of("ACL Fund Pool 202112")));
+    }
+
+    @Test
+    @TestData(fileName = FILTER_TEST_DATA)
+    public void testFindDtosByFilterPeriods() {
+        assertFilteredDtosFindByFilter(filter -> filter.setPeriods(Set.of(202112)));
+    }
+
+    @Test
+    @TestData(fileName = FILTER_TEST_DATA)
+    public void testFindDtosByFilterAggregateLicenseeClass() {
+        assertFilteredDtosFindByFilter(
+            filter -> filter.setAggregateLicenseeClasses(Set.of(buildAggregateLicenseeClass(51))));
+    }
+
+    @Test
+    @TestData(fileName = FILTER_TEST_DATA)
+    public void testFindDtosByFilterDetailLicenseeClass() {
+        assertFilteredDtosFindByFilter(filter -> filter.setDetailLicenseeClasses(Set.of(buildDetailLicenseeClass(2))));
+    }
+
+    @Test
+    @TestData(fileName = FILTER_TEST_DATA)
+    public void testFindDtosByFilterLicenseType() {
+        assertFilteredDtosFindByFilter(filter -> filter.setLicenseType(LICENSE_TYPE));
+    }
+
+    @Test
+    @TestData(fileName = FILTER_TEST_DATA)
+    public void testFindDtosByFilterFundPoolType() {
+        assertFilteredDtosFindByFilter(filter -> filter.setFundPoolType("PRINT"));
     }
 
     @Test
@@ -218,6 +243,12 @@ public class AclFundPoolRepositoryIntegrationTest {
         AggregateLicenseeClass aggregateLicenseeClass = new AggregateLicenseeClass();
         aggregateLicenseeClass.setId(id);
         return aggregateLicenseeClass;
+    }
+
+    private DetailLicenseeClass buildDetailLicenseeClass(int id) {
+        DetailLicenseeClass detailLicenseeClass = new DetailLicenseeClass();
+        detailLicenseeClass.setId(id);
+        return detailLicenseeClass;
     }
 
     private AclFundPoolDetail buildAclFundPoolDetail() {
@@ -297,5 +328,14 @@ public class AclFundPoolRepositoryIntegrationTest {
             }
         });
         return details;
+    }
+
+    private void assertFilteredDtosFindByFilter(Consumer<AclFundPoolDetailFilter> consumer) {
+        AclFundPoolDetailFilter filter = new AclFundPoolDetailFilter();
+        consumer.accept(filter);
+        List<AclFundPoolDetailDto> details = repository.findDtosByFilter(filter);
+        assertEquals(1, details.size());
+        verifyFundPoolDetail(loadExpectedDetails(List.of("json/acl/acl_fund_pool_detail_find_by_filter.json"))
+            .get(0), details.get(0));
     }
 }
