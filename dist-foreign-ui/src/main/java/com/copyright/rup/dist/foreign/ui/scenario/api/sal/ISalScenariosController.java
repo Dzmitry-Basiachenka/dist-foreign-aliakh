@@ -28,8 +28,8 @@ public interface ISalScenariosController extends ICommonScenariosController {
     String getFundPoolName(String fundPoolId);
 
     /**
-     * @return list of {@link Scenario}s in
-     * @param status scenario staus instance of {@link ScenarioStatusEnum}.
+     * @param status scenario status instance of {@link ScenarioStatusEnum}
+     * @return list of {@link Scenario}s
      */
     List<Scenario> getScenariosByStatus(ScenarioStatusEnum status);
 

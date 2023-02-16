@@ -53,7 +53,6 @@ public class SalSendToLmScenariosWindowTest {
     private static final String SCENARIO_ID_2 = "69a22caf-57da-45fa-afbb-35cf96ffd0ba";
     private Scenario scenario1;
     private Scenario scenario2;
-
     private SalSendToLmScenariosWindow window;
 
     @Before

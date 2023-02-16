@@ -26,7 +26,7 @@ public class SalApproveScenariosWindow extends SalPerformScenariosActionsCommonW
      * @param controller instance of {@link ISalScenariosController}
      */
     public SalApproveScenariosWindow(ISalScenariosController controller) {
-        super(controller,"window.choose_scenarios_to_approve", "button.approve", ScenarioStatusEnum.SUBMITTED);
+        super(controller, "button.approve", ScenarioStatusEnum.SUBMITTED);
         this.controller = controller;
     }
 

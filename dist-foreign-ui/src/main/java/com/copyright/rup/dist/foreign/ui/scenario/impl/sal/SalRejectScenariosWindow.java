@@ -26,7 +26,7 @@ public class SalRejectScenariosWindow extends SalPerformScenariosActionsCommonWi
      * @param controller instance of {@link ISalScenariosController}
      */
     public SalRejectScenariosWindow(ISalScenariosController controller) {
-        super(controller,"window.choose_scenarios_to_reject", "button.reject", ScenarioStatusEnum.SUBMITTED);
+        super(controller, "button.reject", ScenarioStatusEnum.SUBMITTED);
         this.controller = controller;
     }
 
