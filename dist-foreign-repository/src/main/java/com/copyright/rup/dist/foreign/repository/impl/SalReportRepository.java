@@ -130,8 +130,7 @@ public class SalReportRepository extends CommonReportRepository implements ISalR
     public void writeSalFundPoolsCsvReport(OutputStream outputStream) {
         try (SalFundPoolsExportHandler handler =
                  new SalFundPoolsExportHandler(Objects.requireNonNull(outputStream))) {
-            Map<String, Object> parameters = Map.of(PRODUCT_FAMILY, FdaConstants.SAL_PRODUCT_FAMILY);
-            getTemplate().select("ISalReportMapper.findSalFundPools", parameters, handler);
+            getTemplate().select("ISalReportMapper.findSalFundPools", FdaConstants.SAL_PRODUCT_FAMILY, handler);
         }
     }
 

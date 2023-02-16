@@ -78,7 +78,7 @@ public class ViewSalFundPoolWindowTest {
         controller = createMock(ISalUsageController.class);
         IStreamSource streamSource = createMock(IStreamSource.class);
         expect(streamSource.getSource())
-            .andReturn(new SimpleImmutableEntry(createMock(Supplier.class), createMock(Supplier.class))).times(1);
+            .andReturn(new SimpleImmutableEntry(createMock(Supplier.class), createMock(Supplier.class))).once();
         expect(controller.getExportFundPoolsStreamSource()).andReturn(streamSource).once();
         expect(ForeignSecurityUtils.hasDeleteFundPoolPermission()).andReturn(true).once();
         expect(controller.getFundPools()).andReturn(List.of(fundPool)).once();

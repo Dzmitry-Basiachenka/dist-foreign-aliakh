@@ -104,7 +104,7 @@
         order by fund_pool_name
     </select>
 
-    <select id="findSalFundPools" parameterType="map" resultMap="IFundPoolMapper.fundPoolResultMap">
+    <select id="findSalFundPools" parameterType="string" resultMap="IFundPoolMapper.fundPoolResultMap">
         <include refid="IFundPoolMapper.selectFundPoolsByProductFamilySql"/>
     </select>
 
