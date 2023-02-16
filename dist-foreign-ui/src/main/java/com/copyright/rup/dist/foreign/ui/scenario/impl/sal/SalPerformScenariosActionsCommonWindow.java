@@ -17,11 +17,14 @@ import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
+import com.vaadin.ui.components.grid.MultiSelectionModel.SelectAllCheckBoxVisibility;
+import com.vaadin.ui.components.grid.MultiSelectionModelImpl;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Comparator;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -100,10 +103,14 @@ public abstract class SalPerformScenariosActionsCommonWindow extends Window impl
     }
 
     private void initGrid() {
-        dataProvider = new ListDataProvider<>(controller.getScenariosByStatus(displayedStatus));
+        List<Scenario> scenarios = controller.getScenariosByStatus(displayedStatus);
+        dataProvider = new ListDataProvider<>(scenarios);
         grid = new Grid<>(dataProvider);
         grid.setSizeFull();
-        grid.setSelectionMode(Grid.SelectionMode.MULTI);
+        MultiSelectionModelImpl<Scenario> gridSelectionModel =
+            (MultiSelectionModelImpl<Scenario>) grid.setSelectionMode(Grid.SelectionMode.MULTI);
+        gridSelectionModel.setSelectAllCheckBoxVisibility(
+            scenarios.isEmpty() ? SelectAllCheckBoxVisibility.HIDDEN : SelectAllCheckBoxVisibility.VISIBLE);
         grid.addColumn(Scenario::getName)
             .setCaption(ForeignUi.getMessage("table.column.scenario_name"))
             .setComparator(SCENARIOS_COMPARATOR);

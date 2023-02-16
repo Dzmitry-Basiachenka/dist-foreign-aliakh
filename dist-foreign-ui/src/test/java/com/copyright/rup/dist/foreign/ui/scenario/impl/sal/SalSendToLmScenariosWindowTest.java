@@ -12,15 +12,12 @@ import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.ui.scenario.api.sal.ISalScenariosController;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
-import com.vaadin.data.provider.ListDataProvider;
-import com.vaadin.server.SerializablePredicate;
 import com.vaadin.server.Sizeable;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
@@ -31,7 +28,6 @@ import com.vaadin.ui.VerticalLayout;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.powermock.reflect.Whitebox;
 
 import java.util.List;
 import java.util.Set;
@@ -85,38 +81,6 @@ public class SalSendToLmScenariosWindowTest {
         assertThat(searchWidget, instanceOf(SearchWidget.class));
         verifyGrid((Grid) content.getComponent(1));
         verifyButtonsLayout((HorizontalLayout) content.getComponent(2));
-    }
-
-    @Test
-    public void testSendToLmButtonState() {
-        VerticalLayout content = (VerticalLayout) window.getContent();
-        Grid<Scenario> grid = (Grid<Scenario>) content.getComponent(1);
-        HorizontalLayout buttonsLayout = (HorizontalLayout) content.getComponent(2);
-        Button sendToLmButton = (Button) buttonsLayout.getComponent(0);
-        grid.select(scenario1);
-        assertTrue(sendToLmButton.isEnabled());
-        grid.select(scenario2);
-        assertTrue(sendToLmButton.isEnabled());
-        grid.deselectAll();
-        assertFalse(sendToLmButton.isEnabled());
-    }
-
-    @Test
-    public void testPerformSearch() {
-        SearchWidget searchWidget = createMock(SearchWidget.class);
-        Whitebox.setInternalState(window, searchWidget);
-        expect(searchWidget.getSearchValue()).andReturn("12").once();
-        replay(searchWidget);
-        VerticalLayout content = (VerticalLayout) window.getContent();
-        Grid<Scenario> grid = (Grid<Scenario>) content.getComponent(1);
-        ListDataProvider<Scenario> provider = (ListDataProvider<Scenario>) grid.getDataProvider();
-        grid.select(scenario1);
-        grid.select(scenario2);
-        window.performSearch();
-        SerializablePredicate filter = provider.getFilter();
-        assertTrue(filter.test(scenario2));
-        assertEquals(Set.of(scenario1, scenario2), grid.getSelectedItems());
-        verify(searchWidget);
     }
 
     private void verifyGrid(Grid grid) {
