@@ -2,7 +2,7 @@ databaseChangeLog {
     property(file: 'database-testInteg.properties')
 
     changeSet(id: '2020-11-09-00', author: 'Anton Azarenka <aazarenka@copyright.com>') {
-        comment('Inserting test data for testWriteFundPoolsCsvReport')
+        comment('Inserting test data for testWriteFundPoolsCsvReport and testWriteFundPoolsListCsvReport')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_fund_pool') {
             column(name: 'df_fund_pool_uid', value: '1dbec643-2133-4839-9cf4-60dcfd04cc59')
