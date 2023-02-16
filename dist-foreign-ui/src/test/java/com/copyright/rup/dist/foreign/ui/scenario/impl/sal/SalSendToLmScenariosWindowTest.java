@@ -19,6 +19,8 @@ import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.ui.scenario.api.sal.ISalScenariosController;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
+import com.vaadin.data.provider.ListDataProvider;
+import com.vaadin.server.SerializablePredicate;
 import com.vaadin.server.Sizeable;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
@@ -29,6 +31,7 @@ import com.vaadin.ui.VerticalLayout;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.powermock.reflect.Whitebox;
 
 import java.util.List;
 import java.util.Set;
@@ -97,6 +100,24 @@ public class SalSendToLmScenariosWindowTest {
         assertTrue(sendToLmButton.isEnabled());
         grid.deselectAll();
         assertFalse(sendToLmButton.isEnabled());
+    }
+
+    @Test
+    public void testPerformSearch() {
+        SearchWidget searchWidget = createMock(SearchWidget.class);
+        Whitebox.setInternalState(window, searchWidget);
+        expect(searchWidget.getSearchValue()).andReturn("12").once();
+        replay(searchWidget);
+        VerticalLayout content = (VerticalLayout) window.getContent();
+        Grid<Scenario> grid = (Grid<Scenario>) content.getComponent(1);
+        ListDataProvider<Scenario> provider = (ListDataProvider<Scenario>) grid.getDataProvider();
+        grid.select(scenario1);
+        grid.select(scenario2);
+        window.performSearch();
+        SerializablePredicate filter = provider.getFilter();
+        assertTrue(filter.test(scenario2));
+        assertEquals(Set.of(scenario1, scenario2), grid.getSelectedItems());
+        verify(searchWidget);
     }
 
     private void verifyGrid(Grid grid) {
