@@ -72,9 +72,6 @@ public abstract class SalPerformScenariosActionsCommonWindow extends Window impl
         dataProvider.clearFilters();
         String searchValue = searchWidget.getSearchValue();
         if (StringUtils.isNotEmpty(searchValue)) {
-            grid.getSelectedItems().stream()
-                .filter(scenario -> !scenarioMatches(scenario, searchValue))
-                .forEach(grid::deselect);
             dataProvider.setFilter(scenario -> scenarioMatches(scenario, searchValue));
         }
     }
