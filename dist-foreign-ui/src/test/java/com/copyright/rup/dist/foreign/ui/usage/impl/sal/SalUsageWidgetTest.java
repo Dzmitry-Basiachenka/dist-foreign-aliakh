@@ -218,17 +218,21 @@ public class SalUsageWidgetTest {
     }
 
     @Test
+    @SuppressWarnings("UNCHECKED")
     public void testRefresh() {
         DataProvider dataProvider = createMock(DataProvider.class);
-        Grid usagesGrid = new Grid(dataProvider);
+        Grid usagesGrid = createMock(Grid.class);
         SalUsageMediator mediator = createMock(SalUsageMediator.class);
         Whitebox.setInternalState(usagesWidget, usagesGrid, CommonUsageWidget.class);
         Whitebox.setInternalState(usagesWidget, mediator);
+        usagesGrid.deselectAll();
+        expectLastCall().once();
+        expect(usagesGrid.getDataProvider()).andReturn(dataProvider).once();
         dataProvider.refreshAll();
         expectLastCall().once();
-        replay(dataProvider, controller, mediator);
+        replay(dataProvider, usagesGrid, controller, mediator);
         usagesWidget.refresh();
-        verify(dataProvider, controller, mediator);
+        verify(dataProvider, usagesGrid, controller, mediator);
     }
 
     @Test
