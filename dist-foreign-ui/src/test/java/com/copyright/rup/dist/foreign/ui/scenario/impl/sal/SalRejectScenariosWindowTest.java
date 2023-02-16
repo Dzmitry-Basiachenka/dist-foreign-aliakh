@@ -53,7 +53,6 @@ public class SalRejectScenariosWindowTest {
     private static final String SCENARIO_ID_2 = "036ee3d7-9a4d-4385-aa8f-354f50ba9222";
     private Scenario scenario1;
     private Scenario scenario2;
-
     private SalRejectScenariosWindow window;
 
     @Before

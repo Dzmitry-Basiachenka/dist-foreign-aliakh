@@ -50,12 +50,11 @@ public abstract class SalPerformScenariosActionsCommonWindow extends Window impl
      * Constructor.
      *
      * @param controller                   instance of {@link ISalScenariosController}
-     * @param windowCaptionLabelName       caption of window
      * @param actionButtonCaptionLabelName caption of action button
      * @param displayedStatus              status {@link ScenarioStatusEnum} with which will be displayed scenarios
      */
-    SalPerformScenariosActionsCommonWindow(ISalScenariosController controller, String windowCaptionLabelName,
-                                           String actionButtonCaptionLabelName, ScenarioStatusEnum displayedStatus) {
+    SalPerformScenariosActionsCommonWindow(ISalScenariosController controller, String actionButtonCaptionLabelName,
+                                           ScenarioStatusEnum displayedStatus) {
         this.controller = controller;
         this.actionButtonCaption = ForeignUi.getMessage(actionButtonCaptionLabelName);
         this.displayedStatus = displayedStatus;
@@ -63,7 +62,7 @@ public abstract class SalPerformScenariosActionsCommonWindow extends Window impl
         setWidth(500, Unit.PIXELS);
         setResizable(true);
         setContent(initAndGetContentLayout());
-        setCaption(ForeignUi.getMessage(windowCaptionLabelName));
+        setCaption(ForeignUi.getMessage("window.choose_scenarios_to", actionButtonCaption));
         VaadinUtils.addComponentStyle(this, "sal-choose-scenarios-window");
     }
 

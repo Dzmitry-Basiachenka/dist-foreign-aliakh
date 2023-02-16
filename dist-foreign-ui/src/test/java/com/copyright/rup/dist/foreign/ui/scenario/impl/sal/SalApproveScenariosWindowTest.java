@@ -53,7 +53,6 @@ public class SalApproveScenariosWindowTest {
     private static final String SCENARIO_ID_2 = "04debbd0-4bc6-437d-be13-991e6e446233";
     private Scenario scenario1;
     private Scenario scenario2;
-
     private SalApproveScenariosWindow window;
 
     @Before

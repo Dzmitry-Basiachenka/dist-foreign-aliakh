@@ -25,8 +25,7 @@ public class SalSendToLmScenariosWindow extends SalPerformScenariosActionsCommon
      * @param controller instance of {@link ISalScenariosController}
      */
     public SalSendToLmScenariosWindow(ISalScenariosController controller) {
-        super(controller,"window.choose_scenarios_to_send_to_lm", "button.send_to_lm",
-            ScenarioStatusEnum.APPROVED);
+        super(controller, "button.send_to_lm", ScenarioStatusEnum.APPROVED);
         this.controller = controller;
     }
 
