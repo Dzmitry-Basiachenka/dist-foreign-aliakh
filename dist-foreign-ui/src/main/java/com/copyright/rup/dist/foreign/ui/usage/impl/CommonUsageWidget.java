@@ -49,6 +49,7 @@ public abstract class CommonUsageWidget extends HorizontalSplitPanel implements 
 
     @Override
     public void refresh() {
+        usagesGrid.deselectAll();
         usagesGrid.getDataProvider().refreshAll();
     }
 
