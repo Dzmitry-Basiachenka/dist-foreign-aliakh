@@ -8,6 +8,7 @@ import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.INtsReportRepository;
 import com.copyright.rup.dist.foreign.repository.impl.csv.fas.NtsServiceFeeTrueUpReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.nts.AuditNtsCsvReportHandler;
+import com.copyright.rup.dist.foreign.repository.impl.csv.nts.NtsFundPoolsCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.nts.NtsScenarioUsagesCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.nts.NtsUndistributedLiabilitiesReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.nts.NtsUsageCsvReportHandler;
@@ -135,6 +136,13 @@ public class NtsReportRepository extends CommonReportRepository implements INtsR
             parameters.put(PRODUCT_FAMILY, FdaConstants.NTS_PRODUCT_FAMILY);
             parameters.put(STATUSES, List.of(ScenarioStatusEnum.SENT_TO_LM, ScenarioStatusEnum.ARCHIVED));
             getTemplate().select("INtsReportMapper.findNtsUndistributedLiabilitiesReportDtos", parameters, handler);
+        }
+    }
+
+    @Override
+    public void writeNtsFundPoolsCsvReport(OutputStream outputStream) {
+        try (NtsFundPoolsCsvReportHandler handler = new NtsFundPoolsCsvReportHandler(outputStream)) {
+            getTemplate().select("INtsReportMapper.findNtsFundPools", handler);
         }
     }
 }

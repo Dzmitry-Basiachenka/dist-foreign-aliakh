@@ -95,4 +95,11 @@ public interface INtsReportRepository {
      * @param outputStream        instance of {@link OutputStream}
      */
     void writeNtsUndistributedLiabilitiesCsvReport(BigDecimal estimatedServiceFee, OutputStream outputStream);
+
+    /**
+     * Writes NTS Fund Pools Report into the output stream in CSV format.
+     *
+     * @param outputStream instance of {@link OutputStream}
+     */
+    void writeNtsFundPoolsCsvReport(OutputStream outputStream);
 }

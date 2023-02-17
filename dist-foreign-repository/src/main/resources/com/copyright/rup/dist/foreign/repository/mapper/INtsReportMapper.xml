@@ -179,4 +179,21 @@
     <select id="findWorkClassificationBySearch" resultMap="IWorkClassificationMapper.workClassificationResultMap" parameterType="map">
         <include refid="IWorkClassificationMapper.findBySearchSql"/>
     </select>
+
+    <select id="findNtsFundPools" resultMap="IUsageBatchMapper.usageBatchResultMap">
+        select
+            distinct ub.name,
+            ub.rro_account_number,
+            r.name rro_name,
+            ub.payment_date,
+            ub.fiscal_year,
+            ub.nts_fields,
+            ub.created_datetime,
+            ub.created_by_user
+        from ${schema}.df_usage_batch ub
+        left join ${schema}.df_rightsholder r on r.rh_account_number = ub.rro_account_number
+        join ${schema}.df_usage u on ub.df_usage_batch_uid = u.df_usage_batch_uid
+        where ub.product_family = 'NTS'
+        order by ub.rro_account_number
+    </select>
 </mapper>
