@@ -1,3 +1,19 @@
+17.0.6
+-
+* CDP-1120 FDA: SAL: Usages tab: Usages table does not remove selections in some cases
+* CDP-1119 FDA: SAL: Scenarios tab: Choose Scenarios windows: All selected checkboxes become deselected after unchecking at least one of them filtered by search field
+* B-56525 FDA: Fundpool data Report: implement UI and controller to generate report
+* B-56525 FDA: Fundpool data Report: implement back end logic
+* B-76766 FDA: Create Batch Status subtab for UDM tab: make changes based on comments
+* B-76695 FDA: Export list of fund pools: make changes based on comments
+* B-77081 FDA: Allow multi select when approving SAL scenarios: make changes based on comments in code review
+* B-77081 FDA: Allow multi select when approving SAL scenarios: hide the Select All checkbox in the empty grid
+* B-76876 FDA: Edit usage details: implement getting rights for usages
+* B-76876 FDA: Edit usage details: implement closing Update Usages window
+* B-76876 FDA: Edit usage details: implement service to get work by Wr Wrk Inst
+* B-77992 Tech Debt: FDA: add implementation of test in AclciUsageControllerTest
+* B-77992 Tech Debt: FDA: implement filter tests for Acl Fund Pool repository
+
 17.0.5
 -
 * B-77081 FDA: Allow multi select when approving SAL scenarios: implement Choose Scenarios to Reject window
