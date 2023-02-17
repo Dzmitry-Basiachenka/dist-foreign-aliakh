@@ -97,7 +97,7 @@ class FasEditMultipleUsagesWindow extends Window {
                     reason -> {
                         controller.updateUsages(usageIds, wrWrkInst, reason);
                         controller.refreshWidget();
-                        updateUsageWindow.refreshDataProvider();
+                        updateUsageWindow.close();
                         this.close();
                     }, new StringLengthValidator(ForeignUi.getMessage("field.error.empty.length", 1024), 1, 1024));
             } else {

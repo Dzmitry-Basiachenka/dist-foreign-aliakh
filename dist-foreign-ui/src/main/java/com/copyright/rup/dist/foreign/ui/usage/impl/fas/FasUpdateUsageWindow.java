@@ -65,18 +65,6 @@ class FasUpdateUsageWindow extends Window implements IRefreshable {
         dataProvider.refreshAll();
     }
 
-    /**
-     * Refreshes data provider and updates usages grid.
-     */
-    void refreshDataProvider() {
-        List<UsageDto> usages = controller.getUsageDtosToUpdate();
-        dataProvider = DataProvider.ofCollection(usages);
-        usagesGrid.setDataProvider(dataProvider);
-        switchSelectAllCheckBoxVisibility(usages.size());
-        gridSelectionModel.beforeClientResponse(false);
-        dataProvider.refreshAll();
-    }
-
     private Component initContent() {
         initSearchWidget();
         initGrid();
