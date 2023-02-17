@@ -1,0 +1,52 @@
+[
+  {
+    "id": "4d50fb77-8766-42e5-bfd2-df56e6ba5605",
+    "batchId": "493c7d58-afdf-4f58-886b-c53dee1eb227",
+    "wrWrkInst": 122820638,
+    "rightsholder": {
+    },
+    "payee": {
+    },
+    "article": "DIN EN 779:2013",
+    "publisher": "John Wiley & Sons",
+    "publicationDate": "2011-05-10",
+    "market": "Bus,Doc Del,Edu,Gov,Lib,Sch,Univ",
+    "marketPeriodFrom": 2015,
+    "marketPeriodTo": 2019,
+    "author": "Nanette M. Schwann",
+    "numberOfCopies": 1600,
+    "reportedValue": 1560.00,
+    "netAmount": 0.0000000000,
+    "serviceFeeAmount": 0.0000000000,
+    "grossAmount": 35000.0000000000,
+    "status": "WORK_NOT_FOUND",
+    "productFamily": "FAS",
+    "rhParticipating": false,
+    "payeeParticipating": false
+  },
+  {
+    "id": "bd8fcc73-bd03-46b4-8f6b-84586d598de9",
+    "batchId": "493c7d58-afdf-4f58-886b-c53dee1eb227",
+    "wrWrkInst": 122820638,
+    "rightsholder": {
+    },
+    "payee": {
+    },
+    "article": "DIN EN 779:2012",
+    "publisher": "McGraw-Hill",
+    "publicationDate": "2009-12-31",
+    "market": "Edu",
+    "marketPeriodFrom": 2015,
+    "marketPeriodTo": 2019,
+    "author": "Mirjam H. Hüberli",
+    "numberOfCopies": 2630,
+    "reportedValue": 1280.00,
+    "netAmount": 0.0000000000,
+    "serviceFeeAmount": 0.0000000000,
+    "grossAmount": 2125.2400000000,
+    "status": "WORK_NOT_FOUND",
+    "productFamily": "FAS",
+    "rhParticipating": false,
+    "payeeParticipating": false
+  }
+]

@@ -1,0 +1,18 @@
+[
+  {
+    "actionType": "ELIGIBLE",
+    "actionReason": "Usage has become eligible"
+  },
+  {
+    "actionType": "RH_FOUND",
+    "actionReason": "Rightsholder account 1000023401 was found in RMS"
+  },
+  {
+    "actionType": "WORK_FOUND",
+    "actionReason": "Wr Wrk Inst 854030732 was found in PI"
+  },
+  {
+    "actionType": "USAGE_EDIT",
+    "actionReason": "some reason"
+  }
+]
