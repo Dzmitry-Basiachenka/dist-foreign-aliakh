@@ -117,7 +117,7 @@ public class FasEditMultipleUsagesWindowTest {
         expectLastCall().once();
         controller.refreshWidget();
         expectLastCall().once();
-        updateUsageWindow.refreshDataProvider();
+        updateUsageWindow.close();
         expectLastCall().once();
         replay(Windows.class, controller, updateUsageWindow);
         VerticalLayout contentLayout = (VerticalLayout) window.getContent();

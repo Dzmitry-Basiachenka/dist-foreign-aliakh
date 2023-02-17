@@ -110,7 +110,7 @@ public class FasUpdateUsageWindowTest {
         expect(controller.getUsageDtosToUpdate()).andReturn(List.of(new UsageDto())).once();
         expect(controller.getRecordsThreshold()).andReturn(RECORD_THRESHOLD).once();
         replay(controller);
-        window.refreshDataProvider();
+        window = new FasUpdateUsageWindow(controller);
         Grid<UsageDto> grid = Whitebox.getInternalState(window, USAGES_GRID);
         MultiSelectionModelImpl<UsageDto> selectionModel = (MultiSelectionModelImpl<UsageDto>) grid.getSelectionModel();
         assertEquals(SelectAllCheckBoxVisibility.VISIBLE, selectionModel.getSelectAllCheckBoxVisibility());
@@ -121,7 +121,7 @@ public class FasUpdateUsageWindowTest {
     public void testSelectAllCheckBoxVisibilityHiddenNoUsages() {
         expect(controller.getUsageDtosToUpdate()).andReturn(List.of()).once();
         replay(controller);
-        window.refreshDataProvider();
+        window = new FasUpdateUsageWindow(controller);
         Grid<UsageDto> grid = Whitebox.getInternalState(window, USAGES_GRID);
         MultiSelectionModelImpl<UsageDto> selectionModel = (MultiSelectionModelImpl<UsageDto>) grid.getSelectionModel();
         assertEquals(SelectAllCheckBoxVisibility.HIDDEN, selectionModel.getSelectAllCheckBoxVisibility());
@@ -137,7 +137,7 @@ public class FasUpdateUsageWindowTest {
         expect(controller.getUsageDtosToUpdate()).andReturn(usages).once();
         expect(controller.getRecordsThreshold()).andReturn(RECORD_THRESHOLD).once();
         replay(controller);
-        window.refreshDataProvider();
+        window = new FasUpdateUsageWindow(controller);
         Grid<UsageDto> grid = Whitebox.getInternalState(window, USAGES_GRID);
         MultiSelectionModelImpl<UsageDto> selectionModel = (MultiSelectionModelImpl<UsageDto>) grid.getSelectionModel();
         assertEquals(SelectAllCheckBoxVisibility.HIDDEN, selectionModel.getSelectAllCheckBoxVisibility());
