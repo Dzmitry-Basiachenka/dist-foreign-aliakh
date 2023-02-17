@@ -145,9 +145,9 @@ public class AclGrantServiceTest {
     private List<AclGrantDetail> buildAclGrantDetails() {
         return List.of(
             buildAclGrantDetail(
-                PRINT, 1000002760L, 136797639L, "Different RH", "Farewell to the leftist working class", GRANT),
-            buildAclGrantDetail(
                 DIGITAL, 1000014080L, 136797639L, "Different RH", "Farewell to the leftist working class", GRANT),
+            buildAclGrantDetail(
+                PRINT, 1000002760L, 136797639L, "Different RH", "Farewell to the leftist working class", GRANT),
             buildAclGrantDetail(
                 PRINT, 1000004023L, 159246556L, "Print&Digital", "Embracing watershed politics", GRANT),
             buildAclGrantDetail(

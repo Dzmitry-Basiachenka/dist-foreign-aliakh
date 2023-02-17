@@ -14,7 +14,7 @@
           "wr_wrk_inst": "658824345",
           "status": "GRANT",
           "type_of_use": "CURR_REUSE_K12",
-          "market": "ACADEMIC_NON_HIGHER_ED",
+          "market": ["ACADEMIC_NON_HIGHER_ED"],
           "distribution": "EXTERNAL",
           "region": "US",
           "right_begin_date": "08/12/2011",

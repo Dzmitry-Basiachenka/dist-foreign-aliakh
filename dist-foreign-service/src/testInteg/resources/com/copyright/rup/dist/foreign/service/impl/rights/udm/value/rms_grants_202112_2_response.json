@@ -14,7 +14,7 @@
           "wr_wrk_inst": "210001133",
           "status": "GRANT",
           "type_of_use": "DIGITAL",
-          "market": "CORPORATE",
+          "market": ["CORPORATE"],
           "distribution": "EXTERNAL",
           "region": "WORLDWIDE",
           "right_begin_date": "12/20/1995",
