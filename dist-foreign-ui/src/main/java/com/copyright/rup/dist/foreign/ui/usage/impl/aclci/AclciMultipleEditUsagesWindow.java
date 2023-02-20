@@ -60,7 +60,7 @@ class AclciMultipleEditUsagesWindow extends Window {
         this.usageUpdateWindow = usageUpdateWindow;
         this.usageIds = usageIds;
         setContent(initRootLayout());
-        setCaption(ForeignUi.getMessage("window.multiple.edit_aclci_usage"));
+        setCaption(ForeignUi.getMessage("window.multiple.edit_aclci_usages"));
         setResizable(false);
         setWidth(440, Unit.PIXELS);
         setHeight(210, Unit.PIXELS);

@@ -76,7 +76,7 @@ public class FasEditMultipleUsagesWindowTest {
     public void testConstructor() {
         replay(controller);
         window = new FasEditMultipleUsagesWindow(controller, updateUsageWindow, USAGE_IDS);
-        verifyWindow(window, "Edit multiple FAS Usages", 280, 120, Unit.PIXELS);
+        verifyWindow(window, "Edit multiple FAS/FAS2 Usages", 280, 120, Unit.PIXELS);
         Component content = window.getContent();
         assertThat(content, instanceOf(VerticalLayout.class));
         VerticalLayout contentLayout = (VerticalLayout) content;
