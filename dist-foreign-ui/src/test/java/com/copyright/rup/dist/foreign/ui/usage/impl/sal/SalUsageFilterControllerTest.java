@@ -18,7 +18,6 @@ import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
 import org.apache.commons.collections4.CollectionUtils;
 import org.junit.Before;
 import org.junit.Test;
-import org.powermock.api.easymock.PowerMock;
 import org.powermock.reflect.Whitebox;
 
 import java.util.List;
@@ -74,8 +73,8 @@ public class SalUsageFilterControllerTest {
     public void testGetRightsholders() {
         List<Rightsholder> rightsholders = List.of(new Rightsholder());
         expect(salUsageService.getRightsholders()).andReturn(rightsholders).once();
-        PowerMock.replay(salUsageService);
+        replay(salUsageService);
         assertSame(rightsholders, controller.getRightsholders());
-        PowerMock.verify(salUsageService);
+        verify(salUsageService);
     }
 }
