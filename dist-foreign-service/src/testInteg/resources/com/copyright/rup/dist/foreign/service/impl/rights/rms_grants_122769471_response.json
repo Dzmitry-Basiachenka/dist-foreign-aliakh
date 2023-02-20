@@ -14,7 +14,7 @@
           "wr_wrk_inst": "122769471",
           "status": "GRANT",
           "type_of_use": "DIGITAL",
-          "market": "ACADEMIC",
+          "market": ["ACADEMIC"],
           "distribution": "INTERNAL",
           "region": "WORLDWIDE",
           "right_begin_date": "08/12/2011",

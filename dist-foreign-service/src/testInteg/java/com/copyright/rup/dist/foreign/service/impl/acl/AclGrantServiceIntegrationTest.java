@@ -122,9 +122,9 @@ public class AclGrantServiceIntegrationTest {
             buildAclGrantDetail(
                 PRINT, RH_ACCOUNT_2, WR_WRK_INST_1, DIFFERENT_RH, SYSTEM_TITLE_3, false),
             buildAclGrantDetail(
-                PRINT, RH_ACCOUNT_3, WR_WRK_INST_2, PRINT_DIGITAL, SYSTEM_TITLE_2, false),
-            buildAclGrantDetail(
                 DIGITAL, RH_ACCOUNT_3, WR_WRK_INST_2, PRINT_DIGITAL, SYSTEM_TITLE_2, false),
+            buildAclGrantDetail(
+                PRINT, RH_ACCOUNT_3, WR_WRK_INST_2, PRINT_DIGITAL, SYSTEM_TITLE_2, false),
             buildAclGrantDetail(DIGITAL, RH_ACCOUNT_4, WR_WRK_INST_3, DIGITAL_ONLY, SYSTEM_TITLE_1, false),
             buildAclGrantDetail(PRINT, RH_ACCOUNT_5, WR_WRK_INST_4, PRINT_ONLY, SYSTEM_TITLE_4, false),
             buildAclGrantDetail(DIGITAL, RH_ACCOUNT_6, WR_WRK_INST_5, DIGITAL_ONLY, SYSTEM_TITLE_1, false),
@@ -152,9 +152,9 @@ public class AclGrantServiceIntegrationTest {
             buildAclGrantDetail(
                 PRINT, RH_ACCOUNT_2, WR_WRK_INST_1, DIFFERENT_RH, SYSTEM_TITLE_3, true),
             buildAclGrantDetail(
-                PRINT, RH_ACCOUNT_3, WR_WRK_INST_2, PRINT_DIGITAL, SYSTEM_TITLE_2, true),
-            buildAclGrantDetail(
                 DIGITAL, RH_ACCOUNT_3, WR_WRK_INST_2, PRINT_DIGITAL, SYSTEM_TITLE_2, false),
+            buildAclGrantDetail(
+                PRINT, RH_ACCOUNT_3, WR_WRK_INST_2, PRINT_DIGITAL, SYSTEM_TITLE_2, true),
             buildAclGrantDetail(DIGITAL, RH_ACCOUNT_4, WR_WRK_INST_3, DIGITAL_ONLY, SYSTEM_TITLE_1, false),
             buildAclGrantDetail(PRINT, RH_ACCOUNT_5, WR_WRK_INST_4, PRINT_ONLY, SYSTEM_TITLE_4, true),
             buildAclGrantDetail(DIGITAL, RH_ACCOUNT_6, WR_WRK_INST_5, DIGITAL_ONLY, SYSTEM_TITLE_1, false),
@@ -185,9 +185,9 @@ public class AclGrantServiceIntegrationTest {
             buildAclGrantDetail(
                 PRINT, RH_ACCOUNT_2, WR_WRK_INST_1, DIFFERENT_RH, SYSTEM_TITLE_3, false),
             buildAclGrantDetail(
-                PRINT, RH_ACCOUNT_3, WR_WRK_INST_2, PRINT_DIGITAL, SYSTEM_TITLE_2, false),
-            buildAclGrantDetail(
                 DIGITAL, RH_ACCOUNT_3, WR_WRK_INST_2, PRINT_DIGITAL, SYSTEM_TITLE_2, true),
+            buildAclGrantDetail(
+                PRINT, RH_ACCOUNT_3, WR_WRK_INST_2, PRINT_DIGITAL, SYSTEM_TITLE_2, false),
             buildAclGrantDetail(DIGITAL, RH_ACCOUNT_4, WR_WRK_INST_3, DIGITAL_ONLY, SYSTEM_TITLE_1, true),
             buildAclGrantDetail(PRINT, RH_ACCOUNT_5, WR_WRK_INST_4, PRINT_ONLY, SYSTEM_TITLE_4, true),
             buildAclGrantDetail(DIGITAL, RH_ACCOUNT_6, WR_WRK_INST_5, DIGITAL_ONLY, SYSTEM_TITLE_1, true),

@@ -14,7 +14,7 @@
           "wr_wrk_inst": "100010768",
           "status": "GRANT",
           "type_of_use": "PRINT",
-          "market": "CORPORATE",
+          "market": ["CORPORATE"],
           "distribution": "EXTERNAL",
           "region": "WORLDWIDE",
           "right_begin_date": "12/20/1995",
