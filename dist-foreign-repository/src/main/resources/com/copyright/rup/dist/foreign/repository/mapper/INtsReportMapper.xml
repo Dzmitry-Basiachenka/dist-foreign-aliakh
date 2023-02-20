@@ -194,6 +194,6 @@
         left join ${schema}.df_rightsholder r on r.rh_account_number = ub.rro_account_number
         join ${schema}.df_usage u on ub.df_usage_batch_uid = u.df_usage_batch_uid
         where ub.product_family = 'NTS'
-        order by ub.rro_account_number
+        order by ub.rro_account_number, ub.created_datetime desc
     </select>
 </mapper>

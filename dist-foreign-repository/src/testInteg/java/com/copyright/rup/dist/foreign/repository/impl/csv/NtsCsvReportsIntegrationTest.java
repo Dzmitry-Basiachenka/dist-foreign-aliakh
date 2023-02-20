@@ -212,9 +212,16 @@ public class NtsCsvReportsIntegrationTest extends CsvReportsTestHelper {
     @Test
     @TestData(fileName = FOLDER_NAME + "write-nts-fund-pools-csv-report.groovy")
     public void writeNtsFundPoolsCsvReport() throws IOException {
-        //TODO add test cases
         assertFilesWithExecutor(
             outputStream -> reportRepository.writeNtsFundPoolsCsvReport(outputStream),
             "nts/nts_fund_pools_report.csv");
+    }
+
+    @Test
+    @TestData(fileName = FOLDER_NAME + "write-nts-fund-pools-csv-report-empty.groovy")
+    public void writeNtsFundPoolsCsvReportEmpty() throws IOException {
+        assertFilesWithExecutor(
+            outputStream -> reportRepository.writeNtsFundPoolsCsvReport(outputStream),
+            "nts/nts_fund_pools_report_empty.csv");
     }
 }
