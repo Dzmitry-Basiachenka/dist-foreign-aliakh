@@ -78,7 +78,7 @@ public class UdmEditMultipleUsagesResearcherWindow extends Window {
         saveButtonClickListener = clickListener;
         bindedUsageDto = new UdmUsageDto();
         setContent(initRootLayout());
-        setCaption(ForeignUi.getMessage("window.multiple.edit_udm_usage"));
+        setCaption(ForeignUi.getMessage("window.multiple.edit_udm_usages"));
         setResizable(false);
         setWidth(650, Unit.PIXELS);
         setHeight(215, Unit.PIXELS);

@@ -52,7 +52,7 @@ class FasEditMultipleUsagesWindow extends Window {
         this.updateUsageWindow = updateUsageWindow;
         this.usageIds = usageIds;
         setContent(initRootLayout());
-        setCaption(ForeignUi.getMessage("window.multiple.edit_fas_usage"));
+        setCaption(ForeignUi.getMessage("window.multiple.edit_fas_fas2_usages"));
         setResizable(false);
         setWidth(280, Unit.PIXELS);
         setHeight(120, Unit.PIXELS);
