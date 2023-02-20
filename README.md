@@ -1,3 +1,9 @@
+17.0.7
+-
+* B-77083 FDA: Add ability to exclude details: make changes based on comments in code review
+* B-56525 FDA: Fundpool data Report: add test cases to the integration test
+* B-76876 FDA: Edit usage details: apply the changes to FAS2 usages
+
 17.0.6
 -
 * CDP-1120 FDA: SAL: Usages tab: Usages table does not remove selections in some cases
