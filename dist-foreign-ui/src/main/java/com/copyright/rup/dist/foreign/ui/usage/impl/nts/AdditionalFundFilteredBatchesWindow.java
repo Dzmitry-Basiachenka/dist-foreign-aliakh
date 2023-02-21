@@ -111,6 +111,7 @@ class AdditionalFundFilteredBatchesWindow extends Window {
                 batchesFilterWindow, this)));
         Button cancelButton = Buttons.createButton("Cancel");
         cancelButton.addClickListener(event -> this.close());
+        VaadinUtils.setButtonsAutoDisabled(continueButton);
         return new HorizontalLayout(exportButton, continueButton, cancelButton);
     }
 }

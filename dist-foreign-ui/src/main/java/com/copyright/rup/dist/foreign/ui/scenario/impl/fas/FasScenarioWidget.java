@@ -97,6 +97,7 @@ public class FasScenarioWidget extends CommonScenarioWidget implements IFasScena
         exportScenarioFileDownloader.extend(exportButton);
         excludeByRroButton = new Button(ForeignUi.getMessage("button.exclude_by_rro"));
         excludeByRroButton.addClickListener(event -> scenarioController.onExcludeByRroClicked());
+        VaadinUtils.setButtonsAutoDisabled(excludeByRroButton);
         HorizontalLayout buttons = new HorizontalLayout(excludeByRroButton, exportDetailsButton, exportButton,
             Buttons.createCloseButton(this));
         VaadinUtils.addComponentStyle(buttons, "scenario-buttons-layout");

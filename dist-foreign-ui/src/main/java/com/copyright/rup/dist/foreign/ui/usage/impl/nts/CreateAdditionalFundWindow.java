@@ -108,6 +108,7 @@ class CreateAdditionalFundWindow extends Window {
         cancelButton.addClickListener(event -> this.close());
         Button closeButton = Buttons.createButton(ForeignUi.getMessage("button.close"));
         closeButton.addClickListener(event -> closeAllWindows());
+        VaadinUtils.setButtonsAutoDisabled(confirmButton);
         HorizontalLayout layout = new HorizontalLayout(confirmButton, cancelButton, closeButton);
         layout.setSpacing(true);
         return layout;
