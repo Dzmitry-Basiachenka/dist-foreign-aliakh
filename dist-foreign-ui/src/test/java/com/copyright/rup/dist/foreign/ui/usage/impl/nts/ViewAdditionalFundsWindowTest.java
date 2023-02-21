@@ -119,7 +119,7 @@ public class ViewAdditionalFundsWindowTest {
         Grid grid = (Grid) content.getComponent(1);
         Button deleteButton = (Button) grid.getColumn("delete").getValueProvider().apply(fundPool);
         Collection<?> listeners = deleteButton.getListeners(ClickEvent.class);
-        assertEquals(1, listeners.size());
+        assertEquals(2, listeners.size());
         expect(controller.getScenarioNameAssociatedWithAdditionalFund(FUND_ID)).andReturn(null).once();
         expect(
             Windows.showConfirmDialog(eq("Are you sure you want to delete <i><b>'Test Fund'</b></i> additional fund?"),
@@ -137,7 +137,7 @@ public class ViewAdditionalFundsWindowTest {
         Grid grid = (Grid) content.getComponent(1);
         Button deleteButton = (Button) grid.getColumn("delete").getValueProvider().apply(fundPool);
         Collection<?> listeners = deleteButton.getListeners(ClickEvent.class);
-        assertEquals(1, listeners.size());
+        assertEquals(2, listeners.size());
         expect(controller.getScenarioNameAssociatedWithAdditionalFund(FUND_ID))
             .andReturn("FAS Distribution 2019").once();
         Windows.showNotificationWindow("Pre-Service Fee Fund cannot be deleted because it is associated with " +

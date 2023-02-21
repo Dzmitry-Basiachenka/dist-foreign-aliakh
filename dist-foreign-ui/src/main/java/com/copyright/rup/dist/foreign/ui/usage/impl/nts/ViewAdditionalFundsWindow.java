@@ -93,6 +93,7 @@ class ViewAdditionalFundsWindow extends Window {
             Button deleteButton = Buttons.createButton(ForeignUi.getMessage("button.delete"));
             deleteButton.setId(fundPool.getId());
             deleteButton.addClickListener(event -> deleteFund(fundPool));
+            VaadinUtils.setButtonsAutoDisabled(deleteButton);
             return deleteButton;
         }).setId("delete")
             .setWidth(90)
