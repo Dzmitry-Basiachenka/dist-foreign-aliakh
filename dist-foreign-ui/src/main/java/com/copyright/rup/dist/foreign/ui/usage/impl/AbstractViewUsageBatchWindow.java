@@ -182,6 +182,7 @@ public abstract class AbstractViewUsageBatchWindow extends Window
         deleteButton.addClickListener(event ->
             deleteUsageBatch(grid.getSelectedItems().stream().findFirst().orElse(null)));
         deleteButton.setEnabled(false);
+        VaadinUtils.setButtonsAutoDisabled(deleteButton);
         HorizontalLayout layout = new HorizontalLayout(deleteButton, closeButton);
         layout.setSpacing(true);
         VaadinUtils.addComponentStyle(layout, "view-batch-buttons");
