@@ -1,3 +1,8 @@
+17.0.8
+-
+* B-78452 FDA: Adjust system to receive array for Market from RMS: change tests and test data that represents RMS responses
+* B-77992 Tech Debt: FDA: add auto disable functionality to Delete,Exclude, Confirm, Update, Update Rightsholder buttons
+
 17.0.7
 -
 * B-77083 FDA: Add ability to exclude details: make changes based on comments in code review
