@@ -97,7 +97,7 @@ public class FasUpdateUsageWindowTest {
         HorizontalLayout buttonsLayout = (HorizontalLayout) content.getComponent(2);
         Button updateButton = (Button) buttonsLayout.getComponent(0);
         Collection<?> listeners = updateButton.getListeners(Button.ClickEvent.class);
-        assertEquals(1, listeners.size());
+        assertEquals(2, listeners.size());
         Button.ClickListener listener = (Button.ClickListener) listeners.iterator().next();
         expect(usagesGrid.getSelectedItems()).andReturn(Set.of(new UsageDto())).once();
         replay(Windows.class, usagesGrid);

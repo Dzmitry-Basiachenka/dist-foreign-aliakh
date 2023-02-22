@@ -130,6 +130,7 @@ class FasUpdateUsageWindow extends Window implements IRefreshable {
             this, usagesGrid.getSelectedItems().stream().map(UsageDto::getId).collect(Collectors.toList()))));
         updateButton.setEnabled(false);
         Button closeButton = Buttons.createCloseButton(this);
+        VaadinUtils.setButtonsAutoDisabled(updateButton);
         buttonsLayout.addComponents(updateButton, closeButton);
         return buttonsLayout;
     }

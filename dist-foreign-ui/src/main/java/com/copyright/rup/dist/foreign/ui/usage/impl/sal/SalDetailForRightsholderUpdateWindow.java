@@ -134,6 +134,7 @@ class SalDetailForRightsholderUpdateWindow extends Window implements IRefreshabl
                 usagesGrid.getSelectedItems().stream().map(UsageDto::getId).collect(Collectors.toSet()))));
         updateRightsholderButton.setEnabled(false);
         Button closeButton = Buttons.createCloseButton(this);
+        VaadinUtils.setButtonsAutoDisabled(updateRightsholderButton);
         buttonsLayout.addComponents(updateRightsholderButton, closeButton);
         return buttonsLayout;
     }
