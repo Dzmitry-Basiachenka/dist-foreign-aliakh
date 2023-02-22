@@ -144,8 +144,11 @@ class WorkClassificationWindow extends Window {
                 controller.deleteClassification(classifications);
                 updateAndRefreshDataProvider();
             });
+        Button closeButton = Buttons.createCloseButton(this);
+        VaadinUtils.setButtonsAutoDisabled(markAsStmButton, markAsNonStmButton, markAsBelletristicButton,
+            deleteClassificationButton, clearButton, closeButton);
         buttonsLayout.addComponents(markAsStmButton, markAsNonStmButton, markAsBelletristicButton,
-            deleteClassificationButton, clearButton, Buttons.createCloseButton(this));
+            deleteClassificationButton, clearButton, closeButton);
         buttonsLayout.setSpacing(true);
         return buttonsLayout;
     }

@@ -99,7 +99,7 @@ public class AclciUsageUpdateWindowTest {
         HorizontalLayout buttonsLayout = (HorizontalLayout) content.getComponent(2);
         Button updateRhButton = (Button) buttonsLayout.getComponent(0);
         Collection<?> listeners = updateRhButton.getListeners(Button.ClickEvent.class);
-        assertEquals(1, CollectionUtils.size(listeners));
+        assertEquals(2, CollectionUtils.size(listeners));
         Button.ClickListener listener = (Button.ClickListener) listeners.iterator().next();
         UsageDto selectedUsage = new UsageDto();
         expect(usagesGrid.getSelectedItems()).andReturn(Set.of(selectedUsage)).once();
