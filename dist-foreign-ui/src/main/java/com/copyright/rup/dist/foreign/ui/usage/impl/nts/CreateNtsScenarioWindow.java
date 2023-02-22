@@ -166,6 +166,7 @@ class CreateNtsScenarioWindow extends Window {
     private HorizontalLayout initButtonsLayout() {
         Button confirmButton = Buttons.createButton(ForeignUi.getMessage("button.confirm"));
         confirmButton.addClickListener(listener -> onConfirmButtonClicked());
+        VaadinUtils.setButtonsAutoDisabled(confirmButton);
         HorizontalLayout layout = new HorizontalLayout(confirmButton, Buttons.createCancelButton(this));
         layout.setSpacing(true);
         return layout;

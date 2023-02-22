@@ -146,6 +146,7 @@ public class FasExcludeRightsholdersWindow extends Window implements ISearchCont
         });
         Button clearButton = Buttons.createButton(ForeignUi.getMessage("button.clear"));
         clearButton.addClickListener(event -> rightsholdersGrid.getSelectionModel().deselectAll());
+        VaadinUtils.setButtonsAutoDisabled(confirmButton);
         return new HorizontalLayout(confirmButton, clearButton, Buttons.createCloseButton(this));
     }
 }

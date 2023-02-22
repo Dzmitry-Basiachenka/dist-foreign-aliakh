@@ -107,9 +107,9 @@ public class FasExcludeSourceRroWindow extends Window implements ISearchControll
             .setSortProperty("name")
             .setExpandRatio(4);
         grid.addComponentColumn(rightsholder -> {
-            Button deleteButton = Buttons.createButton(ForeignUi.getMessage("button.exclude"));
-            deleteButton.setId(rightsholder.getId());
-            deleteButton.addClickListener(event -> {
+            Button excludeButton = Buttons.createButton(ForeignUi.getMessage("button.exclude"));
+            excludeButton.setId(rightsholder.getId());
+            excludeButton.addClickListener(event -> {
                 FasExcludeRightsholdersWindow window =
                     new FasExcludeRightsholdersWindow(rightsholder.getAccountNumber(), scenarioController);
                 Windows.showModalWindow(window);
@@ -118,7 +118,8 @@ public class FasExcludeSourceRroWindow extends Window implements ISearchControll
                     scenarioController.fireWidgetEvent(excludeUsagesEvent);
                 });
             });
-            return deleteButton;
+            VaadinUtils.setButtonsAutoDisabled(excludeButton);
+            return excludeButton;
         }).setWidth(95)
             .setSortable(false);
     }
