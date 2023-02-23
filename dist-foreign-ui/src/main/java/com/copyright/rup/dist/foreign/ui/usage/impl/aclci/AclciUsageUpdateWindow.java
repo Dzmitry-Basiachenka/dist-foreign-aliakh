@@ -113,17 +113,19 @@ class AclciUsageUpdateWindow extends Window implements IRefreshable {
     }
 
     private void addGridColumns() {
-        addColumn(UsageDto::getId, "table.column.detail_id", "detailId", 250);
-        addColumn(UsageDto::getStatus, "table.column.status", "status", 170);
-        addColumn(UsageDto::getBatchName, "table.column.batch_name", "batchName", 200);
-        addColumn(UsageDto::getWrWrkInst, "table.column.wr_wrk_inst", "wrWrkInst", 130);
-        addColumn(UsageDto::getSystemTitle, "table.column.system_title", "systemTitle", 250);
+        addColumn(UsageDto::getId, "table.column.detail_id", 250);
+        usagesGrid.addColumn((ValueProvider<UsageDto, ?>) UsageDto::getStatus)
+            .setCaption(ForeignUi.getMessage("table.column.status"))
+            .setComparator((status1, status2) -> status1.getStatus().name().compareTo(status2.getStatus().name()))
+            .setWidth(170);
+        addColumn(UsageDto::getBatchName, "table.column.batch_name", 200);
+        addColumn(UsageDto::getWrWrkInst, "table.column.wr_wrk_inst", 130);
+        addColumn(UsageDto::getSystemTitle, "table.column.system_title", 250);
     }
 
-    private void addColumn(ValueProvider<UsageDto, ?> provider, String captionProperty, String sort, double width) {
+    private void addColumn(ValueProvider<UsageDto, ?> provider, String captionProperty, double width) {
         usagesGrid.addColumn(provider)
             .setCaption(ForeignUi.getMessage(captionProperty))
-            .setSortProperty(sort)
             .setWidth(width);
     }
 
