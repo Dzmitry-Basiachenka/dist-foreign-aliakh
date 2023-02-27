@@ -79,7 +79,7 @@ public class FasUpdateUsageWindowTest {
             Triple.of("Status", 150.0, -1),
             Triple.of("Usage Batch Name", 170.0, -1),
             Triple.of("Wr Wrk Inst", 100.0, -1),
-            Triple.of("System Title", 220.0, -1),
+            Triple.of("System Title", -1.0, 1),
             Triple.of("RH Account #", 100.0, -1),
             Triple.of("RH Name", 260.0, -1)
         ));

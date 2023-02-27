@@ -1,9 +1,10 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.sal;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGrid;
+
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
@@ -29,6 +30,7 @@ import com.vaadin.ui.components.grid.MultiSelectionModel.SelectAllCheckBoxVisibi
 import com.vaadin.ui.components.grid.MultiSelectionModelImpl;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.tuple.Triple;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -39,7 +41,6 @@ import org.powermock.reflect.Whitebox;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * Verifies {@link SalDetailForRightsholderUpdateWindow}.
@@ -80,7 +81,13 @@ public class SalDetailForRightsholderUpdateWindowTest {
         assertEquals(SearchWidget.class, searchWidgetComponent.getClass());
         Component gridComponent = content.getComponent(1);
         assertEquals(Grid.class, gridComponent.getClass());
-        verifyGrid((Grid) gridComponent);
+        verifyGrid((Grid) gridComponent, List.of(
+            Triple.of("Detail ID", 250.0, -1),
+            Triple.of("Status", 170.0, -1),
+            Triple.of("Usage Batch Name", 200.0, -1),
+            Triple.of("Wr Wrk Inst", 130.0, -1),
+            Triple.of("System Title", -1.0, 1)
+        ));
         assertEquals(1, content.getExpandRatio(gridComponent), 0);
         Component buttonsLayoutComponent = content.getComponent(2);
         assertEquals(HorizontalLayout.class, buttonsLayoutComponent.getClass());
@@ -136,20 +143,6 @@ public class SalDetailForRightsholderUpdateWindowTest {
         assertEquals(height, component.getHeight(), 0);
         assertEquals(heightUnit, component.getHeightUnits());
         assertEquals(widthUnit, component.getWidthUnits());
-    }
-
-    @SuppressWarnings("unchecked")
-    private void verifyGrid(Grid grid) {
-        assertNull(grid.getCaption());
-        verifySize(grid, 100, Unit.PERCENTAGE, 100, Unit.PERCENTAGE);
-        List<Grid.Column> columns = grid.getColumns();
-        assertEquals(List.of("Detail ID", "Status", "Usage Batch Name", "Wr Wrk Inst", "System Title"),
-            columns.stream().map(Grid.Column::getCaption).collect(Collectors.toList()));
-        assertEquals(250, columns.get(0).getWidth(), 0);
-        assertEquals(170, columns.get(1).getWidth(), 0);
-        assertEquals(200, columns.get(2).getWidth(), 0);
-        assertEquals(130, columns.get(3).getWidth(), 0);
-        assertEquals(250, columns.get(4).getWidth(), 0);
     }
 
     private void verifyButtonsLayout(HorizontalLayout buttonsLayout) {
