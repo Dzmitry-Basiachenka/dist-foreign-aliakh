@@ -19,9 +19,9 @@ import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
-
 import com.vaadin.ui.components.grid.MultiSelectionModel.SelectAllCheckBoxVisibility;
 import com.vaadin.ui.components.grid.MultiSelectionModelImpl;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -112,17 +112,18 @@ class SalDetailForRightsholderUpdateWindow extends Window implements IRefreshabl
     }
 
     private void addGridColumns() {
-        addColumn(UsageDto::getId, "table.column.detail_id", "detailId", 250);
-        addColumn(UsageDto::getStatus, "table.column.status", "status", 170);
-        addColumn(UsageDto::getBatchName, "table.column.batch_name", "batchName", 200);
-        addColumn(UsageDto::getWrWrkInst, "table.column.wr_wrk_inst", "wrWrkInst", 130);
-        addColumn(UsageDto::getSystemTitle, "table.column.system_title", "systemTitle", 250);
+        addColumn(UsageDto::getId, "table.column.detail_id", 250);
+        addColumn(UsageDto::getStatus, "table.column.status", 170);
+        addColumn(UsageDto::getBatchName, "table.column.batch_name", 200);
+        addColumn(UsageDto::getWrWrkInst, "table.column.wr_wrk_inst", 130);
+        usagesGrid.addColumn((ValueProvider<UsageDto, ?>) UsageDto::getSystemTitle)
+            .setCaption(ForeignUi.getMessage("table.column.system_title"))
+            .setExpandRatio(1);
     }
 
-    private void addColumn(ValueProvider<UsageDto, ?> provider, String captionProperty, String sort, double width) {
+    private void addColumn(ValueProvider<UsageDto, ?> provider, String captionProperty, double width) {
         usagesGrid.addColumn(provider)
             .setCaption(ForeignUi.getMessage(captionProperty))
-            .setSortProperty(sort)
             .setWidth(width);
     }
 

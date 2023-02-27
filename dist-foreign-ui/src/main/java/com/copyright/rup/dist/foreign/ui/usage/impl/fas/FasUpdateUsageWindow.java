@@ -114,7 +114,9 @@ class FasUpdateUsageWindow extends Window implements IRefreshable {
             .setWidth(150);
         addColumn(UsageDto::getBatchName, "table.column.batch_name", 170);
         addColumn(UsageDto::getWrWrkInst, "table.column.wr_wrk_inst", 100);
-        addColumn(UsageDto::getSystemTitle, "table.column.system_title", 220);
+        usagesGrid.addColumn((ValueProvider<UsageDto, ?>) UsageDto::getSystemTitle)
+            .setCaption(ForeignUi.getMessage("table.column.system_title"))
+            .setExpandRatio(1);
         addColumn(UsageDto::getRhAccountNumber, "table.column.rh_account_number", 100);
         addColumn(UsageDto::getRhName, "table.column.rh_account_name", 260);
     }

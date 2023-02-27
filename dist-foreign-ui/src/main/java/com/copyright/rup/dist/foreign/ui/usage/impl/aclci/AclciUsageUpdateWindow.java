@@ -120,7 +120,9 @@ class AclciUsageUpdateWindow extends Window implements IRefreshable {
             .setWidth(170);
         addColumn(UsageDto::getBatchName, "table.column.batch_name", 200);
         addColumn(UsageDto::getWrWrkInst, "table.column.wr_wrk_inst", 130);
-        addColumn(UsageDto::getSystemTitle, "table.column.system_title", 250);
+        usagesGrid.addColumn((ValueProvider<UsageDto, ?>) UsageDto::getSystemTitle)
+            .setCaption(ForeignUi.getMessage("table.column.system_title"))
+            .setExpandRatio(1);
     }
 
     private void addColumn(ValueProvider<UsageDto, ?> provider, String captionProperty, double width) {
