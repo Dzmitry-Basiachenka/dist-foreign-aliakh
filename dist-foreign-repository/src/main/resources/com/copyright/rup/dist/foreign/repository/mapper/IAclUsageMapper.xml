@@ -32,6 +32,7 @@
         <result property="annualizedCopies" column="annualized_copies"/>
         <result property="quantity" column="quantity"/>
         <result property="editable" column="is_editable"/>
+        <result property="workDeletedFlag" column="work_deleted_flag"/>
     </resultMap>
 
     <resultMap id="aclDefaultUsageAgeWeightResultMap" type="UsageAge" extends="StoredEntityMapper.storedEntityResult">
@@ -92,6 +93,7 @@
         annualized_copies,
         u.quantity,
         is_editable,
+        work_deleted_flag,
         u.created_datetime,
         u.updated_datetime,
         u.created_by_user,
@@ -293,6 +295,9 @@
             </when>
             <when test="sort.property == 'annualizedCopies'">
                 annualized_copies <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'mdwmsDeleted'">
+                work_deleted_flag <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'updateUser'">
                 u.updated_by_user <include refid="IUsageMapper.direction"/>

@@ -684,6 +684,7 @@ public class AclUsageRepositoryIntegrationTest extends CsvReportsTestHelper {
         assertSortingFindDtosByFilter(ACL_USAGE_UID_1, ACL_USAGE_UID_5, "reportedTypeOfUse");
         assertSortingFindDtosByFilter(ACL_USAGE_UID_5, ACL_USAGE_UID_2, "typeOfUse");
         assertSortingFindDtosByFilter(ACL_USAGE_UID_2, ACL_USAGE_UID_5, "annualizedCopies");
+        assertSortingFindDtosByFilter(ACL_USAGE_UID_5, ACL_USAGE_UID_2, "mdwmsDeleted");
         assertSortingFindDtosByFilter(ACL_USAGE_UID_1, ACL_USAGE_UID_2, "updateUser");
         assertSortingFindDtosByFilter(ACL_USAGE_UID_2, ACL_USAGE_UID_1, "updateDate");
     }
@@ -800,6 +801,7 @@ public class AclUsageRepositoryIntegrationTest extends CsvReportsTestHelper {
         assertEquals(expectedUsage.getAnnualizedCopies(), actualUsage.getAnnualizedCopies());
         assertEquals(expectedUsage.getQuantity(), actualUsage.getQuantity());
         assertEquals(expectedUsage.isEditable(), actualUsage.isEditable());
+        assertEquals(expectedUsage.isWorkDeletedFlag(), actualUsage.isWorkDeletedFlag());
         assertEquals(expectedUsage.getCreateUser(), actualUsage.getCreateUser());
         assertEquals(expectedUsage.getUpdateUser(), actualUsage.getUpdateUser());
         if (isValidateDates) {
