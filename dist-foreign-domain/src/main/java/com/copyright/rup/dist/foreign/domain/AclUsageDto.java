@@ -42,6 +42,7 @@ public class AclUsageDto extends StoredEntity<String> {
     private BigDecimal annualizedCopies;
     private Long quantity;
     private boolean editable;
+    private boolean workDeletedFlag;
 
     public String getUsageBatchId() {
         return usageBatchId;
@@ -227,6 +228,14 @@ public class AclUsageDto extends StoredEntity<String> {
         this.editable = editable;
     }
 
+    public boolean isWorkDeletedFlag() {
+        return workDeletedFlag;
+    }
+
+    public void setWorkDeletedFlag(boolean workDeletedFlag) {
+        this.workDeletedFlag = workDeletedFlag;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -261,6 +270,7 @@ public class AclUsageDto extends StoredEntity<String> {
             .append(annualizedCopies, that.annualizedCopies)
             .append(quantity, that.quantity)
             .append(editable, that.editable)
+            .append(workDeletedFlag, that.workDeletedFlag)
             .isEquals();
     }
 
@@ -291,6 +301,7 @@ public class AclUsageDto extends StoredEntity<String> {
             .append(annualizedCopies)
             .append(quantity)
             .append(editable)
+            .append(workDeletedFlag)
             .toHashCode();
     }
 
@@ -321,6 +332,7 @@ public class AclUsageDto extends StoredEntity<String> {
             .append("annualizedCopies", annualizedCopies)
             .append("quantity", quantity)
             .append("editable", editable)
+            .append("workDeletedFlag", workDeletedFlag)
             .toString();
     }
 }

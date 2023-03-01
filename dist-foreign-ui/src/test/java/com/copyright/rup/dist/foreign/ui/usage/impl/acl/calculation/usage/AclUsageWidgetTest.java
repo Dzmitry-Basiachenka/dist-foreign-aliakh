@@ -244,7 +244,7 @@ public class AclUsageWidgetTest {
         Object[][] expectedCells = {
             {"48579d64-99b7-492a-975a-93c96499417a", 202012, UdmUsageOriginEnum.SS, UdmChannelEnum.CCC, "LUBRIZ0610EML",
                 122815600L, "Tribology international", 5, "Chemicals", 51, "Materials", "International", "SJ",
-                "6.0000000006", "3.0000000003", "2.0000000002", "N", "EMAIL_COPY", "DIGITAL", "1.00",
+                "6.0000000006", "3.0000000003", "2.0000000002", "N", "EMAIL_COPY", "DIGITAL", "1.00", "Y",
                 "user@copyright.com", "08/31/2022"}
         };
         verifyGridItems(grid, usages, expectedCells);
@@ -291,6 +291,7 @@ public class AclUsageWidgetTest {
             Triple.of("Reported TOU", 120.0, -1),
             Triple.of("TOU", 120.0, -1),
             Triple.of("Annualized Copies", 130.0, -1),
+            Triple.of("MDWMS Deleted", 120.0, -1),
             Triple.of("Updated By", 200.0, -1),
             Triple.of("Updated Date", 110.0, -1)));
         verifyGridFooter(grid);
@@ -359,6 +360,7 @@ public class AclUsageWidgetTest {
         usage.setReportedTypeOfUse("EMAIL_COPY");
         usage.setTypeOfUse("DIGITAL");
         usage.setAnnualizedCopies(new BigDecimal("1.00"));
+        usage.setWorkDeletedFlag(true);
         usage.setUpdateUser("user@copyright.com");
         usage.setUpdateDate(Date.from(LocalDate.of(2022, 8, 31).atStartOfDay(
             ZoneId.systemDefault()).toInstant()));

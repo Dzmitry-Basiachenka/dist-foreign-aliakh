@@ -187,6 +187,7 @@ public class AclUsageWidget extends HorizontalSplitPanel implements IAclUsageWid
             addColumn(AclUsageDto::getTypeOfUse, "table.column.tou", "typeOfUse", 120),
             addBigDecimalColumn(AclUsageDto::getAnnualizedCopies, "table.column.annualized_copies", "annualizedCopies",
                 130),
+            addBooleanColumn(AclUsageDto::isWorkDeletedFlag, "table.column.mdwms_deleted", "mdwmsDeleted", 120),
             addColumn(AclUsageDto::getUpdateUser, "table.column.updated_by", "updateUser", 200),
             addColumn(value -> toShortFormat(value.getUpdateDate()), "table.column.updated_date", "updateDate",
                 110));
