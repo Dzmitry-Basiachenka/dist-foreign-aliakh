@@ -12,4 +12,18 @@ databaseChangeLog {
             dropColumn(schemaName: dbAppsSchema, tableName: 'df_fund_pool', columnName: 'aclci_fields')
         }
     }
+
+    changeSet(id: '2023-03-01-00', author: 'Mikita Maistrenka <mmaistrenka@copyright.com>') {
+        comment("B-76925 FDA: Deleted works column for editing wrWrkInsts: add work_deleted_flag column to df_acl_usage table")
+
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_acl_usage') {
+            column(name: 'work_deleted_flag', type: 'BOOLEAN', defaultValue: false, remarks: 'Work was soft delete from MDWMS') {
+                constraints(nullable: false)
+            }
+        }
+
+        rollback {
+            dropColumn(schemaName: dbAppsSchema, tableName: 'df_acl_usage', columnName: 'work_deleted_flag')
+        }
+    }
 }
