@@ -90,7 +90,7 @@ public class FasNtsUsageFilterWidgetTest {
         expect(usagesFilterController.getSelectedProductFamily()).andReturn(FAS_PRODUCT_FAMILY).times(2);
         replay(usagesFilterController);
         assertSame(widget, widget.init());
-        assertEquals(2, widget.getComponentCount());
+        assertEquals(4, widget.getComponentCount());
         assertEquals(new MarginInfo(true), widget.getMargin());
         verifyFiltersLayout(widget.getComponent(0));
         verifyButtonsLayout(widget.getComponent(1));
@@ -101,10 +101,11 @@ public class FasNtsUsageFilterWidgetTest {
     public void testApplyFilter() {
         expect(usagesFilterController.getSelectedProductFamily()).andReturn(FAS_PRODUCT_FAMILY).times(4);
         expect(usagesFilterController.getFiscalYears()).andReturn(List.of(FISCAL_YEAR)).once();
+        expect(usagesFilterController.getRightsholdersByAccountNumbers(Set.of(ACCOUNT_NUMBER)))
+            .andReturn(List.of()).once();
         replay(usagesFilterController);
         widget.init();
         widget.clearFilter();
-        verify(usagesFilterController);
         Button applyButton = getApplyButton();
         assertFalse(applyButton.isEnabled());
         assertTrue(widget.getAppliedFilter().getRhAccountNumbers().isEmpty());
@@ -119,6 +120,7 @@ public class FasNtsUsageFilterWidgetTest {
         applyButton.click();
         assertFalse(applyButton.isEnabled());
         assertFalse(widget.getAppliedFilter().getRhAccountNumbers().isEmpty());
+        verify(usagesFilterController);
     }
 
     @Test
@@ -137,6 +139,8 @@ public class FasNtsUsageFilterWidgetTest {
     public void testClearFilter() {
         expect(usagesFilterController.getSelectedProductFamily()).andReturn(FAS_PRODUCT_FAMILY).times(4);
         expect(usagesFilterController.getFiscalYears()).andReturn(List.of(FISCAL_YEAR)).once();
+        expect(usagesFilterController.getRightsholdersByAccountNumbers(Set.of(ACCOUNT_NUMBER)))
+            .andReturn(List.of()).once();
         replay(usagesFilterController);
         widget.init();
         Button applyButton = getApplyButton();

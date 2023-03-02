@@ -1,7 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.calculation.grant;
 
 import com.copyright.rup.dist.foreign.domain.filter.AclGrantDetailFilter;
-import com.copyright.rup.dist.foreign.ui.usage.impl.acl.CommonAclAppliedFilterPanel;
+import com.copyright.rup.dist.foreign.ui.common.CommonAppliedFilterPanel;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.ui.VerticalLayout;
@@ -17,7 +17,7 @@ import org.apache.commons.lang3.StringUtils;
  *
  * @author Dzmitry Basiachenka
  */
-public class AclGrantDetailAppliedFilterWidget extends CommonAclAppliedFilterPanel {
+public class AclGrantDetailAppliedFilterWidget extends CommonAppliedFilterPanel {
 
     /**
      * Constructor.

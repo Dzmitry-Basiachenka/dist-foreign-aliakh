@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.ui.usage.impl.acl;
+package com.copyright.rup.dist.foreign.ui.common;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -20,7 +20,7 @@ import java.util.HashSet;
 import java.util.List;
 
 /**
- * Test for {@link CommonAclAppliedFilterPanel}.
+ * Test for {@link CommonAppliedFilterPanel}.
  * <p>
  * Copyright (C) 2021 copyright.com
  * <p>
@@ -28,9 +28,9 @@ import java.util.List;
  *
  * @author Anton Azarenka
  */
-public class CommonAclAppliedFilterPanelTest {
+public class CommonAppliedFilterPanelTest {
 
-    private final CommonAclAppliedFilterPanel filterPanel = new CommonAclAppliedFilterPanel() {};
+    private final CommonAppliedFilterPanel filterPanel = new CommonAppliedFilterPanel() {};
     private Label expectedLabel;
     private UdmUsageFilter udmUsageFilter;
 

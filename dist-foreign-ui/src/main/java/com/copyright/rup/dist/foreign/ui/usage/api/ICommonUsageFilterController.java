@@ -1,9 +1,11 @@
 package com.copyright.rup.dist.foreign.ui.usage.api;
 
+import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.vaadin.widget.api.IFilterController;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Interface for common controller for usage filtering.
@@ -29,4 +31,12 @@ public interface ICommonUsageFilterController extends IFilterController<ICommonU
      * @return list of {@link UsageBatch}es
      */
     List<UsageBatch> getUsageBatches();
+
+    /**
+     * Returns list of {@link Rightsholder}s with given account numbers.
+     *
+     * @param accountNumbers set of {@link Rightsholder}s account numbers
+     * @return list of {@link Rightsholder}s
+     */
+    List<Rightsholder> getRightsholdersByAccountNumbers(Set<Long> accountNumbers);
 }

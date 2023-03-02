@@ -105,4 +105,12 @@ public interface IRightsholderService extends ICommonRightsholderService {
      * @return list of {@link RightsholderPayeePair}s
      */
     List<RightsholderPayeePair> getRhPayeePairByScenarioId(String scenarioId);
+
+    /**
+     * Returns list of {@link Rightsholder}s with given account numbers.
+     *
+     * @param accountNumbers set of {@link Rightsholder}s account numbers
+     * @return list of {@link Rightsholder}s
+     */
+    List<Rightsholder> getRightsholdersByAccountNumbers(Set<Long> accountNumbers);
 }

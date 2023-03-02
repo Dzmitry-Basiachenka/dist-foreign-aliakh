@@ -3,9 +3,9 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.usage;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.UdmBatch;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
+import com.copyright.rup.dist.foreign.ui.common.CommonAppliedFilterPanel;
 import com.copyright.rup.dist.foreign.ui.common.utils.IDateFormatter;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageFilterController;
-import com.copyright.rup.dist.foreign.ui.usage.impl.acl.CommonAclAppliedFilterPanel;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.ui.VerticalLayout;
@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
  *
  * @author Anton Azarenka
  */
-public class UdmUsageAppliedFilterWidget extends CommonAclAppliedFilterPanel implements IDateFormatter {
+public class UdmUsageAppliedFilterWidget extends CommonAppliedFilterPanel implements IDateFormatter {
 
     private final IUdmUsageFilterController controller;
 

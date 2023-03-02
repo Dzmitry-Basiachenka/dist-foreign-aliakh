@@ -3,8 +3,8 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.aclci;
 import com.copyright.rup.dist.foreign.domain.AclciLicenseTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
+import com.copyright.rup.dist.foreign.ui.common.CommonAppliedFilterPanel;
 import com.copyright.rup.dist.foreign.ui.usage.api.aclci.IAclciUsageFilterController;
-import com.copyright.rup.dist.foreign.ui.usage.impl.acl.CommonAclAppliedFilterPanel;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.ui.VerticalLayout;
@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
  *
  * @author Mikita Maistrenka
  */
-public class AclciUsageAppliedFilterWidget extends CommonAclAppliedFilterPanel {
+public class AclciUsageAppliedFilterWidget extends CommonAppliedFilterPanel {
 
     private final IAclciUsageFilterController controller;
 
