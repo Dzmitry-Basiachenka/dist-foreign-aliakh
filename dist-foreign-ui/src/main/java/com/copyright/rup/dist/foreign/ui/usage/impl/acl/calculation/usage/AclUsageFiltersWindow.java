@@ -94,6 +94,8 @@ public class AclUsageFiltersWindow extends CommonAclFiltersWindow {
         buildNumericOperatorComboBox(NUMERIC_OPERATOR_ITEMS);
     private final ComboBox<FilterOperatorEnum> contentUnitPriceFlagComboBox =
         new ComboBox<>(ForeignUi.getMessage("label.content_unit_price_flag"));
+    private final ComboBox<FilterOperatorEnum> workDeletedFlagComboBox =
+        new ComboBox<>(ForeignUi.getMessage("label.mdwms_deleted"));
     private final TextField annualizedCopiesFromField =
         new TextField(ForeignUi.getMessage("label.annualized_copies_from"));
     private final TextField annualizedCopiesToField = new TextField(ForeignUi.getMessage("label.annualized_copies_to"));
@@ -135,7 +137,8 @@ public class AclUsageFiltersWindow extends CommonAclFiltersWindow {
         fieldsLayout.addComponents(initPeriodDetailLicenseeClassLayout(), initAggregateLicenseeClassPubTypeLayout(),
             initReportedTypeOfUseFilterWidget(), initUsageOriginChannelLayout(), initTypeOfUseComboBox(),
             initUsageDetailIdLayout(), initWrWrkInstLayout(), initSystemTitleLayout(), initSurveyCountryLayout(),
-            initContentUnitPriceLayout(), initContentUnitPriceFlagComboBox(), initAnnualizedCopiesLayout());
+            initContentUnitPriceLayout(), initContentUnitPriceFlagWorkDeletedFlagLayout(),
+            initAnnualizedCopiesLayout());
         filterBinder.readBean(usageFilter);
         filterBinder.validate();
         return buildRootLayout(fieldsLayout);
@@ -336,14 +339,31 @@ public class AclUsageFiltersWindow extends CommonAclFiltersWindow {
         return horizontalLayout;
     }
 
+    private HorizontalLayout initContentUnitPriceFlagWorkDeletedFlagLayout() {
+        HorizontalLayout horizontalLayout = new HorizontalLayout(initContentUnitPriceFlagComboBox(),
+            initWorkDeletedFlagComboBox());
+        horizontalLayout.setSizeFull();
+        return horizontalLayout;
+    }
+
     private ComboBox<FilterOperatorEnum> initContentUnitPriceFlagComboBox() {
         filterBinder.forField(contentUnitPriceFlagComboBox)
             .bind(filter -> filter.getContentUnitPriceFlagExpression().getOperator(),
                 (filter, value) -> filter.getContentUnitPriceFlagExpression().setOperator(value));
         populateFlagComboBox(contentUnitPriceFlagComboBox,
             usageFilter.getContentUnitPriceFlagExpression().getOperator(), "acl-usage-content-unit-price-flag-filter");
-        contentUnitPriceFlagComboBox.setWidth(50, Unit.PERCENTAGE);
+        contentUnitPriceFlagComboBox.setSizeFull();
         return contentUnitPriceFlagComboBox;
+    }
+
+    private ComboBox<FilterOperatorEnum> initWorkDeletedFlagComboBox() {
+        filterBinder.forField(workDeletedFlagComboBox)
+            .bind(filter -> filter.getWorkDeletedFlagExpression().getOperator(),
+                (filter, value) -> filter.getWorkDeletedFlagExpression().setOperator(value));
+        populateFlagComboBox(workDeletedFlagComboBox, usageFilter.getWorkDeletedFlagExpression().getOperator(),
+            "acl-work-deleted-flag-filter");
+        workDeletedFlagComboBox.setSizeFull();
+        return workDeletedFlagComboBox;
     }
 
     private HorizontalLayout initAnnualizedCopiesLayout() {

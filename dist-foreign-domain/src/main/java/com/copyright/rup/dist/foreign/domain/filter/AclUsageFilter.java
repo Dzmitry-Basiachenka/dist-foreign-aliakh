@@ -41,6 +41,7 @@ public class AclUsageFilter {
     private FilterExpression<String> surveyCountryExpression = new FilterExpression<>();
     private FilterExpression<Number> contentUnitPriceExpression = new FilterExpression<>();
     private FilterExpression<Boolean> contentUnitPriceFlagExpression = new FilterExpression<>();
+    private FilterExpression<Boolean> workDeletedFlagExpression = new FilterExpression<>();
     private FilterExpression<Number> annualizedCopiesExpression = new FilterExpression<>();
 
     /**
@@ -71,6 +72,7 @@ public class AclUsageFilter {
             setSurveyCountryExpression(new FilterExpression<>(filter.getSurveyCountryExpression()));
             setContentUnitPriceExpression(new FilterExpression<>(filter.getContentUnitPriceExpression()));
             setContentUnitPriceFlagExpression(new FilterExpression<>(filter.getContentUnitPriceFlagExpression()));
+            setWorkDeletedFlagExpression(new FilterExpression<>(filter.getWorkDeletedFlagExpression()));
             setAnnualizedCopiesExpression(new FilterExpression<>(filter.getAnnualizedCopiesExpression()));
         }
     }
@@ -203,6 +205,14 @@ public class AclUsageFilter {
         this.annualizedCopiesExpression = annualizedCopiesExpression;
     }
 
+    public FilterExpression<Boolean> getWorkDeletedFlagExpression() {
+        return workDeletedFlagExpression;
+    }
+
+    public void setWorkDeletedFlagExpression(FilterExpression<Boolean> workDeletedFlagExpression) {
+        this.workDeletedFlagExpression = workDeletedFlagExpression;
+    }
+
     /**
      * @return {@code true} if filter does not contain any criteria, otherwise {@code false}.
      */
@@ -222,6 +232,7 @@ public class AclUsageFilter {
             && surveyCountryExpression.isEmpty()
             && contentUnitPriceExpression.isEmpty()
             && contentUnitPriceFlagExpression.isEmpty()
+            && workDeletedFlagExpression.isEmpty()
             && annualizedCopiesExpression.isEmpty();
     }
 
@@ -250,6 +261,7 @@ public class AclUsageFilter {
             .append(surveyCountryExpression, that.surveyCountryExpression)
             .append(contentUnitPriceExpression, that.contentUnitPriceExpression)
             .append(contentUnitPriceFlagExpression, that.contentUnitPriceFlagExpression)
+            .append(workDeletedFlagExpression, that.workDeletedFlagExpression)
             .append(annualizedCopiesExpression, that.annualizedCopiesExpression)
             .isEquals();
     }
@@ -272,6 +284,7 @@ public class AclUsageFilter {
             .append(surveyCountryExpression)
             .append(contentUnitPriceExpression)
             .append(contentUnitPriceFlagExpression)
+            .append(workDeletedFlagExpression)
             .append(annualizedCopiesExpression)
             .toHashCode();
     }
@@ -294,6 +307,7 @@ public class AclUsageFilter {
             .append("surveyCountryExpression", surveyCountryExpression)
             .append("contentUnitPriceExpression", contentUnitPriceExpression)
             .append("contentUnitPriceFlagExpression", contentUnitPriceFlagExpression)
+            .append("workDeletedFlagExpression", workDeletedFlagExpression)
             .append("annualizedCopiesExpression", annualizedCopiesExpression)
             .toString();
     }

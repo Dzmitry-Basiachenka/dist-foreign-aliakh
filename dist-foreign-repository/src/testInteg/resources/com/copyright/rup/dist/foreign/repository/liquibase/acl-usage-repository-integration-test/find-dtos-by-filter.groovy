@@ -115,7 +115,7 @@ databaseChangeLog {
             column(name: 'reported_type_of_use', value: 'SHARE_PHOTOCOPIES')
             column(name: 'type_of_use', value: 'DIGITAL')
             column(name: 'annualized_copies', value: 3)
-            column(name: 'work_deleted_flag', value: false)
+            column(name: 'work_deleted_flag', value: true)
             column(name: 'created_by_user', value: 'user@copyright.com')
             column(name: 'updated_by_user', value: 'user@copyright.com')
             column(name: 'created_datetime', value: '2021-02-10 14:00:00+00')

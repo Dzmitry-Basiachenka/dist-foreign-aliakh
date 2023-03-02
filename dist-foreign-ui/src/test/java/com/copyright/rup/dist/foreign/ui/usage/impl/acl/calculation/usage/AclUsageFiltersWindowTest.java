@@ -257,7 +257,7 @@ public class AclUsageFiltersWindowTest {
         verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(8), "Survey Country");
         verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(9), "Content Unit Price From",
             "Content Unit Price To");
-        verifyComboBox(verticalLayout.getComponent(10), "CUP Flag", Unit.PERCENTAGE, 50, true , FLAG_ITEMS);
+        verifyComboBoxLayout(verticalLayout.getComponent(10), "CUP Flag", FLAG_ITEMS, "MDWMS Deleted", FLAG_ITEMS);
         verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(11), "Annualized Copies From",
             "Annualized Copies To");
     }
@@ -326,6 +326,7 @@ public class AclUsageFiltersWindowTest {
         filter.setContentUnitPriceExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, CONTENT_UNIT_PRICE, null));
         filter.setContentUnitPriceFlagExpression(CUP_FLAG);
+        filter.setWorkDeletedFlagExpression(new FilterExpression<>(FilterOperatorEnum.Y));
         filter.setAnnualizedCopiesExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, new BigDecimal("5.5"), null));
         return filter;
@@ -403,6 +404,7 @@ public class AclUsageFiltersWindowTest {
         assertTextFieldValue("contentUnitPriceFromField", CONTENT_UNIT_PRICE.toString());
         assertComboBoxValue("contentUnitPriceOperatorComboBox", FilterOperatorEnum.EQUALS);
         assertComboBoxValue("contentUnitPriceFlagComboBox", FilterOperatorEnum.N);
+        assertComboBoxValue("workDeletedFlagComboBox", FilterOperatorEnum.Y);
         assertTextFieldValue("annualizedCopiesFromField", "5.5");
         assertComboBoxValue("annualizedCopiesOperatorComboBox", FilterOperatorEnum.EQUALS);
     }
@@ -436,6 +438,7 @@ public class AclUsageFiltersWindowTest {
         populateTextField("contentUnitPriceFromField", CONTENT_UNIT_PRICE.toString());
         populateComboBox("contentUnitPriceOperatorComboBox", FilterOperatorEnum.EQUALS);
         populateComboBox("contentUnitPriceFlagComboBox", FilterOperatorEnum.N);
+        populateComboBox("workDeletedFlagComboBox", FilterOperatorEnum.Y);
         populateTextField("annualizedCopiesFromField", "5.5");
         populateComboBox("annualizedCopiesOperatorComboBox", FilterOperatorEnum.EQUALS);
     }
