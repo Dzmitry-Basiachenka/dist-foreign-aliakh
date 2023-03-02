@@ -29,11 +29,13 @@ public abstract class CommonUsageFilterWidget extends VerticalLayout implements 
     private Button applyButton;
     private UsageFilter usageFilter = new UsageFilter();
     private UsageFilter appliedUsageFilter = new UsageFilter();
+    private CommonUsageAppliedFilterWidget appliedFilterWidget;
 
     @Override
     @SuppressWarnings("unchecked")
     public CommonUsageFilterWidget init() {
-        addComponents(initFiltersLayout(), initButtonsLayout());
+        appliedFilterWidget = new CommonUsageAppliedFilterWidget(controller);
+        addComponents(initFiltersLayout(), initButtonsLayout(), buildAppliedFiltersHeaderLabel(), appliedFilterWidget);
         refreshFilter();
         VaadinUtils.setMaxComponentsWidth(this);
         VaadinUtils.addComponentStyle(this, "usages-filter-widget");
@@ -43,6 +45,7 @@ public abstract class CommonUsageFilterWidget extends VerticalLayout implements 
     @Override
     public void applyFilter() {
         appliedUsageFilter = new UsageFilter(usageFilter);
+        appliedFilterWidget.refreshFilterPanel(appliedUsageFilter);
         filterChanged();
         fireEvent(new FilterChangedEvent(this));
     }
@@ -116,5 +119,11 @@ public abstract class CommonUsageFilterWidget extends VerticalLayout implements 
         VaadinUtils.setMaxComponentsWidth(horizontalLayout, applyButton, clearButton);
         VaadinUtils.addComponentStyle(horizontalLayout, "filter-buttons");
         return horizontalLayout;
+    }
+
+    private Label buildAppliedFiltersHeaderLabel() {
+        Label appliedFilterHeaderLabel = new Label(ForeignUi.getMessage("label.applied_filters"));
+        appliedFilterHeaderLabel.addStyleNames(Cornerstone.LABEL_H2, "acl-applied-filter-header");
+        return appliedFilterHeaderLabel;
     }
 }

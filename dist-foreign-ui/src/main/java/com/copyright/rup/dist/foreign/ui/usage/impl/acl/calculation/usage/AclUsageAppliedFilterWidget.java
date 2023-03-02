@@ -4,7 +4,7 @@ import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.filter.AclUsageFilter;
-import com.copyright.rup.dist.foreign.ui.usage.impl.acl.CommonAclAppliedFilterPanel;
+import com.copyright.rup.dist.foreign.ui.common.CommonAppliedFilterPanel;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.ui.VerticalLayout;
@@ -20,7 +20,7 @@ import org.apache.commons.lang3.StringUtils;
  *
  * @author Aliaksandr Liakh
  */
-public class AclUsageAppliedFilterWidget extends CommonAclAppliedFilterPanel {
+public class AclUsageAppliedFilterWidget extends CommonAppliedFilterPanel {
 
     /**
      * Constructor.

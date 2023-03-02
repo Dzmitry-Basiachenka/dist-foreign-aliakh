@@ -128,6 +128,11 @@ public class RightsholderService extends CommonRightsholderService implements IR
         return rightsholderRepository.findRhPayeePairByScenarioId(scenarioId);
     }
 
+    @Override
+    public List<Rightsholder> getRightsholdersByAccountNumbers(Set<Long> accountNumbers) {
+        return rightsholderRepository.findByAccountNumbers(accountNumbers);
+    }
+
     /**
      * Gets instance of {@link ExecutorService} with 2 threads.
      * Used for sending usages to queues to process them.

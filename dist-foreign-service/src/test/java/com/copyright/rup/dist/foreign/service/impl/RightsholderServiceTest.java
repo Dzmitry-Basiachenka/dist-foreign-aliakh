@@ -151,6 +151,18 @@ public class RightsholderServiceTest {
         PowerMock.verify(rightsholderRepository);
     }
 
+    @Test
+    public void testGetRightsholdersByAccountNumbers() {
+        List<Rightsholder> rightsholders =
+            List.of(buildRightsholder(ACCOUNT_NUMBER_1), buildRightsholder(ACCOUNT_NUMBER_2));
+        expect(rightsholderRepository.findByAccountNumbers(Set.of(ACCOUNT_NUMBER_1, ACCOUNT_NUMBER_2)))
+            .andReturn(rightsholders).once();
+        PowerMock.replay(rightsholderRepository);
+        assertEquals(rightsholders, rightsholderService.getRightsholdersByAccountNumbers(
+            Set.of(ACCOUNT_NUMBER_1, ACCOUNT_NUMBER_2)));
+        PowerMock.verify(rightsholderRepository);
+    }
+
     private Rightsholder buildRightsholder(Long accountNumber) {
         Rightsholder rightsholder = new Rightsholder();
         rightsholder.setAccountNumber(accountNumber);

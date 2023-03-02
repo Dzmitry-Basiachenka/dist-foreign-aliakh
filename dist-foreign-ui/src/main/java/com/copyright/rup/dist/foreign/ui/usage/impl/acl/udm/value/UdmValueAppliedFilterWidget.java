@@ -2,7 +2,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.value;
 
 import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.filter.UdmValueFilter;
-import com.copyright.rup.dist.foreign.ui.usage.impl.acl.CommonAclAppliedFilterPanel;
+import com.copyright.rup.dist.foreign.ui.common.CommonAppliedFilterPanel;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.ui.VerticalLayout;
@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
  *
  * @author Anton Azarenka
  */
-public class UdmValueAppliedFilterWidget extends CommonAclAppliedFilterPanel {
+public class UdmValueAppliedFilterWidget extends CommonAppliedFilterPanel {
 
     private static final String NULL = "NULL";
 

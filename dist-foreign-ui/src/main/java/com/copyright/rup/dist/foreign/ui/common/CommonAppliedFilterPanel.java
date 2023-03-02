@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.ui.usage.impl.acl;
+package com.copyright.rup.dist.foreign.ui.common;
 
 import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
@@ -34,14 +34,14 @@ import java.util.stream.Collectors;
  *
  * @author Anton Azarenka
  */
-public abstract class CommonAclAppliedFilterPanel extends Panel {
+public abstract class CommonAppliedFilterPanel extends Panel {
 
     private static final String LIST_SEPARATOR = ", ";
 
     /**
      * Constructor.
      */
-    public CommonAclAppliedFilterPanel() {
+    public CommonAppliedFilterPanel() {
         initLayout();
     }
 

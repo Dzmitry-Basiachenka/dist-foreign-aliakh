@@ -3,7 +3,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl.calculation.fundpool;
 import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.filter.AclFundPoolDetailFilter;
-import com.copyright.rup.dist.foreign.ui.usage.impl.acl.CommonAclAppliedFilterPanel;
+import com.copyright.rup.dist.foreign.ui.common.CommonAppliedFilterPanel;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.ui.VerticalLayout;
@@ -17,7 +17,7 @@ import com.vaadin.ui.VerticalLayout;
  *
  * @author Mikita Maistrenka
  */
-public class AclFundPoolAppliedFilterWidget extends CommonAclAppliedFilterPanel {
+public class AclFundPoolAppliedFilterWidget extends CommonAppliedFilterPanel {
 
     /**
      * Constructor.

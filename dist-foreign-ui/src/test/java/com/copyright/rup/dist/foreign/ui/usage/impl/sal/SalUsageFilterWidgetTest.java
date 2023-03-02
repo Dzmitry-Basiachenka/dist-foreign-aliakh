@@ -46,6 +46,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -83,7 +84,7 @@ public class SalUsageFilterWidgetTest {
         expect(usagesFilterController.getSelectedProductFamily()).andReturn(SAL_PRODUCT_FAMILY).once();
         replay(usagesFilterController);
         assertSame(widget, widget.init());
-        assertEquals(2, widget.getComponentCount());
+        assertEquals(4, widget.getComponentCount());
         assertEquals(new MarginInfo(true), widget.getMargin());
         verifyFiltersLayout(widget.getComponent(0));
         verifyButtonsLayout(widget.getComponent(1));
@@ -93,10 +94,11 @@ public class SalUsageFilterWidgetTest {
     @Test
     public void testApplyFilter() {
         expect(usagesFilterController.getSelectedProductFamily()).andReturn(SAL_PRODUCT_FAMILY).times(2);
+        expect(usagesFilterController.getRightsholdersByAccountNumbers(Set.of(ACCOUNT_NUMBER)))
+            .andReturn(List.of()).once();
         replay(usagesFilterController);
         widget.init();
         widget.clearFilter();
-        verify(usagesFilterController);
         Button applyButton = getApplyButton();
         assertFalse(applyButton.isEnabled());
         assertTrue(widget.getAppliedFilter().getRhAccountNumbers().isEmpty());
@@ -111,6 +113,7 @@ public class SalUsageFilterWidgetTest {
         applyButton.click();
         assertFalse(applyButton.isEnabled());
         assertFalse(widget.getAppliedFilter().getRhAccountNumbers().isEmpty());
+        verify(usagesFilterController);
     }
 
     @Test

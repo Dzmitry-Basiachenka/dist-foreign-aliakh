@@ -1,8 +1,8 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl.acl.calculation;
 
 import com.copyright.rup.dist.foreign.domain.filter.AclScenarioFilter;
+import com.copyright.rup.dist.foreign.ui.common.CommonAppliedFilterPanel;
 import com.copyright.rup.dist.foreign.ui.common.utils.BooleanUtils;
-import com.copyright.rup.dist.foreign.ui.usage.impl.acl.CommonAclAppliedFilterPanel;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.ui.VerticalLayout;
@@ -16,7 +16,7 @@ import com.vaadin.ui.VerticalLayout;
  *
  * @author Mikita Maistrenka
  */
-public class AclScenariosAppliedFilterWidget extends CommonAclAppliedFilterPanel {
+public class AclScenariosAppliedFilterWidget extends CommonAppliedFilterPanel {
 
     /**
      * Constructor.

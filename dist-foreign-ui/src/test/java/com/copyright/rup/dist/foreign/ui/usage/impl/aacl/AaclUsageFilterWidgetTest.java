@@ -82,7 +82,7 @@ public class AaclUsageFilterWidgetTest {
         expect(usagesFilterController.getSelectedProductFamily()).andReturn(AACL_PRODUCT_FAMILY).once();
         replay(usagesFilterController);
         assertSame(widget, widget.init());
-        assertEquals(2, widget.getComponentCount());
+        assertEquals(4, widget.getComponentCount());
         assertEquals(new MarginInfo(true), widget.getMargin());
         verifyFiltersLayout(widget.getComponent(0));
         verifyButtonsLayout(widget.getComponent(1), "Apply", "Clear");
@@ -93,10 +93,11 @@ public class AaclUsageFilterWidgetTest {
     public void testApplyFilter() {
         expect(usagesFilterController.getUsagePeriods()).andReturn(List.of(USAGE_PERIOD)).times(2);
         expect(usagesFilterController.getSelectedProductFamily()).andReturn(AACL_PRODUCT_FAMILY).times(2);
+        expect(usagesFilterController.getRightsholdersByAccountNumbers(Set.of(ACCOUNT_NUMBER)))
+            .andReturn(List.of()).once();
         replay(usagesFilterController);
         widget.init();
         widget.clearFilter();
-        verify(usagesFilterController);
         Button applyButton = getApplyButton();
         assertFalse(applyButton.isEnabled());
         assertTrue(widget.getAppliedFilter().getRhAccountNumbers().isEmpty());
@@ -111,6 +112,7 @@ public class AaclUsageFilterWidgetTest {
         applyButton.click();
         assertFalse(applyButton.isEnabled());
         assertFalse(widget.getAppliedFilter().getRhAccountNumbers().isEmpty());
+        verify(usagesFilterController);
     }
 
     @Test
@@ -130,6 +132,8 @@ public class AaclUsageFilterWidgetTest {
     public void testClearFilter() {
         expect(usagesFilterController.getUsagePeriods()).andReturn(List.of(USAGE_PERIOD)).times(2);
         expect(usagesFilterController.getSelectedProductFamily()).andReturn(AACL_PRODUCT_FAMILY).times(2);
+        expect(usagesFilterController.getRightsholdersByAccountNumbers(Set.of(ACCOUNT_NUMBER)))
+            .andReturn(List.of()).once();
         replay(usagesFilterController);
         widget.init();
         Button applyButton = getApplyButton();
