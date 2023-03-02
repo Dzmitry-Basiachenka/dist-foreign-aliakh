@@ -67,6 +67,8 @@ public class AclUsageAppliedFilterWidget extends CommonAclAppliedFilterPanel {
             addLabel(createLabelWithSingleValue(aclUsageFilter -> convertFilterOperatorToString(
                 aclUsageFilter.getContentUnitPriceFlagExpression().getOperator()), filter,
                 "label.content_unit_price_flag"), layout);
+            addLabel(createLabelWithSingleValue(aclUsageFilter -> convertFilterOperatorToString(
+                aclUsageFilter.getWorkDeletedFlagExpression().getOperator()), filter, "label.mdwms_deleted"), layout);
             addLabel(createLabelWithOperator(filter.getAnnualizedCopiesExpression(), "label.annualized_copies_from",
                 "label.annualized_copies_to"), layout);
         }

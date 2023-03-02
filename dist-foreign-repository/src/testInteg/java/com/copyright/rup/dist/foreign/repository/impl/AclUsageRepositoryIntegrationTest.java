@@ -170,6 +170,7 @@ public class AclUsageRepositoryIntegrationTest extends CsvReportsTestHelper {
         filter.setSurveyCountryExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, SURVEY_COUNTRY, null));
         filter.setContentUnitPriceExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 10, null));
         filter.setContentUnitPriceFlagExpression(new FilterExpression<>(FilterOperatorEnum.Y));
+        filter.setWorkDeletedFlagExpression(new FilterExpression<>(FilterOperatorEnum.Y));
         filter.setAnnualizedCopiesExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 1, null));
         assertEquals(1, aclUsageRepository.findCountByFilter(filter));
     }
@@ -358,6 +359,15 @@ public class AclUsageRepositoryIntegrationTest extends CsvReportsTestHelper {
 
     @Test
     @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindCountByFilterWorkDeletedFlag() {
+        assertFilteringFindCountByFilter(filter -> filter.setWorkDeletedFlagExpression(
+            new FilterExpression<>(FilterOperatorEnum.Y)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setWorkDeletedFlagExpression(
+            new FilterExpression<>(FilterOperatorEnum.N)), 2);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindCountByFilterAnnualizedCopies() {
         assertFilteringFindCountByFilter(filter -> filter.setAnnualizedCopiesExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, ANNUALIZED_COPIES_1, null)), 1);
@@ -394,6 +404,7 @@ public class AclUsageRepositoryIntegrationTest extends CsvReportsTestHelper {
         filter.setSurveyCountryExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, SURVEY_COUNTRY, null));
         filter.setContentUnitPriceExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 10, null));
         filter.setContentUnitPriceFlagExpression(new FilterExpression<>(FilterOperatorEnum.Y));
+        filter.setWorkDeletedFlagExpression(new FilterExpression<>(FilterOperatorEnum.Y));
         filter.setAnnualizedCopiesExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 1, null));
         List<AclUsageDto> values = aclUsageRepository.findDtosByFilter(filter, null, buildSort());
         assertEquals(1, values.size());
@@ -633,6 +644,15 @@ public class AclUsageRepositoryIntegrationTest extends CsvReportsTestHelper {
             new FilterExpression<>(FilterOperatorEnum.Y)), ACL_USAGE_UID_2);
         assertFilteringFindDtosByFilter(filter -> filter.setContentUnitPriceFlagExpression(
             new FilterExpression<>(FilterOperatorEnum.N)), ACL_USAGE_UID_3, ACL_USAGE_UID_4, ACL_USAGE_UID_5);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindDtosByFilterWorkDeletedFlag() {
+        assertFilteringFindDtosByFilter(filter -> filter.setWorkDeletedFlagExpression(
+            new FilterExpression<>(FilterOperatorEnum.Y)), ACL_USAGE_UID_2, ACL_USAGE_UID_4);
+        assertFilteringFindDtosByFilter(filter -> filter.setWorkDeletedFlagExpression(
+            new FilterExpression<>(FilterOperatorEnum.N)), ACL_USAGE_UID_3, ACL_USAGE_UID_5);
     }
 
     @Test

@@ -47,7 +47,7 @@ public class AclUsageAppliedFilterWidgetTest {
         Component component = widget.getContent();
         assertThat(component, instanceOf(VerticalLayout.class));
         VerticalLayout verticalLayout = (VerticalLayout) component;
-        assertEquals(16, verticalLayout.getComponentCount());
+        assertEquals(17, verticalLayout.getComponentCount());
         verifyLabel(verticalLayout.getComponent(0), "Usage Batch Name", "ACL Usage Batch 2021");
         verifyLabel(verticalLayout.getComponent(1), "Periods", "202212, 202112, 201506");
         verifyLabel(verticalLayout.getComponent(2), "Detail Licensee Classes",
@@ -66,7 +66,8 @@ public class AclUsageAppliedFilterWidgetTest {
         verifyLabel(verticalLayout.getComponent(12), "Survey Country", "DOES_NOT_EQUAL", "Portugal");
         verifyLabel(verticalLayout.getComponent(13), "Content Unit Price From", "GREATER_THAN", "1");
         verifyLabel(verticalLayout.getComponent(14), "CUP Flag", "N");
-        verifyLabel(verticalLayout.getComponent(15), "Annualized Copies From", "LESS_THAN", "2");
+        verifyLabel(verticalLayout.getComponent(15), "MDWMS Deleted", "Y");
+        verifyLabel(verticalLayout.getComponent(16), "Annualized Copies From", "LESS_THAN", "2");
     }
 
     private void verifyLabel(Component component, String labelName, String labelValue) {
@@ -110,6 +111,7 @@ public class AclUsageAppliedFilterWidgetTest {
         filter.setSurveyCountryExpression(new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, "Portugal", null));
         filter.setContentUnitPriceExpression(new FilterExpression<>(FilterOperatorEnum.GREATER_THAN, 1, null));
         filter.setContentUnitPriceFlagExpression(new FilterExpression<>(FilterOperatorEnum.N));
+        filter.setWorkDeletedFlagExpression(new FilterExpression<>(FilterOperatorEnum.Y));
         filter.setAnnualizedCopiesExpression(new FilterExpression<>(FilterOperatorEnum.LESS_THAN, 2, null));
         return filter;
     }

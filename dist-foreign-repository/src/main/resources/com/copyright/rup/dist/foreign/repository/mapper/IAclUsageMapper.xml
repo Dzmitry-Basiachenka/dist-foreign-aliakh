@@ -224,6 +224,12 @@
                 <property name="operator" value="filter.contentUnitPriceFlagExpression.operator"/>
             </include>
         </if>
+        <if test="!filter.workDeletedFlagExpression.isEmpty()">
+            <include refid="IUdmCommonMapper.booleanFieldFilterExpression">
+                <property name="column" value="u.work_deleted_flag"/>
+                <property name="operator" value="filter.workDeletedFlagExpression.operator"/>
+            </include>
+        </if>
         <if test="!filter.annualizedCopiesExpression.isEmpty()">
             <include refid="IUdmCommonMapper.numericFieldFilterExpression">
                 <property name="column" value="u.annualized_copies"/>
