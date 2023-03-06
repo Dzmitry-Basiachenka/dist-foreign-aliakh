@@ -56,9 +56,9 @@ public class PiIntegrationService implements IPiIntegrationService {
     private List<String> nodes;
     @Value("$RUP{dist.foreign.pi.index}")
     private String piIndex;
-    @Value("$RUP{inventory.index.search.ldap.username}")
+    @Value("$RUP{dist.foreign.search.ldap.username}")
     private String username;
-    @Value("$RUP{inventory.index.search.ldap.password}")
+    @Value("$RUP{dist.foreign.search.ldap.password}")
     private String password;
 
     private ObjectMapper mapper;
