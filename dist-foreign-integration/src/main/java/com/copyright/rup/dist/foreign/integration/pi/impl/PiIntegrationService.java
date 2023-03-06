@@ -14,16 +14,18 @@ import com.copyright.rup.es.api.request.RupSearchRequest;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Iterables;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.lucene.queryparser.classic.QueryParser;
-import org.elasticsearch.ElasticsearchException;
+import org.opensearch.OpenSearchException;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -54,6 +56,10 @@ public class PiIntegrationService implements IPiIntegrationService {
     private List<String> nodes;
     @Value("$RUP{dist.foreign.pi.index}")
     private String piIndex;
+    @Value("$RUP{inventory.index.search.ldap.username}")
+    private String username;
+    @Value("$RUP{inventory.index.search.ldap.password}")
+    private String password;
 
     private ObjectMapper mapper;
     private RupEsApi rupEsApi;
@@ -91,7 +97,8 @@ public class PiIntegrationService implements IPiIntegrationService {
      */
     protected RupEsApi getRupEsApi() {
         if (Objects.isNull(rupEsApi)) {
-            rupEsApi = RupEsApi.of(cluster, Iterables.toArray(nodes, String.class));
+            Map<String, String> credentialsMap = Map.of(RupEsApi.USERNAME, username, RupEsApi.PASSWORD, password);
+            rupEsApi = RupEsApi.of(cluster, credentialsMap, Iterables.toArray(nodes, String.class));
         }
         return rupEsApi;
     }
@@ -212,7 +219,7 @@ public class PiIntegrationService implements IPiIntegrationService {
         request.setFetchSource(true);
         try {
             return getRupEsApi().search(request);
-        } catch (RupEsApiRuntimeException | ElasticsearchException e) {
+        } catch (RupEsApiRuntimeException | OpenSearchException e) {
             throw new RupRuntimeException("Unable to connect to RupEsApi", e);
         }
     }
