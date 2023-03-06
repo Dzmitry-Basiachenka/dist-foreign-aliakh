@@ -1,3 +1,15 @@
+17.0.9
+-
+* B-76925 FDA: Deleted works column for editing wrwrkinsts: implement Liquibase script to add isDeletedFlag
+* B-76925 FDA: Deleted works column for editing wrwrkinsts: add column MDWMS Deleted on UI
+* B-76925 FDA: Deleted works column for editing wrwrkinsts: add filter and applied filter functionality for MDWMS Deleted
+* B-76925 FDA: Deleted works column for editing wrwrkinsts: add property for dpdel PI index
+* B-76696 FDA: Migration to Open Search: migrate from ES to OpenSearch
+* B-76696 FDA: Migration to Open Search: rename credentials properties for OpenSearch
+* B-77141 FDA: Display all filtered criteria for filters: add display applied filters on Usage tab for FAS/FAS2, NTS, AACL, SAL
+* B-77992 Tech Debt: FDA: fix sorting by status in Update Usages grids
+* B-77992 Tech Debt: FDA: refine width of system title column in  update usages windows for FAS, SAL, ACLCI
+
 17.0.8
 -
 * B-78452 FDA: Adjust system to receive array for Market from RMS: change tests and test data that represents RMS responses
