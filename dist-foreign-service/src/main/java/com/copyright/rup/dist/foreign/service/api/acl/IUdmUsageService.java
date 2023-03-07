@@ -191,4 +191,12 @@ public interface IUdmUsageService {
      * @return threshold value for size of UDM records.
      */
     int getUdmRecordThreshold();
+
+    /**
+     * Gets wrWrkInsts of UDM usage which was published to baseline by periods.
+     *
+     * @param periods periods
+     * @return set of wrWrkInsts
+     */
+    Set<Long> getWrWrkInstPublishedToBaselineUdmUsages(Set<Integer> periods);
 }

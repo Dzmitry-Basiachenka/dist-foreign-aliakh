@@ -1571,6 +1571,15 @@ public class UdmUsageRepositoryIntegrationTest {
             .count());
     }
 
+    @Test
+    @TestData(fileName = FOLDER_NAME + "published-to-baseline-udm-usages.groovy")
+    public void testFindWrWrkInstPublishedToBaselineUdmUsages() {
+        Set<Long> expectedWrWrkInsts = Set.of(306985867L, 132979400L, 246798539L);
+        Set<Long> actualWrWrkInsts =
+            udmUsageRepository.findWrWrkInstPublishedToBaselineUdmUsages(Set.of(202106, 202206));
+        assertEquals(expectedWrWrkInsts, actualWrWrkInsts);
+    }
+
     private void verifyFindBySearchValue(String searchValue, String... udmUsageIds) {
         List<String> expectedUdmUsageIds = Arrays.stream(udmUsageIds)
             .sorted()

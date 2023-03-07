@@ -146,4 +146,12 @@ public interface IUdmUsageRepository {
      * @return set of UDM usage ids
      */
     Set<String> publishUdmUsagesToBaseline(Integer period, String userName);
+
+    /**
+     * Finds wrWrkInsts of UDM usage which was published to baseline by periods.
+     *
+     * @param periods periods
+     * @return set of wrWrkInsts
+     */
+    Set<Long> findWrWrkInstPublishedToBaselineUdmUsages(Set<Integer> periods);
 }

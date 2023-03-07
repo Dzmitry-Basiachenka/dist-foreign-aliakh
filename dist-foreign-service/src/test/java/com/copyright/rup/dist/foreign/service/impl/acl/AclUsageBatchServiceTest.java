@@ -15,9 +15,11 @@ import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.AclUsageBatch;
+import com.copyright.rup.dist.foreign.integration.pi.api.IPiDeletedWorkIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.IAclUsageBatchRepository;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageService;
+import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageService;
 
 import com.google.common.collect.Sets;
 
@@ -30,6 +32,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Verifies {@link AclUsageBatchService}.
@@ -51,14 +54,20 @@ public class AclUsageBatchServiceTest {
     private IAclUsageBatchService aclUsageBatchService;
     private IAclUsageBatchRepository aclUsageBatchRepository;
     private IAclUsageService aclUsageService;
+    private IPiDeletedWorkIntegrationService piIntegrationService;
+    private IUdmUsageService udmUsageService;
 
     @Before
     public void setUp() {
         aclUsageBatchService = new AclUsageBatchService();
+        udmUsageService = createMock(IUdmUsageService.class);
+        piIntegrationService = createMock(IPiDeletedWorkIntegrationService.class);
         aclUsageBatchRepository = createMock(IAclUsageBatchRepository.class);
         aclUsageService = createMock(IAclUsageService.class);
         Whitebox.setInternalState(aclUsageBatchService, aclUsageBatchRepository);
         Whitebox.setInternalState(aclUsageBatchService, aclUsageService);
+        Whitebox.setInternalState(aclUsageBatchService, udmUsageService);
+        Whitebox.setInternalState(aclUsageBatchService, piIntegrationService);
     }
 
     @Test
@@ -70,21 +79,47 @@ public class AclUsageBatchServiceTest {
     }
 
     @Test
-    public void testInsert() {
+    public void testInsertWithSoftDeletedWork() {
         mockStatic(RupContextUtils.class);
         AclUsageBatch usageBatch = buildAclUsageBatch();
+        Set<Long> wrWrkInsts = Set.of(137133077L);
         Capture<String> usageBatchIdCapture = newCapture();
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
+        expect(udmUsageService.getWrWrkInstPublishedToBaselineUdmUsages(usageBatch.getPeriods()))
+            .andReturn(wrWrkInsts).once();
+        expect(piIntegrationService.isDeletedWork(137133077L)).andReturn(true).once();
         aclUsageBatchRepository.insert(usageBatch);
         expectLastCall().once();
         expect(aclUsageService.populateAclUsages(capture(usageBatchIdCapture), eq(usageBatch.getPeriods()),
-            eq(USER_NAME))).andReturn(1).once();
-        replay(RupContextUtils.class, aclUsageBatchRepository, aclUsageService);
+            eq(USER_NAME), eq(wrWrkInsts))).andReturn(1).once();
+        replay(RupContextUtils.class, aclUsageBatchRepository, aclUsageService, udmUsageService, piIntegrationService);
         assertEquals(1, aclUsageBatchService.insert(usageBatch));
         assertEquals(usageBatch.getId(), usageBatchIdCapture.getValue());
         assertEquals(usageBatch.getCreateUser(), USER_NAME);
         assertEquals(usageBatch.getUpdateUser(), USER_NAME);
-        verify(RupContextUtils.class, aclUsageBatchRepository, aclUsageService);
+        verify(RupContextUtils.class, aclUsageBatchRepository, aclUsageService, udmUsageService, piIntegrationService);
+    }
+
+    @Test
+    public void testInsert() {
+        mockStatic(RupContextUtils.class);
+        AclUsageBatch usageBatch = buildAclUsageBatch();
+        Set<Long> wrWrkInsts = Set.of(122581113L);
+        Capture<String> usageBatchIdCapture = newCapture();
+        expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
+        expect(udmUsageService.getWrWrkInstPublishedToBaselineUdmUsages(usageBatch.getPeriods()))
+            .andReturn(wrWrkInsts).once();
+        expect(piIntegrationService.isDeletedWork(122581113L)).andReturn(false).once();
+        aclUsageBatchRepository.insert(usageBatch);
+        expectLastCall().once();
+        expect(aclUsageService.populateAclUsages(capture(usageBatchIdCapture), eq(usageBatch.getPeriods()),
+            eq(USER_NAME), eq(Set.of()))).andReturn(1).once();
+        replay(RupContextUtils.class, aclUsageBatchRepository, aclUsageService, udmUsageService, piIntegrationService);
+        assertEquals(1, aclUsageBatchService.insert(usageBatch));
+        assertEquals(usageBatch.getId(), usageBatchIdCapture.getValue());
+        assertEquals(usageBatch.getCreateUser(), USER_NAME);
+        assertEquals(usageBatch.getUpdateUser(), USER_NAME);
+        verify(RupContextUtils.class, aclUsageBatchRepository, aclUsageService, udmUsageService, piIntegrationService);
     }
 
     @Test

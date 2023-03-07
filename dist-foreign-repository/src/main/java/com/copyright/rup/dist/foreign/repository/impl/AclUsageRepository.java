@@ -38,12 +38,14 @@ public class AclUsageRepository extends AclBaseRepository implements IAclUsageRe
     private static final String CREATE_USER = "createUser";
 
     @Override
-    public List<String> populateAclUsages(String usageBatchId, Set<Integer> periods, String userName) {
-        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(4);
+    public List<String> populateAclUsages(String usageBatchId, Set<Integer> periods, String userName,
+                                          Set<Long> wrWrkInsts) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(5);
         parameters.put("usageBatchId", Objects.requireNonNull(usageBatchId));
         parameters.put("periods", Objects.requireNonNull(periods));
         parameters.put(UPDATE_USER, Objects.requireNonNull(userName));
         parameters.put(CREATE_USER, userName);
+        parameters.put("wrWrkInsts", wrWrkInsts);
         return selectList("IAclUsageMapper.populateAclUsages", parameters);
     }
 

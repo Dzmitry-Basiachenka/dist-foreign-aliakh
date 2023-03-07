@@ -120,11 +120,29 @@ public class AclUsageRepositoryIntegrationTest extends CsvReportsTestHelper {
     public void testPopulateAclUsages() {
         String usageBatchId = "1fa04580-af0a-4c57-8470-37ae9c06bea1";
         Set<Integer> periods = Sets.newHashSet(202106, 202112);
-        List<String> usageIds = aclUsageRepository.populateAclUsages(usageBatchId, periods, USER_NAME);
+        Set<Long> wrkWrkInsts = Set.of(306985867L);
+        List<String> usageIds = aclUsageRepository.populateAclUsages(usageBatchId, periods, USER_NAME, wrkWrkInsts);
         assertEquals(2, usageIds.size());
         List<AclUsageDto> actualUsages = aclUsageRepository.findByIds(usageIds);
         assertEquals(2, actualUsages.size());
         List<AclUsageDto> expectedUsages = loadExpectedDtos("json/acl/acl_usage_dto.json");
+        IntStream.range(0, 2).forEach(i -> {
+            AclUsageDto expectedUsage = expectedUsages.get(i);
+            expectedUsage.setId(usageIds.get(i));
+            verifyAclUsageDto(expectedUsage, actualUsages.get(i), false);
+        });
+    }
+
+    @Test
+    @TestData(fileName = FOLDER_NAME + "populate-acl-usages-without-soft-deleted-works.groovy")
+    public void testPopulateAclUsagesWithoutSoftDeletedWorks() {
+        String usageBatchId = "72ebe159-c40f-4b61-923d-a58b170aad9e";
+        Set<Integer> periods = Sets.newHashSet(202106, 202112);
+        List<String> usageIds = aclUsageRepository.populateAclUsages(usageBatchId, periods, USER_NAME, Set.of());
+        assertEquals(2, usageIds.size());
+        List<AclUsageDto> actualUsages = aclUsageRepository.findByIds(usageIds);
+        assertEquals(2, actualUsages.size());
+        List<AclUsageDto> expectedUsages = loadExpectedDtos("json/acl/acl_usage_dto_without_soft_deleted_works.json");
         IntStream.range(0, 2).forEach(i -> {
             AclUsageDto expectedUsage = expectedUsages.get(i);
             expectedUsage.setId(usageIds.get(i));

@@ -68,9 +68,11 @@ public class AclUsageServiceTest {
         Set<Integer> periods = Set.of(202106);
         String userName = "user@copyright.com";
         List<String> usageIds = List.of("8b705e49-85fe-4851-a051-08109d159c7d");
-        expect(aclUsageRepository.populateAclUsages(usageBatchId, periods, userName)).andReturn(usageIds).once();
+        Set<Long> wrWrkInsts = Set.of(137133077L);
+        expect(aclUsageRepository.populateAclUsages(usageBatchId, periods, userName, wrWrkInsts))
+            .andReturn(usageIds).once();
         replay(aclUsageRepository);
-        assertEquals(usageIds.size(), aclUsageService.populateAclUsages(usageBatchId, periods, userName));
+        assertEquals(usageIds.size(), aclUsageService.populateAclUsages(usageBatchId, periods, userName, wrWrkInsts));
         verify(aclUsageRepository);
     }
 

@@ -26,11 +26,12 @@ public interface IAclUsageService {
      * Populates ACL usages from UDM usages and UDM values and inserts them.
      *
      * @param usageBatchId id of the {@link com.copyright.rup.dist.foreign.domain.AclUsageBatch}
-     * @param periods      periods
-     * @param userName     user name
+     * @param periods    periods
+     * @param userName   user name
+     * @param wrWrkInsts wrWrkInsts of soft deleted works
      * @return count of inserted ACL usages
      */
-    int populateAclUsages(String usageBatchId, Set<Integer> periods, String userName);
+    int populateAclUsages(String usageBatchId, Set<Integer> periods, String userName, Set<Long> wrWrkInsts);
 
     /**
      * Updates ACL usages.

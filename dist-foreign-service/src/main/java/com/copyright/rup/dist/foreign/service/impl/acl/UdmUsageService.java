@@ -306,6 +306,11 @@ public class UdmUsageService implements IUdmUsageService {
         return udmRecordsThreshold;
     }
 
+    @Override
+    public Set<Long> getWrWrkInstPublishedToBaselineUdmUsages(Set<Integer> periods) {
+        return udmUsageRepository.findWrWrkInstPublishedToBaselineUdmUsages(periods);
+    }
+
     private UdmUsage convertUdmDtoToUsage(UdmUsageDto usageDto) {
         UdmUsage udmUsage = new UdmUsage();
         udmUsage.setId(usageDto.getId());

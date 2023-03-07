@@ -31,7 +31,7 @@ import javax.annotation.PreDestroy;
  *
  * @author Mikita Maistrenka
  */
-@Service
+@Service("df.integration.piDeletedWorkIntegrationService")
 public class PiDeletedWorkIntegrationService implements IPiDeletedWorkIntegrationService {
 
     private static final Logger LOGGER = RupLogUtils.getLogger();
