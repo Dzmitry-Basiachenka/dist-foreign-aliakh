@@ -4,14 +4,19 @@ import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.ui.common.CommonAppliedFilterPanel;
+import com.copyright.rup.dist.foreign.ui.common.utils.IDateFormatter;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageFilterController;
+import com.copyright.rup.dist.foreign.ui.usage.impl.sal.SalUsageFilterController;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.ui.VerticalLayout;
 
+import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.LinkedHashSet;
+import java.util.Objects;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -23,9 +28,10 @@ import java.util.stream.Collectors;
  *
  * @author Stepan Karakhanov
  */
-public class CommonUsageAppliedFilterWidget extends CommonAppliedFilterPanel {
+public class CommonUsageAppliedFilterWidget extends CommonAppliedFilterPanel implements IDateFormatter {
 
     private final ICommonUsageFilterController controller;
+    private final String rightsholderLabel;
 
     /**
      * Constructor.
@@ -36,6 +42,12 @@ public class CommonUsageAppliedFilterWidget extends CommonAppliedFilterPanel {
         super();
         this.controller = controller;
         VaadinUtils.addComponentStyle(this, "aclci-usage-filter-panel-widget");
+        //TODO: avoid this condition
+        if (controller instanceof SalUsageFilterController) {
+            rightsholderLabel = "label.rightsholders";
+        } else {
+            rightsholderLabel = "label.rros";
+        }
     }
 
     /**
@@ -49,10 +61,11 @@ public class CommonUsageAppliedFilterWidget extends CommonAppliedFilterPanel {
             addLabel(createLabelWithMultipleValues(convertBatchIdsToBatchNames(filter.getUsageBatchesIds()),
                 "label.batches", String::valueOf), layout);
             addLabel(createLabelWithMultipleValues(convertRroAccountNumbersToRroNames(filter.getRhAccountNumbers()),
-                "label.rightsholders", String::valueOf), layout);
-            addLabel(createLabelWithSingleValue(UsageFilter::getPaymentDate, filter, "label.payment_date_to"), layout);
+                rightsholderLabel, String::valueOf), layout);
+            addLabel(createLabelWithSingleValue(getFunctionForDate(UsageFilter::getPaymentDate, filter), filter,
+                "label.payment_date_to"), layout);
             addLabel(createLabelWithSingleValue(UsageFilter::getUsageStatus, filter, "label.status"), layout);
-            addLabel(createLabelWithSingleValue(UsageFilter::getFiscalYear, filter, "label.fiscal_year"), layout);
+            addLabel(createLabelWithSingleValue(UsageFilter::getFiscalYear, filter, "label.fiscal_year_to"), layout);
             addLabel(createLabelWithSingleValue(UsageFilter::getUsagePeriod, filter, "label.usage_period"), layout);
             addLabel(createLabelWithSingleValue(UsageFilter::getSalDetailType, filter, "label.detail_type"), layout);
         }
@@ -81,5 +94,11 @@ public class CommonUsageAppliedFilterWidget extends CommonAppliedFilterPanel {
             .sorted(Comparator.comparing(Rightsholder::getAccountNumber))
             .map(rightsholder -> rightsholder.getAccountNumber() + " - " + rightsholder.getName())
             .collect(Collectors.toCollection(LinkedHashSet::new));
+    }
+
+    private Function<UsageFilter, ?> getFunctionForDate(Function<UsageFilter, LocalDate> function, UsageFilter filter) {
+        return Objects.nonNull(function.apply(filter))
+            ? value -> toShortFormat(function.apply(filter))
+            : function;
     }
 }

@@ -149,7 +149,7 @@ public class AclGrantDetailFilterWidget extends VerticalLayout implements IAclGr
 
     private Label buildAppliedFiltersHeaderLabel() {
         Label appliedFilterHeaderLabel = new Label(ForeignUi.getMessage("label.applied_filters"));
-        appliedFilterHeaderLabel.addStyleNames(Cornerstone.LABEL_H2, "acl-applied-filter-header");
+        appliedFilterHeaderLabel.addStyleNames(Cornerstone.LABEL_H2, "applied-filter-header");
         return appliedFilterHeaderLabel;
     }
 }

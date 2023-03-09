@@ -14,7 +14,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.SalDetailTypeEnum;
+import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.ui.audit.api.sal.ISalAuditFilterController;
@@ -51,26 +53,28 @@ import java.util.Set;
  */
 public class SalAuditFilterWidgetTest {
 
+    private static final String USAGE_BATCH_ID = "8f8fbc50-4ad9-4103-af71-7d96b558a81a";
+    private static final Long RH_ACCOUNT_NUMBER = 1000018380L;
     private CommonAuditFilterWidget widget;
+    private ISalAuditFilterController controller;
 
     @Before
     public void setUp() {
-        ISalAuditFilterController controller = createMock(ISalAuditFilterController.class);
-        expect(controller.getProductFamily()).andReturn("SAL").times(2);
-        expect(controller.getUsagePeriods()).andReturn(buildUsagePeriods()).once();
-        replay(controller);
+        controller = createMock(ISalAuditFilterController.class);
         widget = new SalAuditFilterWidget(controller);
         widget.setController(controller);
-        widget.init();
-        verify(controller);
+        expect(controller.getProductFamily()).andReturn("SAL").times(2);
+        expect(controller.getUsagePeriods()).andReturn(buildUsagePeriods()).once();
     }
 
     @Test
     public void testLayout() {
+        replay(controller);
+        widget.init();
         assertTrue(widget.isSpacing());
         assertEquals(new MarginInfo(true), widget.getMargin());
         assertEquals("audit-filter-widget", widget.getStyleName());
-        assertEquals(10, widget.getComponentCount());
+        assertEquals(12, widget.getComponentCount());
         Component component = widget.getComponent(0);
         verifyFiltersLabel(component);
         component = widget.getComponent(1);
@@ -95,16 +99,22 @@ public class SalAuditFilterWidgetTest {
         assertThat(component, instanceOf(HorizontalLayout.class));
         verifyButtonsLayout((HorizontalLayout) component);
         assertEquals(Alignment.MIDDLE_RIGHT, widget.getComponentAlignment(component));
+        verify(controller);
     }
 
     @Test
     public void testApplyFilter() {
+        expect(controller.getRightsholdersByAccountNumbers(Set.of(RH_ACCOUNT_NUMBER)))
+            .andReturn(List.of(buildRightsholder())).once();
+        expect(controller.getUsageBatches()).andReturn(List.of(buildUsageBatch(USAGE_BATCH_ID))).once();
+        replay(controller);
+        widget.init();
         AuditFilter auditFilter = new AuditFilter();
         auditFilter.setProductFamily("SAL");
         assertEquals(auditFilter, widget.getAppliedFilter());
-        auditFilter.setRhAccountNumbers(Set.of(1000018380L));
+        auditFilter.setRhAccountNumbers(Set.of(RH_ACCOUNT_NUMBER));
         auditFilter.setLicenseeAccountNumbers(Set.of(1114L));
-        auditFilter.setBatchesIds(Set.of("8f8fbc50-4ad9-4103-af71-7d96b558a81a"));
+        auditFilter.setBatchesIds(Set.of(USAGE_BATCH_ID));
         auditFilter.setStatuses(Set.of(UsageStatusEnum.ELIGIBLE));
         auditFilter.setCccEventId("53256");
         auditFilter.setDistributionName("SAL December 2020");
@@ -114,6 +124,7 @@ public class SalAuditFilterWidgetTest {
         Whitebox.setInternalState(widget, "filter", auditFilter);
         widget.applyFilter();
         assertEquals(auditFilter, widget.getAppliedFilter());
+        verify(controller);
     }
 
     private void verifyFilterWidget(BaseItemsFilterWidget filterWidget, String caption) {
@@ -150,5 +161,17 @@ public class SalAuditFilterWidgetTest {
 
     private List<Integer> buildUsagePeriods() {
         return List.of(2020);
+    }
+
+    private Rightsholder buildRightsholder() {
+        Rightsholder rightsholder = new Rightsholder();
+        rightsholder.setAccountNumber(RH_ACCOUNT_NUMBER);
+        return rightsholder;
+    }
+
+    private UsageBatch buildUsageBatch(String id) {
+        UsageBatch usageBatch = new UsageBatch();
+        usageBatch.setId(id);
+        return usageBatch;
     }
 }

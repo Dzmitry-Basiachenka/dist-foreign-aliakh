@@ -22,6 +22,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Controller for audit filter.
@@ -68,6 +69,11 @@ public abstract class CommonAuditFilterController extends CommonController<IComm
     @Override
     public String getProductFamily() {
         return productFamilyProvider.getSelectedProductFamily();
+    }
+
+    @Override
+    public List<Rightsholder> getRightsholdersByAccountNumbers(Set<Long> accountNumbers) {
+        return rightsholderService.getRightsholdersByAccountNumbers(accountNumbers);
     }
 
     /**
