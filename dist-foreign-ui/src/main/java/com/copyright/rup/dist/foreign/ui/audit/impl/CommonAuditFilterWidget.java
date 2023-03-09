@@ -40,15 +40,17 @@ public abstract class CommonAuditFilterWidget extends VerticalLayout implements 
     private AuditFilter filter;
     private AuditFilter appliedFilter;
     private Button applyButton;
+    private CommonAuditAppliedFilterWidget appliedFilterWidget;
 
     @SuppressWarnings("unchecked")
     @Override
     public CommonAuditFilterWidget init() {
         filter = buildAuditFilter();
         appliedFilter = buildAuditFilter();
+        appliedFilterWidget = new CommonAuditAppliedFilterWidget(controller);
         HorizontalLayout buttonsLayout = buildButtonsLayout();
         initFields();
-        addComponents(buttonsLayout);
+        addComponents(buttonsLayout, buildAppliedFiltersHeaderLabel(), appliedFilterWidget);
         setComponentAlignment(buttonsLayout, Alignment.MIDDLE_RIGHT);
         setMargin(true);
         setSpacing(true);
@@ -64,6 +66,7 @@ public abstract class CommonAuditFilterWidget extends VerticalLayout implements 
     @Override
     public void applyFilter() {
         appliedFilter = new AuditFilter(filter);
+        appliedFilterWidget.refreshFilterPanel(appliedFilter);
         filterChanged();
         fireEvent(new FilterChangedEvent(this));
     }
@@ -191,5 +194,11 @@ public abstract class CommonAuditFilterWidget extends VerticalLayout implements 
         TextField textField = new TextField(caption);
         VaadinUtils.setMaxComponentsWidth(textField);
         return textField;
+    }
+
+    private Label buildAppliedFiltersHeaderLabel() {
+        Label appliedFilterHeaderLabel = new Label(ForeignUi.getMessage("label.applied_filters"));
+        appliedFilterHeaderLabel.addStyleNames(Cornerstone.LABEL_H2, "applied-filter-header");
+        return appliedFilterHeaderLabel;
     }
 }

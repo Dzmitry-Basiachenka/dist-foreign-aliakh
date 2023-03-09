@@ -161,7 +161,7 @@ public class UdmUsageFilterWidget extends VerticalLayout implements IUdmUsageFil
 
     private Label buildAppliedFiltersHeaderLabel() {
         Label appliedFilterHeaderLabel = new Label(ForeignUi.getMessage("label.applied_filters"));
-        appliedFilterHeaderLabel.addStyleNames(Cornerstone.LABEL_H2, "udm-applied-filter-header");
+        appliedFilterHeaderLabel.addStyleNames(Cornerstone.LABEL_H2, "applied-filter-header");
         return appliedFilterHeaderLabel;
     }
 

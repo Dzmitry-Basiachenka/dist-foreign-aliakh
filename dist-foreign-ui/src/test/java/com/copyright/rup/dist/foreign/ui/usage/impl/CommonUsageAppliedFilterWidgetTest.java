@@ -73,11 +73,11 @@ public class CommonUsageAppliedFilterWidgetTest {
         VerticalLayout verticalLayout = (VerticalLayout) component;
         assertEquals(7, verticalLayout.getComponentCount());
         verifyLabel(((VerticalLayout) component).getComponent(0), "Batches", NAME_1 + ", " + NAME_2);
-        verifyLabel(((VerticalLayout) component).getComponent(1), "Rightsholders",
+        verifyLabel(((VerticalLayout) component).getComponent(1), "RROs",
             ACCOUNT_NUMBER_1 + " - " + NAME_1 + ", " + ACCOUNT_NUMBER_2 + " - " + NAME_2);
-        verifyLabel(((VerticalLayout) component).getComponent(2), "Payment Date To", String.valueOf(DATE));
+        verifyLabel(((VerticalLayout) component).getComponent(2), "Payment Date To", "05/23/2023");
         verifyLabel(((VerticalLayout) component).getComponent(3), "Status", String.valueOf(UsageStatusEnum.RH_FOUND));
-        verifyLabel(((VerticalLayout) component).getComponent(4), "Fiscal Year", String.valueOf(2023));
+        verifyLabel(((VerticalLayout) component).getComponent(4), "Fiscal Year To", String.valueOf(2023));
         verifyLabel(((VerticalLayout) component).getComponent(5), "Usage Period", String.valueOf(2023));
         verifyLabel(((VerticalLayout) component).getComponent(6), "Detail Type", String.valueOf(SalDetailTypeEnum.IB));
     }

@@ -13,6 +13,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 
+import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.ui.audit.api.aacl.IAaclAuditFilterController;
 import com.copyright.rup.dist.foreign.ui.audit.impl.CommonAuditFilterWidget;
@@ -52,25 +53,25 @@ public class AaclAuditFilterWidgetTest {
     private static final int USAGE_PERIOD = 2020;
 
     private CommonAuditFilterWidget widget;
+    private IAaclAuditFilterController auditFilterController;
 
     @Before
     public void setUp() {
-        IAaclAuditFilterController auditFilterController = createMock(IAaclAuditFilterController.class);
+        auditFilterController = createMock(IAaclAuditFilterController.class);
         expect(auditFilterController.getProductFamily()).andReturn("AACL").times(2);
         expect(auditFilterController.getUsagePeriods()).andReturn(List.of(USAGE_PERIOD)).once();
-        replay(auditFilterController);
         widget = new AaclAuditFilterWidget(auditFilterController);
         widget.setController(auditFilterController);
-        widget.init();
-        verify(auditFilterController);
     }
 
     @Test
     public void testLayout() {
+        replay(auditFilterController);
+        widget.init();
         assertTrue(widget.isSpacing());
         assertEquals(new MarginInfo(true), widget.getMargin());
         assertEquals("audit-filter-widget", widget.getStyleName());
-        assertEquals(8, widget.getComponentCount());
+        assertEquals(10, widget.getComponentCount());
         Component component = widget.getComponent(0);
         verifyFiltersLabel(component);
         component = widget.getComponent(1);
@@ -90,10 +91,14 @@ public class AaclAuditFilterWidgetTest {
         assertThat(component, instanceOf(HorizontalLayout.class));
         verifyButtonsLayout((HorizontalLayout) component);
         assertEquals(Alignment.MIDDLE_RIGHT, widget.getComponentAlignment(component));
+        verify(auditFilterController);
     }
 
     @Test
     public void testApplyFilter() {
+        expect(auditFilterController.getUsageBatches()).andReturn(List.of(new UsageBatch())).once();
+        replay(auditFilterController);
+        widget.init();
         AuditFilter auditFilter = new AuditFilter();
         auditFilter.setProductFamily("AACL");
         assertEquals(auditFilter, widget.getAppliedFilter());
@@ -102,6 +107,7 @@ public class AaclAuditFilterWidgetTest {
         Whitebox.setInternalState(widget, "filter", auditFilter);
         widget.applyFilter();
         assertEquals(auditFilter, widget.getAppliedFilter());
+        verify(auditFilterController);
     }
 
     private void verifyFilterWidget(BaseItemsFilterWidget filterWidget, String caption) {

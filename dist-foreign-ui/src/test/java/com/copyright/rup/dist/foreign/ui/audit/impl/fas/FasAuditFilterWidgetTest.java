@@ -12,6 +12,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.ui.audit.api.fas.IFasAuditFilterController;
 import com.copyright.rup.dist.foreign.ui.audit.impl.CommonAuditFilterWidget;
@@ -35,6 +36,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
+import java.util.List;
+
 /**
  * Verifies {@link FasAuditFilterWidget}.
  * <p>
@@ -47,24 +50,24 @@ import org.powermock.reflect.Whitebox;
 public class FasAuditFilterWidgetTest {
 
     private CommonAuditFilterWidget widget;
+    private IFasAuditFilterController auditFilterController;
 
     @Before
     public void setUp() {
-        IFasAuditFilterController auditFilterController = createMock(IFasAuditFilterController.class);
+        auditFilterController = createMock(IFasAuditFilterController.class);
         expect(auditFilterController.getProductFamily()).andReturn("FAS").times(2);
-        replay(auditFilterController);
         widget = new FasAuditFilterWidget();
         widget.setController(auditFilterController);
-        widget.init();
-        verify(auditFilterController);
     }
 
     @Test
     public void testLayout() {
+        replay(auditFilterController);
+        widget.init();
         assertTrue(widget.isSpacing());
         assertEquals(new MarginInfo(true), widget.getMargin());
         assertEquals("audit-filter-widget", widget.getStyleName());
-        assertEquals(7, widget.getComponentCount());
+        assertEquals(9, widget.getComponentCount());
         Component component = widget.getComponent(0);
         verifyFiltersLabel(component);
         component = widget.getComponent(1);
@@ -83,10 +86,14 @@ public class FasAuditFilterWidgetTest {
         assertThat(component, instanceOf(HorizontalLayout.class));
         verifyButtonsLayout((HorizontalLayout) component);
         assertEquals(Alignment.MIDDLE_RIGHT, widget.getComponentAlignment(component));
+        verify(auditFilterController);
     }
 
     @Test
     public void testApplyFilter() {
+        expect(auditFilterController.getUsageBatches()).andReturn(List.of(new UsageBatch())).once();
+        replay(auditFilterController);
+        widget.init();
         AuditFilter auditFilter = new AuditFilter();
         auditFilter.setProductFamily("FAS");
         assertEquals(auditFilter, widget.getAppliedFilter());
@@ -94,6 +101,7 @@ public class FasAuditFilterWidgetTest {
         Whitebox.setInternalState(widget, "filter", auditFilter);
         widget.applyFilter();
         assertEquals(auditFilter, widget.getAppliedFilter());
+        verify(auditFilterController);
     }
 
     private void verifyFilterWidget(BaseItemsFilterWidget filterWidget, String caption) {

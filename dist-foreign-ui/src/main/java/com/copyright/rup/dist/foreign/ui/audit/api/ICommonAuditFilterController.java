@@ -7,6 +7,7 @@ import com.copyright.rup.vaadin.widget.api.IFilterController;
 import com.vaadin.data.provider.QuerySortOrder;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Audit filter controller.
@@ -47,4 +48,12 @@ public interface ICommonAuditFilterController extends IFilterController<ICommonA
      * @return number of items
      */
     int getBeansCount(String searchValue);
+
+    /**
+     * Returns list of {@link Rightsholder}s with given account numbers.
+     *
+     * @param accountNumbers set of {@link Rightsholder}s account numbers
+     * @return list of {@link Rightsholder}s
+     */
+    List<Rightsholder> getRightsholdersByAccountNumbers(Set<Long> accountNumbers);
 }
