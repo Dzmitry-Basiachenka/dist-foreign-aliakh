@@ -4,16 +4,21 @@ import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.AclUsageBatch;
+import com.copyright.rup.dist.foreign.integration.pi.api.IPiDeletedWorkIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.IAclUsageBatchRepository;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageService;
+import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageService;
 
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Implementation of {@link IAclUsageBatchService}.
@@ -30,9 +35,14 @@ public class AclUsageBatchService implements IAclUsageBatchService {
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
     @Autowired
+    @Qualifier("df.integration.piDeletedWorkIntegrationService")
+    private IPiDeletedWorkIntegrationService piIntegrationService;
+    @Autowired
     private IAclUsageBatchRepository aclUsageBatchRepository;
     @Autowired
     private IAclUsageService aclUsageService;
+    @Autowired
+    private IUdmUsageService udmUsageService;
 
     @Override
     public boolean isAclUsageBatchExist(String usageBatchName) {
@@ -47,8 +57,13 @@ public class AclUsageBatchService implements IAclUsageBatchService {
         usageBatch.setId(RupPersistUtils.generateUuid());
         usageBatch.setCreateUser(userName);
         usageBatch.setUpdateUser(userName);
+        Set<Integer> periods = usageBatch.getPeriods();
+        Set<Long> wrWrkInsts = udmUsageService.getWrWrkInstPublishedToBaselineUdmUsages(periods);
+        Set<Long> deletedWrWrkInsts = wrWrkInsts.stream().filter(wrWrkInst ->
+                piIntegrationService.isDeletedWork(wrWrkInst))
+            .collect(Collectors.toSet());
         aclUsageBatchRepository.insert(usageBatch);
-        int count = aclUsageService.populateAclUsages(usageBatch.getId(), usageBatch.getPeriods(), userName);
+        int count = aclUsageService.populateAclUsages(usageBatch.getId(), periods, userName, deletedWrWrkInsts);
         LOGGER.info("Insert ACL usage batch. Finished. AclUsageBatch={}, AclUsagesCount={}, UserName={}",
             usageBatch, count, userName);
         return count;

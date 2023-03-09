@@ -159,4 +159,9 @@ public class UdmUsageRepository extends AclBaseRepository implements IUdmUsageRe
         parameters.put("createUser", Objects.requireNonNull(userName));
         return new HashSet<>(selectList("IUdmUsageMapper.publishToBaseline", parameters));
     }
+
+    @Override
+    public Set<Long> findWrWrkInstPublishedToBaselineUdmUsages(Set<Integer> periods) {
+        return new HashSet<>(selectList("IUdmUsageMapper.findWrWrkInstPublishedToBaseline", periods));
+    }
 }

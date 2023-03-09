@@ -1,6 +1,6 @@
 [
   {
-    "usageBatchId": "1fa04580-af0a-4c57-8470-37ae9c06bea1",
+    "usageBatchId": "72ebe159-c40f-4b61-923d-a58b170aad9e",
     "usageOrigin": "SS",
     "channel": "CCC",
     "period": 202112,
@@ -30,12 +30,12 @@
     "annualizedCopies": 1.00000,
     "quantity": 11,
     "editable": true,
-    "workDeletedFlag": true,
+    "workDeletedFlag": false,
     "createUser": "user@copyright.com",
     "updateUser": "user@copyright.com"
   },
   {
-    "usageBatchId": "1fa04580-af0a-4c57-8470-37ae9c06bea1",
+    "usageBatchId": "72ebe159-c40f-4b61-923d-a58b170aad9e",
     "usageOrigin": "SS",
     "channel": "CCC",
     "period": 202112,

@@ -50,6 +50,9 @@
     <bean id="df.integration.piIntegrationCacheService"
           class="com.copyright.rup.dist.foreign.service.impl.mock.PiIntegrationServiceMock"/>
 
+    <bean id="df.integration.piDeletedWorkIntegrationService"
+          class="com.copyright.rup.dist.foreign.service.impl.mock.PiDeletedWorkIntegrationServiceMock"/>
+
     <bean id="dist.common.integration.rest.prmRightsholderOrganizationAsyncService"
           class="com.copyright.rup.dist.foreign.service.impl.mock.PrmRightsholderOrganizationServiceMock"/>
 

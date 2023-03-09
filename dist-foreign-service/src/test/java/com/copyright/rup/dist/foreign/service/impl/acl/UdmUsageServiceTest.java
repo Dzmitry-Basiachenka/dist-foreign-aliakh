@@ -554,6 +554,16 @@ public class UdmUsageServiceTest {
         verify(udmUsageRepository, udmUsageAuditService, RupContextUtils.class);
     }
 
+    @Test
+    public void testGetWrWrkInstPublishedToBaselineUdmUsages() {
+        Set<Integer> periods = Set.of(202206, 202212);
+        Set<Long> wrWrkInsts = Set.of(137133077L, 122581113L);
+        expect(udmUsageRepository.findWrWrkInstPublishedToBaselineUdmUsages(periods)).andReturn(wrWrkInsts).once();
+        replay(udmUsageRepository);
+        assertEquals(wrWrkInsts, udmUsageService.getWrWrkInstPublishedToBaselineUdmUsages(periods));
+        verify(udmUsageRepository);
+    }
+
     private UdmBatch buildUdmBatch() {
         UdmBatch udmBatch = new UdmBatch();
         udmBatch.setId(UDM_BATCH_UID);

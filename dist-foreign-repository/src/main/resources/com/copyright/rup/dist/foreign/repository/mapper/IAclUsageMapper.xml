@@ -62,6 +62,7 @@
         type_of_use,
         annualized_copies,
         quantity,
+        work_deleted_flag,
         <include refid="StoredEntityMapper.additionalColumns"/>
     </sql>
 
@@ -352,6 +353,18 @@
             u.type_of_use,
             u.annualized_copies,
             u.quantity,
+            <choose>
+                <when test="!wrWrkInsts.isEmpty()">
+                    case when u.wr_wrk_inst in
+                    <foreach collection="wrWrkInsts" item="wrWrkInst" open="(" separator="," close=")">
+                        #{wrWrkInst}
+                    </foreach>
+                        then true else false end,
+                </when>
+                <otherwise>
+                    false,
+                </otherwise>
+            </choose>
             <include refid="StoredEntityMapper.insert"/>
         from ${schema}.df_udm_usage u
         join ${schema}.df_udm_usage_batch ub on u.df_udm_usage_batch_uid = ub.df_udm_usage_batch_uid
@@ -505,6 +518,7 @@
             type_of_use,
             annualized_copies,
             quantity,
+            work_deleted_flag,
             <include refid="StoredEntityMapper.insert"/>
         from ${schema}.df_acl_usage
         where df_acl_usage_batch_uid = #{sourceUsageBatchId}

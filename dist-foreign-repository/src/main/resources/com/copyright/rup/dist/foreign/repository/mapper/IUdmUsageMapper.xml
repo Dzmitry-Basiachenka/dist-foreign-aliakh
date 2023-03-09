@@ -747,4 +747,15 @@
             and is_baseline_flag = false
         returning df_udm_usage_uid
     </select>
+
+    <select id="findWrWrkInstPublishedToBaseline" parameterType="collection" resultType="long">
+        select distinct on (u.wr_wrk_inst)
+            u.wr_wrk_inst
+        from ${schema}.df_udm_usage u
+        where u.is_baseline_flag = true
+            and u.period in
+            <foreach collection="collection" item="period" open="(" separator="," close=")">
+                 #{period}
+            </foreach>
+    </select>
 </mapper>

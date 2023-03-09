@@ -41,8 +41,9 @@ public class AclUsageService implements IAclUsageService {
     private int recordsThreshold;
 
     @Override
-    public int populateAclUsages(String usageBatchId, Set<Integer> periods, String userName) {
-        return aclUsageRepository.populateAclUsages(usageBatchId, periods, userName).size();
+    public int populateAclUsages(String usageBatchId, Set<Integer> periods, String userName,
+                                 Set<Long> wrWrkInsts) {
+        return aclUsageRepository.populateAclUsages(usageBatchId, periods, userName, wrWrkInsts).size();
     }
 
     @Transactional
