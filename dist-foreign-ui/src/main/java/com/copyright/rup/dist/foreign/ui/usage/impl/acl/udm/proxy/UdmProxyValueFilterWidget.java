@@ -31,6 +31,7 @@ public class UdmProxyValueFilterWidget extends VerticalLayout implements IUdmPro
     private IUdmProxyValueFilterController controller;
     private UdmProxyValueFilter udmValueFilter = new UdmProxyValueFilter();
     private UdmProxyValueFilter appliedUdmValueFilter = new UdmProxyValueFilter();
+    private UdmProxyValueAppliedFilterWidget appliedFilterWidget;
 
     @Override
     public UdmProxyValueFilter getFilter() {
@@ -50,7 +51,8 @@ public class UdmProxyValueFilterWidget extends VerticalLayout implements IUdmPro
     @Override
     @SuppressWarnings("unchecked")
     public IUdmProxyValueFilterWidget init() {
-        addComponents(initFiltersLayout(), initButtonsLayout());
+        appliedFilterWidget = new UdmProxyValueAppliedFilterWidget();
+        addComponents(initFiltersLayout(), initButtonsLayout(), buildAppliedFiltersHeaderLabel(), appliedFilterWidget);
         VaadinUtils.setMaxComponentsWidth(this);
         VaadinUtils.addComponentStyle(this, "udm-proxy-value-filter-widget");
         return this;
@@ -59,6 +61,7 @@ public class UdmProxyValueFilterWidget extends VerticalLayout implements IUdmPro
     @Override
     public void applyFilter() {
         appliedUdmValueFilter = new UdmProxyValueFilter(udmValueFilter);
+        appliedFilterWidget.refreshFilterPanel(appliedUdmValueFilter);
         filterChanged();
         fireEvent(new FilterChangedEvent(this));
     }
@@ -118,5 +121,11 @@ public class UdmProxyValueFilterWidget extends VerticalLayout implements IUdmPro
         Label filterHeaderLabel = new Label(ForeignUi.getMessage("label.filters"));
         filterHeaderLabel.addStyleName(Cornerstone.LABEL_H2);
         return filterHeaderLabel;
+    }
+
+    private Label buildAppliedFiltersHeaderLabel() {
+        Label appliedFilterHeaderLabel = new Label(ForeignUi.getMessage("label.applied_filters"));
+        appliedFilterHeaderLabel.addStyleNames(Cornerstone.LABEL_H2, "applied-filter-header");
+        return appliedFilterHeaderLabel;
     }
 }
