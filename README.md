@@ -1,3 +1,9 @@
+17.0.10
+-
+* B-76925 FDA: Deleted works column for editing wrwrkinsts: implement PI integration logic
+* B-76925 FDA: Deleted works column for editing wrwrkinsts: refactor back end logic related to populating Acl Usage Batch
+* B-77141 FDA: Display all filtered criteria for filters: add display applied filters on Audit tab for FAS/FAS2, NTS, AACL, SAL
+
 17.0.9
 -
 * B-76925 FDA: Deleted works column for editing wrwrkinsts: implement Liquibase script to add isDeletedFlag
