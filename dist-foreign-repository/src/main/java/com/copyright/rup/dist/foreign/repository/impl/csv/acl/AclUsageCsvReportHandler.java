@@ -23,8 +23,8 @@ public class AclUsageCsvReportHandler extends BaseCsvReportHandler<AclUsageDto> 
 
     private static final List<String> HEADERS = List.of("Detail ID", "Period", "Usage Origin", "Channel",
         "Usage Detail ID", "Wr Wrk Inst", "System Title", "Det LC ID", "Det LC Name", "Agg LC ID", "Agg LC Name",
-        "Survey Country", "Pub Type", "Content Unit Price", "CUP Flag", "TOU", "Annualized Copies", "Updated By",
-        "Updated Date");
+        "Survey Country", "Pub Type", "Content Unit Price", "CUP Flag", "TOU", "Annualized Copies", "MDWMS Deleted",
+        "Updated By", "Updated Date");
 
     /**
      * Constructor.
@@ -56,6 +56,7 @@ public class AclUsageCsvReportHandler extends BaseCsvReportHandler<AclUsageDto> 
         beanProperties.add(bean.getContentUnitPriceFlag() ? "Y" : "N");
         beanProperties.add(bean.getTypeOfUse());
         beanProperties.add(getBeanBigDecimal(bean.getAnnualizedCopies()));
+        beanProperties.add(bean.isWorkDeletedFlag() ? "Y" : "N");
         beanProperties.add(bean.getUpdateUser());
         beanProperties.add(convertDateToString(bean.getUpdateDate()));
         return beanProperties;
