@@ -9,6 +9,7 @@ import com.copyright.rup.dist.common.service.impl.csv.validator.AmountValidator;
 import com.copyright.rup.dist.common.service.impl.csv.validator.LengthValidator;
 import com.copyright.rup.dist.common.service.impl.csv.validator.PositiveNumberValidator;
 import com.copyright.rup.dist.common.service.impl.csv.validator.RequiredValidator;
+import com.copyright.rup.dist.foreign.domain.FasUsage;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.DateFormatValidator;
@@ -206,6 +207,9 @@ public class UsageCsvProcessor extends DistCsvProcessor<Usage> {
                 : isWorkFound(result) ? UsageStatusEnum.WORK_FOUND : UsageStatusEnum.NEW);
             result.setProductFamily(productFamily);
             result.setComment(getString(row, BasicHeader.COMMENT, headers));
+            FasUsage fasUsage = new FasUsage();
+            fasUsage.setReportedStandardNumber(result.getStandardNumber());
+            result.setFasUsage(fasUsage);
             return result;
         }
 

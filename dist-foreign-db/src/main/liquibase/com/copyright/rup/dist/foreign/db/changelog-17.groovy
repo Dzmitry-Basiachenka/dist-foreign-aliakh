@@ -26,4 +26,16 @@ databaseChangeLog {
             dropColumn(schemaName: dbAppsSchema, tableName: 'df_acl_usage', columnName: 'work_deleted_flag')
         }
     }
+
+    changeSet(id: '2023-03-07-00', author: 'Dzmitry Basiachenka <dbasiachenka@copyright.com>') {
+        comment("B-77080 FDA: Show Reported Standard Number and Reported Title on UI & Exports: add reported_standard_number column to df_usage_fas table")
+
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'reported_standard_number', type: 'VARCHAR(1000)', remarks: 'The reported standard number')
+        }
+
+        rollback {
+            dropColumn(schemaName: dbAppsSchema, tableName: 'df_usage_fas', columnName: 'reported_standard_number')
+        }
+    }
 }

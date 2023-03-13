@@ -116,6 +116,7 @@
         <result property="salUsage.states" column="states"/>
         <result property="salUsage.assessmentType" column="assessment_type"/>
         <result property="salUsage.reportedPublicationDate" column="reported_publication_date"/>
+        <result property="fasUsage.reportedStandardNumber" column="reported_standard_number"/>
     </resultMap>
 
     <resultMap id="wrWrkInstToUsageIdResultMap" type="WrWrkInstUsageIdPair">
@@ -601,6 +602,7 @@
             u.net_amount,
             ufas.is_rh_participating_flag,
             ufas.is_payee_participating_flag,
+            ufas.reported_standard_number,
             u.created_datetime,
             u.updated_datetime,
             u.created_by_user,

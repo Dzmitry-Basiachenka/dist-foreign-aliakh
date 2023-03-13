@@ -54,6 +54,7 @@ public class Usage extends StoredEntity<String> {
     private AaclUsage aaclUsage;
     private SalUsage salUsage;
     private AclciUsage aclciUsage;
+    private FasUsage fasUsage;
 
     public String getBatchId() {
         return batchId;
@@ -303,6 +304,14 @@ public class Usage extends StoredEntity<String> {
         this.aclciUsage = aclciUsage;
     }
 
+    public FasUsage getFasUsage() {
+        return fasUsage;
+    }
+
+    public void setFasUsage(FasUsage fasUsage) {
+        this.fasUsage = fasUsage;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -345,6 +354,7 @@ public class Usage extends StoredEntity<String> {
             .append(this.aaclUsage, that.aaclUsage)
             .append(this.salUsage, that.salUsage)
             .append(this.aclciUsage, that.aclciUsage)
+            .append(this.fasUsage, that.fasUsage)
             .isEquals();
     }
 
@@ -383,6 +393,7 @@ public class Usage extends StoredEntity<String> {
             .append(aaclUsage)
             .append(salUsage)
             .append(aclciUsage)
+            .append(fasUsage)
             .toHashCode();
     }
 
@@ -421,6 +432,7 @@ public class Usage extends StoredEntity<String> {
             .append("aaclUsage", aaclUsage)
             .append("salUsage", salUsage)
             .append("aclciUsage", aclciUsage)
+            .append("fasUsage", fasUsage)
             .toString();
     }
 }

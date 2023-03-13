@@ -9,6 +9,7 @@ import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.test.liquibase.LiquibaseTestExecutionListener;
 import com.copyright.rup.dist.common.test.liquibase.TestData;
+import com.copyright.rup.dist.foreign.domain.FasUsage;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
 import com.copyright.rup.dist.foreign.domain.Scenario;
@@ -554,6 +555,9 @@ public class ScenarioRepositoryIntegrationTest {
         usage.setNumberOfCopies(1);
         usage.setReportedValue(new BigDecimal("11.25"));
         usage.setGrossAmount(new BigDecimal("54.4400000000"));
+        FasUsage fasUsage = new FasUsage();
+        fasUsage.setReportedStandardNumber(usage.getStandardNumber());
+        usage.setFasUsage(fasUsage);
         return usage;
     }
 

@@ -29,6 +29,9 @@
       "name": "CADRA, Centro de Administracion de Derechos Reprograficos, Asociacion Civil",
       "accountNumber": 7000813806
     },
-    "comment": "usage form usages.csv"
+    "comment": "usage form usages.csv",
+    "fasUsage": {
+      "reportedStandardNumber": "2192-3559"
+    }
   }
 ]

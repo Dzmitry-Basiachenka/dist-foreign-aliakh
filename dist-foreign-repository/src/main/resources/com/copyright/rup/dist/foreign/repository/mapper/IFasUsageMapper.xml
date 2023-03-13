@@ -41,6 +41,7 @@
             market_period_to,
             author,
             reported_value,
+            reported_standard_number,
             <include refid="StoredEntityMapper.additionalColumns"/>
         )
         select
@@ -53,6 +54,7 @@
             #{marketPeriodTo},
             #{author},
             #{reportedValue},
+            #{fasUsage.reportedStandardNumber},
             <include refid="StoredEntityMapper.insert"/>
     </insert>
 
@@ -168,7 +170,7 @@
 
     <select id="findForReconcile" resultMap="IUsageMapper.usageResultMap" parameterType="string">
         select
-        u.df_usage_uid,
+            u.df_usage_uid,
             u.wr_wrk_inst,
             u.work_title,
             u.system_title,
