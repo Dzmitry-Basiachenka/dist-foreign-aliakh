@@ -443,5 +443,7 @@ public class FasUsageRepositoryIntegrationTest {
         assertEquals(expectedUsage.getRightsholder().getAccountNumber(),
             actualUsage.getRightsholder().getAccountNumber());
         assertEquals(expectedUsage.getComment(), actualUsage.getComment());
+        assertEquals(expectedUsage.getFasUsage().getReportedStandardNumber(),
+            actualUsage.getFasUsage().getReportedStandardNumber());
     }
 }

@@ -251,6 +251,8 @@ public class UsageCsvProcessorIntegrationTest {
         assertEquals(expectedUsage.getAuthor(), actualUsage.getAuthor());
         assertEquals(expectedUsage.getProductFamily(), actualUsage.getProductFamily());
         assertEquals(expectedUsage.getComment(), actualUsage.getComment());
+        assertEquals(expectedUsage.getFasUsage().getReportedStandardNumber(),
+            actualUsage.getFasUsage().getReportedStandardNumber());
     }
 
     private void assertRightsholder(Rightsholder expectedRightsholder, Rightsholder actualRightsholder) {
