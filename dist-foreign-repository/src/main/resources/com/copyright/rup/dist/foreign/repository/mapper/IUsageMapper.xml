@@ -51,6 +51,7 @@
         <result property="aaclUsage.numberOfPages" column="number_of_pages"/>
         <result property="aaclUsage.rightLimitation" column="right_limitation"/>
         <result property="aaclUsage.batchPeriodEndDate" column="batch_period_end_date"/>
+        <result property="fasUsage.reportedStandardNumber" column="reported_standard_number"/>
     </resultMap>
 
     <resultMap id="usageAmountResultMap" type="Usage" extends="StoredEntityMapper.storedEntityResult">
@@ -192,7 +193,8 @@
         ufas.market,
         ufas.market_period_from,
         ufas.market_period_to,
-        ufas.reported_value
+        ufas.reported_value,
+        ufas.reported_standard_number
     </sql>
 
     <sql id="selectUsageDtos">

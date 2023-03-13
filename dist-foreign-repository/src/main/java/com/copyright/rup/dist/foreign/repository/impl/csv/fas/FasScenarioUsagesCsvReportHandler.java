@@ -4,9 +4,12 @@ import com.copyright.rup.dist.common.repository.impl.csv.BaseCsvReportHandler;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.common.util.UsageBatchUtils;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.PipedOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Writes FAS scenario usages into a {@link PipedOutputStream} connected to the {@link java.io.PipedInputStream}.
@@ -21,10 +24,11 @@ public class FasScenarioUsagesCsvReportHandler extends BaseCsvReportHandler<Usag
 
     private static final List<String> HEADERS =
         List.of("Detail ID", "Product Family", "Usage Batch Name", "RRO Account #", "RRO Name", "RH Account #",
-            "RH Name", "Payee Account #", "Payee Name", "Wr Wrk Inst", "System Title", "Standard Number",
-            "Standard Number Type", "Fiscal Year", "Payment Date", "Title", "Article", "Publisher", "Pub Date",
-            "Number of Copies", "Reported Value", "Gross Amt in USD", "Batch Amt in USD", "Service Fee Amount",
-            "Net Amt in USD", "Service Fee %", "Market", "Market Period From", "Market Period To", "Author", "Comment");
+            "RH Name", "Payee Account #", "Payee Name", "Wr Wrk Inst", "System Title", "Reported Standard Number",
+            "Standard Number", "Standard Number Type", "Fiscal Year", "Payment Date", "Reported Title", "Article",
+            "Publisher", "Pub Date", "Number of Copies", "Reported Value", "Gross Amt in USD", "Batch Amt in USD",
+            "Service Fee Amount", "Net Amt in USD", "Service Fee %", "Market", "Market Period From", "Market Period To",
+            "Author", "Comment");
 
     /**
      * Constructor.
@@ -49,6 +53,7 @@ public class FasScenarioUsagesCsvReportHandler extends BaseCsvReportHandler<Usag
         beanProperties.add(bean.getPayeeName());
         beanProperties.add(getBeanPropertyAsString(bean.getWrWrkInst()));
         beanProperties.add(bean.getSystemTitle());
+        beanProperties.add(formatStringStartedWithZero(getReportedStandardNumber(bean)));
         beanProperties.add(formatStringStartedWithZero(bean.getStandardNumber()));
         beanProperties.add(bean.getStandardNumberType());
         beanProperties.add(UsageBatchUtils.getFiscalYear(bean.getFiscalYear()));
@@ -75,5 +80,11 @@ public class FasScenarioUsagesCsvReportHandler extends BaseCsvReportHandler<Usag
     @Override
     protected List<String> getBeanHeaders() {
         return HEADERS;
+    }
+
+    private String getReportedStandardNumber(UsageDto bean) {
+        return Objects.isNull(bean.getFasUsage())
+            ? StringUtils.EMPTY
+            : bean.getFasUsage().getReportedStandardNumber();
     }
 }
