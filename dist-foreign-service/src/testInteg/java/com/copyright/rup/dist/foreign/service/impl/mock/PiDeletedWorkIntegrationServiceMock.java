@@ -15,9 +15,10 @@ import java.util.Set;
  */
 public class PiDeletedWorkIntegrationServiceMock extends PiDeletedWorkIntegrationService {
 
+    private static final Set<Long> DELETED_WR_WRK_INSTS = Set.of(229793810L, 460670283L, 473655509L, 363079690L);
+
     @Override
     public boolean isDeletedWork(Long wrWrkInst) {
-        Set<Long> deletedWorks = Set.of(229793810L, 460670283L, 473655509L, 363079690L);
-        return deletedWorks.contains(wrWrkInst);
+        return DELETED_WR_WRK_INSTS.contains(wrWrkInst);
     }
 }

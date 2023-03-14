@@ -59,8 +59,8 @@ public class AclUsageBatchService implements IAclUsageBatchService {
         usageBatch.setUpdateUser(userName);
         Set<Integer> periods = usageBatch.getPeriods();
         Set<Long> wrWrkInsts = udmUsageService.getWrWrkInstPublishedToBaselineUdmUsages(periods);
-        Set<Long> deletedWrWrkInsts = wrWrkInsts.stream().filter(wrWrkInst ->
-                piIntegrationService.isDeletedWork(wrWrkInst))
+        Set<Long> deletedWrWrkInsts = wrWrkInsts.stream()
+            .filter(wrWrkInst -> piIntegrationService.isDeletedWork(wrWrkInst))
             .collect(Collectors.toSet());
         aclUsageBatchRepository.insert(usageBatch);
         int count = aclUsageService.populateAclUsages(usageBatch.getId(), periods, userName, deletedWrWrkInsts);
