@@ -93,8 +93,6 @@ public class AaclUsageFilterWidgetTest {
     public void testApplyFilter() {
         expect(usagesFilterController.getUsagePeriods()).andReturn(List.of(USAGE_PERIOD)).times(2);
         expect(usagesFilterController.getSelectedProductFamily()).andReturn(AACL_PRODUCT_FAMILY).times(2);
-        expect(usagesFilterController.getRightsholdersByAccountNumbers(Set.of(ACCOUNT_NUMBER)))
-            .andReturn(List.of()).once();
         replay(usagesFilterController);
         widget.init();
         widget.clearFilter();
@@ -132,8 +130,6 @@ public class AaclUsageFilterWidgetTest {
     public void testClearFilter() {
         expect(usagesFilterController.getUsagePeriods()).andReturn(List.of(USAGE_PERIOD)).times(2);
         expect(usagesFilterController.getSelectedProductFamily()).andReturn(AACL_PRODUCT_FAMILY).times(2);
-        expect(usagesFilterController.getRightsholdersByAccountNumbers(Set.of(ACCOUNT_NUMBER)))
-            .andReturn(List.of()).once();
         replay(usagesFilterController);
         widget.init();
         Button applyButton = getApplyButton();
