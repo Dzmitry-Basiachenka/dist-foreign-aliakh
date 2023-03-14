@@ -162,6 +162,7 @@ public class UdmUsageRepository extends AclBaseRepository implements IUdmUsageRe
 
     @Override
     public Set<Long> findWrWrkInstPublishedToBaselineUdmUsages(Set<Integer> periods) {
-        return new HashSet<>(selectList("IUdmUsageMapper.findWrWrkInstPublishedToBaseline", periods));
+        return new HashSet<>(selectList("IUdmUsageMapper.findWrWrkInstPublishedToBaseline",
+            Objects.requireNonNull(periods)));
     }
 }
