@@ -50,6 +50,7 @@ databaseChangeLog {
             column(name: 'market_period_from', value: 2013)
             column(name: 'market_period_to', value: 2017)
             column(name: 'reported_value', value: 30.86)
+            column(name: 'reported_standard_number', value: '1927-7765')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -73,6 +74,7 @@ databaseChangeLog {
             column(name: 'market_period_from', value: 2013)
             column(name: 'market_period_to', value: 2017)
             column(name: 'reported_value', value: 30.86)
+            column(name: 'reported_standard_number', value: '1927-7765')
         }
 
         // batch with LOCKED usage
@@ -133,6 +135,7 @@ databaseChangeLog {
             column(name: 'reported_value', value: 9900.00)
             column(name: 'is_rh_participating_flag', value: false)
             column(name: 'is_payee_participating_flag', value: false)
+            column(name: 'reported_standard_number', value: '2558902245377325XX')
         }
 
         rollback {

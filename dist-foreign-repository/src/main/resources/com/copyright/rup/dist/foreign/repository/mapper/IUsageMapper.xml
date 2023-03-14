@@ -310,6 +310,9 @@
             <when test="sort.property == 'article'">
                 ufas.article <include refid="IUsageMapper.direction"/>
             </when>
+            <when test="sort.property == 'reportedStandardNumber'">
+                ufas.reported_standard_number <include refid="IUsageMapper.direction"/>
+            </when>
             <when test="sort.property == 'standardNumber'">
                 u.standard_number <include refid="IUsageMapper.direction"/>
             </when>

@@ -820,6 +820,8 @@ public class UsageRepositoryIntegrationTest {
     public void testFindByFilterSortingByWorkInfo() {
         UsageFilter filter = buildUsageFilter(Sets.newHashSet(2000017000L, 7000896777L), Set.of(),
             null, null, null, null);
+        verifyFindByFilterSort(filter, "reportedStandardNumber", Direction.ASC, USAGE_ID_23, USAGE_ID_24);
+        verifyFindByFilterSort(filter, "reportedStandardNumber", Direction.DESC, USAGE_ID_24, USAGE_ID_23);
         verifyFindByFilterSort(filter, STANDARD_NUMBER_KEY, Direction.ASC, USAGE_ID_23, USAGE_ID_24);
         verifyFindByFilterSort(filter, STANDARD_NUMBER_KEY, Direction.DESC, USAGE_ID_24, USAGE_ID_23);
         verifyFindByFilterSort(filter, "standardNumberType", Direction.ASC, USAGE_ID_23, USAGE_ID_24);
