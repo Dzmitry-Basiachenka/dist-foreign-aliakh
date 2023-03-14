@@ -22,6 +22,8 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.MenuBar;
 
+import java.util.Objects;
+
 /**
  * Usage widget for FAS and FAS2 product families.
  * <p>
@@ -73,6 +75,9 @@ public class FasUsageWidget extends CommonUsageWidget implements IFasUsageWidget
         addColumn(UsageDto::getRhName, "table.column.rh_account_name", "rhName", true, 300);
         addColumn(UsageDto::getWrWrkInst, "table.column.wr_wrk_inst", "wrWrkInst", true, 110);
         addColumn(UsageDto::getSystemTitle, "table.column.system_title", "systemTitle", true, 300);
+        addColumn(usageDto -> Objects.nonNull(usageDto.getFasUsage())
+                ? usageDto.getFasUsage().getReportedStandardNumber() : null, "table.column.reported_standard_number",
+            "reportedStandardNumber", true, 190);
         addColumn(UsageDto::getStandardNumber, "table.column.standard_number", "standardNumber", true, 140);
         addColumn(
             UsageDto::getStandardNumberType, "table.column.standard_number_type", "standardNumberType", true, 155);
@@ -80,7 +85,7 @@ public class FasUsageWidget extends CommonUsageWidget implements IFasUsageWidget
             "fiscalYear", true, 105);
         addColumn(usage -> CommonDateUtils.format(usage.getPaymentDate(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT),
             "table.column.payment_date", "paymentDate", true, 115);
-        addColumn(UsageDto::getWorkTitle, "table.column.work_title", "workTitle", true, 300);
+        addColumn(UsageDto::getWorkTitle, "table.column.reported_title", "workTitle", true, 300);
         addColumn(UsageDto::getArticle, "table.column.article", "article", true, 135);
         addColumn(UsageDto::getPublisher, "table.column.publisher", "publisher", true, 135);
         addColumn(usage ->
