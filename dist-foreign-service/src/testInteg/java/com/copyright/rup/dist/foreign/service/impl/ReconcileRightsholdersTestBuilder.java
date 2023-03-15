@@ -138,10 +138,13 @@ class ReconcileRightsholdersTestBuilder {
                 Long oldAccountNumber = expected.getOldRightsholder().getAccountNumber();
                 Long newAccountNumber = expected.getNewRightsholder().getAccountNumber();
                 Long wrWrkInst = expected.getWrWrkInst();
+                String workTitle = expected.getWorkTitle();
                 assertEquals(1, discrepancies.stream()
                     .filter(actual -> oldAccountNumber.equals(actual.getOldRightsholder().getAccountNumber())
                         && newAccountNumber.equals(actual.getNewRightsholder().getAccountNumber())
-                        && wrWrkInst.equals(actual.getWrWrkInst())).count());
+                        && wrWrkInst.equals(actual.getWrWrkInst())
+                        && workTitle.equals(actual.getWorkTitle()))
+                    .count());
             });
         }
 
