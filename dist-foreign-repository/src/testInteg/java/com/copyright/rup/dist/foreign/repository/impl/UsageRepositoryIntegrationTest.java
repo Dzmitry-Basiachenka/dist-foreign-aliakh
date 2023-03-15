@@ -102,6 +102,7 @@ public class UsageRepositoryIntegrationTest {
     private static final String BATCH_NAME_KEY = "batchName";
     private static final String PAYMENT_DATE_KEY = "paymentDate";
     private static final String STANDARD_NUMBER_KEY = "standardNumber";
+    private static final String REPORTED_STANDARD_NUMBER_KEY = "reportedStandardNumber";
     private static final String WR_WRK_INST_KEY = "wrWrkInst";
     private static final String RH_ACCOUNT_NUMBER_KEY = "rhAccountNumber";
     private static final String RH_NAME_KEY = "rhName";
@@ -650,7 +651,7 @@ public class UsageRepositoryIntegrationTest {
     public void testFindForAuditFas() throws IOException {
         AuditFilter filter = new AuditFilter();
         filter.setSearchValue(USAGE_ID_8);
-        verifyUsageDtosForAudit(loadExpectedUsageDtos("json/usage_dto_find_for_audit_fas.json"),
+        verifyUsageDtosForFasAudit(loadExpectedUsageDtos("json/usage_dto_find_for_audit_fas.json"),
             usageRepository.findForAudit(filter, null, null));
     }
 
@@ -659,7 +660,7 @@ public class UsageRepositoryIntegrationTest {
     public void testFindForAuditArchivedFas() throws IOException {
         AuditFilter filter = new AuditFilter();
         filter.setSearchValue(USAGE_ID_15);
-        verifyUsageDtosForAudit(loadExpectedUsageDtos("json/usage_dto_find_for_audit_archive_fas.json"),
+        verifyUsageDtosForFasAudit(loadExpectedUsageDtos("json/usage_dto_find_for_audit_archive_fas.json"),
             usageRepository.findForAudit(filter, null, null));
     }
 
@@ -853,6 +854,8 @@ public class UsageRepositoryIntegrationTest {
         verifyFindForAuditSort(filter, WR_WRK_INST_KEY, Direction.ASC, USAGE_ID_4, USAGE_ID_5);
         verifyFindForAuditSort(filter, WORK_TITLE_KEY, Direction.ASC, USAGE_ID_5, USAGE_ID_4);
         verifyFindForAuditSort(filter, WORK_TITLE_KEY, Direction.DESC, USAGE_ID_4, USAGE_ID_5);
+        verifyFindForAuditSort(filter, REPORTED_STANDARD_NUMBER_KEY, Direction.ASC, USAGE_ID_5, USAGE_ID_4);
+        verifyFindForAuditSort(filter, REPORTED_STANDARD_NUMBER_KEY, Direction.DESC, USAGE_ID_4, USAGE_ID_5);
         verifyFindForAuditSort(filter, STANDARD_NUMBER_KEY, Direction.ASC, USAGE_ID_5, USAGE_ID_4);
         verifyFindForAuditSort(filter, STANDARD_NUMBER_KEY, Direction.DESC, USAGE_ID_4, USAGE_ID_5);
         verifyFindForAuditSort(filter, REPORTED_VALUE_KEY, Direction.ASC, USAGE_ID_5, USAGE_ID_4);
@@ -1145,6 +1148,12 @@ public class UsageRepositoryIntegrationTest {
             .forEach(index -> verifyUsageDtoForAudit(expectedUsages.get(index), actualUsages.get(index)));
     }
 
+    private void verifyUsageDtosForFasAudit(List<UsageDto> expectedUsages, List<UsageDto> actualUsages) {
+        assertEquals(CollectionUtils.size(expectedUsages), CollectionUtils.size(actualUsages));
+        IntStream.range(0, expectedUsages.size())
+            .forEach(index -> verifyUsageDtoForFasAudit(expectedUsages.get(index), actualUsages.get(index)));
+    }
+
     private void verifyFasUsage(Usage expectedUsage, Usage actualUsage) {
         assertEquals(expectedUsage.getId(), actualUsage.getId());
         assertEquals(expectedUsage.getBatchId(), actualUsage.getBatchId());
@@ -1231,6 +1240,12 @@ public class UsageRepositoryIntegrationTest {
         usage.setServiceFeeAmount(
             CalculationUtils.calculateServiceFeeAmount(usage.getGrossAmount(), usage.getServiceFee()));
         usage.setNetAmount(CalculationUtils.calculateNetAmount(usage.getGrossAmount(), usage.getServiceFeeAmount()));
+    }
+
+    private void verifyUsageDtoForFasAudit(UsageDto expectedUsage, UsageDto actualUsage) {
+        verifyUsageDtoForAudit(expectedUsage, actualUsage);
+        assertEquals(expectedUsage.getFasUsage().getReportedStandardNumber(),
+            actualUsage.getFasUsage().getReportedStandardNumber());
     }
 
     private void verifyUsageDtoForAudit(UsageDto expectedUsage, UsageDto actualUsage) {

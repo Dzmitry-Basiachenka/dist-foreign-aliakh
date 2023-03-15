@@ -25,6 +25,9 @@
     "distributionName": "dist name",
     "distributionDate": "2022-01-02T00:00-04:00",
     "periodEndDate": "2022-01-03",
-    "comment": "some comment"
+    "comment": "some comment",
+    "fasUsage": {
+      "reportedStandardNumber": "1003324112314587XX"
+    }
   }
 ]

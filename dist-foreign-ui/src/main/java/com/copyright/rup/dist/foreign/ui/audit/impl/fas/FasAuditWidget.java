@@ -62,7 +62,10 @@ public class FasAuditWidget extends CommonAuditWidget implements IFasAuditWidget
         addColumn(UsageDto::getPayeeName, "table.column.payee_name", "payeeName", 300);
         addColumn(UsageDto::getWrWrkInst, "table.column.wr_wrk_inst", "wrWrkInst", 110);
         addColumn(UsageDto::getSystemTitle, "table.column.system_title", "systemTitle", 300);
-        addColumn(UsageDto::getWorkTitle, "table.column.work_title", "workTitle", 300);
+        addColumn(UsageDto::getWorkTitle, "table.column.reported_title", "workTitle", 300);
+        addColumn(usageDto -> Objects.nonNull(usageDto.getFasUsage())
+                ? usageDto.getFasUsage().getReportedStandardNumber() : null, "table.column.reported_standard_number",
+            "reportedStandardNumber", 190);
         addColumn(UsageDto::getStandardNumber, "table.column.standard_number", "standardNumber", 140);
         addColumn(UsageDto::getStandardNumberType, "table.column.standard_number_type", "standardNumberType", 155);
         addAmountColumn(UsageDto::getReportedValue, "table.column.reported_value", "reportedValue", 115);

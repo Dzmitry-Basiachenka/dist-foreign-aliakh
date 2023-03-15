@@ -168,6 +168,7 @@ databaseChangeLog {
             column(name: 'market_period_to', value: 2017)
             column(name: 'author', value: 'Nanette M. Schwann')
             column(name: 'reported_value', value: 9900.00)
+            column(name: 'reported_standard_number', value: '003324112314587XX')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -197,6 +198,7 @@ databaseChangeLog {
             column(name: 'market_period_to', value: 2017)
             column(name: 'author', value: 'Philippe de Mézières')
             column(name: 'reported_value', value: 5000.00)
+            column(name: 'reported_standard_number', value: '2558902245377325XX')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -231,6 +233,7 @@ databaseChangeLog {
             column(name: 'author', value: 'Philippe de Mézières')
             column(name: 'is_rh_participating_flag', value: 'false')
             column(name: 'reported_value', value: 15000.00)
+            column(name: 'reported_standard_number', value: '52365874521235XX')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -265,6 +268,7 @@ databaseChangeLog {
             column(name: 'author', value: 'Philippe de Mézières')
             column(name: 'is_rh_participating_flag', value: 'false')
             column(name: 'reported_value', value: 3000.00)
+            column(name: 'reported_standard_number', value: '1003324112314587XX')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -299,6 +303,7 @@ databaseChangeLog {
             column(name: 'author', value: 'Philippe de Mézières')
             column(name: 'is_rh_participating_flag', value: 'false')
             column(name: 'reported_value', value: 5620.00)
+            column(name: 'reported_standard_number', value: '0452365874521235XX')
         }
 
         rollback {
