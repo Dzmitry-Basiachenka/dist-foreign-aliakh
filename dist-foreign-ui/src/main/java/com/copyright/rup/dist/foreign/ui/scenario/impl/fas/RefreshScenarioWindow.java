@@ -29,6 +29,7 @@ import com.vaadin.ui.Window;
 import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Widget displays information about usages that will be added to scenario after refreshing.
@@ -115,6 +116,9 @@ public class RefreshScenarioWindow extends Window {
         addColumn(UsageDto::getRhName, "table.column.rh_account_name", "rhName", true, 300);
         addColumn(UsageDto::getWrWrkInst, "table.column.wr_wrk_inst", "wrWrkInst");
         addColumn(UsageDto::getSystemTitle, "table.column.system_title", "systemTitle", true, 300);
+        addColumn(usageDto -> Objects.nonNull(usageDto.getFasUsage())
+                ? usageDto.getFasUsage().getReportedStandardNumber() : null, "table.column.reported_standard_number",
+            "reportedStandardNumber", true, 190);
         addColumn(UsageDto::getStandardNumber, "table.column.standard_number", "standardNumber", true, 125);
         addColumn(
             UsageDto::getStandardNumberType, "table.column.standard_number_type", "standardNumberType", true, 155);
@@ -122,7 +126,7 @@ public class RefreshScenarioWindow extends Window {
             "fiscalYear");
         addColumn(usage -> CommonDateUtils.format(usage.getPaymentDate(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT),
             "table.column.payment_date", "paymentDate");
-        addColumn(UsageDto::getWorkTitle, "table.column.work_title", "workTitle", true, 300);
+        addColumn(UsageDto::getWorkTitle, "table.column.reported_title", "workTitle", true, 300);
         addColumn(UsageDto::getArticle, "table.column.article", "article", true, 135);
         addColumn(UsageDto::getPublisher, "table.column.publisher", "publisher", true, 135);
         addColumn(usage ->
