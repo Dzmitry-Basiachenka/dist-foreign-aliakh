@@ -1004,7 +1004,6 @@ public class UsageRepositoryIntegrationTest {
         usage.getRightsholder().setAccountNumber(RH_ACCOUNT_NUMBER);
         usage.setProductFamily(FAS_PRODUCT_FAMILY);
         usage.setWrWrkInst(5697789789L);
-        usage.setWorkTitle("Wissenschaft & Forschung Italy");
         usage.setSystemTitle("Wissenschaft & Forschung France");
         usage.setStandardNumberType("VALISBN10");
         usage.setStandardNumber(STANDARD_NUMBER);
@@ -1017,7 +1016,6 @@ public class UsageRepositoryIntegrationTest {
         assertEquals(FAS_PRODUCT_FAMILY, updatedUsage.getProductFamily());
         assertEquals("VALISBN10", updatedUsage.getStandardNumberType());
         assertEquals(STANDARD_NUMBER, updatedUsage.getStandardNumber());
-        assertEquals("Wissenschaft & Forschung Italy", updatedUsage.getWorkTitle());
         assertEquals("Wissenschaft & Forschung France", updatedUsage.getSystemTitle());
     }
 

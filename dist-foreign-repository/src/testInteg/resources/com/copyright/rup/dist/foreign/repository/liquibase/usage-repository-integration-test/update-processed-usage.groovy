@@ -57,6 +57,7 @@ databaseChangeLog {
             column(name: 'market_period_to', value: 2017)
             column(name: 'author', value: 'Philippe de Mézières')
             column(name: 'reported_value', value: 1000)
+            column(name: 'reported_standard_number', value: '2192-3559')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
