@@ -16,6 +16,9 @@
     "serviceFee": 0.32000,
     "status": "LOCKED",
     "productFamily": "FAS",
-    "scenarioName": "Scenario name"
+    "scenarioName": "Scenario name",
+    "fasUsage": {
+      "reportedStandardNumber": "1008902112377654XX"
+    }
   }
 ]

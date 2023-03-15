@@ -3,9 +3,12 @@ package com.copyright.rup.dist.foreign.repository.impl.csv.fas;
 import com.copyright.rup.dist.common.repository.impl.csv.BaseCsvReportHandler;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Writes usages into a {@link java.io.PipedOutputStream} connected to the {@link java.io.PipedInputStream}.
@@ -20,9 +23,9 @@ public class AuditFasCsvReportHandler extends BaseCsvReportHandler<UsageDto> {
 
     private static final List<String> HEADERS = List.of("Detail ID", "Detail Status", "Product Family",
         "Usage Batch Name", "Payment Date", "RH Account #", "RH Name", "Payee Account #", "Payee Name",
-        "Wr Wrk Inst", "System Title", "Title", "Standard Number", "Standard Number Type", "Reported Value",
-        "Gross Amt in USD", "Batch Amt in USD", "Service Fee %", "Scenario Name", "Check #", "Check Date", "Event ID",
-        "Dist. Name", "Dist. Date", "Period Ending", "Comment");
+        "Wr Wrk Inst", "System Title", "Reported Title", "Reported Standard Number", "Standard Number",
+        "Standard Number Type", "Reported Value", "Gross Amt in USD", "Batch Amt in USD", "Service Fee %",
+        "Scenario Name", "Check #", "Check Date", "Event ID", "Dist. Name", "Dist. Date", "Period Ending", "Comment");
 
     /**
      * Constructor.
@@ -48,6 +51,7 @@ public class AuditFasCsvReportHandler extends BaseCsvReportHandler<UsageDto> {
         beanProperties.add(getBeanPropertyAsString(bean.getWrWrkInst()));
         beanProperties.add(bean.getSystemTitle());
         beanProperties.add(bean.getWorkTitle());
+        beanProperties.add(formatStringStartedWithZero(getReportedStandardNumber(bean)));
         beanProperties.add(formatStringStartedWithZero(bean.getStandardNumber()));
         beanProperties.add(bean.getStandardNumberType());
         beanProperties.add(roundAndGetBeanBigDecimal(bean.getReportedValue()));
@@ -68,5 +72,11 @@ public class AuditFasCsvReportHandler extends BaseCsvReportHandler<UsageDto> {
     @Override
     protected List<String> getBeanHeaders() {
         return HEADERS;
+    }
+
+    private String getReportedStandardNumber(UsageDto bean) {
+        return Objects.isNull(bean.getFasUsage())
+            ? StringUtils.EMPTY
+            : bean.getFasUsage().getReportedStandardNumber();
     }
 }

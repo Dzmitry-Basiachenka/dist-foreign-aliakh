@@ -24,6 +24,9 @@
     "distributionName": "FDA March 17",
     "distributionDate": "2017-03-15T04:41:52.735531-04:00",
     "periodEndDate": "2017-03-15",
-    "comment": "usage from usages_10.csv"
+    "comment": "usage from usages_10.csv",
+    "fasUsage": {
+      "reportedStandardNumber": "1008902112317555XX"
+    }
   }
 ]

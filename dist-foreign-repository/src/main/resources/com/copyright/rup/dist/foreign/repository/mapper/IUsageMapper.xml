@@ -953,6 +953,7 @@
                     wr_wrk_inst,
                     work_title,
                     system_title,
+                    ufas.reported_standard_number,
                     standard_number,
                     standard_number_type,
                     ufas.reported_value,
@@ -1022,6 +1023,9 @@
                     </when>
                     <when test="sort.property == 'workTitle'">
                         work_title
+                    </when>
+                    <when test="sort.property == 'reportedStandardNumber'">
+                        reported_standard_number
                     </when>
                     <when test="sort.property == 'standardNumber'">
                         standard_number
@@ -1095,6 +1099,7 @@
             wr_wrk_inst,
             work_title,
             system_title,
+            ufas.reported_standard_number,
             standard_number,
             standard_number_type,
             ufas.reported_value,

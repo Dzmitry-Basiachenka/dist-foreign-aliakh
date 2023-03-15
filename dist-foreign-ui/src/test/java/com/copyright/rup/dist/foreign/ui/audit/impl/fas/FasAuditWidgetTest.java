@@ -103,9 +103,9 @@ public class FasAuditWidgetTest {
         Object[][] expectedCells = {
             {"349a84a6-0466-4d21-bb5a-977a11087770", UsageStatusEnum.PAID, "FAS", "Paid batch", "02/12/2021",
                 1000002859L, "John Wiley & Sons - Books", 1000000001L, "Rothchild Consultants", 243904752L,
-                "100 ROAD MOVIES", "100 ROAD MOVIES", "1008902112317555XX", "VALISBN13", "3,000.00", "500.00",
-                "1,000.00", "16.0", "scenario name", "650738", "02/13/2022", "97423", "dist name", "01/02/2022",
-                "01/03/2022", "some comment"}
+                "100 ROAD MOVIES", "100 ROAD MOVIES", "1003324112314587XX", "1008902112317555XX", "VALISBN13",
+                "3,000.00", "500.00", "1,000.00", "16.0", "scenario name", "650738", "02/13/2022", "97423",
+                "dist name", "01/02/2022", "01/03/2022", "some comment"}
         };
         verifyGridItems(grid, usages, expectedCells);
         verify(JavaScript.class, controller);
@@ -177,7 +177,8 @@ public class FasAuditWidgetTest {
             Triple.of("Payee Name", 300.0, -1),
             Triple.of("Wr Wrk Inst", 110.0, -1),
             Triple.of("System Title", 300.0, -1),
-            Triple.of("Title", 300.0, -1),
+            Triple.of("Reported Title", 300.0, -1),
+            Triple.of("Reported Standard Number", 190.0, -1),
             Triple.of("Standard Number", 140.0, -1),
             Triple.of("Standard Number Type", 155.0, -1),
             Triple.of("Reported Value", 115.0, -1),
