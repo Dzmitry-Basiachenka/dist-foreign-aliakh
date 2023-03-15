@@ -1,3 +1,16 @@
+17.0.11
+-
+* B-77141 FDA: Display all filtered criteria for filters: add display applied filters on Proxy Value tab for ACL
+* B-77141 FDA: Display all filtered criteria for filters: make changes based on comments in code review
+* B-76925 FDA: Deleted works column for editing wrwrkinsts: add MDWMS deleted column to Acl usage export
+* B-76925 FDA: Deleted works column for editing wrwrkinsts: make changes based on comments in code review
+* B-77080 FDA: Show Reported Standard Number and Reported Title on UI and Exports: add Reported Standard Number and Reported Title columns for Scenario Details export
+* B-77080 FDA: Show Reported Standard Number and Reported Title on UI and Exports: add Reported Standard Number and Reported Title columns on Usages tab and export
+* B-77080 FDA: Show Reported Standard Number and Reported Title on UI and Exports: add Reported Standard Number and Reported Title columns on Audit tab and export
+* B-77080 FDA: Show Reported Standard Number and Reported Title on UI and Exports: update logic for inserting FAS usages with reported title field
+* B-77080 FDA: Show Reported Standard Number and Reported Title on UI and Exports: update logic for inserting FAS usages with reported standard number field
+* B-77080 FDA: Show Reported Standard Number and Reported Title on UI and Exports: update discrepancy building with System Title in DiscrepancyBuilder
+
 17.0.10
 -
 * B-76925 FDA: Deleted works column for editing wrwrkinsts: implement PI integration logic
