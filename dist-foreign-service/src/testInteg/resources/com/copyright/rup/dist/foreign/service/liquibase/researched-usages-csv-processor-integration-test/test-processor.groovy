@@ -40,6 +40,7 @@ databaseChangeLog {
             column(name: 'market_period_to', value: 2017)
             column(name: 'author', value: 'Philippe de Mézières')
             column(name: 'reported_value', value: 10000)
+            column(name: 'reported_standard_number', value: '2192-3558')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -67,6 +68,7 @@ databaseChangeLog {
             column(name: 'market_period_to', value: 2017)
             column(name: 'author', value: 'Philippe de Mézières')
             column(name: 'reported_value', value: 10000)
+            column(name: 'reported_standard_number', value: '2192-3566')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -94,6 +96,7 @@ databaseChangeLog {
             column(name: 'market_period_to', value: 2017)
             column(name: 'author', value: 'Philippe de Mézières')
             column(name: 'reported_value', value: 10000)
+            column(name: 'reported_standard_number', value: '2192-3566')
         }
 
         rollback {

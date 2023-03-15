@@ -215,9 +215,6 @@ public class WorkMatchingService implements IWorkMatchingService {
         Work work = piIntegrationService.findWorkByStandardNumber(usage.getStandardNumber());
         if (Objects.nonNull(work.getWrWrkInst())) {
             usage.setWrWrkInst(work.getWrWrkInst());
-            if (Objects.isNull(usage.getWorkTitle())) {
-                usage.setWorkTitle(work.getMainTitle());
-            }
             usage.setSystemTitle(work.getMainTitle());
             usage.setStatus(UsageStatusEnum.WORK_FOUND);
             usage.setStandardNumber(work.getMainIdno());
@@ -266,7 +263,6 @@ public class WorkMatchingService implements IWorkMatchingService {
         } else {
             if (Objects.isNull(usage.getStandardNumber()) && Objects.isNull(usage.getWorkTitle())) {
                 usage.setWrWrkInst(UNIDENTIFIED_WR_WRK_INST);
-                usage.setWorkTitle(UNIDENTIFIED_TITLE);
                 usage.setSystemTitle(UNIDENTIFIED_TITLE);
                 usage.setStatus(UsageStatusEnum.WORK_FOUND);
                 auditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND,

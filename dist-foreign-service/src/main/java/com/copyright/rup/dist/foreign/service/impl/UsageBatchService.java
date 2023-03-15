@@ -327,7 +327,6 @@ public class UsageBatchService implements IUsageBatchService {
                 Work work = piIntegrationService.findWorkByWrWrkInst(usage.getWrWrkInst());
                 usage.setStandardNumberType(work.getMainIdnoType());
                 usage.setStandardNumber(work.getMainIdno());
-                usage.setWorkTitle(work.getMainTitle());
                 usage.setSystemTitle(work.getMainTitle());
             });
     }

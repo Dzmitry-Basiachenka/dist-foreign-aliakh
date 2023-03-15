@@ -1247,7 +1247,6 @@
             rh_account_number = #{rightsholder.accountNumber},
             wr_wrk_inst = #{wrWrkInst},
             system_title = #{systemTitle},
-            work_title = #{workTitle},
             status_ind = #{status},
             product_family = #{productFamily},
             standard_number = #{standardNumber},
