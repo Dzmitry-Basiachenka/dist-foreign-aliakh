@@ -86,7 +86,8 @@ public class NtsAuditWidgetTest {
         widget = new NtsAuditWidget(controller);
         widget.setController(controller);
         filterController = createMock(INtsAuditFilterController.class);
-        filterWidget = new NtsAuditFilterWidget();
+        INtsAuditFilterController ntsAuditFilterController = createMock(INtsAuditFilterController.class);
+        filterWidget = new NtsAuditFilterWidget(ntsAuditFilterController);
         filterWidget.setController(filterController);
     }
 

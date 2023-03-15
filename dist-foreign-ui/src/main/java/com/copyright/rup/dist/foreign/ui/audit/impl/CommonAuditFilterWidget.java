@@ -14,6 +14,7 @@ import com.copyright.rup.vaadin.ui.component.filter.CommonFilterWindow;
 import com.copyright.rup.vaadin.ui.component.filter.CommonFilterWindow.IFilterSaveListener;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.util.VaadinUtils;
+
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
@@ -47,7 +48,7 @@ public abstract class CommonAuditFilterWidget extends VerticalLayout implements 
     public CommonAuditFilterWidget init() {
         filter = buildAuditFilter();
         appliedFilter = buildAuditFilter();
-        appliedFilterWidget = new CommonAuditAppliedFilterWidget(controller);
+        appliedFilterWidget = getAppliedFilterWidget();
         HorizontalLayout buttonsLayout = buildButtonsLayout();
         initFields();
         addComponents(buttonsLayout, buildAppliedFiltersHeaderLabel(), appliedFilterWidget);
@@ -104,6 +105,11 @@ public abstract class CommonAuditFilterWidget extends VerticalLayout implements 
     protected void refreshFilter() {
         filter = buildAuditFilter();
     }
+
+    /**
+     * @return instantiated applied filter widget.
+     */
+    protected abstract CommonAuditAppliedFilterWidget getAppliedFilterWidget();
 
     /**
      * @return rightsholder filter {@link LazyRightsholderFilterWidget}.

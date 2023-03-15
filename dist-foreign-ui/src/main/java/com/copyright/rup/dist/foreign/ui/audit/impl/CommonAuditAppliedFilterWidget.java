@@ -4,11 +4,8 @@ import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.ui.audit.api.ICommonAuditFilterController;
-import com.copyright.rup.dist.foreign.ui.audit.impl.sal.SalAuditFilterController;
 import com.copyright.rup.dist.foreign.ui.common.CommonAppliedFilterPanel;
 import com.copyright.rup.vaadin.util.VaadinUtils;
-
-import com.vaadin.ui.VerticalLayout;
 
 import java.util.Comparator;
 import java.util.LinkedHashSet;
@@ -24,7 +21,7 @@ import java.util.stream.Collectors;
  *
  * @author Stepan Karakhanov
  */
-public class CommonAuditAppliedFilterWidget extends CommonAppliedFilterPanel {
+public abstract class CommonAuditAppliedFilterWidget extends CommonAppliedFilterPanel {
 
     private final ICommonAuditFilterController controller;
 
@@ -44,38 +41,15 @@ public class CommonAuditAppliedFilterWidget extends CommonAppliedFilterPanel {
      *
      * @param filter instance of {@link AuditFilter}
      */
-    public void refreshFilterPanel(AuditFilter filter) {
-        VerticalLayout layout = initFilterPanel();
-        if (!filter.isEmpty()) {
-            addLabel(createLabelWithMultipleValues(convertRroAccountNumbersToRroNames(filter.getRhAccountNumbers()),
-                "label.rightsholders", String::valueOf), layout);
-            addLabel(createLabelWithMultipleValues(
-                convertSalLicenseesAccountNumbersToNames(filter.getLicenseeAccountNumbers()), "label.licensees",
-                String::valueOf), layout);
-            addLabel(createLabelWithMultipleValues(convertBatchIdsToBatchNames(filter.getBatchesIds()),
-                "label.batches", String::valueOf), layout);
-            addLabel(createLabelWithMultipleValues(filter.getStatuses(), "label.statuses", String::valueOf), layout);
-            addLabel(createLabelWithSingleValue(AuditFilter::getSalDetailType, filter, "label.detail_type"), layout);
-            addLabel(createLabelWithSingleValue(AuditFilter::getUsagePeriod, filter, "label.usage_period"), layout);
-            addLabel(createLabelWithSingleValue(AuditFilter::getCccEventId, filter, "label.event_id"), layout);
-            addLabel(createLabelWithSingleValue(AuditFilter::getDistributionName, filter, "label.distribution_name"),
-                layout);
-        }
-        setContent(layout);
-    }
+    public abstract void refreshFilterPanel(AuditFilter filter);
 
-    private Set<String> convertSalLicenseesAccountNumbersToNames(Set<Long> accountNumbers) {
-        if (controller instanceof SalAuditFilterController) {
-            return ((SalAuditFilterController)controller).getSalLicensees()
-                .stream()
-                .filter(salLicensee -> accountNumbers.contains(salLicensee.getAccountNumber()))
-                .map(salLicensee -> salLicensee.getAccountNumber() + " - " + salLicensee.getName())
-                .collect(Collectors.toCollection(LinkedHashSet::new));
-        }
-        return Set.of();
-    }
-
-    private Set<String> convertBatchIdsToBatchNames(Set<String> batchesIds) {
+    /**
+     * Convert batches ids to batches names.
+     *
+     * @param batchesIds set of batches id
+     * @return set of batches names
+     */
+    protected Set<String> convertBatchIdsToBatchNames(Set<String> batchesIds) {
         return controller.getUsageBatches()
             .stream()
             .filter(usageBatch -> batchesIds.contains(usageBatch.getId()))
@@ -84,7 +58,13 @@ public class CommonAuditAppliedFilterWidget extends CommonAppliedFilterPanel {
             .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
-    private Set<String> convertRroAccountNumbersToRroNames(Set<Long> accountNumbers) {
+    /**
+     * Convert RROs account numbers to names.
+     *
+     * @param accountNumbers set of RROs account numbers
+     * @return set of RROs names
+     */
+    protected Set<String> convertRroAccountNumbersToRroNames(Set<Long> accountNumbers) {
         if (accountNumbers == null || accountNumbers.isEmpty()) {
             return Set.of();
         }

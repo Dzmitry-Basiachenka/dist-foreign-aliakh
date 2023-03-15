@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.ui.audit.impl;
+package com.copyright.rup.dist.foreign.ui.audit.impl.sal;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
@@ -16,8 +16,7 @@ import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.report.SalLicensee;
-import com.copyright.rup.dist.foreign.ui.audit.api.ICommonAuditFilterController;
-import com.copyright.rup.dist.foreign.ui.audit.impl.sal.SalAuditFilterController;
+import com.copyright.rup.dist.foreign.ui.audit.api.sal.ISalAuditFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.UiTestHelper;
 
 import com.vaadin.server.Sizeable.Unit;
@@ -31,38 +30,36 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Verifies {@link CommonAuditAppliedFilterWidget}.
+ * Verifies {@link SalAuditAppliedFilterWidget}.
  * <p>
  * Copyright (C) 2023 copyright.com
  * <p>
- * Date: 03/07/2023
+ * Date: 03/16/2023
  *
  * @author Stepan Karakhanov
  */
-public class CommonAuditAppliedFilterWidgetTest {
+public class SalAuditAppliedFilterWidgetTest {
 
-    private static final Long ACCOUNT_NUMBER_1 = 1000000001L;
-    private static final Long ACCOUNT_NUMBER_2 = 1000000002L;
     private static final String BATCH_ID_1 = "2f4fabf5-e154-4421-972f-cdc7b357725a";
     private static final String BATCH_ID_2 = "e7b3efe7-6036-41aa-889d-590e211bad7f";
     private static final String NAME_1 = "Name 1";
     private static final String NAME_2 = "Name 2";
-    private static final String EVENT_ID = "007";
-    private static final String DISTRIBUTION_NAME = "Dist 1";
+    private static final String EVENT_ID = "500";
+    private static final String DISTRIBUTION_NAME = "Dist. name";
+    private static final Long ACCOUNT_NUMBER = 1000000001L;
     private static final Integer USAGE_PERIOD = 2023;
 
-    private CommonAuditAppliedFilterWidget widget;
+    private SalAuditAppliedFilterWidget widget;
 
     @Test
     public void testRefreshFilterPanel() {
-        ICommonAuditFilterController controller = createMock(SalAuditFilterController.class);
-        widget = new CommonAuditAppliedFilterWidget(controller);
+        ISalAuditFilterController controller = createMock(ISalAuditFilterController.class);
+        widget = new SalAuditAppliedFilterWidget(controller);
         expect(controller.getUsageBatches()).andReturn(
             List.of(buildBatch(BATCH_ID_1, NAME_1), buildBatch(BATCH_ID_2, NAME_2))).once();
-        expect(controller.getRightsholdersByAccountNumbers(Set.of(ACCOUNT_NUMBER_1))).andReturn(
-            List.of(buildRightsholder(NAME_1, ACCOUNT_NUMBER_1))).once();
-        expect(((SalAuditFilterController) controller).getSalLicensees()).andReturn(
-            List.of(buildSalLicensee(ACCOUNT_NUMBER_2, NAME_2))).once();
+        expect(controller.getRightsholdersByAccountNumbers(Set.of(ACCOUNT_NUMBER))).andReturn(
+            List.of(buildRightsholder(ACCOUNT_NUMBER, NAME_1))).once();
+        expect(controller.getSalLicensees()).andReturn(List.of(buildSalLicensee(ACCOUNT_NUMBER, NAME_2))).once();
         replay(controller);
         AuditFilter filter = buildFilter();
         widget.refreshFilterPanel(filter);
@@ -76,9 +73,9 @@ public class CommonAuditAppliedFilterWidgetTest {
         assertThat(component, instanceOf(VerticalLayout.class));
         VerticalLayout verticalLayout = (VerticalLayout) component;
         assertEquals(8, verticalLayout.getComponentCount());
-        verifyLabel(((VerticalLayout) component).getComponent(0), "Rightsholders", ACCOUNT_NUMBER_1 + " - " + NAME_1);
-        verifyLabel(((VerticalLayout) component).getComponent(1), "Licensees", ACCOUNT_NUMBER_2 + " - " + NAME_2);
-        verifyLabel(((VerticalLayout) component).getComponent(2), "Batches", NAME_1);
+        verifyLabel(((VerticalLayout) component).getComponent(0), "Rightsholders", ACCOUNT_NUMBER + " - " + NAME_1);
+        verifyLabel(((VerticalLayout) component).getComponent(1), "Licensees", ACCOUNT_NUMBER + " - " + NAME_2);
+        verifyLabel(((VerticalLayout) component).getComponent(2), "Batches", NAME_1 + ", " + NAME_2);
         verifyLabel(((VerticalLayout) component).getComponent(3), "Statuses", String.valueOf(UsageStatusEnum.ELIGIBLE));
         verifyLabel(((VerticalLayout) component).getComponent(4), "Detail Type", String.valueOf(SalDetailTypeEnum.IB));
         verifyLabel(((VerticalLayout) component).getComponent(5), "Usage Period", String.valueOf(USAGE_PERIOD));
@@ -92,16 +89,16 @@ public class CommonAuditAppliedFilterWidgetTest {
     }
 
     private AuditFilter buildFilter() {
-        AuditFilter auditFilter = new AuditFilter();
-        auditFilter.setRhAccountNumbers(Set.of(ACCOUNT_NUMBER_1));
-        auditFilter.setLicenseeAccountNumbers(Set.of(ACCOUNT_NUMBER_2));
-        auditFilter.setBatchesIds(Set.of(BATCH_ID_1));
-        auditFilter.setStatuses(Set.of(UsageStatusEnum.ELIGIBLE));
-        auditFilter.setSalDetailType(SalDetailTypeEnum.IB);
-        auditFilter.setUsagePeriod(USAGE_PERIOD);
-        auditFilter.setCccEventId(EVENT_ID);
-        auditFilter.setDistributionName(DISTRIBUTION_NAME);
-        return auditFilter;
+        AuditFilter filter = new AuditFilter();
+        filter.setRhAccountNumbers(Set.of(ACCOUNT_NUMBER));
+        filter.setLicenseeAccountNumbers(Set.of(ACCOUNT_NUMBER));
+        filter.setBatchesIds(Set.of(BATCH_ID_1, BATCH_ID_2));
+        filter.setStatuses(Set.of(UsageStatusEnum.ELIGIBLE));
+        filter.setSalDetailType(SalDetailTypeEnum.IB);
+        filter.setUsagePeriod(USAGE_PERIOD);
+        filter.setCccEventId(EVENT_ID);
+        filter.setDistributionName(DISTRIBUTION_NAME);
+        return filter;
     }
 
     private UsageBatch buildBatch(String id, String name) {
@@ -111,17 +108,17 @@ public class CommonAuditAppliedFilterWidgetTest {
         return batch;
     }
 
-    private Rightsholder buildRightsholder(String name, Long accountNumber) {
+    private Rightsholder buildRightsholder(Long accountNumber, String name) {
         Rightsholder rightsholder = new Rightsholder();
-        rightsholder.setName(name);
         rightsholder.setAccountNumber(accountNumber);
+        rightsholder.setName(name);
         return rightsholder;
     }
 
     private SalLicensee buildSalLicensee(Long accountNumber, String name) {
-        SalLicensee salLicensee = new SalLicensee();
-        salLicensee.setAccountNumber(accountNumber);
-        salLicensee.setName(name);
-        return salLicensee;
+        SalLicensee licensee = new SalLicensee();
+        licensee.setAccountNumber(accountNumber);
+        licensee.setName(name);
+        return licensee;
     }
 }

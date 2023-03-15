@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.audit.impl.nts;
 
+import com.copyright.rup.dist.foreign.ui.audit.api.nts.INtsAuditFilterController;
+import com.copyright.rup.dist.foreign.ui.audit.impl.CommonAuditAppliedFilterWidget;
 import com.copyright.rup.dist.foreign.ui.audit.impl.CommonAuditFilterWidget;
 import com.copyright.rup.dist.foreign.ui.audit.impl.CommonStatusFilterWidget;
 import com.copyright.rup.dist.foreign.ui.common.LazyRightsholderFilterWidget;
@@ -21,11 +23,22 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class NtsAuditFilterWidget extends CommonAuditFilterWidget {
 
+    private final INtsAuditFilterController controller;
+
     private LazyRightsholderFilterWidget rightsholderFilterWidget;
     private UsageBatchFilterWidget usageBatchFilterWidget;
     private CommonStatusFilterWidget commonStatusFilterWidget;
     private TextField cccEventIdField;
     private TextField distributionNameField;
+
+    /**
+     * Constructor.
+     *
+     * @param controller instance of {@link INtsAuditFilterController}
+     */
+    public NtsAuditFilterWidget(INtsAuditFilterController controller) {
+        this.controller = controller;
+    }
 
     @Override
     public void initFields() {
@@ -54,6 +67,11 @@ public class NtsAuditFilterWidget extends CommonAuditFilterWidget {
         cccEventIdField.setValue(StringUtils.trim(cccEventIdField.getValue()));
         distributionNameField.setValue(StringUtils.trim(distributionNameField.getValue()));
         applyFilter();
+    }
+
+    @Override
+    protected CommonAuditAppliedFilterWidget getAppliedFilterWidget() {
+        return new NtsAuditAppliedFilterWidget(controller);
     }
 
     private void initStatusesFilterWidget() {

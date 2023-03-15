@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.ui.audit.impl.sal;
 import com.copyright.rup.dist.foreign.domain.SalDetailTypeEnum;
 import com.copyright.rup.dist.foreign.domain.report.SalLicensee;
 import com.copyright.rup.dist.foreign.ui.audit.api.sal.ISalAuditFilterController;
+import com.copyright.rup.dist.foreign.ui.audit.impl.CommonAuditAppliedFilterWidget;
 import com.copyright.rup.dist.foreign.ui.audit.impl.CommonAuditFilterWidget;
 import com.copyright.rup.dist.foreign.ui.audit.impl.CommonStatusFilterWidget;
 import com.copyright.rup.dist.foreign.ui.common.LazyRightsholderFilterWidget;
@@ -84,6 +85,11 @@ public class SalAuditFilterWidget extends CommonAuditFilterWidget {
         cccEventIdField.setValue(StringUtils.trim(cccEventIdField.getValue()));
         distributionNameField.setValue(StringUtils.trim(distributionNameField.getValue()));
         applyFilter();
+    }
+
+    @Override
+    protected CommonAuditAppliedFilterWidget getAppliedFilterWidget() {
+        return new SalAuditAppliedFilterWidget(controller);
     }
 
     private SalLicenseeFilterWidget buildLicenseesFilter() {
