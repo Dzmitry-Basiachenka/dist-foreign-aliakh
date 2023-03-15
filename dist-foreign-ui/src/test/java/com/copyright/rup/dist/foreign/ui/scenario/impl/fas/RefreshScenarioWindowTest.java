@@ -80,11 +80,12 @@ public class RefreshScenarioWindowTest {
             Triple.of("RH Name", 300.0, -1),
             Triple.of("Wr Wrk Inst", -1.0, -1),
             Triple.of("System Title", 300.0, -1),
+            Triple.of("Reported Standard Number", 190.0, -1),
             Triple.of("Standard Number", 125.0, -1),
             Triple.of("Standard Number Type", 155.0, -1),
             Triple.of("Fiscal Year", -1.0, -1),
             Triple.of("Payment Date", -1.0, -1),
-            Triple.of("Title", 300.0, -1),
+            Triple.of("Reported Title", 300.0, -1),
             Triple.of("Article", 135.0, -1),
             Triple.of("Publisher", 135.0, -1),
             Triple.of("Pub Date", 80.0, -1),
@@ -115,9 +116,9 @@ public class RefreshScenarioWindowTest {
         Object[][] expectedCells = {
             {"377594f8-a247-4277-b29f-0b33ff360a7e", UsageStatusEnum.PAID, "FAS", "Paid batch", 1000000004L,
                 "Computers for Design and Construction", 1000002859L, "John Wiley & Sons - Books", 243904752L,
-                "100 ROAD MOVIES", "1008902112317555XX", "VALISBN13", "FY2021", "02/12/2021", "100 ROAD MOVIES",
-                "some article", "some publisher", "02/13/2021", 2, "3,000.00", "500.00", "1,000.00", "lib", 1980, 2000,
-                "author", "usage from usages_10.csv"}
+                "100 ROAD MOVIES", "1008902112317555XX", "1008902112317555XX", "VALISBN13", "FY2021", "02/12/2021",
+                "100 ROAD MOVIES", "some article", "some publisher", "02/13/2021", 2, "3,000.00", "500.00", "1,000.00",
+                "lib", 1980, 2000, "author", "usage from usages_10.csv"}
         };
         verifyGridItems(grid, usages, expectedCells);
         verify(JavaScript.class);

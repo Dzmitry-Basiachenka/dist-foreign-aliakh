@@ -26,6 +26,9 @@
     "marketPeriodFrom": 1980,
     "marketPeriodTo": 2000,
     "author": "author",
-    "comment": "usage from usages_10.csv"
+    "comment": "usage from usages_10.csv",
+    "fasUsage": {
+      "reportedStandardNumber": "1008902112317555XX"
+    }
   }
 ]
