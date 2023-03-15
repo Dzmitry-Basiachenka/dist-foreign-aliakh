@@ -34,7 +34,7 @@ public abstract class CommonUsageFilterWidget extends VerticalLayout implements 
     @Override
     @SuppressWarnings("unchecked")
     public CommonUsageFilterWidget init() {
-        appliedFilterWidget = new CommonUsageAppliedFilterWidget(controller);
+        appliedFilterWidget = getAppliedFilterWidget();
         addComponents(initFiltersLayout(), initButtonsLayout(), buildAppliedFiltersHeaderLabel(), appliedFilterWidget);
         refreshFilter();
         VaadinUtils.setMaxComponentsWidth(this);
@@ -86,6 +86,11 @@ public abstract class CommonUsageFilterWidget extends VerticalLayout implements 
      * @return instantiated filter layout.
      */
     protected abstract VerticalLayout initFiltersLayout();
+
+    /**
+     * @return instantiated applied filter widget.
+     */
+    protected abstract CommonUsageAppliedFilterWidget getAppliedFilterWidget();
 
     /**
      * @return built filters header label.

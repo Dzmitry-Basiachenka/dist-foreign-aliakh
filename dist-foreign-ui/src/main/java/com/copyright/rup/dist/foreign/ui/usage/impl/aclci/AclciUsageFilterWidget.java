@@ -10,6 +10,7 @@ import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.aclci.IAclciUsageFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.aclci.IAclciUsageFilterWidget;
+import com.copyright.rup.dist.foreign.ui.usage.impl.CommonUsageAppliedFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.impl.CommonUsageFilterWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.filter.CommonFilterWindow.IFilterSaveListener;
@@ -93,6 +94,11 @@ public class AclciUsageFilterWidget extends CommonUsageFilterWidget implements I
                 buildLicenseTypesFilter());
         verticalLayout.setMargin(false);
         return verticalLayout;
+    }
+
+    @Override
+    protected CommonUsageAppliedFilterWidget getAppliedFilterWidget() {
+        return new AclciUsageAppliedFilterWidget(controller);
     }
 
     @Override

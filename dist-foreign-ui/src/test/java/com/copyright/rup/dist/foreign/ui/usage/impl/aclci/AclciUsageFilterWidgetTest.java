@@ -45,7 +45,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -93,7 +92,6 @@ public class AclciUsageFilterWidgetTest {
     @Test
     public void testApplyFilter() {
         expect(controller.getSelectedProductFamily()).andReturn(ACLCI_PRODUCT_FAMILY).once();
-        expect(controller.getUsageBatches()).andReturn(List.of()).once();
         replay(controller);
         widget.init();
         widget.clearFilter();

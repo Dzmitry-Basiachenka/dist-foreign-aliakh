@@ -82,6 +82,11 @@ public class FasNtsUsageFilterWidget extends CommonUsageFilterWidget implements 
         return verticalLayout;
     }
 
+    @Override
+    protected CommonUsageAppliedFilterWidget getAppliedFilterWidget() {
+        return new FasNtsUsageAppliedFilterWidget(controller);
+    }
+
     private HorizontalLayout buildUsageBatchFilter() {
         usageBatchFilterWidget = new UsageBatchFilterWidget(() -> controller.getUsageBatches());
         usageBatchFilterWidget.addFilterSaveListener((IFilterSaveListener<UsageBatch>) saveEvent -> {

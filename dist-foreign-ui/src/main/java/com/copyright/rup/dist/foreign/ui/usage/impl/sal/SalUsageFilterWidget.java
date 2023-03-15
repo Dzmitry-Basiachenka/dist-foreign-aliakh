@@ -9,6 +9,7 @@ import com.copyright.rup.dist.foreign.ui.common.UsageBatchFilterWidget;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageFilterController;
+import com.copyright.rup.dist.foreign.ui.usage.impl.CommonUsageAppliedFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.impl.CommonUsageFilterWidget;
 import com.copyright.rup.vaadin.ui.component.filter.CommonFilterWindow;
 import com.copyright.rup.vaadin.ui.component.filter.FilterWindow;
@@ -76,6 +77,11 @@ public class SalUsageFilterWidget extends CommonUsageFilterWidget implements IAa
             buildRightsholdersFilter(), statusComboBox, detailTypeComboBox);
         verticalLayout.setMargin(false);
         return verticalLayout;
+    }
+
+    @Override
+    protected CommonUsageAppliedFilterWidget getAppliedFilterWidget() {
+        return new SalUsageAppliedFilterWidget(controller);
     }
 
     private HorizontalLayout buildUsageBatchFilter() {

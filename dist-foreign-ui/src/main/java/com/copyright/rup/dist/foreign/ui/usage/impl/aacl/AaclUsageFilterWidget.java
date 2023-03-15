@@ -6,6 +6,7 @@ import com.copyright.rup.dist.foreign.ui.common.UsageBatchFilterWidget;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageFilterWidget;
+import com.copyright.rup.dist.foreign.ui.usage.impl.CommonUsageAppliedFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.impl.CommonUsageFilterWidget;
 import com.copyright.rup.vaadin.ui.component.filter.CommonFilterWindow.IFilterSaveListener;
 import com.copyright.rup.vaadin.util.VaadinUtils;
@@ -69,6 +70,11 @@ public class AaclUsageFilterWidget extends CommonUsageFilterWidget implements IA
             statusComboBox, usagePeriodComboBox);
         verticalLayout.setMargin(false);
         return verticalLayout;
+    }
+
+    @Override
+    protected CommonUsageAppliedFilterWidget getAppliedFilterWidget() {
+        return new AaclUsageAppliedFilterWidget(controller);
     }
 
     private HorizontalLayout buildUsageBatchFilter() {

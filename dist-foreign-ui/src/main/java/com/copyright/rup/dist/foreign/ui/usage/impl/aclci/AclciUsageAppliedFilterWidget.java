@@ -1,10 +1,9 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.aclci;
 
 import com.copyright.rup.dist.foreign.domain.AclciLicenseTypeEnum;
-import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
-import com.copyright.rup.dist.foreign.ui.common.CommonAppliedFilterPanel;
 import com.copyright.rup.dist.foreign.ui.usage.api.aclci.IAclciUsageFilterController;
+import com.copyright.rup.dist.foreign.ui.usage.impl.CommonUsageAppliedFilterWidget;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.ui.VerticalLayout;
@@ -22,9 +21,7 @@ import java.util.stream.Collectors;
  *
  * @author Mikita Maistrenka
  */
-public class AclciUsageAppliedFilterWidget extends CommonAppliedFilterPanel {
-
-    private final IAclciUsageFilterController controller;
+public class AclciUsageAppliedFilterWidget extends CommonUsageAppliedFilterWidget {
 
     /**
      * Constructor.
@@ -32,8 +29,7 @@ public class AclciUsageAppliedFilterWidget extends CommonAppliedFilterPanel {
      * @param controller instance of {@link IAclciUsageFilterController}.
      */
     public AclciUsageAppliedFilterWidget(IAclciUsageFilterController controller) {
-        super();
-        this.controller = controller;
+        super(controller);
         VaadinUtils.addComponentStyle(this, "aclci-usage-filter-panel-widget");
     }
 
@@ -42,6 +38,7 @@ public class AclciUsageAppliedFilterWidget extends CommonAppliedFilterPanel {
      *
      * @param filter instance of {@link UsageFilter}
      */
+    @Override
     public void refreshFilterPanel(UsageFilter filter) {
         VerticalLayout layout = initFilterPanel();
         if (!filter.isEmpty()) {
@@ -58,15 +55,6 @@ public class AclciUsageAppliedFilterWidget extends CommonAppliedFilterPanel {
         return licenseTypes
             .stream()
             .map(AclciLicenseTypeEnum::name)
-            .sorted(String::compareToIgnoreCase)
-            .collect(Collectors.toCollection(LinkedHashSet::new));
-    }
-
-    private Set<String> convertBatchIdsToBatchNames(Set<String> batchesIds) {
-        return controller.getUsageBatches()
-            .stream()
-            .filter(usageBatch -> batchesIds.contains(usageBatch.getId()))
-            .map(UsageBatch::getName)
             .sorted(String::compareToIgnoreCase)
             .collect(Collectors.toCollection(LinkedHashSet::new));
     }
