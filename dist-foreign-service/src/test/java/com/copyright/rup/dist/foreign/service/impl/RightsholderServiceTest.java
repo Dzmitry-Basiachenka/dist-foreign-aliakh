@@ -21,7 +21,6 @@ import com.copyright.rup.dist.foreign.repository.api.IRightsholderRepository;
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
-import org.powermock.api.easymock.PowerMock;
 import org.powermock.reflect.Whitebox;
 
 import java.util.List;
@@ -146,9 +145,9 @@ public class RightsholderServiceTest {
     @Test
     public void testGetRightsholdersByScenarioId() {
         expect(rightsholderRepository.findRhPayeePairByScenarioId(SCENARIO_ID)).andReturn(List.of()).once();
-        PowerMock.replay(rightsholderRepository);
+        replay(rightsholderRepository);
         assertEquals(List.of(), rightsholderService.getRhPayeePairByScenarioId(SCENARIO_ID));
-        PowerMock.verify(rightsholderRepository);
+        verify(rightsholderRepository);
     }
 
     @Test
@@ -157,10 +156,10 @@ public class RightsholderServiceTest {
             List.of(buildRightsholder(ACCOUNT_NUMBER_1), buildRightsholder(ACCOUNT_NUMBER_2));
         expect(rightsholderRepository.findByAccountNumbers(Set.of(ACCOUNT_NUMBER_1, ACCOUNT_NUMBER_2)))
             .andReturn(rightsholders).once();
-        PowerMock.replay(rightsholderRepository);
+        replay(rightsholderRepository);
         assertEquals(rightsholders, rightsholderService.getRightsholdersByAccountNumbers(
             Set.of(ACCOUNT_NUMBER_1, ACCOUNT_NUMBER_2)));
-        PowerMock.verify(rightsholderRepository);
+        verify(rightsholderRepository);
     }
 
     private Rightsholder buildRightsholder(Long accountNumber) {
