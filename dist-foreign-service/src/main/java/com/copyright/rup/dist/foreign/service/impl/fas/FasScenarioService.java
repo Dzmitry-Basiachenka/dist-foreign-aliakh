@@ -239,7 +239,7 @@ public class FasScenarioService implements IFasScenarioService {
             discrepancy.setNewRightsholder(
                 accountNumberToRightsholder.computeIfAbsent(newAccountNumber, this::buildRightsholder));
             discrepancy.setWrWrkInst(usage.getWrWrkInst());
-            discrepancy.setWorkTitle(usage.getWorkTitle());
+            discrepancy.setWorkTitle(usage.getSystemTitle());
             discrepancy.setProductFamily(usage.getProductFamily());
             discrepancy.setStatus(RightsholderDiscrepancyStatusEnum.DRAFT);
             discrepancy.setCreateUser(userName);
