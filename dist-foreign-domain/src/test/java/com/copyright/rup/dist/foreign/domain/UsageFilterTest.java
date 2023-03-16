@@ -7,11 +7,10 @@ import static org.junit.Assert.assertTrue;
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
-import com.google.common.collect.Sets;
-
 import org.junit.Test;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -36,13 +35,13 @@ public class UsageFilterTest {
         assertTrue(usageFilter.isEmpty());
         usageFilter.setProductFamily("FAS");
         assertTrue(usageFilter.isEmpty());
-        usageFilter.setUsageBatchesIds(Sets.newHashSet());
+        usageFilter.setUsageBatchesIds(new HashSet<>());
         assertTrue(usageFilter.isEmpty());
-        usageFilter.setRhAccountNumbers(Sets.newHashSet());
+        usageFilter.setRhAccountNumbers(new HashSet<>());
         assertTrue(usageFilter.isEmpty());
-        usageFilter.setUsageBatchesIds(Sets.newHashSet(RupPersistUtils.generateUuid()));
+        usageFilter.setUsageBatchesIds(Set.of(RupPersistUtils.generateUuid()));
         assertFalse(usageFilter.isEmpty());
-        usageFilter.setRhAccountNumbers(Sets.newHashSet(10000L));
+        usageFilter.setRhAccountNumbers(Set.of(10000L));
         assertFalse(usageFilter.isEmpty());
         usageFilter.setUsageBatchesIds(null);
         assertFalse(usageFilter.isEmpty());
