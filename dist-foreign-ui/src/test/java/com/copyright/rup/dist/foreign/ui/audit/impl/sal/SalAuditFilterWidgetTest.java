@@ -106,6 +106,7 @@ public class SalAuditFilterWidgetTest {
     public void testApplyFilter() {
         expect(controller.getRightsholdersByAccountNumbers(Set.of(RH_ACCOUNT_NUMBER)))
             .andReturn(List.of(buildRightsholder())).once();
+        expect(controller.getSalLicensees()).andReturn(List.of()).once();
         expect(controller.getUsageBatches()).andReturn(List.of(buildUsageBatch(USAGE_BATCH_ID))).once();
         replay(controller);
         widget.init();

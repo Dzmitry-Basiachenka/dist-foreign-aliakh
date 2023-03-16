@@ -25,6 +25,7 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.ui.audit.api.ICommonAuditFilterController;
 import com.copyright.rup.dist.foreign.ui.audit.api.ICommonAuditFilterWidget;
 import com.copyright.rup.dist.foreign.ui.audit.api.fas.IFasAuditController;
+import com.copyright.rup.dist.foreign.ui.audit.api.fas.IFasAuditFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.UiTestHelper;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
@@ -87,7 +88,8 @@ public class FasAuditWidgetTest {
         widget = new FasAuditWidget(controller);
         widget.setController(controller);
         filterController = createMock(ICommonAuditFilterController.class);
-        filterWidget = new FasAuditFilterWidget();
+        IFasAuditFilterController fasAuditFilterController = createMock(IFasAuditFilterController.class);
+        filterWidget = new FasAuditFilterWidget(fasAuditFilterController);
         filterWidget.setController(filterController);
     }
 

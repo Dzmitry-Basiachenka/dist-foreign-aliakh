@@ -56,7 +56,7 @@ public class FasAuditFilterWidgetTest {
     public void setUp() {
         auditFilterController = createMock(IFasAuditFilterController.class);
         expect(auditFilterController.getProductFamily()).andReturn("FAS").times(2);
-        widget = new FasAuditFilterWidget();
+        widget = new FasAuditFilterWidget(auditFilterController);
         widget.setController(auditFilterController);
     }
 

@@ -56,7 +56,7 @@ public class NtsAuditFilterWidgetTest {
     public void setUp() {
         auditFilterController = createMock(INtsAuditFilterController.class);
         expect(auditFilterController.getProductFamily()).andReturn("NTS").times(2);
-        widget = new NtsAuditFilterWidget();
+        widget = new NtsAuditFilterWidget(auditFilterController);
         widget.setController(auditFilterController);
     }
 

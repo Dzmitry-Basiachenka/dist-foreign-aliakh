@@ -22,6 +22,6 @@ import org.springframework.stereotype.Component;
 public class NtsAuditFilterController extends CommonAuditFilterController implements INtsAuditFilterController {
     @Override
     protected ICommonAuditFilterWidget instantiateWidget() {
-        return new NtsAuditFilterWidget();
+        return new NtsAuditFilterWidget(this);
     }
 }

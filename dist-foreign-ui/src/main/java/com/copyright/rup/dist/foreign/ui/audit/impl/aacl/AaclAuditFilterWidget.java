@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.audit.impl.aacl;
 
 import com.copyright.rup.dist.foreign.ui.audit.api.aacl.IAaclAuditFilterController;
+import com.copyright.rup.dist.foreign.ui.audit.impl.CommonAuditAppliedFilterWidget;
 import com.copyright.rup.dist.foreign.ui.audit.impl.CommonAuditFilterWidget;
 import com.copyright.rup.dist.foreign.ui.audit.impl.CommonStatusFilterWidget;
 import com.copyright.rup.dist.foreign.ui.common.LazyRightsholderFilterWidget;
@@ -70,6 +71,11 @@ public class AaclAuditFilterWidget extends CommonAuditFilterWidget {
         cccEventIdField.setValue(StringUtils.trim(cccEventIdField.getValue()));
         distributionNameField.setValue(StringUtils.trim(distributionNameField.getValue()));
         applyFilter();
+    }
+
+    @Override
+    protected CommonAuditAppliedFilterWidget getAppliedFilterWidget() {
+        return new AaclAuditAppliedFilterWidget(controller);
     }
 
     private void initStatusesFilterWidget() {
