@@ -4,14 +4,13 @@ import com.copyright.rup.dist.common.domain.StoredEntity;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 
-import com.google.common.collect.Sets;
-
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -28,8 +27,8 @@ import java.util.stream.Collectors;
 public class ScenarioUsageFilter extends StoredEntity<String> {
 
     private String scenarioId;
-    private Set<Long> rhAccountNumbers = Sets.newHashSet();
-    private Set<UsageBatch> usageBatches = Sets.newHashSet();
+    private Set<Long> rhAccountNumbers = new HashSet<>();
+    private Set<UsageBatch> usageBatches = new HashSet<>();
     private String productFamily;
     private UsageStatusEnum usageStatus;
     private LocalDate paymentDate;
