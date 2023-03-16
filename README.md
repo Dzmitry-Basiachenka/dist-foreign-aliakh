@@ -1,3 +1,11 @@
+17.0.12
+-
+* B-77080 FDA: Show Reported Standard Number and Reported Title on UI and Exports: refine Reconcile Rightsholder tests with checking Work Title field
+* B-77080 FDA: Show Reported Standard Number and Reported Title on UI and Exports: add Reported Standard Number and Reported Title columns on Refresh Scenario window
+* B-77080 FDA: Show Reported Standard Number and Reported Title on UI and Exports: exclude Work Title from FAS usages update
+* B-77993 Tech Debt: FDA: refactor applied filter backend logic at usage tab for all product families
+* B-77993 Tech Debt: FDA: refactor applied filter backend logic at audit tab for all product families
+
 17.0.11
 -
 * B-77141 FDA: Display all filtered criteria for filters: add display applied filters on Proxy Value tab for ACL
