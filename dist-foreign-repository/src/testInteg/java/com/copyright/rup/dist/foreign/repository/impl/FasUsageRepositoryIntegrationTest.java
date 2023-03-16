@@ -302,7 +302,6 @@ public class FasUsageRepositoryIntegrationTest {
         usages.forEach(usage -> {
             assertNotEquals(WR_WRK_INST, usage.getWrWrkInst());
             assertNotEquals(UsageStatusEnum.WORK_FOUND, usage.getStatus());
-            assertNotEquals(WORK_TITLE, usage.getWorkTitle());
             assertNotEquals(WORK_TITLE, usage.getSystemTitle());
             assertNotNull(usage.getRightsholder().getAccountNumber());
             assertNotEquals(STANDARD_NUMBER, usage.getStandardNumber());
@@ -316,7 +315,6 @@ public class FasUsageRepositoryIntegrationTest {
         usages.forEach(usage -> {
             assertEquals(WR_WRK_INST, usage.getWrWrkInst());
             assertEquals(UsageStatusEnum.WORK_FOUND, usage.getStatus());
-            assertEquals(WORK_TITLE, usage.getWorkTitle());
             assertEquals(WORK_TITLE, usage.getSystemTitle());
             assertNull(usage.getRightsholder().getAccountNumber());
             assertEquals(STANDARD_NUMBER, usage.getStandardNumber());
@@ -334,7 +332,6 @@ public class FasUsageRepositoryIntegrationTest {
         usages.forEach(usage -> {
             assertNotEquals(WR_WRK_INST, usage.getWrWrkInst());
             assertNotEquals(UsageStatusEnum.WORK_NOT_FOUND, usage.getStatus());
-            assertNotNull(usage.getWorkTitle());
             assertNotNull(usage.getSystemTitle());
             assertNotNull(usage.getRightsholder().getAccountNumber());
             assertNotNull(usage.getStandardNumber());
@@ -348,7 +345,6 @@ public class FasUsageRepositoryIntegrationTest {
         usages.forEach(usage -> {
             assertEquals(WR_WRK_INST, usage.getWrWrkInst());
             assertEquals(UsageStatusEnum.WORK_NOT_FOUND, usage.getStatus());
-            assertNull(usage.getWorkTitle());
             assertNull(usage.getSystemTitle());
             assertNull(usage.getRightsholder().getAccountNumber());
             assertNull(usage.getStandardNumber());

@@ -40,6 +40,7 @@ databaseChangeLog {
             column(name: 'market_period_to', value: 2019)
             column(name: 'author', value: 'Nanette M. Schwann')
             column(name: 'reported_value', value: 1560)
+            column(name: 'reported_standard_number', value: '2558902245377325XX')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -67,6 +68,7 @@ databaseChangeLog {
             column(name: 'market_period_to', value: 2019)
             column(name: 'author', value: 'Mirjam H. Hüberli')
             column(name: 'reported_value', value: 1280.00)
+            column(name: 'reported_standard_number', value: '4680262122277')
         }
 
         rollback {

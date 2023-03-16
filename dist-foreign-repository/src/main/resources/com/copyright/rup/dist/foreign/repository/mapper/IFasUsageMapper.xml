@@ -258,7 +258,6 @@
         set
             wr_wrk_inst = #{work.wrWrkInst},
             status_ind = #{status},
-            work_title = #{work.mainTitle},
             system_title = #{work.mainTitle},
             rh_account_number = null,
             standard_number = #{work.mainIdno},
