@@ -1,11 +1,10 @@
 package com.copyright.rup.dist.foreign.integration.crm.api;
 
-import com.google.common.collect.Sets;
-
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -20,7 +19,7 @@ import java.util.Set;
  */
 public class CrmResult {
 
-    private final Set<String> invalidUsageIds = Sets.newHashSet();
+    private final Set<String> invalidUsageIds = new HashSet<>();
     private CrmResultStatusEnum status;
 
     /**

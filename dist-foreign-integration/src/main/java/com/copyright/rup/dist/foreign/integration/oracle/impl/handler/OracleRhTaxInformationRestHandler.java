@@ -6,11 +6,11 @@ import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.RhTaxInformation;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.google.common.collect.Maps;
 
 import org.springframework.web.client.RestTemplate;
 
 import java.time.OffsetDateTime;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -38,7 +38,7 @@ public class OracleRhTaxInformationRestHandler extends CommonRestHandler<Map<Lon
 
     @Override
     protected Map<Long, RhTaxInformation> doHandleResponse(JsonNode response) {
-        Map<Long, RhTaxInformation> result = Maps.newHashMap();
+        Map<Long, RhTaxInformation> result = new HashMap<>();
         if (null != response && response.isArray()) {
             for (JsonNode thTaxInformationNode : response) {
                 RhTaxInformation rhTaxInformation = buildRhTaxInformation(thTaxInformationNode);
