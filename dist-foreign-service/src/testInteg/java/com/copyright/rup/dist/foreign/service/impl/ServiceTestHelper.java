@@ -50,7 +50,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.IOUtils;
@@ -166,7 +165,7 @@ public class ServiceTestHelper {
             .andExpect(MockRestRequestMatchers.method(HttpMethod.POST))
             .andExpect(MockRestRequestMatchers.content()
                 .string(new JsonMatcher(TestUtils.fileToString(this.getClass(), expectedRmsRequest),
-                    Lists.newArrayList("period_end_date"))))
+                    List.of("period_end_date"))))
             .andRespond(MockRestResponseCreators.withSuccess(TestUtils.fileToString(this.getClass(),
                     expectedRmsResponse),
                 MediaType.APPLICATION_JSON)));

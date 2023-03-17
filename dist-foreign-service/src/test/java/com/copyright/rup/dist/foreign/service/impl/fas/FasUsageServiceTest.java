@@ -35,7 +35,6 @@ import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
 import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Sets;
 import com.google.common.collect.Table;
 
 import org.apache.commons.collections4.CollectionUtils;
@@ -170,11 +169,11 @@ public class FasUsageServiceTest {
         Map<String, Map<String, Rightsholder>> rollUps = new HashMap<>();
         Rightsholder payee = new Rightsholder();
         payee.setAccountNumber(PAYEE_ACCOUNT_NUMBER);
+        payee.setId("id");
         rollUps.put(RH_ID, ImmutableMap.of(FAS_PRODUCT_FAMILY, payee));
         Map<String, Table<String, String, Object>> preferences = new HashMap<>();
         expect(prmIntegrationService.getRollUps(Set.of(RH_ID))).andReturn(rollUps).once();
-        expect(prmIntegrationService.getPreferences(Sets.newHashSet(payee.getId(), RH_ID)))
-            .andReturn(preferences).once();
+        expect(prmIntegrationService.getPreferences(Set.of(payee.getId(), RH_ID))).andReturn(preferences).once();
         usageRepository.addToScenario(usages);
         expectLastCall().once();
         expect(prmIntegrationService.isRightsholderParticipating(preferences, usage1.getRightsholder().getId(),
@@ -226,9 +225,8 @@ public class FasUsageServiceTest {
 
     @Test
     public void testDeleteFromScenarioByPayees() {
-        Set<String> usageIds =
-            Sets.newHashSet("095eaefe-37de-4adb-928e-be0b888094b9", "7ee9c1ab-57ca-45cf-8a8d-83d7baeb6a9c");
-        Set<Long> accountNumbers = Sets.newHashSet(2000017001L, 2000078999L);
+        Set<String> usageIds = Set.of("095eaefe-37de-4adb-928e-be0b888094b9", "7ee9c1ab-57ca-45cf-8a8d-83d7baeb6a9c");
+        Set<Long> accountNumbers = Set.of(2000017001L, 2000078999L);
         Set<String> scenarioIds = Set.of(scenario.getId());
         expect(fasUsageRepository.deleteFromScenarioByPayees(scenarioIds, accountNumbers, USER_NAME))
             .andReturn(usageIds).once();
@@ -241,9 +239,8 @@ public class FasUsageServiceTest {
 
     @Test
     public void testRedisignateToNtsWithdrawnByPayees() {
-        Set<String> usageIds =
-            Sets.newHashSet("2db4877e-e89c-40f3-8c9a-21d8903fac88", "4a324301-d4a4-4639-ac4f-8a75d86b6048");
-        Set<Long> accountNumbers = Sets.newHashSet(2000017001L, 2000078999L);
+        Set<String> usageIds = Set.of("2db4877e-e89c-40f3-8c9a-21d8903fac88", "4a324301-d4a4-4639-ac4f-8a75d86b6048");
+        Set<Long> accountNumbers = Set.of(2000017001L, 2000078999L);
         Set<String> scenarioIds = Set.of(scenario.getId());
         expect(fasUsageRepository.redesignateToNtsWithdrawnByPayees(scenarioIds, accountNumbers, USER_NAME))
             .andReturn(usageIds).once();

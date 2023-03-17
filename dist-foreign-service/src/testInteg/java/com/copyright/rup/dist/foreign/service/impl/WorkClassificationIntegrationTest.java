@@ -13,8 +13,6 @@ import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.service.api.fas.IFasUsageService;
 import com.copyright.rup.dist.foreign.service.api.nts.IWorkClassificationService;
 
-import com.google.common.collect.Sets;
-
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,6 +22,7 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -68,9 +67,9 @@ public class WorkClassificationIntegrationTest {
         assertAndGetUsages(1, UsageStatusEnum.ELIGIBLE);
         assertAndGetUsages(1, UsageStatusEnum.UNCLASSIFIED);
         workClassificationService.insertOrUpdateClassifications(
-            Sets.newHashSet(buildClassification(WR_WRK_INST_1), buildClassification(WR_WRK_INST_2)), STM);
+            Set.of(buildClassification(WR_WRK_INST_1), buildClassification(WR_WRK_INST_2)), STM);
         List<WorkClassification> workClassifications =
-            workClassificationService.getClassifications(Sets.newHashSet(BATCHES_IDS), null, null, null);
+            workClassificationService.getClassifications(new HashSet<>(BATCHES_IDS), null, null, null);
         assertEquals(2, workClassifications.size());
         assertAndGetUsages(2, UsageStatusEnum.ELIGIBLE);
         workClassifications.forEach(workClassification -> {
@@ -86,9 +85,9 @@ public class WorkClassificationIntegrationTest {
         assertAndGetUsages(1, UsageStatusEnum.ELIGIBLE);
         assertAndGetUsages(1, UsageStatusEnum.UNCLASSIFIED);
         workClassificationService.insertOrUpdateClassifications(
-            Sets.newHashSet(buildClassification(WR_WRK_INST_1), buildClassification(WR_WRK_INST_2)), NON_STM);
+            Set.of(buildClassification(WR_WRK_INST_1), buildClassification(WR_WRK_INST_2)), NON_STM);
         List<WorkClassification> workClassifications =
-            workClassificationService.getClassifications(Sets.newHashSet(BATCHES_IDS), null, null, null);
+            workClassificationService.getClassifications(new HashSet<>(BATCHES_IDS), null, null, null);
         assertEquals(2, workClassifications.size());
         assertAndGetUsages(2, UsageStatusEnum.ELIGIBLE);
         assertEquals("SYSTEM", workClassifications.get(0).getUpdateUser());
@@ -106,7 +105,7 @@ public class WorkClassificationIntegrationTest {
         assertAndGetUsages(1, UsageStatusEnum.ELIGIBLE);
         assertAndGetUsages(1, UsageStatusEnum.UNCLASSIFIED);
         workClassificationService.insertOrUpdateClassifications(
-            Sets.newHashSet(buildClassification(WR_WRK_INST_1), buildClassification(WR_WRK_INST_2)), BELLETRISTIC);
+            Set.of(buildClassification(WR_WRK_INST_1), buildClassification(WR_WRK_INST_2)), BELLETRISTIC);
         assertAndGetUsages(0, UsageStatusEnum.ELIGIBLE);
         assertAndGetUsages(0, UsageStatusEnum.UNCLASSIFIED);
         assertEquals(BELLETRISTIC, workClassificationService.getClassification(WR_WRK_INST_1));
@@ -119,7 +118,7 @@ public class WorkClassificationIntegrationTest {
         assertAndGetUsages(1, UsageStatusEnum.ELIGIBLE);
         assertAndGetUsages(1, UsageStatusEnum.UNCLASSIFIED);
         workClassificationService.deleteClassifications(
-            Sets.newHashSet(buildClassification(WR_WRK_INST_1), buildClassification(WR_WRK_INST_2)));
+            Set.of(buildClassification(WR_WRK_INST_1), buildClassification(WR_WRK_INST_2)));
         assertAndGetUsages(1, UsageStatusEnum.ELIGIBLE);
         assertAndGetUsages(1, UsageStatusEnum.UNCLASSIFIED);
         assertNull(workClassificationService.getClassification(WR_WRK_INST_1));

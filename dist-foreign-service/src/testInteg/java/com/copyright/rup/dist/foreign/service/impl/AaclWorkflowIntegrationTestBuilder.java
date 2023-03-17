@@ -41,8 +41,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.builder.Builder;
@@ -54,6 +52,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -74,7 +73,7 @@ import java.util.stream.IntStream;
 @Component
 public class AaclWorkflowIntegrationTestBuilder implements Builder<Runner> {
 
-    private final Map<String, List<UsageAuditItem>> expectedUsageCommentToAuditMap = Maps.newHashMap();
+    private final Map<String, List<UsageAuditItem>> expectedUsageCommentToAuditMap = new HashMap<>();
     private final Map<String, String> expectedRmsRequestsToResponses = new LinkedHashMap<>();
     private int expectedUploadedCount;
     private String usagesCsvFile;
@@ -186,7 +185,7 @@ public class AaclWorkflowIntegrationTestBuilder implements Builder<Runner> {
     }
 
     AaclWorkflowIntegrationTestBuilder withPayeesToExclude(Long... payees) {
-        this.payeesToExclude = Sets.newHashSet(payees);
+        this.payeesToExclude = Set.of(payees);
         return this;
     }
 

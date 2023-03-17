@@ -22,8 +22,6 @@ import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageService;
 
-import com.google.common.collect.Sets;
-
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
@@ -193,7 +191,7 @@ public class AclUsageBatchServiceTest {
         AclUsageBatch usageBatch = new AclUsageBatch();
         usageBatch.setName(ACL_USAGE_BATCH_NAME);
         usageBatch.setDistributionPeriod(202112);
-        usageBatch.setPeriods(Sets.newHashSet(202106, 202112));
+        usageBatch.setPeriods(Set.of(202106, 202112));
         usageBatch.setEditable(true);
         return usageBatch;
     }

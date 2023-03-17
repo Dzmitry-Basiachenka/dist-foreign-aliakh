@@ -2,12 +2,11 @@ package com.copyright.rup.dist.foreign.service.impl.csv.validator;
 
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor;
 
-import com.google.common.collect.Maps;
-
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -27,7 +26,7 @@ public class DuplicateInFileValidator implements DistCsvProcessor.IValidator<Str
     /**
      * Key is item, value is the list with numbers of lines where it was met.
      */
-    private final Map<String, List<Integer>> existingLines = Maps.newHashMap();
+    private final Map<String, List<Integer>> existingLines = new HashMap<>();
     private int line = 1;
     private String errorMessage = StringUtils.EMPTY;
 

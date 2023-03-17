@@ -17,7 +17,6 @@ import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageAuditService;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Sets;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -108,7 +107,7 @@ public class UdmBaselineServiceTest {
 
     @Test
     public void testGetWrWrkInstToSystemTitles() {
-        Set<Integer> periods = Sets.newHashSet(202012, 201906);
+        Set<Integer> periods = Set.of(202012, 201906);
         ImmutableMap<Long, String> workToTitleMap = ImmutableMap.of(159526526L, "Speculum");
         expect(baselineRepository.findWrWrkInstToSystemTitles(periods)).andReturn(workToTitleMap).once();
         replay(baselineRepository);

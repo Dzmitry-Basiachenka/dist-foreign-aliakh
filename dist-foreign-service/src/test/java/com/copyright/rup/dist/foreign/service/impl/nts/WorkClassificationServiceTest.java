@@ -21,9 +21,6 @@ import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.repository.api.IWorkClassificationRepository;
 import com.copyright.rup.dist.foreign.service.api.processor.IChainProcessor;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
-
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
@@ -35,6 +32,7 @@ import org.powermock.reflect.Whitebox;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
@@ -111,7 +109,7 @@ public class WorkClassificationServiceTest {
         expectLastCall().once();
         replay(workClassificationRepository, ntsUsageRepository, usageRepository, nonBelletristicProcessorMock);
         workClassificationService.insertOrUpdateClassifications(
-            Sets.newHashSet(buildClassification(WR_WRK_INST_1), buildClassification(WR_WRK_INST_2)), STM);
+            Set.of(buildClassification(WR_WRK_INST_1), buildClassification(WR_WRK_INST_2)), STM);
         WorkClassification classification1 = classificationCapture1.getValue();
         assertNotNull(classification1.getWrWrkInst());
         assertNotNull(classification1.getUpdateUser());
@@ -131,11 +129,10 @@ public class WorkClassificationServiceTest {
         expectLastCall().once();
         workClassificationRepository.deleteByWrWrkInst(WR_WRK_INST_2);
         expectLastCall().once();
-        ntsUsageRepository.updateUsagesStatusToUnclassified(Lists.newArrayList(WR_WRK_INST_1, WR_WRK_INST_2),
-            USER_NAME);
+        ntsUsageRepository.updateUsagesStatusToUnclassified(List.of(WR_WRK_INST_1, WR_WRK_INST_2), USER_NAME);
         expectLastCall().once();
         replay(RupContextUtils.class, workClassificationRepository, usageRepository);
-        HashSet<WorkClassification> classifications = Sets.newLinkedHashSet();
+        HashSet<WorkClassification> classifications = new LinkedHashSet<>();
         classifications.add(buildClassification(WR_WRK_INST_1));
         classifications.add(buildClassification(WR_WRK_INST_2));
         workClassificationService.deleteClassifications(classifications);

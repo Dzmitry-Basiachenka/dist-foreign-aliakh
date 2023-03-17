@@ -32,7 +32,6 @@ import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEn
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
-import com.google.common.collect.Sets;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
@@ -434,7 +433,7 @@ public class RightsService implements IRightsService {
                 String.format(RH_FOUND_REASON_FORMAT, rhAccountNumber));
             chainExecutor.execute(usagesToUpdate, ChainProcessorTypeEnum.ELIGIBILITY);
         });
-        rightsholderService.updateRightsholders(Sets.newHashSet(wrWrkInstToAccountNumber.values()));
+        rightsholderService.updateRightsholders(new HashSet<>(wrWrkInstToAccountNumber.values()));
     }
 
     private Set<String> getLicenseTypes(String productFamily) {

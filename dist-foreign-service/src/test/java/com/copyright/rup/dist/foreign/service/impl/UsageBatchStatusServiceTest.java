@@ -12,8 +12,6 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IUsageBatchStatusRepository;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchStatusService;
 
-import com.google.common.collect.Sets;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
@@ -102,7 +100,7 @@ public class UsageBatchStatusServiceTest {
     @Test
     public void testIsBatchProcessingCompleted() {
         Set<UsageStatusEnum> statuses =
-            Sets.newHashSet(UsageStatusEnum.NEW, UsageStatusEnum.WORK_FOUND, UsageStatusEnum.RH_FOUND);
+            Set.of(UsageStatusEnum.NEW, UsageStatusEnum.WORK_FOUND, UsageStatusEnum.RH_FOUND);
         expect(usageBatchStatusRepository.isBatchProcessingCompleted(BATCH_ID, statuses)).andReturn(true).once();
         replay(usageBatchStatusRepository);
         assertTrue(usageBatchStatusService.isBatchProcessingCompleted(BATCH_ID, statuses));

@@ -50,9 +50,6 @@ import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
 import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 import com.copyright.rup.dist.foreign.service.impl.InconsistentUsageStateException;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
-
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Rule;
@@ -350,8 +347,7 @@ public class AaclUsageServiceTest {
     @Test
     public void testExcludeDetailsFromScenarioByPayees() {
         mockStatic(RupContextUtils.class);
-        Set<String> ids =
-            Sets.newHashSet("5377be35-29f2-4cc3-95e6-d024f3e91852", "11916ea7-9b3d-484c-9160-fe4fc9b31e52");
+        Set<String> ids = Set.of("5377be35-29f2-4cc3-95e6-d024f3e91852", "11916ea7-9b3d-484c-9160-fe4fc9b31e52");
         String reason = "Exclude reason";
         expect(aaclUsageRepository.excludeFromScenarioByPayees(SCENARIO_ID, Set.of(7000000001L), USER_NAME))
             .andReturn(ids).once();
@@ -704,7 +700,7 @@ public class AaclUsageServiceTest {
     }
 
     private List<Integer> buildUsagePeriods() {
-        return Lists.newArrayList(2020, 2019, 2017, 2016, 2014, 2012);
+        return List.of(2020, 2019, 2017, 2016, 2014, 2012);
     }
 
     private void verifyUsageAges(List<UsageAge> usageAges) {

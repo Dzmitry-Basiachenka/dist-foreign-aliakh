@@ -10,14 +10,13 @@ import com.copyright.rup.dist.foreign.repository.api.IUdmBatchRepository;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmBatchService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageService;
 
-import com.google.common.collect.Sets;
-
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Implementation of {@link IUdmBatchService}.
@@ -64,7 +63,7 @@ public class UdmBatchService implements IUdmBatchService {
     @Override
     public boolean isUdmBatchProcessingCompleted(String udmBatchId) {
         return udmBatchRepository.isUdmBatchProcessingCompleted(udmBatchId,
-            Sets.newHashSet(UsageStatusEnum.NEW, UsageStatusEnum.WORK_FOUND));
+            Set.of(UsageStatusEnum.NEW, UsageStatusEnum.WORK_FOUND));
     }
 
     @Override

@@ -30,7 +30,6 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Sets;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -79,7 +78,7 @@ public class RhTaxServiceTest {
     private static final String ORACLE_RH_TAX_INFORMATION_JSON = "oracle_rh_tax_information.json";
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
     private static final Set<String> SCENARIO_IDS =
-        Sets.newHashSet("493a6870-51ca-42c6-9727-3a333fa55746", "86b62b54-2b1a-4a97-bb68-28a30538dce8");
+        Set.of("493a6870-51ca-42c6-9727-3a333fa55746", "86b62b54-2b1a-4a97-bb68-28a30538dce8");
 
     static {
         OBJECT_MAPPER.registerModule(new JavaTimeModule());
@@ -119,9 +118,8 @@ public class RhTaxServiceTest {
         Usage notUsTaxUsage = buildUsage(ACC_NUMBER_3);
         List<Usage> usages = List.of(usTaxUsage, notUsTaxUsage);
         expect(oracleRhTaxCountryService.getAccountNumbersToUsTaxCountryFlags(
-                Sets.newHashSet(ACC_NUMBER_2, ACC_NUMBER_3)))
-            .andReturn(ImmutableMap.of(ACC_NUMBER_2, Boolean.TRUE, ACC_NUMBER_3, Boolean.FALSE))
-            .once();
+            Set.of(ACC_NUMBER_2, ACC_NUMBER_3))).andReturn(
+            ImmutableMap.of(ACC_NUMBER_2, Boolean.TRUE, ACC_NUMBER_3, Boolean.FALSE)).once();
         usageService.updateProcessedUsage(usTaxUsage);
         expectLastCall().once();
         replay(oracleRhTaxCountryService, usageService);
@@ -144,7 +142,7 @@ public class RhTaxServiceTest {
             buildHolder(rh2, rh3, FAS2_PRODUCT_FAMILY),  // TBO = RH_3, excluded as number of notifications > 3
             buildHolder(rh2, rh4, FAS2_PRODUCT_FAMILY)   // TBO = RH_4, excluded as no information from Oracle
         );
-        Set<OracleRhTaxInformationRequest> expectedOracleRequests = Sets.newHashSet(
+        Set<OracleRhTaxInformationRequest> expectedOracleRequests = Set.of(
             new OracleRhTaxInformationRequest(ACC_NUMBER_2, ACC_NUMBER_1),
             new OracleRhTaxInformationRequest(ACC_NUMBER_2, ACC_NUMBER_2),
             new OracleRhTaxInformationRequest(ACC_NUMBER_3, ACC_NUMBER_3),
@@ -179,7 +177,7 @@ public class RhTaxServiceTest {
             buildHolder(rh2, rh3, FAS2_PRODUCT_FAMILY),  // TBO = RH_3, excluded as number of notifications > 3
             buildHolder(rh2, rh4, FAS2_PRODUCT_FAMILY)   // TBO = RH_4, excluded as no info from Oracle
         );
-        Set<OracleRhTaxInformationRequest> expectedOracleRequests = Sets.newHashSet(
+        Set<OracleRhTaxInformationRequest> expectedOracleRequests = Set.of(
             new OracleRhTaxInformationRequest(ACC_NUMBER_2, ACC_NUMBER_1),
             new OracleRhTaxInformationRequest(ACC_NUMBER_2, ACC_NUMBER_2),
             new OracleRhTaxInformationRequest(ACC_NUMBER_3, ACC_NUMBER_3),
@@ -223,7 +221,7 @@ public class RhTaxServiceTest {
             buildHolder(rh2, rh3, ACLDIGITAL),  // TBO = RH_3, excluded as number of notifications > 3
             buildHolder(rh2, rh4, ACLDIGITAL)   // TBO = RH_4, excluded as no information from Oracle
         );
-        Set<OracleRhTaxInformationRequest> expectedOracleRequests = Sets.newHashSet(
+        Set<OracleRhTaxInformationRequest> expectedOracleRequests = Set.of(
             new OracleRhTaxInformationRequest(ACC_NUMBER_2, ACC_NUMBER_1),
             new OracleRhTaxInformationRequest(ACC_NUMBER_2, ACC_NUMBER_2),
             new OracleRhTaxInformationRequest(ACC_NUMBER_3, ACC_NUMBER_3),
@@ -255,7 +253,7 @@ public class RhTaxServiceTest {
             buildHolder(rh2, rh3, ACLDIGITAL),  // TBO = RH_3, excluded as number of notifications > 3
             buildHolder(rh2, rh4, ACLDIGITAL)   // TBO = RH_4, excluded as no info from Oracle
         );
-        Set<OracleRhTaxInformationRequest> expectedOracleRequests = Sets.newHashSet(
+        Set<OracleRhTaxInformationRequest> expectedOracleRequests = Set.of(
             new OracleRhTaxInformationRequest(ACC_NUMBER_2, ACC_NUMBER_1),
             new OracleRhTaxInformationRequest(ACC_NUMBER_2, ACC_NUMBER_2),
             new OracleRhTaxInformationRequest(ACC_NUMBER_3, ACC_NUMBER_3),

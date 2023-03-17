@@ -30,7 +30,6 @@ import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
 import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Sets;
 import com.google.common.collect.Table;
 
 import org.easymock.Capture;
@@ -110,9 +109,8 @@ public class NtsUsageServiceTest {
 
     @Test
     public void testExcludeRightsHoldersFromScenario() {
-        Set<String> usageIds =
-            Sets.newHashSet("095eaefe-37de-4adb-928e-be0b888094b9", "7ee9c1ab-57ca-45cf-8a8d-83d7baeb6a9c");
-        Set<Long> accountNumbers = Sets.newHashSet(2000017001L, 2000078999L);
+        Set<String> usageIds = Set.of("095eaefe-37de-4adb-928e-be0b888094b9", "7ee9c1ab-57ca-45cf-8a8d-83d7baeb6a9c");
+        Set<Long> accountNumbers = Set.of(2000017001L, 2000078999L);
         ntsUsageRepository.recalculateAmountsFromExcludedRightshoders(SCENARIO_ID, accountNumbers);
         expectLastCall().once();
         expect(ntsUsageRepository.deleteFromScenarioByRightsholder(SCENARIO_ID, accountNumbers,
@@ -155,7 +153,7 @@ public class NtsUsageServiceTest {
         Rightsholder payee2 = buildRightsholder(2000004422L);
         rollUps.put(rh1.getId(), ImmutableMap.of(NTS_PRODUCT_FAMILY, payee1));
         rollUps.put(rh2.getId(), ImmutableMap.of(NTS_PRODUCT_FAMILY, payee2));
-        Set<String> rhIds = Sets.newHashSet(rh2.getId(), rh1.getId());
+        Set<String> rhIds = Set.of(rh2.getId(), rh1.getId());
         expect(prmIntegrationService.getRollUps(rhIds)).andReturn(rollUps).once();
         Map<String, Table<String, String, Object>> preferences = new HashMap<>();
         expect(prmIntegrationService.getPreferences(rhIds)).andReturn(preferences).once();
@@ -174,7 +172,7 @@ public class NtsUsageServiceTest {
         expectLastCall().once();
         ntsUsageRepository.applyPostServiceFeeAmount(scenario.getId());
         expectLastCall().once();
-        rightsholderService.updateRighstholdersAsync(Sets.newHashSet(2000004422L, 1000004422L));
+        rightsholderService.updateRighstholdersAsync(Set.of(2000004422L, 1000004422L));
         expectLastCall().once();
         replay(RupContextUtils.class, ntsUsageRepository, prmIntegrationService, rightsholderService);
         ntsUsageService.populatePayeeAndCalculateAmountsForScenarioUsages(scenario);

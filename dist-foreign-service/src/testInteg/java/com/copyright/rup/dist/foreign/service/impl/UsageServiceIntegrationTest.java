@@ -15,8 +15,6 @@ import com.copyright.rup.dist.foreign.repository.api.IUsageAuditRepository;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.nts.INtsUsageService;
 
-import com.google.common.collect.Lists;
-
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
@@ -66,7 +64,7 @@ public class UsageServiceIntegrationTest {
         scenario.setId("12ec845f-0e76-4d1c-85cd-bb3fb7ca260e");
         scenario.setName("Test Scenario for exclude");
         usageService.deleteFromScenario("12ec845f-0e76-4d1c-85cd-bb3fb7ca260e", 2000017001L,
-            Lists.newArrayList(1000000003L, 1000000004L), "Exclude reason");
+            List.of(1000000003L, 1000000004L), "Exclude reason");
         verifyExcludedUsages(scenario, true, 1000000003L, 1000000004L);
         verifyExcludedUsages(scenario, false, 1000000001L, 1000000002L, 1000000006L);
         verifyAuditItems(auditRepository.findByUsageId("2641e7fe-2a5a-4cdf-8879-48816d705169"));

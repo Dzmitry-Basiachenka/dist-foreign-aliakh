@@ -13,13 +13,12 @@ import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
-import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Verifies {@link EligibilityProcessor}.
@@ -50,13 +49,13 @@ public class EligibilityProcessorTest {
     public void testProcess() {
         Usage usage1 = buildUsage("709a9486-6d13-41be-8df9-9327934ed53d");
         Usage usage2 = buildUsage("9f9ada01-f27f-4c75-a794-4af0ec83db04");
-        HashSet<String> usageIds = Sets.newHashSet(usage1.getId(), usage2.getId());
+        Set<String> usageIds = Set.of(usage1.getId(), usage2.getId());
         usageRepository.updateStatus(usageIds, UsageStatusEnum.ELIGIBLE);
         expectLastCall().once();
         usageAuditService.logAction(usageIds, UsageActionTypeEnum.ELIGIBLE, "Usage has become eligible");
         expectLastCall().once();
         replay(usageRepository, usageAuditService);
-        eligibilityProcessor.process(Lists.newArrayList(usage1, usage2));
+        eligibilityProcessor.process(List.of(usage1, usage2));
         verify(usageRepository, usageAuditService);
     }
 

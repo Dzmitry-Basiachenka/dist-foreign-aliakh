@@ -11,11 +11,12 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
+
+import java.util.List;
+import java.util.Set;
 
 /**
  * Verifies {@link UnclassifiedStatusProcessor}.
@@ -43,10 +44,10 @@ public class UnclassifiedStatusProcessorTest {
     public void testProcess() {
         Usage usage1 = buildUsage("1cd430df-f874-4881-a307-1835bee3c2e5");
         Usage usage2 = buildUsage("2b2a450e-9b7d-441d-a75b-428a3fef8055");
-        usageRepository.updateStatus(Sets.newHashSet(usage1.getId(), usage2.getId()), UsageStatusEnum.UNCLASSIFIED);
+        usageRepository.updateStatus(Set.of(usage1.getId(), usage2.getId()), UsageStatusEnum.UNCLASSIFIED);
         expectLastCall().once();
         replay(usageRepository);
-        unclassifiedStatusProcessor.process(Lists.newArrayList(usage1, usage2));
+        unclassifiedStatusProcessor.process(List.of(usage1, usage2));
         verify(usageRepository);
     }
 
