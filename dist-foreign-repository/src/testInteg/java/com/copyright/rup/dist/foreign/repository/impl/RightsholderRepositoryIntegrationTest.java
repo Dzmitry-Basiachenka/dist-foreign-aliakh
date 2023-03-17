@@ -14,8 +14,6 @@ import com.copyright.rup.dist.foreign.domain.RightsholderTypeOfUsePair;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 
-import com.google.common.collect.Sets;
-
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
@@ -154,8 +152,7 @@ public class RightsholderRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FIND)
     public void testFindRightsholdersByAccountNumbers() {
-        List<Rightsholder> actualResult = rightsholderRepository.findByAccountNumbers(
-            Sets.newHashSet(7000813806L, 2000017004L));
+        List<Rightsholder> actualResult = rightsholderRepository.findByAccountNumbers(Set.of(7000813806L, 2000017004L));
         assertTrue(CollectionUtils.isNotEmpty(actualResult));
         assertEquals(2, actualResult.size());
         List<Long> accountNumbers = actualResult.stream()
@@ -168,7 +165,7 @@ public class RightsholderRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FIND)
     public void testFindByAccountNumbersEmptyResult() {
-        assertTrue(CollectionUtils.isEmpty(rightsholderRepository.findByAccountNumbers(Sets.newHashSet(1111111111L))));
+        assertTrue(CollectionUtils.isEmpty(rightsholderRepository.findByAccountNumbers(Set.of(1111111111L))));
     }
 
     @Test
@@ -180,14 +177,14 @@ public class RightsholderRepositoryIntegrationTest {
         assertTrue(rightsholders.stream()
             .map(Rightsholder::getAccountNumber)
             .collect(Collectors.toList())
-            .containsAll(Sets.newHashSet(1000159997L, 1000009997L, 1000002859L, 1000005413L, 2000017004L, 7000813806L,
+            .containsAll(Set.of(1000159997L, 1000009997L, 1000002859L, 1000005413L, 2000017004L, 7000813806L,
                 2000017010L)));
         rightsholders = rightsholderRepository.findAllWithSearch("9997", null, null);
         assertEquals(2, rightsholders.size());
         assertTrue(rightsholders.stream()
             .map(Rightsholder::getAccountNumber)
             .collect(Collectors.toList())
-            .containsAll(Sets.newHashSet(1000159997L, 1000009997L)));
+            .containsAll(Set.of(1000159997L, 1000009997L)));
     }
 
     @Test

@@ -32,7 +32,6 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -46,6 +45,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.EnumSet;
@@ -509,7 +509,7 @@ public class UsageRepositoryIntegrationTest {
     @TestData(fileName = FOLDER_NAME + "delete-by-batch-id.groovy")
     public void testDeleteByBatchId() {
         UsageFilter filter = new UsageFilter();
-        filter.setUsageBatchesIds(Sets.newHashSet(USAGE_BATCH_ID_1));
+        filter.setUsageBatchesIds(Set.of(USAGE_BATCH_ID_1));
         Sort sort = new Sort(DETAIL_ID_KEY, Direction.ASC);
         List<UsageDto> usages = usageRepository.findDtosByFilter(filter, null, sort);
         assertEquals(1, usages.size());
@@ -618,9 +618,9 @@ public class UsageRepositoryIntegrationTest {
         usage.setScenarioId(SCENARIO_ID);
         usageRepository.addToScenario(List.of(usage));
         List<String> usagesIds = usageRepository.findIdsByScenarioIdRroAccountNumberRhAccountNumbers(
-            SCENARIO_ID, 2000017010L, Lists.newArrayList(1000002859L, 7000813806L));
+            SCENARIO_ID, 2000017010L, List.of(1000002859L, 7000813806L));
         assertEquals(2, usagesIds.size());
-        assertTrue(usagesIds.containsAll(Lists.newArrayList(USAGE_ID_8, USAGE_ID_7)));
+        assertTrue(usagesIds.containsAll(List.of(USAGE_ID_8, USAGE_ID_7)));
     }
 
     @Test
@@ -769,7 +769,7 @@ public class UsageRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FOLDER_NAME + "find-dtos-by-filter-sort.groovy")
     public void testFindByFilterSortingByBatchInfo() {
-        UsageFilter filter = buildUsageFilter(Sets.newHashSet(2000017000L, 7000896777L), Set.of(),
+        UsageFilter filter = buildUsageFilter(Set.of(2000017000L, 7000896777L), Set.of(),
             null, null, null, null);
         verifyFindByFilterSort(filter, BATCH_NAME_KEY, Direction.ASC, USAGE_ID_23, USAGE_ID_24);
         verifyFindByFilterSort(filter, BATCH_NAME_KEY, Direction.DESC, USAGE_ID_24, USAGE_ID_23);
@@ -790,7 +790,7 @@ public class UsageRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FOLDER_NAME + "find-dtos-by-filter-sort.groovy")
     public void testFindByFilterSortingByUsageInfo() {
-        UsageFilter filter = buildUsageFilter(Sets.newHashSet(2000017000L, 7000896777L), Set.of(),
+        UsageFilter filter = buildUsageFilter(Set.of(2000017000L, 7000896777L), Set.of(),
             null, null, null, null);
         verifyFindByFilterSort(filter, "productFamily", Direction.ASC, USAGE_ID_23, USAGE_ID_24);
         verifyFindByFilterSort(filter, "productFamily", Direction.DESC, USAGE_ID_24, USAGE_ID_23);
@@ -819,7 +819,7 @@ public class UsageRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FOLDER_NAME + "find-dtos-by-filter-sort.groovy")
     public void testFindByFilterSortingByWorkInfo() {
-        UsageFilter filter = buildUsageFilter(Sets.newHashSet(2000017000L, 7000896777L), Set.of(),
+        UsageFilter filter = buildUsageFilter(Set.of(2000017000L, 7000896777L), Set.of(),
             null, null, null, null);
         verifyFindByFilterSort(filter, "reportedStandardNumber", Direction.ASC, USAGE_ID_23, USAGE_ID_24);
         verifyFindByFilterSort(filter, "reportedStandardNumber", Direction.DESC, USAGE_ID_24, USAGE_ID_23);
@@ -874,7 +874,7 @@ public class UsageRepositoryIntegrationTest {
     @TestData(fileName = FIND_FOR_AUDIT)
     public void testFindForAuditSortingByBatchInfo() {
         AuditFilter filter = new AuditFilter();
-        filter.setBatchesIds(Sets.newHashSet(BATCH_ID, "74b736f2-81ce-41fa-bd8e-574299232458"));
+        filter.setBatchesIds(Set.of(BATCH_ID, "74b736f2-81ce-41fa-bd8e-574299232458"));
         verifyFindForAuditSort(filter, BATCH_NAME_KEY, Direction.DESC, USAGE_ID_5, USAGE_ID_4);
         verifyFindForAuditSort(filter, BATCH_NAME_KEY, Direction.ASC, USAGE_ID_5, USAGE_ID_4);
         verifyFindForAuditSort(filter, BATCH_GROSS_AMOUNT_KEY, Direction.ASC, USAGE_ID_5, USAGE_ID_4);
@@ -1022,8 +1022,7 @@ public class UsageRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FOLDER_NAME + "find-works-to-usage-ids-by-batch-name.groovy")
     public void testFindWrWrkInstToUsageIdsByBatchNameAndUsageStatus() {
-        Map<Long, Set<String>> wrWrkInstToUsageIdsMap =
-            ImmutableMap.of(243904752L, Sets.newHashSet(USAGE_ID_7, USAGE_ID_8));
+        Map<Long, Set<String>> wrWrkInstToUsageIdsMap = ImmutableMap.of(243904752L, Set.of(USAGE_ID_7, USAGE_ID_8));
         assertEquals(wrWrkInstToUsageIdsMap,
             usageRepository.findWrWrkInstToUsageIdsByBatchNameAndUsageStatus("JAACC_11Dec16", UsageStatusEnum.LOCKED));
     }
@@ -1231,7 +1230,7 @@ public class UsageRepositoryIntegrationTest {
         usage.setServiceFee(SERVICE_FEE);
         calculateAmounts(usage);
         usages.add(usage);
-        usageRepository.addToScenario(Lists.newArrayList(usages));
+        usageRepository.addToScenario(new ArrayList<>(usages));
     }
 
     private void calculateAmounts(Usage usage) {

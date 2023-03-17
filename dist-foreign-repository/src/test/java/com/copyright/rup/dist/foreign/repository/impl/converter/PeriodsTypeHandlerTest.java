@@ -8,7 +8,6 @@ import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-import com.google.common.collect.Sets;
 import org.junit.Test;
 import org.postgresql.util.PGobject;
 
@@ -94,6 +93,6 @@ public class PeriodsTypeHandlerTest {
     }
 
     private Set<Integer> buildPeriods() {
-        return Sets.newHashSet(202106, 202112);
+        return Set.of(202106, 202112);
     }
 }

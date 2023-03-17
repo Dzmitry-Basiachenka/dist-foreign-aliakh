@@ -30,7 +30,6 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Sets;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.ListUtils;
@@ -127,7 +126,7 @@ public class AaclUsageRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FOLDER_NAME + "insert-from-baseline.groovy")
     public void testInsertFromBaseline() {
-        List<String> actualIds = aaclUsageRepository.insertFromBaseline(Sets.newHashSet(2019, 2018, 2016),
+        List<String> actualIds = aaclUsageRepository.insertFromBaseline(Set.of(2019, 2018, 2016),
             "6e6f656a-e080-4426-b8ea-985b69f8814d", USER_NAME);
         assertEquals(3, actualIds.size());
         List<Usage> actualUsages = aaclUsageRepository.findByIds(actualIds).stream()
@@ -267,20 +266,20 @@ public class AaclUsageRepositoryIntegrationTest {
     @TestData(fileName = FIND_BASELINE_PERIODS)
     public void testFindBaselinePeriodsStartingFromPeriodWithoutUsages() {
         assertEquals(Set.of(2019), aaclUsageRepository.findBaselinePeriods(2020, 1));
-        assertEquals(Sets.newHashSet(2019, 2018, 2016), aaclUsageRepository.findBaselinePeriods(2020, 3));
+        assertEquals(Set.of(2019, 2018, 2016), aaclUsageRepository.findBaselinePeriods(2020, 3));
     }
 
     @Test
     @TestData(fileName = FIND_BASELINE_PERIODS)
     public void testFindBaselinePeriodsStartingFromPeriodWithUsages() {
         assertEquals(Set.of(2019), aaclUsageRepository.findBaselinePeriods(2019, 1));
-        assertEquals(Sets.newHashSet(2019, 2018, 2016), aaclUsageRepository.findBaselinePeriods(2019, 3));
+        assertEquals(Set.of(2019, 2018, 2016), aaclUsageRepository.findBaselinePeriods(2019, 3));
     }
 
     @Test
     @TestData(fileName = FIND_BASELINE_PERIODS)
     public void testFindBaselinePeriodsWithNumberOfYearsGreaterThanExist() {
-        assertEquals(Sets.newHashSet(2016, 2015), aaclUsageRepository.findBaselinePeriods(2016, 3));
+        assertEquals(Set.of(2016, 2015), aaclUsageRepository.findBaselinePeriods(2016, 3));
     }
 
     @Test
@@ -443,7 +442,7 @@ public class AaclUsageRepositoryIntegrationTest {
     public void testFindUsagePeriodsByFilterWithBatchFilter() {
         UsageFilter filter = new UsageFilter();
         filter.setUsageBatchesIds(
-            Sets.newHashSet("31ac3937-157b-48c2-86b2-db28356fc868", "87279dd4-e100-4b72-a561-49e7effe8238"));
+            Set.of("31ac3937-157b-48c2-86b2-db28356fc868", "87279dd4-e100-4b72-a561-49e7effe8238"));
         List<Integer> usagePeriods = aaclUsageRepository.findUsagePeriodsByFilter(filter);
         assertEquals(3, usagePeriods.size());
         assertEquals(2020, usagePeriods.get(0).intValue());
@@ -456,7 +455,7 @@ public class AaclUsageRepositoryIntegrationTest {
     public void testFindUsagePeriodsByFilterWithBatchAndPeriodFilter() {
         UsageFilter filter = new UsageFilter();
         filter.setUsageBatchesIds(
-            Sets.newHashSet("31ac3937-157b-48c2-86b2-db28356fc868", "87279dd4-e100-4b72-a561-49e7effe8238"));
+            Set.of("31ac3937-157b-48c2-86b2-db28356fc868", "87279dd4-e100-4b72-a561-49e7effe8238"));
         filter.setUsagePeriod(2020);
         List<Integer> usagePeriods = aaclUsageRepository.findUsagePeriodsByFilter(filter);
         assertEquals(1, usagePeriods.size());
@@ -507,7 +506,7 @@ public class AaclUsageRepositoryIntegrationTest {
     public void testExcludeFromScenarioByPayees() {
         assertEquals(6, aaclUsageRepository.findByScenarioId(SCENARIO_ID_3).size());
         Set<String> excludedIds =
-            Sets.newHashSet("9ccf8b43-4ad5-4199-8c7f-c5884f27e44f", "ccb115c7-3444-4dbb-9540-7541961febdf");
+            Set.of("9ccf8b43-4ad5-4199-8c7f-c5884f27e44f", "ccb115c7-3444-4dbb-9540-7541961febdf");
         assertEquals(excludedIds, aaclUsageRepository.excludeFromScenarioByPayees(SCENARIO_ID_3,
             Set.of(1000000026L), USER_NAME));
         List<Usage> excludedUsages = aaclUsageRepository.findByIds(new ArrayList<>(excludedIds));
@@ -617,7 +616,7 @@ public class AaclUsageRepositoryIntegrationTest {
     @TestData(fileName = FIND_FOR_AUDIT)
     public void findForAuditByRightsholder() {
         AuditFilter filter = new AuditFilter();
-        filter.setRhAccountNumbers(Sets.newHashSet(1000000027L));
+        filter.setRhAccountNumbers(Set.of(1000000027L));
         assertEquals(2, aaclUsageRepository.findCountForAudit(filter));
         List<UsageDto> usages = aaclUsageRepository.findForAudit(filter, new Pageable(0, 10), null);
         verifyUsageDtos(usages, "f89f016d-0cc7-46b6-9f3f-63d2439458d5", "c7c0bbf9-e0a3-4d90-95af-aa9849e69404");
@@ -1099,7 +1098,7 @@ public class AaclUsageRepositoryIntegrationTest {
                                                                          AggregateLicenseeClass... aggregateClasses) {
         PayeeAccountAggregateLicenseeClassesPair pair = new PayeeAccountAggregateLicenseeClassesPair();
         pair.setPayeeAccountNumber(accountNumber);
-        pair.setAggregateLicenseeClasses(Sets.newHashSet(aggregateClasses));
+        pair.setAggregateLicenseeClasses(Set.of(aggregateClasses));
         return pair;
     }
 

@@ -14,8 +14,6 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IUdmBatchRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUdmUsageRepository;
 
-import com.google.common.collect.Sets;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,7 +89,7 @@ public class UdmBatchRepositoryIntegrationTest {
     @TestData(fileName = FOLDER_NAME + "is-udm-batch-processing-completed.groovy")
     public void testIsUdmBatchProcessingCompleted() {
         assertFalse(udmBatchRepository.isUdmBatchProcessingCompleted(UDM_BATCH_UID_2,
-            Sets.newHashSet(UsageStatusEnum.NEW, UsageStatusEnum.WORK_FOUND)));
+            Set.of(UsageStatusEnum.NEW, UsageStatusEnum.WORK_FOUND)));
         assertTrue(udmBatchRepository.isUdmBatchProcessingCompleted(UDM_BATCH_UID_2, Set.of(UsageStatusEnum.RH_FOUND)));
     }
 

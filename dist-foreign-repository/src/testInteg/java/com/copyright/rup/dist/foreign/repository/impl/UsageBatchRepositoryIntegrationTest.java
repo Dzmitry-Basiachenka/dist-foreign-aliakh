@@ -17,7 +17,6 @@ import com.copyright.rup.dist.foreign.domain.report.SalLicensee;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Sets;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.junit.Test;
@@ -263,7 +262,7 @@ public class UsageBatchRepositoryIntegrationTest {
         assertEquals(1, batchNames.size());
         assertEquals(NTS_BATCH_NAME, batchNames.get(0));
         batchNames = usageBatchRepository.findBatchNamesWithoutUsagesForClassification(
-            Sets.newHashSet(NTS_USAGE_BATCH_ID_1, NTS_USAGE_BATCH_ID_2, NTS_USAGE_BATCH_ID_3), "STM");
+            Set.of(NTS_USAGE_BATCH_ID_1, NTS_USAGE_BATCH_ID_2, NTS_USAGE_BATCH_ID_3), "STM");
         assertTrue(CollectionUtils.isNotEmpty(batchNames));
         assertEquals(2, batchNames.size());
         assertTrue(batchNames.contains(NTS_BATCH_NAME));
@@ -277,7 +276,7 @@ public class UsageBatchRepositoryIntegrationTest {
             Set.of(NTS_USAGE_BATCH_ID_1), "NON-STM");
         assertTrue(CollectionUtils.isEmpty(batchNames));
         batchNames = usageBatchRepository.findBatchNamesWithoutUsagesForClassification(
-            Sets.newHashSet(NTS_USAGE_BATCH_ID_1, NTS_USAGE_BATCH_ID_2, NTS_USAGE_BATCH_ID_3), "NON-STM");
+            Set.of(NTS_USAGE_BATCH_ID_1, NTS_USAGE_BATCH_ID_2, NTS_USAGE_BATCH_ID_3), "NON-STM");
         assertEquals(2, batchNames.size());
         assertTrue(batchNames.contains("NTS Batch with unclassified usages"));
         assertTrue(batchNames.contains("NTS Batch with Belletristic usages"));
@@ -291,7 +290,7 @@ public class UsageBatchRepositoryIntegrationTest {
         assertEquals(1, batchNames.size());
         assertEquals(NTS_BATCH_NAME, batchNames.get(0));
         batchNames = usageBatchRepository.findBatchNamesWithoutUsagesForClassification(
-            Sets.newHashSet(NTS_USAGE_BATCH_ID_1, NTS_USAGE_BATCH_ID_2, NTS_USAGE_BATCH_ID_3), null);
+            Set.of(NTS_USAGE_BATCH_ID_1, NTS_USAGE_BATCH_ID_2, NTS_USAGE_BATCH_ID_3), null);
         assertEquals(2, batchNames.size());
         assertTrue(batchNames.contains("NTS Batch with unclassified usages"));
         assertTrue(batchNames.contains(NTS_BATCH_NAME));

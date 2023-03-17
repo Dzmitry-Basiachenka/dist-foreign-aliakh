@@ -10,8 +10,6 @@ import com.copyright.rup.dist.foreign.domain.filter.AclUsageFilter;
 import com.copyright.rup.dist.foreign.domain.report.AclCalculationReportsInfoDto;
 import com.copyright.rup.dist.foreign.repository.api.IAclCalculationReportRepository;
 
-import com.google.common.collect.Sets;
-
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -117,7 +115,7 @@ public class AclCalculationCsvReportsIntegrationTest extends CsvReportsTestHelpe
     @TestData(fileName = WRITE_FUND_POOL_DETAILS_CSV_REPORT)
     public void testWriteAclFundPoolDetailsCsvReport() throws IOException {
         AclFundPoolDetailFilter filter = new AclFundPoolDetailFilter();
-        filter.setFundPoolNames(Sets.newHashSet("ACL Fund Pool 202112", "VGW LDMT Fund Pool 201906"));
+        filter.setFundPoolNames(Set.of("ACL Fund Pool 202112", "VGW LDMT Fund Pool 201906"));
         assertFilesWithExecutor(
             outputStream -> aclCalculationReportRepository.writeAclFundPoolDetailsCsvReport(filter, outputStream),
             "acl/fund_pool_details_report.csv");
@@ -127,7 +125,7 @@ public class AclCalculationCsvReportsIntegrationTest extends CsvReportsTestHelpe
     @TestData(fileName = WRITE_FUND_POOL_DETAILS_CSV_REPORT)
     public void testWriteAclFundPoolDetailsEmptyCsvReport() throws IOException {
         AclFundPoolDetailFilter filter = new AclFundPoolDetailFilter();
-        filter.setFundPoolNames(Sets.newHashSet("ACL Fund Pool 202112", "VGW LDMT Fund Pool 201906"));
+        filter.setFundPoolNames(Set.of("ACL Fund Pool 202112", "VGW LDMT Fund Pool 201906"));
         filter.setLicenseType("MACL");
         assertFilesWithExecutor(
             outputStream -> aclCalculationReportRepository.writeAclFundPoolDetailsCsvReport(filter, outputStream),

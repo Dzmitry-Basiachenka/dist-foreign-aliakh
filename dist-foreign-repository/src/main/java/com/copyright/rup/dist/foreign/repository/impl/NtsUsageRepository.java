@@ -11,7 +11,6 @@ import com.copyright.rup.dist.foreign.repository.api.INtsUsageRepository;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -143,7 +142,7 @@ public class NtsUsageRepository extends BaseRepository implements INtsUsageRepos
         params.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
         params.put("eligibleStatus", UsageStatusEnum.ELIGIBLE);
         params.put("unclassifiedStatus", UsageStatusEnum.UNCLASSIFIED);
-        params.put("statusesToUpdate", Sets.newHashSet(UsageStatusEnum.SCENARIO_EXCLUDED, UsageStatusEnum.LOCKED));
+        params.put("statusesToUpdate", Set.of(UsageStatusEnum.SCENARIO_EXCLUDED, UsageStatusEnum.LOCKED));
         params.put(UPDATE_USER_KEY, Objects.requireNonNull(userName));
         update("INtsUsageMapper.deleteFromScenario", params);
     }

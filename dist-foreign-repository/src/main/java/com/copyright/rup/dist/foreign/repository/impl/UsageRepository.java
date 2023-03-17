@@ -21,7 +21,6 @@ import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
@@ -111,7 +110,7 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     @Override
     public BigDecimal getTotalAmountByStandardNumberAndBatchId(String standardNumber, String batchId) {
         Set<UsageStatusEnum> statuses =
-            Sets.newHashSet(UsageStatusEnum.NEW, UsageStatusEnum.NTS_WITHDRAWN, UsageStatusEnum.WORK_NOT_FOUND);
+            Set.of(UsageStatusEnum.NEW, UsageStatusEnum.NTS_WITHDRAWN, UsageStatusEnum.WORK_NOT_FOUND);
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
         parameters.put("statuses", Objects.requireNonNull(statuses));
         parameters.put("standardNumber", standardNumber);
@@ -125,7 +124,7 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     @Override
     public BigDecimal getTotalAmountByTitleAndBatchId(String title, String batchId) {
         Set<UsageStatusEnum> statuses =
-            Sets.newHashSet(UsageStatusEnum.NEW, UsageStatusEnum.NTS_WITHDRAWN, UsageStatusEnum.WORK_NOT_FOUND);
+            Set.of(UsageStatusEnum.NEW, UsageStatusEnum.NTS_WITHDRAWN, UsageStatusEnum.WORK_NOT_FOUND);
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
         parameters.put("statuses", Objects.requireNonNull(statuses));
         parameters.put("title", title);

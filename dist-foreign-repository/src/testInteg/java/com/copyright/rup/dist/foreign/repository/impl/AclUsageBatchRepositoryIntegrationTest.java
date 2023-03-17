@@ -10,8 +10,6 @@ import com.copyright.rup.dist.common.test.liquibase.TestData;
 import com.copyright.rup.dist.foreign.domain.AclUsageBatch;
 import com.copyright.rup.dist.foreign.repository.api.IAclUsageBatchRepository;
 
-import com.google.common.collect.Sets;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,9 +64,9 @@ public class AclUsageBatchRepositoryIntegrationTest {
     @TestData(fileName = FOLDER_NAME + "find-all.groovy")
     public void testFindAll() {
         AclUsageBatch aclUsageBatch1 = buildAclUsageBatch("dd559563-379d-4632-abea-922d2821746d",
-            "ACL Usage Batch 2022", 202212, Sets.newHashSet(202206, 202212), true);
+            "ACL Usage Batch 2022", 202212, Set.of(202206, 202212), true);
         AclUsageBatch aclUsageBatch2 = buildAclUsageBatch("446fba70-c15b-45ae-b53d-ba0de3dad0b5",
-            "ACL Usage Batch 2021", 202112, Sets.newHashSet(202106, 202112), false);
+            "ACL Usage Batch 2021", 202112, Set.of(202106, 202112), false);
         List<AclUsageBatch> usageBatches = aclUsageBatchRepository.findAll();
         assertEquals(2, usageBatches.size());
         verifyAclUsageBatch(aclUsageBatch1, usageBatches.get(0));
@@ -79,9 +77,9 @@ public class AclUsageBatchRepositoryIntegrationTest {
     @TestData(fileName = FOLDER_NAME + "find-usage-batch-by-period.groovy")
     public void testFindUsageBatchesByPeriod() {
         AclUsageBatch expectedUsageBatch1 = buildAclUsageBatch("fb5fb8ce-26e8-4417-97db-9a5116ba4061",
-            "ACL Usage Batch 2022", 202212, Sets.newHashSet(202206, 202212), true);
+            "ACL Usage Batch 2022", 202212, Set.of(202206, 202212), true);
         AclUsageBatch expectedUsageBatch2 = buildAclUsageBatch("0825074e-f5fc-4eb6-a4b8-a452e63f1aeb",
-            "ACL Usage Batch 2021", 202212, Sets.newHashSet(202106, 202112), false);
+            "ACL Usage Batch 2021", 202212, Set.of(202106, 202112), false);
         List<AclUsageBatch> usageBatches = aclUsageBatchRepository.findUsageBatchesByPeriod(202212, true);
         assertEquals(2, usageBatches.size());
         verifyAclUsageBatch(expectedUsageBatch1, usageBatches.get(0));
@@ -104,7 +102,7 @@ public class AclUsageBatchRepositoryIntegrationTest {
     @TestData(fileName = "rollback-only.groovy")
     public void testDeleteById() {
         AclUsageBatch usageBatch = buildAclUsageBatch("c7be3b74-341d-412f-9e29-3712a5a49636", "ACL Usage Batch",
-            202112, Sets.newHashSet(202106, 202112), true);
+            202112, Set.of(202106, 202112), true);
         aclUsageBatchRepository.insert(usageBatch);
         assertEquals(1, aclUsageBatchRepository.findAll().size());
         aclUsageBatchRepository.deleteById(usageBatch.getId());
@@ -112,8 +110,7 @@ public class AclUsageBatchRepositoryIntegrationTest {
     }
 
     private AclUsageBatch buildAclUsageBatch() {
-        return buildAclUsageBatch(ACL_USAGE_BATCH_ID, ACL_USAGE_BATCH_NAME, 202112, Sets.newHashSet(202106, 202112),
-            true);
+        return buildAclUsageBatch(ACL_USAGE_BATCH_ID, ACL_USAGE_BATCH_NAME, 202112, Set.of(202106, 202112), true);
     }
 
     private AclUsageBatch buildAclUsageBatch(String id, String name, Integer distributionPeriod, Set<Integer> periods,

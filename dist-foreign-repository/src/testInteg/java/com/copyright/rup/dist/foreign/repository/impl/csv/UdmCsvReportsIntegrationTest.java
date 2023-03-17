@@ -12,7 +12,6 @@ import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUdmReportRepository;
 
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Sets;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -267,7 +266,7 @@ public class UdmCsvReportsIntegrationTest extends CsvReportsTestHelper {
     public void testCompletedAssignmentsReport() throws IOException {
         UdmReportFilter reportFilter = new UdmReportFilter();
         reportFilter.setPeriods(Set.of(202006));
-        reportFilter.setUserNames(Sets.newHashSet("ajohn@copyright.com", "jjohn@copyright.com", "wjohn@copyright.com"));
+        reportFilter.setUserNames(Set.of("ajohn@copyright.com", "jjohn@copyright.com", "wjohn@copyright.com"));
         reportFilter.setDateFrom(LocalDate.of(2020, 7, 1));
         reportFilter.setDateTo(LocalDate.of(2020, 8, 1));
         assertFilesWithExecutor(
@@ -370,7 +369,7 @@ public class UdmCsvReportsIntegrationTest extends CsvReportsTestHelper {
     public void testWriteBaselineValueUpdatesCsvReport() throws IOException {
         UdmReportFilter reportFilter = new UdmReportFilter();
         reportFilter.setPeriods(Set.of(202206));
-        reportFilter.setUserNames(Sets.newHashSet("ajohn@copyright.com", "jjohn@copyright.com"));
+        reportFilter.setUserNames(Set.of("ajohn@copyright.com", "jjohn@copyright.com"));
         reportFilter.setDateFrom(LocalDate.of(2022, 2, 10));
         reportFilter.setDateTo(LocalDate.of(2022, 2, 17));
         assertFilesWithExecutor(
