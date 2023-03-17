@@ -9,18 +9,11 @@ import com.copyright.rup.es.api.RupQueryStringQueryBuilder;
 import com.copyright.rup.es.api.RupSearchResponse;
 import com.copyright.rup.es.api.request.RupSearchRequest;
 
-import com.google.common.collect.Iterables;
-
 import org.opensearch.OpenSearchException;
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-
-import javax.annotation.PreDestroy;
 
 /**
  * This service allows searching soft deleted works in Published Inventory.
@@ -36,43 +29,14 @@ public class PiDeletedWorkIntegrationService implements IPiDeletedWorkIntegratio
 
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
-    @Value("$RUP{dist.foreign.pi.cluster}")
-    private String cluster;
-    @Value("$RUP{dist.foreign.pi.nodes}")
-    private List<String> nodes;
     @Value("$RUP{dist.foreign.pi.index.del}")
     private String piIndex;
-    @Value("$RUP{dist.foreign.search.ldap.username}")
-    private String username;
-    @Value("$RUP{dist.foreign.search.ldap.password}")
-    private String password;
-
+    @Autowired
     private RupEsApi rupEsApi;
 
     @Override
     public boolean isDeletedWork(Long value) {
         return !doSearch(value).getResults().getHits().isEmpty();
-    }
-
-    /**
-     * @return an instance of {@link RupEsApi}.
-     */
-    protected RupEsApi getRupEsApi() {
-        if (Objects.isNull(rupEsApi)) {
-            Map<String, String> credentialsMap = Map.of(RupEsApi.USERNAME, username, RupEsApi.PASSWORD, password);
-            rupEsApi = RupEsApi.of(cluster, credentialsMap, Iterables.toArray(nodes, String.class));
-        }
-        return rupEsApi;
-    }
-
-    /**
-     * Closes search API.
-     */
-    @PreDestroy
-    void destroy() {
-        if (Objects.nonNull(rupEsApi)) {
-            rupEsApi.closeConnection();
-        }
     }
 
     private RupSearchResponse doSearch(Long value) {
@@ -83,7 +47,7 @@ public class PiDeletedWorkIntegrationService implements IPiDeletedWorkIntegratio
         request.setFetchSource(true);
         LOGGER.debug("Search deleted work. ParameterValue={}", value);
         try {
-            return getRupEsApi().search(request);
+            return rupEsApi.search(request);
         } catch (RupEsApiRuntimeException | OpenSearchException e) {
             throw new RupRuntimeException("Unable to connect to RupEsApi", e);
         }

@@ -49,6 +49,7 @@ public class ApplicationContextTest {
             assertNotNull(context.getBean("dist.common.integration.rmsRightsService"));
             assertNotNull(context.getBean("dist.common.integration.rmsRightsAssignmentService"));
             assertNotNull(context.getBean(ExternalUsageProducer.class));
+            assertNotNull(context.getBean("rupEsApi"));
         } catch (Exception e) {
             throw new AssertionError("Context is not valid: ", e);
         }

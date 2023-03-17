@@ -13,24 +13,22 @@ import com.copyright.rup.es.api.request.RupSearchRequest;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.Iterables;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.opensearch.OpenSearchException;
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 
 /**
  * This service allows searching works in Published Inventory with help of RUP ES API.
@@ -50,19 +48,12 @@ public class PiIntegrationService implements IPiIntegrationService {
     private static final String HOST_IDNO = "hostIdno";
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
-    @Value("$RUP{dist.foreign.pi.cluster}")
-    private String cluster;
-    @Value("$RUP{dist.foreign.pi.nodes}")
-    private List<String> nodes;
     @Value("$RUP{dist.foreign.pi.index}")
     private String piIndex;
-    @Value("$RUP{dist.foreign.search.ldap.username}")
-    private String username;
-    @Value("$RUP{dist.foreign.search.ldap.password}")
-    private String password;
+    @Autowired
+    private RupEsApi rupEsApi;
 
     private ObjectMapper mapper;
-    private RupEsApi rupEsApi;
 
     @Override
     public Work findWorkByWrWrkInst(Long wrWrkInst) {
@@ -93,33 +84,12 @@ public class PiIntegrationService implements IPiIntegrationService {
     }
 
     /**
-     * @return an instance of {@link RupEsApi}.
-     */
-    protected RupEsApi getRupEsApi() {
-        if (Objects.isNull(rupEsApi)) {
-            Map<String, String> credentialsMap = Map.of(RupEsApi.USERNAME, username, RupEsApi.PASSWORD, password);
-            rupEsApi = RupEsApi.of(cluster, credentialsMap, Iterables.toArray(nodes, String.class));
-        }
-        return rupEsApi;
-    }
-
-    /**
      * Initializes search API.
      */
     @PostConstruct
     void init() {
         mapper = new ObjectMapper();
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-    }
-
-    /**
-     * Closes search API.
-     */
-    @PreDestroy
-    void destroy() {
-        if (Objects.nonNull(rupEsApi)) {
-            rupEsApi.closeConnection();
-        }
     }
 
     /**
@@ -218,7 +188,7 @@ public class PiIntegrationService implements IPiIntegrationService {
         request.setFields(MAIN_TITLE, HOST_IDNO);
         request.setFetchSource(true);
         try {
-            return getRupEsApi().search(request);
+            return rupEsApi.search(request);
         } catch (RupEsApiRuntimeException | OpenSearchException e) {
             throw new RupRuntimeException("Unable to connect to RupEsApi", e);
         }
