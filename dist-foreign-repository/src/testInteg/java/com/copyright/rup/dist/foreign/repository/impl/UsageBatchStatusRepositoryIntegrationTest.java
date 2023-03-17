@@ -10,8 +10,6 @@ import com.copyright.rup.dist.foreign.domain.UsageBatchStatus;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IUsageBatchStatusRepository;
 
-import com.google.common.collect.Sets;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +50,7 @@ public class UsageBatchStatusRepositoryIntegrationTest {
     public void testFindUsageBatchStatusesFas() {
         List<UsageBatchStatus> usageBatchStatuses =
             usageBatchStatusRepository.findUsageBatchStatusesFas(
-                Sets.newHashSet("cf56b889-82fe-4990-b111-9c56ce986281", "515a78e7-2a92-4b15-859a-fd9f70e80982"));
+                Set.of("cf56b889-82fe-4990-b111-9c56ce986281", "515a78e7-2a92-4b15-859a-fd9f70e80982"));
         assertEquals(2, usageBatchStatuses.size());
         assertUsageBatchStatus(
             buildUsageBatchStatusFas("FAS completed batch", 8, COMPLETED_STATUS, 0, 0, 1, 0, 1, 0, 2, 1, 3),
@@ -67,7 +65,7 @@ public class UsageBatchStatusRepositoryIntegrationTest {
     public void testFindUsageBatchStatusesNts() {
         List<UsageBatchStatus> usageBatchStatuses =
             usageBatchStatusRepository.findUsageBatchStatusesNts(
-                Sets.newHashSet("359de82f-374b-4d53-88ab-0be3982b22aa", "a34417b5-12c1-48e2-9aed-d3861b49545b"));
+                Set.of("359de82f-374b-4d53-88ab-0be3982b22aa", "a34417b5-12c1-48e2-9aed-d3861b49545b"));
         assertEquals(2, usageBatchStatuses.size());
         assertUsageBatchStatus(
             buildUsageBatchStatusNts("NTS completed batch", 5, COMPLETED_STATUS, 2, 0, 0, 0, 0, 1, 2),
@@ -82,7 +80,7 @@ public class UsageBatchStatusRepositoryIntegrationTest {
     public void testFindUsageBatchStatusesAacl() {
         List<UsageBatchStatus> usageBatchStatuses =
             usageBatchStatusRepository.findUsageBatchStatusesAacl(
-                Sets.newHashSet("f77ab6ea-56d3-45dc-8926-9a8cd448f229", "3d7c9de0-3d14-42e4-a500-fb10344a77ff"));
+                Set.of("f77ab6ea-56d3-45dc-8926-9a8cd448f229", "3d7c9de0-3d14-42e4-a500-fb10344a77ff"));
         assertEquals(2, usageBatchStatuses.size());
         assertUsageBatchStatus(
             buildUsageBatchStatusAacl("AACL completed batch", 8, COMPLETED_STATUS, 3, 0, 1, 0, 0, 2, 2),
@@ -97,7 +95,7 @@ public class UsageBatchStatusRepositoryIntegrationTest {
     public void testFindUsageBatchStatusesSal() {
         List<UsageBatchStatus> usageBatchStatuses =
             usageBatchStatusRepository.findUsageBatchStatusesSal(
-                Sets.newHashSet("2a9ac95c-a44d-436c-b754-d69bb7e63993", "b324671c-1ae2-4d1f-9dce-d9b80900df55"));
+                Set.of("2a9ac95c-a44d-436c-b754-d69bb7e63993", "b324671c-1ae2-4d1f-9dce-d9b80900df55"));
         assertEquals(2, usageBatchStatuses.size());
         assertUsageBatchStatus(
             buildUsageBatchStatusSal("SAL completed batch", 8, COMPLETED_STATUS, 0, 2, 0, 1, 1, 0, 4),
@@ -137,9 +135,9 @@ public class UsageBatchStatusRepositoryIntegrationTest {
     @TestData(fileName = FOLDER_NAME + "is-batch-processing-complete.groovy")
     public void testIsBatchProcessingCompleted() {
         assertTrue(usageBatchStatusRepository.isBatchProcessingCompleted("515a78e7-2a92-4b15-859a-fd9f70e80982",
-            Sets.newHashSet(UsageStatusEnum.NEW, UsageStatusEnum.WORK_FOUND, UsageStatusEnum.RH_FOUND)));
+            Set.of(UsageStatusEnum.NEW, UsageStatusEnum.WORK_FOUND, UsageStatusEnum.RH_FOUND)));
         assertFalse(usageBatchStatusRepository.isBatchProcessingCompleted("a34417b5-12c1-48e2-9aed-d3861b49545b",
-            Sets.newHashSet(UsageStatusEnum.WORK_FOUND, UsageStatusEnum.NON_STM_RH, UsageStatusEnum.US_TAX_COUNTRY,
+            Set.of(UsageStatusEnum.WORK_FOUND, UsageStatusEnum.NON_STM_RH, UsageStatusEnum.US_TAX_COUNTRY,
                 UsageStatusEnum.RH_FOUND)));
     }
 

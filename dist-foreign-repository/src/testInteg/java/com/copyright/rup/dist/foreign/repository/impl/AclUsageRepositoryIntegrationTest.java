@@ -25,7 +25,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.google.common.collect.Sets;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -119,7 +118,7 @@ public class AclUsageRepositoryIntegrationTest extends CsvReportsTestHelper {
     @TestData(fileName = FOLDER_NAME + "populate-acl-usages.groovy")
     public void testPopulateAclUsages() {
         String usageBatchId = "1fa04580-af0a-4c57-8470-37ae9c06bea1";
-        Set<Integer> periods = Sets.newHashSet(202106, 202112);
+        Set<Integer> periods = Set.of(202106, 202112);
         Set<Long> wrkWrkInsts = Set.of(306985867L);
         List<String> usageIds = aclUsageRepository.populateAclUsages(usageBatchId, periods, USER_NAME, wrkWrkInsts);
         assertEquals(2, usageIds.size());
@@ -137,7 +136,7 @@ public class AclUsageRepositoryIntegrationTest extends CsvReportsTestHelper {
     @TestData(fileName = FOLDER_NAME + "populate-acl-usages-without-soft-deleted-works.groovy")
     public void testPopulateAclUsagesWithoutSoftDeletedWorks() {
         String usageBatchId = "72ebe159-c40f-4b61-923d-a58b170aad9e";
-        Set<Integer> periods = Sets.newHashSet(202106, 202112);
+        Set<Integer> periods = Set.of(202106, 202112);
         List<String> usageIds = aclUsageRepository.populateAclUsages(usageBatchId, periods, USER_NAME, Set.of());
         assertEquals(2, usageIds.size());
         List<AclUsageDto> actualUsages = aclUsageRepository.findByIds(usageIds);
@@ -742,9 +741,9 @@ public class AclUsageRepositoryIntegrationTest extends CsvReportsTestHelper {
         String grantSetId = "5e8da1ba-3b20-4f8e-96ed-f9506da3b87a";
         String batchId = "55adc071-8bbb-46be-a56e-0daba0883a97";
         assertTrue(aclUsageRepository.usageExistForLicenseeClassesAndTypeOfUse(batchId, grantSetId,
-            Sets.newHashSet(1, 3), DIGITAL_TOU));
+            Set.of(1, 3), DIGITAL_TOU));
         assertFalse(aclUsageRepository.usageExistForLicenseeClassesAndTypeOfUse(batchId, grantSetId,
-            Sets.newHashSet(1, 3), PRINT_TOU));
+            Set.of(1, 3), PRINT_TOU));
         assertFalse(aclUsageRepository.usageExistForLicenseeClassesAndTypeOfUse(batchId, grantSetId,
             Set.of(2), DIGITAL_TOU));
         assertTrue(aclUsageRepository.usageExistForLicenseeClassesAndTypeOfUse(batchId, grantSetId,

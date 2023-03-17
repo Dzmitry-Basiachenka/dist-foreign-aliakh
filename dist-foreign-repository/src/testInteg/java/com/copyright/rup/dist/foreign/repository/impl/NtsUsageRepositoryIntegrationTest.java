@@ -18,8 +18,6 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.junit.Test;
@@ -106,7 +104,7 @@ public class NtsUsageRepositoryIntegrationTest {
             assertNotEquals(ZERO_AMOUNT, usage.getGrossAmount());
         });
         Set<String> usageIds =
-            ntsUsageRepository.deleteFromScenarioByRightsholder(SCENARIO_ID_2, Sets.newHashSet(RH_ACCOUNT_NUMBER_2),
+            ntsUsageRepository.deleteFromScenarioByRightsholder(SCENARIO_ID_2, Set.of(RH_ACCOUNT_NUMBER_2),
                 StoredEntity.DEFAULT_USER);
         assertEquals(2, usageIds.size());
         usageList = usageRepository.findByIds(new ArrayList<>(usageIds));
@@ -140,8 +138,7 @@ public class NtsUsageRepositoryIntegrationTest {
         Usage expectedUsage2 = usages.get(0);
         assertEquals(new BigDecimal("294.0000000000"), expectedUsage1.getNetAmount());
         assertEquals(new BigDecimal("336.0000000000"), expectedUsage2.getNetAmount());
-        ntsUsageRepository.recalculateAmountsFromExcludedRightshoders(SCENARIO_ID_3,
-            Sets.newHashSet(RH_ACCOUNT_NUMBER_3));
+        ntsUsageRepository.recalculateAmountsFromExcludedRightshoders(SCENARIO_ID_3, Set.of(RH_ACCOUNT_NUMBER_3));
         usages = usageRepository.findByIds(
             List.of("56f91295-db33-4440-b550-9bb515239750", "4604c954-e43b-4606-809a-665c81514dbf"));
         assertEquals(new BigDecimal("800.0000000000"),
@@ -198,15 +195,13 @@ public class NtsUsageRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FOLDER_NAME + "find-count-for-batch.groovy")
     public void testFindCountForBatch() {
-        assertEquals(2, ntsUsageRepository.findCountForBatch(2015, 2016, Sets.newHashSet("Bus", "Doc Del")));
+        assertEquals(2, ntsUsageRepository.findCountForBatch(2015, 2016, Set.of("Bus", "Doc Del")));
     }
 
     @Test
     @TestData(fileName = FOLDER_NAME + "find-unclassified-usages-count-by-wr-wrk-insts.groovy")
     public void testFindUnclassifiedUsagesCountByWrWrkInsts() {
-        assertEquals(2,
-            ntsUsageRepository.findUnclassifiedUsagesCountByWrWrkInsts(
-                Sets.newHashSet(987632764L, 12318778798L)));
+        assertEquals(2, ntsUsageRepository.findUnclassifiedUsagesCountByWrWrkInsts(Set.of(987632764L, 12318778798L)));
         assertEquals(0, ntsUsageRepository.findUnclassifiedUsagesCountByWrWrkInsts(Set.of(1L)));
     }
 
@@ -317,12 +312,12 @@ public class NtsUsageRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FOLDER_NAME + "update-usages-status-to-unclassified.groovy")
     public void testUpdateUsagesStatusToUnclassified() {
-        ArrayList<String> usageIds = Lists.newArrayList(USAGE_ID_5, USAGE_ID_6);
+        List<String> usageIds = List.of(USAGE_ID_5, USAGE_ID_6);
         List<Usage> usages = usageRepository.findByIds(usageIds);
         assertEquals(2, usages.size());
         assertEquals(UsageStatusEnum.ELIGIBLE, usages.get(0).getStatus());
         assertEquals(UsageStatusEnum.ELIGIBLE, usages.get(1).getStatus());
-        ntsUsageRepository.updateUsagesStatusToUnclassified(Lists.newArrayList(122267671L, 159526526L),
+        ntsUsageRepository.updateUsagesStatusToUnclassified(List.of(122267671L, 159526526L),
             StoredEntity.DEFAULT_USER);
         usages = usageRepository.findByIds(usageIds);
         assertEquals(2, usages.size());
@@ -351,7 +346,7 @@ public class NtsUsageRepositoryIntegrationTest {
 
     private NtsFields buildNtsFields(BigDecimal nonStmAmount) {
         NtsFields ntsFields = new NtsFields();
-        ntsFields.setMarkets(Sets.newHashSet(EDU_MARKET, GOV_MARKET));
+        ntsFields.setMarkets(Set.of(EDU_MARKET, GOV_MARKET));
         ntsFields.setFundPoolPeriodFrom(2015);
         ntsFields.setFundPoolPeriodTo(2016);
         ntsFields.setStmAmount(HUNDRED_AMOUNT);

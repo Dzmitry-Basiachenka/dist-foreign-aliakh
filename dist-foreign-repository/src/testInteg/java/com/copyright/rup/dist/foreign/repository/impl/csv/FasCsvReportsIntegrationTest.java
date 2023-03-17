@@ -10,8 +10,6 @@ import com.copyright.rup.dist.foreign.domain.filter.ExcludePayeeFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IFasReportRepository;
 
-import com.google.common.collect.Sets;
-
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -70,7 +68,7 @@ public class FasCsvReportsIntegrationTest extends CsvReportsTestHelper {
     @TestData(fileName = WRITE_AUDIT_CSV_REPORT)
     public void testWriteAuditCsvReport() throws Exception {
         AuditFilter auditFilter = new AuditFilter();
-        auditFilter.setBatchesIds(Sets.newHashSet("e855bf85-236c-42e7-9b12-8d68dd747bbe",
+        auditFilter.setBatchesIds(Set.of("e855bf85-236c-42e7-9b12-8d68dd747bbe",
             "02a09322-5f0f-4cae-888c-73127050dc98", "d016d9c2-5460-41bf-837c-8598cf00b654"));
         auditFilter.setProductFamily("FAS");
         assertFilesWithExecutor(outputStream -> reportRepository.writeAuditFasCsvReport(auditFilter, outputStream),
@@ -115,7 +113,7 @@ public class FasCsvReportsIntegrationTest extends CsvReportsTestHelper {
     public void testWriteAuditFas2CsvReport() throws Exception {
         AuditFilter auditFilter = new AuditFilter();
         auditFilter.setBatchesIds(
-            Sets.newHashSet("034873b3-97fa-475a-9a2a-191e8ec988b3", "acae006c-a4fe-45f0-a0cc-098e12db00c5"));
+            Set.of("034873b3-97fa-475a-9a2a-191e8ec988b3", "acae006c-a4fe-45f0-a0cc-098e12db00c5"));
         auditFilter.setProductFamily("FAS2");
         assertFilesWithExecutor(outputStream -> reportRepository.writeAuditFasCsvReport(auditFilter, outputStream),
             "fas/audit_usages_report_fas2.csv");
@@ -156,7 +154,7 @@ public class FasCsvReportsIntegrationTest extends CsvReportsTestHelper {
     @TestData(fileName = WRITE_USAGES_CSV_REPORT)
     public void testWriteUsagesCsvReport() throws IOException {
         UsageFilter usageFilter = new UsageFilter();
-        usageFilter.setUsageBatchesIds(Sets.newHashSet("4c9cc089-b812-42cf-a5d2-1f5eda51fa76",
+        usageFilter.setUsageBatchesIds(Set.of("4c9cc089-b812-42cf-a5d2-1f5eda51fa76",
             "02a09322-5f0f-4cae-888c-73127050dc98"));
         assertFilesWithExecutor(outputStream -> reportRepository.writeFasUsageCsvReport(usageFilter, outputStream),
             "fas/usages_report.csv");
@@ -212,7 +210,7 @@ public class FasCsvReportsIntegrationTest extends CsvReportsTestHelper {
     @TestData(fileName = WRITE_UNDISTRIBUTED_LIABILITIES_CSV_REPORT)
     public void testWriteUndistributedLiabilitiesCsvReport() throws Exception {
         assertFiles(outputStream -> reportRepository.writeUndistributedLiabilitiesCsvReport(LocalDate.of(2011, 5, 5),
-            outputStream, DEFAULT_ESTIMATED_SERVICE_FEE, Sets.newHashSet("FAS", "FAS2")),
+            outputStream, DEFAULT_ESTIMATED_SERVICE_FEE, Set.of("FAS", "FAS2")),
             "fas/undistributed_liabilities_report.csv");
     }
 
@@ -220,7 +218,7 @@ public class FasCsvReportsIntegrationTest extends CsvReportsTestHelper {
     @TestData(fileName = WRITE_UNDISTRIBUTED_LIABILITIES_CSV_REPORT)
     public void testWriteUndistributedLiabilitiesCsvEmptyReport() throws IOException {
         assertFiles(outputStream -> reportRepository.writeUndistributedLiabilitiesCsvReport(LocalDate.of(2001, 5, 5),
-            outputStream, DEFAULT_ESTIMATED_SERVICE_FEE, Sets.newHashSet("FAS", "FAS2")),
+            outputStream, DEFAULT_ESTIMATED_SERVICE_FEE, Set.of("FAS", "FAS2")),
             "fas/undistributed_liabilities_report_empty.csv");
     }
 

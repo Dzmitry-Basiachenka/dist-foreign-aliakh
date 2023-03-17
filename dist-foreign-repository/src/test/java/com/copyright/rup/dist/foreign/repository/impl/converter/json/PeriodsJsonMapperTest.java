@@ -4,7 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.google.common.collect.Sets;
+
 import org.junit.Test;
 
 import java.io.IOException;
@@ -52,6 +52,6 @@ public class PeriodsJsonMapperTest {
     }
 
     private Set<Integer> buildPeriods() {
-        return Sets.newHashSet(202106, 202112);
+        return Set.of(202106, 202112);
     }
 }

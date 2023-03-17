@@ -25,7 +25,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Sets;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.junit.Test;
@@ -644,7 +643,7 @@ public class UdmBaselineRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FOLDER_NAME + "find-wr-wrk-inst-to-system-titles.groovy")
     public void testFindWrWrkInstToSystemTitles() {
-        Map<Long, String> result = baselineRepository.findWrWrkInstToSystemTitles(Sets.newHashSet(201906, 202012));
+        Map<Long, String> result = baselineRepository.findWrWrkInstToSystemTitles(Set.of(201906, 202012));
         assertEquals(2, result.size());
         assertEquals("Tenside, surfactants, detergents", result.get(306985867L));
         assertEquals("Colloids and surfaces. B, Biointerfaces", result.get(20008506L));

@@ -28,7 +28,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.google.common.collect.Sets;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.junit.Test;
@@ -268,7 +267,7 @@ public class UdmUsageRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindDtosByFilterAssignees() {
-        assertFilteringFindDtosByFilter(filter -> filter.setAssignees(Sets.newHashSet(ASSIGNEE_1, UNASSIGNED)),
+        assertFilteringFindDtosByFilter(filter -> filter.setAssignees(Set.of(ASSIGNEE_1, UNASSIGNED)),
             UDM_USAGE_UID_5, UDM_USAGE_UID_6);
         assertFilteringFindDtosByFilter(filter -> filter.setAssignees(Set.of(ASSIGNEE_1)), UDM_USAGE_UID_6);
         assertFilteringFindDtosByFilter(filter -> filter.setAssignees(Set.of(ASSIGNEE_2)), UDM_USAGE_UID_7);
@@ -849,7 +848,7 @@ public class UdmUsageRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindCountByFilterAssignees() {
-        assertFilteringFindCountByFilter(filter -> filter.setAssignees(Sets.newHashSet(ASSIGNEE_1, UNASSIGNED)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setAssignees(Set.of(ASSIGNEE_1, UNASSIGNED)), 2);
         assertFilteringFindCountByFilter(filter -> filter.setAssignees(Set.of(ASSIGNEE_1)), 1);
         assertFilteringFindCountByFilter(filter -> filter.setAssignees(Set.of(ASSIGNEE_2)), 1);
         assertFilteringFindCountByFilter(filter -> filter.setAssignees(Set.of(UNASSIGNED)), 1);
@@ -1508,8 +1507,7 @@ public class UdmUsageRepositoryIntegrationTest {
         UdmUsage udmUsage2 = udmUsages.get(1);
         assertEquals(UsageStatusEnum.NEW, udmUsage2.getStatus());
         assertEquals(USER_NAME, udmUsage2.getUpdateUser());
-        udmUsageRepository.updateStatusByIds(Sets.newHashSet(udmUsage1.getId(), udmUsage2.getId()),
-            UsageStatusEnum.WORK_FOUND);
+        udmUsageRepository.updateStatusByIds(Set.of(udmUsage1.getId(), udmUsage2.getId()), UsageStatusEnum.WORK_FOUND);
         udmUsages = udmUsageRepository.findByIds(List.of(UDM_USAGE_UID_10, UDM_USAGE_UID_11));
         assertEquals(2, udmUsages.size());
         udmUsage1 = udmUsages.get(0);
@@ -1600,7 +1598,7 @@ public class UdmUsageRepositoryIntegrationTest {
 
     private void assertSortingFindDtosByFilter(String detailIdAsc, String detailIdDesc, String sortProperty) {
         UdmUsageFilter filter = new UdmUsageFilter();
-        filter.setUdmBatchesIds(Sets.newHashSet(UDM_BATCH_UID_2, UDM_BATCH_UID_3));
+        filter.setUdmBatchesIds(Set.of(UDM_BATCH_UID_2, UDM_BATCH_UID_3));
         List<UdmUsageDto> usageDtos =
             udmUsageRepository.findDtosByFilter(filter, null, new Sort(sortProperty, Direction.ASC));
         assertEquals(detailIdAsc, usageDtos.get(0).getId());

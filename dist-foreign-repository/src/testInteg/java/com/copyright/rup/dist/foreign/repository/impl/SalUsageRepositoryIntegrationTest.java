@@ -28,7 +28,6 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Sets;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.junit.Test;
@@ -783,7 +782,7 @@ public class SalUsageRepositoryIntegrationTest {
 
     private void assertFindDtosByFilterSort(String detailId, String sortProperty, Sort.Direction sortDirection) {
         List<UsageDto> usageDtos = salUsageRepository.findDtosByFilter(buildUsageFilter(
-            Sets.newHashSet(USAGE_BATCH_ID_1, USAGE_BATCH_ID_2), UsageStatusEnum.NEW, SAL_PRODUCT_FAMILY, null), null,
+            Set.of(USAGE_BATCH_ID_1, USAGE_BATCH_ID_2), UsageStatusEnum.NEW, SAL_PRODUCT_FAMILY, null), null,
             new Sort(sortProperty, sortDirection));
         assertEquals(3, CollectionUtils.size(usageDtos));
         assertEquals(detailId, usageDtos.get(0).getId());

@@ -21,7 +21,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.google.common.collect.Sets;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.junit.Test;
@@ -154,8 +153,8 @@ public class FasUsageRepositoryIntegrationTest {
     @TestData(fileName = FOLDER_NAME + "find-account-numbers-invalid-for-exclude.groovy")
     public void testFindAccountNumbersInvalidForExclude() {
         assertEquals(Set.of(7000813806L), fasUsageRepository.findAccountNumbersInvalidForExclude(
-            Sets.newHashSet(SCENARIO_ID_2, SCENARIO_ID_3), Sets.newHashSet(7000813806L, 1000002859L)));
-        assertTrue(fasUsageRepository.findAccountNumbersInvalidForExclude(Sets.newHashSet(SCENARIO_ID_2, SCENARIO_ID_3),
+            Set.of(SCENARIO_ID_2, SCENARIO_ID_3), Set.of(7000813806L, 1000002859L)));
+        assertTrue(fasUsageRepository.findAccountNumbersInvalidForExclude(Set.of(SCENARIO_ID_2, SCENARIO_ID_3),
             Set.of(1000002859L)).isEmpty());
     }
 

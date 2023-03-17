@@ -29,9 +29,6 @@ import com.copyright.rup.dist.foreign.repository.api.IScenarioUsageFilterReposit
 import com.copyright.rup.dist.foreign.repository.api.IUsageBatchRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
-
 import org.apache.commons.collections4.CollectionUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -137,7 +134,7 @@ public class ScenarioRepositoryIntegrationTest {
     @TestData(fileName = FOLDER_NAME + "find-by-product-families-and-statuses.groovy")
     public void testFindByProductFamiliesAndStatuses() {
         List<Scenario> scenarios =
-            scenarioRepository.findByProductFamiliesAndStatuses(Sets.newHashSet(NTS_PRODUCT_FAMILY, FAS_PRODUCT_FAMILY),
+            scenarioRepository.findByProductFamiliesAndStatuses(Set.of(NTS_PRODUCT_FAMILY, FAS_PRODUCT_FAMILY),
                 EnumSet.of(ScenarioStatusEnum.SENT_TO_LM));
         assertEquals(4, scenarios.size());
         verifyScenario(scenarios.get(0), SCENARIO_ID_4, SENT_TO_LM_AUDIT, "The description of scenario 8",
@@ -372,7 +369,7 @@ public class ScenarioRepositoryIntegrationTest {
         List<Rightsholder> sourceRros = scenarioRepository.findSourceRros(SCENARIO_ID_1);
         assertEquals(2, sourceRros.size());
         assertTrue(sourceRros.stream().map(Rightsholder::getAccountNumber).collect(Collectors.toSet()).containsAll(
-            Sets.newHashSet(2000017010L, 2000017000L)));
+            Set.of(2000017010L, 2000017000L)));
     }
 
     @Test
@@ -391,7 +388,7 @@ public class ScenarioRepositoryIntegrationTest {
         fasUsageRepository.insert(usage1);
         fasUsageRepository.insert(usage2);
         fasUsageRepository.insert(usage3);
-        usageRepository.addToScenario(Lists.newArrayList(usage1, usage2, usage3));
+        usageRepository.addToScenario(List.of(usage1, usage2, usage3));
         List<RightsholderPayeePair> result =
             scenarioRepository.findRightsholdersByScenarioIdAndSourceRro(SCENARIO_ID_1, 2000017010L);
         assertEquals(2, result.size());
@@ -605,7 +602,7 @@ public class ScenarioRepositoryIntegrationTest {
 
     private UsageFilter buildUsageFilter() {
         UsageFilter usageFilter = new UsageFilter();
-        usageFilter.setUsageBatchesIds(Sets.newHashSet("7c8f48fe-3429-43fd-9389-d9b77fa9f3a0",
+        usageFilter.setUsageBatchesIds(Set.of("7c8f48fe-3429-43fd-9389-d9b77fa9f3a0",
             "ac9bae73-9bd7-477c-bc95-e73daee455ee", "5769e9fe-1b4b-4399-841c-73108893f7d2",
             "d8baa8e6-10fd-4c3c-8851-b1e6883e8cde", "f8f23728-75ac-4114-b910-2d7abc061217"));
         usageFilter.setRhAccountNumbers(Set.of(2000017001L));

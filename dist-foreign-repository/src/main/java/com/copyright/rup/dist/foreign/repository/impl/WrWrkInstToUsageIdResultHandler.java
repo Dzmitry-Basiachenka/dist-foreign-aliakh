@@ -1,7 +1,5 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
-import com.google.common.collect.Sets;
-
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -10,6 +8,7 @@ import org.apache.ibatis.session.ResultContext;
 import org.apache.ibatis.session.ResultHandler;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -31,7 +30,7 @@ class WrWrkInstToUsageIdResultHandler implements ResultHandler {
         WrWrkInstUsageIdPair holder = (WrWrkInstUsageIdPair) context.getResultObject();
         Long wrWrkInst = holder.getWrWrkInst();
         if (wrWrkInstToUsageIdsMap.containsKey(wrWrkInst)) {
-            Set<String> usageIds = Sets.newHashSet(wrWrkInstToUsageIdsMap.get(wrWrkInst));
+            Set<String> usageIds = new HashSet<>(wrWrkInstToUsageIdsMap.get(wrWrkInst));
             usageIds.add(holder.getUsageId());
             wrWrkInstToUsageIdsMap.put(wrWrkInst, usageIds);
         } else {

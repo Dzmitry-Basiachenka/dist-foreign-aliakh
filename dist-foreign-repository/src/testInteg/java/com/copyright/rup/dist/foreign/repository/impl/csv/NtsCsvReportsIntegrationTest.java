@@ -9,8 +9,6 @@ import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.INtsReportRepository;
 
-import com.google.common.collect.Sets;
-
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -103,7 +101,7 @@ public class NtsCsvReportsIntegrationTest extends CsvReportsTestHelper {
     @TestData(fileName = WRITE_USAGES_CSV_REPORT)
     public void testWriteUsagesCsvReport() throws IOException {
         UsageFilter usageFilter = new UsageFilter();
-        usageFilter.setUsageBatchesIds(Sets.newHashSet("f20ac1a3-eee4-4027-b5fb-def9adf0f871",
+        usageFilter.setUsageBatchesIds(Set.of("f20ac1a3-eee4-4027-b5fb-def9adf0f871",
             "c0c07d51-2216-43c3-b61b-b904d86ec36a"));
         assertFilesWithExecutor(outputStream -> reportRepository.writeNtsUsageCsvReport(usageFilter, outputStream),
             "nts/usages_report.csv");

@@ -18,7 +18,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -84,7 +83,7 @@ public class UdmProxyValueRepositoryIntegrationTest {
     public void testClearProxyValues() {
         findAllValueDtos().forEach(udmValueDto -> assertNotNull(udmValueDto.getContentUnitPrice()));
         udmProxyValueRepository.clearProxyValues(PERIOD, USER_NAME);
-        assertEquals(Sets.newHashSet("e6b6588f-df06-4c63-b9c0-4b4f1e711945", "57f0198d-0366-4a8e-a833-e40986a37981"),
+        assertEquals(Set.of("e6b6588f-df06-4c63-b9c0-4b4f1e711945", "57f0198d-0366-4a8e-a833-e40986a37981"),
             findAllValueDtos().stream()
                 .filter(udmValueDto -> Objects.isNull(udmValueDto.getContentUnitPrice()))
                 .map(UdmValueDto::getId)
