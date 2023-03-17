@@ -11,7 +11,6 @@ import static org.junit.Assert.assertEquals;
 import com.copyright.rup.dist.foreign.integration.oracle.api.IOracleRhTaxCountryService;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Sets;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -31,7 +30,7 @@ import java.util.Set;
  */
 public class OracleRhTaxCountryCacheServiceTest {
 
-    private static final Set<Long> ACCOUNT_NUMBERS = Sets.newHashSet(7001413934L, 1000009522L);
+    private static final Set<Long> ACCOUNT_NUMBERS = Set.of(7001413934L, 1000009522L);
 
     private IOracleRhTaxCountryService oracleRhTaxCountryService;
     private OracleRhTaxCountryCacheService oracleRhTaxCountryCacheService;

@@ -12,12 +12,12 @@ import com.copyright.rup.dist.foreign.integration.lm.api.domain.ExternalUsageMes
 import com.copyright.rup.dist.foreign.integration.lm.impl.producer.ExternalUsageProducer;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -48,21 +48,21 @@ public class LmIntegrationServiceTest {
 
     @Test
     public void testSendToLmSingleMessage() {
-        externalUsageProducer.send(new ExternalUsageMessage(HEADER, Lists.newArrayList(externalUsage, externalUsage)));
+        externalUsageProducer.send(new ExternalUsageMessage(HEADER, List.of(externalUsage, externalUsage)));
         expectLastCall().once();
         replay(externalUsageProducer);
-        lmIntegrationService.sendToLm(Lists.newArrayList(externalUsage, externalUsage));
+        lmIntegrationService.sendToLm(List.of(externalUsage, externalUsage));
         verify(externalUsageProducer);
     }
 
     @Test
     public void testSendToLmNotSingleMessages() {
-        externalUsageProducer.send(new ExternalUsageMessage(HEADER, Lists.newArrayList(externalUsage, externalUsage)));
+        externalUsageProducer.send(new ExternalUsageMessage(HEADER, List.of(externalUsage, externalUsage)));
         expectLastCall().once();
-        externalUsageProducer.send(new ExternalUsageMessage(HEADER, Lists.newArrayList(externalUsage)));
+        externalUsageProducer.send(new ExternalUsageMessage(HEADER, List.of(externalUsage)));
         expectLastCall().once();
         replay(externalUsageProducer);
-        lmIntegrationService.sendToLm(Lists.newArrayList(externalUsage, externalUsage, externalUsage));
+        lmIntegrationService.sendToLm(List.of(externalUsage, externalUsage, externalUsage));
         verify(externalUsageProducer);
     }
 }

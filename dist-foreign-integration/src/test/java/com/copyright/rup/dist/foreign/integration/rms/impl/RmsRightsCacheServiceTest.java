@@ -14,8 +14,6 @@ import static org.junit.Assert.assertTrue;
 import com.copyright.rup.dist.common.domain.RmsGrant;
 import com.copyright.rup.dist.common.integration.rest.rms.IRmsRightsService;
 
-import com.google.common.collect.Sets;
-
 import org.apache.commons.collections.CollectionUtils;
 import org.easymock.Capture;
 import org.junit.Before;
@@ -60,8 +58,8 @@ public class RmsRightsCacheServiceTest {
     public void testGetAllRmsGrants() {
         List<Long> wrWrkInst1 = List.of(WR_WRK_INST_1);
         List<Long> wrWrkInst2 = List.of(WR_WRK_INST_2, WR_WRK_INST_3);
-        Set<RmsGrant> expectedRmsGrants1 = Sets.newHashSet(buildRmsGrant(WR_WRK_INST_1, RH_ACCOUNT_NUMBER_1));
-        Set<RmsGrant> expectedRmsGrants2 = Sets.newHashSet(buildRmsGrant(WR_WRK_INST_2, RH_ACCOUNT_NUMBER_2),
+        Set<RmsGrant> expectedRmsGrants1 = Set.of(buildRmsGrant(WR_WRK_INST_1, RH_ACCOUNT_NUMBER_1));
+        Set<RmsGrant> expectedRmsGrants2 = Set.of(buildRmsGrant(WR_WRK_INST_2, RH_ACCOUNT_NUMBER_2),
             buildRmsGrant(WR_WRK_INST_3, RH_ACCOUNT_NUMBER_2));
         Capture<List<Long>> wrWrkInstsCapture = newCapture();
         expect(rmsService.getGrants(eq(wrWrkInst1), anyObject(), eq(Set.of()), eq(Set.of()),
@@ -83,7 +81,7 @@ public class RmsRightsCacheServiceTest {
     @Test
     public void testGetAllRmsGrantsFromCache() {
         List<Long> wrWrkInsts = List.of(WR_WRK_INST_1, WR_WRK_INST_2, WR_WRK_INST_3);
-        Set<RmsGrant> expectedRmsGrants = Sets.newHashSet(buildRmsGrant(WR_WRK_INST_1, RH_ACCOUNT_NUMBER_1),
+        Set<RmsGrant> expectedRmsGrants = Set.of(buildRmsGrant(WR_WRK_INST_1, RH_ACCOUNT_NUMBER_1),
             buildRmsGrant(WR_WRK_INST_2, RH_ACCOUNT_NUMBER_2),
             buildRmsGrant(WR_WRK_INST_3, RH_ACCOUNT_NUMBER_2));
         Capture<List<Long>> wrWrkInstsCapture = newCapture();
@@ -105,9 +103,9 @@ public class RmsRightsCacheServiceTest {
     @Test
     public void testGetAllRmsGrantsFromCacheWithTypeOfUses() {
         LocalDate periodEndDate = LocalDate.of(2019, 6, 30);
-        Set<String> typeOfUses = Sets.newHashSet("PRINT", "DIGITAL");
+        Set<String> typeOfUses = Set.of("PRINT", "DIGITAL");
         List<Long> wrWrkInsts = List.of(WR_WRK_INST_1, WR_WRK_INST_2);
-        Set<RmsGrant> expectedRmsGrants = Sets.newHashSet(buildRmsGrant(WR_WRK_INST_1, RH_ACCOUNT_NUMBER_1),
+        Set<RmsGrant> expectedRmsGrants = Set.of(buildRmsGrant(WR_WRK_INST_1, RH_ACCOUNT_NUMBER_1),
             buildRmsGrant(WR_WRK_INST_2, RH_ACCOUNT_NUMBER_2));
         Capture<List<Long>> wrWrkInstsCapture = newCapture();
         expect(rmsService.getGrants(capture(wrWrkInstsCapture), eq(periodEndDate), eq(Set.of()),

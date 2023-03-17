@@ -14,7 +14,6 @@ import com.copyright.rup.dist.common.test.TestUtils;
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableBiMap;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Sets;
 
 import org.apache.commons.collections4.MapUtils;
 import org.junit.Before;
@@ -38,7 +37,7 @@ public class OracleRhTaxCountryServiceTest {
 
     private static final String RH_TAX_COUNTRY_URL =
         "http://localhost:8080/oracle-ap-rest/getRightsholderDataInfo?rightsholderAccountNumbers={accountNumbers}";
-    private static final Set<Long> ACCOUNT_NUMBERS = Sets.newHashSet(7001413934L, 1000009522L);
+    private static final Set<Long> ACCOUNT_NUMBERS = Set.of(7001413934L, 1000009522L);
 
     private OracleRhTaxCountryService oracleRhTaxCountryService;
     private RestTemplate restTemplate;

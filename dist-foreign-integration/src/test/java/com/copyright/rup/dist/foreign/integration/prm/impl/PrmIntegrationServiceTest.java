@@ -22,8 +22,6 @@ import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIneligibleRightsho
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import com.google.common.collect.Table;
 
 import org.junit.Before;
@@ -31,7 +29,9 @@ import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -81,7 +81,7 @@ public class PrmIntegrationServiceTest {
 
     @Test
     public void testGetRightsholders() {
-        Set<Long> accountNumbers = Sets.newHashSet(ACCOUNT_NUMBER);
+        Set<Long> accountNumbers = Set.of(ACCOUNT_NUMBER);
         Rightsholder rightsholder = buildRightsholder();
         expect(prmRightsholderService.getRightsholders(accountNumbers))
             .andReturn(List.of(rightsholder)).once();
@@ -95,7 +95,7 @@ public class PrmIntegrationServiceTest {
 
     @Test
     public void testGetRightsholdersForEmptySet() {
-        expect(prmRightsholderService.getRightsholders(Sets.newHashSet())).andReturn(Lists.newArrayList()).once();
+        expect(prmRightsholderService.getRightsholders(new HashSet<>())).andReturn(new ArrayList<>()).once();
         replay(prmRightsholderService);
         assertTrue(prmIntegrationService.getRightsholders(Set.of()).isEmpty());
         verify(prmRightsholderService);
@@ -103,7 +103,7 @@ public class PrmIntegrationServiceTest {
 
     @Test
     public void testGetRightsholderName() {
-        expect(prmRightsholderService.getRightsholders(Sets.newHashSet(ACCOUNT_NUMBER)))
+        expect(prmRightsholderService.getRightsholders(Set.of(ACCOUNT_NUMBER)))
             .andReturn(List.of(buildRightsholder())).once();
         replay(prmRightsholderService);
         Rightsholder rightsholder = prmIntegrationService.getRightsholder(ACCOUNT_NUMBER);
@@ -114,7 +114,7 @@ public class PrmIntegrationServiceTest {
 
     @Test
     public void testGetRightsholderNameNotPresentedInPrm() {
-        expect(prmRightsholderService.getRightsholders(Sets.newHashSet(ACCOUNT_NUMBER))).andReturn(List.of()).once();
+        expect(prmRightsholderService.getRightsholders(Set.of(ACCOUNT_NUMBER))).andReturn(List.of()).once();
         replay(prmRightsholderService);
         assertNull(prmIntegrationService.getRightsholder(ACCOUNT_NUMBER));
         verify(prmRightsholderService);

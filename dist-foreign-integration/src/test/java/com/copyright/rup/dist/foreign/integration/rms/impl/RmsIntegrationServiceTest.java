@@ -10,8 +10,6 @@ import com.copyright.rup.dist.common.integration.rest.rms.IRmsRightsAssignmentSe
 import com.copyright.rup.dist.common.integration.rest.rms.RightsAssignmentResult;
 import com.copyright.rup.dist.common.integration.rest.rms.RightsAssignmentResult.RightsAssignmentResultStatusEnum;
 
-import com.google.common.collect.Sets;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
@@ -42,7 +40,7 @@ public class RmsIntegrationServiceTest {
 
     @Test
     public void testSendForRightsAssignment() {
-        Set<Long> wrWrkInsts = Sets.newHashSet(WR_WRK_INST_1);
+        Set<Long> wrWrkInsts = Set.of(WR_WRK_INST_1);
         RightsAssignmentResult result = new RightsAssignmentResult(RightsAssignmentResultStatusEnum.SUCCESS);
         result.setJobId("d4127dbb-9ab8-46a3-b952-b9517deff116");
         expect(rmsRightsAssignmentService.sendForRightsAssignment("FAS Batch 02/04/2018", wrWrkInsts))
