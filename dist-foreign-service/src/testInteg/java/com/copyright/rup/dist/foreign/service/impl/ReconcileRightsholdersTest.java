@@ -12,7 +12,6 @@ import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Sets;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -24,6 +23,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Integration test to verify reconcile rightsholders functionality.
@@ -91,7 +91,7 @@ public class ReconcileRightsholdersTest {
             .expectPreferences("reconcileRightsholders/preferences_with_discrepancies_response.json",
                 "3259b121-8b0e-4b9e-8d7a-88707cf418a4", "f0ba198d-14fd-49c9-a2c3-ffc65b2f14af",
                 "cd1d10f8-c625-4634-afee-9b983071e725", "e395cf0e-312f-425c-a37d-4a7ab824b8f6")
-            .expectDiscrepancies(Sets.newHashSet(
+            .expectDiscrepancies(Set.of(
                 buildDiscrepancy(7000515031L, 2000152614L, 127778305L),
                 buildDiscrepancy(2000152614L, 1000002137L, 122861189L),
                 buildDiscrepancy(1000000026L, 1000002137L, 122799407L),

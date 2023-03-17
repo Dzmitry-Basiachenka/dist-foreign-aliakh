@@ -30,8 +30,6 @@ import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioUsageService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageService;
 
-import com.google.common.collect.Sets;
-
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -201,7 +199,7 @@ public class AclScenarioServiceTest {
         expect(aclUsageService.usageExistForLicenseeClassesAndTypeOfUse(BATCH_UID, GRANT_SET_UID,
             Set.of(1), PRINT_TOU)).andReturn(true).once();
         expect(aclUsageService.usageExistForLicenseeClassesAndTypeOfUse(BATCH_UID, GRANT_SET_UID,
-            Sets.newHashSet(2, 3), DIGITAL_TOU)).andReturn(true).once();
+            Set.of(2, 3), DIGITAL_TOU)).andReturn(true).once();
         replay(aclFundPoolService, aclUsageService);
         Set<AclFundPoolDetailDto> invalidDetails =
             aclScenarioService.getFundPoolDetailsNotToBeDistributed(BATCH_UID, FUND_POOL_UID, GRANT_SET_UID, mapping);
@@ -220,7 +218,7 @@ public class AclScenarioServiceTest {
         expect(aclUsageService.usageExistForLicenseeClassesAndTypeOfUse(BATCH_UID, GRANT_SET_UID,
             Set.of(1), PRINT_TOU)).andReturn(true).once();
         expect(aclUsageService.usageExistForLicenseeClassesAndTypeOfUse(BATCH_UID, GRANT_SET_UID,
-            Sets.newHashSet(2, 3), DIGITAL_TOU)).andReturn(false).once();
+            Set.of(2, 3), DIGITAL_TOU)).andReturn(false).once();
         replay(aclFundPoolService, aclUsageService);
         Set<AclFundPoolDetailDto> invalidDetails =
             aclScenarioService.getFundPoolDetailsNotToBeDistributed(BATCH_UID, FUND_POOL_UID, GRANT_SET_UID, mapping);

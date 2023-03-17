@@ -40,7 +40,6 @@ import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEn
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
@@ -50,6 +49,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -226,7 +226,7 @@ public class UsageService implements IUsageService {
         LOGGER.info("Update paid information. Started. UsagesCount={}", paidUsagesCount);
         populateAccountNumbers(paidUsages);
         AtomicInteger newUsagesCount = new AtomicInteger();
-        Set<String> notFoundUsageIds = Sets.newHashSet();
+        Set<String> notFoundUsageIds = new HashSet<>();
         Map<String, Usage> usageIdToUsageMap = findByIdsFunction.apply(paidUsages.stream()
             .map(PaidUsage::getId)
             .collect(Collectors.toList())).stream()
@@ -278,7 +278,7 @@ public class UsageService implements IUsageService {
         int archivedUsagesCount = 0;
         JobInfo jobInfo;
         if (CollectionUtils.isNotEmpty(paidUsagesIds)) {
-            Set<String> invalidUsageIds = Sets.newHashSet();
+            Set<String> invalidUsageIds = new HashSet<>();
             for (List<String> ids : Iterables.partition(paidUsagesIds, 128)) {
                 List<PaidUsage> paidUsages = usageArchiveRepository.findByIdAndStatus(ids, UsageStatusEnum.PAID);
                 if (CollectionUtils.isNotEmpty(paidUsages)) {

@@ -9,11 +9,11 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.google.common.collect.Lists;
 
 import org.slf4j.Logger;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,7 +32,7 @@ public class PaidUsageDeserializer extends JsonDeserializer<List<PaidUsage>> {
     @Override
     public List<PaidUsage> deserialize(JsonParser parser, DeserializationContext context)
         throws IOException {
-        List<PaidUsage> usages = Lists.newArrayList();
+        List<PaidUsage> usages = new ArrayList<>();
         try {
             JsonNode tree = parser.readValueAsTree();
             LOGGER.trace("Deserialize LM message. Received JSON={}", tree);

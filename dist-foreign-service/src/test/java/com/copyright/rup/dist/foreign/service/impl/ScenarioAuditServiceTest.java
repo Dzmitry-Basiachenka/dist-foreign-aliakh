@@ -16,8 +16,6 @@ import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
 import com.copyright.rup.dist.foreign.repository.api.IScenarioAuditRepository;
 import com.copyright.rup.dist.foreign.service.api.IScenarioAuditService;
 
-import com.google.common.collect.Lists;
-
 import org.apache.commons.collections4.CollectionUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -83,7 +81,7 @@ public class ScenarioAuditServiceTest {
     @Test
     public void testGetActions() {
         expect(scenarioAuditRepository.findByScenarioId(SCENARIO_UID))
-            .andReturn(Lists.newArrayList(new ScenarioAuditItem(), new ScenarioAuditItem()))
+            .andReturn(List.of(new ScenarioAuditItem(), new ScenarioAuditItem()))
             .once();
         replay(scenarioAuditRepository);
         List<ScenarioAuditItem> auditItems = scenarioAuditService.getActions(SCENARIO_UID);

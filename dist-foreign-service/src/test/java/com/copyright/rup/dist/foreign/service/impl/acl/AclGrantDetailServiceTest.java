@@ -28,8 +28,6 @@ import com.copyright.rup.dist.foreign.service.api.acl.IAclGrantDetailService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmBaselineService;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 
 import org.easymock.Capture;
 import org.easymock.EasyMock;
@@ -96,7 +94,7 @@ public class AclGrantDetailServiceTest {
         aclGrantDetailRepository.insert(grantDetail);
         expectLastCall().once();
         replay(aclGrantDetailRepository);
-        aclGrantDetailService.insert(Lists.newArrayList(grantDetail));
+        aclGrantDetailService.insert(List.of(grantDetail));
         verify(aclGrantDetailRepository);
     }
 
@@ -186,7 +184,7 @@ public class AclGrantDetailServiceTest {
         expectLastCall().once();
         aclGrantDetailRepository.updateGrant(capture(grantDto4));
         expectLastCall().once();
-        expect(rightsholderService.updateRightsholders(Sets.newHashSet(1000014080L, 2000072827L, 2000070936L)))
+        expect(rightsholderService.updateRightsholders(Set.of(1000014080L, 2000072827L, 2000070936L)))
             .andReturn(List.of()).once();
         replay(aclGrantDetailRepository, rightsholderService, udmBaselineService, prmIntegrationService);
         aclGrantDetailService.addToGrantSet(grantSet, aclGrantDetailDtos);
@@ -414,7 +412,7 @@ public class AclGrantDetailServiceTest {
     private AclGrantSet buildGrantSet() {
         AclGrantSet grantSet = new AclGrantSet();
         grantSet.setId("3eb28726-19de-487d-8397-02c1d5baa308");
-        grantSet.setPeriods(Sets.newHashSet(202106, 202112));
+        grantSet.setPeriods(Set.of(202106, 202112));
         grantSet.setGrantPeriod(202112);
         grantSet.setLicenseType(ACL);
         return grantSet;

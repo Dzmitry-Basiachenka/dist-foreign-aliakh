@@ -22,8 +22,6 @@ import com.copyright.rup.dist.foreign.repository.api.IUdmBatchRepository;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmBatchService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageService;
 
-import com.google.common.collect.Sets;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -123,8 +121,7 @@ public class UdmBatchServiceTest {
 
     @Test
     public void testIsUdmBatchProcessingCompleted() {
-        Set<UsageStatusEnum> statuses =
-            Sets.newHashSet(UsageStatusEnum.NEW, UsageStatusEnum.WORK_FOUND);
+        Set<UsageStatusEnum> statuses = Set.of(UsageStatusEnum.NEW, UsageStatusEnum.WORK_FOUND);
         expect(udmBatchRepository.isUdmBatchProcessingCompleted(UDM_BATCH_UID, statuses)).andReturn(true).once();
         replay(udmBatchRepository);
         assertTrue(udmBatchService.isUdmBatchProcessingCompleted(UDM_BATCH_UID));

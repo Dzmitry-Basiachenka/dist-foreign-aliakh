@@ -43,7 +43,6 @@ import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
 import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Sets;
 
 import org.apache.commons.lang3.StringUtils;
 import org.easymock.Capture;
@@ -88,7 +87,7 @@ public class UsageServiceTest {
     private static final String RH_ID = "9f9d59ce-4e03-41c1-81dc-0577afee2705";
     private static final String RH_ID_2 = "3d2791ed-4d7e-4096-839b-972ac3132e1f";
     private static final String PAYEE_ID = "507d63f2-bb93-499e-8537-78ec185c492a";
-    private static final Set<String> RH_IDS = Sets.newHashSet(RH_ID, PAYEE_ID);
+    private static final Set<String> RH_IDS = Set.of(RH_ID, PAYEE_ID);
     private static final Map<String, Long> IDS_TO_ACCOUNT_NUMBER_MAP =
         ImmutableMap.of(RH_ID, RH_ACCOUNT_NUMBER, PAYEE_ID, PAYEE_ACCOUNT_NUMBER);
 
@@ -343,7 +342,7 @@ public class UsageServiceTest {
         PaidUsage newUsage = buildPaidUsage(UsageStatusEnum.SENT_TO_LM, false, null);
         newUsage.getRightsholder().setId(RH_ID_2);
         newUsage.getRightsholder().setAccountNumber(RH_ACCOUNT_NUMBER_2);
-        expect(rightsholderService.findAccountNumbersByRightsholderIds(Sets.newHashSet(RH_ID_2, PAYEE_ID)))
+        expect(rightsholderService.findAccountNumbersByRightsholderIds(Set.of(RH_ID_2, PAYEE_ID)))
             .andReturn(ImmutableMap.of(RH_ID_2, RH_ACCOUNT_NUMBER_2, PAYEE_ID, PAYEE_ACCOUNT_NUMBER)).once();
         expect(usageArchiveRepository.findByIds(List.of(USAGE_ID_1)))
             .andReturn(List.of(oldUsage))
@@ -418,7 +417,7 @@ public class UsageServiceTest {
         PaidUsage newUsage = buildPaidUsage(UsageStatusEnum.SENT_TO_LM, false, true);
         newUsage.getRightsholder().setId(RH_ID_2);
         newUsage.getRightsholder().setAccountNumber(RH_ACCOUNT_NUMBER_2);
-        expect(rightsholderService.findAccountNumbersByRightsholderIds(Sets.newHashSet(RH_ID_2, PAYEE_ID)))
+        expect(rightsholderService.findAccountNumbersByRightsholderIds(Set.of(RH_ID_2, PAYEE_ID)))
             .andReturn(ImmutableMap.of(RH_ID_2, RH_ACCOUNT_NUMBER_2, PAYEE_ID, PAYEE_ACCOUNT_NUMBER)).once();
         expect(usageArchiveRepository.findByIds(List.of(USAGE_ID_1)))
             .andReturn(List.of(oldUsage))
@@ -625,7 +624,7 @@ public class UsageServiceTest {
 
     @Test
     public void testUpdateStatusAndRhAccountNumber() {
-        Set<String> ids = Sets.newHashSet(USAGE_ID_1, USAGE_ID_2);
+        Set<String> ids = Set.of(USAGE_ID_1, USAGE_ID_2);
         usageRepository.updateStatusAndRhAccountNumber(ids, UsageStatusEnum.ELIGIBLE, RH_ACCOUNT_NUMBER);
         expectLastCall().once();
         replay(usageRepository);

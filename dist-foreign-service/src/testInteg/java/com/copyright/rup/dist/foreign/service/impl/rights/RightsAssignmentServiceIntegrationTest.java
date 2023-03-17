@@ -14,8 +14,6 @@ import com.copyright.rup.dist.foreign.service.api.IRightsService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.impl.ServiceTestHelper;
 
-import com.google.common.collect.Sets;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -47,7 +45,7 @@ public class RightsAssignmentServiceIntegrationTest {
 
     private static final String AUDIT_MESSAGE =
         "Detail was made eligible for NTS because sum of gross amounts, grouped by Wr Wrk Inst, is less than $100";
-    private static final Set<String> USAGE_IDS = Sets.newHashSet(
+    private static final Set<String> USAGE_IDS = Set.of(
         "d82aaf46-8837-4e59-a158-d485d01f9a16",
         "427f017c-688b-4c89-9560-c3ea01e55134",
         "55710948-f203-4547-92b9-3c4526ac32c5");

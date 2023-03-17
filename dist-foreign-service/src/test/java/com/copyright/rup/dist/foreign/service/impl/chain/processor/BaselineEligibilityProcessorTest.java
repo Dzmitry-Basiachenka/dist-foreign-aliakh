@@ -14,12 +14,11 @@ import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 
-import com.google.common.collect.Lists;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -56,7 +55,7 @@ public class BaselineEligibilityProcessorTest {
         usageAuditService.logAction(Set.of(usage1.getId()), UsageActionTypeEnum.ELIGIBLE, "Usage has become eligible");
         expectLastCall().once();
         replay(usageRepository, usageAuditService);
-        baselineEligibilityProcessor.process(Lists.newArrayList(usage1, usage2));
+        baselineEligibilityProcessor.process(List.of(usage1, usage2));
         verify(usageRepository, usageAuditService);
     }
 

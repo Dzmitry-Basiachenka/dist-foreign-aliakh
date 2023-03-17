@@ -10,10 +10,11 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 
-import com.google.common.collect.Lists;
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
+
+import java.util.List;
 
 /**
  * Verifies {@link DeleteUsageProcessor}.
@@ -46,7 +47,7 @@ public class DeleteUsageProcessorTest {
         usageService.deleteById(usage2.getId());
         expectLastCall().once();
         replay(usageService);
-        deleteUsageProcessor.process(Lists.newArrayList(usage1, usage2));
+        deleteUsageProcessor.process(List.of(usage1, usage2));
         verify(usageService);
     }
 

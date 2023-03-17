@@ -3,16 +3,18 @@ package com.copyright.rup.dist.foreign.service.impl.acl.calculation.fundpool;
 import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.dist.common.integration.util.JsonUtils;
 import com.copyright.rup.dist.foreign.domain.LdmtDetail;
+
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
+
 import org.slf4j.Logger;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -33,7 +35,7 @@ public class LdmtDetailsDeserializer extends JsonDeserializer<List<LdmtDetail>> 
 
     @Override
     public List<LdmtDetail> deserialize(JsonParser parser, DeserializationContext context) throws IOException {
-        List<LdmtDetail> ldmtDetails = Lists.newArrayList();
+        List<LdmtDetail> ldmtDetails = new ArrayList<>();
         try {
             JsonNode tree = parser.readValueAsTree();
             LOGGER.trace("Deserialize LDMT details. Received JSON={}", tree);

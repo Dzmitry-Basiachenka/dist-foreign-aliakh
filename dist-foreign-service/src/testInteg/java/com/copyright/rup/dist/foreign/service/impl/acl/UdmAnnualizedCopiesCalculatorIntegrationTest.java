@@ -2,8 +2,6 @@ package com.copyright.rup.dist.foreign.service.impl.acl;
 
 import static org.junit.Assert.assertEquals;
 
-import com.google.common.collect.Sets;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.reflect.Whitebox;
@@ -12,6 +10,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.math.BigDecimal;
+import java.util.Set;
 
 /**
  * Verifies {@link UdmAnnualizedCopiesCalculator}.
@@ -35,13 +34,13 @@ public class UdmAnnualizedCopiesCalculatorIntegrationTest {
     @Test
     public void testTypesOfUseEmail() {
         assertEquals(Whitebox.getInternalState(UdmAnnualizedCopiesCalculator.class, "EMAIL_TOU"),
-            Sets.newHashSet(EMAIL_COPY, "SHARE_SINGLE_ELECTRONIC_COPY", "SUBMIT_ELECTRONIC_COPY"));
+            Set.of(EMAIL_COPY, "SHARE_SINGLE_ELECTRONIC_COPY", "SUBMIT_ELECTRONIC_COPY"));
     }
 
     @Test
     public void testTypesOfUseIntranet() {
         assertEquals(Whitebox.getInternalState(UdmAnnualizedCopiesCalculator.class, "INTRANET_TOU"),
-            Sets.newHashSet("DISPLAY_IN_POWERPOINT", "DISTRIBUTE_IN_POWERPOINT", "STORE_COPY",
+            Set.of("DISPLAY_IN_POWERPOINT", "DISTRIBUTE_IN_POWERPOINT", "STORE_COPY",
                 "DIGITAL_SHARING_OTHER"));
     }
 

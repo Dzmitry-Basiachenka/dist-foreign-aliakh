@@ -38,8 +38,6 @@ import com.copyright.rup.dist.foreign.service.api.nts.INtsUsageService;
 import com.copyright.rup.dist.foreign.service.api.sal.ISalUsageService;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 
 import org.easymock.Capture;
 import org.junit.Before;
@@ -185,13 +183,13 @@ public class UsageBatchServiceTest {
         Usage usage1 = buildUsage(buildRightsholder(1000001534L), 5498456456L, UsageStatusEnum.WORK_FOUND);
         Usage usage2 = buildUsage(buildRightsholder(1000009522L), null, UsageStatusEnum.NEW);
         Usage usage3 = buildUsage(buildRightsholder(1000009535L), 7974545646L, UsageStatusEnum.ELIGIBLE);
-        List<Usage> usages = Lists.newArrayList(usage1, usage2, usage3);
+        List<Usage> usages = List.of(usage1, usage2, usage3);
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
         usageBatchRepository.insert(capture(captureUsageBatch));
         expectLastCall().once();
         rightsholderService.updateRightsholder(rro);
         expectLastCall().once();
-        rightsholderService.updateRighstholdersAsync(Sets.newHashSet(1000001534L, 1000009522L, 1000009535L));
+        rightsholderService.updateRighstholdersAsync(Set.of(1000001534L, 1000009522L, 1000009535L));
         expectLastCall().once();
         expect(piIntegrationService.findWorkByWrWrkInst(5498456456L)).andReturn(buildWork()).once();
         expect(piIntegrationService.findWorkByWrWrkInst(7974545646L)).andReturn(new Work()).once();

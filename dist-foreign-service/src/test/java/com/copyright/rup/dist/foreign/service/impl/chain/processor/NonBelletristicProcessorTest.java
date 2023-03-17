@@ -12,7 +12,6 @@ import com.copyright.rup.dist.foreign.service.api.nts.IWorkClassificationService
 import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 import com.copyright.rup.dist.foreign.service.api.processor.IChainProcessor;
 
-import com.google.common.collect.Lists;
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
@@ -61,7 +60,7 @@ public class NonBelletristicProcessorTest {
         deleteProcessor.process(List.of(usage2));
         expectLastCall().once();
         replay(workClassificationService, eligibilityProcessor, deleteProcessor);
-        nonBelletristicProcessor.process(Lists.newArrayList(usage1, usage2));
+        nonBelletristicProcessor.process(List.of(usage1, usage2));
         verify(workClassificationService, eligibilityProcessor, deleteProcessor);
     }
 

@@ -23,9 +23,6 @@ import com.copyright.rup.dist.foreign.service.api.IScenarioUsageFilterService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.fas.IRightsholderDiscrepancyService;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -99,7 +96,7 @@ public class ScenarioServiceTest {
     @Test
     public void testGetScenariosByProductFamiliesAndStatuses() {
         List<Scenario> scenarios = List.of(new Scenario());
-        Set<String> productFamilies = Sets.newHashSet("FAS", "FAS2");
+        Set<String> productFamilies = Set.of("FAS", "FAS2");
         expect(scenarioRepository.findByProductFamiliesAndStatuses(productFamilies,
             EnumSet.of(ScenarioStatusEnum.IN_PROGRESS))).andReturn(scenarios).once();
         replay(scenarioRepository);
@@ -110,7 +107,7 @@ public class ScenarioServiceTest {
 
     @Test
     public void testGetScenariosNamesByUsageBatchId() {
-        List<String> scenariosNames = Lists.newArrayList(SCENARIO_NAME);
+        List<String> scenariosNames = List.of(SCENARIO_NAME);
         expect(scenarioRepository.findNamesByUsageBatchId(USAGE_BATCH_ID)).andReturn(scenariosNames).once();
         replay(scenarioRepository);
         assertSame(scenariosNames, scenarioService.getScenariosNamesByUsageBatchId(USAGE_BATCH_ID));

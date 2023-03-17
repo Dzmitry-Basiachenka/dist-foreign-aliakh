@@ -29,7 +29,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.google.common.collect.Sets;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -98,11 +97,10 @@ public class ReportServiceTest {
         LocalDate paymentDate = LocalDate.now();
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         fasReportRepository.writeUndistributedLiabilitiesCsvReport(paymentDate, outputStream,
-            DEFAULT_ESTIMATED_SERVICE_FEE, Sets.newHashSet("FAS", "FAS2"));
+            DEFAULT_ESTIMATED_SERVICE_FEE, Set.of("FAS", "FAS2"));
         expectLastCall().once();
         replay(fasReportRepository);
-        reportService.writeUndistributedLiabilitiesCsvReport(paymentDate, outputStream,
-            Sets.newHashSet("FAS", "FAS2"));
+        reportService.writeUndistributedLiabilitiesCsvReport(paymentDate, outputStream, Set.of("FAS", "FAS2"));
         verify(fasReportRepository);
     }
 

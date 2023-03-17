@@ -21,8 +21,6 @@ import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.fas.IFasUsageService;
 import com.copyright.rup.dist.foreign.service.api.fas.IRightsholderDiscrepancyService;
 
-import com.google.common.collect.Sets;
-
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -30,6 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -168,7 +167,7 @@ public class ScenarioService implements IScenarioService {
         int archivedCount = paidScenariosIds.size();
         if (CollectionUtils.isNotEmpty(paidScenariosIds)) {
             scenarioRepository.updateStatus(paidScenariosIds, ScenarioStatusEnum.ARCHIVED);
-            scenarioAuditService.logAction(Sets.newHashSet(paidScenariosIds), ScenarioActionTypeEnum.ARCHIVED,
+            scenarioAuditService.logAction(new HashSet<>(paidScenariosIds), ScenarioActionTypeEnum.ARCHIVED,
                 "All usages from scenario have been sent to CRM");
             LOGGER.info("Archive scenarios. Finished. PaidScenariosCount={}, ArchivedCount={}",
                 LogUtils.size(paidScenariosIds), archivedCount);

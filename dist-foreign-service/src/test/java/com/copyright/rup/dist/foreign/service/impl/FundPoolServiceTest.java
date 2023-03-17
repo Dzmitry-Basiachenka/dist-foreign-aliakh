@@ -24,8 +24,6 @@ import com.copyright.rup.dist.foreign.repository.api.IFundPoolRepository;
 import com.copyright.rup.dist.foreign.service.api.ILicenseeClassService;
 import com.copyright.rup.dist.foreign.service.api.nts.INtsUsageService;
 
-import com.google.common.collect.Lists;
-
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
@@ -133,7 +131,7 @@ public class FundPoolServiceTest {
         detail1.setGrossAmount(BigDecimal.ONE);
         FundPoolDetail detail2 = new FundPoolDetail();
         detail2.setGrossAmount(BigDecimal.ONE);
-        List<FundPoolDetail> details = Lists.newArrayList(detail1, detail2);
+        List<FundPoolDetail> details = List.of(detail1, detail2);
         Capture<FundPool> fundPoolCapture = newCapture();
         Capture<FundPoolDetail> detailCapture1 = newCapture();
         Capture<FundPoolDetail> detailCapture2 = newCapture();
