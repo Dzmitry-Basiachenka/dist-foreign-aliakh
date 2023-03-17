@@ -18,6 +18,7 @@ import com.copyright.rup.es.api.request.RupSearchRequest;
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
+import org.powermock.reflect.Whitebox;
 
 import java.util.List;
 
@@ -41,8 +42,9 @@ public class PiDeletedWorkIntegrationServiceTest {
 
     @Before
     public void setUp() {
-        piDeletedWorkIntegrationService = new PiWorkDeletedIntegrationServiceMock();
-        rupEsApi = piDeletedWorkIntegrationService.getRupEsApi();
+        piDeletedWorkIntegrationService = new PiDeletedWorkIntegrationService();
+        rupEsApi = createMock(RupEsApi.class);
+        Whitebox.setInternalState(piDeletedWorkIntegrationService, rupEsApi);
         searchHit = createMock(RupSearchHit.class);
         searchResponse = createMock(RupSearchResponse.class);
         searchResults = createMock(RupSearchResults.class);
@@ -59,15 +61,5 @@ public class PiDeletedWorkIntegrationServiceTest {
         assertTrue(piDeletedWorkIntegrationService.isDeletedWork(123059057L));
         assertFalse(piDeletedWorkIntegrationService.isDeletedWork(1000009552L));
         verify(rupEsApi, searchResponse, searchResults, searchHit);
-    }
-
-    private static class PiWorkDeletedIntegrationServiceMock extends PiDeletedWorkIntegrationService {
-
-        private final RupEsApi rupEsApiMock = createMock(RupEsApi.class);
-
-        @Override
-        protected RupEsApi getRupEsApi() {
-            return rupEsApiMock;
-        }
     }
 }
