@@ -17,7 +17,6 @@ import com.copyright.rup.vaadin.widget.api.IController;
 import com.copyright.rup.vaadin.widget.api.IMediator;
 import com.copyright.rup.vaadin.widget.api.IMediatorProvider;
 
-import com.google.common.collect.Lists;
 import com.vaadin.annotations.Theme;
 import com.vaadin.server.ErrorHandler;
 import com.vaadin.spring.annotation.EnableVaadin;
@@ -128,7 +127,7 @@ public class ForeignUi extends CommonUi implements IMediatorProvider {
 
     @Override
     protected List<Component> getAdditionalComponents() {
-        return Lists.newArrayList(initProductFamilyComboBox(), initRefreshButton());
+        return List.of(initProductFamilyComboBox(), initRefreshButton());
     }
 
     /**

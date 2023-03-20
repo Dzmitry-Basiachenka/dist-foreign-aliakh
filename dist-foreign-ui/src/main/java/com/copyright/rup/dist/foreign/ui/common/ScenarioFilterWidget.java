@@ -9,11 +9,11 @@ import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.BaseItemsFilterWidget;
 
-import com.google.common.collect.Sets;
 import com.vaadin.data.ValueProvider;
 
 import org.apache.commons.collections4.CollectionUtils;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
@@ -31,7 +31,7 @@ public class ScenarioFilterWidget extends BaseItemsFilterWidget<Scenario>
     implements IFilterWindowController<Scenario> {
 
     private final Supplier<List<Scenario>> supplier;
-    private final Set<Scenario> selectedItemsIds = Sets.newHashSet();
+    private final Set<Scenario> selectedItemsIds = new HashSet<>();
 
     /**
      * Controller.

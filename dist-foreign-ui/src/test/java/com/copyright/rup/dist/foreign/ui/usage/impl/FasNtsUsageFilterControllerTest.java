@@ -15,8 +15,6 @@ import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
 
-import com.google.common.collect.Lists;
-
 import org.apache.commons.collections4.CollectionUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -75,7 +73,7 @@ public class FasNtsUsageFilterControllerTest {
         expect(productFamilyProvider.getSelectedProductFamily()).andReturn(FAS_PRODUCT_FAMILY).once();
         UsageBatch usageBatch = new UsageBatch();
         usageBatch.setName("name");
-        expect(usageBatchService.getUsageBatches(FAS_PRODUCT_FAMILY)).andReturn(Lists.newArrayList(usageBatch)).once();
+        expect(usageBatchService.getUsageBatches(FAS_PRODUCT_FAMILY)).andReturn(List.of(usageBatch)).once();
         replay(usageBatchService, productFamilyProvider);
         List<UsageBatch> usageBatches = controller.getUsageBatches();
         assertEquals(1, CollectionUtils.size(usageBatches));
@@ -88,7 +86,7 @@ public class FasNtsUsageFilterControllerTest {
         expect(productFamilyProvider.getSelectedProductFamily()).andReturn(FAS_PRODUCT_FAMILY).once();
         Rightsholder rightsholder = new Rightsholder();
         rightsholder.setAccountNumber(12345678L);
-        expect(rightsholderService.getRros(FAS_PRODUCT_FAMILY)).andReturn(Lists.newArrayList(rightsholder)).once();
+        expect(rightsholderService.getRros(FAS_PRODUCT_FAMILY)).andReturn(List.of(rightsholder)).once();
         replay(rightsholderService, productFamilyProvider);
         List<Rightsholder> rightsholders = controller.getRros();
         assertEquals(1, CollectionUtils.size(rightsholders));

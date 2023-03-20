@@ -12,7 +12,6 @@ import com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineValueFilter;
 import com.copyright.rup.dist.foreign.ui.usage.UiTestHelper;
 
-import com.google.common.collect.Sets;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.Component;
@@ -21,6 +20,7 @@ import com.vaadin.ui.VerticalLayout;
 import org.junit.Test;
 
 import java.math.BigDecimal;
+import java.util.Set;
 
 /**
  * Test for {@link UdmBaselineValueAppliedFilterWidget}.
@@ -84,8 +84,8 @@ public class UdmBaselineValueAppliedFilterWidgetTest {
 
     private UdmBaselineValueFilter buildUdmFilter() {
         UdmBaselineValueFilter filter = new UdmBaselineValueFilter();
-        filter.setPeriods(Sets.newHashSet(202106, 201506, 202212));
-        filter.setPubTypes(Sets.newHashSet(buildPubType("f1f523ca-1b46-4d3a-842d-99252785187c", "BK2", "Book series"),
+        filter.setPeriods(Set.of(202106, 201506, 202212));
+        filter.setPubTypes(Set.of(buildPubType("f1f523ca-1b46-4d3a-842d-99252785187c", "BK2", "Book series"),
             buildPubType("34574f62-7922-48b9-b798-73bf5c3163da", "SJ", "Scholarly Journal"),
             buildPubType("ce650157-3dbf-4385-938c-f3f1e10f4577", "BK", "Book")));
         filter.setWrWrkInstExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 306985899L, null));

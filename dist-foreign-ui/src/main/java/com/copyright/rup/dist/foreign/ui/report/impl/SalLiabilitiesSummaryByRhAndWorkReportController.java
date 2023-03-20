@@ -11,8 +11,6 @@ import com.copyright.rup.dist.foreign.ui.report.api.ICommonScenariosReportContro
 import com.copyright.rup.dist.foreign.ui.report.api.ICommonScenariosReportWidget;
 import com.copyright.rup.vaadin.widget.api.CommonController;
 
-import com.google.common.collect.Sets;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -45,7 +43,7 @@ public class SalLiabilitiesSummaryByRhAndWorkReportController extends CommonCont
     @Override
     public List<Scenario> getScenarios() {
         return scenarioService.getScenariosByProductFamiliesAndStatuses(
-            Set.of(productFamilyProvider.getSelectedProductFamily()), Sets.newHashSet(ScenarioStatusEnum.values()));
+            Set.of(productFamilyProvider.getSelectedProductFamily()), Set.of(ScenarioStatusEnum.values()));
     }
 
     @Override

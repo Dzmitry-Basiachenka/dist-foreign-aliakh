@@ -17,7 +17,6 @@ import com.copyright.rup.vaadin.ui.component.filter.CommonFilterWindow.FilterSav
 import com.copyright.rup.vaadin.ui.component.filter.FilterWindow;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
-import com.google.common.collect.Sets;
 import com.vaadin.data.ValueProvider;
 
 import org.easymock.Capture;
@@ -67,7 +66,7 @@ public class UsageBatchFilterWidgetTest {
     @Test
     public void testOnSave() {
         FilterSaveEvent filterSaveEvent = createMock(FilterSaveEvent.class);
-        Set usageBatches = Sets.newHashSet(USAGE_BATCH_NAME);
+        Set usageBatches = Set.of(USAGE_BATCH_NAME);
         expect(filterSaveEvent.getSelectedItemsIds()).andReturn(usageBatches).once();
         replay(filterSaveEvent);
         usageBatchFilterWidget.onSave(filterSaveEvent);

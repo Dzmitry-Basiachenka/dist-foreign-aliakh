@@ -20,7 +20,6 @@ import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.LocalDateWidget;
 
-import com.google.common.collect.Lists;
 import com.vaadin.data.Binder;
 import com.vaadin.data.converter.StringToBigDecimalConverter;
 import com.vaadin.data.validator.StringLengthValidator;
@@ -37,6 +36,7 @@ import com.vaadin.ui.Window;
 import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * Window for uploading a usage batch with usages.
@@ -107,8 +107,8 @@ public class UsageBatchUploadWindow extends Window {
             }
         } else {
             Windows.showValidationErrorWindow(
-                Lists.newArrayList(usageBatchNameField, uploadField,
-                    accountNumberField, accountNameField, paymentDateWidget, grossAmountField));
+                List.of(usageBatchNameField, uploadField, accountNumberField, accountNameField, paymentDateWidget,
+                    grossAmountField));
         }
     }
 

@@ -8,12 +8,11 @@ import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.BaseItemsFilterWidget;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import com.vaadin.data.ValueProvider;
 
 import org.apache.commons.collections4.CollectionUtils;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
@@ -33,7 +32,7 @@ class SalLicenseeFilterWidget extends BaseItemsFilterWidget<SalLicensee>
     private final String searchPrompt;
     private final String caption;
     private final Supplier<List<SalLicensee>> supplier;
-    private final Set<SalLicensee> selectedItemsIds = Sets.newHashSet();
+    private final Set<SalLicensee> selectedItemsIds = new HashSet<>();
 
     /**
      * Constructor.
@@ -82,7 +81,7 @@ class SalLicenseeFilterWidget extends BaseItemsFilterWidget<SalLicensee>
         FilterWindow<SalLicensee> filterWindow = Windows.showFilterWindow(
             ForeignUi.getMessage("window.filter_format", caption), this,
             (ValueProvider<SalLicensee, List<String>>) licensee ->
-                Lists.newArrayList(licensee.getName(), licensee.getAccountNumber().toString()));
+                List.of(licensee.getName(), licensee.getAccountNumber().toString()));
         filterWindow.setSelectedItemsIds(selectedItemsIds);
         filterWindow.setSearchPromptString(searchPrompt);
         VaadinUtils.addComponentStyle(filterWindow, "licensees-filter-window");

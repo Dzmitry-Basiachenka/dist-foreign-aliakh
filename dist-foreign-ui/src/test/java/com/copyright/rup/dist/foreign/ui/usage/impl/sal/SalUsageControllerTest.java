@@ -44,7 +44,6 @@ import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageFilterController
 import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageWidget;
 
-import com.google.common.collect.Sets;
 import com.vaadin.ui.HorizontalLayout;
 
 import org.apache.commons.io.IOUtils;
@@ -394,8 +393,7 @@ public class SalUsageControllerTest {
         IUsageBatchStatusService usageBatchStatusService = createMock(IUsageBatchStatusService.class);
         Whitebox.setInternalState(controller, usageBatchStatusService);
         expect(usageBatchStatusService.isBatchProcessingCompleted(batchId,
-            Sets.newHashSet(UsageStatusEnum.NEW, UsageStatusEnum.WORK_FOUND, UsageStatusEnum.RH_FOUND)))
-            .andReturn(true).once();
+            Set.of(UsageStatusEnum.NEW, UsageStatusEnum.WORK_FOUND, UsageStatusEnum.RH_FOUND))).andReturn(true).once();
         replay(usageBatchStatusService);
         assertTrue(controller.isBatchProcessingCompleted(batchId));
         verify(usageBatchStatusService);

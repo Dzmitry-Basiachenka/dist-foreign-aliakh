@@ -47,8 +47,6 @@ import com.copyright.rup.dist.foreign.ui.usage.api.IFasNtsUsageFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.ScenarioCreateEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.fas.IFasUsageWidget;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import com.vaadin.ui.HorizontalLayout;
 
 import org.apache.commons.io.IOUtils;
@@ -68,6 +66,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -167,8 +166,7 @@ public class FasUsageControllerTest {
         IUsageBatchStatusService usageBatchStatusService = createMock(IUsageBatchStatusService.class);
         Whitebox.setInternalState(controller, usageBatchStatusService);
         expect(usageBatchStatusService.isBatchProcessingCompleted(batchId,
-            Sets.newHashSet(UsageStatusEnum.NEW, UsageStatusEnum.WORK_FOUND, UsageStatusEnum.RH_FOUND)))
-            .andReturn(true).once();
+            Set.of(UsageStatusEnum.NEW, UsageStatusEnum.WORK_FOUND, UsageStatusEnum.RH_FOUND))).andReturn(true).once();
         replay(usageBatchStatusService);
         assertTrue(controller.isBatchProcessingCompleted(batchId));
         verify(usageBatchStatusService);
@@ -270,7 +268,7 @@ public class FasUsageControllerTest {
     @Test
     public void testLoadUsageBatch() {
         UsageBatch usageBatch = new UsageBatch();
-        List<Usage> usages = Lists.newArrayList(new Usage());
+        List<Usage> usages = List.of(new Usage());
         expect(filterController.getWidget()).andReturn(filterWidget).once();
         filterWidget.clearFilter();
         expectLastCall().once();
@@ -286,7 +284,7 @@ public class FasUsageControllerTest {
 
     @Test
     public void testLoadResearchedUsages() {
-        List<ResearchedUsage> researchedUsages = Lists.newArrayList(new ResearchedUsage());
+        List<ResearchedUsage> researchedUsages = List.of(new ResearchedUsage());
         expect(filterController.getWidget()).andReturn(filterWidget).once();
         filterWidget.clearFilter();
         expectLastCall().once();

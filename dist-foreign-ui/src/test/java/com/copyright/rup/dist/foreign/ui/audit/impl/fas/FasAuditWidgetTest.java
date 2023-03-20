@@ -33,7 +33,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.google.common.collect.Lists;
 import com.vaadin.data.provider.CallbackDataProvider;
 import com.vaadin.data.provider.Query;
 import com.vaadin.data.provider.QuerySortOrder;
@@ -131,7 +130,7 @@ public class FasAuditWidgetTest {
         initWidget();
         mockStatic(JavaScript.class);
         expect(JavaScript.getCurrent()).andReturn(createMock(JavaScript.class)).times(2);
-        List<UsageDto> liabilities = Lists.newArrayList(new UsageDto());
+        List<UsageDto> liabilities = List.of(new UsageDto());
         Capture<List<QuerySortOrder>> orderCapture = newCapture();
         expect(controller.getSize()).andReturn(1).once();
         expect(controller.loadBeans(eq(0), eq(1), capture(orderCapture))).andReturn(liabilities).once();

@@ -27,7 +27,6 @@ import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.widget.LocalDateWidget;
 
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Sets;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
@@ -110,7 +109,7 @@ public class FasNtsUsageFilterWidgetTest {
         assertFalse(applyButton.isEnabled());
         assertTrue(widget.getAppliedFilter().getRhAccountNumbers().isEmpty());
         assertTrue(widget.getFilter().getRhAccountNumbers().isEmpty());
-        Set<Long> accountNumbers = Sets.newHashSet(ACCOUNT_NUMBER);
+        Set<Long> accountNumbers = Set.of(ACCOUNT_NUMBER);
         widget.getFilter().setRhAccountNumbers(accountNumbers);
         assertNotEquals(widget.getFilter(), widget.getAppliedFilter());
         applyButton.setEnabled(true);
@@ -148,7 +147,7 @@ public class FasNtsUsageFilterWidgetTest {
         assertTrue(widget.getAppliedFilter().getRhAccountNumbers().isEmpty());
         assertEquals(FAS_PRODUCT_FAMILY, widget.getFilter().getProductFamily());
         assertNull(widget.getAppliedFilter().getProductFamily());
-        widget.getFilter().setRhAccountNumbers(Sets.newHashSet(ACCOUNT_NUMBER));
+        widget.getFilter().setRhAccountNumbers(Set.of(ACCOUNT_NUMBER));
         widget.getFilter().setProductFamily(FAS_PRODUCT_FAMILY);
         applyButton.setEnabled(true);
         applyButton.click();
@@ -190,7 +189,7 @@ public class FasNtsUsageFilterWidgetTest {
         expect(usagesFilterController.getFiscalYears()).andReturn(List.of(FISCAL_YEAR)).once();
         replay(clickEvent, usagesFilterController);
         widget.init();
-        Set<Long> accountNumbers = Sets.newHashSet(ACCOUNT_NUMBER);
+        Set<Long> accountNumbers = Set.of(ACCOUNT_NUMBER);
         Button applyButton = getApplyButton();
         widget.getFilter().setRhAccountNumbers(accountNumbers);
         applyButton.setEnabled(true);

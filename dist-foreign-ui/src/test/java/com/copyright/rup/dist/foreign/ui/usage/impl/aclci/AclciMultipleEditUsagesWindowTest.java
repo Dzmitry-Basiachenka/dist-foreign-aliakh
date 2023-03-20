@@ -28,7 +28,6 @@ import com.copyright.rup.dist.foreign.ui.usage.api.aclci.IAclciUsageController;
 import com.copyright.rup.vaadin.ui.component.window.ConfirmActionDialogWindow.IListener;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
-import com.google.common.collect.Lists;
 import com.vaadin.data.Binder;
 import com.vaadin.data.HasValue;
 import com.vaadin.data.Validator;
@@ -52,6 +51,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -124,7 +124,7 @@ public class AclciMultipleEditUsagesWindowTest {
         Rightsholder rh = buildRightsholder();
         window = new AclciMultipleEditUsagesWindow(controller, usageUpdateWindow, USAGE_IDS);
         Whitebox.setInternalState(window, "rh", rh);
-        Collection<? extends AbstractField<?>> fields = Lists.newArrayList(
+        Collection<? extends AbstractField<?>> fields = List.of(
             Whitebox.getInternalState(window, RH_ACCOUNT_NUMBER_FIELD_NAME),
             Whitebox.getInternalState(window, "rhNameField"),
             Whitebox.getInternalState(window, WR_WRK_INST_FIELD_NAME));
@@ -231,7 +231,7 @@ public class AclciMultipleEditUsagesWindowTest {
         UiTestHelper.verifyButtonsLayout(component, "Save", "Close");
         Button saveButton = (Button) ((HorizontalLayout) component).getComponent(0);
         assertEquals(2, saveButton.getListeners(Button.ClickEvent.class).size());
-        verifyLoadClickListener(saveButton, Lists.newArrayList(
+        verifyLoadClickListener(saveButton, List.of(
             Whitebox.getInternalState(window, RH_ACCOUNT_NUMBER_FIELD_NAME),
             Whitebox.getInternalState(window, "rhNameField"),
             Whitebox.getInternalState(window, WR_WRK_INST_FIELD_NAME)));

@@ -2,8 +2,6 @@ package com.copyright.rup.dist.foreign.ui.main.security;
 
 import static org.junit.Assert.assertEquals;
 
-import com.google.common.collect.Sets;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,6 +15,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -46,10 +45,10 @@ public final class ForeignSecurityUtilsTest {
 
     @Parameterized.Parameters
     public static Collection<Object[]> getUserPermissions() {
-        Object[] viewOnlyRole = {Sets.newHashSet(FDA_ACCESS_APPLICATION, "FDA_VIEW_ONLY_PERMISSION")};
-        Object[] approverRole = {Sets.newHashSet(FDA_ACCESS_APPLICATION, "FDA_APPROVER_PERMISSION")};
-        Object[] managerRole =  {Sets.newHashSet(FDA_ACCESS_APPLICATION, "FDA_MANAGER_PERMISSION")};
-        Object[] specialistRole = {Sets.newHashSet(
+        Object[] viewOnlyRole = {Set.of(FDA_ACCESS_APPLICATION, "FDA_VIEW_ONLY_PERMISSION")};
+        Object[] approverRole = {Set.of(FDA_ACCESS_APPLICATION, "FDA_APPROVER_PERMISSION")};
+        Object[] managerRole =  {Set.of(FDA_ACCESS_APPLICATION, "FDA_MANAGER_PERMISSION")};
+        Object[] specialistRole = {Set.of(
             FDA_ACCESS_APPLICATION, "FDA_DELETE_USAGE", "FDA_LOAD_USAGE", "FDA_LOAD_FUND_POOL",
             "FDA_DELETE_FUND_POOL", "FDA_LOAD_RESEARCHED_USAGE", "FDA_CREATE_DELETE_FUND", "FDA_ASSIGN_CLASSIFICATION",
             "FDA_DELETE_SCENARIO", "FDA_EXCLUDE_FROM_SCENARIO", "FDA_SEND_FOR_WORK_RESEARCH",
@@ -124,7 +123,7 @@ public final class ForeignSecurityUtilsTest {
     private static class MockSecurityContext implements SecurityContext {
 
         private static final String USER_NAME = "User@copyright.com";
-        private final Set<GrantedAuthority> grantedAuthorities = Sets.newHashSet();
+        private final Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
 
         /**
          * Sets authorities.

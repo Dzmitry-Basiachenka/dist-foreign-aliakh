@@ -42,7 +42,6 @@ import com.copyright.rup.dist.foreign.ui.usage.impl.acl.AclPublicationTypeWeight
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Sets;
 import com.vaadin.data.Binder;
 import com.vaadin.data.ValidationResult;
 import com.vaadin.server.Sizeable.Unit;
@@ -252,7 +251,7 @@ public class CreateAclScenarioWindowTest {
             .andReturn(List.of(aclGrantSet)).once();
         expect(controller.isValidUsageBatch(BATCH_UID, aclGrantSet.getId(), PERIOD, PERIOD_PRIORS))
             .andReturn(true).once();
-        LinkedHashSet<AclFundPoolDetailDto> invalidDetails = Sets.newLinkedHashSet();
+        LinkedHashSet<AclFundPoolDetailDto> invalidDetails = new LinkedHashSet<>();
         invalidDetails.add(buildAclFundPoolDetailDto(1, 1, "Food and Tobacco", "PRINT"));
         invalidDetails.add(buildAclFundPoolDetailDto(2, 51, "Materials", "DIGITAL"));
         expect(controller.getFundPoolDetailsNotToBeDistributed(BATCH_UID, aclFundPool.getId(), aclGrantSet.getId(),

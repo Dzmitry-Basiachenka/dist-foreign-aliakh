@@ -11,7 +11,6 @@ import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
 import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasScenarioController;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
-import com.google.common.collect.Sets;
 import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.server.SerializablePredicate;
 import com.vaadin.ui.Grid;
@@ -73,9 +72,9 @@ public class FasExcludeRightsholdersSearchTest {
                 {"Keith-St evens Inc", Set.of()},
                 {"7000427902", Set.of(CONTAINER_DATA.get(3))},
                 {"70004 27902", Set.of()},
-                {"10000", Sets.newHashSet(CONTAINER_DATA.get(0), CONTAINER_DATA.get(1))},
-                {"42", Sets.newHashSet(CONTAINER_DATA.get(1), CONTAINER_DATA.get(2), CONTAINER_DATA.get(3))},
-                {"7000425807", Sets.newHashSet(CONTAINER_DATA.get(2))},
+                {"10000", Set.of(CONTAINER_DATA.get(0), CONTAINER_DATA.get(1))},
+                {"42", Set.of(CONTAINER_DATA.get(1), CONTAINER_DATA.get(2), CONTAINER_DATA.get(3))},
+                {"7000425807", Set.of(CONTAINER_DATA.get(2))},
                 {"100000 4271", Set.of()}
             }
         );

@@ -3,8 +3,6 @@ package com.copyright.rup.dist.foreign.ui.audit.impl.fas;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.ui.audit.impl.CommonStatusFilterWidget;
 
-import com.google.common.collect.Sets;
-
 import java.util.Collection;
 import java.util.Set;
 
@@ -20,7 +18,7 @@ import java.util.Set;
 public class FasStatusFilterWidget extends CommonStatusFilterWidget {
 
     private static final Set<UsageStatusEnum> FAS_FAS2_STATUSES =
-        Sets.newHashSet(UsageStatusEnum.NEW, UsageStatusEnum.WORK_NOT_FOUND, UsageStatusEnum.WORK_RESEARCH,
+        Set.of(UsageStatusEnum.NEW, UsageStatusEnum.WORK_NOT_FOUND, UsageStatusEnum.WORK_RESEARCH,
             UsageStatusEnum.WORK_FOUND, UsageStatusEnum.RH_NOT_FOUND, UsageStatusEnum.RH_FOUND,
             UsageStatusEnum.SENT_FOR_RA, UsageStatusEnum.ELIGIBLE, UsageStatusEnum.LOCKED, UsageStatusEnum.SENT_TO_LM,
             UsageStatusEnum.PAID, UsageStatusEnum.ARCHIVED, UsageStatusEnum.NTS_WITHDRAWN,

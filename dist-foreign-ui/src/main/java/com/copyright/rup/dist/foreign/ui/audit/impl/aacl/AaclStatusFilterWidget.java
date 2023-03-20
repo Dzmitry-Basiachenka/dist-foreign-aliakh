@@ -3,8 +3,6 @@ package com.copyright.rup.dist.foreign.ui.audit.impl.aacl;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.ui.audit.impl.CommonStatusFilterWidget;
 
-import com.google.common.collect.Sets;
-
 import java.util.Collection;
 import java.util.Set;
 
@@ -20,7 +18,7 @@ import java.util.Set;
 public class AaclStatusFilterWidget extends CommonStatusFilterWidget {
 
     private static final Set<UsageStatusEnum> AACL_STATUSES =
-        Sets.newHashSet(UsageStatusEnum.NEW, UsageStatusEnum.WORK_FOUND, UsageStatusEnum.WORK_NOT_FOUND,
+        Set.of(UsageStatusEnum.NEW, UsageStatusEnum.WORK_FOUND, UsageStatusEnum.WORK_NOT_FOUND,
             UsageStatusEnum.WORK_RESEARCH, UsageStatusEnum.RH_FOUND, UsageStatusEnum.ELIGIBLE,
             UsageStatusEnum.SCENARIO_EXCLUDED, UsageStatusEnum.LOCKED, UsageStatusEnum.SENT_TO_LM, UsageStatusEnum.PAID,
             UsageStatusEnum.ARCHIVED);

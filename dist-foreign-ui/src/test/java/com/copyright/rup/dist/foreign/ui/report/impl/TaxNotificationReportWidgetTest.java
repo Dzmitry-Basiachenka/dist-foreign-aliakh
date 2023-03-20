@@ -20,7 +20,6 @@ import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.ui.report.api.ITaxNotificationReportController;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
-import com.google.common.collect.Sets;
 import com.vaadin.data.Binder;
 import com.vaadin.server.Sizeable;
 import com.vaadin.server.Sizeable.Unit;
@@ -132,7 +131,7 @@ public class TaxNotificationReportWidgetTest {
         grid.select(SCENARIO_1);
         assertEquals(Set.of(SCENARIO_ID_1), widget.getSelectedScenarioIds());
         grid.select(SCENARIO_2);
-        assertEquals(Sets.newHashSet(SCENARIO_ID_1, SCENARIO_ID_2), widget.getSelectedScenarioIds());
+        assertEquals(Set.of(SCENARIO_ID_1, SCENARIO_ID_2), widget.getSelectedScenarioIds());
         grid.deselectAll();
         assertEquals(Set.of(), widget.getSelectedScenarioIds());
     }

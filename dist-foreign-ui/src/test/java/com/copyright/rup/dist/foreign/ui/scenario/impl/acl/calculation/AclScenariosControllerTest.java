@@ -55,7 +55,6 @@ import com.copyright.rup.vaadin.ui.component.window.ConfirmActionDialogWindow;
 import com.copyright.rup.vaadin.ui.component.window.ConfirmDialogWindow.IListener;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
-import com.google.common.collect.Sets;
 import com.vaadin.data.Validator;
 
 import org.apache.commons.io.IOUtils;
@@ -603,7 +602,7 @@ public class AclScenariosControllerTest {
         AclGrantSet grantSet = new AclGrantSet();
         grantSet.setName("ACL_GRANT_SET_NAME");
         grantSet.setGrantPeriod(202112);
-        grantSet.setPeriods(Sets.newHashSet(202106, 202112));
+        grantSet.setPeriods(Set.of(202106, 202112));
         grantSet.setLicenseType(LICENSE_TYPE);
         grantSet.setEditable(true);
         return grantSet;
@@ -621,7 +620,7 @@ public class AclScenariosControllerTest {
         AclUsageBatch usageBatch = new AclUsageBatch();
         usageBatch.setName("ACL_USAGE_BATCH_NAME");
         usageBatch.setDistributionPeriod(202112);
-        usageBatch.setPeriods(Sets.newHashSet(202106, 202112));
+        usageBatch.setPeriods(Set.of(202106, 202112));
         usageBatch.setEditable(true);
         return usageBatch;
     }

@@ -38,7 +38,6 @@ import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.vaadin.data.Validator;
 import com.vaadin.ui.Window;
 
-import org.apache.commons.compress.utils.Sets;
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
@@ -185,7 +184,7 @@ public class SalScenariosControllerTest {
         scenariosWidget.refresh();
         expectLastCall().once();
         replay(scenariosWidget, salScenarioService, Windows.class);
-        scenariosController.sendToLm(Sets.newHashSet(scenario1, scenario2));
+        scenariosController.sendToLm(Set.of(scenario1, scenario2));
         listenerCapture.getValue().onActionConfirmed();
         verify(scenariosWidget, salScenarioService, Windows.class);
     }

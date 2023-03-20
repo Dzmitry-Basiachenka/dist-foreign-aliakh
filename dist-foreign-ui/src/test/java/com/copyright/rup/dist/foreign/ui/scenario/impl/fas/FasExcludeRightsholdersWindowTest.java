@@ -17,7 +17,6 @@ import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
 import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasScenarioController;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
-import com.google.common.collect.Lists;
 import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.server.SerializablePredicate;
 import com.vaadin.server.Sizeable.Unit;
@@ -45,7 +44,7 @@ import java.util.stream.Collectors;
  */
 public class FasExcludeRightsholdersWindowTest {
 
-    private final List<RightsholderPayeePair> rightsholderPayeePairs = Lists.newArrayList(
+    private final List<RightsholderPayeePair> rightsholderPayeePairs = List.of(
         buildRightsholderPayeePair(
             buildRightsholder(1000033963L, "Alfred R. Lindesmith"),
             buildRightsholder(2000148821L, "ABR Company, Ltd")),

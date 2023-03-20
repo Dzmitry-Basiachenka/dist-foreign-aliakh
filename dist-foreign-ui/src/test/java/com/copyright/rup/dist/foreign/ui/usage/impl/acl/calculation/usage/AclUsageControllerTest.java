@@ -35,8 +35,6 @@ import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclUsageFilterController
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclUsageFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclUsageWidget;
 
-import com.google.common.collect.Sets;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.easymock.Capture;
@@ -283,7 +281,7 @@ public class AclUsageControllerTest {
         AclUsageBatch usageBatch = new AclUsageBatch();
         usageBatch.setName(ACL_USAGE_BATCH_NAME);
         usageBatch.setDistributionPeriod(202112);
-        usageBatch.setPeriods(Sets.newHashSet(202106, 202112));
+        usageBatch.setPeriods(Set.of(202106, 202112));
         usageBatch.setEditable(true);
         return usageBatch;
     }

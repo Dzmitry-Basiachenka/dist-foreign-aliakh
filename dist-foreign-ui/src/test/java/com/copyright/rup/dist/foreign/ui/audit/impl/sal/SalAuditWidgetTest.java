@@ -23,7 +23,6 @@ import com.copyright.rup.dist.foreign.ui.audit.api.sal.ISalAuditController;
 import com.copyright.rup.dist.foreign.ui.audit.api.sal.ISalAuditFilterController;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
-import com.google.common.collect.Lists;
 import com.vaadin.data.provider.CallbackDataProvider;
 import com.vaadin.data.provider.Query;
 import com.vaadin.data.provider.QuerySortOrder;
@@ -99,7 +98,7 @@ public class SalAuditWidgetTest {
         initWidget();
         mockStatic(JavaScript.class);
         expect(JavaScript.getCurrent()).andReturn(createMock(JavaScript.class)).times(2);
-        List<UsageDto> liabilities = Lists.newArrayList(new UsageDto());
+        List<UsageDto> liabilities = List.of(new UsageDto());
         Capture<List<QuerySortOrder>> orderCapture = newCapture();
         expect(controller.getSize()).andReturn(1).once();
         expect(controller.loadBeans(eq(0), eq(1), capture(orderCapture))).andReturn(liabilities).once();

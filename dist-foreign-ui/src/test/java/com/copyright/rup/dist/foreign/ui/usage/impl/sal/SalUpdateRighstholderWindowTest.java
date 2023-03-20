@@ -25,7 +25,6 @@ import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageController;
 import com.copyright.rup.vaadin.ui.component.window.ConfirmActionDialogWindow;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
-import com.google.common.collect.Lists;
 import com.vaadin.data.Binder;
 import com.vaadin.data.HasValue;
 import com.vaadin.data.Validator;
@@ -48,6 +47,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -128,7 +128,7 @@ public class SalUpdateRighstholderWindowTest {
         rh.setName(RH_NAME);
         window = new SalUpdateRighstholderWindow(usageController, detailsWindow, USAGE_IDS);
         Whitebox.setInternalState(window, "rh", rh);
-        Collection<? extends AbstractField<?>> fields = Lists.newArrayList(
+        Collection<? extends AbstractField<?>> fields = List.of(
             Whitebox.getInternalState(window, RH_ACCOUNT_NUMBER_FIELD_NAME),
             Whitebox.getInternalState(window, "rhNameField"));
         Windows.showValidationErrorWindow(fields);
@@ -295,7 +295,7 @@ public class SalUpdateRighstholderWindowTest {
         Button saveButton = verifyButton(layout.getComponent(0), "Save");
         verifyButton(layout.getComponent(1), "Close");
         assertEquals(2, saveButton.getListeners(Button.ClickEvent.class).size());
-        verifyLoadClickListener(saveButton, Lists.newArrayList(
+        verifyLoadClickListener(saveButton, List.of(
             Whitebox.getInternalState(window, RH_ACCOUNT_NUMBER_FIELD_NAME),
             Whitebox.getInternalState(window, "rhNameField")));
     }

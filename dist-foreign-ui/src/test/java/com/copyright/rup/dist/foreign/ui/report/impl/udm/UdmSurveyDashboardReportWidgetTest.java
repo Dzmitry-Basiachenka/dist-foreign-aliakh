@@ -16,7 +16,6 @@ import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 
-import com.google.common.collect.Sets;
 import com.vaadin.server.Sizeable;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
@@ -83,7 +82,7 @@ public class UdmSurveyDashboardReportWidgetTest {
         grid.select(202106);
         assertEquals(Set.of(202106), widget.getSelectedPeriods());
         grid.select(202212);
-        assertEquals(Sets.newHashSet(202106, 202212), widget.getSelectedPeriods());
+        assertEquals(Set.of(202106, 202212), widget.getSelectedPeriods());
         grid.deselectAll();
         assertEquals(Set.of(), widget.getSelectedPeriods());
     }

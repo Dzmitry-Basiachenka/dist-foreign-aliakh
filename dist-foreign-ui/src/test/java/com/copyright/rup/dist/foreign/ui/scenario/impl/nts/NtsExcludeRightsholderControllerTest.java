@@ -13,8 +13,6 @@ import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.nts.INtsUsageService;
 import com.copyright.rup.dist.foreign.ui.scenario.api.nts.INtsExcludeRightsholderController;
 
-import com.google.common.collect.Lists;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
@@ -63,7 +61,7 @@ public class NtsExcludeRightsholderControllerTest {
 
     @Test
     public void testGetRightsholderPayeePair() {
-        List<RightsholderPayeePair> list = Lists.newArrayList(buildRightsholderPayeePair(
+        List<RightsholderPayeePair> list = List.of(buildRightsholderPayeePair(
             buildRightsholder(1000033963L, "Alfred R. Lindesmith"),
             buildRightsholder(2000148821L, "ABR Company, Ltd")),
             buildRightsholderPayeePair(

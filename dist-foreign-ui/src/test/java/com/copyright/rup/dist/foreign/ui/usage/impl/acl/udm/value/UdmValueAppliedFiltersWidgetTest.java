@@ -14,7 +14,6 @@ import com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmValueFilter;
 import com.copyright.rup.dist.foreign.ui.usage.UiTestHelper;
 
-import com.google.common.collect.Sets;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.Component;
@@ -23,6 +22,7 @@ import com.vaadin.ui.VerticalLayout;
 import org.junit.Test;
 
 import java.math.BigDecimal;
+import java.util.Set;
 
 /**
  * Verifies {@link UdmValueAppliedFilterWidget}.
@@ -113,10 +113,10 @@ public class UdmValueAppliedFiltersWidgetTest {
 
     private UdmValueFilter buildUdmValueFilter() {
         UdmValueFilter filter = new UdmValueFilter();
-        filter.setPeriods(Sets.newHashSet(202106, 201506, 202212));
+        filter.setPeriods(Set.of(202106, 201506, 202212));
         filter.setStatus(UdmValueStatusEnum.NEW);
-        filter.setAssignees(Sets.newHashSet("buser@copyright.com", "User@copyright.com", "Auser@copyright.com"));
-        filter.setLastValuePeriods(Sets.newHashSet("202206", FilterOperatorEnum.IS_NULL.name(), "201506", "202312"));
+        filter.setAssignees(Set.of("buser@copyright.com", "User@copyright.com", "Auser@copyright.com"));
+        filter.setLastValuePeriods(Set.of("202206", FilterOperatorEnum.IS_NULL.name(), "201506", "202312"));
         filter.setWrWrkInstExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 306985899L, null));
         filter.setSystemTitleExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, "Tenside, surfactants, detergents", null));
@@ -143,7 +143,7 @@ public class UdmValueAppliedFiltersWidgetTest {
             new FilterExpression<>(FilterOperatorEnum.EQUALS, "last content comment", null));
         filter.setContentUnitPriceExpression(new FilterExpression<>(FilterOperatorEnum.BETWEEN, 10, 20));
         filter.setContentUnitPriceFlagExpression(new FilterExpression<>(FilterOperatorEnum.N));
-        filter.setPubTypes(Sets.newHashSet(new PublicationType(),
+        filter.setPubTypes(Set.of(new PublicationType(),
             buildPubType("34574f62-7922-48b9-b798-73bf5c3163da", "SJ", "Scholarly Journal"),
             buildPubType("ce650157-3dbf-4385-938c-f3f1e10f4577", "BK", "Book")));
         filter.setLastPubType(buildPubType("ce650157-3dbf-4385-938c-f3f1e10f4577", "BK", "Book"));

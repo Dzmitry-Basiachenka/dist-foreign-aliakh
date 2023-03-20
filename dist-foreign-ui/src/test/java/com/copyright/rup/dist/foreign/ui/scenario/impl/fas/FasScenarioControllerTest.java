@@ -35,8 +35,6 @@ import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasScenarioWidget;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.widget.api.IWidget;
 
-import com.google.common.collect.Lists;
-
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -267,7 +265,7 @@ public class FasScenarioControllerTest {
 
     @Test
     public void testDeleteFromScenario() {
-        List<Long> accountNumbers = Lists.newArrayList(1000009522L);
+        List<Long> accountNumbers = List.of(1000009522L);
         usageService.deleteFromScenario(SCENARIO_ID, 2000017010L, accountNumbers, "reason");
         expectLastCall().once();
         replay(usageService);

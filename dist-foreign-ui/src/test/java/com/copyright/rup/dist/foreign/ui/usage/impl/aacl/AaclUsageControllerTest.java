@@ -54,8 +54,6 @@ import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageFilterControll
 import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageWidget;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import com.vaadin.ui.HorizontalLayout;
 
 import org.apache.commons.io.IOUtils;
@@ -294,8 +292,7 @@ public class AaclUsageControllerTest {
         IUsageBatchStatusService usageBatchStatusService = createMock(IUsageBatchStatusService.class);
         Whitebox.setInternalState(controller, usageBatchStatusService);
         expect(usageBatchStatusService.isBatchProcessingCompleted(batchId,
-            Sets.newHashSet(UsageStatusEnum.NEW, UsageStatusEnum.WORK_FOUND)))
-            .andReturn(true).once();
+            Set.of(UsageStatusEnum.NEW, UsageStatusEnum.WORK_FOUND))).andReturn(true).once();
         replay(usageBatchStatusService);
         assertTrue(controller.isBatchProcessingCompleted(batchId));
         verify(usageBatchStatusService);
@@ -348,7 +345,7 @@ public class AaclUsageControllerTest {
         String fileName = "export_usage_";
         Supplier<String> fileNameSupplier = () -> fileName;
         Supplier<InputStream> inputStreamSupplier =
-                () -> IOUtils.toInputStream(StringUtils.EMPTY, StandardCharsets.UTF_8);
+            () -> IOUtils.toInputStream(StringUtils.EMPTY, StandardCharsets.UTF_8);
         PipedOutputStream pos = new PipedOutputStream();
         expect(OffsetDateTime.now()).andReturn(DATE).once();
         expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
@@ -418,9 +415,9 @@ public class AaclUsageControllerTest {
     @Test
     public void testGetDefaultUsageAges() {
         List<UsageAge> usageAges = buildUsageAges();
-        expect(aaclUsageService.getDefaultUsageAges(Lists.newArrayList(2020, 2018))).andReturn(usageAges).once();
+        expect(aaclUsageService.getDefaultUsageAges(List.of(2020, 2018))).andReturn(usageAges).once();
         replay(aaclUsageService, filterWidgetMock, filterController);
-        assertEquals(usageAges, controller.getDefaultUsageAges(Lists.newArrayList(2020, 2018)));
+        assertEquals(usageAges, controller.getDefaultUsageAges(List.of(2020, 2018)));
         verify(aaclUsageService, filterWidgetMock, filterController);
     }
 
@@ -521,7 +518,7 @@ public class AaclUsageControllerTest {
     }
 
     private List<UsageAge> buildUsageAges() {
-        return Lists.newArrayList(
+        return List.of(
             buildUsageAge(2020, new BigDecimal("1.00")),
             buildUsageAge(2018, new BigDecimal("0.75")));
     }

@@ -27,7 +27,6 @@ import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.impl.CommonUsageController;
 
-import com.google.common.collect.Sets;
 import com.google.common.io.Files;
 import com.vaadin.data.provider.QuerySortOrder;
 import com.vaadin.shared.data.sort.SortDirection;
@@ -124,7 +123,7 @@ public class SalUsageController extends CommonUsageController implements ISalUsa
     @Override
     public boolean isBatchProcessingCompleted(String batchId) {
         return getUsageBatchStatusService().isBatchProcessingCompleted(batchId,
-            Sets.newHashSet(UsageStatusEnum.NEW, UsageStatusEnum.WORK_FOUND, UsageStatusEnum.RH_FOUND));
+            Set.of(UsageStatusEnum.NEW, UsageStatusEnum.WORK_FOUND, UsageStatusEnum.RH_FOUND));
     }
 
     @Override

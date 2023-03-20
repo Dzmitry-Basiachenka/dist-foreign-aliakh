@@ -8,7 +8,7 @@ import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageController;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
-import com.google.common.collect.Lists;
+
 import com.vaadin.data.Binder;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.shared.ui.MarginInfo;
@@ -19,8 +19,10 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
+
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -153,7 +155,7 @@ class SalUpdateRighstholderWindow extends Window {
                         this.close();
                     }, new StringLengthValidator(ForeignUi.getMessage("field.error.empty.length", 1024), 1, 1024));
             } else {
-                Windows.showValidationErrorWindow(Lists.newArrayList(rhAccountNumberField, rhNameField));
+                Windows.showValidationErrorWindow(List.of(rhAccountNumberField, rhNameField));
             }
         });
         VaadinUtils.setButtonsAutoDisabled(saveButton);

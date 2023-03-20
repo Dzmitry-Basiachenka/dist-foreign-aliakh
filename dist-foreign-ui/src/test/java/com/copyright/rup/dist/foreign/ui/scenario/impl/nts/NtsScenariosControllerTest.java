@@ -30,7 +30,6 @@ import com.copyright.rup.vaadin.ui.component.window.ConfirmDialogWindow;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Sets;
 import com.vaadin.ui.Window;
 
 import org.easymock.Capture;
@@ -156,7 +155,7 @@ public class NtsScenariosControllerTest {
         scenarioUsageFilter.setFiscalYear(2018);
         scenarioUsageFilter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
         scenarioUsageFilter.setProductFamily(NTS_PRODUCT_FAMILY);
-        scenarioUsageFilter.setRhAccountNumbers(Sets.newHashSet(1000000001L, 1000000002L));
+        scenarioUsageFilter.setRhAccountNumbers(Set.of(1000000001L, 1000000002L));
         scenarioUsageFilter.setPaymentDate(LocalDate.of(2010, 1, 1));
         UsageBatch usageBatch = new UsageBatch();
         usageBatch.setId("batchId");
@@ -165,7 +164,7 @@ public class NtsScenariosControllerTest {
         expect(scenarioUsageFilterService.getByScenarioId(SCENARIO_ID)).andReturn(scenarioUsageFilter).once();
         IRightsholderService rightsholderService = createMock(IRightsholderService.class);
         Whitebox.setInternalState(scenariosController, rightsholderService);
-        expect(rightsholderService.updateAndGetRightsholders(Sets.newHashSet(1000000001L, 1000000002L))).andReturn(
+        expect(rightsholderService.updateAndGetRightsholders(Set.of(1000000001L, 1000000002L))).andReturn(
             ImmutableMap.of(1000000001L, buildRightsholder(1000000001L, "Rothchild Consultants"), 1000000002L,
                 buildRightsholder(1000000002L, "Royal Society of Victoria"))).once();
         replay(scenariosWidget, scenarioUsageFilterService, rightsholderService);

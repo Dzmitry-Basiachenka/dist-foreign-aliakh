@@ -47,7 +47,6 @@ import com.copyright.rup.dist.foreign.ui.usage.api.IFasNtsUsageFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.ScenarioCreateEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.nts.INtsUsageWidget;
 
-import com.google.common.collect.Sets;
 import com.vaadin.ui.HorizontalLayout;
 
 import org.apache.commons.io.IOUtils;
@@ -174,9 +173,8 @@ public class NtsUsageControllerTest {
         IUsageBatchStatusService usageBatchStatusService = PowerMock.createMock(IUsageBatchStatusService.class);
         Whitebox.setInternalState(controller, usageBatchStatusService);
         expect(usageBatchStatusService.isBatchProcessingCompleted(batchId,
-            Sets.newHashSet(UsageStatusEnum.WORK_FOUND, UsageStatusEnum.NON_STM_RH, UsageStatusEnum.US_TAX_COUNTRY,
-                UsageStatusEnum.RH_FOUND)))
-            .andReturn(true).once();
+            Set.of(UsageStatusEnum.WORK_FOUND, UsageStatusEnum.NON_STM_RH, UsageStatusEnum.US_TAX_COUNTRY,
+                UsageStatusEnum.RH_FOUND))).andReturn(true).once();
         replay(usageBatchStatusService);
         assertTrue(controller.isBatchProcessingCompleted(batchId));
         verify(usageBatchStatusService);
@@ -246,7 +244,7 @@ public class NtsUsageControllerTest {
         String fileName = "export_usage_";
         Supplier<String> fileNameSupplier = () -> fileName;
         Supplier<InputStream> inputStreamSupplier =
-                () -> IOUtils.toInputStream(StringUtils.EMPTY, StandardCharsets.UTF_8);
+            () -> IOUtils.toInputStream(StringUtils.EMPTY, StandardCharsets.UTF_8);
         PipedOutputStream pos = new PipedOutputStream();
         expect(OffsetDateTime.now()).andReturn(DATE).once();
         expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
@@ -392,7 +390,7 @@ public class NtsUsageControllerTest {
         String fileName = "pre_service_fee_fund_batches_";
         Supplier<String> fileNameSupplier = () -> fileName;
         Supplier<InputStream> inputStreamSupplier =
-                () -> IOUtils.toInputStream(StringUtils.EMPTY, StandardCharsets.UTF_8);
+            () -> IOUtils.toInputStream(StringUtils.EMPTY, StandardCharsets.UTF_8);
         PipedOutputStream pos = new PipedOutputStream();
         expect(OffsetDateTime.now()).andReturn(DATE).once();
         expect(streamSourceHandler.getCsvStreamSource(capture(fileNameSupplierCapture), capture(posConsumerCapture)))

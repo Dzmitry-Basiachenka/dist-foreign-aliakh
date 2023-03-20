@@ -17,8 +17,6 @@ import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
 import com.copyright.rup.dist.foreign.ui.report.api.IUndistributedLiabilitiesReportWidget;
 
-import com.google.common.collect.Sets;
-
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
@@ -31,6 +29,7 @@ import java.io.OutputStream;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.util.Set;
 
 /**
  * Verifies {@link UndistributedLiabilitiesReportController}.
@@ -74,7 +73,7 @@ public class UndistributedLiabilitiesReportControllerTest {
         expect(OffsetDateTime.now()).andReturn(now).once();
         expect(widget.getPaymentDate()).andReturn(paymentDate).once();
         reportService.writeUndistributedLiabilitiesCsvReport(capture(paymentDateCapture), capture(osCapture),
-            eq(Sets.newHashSet("FAS", "FAS2")));
+            eq(Set.of("FAS", "FAS2")));
         expectLastCall().once();
         replay(OffsetDateTime.class, widget, reportService);
         IStreamSource streamSource = controller.getCsvStreamSource();
