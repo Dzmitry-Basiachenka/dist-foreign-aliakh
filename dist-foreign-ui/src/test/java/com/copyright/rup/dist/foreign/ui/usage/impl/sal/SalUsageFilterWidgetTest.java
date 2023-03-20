@@ -26,7 +26,6 @@ import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageFilterController
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Sets;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
@@ -103,7 +102,7 @@ public class SalUsageFilterWidgetTest {
         assertFalse(applyButton.isEnabled());
         assertTrue(widget.getAppliedFilter().getRhAccountNumbers().isEmpty());
         assertTrue(widget.getFilter().getRhAccountNumbers().isEmpty());
-        Set<Long> accountNumbers = Sets.newHashSet(ACCOUNT_NUMBER);
+        Set<Long> accountNumbers = Set.of(ACCOUNT_NUMBER);
         widget.getFilter().setRhAccountNumbers(accountNumbers);
         assertNotEquals(widget.getFilter(), widget.getAppliedFilter());
         applyButton.setEnabled(true);

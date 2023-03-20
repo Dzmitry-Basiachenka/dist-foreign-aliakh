@@ -24,7 +24,6 @@ import com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclUsageFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.BaseUdmItemsFilterWidget;
 
-import com.google.common.collect.Sets;
 import com.vaadin.data.Binder;
 import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.server.Sizeable.Unit;
@@ -101,8 +100,8 @@ public class AclUsageFiltersWindowTest {
     @Test
     public void testConstructorWithPopulatedFilter() {
         AclUsageFilter usageFilter = buildExpectedFilter();
-        usageFilter.setPeriods(Sets.newHashSet(202206, 202212));
-        usageFilter.setReportedTypeOfUses(Sets.newHashSet("PRINT_COPIES", "FAX_PHOTOCOPIES"));
+        usageFilter.setPeriods(Set.of(202206, 202212));
+        usageFilter.setReportedTypeOfUses(Set.of("PRINT_COPIES", "FAX_PHOTOCOPIES"));
         window = new AclUsageFiltersWindow(createMock(IAclUsageFilterController.class), usageFilter);
         verifyFiltersData();
     }

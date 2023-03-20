@@ -31,7 +31,6 @@ import com.copyright.rup.vaadin.security.SecurityUtils;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.widget.LocalDateWidget;
 
-import com.google.common.collect.Lists;
 import com.vaadin.data.Binder;
 import com.vaadin.data.HasValue.ValueChangeEvent;
 import com.vaadin.server.Sizeable.Unit;
@@ -56,6 +55,7 @@ import org.powermock.reflect.Whitebox;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Verifies {@link FundPoolLoadWindow}.
@@ -384,7 +384,7 @@ public class FundPoolLoadWindowTest {
         Button loadButton = verifyButton(layout.getComponent(0), "Upload");
         verifyButton(layout.getComponent(1), "Close");
         assertEquals(2, loadButton.getListeners(ClickEvent.class).size());
-        verifyLoadClickListener(loadButton, Lists.newArrayList(
+        verifyLoadClickListener(loadButton, List.of(
             Whitebox.getInternalState(window, USAGE_BATCH_NAME_FIELD),
             Whitebox.getInternalState(window, ACCOUNT_NUMBER_FIELD),
             Whitebox.getInternalState(window, "accountNameField"),

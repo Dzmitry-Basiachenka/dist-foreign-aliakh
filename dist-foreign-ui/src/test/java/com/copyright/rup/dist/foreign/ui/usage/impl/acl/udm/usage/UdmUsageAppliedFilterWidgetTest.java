@@ -21,7 +21,6 @@ import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
 import com.copyright.rup.dist.foreign.ui.usage.UiTestHelper;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageFilterController;
 
-import com.google.common.collect.Sets;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.Component;
@@ -130,16 +129,16 @@ public class UdmUsageAppliedFilterWidgetTest {
         UdmUsageFilter filter = new UdmUsageFilter();
         filter.setUdmBatchesIds(Set.of("d7780576-2903-459c-a9ee-75a8d95cd4df",
             "a8711022-8b30-4fa9-be39-c3e25378fd9a", "10bacf4f-8b51-48fa-b16e-b1f3968f0381"));
-        filter.setPeriods(Sets.newHashSet(202106, 202206, 202312));
+        filter.setPeriods(Set.of(202106, 202206, 202312));
         filter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
         filter.setUdmUsageOrigin(UdmUsageOriginEnum.SS);
-        filter.setAssignees(Sets.newHashSet("buser@copyright.com", "User@copyright.com", "Auser@copyright.com"));
-        filter.setReportedPubTypes(Sets.newHashSet("Not Shared", "Book", "Journal"));
-        filter.setPubFormats(Sets.newHashSet("Print", "Digital"));
-        filter.setDetailLicenseeClasses(Sets.newHashSet(buildDetailLicenseeClass(22, "Book series"),
+        filter.setAssignees(Set.of("buser@copyright.com", "User@copyright.com", "Auser@copyright.com"));
+        filter.setReportedPubTypes(Set.of("Not Shared", "Book", "Journal"));
+        filter.setPubFormats(Set.of("Print", "Digital"));
+        filter.setDetailLicenseeClasses(Set.of(buildDetailLicenseeClass(22, "Book series"),
             buildDetailLicenseeClass(1, "Food and Tobacco"),
             buildDetailLicenseeClass(26, "Law Firms")));
-        filter.setReportedTypeOfUses(Sets.newHashSet("PRINT_COPIES", "FAX_PHOTOCOPIES"));
+        filter.setReportedTypeOfUses(Set.of("PRINT_COPIES", "FAX_PHOTOCOPIES"));
         filter.setTypeOfUse("PRINT");
         filter.setUsageDateFrom(LocalDate.of(2020, 4, 12));
         filter.setUsageDateTo(LocalDate.of(2020, 6, 20));

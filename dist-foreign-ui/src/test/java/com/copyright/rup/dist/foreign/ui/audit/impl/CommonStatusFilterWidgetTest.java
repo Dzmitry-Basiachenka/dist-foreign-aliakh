@@ -16,8 +16,6 @@ import com.copyright.rup.vaadin.ui.component.filter.CommonFilterWindow.FilterSav
 import com.copyright.rup.vaadin.ui.component.filter.FilterWindow;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
-import com.google.common.collect.Sets;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
@@ -44,20 +42,20 @@ public class CommonStatusFilterWidgetTest {
     private static final String SELECTED_ITEMS_IDS = "selectedItemsIds";
 
     private static final Set<UsageStatusEnum> FAS_FAS2_STATUSES =
-        Sets.newHashSet(UsageStatusEnum.NEW, UsageStatusEnum.WORK_NOT_FOUND, UsageStatusEnum.WORK_RESEARCH,
+        Set.of(UsageStatusEnum.NEW, UsageStatusEnum.WORK_NOT_FOUND, UsageStatusEnum.WORK_RESEARCH,
             UsageStatusEnum.WORK_FOUND, UsageStatusEnum.RH_NOT_FOUND, UsageStatusEnum.RH_FOUND,
             UsageStatusEnum.SENT_FOR_RA, UsageStatusEnum.ELIGIBLE, UsageStatusEnum.LOCKED, UsageStatusEnum.SENT_TO_LM,
             UsageStatusEnum.PAID, UsageStatusEnum.ARCHIVED, UsageStatusEnum.NTS_WITHDRAWN,
             UsageStatusEnum.TO_BE_DISTRIBUTED);
 
     private static final Set<UsageStatusEnum> NTS_STATUSES =
-        Sets.newHashSet(UsageStatusEnum.WORK_FOUND, UsageStatusEnum.RH_FOUND,
+        Set.of(UsageStatusEnum.WORK_FOUND, UsageStatusEnum.RH_FOUND,
             UsageStatusEnum.UNCLASSIFIED, UsageStatusEnum.ELIGIBLE, UsageStatusEnum.SCENARIO_EXCLUDED,
             UsageStatusEnum.NON_STM_RH, UsageStatusEnum.US_TAX_COUNTRY, UsageStatusEnum.LOCKED,
             UsageStatusEnum.SENT_TO_LM, UsageStatusEnum.PAID, UsageStatusEnum.ARCHIVED);
 
     private static final Set<UsageStatusEnum> AACL_STATUSES =
-        Sets.newHashSet(UsageStatusEnum.NEW, UsageStatusEnum.WORK_FOUND, UsageStatusEnum.WORK_NOT_FOUND,
+        Set.of(UsageStatusEnum.NEW, UsageStatusEnum.WORK_FOUND, UsageStatusEnum.WORK_NOT_FOUND,
             UsageStatusEnum.WORK_RESEARCH, UsageStatusEnum.RH_FOUND, UsageStatusEnum.ELIGIBLE,
             UsageStatusEnum.SCENARIO_EXCLUDED, UsageStatusEnum.LOCKED, UsageStatusEnum.SENT_TO_LM, UsageStatusEnum.PAID,
             UsageStatusEnum.ARCHIVED);
@@ -96,7 +94,7 @@ public class CommonStatusFilterWidgetTest {
     public void testOnSave() {
         CommonStatusFilterWidget widget = new FasStatusFilterWidget();
         FilterSaveEvent event = createMock(FilterSaveEvent.class);
-        Set<UsageStatusEnum> values = Sets.newHashSet(UsageStatusEnum.ELIGIBLE);
+        Set<UsageStatusEnum> values = Set.of(UsageStatusEnum.ELIGIBLE);
         expect(event.getSelectedItemsIds()).andReturn(values).once();
         replay(event);
         widget.onSave(event);

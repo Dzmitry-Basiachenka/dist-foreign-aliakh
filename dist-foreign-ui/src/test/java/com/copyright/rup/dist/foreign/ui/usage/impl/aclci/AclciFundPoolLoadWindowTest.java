@@ -4,6 +4,7 @@ import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.setTextFieldV
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.validateFieldAndVerifyErrorMessage;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyLoadClickListener;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyTextField;
+
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
@@ -22,7 +23,7 @@ import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.FundPool.AclciFields;
 import com.copyright.rup.dist.foreign.ui.usage.api.aclci.IAclciUsageController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
-import com.google.common.collect.Lists;
+
 import com.vaadin.data.Binder;
 import com.vaadin.server.Sizeable;
 import com.vaadin.ui.AbstractComponent;
@@ -32,6 +33,7 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
+
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -41,6 +43,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * Verifies {@link AclciFundPoolLoadWindow}.
@@ -330,7 +333,7 @@ public class AclciFundPoolLoadWindowTest {
         Button loadButton = verifyButton(layout.getComponent(0), "Upload");
         verifyButton(layout.getComponent(1), "Close");
         assertEquals(2, loadButton.getListeners(Button.ClickEvent.class).size());
-        verifyLoadClickListener(loadButton, Lists.newArrayList(
+        verifyLoadClickListener(loadButton, List.of(
             Whitebox.getInternalState(window, FUND_POOL_NAME_FIELD),
             Whitebox.getInternalState(window, COVERAGE_YEARS_FIELD),
             Whitebox.getInternalState(window, GROSS_AMOUNT_FIELD),

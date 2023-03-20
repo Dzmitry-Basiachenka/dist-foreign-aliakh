@@ -6,7 +6,6 @@ import com.copyright.rup.vaadin.ui.component.filter.FilterWindow;
 import com.copyright.rup.vaadin.ui.component.filter.IFilterWindowController;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
-import com.google.common.collect.Lists;
 import com.vaadin.data.ValueProvider;
 import com.vaadin.ui.Button.ClickListener;
 
@@ -30,7 +29,7 @@ class AdditionalFundBatchesFilterWindow extends FilterWindow<UsageBatch> {
      */
     AdditionalFundBatchesFilterWindow(IFilterWindowController<UsageBatch> controller) {
         super(ForeignUi.getMessage("window.batches_filter"), controller, "Continue", null,
-            (ValueProvider<UsageBatch, List<String>>) batch -> Lists.newArrayList(batch.getName()));
+            (ValueProvider<UsageBatch, List<String>>) batch -> List.of(batch.getName()));
         this.setSearchPromptString(ForeignUi.getMessage("prompt.batch"));
         VaadinUtils.addComponentStyle(this, "batches-filter-window");
     }

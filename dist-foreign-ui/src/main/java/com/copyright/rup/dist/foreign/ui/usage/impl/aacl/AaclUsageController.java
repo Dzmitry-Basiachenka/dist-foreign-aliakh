@@ -37,7 +37,6 @@ import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.impl.CommonUsageController;
 
-import com.google.common.collect.Sets;
 import com.google.common.io.Files;
 import com.vaadin.data.provider.QuerySortOrder;
 import com.vaadin.shared.data.sort.SortDirection;
@@ -151,7 +150,7 @@ public class AaclUsageController extends CommonUsageController implements IAaclU
     @Override
     public boolean isBatchProcessingCompleted(String batchId) {
         return getUsageBatchStatusService().isBatchProcessingCompleted(batchId,
-            Sets.newHashSet(UsageStatusEnum.NEW, UsageStatusEnum.WORK_FOUND));
+            Set.of(UsageStatusEnum.NEW, UsageStatusEnum.WORK_FOUND));
     }
 
     @Override

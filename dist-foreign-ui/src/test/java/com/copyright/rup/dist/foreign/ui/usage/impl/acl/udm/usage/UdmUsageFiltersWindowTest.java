@@ -27,7 +27,6 @@ import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageFilterController
 import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.BaseUdmItemsFilterWidget;
 import com.copyright.rup.vaadin.widget.LocalDateWidget;
 
-import com.google.common.collect.Sets;
 import com.vaadin.data.Binder;
 import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.server.Sizeable.Unit;
@@ -120,8 +119,8 @@ public class UdmUsageFiltersWindowTest {
     public void testConstructorWithPopulatedFilter() {
         UdmUsageFilter usageFilter = buildExpectedFilter();
         usageFilter.setAssignees(Set.of("user@copyright.com"));
-        usageFilter.setPubFormats(Sets.newHashSet("Digital", "Not Specified"));
-        usageFilter.setReportedPubTypes(Sets.newHashSet("Book", "Not Shared"));
+        usageFilter.setPubFormats(Set.of("Digital", "Not Specified"));
+        usageFilter.setReportedPubTypes(Set.of("Book", "Not Shared"));
         usageFilter.setReportedTypeOfUses(Set.of(REPORTED_TYPE_OF_USE));
         usageFilter.setTypeOfUse(TYPE_OF_USE);
         DetailLicenseeClass licenseeClass = new DetailLicenseeClass();

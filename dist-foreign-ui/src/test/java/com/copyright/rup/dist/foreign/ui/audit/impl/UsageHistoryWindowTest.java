@@ -18,7 +18,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.google.common.collect.Lists;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
@@ -62,7 +61,7 @@ public class UsageHistoryWindowTest {
         item.setActionReason("Action reason");
         item.setActionType(UsageActionTypeEnum.LOADED);
         String detailId = RupPersistUtils.generateUuid();
-        UsageHistoryWindow window = new UsageHistoryWindow(detailId, Lists.newArrayList(item));
+        UsageHistoryWindow window = new UsageHistoryWindow(detailId, List.of(item));
         verifyWindow(window, "History for usage detail " + detailId, 700, 300, Unit.PIXELS);
         assertTrue(window.isResizable());
         Component content = window.getContent();

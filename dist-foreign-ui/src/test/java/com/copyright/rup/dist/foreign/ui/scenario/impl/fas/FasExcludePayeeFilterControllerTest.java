@@ -13,8 +13,6 @@ import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasExcludePayeeFilterController;
 
-import com.google.common.collect.Sets;
-
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
@@ -22,6 +20,7 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Verifies {@link FasExcludePayeeFilterController}.
@@ -49,7 +48,7 @@ public class FasExcludePayeeFilterControllerTest {
         IScenarioService scenarioService = createMock(IScenarioService.class);
         Whitebox.setInternalState(controller, scenarioService);
         List<Scenario> scenarios = List.of(buildScenario());
-        expect(scenarioService.getScenariosByProductFamiliesAndStatuses(Sets.newHashSet("FAS", "FAS2"),
+        expect(scenarioService.getScenariosByProductFamiliesAndStatuses(Set.of("FAS", "FAS2"),
             EnumSet.of(ScenarioStatusEnum.IN_PROGRESS))).andReturn(scenarios);
         replay(scenarioService);
         assertSame(scenarios, controller.getScenarios());

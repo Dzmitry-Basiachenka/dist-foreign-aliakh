@@ -2,7 +2,6 @@ package com.copyright.rup.dist.foreign.ui.audit.impl.sal;
 
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.ui.audit.impl.CommonStatusFilterWidget;
-import com.google.common.collect.Sets;
 
 import java.util.Collection;
 import java.util.Set;
@@ -19,7 +18,7 @@ import java.util.Set;
 public class SalStatusFilterWidget extends CommonStatusFilterWidget {
 
     private static final Set<UsageStatusEnum> SAL_STATUSES =
-        Sets.newHashSet(UsageStatusEnum.SENT_TO_LM, UsageStatusEnum.LOCKED, UsageStatusEnum.PAID,
+        Set.of(UsageStatusEnum.SENT_TO_LM, UsageStatusEnum.LOCKED, UsageStatusEnum.PAID,
             UsageStatusEnum.RH_FOUND, UsageStatusEnum.RH_NOT_FOUND, UsageStatusEnum.WORK_FOUND,
             UsageStatusEnum.ARCHIVED, UsageStatusEnum.ELIGIBLE, UsageStatusEnum.NEW, UsageStatusEnum.WORK_NOT_FOUND,
             UsageStatusEnum.WORK_NOT_GRANTED);

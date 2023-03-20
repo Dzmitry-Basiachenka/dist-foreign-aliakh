@@ -21,7 +21,6 @@ import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
 import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
 import com.copyright.rup.dist.foreign.ui.report.api.ICommonScenariosReportWidget;
 
-import com.google.common.collect.Sets;
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,6 +33,7 @@ import java.io.OutputStream;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Verifies {@link SalLiabilitiesByRhReportController}.
@@ -96,8 +96,8 @@ public class SalLiabilitiesByRhReportControllerTest {
     public void testGetScenarios() {
         List<Scenario> scenarios = List.of(new Scenario());
         expect(productFamilyProvider.getSelectedProductFamily()).andReturn("SAL").once();
-        expect(scenarioService.getScenariosByProductFamiliesAndStatuses(Sets.newHashSet("SAL"),
-            Sets.newHashSet(ScenarioStatusEnum.values()))).andReturn(scenarios).once();
+        expect(scenarioService.getScenariosByProductFamiliesAndStatuses(Set.of("SAL"),
+            Set.of(ScenarioStatusEnum.values()))).andReturn(scenarios).once();
         replay(scenarioService, productFamilyProvider);
         assertEquals(scenarios, controller.getScenarios());
         verify(scenarioService, productFamilyProvider);

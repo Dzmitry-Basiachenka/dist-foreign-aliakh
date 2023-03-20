@@ -9,8 +9,6 @@ import static org.powermock.api.easymock.PowerMock.verify;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.vaadin.ui.component.filter.CommonFilterWindow.FilterSaveEvent;
 
-import com.google.common.collect.Sets;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -56,7 +54,7 @@ public class AdditionalFundBatchesFilterWidgetTest {
     @Test
     public void testOnSave() {
         FilterSaveEvent filterSaveEvent = createMock(FilterSaveEvent.class);
-        Set usageBatches = Sets.newHashSet(USAGE_BATCH_NAME);
+        Set usageBatches = Set.of(USAGE_BATCH_NAME);
         expect(filterSaveEvent.getSelectedItemsIds()).andReturn(usageBatches).once();
         replay(filterSaveEvent);
         widget.onSave(filterSaveEvent);

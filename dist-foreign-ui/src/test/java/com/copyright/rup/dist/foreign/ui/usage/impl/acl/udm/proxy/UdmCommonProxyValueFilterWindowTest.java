@@ -20,7 +20,6 @@ import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Sets;
 import com.vaadin.data.ValueProvider;
 import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.server.Sizeable;
@@ -93,7 +92,7 @@ public class UdmCommonProxyValueFilterWindowTest {
     public void testSetSelectedItemsIdsWithEmptySet() {
         assertTrue(filterWindow.getSelectedItemsIds().isEmpty());
         filterWindow.setSelectedItemsIds(Set.of());
-        assertEquals(Sets.newHashSet(PUB_TYPE_CODES), filterWindow.getSelectedItemsIds());
+        assertEquals(Set.of(PUB_TYPE_CODES), filterWindow.getSelectedItemsIds());
     }
 
     @Test

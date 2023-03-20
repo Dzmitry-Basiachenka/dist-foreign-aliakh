@@ -17,8 +17,6 @@ import com.copyright.rup.vaadin.ui.component.filter.CommonFilterWindow.FilterSav
 import com.copyright.rup.vaadin.ui.component.filter.FilterWindow;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import com.vaadin.data.ValueProvider;
 
 import org.easymock.Capture;
@@ -57,7 +55,7 @@ public class RightsholderFilterWidgetTest {
         rightsholderFilterWidget =
             new RightsholderFilterWidget("Rightsholders", "Enter Rightsholder Name/Account #",
                 "<span class=\"filter-field-empty-name\">Rightsholder is absent in PRM</span>",
-                () -> Lists.newArrayList(rightsholder));
+                () -> List.of(rightsholder));
     }
 
     @Test
@@ -87,7 +85,7 @@ public class RightsholderFilterWidgetTest {
     @Test
     public void testOnSave() {
         FilterSaveEvent filterSaveEvent = createMock(FilterSaveEvent.class);
-        Set accountNumbers = Sets.newHashSet(ACCOUNT_NUMBER);
+        Set accountNumbers = Set.of(ACCOUNT_NUMBER);
         expect(filterSaveEvent.getSelectedItemsIds()).andReturn(accountNumbers).once();
         replay(filterSaveEvent);
         rightsholderFilterWidget.onSave(filterSaveEvent);

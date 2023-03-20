@@ -30,7 +30,6 @@ import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclUsageFilterController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
-import com.google.common.collect.Sets;
 import com.vaadin.data.provider.CallbackDataProvider;
 import com.vaadin.data.provider.DataProvider;
 import com.vaadin.data.provider.Query;
@@ -125,7 +124,7 @@ public class AclUsageWidgetTest {
         AclUsageDto aclUsageDto2 = new AclUsageDto();
         aclUsageDto2.setId("e27fabb0-89b1-40af-9e77-e32adfc72816");
         aclUsageDto2.setEditable(true);
-        Set<AclUsageDto> aclUsages = Sets.newHashSet(aclUsageDto1, aclUsageDto2);
+        Set<AclUsageDto> aclUsages = Set.of(aclUsageDto1, aclUsageDto2);
         Windows.showNotificationWindow("One of selected usages is not editable");
         expectLastCall().once();
         replay(controller, streamSource, Windows.class, ForeignSecurityUtils.class);

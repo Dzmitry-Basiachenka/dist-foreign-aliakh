@@ -31,7 +31,6 @@ import com.copyright.rup.vaadin.ui.component.window.ConfirmActionDialogWindow.IL
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
-import com.google.common.collect.Sets;
 import com.vaadin.data.Validator;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.MarginInfo;
@@ -160,7 +159,7 @@ public class AaclExcludePayeeWidgetTest {
         mockStatic(Windows.class);
         Button.ClickEvent clickEvent = createMock(Button.ClickEvent.class);
         expect(payeesGrid.getSelectedItems())
-            .andReturn(buildPayeeTotalHolder(Sets.newHashSet(PAYEE_ACCOUNT_NUMBER_1, PAYEE_ACCOUNT_NUMBER_2))).once();
+            .andReturn(buildPayeeTotalHolder(Set.of(PAYEE_ACCOUNT_NUMBER_1, PAYEE_ACCOUNT_NUMBER_2))).once();
         AggregateLicenseeClass aggregateLicenseeClass1 = buildAggregateLicenseeClass(171, "EXGP", "Arts & Humanities");
         AggregateLicenseeClass aggregateLicenseeClass2 = buildAggregateLicenseeClass(120, "MU", "Business Management");
         List<PayeeAccountAggregateLicenseeClassesPair> pairs =
@@ -245,7 +244,7 @@ public class AaclExcludePayeeWidgetTest {
                                                                          AggregateLicenseeClass... aggregateClasses) {
         PayeeAccountAggregateLicenseeClassesPair pair = new PayeeAccountAggregateLicenseeClassesPair();
         pair.setPayeeAccountNumber(accountNumber);
-        pair.setAggregateLicenseeClasses(Sets.newHashSet(aggregateClasses));
+        pair.setAggregateLicenseeClasses(Set.of(aggregateClasses));
         return pair;
     }
 

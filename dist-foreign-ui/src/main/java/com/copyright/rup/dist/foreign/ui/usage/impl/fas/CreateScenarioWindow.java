@@ -11,7 +11,6 @@ import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
-import com.google.common.collect.Lists;
 import com.vaadin.data.Binder;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.ui.Alignment;
@@ -25,6 +24,7 @@ import com.vaadin.ui.Window;
 import org.apache.commons.lang3.StringUtils;
 
 import java.time.LocalDate;
+import java.util.List;
 
 /**
  * Modal window that provides functionality for creating {@link Scenario}.
@@ -113,7 +113,7 @@ class CreateScenarioWindow extends Window {
                     StringUtils.trimToEmpty(descriptionArea.getValue()))));
             close();
         } else {
-            Windows.showValidationErrorWindow(Lists.newArrayList(scenarioNameField, descriptionArea));
+            Windows.showValidationErrorWindow(List.of(scenarioNameField, descriptionArea));
         }
     }
 }

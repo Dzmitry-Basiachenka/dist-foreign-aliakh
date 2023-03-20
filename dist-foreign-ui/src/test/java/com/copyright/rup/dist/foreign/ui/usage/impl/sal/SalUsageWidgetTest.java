@@ -40,7 +40,6 @@ import com.copyright.rup.dist.foreign.ui.usage.impl.CommonUsageWidget;
 import com.copyright.rup.vaadin.ui.component.window.ConfirmDialogWindow.IListener;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
-import com.google.common.collect.Sets;
 import com.vaadin.data.provider.CallbackDataProvider;
 import com.vaadin.data.provider.DataProvider;
 import com.vaadin.data.provider.Query;
@@ -427,8 +426,7 @@ public class SalUsageWidgetTest {
     @Test
     public void testAddToScenarioButtonClickListenerWithMultipleBatchFilter() {
         mockStatic(Windows.class);
-        filterWidget.getAppliedFilter()
-            .setUsageBatchesIds(Sets.newHashSet(BATCH_ID, "437d1f1d-c165-404d-8617-b10ef53426be"));
+        filterWidget.getAppliedFilter().setUsageBatchesIds(Set.of(BATCH_ID, "437d1f1d-c165-404d-8617-b10ef53426be"));
         expect(controller.getBeansCount()).andReturn(1).once();
         prepareCreateScenarioExpectation();
         expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();

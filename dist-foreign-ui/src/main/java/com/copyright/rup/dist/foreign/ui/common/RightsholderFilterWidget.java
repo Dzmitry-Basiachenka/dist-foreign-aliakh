@@ -9,13 +9,12 @@ import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.BaseItemsFilterWidget;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import com.vaadin.data.ValueProvider;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
@@ -36,7 +35,7 @@ public class RightsholderFilterWidget extends BaseItemsFilterWidget<Rightsholder
     private final String caption;
     private final String rightsholderNotFoundString;
     private final Supplier<List<Rightsholder>> supplier;
-    private final Set<Rightsholder> selectedItemsIds = Sets.newHashSet();
+    private final Set<Rightsholder> selectedItemsIds = new HashSet<>();
 
     /**
      * Constructor.
@@ -91,7 +90,7 @@ public class RightsholderFilterWidget extends BaseItemsFilterWidget<Rightsholder
         FilterWindow<Rightsholder> filterWindow =
             Windows.showFilterWindow(ForeignUi.getMessage("window.filter_format", caption), this,
                 (ValueProvider<Rightsholder, List<String>>) rightsholder ->
-                    Lists.newArrayList(rightsholder.getName(), rightsholder.getAccountNumber().toString()));
+                    List.of(rightsholder.getName(), rightsholder.getAccountNumber().toString()));
         filterWindow.setSelectedItemsIds(selectedItemsIds);
         filterWindow.setSearchPromptString(searchPrompt);
         VaadinUtils.addComponentStyle(filterWindow, "rightsholders-filter-window");

@@ -11,13 +11,14 @@ import com.copyright.rup.dist.foreign.domain.filter.FilterExpression;
 import com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum;
 import com.copyright.rup.dist.foreign.ui.usage.UiTestHelper;
 
-import com.google.common.collect.Sets;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.VerticalLayout;
 
 import org.junit.Test;
+
+import java.util.Set;
 
 /**
  * Verifies {@link AclGrantDetailAppliedFilterWidget}.
@@ -73,10 +74,10 @@ public class AclGrantDetailAppliedFilterWidgetTest {
 
     private AclGrantDetailFilter buildAclGrantDetailFilter() {
         AclGrantDetailFilter filter = new AclGrantDetailFilter();
-        filter.setGrantSetNames(Sets.newHashSet("Test grant set", "Grant set name", "ACL Grant Set 2021"));
-        filter.setLicenseTypes(Sets.newHashSet("MACL", "JACDCL", "ACL"));
-        filter.setGrantStatuses(Sets.newHashSet("GRANT", "DENY"));
-        filter.setTypeOfUses(Sets.newHashSet("PRINT", "DIGITAL"));
+        filter.setGrantSetNames(Set.of("Test grant set", "Grant set name", "ACL Grant Set 2021"));
+        filter.setLicenseTypes(Set.of("MACL", "JACDCL", "ACL"));
+        filter.setGrantStatuses(Set.of("GRANT", "DENY"));
+        filter.setTypeOfUses(Set.of("PRINT", "DIGITAL"));
         filter.setGrantSetPeriod(202212);
         filter.setWrWrkInstExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 306985899L, null));
         filter.setRhAccountNumberExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 1000002859L, null));

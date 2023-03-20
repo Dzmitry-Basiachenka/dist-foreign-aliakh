@@ -23,7 +23,6 @@ import static org.powermock.api.easymock.PowerMock.verify;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineValueFilterController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
-import com.google.common.collect.Sets;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
@@ -55,7 +54,7 @@ import java.util.Set;
 @PrepareForTest(Windows.class)
 public class UdmBaselineValueFilterWidgetTest {
 
-    private static final Set<Integer> PERIODS = Sets.newHashSet(202106, 202112);
+    private static final Set<Integer> PERIODS = Set.of(202106, 202112);
     private UdmBaselineValueFilterWidget widget;
 
     @Before

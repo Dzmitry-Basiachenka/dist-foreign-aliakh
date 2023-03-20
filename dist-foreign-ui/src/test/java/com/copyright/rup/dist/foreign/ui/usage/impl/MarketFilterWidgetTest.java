@@ -12,7 +12,6 @@ import com.copyright.rup.vaadin.ui.component.filter.CommonFilterWindow.FilterSav
 import com.copyright.rup.vaadin.ui.component.filter.FilterWindow;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
-import com.google.common.collect.Sets;
 import com.vaadin.server.Sizeable.Unit;
 
 import org.junit.Before;
@@ -23,6 +22,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Verifies {@link MarketFilterWidget}.
@@ -59,7 +59,7 @@ public class MarketFilterWidgetTest {
     @Test
     public void testOnSave() {
         FilterSaveEvent<String> filterSaveEvent = createMock(FilterSaveEvent.class);
-        expect(filterSaveEvent.getSelectedItemsIds()).andReturn(Sets.newHashSet(MARKET)).once();
+        expect(filterSaveEvent.getSelectedItemsIds()).andReturn(Set.of(MARKET)).once();
         replay(filterSaveEvent);
         marketFilterWidget.onSave(filterSaveEvent);
         verify(filterSaveEvent);

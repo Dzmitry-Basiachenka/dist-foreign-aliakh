@@ -3,8 +3,6 @@ package com.copyright.rup.dist.foreign.ui.audit.impl.nts;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.ui.audit.impl.CommonStatusFilterWidget;
 
-import com.google.common.collect.Sets;
-
 import java.util.Collection;
 import java.util.Set;
 
@@ -20,7 +18,7 @@ import java.util.Set;
 public class NtsStatusFilterWidget extends CommonStatusFilterWidget {
 
     private static final Set<UsageStatusEnum> NTS_STATUSES =
-        Sets.newHashSet(UsageStatusEnum.WORK_FOUND, UsageStatusEnum.RH_FOUND,
+        Set.of(UsageStatusEnum.WORK_FOUND, UsageStatusEnum.RH_FOUND,
             UsageStatusEnum.UNCLASSIFIED, UsageStatusEnum.ELIGIBLE, UsageStatusEnum.SCENARIO_EXCLUDED,
             UsageStatusEnum.NON_STM_RH, UsageStatusEnum.US_TAX_COUNTRY, UsageStatusEnum.LOCKED,
             UsageStatusEnum.SENT_TO_LM, UsageStatusEnum.PAID, UsageStatusEnum.ARCHIVED);

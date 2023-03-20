@@ -21,8 +21,6 @@ import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
 import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
 import com.copyright.rup.dist.foreign.ui.report.api.ICommonScenariosReportWidget;
 
-import com.google.common.collect.Sets;
-
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
@@ -73,7 +71,7 @@ public class SalLiabilitiesSummaryByRhAndWorkReportControllerTest {
         List<Scenario> scenarios = List.of();
         expect(productFamilyProvider.getSelectedProductFamily()).andReturn(SAL_PRODUCT_FAMILY).once();
         expect(scenarioService.getScenariosByProductFamiliesAndStatuses(
-            Set.of(SAL_PRODUCT_FAMILY), Sets.newHashSet(ScenarioStatusEnum.values()))).andReturn(scenarios).once();
+            Set.of(SAL_PRODUCT_FAMILY), Set.of(ScenarioStatusEnum.values()))).andReturn(scenarios).once();
         replay(scenarioService, productFamilyProvider);
         assertEquals(scenarios, controller.getScenarios());
         verify(scenarioService, productFamilyProvider);

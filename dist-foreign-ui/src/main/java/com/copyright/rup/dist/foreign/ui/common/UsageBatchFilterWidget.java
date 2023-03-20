@@ -9,12 +9,11 @@ import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.BaseItemsFilterWidget;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import com.vaadin.data.ValueProvider;
 
 import org.apache.commons.collections4.CollectionUtils;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
@@ -32,7 +31,7 @@ public class UsageBatchFilterWidget extends BaseItemsFilterWidget<UsageBatch>
     implements IFilterWindowController<UsageBatch> {
 
     private final Supplier<List<UsageBatch>> supplier;
-    private final Set<UsageBatch> selectedItemsIds = Sets.newHashSet();
+    private final Set<UsageBatch> selectedItemsIds = new HashSet<>();
 
     /**
      * Constructor.
@@ -78,7 +77,7 @@ public class UsageBatchFilterWidget extends BaseItemsFilterWidget<UsageBatch>
     public FilterWindow<UsageBatch> showFilterWindow() {
         FilterWindow<UsageBatch> filterWindow =
             Windows.showFilterWindow(ForeignUi.getMessage("window.batches_filter"), this,
-                (ValueProvider<UsageBatch, List<String>>) bean -> Lists.newArrayList(bean.getName()));
+                (ValueProvider<UsageBatch, List<String>>) bean -> List.of(bean.getName()));
         filterWindow.setSelectedItemsIds(selectedItemsIds);
         filterWindow.setSearchPromptString(ForeignUi.getMessage("prompt.batch"));
         VaadinUtils.addComponentStyle(filterWindow, "batches-filter-window");

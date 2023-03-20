@@ -22,7 +22,6 @@ import com.copyright.rup.dist.foreign.ui.usage.api.nts.INtsUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.nts.IWorkClassificationController;
 import com.copyright.rup.dist.foreign.ui.usage.impl.CommonUsageController;
 
-import com.google.common.collect.Sets;
 import com.vaadin.data.provider.QuerySortOrder;
 import com.vaadin.shared.data.sort.SortDirection;
 
@@ -87,7 +86,7 @@ public class NtsUsageController extends CommonUsageController implements INtsUsa
     @Override
     public boolean isBatchProcessingCompleted(String batchId) {
         return getUsageBatchStatusService().isBatchProcessingCompleted(batchId,
-            Sets.newHashSet(UsageStatusEnum.WORK_FOUND, UsageStatusEnum.NON_STM_RH, UsageStatusEnum.US_TAX_COUNTRY,
+            Set.of(UsageStatusEnum.WORK_FOUND, UsageStatusEnum.NON_STM_RH, UsageStatusEnum.US_TAX_COUNTRY,
                 UsageStatusEnum.RH_FOUND));
     }
 

@@ -10,13 +10,14 @@ import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.AclScenarioFilter;
 import com.copyright.rup.dist.foreign.ui.usage.UiTestHelper;
 
-import com.google.common.collect.Sets;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.VerticalLayout;
 
 import org.junit.Test;
+
+import java.util.Set;
 
 /**
  * Verifies {@link AclScenariosAppliedFilterWidget}.
@@ -58,8 +59,8 @@ public class AclScenariosAppliedFilterWidgetTest {
 
     private AclScenarioFilter buildAclScenarioFilter() {
         AclScenarioFilter filter = new AclScenarioFilter();
-        filter.setPeriods(Sets.newHashSet(202112, 201506, 202212));
-        filter.setLicenseTypes(Sets.newHashSet("MACL", "JACDCL", "ACL", "VGW"));
+        filter.setPeriods(Set.of(202112, 201506, 202212));
+        filter.setLicenseTypes(Set.of("MACL", "JACDCL", "ACL", "VGW"));
         filter.setEditable(true);
         filter.setStatus(ScenarioStatusEnum.APPROVED);
         return filter;

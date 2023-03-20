@@ -16,13 +16,14 @@ import com.copyright.rup.dist.foreign.domain.filter.FilterExpression;
 import com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum;
 import com.copyright.rup.dist.foreign.ui.usage.UiTestHelper;
 
-import com.google.common.collect.Sets;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.VerticalLayout;
 
 import org.junit.Test;
+
+import java.util.Set;
 
 /**
  * Verifies {@link AclUsageAppliedFilterWidget}.
@@ -93,17 +94,17 @@ public class AclUsageAppliedFilterWidgetTest {
         filter.setUsageBatchName("ACL Usage Batch 2021");
         filter.setUsageOrigin(UdmUsageOriginEnum.RFA);
         filter.setChannel(UdmChannelEnum.CCC);
-        filter.setPeriods(Sets.newHashSet(202112, 201506, 202212));
-        filter.setDetailLicenseeClasses(Sets.newHashSet(buildDetailLicenseeClass(22, "Book series"),
+        filter.setPeriods(Set.of(202112, 201506, 202212));
+        filter.setDetailLicenseeClasses(Set.of(buildDetailLicenseeClass(22, "Book series"),
             buildDetailLicenseeClass(1, "Food and Tobacco"),
             buildDetailLicenseeClass(4, "Publishing")));
-        filter.setAggregateLicenseeClasses(Sets.newHashSet(
+        filter.setAggregateLicenseeClasses(Set.of(
             buildAggregateLicenseeClass(12, "Machinery"),
             buildAggregateLicenseeClass(1, "Food and Tobacco"),
             buildAggregateLicenseeClass(57, "Communications")));
-        filter.setPubTypes(Sets.newHashSet(buildPubType("BK2", "Book series"), buildPubType("SJ", "Scholarly Journal"),
+        filter.setPubTypes(Set.of(buildPubType("BK2", "Book series"), buildPubType("SJ", "Scholarly Journal"),
             buildPubType("BK", "Book")));
-        filter.setReportedTypeOfUses(Sets.newHashSet("PRINT_COPIES", "FAX_PHOTOCOPIES"));
+        filter.setReportedTypeOfUses(Set.of("PRINT_COPIES", "FAX_PHOTOCOPIES"));
         filter.setTypeOfUse("PRINT");
         filter.setUsageDetailIdExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, "OGN674GHHHB0153", null));
         filter.setWrWrkInstExpression(new FilterExpression<>(FilterOperatorEnum.BETWEEN, 1, 100000000));

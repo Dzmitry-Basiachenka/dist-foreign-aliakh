@@ -33,7 +33,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.google.common.collect.Sets;
 import com.vaadin.server.Extension;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.MarginInfo;
@@ -253,7 +252,7 @@ public class WorkClassificationWindowTest {
     }
 
     private Set<WorkClassification> buildClassifications() {
-        return Sets.newHashSet(new WorkClassification(), new WorkClassification());
+        return Set.of(new WorkClassification());
     }
 
     private List<WorkClassification> loadExpectedWorkClassifications(String fileName) {

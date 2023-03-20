@@ -9,7 +9,6 @@ import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
-import com.google.common.collect.Lists;
 import com.vaadin.data.Binder;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.shared.ui.MarginInfo;
@@ -24,6 +23,7 @@ import com.vaadin.ui.Window;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -168,8 +168,7 @@ class AclciMultipleEditUsagesWindow extends Window {
                         this.close();
                     }, new StringLengthValidator(ForeignUi.getMessage("field.error.empty.length", 1024), 1, 1024));
             } else {
-                Windows.showValidationErrorWindow(Lists.newArrayList(rhAccountNumberField, rhNameField,
-                    wrWrkInstField));
+                Windows.showValidationErrorWindow(List.of(rhAccountNumberField, rhNameField, wrWrkInstField));
             }
         });
         VaadinUtils.setButtonsAutoDisabled(saveButton);

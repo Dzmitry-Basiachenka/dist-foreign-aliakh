@@ -10,8 +10,6 @@ import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasScenarioController;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.server.SerializablePredicate;
 import com.vaadin.ui.Grid;
@@ -39,7 +37,7 @@ import java.util.Set;
 @RunWith(Parameterized.class)
 public class FasExcludeSourceRroSearchTest {
 
-    private static final List<Rightsholder> CONTAINER_DATA = Lists.newArrayList(
+    private static final List<Rightsholder> CONTAINER_DATA = List.of(
         buildRightsholder(1000000413L, "Times Mirror Magazines, Inc. [T]"),
         buildRightsholder(1000004191L, "Klasing & Co [T]"),
         buildRightsholder(7000425425L, "Kelton Publications"),
@@ -70,7 +68,7 @@ public class FasExcludeSourceRroSearchTest {
                 {"7000427902", Set.of(CONTAINER_DATA.get(3))},
                 {"70004 27902", Set.of()},
                 {"7000427905", Set.of()},
-                {"10000", Sets.newHashSet(CONTAINER_DATA.get(0), CONTAINER_DATA.get(1))}
+                {"10000", Set.of(CONTAINER_DATA.get(0), CONTAINER_DATA.get(1))}
             }
         );
     }

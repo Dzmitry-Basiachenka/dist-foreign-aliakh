@@ -21,7 +21,6 @@ import com.copyright.rup.dist.foreign.ui.scenario.impl.CommonScenariosController
 import com.copyright.rup.vaadin.security.SecurityUtils;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
-import com.google.common.collect.Maps;
 import com.vaadin.data.validator.StringLengthValidator;
 
 import org.apache.commons.collections4.CollectionUtils;
@@ -31,6 +30,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -174,7 +174,7 @@ public class SalScenariosController extends CommonScenariosController implements
     @Override
     @PostConstruct
     public void initActionHandlers() {
-        actionHandlers = Maps.newHashMap();
+        actionHandlers = new HashMap<>();
         actionHandlers.put(ScenarioActionTypeEnum.SUBMITTED,
             (scenarios, reason) -> salScenarioService.changeScenariosState(scenarios, ScenarioStatusEnum.SUBMITTED,
                 ScenarioActionTypeEnum.SUBMITTED, reason));

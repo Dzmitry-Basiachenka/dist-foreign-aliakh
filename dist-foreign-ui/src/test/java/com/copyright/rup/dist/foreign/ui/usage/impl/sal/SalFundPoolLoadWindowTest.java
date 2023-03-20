@@ -24,7 +24,6 @@ import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.widget.LocalDateWidget;
 
-import com.google.common.collect.Lists;
 import com.vaadin.data.Binder;
 import com.vaadin.server.Sizeable;
 import com.vaadin.ui.AbstractComponent;
@@ -44,6 +43,7 @@ import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 /**
  * Verifies {@link SalFundPoolLoadWindow}.
@@ -397,7 +397,7 @@ public class SalFundPoolLoadWindowTest {
         Button loadButton = verifyButton(layout.getComponent(0), "Upload");
         verifyButton(layout.getComponent(1), "Close");
         assertEquals(2, loadButton.getListeners(Button.ClickEvent.class).size());
-        verifyLoadClickListener(loadButton, Lists.newArrayList(
+        verifyLoadClickListener(loadButton, List.of(
             Whitebox.getInternalState(window, FUND_POOL_NAME_FIELD),
             Whitebox.getInternalState(window, ASSESSMENT_NAME_FIELD),
             Whitebox.getInternalState(window, GROSS_AMOUNT_FIELD),

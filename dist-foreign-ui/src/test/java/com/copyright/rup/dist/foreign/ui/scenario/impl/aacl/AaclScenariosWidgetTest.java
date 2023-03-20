@@ -39,7 +39,6 @@ import com.copyright.rup.dist.foreign.ui.usage.impl.ScenarioParameterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.impl.UsageAgeWeightWindow;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
-import com.google.common.collect.Lists;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.shared.ui.MarginInfo;
@@ -151,8 +150,7 @@ public class AaclScenariosWidgetTest {
         expect(usageController.getFundPoolById(FUND_POOL_ID)).andReturn(fundPool).times(2);
         expect(usageController.getFundPoolDetails(FUND_POOL_ID)).andReturn(fundPoolDetails).times(2);
         expect(usageController.getPublicationTypes()).andReturn(buildPublicationTypes()).times(2);
-        expect(usageController.getDefaultUsageAges(Lists.newArrayList(2019, 2018)))
-            .andReturn(buildUsageAges()).times(2);
+        expect(usageController.getDefaultUsageAges(List.of(2019, 2018))).andReturn(buildUsageAges()).times(2);
         replay(controller, usageController);
         scenariosWidget.refresh();
         verifyScenarioMetadataPanel();
@@ -172,8 +170,7 @@ public class AaclScenariosWidgetTest {
         expect(usageController.getFundPoolById(FUND_POOL_ID)).andReturn(fundPool).once();
         expect(usageController.getFundPoolDetails(FUND_POOL_ID)).andReturn(fundPoolDetails).once();
         expect(usageController.getPublicationTypes()).andReturn(buildPublicationTypes()).once();
-        expect(usageController.getDefaultUsageAges(Lists.newArrayList(2019, 2018)))
-            .andReturn(buildUsageAges()).once();
+        expect(usageController.getDefaultUsageAges(List.of(2019, 2018))).andReturn(buildUsageAges()).once();
         replay(controller, usageController);
         scenariosWidget.selectScenario(scenario);
         assertEquals(scenario, grid.getSelectedItems().iterator().next());
@@ -194,8 +191,7 @@ public class AaclScenariosWidgetTest {
         expect(usageController.getFundPoolById(FUND_POOL_ID)).andReturn(fundPool).once();
         expect(usageController.getFundPoolDetails(FUND_POOL_ID)).andReturn(fundPoolDetails).once();
         expect(usageController.getPublicationTypes()).andReturn(buildPublicationTypes()).once();
-        expect(usageController.getDefaultUsageAges(Lists.newArrayList(2019, 2018)))
-            .andReturn(buildUsageAges()).once();
+        expect(usageController.getDefaultUsageAges(List.of(2019, 2018))).andReturn(buildUsageAges()).once();
         replay(controller, usageController, grid);
         scenariosWidget.refreshSelectedScenario();
         verifyScenarioMetadataPanel();
@@ -236,8 +232,7 @@ public class AaclScenariosWidgetTest {
         expect(usageController.getFundPoolById(FUND_POOL_ID)).andReturn(buildFundPool()).once();
         expect(usageController.getFundPoolDetails(FUND_POOL_ID)).andReturn(buildFundPoolDetail()).once();
         expect(usageController.getPublicationTypes()).andReturn(buildPublicationTypes()).once();
-        expect(usageController.getDefaultUsageAges(Lists.newArrayList(2019, 2018)))
-            .andReturn(buildUsageAges()).once();
+        expect(usageController.getDefaultUsageAges(List.of(2019, 2018))).andReturn(buildUsageAges()).once();
         Capture<Window> windowCapture = newCapture();
         Windows.showModalWindow(capture(windowCapture));
         replay(Windows.class, grid, controller, usageController);
@@ -267,8 +262,7 @@ public class AaclScenariosWidgetTest {
         expect(usageController.getFundPoolById(FUND_POOL_ID)).andReturn(buildFundPool()).once();
         expect(usageController.getFundPoolDetails(FUND_POOL_ID)).andReturn(buildFundPoolDetail()).once();
         expect(usageController.getPublicationTypes()).andReturn(publicationTypes).once();
-        expect(usageController.getDefaultUsageAges(Lists.newArrayList(2019, 2018)))
-            .andReturn(buildUsageAges()).once();
+        expect(usageController.getDefaultUsageAges(List.of(2019, 2018))).andReturn(buildUsageAges()).once();
         Capture<Window> windowCapture = newCapture();
         Windows.showModalWindow(capture(windowCapture));
         replay(Windows.class, grid, controller, usageController);
@@ -298,8 +292,7 @@ public class AaclScenariosWidgetTest {
         expect(usageController.getFundPoolById(FUND_POOL_ID)).andReturn(buildFundPool()).once();
         expect(usageController.getFundPoolDetails(FUND_POOL_ID)).andReturn(buildFundPoolDetail()).once();
         expect(usageController.getPublicationTypes()).andReturn(buildPublicationTypes()).once();
-        expect(usageController.getDefaultUsageAges(Lists.newArrayList(2019, 2018)))
-            .andReturn(buildUsageAges()).once();
+        expect(usageController.getDefaultUsageAges(List.of(2019, 2018))).andReturn(buildUsageAges()).once();
         Capture<Window> windowCapture = newCapture();
         Windows.showModalWindow(capture(windowCapture));
         replay(Windows.class, grid, controller, usageController);

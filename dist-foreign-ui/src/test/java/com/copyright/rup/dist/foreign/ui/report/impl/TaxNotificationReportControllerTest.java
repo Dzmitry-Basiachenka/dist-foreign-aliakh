@@ -23,8 +23,6 @@ import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
 import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
 import com.copyright.rup.dist.foreign.ui.report.api.ITaxNotificationReportWidget;
 
-import com.google.common.collect.Sets;
-
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
@@ -110,8 +108,7 @@ public class TaxNotificationReportControllerTest {
     public void testGetScenariosFas() {
         List<Scenario> scenarios = List.of(new Scenario());
         expect(productFamilyProvider.getSelectedProductFamily()).andReturn("FAS").once();
-        expect(
-            scenarioService.getScenariosByProductFamiliesAndStatuses(Sets.newHashSet("FAS", "FAS2"), SCENARIO_STATUSES))
+        expect(scenarioService.getScenariosByProductFamiliesAndStatuses(Set.of("FAS", "FAS2"), SCENARIO_STATUSES))
             .andReturn(scenarios).once();
         replay(scenarioService, productFamilyProvider);
         assertEquals(scenarios, controller.getScenarios());
@@ -122,8 +119,7 @@ public class TaxNotificationReportControllerTest {
     public void testGetScenariosFas2() {
         List<Scenario> scenarios = List.of(new Scenario());
         expect(productFamilyProvider.getSelectedProductFamily()).andReturn("FAS2").once();
-        expect(
-            scenarioService.getScenariosByProductFamiliesAndStatuses(Sets.newHashSet("FAS", "FAS2"), SCENARIO_STATUSES))
+        expect(scenarioService.getScenariosByProductFamiliesAndStatuses(Set.of("FAS", "FAS2"), SCENARIO_STATUSES))
             .andReturn(scenarios).once();
         replay(scenarioService, productFamilyProvider);
         assertEquals(scenarios, controller.getScenarios());

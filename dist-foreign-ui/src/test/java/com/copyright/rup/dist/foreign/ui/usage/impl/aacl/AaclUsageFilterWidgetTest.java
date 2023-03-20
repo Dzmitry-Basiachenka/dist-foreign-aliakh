@@ -25,7 +25,6 @@ import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageFilterControll
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Sets;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -100,7 +99,7 @@ public class AaclUsageFilterWidgetTest {
         assertFalse(applyButton.isEnabled());
         assertTrue(widget.getAppliedFilter().getRhAccountNumbers().isEmpty());
         assertTrue(widget.getFilter().getRhAccountNumbers().isEmpty());
-        Set<Long> accountNumbers = Sets.newHashSet(ACCOUNT_NUMBER);
+        Set<Long> accountNumbers = Set.of(ACCOUNT_NUMBER);
         widget.getFilter().setRhAccountNumbers(accountNumbers);
         assertNotEquals(widget.getFilter(), widget.getAppliedFilter());
         applyButton.setEnabled(true);
@@ -137,7 +136,7 @@ public class AaclUsageFilterWidgetTest {
         assertTrue(widget.getAppliedFilter().getRhAccountNumbers().isEmpty());
         assertEquals(AACL_PRODUCT_FAMILY, widget.getFilter().getProductFamily());
         assertNull(widget.getAppliedFilter().getProductFamily());
-        widget.getFilter().setRhAccountNumbers(Sets.newHashSet(ACCOUNT_NUMBER));
+        widget.getFilter().setRhAccountNumbers(Set.of(ACCOUNT_NUMBER));
         widget.getFilter().setProductFamily(AACL_PRODUCT_FAMILY);
         applyButton.setEnabled(true);
         applyButton.click();
@@ -178,7 +177,7 @@ public class AaclUsageFilterWidgetTest {
         ClickEvent clickEvent = createMock(ClickEvent.class);
         replay(clickEvent, usagesFilterController);
         widget.init();
-        Set<Long> accountNumbers = Sets.newHashSet(ACCOUNT_NUMBER);
+        Set<Long> accountNumbers = Set.of(ACCOUNT_NUMBER);
         Button applyButton = getApplyButton();
         widget.getFilter().setRhAccountNumbers(accountNumbers);
         applyButton.setEnabled(true);

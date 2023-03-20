@@ -26,7 +26,6 @@ import com.copyright.rup.dist.foreign.domain.AclUsageBatch;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclUsageFilterController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
-import com.google.common.collect.Sets;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
@@ -44,6 +43,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Verifies {@link AclUsageFilterWidget}.
@@ -179,7 +179,7 @@ public class AclUsageFilterWidgetTest {
         aclUsageBatch.setId("7f2037ba-7fb0-4222-8454-cd84f7e1a617");
         aclUsageBatch.setName(ACL_USAGE_BATCH_NAME);
         aclUsageBatch.setDistributionPeriod(202212);
-        aclUsageBatch.setPeriods(Sets.newHashSet(202206, 202212));
+        aclUsageBatch.setPeriods(Set.of(202206, 202212));
         aclUsageBatch.setEditable(true);
         return aclUsageBatch;
     }

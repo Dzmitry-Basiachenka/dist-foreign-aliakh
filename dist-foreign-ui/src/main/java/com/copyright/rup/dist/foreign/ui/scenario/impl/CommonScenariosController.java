@@ -18,13 +18,13 @@ import com.copyright.rup.vaadin.security.SecurityUtils;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.widget.api.CommonController;
 
-import com.google.common.collect.Maps;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.ui.Window;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -116,7 +116,7 @@ public abstract class CommonScenariosController extends CommonController<ICommon
      */
     @PostConstruct
     public void initActionHandlers() {
-        actionHandlers = Maps.newHashMap();
+        actionHandlers = new HashMap<>();
         actionHandlers.put(ScenarioActionTypeEnum.SUBMITTED,
             (scenario, reason) -> scenarioService.submit(scenario, reason));
         actionHandlers.put(ScenarioActionTypeEnum.APPROVED,
