@@ -97,7 +97,7 @@ public class FasDrillDownByRightsholderWidgetTest {
         Grid<?> grid = (Grid<?>) ((VerticalLayout) widget.getContent()).getComponent(1);
         Object[][] expectedCells = {
             {"c2c29b7b-13e1-4f02-afc0-ed1684253e20", "FAS", "Paid batch", 1000000008L, "Intercept Limited [T]",
-                340415946L, "100 ROAD MOVIES", "2046-9055", "VALISSN", "FY2021", "02/12/2021",
+                340415946L, "100 ROAD MOVIES", "1046-9055", "2046-9055", "VALISSN", "FY2021", "02/12/2021",
                 "Paediatrics and international child health", "some article", "some publisher", "02/13/2021", 2,
                 "3,000.00", "500.00", "1,000.00", "1,866.67", "9,800.00", "16.0", "Univ", 2015, 2016, "author",
                 "usage from usages_10.csv"}
@@ -160,7 +160,7 @@ public class FasDrillDownByRightsholderWidgetTest {
             assertTrue(column.isSortable());
             assertTrue(column.isResizable());
         });
-        verifyBatchGrossAmountDataProvider(columns.get(18));
+        verifyBatchGrossAmountDataProvider(columns.get(19));
     }
 
     @SuppressWarnings("unchecked")

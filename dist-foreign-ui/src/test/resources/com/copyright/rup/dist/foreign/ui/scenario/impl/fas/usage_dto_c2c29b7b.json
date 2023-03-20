@@ -26,6 +26,9 @@
     "marketPeriodFrom": 2015,
     "marketPeriodTo": 2016,
     "author": "author",
-    "comment": "usage from usages_10.csv"
+    "comment": "usage from usages_10.csv",
+    "fasUsage": {
+      "reportedStandardNumber": "1046-9055"
+    }
   }
 ]
