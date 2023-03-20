@@ -7,6 +7,8 @@ import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasDrillDownByRightsholderWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.impl.CommonDrillDownByRightsholderWidget;
 
+import java.util.Objects;
+
 /**
  * Implementation of {@link IFasDrillDownByRightsholderWidget}.
  * <p>
@@ -28,6 +30,9 @@ public class FasDrillDownByRightsholderWidget extends CommonDrillDownByRightshol
         addColumn(UsageDto::getRroName, "table.column.rro_account_name", "rroName", true, 135);
         addColumn(UsageDto::getWrWrkInst, "table.column.wr_wrk_inst", "wrWrkInst", true, 110);
         addColumn(UsageDto::getSystemTitle, "table.column.system_title", "systemTitle", true, 300);
+        addColumn(usageDto -> Objects.nonNull(usageDto.getFasUsage())
+                ? usageDto.getFasUsage().getReportedStandardNumber() : null, "table.column.reported_standard_number",
+            "reportedStandardNumber", true, 190);
         addColumn(UsageDto::getStandardNumber, "table.column.standard_number", "standardNumber", true, 140);
         addColumn(
             UsageDto::getStandardNumberType, "table.column.standard_number_type", "standardNumberType", true, 155);
@@ -36,7 +41,7 @@ public class FasDrillDownByRightsholderWidget extends CommonDrillDownByRightshol
         addColumn(
             usageDto -> CommonDateUtils.format(usageDto.getPaymentDate(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT),
             "table.column.payment_date", "paymentDate", true, 115);
-        addColumn(UsageDto::getWorkTitle, "table.column.work_title", "workTitle");
+        addColumn(UsageDto::getWorkTitle, "table.column.reported_title", "workTitle");
         addColumn(UsageDto::getArticle, "table.column.article", "article");
         addColumn(UsageDto::getPublisher, "table.column.publisher", "publisher", true, 135);
         addColumn(usageDto -> CommonDateUtils.format(usageDto.getPublicationDate(),
