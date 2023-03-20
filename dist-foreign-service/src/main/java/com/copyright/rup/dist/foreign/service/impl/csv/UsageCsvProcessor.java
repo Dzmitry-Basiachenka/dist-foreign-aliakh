@@ -47,6 +47,7 @@ public class UsageCsvProcessor extends DistCsvProcessor<Usage> {
 
     @Override
     public List<String> getHeadersForValidation() {
+        initPlainValidators();
         List<String> basicHeader =
             Arrays.stream(BasicHeader.values()).map(BasicHeader::getColumnName).collect(Collectors.toList());
         List<String> exportedHeader =
@@ -61,25 +62,44 @@ public class UsageCsvProcessor extends DistCsvProcessor<Usage> {
 
     @Override
     public void initPlainValidators() {
+        if (!getActualHeaders().isEmpty()) {
+            if (getActualHeaders().size() <= BasicHeader.values().length) {
+                initPlainValidators(BasicHeader.TITLE, BasicHeader.ARTICLE, BasicHeader.STANDARD_NUMBER,
+                    BasicHeader.STANDARD_NUMBER_TYPE, BasicHeader.WR_WRK_INST, BasicHeader.RH_ACCT_NUMBER,
+                    BasicHeader.PUBLISHER, BasicHeader.PUB_DATE, BasicHeader.NUMBER_OF_COPIES,
+                    BasicHeader.REPORTED_VALUE, BasicHeader.MARKET, BasicHeader.MARKET_PERIOD_FROM,
+                    BasicHeader.MARKET_PERIOD_TO, BasicHeader.AUTHOR, BasicHeader.COMMENT);
+            } else {
+                initPlainValidators(ExportedHeader.WORK_TITLE, ExportedHeader.ARTICLE,
+                    ExportedHeader.REPORTED_STANDARD_NUMBER, ExportedHeader.STANDARD_NUMBER_TYPE,
+                    ExportedHeader.WR_WRK_INST, ExportedHeader.RH_ACCOUNT_NUMBER, ExportedHeader.PUBLISHER,
+                    ExportedHeader.PUBLICATION_DATE, ExportedHeader.NUMBER_OF_COPIES, ExportedHeader.REPORTED_VALUE,
+                    ExportedHeader.MARKET, ExportedHeader.MARKET_PERIOD_FROM, ExportedHeader.MARKET_PERIOD_TO,
+                    ExportedHeader.AUTHOR, ExportedHeader.COMMENT);
+            }
+        }
+    }
+
+    private void initPlainValidators(ICsvColumn... column) {
         RequiredValidator requiredValidator = new RequiredValidator();
         PositiveNumberValidator positiveNumberValidator = new PositiveNumberValidator();
         LengthValidator lengthValidator1000 = new LengthValidator(1000);
         LengthValidator lengthValidator2000 = new LengthValidator(2000);
-        addPlainValidators(BasicHeader.TITLE, lengthValidator2000);
-        addPlainValidators(BasicHeader.ARTICLE, lengthValidator1000);
-        addPlainValidators(BasicHeader.STANDARD_NUMBER, lengthValidator1000);
-        addPlainValidators(BasicHeader.STANDARD_NUMBER_TYPE, new LengthValidator(50));
-        addPlainValidators(BasicHeader.WR_WRK_INST, positiveNumberValidator, new LengthValidator(9));
-        addPlainValidators(BasicHeader.RH_ACCT_NUMBER, positiveNumberValidator, new LengthValidator(18));
-        addPlainValidators(BasicHeader.PUBLISHER, lengthValidator1000);
-        addPlainValidators(BasicHeader.PUB_DATE, new DateFormatValidator());
-        addPlainValidators(BasicHeader.NUMBER_OF_COPIES, positiveNumberValidator, new LengthValidator(9));
-        addPlainValidators(BasicHeader.REPORTED_VALUE, requiredValidator, new AmountValidator());
-        addPlainValidators(BasicHeader.MARKET, requiredValidator, new LengthValidator(200));
-        addPlainValidators(BasicHeader.MARKET_PERIOD_FROM, requiredValidator, new YearValidator());
-        addPlainValidators(BasicHeader.MARKET_PERIOD_TO, requiredValidator, new YearValidator());
-        addPlainValidators(BasicHeader.AUTHOR, lengthValidator2000);
-        addPlainValidators(BasicHeader.COMMENT, new LengthValidator(100));
+        addPlainValidators(column[0], lengthValidator2000);
+        addPlainValidators(column[1], lengthValidator1000);
+        addPlainValidators(column[2], lengthValidator1000);
+        addPlainValidators(column[3], new LengthValidator(50));
+        addPlainValidators(column[4], positiveNumberValidator, new LengthValidator(9));
+        addPlainValidators(column[5], positiveNumberValidator, new LengthValidator(18));
+        addPlainValidators(column[6], lengthValidator1000);
+        addPlainValidators(column[7], new DateFormatValidator());
+        addPlainValidators(column[8], positiveNumberValidator, new LengthValidator(9));
+        addPlainValidators(column[9], requiredValidator, new AmountValidator());
+        addPlainValidators(column[10], requiredValidator, new LengthValidator(200));
+        addPlainValidators(column[11], requiredValidator, new YearValidator());
+        addPlainValidators(column[12], requiredValidator, new YearValidator());
+        addPlainValidators(column[13], lengthValidator2000);
+        addPlainValidators(column[14], new LengthValidator(100));
     }
 
     /**
@@ -128,11 +148,12 @@ public class UsageCsvProcessor extends DistCsvProcessor<Usage> {
         RH_NAME("RH Name"),
         WR_WRK_INST("Wr Wrk Inst"),
         SYSTEM_TITLE("System Title"),
+        REPORTED_STANDARD_NUMBER("Reported Standard Number"),
         STANDARD_NUMBER("Standard Number"),
         STANDARD_NUMBER_TYPE("Standard Number Type"),
         FISCAL_YEAR("Fiscal Year"),
         PAYMENT_DATE("Payment Date"),
-        WORK_TITLE("Title"),
+        WORK_TITLE("Reported Title"),
         ARTICLE("Article"),
         PUBLISHER("Publisher"),
         PUBLICATION_DATE("Pub Date"),
@@ -183,11 +204,14 @@ public class UsageCsvProcessor extends DistCsvProcessor<Usage> {
         @Override
         public Usage convert(String... row) {
             List<String> headers = getActualHeaders();
+            boolean isBasicHeaders = headers.size() <= BasicHeader.values().length;
             Usage result = new Usage();
             result.setId(RupPersistUtils.generateUuid());
-            result.setWorkTitle(getString(row, BasicHeader.TITLE, headers));
+            result.setWorkTitle(
+                getString(row, isBasicHeaders ? BasicHeader.TITLE : ExportedHeader.WORK_TITLE, headers));
             result.setArticle(getString(row, BasicHeader.ARTICLE, headers));
-            result.setStandardNumber(getString(row, BasicHeader.STANDARD_NUMBER, headers));
+            result.setStandardNumber(getString(row,
+                isBasicHeaders ? BasicHeader.STANDARD_NUMBER : ExportedHeader.REPORTED_STANDARD_NUMBER, headers));
             result.setStandardNumberType(
                 StringUtils.upperCase(getString(row, BasicHeader.STANDARD_NUMBER_TYPE, headers)));
             result.setWrWrkInst(getLong(row, BasicHeader.WR_WRK_INST, headers));

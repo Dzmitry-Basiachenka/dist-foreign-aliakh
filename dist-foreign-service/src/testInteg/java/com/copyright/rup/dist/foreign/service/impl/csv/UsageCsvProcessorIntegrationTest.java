@@ -177,11 +177,12 @@ public class UsageCsvProcessorIntegrationTest {
                     "<li>RH Name</li>" +
                     "<li>Wr Wrk Inst</li>" +
                     "<li>System Title</li>" +
+                    "<li>Reported Standard Number</li>" +
                     "<li>Standard Number</li>" +
                     "<li>Standard Number Type</li>" +
                     "<li>Fiscal Year</li>" +
                     "<li>Payment Date</li>" +
-                    "<li>Title</li>" +
+                    "<li>Reported Title</li>" +
                     "<li>Article</li>" +
                     "<li>Publisher</li>" +
                     "<li>Pub Date</li>" +
