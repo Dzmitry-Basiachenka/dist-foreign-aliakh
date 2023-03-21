@@ -114,7 +114,8 @@ public class NtsScenarioService implements INtsScenarioService {
                         usage.setWrWrkInst(null);
                         usage.setSystemTitle(null);
                     });
-                    lmIntegrationService.sendToLm(usages.stream().map(ExternalUsage::new).collect(Collectors.toList()));
+                    lmIntegrationService.sendToLm(usages.stream().map(ExternalUsage::new).collect(Collectors.toList()),
+                        scenario, usageIds.size());
                 });
             changeScenarioState(scenario, ScenarioStatusEnum.SENT_TO_LM, ScenarioActionTypeEnum.SENT_TO_LM,
                 StringUtils.EMPTY);

@@ -103,7 +103,8 @@ public class FasScenarioService implements IFasScenarioService {
             Iterables.partition(usageIds, batchSize)
                 .forEach(partition ->
                     lmIntegrationService.sendToLm(usageService.getArchivedUsagesForSendToLmByIds(partition)
-                        .stream().map(ExternalUsage::new).collect(Collectors.toList())));
+                        .stream().map(ExternalUsage::new).collect(Collectors.toList()),
+                        scenario, usageIds.size()));
             changeScenarioState(scenario, ScenarioStatusEnum.SENT_TO_LM, ScenarioActionTypeEnum.SENT_TO_LM,
                 StringUtils.EMPTY);
             LOGGER.info("Send scenario to LM. Finished. {}, User={}", ForeignLogUtils.scenario(scenario),

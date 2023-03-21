@@ -4,10 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
-import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.common.test.liquibase.LiquibaseTestExecutionListener;
 import com.copyright.rup.dist.common.test.liquibase.TestData;
-import com.copyright.rup.dist.common.test.mock.aws.SqsClientMock;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Usage;
@@ -23,8 +21,6 @@ import com.copyright.rup.dist.foreign.service.api.nts.INtsScenarioService;
 import com.copyright.rup.dist.foreign.service.api.sal.ISalScenarioService;
 import com.copyright.rup.dist.foreign.service.api.sal.ISalUsageService;
 
-import com.google.common.collect.ImmutableMap;
-
 import org.apache.commons.collections4.CollectionUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -37,7 +33,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -65,8 +60,14 @@ public class SendScenarioToLmTest {
     private static final String NTS_SCENARIO_ID = "67027e15-17c6-4b9b-b7f0-12ec414ad344";
     private static final String AACL_SCENARIO_ID = "d92e3c8e-7ecc-4080-bf3f-b541f51c9a06";
     private static final String SAL_SCENARIO_ID = "b32a1abe-0de7-4889-99aa-fd5491c85a94";
-    private static final String QUEUE_NAME = "fda-test-sf-detail.fifo";
-    private static final Map<String, String> SOURCE_MAP = ImmutableMap.of("source", "FDA");
+    private static final String FAS_SCENARIO_NAME = "FAS Scenario";
+    private static final String NTS_SCENARIO_NAME = "NTS Scenario";
+    private static final String AACL_SCENARIO_NAME = "AACL Scenario";
+    private static final String SAL_SCENARIO_NAME = "SAL Scenario";
+    private static final String FAS_PRODUCT_FAMILY = "FAS";
+    private static final String NTS_PRODUCT_FAMILY = "NTS";
+    private static final String AACL_PRODUCT_FAMILY = "AACL";
+    private static final String SAL_PRODUCT_FAMILY = "SAL";
 
     @Autowired
     private IFasScenarioService fasScenarioService;
@@ -85,13 +86,11 @@ public class SendScenarioToLmTest {
     @Autowired
     private IAaclUsageRepository aaclUsageRepository;
     @Autowired
-    private SqsClientMock sqsClientMock;
-    @Autowired
     private ServiceTestHelper testHelper;
 
     @Before
     public void setUp() {
-        sqsClientMock.reset();
+        testHelper.reset();
     }
 
     @Test
@@ -99,10 +98,11 @@ public class SendScenarioToLmTest {
     public void testSendToLmSal() throws IOException {
         Scenario scenario = new Scenario();
         scenario.setId(SAL_SCENARIO_ID);
-        scenario.setProductFamily("SAL");
+        scenario.setName(SAL_SCENARIO_NAME);
+        scenario.setProductFamily(SAL_PRODUCT_FAMILY);
         salScenarioService.sendToLm(scenario);
-        sqsClientMock.assertSendMessages(QUEUE_NAME,
-            List.of(TestUtils.fileToString(this.getClass(), "details/details_to_lm_sal.json")), List.of(), SOURCE_MAP);
+        testHelper.sendScenarioToLm(List.of("details/details_to_lm_sal.json"), List.of(),
+            scenario.getId(), scenario.getName(), scenario.getProductFamily());
         List<UsageDto> usageDtos = usageService.getRightsholderTotalsHoldersByScenario(scenario, null, null, null)
             .stream()
             .map(RightsholderTotalsHolder::getRightsholder)
@@ -122,10 +122,11 @@ public class SendScenarioToLmTest {
     public void testSendToLmFas() throws IOException {
         Scenario scenario = new Scenario();
         scenario.setId(FAS_SCENARIO_ID);
-        scenario.setProductFamily("FAS");
+        scenario.setName(FAS_SCENARIO_NAME);
+        scenario.setProductFamily(FAS_PRODUCT_FAMILY);
         fasScenarioService.sendToLm(scenario);
-        sqsClientMock.assertSendMessages(QUEUE_NAME,
-            List.of(TestUtils.fileToString(this.getClass(), "details/details_to_lm_fas.json")), List.of(), SOURCE_MAP);
+        testHelper.sendScenarioToLm(List.of("details/details_to_lm_fas.json"), List.of(),
+            scenario.getId(), scenario.getName(), scenario.getProductFamily());
         List<UsageDto> usageDtos = findUsageDtos(scenario);
         List<UsageDto> expectedUsageDtos = testHelper.loadExpectedUsageDtos("usage/archived_usage_dtos_fas.json");
         assertEquals(CollectionUtils.size(expectedUsageDtos), CollectionUtils.size(usageDtos));
@@ -139,11 +140,11 @@ public class SendScenarioToLmTest {
         assertNtsFundPoolUsages(UsageStatusEnum.TO_BE_DISTRIBUTED);
         Scenario scenario = new Scenario();
         scenario.setId(NTS_SCENARIO_ID);
-        scenario.setProductFamily("NTS");
+        scenario.setName(NTS_SCENARIO_NAME);
+        scenario.setProductFamily(NTS_PRODUCT_FAMILY);
         ntsScenarioService.sendToLm(scenario);
-        sqsClientMock.assertSendMessages(QUEUE_NAME,
-            List.of(TestUtils.fileToString(this.getClass(), "details/details_to_lm_nts.json")),
-            List.of("detail_id"), SOURCE_MAP);
+        testHelper.sendScenarioToLm(List.of("details/details_to_lm_nts.json"), List.of("detail_id"),
+            scenario.getId(), scenario.getName(), scenario.getProductFamily());
         List<UsageDto> usageDtos = findUsageDtos(scenario);
         List<UsageDto> expectedUsageDtos = testHelper.loadExpectedUsageDtos("usage/archived_usage_dtos_nts.json");
         assertEquals(CollectionUtils.size(expectedUsageDtos), CollectionUtils.size(usageDtos));
@@ -157,10 +158,11 @@ public class SendScenarioToLmTest {
     public void testSendToLmAacl() throws IOException {
         Scenario scenario = new Scenario();
         scenario.setId(AACL_SCENARIO_ID);
-        scenario.setProductFamily("AACL");
+        scenario.setName(AACL_SCENARIO_NAME);
+        scenario.setProductFamily(AACL_PRODUCT_FAMILY);
         aaclScenarioService.sendToLm(scenario);
-        sqsClientMock.assertSendMessages(QUEUE_NAME,
-            List.of(TestUtils.fileToString(this.getClass(), "details/details_to_lm_aacl.json")), List.of(), SOURCE_MAP);
+        testHelper.sendScenarioToLm(List.of("details/details_to_lm_aacl.json"), List.of(),
+            scenario.getId(), scenario.getName(), scenario.getProductFamily());
         List<UsageDto> actualUsageDtos = usageArchiveRepository.findAaclDtosByScenarioId(AACL_SCENARIO_ID);
         List<UsageDto> expectedUsageDtos = testHelper.loadExpectedUsageDtos("usage/aacl/aacl_archived_usage_dtos.json");
         assertEquals(CollectionUtils.size(expectedUsageDtos), CollectionUtils.size(actualUsageDtos));

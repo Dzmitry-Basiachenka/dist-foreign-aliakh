@@ -44,12 +44,13 @@ import com.copyright.rup.dist.foreign.service.impl.mock.LdmtDetailsConsumerMock;
 import com.copyright.rup.dist.foreign.service.impl.mock.PaidUsageConsumerMock;
 import com.copyright.rup.dist.foreign.service.impl.mock.SnsMock;
 
+import com.amazonaws.services.sqs.model.MessageAttributeValue;
+import com.amazonaws.services.sqs.model.SendMessageRequest;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.common.base.Joiner;
-import com.google.common.collect.ImmutableMap;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.IOUtils;
@@ -70,6 +71,8 @@ import org.springframework.web.client.RestTemplate;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
@@ -265,13 +268,45 @@ public class ServiceTestHelper {
             .andRespond(MockRestResponseCreators.withSuccess(responseBody, MediaType.APPLICATION_JSON));
     }
 
-    public void sendScenarioToLm(List<String> lmDetailsJsonFiles) {
+    public void sendScenarioToLm(List<String> lmDetailsJsonFiles, List<String> excludedFields, String scenarioId,
+                                 String scenarioName, String productFamily) {
         List<String> lmDetailsMessages = lmDetailsJsonFiles
             .stream()
             .map(fileName -> TestUtils.fileToString(this.getClass(), fileName))
             .collect(Collectors.toList());
-        sqsClientMock.assertSendMessages("fda-test-sf-detail.fifo", lmDetailsMessages,
-            List.of("detail_id"), ImmutableMap.of("source", "FDA"));
+        //TODO: simplify by introducing a method parameter
+        int numberOfMessages = lmDetailsMessages
+            .stream()
+            .map(message -> {
+                try {
+                    ObjectMapper mapper = new ObjectMapper();
+                    return mapper.readValue(message, new TypeReference<Map<String, Object>>() {
+                    });
+                } catch (IOException e) {
+                    throw new AssertionError(e);
+                }
+            })
+            .map(map -> map.get("details"))
+            .map(details -> (List<?>) details)
+            .map(List::size)
+            .mapToInt(Integer::intValue)
+            .sum();
+        sqsClientMock.assertSendMessages("fda-test-sf-detail.fifo", lmDetailsMessages, excludedFields,
+            Map.of(
+                "source", "FDA",
+                "scenarioId", scenarioId,
+                "scenarioName", scenarioName,
+                "productFamily", productFamily,
+                "numberOfMessages", String.valueOf(numberOfMessages))
+        );
+        List<SendMessageRequest> sendMessageRequests = sqsClientMock.getActualSendMessageRequests();
+        sendMessageRequests.forEach(sendMessageRequest -> {
+            Map<String, MessageAttributeValue> headers = sendMessageRequest.getMessageAttributes();
+            MessageAttributeValue sendDate = headers.get("sendDate");
+            assertNotNull(sendDate);
+            assertNotNull(OffsetDateTime.parse(sendDate.getStringValue(),
+                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS Z")));
+        });
     }
 
     public void receivePaidUsagesFromLm(String paidUsagesMessageFile) throws InterruptedException {

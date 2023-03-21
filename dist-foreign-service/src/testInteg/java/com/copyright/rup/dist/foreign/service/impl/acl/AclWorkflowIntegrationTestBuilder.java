@@ -466,7 +466,8 @@ public class AclWorkflowIntegrationTestBuilder implements Builder<Runner> {
 
         private void sendAclScenarioToLm() {
             aclScenarioService.sendToLm(aclScenario);
-            testHelper.sendScenarioToLm(expectedLmDetailsJson);
+            testHelper.sendScenarioToLm(expectedLmDetailsJson, List.of("detail_id"),
+                aclScenario.getId(), aclScenario.getName(), "ACL");
         }
 
         private void verifyAclScenario() throws IOException {
