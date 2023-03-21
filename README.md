@@ -1,3 +1,11 @@
+17.0.13
+-
+* B-77993 Tech Debt: FDA: replace Google Guava by Java 11 features
+* B-77993 Tech Debt: FDA: introduce common PI matching service to init and destroy RupEsApi in single place
+* B-77080 FDA: Show Reported Standard Number and Reported Title on UI & Exports: refine batch upload for exported usages
+* B-77080 FDA: Show Reported Standard Number and Reported Title on UI & Exports: add reported standard number to view scenario window
+* B-77080 FDA: Show Reported Standard Number and Reported Title on UI & Exports: update corresponding tests
+
 17.0.12
 -
 * B-77080 FDA: Show Reported Standard Number and Reported Title on UI and Exports: refine Reconcile Rightsholder tests with checking Work Title field
