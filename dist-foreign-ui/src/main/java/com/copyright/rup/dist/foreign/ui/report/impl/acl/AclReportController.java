@@ -39,6 +39,9 @@ public class AclReportController extends CommonController<IAclReportWidget> impl
     private ITaxNotificationReportController taxNotificationReportController;
     @Autowired
     private IAclFundPoolByAggLcReportController fundPoolByAggLcReportController;
+    @Autowired
+    @Qualifier("df.comparisonByAggLcClassAndTitleReportController")
+    private IAclCommonReportController comparisonByAggLcClassAndTitleReportController;
 
     @Override
     public IAclCommonReportController getAclLiabilitiesByAggLicClassReportController() {
@@ -63,6 +66,11 @@ public class AclReportController extends CommonController<IAclReportWidget> impl
     @Override
     public IAclFundPoolByAggLcReportController getFundPoolByAggLcReportController() {
         return fundPoolByAggLcReportController;
+    }
+
+    @Override
+    public IAclCommonReportController getComparisonByAggLcClassAndTitleReportController() {
+        return comparisonByAggLcClassAndTitleReportController;
     }
 
     @Override

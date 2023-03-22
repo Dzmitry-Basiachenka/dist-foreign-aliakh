@@ -26,6 +26,7 @@ public class AclReportControllerTest {
     private IAclCommonReportController liabilityDetailsReportController;
     private IAclCommonReportController liabilitiesByRhReportController;
     private ITaxNotificationReportController taxNotificationReportController;
+    private IAclCommonReportController comparisonByAggLcClassAndTitleReportController;
     private AclReportController aclReportController;
 
     @Before
@@ -35,6 +36,7 @@ public class AclReportControllerTest {
         liabilityDetailsReportController = createMock(IAclCommonReportController.class);
         liabilitiesByRhReportController = createMock(IAclCommonReportController.class);
         taxNotificationReportController = createMock(ITaxNotificationReportController.class);
+        comparisonByAggLcClassAndTitleReportController = createMock(IAclCommonReportController.class);
         Whitebox.setInternalState(aclReportController, "liabilitiesByAggLicClassReportController",
             liabilitiesByAggLicClassReportController);
         Whitebox.setInternalState(aclReportController, "liabilityDetailsReportController",
@@ -42,6 +44,8 @@ public class AclReportControllerTest {
         Whitebox.setInternalState(aclReportController, "liabilitiesByRhReportController",
             liabilitiesByRhReportController);
         Whitebox.setInternalState(aclReportController, taxNotificationReportController);
+        Whitebox.setInternalState(aclReportController, "comparisonByAggLcClassAndTitleReportController",
+            comparisonByAggLcClassAndTitleReportController);
     }
 
     @Test
@@ -63,6 +67,12 @@ public class AclReportControllerTest {
     @Test
     public void testGetTaxNotificationReportController() {
         assertSame(taxNotificationReportController, aclReportController.getTaxNotificationReportController());
+    }
+
+    @Test
+    public void testGetComparisonByAggLcClassAndTitleReportController() {
+        assertSame(comparisonByAggLcClassAndTitleReportController,
+            aclReportController.getComparisonByAggLcClassAndTitleReportController());
     }
 
     @Test

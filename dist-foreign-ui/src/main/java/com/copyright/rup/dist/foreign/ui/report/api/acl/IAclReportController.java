@@ -38,4 +38,9 @@ public interface IAclReportController extends IController<IAclReportWidget> {
      * @return fund pool by Aggregate Licensee Class report controller.
      */
     IAclFundPoolByAggLcReportController getFundPoolByAggLcReportController();
+
+    /**
+     * @return ACL Comparison by Aggregate Licensee Class and Title report controller.
+     */
+    IAclCommonReportController getComparisonByAggLcClassAndTitleReportController();
 }

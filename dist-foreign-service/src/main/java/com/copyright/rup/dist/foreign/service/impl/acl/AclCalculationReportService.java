@@ -79,4 +79,10 @@ public class AclCalculationReportService implements IAclCalculationReportService
     public void writeAclLiabilitiesByRhReport(AclCalculationReportsInfoDto reportInfo, OutputStream outputStream) {
         aclCalculationReportRepository.writeAclLiabilitiesByRhReport(reportInfo, outputStream);
     }
+
+    @Override
+    public void writeAclComparisonByAggLcClassAndTitleReport(AclCalculationReportsInfoDto reportInfo,
+                                                             OutputStream outputStream) {
+        //TODO will be implemented with backend logic
+    }
 }

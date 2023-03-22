@@ -45,7 +45,8 @@ public class AclScenarioFilterWidgetTest {
     private static final String SCENARIO_NAME = "MACL Scenario 202212";
     private static final String SCENARIO_ID = "17a915c3-3f78-412b-8a00-29e7f5e9b965";
 
-    private final AclScenarioFilterWidget scenarioFilterWidget = new AclScenarioFilterWidget(List::of);
+    private final AclScenarioFilterWidget scenarioFilterWidget = new AclScenarioFilterWidget(List::of,
+        "label.scenarios");
 
     @Test
     public void testGetBeanClass() {
