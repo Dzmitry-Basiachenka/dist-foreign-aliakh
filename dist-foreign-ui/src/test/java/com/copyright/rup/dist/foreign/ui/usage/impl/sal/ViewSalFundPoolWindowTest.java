@@ -44,6 +44,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Collection;
@@ -184,6 +185,8 @@ public class ViewSalFundPoolWindowTest {
         assertEquals("487.49", columns.get(12).getValueProvider().apply(fundPoolToRender));
         assertEquals("243.74", columns.get(13).getValueProvider().apply(fundPoolToRender));
         assertEquals("0.00", columns.get(14).getValueProvider().apply(fundPoolToRender));
+        assertEquals("David",columns.get(15).getValueProvider().apply(fundPoolToRender));
+        assertEquals("12/23/2020 12:00 AM",columns.get(16).getValueProvider().apply(fundPoolToRender));
     }
 
     private void verifySize(Component component) {
@@ -197,14 +200,15 @@ public class ViewSalFundPoolWindowTest {
         assertNull(grid.getCaption());
         List<Grid.Column> columns = grid.getColumns();
         assertEquals(List.of("Fund Pool Name", "Date Received", "Assessment Name", "Licensee Account #",
-            "Licensee Name", "Gross Amount", "Service Fee %", "Item Bank Split %",
-            "Grade K-5 Number of Students", "Grade 6-8 Number of Students", "Grade 9-12 Number of Students",
-            "Item Bank Gross Amount", "Grade K-5 Gross Amount", "Grade 6-8 Gross Amount", "Grade 9-12 Gross Amount"),
+                "Licensee Name", "Gross Amount", "Service Fee %", "Item Bank Split %",
+                "Grade K-5 Number of Students", "Grade 6-8 Number of Students", "Grade 9-12 Number of Students",
+                "Item Bank Gross Amount", "Grade K-5 Gross Amount", "Grade 6-8 Gross Amount", "Grade 9-12 Gross Amount",
+                "Created By", "Created Date"),
             columns.stream().map(Grid.Column::getCaption).collect(Collectors.toList()));
         assertEquals(List.of(-1.0, -1.0, 180.0, 150.0, 300.0, 170.0, 115.0, 150.0, 190.0, 190.0, 190.0, 170.0,
-            170.0, 170.0, 170.0),
+                170.0, 170.0, 170.0, 170.0, -1.0),
             columns.stream().map(Grid.Column::getWidth).collect(Collectors.toList()));
-        assertEquals(List.of(1, 0, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1),
+        assertEquals(List.of(1, 0, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1),
             columns.stream().map(Grid.Column::getExpandRatio).collect(Collectors.toList()));
         Grid.Column createDateColumn = columns.get(3);
         assertNotNull(createDateColumn.getComparator(SortDirection.ASCENDING));
@@ -241,6 +245,8 @@ public class ViewSalFundPoolWindowTest {
         salFundPool.setSalFields(salFields);
         salFundPool.setId(FUND_POOL_ID);
         salFundPool.setName("SAL Fund Pool");
+        salFundPool.setCreateUser("David");
+        salFundPool.setCreateDate(Date.valueOf("2020-12-23"));
         return salFundPool;
     }
 }
