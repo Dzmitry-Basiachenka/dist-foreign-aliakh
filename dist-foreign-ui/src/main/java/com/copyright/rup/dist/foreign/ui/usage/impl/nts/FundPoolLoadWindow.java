@@ -45,7 +45,7 @@ import java.util.Set;
  */
 class FundPoolLoadWindow extends Window {
 
-    private static final String EMPTY_MARKET_STYLE = "empty-selected-markets";
+    private static final String EMPTY_MARKET_STYLE = "empty-item-filter-widget";
     private static final String NOT_NUMERIC_MESSAGE = "field.error.not_numeric";
     private static final int MIN_YEAR = 1950;
     private static final int MAX_YEAR = 2099;

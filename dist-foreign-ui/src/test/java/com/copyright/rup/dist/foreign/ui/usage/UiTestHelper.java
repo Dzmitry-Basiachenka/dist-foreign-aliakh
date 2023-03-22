@@ -500,9 +500,20 @@ public final class UiTestHelper {
      */
     @SuppressWarnings(UNCHECKED)
     public static void verifyItemsFilterWidget(Component component, String caption) {
+        verifyItemsFilterWidget(component, true, caption);
+    }
+
+    /**
+     * Verifies filter widget.
+     *
+     * @param component UI component
+     * @param isEnabled true - if widget is enabled, false - otherwise
+     * @param caption   caption of filter widget
+     */
+    public static void verifyItemsFilterWidget(Component component, boolean isEnabled, String caption) {
         assertThat(component, instanceOf(HorizontalLayout.class));
         HorizontalLayout layout = (HorizontalLayout) component;
-        assertTrue(layout.isEnabled());
+        assertEquals(isEnabled, layout.isEnabled());
         assertTrue(layout.isSpacing());
         Iterator<Component> iterator = layout.iterator();
         assertEquals("(0)", ((Label) iterator.next()).getValue());

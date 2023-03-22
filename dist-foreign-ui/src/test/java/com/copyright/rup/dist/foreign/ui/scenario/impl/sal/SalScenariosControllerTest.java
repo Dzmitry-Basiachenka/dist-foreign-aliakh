@@ -46,6 +46,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -184,7 +185,10 @@ public class SalScenariosControllerTest {
         scenariosWidget.refresh();
         expectLastCall().once();
         replay(scenariosWidget, salScenarioService, Windows.class);
-        scenariosController.sendToLm(Set.of(scenario1, scenario2));
+        LinkedHashSet<Scenario> scenarios = new LinkedHashSet<>();
+        scenarios.add(scenario1);
+        scenarios.add(scenario2);
+        scenariosController.sendToLm(scenarios);
         listenerCapture.getValue().onActionConfirmed();
         verify(scenariosWidget, salScenarioService, Windows.class);
     }

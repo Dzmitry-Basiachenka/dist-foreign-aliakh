@@ -33,4 +33,9 @@ public interface IAclReportController extends IController<IAclReportWidget> {
      * @return tax notification report controller.
      */
     ITaxNotificationReportController getTaxNotificationReportController();
+
+    /**
+     * @return fund pool by Aggregate Licensee Class report controller.
+     */
+    IAclFundPoolByAggLcReportController getFundPoolByAggLcReportController();
 }
