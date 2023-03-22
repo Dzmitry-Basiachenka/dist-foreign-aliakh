@@ -40,6 +40,9 @@ public class AclReportWidget extends MenuBar implements IAclReportWidget {
         String taxNotificationReport = ForeignUi.getMessage("menu.report.tax_notification_report");
         rootItem.addItem(taxNotificationReport,
             menuItem -> openReportWindow(taxNotificationReport, controller.getTaxNotificationReportController()));
+        String fundPoolByAggLcReport = ForeignUi.getMessage("menu.report.fund_pools_by_agg_lc_report");
+        rootItem.addItem(fundPoolByAggLcReport,
+            menuItem -> openReportWindow(fundPoolByAggLcReport, controller.getFundPoolByAggLcReportController()));
     }
 
     @Override

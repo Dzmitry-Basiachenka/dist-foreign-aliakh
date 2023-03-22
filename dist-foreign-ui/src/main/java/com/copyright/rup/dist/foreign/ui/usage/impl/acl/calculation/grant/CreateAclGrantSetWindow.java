@@ -41,7 +41,7 @@ import java.util.Set;
  */
 public class CreateAclGrantSetWindow extends Window {
 
-    private static final String EMPTY_PERIOD_STYLE = "empty-selected-periods";
+    private static final String EMPTY_PERIOD_STYLE = "empty-item-filter-widget";
     private static final String EMPTY_FIELD_MESSAGE = "field.error.empty";
 
     private final Binder<AclGrantSet> grantSetBinder = new Binder<>();

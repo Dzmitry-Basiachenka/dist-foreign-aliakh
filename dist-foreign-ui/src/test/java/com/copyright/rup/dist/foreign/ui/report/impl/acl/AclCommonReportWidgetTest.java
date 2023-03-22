@@ -62,9 +62,9 @@ public class AclCommonReportWidgetTest {
     public void setUp() {
         widget.setController(controller);
         expect(controller.getPeriods()).andReturn(List.of(202012)).once();
+        expect(controller.getCsvStreamSource()).andReturn(streamSource).once();
         expect(streamSource.getSource()).andReturn(new SimpleImmutableEntry(createMock(Supplier.class),
             createMock(Supplier.class))).once();
-        expect(controller.getCsvStreamSource()).andReturn(streamSource).once();
     }
 
     @Test

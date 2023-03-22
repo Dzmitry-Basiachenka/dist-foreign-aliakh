@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.report.impl.acl;
 
 import com.copyright.rup.dist.foreign.ui.report.api.ITaxNotificationReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.acl.IAclCommonReportController;
+import com.copyright.rup.dist.foreign.ui.report.api.acl.IAclFundPoolByAggLcReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.acl.IAclReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.acl.IAclReportWidget;
 import com.copyright.rup.vaadin.widget.api.CommonController;
@@ -36,6 +37,8 @@ public class AclReportController extends CommonController<IAclReportWidget> impl
     private IAclCommonReportController liabilitiesByRhReportController;
     @Autowired
     private ITaxNotificationReportController taxNotificationReportController;
+    @Autowired
+    private IAclFundPoolByAggLcReportController fundPoolByAggLcReportController;
 
     @Override
     public IAclCommonReportController getAclLiabilitiesByAggLicClassReportController() {
@@ -55,6 +58,11 @@ public class AclReportController extends CommonController<IAclReportWidget> impl
     @Override
     public ITaxNotificationReportController getTaxNotificationReportController() {
         return taxNotificationReportController;
+    }
+
+    @Override
+    public IAclFundPoolByAggLcReportController getFundPoolByAggLcReportController() {
+        return fundPoolByAggLcReportController;
     }
 
     @Override
