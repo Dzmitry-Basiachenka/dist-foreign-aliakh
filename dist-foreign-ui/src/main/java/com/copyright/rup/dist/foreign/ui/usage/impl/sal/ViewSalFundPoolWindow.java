@@ -1,7 +1,9 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.sal;
 
 import com.copyright.rup.common.date.RupDateUtils;
+import com.copyright.rup.dist.common.domain.StoredEntity;
 import com.copyright.rup.dist.foreign.domain.FundPool;
+import com.copyright.rup.dist.foreign.ui.common.utils.IDateFormatter;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageController;
 import com.copyright.rup.vaadin.ui.Buttons;
@@ -35,7 +37,7 @@ import java.util.Objects;
  *
  * @author Aliaksandr Liakh
  */
-public class ViewSalFundPoolWindow extends Window implements SearchWidget.ISearchController {
+public class ViewSalFundPoolWindow extends Window implements SearchWidget.ISearchController, IDateFormatter {
 
     private static final int SCALE_1 = 1;
 
@@ -194,6 +196,13 @@ public class ViewSalFundPoolWindow extends Window implements SearchWidget.ISearc
             .setComparator((fundPool1, fundPool2) -> fundPool1.getSalFields().getGrade9to12GrossAmount()
                 .compareTo(fundPool2.getSalFields().getGrade9to12GrossAmount()))
             .setWidth(170);
+        grid.addColumn(StoredEntity::getCreateUser)
+            .setCaption(ForeignUi.getMessage("table.column.created_by"))
+            .setComparator((fundPool1, fundPool2) -> fundPool1.getCreateUser().compareTo(fundPool2.getCreateUser()))
+            .setWidth(170);
+        grid.addColumn(fundPool -> toLongFormat(fundPool.getCreateDate()))
+            .setCaption(ForeignUi.getMessage("table.column.created_date"))
+            .setComparator((fundPool1, fundPool2) -> fundPool1.getCreateDate().compareTo(fundPool2.getCreateDate()));
     }
 
     private String getPercentColumnAsString(BigDecimal value) {

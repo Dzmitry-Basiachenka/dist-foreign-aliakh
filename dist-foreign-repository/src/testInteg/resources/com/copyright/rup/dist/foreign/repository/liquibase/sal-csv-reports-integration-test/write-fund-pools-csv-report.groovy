@@ -15,6 +15,8 @@ databaseChangeLog {
                     '"gross_amount": 1000.00, "item_bank_gross_amount": 100.00, ' +
                     '"grade_K_5_gross_amount": 900.00, "grade_6_8_gross_amount": 0.00, "grade_9_12_gross_amount": 0.00, ' +
                     '"item_bank_split_percent": 0.10000, "service_fee": 0.25000}')
+            column(name: 'created_by_user', value: 'fda_spec@copyright.com')
+            column(name: 'created_datetime', value: '2023-01-30 17:57:22.780 +0400')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_fund_pool') {
@@ -27,6 +29,8 @@ databaseChangeLog {
                     '"grade_6_8_number_of_students": 0, "grade_9_12_number_of_students": 0, "gross_amount": 5000.00, ' +
                     '"item_bank_gross_amount": 250.00, "grade_K_5_gross_amount": 4750.00, "grade_6_8_gross_amount": 0.00, ' +
                     '"grade_9_12_gross_amount": 0.00, "item_bank_split_percent": 0.50000, "service_fee": 0.25000}')
+            column(name: 'created_by_user', value: 'fda_spec@copyright.com')
+            column(name: 'created_datetime', value: '2023-01-30 17:57:22.780 +0400')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_fund_pool') {
@@ -39,6 +43,8 @@ databaseChangeLog {
                     '"grade_6_8_number_of_students": 0, "grade_9_12_number_of_students": 0, "gross_amount": 1000.00, ' +
                     '"item_bank_gross_amount": 100.00, "grade_K_5_gross_amount": 900.0, "grade_6_8_gross_amount": 0.00, ' +
                     '"grade_9_12_gross_amount": 0.00, "item_bank_split_percent": 0.10000, "service_fee": 0.25000}')
+            column(name: 'created_by_user', value: 'fda_spec@copyright.com')
+            column(name: 'created_datetime', value: '2023-01-30 17:57:22.780 +0400')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
