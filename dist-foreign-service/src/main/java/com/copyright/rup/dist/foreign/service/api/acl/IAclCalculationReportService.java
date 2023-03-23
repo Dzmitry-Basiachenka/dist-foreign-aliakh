@@ -98,4 +98,13 @@ public interface IAclCalculationReportService {
      * @param outputStream instance of {@link OutputStream}
      */
     void writeAclLiabilitiesByRhReport(AclCalculationReportsInfoDto reportInfo, OutputStream outputStream);
+
+    /**
+     * Writes ACL Comparison by Aggregate Licensee Class and Title report.
+     *
+     * @param reportInfo   instance of {@link AclCalculationReportsInfoDto}
+     * @param outputStream instance of {@link OutputStream}
+     */
+    void writeAclComparisonByAggLcClassAndTitleReport(AclCalculationReportsInfoDto reportInfo,
+                                                      OutputStream outputStream);
 }

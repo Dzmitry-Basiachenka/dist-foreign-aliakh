@@ -43,6 +43,11 @@ public class AclReportWidget extends MenuBar implements IAclReportWidget {
         String fundPoolByAggLcReport = ForeignUi.getMessage("menu.report.fund_pools_by_agg_lc_report");
         rootItem.addItem(fundPoolByAggLcReport,
             menuItem -> openReportWindow(fundPoolByAggLcReport, controller.getFundPoolByAggLcReportController()));
+        String comparisonByAggLcClassAndTitleReport =
+            ForeignUi.getMessage("menu.report.comparison_by_agg_lc_cl_and_title_report");
+        rootItem.addItem(comparisonByAggLcClassAndTitleReport,
+            menuItem -> openReportWindow(comparisonByAggLcClassAndTitleReport,
+                controller.getComparisonByAggLcClassAndTitleReportController()));
     }
 
     @Override

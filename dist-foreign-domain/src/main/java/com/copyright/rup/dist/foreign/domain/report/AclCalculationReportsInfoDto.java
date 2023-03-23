@@ -21,7 +21,9 @@ import java.util.List;
 public class AclCalculationReportsInfoDto {
 
     private List<AclScenario> scenarios;
+    private List<AclScenario> previousScenarios;
     private Integer period;
+    private Integer previousPeriod;
     private String user;
     private OffsetDateTime reportDateTime;
 
@@ -33,12 +35,28 @@ public class AclCalculationReportsInfoDto {
         this.scenarios = scenarios;
     }
 
+    public List<AclScenario> getPreviousScenarios() {
+        return previousScenarios;
+    }
+
+    public void setPreviousScenarios(List<AclScenario> previousScenarios) {
+        this.previousScenarios = previousScenarios;
+    }
+
     public Integer getPeriod() {
         return period;
     }
 
     public void setPeriod(Integer period) {
         this.period = period;
+    }
+
+    public Integer getPreviousPeriod() {
+        return previousPeriod;
+    }
+
+    public void setPreviousPeriod(Integer previousPeriod) {
+        this.previousPeriod = previousPeriod;
     }
 
     public String getUser() {
@@ -68,7 +86,9 @@ public class AclCalculationReportsInfoDto {
         AclCalculationReportsInfoDto that = (AclCalculationReportsInfoDto) obj;
         return new EqualsBuilder()
             .append(scenarios, that.scenarios)
+            .append(previousScenarios, that.previousScenarios)
             .append(period, that.period)
+            .append(previousPeriod, that.previousPeriod)
             .append(user, that.user)
             .append(reportDateTime, that.reportDateTime)
             .isEquals();
@@ -78,7 +98,9 @@ public class AclCalculationReportsInfoDto {
     public int hashCode() {
         return new HashCodeBuilder()
             .append(scenarios)
+            .append(previousScenarios)
             .append(period)
+            .append(previousPeriod)
             .append(user)
             .append(reportDateTime)
             .toHashCode();
@@ -88,7 +110,9 @@ public class AclCalculationReportsInfoDto {
     public String toString() {
         return new ToStringBuilder(this)
             .append("scenarios", scenarios)
+            .append("previousScenarios", previousScenarios)
             .append("period", period)
+            .append("previousPeriod", previousPeriod)
             .append("user", user)
             .append("reportDateTime", reportDateTime)
             .toString();

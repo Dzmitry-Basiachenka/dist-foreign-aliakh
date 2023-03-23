@@ -36,10 +36,11 @@ public class AclScenarioFilterWidget extends BaseItemsFilterWidget<AclScenario>
     /**
      * Constructor.
      *
-     * @param supplier period supplier
+     * @param supplier                     period supplier
+     * @param widgetButtonCaptionLabelName widget button caption label name
      */
-    public AclScenarioFilterWidget(Supplier<List<AclScenario>> supplier) {
-        super(ForeignUi.getMessage("label.scenarios"));
+    public AclScenarioFilterWidget(Supplier<List<AclScenario>> supplier, String widgetButtonCaptionLabelName) {
+        super(ForeignUi.getMessage(widgetButtonCaptionLabelName));
         this.supplier = supplier;
     }
 
