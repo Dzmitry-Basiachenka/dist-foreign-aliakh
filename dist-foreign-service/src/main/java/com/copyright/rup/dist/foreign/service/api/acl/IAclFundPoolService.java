@@ -6,6 +6,7 @@ import com.copyright.rup.dist.foreign.domain.AclFundPoolDetailDto;
 import com.copyright.rup.dist.foreign.domain.filter.AclFundPoolDetailFilter;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Represents interface of service for fund pool business logic.
@@ -66,11 +67,17 @@ public interface IAclFundPoolService {
     List<AclFundPoolDetailDto> getDtosByFilter(AclFundPoolDetailFilter filter);
 
     /**
-     * Gets all ACL fund pools.
-     *
      * @return list of all {@link AclFundPool}s
      */
     List<AclFundPool> getAll();
+
+    /**
+     * * Gets ACL fund pools by periods.
+     *
+     * @param periods set of periods
+     * @return list of {@link AclFundPool}s
+     */
+    List<AclFundPool> getFundPoolsByPeriods(Set<Integer> periods);
 
     /**
      * Gets all available periods.

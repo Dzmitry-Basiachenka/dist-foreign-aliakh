@@ -28,6 +28,7 @@ import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Verifies {@link AclFundPoolService}.
@@ -147,6 +148,16 @@ public class AclFundPoolServiceTest {
         expect(fundPoolRepository.findPeriods()).andReturn(periods).once();
         replay(fundPoolRepository);
         assertSame(periods, service.getPeriods());
+        verify(fundPoolRepository);
+    }
+
+    @Test
+    public void testGetFundPoolsByPeriods() {
+        List<AclFundPool> fundPools = List.of(buildFundPool());
+        Set<Integer> periods = Set.of(202006);
+        expect(fundPoolRepository.findFundPoolsByPeriods(periods)).andReturn(fundPools).once();
+        replay(fundPoolRepository);
+        assertSame(fundPools, service.getFundPoolsByPeriods(periods));
         verify(fundPoolRepository);
     }
 

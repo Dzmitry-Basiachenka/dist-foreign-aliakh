@@ -255,7 +255,28 @@
             fp.created_by_user
         from ${schema}.df_acl_fund_pool fp
         join ${schema}.df_acl_fund_pool_detail fpd on fp.df_acl_fund_pool_uid = fpd.df_acl_fund_pool_uid
-        group by fp.df_acl_fund_pool_uid,  fp.license_type, fp.updated_datetime
+        group by fp.df_acl_fund_pool_uid, fp.license_type, fp.updated_datetime
+        order by fp.updated_datetime desc
+    </select>
+
+    <select id="findFundPoolsByPeriods" resultMap="aclFundPoolResultMap">
+        select
+            fp.df_acl_fund_pool_uid,
+            name,
+            period,
+            fp.license_type,
+            is_manual,
+            sum(fpd.gross_amount) as total_amount,
+            sum(fpd.net_amount) as net_amount,
+            fp.created_datetime,
+            fp.created_by_user
+        from ${schema}.df_acl_fund_pool fp
+        join ${schema}.df_acl_fund_pool_detail fpd on fp.df_acl_fund_pool_uid = fpd.df_acl_fund_pool_uid
+        where period in
+            <foreach collection="collection" item="period" open="(" separator=" , " close=")">
+                #{period}
+            </foreach>
+        group by fp.df_acl_fund_pool_uid, fp.license_type, fp.updated_datetime
         order by fp.updated_datetime desc
     </select>
 

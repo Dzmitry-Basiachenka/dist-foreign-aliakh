@@ -1,10 +1,12 @@
 package com.copyright.rup.dist.foreign.ui.report.impl.acl;
 
+import com.copyright.rup.dist.common.domain.BaseEntity;
 import com.copyright.rup.dist.common.reporting.impl.CsvStreamSource;
+import com.copyright.rup.dist.foreign.domain.AclFundPool;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.report.api.acl.IAclFundPoolByAggLcReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.acl.IAclFundPoolByAggLcReportWidget;
-import com.copyright.rup.dist.foreign.ui.usage.impl.acl.calculation.fundpool.AclFundPoolNameFilterWidget;
+import com.copyright.rup.dist.foreign.ui.usage.impl.acl.calculation.fundpool.AclFundPoolItemFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.PeriodFilterWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
@@ -20,7 +22,9 @@ import com.vaadin.ui.Window;
 
 import org.apache.commons.collections4.CollectionUtils;
 
-import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Implementation of {@link IAclFundPoolByAggLcReportWidget}.
@@ -37,6 +41,7 @@ public class AclFundPoolByAggLcReportWidget extends Window implements IAclFundPo
 
     private final Button exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
     private IAclFundPoolByAggLcReportController controller;
+    private Set<String> fundPoolIds = new HashSet<>();
 
     @Override
     @SuppressWarnings("unchecked")
@@ -50,31 +55,40 @@ public class AclFundPoolByAggLcReportWidget extends Window implements IAclFundPo
     }
 
     @Override
+    public Set<String> getFundPoolIds() {
+        return fundPoolIds;
+    }
+
+    @Override
     public void setController(IAclFundPoolByAggLcReportController controller) {
         this.controller = controller;
     }
 
     private ComponentContainer initRootLayout() {
-        PeriodFilterWidget periodFilterWidget = new PeriodFilterWidget(ArrayList::new);
+        PeriodFilterWidget periodFilterWidget = new PeriodFilterWidget(controller::getPeriods);
         periodFilterWidget.addStyleName(EMPTY_FILTER_STYLE);
         VaadinUtils.setMaxComponentsWidth(periodFilterWidget);
-        AclFundPoolNameFilterWidget fundPoolNameFilterWidget = new AclFundPoolNameFilterWidget(ArrayList::new);
-        fundPoolNameFilterWidget.addStyleName(EMPTY_FILTER_STYLE);
-        fundPoolNameFilterWidget.setEnabled(false);
+        AclFundPoolItemFilterWidget fundPoolFilterWidget = new AclFundPoolItemFilterWidget(() ->
+            controller.getFundPools(periodFilterWidget.getSelectedItemsIds()));
+        fundPoolFilterWidget.addStyleName(EMPTY_FILTER_STYLE);
+        fundPoolFilterWidget.setEnabled(false);
         periodFilterWidget.addFilterSaveListener(event -> {
-            fundPoolNameFilterWidget.reset();
-            fundPoolNameFilterWidget.setEnabled(CollectionUtils.isNotEmpty(event.getSelectedItemsIds()));
+            fundPoolFilterWidget.reset();
+            fundPoolFilterWidget.loadBeans();
+            fundPoolFilterWidget.setEnabled(CollectionUtils.isNotEmpty(event.getSelectedItemsIds()));
             applyFilterEmptyStyle(periodFilterWidget, event.getSelectedItemsIds().size());
         });
-        fundPoolNameFilterWidget.addFilterSaveListener(event -> {
-            exportButton.setEnabled(CollectionUtils.isNotEmpty(event.getSelectedItemsIds()));
-            applyFilterEmptyStyle(fundPoolNameFilterWidget, event.getSelectedItemsIds().size());
+        fundPoolFilterWidget.addFilterSaveListener(event -> {
+            Set<AclFundPool> selectedItems = event.getSelectedItemsIds();
+            exportButton.setEnabled(CollectionUtils.isNotEmpty(selectedItems));
+            applyFilterEmptyStyle(fundPoolFilterWidget, selectedItems.size());
+            fundPoolIds = selectedItems.stream().map(BaseEntity::getId).collect(Collectors.toSet());
         });
         HorizontalLayout buttonsLayout = initButtonsLayout();
-        VerticalLayout verticalLayout = new VerticalLayout(periodFilterWidget, fundPoolNameFilterWidget, buttonsLayout);
+        VerticalLayout verticalLayout = new VerticalLayout(periodFilterWidget, fundPoolFilterWidget, buttonsLayout);
         verticalLayout.setComponentAlignment(buttonsLayout, Alignment.BOTTOM_RIGHT);
         VaadinUtils.addComponentStyle(periodFilterWidget, "acl-report-period-filter-widget");
-        VaadinUtils.addComponentStyle(fundPoolNameFilterWidget, "acl-report-fund-pool-filter-widget");
+        VaadinUtils.addComponentStyle(fundPoolFilterWidget, "acl-report-fund-pool-filter-widget");
         return verticalLayout;
     }
 

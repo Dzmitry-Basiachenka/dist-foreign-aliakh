@@ -41,7 +41,7 @@ public class AclFundPoolFilterController extends CommonController<IAclFundPoolFi
     }
 
     @Override
-    public List<AclFundPool> getFundPoolNames() {
+    public List<AclFundPool> getFundPools() {
         return aclFundPoolService.getAll();
     }
 

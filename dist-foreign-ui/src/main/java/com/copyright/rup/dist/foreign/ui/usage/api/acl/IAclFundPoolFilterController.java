@@ -23,7 +23,7 @@ public interface IAclFundPoolFilterController extends IFilterController<IAclFund
      *
      * @return list of fund pool names
      */
-    List<AclFundPool> getFundPoolNames();
+    List<AclFundPool> getFundPools();
 
     /**
      * Gets all available periods.

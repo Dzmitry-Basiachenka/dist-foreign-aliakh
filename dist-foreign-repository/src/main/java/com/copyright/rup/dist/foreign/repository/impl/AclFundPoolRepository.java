@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * Implementation of {@link IAclFundPoolRepository}.
@@ -80,6 +81,11 @@ public class AclFundPoolRepository extends AclBaseRepository implements IAclFund
     @Override
     public List<AclFundPool> findAll() {
         return selectList("IAclFundPoolMapper.findAllFundPools");
+    }
+
+    @Override
+    public List<AclFundPool> findFundPoolsByPeriods(Set<Integer> periods) {
+        return selectList("IAclFundPoolMapper.findFundPoolsByPeriods", periods);
     }
 
     @Override

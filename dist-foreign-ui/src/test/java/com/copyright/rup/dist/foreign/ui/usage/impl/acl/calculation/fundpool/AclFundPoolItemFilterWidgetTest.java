@@ -30,7 +30,7 @@ import org.powermock.reflect.Whitebox;
 import java.util.List;
 import java.util.Set;
 /**
- * Verifies {@link AclFundPoolNameFilterWidget}.
+ * Verifies {@link AclFundPoolItemFilterWidget}.
  * <p>
  * Copyright (C) 2022 copyright.com
  * <p>
@@ -40,25 +40,25 @@ import java.util.Set;
  */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({Windows.class})
-public class AclFundPoolNameFilterWidgetTest {
+public class AclFundPoolItemFilterWidgetTest {
 
     private static final String FUND_POOL_NAME = "ACL Fund Pool 2022";
 
-    private AclFundPoolNameFilterWidget aclFundPoolNameFilterWidget;
+    private AclFundPoolItemFilterWidget aclFundPoolItemFilterWidget;
 
     @Before
     public void setUp() {
-        aclFundPoolNameFilterWidget = new AclFundPoolNameFilterWidget(List::of);
+        aclFundPoolItemFilterWidget = new AclFundPoolItemFilterWidget(List::of);
     }
 
     @Test
     public void testGetBeanClass() {
-        assertEquals(AclFundPool.class, aclFundPoolNameFilterWidget.getBeanClass());
+        assertEquals(AclFundPool.class, aclFundPoolItemFilterWidget.getBeanClass());
     }
 
     @Test
     public void testGetBeanItemCaption() {
-        assertEquals(FUND_POOL_NAME, aclFundPoolNameFilterWidget.getBeanItemCaption(buildAclFundPool()));
+        assertEquals(FUND_POOL_NAME, aclFundPoolItemFilterWidget.getBeanItemCaption(buildAclFundPool()));
     }
 
     @Test
@@ -67,9 +67,9 @@ public class AclFundPoolNameFilterWidgetTest {
         Set<AclFundPool> fundPools = Set.of(new AclFundPool());
         expect(filterSaveEvent.getSelectedItemsIds()).andReturn(fundPools).once();
         replay(filterSaveEvent);
-        aclFundPoolNameFilterWidget.onSave(filterSaveEvent);
+        aclFundPoolItemFilterWidget.onSave(filterSaveEvent);
         verify(filterSaveEvent);
-        assertEquals(fundPools, Whitebox.getInternalState(aclFundPoolNameFilterWidget, "selectedItemsIds"));
+        assertEquals(fundPools, Whitebox.getInternalState(aclFundPoolItemFilterWidget, "selectedItemsIds"));
     }
 
     @Test
@@ -77,7 +77,7 @@ public class AclFundPoolNameFilterWidgetTest {
         FilterWindow filterWindow = createMock(FilterWindow.class);
         mockStatic(Windows.class);
         Capture<ValueProvider<AclFundPool, List<String>>> providerCapture = newCapture();
-        expect(Windows.showFilterWindow(eq("Fund Pool Names filter"), same(aclFundPoolNameFilterWidget),
+        expect(Windows.showFilterWindow(eq("Fund Pool Names filter"), same(aclFundPoolItemFilterWidget),
             capture(providerCapture))).andReturn(filterWindow).once();
         filterWindow.setSelectedItemsIds(Set.of());
         expectLastCall().once();
@@ -89,7 +89,7 @@ public class AclFundPoolNameFilterWidgetTest {
         filterWindow.setSearchPromptString("Enter Fund Pool Name");
         expectLastCall().once();
         replay(filterWindow, Windows.class);
-        aclFundPoolNameFilterWidget.showFilterWindow();
+        aclFundPoolItemFilterWidget.showFilterWindow();
         assertEquals(List.of(FUND_POOL_NAME), providerCapture.getValue().apply(buildAclFundPool()));
         verify(filterWindow, Windows.class);
     }

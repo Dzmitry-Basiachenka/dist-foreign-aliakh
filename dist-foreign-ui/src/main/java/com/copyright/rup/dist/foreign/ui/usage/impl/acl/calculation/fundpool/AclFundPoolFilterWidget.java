@@ -39,7 +39,7 @@ public class AclFundPoolFilterWidget extends VerticalLayout implements IAclFundP
     private Button applyButton;
     private AclFundPoolDetailFilter aclFundPoolDetailFilter = new AclFundPoolDetailFilter();
     private AclFundPoolDetailFilter appliedAclFundPoolDetailFilter = new AclFundPoolDetailFilter();
-    private AclFundPoolNameFilterWidget aclFundPoolNameFilterWidget;
+    private AclFundPoolItemFilterWidget aclFundPoolItemFilterWidget;
     private PeriodFilterWidget periodFilterWidget;
     private AggregateLicenseeClassFilterWidget aggregateLicenseeClassFilterWidget;
     private DetailLicenseeClassFilterWidget detailLicenseeClassFilterWidget;
@@ -77,7 +77,7 @@ public class AclFundPoolFilterWidget extends VerticalLayout implements IAclFundP
 
     @Override
     public void clearFilter() {
-        aclFundPoolNameFilterWidget.reset();
+        aclFundPoolItemFilterWidget.reset();
         periodFilterWidget.reset();
         aggregateLicenseeClassFilterWidget.reset();
         detailLicenseeClassFilterWidget.reset();
@@ -115,15 +115,15 @@ public class AclFundPoolFilterWidget extends VerticalLayout implements IAclFundP
         return verticalLayout;
     }
 
-    private AclFundPoolNameFilterWidget buildFundPoolNamesFilter() {
-        aclFundPoolNameFilterWidget = new AclFundPoolNameFilterWidget(() -> controller.getFundPoolNames());
-        aclFundPoolNameFilterWidget.addFilterSaveListener((IFilterSaveListener<AclFundPool>) saveEvent -> {
+    private AclFundPoolItemFilterWidget buildFundPoolNamesFilter() {
+        aclFundPoolItemFilterWidget = new AclFundPoolItemFilterWidget(() -> controller.getFundPools());
+        aclFundPoolItemFilterWidget.addFilterSaveListener((IFilterSaveListener<AclFundPool>) saveEvent -> {
             aclFundPoolDetailFilter.setFundPoolNames(
                 saveEvent.getSelectedItemsIds().stream().map(AclFundPool::getName).collect(Collectors.toSet()));
             filterChanged();
         });
-        VaadinUtils.addComponentStyle(aclFundPoolNameFilterWidget, "acl-fund-pool-name-filter");
-        return aclFundPoolNameFilterWidget;
+        VaadinUtils.addComponentStyle(aclFundPoolItemFilterWidget, "acl-fund-pool-name-filter");
+        return aclFundPoolItemFilterWidget;
     }
 
     private PeriodFilterWidget buildPeriodFilter() {

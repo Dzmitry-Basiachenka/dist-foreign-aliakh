@@ -149,6 +149,24 @@ public class AclFundPoolRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = FOLDER_NAME + "find-fund-pools-by-periods.groovy")
+    public void testFundPoolsByPeriods() {
+        AclFundPool aclFundPool1 = buildAclFundPool("99300101-68c1-434b-b80e-469aa82eab94",
+            "ACL Fund Pool 202212", 202212, LICENSE_TYPE, true, new BigDecimal("2400.52"), new BigDecimal("2711.00"));
+        AclFundPool aclFundPool2 = buildAclFundPool("b9311704-0c34-499c-b527-974ad0ecd40e",
+            "ACL Fund Pool 202206", 202206, "MACL", true, new BigDecimal("1000.00"), new BigDecimal("1180.24"));
+        AclFundPool aclFundPool3 = buildAclFundPool("7f3be0e9-d951-426f-a628-e16254bb3430",
+            "ACL Fund Pool 202006", 202006, "VGW", true, new BigDecimal("16.00"), new BigDecimal("20.00"));
+        List<AclFundPool> fundPools = repository.findFundPoolsByPeriods(Set.of(202206, 202212));
+        assertEquals(2, fundPools.size());
+        verifyAclFundPool(aclFundPool1, fundPools.get(0));
+        verifyAclFundPool(aclFundPool2, fundPools.get(1));
+        fundPools = repository.findFundPoolsByPeriods(Set.of(202006));
+        assertEquals(1, fundPools.size());
+        verifyAclFundPool(aclFundPool3, fundPools.get(0));
+    }
+
+    @Test
     @TestData(fileName = FILTER_TEST_DATA)
     public void testFindDtosByFilterFundPoolNames() {
         assertFilteredDtosFindByFilter(filter -> filter.setFundPoolNames(Set.of("ACL Fund Pool 202112")));
