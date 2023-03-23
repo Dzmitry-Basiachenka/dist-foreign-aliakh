@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Implementation of {@link IAclFundPoolService}.
@@ -93,6 +94,11 @@ public class AclFundPoolService implements IAclFundPoolService {
     @Override
     public List<AclFundPool> getAll() {
         return fundPoolRepository.findAll();
+    }
+
+    @Override
+    public List<AclFundPool> getFundPoolsByPeriods(Set<Integer> periods) {
+        return fundPoolRepository.findFundPoolsByPeriods(periods);
     }
 
     @Override

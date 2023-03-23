@@ -51,11 +51,11 @@ public class AclFundPoolFilterControllerTest {
     }
 
     @Test
-    public void testGetFundPoolNames() {
+    public void testGetFundPools() {
         List<AclFundPool> aclFundPools = List.of(new AclFundPool());
         expect(fundPoolService.getAll()).andReturn(aclFundPools).once();
         replay(fundPoolService);
-        assertSame(aclFundPools, controller.getFundPoolNames());
+        assertSame(aclFundPools, controller.getFundPools());
         verify(fundPoolService);
     }
 

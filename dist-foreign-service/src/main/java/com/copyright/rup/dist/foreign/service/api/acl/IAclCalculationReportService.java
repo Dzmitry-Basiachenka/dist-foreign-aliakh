@@ -7,6 +7,7 @@ import com.copyright.rup.dist.foreign.domain.report.AclCalculationReportsInfoDto
 
 import java.io.OutputStream;
 import java.io.PipedOutputStream;
+import java.util.Set;
 
 /**
  * Interface that provides ability to generate multiple reports for ACL calculations.
@@ -107,4 +108,12 @@ public interface IAclCalculationReportService {
      */
     void writeAclComparisonByAggLcClassAndTitleReport(AclCalculationReportsInfoDto reportInfo,
                                                       OutputStream outputStream);
+
+    /**
+     * Writes ACL Fund Pool by Aggregate Licensee Class report.
+     *
+     * @param fundPoolIds  set of fund pool ids
+     * @param outputStream instance of {@link OutputStream}
+     */
+    void writeAclFundPoolByAggLcReport(Set<String> fundPoolIds, OutputStream outputStream);
 }

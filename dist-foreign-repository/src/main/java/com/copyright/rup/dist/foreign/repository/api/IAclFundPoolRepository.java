@@ -6,6 +6,7 @@ import com.copyright.rup.dist.foreign.domain.AclFundPoolDetailDto;
 import com.copyright.rup.dist.foreign.domain.filter.AclFundPoolDetailFilter;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Represents interface of repository for ACL fund pools.
@@ -91,11 +92,17 @@ public interface IAclFundPoolRepository {
     int addLdmtDetailsToFundPool(String fundPoolId, String licenseType, String userName);
 
     /**
-     * Finds list of all ACL fund pools.
-     *
      * @return list of all {@link AclFundPool}s
      */
     List<AclFundPool> findAll();
+
+    /**
+     * Finds ACL fund pools by periods.
+     *
+     * @param periods set of periods
+     * @return list of {@link AclFundPool}s
+     */
+    List<AclFundPool> findFundPoolsByPeriods(Set<Integer> periods);
 
     /**
      * Finds list of periods from ACL fund pool.

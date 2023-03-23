@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.OutputStream;
 import java.io.PipedOutputStream;
+import java.util.Set;
 
 /**
  * Implements {@link IAclCalculationReportService}.
@@ -84,5 +85,10 @@ public class AclCalculationReportService implements IAclCalculationReportService
     public void writeAclComparisonByAggLcClassAndTitleReport(AclCalculationReportsInfoDto reportInfo,
                                                              OutputStream outputStream) {
         //TODO will be implemented with backend logic
+    }
+
+    @Override
+    public void writeAclFundPoolByAggLcReport(Set<String> fundPoolIds, OutputStream outputStream) {
+        //TODO implement backend
     }
 }

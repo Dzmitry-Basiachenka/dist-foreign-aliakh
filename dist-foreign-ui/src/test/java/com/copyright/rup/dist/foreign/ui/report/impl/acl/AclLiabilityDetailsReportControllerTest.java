@@ -40,7 +40,7 @@ import java.time.ZoneOffset;
  */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({OffsetDateTime.class, ByteArrayStreamSource.class, AclLiabilityDetailsReportController.class})
-public class AclLiabilityDetailsReportTest {
+public class AclLiabilityDetailsReportControllerTest {
 
     @Test
     public void testGetCsvStreamSource() {
