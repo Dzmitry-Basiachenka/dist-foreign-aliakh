@@ -23,8 +23,8 @@ public class AclUsageCsvReportHandler extends BaseCsvReportHandler<AclUsageDto> 
 
     private static final List<String> HEADERS = List.of("Detail ID", "Period", "Usage Origin", "Channel",
         "Usage Detail ID", "Wr Wrk Inst", "System Title", "Det LC ID", "Det LC Name", "Agg LC ID", "Agg LC Name",
-        "Survey Country", "Pub Type", "Content Unit Price", "CUP Flag", "TOU", "Annualized Copies", "MDWMS Deleted",
-        "Updated By", "Updated Date");
+        "Survey Country", "Pub Type", "Price", "Content", "Content Unit Price", "CUP Flag", "Reported TOU", "TOU",
+        "Annualized Copies", "MDWMS Deleted", "Updated By", "Updated Date");
 
     /**
      * Constructor.
@@ -52,8 +52,11 @@ public class AclUsageCsvReportHandler extends BaseCsvReportHandler<AclUsageDto> 
         beanProperties.add(bean.getSurveyCountry());
         beanProperties.add(
             Objects.nonNull(bean.getPublicationType()) ? bean.getPublicationType().getName() : StringUtils.EMPTY);
+        beanProperties.add(getBeanBigDecimal(bean.getPrice()));
+        beanProperties.add(getBeanBigDecimal(bean.getContent()));
         beanProperties.add(getBeanBigDecimal(bean.getContentUnitPrice()));
         beanProperties.add(bean.getContentUnitPriceFlag() ? "Y" : "N");
+        beanProperties.add(bean.getReportedTypeOfUse());
         beanProperties.add(bean.getTypeOfUse());
         beanProperties.add(getBeanBigDecimal(bean.getAnnualizedCopies()));
         beanProperties.add(bean.isWorkDeletedFlag() ? "Y" : "N");

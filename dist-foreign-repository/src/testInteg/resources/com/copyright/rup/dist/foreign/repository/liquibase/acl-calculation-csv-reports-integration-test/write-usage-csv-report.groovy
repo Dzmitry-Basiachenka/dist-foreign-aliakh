@@ -31,6 +31,9 @@ databaseChangeLog {
             column(name: 'updated_by_user', value: 'user@copyright.com')
             column(name: 'created_datetime', value: '2022-02-10 12:00:00+00')
             column(name: 'updated_datetime', value: '2022-02-14 12:00:00+00')
+            column(name: 'reported_type_of_use', value: 'DIGITAL')
+            column(name: 'price', value: 10.0000000000)
+            column(name: 'content', value: 42)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_acl_usage') {
@@ -54,6 +57,9 @@ databaseChangeLog {
             column(name: 'updated_by_user', value: 'user@copyright.com')
             column(name: 'created_datetime', value: '2021-02-10 12:00:00+00')
             column(name: 'updated_datetime', value: '2021-02-14 12:00:00+00')
+            column(name: 'reported_type_of_use', value: 'PRINT')
+            column(name: 'price', value: 10.0000000000)
+            column(name: 'content', value: 42)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_acl_usage_batch') {
@@ -84,6 +90,9 @@ databaseChangeLog {
             column(name: 'updated_by_user', value: 'user@copyright.com')
             column(name: 'created_datetime', value: '2021-02-10 12:00:00+00')
             column(name: 'updated_datetime', value: '2021-02-14 12:00:00+00')
+            column(name: 'reported_type_of_use', value: 'PRINT')
+            column(name: 'price', value: 10.0000000000)
+            column(name: 'content', value: 42)
         }
 
         rollback {
