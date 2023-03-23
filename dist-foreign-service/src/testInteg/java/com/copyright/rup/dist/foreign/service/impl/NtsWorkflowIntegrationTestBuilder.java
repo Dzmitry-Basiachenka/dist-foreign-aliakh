@@ -166,7 +166,7 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
     public class Runner {
 
         private List<String> actualUsageIds;
-        private Scenario actualScenario;
+        private Scenario scenario;
 
         public void run() throws InterruptedException {
             testHelper.createRestServer();
@@ -185,8 +185,8 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
                 List.of("omOrderDetailNumber", "licenseCreateDate"));
             loadNtsBatch();
             createScenario();
-            scenarioService.submit(actualScenario, "Submitting actualScenario for testing purposes");
-            scenarioService.approve(actualScenario, "Approving actualScenario for testing purposes");
+            scenarioService.submit(scenario, "Submitting actualScenario for testing purposes");
+            scenarioService.approve(scenario, "Approving actualScenario for testing purposes");
             sendScenarioToLm();
             receivePaidUsagesFromLm();
             usageService.sendToCrm();
@@ -207,12 +207,13 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
             usageFilter.setProductFamily("NTS");
             NtsFields ntsFields = new NtsFields();
             ntsFields.setRhMinimumAmount(new BigDecimal("300"));
-            actualScenario = ntsScenarioService.createScenario("Test Scenario", ntsFields, null, usageFilter);
+            scenario = ntsScenarioService.createScenario("Test Scenario", ntsFields, null, usageFilter);
         }
 
         private void sendScenarioToLm() {
-            ntsScenarioService.sendToLm(actualScenario);
-            testHelper.sendScenarioToLm(List.of(expectedLmDetailsJsonFile));
+            ntsScenarioService.sendToLm(scenario);
+            testHelper.sendScenarioToLm(List.of(expectedLmDetailsJsonFile), List.of("detail_id"),
+                scenario.getId(), scenario.getName(), scenario.getProductFamily());
         }
 
         private void receivePaidUsagesFromLm() throws InterruptedException {
@@ -220,11 +221,11 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
         }
 
         private void assertScenario() {
-            actualScenario = scenarioRepository.findById(actualScenario.getId());
-            assertNotNull(actualScenario);
+            scenario = scenarioRepository.findById(scenario.getId());
+            assertNotNull(scenario);
             assertEquals(expectedScenario.getNtsFields().getRhMinimumAmount(),
-                actualScenario.getNtsFields().getRhMinimumAmount());
-            assertEquals(expectedScenario.getStatus(), actualScenario.getStatus());
+                scenario.getNtsFields().getRhMinimumAmount());
+            assertEquals(expectedScenario.getStatus(), scenario.getStatus());
         }
 
         private void assertAudit() {
@@ -234,7 +235,7 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
 
         private List<UsageDto> getArchivedUsages() {
             List<UsageDto> actualUsages =
-                usageArchiveRepository.findByScenarioIdAndRhAccountNumber(actualScenario.getId(),
+                usageArchiveRepository.findByScenarioIdAndRhAccountNumber(scenario.getId(),
                     1000023401L, null, null, null);
             assertEquals(1, CollectionUtils.size(actualUsages));
             return actualUsages;

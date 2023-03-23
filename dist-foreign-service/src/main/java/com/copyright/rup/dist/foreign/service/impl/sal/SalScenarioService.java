@@ -110,7 +110,7 @@ public class SalScenarioService implements ISalScenarioService {
                 .stream()
                 .map(ExternalUsage::new)
                 .collect(Collectors.toList());
-            lmIntegrationService.sendToLm(externalUsages);
+            lmIntegrationService.sendToLm(externalUsages, scenario, usageIds.size());
         });
         scenario.setStatus(ScenarioStatusEnum.SENT_TO_LM);
         scenario.setUpdateUser(RupContextUtils.getUserName());

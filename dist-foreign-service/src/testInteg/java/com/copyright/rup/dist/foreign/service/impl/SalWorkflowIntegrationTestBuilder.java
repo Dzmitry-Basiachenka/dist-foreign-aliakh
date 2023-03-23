@@ -294,7 +294,8 @@ public class SalWorkflowIntegrationTestBuilder implements Builder<Runner> {
 
         private void sendScenarioToLm() {
             salScenarioService.sendToLm(scenario);
-            testHelper.sendScenarioToLm(expectedLmDetailsJsonFiles);
+            testHelper.sendScenarioToLm(expectedLmDetailsJsonFiles, List.of("detail_id"),
+                scenario.getId(), scenario.getName(), scenario.getProductFamily());
         }
 
         private void receivePaidUsagesFromLm() throws InterruptedException {

@@ -77,7 +77,7 @@ public class FasScenarioServiceTest {
         Usage usage = new Usage();
         expect(fasUsageService.moveToArchive(scenario)).andReturn(usageIds).once();
         expect(usageService.getArchivedUsagesForSendToLmByIds(usageIds)).andReturn(List.of(usage)).once();
-        lmIntegrationService.sendToLm(List.of(new ExternalUsage(usage)));
+        lmIntegrationService.sendToLm(List.of(new ExternalUsage(usage)), scenario, usageIds.size());
         expectLastCall().once();
         scenarioRepository.updateStatus(scenario);
         expectLastCall().once();

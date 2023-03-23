@@ -9,6 +9,7 @@ import com.copyright.rup.dist.foreign.domain.AclPublicationType;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioLiabilityDetail;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
@@ -245,7 +246,8 @@ public class AclScenarioService implements IAclScenarioService {
         Iterables.partition(liabilityDetails, batchSize)
             .forEach(partition -> lmIntegrationService.sendToLm(partition.stream()
                 .map(ExternalUsage::new)
-                .collect(Collectors.toList())));
+                .collect(Collectors.toList()),
+                scenario.getId(), scenario.getName(), FdaConstants.ACL_PRODUCT_FAMILY, liabilityDetails.size()));
         aclScenarioAuditService.logAction(scenario.getId(), ScenarioActionTypeEnum.SENT_TO_LM, StringUtils.EMPTY);
         changeScenarioState(scenario, ScenarioStatusEnum.ARCHIVED, ScenarioActionTypeEnum.ARCHIVED, StringUtils.EMPTY);
         LOGGER.info("Send ACL scenario to LM. Finished. {}, User={}", ForeignLogUtils.aclScenario(scenario),

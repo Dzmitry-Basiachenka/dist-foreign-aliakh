@@ -69,6 +69,7 @@ public class AclScenarioServiceTest {
     private static final String USER_NAME = "SYSTEM";
     private static final String DIGITAL_TOU = "DIGITAL";
     private static final String PRINT_TOU = "PRINT";
+    private static final String LICENSE_TYPE = "ACL";
 
     private IAclScenarioService aclScenarioService;
     private IAclScenarioUsageService aclScenarioUsageService;
@@ -291,8 +292,8 @@ public class AclScenarioServiceTest {
     @Test
     public void testIsExistsScenarioInSubmitStatus() {
         AclScenario scenario = buildAclScenario();
-        expect(aclScenarioRepository.submittedScenarioExistWithLicenseTypeAndPeriod("ACL", 202212)).andReturn(false)
-            .once();
+        expect(aclScenarioRepository.submittedScenarioExistWithLicenseTypeAndPeriod(LICENSE_TYPE, 202212))
+            .andReturn(false).once();
         replay(aclScenarioRepository);
         assertTrue(aclScenarioService.isNotExistsSubmittedScenario(scenario));
         verify(aclScenarioRepository);
@@ -319,7 +320,8 @@ public class AclScenarioServiceTest {
         AclScenario aclScenario = buildAclScenario();
         expect(aclScenarioUsageService.getLiabilityDetailsForSendToLmByIds(aclScenario.getId()))
             .andReturn(List.of(liabilityDetail)).once();
-        lmIntegrationService.sendToLm(List.of(new ExternalUsage(liabilityDetail)));
+        lmIntegrationService.sendToLm(List.of(new ExternalUsage(liabilityDetail)), aclScenario.getId(),
+            aclScenario.getName(), "ACL", 1);
         expectLastCall().once();
         aclScenarioAuditService.logAction(aclScenario.getId(), ScenarioActionTypeEnum.SENT_TO_LM, StringUtils.EMPTY);
         expectLastCall().once();
@@ -343,7 +345,7 @@ public class AclScenarioServiceTest {
         aclScenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);
         aclScenario.setEditableFlag(false);
         aclScenario.setPeriodEndDate(202212);
-        aclScenario.setLicenseType("ACL");
+        aclScenario.setLicenseType(LICENSE_TYPE);
         aclScenario.setCreateDate(Date.from(LocalDate.of(2022, 6, 1).atStartOfDay(ZoneId.systemDefault()).toInstant()));
         aclScenario.setCreateUser("user@copyright.com");
         return aclScenario;
@@ -390,7 +392,7 @@ public class AclScenarioServiceTest {
         liabilityDetail.setWrWrkInst(123456789L);
         liabilityDetail.setProductFamily("ACLPRINT");
         liabilityDetail.setTypeOfUse("PRINT");
-        liabilityDetail.setLicenseType("ACL");
+        liabilityDetail.setLicenseType(LICENSE_TYPE);
         liabilityDetail.setAggregateLicenseeClassName("Materials");
         return liabilityDetail;
     }
