@@ -7,6 +7,7 @@ import com.copyright.rup.dist.foreign.domain.filter.AclGrantDetailFilter;
 import com.copyright.rup.dist.foreign.domain.filter.AclUsageFilter;
 import com.copyright.rup.dist.foreign.domain.report.AclCalculationReportsInfoDto;
 import com.copyright.rup.dist.foreign.repository.api.IAclCalculationReportRepository;
+import com.copyright.rup.dist.foreign.repository.impl.csv.acl.AclFundPoolByAggLcCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.AclFundPoolDetailsCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.AclGrantDetailCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.AclLiabilitiesByAggLicClassCsvReportHandler;
@@ -26,6 +27,7 @@ import java.io.OutputStream;
 import java.io.PipedOutputStream;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * Implementation of {@link IAclCalculationReportRepository}.
@@ -145,6 +147,14 @@ public class AclCalculationReportRepository extends CommonReportRepository imple
             handler.writeTotals(
                 selectOne("IAclCalculationReportMapper.findAclLiabilitiesByRhReportTotalAmounts", reportInfo));
             handler.writeMetadata(reportInfo);
+        }
+    }
+
+    @Override
+    public void writeAclFundPoolByAggLcReport(Set<String> fundPoolIds, OutputStream outputStream) {
+        try (AclFundPoolByAggLcCsvReportHandler handler =
+                 new AclFundPoolByAggLcCsvReportHandler(Objects.requireNonNull(outputStream))) {
+            getTemplate().select("IAclCalculationReportMapper.writeAclFundPoolByAggLcReport", fundPoolIds, handler);
         }
     }
 }

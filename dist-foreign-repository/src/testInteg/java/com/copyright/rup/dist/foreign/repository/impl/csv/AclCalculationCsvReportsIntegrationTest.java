@@ -60,6 +60,8 @@ public class AclCalculationCsvReportsIntegrationTest extends CsvReportsTestHelpe
         FOLDER_NAME + "write-liability-details-csv-report.groovy";
     private static final String WRITE_LIABILITIES_BY_RH_CSV_REPORT =
         FOLDER_NAME + "write-liabilities-by-rh-csv-report.groovy";
+    private static final String WRITE_FUND_POOL_BY_AGG_LC_CSV_REPORT =
+        FOLDER_NAME + "write-fund-pool-by-agg-lc-csv-report.groovy";
     private static final String ACL_SCENARIO_NAME = "ACL Scenario 10/05/202212";
 
     @Autowired
@@ -227,8 +229,18 @@ public class AclCalculationCsvReportsIntegrationTest extends CsvReportsTestHelpe
             buildScenario("3ecfcf3b-1be0-4bfa-bc55-44add8432df9", "VGW Scenario 10/05/202212"),
             buildScenario("ce858f53-eea8-4273-888e-ab983f88f59b", "JACDCL Scenario 10/05/202212")));
         assertFilesWithExecutor(outputStream ->
-                aclCalculationReportRepository.writeAclLiabilitiesByRhReport(reportsInfoDto, outputStream),
+            aclCalculationReportRepository.writeAclLiabilitiesByRhReport(reportsInfoDto, outputStream),
             "acl/liabilities_by_rightsholder_report.csv");
+    }
+
+    @Test
+    @TestData(fileName = WRITE_FUND_POOL_BY_AGG_LC_CSV_REPORT)
+    public void testWriteAclFundPoolByAggLcReport() throws IOException {
+        Set<String> fundPoolIds =
+            Set.of("9be3e7f9-a48a-4d23-86bb-b1dc5054e4bd", "1ab6de5a-f4cd-43b6-b2d3-f4b6b5a1bc7a");
+        assertFilesWithExecutor(outputStream ->
+            aclCalculationReportRepository.writeAclFundPoolByAggLcReport(fundPoolIds, outputStream),
+            "acl/fund_pool_by_agg_lc_report.csv");
     }
 
     private AclScenario buildScenario(String id, String name) {

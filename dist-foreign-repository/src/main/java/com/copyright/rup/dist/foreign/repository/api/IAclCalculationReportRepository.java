@@ -7,6 +7,7 @@ import com.copyright.rup.dist.foreign.domain.report.AclCalculationReportsInfoDto
 
 import java.io.OutputStream;
 import java.io.PipedOutputStream;
+import java.util.Set;
 
 /**
  * Represents interface of repository for ACL calculation reports.
@@ -105,4 +106,12 @@ public interface IAclCalculationReportRepository {
      * @param outputStream instance of {@link OutputStream}
      */
     void writeAclLiabilitiesByRhReport(AclCalculationReportsInfoDto reportInfo, OutputStream outputStream);
+
+    /**
+     * Finds ACL Fund Pools grouped by Agg LC and writes them to the output stream in CSV format.
+     *
+     * @param fundPoolIds  set of Fund Pool ids
+     * @param outputStream instance of {@link OutputStream}
+     */
+    void writeAclFundPoolByAggLcReport(Set<String> fundPoolIds, OutputStream outputStream);
 }

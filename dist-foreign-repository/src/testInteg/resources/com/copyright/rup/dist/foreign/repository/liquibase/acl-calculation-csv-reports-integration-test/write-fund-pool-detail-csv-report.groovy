@@ -2,7 +2,7 @@ databaseChangeLog {
     property(file: 'database-testInteg.properties')
 
     changeSet(id: '2022-05-13-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
-        comment('Inserting test data for findByFilter tests')
+        comment('Inserting test data for testWriteAclFundPoolDetailsCsvReport tests')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_acl_fund_pool') {
             column(name: 'df_acl_fund_pool_uid', value: 'c2778b06-fc08-43c9-a265-0e4773b35b35')

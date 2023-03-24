@@ -6,6 +6,7 @@ import com.copyright.rup.dist.foreign.domain.filter.AclGrantDetailFilter;
 import com.copyright.rup.dist.foreign.domain.filter.AclScenarioFilter;
 import com.copyright.rup.dist.foreign.domain.filter.AclUsageFilter;
 import com.copyright.rup.dist.foreign.domain.report.AclCalculationReportsInfoDto;
+import com.copyright.rup.dist.foreign.domain.report.AclFundPoolByAggLcReportDto;
 import com.copyright.rup.dist.foreign.domain.report.AclLiabilitiesByAggLicClassReportDto;
 import com.copyright.rup.dist.foreign.domain.report.AclLiabilitiesByRhReportDto;
 import com.copyright.rup.dist.foreign.domain.report.AclLiabilityDetailsReportDto;
@@ -71,6 +72,7 @@ public class AclDomainVerifierTest {
             {AclWorkSharesByAggLcReportDto.class},
             {AclLiabilityDetailsReportDto.class},
             {AclLiabilitiesByAggLicClassReportDto.class},
+            {AclFundPoolByAggLcReportDto.class},
             {AclReportTotalAmountsDto.class},
             {AclLiabilitiesByRhReportDto.class},
             {AclScenarioFilter.class},
