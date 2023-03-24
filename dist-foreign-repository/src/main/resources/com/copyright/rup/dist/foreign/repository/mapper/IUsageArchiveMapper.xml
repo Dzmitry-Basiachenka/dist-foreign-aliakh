@@ -314,6 +314,7 @@
             ufas.market_period_to,
             ufas.reported_value,
             ufas.is_rh_participating_flag,
+            ufas.reported_standard_number,
             usal.detail_type,
             usal.reported_article,
             usal.reported_vol_number_series,
@@ -376,6 +377,7 @@
             ufas.author,
             ufas.reported_value,
             ufas.is_rh_participating_flag,
+            ufas.reported_standard_number,
             u.created_datetime,
             u.updated_datetime,
             u.created_by_user,
@@ -476,6 +478,7 @@
             market_period_to,
             author,
             reported_value,
+            reported_standard_number,
             is_rh_participating_flag,
             <include refid="StoredEntityMapper.additionalColumns"/>)
         values (
@@ -488,6 +491,7 @@
             #{marketPeriodTo},
             #{author},
             #{reportedValue},
+            #{fasUsage.reportedStandardNumber},
             #{rhParticipating},
             <include refid="StoredEntityMapper.insert"/>)
     </insert>

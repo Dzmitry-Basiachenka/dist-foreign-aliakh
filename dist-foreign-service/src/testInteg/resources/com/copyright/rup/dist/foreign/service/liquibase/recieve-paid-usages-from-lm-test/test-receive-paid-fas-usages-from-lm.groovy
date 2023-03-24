@@ -52,6 +52,7 @@ databaseChangeLog {
             column(name: 'market_period_to', value: 2017)
             column(name: 'author', value: 'Philippe de Mézières')
             column(name: 'reported_value', value: 6000)
+            column(name: 'reported_standard_number', value: '1008902112317555AA')
         }
 
         rollback {
