@@ -89,6 +89,6 @@ public class AclCalculationReportService implements IAclCalculationReportService
 
     @Override
     public void writeAclFundPoolByAggLcReport(Set<String> fundPoolIds, OutputStream outputStream) {
-        //TODO implement backend
+        aclCalculationReportRepository.writeAclFundPoolByAggLcReport(fundPoolIds, outputStream);
     }
 }

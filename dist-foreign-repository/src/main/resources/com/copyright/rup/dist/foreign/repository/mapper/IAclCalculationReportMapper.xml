@@ -44,6 +44,15 @@
         <result property="jacdclNetAmount" column="jacdcl_net_amount"/>
     </resultMap>
 
+    <resultMap id="aclFundPoolByAggLcReportDtoResultMap" type="AclFundPoolByAggLcReportDto">
+        <result property="fundPoolName" column="name"/>
+        <result property="period" column="period"/>
+        <result property="licenseType" column="license_type"/>
+        <result property="aggregateLicenseeClassId" column="aggregate_licensee_class_id"/>
+        <result property="aggregateLicenseeClassName" column="description"/>
+        <result property="netAmount" column="net_amount"/>
+    </resultMap>
+
     <resultMap id="aclScenarioDetailsReportDtoResultMap" type="AclScenarioDetailsReport">
         <result property="rhAccountNumber" column="rh_account_number"/>
         <result property="rhName" column="rh_name"/>
@@ -306,5 +315,25 @@
 
     <select id="findAclLiabilitiesByRhReportTotalAmounts" parameterType="map" resultMap="aclTotalAmountsReportDtoResultMap">
         <include refid="IAclCalculationReportMapper.selectAclTotalAmountsSql"/>
+    </select>
+
+    <select id="writeAclFundPoolByAggLcReport" resultMap="aclFundPoolByAggLcReportDtoResultMap">
+        select
+            fp.name,
+            fp.period,
+            fp.license_type,
+            alc.aggregate_licensee_class_id,
+            alc.description,
+            sum(net_amount) net_amount
+        from ${schema}.df_acl_fund_pool_detail fpd
+        join ${schema}.df_acl_fund_pool fp on fpd.df_acl_fund_pool_uid = fp.df_acl_fund_pool_uid
+        join ${schema}.df_detail_licensee_class dlc on fpd.detail_licensee_class_id = dlc.detail_licensee_class_id
+        join ${schema}.df_aggregate_licensee_class alc on dlc.aggregate_licensee_class_id = alc.aggregate_licensee_class_id
+        where fpd.df_acl_fund_pool_uid in
+            <foreach collection="collection" item="fundPoolId" open="(" separator=", " close=")">
+                #{fundPoolId}
+            </foreach>
+        group by fp.df_acl_fund_pool_uid, alc.aggregate_licensee_class_id, alc.description
+        order by fp.name, alc.aggregate_licensee_class_id
     </select>
 </mapper>

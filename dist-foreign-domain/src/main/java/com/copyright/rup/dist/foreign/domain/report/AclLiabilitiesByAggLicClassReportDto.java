@@ -110,7 +110,6 @@ public class AclLiabilitiesByAggLicClassReportDto extends StoredEntity<String> {
         this.jacdclNetAmount = jacdclNetAmount;
     }
 
-
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
