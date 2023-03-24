@@ -3,7 +3,10 @@ dependencies {
     compile project(':dist-foreign-repository')
     compile project(':dist-foreign-integration')
 
-    compile("com.copyright.rup.dist.common:dist-common-service:${distCommonVersion}")
+    compile("com.copyright.rup.dist.common:dist-common-service:${distCommonVersion}") {
+        exclude group: 'org.apache.camel', module: 'camel-aws-sqs'
+        exclude group: 'org.apache.camel', module: 'camel-aws-sns'
+    }
     compile("org.quartz-scheduler:quartz:${quartzVersion}") {
         exclude group: 'c3p0'
     }
@@ -13,7 +16,11 @@ dependencies {
     runtime("commons-jexl:commons-jexl:${jexlVersion}")
     runtime("org.aspectj:aspectjweaver:${aspectjVersion}")
 
-    testCompile("com.copyright.rup.dist.common:dist-common-test:${distCommonVersion}")
+    testCompile("com.copyright.rup.dist.common:dist-common-test:${distCommonVersion}") {
+        exclude group: 'com.copyright.rup.aws', module: 'rup-aws-sqs'
+        exclude group: 'com.copyright.rup.aws', module: 'rup-aws-sns'
+        exclude group: 'org.apache.camel'
+    }
 
     testIntegCompile("commons-io:commons-io:${commonsIoVersion}")
     testIntegRuntime project(path: ':dist-foreign-repository', configuration: 'testIntegRuntime')

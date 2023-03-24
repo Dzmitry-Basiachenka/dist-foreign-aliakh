@@ -1,0 +1,12 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="dist.common.integration.aws.client.configuration" class="com.copyright.rup.aws.RupClientConfiguration">
+        <property name="connectionTimeout" value="$RUP{dist.common.aws.rup.client.connection.timeout.millis}"/>
+        <property name="socketTimeout" value="$RUP{dist.common.aws.rup.client.socket.timeout.millis}"/>
+        <property name="maxErrorRetry" value="$RUP{dist.common.aws.rup.client.max.error.retry}"/>
+        <property name="maxConnections" value="$RUP{dist.common.aws.rup.client.max.connections}"/>
+    </bean>
+</beans>

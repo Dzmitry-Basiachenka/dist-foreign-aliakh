@@ -2,14 +2,13 @@ package com.copyright.rup.dist.foreign.service.impl.common;
 
 import com.copyright.rup.common.exception.RupRuntimeException;
 
-import com.amazonaws.services.sqs.AmazonSQS;
-import com.amazonaws.services.sqs.model.GetQueueAttributesResult;
-
-import org.apache.camel.component.aws.sqs.SqsConfiguration;
-import org.apache.camel.component.aws.sqs.SqsEndpoint;
+import org.apache.camel.component.aws2.sqs.Sqs2Configuration;
+import org.apache.camel.component.aws2.sqs.Sqs2Endpoint;
 import org.springframework.beans.factory.FactoryBean;
 
-import java.util.List;
+import software.amazon.awssdk.services.sqs.SqsClient;
+import software.amazon.awssdk.services.sqs.model.GetQueueAttributesRequest;
+import software.amazon.awssdk.services.sqs.model.QueueAttributeName;
 
 /**
  * Factory bean that produces AWS SQS Redrive Policy.
@@ -22,10 +21,9 @@ import java.util.List;
  */
 public class RedrivePolicyFactoryBean implements FactoryBean<String> {
 
-    private static final String QUEUE_ARN_ATTRIBUTE = "QueueArn";
     private static final String REDRIVE_POLICY_TEMPLATE = "{\"maxReceiveCount\":\"%s\",\"deadLetterTargetArn\":\"%s\"}";
 
-    private SqsEndpoint sqsEndpoint;
+    private Sqs2Endpoint sqsEndpoint;
     private int maxReceiveCount;
 
     @Override
@@ -37,9 +35,9 @@ public class RedrivePolicyFactoryBean implements FactoryBean<String> {
                 throw new RupRuntimeException("Exception during SQS endpoint startup. Endpoint=" + sqsEndpoint, e);
             }
         }
-        SqsConfiguration configuration = sqsEndpoint.getConfiguration();
-        AmazonSQS sqsClient = configuration.getAmazonSQSClient();
-        String queueUrl = sqsClient.getQueueUrl(configuration.getQueueName()).getQueueUrl();
+        Sqs2Configuration configuration = sqsEndpoint.getConfiguration();
+        SqsClient sqsClient = configuration.getAmazonSQSClient();
+        String queueUrl = configuration.getQueueName();
         return String.format(REDRIVE_POLICY_TEMPLATE, maxReceiveCount, findQueueArn(sqsClient, queueUrl));
     }
 
@@ -53,7 +51,7 @@ public class RedrivePolicyFactoryBean implements FactoryBean<String> {
         return false;
     }
 
-    public void setSqsEndpoint(SqsEndpoint sqsEndpoint) {
+    public void setSqsEndpoint(Sqs2Endpoint sqsEndpoint) {
         this.sqsEndpoint = sqsEndpoint;
     }
 
@@ -61,8 +59,10 @@ public class RedrivePolicyFactoryBean implements FactoryBean<String> {
         this.maxReceiveCount = maxReceiveCount;
     }
 
-    private String findQueueArn(AmazonSQS client, String queueUrl) {
-        GetQueueAttributesResult result = client.getQueueAttributes(queueUrl, List.of(QUEUE_ARN_ATTRIBUTE));
-        return result.getAttributes().get(QUEUE_ARN_ATTRIBUTE);
+    private String findQueueArn(SqsClient client, String queueUrl) {
+        return client.getQueueAttributes(
+            GetQueueAttributesRequest.builder()
+                .queueUrl(queueUrl)
+                .attributeNames(QueueAttributeName.QUEUE_ARN).build()).attributes().get(QueueAttributeName.QUEUE_ARN);
     }
 }

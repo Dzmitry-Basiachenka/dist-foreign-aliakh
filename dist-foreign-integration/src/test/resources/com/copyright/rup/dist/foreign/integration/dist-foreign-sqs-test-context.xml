@@ -1,0 +1,10 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <import resource="classpath:/com/copyright/rup/dist/foreign/integration/dist-foreign-aws-test-context.xml"/>
+
+    <bean id="dist.common.integration.sqs.endpoint.configuration" class="java.lang.Object"/>
+    <bean id="dist.common.integration.sqs.client" class="com.copyright.rup.dist.foreign.integration.aws.SqsClientMock"/>
+</beans>
