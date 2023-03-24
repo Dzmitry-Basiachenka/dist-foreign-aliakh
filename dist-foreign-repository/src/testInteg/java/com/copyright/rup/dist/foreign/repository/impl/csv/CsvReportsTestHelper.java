@@ -59,8 +59,9 @@ public class CsvReportsTestHelper {
     }
 
     protected void assertFiles(Consumer<ByteArrayOutputStream> reportWriter, String fileName) throws IOException {
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        reportWriter.accept(outputStream);
-        reportTestUtils.assertCsvReport(fileName, new ByteArrayInputStream(outputStream.toByteArray()));
+        try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+            reportWriter.accept(outputStream);
+            reportTestUtils.assertCsvReport(fileName, new ByteArrayInputStream(outputStream.toByteArray()));
+        }
     }
 }

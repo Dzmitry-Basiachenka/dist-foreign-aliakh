@@ -1,5 +1,9 @@
 dependencies {
     compile("com.copyright.rup.dist.common:dist-common-domain:${distCommonVersion}")
 
-    testCompile("com.copyright.rup.dist.common:dist-common-test:${distCommonVersion}")
+    testCompile("com.copyright.rup.dist.common:dist-common-test:${distCommonVersion}") {
+        exclude group: 'com.copyright.rup.aws', module: 'rup-aws-sqs'
+        exclude group: 'com.copyright.rup.aws', module: 'rup-aws-sns'
+        exclude group: 'org.apache.camel'
+    }
 }

@@ -145,6 +145,9 @@
     <rule ref="category/java/errorprone.xml/CloseResource">
         <properties>
             <property name="violationSuppressXPath" value="//ClassOrInterfaceDeclaration[ends-with(@SimpleName, 'Test')]"/>
+            <property name="allowedResourceTypes">
+                <value>software.amazon.awssdk.services.sqs.SqsClient|software.amazon.awssdk.services.sns.SnsClient</value>
+            </property>
         </properties>
     </rule>
 

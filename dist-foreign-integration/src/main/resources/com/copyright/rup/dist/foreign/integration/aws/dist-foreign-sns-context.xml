@@ -1,0 +1,17 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <import resource="classpath:/com/copyright/rup/dist/foreign/integration/aws/dist-foreign-aws-context.xml"/>
+
+    <bean id="dist.common.integration.sns.endpoint.configuration" class="com.copyright.rup.aws.RupEndpointConfiguration">
+        <constructor-arg name="serviceEndpoint" value="https://sns.$RUP{dist.common.aws.signing.region}.amazonaws.com"/>
+        <constructor-arg name="signingRegion" value="$RUP{dist.common.aws.signing.region}"/>
+    </bean>
+
+    <bean id="dist.common.integration.sns.client" class="com.copyright.rup.aws.services.sns.RupAmazonSnsFactoryBean">
+        <property name="rupClientConfiguration" ref="dist.common.integration.aws.client.configuration"/>
+        <property name="rupEndpointConfiguration" ref="dist.common.integration.sns.endpoint.configuration"/>
+    </bean>
+</beans>

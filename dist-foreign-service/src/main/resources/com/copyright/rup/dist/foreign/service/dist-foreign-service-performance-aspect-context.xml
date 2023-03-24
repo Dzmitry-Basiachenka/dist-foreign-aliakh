@@ -4,7 +4,8 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
             http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <import resource="classpath:/com/copyright/rup/dist/common/service/dist-common-performance-aspect-context.xml"/>
+    <!--TODO: investigate CamelContext fail-->
+    <!--<import resource="classpath:/com/copyright/rup/dist/common/service/dist-common-performance-aspect-context.xml"/>-->
 
     <bean id="slf4jPerformanceAspect" class="org.perf4j.slf4j.aop.TimingAspect"/>
 </beans>

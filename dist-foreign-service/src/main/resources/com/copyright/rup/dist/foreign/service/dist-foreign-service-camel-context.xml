@@ -68,6 +68,7 @@
           class="com.copyright.rup.dist.foreign.service.impl.usage.paid.PaidUsageSubscriber">
         <constructor-arg ref="df.service.lm.detail.paid.endpoint.topic"/>
         <constructor-arg ref="df.service.lm.detail.paid.endpoint"/>
+        <constructor-arg value="FDA"/>
     </bean>
 
     <bean id="commonRedrivePolicy" class="com.copyright.rup.dist.foreign.service.impl.common.RedrivePolicyFactoryBean">

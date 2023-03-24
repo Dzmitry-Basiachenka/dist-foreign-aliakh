@@ -13,8 +13,8 @@
            http://camel.apache.org/schema/spring/camel-spring.xsd">
 
     <import resource="classpath:/com/copyright/rup/common/config/rup-properties-config.xml"/>
-    <import resource="classpath:/com/copyright/rup/dist/common/integration/aws/dist-common-sns-context.xml"/>
-    <import resource="classpath:/com/copyright/rup/dist/common/integration/aws/dist-common-sqs-context.xml"/>
+    <import resource="classpath:/com/copyright/rup/dist/foreign/integration/aws/dist-foreign-sns-context.xml"/>
+    <import resource="classpath:/com/copyright/rup/dist/foreign/integration/aws/dist-foreign-sqs-context.xml"/>
     <import resource="classpath:/com/copyright/rup/dist/common/integration/rest/prm/prm-rh-preference-context.xml"/>
     <import resource="classpath:/com/copyright/rup/dist/common/integration/rest/prm/prm-rollup-context.xml"/>
     <import resource="classpath:/com/copyright/rup/dist/common/integration/rest/prm/prm-country-context.xml"/>

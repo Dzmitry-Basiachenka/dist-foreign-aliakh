@@ -7,7 +7,6 @@ import static org.junit.Assert.assertTrue;
 import com.copyright.rup.dist.common.domain.BaseEntity;
 import com.copyright.rup.dist.common.test.JsonMatcher;
 import com.copyright.rup.dist.common.test.TestUtils;
-import com.copyright.rup.dist.common.test.mock.aws.SqsClientMock;
 import com.copyright.rup.dist.foreign.domain.AaclUsage;
 import com.copyright.rup.dist.foreign.domain.AclFundPoolDetail;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
@@ -43,9 +42,8 @@ import com.copyright.rup.dist.foreign.service.api.sal.ISalUsageService;
 import com.copyright.rup.dist.foreign.service.impl.mock.LdmtDetailsConsumerMock;
 import com.copyright.rup.dist.foreign.service.impl.mock.PaidUsageConsumerMock;
 import com.copyright.rup.dist.foreign.service.impl.mock.SnsMock;
+import com.copyright.rup.dist.foreign.service.impl.mock.aws.SqsClientMock;
 
-import com.amazonaws.services.sqs.model.MessageAttributeValue;
-import com.amazonaws.services.sqs.model.SendMessageRequest;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -83,6 +81,9 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+
+import software.amazon.awssdk.services.sqs.model.MessageAttributeValue;
+import software.amazon.awssdk.services.sqs.model.SendMessageRequest;
 
 /**
  * Helper for test.
@@ -291,7 +292,7 @@ public class ServiceTestHelper {
             .map(List::size)
             .mapToInt(Integer::intValue)
             .sum();
-        sqsClientMock.assertSendMessages("fda-test-sf-detail.fifo", lmDetailsMessages, excludedFields,
+        sqsClientMock.assertSentMessages("fda-test-sf-detail.fifo", lmDetailsMessages, excludedFields,
             Map.of(
                 "source", "FDA",
                 "scenarioId", scenarioId,
@@ -301,10 +302,10 @@ public class ServiceTestHelper {
         );
         List<SendMessageRequest> sendMessageRequests = sqsClientMock.getActualSendMessageRequests();
         sendMessageRequests.forEach(sendMessageRequest -> {
-            Map<String, MessageAttributeValue> headers = sendMessageRequest.getMessageAttributes();
+            Map<String, MessageAttributeValue> headers = sendMessageRequest.messageAttributes();
             MessageAttributeValue sendDate = headers.get("sendDate");
             assertNotNull(sendDate);
-            assertNotNull(OffsetDateTime.parse(sendDate.getStringValue(),
+            assertNotNull(OffsetDateTime.parse(sendDate.stringValue(),
                 DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS Z")));
         });
     }
@@ -324,7 +325,7 @@ public class ServiceTestHelper {
         String message = TestUtils.fileToString(this.getClass(), fileName);
         sqsClientMock.sendMessage("fda-test-ldmt-licensedata", message, Map.of());
         assertTrue(ldmtDetailsConsumer.getLatch().await(10, TimeUnit.SECONDS));
-        sqsClientMock.assertQueueMessagesReceived("fda-test-ldmt-licensedata");
+        sqsClientMock.assertReceivedMessages("fda-test-ldmt-licensedata");
     }
 
     // TODO: investigate the order of audit items committed in one transaction
@@ -636,9 +637,9 @@ public class ServiceTestHelper {
 
     private void doReceivePaidUsagesFromLm(String message) throws InterruptedException {
         paidUsageConsumer.setLatch(new CountDownLatch(1));
-        sqsClientMock.sendMessage("fda-test-df-consumer-sf-detail-paid", SnsMock.wrapBody(message), Map.of());
+        sqsClientMock.sendMessage("fda-test-df-consumer-sf-detail-paid.fifo", SnsMock.wrapBody(message), Map.of());
         assertTrue(paidUsageConsumer.getLatch().await(10, TimeUnit.SECONDS));
-        sqsClientMock.assertQueueMessagesReceived("fda-test-df-consumer-sf-detail-paid");
+        sqsClientMock.assertReceivedMessages("fda-test-df-consumer-sf-detail-paid.fifo");
     }
 
     private void assertPaidUsages(List<PaidUsage> expectedUsages,
