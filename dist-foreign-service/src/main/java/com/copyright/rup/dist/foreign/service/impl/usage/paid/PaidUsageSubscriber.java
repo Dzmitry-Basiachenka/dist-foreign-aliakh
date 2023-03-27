@@ -86,9 +86,7 @@ public class PaidUsageSubscriber {
         String subscriptionArn = subscribeResponse.subscriptionArn();
         LOGGER.info("Subscription ARN: {}", subscriptionArn);
         setSubscriptionAttributes(snsClient, subscriptionArn);
-        String policyJson = queueAttrResponse.attributes().get(QueueAttributeName.POLICY);
-        LOGGER.info("Queue policy: {}", policyJson);
-        setQueueAttributes(sqsClient, queueUrl, queueArn, topicArn, policyJson);
+        setQueueAttributes(sqsClient, queueUrl, queueArn, topicArn);
         LOGGER.info("Subscribe SQS queue to SNS topic. Finished. TopicEndpoint={}, QueueEndpoint={}, Source={}",
             topicEndpoint, queueEndpoint, source);
     }
@@ -136,19 +134,19 @@ public class PaidUsageSubscriber {
         LOGGER.info("Set subscription attributes response: {}", subscriptionAttrResponse);
     }
 
-    private void setQueueAttributes(SqsClient sqsClient, String queueUrl, String queueArn, String topicArn,
-                                    String policyJson) {
-        Policy policy = policyJson != null && policyJson.length() > 0
-            ? Policy.fromJson(policyJson) : new Policy();
+    private void setQueueAttributes(SqsClient sqsClient, String queueUrl, String queueArn, String topicArn) {
+        Policy policy = new Policy();
         policy.getStatements().add(new Statement(Statement.Effect.Allow)
             .withId("topic-subscription-" + topicArn)
             .withPrincipals(Principal.AllUsers)
             .withActions(() -> "sqs:SendMessage")
             .withResources(new Resource(queueArn))
             .withConditions(ConditionFactory.newSourceArnCondition(topicArn)));
+        String policyJson = policy.toJson();
+        LOGGER.info("Queue policy: {}", policyJson);
         SetQueueAttributesRequest setQueueAttrRequest = SetQueueAttributesRequest.builder()
             .queueUrl(queueUrl)
-            .attributes(Map.of(QueueAttributeName.POLICY, policy.toJson()))
+            .attributes(Map.of(QueueAttributeName.POLICY, policyJson))
             .build();
         LOGGER.info("Set queue attributes request: {}", setQueueAttrRequest);
         SetQueueAttributesResponse setQueueAttrResponse = sqsClient.setQueueAttributes(setQueueAttrRequest);
