@@ -1,3 +1,16 @@
+17.0.14
+-
+* B-76640 FDA: Send notification email when details arrive to LM from FDA: implement headers scenarioId, scenarioName, productFamily, numberOfMessages, sendDate during sending scenarios to LM
+* B-77082 FDA: Show Created By and Created Date on View Fund Pool screen: add Created By and Created Date columns to SAL Fund Pool view window and export file
+* B-77079 FDA: Comparison by Aggregate Licensee Class and Title Report: implement report window
+* B-77108 FDA: Fund Pools by Aggregate Licensee Class Report: implement backend to populate filters
+* B-77108 FDA: Fund Pools by Aggregate Licensee Class Report: implement window to generate report
+* B-77108 FDA: Fund Pools by Aggregate Licensee Class Report: implement backend to generate report
+* B-76852 FDA: switch integrations for paid liabilities to SNS/SQS FIFO: migrate to SNS/SQS FIFO
+* B-76852 FDA: switch integrations for paid liabilities to SNS/SQS FIFO: add performance logs
+* B-76852 FDA: switch integrations for paid liabilities to SNS/SQS FIFO: refine policy configuration in PaidUsageSubscriber
+* B-77994 Tech Debt: FDA: add missing columns to ACL Calculation usage export file
+
 17.0.13
 -
 * B-77993 Tech Debt: FDA: replace Google Guava by Java 11 features
