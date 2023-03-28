@@ -78,8 +78,8 @@
         <constructor-arg ref="dist.common.integration.rest.prmRightsholderOrganizationAsyncService"/>
     </bean>
 
-    <import resource="classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-sqs-test-context.xml"/>
-    <import resource="classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-sns-test-context.xml"/>
+    <import resource="classpath:/com/copyright/rup/dist/common/test/mock/aws/dist-common-sqs-test-context.xml"/>
+    <import resource="classpath:/com/copyright/rup/dist/common/test/mock/aws/dist-common-sns-test-context.xml"/>
     <bean id="df.service.paidUsageSubscriber" class="java.lang.Object"/>
 
     <bean id="commonRedrivePolicy" class="java.lang.Object"/>

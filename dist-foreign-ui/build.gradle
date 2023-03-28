@@ -43,11 +43,7 @@ dependencies {
     runtime("com.copyright.rup.security.auth:rup-auth-consumer:${rupAuthVersion}")
     runtime("org.codehaus.janino:janino:${janinoVersion}")
 
-    testCompile("com.copyright.rup.dist.common:dist-common-test:${distCommonVersion}") {
-        exclude group: 'com.copyright.rup.aws', module: 'rup-aws-sqs'
-        exclude group: 'com.copyright.rup.aws', module: 'rup-aws-sns'
-        exclude group: 'org.apache.camel'
-    }
+    testCompile("com.copyright.rup.dist.common:dist-common-test:${distCommonVersion}")
     testCompile("org.apache.commons:commons-text:${commonsTextVersion}")
 
     testIntegRuntime("com.jayway.jsonpath:json-path:${jsonPathVersion}")

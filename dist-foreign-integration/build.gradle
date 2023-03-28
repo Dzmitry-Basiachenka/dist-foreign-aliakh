@@ -5,10 +5,7 @@ dependencies {
 
     compile("com.copyright.rup.aws:rup-aws-sns:${rupAwsVersion}")
     compile("com.copyright.rup.aws:rup-aws-sqs:${rupAwsVersion}")
-    compile("com.copyright.rup.dist.common:dist-common-integration:${distCommonVersion}") {
-        exclude group: 'org.apache.camel', module: 'camel-aws-sqs'
-        exclude group: 'org.apache.camel', module: 'camel-aws-sns'
-    }
+    compile("com.copyright.rup.dist.common:dist-common-integration:${distCommonVersion}")
     //transitive dependency of rup-es-api to avoid CVE-2020-9488, CVE-2020-21913
     compile("org.apache.logging.log4j:log4j-api:${log4jVersion}")
     compile("com.ibm.icu:icu4j:${icu4jVersion}")
@@ -25,11 +22,7 @@ dependencies {
     compile("org.apache.httpcomponents:httpasyncclient:${httpAsyncClientVersion}")
     compile("org.springframework:spring-web:${rupJava.standardDependencies.spring.version}")
 
-    testCompile("com.copyright.rup.dist.common:dist-common-test:${distCommonVersion}") {
-        exclude group: 'com.copyright.rup.aws', module: 'rup-aws-sqs'
-        exclude group: 'com.copyright.rup.aws', module: 'rup-aws-sns'
-        exclude group: 'org.apache.camel'
-    }
+    testCompile("com.copyright.rup.dist.common:dist-common-test:${distCommonVersion}")
 
     testRuntime("com.copyright.rup.common:rup-common-config:${rupCommonVersion}")
 }

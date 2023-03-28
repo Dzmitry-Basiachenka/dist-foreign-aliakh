@@ -64,8 +64,7 @@
         <property name="endPoint" value="direct:df.feeder.job.status"/>
     </bean>
 
-    <bean id="df.service.paidUsageSubscriber"
-          class="com.copyright.rup.dist.foreign.service.impl.usage.paid.PaidUsageSubscriber">
+    <bean id="df.service.paidUsageSubscriber" class="com.copyright.rup.dist.common.integration.aws.SnsTopicSubscriber">
         <constructor-arg ref="df.service.lm.detail.paid.endpoint.topic"/>
         <constructor-arg ref="df.service.lm.detail.paid.endpoint"/>
         <constructor-arg value="FDA"/>

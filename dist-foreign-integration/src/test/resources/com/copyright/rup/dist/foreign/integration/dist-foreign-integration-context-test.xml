@@ -9,6 +9,6 @@
     <import resource="classpath:/com/copyright/rup/dist/foreign/integration/dist-foreign-integration-context.xml"/>
 
     <!-- Mocks -->
-    <import resource="classpath:/com/copyright/rup/dist/foreign/integration/dist-foreign-sqs-test-context.xml"/>
-    <import resource="classpath:/com/copyright/rup/dist/foreign/integration/dist-foreign-sns-test-context.xml"/>
+    <import resource="classpath:/com/copyright/rup/dist/common/test/mock/aws/dist-common-sqs-test-context.xml"/>
+    <import resource="classpath:/com/copyright/rup/dist/common/test/mock/aws/dist-common-sns-test-context.xml"/>
 </beans>
