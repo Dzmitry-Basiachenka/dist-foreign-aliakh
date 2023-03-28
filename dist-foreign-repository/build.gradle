@@ -12,11 +12,7 @@ dependencies {
     compile("com.fasterxml.jackson.module:jackson-module-jaxb-annotations:${rupCamel.standardDependencies.jackson.version}")
     compile("org.apache.commons:commons-collections4:${commonsCollectionsVersion}")
 
-    testCompile("com.copyright.rup.dist.common:dist-common-test:${distCommonVersion}") {
-        exclude group: 'com.copyright.rup.aws', module: 'rup-aws-sqs'
-        exclude group: 'com.copyright.rup.aws', module: 'rup-aws-sns'
-        exclude group: 'org.apache.camel'
-    }
+    testCompile("com.copyright.rup.dist.common:dist-common-test:${distCommonVersion}")
 
     testIntegCompile("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${rupCamel.standardDependencies.jackson.version}")
     testIntegRuntime project(":dist-foreign-db")
