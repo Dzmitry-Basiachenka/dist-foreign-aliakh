@@ -275,21 +275,10 @@ public class ServiceTestHelper {
             .stream()
             .map(fileName -> TestUtils.fileToString(this.getClass(), fileName))
             .collect(Collectors.toList());
-        //TODO: simplify by introducing a method parameter
         int numberOfMessages = lmDetailsMessages
             .stream()
-            .map(message -> {
-                try {
-                    ObjectMapper mapper = new ObjectMapper();
-                    return mapper.readValue(message, new TypeReference<Map<String, Object>>() {
-                    });
-                } catch (IOException e) {
-                    throw new AssertionError(e);
-                }
-            })
-            .map(map -> map.get("details"))
-            .map(details -> (List<?>) details)
-            .map(List::size)
+            .map(this::parseExternalUsageWrapper)
+            .map(wrapper -> wrapper.getDetails().size())
             .mapToInt(Integer::intValue)
             .sum();
         sqsClientMock.assertSentMessages("fda-test-sf-detail.fifo", lmDetailsMessages, excludedFields,
@@ -818,6 +807,16 @@ public class ServiceTestHelper {
             .forEach(i -> verifyAclScenarioDetail(expectedScenarioDetails.get(i), actualScenarioDetails.get(i)));
     }
 
+    private ExternalUsageWrapper parseExternalUsageWrapper(String message) {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            return mapper.readValue(message, new TypeReference<ExternalUsageWrapper>() {
+            });
+        } catch (IOException e) {
+            throw new AssertionError(e);
+        }
+    }
+
     private PaidUsage getPaidUsageByLmDetailId(String lmDetailId,
                                                Map<UsageStatusEnum, List<String>> usageIdsGroupedByStatus) {
         assertNotNull(lmDetailId);
@@ -896,5 +895,18 @@ public class ServiceTestHelper {
         assertEquals(expectedDetail.getGrossAmount(), actualDetail.getGrossAmount());
         assertEquals(expectedDetail.getNetAmount(), actualDetail.getNetAmount());
         assertEquals(expectedDetail.getServiceFeeAmount(), actualDetail.getServiceFeeAmount());
+    }
+
+    private static class ExternalUsageWrapper {
+
+        private List<Object> details;
+
+        public List<Object> getDetails() {
+            return details;
+        }
+
+        public void setDetails(List<Object> details) {
+            this.details = details;
+        }
     }
 }
