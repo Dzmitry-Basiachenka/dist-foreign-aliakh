@@ -95,6 +95,30 @@
         <result property="jacdclNetAmount" column="jacdcl_net_amount"/>
     </resultMap>
 
+    <resultMap id="AclComparisonByAggLcClassAndTitleReportDtoResultMap" type="AclComparisonByAggLcClassAndTitleReportDto">
+        <result property="aggregateLicenseeClassId" column="aggregate_licensee_class_id"/>
+        <result property="aggregateLicenseeClassName" column="aggregate_licensee_class_name"/>
+        <result property="wrWrkInst" column="wr_wrk_inst"/>
+        <result property="systemTitle" column="system_title"/>
+        <result property="pubTypeName" column="name"/>
+        <result property="printRhAccountNumberPreviousPeriod" column="print_rh_account_number_previous_period"/>
+        <result property="printRhNamePreviousPeriod" column="print_rh_name_previous_period"/>
+        <result property="digitalRhAccountNumberPreviousPeriod" column="digital_rh_account_number_previous_period"/>
+        <result property="digitalRhNamePreviousPeriod" column="digital_rh_name_previous_period"/>
+        <result property="printNetAmountPreviousPeriod" column="print_net_amount_previous_period"/>
+        <result property="digitalNetAmountPreviousPeriod" column="digital_net_amount_previous_period"/>
+        <result property="totalNetAmountPreviousPeriod" column="total_net_amount_previous_period"/>
+        <result property="printRhAccountNumberCurrentPeriod" column="print_rh_account_number_current_period"/>
+        <result property="printRhNameCurrentPeriod" column="print_rh_name_current_period"/>
+        <result property="digitalRhAccountNumberCurrentPeriod" column="digital_rh_account_number_current_period"/>
+        <result property="digitalRhNameCurrentPeriod" column="digital_rh_name_current_period"/>
+        <result property="printNetAmountCurrentPeriod" column="print_net_amount_current_period"/>
+        <result property="digitalNetAmountCurrentPeriod" column="digital_net_amount_current_period"/>
+        <result property="totalNetAmountCurrentPeriod" column="total_net_amount"/>
+        <result property="delta" column="delta"/>
+        <result property="changePercent" column="change_percent"/>
+    </resultMap>
+
     <sql id="selectAclTotalAmountsSql">
         select
             sum(gross_amount) as gross_amount,
@@ -315,6 +339,85 @@
 
     <select id="findAclLiabilitiesByRhReportTotalAmounts" parameterType="map" resultMap="aclTotalAmountsReportDtoResultMap">
         <include refid="IAclCalculationReportMapper.selectAclTotalAmountsSql"/>
+    </select>
+
+    <select id="findAclComparisonByAggLcClassAndTitleReport" parameterType="map" resultMap="AclComparisonByAggLcClassAndTitleReportDtoResultMap">
+        with usage_data_previous_period as (
+            select
+                alc.aggregate_licensee_class_id,
+                alc.description,
+                scd.wr_wrk_inst,
+                scd.system_title,
+                pt.name,
+                min(case when shd.type_of_use = 'PRINT' then shd.rh_account_number end) as print_rh_account_number,
+                min(case when shd.type_of_use = 'DIGITAL' then shd.rh_account_number end) as digital_rh_account_number,
+                sum(case when shd.type_of_use = 'PRINT' then coalesce(net_amount, 0) else 0 end) as print_net_amount,
+                sum(case when shd.type_of_use = 'DIGITAL' then coalesce(net_amount, 0) else 0 end) as digital_net_amount,
+                sum(net_amount) as total_net_amount
+            from ${schema}.df_acl_scenario_detail scd
+            join ${schema}.df_acl_share_detail shd on scd.df_acl_scenario_detail_uid = shd.df_acl_scenario_detail_uid
+            join ${schema}.df_detail_licensee_class dlc on scd.detail_licensee_class_id = dlc.detail_licensee_class_id
+            join ${schema}.df_aggregate_licensee_class alc on dlc.aggregate_licensee_class_id = alc.aggregate_licensee_class_id
+            join ${schema}.df_publication_type pt on scd.publication_type_uid = pt.df_publication_type_uid
+            where shd.df_acl_scenario_uid in
+                <foreach collection="previousScenarios" item="previousScenario" open="(" separator=", " close=")">
+                    #{previousScenario.id}
+                </foreach>
+            group by alc.aggregate_licensee_class_id, scd.wr_wrk_inst, scd.system_title, pt.name
+        ),
+        usage_data_current_period as (
+            select
+                alc.aggregate_licensee_class_id,
+                alc.description,
+                scd.wr_wrk_inst,
+                scd.system_title,
+                pt.name,
+                min(case when shd.type_of_use = 'PRINT' then shd.rh_account_number end) as print_rh_account_number,
+                min(case when shd.type_of_use = 'DIGITAL' then shd.rh_account_number end) as digital_rh_account_number,
+                sum(case when shd.type_of_use = 'PRINT' then coalesce(net_amount, 0) else 0 end) as print_net_amount,
+                sum(case when shd.type_of_use = 'DIGITAL' then coalesce(net_amount, 0) else 0 end) as digital_net_amount,
+                sum(net_amount) as total_net_amount
+            from ${schema}.df_acl_scenario_detail scd
+            join ${schema}.df_acl_share_detail shd on scd.df_acl_scenario_detail_uid = shd.df_acl_scenario_detail_uid
+            join ${schema}.df_detail_licensee_class dlc on scd.detail_licensee_class_id = dlc.detail_licensee_class_id
+            join ${schema}.df_aggregate_licensee_class alc on dlc.aggregate_licensee_class_id = alc.aggregate_licensee_class_id
+            join ${schema}.df_publication_type pt on scd.publication_type_uid = pt.df_publication_type_uid
+            where shd.df_acl_scenario_uid in
+                <foreach collection="scenarios" item="scenario" open="(" separator=", " close=")">
+                    #{scenario.id}
+                </foreach>
+            group by alc.aggregate_licensee_class_id, scd.wr_wrk_inst, scd.system_title, pt.name
+        )
+        select
+            coalesce(udpp.aggregate_licensee_class_id, udcp.aggregate_licensee_class_id) as aggregate_licensee_class_id,
+            coalesce(udpp.description, udcp.description) as aggregate_licensee_class_name,
+            coalesce(udpp.wr_wrk_inst, udcp.wr_wrk_inst) as wr_wrk_inst,
+            coalesce(udpp.system_title, udcp.system_title) as system_title,
+            coalesce(udpp.name, udcp.name) as name,
+            udpp.print_rh_account_number as print_rh_account_number_previous_period,
+            rpp.name as print_rh_name_previous_period,
+            udpp.digital_rh_account_number as digital_rh_account_number_previous_period,
+            rpd.name as digital_rh_name_previous_period,
+            udpp.print_net_amount as print_net_amount_previous_period,
+            udpp.digital_net_amount as digital_net_amount_previous_period,
+            udpp.total_net_amount as total_net_amount_previous_period,
+            udcp.print_rh_account_number as print_rh_account_number_current_period,
+            rcp.name as print_rh_name_current_period,
+            udcp.digital_rh_account_number as digital_rh_account_number_current_period,
+            rcd.name as digital_rh_name_current_period,
+            udcp.print_net_amount as print_net_amount_current_period,
+            udcp.digital_net_amount as digital_net_amount_current_period,
+            udcp.total_net_amount as total_net_amount,
+            coalesce(udcp.total_net_amount, 0) - coalesce(udpp.total_net_amount, 0) as delta,
+            case when udpp.total_net_amount != 0 then (100 * (coalesce(udcp.total_net_amount, 0) - udpp.total_net_amount) / udpp.total_net_amount) else null end as change_percent
+        from usage_data_previous_period udpp
+        full join usage_data_current_period udcp on udpp.aggregate_licensee_class_id = udcp.aggregate_licensee_class_id
+            and udpp.wr_wrk_inst = udcp.wr_wrk_inst and udpp.system_title = udcp.system_title and udpp.name = udcp.name
+        left join ${schema}.df_rightsholder rpp on udpp.print_rh_account_number = rpp.rh_account_number
+        left join ${schema}.df_rightsholder rpd on udpp.digital_rh_account_number = rpd.rh_account_number
+        left join ${schema}.df_rightsholder rcp on udcp.print_rh_account_number = rcp.rh_account_number
+        left join ${schema}.df_rightsholder rcd on udcp.digital_rh_account_number = rcd.rh_account_number
+        order by aggregate_licensee_class_id, wr_wrk_inst
     </select>
 
     <select id="writeAclFundPoolByAggLcReport" resultMap="aclFundPoolByAggLcReportDtoResultMap">

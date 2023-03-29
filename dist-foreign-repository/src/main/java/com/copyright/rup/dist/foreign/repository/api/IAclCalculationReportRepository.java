@@ -108,6 +108,15 @@ public interface IAclCalculationReportRepository {
     void writeAclLiabilitiesByRhReport(AclCalculationReportsInfoDto reportInfo, OutputStream outputStream);
 
     /**
+     * Finds ACL Comparison by Aggregate Licensee Class dtos and writes them to the output stream in CSV format.
+     *
+     * @param reportInfo   meta information regarding report
+     * @param outputStream instance of {@link OutputStream}
+     */
+    void writeAclComparisonByAggLcClassAndTitleReport(AclCalculationReportsInfoDto reportInfo,
+                                                      OutputStream outputStream);
+
+    /**
      * Finds ACL Fund Pools grouped by Agg LC and writes them to the output stream in CSV format.
      *
      * @param fundPoolIds  set of Fund Pool ids

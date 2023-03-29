@@ -6,6 +6,7 @@ import com.copyright.rup.dist.foreign.domain.filter.AclGrantDetailFilter;
 import com.copyright.rup.dist.foreign.domain.filter.AclScenarioFilter;
 import com.copyright.rup.dist.foreign.domain.filter.AclUsageFilter;
 import com.copyright.rup.dist.foreign.domain.report.AclCalculationReportsInfoDto;
+import com.copyright.rup.dist.foreign.domain.report.AclComparisonByAggLcClassAndTitleReportDto;
 import com.copyright.rup.dist.foreign.domain.report.AclFundPoolByAggLcReportDto;
 import com.copyright.rup.dist.foreign.domain.report.AclLiabilitiesByAggLicClassReportDto;
 import com.copyright.rup.dist.foreign.domain.report.AclLiabilitiesByRhReportDto;
@@ -13,6 +14,7 @@ import com.copyright.rup.dist.foreign.domain.report.AclLiabilityDetailsReportDto
 import com.copyright.rup.dist.foreign.domain.report.AclReportTotalAmountsDto;
 import com.copyright.rup.dist.foreign.domain.report.AclSummaryOfWorkSharesByAggLcReportDto;
 import com.copyright.rup.dist.foreign.domain.report.AclWorkSharesByAggLcReportDto;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -77,6 +79,7 @@ public class AclDomainVerifierTest {
             {AclLiabilitiesByRhReportDto.class},
             {AclScenarioFilter.class},
             {AclScenarioLiabilityDetail.class},
+            {AclComparisonByAggLcClassAndTitleReportDto.class},
         };
         return List.of(testData);
     }

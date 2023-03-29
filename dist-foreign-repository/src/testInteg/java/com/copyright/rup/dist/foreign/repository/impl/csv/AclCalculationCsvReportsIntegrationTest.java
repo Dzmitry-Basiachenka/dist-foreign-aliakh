@@ -60,6 +60,8 @@ public class AclCalculationCsvReportsIntegrationTest extends CsvReportsTestHelpe
         FOLDER_NAME + "write-liability-details-csv-report.groovy";
     private static final String WRITE_LIABILITIES_BY_RH_CSV_REPORT =
         FOLDER_NAME + "write-liabilities-by-rh-csv-report.groovy";
+    private static final String WRITE_COMPARISON_BY_AGG_LC_CL_CSV_REPORT =
+        FOLDER_NAME + "write-comparison-by-agg-lc-class-and-title-csv-report.groovy";
     private static final String WRITE_FUND_POOL_BY_AGG_LC_CSV_REPORT =
         FOLDER_NAME + "write-fund-pool-by-agg-lc-csv-report.groovy";
     private static final String ACL_SCENARIO_NAME = "ACL Scenario 10/05/202212";
@@ -231,6 +233,23 @@ public class AclCalculationCsvReportsIntegrationTest extends CsvReportsTestHelpe
         assertFilesWithExecutor(outputStream ->
             aclCalculationReportRepository.writeAclLiabilitiesByRhReport(reportsInfoDto, outputStream),
             "acl/liabilities_by_rightsholder_report.csv");
+    }
+
+    @Test
+    @TestData(fileName = WRITE_COMPARISON_BY_AGG_LC_CL_CSV_REPORT)
+    public void testWriteAclComparisonByAggLcClassAndTitleReport() throws IOException {
+        AclCalculationReportsInfoDto reportInfo = new AclCalculationReportsInfoDto();
+        reportInfo.setPreviousScenarios(List.of(
+            buildScenario("7fa61f70-3310-4ec0-8a50-bdd794e2fd08", "ACL Scenario 202212"),
+            buildScenario("c283e1db-5fea-4ad6-bb54-5069ba0ecc1e", "MACL Scenario 202212"),
+            buildScenario("2050bc92-4900-403b-88bc-a05ec33c5de4", "VGW Scenario 202212")));
+        reportInfo.setScenarios(List.of(
+            buildScenario("ec2e8521-a55b-4b70-ad9d-9b07ddfa0b3e", "ACL Scenario 202312"),
+            buildScenario("c42237cf-dec7-43e3-a5d6-4427b6d24773", "MACL Scenario 202312"),
+            buildScenario("2bd594f8-7289-4d6e-be46-9df909f36263", "VGW Scenario 202312")));
+        assertFilesWithExecutor(outputStream ->
+                aclCalculationReportRepository.writeAclComparisonByAggLcClassAndTitleReport(reportInfo, outputStream),
+            "acl/comparison_by_agg_lc_cl_and_title_report.csv");
     }
 
     @Test

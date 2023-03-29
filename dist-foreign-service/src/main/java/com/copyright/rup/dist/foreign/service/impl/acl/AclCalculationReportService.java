@@ -84,7 +84,7 @@ public class AclCalculationReportService implements IAclCalculationReportService
     @Override
     public void writeAclComparisonByAggLcClassAndTitleReport(AclCalculationReportsInfoDto reportInfo,
                                                              OutputStream outputStream) {
-        //TODO will be implemented with backend logic
+        aclCalculationReportRepository.writeAclComparisonByAggLcClassAndTitleReport(reportInfo, outputStream);
     }
 
     @Override
