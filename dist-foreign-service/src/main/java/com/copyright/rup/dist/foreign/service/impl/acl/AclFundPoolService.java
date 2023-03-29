@@ -98,7 +98,7 @@ public class AclFundPoolService implements IAclFundPoolService {
 
     @Override
     public List<AclFundPool> getFundPoolsByPeriods(Set<Integer> periods) {
-        return fundPoolRepository.findFundPoolsByPeriods(periods);
+        return !periods.isEmpty() ? fundPoolRepository.findFundPoolsByPeriods(periods) : List.of();
     }
 
     @Override

@@ -29,9 +29,9 @@ import java.util.stream.Collectors;
 /**
  * Implementation of {@link IAclFundPoolByAggLcReportWidget}.
  * <p>
- * Copyright (C) 2022 copyright.com
+ * Copyright (C) 2023 copyright.com
  * <p>
- * Date: 10/05/2022
+ * Date: 03/22/2023
  *
  * @author Ihar Suvorau
  */
@@ -77,6 +77,7 @@ public class AclFundPoolByAggLcReportWidget extends Window implements IAclFundPo
             fundPoolFilterWidget.loadBeans();
             fundPoolFilterWidget.setEnabled(CollectionUtils.isNotEmpty(event.getSelectedItemsIds()));
             applyFilterEmptyStyle(periodFilterWidget, event.getSelectedItemsIds().size());
+            exportButton.setEnabled(false);
         });
         fundPoolFilterWidget.addFilterSaveListener(event -> {
             Set<AclFundPool> selectedItems = event.getSelectedItemsIds();

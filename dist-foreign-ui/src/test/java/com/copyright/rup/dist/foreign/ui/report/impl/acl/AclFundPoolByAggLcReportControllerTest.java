@@ -91,7 +91,7 @@ public class AclFundPoolByAggLcReportControllerTest {
         expectLastCall().once();
         replay(OffsetDateTime.class, widget, aclReportService);
         IStreamSource streamSource = controller.getCsvStreamSource();
-        assertEquals("fund_pools_by_agg_lc_report_01_02_2021_03_04.csv",
+        assertEquals("fund_pools_by_aggregate_licensee_class_report_01_02_2021_03_04.csv",
             streamSource.getSource().getKey().get());
         assertNotNull(streamSource.getSource().getValue().get());
         assertNotNull(osCapture.getValue());
