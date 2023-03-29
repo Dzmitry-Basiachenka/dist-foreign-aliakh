@@ -334,6 +334,6 @@
                 #{fundPoolId}
             </foreach>
         group by fp.df_acl_fund_pool_uid, alc.aggregate_licensee_class_id, alc.description
-        order by fp.name, alc.aggregate_licensee_class_id
+        order by fp.period desc, fp.name, alc.aggregate_licensee_class_id
     </select>
 </mapper>

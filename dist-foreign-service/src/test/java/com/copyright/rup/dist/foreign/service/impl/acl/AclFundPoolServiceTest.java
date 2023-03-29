@@ -162,6 +162,13 @@ public class AclFundPoolServiceTest {
     }
 
     @Test
+    public void testGetFundPoolsByPeriodsEmptyPeriods() {
+        replay(fundPoolRepository);
+        assertTrue(service.getFundPoolsByPeriods(Set.of()).isEmpty());
+        verify(fundPoolRepository);
+    }
+
+    @Test
     public void testDeleteAclFundPool() {
         mockStatic(RupContextUtils.class);
         AclFundPool fundPool = buildFundPool();

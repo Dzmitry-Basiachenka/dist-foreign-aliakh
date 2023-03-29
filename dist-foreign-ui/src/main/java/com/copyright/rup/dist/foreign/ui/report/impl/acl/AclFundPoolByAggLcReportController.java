@@ -49,7 +49,7 @@ public class AclFundPoolByAggLcReportController extends CommonController<IAclFun
 
     @Override
     public IStreamSource getCsvStreamSource() {
-        return new ByteArrayStreamSource("fund_pools_by_agg_lc_report_", os ->
+        return new ByteArrayStreamSource("fund_pools_by_aggregate_licensee_class_report_", os ->
             reportService.writeAclFundPoolByAggLcReport(getWidget().getFundPoolIds(), os));
     }
 
