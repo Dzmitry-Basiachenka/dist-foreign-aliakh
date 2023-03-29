@@ -42,7 +42,10 @@
     "distributionName": "FDA April 18",
     "distributionDate": "2018-04-07T20:00:00-04:00",
     "periodEndDate": "2018-04-11T20:00:00-04:00",
-    "lmDetailId": "1cb528e4-9712-4a2a-b456-9eb4316799d4"
+    "lmDetailId": "1cb528e4-9712-4a2a-b456-9eb4316799d4",
+    "fasUsage": {
+      "reportedStandardNumber": "12345XX-12978"
+    }
   },
   {
     "batchId": "%1$s",
@@ -86,7 +89,10 @@
     "distributionName": "FDA May 18",
     "distributionDate": "2018-05-17T20:00:00-04:00",
     "periodEndDate": "2018-05-21T20:00:00-04:00",
-    "lmDetailId": "ebae756e-6174-4ce7-9988-7722cdc35ce4"
+    "lmDetailId": "ebae756e-6174-4ce7-9988-7722cdc35ce4",
+    "fasUsage": {
+      "reportedStandardNumber": "12345XX-12978"
+    }
   },
   {
     "id": "5e8307ee-be63-45d3-b074-17052fbcddda",
@@ -131,7 +137,10 @@
     "distributionName": "FDA April 18",
     "distributionDate": "2018-04-07T20:00:00-04:00",
     "periodEndDate": "2018-04-11T20:00:00-04:00",
-    "lmDetailId": "75d22d2c-d9f0-4486-b17e-6e03ccda6bf9"
+    "lmDetailId": "75d22d2c-d9f0-4486-b17e-6e03ccda6bf9",
+    "fasUsage": {
+      "reportedStandardNumber": "12345XX-123117"
+    }
   },
   {
     "id": "bde1e665-b10f-4015-936f-71fb42410e3b",
@@ -176,7 +185,10 @@
     "distributionName": "FDA March 11",
     "distributionDate": "2011-03-15T04:41:52.735531-04:00",
     "periodEndDate": "2011-03-15T04:41:52.735531-04:00",
-    "lmDetailId": "803dea5c-03d9-4404-8b3a-7f6b5ba9acce"
+    "lmDetailId": "803dea5c-03d9-4404-8b3a-7f6b5ba9acce",
+    "fasUsage": {
+      "reportedStandardNumber": "1008902112317622XX"
+    }
   },
   {
     "id": "ae72ce15-d501-4c0f-b224-3ffca884e0f3",
@@ -221,7 +233,10 @@
     "distributionName": "FDA April 18",
     "distributionDate": "2018-04-07T20:00:00-04:00",
     "periodEndDate": "2018-04-11T20:00:00-04:00",
-    "lmDetailId": "b771be06-0206-4e03-9e9a-740c5714bdae"
+    "lmDetailId": "b771be06-0206-4e03-9e9a-740c5714bdae",
+    "fasUsage": {
+      "reportedStandardNumber": "12345XX-190048"
+    }
   },
   {
     "id": "7d00d72c-891e-47c8-810f-1c750fb58915",
@@ -266,7 +281,10 @@
     "distributionName": "FDA April 18",
     "distributionDate": "2018-04-07T20:00:00-04:00",
     "periodEndDate": "2018-04-11T20:00:00-04:00",
-    "lmDetailId": "c6a8a6d4-952c-43e2-9f9d-f12212c95fd8"
+    "lmDetailId": "c6a8a6d4-952c-43e2-9f9d-f12212c95fd8",
+    "fasUsage": {
+      "reportedStandardNumber": "1008902112317622XX"
+    }
   },
   {
     "id": "2bffdf90-db90-4d92-a15e-03fbc739a0d5",
@@ -311,7 +329,10 @@
     "distributionName": "FDA April 18",
     "distributionDate": "2018-04-07T20:00:00-04:00",
     "periodEndDate": "2018-04-11T20:00:00-04:00",
-    "lmDetailId": "d40b2162-d062-4161-8d64-7e869d45da4a"
+    "lmDetailId": "d40b2162-d062-4161-8d64-7e869d45da4a",
+    "fasUsage": {
+      "reportedStandardNumber": "12345XX-79068"
+    }
   },
   {
     "id": "5f0f7397-6cb6-4538-b3dc-9364ed302e95",
@@ -356,6 +377,9 @@
     "distributionName": "FDA April 18",
     "distributionDate": "2018-04-07T20:00:00-04:00",
     "periodEndDate": "2018-04-11T20:00:00-04:00",
-    "lmDetailId": "f9233aec-fa18-4973-a97c-5b550474c2fd"
+    "lmDetailId": "f9233aec-fa18-4973-a97c-5b550474c2fd",
+    "fasUsage": {
+      "reportedStandardNumber": "12345XX-79069"
+    }
   }
 ]

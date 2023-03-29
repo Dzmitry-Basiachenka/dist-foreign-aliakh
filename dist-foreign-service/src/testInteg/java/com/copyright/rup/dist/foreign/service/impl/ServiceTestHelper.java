@@ -660,6 +660,10 @@ public class ServiceTestHelper {
             if (Objects.nonNull(actualUsage.getAaclUsage())) {
                 assertAaclUsage(expectedUsage.getAaclUsage(), actualUsage.getAaclUsage());
             }
+            if (Objects.nonNull(actualUsage.getFasUsage())) {
+                assertEquals(expectedUsage.getFasUsage().getReportedStandardNumber(),
+                    actualUsage.getFasUsage().getReportedStandardNumber());
+            }
         });
     }
 
@@ -750,7 +754,7 @@ public class ServiceTestHelper {
         assertEquals(expectedUsage.getQuestionIdentifier(), actualUsage.getQuestionIdentifier());
     }
 
-    public void assertAclciUsage(AclciUsage expectedUsage, AclciUsage actualUsage)  {
+    public void assertAclciUsage(AclciUsage expectedUsage, AclciUsage actualUsage) {
         assertEquals(expectedUsage.getLicenseeAccountNumber(), actualUsage.getLicenseeAccountNumber());
         assertEquals(expectedUsage.getLicenseeName(), actualUsage.getLicenseeName());
         assertEquals(expectedUsage.getCoveragePeriod(), actualUsage.getCoveragePeriod());

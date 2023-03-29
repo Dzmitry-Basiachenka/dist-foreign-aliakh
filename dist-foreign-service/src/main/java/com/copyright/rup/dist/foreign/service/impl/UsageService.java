@@ -487,6 +487,7 @@ public class UsageService implements IUsageService {
         resultUsage.setComment(originalUsage.getComment());
         resultUsage.setAaclUsage(originalUsage.getAaclUsage());
         resultUsage.setSalUsage(originalUsage.getSalUsage());
+        resultUsage.setFasUsage(originalUsage.getFasUsage());
         resultUsage.setNetAmount(paidUsage.getNetAmount());
         resultUsage.setServiceFeeAmount(paidUsage.getServiceFeeAmount());
         resultUsage.setGrossAmount(paidUsage.getGrossAmount());
