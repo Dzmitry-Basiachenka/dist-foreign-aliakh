@@ -158,6 +158,7 @@ public class AclCalculationReportRepository extends CommonReportRepository imple
                  new AclComparisonByAggLcClassAndTitleCsvReportHandler(Objects.requireNonNull(outputStream))) {
             getTemplate().select("IAclCalculationReportMapper.findAclComparisonByAggLcClassAndTitleReport",
                 reportInfo, handler);
+            handler.writeMetadata(reportInfo);
         }
     }
 

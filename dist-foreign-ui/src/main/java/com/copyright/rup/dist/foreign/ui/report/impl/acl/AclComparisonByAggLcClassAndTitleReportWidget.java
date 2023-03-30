@@ -61,8 +61,6 @@ public class AclComparisonByAggLcClassAndTitleReportWidget extends AclCommonRepo
     @Override
     public AclCalculationReportsInfoDto getReportInfo() {
         AclCalculationReportsInfoDto reportInfo = new AclCalculationReportsInfoDto();
-        reportInfo.setPreviousPeriod(previousPeriodComboBox.getSelectedItem().orElse(null));
-        reportInfo.setPeriod(currentPeriodComboBox.getSelectedItem().orElse(null));
         reportInfo.setPreviousScenarios(new ArrayList<>(previousScenarioFilterWidget.getSelectedItems()));
         reportInfo.setScenarios(new ArrayList<>(currentScenarioFilterWidget.getSelectedItems()));
         return reportInfo;

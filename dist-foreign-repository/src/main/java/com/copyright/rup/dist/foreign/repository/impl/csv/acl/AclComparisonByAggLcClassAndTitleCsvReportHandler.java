@@ -1,12 +1,17 @@
 package com.copyright.rup.dist.foreign.repository.impl.csv.acl;
 
 import com.copyright.rup.dist.common.repository.impl.csv.BaseCsvReportHandler;
+import com.copyright.rup.dist.foreign.domain.AclScenario;
+import com.copyright.rup.dist.foreign.domain.report.AclCalculationReportsInfoDto;
 import com.copyright.rup.dist.foreign.domain.report.AclComparisonByAggLcClassAndTitleReportDto;
+
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * Writes ACL Comparison by Aggregate Licensee Class and Title Report into {@link OutputStream}.
@@ -26,6 +31,7 @@ public class AclComparisonByAggLcClassAndTitleCsvReportHandler extends
         "Print RH Account # Period 2", "Print RH Name Period 2", "Digital RH Account # Period 2",
         "Digital RH Name Period 2", "Print Net Amt Period 2", "Digital Net Amt Period 2", "Net Total Amount Period 2",
         "Delta", "% Change");
+    private static final List<String> METADATA_HEADERS = List.of("Scenarios Period 1", "Scenarios Period 2");
 
     /**
      * Constructor.
@@ -34,6 +40,21 @@ public class AclComparisonByAggLcClassAndTitleCsvReportHandler extends
      */
     public AclComparisonByAggLcClassAndTitleCsvReportHandler(OutputStream outputStream) {
         super(outputStream);
+    }
+
+    /**
+     * Writes metadata into the report.
+     *
+     * @param metadata ACL calculation report metadata
+     */
+    public void writeMetadata(AclCalculationReportsInfoDto metadata) {
+        String scenarioNamesPreviousPeriod = metadata.getPreviousScenarios().stream().map(AclScenario::getName)
+            .sorted(String::compareToIgnoreCase).collect(Collectors.joining(", "));
+        String scenarioNamesCurrentPeriod = metadata.getScenarios().stream().map(AclScenario::getName)
+            .sorted(String::compareToIgnoreCase).collect(Collectors.joining(", "));
+        writeStringRow(List.of(StringUtils.EMPTY, StringUtils.EMPTY));
+        writeStringRow(METADATA_HEADERS);
+        writeStringRow(List.of(scenarioNamesPreviousPeriod, scenarioNamesCurrentPeriod));
     }
 
     @Override
