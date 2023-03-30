@@ -7,3 +7,6 @@ Agg LC ID,Agg LC Name,Wr Wrk Inst,System Title,Pub Type,Print RH Account # Perio
 23,Electric and Gas Utilities,269040891,Technology review,BK,1000028511,Greenleaf Publishing,,,37.1100000000,0.00,37.1100000000,1000002859,John Wiley & Sons - Books,,,37.1200000000,0.00,37.1200000000,0.0100000000,0%
 56,Financial,122813964,Aerospace America,BK,,,,,,,,1000002859,John Wiley & Sons - Books,1000002859,John Wiley & Sons - Books,50.0000000000,75.0000000000,125.0000000000,125.0000000000,N/A
 56,Financial,269040891,Technology review,NL,1000002859,John Wiley & Sons - Books,1000002859,John Wiley & Sons - Books,40.0000000000,80.0000000000,120.0000000000,,,,,,,,-120.0000000000,-100%
+,
+Scenarios Period 1,Scenarios Period 2
+"ACL Scenario 202212, MACL Scenario 202212, VGW Scenario 202212","ACL Scenario 202312, MACL Scenario 202312, VGW Scenario 202312"

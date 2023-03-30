@@ -62,8 +62,6 @@ public class AclComparisonByAggLcClassAndTitleReportControllerTest {
         OffsetDateTime now = OffsetDateTime.of(2021, 1, 2, 3, 4, 5, 6, ZoneOffset.ofHours(0));
         mockStatic(OffsetDateTime.class);
         AclCalculationReportsInfoDto reportInfo = new AclCalculationReportsInfoDto();
-        reportInfo.setPeriod(202012);
-        reportInfo.setPreviousPeriod(202112);
         reportInfo.setScenarios(List.of(new AclScenario()));
         reportInfo.setPreviousScenarios(List.of(new AclScenario()));
         IAclCommonReportWidget widget = createMock(IAclCommonReportWidget.class);

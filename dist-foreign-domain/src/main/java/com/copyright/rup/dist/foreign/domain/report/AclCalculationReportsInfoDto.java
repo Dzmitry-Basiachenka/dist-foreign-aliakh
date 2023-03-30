@@ -23,7 +23,6 @@ public class AclCalculationReportsInfoDto {
     private List<AclScenario> scenarios;
     private List<AclScenario> previousScenarios;
     private Integer period;
-    private Integer previousPeriod;
     private String user;
     private OffsetDateTime reportDateTime;
 
@@ -49,14 +48,6 @@ public class AclCalculationReportsInfoDto {
 
     public void setPeriod(Integer period) {
         this.period = period;
-    }
-
-    public Integer getPreviousPeriod() {
-        return previousPeriod;
-    }
-
-    public void setPreviousPeriod(Integer previousPeriod) {
-        this.previousPeriod = previousPeriod;
     }
 
     public String getUser() {
@@ -88,7 +79,6 @@ public class AclCalculationReportsInfoDto {
             .append(scenarios, that.scenarios)
             .append(previousScenarios, that.previousScenarios)
             .append(period, that.period)
-            .append(previousPeriod, that.previousPeriod)
             .append(user, that.user)
             .append(reportDateTime, that.reportDateTime)
             .isEquals();
@@ -100,7 +90,6 @@ public class AclCalculationReportsInfoDto {
             .append(scenarios)
             .append(previousScenarios)
             .append(period)
-            .append(previousPeriod)
             .append(user)
             .append(reportDateTime)
             .toHashCode();
@@ -112,7 +101,6 @@ public class AclCalculationReportsInfoDto {
             .append("scenarios", scenarios)
             .append("previousScenarios", previousScenarios)
             .append("period", period)
-            .append("previousPeriod", previousPeriod)
             .append("user", user)
             .append("reportDateTime", reportDateTime)
             .toString();

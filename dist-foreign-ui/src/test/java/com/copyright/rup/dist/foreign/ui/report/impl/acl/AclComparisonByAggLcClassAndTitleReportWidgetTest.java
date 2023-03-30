@@ -118,8 +118,6 @@ public class AclComparisonByAggLcClassAndTitleReportWidgetTest {
         Whitebox.setInternalState(widget, "previousScenarioFilterWidget", previousScenarioFilterWidget);
         Whitebox.setInternalState(widget, "currentScenarioFilterWidget", currentScenarioFilterWidget);
         AclCalculationReportsInfoDto reportInfo = widget.getReportInfo();
-        assertEquals(202012, reportInfo.getPreviousPeriod(), 0);
-        assertEquals(202112, reportInfo.getPeriod(), 0);
         assertEquals("Previous", reportInfo.getPreviousScenarios().get(0).getName());
         assertEquals("Current", reportInfo.getScenarios().get(0).getName());
         verify(controller, previousScenarioFilterWidget, currentScenarioFilterWidget, streamSource);
