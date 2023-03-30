@@ -1,3 +1,11 @@
+17.0.15
+-
+* B-76852 FDA: switch integrations for paid liabilities to SNS/SQS FIFO: apply dist-common configuration
+* B-77108 FDA: Fund Pools by Aggregate Licensee Class Report: update sort order, disable export button on period changes
+* B-77079 FDA: Comparison by Aggregate Licensee Class and Title Report: implement backend logic to generate report
+* B-77079 FDA: Comparison by Aggregate Licensee Class and Title Report: add selected scenarios to report metadata
+* B-77994 Tech Debt: FDA: update paid Usages consumer to copy reported standard number for new details
+
 17.0.14
 -
 * B-76640 FDA: Send notification email when details arrive to LM from FDA: implement headers scenarioId, scenarioName, productFamily, numberOfMessages, sendDate during sending scenarios to LM
