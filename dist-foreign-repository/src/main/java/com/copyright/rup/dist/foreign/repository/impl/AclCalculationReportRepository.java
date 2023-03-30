@@ -7,6 +7,7 @@ import com.copyright.rup.dist.foreign.domain.filter.AclGrantDetailFilter;
 import com.copyright.rup.dist.foreign.domain.filter.AclUsageFilter;
 import com.copyright.rup.dist.foreign.domain.report.AclCalculationReportsInfoDto;
 import com.copyright.rup.dist.foreign.repository.api.IAclCalculationReportRepository;
+import com.copyright.rup.dist.foreign.repository.impl.csv.acl.AclComparisonByAggLcClassAndTitleCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.AclFundPoolByAggLcCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.AclFundPoolDetailsCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.AclGrantDetailCsvReportHandler;
@@ -147,6 +148,16 @@ public class AclCalculationReportRepository extends CommonReportRepository imple
             handler.writeTotals(
                 selectOne("IAclCalculationReportMapper.findAclLiabilitiesByRhReportTotalAmounts", reportInfo));
             handler.writeMetadata(reportInfo);
+        }
+    }
+
+    @Override
+    public void writeAclComparisonByAggLcClassAndTitleReport(AclCalculationReportsInfoDto reportInfo,
+                                                             OutputStream outputStream) {
+        try (AclComparisonByAggLcClassAndTitleCsvReportHandler handler =
+                 new AclComparisonByAggLcClassAndTitleCsvReportHandler(Objects.requireNonNull(outputStream))) {
+            getTemplate().select("IAclCalculationReportMapper.findAclComparisonByAggLcClassAndTitleReport",
+                reportInfo, handler);
         }
     }
 

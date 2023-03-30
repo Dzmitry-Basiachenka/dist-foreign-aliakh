@@ -137,4 +137,15 @@ public class AclCalculationReportServiceTest {
         aclCalculationReportService.writeAclLiabilitiesByRhReport(reportInfo, outputStream);
         verify(aclCalculationReportRepository);
     }
+
+    @Test
+    public void testWriteAclComparisonByAggLcClassAndTitleReport() {
+        AclCalculationReportsInfoDto reportInfo = new AclCalculationReportsInfoDto();
+        OutputStream outputStream = createMock(OutputStream.class);
+        aclCalculationReportRepository.writeAclComparisonByAggLcClassAndTitleReport(reportInfo, outputStream);
+        expectLastCall().once();
+        replay(aclCalculationReportRepository);
+        aclCalculationReportService.writeAclComparisonByAggLcClassAndTitleReport(reportInfo, outputStream);
+        verify(aclCalculationReportRepository);
+    }
 }
