@@ -73,6 +73,7 @@ public class AclFundPoolByAggLcReportDto extends StoredEntity<String> {
     public void setNetAmount(BigDecimal netAmount) {
         this.netAmount = netAmount;
     }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
