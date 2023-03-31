@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.domain.report;
 
 import com.copyright.rup.dist.common.domain.StoredEntity;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -19,21 +20,19 @@ import java.math.BigDecimal;
  */
 public class NtsServiceFeeTrueUpReportDto extends StoredEntity<String> {
 
-    private static final BigDecimal DEFAULT_AMOUNT = BigDecimal.ZERO.setScale(2, BigDecimal.ROUND_HALF_UP);
-
-    private BigDecimal batchGrossAmount = DEFAULT_AMOUNT;
-    private BigDecimal preServiceFeeAmount = DEFAULT_AMOUNT;
-    private BigDecimal preServiceFeeFunds = DEFAULT_AMOUNT;
-    private BigDecimal postServiceFeeAmount = DEFAULT_AMOUNT;
-    private BigDecimal grossAmount = DEFAULT_AMOUNT;
-    private BigDecimal estimatedServiceFee = DEFAULT_AMOUNT;
-    private BigDecimal estimatedServiceFeeAmount = DEFAULT_AMOUNT;
-    private BigDecimal estimatedNetAmount = DEFAULT_AMOUNT;
-    private BigDecimal grossAmountSentToLm = DEFAULT_AMOUNT;
-    private BigDecimal serviceFeeSentToLm = DEFAULT_AMOUNT;
-    private BigDecimal serviceFeeAmountSentToLm = DEFAULT_AMOUNT;
-    private BigDecimal netAmountSentToLm = DEFAULT_AMOUNT;
-    private BigDecimal serviceFeeTrueUpAmount = DEFAULT_AMOUNT;
+    private BigDecimal batchGrossAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+    private BigDecimal preServiceFeeAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+    private BigDecimal preServiceFeeFunds = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+    private BigDecimal postServiceFeeAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+    private BigDecimal grossAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+    private BigDecimal estimatedServiceFee = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+    private BigDecimal estimatedServiceFeeAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+    private BigDecimal estimatedNetAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+    private BigDecimal grossAmountSentToLm = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+    private BigDecimal serviceFeeSentToLm = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+    private BigDecimal serviceFeeAmountSentToLm = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+    private BigDecimal netAmountSentToLm = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+    private BigDecimal serviceFeeTrueUpAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
 
     public BigDecimal getBatchGrossAmount() {
         return batchGrossAmount;

@@ -2,6 +2,8 @@ package com.copyright.rup.dist.foreign.domain;
 
 import com.google.common.collect.ImmutableSet;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.EnumSet;
 import java.util.Set;
 
@@ -132,6 +134,16 @@ public final class FdaConstants {
      */
     public static final EnumSet<ScenarioStatusEnum> ARCHIVED_SCENARIO_STATUSES =
         EnumSet.of(ScenarioStatusEnum.SENT_TO_LM, ScenarioStatusEnum.ARCHIVED);
+
+    /**
+     * Default amount with scale 2.
+     */
+    public static final BigDecimal DEFAULT_AMOUNT_SCALE_2 = BigDecimal.ZERO.setScale(2, RoundingMode.HALF_UP);
+
+    /**
+     * Default amount with scale 10.
+     */
+    public static final BigDecimal DEFAULT_AMOUNT_SCALE_10 = BigDecimal.ZERO.setScale(10, RoundingMode.HALF_UP);
 
     private FdaConstants() {
         throw new AssertionError("Constructor shouldn't be called directly");

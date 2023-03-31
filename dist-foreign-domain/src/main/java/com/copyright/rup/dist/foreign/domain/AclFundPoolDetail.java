@@ -7,7 +7,6 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 
 /**
  * Domain object to represent ACL fund pool detail.
@@ -24,8 +23,8 @@ public class AclFundPoolDetail extends StoredEntity<String> {
     private DetailLicenseeClass detailLicenseeClass = new DetailLicenseeClass();
     private String licenseType;
     private String typeOfUse;
-    private BigDecimal grossAmount = BigDecimal.ZERO.setScale(2, RoundingMode.HALF_UP);
-    private BigDecimal netAmount = BigDecimal.ZERO.setScale(2, RoundingMode.HALF_UP);
+    private BigDecimal grossAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+    private BigDecimal netAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
     private boolean ldmtFlag;
 
     public String getFundPoolId() {

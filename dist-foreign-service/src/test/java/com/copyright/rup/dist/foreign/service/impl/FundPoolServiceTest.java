@@ -16,6 +16,7 @@ import static org.powermock.api.easymock.PowerMock.verify;
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.FundPool.AclciFields;
 import com.copyright.rup.dist.foreign.domain.FundPool.SalFields;
@@ -33,7 +34,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
@@ -439,7 +439,7 @@ public class FundPoolServiceTest {
     private FundPoolDetail buildZeroDetail(AggregateLicenseeClass alc) {
         FundPoolDetail detail = new FundPoolDetail();
         detail.setAggregateLicenseeClass(alc);
-        detail.setGrossAmount(BigDecimal.ZERO.setScale(2, RoundingMode.HALF_UP));
+        detail.setGrossAmount(FdaConstants.DEFAULT_AMOUNT_SCALE_2);
         return detail;
     }
 

@@ -52,7 +52,7 @@ class AclciFundPoolLoadWindow extends Window {
     private static final String NUMBER_OF_STUDENTS_NOT_ALL_ZERO_MESSAGE =
         ForeignUi.getMessage("field.error.number_of_students_not_all_zero");
     private static final BigDecimal HUNDRED = new BigDecimal("100");
-    private static final String ZERO = "0";
+    private static final String ZERO = "0.00";
     private static final int SCALE_2 = 2;
     private static final int SCALE_5 = 5;
 

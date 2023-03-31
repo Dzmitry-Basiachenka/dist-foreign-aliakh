@@ -41,11 +41,11 @@ public class Usage extends StoredEntity<String> {
     private Integer marketPeriodTo;
     private String author;
     private Integer numberOfCopies;
-    private BigDecimal reportedValue = BigDecimal.ZERO;
-    private BigDecimal netAmount = BigDecimal.ZERO;
+    private BigDecimal reportedValue = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+    private BigDecimal netAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
     private BigDecimal serviceFee;
-    private BigDecimal serviceFeeAmount = BigDecimal.ZERO;
-    private BigDecimal grossAmount = BigDecimal.ZERO;
+    private BigDecimal serviceFeeAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+    private BigDecimal grossAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
     private UsageStatusEnum status;
     private String productFamily;
     private boolean rhParticipating;

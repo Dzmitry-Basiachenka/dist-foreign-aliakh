@@ -10,6 +10,7 @@ import static org.junit.Assert.assertTrue;
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.common.test.liquibase.LiquibaseTestExecutionListener;
 import com.copyright.rup.dist.common.test.liquibase.TestData;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
@@ -76,7 +77,7 @@ public class FasUsageRepositoryIntegrationTest {
     private static final String USER_NAME = "user@copyright.com";
     private static final String STANDARD_NUMBER = "2192-3558";
     private static final String STANDARD_NUMBER_TYPE = "VALISBN13";
-    private static final BigDecimal DEFAULT_ZERO_AMOUNT = new BigDecimal("0.0000000000");
+    private static final BigDecimal DEFAULT_ZERO_AMOUNT = FdaConstants.DEFAULT_AMOUNT_SCALE_10;
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
@@ -230,7 +231,7 @@ public class FasUsageRepositoryIntegrationTest {
         Usage usage = usages.get(0);
         assertEquals(USAGE_ID_1, usage.getId());
         assertEquals(new BigDecimal("35000.0000000000"), usage.getGrossAmount());
-        assertEquals(BigDecimal.ZERO.setScale(10, BigDecimal.ROUND_HALF_UP), usage.getNetAmount());
+        assertEquals(FdaConstants.DEFAULT_AMOUNT_SCALE_10, usage.getNetAmount());
         assertEquals(new BigDecimal("2500.00"), usage.getReportedValue());
         assertNull(usage.getServiceFee());
         assertNotNull(usage.getCreateDate());

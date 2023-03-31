@@ -1,6 +1,8 @@
 package com.copyright.rup.dist.foreign.domain.report;
 
 import com.copyright.rup.dist.common.domain.StoredEntity;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -19,23 +21,21 @@ import java.time.LocalDate;
  */
 public class FasServiceFeeTrueUpReportDto extends StoredEntity<String> {
 
-    private static final BigDecimal DEFAULT_AMOUNT = BigDecimal.ZERO.setScale(2, BigDecimal.ROUND_HALF_UP);
-
     private Long rroAccountNumber;
     private String rroName;
     private LocalDate paymentDate;
-    private BigDecimal grossAmountSentToLm = DEFAULT_AMOUNT;
-    private BigDecimal serviceFeeAmountSentToLm = DEFAULT_AMOUNT;
-    private BigDecimal serviceFeeSentToLm = DEFAULT_AMOUNT;
-    private BigDecimal netAmountSentToLm = DEFAULT_AMOUNT;
-    private BigDecimal estimatedServiceFeeAmountSentToLm = DEFAULT_AMOUNT;
-    private BigDecimal estimatedServiceFee = DEFAULT_AMOUNT;
-    private BigDecimal serviceFeeTrueUp = DEFAULT_AMOUNT;
-    private BigDecimal grossAmountReturnToCla = DEFAULT_AMOUNT;
-    private BigDecimal estimatedServiceFeeAmountReturnToCla = DEFAULT_AMOUNT;
-    private BigDecimal serviceFeeAmountReturnToCla = DEFAULT_AMOUNT;
-    private BigDecimal netAmountReturnToCla = DEFAULT_AMOUNT;
-    private BigDecimal serviceFeeTrueUpReturnToCla = DEFAULT_AMOUNT;
+    private BigDecimal grossAmountSentToLm = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+    private BigDecimal serviceFeeAmountSentToLm = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+    private BigDecimal serviceFeeSentToLm = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+    private BigDecimal netAmountSentToLm = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+    private BigDecimal estimatedServiceFeeAmountSentToLm = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+    private BigDecimal estimatedServiceFee = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+    private BigDecimal serviceFeeTrueUp = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+    private BigDecimal grossAmountReturnToCla = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+    private BigDecimal estimatedServiceFeeAmountReturnToCla = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+    private BigDecimal serviceFeeAmountReturnToCla = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+    private BigDecimal netAmountReturnToCla = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+    private BigDecimal serviceFeeTrueUpReturnToCla = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
 
     public Long getRroAccountNumber() {
         return rroAccountNumber;

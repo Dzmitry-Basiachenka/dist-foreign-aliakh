@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.domain.report;
 
 import com.copyright.rup.dist.common.domain.StoredEntity;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -20,16 +21,14 @@ import java.time.LocalDate;
  */
 public class UndistributedLiabilitiesReportDto extends StoredEntity<String> {
 
-    private static final BigDecimal DEFAULT_AMOUNT = BigDecimal.ZERO.setScale(2, BigDecimal.ROUND_HALF_UP);
-
     private String rroName;
     private Long rroAccountNumber;
     private LocalDate paymentDate;
-    private BigDecimal grossAmount = DEFAULT_AMOUNT;
-    private BigDecimal estimatedServiceFeeAmount = DEFAULT_AMOUNT;
-    private BigDecimal estimatedNetAmount = DEFAULT_AMOUNT;
-    private BigDecimal estimatedServiceFee = DEFAULT_AMOUNT;
-    private BigDecimal withdrawnGrossAmount = DEFAULT_AMOUNT;
+    private BigDecimal grossAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+    private BigDecimal estimatedServiceFeeAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+    private BigDecimal estimatedNetAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+    private BigDecimal estimatedServiceFee = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+    private BigDecimal withdrawnGrossAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
 
     public String getRroName() {
         return rroName;

@@ -17,15 +17,15 @@ import java.math.BigDecimal;
  */
 public class AclScenarioDto extends AclScenario {
 
-    private BigDecimal grossTotal = BigDecimal.ZERO.setScale(10, BigDecimal.ROUND_HALF_UP);
-    private BigDecimal grossTotalPrint = BigDecimal.ZERO.setScale(10, BigDecimal.ROUND_HALF_UP);
-    private BigDecimal grossTotalDigital = BigDecimal.ZERO.setScale(10, BigDecimal.ROUND_HALF_UP);
-    private BigDecimal serviceFeeTotal = BigDecimal.ZERO.setScale(10, BigDecimal.ROUND_HALF_UP);
-    private BigDecimal serviceFeeTotalPrint = BigDecimal.ZERO.setScale(10, BigDecimal.ROUND_HALF_UP);
-    private BigDecimal serviceFeeTotalDigital = BigDecimal.ZERO.setScale(10, BigDecimal.ROUND_HALF_UP);
-    private BigDecimal netTotal = BigDecimal.ZERO.setScale(10, BigDecimal.ROUND_HALF_UP);
-    private BigDecimal netTotalPrint = BigDecimal.ZERO.setScale(10, BigDecimal.ROUND_HALF_UP);
-    private BigDecimal netTotalDigital = BigDecimal.ZERO.setScale(10, BigDecimal.ROUND_HALF_UP);
+    private BigDecimal grossTotal = FdaConstants.DEFAULT_AMOUNT_SCALE_10;
+    private BigDecimal grossTotalPrint = FdaConstants.DEFAULT_AMOUNT_SCALE_10;
+    private BigDecimal grossTotalDigital = FdaConstants.DEFAULT_AMOUNT_SCALE_10;
+    private BigDecimal serviceFeeTotal = FdaConstants.DEFAULT_AMOUNT_SCALE_10;
+    private BigDecimal serviceFeeTotalPrint = FdaConstants.DEFAULT_AMOUNT_SCALE_10;
+    private BigDecimal serviceFeeTotalDigital = FdaConstants.DEFAULT_AMOUNT_SCALE_10;
+    private BigDecimal netTotal = FdaConstants.DEFAULT_AMOUNT_SCALE_10;
+    private BigDecimal netTotalPrint = FdaConstants.DEFAULT_AMOUNT_SCALE_10;
+    private BigDecimal netTotalDigital = FdaConstants.DEFAULT_AMOUNT_SCALE_10;
     private int numberOfRhsPrint;
     private int numberOfRhsDigital;
     private int numberOfWorksPrint;

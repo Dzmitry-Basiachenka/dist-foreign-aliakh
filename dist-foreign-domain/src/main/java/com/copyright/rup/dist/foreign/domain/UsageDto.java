@@ -22,8 +22,6 @@ import java.time.OffsetDateTime;
  */
 public class UsageDto extends StoredEntity<String> {
 
-    private static final BigDecimal DEFAULT_AMOUNT = BigDecimal.ZERO.setScale(2, BigDecimal.ROUND_HALF_UP);
-
     private String batchName;
     private Integer fiscalYear;
     private String rroName;
@@ -46,12 +44,12 @@ public class UsageDto extends StoredEntity<String> {
     private String author;
     private Long payeeAccountNumber;
     private String payeeName;
-    private BigDecimal grossAmount = DEFAULT_AMOUNT;
-    private BigDecimal reportedValue = DEFAULT_AMOUNT;
+    private BigDecimal grossAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+    private BigDecimal reportedValue = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
     private BigDecimal batchGrossAmount;
-    private BigDecimal netAmount = DEFAULT_AMOUNT;
-    private BigDecimal serviceFee = DEFAULT_AMOUNT;
-    private BigDecimal serviceFeeAmount = DEFAULT_AMOUNT;
+    private BigDecimal netAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+    private BigDecimal serviceFee = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+    private BigDecimal serviceFeeAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
     private UsageStatusEnum status;
     private String productFamily;
     private String scenarioName;

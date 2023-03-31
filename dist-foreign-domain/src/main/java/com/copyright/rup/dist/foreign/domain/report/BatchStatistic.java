@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.domain.report;
 
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -17,38 +19,36 @@ import java.math.BigDecimal;
  */
 public class BatchStatistic {
 
-    private static final BigDecimal DEFAULT_AMOUNT = BigDecimal.ZERO.setScale(2, BigDecimal.ROUND_HALF_UP);
-
     private String batchName;
     private int totalCount;
-    private BigDecimal totalAmount = DEFAULT_AMOUNT;
+    private BigDecimal totalAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
     private int matchedCount;
-    private BigDecimal matchedAmount = DEFAULT_AMOUNT;
-    private BigDecimal matchedPercent = DEFAULT_AMOUNT;
+    private BigDecimal matchedAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+    private BigDecimal matchedPercent = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
     private int worksNotFoundCount;
-    private BigDecimal worksNotFoundAmount = DEFAULT_AMOUNT;
-    private BigDecimal worksNotFoundPercent = DEFAULT_AMOUNT;
+    private BigDecimal worksNotFoundAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+    private BigDecimal worksNotFoundPercent = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
     private int multipleMatchingCount;
-    private BigDecimal multipleMatchingAmount = DEFAULT_AMOUNT;
-    private BigDecimal multipleMatchingPercent = DEFAULT_AMOUNT;
+    private BigDecimal multipleMatchingAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+    private BigDecimal multipleMatchingPercent = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
     private int ntsWithdrawnCount;
-    private BigDecimal ntsWithdrawnAmount = DEFAULT_AMOUNT;
-    private BigDecimal ntsWithdrawnPercent = DEFAULT_AMOUNT;
+    private BigDecimal ntsWithdrawnAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+    private BigDecimal ntsWithdrawnPercent = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
     private int rhNotFoundCount;
-    private BigDecimal rhNotFoundAmount = DEFAULT_AMOUNT;
-    private BigDecimal rhNotFoundPercent = DEFAULT_AMOUNT;
+    private BigDecimal rhNotFoundAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+    private BigDecimal rhNotFoundPercent = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
     private int rhFoundCount;
-    private BigDecimal rhFoundAmount = DEFAULT_AMOUNT;
-    private BigDecimal rhFoundPercent = DEFAULT_AMOUNT;
+    private BigDecimal rhFoundAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+    private BigDecimal rhFoundPercent = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
     private int eligibleCount;
-    private BigDecimal eligibleAmount = DEFAULT_AMOUNT;
-    private BigDecimal eligiblePercent = DEFAULT_AMOUNT;
+    private BigDecimal eligibleAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+    private BigDecimal eligiblePercent = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
     private int sendForRaCount;
-    private BigDecimal sendForRaAmount = DEFAULT_AMOUNT;
-    private BigDecimal sendForRaPercent = DEFAULT_AMOUNT;
+    private BigDecimal sendForRaAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+    private BigDecimal sendForRaPercent = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
     private int paidCount;
-    private BigDecimal paidAmount = DEFAULT_AMOUNT;
-    private BigDecimal paidPercent = DEFAULT_AMOUNT;
+    private BigDecimal paidAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+    private BigDecimal paidPercent = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
 
     public String getBatchName() {
         return batchName;
