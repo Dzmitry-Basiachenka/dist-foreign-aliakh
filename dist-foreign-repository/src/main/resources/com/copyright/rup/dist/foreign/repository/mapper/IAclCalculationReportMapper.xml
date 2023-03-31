@@ -114,7 +114,7 @@
         <result property="digitalRhNameCurrentPeriod" column="digital_rh_name_current_period"/>
         <result property="printNetAmountCurrentPeriod" column="print_net_amount_current_period"/>
         <result property="digitalNetAmountCurrentPeriod" column="digital_net_amount_current_period"/>
-        <result property="totalNetAmountCurrentPeriod" column="total_net_amount"/>
+        <result property="totalNetAmountCurrentPeriod" column="total_net_amount_current_period"/>
         <result property="delta" column="delta"/>
         <result property="changePercent" column="change_percent"/>
     </resultMap>
@@ -138,6 +138,30 @@
                 shd.df_acl_scenario_uid = #{scenario.id}
             </foreach>
         </if>
+    </sql>
+
+    <sql id="selectComparisonByAggLcClassAndTitleUsageData">
+        select
+            alc.aggregate_licensee_class_id,
+            alc.description,
+            scd.wr_wrk_inst,
+            scd.system_title,
+            pt.name,
+            min(case when shd.type_of_use = 'PRINT' then shd.rh_account_number end) as print_rh_account_number,
+            min(case when shd.type_of_use = 'DIGITAL' then shd.rh_account_number end) as digital_rh_account_number,
+            sum(case when shd.type_of_use = 'PRINT' then coalesce(net_amount, 0) else 0 end) as print_net_amount,
+            sum(case when shd.type_of_use = 'DIGITAL' then coalesce(net_amount, 0) else 0 end) as digital_net_amount,
+            sum(net_amount) as total_net_amount
+        from ${schema}.df_acl_scenario_detail scd
+        join ${schema}.df_acl_share_detail shd on scd.df_acl_scenario_detail_uid = shd.df_acl_scenario_detail_uid
+        join ${schema}.df_detail_licensee_class dlc on scd.detail_licensee_class_id = dlc.detail_licensee_class_id
+        join ${schema}.df_aggregate_licensee_class alc on dlc.aggregate_licensee_class_id = alc.aggregate_licensee_class_id
+        join ${schema}.df_publication_type pt on scd.publication_type_uid = pt.df_publication_type_uid
+        where shd.df_acl_scenario_uid in
+        <foreach collection="${scenarios}" item="scenario" open="(" separator=", " close=")">
+            #{scenario.id}
+        </foreach>
+        group by alc.aggregate_licensee_class_id, scd.wr_wrk_inst, scd.system_title, pt.name
     </sql>
 
     <select id="findAclGrantDetailsCountByFilter" parameterType="map" resultType="int">
@@ -341,52 +365,16 @@
         <include refid="IAclCalculationReportMapper.selectAclTotalAmountsSql"/>
     </select>
 
-    <select id="findAclComparisonByAggLcClassAndTitleReport" parameterType="map" resultMap="AclComparisonByAggLcClassAndTitleReportDtoResultMap">
+    <select id="findAclComparisonByAggLcClassAndTitleReportDtos" parameterType="map" resultMap="AclComparisonByAggLcClassAndTitleReportDtoResultMap">
         with usage_data_previous_period as (
-            select
-                alc.aggregate_licensee_class_id,
-                alc.description,
-                scd.wr_wrk_inst,
-                scd.system_title,
-                pt.name,
-                min(case when shd.type_of_use = 'PRINT' then shd.rh_account_number end) as print_rh_account_number,
-                min(case when shd.type_of_use = 'DIGITAL' then shd.rh_account_number end) as digital_rh_account_number,
-                sum(case when shd.type_of_use = 'PRINT' then coalesce(net_amount, 0) else 0 end) as print_net_amount,
-                sum(case when shd.type_of_use = 'DIGITAL' then coalesce(net_amount, 0) else 0 end) as digital_net_amount,
-                sum(net_amount) as total_net_amount
-            from ${schema}.df_acl_scenario_detail scd
-            join ${schema}.df_acl_share_detail shd on scd.df_acl_scenario_detail_uid = shd.df_acl_scenario_detail_uid
-            join ${schema}.df_detail_licensee_class dlc on scd.detail_licensee_class_id = dlc.detail_licensee_class_id
-            join ${schema}.df_aggregate_licensee_class alc on dlc.aggregate_licensee_class_id = alc.aggregate_licensee_class_id
-            join ${schema}.df_publication_type pt on scd.publication_type_uid = pt.df_publication_type_uid
-            where shd.df_acl_scenario_uid in
-                <foreach collection="previousScenarios" item="previousScenario" open="(" separator=", " close=")">
-                    #{previousScenario.id}
-                </foreach>
-            group by alc.aggregate_licensee_class_id, scd.wr_wrk_inst, scd.system_title, pt.name
+            <include refid="selectComparisonByAggLcClassAndTitleUsageData">
+                <property name="scenarios" value="previousScenarios"/>
+            </include>
         ),
         usage_data_current_period as (
-            select
-                alc.aggregate_licensee_class_id,
-                alc.description,
-                scd.wr_wrk_inst,
-                scd.system_title,
-                pt.name,
-                min(case when shd.type_of_use = 'PRINT' then shd.rh_account_number end) as print_rh_account_number,
-                min(case when shd.type_of_use = 'DIGITAL' then shd.rh_account_number end) as digital_rh_account_number,
-                sum(case when shd.type_of_use = 'PRINT' then coalesce(net_amount, 0) else 0 end) as print_net_amount,
-                sum(case when shd.type_of_use = 'DIGITAL' then coalesce(net_amount, 0) else 0 end) as digital_net_amount,
-                sum(net_amount) as total_net_amount
-            from ${schema}.df_acl_scenario_detail scd
-            join ${schema}.df_acl_share_detail shd on scd.df_acl_scenario_detail_uid = shd.df_acl_scenario_detail_uid
-            join ${schema}.df_detail_licensee_class dlc on scd.detail_licensee_class_id = dlc.detail_licensee_class_id
-            join ${schema}.df_aggregate_licensee_class alc on dlc.aggregate_licensee_class_id = alc.aggregate_licensee_class_id
-            join ${schema}.df_publication_type pt on scd.publication_type_uid = pt.df_publication_type_uid
-            where shd.df_acl_scenario_uid in
-                <foreach collection="scenarios" item="scenario" open="(" separator=", " close=")">
-                    #{scenario.id}
-                </foreach>
-            group by alc.aggregate_licensee_class_id, scd.wr_wrk_inst, scd.system_title, pt.name
+            <include refid="selectComparisonByAggLcClassAndTitleUsageData">
+                <property name="scenarios" value="scenarios"/>
+            </include>
         )
         select
             coalesce(udpp.aggregate_licensee_class_id, udcp.aggregate_licensee_class_id) as aggregate_licensee_class_id,
@@ -407,7 +395,7 @@
             rcd.name as digital_rh_name_current_period,
             udcp.print_net_amount as print_net_amount_current_period,
             udcp.digital_net_amount as digital_net_amount_current_period,
-            udcp.total_net_amount as total_net_amount,
+            udcp.total_net_amount as total_net_amount_current_period,
             coalesce(udcp.total_net_amount, 0) - coalesce(udpp.total_net_amount, 0) as delta,
             case when udpp.total_net_amount != 0 then (100 * (coalesce(udcp.total_net_amount, 0) - udpp.total_net_amount) / udpp.total_net_amount) else null end as change_percent
         from usage_data_previous_period udpp
