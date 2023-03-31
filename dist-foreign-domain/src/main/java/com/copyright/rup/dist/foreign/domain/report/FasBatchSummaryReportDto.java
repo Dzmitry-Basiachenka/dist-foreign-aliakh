@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.domain.report;
 
 import com.copyright.rup.dist.common.domain.StoredEntity;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -20,8 +21,6 @@ import java.time.LocalDate;
  */
 public class FasBatchSummaryReportDto extends StoredEntity<String> {
 
-    private static final BigDecimal DEFAULT_AMOUNT = BigDecimal.ZERO.setScale(2, BigDecimal.ROUND_HALF_UP);
-
     private String batchName;
     private String rroName;
     private Long rroAccountNumber;
@@ -31,13 +30,13 @@ public class FasBatchSummaryReportDto extends StoredEntity<String> {
     private int fasAndClaFasEligibleDetailsCount;
     private int scenariosDetailsCount;
     private int returnToClaDetailsCount;
-    private BigDecimal grossAmount = DEFAULT_AMOUNT;
-    private BigDecimal nonEligibleDetailsGrossAmount = DEFAULT_AMOUNT;
-    private BigDecimal ntsDetailsGrossAmount = DEFAULT_AMOUNT;
-    private BigDecimal fasAndClaFasEligibleDetailsGrossAmount = DEFAULT_AMOUNT;
-    private BigDecimal scenariosDetailsGrossAmount = DEFAULT_AMOUNT;
-    private BigDecimal scenariosDetailsNetAmount = DEFAULT_AMOUNT;
-    private BigDecimal returnToClaDetailsGrossAmount = DEFAULT_AMOUNT;
+    private BigDecimal grossAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+    private BigDecimal nonEligibleDetailsGrossAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+    private BigDecimal ntsDetailsGrossAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+    private BigDecimal fasAndClaFasEligibleDetailsGrossAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+    private BigDecimal scenariosDetailsGrossAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+    private BigDecimal scenariosDetailsNetAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+    private BigDecimal returnToClaDetailsGrossAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
 
     public String getBatchName() {
         return batchName;

@@ -13,8 +13,8 @@ import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.Processin
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ThresholdExceededException;
 import com.copyright.rup.dist.common.test.ReportTestUtils;
 import com.copyright.rup.dist.common.test.liquibase.LiquibaseTestExecutionListener;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.Usage;
-
 import com.copyright.rup.dist.foreign.service.impl.ServiceTestHelper;
 
 import org.apache.commons.io.IOUtils;
@@ -31,7 +31,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.stream.IntStream;
@@ -269,10 +268,10 @@ public class UsageCsvProcessorIntegrationTest {
     private void assertUsageNonParsedFields(Usage usage) {
         assertNull(usage.getBatchId());
         assertNull(usage.getScenarioId());
-        assertEquals(BigDecimal.ZERO, usage.getNetAmount());
+        assertEquals(FdaConstants.DEFAULT_AMOUNT_SCALE_2, usage.getNetAmount());
         assertNull(usage.getServiceFee());
-        assertEquals(BigDecimal.ZERO, usage.getServiceFeeAmount());
-        assertEquals(BigDecimal.ZERO, usage.getGrossAmount());
+        assertEquals(FdaConstants.DEFAULT_AMOUNT_SCALE_2, usage.getServiceFeeAmount());
+        assertEquals(FdaConstants.DEFAULT_AMOUNT_SCALE_2, usage.getGrossAmount());
         assertFalse(usage.isRhParticipating());
     }
 }

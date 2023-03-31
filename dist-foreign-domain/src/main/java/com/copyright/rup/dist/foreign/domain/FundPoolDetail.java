@@ -21,7 +21,7 @@ public class FundPoolDetail extends StoredEntity<String> {
 
     private String fundPoolId;
     private AggregateLicenseeClass aggregateLicenseeClass = new AggregateLicenseeClass();
-    private BigDecimal grossAmount = BigDecimal.ZERO.setScale(2, BigDecimal.ROUND_HALF_UP);
+    private BigDecimal grossAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
 
     public String getFundPoolId() {
         return fundPoolId;

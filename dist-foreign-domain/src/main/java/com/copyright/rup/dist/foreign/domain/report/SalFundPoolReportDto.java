@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.domain.report;
 
 import com.copyright.rup.dist.common.domain.StoredEntity;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -20,23 +21,21 @@ import java.time.LocalDate;
  */
 public class SalFundPoolReportDto extends StoredEntity<String> {
 
-    private static final BigDecimal DEFAULT_AMOUNT = BigDecimal.ZERO.setScale(2, BigDecimal.ROUND_HALF_UP);
-
     private String fundPoolName;
     private String scenarioName;
     private LocalDate dateReceived;
     private String assessmentName;
     private Long licenseeAccountNumber;
     private String licenseeName;
-    private BigDecimal serviceFee = DEFAULT_AMOUNT;
-    private BigDecimal netAmount = DEFAULT_AMOUNT;
-    private BigDecimal grossAmount = DEFAULT_AMOUNT;
-    private BigDecimal itemBankSplitPercent = DEFAULT_AMOUNT;
-    private BigDecimal itemBankGrossAmount = DEFAULT_AMOUNT;
-    private BigDecimal gradeKto5GrossAmount = DEFAULT_AMOUNT;
-    private BigDecimal grade6to8GrossAmount = DEFAULT_AMOUNT;
-    private BigDecimal grade9to12GrossAmount = DEFAULT_AMOUNT;
-    private BigDecimal totalGrossAmount = DEFAULT_AMOUNT;
+    private BigDecimal serviceFee = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+    private BigDecimal netAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+    private BigDecimal grossAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+    private BigDecimal itemBankSplitPercent = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+    private BigDecimal itemBankGrossAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+    private BigDecimal gradeKto5GrossAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+    private BigDecimal grade6to8GrossAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+    private BigDecimal grade9to12GrossAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+    private BigDecimal totalGrossAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
     private int gradeKto5NumberOfStudents;
     private int grade6to8NumberOfStudents;
     private int grade9to12NumberOfStudents;
@@ -58,7 +57,7 @@ public class SalFundPoolReportDto extends StoredEntity<String> {
     }
 
     public static BigDecimal getDefaultAmount() {
-        return DEFAULT_AMOUNT;
+        return FdaConstants.DEFAULT_AMOUNT_SCALE_2;
     }
 
     public String getFundPoolName() {

@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.domain.report;
 
 import com.copyright.rup.dist.common.domain.StoredEntity;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -20,15 +21,13 @@ import java.time.LocalDate;
  */
 public class SummaryMarketReportDto extends StoredEntity<String> {
 
-    private static final BigDecimal DEFAULT_AMOUNT = BigDecimal.ZERO.setScale(2, BigDecimal.ROUND_HALF_UP);
-
     private String batchName;
     private String rroName;
     private Long rroAccountNumber;
     private LocalDate paymentDate;
     private String market;
-    private BigDecimal marketTotalAmount = DEFAULT_AMOUNT;
-    private BigDecimal totalPaymentAmount = DEFAULT_AMOUNT;
+    private BigDecimal marketTotalAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+    private BigDecimal totalPaymentAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
 
     public String getBatchName() {
         return batchName;

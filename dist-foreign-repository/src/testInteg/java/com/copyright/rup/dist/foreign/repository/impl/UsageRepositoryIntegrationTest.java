@@ -14,6 +14,7 @@ import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.common.test.liquibase.LiquibaseTestExecutionListener;
 import com.copyright.rup.dist.common.test.liquibase.TestData;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.PayeeTotalHolder;
 import com.copyright.rup.dist.foreign.domain.RightsholderPayeeProductFamilyHolder;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
@@ -143,8 +144,8 @@ public class UsageRepositoryIntegrationTest {
     private static final String PERCENT = "%";
     private static final String UNDERSCORE = "_";
     private static final BigDecimal SERVICE_FEE = new BigDecimal("0.32000");
-    private static final BigDecimal ZERO_AMOUNT = new BigDecimal("0.00");
-    private static final BigDecimal DEFAULT_ZERO_AMOUNT = new BigDecimal("0.0000000000");
+    private static final BigDecimal ZERO_AMOUNT = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+    private static final BigDecimal DEFAULT_ZERO_AMOUNT = FdaConstants.DEFAULT_AMOUNT_SCALE_10;
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 

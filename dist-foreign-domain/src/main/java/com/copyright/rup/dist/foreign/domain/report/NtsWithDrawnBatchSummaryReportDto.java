@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.domain.report;
 
 import com.copyright.rup.dist.common.domain.StoredEntity;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -20,15 +21,13 @@ import java.time.LocalDate;
  */
 public class NtsWithDrawnBatchSummaryReportDto extends StoredEntity<String> {
 
-    private static final BigDecimal DEFAULT_AMOUNT = BigDecimal.ZERO.setScale(2, BigDecimal.ROUND_HALF_UP);
-
     private String batchName;
     private Long rroAccountNumber;
     private String rroName;
     private LocalDate paymentDate;
     private int ntsDetailsCount;
-    private BigDecimal batchGrossAmount = DEFAULT_AMOUNT;
-    private BigDecimal ntsDetailsGrossAmount = DEFAULT_AMOUNT;
+    private BigDecimal batchGrossAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+    private BigDecimal ntsDetailsGrossAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
 
     public String getBatchName() {
         return batchName;

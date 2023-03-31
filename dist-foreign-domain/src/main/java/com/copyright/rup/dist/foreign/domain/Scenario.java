@@ -24,9 +24,9 @@ public class Scenario extends StoredEntity<String> {
 
     private String name;
     private String productFamily;
-    private BigDecimal netTotal = BigDecimal.ZERO.setScale(10, BigDecimal.ROUND_HALF_UP);
-    private BigDecimal serviceFeeTotal = BigDecimal.ZERO.setScale(10, BigDecimal.ROUND_HALF_UP);
-    private BigDecimal grossTotal = BigDecimal.ZERO.setScale(10, BigDecimal.ROUND_HALF_UP);
+    private BigDecimal netTotal = FdaConstants.DEFAULT_AMOUNT_SCALE_10;
+    private BigDecimal serviceFeeTotal = FdaConstants.DEFAULT_AMOUNT_SCALE_10;
+    private BigDecimal grossTotal = FdaConstants.DEFAULT_AMOUNT_SCALE_10;
     private String description;
     private ScenarioStatusEnum status;
     private ScenarioAuditItem auditItem;
@@ -268,10 +268,10 @@ public class Scenario extends StoredEntity<String> {
      */
     public static class NtsFields {
 
-        private BigDecimal rhMinimumAmount = BigDecimal.ZERO.setScale(2, BigDecimal.ROUND_HALF_UP);
-        private BigDecimal preServiceFeeAmount = BigDecimal.ZERO.setScale(2, BigDecimal.ROUND_HALF_UP);
-        private BigDecimal postServiceFeeAmount = BigDecimal.ZERO.setScale(2, BigDecimal.ROUND_HALF_UP);
-        private BigDecimal preServiceFeeFundTotal = BigDecimal.ZERO.setScale(2, BigDecimal.ROUND_HALF_UP);
+        private BigDecimal rhMinimumAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+        private BigDecimal preServiceFeeAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+        private BigDecimal postServiceFeeAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+        private BigDecimal preServiceFeeFundTotal = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
         private String preServiceFeeFundId;
         private String preServiceFeeFundName;
 

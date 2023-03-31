@@ -25,12 +25,12 @@ public class AclRightsholderTotalsHolder extends StoredEntity<String> {
     private String printPayeeName;
     private Long digitalPayeeAccountNumber;
     private String digitalPayeeName;
-    private BigDecimal grossTotalPrint = BigDecimal.ZERO.setScale(10, BigDecimal.ROUND_HALF_UP);
-    private BigDecimal grossTotalDigital = BigDecimal.ZERO.setScale(10, BigDecimal.ROUND_HALF_UP);
-    private BigDecimal serviceFeeTotalPrint = BigDecimal.ZERO.setScale(10, BigDecimal.ROUND_HALF_UP);
-    private BigDecimal serviceFeeTotalDigital = BigDecimal.ZERO.setScale(10, BigDecimal.ROUND_HALF_UP);
-    private BigDecimal netTotalPrint = BigDecimal.ZERO.setScale(10, BigDecimal.ROUND_HALF_UP);
-    private BigDecimal netTotalDigital = BigDecimal.ZERO.setScale(10, BigDecimal.ROUND_HALF_UP);
+    private BigDecimal grossTotalPrint = FdaConstants.DEFAULT_AMOUNT_SCALE_10;
+    private BigDecimal grossTotalDigital = FdaConstants.DEFAULT_AMOUNT_SCALE_10;
+    private BigDecimal serviceFeeTotalPrint = FdaConstants.DEFAULT_AMOUNT_SCALE_10;
+    private BigDecimal serviceFeeTotalDigital = FdaConstants.DEFAULT_AMOUNT_SCALE_10;
+    private BigDecimal netTotalPrint = FdaConstants.DEFAULT_AMOUNT_SCALE_10;
+    private BigDecimal netTotalDigital = FdaConstants.DEFAULT_AMOUNT_SCALE_10;
     private int numberOfTitles;
     private int numberOfAggLcClasses;
     private String licenseType;

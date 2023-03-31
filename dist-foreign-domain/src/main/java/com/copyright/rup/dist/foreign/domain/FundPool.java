@@ -26,9 +26,9 @@ public class FundPool extends StoredEntity<String> {
     private String productFamily;
     private String name;
     private String comment;
-    private BigDecimal totalAmount = BigDecimal.ZERO.setScale(2, BigDecimal.ROUND_HALF_UP);
-    private BigDecimal serviceFeeAmount = BigDecimal.ZERO.setScale(2, BigDecimal.ROUND_HALF_UP);
-    private BigDecimal netAmount = BigDecimal.ZERO.setScale(2, BigDecimal.ROUND_HALF_UP);
+    private BigDecimal totalAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+    private BigDecimal serviceFeeAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+    private BigDecimal netAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
     private SalFields salFields;
     private AclciFields aclciFields;
 
@@ -182,13 +182,13 @@ public class FundPool extends StoredEntity<String> {
         private int gradeKto5NumberOfStudents;
         private int grade6to8NumberOfStudents;
         private int grade9to12NumberOfStudents;
-        private BigDecimal grossAmount = BigDecimal.ZERO;
-        private BigDecimal itemBankGrossAmount = BigDecimal.ZERO;
-        private BigDecimal gradeKto5GrossAmount = BigDecimal.ZERO;
-        private BigDecimal grade6to8GrossAmount = BigDecimal.ZERO;
-        private BigDecimal grade9to12GrossAmount = BigDecimal.ZERO;
-        private BigDecimal itemBankSplitPercent = BigDecimal.ZERO;
-        private BigDecimal serviceFee = BigDecimal.ZERO;
+        private BigDecimal grossAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+        private BigDecimal itemBankGrossAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+        private BigDecimal gradeKto5GrossAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+        private BigDecimal grade6to8GrossAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+        private BigDecimal grade9to12GrossAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+        private BigDecimal itemBankSplitPercent = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+        private BigDecimal serviceFee = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
 
         public LocalDate getDateReceived() {
             return dateReceived;
@@ -381,14 +381,14 @@ public class FundPool extends StoredEntity<String> {
         private long grade6to8NumberOfStudents;
         private long grade9to12NumberOfStudents;
         private long gradeHeNumberOfStudents;
-        private BigDecimal grossAmount = BigDecimal.ZERO;
-        private BigDecimal curriculumDbSplitPercent = BigDecimal.ZERO;
-        private BigDecimal gradeKto2GrossAmount = BigDecimal.ZERO;
-        private BigDecimal grade3to5GrossAmount = BigDecimal.ZERO;
-        private BigDecimal grade6to8GrossAmount = BigDecimal.ZERO;
-        private BigDecimal grade9to12GrossAmount = BigDecimal.ZERO;
-        private BigDecimal gradeHeGrossAmount = BigDecimal.ZERO;
-        private BigDecimal curriculumDbGrossAmount = BigDecimal.ZERO;
+        private BigDecimal grossAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+        private BigDecimal curriculumDbSplitPercent = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+        private BigDecimal gradeKto2GrossAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+        private BigDecimal grade3to5GrossAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+        private BigDecimal grade6to8GrossAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+        private BigDecimal grade9to12GrossAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+        private BigDecimal gradeHeGrossAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+        private BigDecimal curriculumDbGrossAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
 
         /**
          * Constructor.

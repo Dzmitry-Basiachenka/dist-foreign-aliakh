@@ -9,7 +9,6 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 
 /**
  * Represents domain to hold group of usages.
@@ -25,9 +24,9 @@ public class RightsholderTotalsHolder extends StoredEntity<String> {
 
     private Rightsholder rightsholder = new Rightsholder();
     private Rightsholder payee = new Rightsholder();
-    private BigDecimal grossTotal = BigDecimal.ZERO.setScale(10, RoundingMode.HALF_UP);
-    private BigDecimal serviceFeeTotal = BigDecimal.ZERO.setScale(10, RoundingMode.HALF_UP);
-    private BigDecimal netTotal = BigDecimal.ZERO.setScale(10, RoundingMode.HALF_UP);
+    private BigDecimal grossTotal = FdaConstants.DEFAULT_AMOUNT_SCALE_10;
+    private BigDecimal serviceFeeTotal = FdaConstants.DEFAULT_AMOUNT_SCALE_10;
+    private BigDecimal netTotal = FdaConstants.DEFAULT_AMOUNT_SCALE_10;
     private BigDecimal serviceFee;
 
     public Rightsholder getRightsholder() {

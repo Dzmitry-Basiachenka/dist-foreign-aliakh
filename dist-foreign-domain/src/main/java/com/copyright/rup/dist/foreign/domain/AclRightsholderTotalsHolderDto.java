@@ -19,8 +19,8 @@ public class AclRightsholderTotalsHolderDto extends AclRightsholderTotalsHolder 
 
     private Long wrWrkInst;
     private String systemTitle;
-    private BigDecimal grossTotal = BigDecimal.ZERO.setScale(10, BigDecimal.ROUND_HALF_UP);
-    private BigDecimal netTotal = BigDecimal.ZERO.setScale(10, BigDecimal.ROUND_HALF_UP);
+    private BigDecimal grossTotal = FdaConstants.DEFAULT_AMOUNT_SCALE_10;
+    private BigDecimal netTotal = FdaConstants.DEFAULT_AMOUNT_SCALE_10;
     private AggregateLicenseeClass aggregateLicenseeClass = new AggregateLicenseeClass();
 
     public Long getWrWrkInst() {

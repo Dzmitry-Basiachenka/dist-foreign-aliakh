@@ -42,7 +42,7 @@ public class FundPoolService implements IFundPoolService {
 
     private static final int DEFAULT_SCALE = 2;
     private static final int SCALE_10 = 10;
-    private static final BigDecimal ZERO = new BigDecimal("0.00");
+    private static final BigDecimal ZERO = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
     @Value("$RUP{dist.foreign.service_fee.sal}")

@@ -15,6 +15,7 @@ import com.copyright.rup.dist.common.test.liquibase.TestData;
 import com.copyright.rup.dist.foreign.domain.AaclClassifiedUsage;
 import com.copyright.rup.dist.foreign.domain.AaclUsage;
 import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.PayeeAccountAggregateLicenseeClassesPair;
 import com.copyright.rup.dist.foreign.domain.PayeeTotalHolder;
 import com.copyright.rup.dist.foreign.domain.Usage;
@@ -99,7 +100,7 @@ public class AaclUsageRepositoryIntegrationTest {
     private static final String PERCENT = "%";
     private static final String UNDERSCORE = "_";
     private static final String AMOUNT_50 = "50.0000000000";
-    private static final BigDecimal AMOUNT_0 = BigDecimal.ZERO.setScale(10, BigDecimal.ROUND_HALF_UP);
+    private static final BigDecimal AMOUNT_0 = FdaConstants.DEFAULT_AMOUNT_SCALE_10;
     private static final Long RH_ACCOUNT_NUMBER = 7000813806L;
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();

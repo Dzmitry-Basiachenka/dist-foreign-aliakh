@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.domain.report;
 
 import com.copyright.rup.dist.common.domain.StoredEntity;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -20,8 +21,6 @@ import java.time.LocalDate;
  */
 public class ResearchStatusReportDto extends StoredEntity<String> {
 
-    private static final BigDecimal DEFAULT_AMOUNT = BigDecimal.ZERO.setScale(2, BigDecimal.ROUND_HALF_UP);
-
     private String batchName;
     private String rroName;
     private Long rroAccountNumber;
@@ -30,10 +29,10 @@ public class ResearchStatusReportDto extends StoredEntity<String> {
     private int workResearchDetailsCount;
     private int sendForRaDetailsCount;
     private int rhNotFoundDetailsCount;
-    private BigDecimal workNotFoundGrossAmount = DEFAULT_AMOUNT;
-    private BigDecimal workResearchGrossAmount = DEFAULT_AMOUNT;
-    private BigDecimal sendForRaGrossAmount = DEFAULT_AMOUNT;
-    private BigDecimal rhNotFoundGrossAmount = DEFAULT_AMOUNT;
+    private BigDecimal workNotFoundGrossAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+    private BigDecimal workResearchGrossAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+    private BigDecimal sendForRaGrossAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+    private BigDecimal rhNotFoundGrossAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
 
     public String getBatchName() {
         return batchName;

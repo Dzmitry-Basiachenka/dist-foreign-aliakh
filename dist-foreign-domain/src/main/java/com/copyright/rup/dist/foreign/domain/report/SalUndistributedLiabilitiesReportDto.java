@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.domain.report;
 
 import com.copyright.rup.dist.common.domain.StoredEntity;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -20,13 +21,11 @@ import java.time.LocalDate;
  */
 public class SalUndistributedLiabilitiesReportDto extends StoredEntity<String> {
 
-    private static final BigDecimal DEFAULT_AMOUNT = BigDecimal.ZERO.setScale(2, BigDecimal.ROUND_HALF_UP);
-
     private LocalDate dateReceived;
     private String fundPoolName;
-    private BigDecimal grossAmount = DEFAULT_AMOUNT;
-    private BigDecimal serviceFeeAmount = DEFAULT_AMOUNT;
-    private BigDecimal netAmount = DEFAULT_AMOUNT;
+    private BigDecimal grossAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+    private BigDecimal serviceFeeAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+    private BigDecimal netAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
 
     public LocalDate getDateReceived() {
         return dateReceived;
