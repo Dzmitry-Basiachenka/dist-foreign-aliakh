@@ -79,7 +79,7 @@ public class AclDomainVerifierTest {
             {AclLiabilitiesByRhReportDto.class},
             {AclScenarioFilter.class},
             {AclScenarioLiabilityDetail.class},
-            {AclComparisonByAggLcClassAndTitleReportDto.class},
+            {AclComparisonByAggLcClassAndTitleReportDto.class}
         };
         return List.of(testData);
     }

@@ -156,7 +156,7 @@ public class AclCalculationReportRepository extends CommonReportRepository imple
                                                              OutputStream outputStream) {
         try (AclComparisonByAggLcClassAndTitleCsvReportHandler handler =
                  new AclComparisonByAggLcClassAndTitleCsvReportHandler(Objects.requireNonNull(outputStream))) {
-            getTemplate().select("IAclCalculationReportMapper.findAclComparisonByAggLcClassAndTitleReport",
+            getTemplate().select("IAclCalculationReportMapper.findAclComparisonByAggLcClassAndTitleReportDtos",
                 reportInfo, handler);
             handler.writeMetadata(reportInfo);
         }
