@@ -78,9 +78,9 @@ public class AclComparisonByAggLcClassAndTitleReportWidget extends AclCommonRepo
 
     private HorizontalLayout initScenarioLayout() {
         previousScenarioFilterWidget = initScenarioFilterWidget(previousPeriodComboBox, "label.previous_scenarios",
-            "acl-previous-scenarios-report-filter");
+            "acl-previous-scenarios-report-filter", "window.previous_scenarios_filter");
         currentScenarioFilterWidget = initScenarioFilterWidget(currentPeriodComboBox, "label.current_scenarios",
-            "acl-current-scenarios-report-filter");
+            "acl-current-scenarios-report-filter", "window.current_scenarios_filter");
         HorizontalLayout scenarioLayout =
             new HorizontalLayout(previousScenarioFilterWidget, currentScenarioFilterWidget);
         scenarioLayout.setSizeFull();
@@ -117,9 +117,11 @@ public class AclComparisonByAggLcClassAndTitleReportWidget extends AclCommonRepo
     }
 
     private AclScenarioFilterWidget initScenarioFilterWidget(ComboBox<Integer> periodComboBox,
-                                                             String widgetButtonCaptionLabelName, String styleName) {
+                                                             String widgetButtonCaptionLabelName, String styleName,
+                                                             String widgetCaptionLabelName) {
         AclScenarioFilterWidget scenarioFilterWidget = new AclScenarioFilterWidget(() ->
-            controller.getScenarios(periodComboBox.getSelectedItem().orElse(null)), widgetButtonCaptionLabelName);
+            controller.getScenarios(periodComboBox.getSelectedItem().orElse(null)), widgetButtonCaptionLabelName,
+            widgetCaptionLabelName);
         scenarioFilterWidget.setEnabled(false);
         scenarioFilterWidget.addFilterSaveListener(event -> {
             applyFilterEmptyStyle(scenarioFilterWidget, 0 == event.getSelectedItemsIds().size());

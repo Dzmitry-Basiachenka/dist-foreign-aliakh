@@ -32,16 +32,20 @@ public class AclScenarioFilterWidget extends BaseItemsFilterWidget<AclScenario>
 
     private final Supplier<List<AclScenario>> supplier;
     private final Set<AclScenario> scenarios = new HashSet<>();
+    private final String widgetCaptionLabelName;
 
     /**
      * Constructor.
      *
      * @param supplier                     period supplier
      * @param widgetButtonCaptionLabelName widget button caption label name
+     * @param widgetCaptionLabelName       widget caption label name
      */
-    public AclScenarioFilterWidget(Supplier<List<AclScenario>> supplier, String widgetButtonCaptionLabelName) {
+    public AclScenarioFilterWidget(Supplier<List<AclScenario>> supplier, String widgetButtonCaptionLabelName,
+                                   String widgetCaptionLabelName) {
         super(ForeignUi.getMessage(widgetButtonCaptionLabelName));
         this.supplier = supplier;
+        this.widgetCaptionLabelName = widgetCaptionLabelName;
     }
 
     @Override
@@ -77,7 +81,7 @@ public class AclScenarioFilterWidget extends BaseItemsFilterWidget<AclScenario>
     @Override
     public FilterWindow<AclScenario> showFilterWindow() {
         FilterWindow<AclScenario> filterWindow =
-            Windows.showFilterWindow(ForeignUi.getMessage("window.scenarios_filter"), this,
+            Windows.showFilterWindow(ForeignUi.getMessage(widgetCaptionLabelName), this,
                 (ValueProvider<AclScenario, List<String>>) scenario -> List.of(scenario.getName()));
         filterWindow.setSelectedItemsIds(scenarios);
         filterWindow.setSelectAllButtonVisible();
