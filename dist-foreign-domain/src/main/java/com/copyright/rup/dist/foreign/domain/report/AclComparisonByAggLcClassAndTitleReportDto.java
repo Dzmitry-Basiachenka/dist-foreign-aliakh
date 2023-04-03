@@ -39,7 +39,7 @@ public class AclComparisonByAggLcClassAndTitleReportDto extends StoredEntity<Str
     private BigDecimal digitalNetAmountCurrentPeriod;
     private BigDecimal totalNetAmountCurrentPeriod;
     private BigDecimal delta;
-    private Integer changePercent;
+    private BigDecimal changePercent;
 
     public Integer getAggregateLicenseeClassId() {
         return aggregateLicenseeClassId;
@@ -201,11 +201,11 @@ public class AclComparisonByAggLcClassAndTitleReportDto extends StoredEntity<Str
         this.delta = delta;
     }
 
-    public Integer getChangePercent() {
+    public BigDecimal getChangePercent() {
         return changePercent;
     }
 
-    public void setChangePercent(Integer changePercent) {
+    public void setChangePercent(BigDecimal changePercent) {
         this.changePercent = changePercent;
     }
 

@@ -8,6 +8,8 @@ import com.copyright.rup.dist.foreign.domain.report.AclComparisonByAggLcClassAnd
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.OutputStream;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -69,17 +71,17 @@ public class AclComparisonByAggLcClassAndTitleCsvReportHandler extends
         beanProperties.add(bean.getPrintRhNamePreviousPeriod());
         beanProperties.add(getBeanPropertyAsString(bean.getDigitalRhAccountNumberPreviousPeriod()));
         beanProperties.add(bean.getDigitalRhNamePreviousPeriod());
-        beanProperties.add(getBeanBigDecimal(bean.getPrintNetAmountPreviousPeriod()));
-        beanProperties.add(getBeanBigDecimal(bean.getDigitalNetAmountPreviousPeriod()));
-        beanProperties.add(getBeanBigDecimal(bean.getTotalNetAmountPreviousPeriod()));
+        beanProperties.add(roundAndGetBeanBigDecimal(bean.getPrintNetAmountPreviousPeriod()));
+        beanProperties.add(roundAndGetBeanBigDecimal(bean.getDigitalNetAmountPreviousPeriod()));
+        beanProperties.add(roundAndGetBeanBigDecimal(bean.getTotalNetAmountPreviousPeriod()));
         beanProperties.add(getBeanPropertyAsString(bean.getPrintRhAccountNumberCurrentPeriod()));
         beanProperties.add(bean.getPrintRhNameCurrentPeriod());
         beanProperties.add(getBeanPropertyAsString(bean.getDigitalRhAccountNumberCurrentPeriod()));
         beanProperties.add(bean.getDigitalRhNameCurrentPeriod());
-        beanProperties.add(getBeanBigDecimal(bean.getPrintNetAmountCurrentPeriod()));
-        beanProperties.add(getBeanBigDecimal(bean.getDigitalNetAmountCurrentPeriod()));
-        beanProperties.add(getBeanBigDecimal(bean.getTotalNetAmountCurrentPeriod()));
-        beanProperties.add(getBeanBigDecimal(bean.getDelta()));
+        beanProperties.add(roundAndGetBeanBigDecimal(bean.getPrintNetAmountCurrentPeriod()));
+        beanProperties.add(roundAndGetBeanBigDecimal(bean.getDigitalNetAmountCurrentPeriod()));
+        beanProperties.add(roundAndGetBeanBigDecimal(bean.getTotalNetAmountCurrentPeriod()));
+        beanProperties.add(roundAndGetBeanBigDecimal(bean.getDelta()));
         beanProperties.add(getBeanPercent(bean.getChangePercent()));
         return beanProperties;
     }
@@ -89,7 +91,7 @@ public class AclComparisonByAggLcClassAndTitleCsvReportHandler extends
         return HEADERS;
     }
 
-    private String getBeanPercent(Integer value) {
-        return Objects.nonNull(value) ? String.format("%d%%", value) : "N/A";
+    private String getBeanPercent(BigDecimal value) {
+        return Objects.nonNull(value) ? String.format("%.0f%%", value.setScale(0, RoundingMode.HALF_UP)) : "N/A";
     }
 }
