@@ -569,7 +569,7 @@ databaseChangeLog {
             column(name: 'volume_share', value: 1.0000000000)
             column(name: 'value_share', value: 1.0000000000)
             column(name: 'detail_share', value: 1.0000000000)
-            column(name: 'net_amount', value: 50.5555555555)
+            column(name: 'net_amount', value: 50.5545555555)
             column(name: 'gross_amount', value: 100.0000000000)
             column(name: 'service_fee_amount', value: 16.0000000000)
         }
