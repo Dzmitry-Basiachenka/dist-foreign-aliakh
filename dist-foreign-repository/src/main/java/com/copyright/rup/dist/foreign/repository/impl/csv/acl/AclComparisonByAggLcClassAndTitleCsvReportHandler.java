@@ -29,9 +29,9 @@ public class AclComparisonByAggLcClassAndTitleCsvReportHandler extends
 
     private static final List<String> HEADERS = List.of("Agg LC ID", "Agg LC Name", "Wr Wrk Inst", "System Title",
         "Pub Type", "Print RH Account # Period 1", "Print RH Name Period 1", "Digital RH Account # Period 1",
-        "Digital RH Name Period 1", "Print Net Amt Period 1", "Digital Net Amt Period 1", "Net Total Amount Period 1",
+        "Digital RH Name Period 1", "Print Net Amt Period 1", "Digital Net Amt Period 1", "Total Net Amt Period 1",
         "Print RH Account # Period 2", "Print RH Name Period 2", "Digital RH Account # Period 2",
-        "Digital RH Name Period 2", "Print Net Amt Period 2", "Digital Net Amt Period 2", "Net Total Amount Period 2",
+        "Digital RH Name Period 2", "Print Net Amt Period 2", "Digital Net Amt Period 2", "Total Net Amt Period 2",
         "Delta", "% Change");
     private static final List<String> METADATA_HEADERS = List.of("Scenarios Period 1", "Scenarios Period 2");
 
