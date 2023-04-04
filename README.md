@@ -1,3 +1,11 @@
+17.0.16
+-
+* B-77108 FDA: Fund Pools by Aggregate Licensee Class Report: make changes based on comments on code review
+* B-77994 Tech Debt: FDA: introduce constants for default amount equal to  BigDecimal.ZERO
+* B-77079 FDA: Comparison by Aggregate Licensee Class and Title Report: make changes based on comments in code review
+* B-77079 FDA: Comparison by Aggregate Licensee Class and Title Report: refine formatting amounts and rounding percents
+* B-77079 FDA: Comparison by Aggregate Licensee Class and Title Report: rename scenario filter widgets
+
 17.0.15
 -
 * B-76852 FDA: switch integrations for paid liabilities to SNS/SQS FIFO: apply dist-common configuration
