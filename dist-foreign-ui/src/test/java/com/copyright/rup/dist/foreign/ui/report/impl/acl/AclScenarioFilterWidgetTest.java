@@ -46,7 +46,7 @@ public class AclScenarioFilterWidgetTest {
     private static final String SCENARIO_ID = "17a915c3-3f78-412b-8a00-29e7f5e9b965";
 
     private final AclScenarioFilterWidget scenarioFilterWidget = new AclScenarioFilterWidget(List::of,
-        "label.scenarios");
+        "label.scenarios", "window.scenarios_filter");
 
     @Test
     public void testGetBeanClass() {

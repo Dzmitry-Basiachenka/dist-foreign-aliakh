@@ -68,7 +68,8 @@ public class AclCommonReportWidget extends Window implements IAclCommonReportWid
         periodComboBox.setRequiredIndicatorVisible(true);
         VaadinUtils.setMaxComponentsWidth(periodComboBox);
         scenarioFilterWidget = new AclScenarioFilterWidget(() ->
-            controller.getScenarios(periodComboBox.getSelectedItem().orElse(null)), "label.scenarios");
+            controller.getScenarios(periodComboBox.getSelectedItem().orElse(null)), "label.scenarios",
+            "window.scenarios_filter");
         scenarioFilterWidget.setEnabled(false);
         periodComboBox.addValueChangeListener(event -> {
             scenarioFilterWidget.reset();
