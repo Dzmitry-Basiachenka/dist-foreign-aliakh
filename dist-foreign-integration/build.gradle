@@ -4,6 +4,8 @@ dependencies {
     compile project(':dist-foreign-domain')
 
     compile("com.copyright.rup.aws:rup-aws-sns:${rupAwsVersion}")
+    //updated version of transitive dependency snakeyaml from dependency rup-aws-sns to fix vulnerability CVE-2022-1471
+    compile("org.yaml:snakeyaml:${snakeyamlVersion}")
     compile("com.copyright.rup.aws:rup-aws-sqs:${rupAwsVersion}")
     compile("com.copyright.rup.dist.common:dist-common-integration:${distCommonVersion}")
     //transitive dependency of rup-es-api to avoid CVE-2020-9488, CVE-2020-21913
