@@ -1,3 +1,9 @@
+17.0.17
+-
+* B-77079 FDA: Comparison by Aggregate Licensee Class and Title Report: rename Total Amount columns
+* B-77994 Tech Debt: FDA: fix vulnerabilities CVE-2023-20860, CVE-2023-20861
+* B-77994 Tech Debt: FDA: fix security vulnerability CVE-2022-1471
+
 17.0.16
 -
 * B-77108 FDA: Fund Pools by Aggregate Licensee Class Report: make changes based on comments on code review
