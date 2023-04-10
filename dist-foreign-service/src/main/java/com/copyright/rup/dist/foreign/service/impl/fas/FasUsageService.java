@@ -154,27 +154,26 @@ public class FasUsageService implements IFasUsageService {
     }
 
     @Override
+    @Transactional
     public void loadResearchedUsages(List<ResearchedUsage> researchedUsages) {
         LogUtils.ILogWrapper researchedUsagesCount = LogUtils.size(researchedUsages);
         LOGGER.info("Load researched usages. Started. ResearchedUsagesCount={}", researchedUsagesCount);
         populateTitlesStandardNumberAndType(researchedUsages);
-        markAsWorkFound(researchedUsages);
-        List<String> usageIds = researchedUsages.stream()
-            .map(ResearchedUsage::getUsageId)
-            .collect(Collectors.toList());
-        chainExecutor.execute(usageRepository.findByIds(usageIds), ChainProcessorTypeEnum.RIGHTS);
-        LOGGER.info("Load researched usages. Finished. ResearchedUsagesCount={}", researchedUsagesCount);
-    }
-
-    @Override
-    @Transactional
-    public void markAsWorkFound(List<ResearchedUsage> researchedUsages) {
         fasUsageRepository.updateResearchedUsages(researchedUsages);
         researchedUsages.forEach(
             researchedUsage -> usageAuditService.logAction(researchedUsage.getUsageId(),
                 UsageActionTypeEnum.WORK_FOUND,
                 String.format("Wr Wrk Inst %s was added based on research", researchedUsage.getWrWrkInst()))
         );
+        LOGGER.info("Load researched usages. Finished. ResearchedUsagesCount={}", researchedUsagesCount);
+    }
+
+    @Override
+    public void sendForGettingRights(List<ResearchedUsage> researchedUsages) {
+        List<String> usageIds = researchedUsages.stream()
+            .map(ResearchedUsage::getUsageId)
+            .collect(Collectors.toList());
+        chainExecutor.execute(usageRepository.findByIds(usageIds), ChainProcessorTypeEnum.RIGHTS);
     }
 
     @Override

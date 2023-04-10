@@ -133,6 +133,7 @@ public class FasUsageController extends CommonUsageController implements IFasUsa
     @Override
     public void loadResearchedUsages(List<ResearchedUsage> researchedUsages) {
         fasUsageService.loadResearchedUsages(researchedUsages);
+        fasUsageService.sendForGettingRights(researchedUsages);
         getUsageFilterController().getWidget().clearFilter();
     }
 
