@@ -93,7 +93,9 @@ public class AclciUsageController extends CommonUsageController implements IAclc
 
     @Override
     public IStreamSource getExportUsagesStreamSource() {
-        return null; //TODO: implement
+        return streamSourceHandler.getCsvStreamSource(() -> "export_usage_",
+            pos -> getReportService().writeAaclUsageCsvReport(//TODO: implement writeAclciUsageCsvReport
+                getUsageFilterController().getWidget().getAppliedFilter(), pos));
     }
 
     @Override

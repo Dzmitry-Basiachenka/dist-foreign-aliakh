@@ -21,6 +21,7 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.ui.usage.api.aclci.IAclciUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.aclci.IAclciUsageFilterController;
@@ -45,8 +46,10 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
+import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Supplier;
 
 /**
  * Verifies {@link AclciUsageWidget}.
@@ -69,12 +72,16 @@ public class AclciUsageWidgetTest {
         controller = createMock(IAclciUsageController.class);
         expect(controller.initUsagesFilterWidget()).andReturn(new AclciUsageFilterWidget(
             createMock(IAclciUsageFilterController.class))).once();
+        IStreamSource streamSource = createMock(IStreamSource.class);
+        expect(streamSource.getSource()).andReturn(new SimpleImmutableEntry(createMock(Supplier.class),
+            createMock(Supplier.class))).once();
+        expect(controller.getExportUsagesStreamSource()).andReturn(streamSource).once();
         widget = new AclciUsageWidget(controller);
         widget.setController(controller);
-        replay(controller);
+        replay(controller, streamSource);
         widget.init();
-        verify(controller);
-        reset(controller);
+        verify(controller, streamSource);
+        reset(controller, streamSource);
     }
 
     @Test
@@ -212,9 +219,10 @@ public class AclciUsageWidgetTest {
     }
 
     private void verifyButtonsLayout(HorizontalLayout layout) {
-        assertEquals(3, layout.getComponentCount());
+        assertEquals(4, layout.getComponentCount());
         verifyMenuBar(layout.getComponent(0), "Usage Batch", true, List.of("Load"));
         verifyMenuBar(layout.getComponent(1), "Fund Pool", true, List.of("Load"));
         verifyButton(layout.getComponent(2), "Update Usages", true);
+        verifyButton(layout.getComponent(3), "Export", true);
     }
 }
