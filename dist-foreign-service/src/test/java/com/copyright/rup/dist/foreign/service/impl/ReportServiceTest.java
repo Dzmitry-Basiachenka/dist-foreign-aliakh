@@ -18,6 +18,7 @@ import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.ExcludePayeeFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IAaclReportRepository;
+import com.copyright.rup.dist.foreign.repository.api.IAclciReportRepository;
 import com.copyright.rup.dist.foreign.repository.api.IFasReportRepository;
 import com.copyright.rup.dist.foreign.repository.api.INtsReportRepository;
 import com.copyright.rup.dist.foreign.repository.api.ISalReportRepository;
@@ -71,6 +72,7 @@ public class ReportServiceTest {
 
     private IReportService reportService;
     private IAaclReportRepository aaclReportRepository;
+    private IAclciReportRepository aclciReportRepository;
     private IFasReportRepository fasReportRepository;
     private INtsReportRepository ntsReportRepository;
     private ISalReportRepository salReportRepository;
@@ -79,15 +81,17 @@ public class ReportServiceTest {
     @Before
     public void setUp() {
         reportService = new ReportService();
-        salReportRepository = createMock(ISalReportRepository.class);
         aaclReportRepository = createMock(IAaclReportRepository.class);
+        aclciReportRepository = createMock(IAclciReportRepository.class);
         fasReportRepository = createMock(IFasReportRepository.class);
         ntsReportRepository = createMock(INtsReportRepository.class);
+        salReportRepository = createMock(ISalReportRepository.class);
         rhTaxService = createMock(IRhTaxService.class);
-        Whitebox.setInternalState(reportService, salReportRepository);
         Whitebox.setInternalState(reportService, aaclReportRepository);
+        Whitebox.setInternalState(reportService, aclciReportRepository);
         Whitebox.setInternalState(reportService, fasReportRepository);
         Whitebox.setInternalState(reportService, ntsReportRepository);
+        Whitebox.setInternalState(reportService, salReportRepository);
         Whitebox.setInternalState(reportService, rhTaxService);
         Whitebox.setInternalState(reportService, "defaultEstimatedServiceFee", DEFAULT_ESTIMATED_SERVICE_FEE);
     }
@@ -229,6 +233,17 @@ public class ReportServiceTest {
         replay(aaclReportRepository);
         reportService.writeAaclUsageCsvReport(filter, outputStream);
         verify(aaclReportRepository);
+    }
+
+    @Test
+    public void testWriteAclciUsageCsvReport() {
+        UsageFilter filter = createMock(UsageFilter.class);
+        PipedOutputStream outputStream = createMock(PipedOutputStream.class);
+        aclciReportRepository.writeAclciUsagesCsvReport(filter, outputStream);
+        expectLastCall().once();
+        replay(aclciReportRepository);
+        reportService.writeAclciUsageCsvReport(filter, outputStream);
+        verify(aclciReportRepository);
     }
 
     @Test
