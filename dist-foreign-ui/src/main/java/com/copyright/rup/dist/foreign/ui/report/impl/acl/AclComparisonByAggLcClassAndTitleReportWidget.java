@@ -4,6 +4,7 @@ import com.copyright.rup.dist.common.reporting.impl.CsvStreamSource;
 import com.copyright.rup.dist.foreign.domain.report.AclCalculationReportsInfoDto;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.report.api.acl.IAclCommonReportController;
+import com.copyright.rup.dist.foreign.ui.report.api.acl.IAclCommonReportWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
 import com.copyright.rup.vaadin.util.VaadinUtils;
@@ -14,6 +15,7 @@ import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.ComponentContainer;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.Window;
 
 import org.apache.commons.collections4.CollectionUtils;
 
@@ -29,7 +31,7 @@ import java.util.List;
  *
  * @author Mikita Maistrenka
  */
-public class AclComparisonByAggLcClassAndTitleReportWidget extends AclCommonReportWidget {
+public class AclComparisonByAggLcClassAndTitleReportWidget extends Window implements IAclCommonReportWidget {
 
     private static final String EMPTY_FILTER_STYLE = "empty-item-filter-widget";
 

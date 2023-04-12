@@ -32,7 +32,6 @@ import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
-import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Table;
@@ -279,10 +278,6 @@ public class FasUsageServiceTest {
         expectLastCall().once();
         usageAuditService.logAction(usageId2, UsageActionTypeEnum.WORK_FOUND,
             "Wr Wrk Inst 876543210 was added based on research");
-        expectLastCall().once();
-        List<Usage> usages = List.of(buildUsage(usageId1), buildUsage(usageId2));
-        expect(usageRepository.findByIds(List.of(usageId1, usageId2))).andReturn(usages).once();
-        chainExecutor.execute(usages, ChainProcessorTypeEnum.RIGHTS);
         expectLastCall().once();
         replay(usageRepository, usageAuditService, chainExecutor, piIntegrationService, fasUsageRepository);
         usageService.loadResearchedUsages(researchedUsages);

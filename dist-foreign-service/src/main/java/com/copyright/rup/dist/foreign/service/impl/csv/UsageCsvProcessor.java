@@ -33,6 +33,18 @@ import java.util.stream.Collectors;
  */
 public class UsageCsvProcessor extends DistCsvProcessor<Usage> {
 
+    private final LengthValidator lengthValidator9 = new LengthValidator(9);
+    private final LengthValidator lengthValidator18 = new LengthValidator(18);
+    private final LengthValidator lengthValidator50 = new LengthValidator(50);
+    private final LengthValidator lengthValidator100 = new LengthValidator(100);
+    private final LengthValidator lengthValidator200 = new LengthValidator(200);
+    private final LengthValidator lengthValidator2000 = new LengthValidator(2000);
+    private final LengthValidator lengthValidator1000 = new LengthValidator(1000);
+    private final RequiredValidator requiredValidator = new RequiredValidator();
+    private final PositiveNumberValidator positiveNumberValidator = new PositiveNumberValidator();
+    private final DateFormatValidator dateFormatValidator = new DateFormatValidator();
+    private final YearValidator yearValidator = new YearValidator();
+    private final AmountValidator amountValidator = new AmountValidator();
     private final String productFamily;
 
     /**
@@ -47,12 +59,17 @@ public class UsageCsvProcessor extends DistCsvProcessor<Usage> {
 
     @Override
     public List<String> getHeadersForValidation() {
-        initPlainValidators();
         List<String> basicHeader =
             Arrays.stream(BasicHeader.values()).map(BasicHeader::getColumnName).collect(Collectors.toList());
         List<String> exportedHeader =
             Arrays.stream(ExportedHeader.values()).map(ExportedHeader::getColumnName).collect(Collectors.toList());
-        return getActualHeaders().size() <= basicHeader.size() ? basicHeader : exportedHeader;
+        boolean isBasicHeaderApplied = getActualHeaders().size() <= basicHeader.size();
+        if (isBasicHeaderApplied) {
+            initBasicPlainValidators();
+        } else {
+            initExportedPlainValidators();
+        }
+        return isBasicHeaderApplied ? basicHeader : exportedHeader;
     }
 
     @Override
@@ -60,46 +77,40 @@ public class UsageCsvProcessor extends DistCsvProcessor<Usage> {
         return new UsageConverter(productFamily);
     }
 
-    @Override
-    public void initPlainValidators() {
-        if (!getActualHeaders().isEmpty()) {
-            if (getActualHeaders().size() <= BasicHeader.values().length) {
-                initPlainValidators(BasicHeader.TITLE, BasicHeader.ARTICLE, BasicHeader.STANDARD_NUMBER,
-                    BasicHeader.STANDARD_NUMBER_TYPE, BasicHeader.WR_WRK_INST, BasicHeader.RH_ACCT_NUMBER,
-                    BasicHeader.PUBLISHER, BasicHeader.PUB_DATE, BasicHeader.NUMBER_OF_COPIES,
-                    BasicHeader.REPORTED_VALUE, BasicHeader.MARKET, BasicHeader.MARKET_PERIOD_FROM,
-                    BasicHeader.MARKET_PERIOD_TO, BasicHeader.AUTHOR, BasicHeader.COMMENT);
-            } else {
-                initPlainValidators(ExportedHeader.WORK_TITLE, ExportedHeader.ARTICLE,
-                    ExportedHeader.REPORTED_STANDARD_NUMBER, ExportedHeader.STANDARD_NUMBER_TYPE,
-                    ExportedHeader.WR_WRK_INST, ExportedHeader.RH_ACCOUNT_NUMBER, ExportedHeader.PUBLISHER,
-                    ExportedHeader.PUBLICATION_DATE, ExportedHeader.NUMBER_OF_COPIES, ExportedHeader.REPORTED_VALUE,
-                    ExportedHeader.MARKET, ExportedHeader.MARKET_PERIOD_FROM, ExportedHeader.MARKET_PERIOD_TO,
-                    ExportedHeader.AUTHOR, ExportedHeader.COMMENT);
-            }
-        }
+    private void initBasicPlainValidators() {
+        addPlainValidators(BasicHeader.TITLE, lengthValidator2000);
+        addPlainValidators(BasicHeader.ARTICLE, lengthValidator1000);
+        addPlainValidators(BasicHeader.STANDARD_NUMBER, lengthValidator1000);
+        addPlainValidators(BasicHeader.STANDARD_NUMBER_TYPE, lengthValidator50);
+        addPlainValidators(BasicHeader.WR_WRK_INST, positiveNumberValidator, lengthValidator9);
+        addPlainValidators(BasicHeader.RH_ACCT_NUMBER, positiveNumberValidator, lengthValidator18);
+        addPlainValidators(BasicHeader.PUBLISHER, lengthValidator1000);
+        addPlainValidators(BasicHeader.PUB_DATE, dateFormatValidator);
+        addPlainValidators(BasicHeader.NUMBER_OF_COPIES, positiveNumberValidator, lengthValidator9);
+        addPlainValidators(BasicHeader.REPORTED_VALUE, requiredValidator, amountValidator);
+        addPlainValidators(BasicHeader.MARKET, requiredValidator, lengthValidator200);
+        addPlainValidators(BasicHeader.MARKET_PERIOD_FROM, requiredValidator, yearValidator);
+        addPlainValidators(BasicHeader.MARKET_PERIOD_TO, requiredValidator, yearValidator);
+        addPlainValidators(BasicHeader.AUTHOR, lengthValidator2000);
+        addPlainValidators(BasicHeader.COMMENT, lengthValidator100);
     }
 
-    private void initPlainValidators(ICsvColumn... column) {
-        RequiredValidator requiredValidator = new RequiredValidator();
-        PositiveNumberValidator positiveNumberValidator = new PositiveNumberValidator();
-        LengthValidator lengthValidator1000 = new LengthValidator(1000);
-        LengthValidator lengthValidator2000 = new LengthValidator(2000);
-        addPlainValidators(column[0], lengthValidator2000);
-        addPlainValidators(column[1], lengthValidator1000);
-        addPlainValidators(column[2], lengthValidator1000);
-        addPlainValidators(column[3], new LengthValidator(50));
-        addPlainValidators(column[4], positiveNumberValidator, new LengthValidator(9));
-        addPlainValidators(column[5], positiveNumberValidator, new LengthValidator(18));
-        addPlainValidators(column[6], lengthValidator1000);
-        addPlainValidators(column[7], new DateFormatValidator());
-        addPlainValidators(column[8], positiveNumberValidator, new LengthValidator(9));
-        addPlainValidators(column[9], requiredValidator, new AmountValidator());
-        addPlainValidators(column[10], requiredValidator, new LengthValidator(200));
-        addPlainValidators(column[11], requiredValidator, new YearValidator());
-        addPlainValidators(column[12], requiredValidator, new YearValidator());
-        addPlainValidators(column[13], lengthValidator2000);
-        addPlainValidators(column[14], new LengthValidator(100));
+    private void initExportedPlainValidators() {
+        addPlainValidators(ExportedHeader.WORK_TITLE, lengthValidator2000);
+        addPlainValidators(ExportedHeader.ARTICLE, lengthValidator1000);
+        addPlainValidators(ExportedHeader.REPORTED_STANDARD_NUMBER, lengthValidator1000);
+        addPlainValidators(ExportedHeader.STANDARD_NUMBER_TYPE, lengthValidator50);
+        addPlainValidators(ExportedHeader.WR_WRK_INST, positiveNumberValidator, lengthValidator9);
+        addPlainValidators(ExportedHeader.RH_ACCOUNT_NUMBER, positiveNumberValidator, lengthValidator18);
+        addPlainValidators(ExportedHeader.PUBLISHER, lengthValidator1000);
+        addPlainValidators(ExportedHeader.PUBLICATION_DATE, dateFormatValidator);
+        addPlainValidators(ExportedHeader.NUMBER_OF_COPIES, positiveNumberValidator, lengthValidator9);
+        addPlainValidators(ExportedHeader.REPORTED_VALUE, requiredValidator, amountValidator);
+        addPlainValidators(ExportedHeader.MARKET, requiredValidator, lengthValidator200);
+        addPlainValidators(ExportedHeader.MARKET_PERIOD_FROM, requiredValidator, yearValidator);
+        addPlainValidators(ExportedHeader.MARKET_PERIOD_TO, requiredValidator, yearValidator);
+        addPlainValidators(ExportedHeader.AUTHOR, lengthValidator2000);
+        addPlainValidators(ExportedHeader.COMMENT, lengthValidator100);
     }
 
     /**

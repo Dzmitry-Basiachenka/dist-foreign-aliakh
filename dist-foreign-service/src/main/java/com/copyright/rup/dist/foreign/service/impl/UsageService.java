@@ -229,8 +229,7 @@ public class UsageService implements IUsageService {
         Set<String> notFoundUsageIds = new HashSet<>();
         Map<String, Usage> usageIdToUsageMap = findByIdsFunction.apply(paidUsages.stream()
             .map(PaidUsage::getId)
-            .collect(Collectors.toList())).stream()
-            .collect(Collectors.toMap(Usage::getId, usage -> usage));
+            .collect(Collectors.toList())).stream().collect(Collectors.toMap(Usage::getId, usage -> usage));
         paidUsages.forEach(paidUsage -> {
             String paidUsageId = paidUsage.getId();
             if (Objects.nonNull(usageIdToUsageMap.get(paidUsageId))) {
@@ -399,27 +398,23 @@ public class UsageService implements IUsageService {
 
     @Override
     public void sendForMatching(List<Usage> usages) {
-        chainExecutor.execute(() -> {
-            List<Usage> usagesInNewStatus =
-                usages.stream().filter(usage -> UsageStatusEnum.NEW == usage.getStatus()).collect(Collectors.toList());
-            chainExecutor.execute(usagesInNewStatus, ChainProcessorTypeEnum.MATCHING);
-        });
+        List<Usage> usagesInNewStatus =
+            usages.stream().filter(usage -> UsageStatusEnum.NEW == usage.getStatus()).collect(Collectors.toList());
+        chainExecutor.execute(usagesInNewStatus, ChainProcessorTypeEnum.MATCHING);
     }
 
     @Override
     public void sendForGettingRights(List<Usage> usages, String batchName) {
-        chainExecutor.execute(() -> {
-            LOGGER.info("Send usages for getting rights. Started. UsageBatchName={}, UsagesCount={}", batchName,
-                LogUtils.size(usages));
-            List<Usage> workFoundUsages =
-                usages.stream()
-                    .filter(usage -> UsageStatusEnum.WORK_FOUND == usage.getStatus())
-                    .collect(Collectors.toList());
-            chainExecutor.execute(workFoundUsages, ChainProcessorTypeEnum.RIGHTS);
-            LOGGER.info(
-                "Send usages for getting rights. Finished. UsageBatchName={}, UsagesCount={}, WorkFoundUsagesCount={}",
-                batchName, LogUtils.size(usages), LogUtils.size(workFoundUsages));
-        });
+        LOGGER.info("Send usages for getting rights. Started. UsageBatchName={}, UsagesCount={}", batchName,
+            LogUtils.size(usages));
+        List<Usage> workFoundUsages =
+            usages.stream()
+                .filter(usage -> UsageStatusEnum.WORK_FOUND == usage.getStatus())
+                .collect(Collectors.toList());
+        chainExecutor.execute(workFoundUsages, ChainProcessorTypeEnum.RIGHTS);
+        LOGGER.info(
+            "Send usages for getting rights. Finished. UsageBatchName={}, UsagesCount={}, WorkFoundUsagesCount={}",
+            batchName, LogUtils.size(usages), LogUtils.size(workFoundUsages));
     }
 
     @Override

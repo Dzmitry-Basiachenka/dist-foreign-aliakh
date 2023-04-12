@@ -1,11 +1,12 @@
 package com.copyright.rup.dist.foreign.ui.common;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 
+import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.ui.audit.api.ICommonAuditFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.UiTestHelper;
 import com.copyright.rup.vaadin.ui.component.filter.CommonFilterWindow.IFilterSaveListener;
@@ -69,9 +70,10 @@ public class LazyRightsholderFilterWidgetTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testAddFilterSaveListener() {
-        IFilterSaveListener saveListener = createMock(IFilterSaveListener.class);
-        assertNotEquals(saveListener, Whitebox.getInternalState(itemsFilterWidget, "saveListener"));
+        IFilterSaveListener<Rightsholder> saveListener = createMock(IFilterSaveListener.class);
+        assertNull(Whitebox.getInternalState(itemsFilterWidget, "saveListener"));
         itemsFilterWidget.addFilterSaveListener(saveListener);
         assertEquals(saveListener, Whitebox.getInternalState(itemsFilterWidget, "saveListener"));
     }

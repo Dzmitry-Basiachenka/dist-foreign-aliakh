@@ -290,6 +290,8 @@ public class FasUsageControllerTest {
         expectLastCall().once();
         fasUsageService.loadResearchedUsages(researchedUsages);
         expectLastCall().once();
+        fasUsageService.sendForGettingRights(researchedUsages);
+        expectLastCall().once();
         replay(fasUsageService, filterController, filterWidget);
         controller.loadResearchedUsages(researchedUsages);
         verify(fasUsageService, filterController, filterWidget);

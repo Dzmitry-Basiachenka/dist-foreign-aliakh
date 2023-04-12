@@ -1,10 +1,8 @@
 package com.copyright.rup.dist.foreign.service.impl;
 
-import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.newCapture;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -45,7 +43,6 @@ import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEn
 import com.google.common.collect.ImmutableMap;
 
 import org.apache.commons.lang3.StringUtils;
-import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -671,17 +668,10 @@ public class UsageServiceTest {
         usage1.setStatus(UsageStatusEnum.NEW);
         Usage usage2 = new Usage();
         usage2.setStatus(UsageStatusEnum.WORK_NOT_FOUND);
-        Capture<Runnable> captureRunnable = newCapture();
-        chainExecutor.execute(capture(captureRunnable));
-        expectLastCall().once();
         chainExecutor.execute(List.of(usage1), ChainProcessorTypeEnum.MATCHING);
         expectLastCall().once();
         replay(chainExecutor);
         usageService.sendForMatching(List.of(usage1, usage2));
-        assertNotNull(captureRunnable);
-        Runnable runnable = captureRunnable.getValue();
-        assertNotNull(runnable);
-        runnable.run();
         verify(chainExecutor);
     }
 
@@ -691,17 +681,10 @@ public class UsageServiceTest {
         usage1.setStatus(UsageStatusEnum.WORK_FOUND);
         Usage usage2 = new Usage();
         usage2.setStatus(UsageStatusEnum.WORK_NOT_FOUND);
-        Capture<Runnable> captureRunnable = newCapture();
-        chainExecutor.execute(capture(captureRunnable));
-        expectLastCall().once();
         chainExecutor.execute(List.of(usage1), ChainProcessorTypeEnum.RIGHTS);
         expectLastCall().once();
         replay(chainExecutor);
         usageService.sendForGettingRights(List.of(usage1, usage2), "Batch name");
-        assertNotNull(captureRunnable);
-        Runnable runnable = captureRunnable.getValue();
-        assertNotNull(runnable);
-        runnable.run();
         verify(chainExecutor);
     }
 

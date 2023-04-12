@@ -103,14 +103,11 @@ public interface IFasUsageService {
     void loadResearchedUsages(List<ResearchedUsage> researchedUsages);
 
     /**
-     * Updates researched usage details, sets WORK_FOUND status and adds log action.
-     * Is used only by {@link IFasUsageService#loadResearchedUsages(List)}.
-     * Due to the fact that default mechanisms of proxying in Spring are Dynamic Proxy and CGLIB,
-     * it was implemented as public method to support declarative transaction.
+     * Finds FAS usages by their ids and sends them to queue for getting Rights process.
      *
-     * @param researchedUsages list of {@link ResearchedUsage}s
+     * @param researchedUsages list of researched usage ids
      */
-    void markAsWorkFound(List<ResearchedUsage> researchedUsages);
+    void sendForGettingRights(List<ResearchedUsage> researchedUsages);
 
     /**
      * Gets the {@link Usage}s based on {@link UsageFilter}.

@@ -29,13 +29,7 @@ class WrWrkInstToUsageIdResultHandler implements ResultHandler {
     public void handleResult(ResultContext context) {
         WrWrkInstUsageIdPair holder = (WrWrkInstUsageIdPair) context.getResultObject();
         Long wrWrkInst = holder.getWrWrkInst();
-        if (wrWrkInstToUsageIdsMap.containsKey(wrWrkInst)) {
-            Set<String> usageIds = new HashSet<>(wrWrkInstToUsageIdsMap.get(wrWrkInst));
-            usageIds.add(holder.getUsageId());
-            wrWrkInstToUsageIdsMap.put(wrWrkInst, usageIds);
-        } else {
-            wrWrkInstToUsageIdsMap.put(holder.getWrWrkInst(), Set.of(holder.getUsageId()));
-        }
+        wrWrkInstToUsageIdsMap.computeIfAbsent(wrWrkInst, key -> new HashSet<>()).add(holder.getUsageId());
     }
 
     /**
