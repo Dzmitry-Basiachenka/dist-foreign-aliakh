@@ -14,6 +14,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -69,36 +70,36 @@ public class UdmUsageFilter {
      * @param filter base filter
      */
     public UdmUsageFilter(UdmUsageFilter filter) {
-        if (null != filter) {
-            setUdmBatchesIds(filter.getUdmBatchesIds());
-            setPeriods(filter.getPeriods());
-            setUsageStatus(filter.getUsageStatus());
-            setUdmUsageOrigin(filter.getUdmUsageOrigin());
-            setAssignees(filter.getAssignees());
-            setDetailLicenseeClasses(filter.getDetailLicenseeClasses());
-            setReportedPubTypes(filter.getReportedPubTypes());
-            setReportedTypeOfUses(filter.getReportedTypeOfUses());
-            setPubFormats(filter.getPubFormats());
-            setUsageDateFrom(filter.getUsageDateFrom());
-            setUsageDateTo(filter.getUsageDateTo());
-            setSurveyStartDateFrom(filter.getSurveyStartDateFrom());
-            setSurveyStartDateTo(filter.getSurveyStartDateTo());
-            setTypeOfUse(filter.getTypeOfUse());
-            setChannel(filter.getChannel());
-            setWrWrkInstExpression(new FilterExpression<>(filter.getWrWrkInstExpression()));
-            setReportedTitleExpression(new FilterExpression<>(filter.getReportedTitleExpression()));
-            setSystemTitleExpression(new FilterExpression<>(filter.getSystemTitleExpression()));
-            setUsageDetailIdExpression(new FilterExpression<>(filter.getUsageDetailIdExpression()));
-            setCompanyIdExpression(new FilterExpression<>(filter.getCompanyIdExpression()));
-            setCompanyNameExpression(new FilterExpression<>(filter.getCompanyNameExpression()));
-            setSurveyRespondentExpression(new FilterExpression<>(filter.getSurveyRespondentExpression()));
-            setSurveyCountryExpression(new FilterExpression<>(filter.getSurveyCountryExpression()));
-            setLanguageExpression(new FilterExpression<>(filter.getLanguageExpression()));
-            setAnnualMultiplierExpression(new FilterExpression<>(filter.getAnnualMultiplierExpression()));
-            setAnnualizedCopiesExpression(new FilterExpression<>(filter.getAnnualizedCopiesExpression()));
-            setStatisticalMultiplierExpression(new FilterExpression<>(filter.getStatisticalMultiplierExpression()));
-            setQuantityExpression(new FilterExpression<>(filter.getQuantityExpression()));
-            setSearchValue(filter.getSearchValue());
+        if (Objects.nonNull(filter)) {
+            this.udmBatchesIds = filter.getUdmBatchesIds();
+            this.periods = filter.getPeriods();
+            this.usageStatus = filter.getUsageStatus();
+            this.udmUsageOrigin = filter.getUdmUsageOrigin();
+            this.assignees = filter.getAssignees();
+            this.detailLicenseeClasses = filter.getDetailLicenseeClasses();
+            this.reportedPubTypes = filter.getReportedPubTypes();
+            this.reportedTypeOfUses = filter.getReportedTypeOfUses();
+            this.pubFormats = filter.getPubFormats();
+            this.usageDateFrom = filter.getUsageDateFrom();
+            this.usageDateTo = filter.getUsageDateTo();
+            this.surveyStartDateFrom = filter.getSurveyStartDateFrom();
+            this.surveyStartDateTo = filter.getSurveyStartDateTo();
+            this.typeOfUse = filter.getTypeOfUse();
+            this.channel = filter.getChannel();
+            this.wrWrkInstExpression = new FilterExpression<>(filter.getWrWrkInstExpression());
+            this.reportedTitleExpression = new FilterExpression<>(filter.getReportedTitleExpression());
+            this.systemTitleExpression = new FilterExpression<>(filter.getSystemTitleExpression());
+            this.usageDetailIdExpression = new FilterExpression<>(filter.getUsageDetailIdExpression());
+            this.companyIdExpression = new FilterExpression<>(filter.getCompanyIdExpression());
+            this.companyNameExpression = new FilterExpression<>(filter.getCompanyNameExpression());
+            this.surveyRespondentExpression = new FilterExpression<>(filter.getSurveyRespondentExpression());
+            this.surveyCountryExpression = new FilterExpression<>(filter.getSurveyCountryExpression());
+            this.languageExpression = new FilterExpression<>(filter.getLanguageExpression());
+            this.annualMultiplierExpression = new FilterExpression<>(filter.getAnnualMultiplierExpression());
+            this.annualizedCopiesExpression = new FilterExpression<>(filter.getAnnualizedCopiesExpression());
+            this.statisticalMultiplierExpression = new FilterExpression<>(filter.getStatisticalMultiplierExpression());
+            this.quantityExpression = new FilterExpression<>(filter.getQuantityExpression());
+            this.searchValue = filter.getSearchValue();
         }
     }
 

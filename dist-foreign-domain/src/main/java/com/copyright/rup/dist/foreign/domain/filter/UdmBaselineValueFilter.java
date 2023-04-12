@@ -8,6 +8,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.springframework.util.CollectionUtils;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -45,18 +46,18 @@ public class UdmBaselineValueFilter {
      * @param filter base filter
      */
     public UdmBaselineValueFilter(UdmBaselineValueFilter filter) {
-        if (null != filter) {
-            setPeriods(filter.getPeriods());
-            setPubTypes(filter.getPubTypes());
-            setWrWrkInstExpression(new FilterExpression<>(filter.getWrWrkInstExpression()));
-            setSystemTitleExpression(new FilterExpression<>(filter.getSystemTitleExpression()));
-            setPriceFlagExpression(new FilterExpression<>(filter.getPriceFlagExpression()));
-            setContentFlagExpression(new FilterExpression<>(filter.getContentFlagExpression()));
-            setContentUnitPriceFlagExpression(new FilterExpression<>(filter.getContentUnitPriceFlagExpression()));
-            setPriceExpression(new FilterExpression<>(filter.getPriceExpression()));
-            setContentExpression(new FilterExpression<>(filter.getContentExpression()));
-            setContentUnitPriceExpression(new FilterExpression<>(filter.getContentUnitPriceExpression()));
-            setCommentExpression(new FilterExpression<>(filter.getCommentExpression()));
+        if (Objects.nonNull(filter)) {
+            this.periods = filter.getPeriods();
+            this.pubTypes = filter.getPubTypes();
+            this.wrWrkInstExpression = new FilterExpression<>(filter.getWrWrkInstExpression());
+            this.systemTitleExpression = new FilterExpression<>(filter.getSystemTitleExpression());
+            this.priceFlagExpression = new FilterExpression<>(filter.getPriceFlagExpression());
+            this.contentFlagExpression = new FilterExpression<>(filter.getContentFlagExpression());
+            this.contentUnitPriceFlagExpression = new FilterExpression<>(filter.getContentUnitPriceFlagExpression());
+            this.priceExpression = new FilterExpression<>(filter.getPriceExpression());
+            this.contentExpression = new FilterExpression<>(filter.getContentExpression());
+            this.contentUnitPriceExpression = new FilterExpression<>(filter.getContentUnitPriceExpression());
+            this.commentExpression = new FilterExpression<>(filter.getCommentExpression());
         }
     }
 

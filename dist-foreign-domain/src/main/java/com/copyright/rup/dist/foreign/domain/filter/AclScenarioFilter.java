@@ -40,10 +40,10 @@ public class AclScenarioFilter {
      */
     public AclScenarioFilter(AclScenarioFilter filter) {
         if (Objects.nonNull(filter)) {
-            setPeriods(filter.getPeriods());
-            setLicenseTypes(filter.getLicenseTypes());
-            setEditable(filter.getEditable());
-            setStatus(filter.getStatus());
+            this.periods = filter.getPeriods();
+            this.licenseTypes = filter.getLicenseTypes();
+            this.editable = filter.getEditable();
+            this.status = filter.getStatus();
         }
     }
 

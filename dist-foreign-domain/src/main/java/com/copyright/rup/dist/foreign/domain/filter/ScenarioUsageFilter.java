@@ -48,14 +48,15 @@ public class ScenarioUsageFilter extends StoredEntity<String> {
      * @param usageFilter {@link UsageFilter}
      */
     public ScenarioUsageFilter(UsageFilter usageFilter) {
-        Objects.requireNonNull(usageFilter);
-        this.rhAccountNumbers = usageFilter.getRhAccountNumbers();
-        setUsageBatchesIds(usageFilter.getUsageBatchesIds());
-        this.productFamily = Objects.requireNonNull(usageFilter.getProductFamily());
-        this.usageStatus = usageFilter.getUsageStatus();
-        this.paymentDate = usageFilter.getPaymentDate();
-        this.fiscalYear = usageFilter.getFiscalYear();
-        this.usagePeriod = usageFilter.getUsagePeriod();
+        if (Objects.nonNull(usageFilter)) {
+            this.rhAccountNumbers = usageFilter.getRhAccountNumbers();
+            setUsageBatchesIds(usageFilter.getUsageBatchesIds());
+            this.productFamily = usageFilter.getProductFamily();
+            this.usageStatus = usageFilter.getUsageStatus();
+            this.paymentDate = usageFilter.getPaymentDate();
+            this.fiscalYear = usageFilter.getFiscalYear();
+            this.usagePeriod = usageFilter.getUsagePeriod();
+        }
     }
 
     public String getScenarioId() {
@@ -86,7 +87,7 @@ public class ScenarioUsageFilter extends StoredEntity<String> {
         return usageBatches.stream().map(UsageBatch::getId).collect(Collectors.toSet());
     }
 
-    public void setUsageBatchesIds(Set<String> usageBatchesIds) {
+    public final void setUsageBatchesIds(Set<String> usageBatchesIds) {
         this.usageBatches = usageBatchesIds.stream().map(batchId -> {
             UsageBatch usageBatch = new UsageBatch();
             usageBatch.setId(batchId);

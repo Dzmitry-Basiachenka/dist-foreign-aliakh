@@ -11,6 +11,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.springframework.util.CollectionUtils;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -49,19 +50,19 @@ public class UdmBaselineFilter {
      * @param filter base filter
      */
     public UdmBaselineFilter(UdmBaselineFilter filter) {
-        if (null != filter) {
-            setPeriods(filter.getPeriods());
-            setUdmUsageOrigin(filter.getUdmUsageOrigin());
-            setChannel(filter.getChannel());
-            setDetailLicenseeClasses(filter.getDetailLicenseeClasses());
-            setAggregateLicenseeClasses(filter.getAggregateLicenseeClasses());
-            setReportedTypeOfUses(filter.getReportedTypeOfUses());
-            setTypeOfUse(filter.getTypeOfUse());
-            setAnnualizedCopiesExpression(new FilterExpression<>(filter.getAnnualizedCopiesExpression()));
-            setWrWrkInstExpression(new FilterExpression<>(filter.getWrWrkInstExpression()));
-            setSystemTitleExpression(new FilterExpression<>(filter.getSystemTitleExpression()));
-            setUsageDetailIdExpression(new FilterExpression<>(filter.getUsageDetailIdExpression()));
-            setSurveyCountryExpression(new FilterExpression<>(filter.getSurveyCountryExpression()));
+        if (Objects.nonNull(filter)) {
+            this.periods = filter.getPeriods();
+            this.udmUsageOrigin = filter.getUdmUsageOrigin();
+            this.channel = filter.getChannel();
+            this.detailLicenseeClasses = filter.getDetailLicenseeClasses();
+            this.aggregateLicenseeClasses = filter.getAggregateLicenseeClasses();
+            this.reportedTypeOfUses = filter.getReportedTypeOfUses();
+            this.typeOfUse = filter.getTypeOfUse();
+            this.annualizedCopiesExpression = new FilterExpression<>(filter.getAnnualizedCopiesExpression());
+            this.wrWrkInstExpression = new FilterExpression<>(filter.getWrWrkInstExpression());
+            this.systemTitleExpression = new FilterExpression<>(filter.getSystemTitleExpression());
+            this.usageDetailIdExpression = new FilterExpression<>(filter.getUsageDetailIdExpression());
+            this.surveyCountryExpression = new FilterExpression<>(filter.getSurveyCountryExpression());
         }
     }
 

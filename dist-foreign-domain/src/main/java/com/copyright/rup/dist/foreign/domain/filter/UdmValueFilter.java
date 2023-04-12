@@ -10,6 +10,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.springframework.util.CollectionUtils;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -63,34 +64,34 @@ public class UdmValueFilter {
      * @param filter base filter
      */
     public UdmValueFilter(UdmValueFilter filter) {
-        if (null != filter) {
-            setPeriods(filter.getPeriods());
-            setStatus(filter.getStatus());
-            setCurrency(filter.getCurrency());
-            setAssignees(filter.getAssignees());
-            setLastValuePeriods(filter.getLastValuePeriods());
-            setWrWrkInstExpression(new FilterExpression<>(filter.getWrWrkInstExpression()));
-            setSystemTitleExpression(new FilterExpression<>(filter.getSystemTitleExpression()));
-            setSystemStandardNumberExpression(new FilterExpression<>(filter.getSystemStandardNumberExpression()));
-            setRhAccountNumberExpression(new FilterExpression<>(filter.getRhAccountNumberExpression()));
-            setRhNameExpression(new FilterExpression<>(filter.getRhNameExpression()));
-            setPriceExpression(new FilterExpression<>(filter.getPriceExpression()));
-            setPriceInUsdExpression(new FilterExpression<>(filter.getPriceInUsdExpression()));
-            setPriceCommentExpression(new FilterExpression<>(filter.getPriceCommentExpression()));
-            setPriceFlagExpression(new FilterExpression<>(filter.getPriceFlagExpression()));
-            setLastPriceFlagExpression(new FilterExpression<>(filter.getLastPriceFlagExpression()));
-            setLastPriceCommentExpression(new FilterExpression<>(filter.getLastPriceCommentExpression()));
-            setContentExpression(new FilterExpression<>(filter.getContentExpression()));
-            setContentFlagExpression(new FilterExpression<>(filter.getContentFlagExpression()));
-            setLastContentFlagExpression(new FilterExpression<>(filter.getLastContentFlagExpression()));
-            setContentCommentExpression(new FilterExpression<>(filter.getContentCommentExpression()));
-            setLastContentCommentExpression(new FilterExpression<>(filter.getLastContentCommentExpression()));
-            setContentUnitPriceExpression(new FilterExpression<>(filter.getContentUnitPriceExpression()));
-            setContentUnitPriceFlagExpression(new FilterExpression<>(filter.getContentUnitPriceFlagExpression()));
-            setPubTypes(filter.getPubTypes());
-            setLastPubType(filter.getLastPubType());
-            setCommentExpression(new FilterExpression<>(filter.getCommentExpression()));
-            setLastCommentExpression(new FilterExpression<>(filter.getLastCommentExpression()));
+        if (Objects.nonNull(filter)) {
+            this.periods = filter.getPeriods();
+            this.status = filter.getStatus();
+            this.currency = filter.getCurrency();
+            this.assignees = filter.getAssignees();
+            this.lastValuePeriods = filter.getLastValuePeriods();
+            this.wrWrkInstExpression = new FilterExpression<>(filter.getWrWrkInstExpression());
+            this.systemTitleExpression = new FilterExpression<>(filter.getSystemTitleExpression());
+            this.systemStandardNumberExpression = new FilterExpression<>(filter.getSystemStandardNumberExpression());
+            this.rhAccountNumberExpression = new FilterExpression<>(filter.getRhAccountNumberExpression());
+            this.rhNameExpression = new FilterExpression<>(filter.getRhNameExpression());
+            this.priceExpression = new FilterExpression<>(filter.getPriceExpression());
+            this.priceInUsdExpression = new FilterExpression<>(filter.getPriceInUsdExpression());
+            this.priceCommentExpression = new FilterExpression<>(filter.getPriceCommentExpression());
+            this.priceFlagExpression = new FilterExpression<>(filter.getPriceFlagExpression());
+            this.lastPriceFlagExpression = new FilterExpression<>(filter.getLastPriceFlagExpression());
+            this.lastPriceCommentExpression = new FilterExpression<>(filter.getLastPriceCommentExpression());
+            this.contentExpression = new FilterExpression<>(filter.getContentExpression());
+            this.contentFlagExpression = new FilterExpression<>(filter.getContentFlagExpression());
+            this.lastContentFlagExpression = new FilterExpression<>(filter.getLastContentFlagExpression());
+            this.contentCommentExpression = new FilterExpression<>(filter.getContentCommentExpression());
+            this.lastContentCommentExpression = new FilterExpression<>(filter.getLastContentCommentExpression());
+            this.contentUnitPriceExpression = new FilterExpression<>(filter.getContentUnitPriceExpression());
+            this.contentUnitPriceFlagExpression = new FilterExpression<>(filter.getContentUnitPriceFlagExpression());
+            this.pubTypes = filter.getPubTypes();
+            this.lastPubType = filter.getLastPubType();
+            this.commentExpression = new FilterExpression<>(filter.getCommentExpression());
+            this.lastCommentExpression = new FilterExpression<>(filter.getLastCommentExpression());
         }
     }
 
