@@ -14,6 +14,7 @@ import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
+import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
@@ -31,6 +32,7 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.integration.telesales.api.ITelesalesService;
 import com.copyright.rup.dist.foreign.service.api.IFundPoolService;
+import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.impl.aclci.AclciUsageService;
 import com.copyright.rup.dist.foreign.service.impl.csv.AclciUsageCsvProcessor;
@@ -55,6 +57,8 @@ import org.powermock.reflect.Whitebox;
 import java.io.InputStream;
 import java.io.PipedOutputStream;
 import java.nio.charset.StandardCharsets;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -70,12 +74,13 @@ import java.util.function.Supplier;
  * @author Aliaksanr Liakh
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest(ProcessingResult.class)
+@PrepareForTest({ProcessingResult.class, OffsetDateTime.class, StreamSource.class})
 public class AclciUsageControllerTest {
 
     private static final String USAGE_BATCH_NAME = "ACLCI Usage Batch";
     private static final String FUND_POOL_NAME = "ACLCI Fund Pool";
     private static final String ACLCI_PRODUCT_FAMILY = "ACLCI";
+    private static final OffsetDateTime DATE = OffsetDateTime.of(2020, 1, 2, 3, 4, 5, 6, ZoneOffset.ofHours(0));
     private static final Long LICENSEE_ACCOUNT_NUMBER = 1111L;
     private static final String LICENSEE_NAME = "Acuson Corporation";
 
@@ -83,6 +88,7 @@ public class AclciUsageControllerTest {
     private IAclciUsageFilterController filterController;
     private IAclciUsageFilterWidget filterWidget;
     private IUsageBatchService usageBatchService;
+    private IReportService reportService;
     private CsvProcessorFactory csvProcessorFactory;
     private IStreamSourceHandler streamSourceHandler;
     private AclciUsageService aclciUsageService;
@@ -97,6 +103,7 @@ public class AclciUsageControllerTest {
         filterController = createMock(IAclciUsageFilterController.class);
         filterWidget = createMock(IAclciUsageFilterWidget.class);
         usageBatchService = createMock(IUsageBatchService.class);
+        reportService = createMock(IReportService.class);
         csvProcessorFactory = createMock(CsvProcessorFactory.class);
         streamSourceHandler = createMock(IStreamSourceHandler.class);
         aclciUsageService = createMock(AclciUsageService.class);
@@ -105,6 +112,7 @@ public class AclciUsageControllerTest {
         usagesWidget = createMock(IAclciUsageWidget.class);
         Whitebox.setInternalState(controller, filterController);
         Whitebox.setInternalState(controller, usageBatchService);
+        Whitebox.setInternalState(controller, reportService);
         Whitebox.setInternalState(controller, csvProcessorFactory);
         Whitebox.setInternalState(controller, streamSourceHandler);
         Whitebox.setInternalState(controller, aclciUsageService);
@@ -164,7 +172,30 @@ public class AclciUsageControllerTest {
 
     @Test
     public void testGetExportUsagesStreamSource() {
-        //TODO: implement
+        mockStatic(OffsetDateTime.class);
+        usageFilter.setProductFamily(ACLCI_PRODUCT_FAMILY);
+        Capture<Supplier<String>> fileNameSupplierCapture = newCapture();
+        Capture<Consumer<PipedOutputStream>> posConsumerCapture = newCapture();
+        String fileName = "export_usage_";
+        Supplier<String> fileNameSupplier = () -> fileName;
+        Supplier<InputStream> inputStreamSupplier =
+            () -> IOUtils.toInputStream(StringUtils.EMPTY, StandardCharsets.UTF_8);
+        PipedOutputStream pos = new PipedOutputStream();
+        expect(OffsetDateTime.now()).andReturn(DATE).once();
+        expect(filterController.getWidget()).andReturn(filterWidget).once();
+        expect(filterWidget.getAppliedFilter()).andReturn(usageFilter).once();
+        expect(streamSourceHandler.getCsvStreamSource(capture(fileNameSupplierCapture), capture(posConsumerCapture)))
+            .andReturn(new StreamSource(fileNameSupplier, "csv", inputStreamSupplier)).once();
+        reportService.writeAaclUsageCsvReport(usageFilter, pos);//TODO: use writeAclciUsageCsvReport
+        expectLastCall().once();
+        replay(OffsetDateTime.class, filterWidget, filterController, streamSourceHandler, reportService);
+        IStreamSource streamSource = controller.getExportUsagesStreamSource();
+        assertEquals("export_usage_01_02_2020_03_04.csv", streamSource.getSource().getKey().get());
+        assertEquals(fileName, fileNameSupplierCapture.getValue().get());
+        Consumer<PipedOutputStream> posConsumer = posConsumerCapture.getValue();
+        assertNotNull(posConsumer);
+        posConsumer.accept(pos);
+        verify(OffsetDateTime.class, filterWidget, filterController, streamSourceHandler, reportService);
     }
 
     @Test

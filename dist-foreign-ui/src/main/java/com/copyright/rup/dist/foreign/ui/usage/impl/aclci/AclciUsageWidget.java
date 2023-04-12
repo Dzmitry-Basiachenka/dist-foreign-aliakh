@@ -9,6 +9,7 @@ import com.copyright.rup.dist.foreign.ui.usage.api.aclci.IAclciUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.aclci.IAclciUsageWidget;
 import com.copyright.rup.dist.foreign.ui.usage.impl.CommonUsageWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
+import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.api.IMediator;
@@ -36,6 +37,7 @@ public class AclciUsageWidget extends CommonUsageWidget implements IAclciUsageWi
     private MenuBar fundPoolMenuBar;
     private MenuBar.MenuItem loadFundPoolMenuItem;
     private Button updateUsagesButton;
+    private Button exportButton;
 
     /**
      * Controller.
@@ -105,8 +107,10 @@ public class AclciUsageWidget extends CommonUsageWidget implements IAclciUsageWi
         initUsageBatchMenuBar();
         initFundPoolMenuBar();
         initUpdateUsagesButton();
+        initExportButton();
         VaadinUtils.setButtonsAutoDisabled(updateUsagesButton);
-        HorizontalLayout layout = new HorizontalLayout(usageBatchMenuBar, fundPoolMenuBar, updateUsagesButton);
+        HorizontalLayout layout = new HorizontalLayout(usageBatchMenuBar, fundPoolMenuBar, updateUsagesButton,
+            exportButton);
         layout.setMargin(true);
         VaadinUtils.addComponentStyle(layout, "usages-buttons");
         return layout;
@@ -155,5 +159,12 @@ public class AclciUsageWidget extends CommonUsageWidget implements IAclciUsageWi
         } else {
             Windows.showNotificationWindow(message);
         }
+    }
+
+    private void initExportButton() {
+        exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
+        OnDemandFileDownloader fileDownloader =
+            new OnDemandFileDownloader(controller.getExportUsagesStreamSource().getSource());
+        fileDownloader.extend(exportButton);
     }
 }
