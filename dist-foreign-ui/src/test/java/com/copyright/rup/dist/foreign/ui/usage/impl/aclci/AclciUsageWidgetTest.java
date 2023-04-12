@@ -220,7 +220,7 @@ public class AclciUsageWidgetTest {
 
     private void verifyButtonsLayout(HorizontalLayout layout) {
         assertEquals(4, layout.getComponentCount());
-        verifyMenuBar(layout.getComponent(0), "Usage Batch", true, List.of("Load"));
+        verifyMenuBar(layout.getComponent(0), "Usage Batch", true, List.of("Load", "View"));
         verifyMenuBar(layout.getComponent(1), "Fund Pool", true, List.of("Load"));
         verifyButton(layout.getComponent(2), "Update Usages", true);
         verifyButton(layout.getComponent(3), "Export", true);

@@ -1,10 +1,10 @@
-package com.copyright.rup.dist.foreign.ui.usage.impl.sal;
+package com.copyright.rup.dist.foreign.ui.usage.impl.aclci;
 
 import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.ui.common.utils.IDateFormatter;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
-import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageController;
+import com.copyright.rup.dist.foreign.ui.usage.api.aclci.IAclciUsageController;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
@@ -18,38 +18,35 @@ import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
-import com.vaadin.ui.renderers.LocalDateRenderer;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.function.Consumer;
 
 /**
- * Modal window that provides functionality for viewing and deleting SAL {@link UsageBatch}es.
+ * Modal window that provides functionality for viewing and deleting ACLCI {@link UsageBatch}es.
  * <p>
- * Copyright (C) 2020 copyright.com
+ * Copyright (C) 2023 copyright.com
  * <p>
- * Date: 09/28/20
+ * Date: 04/12/23
  *
- * @author Anton Azarenka
+ * @author Mikita Maistrenka
  */
-public class ViewSalUsageBatchWindow extends Window implements SearchWidget.ISearchController, IDateFormatter {
+public class ViewAclciUsageBatchWindow extends Window implements SearchWidget.ISearchController, IDateFormatter {
 
     private final SearchWidget searchWidget;
-    private final ISalUsageController controller;
+    private final IAclciUsageController controller;
     private Grid<UsageBatch> grid;
-    private Button deleteBatchButton;
-    private Button deleteUsageDetailsButton;
+    private Button deleteButton;
 
     /**
      * Controller.
      *
-     * @param controller {@link ISalUsageController} instance
+     * @param controller {@link IAclciUsageController} instance
      */
-    public ViewSalUsageBatchWindow(ISalUsageController controller) {
+    public ViewAclciUsageBatchWindow(IAclciUsageController controller) {
         this.controller = controller;
         setWidth(1000, Unit.PIXELS);
         setHeight(550, Unit.PIXELS);
@@ -57,7 +54,6 @@ public class ViewSalUsageBatchWindow extends Window implements SearchWidget.ISea
         searchWidget.setPrompt(ForeignUi.getMessage("field.prompt.view_batch.search.sal_aclci"));
         initUsageBatchesGrid();
         HorizontalLayout buttonsLayout = initButtons();
-        initMediator();
         VerticalLayout layout = new VerticalLayout(searchWidget, grid, buttonsLayout);
         layout.setSizeFull();
         layout.setExpandRatio(grid, 1);
@@ -76,53 +72,30 @@ public class ViewSalUsageBatchWindow extends Window implements SearchWidget.ISea
         if (StringUtils.isNotBlank(searchValue)) {
             dataProvider.setFilter(getSearchFilter(searchValue));
         }
-        // Gets round an issue when Vaadin do not recalculates columns widths once vertical scroll is disappeared
         grid.recalculateColumnWidths();
     }
 
-    private void initMediator() {
-        ViewSalUsageBatchMediator mediator = new ViewSalUsageBatchMediator();
-        mediator.setDeleteBatchButton(deleteBatchButton);
-        mediator.setDeleteUsageDetailsButton(deleteUsageDetailsButton);
-        mediator.applyPermissions();
+    private void initUsageBatchesGrid() {
+        grid = new Grid<>();
+        grid.setSelectionMode(Grid.SelectionMode.SINGLE);
+        grid.setItems(controller.getUsageBatches(controller.getSelectedProductFamily()));
+        grid.addSelectionListener(event ->
+            deleteButton.setEnabled(CollectionUtils.isNotEmpty(event.getAllSelectedItems())));
+        grid.setSizeFull();
+        addGridColumns();
+        VaadinUtils.addComponentStyle(grid, "view-batch-grid");
     }
 
     private HorizontalLayout initButtons() {
         Button closeButton = Buttons.createCloseButton(this);
-        deleteBatchButton = Buttons.createButton(ForeignUi.getMessage("button.delete_usage_batch"));
-        deleteBatchButton.addClickListener(event ->
+        deleteButton = Buttons.createButton(ForeignUi.getMessage("button.delete"));
+        deleteButton.addClickListener(event ->
             deleteUsageBatch(grid.getSelectedItems().stream().findFirst().orElse(null)));
-        deleteBatchButton.setEnabled(false);
-        deleteUsageDetailsButton = Buttons.createButton(ForeignUi.getMessage("button.delete_usage_details"));
-        deleteUsageDetailsButton.addClickListener(event ->
-            deleteUsageDetails(grid.getSelectedItems().stream().findFirst().orElse(null)));
-        deleteUsageDetailsButton.setEnabled(false);
-        HorizontalLayout layout = new HorizontalLayout(deleteBatchButton, deleteUsageDetailsButton, closeButton);
+        deleteButton.setEnabled(false);
+        HorizontalLayout layout = new HorizontalLayout(deleteButton, closeButton);
         layout.setSpacing(true);
         VaadinUtils.addComponentStyle(layout, "view-batch-buttons");
         return layout;
-    }
-
-    private void deleteUsageDetails(UsageBatch usageBatch) {
-        if (!controller.usageDataExists(usageBatch.getId())) {
-            Windows.showNotificationWindow(ForeignUi.getMessage("message.error.no_usage_details.sal"));
-        } else {
-            List<String> scenariosNames = controller.getScenariosNamesAssociatedWithUsageBatch(usageBatch.getId());
-            if (CollectionUtils.isEmpty(scenariosNames)) {
-                if (controller.isBatchProcessingCompleted(usageBatch.getId())) {
-                    Windows.showConfirmDialog(
-                        ForeignUi.getMessage("message.confirm.delete_action", usageBatch.getName(), "usage details"),
-                        () -> performDelete(controller::deleteUsageData, usageBatch));
-                } else {
-                    Windows.showNotificationWindow(
-                        ForeignUi.getMessage("message.error.delete_in_progress_batch", usageBatch.getName()));
-                }
-            } else {
-                Windows.showNotificationWindow(
-                    buildNotificationMessage("message.error.delete_usage_details", "Usage details", "scenarios",
-                        scenariosNames));
-            }
-        }
     }
 
     private void deleteUsageBatch(UsageBatch usageBatch) {
@@ -131,7 +104,10 @@ public class ViewSalUsageBatchWindow extends Window implements SearchWidget.ISea
             if (controller.isBatchProcessingCompleted(usageBatch.getId())) {
                 Windows.showConfirmDialog(
                     ForeignUi.getMessage("message.confirm.delete_action", usageBatch.getName(), "usage batch"),
-                    () -> performDelete(controller::deleteUsageBatch, usageBatch));
+                    () -> {
+                        controller.deleteUsageBatch(usageBatch);
+                        grid.setItems(controller.getUsageBatches(controller.getSelectedProductFamily()));
+                    });
             } else {
                 Windows.showNotificationWindow(
                     ForeignUi.getMessage("message.error.delete_in_progress_batch", usageBatch.getName()));
@@ -143,30 +119,12 @@ public class ViewSalUsageBatchWindow extends Window implements SearchWidget.ISea
         }
     }
 
-    private void performDelete(Consumer<UsageBatch> consumer, UsageBatch usageBatch) {
-        consumer.accept(usageBatch);
-        grid.setItems(controller.getUsageBatches(controller.getSelectedProductFamily()));
-    }
-
     private SerializablePredicate<UsageBatch> getSearchFilter(String searchValue) {
         return batch -> StringUtils.containsIgnoreCase(batch.getName(), searchValue)
             || StringUtils.containsIgnoreCase(batch.getPaymentDate().format(
             DateTimeFormatter.ofPattern(RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT)), searchValue)
-            || StringUtils.containsIgnoreCase(batch.getSalFields().getLicenseeAccountNumber().toString(), searchValue)
-            || StringUtils.containsIgnoreCase(batch.getSalFields().getLicenseeName(), searchValue);
-    }
-
-    private void initUsageBatchesGrid() {
-        grid = new Grid<>();
-        grid.setSelectionMode(Grid.SelectionMode.SINGLE);
-        grid.setItems(controller.getUsageBatches(controller.getSelectedProductFamily()));
-        grid.addSelectionListener(event ->
-            deleteBatchButton.setEnabled(CollectionUtils.isNotEmpty(event.getAllSelectedItems())));
-        grid.addSelectionListener(
-            event -> deleteUsageDetailsButton.setEnabled(CollectionUtils.isNotEmpty(event.getAllSelectedItems())));
-        grid.setSizeFull();
-        addGridColumns();
-        VaadinUtils.addComponentStyle(grid, "view-batch-grid");
+            || StringUtils.containsIgnoreCase(batch.getAclciFields().getLicenseeAccountNumber().toString(), searchValue)
+            || StringUtils.containsIgnoreCase(batch.getAclciFields().getLicenseeName(), searchValue);
     }
 
     private void addGridColumns() {
@@ -174,19 +132,19 @@ public class ViewSalUsageBatchWindow extends Window implements SearchWidget.ISea
             .setCaption(ForeignUi.getMessage("table.column.batch_name"))
             .setComparator((batch1, batch2) -> batch1.getName().compareToIgnoreCase(batch2.getName()))
             .setExpandRatio(1);
-        grid.addColumn(usageBatch -> usageBatch.getSalFields().getLicenseeAccountNumber())
+        grid.addColumn(usageBatch -> usageBatch.getAclciFields().getLicenseeAccountNumber())
             .setCaption(ForeignUi.getMessage("table.column.licensee_account_number"))
-            .setComparator((batch1, batch2) -> batch1.getSalFields()
-                .getLicenseeAccountNumber().compareTo(batch2.getSalFields().getLicenseeAccountNumber()))
+            .setComparator((batch1, batch2) -> batch1.getAclciFields()
+                .getLicenseeAccountNumber().compareTo(batch2.getAclciFields().getLicenseeAccountNumber()))
             .setWidth(180);
-        grid.addColumn(usageBatch -> usageBatch.getSalFields().getLicenseeName())
+        grid.addColumn(usageBatch -> usageBatch.getAclciFields().getLicenseeName())
             .setCaption(ForeignUi.getMessage("table.column.licensee_name"))
-            .setComparator((batch1, batch2) -> batch1.getSalFields()
-                .getLicenseeName().compareTo(batch2.getSalFields().getLicenseeName()))
+            .setComparator((batch1, batch2) -> batch1.getAclciFields()
+                .getLicenseeName().compareTo(batch2.getAclciFields().getLicenseeName()))
             .setWidth(180);
-        grid.addColumn(UsageBatch::getPaymentDate)
+        grid.addColumn(batch -> toShortFormat(batch.getPaymentDate()))
             .setCaption(ForeignUi.getMessage("table.column.period_end_date"))
-            .setRenderer(new LocalDateRenderer(RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT))
+            .setComparator((batch1, batch2) -> batch1.getPaymentDate().compareTo(batch2.getPaymentDate()))
             .setWidth(120);
         grid.addColumn(UsageBatch::getCreateUser)
             .setCaption(ForeignUi.getMessage("table.column.created_by"))
