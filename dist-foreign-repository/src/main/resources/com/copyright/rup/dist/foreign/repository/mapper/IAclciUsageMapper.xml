@@ -334,4 +334,14 @@
                 #{usageId}
             </foreach>
     </update>
+
+    <delete id="deleteByBatchId" parameterType="string">
+        with usage_ids as (
+            delete from ${schema}.df_usage
+            where df_usage_batch_uid = #{batchId}
+            returning df_usage_uid
+        )
+        delete from ${schema}.df_usage_aclci
+        where df_usage_aclci_uid in (select df_usage_uid from usage_ids)
+    </delete>
 </mapper>

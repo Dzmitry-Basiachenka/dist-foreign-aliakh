@@ -73,4 +73,11 @@ public interface IAclciUsageService {
      * @param reason          action reason
      */
     void updateToEligibleByIds(Set<String> usageIds, Long rhAccountNumber, Long wrWrkInst, String reason);
+
+    /**
+     * Deletes all {@link Usage}s associated with the given ACLCI {@link UsageBatch}.
+     *
+     * @param usageBatch {@link UsageBatch} to delete usages from
+     */
+    void deleteUsageBatchDetails(UsageBatch usageBatch);
 }

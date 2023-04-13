@@ -159,6 +159,16 @@ public class AclciUsageRepositoryIntegrationTest {
         assertSortingUsageDto(dto1, dto2, "comment");
     }
 
+    @Test
+    @TestData(fileName = FOLDER_NAME + "delete-by-batch-id.groovy")
+    public void testDeleteByBatchId() {
+        UsageFilter filter = new UsageFilter();
+        filter.setUsageBatchesIds(Set.of("0c773ba8-9f3f-47d0-bfeb-95ab92c02523"));
+        assertEquals(2, aclciUsageRepository.findCountByFilter(filter));
+        aclciUsageRepository.deleteByBatchId("0c773ba8-9f3f-47d0-bfeb-95ab92c02523");
+        assertEquals(0, aclciUsageRepository.findCountByFilter(filter));
+    }
+
     private UsageFilter buildUsageFilter(Set<String> usageBatchIds, UsageStatusEnum status, String productFamily,
                                          Set<AclciLicenseTypeEnum> licenseTypes) {
         UsageFilter usageFilter = new UsageFilter();

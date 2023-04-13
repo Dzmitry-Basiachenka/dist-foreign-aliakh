@@ -100,12 +100,14 @@ public class AclciUsageController extends CommonUsageController implements IAclc
 
     @Override
     public boolean isBatchProcessingCompleted(String batchId) {
-        return false; //TODO: implement
+        return getUsageBatchStatusService().isBatchProcessingCompleted(batchId,
+            Set.of(UsageStatusEnum.NEW, UsageStatusEnum.WORK_FOUND, UsageStatusEnum.RH_FOUND));
     }
 
     @Override
     public void deleteUsageBatch(UsageBatch usageBatch) {
-        //TODO: implement
+        getUsageBatchService().deleteAclciUsageBatch(usageBatch);
+        getUsageFilterController().getWidget().clearFilter();
     }
 
     @Override

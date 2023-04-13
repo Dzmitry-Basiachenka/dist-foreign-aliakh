@@ -126,4 +126,15 @@ public class AclciUsageService implements IAclciUsageService {
         LOGGER.info("Update RH for ACLCI usage. Finished. UsageIds={}, RhAccountNumber={}, Reason={}, UserName={}",
             usageIds, rhAccountNumber, reason, userName);
     }
+
+    @Override
+    @Transactional
+    public void deleteUsageBatchDetails(UsageBatch usageBatch) {
+        String userName = RupContextUtils.getUserName();
+        String batchName = usageBatch.getName();
+        LOGGER.info("Delete ACLCI usage details. Started. BatchName={}, UserName={}", batchName, userName);
+        usageAuditService.deleteActionsByBatchId(usageBatch.getId());
+        aclciUsageRepository.deleteByBatchId(usageBatch.getId());
+        LOGGER.info("Delete ACLCI usage details. Finished. BatchName={}, UserName={}", batchName, userName);
+    }
 }

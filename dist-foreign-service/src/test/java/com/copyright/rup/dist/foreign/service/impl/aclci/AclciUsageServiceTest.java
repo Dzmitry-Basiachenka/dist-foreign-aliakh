@@ -175,6 +175,18 @@ public class AclciUsageServiceTest {
         verify(RupContextUtils.class, aclciUsageRepository, usageAuditService, rightsholderService);
     }
 
+    @Test
+    public void testDeleteUsageBatchDetails() {
+        UsageBatch usageBatch = buildUsageBatch();
+        usageAuditService.deleteActionsByBatchId(usageBatch.getId());
+        expectLastCall().once();
+        aclciUsageRepository.deleteByBatchId(usageBatch.getId());
+        expectLastCall().once();
+        replay(usageAuditService, aclciUsageRepository);
+        aclciUsageService.deleteUsageBatchDetails(usageBatch);
+        verify(usageAuditService, aclciUsageRepository);
+    }
+
     private UsageBatch buildUsageBatch() {
         UsageBatch usageBatch = new UsageBatch();
         usageBatch.setId(BATCH_ID);

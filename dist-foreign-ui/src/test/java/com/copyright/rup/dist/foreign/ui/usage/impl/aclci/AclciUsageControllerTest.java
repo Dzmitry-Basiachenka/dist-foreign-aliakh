@@ -34,6 +34,7 @@ import com.copyright.rup.dist.foreign.integration.telesales.api.ITelesalesServic
 import com.copyright.rup.dist.foreign.service.api.IFundPoolService;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
+import com.copyright.rup.dist.foreign.service.api.IUsageBatchStatusService;
 import com.copyright.rup.dist.foreign.service.impl.aclci.AclciUsageService;
 import com.copyright.rup.dist.foreign.service.impl.csv.AclciUsageCsvProcessor;
 import com.copyright.rup.dist.foreign.service.impl.csv.CsvProcessorFactory;
@@ -205,12 +206,27 @@ public class AclciUsageControllerTest {
 
     @Test
     public void testIsBatchProcessingCompleted() {
-        //TODO: implement
+        String batchId = "17f8e1a0-8e78-4e4a-9a1b-7e408288abb8";
+        IUsageBatchStatusService usageBatchStatusService = createMock(IUsageBatchStatusService.class);
+        Whitebox.setInternalState(controller, usageBatchStatusService);
+        expect(usageBatchStatusService.isBatchProcessingCompleted(batchId,
+            Set.of(UsageStatusEnum.NEW, UsageStatusEnum.WORK_FOUND, UsageStatusEnum.RH_FOUND))).andReturn(true).once();
+        replay(usageBatchStatusService);
+        assertTrue(controller.isBatchProcessingCompleted(batchId));
+        verify(usageBatchStatusService);
     }
 
     @Test
     public void testDeleteUsageBatch() {
-        //TODO: implement
+        UsageBatch usageBatch = new UsageBatch();
+        usageBatchService.deleteAclciUsageBatch(usageBatch);
+        expectLastCall().once();
+        expect(filterController.getWidget()).andReturn(filterWidget).once();
+        filterWidget.clearFilter();
+        expectLastCall().once();
+        replay(usageBatchService, filterController, filterWidget);
+        controller.deleteUsageBatch(usageBatch);
+        verify(usageBatchService, filterController, filterWidget);
     }
 
     @Test

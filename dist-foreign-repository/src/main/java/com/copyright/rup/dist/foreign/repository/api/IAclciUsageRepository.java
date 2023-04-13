@@ -63,4 +63,11 @@ public interface IAclciUsageRepository {
      * @param userName        updated username
      */
     void updateToEligibleByIds(Set<String> usageIds, Long rhAccountNumber, Long wrWrkInst, String userName);
+
+    /**
+     * Deletes all {@link Usage}s from the batch with given id.
+     *
+     * @param batchId {@link com.copyright.rup.dist.foreign.domain.UsageBatch} id
+     */
+    void deleteByBatchId(String batchId);
 }
