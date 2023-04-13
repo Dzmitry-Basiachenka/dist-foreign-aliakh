@@ -226,6 +226,30 @@
         </where>
     </sql>
 
+    <sql id="selectCountByFilterSql">
+        select count(1)
+        from ${schema}.df_usage u
+        join ${schema}.df_usage_aclci uaclci on u.df_usage_uid = uaclci.df_usage_aclci_uid
+        join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
+        left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
+        <include refid="IAclciUsageMapper.usageFilter"/>
+            and u.df_scenario_uid is null
+    </sql>
+
+    <sql id="selectDtosByFilterSql">
+        select
+            u.df_usage_uid,
+            <include refid="IAclciUsageMapper.aclciUsageColumns"/>
+        from ${schema}.df_usage u
+        join ${schema}.df_usage_aclci uaclci on u.df_usage_uid = uaclci.df_usage_aclci_uid
+        join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
+        left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
+        <include refid="IAclciUsageMapper.usageFilter"/>
+            and u.df_scenario_uid is null
+        <include refid="IAclciUsageMapper.ifSortable"/>
+        <include refid="IUsageMapper.ifPageable"/>
+    </sql>
+
     <insert id="insert" parameterType="Usage">
         with u as (
             insert into ${schema}.df_usage (
@@ -297,27 +321,11 @@
     </select>
 
     <select id="findCountByFilter" parameterType="map" resultType="int">
-        select count(1)
-        from ${schema}.df_usage u
-        join ${schema}.df_usage_aclci uaclci on u.df_usage_uid = uaclci.df_usage_aclci_uid
-        join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
-        left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
-        <include refid="IAclciUsageMapper.usageFilter"/>
-            and u.df_scenario_uid is null
+        <include refid="IAclciUsageMapper.selectCountByFilterSql"/>
     </select>
 
     <select id="findDtosByFilter" resultMap="aclciUsageDtoResultMap" parameterType="map" fetchSize="${usageSelectFetchSize}">
-        select
-            u.df_usage_uid,
-            <include refid="IAclciUsageMapper.aclciUsageColumns"/>
-        from ${schema}.df_usage u
-        join ${schema}.df_usage_aclci uaclci on u.df_usage_uid = uaclci.df_usage_aclci_uid
-        join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
-        left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
-        <include refid="IAclciUsageMapper.usageFilter"/>
-            and u.df_scenario_uid is null
-        <include refid="IAclciUsageMapper.ifSortable"/>
-        <include refid="IUsageMapper.ifPageable"/>
+        <include refid="IAclciUsageMapper.selectDtosByFilterSql"/>
     </select>
 
     <update id="updateToEligibleByIds" parameterType="map">

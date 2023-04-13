@@ -1,0 +1,14 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="IAclciReportMapper">
+
+    <select id="findAclciUsagesCountByFilter" parameterType="map" resultType="int">
+        <include refid="IAclciUsageMapper.selectCountByFilterSql"/>
+    </select>
+
+    <select id="findAclciUsageReportDtos" resultMap="IAclciUsageMapper.aclciUsageDtoResultMap" parameterType="map" fetchSize="${usageSelectFetchSize}">
+        <include refid="IAclciUsageMapper.selectDtosByFilterSql"/>
+    </select>
+</mapper>
