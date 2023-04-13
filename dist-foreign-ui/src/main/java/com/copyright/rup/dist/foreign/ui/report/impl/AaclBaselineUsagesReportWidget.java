@@ -10,6 +10,7 @@ import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.data.Binder;
+import com.vaadin.data.ValueProvider;
 import com.vaadin.data.converter.StringToIntegerConverter;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
@@ -69,7 +70,7 @@ public class AaclBaselineUsagesReportWidget extends Window implements IAaclBasel
             .withValidator(value -> StringUtils.isNumeric(StringUtils.trim(value)) || Integer.parseInt(
                 StringUtils.trim(value)) >= 0, ForeignUi.getMessage("field.error.positive_number"))
             .withConverter(new StringToIntegerConverter(ForeignUi.getMessage("field.error.value_not_convertible")))
-            .bind(source -> source, (bean, fieldValue) -> bean = fieldValue)
+            .bind(ValueProvider.identity(), (bean, fieldValue) -> bean = fieldValue)
             .validate();
         VaadinUtils.addComponentStyle(numberOfBaselineYearsField, "number-of-baseline-years-field");
         numberOfBaselineYearsField.setWidth(100, Unit.PERCENTAGE);

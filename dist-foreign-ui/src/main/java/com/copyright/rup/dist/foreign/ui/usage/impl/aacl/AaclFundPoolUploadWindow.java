@@ -16,6 +16,7 @@ import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.data.Binder;
+import com.vaadin.data.ValueProvider;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
@@ -116,7 +117,7 @@ public class AaclFundPoolUploadWindow extends Window {
             .withValidator(new RequiredValidator())
             .withValidator(value -> StringUtils.endsWith(value, ".csv"),
                 ForeignUi.getMessage("error.upload_file.invalid_extension"))
-            .bind(source -> source, (bean, fieldValue) -> bean = fieldValue).validate();
+            .bind(ValueProvider.identity(), (bean, fieldValue) -> bean = fieldValue).validate();
         uploadField.addSucceededListener(event -> uploadBinder.validate());
         VaadinUtils.addComponentStyle(uploadField, "aacl-fund-pool-upload-component");
         return uploadField;

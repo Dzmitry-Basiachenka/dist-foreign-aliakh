@@ -26,6 +26,7 @@ import java.math.RoundingMode;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -197,7 +198,7 @@ public class FundPoolService implements IFundPoolService {
     public List<FundPoolDetail> getDetailsByFundPoolId(String fundPoolId) {
         Map<Integer, FundPoolDetail> classIdToDetail =
             fundPoolRepository.findDetailsByFundPoolId(fundPoolId).stream()
-                .collect(Collectors.toMap(detail -> detail.getAggregateLicenseeClass().getId(), detail -> detail));
+                .collect(Collectors.toMap(detail -> detail.getAggregateLicenseeClass().getId(), Function.identity()));
         return licenseeClassService.getAggregateLicenseeClasses(FdaConstants.AACL_PRODUCT_FAMILY).stream()
             .map(alc -> classIdToDetail.getOrDefault(alc.getId(), buildZeroFundPoolDetail(alc)))
             .collect(Collectors.toList());

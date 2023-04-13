@@ -14,6 +14,7 @@ import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.data.Binder;
+import com.vaadin.data.ValueProvider;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
@@ -129,7 +130,7 @@ public class FasExcludePayeeFilterWidget extends VerticalLayout implements IFasE
         minimumNetThreshold = new TextField(ForeignUi.getMessage("label.minimum_net_threshold"));
         binder.forField(minimumNetThreshold)
             .withValidator(new AmountZeroValidator())
-            .bind(source -> source, (beanValue, fieldValue) -> beanValue = fieldValue);
+            .bind(ValueProvider.identity(), (beanValue, fieldValue) -> beanValue = fieldValue);
         minimumNetThreshold.addValueChangeListener(event -> {
             if (!binder.validate().hasErrors()) {
                 filter.setNetAmountMinThreshold(StringUtils.isNotBlank(event.getValue())

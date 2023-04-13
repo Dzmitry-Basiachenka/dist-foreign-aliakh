@@ -61,6 +61,7 @@ import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -420,7 +421,7 @@ public class AaclUsageService implements IAaclUsageService {
     private List<AggregateLicenseeClass> getAggregateClassesByIds(Set<Integer> aggregateClassIds) {
         Map<Integer, AggregateLicenseeClass> aggregateClassIdToClass =
             licenseeClassService.getAggregateLicenseeClasses(FdaConstants.AACL_PRODUCT_FAMILY).stream()
-                .collect(Collectors.toMap(AggregateLicenseeClass::getId, aggregateClass -> aggregateClass));
+                .collect(Collectors.toMap(AggregateLicenseeClass::getId, Function.identity()));
         return aggregateClassIds.stream()
             .map(aggregateClassIdToClass::get)
             .sorted(Comparator.comparing(AggregateLicenseeClass::getId))

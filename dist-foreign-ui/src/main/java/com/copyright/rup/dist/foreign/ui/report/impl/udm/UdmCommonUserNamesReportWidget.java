@@ -14,6 +14,7 @@ import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.LocalDateWidget;
 
 import com.vaadin.data.Binder;
+import com.vaadin.data.ValueProvider;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
@@ -129,7 +130,7 @@ public class UdmCommonUserNamesReportWidget extends Window implements IUdmCommon
         dateBinder.forField(dateToWidget)
             .withValidator(
                 new DateValidator(ForeignUi.getMessage(dateFromMessageProperty), dateFromWidget, dateToWidget))
-            .bind(source -> source, (bean, fieldValue) -> bean = fieldValue)
+            .bind(ValueProvider.identity(), (bean, fieldValue) -> bean = fieldValue)
             .validate();
     }
 

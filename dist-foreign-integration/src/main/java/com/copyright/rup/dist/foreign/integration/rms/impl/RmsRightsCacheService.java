@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -53,8 +54,8 @@ public class RmsRightsCacheService extends AbstractMultipleCacheService<RmsGrant
                 .map(wrWrkInst -> new RmsGrantKey(wrWrkInst, periodEndDate, statuses, typeOfUses, licenseTypes))
                 .collect(Collectors.toSet()))
                 .values().stream()
-                    .flatMap(Collection::stream)
-                    .collect(Collectors.toSet());
+                .flatMap(Collection::stream)
+                .collect(Collectors.toSet());
         } else {
             return getGrantsWithoutCache(wrWrkInsts, periodEndDate, statuses, typeOfUses, licenseTypes);
         }
@@ -69,11 +70,9 @@ public class RmsRightsCacheService extends AbstractMultipleCacheService<RmsGrant
         Set<RmsGrant> rmsGrants = getGrantsWithoutCache(wrWrkInsts, rmsGrantKey.getPeriodEndDate(),
             rmsGrantKey.getStatuses(), rmsGrantKey.getTypeOfUses(), rmsGrantKey.getLicenseTypes());
         return grantKeys.stream()
-            .collect(Collectors.toMap(
-                grantKey -> grantKey,
-                grantKey -> rmsGrants.stream()
-                    .filter(rmsGrant -> rmsGrant.getWrWrkInst().equals(grantKey.getWrWrkInst()))
-                    .collect(Collectors.toSet())));
+            .collect(Collectors.toMap(Function.identity(), grantKey -> rmsGrants.stream()
+                .filter(rmsGrant -> rmsGrant.getWrWrkInst().equals(grantKey.getWrWrkInst()))
+                .collect(Collectors.toSet())));
     }
 
     @Override

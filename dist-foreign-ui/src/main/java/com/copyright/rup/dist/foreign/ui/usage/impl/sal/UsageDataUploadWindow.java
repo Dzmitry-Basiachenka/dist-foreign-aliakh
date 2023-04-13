@@ -16,6 +16,7 @@ import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.data.Binder;
+import com.vaadin.data.ValueProvider;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -144,7 +145,8 @@ public class UsageDataUploadWindow extends Window {
             .withValidator(new RequiredValidator())
             .withValidator(value -> StringUtils.endsWith(value, ".csv"),
                 ForeignUi.getMessage("error.upload_file.invalid_extension"))
-            .bind(s -> s, (s, v) -> s = v).validate();
+            .bind(ValueProvider.identity(), (bean, fieldValue) -> bean = fieldValue)
+            .validate();
         uploadField.addSucceededListener(event -> uploadBinder.validate());
         VaadinUtils.setMaxComponentsWidth(uploadField);
         VaadinUtils.addComponentStyle(uploadField, "usage-upload-component");
@@ -168,7 +170,7 @@ public class UsageDataUploadWindow extends Window {
         itemBankComboBox.setRequiredIndicatorVisible(true);
         itemBankBinder.forField(itemBankComboBox)
             .asRequired(ForeignUi.getMessage("field.error.item_bank.empty"))
-            .bind(s -> s, (s, v) -> s = v);
+            .bind(ValueProvider.identity(), (bean, fieldValue) -> bean = fieldValue);
         itemBankComboBox.setSizeFull();
         VaadinUtils.setMaxComponentsWidth(itemBankComboBox);
         VaadinUtils.addComponentStyle(itemBankComboBox, "item-banks-filter");

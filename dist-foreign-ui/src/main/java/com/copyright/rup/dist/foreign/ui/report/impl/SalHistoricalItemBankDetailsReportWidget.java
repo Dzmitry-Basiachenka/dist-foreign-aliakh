@@ -10,6 +10,7 @@ import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.vaadin.data.Binder;
+import com.vaadin.data.ValueProvider;
 import com.vaadin.server.SerializablePredicate;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
@@ -96,7 +97,7 @@ public class SalHistoricalItemBankDetailsReportWidget extends Window
             .withValidator(getNumericValidator(), ForeignUi.getMessage("field.error.not_numeric"))
             .withValidator(getYearValidator(), ForeignUi.getMessage("field.error.number_not_in_range",
                 MIN_YEAR, MAX_YEAR))
-            .bind(source -> source, (bean, fieldValue) -> bean = fieldValue)
+            .bind(ValueProvider.identity(), (bean, fieldValue) -> bean = fieldValue)
             .validate();
     }
 
@@ -122,7 +123,7 @@ public class SalHistoricalItemBankDetailsReportWidget extends Window
                     || 0 <= periodEndDateToField.getValue().compareTo(periodFrom);
             }, ForeignUi.getMessage("field.error.greater_or_equal_to",
                 ForeignUi.getMessage("field.period_end_date_from")))
-            .bind(source -> source, (bean, fieldValue) -> bean = fieldValue)
+            .bind(ValueProvider.identity(), (bean, fieldValue) -> bean = fieldValue)
             .validate();
     }
 
