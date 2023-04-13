@@ -49,16 +49,16 @@ public class UsageFilter {
      * @param filter base filter
      */
     public UsageFilter(UsageFilter filter) {
-        if (null != filter) {
-            setRhAccountNumbers(filter.getRhAccountNumbers());
-            setUsageBatchesIds(filter.getUsageBatchesIds());
-            setUsageStatus(filter.getUsageStatus());
-            setPaymentDate(filter.getPaymentDate());
-            setFiscalYear(filter.getFiscalYear());
-            setProductFamily(filter.getProductFamily());
-            setUsagePeriod(filter.getUsagePeriod());
-            setSalDetailType(filter.getSalDetailType());
-            setLicenseTypes(filter.getLicenseTypes());
+        if (Objects.nonNull(filter)) {
+            this.rhAccountNumbers = filter.getRhAccountNumbers();
+            this.usageBatchesIds = filter.getUsageBatchesIds();
+            this.usageStatus = filter.getUsageStatus();
+            this.paymentDate = filter.getPaymentDate();
+            this.fiscalYear = filter.getFiscalYear();
+            this.productFamily = filter.getProductFamily();
+            this.usagePeriod = filter.getUsagePeriod();
+            this.salDetailType = filter.getSalDetailType();
+            this.licenseTypes = filter.getLicenseTypes();
         }
     }
 

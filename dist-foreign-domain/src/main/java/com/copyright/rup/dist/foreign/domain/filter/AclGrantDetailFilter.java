@@ -6,6 +6,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.springframework.util.CollectionUtils;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -42,17 +43,17 @@ public class AclGrantDetailFilter {
      * @param filter base filter
      */
     public AclGrantDetailFilter(AclGrantDetailFilter filter) {
-        if (null != filter) {
-            setGrantSetNames(filter.getGrantSetNames());
-            setLicenseTypes(filter.getLicenseTypes());
-            setGrantStatuses(filter.getGrantStatuses());
-            setTypeOfUses(filter.getTypeOfUses());
-            setGrantSetPeriod(filter.getGrantSetPeriod());
-            setWrWrkInstExpression(new FilterExpression<>(filter.getWrWrkInstExpression()));
-            setRhAccountNumberExpression(new FilterExpression<>(filter.getRhAccountNumberExpression()));
-            setRhNameExpression(new FilterExpression<>(filter.getRhNameExpression()));
-            setEligibleExpression(new FilterExpression<>(filter.getEligibleExpression()));
-            setEditableExpression(new FilterExpression<>(filter.getEditableExpression()));
+        if (Objects.nonNull(filter)) {
+            this.grantSetNames = filter.getGrantSetNames();
+            this.licenseTypes = filter.getLicenseTypes();
+            this.grantStatuses = filter.getGrantStatuses();
+            this.typeOfUses = filter.getTypeOfUses();
+            this.grantSetPeriod = filter.getGrantSetPeriod();
+            this.wrWrkInstExpression = new FilterExpression<>(filter.getWrWrkInstExpression());
+            this.rhAccountNumberExpression = new FilterExpression<>(filter.getRhAccountNumberExpression());
+            this.rhNameExpression = new FilterExpression<>(filter.getRhNameExpression());
+            this.eligibleExpression = new FilterExpression<>(filter.getEligibleExpression());
+            this.editableExpression = new FilterExpression<>(filter.getEditableExpression());
         }
     }
 

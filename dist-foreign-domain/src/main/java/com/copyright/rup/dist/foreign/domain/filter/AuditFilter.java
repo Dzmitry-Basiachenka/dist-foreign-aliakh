@@ -49,16 +49,18 @@ public class AuditFilter {
      * @param filter {@link AuditFilter}
      */
     public AuditFilter(AuditFilter filter) {
-        setStatuses(filter.getStatuses());
-        setBatchesIds(filter.getBatchesIds());
-        setRhAccountNumbers(filter.getRhAccountNumbers());
-        setLicenseeAccountNumbers(filter.getLicenseeAccountNumbers());
-        setCccEventId(filter.getCccEventId());
-        setDistributionName(filter.getDistributionName());
-        setSearchValue(filter.getSearchValue());
-        setProductFamily(filter.getProductFamily());
-        setUsagePeriod(filter.getUsagePeriod());
-        setSalDetailType(filter.getSalDetailType());
+        if (Objects.nonNull(filter)) {
+            this.statuses = filter.getStatuses();
+            this.batchesIds = filter.getBatchesIds();
+            this.rhAccountNumbers = filter.getRhAccountNumbers();
+            this.licenseeAccountNumbers = filter.getLicenseeAccountNumbers();
+            this.cccEventId = filter.getCccEventId();
+            this.distributionName = filter.getDistributionName();
+            this.searchValue = filter.getSearchValue();
+            this.productFamily = filter.getProductFamily();
+            this.usagePeriod = filter.getUsagePeriod();
+            this.salDetailType = filter.getSalDetailType();
+        }
     }
 
     public Integer getUsagePeriod() {

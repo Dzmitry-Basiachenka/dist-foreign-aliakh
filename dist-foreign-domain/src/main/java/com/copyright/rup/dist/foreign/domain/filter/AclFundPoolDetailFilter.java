@@ -44,12 +44,12 @@ public class AclFundPoolDetailFilter {
      */
     public AclFundPoolDetailFilter(AclFundPoolDetailFilter filter) {
         if (Objects.nonNull(filter)) {
-            setFundPoolNames(filter.getFundPoolNames());
-            setPeriods(filter.getPeriods());
-            setAggregateLicenseeClasses(filter.getAggregateLicenseeClasses());
-            setDetailLicenseeClasses(filter.getDetailLicenseeClasses());
-            setLicenseType(filter.getLicenseType());
-            setFundPoolType(filter.getFundPoolType());
+            this.fundPoolNames = filter.getFundPoolNames();
+            this.periods = filter.getPeriods();
+            this.aggregateLicenseeClasses = filter.getAggregateLicenseeClasses();
+            this.detailLicenseeClasses = filter.getDetailLicenseeClasses();
+            this.licenseType = filter.getLicenseType();
+            this.fundPoolType = filter.getFundPoolType();
         }
     }
 

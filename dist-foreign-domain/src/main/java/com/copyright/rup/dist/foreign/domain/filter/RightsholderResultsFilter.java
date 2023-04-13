@@ -5,6 +5,8 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import java.util.Objects;
+
 /**
  * Represents domain to hold results by rightsholder.
  * <p>
@@ -36,13 +38,15 @@ public class RightsholderResultsFilter {
      * @param filter {@link RightsholderResultsFilter}
      */
     public RightsholderResultsFilter(RightsholderResultsFilter filter) {
-        setScenarioId(filter.getScenarioId());
-        setRhAccountNumber(filter.getRhAccountNumber());
-        setRhName(filter.getRhName());
-        setWrWrkInst(filter.getWrWrkInst());
-        setSystemTitle(filter.getSystemTitle());
-        setAggregateLicenseeClassId(filter.getAggregateLicenseeClassId());
-        setAggregateLicenseeClassName(filter.getAggregateLicenseeClassName());
+        if (Objects.nonNull(filter)) {
+            this.scenarioId = filter.getScenarioId();
+            this.rhAccountNumber = filter.getRhAccountNumber();
+            this.rhName = filter.getRhName();
+            this.wrWrkInst = filter.getWrWrkInst();
+            this.systemTitle = filter.getSystemTitle();
+            this.aggregateLicenseeClassId = filter.getAggregateLicenseeClassId();
+            this.aggregateLicenseeClassName = filter.getAggregateLicenseeClassName();
+        }
     }
 
     public String getScenarioId() {

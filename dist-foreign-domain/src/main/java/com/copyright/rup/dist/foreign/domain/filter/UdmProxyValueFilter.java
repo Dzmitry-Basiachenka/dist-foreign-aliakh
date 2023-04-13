@@ -6,6 +6,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.springframework.util.CollectionUtils;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -34,9 +35,9 @@ public class UdmProxyValueFilter {
      * @param filter base filter
      */
     public UdmProxyValueFilter(UdmProxyValueFilter filter) {
-        if (null != filter) {
-            setPeriods(filter.getPeriods());
-            setPubTypeNames(filter.getPubTypeNames());
+        if (Objects.nonNull(filter)) {
+            this.periods = filter.getPeriods();
+            this.pubTypeNames = filter.getPubTypeNames();
         }
     }
 

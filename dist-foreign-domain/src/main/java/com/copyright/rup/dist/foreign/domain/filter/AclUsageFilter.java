@@ -57,23 +57,23 @@ public class AclUsageFilter {
      */
     public AclUsageFilter(AclUsageFilter filter) {
         if (Objects.nonNull(filter)) {
-            setUsageBatchName(filter.getUsageBatchName());
-            setUsageOrigin(filter.getUsageOrigin());
-            setChannel(filter.getChannel());
-            setTypeOfUse(filter.getTypeOfUse());
-            setPeriods(filter.getPeriods());
-            setDetailLicenseeClasses(filter.getDetailLicenseeClasses());
-            setAggregateLicenseeClasses(filter.getAggregateLicenseeClasses());
-            setPubTypes(filter.getPubTypes());
-            setReportedTypeOfUses(filter.getReportedTypeOfUses());
-            setUsageDetailIdExpression(new FilterExpression<>(filter.getUsageDetailIdExpression()));
-            setWrWrkInstExpression(new FilterExpression<>(filter.getWrWrkInstExpression()));
-            setSystemTitleExpression(new FilterExpression<>(filter.getSystemTitleExpression()));
-            setSurveyCountryExpression(new FilterExpression<>(filter.getSurveyCountryExpression()));
-            setContentUnitPriceExpression(new FilterExpression<>(filter.getContentUnitPriceExpression()));
-            setContentUnitPriceFlagExpression(new FilterExpression<>(filter.getContentUnitPriceFlagExpression()));
-            setWorkDeletedFlagExpression(new FilterExpression<>(filter.getWorkDeletedFlagExpression()));
-            setAnnualizedCopiesExpression(new FilterExpression<>(filter.getAnnualizedCopiesExpression()));
+            this.usageBatchName = filter.getUsageBatchName();
+            this.usageOrigin = filter.getUsageOrigin();
+            this.channel = filter.getChannel();
+            this.typeOfUse = filter.getTypeOfUse();
+            this.periods = filter.getPeriods();
+            this.detailLicenseeClasses = filter.getDetailLicenseeClasses();
+            this.aggregateLicenseeClasses = filter.getAggregateLicenseeClasses();
+            this.pubTypes = filter.getPubTypes();
+            this.reportedTypeOfUses = filter.getReportedTypeOfUses();
+            this.usageDetailIdExpression = new FilterExpression<>(filter.getUsageDetailIdExpression());
+            this.wrWrkInstExpression = new FilterExpression<>(filter.getWrWrkInstExpression());
+            this.systemTitleExpression = new FilterExpression<>(filter.getSystemTitleExpression());
+            this.surveyCountryExpression = new FilterExpression<>(filter.getSurveyCountryExpression());
+            this.contentUnitPriceExpression = new FilterExpression<>(filter.getContentUnitPriceExpression());
+            this.contentUnitPriceFlagExpression = new FilterExpression<>(filter.getContentUnitPriceFlagExpression());
+            this.workDeletedFlagExpression = new FilterExpression<>(filter.getWorkDeletedFlagExpression());
+            this.annualizedCopiesExpression = new FilterExpression<>(filter.getAnnualizedCopiesExpression());
         }
     }
 
