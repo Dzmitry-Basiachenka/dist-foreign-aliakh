@@ -127,6 +127,8 @@ public class AclciUsageWidget extends CommonUsageWidget implements IAclciUsageWi
             usageBatchMenuBar.addItem(ForeignUi.getMessage("menu.caption.usage_batch"), null, null);
         loadUsageBatchMenuItem = menuItem.addItem(ForeignUi.getMessage("menu.item.load"), null,
             item -> Windows.showModalWindow(new AclciUsageBatchUploadWindow(controller)));
+        menuItem.addItem(ForeignUi.getMessage("menu.item.view"), null,
+            item -> Windows.showModalWindow(new ViewAclciUsageBatchWindow(controller)));
         VaadinUtils.addComponentStyle(usageBatchMenuBar, "usage-batch-menu-bar");
         VaadinUtils.addComponentStyle(usageBatchMenuBar, "v-menubar-df");
     }

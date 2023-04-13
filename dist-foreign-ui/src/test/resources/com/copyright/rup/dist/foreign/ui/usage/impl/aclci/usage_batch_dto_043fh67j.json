@@ -1,0 +1,13 @@
+[
+  {
+    "id": "964c4046-813d-40c3-9774-0365f9cc3267",
+    "name": "ACLCI Batch",
+    "aclciFields": {
+      "licenseeAccountNumber": "5588",
+      "licenseeName": "RGS Energy Group, Inc."
+    },
+    "paymentDate": "2023-06-30",
+    "createUser": "user@copyright.com",
+    "createDate": "2023-04-12T13:55:56-0500"
+  }
+]
