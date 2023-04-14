@@ -9,6 +9,7 @@ import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.ExcludePayeeFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IAaclReportRepository;
+import com.copyright.rup.dist.foreign.repository.api.IAclciReportRepository;
 import com.copyright.rup.dist.foreign.repository.api.IFasReportRepository;
 import com.copyright.rup.dist.foreign.repository.api.INtsReportRepository;
 import com.copyright.rup.dist.foreign.repository.api.ISalReportRepository;
@@ -46,6 +47,8 @@ public class ReportService implements IReportService {
     @Autowired
     private IAaclReportRepository aaclReportRepository;
     @Autowired
+    private IAclciReportRepository aclciReportRepository;
+    @Autowired
     private IFasReportRepository fasReportRepository;
     @Autowired
     private INtsReportRepository ntsReportRepository;
@@ -72,6 +75,11 @@ public class ReportService implements IReportService {
     @Override
     public void writeAaclUsageCsvReport(UsageFilter filter, PipedOutputStream pipedOutputStream) {
         aaclReportRepository.writeAaclUsagesCsvReport(filter, pipedOutputStream);
+    }
+
+    @Override
+    public void writeAclciUsageCsvReport(UsageFilter filter, PipedOutputStream pipedOutputStream) {
+        aclciReportRepository.writeAclciUsagesCsvReport(filter, pipedOutputStream);
     }
 
     @Override

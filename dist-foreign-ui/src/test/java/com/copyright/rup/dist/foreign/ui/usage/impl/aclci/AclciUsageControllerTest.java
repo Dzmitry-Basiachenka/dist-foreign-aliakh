@@ -186,7 +186,7 @@ public class AclciUsageControllerTest {
         expect(filterWidget.getAppliedFilter()).andReturn(usageFilter).once();
         expect(streamSourceHandler.getCsvStreamSource(capture(fileNameSupplierCapture), capture(posConsumerCapture)))
             .andReturn(new StreamSource(fileNameSupplier, "csv", inputStreamSupplier)).once();
-        reportService.writeAaclUsageCsvReport(usageFilter, pos);//TODO: use writeAclciUsageCsvReport
+        reportService.writeAclciUsageCsvReport(usageFilter, pos);
         expectLastCall().once();
         replay(OffsetDateTime.class, filterWidget, filterController, streamSourceHandler, reportService);
         IStreamSource streamSource = controller.getExportUsagesStreamSource();
