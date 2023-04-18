@@ -11,7 +11,6 @@ import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.vaadin.data.ValueProvider;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.ObjectUtils;
 
 import java.util.HashSet;
 import java.util.List;
@@ -94,7 +93,9 @@ public class PublicationTypeFilterWidget extends BaseUdmItemsFilterWidget<Public
         FilterWindow<PublicationType> filterWindow =
             Windows.showFilterWindow(ForeignUi.getMessage("window.publication_types_filter"), this,
                 (ValueProvider<PublicationType, List<String>>) pubType ->
-                    List.of(ObjectUtils.defaultIfNull(pubType.getName(), NULL), pubType.getDescription()));
+                    Objects.nonNull(pubType.getName())
+                        ? List.of(pubType.getName(), pubType.getDescription())
+                        : List.of(NULL));
         filterWindow.setSelectedItemsIds(selectedItemsIds);
         filterWindow.setSelectAllButtonVisible();
         filterWindow.setSearchPromptString(ForeignUi.getMessage("prompt.publication_type"));

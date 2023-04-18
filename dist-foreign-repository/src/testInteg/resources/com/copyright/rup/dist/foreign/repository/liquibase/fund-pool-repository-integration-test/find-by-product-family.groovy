@@ -73,7 +73,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'NTS')
             column(name: 'name', value: 'Archived Pre-Service fee fund')
             column(name: 'total_amount', value: 99.00)
-            column(name: 'updated_datetime', value: '2019-03-26 16:35:52.735531+03')
+            column(name: 'updated_datetime', value: '2019-03-25 16:35:52.735531+03')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
