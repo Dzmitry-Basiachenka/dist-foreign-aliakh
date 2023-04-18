@@ -78,4 +78,9 @@ public class AclciUsageRepository extends BaseRepository implements IAclciUsageR
             update("IAclciUsageMapper.updateToEligibleByIds", parameters);
         });
     }
+
+    @Override
+    public void deleteByBatchId(String batchId) {
+        delete("IAclciUsageMapper.deleteByBatchId", Objects.requireNonNull(batchId));
+    }
 }

@@ -220,4 +220,11 @@ public interface IUsageBatchService {
      * @return ids of inserted usages
      */
     List<String> insertAclciBatch(UsageBatch usageBatch, List<Usage> usages);
+
+    /**
+     * Deletes given ACLCI {@link UsageBatch} and all it's usage details.
+     *
+     * @param usageBatch {@link UsageBatch}
+     */
+    void deleteAclciUsageBatch(UsageBatch usageBatch);
 }

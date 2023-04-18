@@ -538,6 +538,21 @@ public class UsageBatchServiceTest {
         verify(RupContextUtils.class, RupPersistUtils.class, aclciUsageService, usageBatchRepository);
     }
 
+    @Test
+    public void testDeleteAclciUsageBatch() {
+        mockStatic(RupContextUtils.class);
+        UsageBatch usageBatch = new UsageBatch();
+        usageBatch.setId(BATCH_UID);
+        expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
+        aclciUsageService.deleteUsageBatchDetails(usageBatch);
+        expectLastCall().once();
+        usageBatchRepository.deleteUsageBatch(usageBatch.getId());
+        expectLastCall().once();
+        replay(aclciUsageService, usageBatchRepository, RupContextUtils.class);
+        usageBatchService.deleteAclciUsageBatch(usageBatch);
+        verify(aclciUsageService, usageBatchRepository, RupContextUtils.class);
+    }
+
     private Rightsholder buildRro() {
         Rightsholder rightsholder = buildRightsholder(RRO_ACCOUNT_NUMBER);
         rightsholder.setName(RRO_NAME);

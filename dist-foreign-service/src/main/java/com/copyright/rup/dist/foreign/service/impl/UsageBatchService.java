@@ -320,6 +320,17 @@ public class UsageBatchService implements IUsageBatchService {
             .collect(Collectors.toList());
     }
 
+    @Override
+    @Transactional
+    public void deleteAclciUsageBatch(UsageBatch usageBatch) {
+        String userName = RupContextUtils.getUserName();
+        String batchName = usageBatch.getName();
+        LOGGER.info("Delete ACLCI usage batch. Started. BatchName={}, UserName={}", batchName, userName);
+        aclciUsageService.deleteUsageBatchDetails(usageBatch);
+        usageBatchRepository.deleteUsageBatch(usageBatch.getId());
+        LOGGER.info("Delete ACLCI usage batch. Finished. BatchName={}, UserName={}", batchName, userName);
+    }
+
     private void populateTitlesStandardNumberAndType(List<Usage> usages) {
         usages.stream()
             .filter(usage -> Objects.nonNull(usage.getWrWrkInst()))
