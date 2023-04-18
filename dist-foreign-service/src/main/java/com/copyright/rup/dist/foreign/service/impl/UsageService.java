@@ -229,7 +229,7 @@ public class UsageService implements IUsageService {
         Set<String> notFoundUsageIds = new HashSet<>();
         Map<String, Usage> usageIdToUsageMap = findByIdsFunction.apply(paidUsages.stream()
             .map(PaidUsage::getId)
-            .collect(Collectors.toList())).stream().collect(Collectors.toMap(Usage::getId, usage -> usage));
+            .collect(Collectors.toList())).stream().collect(Collectors.toMap(Usage::getId, Function.identity()));
         paidUsages.forEach(paidUsage -> {
             String paidUsageId = paidUsage.getId();
             if (Objects.nonNull(usageIdToUsageMap.get(paidUsageId))) {

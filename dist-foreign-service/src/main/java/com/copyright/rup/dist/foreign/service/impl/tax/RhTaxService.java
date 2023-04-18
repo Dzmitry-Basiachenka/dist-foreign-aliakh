@@ -32,6 +32,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -93,7 +94,7 @@ public class RhTaxService implements IRhTaxService {
                 : usageService.getRightsholderPayeeProductFamilyHoldersByScenarioIds(scenarioIds);
         if (CollectionUtils.isNotEmpty(holders)) {
             Map<RightsholderPayeeProductFamilyHolder, Rightsholder> holderToTboMap = holders.stream()
-                .collect(Collectors.toMap(holder -> holder, this::getTaxBeneficialOwner));
+                .collect(Collectors.toMap(Function.identity(), this::getTaxBeneficialOwner));
             Set<OracleRhTaxInformationRequest> oracleRequests = holderToTboMap.entrySet().stream()
                 .map(entry -> {
                     RightsholderPayeeProductFamilyHolder holder = entry.getKey();

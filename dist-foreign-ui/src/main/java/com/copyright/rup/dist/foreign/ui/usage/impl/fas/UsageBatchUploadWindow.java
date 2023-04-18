@@ -21,6 +21,7 @@ import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.LocalDateWidget;
 
 import com.vaadin.data.Binder;
+import com.vaadin.data.ValueProvider;
 import com.vaadin.data.converter.StringToBigDecimalConverter;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.shared.ui.MarginInfo;
@@ -153,7 +154,8 @@ public class UsageBatchUploadWindow extends Window {
             .withValidator(requiredValidator)
             .withValidator(value -> StringUtils.endsWith(value, ".csv"),
                 ForeignUi.getMessage("error.upload_file.invalid_extension"))
-            .bind(s -> s, (s, v) -> s = v).validate();
+            .bind(ValueProvider.identity(), (bean, fieldValue) -> bean = fieldValue)
+            .validate();
         uploadField.addSucceededListener(event -> uploadBinder.validate());
         VaadinUtils.setMaxComponentsWidth(uploadField);
         VaadinUtils.addComponentStyle(uploadField, "usage-upload-component");

@@ -17,6 +17,7 @@ import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.data.Binder;
+import com.vaadin.data.ValueProvider;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -168,7 +169,7 @@ public class CreateAclFundPoolWindow extends Window {
             .withValidator(value -> StringUtils.isNumeric(StringUtils.trim(value)),
                 ForeignUi.getMessage("field.error.not_numeric"))
             .withValidator(new YearValidator())
-            .bind(s -> s, (s, v) -> s = v)
+            .bind(ValueProvider.identity(), (bean, fieldValue) -> bean = fieldValue)
             .validate();
         VaadinUtils.addComponentStyle(fundPoolPeriodYearField, "acl-fund-pool-period-year-field");
         return fundPoolPeriodYearField;
@@ -180,7 +181,7 @@ public class CreateAclFundPoolWindow extends Window {
         fundPoolPeriodMonthComboBox.setRequiredIndicatorVisible(true);
         binder.forField(fundPoolPeriodMonthComboBox)
             .withValidator(new RequiredValidator())
-            .bind(s -> s, (s, v) -> s = v)
+            .bind(ValueProvider.identity(), (bean, fieldValue) -> bean = fieldValue)
             .validate();
         fundPoolPeriodMonthComboBox.setSizeFull();
         VaadinUtils.addComponentStyle(fundPoolPeriodMonthComboBox, "acl-fund-pool-period-month-combo-box");
@@ -208,7 +209,7 @@ public class CreateAclFundPoolWindow extends Window {
                 ForeignUi.getMessage("field.error.empty"))
             .withValidator(value -> ldmtCheckBox.getValue() || StringUtils.endsWith(value, ".csv"),
                 ForeignUi.getMessage("error.upload_file.invalid_extension"))
-            .bind(source -> source, (bean, fieldValue) -> bean = fieldValue);
+            .bind(ValueProvider.identity(), (bean, fieldValue) -> bean = fieldValue);
         uploadField.addSucceededListener(event -> binder.validate());
         VaadinUtils.setMaxComponentsWidth(uploadField);
         VaadinUtils.addComponentStyle(uploadField, "fund-pool-details-upload-component");

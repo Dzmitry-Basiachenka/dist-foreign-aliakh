@@ -10,6 +10,7 @@ import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.data.Binder;
+import com.vaadin.data.ValueProvider;
 import com.vaadin.data.converter.StringToIntegerConverter;
 import com.vaadin.server.SerializablePredicate;
 import com.vaadin.shared.ui.MarginInfo;
@@ -88,7 +89,7 @@ public class SalFundPoolsReportWidget extends Window implements ISalFundPoolsRep
             .withValidator(getYearValidator(), ForeignUi.getMessage("field.error.number_not_in_range",
                 MIN_YEAR, MAX_YEAR))
             .withConverter(new StringToIntegerConverter(ForeignUi.getMessage("field.error.value_not_convertible")))
-            .bind(source -> source, (bean, fieldValue) -> bean = fieldValue)
+            .bind(ValueProvider.identity(), (bean, fieldValue) -> bean = fieldValue)
             .validate();
         VaadinUtils.addComponentStyle(distributionYear, "distribution-year-field");
         distributionYear.setWidth(100, Unit.PERCENTAGE);

@@ -15,6 +15,7 @@ import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.LocalDateWidget;
 
 import com.vaadin.data.Binder;
+import com.vaadin.data.ValueProvider;
 import com.vaadin.data.converter.StringToBigDecimalConverter;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.server.SerializablePredicate;
@@ -151,7 +152,7 @@ class FundPoolLoadWindow extends Window {
         marketValidationField = new TextField(ForeignUi.getMessage("label.markets"));
         stringBinder.forField(marketValidationField)
             .withValidator(value -> Integer.parseInt(value) > 0, ForeignUi.getMessage("message.market.empty"))
-            .bind(source -> source, (bean, fieldValue) -> bean = fieldValue)
+            .bind(ValueProvider.identity(), (bean, fieldValue) -> bean = fieldValue)
             .validate();
         MarketFilterWidget marketFilterWidget = new MarketFilterWidget(usagesController::getMarkets);
         VaadinUtils.addComponentStyle(marketFilterWidget, "market-filter-widget");
@@ -232,7 +233,7 @@ class FundPoolLoadWindow extends Window {
             .withValidator(getNumericValidator(), ForeignUi.getMessage(NOT_NUMERIC_MESSAGE))
             .withValidator(getYearValidator(), ForeignUi.getMessage("field.error.number_not_in_range",
                 MIN_YEAR, MAX_YEAR))
-            .bind(source -> source, (bean, fieldValue) -> bean = fieldValue)
+            .bind(ValueProvider.identity(), (bean, fieldValue) -> bean = fieldValue)
             .validate();
     }
 
@@ -254,7 +255,7 @@ class FundPoolLoadWindow extends Window {
                     || 0 <= fundPoolPeriodToField.getValue().compareTo(periodFrom);
             }, ForeignUi.getMessage("field.error.greater_or_equal_to",
                 ForeignUi.getMessage("label.fund.pool.period.from")))
-            .bind(source -> source, (bean, fieldValue) -> bean = fieldValue)
+            .bind(ValueProvider.identity(), (bean, fieldValue) -> bean = fieldValue)
             .validate();
     }
 

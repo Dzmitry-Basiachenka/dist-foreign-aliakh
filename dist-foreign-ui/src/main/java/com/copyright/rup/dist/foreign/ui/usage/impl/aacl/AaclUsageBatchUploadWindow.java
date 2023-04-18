@@ -18,6 +18,7 @@ import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.data.Binder;
+import com.vaadin.data.ValueProvider;
 import com.vaadin.data.converter.StringToIntegerConverter;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.server.SerializablePredicate;
@@ -142,7 +143,8 @@ public class AaclUsageBatchUploadWindow extends Window {
         uploadBinder.forField(uploadField)
             .withValidator(value -> StringUtils.isEmpty(value)
                 || StringUtils.endsWith(value, ".csv"), ForeignUi.getMessage("error.upload_file.invalid_extension"))
-            .bind(s -> s, (s, v) -> s = v).validate();
+            .bind(ValueProvider.identity(), (bean, fieldValue) -> bean = fieldValue)
+            .validate();
         uploadField.addSucceededListener(event -> uploadBinder.validate());
         VaadinUtils.addComponentStyle(uploadField, "usage-upload-component");
         return uploadField;

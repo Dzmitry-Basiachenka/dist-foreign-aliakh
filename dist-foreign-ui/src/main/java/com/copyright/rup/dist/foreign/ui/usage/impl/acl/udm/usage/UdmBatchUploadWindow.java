@@ -19,6 +19,7 @@ import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.data.Binder;
+import com.vaadin.data.ValueProvider;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -138,7 +139,8 @@ public class UdmBatchUploadWindow extends Window {
                 ForeignUi.getMessage("error.upload_file.invalid_extension"))
             .withValidator(value -> !udmUsageController.udmBatchExists(getBatchName()),
                 ForeignUi.getMessage("message.error.unique_name", "UDM Batch"))
-            .bind(s -> s, (s, v) -> s = v).validate();
+            .bind(ValueProvider.identity(), (bean, fieldValue) -> bean = fieldValue)
+            .validate();
         uploadField.addSucceededListener(event -> binder.validate());
         VaadinUtils.setMaxComponentsWidth(uploadField);
         VaadinUtils.addComponentStyle(uploadField, "udm-usage-upload-component");
@@ -161,7 +163,8 @@ public class UdmBatchUploadWindow extends Window {
             .withValidator(value -> StringUtils.isNumeric(StringUtils.trim(value)),
                 ForeignUi.getMessage("field.error.not_numeric"))
             .withValidator(new YearValidator())
-            .bind(s -> s, (s, v) -> s = v).validate();
+            .bind(ValueProvider.identity(), (bean, fieldValue) -> bean = fieldValue)
+            .validate();
         VaadinUtils.addComponentStyle(periodYearField, "period-year-field");
         return periodYearField;
     }
@@ -172,7 +175,8 @@ public class UdmBatchUploadWindow extends Window {
         monthField.setRequiredIndicatorVisible(true);
         binder.forField(monthField)
             .withValidator(new RequiredValidator())
-            .bind(s -> s, (s, v) -> s = v).validate();
+            .bind(ValueProvider.identity(), (bean, fieldValue) -> bean = fieldValue)
+            .validate();
         monthField.setSizeFull();
         VaadinUtils.addComponentStyle(monthField, "period-month-field");
         return monthField;

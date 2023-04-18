@@ -13,6 +13,7 @@ import com.copyright.rup.vaadin.widget.SearchWidget;
 import com.copyright.rup.vaadin.widget.SearchWidget.ISearchController;
 
 import com.vaadin.data.Binder;
+import com.vaadin.data.ValueProvider;
 import com.vaadin.data.converter.StringToIntegerConverter;
 import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.data.validator.IntegerRangeValidator;
@@ -137,7 +138,7 @@ public class TaxNotificationReportWidget extends Window implements ITaxNotificat
             .withValidator(new IntegerRangeValidator(
                 ForeignUi.getMessage("field.error.positive_number_or_zero_and_max_value", DAYS_MAX_VALUE),
                 DAYS_MIN_VALUE, DAYS_MAX_VALUE))
-            .bind(s -> s, (s, v) -> s = v)
+            .bind(ValueProvider.identity(), (bean, fieldValue) -> bean = fieldValue)
             .validate();
     }
 

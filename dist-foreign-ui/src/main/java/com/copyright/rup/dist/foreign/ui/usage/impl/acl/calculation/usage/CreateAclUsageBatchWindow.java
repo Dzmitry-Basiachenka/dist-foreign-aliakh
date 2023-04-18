@@ -12,6 +12,7 @@ import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.data.Binder;
+import com.vaadin.data.ValueProvider;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
@@ -145,7 +146,7 @@ public class CreateAclUsageBatchWindow extends Window {
             .withValidator(value -> StringUtils.isNumeric(StringUtils.trim(value)),
                 ForeignUi.getMessage("field.error.not_numeric"))
             .withValidator(new YearValidator())
-            .bind(source -> source, (bean, fieldValue) -> bean = fieldValue)
+            .bind(ValueProvider.identity(), (bean, fieldValue) -> bean = fieldValue)
             .validate();
         VaadinUtils.addComponentStyle(distributionPeriodYearField, "acl-distribution-period-year-field");
         return distributionPeriodYearField;
@@ -157,7 +158,7 @@ public class CreateAclUsageBatchWindow extends Window {
         distributionPeriodMonthComboBox.setRequiredIndicatorVisible(true);
         binder.forField(distributionPeriodMonthComboBox)
             .withValidator(new RequiredValidator())
-            .bind(source -> source, (bean, fieldValue) -> bean = fieldValue)
+            .bind(ValueProvider.identity(), (bean, fieldValue) -> bean = fieldValue)
             .validate();
         distributionPeriodMonthComboBox.setSizeFull();
         VaadinUtils.addComponentStyle(distributionPeriodMonthComboBox, "acl-distribution-period-month-combo-box");
@@ -168,7 +169,7 @@ public class CreateAclUsageBatchWindow extends Window {
         periodValidationField = new TextField(ForeignUi.getMessage("label.periods"));
         binder.forField(periodValidationField)
             .withValidator(value -> Integer.parseInt(value) > 0, ForeignUi.getMessage("message.period.empty"))
-            .bind(source -> source, (bean, fieldValue) -> bean = fieldValue)
+            .bind(ValueProvider.identity(), (bean, fieldValue) -> bean = fieldValue)
             .validate();
         periodFilterWidget = new PeriodFilterWidget(aclUsageController::getAllPeriods);
         VaadinUtils.addComponentStyle(periodFilterWidget, "acl-periods-filter-widget");
