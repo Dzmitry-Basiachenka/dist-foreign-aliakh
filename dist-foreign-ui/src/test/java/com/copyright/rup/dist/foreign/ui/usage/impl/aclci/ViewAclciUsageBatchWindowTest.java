@@ -19,6 +19,7 @@ import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
+import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.UiTestHelper;
 import com.copyright.rup.dist.foreign.ui.usage.api.aclci.IAclciUsageController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
@@ -61,7 +62,7 @@ import java.util.Set;
  * @author Mikita Maistrenka
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest(Windows.class)
+@PrepareForTest({Windows.class, ForeignSecurityUtils.class})
 public class ViewAclciUsageBatchWindowTest {
 
     private static final String USAGE_BATCH_ID = "964c4046-813d-40c3-9774-0365f9cc3267";
@@ -74,19 +75,20 @@ public class ViewAclciUsageBatchWindowTest {
 
     @Before
     public void setUp() {
+        mockStatic(ForeignSecurityUtils.class);
         controller = createMock(IAclciUsageController.class);
+        expect(ForeignSecurityUtils.hasDeleteUsagePermission()).andReturn(true).once();
         expect(controller.getSelectedProductFamily()).andReturn("ACLCI").once();
         expect(controller.getUsageBatches("ACLCI")).andReturn(usageBatches).once();
-        replay(controller);
+        replay(ForeignSecurityUtils.class, controller);
         window = new ViewAclciUsageBatchWindow(controller);
-        verify(controller);
-        reset(controller);
+        verify(ForeignSecurityUtils.class, controller);
+        reset(ForeignSecurityUtils.class, controller);
     }
 
     @Test
     @SuppressWarnings(UNCHECKED)
     public void testStructure() {
-        replay(controller);
         assertEquals("View Usage Batch", window.getCaption());
         verifySize(window);
         VerticalLayout content = (VerticalLayout) window.getContent();

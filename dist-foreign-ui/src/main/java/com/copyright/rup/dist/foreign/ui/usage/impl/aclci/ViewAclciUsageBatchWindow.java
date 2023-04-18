@@ -54,6 +54,7 @@ public class ViewAclciUsageBatchWindow extends Window implements SearchWidget.IS
         searchWidget.setPrompt(ForeignUi.getMessage("field.prompt.view_batch.search.sal_aclci"));
         initUsageBatchesGrid();
         HorizontalLayout buttonsLayout = initButtons();
+        initMediator();
         VerticalLayout layout = new VerticalLayout(searchWidget, grid, buttonsLayout);
         layout.setSizeFull();
         layout.setExpandRatio(grid, 1);
@@ -96,6 +97,12 @@ public class ViewAclciUsageBatchWindow extends Window implements SearchWidget.IS
         layout.setSpacing(true);
         VaadinUtils.addComponentStyle(layout, "view-batch-buttons");
         return layout;
+    }
+
+    private void initMediator() {
+        ViewAclciUsageBatchMediator mediator = new ViewAclciUsageBatchMediator();
+        mediator.setDeleteButton(deleteButton);
+        mediator.applyPermissions();
     }
 
     private void deleteUsageBatch(UsageBatch usageBatch) {
