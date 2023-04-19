@@ -35,6 +35,8 @@
         <result property="batchGrossAmount" column="gross_amount"/>
         <result property="ntsDetailsCount" column="nts_details_count"/>
         <result property="ntsDetailsGrossAmount" column="nts_details_gross_amount"/>
+        <result property="toBeDistributedDetailsCount" column="to_be_distributed_details_count"/>
+        <result property="toBeDistributedDetailsGrossAmount" column="to_be_distributed_details_gross_amount"/>
     </resultMap>
 
     <select id="findNtsUndistributedLiabilitiesReportDtos" parameterType="map" resultMap="ntsUndistributedLiabilitiesReportDtoResultMap">
@@ -70,6 +72,8 @@
             gross_amount,
             nts_details_count,
             nts_details_gross_amount,
+            to_be_distributed_details_count,
+            to_be_distributed_details_gross_amount,
             created_datetime
         from ${schema}.v_nts_withdrawn_batch_summary_report
         order by batch_name

@@ -25,9 +25,11 @@ public class NtsWithDrawnBatchSummaryReportDto extends StoredEntity<String> {
     private Long rroAccountNumber;
     private String rroName;
     private LocalDate paymentDate;
-    private int ntsDetailsCount;
     private BigDecimal batchGrossAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+    private int ntsDetailsCount;
     private BigDecimal ntsDetailsGrossAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
+    private int toBeDistributedDetailsCount;
+    private BigDecimal toBeDistributedDetailsGrossAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
 
     public String getBatchName() {
         return batchName;
@@ -61,20 +63,20 @@ public class NtsWithDrawnBatchSummaryReportDto extends StoredEntity<String> {
         this.paymentDate = paymentDate;
     }
 
-    public int getNtsDetailsCount() {
-        return ntsDetailsCount;
-    }
-
-    public void setNtsDetailsCount(int ntsDetailsCount) {
-        this.ntsDetailsCount = ntsDetailsCount;
-    }
-
     public BigDecimal getBatchGrossAmount() {
         return batchGrossAmount;
     }
 
     public void setBatchGrossAmount(BigDecimal batchGrossAmount) {
         this.batchGrossAmount = batchGrossAmount;
+    }
+
+    public int getNtsDetailsCount() {
+        return ntsDetailsCount;
+    }
+
+    public void setNtsDetailsCount(int ntsDetailsCount) {
+        this.ntsDetailsCount = ntsDetailsCount;
     }
 
     public BigDecimal getNtsDetailsGrossAmount() {
@@ -85,38 +87,58 @@ public class NtsWithDrawnBatchSummaryReportDto extends StoredEntity<String> {
         this.ntsDetailsGrossAmount = ntsDetailsGrossAmount;
     }
 
+    public int getToBeDistributedDetailsCount() {
+        return toBeDistributedDetailsCount;
+    }
+
+    public void setToBeDistributedDetailsCount(int toBeDistributedDetailsCount) {
+        this.toBeDistributedDetailsCount = toBeDistributedDetailsCount;
+    }
+
+    public BigDecimal getToBeDistributedDetailsGrossAmount() {
+        return toBeDistributedDetailsGrossAmount;
+    }
+
+    public void setToBeDistributedDetailsGrossAmount(BigDecimal toBeDistributedDetailsGrossAmount) {
+        this.toBeDistributedDetailsGrossAmount = toBeDistributedDetailsGrossAmount;
+    }
+
     @Override
-    public boolean equals(Object o) {
-        if (this == o) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
             return true;
         }
-        if (null == o || getClass() != o.getClass()) {
+        if (obj == null || getClass() != obj.getClass()) {
             return false;
         }
-        NtsWithDrawnBatchSummaryReportDto that = (NtsWithDrawnBatchSummaryReportDto) o;
+        NtsWithDrawnBatchSummaryReportDto that = (NtsWithDrawnBatchSummaryReportDto) obj;
         return new EqualsBuilder()
-            .appendSuper(super.equals(o))
-            .append(ntsDetailsCount, that.ntsDetailsCount)
+            .appendSuper(super.equals(obj))
             .append(batchName, that.batchName)
             .append(rroAccountNumber, that.rroAccountNumber)
             .append(rroName, that.rroName)
             .append(paymentDate, that.paymentDate)
             .append(batchGrossAmount, that.batchGrossAmount)
+            .append(ntsDetailsCount, that.ntsDetailsCount)
             .append(ntsDetailsGrossAmount, that.ntsDetailsGrossAmount)
+            .append(toBeDistributedDetailsCount, that.toBeDistributedDetailsCount)
+            .append(toBeDistributedDetailsGrossAmount, that.toBeDistributedDetailsGrossAmount)
             .isEquals();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(17, 37)
+        return new HashCodeBuilder()
             .appendSuper(super.hashCode())
             .append(batchName)
             .append(rroAccountNumber)
             .append(rroName)
             .append(paymentDate)
-            .append(ntsDetailsCount)
             .append(batchGrossAmount)
+            .append(ntsDetailsCount)
             .append(ntsDetailsGrossAmount)
+            .append(toBeDistributedDetailsCount)
+            .append(toBeDistributedDetailsGrossAmount)
             .toHashCode();
     }
 
@@ -127,9 +149,11 @@ public class NtsWithDrawnBatchSummaryReportDto extends StoredEntity<String> {
             .append("rroAccountNumber", rroAccountNumber)
             .append("rroName", rroName)
             .append("paymentDate", paymentDate)
-            .append("ntsDetailsCount", ntsDetailsCount)
             .append("batchGrossAmount", batchGrossAmount)
+            .append("ntsDetailsCount", ntsDetailsCount)
             .append("ntsDetailsGrossAmount", ntsDetailsGrossAmount)
+            .append("toBeDistributedDetailsCount", toBeDistributedDetailsCount)
+            .append("toBeDistributedDetailsGrossAmount", toBeDistributedDetailsGrossAmount)
             .toString();
     }
 }

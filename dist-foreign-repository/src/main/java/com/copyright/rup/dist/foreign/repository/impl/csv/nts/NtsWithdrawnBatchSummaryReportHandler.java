@@ -22,7 +22,8 @@ import java.util.List;
 public class NtsWithdrawnBatchSummaryReportHandler extends BaseCsvReportHandler<NtsWithDrawnBatchSummaryReportDto> {
 
     private static final List<String> HEADERS = List.of("Usage Batch Name", "RRO Account Number", "RRO Name",
-        "Payment Date", "Load Date", "Gross Fund Pool in USD", "# Details NTS", "Gross USD NTS");
+        "Payment Date", "Load Date", "Gross Fund Pool in USD", "# Details NTS WD", "Gross USD NTS WD",
+        "# Details To Be Distributed", "Gross USD To Be Distributed");
 
     /**
      * Constructor.
@@ -44,6 +45,8 @@ public class NtsWithdrawnBatchSummaryReportHandler extends BaseCsvReportHandler<
         beanProperties.add(roundAndGetBeanBigDecimal(bean.getBatchGrossAmount()));
         beanProperties.add(getBeanPropertyAsString(bean.getNtsDetailsCount()));
         beanProperties.add(roundAndGetBeanBigDecimal(bean.getNtsDetailsGrossAmount()));
+        beanProperties.add(getBeanPropertyAsString(bean.getToBeDistributedDetailsCount()));
+        beanProperties.add(roundAndGetBeanBigDecimal(bean.getToBeDistributedDetailsGrossAmount()));
         return beanProperties;
     }
 
