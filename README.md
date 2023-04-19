@@ -1,3 +1,7 @@
+17.0.18
+-
+* CDP-1132 FDA: UDM Values Tab: Exception occurs on Pub Types filter window when search is performed
+
 17.0.17
 -
 * B-77079 FDA: Comparison by Aggregate Licensee Class and Title Report: rename Total Amount columns
