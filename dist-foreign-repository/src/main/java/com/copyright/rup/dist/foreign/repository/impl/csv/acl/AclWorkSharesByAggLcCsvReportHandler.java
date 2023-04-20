@@ -59,7 +59,7 @@ public class AclWorkSharesByAggLcCsvReportHandler extends BaseCsvReportHandler<A
 
     @Override
     protected List<String> getBeanProperties(AclWorkSharesByAggLcReportDto bean) {
-        List<String> beanProperties = new ArrayList<>();
+        List<String> beanProperties = new ArrayList<>(HEADERS.size());
         beanProperties.add(getBeanPropertyAsString(bean.getAggregateLicenseeClassId()));
         beanProperties.add(bean.getAggregateLicenseeClassName());
         beanProperties.add(getBeanPropertyAsString(bean.getWrWrkInst()));

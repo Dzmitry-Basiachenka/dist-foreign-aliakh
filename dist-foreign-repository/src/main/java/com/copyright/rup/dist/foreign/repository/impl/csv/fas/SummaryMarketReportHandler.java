@@ -33,7 +33,7 @@ public class SummaryMarketReportHandler extends BaseCsvReportHandler<SummaryMark
 
     @Override
     protected List<String> getBeanProperties(SummaryMarketReportDto bean) {
-        List<String> beanProperties = new ArrayList<>();
+        List<String> beanProperties = new ArrayList<>(HEADERS.size());
         beanProperties.add(getBeanPropertyAsString(bean.getRroAccountNumber()));
         beanProperties.add(bean.getRroName());
         beanProperties.add(bean.getBatchName());

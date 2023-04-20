@@ -34,7 +34,7 @@ public class SalUndistributedLiabilitiesReportHandler
 
     @Override
     protected List<String> getBeanProperties(SalUndistributedLiabilitiesReportDto bean) {
-        List<String> beanProperties = new ArrayList<>();
+        List<String> beanProperties = new ArrayList<>(HEADERS.size());
         beanProperties.add(getBeanLocalDate(bean.getDateReceived()));
         beanProperties.add(bean.getFundPoolName());
         beanProperties.add(roundAndGetBeanBigDecimal(bean.getGrossAmount()));

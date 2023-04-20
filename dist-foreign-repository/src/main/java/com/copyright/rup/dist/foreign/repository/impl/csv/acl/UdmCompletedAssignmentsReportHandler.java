@@ -32,7 +32,7 @@ public class UdmCompletedAssignmentsReportHandler extends BaseCsvReportHandler<U
 
     @Override
     protected List<String> getBeanProperties(UdmCompletedAssignmentsReportDto bean) {
-        List<String> beanProperties = new ArrayList<>();
+        List<String> beanProperties = new ArrayList<>(HEADERS.size());
         beanProperties.add(bean.getUserName());
         beanProperties.add(getBeanPropertyAsString(bean.getUsagesCount()));
         beanProperties.add(getBeanPropertyAsString(bean.getValuesCount()));

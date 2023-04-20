@@ -36,7 +36,7 @@ public class NtsWithdrawnBatchSummaryReportHandler extends BaseCsvReportHandler<
 
     @Override
     protected List<String> getBeanProperties(NtsWithDrawnBatchSummaryReportDto bean) {
-        List<String> beanProperties = new ArrayList<>();
+        List<String> beanProperties = new ArrayList<>(HEADERS.size());
         beanProperties.add(getBeanPropertyAsString(bean.getBatchName()));
         beanProperties.add(getBeanPropertyAsString(bean.getRroAccountNumber()));
         beanProperties.add(bean.getRroName());

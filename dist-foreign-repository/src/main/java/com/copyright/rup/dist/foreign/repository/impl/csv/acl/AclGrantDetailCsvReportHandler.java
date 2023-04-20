@@ -33,7 +33,7 @@ public class AclGrantDetailCsvReportHandler extends BaseCsvReportHandler<AclGran
 
     @Override
     protected List<String> getBeanProperties(AclGrantDetailDto bean) {
-        List<String> beanProperties = new ArrayList<>();
+        List<String> beanProperties = new ArrayList<>(HEADERS.size());
         beanProperties.add(getBeanPropertyAsString(bean.getGrantSetName()));
         beanProperties.add(getBeanPropertyAsString(bean.getGrantPeriod()));
         beanProperties.add(bean.getLicenseType());

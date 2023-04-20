@@ -42,7 +42,7 @@ public class NtsFundPoolsCsvReportHandler extends BaseCsvReportHandler<UsageBatc
 
     @Override
     protected List<String> getBeanProperties(UsageBatch bean) {
-        List<String> beanProperties = new ArrayList<>();
+        List<String> beanProperties = new ArrayList<>(HEADERS.size());
         beanProperties.add(getBeanPropertyAsString(bean.getName()));
         beanProperties.add(getBeanPropertyAsString(bean.getRro().getAccountNumber()));
         beanProperties.add(getBeanPropertyAsString(bean.getRro().getName()));

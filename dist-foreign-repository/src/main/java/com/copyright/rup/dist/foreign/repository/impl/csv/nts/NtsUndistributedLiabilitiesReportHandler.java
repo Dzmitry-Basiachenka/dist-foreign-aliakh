@@ -32,7 +32,7 @@ public class NtsUndistributedLiabilitiesReportHandler extends BaseCsvReportHandl
 
     @Override
     protected List<String> getBeanProperties(UndistributedLiabilitiesReportDto bean) {
-        List<String> beanProperties = new ArrayList<>();
+        List<String> beanProperties = new ArrayList<>(HEADERS.size());
         beanProperties.add(roundAndGetBeanBigDecimal(bean.getGrossAmount()));
         beanProperties.add(getBeanServiceFeePercent(bean.getEstimatedServiceFee()));
         beanProperties.add(roundAndGetBeanBigDecimal(bean.getEstimatedServiceFeeAmount()));

@@ -38,7 +38,7 @@ public class UdmWeeklySurveyReportHandler extends BaseCsvReportHandler<UdmWeekly
 
     @Override
     protected List<String> getBeanProperties(UdmWeeklySurveyReportDto bean) {
-        List<String> beanProperties = new ArrayList<>();
+        List<String> beanProperties = new ArrayList<>(HEADERS.size());
         beanProperties.add(getBeanPropertyAsString(bean.getPeriod()));
         beanProperties.add(convertDateToString(bean.getDateReceived()));
         beanProperties.add(bean.getChannel());

@@ -61,7 +61,7 @@ public class AclComparisonByAggLcClassAndTitleCsvReportHandler extends
 
     @Override
     protected List<String> getBeanProperties(AclComparisonByAggLcClassAndTitleReportDto bean) {
-        List<String> beanProperties = new ArrayList<>(21);
+        List<String> beanProperties = new ArrayList<>(HEADERS.size());
         beanProperties.add(getBeanPropertyAsString(bean.getAggregateLicenseeClassId()));
         beanProperties.add(bean.getAggregateLicenseeClassName());
         beanProperties.add(getBeanPropertyAsString(bean.getWrWrkInst()));

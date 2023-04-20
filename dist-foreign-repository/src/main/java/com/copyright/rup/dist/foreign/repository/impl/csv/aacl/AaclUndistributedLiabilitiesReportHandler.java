@@ -33,7 +33,7 @@ public class AaclUndistributedLiabilitiesReportHandler extends BaseCsvReportHand
 
     @Override
     protected List<String> getBeanProperties(FundPool bean) {
-        List<String> beanProperties = new ArrayList<>();
+        List<String> beanProperties = new ArrayList<>(HEADERS.size());
         beanProperties.add(getBeanPropertyAsString(bean.getName()));
         beanProperties.add(roundAndGetBeanBigDecimal(bean.getTotalAmount()));
         beanProperties.add(roundAndGetBeanBigDecimal(bean.getServiceFeeAmount()));

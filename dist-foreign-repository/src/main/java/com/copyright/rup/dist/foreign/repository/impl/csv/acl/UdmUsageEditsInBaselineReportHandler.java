@@ -34,7 +34,7 @@ public class UdmUsageEditsInBaselineReportHandler extends BaseCsvReportHandler<U
 
     @Override
     protected List<String> getBeanProperties(UdmUsageEditsInBaselineReportDto bean) {
-        List<String> beanProperties = new ArrayList<>();
+        List<String> beanProperties = new ArrayList<>(HEADERS.size());
         beanProperties.add(bean.getUsageId());
         beanProperties.add(getBeanPropertyAsString(bean.getActionType()));
         beanProperties.add(bean.getActionReason());

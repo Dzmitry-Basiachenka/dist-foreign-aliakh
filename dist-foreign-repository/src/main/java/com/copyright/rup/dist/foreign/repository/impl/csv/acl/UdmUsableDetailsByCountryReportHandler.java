@@ -32,7 +32,7 @@ public class UdmUsableDetailsByCountryReportHandler extends BaseCsvReportHandler
 
     @Override
     protected List<String> getBeanProperties(UdmUsableDetailsByCountryReportDto bean) {
-        List<String> beanProperties = new ArrayList<>();
+        List<String> beanProperties = new ArrayList<>(HEADERS.size());
         beanProperties.add(getBeanPropertyAsString(bean.getPeriod()));
         beanProperties.add(bean.getChannel());
         beanProperties.add(bean.getUsageOrigin());

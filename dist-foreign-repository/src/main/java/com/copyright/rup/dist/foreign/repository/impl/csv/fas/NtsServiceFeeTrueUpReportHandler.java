@@ -35,7 +35,7 @@ public class NtsServiceFeeTrueUpReportHandler extends BaseCsvReportHandler<NtsSe
 
     @Override
     protected List<String> getBeanProperties(NtsServiceFeeTrueUpReportDto bean) {
-        List<String> beanProperties = new ArrayList<>();
+        List<String> beanProperties = new ArrayList<>(HEADERS.size());
         beanProperties.add(roundAndGetBeanBigDecimal(bean.getBatchGrossAmount()));
         beanProperties.add(roundAndGetBeanBigDecimal(bean.getPreServiceFeeAmount()));
         beanProperties.add(roundAndGetBeanBigDecimal(bean.getPreServiceFeeFunds()));

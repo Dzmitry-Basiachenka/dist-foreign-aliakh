@@ -37,7 +37,7 @@ public class AaclExcludeDetailsByPayeeCsvReportHandler extends BaseCsvReportHand
 
     @Override
     protected List<String> getBeanProperties(PayeeTotalHolder bean) {
-        List<String> beanProperties = new ArrayList<>();
+        List<String> beanProperties = new ArrayList<>(HEADERS.size());
         beanProperties.add(selectedAccountNumbers.contains(bean.getPayee().getAccountNumber()) ? "[X]" : "[_]");
         beanProperties.add(getBeanPropertyAsString(bean.getPayee().getAccountNumber()));
         beanProperties.add(bean.getPayee().getName());

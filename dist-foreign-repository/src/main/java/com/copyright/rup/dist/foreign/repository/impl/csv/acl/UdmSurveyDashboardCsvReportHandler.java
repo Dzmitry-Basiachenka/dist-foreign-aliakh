@@ -34,7 +34,7 @@ public class UdmSurveyDashboardCsvReportHandler extends BaseCsvReportHandler<Udm
 
     @Override
     protected List<String> getBeanProperties(UdmSurveyDashboardReportDto bean) {
-        List<String> beanProperties = new ArrayList<>();
+        List<String> beanProperties = new ArrayList<>(HEADERS.size());
         beanProperties.add(bean.getUsageOrigin());
         beanProperties.add(bean.getChannel());
         beanProperties.add(getBeanPropertyAsString(bean.getPeriod()));

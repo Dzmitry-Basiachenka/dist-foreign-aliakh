@@ -41,7 +41,7 @@ public class SalFundPoolsExportHandler extends BaseCsvReportHandler<FundPool> {
 
     @Override
     protected List<String> getBeanProperties(FundPool bean) {
-        List<String> beanProperties = new ArrayList<>(17);
+        List<String> beanProperties = new ArrayList<>(HEADERS.size());
         SalFields salFields = bean.getSalFields();
         beanProperties.add(bean.getName());
         beanProperties.add(getBeanLocalDate(salFields.getDateReceived()));

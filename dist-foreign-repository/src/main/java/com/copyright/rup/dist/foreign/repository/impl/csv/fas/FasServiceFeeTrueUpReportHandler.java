@@ -36,7 +36,7 @@ public class FasServiceFeeTrueUpReportHandler extends BaseCsvReportHandler<FasSe
 
     @Override
     protected List<String> getBeanProperties(FasServiceFeeTrueUpReportDto bean) {
-        List<String> beanProperties = new ArrayList<>();
+        List<String> beanProperties = new ArrayList<>(HEADERS.size());
         beanProperties.add(getBeanPropertyAsString(bean.getRroAccountNumber()));
         beanProperties.add(bean.getRroName());
         beanProperties.add(getBeanLocalDate(bean.getPaymentDate()));

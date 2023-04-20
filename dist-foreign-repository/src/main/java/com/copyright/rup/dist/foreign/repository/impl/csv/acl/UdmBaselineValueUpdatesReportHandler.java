@@ -35,7 +35,7 @@ public class UdmBaselineValueUpdatesReportHandler extends BaseCsvReportHandler<U
 
     @Override
     protected List<String> getBeanProperties(UdmBaselineValueUpdatesReportDto bean) {
-        List<String> beanProperties = new ArrayList<>();
+        List<String> beanProperties = new ArrayList<>(HEADERS.size());
         beanProperties.add(bean.getValueId());
         beanProperties.add(getBeanPropertyAsString(bean.getActionType()));
         beanProperties.add(bean.getActionReason());

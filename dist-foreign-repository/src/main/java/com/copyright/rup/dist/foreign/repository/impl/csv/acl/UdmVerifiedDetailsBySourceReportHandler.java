@@ -32,7 +32,7 @@ public class UdmVerifiedDetailsBySourceReportHandler extends BaseCsvReportHandle
 
     @Override
     protected List<String> getBeanProperties(UdmVerifiedDetailsBySourceReportDto bean) {
-        List<String> beanProperties = new ArrayList<>();
+        List<String> beanProperties = new ArrayList<>(HEADERS.size());
         beanProperties.add(getBeanPropertyAsString(bean.getDetailLicenseeClassId()));
         beanProperties.add(bean.getDetailLicenseeClassName());
         beanProperties.add(getBeanPropertyAsString(bean.getAggregateLicenseeClassId()));

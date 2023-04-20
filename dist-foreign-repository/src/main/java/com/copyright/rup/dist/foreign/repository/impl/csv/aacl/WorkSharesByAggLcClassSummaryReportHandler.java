@@ -35,7 +35,7 @@ public class WorkSharesByAggLcClassSummaryReportHandler
 
     @Override
     protected List<String> getBeanProperties(WorkSharesByAggLcClassReportDto bean) {
-        List<String> beanProperties = new ArrayList<>();
+        List<String> beanProperties = new ArrayList<>(HEADERS.size());
         beanProperties.add(getBeanPropertyAsString(bean.getAggregateLicenseeClass().getId()));
         beanProperties.add(getBeanPropertyAsString(bean.getAggregateLicenseeClass().getEnrollmentProfile()));
         beanProperties.add(getBeanPropertyAsString(bean.getAggregateLicenseeClass().getDiscipline()));

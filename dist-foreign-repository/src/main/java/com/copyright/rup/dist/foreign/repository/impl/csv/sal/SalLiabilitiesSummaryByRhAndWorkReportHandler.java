@@ -47,7 +47,7 @@ public class SalLiabilitiesSummaryByRhAndWorkReportHandler
 
     @Override
     protected List<String> getBeanProperties(SalLiabilitiesSummaryByRhAndWorkReportDto bean) {
-        List<String> beanProperties = new ArrayList<>();
+        List<String> beanProperties = new ArrayList<>(HEADERS.size());
         beanProperties.add(getBeanPropertyAsString(bean.getRhAccountNumber()));
         beanProperties.add(bean.getRhName());
         beanProperties.add(bean.getWrWrkInst());

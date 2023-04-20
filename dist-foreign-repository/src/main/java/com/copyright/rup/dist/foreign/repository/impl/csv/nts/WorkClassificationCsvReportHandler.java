@@ -33,7 +33,7 @@ public class WorkClassificationCsvReportHandler extends BaseCsvReportHandler<Wor
 
     @Override
     protected List<String> getBeanProperties(WorkClassification bean) {
-        List<String> beanProperties = new ArrayList<>();
+        List<String> beanProperties = new ArrayList<>(HEADERS.size());
         beanProperties.add(getBeanPropertyAsString(bean.getWrWrkInst()));
         beanProperties.add(bean.getSystemTitle());
         beanProperties.add(bean.getClassification());
