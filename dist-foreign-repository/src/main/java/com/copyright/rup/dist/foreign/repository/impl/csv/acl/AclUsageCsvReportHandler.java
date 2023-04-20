@@ -37,7 +37,7 @@ public class AclUsageCsvReportHandler extends BaseCsvReportHandler<AclUsageDto> 
 
     @Override
     protected List<String> getBeanProperties(AclUsageDto bean) {
-        List<String> beanProperties = new ArrayList<>();
+        List<String> beanProperties = new ArrayList<>(HEADERS.size());
         beanProperties.add(bean.getId());
         beanProperties.add(getBeanPropertyAsString(bean.getPeriod()));
         beanProperties.add(bean.getUsageOrigin().name());

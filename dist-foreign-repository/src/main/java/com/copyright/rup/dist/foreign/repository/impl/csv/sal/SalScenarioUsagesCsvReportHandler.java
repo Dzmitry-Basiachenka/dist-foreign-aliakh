@@ -41,7 +41,7 @@ public class SalScenarioUsagesCsvReportHandler extends BaseCsvReportHandler<Usag
 
     @Override
     protected List<String> getBeanProperties(UsageDto bean) {
-        List<String> beanProperties = new ArrayList<>();
+        List<String> beanProperties = new ArrayList<>(HEADERS.size());
         beanProperties.add(bean.getId());
         beanProperties.add(bean.getStatus().name());
         beanProperties.add(getBeanPropertyAsString(bean.getSalUsage().getDetailType()));

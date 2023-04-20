@@ -35,7 +35,7 @@ public class AclScenarioRightsholderTotalsCsvReportHandler extends BaseCsvReport
 
     @Override
     protected List<String> getBeanProperties(AclRightsholderTotalsHolder bean) {
-        List<String> beanProperties = new ArrayList<>();
+        List<String> beanProperties = new ArrayList<>(HEADERS.size());
         beanProperties.add(getBeanPropertyAsString(bean.getRightsholder().getAccountNumber()));
         beanProperties.add(bean.getRightsholder().getName());
         beanProperties.add(getBeanPropertyAsString(bean.getPrintPayeeAccountNumber()));

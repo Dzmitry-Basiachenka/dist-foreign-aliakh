@@ -36,7 +36,7 @@ public class SalHistoricalItemBankDetailsReportHandler
 
     @Override
     protected List<String> getBeanProperties(SalHistoricalItemBankDetailsReportDto bean) {
-        List<String> beanProperties = new ArrayList<>();
+        List<String> beanProperties = new ArrayList<>(HEADERS.size());
         beanProperties.add(bean.getId());
         beanProperties.add(bean.getItemBankName());
         beanProperties.add(getBeanLocalDate(bean.getPeriodEndDate()));

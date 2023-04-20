@@ -40,7 +40,7 @@ public class UdmUsageCsvReportHandlerSpecialistManager extends BaseCsvReportHand
 
     @Override
     protected List<String> getBeanProperties(UdmUsageDto bean) {
-        List<String> beanProperties = new ArrayList<>();
+        List<String> beanProperties = new ArrayList<>(HEADERS.size());
         beanProperties.add(bean.getId());
         beanProperties.add(getBeanPropertyAsString(bean.getPeriod()));
         beanProperties.add(bean.getUsageOrigin().name());

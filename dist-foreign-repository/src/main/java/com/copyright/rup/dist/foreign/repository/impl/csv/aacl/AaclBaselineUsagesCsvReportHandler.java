@@ -37,7 +37,7 @@ public class AaclBaselineUsagesCsvReportHandler extends BaseCsvReportHandler<Usa
 
     @Override
     protected List<String> getBeanProperties(UsageDto bean) {
-        List<String> beanProperties = new ArrayList<>();
+        List<String> beanProperties = new ArrayList<>(HEADERS.size());
         beanProperties.add(bean.getAaclUsage().getBaselineId());
         beanProperties.add(getBeanPropertyAsString(bean.getWrWrkInst()));
         beanProperties.add(getBeanPropertyAsString(bean.getAaclUsage().getUsageAge().getPeriod()));

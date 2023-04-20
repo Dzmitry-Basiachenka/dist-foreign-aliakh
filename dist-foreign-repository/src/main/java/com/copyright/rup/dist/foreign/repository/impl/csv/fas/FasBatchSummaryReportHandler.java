@@ -38,7 +38,7 @@ public class FasBatchSummaryReportHandler extends BaseCsvReportHandler<FasBatchS
 
     @Override
     protected List<String> getBeanProperties(FasBatchSummaryReportDto bean) {
-        List<String> beanProperties = new ArrayList<>();
+        List<String> beanProperties = new ArrayList<>(HEADERS.size());
         beanProperties.add(getBeanPropertyAsString(bean.getBatchName()));
         beanProperties.add(getBeanPropertyAsString(bean.getRroAccountNumber()));
         beanProperties.add(bean.getRroName());

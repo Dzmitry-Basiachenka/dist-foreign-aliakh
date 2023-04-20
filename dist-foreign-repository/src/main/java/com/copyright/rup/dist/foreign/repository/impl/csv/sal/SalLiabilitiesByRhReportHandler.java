@@ -46,7 +46,7 @@ public class SalLiabilitiesByRhReportHandler extends BaseCsvReportHandler<SalLia
 
     @Override
     protected List<String> getBeanProperties(SalLiabilitiesByRhReportDto bean) {
-        List<String> beanProperties = new ArrayList<>();
+        List<String> beanProperties = new ArrayList<>(HEADERS.size());
         beanProperties.add(getBeanPropertyAsString(bean.getRhAccountNumber()));
         beanProperties.add(bean.getRhName());
         beanProperties.add(roundAndGetBeanBigDecimal(bean.getGrossAmount()));

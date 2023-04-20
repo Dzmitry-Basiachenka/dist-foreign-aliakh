@@ -35,7 +35,7 @@ public class SalFundPoolsReportHandler extends BaseCsvReportHandler<SalFundPoolR
 
     @Override
     protected List<String> getBeanProperties(SalFundPoolReportDto bean) {
-        List<String> beanProperties = new ArrayList<>();
+        List<String> beanProperties = new ArrayList<>(HEADERS.size());
         beanProperties.add(bean.getFundPoolName());
         beanProperties.add(bean.getScenarioName());
         beanProperties.add(getBeanLocalDate(bean.getDateReceived()));

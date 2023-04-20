@@ -38,7 +38,7 @@ public class AuditFasCsvReportHandler extends BaseCsvReportHandler<UsageDto> {
 
     @Override
     protected List<String> getBeanProperties(UsageDto bean) {
-        List<String> beanProperties = new ArrayList<>();
+        List<String> beanProperties = new ArrayList<>(HEADERS.size());
         beanProperties.add(bean.getId());
         beanProperties.add(bean.getStatus().name());
         beanProperties.add(bean.getProductFamily());

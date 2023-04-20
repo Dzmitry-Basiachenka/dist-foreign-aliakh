@@ -32,7 +32,7 @@ public class AclFundPoolByAggLcCsvReportHandler extends BaseCsvReportHandler<Acl
 
     @Override
     protected List<String> getBeanProperties(AclFundPoolByAggLcReportDto bean) {
-        List<String> beanProperties = new ArrayList<>();
+        List<String> beanProperties = new ArrayList<>(HEADERS.size());
         beanProperties.add(bean.getFundPoolName());
         beanProperties.add(getBeanPropertyAsString(bean.getPeriod()));
         beanProperties.add(bean.getLicenseType());

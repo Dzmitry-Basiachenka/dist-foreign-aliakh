@@ -49,7 +49,7 @@ public class AclLiabilitiesByAggLicClassCsvReportHandler
 
     @Override
     protected List<String> getBeanProperties(AclLiabilitiesByAggLicClassReportDto bean) {
-        List<String> beanProperties = new ArrayList<>();
+        List<String> beanProperties = new ArrayList<>(HEADERS.size());
         beanProperties.add(getBeanPropertyAsString(bean.getAggregateLicenseeClassId()));
         beanProperties.add(bean.getAggregateLicenseeClassName());
         beanProperties.add(getBeanBigDecimal(bean.getGrossAmount()));

@@ -39,7 +39,7 @@ public class AclScenarioDetailCsvReportHandler extends BaseCsvReportHandler<AclS
 
     @Override
     protected List<String> getBeanProperties(AclScenarioDetailDto bean) {
-        List<String> beanProperties = new ArrayList<>();
+        List<String> beanProperties = new ArrayList<>(HEADERS.size());
         beanProperties.add(bean.getId());
         beanProperties.add(bean.getOriginalDetailId());
         beanProperties.add(bean.getProductFamily());

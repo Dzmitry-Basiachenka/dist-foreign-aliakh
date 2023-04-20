@@ -50,7 +50,7 @@ public class AclLiabilitiesByRhCsvReportHandler
 
     @Override
     protected List<String> getBeanProperties(AclLiabilitiesByRhReportDto bean) {
-        List<String> beanProperties = new ArrayList<>();
+        List<String> beanProperties = new ArrayList<>(HEADERS.size());
         beanProperties.add(getBeanPropertyAsString(bean.getRhAccountNumber()));
         beanProperties.add(bean.getRhName());
         beanProperties.add(getBeanPropertyAsString(bean.getPrintPayeeAccountNumber()));

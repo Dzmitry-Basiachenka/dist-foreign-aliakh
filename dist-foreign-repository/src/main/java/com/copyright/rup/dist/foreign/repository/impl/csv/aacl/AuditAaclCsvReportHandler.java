@@ -37,7 +37,7 @@ public class AuditAaclCsvReportHandler extends BaseCsvReportHandler<UsageDto> {
 
     @Override
     protected List<String> getBeanProperties(UsageDto bean) {
-        List<String> beanProperties = new ArrayList<>();
+        List<String> beanProperties = new ArrayList<>(HEADERS.size());
         beanProperties.add(bean.getId());
         beanProperties.add(getBeanPropertyAsString(bean.getAaclUsage().getBaselineId()));
         beanProperties.add(bean.getStatus().name());

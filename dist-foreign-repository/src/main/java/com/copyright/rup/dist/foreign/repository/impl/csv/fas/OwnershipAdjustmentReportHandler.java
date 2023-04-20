@@ -32,7 +32,7 @@ public class OwnershipAdjustmentReportHandler extends BaseCsvReportHandler<Right
 
     @Override
     protected List<String> getBeanProperties(RightsholderDiscrepancy bean) {
-        List<String> beanProperties = new ArrayList<>();
+        List<String> beanProperties = new ArrayList<>(HEADERS.size());
         beanProperties.add(getBeanPropertyAsString(bean.getOldRightsholder().getAccountNumber()));
         beanProperties.add(bean.getOldRightsholder().getName());
         beanProperties.add(getBeanPropertyAsString(bean.getNewRightsholder().getAccountNumber()));

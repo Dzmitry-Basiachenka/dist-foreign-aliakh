@@ -31,7 +31,7 @@ public class UdmAssigneesByStatusReportHandler extends BaseCsvReportHandler<UdmA
 
     @Override
     protected List<String> getBeanProperties(UdmAssigneeStatusReportDto bean) {
-        List<String> beanProperties = new ArrayList<>();
+        List<String> beanProperties = new ArrayList<>(HEADERS.size());
         beanProperties.add(bean.getStatus());
         beanProperties.add(bean.getAssignee());
         beanProperties.add(getBeanPropertyAsString(bean.getCount()));
