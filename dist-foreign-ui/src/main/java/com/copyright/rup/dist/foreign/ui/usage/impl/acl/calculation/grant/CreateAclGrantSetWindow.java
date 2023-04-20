@@ -224,7 +224,7 @@ public class CreateAclGrantSetWindow extends Window {
 
     private CheckBox initEditableCheckBox() {
         editableCheckBox = new CheckBox();
-        editableCheckBox.setValue(true);
+        editableCheckBox.setValue(Boolean.TRUE);
         editableCheckBox.setCaption(ForeignUi.getMessage("label.editable"));
         VaadinUtils.addComponentStyle(editableCheckBox, "acl-editable-checkbox");
         return editableCheckBox;
@@ -259,7 +259,7 @@ public class CreateAclGrantSetWindow extends Window {
         periodFilterWidget.setLabelValue(selectedPeriods.size());
         periodValidationField.setValue(String.valueOf(selectedPeriods.size()));
         licenseTypeComboBox.setValue(aclGrantSet.getLicenseType());
-        editableCheckBox.setValue(true);
+        editableCheckBox.setValue(Boolean.TRUE);
         setEnabledComponents(false);
     }
 

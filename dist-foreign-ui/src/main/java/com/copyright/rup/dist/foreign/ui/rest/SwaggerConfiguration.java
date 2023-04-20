@@ -53,7 +53,7 @@ public class SwaggerConfiguration {
     @Bean
     public UiConfiguration uiConfiguration() {
         return UiConfigurationBuilder.builder()
-            .displayRequestDuration(true)
+            .displayRequestDuration(Boolean.TRUE)
             .validatorUrl("")
             .build();
     }

@@ -249,7 +249,7 @@ public class CreateAclScenarioWindow extends Window implements IDateFormatter {
                 publicationTypeWeightWidget.setAppliedParameters(controller.getAclHistoricalPublicationTypes());
             }
         });
-        editableCheckBox.setValue(true);
+        editableCheckBox.setValue(Boolean.TRUE);
         scenarioBinder.forField(editableCheckBox)
             .bind(AclScenario::isEditableFlag, AclScenario::setEditableFlag);
         VaadinUtils.addComponentStyle(editableCheckBox, "acl-scenario-editable-check-box");
@@ -386,7 +386,7 @@ public class CreateAclScenarioWindow extends Window implements IDateFormatter {
     }
 
     private void populateCopiedScenarioFields(AclScenario scenario) {
-        editableCheckBox.setValue(true);
+        editableCheckBox.setValue(Boolean.TRUE);
         licenseTypeComboBox.setValue(scenario.getLicenseType());
         periodComboBox.setValue(scenario.getPeriodEndDate());
         setEnableUsageBatchFundPoolAndGrantSetComboBoxes(true);

@@ -116,7 +116,7 @@ public class AclGrantService implements IAclGrantService {
         aclGrantDetail.setId(RupPersistUtils.generateUuid());
         aclGrantDetail.setGrantSetId(grantSetId);
         aclGrantDetail.setGrantStatus(grantStatus);
-        aclGrantDetail.setManualUploadFlag(false);
+        aclGrantDetail.setManualUploadFlag(Boolean.FALSE);
         aclGrantDetail.setTypeOfUse(grant.getTypeOfUse());
         aclGrantDetail.setRhAccountNumber(grant.getWorkGroupOwnerOrgNumber().longValueExact());
         aclGrantDetail.setWrWrkInst(grant.getWrWrkInst());
