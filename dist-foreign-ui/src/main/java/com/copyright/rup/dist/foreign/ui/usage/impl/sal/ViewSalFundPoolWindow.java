@@ -166,6 +166,8 @@ public class ViewSalFundPoolWindow extends Window implements SearchWidget.ISearc
             .setWidth(115);
         grid.addColumn(fundPool -> getPercentColumnAsString(fundPool.getSalFields().getItemBankSplitPercent()))
             .setCaption(ForeignUi.getMessage("table.column.item_bank_split_percent"))
+            .setComparator((fundPool1, fundPool2) -> fundPool1.getSalFields().getItemBankSplitPercent()
+                .compareTo(fundPool2.getSalFields().getItemBankSplitPercent()))
             .setWidth(150);
         grid.addColumn(fundPool -> fundPool.getSalFields().getGradeKto5NumberOfStudents())
             .setCaption(ForeignUi.getMessage("table.column.grade_K_5_number_of_students"))
