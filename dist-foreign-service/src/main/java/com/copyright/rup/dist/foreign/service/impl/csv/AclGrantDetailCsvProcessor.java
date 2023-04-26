@@ -89,8 +89,8 @@ public class AclGrantDetailCsvProcessor extends DistCsvProcessor<AclGrantDetailD
             detail.setTypeOfUse(StringUtils.upperCase(getString(row, Header.TYPE_OF_USE, headers)));
             detail.setRhAccountNumber(getLong(row, Header.RH_ACCOUNT_NUMBER, headers));
             detail.setGrantStatus("GRANT");
-            detail.setEligible(true);
-            detail.setManualUploadFlag(true);
+            detail.setEligible(Boolean.TRUE);
+            detail.setManualUploadFlag(Boolean.TRUE);
             return detail;
         }
     }

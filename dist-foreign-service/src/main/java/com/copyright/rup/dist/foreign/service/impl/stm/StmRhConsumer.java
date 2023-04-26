@@ -50,9 +50,9 @@ public class StmRhConsumer implements IConsumer<List<Usage>> {
         if (Objects.nonNull(usages)) {
             LOGGER.trace("Consume usages for processing STM RH. Started. UsageIds={}", LogUtils.ids(usages));
             Predicate<Usage> successPredicate = usage -> {
-                boolean excludingStm = Objects.requireNonNull(batchService.getUsageBatchById(usage.getBatchId())
-                    .getNtsFields())
-                    .isExcludingStm();
+                boolean excludingStm =
+                    Objects.requireNonNull(batchService.getUsageBatchById(usage.getBatchId()).getNtsFields())
+                        .isExcludingStm();
                 LOGGER.trace("Consume usages for processing STM RH. Processed. UsageId={}, BatchId={}, ExcludingStm={}",
                     usage.getId(), usage.getBatchId(), excludingStm);
                 return excludingStm;
@@ -60,19 +60,18 @@ public class StmRhConsumer implements IConsumer<List<Usage>> {
             Map<Boolean, List<Usage>> usagesByExcludingStm = usages
                 .stream()
                 .collect(Collectors.partitioningBy(successPredicate));
-            List<Usage> usagesExcludingStm = usagesByExcludingStm.get(true);
+            List<Usage> usagesExcludingStm = usagesByExcludingStm.get(Boolean.TRUE);
             if (!usagesExcludingStm.isEmpty()) {
                 String productFamily = usagesExcludingStm.get(0).getProductFamily();
                 stmRhService.processStmRhs(usagesExcludingStm, productFamily);
                 stmRhProcessor.executeNextChainProcessor(usagesExcludingStm,
                     usage -> UsageStatusEnum.NON_STM_RH == usage.getStatus());
             }
-            List<Usage> usagesNonExcludingStm = usagesByExcludingStm.get(false);
+            List<Usage> usagesNonExcludingStm = usagesByExcludingStm.get(Boolean.FALSE);
             if (!usagesNonExcludingStm.isEmpty()) {
-                usagesNonExcludingStm.forEach(usage -> {
+                usagesNonExcludingStm.forEach(usage ->
                     LOGGER.trace("Consume usages for processing STM RH. Skipped. UsageId={}, " +
-                        "Reason=STM RH exclusion is not needed", usage.getId());
-                });
+                        "Reason=STM RH exclusion is not needed", usage.getId()));
                 stmRhProcessor.executeNextChainProcessor(usagesNonExcludingStm, usage -> true);
             }
             LOGGER.trace("Consume usages for processing STM RH. Finished. UsageIds={}", LogUtils.ids(usages));

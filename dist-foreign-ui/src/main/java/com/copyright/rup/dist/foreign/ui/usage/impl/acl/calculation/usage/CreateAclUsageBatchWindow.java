@@ -206,7 +206,7 @@ public class CreateAclUsageBatchWindow extends Window {
 
     private CheckBox initEditableCheckBox() {
         editableCheckBox = new CheckBox();
-        editableCheckBox.setValue(true);
+        editableCheckBox.setValue(Boolean.TRUE);
         editableCheckBox.setCaption(ForeignUi.getMessage("label.editable"));
         VaadinUtils.addComponentStyle(editableCheckBox, "acl-editable-checkbox");
         return editableCheckBox;
@@ -259,7 +259,7 @@ public class CreateAclUsageBatchWindow extends Window {
             periodFilterWidget.addStyleName(EMPTY_PERIOD_STYLE);
         }
         periodFilterWidget.setEnabled(isEnable);
-        editableCheckBox.setValue(true);
+        editableCheckBox.setValue(Boolean.TRUE);
         editableCheckBox.setEnabled(isEnable);
     }
 }

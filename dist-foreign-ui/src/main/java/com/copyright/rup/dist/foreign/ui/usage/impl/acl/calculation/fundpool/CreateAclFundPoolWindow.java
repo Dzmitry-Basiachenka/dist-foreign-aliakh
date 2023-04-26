@@ -218,7 +218,7 @@ public class CreateAclFundPoolWindow extends Window {
 
     private CheckBox initLdmtCheckBox() {
         ldmtCheckBox = new CheckBox();
-        ldmtCheckBox.setValue(false);
+        ldmtCheckBox.setValue(Boolean.FALSE);
         ldmtCheckBox.addValueChangeListener(event -> {
             uploadField.setEnabled(!event.getValue());
             binder.validate();

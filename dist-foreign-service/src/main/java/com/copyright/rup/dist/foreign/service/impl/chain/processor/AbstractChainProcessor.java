@@ -49,11 +49,11 @@ public abstract class AbstractChainProcessor<T> implements IChainProcessor<T> {
         Map<Boolean, List<T>> partitionedItems = items
             .stream()
             .collect(Collectors.partitioningBy(successPredicate));
-        List<T> succeedItems = partitionedItems.get(true);
+        List<T> succeedItems = partitionedItems.get(Boolean.TRUE);
         if (!succeedItems.isEmpty() && Objects.nonNull(getSuccessProcessor())) {
             getSuccessProcessor().process(succeedItems);
         }
-        List<T> failedItems = partitionedItems.get(false);
+        List<T> failedItems = partitionedItems.get(Boolean.FALSE);
         if (!failedItems.isEmpty() && Objects.nonNull(getFailureProcessor())) {
             getFailureProcessor().process(failedItems);
         }
