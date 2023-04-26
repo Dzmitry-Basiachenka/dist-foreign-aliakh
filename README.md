@@ -1,3 +1,18 @@
+18.0.0
+-
+* B-78666 FDA: Add columns to NTS WD Batch Summary Report: add number and gross amount columns for details with status TO_BE_DISTRIBUTED
+* B-57778 FDA: ACLCI usage tab export: implement Export button
+* B-57778 FDA: ACLCI usage tab export: implement ACLCI report repository
+* B-57778 FDA: ACLCI usage tab export: update report service
+* B-68574 FDA: View and Delete ACLCI batch: implement view usage batch window
+* B-68574 FDA: View and Delete ACLCI batch: implement back end logic to delete Usage Batch
+* B-68574 FDA: View and Delete ACLCI batch: apply permissions for delete button
+* B-77995 Tech Debt: FDA: apply Function.identity() instead of no-op lambda method
+* B-77994 Tech Debt: FDA: fix SonarQube new code bugs
+* B-77995 Tech Debt: FDA: replace copy constructor setters call with direct assingment
+* B-77995 Tech Debt: FDA: use expected size constructor for ArrayList for CSV report handlers
+* B-77995 Tech Debt: FDA: avoid redundant boxing for boolean values
+
 17.0.18
 -
 * CDP-1132 FDA: UDM Values Tab: Exception occurs on Pub Types filter window when search is performed
