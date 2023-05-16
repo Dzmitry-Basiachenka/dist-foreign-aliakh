@@ -23,17 +23,6 @@ allprojects {
     group = 'com.copyright.rup.dist.foreign'
 }
 
-//force all dependencies with group 'org.springframework.security' to use version 5.7.5
-allprojects {
-    configurations.all {
-        resolutionStrategy.eachDependency { details ->
-            if (details.requested.group == 'org.springframework.security') {
-                details.useVersion "5.7.5"
-            }
-        }
-    }
-}
-
 subprojects {
     def styleCheckConfigDir = rootProject.getProjectDir().getCanonicalPath() + '/tools/stylecheck/'
     checkstyle {
