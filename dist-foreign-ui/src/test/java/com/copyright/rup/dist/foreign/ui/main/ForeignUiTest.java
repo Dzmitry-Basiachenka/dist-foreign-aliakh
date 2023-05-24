@@ -91,7 +91,7 @@ public class ForeignUiTest {
 
     @Test
     public void testGetApplicationName() {
-        assertEquals("Foreign Distribution", new ForeignUi().getApplicationTitle());
+        assertEquals("Federated Distribution", new ForeignUi().getApplicationTitle());
     }
 
     @Test
