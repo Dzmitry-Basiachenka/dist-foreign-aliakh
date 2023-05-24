@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.domain.filter;
 
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
+import com.copyright.rup.dist.foreign.domain.UdmActionReason;
 import com.copyright.rup.dist.foreign.domain.UdmChannelEnum;
 import com.copyright.rup.dist.foreign.domain.UdmUsageOriginEnum;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
@@ -37,6 +38,7 @@ public class UdmUsageFilter {
     private Set<String> reportedPubTypes = new HashSet<>();
     private Set<String> reportedTypeOfUses = new HashSet<>();
     private Set<String> pubFormats = new HashSet<>();
+    private Set<UdmActionReason> actionReasons = new HashSet<>();
     private LocalDate usageDateFrom;
     private LocalDate usageDateTo;
     private LocalDate surveyStartDateFrom;
@@ -80,6 +82,7 @@ public class UdmUsageFilter {
             this.reportedPubTypes = filter.getReportedPubTypes();
             this.reportedTypeOfUses = filter.getReportedTypeOfUses();
             this.pubFormats = filter.getPubFormats();
+            this.actionReasons = filter.getActionReasons();
             this.usageDateFrom = filter.getUsageDateFrom();
             this.usageDateTo = filter.getUsageDateTo();
             this.surveyStartDateFrom = filter.getSurveyStartDateFrom();
@@ -173,6 +176,14 @@ public class UdmUsageFilter {
 
     public void setPubFormats(Set<String> pubFormats) {
         this.pubFormats = pubFormats;
+    }
+
+    public Set<UdmActionReason> getActionReasons() {
+        return actionReasons;
+    }
+
+    public void setActionReasons(Set<UdmActionReason> actionReasons) {
+        this.actionReasons = actionReasons;
     }
 
     public LocalDate getUsageDateFrom() {
@@ -348,6 +359,7 @@ public class UdmUsageFilter {
             && CollectionUtils.isEmpty(reportedPubTypes)
             && CollectionUtils.isEmpty(reportedTypeOfUses)
             && CollectionUtils.isEmpty(pubFormats)
+            && CollectionUtils.isEmpty(actionReasons)
             && null == usageDateFrom
             && null == usageDateTo
             && null == surveyStartDateFrom
@@ -389,6 +401,7 @@ public class UdmUsageFilter {
             .append(reportedPubTypes, that.reportedPubTypes)
             .append(reportedTypeOfUses, that.reportedTypeOfUses)
             .append(pubFormats, that.pubFormats)
+            .append(actionReasons, that.actionReasons)
             .append(usageDateFrom, that.usageDateFrom)
             .append(usageDateTo, that.usageDateTo)
             .append(surveyStartDateFrom, that.surveyStartDateFrom)
@@ -424,6 +437,7 @@ public class UdmUsageFilter {
             .append(reportedPubTypes)
             .append(reportedTypeOfUses)
             .append(pubFormats)
+            .append(actionReasons)
             .append(usageDateFrom)
             .append(usageDateTo)
             .append(surveyStartDateFrom)
@@ -459,6 +473,7 @@ public class UdmUsageFilter {
             .append("reportedPubTypes", reportedPubTypes)
             .append("reportedTypeOfUses", reportedTypeOfUses)
             .append("pubFormats", pubFormats)
+            .append("actionReasons", actionReasons)
             .append("usageDateFrom", usageDateFrom)
             .append("usageDateTo", usageDateTo)
             .append("surveyStartDateFrom", surveyStartDateFrom)

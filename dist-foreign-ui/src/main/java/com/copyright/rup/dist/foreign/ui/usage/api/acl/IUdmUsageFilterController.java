@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.api.acl;
 
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
+import com.copyright.rup.dist.foreign.domain.UdmActionReason;
 import com.copyright.rup.dist.foreign.domain.UdmBatch;
 import com.copyright.rup.vaadin.widget.api.IFilterController;
 
@@ -57,4 +58,9 @@ public interface IUdmUsageFilterController extends IFilterController<IUdmUsageFi
      * @return list of detail licensee classes.
      */
     List<DetailLicenseeClass> getDetailLicenseeClasses();
+
+    /**
+     * @return list of {@link UdmActionReason}.
+     */
+    List<UdmActionReason> getAllActionReasons();
 }

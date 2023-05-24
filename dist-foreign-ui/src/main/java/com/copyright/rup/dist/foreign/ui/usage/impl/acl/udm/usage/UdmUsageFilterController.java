@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.usage;
 
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
+import com.copyright.rup.dist.foreign.domain.UdmActionReason;
 import com.copyright.rup.dist.foreign.domain.UdmBatch;
 import com.copyright.rup.dist.foreign.service.api.ILicenseeClassService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmBatchService;
@@ -74,6 +75,11 @@ public class UdmUsageFilterController extends CommonController<IUdmUsageFilterWi
     @Override
     public List<DetailLicenseeClass> getDetailLicenseeClasses() {
         return licenseeClassService.getDetailLicenseeClasses(FdaConstants.ACL_PRODUCT_FAMILY);
+    }
+
+    @Override
+    public List<UdmActionReason> getAllActionReasons() {
+        return udmUsageService.getAllActionReasons();
     }
 
     @Override

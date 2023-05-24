@@ -10,6 +10,7 @@ import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.impl.acl.CommonAclFiltersWindow;
+import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.ActionReasonFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.AssigneeFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.DetailLicenseeClassFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.PublicationFormatFilterWidget;
@@ -114,6 +115,7 @@ public class UdmUsageFiltersWindow extends CommonAclFiltersWindow {
     private PublicationFormatFilterWidget publicationFormatFilterWidget;
     private DetailLicenseeClassFilterWidget detailLicenseeClassFilterWidget;
     private ReportedTypeOfUseFilterWidget reportedTypeOfUseFilterWidget;
+    private ActionReasonFilterWidget actionReasonFilterWidget;
     private final UdmUsageFilter usageFilter;
     private final IUdmUsageFilterController controller;
 
@@ -137,7 +139,7 @@ public class UdmUsageFiltersWindow extends CommonAclFiltersWindow {
     private ComponentContainer initRootLayout() {
         VerticalLayout fieldsLayout = new VerticalLayout();
         fieldsLayout.addComponents(initAssigneeLicenseeClassLayout(), initReportedPubTypeReportedTypeOfUseLayout(),
-            initPublicationFormatFilterWidget(), initUsageDateLayout(), initSurveyDateLayout(),
+            initPublicationFormatActionReasonLayout(), initUsageDateLayout(), initSurveyDateLayout(),
             initChannelTypeOfUseLayout(), initWrWrkInstLayout(), initReportedTitleLayout(), initSystemTitleLayout(),
             initUsageDetailIdLayout(), initCompanyIdLayout(), initCompanyNameLayout(), initSurveyRespondentLayout(),
             initSurveyCountryLayout(), initLanguageLayout(), initAnnualMultiplierLayout(), initAnnualizedCopiesLayout(),
@@ -190,6 +192,12 @@ public class UdmUsageFiltersWindow extends CommonAclFiltersWindow {
         return reportedTypeOfUseFilterWidget;
     }
 
+    private ActionReasonFilterWidget initActionReasonFilterWidget() {
+        actionReasonFilterWidget =
+            new ActionReasonFilterWidget(controller::getAllActionReasons, usageFilter.getActionReasons());
+        return actionReasonFilterWidget;
+    }
+
     private HorizontalLayout initAssigneeLicenseeClassLayout() {
         HorizontalLayout horizontalLayout =
             new HorizontalLayout(initAssigneeFilterWidget(), initDetailLicenseeClassFilterWidget());
@@ -201,6 +209,14 @@ public class UdmUsageFiltersWindow extends CommonAclFiltersWindow {
     private HorizontalLayout initReportedPubTypeReportedTypeOfUseLayout() {
         HorizontalLayout horizontalLayout =
             new HorizontalLayout(initReportedPublicationTypeFilterWidget(), initReportedTypeOfUseFilterWidget());
+        horizontalLayout.setSizeFull();
+        horizontalLayout.setSpacing(true);
+        return horizontalLayout;
+    }
+
+    private HorizontalLayout initPublicationFormatActionReasonLayout() {
+        HorizontalLayout horizontalLayout =
+            new HorizontalLayout(initPublicationFormatFilterWidget(), initActionReasonFilterWidget());
         horizontalLayout.setSizeFull();
         horizontalLayout.setSpacing(true);
         return horizontalLayout;
@@ -645,6 +661,7 @@ public class UdmUsageFiltersWindow extends CommonAclFiltersWindow {
                 usageFilter.setPubFormats(publicationFormatFilterWidget.getSelectedItemsIds());
                 usageFilter.setDetailLicenseeClasses(detailLicenseeClassFilterWidget.getSelectedItemsIds());
                 usageFilter.setReportedTypeOfUses(reportedTypeOfUseFilterWidget.getSelectedItemsIds());
+                usageFilter.setActionReasons(actionReasonFilterWidget.getSelectedItemsIds());
                 close();
             } catch (ValidationException e) {
                 Windows.showValidationErrorWindow(
@@ -668,6 +685,7 @@ public class UdmUsageFiltersWindow extends CommonAclFiltersWindow {
         reportedPubTypeFilterWidget.reset();
         reportedTypeOfUseFilterWidget.reset();
         publicationFormatFilterWidget.reset();
+        actionReasonFilterWidget.reset();
         filterBinder.readBean(new UdmUsageFilter());
     }
 
