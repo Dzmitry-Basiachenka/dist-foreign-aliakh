@@ -11,6 +11,7 @@ import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
+import com.copyright.rup.dist.foreign.domain.UdmActionReason;
 import com.copyright.rup.dist.foreign.domain.UdmBatch;
 import com.copyright.rup.dist.foreign.domain.UdmChannelEnum;
 import com.copyright.rup.dist.foreign.domain.UdmUsageOriginEnum;
@@ -65,7 +66,7 @@ public class UdmUsageAppliedFilterWidgetTest {
         Component component = widget.getContent();
         assertThat(component, instanceOf(VerticalLayout.class));
         VerticalLayout verticalLayout = (VerticalLayout) component;
-        assertEquals(28, verticalLayout.getComponentCount());
+        assertEquals(29, verticalLayout.getComponentCount());
         verifyLabel(((VerticalLayout) component).getComponent(0), "Batches",
             "batch 2022, Udm Batch 2021, Udm Batch 2022");
         verifyLabel(((VerticalLayout) component).getComponent(1), "Periods", "202312, 202206, 202106");
@@ -79,39 +80,41 @@ public class UdmUsageAppliedFilterWidgetTest {
         verifyLabel(((VerticalLayout) component).getComponent(7), "Reported Types of Use",
             "FAX_PHOTOCOPIES, PRINT_COPIES");
         verifyLabel(((VerticalLayout) component).getComponent(8), "Publication Formats", "Digital, Print");
-        verifyLabel(((VerticalLayout) component).getComponent(9), "Usage Date From", "04/12/2020");
-        verifyLabel(((VerticalLayout) component).getComponent(10), "Usage Date To", "06/20/2020");
-        verifyLabel(((VerticalLayout) component).getComponent(11), "Survey Start Date From", "03/12/2020");
-        verifyLabel(((VerticalLayout) component).getComponent(12), "Survey Start Date To", "05/20/2020");
-        verifyLabel(((VerticalLayout) component).getComponent(13), "Channel", "CCC");
-        verifyLabel(((VerticalLayout) component).getComponent(14), "Type of Use", "PRINT");
-        verifyLabelWithOperator(((VerticalLayout) component).getComponent(15),
-            "<li><b><i>Wr Wrk Inst From: </i></b>254327612</li><li><b><i>Operator: </i></b>EQUALS</li>");
+        verifyLabel(((VerticalLayout) component).getComponent(9), "Action Reasons",
+            "Created new work, Incorrect/inappropriate Det Lic Class");
+        verifyLabel(((VerticalLayout) component).getComponent(10), "Usage Date From", "04/12/2020");
+        verifyLabel(((VerticalLayout) component).getComponent(11), "Usage Date To", "06/20/2020");
+        verifyLabel(((VerticalLayout) component).getComponent(12), "Survey Start Date From", "03/12/2020");
+        verifyLabel(((VerticalLayout) component).getComponent(13), "Survey Start Date To", "05/20/2020");
+        verifyLabel(((VerticalLayout) component).getComponent(14), "Channel", "CCC");
+        verifyLabel(((VerticalLayout) component).getComponent(15), "Type of Use", "PRINT");
         verifyLabelWithOperator(((VerticalLayout) component).getComponent(16),
-            "<li><b><i>Reported Title: </i></b>The New York times</li><li><b><i>Operator: </i></b>EQUALS</li>");
+            "<li><b><i>Wr Wrk Inst From: </i></b>254327612</li><li><b><i>Operator: </i></b>EQUALS</li>");
         verifyLabelWithOperator(((VerticalLayout) component).getComponent(17),
-            "<li><b><i>System Title: </i></b>New York times</li><li><b><i>Operator: </i></b>EQUALS</li>");
+            "<li><b><i>Reported Title: </i></b>The New York times</li><li><b><i>Operator: </i></b>EQUALS</li>");
         verifyLabelWithOperator(((VerticalLayout) component).getComponent(18),
+            "<li><b><i>System Title: </i></b>New York times</li><li><b><i>Operator: </i></b>EQUALS</li>");
+        verifyLabelWithOperator(((VerticalLayout) component).getComponent(19),
             "<li><b><i>Usage Detail ID: </i></b>b989e02b-1f1d-4637-b89e-dc99938a51b9</li>" +
                 "<li><b><i>Operator: </i></b>EQUALS</li>");
-        verifyLabelWithOperator(((VerticalLayout) component).getComponent(19),
-            "<li><b><i>Company ID From: </i></b>1136</li><li><b><i>Operator: </i></b>EQUALS</li>");
         verifyLabelWithOperator(((VerticalLayout) component).getComponent(20),
-            "<li><b><i>Company Name: </i></b>Albany International Corp.</li><li><b><i>Operator: </i></b>EQUALS</li>");
+            "<li><b><i>Company ID From: </i></b>1136</li><li><b><i>Operator: </i></b>EQUALS</li>");
         verifyLabelWithOperator(((VerticalLayout) component).getComponent(21),
+            "<li><b><i>Company Name: </i></b>Albany International Corp.</li><li><b><i>Operator: </i></b>EQUALS</li>");
+        verifyLabelWithOperator(((VerticalLayout) component).getComponent(22),
             "<li><b><i>Survey Respondent: </i></b>fa0276c3-55d6-42cd-8ffe-e9124acae02f</li>" +
                 "<li><b><i>Operator: </i></b>EQUALS</li>");
-        verifyLabelWithOperator(((VerticalLayout) component).getComponent(22),
-            "<li><b><i>Survey Country: </i></b>United States</li><li><b><i>Operator: </i></b>EQUALS</li>");
         verifyLabelWithOperator(((VerticalLayout) component).getComponent(23),
-            "<li><b><i>Language: </i></b>English</li><li><b><i>Operator: </i></b>EQUALS</li>");
+            "<li><b><i>Survey Country: </i></b>United States</li><li><b><i>Operator: </i></b>EQUALS</li>");
         verifyLabelWithOperator(((VerticalLayout) component).getComponent(24),
-            "<li><b><i>Annual Multiplier From: </i></b>25</li><li><b><i>Operator: </i></b>EQUALS</li>");
+            "<li><b><i>Language: </i></b>English</li><li><b><i>Operator: </i></b>EQUALS</li>");
         verifyLabelWithOperator(((VerticalLayout) component).getComponent(25),
-            "<li><b><i>Annualized Copies From: </i></b>425</li><li><b><i>Operator: </i></b>LESS_THAN</li>");
+            "<li><b><i>Annual Multiplier From: </i></b>25</li><li><b><i>Operator: </i></b>EQUALS</li>");
         verifyLabelWithOperator(((VerticalLayout) component).getComponent(26),
-            "<li><b><i>Statistical Multiplier From: </i></b>1</li><li><b><i>Operator: </i></b>GREATER_THAN</li>");
+            "<li><b><i>Annualized Copies From: </i></b>425</li><li><b><i>Operator: </i></b>LESS_THAN</li>");
         verifyLabelWithOperator(((VerticalLayout) component).getComponent(27),
+            "<li><b><i>Statistical Multiplier From: </i></b>1</li><li><b><i>Operator: </i></b>GREATER_THAN</li>");
+        verifyLabelWithOperator(((VerticalLayout) component).getComponent(28),
             "<li><b><i>Quantity From: </i></b>2</li><li><b><i>Quantity To: </i></b>400</li>" +
                 "<li><b><i>Operator: </i></b>BETWEEN</li>");
     }
@@ -139,6 +142,9 @@ public class UdmUsageAppliedFilterWidgetTest {
             buildDetailLicenseeClass(1, "Food and Tobacco"),
             buildDetailLicenseeClass(26, "Law Firms")));
         filter.setReportedTypeOfUses(Set.of("PRINT_COPIES", "FAX_PHOTOCOPIES"));
+        filter.setActionReasons(Set.of(
+            new UdmActionReason("be6ece83-4739-479d-b468-5dcea822e1f8", "Incorrect/inappropriate Det Lic Class"),
+            new UdmActionReason("04b99a98-56d3-4f59-bfcb-2c72d18ebbbc", "Created new work")));
         filter.setTypeOfUse("PRINT");
         filter.setUsageDateFrom(LocalDate.of(2020, 4, 12));
         filter.setUsageDateTo(LocalDate.of(2020, 6, 20));
