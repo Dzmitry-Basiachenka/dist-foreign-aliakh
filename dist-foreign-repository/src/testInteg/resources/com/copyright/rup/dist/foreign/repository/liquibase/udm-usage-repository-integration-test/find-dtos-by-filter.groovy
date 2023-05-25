@@ -86,6 +86,7 @@ databaseChangeLog {
             column(name: 'annualized_copies', value: 75.00000)
             column(name: 'comment', value: 'Assigned to wjohn for review')
             column(name: 'research_url', value: 'google.com')
+            column(name: 'df_udm_action_reason_uid', value: 'ccbd22af-32bf-4162-8145-d49eae14c800')
             column(name: 'updated_by_user', value: 'user@copyright.com')
             column(name: 'created_by_user', value: 'user@copyright.com')
             column(name: 'created_datetime', value: '2021-02-14 12:00:00+00')

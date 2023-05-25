@@ -142,6 +142,8 @@ public class UdmUsageRepositoryIntegrationTest {
     private static final String USER_NAME = "user@copyright.com";
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
     private static final String INVALID_VALUE = "Invalid value";
+    private final UdmActionReason actionReason =
+        new UdmActionReason("ccbd22af-32bf-4162-8145-d49eae14c800", "User is not reporting a Mkt Rsch Rpt");
 
     static {
         OBJECT_MAPPER.registerModule(new JavaTimeModule());
@@ -226,6 +228,7 @@ public class UdmUsageRepositoryIntegrationTest {
         filter.setReportedTypeOfUses(Set.of(REPORTED_TYPE_OF_USE));
         filter.setTypeOfUse(TYPE_OF_USE);
         filter.setPubFormats(Set.of(PUBLICATION_FORMAT));
+        filter.setActionReasons(Set.of(actionReason));
         filter.setUsageDateFrom(LocalDate.of(2020, 4, 12));
         filter.setUsageDateTo(LocalDate.of(2020, 6, 20));
         filter.setSurveyStartDateFrom(LocalDate.of(2020, 3, 12));
@@ -300,6 +303,12 @@ public class UdmUsageRepositoryIntegrationTest {
     public void testFindDtosByFilterReportedTypeOfUses() {
         assertFilteringFindDtosByFilter(filter ->
             filter.setReportedTypeOfUses(Set.of(REPORTED_TYPE_OF_USE)), UDM_USAGE_UID_5, UDM_USAGE_UID_6);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindDtosByFilterActionReasons() {
+        assertFilteringFindDtosByFilter(filter -> filter.setActionReasons(Set.of(actionReason)), UDM_USAGE_UID_6);
     }
 
     @Test
@@ -877,6 +886,12 @@ public class UdmUsageRepositoryIntegrationTest {
     @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindCountByFilterReportedTypeOfUses() {
         assertFilteringFindCountByFilter(filter -> filter.setReportedTypeOfUses(Set.of(REPORTED_TYPE_OF_USE)), 2);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindCountByFilterActionReasons() {
+        assertFilteringFindCountByFilter(filter -> filter.setActionReasons(Set.of(actionReason)), 1);
     }
 
     @Test
@@ -1663,6 +1678,7 @@ public class UdmUsageRepositoryIntegrationTest {
         assertEquals(expectedUsage.getComment(), actualUsage.getComment());
         assertEquals(expectedUsage.getResearchUrl(), actualUsage.getResearchUrl());
         assertEquals(expectedUsage.getIneligibleReason(), actualUsage.getIneligibleReason());
+        assertEquals(expectedUsage.getActionReason(), actualUsage.getActionReason());
     }
 
     private void verifyUsage(UdmUsage expectedUsage, UdmUsage actualUsage) {

@@ -37,6 +37,10 @@
     "quantity": 3,
     "comment": "Assigned to wjohn for review",
     "researchUrl": "google.com",
-    "version": 2
+    "version": 2,
+    "actionReason": {
+      "id": "ccbd22af-32bf-4162-8145-d49eae14c800",
+      "reason": "User is not reporting a Mkt Rsch Rpt"
+    }
   }
 ]
