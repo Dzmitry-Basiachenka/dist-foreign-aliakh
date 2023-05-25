@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.usage;
 
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
+import com.copyright.rup.dist.foreign.domain.UdmActionReason;
 import com.copyright.rup.dist.foreign.domain.UdmBatch;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
 import com.copyright.rup.dist.foreign.ui.common.CommonAppliedFilterPanel;
@@ -68,6 +69,8 @@ public class UdmUsageAppliedFilterWidget extends CommonAppliedFilterPanel implem
                 "label.reported_types_of_use", String::valueOf), layout);
             addLabel(createLabelWithMultipleValues(sortStringValuesByNaturalOrder(filter.getPubFormats()),
                 "label.publication_formats", String::valueOf), layout);
+            addLabel(createLabelWithMultipleValues(sortActionReasons(filter.getActionReasons()),
+                "label.action_reasons_udm", UdmActionReason::getReason), layout);
             addLabel(createLabelWithSingleValue(getFunctionForDate(UdmUsageFilter::getUsageDateFrom, filter), filter,
                 "label.usage_date_from"), layout);
             addLabel(createLabelWithSingleValue(getFunctionForDate(UdmUsageFilter::getUsageDateTo, filter), filter,
