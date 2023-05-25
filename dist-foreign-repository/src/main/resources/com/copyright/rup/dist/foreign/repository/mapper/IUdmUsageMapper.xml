@@ -145,6 +145,12 @@
                     u.reported_type_of_use = #{reportedTypeOfUse}
                 </foreach>
             </if>
+            <if test="null != filter.actionReasons and filter.actionReasons.size() > 0">
+                and
+                <foreach collection="filter.actionReasons" item="actionReason" open="(" separator=" or " close=")">
+                    u.df_udm_action_reason_uid = #{actionReason.id}
+                </foreach>
+            </if>
             <if test="null != filter.typeOfUse">
                 and u.type_of_use = #{filter.typeOfUse}
             </if>
@@ -355,6 +361,7 @@
         join ${schema}.df_udm_usage_batch ub on u.df_udm_usage_batch_uid = ub.df_udm_usage_batch_uid
         join ${schema}.df_detail_licensee_class dlc on u.detail_licensee_class_id = dlc.detail_licensee_class_id
         left join ${schema}.df_rightsholder r on u.rh_account_number = r.rh_account_number
+        left join ${schema}.df_udm_action_reason ar on u.df_udm_action_reason_uid = ar.df_udm_action_reason_uid
         <include refid="IUdmUsageMapper.udmUsageFilter"/>
     </sql>
 
