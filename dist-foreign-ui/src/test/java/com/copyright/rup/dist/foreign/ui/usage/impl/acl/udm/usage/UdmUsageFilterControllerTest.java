@@ -9,6 +9,7 @@ import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertSame;
 
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
+import com.copyright.rup.dist.foreign.domain.UdmActionReason;
 import com.copyright.rup.dist.foreign.domain.UdmBatch;
 import com.copyright.rup.dist.foreign.service.api.ILicenseeClassService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmBatchService;
@@ -117,5 +118,16 @@ public class UdmUsageFilterControllerTest {
         replay(udmTypeOfUseService);
         assertSame(reportedTypeOfUses, controller.getReportedTypeOfUses());
         verify(udmTypeOfUseService);
+    }
+
+    @Test
+    public void testGetAllActionReasons() {
+        List<UdmActionReason> actionReasons = List.of(
+            new UdmActionReason("1c8f6e43-2ca8-468d-8700-ce855e6cd8c0", "Aggregated Content"),
+            new UdmActionReason("97fd8093-7f36-4a09-99f1-1bfe36a5c3f4", "Arbitrary RFA search result order"));
+        expect(udmUsageService.getAllActionReasons()).andReturn(actionReasons).once();
+        replay(udmUsageService);
+        assertSame(actionReasons, controller.getAllActionReasons());
+        verify(udmUsageService);
     }
 }

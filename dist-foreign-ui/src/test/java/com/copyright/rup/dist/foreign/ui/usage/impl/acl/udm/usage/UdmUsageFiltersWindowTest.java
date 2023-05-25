@@ -18,6 +18,7 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
+import com.copyright.rup.dist.foreign.domain.UdmActionReason;
 import com.copyright.rup.dist.foreign.domain.UdmChannelEnum;
 import com.copyright.rup.dist.foreign.domain.filter.FilterExpression;
 import com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum;
@@ -90,11 +91,14 @@ public class UdmUsageFiltersWindowTest {
     private static final String INVALID_NUMBER = "a12345678";
     private static final String INTEGER_WITH_SPACES_STRING = "  123  ";
     private static final String SPACES_STRING = "   ";
+    private static final String FILTER_VALUE_COUNT_1 = "(1)";
     private static final String NUMBER_VALIDATION_MESSAGE = "Field value should contain numeric values only";
     private static final String DECIMAL_VALIDATION_MESSAGE =
         "Field value should be positive number or zero and should not exceed 10 digits";
     private static final String BETWEEN_OPERATOR_VALIDATION_MESSAGE =
         "Field value should be populated for Between Operator";
+    private final UdmActionReason actionReason =
+        new UdmActionReason("1c8f6e43-2ca8-468d-8700-ce855e6cd8c0", "Aggregated Content");
     private UdmUsageFiltersWindow window;
     private Binder<UdmUsageFilter> binder;
 
@@ -127,6 +131,7 @@ public class UdmUsageFiltersWindowTest {
         licenseeClass.setId(26);
         licenseeClass.setDescription("Law Firms");
         usageFilter.setDetailLicenseeClasses(Set.of(licenseeClass));
+        usageFilter.setActionReasons(Set.of(actionReason));
         replay(ForeignSecurityUtils.class);
         window = new UdmUsageFiltersWindow(createMock(IUdmUsageFilterController.class), usageFilter);
         verifyFiltersData();
@@ -433,7 +438,7 @@ public class UdmUsageFiltersWindowTest {
         assertEquals(19, verticalLayout.getComponentCount());
         verifyItemsFilterLayout(verticalLayout.getComponent(0), "Assignees", "Detail Licensee Classes");
         verifyItemsFilterLayout(verticalLayout.getComponent(1), "Reported Pub Types", "Reported Types of Use");
-        verifyItemsFilterWidget(verticalLayout.getComponent(2), "Publication Formats");
+        verifyItemsFilterLayout(verticalLayout.getComponent(2), "Publication Formats", "Action Reasons");
         verifyDateFieldComponent(verticalLayout.getComponent(3), "Usage Date From", "Usage Date To");
         verifyDateFieldComponent(verticalLayout.getComponent(4), "Survey Start Date From", "Survey Start Date To");
         verifyComboBoxLayout(verticalLayout.getComponent(5), "Channel", List.of(UdmChannelEnum.values()),
@@ -621,6 +626,7 @@ public class UdmUsageFiltersWindowTest {
         filter.setReportedTypeOfUses(Set.of(REPORTED_TYPE_OF_USE));
         filter.setTypeOfUse(TYPE_OF_USE);
         filter.setPubFormats(Set.of(PUBLICATION_FORMATS));
+        filter.setActionReasons(Set.of(actionReason));
         filter.setUsageDateFrom(DATE_FROM);
         filter.setUsageDateTo(DATE_TO);
         filter.setSurveyStartDateFrom(DATE_FROM);
@@ -645,13 +651,13 @@ public class UdmUsageFiltersWindowTest {
         return filter;
     }
 
-    @SuppressWarnings(UNCHECKED)
     private void verifyFiltersData() {
-        assertFilterWidgetLabelValue("assigneeFilterWidget", "(1)");
+        assertFilterWidgetLabelValue("assigneeFilterWidget", FILTER_VALUE_COUNT_1);
         assertFilterWidgetLabelValue("reportedPubTypeFilterWidget", "(2)");
         assertFilterWidgetLabelValue("publicationFormatFilterWidget", "(2)");
-        assertFilterWidgetLabelValue("detailLicenseeClassFilterWidget", "(1)");
-        assertFilterWidgetLabelValue("reportedTypeOfUseFilterWidget", "(1)");
+        assertFilterWidgetLabelValue("detailLicenseeClassFilterWidget", FILTER_VALUE_COUNT_1);
+        assertFilterWidgetLabelValue("reportedTypeOfUseFilterWidget", FILTER_VALUE_COUNT_1);
+        assertFilterWidgetLabelValue("actionReasonFilterWidget", FILTER_VALUE_COUNT_1);
         assertLocalDateFieldValue("usageDateFromWidget", DATE_FROM);
         assertLocalDateFieldValue("usageDateToWidget", DATE_TO);
         assertLocalDateFieldValue("surveyStartDateFromWidget", DATE_FROM);
@@ -717,7 +723,6 @@ public class UdmUsageFiltersWindowTest {
                 FilterOperatorEnum.BETWEEN, FilterOperatorEnum.IS_NULL, FilterOperatorEnum.IS_NOT_NULL));
     }
 
-    @SuppressWarnings(UNCHECKED)
     private void populateData() {
         DetailLicenseeClass detailLicenseeClass = new DetailLicenseeClass();
         detailLicenseeClass.setId(26);
@@ -729,6 +734,7 @@ public class UdmUsageFiltersWindowTest {
         filter.setReportedTypeOfUses(Set.of(REPORTED_TYPE_OF_USE));
         filter.setTypeOfUse(TYPE_OF_USE);
         filter.setPubFormats(Set.of(PUBLICATION_FORMATS));
+        filter.setActionReasons(Set.of(actionReason));
         populateLocalDateWidget("usageDateFromWidget", DATE_FROM);
         populateLocalDateWidget("usageDateToWidget", DATE_TO);
         populateLocalDateWidget("surveyStartDateFromWidget", DATE_FROM);
