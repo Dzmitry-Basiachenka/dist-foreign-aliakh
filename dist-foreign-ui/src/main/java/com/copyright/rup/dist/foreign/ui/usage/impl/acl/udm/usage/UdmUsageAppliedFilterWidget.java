@@ -14,6 +14,7 @@ import com.vaadin.ui.VerticalLayout;
 import org.apache.commons.lang3.StringUtils;
 
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -117,6 +118,12 @@ public class UdmUsageAppliedFilterWidget extends CommonAppliedFilterPanel implem
             .filter(udmBatch -> batchesIds.contains(udmBatch.getId()))
             .map(UdmBatch::getName)
             .sorted(String::compareToIgnoreCase)
+            .collect(Collectors.toCollection(LinkedHashSet::new));
+    }
+
+    private Set<UdmActionReason> sortActionReasons(Collection<UdmActionReason> actionReasons) {
+        return actionReasons.stream()
+            .sorted((reason1, reason2) -> reason1.getReason().compareToIgnoreCase(reason2.getReason()))
             .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 

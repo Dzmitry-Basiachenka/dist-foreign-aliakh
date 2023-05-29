@@ -3,7 +3,6 @@ package com.copyright.rup.dist.foreign.ui.common;
 import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
-import com.copyright.rup.dist.foreign.domain.UdmActionReason;
 import com.copyright.rup.dist.foreign.domain.filter.FilterExpression;
 import com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
@@ -204,18 +203,6 @@ public abstract class CommonAppliedFilterPanel extends Panel {
     protected Set<PublicationType> sortPublicationTypes(Collection<PublicationType> publicationTypes) {
         return publicationTypes.stream()
             .sorted((p1, p2) -> p1.getNameAndDescription().compareToIgnoreCase(p2.getNameAndDescription()))
-            .collect(Collectors.toCollection(LinkedHashSet::new));
-    }
-
-    /**
-     * Sorts action reasons by reason ascending.
-     *
-     * @param actionReasons collection of {@link UdmActionReason}s
-     * @return set of sorted {@link UdmActionReason}s
-     */
-    protected Set<UdmActionReason> sortActionReasons(Collection<UdmActionReason> actionReasons) {
-        return actionReasons.stream()
-            .sorted((reason1, reason2) -> reason1.getReason().compareToIgnoreCase(reason2.getReason()))
             .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
