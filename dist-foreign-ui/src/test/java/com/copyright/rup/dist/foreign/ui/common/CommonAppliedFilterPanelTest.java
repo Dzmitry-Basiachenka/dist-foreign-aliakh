@@ -7,7 +7,6 @@ import static org.junit.Assert.assertNull;
 import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
-import com.copyright.rup.dist.foreign.domain.UdmActionReason;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.FilterExpression;
 import com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum;
@@ -147,17 +146,6 @@ public class CommonAppliedFilterPanelTest {
         Set<PublicationType> actualPubTypes = Set.of(pubType2, pubType1);
         Set<PublicationType> expectedPubTypes = new LinkedHashSet<>(List.of(pubType1, pubType2));
         assertEquals(expectedPubTypes, filterPanel.sortPublicationTypes(actualPubTypes));
-    }
-
-    @Test
-    public void testSortActionReasons() {
-        UdmActionReason reason1 = new UdmActionReason("1c8f6e43-2ca8-468d-8700-ce855e6cd8c0", "Aggregated Content");
-        UdmActionReason reason2 = new UdmActionReason("04b99a98-56d3-4f59-bfcb-2c72d18ebbbc", "Created new work");
-        UdmActionReason reason3 =
-            new UdmActionReason("be6ece83-4739-479d-b468-5dcea822e1f8", "Incorrect/inappropriate Det Lic Class");
-        Set<UdmActionReason> actualReasons = Set.of(reason3, reason1, reason2);
-        Set<UdmActionReason> expectedReasons = new LinkedHashSet<>(List.of(reason1, reason2, reason3));
-        assertEquals(expectedReasons, filterPanel.sortActionReasons(actualReasons));
     }
 
     private void verifyLabel(Label actualLabel) {
