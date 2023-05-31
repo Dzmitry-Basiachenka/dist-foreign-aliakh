@@ -4,7 +4,7 @@
       "status": ["GRANT", "DENY", "SPECIAL_REQUEST"],
       "wr_wrk_inst": 876543210,
       "period_end_date": "06/30/2020",
-      "license_type": ["ACL"]
+      "license_type": ["ACLCI","TRS","APS","ECC","DPS","VGW","RLS","ACL","JACDCL","MACL","SAL"]
     }
   ]
 }

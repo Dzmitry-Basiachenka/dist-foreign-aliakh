@@ -8,7 +8,7 @@
       ],
       "wr_wrk_inst": 854030732,
       "period_end_date": "05/30/2022",
-      "license_type": ["ACL"]
+      "license_type": ["ACLCI","TRS","APS","ECC","DPS","VGW","RLS","ACL","JACDCL","MACL","SAL"]
     }
   ]
 }
