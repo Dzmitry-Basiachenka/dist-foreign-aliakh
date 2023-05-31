@@ -1,3 +1,16 @@
+18.0.1
+-
+* CDP-1143 FDA: SAL: Usages tab: ‘View Fund Pool’ window: Sorting on ‘ITEM BANK SPLIT %’ column is executed as string
+* B-80143 FDA application name change: Change name of application from Foreign Distribution to Federated Distribution
+* B-79524 FDA: ACL: Multi-select filter for Action Reason: implement Action Reason filter widget
+* B-79524 FDA: ACL: Multi-select filter for Action Reason: add Action Reason filter on UDM Usages tab
+* B-79524 FDA: ACL: Multi-select filter for Action Reason: update Applied Filters panel with Action Reason filter
+* B-79524 FDA: ACL: Multi-select filter for Action Reason: update SQL query to  select UDM usages by filter
+* B-79524 FDA: ACL: Multi-select filter for Action Reason: make changes based on comments
+* B-79569 ACL: Revise the process to find rights in an updated hierarchy: implement query for ACL UDM USAGE
+* B-79569 ACL: Revise the process to find rights in an updated hierarchy: improve integration tests after adding data
+* B-77996 Tech Debt: FDA: fix vulnerabilities CVE-2023-20862, CVE-2023-20863, CVE-2023-28708
+
 18.0.0
 -
 * B-78666 FDA: Add columns to NTS WD Batch Summary Report: add number and gross amount columns for details with status TO_BE_DISTRIBUTED
