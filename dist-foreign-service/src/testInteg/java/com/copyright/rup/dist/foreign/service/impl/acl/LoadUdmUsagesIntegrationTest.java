@@ -24,6 +24,7 @@ import com.copyright.rup.dist.foreign.service.impl.csv.CsvProcessorFactory;
 import com.copyright.rup.dist.foreign.service.impl.csv.UdmCsvProcessor;
 
 import com.google.common.collect.ImmutableMap;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -59,7 +60,7 @@ public class LoadUdmUsagesIntegrationTest {
 
     private static final String UDM_BATCH_NAME = "UDM Batch 2021 June";
     private static final String LOADED_REASON = "Uploaded in 'UDM Batch 2021 June' Batch";
-
+    private final UdmBatch batch = buildUdmBatch();
     @Autowired
     private CsvProcessorFactory csvProcessorFactory;
     @Autowired
@@ -76,8 +77,6 @@ public class LoadUdmUsagesIntegrationTest {
     private ServiceTestHelper testHelper;
     @Autowired
     private List<ICacheService<?, ?>> cacheServices;
-
-    private final UdmBatch batch = buildUdmBatch();
 
     @Before
     public void setUp() {
