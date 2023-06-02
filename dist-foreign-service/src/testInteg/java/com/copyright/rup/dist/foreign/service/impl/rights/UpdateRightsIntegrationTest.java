@@ -59,13 +59,21 @@ import java.util.List;
 public class UpdateRightsIntegrationTest {
 
     private static final String FOLDER_NAME = "update-rights-integration-test/";
+    private static final String UDM_RIGHTS_FILE = "test-update-udm-rights.groovy";
     private static final Long RH_ACCOUNT_NUMBER_1 = 1000023401L;
     private static final Long RH_ACCOUNT_NUMBER_2 = 1000000322L;
     private static final String FAS = "FAS";
     private static final String AACL = "AACL";
+    private static final String PRINT_TYPE_OF_USE = "PRINT";
+    private static final String DIGITAL_TYPE_OF_USE = "DIGITAL";
+    private static final String UDM_USAGE_ID_1 = "acb53a42-7e8d-4a4a-8d72-6f794be2731c";
+    private static final String UDM_USAGE_ID_2 = "1b348196-2193-46d7-b9df-2ba835189131";
+    private static final String UDM_USAGE_ID_3 = "074749c5-08fa-4f57-8c3b-ecbc334a5c2a";
     private static final String RH_FOUND_REASON = "Rightsholder account 1000000322 was found in RMS";
     private static final String RMS_GRANTS_EMPTY_RESPONSE_JSON = "rights/rms_grants_empty_response.json";
     private static final String PRM_RIGHTSHOLDER_1000000322_RESPONSE_JSON = "prm/rightsholder_1000000322_response.json";
+    private static final String RIGHTS_GRANTS_REQUEST_1 = "rights/udm/usage/rms_grants_request_1.json";
+    private static final String RIGHTS_GRANTS_210001899_REQUEST = "rights/udm/usage/rms_grants_210001899_request.json";
 
     @Autowired
     private IUsageRepository usageRepository;
@@ -88,6 +96,7 @@ public class UpdateRightsIntegrationTest {
 
     @Before
     public void setUp() {
+        testHelper.reset();
         cacheServices.forEach(ICacheService::invalidateCache);
     }
 
@@ -156,7 +165,8 @@ public class UpdateRightsIntegrationTest {
             buildAaclUsage("7e7b97d1-ad60-4d47-915b-2834c5cc056a", 130297955)));
         rightsService.updateAaclRights(List.of(buildAaclUsage("10c9a60f-28b6-466c-975c-3ea930089a9e", 200208329)));
         assertAaclUsage("b23cb103-9242-4d58-a65d-2634b3e5a8cf", UsageStatusEnum.RH_FOUND, 1000000322L, "ALL");
-        assertAaclUsage("7e7b97d1-ad60-4d47-915b-2834c5cc056a", UsageStatusEnum.RH_FOUND, 1000023401L, "PRINT");
+        assertAaclUsage("7e7b97d1-ad60-4d47-915b-2834c5cc056a", UsageStatusEnum.RH_FOUND, 1000023401L,
+            PRINT_TYPE_OF_USE);
         assertAaclUsage("10c9a60f-28b6-466c-975c-3ea930089a9e", UsageStatusEnum.NEW, null, null);
         assertAudit("b23cb103-9242-4d58-a65d-2634b3e5a8cf", RH_FOUND_REASON);
         assertAudit("7e7b97d1-ad60-4d47-915b-2834c5cc056a", "Rightsholder account 1000023401 was found in RMS");
@@ -165,22 +175,152 @@ public class UpdateRightsIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = FOLDER_NAME + "test-update-udm-rights.groovy")
+    @TestData(fileName = FOLDER_NAME + UDM_RIGHTS_FILE)
     public void testUpdateUdmRights() {
         testHelper.createRestServer();
-        testHelper.expectGetRmsRights("rights/udm/usage/rms_grants_request_1.json",
+        testHelper.expectGetRmsRights(RIGHTS_GRANTS_REQUEST_1,
             "rights/udm/usage/rms_grants_response_1.json");
-        testHelper.expectGetRmsRights("rights/udm/usage/rms_grants_210001899_request.json",
-            RMS_GRANTS_EMPTY_RESPONSE_JSON);
+        testHelper.expectGetRmsRights(RIGHTS_GRANTS_210001899_REQUEST, RMS_GRANTS_EMPTY_RESPONSE_JSON);
         testHelper.expectPrmCall(PRM_RIGHTSHOLDER_1000000322_RESPONSE_JSON, 1000000322L);
         rightsService.updateUdmRights(List.of(
-            buildUdmUsage("acb53a42-7e8d-4a4a-8d72-6f794be2731c", 122769421, "DIGITAL"),
-            buildUdmUsage("1b348196-2193-46d7-b9df-2ba835189131", 210001133, "PRINT")));
+            buildUdmUsage(UDM_USAGE_ID_1, 122769421, DIGITAL_TYPE_OF_USE),
+            buildUdmUsage(UDM_USAGE_ID_2, 210001133, PRINT_TYPE_OF_USE)));
         rightsService.updateUdmRights(List.of(
-            buildUdmUsage("074749c5-08fa-4f57-8c3b-ecbc334a5c2a", 210001899, "DIGITAL")));
-        assertUdmUsage("acb53a42-7e8d-4a4a-8d72-6f794be2731c", UsageStatusEnum.RH_FOUND, 1000023401L);
-        assertUdmUsage("1b348196-2193-46d7-b9df-2ba835189131", UsageStatusEnum.RH_FOUND, 1000000322L);
-        assertUdmUsage("074749c5-08fa-4f57-8c3b-ecbc334a5c2a", UsageStatusEnum.RH_NOT_FOUND, null);
+            buildUdmUsage(UDM_USAGE_ID_3, 210001899, DIGITAL_TYPE_OF_USE)));
+        assertUdmUsage(UDM_USAGE_ID_1, UsageStatusEnum.RH_FOUND, 1000023401L);
+        assertUdmUsage(UDM_USAGE_ID_2, UsageStatusEnum.RH_FOUND, 1000000322L);
+        assertUdmUsage(UDM_USAGE_ID_3, UsageStatusEnum.RH_NOT_FOUND, null);
+        testHelper.verifyRestServer();
+    }
+
+    @Test
+    @TestData(fileName = FOLDER_NAME + UDM_RIGHTS_FILE)
+    public void testUpdateUdmMaclRights() {
+        testHelper.createRestServer();
+        testHelper.expectGetRmsRights(RIGHTS_GRANTS_REQUEST_1,
+            "rights/udm/usage/rms_grants_response_1_MACL.json");
+        testHelper.expectGetRmsRights(RIGHTS_GRANTS_210001899_REQUEST, RMS_GRANTS_EMPTY_RESPONSE_JSON);
+        testHelper.expectPrmCall(PRM_RIGHTSHOLDER_1000000322_RESPONSE_JSON, 1000000322L);
+        rightsService.updateUdmRights(List.of(
+            buildUdmUsage(UDM_USAGE_ID_1, 122769421, DIGITAL_TYPE_OF_USE),
+            buildUdmUsage(UDM_USAGE_ID_2, 210001133, PRINT_TYPE_OF_USE)));
+        rightsService.updateUdmRights(List.of(
+            buildUdmUsage(UDM_USAGE_ID_3, 210001899, DIGITAL_TYPE_OF_USE)));
+        assertUdmUsage(UDM_USAGE_ID_1, UsageStatusEnum.RH_FOUND, 1000000322L);
+        assertUdmUsage(UDM_USAGE_ID_2, UsageStatusEnum.RH_FOUND, 1000023401L);
+        assertUdmUsage(UDM_USAGE_ID_3, UsageStatusEnum.RH_NOT_FOUND, null);
+        testHelper.verifyRestServer();
+    }
+
+    @Test
+    @TestData(fileName = FOLDER_NAME + UDM_RIGHTS_FILE)
+    public void testUpdateUdmJacdclRights() {
+        testHelper.createRestServer();
+        testHelper.expectGetRmsRights(RIGHTS_GRANTS_REQUEST_1,
+            "rights/udm/usage/rms_grants_response_1_JACDCL.json");
+        testHelper.expectGetRmsRights(RIGHTS_GRANTS_210001899_REQUEST, RMS_GRANTS_EMPTY_RESPONSE_JSON);
+        rightsService.updateUdmRights(List.of(
+            buildUdmUsage(UDM_USAGE_ID_1, 122769421, DIGITAL_TYPE_OF_USE),
+            buildUdmUsage(UDM_USAGE_ID_2, 210001133, PRINT_TYPE_OF_USE)));
+        rightsService.updateUdmRights(List.of(
+            buildUdmUsage(UDM_USAGE_ID_3, 210001899, DIGITAL_TYPE_OF_USE)));
+        assertUdmUsage(UDM_USAGE_ID_1, UsageStatusEnum.RH_FOUND, 1000023401L);
+        assertUdmUsage(UDM_USAGE_ID_2, UsageStatusEnum.RH_FOUND, 1000023401L);
+        assertUdmUsage(UDM_USAGE_ID_3, UsageStatusEnum.RH_NOT_FOUND, null);
+        testHelper.verifyRestServer();
+    }
+
+    @Test
+    @TestData(fileName = FOLDER_NAME + UDM_RIGHTS_FILE)
+    public void testUpdateUdmVgwRights() {
+        testHelper.createRestServer();
+        testHelper.expectGetRmsRights(RIGHTS_GRANTS_REQUEST_1,
+            "rights/udm/usage/rms_grants_response_1_VGW.json");
+        testHelper.expectGetRmsRights(RIGHTS_GRANTS_210001899_REQUEST, RMS_GRANTS_EMPTY_RESPONSE_JSON);
+        testHelper.expectPrmCall(PRM_RIGHTSHOLDER_1000000322_RESPONSE_JSON, 1000000322L);
+        rightsService.updateUdmRights(List.of(
+            buildUdmUsage(UDM_USAGE_ID_1, 122769421, DIGITAL_TYPE_OF_USE),
+            buildUdmUsage(UDM_USAGE_ID_2, 210001133, PRINT_TYPE_OF_USE)));
+        rightsService.updateUdmRights(List.of(
+            buildUdmUsage(UDM_USAGE_ID_3, 210001899, DIGITAL_TYPE_OF_USE)));
+        assertUdmUsage(UDM_USAGE_ID_1, UsageStatusEnum.RH_FOUND, 1000023401L);
+        assertUdmUsage(UDM_USAGE_ID_2, UsageStatusEnum.RH_FOUND, 1000000322L);
+        assertUdmUsage(UDM_USAGE_ID_3, UsageStatusEnum.RH_NOT_FOUND, null);
+        testHelper.verifyRestServer();
+    }
+
+    @Test
+    @TestData(fileName = FOLDER_NAME + UDM_RIGHTS_FILE)
+    public void testUpdateUdmTrsRights() {
+        testHelper.createRestServer();
+        testHelper.expectGetRmsRights(RIGHTS_GRANTS_REQUEST_1,
+            "rights/udm/usage/rms_grants_response_1_TRS.json");
+        testHelper.expectGetRmsRights(RIGHTS_GRANTS_210001899_REQUEST, RMS_GRANTS_EMPTY_RESPONSE_JSON);
+        testHelper.expectPrmCall(PRM_RIGHTSHOLDER_1000000322_RESPONSE_JSON, 1000000322L);
+        rightsService.updateUdmRights(List.of(
+            buildUdmUsage(UDM_USAGE_ID_1, 122769421, DIGITAL_TYPE_OF_USE),
+            buildUdmUsage(UDM_USAGE_ID_2, 210001133, PRINT_TYPE_OF_USE)));
+        rightsService.updateUdmRights(List.of(
+            buildUdmUsage(UDM_USAGE_ID_3, 210001899, DIGITAL_TYPE_OF_USE)));
+        assertUdmUsage(UDM_USAGE_ID_1, UsageStatusEnum.RH_FOUND, 1000000322L);
+        assertUdmUsage(UDM_USAGE_ID_2, UsageStatusEnum.RH_FOUND, 1000023401L);
+        assertUdmUsage(UDM_USAGE_ID_3, UsageStatusEnum.RH_NOT_FOUND, null);
+        testHelper.verifyRestServer();
+    }
+
+    @Test
+    @TestData(fileName = FOLDER_NAME + UDM_RIGHTS_FILE)
+    public void testUpdateUdmDpsRights() {
+        testHelper.createRestServer();
+        testHelper.expectGetRmsRights(RIGHTS_GRANTS_REQUEST_1,
+            "rights/udm/usage/rms_grants_response_1_DPS.json");
+        testHelper.expectGetRmsRights(RIGHTS_GRANTS_210001899_REQUEST, RMS_GRANTS_EMPTY_RESPONSE_JSON);
+        testHelper.expectPrmCall(PRM_RIGHTSHOLDER_1000000322_RESPONSE_JSON, 1000000322L);
+        rightsService.updateUdmRights(List.of(
+            buildUdmUsage(UDM_USAGE_ID_1, 122769421, DIGITAL_TYPE_OF_USE),
+            buildUdmUsage(UDM_USAGE_ID_2, 210001133, PRINT_TYPE_OF_USE)));
+        rightsService.updateUdmRights(List.of(
+            buildUdmUsage(UDM_USAGE_ID_3, 210001899, DIGITAL_TYPE_OF_USE)));
+        assertUdmUsage(UDM_USAGE_ID_1, UsageStatusEnum.RH_FOUND, 1000000322L);
+        assertUdmUsage(UDM_USAGE_ID_2, UsageStatusEnum.RH_FOUND, 1000023401L);
+        assertUdmUsage(UDM_USAGE_ID_3, UsageStatusEnum.RH_NOT_FOUND, null);
+        testHelper.verifyRestServer();
+    }
+
+    @Test
+    @TestData(fileName = FOLDER_NAME + UDM_RIGHTS_FILE)
+    public void testUpdateUdmSalRights() {
+        testHelper.createRestServer();
+        testHelper.expectGetRmsRights(RIGHTS_GRANTS_REQUEST_1,
+            "rights/udm/usage/rms_grants_response_1_SAL.json");
+        testHelper.expectGetRmsRights(RIGHTS_GRANTS_210001899_REQUEST, RMS_GRANTS_EMPTY_RESPONSE_JSON);
+        testHelper.expectPrmCall(PRM_RIGHTSHOLDER_1000000322_RESPONSE_JSON, 1000000322L);
+        rightsService.updateUdmRights(List.of(
+            buildUdmUsage(UDM_USAGE_ID_1, 122769421, DIGITAL_TYPE_OF_USE),
+            buildUdmUsage(UDM_USAGE_ID_2, 210001133, PRINT_TYPE_OF_USE)));
+        rightsService.updateUdmRights(List.of(
+            buildUdmUsage(UDM_USAGE_ID_3, 210001899, DIGITAL_TYPE_OF_USE)));
+        assertUdmUsage(UDM_USAGE_ID_1, UsageStatusEnum.RH_FOUND, 1000000322L);
+        assertUdmUsage(UDM_USAGE_ID_2, UsageStatusEnum.RH_FOUND, 1000000322L);
+        assertUdmUsage(UDM_USAGE_ID_3, UsageStatusEnum.RH_NOT_FOUND, null);
+        testHelper.verifyRestServer();
+    }
+
+    @Test
+    @TestData(fileName = FOLDER_NAME + UDM_RIGHTS_FILE)
+    public void testUpdateUdmRlsRights() {
+        testHelper.createRestServer();
+        testHelper.expectGetRmsRights(RIGHTS_GRANTS_REQUEST_1, "rights/udm/usage/rms_grants_response_1_RLS.json");
+        testHelper.expectGetRmsRights(RIGHTS_GRANTS_210001899_REQUEST, RMS_GRANTS_EMPTY_RESPONSE_JSON);
+        testHelper.expectPrmCall(PRM_RIGHTSHOLDER_1000000322_RESPONSE_JSON, 1000000322L);
+        rightsService.updateUdmRights(List.of(
+            buildUdmUsage(UDM_USAGE_ID_1, 122769421, DIGITAL_TYPE_OF_USE),
+            buildUdmUsage(UDM_USAGE_ID_2, 210001133, PRINT_TYPE_OF_USE)));
+        rightsService.updateUdmRights(List.of(
+            buildUdmUsage(UDM_USAGE_ID_3, 210001899, DIGITAL_TYPE_OF_USE)));
+        assertUdmUsage(UDM_USAGE_ID_1, UsageStatusEnum.RH_FOUND, 1000000322L);
+        assertUdmUsage(UDM_USAGE_ID_2, UsageStatusEnum.RH_FOUND, 1000023401L);
+        assertUdmUsage(UDM_USAGE_ID_3, UsageStatusEnum.RH_NOT_FOUND, null);
         testHelper.verifyRestServer();
     }
 
