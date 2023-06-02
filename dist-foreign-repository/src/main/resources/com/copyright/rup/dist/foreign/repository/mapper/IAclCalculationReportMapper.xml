@@ -154,8 +154,9 @@
             sum(net_amount) as total_net_amount
         from ${schema}.df_acl_scenario_detail scd
         join ${schema}.df_acl_share_detail shd on scd.df_acl_scenario_detail_uid = shd.df_acl_scenario_detail_uid
-        join ${schema}.df_detail_licensee_class dlc on scd.detail_licensee_class_id = dlc.detail_licensee_class_id
-        join ${schema}.df_aggregate_licensee_class alc on dlc.aggregate_licensee_class_id = alc.aggregate_licensee_class_id
+        join ${schema}.df_acl_scenario_licensee_class slc on scd.df_acl_scenario_uid = slc.df_acl_scenario_uid
+            and scd.detail_licensee_class_id = slc.detail_licensee_class_id
+        join ${schema}.df_aggregate_licensee_class alc on slc.aggregate_licensee_class_id = alc.aggregate_licensee_class_id
         join ${schema}.df_publication_type pt on scd.publication_type_uid = pt.df_publication_type_uid
         where shd.df_acl_scenario_uid in
         <foreach collection="${scenarios}" item="scenario" open="(" separator=", " close=")">
