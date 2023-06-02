@@ -3,10 +3,11 @@ Agg LC ID,Agg LC Name,Wr Wrk Inst,System Title,Pub Type,Print RH Account # Perio
 1,Food and Tobacco,269040891,Technology review,BK,1000028511,Greenleaf Publishing,1000000001,Rothchild Consultants,2.00,1.00,3.00,,,1000000001,Rothchild Consultants,0.00,200.00,200.00,197.00,6567%
 18,Aircraft and Aerospace,269040891,Technology review,NL,1000002859,John Wiley & Sons - Books,1000002859,John Wiley & Sons - Books,0.00,0.00,0.00,1000000001,Rothchild Consultants,1000000001,Rothchild Consultants,100.00,100.00,200.00,200.00,N/A
 23,Electric and Gas Utilities,122813964,Aerospace America,BK,1000002859,John Wiley & Sons - Books,1000002859,John Wiley & Sons - Books,306.00,205.00,511.00,1000002859,John Wiley & Sons - Books,1000002859,John Wiley & Sons - Books,23.00,23.00,46.00,-465.00,-91%
-23,Electric and Gas Utilities,123822477,Portland business journal,NL,,,1000000001,Rothchild Consultants,0.00,0.00,,,,1000000001,Rothchild Consultants,0.00,0.00,,0.00,N/A
 23,Electric and Gas Utilities,269040891,Technology review,BK,1000028511,Greenleaf Publishing,,,37.11,0.00,37.11,1000002859,John Wiley & Sons - Books,,,37.12,0.00,37.12,0.01,0%
 56,Financial,122813964,Aerospace America,BK,,,,,,,,1000002859,John Wiley & Sons - Books,1000002859,John Wiley & Sons - Books,50.00,75.00,125.00,125.00,N/A
+56,Financial,123822477,Portland business journal,NL,,,1000000001,Rothchild Consultants,0.00,0.00,,,,,,,,,0.00,N/A
 56,Financial,269040891,Technology review,NL,1000002859,John Wiley & Sons - Books,1000002859,John Wiley & Sons - Books,40.00,80.00,120.00,,,,,,,,-120.00,-100%
+57,Communications,123822477,Portland business journal,NL,,,,,,,,,,1000000001,Rothchild Consultants,0.00,0.00,,0.00,N/A
 ,
 Scenarios Period 1,Scenarios Period 2
 "ACL Scenario 202212, MACL Scenario 202212, VGW Scenario 202212","ACL Scenario 202312, MACL Scenario 202312, VGW Scenario 202312"
