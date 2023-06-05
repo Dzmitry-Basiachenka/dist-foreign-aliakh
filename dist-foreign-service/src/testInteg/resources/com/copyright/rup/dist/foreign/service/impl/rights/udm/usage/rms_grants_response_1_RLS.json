@@ -25,7 +25,7 @@
           "agreement_end_date": "12/31/3000",
           "wg_owner_org_number": "1000000322",
           "right_id": "a07af8f9-bc67-4045-4599-79529fc087ac",
-          "license_type": "DPS",
+          "license_type": "NGT_INTERNET_POST",
           "product_family": "DPS",
           "rh_account_number": "1000000322"
         },
@@ -63,7 +63,7 @@
           "agreement_end_date": "12/31/3000",
           "wg_owner_org_number": "1000000322",
           "right_id": "a02af8f9-2ee4-4045-8bb5-79529fc087a6",
-          "license_type": "RLS",
+          "license_type": "NGT_TRAINING_MATERIALS",
           "product_family": "RLS",
           "rh_account_number": "1000000322"
         },
@@ -82,7 +82,7 @@
           "agreement_end_date": "12/31/3000",
           "wg_owner_org_number": "1000023401",
           "right_id": "b02af8f9-cc56-4045-8bb5-79529fc087a5",
-          "license_type": "RLS",
+          "license_type": "NGT_BROC_PROMO_MATERIAL",
           "product_family": "RLS",
           "rh_account_number": "1000023401"
         }

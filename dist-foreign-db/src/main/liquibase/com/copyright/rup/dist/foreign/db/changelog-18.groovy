@@ -317,4 +317,281 @@ databaseChangeLog {
             }
         }
     }
+
+    changeSet(id: '2023-06-05-00', author: 'Anton Azarenka <aazarenka@copyright.com>') {
+        comment("B-79569 ACL: Revise the process to find rights in an updated hierarchy: update values for " +
+                "ACL_UDM_USAGES where type of use does not equal PRINT or DIGITAL")
+
+        update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'license_type', value: 'NGT_PHOTOCOPY')
+            where "product_family = 'ACL_UDM_USAGE' and priority = '8'"
+        }
+
+        update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'license_type', value: 'NGT_SEND_EMAIL')
+            where "product_family = 'ACL_UDM_USAGE' and priority = '9'"
+        }
+
+        update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'license_type', value: 'NGT_INTRANET_POST')
+            where "product_family = 'ACL_UDM_USAGE' and priority = '10'"
+        }
+
+        update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'license_type', value: 'NGT_INTERNET_POST')
+            where "product_family = 'ACL_UDM_USAGE' and priority = '11'"
+        }
+
+        update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'license_type', value: 'NGT_EXTRANET_POST')
+            where "product_family = 'ACL_UDM_USAGE' and priority = '12'"
+        }
+
+        update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'license_type', value: 'NGT_PRINT_COURSE_MATERIALS')
+            where "product_family = 'ACL_UDM_USAGE' and priority = '13'"
+        }
+
+        update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'license_type', value: 'NGT_ELECTRONIC_COURSE_MATERIALS')
+            where "product_family = 'ACL_UDM_USAGE' and priority = '14'"
+        }
+
+        update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'license_type', value: 'CURR_REPUB_K12')
+            where "product_family = 'ACL_UDM_USAGE' and priority = '16'"
+        }
+
+        update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'license_type', value: 'CURR_REPUB_HE')
+            where "product_family = 'ACL_UDM_USAGE' and priority = '17'"
+        }
+
+        update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'license_type', value: 'CURR_REUSE_K12')
+            where "product_family = 'ACL_UDM_USAGE' and priority = '18'"
+        }
+
+        update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'license_type', value: 'CURR_SHARE_K12')
+            where "product_family = 'ACL_UDM_USAGE' and priority = '19'"
+        }
+
+        update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'license_type', value: 'NGT_BOOK')
+            where "product_family = 'ACL_UDM_USAGE' and priority = '20'"
+        }
+
+        update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'license_type', value: 'NGT_JOURNAL_MAGAZINE')
+            where "product_family = 'ACL_UDM_USAGE' and priority = '21'"
+        }
+
+        update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'license_type', value: 'NGT_EDU_INSTRUC_PROGRAM')
+            where "product_family = 'ACL_UDM_USAGE' and priority = '22'"
+        }
+
+        update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'license_type', value: 'NGT_NEWSPAPER')
+            where "product_family = 'ACL_UDM_USAGE' and priority = '23'"
+        }
+
+        update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'license_type', value: 'NGT_NEWSLETTER')
+            where "product_family = 'ACL_UDM_USAGE' and priority = '24'"
+        }
+
+        update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'license_type', value: 'NGT_THESIS_DISSERTATION')
+            where "product_family = 'ACL_UDM_USAGE' and priority = '25'"
+        }
+
+        update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'license_type', value: 'NGT_BROC_PROMO_MATERIAL')
+            where "product_family = 'ACL_UDM_USAGE' and priority = '26'"
+        }
+
+        update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'license_type', value: 'NGT_PRESENTATION_SLIDES')
+            where "product_family = 'ACL_UDM_USAGE' and priority = '27'"
+        }
+
+        update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'license_type', value: 'NGT_CONT_EDU_TRAIN_MATERIALS')
+            where "product_family = 'ACL_UDM_USAGE' and priority = '28'"
+        }
+
+        update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'license_type', value: 'NGT_TRAINING_MATERIALS')
+            where "product_family = 'ACL_UDM_USAGE' and priority = '29'"
+        }
+
+        update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'license_type', value: 'NGT_OTHR_PUBLISH_PRODUCT')
+            where "product_family = 'ACL_UDM_USAGE' and priority = '30'"
+        }
+
+        update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'license_type', value: 'NGT_MEDCOMMS')
+            where "product_family = 'ACL_UDM_USAGE' and priority = '31'"
+        }
+
+        update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'license_type', value: 'NGT_MEDCOMMS_MEDICAL_PROMO')
+            where "product_family = 'ACL_UDM_USAGE' and priority = '32'"
+        }
+
+        update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'license_type', value: 'NGT_MEDCOMMS_MEDICALED_NONPROMO')
+            where "product_family = 'ACL_UDM_USAGE' and priority = '33'"
+        }
+
+        update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'license_type', value: 'NGT_MEDCOMMS_INTERNAL_TRAIN')
+            where "product_family = 'ACL_UDM_USAGE' and priority = '34'"
+        }
+
+        update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'license_type', value: 'NGT_MEDCOMMS_REFMATERIALS')
+            where "product_family = 'ACL_UDM_USAGE' and priority = '35'"
+        }
+
+        rollback {
+            update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+                column(name: 'license_type', value: 'TRS')
+                where "product_family = 'ACL_UDM_USAGE' and priority = '8'"
+            }
+
+            update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+                column(name: 'license_type', value: 'DPS')
+                where "product_family = 'ACL_UDM_USAGE' and priority = '9'"
+            }
+
+            update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+                column(name: 'license_type', value: 'DPS')
+                where "product_family = 'ACL_UDM_USAGE' and priority = '10'"
+            }
+
+            update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+                column(name: 'license_type', value: 'DPS')
+                where "product_family = 'ACL_UDM_USAGE' and priority = '11'"
+            }
+
+            update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+                column(name: 'license_type', value: 'DPS')
+                where "product_family = 'ACL_UDM_USAGE' and priority = '12'"
+            }
+
+            update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+                column(name: 'license_type', value: 'APS')
+                where "product_family = 'ACL_UDM_USAGE' and priority = '13'"
+            }
+
+            update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+                column(name: 'license_type', value: 'ECC')
+                where "product_family = 'ACL_UDM_USAGE' and priority = '14'"
+            }
+
+            update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+                column(name: 'license_type', value: 'ACLCI')
+                where "product_family = 'ACL_UDM_USAGE' and priority = '16'"
+            }
+
+            update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+                column(name: 'license_type', value: 'ACLCI')
+                where "product_family = 'ACL_UDM_USAGE' and priority = '17'"
+            }
+
+            update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+                column(name: 'license_type', value: 'ACLCI')
+                where "product_family = 'ACL_UDM_USAGE' and priority = '18'"
+            }
+
+            update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+                column(name: 'license_type', value: 'ACLCI')
+                where "product_family = 'ACL_UDM_USAGE' and priority = '19'"
+            }
+
+            update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+                column(name: 'license_type', value: 'RLS')
+                where "product_family = 'ACL_UDM_USAGE' and priority = '20'"
+            }
+
+            update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+                column(name: 'license_type', value: 'RLS')
+                where "product_family = 'ACL_UDM_USAGE' and priority = '21'"
+            }
+
+            update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+                column(name: 'license_type', value: 'RLS')
+                where "product_family = 'ACL_UDM_USAGE' and priority = '22'"
+            }
+
+            update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+                column(name: 'license_type', value: 'RLS')
+                where "product_family = 'ACL_UDM_USAGE' and priority = '23'"
+            }
+
+            update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+                column(name: 'license_type', value: 'RLS')
+                where "product_family = 'ACL_UDM_USAGE' and priority = '24'"
+            }
+
+            update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+                column(name: 'license_type', value: 'RLS')
+                where "product_family = 'ACL_UDM_USAGE' and priority = '25'"
+            }
+
+            update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+                column(name: 'license_type', value: 'RLS')
+                where "product_family = 'ACL_UDM_USAGE' and priority = '26'"
+            }
+
+            update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+                column(name: 'license_type', value: 'RLS')
+                where "product_family = 'ACL_UDM_USAGE' and priority = '27'"
+            }
+
+            update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+                column(name: 'license_type', value: 'RLS')
+                where "product_family = 'ACL_UDM_USAGE' and priority = '28'"
+            }
+
+            update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+                column(name: 'license_type', value: 'RLS')
+                where "product_family = 'ACL_UDM_USAGE' and priority = '29'"
+            }
+
+            update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+                column(name: 'license_type', value: 'RLS')
+                where "product_family = 'ACL_UDM_USAGE' and priority = '30'"
+            }
+
+            update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+                column(name: 'license_type', value: 'RLS')
+                where "product_family = 'ACL_UDM_USAGE' and priority = '31'"
+            }
+
+            update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+                column(name: 'license_type', value: 'RLS')
+                where "product_family = 'ACL_UDM_USAGE' and priority = '32'"
+            }
+
+            update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+                column(name: 'license_type', value: 'RLS')
+                where "product_family = 'ACL_UDM_USAGE' and priority = '33'"
+            }
+
+            update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+                column(name: 'license_type', value: 'RLS')
+                where "product_family = 'ACL_UDM_USAGE' and priority = '34'"
+            }
+
+            update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+                column(name: 'license_type', value: 'RLS')
+                where "product_family = 'ACL_UDM_USAGE' and priority = '35'"
+            }
+        }
+    }
 }

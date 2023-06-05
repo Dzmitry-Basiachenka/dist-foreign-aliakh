@@ -63,7 +63,7 @@
           "agreement_end_date": "12/31/3000",
           "wg_owner_org_number": "1000000322",
           "right_id": "a02af8f9-2ee4-4045-8bb5-79529fc087a6",
-          "license_type": "RLS",
+          "license_type": "NGT_THESIS_DISSERTATION",
           "product_family": "RLS",
           "rh_account_number": "1000000322"
         },
@@ -82,7 +82,7 @@
           "agreement_end_date": "12/31/3000",
           "wg_owner_org_number": "1000023401",
           "right_id": "b02af8f9-cc56-4045-8bb5-79529fc087a5",
-          "license_type": "RLS",
+          "license_type": "NGT_BROC_PROMO_MATERIAL",
           "product_family": "RLS",
           "rh_account_number": "1000023401"
         }
