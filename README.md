@@ -1,3 +1,7 @@
+18.0.2
+-
+* CDP-1146: FDA: Revised process of getting UDM rights: 'License type' payload in the rights request contains product family instead of type of use for transactional products
+
 18.0.1
 -
 * CDP-1143 FDA: SAL: Usages tab: ‘View Fund Pool’ window: Sorting on ‘ITEM BANK SPLIT %’ column is executed as string
