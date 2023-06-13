@@ -369,7 +369,7 @@ public class UpdateRightsIntegrationTest {
     public void testUpdateAclciRights() {
         testHelper.createRestServer();
         testHelper.expectGetRmsRights("rights/aclci/rms_grants_request_1.json",
-            "rights/aclci/rms_grants_response_1.json");
+            "rights/udm/usage/rms_grants_response_1_ACLCI.json");
         testHelper.expectGetRmsRights("rights/aclci/rms_grants_140160102_request.json", RMS_GRANTS_EMPTY_RESPONSE_JSON);
         testHelper.expectPrmCall(PRM_RIGHTSHOLDER_1000000322_RESPONSE_JSON, 1000000322L);
         rightsService.updateAclciRights(List.of(

@@ -594,4 +594,51 @@ databaseChangeLog {
             }
         }
     }
+
+    changeSet(id: '2023-06-13-00', author: 'Anton Azarenka <aazarenka@copyright.com>') {
+        comment("B-79569 ACL: Revise the process to find rights in an updated hierarchy: update grant_product_family" +
+                " for ACLCI product family")
+
+        update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'grant_product_family', value: 'CURR_REPUB_K12')
+            where "product_family = 'ACL_UDM_USAGE' and priority = '16'"
+        }
+
+        update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'grant_product_family', value: 'CURR_REPUB_HE')
+            where "product_family = 'ACL_UDM_USAGE' and priority = '17'"
+        }
+
+        update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'grant_product_family', value: 'CURR_REUSE_K12')
+            where "product_family = 'ACL_UDM_USAGE' and priority = '18'"
+        }
+
+        update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'grant_product_family', value: 'CURR_SHARE_K12')
+            where "product_family = 'ACL_UDM_USAGE' and priority = '19'"
+        }
+
+        rollback {
+            update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+                column(name: 'grant_product_family', value: 'ACLCI')
+                where "product_family = 'ACL_UDM_USAGE' and priority = '16'"
+            }
+
+            update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+                column(name: 'grant_product_family', value: 'ACLCI')
+                where "product_family = 'ACL_UDM_USAGE' and priority = '17'"
+            }
+
+            update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+                column(name: 'grant_product_family', value: 'ACLCI')
+                where "product_family = 'ACL_UDM_USAGE' and priority = '18'"
+            }
+
+            update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+                column(name: 'grant_product_family', value: 'ACLCI')
+                where "product_family = 'ACL_UDM_USAGE' and priority = '19'"
+            }
+        }
+    }
 }
