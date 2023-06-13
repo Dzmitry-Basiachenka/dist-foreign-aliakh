@@ -1,3 +1,7 @@
+18.0.3
+-
+* B-79569 ACL: Revise the process to find rights in an updated hierarchy: update grant_product_family for ACLCI product family
+
 18.0.2
 -
 * CDP-1146: FDA: Revised process of getting UDM rights: 'License type' payload in the rights request contains product family instead of type of use for transactional products
