@@ -1,3 +1,8 @@
+18.0.4
+-
+* B-78642 Tech Debt: FDA: fix security vulnerability CVE-2023-28709
+* B-78914 Migrate ShareCalc ACL data to FDA - Scenario Inputs: add index by batch ID to ACL usages table
+
 18.0.3
 -
 * B-79569 ACL: Revise the process to find rights in an updated hierarchy: update grant_product_family for ACLCI product family
