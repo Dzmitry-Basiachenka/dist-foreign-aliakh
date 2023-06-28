@@ -641,4 +641,18 @@ databaseChangeLog {
             }
         }
     }
+
+    changeSet(id: '2023-06-28-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
+        comment("B-78914 Migrate ShareCalc ACL data to FDA - Scenario Inputs: add index by " +
+                "df_acl_usage_batch_uid for df_acl_usage table")
+
+        createIndex(indexName: 'ix_df_acl_usage_df_acl_usage_batch_uid', schemaName: dbAppsSchema,
+                tableName: 'df_acl_usage', tablespace: dbIndexTablespace) {
+            column(name: 'df_acl_usage_batch_uid')
+        }
+
+        rollback {
+            sql("drop index ${dbAppsSchema}.ix_df_acl_usage_df_acl_usage_batch_uid")
+        }
+    }
 }
