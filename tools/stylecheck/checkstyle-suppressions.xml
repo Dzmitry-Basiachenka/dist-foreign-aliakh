@@ -66,4 +66,7 @@
               files="src[/\\]main[/\\]java[/\\]com[/\\]copyright[/\\]rup[/\\]dist[/\\]foreign[/\\]repository[/\\]impl[/\\]UsageRepository.java"/>
     <suppress checks="FileLength"
               files="src[/\\]main[/\\]java[/\\]com[/\\]copyright[/\\]rup[/\\]dist[/\\]foreign[/\\]service[/\\]impl[/\\]csv[/\\]DistCsvProcessor.java"/>
+    <!-- suppress check 'use parameterized logging instead of string concatenation' -->
+    <suppress checks="Regexp"
+              files="src[/\\]main[/\\]java[/\\]com[/\\]copyright[/\\]rup[/\\]dist[/\\]foreign[/\\]service[/\\]impl[/\\]config[/\\]micrometer[/\\]FdaLoggingMeterRegistry.java"/>
 </suppressions>
