@@ -1,0 +1,104 @@
+{
+  "response": {
+    "status": {
+      "code": "SUCCESS",
+      "message": "OK"
+    },
+    "content": {
+      "@class": "com.copyright.rup.rms.rights.domain.GrantWorksResponse",
+      "requestedWorkCount": "2",
+      "processedWorkCount": "2",
+      "foundWorkCount": "4",
+      "rights": [
+        {
+          "wr_wrk_inst": "123440502",
+          "status": "GRANT",
+          "type_of_use": "FAS",
+          "market": [
+            "INTERNATIONAL"
+          ],
+          "distribution": [
+            "INTERNAL"
+          ],
+          "region": "DZ, AL",
+          "right_begin_date": "06/15/2023",
+          "right_end_date": "12/31/2100",
+          "publication_begin_date": "06/15/2023",
+          "publication_end_date": "06/01/2025",
+          "agreement_begin_date": "06/15/2023",
+          "agreement_end_date": "12/31/3000",
+          "wg_owner_org_number": "1000011806",
+          "right_id": "44ddde14-c0ad-43f9-9098-4498ff1ce7b7",
+          "license_type": "FAS",
+          "product_family": "FAS",
+          "rh_account_number": "1000011806"
+        },
+        {
+          "wr_wrk_inst": "123440502",
+          "status": "DENY",
+          "type_of_use": "NGT_PHOTOCOPY",
+          "market": [
+            "CORPORATE"
+          ],
+          "distribution": "EXTERNAL",
+          "region": "WORLDWIDE",
+          "right_begin_date": "06/15/2023",
+          "right_end_date": "12/31/2100",
+          "publication_begin_date": "06/15/2023",
+          "publication_end_date": "06/01/2025",
+          "agreement_begin_date": "06/15/2023",
+          "agreement_end_date": "12/31/3000",
+          "wg_owner_org_number": "1000010077",
+          "right_id": "8afb9544-5325-4fa2-94d4-2195893b0ce4",
+          "license_type": "NGT_PHOTOCOPY",
+          "product_family": "FAS",
+          "rh_account_number": "1000010077"
+        },
+        {
+          "wr_wrk_inst": "122853015",
+          "status": "GRANT",
+          "type_of_use": "FAS",
+          "market": [
+            "INTERNATIONAL"
+          ],
+          "distribution": [
+            "INTERNAL"
+          ],
+          "region": "DZ, AL",
+          "right_begin_date": "06/15/2023",
+          "right_end_date": "12/31/2100",
+          "publication_begin_date": "06/15/2023",
+          "publication_end_date": "06/01/2025",
+          "agreement_begin_date": "06/15/2023",
+          "agreement_end_date": "12/31/3000",
+          "wg_owner_org_number": "1000027688",
+          "right_id": "b07af8f9-d675-4045-45ff-79529fc08733",
+          "license_type": "FAS",
+          "product_family": "FAS",
+          "rh_account_number": "1000027688"
+        },
+        {
+          "wr_wrk_inst": "122853015",
+          "status": "DENY",
+          "type_of_use": "NGT_PHOTOCOPY",
+          "market": [
+            "CORPORATE"
+          ],
+          "distribution": "EXTERNAL",
+          "region": "WORLDWIDE",
+          "right_begin_date": "06/15/2023",
+          "right_end_date": "12/31/2100",
+          "publication_begin_date": "06/15/2023",
+          "publication_end_date": "06/01/2025",
+          "agreement_begin_date": "06/15/2023",
+          "agreement_end_date": "12/31/3000",
+          "wg_owner_org_number": "1000010077",
+          "right_id": "8afb9544-5325-4fa2-94d4-2195893b0ce4",
+          "license_type": "NGT_PHOTOCOPY",
+          "product_family": "FAS",
+          "rh_account_number": "1000010077"
+        }
+      ]
+    }
+  }
+}

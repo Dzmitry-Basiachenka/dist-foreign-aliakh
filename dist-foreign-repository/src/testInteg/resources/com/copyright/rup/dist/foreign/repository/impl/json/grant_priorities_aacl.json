@@ -1,0 +1,16 @@
+[
+  {
+    "productFamily": "AACL",
+    "typeOfUse": "DIGITAL",
+    "grantProductFamily": "AACL",
+    "priority": 0,
+    "licenseType": "AACL"
+  },
+  {
+    "productFamily": "AACL",
+    "typeOfUse": "PRINT",
+    "grantProductFamily": "AACL",
+    "priority": 1,
+    "licenseType": "AACL"
+  }
+]

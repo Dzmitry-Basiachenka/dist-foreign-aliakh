@@ -1,0 +1,254 @@
+[
+  {
+    "productFamily": "ACL_UDM_USAGE",
+    "typeOfUse": "DIGITAL",
+    "grantProductFamily": "ACL",
+    "priority": 0,
+    "licenseType": "ACL"
+  },
+  {
+    "productFamily": "ACL_UDM_USAGE",
+    "typeOfUse": "PRINT",
+    "grantProductFamily": "ACL",
+    "priority": 1,
+    "licenseType": "ACL"
+  },
+  {
+    "productFamily": "ACL_UDM_USAGE",
+    "typeOfUse": "DIGITAL",
+    "grantProductFamily": "MACL",
+    "priority": 2,
+    "licenseType": "MACL"
+  },
+  {
+    "productFamily": "ACL_UDM_USAGE",
+    "typeOfUse": "PRINT",
+    "grantProductFamily": "MACL",
+    "priority": 3,
+    "licenseType": "MACL"
+  },
+  {
+    "productFamily": "ACL_UDM_USAGE",
+    "typeOfUse": "DIGITAL",
+    "grantProductFamily": "JACDCL",
+    "priority": 4,
+    "licenseType": "JACDCL"
+  },
+  {
+    "productFamily": "ACL_UDM_USAGE",
+    "typeOfUse": "PRINT",
+    "grantProductFamily": "JACDCL",
+    "priority": 5,
+    "licenseType": "JACDCL"
+  },
+  {
+    "productFamily": "ACL_UDM_USAGE",
+    "typeOfUse": "DIGITAL",
+    "grantProductFamily": "VGW",
+    "priority": 6,
+    "licenseType": "VGW"
+  },
+  {
+    "productFamily": "ACL_UDM_USAGE",
+    "typeOfUse": "PRINT",
+    "grantProductFamily": "VGW",
+    "priority": 7,
+    "licenseType": "VGW"
+  },
+  {
+    "productFamily": "ACL_UDM_USAGE",
+    "typeOfUse": "NGT_PHOTOCOPY",
+    "grantProductFamily": "TRS",
+    "priority": 8,
+    "licenseType": "NGT_PHOTOCOPY"
+  },
+  {
+    "productFamily": "ACL_UDM_USAGE",
+    "typeOfUse": "NGT_SEND_EMAIL",
+    "grantProductFamily": "DPS",
+    "priority": 9,
+    "licenseType": "NGT_SEND_EMAIL"
+  },
+  {
+    "productFamily": "ACL_UDM_USAGE",
+    "typeOfUse": "NGT_INTRANET_POST",
+    "grantProductFamily": "DPS",
+    "priority": 10,
+    "licenseType": "NGT_INTRANET_POST"
+  },
+  {
+    "productFamily": "ACL_UDM_USAGE",
+    "typeOfUse": "NGT_INTERNET_POST",
+    "grantProductFamily": "DPS",
+    "priority": 11,
+    "licenseType": "NGT_INTERNET_POST"
+  },
+  {
+    "productFamily": "ACL_UDM_USAGE",
+    "typeOfUse": "NGT_EXTRANET_POST",
+    "grantProductFamily": "DPS",
+    "priority": 12,
+    "licenseType": "NGT_EXTRANET_POST"
+  },
+  {
+    "productFamily": "ACL_UDM_USAGE",
+    "typeOfUse": "NGT_PRINT_COURSE_MATERIALS",
+    "grantProductFamily": "APS",
+    "priority": 13,
+    "licenseType": "NGT_PRINT_COURSE_MATERIALS"
+  },
+  {
+    "productFamily": "ACL_UDM_USAGE",
+    "typeOfUse": "NGT_ELECTRONIC_COURSE_MATERIALS",
+    "grantProductFamily": "ECC",
+    "priority": 14,
+    "licenseType": "NGT_ELECTRONIC_COURSE_MATERIALS"
+  },
+  {
+    "productFamily": "ACL_UDM_USAGE",
+    "typeOfUse": "DIGITAL",
+    "grantProductFamily": "SAL",
+    "priority": 15,
+    "licenseType": "SAL"
+  },
+  {
+    "productFamily": "ACL_UDM_USAGE",
+    "typeOfUse": "CURR_REPUB_K12",
+    "grantProductFamily": "CURR_REPUB_K12",
+    "priority": 16,
+    "licenseType": "CURR_REPUB_K12"
+  },
+  {
+    "productFamily": "ACL_UDM_USAGE",
+    "typeOfUse": "CURR_REPUB_HE",
+    "grantProductFamily": "CURR_REPUB_HE",
+    "priority": 17,
+    "licenseType": "CURR_REPUB_HE"
+  },
+  {
+    "productFamily": "ACL_UDM_USAGE",
+    "typeOfUse": "CURR_REUSE_K12",
+    "grantProductFamily": "CURR_REUSE_K12",
+    "priority": 18,
+    "licenseType": "CURR_REUSE_K12"
+  },
+  {
+    "productFamily": "ACL_UDM_USAGE",
+    "typeOfUse": "CURR_SHARE_K12",
+    "grantProductFamily": "CURR_SHARE_K12",
+    "priority": 19,
+    "licenseType": "CURR_SHARE_K12"
+  },
+  {
+    "productFamily": "ACL_UDM_USAGE",
+    "typeOfUse": "NGT_BOOK",
+    "grantProductFamily": "RLS",
+    "priority": 20,
+    "licenseType": "NGT_BOOK"
+  },
+  {
+    "productFamily": "ACL_UDM_USAGE",
+    "typeOfUse": "NGT_JOURNAL_MAGAZINE",
+    "grantProductFamily": "RLS",
+    "priority": 21,
+    "licenseType": "NGT_JOURNAL_MAGAZINE"
+  },
+  {
+    "productFamily": "ACL_UDM_USAGE",
+    "typeOfUse": "NGT_EDU_INSTRUC_PROGRAM",
+    "grantProductFamily": "RLS",
+    "priority": 22,
+    "licenseType": "NGT_EDU_INSTRUC_PROGRAM"
+  },
+  {
+    "productFamily": "ACL_UDM_USAGE",
+    "typeOfUse": "NGT_NEWSPAPER",
+    "grantProductFamily": "RLS",
+    "priority": 23,
+    "licenseType": "NGT_NEWSPAPER"
+  },
+  {
+    "productFamily": "ACL_UDM_USAGE",
+    "typeOfUse": "NGT_NEWSLETTER",
+    "grantProductFamily": "RLS",
+    "priority": 24,
+    "licenseType": "NGT_NEWSLETTER"
+  },
+  {
+    "productFamily": "ACL_UDM_USAGE",
+    "typeOfUse": "NGT_THESIS_DISSERTATION",
+    "grantProductFamily": "RLS",
+    "priority": 25,
+    "licenseType": "NGT_THESIS_DISSERTATION"
+  },
+  {
+    "productFamily": "ACL_UDM_USAGE",
+    "typeOfUse": "NGT_BROC_PROMO_MATERIAL",
+    "grantProductFamily": "RLS",
+    "priority": 26,
+    "licenseType": "NGT_BROC_PROMO_MATERIAL"
+  },
+  {
+    "productFamily": "ACL_UDM_USAGE",
+    "typeOfUse": "NGT_PRESENTATION_SLIDES",
+    "grantProductFamily": "RLS",
+    "priority": 27,
+    "licenseType": "NGT_PRESENTATION_SLIDES"
+  },
+  {
+    "productFamily": "ACL_UDM_USAGE",
+    "typeOfUse": "NGT_CONT_EDU_TRAIN_MATERIALS",
+    "grantProductFamily": "RLS",
+    "priority": 28,
+    "licenseType": "NGT_CONT_EDU_TRAIN_MATERIALS"
+  },
+  {
+    "productFamily": "ACL_UDM_USAGE",
+    "typeOfUse": "NGT_TRAINING_MATERIALS",
+    "grantProductFamily": "RLS",
+    "priority": 29,
+    "licenseType": "NGT_TRAINING_MATERIALS"
+  },
+  {
+    "productFamily": "ACL_UDM_USAGE",
+    "typeOfUse": "NGT_OTHR_PUBLISH_PRODUCT",
+    "grantProductFamily": "RLS",
+    "priority": 30,
+    "licenseType": "NGT_OTHR_PUBLISH_PRODUCT"
+  },
+  {
+    "productFamily": "ACL_UDM_USAGE",
+    "typeOfUse": "NGT_MEDCOMMS",
+    "grantProductFamily": "RLS",
+    "priority": 31,
+    "licenseType": "NGT_MEDCOMMS"
+  },
+  {
+    "productFamily": "ACL_UDM_USAGE",
+    "typeOfUse": "NGT_MEDCOMMS_MEDICAL_PROMO",
+    "grantProductFamily": "RLS",
+    "priority": 32,
+    "licenseType": "NGT_MEDCOMMS_MEDICAL_PROMO"
+  },
+  {
+    "productFamily": "ACL_UDM_USAGE",
+    "typeOfUse": "NGT_MEDCOMMS_MEDICALED_NONPROMO",
+    "grantProductFamily": "RLS",
+    "priority": 33,
+    "licenseType": "NGT_MEDCOMMS_MEDICALED_NONPROMO"
+  },
+  {
+    "productFamily": "ACL_UDM_USAGE",
+    "typeOfUse": "NGT_MEDCOMMS_INTERNAL_TRAIN",
+    "grantProductFamily": "RLS",
+    "priority": 34,
+    "licenseType": "NGT_MEDCOMMS_INTERNAL_TRAIN"
+  },
+  {
+    "productFamily": "ACL_UDM_USAGE",
+    "typeOfUse": "NGT_MEDCOMMS_REFMATERIALS",
+    "grantProductFamily": "RLS",
+    "priority": 35,
+    "licenseType": "NGT_MEDCOMMS_REFMATERIALS"
+  }
+]

@@ -62,8 +62,10 @@ public class UpdateRightsIntegrationTest {
     private static final String UDM_RIGHTS_FILE = "test-update-udm-rights.groovy";
     private static final Long RH_ACCOUNT_NUMBER_1 = 1000023401L;
     private static final Long RH_ACCOUNT_NUMBER_2 = 1000000322L;
-    private static final String FAS = "FAS";
-    private static final String AACL = "AACL";
+    private static final String FAS_PRODUCT_FAMILY = "FAS";
+    private static final String FAS2_PRODUCT_FAMILY = "FAS2";
+    private static final String NTS_PRODUCT_FAMILY = "NTS";
+    private static final String AACL_PRODUCT_FAMILY = "AACL";
     private static final String PRINT_TYPE_OF_USE = "PRINT";
     private static final String DIGITAL_TYPE_OF_USE = "DIGITAL";
     private static final String UDM_USAGE_ID_1 = "acb53a42-7e8d-4a4a-8d72-6f794be2731c";
@@ -132,10 +134,11 @@ public class UpdateRightsIntegrationTest {
         testHelper.expectGetRmsRights("rights/nts/rms_grants_786768461_request.json",
             "rights/nts/rms_grants_786768461_response.json");
         rightsService.updateRights(List.of(
-            buildUsage("b77e72d6-ef71-4f4b-a00b-5800e43e5bee", FAS, 254030731L),
-            buildUsage("8aded52d-9507-4883-ab4c-fd2e029298af", FAS, 254030731L),
-            buildUsage("74ded52a-4454-1225-ab4c-fA2e029298af", FAS, 658824345L)), true);
-        rightsService.updateRights(List.of(buildUsage("3a6b6f25-9f68-4da7-be4f-dd65574f5168", FAS, 488824345L)), true);
+            buildUsage("b77e72d6-ef71-4f4b-a00b-5800e43e5bee", FAS_PRODUCT_FAMILY, 254030731L),
+            buildUsage("8aded52d-9507-4883-ab4c-fd2e029298af", FAS_PRODUCT_FAMILY, 254030731L),
+            buildUsage("74ded52a-4454-1225-ab4c-fA2e029298af", FAS_PRODUCT_FAMILY, 658824345L)), true);
+        rightsService.updateRights(List.of(
+            buildUsage("3a6b6f25-9f68-4da7-be4f-dd65574f5168", FAS_PRODUCT_FAMILY, 488824345L)), true);
         rightsService.updateRights(
             List.of(buildUsage("ede81bc0-a756-43a2-b236-05a0184384f4", "NTS", 786768461L)), false);
         assertUsage("ede81bc0-a756-43a2-b236-05a0184384f4", UsageStatusEnum.RH_FOUND, 1000023401L);
@@ -148,6 +151,72 @@ public class UpdateRightsIntegrationTest {
         assertAudit("74ded52a-4454-1225-ab4c-fA2e029298af", "Rightsholder account 1000023401 was found in RMS");
         assertAudit("3a6b6f25-9f68-4da7-be4f-dd65574f5168", "Rightsholder account for 488824345 was not found in RMS");
         assertAudit("ede81bc0-a756-43a2-b236-05a0184384f4");
+        testHelper.verifyRestServer();
+    }
+
+    @Test
+    @TestData(fileName = FOLDER_NAME + "test-update-rights-fas.groovy")
+    public void testUpdateRightsProductFamilyFasGrantProductFamilyFas() {
+        testHelper.createRestServer();
+        testHelper.expectGetRmsRights("rights/fas/rms_grants_123440502_122853015_request.json",
+            "rights/fas/rms_grants_123440502_122853015_response.json");
+        testHelper.expectGetRmsRights("rights/rms_grants_122799600_request.json",
+            RMS_GRANTS_EMPTY_RESPONSE_JSON);
+        rightsService.updateRights(List.of(
+            buildUsage("1ad07d10-c545-4921-9273-cdf74350683d", FAS_PRODUCT_FAMILY, 123440502L),
+            buildUsage("3319494e-b75c-41fb-aed0-f65c14356942", FAS_PRODUCT_FAMILY, 122853015L)), true);
+        rightsService.updateRights(List.of(
+            buildUsage("5ecad71e-0e13-40a8-9304-b93f37aa8358", FAS_PRODUCT_FAMILY, 122799600L)), true);
+        assertUsage("1ad07d10-c545-4921-9273-cdf74350683d", UsageStatusEnum.RH_FOUND, 1000011806L);
+        assertUsage("3319494e-b75c-41fb-aed0-f65c14356942", UsageStatusEnum.RH_FOUND, 1000027688L);
+        assertUsage("5ecad71e-0e13-40a8-9304-b93f37aa8358", UsageStatusEnum.RH_NOT_FOUND, null);
+        assertAudit("1ad07d10-c545-4921-9273-cdf74350683d", "Rightsholder account 1000011806 was found in RMS");
+        assertAudit("3319494e-b75c-41fb-aed0-f65c14356942", "Rightsholder account 1000027688 was found in RMS");
+        assertAudit("5ecad71e-0e13-40a8-9304-b93f37aa8358", "Rightsholder account for 122799600 was not found in RMS");
+        testHelper.verifyRestServer();
+    }
+
+    @Test
+    @TestData(fileName = FOLDER_NAME + "test-update-rights-fas2.groovy")
+    public void testUpdateRightsProductFamilyFas2GrantProductFamilyFas() {
+        testHelper.createRestServer();
+        testHelper.expectGetRmsRights("rights/fas/rms_grants_123440502_122853015_request.json",
+            "rights/fas/rms_grants_123440502_122853015_response.json");
+        testHelper.expectGetRmsRights("rights/rms_grants_122799600_request.json",
+            RMS_GRANTS_EMPTY_RESPONSE_JSON);
+        rightsService.updateRights(List.of(
+            buildUsage("286b6f99-61dc-4aec-8921-1bb12a1af95c", FAS2_PRODUCT_FAMILY, 123440502L),
+            buildUsage("439b553b-3df4-4b1d-b5c4-43e383614e2e", FAS2_PRODUCT_FAMILY, 122853015L)), true);
+        rightsService.updateRights(List.of(
+            buildUsage("6535b989-a9ee-4089-b815-1fee4c130e0b", FAS2_PRODUCT_FAMILY, 122799600L)), true);
+        assertUsage("286b6f99-61dc-4aec-8921-1bb12a1af95c", UsageStatusEnum.RH_FOUND, 1000011806L);
+        assertUsage("439b553b-3df4-4b1d-b5c4-43e383614e2e", UsageStatusEnum.RH_FOUND, 1000027688L);
+        assertUsage("6535b989-a9ee-4089-b815-1fee4c130e0b", UsageStatusEnum.RH_NOT_FOUND, null);
+        assertAudit("286b6f99-61dc-4aec-8921-1bb12a1af95c", "Rightsholder account 1000011806 was found in RMS");
+        assertAudit("439b553b-3df4-4b1d-b5c4-43e383614e2e", "Rightsholder account 1000027688 was found in RMS");
+        assertAudit("6535b989-a9ee-4089-b815-1fee4c130e0b", "Rightsholder account for 122799600 was not found in RMS");
+        testHelper.verifyRestServer();
+    }
+
+    @Test
+    @TestData(fileName = FOLDER_NAME + "test-update-rights-nts.groovy")
+    public void testUpdateRightsProductFamilyNtsGrantProductFamilyFas() {
+        testHelper.createRestServer();
+        testHelper.expectGetRmsRights("rights/fas/rms_grants_123440502_122853015_request.json",
+            "rights/fas/rms_grants_123440502_122853015_response.json");
+        testHelper.expectGetRmsRights("rights/rms_grants_122799600_request.json",
+            RMS_GRANTS_EMPTY_RESPONSE_JSON);
+        rightsService.updateRights(List.of(
+            buildUsage("3810cb0f-1eea-4ad9-8a9c-dd96eecaa6f8", NTS_PRODUCT_FAMILY, 123440502L),
+            buildUsage("579540ab-e49e-48ac-9623-3b5a9c0bc2b3", NTS_PRODUCT_FAMILY, 122853015L)), true);
+        rightsService.updateRights(List.of(
+            buildUsage("715f0c59-9af4-4ac7-95ff-dd957a7eecd6", NTS_PRODUCT_FAMILY, 122799600L)), true);
+        assertUsage("3810cb0f-1eea-4ad9-8a9c-dd96eecaa6f8", UsageStatusEnum.RH_FOUND, 1000011806L);
+        assertUsage("579540ab-e49e-48ac-9623-3b5a9c0bc2b3", UsageStatusEnum.RH_FOUND, 1000027688L);
+        assertUsage("715f0c59-9af4-4ac7-95ff-dd957a7eecd6", UsageStatusEnum.RH_NOT_FOUND, null);
+        assertAudit("3810cb0f-1eea-4ad9-8a9c-dd96eecaa6f8", "Rightsholder account 1000011806 was found in RMS");
+        assertAudit("579540ab-e49e-48ac-9623-3b5a9c0bc2b3", "Rightsholder account 1000027688 was found in RMS");
+        assertAudit("715f0c59-9af4-4ac7-95ff-dd957a7eecd6", "Rightsholder account for 122799600 was not found in RMS");
         testHelper.verifyRestServer();
     }
 
@@ -396,7 +465,7 @@ public class UpdateRightsIntegrationTest {
     }
 
     private Usage buildAaclUsage(String usageId, long wrWrkInst) {
-        Usage usage = buildUsage(usageId, AACL, wrWrkInst);
+        Usage usage = buildUsage(usageId, AACL_PRODUCT_FAMILY, wrWrkInst);
         usage.setAaclUsage(new AaclUsage());
         usage.getAaclUsage().setBatchPeriodEndDate(LocalDate.of(2015, 6, 30));
         return usage;
