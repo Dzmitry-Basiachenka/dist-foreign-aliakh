@@ -9,9 +9,9 @@ dependencies {
     }
     compile("com.mchange:c3p0:${c3p0Version}")
     compile("org.springframework:spring-context-support:${rupJava.standardDependencies.spring.version}")
+    compile("io.micrometer:micrometer-core:${micrometerVersion}")
 
     runtime("commons-jexl:commons-jexl:${jexlVersion}")
-    runtime("org.aspectj:aspectjweaver:${aspectjVersion}")
 
     testCompile("com.copyright.rup.dist.common:dist-common-test:${distCommonVersion}")
 
