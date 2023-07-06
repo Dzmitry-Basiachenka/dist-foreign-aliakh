@@ -1,6 +1,17 @@
 <configuration>
 
-    <include resource="com/copyright/rup/dist/common/web/logback-dist.xml"/>
+    <!-- Use logback-dist.xml after migration to Micrometer of all applications -->
+    <include resource="com/copyright/rup/common/logging/logback-webapp.xml"/>
+
+    <!-- Remove after migration to Micrometer of all applications -->
+    <property name="logLevelDist" value="${DIST_LOG_LEVEL:-INFO}"/>
+    <property name="logLevelGen" value="${GEN_LOG_LEVEL:-WARN}"/>
+    <property name="logLevelCamel" value="${JMS_LOG_LEVEL:-WARN}"/>
+
+    <!-- Remove after migration to Micrometer of all applications -->
+    <logger name="com.copyright" level="INFO"/>
+    <logger name="com.copyright.rup.dist" level="${logLevelDist}"/>
+    <logger name="org.apache.camel" level="${logLevelCamel}"/>
 
     <!-- STANDARD-PATTERN: Set the context name for webapps. When multiple webapps
         are deployed to a container, this gives each a distinct JMX MBeans. -->
@@ -16,6 +27,22 @@
     <property name="logLevelSpringSecurity" value="${DIST_FOREIGN_SPRING_SECURITY_LOG_LEVEL:-${logLevelDist}}"/>
     <property name="logLevelStmRh" value="${DIST_FOREIGN_STM_RH_LOG_LEVEL:-${logLevelDist}}"/>
     <property name="logLevelUsageProcessing" value="${DIST_FOREIGN_USAGE_PROCESSING_LOG_LEVEL:-${logLevelDist}}"/>
+
+    <appender name="MICROMETER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${APP_LOG_DIR:-build}/dist-foreign-ui-micrometer.log</file>
+        <encoder>
+            <pattern>%date{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] [%mdc] - %message%n</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${APP_LOG_DIR:-build}/dist-foreign-ui-micrometer.log.%d.%i.gz</fileNamePattern>
+            <maxFileSize>100MB</maxFileSize>
+            <maxHistory>180</maxHistory>
+        </rollingPolicy>
+    </appender>
+
+    <logger additivity="false" name="com.copyright.rup.dist.foreign.service.impl.config.micrometer.FdaLoggingMeterRegistry" level="INFO">
+        <appender-ref ref="MICROMETER"/>
+    </logger>
 
     <logger name="com.copyright.rup.dist.foreign.service.impl" level="${logLevelService}"/>
 

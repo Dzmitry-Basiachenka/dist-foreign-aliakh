@@ -29,4 +29,5 @@
     </bean>
 
     <context:component-scan base-package="com.copyright.rup.dist.foreign.service"/>
+    <context:component-scan base-package="com.copyright.rup.dist.foreign.service.impl.config.micrometer"/>
 </beans>
