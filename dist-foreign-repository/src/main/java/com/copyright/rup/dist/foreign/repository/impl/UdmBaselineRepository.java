@@ -19,6 +19,8 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import io.micrometer.core.annotation.Timed;
+
 /**
  * Implementation of {@link IUdmBaselineRepository}.
  * <p>
@@ -29,6 +31,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author Anton Azarenka
  */
 @Repository
+@Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
 public class UdmBaselineRepository extends AclBaseRepository implements IUdmBaselineRepository {
 
     private static final int PARTITION_SIZE_FOR_POPULATING = 16000; // Max count of allowed parameters for 2 variables

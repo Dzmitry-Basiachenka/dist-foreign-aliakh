@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import io.micrometer.core.annotation.Timed;
+
 /**
  * Implementation of {@link ILicenseeClassRepository}.
  * <p>
@@ -23,6 +25,7 @@ import java.util.Objects;
  * @author Anton Azarenka
  */
 @Repository
+@Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
 public class LicenseeClassRepository extends BaseRepository implements ILicenseeClassRepository {
 
     @Override
