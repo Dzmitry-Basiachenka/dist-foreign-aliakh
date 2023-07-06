@@ -21,6 +21,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
+import io.micrometer.core.annotation.Timed;
+
 /**
  * Implementation of UDM usage repository.
  * <p>
@@ -31,6 +33,7 @@ import java.util.Set;
  * @author Uladzislau Shalamitski
  */
 @Repository
+@Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
 public class UdmUsageRepository extends AclBaseRepository implements IUdmUsageRepository {
 
     private static final int MAX_VARIABLES_COUNT = 32000;
