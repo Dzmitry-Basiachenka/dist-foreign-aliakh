@@ -17,6 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.OutputStream;
 import java.util.Set;
 
+import io.micrometer.core.annotation.Timed;
+
 /**
  * Implementation of {@link IResearchService}.
  * <p>
@@ -27,6 +29,7 @@ import java.util.Set;
  * @author Nikita Levyankov
  */
 @Service
+@Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
 public class ResearchService implements IResearchService {
 
     @Autowired

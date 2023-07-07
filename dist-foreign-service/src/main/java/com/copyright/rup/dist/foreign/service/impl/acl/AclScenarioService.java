@@ -44,6 +44,8 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import io.micrometer.core.annotation.Timed;
+
 /**
  * Implementation of {@link IAclScenarioService}.
  * <p>
@@ -54,6 +56,7 @@ import java.util.stream.Collectors;
  * @author Dzmitry Basiachenka
  */
 @Service
+@Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
 public class AclScenarioService implements IAclScenarioService {
 
     private static final Logger LOGGER = RupLogUtils.getLogger();

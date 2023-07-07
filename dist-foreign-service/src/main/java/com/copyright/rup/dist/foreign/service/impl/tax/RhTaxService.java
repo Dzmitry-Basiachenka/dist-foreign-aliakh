@@ -35,6 +35,8 @@ import java.util.TreeSet;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import io.micrometer.core.annotation.Timed;
+
 /**
  * Service to process RH taxes.
  * <p>
@@ -45,6 +47,7 @@ import java.util.stream.Collectors;
  * @author Uladzislau Shalamitski
  */
 @Component
+@Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
 public class RhTaxService implements IRhTaxService {
 
     private static final Logger LOGGER = RupLogUtils.getLogger();

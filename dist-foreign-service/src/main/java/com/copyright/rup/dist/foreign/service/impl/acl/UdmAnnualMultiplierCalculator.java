@@ -1,9 +1,11 @@
 package com.copyright.rup.dist.foreign.service.impl.acl;
 
 import com.copyright.rup.common.exception.RupRuntimeException;
+
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Range;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -13,6 +15,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
+
+import io.micrometer.core.annotation.Timed;
 
 /**
  * Calculator of annual multiplier for UDM usages.
@@ -24,6 +28,7 @@ import javax.annotation.PostConstruct;
  * @author Aliaksandr Liakh
  */
 @Component
+@Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
 public class UdmAnnualMultiplierCalculator {
 
     @Value("#{$RUP{dist.foreign.udm.difference_in_days.to.annual_multiplier}}")

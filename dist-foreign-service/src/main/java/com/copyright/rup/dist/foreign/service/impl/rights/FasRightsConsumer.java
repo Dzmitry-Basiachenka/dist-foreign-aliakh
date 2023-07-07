@@ -17,6 +17,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+import io.micrometer.core.annotation.Timed;
+
 /**
  * Consumer to handle FAS/FAS2 usages for getting Rights.
  * <p>
@@ -28,6 +30,7 @@ import java.util.List;
  * @author Aliaksandr Liakh
  */
 @Component("df.service.fasRightsConsumer")
+@Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
 public class FasRightsConsumer implements IConsumer<List<Usage>> {
 
     private static final Logger LOGGER = RupLogUtils.getLogger();

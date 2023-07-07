@@ -30,6 +30,8 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import io.micrometer.core.annotation.Timed;
+
 /**
  * Implementation of {@link IAclGrantDetailService}.
  * <p>
@@ -40,6 +42,7 @@ import java.util.stream.Collectors;
  * @author Aliaksandr Liakh
  */
 @Service
+@Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
 public class AclGrantDetailService implements IAclGrantDetailService {
 
     private static final int TYPE_OF_USE_COUNT = 1;

@@ -60,6 +60,8 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import io.micrometer.core.annotation.Timed;
+
 /**
  * Represents interface of service for usage business logic.
  * <p>
@@ -72,6 +74,7 @@ import java.util.stream.Stream;
  * @author Aliaksandr Radkevich
  */
 @Service
+@Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
 public class UsageService implements IUsageService {
 
     private static final String SEND_TO_CRM_FINISHED_INFO_LOG_MESSAGE = "Send to CRM. Finished. PaidUsagesCount={}, " +

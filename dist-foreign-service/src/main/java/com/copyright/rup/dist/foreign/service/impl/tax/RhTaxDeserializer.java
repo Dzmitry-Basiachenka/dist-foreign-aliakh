@@ -9,10 +9,13 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
+
 import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+
+import io.micrometer.core.annotation.Timed;
 
 /**
  * Implementation of {@link JsonDeserializer} to check RH tax country.
@@ -24,6 +27,7 @@ import java.io.IOException;
  * @author Uladzislau Shalamitski
  */
 @Component("df.service.rhTaxDeserializer")
+@Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
 public class RhTaxDeserializer extends JsonDeserializer<Usage> {
 
     private static final Logger LOGGER = RupLogUtils.getLogger();
