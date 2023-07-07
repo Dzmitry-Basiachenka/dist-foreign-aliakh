@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import io.micrometer.core.annotation.Timed;
+
 /**
  * Implementation of {@link IUdmBaselineValueService}.
  * <p>
@@ -22,6 +24,7 @@ import java.util.List;
  * @author Anton Azarenka
  */
 @Service
+@Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
 public class UdmBaselineValueService implements IUdmBaselineValueService {
 
     @Autowired

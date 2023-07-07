@@ -17,6 +17,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+import io.micrometer.core.annotation.Timed;
+
 /**
  * Consumer to handle ACLCI usages for getting Rights.
  * <p>
@@ -27,6 +29,7 @@ import java.util.List;
  * @author Dzmitry Basiachenka
  */
 @Component("df.service.aclciRightsConsumer")
+@Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
 public class AclciRightsConsumer implements IConsumer<List<Usage>> {
 
     private static final Logger LOGGER = RupLogUtils.getLogger();

@@ -37,6 +37,8 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import io.micrometer.core.annotation.Timed;
+
 /**
  * Implementation of {@link IUsageBatchService}.
  * <p>
@@ -48,6 +50,7 @@ import java.util.stream.Collectors;
  * @author Aliaksandr Radkevich
  */
 @Service
+@Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
 public class UsageBatchService implements IUsageBatchService {
 
     private static final EnumSet<UsageStatusEnum> PROCESSED_NTS_BATCH_USAGE_STATUSES =

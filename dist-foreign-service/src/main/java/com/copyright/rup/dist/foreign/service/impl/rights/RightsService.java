@@ -53,6 +53,8 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
+import io.micrometer.core.annotation.Timed;
+
 /**
  * Service contains logic related to Rights Assignment.
  * <p>
@@ -63,6 +65,7 @@ import java.util.stream.Collectors;
  * @author Nikita Levyankov
  */
 @Service
+@Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
 public class RightsService implements IRightsService {
 
     private static final int PRODUCT_FAMILIES_COUNT = 1;

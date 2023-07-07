@@ -29,6 +29,8 @@ import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
+import io.micrometer.core.annotation.Timed;
+
 /**
  * Implementation of {@link IRightsholderService}.
  * <p/>
@@ -39,6 +41,7 @@ import javax.annotation.PreDestroy;
  * @author Mikita Hladkikh
  */
 @Service
+@Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
 public class RightsholderService extends CommonRightsholderService implements IRightsholderService {
 
     private static final Logger LOGGER = RupLogUtils.getLogger();

@@ -20,6 +20,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import io.micrometer.core.annotation.Timed;
+
 /**
  * Implementation of {@link IAclGrantSetService}.
  * <p>
@@ -30,6 +32,7 @@ import java.util.stream.Collectors;
  * @author Aliaksandr Liakh
  */
 @Service
+@Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
 public class AclGrantSetService implements IAclGrantSetService {
 
     private static final Logger LOGGER = RupLogUtils.getLogger();

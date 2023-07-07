@@ -47,6 +47,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import io.micrometer.core.annotation.Timed;
+
 /**
  * Implementation of {@link IFasUsageService}.
  * <p>
@@ -57,6 +59,7 @@ import java.util.stream.Stream;
  * @author Ihar Suvorau
  */
 @Service
+@Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
 public class FasUsageService implements IFasUsageService {
 
     private static final String CALCULATION_FINISHED_LOG_MESSAGE = "Calculated usages gross amount. " +

@@ -17,6 +17,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+import io.micrometer.core.annotation.Timed;
+
 /**
  * Consumer to handle UDM usages for getting rights.
  * <p>
@@ -27,6 +29,7 @@ import java.util.List;
  * @author Uladzislau Shalamitski
  */
 @Component("df.service.udmRightsConsumer")
+@Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
 public class UdmRightsConsumer implements IConsumer<List<UdmUsage>> {
 
     private static final Logger LOGGER = RupLogUtils.getLogger();

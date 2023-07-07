@@ -20,6 +20,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import io.micrometer.core.annotation.Timed;
+
 /**
  * Implementation of {@link IUdmBaselineService}.
  * <p>
@@ -30,6 +32,7 @@ import java.util.Set;
  * @author Anton Azarenka
  */
 @Service
+@Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
 public class UdmBaselineService implements IUdmBaselineService {
 
     private static final Logger LOGGER = RupLogUtils.getLogger();
