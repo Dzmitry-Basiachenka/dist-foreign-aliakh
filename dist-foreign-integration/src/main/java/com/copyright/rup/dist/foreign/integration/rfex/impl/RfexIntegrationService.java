@@ -26,6 +26,8 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
+import io.micrometer.core.annotation.Timed;
+
 /**
  * Implementation of {@link IRfexIntegrationService}.
  * <p>
@@ -36,6 +38,7 @@ import java.util.Date;
  * @author Anton Azarenka
  */
 @Service("df.integration.rfexIntegrationService")
+@Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
 public class RfexIntegrationService implements IRfexIntegrationService {
 
     private static final String BASE_CURRENCY = "USD";

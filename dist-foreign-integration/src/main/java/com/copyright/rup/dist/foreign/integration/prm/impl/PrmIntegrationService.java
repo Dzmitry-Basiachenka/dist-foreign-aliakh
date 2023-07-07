@@ -28,6 +28,8 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import io.micrometer.core.annotation.Timed;
+
 /**
  * Implementation of {@link IPrmIntegrationService} for PRM system.
  * <p/>
@@ -38,6 +40,7 @@ import java.util.stream.Collectors;
  * @author Mikalai Bezmen
  */
 @Service
+@Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
 public class PrmIntegrationService implements IPrmIntegrationService {
 
     @Autowired

@@ -35,6 +35,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import io.micrometer.core.annotation.Timed;
+
 /**
  * Implementation of {@link ICrmService}.
  * <p>
@@ -45,6 +47,7 @@ import java.util.stream.Collectors;
  * @author Darya Baraukova
  */
 @Service
+@Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
 public class CrmService implements ICrmService {
 
     private static final Logger LOGGER = RupLogUtils.getLogger();

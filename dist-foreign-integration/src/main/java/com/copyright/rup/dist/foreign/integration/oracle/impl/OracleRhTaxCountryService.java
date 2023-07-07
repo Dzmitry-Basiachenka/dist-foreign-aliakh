@@ -6,6 +6,7 @@ import com.copyright.rup.dist.foreign.integration.oracle.impl.handler.OracleRhTa
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableMap;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,8 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Map;
 import java.util.Set;
+
+import io.micrometer.core.annotation.Timed;
 
 /**
  * Implementation of {@link IOracleRhTaxCountryService}.
@@ -26,6 +29,7 @@ import java.util.Set;
  * @author Uladzislau Shalamitski
  */
 @Service("df.integration.oracleRhTaxCountryService")
+@Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
 public class OracleRhTaxCountryService implements IOracleRhTaxCountryService {
 
     private static final String CONNECTION_EXCEPTION_MESSAGE = "Could not connect to the Oracle AP";

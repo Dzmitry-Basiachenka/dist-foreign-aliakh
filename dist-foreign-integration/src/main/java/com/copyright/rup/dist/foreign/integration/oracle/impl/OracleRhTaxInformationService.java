@@ -33,6 +33,8 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Map;
 
+import io.micrometer.core.annotation.Timed;
+
 /**
  * Implementation of {@link IOracleRhTaxInformationService}.
  * <p>
@@ -43,6 +45,7 @@ import java.util.Map;
  * @author Stanislau Rudak
  */
 @Service("df.integration.oracleRhTaxInformationService")
+@Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
 public class OracleRhTaxInformationService implements IOracleRhTaxInformationService {
 
     private static final int BATCH_SIZE = 128;
