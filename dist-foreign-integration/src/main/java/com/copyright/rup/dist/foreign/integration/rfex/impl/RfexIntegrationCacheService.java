@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.concurrent.TimeUnit;
 
+import io.micrometer.core.annotation.Timed;
+
 /**
  * Implementation of service for retrieving information about {@link ExchangeRate}s from PRM.
  * Uses {@link com.google.common.cache.Cache} for caching data and REST calls for retrieving data.
@@ -25,6 +27,7 @@ import java.util.concurrent.TimeUnit;
  * @author Anton Azarenka
  */
 @Service("df.integration.rfexIntegrationCacheService")
+@Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
 public class RfexIntegrationCacheService extends AbstractCacheService<ExchangeRateRequest, ExchangeRate>
     implements IRfexIntegrationService {
 

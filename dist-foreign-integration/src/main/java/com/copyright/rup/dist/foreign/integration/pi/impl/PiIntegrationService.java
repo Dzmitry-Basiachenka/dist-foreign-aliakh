@@ -30,6 +30,8 @@ import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
+import io.micrometer.core.annotation.Timed;
+
 /**
  * This service allows searching works in Published Inventory with help of RUP ES API.
  * <p/>
@@ -40,6 +42,7 @@ import javax.annotation.PostConstruct;
  * @author Aliaksandr Radkevich
  */
 @Service("df.integration.piIntegrationService")
+@Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
 public class PiIntegrationService implements IPiIntegrationService {
 
     private static final int EXPECTED_SEARCH_HITS_COUNT = 1;

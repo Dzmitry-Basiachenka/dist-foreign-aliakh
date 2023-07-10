@@ -15,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import io.micrometer.core.annotation.Timed;
+
 /**
  * This service allows searching soft deleted works in Published Inventory.
  * <p/>
@@ -25,6 +27,7 @@ import org.springframework.stereotype.Service;
  * @author Mikita Maistrenka
  */
 @Service("df.integration.piDeletedWorkIntegrationService")
+@Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
 public class PiDeletedWorkIntegrationService implements IPiDeletedWorkIntegrationService {
 
     private static final Logger LOGGER = RupLogUtils.getLogger();
