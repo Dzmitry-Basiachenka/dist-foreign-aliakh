@@ -1,0 +1,100 @@
+[
+  {
+    "productFamily": "FAS",
+    "typeOfUse": "NGT_PHOTOCOPY",
+    "grantProductFamily": "TRS",
+    "priority": 0,
+    "licenseType": "NGT_PHOTOCOPY"
+  },
+  {
+    "productFamily": "FAS",
+    "typeOfUse": "PRINT",
+    "grantProductFamily": "ACL",
+    "priority": 1,
+    "licenseType": "ACL"
+  },
+  {
+    "productFamily": "FAS",
+    "typeOfUse": "PRINT",
+    "grantProductFamily": "JACDCL",
+    "priority": 2,
+    "licenseType": "JACDCL"
+  },
+  {
+    "productFamily": "FAS",
+    "typeOfUse": "PRINT",
+    "grantProductFamily": "MACL",
+    "priority": 3,
+    "licenseType": "MACL"
+  },
+  {
+    "productFamily": "FAS",
+    "typeOfUse": "PRINT",
+    "grantProductFamily": "VGW",
+    "priority": 4,
+    "licenseType": "VGW"
+  },
+  {
+    "productFamily": "FAS",
+    "typeOfUse": "DIGITAL",
+    "grantProductFamily": "ACL",
+    "priority": 5,
+    "licenseType": "ACL"
+  },
+  {
+    "productFamily": "FAS",
+    "typeOfUse": "DIGITAL",
+    "grantProductFamily": "JACDCL",
+    "priority": 6,
+    "licenseType": "JACDCL"
+  },
+  {
+    "productFamily": "FAS",
+    "typeOfUse": "DIGITAL",
+    "grantProductFamily": "MACL",
+    "priority": 7,
+    "licenseType": "MACL"
+  },
+  {
+    "productFamily": "FAS",
+    "typeOfUse": "DIGITAL",
+    "grantProductFamily": "VGW",
+    "priority": 8,
+    "licenseType": "VGW"
+  },
+  {
+    "productFamily": "FAS",
+    "typeOfUse": "PRINT",
+    "grantProductFamily": "AACL",
+    "priority": 9,
+    "licenseType": "AACL"
+  },
+  {
+    "productFamily": "FAS",
+    "typeOfUse": "DIGITAL",
+    "grantProductFamily": "AACL",
+    "priority": 10,
+    "licenseType": "AACL"
+  },
+  {
+    "productFamily": "FAS",
+    "typeOfUse": "NGT_PRINT_COURSE_MATERIALS",
+    "grantProductFamily": "APS",
+    "priority": 11,
+    "licenseType": "NGT_PRINT_COURSE_MATERIALS"
+  },
+  {
+    "productFamily": "FAS",
+    "typeOfUse": "NGT_ELECTRONIC_COURSE_MATERIALS",
+    "grantProductFamily": "ECC",
+    "priority": 12,
+    "licenseType": "NGT_ELECTRONIC_COURSE_MATERIALS"
+  },
+  {
+    "productFamily": "FAS",
+    "typeOfUse": "FAS",
+    "grantProductFamily": "FAS",
+    "priority": 13,
+    "licenseType": "FAS"
+  }
+]

@@ -1,0 +1,16 @@
+[
+  {
+    "productFamily": "ACL_UDM_VALUE",
+    "typeOfUse": "DIGITAL",
+    "grantProductFamily": "ACL",
+    "priority": 0,
+    "licenseType": "ACL"
+  },
+  {
+    "productFamily": "ACL_UDM_VALUE",
+    "typeOfUse": "PRINT",
+    "grantProductFamily": "ACL",
+    "priority": 1,
+    "licenseType": "ACL"
+  }
+]

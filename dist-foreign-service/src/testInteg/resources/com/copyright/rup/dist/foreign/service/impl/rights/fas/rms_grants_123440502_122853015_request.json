@@ -6,18 +6,18 @@
         "DENY",
         "SPECIAL_REQUEST"
       ],
-      "wr_wrk_inst": 658824345,
-      "period_end_date": "02/01/2018",
+      "wr_wrk_inst": 123440502,
+      "period_end_date": "07/04/2023",
       "license_type": [
         "NGT_PHOTOCOPY",
-        "VGW",
-        "AACL",
-        "NGT_ELECTRONIC_COURSE_MATERIALS",
-        "FAS",
         "ACL",
         "JACDCL",
+        "MACL",
+        "VGW",
+        "AACL",
         "NGT_PRINT_COURSE_MATERIALS",
-        "MACL"
+        "NGT_ELECTRONIC_COURSE_MATERIALS",
+        "FAS"
       ]
     },
     {
@@ -26,18 +26,18 @@
         "DENY",
         "SPECIAL_REQUEST"
       ],
-      "wr_wrk_inst": 854030732,
-      "period_end_date": "02/01/2018",
+      "wr_wrk_inst": 122853015,
+      "period_end_date": "07/04/2023",
       "license_type": [
         "NGT_PHOTOCOPY",
-        "VGW",
-        "AACL",
-        "NGT_ELECTRONIC_COURSE_MATERIALS",
-        "FAS",
         "ACL",
         "JACDCL",
+        "MACL",
+        "VGW",
+        "AACL",
         "NGT_PRINT_COURSE_MATERIALS",
-        "MACL"
+        "NGT_ELECTRONIC_COURSE_MATERIALS",
+        "FAS"
       ]
     }
   ]
