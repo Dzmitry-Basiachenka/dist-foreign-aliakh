@@ -1,3 +1,14 @@
+19.0.0
+-
+* B-75922 FDA: Move from Perf4j to Micron Meter: update Gradle project
+* B-75922 FDA: Move from Perf4j to Micron Meter: update spring cofiguration
+* B-75922 FDA: Move from Perf4j to Micron Meter: update logging configuration file
+* B-75922 FDA: Move from Perf4j to Micron Meter: update repository
+* B-75922 FDA: Move from Perf4j to Micron Meter: update repository
+* B-75922 FDA: Move from Perf4j to Micron Meter: update service
+* B-75922 FDA: Move from Perf4j to Micron Meter: update integration
+* B-80117 FDA: TOU for FAS: implement grant priorities for FAS TOU
+
 18.0.4
 -
 * B-78642 Tech Debt: FDA: fix security vulnerability CVE-2023-28709
