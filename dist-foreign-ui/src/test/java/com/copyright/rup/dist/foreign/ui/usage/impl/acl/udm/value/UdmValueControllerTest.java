@@ -16,6 +16,9 @@ import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.dist.common.reporting.api.IStreamSource;
+import com.copyright.rup.dist.common.reporting.api.IStreamSourceHandler;
+import com.copyright.rup.dist.common.reporting.impl.StreamSource;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.domain.Currency;
 import com.copyright.rup.dist.foreign.domain.ExchangeRate;
@@ -28,6 +31,7 @@ import com.copyright.rup.dist.foreign.service.api.IPublicationTypeService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmBaselineService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmPriceTypeService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmProxyValueService;
+import com.copyright.rup.dist.foreign.service.api.acl.IUdmReportService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmValueAuditService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmValueService;
 import com.copyright.rup.dist.foreign.ui.audit.impl.UdmValueAuditFieldToValuesMap;
@@ -40,6 +44,8 @@ import com.copyright.rup.vaadin.ui.component.window.Windows;
 
 import com.vaadin.ui.Window;
 
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
@@ -48,10 +54,17 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
+import java.io.InputStream;
+import java.io.PipedOutputStream;
 import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 /**
  * Verifies {@link UdmValueController}.
@@ -63,10 +76,11 @@ import java.util.Set;
  * @author Aliaksandr Liakh
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({ForeignSecurityUtils.class, Windows.class})
+@PrepareForTest({ForeignSecurityUtils.class, Windows.class, StreamSource.class})
 public class UdmValueControllerTest {
 
     private static final String ACL_PRODUCT_FAMILY = "ACL";
+    private static final OffsetDateTime DATE = OffsetDateTime.of(2021, 1, 2, 3, 4, 5, 6, ZoneOffset.ofHours(0));
 
     private final UdmValueController controller = new UdmValueController();
     private final UdmValueFilter udmValueFilter = new UdmValueFilter();
@@ -80,6 +94,8 @@ public class UdmValueControllerTest {
     private IPublicationTypeService publicationTypeService;
     private IUdmPriceTypeService udmPriceTypeService;
     private IRfexIntegrationService rfexIntegrationService;
+    private IUdmReportService udmReportService;
+    private IStreamSourceHandler streamSourceHandler;
 
     @Before
     public void setUp() {
@@ -93,6 +109,8 @@ public class UdmValueControllerTest {
         publicationTypeService = createMock(IPublicationTypeService.class);
         udmPriceTypeService = createMock(IUdmPriceTypeService.class);
         rfexIntegrationService = createMock(IRfexIntegrationService.class);
+        udmReportService = createMock(IUdmReportService.class);
+        streamSourceHandler = createMock(IStreamSourceHandler.class);
         Whitebox.setInternalState(controller, udmValueFilterController);
         Whitebox.setInternalState(controller, udmValueFilterWidget);
         Whitebox.setInternalState(controller, valueService);
@@ -103,6 +121,8 @@ public class UdmValueControllerTest {
         Whitebox.setInternalState(controller, publicationTypeService);
         Whitebox.setInternalState(controller, udmPriceTypeService);
         Whitebox.setInternalState(controller, rfexIntegrationService);
+        Whitebox.setInternalState(controller, udmReportService);
+        Whitebox.setInternalState(controller, streamSourceHandler);
     }
 
     @Test
@@ -304,6 +324,34 @@ public class UdmValueControllerTest {
         assertNotNull(window);
         assertEquals("History for UDM value 432320b8-5029-47dd-8137-99007cb69bf1", window.getCaption());
         verify(Windows.class, closeListener, udmValueAuditService);
+    }
+
+    @Test
+    public void testGetExportValuesStreamSource() {
+        mockStatic(OffsetDateTime.class);
+        Capture<Supplier<String>> fileNameSupplierCapture = newCapture();
+        Capture<Consumer<PipedOutputStream>> posConsumerCapture = newCapture();
+        String fileName = "export_udm_value_";
+        Supplier<String> fileNameSupplier = () -> fileName;
+        Supplier<InputStream> inputStreamSupplier =
+            () -> IOUtils.toInputStream(StringUtils.EMPTY, StandardCharsets.UTF_8);
+        PipedOutputStream pos = new PipedOutputStream();
+        expect(OffsetDateTime.now()).andReturn(DATE).once();
+        expect(udmValueFilterController.getWidget()).andReturn(udmValueFilterWidget).once();
+        expect(udmValueFilterWidget.getAppliedFilter()).andReturn(udmValueFilter).once();
+        expect(streamSourceHandler.getCsvStreamSource(capture(fileNameSupplierCapture), capture(posConsumerCapture)))
+            .andReturn(new StreamSource(fileNameSupplier, "csv", inputStreamSupplier)).once();
+        udmReportService.writeUdmValuesCsvReport(udmValueFilter, pos);
+        replay(OffsetDateTime.class, udmValueFilterWidget, udmValueFilterController, streamSourceHandler, valueService,
+            udmReportService);
+        IStreamSource streamSource = controller.getExportValuesStreamSource();
+        assertEquals("export_udm_value_01_02_2021_03_04.csv", streamSource.getSource().getKey().get());
+        assertEquals(fileName, fileNameSupplierCapture.getValue().get());
+        Consumer<PipedOutputStream> posConsumer = posConsumerCapture.getValue();
+        posConsumer.accept(pos);
+        assertNotNull(posConsumer);
+        verify(OffsetDateTime.class, udmValueFilterWidget, udmValueFilterController, streamSourceHandler, valueService,
+            udmReportService);
     }
 
     private PublicationType buildPublicationType(String name, String weight) {

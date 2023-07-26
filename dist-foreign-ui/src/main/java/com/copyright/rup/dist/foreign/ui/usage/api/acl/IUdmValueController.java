@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.api.acl;
 
+import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.domain.Currency;
 import com.copyright.rup.dist.foreign.domain.ExchangeRate;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
@@ -177,4 +178,9 @@ public interface IUdmValueController extends IController<IUdmValueWidget> {
      * @param closeListener listener to handle window close event
      */
     void showUdmValueHistory(String udmValueId, Window.CloseListener closeListener);
+
+    /**
+     * @return instance of {@link IStreamSource} for export.
+     */
+    IStreamSource getExportValuesStreamSource();
 }

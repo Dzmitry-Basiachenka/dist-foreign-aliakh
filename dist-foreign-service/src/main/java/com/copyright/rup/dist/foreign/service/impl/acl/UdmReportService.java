@@ -4,6 +4,7 @@ import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UdmProxyValueFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UdmReportFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
+import com.copyright.rup.dist.foreign.domain.filter.UdmValueFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUdmReportRepository;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmReportService;
 
@@ -90,6 +91,11 @@ public class UdmReportService implements IUdmReportService {
     @Override
     public void writeUdmValuesByStatusCsvReport(Integer period, OutputStream outputStream) {
         udmReportRepository.writeUdmValuesByStatusCsvReport(period, outputStream);
+    }
+
+    @Override
+    public void writeUdmValuesCsvReport(UdmValueFilter udmValueFilter, OutputStream outputStream) {
+        //TODO will implement later
     }
 
     @Override
