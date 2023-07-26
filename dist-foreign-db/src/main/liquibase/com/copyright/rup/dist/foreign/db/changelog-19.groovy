@@ -40,4 +40,20 @@ databaseChangeLog {
             }
         }
     }
+
+    changeSet(id: '2023-07-26-00', author: 'Dzmitry Basiachenka <dbasiachenka@copyright.com>') {
+        comment("B-80266 FDA: Add Ineligible reason 'Non-participating RH' to drop-down: add 'Non-participating RH' " +
+                "reason to df_udm_ineligible_reason table")
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_udm_ineligible_reason') {
+            column(name: 'df_udm_ineligible_reason_uid', value: '3dc09f93-e9d9-4e7b-b86f-35db48f4fea0')
+            column(name: 'ineligible_reason', value: 'Non-participating RH')
+        }
+
+        rollback {
+            delete(schemaName: dbAppsSchema, tableName: 'df_udm_ineligible_reason') {
+                where "df_udm_ineligible_reason_uid = '3dc09f93-e9d9-4e7b-b86f-35db48f4fea0'"
+            }
+        }
+    }
 }

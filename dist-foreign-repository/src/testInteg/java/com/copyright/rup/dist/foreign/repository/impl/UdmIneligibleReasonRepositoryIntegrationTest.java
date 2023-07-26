@@ -38,6 +38,7 @@ public class UdmIneligibleReasonRepositoryIntegrationTest {
             new UdmIneligibleReason("b60a726a-39e8-4303-abe1-6816da05b858", "Invalid survey"),
             new UdmIneligibleReason("0d5a129c-0f8f-4e48-98b2-8b980cdb9333", "Misc - See Comments"),
             new UdmIneligibleReason("b040d59b-72c7-42fc-99d2-d406d5ea60f3", "Multiple works found"),
+            new UdmIneligibleReason("3dc09f93-e9d9-4e7b-b86f-35db48f4fea0", "Non-participating RH"),
             new UdmIneligibleReason("18fbee56-2f5c-450a-999e-54903c0bfb23", "No Reported Use"),
             new UdmIneligibleReason("fd2f2dea-4018-48ee-a630-b8dfedbe857b", "Public Domain"),
             new UdmIneligibleReason("53f8661b-bf27-47a4-b30c-7666c0df02c5", "RH cannot be determined"),
