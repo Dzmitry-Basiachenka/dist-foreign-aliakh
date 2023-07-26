@@ -21,6 +21,7 @@ import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.UdmValueDto;
@@ -67,9 +68,11 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.io.IOException;
+import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 /**
@@ -96,14 +99,19 @@ public class UdmValueWidgetTest {
     private final List<UdmValueDto> udmValues = loadExpectedUdmValueDto("udm_value_dto_43699543.json");
     private IUdmValueController controller;
     private UdmValueWidget valueWidget;
+    private IStreamSource streamSource;
 
     @Before
     public void setUp() {
         mockStatic(ForeignSecurityUtils.class);
         mockStatic(RupContextUtils.class);
         controller = createMock(IUdmValueController.class);
+        streamSource = createMock(IStreamSource.class);
         UdmValueFilterWidget filterWidget = new UdmValueFilterWidget(createMock(IUdmValueFilterController.class));
         expect(controller.initValuesFilterWidget()).andReturn(filterWidget).once();
+        expect(controller.getExportValuesStreamSource()).andReturn(streamSource).once();
+        expect(streamSource.getSource()).andReturn(new SimpleImmutableEntry(createMock(Supplier.class),
+            createMock(Supplier.class))).once();
         expect(RupContextUtils.getUserName()).andReturn(USER).once();
     }
 
@@ -115,7 +123,7 @@ public class UdmValueWidgetTest {
         expect(controller.getBeansCount()).andReturn(1).once();
         expect(controller.getUdmRecordThreshold()).andReturn(UDM_RECORD_THRESHOLD).once();
         setSpecialistExpectations();
-        replay(controller, JavaScript.class, ForeignSecurityUtils.class, RupContextUtils.class);
+        replay(controller, JavaScript.class, ForeignSecurityUtils.class, RupContextUtils.class, streamSource);
         initWidget();
         Grid grid = (Grid) ((VerticalLayout) valueWidget.getSecondComponent()).getComponent(1);
         DataProvider dataProvider = grid.getDataProvider();
@@ -128,7 +136,7 @@ public class UdmValueWidgetTest {
                 "Comment", "user@copyright.com", "09/05/2022"}
         };
         verifyGridItems(grid, udmValues, expectedCells);
-        verify(controller, JavaScript.class, ForeignSecurityUtils.class, RupContextUtils.class);
+        verify(controller, JavaScript.class, ForeignSecurityUtils.class, RupContextUtils.class, streamSource);
         Object[][] expectedFooterColumns = {{"valueId", "Values Count: 1", null}};
         verifyFooterItems(grid, expectedFooterColumns);
     }
@@ -136,9 +144,9 @@ public class UdmValueWidgetTest {
     @Test
     public void testWidgetStructure() {
         setSpecialistExpectations();
-        replay(controller, ForeignSecurityUtils.class, RupContextUtils.class);
+        replay(controller, ForeignSecurityUtils.class, RupContextUtils.class, streamSource);
         initWidget();
-        verify(controller, ForeignSecurityUtils.class, RupContextUtils.class);
+        verify(controller, ForeignSecurityUtils.class, RupContextUtils.class, streamSource);
         assertTrue(valueWidget.isLocked());
         assertEquals(270, valueWidget.getSplitPosition(), 0);
         verifySize(valueWidget, 100, 100, Unit.PERCENTAGE);
@@ -170,7 +178,8 @@ public class UdmValueWidgetTest {
         expectLastCall().once();
         Windows.showNotificationWindow("1 value(s) were successfully assigned to you");
         expectLastCall().once();
-        replay(controller, confirmWindowMock, Windows.class, ForeignSecurityUtils.class, RupContextUtils.class);
+        replay(controller, confirmWindowMock, Windows.class, ForeignSecurityUtils.class, RupContextUtils.class,
+            streamSource);
         initWidget();
         Grid<UdmValueDto> grid =
             (Grid<UdmValueDto>) ((VerticalLayout) valueWidget.getSecondComponent()).getComponent(1);
@@ -181,7 +190,8 @@ public class UdmValueWidgetTest {
         MenuBar.MenuItem menuItemAssign = menuItems.get(0);
         menuItemAssign.getCommand().menuSelected(menuItemAssign);
         windowListenerCapture.getValue().onActionConfirmed();
-        verify(controller, confirmWindowMock, Windows.class, ForeignSecurityUtils.class, RupContextUtils.class);
+        verify(controller, confirmWindowMock, Windows.class, ForeignSecurityUtils.class, RupContextUtils.class,
+            streamSource);
     }
 
     @Test
@@ -194,7 +204,7 @@ public class UdmValueWidgetTest {
         setResearcherExpectations();
         Windows.showNotificationWindow("You can assign only UDM values in statuses NEW, RSCHD_IN_THE_PREV_PERIOD");
         expectLastCall().once();
-        replay(controller, Windows.class, ForeignSecurityUtils.class, RupContextUtils.class);
+        replay(controller, Windows.class, ForeignSecurityUtils.class, RupContextUtils.class, streamSource);
         initWidget();
         Grid<UdmValueDto> grid =
             (Grid<UdmValueDto>) ((VerticalLayout) valueWidget.getSecondComponent()).getComponent(1);
@@ -204,7 +214,7 @@ public class UdmValueWidgetTest {
         assertEquals(2, CollectionUtils.size(menuItems));
         MenuBar.MenuItem menuItemAssign = menuItems.get(0);
         menuItemAssign.getCommand().menuSelected(menuItemAssign);
-        verify(controller, Windows.class, ForeignSecurityUtils.class, RupContextUtils.class);
+        verify(controller, Windows.class, ForeignSecurityUtils.class, RupContextUtils.class, streamSource);
     }
 
     @Test
@@ -223,7 +233,8 @@ public class UdmValueWidgetTest {
         expectLastCall().once();
         Windows.showNotificationWindow("1 value(s) were successfully unassigned");
         expectLastCall().once();
-        replay(controller, confirmWindowMock, Windows.class, ForeignSecurityUtils.class, RupContextUtils.class);
+        replay(controller, confirmWindowMock, Windows.class, ForeignSecurityUtils.class, RupContextUtils.class,
+            streamSource);
         initWidget();
         Grid<UdmValueDto> grid =
             (Grid<UdmValueDto>) ((VerticalLayout) valueWidget.getSecondComponent()).getComponent(1);
@@ -234,7 +245,8 @@ public class UdmValueWidgetTest {
         MenuBar.MenuItem menuItemUnassign = menuItems.get(1);
         menuItemUnassign.getCommand().menuSelected(menuItemUnassign);
         windowListenerCapture.getValue().onActionConfirmed();
-        verify(controller, confirmWindowMock, Windows.class, ForeignSecurityUtils.class, RupContextUtils.class);
+        verify(controller, confirmWindowMock, Windows.class, ForeignSecurityUtils.class, RupContextUtils.class,
+            streamSource);
     }
 
     @Test
@@ -247,7 +259,8 @@ public class UdmValueWidgetTest {
         setSpecialistExpectations();
         Windows.showNotificationWindow("Only values that are assigned to you can be unassigned");
         expectLastCall().once();
-        replay(controller, confirmWindowMock, Windows.class, ForeignSecurityUtils.class, RupContextUtils.class);
+        replay(controller, confirmWindowMock, Windows.class, ForeignSecurityUtils.class, RupContextUtils.class,
+            streamSource);
         initWidget();
         Grid<UdmValueDto> grid =
             (Grid<UdmValueDto>) ((VerticalLayout) valueWidget.getSecondComponent()).getComponent(1);
@@ -258,7 +271,8 @@ public class UdmValueWidgetTest {
         assertEquals(2, CollectionUtils.size(menuItems));
         MenuBar.MenuItem menuItemUnassign = menuItems.get(1);
         menuItemUnassign.getCommand().menuSelected(menuItemUnassign);
-        verify(controller, confirmWindowMock, Windows.class, ForeignSecurityUtils.class, RupContextUtils.class);
+        verify(controller, confirmWindowMock, Windows.class, ForeignSecurityUtils.class, RupContextUtils.class,
+            streamSource);
     }
 
     @Test
@@ -271,7 +285,7 @@ public class UdmValueWidgetTest {
         expect(controller.loadBeans(0, 2, List.of())).andReturn(udmValueDtos).once();
         expect(controller.getBeansCount()).andReturn(UDM_RECORD_THRESHOLD).once();
         expect(controller.getUdmRecordThreshold()).andReturn(UDM_RECORD_THRESHOLD).once();
-        replay(controller, RupContextUtils.class, ForeignSecurityUtils.class, JavaScript.class);
+        replay(controller, RupContextUtils.class, ForeignSecurityUtils.class, JavaScript.class, streamSource);
         initWidget();
         Grid<UdmValueDto> grid =
             (Grid<UdmValueDto>) ((VerticalLayout) valueWidget.getSecondComponent()).getComponent(1);
@@ -281,7 +295,7 @@ public class UdmValueWidgetTest {
         assertEquals(UDM_RECORD_THRESHOLD, dataProvider.size(new Query<>()));
         assertThat(grid.getSelectionModel(), instanceOf(MultiSelectionModelImpl.class));
         assertTrue(((MultiSelectionModelImpl<?>) grid.getSelectionModel()).isSelectAllCheckBoxVisible());
-        verify(controller, RupContextUtils.class, ForeignSecurityUtils.class, JavaScript.class);
+        verify(controller, RupContextUtils.class, ForeignSecurityUtils.class, JavaScript.class, streamSource);
     }
 
     @Test
@@ -294,7 +308,7 @@ public class UdmValueWidgetTest {
         expect(controller.loadBeans(0, 2, List.of())).andReturn(udmValueDtos).once();
         expect(controller.getBeansCount()).andReturn(EXCEEDED_UDM_RECORD_THRESHOLD).once();
         expect(controller.getUdmRecordThreshold()).andReturn(UDM_RECORD_THRESHOLD).once();
-        replay(controller, RupContextUtils.class, ForeignSecurityUtils.class, JavaScript.class);
+        replay(controller, RupContextUtils.class, ForeignSecurityUtils.class, JavaScript.class, streamSource);
         initWidget();
         Grid<UdmValueDto> grid =
             (Grid<UdmValueDto>) ((VerticalLayout) valueWidget.getSecondComponent()).getComponent(1);
@@ -304,7 +318,7 @@ public class UdmValueWidgetTest {
         assertEquals(EXCEEDED_UDM_RECORD_THRESHOLD, dataProvider.size(new Query<>()));
         assertThat(grid.getSelectionModel(), instanceOf(MultiSelectionModelImpl.class));
         assertFalse(((MultiSelectionModelImpl<?>) grid.getSelectionModel()).isSelectAllCheckBoxVisible());
-        verify(controller, RupContextUtils.class, ForeignSecurityUtils.class, JavaScript.class);
+        verify(controller, RupContextUtils.class, ForeignSecurityUtils.class, JavaScript.class, streamSource);
     }
 
     @Test
@@ -315,7 +329,7 @@ public class UdmValueWidgetTest {
         expect(JavaScript.getCurrent()).andReturn(createMock(JavaScript.class)).times(2);
         expect(controller.loadBeans(0, 2, List.of())).andReturn(List.of()).once();
         expect(controller.getBeansCount()).andReturn(0).once();
-        replay(controller, RupContextUtils.class, ForeignSecurityUtils.class, JavaScript.class);
+        replay(controller, RupContextUtils.class, ForeignSecurityUtils.class, JavaScript.class, streamSource);
         initWidget();
         Grid<UdmValueDto> grid =
             (Grid<UdmValueDto>) ((VerticalLayout) valueWidget.getSecondComponent()).getComponent(1);
@@ -325,7 +339,7 @@ public class UdmValueWidgetTest {
         assertEquals(0, dataProvider.size(new Query<>()));
         assertThat(grid.getSelectionModel(), instanceOf(MultiSelectionModelImpl.class));
         assertFalse(((MultiSelectionModelImpl<?>) grid.getSelectionModel()).isSelectAllCheckBoxVisible());
-        verify(controller, RupContextUtils.class, ForeignSecurityUtils.class, JavaScript.class);
+        verify(controller, RupContextUtils.class, ForeignSecurityUtils.class, JavaScript.class, streamSource);
     }
 
     @Test
@@ -335,12 +349,12 @@ public class UdmValueWidgetTest {
         expect(controller.getPeriods()).andReturn(List.of(202006)).once();
         Windows.showModalWindow(anyObject(UdmCalculateProxyValuesWindow.class));
         expectLastCall().once();
-        replay(controller, Windows.class, ForeignSecurityUtils.class, RupContextUtils.class);
+        replay(controller, Windows.class, ForeignSecurityUtils.class, RupContextUtils.class, streamSource);
         initWidget();
         HorizontalLayout buttonsLayout =
             (HorizontalLayout) ((VerticalLayout) valueWidget.getSecondComponent()).getComponent(0);
         ((Button) buttonsLayout.getComponent(3)).click();
-        verify(controller, Windows.class, ForeignSecurityUtils.class, RupContextUtils.class);
+        verify(controller, Windows.class, ForeignSecurityUtils.class, RupContextUtils.class, streamSource);
     }
 
     @Test
@@ -350,12 +364,12 @@ public class UdmValueWidgetTest {
         expect(controller.getPeriods()).andReturn(List.of(202006)).once();
         Windows.showModalWindow(anyObject(UdmPublishToBaselineWindow.class));
         expectLastCall().once();
-        replay(controller, Windows.class, ForeignSecurityUtils.class, RupContextUtils.class);
+        replay(controller, Windows.class, ForeignSecurityUtils.class, RupContextUtils.class, streamSource);
         initWidget();
         HorizontalLayout buttonsLayout =
             (HorizontalLayout) ((VerticalLayout) valueWidget.getSecondComponent()).getComponent(0);
         ((Button) buttonsLayout.getComponent(3)).click();
-        verify(controller, Windows.class, ForeignSecurityUtils.class, RupContextUtils.class);
+        verify(controller, Windows.class, ForeignSecurityUtils.class, RupContextUtils.class, streamSource);
     }
 
     @Test
@@ -451,11 +465,12 @@ public class UdmValueWidgetTest {
     private void verifyButtonsLayout(HorizontalLayout layout) {
         assertTrue(layout.isSpacing());
         assertEquals(new MarginInfo(true), layout.getMargin());
-        assertEquals(4, layout.getComponentCount());
+        assertEquals(5, layout.getComponentCount());
         verifyButton(layout.getComponent(0), "Populate Value Batch");
         verifyMenuBar(layout.getComponent(1), "Assignment", true, List.of("Assign", "Unassign"));
         verifyButton(layout.getComponent(2), "Calculate Proxies");
         verifyButton(layout.getComponent(3), "Publish");
+        verifyButton(layout.getComponent(4), "Export");
     }
 
     private void verifyButton(Component component, String name) {
@@ -534,7 +549,8 @@ public class UdmValueWidgetTest {
             .andReturn(mockWindow).once();
         Windows.showModalWindow(mockWindow);
         expectLastCall().once();
-        replay(controller, Windows.class, ForeignSecurityUtils.class, UdmEditValueWindow.class, RupContextUtils.class);
+        replay(controller, Windows.class, ForeignSecurityUtils.class, UdmEditValueWindow.class, RupContextUtils.class,
+            streamSource);
         initWidget();
         Grid<UdmValueDto> grid =
             (Grid<UdmValueDto>) ((VerticalLayout) valueWidget.getSecondComponent()).getComponent(1);
@@ -543,7 +559,8 @@ public class UdmValueWidgetTest {
         Grid.ItemClick<UdmValueDto> usageDtoItemClick =
             new ItemClick<>(grid, grid.getColumns().get(0), udmValueDto, createMouseEvent(), 0);
         listener.itemClick(usageDtoItemClick);
-        verify(controller, Windows.class, ForeignSecurityUtils.class, UdmEditValueWindow.class, RupContextUtils.class);
+        verify(controller, Windows.class, ForeignSecurityUtils.class, UdmEditValueWindow.class, RupContextUtils.class,
+            streamSource);
     }
 
     @SuppressWarnings(UNCHECKED)
@@ -554,7 +571,8 @@ public class UdmValueWidgetTest {
         expectNew(UdmViewValueWindow.class, eq(controller), eq(udmValueDto)).andReturn(mockWindow).once();
         Windows.showModalWindow(mockWindow);
         expectLastCall().once();
-        replay(controller, Windows.class, ForeignSecurityUtils.class, UdmViewValueWindow.class, RupContextUtils.class);
+        replay(controller, Windows.class, ForeignSecurityUtils.class, UdmViewValueWindow.class, RupContextUtils.class,
+            streamSource);
         initWidget();
         Grid<UdmValueDto> grid =
             (Grid<UdmValueDto>) ((VerticalLayout) valueWidget.getSecondComponent()).getComponent(1);
@@ -563,7 +581,8 @@ public class UdmValueWidgetTest {
         Grid.ItemClick<UdmValueDto> usageDtoItemClick =
             new ItemClick<>(grid, grid.getColumns().get(0), udmValueDto, createMouseEvent(), 0);
         listener.itemClick(usageDtoItemClick);
-        verify(controller, Windows.class, ForeignSecurityUtils.class, UdmViewValueWindow.class, RupContextUtils.class);
+        verify(controller, Windows.class, ForeignSecurityUtils.class, UdmViewValueWindow.class, RupContextUtils.class,
+            streamSource);
     }
 
     private List<UdmValueDto> loadExpectedUdmValueDto(String fileName) {

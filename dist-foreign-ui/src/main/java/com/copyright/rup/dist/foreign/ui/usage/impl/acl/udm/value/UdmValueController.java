@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.value;
 
+import com.copyright.rup.dist.common.reporting.api.IStreamSource;
+import com.copyright.rup.dist.common.reporting.api.IStreamSourceHandler;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
@@ -14,6 +16,7 @@ import com.copyright.rup.dist.foreign.service.api.IPublicationTypeService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmBaselineService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmPriceTypeService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmProxyValueService;
+import com.copyright.rup.dist.foreign.service.api.acl.IUdmReportService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmValueAuditService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmValueService;
 import com.copyright.rup.dist.foreign.ui.audit.impl.UdmValueHistoryWindow;
@@ -28,6 +31,7 @@ import com.copyright.rup.vaadin.widget.api.CommonController;
 import com.vaadin.data.provider.QuerySortOrder;
 import com.vaadin.shared.data.sort.SortDirection;
 import com.vaadin.ui.Window;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -65,10 +69,14 @@ public class UdmValueController extends CommonController<IUdmValueWidget> implem
     @Autowired
     private IPublicationTypeService publicationTypeService;
     @Autowired
+    private IUdmReportService udmReportService;
+    @Autowired
     private IUdmPriceTypeService udmPriceTypeService;
     @Qualifier("df.integration.rfexIntegrationCacheService")
     @Autowired
     private IRfexIntegrationService rfexIntegrationService;
+    @Autowired
+    private IStreamSourceHandler streamSourceHandler;
 
     @Override
     public List<Integer> getBaselinePeriods() {
@@ -183,6 +191,12 @@ public class UdmValueController extends CommonController<IUdmValueWidget> implem
             new UdmValueHistoryWindow(udmValueId, udmValueAuditService.getUdmValueAudit(udmValueId));
         historyWindow.addCloseListener(closeListener);
         Windows.showModalWindow(historyWindow);
+    }
+
+    @Override
+    public IStreamSource getExportValuesStreamSource() {
+        return streamSourceHandler.getCsvStreamSource(() -> "export_udm_value_", pos ->
+            udmReportService.writeUdmValuesCsvReport(getFilter(), pos));
     }
 
     private UdmValueFilter getFilter() {

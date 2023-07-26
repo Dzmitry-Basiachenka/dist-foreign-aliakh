@@ -4,6 +4,7 @@ import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UdmProxyValueFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UdmReportFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
+import com.copyright.rup.dist.foreign.domain.filter.UdmValueFilter;
 
 import java.io.OutputStream;
 import java.io.PipedOutputStream;
@@ -115,6 +116,14 @@ public interface IUdmReportService {
      * @param outputStream instance of {@link OutputStream}
      */
     void writeUdmValuesByStatusCsvReport(Integer period, OutputStream outputStream);
+
+    /**
+     * Writes UDM Values Report into csv output stream.
+     *
+     * @param udmValueFilter instance of {@link UdmValueFilter}
+     * @param outputStream   instance of {@link OutputStream}
+     */
+    void writeUdmValuesCsvReport(UdmValueFilter udmValueFilter, OutputStream outputStream);
 
     /**
      * Writes UDM Usages by Status Report into csv output stream.

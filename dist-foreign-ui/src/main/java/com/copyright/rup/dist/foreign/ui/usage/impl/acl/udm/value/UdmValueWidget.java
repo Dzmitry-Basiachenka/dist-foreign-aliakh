@@ -12,6 +12,7 @@ import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.dataprovider.LoadingIndicatorDataProvider;
+import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.api.IMediator;
@@ -176,6 +177,10 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
     }
 
     private HorizontalLayout initButtonsLayout() {
+        Button exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
+        OnDemandFileDownloader fileDownloader =
+            new OnDemandFileDownloader(controller.getExportValuesStreamSource().getSource());
+        fileDownloader.extend(exportButton);
         populateButton = Buttons.createButton(ForeignUi.getMessage("button.populate_value_batch"));
         populateButton.addClickListener(event -> Windows.showModalWindow(new UdmPopulateValueBatchWindow(controller)));
         calculateProxyValuesButton = Buttons.createButton(ForeignUi.getMessage("button.calculate_proxies"));
@@ -186,7 +191,7 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
             publishEvent -> refresh())));
         VaadinUtils.setButtonsAutoDisabled(populateButton, calculateProxyValuesButton, publishButton);
         HorizontalLayout layout = new HorizontalLayout(populateButton, assignmentMenuBar, calculateProxyValuesButton,
-            publishButton);
+            publishButton, exportButton);
         layout.setMargin(true);
         VaadinUtils.addComponentStyle(layout, "udm-value-buttons");
         return layout;
