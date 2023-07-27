@@ -5,6 +5,7 @@ import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UdmProxyValueFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UdmReportFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
+import com.copyright.rup.dist.foreign.domain.filter.UdmValueFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUdmReportRepository;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmAssigneesByStatusReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmBaselineUsageCsvReportHandler;
@@ -164,6 +165,11 @@ public class UdmReportRepository extends CommonReportRepository implements IUdmR
             getTemplate().select("IUdmReportMapper.findUdmSurveyDashboardReportDtos",
                 ImmutableMap.of("periods", Objects.requireNonNull(periods)), handler);
         }
+    }
+
+    @Override
+    public void writeUdmValuesCsvReport(UdmValueFilter filter, OutputStream outputStream) {
+        //TODO will be implement later
     }
 
     private void writeUdmUsageCsvReport(UdmUsageFilter filter, BaseCsvReportHandler handler) {

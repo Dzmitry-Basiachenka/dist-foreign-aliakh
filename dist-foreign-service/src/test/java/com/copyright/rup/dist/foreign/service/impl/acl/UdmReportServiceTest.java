@@ -11,6 +11,7 @@ import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UdmProxyValueFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UdmReportFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
+import com.copyright.rup.dist.foreign.domain.filter.UdmValueFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUdmReportRepository;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmReportService;
 
@@ -199,6 +200,18 @@ public class UdmReportServiceTest {
         expectLastCall().once();
         replay(udmReportRepository);
         udmReportService.writeUdmUsagesByStatusCsvReport(202212, outputStream);
+        verify(udmReportRepository);
+    }
+
+    @Test
+    public void testWriteUdmValuesCsvReport() {
+        OutputStream outputStream = new ByteArrayOutputStream();
+        UdmValueFilter filter = new UdmValueFilter();
+        filter.setPeriods(Set.of(202212));
+        udmReportRepository.writeUdmValuesCsvReport(filter, outputStream);
+        expectLastCall().once();
+        replay(udmReportRepository);
+        udmReportService.writeUdmValuesCsvReport(filter, outputStream);
         verify(udmReportRepository);
     }
 

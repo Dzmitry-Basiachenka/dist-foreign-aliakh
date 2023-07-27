@@ -95,7 +95,7 @@ public class UdmReportService implements IUdmReportService {
 
     @Override
     public void writeUdmValuesCsvReport(UdmValueFilter udmValueFilter, OutputStream outputStream) {
-        //TODO will implement later
+        udmReportRepository.writeUdmValuesCsvReport(udmValueFilter, outputStream);
     }
 
     @Override
