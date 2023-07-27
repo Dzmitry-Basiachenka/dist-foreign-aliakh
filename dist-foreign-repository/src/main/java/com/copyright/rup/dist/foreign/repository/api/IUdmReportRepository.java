@@ -4,6 +4,7 @@ import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UdmProxyValueFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UdmReportFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
+import com.copyright.rup.dist.foreign.domain.filter.UdmValueFilter;
 
 import java.io.OutputStream;
 import java.io.PipedOutputStream;
@@ -139,8 +140,18 @@ public interface IUdmReportRepository {
     /**
      * Writes UDM Survey Dashboard Report into csv output stream.
      *
-     * @param periods set of periods
+     * @param periods      set of periods
      * @param outputStream instance of {@link OutputStream}
      */
     void writeUdmSurveyDashboardCsvReport(Set<Integer> periods, OutputStream outputStream);
+
+    /**
+     * Finds UDM values according to given {@link UdmValueFilter} and writes them to the output stream in CSV format
+     * for Specialist and Manager roles.
+     *
+     * @param filter       instance of {@link UdmValueFilter}
+     * @param outputStream instance of {@link OutputStream}
+     */
+    void writeUdmValuesCsvReport(UdmValueFilter filter, OutputStream outputStream);
+
 }
