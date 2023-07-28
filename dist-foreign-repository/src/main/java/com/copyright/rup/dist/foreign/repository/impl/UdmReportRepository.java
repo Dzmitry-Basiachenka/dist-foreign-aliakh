@@ -19,6 +19,7 @@ import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmUsageCsvReportH
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmUsageCsvReportHandlerSpecialistManager;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmUsageCsvReportHandlerView;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmUsageEditsInBaselineReportHandler;
+import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmValueCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmVerifiedDetailsBySourceReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmWeeklySurveyReportHandler;
 
@@ -48,13 +49,15 @@ import io.micrometer.core.annotation.Timed;
 @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
 public class UdmReportRepository extends CommonReportRepository implements IUdmReportRepository {
 
+    private static final String FILTER_KEY = "filter";
+
     @Override
     public void writeUdmProxyValueCsvReport(UdmProxyValueFilter filter, PipedOutputStream pipedOutputStream) {
         try (UdmProxyValueCsvReportHandler handler =
                  new UdmProxyValueCsvReportHandler(Objects.requireNonNull(pipedOutputStream))) {
             if (!Objects.requireNonNull(filter).isEmpty()) {
                 Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(1);
-                parameters.put("filter", filter);
+                parameters.put(FILTER_KEY, filter);
                 getTemplate().select("IUdmReportMapper.findUdmProxyValueDtosByFilter", parameters, handler);
             }
         }
@@ -80,7 +83,7 @@ public class UdmReportRepository extends CommonReportRepository implements IUdmR
     @Override
     public void writeUdmBaselineUsageCsvReport(UdmBaselineFilter filter, PipedOutputStream pipedOutputStream) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
-        parameters.put("filter", Objects.requireNonNull(filter));
+        parameters.put(FILTER_KEY, Objects.requireNonNull(filter));
         writeCsvReportByParts("IUdmReportMapper.findUdmBaselineUsagesCountByFilter",
             "IUdmReportMapper.findUdmBaselineUsageDtosByFilter", parameters, !filter.isEmpty(),
             () -> new UdmBaselineUsageCsvReportHandler(Objects.requireNonNull(pipedOutputStream)));
@@ -168,13 +171,17 @@ public class UdmReportRepository extends CommonReportRepository implements IUdmR
     }
 
     @Override
-    public void writeUdmValuesCsvReport(UdmValueFilter filter, OutputStream outputStream) {
-        //TODO will be implement later
+    public void writeUdmValuesCsvReport(UdmValueFilter filter, PipedOutputStream pipedOutputStream) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
+        parameters.put(FILTER_KEY, Objects.requireNonNull(filter));
+        writeCsvReportByParts("IUdmReportMapper.findUdmValuesCountByFilter",
+            "IUdmReportMapper.findUdmValuesDtosByFilter", parameters, !filter.isEmpty(),
+            () -> new UdmValueCsvReportHandler(Objects.requireNonNull(pipedOutputStream)));
     }
 
     private void writeUdmUsageCsvReport(UdmUsageFilter filter, BaseCsvReportHandler handler) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
-        parameters.put("filter", escapeSqlLikePattern(Objects.requireNonNull(filter)));
+        parameters.put(FILTER_KEY, escapeSqlLikePattern(Objects.requireNonNull(filter)));
         writeCsvReportByParts("IUdmReportMapper.findUdmUsagesCountByFilter",
             "IUdmReportMapper.findUdmUsageDtosByFilter", parameters, !filter.isEmpty(), () -> handler);
     }

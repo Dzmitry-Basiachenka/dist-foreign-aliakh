@@ -3,9 +3,12 @@ package com.copyright.rup.dist.foreign.repository.impl.csv.acl;
 import com.copyright.rup.dist.common.repository.impl.csv.BaseCsvReportHandler;
 import com.copyright.rup.dist.foreign.domain.UdmValueDto;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Writes UDM values into an {@link OutputStream}.
@@ -32,7 +35,7 @@ public class UdmValueCsvReportHandler extends BaseCsvReportHandler<UdmValueDto> 
      *
      * @param outputStream {@link OutputStream} instance
      */
-    protected UdmValueCsvReportHandler(OutputStream outputStream) {
+    public UdmValueCsvReportHandler(OutputStream outputStream) {
         super(outputStream);
     }
 
@@ -50,7 +53,8 @@ public class UdmValueCsvReportHandler extends BaseCsvReportHandler<UdmValueDto> 
         beanProperties.add(bean.getSystemStandardNumber());
         beanProperties.add(getBeanPropertyAsString(bean.getLastValuePeriod()));
         beanProperties.add(bean.getLastPubType());
-        beanProperties.add(getBeanPropertyAsString(bean.getPublicationType()));
+        beanProperties.add(
+            Objects.nonNull(bean.getPublicationType()) ? bean.getPublicationType().getName() : StringUtils.EMPTY);
         beanProperties.add(getBeanBigDecimal(bean.getLastPriceInUsd()));
         beanProperties.add(getFlagAsString(bean.isLastPriceFlag()));
         beanProperties.add(getBeanPropertyAsString(bean.getLastPriceSource()));
@@ -88,7 +92,9 @@ public class UdmValueCsvReportHandler extends BaseCsvReportHandler<UdmValueDto> 
         return HEADERS;
     }
 
-    private String getFlagAsString(boolean flag) {
-        return flag ? "Y" : "N";
+    private String getFlagAsString(Boolean flag) {
+        return Objects.nonNull(flag)
+            ? flag ? "Y" : "N"
+            : StringUtils.EMPTY;
     }
 }

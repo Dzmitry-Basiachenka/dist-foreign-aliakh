@@ -154,6 +154,14 @@
         <include refid="IUdmBaselineMapper.selectDtosByFilterSql"/>
     </select>
 
+    <select id="findUdmValuesCountByFilter" parameterType="map" resultType="int">
+        <include refid="IUdmValueMapper.selectCountByFilterSql"/>
+    </select>
+
+    <select id="findUdmValuesDtosByFilter" resultMap="IUdmValueMapper.udmValueDtoResultMap" parameterType="map" fetchSize="${usageSelectFetchSize}">
+        <include refid="IUdmValueMapper.selectDtosByFilterSql"/>
+    </select>
+
     <select id="findUdmProxyValueDtosByFilter" resultMap="IUdmProxyValueMapper.udmProxyValueDtoResultMap" parameterType="map" fetchSize="${usageSelectFetchSize}">
         <include refid="IUdmProxyValueMapper.selectDtosByFilterSql"/>
     </select>

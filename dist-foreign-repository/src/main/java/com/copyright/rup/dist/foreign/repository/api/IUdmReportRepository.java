@@ -149,9 +149,9 @@ public interface IUdmReportRepository {
      * Finds UDM values according to given {@link UdmValueFilter} and writes them to the output stream in CSV format
      * for Specialist and Manager roles.
      *
-     * @param filter       instance of {@link UdmValueFilter}
-     * @param outputStream instance of {@link OutputStream}
+     * @param filter            instance of {@link UdmValueFilter}
+     * @param pipedOutputStream instance of {@link PipedOutputStream}
      */
-    void writeUdmValuesCsvReport(UdmValueFilter filter, OutputStream outputStream);
+    void writeUdmValuesCsvReport(UdmValueFilter filter, PipedOutputStream pipedOutputStream);
 
 }
