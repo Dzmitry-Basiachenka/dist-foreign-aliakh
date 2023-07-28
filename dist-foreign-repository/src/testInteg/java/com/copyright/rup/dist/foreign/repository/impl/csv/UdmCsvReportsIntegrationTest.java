@@ -5,10 +5,12 @@ import com.copyright.rup.dist.common.test.liquibase.LiquibaseTestExecutionListen
 import com.copyright.rup.dist.common.test.liquibase.TestData;
 import com.copyright.rup.dist.foreign.domain.UdmChannelEnum;
 import com.copyright.rup.dist.foreign.domain.UdmUsageOriginEnum;
+import com.copyright.rup.dist.foreign.domain.UdmValueStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UdmProxyValueFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UdmReportFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
+import com.copyright.rup.dist.foreign.domain.filter.UdmValueFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUdmReportRepository;
 
 import com.google.common.collect.ImmutableSet;
@@ -49,6 +51,8 @@ public class UdmCsvReportsIntegrationTest extends CsvReportsTestHelper {
     private static final String WRITE_USAGE_CSV_REPORT = FOLDER_NAME + "write-usage-csv-report.groovy";
     private static final String WRITE_BASELINE_USAGE_CSV_REPORT =
         FOLDER_NAME + "write-baseline-usage-csv-report.groovy";
+    private static final String WRITE_VALUES_CSV_REPORT =
+        FOLDER_NAME + "write-values-csv-report.groovy";
     private static final String WRITE_WEEKLY_SURVEY_CSV_REPORT = FOLDER_NAME + "write-weekly-survey-csv-report.groovy";
     private static final String WRITE_SURVEY_LICENSEE_CSV_REPORT =
         FOLDER_NAME + "write-survey-licensee-csv-report.groovy";
@@ -170,6 +174,25 @@ public class UdmCsvReportsIntegrationTest extends CsvReportsTestHelper {
         assertFilesWithExecutor(outputStream ->
                 udmReportRepository.writeUdmBaselineUsageCsvReport(new UdmBaselineFilter(), outputStream),
             "udm/baseline_usages_report_empty.csv");
+    }
+
+    @Test
+    @TestData(fileName = WRITE_VALUES_CSV_REPORT)
+    public void testWriteValuesCsvReport() throws IOException {
+        UdmValueFilter udmValueFilter = new UdmValueFilter();
+        udmValueFilter.setPeriods(Set.of(202106));
+        udmValueFilter.setStatus(UdmValueStatusEnum.RESEARCH_COMPLETE);
+        assertFilesWithExecutor(outputStream ->
+                udmReportRepository.writeUdmValuesCsvReport(udmValueFilter, outputStream),
+            "udm/values_report.csv");
+    }
+
+    @Test
+    @TestData(fileName = WRITE_VALUES_CSV_REPORT)
+    public void testWriteValuesEmptyCsvReport() throws IOException {
+        assertFilesWithExecutor(outputStream ->
+                udmReportRepository.writeUdmValuesCsvReport(new UdmValueFilter(), outputStream),
+            "udm/values_report_empty.csv");
     }
 
     @Test

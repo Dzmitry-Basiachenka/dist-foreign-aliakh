@@ -94,8 +94,8 @@ public class UdmReportService implements IUdmReportService {
     }
 
     @Override
-    public void writeUdmValuesCsvReport(UdmValueFilter udmValueFilter, OutputStream outputStream) {
-        udmReportRepository.writeUdmValuesCsvReport(udmValueFilter, outputStream);
+    public void writeUdmValuesCsvReport(UdmValueFilter udmValueFilter, PipedOutputStream pipedOutputStream) {
+        udmReportRepository.writeUdmValuesCsvReport(udmValueFilter, pipedOutputStream);
     }
 
     @Override

@@ -1,0 +1,113 @@
+databaseChangeLog {
+    property(file: 'database-testInteg.properties')
+
+    changeSet(id: '2023-07-28-00', author: 'Anton Azarenka <aazarenka@copyright.com>') {
+        comment('Insert test data for testWriteValuesCsvReport, testWriteValuesEmptyCsvReport')
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
+            column(name: 'df_rightsholder_uid', value: '827d69cb-1646-4701-a7c5-c22164397f5d')
+            column(name: 'rh_account_number', value: 1000002859)
+            column(name: 'name', value: 'John Wiley & Sons - Books')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_udm_value') {
+            column(name: 'df_udm_value_uid', value: '4b466830-68f4-4270-9f3f-f63a6d8174f5')
+            column(name: 'period', value: 201506)
+            column(name: 'status_ind', value: 'NEW')
+            column(name: 'rh_account_number', value: 1000002859)
+            column(name: 'wr_wrk_inst', value: 823333789)
+            column(name: 'system_title', value: 'Tenside, surfactants, detergents')
+            column(name: 'publication_type_uid', value: '73876e58-2e87-485e-b6f3-7e23792dd214')
+            column(name: 'standard_number', value: '1873-7773')
+            column(name: 'assignee', value: 'jjohn@copyright.com')
+            column(name: 'price', value: 70.0000000000)
+            column(name: 'price_in_usd', value: 79.29600028)
+            column(name: 'price_year', value: 2021)
+            column(name: 'price_type', value: 'Individual')
+            column(name: 'price_source', value: 'http://google.com')
+            column(name: 'price_flag', value: true)
+            column(name: 'price_comment', value: 'price comment 1')
+            column(name: 'content', value: 4)
+            column(name: 'content_source', value: 'Book')
+            column(name: 'content_flag', value: true)
+            column(name: 'content_comment', value: 'content comment 1')
+            column(name: 'currency', value: 'EUR')
+            column(name: 'currency_exchange_rate', value: 1.1328000040)
+            column(name: 'currency_exchange_rate_date', value: '2021-09-10')
+            column(name: 'content_unit_price', value: 19.82400007)
+            column(name: 'content_unit_price_flag', value: true)
+            column(name: 'comment', value: 'comment 1')
+            column(name: 'updated_datetime', value: '2021-09-11T00:00:00-04:00')
+            column(name: 'updated_by_user', value: 'user@copyright.com')
+            column(name: 'created_datetime', value: '2021-09-11T00:00:00-04:00')
+            column(name: 'created_by_user', value: 'user@copyright.com')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_udm_value') {
+            column(name: 'df_udm_value_uid', value: '7e3a17ac-a270-484f-8f79-dfc79f1e4a5e')
+            column(name: 'period', value: 201512)
+            column(name: 'status_ind', value: 'PRELIM_RESEARCH_COMPLETE')
+            column(name: 'rh_account_number', value: 1000002859)
+            column(name: 'wr_wrk_inst', value: 823333789)
+            column(name: 'system_title', value: 'Colloids and  libero !@#$%^&*()_+-=?/\\\'"}{][<>convallis. B, Biointerfaces')
+            column(name: 'standard_number', value: '1873-7773')
+            column(name: 'publication_type_uid', value: '73876e58-2e87-485e-b6f3-7e23792dd214')
+            column(name: 'assignee', value: 'jjohn@copyright.com')
+            column(name: 'price', value: 60.0000000000)
+            column(name: 'price_in_usd', value: 67.96800024)
+            column(name: 'price_year', value: 2021)
+            column(name: 'price_type', value: 'Individual')
+            column(name: 'price_source', value: 'http://google.com')
+            column(name: 'price_comment', value: 'price comment 2 !@#$%^&*()_+-=?/\\\'"}{][<>')
+            column(name: 'content', value: 3)
+            column(name: 'currency_exchange_rate', value: 1.1328000040)
+            column(name: 'currency_exchange_rate_date', value: '2021-09-10')
+            column(name: 'content_unit_price', value: 22.65600008)
+            column(name: 'comment', value: 'comment 2 !@#$%^&*()_+-=?/\\\'"}{][<>')
+            column(name: 'content_source', value: 'Book')
+            column(name: 'content_comment', value: 'content comment 2 !@#$%^&*()_+-=?/\\\'"}{][<>')
+            column(name: 'updated_datetime', value: '2021-09-11T00:00:00-04:00')
+            column(name: 'updated_by_user', value: 'user@copyright.com')
+            column(name: 'created_datetime', value: '2021-09-11T00:00:00-04:00')
+            column(name: 'created_by_user', value: 'user@copyright.com')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_udm_value') {
+            column(name: 'df_udm_value_uid', value: 'a71625dc-76b5-4e4d-8a5c-22c0f76fc1ef')
+            column(name: 'period', value: 202106)
+            column(name: 'status_ind', value: 'RESEARCH_COMPLETE')
+            column(name: 'rh_account_number', value: 1000002859)
+            column(name: 'wr_wrk_inst', value: 823333789)
+            column(name: 'system_title', value: 'Redfords and Mitchells')
+            column(name: 'standard_number', value: '1873-7773')
+            column(name: 'assignee', value: 'jjohn@copyright.com')
+            column(name: 'price', value: 60)
+            column(name: 'price_access_type', value: 'Digital')
+            column(name: 'price_comment', value: 'Coment')
+            column(name: 'price_in_usd', value: 90)
+            column(name: 'price_year', value: 2021)
+            column(name: 'price_type', value: 'Individual')
+            column(name: 'price_source', value: 'http://google.com')
+            column(name: 'price_flag', value: true)
+            column(name: 'content', value: 5)
+            column(name: 'content_flag', value: true)
+            column(name: 'currency', value: 'EUR')
+            column(name: 'currency_exchange_rate', value: 1.5)
+            column(name: 'currency_exchange_rate_date', value: '2021-09-10')
+            column(name: 'content_unit_price', value: 18)
+            column(name: 'content_unit_price_flag', value: true)
+            column(name: 'publication_type_uid', value: '73876e58-2e87-485e-b6f3-7e23792dd214')
+            column(name: 'comment', value: 'Comment')
+            column(name: 'content_source', value: 'Book')
+            column(name: 'content_comment', value: 'Content comment')
+            column(name: 'updated_datetime', value: '2021-09-11T00:00:00-04:00')
+            column(name: 'updated_by_user', value: 'user@copyright.com')
+            column(name: 'created_datetime', value: '2021-09-11T00:00:00-04:00')
+            column(name: 'created_by_user', value: 'user@copyright.com')
+        }
+
+        rollback {
+            dbRollback
+        }
+    }
+}

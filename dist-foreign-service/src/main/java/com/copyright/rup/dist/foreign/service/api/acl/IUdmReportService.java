@@ -120,10 +120,10 @@ public interface IUdmReportService {
     /**
      * Writes UDM Values Report into csv output stream.
      *
-     * @param udmValueFilter instance of {@link UdmValueFilter}
-     * @param outputStream   instance of {@link OutputStream}
+     * @param udmValueFilter    instance of {@link UdmValueFilter}
+     * @param pipedOutputStream instance of {@link PipedOutputStream}
      */
-    void writeUdmValuesCsvReport(UdmValueFilter udmValueFilter, OutputStream outputStream);
+    void writeUdmValuesCsvReport(UdmValueFilter udmValueFilter, PipedOutputStream pipedOutputStream);
 
     /**
      * Writes UDM Usages by Status Report into csv output stream.

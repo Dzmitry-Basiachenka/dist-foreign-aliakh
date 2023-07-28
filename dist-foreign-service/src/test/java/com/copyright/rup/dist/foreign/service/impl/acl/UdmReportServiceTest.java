@@ -205,7 +205,7 @@ public class UdmReportServiceTest {
 
     @Test
     public void testWriteUdmValuesCsvReport() {
-        OutputStream outputStream = new ByteArrayOutputStream();
+        PipedOutputStream outputStream = createMock(PipedOutputStream.class);
         UdmValueFilter filter = new UdmValueFilter();
         filter.setPeriods(Set.of(202212));
         udmReportRepository.writeUdmValuesCsvReport(filter, outputStream);
