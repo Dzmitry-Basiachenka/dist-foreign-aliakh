@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.service.api.acl;
 
 import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineFilter;
+import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineValueFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UdmProxyValueFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UdmReportFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
@@ -60,6 +61,14 @@ public interface IUdmReportService {
      * @param pipedOutputStream instance of {@link PipedOutputStream}
      */
     void writeUdmBaselineUsageCsvReport(UdmBaselineFilter filter, PipedOutputStream pipedOutputStream);
+
+    /**
+     * Writes UDM baseline values found by filter into csv output stream.
+     *
+     * @param filter            instance of {@link UdmBaselineFilter}
+     * @param pipedOutputStream instance of {@link PipedOutputStream}
+     */
+    void writeUdmBaselineValuesCsvReport(UdmBaselineValueFilter filter, PipedOutputStream pipedOutputStream);
 
     /**
      * Writes UDM Weekly Survey Report into csv output stream.

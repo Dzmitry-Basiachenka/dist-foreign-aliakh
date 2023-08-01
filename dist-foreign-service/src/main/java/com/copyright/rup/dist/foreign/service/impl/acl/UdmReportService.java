@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.service.impl.acl;
 
 import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineFilter;
+import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineValueFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UdmProxyValueFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UdmReportFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
@@ -56,6 +57,11 @@ public class UdmReportService implements IUdmReportService {
     @Override
     public void writeUdmBaselineUsageCsvReport(UdmBaselineFilter filter, PipedOutputStream pipedOutputStream) {
         udmReportRepository.writeUdmBaselineUsageCsvReport(filter, pipedOutputStream);
+    }
+
+    @Override
+    public void writeUdmBaselineValuesCsvReport(UdmBaselineValueFilter filter, PipedOutputStream pipedOutputStream) {
+        //TODO implement method udmReportRepository.writeUdmBaselineValuesCsvReport
     }
 
     @Override

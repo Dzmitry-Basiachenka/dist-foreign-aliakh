@@ -1,11 +1,14 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.baseline.value;
 
+import com.copyright.rup.dist.common.reporting.api.IStreamSource;
+import com.copyright.rup.dist.common.reporting.api.IStreamSourceHandler;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.foreign.domain.UdmValueBaselineDto;
 import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineValueFilter;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmBaselineValueService;
+import com.copyright.rup.dist.foreign.service.api.acl.IUdmReportService;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineValueController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineValueFilterController;
@@ -42,6 +45,10 @@ public class UdmBaselineValueController extends CommonController<IUdmBaselineVal
     private IUdmBaselineValueFilterController udmBaselineValueFilterController;
     @Autowired
     private IUdmBaselineValueService udmBaselineValueService;
+    @Autowired
+    private IUdmReportService udmReportService;
+    @Autowired
+    private IStreamSourceHandler streamSourceHandler;
 
     @Override
     public void onFilterChanged(FilterChangedEvent event) {
@@ -61,6 +68,12 @@ public class UdmBaselineValueController extends CommonController<IUdmBaselineVal
     @Override
     public int getBeansCount() {
         return udmBaselineValueService.getBaselineValueCount(getFilter());
+    }
+
+    @Override
+    public IStreamSource getExportBaselineValuesStreamSource() {
+        return streamSourceHandler.getCsvStreamSource(() -> "export_udm_baseline_value_", pos ->
+            udmReportService.writeUdmBaselineValuesCsvReport(getFilter(), pos));
     }
 
     @Override
