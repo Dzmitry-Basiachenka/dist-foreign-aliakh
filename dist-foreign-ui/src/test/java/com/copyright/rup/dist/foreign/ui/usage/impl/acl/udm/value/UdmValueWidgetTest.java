@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.value;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButton;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyFooterItems;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGridItems;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyMenuBar;
@@ -466,18 +467,11 @@ public class UdmValueWidgetTest {
         assertTrue(layout.isSpacing());
         assertEquals(new MarginInfo(true), layout.getMargin());
         assertEquals(5, layout.getComponentCount());
-        verifyButton(layout.getComponent(0), "Populate Value Batch");
+        verifyButton(layout.getComponent(0), "Populate Value Batch", true);
         verifyMenuBar(layout.getComponent(1), "Assignment", true, List.of("Assign", "Unassign"));
-        verifyButton(layout.getComponent(2), "Calculate Proxies");
-        verifyButton(layout.getComponent(3), "Publish");
-        verifyButton(layout.getComponent(4), "Export");
-    }
-
-    private void verifyButton(Component component, String name) {
-        assertThat(component, instanceOf(Button.class));
-        Button button = (Button) component;
-        assertEquals(name, button.getCaption());
-        assertTrue(button.isVisible());
+        verifyButton(layout.getComponent(2), "Calculate Proxies", true);
+        verifyButton(layout.getComponent(3), "Publish", true);
+        verifyButton(layout.getComponent(4), "Export", true);
     }
 
     private UdmValueDto buildUdmValueDto(String valueId, String assignee) {

@@ -7,14 +7,18 @@ import com.copyright.rup.dist.foreign.ui.common.utils.IDateFormatter;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineValueController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineValueWidget;
+import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.dataprovider.LoadingIndicatorDataProvider;
+import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.data.ValueProvider;
 import com.vaadin.data.provider.DataProvider;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.Grid.SelectionMode;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.components.grid.FooterRow;
@@ -57,12 +61,23 @@ public class UdmBaselineValueWidget extends HorizontalSplitPanel implements IUdm
 
     private VerticalLayout initBaselineLayout() {
         initGrid();
-        VerticalLayout layout = new VerticalLayout(udmBaselineValueGrid);
+        VerticalLayout layout = new VerticalLayout(initButtonsLayout(), udmBaselineValueGrid);
         layout.setSizeFull();
         layout.setMargin(false);
         layout.setSpacing(false);
         layout.setExpandRatio(udmBaselineValueGrid, 1);
         VaadinUtils.addComponentStyle(layout, "udm-baseline-value-layout");
+        return layout;
+    }
+
+    private HorizontalLayout initButtonsLayout() {
+        Button exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
+        OnDemandFileDownloader fileDownloader =
+            new OnDemandFileDownloader(controller.getExportBaselineValuesStreamSource().getSource());
+        fileDownloader.extend(exportButton);
+        HorizontalLayout layout = new HorizontalLayout(exportButton);
+        layout.setMargin(true);
+        VaadinUtils.addComponentStyle(layout, "udm-baseline-value-buttons");
         return layout;
     }
 

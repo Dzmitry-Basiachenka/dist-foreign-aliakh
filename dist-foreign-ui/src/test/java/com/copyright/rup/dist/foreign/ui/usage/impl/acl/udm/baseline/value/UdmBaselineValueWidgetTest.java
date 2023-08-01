@@ -1,20 +1,22 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.baseline.value;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButton;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyFooterItems;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGrid;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGridItems;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
-import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.domain.UdmValueBaselineDto;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineValueController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineValueFilterController;
@@ -22,8 +24,10 @@ import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineValueFilterWi
 
 import com.vaadin.data.provider.DataProvider;
 import com.vaadin.server.Sizeable.Unit;
+import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.JavaScript;
 import com.vaadin.ui.VerticalLayout;
 
@@ -37,8 +41,10 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Date;
 import java.util.List;
+import java.util.function.Supplier;
 
 /**
  * Verifies {@link UdmBaselineValueWidget}.
@@ -55,13 +61,18 @@ public class UdmBaselineValueWidgetTest {
 
     private UdmBaselineValueWidget udmBaselineValueWidget;
     private IUdmBaselineValueController controller;
+    private IStreamSource streamSource;
 
     @Before
     public void setUp() {
         controller = createMock(IUdmBaselineValueController.class);
+        streamSource = createMock(IStreamSource.class);
         IUdmBaselineValueFilterWidget filterWidget =
             new UdmBaselineValueFilterWidget(createMock(IUdmBaselineValueFilterController.class));
         expect(controller.initBaselineValuesFilterWidget()).andReturn(filterWidget).once();
+        expect(controller.getExportBaselineValuesStreamSource()).andReturn(streamSource).once();
+        expect(streamSource.getSource()).andReturn(new SimpleImmutableEntry(createMock(Supplier.class),
+            createMock(Supplier.class))).once();
     }
 
     @Test
@@ -71,9 +82,9 @@ public class UdmBaselineValueWidgetTest {
         expect(JavaScript.getCurrent()).andReturn(createMock(JavaScript.class)).times(2);
         expect(controller.getBeansCount()).andReturn(1).once();
         expect(controller.loadBeans(0, Integer.MAX_VALUE, List.of())).andReturn(udmValueBaselines).once();
-        replay(JavaScript.class, controller);
+        replay(JavaScript.class, controller, streamSource);
         initWidget();
-        Grid grid = (Grid) ((VerticalLayout) udmBaselineValueWidget.getSecondComponent()).getComponent(0);
+        Grid grid = (Grid) ((VerticalLayout) udmBaselineValueWidget.getSecondComponent()).getComponent(1);
         DataProvider dataProvider = grid.getDataProvider();
         dataProvider.refreshAll();
         Object[][] expectedCells = {
@@ -82,16 +93,16 @@ public class UdmBaselineValueWidgetTest {
                 "09/01/2022"}
         };
         verifyGridItems(grid, udmValueBaselines, expectedCells);
-        verify(JavaScript.class, controller);
+        verify(JavaScript.class, controller, streamSource);
         Object[][] expectedFooterColumns = {{"valueId", "Values Count: 1", null}};
         verifyFooterItems(grid, expectedFooterColumns);
     }
 
     @Test
     public void testWidgetStructure() {
-        replay(controller);
+        replay(controller, streamSource);
         initWidget();
-        verify(controller);
+        verify(controller, streamSource);
         assertTrue(udmBaselineValueWidget.isLocked());
         assertEquals(270, udmBaselineValueWidget.getSplitPosition(), 0);
         verifyWindow(udmBaselineValueWidget, null, 100, 100, Unit.PERCENTAGE);
@@ -100,8 +111,9 @@ public class UdmBaselineValueWidgetTest {
         assertThat(secondComponent, instanceOf(VerticalLayout.class));
         VerticalLayout layout = (VerticalLayout) secondComponent;
         verifyWindow(layout, null, 100, 100, Unit.PERCENTAGE);
-        assertEquals(1, layout.getComponentCount());
-        verifyGrid((Grid) layout.getComponent(0), List.of(
+        assertEquals(2, layout.getComponentCount());
+        verifyButtonsLayout((HorizontalLayout) layout.getComponent(0));
+        verifyGrid((Grid) layout.getComponent(1), List.of(
             Triple.of("Value ID", 200.0, -1),
             Triple.of("Value Period", 120.0, -1),
             Triple.of("Wr Wrk Inst", 120.0, -1),
@@ -116,7 +128,14 @@ public class UdmBaselineValueWidgetTest {
             Triple.of("Comment", 300.0, -1),
             Triple.of("Updated By", 150.0, -1),
             Triple.of("Updated Date", 110.0, -1)));
-        assertEquals(1, layout.getExpandRatio(layout.getComponent(0)), 0);
+        assertEquals(1, layout.getExpandRatio(layout.getComponent(1)), 0);
+    }
+
+    private void verifyButtonsLayout(HorizontalLayout layout) {
+        assertTrue(layout.isSpacing());
+        assertEquals(new MarginInfo(true), layout.getMargin());
+        assertEquals(1, layout.getComponentCount());
+        verifyButton(layout.getComponent(0), "Export", true);
     }
 
     private void initWidget() {

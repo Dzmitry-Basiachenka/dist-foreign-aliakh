@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.api.acl;
 
+import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.domain.UdmValueBaselineDto;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.vaadin.widget.api.IController;
@@ -48,6 +49,11 @@ public interface IUdmBaselineValueController extends IController<IUdmBaselineVal
      * @return number of items.
      */
     int getBeansCount();
+
+    /**
+     * @return instance of {@link IStreamSource} for export.
+     */
+    IStreamSource getExportBaselineValuesStreamSource();
 
     /**
      * Initializes {@link IUdmBaselineValueFilterWidget}.
