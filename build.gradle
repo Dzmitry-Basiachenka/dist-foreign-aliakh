@@ -9,6 +9,7 @@ buildscript {
     dependencies {
         classpath("com.copyright.rup.scm.gradle.plugins:rup-gradle-plugins:${rupGradlePluginsVersion}")
         classpath("com.devsoap.plugin:gradle-vaadin-plugin:${gradleVaadinPluginVersion}")
+        classpath("com.google.guava:guava:${guavaVersion}")
         classpath("com.fasterxml.jackson.core:jackson-core:${jacksonVersion}")
         classpath("com.fasterxml.jackson.core:jackson-annotations:${jacksonVersion}")
     }
