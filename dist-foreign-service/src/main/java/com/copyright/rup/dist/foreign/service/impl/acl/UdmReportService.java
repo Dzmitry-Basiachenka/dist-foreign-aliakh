@@ -61,7 +61,7 @@ public class UdmReportService implements IUdmReportService {
 
     @Override
     public void writeUdmBaselineValuesCsvReport(UdmBaselineValueFilter filter, PipedOutputStream pipedOutputStream) {
-        //TODO implement method udmReportRepository.writeUdmBaselineValuesCsvReport
+        udmReportRepository.writeUdmBaselineValuesCsvReport(filter, pipedOutputStream);
     }
 
     @Override
