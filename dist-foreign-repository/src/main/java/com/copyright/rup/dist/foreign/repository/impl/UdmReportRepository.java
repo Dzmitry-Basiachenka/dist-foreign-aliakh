@@ -10,6 +10,7 @@ import com.copyright.rup.dist.foreign.domain.filter.UdmValueFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUdmReportRepository;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmAssigneesByStatusReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmBaselineUsageCsvReportHandler;
+import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmBaselineValueCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmBaselineValueUpdatesReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmCompletedAssignmentsReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmProxyValueCsvReportHandler;
@@ -92,7 +93,11 @@ public class UdmReportRepository extends CommonReportRepository implements IUdmR
 
     @Override
     public void writeUdmBaselineValuesCsvReport(UdmBaselineValueFilter filter, PipedOutputStream pipedOutputStream) {
-        //TODO implement
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
+        parameters.put(FILTER_KEY, Objects.requireNonNull(filter));
+        writeCsvReportByParts("IUdmReportMapper.findUdmBaselineValuesCountByFilter",
+            "IUdmReportMapper.findUdmBaselineValuesDtosByFilter", parameters, !filter.isEmpty(),
+            () -> new UdmBaselineValueCsvReportHandler(Objects.requireNonNull(pipedOutputStream)));
     }
 
     @Override
