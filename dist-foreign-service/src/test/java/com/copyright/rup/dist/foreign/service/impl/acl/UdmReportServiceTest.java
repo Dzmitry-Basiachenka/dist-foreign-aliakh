@@ -8,6 +8,7 @@ import static org.easymock.EasyMock.verify;
 import com.copyright.rup.dist.foreign.domain.UdmChannelEnum;
 import com.copyright.rup.dist.foreign.domain.UdmUsageOriginEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineFilter;
+import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineValueFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UdmProxyValueFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UdmReportFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
@@ -100,6 +101,17 @@ public class UdmReportServiceTest {
         expectLastCall().once();
         replay(udmReportRepository);
         udmReportService.writeUdmBaselineUsageCsvReport(filter, outputStream);
+        verify(udmReportRepository);
+    }
+
+    @Test
+    public void testWriteUdmBaselineValuesCsvReport() {
+        UdmBaselineValueFilter filter = createMock(UdmBaselineValueFilter.class);
+        PipedOutputStream outputStream = createMock(PipedOutputStream.class);
+        udmReportRepository.writeUdmBaselineValuesCsvReport(filter, outputStream);
+        expectLastCall().once();
+        replay(udmReportRepository);
+        udmReportService.writeUdmBaselineValuesCsvReport(filter, outputStream);
         verify(udmReportRepository);
     }
 

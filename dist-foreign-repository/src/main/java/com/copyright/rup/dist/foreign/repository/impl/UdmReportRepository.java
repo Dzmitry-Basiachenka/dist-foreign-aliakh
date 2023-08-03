@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.repository.impl;
 
 import com.copyright.rup.dist.common.repository.impl.csv.BaseCsvReportHandler;
 import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineFilter;
+import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineValueFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UdmProxyValueFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UdmReportFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
@@ -87,6 +88,11 @@ public class UdmReportRepository extends CommonReportRepository implements IUdmR
         writeCsvReportByParts("IUdmReportMapper.findUdmBaselineUsagesCountByFilter",
             "IUdmReportMapper.findUdmBaselineUsageDtosByFilter", parameters, !filter.isEmpty(),
             () -> new UdmBaselineUsageCsvReportHandler(Objects.requireNonNull(pipedOutputStream)));
+    }
+
+    @Override
+    public void writeUdmBaselineValuesCsvReport(UdmBaselineValueFilter filter, PipedOutputStream pipedOutputStream) {
+        //TODO implement
     }
 
     @Override

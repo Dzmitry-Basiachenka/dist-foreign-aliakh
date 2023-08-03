@@ -177,6 +177,16 @@ public class UdmCsvReportsIntegrationTest extends CsvReportsTestHelper {
     }
 
     @Test
+    public void testWriteBaselineValuesCsvReport() {
+        //TODO implement
+    }
+
+    @Test
+    public void testWriteBaselineValuesEmptyCsvReport() {
+        //TODO implement
+    }
+
+    @Test
     @TestData(fileName = WRITE_VALUES_CSV_REPORT)
     public void testWriteValuesCsvReport() throws IOException {
         UdmValueFilter udmValueFilter = new UdmValueFilter();
