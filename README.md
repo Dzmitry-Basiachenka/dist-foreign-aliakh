@@ -1,3 +1,15 @@
+19.0.1
+-
+* B-81045 FDA: Ability to Export Value Queue List View: add Export button
+* B-81045 FDA: Ability to Export Value Queue List View: implement report handler
+* B-81045 FDA: Ability to Export Value Queue List View: implement repository logic for generating values export
+* B-81044 FDA: Ability to Export Baseline Values List View: add Export button
+* B-81044 FDA: Ability to Export Baseline Values List View: implement the report handler
+* B-81044 FDA: Ability to Export Baseline Values List View: implement the repository
+* B-80266 FDA: Add Ineligible reason Non participating RH to drop down: add ineligible reason Non participating RH
+* B-78643 Tech Debt: fix security vulnerabilities CVE-2023-34981, CVE-2023-33546
+* B-78643 Tech Debt: fix security vulnerability CVE-2023-2976
+
 19.0.0
 -
 * B-75922 FDA: Move from Perf4j to Micron Meter: update Gradle project
