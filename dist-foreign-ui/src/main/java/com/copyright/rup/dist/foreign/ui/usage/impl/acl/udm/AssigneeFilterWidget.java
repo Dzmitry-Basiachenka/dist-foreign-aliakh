@@ -12,7 +12,6 @@ import com.vaadin.data.ValueProvider;
 import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -84,7 +83,7 @@ public class AssigneeFilterWidget extends BaseUdmItemsFilterWidget<String>
     public FilterWindow<String> showFilterWindow() {
         FilterWindow<String> filterWindow =
             Windows.showFilterWindow(ForeignUi.getMessage("window.assignees_filter"), this,
-                (ValueProvider<String, List<String>>) Arrays::asList);
+                (ValueProvider<String, List<String>>) List::of);
         filterWindow.setSelectedItemsIds(selectedItemsIds);
         filterWindow.setSelectAllButtonVisible();
         filterWindow.setSearchPromptString(ForeignUi.getMessage("prompt.assignee"));

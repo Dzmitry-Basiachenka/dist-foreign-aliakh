@@ -32,6 +32,6 @@ dependencies {
 
 sonarqube {
     properties {
-        property "sonar.tests", "src/test, src/testInteg"
+        property "sonar.tests", "src/test"
     }
 }
