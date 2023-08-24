@@ -11,7 +11,6 @@ import com.vaadin.data.ValueProvider;
 
 import org.apache.commons.collections4.CollectionUtils;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -79,7 +78,7 @@ public class PublicationFormatFilterWidget extends BaseUdmItemsFilterWidget<Stri
     public FilterWindow<String> showFilterWindow() {
         FilterWindow<String> filterWindow =
             Windows.showFilterWindow(ForeignUi.getMessage("window.publication_format_filter"), this,
-                (ValueProvider<String, List<String>>) Arrays::asList);
+                (ValueProvider<String, List<String>>) List::of);
         filterWindow.setSelectedItemsIds(selectedItemsIds);
         filterWindow.setSelectAllButtonVisible();
         filterWindow.setSearchPromptString(ForeignUi.getMessage("prompt.publication_format"));
