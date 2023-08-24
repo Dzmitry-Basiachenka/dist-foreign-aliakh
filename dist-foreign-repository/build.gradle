@@ -21,3 +21,9 @@ dependencies {
     testIntegRuntime(group: "com.copyright.rup.common", name: "rup-common-test-integ",
             version: "${rupCommonVersion}", configuration: "postgres")
 }
+
+sonarqube {
+    properties {
+        property "sonar.tests", "src/test, src/testInteg"
+    }
+}

@@ -12,11 +12,13 @@ buildscript {
         classpath("com.google.guava:guava:${guavaVersion}")
         classpath("com.fasterxml.jackson.core:jackson-core:${jacksonVersion}")
         classpath("com.fasterxml.jackson.core:jackson-annotations:${jacksonVersion}")
+        classpath("org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:${sonarqubeVersion}")
     }
 }
 
 apply plugin: 'rup-java'
 apply plugin: 'rup-idea'
+apply plugin: 'org.sonarqube'
 
 allprojects {
     group = 'com.copyright.rup.dist.foreign'
