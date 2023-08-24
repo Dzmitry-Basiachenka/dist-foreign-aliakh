@@ -3,3 +3,9 @@ dependencies {
 
     testCompile("com.copyright.rup.dist.common:dist-common-test:${distCommonVersion}")
 }
+
+sonarqube {
+    properties {
+        property "sonar.tests", "src/test"
+    }
+}

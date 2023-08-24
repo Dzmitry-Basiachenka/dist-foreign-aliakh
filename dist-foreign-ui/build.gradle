@@ -58,3 +58,11 @@ war {
 tasks.withType(Test) {
     maxParallelForks = Runtime.runtime.availableProcessors()
 }
+
+sonarqube {
+    properties {
+        property "sonar.tests", "src/test, src/testInteg"
+        property 'sonar.coverage.exclusions', "**/com/copyright/rup/dist/foreign/ui/rest/gen/**"
+        property "sonar.exclusions", "**/com/copyright/rup/dist/foreign/ui/rest/gen/**"
+    }
+}

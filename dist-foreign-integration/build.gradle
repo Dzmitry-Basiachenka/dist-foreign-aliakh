@@ -29,3 +29,9 @@ dependencies {
 
     testRuntime("com.copyright.rup.common:rup-common-config:${rupCommonVersion}")
 }
+
+sonarqube {
+    properties {
+        property "sonar.tests", "src/test, src/testInteg"
+    }
+}
