@@ -243,7 +243,7 @@ public class CreateAclGrantSetWindow extends Window {
     private AclGrantSet buildAclGrantSet() {
         AclGrantSet aclGrantSet = new AclGrantSet();
         aclGrantSet.setName(StringUtils.trim(grantSetNameFiled.getValue()));
-        aclGrantSet.setGrantPeriod(Integer.parseInt(String.format("%s%s",
+        aclGrantSet.setGrantPeriod(Integer.valueOf(String.format("%s%s",
             StringUtils.trim(grantPeriodYearField.getValue()), grantPeriodMonthComboBox.getValue())));
         aclGrantSet.setPeriods(selectedPeriods);
         aclGrantSet.setLicenseType(licenseTypeComboBox.getValue());

@@ -215,7 +215,7 @@ public class UdmBatchUploadWindow extends Window {
     private UdmBatch buildUdmBatch() {
         UdmBatch udmBatch = new UdmBatch();
         udmBatch.setName(getBatchName());
-        udmBatch.setPeriod(Integer.parseInt(
+        udmBatch.setPeriod(Integer.valueOf(
             String.format("%s%s", StringUtils.trim(periodYearField.getValue()), monthField.getValue())));
         udmBatch.setChannel(channelField.getValue());
         udmBatch.setUsageOrigin(usageOriginField.getValue());
