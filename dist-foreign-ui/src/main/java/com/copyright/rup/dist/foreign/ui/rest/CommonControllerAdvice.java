@@ -106,7 +106,7 @@ public class CommonControllerAdvice {
     private ResponseEntity<Error> handleUnexpectedException(Exception exception, String errorText, HttpStatus status) {
         Error error = buildError(exception, errorText);
         error.setStackTrace(ExceptionUtils.getStackTrace(exception));
-        LOGGER.warn("Exception on REST call handling. {}", exception);
+        LOGGER.warn("Exception on REST call handling", exception);
         return new ResponseEntity<>(error, status);
     }
 

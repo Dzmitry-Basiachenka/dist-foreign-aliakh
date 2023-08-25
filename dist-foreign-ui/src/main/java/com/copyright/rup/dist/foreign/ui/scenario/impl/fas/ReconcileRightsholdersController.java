@@ -74,7 +74,7 @@ public class ReconcileRightsholdersController implements IReconcileRightsholders
     public List<RightsholderDiscrepancy> loadBeans(int startIndex, int count, List<QuerySortOrder> sortOrders) {
         Sort sort = null;
         if (CollectionUtils.isNotEmpty(sortOrders)) {
-            QuerySortOrder sortOrder = sortOrders.iterator().next();
+            QuerySortOrder sortOrder = sortOrders.get(0);
             sort = new Sort(sortOrder.getSorted(), Direction.of(SortDirection.ASCENDING == sortOrder.getDirection()));
         }
         return rightsholderDiscrepancyService.getByScenarioIdAndStatus(scenario.getId(),

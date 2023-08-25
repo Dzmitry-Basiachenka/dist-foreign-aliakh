@@ -250,12 +250,12 @@ public class SalUsageWidget extends CommonUsageWidget implements ISalUsageWidget
         List<String> processingBatchesNames = controller.getProcessingBatchesNames(batchesIds);
         if (CollectionUtils.isNotEmpty(processingBatchesNames)) {
             message = ForeignUi.getMessage("message.error.processing_batches_names",
-                processingBatchesNames.iterator().next());
+                processingBatchesNames.get(0));
         } else {
             List<String> ineligibleBatchNames = controller.getIneligibleBatchesNames(batchesIds);
             if (CollectionUtils.isNotEmpty(ineligibleBatchNames)) {
                 message = ForeignUi.getMessage("message.error.batches_with_non_eligible_usages",
-                    ineligibleBatchNames.iterator().next());
+                    ineligibleBatchNames.get(0));
             }
         }
         return message;
