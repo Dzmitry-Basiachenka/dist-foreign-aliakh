@@ -118,7 +118,7 @@ public class UploadGrantDetailWindow extends Window {
         VaadinUtils.addComponentStyle(comboBox, "grant-details-upload-combo-box");
         grantSetBinder.forField(comboBox)
             .asRequired(ForeignUi.getMessage("field.error.empty"))
-            .bind(bean -> bean, (bean, fieldValue) -> bean = fieldValue)
+            .bind(ValueProvider.identity(), (bean, fieldValue) -> bean = fieldValue)
             .validate();
         return comboBox;
     }
