@@ -13,7 +13,6 @@ import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
-import com.google.common.collect.Maps;
 import com.vaadin.data.Binder;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.ui.Alignment;
@@ -30,6 +29,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -157,7 +157,7 @@ class CreateSalScenarioWindow extends Window {
 
     private boolean isValidGradeGroups(FundPool fundPool) {
         List<SalGradeGroupEnum> existingGradeGroups = controller.getUsageDataGradeGroups();
-        Map<SalGradeGroupEnum, BigDecimal> gradeGroupAmountMap = Maps.newHashMapWithExpectedSize(3);
+        Map<SalGradeGroupEnum, BigDecimal> gradeGroupAmountMap = new EnumMap<>(SalGradeGroupEnum.class);
         gradeGroupAmountMap.put(SalGradeGroupEnum.GRADEK_5, fundPool.getSalFields().getGradeKto5GrossAmount());
         gradeGroupAmountMap.put(SalGradeGroupEnum.GRADE6_8, fundPool.getSalFields().getGrade6to8GrossAmount());
         gradeGroupAmountMap.put(SalGradeGroupEnum.GRADE9_12, fundPool.getSalFields().getGrade9to12GrossAmount());

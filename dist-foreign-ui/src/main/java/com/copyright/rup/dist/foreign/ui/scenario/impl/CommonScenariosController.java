@@ -24,7 +24,7 @@ import com.vaadin.ui.Window;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -116,7 +116,7 @@ public abstract class CommonScenariosController extends CommonController<ICommon
      */
     @PostConstruct
     public void initActionHandlers() {
-        actionHandlers = new HashMap<>();
+        actionHandlers = new EnumMap<>(ScenarioActionTypeEnum.class);
         actionHandlers.put(ScenarioActionTypeEnum.SUBMITTED,
             (scenario, reason) -> scenarioService.submit(scenario, reason));
         actionHandlers.put(ScenarioActionTypeEnum.APPROVED,

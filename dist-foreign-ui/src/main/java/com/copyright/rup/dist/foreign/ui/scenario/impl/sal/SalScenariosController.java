@@ -30,7 +30,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -174,7 +174,7 @@ public class SalScenariosController extends CommonScenariosController implements
     @Override
     @PostConstruct
     public void initActionHandlers() {
-        actionHandlers = new HashMap<>();
+        actionHandlers = new EnumMap<>(ScenarioActionTypeEnum.class);
         actionHandlers.put(ScenarioActionTypeEnum.SUBMITTED,
             (scenarios, reason) -> salScenarioService.changeScenariosState(scenarios, ScenarioStatusEnum.SUBMITTED,
                 ScenarioActionTypeEnum.SUBMITTED, reason));

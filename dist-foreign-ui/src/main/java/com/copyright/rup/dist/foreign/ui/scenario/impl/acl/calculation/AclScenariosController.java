@@ -46,7 +46,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -309,7 +309,7 @@ public class AclScenariosController extends CommonController<IAclScenariosWidget
      */
     @PostConstruct
     public void initActionHandlers() {
-        actionHandlers = new HashMap<>();
+        actionHandlers = new EnumMap<>(ScenarioActionTypeEnum.class);
         actionHandlers.put(ScenarioActionTypeEnum.SUBMITTED,
             (scenario, reason) -> aclScenarioService.changeScenarioState(scenario, ScenarioStatusEnum.SUBMITTED,
                 ScenarioActionTypeEnum.SUBMITTED, reason));
