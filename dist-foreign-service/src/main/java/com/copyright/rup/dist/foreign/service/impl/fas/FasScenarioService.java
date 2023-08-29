@@ -127,7 +127,7 @@ public class FasScenarioService implements IFasScenarioService {
         List<Usage> usagesForReconcile = fasUsageService.getUsagesForReconcile(scenario.getId());
         Map<Long, List<Usage>> groupedByWrWrkInstUsages =
             usagesForReconcile.stream().collect(Collectors.groupingBy(Usage::getWrWrkInst));
-        String productFamily = usagesForReconcile.iterator().next().getProductFamily();
+        String productFamily = usagesForReconcile.get(0).getProductFamily();
         String userName = RupContextUtils.getUserName();
         Set<String> licenseTypes = grantPriorityRepository.findByProductFamily(productFamily).stream()
             .map(GrantPriority::getLicenseType)
