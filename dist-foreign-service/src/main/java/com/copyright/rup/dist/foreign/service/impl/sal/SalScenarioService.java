@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.service.impl.sal;
 import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
+import com.copyright.rup.dist.common.util.LogUtils;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Scenario.SalFields;
@@ -105,8 +106,9 @@ public class SalScenarioService implements ISalScenarioService {
     @Override
     @Transactional
     public void sendToLm(Scenario scenario) {
-        LOGGER.info("Send SAL scenario to LM. Started. {}, User={}", ForeignLogUtils.scenario(scenario),
-            RupContextUtils.getUserName());
+        LogUtils.ILogWrapper scenarioWrapper = ForeignLogUtils.scenario(scenario);
+        String userName = RupContextUtils.getUserName();
+        LOGGER.info("Send SAL scenario to LM. Started. {}, User={}", scenarioWrapper, userName);
         List<String> usageIds = salUsageService.moveToArchive(scenario);
         Iterables.partition(usageIds, batchSize).forEach(partition -> {
             List<ExternalUsage> externalUsages = usageService.getArchivedUsagesForSendToLmByIds(partition)
@@ -116,11 +118,10 @@ public class SalScenarioService implements ISalScenarioService {
             lmIntegrationService.sendToLm(externalUsages, scenario, usageIds.size());
         });
         scenario.setStatus(ScenarioStatusEnum.SENT_TO_LM);
-        scenario.setUpdateUser(RupContextUtils.getUserName());
+        scenario.setUpdateUser(userName);
         scenarioRepository.updateStatus(scenario);
         scenarioAuditService.logAction(scenario.getId(), ScenarioActionTypeEnum.SENT_TO_LM, StringUtils.EMPTY);
-        LOGGER.info("Send SAL scenario to LM. Finished. {}, User={}", ForeignLogUtils.scenario(scenario),
-            RupContextUtils.getUserName());
+        LOGGER.info("Send SAL scenario to LM. Finished. {}, User={}", scenarioWrapper, userName);
     }
 
     @Override

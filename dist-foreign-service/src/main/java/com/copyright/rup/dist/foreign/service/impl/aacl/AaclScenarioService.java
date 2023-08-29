@@ -4,6 +4,7 @@ import com.copyright.rup.common.exception.RupRuntimeException;
 import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
+import com.copyright.rup.dist.common.util.LogUtils;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Scenario.AaclFields;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
@@ -106,8 +107,9 @@ public class AaclScenarioService implements IAaclScenarioService {
     @Override
     @Transactional
     public void sendToLm(Scenario scenario) {
-        LOGGER.info("Send scenario to LM. Started. {}, User={}", ForeignLogUtils.scenario(scenario),
-            RupContextUtils.getUserName());
+        LogUtils.ILogWrapper scenarioWrapper = ForeignLogUtils.scenario(scenario);
+        String userName = RupContextUtils.getUserName();
+        LOGGER.info("Send scenario to LM. Started. {}, User={}", scenarioWrapper, userName);
         List<String> usageIds = aaclUsageService.moveToArchive(scenario);
         if (CollectionUtils.isNotEmpty(usageIds)) {
             Iterables.partition(usageIds, batchSize)
@@ -117,11 +119,10 @@ public class AaclScenarioService implements IAaclScenarioService {
                         scenario, usageIds.size()));
             changeScenarioState(scenario, ScenarioStatusEnum.SENT_TO_LM, ScenarioActionTypeEnum.SENT_TO_LM,
                 StringUtils.EMPTY);
-            LOGGER.info("Send scenario to LM. Finished. {}, User={}", ForeignLogUtils.scenario(scenario),
-                RupContextUtils.getUserName());
+            LOGGER.info("Send scenario to LM. Finished. {}, User={}", scenarioWrapper, userName);
         } else {
             throw new RupRuntimeException(String.format("Send scenario to LM. Failed. %s. Reason=Scenario is empty",
-                ForeignLogUtils.scenario(scenario)));
+                scenarioWrapper));
         }
     }
 
