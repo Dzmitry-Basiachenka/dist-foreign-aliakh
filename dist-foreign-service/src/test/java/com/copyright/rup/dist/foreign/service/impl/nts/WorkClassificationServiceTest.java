@@ -62,7 +62,7 @@ public class WorkClassificationServiceTest {
     private IWorkClassificationRepository workClassificationRepository;
     private IUsageRepository usageRepository;
     private INtsUsageRepository ntsUsageRepository;
-    private IChainProcessor<Usage> nonBelletristicProcessorMock;
+    private IChainProcessor<Usage> nonBelletristicProcessor;
 
     @Before
     public void setUp() {
@@ -70,12 +70,12 @@ public class WorkClassificationServiceTest {
         workClassificationRepository = createMock(IWorkClassificationRepository.class);
         usageRepository = createMock(IUsageRepository.class);
         ntsUsageRepository = createMock(INtsUsageRepository.class);
-        nonBelletristicProcessorMock = createMock(IChainProcessor.class);
-        workClassificationService.setWorkClassificationRepository(workClassificationRepository);
-        workClassificationService.setUsageRepository(usageRepository);
-        workClassificationService.setNonBelletristicProcessor(nonBelletristicProcessorMock);
+        nonBelletristicProcessor = createMock(IChainProcessor.class);
+        Whitebox.setInternalState(workClassificationService, workClassificationRepository);
+        Whitebox.setInternalState(workClassificationService, usageRepository);
+        Whitebox.setInternalState(workClassificationService, ntsUsageRepository);
+        Whitebox.setInternalState(workClassificationService, nonBelletristicProcessor);
         Whitebox.setInternalState(workClassificationService, "usagesBatchSize", 100);
-        Whitebox.setInternalState(workClassificationService, "ntsUsageRepository", ntsUsageRepository);
     }
 
     @Test
@@ -94,7 +94,7 @@ public class WorkClassificationServiceTest {
         expectLastCall().once();
         workClassificationRepository.insertOrUpdate(capture(classificationCapture2));
         expectLastCall().once();
-        workClassificationService.setUsagesBatchSize(1);
+        Whitebox.setInternalState(workClassificationService, "usagesBatchSize", 1);
         Usage usage1 = new Usage();
         usage1.setId(RupPersistUtils.generateUuid());
         Usage usage2 = new Usage();
@@ -102,12 +102,12 @@ public class WorkClassificationServiceTest {
         expect(ntsUsageRepository.findUsageIdsForClassificationUpdate())
             .andReturn(List.of(usage1.getId(), usage2.getId())).once();
         expect(usageRepository.findByIds(List.of(usage1.getId()))).andReturn(List.of(usage1)).once();
-        nonBelletristicProcessorMock.process(List.of(usage1));
+        nonBelletristicProcessor.process(List.of(usage1));
         expectLastCall().once();
         expect(usageRepository.findByIds(List.of(usage2.getId()))).andReturn(List.of(usage2)).once();
-        nonBelletristicProcessorMock.process(List.of(usage2));
+        nonBelletristicProcessor.process(List.of(usage2));
         expectLastCall().once();
-        replay(workClassificationRepository, ntsUsageRepository, usageRepository, nonBelletristicProcessorMock);
+        replay(workClassificationRepository, ntsUsageRepository, usageRepository, nonBelletristicProcessor);
         workClassificationService.insertOrUpdateClassifications(
             Set.of(buildClassification(WR_WRK_INST_1), buildClassification(WR_WRK_INST_2)), STM);
         WorkClassification classification1 = classificationCapture1.getValue();
@@ -118,7 +118,7 @@ public class WorkClassificationServiceTest {
         WorkClassification classification2 = classificationCapture2.getValue();
         assertNotNull(classification2.getWrWrkInst());
         assertEquals(STM, classification2.getClassification());
-        verify(workClassificationRepository, ntsUsageRepository, usageRepository, nonBelletristicProcessorMock);
+        verify(workClassificationRepository, ntsUsageRepository, usageRepository, nonBelletristicProcessor);
     }
 
     @Test
