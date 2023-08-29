@@ -133,22 +133,6 @@ public class WorkClassificationService implements IWorkClassificationService {
         return recordsThreshold;
     }
 
-    void setWorkClassificationRepository(IWorkClassificationRepository workClassificationRepository) {
-        this.workClassificationRepository = workClassificationRepository;
-    }
-
-    void setUsageRepository(IUsageRepository usageRepository) {
-        this.usageRepository = usageRepository;
-    }
-
-    void setNonBelletristicProcessor(IChainProcessor<Usage> nonBelletristicProcessor) {
-        this.nonBelletristicProcessor = nonBelletristicProcessor;
-    }
-
-    void setUsagesBatchSize(int usagesBatchSize) {
-        this.usagesBatchSize = usagesBatchSize;
-    }
-
     private void updateClassifiedUsages() {
         List<String> usageIdsToUpdate = ntsUsageRepository.findUsageIdsForClassificationUpdate();
         if (CollectionUtils.isNotEmpty(usageIdsToUpdate)) {
