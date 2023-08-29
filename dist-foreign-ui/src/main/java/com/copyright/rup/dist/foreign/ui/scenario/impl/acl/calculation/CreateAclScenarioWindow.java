@@ -27,6 +27,7 @@ import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.data.Binder;
 import com.vaadin.data.ValidationException;
+import com.vaadin.data.ValueProvider;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -223,7 +224,7 @@ public class CreateAclScenarioWindow extends Window implements IDateFormatter {
         aclCopyFromScenarioComboBox = new ComboBox<>(ForeignUi.getMessage("label.copy_from"));
         aclCopyFromScenarioComboBox.setItemCaptionGenerator(AclScenario::getName);
         aclCopyFromScenarioComboBox.setItems(controller.getScenarios());
-        scenarioBinder.forField(aclCopyFromScenarioComboBox).bind(scenario -> scenario, (scenario, value) ->
+        scenarioBinder.forField(aclCopyFromScenarioComboBox).bind(ValueProvider.identity(), (scenario, value) ->
             scenario.setCopiedFrom(Objects.nonNull(value) ? value.getName() : null));
         aclCopyFromScenarioComboBox.addValueChangeListener(event -> {
             if (Objects.nonNull(event.getValue())) {
