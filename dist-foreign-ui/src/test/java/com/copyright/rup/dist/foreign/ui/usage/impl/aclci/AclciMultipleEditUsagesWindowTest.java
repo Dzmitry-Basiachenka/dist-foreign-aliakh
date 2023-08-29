@@ -72,6 +72,7 @@ public class AclciMultipleEditUsagesWindowTest {
     private static final Long RH_ACCOUNT_NUMBER = 2000047356L;
     private static final String RH_NAME = "National Geographic Partners";
     private static final String RH_ACCOUNT_NUMBER_FIELD_NAME = "rhAccountNumberField";
+    private static final String RH_NAME_FIELD_NAME = "rhNameField";
     private static final String WR_WRK_INST_FIELD_NAME = "wrWrkInstField";
     private static final String NUMBER_VALIDATION_MESSAGE = "Field value should contain numeric values only";
     private IAclciUsageController controller;
@@ -121,12 +122,10 @@ public class AclciMultipleEditUsagesWindowTest {
     public void testSaveButtonClickNotSetValues() {
         mockStatic(Windows.class);
         ClickEvent clickEvent = createMock(ClickEvent.class);
-        Rightsholder rh = buildRightsholder();
         window = new AclciMultipleEditUsagesWindow(controller, usageUpdateWindow, USAGE_IDS);
-        Whitebox.setInternalState(window, "rh", rh);
         Collection<? extends AbstractField<?>> fields = List.of(
             Whitebox.getInternalState(window, RH_ACCOUNT_NUMBER_FIELD_NAME),
-            Whitebox.getInternalState(window, "rhNameField"),
+            Whitebox.getInternalState(window, RH_NAME_FIELD_NAME),
             Whitebox.getInternalState(window, WR_WRK_INST_FIELD_NAME));
         Windows.showValidationErrorWindow(fields);
         expectLastCall().once();
@@ -233,7 +232,7 @@ public class AclciMultipleEditUsagesWindowTest {
         assertEquals(2, saveButton.getListeners(Button.ClickEvent.class).size());
         verifyLoadClickListener(saveButton, List.of(
             Whitebox.getInternalState(window, RH_ACCOUNT_NUMBER_FIELD_NAME),
-            Whitebox.getInternalState(window, "rhNameField"),
+            Whitebox.getInternalState(window, RH_NAME_FIELD_NAME),
             Whitebox.getInternalState(window, WR_WRK_INST_FIELD_NAME)));
     }
 
@@ -248,17 +247,14 @@ public class AclciMultipleEditUsagesWindowTest {
     private void verifySaveButtonClick(Long wrWrkInst) {
         mockStatic(Windows.class);
         Button.ClickEvent clickEvent = createMock(Button.ClickEvent.class);
-        Rightsholder rh = new Rightsholder();
-        rh.setAccountNumber(RH_ACCOUNT_NUMBER);
-        rh.setName(RH_NAME);
         Binder<UsageDto> binder = createMock(Binder.class);
         window = new AclciMultipleEditUsagesWindow(controller, usageUpdateWindow, USAGE_IDS);
         Whitebox.setInternalState(window, "binder", binder);
         Whitebox.setInternalState(window, RH_ACCOUNT_NUMBER_FIELD_NAME,
             new TextField("RH Account #", RH_ACCOUNT_NUMBER.toString()));
+        Whitebox.setInternalState(window, RH_NAME_FIELD_NAME, new TextField("RH Name", RH_NAME));
         Whitebox.setInternalState(window, WR_WRK_INST_FIELD_NAME,
             new TextField("Wr Wrk Inst", Objects.isNull(wrWrkInst) ? StringUtils.EMPTY : wrWrkInst.toString()));
-        Whitebox.setInternalState(window, "rh", rh);
         Capture<IListener> actionDialogListenerCapture = newCapture();
         expect(binder.isValid()).andReturn(true).once();
         Windows.showConfirmDialogWithReason(eq("Confirm action"),

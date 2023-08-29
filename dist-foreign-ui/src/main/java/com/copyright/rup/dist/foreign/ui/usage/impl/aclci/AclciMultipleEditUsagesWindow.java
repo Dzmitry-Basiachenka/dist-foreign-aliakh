@@ -45,7 +45,6 @@ class AclciMultipleEditUsagesWindow extends Window {
     private TextField rhAccountNumberField;
     private TextField rhNameField;
     private TextField wrWrkInstField;
-    private Rightsholder rh;
 
     /**
      * Constructor.
@@ -121,7 +120,7 @@ class AclciMultipleEditUsagesWindow extends Window {
         Button button = Buttons.createButton(ForeignUi.getMessage("button.verify"));
         button.addClickListener(event -> {
             if (Objects.isNull(rhAccountNumberField.getErrorMessage())) {
-                rh = controller.getRightsholder(
+                Rightsholder rh = controller.getRightsholder(
                     Long.valueOf(StringUtils.trim(rhAccountNumberField.getValue())));
                 if (StringUtils.isNotBlank(rh.getName())) {
                     rhNameField.setValue(rh.getName());

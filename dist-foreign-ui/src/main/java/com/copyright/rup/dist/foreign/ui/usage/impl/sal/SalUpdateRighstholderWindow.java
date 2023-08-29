@@ -43,7 +43,6 @@ class SalUpdateRighstholderWindow extends Window {
     private final SalDetailForRightsholderUpdateWindow detailsWindow;
     private TextField rhAccountNumberField;
     private TextField rhNameField;
-    private Rightsholder rh;
 
     /**
      * Constructor.
@@ -125,7 +124,7 @@ class SalUpdateRighstholderWindow extends Window {
         Button button = Buttons.createButton(ForeignUi.getMessage("button.verify"));
         button.addClickListener(event -> {
             if (Objects.isNull(rhAccountNumberField.getErrorMessage())) {
-                rh = salUsageController.getRightsholder(
+                Rightsholder rh = salUsageController.getRightsholder(
                     Long.valueOf(StringUtils.trim(rhAccountNumberField.getValue())));
                 if (StringUtils.isNotBlank(rh.getName())) {
                     rhNameField.setValue(rh.getName());
