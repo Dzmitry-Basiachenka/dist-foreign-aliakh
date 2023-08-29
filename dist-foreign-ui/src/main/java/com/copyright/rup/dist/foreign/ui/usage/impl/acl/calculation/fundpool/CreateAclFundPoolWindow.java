@@ -241,7 +241,7 @@ public class CreateAclFundPoolWindow extends Window {
     private AclFundPool buildFundPool() {
         AclFundPool aclFundPool = new AclFundPool();
         aclFundPool.setName(fundPoolNameField.getValue());
-        aclFundPool.setPeriod(Integer.parseInt(String.format("%s%s",
+        aclFundPool.setPeriod(Integer.valueOf(String.format("%s%s",
             StringUtils.trim(fundPoolPeriodYearField.getValue()), fundPoolPeriodMonthComboBox.getValue())));
         aclFundPool.setLicenseType(licenseTypeComboBox.getValue());
         aclFundPool.setManualUploadFlag(!ldmtCheckBox.getValue());

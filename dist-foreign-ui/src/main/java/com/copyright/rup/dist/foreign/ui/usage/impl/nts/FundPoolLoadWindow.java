@@ -124,8 +124,8 @@ class FundPoolLoadWindow extends Window {
         usageBatch.setFiscalYear(UsageBatchUtils.calculateFiscalYear(paymentDateWidget.getValue()));
         NtsFields ntsFields = new NtsFields();
         ntsFields.setMarkets(selectedMarkets);
-        ntsFields.setFundPoolPeriodFrom(Integer.parseInt(fundPoolPeriodFromField.getValue()));
-        ntsFields.setFundPoolPeriodTo(Integer.parseInt(fundPoolPeriodToField.getValue()));
+        ntsFields.setFundPoolPeriodFrom(Integer.valueOf(fundPoolPeriodFromField.getValue()));
+        ntsFields.setFundPoolPeriodTo(Integer.valueOf(fundPoolPeriodToField.getValue()));
         ntsFields.setStmAmount(new BigDecimal(stmAmountField.getValue()));
         ntsFields.setNonStmAmount(new BigDecimal(nonStmAmountField.getValue()));
         ntsFields.setStmMinimumAmount(new BigDecimal(stmMinAmountField.getValue()));

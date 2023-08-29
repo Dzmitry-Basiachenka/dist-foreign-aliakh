@@ -225,7 +225,7 @@ public class CreateAclUsageBatchWindow extends Window {
     private AclUsageBatch buildAclUsageBatch() {
         AclUsageBatch usageBatch = new AclUsageBatch();
         usageBatch.setName(StringUtils.trim(usageBatchNameFiled.getValue()));
-        usageBatch.setDistributionPeriod(Integer.parseInt(String.format("%s%s",
+        usageBatch.setDistributionPeriod(Integer.valueOf(String.format("%s%s",
             StringUtils.trim(distributionPeriodYearField.getValue()), distributionPeriodMonthComboBox.getValue())));
         usageBatch.setPeriods(selectedPeriods);
         usageBatch.setEditable(editableCheckBox.getValue());
