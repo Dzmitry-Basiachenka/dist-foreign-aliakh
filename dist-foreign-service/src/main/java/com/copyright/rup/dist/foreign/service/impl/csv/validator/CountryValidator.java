@@ -5,7 +5,7 @@ import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor;
 import com.copyright.rup.dist.foreign.domain.UdmUsage;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 
-import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
  */
 public class CountryValidator implements DistCsvProcessor.IValidator<UdmUsage> {
 
-    private final List<String> countryNames;
+    private final Set<String> countryNames;
 
     /**
      * Constructor.
@@ -27,8 +27,11 @@ public class CountryValidator implements DistCsvProcessor.IValidator<UdmUsage> {
      * @param prmIntegrationService instance of {@link IPrmIntegrationService}
      */
     public CountryValidator(IPrmIntegrationService prmIntegrationService) {
-        countryNames =
-            prmIntegrationService.getCountries().values().stream().map(Country::getName).collect(Collectors.toList());
+        countryNames = prmIntegrationService.getCountries()
+            .values()
+            .stream()
+            .map(Country::getName)
+            .collect(Collectors.toSet());
     }
 
     @Override

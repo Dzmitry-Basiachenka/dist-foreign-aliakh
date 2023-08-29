@@ -39,7 +39,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
-import java.util.List;
+import java.util.EnumSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -60,7 +60,7 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
 
     private static final String EMPTY_STYLE_NAME = "empty-usages-grid";
     private static final String FOOTER_LABEL = "Usages Count: %s";
-    private static final List<UsageStatusEnum> USAGE_STATUSES_EDIT_ALLOWED_FOR_RESEARCHER = List.of(
+    private static final Set<UsageStatusEnum> USAGE_STATUSES_EDIT_ALLOWED_FOR_RESEARCHER = EnumSet.of(
         UsageStatusEnum.WORK_NOT_FOUND, UsageStatusEnum.RH_NOT_FOUND, UsageStatusEnum.OPS_REVIEW);
     private static final String USAGES_PROCESSING_ERROR_MESSAGE = "message.error.processing_usages";
     private final boolean hasResearcherPermission = ForeignSecurityUtils.hasResearcherPermission();

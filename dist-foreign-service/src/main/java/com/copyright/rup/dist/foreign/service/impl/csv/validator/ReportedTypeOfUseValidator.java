@@ -6,9 +6,9 @@ import com.copyright.rup.dist.foreign.service.api.acl.IUdmTypeOfUseService;
 
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * The validator to check that Reported Type Of Use should be blank in case Reported Title equals to 'None',
@@ -26,7 +26,7 @@ public class ReportedTypeOfUseValidator implements DistCsvProcessor.IValidator<U
         "'None', otherwise it should be filled in";
     private static final String REPORTED_TITLE_NONE = "None";
 
-    private final List<String> udmTous = new ArrayList<>();
+    private final Set<String> udmTous = new HashSet<>();
     private String errorMessage;
 
     /**
