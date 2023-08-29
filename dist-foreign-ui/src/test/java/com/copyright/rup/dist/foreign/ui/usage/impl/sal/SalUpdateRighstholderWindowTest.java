@@ -68,6 +68,7 @@ public class SalUpdateRighstholderWindowTest {
     private static final String RH_NAME = "National Geographic Partners";
     private static final String REASON = "Reason";
     private static final String RH_ACCOUNT_NUMBER_FIELD_NAME = "rhAccountNumberField";
+    private static final String RH_NAME_FIELD_NAME = "rhNameField";
     private ISalUsageController usageController;
     private SalDetailForRightsholderUpdateWindow detailsWindow;
     private SalUpdateRighstholderWindow window;
@@ -123,14 +124,10 @@ public class SalUpdateRighstholderWindowTest {
     public void testSaveButtonClickNotSetValues() {
         mockStatic(Windows.class);
         Button.ClickEvent clickEvent = createMock(Button.ClickEvent.class);
-        Rightsholder rh = new Rightsholder();
-        rh.setAccountNumber(RH_ACCOUNT_NUMBER);
-        rh.setName(RH_NAME);
         window = new SalUpdateRighstholderWindow(usageController, detailsWindow, USAGE_IDS);
-        Whitebox.setInternalState(window, "rh", rh);
         Collection<? extends AbstractField<?>> fields = List.of(
             Whitebox.getInternalState(window, RH_ACCOUNT_NUMBER_FIELD_NAME),
-            Whitebox.getInternalState(window, "rhNameField"));
+            Whitebox.getInternalState(window, RH_NAME_FIELD_NAME));
         Windows.showValidationErrorWindow(fields);
         expectLastCall().once();
         replay(clickEvent, usageController, Windows.class);
@@ -153,15 +150,12 @@ public class SalUpdateRighstholderWindowTest {
     public void testSaveButtonClick() {
         mockStatic(Windows.class);
         Button.ClickEvent clickEvent = createMock(Button.ClickEvent.class);
-        Rightsholder rh = new Rightsholder();
-        rh.setAccountNumber(RH_ACCOUNT_NUMBER);
-        rh.setName(RH_NAME);
         Binder<UsageDto> binder = createMock(Binder.class);
         window = new SalUpdateRighstholderWindow(usageController, detailsWindow, USAGE_IDS);
         Whitebox.setInternalState(window, "usageBinder", binder);
         Whitebox.setInternalState(window, RH_ACCOUNT_NUMBER_FIELD_NAME,
             new TextField("RH Account #", RH_ACCOUNT_NUMBER.toString()));
-        Whitebox.setInternalState(window, "rh", rh);
+        Whitebox.setInternalState(window, RH_NAME_FIELD_NAME, new TextField("RH Name", RH_NAME));
         Capture<ConfirmActionDialogWindow.IListener> actionDialogListenerCapture = newCapture();
         expect(binder.isValid()).andReturn(true).once();
         Windows.showConfirmDialogWithReason(eq("Confirm action"),
@@ -195,15 +189,12 @@ public class SalUpdateRighstholderWindowTest {
     public void testSaveButtonClickRhWithSpaces() {
         mockStatic(Windows.class);
         Button.ClickEvent clickEvent = createMock(Button.ClickEvent.class);
-        Rightsholder rh = new Rightsholder();
-        rh.setAccountNumber(38042L);
-        rh.setName("Hopkins and Carley");
         Binder<UsageDto> binder = createMock(Binder.class);
         window = new SalUpdateRighstholderWindow(usageController, detailsWindow, USAGE_IDS);
         Whitebox.setInternalState(window, "usageBinder", binder);
         Whitebox.setInternalState(window, RH_ACCOUNT_NUMBER_FIELD_NAME,
             new TextField("RH Account #", "  38042  "));
-        Whitebox.setInternalState(window, "rh", rh);
+        Whitebox.setInternalState(window, RH_NAME_FIELD_NAME, new TextField("RH Name", "Hopkins and Carley"));
         Capture<ConfirmActionDialogWindow.IListener> actionDialogListenerCapture = newCapture();
         expect(binder.isValid()).andReturn(true).once();
         Windows.showConfirmDialogWithReason(eq("Confirm action"),
@@ -297,7 +288,7 @@ public class SalUpdateRighstholderWindowTest {
         assertEquals(2, saveButton.getListeners(Button.ClickEvent.class).size());
         verifyLoadClickListener(saveButton, List.of(
             Whitebox.getInternalState(window, RH_ACCOUNT_NUMBER_FIELD_NAME),
-            Whitebox.getInternalState(window, "rhNameField")));
+            Whitebox.getInternalState(window, RH_NAME_FIELD_NAME)));
     }
 
     private Button verifyButton(Component component, String caption) {
