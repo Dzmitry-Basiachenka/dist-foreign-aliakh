@@ -53,4 +53,8 @@ public abstract class CommonUsageFilterController extends CommonController<IComm
     protected IUsageBatchService getUsageBatchService() {
         return usageBatchService;
     }
+
+    protected IRightsholderService getRightsholderService() {
+        return rightsholderService;
+    }
 }

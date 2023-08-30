@@ -20,7 +20,6 @@ import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
-import com.copyright.rup.dist.foreign.service.api.IFundPoolService;
 import com.copyright.rup.dist.foreign.service.api.ILicenseeClassService;
 import com.copyright.rup.dist.foreign.service.api.IPublicationTypeService;
 import com.copyright.rup.dist.foreign.service.api.IResearchService;
@@ -75,8 +74,6 @@ public class AaclUsageController extends CommonUsageController implements IAaclU
     @Autowired
     private IAaclUsageService aaclUsageService;
     @Autowired
-    private IFundPoolService fundPoolService;
-    @Autowired
     private IPublicationTypeService publicationTypeService;
     @Autowired
     private ILicenseeClassService licenseeClassService;
@@ -124,22 +121,22 @@ public class AaclUsageController extends CommonUsageController implements IAaclU
 
     @Override
     public FundPool getFundPoolById(String fundPoolId) {
-        return fundPoolService.getFundPoolById(fundPoolId);
+        return getFundPoolService().getFundPoolById(fundPoolId);
     }
 
     @Override
     public List<FundPool> getFundPools() {
-        return fundPoolService.getFundPools(FdaConstants.AACL_PRODUCT_FAMILY);
+        return getFundPoolService().getFundPools(FdaConstants.AACL_PRODUCT_FAMILY);
     }
 
     @Override
     public List<FundPool> getFundPoolsNotAttachedToScenario() {
-        return fundPoolService.getAaclNotAttachedToScenario();
+        return getFundPoolService().getAaclNotAttachedToScenario();
     }
 
     @Override
     public List<FundPoolDetail> getFundPoolDetails(String fundPoolId) {
-        return fundPoolService.getDetailsByFundPoolId(fundPoolId);
+        return getFundPoolService().getDetailsByFundPoolId(fundPoolId);
     }
 
     @Override
@@ -155,7 +152,7 @@ public class AaclUsageController extends CommonUsageController implements IAaclU
 
     @Override
     public void deleteFundPool(FundPool fundPool) {
-        fundPoolService.deleteAaclFundPool(fundPool);
+        getFundPoolService().deleteAaclFundPool(fundPool);
     }
 
     @Override
@@ -206,7 +203,7 @@ public class AaclUsageController extends CommonUsageController implements IAaclU
 
     @Override
     public boolean fundPoolExists(String name) {
-        return fundPoolService.fundPoolExists(FdaConstants.AACL_PRODUCT_FAMILY, name);
+        return getFundPoolService().fundPoolExists(FdaConstants.AACL_PRODUCT_FAMILY, name);
     }
 
     @Override
@@ -216,7 +213,7 @@ public class AaclUsageController extends CommonUsageController implements IAaclU
 
     @Override
     public int insertFundPool(FundPool fundPool, List<FundPoolDetail> details) {
-        return fundPoolService.createAaclFundPool(fundPool, details);
+        return getFundPoolService().createAaclFundPool(fundPool, details);
     }
 
     @Override

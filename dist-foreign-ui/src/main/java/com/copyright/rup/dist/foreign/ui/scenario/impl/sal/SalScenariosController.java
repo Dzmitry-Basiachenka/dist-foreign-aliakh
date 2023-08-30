@@ -7,7 +7,6 @@ import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.filter.ScenarioUsageFilter;
 import com.copyright.rup.dist.foreign.service.api.IFundPoolService;
-import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.sal.ISalScenarioService;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonScenarioController;
@@ -64,8 +63,6 @@ public class SalScenariosController extends CommonScenariosController implements
     private ISalScenarioService salScenarioService;
     @Autowired
     private IFundPoolService fundPoolService;
-    @Autowired
-    private IUsageService usageService;
 
     @Override
     public List<Scenario> getScenariosByStatus(ScenarioStatusEnum status) {
@@ -150,7 +147,7 @@ public class SalScenariosController extends CommonScenariosController implements
     @Override
     public void handleAction(ScenarioActionTypeEnum actionType, Set<Scenario> scenarios) {
         List<String> namesOfEmptyScenarios = scenarios.stream()
-            .filter(scenario -> usageService.isScenarioEmpty(scenario))
+            .filter(scenario -> getUsageService().isScenarioEmpty(scenario))
             .map(Scenario::getName)
             .sorted(String::compareToIgnoreCase)
             .collect(Collectors.toList());
