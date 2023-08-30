@@ -37,7 +37,7 @@ public class AclPublicationType extends PublicationType {
         return period;
     }
 
-    public void setPeriod(Integer period) {
+    public final void setPeriod(Integer period) {
         this.period = period;
     }
 

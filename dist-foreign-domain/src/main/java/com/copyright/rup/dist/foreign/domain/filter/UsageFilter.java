@@ -82,7 +82,7 @@ public class UsageFilter {
         return rhAccountNumbers;
     }
 
-    public void setRhAccountNumbers(Set<Long> rhAccountNumbers) {
+    public final void setRhAccountNumbers(Set<Long> rhAccountNumbers) {
         this.rhAccountNumbers = rhAccountNumbers;
     }
 
@@ -90,7 +90,7 @@ public class UsageFilter {
         return usageBatchesIds;
     }
 
-    public void setUsageBatchesIds(Set<String> usageBatchesIds) {
+    public final void setUsageBatchesIds(Set<String> usageBatchesIds) {
         this.usageBatchesIds = usageBatchesIds;
     }
 
@@ -98,7 +98,7 @@ public class UsageFilter {
         return usageStatus;
     }
 
-    public void setUsageStatus(UsageStatusEnum usageStatus) {
+    public final void setUsageStatus(UsageStatusEnum usageStatus) {
         this.usageStatus = usageStatus;
     }
 
@@ -106,7 +106,7 @@ public class UsageFilter {
         return productFamily;
     }
 
-    public void setProductFamily(String productFamily) {
+    public final void setProductFamily(String productFamily) {
         this.productFamily = productFamily;
     }
 
@@ -114,7 +114,7 @@ public class UsageFilter {
         return paymentDate;
     }
 
-    public void setPaymentDate(LocalDate paymentDate) {
+    public final void setPaymentDate(LocalDate paymentDate) {
         this.paymentDate = paymentDate;
     }
 
@@ -122,7 +122,7 @@ public class UsageFilter {
         return fiscalYear;
     }
 
-    public void setFiscalYear(Integer fiscalYear) {
+    public final void setFiscalYear(Integer fiscalYear) {
         this.fiscalYear = fiscalYear;
     }
 
