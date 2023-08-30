@@ -13,7 +13,6 @@ import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.integration.telesales.api.ITelesalesService;
-import com.copyright.rup.dist.foreign.service.api.IFundPoolService;
 import com.copyright.rup.dist.foreign.service.api.aclci.IAclciUsageService;
 import com.copyright.rup.dist.foreign.service.impl.csv.AclciUsageCsvProcessor;
 import com.copyright.rup.dist.foreign.service.impl.csv.CsvProcessorFactory;
@@ -62,8 +61,6 @@ public class AclciUsageController extends CommonUsageController implements IAclc
     @Autowired
     @Qualifier("df.integration.telesalesCacheService")
     private ITelesalesService telesalesService;
-    @Autowired
-    private IFundPoolService fundPoolService;
 
     @Override
     public int getBeansCount() {
@@ -136,17 +133,17 @@ public class AclciUsageController extends CommonUsageController implements IAclc
 
     @Override
     public boolean aclciFundPoolExists(String name) {
-        return fundPoolService.fundPoolExists(FdaConstants.ACLCI_PRODUCT_FAMILY, name);
+        return getFundPoolService().fundPoolExists(FdaConstants.ACLCI_PRODUCT_FAMILY, name);
     }
 
     @Override
     public FundPool calculateAclciFundPoolAmounts(FundPool fundPool) {
-        return fundPoolService.calculateAclciFundPoolAmounts(fundPool);
+        return getFundPoolService().calculateAclciFundPoolAmounts(fundPool);
     }
 
     @Override
     public void createAclciFundPool(FundPool fundPool) {
-        fundPoolService.createAclciFundPool(fundPool);
+        getFundPoolService().createAclciFundPool(fundPool);
     }
 
     @Override

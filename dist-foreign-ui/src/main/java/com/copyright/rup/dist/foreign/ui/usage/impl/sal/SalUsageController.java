@@ -15,7 +15,6 @@ import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.integration.telesales.api.ITelesalesService;
-import com.copyright.rup.dist.foreign.service.api.IFundPoolService;
 import com.copyright.rup.dist.foreign.service.api.sal.ISalScenarioService;
 import com.copyright.rup.dist.foreign.service.api.sal.ISalUsageService;
 import com.copyright.rup.dist.foreign.service.impl.csv.CsvProcessorFactory;
@@ -67,8 +66,6 @@ public class SalUsageController extends CommonUsageController implements ISalUsa
     @Qualifier("df.integration.telesalesCacheService")
     private ITelesalesService telesalesService;
     @Autowired
-    private IFundPoolService fundPoolService;
-    @Autowired
     private ISalScenarioService salScenarioService;
 
     @Override
@@ -107,7 +104,7 @@ public class SalUsageController extends CommonUsageController implements ISalUsa
 
     @Override
     public List<FundPool> getFundPoolsNotAttachedToScenario() {
-        return fundPoolService.getSalNotAttachedToScenario();
+        return getFundPoolService().getSalNotAttachedToScenario();
     }
 
     @Override
@@ -162,7 +159,7 @@ public class SalUsageController extends CommonUsageController implements ISalUsa
 
     @Override
     public boolean fundPoolExists(String name) {
-        return fundPoolService.fundPoolExists(FdaConstants.SAL_PRODUCT_FAMILY, name);
+        return getFundPoolService().fundPoolExists(FdaConstants.SAL_PRODUCT_FAMILY, name);
     }
 
     @Override
@@ -195,12 +192,12 @@ public class SalUsageController extends CommonUsageController implements ISalUsa
 
     @Override
     public FundPool calculateFundPoolAmounts(FundPool fundPool) {
-        return fundPoolService.calculateSalFundPoolAmounts(fundPool);
+        return getFundPoolService().calculateSalFundPoolAmounts(fundPool);
     }
 
     @Override
     public void createFundPool(FundPool fundPool) {
-        fundPoolService.createSalFundPool(fundPool);
+        getFundPoolService().createSalFundPool(fundPool);
     }
 
     @Override
@@ -216,7 +213,7 @@ public class SalUsageController extends CommonUsageController implements ISalUsa
 
     @Override
     public List<FundPool> getFundPools() {
-        return fundPoolService.getFundPools(FdaConstants.SAL_PRODUCT_FAMILY);
+        return getFundPoolService().getFundPools(FdaConstants.SAL_PRODUCT_FAMILY);
     }
 
     @Override
@@ -226,7 +223,7 @@ public class SalUsageController extends CommonUsageController implements ISalUsa
 
     @Override
     public void deleteFundPool(FundPool fundPool) {
-        fundPoolService.deleteSalFundPool(fundPool);
+        getFundPoolService().deleteSalFundPool(fundPool);
     }
 
     @Override
