@@ -95,7 +95,11 @@ public class MainWidgetController extends TabController<IMainWidget> implements 
     @Override
     public void onScenarioCreated(ScenarioCreateEvent event) {
         getTabSheet().setSelectedTab(SCENARIOS_TAB_INDEX);
-        getScenariosControllerProvider().getController().get().getWidget().selectScenario(event.getScenarioId());
+        getScenariosControllerProvider()
+            .getController()
+            .orElseThrow()
+            .getWidget()
+            .selectScenario(event.getScenarioId());
     }
 
     @Override

@@ -68,7 +68,7 @@ public class UsageDataUploadWindow extends Window {
      */
     void onUploadClicked() {
         if (isValid()) {
-            UsageBatch batch = itemBankComboBox.getSelectedItem().get();
+            UsageBatch batch = itemBankComboBox.getSelectedItem().orElseThrow();
             if (!usagesController.usageDataExists(batch.getId())) {
                 if (usagesController.getIneligibleBatchesNames(Set.of(batch.getId())).isEmpty()) {
                     uploadUsageData();
@@ -95,7 +95,7 @@ public class UsageDataUploadWindow extends Window {
     }
 
     private void uploadUsageData() {
-        UsageBatch selectedBatch = itemBankComboBox.getSelectedItem().get();
+        UsageBatch selectedBatch = itemBankComboBox.getSelectedItem().orElseThrow();
         try {
             SalUsageDataCsvProcessor processor =
                 usagesController.getSalUsageDataCsvProcessor(selectedBatch.getId());

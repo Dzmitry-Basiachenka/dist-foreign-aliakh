@@ -63,7 +63,7 @@ public class RmsRightsCacheService extends AbstractMultipleCacheService<RmsGrant
 
     @Override
     public Map<RmsGrantKey, Set<RmsGrant>> loadData(Set<RmsGrantKey> grantKeys) {
-        RmsGrantKey rmsGrantKey = grantKeys.stream().findAny().get();
+        RmsGrantKey rmsGrantKey = grantKeys.stream().findAny().orElseThrow();
         List<Long> wrWrkInsts = grantKeys.stream()
             .map(RmsGrantKey::getWrWrkInst)
             .collect(Collectors.toList());
