@@ -77,7 +77,7 @@ public class UploadGrantDetailWindow extends Window {
     void onUploadClicked() {
         if (isValid()) {
             try {
-                AclGrantSet grantSet = comboBox.getSelectedItem().get();
+                AclGrantSet grantSet = comboBox.getSelectedItem().orElseThrow();
                 AclGrantDetailCsvProcessor processor = controller.getCsvProcessor(grantSet.getId());
                 ProcessingResult<AclGrantDetailDto> result = processor.process(uploadField.getStreamToUploadedFile());
                 if (result.isSuccessful()) {
