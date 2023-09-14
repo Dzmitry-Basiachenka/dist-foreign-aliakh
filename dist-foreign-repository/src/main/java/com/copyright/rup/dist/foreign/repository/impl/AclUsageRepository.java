@@ -19,8 +19,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
-import io.micrometer.core.annotation.Timed;
-
 /**
  * Implementation of {@link IAclUsageRepository}.
  * <p>
@@ -31,7 +29,6 @@ import io.micrometer.core.annotation.Timed;
  * @author Aliaksandr Liakh
  */
 @Repository
-@Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
 public class AclUsageRepository extends AclBaseRepository implements IAclUsageRepository {
 
     private static final List<String> ELIGIBLE_GRANT_STATUSES = List.of("Print&Digital", "Different RH");

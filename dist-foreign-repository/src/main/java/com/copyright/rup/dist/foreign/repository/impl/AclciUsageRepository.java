@@ -21,8 +21,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
-import io.micrometer.core.annotation.Timed;
-
 /**
  * Implementation of {@link IAclciUsageRepository}.
  * <p>
@@ -33,7 +31,6 @@ import io.micrometer.core.annotation.Timed;
  * @author Aliaksandr Liakh
  */
 @Repository
-@Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
 public class AclciUsageRepository extends BaseRepository implements IAclciUsageRepository {
 
     private static final int MAX_VARIABLES_COUNT = 32000;

@@ -8,8 +8,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Map;
 
-import io.micrometer.core.annotation.Timed;
-
 /**
  * Implementation of {@link IUdmTypeOfUseRepository}.
  * <p>
@@ -20,7 +18,6 @@ import io.micrometer.core.annotation.Timed;
  * @author Dzmitry Basiachenka
  */
 @Repository
-@Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
 public class UdmTypeOfUseRepository extends BaseRepository implements IUdmTypeOfUseRepository {
 
     @Override

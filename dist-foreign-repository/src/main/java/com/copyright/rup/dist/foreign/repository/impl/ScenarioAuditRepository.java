@@ -16,8 +16,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import io.micrometer.core.annotation.Timed;
-
 /**
  * Implementation of {@link IScenarioAuditRepository}.
  * <p>
@@ -28,7 +26,6 @@ import io.micrometer.core.annotation.Timed;
  * @author Uladzislau_Shalamitski
  */
 @Repository
-@Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
 public class ScenarioAuditRepository extends BaseRepository implements IScenarioAuditRepository {
 
     @Override
