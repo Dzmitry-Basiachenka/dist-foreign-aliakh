@@ -44,6 +44,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
+import com.vaadin.ui.TabSheet.SelectedTabChangeEvent;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.themes.ValoTheme;
@@ -129,6 +130,13 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
         dataProvider = DataProvider.ofCollection(scenarios);
         scenarioGrid.setDataProvider(dataProvider);
         selectFirstScenario(scenarios);
+    }
+
+    @Override
+    public void selectedTabChange(SelectedTabChangeEvent selectedTabChangeEvent) {
+        if (scenarioGrid.getSelectedItems().isEmpty()) {
+            refresh();
+        }
     }
 
     @Override
@@ -506,7 +514,8 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
     private void selectFirstScenario(List<AclScenario> scenarios) {
         if (CollectionUtils.isNotEmpty(scenarios)) {
             scenarioGrid.select(scenarios.get(0));
+        } else {
+            refreshSelectedScenario();
         }
-        refreshSelectedScenario();
     }
 }
