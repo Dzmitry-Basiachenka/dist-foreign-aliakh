@@ -48,7 +48,6 @@ import io.micrometer.core.annotation.Timed;
  * @author Ihar Suvorau
  */
 @Service
-@Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
 public class NtsScenarioService implements INtsScenarioService {
 
     private static final Logger LOGGER = RupLogUtils.getLogger();
@@ -70,6 +69,7 @@ public class NtsScenarioService implements INtsScenarioService {
 
     @Override
     @Transactional
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public Scenario createScenario(String scenarioName, NtsFields ntsFields, String description,
                                    UsageFilter usageFilter) {
         LOGGER.info("Insert NTS scenario. Started. Name={}, NtsFields={}, Description={}, UsageFilter={}",
@@ -86,6 +86,7 @@ public class NtsScenarioService implements INtsScenarioService {
 
     @Override
     @Transactional
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void deleteScenario(Scenario scenario) {
         String userName = RupContextUtils.getUserName();
         LOGGER.info("Delete scenario. Started. {}, User={}", ForeignLogUtils.scenario(scenario), userName);
@@ -105,6 +106,7 @@ public class NtsScenarioService implements INtsScenarioService {
 
     @Override
     @Transactional
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void sendToLm(Scenario scenario) {
         LogUtils.ILogWrapper scenarioWrapper = ForeignLogUtils.scenario(scenario);
         String userName = RupContextUtils.getUserName();

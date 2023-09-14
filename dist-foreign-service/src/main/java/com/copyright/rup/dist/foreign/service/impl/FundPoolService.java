@@ -41,7 +41,6 @@ import io.micrometer.core.annotation.Timed;
  * @author Ihar Suvorau
  */
 @Service
-@Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
 public class FundPoolService implements IFundPoolService {
 
     private static final int DEFAULT_SCALE = 2;
@@ -76,6 +75,7 @@ public class FundPoolService implements IFundPoolService {
 
     @Override
     @Transactional
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void createNtsFundPool(FundPool fundPool, Set<String> batchIds) {
         String userName = RupContextUtils.getUserName();
         fundPool.setCreateUser(userName);
@@ -92,6 +92,7 @@ public class FundPoolService implements IFundPoolService {
 
     @Override
     @Transactional
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public int createAaclFundPool(FundPool fundPool, List<FundPoolDetail> details) {
         String userName = RupContextUtils.getUserName();
         int count = details.size();
@@ -117,6 +118,7 @@ public class FundPoolService implements IFundPoolService {
     }
 
     @Override
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void createSalFundPool(FundPool fundPool) {
         String userName = RupContextUtils.getUserName();
         LOGGER.info("Insert SAL fund pool. Started. FundPoolName={}, UserName={}", fundPool.getName(), userName);
@@ -129,6 +131,7 @@ public class FundPoolService implements IFundPoolService {
     }
 
     @Override
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void createAclciFundPool(FundPool fundPool) {
         String userName = RupContextUtils.getUserName();
         LOGGER.info("Insert ACLCI fund pool. Started. FundPoolName={}, UserName={}", fundPool.getName(), userName);
@@ -157,6 +160,7 @@ public class FundPoolService implements IFundPoolService {
 
     @Override
     @Transactional
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void deleteNtsFundPool(FundPool fundPool) {
         String userName = RupContextUtils.getUserName();
         LOGGER.info("Delete NTS fund pool. Started. FundPoolName={}, UserName={}", fundPool.getName(), userName);
@@ -168,6 +172,7 @@ public class FundPoolService implements IFundPoolService {
 
     @Override
     @Transactional
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void deleteAaclFundPool(FundPool fundPool) {
         String userName = RupContextUtils.getUserName();
         LOGGER.info("Delete AACL fund pool. Started. FundPoolName={}, UserName={}", fundPool.getName(), userName);
@@ -177,6 +182,7 @@ public class FundPoolService implements IFundPoolService {
     }
 
     @Override
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void deleteSalFundPool(FundPool fundPool) {
         String userName = RupContextUtils.getUserName();
         LOGGER.info("Delete SAL fund pool. Started. FundPoolName={}, UserName={}", fundPool.getName(), userName);
@@ -185,6 +191,7 @@ public class FundPoolService implements IFundPoolService {
     }
 
     @Override
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void deleteAclciFundPool(FundPool fundPool) {
         String userName = RupContextUtils.getUserName();
         LOGGER.info("Delete ACLCI fund pool. Started. FundPoolName={}, UserName={}", fundPool.getName(), userName);
@@ -208,6 +215,7 @@ public class FundPoolService implements IFundPoolService {
     }
 
     @Override
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public FundPool calculateSalFundPoolAmounts(FundPool fundPool) {
         SalFields salFields = fundPool.getSalFields();
         BigDecimal splitPercent = salFields.getItemBankSplitPercent();
@@ -243,6 +251,7 @@ public class FundPoolService implements IFundPoolService {
     }
 
     @Override
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public FundPool calculateAclciFundPoolAmounts(FundPool fundPool) {
         AclciFields aclciFields = fundPool.getAclciFields();
         BigDecimal splitPercent = aclciFields.getCurriculumDbSplitPercent();

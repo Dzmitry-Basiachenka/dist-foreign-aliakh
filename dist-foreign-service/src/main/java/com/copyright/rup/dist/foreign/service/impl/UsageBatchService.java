@@ -50,7 +50,6 @@ import io.micrometer.core.annotation.Timed;
  * @author Aliaksandr Radkevich
  */
 @Service
-@Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
 public class UsageBatchService implements IUsageBatchService {
 
     private static final EnumSet<UsageStatusEnum> PROCESSED_NTS_BATCH_USAGE_STATUSES =
@@ -116,6 +115,7 @@ public class UsageBatchService implements IUsageBatchService {
 
     @Override
     @Transactional
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public int insertFasBatch(UsageBatch usageBatch, List<Usage> usages) {
         String userName = RupContextUtils.getUserName();
         usageBatch.setId(RupPersistUtils.generateUuid());
@@ -139,6 +139,7 @@ public class UsageBatchService implements IUsageBatchService {
 
     @Override
     @Transactional
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public List<String> insertNtsBatch(UsageBatch usageBatch, String userName) {
         LOGGER.info("Insert NTS batch. Started. UsageBatchName={}, UserName={}", usageBatch.getName(), userName);
         usageBatch.setId(RupPersistUtils.generateUuid());
@@ -156,6 +157,7 @@ public class UsageBatchService implements IUsageBatchService {
 
     @Override
     @Transactional
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public List<String> insertAaclBatch(UsageBatch usageBatch, List<Usage> uploadedUsages) {
         String userName = RupContextUtils.getUserName();
         usageBatch.setId(RupPersistUtils.generateUuid());
@@ -179,6 +181,7 @@ public class UsageBatchService implements IUsageBatchService {
 
     @Override
     @Transactional
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public List<String> insertSalBatch(UsageBatch usageBatch, List<Usage> uploadedUsages) {
         String userName = RupContextUtils.getUserName();
         usageBatch.setId(RupPersistUtils.generateUuid());
@@ -198,6 +201,7 @@ public class UsageBatchService implements IUsageBatchService {
 
     @Override
     @Transactional
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void addUsageDataToSalBatch(UsageBatch usageBatch, List<Usage> usages) {
         String userName = RupContextUtils.getUserName();
         LogUtils.ILogWrapper size = LogUtils.size(usages);
@@ -212,6 +216,7 @@ public class UsageBatchService implements IUsageBatchService {
 
     @Override
     @Transactional
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void deleteUsageBatch(UsageBatch usageBatch) {
         String userName = RupContextUtils.getUserName();
         LOGGER.info("Delete usage batch. Started. UsageBatchName={}, UserName={}", usageBatch.getName(), userName);
@@ -222,6 +227,7 @@ public class UsageBatchService implements IUsageBatchService {
 
     @Override
     @Transactional
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void deleteAaclUsageBatch(UsageBatch usageBatch) {
         String userName = RupContextUtils.getUserName();
         String batchName = usageBatch.getName();
@@ -233,6 +239,7 @@ public class UsageBatchService implements IUsageBatchService {
 
     @Override
     @Transactional
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void deleteSalUsageBatch(UsageBatch usageBatch) {
         String userName = RupContextUtils.getUserName();
         String batchName = usageBatch.getName();
@@ -307,6 +314,7 @@ public class UsageBatchService implements IUsageBatchService {
 
     @Override
     @Transactional
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public List<String> insertAclciBatch(UsageBatch usageBatch, List<Usage> usages) {
         String userName = RupContextUtils.getUserName();
         usageBatch.setId(RupPersistUtils.generateUuid());
@@ -325,6 +333,7 @@ public class UsageBatchService implements IUsageBatchService {
 
     @Override
     @Transactional
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void deleteAclciUsageBatch(UsageBatch usageBatch) {
         String userName = RupContextUtils.getUserName();
         String batchName = usageBatch.getName();

@@ -39,7 +39,6 @@ import io.micrometer.core.annotation.Timed;
  * @author Anton Azarenka
  */
 @Service
-@Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
 public class AclGrantService implements IAclGrantService {
 
     private static final int TYPE_OF_USE_COUNT = 1;
@@ -57,6 +56,7 @@ public class AclGrantService implements IAclGrantService {
 
     @Override
     @Transactional
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public List<AclGrantDetail> createAclGrantDetails(AclGrantSet grantSet, Map<Long, String> wrWrkInstToSystemTitles,
                                                       String userName) {
         LocalDate periodEndDate = createPeriodEndDate(grantSet.getGrantPeriod());

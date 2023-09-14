@@ -27,7 +27,6 @@ import io.micrometer.core.annotation.Timed;
  * @author Ihar Suvorau
  */
 @Service
-@Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
 public class UsageBatchStatusService implements IUsageBatchStatusService {
 
     @Autowired
@@ -36,6 +35,7 @@ public class UsageBatchStatusService implements IUsageBatchStatusService {
     private long numberOfDays;
 
     @Override
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public List<UsageBatchStatus> getUsageBatchStatusesFas(String productFamily) {
         Set<String> batchIds = usageBatchStatusRepository.findFasUsageBatchIdsEligibleForStatistic(
             productFamily, LocalDate.now().minusDays(numberOfDays));
@@ -45,6 +45,7 @@ public class UsageBatchStatusService implements IUsageBatchStatusService {
     }
 
     @Override
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public List<UsageBatchStatus> getUsageBatchStatusesNts() {
         Set<String> batchIds = usageBatchStatusRepository.findUsageBatchIdsEligibleForStatistic(
             FdaConstants.NTS_PRODUCT_FAMILY, LocalDate.now().minusDays(numberOfDays));
@@ -54,6 +55,7 @@ public class UsageBatchStatusService implements IUsageBatchStatusService {
     }
 
     @Override
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public List<UsageBatchStatus> getUsageBatchStatusesAacl() {
         Set<String> batchIds = usageBatchStatusRepository.findUsageBatchIdsEligibleForStatistic(
             FdaConstants.AACL_PRODUCT_FAMILY, LocalDate.now().minusDays(numberOfDays));
@@ -63,6 +65,7 @@ public class UsageBatchStatusService implements IUsageBatchStatusService {
     }
 
     @Override
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public List<UsageBatchStatus> getUsageBatchStatusesSal() {
         Set<String> batchIds = usageBatchStatusRepository.findUsageBatchIdsEligibleForStatistic(
             FdaConstants.SAL_PRODUCT_FAMILY, LocalDate.now().minusDays(numberOfDays));
@@ -72,6 +75,7 @@ public class UsageBatchStatusService implements IUsageBatchStatusService {
     }
 
     @Override
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public List<UsageBatchStatus> getUsageBatchStatusesUdm() {
         return usageBatchStatusRepository.findUsageBatchStatusesUdm(LocalDate.now().minusDays(numberOfDays));
     }

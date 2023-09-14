@@ -8,8 +8,6 @@ import org.springframework.stereotype.Component;
 import java.math.BigDecimal;
 import java.util.Set;
 
-import io.micrometer.core.annotation.Timed;
-
 /**
  * Calculator of annualized copies for UDM usages.
  * <p>
@@ -20,7 +18,6 @@ import io.micrometer.core.annotation.Timed;
  * @author Aliaksandr Liakh
  */
 @Component
-@Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
 public class UdmAnnualizedCopiesCalculator {
 
     private static final Set<String> EMAIL_TOU = ImmutableSet.of("EMAIL_COPY", "SHARE_SINGLE_ELECTRONIC_COPY",

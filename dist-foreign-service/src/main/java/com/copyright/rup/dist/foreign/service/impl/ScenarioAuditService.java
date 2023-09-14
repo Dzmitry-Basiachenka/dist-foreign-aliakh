@@ -13,8 +13,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Set;
 
-import io.micrometer.core.annotation.Timed;
-
 /**
  * Implementation of {@link IScenarioAuditService}.
  * <p>
@@ -25,7 +23,6 @@ import io.micrometer.core.annotation.Timed;
  * @author Uladzislau_Shalamitski
  */
 @Service
-@Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
 public class ScenarioAuditService implements IScenarioAuditService {
 
     @Autowired

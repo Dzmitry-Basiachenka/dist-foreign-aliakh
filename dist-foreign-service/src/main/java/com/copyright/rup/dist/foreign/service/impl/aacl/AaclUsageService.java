@@ -77,7 +77,6 @@ import io.micrometer.core.annotation.Timed;
  * @author Ihar Suvorau
  */
 @Service
-@Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
 public class AaclUsageService implements IAaclUsageService {
 
     private static final List<BigDecimal> DEFAULT_USAGES_AGE_WEIGHTS =
@@ -114,6 +113,7 @@ public class AaclUsageService implements IAaclUsageService {
 
     @Override
     @Transactional
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void insertUsages(UsageBatch usageBatch, List<Usage> usages) {
         String userName = RupContextUtils.getUserName();
         int size = usages.size();
@@ -136,6 +136,7 @@ public class AaclUsageService implements IAaclUsageService {
 
     @Override
     @Transactional
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public List<String> insertUsagesFromBaseline(UsageBatch usageBatch) {
         String userName = RupContextUtils.getUserName();
         int period = usageBatch.getPaymentDate().getYear();
@@ -161,6 +162,7 @@ public class AaclUsageService implements IAaclUsageService {
 
     @Override
     @Transactional
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public int updateClassifiedUsages(List<AaclClassifiedUsage> usages) {
         String userName = RupContextUtils.getUserName();
         LOGGER.info("Update Classified AACL usages. Started. UsagesCount={}, UserName={}", LogUtils.size(usages),
@@ -258,17 +260,20 @@ public class AaclUsageService implements IAaclUsageService {
     }
 
     @Override
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void calculateAmounts(String scenarioId, String userName) {
         aaclUsageRepository.calculateAmounts(scenarioId, userName);
     }
 
     @Override
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void excludeZeroAmountUsages(String scenarioId, String userName) {
         aaclUsageRepository.excludeZeroAmountUsages(scenarioId, userName);
     }
 
     @Override
     @Transactional
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void deleteUsageBatchDetails(UsageBatch usageBatch) {
         usageAuditService.deleteActionsByBatchId(usageBatch.getId());
         aaclUsageRepository.deleteByBatchId(usageBatch.getId());
@@ -291,6 +296,7 @@ public class AaclUsageService implements IAaclUsageService {
 
     @Override
     @Transactional
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void addUsagesToScenario(Scenario scenario, UsageFilter filter) {
         String scenarioId = scenario.getId();
         String updateUser = scenario.getUpdateUser();
@@ -302,6 +308,7 @@ public class AaclUsageService implements IAaclUsageService {
 
     @Override
     @Transactional
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void populatePayees(String scenarioId) {
         String userName = RupContextUtils.getUserName();
         Set<Long> payeeAccountNumbers = new HashSet<>();
@@ -319,6 +326,7 @@ public class AaclUsageService implements IAaclUsageService {
     }
 
     @Override
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public List<AggregateLicenseeClass> getAggregateClassesNotToBeDistributed(String fundPoolId, UsageFilter filter,
                                                                               List<DetailLicenseeClass> mapping) {
         Set<Integer> fundPoolAggregateClassIds = getAggregateClassIdsWithAmountsFromFundPool(fundPoolId);
@@ -345,6 +353,7 @@ public class AaclUsageService implements IAaclUsageService {
 
     @Override
     @Transactional
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void excludeDetailsFromScenarioByPayees(String scenarioId, Set<Long> accountNumbers, String reason) {
         String userName = RupContextUtils.getUserName();
         Set<String> usageIds = aaclUsageRepository.excludeFromScenarioByPayees(scenarioId, accountNumbers, userName);
@@ -386,12 +395,14 @@ public class AaclUsageService implements IAaclUsageService {
     }
 
     @Override
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void deleteFromScenario(String scenarioId) {
         aaclUsageRepository.deleteFromScenario(scenarioId, RupContextUtils.getUserName());
     }
 
     @Override
     @Transactional
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public List<String> moveToArchive(Scenario scenario) {
         LOGGER.info("Move details to archive. Started. {}", ForeignLogUtils.scenario(scenario));
         String scenarioId = scenario.getId();
@@ -408,6 +419,7 @@ public class AaclUsageService implements IAaclUsageService {
 
     @Override
     @Transactional
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void updatePaidInfo(List<PaidUsage> paidUsages) {
         usageService.updatePaidUsages(paidUsages, ids -> usageArchiveRepository.findAaclByIds(ids),
             usage -> usageArchiveRepository.insertAaclPaid(usage));

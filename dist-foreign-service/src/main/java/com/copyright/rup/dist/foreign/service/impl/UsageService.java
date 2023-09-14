@@ -74,7 +74,6 @@ import io.micrometer.core.annotation.Timed;
  * @author Aliaksandr Radkevich
  */
 @Service
-@Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
 public class UsageService implements IUsageService {
 
     private static final String SEND_TO_CRM_FINISHED_INFO_LOG_MESSAGE = "Send to CRM. Finished. PaidUsagesCount={}, " +
@@ -106,6 +105,7 @@ public class UsageService implements IUsageService {
 
     @Override
     @Transactional
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void deleteUsageBatchDetails(UsageBatch usageBatch) {
         usageAuditService.deleteActionsByBatchId(usageBatch.getId());
         usageRepository.deleteByBatchId(usageBatch.getId());
@@ -113,6 +113,7 @@ public class UsageService implements IUsageService {
 
     @Override
     @Transactional
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void deleteArchivedByBatchId(String batchId) {
         usageAuditService.deleteActionsForArchivedByBatchId(batchId);
         usageArchiveRepository.deleteByBatchId(batchId);
@@ -223,6 +224,7 @@ public class UsageService implements IUsageService {
 
     @Override
     @Transactional
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void updatePaidUsages(List<PaidUsage> paidUsages, Function<List<String>, List<Usage>> findByIdsFunction,
                                  Consumer<PaidUsage> insertPaidConsumer) {
         LogUtils.ILogWrapper paidUsagesCount = LogUtils.size(paidUsages);
@@ -272,7 +274,7 @@ public class UsageService implements IUsageService {
     }
 
     @Override
-    //TODO: analyze possibility to split retrieval of usages from db by product family
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public JobInfo sendToCrm() {
         List<String> paidUsagesIds = usageArchiveRepository.findPaidIds();
         LogUtils.ILogWrapper paidUsagesCount = LogUtils.size(paidUsagesIds);
@@ -324,6 +326,7 @@ public class UsageService implements IUsageService {
 
     @Override
     @Transactional
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public RightsAssignmentResult sendForRightsAssignment(String batchName, Set<Long> wrWrkInsts,
                                                           Set<String> usageIds) {
         LOGGER.info("Send for Rights Assignment. Started. BatchName={}, WrWrkInstsCount={}, UsagesCount={}",

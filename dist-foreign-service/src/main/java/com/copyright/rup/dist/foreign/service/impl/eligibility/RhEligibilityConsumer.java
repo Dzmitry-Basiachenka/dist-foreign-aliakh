@@ -16,8 +16,6 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Objects;
 
-import io.micrometer.core.annotation.Timed;
-
 /**
  * Consumer to check whether RH is eligible for distribution or not.
  * <p>
@@ -29,7 +27,6 @@ import io.micrometer.core.annotation.Timed;
  * @author Aliaksandr Liakh
  */
 @Component("df.service.rhEligibilityConsumer")
-@Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
 public class RhEligibilityConsumer implements IConsumer<List<Usage>> {
 
     private static final Logger LOGGER = RupLogUtils.getLogger();

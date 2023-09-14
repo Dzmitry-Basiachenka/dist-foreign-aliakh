@@ -10,8 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import io.micrometer.core.annotation.Timed;
-
 /**
  * Implements {@link IPublicationTypeService}.
  * <p>
@@ -22,7 +20,6 @@ import io.micrometer.core.annotation.Timed;
  * @author Anton Azarenka
  */
 @Service
-@Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
 public class PublicationTypeService implements IPublicationTypeService {
 
     @Autowired

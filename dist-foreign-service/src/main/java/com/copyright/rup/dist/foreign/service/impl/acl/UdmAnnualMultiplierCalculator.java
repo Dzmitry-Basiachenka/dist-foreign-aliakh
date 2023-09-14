@@ -16,8 +16,6 @@ import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
-import io.micrometer.core.annotation.Timed;
-
 /**
  * Calculator of annual multiplier for UDM usages.
  * <p>
@@ -28,7 +26,6 @@ import io.micrometer.core.annotation.Timed;
  * @author Aliaksandr Liakh
  */
 @Component
-@Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
 public class UdmAnnualMultiplierCalculator {
 
     @Value("#{$RUP{dist.foreign.udm.difference_in_days.to.annual_multiplier}}")

@@ -62,7 +62,6 @@ import io.micrometer.core.annotation.Timed;
  * @author Ihar Suvorau
  */
 @Service
-@Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
 public class FasScenarioService implements IFasScenarioService {
 
     private static final Logger LOGGER = RupLogUtils.getLogger();
@@ -98,6 +97,7 @@ public class FasScenarioService implements IFasScenarioService {
 
     @Override
     @Transactional
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void sendToLm(Scenario scenario) {
         LogUtils.ILogWrapper scenarioWrapper = ForeignLogUtils.scenario(scenario);
         String userName = RupContextUtils.getUserName();
@@ -120,6 +120,7 @@ public class FasScenarioService implements IFasScenarioService {
 
     @Override
     @Transactional
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void reconcileRightsholders(Scenario scenario) {
         LOGGER.info("Reconcile rightsholders. Started. {}", ForeignLogUtils.scenario(Objects.requireNonNull(scenario)));
         rightsholderDiscrepancyService.deleteByScenarioIdAndStatus(scenario.getId(),
@@ -154,6 +155,7 @@ public class FasScenarioService implements IFasScenarioService {
     }
 
     @Override
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void updateRhPayeeParticipating(Scenario scenario) {
         fasUsageService.updateRhPayeeAmountsAndParticipating(usageService.getUsagesByScenarioId(scenario.getId()));
     }
@@ -171,6 +173,7 @@ public class FasScenarioService implements IFasScenarioService {
 
     @Override
     @Transactional
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void approveOwnershipChanges(Scenario scenario) {
         List<RightsholderDiscrepancy> discrepancies =
             rightsholderDiscrepancyService.getByScenarioIdAndStatus(

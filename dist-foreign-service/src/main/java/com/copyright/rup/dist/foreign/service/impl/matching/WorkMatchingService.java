@@ -27,8 +27,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
 
-import io.micrometer.core.annotation.Timed;
-
 /**
  * Service encapsulates logic for matching {@link Usage}s to works against PI (Publi).
  * <p>
@@ -39,7 +37,6 @@ import io.micrometer.core.annotation.Timed;
  * @author Aliaksandr Radkevich
  */
 @Service
-@Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
 public class WorkMatchingService implements IWorkMatchingService {
 
     private static final BigDecimal GROSS_AMOUNT_LIMIT = BigDecimal.valueOf(100L);

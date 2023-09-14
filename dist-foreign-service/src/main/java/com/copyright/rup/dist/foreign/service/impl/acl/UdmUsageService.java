@@ -56,7 +56,6 @@ import io.micrometer.core.annotation.Timed;
  * @author Uladzislau Shalamitski
  */
 @Service
-@Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
 public class UdmUsageService implements IUdmUsageService {
 
     private static final BigDecimal DEFAULT_STATISTICAL_MULTIPLIER =
@@ -90,6 +89,7 @@ public class UdmUsageService implements IUdmUsageService {
 
     @Override
     @Transactional
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void insertUdmUsages(UdmBatch udmBatch, List<UdmUsage> udmUsages) {
         String userName = RupContextUtils.getUserName();
         int size = udmUsages.size();
@@ -240,6 +240,7 @@ public class UdmUsageService implements IUdmUsageService {
 
     @Override
     @Transactional
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void deleteUdmBatchDetails(UdmBatch udmBatch) {
         udmUsageAuditService.deleteActionsByBatchId(udmBatch.getId());
         udmUsageRepository.deleteByBatchId(udmBatch.getId());
@@ -283,6 +284,7 @@ public class UdmUsageService implements IUdmUsageService {
 
     @Override
     @Transactional
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void updateUsages(Map<UdmUsageDto, List<String>> dtoToActionReasonsMap, boolean isResearcher,
                              String reason) {
         dtoToActionReasonsMap.forEach((udmUsageDto, actionReasons) ->
@@ -291,6 +293,7 @@ public class UdmUsageService implements IUdmUsageService {
 
     @Override
     @Transactional
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public int publishUdmUsagesToBaseline(Integer period) {
         String userName = RupContextUtils.getUserName();
         LOGGER.info("Publish to baseline UDM usages. Started. Period={}, UserName={}", period, userName);

@@ -32,7 +32,6 @@ import io.micrometer.core.annotation.Timed;
  * @author Anton Azarenka
  */
 @Service
-@Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
 public class UdmBaselineService implements IUdmBaselineService {
 
     private static final Logger LOGGER = RupLogUtils.getLogger();
@@ -73,6 +72,7 @@ public class UdmBaselineService implements IUdmBaselineService {
 
     @Override
     @Transactional
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void deleteFromBaseline(Set<String> usageIds, String reason, String userName) {
         LOGGER.info("Delete UDM usages from baseline. Started. UsageIds={}, Reason={}, UserName={}", usageIds, reason,
             userName);

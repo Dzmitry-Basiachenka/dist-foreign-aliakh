@@ -85,6 +85,7 @@ public class NtsUsageService implements INtsUsageService {
 
     @Override
     @Transactional
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public List<String> insertUsages(UsageBatch usageBatch) {
         String userName = RupContextUtils.getUserName();
         LOGGER.info("Insert NTS usages. Started. UsageBatchName={}, UserName={}", usageBatch.getName(), userName);
@@ -108,6 +109,7 @@ public class NtsUsageService implements INtsUsageService {
 
     @Override
     @Transactional
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void populatePayeeAndCalculateAmountsForScenarioUsages(Scenario scenario) {
         String userName = RupContextUtils.getUserName();
         Set<Long> payeeAccountNumbers = new HashSet<>();
@@ -133,6 +135,7 @@ public class NtsUsageService implements INtsUsageService {
 
     @Override
     @Transactional
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public List<String> moveToArchive(Scenario scenario) {
         LOGGER.info("Move details to archive. Started. {}", ForeignLogUtils.scenario(scenario));
         List<String> usageIds =

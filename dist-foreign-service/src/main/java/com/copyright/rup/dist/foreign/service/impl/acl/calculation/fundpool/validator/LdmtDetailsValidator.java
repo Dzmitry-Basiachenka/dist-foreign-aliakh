@@ -21,8 +21,6 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import io.micrometer.core.annotation.Timed;
-
 /**
  * Implementation of {@link IValidator} to perform validation for {@link LdmtDetail}s.
  * <p/>
@@ -33,7 +31,6 @@ import io.micrometer.core.annotation.Timed;
  * @author Aliaksandr Liakh
  */
 @Component("df.service.ldmtDetailsValidator")
-@Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
 public class LdmtDetailsValidator implements IValidator<List<LdmtDetail>> {
 
     private static final Set<String> LICENSE_TYPES = ImmutableSet.of("ACL", "JACDCL", "MACL", "VGW");

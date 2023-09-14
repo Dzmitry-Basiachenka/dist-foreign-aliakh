@@ -56,7 +56,6 @@ import io.micrometer.core.annotation.Timed;
  * @author Dzmitry Basiachenka
  */
 @Service
-@Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
 public class AclScenarioService implements IAclScenarioService {
 
     private static final Logger LOGGER = RupLogUtils.getLogger();
@@ -78,6 +77,7 @@ public class AclScenarioService implements IAclScenarioService {
 
     @Override
     @Transactional
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void insertScenario(AclScenario aclScenario) {
         String scenarioId = RupPersistUtils.generateUuid();
         String userName = RupContextUtils.getUserName();
@@ -125,6 +125,7 @@ public class AclScenarioService implements IAclScenarioService {
     }
 
     @Override
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public List<AclScenario> getScenarios(AclScenarioFilter filter) {
         return aclScenarioRepository.findByFilter(filter);
     }
@@ -160,6 +161,7 @@ public class AclScenarioService implements IAclScenarioService {
     }
 
     @Override
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public Set<AclFundPoolDetailDto> getFundPoolDetailsNotToBeDistributed(String batchId, String fundPoolId,
                                                                           String grantSetId,
                                                                           List<DetailLicenseeClass> mapping) {
@@ -205,6 +207,7 @@ public class AclScenarioService implements IAclScenarioService {
 
     @Override
     @Transactional
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void deleteAclScenario(AclScenario aclScenario) {
         String userName = RupContextUtils.getUserName();
         LOGGER.info("Delete ACL scenario. Started. {}, User={}", ForeignLogUtils.aclScenario(aclScenario), userName);
@@ -241,6 +244,7 @@ public class AclScenarioService implements IAclScenarioService {
 
     @Override
     @Transactional
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void sendToLm(AclScenario scenario) {
         String userName = RupContextUtils.getUserName();
         LOGGER.info("Send ACL scenario to LM. Started. {}, User={}", ForeignLogUtils.aclScenario(scenario), userName);

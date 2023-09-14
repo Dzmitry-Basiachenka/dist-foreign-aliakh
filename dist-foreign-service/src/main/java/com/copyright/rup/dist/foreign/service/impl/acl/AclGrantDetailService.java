@@ -42,7 +42,6 @@ import io.micrometer.core.annotation.Timed;
  * @author Aliaksandr Liakh
  */
 @Service
-@Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
 public class AclGrantDetailService implements IAclGrantDetailService {
 
     private static final int TYPE_OF_USE_COUNT = 1;
@@ -59,6 +58,7 @@ public class AclGrantDetailService implements IAclGrantDetailService {
 
     @Transactional
     @Override
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void insert(List<AclGrantDetail> grantDetails) {
         int size = grantDetails.size();
         String userName = RupContextUtils.getUserName();
@@ -69,6 +69,7 @@ public class AclGrantDetailService implements IAclGrantDetailService {
 
     @Transactional
     @Override
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void addToGrantSet(AclGrantSet grantSet, List<AclGrantDetailDto> grantDetails) {
         int size = grantDetails.size();
         String grantSetId = grantSet.getId();
@@ -104,6 +105,7 @@ public class AclGrantDetailService implements IAclGrantDetailService {
     }
 
     @Override
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void updateGrants(Collection<AclGrantDetailDto> aclGrantDetailDtos, boolean doUpdateTouStatus) {
         String userName = RupContextUtils.getUserName();
         if (doUpdateTouStatus) {

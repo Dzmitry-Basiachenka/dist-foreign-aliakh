@@ -43,7 +43,6 @@ import io.micrometer.core.annotation.Timed;
  * @author Aliaksandr Liakh
  */
 @Service
-@Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
 public class AclciUsageService implements IAclciUsageService {
 
     private static final Logger LOGGER = RupLogUtils.getLogger();
@@ -62,6 +61,7 @@ public class AclciUsageService implements IAclciUsageService {
 
     @Override
     @Transactional
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void insertUsages(UsageBatch usageBatch, List<Usage> usages) {
         String userName = RupContextUtils.getUserName();
         int size = usages.size();
@@ -117,6 +117,7 @@ public class AclciUsageService implements IAclciUsageService {
 
     @Override
     @Transactional
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void updateToEligibleByIds(Set<String> usageIds, Long rhAccountNumber, Long wrWrkInst, String reason) {
         String userName = RupContextUtils.getUserName();
         LOGGER.info("Update RH for ACLCI usage. Started. UsageIds={}, RhAccountNumber={}, Reason={}, UserName={}",
@@ -132,6 +133,7 @@ public class AclciUsageService implements IAclciUsageService {
 
     @Override
     @Transactional
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void deleteUsageBatchDetails(UsageBatch usageBatch) {
         String userName = RupContextUtils.getUserName();
         String batchName = usageBatch.getName();

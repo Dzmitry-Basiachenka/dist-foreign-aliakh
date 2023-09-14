@@ -47,7 +47,6 @@ import io.micrometer.core.annotation.Timed;
  * @author Mikalai Bezmen
  */
 @Service
-@Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
 public class ScenarioService implements IScenarioService {
 
     private static final Logger LOGGER = RupLogUtils.getLogger();
@@ -88,6 +87,7 @@ public class ScenarioService implements IScenarioService {
 
     @Override
     @Transactional
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public Scenario createScenario(String scenarioName, String description, UsageFilter usageFilter) {
         LOGGER.info("Insert scenario. Started. Name={}, Description={}, UsageFilter={}",
             scenarioName, description, usageFilter);
@@ -112,6 +112,7 @@ public class ScenarioService implements IScenarioService {
 
     @Override
     @Transactional
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void deleteScenario(Scenario scenario) {
         String userName = RupContextUtils.getUserName();
         LOGGER.info("Delete scenario. Started. {}, User={}", ForeignLogUtils.scenario(scenario), userName);
@@ -126,6 +127,7 @@ public class ScenarioService implements IScenarioService {
 
     @Override
     @Transactional
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void refreshScenario(Scenario scenario) {
         ScenarioUsageFilter usageFilter = scenarioUsageFilterService.getByScenarioId(scenario.getId());
         if (null != usageFilter) {
@@ -136,6 +138,7 @@ public class ScenarioService implements IScenarioService {
     }
 
     @Override
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public Scenario getScenarioWithAmountsAndLastAction(Scenario scenario) {
         return FdaConstants.ARCHIVED_SCENARIO_STATUSES.contains(scenario.getStatus())
             ? scenarioRepository.findArchivedWithAmountsAndLastAction(scenario.getId())
@@ -164,6 +167,7 @@ public class ScenarioService implements IScenarioService {
 
     @Override
     @Transactional
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public int archiveScenarios() {
         List<String> paidScenariosIds = scenarioRepository.findIdsForArchiving();
         LOGGER.info("Archive scenarios. Started. PaidScenariosCount={}", LogUtils.size(paidScenariosIds));
