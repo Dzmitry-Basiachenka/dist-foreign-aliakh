@@ -112,8 +112,8 @@ public class AclScenariosWidgetTest {
         mockStatic(ForeignSecurityUtils.class);
         scenariosWidget = new AclScenariosWidget(controller, createMock(IAclScenarioHistoryController.class));
         expect(controller.getScenarios()).andReturn(List.of(scenario)).times(2);
-        expect(controller.getAclScenarioWithAmountsAndLastAction(SCENARIO_UID)).andReturn(scenarioDto).times(2);
-        expect(controller.getCriteriaHtmlRepresentation()).andReturn(SELECTION_CRITERIA).times(2);
+        expect(controller.getAclScenarioWithAmountsAndLastAction(SCENARIO_UID)).andReturn(scenarioDto).once();
+        expect(controller.getCriteriaHtmlRepresentation()).andReturn(SELECTION_CRITERIA).once();
         expect(controller.getUsageAgeWeights()).andReturn(List.of()).once();
         expect(controller.getDetailLicenseeClasses()).andReturn(List.of()).once();
         IStreamSource streamSource = createMock(IStreamSource.class);
@@ -121,7 +121,7 @@ public class AclScenariosWidgetTest {
             createMock(Supplier.class))).times(2);
         expect(controller.getExportAclSummaryOfWorkSharesByAggLcStreamSource()).andReturn(streamSource).once();
         expect(controller.getExportAclWorkSharesByAggLcStreamSource()).andReturn(streamSource).once();
-        expect(ForeignSecurityUtils.hasSpecialistPermission()).andReturn(true).times(2);
+        expect(ForeignSecurityUtils.hasSpecialistPermission()).andReturn(true).once();
         expect(controller.initAclScenariosFilterWidget())
             .andReturn(new AclScenariosFilterWidget(new AclScenariosFilterController())).once();
         replay(controller, streamSource, ForeignSecurityUtils.class);
@@ -171,12 +171,10 @@ public class AclScenariosWidgetTest {
     @Test
     public void testRefresh() {
         reset(controller, ForeignSecurityUtils.class);
-        expect(controller.getAclScenarioWithAmountsAndLastAction(SCENARIO_UID)).andReturn(scenarioDto).once();
-        expect(controller.getCriteriaHtmlRepresentation()).andReturn(SELECTION_CRITERIA).once();
-        expect(ForeignSecurityUtils.hasSpecialistPermission()).andReturn(true).times(2);
         expect(controller.getScenarios()).andReturn(List.of(scenario)).once();
         expect(controller.getAclScenarioWithAmountsAndLastAction(SCENARIO_UID)).andReturn(scenarioDto).once();
         expect(controller.getCriteriaHtmlRepresentation()).andReturn(SELECTION_CRITERIA).once();
+        expect(ForeignSecurityUtils.hasSpecialistPermission()).andReturn(true).once();
         replay(controller, ForeignSecurityUtils.class);
         scenariosWidget.refresh();
         verify(controller, ForeignSecurityUtils.class);

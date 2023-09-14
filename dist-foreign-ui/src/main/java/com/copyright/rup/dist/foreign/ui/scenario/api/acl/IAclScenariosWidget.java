@@ -6,6 +6,8 @@ import com.copyright.rup.vaadin.widget.api.IMediatorProvider;
 import com.copyright.rup.vaadin.widget.api.IRefreshable;
 import com.copyright.rup.vaadin.widget.api.IWidget;
 
+import com.vaadin.ui.TabSheet.SelectedTabChangeListener;
+
 /**
  * Interface for scenarios widget for ACL product family.
  * <p>
@@ -15,7 +17,8 @@ import com.copyright.rup.vaadin.widget.api.IWidget;
  *
  * @author Dzmitry Basiachenka
  */
-public interface IAclScenariosWidget extends IWidget<IAclScenariosController>, IRefreshable, IMediatorProvider {
+public interface IAclScenariosWidget extends IWidget<IAclScenariosController>, IRefreshable, IMediatorProvider,
+    SelectedTabChangeListener {
 
     /**
      * Selects specified ACL scenario in the grid.

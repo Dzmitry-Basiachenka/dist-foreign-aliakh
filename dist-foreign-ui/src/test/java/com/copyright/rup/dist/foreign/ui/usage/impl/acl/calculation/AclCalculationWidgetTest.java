@@ -73,14 +73,6 @@ public class AclCalculationWidgetTest {
         expect(aclScenariosController.initWidget()).andReturn(aclScenariosWidget).once();
         aclScenariosWidget.setController(aclScenariosController);
         expectLastCall().once();
-        aclScenariosController.refreshWidget();
-        expectLastCall().once();
-        aclUsageController.refreshWidget();
-        expectLastCall().once();
-        aclFundPoolController.refreshWidget();
-        expectLastCall().once();
-        aclGrantDetailController.refreshWidget();
-        expectLastCall().once();
         expect(controller.getAclScenariosController()).andReturn(aclScenariosController).once();
     }
 

@@ -36,6 +36,7 @@ public class AclCalculationWidget extends TabSheet implements IAclCalculationWid
         initAndAddTab(() -> aclCalculationController.getAclGrantDetailController(), "tab.grant_set");
         initAndAddTab(() -> aclCalculationController.getAclScenariosController(), "tab.scenarios");
         setSizeFull();
+        addSelectedTabChangeListener(this::selectedTabChange);
         return this;
     }
 
@@ -52,11 +53,17 @@ public class AclCalculationWidget extends TabSheet implements IAclCalculationWid
         this.aclCalculationController = controller;
     }
 
+    private void selectedTabChange(SelectedTabChangeEvent event) {
+        Component selectedTab = getSelectedTab();
+        if (selectedTab instanceof SelectedTabChangeListener) {
+            ((SelectedTabChangeListener) selectedTab).selectedTabChange(event);
+        }
+    }
+
     private <T extends IController<?>> void initAndAddTab(Supplier<T> supplier, String caption) {
         IController<?> controller = supplier.get();
         IWidget widget = controller.initWidget();
         widget.setController(controller);
-        controller.refreshWidget();
         addTab(widget, ForeignUi.getMessage(caption));
     }
 }
