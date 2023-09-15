@@ -47,7 +47,6 @@ import io.micrometer.core.annotation.Timed;
  * @author Aliaksandr Liakh
  */
 @Service
-@Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
 public class SalScenarioService implements ISalScenarioService {
 
     private static final Logger LOGGER = RupLogUtils.getLogger();
@@ -74,6 +73,7 @@ public class SalScenarioService implements ISalScenarioService {
 
     @Override
     @Transactional
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public Scenario createScenario(String scenarioName, String fundPoolId, String description,
                                    UsageFilter usageFilter) {
         LOGGER.info("Insert SAL scenario. Started. Name={}, FundPoolId={}, Description={}, UsageFilter={}",
@@ -92,6 +92,7 @@ public class SalScenarioService implements ISalScenarioService {
 
     @Override
     @Transactional
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void deleteScenario(Scenario scenario) {
         String userName = RupContextUtils.getUserName();
         LOGGER.info("Delete scenario. Started. {}, User={}", ForeignLogUtils.scenario(scenario), userName);
@@ -105,6 +106,7 @@ public class SalScenarioService implements ISalScenarioService {
 
     @Override
     @Transactional
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void sendToLm(Scenario scenario) {
         LogUtils.ILogWrapper scenarioWrapper = ForeignLogUtils.scenario(scenario);
         String userName = RupContextUtils.getUserName();

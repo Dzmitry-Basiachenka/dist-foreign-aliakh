@@ -30,7 +30,6 @@ import io.micrometer.core.annotation.Timed;
  * @author Anton Azarenka
  */
 @Service
-@Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
 public class AclFundPoolService implements IAclFundPoolService {
 
     private static final Logger LOGGER = RupLogUtils.getLogger();
@@ -40,6 +39,7 @@ public class AclFundPoolService implements IAclFundPoolService {
 
     @Transactional
     @Override
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void insertManualAclFundPool(AclFundPool fundPool, List<AclFundPoolDetail> fundPoolDetails) {
         String userName = RupContextUtils.getUserName();
         LOGGER.info("Insert manual ACL fund pool. Started. AclFundPool={}, UserName={}", fundPool, userName);
@@ -57,6 +57,7 @@ public class AclFundPoolService implements IAclFundPoolService {
 
     @Transactional
     @Override
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public int insertLdmtAclFundPool(AclFundPool fundPool) {
         String userName = RupContextUtils.getUserName();
         LOGGER.info("Insert LDMT ACL fund pool. Started. AclFundPool={}, UserName={}", fundPool, userName);
@@ -71,6 +72,7 @@ public class AclFundPoolService implements IAclFundPoolService {
 
     @Transactional
     @Override
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void insertAclFundPoolDetails(List<AclFundPoolDetail> fundPoolDetails) {
         int size = fundPoolDetails.size();
         String userName = RupContextUtils.getUserName();
@@ -111,6 +113,7 @@ public class AclFundPoolService implements IAclFundPoolService {
 
     @Override
     @Transactional
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void deleteAclFundPool(AclFundPool fundPool) {
         String userName = RupContextUtils.getUserName();
         LOGGER.info("Delete ACL fund fool. Started. FundPoolName={}, UserName={}", fundPool.getName(), userName);

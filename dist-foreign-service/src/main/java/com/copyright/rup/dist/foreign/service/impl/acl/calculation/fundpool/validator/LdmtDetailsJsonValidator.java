@@ -22,8 +22,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import io.micrometer.core.annotation.Timed;
-
 /**
  * Validator to perform validation for LDMT details JSON.
  * <p/>
@@ -34,7 +32,6 @@ import io.micrometer.core.annotation.Timed;
  * @author Aliaksandr Liakh
  */
 @Component("df.service.ldmtDetailsJsonValidator")
-@Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
 public class LdmtDetailsJsonValidator {
 
     private static final ObjectMapper MAPPER = new ObjectMapper();

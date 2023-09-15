@@ -30,7 +30,6 @@ import io.micrometer.core.annotation.Timed;
  * @author Uladzislau Shalamitski
  */
 @Service
-@Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
 public class UdmBatchService implements IUdmBatchService {
 
     private static final Logger LOGGER = RupLogUtils.getLogger();
@@ -42,6 +41,7 @@ public class UdmBatchService implements IUdmBatchService {
 
     @Override
     @Transactional
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void insertUdmBatch(UdmBatch udmBatch, List<UdmUsage> udmUsages) {
         String userName = RupContextUtils.getUserName();
         udmBatch.setId(RupPersistUtils.generateUuid());
@@ -54,6 +54,7 @@ public class UdmBatchService implements IUdmBatchService {
     }
 
     @Override
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public List<UdmBatch> getUdmBatches() {
         return udmBatchRepository.findAll();
     }
@@ -71,6 +72,7 @@ public class UdmBatchService implements IUdmBatchService {
 
     @Override
     @Transactional
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void deleteUdmBatch(UdmBatch udmBatch) {
         String userName = RupContextUtils.getUserName();
         LOGGER.info("Delete UDM batch. Started. UsageBatchName={}, UserName={}", udmBatch.getName(), userName);

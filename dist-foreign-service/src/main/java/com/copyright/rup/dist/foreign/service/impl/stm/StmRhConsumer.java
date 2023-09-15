@@ -21,8 +21,6 @@ import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import io.micrometer.core.annotation.Timed;
-
 /**
  * Consumer that handles STM RH usage exclusion.
  * <p>
@@ -34,7 +32,6 @@ import io.micrometer.core.annotation.Timed;
  * @author Aliaksandr Liakh
  */
 @Component("df.service.stmRhConsumer")
-@Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
 public class StmRhConsumer implements IConsumer<List<Usage>> {
 
     private static final Logger LOGGER = RupLogUtils.getLogger();

@@ -32,7 +32,6 @@ import io.micrometer.core.annotation.Timed;
  * @author Aliaksandr Liakh
  */
 @Service
-@Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
 public class AclUsageBatchService implements IAclUsageBatchService {
 
     private static final Logger LOGGER = RupLogUtils.getLogger();
@@ -54,6 +53,7 @@ public class AclUsageBatchService implements IAclUsageBatchService {
 
     @Transactional
     @Override
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public int insert(AclUsageBatch usageBatch) {
         String userName = RupContextUtils.getUserName();
         LOGGER.info("Insert ACL usage batch. Started. AclUsageBatch={}, UserName={}", usageBatch, userName);
@@ -94,6 +94,7 @@ public class AclUsageBatchService implements IAclUsageBatchService {
 
     @Transactional
     @Override
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public int copyUsageBatch(String sourceUsageBatchId, AclUsageBatch aclUsageBatch) {
         String userName = RupContextUtils.getUserName();
         LOGGER.info("Copy ACL usage batch. Started. SourceBatchId={}, AclUsageBatch={}, UserName={}",
@@ -110,6 +111,7 @@ public class AclUsageBatchService implements IAclUsageBatchService {
 
     @Override
     @Transactional
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void deleteAclUsageBatch(AclUsageBatch usageBatch) {
         String userName = RupContextUtils.getUserName();
         LOGGER.info("Delete ACL usage batch. Started. UsageBatchName={}, UserName={}", usageBatch.getName(), userName);

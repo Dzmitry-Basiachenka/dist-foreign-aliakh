@@ -17,8 +17,6 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Objects;
 
-import io.micrometer.core.annotation.Timed;
-
 /**
  * Consumer to handle FAS/FAS2 usages for PI matching.
  * <p>
@@ -30,7 +28,6 @@ import io.micrometer.core.annotation.Timed;
  * @author Aliaksandr Liakh
  */
 @Component("df.service.fasMatchingConsumer")
-@Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
 public class FasMatchingConsumer implements IConsumer<List<Usage>> {
 
     private static final Logger LOGGER = RupLogUtils.getLogger();

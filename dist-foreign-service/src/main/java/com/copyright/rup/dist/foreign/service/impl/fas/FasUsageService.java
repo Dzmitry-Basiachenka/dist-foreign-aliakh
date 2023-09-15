@@ -59,7 +59,6 @@ import io.micrometer.core.annotation.Timed;
  * @author Ihar Suvorau
  */
 @Service
-@Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
 public class FasUsageService implements IFasUsageService {
 
     private static final String CALCULATION_FINISHED_LOG_MESSAGE = "Calculated usages gross amount. " +
@@ -92,6 +91,7 @@ public class FasUsageService implements IFasUsageService {
     private IRightsholderService rightsholderService;
 
     @Override
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public int insertUsages(UsageBatch usageBatch, List<Usage> usages) {
         String userName = RupContextUtils.getUserName();
         int size = usages.size();
@@ -137,6 +137,7 @@ public class FasUsageService implements IFasUsageService {
 
     @Override
     @Transactional
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void deleteFromScenarioByPayees(Set<String> scenarioIds, Set<Long> accountNumbers, String reason) {
         Set<String> usageIds =
             fasUsageRepository.deleteFromScenarioByPayees(scenarioIds, accountNumbers, RupContextUtils.getUserName());
@@ -145,6 +146,7 @@ public class FasUsageService implements IFasUsageService {
 
     @Override
     @Transactional
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void redesignateToNtsWithdrawnByPayees(Set<String> scenarioIds, Set<Long> accountNumbers, String reason) {
         Set<String> usageIds = fasUsageRepository.redesignateToNtsWithdrawnByPayees(scenarioIds, accountNumbers,
             RupContextUtils.getUserName());
@@ -158,6 +160,7 @@ public class FasUsageService implements IFasUsageService {
 
     @Override
     @Transactional
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void loadResearchedUsages(List<ResearchedUsage> researchedUsages) {
         LogUtils.ILogWrapper researchedUsagesCount = LogUtils.size(researchedUsages);
         LOGGER.info("Load researched usages. Started. ResearchedUsagesCount={}", researchedUsagesCount);
@@ -181,6 +184,7 @@ public class FasUsageService implements IFasUsageService {
 
     @Override
     @Transactional
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public List<String> moveToArchive(Scenario scenario) {
         LOGGER.info("Move details to archive. Started. {}", ForeignLogUtils.scenario(scenario));
         List<String> usageIds =
@@ -197,6 +201,7 @@ public class FasUsageService implements IFasUsageService {
     }
 
     @Override
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void addUsagesToScenario(List<Usage> usages, Scenario scenario) {
         Set<String> rightsholdersIds =
             usages.stream().map(usage -> usage.getRightsholder().getId()).collect(Collectors.toSet());
@@ -217,6 +222,7 @@ public class FasUsageService implements IFasUsageService {
     }
 
     @Override
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void updateRhPayeeAmountsAndParticipating(List<Usage> usages) {
         String userName = RupContextUtils.getUserName();
         Map<String, Table<String, String, Object>> preferencesMap =
@@ -234,6 +240,7 @@ public class FasUsageService implements IFasUsageService {
     }
 
     @Override
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void recalculateUsagesForRefresh(UsageFilter filter, Scenario scenario) {
         Map<Long, Usage> rhToUsageMap = getRightsholdersInformation(scenario.getId());
         List<Usage> newUsages = fasUsageRepository.findWithAmountsAndRightsholders(filter);

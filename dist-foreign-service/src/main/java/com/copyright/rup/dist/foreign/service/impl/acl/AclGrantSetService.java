@@ -32,7 +32,6 @@ import io.micrometer.core.annotation.Timed;
  * @author Aliaksandr Liakh
  */
 @Service
-@Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
 public class AclGrantSetService implements IAclGrantSetService {
 
     private static final Logger LOGGER = RupLogUtils.getLogger();
@@ -50,6 +49,7 @@ public class AclGrantSetService implements IAclGrantSetService {
 
     @Transactional
     @Override
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public int insert(AclGrantSet grantSet) {
         String userName = RupContextUtils.getUserName();
         LOGGER.info("Insert ACL grant set. Started. AclGrantSet={}, UserName={}", grantSet, userName);
@@ -84,6 +84,7 @@ public class AclGrantSetService implements IAclGrantSetService {
 
     @Override
     @Transactional
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void deleteAclGrantSet(AclGrantSet grantSet) {
         String userName = RupContextUtils.getUserName();
         LOGGER.info("Delete ACL grant set. Started. GrantSetName={}, UserName={}", grantSet.getName(), userName);
@@ -105,6 +106,7 @@ public class AclGrantSetService implements IAclGrantSetService {
 
     @Override
     @Transactional
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public int copyGrantSet(AclGrantSet aclGrantSet, String sourceGrantSetId) {
         String userName = RupContextUtils.getUserName();
         LOGGER.info("Copy ACL grant set. Started. AclGrantSet={}, UserName={}", aclGrantSet, userName);

@@ -47,7 +47,6 @@ import io.micrometer.core.annotation.Timed;
  * @author Anton Azarenka
  */
 @Service
-@Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
 public class AaclScenarioService implements IAaclScenarioService {
 
     private static final Logger LOGGER = RupLogUtils.getLogger();
@@ -69,6 +68,7 @@ public class AaclScenarioService implements IAaclScenarioService {
 
     @Override
     @Transactional
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public Scenario createScenario(String scenarioName, AaclFields aaclFields, String description,
                                    UsageFilter usageFilter) {
         LOGGER.info("Insert AACL scenario. Started. Name={}, AaclFields={}, Description={}, UsageFilter={}",
@@ -88,6 +88,7 @@ public class AaclScenarioService implements IAaclScenarioService {
 
     @Override
     @Transactional
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void deleteScenario(Scenario scenario) {
         String userName = RupContextUtils.getUserName();
         LOGGER.info("Delete scenario. Started. {}, User={}", ForeignLogUtils.scenario(scenario), userName);
@@ -106,6 +107,7 @@ public class AaclScenarioService implements IAaclScenarioService {
 
     @Override
     @Transactional
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void sendToLm(Scenario scenario) {
         LogUtils.ILogWrapper scenarioWrapper = ForeignLogUtils.scenario(scenario);
         String userName = RupContextUtils.getUserName();

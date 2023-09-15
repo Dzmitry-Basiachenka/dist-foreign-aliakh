@@ -33,7 +33,6 @@ import io.micrometer.core.annotation.Timed;
  * @author Aliaksandr Liakh
  */
 @Service
-@Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
 public class AclUsageService implements IAclUsageService {
 
     private static final Logger LOGGER = RupLogUtils.getLogger();
@@ -44,6 +43,7 @@ public class AclUsageService implements IAclUsageService {
     private int recordsThreshold;
 
     @Override
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public int populateAclUsages(String usageBatchId, Set<Integer> periods, String userName,
                                  Set<Long> wrWrkInsts) {
         return aclUsageRepository.populateAclUsages(usageBatchId, periods, userName, wrWrkInsts).size();
@@ -102,6 +102,7 @@ public class AclUsageService implements IAclUsageService {
     }
 
     @Override
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void writeInvalidUsagesCsvReport(String batchId, String grantSetId, Integer distributionPeriod,
                                             List<Integer> periodPriors, OutputStream outputStream) {
         aclUsageRepository.writeInvalidUsagesCsvReport(batchId, grantSetId, distributionPeriod, periodPriors,

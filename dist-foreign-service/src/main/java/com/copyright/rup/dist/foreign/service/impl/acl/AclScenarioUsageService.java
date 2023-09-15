@@ -43,7 +43,6 @@ import io.micrometer.core.annotation.Timed;
  * @author Ihar Suvorau
  */
 @Service
-@Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
 public class AclScenarioUsageService implements IAclScenarioUsageService {
 
     private static final Logger LOGGER = RupLogUtils.getLogger();
@@ -56,32 +55,38 @@ public class AclScenarioUsageService implements IAclScenarioUsageService {
     private IPrmIntegrationService prmIntegrationService;
 
     @Override
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void addUsagesToAclScenario(AclScenario aclScenario, String username) {
         aclScenarioUsageRepository.addToAclScenario(aclScenario, username);
     }
 
     @Override
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void addScenarioShares(AclScenario aclScenario, String username) {
         aclScenarioUsageRepository.addScenarioShares(aclScenario, username);
     }
 
     @Override
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void populatePubTypeWeights(String scenarioId, String userName) {
         aclScenarioUsageRepository.populatePubTypeWeights(scenarioId, userName);
     }
 
     @Override
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void calculateScenarioShares(String scenarioId, String username) {
         aclScenarioUsageRepository.calculateScenarioShares(scenarioId, username);
     }
 
     @Override
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void calculateScenarioAmounts(String scenarioId, String userName) {
         aclScenarioUsageRepository.calculateScenarioAmounts(scenarioId, userName);
     }
 
     @Override
     @Transactional
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void deleteZeroAmountUsages(String scenarioId) {
         aclScenarioUsageRepository.deleteZeroAmountShares(scenarioId);
         aclScenarioUsageRepository.deleteZeroAmountUsages(scenarioId);
@@ -138,6 +143,7 @@ public class AclScenarioUsageService implements IAclScenarioUsageService {
     }
 
     @Override
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void populatePayees(String scenarioId) {
         Set<Long> payeeAccountNumbers = new HashSet<>();
         List<RightsholderTypeOfUsePair> rightsholderTypeOfUsePairs = rightsholderService.getByAclScenarioId(scenarioId);

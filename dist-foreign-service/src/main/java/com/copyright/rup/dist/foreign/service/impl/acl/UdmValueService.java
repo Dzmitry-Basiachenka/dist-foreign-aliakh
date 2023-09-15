@@ -149,6 +149,7 @@ public class UdmValueService implements IUdmValueService {
 
     @Override
     @Transactional
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public int populateValueBatch(Integer period) {
         String userName = RupContextUtils.getUserName();
         LOGGER.info("Populate UDM Value batch. Started. Period={}, UserName={}", period, userName);
@@ -189,6 +190,7 @@ public class UdmValueService implements IUdmValueService {
     }
 
     @Override
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public int publishToBaseline(Integer period) {
         String userName = RupContextUtils.getUserName();
         LOGGER.info("Publish UDM Values to baseline. Started. Period={}, UserName={}", period, userName);

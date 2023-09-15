@@ -63,7 +63,6 @@ import io.micrometer.core.annotation.Timed;
  * @author Aliaksandr Liakh
  */
 @Service
-@Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
 public class SalUsageService implements ISalUsageService {
 
     private static final Logger LOGGER = RupLogUtils.getLogger();
@@ -119,6 +118,7 @@ public class SalUsageService implements ISalUsageService {
 
     @Override
     @Transactional
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void insertItemBankDetails(UsageBatch usageBatch, List<Usage> usages) {
         String userName = RupContextUtils.getUserName();
         ILogWrapper size = LogUtils.size(usages);
@@ -138,6 +138,7 @@ public class SalUsageService implements ISalUsageService {
 
     @Override
     @Transactional
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void insertUsageDataDetails(UsageBatch usageBatch, List<Usage> usages, String userName) {
         ILogWrapper size = LogUtils.size(usages);
         LOGGER.info("Insert SAL usage data details. Started. UsageBatchName={}, UsagesCount={}, UserName={}",
@@ -175,12 +176,14 @@ public class SalUsageService implements ISalUsageService {
     }
 
     @Override
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void addUsagesToScenario(Scenario scenario, UsageFilter filter) {
         salUsageRepository.addToScenario(scenario.getId(), filter, scenario.getUpdateUser());
     }
 
     @Override
     @Transactional
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void populatePayees(String scenarioId) {
         String userName = RupContextUtils.getUserName();
         Set<Long> payeeAccountNumbers = new HashSet<>();
@@ -223,6 +226,7 @@ public class SalUsageService implements ISalUsageService {
 
     @Override
     @Transactional
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void deleteUsageData(UsageBatch usageBatch) {
         String userName = RupContextUtils.getUserName();
         String batchName = usageBatch.getName();
@@ -234,6 +238,7 @@ public class SalUsageService implements ISalUsageService {
 
     @Override
     @Transactional
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void deleteItemBankUsages(Set<UsageDto> usagesToDelete) {
         String userName = RupContextUtils.getUserName();
         int usagesSize = usagesToDelete.size();
@@ -248,6 +253,7 @@ public class SalUsageService implements ISalUsageService {
 
     @Override
     @Transactional
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void deleteUsageBatchDetails(UsageBatch usageBatch) {
         String userName = RupContextUtils.getUserName();
         String batchName = usageBatch.getName();
@@ -286,12 +292,14 @@ public class SalUsageService implements ISalUsageService {
     }
 
     @Override
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void calculateAmounts(String scenarioId, String userName) {
         salUsageRepository.calculateAmounts(scenarioId, userName);
     }
 
     @Override
     @Transactional
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public List<String> moveToArchive(Scenario scenario) {
         LOGGER.info("Move SAL details to archive. Started. {}", ForeignLogUtils.scenario(scenario));
         String userName = RupContextUtils.getUserName();
@@ -304,6 +312,7 @@ public class SalUsageService implements ISalUsageService {
 
     @Override
     @Transactional
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void updateToEligibleWithRhAccountNumber(Set<String> usageIds, Long rhAccountNumber, String reason) {
         String userName = RupContextUtils.getUserName();
         LOGGER.info("Update RH for SAL detail. Started. UsageIds={}, RhAccountNumber={}, Reason={}, UserName={}",
