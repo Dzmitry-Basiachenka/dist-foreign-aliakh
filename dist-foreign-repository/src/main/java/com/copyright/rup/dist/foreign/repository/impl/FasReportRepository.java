@@ -29,6 +29,7 @@ import com.copyright.rup.dist.foreign.repository.impl.csv.fas.UndistributedLiabi
 import com.google.common.collect.Maps;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.springframework.stereotype.Repository;
 
 import java.io.OutputStream;
 import java.io.PipedOutputStream;
@@ -50,6 +51,7 @@ import java.util.Set;
  *
  * @author Dzmitry Basiachenka
  */
+@Repository
 public class FasReportRepository extends CommonReportRepository implements IFasReportRepository {
 
     private static final String FILTER_KEY = "filter";
