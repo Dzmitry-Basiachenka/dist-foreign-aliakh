@@ -1,3 +1,22 @@
+19.0.2
+-
+* CDP-1166 FDA: SonarQube Report Improvements: add SonarQube configuration
+* CDP-1166 FDA: SonarQube Report Improvements: fix SonarQube bug 'Method builds a list from one element using Arrays.asList'
+* CDP-1166 FDA: SonarQube Report Improvements: fix SonarQube bug 'Method converts String to boxed primitive using excessive boxing'
+* CDP-1166 FDA: SonarQube Report Improvements: fix SonarQube bug 'Class uses an ordinary set or map with an enum class as the key'
+* CDP-1166 FDA: SonarQube Report Improvements: fix SonarQube bug 'Class defines List based fields but uses them like Sets'
+* CDP-1166 FDA: SonarQube Report Improvements: fix SonarQube bug 'Method declares an identity lambda function rather than using Function.identity()'
+* CDP-1166 FDA: SonarQube Report Improvements: fix SonarQube bug 'Method appears to call the same method on the same object redundantly'
+* CDP-1166 FDA: SonarQube Report Improvements: fix SonarQube bug 'Method of Singleton class writes to a field in an unsynchronized manner'
+* CDP-1166 FDA: SonarQube Report Improvements: fix SonarQube bug 'Class defines fields that are used only as locals'
+* CDP-1166 FDA: SonarQube Report Improvements: fix SonarQube bug 'Class defines List based fields but uses them like Sets'
+* CDP-1166 FDA: SonarQube Report Improvements: fix SonarQube bug 'Constructor makes call to non-final method'
+* CDP-1166 FDA: SonarQube Report Improvements: fix SonarQube bug 'Class auto wires the same object into two separate fields in a class hierarchy'
+* CDP-1166 FDA: SonarQube Report Improvements: fix SonarQube bug 'Optional value should only be accessed after calling isPresent()'
+* CDP-1824: Clean up logs to improve space in splunk: remove micrometer configuration for repositories
+* CDP-1824: Clean up logs to improve space in splunk: update configuration for service layer
+* CDP-1760 Tech Debt: improve performance of ACL tab selection
+
 19.0.1
 -
 * B-81045 FDA: Ability to Export Value Queue List View: add Export button
