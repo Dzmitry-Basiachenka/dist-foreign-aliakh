@@ -56,4 +56,44 @@ databaseChangeLog {
             }
         }
     }
+
+    changeSet(id: '2023-09-19-02', author: 'Anton Azarenka <aazarenka@copyright.com>') {
+        comment("CDP-1778: FDA ACL: Add Detailed Licensee Classes to FDA: add new detail licensee classes")
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_detail_licensee_class') {
+            column(name: 'detail_licensee_class_id', value: 44)
+            column(name: 'description', value: 'Government – Aerospace, Defense, Environmental, International')
+            column(name: 'aggregate_licensee_class_id', value: 39)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_detail_licensee_class') {
+            column(name: 'detail_licensee_class_id', value: 45)
+            column(name: 'description', value: 'Government – Administration, Legislative, Agricultural, Regulatory')
+            column(name: 'aggregate_licensee_class_id', value: 39)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_detail_licensee_class') {
+            column(name: 'detail_licensee_class_id', value: 46)
+            column(name: 'description', value: 'Government - Other including Finance, Social, Economic, Transportation, Utilities')
+            column(name: 'aggregate_licensee_class_id', value: 39)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_detail_licensee_class') {
+            column(name: 'detail_licensee_class_id', value: 60)
+            column(name: 'description', value: 'Scientific Research')
+            column(name: 'aggregate_licensee_class_id', value: 52)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_detail_licensee_class') {
+            column(name: 'detail_licensee_class_id', value: 101)
+            column(name: 'description', value: 'Contract Research Organizations')
+            column(name: 'aggregate_licensee_class_id', value: 52)
+        }
+        
+        rollback {
+            delete(schemaName: dbAppsSchema, tableName: 'df_detail_licensee_class') {
+                where "detail_licensee_class_id in (44, 45, 46, 60, 101)"
+            }
+        }
+    }
 }
