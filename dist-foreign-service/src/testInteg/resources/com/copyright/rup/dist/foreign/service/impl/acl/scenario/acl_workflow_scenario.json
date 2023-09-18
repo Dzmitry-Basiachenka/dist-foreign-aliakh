@@ -356,6 +356,30 @@
       }
     },
     {
+      "id": 44,
+      "aggregateLicenseeClass": {
+        "id": 39
+      }
+    },
+    {
+      "id": 45,
+      "aggregateLicenseeClass": {
+        "id": 39
+      }
+    },
+    {
+      "id": 46,
+      "aggregateLicenseeClass": {
+        "id": 39
+      }
+    },
+    {
+      "id": 60,
+      "aggregateLicenseeClass": {
+        "id": 52
+      }
+    },
+    {
       "id": 93,
       "aggregateLicenseeClass": {
         "id": 25
@@ -393,6 +417,12 @@
     },
     {
       "id": 100,
+      "aggregateLicenseeClass": {
+        "id": 52
+      }
+    },
+    {
+      "id": 101,
       "aggregateLicenseeClass": {
         "id": 52
       }
