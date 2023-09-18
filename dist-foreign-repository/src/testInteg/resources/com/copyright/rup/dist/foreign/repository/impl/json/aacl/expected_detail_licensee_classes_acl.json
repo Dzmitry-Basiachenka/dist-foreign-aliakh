@@ -304,6 +304,38 @@
     }
   },
   {
+    "id": 44,
+    "description": "Government – Aerospace, Defense, Environmental, International",
+    "aggregateLicenseeClass": {
+      "id": 39,
+      "description": "Government"
+    }
+  },
+  {
+    "id": 45,
+    "description": "Government - Administration, Legislative, Agricultural, Regulatory",
+    "aggregateLicenseeClass": {
+      "id": 39,
+      "description": "Government"
+    }
+  },
+  {
+    "id": 46,
+    "description": "Government - Other including Finance, Social, Economic, Transportation, Utilities",
+    "aggregateLicenseeClass": {
+      "id": 39,
+      "description": "Government"
+    }
+  },
+  {
+    "id": 60,
+    "description": "Scientific Research",
+    "aggregateLicenseeClass": {
+      "id": 52,
+      "description": "Medical"
+    }
+  },
+  {
     "id": 93,
     "description": "Membership Organizations",
     "aggregateLicenseeClass": {
@@ -354,6 +386,14 @@
   {
     "id": 100,
     "description": "Generic Pharmaceuticals",
+    "aggregateLicenseeClass": {
+      "id": 52,
+      "description": "Medical"
+    }
+  },
+  {
+    "id": 101,
+    "description": "Contract Research Organizations",
     "aggregateLicenseeClass": {
       "id": 52,
       "description": "Medical"
