@@ -1,3 +1,9 @@
+19.0.3
+-
+* CDP-1778: FDA ACL: Add Detailed Licensee Classes to FDA
+* CDP-1778: FDA ACL: Add Detailed Licensee Classes to FDA: implement integration test
+* CDP-1778: FDA ACL: Add Detailed Licensee Classes to FDA: implement integration service test
+
 19.0.2
 -
 * CDP-1166 FDA: SonarQube Report Improvements: add SonarQube configuration
