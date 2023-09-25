@@ -23,7 +23,6 @@ import com.copyright.rup.dist.foreign.repository.api.IUdmUsageRepository;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 
 import org.apache.commons.collections4.CollectionUtils;
@@ -614,15 +613,12 @@ public class UdmBaselineRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FOLDER_NAME + "populate-value-id.groovy")
     public void testPopulateValueId() {
-        Map<Long, String> wrWrkInstToValueIdMap = ImmutableMap.of(
-            28908508L, "9b2550ff-a80a-41a9-a63c-047216a62241",
-            38908778L, "436be73d-82c9-4e53-bda6-b882e528bed7");
-        assertEquals(3, baselineRepository.populateValueId(211512, wrWrkInstToValueIdMap, USER_NAME));
+        assertEquals(4, baselineRepository.populateValueId(211512, USER_NAME));
         UdmBaselineFilter filter = new UdmBaselineFilter();
         filter.setPeriods(Set.of(211512));
         verifyUdmBaselineDto(loadExpectedBaselineDto("json/udm/udm_baseline_dto_211512.json"),
             baselineRepository.findDtosByFilter(filter, null, null));
-        filter.setPeriods(Set.of(211412));
+        filter.setPeriods(Set.of(211412, 210412));
         verifyUdmBaselineDto(loadExpectedBaselineDto("json/udm/udm_baseline_dto_211412.json"),
             baselineRepository.findDtosByFilter(filter, null, null));
     }

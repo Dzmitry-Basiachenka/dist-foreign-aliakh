@@ -63,12 +63,11 @@ public interface IUdmBaselineRepository {
     /**
      * Populates baseline usages with corresponding values id.
      *
-     * @param period                usage period
-     * @param wrWrkInstToValueIdMap map of wrWrkInst to value id
-     * @param userName              user who updated usages
+     * @param period   usage period
+     * @param userName user who updated usages
      * @return count of updated usages
      */
-    int populateValueId(Integer period, Map<Long, String> wrWrkInstToValueIdMap, String userName);
+    int populateValueId(Integer period, String userName);
 
     /**
      * Removes UDM usage from baseline by id. Sets is_baseline_flag {@code false}.

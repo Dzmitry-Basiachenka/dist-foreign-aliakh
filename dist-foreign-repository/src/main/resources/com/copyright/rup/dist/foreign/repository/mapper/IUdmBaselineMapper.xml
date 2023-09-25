@@ -218,13 +218,6 @@
             <include refid="IUdmBaselineMapper.udmBaselineFilter"/>
     </sql>
 
-    <sql id="selectOldestPeriodWithPositiveAgeWeight">
-        last_period_to_select_works as (
-            select to_char(to_date(#{period}::text, 'YYYYMM') -
-                (((select count(*) from ${schema}.df_udm_age_weight where weight > 0 and period_prior > 0) * 6) || ' months')::INTERVAL, 'YYYYMM')::int as period
-        )
-    </sql>
-
     <select id="findDtosByFilter" resultMap="udmBaselineDtoResultMap" parameterType="map" fetchSize="${usageSelectFetchSize}">
         <include refid="IUdmBaselineMapper.selectDtosByFilterSql"/>
     </select>
@@ -246,21 +239,18 @@
             select wr_wrk_inst
             from ${schema}.df_udm_value
             where period = #{period}
-        ),
-        <!-- Selects oldest period with age weight greater than zero -->
-        <include refid="IUdmBaselineMapper.selectOldestPeriodWithPositiveAgeWeight"/>
+        )
         <!-- The following unique works are included into result:
              1. works that were not populated into value batch for given period
-             2. works from previous periods with age weight greater than zero, that were not populated into value batch for any period -->
+             2. works from previous periods, that were not populated into value batch for any period -->
         select distinct on (u.wr_wrk_inst)
             #{period} as period,
             u.wr_wrk_inst,
             u.system_title,
             u.standard_number
-            <!-- TODO: u.standard_number_type -->
         from ${schema}.df_udm_usage u
         left join ${schema}.df_udm_value v on v.wr_wrk_inst = u.wr_wrk_inst
-        where u.period between (select period from last_period_to_select_works) and #{period}
+        where u.period &lt;= #{period}
             and u.is_baseline_flag = true
             <!-- work is absent in df_udm_value table -->
             and (v.wr_wrk_inst is null
@@ -270,14 +260,13 @@
     </select>
 
     <select id="populateValueId" parameterType="map" resultType="int">
-        with work_to_value_id (wr_wrk_inst, df_udm_value_uid) as (
-            values
-                <foreach collection="wrWrkInstToValueIdMap" index="wrWrkInst" item="valueId" separator=",">
-                    (#{wrWrkInst}, #{valueId})
-                </foreach>
+        with work_to_value_id as materialized (
+            select
+                wr_wrk_inst,
+                df_udm_value_uid
+            from ${schema}.df_udm_value
+            where period = #{period}
         ),
-        <!-- Selects oldest period with age weight greater than zero -->
-        <include refid="IUdmBaselineMapper.selectOldestPeriodWithPositiveAgeWeight"/>,
         updated_usages_uids as (
             update ${schema}.df_udm_usage u
             set
@@ -287,7 +276,7 @@
                 record_version = u.record_version + 1
             from work_to_value_id wv
             where wv.wr_wrk_inst = u.wr_wrk_inst
-                and u.period between (select period from last_period_to_select_works) and #{period}
+                and u.period &lt;= #{period}
                 and u.df_udm_value_uid is null
                 and u.is_baseline_flag is true
             returning df_udm_usage_uid

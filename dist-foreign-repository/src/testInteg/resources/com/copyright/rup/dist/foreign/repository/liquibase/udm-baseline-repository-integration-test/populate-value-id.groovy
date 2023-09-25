@@ -230,7 +230,7 @@ databaseChangeLog {
         }
 
         // WrWrkInst: 38908778
-        // Will be updated as age weight is greater than zero
+        // Will be updated
         insert(schemaName: dbAppsSchema, tableName: 'df_udm_usage') {
             column(name: 'df_udm_usage_uid', value: '139f0ada-6532-449d-a73a-ba56f9753ee9')
             column(name: 'df_udm_usage_batch_uid', value: 'dc50e533-6d98-4e09-ae03-fed4b543f92b')
@@ -327,7 +327,7 @@ databaseChangeLog {
         }
 
         // WrWrkInst: 38908778
-        // Won't be updated as age weight is zero
+        // Will be updated
         insert(schemaName: dbAppsSchema, tableName: 'df_udm_usage') {
             column(name: 'df_udm_usage_uid', value: '0be65153-53f9-4158-b7a3-e92aa096caa8')
             column(name: 'df_udm_usage_batch_uid', value: 'f9c1bbe6-6045-499c-92a2-f35a7fda8cfc')
@@ -353,6 +353,7 @@ databaseChangeLog {
             column(name: 'usage_date', value: '2020-09-10')
             column(name: 'survey_start_date', value: '2020-09-10')
             column(name: 'survey_end_date', value: '2021-06-30')
+            column(name: 'type_of_use', value: 'PRINT')
             column(name: 'reported_type_of_use', value: 'PRINT_COPIES')
             column(name: 'statistical_multiplier', value: 1.00000)
             column(name: 'annual_multiplier', value: 2)
