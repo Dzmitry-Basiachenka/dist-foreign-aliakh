@@ -64,21 +64,20 @@ public class UsageStatistic {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
             return true;
         }
-        if (!(o instanceof UsageStatistic)) {
+        if (null == obj || getClass() != obj.getClass()) {
             return false;
         }
-        UsageStatistic that = (UsageStatistic) o;
+        UsageStatistic that = (UsageStatistic) obj;
         return new EqualsBuilder()
-            .appendSuper(super.equals(o))
-            .append(usageId, that.usageId)
-            .append(status, that.status)
             .append(matchingMs, that.matchingMs)
             .append(rightsMs, that.rightsMs)
             .append(eligibilityMs, that.eligibilityMs)
+            .append(usageId, that.usageId)
+            .append(status, that.status)
             .isEquals();
     }
 

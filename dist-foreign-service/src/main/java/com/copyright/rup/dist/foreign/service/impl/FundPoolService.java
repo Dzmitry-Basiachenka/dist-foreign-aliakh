@@ -7,8 +7,6 @@ import com.copyright.rup.dist.common.util.LogUtils;
 import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.FundPool;
-import com.copyright.rup.dist.foreign.domain.FundPool.AclciFields;
-import com.copyright.rup.dist.foreign.domain.FundPool.SalFields;
 import com.copyright.rup.dist.foreign.domain.FundPoolDetail;
 import com.copyright.rup.dist.foreign.repository.api.IFundPoolRepository;
 import com.copyright.rup.dist.foreign.service.api.IFundPoolService;
@@ -217,7 +215,7 @@ public class FundPoolService implements IFundPoolService {
     @Override
     @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public FundPool calculateSalFundPoolAmounts(FundPool fundPool) {
-        SalFields salFields = fundPool.getSalFields();
+        var salFields = fundPool.getSalFields();
         BigDecimal splitPercent = salFields.getItemBankSplitPercent();
         salFields.setServiceFee(salServiceFee);
         if (0 == BigDecimal.ONE.compareTo(splitPercent)) {
@@ -228,10 +226,10 @@ public class FundPoolService implements IFundPoolService {
             salFields.setGrade9to12GrossAmount(ZERO);
         } else {
             BigDecimal multiplier = salFields.getGrossAmount().multiply(BigDecimal.ONE.subtract(splitPercent));
-            BigDecimal totalStudents = BigDecimal.valueOf(
+            var totalStudents = BigDecimal.valueOf(
                 salFields.getGradeKto5NumberOfStudents()
-                    + salFields.getGrade6to8NumberOfStudents()
-                    + salFields.getGrade9to12NumberOfStudents());
+                + (long) salFields.getGrade6to8NumberOfStudents()
+                + (long) salFields.getGrade9to12NumberOfStudents());
             salFields.setGradeKto5GrossAmount(
                 calculateGradeAmount(multiplier, totalStudents, salFields.getGradeKto5NumberOfStudents()));
             salFields.setGrade6to8GrossAmount(
@@ -253,7 +251,7 @@ public class FundPoolService implements IFundPoolService {
     @Override
     @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public FundPool calculateAclciFundPoolAmounts(FundPool fundPool) {
-        AclciFields aclciFields = fundPool.getAclciFields();
+        var aclciFields = fundPool.getAclciFields();
         BigDecimal splitPercent = aclciFields.getCurriculumDbSplitPercent();
         if (0 == BigDecimal.ONE.compareTo(splitPercent)) {
             fundPool.setTotalAmount(aclciFields.getGrossAmount());
@@ -265,7 +263,7 @@ public class FundPoolService implements IFundPoolService {
             aclciFields.setGradeHeGrossAmount(ZERO);
         } else {
             BigDecimal multiplier = aclciFields.getGrossAmount().multiply(BigDecimal.ONE.subtract(splitPercent));
-            BigDecimal totalStudents = BigDecimal.valueOf(
+            var totalStudents = BigDecimal.valueOf(
                 aclciFields.getGradeKto2NumberOfStudents() +
                 aclciFields.getGrade3to5NumberOfStudents() +
                 aclciFields.getGrade6to8NumberOfStudents() +
@@ -313,7 +311,7 @@ public class FundPoolService implements IFundPoolService {
     }
 
     private FundPoolDetail buildZeroFundPoolDetail(AggregateLicenseeClass aggregateLicenseeClass) {
-        FundPoolDetail detail = new FundPoolDetail();
+        var detail = new FundPoolDetail();
         detail.setAggregateLicenseeClass(aggregateLicenseeClass);
         return detail;
     }
