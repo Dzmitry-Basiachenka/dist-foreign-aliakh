@@ -167,16 +167,16 @@ public class FasBatchSummaryReportDto extends StoredEntity<String> {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
             return true;
         }
-        if (!(o instanceof FasBatchSummaryReportDto)) {
+        if (null == obj || getClass() != obj.getClass()) {
             return false;
         }
-        FasBatchSummaryReportDto that = (FasBatchSummaryReportDto) o;
+        FasBatchSummaryReportDto that = (FasBatchSummaryReportDto) obj;
         return new EqualsBuilder()
-            .appendSuper(super.equals(o))
+            .appendSuper(super.equals(obj))
             .append(nonEligibleDetailsCount, that.nonEligibleDetailsCount)
             .append(ntsDetailsCount, that.ntsDetailsCount)
             .append(fasAndClaFasEligibleDetailsCount, that.fasAndClaFasEligibleDetailsCount)
@@ -198,7 +198,7 @@ public class FasBatchSummaryReportDto extends StoredEntity<String> {
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(17, 37)
+        return new HashCodeBuilder()
             .appendSuper(super.hashCode())
             .append(batchName)
             .append(rroName)

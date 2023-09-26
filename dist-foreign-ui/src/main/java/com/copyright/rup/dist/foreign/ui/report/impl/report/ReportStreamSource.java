@@ -53,7 +53,7 @@ public class ReportStreamSource extends StreamResource {
         if (this == obj) {
             return true;
         }
-        if (!(obj instanceof ReportStreamSource)) {
+        if (null == obj || getClass() != obj.getClass()) {
             return false;
         }
         ReportStreamSource that = (ReportStreamSource) obj;
