@@ -117,6 +117,7 @@ public class UdmEditValueWindowTest {
     private static final BigDecimal CONTENT_UNIT_PRICE = new BigDecimal("1550.40");
     private static final boolean CUP_FLAG = false;
     private static final String COMMENT = "comment";
+    private static final String LAST_COMMENT = "last comment";
     private static final String USER_NAME = "user@copyright.com";
     private static final String VALID_DECIMAL = "0.1";
     private static final String INVALID_NUMBER = "12a";
@@ -228,8 +229,9 @@ public class UdmEditValueWindowTest {
         assertTextFieldValue(contentContent.getComponent(9), NO);
         Panel commentPanel = (Panel) row2.getComponent(3);
         VerticalLayout commentContent = (VerticalLayout) commentPanel.getContent();
-        assertEquals(1, commentContent.getComponentCount());
+        assertEquals(2, commentContent.getComponentCount());
         assertTextFieldValue(commentContent.getComponent(0), COMMENT);
+        assertTextFieldValue(commentContent.getComponent(1), LAST_COMMENT);
         Panel updatePanel = (Panel) row2.getComponent(4);
         VerticalLayout updateContent = (VerticalLayout) updatePanel.getContent();
         assertEquals(2, updateContent.getComponentCount());
@@ -711,8 +713,9 @@ public class UdmEditValueWindowTest {
         Panel commentPanel = (Panel) row2.getComponent(3);
         assertEquals("Comment", commentPanel.getCaption());
         VerticalLayout commentContent = (VerticalLayout) commentPanel.getContent();
-        assertEquals(1, commentContent.getComponentCount());
+        assertEquals(2, commentContent.getComponentCount());
         verifyTextFieldLayout(commentContent.getComponent(0), "Comment", false, true, "udm-value-edit-comment-field");
+        verifyTextFieldLayout(commentContent.getComponent(1), "Last Comment", true, false, StringUtils.EMPTY);
         Panel updatePanel = (Panel) row2.getComponent(4);
         assertNull(updatePanel.getCaption());
         VerticalLayout updateContent = (VerticalLayout) updatePanel.getContent();
@@ -806,6 +809,7 @@ public class UdmEditValueWindowTest {
         udmValue.setContentUnitPrice(CONTENT_UNIT_PRICE);
         udmValue.setContentUnitPriceFlag(CUP_FLAG);
         udmValue.setComment(COMMENT);
+        udmValue.setLastComment(LAST_COMMENT);
         udmValue.setCreateDate(Date.from(LocalDate.of(2019, 1, 1).atStartOfDay(ZoneId.systemDefault()).toInstant()));
         udmValue.setUpdateUser(USER_NAME);
         udmValue.setUpdateDate(Date.from(LocalDate.of(2020, 12, 31).atStartOfDay(ZoneId.systemDefault()).toInstant()));
