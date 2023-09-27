@@ -277,7 +277,8 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
             new Panel(ForeignUi.getMessage("label.comment"), new VerticalLayout(
                 buildEditableStringLayout(commentField, "label.comment", 1000,
                     UdmValueDto::getComment, UdmValueDto::setComment,
-                    "udm-value-edit-comment-field")
+                    "udm-value-edit-comment-field"),
+                buildReadOnlyLayout("label.last_comment", UdmValueDto::getLastComment, binder)
             )),
             new Panel(new VerticalLayout(
                 buildReadOnlyLayout("label.updated_by", UdmValueDto::getUpdateUser, binder),
