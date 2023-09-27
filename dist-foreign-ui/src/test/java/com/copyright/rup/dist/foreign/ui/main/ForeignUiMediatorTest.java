@@ -46,9 +46,13 @@ public class ForeignUiMediatorTest {
 
     private static final String FDA_ACCESS_APPLICATION = "FDA_ACCESS_APPLICATION";
     private static final List<String> PRODUCT_FAMILIES = List.of(
-        FdaConstants.FAS_PRODUCT_FAMILY, FdaConstants.CLA_FAS_PRODUCT_FAMILY, FdaConstants.NTS_PRODUCT_FAMILY,
-        FdaConstants.AACL_PRODUCT_FAMILY, FdaConstants.SAL_PRODUCT_FAMILY, FdaConstants.ACL_PRODUCT_FAMILY,
-        FdaConstants.ACLCI_PRODUCT_FAMILY);
+        FdaConstants.ACL_PRODUCT_FAMILY,
+        FdaConstants.AACL_PRODUCT_FAMILY,
+        FdaConstants.ACLCI_PRODUCT_FAMILY,
+        FdaConstants.FAS_PRODUCT_FAMILY,
+        FdaConstants.CLA_FAS_PRODUCT_FAMILY,
+        FdaConstants.NTS_PRODUCT_FAMILY,
+        FdaConstants.SAL_PRODUCT_FAMILY);
 
     private ComboBox<String> productFamilyComboBox;
     private IReportController reportController;
@@ -92,8 +96,8 @@ public class ForeignUiMediatorTest {
         mediator.applyPermissions();
         Collection<String> products = ((ListDataProvider<String>) productFamilyComboBox.getDataProvider()).getItems();
         assertEquals(PRODUCT_FAMILIES, new ArrayList<>(products));
-        assertEquals(FdaConstants.FAS_PRODUCT_FAMILY, productFamilyComboBox.getValue());
-        assertEquals(FdaConstants.FAS_PRODUCT_FAMILY, productFamilyProvider.getSelectedProductFamily());
+        assertEquals(FdaConstants.ACL_PRODUCT_FAMILY, productFamilyComboBox.getValue());
+        assertEquals(FdaConstants.ACL_PRODUCT_FAMILY, productFamilyProvider.getSelectedProductFamily());
         verify(SecurityUtils.class);
     }
 
@@ -104,8 +108,8 @@ public class ForeignUiMediatorTest {
         mediator.applyPermissions();
         Collection<String> products = ((ListDataProvider<String>) productFamilyComboBox.getDataProvider()).getItems();
         assertEquals(PRODUCT_FAMILIES, new ArrayList<>(products));
-        assertEquals(FdaConstants.FAS_PRODUCT_FAMILY, productFamilyComboBox.getValue());
-        assertEquals(FdaConstants.FAS_PRODUCT_FAMILY, productFamilyProvider.getSelectedProductFamily());
+        assertEquals(FdaConstants.ACL_PRODUCT_FAMILY, productFamilyComboBox.getValue());
+        assertEquals(FdaConstants.ACL_PRODUCT_FAMILY, productFamilyProvider.getSelectedProductFamily());
         verify(SecurityUtils.class);
     }
 
@@ -116,8 +120,8 @@ public class ForeignUiMediatorTest {
         mediator.applyPermissions();
         Collection<String> products = ((ListDataProvider<String>) productFamilyComboBox.getDataProvider()).getItems();
         assertEquals(PRODUCT_FAMILIES, new ArrayList<>(products));
-        assertEquals(FdaConstants.FAS_PRODUCT_FAMILY, productFamilyComboBox.getValue());
-        assertEquals(FdaConstants.FAS_PRODUCT_FAMILY, productFamilyProvider.getSelectedProductFamily());
+        assertEquals(FdaConstants.ACL_PRODUCT_FAMILY, productFamilyComboBox.getValue());
+        assertEquals(FdaConstants.ACL_PRODUCT_FAMILY, productFamilyProvider.getSelectedProductFamily());
         verify(SecurityUtils.class);
     }
 

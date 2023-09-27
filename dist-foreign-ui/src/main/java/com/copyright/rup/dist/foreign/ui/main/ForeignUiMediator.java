@@ -7,10 +7,9 @@ import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.report.api.IReportController;
 import com.copyright.rup.vaadin.widget.api.IMediator;
 
-import com.google.common.collect.ImmutableSet;
 import com.vaadin.ui.ComboBox;
 
-import java.util.Set;
+import java.util.List;
 
 /**
  * Mediator for the {@link ForeignUi}.
@@ -23,10 +22,14 @@ import java.util.Set;
  */
 public class ForeignUiMediator implements IMediator {
 
-    private static final Set<String> PRODUCT_FAMILIES = ImmutableSet.of(
-        FdaConstants.FAS_PRODUCT_FAMILY, FdaConstants.CLA_FAS_PRODUCT_FAMILY, FdaConstants.NTS_PRODUCT_FAMILY,
-        FdaConstants.AACL_PRODUCT_FAMILY, FdaConstants.SAL_PRODUCT_FAMILY, FdaConstants.ACL_PRODUCT_FAMILY,
-        FdaConstants.ACLCI_PRODUCT_FAMILY);
+    private static final List<String> PRODUCT_FAMILIES = List.of(
+        FdaConstants.ACL_PRODUCT_FAMILY,
+        FdaConstants.AACL_PRODUCT_FAMILY,
+        FdaConstants.ACLCI_PRODUCT_FAMILY,
+        FdaConstants.FAS_PRODUCT_FAMILY,
+        FdaConstants.CLA_FAS_PRODUCT_FAMILY,
+        FdaConstants.NTS_PRODUCT_FAMILY,
+        FdaConstants.SAL_PRODUCT_FAMILY);
 
     private ComboBox<String> productFamilyComboBox;
     private IReportController reportController;
@@ -43,7 +46,7 @@ public class ForeignUiMediator implements IMediator {
             reportController.onProductFamilyChanged();
         } else {
             productFamilyComboBox.setItems(PRODUCT_FAMILIES);
-            productFamilyComboBox.setSelectedItem(FdaConstants.FAS_PRODUCT_FAMILY);
+            productFamilyComboBox.setSelectedItem(FdaConstants.ACL_PRODUCT_FAMILY);
         }
     }
 
