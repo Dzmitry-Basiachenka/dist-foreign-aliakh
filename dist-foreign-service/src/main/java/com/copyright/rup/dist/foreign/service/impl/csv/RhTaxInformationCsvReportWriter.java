@@ -37,7 +37,7 @@ public class RhTaxInformationCsvReportWriter extends BaseCsvReportWriter<RhTaxIn
 
     @Override
     protected List<String> getBeanProperties(RhTaxInformation bean) {
-        List<String> beanProperties = new ArrayList<>();
+        List<String> beanProperties = new ArrayList<>(HEADERS.size());
         beanProperties.add(bean.getTypeOfForm());
         beanProperties.add(getBeanPropertyAsString(bean.getNotificationsSent()));
         beanProperties.add(bean.getProductFamily());
