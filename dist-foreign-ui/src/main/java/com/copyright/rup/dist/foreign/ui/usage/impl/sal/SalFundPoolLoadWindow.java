@@ -408,13 +408,13 @@ class SalFundPoolLoadWindow extends Window {
 
     private SerializablePredicate<Integer> gradeNumberOfStudentsAtLeastOneNotZeroValidator() {
         return value -> {
-            String gradeKto5NumOfStudents = gradeKto5NumberOfStudents.getValue();
-            String grade6to8NumOfStudents = grade6to8NumberOfStudents.getValue();
-            String grade9to12NumOfStudents = grade9to12NumberOfStudents.getValue();
+            String gradeKto5Number = gradeKto5NumberOfStudents.getValue();
+            String grade6to8Number = grade6to8NumberOfStudents.getValue();
+            String grade9to12Number = grade9to12NumberOfStudents.getValue();
             if (isItemBankSplitPercentNotEqualToHundred()
-                && StringUtils.isNumeric(gradeKto5NumOfStudents) && 10 >= StringUtils.length(gradeKto5NumOfStudents)
-                && StringUtils.isNumeric(grade6to8NumOfStudents) && 10 >= StringUtils.length(grade6to8NumOfStudents)
-                && StringUtils.isNumeric(grade9to12NumOfStudents) && 10 >= StringUtils.length(grade6to8NumOfStudents)) {
+                && StringUtils.isNumeric(gradeKto5Number) && 10 >= StringUtils.length(gradeKto5Number)
+                && StringUtils.isNumeric(grade6to8Number) && 10 >= StringUtils.length(grade6to8Number)
+                && StringUtils.isNumeric(grade9to12Number) && 10 >= StringUtils.length(grade9to12Number)) {
                 return 0 < Integer.parseInt(gradeKto5NumberOfStudents.getValue()) ||
                     0 < Integer.parseInt(grade6to8NumberOfStudents.getValue()) ||
                     0 < Integer.parseInt(grade9to12NumberOfStudents.getValue());

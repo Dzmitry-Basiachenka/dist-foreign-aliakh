@@ -96,7 +96,7 @@ public class AclGrantService implements IAclGrantService {
             .entrySet()
             .stream()
             .max(Entry.comparingByKey())
-            .get()
+            .orElseThrow()
             .getValue()
             .stream()
             .filter(grant -> GRANT.equals(grant.getRightStatus()))
