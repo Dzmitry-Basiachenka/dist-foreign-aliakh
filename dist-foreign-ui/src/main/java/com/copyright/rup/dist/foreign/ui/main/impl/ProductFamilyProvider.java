@@ -25,11 +25,11 @@ import java.util.concurrent.atomic.AtomicReference;
 public class ProductFamilyProvider implements IProductFamilyProvider, Serializable {
 
     private final AtomicReference<String> selectedProductFamilyHolder =
-        new AtomicReference<>(FdaConstants.FAS_PRODUCT_FAMILY);
+        new AtomicReference<>(FdaConstants.ACL_PRODUCT_FAMILY);
 
     @Override
     public void setProductFamily(String productFamily) {
-        this.selectedProductFamilyHolder.set(Objects.requireNonNull(productFamily));
+        selectedProductFamilyHolder.set(Objects.requireNonNull(productFamily));
     }
 
     @Override

@@ -27,7 +27,7 @@ public class SelectedProductFamilyProviderTest {
 
     @Test
     public void testGetWithDefaultValue() {
-        assertEquals("FAS", provider.getSelectedProductFamily());
+        assertEquals("ACL", provider.getSelectedProductFamily());
     }
 
     @Test(expected = NullPointerException.class)
