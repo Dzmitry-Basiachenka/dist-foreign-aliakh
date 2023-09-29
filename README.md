@@ -1,3 +1,10 @@
+20.0.0
+-
+* B-80473 FDA: Add Last Comment field to value edit screen: modify Edit UDM Value widget
+* B-79027 FDA: ACL is default product on opening the UI: change order in Product Family dropdown
+* CDP-1616 SonarQube metric improvements: fix bugs with critical status
+* CDP-1617 SonarQube metric improvements: Fix vulnerabilities and high priority bugs in FDA
+
 19.0.3
 -
 * CDP-1778: FDA ACL: Add Detailed Licensee Classes to FDA
