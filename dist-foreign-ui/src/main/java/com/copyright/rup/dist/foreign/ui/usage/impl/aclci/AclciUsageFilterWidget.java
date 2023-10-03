@@ -15,14 +15,12 @@ import com.copyright.rup.dist.foreign.ui.usage.impl.CommonUsageFilterWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.filter.CommonFilterWindow.IFilterSaveListener;
 import com.copyright.rup.vaadin.ui.component.filter.FilterWindow;
-import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.google.common.collect.ImmutableSet;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
 import java.util.Set;
@@ -172,11 +170,5 @@ public class AclciUsageFilterWidget extends CommonUsageFilterWidget implements I
         VaadinUtils.setMaxComponentsWidth(horizontalLayout, applyButton, clearButton);
         VaadinUtils.addComponentStyle(horizontalLayout, "filter-buttons");
         return horizontalLayout;
-    }
-
-    private Label buildAppliedFiltersHeaderLabel() {
-        Label appliedFilterHeaderLabel = new Label(ForeignUi.getMessage("label.applied_filters"));
-        appliedFilterHeaderLabel.addStyleNames(Cornerstone.LABEL_H2, "applied-filter-header");
-        return appliedFilterHeaderLabel;
     }
 }
