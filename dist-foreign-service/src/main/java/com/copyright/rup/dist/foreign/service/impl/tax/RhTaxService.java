@@ -161,7 +161,8 @@ public class RhTaxService implements IRhTaxService {
         result.setState(rhTaxInfo.getState());
         result.setZip(rhTaxInfo.getZip());
         String countryCode = rhTaxInfo.getCountryCode();
-        result.setCountry(countries.containsKey(countryCode) ? countries.get(countryCode).getName() : countryCode);
+        Country country = countries.get(countryCode);
+        result.setCountry(Objects.nonNull(country) ? country.getName() : countryCode);
         result.setCountryCode(countryCode);
         result.setWithHoldingIndicator(rhTaxInfo.getWithHoldingIndicator());
         result.setPayGroup(rhTaxInfo.getPayGroup());
