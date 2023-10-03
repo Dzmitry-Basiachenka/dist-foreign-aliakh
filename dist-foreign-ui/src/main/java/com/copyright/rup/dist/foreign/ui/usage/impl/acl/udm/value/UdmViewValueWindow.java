@@ -144,7 +144,8 @@ public class UdmViewValueWindow extends CommonUdmValueWindow {
                     bean -> BooleanUtils.toYNString(bean.isContentUnitPriceFlag()), binder)
             )),
             new Panel(ForeignUi.getMessage("label.comment"), new VerticalLayout(
-                buildReadOnlyLayout("label.comment", UdmValueDto::getComment, binder)
+                buildReadOnlyLayout("label.comment", UdmValueDto::getComment, binder),
+                buildReadOnlyLayout("label.last_comment", UdmValueDto::getLastComment, binder)
             )),
             new Panel(new VerticalLayout(
                 buildReadOnlyLayout("label.updated_by", UdmValueDto::getUpdateUser, binder),
