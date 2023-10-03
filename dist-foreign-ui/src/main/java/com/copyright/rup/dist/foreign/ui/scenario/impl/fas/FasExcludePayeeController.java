@@ -15,7 +15,7 @@ import com.copyright.rup.vaadin.widget.api.CommonController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Set;
@@ -29,7 +29,7 @@ import java.util.Set;
  *
  * @author Uladzislau Shalamitski
  */
-@Controller
+@Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class FasExcludePayeeController extends CommonController<IFasExcludePayeeWidget>
     implements IFasExcludePayeeController {
