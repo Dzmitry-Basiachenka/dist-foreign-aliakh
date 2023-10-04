@@ -110,9 +110,9 @@ public class RhTaxService implements IRhTaxService {
             List<RhTaxInformation> result = new ArrayList<>();
             holderToTboMap.forEach((holder, tbo) -> {
                 Long tboAccountNumber = tbo.getAccountNumber();
-                if (tboToTaxInfoMap.containsKey(tboAccountNumber)) {
-                    RhTaxInformation rhTaxInfo =
-                        buildRhTaxInformation(tboToTaxInfoMap.get(tboAccountNumber), holder, tbo, countries);
+                RhTaxInformation rhTaxInfo = tboToTaxInfoMap.get(tboAccountNumber);
+                if (Objects.nonNull(rhTaxInfo)) {
+                    rhTaxInfo = buildRhTaxInformation(rhTaxInfo, holder, tbo, countries);
                     if (numberOfDaysPredicate.test(rhTaxInfo)) {
                         result.add(rhTaxInfo);
                     }
