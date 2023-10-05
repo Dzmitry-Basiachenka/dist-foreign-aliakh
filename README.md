@@ -1,3 +1,12 @@
+20.0.1
+-
+* CDP-1617 FDA: SonarQube metric improvements: Fix SonarQube bug 'Remove this "@Scope" annotation'
+* CDP-1617 FDA: SonarQube metric improvements: Fix SonarQube bug 'Rename this method; there is a "private" method in the parent class with the same name'
+* CDP-1617 FDA: SonarQube metric improvements: Fix SonarQube bug 'Method check a map with containsKey(), before using get()'
+* CDP-1887 FDA: Update value batch requirements for ACL works from previous periods: update value populating logic to include all works without values; add index by WrWrkInst to grant detail table
+* CDP-1887 FDA: Update value batch requirements for ACL works from previous periods: update ACL workflow integration test
+* B-80473 FDA: Add Last Comment field to value edit screen: modify View UDM Value widget
+
 20.0.0
 -
 * B-80473 FDA: Add Last Comment field to value edit screen: modify Edit UDM Value widget
