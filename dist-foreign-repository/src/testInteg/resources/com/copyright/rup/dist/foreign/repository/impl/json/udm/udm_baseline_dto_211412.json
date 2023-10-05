@@ -1,5 +1,26 @@
 [
   {
+    "id": "0be65153-53f9-4158-b7a3-e92aa096caa8",
+    "period": 210412,
+    "usageOrigin": "RFA",
+    "originalDetailId": "OGN545GHASG007",
+    "wrWrkInst": 38908778,
+    "systemTitle": "Colloids and surfaces. C, Biointerfaces",
+    "detailLicenseeClassId": 22,
+    "detailLicenseeClassName": "Banks/Ins/RE/Holding Cos",
+    "aggregateLicenseeClassId": 56,
+    "aggregateLicenseeClassName": "Financial",
+    "surveyCountry": "Portugal",
+    "channel": "Rightsdirect",
+    "typeOfUse": "PRINT",
+    "reportedTypeOfUse": "PRINT_COPIES",
+    "annualizedCopies": 4.00000,
+    "valueId": "436be73d-82c9-4e53-bda6-b882e528bed7",
+    "createUser": "wjohn@copyright.com",
+    "updateUser": "user@copyright.com",
+    "version": 2
+  },
+  {
     "id": "139f0ada-6532-449d-a73a-ba56f9753ee9",
     "period": 211412,
     "usageOrigin": "RFA",

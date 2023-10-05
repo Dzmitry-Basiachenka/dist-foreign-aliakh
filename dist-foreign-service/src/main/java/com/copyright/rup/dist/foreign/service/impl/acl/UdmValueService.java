@@ -169,7 +169,7 @@ public class UdmValueService implements IUdmValueService {
             .collect(Collectors.toMap(UdmValue::getWrWrkInst, UdmValue::getId));
         int updatedUsagesCount = 0;
         if (MapUtils.isNotEmpty(wrWrkInstToValueIdMap)) {
-            updatedUsagesCount = baselineRepository.populateValueId(period, wrWrkInstToValueIdMap, userName);
+            updatedUsagesCount = baselineRepository.populateValueId(period, userName);
             if (String.valueOf(period).endsWith("12")) {
                 udmValueRepository.updateResearchedInPrevPeriod(period, userName);
             }
