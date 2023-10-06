@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -103,7 +104,7 @@ public class PrmIntegrationService implements IPrmIntegrationService {
 
     @Override
     public boolean isRightsholderEligibleForNtsDistribution(String rightsholderId) {
-        return !getBooleanPreference(prmPreferenceService.getPreferencesMap(Set.of(rightsholderId)),
+        return !getBooleanPreference(prmPreferenceService.getPreferencesMap(Collections.singleton(rightsholderId)),
             rightsholderId, FdaConstants.NTS_PRODUCT_FAMILY, FdaConstants.IS_RH_DIST_INELIGIBLE_CODE);
     }
 
@@ -114,14 +115,14 @@ public class PrmIntegrationService implements IPrmIntegrationService {
 
     @Override
     public boolean isStmRightsholder(String rightsholderId, String productFamily) {
-        return getBooleanPreference(prmPreferenceService.getPreferencesMap(Set.of(rightsholderId)), rightsholderId,
-            productFamily, FdaConstants.IS_RH_STM_IPRO_CODE);
+        return getBooleanPreference(prmPreferenceService.getPreferencesMap(Collections.singleton(rightsholderId)),
+            rightsholderId, productFamily, FdaConstants.IS_RH_STM_IPRO_CODE);
     }
 
     @Override
     public boolean isRightsholderTaxBeneficialOwner(String rightsholderId, String productFamily) {
-        return getBooleanPreference(prmPreferenceService.getPreferencesMap(Set.of(rightsholderId)), rightsholderId,
-            productFamily, FdaConstants.TAX_BENEFICIAL_OWNER_CODE);
+        return getBooleanPreference(prmPreferenceService.getPreferencesMap(Collections.singleton(rightsholderId)),
+            rightsholderId, productFamily, FdaConstants.TAX_BENEFICIAL_OWNER_CODE);
     }
 
     @Override

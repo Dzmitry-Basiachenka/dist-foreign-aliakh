@@ -214,11 +214,6 @@
         <include refid="IUsageMapper.ifPageable"/>
     </sql>
 
-    <sql id="selectDtosCountByScenarioIdSql">
-        <include refid="IAclScenarioUsageMapper.selectScenarioDetailDtosCountSql"/>
-        where s.df_acl_scenario_uid = #{scenarioId}
-    </sql>
-
     <sql id="selectScenarioDetailDtosSql">
         select
             scd.df_acl_scenario_detail_uid,
@@ -229,13 +224,13 @@
             wr_wrk_inst,
             system_title,
             print_details.rh_account_number rh_account_number_print,
-            print_details.rh_name rh_name_print,
+            print_rh.name rh_name_print,
             print_details.payee_account_number payee_account_number_print,
-            print_details.payee_name payee_name_print,
+            print_payee.name payee_name_print,
             digital_details.rh_account_number rh_account_number_digital,
-            digital_details.rh_name rh_name_digital,
+            digital_rh.name rh_name_digital,
             digital_details.payee_account_number payee_account_number_digital,
-            digital_details.payee_name payee_name_digital,
+            digital_payee.name payee_name_digital,
             scd.period_end_date usage_period,
             usage_age_weight,
             scd.detail_licensee_class_id,
@@ -244,7 +239,7 @@
             alc.description aggregate_licensee_class_name,
             survey_country,
             reported_type_of_use,
-            type_of_use,
+            scd.type_of_use,
             number_of_copies,
             weighted_copies,
             scd.publication_type_uid,
@@ -268,17 +263,12 @@
         from ${schema}.df_acl_scenario s
         join ${schema}.df_acl_usage_batch ub on s.df_acl_usage_batch_uid = ub.df_acl_usage_batch_uid
         join ${schema}.df_acl_scenario_detail scd on s.df_acl_scenario_uid = scd.df_acl_scenario_uid
-        left join (
-            <include refid="IAclScenarioUsageMapper.selectPrintShareDetailsSql"/>
-        ) as print_details on scd.df_acl_scenario_detail_uid = print_details.df_acl_scenario_detail_uid
-        left join (
-            <include refid="IAclScenarioUsageMapper.selectDigitalShareDetailsSql"/>
-        ) as digital_details on scd.df_acl_scenario_detail_uid = digital_details.df_acl_scenario_detail_uid
         join ${schema}.df_publication_type pt on scd.publication_type_uid = pt.df_publication_type_uid
         join ${schema}.df_detail_licensee_class dlc on scd.detail_licensee_class_id = dlc.detail_licensee_class_id
         join ${schema}.df_acl_scenario_licensee_class slc on dlc.detail_licensee_class_id = slc.detail_licensee_class_id
             and slc.df_acl_scenario_uid = #{scenarioId}
         join ${schema}.df_aggregate_licensee_class alc on slc.aggregate_licensee_class_id = alc.aggregate_licensee_class_id
+        <include refid="IAclScenarioUsageMapper.joinShareDetailsSql"/>
     </sql>
 
     <sql id="selectScenarioDetailDtosCountSql">
@@ -286,43 +276,23 @@
         from ${schema}.df_acl_scenario s
         join ${schema}.df_acl_usage_batch ub on s.df_acl_usage_batch_uid = ub.df_acl_usage_batch_uid
         join ${schema}.df_acl_scenario_detail scd on s.df_acl_scenario_uid = scd.df_acl_scenario_uid
-        left join (
-            <include refid="IAclScenarioUsageMapper.selectPrintShareDetailsSql"/>
-        ) as print_details on scd.df_acl_scenario_detail_uid = print_details.df_acl_scenario_detail_uid
-        left join (
-            <include refid="IAclScenarioUsageMapper.selectDigitalShareDetailsSql"/>
-        ) as digital_details on scd.df_acl_scenario_detail_uid = digital_details.df_acl_scenario_detail_uid
         join ${schema}.df_publication_type pt on scd.publication_type_uid = pt.df_publication_type_uid
         join ${schema}.df_detail_licensee_class dlc on scd.detail_licensee_class_id = dlc.detail_licensee_class_id
         join ${schema}.df_acl_scenario_licensee_class slc on dlc.detail_licensee_class_id = slc.detail_licensee_class_id
             and slc.df_acl_scenario_uid = #{scenarioId}
         join ${schema}.df_aggregate_licensee_class alc on slc.aggregate_licensee_class_id = alc.aggregate_licensee_class_id
+        <include refid="IAclScenarioUsageMapper.joinShareDetailsSql"/>
     </sql>
 
-    <sql id="selectPrintShareDetailsSql">
-        select
-            <include refid="IAclScenarioUsageMapper.shareDetailColumns"/>
-        from ${schema}.df_acl_share_detail shd
-        left join ${schema}.df_rightsholder r on shd.rh_account_number = r.rh_account_number
-        left join ${schema}.df_rightsholder p on shd.payee_account_number = p.rh_account_number
-        where df_acl_scenario_uid = #{scenarioId}
-            and type_of_use = 'PRINT'
-        <if test="null != accountNumber">
-            and shd.rh_account_number = #{accountNumber}
-        </if>
-    </sql>
-
-    <sql id="selectDigitalShareDetailsSql">
-        select
-            <include refid="IAclScenarioUsageMapper.shareDetailColumns"/>
-        from ${schema}.df_acl_share_detail shd
-        left join ${schema}.df_rightsholder r on shd.rh_account_number = r.rh_account_number
-        left join ${schema}.df_rightsholder p on shd.payee_account_number = p.rh_account_number
-        where df_acl_scenario_uid = #{scenarioId}
-            and type_of_use = 'DIGITAL'
-        <if test="null != accountNumber">
-            and shd.rh_account_number = #{accountNumber}
-        </if>
+    <sql id="joinShareDetailsSql">
+        left join ${schema}.df_acl_share_detail print_details on scd.df_acl_scenario_detail_uid = print_details.df_acl_scenario_detail_uid
+            and print_details.type_of_use = 'PRINT'
+        left join ${schema}.df_acl_share_detail digital_details on scd.df_acl_scenario_detail_uid = digital_details.df_acl_scenario_detail_uid
+            and digital_details.type_of_use = 'DIGITAL'
+        left join ${schema}.df_rightsholder print_rh on print_details.rh_account_number = print_rh.rh_account_number
+        left join ${schema}.df_rightsholder print_payee on print_details.payee_account_number = print_payee.rh_account_number
+        left join ${schema}.df_rightsholder digital_rh on digital_details.rh_account_number = digital_rh.rh_account_number
+        left join ${schema}.df_rightsholder digital_payee on digital_details.payee_account_number = digital_payee.rh_account_number
     </sql>
 
     <sql id="shareDetailColumns">
@@ -351,19 +321,14 @@
     </sql>
 
     <sql id="findAclRightsholderTotalsHoldersByScenarioIdSql">
-        select
-            shd.*,
-            r.name rh_name,
-            rp.name print_payee_name,
-            rd.name digital_payee_name
-        from (
-            with works as (
-                select
-                    df_acl_scenario_detail_uid,
-                    wr_wrk_inst
-                from ${schema}.df_acl_scenario_detail
-                where df_acl_scenario_uid = #{scenarioId}
-            )
+        with works as materialized (
+            select
+                df_acl_scenario_detail_uid,
+                wr_wrk_inst
+            from ${schema}.df_acl_scenario_detail
+            where df_acl_scenario_uid = #{scenarioId}
+        ),
+        shd as materialized (
             select
                 shd.rh_account_number,
                 min(case when shd.type_of_use = 'PRINT' then shd.payee_account_number end) as print_payee_account_number,
@@ -382,7 +347,13 @@
             join works w on w.df_acl_scenario_detail_uid = shd.df_acl_scenario_detail_uid
             where shd.df_acl_scenario_uid = #{scenarioId}
             group by shd.rh_account_number, s.license_type
-        ) shd
+        )
+        select
+            shd.*,
+            r.name rh_name,
+            rp.name print_payee_name,
+            rd.name digital_payee_name
+        from shd
         left join ${schema}.df_rightsholder r on shd.rh_account_number = r.rh_account_number
         left join ${schema}.df_rightsholder rp on shd.print_payee_account_number = rp.rh_account_number
         left join ${schema}.df_rightsholder rd on shd.digital_payee_account_number = rd.rh_account_number
@@ -634,24 +605,24 @@
     </select>
 
     <select id="findWithAmountsAndLastAction" parameterType="string" resultMap="aclScenarioDtoResultMap">
-        select
-            <include refid="aclScenarioWithAmountsAndLastActionColumns"/>
-        from (
+        with groups as materialized (
             select
-                s.df_acl_scenario_uid,
+                #{scenarioId} as df_acl_scenario_uid,
                 sum(shd.gross_amount) as gross_total,
                 sum(shd.service_fee_amount) as service_fee_total,
                 sum(shd.net_amount) as net_total,
                 count(distinct shd.rh_account_number) number_of_rhs,
                 count(distinct scd.wr_wrk_inst) number_of_works,
                 shd.type_of_use
-            from ${schema}.df_acl_scenario s
-            left join ${schema}.df_acl_share_detail shd on shd.df_acl_scenario_uid = s.df_acl_scenario_uid
-            left join ${schema}.df_acl_scenario_detail scd on scd.df_acl_scenario_detail_uid = shd.df_acl_scenario_detail_uid
-            where s.df_acl_scenario_uid = #{scenarioId}
-            group by s.df_acl_scenario_uid, shd.type_of_use
-        ) as groups
-        join ${schema}.df_acl_scenario s on s.df_acl_scenario_uid = groups.df_acl_scenario_uid
+            from ${schema}.df_acl_scenario_detail scd
+            left join ${schema}.df_acl_share_detail shd on scd.df_acl_scenario_detail_uid = shd.df_acl_scenario_detail_uid
+            where scd.df_acl_scenario_uid = #{scenarioId}
+            group by scd.df_acl_scenario_uid, shd.type_of_use
+        )
+        select
+            <include refid="aclScenarioWithAmountsAndLastActionColumns"/>
+        from ${schema}.df_acl_scenario s
+        left join groups on s.df_acl_scenario_uid = groups.df_acl_scenario_uid
         left join ${schema}.df_acl_scenario_audit sa on sa.df_acl_scenario_uid = s.df_acl_scenario_uid
             and sa.df_acl_scenario_audit_uid = (
                 select df_acl_scenario_audit_uid
@@ -660,15 +631,26 @@
                 order by created_datetime desc, df_acl_scenario_audit_id desc
                 limit 1
             )
+        where s.df_acl_scenario_uid = #{scenarioId}
         group by s.df_acl_scenario_uid, sa.df_acl_scenario_audit_uid
     </select>
+
+    <sql id="drillDownSearchWhereClause">
+        (original_detail_id ilike '%' || #{searchValue} || '%' or
+        cast(scd.wr_wrk_inst as text) like '%' || #{searchValue} || '%' or
+        system_title ilike '%' || #{searchValue} || '%' or
+        cast(print_details.rh_account_number as text) like '%' || #{searchValue} || '%' or
+        print_rh.name ilike '%' || #{searchValue} || '%' or
+        cast(digital_details.rh_account_number as text) like '%' || #{searchValue} || '%' or
+        digital_rh.name ilike '%' || #{searchValue} || '%')
+    </sql>
 
     <select id="findByScenarioIdAndRhAccountNumber" parameterType="map" resultMap="aclScenarioDetailDtoResultMap">
         <include refid="IAclScenarioUsageMapper.selectScenarioDetailDtosSql"/>
         where s.df_acl_scenario_uid = #{scenarioId}
             and (print_details.rh_account_number = #{accountNumber} or digital_details.rh_account_number = #{accountNumber})
         <if test="null != searchValue">
-            and <include refid="IAclScenarioMapper.drillDownSearchWhereClause"/>
+            and <include refid="drillDownSearchWhereClause"/>
         </if>
         <include refid="IAclScenarioMapper.ifSortable"/>
         <include refid="IUsageMapper.ifPageable"/>
@@ -679,25 +661,44 @@
         where s.df_acl_scenario_uid = #{scenarioId}
             and (print_details.rh_account_number = #{accountNumber} or digital_details.rh_account_number = #{accountNumber})
         <if test="null != searchValue">
-            and <include refid="IAclScenarioMapper.drillDownSearchWhereClause"/>
+            and <include refid="drillDownSearchWhereClause"/>
         </if>
     </select>
+
+    <sql id="viewDetailsSearchWhereClause">
+        (original_detail_id ilike '%' || #{searchValue} || '%' or
+        cast(scd.wr_wrk_inst as text) like '%' || #{searchValue} || '%' or
+        system_title ilike '%' || #{searchValue} || '%' or
+        cast(print_details.rh_account_number as text) like '%' || #{searchValue} || '%' or
+        print_rh.name ilike '%' || #{searchValue} || '%' or
+        cast(digital_details.rh_account_number as text) like '%' || #{searchValue} || '%' or
+        digital_rh.name ilike '%' || #{searchValue} || '%' or
+        cast(print_details.payee_account_number as text) like '%' || #{searchValue} || '%' or
+        print_payee.name ilike '%' || #{searchValue} || '%' or
+        cast(digital_details.payee_account_number as text) like '%' || #{searchValue} || '%' or
+        digital_payee.name ilike '%' || #{searchValue} || '%')
+    </sql>
 
     <select id="findByScenarioId" parameterType="map" resultMap="aclScenarioDetailDtoResultMap">
         <include refid="IAclScenarioUsageMapper.selectScenarioDetailDtosSql"/>
         where s.df_acl_scenario_uid = #{scenarioId}
         <if test="null != searchValue">
-            and <include refid="IAclScenarioMapper.viewDetailsSearchWhereClause"/>
+            and <include refid="viewDetailsSearchWhereClause"/>
         </if>
         <include refid="IAclScenarioMapper.ifSortable"/>
         <include refid="IUsageMapper.ifPageable"/>
     </select>
 
     <select id="findCountByScenarioId" parameterType="map" resultType="int">
-        <include refid="IAclScenarioUsageMapper.selectScenarioDetailDtosCountSql"/>
-        where s.df_acl_scenario_uid = #{scenarioId}
+        <if test="null == searchValue">
+            select count(1)
+            from ${schema}.df_acl_scenario_detail
+            where df_acl_scenario_uid = #{scenarioId}
+        </if>
         <if test="null != searchValue">
-            and <include refid="IAclScenarioMapper.viewDetailsSearchWhereClause"/>
+            <include refid="IAclScenarioUsageMapper.selectScenarioDetailDtosCountSql"/>
+            where s.df_acl_scenario_uid = #{scenarioId}
+                and <include refid="viewDetailsSearchWhereClause"/>
         </if>
     </select>
 
