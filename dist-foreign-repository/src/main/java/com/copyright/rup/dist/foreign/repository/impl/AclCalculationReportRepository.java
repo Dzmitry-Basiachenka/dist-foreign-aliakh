@@ -1,7 +1,9 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
+import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
+import com.copyright.rup.dist.common.repository.impl.csv.BaseCsvReportHandler;
 import com.copyright.rup.dist.foreign.domain.filter.AclFundPoolDetailFilter;
 import com.copyright.rup.dist.foreign.domain.filter.AclGrantDetailFilter;
 import com.copyright.rup.dist.foreign.domain.filter.AclUsageFilter;
@@ -29,6 +31,7 @@ import java.io.PipedOutputStream;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Supplier;
 
 /**
  * Implementation of {@link IAclCalculationReportRepository}.
@@ -41,6 +44,9 @@ import java.util.Set;
  */
 @Repository
 public class AclCalculationReportRepository extends CommonReportRepository implements IAclCalculationReportRepository {
+
+    private static final int REPORT_BATCH_SIZE = 1000;
+    private static final String PAGEABLE_KEY = "pageable";
 
     @Override
     public void writeAclGrantDetailCsvReport(AclGrantDetailFilter filter, PipedOutputStream pipedOutputStream) {
@@ -167,6 +173,22 @@ public class AclCalculationReportRepository extends CommonReportRepository imple
         try (AclFundPoolByAggLcCsvReportHandler handler =
                  new AclFundPoolByAggLcCsvReportHandler(Objects.requireNonNull(outputStream))) {
             getTemplate().select("IAclCalculationReportMapper.writeAclFundPoolByAggLcReport", fundPoolIds, handler);
+        }
+    }
+
+    @Override
+    protected void writeCsvReportByParts(String countMethodName, String selectMethodName,
+                                         Map<String, Object> parameters,
+                                         boolean precondition,
+                                         Supplier<? extends BaseCsvReportHandler> handlerSupplier) {
+        int size = selectOne(countMethodName, parameters);
+        try (BaseCsvReportHandler handler = handlerSupplier.get()) {
+            if (precondition && 0 < size) {
+                for (int offset = 0; offset < size; offset += REPORT_BATCH_SIZE) {
+                    parameters.put(PAGEABLE_KEY, new Pageable(offset, REPORT_BATCH_SIZE));
+                    getTemplate().select(selectMethodName, parameters, handler);
+                }
+            }
         }
     }
 }

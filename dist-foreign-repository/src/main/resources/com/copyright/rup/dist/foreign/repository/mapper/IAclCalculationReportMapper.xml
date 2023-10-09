@@ -186,7 +186,9 @@
     </select>
 
     <select id="findAclScenarioDetailDtosCount" parameterType="map" resultType="int">
-        <include refid="IAclScenarioUsageMapper.selectDtosCountByScenarioIdSql"/>
+        select count(1)
+        from ${schema}.df_acl_scenario_detail
+        where df_acl_scenario_uid = #{scenarioId}
     </select>
 
     <select id="findAclScenarioDetailDtos" resultMap="IAclScenarioUsageMapper.aclScenarioDetailDtoResultMap" parameterType="map" fetchSize="${usageSelectFetchSize}">
@@ -314,7 +316,7 @@
     </select>
 
     <select id="findAclLiabilitiesByRhReportDtos" parameterType="map" resultMap="aclLiabilitiesByRhReportDtoResultMap">
-        with payees as (
+        with payees as materialized (
             select distinct on (shd.rh_account_number, type_of_use)
                 shd.rh_account_number,
                 type_of_use,
@@ -367,12 +369,12 @@
     </select>
 
     <select id="findAclComparisonByAggLcClassAndTitleReportDtos" parameterType="map" resultMap="AclComparisonByAggLcClassAndTitleReportDtoResultMap">
-        with usage_data_previous_period as (
+        with usage_data_previous_period as materialized (
             <include refid="selectComparisonByAggLcClassAndTitleUsageData">
                 <property name="scenarios" value="previousScenarios"/>
             </include>
         ),
-        usage_data_current_period as (
+        usage_data_current_period as materialized (
             <include refid="selectComparisonByAggLcClassAndTitleUsageData">
                 <property name="scenarios" value="scenarios"/>
             </include>

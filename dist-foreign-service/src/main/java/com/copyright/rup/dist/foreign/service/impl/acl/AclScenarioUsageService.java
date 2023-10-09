@@ -93,16 +93,19 @@ public class AclScenarioUsageService implements IAclScenarioUsageService {
     }
 
     @Override
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public List<AclRightsholderTotalsHolder> getAclRightsholderTotalsHoldersByScenarioId(String scenarioId) {
         return aclScenarioUsageRepository.findAclRightsholderTotalsHoldersByScenarioId(scenarioId);
     }
 
     @Override
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public AclScenarioDto getAclScenarioWithAmountsAndLastAction(String scenarioId) {
         return aclScenarioUsageRepository.findWithAmountsAndLastAction(scenarioId);
     }
 
     @Override
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public List<AclScenarioDetailDto> getByScenarioIdAndRhAccountNumber(Long accountNumber, String scenarioId,
                                                                         String searchValue, Pageable pageable,
                                                                         Sort sort) {
@@ -111,18 +114,21 @@ public class AclScenarioUsageService implements IAclScenarioUsageService {
     }
 
     @Override
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public int getCountByScenarioIdAndRhAccountNumber(Long accountNumber, String scenarioId, String searchValue) {
         return aclScenarioUsageRepository.findCountByScenarioIdAndRhAccountNumber(accountNumber, scenarioId,
             searchValue);
     }
 
     @Override
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public List<AclScenarioDetailDto> getByScenarioId(String scenarioId, String searchValue, Pageable pageable,
                                                       Sort sort) {
         return aclScenarioUsageRepository.findByScenarioId(scenarioId, searchValue, pageable, sort);
     }
 
     @Override
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public int getCountByScenarioId(String scenarioId, String searchValue) {
         return aclScenarioUsageRepository.findCountByScenarioId(scenarioId, searchValue);
     }

@@ -225,7 +225,7 @@
     </select>
 
     <select id="addLdmtDetailsToFundPool" parameterType="map" resultType="int">
-        with fund_pool_detail as (
+        with fund_pool_detail as materialized (
             update ${schema}.df_acl_fund_pool_detail
             set
                 df_acl_fund_pool_uid = #{fundPoolId},
