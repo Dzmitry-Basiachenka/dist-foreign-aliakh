@@ -1,3 +1,7 @@
+20.0.2
+-
+* CDP-1887 FDA: Update value batch requirements for ACL works from previous periods: update ACL calculation tab queries to use materialization
+
 20.0.1
 -
 * CDP-1617 FDA: SonarQube metric improvements: Fix SonarQube bug 'Remove this "@Scope" annotation'
