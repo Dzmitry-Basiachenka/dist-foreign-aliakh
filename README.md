@@ -1,3 +1,7 @@
+20.0.3
+-
+* CDP-1887 FDA: Update value batch requirements for ACL works from previous periods: introduce WrWrkInst column in ACL shares to improve performance
+
 20.0.2
 -
 * CDP-1887 FDA: Update value batch requirements for ACL works from previous periods: update ACL calculation tab queries to use materialization
