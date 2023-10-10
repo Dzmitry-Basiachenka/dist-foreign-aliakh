@@ -273,6 +273,7 @@ public class UdmValueServiceTest {
         rightsService.updateUdmValuesRights(values, 202012);
         expectLastCall().once();
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
+        expect(udmBaselineRepository.populateValueId(202012, USER_NAME)).andReturn(1).once();
         replay(udmBaselineRepository, udmValueRepository, rightsService, RupContextUtils.class, RupPersistUtils.class);
         assertEquals(0, udmValueService.populateValueBatch(202012));
         verify(udmBaselineRepository, udmValueRepository, rightsService, RupContextUtils.class, RupPersistUtils.class);

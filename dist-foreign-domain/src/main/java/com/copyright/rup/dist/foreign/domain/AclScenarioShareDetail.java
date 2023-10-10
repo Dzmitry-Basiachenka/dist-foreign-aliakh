@@ -17,6 +17,7 @@ import java.math.BigDecimal;
  */
 public class AclScenarioShareDetail {
 
+    private Long wrWrkInst;
     private Long rhAccountNumber;
     private Long payeeAccountNumber;
     private String typeOfUse;
@@ -30,6 +31,14 @@ public class AclScenarioShareDetail {
     private BigDecimal netAmount;
     private BigDecimal serviceFeeAmount;
     private BigDecimal grossAmount;
+
+    public Long getWrWrkInst() {
+        return wrWrkInst;
+    }
+
+    public void setWrWrkInst(Long wrWrkInst) {
+        this.wrWrkInst = wrWrkInst;
+    }
 
     public Long getRhAccountNumber() {
         return rhAccountNumber;
@@ -145,6 +154,7 @@ public class AclScenarioShareDetail {
         }
         AclScenarioShareDetail that = (AclScenarioShareDetail) obj;
         return new EqualsBuilder()
+            .append(wrWrkInst, that.wrWrkInst)
             .append(rhAccountNumber, that.rhAccountNumber)
             .append(payeeAccountNumber, that.payeeAccountNumber)
             .append(typeOfUse, that.typeOfUse)
@@ -164,6 +174,7 @@ public class AclScenarioShareDetail {
     @Override
     public int hashCode() {
         return new HashCodeBuilder()
+            .append(wrWrkInst)
             .append(rhAccountNumber)
             .append(payeeAccountNumber)
             .append(typeOfUse)
@@ -183,6 +194,7 @@ public class AclScenarioShareDetail {
     @Override
     public String toString() {
         return new ToStringBuilder(this)
+            .append("wrWrkInst", wrWrkInst)
             .append("rhAccountNumber", rhAccountNumber)
             .append("payeeAccountNumber", payeeAccountNumber)
             .append("typeOfUse", typeOfUse)
