@@ -289,6 +289,7 @@
         update ${schema}.df_udm_usage
         set
             is_baseline_flag = false,
+            df_udm_value_uid = null,
             baseline_created_by_user = null,
             baseline_created_datetime = null
         where df_udm_usage_uid = #{udmUsageId}

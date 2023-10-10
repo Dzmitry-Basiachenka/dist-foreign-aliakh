@@ -4,6 +4,18 @@ databaseChangeLog {
     changeSet(id: '2021-12-02-00', author: 'Dzmitry Basiachenka <dbasiachenka@copyright.com>') {
         comment('Inserting test data for testRemoveUdmUsageFromBaselineById')
 
+        insert(schemaName: dbAppsSchema, tableName: 'df_udm_value') {
+            column(name: 'df_udm_value_uid', value: 'befb7888-ea23-4ef3-8159-f13fa8a9802d')
+            column(name: 'period', value: 202106)
+            column(name: 'status_ind', value: "NEW")
+            column(name: 'rh_account_number', value: 1000002859)
+            column(name: 'wr_wrk_inst', value: 306985867)
+            column(name: 'system_title', value: 'Artifacts in video compression')
+            column(name: 'standard_number', value: '0927-7765')
+            column(name: 'publication_type_uid', value: '076f2c40-f524-405d-967a-3840df2b57df')
+            column(name: 'assignee', value: 'jjohn@copyright.com')
+        }
+
         insert(schemaName: dbAppsSchema, tableName: 'df_udm_usage_batch') {
             column(name: 'df_udm_usage_batch_uid', value: '19c51bcd-1873-415f-9fef-da849f236595')
             column(name: 'name', value: 'UDM Batch 2021 remove from baseline by id')
@@ -45,6 +57,7 @@ databaseChangeLog {
             column(name: 'annualized_copies', value: 1)
             column(name: 'quantity', value: 1)
             column(name: 'is_baseline_flag', value: true)
+            column(name: 'df_udm_value_uid', value: 'befb7888-ea23-4ef3-8159-f13fa8a9802d')
             column(name: 'baseline_created_by_user', value: 'wjohn@copyright.com')
             column(name: 'baseline_created_datetime', value: '2020-06-15 12:00:00+00')
             column(name: 'created_by_user', value: 'user@copyright.com')

@@ -68,6 +68,7 @@ databaseChangeLog {
             column(name: 'df_acl_scenario_uid', value: '9fab9b5f-86cd-487a-a5e1-aab5ea8df175')
             column(name: 'df_acl_scenario_detail_uid', value: 'b5018606-8943-43db-ae80-57ad5ba15cba')
             column(name: 'type_of_use', value: 'PRINT')
+            column(name: 'wr_wrk_inst', value: 122825555)
             column(name: 'rh_account_number', value: 1000028511)
             column(name: 'aggregate_licensee_class_id', value: 1)
             column(name: 'volume_weight', value: 3.0000000000)

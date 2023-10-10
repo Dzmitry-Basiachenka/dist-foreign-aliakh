@@ -2,6 +2,8 @@ package com.copyright.rup.dist.foreign.repository.impl;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.repository.api.Sort;
@@ -630,10 +632,12 @@ public class UdmBaselineRepositoryIntegrationTest {
             udmUsageRepository.findByIds(List.of("38ac4213-0515-42f5-a1bc-d4794f4eea8f"));
         assertEquals(1, udmUsages.size());
         assertTrue(udmUsages.get(0).isBaselineFlag());
+        assertNotNull(udmUsages.get(0).getValueId());
         baselineRepository.removeUdmUsageFromBaselineById("38ac4213-0515-42f5-a1bc-d4794f4eea8f");
         udmUsages = udmUsageRepository.findByIds(List.of("38ac4213-0515-42f5-a1bc-d4794f4eea8f"));
         assertEquals(1, udmUsages.size());
         assertFalse(udmUsages.get(0).isBaselineFlag());
+        assertNull(udmUsages.get(0).getValueId());
     }
 
     @Test

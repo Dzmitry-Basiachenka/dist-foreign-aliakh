@@ -109,6 +109,7 @@ databaseChangeLog {
             column(name: 'df_acl_scenario_uid', value: '3beec0c7-6783-4481-9648-c02f4ec1da5a')
             column(name: 'df_acl_scenario_detail_uid', value: '2e2e0eab-228c-4353-b613-6e23c126a959')
             column(name: 'type_of_use', value: 'DIGITAL')
+            column(name: 'wr_wrk_inst', value: 122820638)
             column(name: 'rh_account_number', value: 1000028511)
             column(name: 'aggregate_licensee_class_id', value: 51)
             column(name: 'volume_weight', value: 5.0000000000)

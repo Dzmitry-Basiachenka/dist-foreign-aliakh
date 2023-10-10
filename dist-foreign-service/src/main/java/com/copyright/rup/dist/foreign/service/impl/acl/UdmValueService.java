@@ -167,12 +167,9 @@ public class UdmValueService implements IUdmValueService {
                 udmValueAuditService.logAction(value.getId(), UdmValueActionTypeEnum.CREATED, auditReason);
             })
             .collect(Collectors.toMap(UdmValue::getWrWrkInst, UdmValue::getId));
-        int updatedUsagesCount = 0;
-        if (MapUtils.isNotEmpty(wrWrkInstToValueIdMap)) {
-            updatedUsagesCount = baselineRepository.populateValueId(period, userName);
-            if (String.valueOf(period).endsWith("12")) {
-                udmValueRepository.updateResearchedInPrevPeriod(period, userName);
-            }
+        int updatedUsagesCount = baselineRepository.populateValueId(period, userName);
+        if (MapUtils.isNotEmpty(wrWrkInstToValueIdMap) && String.valueOf(period).endsWith("12")) {
+            udmValueRepository.updateResearchedInPrevPeriod(period, userName);
         }
         LOGGER.info("Populate UDM Value batch. Finished. Period={}, UserName={}, PopulatedValuesCount={}, " +
             "UpdatedUsagesCount={}", period, userName, wrWrkInstToValueIdMap.size(), updatedUsagesCount);

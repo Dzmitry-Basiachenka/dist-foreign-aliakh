@@ -221,7 +221,7 @@
             'ACL' product_family,
             ub.name usage_batch_name,
             s.period_end_date,
-            wr_wrk_inst,
+            scd.wr_wrk_inst,
             system_title,
             print_details.rh_account_number rh_account_number_print,
             print_rh.name rh_name_print,
@@ -321,14 +321,7 @@
     </sql>
 
     <sql id="findAclRightsholderTotalsHoldersByScenarioIdSql">
-        with works as materialized (
-            select
-                df_acl_scenario_detail_uid,
-                wr_wrk_inst
-            from ${schema}.df_acl_scenario_detail
-            where df_acl_scenario_uid = #{scenarioId}
-        ),
-        shd as materialized (
+        with shd as materialized (
             select
                 shd.rh_account_number,
                 min(case when shd.type_of_use = 'PRINT' then shd.payee_account_number end) as print_payee_account_number,
@@ -339,12 +332,11 @@
                 sum(case when shd.type_of_use = 'DIGITAL' then coalesce(shd.gross_amount, 0) else 0 end) as gross_total_digital,
                 sum(case when shd.type_of_use = 'DIGITAL' then coalesce(shd.service_fee_amount, 0) else 0 end) as service_fee_total_digital,
                 sum(case when shd.type_of_use = 'DIGITAL' then coalesce(shd.net_amount, 0) else 0 end) as net_total_digital,
-                count(distinct wr_wrk_inst) number_of_titles,
-                count(distinct aggregate_licensee_class_id) number_of_agg_lc_classes,
+                count(distinct shd.wr_wrk_inst) number_of_titles,
+                count(distinct shd.aggregate_licensee_class_id) number_of_agg_lc_classes,
                 s.license_type
             from ${schema}.df_acl_share_detail shd
             join ${schema}.df_acl_scenario s on s.df_acl_scenario_uid = #{scenarioId}
-            join works w on w.df_acl_scenario_detail_uid = shd.df_acl_scenario_detail_uid
             where shd.df_acl_scenario_uid = #{scenarioId}
             group by shd.rh_account_number, s.license_type
         )
@@ -432,6 +424,7 @@
                 uuid_generate_v4() df_acl_share_detail_uid,
                 #{scenario.id} df_acl_scenario_uid,
                 sd.df_acl_scenario_detail_uid,
+                sd.wr_wrk_inst,
                 gd.type_of_use,
                 gd.rh_account_number,
                 slc.aggregate_licensee_class_id,
@@ -450,6 +443,7 @@
             df_acl_share_detail_uid,
             df_acl_scenario_uid,
             df_acl_scenario_detail_uid,
+            wr_wrk_inst,
             type_of_use,
             rh_account_number,
             aggregate_licensee_class_id,
@@ -539,7 +533,7 @@
             sd.df_acl_scenario_uid,
             period_end_date,
             original_detail_id,
-            wr_wrk_inst,
+            sd.wr_wrk_inst,
             system_title,
             sd.detail_licensee_class_id,
             dlc.description detail_licensee_class_name,
@@ -608,16 +602,15 @@
         with groups as materialized (
             select
                 #{scenarioId} as df_acl_scenario_uid,
-                sum(shd.gross_amount) as gross_total,
-                sum(shd.service_fee_amount) as service_fee_total,
-                sum(shd.net_amount) as net_total,
-                count(distinct shd.rh_account_number) number_of_rhs,
-                count(distinct scd.wr_wrk_inst) number_of_works,
-                shd.type_of_use
-            from ${schema}.df_acl_scenario_detail scd
-            left join ${schema}.df_acl_share_detail shd on scd.df_acl_scenario_detail_uid = shd.df_acl_scenario_detail_uid
-            where scd.df_acl_scenario_uid = #{scenarioId}
-            group by scd.df_acl_scenario_uid, shd.type_of_use
+                sum(gross_amount) as gross_total,
+                sum(service_fee_amount) as service_fee_total,
+                sum(net_amount) as net_total,
+                count(distinct rh_account_number) number_of_rhs,
+                count(distinct wr_wrk_inst) number_of_works,
+                type_of_use
+            from ${schema}.df_acl_share_detail
+            where df_acl_scenario_uid = #{scenarioId}
+            group by df_acl_scenario_uid, type_of_use
         )
         select
             <include refid="aclScenarioWithAmountsAndLastActionColumns"/>
@@ -706,7 +699,7 @@
         <include refid="IAclScenarioUsageMapper.selectScenarioDetailDtosSql"/>
         where s.df_acl_scenario_uid = #{scenarioId}
             and (print_details.rh_account_number = #{accountNumber} or digital_details.rh_account_number = #{accountNumber})
-            and wr_wrk_inst = #{wrWrkInst}
+            and scd.wr_wrk_inst = #{wrWrkInst}
             and alc.aggregate_licensee_class_id = #{aggregateLicenseeClassId}
         order by scd.updated_datetime desc, scd.df_acl_scenario_detail_uid
     </select>
@@ -723,11 +716,10 @@
             coalesce(sum(shd.net_amount), 0) as net_total
         from ${schema}.df_acl_share_detail shd
         join ${schema}.df_aggregate_licensee_class alc on shd.aggregate_licensee_class_id = alc.aggregate_licensee_class_id
-        join ${schema}.df_acl_scenario_detail scd on shd.df_acl_scenario_detail_uid = scd.df_acl_scenario_detail_uid
         where shd.df_acl_scenario_uid = #{scenarioId}
             and shd.rh_account_number = #{accountNumber}
             <if test="null != wrWrkInst">
-                and scd.wr_wrk_inst = #{wrWrkInst}
+                and shd.wr_wrk_inst = #{wrWrkInst}
             </if>
         group by shd.aggregate_licensee_class_id, aggregate_licensee_class_name
         order by shd.aggregate_licensee_class_id
@@ -735,8 +727,8 @@
 
     <select id="findRightsholderTitleResults" parameterType="map" resultMap="aclRightsholderTotalsHolderDtoResultMap">
         select
-            wr_wrk_inst,
-            system_title,
+            scd.wr_wrk_inst,
+            scd.system_title,
             sum(case when shd.type_of_use = 'PRINT' then coalesce(shd.gross_amount, 0) else 0 end) as gross_total_print,
             sum(case when shd.type_of_use = 'PRINT' then coalesce(shd.net_amount, 0) else 0 end) as net_total_print,
             sum(case when shd.type_of_use = 'DIGITAL' then coalesce(shd.gross_amount, 0) else 0 end) as gross_total_digital,
@@ -750,8 +742,8 @@
         <if test="null != aggregateLicenseeClassId">
             and shd.aggregate_licensee_class_id = #{aggregateLicenseeClassId}
         </if>
-        group by wr_wrk_inst, system_title
-        order by wr_wrk_inst
+        group by scd.wr_wrk_inst, system_title
+        order by scd.wr_wrk_inst
     </select>
 
     <update id="updatePayeeByAccountNumber" parameterType="map">
@@ -793,18 +785,18 @@
             sda.wr_wrk_inst,
             sda.system_title,
             rh.df_rightsholder_uid rh_id,
-            shda.type_of_use,
-            case when shda.type_of_use = 'DIGITAL' then 'ACLDIGITAL' else 'ACLPRINT' end as product_family,
+            shd.type_of_use,
+            case when shd.type_of_use = 'DIGITAL' then 'ACLDIGITAL' else 'ACLPRINT' end as product_family,
             s.license_type,
             alc.description detail_licensee_class_name,
             gross_amount,
             service_fee_amount,
             net_amount
-        from ${schema}.df_acl_share_detail shda
-        left join ${schema}.df_rightsholder rh on rh.rh_account_number = shda.rh_account_number
-        join ${schema}.df_acl_scenario_detail sda on shda.df_acl_scenario_detail_uid = sda.df_acl_scenario_detail_uid
-        join ${schema}.df_acl_scenario s on shda.df_acl_scenario_uid = s.df_acl_scenario_uid
-        join ${schema}.df_aggregate_licensee_class alc on shda.aggregate_licensee_class_id = alc.aggregate_licensee_class_id
+        from ${schema}.df_acl_share_detail shd
+        left join ${schema}.df_rightsholder rh on rh.rh_account_number = shd.rh_account_number
+        join ${schema}.df_acl_scenario_detail sda on shd.df_acl_scenario_detail_uid = sda.df_acl_scenario_detail_uid
+        join ${schema}.df_acl_scenario s on shd.df_acl_scenario_uid = s.df_acl_scenario_uid
+        join ${schema}.df_aggregate_licensee_class alc on shd.aggregate_licensee_class_id = alc.aggregate_licensee_class_id
         where sda.df_acl_scenario_uid = #{scenarioId}
         order by df_acl_share_detail_uid
     </select>
