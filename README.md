@@ -1,3 +1,7 @@
+20.0.4
+-
+* CDP-1887 FDA: Update value batch requirements for ACL works from previous periods: remove WrWrkInst population from liquibase script
+
 20.0.3
 -
 * CDP-1887 FDA: Update value batch requirements for ACL works from previous periods: introduce WrWrkInst column in ACL shares to improve performance
