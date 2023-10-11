@@ -23,11 +23,6 @@ databaseChangeLog {
             column(name: 'wr_wrk_inst', type: 'NUMERIC(15)', remarks: 'The Wr Wrk Inst')
         }
 
-        sql("""update ${dbAppsSchema}.df_acl_share_detail shd 
-                set wr_wrk_inst = scd.wr_wrk_inst
-                from ${dbAppsSchema}.df_acl_scenario_detail scd
-                where shd.df_acl_scenario_detail_uid = scd.df_acl_scenario_detail_uid""")
-
         rollback {
             dropColumn(schemaName: dbAppsSchema, tableName: 'df_acl_share_detail', columnName: 'wr_wrk_inst')
         }
