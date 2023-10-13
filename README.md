@@ -1,3 +1,7 @@
+20.0.5
+-
+* CDP-1887 FDA: Update value batch requirements for ACL works from previous periods: add index by TOU, detail ID to ACL shares table
+
 20.0.4
 -
 * CDP-1887 FDA: Update value batch requirements for ACL works from previous periods: remove WrWrkInst population from liquibase script
