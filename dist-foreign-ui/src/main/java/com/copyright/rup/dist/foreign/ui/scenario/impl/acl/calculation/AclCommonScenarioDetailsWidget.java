@@ -20,6 +20,8 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.math.BigDecimal;
 import java.util.function.Function;
 
@@ -53,7 +55,7 @@ public abstract class AclCommonScenarioDetailsWidget extends Window implements I
 
     @Override
     public String getSearchValue() {
-        return searchWidget.getSearchValue();
+        return StringUtils.trimToNull(searchWidget.getSearchValue());
     }
 
     @Override
@@ -105,7 +107,7 @@ public abstract class AclCommonScenarioDetailsWidget extends Window implements I
 
     /**
      * Adds columns to the grid.
-    */
+     */
     protected abstract void addColumns();
 
     /**
@@ -117,7 +119,7 @@ public abstract class AclCommonScenarioDetailsWidget extends Window implements I
      * @param width           column width
      */
     protected void addBigDecimalColumn(Function<AclScenarioDetailDto, BigDecimal> function, String captionProperty,
-                                     String sort, double width) {
+                                       String sort, double width) {
         grid.addColumn(detail -> BigDecimalUtils.formatCurrencyForGrid(function.apply(detail)))
             .setCaption(ForeignUi.getMessage(captionProperty))
             .setSortProperty(sort)
@@ -171,7 +173,7 @@ public abstract class AclCommonScenarioDetailsWidget extends Window implements I
      * @param width           column width
      */
     protected void addBooleanColumn(ValueProvider<AclScenarioDetailDto, Boolean> provider, String captionProperty,
-                                  String columnId, double width) {
+                                    String columnId, double width) {
         grid.addColumn(value -> BooleanUtils.toYNString(provider.apply(value)))
             .setCaption(ForeignUi.getMessage(captionProperty))
             .setId(columnId)
