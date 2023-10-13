@@ -27,4 +27,19 @@ databaseChangeLog {
             dropColumn(schemaName: dbAppsSchema, tableName: 'df_acl_share_detail', columnName: 'wr_wrk_inst')
         }
     }
+
+    changeSet(id: '2023-10-13-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
+        comment("CDP-1887 FDA: Update value batch requirements for ACL works from previous periods: " +
+                "add index by type_of_use and df_acl_scenario_detail_uid to df_acl_share_detail table")
+
+        createIndex(indexName: 'ix_df_acl_scenario_detail_uid_type_of_use', schemaName: dbAppsSchema,
+                tableName: 'df_acl_share_detail', tablespace: dbIndexTablespace) {
+            column(name: 'df_acl_scenario_detail_uid')
+            column(name: 'type_of_use')
+        }
+
+        rollback {
+            sql("drop index ${dbAppsSchema}.ix_df_acl_scenario_detail_uid_type_of_use")
+        }
+    }
 }
