@@ -58,6 +58,10 @@ public class AclciGradeValidatorTest {
             {"12", true},
             {"13", false},
             {"HE", true},
+            {"HS", true},
+            {"E", true},
+            {"M", true},
+            {"ME", false},
             {"error", false}
         });
     }
@@ -66,6 +70,6 @@ public class AclciGradeValidatorTest {
     public void testGetErrorMessage() {
         AclciGradeValidator validator = new AclciGradeValidator();
         assertEquals(expectedResult, validator.isValid(value));
-        assertEquals("Field value should be any of: K, 1-12, HE", validator.getErrorMessage());
+        assertEquals("Field value should be any of: K, 1-12, HE, HS, M, E", validator.getErrorMessage());
     }
 }

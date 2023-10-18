@@ -16,9 +16,24 @@ import java.util.Map;
 public enum AclciGradeGroupEnum {
 
     /**
+     * 'Grade E' grade group.
+     */
+    GRADE_E,
+
+    /**
      * 'Grade HE' grade group.
      */
     GRADE_HE,
+
+    /**
+     * 'Grade HS' grade group.
+     */
+    GRADE_HS,
+
+    /**
+     * 'Grade M' grade group.
+     */
+    GRADE_M,
 
     /**
      * 'Grade K_2' grade group.
@@ -34,6 +49,7 @@ public enum AclciGradeGroupEnum {
      * 'Grade 6_8' grade group.
      */
     GRADE6_8,
+
     /**
      * 'Grade 9_12' grade group.
      */
@@ -55,6 +71,9 @@ public enum AclciGradeGroupEnum {
             .put("11", GRADE9_12)
             .put("12", GRADE9_12)
             .put("HE", GRADE_HE)
+            .put("HS", GRADE_HS)
+            .put("E", GRADE_E)
+            .put("M", GRADE_M)
             .build();
 
     /**
