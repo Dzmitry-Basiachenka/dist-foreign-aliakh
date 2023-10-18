@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.service.impl.csv.validator;
 
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor;
+
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -14,7 +15,7 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class AclciGradeValidator implements DistCsvProcessor.IValidator<String> {
 
-    private static final String GRADE_REGEX = "K|([1-9]|1[0-2])|HE";
+    private static final String GRADE_REGEX = "K|([1-9]|1[0-2])|HE|M|HS|E";
 
     @Override
     public boolean isValid(String value) {
@@ -23,6 +24,6 @@ public class AclciGradeValidator implements DistCsvProcessor.IValidator<String> 
 
     @Override
     public String getErrorMessage() {
-        return "Field value should be any of: K, 1-12, HE";
+        return "Field value should be any of: K, 1-12, HE, HS, M, E";
     }
 }
