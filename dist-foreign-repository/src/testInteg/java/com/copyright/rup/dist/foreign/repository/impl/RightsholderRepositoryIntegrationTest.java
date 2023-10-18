@@ -102,10 +102,10 @@ public class RightsholderRepositoryIntegrationTest {
     @TestData(fileName = FIND)
     public void testFindAccountNumbers() {
         Set<Long> accountNumbers = rightsholderRepository.findAccountNumbers();
-        assertEquals(13, accountNumbers.size());
+        assertEquals(14, accountNumbers.size());
         assertTrue(accountNumbers.containsAll(
             List.of(7000813806L, 2000017004L, 2000017010L, 1000009997L, 1000002859L, 1000005413L, 1000159997L,
-                7000800832L, 7001555529L, 2000105646L, 2580011451L, 1000002854L, 1000028511L)));
+                7000800832L, 7001555529L, 2000105646L, 2580011451L, 1000002854L, 1000028511L, 1000009522L)));
     }
 
     @Test

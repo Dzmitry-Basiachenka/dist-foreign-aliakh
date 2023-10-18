@@ -74,6 +74,10 @@
         select distinct rh_account_number
         from ${schema}.df_acl_grant_detail
         where rh_account_number is not null
+        union
+        select distinct payee_account_number
+        from ${schema}.df_acl_share_detail
+        where payee_account_number is not null
     </select>
 
     <delete id="deleteByAccountNumber" parameterType="long">
