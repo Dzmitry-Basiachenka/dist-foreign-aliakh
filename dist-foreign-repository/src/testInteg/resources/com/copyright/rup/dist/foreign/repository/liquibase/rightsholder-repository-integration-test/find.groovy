@@ -315,6 +315,102 @@ databaseChangeLog {
             column(name: 'is_eligible', value: true)
         }
 
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_usage_batch') {
+            column(name: 'df_acl_usage_batch_uid', value: '38474a7b-0fb7-406f-817d-438896f59310')
+            column(name: 'name', value: 'ACL Usage Batch 202212')
+            column(name: 'distribution_period', value: 202212)
+            column(name: 'periods', value: '[202206, 202212]')
+            column(name: 'is_editable', value: true)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_fund_pool') {
+            column(name: 'df_acl_fund_pool_uid', value: '6d2fc5b1-c9ee-4c2c-bf2e-a0f214a81f10')
+            column(name: 'name', value: 'ACL Fund Pool 202212')
+            column(name: 'period', value: 202212)
+            column(name: 'license_type', value: 'ACL')
+            column(name: 'is_manual', value: true)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_scenario') {
+            column(name: 'df_acl_scenario_uid', value: 'bbf5fd2f-2b9f-402a-a819-98ba33668c54')
+            column(name: 'df_acl_fund_pool_uid', value: '6d2fc5b1-c9ee-4c2c-bf2e-a0f214a81f10')
+            column(name: 'df_acl_usage_batch_uid', value: '38474a7b-0fb7-406f-817d-438896f59310')
+            column(name: 'df_acl_grant_set_uid', value: '7aff4f60-a735-400e-a70f-ca2716febab6')
+            column(name: 'name', value: 'ACL Scenario 10/05/202212')
+            column(name: 'period_end_date', value: 202212)
+            column(name: 'status_ind', value: 'IN_PROGRESS')
+            column(name: 'description', value: 'Description')
+            column(name: 'license_type', value: 'ACL')
+            column(name: 'is_editable', value: true)
+            column(name: 'created_by_user', value: 'user@copyright.com')
+            column(name: 'updated_by_user', value: 'user@copyright.com')
+            column(name: 'created_datetime', value: '2022-02-14 12:00:00+00')
+            column(name: 'updated_datetime', value: '2022-02-14 12:00:00+00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_detail') {
+            column(name: 'df_acl_scenario_detail_uid', value: 'afab7fb3-577e-4e6e-95da-a7bfa057aaaa')
+            column(name: 'df_acl_scenario_uid', value: 'bbf5fd2f-2b9f-402a-a819-98ba33668c54')
+            column(name: 'period_end_date', value: 202212)
+            column(name: 'original_detail_id', value: 'OGN674GHHSB107')
+            column(name: 'wr_wrk_inst', value: 122820638)
+            column(name: 'system_title', value: 'Aerospace America')
+            column(name: 'detail_licensee_class_id', value: 1)
+            column(name: 'publication_type_uid', value: '73876e58-2e87-485e-b6f3-7e23792dd214')
+            column(name: 'content', value: 11.0001230000)
+            column(name: 'content_flag', value: true)
+            column(name: 'content_unit_price', value: 2.0000000000)
+            column(name: 'number_of_copies', value: 1.00000)
+            column(name: 'usage_age_weight', value: 1.00000)
+            column(name: 'weighted_copies', value: 1.0000000000)
+            column(name: 'pub_type_weight', value: 1.00)
+            column(name: 'survey_country', value: 'United States')
+            column(name: 'reported_type_of_use', value: 'COPY_FOR_MYSELF')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_share_detail') {
+            column(name: 'df_acl_share_detail_uid', value: 'de53f506-ec27-43d8-9a7c-8a7129d7cf76')
+            column(name: 'df_acl_scenario_uid', value: 'bbf5fd2f-2b9f-402a-a819-98ba33668c54')
+            column(name: 'df_acl_scenario_detail_uid', value: 'afab7fb3-577e-4e6e-95da-a7bfa057aaaa')
+            column(name: 'type_of_use', value: 'DIGITAL')
+            column(name: 'wr_wrk_inst', value: 122820638)
+            column(name: 'rh_account_number', value: 1000028511)
+            column(name: 'payee_account_number', value: 1000002859)
+            column(name: 'aggregate_licensee_class_id', value: 1)
+            column(name: 'volume_weight', value: 1.0000000000)
+            column(name: 'value_weight', value: 1.0000000000)
+            column(name: 'volume_weight_denominator', value: 1.0000000000)
+            column(name: 'value_weight_denominator', value: 1.0000000000)
+            column(name: 'volume_share', value: 1.0000000000)
+            column(name: 'value_share', value: 1.0000000000)
+            column(name: 'detail_share', value: 1.0000000000)
+            column(name: 'net_amount', value: 84.1000000000)
+            column(name: 'gross_amount', value: 100.0000000000)
+            column(name: 'service_fee_amount', value: 16.0000000000)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_share_detail') {
+            column(name: 'df_acl_share_detail_uid', value: '4c2831d4-11b5-4203-b280-f1b0c3e82157')
+            column(name: 'df_acl_scenario_uid', value: 'bbf5fd2f-2b9f-402a-a819-98ba33668c54')
+            column(name: 'df_acl_scenario_detail_uid', value: 'afab7fb3-577e-4e6e-95da-a7bfa057aaaa')
+            column(name: 'type_of_use', value: 'PRINT')
+            column(name: 'wr_wrk_inst', value: 122820638)
+            column(name: 'rh_account_number', value: 1000028511)
+            column(name: 'payee_account_number', value: 1000009522)
+            column(name: 'aggregate_licensee_class_id', value: 1)
+            column(name: 'volume_weight', value: 1.0000013432)
+            column(name: 'value_weight', value: 1.0000000000)
+            column(name: 'volume_weight_denominator', value: 1.0000000000)
+            column(name: 'value_weight_denominator', value: 1.0000000000)
+            column(name: 'volume_share', value: 1.0000000000)
+            column(name: 'value_share', value: 1.0000000000)
+            column(name: 'detail_share', value: 1.0000000000)
+            column(name: 'net_amount', value: 42.1000000000)
+            column(name: 'gross_amount', value: 50.0000000000)
+            column(name: 'service_fee_amount', value: 7.9000000000)
+        }
+
         rollback {
             dbRollback
         }
