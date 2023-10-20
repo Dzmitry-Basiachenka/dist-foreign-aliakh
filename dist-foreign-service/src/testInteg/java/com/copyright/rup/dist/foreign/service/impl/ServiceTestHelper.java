@@ -758,7 +758,7 @@ public class ServiceTestHelper {
         assertEquals(expectedUsage.getLicenseeAccountNumber(), actualUsage.getLicenseeAccountNumber());
         assertEquals(expectedUsage.getLicenseeName(), actualUsage.getLicenseeName());
         assertEquals(expectedUsage.getCoveragePeriod(), actualUsage.getCoveragePeriod());
-        assertEquals(expectedUsage.getNumberOfStudents(), actualUsage.getNumberOfStudents());
+        assertEquals(expectedUsage.getReportedNumberOfStudents(), actualUsage.getReportedNumberOfStudents());
         assertEquals(expectedUsage.getLicenseType(), actualUsage.getLicenseType());
         assertEquals(expectedUsage.getReportedMediaType(), actualUsage.getReportedMediaType());
         assertEquals(expectedUsage.getMediaTypeWeight(), actualUsage.getMediaTypeWeight());
