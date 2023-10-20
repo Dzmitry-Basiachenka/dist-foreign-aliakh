@@ -22,7 +22,7 @@ public class AclciUsage {
     private Long licenseeAccountNumber;
     private String licenseeName;
     private String coveragePeriod;
-    private Integer numberOfStudents;
+    private Integer reportedNumberOfStudents;
     private AclciLicenseTypeEnum licenseType;
     private String reportedMediaType;
     private BigDecimal mediaTypeWeight;
@@ -59,12 +59,12 @@ public class AclciUsage {
         this.coveragePeriod = coveragePeriod;
     }
 
-    public Integer getNumberOfStudents() {
-        return numberOfStudents;
+    public Integer getReportedNumberOfStudents() {
+        return reportedNumberOfStudents;
     }
 
-    public void setNumberOfStudents(Integer numberOfStudents) {
-        this.numberOfStudents = numberOfStudents;
+    public void setReportedNumberOfStudents(Integer reportedNumberOfStudents) {
+        this.reportedNumberOfStudents = reportedNumberOfStudents;
     }
 
     public AclciLicenseTypeEnum getLicenseType() {
@@ -168,7 +168,7 @@ public class AclciUsage {
             .append(licenseeAccountNumber, that.licenseeAccountNumber)
             .append(licenseeName, that.licenseeName)
             .append(coveragePeriod, that.coveragePeriod)
-            .append(numberOfStudents, that.numberOfStudents)
+            .append(reportedNumberOfStudents, that.reportedNumberOfStudents)
             .append(licenseType, that.licenseType)
             .append(reportedMediaType, that.reportedMediaType)
             .append(mediaTypeWeight, that.mediaTypeWeight)
@@ -189,7 +189,7 @@ public class AclciUsage {
             .append(licenseeAccountNumber)
             .append(licenseeName)
             .append(coveragePeriod)
-            .append(numberOfStudents)
+            .append(reportedNumberOfStudents)
             .append(licenseType)
             .append(reportedMediaType)
             .append(mediaTypeWeight)
@@ -210,7 +210,7 @@ public class AclciUsage {
             .append("licenseeAccountNumber", licenseeAccountNumber)
             .append("licenseeName", licenseeName)
             .append("coveragePeriod", coveragePeriod)
-            .append("numberOfStudents", numberOfStudents)
+            .append("reportedNumberOfStudents", reportedNumberOfStudents)
             .append("licenseType", licenseType)
             .append("reportedMediaType", reportedMediaType)
             .append("mediaTypeWeight", mediaTypeWeight)

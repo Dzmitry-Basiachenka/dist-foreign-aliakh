@@ -42,4 +42,20 @@ databaseChangeLog {
             sql("drop index ${dbAppsSchema}.ix_df_acl_scenario_detail_uid_type_of_use")
         }
     }
+
+    changeSet(id: '2023-10-20-00', author: 'Anton Azarenka <aazarenka@copyright.com>') {
+        comment("B-80341 - FDA & ACLCI: Update the file upload with an additional field: add new " +
+                "reported_number_of_students column")
+
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_usage_aclci') {
+            column(name: 'reported_number_of_students', type: 'NUMERIC(8)', remarks: 'Reported Number of Students',
+                    defaultValue: '0'){
+                constraints(nullable: false)
+            }
+        }
+
+        rollback {
+            dropColumn(schemaName: dbAppsSchema, tableName: 'df_usage_aclci', columnName: 'reported_number_of_students')
+        }
+    }
 }

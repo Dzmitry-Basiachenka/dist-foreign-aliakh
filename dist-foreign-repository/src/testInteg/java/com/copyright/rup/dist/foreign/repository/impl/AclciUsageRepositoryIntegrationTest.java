@@ -136,6 +136,7 @@ public class AclciUsageRepositoryIntegrationTest {
         assertSortingUsageDto(dto1, dto2, "licenseType");
         assertSortingUsageDto(dto1, dto1, "productFamily");
         assertSortingUsageDto(dto1, dto2, "batchName");
+        assertSortingUsageDto(dto2, dto1, "reportedNumberOfStudents");
         assertSortingUsageDto(dto2, dto1, "periodEndDate");
         assertSortingUsageDto(dto2, dto1, "coveragePeriod");
         assertSortingUsageDto(dto2, dto1, "licenseeAccountNumber");
@@ -231,6 +232,7 @@ public class AclciUsageRepositoryIntegrationTest {
     private void verifyAclciUsage(AclciUsage expectedUsage, AclciUsage actualUsage) {
         assertEquals(expectedUsage.getLicenseeAccountNumber(), actualUsage.getLicenseeAccountNumber());
         assertEquals(expectedUsage.getLicenseeName(), actualUsage.getLicenseeName());
+        assertEquals(expectedUsage.getReportedNumberOfStudents(), actualUsage.getReportedNumberOfStudents());
         assertEquals(expectedUsage.getCoveragePeriod(), actualUsage.getCoveragePeriod());
         assertEquals(expectedUsage.getLicenseType(), actualUsage.getLicenseType());
         assertEquals(expectedUsage.getReportedMediaType(), actualUsage.getReportedMediaType());

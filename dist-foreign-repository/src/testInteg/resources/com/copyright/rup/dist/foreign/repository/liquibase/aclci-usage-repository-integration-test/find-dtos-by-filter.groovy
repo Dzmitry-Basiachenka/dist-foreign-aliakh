@@ -53,6 +53,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_aclci') {
             column(name: 'df_usage_aclci_uid', value: '37b078c7-ce89-46d7-8403-977fa84bccb4')
             column(name: 'coverage_period', value: '2021-2022')
+            column(name: 'reported_number_of_students', value: 2019)
             column(name: 'license_type', value: 'CURR_REPUB_K12')
             column(name: 'reported_media_type', value: 'Image')
             column(name: 'media_type_weight', value: 0.3)
@@ -87,6 +88,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_aclci') {
             column(name: 'df_usage_aclci_uid', value: '865997ed-4c60-4530-972a-37023b7bf509')
             column(name: 'coverage_period', value: '2020-2022')
+            column(name: 'reported_number_of_students', value: 2019)
             column(name: 'license_type', value: 'CURR_REUSE_K12')
             column(name: 'reported_media_type', value: 'Text')
             column(name: 'media_type_weight', value: 1.0)
@@ -131,6 +133,7 @@ databaseChangeLog {
             column(name: 'df_usage_aclci_uid', value: '8ef208d0-d4a7-4f14-93f5-702ca4656b0c')
             column(name: 'coverage_period', value: '2020-2022')
             column(name: 'license_type', value: 'CURR_REUSE_K12')
+            column(name: 'reported_number_of_students', value: 15)
             column(name: 'reported_media_type', value: 'Text')
             column(name: 'media_type_weight', value: 1.0)
             column(name: 'reported_article', value: 'Medical Journal')
