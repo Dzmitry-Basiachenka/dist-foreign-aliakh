@@ -14,6 +14,7 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.AclciGradeValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.AclciLicenseTypeValidator;
+import com.copyright.rup.dist.foreign.service.impl.csv.validator.IntegerValidator;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -50,6 +51,8 @@ public class AclciUsageCsvProcessor extends DistCsvProcessor<Usage> {
         PositiveNumberValidator positiveNumberValidator = new PositiveNumberValidator();
         addPlainValidators(Header.COVERAGE_PERIOD, requiredValidator, lengthValidator100);
         addPlainValidators(Header.LICENSE_TYPE, requiredValidator, new AclciLicenseTypeValidator());
+        addPlainValidators(Header.NUMBER_OF_STUDENTS, requiredValidator, new IntegerValidator(),
+            new LengthValidator(8));
         addPlainValidators(Header.REPORTED_GRADE, requiredValidator, new AclciGradeValidator());
         addPlainValidators(Header.WR_WRK_INST, requiredValidator, positiveNumberValidator, new LengthValidator(9));
         addPlainValidators(Header.REPORTED_WORK_TITLE, new LengthValidator(2000));
@@ -68,6 +71,7 @@ public class AclciUsageCsvProcessor extends DistCsvProcessor<Usage> {
     private enum Header implements ICsvColumn {
         COVERAGE_PERIOD("Coverage Period"),
         LICENSE_TYPE("License Type"),
+        NUMBER_OF_STUDENTS("Number of Students"),
         REPORTED_GRADE("Reported Grade"),
         WR_WRK_INST("Wr Wrk Inst"),
         REPORTED_WORK_TITLE("Reported Work Title"),
@@ -118,6 +122,7 @@ public class AclciUsageCsvProcessor extends DistCsvProcessor<Usage> {
             aclciUsage.setCoveragePeriod(getString(row, Header.COVERAGE_PERIOD, headers));
             String licenseType = getString(row, Header.LICENSE_TYPE, headers).toUpperCase(Locale.ROOT);
             aclciUsage.setLicenseType(AclciLicenseTypeEnum.valueOf(licenseType));
+            aclciUsage.setNumberOfStudents(getInteger(row, Header.NUMBER_OF_STUDENTS, headers));
             aclciUsage.setReportedGrade(getString(row, Header.REPORTED_GRADE, headers));
             aclciUsage.setReportedStandardNumber(getString(row, Header.REPORTED_STANDARD_NUMBER, headers));
             aclciUsage.setReportedArticle(getString(row, Header.REPORTED_ARTICLE, headers));
