@@ -164,7 +164,7 @@ public class AclciUsageCsvProcessorIntegrationTest {
     private void assertAclciUsage(AclciUsage expectedUsage, AclciUsage actualUsage)  {
         assertEquals(expectedUsage.getLicenseeAccountNumber(), actualUsage.getLicenseeAccountNumber());
         assertEquals(expectedUsage.getLicenseeName(), actualUsage.getLicenseeName());
-        assertEquals(expectedUsage.getNumberOfStudents(), actualUsage.getNumberOfStudents());
+        assertEquals(expectedUsage.getReportedNumberOfStudents(), actualUsage.getReportedNumberOfStudents());
         assertEquals(expectedUsage.getCoveragePeriod(), actualUsage.getCoveragePeriod());
         assertEquals(expectedUsage.getLicenseType(), actualUsage.getLicenseType());
         assertEquals(expectedUsage.getReportedMediaType(), actualUsage.getReportedMediaType());

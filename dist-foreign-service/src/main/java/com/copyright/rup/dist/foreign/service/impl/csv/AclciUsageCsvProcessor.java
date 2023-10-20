@@ -122,7 +122,7 @@ public class AclciUsageCsvProcessor extends DistCsvProcessor<Usage> {
             aclciUsage.setCoveragePeriod(getString(row, Header.COVERAGE_PERIOD, headers));
             String licenseType = getString(row, Header.LICENSE_TYPE, headers).toUpperCase(Locale.ROOT);
             aclciUsage.setLicenseType(AclciLicenseTypeEnum.valueOf(licenseType));
-            aclciUsage.setNumberOfStudents(getInteger(row, Header.NUMBER_OF_STUDENTS, headers));
+            aclciUsage.setReportedNumberOfStudents(getInteger(row, Header.NUMBER_OF_STUDENTS, headers));
             aclciUsage.setReportedGrade(getString(row, Header.REPORTED_GRADE, headers));
             aclciUsage.setReportedStandardNumber(getString(row, Header.REPORTED_STANDARD_NUMBER, headers));
             aclciUsage.setReportedArticle(getString(row, Header.REPORTED_ARTICLE, headers));
