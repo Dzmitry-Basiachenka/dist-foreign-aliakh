@@ -24,6 +24,7 @@
         <result property="comment" column="comment"/>
         <result property="aclciUsage.coveragePeriod" column="coverage_period"/>
         <result property="aclciUsage.licenseType" column="license_type"/>
+        <result property="aclciUsage.reportedNumberOfStudents" column="reported_number_of_students"/>
         <result property="aclciUsage.reportedMediaType" column="reported_media_type"/>
         <result property="aclciUsage.mediaTypeWeight" column="media_type_weight"/>
         <result property="aclciUsage.reportedArticle" column="reported_article"/>
@@ -52,6 +53,7 @@
         <result property="comment" column="comment"/>
         <result property="aclciUsage.licenseeAccountNumber" column="licensee_account_number"/>
         <result property="aclciUsage.licenseeName" column="licensee_name"/>
+        <result property="aclciUsage.reportedNumberOfStudents" column="reported_number_of_students"/>
         <result property="aclciUsage.coveragePeriod" column="coverage_period"/>
         <result property="aclciUsage.licenseType" column="license_type"/>
         <result property="aclciUsage.reportedMediaType" column="reported_media_type"/>
@@ -85,6 +87,7 @@
         u.comment,
         uaclci.coverage_period,
         uaclci.license_type,
+        uaclci.reported_number_of_students,
         uaclci.reported_media_type,
         uaclci.media_type_weight,
         uaclci.reported_article,
@@ -157,6 +160,9 @@
             </when>
             <when test="sort.property == 'reportedMediaType'">
                 uaclci.reported_media_type <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'reportedNumberOfStudents'">
+                uaclci.reported_number_of_students <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'mediaTypeWeight'">
                 uaclci.media_type_weight <include refid="IUsageMapper.direction"/>
@@ -286,6 +292,7 @@
             reported_publication_date,
             reported_grade,
             grade_group,
+            reported_number_of_students,
             <include refid="StoredEntityMapper.additionalColumns"/>
         )
         values (
@@ -301,6 +308,7 @@
             #{aclciUsage.reportedPublicationDate},
             #{aclciUsage.reportedGrade},
             #{aclciUsage.gradeGroup},
+            #{aclciUsage.reportedNumberOfStudents},
             <include refid="StoredEntityMapper.insert"/>
         )
     </insert>
