@@ -11,7 +11,6 @@ import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.Threshold
 import com.copyright.rup.dist.common.test.ReportTestUtils;
 import com.copyright.rup.dist.foreign.domain.AclciUsage;
 import com.copyright.rup.dist.foreign.domain.Usage;
-
 import com.copyright.rup.dist.foreign.service.impl.ServiceTestHelper;
 
 import org.apache.commons.io.IOUtils;
@@ -103,6 +102,7 @@ public class AclciUsageCsvProcessorIntegrationTest {
                     "<ul>" +
                     "<li>Coverage Period</li>" +
                     "<li>License Type</li>" +
+                    "<li>Number of Students</li>" +
                     "<li>Reported Grade</li>" +
                     "<li>Wr Wrk Inst</li>" +
                     "<li>Reported Work Title</li>" +
@@ -164,6 +164,7 @@ public class AclciUsageCsvProcessorIntegrationTest {
     private void assertAclciUsage(AclciUsage expectedUsage, AclciUsage actualUsage)  {
         assertEquals(expectedUsage.getLicenseeAccountNumber(), actualUsage.getLicenseeAccountNumber());
         assertEquals(expectedUsage.getLicenseeName(), actualUsage.getLicenseeName());
+        assertEquals(expectedUsage.getNumberOfStudents(), actualUsage.getNumberOfStudents());
         assertEquals(expectedUsage.getCoveragePeriod(), actualUsage.getCoveragePeriod());
         assertEquals(expectedUsage.getLicenseType(), actualUsage.getLicenseType());
         assertEquals(expectedUsage.getReportedMediaType(), actualUsage.getReportedMediaType());

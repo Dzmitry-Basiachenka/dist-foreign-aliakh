@@ -14,6 +14,7 @@
     "aclciUsage": {
       "coveragePeriod": "2021-2022",
       "licenseType": "CURR_REPUB_K12",
+      "numberOfStudents": 12,
       "reportedMediaType": "TEXT",
       "mediaTypeWeight": 1,
       "reportedArticle": "The Bronze Statue",
@@ -39,6 +40,7 @@
     "aclciUsage": {
       "coveragePeriod": "2020-2021",
       "licenseType": "CURR_REUSE_K12",
+      "numberOfStudents": 0,
       "reportedMediaType": "IMAGE",
       "mediaTypeWeight": 0.3,
       "reportedArticle": "Traveling Hunters",
