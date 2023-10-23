@@ -123,6 +123,7 @@ public class AclciUsageWidgetTest {
             Triple.of("Reported Publication Date", 200.0, -1),
             Triple.of("Reported Grade", 120.0, -1),
             Triple.of("Grade Group", 115.0, -1),
+            Triple.of("Reported Number of Students", 210.0, -1),
             Triple.of("Comment", 115.0, -1)));
         assertEquals(1, layout.getExpandRatio(grid), 0);
     }

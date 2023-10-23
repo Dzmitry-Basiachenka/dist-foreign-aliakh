@@ -71,7 +71,7 @@ public class AclciUsageCsvProcessor extends DistCsvProcessor<Usage> {
     private enum Header implements ICsvColumn {
         COVERAGE_PERIOD("Coverage Period"),
         LICENSE_TYPE("License Type"),
-        NUMBER_OF_STUDENTS("Number of Students"),
+        NUMBER_OF_STUDENTS("Reported Number of Students"),
         REPORTED_GRADE("Reported Grade"),
         WR_WRK_INST("Wr Wrk Inst"),
         REPORTED_WORK_TITLE("Reported Work Title"),
