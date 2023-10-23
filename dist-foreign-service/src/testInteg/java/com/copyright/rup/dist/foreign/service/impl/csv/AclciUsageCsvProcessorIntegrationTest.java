@@ -102,7 +102,7 @@ public class AclciUsageCsvProcessorIntegrationTest {
                     "<ul>" +
                     "<li>Coverage Period</li>" +
                     "<li>License Type</li>" +
-                    "<li>Number of Students</li>" +
+                    "<li>Reported Number of Students</li>" +
                     "<li>Reported Grade</li>" +
                     "<li>Wr Wrk Inst</li>" +
                     "<li>Reported Work Title</li>" +
