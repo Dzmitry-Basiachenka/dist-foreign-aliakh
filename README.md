@@ -1,3 +1,12 @@
+20.0.6
+-
+* B-80348 - FDA & ACLCI: Update Grade Groups to include new values: add new Grade Group values
+* CDP-1946: FDA: updateRightsholdersQuartzJob: Payees that are present in ACL shares only are not updated by the job
+* B-80341 - FDA & ACLCI: Update the file upload with an additional field: implement validator for new field
+* B-80341 - FDA & ACLCI: Update the file upload with an additional field: implement repository logic to preserve number of students column
+* B-80341 - FDA & ACLCI: Update the file upload with an additional field: fix integration tests
+* B-80341 - FDA & ACLCI: Update the file upload with an additional field: add Reported Number of Students column to the UI
+
 20.0.5
 -
 * CDP-1887 FDA: Update value batch requirements for ACL works from previous periods: add index by TOU, detail ID to ACL shares table
