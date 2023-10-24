@@ -287,8 +287,14 @@
     <sql id="joinShareDetailsSql">
         left join ${schema}.df_acl_share_detail print_details on scd.df_acl_scenario_detail_uid = print_details.df_acl_scenario_detail_uid
             and print_details.type_of_use = 'PRINT'
+            <if test="null != accountNumber">
+                and print_details.rh_account_number = #{accountNumber}
+            </if>
         left join ${schema}.df_acl_share_detail digital_details on scd.df_acl_scenario_detail_uid = digital_details.df_acl_scenario_detail_uid
             and digital_details.type_of_use = 'DIGITAL'
+            <if test="null != accountNumber">
+                and digital_details.rh_account_number = #{accountNumber}
+            </if>
         left join ${schema}.df_rightsholder print_rh on print_details.rh_account_number = print_rh.rh_account_number
         left join ${schema}.df_rightsholder print_payee on print_details.payee_account_number = print_payee.rh_account_number
         left join ${schema}.df_rightsholder digital_rh on digital_details.rh_account_number = digital_rh.rh_account_number

@@ -1,0 +1,42 @@
+[
+  {
+    "id": "3028b170-8b74-4d65-97ec-c98fcdc2ede5",
+    "originalDetailId": "OGN674GHHSB108",
+    "productFamily": "ACL",
+    "usageBatchName": "ACL Usage Batch 202212",
+    "periodEndPeriod": 202212,
+    "wrWrkInst": 122820638,
+    "systemTitle": "Technology review",
+    "rhAccountNumberPrint": 1000002901,
+    "rhNamePrint": "Kluwer Academic Publishers - Dordrecht",
+    "rhAccountNumberDigital": null,
+    "rhNameDigital": null,
+    "usagePeriod": 202206,
+    "usageAgeWeight": 0.99000,
+    "detailLicenseeClassId": 2,
+    "detailLicenseeClassName": "Textiles, Apparel, etc.",
+    "aggregateLicenseeClassId": 51,
+    "aggregateLicenseeClassName": "Materials",
+    "surveyCountry": "Germany",
+    "reportedTypeOfUse": "EMAIL_COPY",
+    "numberOfCopies": 2.00000,
+    "weightedCopies": 0.9000000000,
+    "publicationType": {
+      "id": "f1f523ca-1b46-4d3a-842d-99252785187c",
+      "name": "BK2",
+      "weight": 2.00
+    },
+    "price": 4.0000000000,
+    "priceFlag": true,
+    "content": 2.0000000000,
+    "contentFlag": true,
+    "contentUnitPrice": 3.0000000000,
+    "contentUnitPriceFlag": true,
+    "netAmountDigital": 0,
+    "valueSharePrint": 0.1000000000,
+    "volumeSharePrint": 0.0000000001,
+    "detailSharePrint": 0.9000000000,
+    "netAmountPrint": 16.0000000000,
+    "combinedNetAmount": 16.0000000000
+  }
+]

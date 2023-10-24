@@ -16,6 +16,12 @@ databaseChangeLog {
             column(name: 'name', value: 'John Wiley & Sons - Books')
         }
 
+        insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
+            column(name: 'df_rightsholder_uid', value: '99991909-744c-4766-ad67-fdc9e2c043eb')
+            column(name: 'rh_account_number', value: 1000002901)
+            column(name: 'name', value: 'Kluwer Academic Publishers - Dordrecht')
+        }
+
         insert(schemaName: dbAppsSchema, tableName: 'df_acl_fund_pool') {
             column(name: 'df_acl_fund_pool_uid', value: '861374bd-c619-4e52-b518-d4bbc3c8a209')
             column(name: 'name', value: 'ACL Fund Pool 202212')
@@ -161,6 +167,26 @@ databaseChangeLog {
             column(name: 'net_amount', value: 168.0000000000)
             column(name: 'gross_amount', value: 200.0000000000)
             column(name: 'service_fee_amount', value: 32.0000000000)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_share_detail') {
+            column(name: 'df_acl_share_detail_uid', value: 'd8f1f6ba-e49e-40b3-ab16-3b15ef4e30e4')
+            column(name: 'df_acl_scenario_uid', value: 'f473fa64-12ea-4db6-9d30-94087fe500fd')
+            column(name: 'df_acl_scenario_detail_uid', value: '3028b170-8b74-4d65-97ec-c98fcdc2ede5')
+            column(name: 'type_of_use', value: 'PRINT')
+            column(name: 'wr_wrk_inst', value: 122820638)
+            column(name: 'rh_account_number', value: 1000002901)
+            column(name: 'aggregate_licensee_class_id', value: 1)
+            column(name: 'volume_weight', value: 1.0000000000)
+            column(name: 'value_weight', value: 1.0000000000)
+            column(name: 'volume_weight_denominator', value: 1.0000000000)
+            column(name: 'value_weight_denominator', value: 1.0000000000)
+            column(name: 'volume_share', value: 0.0000000001)
+            column(name: 'value_share', value: 0.1000000000)
+            column(name: 'detail_share', value: 0.9000000000)
+            column(name: 'net_amount', value: 16.0000000000)
+            column(name: 'gross_amount', value: 20.0000000000)
+            column(name: 'service_fee_amount', value: 4.0000000000)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_usage_age_weight') {

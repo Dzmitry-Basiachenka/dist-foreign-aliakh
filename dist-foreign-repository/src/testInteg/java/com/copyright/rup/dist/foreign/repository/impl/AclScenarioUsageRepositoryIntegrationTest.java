@@ -334,10 +334,12 @@ public class AclScenarioUsageRepositoryIntegrationTest {
         List<AclScenarioDetailDto> scenarioDetailDtos = aclScenarioUsageRepository.findByScenarioIdAndRhAccountNumber(
             RH_ACCOUNT_NUMBER_1, SCENARIO_UID_4, null, null, null);
         assertEquals(2, scenarioDetailDtos.size());
-        AclScenarioDetailDto scenarioDetailDto1 = buildDigitalAclScenarioDetailDto();
-        AclScenarioDetailDto scenarioDetailDto2 = buildPrintDigitalAclScenarioDetailDto();
-        verifyAclScenarioDetailDto(scenarioDetailDto1, scenarioDetailDtos.get(0));
-        verifyAclScenarioDetailDto(scenarioDetailDto2, scenarioDetailDtos.get(1));
+        verifyAclScenarioDetailDto(buildDigitalAclScenarioDetailDto(), scenarioDetailDtos.get(0));
+        verifyAclScenarioDetailDto(buildPrintDigitalAclScenarioDetailDto(), scenarioDetailDtos.get(1));
+        scenarioDetailDtos = aclScenarioUsageRepository.findByScenarioIdAndRhAccountNumber(
+            1000002901L, SCENARIO_UID_4, null, null, null);
+        assertEquals(1, scenarioDetailDtos.size());
+        verifyAclScenarioDetailDto(buildDifferentRhDetailDtoFindByScenarioId(), scenarioDetailDtos.get(0));
     }
 
     @Test
@@ -754,9 +756,8 @@ public class AclScenarioUsageRepositoryIntegrationTest {
         List<AclScenarioDetailDto> actualScenarioDetails =
             aclScenarioUsageRepository.findRightsholderDetailsResults(filter);
         assertEquals(expectedScenarioDetails.size(), actualScenarioDetails.size());
-        IntStream.range(0, expectedScenarioDetails.size())
-            .forEach(index ->
-                verifyAclScenarioDetailDto(expectedScenarioDetails.get(index), actualScenarioDetails.get(index)));
+        IntStream.range(0, expectedScenarioDetails.size()).forEach(index ->
+            verifyAclScenarioDetailDto(expectedScenarioDetails.get(index), actualScenarioDetails.get(index)));
     }
 
     @Test
@@ -770,9 +771,8 @@ public class AclScenarioUsageRepositoryIntegrationTest {
         List<AclRightsholderTotalsHolderDto> actualRhTotalsHolderDtos =
             aclScenarioUsageRepository.findRightsholderTitleResults(filter);
         assertEquals(expectedRhTotalsHolderDtos.size(), actualRhTotalsHolderDtos.size());
-        IntStream.range(0, expectedRhTotalsHolderDtos.size()).forEach(i -> {
-            verifyAclRightsholderTotalsHolderDto(expectedRhTotalsHolderDtos.get(i), actualRhTotalsHolderDtos.get(i));
-        });
+        IntStream.range(0, expectedRhTotalsHolderDtos.size()).forEach(i ->
+            verifyAclRightsholderTotalsHolderDto(expectedRhTotalsHolderDtos.get(i), actualRhTotalsHolderDtos.get(i)));
     }
 
     @Test
@@ -1195,6 +1195,10 @@ public class AclScenarioUsageRepositoryIntegrationTest {
 
     private AclScenarioDetailDto buildPrintDigitalAclScenarioDetailDto() {
         return loadExpectedAclScenarioDetailDto("json/acl/acl_scenario_detail_dto_print_digital.json").get(0);
+    }
+
+    private AclScenarioDetailDto buildDifferentRhDetailDtoFindByScenarioId() {
+        return loadExpectedAclScenarioDetailDto("json/acl/acl_scenario_detail_dto_different_rhs.json").get(0);
     }
 
     private AclScenarioDetailDto buildAclScenarioDetailDto1FindByScenarioId() {
