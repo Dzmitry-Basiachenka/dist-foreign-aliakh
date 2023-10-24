@@ -1,3 +1,7 @@
+20.0.7
+-
+* CDP-1887 FDA: Update value batch requirements for ACL works from previous periods: update SQL to retrive rightsholder specific details with correct payees and amounts
+
 20.0.6
 -
 * B-80348 - FDA & ACLCI: Update Grade Groups to include new values: add new Grade Group values
