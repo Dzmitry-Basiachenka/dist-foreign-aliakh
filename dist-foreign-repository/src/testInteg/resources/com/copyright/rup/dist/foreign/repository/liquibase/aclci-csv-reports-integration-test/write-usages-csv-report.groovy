@@ -61,6 +61,7 @@ databaseChangeLog {
             column(name: 'reported_publisher', value: 'Barefoot Books')
             column(name: 'reported_publication_date', value: '2022-02-14')
             column(name: 'reported_grade', value: '6')
+            column(name: 'reported_number_of_students', value: '6')
             column(name: 'grade_group', value: 'GRADE6_8')
         }
 
@@ -94,6 +95,7 @@ databaseChangeLog {
             column(name: 'reported_publisher', value: 'Associated Press')
             column(name: 'reported_publication_date', value: '2021-02-14')
             column(name: 'reported_grade', value: '6')
+            column(name: 'reported_number_of_students', value: '7')
             column(name: 'grade_group', value: 'GRADE6_8')
         }
 
@@ -136,6 +138,7 @@ databaseChangeLog {
             column(name: 'reported_publisher', value: 'Associated Press')
             column(name: 'reported_publication_date', value: '2021-02-14')
             column(name: 'reported_grade', value: '3')
+            column(name: 'reported_number_of_students', value: '8')
             column(name: 'grade_group', value: 'GRADE3_5')
         }
 

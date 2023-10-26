@@ -24,7 +24,7 @@ public class AclciUsageCsvReportHandler extends BaseCsvReportHandler<UsageDto> {
             "System Title", "Standard Number", "Standard Number Type", "Reported Title", "Reported Media Type",
             "Media Type Weight", "Reported Article or Chapter Title", "Reported Standard Number or Image ID Number",
             "Reported Author", "Reported Publisher", "Reported Publication Date", "Reported Grade", "Grade Group",
-            "Comment");
+            "Reported Number of Students", "Comment");
 
     /**
      * Constructor.
@@ -63,6 +63,7 @@ public class AclciUsageCsvReportHandler extends BaseCsvReportHandler<UsageDto> {
         beanProperties.add(bean.getAclciUsage().getReportedPublicationDate());
         beanProperties.add(bean.getAclciUsage().getReportedGrade());
         beanProperties.add(bean.getAclciUsage().getGradeGroup().name());
+        beanProperties.add(getBeanPropertyAsString(bean.getAclciUsage().getReportedNumberOfStudents()));
         beanProperties.add(bean.getComment());
         return beanProperties;
     }
