@@ -1,3 +1,7 @@
+20.0.8
+-
+* B-80341 - FDA & ACLCI: Update the file upload with an additional field: add new field to the export report
+
 20.0.7
 -
 * CDP-1887 FDA: Update value batch requirements for ACL works from previous periods: update SQL to retrive rightsholder specific details with correct payees and amounts
