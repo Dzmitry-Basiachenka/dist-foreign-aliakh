@@ -24,6 +24,7 @@ import com.vaadin.data.ValidationException;
 import com.vaadin.data.ValueProvider;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.server.Setter;
+import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickListener;
@@ -63,6 +64,8 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
     private final IUdmValueController controller;
     private final UdmValueDto udmValue;
     private final Button saveButton = Buttons.createButton(ForeignUi.getMessage("button.save"));
+    private final Button editButton = Buttons.createButton(ForeignUi.getMessage("button.edit_cup"));
+    private final Button clearButton = Buttons.createButton(ForeignUi.getMessage("button.clear"));
     private final ClickListener saveButtonClickListener;
     private final ComboBox<UdmValueStatusEnum> valueStatusComboBox =
         new ComboBox<>(ForeignUi.getMessage("label.value_status"));
@@ -272,7 +275,8 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
                     fromStringToBigDecimal(UdmValueDto::setContentUnitPrice)),
                 buildReadOnlyLayout(contentUnitPriceFlagField, "label.content_unit_price_flag",
                     fromBooleanToYNString(UdmValueDto::isContentUnitPriceFlag),
-                    fromYNStringToBoolean(UdmValueDto::setContentUnitPriceFlag))
+                    fromYNStringToBoolean(UdmValueDto::setContentUnitPriceFlag)),
+                initContentButtonsLayout()
             )),
             new Panel(ForeignUi.getMessage("label.comment"), new VerticalLayout(
                 buildEditableStringLayout(commentField, "label.comment", 1000,
@@ -286,6 +290,15 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
                     bean -> toShortFormat(bean.getUpdateDate()), binder)
             ))
         );
+    }
+
+    private VerticalLayout initContentButtonsLayout() {
+        var buttonsLayout = new HorizontalLayout(editButton, clearButton);
+        var editClearContentFieldsLayout = new VerticalLayout(buttonsLayout);
+        editClearContentFieldsLayout.setMargin(new MarginInfo(false));
+        editClearContentFieldsLayout.setSpacing(false);
+        editClearContentFieldsLayout.setComponentAlignment(buttonsLayout, Alignment.MIDDLE_RIGHT);
+        return editClearContentFieldsLayout;
     }
 
     private VerticalLayout buildVerticalLayoutWithFixedWidth(Component... children) {
