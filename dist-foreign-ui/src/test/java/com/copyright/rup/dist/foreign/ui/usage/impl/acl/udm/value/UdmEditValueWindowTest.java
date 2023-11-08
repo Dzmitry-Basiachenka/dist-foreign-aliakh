@@ -28,6 +28,7 @@ import com.copyright.rup.dist.foreign.domain.UdmValueDto;
 import com.copyright.rup.dist.foreign.domain.UdmValueStatusEnum;
 import com.copyright.rup.dist.foreign.ui.audit.impl.UdmValueAuditFieldToValuesMap;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
+import com.copyright.rup.dist.foreign.ui.usage.UiTestHelper;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
@@ -161,7 +162,7 @@ public class UdmEditValueWindowTest {
     public void testConstructor() {
         setSpecialistExpectations();
         initEditWindow();
-        verifyWindow(window, "Edit UDM Value",960, 700, Unit.PIXELS);
+        verifyWindow(window, "Edit UDM Value", 960, 700, Unit.PIXELS);
         VerticalLayout verticalLayout = verifyRootLayout(window.getContent(), true);
         verifyPanel(verticalLayout.getComponent(0));
     }
@@ -216,7 +217,7 @@ public class UdmEditValueWindowTest {
         assertTextFieldValue(pubTypeContent.getComponent(1), LAST_PUB_TYPE);
         Panel contentPanel = (Panel) row2.getComponent(2);
         VerticalLayout contentContent = (VerticalLayout) contentPanel.getContent();
-        assertEquals(10, contentContent.getComponentCount());
+        assertEquals(11, contentContent.getComponentCount());
         assertTextFieldValue(contentContent.getComponent(0), "3.00");
         assertTextFieldValue(contentContent.getComponent(1), CONTENT_SOURCE);
         assertTextFieldValue(contentContent.getComponent(2), CONTENT_COMMENT);
@@ -227,6 +228,7 @@ public class UdmEditValueWindowTest {
         assertTextFieldValue(contentContent.getComponent(7), YES);
         assertTextFieldValue(contentContent.getComponent(8), CONTENT_UNIT_PRICE.toString());
         assertTextFieldValue(contentContent.getComponent(9), NO);
+        verifyContentButtonsLayout(contentContent.getComponent(10));
         Panel commentPanel = (Panel) row2.getComponent(3);
         VerticalLayout commentContent = (VerticalLayout) commentPanel.getContent();
         assertEquals(2, commentContent.getComponentCount());
@@ -237,6 +239,16 @@ public class UdmEditValueWindowTest {
         assertEquals(2, updateContent.getComponentCount());
         assertTextFieldValue(updateContent.getComponent(0), USER_NAME);
         assertTextFieldValue(updateContent.getComponent(1), "12/31/2020");
+    }
+
+    private void verifyContentButtonsLayout(Component component) {
+        assertThat(component, instanceOf(VerticalLayout.class));
+        var layout = (VerticalLayout) component;
+        assertEquals(1, layout.getComponentCount());
+        assertThat(layout.getComponent(0), instanceOf(HorizontalLayout.class));
+        var buttonsLayout = (HorizontalLayout) ((VerticalLayout) component).getComponent(0);
+        assertEquals(2, buttonsLayout.getComponentCount());
+        UiTestHelper.verifyButtonsLayout(buttonsLayout, "Edit CUP", "Clear");
     }
 
     @Test
@@ -697,7 +709,7 @@ public class UdmEditValueWindowTest {
         Panel contentPanel = (Panel) row2.getComponent(2);
         assertEquals("Content", contentPanel.getCaption());
         VerticalLayout contentContent = (VerticalLayout) contentPanel.getContent();
-        assertEquals(10, contentContent.getComponentCount());
+        assertEquals(11, contentContent.getComponentCount());
         verifyTextFieldLayout(contentContent.getComponent(0), "Content", false, true, "udm-value-edit-content-field");
         verifyTextFieldLayout(contentContent.getComponent(1), "Content Source", false, true,
             "udm-value-edit-content-source-field");
