@@ -190,7 +190,7 @@ public class UdmEditValueWindowTest {
         assertTextFieldValue(workContent.getComponent(4), RH_ACCOUNT_NUMBER.toString());
         Panel pricePanel = (Panel) row1.getComponent(1);
         VerticalLayout priceContent = (VerticalLayout) pricePanel.getContent();
-        assertEquals(15, priceContent.getComponentCount());
+        assertEquals(16, priceContent.getComponentCount());
         assertTextFieldValue(priceContent.getComponent(0), PRICE.toString());
         assertComboBoxFieldValue(priceContent.getComponent(1), CURRENCY);
         assertTextFieldValue(priceContent.getComponent(2), CURRENCY_EXCHANGE_RATE.toString());
@@ -568,6 +568,41 @@ public class UdmEditValueWindowTest {
     }
 
     @Test
+    public void testClearPriceSectionButtonClickListener() {
+        setSpecialistExpectations();
+        initEditWindow();
+        VerticalLayout verticalLayout = getPanelContent();
+        HorizontalLayout horizontalLayout = (HorizontalLayout) verticalLayout.getComponent(0);
+        VerticalLayout row = (VerticalLayout) horizontalLayout.getComponent(0);
+        assertEquals(2, row.getComponentCount());
+        Panel pricePanel = (Panel) row.getComponent(1);
+        VerticalLayout priceContent = (VerticalLayout) pricePanel.getContent();
+        assertEquals(16, priceContent.getComponentCount());
+        assertTextFieldValue(priceContent.getComponent(0), PRICE.toString());
+        assertComboBoxFieldValue(priceContent.getComponent(1), CURRENCY);
+        assertTextFieldValue(priceContent.getComponent(2), CURRENCY_EXCHANGE_RATE.toString());
+        assertTextFieldValue(priceContent.getComponent(3), "12/31/2020");
+        assertTextFieldValue(priceContent.getComponent(4), PRICE_IN_USD.toString());
+        assertComboBoxFieldValue(priceContent.getComponent(5), PRICE_TYPE);
+        assertComboBoxFieldValue(priceContent.getComponent(6), PRICE_ACCESS_TYPE);
+        assertTextFieldValue(priceContent.getComponent(7), PRICE_YEAR.toString());
+        assertTextFieldValue(priceContent.getComponent(8), PRICE_SOURCE);
+        assertTextFieldValue(priceContent.getComponent(9), PRICE_COMMENT);
+        Button clearPriceSectionButton = Whitebox.getInternalState(window, "clearPriceSectionButton");
+        clearPriceSectionButton.click();
+        assertTextFieldValue(priceContent.getComponent(0), StringUtils.EMPTY);
+        assertComboBoxFieldValue(priceContent.getComponent(1), null);
+        assertTextFieldValue(priceContent.getComponent(2), StringUtils.EMPTY);
+        assertTextFieldValue(priceContent.getComponent(3), StringUtils.EMPTY);
+        assertTextFieldValue(priceContent.getComponent(4), StringUtils.EMPTY);
+        assertComboBoxFieldValue(priceContent.getComponent(5), null);
+        assertComboBoxFieldValue(priceContent.getComponent(6), null);
+        assertTextFieldValue(priceContent.getComponent(7), StringUtils.EMPTY);
+        assertTextFieldValue(priceContent.getComponent(8), StringUtils.EMPTY);
+        assertTextFieldValue(priceContent.getComponent(9), StringUtils.EMPTY);
+    }
+
+    @Test
     public void testCommentFieldValidation() {
         setSpecialistExpectations();
         initEditWindow();
@@ -730,7 +765,7 @@ public class UdmEditValueWindowTest {
         Panel pricePanel = (Panel) row1.getComponent(1);
         assertEquals("Price", pricePanel.getCaption());
         VerticalLayout priceContent = (VerticalLayout) pricePanel.getContent();
-        assertEquals(15, priceContent.getComponentCount());
+        assertEquals(16, priceContent.getComponentCount());
         verifyTextFieldLayout(priceContent.getComponent(0), "Price", false, true, "udm-value-edit-price-field");
         verifyComboBoxLayout(priceContent.getComponent(1), "Currency", true, true, List.of(CURRENCY));
         verifyTextFieldLayout(priceContent.getComponent(2), "Currency Exchange Rate", true, false, StringUtils.EMPTY);
@@ -750,6 +785,7 @@ public class UdmEditValueWindowTest {
         verifyTextFieldLayout(priceContent.getComponent(12), "Last Price Source", true, false, StringUtils.EMPTY);
         verifyTextFieldLayout(priceContent.getComponent(13), "Last Price Comment", true, false, StringUtils.EMPTY);
         verifyTextFieldLayout(priceContent.getComponent(14), "Last Price Flag", true, false, StringUtils.EMPTY);
+        UiTestHelper.verifyButtonsLayout(priceContent.getComponent(15), "Clear");
     }
 
     private void verifyRow2(HorizontalLayout horizontalLayout) {
