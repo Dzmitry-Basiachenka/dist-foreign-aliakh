@@ -8,6 +8,7 @@ import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.reset;
@@ -30,11 +31,13 @@ import com.copyright.rup.dist.foreign.ui.audit.impl.UdmValueAuditFieldToValuesMa
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.UiTestHelper;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueController;
+import com.copyright.rup.vaadin.ui.component.window.ConfirmActionDialogWindow;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
 import com.vaadin.data.Binder;
 import com.vaadin.data.BinderValidationStatus;
 import com.vaadin.data.ValidationResult;
+import com.vaadin.data.Validator;
 import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.ContentMode;
@@ -52,6 +55,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.powermock.api.easymock.PowerMock;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
@@ -131,6 +135,7 @@ public class UdmEditValueWindowTest {
         "Field value should be positive number and should not exceed 10 digits";
     private static final String PRICE_FIELD = "priceField";
     private static final String CONTENT_FIELD = "contentField";
+    private static final String CONTENT_UNIT_PRICE_FIELD = "contentUnitPriceField";
     private static final String YES = "Y";
     private static final String NO = "N";
 
@@ -263,7 +268,7 @@ public class UdmEditValueWindowTest {
         validateFieldAndVerifyErrorMessage(priceField, INTEGER_WITH_SPACES_STRING, binder, null, true);
         validateFieldAndVerifyErrorMessage(priceField, "-1", binder, POSITIVE_OR_ZERO_AND_LENGTH_ERROR_MESSAGE, false);
         validateFieldAndVerifyErrorMessage(priceField, "0", binder, null, true);
-        validateFieldAndVerifyErrorMessage(priceField, "0.1", binder, null, true);
+        validateFieldAndVerifyErrorMessage(priceField, VALID_DECIMAL, binder, null, true);
         validateFieldAndVerifyErrorMessage(priceField, "0.12", binder, null, true);
         validateFieldAndVerifyErrorMessage(priceField, "  0.12  ", binder, null, true);
         validateFieldAndVerifyErrorMessage(priceField, "0.123", binder, null, true);
@@ -431,7 +436,7 @@ public class UdmEditValueWindowTest {
         validateFieldAndVerifyErrorMessage(contentField, INTEGER_WITH_SPACES_STRING, binder, null, true);
         validateFieldAndVerifyErrorMessage(contentField, "-1", binder, POSITIVE_AND_LENGTH_ERROR_MESSAGE, false);
         validateFieldAndVerifyErrorMessage(contentField, "0", binder, POSITIVE_AND_LENGTH_ERROR_MESSAGE, false);
-        validateFieldAndVerifyErrorMessage(contentField, "0.1", binder, null, true);
+        validateFieldAndVerifyErrorMessage(contentField, VALID_DECIMAL, binder, null, true);
         validateFieldAndVerifyErrorMessage(contentField, "0.12", binder, null, true);
         validateFieldAndVerifyErrorMessage(contentField, "  0.12  ", binder, null, true);
         validateFieldAndVerifyErrorMessage(contentField, "0.123", binder, null, true);
@@ -570,6 +575,46 @@ public class UdmEditValueWindowTest {
     }
 
     @Test
+    public void testContentUnitPriceFieldValidation() {
+        setSpecialistExpectations();
+        initEditWindow();
+        TextField contentUnitPrice = Whitebox.getInternalState(window, CONTENT_UNIT_PRICE_FIELD);
+        validateFieldAndVerifyErrorMessage(contentUnitPrice, StringUtils.EMPTY, binder, null, true);
+        validateFieldAndVerifyErrorMessage(
+            contentUnitPrice, SPACES_STRING, binder, POSITIVE_OR_ZERO_AND_LENGTH_ERROR_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(contentUnitPrice, INVALID_NUMBER, binder, NUMBER_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(contentUnitPrice, INTEGER_WITH_SPACES_STRING, binder, null, true);
+        validateFieldAndVerifyErrorMessage(contentUnitPrice, "-1", binder, POSITIVE_OR_ZERO_AND_LENGTH_ERROR_MESSAGE,
+            false);
+        validateFieldAndVerifyErrorMessage(contentUnitPrice, "0", binder, null, true);
+        validateFieldAndVerifyErrorMessage(contentUnitPrice, VALID_DECIMAL, binder, null, true);
+        validateFieldAndVerifyErrorMessage(contentUnitPrice, "0.12", binder, null, true);
+        validateFieldAndVerifyErrorMessage(contentUnitPrice, "  0.12  ", binder, null, true);
+        validateFieldAndVerifyErrorMessage(contentUnitPrice, "0.123", binder, null, true);
+        validateFieldAndVerifyErrorMessage(contentUnitPrice, "0.1234", binder, null, true);
+        validateFieldAndVerifyErrorMessage(contentUnitPrice, "0.12345", binder, null, true);
+        validateFieldAndVerifyErrorMessage(contentUnitPrice, "0.123456", binder, null, true);
+        validateFieldAndVerifyErrorMessage(contentUnitPrice, "0.1234567", binder, null, true);
+        validateFieldAndVerifyErrorMessage(contentUnitPrice, "0.12345678", binder, null, true);
+        validateFieldAndVerifyErrorMessage(contentUnitPrice, "0.123456789", binder, null, true);
+        validateFieldAndVerifyErrorMessage(contentUnitPrice, "0.1234567890", binder, null, true);
+        validateFieldAndVerifyErrorMessage(
+            contentUnitPrice, "0.12345678901", binder, POSITIVE_OR_ZERO_AND_LENGTH_ERROR_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(contentUnitPrice, "1.1234567890", binder, null, true);
+        validateFieldAndVerifyErrorMessage(contentUnitPrice, "12.1234567890", binder, null, true);
+        validateFieldAndVerifyErrorMessage(contentUnitPrice, "123.1234567890", binder, null, true);
+        validateFieldAndVerifyErrorMessage(contentUnitPrice, "1234.1234567890", binder, null, true);
+        validateFieldAndVerifyErrorMessage(contentUnitPrice, "12345.1234567890", binder, null, true);
+        validateFieldAndVerifyErrorMessage(contentUnitPrice, "123456.1234567890", binder, null, true);
+        validateFieldAndVerifyErrorMessage(contentUnitPrice, "1234567.1234567890", binder, null, true);
+        validateFieldAndVerifyErrorMessage(contentUnitPrice, "12345678.1234567890", binder, null, true);
+        validateFieldAndVerifyErrorMessage(contentUnitPrice, "123456789.1234567890", binder, null, true);
+        validateFieldAndVerifyErrorMessage(contentUnitPrice, "1234567890.1234567890", binder, null, true);
+        validateFieldAndVerifyErrorMessage(
+            contentUnitPrice, "12345678901.1234567890", binder, POSITIVE_OR_ZERO_AND_LENGTH_ERROR_MESSAGE, false);
+    }
+
+    @Test
     public void testSaveButtonClickListener() throws Exception {
         setSpecialistExpectations();
         controller.updateValue(udmValue, new UdmValueAuditFieldToValuesMap(udmValue).getActionReasons());
@@ -593,7 +638,28 @@ public class UdmEditValueWindowTest {
         assertNull(udmValue.getContentComment());
         assertNull(udmValue.getPriceSource());
         assertNull(udmValue.getPriceComment());
-        verify(controller, saveButtonClickListener, ForeignSecurityUtils.class);
+        verify(controller, saveButtonClickListener, ForeignSecurityUtils.class, Windows.class);
+    }
+
+    @Test
+    public void testSaveButtonWithEditCUPClickListener() {
+        mockStatic(Windows.class);
+        setSpecialistExpectations();
+        Windows.showConfirmDialogWithReason(eq("Confirm action"), eq("Are you sure you want to update CUP?"),
+            eq("Yes"), eq("Cancel"), anyObject(ConfirmActionDialogWindow.IListener.class), anyObject(Validator.class));
+        PowerMock.expectLastCall().once();
+        replay(controller, saveButtonClickListener, ForeignSecurityUtils.class, Windows.class);
+        window = new UdmEditValueWindow(controller, udmValue, saveButtonClickListener);
+        Button editCupButton = Whitebox.getInternalState(window, "editButton");
+        editCupButton.click();
+        TextField contentUnitPriceField = Whitebox.getInternalState(window, "contentUnitPriceField");
+        contentUnitPriceField.setValue("0.25");
+        TextField contentUnitPriceFlagField = Whitebox.getInternalState(window, "contentUnitPriceFlagField");
+        contentUnitPriceFlagField.setValue("Y");
+        Button saveButton = Whitebox.getInternalState(window, "saveButton");
+        saveButton.setEnabled(true);
+        saveButton.click();
+        verify(controller, saveButtonClickListener, ForeignSecurityUtils.class, Windows.class);
     }
 
     @Test

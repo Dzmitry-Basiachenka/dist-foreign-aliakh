@@ -112,7 +112,8 @@ public abstract class CommonUdmValueWindow extends Window implements IDateFormat
      * @return value provider with converted value
      */
     protected Setter<UdmValueDto, String> fromYNStringToBoolean(Setter<UdmValueDto, Boolean> setter) {
-        return (bean, value) -> setter.accept(bean, Objects.nonNull(value) ? "Y".equals(value) : null);
+        return (bean, value) -> setter.accept(bean, Objects.nonNull(StringUtils.trim(value))
+            ? "Y".equals(StringUtils.trim(value)) : null);
     }
 
     /**
@@ -155,5 +156,15 @@ public abstract class CommonUdmValueWindow extends Window implements IDateFormat
      */
     protected String convertFromBigDecimalToMoneyString(BigDecimal value) {
         return BigDecimalUtils.formatCurrencyForDialog(value);
+    }
+
+    /**
+     * Converts value from {@link String} to Boolean.
+     *
+     * @param value instance of {@link String}
+     * @return converted value
+     */
+    protected boolean convertFromYNStringToBoolean(String value) {
+        return "Y".equals(StringUtils.trim(value));
     }
 }
