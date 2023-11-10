@@ -27,6 +27,7 @@ import com.vaadin.server.Setter;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
@@ -270,10 +271,10 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
                 buildReadOnlyLayout("label.last_content_comment", UdmValueDto::getLastContentComment, binder),
                 buildReadOnlyLayout("label.last_content_flag",
                     bean -> BooleanUtils.toYNString(bean.isLastContentFlag()), binder),
-                buildReadOnlyLayout(contentUnitPriceField, "label.content_unit_price",
+                buildContentUnitPriceLayout(contentUnitPriceField,
                     fromBigDecimalToMoneyString(UdmValueDto::getContentUnitPrice),
                     fromStringToBigDecimal(UdmValueDto::setContentUnitPrice)),
-                buildReadOnlyLayout(contentUnitPriceFlagField, "label.content_unit_price_flag",
+                buildContentUnitPriceFlagLayout(contentUnitPriceFlagField,
                     fromBooleanToYNString(UdmValueDto::isContentUnitPriceFlag),
                     fromYNStringToBoolean(UdmValueDto::setContentUnitPriceFlag)),
                 initContentButtonsLayout()
@@ -294,6 +295,10 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
 
     private VerticalLayout initContentButtonsLayout() {
         var buttonsLayout = new HorizontalLayout(editButton, clearButton);
+        editButton.addClickListener(event -> {
+            contentUnitPriceField.setReadOnly(false);
+            contentUnitPriceFlagField.setReadOnly(false);
+        });
         var editClearContentFieldsLayout = new VerticalLayout(buttonsLayout);
         editClearContentFieldsLayout.setMargin(new MarginInfo(false));
         editClearContentFieldsLayout.setSpacing(false);
@@ -319,6 +324,35 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
         return buildCommonLayout(textField, fieldName);
     }
 
+    private HorizontalLayout buildContentUnitPriceLayout(TextField textField, ValueProvider<UdmValueDto, String> getter,
+                                                         Setter<UdmValueDto, String> setter) {
+        binder.forField(textField)
+            .withValidator(value -> StringUtils.isBlank(value) || NumberUtils.isNumber(value.trim()),
+                NUMBER_VALIDATION_MESSAGE)
+            .withValidator(new AmountValidator())
+            .bind(getter, setter);
+        return buildContentUnitPriceLayout(textField, "label.content_unit_price");
+    }
+
+    private HorizontalLayout buildContentUnitPriceFlagLayout(TextField textField,
+                                                             ValueProvider<UdmValueDto, String> getter,
+                                                             Setter<UdmValueDto, String> setter) {
+        binder.forField(textField)
+            .withValidator(value -> "Y".equals(value.trim()) || "N".equals(value.trim()),
+                ForeignUi.getMessage("field.error.flag"))
+            .bind(getter, setter);
+        return buildContentUnitPriceLayout(textField, "label.content_unit_price_flag");
+    }
+
+    private HorizontalLayout buildContentUnitPriceLayout(TextField textField, String caption) {
+        String fieldName = ForeignUi.getMessage(caption);
+        textField.setReadOnly(true);
+        textField.setSizeFull();
+        textField.addValueChangeListener(event ->
+            fieldToValueChangesMap.updateFieldValue(fieldName, event.getValue().trim()));
+        return buildCommonLayout(textField, fieldName);
+    }
+
     private HorizontalLayout buildEditableStringLayout(TextField textField, String caption, int maxLength,
                                                        ValueProvider<UdmValueDto, String> getter,
                                                        Setter<UdmValueDto, String> setter, String styleName) {
@@ -338,15 +372,23 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
         Button closeButton = Buttons.createCloseButton(this);
         saveButton.setEnabled(false);
         saveButton.addClickListener(event -> {
-            try {
-                binder.writeBean(udmValue);
-                controller.updateValue(udmValue, fieldToValueChangesMap.getActionReasons());
-                saveButtonClickListener.buttonClick(event);
-                close();
-            } catch (ValidationException e) {
-                Windows.showValidationErrorWindow(List.of(valueStatusComboBox, pubTypeComboBox, priceField,
-                    currencyComboBox, priceTypeComboBox, priceAccessTypeComboBox, priceYearField, priceSourceField,
-                    priceCommentField, contentField, contentSourceField, contentCommentField, commentField));
+            if (binder.isValid()) {
+                if (isContentUnitPriceFieldsChanged()) {
+                    Windows.showConfirmDialogWithReason(
+                        ForeignUi.getMessage("window.confirm"),
+                        ForeignUi.getMessage("message.confirm.update_values_cup"),
+                        ForeignUi.getMessage("button.yes"),
+                        ForeignUi.getMessage("button.cancel"),
+                        reason -> {
+                            onClickSaveButton(event, reason);
+                            this.close();
+                        },
+                        new StringLengthValidator(ForeignUi.getMessage("field.error.empty.length", 1024), 1, 1024));
+                } else {
+                    onClickSaveButton(event, StringUtils.EMPTY);
+                }
+            } else {
+                showValidationMessage();
             }
         });
         VaadinUtils.setButtonsAutoDisabled(saveButton);
@@ -357,6 +399,39 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
             saveButton.setEnabled(false);
         });
         return new HorizontalLayout(saveButton, discardButton, closeButton);
+    }
+
+    private void onClickSaveButton(ClickEvent event, String reason) {
+        try {
+            binder.writeBean(udmValue);
+            if (StringUtils.isNotBlank(reason)) {
+                fieldToValueChangesMap.setContentUnitPriceReason(reason);
+            }
+            controller.updateValue(udmValue, fieldToValueChangesMap.getActionReasons());
+            saveButtonClickListener.buttonClick(event);
+            close();
+        } catch (ValidationException e) {
+            showValidationMessage();
+        }
+    }
+
+    private void showValidationMessage() {
+        Windows.showValidationErrorWindow(List.of(valueStatusComboBox, pubTypeComboBox, priceField,
+            currencyComboBox, priceTypeComboBox, priceAccessTypeComboBox, priceYearField, priceSourceField,
+            priceCommentField, contentField, contentSourceField, contentCommentField, commentField,
+            contentUnitPriceField, contentUnitPriceFlagField)
+        );
+    }
+
+    private boolean isContentUnitPriceFieldsChanged() {
+        return !contentUnitPriceField.isReadOnly() && isPriceAndContentFieldsNotChanged()
+            && (0 != (udmValue.getContentUnitPrice().compareTo(new BigDecimal(contentUnitPriceField.getValue())))
+            || convertFromYNStringToBoolean(contentUnitPriceFlagField.getValue()) != udmValue.isContentUnitPriceFlag());
+    }
+
+    private boolean isPriceAndContentFieldsNotChanged() {
+        return 0 == udmValue.getPrice().compareTo(new BigDecimal(priceField.getValue()))
+            && 0 == udmValue.getContent().compareTo(new BigDecimal(contentField.getValue()));
     }
 
     private HorizontalLayout initValueStatusLayout() {

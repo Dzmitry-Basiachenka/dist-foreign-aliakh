@@ -422,40 +422,51 @@ public class UdmValueAuditFieldToValuesMapTest {
     public void testContentUnitPrice() {
         UdmValueDto valueDto = new UdmValueDto();
         UdmValueAuditFieldToValuesMap fieldToValuesMap = new UdmValueAuditFieldToValuesMap(valueDto);
+        fieldToValuesMap.setContentUnitPriceReason("Reason for changing field");
         assertEquals(List.of(), fieldToValuesMap.getActionReasons());
         fieldToValuesMap.updateFieldValue("Content Unit Price", CONTENT_UNIT_PRICE_OLD.toString());
         assertEquals(List.of("The field 'Content Unit Price' was edited. " +
-            "Old Value is not specified. New Value is '1694.10610725'"), fieldToValuesMap.getActionReasons());
+                "Old Value is not specified. New Value is '1694.10610725'. Reason for changing field"),
+            fieldToValuesMap.getActionReasons());
         valueDto.setContentUnitPrice(CONTENT_UNIT_PRICE_OLD);
         fieldToValuesMap = new UdmValueAuditFieldToValuesMap(valueDto);
+        fieldToValuesMap.setContentUnitPriceReason("Reason for changing field");
         fieldToValuesMap.updateFieldValue("Content Unit Price", CONTENT_UNIT_PRICE_NEW.toString());
         assertEquals(List.of("The field 'Content Unit Price' was edited. " +
-            "Old Value is '1694.10610725'. New Value is '1771.4271794667'"), fieldToValuesMap.getActionReasons());
+                "Old Value is '1694.10610725'. New Value is '1771.4271794667'. Reason for changing field"),
+            fieldToValuesMap.getActionReasons());
         valueDto.setContentUnitPrice(CONTENT_UNIT_PRICE_NEW);
         fieldToValuesMap = new UdmValueAuditFieldToValuesMap(valueDto);
+        fieldToValuesMap.setContentUnitPriceReason("Reason for changing field to not specified");
         fieldToValuesMap.updateFieldValue("Content Unit Price", null);
-        assertEquals(List.of("The field 'Content Unit Price' was edited. " +
-            "Old Value is '1771.4271794667'. New Value is not specified"), fieldToValuesMap.getActionReasons());
+        assertEquals(List.of("The field 'Content Unit Price' was edited. Old Value is '1771.4271794667'. " +
+                "New Value is not specified. Reason for changing field to not specified"),
+            fieldToValuesMap.getActionReasons());
     }
 
     @Test
     public void testContentUnitPriceFlag() {
         UdmValueDto valueDto = new UdmValueDto();
         UdmValueAuditFieldToValuesMap fieldToValuesMap = new UdmValueAuditFieldToValuesMap(valueDto);
+        fieldToValuesMap.setContentUnitPriceReason("Reason for changing field to N");
         assertEquals(List.of(), fieldToValuesMap.getActionReasons());
         fieldToValuesMap.updateFieldValue("CUP Flag", fromBooleanToYNString(CUP_FLAG_OLD));
         assertEquals(List.of("The field 'CUP Flag' was edited. " +
-            "Old Value is not specified. New Value is 'N'"), fieldToValuesMap.getActionReasons());
+                "Old Value is not specified. New Value is 'N'. Reason for changing field to N"),
+            fieldToValuesMap.getActionReasons());
         valueDto.setContentUnitPriceFlag(CUP_FLAG_OLD);
         fieldToValuesMap = new UdmValueAuditFieldToValuesMap(valueDto);
+        fieldToValuesMap.setContentUnitPriceReason("Reason for changing field to Y");
         fieldToValuesMap.updateFieldValue("CUP Flag", fromBooleanToYNString(CUP_FLAG_NEW));
         assertEquals(List.of("The field 'CUP Flag' was edited. " +
-            "Old Value is 'N'. New Value is 'Y'"), fieldToValuesMap.getActionReasons());
+            "Old Value is 'N'. New Value is 'Y'. Reason for changing field to Y"), fieldToValuesMap.getActionReasons());
         valueDto.setContentUnitPriceFlag(CUP_FLAG_NEW);
         fieldToValuesMap = new UdmValueAuditFieldToValuesMap(valueDto);
+        fieldToValuesMap.setContentUnitPriceReason("Reason for changing field cup flag to not specified");
         fieldToValuesMap.updateFieldValue("CUP Flag", null);
         assertEquals(List.of("The field 'CUP Flag' was edited. " +
-            "Old Value is 'Y'. New Value is not specified"), fieldToValuesMap.getActionReasons());
+                "Old Value is 'Y'. New Value is not specified. Reason for changing field cup flag to not specified"),
+            fieldToValuesMap.getActionReasons());
     }
 
     @Test

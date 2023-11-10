@@ -28,9 +28,27 @@ public class CommonAuditFieldToValuesMap<T> {
     protected static final Pair<String, String> EMPTY_PAIR = Pair.of(null, null);
 
     private static final String USAGE_EDIT_REASON = "The field '%s' was edited. Old Value is %s. New Value is %s";
+    private static final String CUP_VALUE_EDIT_REASON =
+        "The field '%s' was edited. Old Value is %s. New Value is %s. %s";
     private static final String NOT_SPECIFIED = "not specified";
 
     private final Map<String, Pair<String, String>> fieldToValueChangesMap = new LinkedHashMap<>();
+    private String contentUnitPriceReason;
+
+    /**
+     * Gets maps of DTOs to list of audit action reasons.
+     *
+     * @param commonAuditFieldToValuesMap instance of {@link CommonAuditFieldToValuesMap}
+     * @param <T>                         type of domain objects
+     * @return list of audit action reasons
+     */
+    public static <T> Map<T, List<String>> getDtoToAuditReasonsMap(
+        Map<T, ? extends CommonAuditFieldToValuesMap<T>> commonAuditFieldToValuesMap) {
+        return commonAuditFieldToValuesMap
+            .entrySet()
+            .stream()
+            .collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().getActionReasons()));
+    }
 
     /**
      * Updates field value for specified field name.
@@ -53,6 +71,10 @@ public class CommonAuditFieldToValuesMap<T> {
         fieldToValueChangesMap.put(fieldValue, Pair.of(oldValue, newValue));
     }
 
+    public void setContentUnitPriceReason(String reason) {
+        this.contentUnitPriceReason = reason;
+    }
+
     /**
      * Gets list of audit action reasons.
      *
@@ -66,25 +88,13 @@ public class CommonAuditFieldToValuesMap<T> {
                     ? NOT_SPECIFIED : String.format("'%s'", value.getLeft());
                 String newValue = StringUtils.isBlank(value.getRight())
                     ? NOT_SPECIFIED : String.format("'%s'", value.getRight());
-                result.add(String.format(USAGE_EDIT_REASON, key, oldValue, newValue));
+                result.add(StringUtils.isNotBlank(contentUnitPriceReason)
+                    && ("Content Unit Price".equals(key) || "CUP Flag".equals(key))
+                    ? String.format(CUP_VALUE_EDIT_REASON, key, oldValue, newValue, contentUnitPriceReason)
+                    : String.format(USAGE_EDIT_REASON, key, oldValue, newValue));
             }
         });
         return result;
-    }
-
-    /**
-     * Gets maps of DTOs to list of audit action reasons.
-     *
-     * @param commonAuditFieldToValuesMap instance of {@link CommonAuditFieldToValuesMap}
-     * @param <T>                         type of domain objects
-     * @return list of audit action reasons
-     */
-    public static <T> Map<T, List<String>> getDtoToAuditReasonsMap(
-        Map<T, ? extends CommonAuditFieldToValuesMap<T>> commonAuditFieldToValuesMap) {
-        return commonAuditFieldToValuesMap
-            .entrySet()
-            .stream()
-            .collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().getActionReasons()));
     }
 
     protected final Map<String, Pair<String, String>> getFieldToValueChangesMap() {
