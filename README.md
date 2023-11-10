@@ -1,3 +1,9 @@
+20.0.9
+-
+CDP-1769: PI 20 Sprint 3 Tech Debt fix CVE-2023-44487
+B-80927 - FDA & ACL: Manually enter proxy CUP and update CUP Flag: add edit button
+B-80927 - FDA & ACL: Manually enter proxy CUP and update CUP Flag: implement logic to be able to update CUP and CUP flag
+
 20.0.8
 -
 * B-80341 - FDA & ACLCI: Update the file upload with an additional field: add new field to the export report
