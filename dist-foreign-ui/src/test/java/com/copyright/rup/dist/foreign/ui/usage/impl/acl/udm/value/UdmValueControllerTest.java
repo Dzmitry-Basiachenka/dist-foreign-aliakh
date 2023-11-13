@@ -354,6 +354,22 @@ public class UdmValueControllerTest {
             udmReportService);
     }
 
+    @Test
+    public void testIsAllowedForRecalculatingTrue() {
+        expect(valueService.isAllowedForRecalculating(202106)).andReturn(true).once();
+        replay(valueService);
+        assertTrue(controller.isAllowedForRecalculating(202106));
+        verify(valueService);
+    }
+
+    @Test
+    public void testIsAllowedForRecalculatingFalse() {
+        expect(valueService.isAllowedForRecalculating(202106)).andReturn(false).once();
+        replay(valueService);
+        assertFalse(controller.isAllowedForRecalculating(202106));
+        verify(valueService);
+    }
+
     private PublicationType buildPublicationType(String name, String weight) {
         PublicationType pubType = new PublicationType();
         pubType.setName(name);

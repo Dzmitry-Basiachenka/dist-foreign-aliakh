@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.repository.impl;
 
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
+import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.UdmValue;
 import com.copyright.rup.dist.foreign.domain.UdmValueDto;
 import com.copyright.rup.dist.foreign.domain.UdmValueStatusEnum;
@@ -29,6 +30,8 @@ import java.util.Set;
  */
 @Repository
 public class UdmValueRepository extends AclBaseRepository implements IUdmValueRepository {
+
+    private static final String PERIOD_KEY = "period";
 
     @Override
     public void insert(UdmValue value) {
@@ -82,7 +85,7 @@ public class UdmValueRepository extends AclBaseRepository implements IUdmValueRe
     @Override
     public boolean isAllowedForPublishing(Integer period) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
-        parameters.put("period", Objects.requireNonNull(period));
+        parameters.put(PERIOD_KEY, Objects.requireNonNull(period));
         parameters.put("statuses", List.of(UdmValueStatusEnum.NEW, UdmValueStatusEnum.RSCHD_IN_THE_PREV_PERIOD));
         return selectOne("IUdmValueMapper.isAllowedForPublishing", parameters);
     }
@@ -90,7 +93,7 @@ public class UdmValueRepository extends AclBaseRepository implements IUdmValueRe
     @Override
     public List<String> publishToBaseline(Integer period, String userName) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
-        parameters.put("period", Objects.requireNonNull(period));
+        parameters.put(PERIOD_KEY, Objects.requireNonNull(period));
         parameters.put("updateUser", Objects.requireNonNull(userName));
         parameters.put("createUser", userName);
         return selectList("IUdmValueMapper.publishToBaseline", parameters);
@@ -99,9 +102,17 @@ public class UdmValueRepository extends AclBaseRepository implements IUdmValueRe
     @Override
     public void updateResearchedInPrevPeriod(Integer period, String userName) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
-        parameters.put("period", Objects.requireNonNull(period));
+        parameters.put(PERIOD_KEY, Objects.requireNonNull(period));
         parameters.put("updateUser", Objects.requireNonNull(userName));
         update("IUdmValueMapper.updateResearchedInPrevPeriod", parameters);
+    }
+
+    @Override
+    public boolean isAllowedForRecalculating(Integer period) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
+        parameters.put(PERIOD_KEY, Objects.requireNonNull(period));
+        parameters.put("statuses", List.of(ScenarioStatusEnum.SENT_TO_LM, ScenarioStatusEnum.ARCHIVED));
+        return selectOne("IUdmValueMapper.isAllowedForRecalculating", parameters);
     }
 
     private UdmValueFilter escapeSqlLikePattern(UdmValueFilter udmUsageFilter) {

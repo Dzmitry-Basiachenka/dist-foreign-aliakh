@@ -1634,6 +1634,14 @@ public class UdmValueRepositoryIntegrationTest {
             Set.of("5cd32c80-49cb-4338-8896-c415b6bc0631", "64944284-158e-4bb1-96ca-7119a2ea322b"));
     }
 
+    @Test
+    @TestData(fileName = FOLDER_NAME + "is-allowed-for-recalculating.groovy")
+    public void testIsAllowedForRecalculating() {
+        assertTrue(udmValueRepository.isAllowedForRecalculating(202512));
+        assertFalse(udmValueRepository.isAllowedForRecalculating(202612));
+        assertFalse(udmValueRepository.isAllowedForRecalculating(202712));
+    }
+
     private void verifyValueBaselineDto(List<UdmValueBaselineDto> expectedValues,
                                         List<UdmValueBaselineDto> actualValues) {
         assertEquals(expectedValues.size(), actualValues.size());

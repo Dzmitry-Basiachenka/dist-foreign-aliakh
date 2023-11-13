@@ -634,6 +634,18 @@
         )
     </select>
 
+    <select id="isAllowedForRecalculating" parameterType="map" resultType="boolean">
+        select not exists (
+            select 1
+            from ${schema}.df_acl_scenario
+            where period_end_date = #{period}
+                and status_ind in
+                <foreach collection="statuses" item="status" open="(" separator="," close=")">
+                    #{status}
+                </foreach>
+        )
+    </select>
+
     <select id="publishToBaseline" parameterType="map" resultType="string">
         with existent_baseline_values_uids as (
             update ${schema}.df_udm_value_baseline vb

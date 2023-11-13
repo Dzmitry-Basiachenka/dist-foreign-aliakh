@@ -786,8 +786,8 @@ public class UdmEditValueWindowTest {
         verifyTextFieldLayout(contentContent.getComponent(5), "Last Content Source", true, false, StringUtils.EMPTY);
         verifyTextFieldLayout(contentContent.getComponent(6), "Last Content Comment", true, false, StringUtils.EMPTY);
         verifyTextFieldLayout(contentContent.getComponent(7), "Last Content Flag", true, false, StringUtils.EMPTY);
-        verifyTextFieldLayout(contentContent.getComponent(8), "Content Unit Price", true, false, StringUtils.EMPTY);
-        verifyTextFieldLayout(contentContent.getComponent(9), "CUP Flag", true, false, StringUtils.EMPTY);
+        verifyTextFieldLayout(contentContent.getComponent(8), "Content Unit Price", true, true, StringUtils.EMPTY);
+        verifyTextFieldLayout(contentContent.getComponent(9), "CUP Flag", true, true, StringUtils.EMPTY);
         Panel commentPanel = (Panel) row2.getComponent(3);
         assertEquals("Comment", commentPanel.getCaption());
         VerticalLayout commentContent = (VerticalLayout) commentPanel.getContent();

@@ -110,4 +110,12 @@ public interface IUdmValueRepository {
      * @param userName name of the user who publishes to baseline
      */
     void updateResearchedInPrevPeriod(Integer period, String userName);
+
+    /**
+     * Checks whether a values for given period is allowed for recalculating.
+     *
+     * @param period period to check
+     * @return {@code true} if value batch for given period is allowed for recalculating, otherwise {@code false}
+     */
+    boolean isAllowedForRecalculating(Integer period);
 }

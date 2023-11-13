@@ -87,8 +87,9 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
     private final TextField contentSourceField = new TextField(ForeignUi.getMessage("label.content_source"));
     private final TextField contentCommentField = new TextField(ForeignUi.getMessage("label.content_comment"));
     private final TextField contentFlagField = new TextField();
-    private final TextField contentUnitPriceField = new TextField();
-    private final TextField contentUnitPriceFlagField = new TextField();
+    private final TextField contentUnitPriceField = new TextField(ForeignUi.getMessage("label.content_unit_price"));
+    private final TextField contentUnitPriceFlagField = new TextField(
+        ForeignUi.getMessage("label.content_unit_price_flag"));
     private final TextField commentField = new TextField(ForeignUi.getMessage("label.comment"));
     private final UdmValueAuditFieldToValuesMap fieldToValueChangesMap;
 
@@ -430,7 +431,9 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
     }
 
     private boolean isPriceAndContentFieldsNotChanged() {
-        return 0 == udmValue.getPrice().compareTo(new BigDecimal(priceField.getValue()))
+        return Objects.nonNull(udmValue.getPrice())
+            && Objects.nonNull(udmValue.getContent())
+            && 0 == udmValue.getPrice().compareTo(new BigDecimal(priceField.getValue()))
             && 0 == udmValue.getContent().compareTo(new BigDecimal(contentField.getValue()));
     }
 
