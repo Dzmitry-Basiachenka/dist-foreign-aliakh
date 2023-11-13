@@ -199,6 +199,11 @@ public class UdmValueController extends CommonController<IUdmValueWidget> implem
             udmReportService.writeUdmValuesCsvReport(getFilter(), pos));
     }
 
+    @Override
+    public boolean isAllowedForRecalculating(Integer period) {
+        return valueService.isAllowedForRecalculating(period);
+    }
+
     private UdmValueFilter getFilter() {
         return udmValueFilterController.getWidget().getAppliedFilter();
     }

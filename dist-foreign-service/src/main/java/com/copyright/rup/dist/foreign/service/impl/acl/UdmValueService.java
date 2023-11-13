@@ -200,4 +200,9 @@ public class UdmValueService implements IUdmValueService {
             period, userName, LogUtils.size(publishedIds));
         return publishedIds.size();
     }
+
+    @Override
+    public boolean isAllowedForRecalculating(Integer period) {
+        return udmValueRepository.isAllowedForRecalculating(period);
+    }
 }

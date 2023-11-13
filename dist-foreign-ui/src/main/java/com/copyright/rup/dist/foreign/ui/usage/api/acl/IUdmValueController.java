@@ -183,4 +183,12 @@ public interface IUdmValueController extends IController<IUdmValueWidget> {
      * @return instance of {@link IStreamSource} for export.
      */
     IStreamSource getExportValuesStreamSource();
+
+    /**
+     * Checks whether a values for given period is allowed for recalculating.
+     *
+     * @param period period to check
+     * @return {@code true} if value batch for given period is allowed for recalculating, otherwise {@code false}
+     */
+    boolean isAllowedForRecalculating(Integer period);
 }

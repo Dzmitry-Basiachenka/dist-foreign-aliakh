@@ -70,12 +70,31 @@ public class UdmCalculateProxyValuesWindowTest {
 
     @Test
     @SuppressWarnings("unchecked")
-    public void testClickContinueButton() {
+    public void testClickContinueButtonAllowedCalculating() {
         expect(controller.getPeriods()).andReturn(List.of(202106)).once();
         expect(controller.calculateProxyValues(202106)).andReturn(2).once();
+        expect(controller.isAllowedForRecalculating(202106)).andReturn(true);
         Windows.showNotificationWindow("Proxy values calculating completed: 2 record(s) were updated");
         expectLastCall().once();
         continueButtonClickListener.buttonClick(anyObject(ClickEvent.class));
+        expectLastCall().once();
+        replay(Windows.class, controller, continueButtonClickListener);
+        window = new UdmCalculateProxyValuesWindow(controller, continueButtonClickListener);
+        ComboBox<Integer> comboBox = (ComboBox<Integer>) ((VerticalLayout) window.getContent()).getComponent(0);
+        comboBox.setSelectedItem(202106);
+        Button continueButton =
+            (Button) ((HorizontalLayout) ((VerticalLayout) window.getContent()).getComponent(1)).getComponent(0);
+        continueButton.click();
+        verify(Windows.class, controller, continueButtonClickListener);
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void testClickContinueButtonDoesAotAllowedCalculating() {
+        expect(controller.getPeriods()).andReturn(List.of(202106)).once();
+        expect(controller.isAllowedForRecalculating(202106)).andReturn(false);
+        Windows.showNotificationWindow("At least one scenario for this period is sent to LM and proxy values will " +
+            "not be recalculated");
         expectLastCall().once();
         replay(Windows.class, controller, continueButtonClickListener);
         window = new UdmCalculateProxyValuesWindow(controller, continueButtonClickListener);

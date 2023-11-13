@@ -306,6 +306,22 @@ public class UdmValueServiceTest {
         verify(udmValueRepository);
     }
 
+    @Test
+    public void testIsAllowedForRecalculatingTrue() {
+        expect(udmValueRepository.isAllowedForRecalculating(202106)).andReturn(true).once();
+        replay(udmValueRepository);
+        assertTrue(udmValueService.isAllowedForRecalculating(202106));
+        verify(udmValueRepository);
+    }
+
+    @Test
+    public void testIsAllowedForRecalculatingFalse() {
+        expect(udmValueRepository.isAllowedForRecalculating(202106)).andReturn(false).once();
+        replay(udmValueRepository);
+        assertFalse(udmValueService.isAllowedForRecalculating(202106));
+        verify(udmValueRepository);
+    }
+
     private UdmValue buildUdmValue(Long wrWrkInst) {
         UdmValue value = new UdmValue();
         value.setWrWrkInst(wrWrkInst);

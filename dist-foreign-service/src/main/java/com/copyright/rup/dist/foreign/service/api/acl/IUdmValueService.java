@@ -119,4 +119,12 @@ public interface IUdmValueService {
      * @return count of newly published records
      */
     int publishToBaseline(Integer period);
+
+    /**
+     * Checks whether a values for given period is allowed for recalculating.
+     *
+     * @param period period to check
+     * @return {@code true} if value batch for given period is allowed for recalculating, otherwise {@code false}
+     */
+    boolean isAllowedForRecalculating(Integer period);
 }

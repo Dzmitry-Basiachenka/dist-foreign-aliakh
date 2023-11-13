@@ -5,6 +5,7 @@ import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueController;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
+
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickListener;
@@ -61,11 +62,15 @@ public class UdmCalculateProxyValuesWindow extends Window {
         Button cancelButton = Buttons.createCancelButton(this);
         continueButton.setEnabled(false);
         continueButton.addClickListener(event -> {
-            int updatedValuesCount = controller.calculateProxyValues(periodComboBox.getValue());
-            continueButtonClickListener.buttonClick(event);
-            close();
-            Windows.showNotificationWindow(ForeignUi.getMessage("message.udm_proxy_value.calculate",
-                updatedValuesCount));
+            if (controller.isAllowedForRecalculating(periodComboBox.getValue())) {
+                int updatedValuesCount = controller.calculateProxyValues(periodComboBox.getValue());
+                continueButtonClickListener.buttonClick(event);
+                close();
+                Windows.showNotificationWindow(ForeignUi.getMessage("message.udm_proxy_value.calculate",
+                    updatedValuesCount));
+            } else {
+                Windows.showNotificationWindow(ForeignUi.getMessage("message.udm_proxy_value.calculate_error"));
+            }
         });
         VaadinUtils.setButtonsAutoDisabled(continueButton);
         horizontalLayout.addComponents(continueButton, cancelButton);
