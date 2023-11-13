@@ -1,8 +1,12 @@
+20.0.10
+-
+* B-80927 - FDA & ACL: Manually enter proxy CUP and update CUP Flag: implement backend logic to check value batch for ability to recalculate proxy values
+
 20.0.9
 -
 CDP-1769: PI 20 Sprint 3 Tech Debt fix CVE-2023-44487
-B-80927 - FDA & ACL: Manually enter proxy CUP and update CUP Flag: add edit button
-B-80927 - FDA & ACL: Manually enter proxy CUP and update CUP Flag: implement logic to be able to update CUP and CUP flag
+* B-80927 - FDA & ACL: Manually enter proxy CUP and update CUP Flag: add edit button
+* B-80927 - FDA & ACL: Manually enter proxy CUP and update CUP Flag: implement logic to be able to update CUP and CUP flag
 
 20.0.8
 -
