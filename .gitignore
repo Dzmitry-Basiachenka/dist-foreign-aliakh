@@ -26,3 +26,14 @@ build
 bin
 test-output
 .springBeans
+#Vaadin 23+ auto-generated files
+dist-foreign-vui/frontend/generated
+dist-foreign-vui/frontend/index.html
+dist-foreign-vui/node_modules
+dist-foreign-vui/node
+dist-foreign-vui/package.json
+dist-foreign-vui/package-lock.json
+dist-foreign-vui/tsconfig.json
+dist-foreign-vui/types.d.ts
+dist-foreign-vui/vite.config.ts
+dist-foreign-vui/vite.generated.ts
