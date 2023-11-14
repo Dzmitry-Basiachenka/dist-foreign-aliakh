@@ -1,0 +1,108 @@
+import org.apache.tools.ant.taskdefs.condition.Os
+
+buildscript {
+    repositories {
+        maven {
+            url rupRepoExtUrl
+        }
+    }
+    dependencies {
+        classpath "com.vaadin:vaadin-gradle-plugin:${vaadinGradlePluginVersion}",
+                classpath("com.moowork.gradle:gradle-node-plugin:${gradleNodePluginVersion}")
+    }
+}
+
+apply plugin: 'rup-war'
+apply plugin: 'com.vaadin'
+apply plugin: 'rup-tomcat'
+apply plugin: 'com.moowork.node'
+
+project.node {
+    version = "${nodeVersion}"
+    download = true
+    distBaseUrl = 'https://artifacts.copyright.com/rup-software/org/nodejs/'
+}
+
+rupTomcat {
+    tomcatVersion = "${embeddedTomcatVersion}"
+    httpPort = 8080
+    stopPort = 8081
+    debugPort = 5005
+    debugSuspend = false
+}
+
+repositories {
+    maven { url rupRepoExtUrl }
+    maven { url vaadinAddonsUrl }
+    ivy { url rupRepoReleaseUrl }
+    ivy { url cccRepoReleaseUrl }
+    if (project.hasProperty('developPlugins')) {
+        ivy { url file(System.getProperty('user.home') + '/.ivylocal') }
+    }
+}
+
+vaadin {
+    productionMode = true
+}
+
+dependencies {
+    //project dependencies
+
+    compile project(':dist-foreign-domain')
+    compile project(':dist-foreign-service')
+
+    implementation enforcedPlatform("com.vaadin:vaadin-bom:${vaadinUiVersion}")
+
+    implementation("com.vaadin:vaadin-core")
+    implementation('com.vaadin:vaadin-spring') {
+        transitive = false
+    }
+    implementation("com.copyright.rup.common:rup-common-logging:${rupCommonVersion}")
+    implementation("org.springframework:spring-webmvc:${rupJava.standardDependencies.spring.version}")
+    implementation("commons-io:commons-io:${commonsIoVersion}")
+
+    compile("com.copyright.rup.security.auth:rup-auth-common:${rupAuthVersion}")
+    compile("org.springframework:spring-context-support:${rupJava.standardDependencies.spring.version}")
+    compile("org.hibernate:hibernate-validator:${hibernateValidatorVersion}")
+
+    runtime("com.copyright.rup.common:rup-common-web:${rupCommonVersion}")
+    runtime("com.copyright.rup.dist.common:dist-common-web:${distCommonVersion}")
+    runtime("com.copyright.rup.security.auth:rup-auth-consumer:${rupAuthVersion}")
+    runtime("org.codehaus.janino:janino:${janinoVersion}")
+    providedCompile ("javax.servlet:javax.servlet-api:${javaxServletApiVersion}")
+
+    testCompile("com.copyright.rup.dist.common:dist-common-test:${distCommonVersion}")
+    testCompile("org.apache.commons:commons-text:${commonsTextVersion}")
+
+    testIntegRuntime("com.jayway.jsonpath:json-path:${jsonPathVersion}")
+    testIntegRuntime("org.skyscreamer:jsonassert:${jsonassertVersion}")
+}
+
+task vaadinNodeInstall {
+    doLast {
+        def fromPathNpm = "${node.variant.nodeDir}/lib/node_modules/npm"
+        if (Os.isFamily(Os.FAMILY_WINDOWS)) {
+            fromPathNpm = "${node.variant.nodeDir}/node_modules/npm"
+        }
+
+        project.sync {
+            from "${node.variant.nodeExec}"
+            into "$projectDir/node"
+        }
+
+        project.sync {
+            from "$fromPathNpm"
+            into "$projectDir/node/node_modules/npm"
+        }
+    }
+
+    dependsOn(tasks.nodeSetup)
+}
+
+tasks.vaadinPrepareFrontend.dependsOn { tasks.vaadinNodeInstall }
+
+sonarqube {
+    properties {
+        property "sonar.tests", "src/test"
+    }
+}

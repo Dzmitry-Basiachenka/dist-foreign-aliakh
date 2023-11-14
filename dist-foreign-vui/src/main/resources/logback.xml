@@ -1,0 +1,99 @@
+<configuration>
+
+    <!-- Use logback-dist.xml after migration to Micrometer of all applications -->
+    <include resource="com/copyright/rup/common/logging/logback-webapp.xml"/>
+
+    <!-- Remove after migration to Micrometer of all applications -->
+    <property name="logLevelDist" value="${DIST_LOG_LEVEL:-INFO}"/>
+    <property name="logLevelGen" value="${GEN_LOG_LEVEL:-WARN}"/>
+    <property name="logLevelCamel" value="${JMS_LOG_LEVEL:-WARN}"/>
+
+    <!-- Remove after migration to Micrometer of all applications -->
+    <logger name="com.copyright" level="INFO"/>
+    <logger name="com.copyright.rup.dist" level="${logLevelDist}"/>
+    <logger name="org.apache.camel" level="${logLevelCamel}"/>
+
+    <!-- STANDARD-PATTERN: Set the context name for webapps. When multiple webapps
+        are deployed to a container, this gives each a distinct JMX MBeans. -->
+    <contextName>dist-foreign-vui</contextName>
+
+    <property name="logLevelPrm" value="${DIST_FOREIGN_PRM_LOG_LEVEL:-${logLevelDist}}"/>
+    <property name="logLevelCrmReporting" value="${DIST_FOREIGN_CRM_REPORTING_LOG_LEVEL:-${logLevelDist}}"/>
+    <property name="logLevelMatching" value="${DIST_FOREIGN_MATCHING_LOG_LEVEL:-${logLevelDist}}"/>
+    <property name="logLevelResearch" value="${DIST_FOREIGN_RESEARCH_LOG_LEVEL:-${logLevelDist}}"/>
+    <property name="logLevelRhTax" value="${DIST_FOREIGN_RIGHTSHOLDER_TAX_LOG_LEVEL:-${logLevelDist}}"/>
+    <property name="logLevelRights" value="${DIST_FOREIGN_RIGHTS_LOG_LEVEL:-${logLevelDist}}"/>
+    <property name="logLevelService" value="${DIST_FOREIGN_SERVICE_LOG_LEVEL:-${logLevelDist}}"/>
+    <property name="logLevelSpringSecurity" value="${DIST_FOREIGN_SPRING_SECURITY_LOG_LEVEL:-${logLevelDist}}"/>
+    <property name="logLevelStmRh" value="${DIST_FOREIGN_STM_RH_LOG_LEVEL:-${logLevelDist}}"/>
+    <property name="logLevelUsageProcessing" value="${DIST_FOREIGN_USAGE_PROCESSING_LOG_LEVEL:-${logLevelDist}}"/>
+
+    <appender name="MICROMETER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${APP_LOG_DIR:-build}/dist-foreign-vui-micrometer.log</file>
+        <encoder>
+            <pattern>%date{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] [%mdc] - %message%n</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${APP_LOG_DIR:-build}/dist-foreign-vui-micrometer.log.%d.%i.gz</fileNamePattern>
+            <maxFileSize>100MB</maxFileSize>
+            <maxHistory>180</maxHistory>
+        </rollingPolicy>
+    </appender>
+
+    <logger additivity="false" name="com.copyright.rup.dist.foreign.service.impl.config.micrometer.FdaLoggingMeterRegistry" level="INFO">
+        <appender-ref ref="MICROMETER"/>
+    </logger>
+
+    <logger name="com.copyright.rup.dist.foreign.service.impl" level="${logLevelService}"/>
+
+    <!--Loggers for PRM related logic-->
+    <logger name="com.copyright.rup.dist.common.integration.rest.prm" level="${logLevelPrm}"/>
+
+    <!--Loggers for Rights related logic-->
+    <logger name="com.copyright.rup.dist.common.integration.rest.rms" level="${logLevelRights}"/>
+    <logger name="com.copyright.rup.dist.common.service.impl.discrepancy" level="${logLevelRights}"/>
+    <logger name="com.copyright.rup.dist.foreign.integration.rms.impl" level="${logLevelRights}"/>
+    <logger name="com.copyright.rup.dist.foreign.service.impl.rights.RightsService" level="${logLevelRights}"/>
+
+    <!--Loggers for CRM reporting related logic-->
+    <logger name="com.copyright.rup.dist.foreign.integration.crm.impl" level="${logLevelCrmReporting}"/>
+
+    <!--Loggers for Matching logic-->
+    <logger name="com.copyright.rup.dist.foreign.integration.pi.impl" level="${logLevelMatching}"/>
+    <logger name="com.copyright.rup.dist.foreign.service.impl.matching.WorkMatchingService" level="${logLevelMatching}"/>
+
+    <!--Loggers for Taxes logic-->
+    <logger name="com.copyright.rup.dist.foreign.service.impl.tax.RhTaxService" level="${logLevelRhTax}"/>
+
+    <!--Loggers for STM RH processing logic-->
+    <logger name="com.copyright.rup.dist.foreign.service.impl.stm.StmRhService" level="${logLevelStmRh}"/>
+
+    <!--Loggers for usage processing-->
+    <logger name="com.copyright.rup.dist.foreign.service.impl.chain.processor" level="${logLevelUsageProcessing}" />
+    <logger name="com.copyright.rup.dist.foreign.service.impl.eligibility.RhEligibilityConsumer" level="${logLevelUsageProcessing}"/>
+    <logger name="com.copyright.rup.dist.foreign.service.impl.matching.FasMatchingConsumer" level="${logLevelUsageProcessing}"/>
+    <logger name="com.copyright.rup.dist.foreign.service.impl.matching.AaclMatchingConsumer" level="${logLevelUsageProcessing}"/>
+    <logger name="com.copyright.rup.dist.foreign.service.impl.matching.SalMatchingConsumer" level="${logLevelUsageProcessing}"/>
+    <logger name="com.copyright.rup.dist.foreign.service.impl.matching.UdmMatchingConsumer" level="${logLevelUsageProcessing}"/>
+    <logger name="com.copyright.rup.dist.foreign.service.impl.matching.AclciMatchingConsumer" level="${logLevelUsageProcessing}"/>
+    <logger name="com.copyright.rup.dist.foreign.service.impl.rights.FasRightsConsumer" level="${logLevelUsageProcessing}"/>
+    <logger name="com.copyright.rup.dist.foreign.service.impl.rights.NtsRightsConsumer" level="${logLevelUsageProcessing}"/>
+    <logger name="com.copyright.rup.dist.foreign.service.impl.rights.AaclRightsConsumer" level="${logLevelUsageProcessing}"/>
+    <logger name="com.copyright.rup.dist.foreign.service.impl.rights.SalRightsConsumer" level="${logLevelUsageProcessing}"/>
+    <logger name="com.copyright.rup.dist.foreign.service.impl.rights.UdmRightsConsumer" level="${logLevelUsageProcessing}"/>
+    <logger name="com.copyright.rup.dist.foreign.service.impl.stm.StmRhConsumer" level="${logLevelUsageProcessing}"/>
+    <logger name="com.copyright.rup.dist.foreign.service.impl.tax.RhTaxConsumer" level="${logLevelUsageProcessing}"/>
+
+    <logger name="org.springframework.security" level="${logLevelSpringSecurity}"/>
+
+    <!-- Ignores redundant warn message 'sessionIdGeneratorBase.createRandom' -->
+    <logger name="org.apache.catalina.util.SessionIdGeneratorBase" level="ERROR" />
+
+    <!-- Ignores redundant warn message 'Front Channel single sign out redirects are disabled...'-->
+    <logger name="org.jasig.cas.client.session.SingleSignOutHandler" level="ERROR" />
+
+    <root level="${logLevelGen}">
+        <appender-ref ref="RUP-LOG"/>
+    </root>
+
+</configuration>
