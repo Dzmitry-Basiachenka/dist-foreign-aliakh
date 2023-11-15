@@ -21,12 +21,7 @@
         <exclude name="JUnitTestContainsTooManyAsserts"/>
         <exclude name="UseTryWithResources"/>
         <exclude name="GuardLogStatement"/>
-    </rule>
-
-    <rule ref="category/java/bestpractices.xml/UnusedAssignment">
-        <properties>
-            <property name="violationSuppressXPath" value="//PackageDeclaration/Name[starts-with(@Image, 'com.copyright.rup.dist.foreign.ui')]" />
-        </properties>
+        <exclude name="UnusedAssignment"/>
     </rule>
 
     <rule ref="category/java/codestyle.xml">
@@ -165,6 +160,7 @@
     <rule ref="category/java/multithreading.xml">
         <!--False positive on ImmutableHashMap-->
         <exclude name="UseConcurrentHashMap"/>
+        <exclude name="UnsynchronizedStaticFormatter"/>
         <!--Threads are used for Vaadin webapp, not complying with J2EE spec-->
         <exclude name="DoNotUseThreads"/>
     </rule>
