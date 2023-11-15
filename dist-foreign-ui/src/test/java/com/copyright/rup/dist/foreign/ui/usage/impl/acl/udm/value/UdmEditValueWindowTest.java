@@ -650,6 +650,26 @@ public class UdmEditValueWindowTest {
     }
 
     @Test
+    public void testClearContentSectionButtonClickListener() {
+        setSpecialistExpectations();
+        initEditWindow();
+        VerticalLayout verticalLayout = getPanelContent();
+        HorizontalLayout horizontalLayout = (HorizontalLayout) verticalLayout.getComponent(0);
+        VerticalLayout row = (VerticalLayout) horizontalLayout.getComponent(1);
+        Panel contentPanel = (Panel) row.getComponent(2);
+        VerticalLayout contentContent = (VerticalLayout) contentPanel.getContent();
+        assertEquals(11, contentContent.getComponentCount());
+        assertTextFieldValue(contentContent.getComponent(0), "3.00");
+        assertTextFieldValue(contentContent.getComponent(1), CONTENT_SOURCE);
+        assertTextFieldValue(contentContent.getComponent(2), CONTENT_COMMENT);
+        Button clearContentSectionButton = Whitebox.getInternalState(window, "clearContentSectionButton");
+        clearContentSectionButton.click();
+        assertTextFieldValue(contentContent.getComponent(0), StringUtils.EMPTY);
+        assertTextFieldValue(contentContent.getComponent(1), StringUtils.EMPTY);
+        assertTextFieldValue(contentContent.getComponent(2), StringUtils.EMPTY);
+    }
+
+    @Test
     public void testSaveButtonClickListener() throws Exception {
         setSpecialistExpectations();
         controller.updateValue(udmValue, new UdmValueAuditFieldToValuesMap(udmValue).getActionReasons());
