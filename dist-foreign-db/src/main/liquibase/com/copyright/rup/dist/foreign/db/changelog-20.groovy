@@ -58,4 +58,18 @@ databaseChangeLog {
             dropColumn(schemaName: dbAppsSchema, tableName: 'df_usage_aclci', columnName: 'reported_number_of_students')
         }
     }
+
+    changeSet(id: '2023-11-11-00', author: 'Dzmitry Basiachenka <dbasiachenka@copyright.com>') {
+        comment("CDP-1630 FDA: Implement improvements from SAR Review: add missing database index " +
+                "for table df_udm_value_audit")
+
+        createIndex(indexName: 'ix_df_udm_value_audit_df_udm_value_uid', schemaName: dbAppsSchema,
+                tableName: 'df_udm_value_audit', tablespace: dbIndexTablespace) {
+            column(name: 'df_udm_value_uid')
+        }
+
+        rollback {
+            sql("DROP INDEX ${dbAppsSchema}.ix_df_udm_value_audit_df_udm_value_uid")
+        }
+    }
 }
