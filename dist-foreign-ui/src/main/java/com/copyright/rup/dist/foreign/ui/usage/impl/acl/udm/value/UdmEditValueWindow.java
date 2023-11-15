@@ -65,7 +65,7 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
     private final IUdmValueController controller;
     private final UdmValueDto udmValue;
     private final Button saveButton = Buttons.createButton(ForeignUi.getMessage("button.save"));
-    private final Button editButton = Buttons.createButton(ForeignUi.getMessage("button.edit_cup"));
+    private final Button editCupButton = Buttons.createButton(ForeignUi.getMessage("button.edit_cup"));
     private final Button clearContentSectionButton = Buttons.createButton(ForeignUi.getMessage("button.clear"));
     private final ClickListener saveButtonClickListener;
     private final ComboBox<UdmValueStatusEnum> valueStatusComboBox =
@@ -297,8 +297,8 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
     }
 
     private VerticalLayout initContentButtonsLayout() {
-        var buttonsLayout = new HorizontalLayout(editButton, clearContentSectionButton);
-        editButton.addClickListener(event -> {
+        var buttonsLayout = new HorizontalLayout(editCupButton, clearContentSectionButton);
+        editCupButton.addClickListener(event -> {
             contentUnitPriceField.setReadOnly(false);
             contentUnitPriceFlagField.setReadOnly(false);
         });

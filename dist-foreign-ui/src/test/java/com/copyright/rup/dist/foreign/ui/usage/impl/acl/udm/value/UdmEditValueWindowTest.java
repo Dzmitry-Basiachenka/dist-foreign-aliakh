@@ -136,6 +136,8 @@ public class UdmEditValueWindowTest {
     private static final String PRICE_FIELD = "priceField";
     private static final String CONTENT_FIELD = "contentField";
     private static final String CONTENT_UNIT_PRICE_FIELD = "contentUnitPriceField";
+    private static final String CONTENT_UNIT_PRICE_FLAG_FIELD = "contentUnitPriceFlagField";
+    private static final String CUP_FLAG_VALIDATION_MESSAGE = "Field value should be 'Y' or 'N'";
     private static final String YES = "Y";
     private static final String NO = "N";
 
@@ -610,6 +612,27 @@ public class UdmEditValueWindowTest {
     }
 
     @Test
+    public void testContentUnitPriceFlagFieldValidation() {
+        setSpecialistExpectations();
+        initEditWindow();
+        TextField contentUnitPriceFlag = Whitebox.getInternalState(window, CONTENT_UNIT_PRICE_FLAG_FIELD);
+        validateFieldAndVerifyErrorMessage(contentUnitPriceFlag, StringUtils.EMPTY, binder, CUP_FLAG_VALIDATION_MESSAGE,
+         false);
+        validateFieldAndVerifyErrorMessage(contentUnitPriceFlag, " ", binder, CUP_FLAG_VALIDATION_MESSAGE,
+         false);
+        validateFieldAndVerifyErrorMessage(contentUnitPriceFlag, "n", binder, CUP_FLAG_VALIDATION_MESSAGE,
+         false);
+        validateFieldAndVerifyErrorMessage(contentUnitPriceFlag, "y", binder, CUP_FLAG_VALIDATION_MESSAGE,
+         false);
+        validateFieldAndVerifyErrorMessage(contentUnitPriceFlag, "123", binder, CUP_FLAG_VALIDATION_MESSAGE,
+         false);
+        validateFieldAndVerifyErrorMessage(contentUnitPriceFlag, "test", binder, CUP_FLAG_VALIDATION_MESSAGE,
+         false);
+        validateFieldAndVerifyErrorMessage(contentUnitPriceFlag, "Y", binder, null, true);
+        validateFieldAndVerifyErrorMessage(contentUnitPriceFlag, "N", binder, null, true);
+    }
+
+    @Test
     public void testContentUnitPriceFieldValidation() {
         setSpecialistExpectations();
         initEditWindow();
@@ -705,7 +728,7 @@ public class UdmEditValueWindowTest {
         PowerMock.expectLastCall().once();
         replay(controller, saveButtonClickListener, ForeignSecurityUtils.class, Windows.class);
         window = new UdmEditValueWindow(controller, udmValue, saveButtonClickListener);
-        Button editCupButton = Whitebox.getInternalState(window, "editButton");
+        Button editCupButton = Whitebox.getInternalState(window, "editCupButton");
         editCupButton.click();
         TextField contentUnitPriceField = Whitebox.getInternalState(window, "contentUnitPriceField");
         contentUnitPriceField.setValue("0.25");
