@@ -66,7 +66,7 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
     private final UdmValueDto udmValue;
     private final Button saveButton = Buttons.createButton(ForeignUi.getMessage("button.save"));
     private final Button editButton = Buttons.createButton(ForeignUi.getMessage("button.edit_cup"));
-    private final Button clearButton = Buttons.createButton(ForeignUi.getMessage("button.clear"));
+    private final Button clearContentSectionButton = Buttons.createButton(ForeignUi.getMessage("button.clear"));
     private final ClickListener saveButtonClickListener;
     private final ComboBox<UdmValueStatusEnum> valueStatusComboBox =
         new ComboBox<>(ForeignUi.getMessage("label.value_status"));
@@ -297,10 +297,15 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
     }
 
     private VerticalLayout initContentButtonsLayout() {
-        var buttonsLayout = new HorizontalLayout(editButton, clearButton);
+        var buttonsLayout = new HorizontalLayout(editButton, clearContentSectionButton);
         editButton.addClickListener(event -> {
             contentUnitPriceField.setReadOnly(false);
             contentUnitPriceFlagField.setReadOnly(false);
+        });
+        clearContentSectionButton.addClickListener(event -> {
+            contentField.clear();
+            contentSourceField.clear();
+            contentCommentField.clear();
         });
         var editClearContentFieldsLayout = new VerticalLayout(buttonsLayout);
         editClearContentFieldsLayout.setMargin(new MarginInfo(false));
