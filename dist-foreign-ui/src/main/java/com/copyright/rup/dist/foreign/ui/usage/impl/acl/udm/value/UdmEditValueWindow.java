@@ -83,6 +83,7 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
     private final TextField priceSourceField = new TextField(ForeignUi.getMessage("label.price_source"));
     private final TextField priceCommentField = new TextField(ForeignUi.getMessage("label.price_comment"));
     private final TextField priceFlagField = new TextField();
+    private final Button clearPriceSectionButton = Buttons.createButton(ForeignUi.getMessage("button.clear"));
     private final TextField contentField = new TextField(ForeignUi.getMessage("label.content"));
     private final TextField contentSourceField = new TextField(ForeignUi.getMessage("label.content_source"));
     private final TextField contentCommentField = new TextField(ForeignUi.getMessage("label.content_comment"));
@@ -239,7 +240,8 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
                 buildReadOnlyLayout("label.last_price_source", UdmValueDto::getLastPriceSource, binder),
                 buildReadOnlyLayout("label.last_price_comment", UdmValueDto::getLastPriceComment, binder),
                 buildReadOnlyLayout("label.last_price_flag",
-                    bean -> BooleanUtils.toYNString(bean.isLastPriceFlag()), binder)
+                    bean -> BooleanUtils.toYNString(bean.isLastPriceFlag()), binder),
+                buildClearPriceSectionLayout()
             ))
         );
     }
@@ -586,6 +588,25 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
                 (value, fieldValue) -> value.setPriceSource(StringUtils.trimToNull(fieldValue)));
         VaadinUtils.addComponentStyle(priceSourceField, "udm-value-edit-price-source-field");
         return buildCommonLayout(priceSourceField, fieldName);
+    }
+
+    private HorizontalLayout buildClearPriceSectionLayout() {
+        clearPriceSectionButton.addClickListener(event -> {
+            priceField.clear();
+            currencyComboBox.clear();
+            currencyExchangeRateField.clear();
+            currencyExchangeRateDateField.clear();
+            priceInUsdField.clear();
+            priceTypeComboBox.clear();
+            priceAccessTypeComboBox.clear();
+            priceYearField.clear();
+            priceSourceField.clear();
+            priceCommentField.clear();
+        });
+        HorizontalLayout buttonsLayout = new HorizontalLayout(clearPriceSectionButton);
+        buttonsLayout.setComponentAlignment(clearPriceSectionButton, Alignment.MIDDLE_RIGHT);
+        buttonsLayout.setSizeFull();
+        return buttonsLayout;
     }
 
     private HorizontalLayout buildContentLayout() {
