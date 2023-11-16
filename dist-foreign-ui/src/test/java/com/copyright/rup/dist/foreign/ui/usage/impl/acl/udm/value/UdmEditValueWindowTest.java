@@ -707,7 +707,7 @@ public class UdmEditValueWindowTest {
         udmValue.setPrice(null);
         udmValue.setPriceSource(null);
         udmValue.setPriceComment(null);
-        window = new UdmEditValueWindow(controller, udmValue, saveButtonClickListener);
+        window = new UdmEditValueWindow(controller, udmValue, saveButtonClickListener, false);
         Button saveButton = Whitebox.getInternalState(window, "saveButton");
         saveButton.setEnabled(true);
         saveButton.click();
@@ -727,7 +727,7 @@ public class UdmEditValueWindowTest {
             eq("Yes"), eq("Cancel"), anyObject(ConfirmActionDialogWindow.IListener.class), anyObject(Validator.class));
         PowerMock.expectLastCall().once();
         replay(controller, saveButtonClickListener, ForeignSecurityUtils.class, Windows.class);
-        window = new UdmEditValueWindow(controller, udmValue, saveButtonClickListener);
+        window = new UdmEditValueWindow(controller, udmValue, saveButtonClickListener, false);
         Button editCupButton = Whitebox.getInternalState(window, "editCupButton");
         editCupButton.click();
         TextField contentUnitPriceField = Whitebox.getInternalState(window, "contentUnitPriceField");
@@ -993,7 +993,7 @@ public class UdmEditValueWindowTest {
 
     private void initEditWindow() {
         replay(controller, ForeignSecurityUtils.class);
-        window = new UdmEditValueWindow(controller, udmValue, saveButtonClickListener);
+        window = new UdmEditValueWindow(controller, udmValue, saveButtonClickListener, false);
         binder = Whitebox.getInternalState(window, "binder");
         verify(controller, ForeignSecurityUtils.class);
     }
