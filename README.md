@@ -1,3 +1,13 @@
+20.0.11
+
+* CDP-1632 FDA: Initialize UI Framework: add module, base packages, and initialize build.gradlew file
+* CDP-1276 FDA: Ability to clear Price and Content fields on Value : implement cleaning the Price section
+* CDP-1276 FDA: Ability to clear Price and Content fields on Value : implement cleaning the Content section
+* CDP-1630 FDA: Implement improvements from SAR Review: add missing database index for table df_udm_value_audit
+* CDP-1632 FDA: Initialize UI Framework: add common vaadin modules
+* B-80927 - FDA & ACL: Manually enter proxy CUP and update CUP Flag: change CUP flag validation message
+* B-80927 - FDA & ACL: Manually enter proxy CUP and update CUP Flag: hide edit button from researcher
+
 20.0.10
 -
 * B-80927 - FDA & ACL: Manually enter proxy CUP and update CUP Flag: implement backend logic to check value batch for ability to recalculate proxy values
