@@ -93,18 +93,21 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
         ForeignUi.getMessage("label.content_unit_price_flag"));
     private final TextField commentField = new TextField(ForeignUi.getMessage("label.comment"));
     private final UdmValueAuditFieldToValuesMap fieldToValueChangesMap;
+    private final boolean hasResearcherPermission;
 
     /**
      * Constructor.
      *
-     * @param valueController  instance of {@link IUdmValueController}
-     * @param selectedUdmValue UDM value to be displayed on the window
-     * @param clickListener    action that should be performed after Save button was clicked
+     * @param valueController         instance of {@link IUdmValueController}
+     * @param selectedUdmValue        UDM value to be displayed on the window
+     * @param clickListener           action that should be performed after Save button was clicked
+     * @param hasResearcherPermission is user has researcher permission
      */
     public UdmEditValueWindow(IUdmValueController valueController, UdmValueDto selectedUdmValue,
-                              ClickListener clickListener) {
+                              ClickListener clickListener, boolean hasResearcherPermission) {
         controller = valueController;
         udmValue = selectedUdmValue;
+        this.hasResearcherPermission = hasResearcherPermission;
         saveButtonClickListener = clickListener;
         fieldToValueChangesMap = new UdmValueAuditFieldToValuesMap(udmValue);
         setContent(initRootLayout());
@@ -298,6 +301,7 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
 
     private VerticalLayout initContentButtonsLayout() {
         var buttonsLayout = new HorizontalLayout(editCupButton, clearContentSectionButton);
+        editCupButton.setVisible(!hasResearcherPermission);
         editCupButton.addClickListener(event -> {
             contentUnitPriceField.setReadOnly(false);
             contentUnitPriceFlagField.setReadOnly(false);
@@ -432,16 +436,26 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
     }
 
     private boolean isContentUnitPriceFieldsChanged() {
-        return !contentUnitPriceField.isReadOnly() && isPriceAndContentFieldsNotChanged()
-            && (0 != (udmValue.getContentUnitPrice().compareTo(new BigDecimal(contentUnitPriceField.getValue())))
+        return !contentUnitPriceField.isReadOnly()
+            && isPriceAndContentFieldsNotChanged()
+            && (StringUtils.isNotBlank(contentUnitPriceField.getValue().trim()) &&
+                Objects.isNull(udmValue.getContentUnitPrice())
+            || StringUtils.isBlank(contentUnitPriceField.getValue().trim()) &&
+                Objects.nonNull(udmValue.getContentUnitPrice())
+            || StringUtils.isNotBlank(contentUnitPriceField.getValue().trim()) &&
+                Objects.nonNull(udmValue.getContentUnitPrice()) &&
+                0 != (udmValue.getContentUnitPrice().compareTo(new BigDecimal(contentUnitPriceField.getValue().trim())))
             || convertFromYNStringToBoolean(contentUnitPriceFlagField.getValue()) != udmValue.isContentUnitPriceFlag());
     }
 
     private boolean isPriceAndContentFieldsNotChanged() {
-        return Objects.nonNull(udmValue.getPrice())
-            && Objects.nonNull(udmValue.getContent())
-            && 0 == udmValue.getPrice().compareTo(new BigDecimal(priceField.getValue()))
-            && 0 == udmValue.getContent().compareTo(new BigDecimal(contentField.getValue()));
+        return Objects.isNull(udmValue.getPrice()) && Objects.isNull(udmValue.getContent())
+            && StringUtils.isBlank(priceField.getValue()) && StringUtils.isBlank(contentField.getValue())
+            || Objects.nonNull(udmValue.getPrice()) && Objects.nonNull(udmValue.getContent())
+            && StringUtils.isNotBlank(priceField.getValue()) && Objects.nonNull(udmValue.getPrice())
+            && 0 == udmValue.getPrice().compareTo(NumberUtils.createBigDecimal(priceField.getValue().trim()))
+            && StringUtils.isNotBlank(contentField.getValue()) && Objects.nonNull(udmValue.getContent())
+            && 0 == udmValue.getContent().compareTo(NumberUtils.createBigDecimal(contentField.getValue().trim()));
     }
 
     private HorizontalLayout initValueStatusLayout() {

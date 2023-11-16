@@ -436,7 +436,7 @@ public class UdmValueWidgetTest {
     @Test
     public void testDoubleClickListenerResearcherAllowedValidAssignee() throws Exception {
         setResearcherExpectations();
-        testDoubleClickListenerAllowed(USER);
+        testDoubleClickListenerAllowed(USER, true);
     }
 
     private void verifyGrid(Grid grid) {
@@ -526,21 +526,21 @@ public class UdmValueWidgetTest {
 
     private void testDoubleClickListenerSpecialistAllowed(String user) throws Exception {
         setSpecialistExpectations();
-        testDoubleClickListenerAllowed(user);
+        testDoubleClickListenerAllowed(user, false);
     }
 
     private void testDoubleClickListenerManagerAllowed(String user) throws Exception {
         setManagerExpectations();
-        testDoubleClickListenerAllowed(user);
+        testDoubleClickListenerAllowed(user, false);
     }
 
     @SuppressWarnings(UNCHECKED)
-    private void testDoubleClickListenerAllowed(String user) throws Exception {
+    private void testDoubleClickListenerAllowed(String user, Boolean isResearcher) throws Exception {
         mockStatic(Windows.class);
         UdmValueDto udmValueDto = buildUdmValueDto("c219bbe1-4dde-41aa-9d9a-31563997ab7d", user);
         UdmEditValueWindow mockWindow = createMock(UdmEditValueWindow.class);
-        expectNew(UdmEditValueWindow.class, eq(controller), eq(udmValueDto), anyObject(ClickListener.class))
-            .andReturn(mockWindow).once();
+        expectNew(UdmEditValueWindow.class, eq(controller), eq(udmValueDto), anyObject(ClickListener.class),
+            eq(isResearcher)).andReturn(mockWindow).once();
         Windows.showModalWindow(mockWindow);
         expectLastCall().once();
         replay(controller, Windows.class, ForeignSecurityUtils.class, UdmEditValueWindow.class, RupContextUtils.class,

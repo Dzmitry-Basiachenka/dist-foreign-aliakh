@@ -229,16 +229,16 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
         FooterRow footer = udmValuesGrid.appendFooterRow();
         udmValuesGrid.setFooterVisible(true);
         Column<UdmValueDto, ?> column = udmValuesGrid.addComponentColumn(udmValue -> {
-            String udmValueId = udmValue.getId();
-            Button button = Buttons.createButton(udmValueId);
-            button.addStyleName(ValoTheme.BUTTON_LINK);
-            button.addClickListener(event -> {
-                controller.showUdmValueHistory(udmValueId, closeEvent ->
-                    restoreSelection(selectedUdmValues, isAllSelected));
-                highlightSelectedValue(udmValue);
-            });
-            return button;
-        })
+                String udmValueId = udmValue.getId();
+                var button = Buttons.createButton(udmValueId);
+                button.addStyleName(ValoTheme.BUTTON_LINK);
+                button.addClickListener(event -> {
+                    controller.showUdmValueHistory(udmValueId, closeEvent ->
+                        restoreSelection(selectedUdmValues, isAllSelected));
+                    highlightSelectedValue(udmValue);
+                });
+                return button;
+            })
             .setCaption(ForeignUi.getMessage("table.column.value_id"))
             .setId("valueId")
             .setSortProperty("valueId")
@@ -393,7 +393,8 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
     }
 
     private void showEditWindow(UdmValueDto selectedValue) {
-        UdmEditValueWindow editWindow = new UdmEditValueWindow(controller, selectedValue, saveEvent -> refresh());
+        UdmEditValueWindow editWindow =
+            new UdmEditValueWindow(controller, selectedValue, saveEvent -> refresh(), hasResearcherPermission);
         editWindow.addCloseListener(closeEvent -> restoreSelection(selectedUdmValues, isAllSelected));
         Windows.showModalWindow(editWindow);
     }
