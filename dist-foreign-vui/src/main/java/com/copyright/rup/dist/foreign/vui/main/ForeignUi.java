@@ -1,7 +1,26 @@
 package com.copyright.rup.dist.foreign.vui.main;
 
-import com.vaadin.flow.component.applayout.AppLayout;
+import com.copyright.rup.common.logging.RupLogUtils;
+import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.ICommonUi;
+import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.UnsupportedBrowserWindow;
+import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.AccessDeniedWidget;
 
+import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.applayout.AppLayout;
+import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.page.AppShellConfigurator;
+import com.vaadin.flow.component.page.LoadingIndicatorConfiguration;
+import com.vaadin.flow.router.Route;
+import com.vaadin.flow.server.AppShellSettings;
+import com.vaadin.flow.spring.annotation.VaadinSessionScope;
+
+import org.slf4j.Logger;
+
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.HashMap;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 /**
@@ -14,10 +33,41 @@ import java.util.ResourceBundle;
  * @author Nikita Levyankovov
  * @author Anton Azarenka
  */
-public class ForeignUi extends AppLayout {
+@Route("")
+@VaadinSessionScope
+public class ForeignUi extends AppLayout implements AppShellConfigurator, ICommonUi, IMessageSource {
 
     private static final ResourceBundle MESSAGES =
      ResourceBundle.getBundle("com.copyright.rup.dist.foreign.ui.messages");
+    private static final Logger LOGGER = RupLogUtils.getLogger();
+
+    /**
+     * Constructor.
+     */
+    public ForeignUi() {
+        String applicationTitle = getApplicationTitle();
+        addToNavbar(initHeader(applicationTitle));
+        UI current = UI.getCurrent();
+        if (Objects.nonNull(current)) {
+            LOGGER.info("Initialize UI. User={}, ClientDate={}, ServerTimeZone={}", getActiveUser(),
+                LocalDateTime.now(ZoneId.systemDefault()), ZoneId.systemDefault());
+            current.getSession().setErrorHandler(new ForeignErrorHandler(this));
+            // Retrieving extended client details to have cached data for avoiding empty date in exports
+            current.getPage().retrieveExtendedClientDetails(extendedClientDetails -> {});
+            if (!hasAccessPermission()) {
+                setContent(new AccessDeniedWidget());
+            } else if (!isWebBrowserSupported()) {
+                UnsupportedBrowserWindow unsupportedBrowserWindow =
+                    new UnsupportedBrowserWindow(applicationTitle, getSupportedBrowsers());
+                unsupportedBrowserWindow.open();
+            } else {
+                Component widget = Objects.requireNonNull(initMainWidget());
+                setContent(initRootWidget(widget));
+            }
+            LoadingIndicatorConfiguration conf = current.getLoadingIndicatorConfiguration();
+            conf.setApplyDefaultTheme(false);
+        }
+    }
 
     /**
      * Gets a message associated with specified {@code key}.
@@ -28,5 +78,34 @@ public class ForeignUi extends AppLayout {
      */
     public static String getMessage(String key, Object... parameters) {
         return String.format(MESSAGES.getString(key), parameters);
+    }
+
+
+    @Override
+    public void configurePage(AppShellSettings settings) {
+        HashMap<String, String> attributes = new HashMap<>();
+        attributes.put("rel", "shortcut icon");
+        settings.addLink("./themes/dist/img/favicon.ico", attributes);
+        settings.addFavIcon("icon", "./themes/dist/img/favicon.ico", "64x64");
+    }
+
+    @Override
+    public boolean hasAccessPermission() {
+        return true;
+    }
+
+    @Override
+    public String getApplicationTitle() {
+        return getMessage("application.name");
+    }
+
+    @Override
+    public Component initMainWidget() {
+        return new Div();
+    }
+
+    @Override
+    public String getStringMessage(String key, Object... parameters) {
+        return getMessage(key, parameters);
     }
 }

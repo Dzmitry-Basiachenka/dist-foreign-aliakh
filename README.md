@@ -1,5 +1,5 @@
 20.0.11
-
+-
 * CDP-1632 FDA: Initialize UI Framework: add module, base packages, and initialize build.gradlew file
 * CDP-1276 FDA: Ability to clear Price and Content fields on Value : implement cleaning the Price section
 * CDP-1276 FDA: Ability to clear Price and Content fields on Value : implement cleaning the Content section
