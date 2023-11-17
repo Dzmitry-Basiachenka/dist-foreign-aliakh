@@ -1,0 +1,12 @@
+/**
+* Styles for menu bar button. (Reports tab)
+* @see https://vaadin.com/docs/latest/styling/custom-theme/style-scopes
+*/
+
+:host {
+    background: transparent;
+}
+
+:host::before, :host::after {
+    background: transparent;
+}

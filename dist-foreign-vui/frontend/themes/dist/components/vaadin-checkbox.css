@@ -1,0 +1,12 @@
+/*
+* Styles for checkbox.
+* @see https://vaadin.com/docs/latest/styling/custom-theme/style-scopes
+*/
+
+:host([has-label]) ::slotted(label) {
+    font-size: 13px;
+}
+
+.vaadin-checkbox-container {
+    align-items: center;
+}

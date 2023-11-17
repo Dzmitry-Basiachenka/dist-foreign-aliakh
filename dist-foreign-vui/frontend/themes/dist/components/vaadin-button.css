@@ -1,0 +1,22 @@
+/*
+* Styles for all buttons (Local scope).
+* @see https://vaadin.com/docs/latest/styling/custom-theme/style-scopes
+*/
+
+:host {
+    background-color: var(--button-background-color);
+}
+
+:host(:hover) {
+    color: var(--button-color-hover);
+}
+
+:host([theme~='tertiary-inline']) {
+    text-decoration: underline;
+    font-weight: 400;
+    cursor: pointer;
+}
+
+:host([theme~='tertiary-inline']:hover) {
+    font-weight: 500 !important;
+}

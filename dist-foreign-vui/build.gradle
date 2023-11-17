@@ -61,8 +61,8 @@ dependencies {
     implementation("org.springframework:spring-webmvc:${rupJava.standardDependencies.spring.version}")
     implementation("commons-io:commons-io:${commonsIoVersion}")
 
-    compile("com.copyright.rup.security.auth:rup-auth-common:${rupAuthVersion}")
     compile("org.springframework:spring-context-support:${rupJava.standardDependencies.spring.version}")
+    compile("org.springframework.security:spring-security-core:${springSecurityVersion}")
     compile("org.hibernate:hibernate-validator:${hibernateValidatorVersion}")
 
     runtime("com.copyright.rup.common:rup-common-web:${rupCommonVersion}")

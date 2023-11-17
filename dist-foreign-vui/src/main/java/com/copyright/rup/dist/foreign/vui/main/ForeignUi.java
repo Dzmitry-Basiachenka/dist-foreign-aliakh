@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.vui.main;
 
 import com.copyright.rup.common.logging.RupLogUtils;
+import com.copyright.rup.dist.foreign.vui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.ICommonUi;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.UnsupportedBrowserWindow;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.AccessDeniedWidget;
@@ -8,12 +9,14 @@ import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.AccessDeniedWidge
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
+import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.page.AppShellConfigurator;
 import com.vaadin.flow.component.page.LoadingIndicatorConfiguration;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.AppShellSettings;
 import com.vaadin.flow.spring.annotation.VaadinSessionScope;
+import com.vaadin.flow.theme.Theme;
 
 import org.slf4j.Logger;
 
@@ -34,11 +37,13 @@ import java.util.ResourceBundle;
  * @author Anton Azarenka
  */
 @Route("")
+@Theme("dist")
+@CssImport(themeFor = "vaadin-grid", value = "./themes/dist/components/vaadin-grid-cell.css")
 @VaadinSessionScope
 public class ForeignUi extends AppLayout implements AppShellConfigurator, ICommonUi, IMessageSource {
 
     private static final ResourceBundle MESSAGES =
-     ResourceBundle.getBundle("com.copyright.rup.dist.foreign.ui.messages");
+     ResourceBundle.getBundle("com.copyright.rup.dist.foreign.vui.messages");
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
     /**
@@ -91,7 +96,7 @@ public class ForeignUi extends AppLayout implements AppShellConfigurator, ICommo
 
     @Override
     public boolean hasAccessPermission() {
-        return true;
+        return ForeignSecurityUtils.hasAccessPermission();
     }
 
     @Override

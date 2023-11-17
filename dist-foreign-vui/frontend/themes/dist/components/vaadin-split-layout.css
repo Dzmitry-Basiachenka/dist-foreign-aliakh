@@ -1,0 +1,11 @@
+/**
+*  Styles for Vaadin Split Layout.
+*  @see https://vaadin.com/docs/latest/styling/custom-theme/style-scopes
+*/
+:host(:not([orientation='vertical'])) > [part='splitter'] {
+    cursor: default;
+}
+
+:host(:not([orientation='vertical'])) > [part='splitter'] > [part='handle'] {
+    display: none;
+}

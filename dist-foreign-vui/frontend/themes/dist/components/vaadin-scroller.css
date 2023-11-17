@@ -1,0 +1,8 @@
+/**
+* Styles for vaadin scroller.
+* @see https://vaadin.com/docs/latest/styling/custom-theme/style-scopes
+*/
+
+:host {
+    width: 100%;
+}

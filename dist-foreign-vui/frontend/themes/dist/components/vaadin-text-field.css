@@ -1,0 +1,15 @@
+/**
+* Style for texfield component.
+*/
+
+::slotted(:is(input, textarea):placeholder-shown) {
+    color: var(--input-placeholder-color);
+}
+
+[part='label'] {
+    color: var(--label-color);
+}
+
+:host([has-label]){
+    padding-top: 8px;
+}

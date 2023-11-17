@@ -1,0 +1,25 @@
+/**
+* Styles for grid cells which will be use with classNameGenerator.
+* @see https://vaadin.com/docs/latest/styling/custom-theme/style-scopes
+*/
+[part~='resize-handle']::before {
+    width: 5px;
+}
+
+:host([theme~='compact']) [part='row']:only-child [part~='header-cell'] {
+    min-height: 25px;
+}
+
+td[(selected)]{
+    background-color: black;
+}
+
+.label-amount {
+    text-align: right;
+	display: block;
+}
+
+.label-negative-amount {
+    text-align: right;
+    color: red !important;
+}

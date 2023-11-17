@@ -1,0 +1,7 @@
+/**
+* Style for month calendar component.
+*/
+
+[part='month-header'] {
+    color: #0e4cc8d9;
+}

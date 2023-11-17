@@ -13,5 +13,8 @@
     <import resource="classpath:/com/copyright/rup/common/config/rup-properties-config.xml"/>
     <context:component-scan base-package="com.copyright.rup.dist.foreign.vui"/>
 
+
+<!-- todo {vaadin23} resolve issue later
     <bean id="streamSourceHandler" class="com.copyright.rup.dist.common.reporting.impl.StreamSourceHandler"/>
+-->
 </beans>
