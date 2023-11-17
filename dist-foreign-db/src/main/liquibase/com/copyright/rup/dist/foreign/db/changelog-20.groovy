@@ -72,4 +72,18 @@ databaseChangeLog {
             sql("DROP INDEX ${dbAppsSchema}.ix_df_udm_value_audit_df_udm_value_uid")
         }
     }
+
+    changeSet(id: '2023-11-16-00', author: 'Dzmitry Basiachenka <dbasiachenka@copyright.com>') {
+        comment("CDP-1630 FDA: Implement improvements from SAR Review: " +
+                "add database index by rh_account_number for table df_usage")
+
+        createIndex(indexName: 'ix_df_usage_rh_account_number', schemaName: dbAppsSchema,
+                tableName: 'df_usage', tablespace: dbIndexTablespace) {
+            column(name: 'rh_account_number')
+        }
+
+        rollback {
+            sql("DROP INDEX ${dbAppsSchema}.ix_df_usage_rh_account_number")
+        }
+    }
 }
