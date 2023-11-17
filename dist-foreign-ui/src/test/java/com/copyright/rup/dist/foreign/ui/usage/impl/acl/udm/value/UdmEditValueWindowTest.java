@@ -37,7 +37,6 @@ import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.vaadin.data.Binder;
 import com.vaadin.data.BinderValidationStatus;
 import com.vaadin.data.ValidationResult;
-import com.vaadin.data.Validator;
 import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.ContentMode;
@@ -724,10 +723,10 @@ public class UdmEditValueWindowTest {
         mockStatic(Windows.class);
         setSpecialistExpectations();
         Windows.showConfirmDialogWithReason(eq("Confirm action"), eq("Are you sure you want to update CUP?"),
-            eq("Yes"), eq("Cancel"), anyObject(ConfirmActionDialogWindow.IListener.class), anyObject(Validator.class));
+            eq("Yes"), eq("Cancel"), anyObject(ConfirmActionDialogWindow.IListener.class), anyObject(List.class));
         PowerMock.expectLastCall().once();
         replay(controller, saveButtonClickListener, ForeignSecurityUtils.class, Windows.class);
-        window = new UdmEditValueWindow(controller, udmValue, saveButtonClickListener, false);
+        window = new UdmEditValueWindow(controller, udmValue, saveButtonClickListener, true);
         Button editCupButton = Whitebox.getInternalState(window, "editCupButton");
         editCupButton.click();
         TextField contentUnitPriceField = Whitebox.getInternalState(window, "contentUnitPriceField");

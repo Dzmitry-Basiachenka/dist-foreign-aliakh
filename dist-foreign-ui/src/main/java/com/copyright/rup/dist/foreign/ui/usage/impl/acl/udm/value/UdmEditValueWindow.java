@@ -9,6 +9,7 @@ import com.copyright.rup.dist.foreign.ui.audit.impl.UdmValueAuditFieldToValuesMa
 import com.copyright.rup.dist.foreign.ui.common.utils.BooleanUtils;
 import com.copyright.rup.dist.foreign.ui.common.validator.AmountValidator;
 import com.copyright.rup.dist.foreign.ui.common.validator.AmountZeroValidator;
+import com.copyright.rup.dist.foreign.ui.common.validator.RequiredValidator;
 import com.copyright.rup.dist.foreign.ui.common.validator.YearValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
@@ -93,7 +94,7 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
         ForeignUi.getMessage("label.content_unit_price_flag"));
     private final TextField commentField = new TextField(ForeignUi.getMessage("label.comment"));
     private final UdmValueAuditFieldToValuesMap fieldToValueChangesMap;
-    private final boolean hasResearcherPermission;
+    private final boolean hasSpecialistPermission;
 
     /**
      * Constructor.
@@ -101,13 +102,13 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
      * @param valueController         instance of {@link IUdmValueController}
      * @param selectedUdmValue        UDM value to be displayed on the window
      * @param clickListener           action that should be performed after Save button was clicked
-     * @param hasResearcherPermission is user has researcher permission
+     * @param hasSpecialistPermission is user has specialist permission
      */
     public UdmEditValueWindow(IUdmValueController valueController, UdmValueDto selectedUdmValue,
-                              ClickListener clickListener, boolean hasResearcherPermission) {
+                              ClickListener clickListener, boolean hasSpecialistPermission) {
         controller = valueController;
         udmValue = selectedUdmValue;
-        this.hasResearcherPermission = hasResearcherPermission;
+        this.hasSpecialistPermission = hasSpecialistPermission;
         saveButtonClickListener = clickListener;
         fieldToValueChangesMap = new UdmValueAuditFieldToValuesMap(udmValue);
         setContent(initRootLayout());
@@ -301,7 +302,7 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
 
     private VerticalLayout initContentButtonsLayout() {
         var buttonsLayout = new HorizontalLayout(editCupButton, clearContentSectionButton);
-        editCupButton.setVisible(!hasResearcherPermission);
+        editCupButton.setVisible(hasSpecialistPermission);
         editCupButton.addClickListener(event -> {
             contentUnitPriceField.setReadOnly(false);
             contentUnitPriceFlagField.setReadOnly(false);
@@ -394,8 +395,8 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
                         reason -> {
                             onClickSaveButton(event, reason);
                             this.close();
-                        },
-                        new StringLengthValidator(ForeignUi.getMessage("field.error.empty.length", 1024), 1, 1024));
+                        }, List.of(new RequiredValidator(),
+                        new StringLengthValidator(ForeignUi.getMessage("field.error.empty.length", 1024), 1, 1024)));
                 } else {
                     onClickSaveButton(event, StringUtils.EMPTY);
                 }
@@ -416,7 +417,7 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
     private void onClickSaveButton(ClickEvent event, String reason) {
         try {
             binder.writeBean(udmValue);
-            if (StringUtils.isNotBlank(reason)) {
+            if (StringUtils.isNotBlank(reason.trim())) {
                 fieldToValueChangesMap.setContentUnitPriceReason(reason);
             }
             controller.updateValue(udmValue, fieldToValueChangesMap.getActionReasons());
@@ -437,7 +438,8 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
 
     private boolean isContentUnitPriceFieldsChanged() {
         return !contentUnitPriceField.isReadOnly()
-            && isPriceAndContentFieldsNotChanged()
+            && isPriceFieldNotChanged()
+            && isContentFieldNotChanged()
             && (StringUtils.isNotBlank(contentUnitPriceField.getValue().trim()) &&
                 Objects.isNull(udmValue.getContentUnitPrice())
             || StringUtils.isBlank(contentUnitPriceField.getValue().trim()) &&
@@ -448,14 +450,16 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
             || convertFromYNStringToBoolean(contentUnitPriceFlagField.getValue()) != udmValue.isContentUnitPriceFlag());
     }
 
-    private boolean isPriceAndContentFieldsNotChanged() {
-        return Objects.isNull(udmValue.getPrice()) && Objects.isNull(udmValue.getContent())
-            && StringUtils.isBlank(priceField.getValue()) && StringUtils.isBlank(contentField.getValue())
-            || Objects.nonNull(udmValue.getPrice()) && Objects.nonNull(udmValue.getContent())
-            && StringUtils.isNotBlank(priceField.getValue()) && Objects.nonNull(udmValue.getPrice())
-            && 0 == udmValue.getPrice().compareTo(NumberUtils.createBigDecimal(priceField.getValue().trim()))
-            && StringUtils.isNotBlank(contentField.getValue()) && Objects.nonNull(udmValue.getContent())
+    private boolean isContentFieldNotChanged() {
+        return Objects.isNull(udmValue.getContent()) && StringUtils.isBlank(contentField.getValue())
+            || Objects.nonNull(udmValue.getContent()) && StringUtils.isNotBlank(contentField.getValue())
             && 0 == udmValue.getContent().compareTo(NumberUtils.createBigDecimal(contentField.getValue().trim()));
+    }
+
+    private boolean isPriceFieldNotChanged(){
+        return Objects.isNull(udmValue.getPrice()) && StringUtils.isBlank(priceField.getValue())
+            || Objects.nonNull(udmValue.getPrice()) && StringUtils.isNotBlank(priceField.getValue())
+            && 0 == udmValue.getPrice().compareTo(NumberUtils.createBigDecimal(priceField.getValue().trim()));
     }
 
     private HorizontalLayout initValueStatusLayout() {
