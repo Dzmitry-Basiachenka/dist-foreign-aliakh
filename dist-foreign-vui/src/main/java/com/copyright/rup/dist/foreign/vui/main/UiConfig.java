@@ -19,9 +19,10 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableVaadin
 @EnableWebMvc
 @ImportResource({
-        "classpath:/dist-foreign-rest-auth-context.xml",
-        "classpath:/dist-foreign-ui-context.xml",
-        "classpath:/dist-foreign-ui-rest-context.xml"
+    "classpath:/com/copyright/rup/dist/foreign/vui/dist-foreign-ui-context.xml",
+    "classpath:/com/copyright/rup/dist/foreign/vui/dist-foreign-rest-auth-context.xml",
+    "classpath:/com/copyright/rup/security/auth/consumer/rup-vaadin-auth-context.xml"
+
 })
 public class UiConfig {
 }

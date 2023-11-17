@@ -1,0 +1,20 @@
+/*
+* Styles for all tabs (Local scope).
+* @see https://vaadin.com/docs/latest/styling/custom-theme/style-scopes
+*/
+
+:host {
+    color: var(--tab-text-color);
+    font-weight: bolder;
+    font-size: var(--tab-font-weight) !important;
+}
+
+:host([selected]) {
+    color: var(--tab-text-color-hover);
+}
+
+:host([selected])::before, :host([selected])::after {
+    background-color: var(--tab-text-color-hover);
+    margin: 4px;
+    width: 50px;
+}

@@ -1,0 +1,19 @@
+/**
+* Styles for menu bar item. (Reports tab).
+* @see https://vaadin.com/docs/latest/styling/custom-theme/style-scopes
+*/
+
+@media (any-hover: hover) {
+:host(:hover:not([disabled])) {
+    background-color: transparent;
+}
+
+:host([theme='menu-bar-item']) [part='content'] {
+    color: var(--tab-text-color);
+    font-weight: bolder;
+    font-size: var(--tab-font-weight);
+}
+
+:host(:hover[theme='menu-bar-item']) [part='content'] {
+    color: var(--tab-text-color-hover);
+}

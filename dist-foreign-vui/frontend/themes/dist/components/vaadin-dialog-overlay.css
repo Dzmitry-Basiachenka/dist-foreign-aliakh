@@ -1,0 +1,30 @@
+/*
+* Styles for Dialog component.
+* @see https://vaadin.com/docs/latest/styling/custom-theme/style-scopes
+*/
+
+:host(:is([has-header], [has-title])) [part='header'] + [part='content'] {
+    padding: 0;
+    margin: 0;
+}
+
+:host([resizable]) [part='title'] {
+    font-size: 20px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+[part='header'] {
+    background: var(--tabsheet-background-color);
+    height: 10px;
+}
+
+[part='header']:hover {
+    cursor: grab;
+}
+
+[part='footer'] {
+    height: 25px;
+    flex-wrap: nowrap;
+}

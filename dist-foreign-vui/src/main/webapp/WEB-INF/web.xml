@@ -6,29 +6,36 @@
     <!-- RMS-836: enable high availability session replication -->
     <distributable/>
 
-    <context-param>
-        <description>Vaadin production mode</description>
-        <param-name>productionMode</param-name>
-        <param-value>true</param-value>
-    </context-param>
-
-    <context-param>
-        <param-name>moduleInitParameter</param-name>
-        <param-value>MANAGEMENT</param-value>
-    </context-param>
-
-    <listener>
-        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-    </listener>
     <listener>
         <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
     </listener>
+
     <listener>
         <listener-class>com.copyright.rup.common.web.RupAppContextListener</listener-class>
     </listener>
     <listener>
         <listener-class>org.jasig.cas.client.session.SingleSignOutHttpSessionListener</listener-class>
     </listener>
+
+    <filter>
+        <filter-name>rup</filter-name>
+        <filter-class>com.copyright.rup.common.web.RupAppFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>rup</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
 
     <session-config>
         <session-timeout>60</session-timeout>
@@ -52,24 +59,4 @@
         <servlet-name>SpringServlet</servlet-name>
         <url-pattern>/spring/*</url-pattern>
     </servlet-mapping>
-
-    <filter>
-        <filter-name>rup</filter-name>
-        <filter-class>com.copyright.rup.common.web.RupAppFilter</filter-class>
-    </filter>
-
-    <filter-mapping>
-        <filter-name>rup</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>
-
-    <filter>
-        <filter-name>springSecurityFilterChain</filter-name>
-        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
-    </filter>
-
-    <filter-mapping>
-        <filter-name>springSecurityFilterChain</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>
 </web-app>

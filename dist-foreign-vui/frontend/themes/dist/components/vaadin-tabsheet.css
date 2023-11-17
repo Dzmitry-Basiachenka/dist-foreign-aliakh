@@ -1,0 +1,26 @@
+/*
+* Styles for tabsheet  (Local scope).
+* @see https://vaadin.com/docs/latest/styling/custom-theme/style-scopes
+*/
+
+[part='tabs-container'] {
+    background: var(--tabsheet-background-color);
+    padding: 0;
+    gap: 0;
+}
+
+[part='content'] {
+    padding: 0;
+}
+
+:host([loading]) [part='content'] {
+    /*remove spinner from tabs*/
+    display: none;
+}
+
+::slotted([slot='tabs']) {
+    flex: 1;
+    align-self: stretch;
+    min-width: var(--tabs-width-size, max-content);
+    max-width: var(--tabs-width-size, max-content);
+}
