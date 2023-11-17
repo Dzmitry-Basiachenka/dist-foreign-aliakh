@@ -1,0 +1,119 @@
+/**
+* Styles for Global styles scopes.
+* @see https://vaadin.com/docs/latest/styling/custom-theme/style-scopes
+*/
+@import 'components/loading-indicator.css';
+
+html {
+    /*
+    * Constants for styles
+    */
+
+    /* Size of all tabs. Not includes report tab */
+    --tabsheet-background-color: #416f93;
+    --tabs-width-size: 633px;
+    --tab-text-color: aliceblue;
+    --tab-text-color-hover: #f0a80b;
+    --tab-font-weight: 16px;
+
+    /* Colors for header */
+    --header-background-color: #33587c;
+
+    /* Common styles for UI*/
+    --lumo-size-s: 1.25em;
+    --lumo-size-m: 1.75em;
+    --lumo-primary-color-10pct: #91aac3cf;
+    --lumo-header-text-color: aliceblue;
+    --lumo-primary-text-color: #0e4cc8d9;
+
+    --vaadin-checkbox-size: 17px;
+    --button-color-hover: #01407c;
+    --button-background-color:  #d9dbdd;
+    --input-placeholder-color: #00234f78;
+    --label-color: #00234fc7;
+}
+
+.header-layout {
+    background-color: var(--header-background-color);
+    padding: 0 10px 0 10px;
+}
+
+.logo-layout-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--tab-text-color);
+}
+
+.logout-layout-username {
+    color: var(--tab-text-color);
+}
+
+.logout-layout-logout-button {
+    background-color: var(--header-background-color);
+    color: var(--tab-text-color);
+}
+
+.logout-layout-logout-button:hover {
+    color: var(--tab-text-color-hover) !important;
+}
+
+vaadin-tab:hover {
+    color: var(--tab-text-color-hover);
+}
+
+.button-refresh, .button-close, .button-resize {
+    cursor: pointer;
+    background: transparent !important;
+    color: #ffffff !important;
+}
+
+.button-refresh:hover, .button-resize:hover, .button-close:hover {
+   color: var(--tab-text-color-hover) !important;
+}
+
+.label-amount {
+    text-align: right;
+	display: block;
+}
+
+.label-negative-amount {
+    color: red !important;
+}
+
+.popup-date-widget-layout {
+    padding: 5px 0px;
+    margin: 0;
+}
+
+.label-note {
+    font-size: 14px;
+    color: #000099;
+    font-weight: bold;
+}
+
+.v-label-white-space-normal {
+    white-space: normal;
+}
+
+.v-layout-notification-window {
+    font-weight: bold;
+}
+
+.filter-label {
+    font-family: Helvetica, Arial, "Lucida Grande", Geneva, Tahoma, Verdana, sans-serif;
+	font-size: 24px;
+	line-height: 30px;
+	font-weight: bold;
+	color: #44698b;
+	letter-spacing: -0.02em;
+	text-shadow: #fff 0 -1px 1px;
+	padding: 15px 0px 10px 0px;
+}
+
+.reports-tab-refresh-button-layout {
+    width: calc(100% - var(--tabs-width-size));
+}
+
+.reports-menu-root {
+    background: transparent !important;
+}

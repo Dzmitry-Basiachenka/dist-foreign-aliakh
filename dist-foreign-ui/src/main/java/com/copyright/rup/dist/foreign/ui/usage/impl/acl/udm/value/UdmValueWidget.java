@@ -394,7 +394,7 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
 
     private void showEditWindow(UdmValueDto selectedValue) {
         UdmEditValueWindow editWindow =
-            new UdmEditValueWindow(controller, selectedValue, saveEvent -> refresh(), hasResearcherPermission);
+            new UdmEditValueWindow(controller, selectedValue, saveEvent -> refresh(), hasSpecialistPermission);
         editWindow.addCloseListener(closeEvent -> restoreSelection(selectedUdmValues, isAllSelected));
         Windows.showModalWindow(editWindow);
     }
