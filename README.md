@@ -1,3 +1,12 @@
+20.0.12
+-
+* CDP-1632 FDA: Initialize UI Framework: add configuration files
+* CDP-1630 FDA: Implement improvements from SAR Review: add database index by rh_account_number for table df_usage
+* CDP-1632 FDA: Initialize UI Framework: add styles
+* CDP-1630 FDA: Implement improvements from SAR Review: add database index by status_ind for table df_usage
+* B-80927 - FDA & ACL: Manually enter proxy CUP and update CUP Flag: hide edit button from manager, add requered validator for action reason message
+* CDP-1276 FDA: Ability to clear Price and Content fields on Value : add styles to differentiate between the Clear buttons in the Price and Content sections
+
 20.0.11
 -
 * CDP-1632 FDA: Initialize UI Framework: add module, base packages, and initialize build.gradlew file
