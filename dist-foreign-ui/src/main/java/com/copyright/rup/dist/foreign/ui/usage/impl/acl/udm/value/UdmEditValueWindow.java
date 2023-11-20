@@ -312,6 +312,7 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
             contentSourceField.clear();
             contentCommentField.clear();
         });
+        VaadinUtils.addComponentStyle(clearContentSectionButton, "clear-content-section-button");
         var editClearContentFieldsLayout = new VerticalLayout(buttonsLayout);
         editClearContentFieldsLayout.setMargin(new MarginInfo(false));
         editClearContentFieldsLayout.setSpacing(false);
@@ -626,6 +627,7 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
             priceSourceField.clear();
             priceCommentField.clear();
         });
+        VaadinUtils.addComponentStyle(clearPriceSectionButton, "clear-price-section-button");
         HorizontalLayout buttonsLayout = new HorizontalLayout(clearPriceSectionButton);
         buttonsLayout.setComponentAlignment(clearPriceSectionButton, Alignment.MIDDLE_RIGHT);
         buttonsLayout.setSizeFull();

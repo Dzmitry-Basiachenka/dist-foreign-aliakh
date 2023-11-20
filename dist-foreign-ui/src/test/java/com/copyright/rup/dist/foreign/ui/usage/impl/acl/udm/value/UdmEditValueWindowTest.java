@@ -590,6 +590,7 @@ public class UdmEditValueWindowTest {
         assertTextFieldValue(priceContent.getComponent(8), PRICE_SOURCE);
         assertTextFieldValue(priceContent.getComponent(9), PRICE_COMMENT);
         Button clearPriceSectionButton = Whitebox.getInternalState(window, "clearPriceSectionButton");
+        assertTrue(clearPriceSectionButton.getStyleName().contains("clear-price-section-button"));
         clearPriceSectionButton.click();
         assertTextFieldValue(priceContent.getComponent(0), StringUtils.EMPTY);
         assertComboBoxFieldValue(priceContent.getComponent(1), null);
@@ -685,6 +686,7 @@ public class UdmEditValueWindowTest {
         assertTextFieldValue(contentContent.getComponent(1), CONTENT_SOURCE);
         assertTextFieldValue(contentContent.getComponent(2), CONTENT_COMMENT);
         Button clearContentSectionButton = Whitebox.getInternalState(window, "clearContentSectionButton");
+        assertTrue(clearContentSectionButton.getStyleName().contains("clear-content-section-button"));
         clearContentSectionButton.click();
         assertTextFieldValue(contentContent.getComponent(0), StringUtils.EMPTY);
         assertTextFieldValue(contentContent.getComponent(1), StringUtils.EMPTY);
