@@ -38,7 +38,7 @@ public class ForeignErrorHandler extends CommonErrorHandler {
     protected Dialog initErrorWindow(ErrorEvent event) {
         if (integrationConnectionExceptionPresent(event)) {
             Dialog window = new NotificationWindow(messageSource.getStringMessage("label.content.accessibility"));
-            window.setHeaderTitle(ForeignUi.getMessage("window.caption.connection_problem"));
+            window.setHeaderTitle(messageSource.getStringMessage("window.caption.connection_problem"));
             return window;
         } else if (fileDownloadExceptionPresent(event)) {
             return new NotificationWindow(messageSource.getStringMessage("message.report.generate_error"));
