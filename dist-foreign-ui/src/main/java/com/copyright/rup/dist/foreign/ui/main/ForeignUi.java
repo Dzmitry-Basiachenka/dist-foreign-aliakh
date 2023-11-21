@@ -10,7 +10,6 @@ import com.copyright.rup.dist.foreign.ui.report.api.acl.IAclReportWidget;
 import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmReportWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
-import com.copyright.rup.vaadin.ui.CommonUi;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.RootWidget;
 import com.copyright.rup.vaadin.widget.api.IController;
@@ -46,7 +45,7 @@ import java.util.ResourceBundle;
 @EnableVaadin
 @Theme("foreign")
 @SpringUI
-public class ForeignUi extends CommonUi implements IMediatorProvider {
+public class ForeignUi extends ForeignCommonUi implements IMediatorProvider {
 
     private static final ResourceBundle MESSAGES =
         ResourceBundle.getBundle("com.copyright.rup.dist.foreign.ui.messages");
@@ -96,6 +95,11 @@ public class ForeignUi extends CommonUi implements IMediatorProvider {
         mediator.setProductFamilyProvider(productFamilyProvider);
         mediator.setReportController(reportController);
         return mediator;
+    }
+
+    @Override
+    public String getStringMessage(String key, Object... parameters) {
+        return getMessage(key, parameters);
     }
 
     @Override
