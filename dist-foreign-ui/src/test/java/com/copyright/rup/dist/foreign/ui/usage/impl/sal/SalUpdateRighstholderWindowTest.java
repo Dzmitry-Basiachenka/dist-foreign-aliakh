@@ -21,6 +21,7 @@ import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
+import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalDetailForRightsholderUpdateWindow;
 import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageController;
 import com.copyright.rup.vaadin.ui.component.window.ConfirmActionDialogWindow;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
@@ -70,13 +71,13 @@ public class SalUpdateRighstholderWindowTest {
     private static final String RH_ACCOUNT_NUMBER_FIELD_NAME = "rhAccountNumberField";
     private static final String RH_NAME_FIELD_NAME = "rhNameField";
     private ISalUsageController usageController;
-    private SalDetailForRightsholderUpdateWindow detailsWindow;
+    private ISalDetailForRightsholderUpdateWindow detailsWindow;
     private SalUpdateRighstholderWindow window;
 
     @Before
     public void setUp() {
         usageController = createMock(ISalUsageController.class);
-        detailsWindow = createMock(SalDetailForRightsholderUpdateWindow.class);
+        detailsWindow = createMock(ISalDetailForRightsholderUpdateWindow.class);
     }
 
     @Test

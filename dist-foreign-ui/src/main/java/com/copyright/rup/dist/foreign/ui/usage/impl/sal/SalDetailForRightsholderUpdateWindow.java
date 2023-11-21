@@ -2,12 +2,12 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.sal;
 
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
+import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalDetailForRightsholderUpdateWindow;
 import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageController;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.SearchWidget;
-import com.copyright.rup.vaadin.widget.api.IRefreshable;
 
 import com.vaadin.data.ValueProvider;
 import com.vaadin.data.provider.DataProvider;
@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
  *
  * @author Darya Baraukova
  */
-class SalDetailForRightsholderUpdateWindow extends Window implements IRefreshable {
+class SalDetailForRightsholderUpdateWindow extends Window implements ISalDetailForRightsholderUpdateWindow {
 
     private SearchWidget searchWidget;
     private Grid<UsageDto> usagesGrid;
@@ -66,10 +66,8 @@ class SalDetailForRightsholderUpdateWindow extends Window implements IRefreshabl
         dataProvider.refreshAll();
     }
 
-    /**
-     * Refreshes data provider and updates usages grid.
-     */
-    void refreshDataProvider() {
+    @Override
+    public void refreshDataProvider() {
         List<UsageDto> usages = controller.getUsageDtosForRhUpdate();
         dataProvider = DataProvider.ofCollection(usages);
         usagesGrid.setDataProvider(dataProvider);
