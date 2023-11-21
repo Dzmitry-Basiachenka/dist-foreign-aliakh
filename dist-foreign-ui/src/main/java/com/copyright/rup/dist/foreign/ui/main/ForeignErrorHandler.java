@@ -7,7 +7,6 @@ import com.copyright.rup.vaadin.ui.component.downloader.FileDownloadException;
 import com.copyright.rup.vaadin.ui.component.window.NotificationWindow;
 
 import com.vaadin.server.ErrorEvent;
-import com.vaadin.ui.UI;
 import com.vaadin.ui.Window;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -24,26 +23,29 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
  */
 public class ForeignErrorHandler extends CommonErrorHandler {
 
+    private final ForeignCommonUi owner;
+
     /**
      * Default constructor.
      * Consumes UI instance as the parameter.
      *
      * @param owner the owner.
      */
-    public ForeignErrorHandler(UI owner) {
+    public ForeignErrorHandler(ForeignCommonUi owner) {
         super(owner);
+        this.owner = owner;
     }
 
     @Override
     protected Window initErrorWindow(ErrorEvent event) {
         if (integrationConnectionExceptionPresent(event)) {
-            Window window = new NotificationWindow(ForeignUi.getMessage("label.content.accessibility"));
-            window.setCaption(ForeignUi.getMessage("window.caption.connection_problem"));
+            Window window = new NotificationWindow(owner.getStringMessage("label.content.accessibility"));
+            window.setCaption(owner.getStringMessage("window.caption.connection_problem"));
             return window;
         } else if (fileDownloadExceptionPresent(event)) {
-            return new NotificationWindow(ForeignUi.getMessage("message.report.generate_error"));
+            return new NotificationWindow(owner.getStringMessage("message.report.generate_error"));
         } else if (prmConfigurationExceptionPresent(event)) {
-            return new NotificationWindow(ForeignUi.getMessage("message.error.incorrect_prm_configuration"));
+            return new NotificationWindow(owner.getStringMessage("message.error.incorrect_prm_configuration"));
         }
         return super.initErrorWindow(event);
     }

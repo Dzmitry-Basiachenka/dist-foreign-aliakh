@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.ui.main;
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.newCapture;
 import static org.easymock.EasyMock.replay;
@@ -19,7 +20,6 @@ import com.copyright.rup.vaadin.ui.component.window.NotificationWindow;
 
 import com.vaadin.server.ErrorEvent;
 import com.vaadin.ui.Label;
-import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
@@ -41,13 +41,19 @@ import java.io.IOException;
 public class ForeignErrorHandlerTest {
 
     private static final String ERROR_MESSAGE = "Not valid parameters passed";
+    private static final String CONNECTION_ACCESSIBILITY_MESSAGE = "The application is currently not available due " +
+        "to a system issue or routine maintenance. Please submit an IT Help Desk request and try again later.";
+    private static final String CONNECTION_PROBLEM_CAPTION = "Connection problem";
     private static final String EXPECTED_PRM_MESSAGE = "Process cannot be finished.<br>" +
         "Please check configuration in PRM: RHs have several identical preferences.";
-    private UI ui;
+    private static final String COULD_NOT_GENERATE_REPORT_MESSAGE = "Sorry, couldn't generate report. Please try " +
+        "again later";
+
+    private ForeignCommonUi ui;
 
     @Before
     public void setUp() {
-        ui = createMock(UI.class);
+        ui = createMock(ForeignCommonUi.class);
     }
 
     @Test
@@ -62,6 +68,8 @@ public class ForeignErrorHandlerTest {
     @Test
     public void testErrorWithIntegrationConnectionException() {
         ForeignErrorHandler errorHandler = new ForeignErrorHandler(ui);
+        expect(ui.getStringMessage("label.content.accessibility")).andReturn(CONNECTION_ACCESSIBILITY_MESSAGE).once();
+        expect(ui.getStringMessage("window.caption.connection_problem")).andReturn(CONNECTION_PROBLEM_CAPTION).once();
         Capture<Window> captureErrorWindow = newCapture();
         ui.addWindow(capture(captureErrorWindow));
         expectLastCall().once();
@@ -70,12 +78,17 @@ public class ForeignErrorHandlerTest {
         Window window = captureErrorWindow.getValue();
         assertNotNull(window);
         assertSame(NotificationWindow.class, window.getClass());
+        String message = ((Label) ((VerticalLayout) window.getContent()).getComponent(0)).getValue();
+        assertEquals(CONNECTION_ACCESSIBILITY_MESSAGE, message);
+        assertEquals(CONNECTION_PROBLEM_CAPTION, window.getCaption());
         verify(ui);
     }
 
     @Test
     public void testCauseFileDownloadException() {
         ForeignErrorHandler errorHandler = new ForeignErrorHandler(ui);
+        expect(ui.getStringMessage("message.report.generate_error"))
+            .andReturn(COULD_NOT_GENERATE_REPORT_MESSAGE).once();
         Capture<Window> captureErrorWindow = newCapture();
         ui.addWindow(capture(captureErrorWindow));
         expectLastCall().once();
@@ -85,11 +98,14 @@ public class ForeignErrorHandlerTest {
         Window window = captureErrorWindow.getValue();
         assertNotNull(window);
         assertSame(NotificationWindow.class, window.getClass());
+        String message = ((Label) ((VerticalLayout) window.getContent()).getComponent(0)).getValue();
+        assertEquals(COULD_NOT_GENERATE_REPORT_MESSAGE, message);
     }
 
     @Test
     public void testCausePrmConfigurationException() {
         ForeignErrorHandler errorHandler = new ForeignErrorHandler(ui);
+        expect(ui.getStringMessage("message.error.incorrect_prm_configuration")).andReturn(EXPECTED_PRM_MESSAGE).once();
         Capture<Window> captureErrorWindow = newCapture();
         ui.addWindow(capture(captureErrorWindow));
         expectLastCall().once();
