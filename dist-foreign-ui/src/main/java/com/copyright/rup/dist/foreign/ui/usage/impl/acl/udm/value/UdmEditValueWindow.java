@@ -397,7 +397,8 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
                             onClickSaveButton(event, reason);
                             this.close();
                         }, List.of(new RequiredValidator(),
-                        new StringLengthValidator(ForeignUi.getMessage("field.error.empty.length", 1024), 1, 1024)));
+                            new StringLengthValidator(ForeignUi.getMessage("field.error.empty.length", 1024), 1,
+                                1024)));
                 } else {
                     onClickSaveButton(event, StringUtils.EMPTY);
                 }
@@ -439,28 +440,8 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
 
     private boolean isContentUnitPriceFieldsChanged() {
         return !contentUnitPriceField.isReadOnly()
-            && isPriceFieldNotChanged()
-            && isContentFieldNotChanged()
-            && (StringUtils.isNotBlank(contentUnitPriceField.getValue().trim()) &&
-                Objects.isNull(udmValue.getContentUnitPrice())
-            || StringUtils.isBlank(contentUnitPriceField.getValue().trim()) &&
-                Objects.nonNull(udmValue.getContentUnitPrice())
-            || StringUtils.isNotBlank(contentUnitPriceField.getValue().trim()) &&
-                Objects.nonNull(udmValue.getContentUnitPrice()) &&
-                0 != (udmValue.getContentUnitPrice().compareTo(new BigDecimal(contentUnitPriceField.getValue().trim())))
+            && (!String.valueOf(udmValue.getContentUnitPrice()).equals(contentUnitPriceField.getValue().trim())
             || convertFromYNStringToBoolean(contentUnitPriceFlagField.getValue()) != udmValue.isContentUnitPriceFlag());
-    }
-
-    private boolean isContentFieldNotChanged() {
-        return Objects.isNull(udmValue.getContent()) && StringUtils.isBlank(contentField.getValue())
-            || Objects.nonNull(udmValue.getContent()) && StringUtils.isNotBlank(contentField.getValue())
-            && 0 == udmValue.getContent().compareTo(NumberUtils.createBigDecimal(contentField.getValue().trim()));
-    }
-
-    private boolean isPriceFieldNotChanged(){
-        return Objects.isNull(udmValue.getPrice()) && StringUtils.isBlank(priceField.getValue())
-            || Objects.nonNull(udmValue.getPrice()) && StringUtils.isNotBlank(priceField.getValue())
-            && 0 == udmValue.getPrice().compareTo(NumberUtils.createBigDecimal(priceField.getValue().trim()));
     }
 
     private HorizontalLayout initValueStatusLayout() {

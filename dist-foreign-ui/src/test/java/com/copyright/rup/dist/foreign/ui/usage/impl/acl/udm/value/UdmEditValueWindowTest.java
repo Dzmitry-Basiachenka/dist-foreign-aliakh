@@ -617,17 +617,17 @@ public class UdmEditValueWindowTest {
         initEditWindow();
         TextField contentUnitPriceFlag = Whitebox.getInternalState(window, CONTENT_UNIT_PRICE_FLAG_FIELD);
         validateFieldAndVerifyErrorMessage(contentUnitPriceFlag, StringUtils.EMPTY, binder, CUP_FLAG_VALIDATION_MESSAGE,
-         false);
+            false);
         validateFieldAndVerifyErrorMessage(contentUnitPriceFlag, " ", binder, CUP_FLAG_VALIDATION_MESSAGE,
-         false);
+            false);
         validateFieldAndVerifyErrorMessage(contentUnitPriceFlag, "n", binder, CUP_FLAG_VALIDATION_MESSAGE,
-         false);
+            false);
         validateFieldAndVerifyErrorMessage(contentUnitPriceFlag, "y", binder, CUP_FLAG_VALIDATION_MESSAGE,
-         false);
+            false);
         validateFieldAndVerifyErrorMessage(contentUnitPriceFlag, "123", binder, CUP_FLAG_VALIDATION_MESSAGE,
-         false);
+            false);
         validateFieldAndVerifyErrorMessage(contentUnitPriceFlag, "test", binder, CUP_FLAG_VALIDATION_MESSAGE,
-         false);
+            false);
         validateFieldAndVerifyErrorMessage(contentUnitPriceFlag, "Y", binder, null, true);
         validateFieldAndVerifyErrorMessage(contentUnitPriceFlag, "N", binder, null, true);
     }
@@ -737,6 +737,25 @@ public class UdmEditValueWindowTest {
         contentUnitPriceFlagField.setValue("Y");
         Button saveButton = Whitebox.getInternalState(window, "saveButton");
         saveButton.setEnabled(true);
+        saveButton.click();
+        verify(controller, saveButtonClickListener, ForeignSecurityUtils.class, Windows.class);
+    }
+
+    @Test
+    public void testSaveButtonWithoutActionReason() {
+        mockStatic(Windows.class);
+        setSpecialistExpectations();
+        saveButtonClickListener.buttonClick(anyObject(ClickEvent.class));
+        expectLastCall().once();
+        controller.updateValue(eq(udmValue), anyObject(List.class));
+        expectLastCall().once();
+        replay(controller, saveButtonClickListener, ForeignSecurityUtils.class, Windows.class);
+        window = new UdmEditValueWindow(controller, udmValue, saveButtonClickListener, true);
+        Button editCupButton = Whitebox.getInternalState(window, "editCupButton");
+        editCupButton.click();
+        TextField priceField = Whitebox.getInternalState(window, "priceField");
+        priceField.setValue("2.0");
+        Button saveButton = Whitebox.getInternalState(window, "saveButton");
         saveButton.click();
         verify(controller, saveButtonClickListener, ForeignSecurityUtils.class, Windows.class);
     }
