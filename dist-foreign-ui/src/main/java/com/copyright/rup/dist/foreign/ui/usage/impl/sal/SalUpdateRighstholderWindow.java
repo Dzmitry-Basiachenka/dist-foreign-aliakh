@@ -4,6 +4,7 @@ import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.ui.common.validator.RequiredValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
+import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalDetailForRightsholderUpdateWindow;
 import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageController;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
@@ -40,7 +41,7 @@ class SalUpdateRighstholderWindow extends Window {
     private final ISalUsageController salUsageController;
     private final Set<String> usageIds;
     private final Binder<Usage> usageBinder = new Binder<>();
-    private final SalDetailForRightsholderUpdateWindow detailsWindow;
+    private final ISalDetailForRightsholderUpdateWindow detailsWindow;
     private TextField rhAccountNumberField;
     private TextField rhNameField;
 
@@ -48,11 +49,11 @@ class SalUpdateRighstholderWindow extends Window {
      * Constructor.
      *
      * @param salUsageController {@link ISalUsageController} instance
-     * @param detailsWindow      {@link SalDetailForRightsholderUpdateWindow} instance
+     * @param detailsWindow      {@link ISalDetailForRightsholderUpdateWindow} instance
      * @param usageIds           set of usage ids
      */
     SalUpdateRighstholderWindow(ISalUsageController salUsageController,
-                                SalDetailForRightsholderUpdateWindow detailsWindow, Set<String> usageIds) {
+                                ISalDetailForRightsholderUpdateWindow detailsWindow, Set<String> usageIds) {
         this.salUsageController = salUsageController;
         this.detailsWindow = detailsWindow;
         this.usageIds = usageIds;
