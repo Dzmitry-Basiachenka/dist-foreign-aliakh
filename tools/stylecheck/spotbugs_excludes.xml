@@ -1,7 +1,7 @@
 <FindBugsFilter>
     <Match>
         <!--Application is dealing with Date objects so EXPOSE checks are redundant so far. Serialization checks isn't neccessary-->
-        <Bug pattern="EI_EXPOSE_REP,EI_EXPOSE_REP2,SE_BAD_FIELD,SE_NO_SERIALVERSIONID,NP_PARAMETER_MUST_BE_NONNULL_BUT_MARKED_AS_NULLABLE,MC_OVERRIDABLE_METHOD_CALL_IN_CONSTRUCTOR"/>
+        <Bug pattern="EI_EXPOSE_REP,EI_EXPOSE_REP2,SE_BAD_FIELD,SE_NO_SERIALVERSIONID,NP_PARAMETER_MUST_BE_NONNULL_BUT_MARKED_AS_NULLABLE,MC_OVERRIDABLE_METHOD_CALL_IN_CONSTRUCTOR,BC_UNCONFIRMED_CAST_OF_RETURN_VALUE"/>
     </Match>
     <Match>
         <!--Field can be initialized via postConstruct annotation or via spring or by calling another method. So, this check is not required-->

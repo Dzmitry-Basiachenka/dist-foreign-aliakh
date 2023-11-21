@@ -1,24 +1,29 @@
 package com.copyright.rup.dist.foreign.vui.main;
 
 import com.copyright.rup.common.logging.RupLogUtils;
+import com.copyright.rup.dist.foreign.vui.main.api.IMainWidgetController;
+import com.copyright.rup.dist.foreign.vui.main.api.IProductFamilyProvider;
 import com.copyright.rup.dist.foreign.vui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.ICommonUi;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.UnsupportedBrowserWindow;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.AccessDeniedWidget;
+import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.api.IMediator;
+import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.api.IMediatorProvider;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.dependency.CssImport;
-import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.page.AppShellConfigurator;
 import com.vaadin.flow.component.page.LoadingIndicatorConfiguration;
+import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.AppShellSettings;
 import com.vaadin.flow.spring.annotation.VaadinSessionScope;
 import com.vaadin.flow.theme.Theme;
 
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -40,16 +45,24 @@ import java.util.ResourceBundle;
 @Theme("dist")
 @CssImport(themeFor = "vaadin-grid", value = "./themes/dist/components/vaadin-grid-cell.css")
 @VaadinSessionScope
-public class ForeignUi extends AppLayout implements AppShellConfigurator, ICommonUi, IMessageSource {
+public class ForeignUi extends AppLayout implements AppShellConfigurator, ICommonUi, IMediatorProvider,
+    IMessageSource {
 
     private static final ResourceBundle MESSAGES =
-     ResourceBundle.getBundle("com.copyright.rup.dist.foreign.vui.messages");
+        ResourceBundle.getBundle("com.copyright.rup.dist.foreign.vui.messages");
     private static final Logger LOGGER = RupLogUtils.getLogger();
+
+    private final IMainWidgetController controller;
+    @Autowired
+    private IProductFamilyProvider productFamilyProvider;
 
     /**
      * Constructor.
+     *
+     * @param controller controller
      */
-    public ForeignUi() {
+    public ForeignUi(@Autowired IMainWidgetController controller) {
+        this.controller = controller;
         String applicationTitle = getApplicationTitle();
         addToNavbar(initHeader(applicationTitle));
         UI current = UI.getCurrent();
@@ -85,7 +98,6 @@ public class ForeignUi extends AppLayout implements AppShellConfigurator, ICommo
         return String.format(MESSAGES.getString(key), parameters);
     }
 
-
     @Override
     public void configurePage(AppShellSettings settings) {
         HashMap<String, String> attributes = new HashMap<>();
@@ -106,11 +118,21 @@ public class ForeignUi extends AppLayout implements AppShellConfigurator, ICommo
 
     @Override
     public Component initMainWidget() {
-        return new Div();
+        return (Component) controller.initWidget();
     }
 
     @Override
     public String getStringMessage(String key, Object... parameters) {
         return getMessage(key, parameters);
+    }
+
+    @Override
+    public IMediator initMediator() {
+        ForeignUiMediator mediator = new ForeignUiMediator();
+        Select<String> productFamilySelect = new Select<>(getMessage("label.product_family"));
+        mediator.setProductFamilySelect(productFamilySelect);
+        mediator.setController(controller);
+        mediator.setProductFamilyProvider(productFamilyProvider);
+        return mediator;
     }
 }
