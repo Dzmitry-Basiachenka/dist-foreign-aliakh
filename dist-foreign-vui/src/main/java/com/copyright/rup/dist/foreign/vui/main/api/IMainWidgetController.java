@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.vui.main.api;
 
+import com.copyright.rup.dist.foreign.vui.usage.api.ICommonUsageController;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.api.IController;
 
 /**
@@ -17,4 +18,16 @@ public interface IMainWidgetController extends IController<IMainWidget> {
      * Handles global product family selection.
      */
     void onProductFamilyChanged();
+
+    /**
+     * Returns instance of {@link IProductFamilyProvider}.
+     *
+     * @return instance of {@link IProductFamilyProvider}.
+     */
+    IProductFamilyProvider getProductFamilyProvider();
+
+    /**
+     * @return instance of {@link IControllerProvider} for {@link ICommonUsageController}.
+     */
+    IControllerProvider<ICommonUsageController> getUsagesControllerProvider();
 }

@@ -1,0 +1,7 @@
+/**
+* Styles for widgets.
+*/
+
+.global-product-family-select vaadin-select-value-button {
+    color: var(--tab-text-color);
+}

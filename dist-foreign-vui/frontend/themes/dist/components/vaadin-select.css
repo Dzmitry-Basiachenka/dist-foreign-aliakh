@@ -1,0 +1,12 @@
+/**
+* Styles for vaadin select.
+* @see https://vaadin.com/docs/latest/styling/custom-theme/style-scopes
+*/
+
+[part='input-field']{
+   height: 20px;
+}
+
+[class$='container'] {
+    justify-content: center;
+}
