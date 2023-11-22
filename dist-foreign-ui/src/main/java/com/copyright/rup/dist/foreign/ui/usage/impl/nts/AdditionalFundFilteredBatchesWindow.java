@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.nts;
 
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
+import com.copyright.rup.dist.foreign.ui.usage.api.nts.IAdditionalFundBatchesFilterWindow;
 import com.copyright.rup.dist.foreign.ui.usage.api.nts.INtsUsageController;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
@@ -37,17 +38,17 @@ import java.util.stream.Collectors;
 class AdditionalFundFilteredBatchesWindow extends Window {
 
     private final INtsUsageController controller;
-    private final AdditionalFundBatchesFilterWindow batchesFilterWindow;
+    private final IAdditionalFundBatchesFilterWindow batchesFilterWindow;
 
     /**
      * Constructor.
      *
      * @param controller          instance of {@link INtsUsageController}
      * @param batches             list of {@link UsageBatch}'es
-     * @param batchesFilterWindow instance of {@link AdditionalFundBatchesFilterWindow}
+     * @param batchesFilterWindow instance of {@link IAdditionalFundBatchesFilterWindow}
      */
     AdditionalFundFilteredBatchesWindow(INtsUsageController controller, List<UsageBatch> batches,
-                                        AdditionalFundBatchesFilterWindow batchesFilterWindow) {
+                                        IAdditionalFundBatchesFilterWindow batchesFilterWindow) {
         this.controller = controller;
         this.batchesFilterWindow = batchesFilterWindow;
         BigDecimal grossAmount = batches

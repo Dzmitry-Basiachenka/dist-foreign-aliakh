@@ -15,6 +15,7 @@ import static org.junit.Assert.assertNotNull;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
+import com.copyright.rup.dist.foreign.ui.usage.api.nts.IAdditionalFundBatchesFilterWindow;
 import com.copyright.rup.dist.foreign.ui.usage.api.nts.INtsUsageController;
 
 import com.vaadin.server.Sizeable.Unit;
@@ -59,7 +60,7 @@ public class AdditionalFundFilteredBatchesWindowTest {
         replay(controller, streamSource);
         AdditionalFundFilteredBatchesWindow
             window = new AdditionalFundFilteredBatchesWindow(controller, batches,
-            createMock(AdditionalFundBatchesFilterWindow.class));
+            createMock(IAdditionalFundBatchesFilterWindow.class));
         verify(controller, streamSource);
         verifyWindow(window, "Filtered batches", 700, 400, Unit.PIXELS);
         assertEquals("batches-filter-window", window.getStyleName());
