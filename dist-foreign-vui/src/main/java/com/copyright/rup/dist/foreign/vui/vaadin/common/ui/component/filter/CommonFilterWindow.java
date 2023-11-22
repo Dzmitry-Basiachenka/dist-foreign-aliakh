@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.filter;
 
+import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.CommonDialog;
+
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.ComponentUtil;
@@ -17,7 +19,7 @@ import java.util.Set;
  * @param <T> bean type
  * @author Ihar Suvorau
  */
-public class CommonFilterWindow<T> extends Dialog {
+public class CommonFilterWindow<T> extends CommonDialog {
 
     /**
      * Constructor.

@@ -1,13 +1,10 @@
 package com.copyright.rup.dist.foreign.vui.vaadin.common.util;
 
-import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.Buttons;
-
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasEnabled;
 import com.vaadin.flow.component.HasStyle;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.dom.Style;
@@ -109,26 +106,6 @@ public final class VaadinUtils {
         );
         grid.setSizeFull();
         VaadinUtils.addComponentStyle(grid, style);
-    }
-
-    /**
-     * Adds themes and style and id for providing dialog component.
-     *
-     * @param dialog      instance of {@link  Dialog}
-     * @param style       class name for css
-     * @param isResizable {@code true} if the dialog is resizable, {@code false} otherwise
-     */
-    public static void setModalWindowProperties(Dialog dialog, String style, boolean isResizable) {
-        dialog.setResizable(isResizable);
-        dialog.setDraggable(true);
-        dialog.setCloseOnEsc(false);
-        dialog.setCloseOnOutsideClick(false);
-        dialog.setMinHeight("200px");
-        if (isResizable) {
-            dialog.getHeader().add(Buttons.createMaximizeWindowIcon(dialog));
-        }
-        dialog.getHeader().add(Buttons.createCloseIcon(dialog));
-        VaadinUtils.addComponentStyle(dialog, style);
     }
 
     /**

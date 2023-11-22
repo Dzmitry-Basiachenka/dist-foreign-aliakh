@@ -3,12 +3,11 @@ package com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window;
 import static com.google.common.base.Preconditions.checkArgument;
 
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.Buttons;
-import com.copyright.rup.dist.foreign.vui.vaadin.common.util.VaadinUtils;
+import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.CommonDialog;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Html;
 import com.vaadin.flow.component.Unit;
-import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
@@ -24,7 +23,7 @@ import org.apache.commons.lang3.StringUtils;
  * @author Siarhei Sabetski
  * @author Nikita Levyankov
  */
-public final class NotificationWindow extends Dialog {
+public final class NotificationWindow extends CommonDialog {
 
     /**
      * Constructs new notification window with given message.
@@ -49,7 +48,7 @@ public final class NotificationWindow extends Dialog {
         add(initContent(message));
         getFooter().add(new HorizontalLayout(Buttons.createOkButton(this)));
         setWidth(600, Unit.PIXELS);
-        VaadinUtils.setModalWindowProperties(this, "notification-window", false);
+        setModalWindowProperties("notification-window", false);
     }
 
     private Component initContent(String message) {
