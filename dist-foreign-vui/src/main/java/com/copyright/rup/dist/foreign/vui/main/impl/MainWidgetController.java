@@ -1,11 +1,17 @@
 package com.copyright.rup.dist.foreign.vui.main.impl;
 
+
+import com.copyright.rup.dist.foreign.vui.main.api.IControllerProvider;
 import com.copyright.rup.dist.foreign.vui.main.api.IMainWidget;
 import com.copyright.rup.dist.foreign.vui.main.api.IMainWidgetController;
+import com.copyright.rup.dist.foreign.vui.main.api.IProductFamilyProvider;
+import com.copyright.rup.dist.foreign.vui.usage.api.ICommonUsageController;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.api.TabController;
 
 import com.vaadin.flow.component.tabs.TabSheet;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -23,10 +29,26 @@ import org.springframework.stereotype.Component;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class MainWidgetController extends TabController<IMainWidget> implements IMainWidgetController {
 
+    @Autowired
+    private IProductFamilyProvider productFamilyProvider;
+    @Autowired
+    @Qualifier("dist.foreign.usagesControllerProvider")
+    private IControllerProvider<ICommonUsageController> usagesControllerProvider;
+
     @Override
     public void onProductFamilyChanged() {
         getWidget().updateProductFamily();
         refreshWidget();
+    }
+
+    @Override
+    public IProductFamilyProvider getProductFamilyProvider() {
+        return productFamilyProvider;
+    }
+
+    @Override
+    public IControllerProvider<ICommonUsageController> getUsagesControllerProvider() {
+        return usagesControllerProvider;
     }
 
     @Override

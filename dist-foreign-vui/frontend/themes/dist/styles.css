@@ -3,6 +3,7 @@
 * @see https://vaadin.com/docs/latest/styling/custom-theme/style-scopes
 */
 @import 'components/loading-indicator.css';
+@import 'components/custom-elements.css';
 
 html {
     /*

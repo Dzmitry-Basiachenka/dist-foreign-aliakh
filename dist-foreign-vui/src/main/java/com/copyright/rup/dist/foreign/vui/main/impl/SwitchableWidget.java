@@ -6,7 +6,7 @@ import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.api.IRefreshable;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.api.IWidget;
 
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.html.Section;
 
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
  * @param <C> type of controller
  * @author Stanislau Rudak
  */
-class SwitchableWidget<W extends IWidget<C>, C extends IController<W>> extends VerticalLayout implements IRefreshable {
+class SwitchableWidget<W extends IWidget<C>, C extends IController<W>> extends Section implements IRefreshable {
 
     private final IControllerProvider<C> controllerProvider;
     private final Consumer<W> listenerRegisterer;
