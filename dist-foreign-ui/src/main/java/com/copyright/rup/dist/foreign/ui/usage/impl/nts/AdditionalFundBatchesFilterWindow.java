@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.nts;
 
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
+import com.copyright.rup.dist.foreign.ui.usage.api.nts.IAdditionalFundBatchesFilterWindow;
 import com.copyright.rup.vaadin.ui.component.filter.FilterWindow;
 import com.copyright.rup.vaadin.ui.component.filter.IFilterWindowController;
 import com.copyright.rup.vaadin.util.VaadinUtils;
@@ -20,7 +21,7 @@ import java.util.List;
  *
  * @author Aliaksandr Liakh
  */
-class AdditionalFundBatchesFilterWindow extends FilterWindow<UsageBatch> {
+class AdditionalFundBatchesFilterWindow extends FilterWindow<UsageBatch> implements IAdditionalFundBatchesFilterWindow {
 
     /**
      * Constructor.

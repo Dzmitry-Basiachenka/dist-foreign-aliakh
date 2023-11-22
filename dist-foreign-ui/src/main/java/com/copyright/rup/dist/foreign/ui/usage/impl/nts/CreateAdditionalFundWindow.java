@@ -5,6 +5,7 @@ import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.ui.common.validator.RequiredValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
+import com.copyright.rup.dist.foreign.ui.usage.api.nts.IAdditionalFundBatchesFilterWindow;
 import com.copyright.rup.dist.foreign.ui.usage.api.nts.INtsUsageController;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
@@ -40,7 +41,7 @@ class CreateAdditionalFundWindow extends Window {
     private final INtsUsageController controller;
     private final Set<String> batchIds;
     private final BigDecimal amount;
-    private final AdditionalFundBatchesFilterWindow batchesFilterWindow;
+    private final IAdditionalFundBatchesFilterWindow batchesFilterWindow;
     private final AdditionalFundFilteredBatchesWindow filteredBatchesWindow;
     private final Binder<FundPool> binder = new Binder<>();
 
@@ -53,11 +54,11 @@ class CreateAdditionalFundWindow extends Window {
      * @param controller            instance of {@link INtsUsageController}
      * @param batchIds              set of ids of usage batches
      * @param amount                gross amount
-     * @param batchesFilterWindow   instance of {@link AdditionalFundBatchesFilterWindow}
+     * @param batchesFilterWindow   instance of {@link IAdditionalFundBatchesFilterWindow}
      * @param filteredBatchesWindow instance of {@link AdditionalFundFilteredBatchesWindow}
      */
     CreateAdditionalFundWindow(INtsUsageController controller, Set<String> batchIds, BigDecimal amount,
-                               AdditionalFundBatchesFilterWindow batchesFilterWindow,
+                               IAdditionalFundBatchesFilterWindow batchesFilterWindow,
                                AdditionalFundFilteredBatchesWindow filteredBatchesWindow) {
         this.controller = controller;
         this.batchIds = batchIds;
