@@ -6,7 +6,6 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
 import org.junit.Test;
@@ -65,18 +64,6 @@ public class VaadinUtilsTest {
         VaadinUtils.addComponentStyle(sourceComponent, anotherStyle);
         assertNotEquals(anotherStyle, sourceComponent.getId().orElseThrow());
         assertTrue(sourceComponent.getClassName().contains(anotherStyle));
-    }
-
-    @Test
-    public void testSetModalWindowProperties() {
-        Dialog dialog = new Dialog();
-        VaadinUtils.setModalWindowProperties(dialog, "test-dialog", true);
-        assertEquals("test-dialog", dialog.getClassName());
-        assertTrue(dialog.isResizable());
-        assertTrue(dialog.isDraggable());
-        assertFalse(dialog.isCloseOnEsc());
-        assertFalse(dialog.isCloseOnOutsideClick());
-        assertFalse(dialog.isOpened());
     }
 
     @Test

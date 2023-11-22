@@ -91,7 +91,7 @@ public abstract class BaseItemsFilterWidget<T> extends HorizontalLayout {
         VaadinUtils.setButtonsAutoDisabled(button);
         addClickListener(event -> {
             CommonFilterWindow<T> filterWindow = showFilterWindow();
-            VaadinUtils.setModalWindowProperties(filterWindow, StringUtils.EMPTY, false);
+            filterWindow.setModalWindowProperties(StringUtils.EMPTY, false);
             if (Objects.nonNull(saveListener)) {
                 filterWindow.addFilterSaveListener(saveListener);
             }
