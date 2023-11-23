@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.nts;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.nts.IAdditionalFundBatchesFilterWindow;
+import com.copyright.rup.dist.foreign.ui.usage.api.nts.IAdditionalFundFilteredBatchesWindow;
 import com.copyright.rup.dist.foreign.ui.usage.api.nts.INtsUsageController;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
@@ -35,7 +36,7 @@ import java.util.stream.Collectors;
  *
  * @author Aliaksandr Liakh
  */
-class AdditionalFundFilteredBatchesWindow extends Window {
+class AdditionalFundFilteredBatchesWindow extends Window implements IAdditionalFundFilteredBatchesWindow {
 
     private final INtsUsageController controller;
     private final IAdditionalFundBatchesFilterWindow batchesFilterWindow;

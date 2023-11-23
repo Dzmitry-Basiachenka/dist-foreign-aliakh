@@ -15,6 +15,8 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.foreign.domain.FundPool;
+import com.copyright.rup.dist.foreign.ui.usage.api.nts.IAdditionalFundBatchesFilterWindow;
+import com.copyright.rup.dist.foreign.ui.usage.api.nts.IAdditionalFundFilteredBatchesWindow;
 import com.copyright.rup.dist.foreign.ui.usage.api.nts.INtsUsageController;
 
 import com.vaadin.data.Binder;
@@ -64,7 +66,8 @@ public class CreateAdditionalFundWindowTest {
     public void setUp() {
         usagesController = createMock(INtsUsageController.class);
         window = new CreateAdditionalFundWindow(usagesController, Set.of(), BigDecimal.ONE,
-            createMock(AdditionalFundBatchesFilterWindow.class), createMock(AdditionalFundFilteredBatchesWindow.class));
+            createMock(IAdditionalFundBatchesFilterWindow.class),
+            createMock(IAdditionalFundFilteredBatchesWindow.class));
     }
 
     @Test

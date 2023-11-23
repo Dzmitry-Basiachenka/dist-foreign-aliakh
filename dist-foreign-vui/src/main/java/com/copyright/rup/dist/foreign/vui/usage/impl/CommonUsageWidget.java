@@ -33,5 +33,4 @@ public abstract class CommonUsageWidget extends SplitLayout implements ICommonUs
      * @return instance of {@link HorizontalLayout} that contains available buttons.
      */
     protected abstract HorizontalLayout initButtonsLayout();
-
 }
