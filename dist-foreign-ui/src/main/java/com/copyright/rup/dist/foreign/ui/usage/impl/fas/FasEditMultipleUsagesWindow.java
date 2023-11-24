@@ -3,10 +3,12 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.fas;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.ui.common.validator.RequiredValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
+import com.copyright.rup.dist.foreign.ui.usage.api.fas.IFasUpdateUsageWindow;
 import com.copyright.rup.dist.foreign.ui.usage.api.fas.IFasUsageController;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
+
 import com.vaadin.data.Binder;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.shared.ui.MarginInfo;
@@ -17,6 +19,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
+
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
@@ -36,17 +39,17 @@ class FasEditMultipleUsagesWindow extends Window {
     private final IFasUsageController controller;
     private final List<String> usageIds;
     private final Binder<Usage> binder = new Binder<>();
-    private final FasUpdateUsageWindow updateUsageWindow;
+    private final IFasUpdateUsageWindow updateUsageWindow;
     private TextField wrWrkInstField;
 
     /**
      * Constructor.
      *
      * @param controller        {@link IFasUsageController} instance
-     * @param updateUsageWindow {@link FasUpdateUsageWindow} instance
+     * @param updateUsageWindow {@link IFasUpdateUsageWindow} instance
      * @param usageIds          list of usage ids
      */
-    FasEditMultipleUsagesWindow(IFasUsageController controller, FasUpdateUsageWindow updateUsageWindow,
+    FasEditMultipleUsagesWindow(IFasUsageController controller, IFasUpdateUsageWindow updateUsageWindow,
                                 List<String> usageIds) {
         this.controller = controller;
         this.updateUsageWindow = updateUsageWindow;
