@@ -5,13 +5,9 @@ import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.filter.Filt
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.filter.IFilterWindowController;
 
 import com.vaadin.flow.component.dialog.Dialog;
-import com.vaadin.flow.data.binder.Validator;
 import com.vaadin.flow.function.ValueProvider;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.Objects;
-import java.util.function.Consumer;
 
 /**
  * Utility class to work with modal windows.
@@ -110,41 +106,5 @@ public final class Windows {
         FilterWindow<T> filterWindow = new FilterWindow(caption, Objects.requireNonNull(controller), providers);
         showModalWindow(filterWindow);
         return filterWindow;
-    }
-
-    /**
-     * Shows confirm action dialog window.
-     *
-     * @param caption        caption of dialog
-     * @param message        message of dialog
-     * @param confirmCaption caption for confirm button
-     * @param declineCaption caption for decline button
-     * @param action         action on confirmation button click
-     */
-    public static void showConfirmDialogWithReason(String caption, String message, String confirmCaption,
-                                                   String declineCaption,
-                                                   Consumer<String> action) {
-        showConfirmDialogWithReason(caption, message, confirmCaption, declineCaption, action,
-            Collections.emptyList());
-    }
-
-    /**
-     * Shows confirm action dialog window.
-     *
-     * @param caption        caption of dialog
-     * @param message        message of dialog
-     * @param confirmCaption caption for confirm button
-     * @param declineCaption caption for decline button
-     * @param action         action on confirmation button click
-     * @param validators     list of validators for reason text field
-     */
-    public static void showConfirmDialogWithReason(String caption, String message, String confirmCaption,
-                                                   String declineCaption,
-                                                   Consumer<String> action,
-                                                   List<Validator<String>> validators) {
-        Objects.requireNonNull(validators);
-        ConfirmActionDialogWindow window =
-            new ConfirmActionDialogWindow(action, caption, message, confirmCaption, declineCaption, validators);
-        showModalWindow(window);
     }
 }
