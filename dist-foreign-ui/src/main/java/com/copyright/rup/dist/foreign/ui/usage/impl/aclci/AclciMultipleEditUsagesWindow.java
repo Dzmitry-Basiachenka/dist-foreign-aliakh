@@ -5,6 +5,7 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.ui.common.validator.RequiredValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.aclci.IAclciUsageController;
+import com.copyright.rup.dist.foreign.ui.usage.api.aclci.IAclciUsageUpdateWindow;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
@@ -41,7 +42,7 @@ class AclciMultipleEditUsagesWindow extends Window {
     private final IAclciUsageController controller;
     private final Set<String> usageIds;
     private final Binder<Usage> binder = new Binder<>();
-    private final AclciUsageUpdateWindow usageUpdateWindow;
+    private final IAclciUsageUpdateWindow usageUpdateWindow;
     private TextField rhAccountNumberField;
     private TextField rhNameField;
     private TextField wrWrkInstField;
@@ -50,10 +51,10 @@ class AclciMultipleEditUsagesWindow extends Window {
      * Constructor.
      *
      * @param controller        {@link IAclciUsageController} instance
-     * @param usageUpdateWindow {@link IAclciUsageController} instance
+     * @param usageUpdateWindow {@link IAclciUsageUpdateWindow} instance
      * @param usageIds          set of usage ids
      */
-    AclciMultipleEditUsagesWindow(IAclciUsageController controller, AclciUsageUpdateWindow usageUpdateWindow,
+    AclciMultipleEditUsagesWindow(IAclciUsageController controller, IAclciUsageUpdateWindow usageUpdateWindow,
                                   Set<String> usageIds) {
         this.controller = controller;
         this.usageUpdateWindow = usageUpdateWindow;

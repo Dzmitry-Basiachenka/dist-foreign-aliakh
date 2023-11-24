@@ -5,6 +5,7 @@ import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.validateField
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyTextField;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
+
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.eq;
@@ -18,9 +19,11 @@ import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.dist.foreign.ui.usage.api.fas.IFasUpdateUsageWindow;
 import com.copyright.rup.dist.foreign.ui.usage.api.fas.IFasUsageController;
 import com.copyright.rup.vaadin.ui.component.window.ConfirmActionDialogWindow.IListener;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
+
 import com.vaadin.data.Binder;
 import com.vaadin.data.Validator;
 import com.vaadin.server.Sizeable.Unit;
@@ -30,6 +33,7 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
+
 import org.apache.commons.lang3.StringUtils;
 import org.easymock.Capture;
 import org.junit.Before;
@@ -63,13 +67,13 @@ public class FasEditMultipleUsagesWindowTest {
     private static final String INVALID_NUMBER_ERROR = "Field value should contain numeric values only";
 
     private IFasUsageController controller;
-    private FasUpdateUsageWindow updateUsageWindow;
+    private IFasUpdateUsageWindow updateUsageWindow;
     private FasEditMultipleUsagesWindow window;
 
     @Before
     public void setUp() {
         controller = createMock(IFasUsageController.class);
-        updateUsageWindow = createMock(FasUpdateUsageWindow.class);
+        updateUsageWindow = createMock(IFasUpdateUsageWindow.class);
     }
 
     @Test

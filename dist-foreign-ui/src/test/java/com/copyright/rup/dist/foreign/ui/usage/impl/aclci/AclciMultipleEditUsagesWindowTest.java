@@ -25,6 +25,7 @@ import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.ui.usage.UiTestHelper;
 import com.copyright.rup.dist.foreign.ui.usage.api.aclci.IAclciUsageController;
+import com.copyright.rup.dist.foreign.ui.usage.api.aclci.IAclciUsageUpdateWindow;
 import com.copyright.rup.vaadin.ui.component.window.ConfirmActionDialogWindow.IListener;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
@@ -76,13 +77,13 @@ public class AclciMultipleEditUsagesWindowTest {
     private static final String WR_WRK_INST_FIELD_NAME = "wrWrkInstField";
     private static final String NUMBER_VALIDATION_MESSAGE = "Field value should contain numeric values only";
     private IAclciUsageController controller;
-    private AclciUsageUpdateWindow usageUpdateWindow;
+    private IAclciUsageUpdateWindow usageUpdateWindow;
     private AclciMultipleEditUsagesWindow window;
 
     @Before
     public void setUp() {
         controller = createMock(IAclciUsageController.class);
-        usageUpdateWindow = createMock(AclciUsageUpdateWindow.class);
+        usageUpdateWindow = createMock(IAclciUsageUpdateWindow.class);
     }
 
     @Test

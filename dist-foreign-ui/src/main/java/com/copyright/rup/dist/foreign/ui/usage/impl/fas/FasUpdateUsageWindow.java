@@ -2,12 +2,13 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.fas;
 
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
+import com.copyright.rup.dist.foreign.ui.usage.api.fas.IFasUpdateUsageWindow;
 import com.copyright.rup.dist.foreign.ui.usage.api.fas.IFasUsageController;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.SearchWidget;
-import com.copyright.rup.vaadin.widget.api.IRefreshable;
+
 import com.vaadin.data.ValueProvider;
 import com.vaadin.data.provider.DataProvider;
 import com.vaadin.data.provider.ListDataProvider;
@@ -20,6 +21,7 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.components.grid.MultiSelectionModel.SelectAllCheckBoxVisibility;
 import com.vaadin.ui.components.grid.MultiSelectionModelImpl;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -36,7 +38,7 @@ import java.util.stream.Collectors;
  *
  * @author Aliaksandr Liakh
  */
-class FasUpdateUsageWindow extends Window implements IRefreshable {
+class FasUpdateUsageWindow extends Window implements IFasUpdateUsageWindow {
 
     private final IFasUsageController controller;
     private SearchWidget searchWidget;
