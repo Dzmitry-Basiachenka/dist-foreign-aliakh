@@ -62,6 +62,15 @@ public class MainWidget extends TabSheet implements IMainWidget, IMediatorProvid
         this.controller = controller;
     }
 
+    @Override
+    public IMediator initMediator() {
+        var mediator = new MainWidgetMediator();
+        mediator.setController(controller);
+        mediator.setProductFamilyProvider(controller.getProductFamilyProvider());
+        mediator.setProductFamilySelect(productFamilySelect);
+        return mediator;
+    }
+
     private Tab addTab(String caption, Component component, String style) {
         var tab = add(caption, component);
         VaadinUtils.addComponentStyle(tab, style);
@@ -78,15 +87,6 @@ public class MainWidget extends TabSheet implements IMainWidget, IMediatorProvid
         horizontalLayout.setDefaultVerticalComponentAlignment(Alignment.CENTER);
         VaadinUtils.addComponentStyle(horizontalLayout, "reports-tab-refresh-button-layout");
         return horizontalLayout;
-    }
-
-    @Override
-    public IMediator initMediator() {
-        var mediator = new MainWidgetMediator();
-        mediator.setController(controller);
-        mediator.setProductFamilyProvider(controller.getProductFamilyProvider());
-        mediator.setProductFamilySelect(productFamilySelect);
-        return mediator;
     }
 
     private Select<String> initProductFamilySelect() {

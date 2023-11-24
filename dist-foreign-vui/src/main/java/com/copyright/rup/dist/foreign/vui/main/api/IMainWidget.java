@@ -1,6 +1,5 @@
 package com.copyright.rup.dist.foreign.vui.main.api;
 
-
 import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.api.IWidget;
 
 /**

@@ -31,5 +31,4 @@ public abstract class CommonUsageController extends CommonController<ICommonUsag
         //TODO will implement later
         return new UsageService();
     }
-
 }

@@ -1,6 +1,5 @@
 package com.copyright.rup.dist.foreign.vui.main.impl;
 
-
 import com.copyright.rup.dist.foreign.vui.main.api.IControllerProvider;
 import com.copyright.rup.dist.foreign.vui.main.api.IMainWidget;
 import com.copyright.rup.dist.foreign.vui.main.api.IMainWidgetController;
