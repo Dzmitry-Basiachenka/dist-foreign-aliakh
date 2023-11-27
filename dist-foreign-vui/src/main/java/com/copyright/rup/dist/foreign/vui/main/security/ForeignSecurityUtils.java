@@ -15,7 +15,6 @@ import com.copyright.rup.dist.foreign.vui.vaadin.common.security.SecurityUtils;
  */
 public final class ForeignSecurityUtils {
 
-
     private ForeignSecurityUtils() {
         throw new AssertionError("Constructor shouldn't be called directly");
     }

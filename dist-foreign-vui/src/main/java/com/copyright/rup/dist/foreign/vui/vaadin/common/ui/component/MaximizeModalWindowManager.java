@@ -69,6 +69,28 @@ public class MaximizeModalWindowManager {
         return resizeButton;
     }
 
+    /**
+     * Sets position.
+     *
+     * @param position position
+     */
+    protected void setPosition(Position position) {
+        window.getElement().executeJs(SET_PROPERTY_IN_OVERLAY_JS, "left", position.getLeft());
+        window.getElement().executeJs(SET_PROPERTY_IN_OVERLAY_JS, "top", position.getTop());
+    }
+
+    /**
+     * Enables positioning.
+     *
+     * @param positioningEnabled positioning enabled flag
+     */
+    protected void enablePositioning(boolean positioningEnabled) {
+        window.getElement()
+            .executeJs(SET_PROPERTY_IN_OVERLAY_JS, "align-self", positioningEnabled ? "flex-start" : "unset");
+        window.getElement()
+            .executeJs(SET_PROPERTY_IN_OVERLAY_JS, "position", positioningEnabled ? "absolute" : "relative");
+    }
+
     private void initManager() {
         initResizeButton();
         window.addResizeListener(event -> {
@@ -97,28 +119,6 @@ public class MaximizeModalWindowManager {
         window.setDraggable(true);
         resizeButton.setTooltipText("Maximize");
         resizeButton.setIcon(new Icon(VaadinIcon.THIN_SQUARE));
-    }
-
-    /**
-     * Sets position.
-     *
-     * @param position position
-     */
-    protected void setPosition(Position position) {
-        window.getElement().executeJs(SET_PROPERTY_IN_OVERLAY_JS, "left", position.getLeft());
-        window.getElement().executeJs(SET_PROPERTY_IN_OVERLAY_JS, "top", position.getTop());
-    }
-
-    /**
-     * Enables positioning.
-     *
-     * @param positioningEnabled positioning enabled flag
-     */
-    protected void enablePositioning(boolean positioningEnabled) {
-        window.getElement()
-            .executeJs(SET_PROPERTY_IN_OVERLAY_JS, "align-self", positioningEnabled ? "flex-start" : "unset");
-        window.getElement()
-            .executeJs(SET_PROPERTY_IN_OVERLAY_JS, "position", positioningEnabled ? "absolute" : "relative");
     }
 
     private void changeLastPosition(SerializableConsumer<Position> consumer) {
