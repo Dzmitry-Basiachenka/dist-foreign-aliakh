@@ -39,8 +39,6 @@
             <result property="valueShare" column="value_share"/>
             <result property="volumeShare" column="volume_share"/>
             <result property="detailShare" column="detail_share"/>
-            <result property="volumeWeightDenominator" column="volume_weight_denominator"/>
-            <result property="valueWeightDenominator" column="value_weight_denominator"/>
             <result property="netAmount" column="net_amount"/>
             <result property="grossAmount" column="gross_amount"/>
             <result property="serviceFeeAmount" column="service_fee_amount"/>
@@ -567,8 +565,6 @@
             shd.value_share,
             shd.volume_share,
             shd.detail_share,
-            shd.volume_weight_denominator,
-            shd.value_weight_denominator,
             shd.net_amount,
             shd.gross_amount,
             shd.service_fee_amount
