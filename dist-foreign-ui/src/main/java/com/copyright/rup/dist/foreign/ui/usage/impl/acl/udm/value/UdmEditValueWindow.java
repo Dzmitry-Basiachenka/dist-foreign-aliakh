@@ -157,6 +157,7 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
         } else {
             flagField.clear();
         }
+        recalculateContentUnitPriceFlag();
     }
 
     /**
@@ -311,6 +312,8 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
             contentField.clear();
             contentSourceField.clear();
             contentCommentField.clear();
+            recalculateFlag(contentField, contentFlagField);
+            contentUnitPriceField.clear();
         });
         VaadinUtils.addComponentStyle(clearContentSectionButton, "clear-content-section-button");
         var editClearContentFieldsLayout = new VerticalLayout(buttonsLayout);
@@ -499,7 +502,6 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
             if (event.isUserOriginated()) {
                 recalculatePriceInUsd();
                 recalculateFlag(priceField, priceFlagField);
-                recalculateContentUnitPriceFlag();
             }
         });
         VaadinUtils.addComponentStyle(priceField, "udm-value-edit-price-field");
@@ -607,6 +609,8 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
             priceYearField.clear();
             priceSourceField.clear();
             priceCommentField.clear();
+            recalculateFlag(priceField, priceFlagField);
+            contentUnitPriceField.clear();
         });
         VaadinUtils.addComponentStyle(clearPriceSectionButton, "clear-price-section-button");
         HorizontalLayout buttonsLayout = new HorizontalLayout(clearPriceSectionButton);
@@ -631,7 +635,6 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
             if (event.isUserOriginated()) {
                 recalculateContentUnitPrice();
                 recalculateFlag(contentField, contentFlagField);
-                recalculateContentUnitPriceFlag();
             }
         });
         VaadinUtils.addComponentStyle(contentField, "udm-value-edit-content-field");
