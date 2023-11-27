@@ -1,3 +1,7 @@
+20.0.14
+-
+* CDP-2074: FDA ACL: Clear Price and Content on Edit Value window: Price and Content flags display 'Y' value in case price and content were cleared by 'Clear' buttons
+
 20.0.13
 -
 * CDP-1630 FDA: Implement improvements from SAR Review: fix issue 'System contains class cyclic dependencies' for class ForeignErrorHandler
@@ -38,7 +42,7 @@
 
 20.0.9
 -
-CDP-1769: PI 20 Sprint 3 Tech Debt fix CVE-2023-44487
+* CDP-1769: PI 20 Sprint 3 Tech Debt fix CVE-2023-44487
 * B-80927 - FDA & ACL: Manually enter proxy CUP and update CUP Flag: add edit button
 * B-80927 - FDA & ACL: Manually enter proxy CUP and update CUP Flag: implement logic to be able to update CUP and CUP flag
 
