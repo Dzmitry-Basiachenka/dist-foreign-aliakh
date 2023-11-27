@@ -5,7 +5,6 @@ import com.copyright.rup.dist.foreign.domain.filter.RightsholderResultsFilter;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioController;
 import com.copyright.rup.vaadin.ui.Buttons;
-import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.util.CurrencyUtils;
 import com.copyright.rup.vaadin.util.VaadinUtils;
@@ -129,11 +128,7 @@ public class AclScenarioDrillDownAggLcClassesWindow extends Window {
             button.addClickListener(event -> {
                 filter.setAggregateLicenseeClassId(holder.getAggregateLicenseeClass().getId());
                 filter.setAggregateLicenseeClassName(holder.getAggregateLicenseeClass().getDescription());
-                Windows.showModalWindow(
-                    Objects.nonNull(filter.getWrWrkInst())
-                        ? new AclScenarioDrillDownUsageDetailsWindow(controller, new RightsholderResultsFilter(filter))
-                        : new AclScenarioDrillDownTitlesWindow(controller, new RightsholderResultsFilter(filter))
-                );
+                controller.openAclScenarioDrillDownWindow(filter);
             });
             VaadinUtils.setButtonsAutoDisabled(button);
             return button;

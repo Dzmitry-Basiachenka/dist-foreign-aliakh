@@ -13,7 +13,10 @@ import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioController
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioDetailsByRightsholderController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioDetailsController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioWidget;
+import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.widget.api.CommonController;
+
+import com.vaadin.ui.Window;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -21,6 +24,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Implementation of {@link IAclScenarioController}.
@@ -91,6 +95,20 @@ public class AclScenarioController extends CommonController<IAclScenarioWidget> 
     public IStreamSource getExportAclScenarioRightsholderTotalsStreamSource() {
         return streamSourceHandler.getCsvStreamSource(() -> aclScenario.getName() + "_",
             pos -> aclCalculationReportService.writeAclScenarioRightsholderTotalsCsvReport(aclScenario.getId(), pos));
+    }
+
+    @Override
+    //TODO: move this logic to CommonDrillDownWindow
+    public void openAclScenarioDrillDownWindow(RightsholderResultsFilter filter) {
+        Window window;
+        if (Objects.isNull(filter.getWrWrkInst())) {
+           window = new AclScenarioDrillDownTitlesWindow(this, new RightsholderResultsFilter(filter));
+        } else if (Objects.isNull(filter.getAggregateLicenseeClassId())) {
+            window = new AclScenarioDrillDownAggLcClassesWindow(this, new RightsholderResultsFilter(filter));
+        } else {
+            window = new AclScenarioDrillDownUsageDetailsWindow(this, new RightsholderResultsFilter(filter));
+        }
+        Windows.showModalWindow(window);
     }
 
     @Override

@@ -5,11 +5,11 @@ import com.copyright.rup.dist.foreign.domain.filter.RightsholderResultsFilter;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioController;
 import com.copyright.rup.vaadin.ui.Buttons;
-import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.util.CurrencyUtils;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.SearchWidget;
+import com.copyright.rup.vaadin.widget.SearchWidget.ISearchController;
 
 import com.vaadin.data.provider.DataProvider;
 import com.vaadin.data.provider.ListDataProvider;
@@ -42,7 +42,7 @@ import java.util.stream.Stream;
  *
  * @author Dzmitry Basiachenka
  */
-public class AclScenarioDrillDownTitlesWindow extends Window implements SearchWidget.ISearchController {
+public class AclScenarioDrillDownTitlesWindow extends Window implements ISearchController {
 
     private static final String STYLE_ALIGN_RIGHT = "v-align-right";
     private static final String WR_WRK_INST_PROPERTY = "wrWrkInst";
@@ -86,6 +86,19 @@ public class AclScenarioDrillDownTitlesWindow extends Window implements SearchWi
         VaadinUtils.addComponentStyle(this, "acl-scenario-drill-down-titles-window");
     }
 
+    @Override
+    public void performSearch() {
+        dataProvider.clearFilters();
+        String searchValue = searchWidget.getSearchValue();
+        if (StringUtils.isNotBlank(searchValue)) {
+            dataProvider.setFilter(value ->
+                StringUtils.containsIgnoreCase(Objects.toString(value.getWrWrkInst(), null), searchValue)
+                    || StringUtils.containsIgnoreCase(value.getSystemTitle(), searchValue));
+        }
+        // Gets round an issue when Vaadin do not recalculates columns widths once vertical scroll is disappeared
+        grid.recalculateColumnWidths();
+    }
+
     private VerticalLayout initMetaInfoLayout() {
         HorizontalLayout[] components = Stream.of(
             initLabelsHorizontalLayout(ForeignUi.getMessage("label.rh_account_number"), filter.getRhAccountNumber()),
@@ -120,19 +133,6 @@ public class AclScenarioDrillDownTitlesWindow extends Window implements SearchWi
         return horizontalLayout;
     }
 
-    @Override
-    public void performSearch() {
-        dataProvider.clearFilters();
-        String searchValue = searchWidget.getSearchValue();
-        if (StringUtils.isNotBlank(searchValue)) {
-            dataProvider.setFilter(value ->
-                StringUtils.containsIgnoreCase(Objects.toString(value.getWrWrkInst(), null), searchValue)
-                    || StringUtils.containsIgnoreCase(value.getSystemTitle(), searchValue));
-        }
-        // Gets round an issue when Vaadin do not recalculates columns widths once vertical scroll is disappeared
-        grid.recalculateColumnWidths();
-    }
-
     private void initGrid() {
         aclRightsholderTotalsHolderDtos = controller.getRightsholderTitleResults(filter);
         dataProvider = DataProvider.ofCollection(aclRightsholderTotalsHolderDtos);
@@ -151,11 +151,7 @@ public class AclScenarioDrillDownTitlesWindow extends Window implements SearchWi
             button.addClickListener(event -> {
                 filter.setWrWrkInst(holder.getWrWrkInst());
                 filter.setSystemTitle(holder.getSystemTitle());
-                Windows.showModalWindow(
-                    Objects.nonNull(filter.getAggregateLicenseeClassId())
-                        ? new AclScenarioDrillDownUsageDetailsWindow(controller, new RightsholderResultsFilter(filter))
-                        : new AclScenarioDrillDownAggLcClassesWindow(controller, new RightsholderResultsFilter(filter))
-                );
+                controller.openAclScenarioDrillDownWindow(filter);
             });
             VaadinUtils.setButtonsAutoDisabled(button);
             return button;
