@@ -1,3 +1,18 @@
+20.0.13
+-
+* CDP-1630 FDA: Implement improvements from SAR Review: fix issue 'System contains class cyclic dependencies' for class ForeignErrorHandler
+* CDP-1630 FDA: Implement improvements from SAR Review: fix issue 'System contains class cyclic dependencies' for class MaximizeModalWindowManagerTest
+* CDP-1632 FDA: Initialize UI Framework: migrate main view and mediator for main view
+* CDP-1630 FDA: Implement improvements from SAR Review: fix issue 'System contains class cyclic dependencies' for ForeignErrorHandler in UI module
+* B-80927 - FDA & ACL: Manually enter proxy CUP and update CUP Flag: make changes based on comments in code review
+* CDP-1630 FDA: Implement improvements from SAR Review: fix issue 'System contains class cyclic dependencies' for SalUpdateRighstholderWindow
+* CDP-1630 FDA: Implement improvements from SAR Review: fix issue 'System contains class cyclic dependencies' for IAdditionalFundBatchesFilterWindow and 'Constructor makes call to non-final method' in ForeignUi
+* CDP-1630 FDA: Implement improvements from SAR Review: add CommonDialog class to prevent 'Class has a circular dependency with other classes' issue
+* CDP-1632 FDA: Initialize UI Framework: migrate header and product family select
+* CDP-1630 FDA: Implement improvements from SAR Review: fix issue 'Class has a circular dependency with other classes' for CreateAdditionalFundWindow
+* CDP-1630 FDA: Implement improvements from SAR Review: fix issue 'Class has a circular dependency with other classes' for AclciUsageUpdateWindow and FasUpdateUsageWindow
+* CDP-1630 FDA: Implement improvements from SAR Review: fix issue 'Class has a circular dependency with other classes' for ConfirmActionDialogWindow
+
 20.0.12
 -
 * CDP-1632 FDA: Initialize UI Framework: add configuration files
