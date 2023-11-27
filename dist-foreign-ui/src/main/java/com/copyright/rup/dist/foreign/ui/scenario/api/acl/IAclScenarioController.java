@@ -83,4 +83,11 @@ public interface IAclScenarioController extends IController<IAclScenarioWidget> 
      * @return instance of {@link IStreamSource} for export scenario.
      */
     IStreamSource getExportAclScenarioRightsholderTotalsStreamSource();
+
+    /**
+     * Opens specific ACL scenario drill down window based on filter.
+     *
+     * @param filter instance of {@link RightsholderResultsFilter}
+     */
+    void openAclScenarioDrillDownWindow(RightsholderResultsFilter filter);
 }

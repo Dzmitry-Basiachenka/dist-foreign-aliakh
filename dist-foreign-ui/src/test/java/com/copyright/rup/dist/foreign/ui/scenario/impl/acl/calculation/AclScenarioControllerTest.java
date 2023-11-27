@@ -5,6 +5,8 @@ import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.newCapture;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
@@ -25,6 +27,9 @@ import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioUsageService;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioDetailsByRightsholderController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioDetailsController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioWidget;
+import com.copyright.rup.vaadin.ui.component.window.Windows;
+
+import com.vaadin.ui.Window;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -57,7 +62,7 @@ import java.util.function.Supplier;
  * @author Dzmitry Basiachenka
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({OffsetDateTime.class, StreamSource.class})
+@PrepareForTest({OffsetDateTime.class, StreamSource.class, Windows.class})
 public class AclScenarioControllerTest {
 
     private static final String SCENARIO_UID = "2398769d-8862-42e8-9504-9cbe19376b4b";
@@ -191,6 +196,57 @@ public class AclScenarioControllerTest {
         replay(scenarioDetailsController);
         controller.onViewDetailsClicked();
         verify(scenarioDetailsController);
+    }
+
+    @Test
+    public void testOpenAclScenarioDrillDownTitlesWindow() {
+        mockStatic(Windows.class);
+        RightsholderResultsFilter filter = buildRightsholderResultsFilter();
+        expect(aclScenarioUsageService.getRightsholderTitleResults(filter)).andReturn(List.of()).once();
+        Capture<Window> windowCapture = newCapture();
+        Windows.showModalWindow(capture(windowCapture));
+        expectLastCall().once();
+        replay(aclScenarioUsageService, Windows.class);
+        controller.openAclScenarioDrillDownWindow(filter);
+        verify(aclScenarioUsageService, Windows.class);
+        Window window = windowCapture.getValue();
+        assertNotNull(window);
+        assertThat(window, instanceOf(AclScenarioDrillDownTitlesWindow.class));
+    }
+
+    @Test
+    public void testOpenAclScenarioDrillDownAggLcClassesWindow() {
+        mockStatic(Windows.class);
+        RightsholderResultsFilter filter = buildRightsholderResultsFilter();
+        filter.setWrWrkInst(123456789L);
+        expect(aclScenarioUsageService.getRightsholderAggLcClassResults(filter)).andReturn(List.of()).once();
+        Capture<Window> windowCapture = newCapture();
+        Windows.showModalWindow(capture(windowCapture));
+        expectLastCall().once();
+        replay(aclScenarioUsageService, Windows.class);
+        controller.openAclScenarioDrillDownWindow(filter);
+        verify(aclScenarioUsageService, Windows.class);
+        Window window = windowCapture.getValue();
+        assertNotNull(window);
+        assertThat(window, instanceOf(AclScenarioDrillDownAggLcClassesWindow.class));
+    }
+
+    @Test
+    public void testOpenAclScenarioDrillDownUsageDetailsWindow() {
+        mockStatic(Windows.class);
+        RightsholderResultsFilter filter = buildRightsholderResultsFilter();
+        filter.setWrWrkInst(123456789L);
+        filter.setAggregateLicenseeClassId(1);
+        expect(aclScenarioUsageService.getRightsholderDetailsResults(filter)).andReturn(List.of()).once();
+        Capture<Window> windowCapture = newCapture();
+        Windows.showModalWindow(capture(windowCapture));
+        expectLastCall().once();
+        replay(aclScenarioUsageService, Windows.class);
+        controller.openAclScenarioDrillDownWindow(filter);
+        verify(aclScenarioUsageService, Windows.class);
+        Window window = windowCapture.getValue();
+        assertNotNull(window);
+        assertThat(window, instanceOf(AclScenarioDrillDownUsageDetailsWindow.class));
     }
 
     private AclScenario buildAclScenario() {

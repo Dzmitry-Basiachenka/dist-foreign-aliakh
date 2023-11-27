@@ -6,24 +6,20 @@ import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGrid;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGridItems;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyLabel;
 
-import static org.easymock.EasyMock.eq;
+import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.reset;
+import static org.easymock.EasyMock.verify;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
-import static org.powermock.api.easymock.PowerMock.createMock;
-import static org.powermock.api.easymock.PowerMock.expectNew;
-import static org.powermock.api.easymock.PowerMock.mockStatic;
-import static org.powermock.api.easymock.PowerMock.replay;
-import static org.powermock.api.easymock.PowerMock.reset;
-import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolderDto;
 import com.copyright.rup.dist.foreign.domain.filter.RightsholderResultsFilter;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioController;
-import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
 import com.vaadin.data.ValueProvider;
@@ -40,9 +36,6 @@ import com.vaadin.ui.VerticalLayout;
 import org.apache.commons.lang3.tuple.Triple;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
@@ -58,8 +51,6 @@ import java.util.stream.IntStream;
  *
  * @author Dzmitry Basiachenka
  */
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({AclScenarioDrillDownTitlesWindow.class, Windows.class})
 public class AclScenarioDrillDownTitlesWindowTest {
 
     private static final String SCENARIO_UID = "1236249b-0063-4f7e-888a-3b1051d7a898";
@@ -149,41 +140,19 @@ public class AclScenarioDrillDownTitlesWindowTest {
     }
 
     @Test
-    public void testWrWrkInstCellClickToDrillDownAggLcClassesWindow() throws Exception {
+    public void testWrWrkInstCellButtonClick() {
         RightsholderResultsFilter filter = buildRightsholderResultsFilter(null, null);
         expect(controller.getRightsholderTitleResults(filter)).andReturn(buildAclRightsholderTotalsHolderDtos()).once();
-        AclScenarioDrillDownAggLcClassesWindow mockWindow = createMock(AclScenarioDrillDownAggLcClassesWindow.class);
-        expectNew(AclScenarioDrillDownAggLcClassesWindow.class, eq(controller), eq(filter)).andReturn(mockWindow)
-            .once();
-        mockStatic(Windows.class);
-        Windows.showModalWindow(mockWindow);
+        controller.openAclScenarioDrillDownWindow(filter);
         expectLastCall().once();
-        replay(Windows.class, AclScenarioDrillDownAggLcClassesWindow.class, controller);
+        replay(controller);
         window = new AclScenarioDrillDownTitlesWindow(controller, filter);
         Grid grid = Whitebox.getInternalState(window, "grid");
         Grid.Column column = (Grid.Column) grid.getColumns().get(0);
         ValueProvider<AclRightsholderTotalsHolder, Button> provider = column.getValueProvider();
         Button button = provider.apply(buildAclRightsholderTotalsHolderDtos().get(0));
         button.click();
-        verify(Windows.class, AclScenarioDrillDownAggLcClassesWindow.class, controller);
-    }
-
-    @Test
-    public void testWrWrkInstCellClickToDrillDownUsageDetailsWindow() throws Exception {
-        RightsholderResultsFilter filter = buildRightsholderResultsFilter(AGG_LIC_CLASS_ID, AGG_LIC_CLASS_NAME);
-        AclScenarioDrillDownUsageDetailsWindow mockWindow = createMock(AclScenarioDrillDownUsageDetailsWindow.class);
-        expectNew(AclScenarioDrillDownUsageDetailsWindow.class, eq(controller), eq(filter)).andReturn(mockWindow)
-            .once();
-        mockStatic(Windows.class);
-        Windows.showModalWindow(mockWindow);
-        expectLastCall().once();
-        replay(Windows.class, AclScenarioDrillDownUsageDetailsWindow.class, controller);
-        Grid grid = Whitebox.getInternalState(window, "grid");
-        Grid.Column column = (Grid.Column) grid.getColumns().get(0);
-        ValueProvider<AclRightsholderTotalsHolder, Button> provider = column.getValueProvider();
-        Button button = provider.apply(buildAclRightsholderTotalsHolderDtos().get(0));
-        button.click();
-        verify(Windows.class, AclScenarioDrillDownUsageDetailsWindow.class, controller);
+        verify(controller);
     }
 
     private RightsholderResultsFilter buildRightsholderResultsFilter(Integer aggLicClassId, String aggLicClassName) {
