@@ -117,7 +117,7 @@ public class UdmEditValueWindowTest {
     private static final BigDecimal CONTENT = new BigDecimal("3.00");
     private static final String CONTENT_SOURCE = "content source";
     private static final String CONTENT_COMMENT = "content comment";
-    private static final boolean CONTENT_FLAG = false;
+    private static final boolean CONTENT_FLAG = true;
     private static final BigDecimal CONTENT_UNIT_PRICE = new BigDecimal("1550.40");
     private static final boolean CUP_FLAG = false;
     private static final String COMMENT = "comment";
@@ -227,7 +227,7 @@ public class UdmEditValueWindowTest {
         assertTextFieldValue(contentContent.getComponent(0), "3.00");
         assertTextFieldValue(contentContent.getComponent(1), CONTENT_SOURCE);
         assertTextFieldValue(contentContent.getComponent(2), CONTENT_COMMENT);
-        assertTextFieldValue(contentContent.getComponent(3), NO);
+        assertTextFieldValue(contentContent.getComponent(3), YES);
         assertTextFieldValue(contentContent.getComponent(4), LAST_CONTENT.toString());
         assertTextFieldValue(contentContent.getComponent(5), LAST_CONTENT_SOURCE);
         assertTextFieldValue(contentContent.getComponent(6), LAST_CONTENT_COMMENT);
@@ -245,16 +245,6 @@ public class UdmEditValueWindowTest {
         assertEquals(2, updateContent.getComponentCount());
         assertTextFieldValue(updateContent.getComponent(0), USER_NAME);
         assertTextFieldValue(updateContent.getComponent(1), "12/31/2020");
-    }
-
-    private void verifyContentButtonsLayout(Component component) {
-        assertThat(component, instanceOf(VerticalLayout.class));
-        var layout = (VerticalLayout) component;
-        assertEquals(1, layout.getComponentCount());
-        assertThat(layout.getComponent(0), instanceOf(HorizontalLayout.class));
-        var buttonsLayout = (HorizontalLayout) ((VerticalLayout) component).getComponent(0);
-        assertEquals(2, buttonsLayout.getComponentCount());
-        UiTestHelper.verifyButtonsLayout(buttonsLayout, "Edit CUP", "Clear");
     }
 
     @Test
@@ -589,6 +579,7 @@ public class UdmEditValueWindowTest {
         assertTextFieldValue(priceContent.getComponent(7), PRICE_YEAR.toString());
         assertTextFieldValue(priceContent.getComponent(8), PRICE_SOURCE);
         assertTextFieldValue(priceContent.getComponent(9), PRICE_COMMENT);
+        assertTextFieldValue(priceContent.getComponent(10), YES);
         Button clearPriceSectionButton = Whitebox.getInternalState(window, "clearPriceSectionButton");
         assertTrue(clearPriceSectionButton.getStyleName().contains("clear-price-section-button"));
         clearPriceSectionButton.click();
@@ -602,6 +593,7 @@ public class UdmEditValueWindowTest {
         assertTextFieldValue(priceContent.getComponent(7), StringUtils.EMPTY);
         assertTextFieldValue(priceContent.getComponent(8), StringUtils.EMPTY);
         assertTextFieldValue(priceContent.getComponent(9), StringUtils.EMPTY);
+        assertTextFieldValue(priceContent.getComponent(10), NO);
     }
 
     @Test
@@ -685,12 +677,18 @@ public class UdmEditValueWindowTest {
         assertTextFieldValue(contentContent.getComponent(0), "3.00");
         assertTextFieldValue(contentContent.getComponent(1), CONTENT_SOURCE);
         assertTextFieldValue(contentContent.getComponent(2), CONTENT_COMMENT);
+        assertTextFieldValue(contentContent.getComponent(3), YES);
+        assertTextFieldValue(contentContent.getComponent(8), "1550.40");
+        assertTextFieldValue(contentContent.getComponent(9), NO);
         Button clearContentSectionButton = Whitebox.getInternalState(window, "clearContentSectionButton");
         assertTrue(clearContentSectionButton.getStyleName().contains("clear-content-section-button"));
         clearContentSectionButton.click();
         assertTextFieldValue(contentContent.getComponent(0), StringUtils.EMPTY);
         assertTextFieldValue(contentContent.getComponent(1), StringUtils.EMPTY);
         assertTextFieldValue(contentContent.getComponent(2), StringUtils.EMPTY);
+        assertTextFieldValue(contentContent.getComponent(3), NO);
+        assertTextFieldValue(contentContent.getComponent(8), StringUtils.EMPTY);
+        assertTextFieldValue(contentContent.getComponent(9), NO);
     }
 
     @Test
@@ -786,6 +784,16 @@ public class UdmEditValueWindowTest {
         assertTrue(statusValues.contains(UdmValueStatusEnum.PRELIM_RESEARCH_COMPLETE));
         assertTrue(statusValues.contains(UdmValueStatusEnum.NEEDS_FURTHER_REVIEW));
         assertTrue(statusValues.contains(UdmValueStatusEnum.RESEARCH_COMPLETE));
+    }
+
+    private void verifyContentButtonsLayout(Component component) {
+        assertThat(component, instanceOf(VerticalLayout.class));
+        var layout = (VerticalLayout) component;
+        assertEquals(1, layout.getComponentCount());
+        assertThat(layout.getComponent(0), instanceOf(HorizontalLayout.class));
+        var buttonsLayout = (HorizontalLayout) ((VerticalLayout) component).getComponent(0);
+        assertEquals(2, buttonsLayout.getComponentCount());
+        UiTestHelper.verifyButtonsLayout(buttonsLayout, "Edit CUP", "Clear");
     }
 
     private void verifyLengthValidation(TextField textField, int maxSize) {

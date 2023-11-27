@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.domain;
 
+import com.copyright.rup.dist.common.domain.StoredEntity;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -14,7 +16,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  *
  * @author Anton Azarenka
  */
-public class AaclClassifiedUsage {
+public class AaclClassifiedUsage extends StoredEntity<String> {
 
     private String detailId;
     private Long wrWrkInst;
