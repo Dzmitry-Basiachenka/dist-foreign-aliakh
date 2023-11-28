@@ -431,12 +431,11 @@ public class ScenarioRepositoryIntegrationTest {
         pubTypes.add(buildPublicationType("a3dff475-fc06-4d8c-b7cc-f093073ada6f", "4.00"));
         pubTypes.add(buildPublicationType("1f6f1925-7aa1-4b1a-b3a8-8903acc3d18e", "1.10"));
         scenarioRepository.insert(scenario);
-        UsageFilter usageFilter = new UsageFilter();
-        usageFilter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
-        usageFilter.setProductFamily(AACL_PRODUCT_FAMILY);
-        ScenarioUsageFilter scenarioUsageFilter = new ScenarioUsageFilter(usageFilter);
+        ScenarioUsageFilter scenarioUsageFilter = new ScenarioUsageFilter();
         scenarioUsageFilter.setId("c96cfa30-92a3-409b-adef-a76fc9e7ec1f");
         scenarioUsageFilter.setScenarioId(scenario.getId());
+        scenarioUsageFilter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
+        scenarioUsageFilter.setProductFamily(AACL_PRODUCT_FAMILY);
         filterRepository.insert(scenarioUsageFilter);
         Scenario actualScenario = scenarioRepository.findWithAmountsAndLastAction(SCENARIO_ID_1);
         AaclFields actualAaclFields = actualScenario.getAaclFields();
@@ -454,12 +453,11 @@ public class ScenarioRepositoryIntegrationTest {
         scenario.setSalFields(salFields);
         salFields.setFundPoolId("9888ce49-c550-4444-a8de-a05affa4927c");
         scenarioRepository.insert(scenario);
-        UsageFilter usageFilter = new UsageFilter();
-        usageFilter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
-        usageFilter.setProductFamily(SAL_PRODUCT_FAMILY);
-        ScenarioUsageFilter scenarioUsageFilter = new ScenarioUsageFilter(usageFilter);
+        ScenarioUsageFilter scenarioUsageFilter = new ScenarioUsageFilter();
         scenarioUsageFilter.setId("2395bfa7-de54-4946-acd2-a7526806dca1");
         scenarioUsageFilter.setScenarioId(scenario.getId());
+        scenarioUsageFilter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
+        scenarioUsageFilter.setProductFamily(SAL_PRODUCT_FAMILY);
         filterRepository.insert(scenarioUsageFilter);
         Scenario actualScenario = scenarioRepository.findWithAmountsAndLastAction(SCENARIO_ID_1);
         SalFields actualSalFields = actualScenario.getSalFields();
@@ -479,9 +477,7 @@ public class ScenarioRepositoryIntegrationTest {
         scenario.setNtsFields(ntsFields);
         UsageFilter usageFilter = buildUsageFilter();
         scenarioRepository.insertNtsScenarioAndAddUsages(scenario, usageFilter);
-        ScenarioUsageFilter scenarioUsageFilter = new ScenarioUsageFilter(usageFilter);
-        scenarioUsageFilter.setId("4ea7c95a-c98a-4552-a566-bd4bcec37652");
-        scenarioUsageFilter.setScenarioId(scenario.getId());
+        ScenarioUsageFilter scenarioUsageFilter = buildScenarioUsageFilter(usageFilter);
         filterRepository.insert(scenarioUsageFilter);
         Scenario ntsScenario = scenarioRepository.findWithAmountsAndLastAction(SCENARIO_ID_1);
         assertNotNull(ntsScenario.getNtsFields());
@@ -611,6 +607,19 @@ public class ScenarioRepositoryIntegrationTest {
         usageFilter.setPaymentDate(LocalDate.of(2020, 1, 1));
         usageFilter.setFiscalYear(2020);
         return usageFilter;
+    }
+
+    private ScenarioUsageFilter buildScenarioUsageFilter(UsageFilter usageFilter) {
+        ScenarioUsageFilter scenarioUsageFilter = new ScenarioUsageFilter();
+        scenarioUsageFilter.setId("4ea7c95a-c98a-4552-a566-bd4bcec37652");
+        scenarioUsageFilter.setScenarioId(SCENARIO_ID_1);
+        scenarioUsageFilter.setUsageBatchesIds(usageFilter.getUsageBatchesIds());
+        scenarioUsageFilter.setRhAccountNumbers(usageFilter.getRhAccountNumbers());
+        scenarioUsageFilter.setUsageStatus(usageFilter.getUsageStatus());
+        scenarioUsageFilter.setProductFamily(usageFilter.getProductFamily());
+        scenarioUsageFilter.setPaymentDate(usageFilter.getPaymentDate());
+        scenarioUsageFilter.setFiscalYear(usageFilter.getFiscalYear());
+        return scenarioUsageFilter;
     }
 
     private Usage buildUsage(String usageId, String grossAmount) {

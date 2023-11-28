@@ -12,8 +12,8 @@ import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
-import com.copyright.rup.dist.foreign.domain.filter.ScenarioUsageFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
+import com.copyright.rup.dist.foreign.service.impl.converter.UsageFilterToScenarioUsageFilterConverter;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
@@ -69,7 +69,7 @@ public class CreateAaclScenarioIntegrationTest {
                 "60080587-a225-439c-81af-f016cb33aeac", "019acfde-91be-43aa-8871-6305642bcb2c")
             .withScenario(SCENARIO_NAME, SCENARIO_DESCRIPTION, buildAaclFields())
             .expectScenario(buildExpectedScenario())
-            .expectScenarioFilter(new ScenarioUsageFilter(buildUsageFilter()))
+            .expectScenarioFilter(new UsageFilterToScenarioUsageFilterConverter().apply(buildUsageFilter()))
             .expectScenarioAudit(List.of(Pair.of(ScenarioActionTypeEnum.ADDED_USAGES, StringUtils.EMPTY)))
             .expectUsages("usage/aacl/aacl_expected_usages_for_create_scenario.json")
             .build()

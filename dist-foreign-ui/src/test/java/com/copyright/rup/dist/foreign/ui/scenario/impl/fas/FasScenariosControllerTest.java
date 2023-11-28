@@ -247,7 +247,7 @@ public class FasScenariosControllerTest {
         expect(scenarioUsageFilterService.getByScenarioId(SCENARIO_ID)).andReturn(new ScenarioUsageFilter()).once();
         UsageDto usageDto = new UsageDto();
         usageDto.setId("ef0863ad-eb6f-405d-90bd-f10d363bd320");
-        expect(fasUsageService.getUsagesCount(new UsageFilter(new ScenarioUsageFilter()))).andReturn(1).once();
+        expect(fasUsageService.getUsagesCount(new UsageFilter())).andReturn(1).once();
         Windows.showModalWindow(anyObject(RefreshScenarioWindow.class));
         expectLastCall().once();
         replay(Windows.class, scenariosWidget, scenarioUsageFilterService, fasUsageService);
