@@ -11,7 +11,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.time.LocalDate;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -34,30 +33,6 @@ public class ScenarioUsageFilter extends StoredEntity<String> {
     private LocalDate paymentDate;
     private Integer fiscalYear;
     private Integer usagePeriod;
-
-    /**
-     * Default constructor.
-     */
-    public ScenarioUsageFilter() {
-        // default constructor
-    }
-
-    /**
-     * Constructor.
-     *
-     * @param usageFilter {@link UsageFilter}
-     */
-    public ScenarioUsageFilter(UsageFilter usageFilter) {
-        if (Objects.nonNull(usageFilter)) {
-            this.rhAccountNumbers = usageFilter.getRhAccountNumbers();
-            setUsageBatchesIds(usageFilter.getUsageBatchesIds());
-            this.productFamily = usageFilter.getProductFamily();
-            this.usageStatus = usageFilter.getUsageStatus();
-            this.paymentDate = usageFilter.getPaymentDate();
-            this.fiscalYear = usageFilter.getFiscalYear();
-            this.usagePeriod = usageFilter.getUsagePeriod();
-        }
-    }
 
     public String getScenarioId() {
         return scenarioId;

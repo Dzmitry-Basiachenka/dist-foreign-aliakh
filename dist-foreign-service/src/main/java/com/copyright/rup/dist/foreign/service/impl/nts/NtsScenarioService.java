@@ -11,7 +11,6 @@ import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.common.util.ForeignLogUtils;
-import com.copyright.rup.dist.foreign.domain.filter.ScenarioUsageFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.integration.lm.api.ILmIntegrationService;
 import com.copyright.rup.dist.foreign.integration.lm.api.domain.ExternalUsage;
@@ -21,6 +20,7 @@ import com.copyright.rup.dist.foreign.service.api.IScenarioUsageFilterService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.nts.INtsScenarioService;
 import com.copyright.rup.dist.foreign.service.api.nts.INtsUsageService;
+import com.copyright.rup.dist.foreign.service.impl.converter.UsageFilterToScenarioUsageFilterConverter;
 
 import com.google.common.collect.Iterables;
 
@@ -77,7 +77,8 @@ public class NtsScenarioService implements INtsScenarioService {
         Scenario scenario = buildScenario(scenarioName, ntsFields, description, usageFilter);
         scenarioRepository.insertNtsScenarioAndAddUsages(scenario, usageFilter);
         ntsUsageService.populatePayeeAndCalculateAmountsForScenarioUsages(scenario);
-        scenarioUsageFilterService.insert(scenario.getId(), new ScenarioUsageFilter(usageFilter));
+        scenarioUsageFilterService.insert(scenario.getId(),
+            new UsageFilterToScenarioUsageFilterConverter().apply(usageFilter));
         scenarioAuditService.logAction(scenario.getId(), ScenarioActionTypeEnum.ADDED_USAGES, StringUtils.EMPTY);
         LOGGER.info("Insert NTS scenario. Finished. Name={}, NtsFields={}, Description={}, UsageFilter={}",
             scenarioName, ntsFields, description, usageFilter);

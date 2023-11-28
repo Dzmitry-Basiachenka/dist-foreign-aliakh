@@ -10,7 +10,6 @@ import com.copyright.rup.dist.foreign.domain.Scenario.SalFields;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.common.util.ForeignLogUtils;
-import com.copyright.rup.dist.foreign.domain.filter.ScenarioUsageFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.integration.lm.api.ILmIntegrationService;
 import com.copyright.rup.dist.foreign.integration.lm.api.domain.ExternalUsage;
@@ -20,6 +19,7 @@ import com.copyright.rup.dist.foreign.service.api.IScenarioUsageFilterService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.sal.ISalScenarioService;
 import com.copyright.rup.dist.foreign.service.api.sal.ISalUsageService;
+import com.copyright.rup.dist.foreign.service.impl.converter.UsageFilterToScenarioUsageFilterConverter;
 
 import com.google.common.collect.Iterables;
 
@@ -81,7 +81,8 @@ public class SalScenarioService implements ISalScenarioService {
         Scenario scenario = buildScenario(scenarioName, fundPoolId, description);
         scenarioRepository.insert(scenario);
         salUsageService.addUsagesToScenario(scenario, usageFilter);
-        scenarioUsageFilterService.insert(scenario.getId(), new ScenarioUsageFilter(usageFilter));
+        scenarioUsageFilterService.insert(scenario.getId(),
+            new UsageFilterToScenarioUsageFilterConverter().apply(usageFilter));
         scenarioAuditService.logAction(scenario.getId(), ScenarioActionTypeEnum.ADDED_USAGES, StringUtils.EMPTY);
         salUsageService.calculateAmounts(scenario.getId(), scenario.getCreateUser());
         salUsageService.populatePayees(scenario.getId());

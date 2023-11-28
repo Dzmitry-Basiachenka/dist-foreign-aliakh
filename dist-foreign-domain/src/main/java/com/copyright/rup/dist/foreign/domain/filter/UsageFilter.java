@@ -62,22 +62,6 @@ public class UsageFilter {
         }
     }
 
-    /**
-     * Constructs new filter based on previously stored one.
-     *
-     * @param usageFilter instance of {@link ScenarioUsageFilter}
-     */
-    public UsageFilter(ScenarioUsageFilter usageFilter) {
-        //TODO: set setSalDetailType once it is added to ScenarioUsageFilter
-        Objects.requireNonNull(usageFilter);
-        setRhAccountNumbers(usageFilter.getRhAccountNumbers());
-        setUsageBatchesIds(usageFilter.getUsageBatchesIds());
-        setUsageStatus(usageFilter.getUsageStatus());
-        setPaymentDate(usageFilter.getPaymentDate());
-        setFiscalYear(usageFilter.getFiscalYear());
-        setProductFamily(usageFilter.getProductFamily());
-    }
-
     public Set<Long> getRhAccountNumbers() {
         return rhAccountNumbers;
     }

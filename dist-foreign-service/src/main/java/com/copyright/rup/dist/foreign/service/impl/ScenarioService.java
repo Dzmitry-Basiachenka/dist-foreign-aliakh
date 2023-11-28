@@ -20,6 +20,8 @@ import com.copyright.rup.dist.foreign.service.api.IScenarioUsageFilterService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.fas.IFasUsageService;
 import com.copyright.rup.dist.foreign.service.api.fas.IRightsholderDiscrepancyService;
+import com.copyright.rup.dist.foreign.service.impl.converter.ScenarioUsageFilterToUsageFilterConverter;
+import com.copyright.rup.dist.foreign.service.impl.converter.UsageFilterToScenarioUsageFilterConverter;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -95,7 +97,8 @@ public class ScenarioService implements IScenarioService {
         Scenario scenario = buildScenario(scenarioName, description, usageFilter);
         scenarioRepository.insert(scenario);
         fasUsageService.addUsagesToScenario(usages, scenario);
-        scenarioUsageFilterService.insert(scenario.getId(), new ScenarioUsageFilter(usageFilter));
+        scenarioUsageFilterService.insert(scenario.getId(),
+            new UsageFilterToScenarioUsageFilterConverter().apply(usageFilter));
         scenarioAuditService.logAction(scenario.getId(), ScenarioActionTypeEnum.ADDED_USAGES, StringUtils.EMPTY);
         LOGGER.info("Insert scenario. Finished. Name={}, Description={}, UsageFilter={}",
             scenarioName, description, usageFilter);
@@ -131,7 +134,8 @@ public class ScenarioService implements IScenarioService {
     public void refreshScenario(Scenario scenario) {
         ScenarioUsageFilter usageFilter = scenarioUsageFilterService.getByScenarioId(scenario.getId());
         if (null != usageFilter) {
-            fasUsageService.recalculateUsagesForRefresh(new UsageFilter(usageFilter), scenario);
+            fasUsageService.recalculateUsagesForRefresh(
+                new ScenarioUsageFilterToUsageFilterConverter().apply(usageFilter), scenario);
             scenarioRepository.refresh(scenario);
             scenarioAuditService.logAction(scenario.getId(), ScenarioActionTypeEnum.ADDED_USAGES, StringUtils.EMPTY);
         }

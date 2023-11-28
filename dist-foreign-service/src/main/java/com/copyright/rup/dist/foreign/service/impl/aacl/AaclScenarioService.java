@@ -10,7 +10,6 @@ import com.copyright.rup.dist.foreign.domain.Scenario.AaclFields;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.common.util.ForeignLogUtils;
-import com.copyright.rup.dist.foreign.domain.filter.ScenarioUsageFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.integration.lm.api.ILmIntegrationService;
 import com.copyright.rup.dist.foreign.integration.lm.api.domain.ExternalUsage;
@@ -20,6 +19,7 @@ import com.copyright.rup.dist.foreign.service.api.IScenarioUsageFilterService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.aacl.IAaclScenarioService;
 import com.copyright.rup.dist.foreign.service.api.aacl.IAaclUsageService;
+import com.copyright.rup.dist.foreign.service.impl.converter.UsageFilterToScenarioUsageFilterConverter;
 
 import com.google.common.collect.Iterables;
 
@@ -76,7 +76,8 @@ public class AaclScenarioService implements IAaclScenarioService {
         Scenario scenario = buildAaclScenario(scenarioName, aaclFields, description, usageFilter);
         scenarioRepository.insert(scenario);
         aaclUsageService.addUsagesToScenario(scenario, usageFilter);
-        scenarioUsageFilterService.insert(scenario.getId(), new ScenarioUsageFilter(usageFilter));
+        scenarioUsageFilterService.insert(scenario.getId(),
+            new UsageFilterToScenarioUsageFilterConverter().apply(usageFilter));
         scenarioAuditService.logAction(scenario.getId(), ScenarioActionTypeEnum.ADDED_USAGES, StringUtils.EMPTY);
         aaclUsageService.calculateAmounts(scenario.getId(), scenario.getCreateUser());
         aaclUsageService.excludeZeroAmountUsages(scenario.getId(), scenario.getCreateUser());

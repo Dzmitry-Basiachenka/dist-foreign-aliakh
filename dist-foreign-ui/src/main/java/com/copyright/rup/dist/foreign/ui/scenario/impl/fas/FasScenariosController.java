@@ -14,6 +14,7 @@ import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.service.api.fas.IFasScenarioService;
 import com.copyright.rup.dist.foreign.service.api.fas.IFasUsageService;
 import com.copyright.rup.dist.foreign.service.api.fas.IRightsholderDiscrepancyService;
+import com.copyright.rup.dist.foreign.service.impl.converter.ScenarioUsageFilterToUsageFilterConverter;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ExcludeUsagesEvent;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludeUsagesListener;
@@ -118,7 +119,7 @@ public class FasScenariosController extends CommonScenariosController implements
         ScenarioUsageFilter filter =
             getScenarioUsageFilterService().getByScenarioId(getWidget().getSelectedScenario().getId());
         if (Objects.nonNull(filter)) {
-            UsageFilter usageFilter = new UsageFilter(filter);
+            UsageFilter usageFilter = new ScenarioUsageFilterToUsageFilterConverter().apply(filter);
             if (0 < getSize(usageFilter)) {
                 Windows.showModalWindow(new RefreshScenarioWindow(
                     query ->
@@ -183,7 +184,7 @@ public class FasScenariosController extends CommonScenariosController implements
     @Override
     public List<Long> getInvalidRightsholders() {
         return getUsageService().getInvalidRightsholdersByFilter(
-            new UsageFilter(
+            new ScenarioUsageFilterToUsageFilterConverter().apply(
                 getScenarioUsageFilterService().getByScenarioId(getWidget().getSelectedScenario().getId())));
     }
 

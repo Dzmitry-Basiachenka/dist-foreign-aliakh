@@ -8,8 +8,8 @@ import com.copyright.rup.dist.foreign.domain.Scenario.SalFields;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
-import com.copyright.rup.dist.foreign.domain.filter.ScenarioUsageFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
+import com.copyright.rup.dist.foreign.service.impl.converter.UsageFilterToScenarioUsageFilterConverter;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
@@ -65,7 +65,7 @@ public class CreateSalScenarioIntegrationTest {
             .expectRollups("prm/sal_rollups_response.json", "05844db0-e0e4-4423-8966-7f1c6160f000")
             .withScenario(SCENARIO_NAME, SCENARIO_DESCRIPTION, buildSalFields())
             .expectScenario(buildExpectedScenario())
-            .expectScenarioFilter(new ScenarioUsageFilter(buildUsageFilter()))
+            .expectScenarioFilter(new UsageFilterToScenarioUsageFilterConverter().apply(buildUsageFilter()))
             .expectScenarioAudit(List.of(Pair.of(ScenarioActionTypeEnum.ADDED_USAGES, StringUtils.EMPTY)))
             .expectUsages("usage/sal/sal_expected_usages_for_create_scenario.json")
             .build()
