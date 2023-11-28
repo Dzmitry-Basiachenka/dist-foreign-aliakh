@@ -90,11 +90,7 @@ public class RightsholderService extends CommonRightsholderService implements IR
 
     @Override
     public void updateRighstholdersAsync(Set<Long> accountNumbers) {
-        executorService.execute(() -> {
-            synchronized (this) {
-                updateRightsholders(accountNumbers);
-            }
-        });
+        executorService.execute(() -> updateRightsholders(accountNumbers));
     }
 
     @Override
