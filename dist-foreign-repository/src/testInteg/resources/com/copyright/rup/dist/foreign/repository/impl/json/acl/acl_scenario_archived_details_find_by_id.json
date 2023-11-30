@@ -41,8 +41,6 @@
         "valueShare": 0.1000000000,
         "volumeShare": 0.0000000001,
         "detailShare": 0.9000000000,
-        "volumeWeightDenominator": 1.0000000000,
-        "valueWeightDenominator": 1.0000000000,
         "netAmount": 168.0000000000,
         "serviceFeeAmount": 32.0000000000,
         "grossAmount": 200.0000000000
@@ -91,8 +89,6 @@
         "valueShare": 0.2000000000,
         "volumeShare": 0.0000000002,
         "detailShare": 0.8000000000,
-        "volumeWeightDenominator": 1.0000000000,
-        "valueWeightDenominator": 1.0000000000,
         "netAmount": 6.0000000000,
         "serviceFeeAmount": 4.0000000000,
         "grossAmount": 10.0000000000
@@ -106,8 +102,6 @@
         "valueShare": 0.1000000000,
         "volumeShare": 0.0000000001,
         "detailShare": 1.0000000000,
-        "volumeWeightDenominator": 1.0000000000,
-        "valueWeightDenominator": 1.0000000000,
         "netAmount": 84.0000000000,
         "serviceFeeAmount": 16.0000000000,
         "grossAmount": 100.0000000000

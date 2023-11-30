@@ -100,4 +100,18 @@ databaseChangeLog {
             sql("DROP INDEX ${dbAppsSchema}.ix_df_usage_status_ind")
         }
     }
+
+    changeSet(id: '2023-11-30-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
+        comment("CDP-1630 FDA: CDP-1771 Tech Debt: remove: drop denominator columns from df_acl_share_detail table")
+
+        dropColumn(schemaName: dbAppsSchema, tableName: 'df_acl_share_detail', columnName: 'value_weight_denominator')
+        dropColumn(schemaName: dbAppsSchema, tableName: 'df_acl_share_detail', columnName: 'volume_weight_denominator')
+
+        rollback {
+            addColumn(tableName: 'df_acl_share_detail', schemaName: dbAppsSchema) {
+                column(name: 'value_weight_denominator', type: 'NUMERIC (38,10)', remarks: 'The value weight denominator')
+                column(name: 'volume_weight_denominator', type: 'NUMERIC (38,10)', remarks: 'The volume weight denominator')
+            }
+        }
+    }
 }

@@ -26,8 +26,6 @@ public class AclScenarioShareDetail {
     private BigDecimal valueShare;
     private BigDecimal volumeShare;
     private BigDecimal detailShare;
-    private BigDecimal volumeWeightDenominator;
-    private BigDecimal valueWeightDenominator;
     private BigDecimal netAmount;
     private BigDecimal serviceFeeAmount;
     private BigDecimal grossAmount;
@@ -104,22 +102,6 @@ public class AclScenarioShareDetail {
         this.detailShare = detailShare;
     }
 
-    public BigDecimal getVolumeWeightDenominator() {
-        return volumeWeightDenominator;
-    }
-
-    public void setVolumeWeightDenominator(BigDecimal volumeWeightDenominator) {
-        this.volumeWeightDenominator = volumeWeightDenominator;
-    }
-
-    public BigDecimal getValueWeightDenominator() {
-        return valueWeightDenominator;
-    }
-
-    public void setValueWeightDenominator(BigDecimal valueWeightDenominator) {
-        this.valueWeightDenominator = valueWeightDenominator;
-    }
-
     public BigDecimal getNetAmount() {
         return netAmount;
     }
@@ -163,8 +145,6 @@ public class AclScenarioShareDetail {
             .append(valueShare, that.valueShare)
             .append(volumeShare, that.volumeShare)
             .append(detailShare, that.detailShare)
-            .append(volumeWeightDenominator, that.volumeWeightDenominator)
-            .append(valueWeightDenominator, that.valueWeightDenominator)
             .append(netAmount, that.netAmount)
             .append(serviceFeeAmount, that.serviceFeeAmount)
             .append(grossAmount, that.grossAmount)
@@ -183,8 +163,6 @@ public class AclScenarioShareDetail {
             .append(valueShare)
             .append(volumeShare)
             .append(detailShare)
-            .append(volumeWeightDenominator)
-            .append(valueWeightDenominator)
             .append(netAmount)
             .append(serviceFeeAmount)
             .append(grossAmount)
@@ -203,8 +181,6 @@ public class AclScenarioShareDetail {
             .append("valueShare", valueShare)
             .append("volumeShare", volumeShare)
             .append("detailShare", detailShare)
-            .append("volumeWeightDenominator", volumeWeightDenominator)
-            .append("valueWeightDenominator", valueWeightDenominator)
             .append("netAmount", netAmount)
             .append("serviceFeeAmount", serviceFeeAmount)
             .append("grossAmount", grossAmount)
