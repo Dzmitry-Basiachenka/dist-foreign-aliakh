@@ -62,7 +62,7 @@ public class AclciUsageCsvReportHandler extends BaseCsvReportHandler<UsageDto> {
         beanProperties.add(bean.getAclciUsage().getReportedPublisher());
         beanProperties.add(bean.getAclciUsage().getReportedPublicationDate());
         beanProperties.add(bean.getAclciUsage().getReportedGrade());
-        beanProperties.add(bean.getAclciUsage().getGradeGroup().name());
+        beanProperties.add(bean.getAclciUsage().getGradeGroup().toString());
         beanProperties.add(getBeanPropertyAsString(bean.getAclciUsage().getReportedNumberOfStudents()));
         beanProperties.add(bean.getComment());
         return beanProperties;
