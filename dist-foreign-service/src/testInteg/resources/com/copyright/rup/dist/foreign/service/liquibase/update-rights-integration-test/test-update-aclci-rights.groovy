@@ -32,7 +32,7 @@ databaseChangeLog {
             column(name: 'reported_media_type', value: 'Image')
             column(name: 'media_type_weight', value: 0.3)
             column(name: 'reported_grade', value: 'K')
-            column(name: 'grade_group', value: 'GRADEK_2')
+            column(name: 'grade_group', value: 'GRADE_E')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -54,7 +54,7 @@ databaseChangeLog {
             column(name: 'reported_media_type', value: 'Video')
             column(name: 'media_type_weight', value: 0.3)
             column(name: 'reported_grade', value: 'K')
-            column(name: 'grade_group', value: 'GRADEK_2')
+            column(name: 'grade_group', value: 'GRADE_E')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {

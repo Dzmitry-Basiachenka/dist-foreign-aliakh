@@ -23,7 +23,7 @@
       "reportedPublisher": "Barefoot Books",
       "reportedPublicationDate": "2021-02-03",
       "reportedGrade": "6",
-      "gradeGroup": "GRADE6_8",
+      "gradeGroup": "GRADE_M",
       "batchPeriodEndDate": "2022-06-30"
     }
   },
@@ -51,7 +51,7 @@
       "reportedPublisher": "Compass Point Books",
       "reportedPublicationDate": "2020-01-02",
       "reportedGrade": "9",
-      "gradeGroup": "GRADE9_12",
+      "gradeGroup": "GRADE_M",
       "batchPeriodEndDate": "2022-06-30"
     }
   }

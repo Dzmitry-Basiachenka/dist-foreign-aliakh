@@ -56,7 +56,7 @@ databaseChangeLog {
             column(name: 'reported_publisher', value: 'Barefoot Books')
             column(name: 'reported_publication_date', value: '2022-02-14')
             column(name: 'reported_grade', value: '6')
-            column(name: 'grade_group', value: 'GRADE6_8')
+            column(name: 'grade_group', value: 'GRADE_M')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -89,7 +89,7 @@ databaseChangeLog {
             column(name: 'reported_publisher', value: 'Associated Press')
             column(name: 'reported_publication_date', value: '2021-02-14')
             column(name: 'reported_grade', value: 'K')
-            column(name: 'grade_group', value: 'GRADEK_2')
+            column(name: 'grade_group', value: 'GRADE_E')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -122,7 +122,7 @@ databaseChangeLog {
             column(name: 'reported_publisher', value: 'Associated Press')
             column(name: 'reported_publication_date', value: '2021-02-14')
             column(name: 'reported_grade', value: 'K')
-            column(name: 'grade_group', value: 'GRADEK_2')
+            column(name: 'grade_group', value: 'GRADE_M')
         }
 
         rollback {

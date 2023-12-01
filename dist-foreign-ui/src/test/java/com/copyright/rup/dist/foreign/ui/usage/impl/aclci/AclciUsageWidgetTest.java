@@ -22,6 +22,8 @@ import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
+import com.copyright.rup.dist.foreign.domain.AclciGradeGroupEnum;
+import com.copyright.rup.dist.foreign.domain.AclciUsage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.ui.usage.api.aclci.IAclciUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.aclci.IAclciUsageFilterController;
@@ -34,6 +36,7 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
+import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.VerticalLayout;
@@ -134,6 +137,16 @@ public class AclciUsageWidgetTest {
     }
 
     @Test
+    public void testGradeGroupValues() {
+        Grid<UsageDto> grid = (Grid<UsageDto>) ((VerticalLayout) widget.getSecondComponent()).getComponent(1);
+        Column<UsageDto, ?> gradeGroupColumn = grid.getColumns().get(24);
+        verifyGradeGroupColumnValue("Elementary", AclciGradeGroupEnum.GRADE_E, grid, gradeGroupColumn);
+        verifyGradeGroupColumnValue("Middle", AclciGradeGroupEnum.GRADE_M, grid, gradeGroupColumn);
+        verifyGradeGroupColumnValue("HS", AclciGradeGroupEnum.GRADE_HS, grid, gradeGroupColumn);
+        verifyGradeGroupColumnValue("HE", AclciGradeGroupEnum.GRADE_HE, grid, gradeGroupColumn);
+    }
+
+    @Test
     public void testRefresh() {
         DataProvider dataProvider = createMock(DataProvider.class);
         Grid usagesGrid = new Grid(dataProvider);
@@ -225,5 +238,20 @@ public class AclciUsageWidgetTest {
         verifyMenuBar(layout.getComponent(1), "Fund Pool", true, List.of("Load"));
         verifyButton(layout.getComponent(2), "Update Usages", true);
         verifyButton(layout.getComponent(3), "Export", true);
+    }
+
+    private UsageDto buildUsageDto(AclciGradeGroupEnum gradeGroupEnum) {
+        UsageDto usage = new UsageDto();
+        AclciUsage aclciUsage = new AclciUsage();
+        aclciUsage.setGradeGroup(gradeGroupEnum);
+        usage.setAclciUsage(aclciUsage);
+        return usage;
+    }
+
+    private void verifyGradeGroupColumnValue(String expectedValue, AclciGradeGroupEnum gradeGroup,
+                                             Grid<UsageDto> grid, Column<UsageDto, ?> column) {
+        UsageDto usageDto = buildUsageDto(gradeGroup);
+        grid.setDataProvider(DataProvider.ofCollection(List.of(usageDto)));
+        assertEquals(expectedValue, column.getValueProvider().apply(usageDto));
     }
 }

@@ -768,7 +768,7 @@ public class ServiceTestHelper {
         assertEquals(expectedUsage.getReportedPublisher(), actualUsage.getReportedPublisher());
         assertEquals(expectedUsage.getReportedPublicationDate(), actualUsage.getReportedPublicationDate());
         assertEquals(expectedUsage.getReportedGrade(), actualUsage.getReportedGrade());
-        assertEquals(expectedUsage.getGradeGroup(), actualUsage.getGradeGroup());
+        assertEquals(expectedUsage.getGradeGroup().name(), actualUsage.getGradeGroup().name());
         assertEquals(expectedUsage.getBatchPeriodEndDate(), actualUsage.getBatchPeriodEndDate());
     }
 
