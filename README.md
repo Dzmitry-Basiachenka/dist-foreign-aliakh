@@ -1,3 +1,12 @@
+20.0.16
+-
+* CDP-2079 FDA UDM: Edit value: Redundant audit message appears in case currency was changed and then set back
+* CDP-2092 FDA: ACLCI remap grades to new grade groups: update grade group mapping
+* CDP-1632 FDA: Initialize UI Framework: make changes based on comment in code review
+* CDP-1630 FDA: Implement improvements from SAR Review: fix issue 'Class has a circular dependency with other classes' for ScenarioUsageFilter
+* CDP-1630 FDA: Implement improvements from SAR Review: fix issue 'Java native synchronization can limit system scalability' in RightsholderService
+* CDP-1771 Tech Debt: remove denominators column from share table
+
 20.0.14
 -
 * CDP-2074: FDA ACL: Clear Price and Content on Edit Value window: Price and Content flags display 'Y' value in case price and content were cleared by 'Clear' buttons
