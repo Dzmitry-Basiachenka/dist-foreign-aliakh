@@ -523,8 +523,8 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
             .orElse(null));
         currencyComboBox.addValueChangeListener(event -> {
             binder.validate();
-            fieldToValueChangesMap.updateFieldValue(fieldName, Objects.nonNull(event.getValue())
-                ? event.getValue().getCodeAndDescription() : null);
+            fieldToValueChangesMap.updateFieldValue(fieldName,
+                Objects.nonNull(event.getValue()) ? event.getValue().getCode() : StringUtils.EMPTY);
             if (event.isUserOriginated()) {
                 recalculatePriceInUsd();
             }

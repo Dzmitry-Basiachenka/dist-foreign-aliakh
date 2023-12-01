@@ -7,10 +7,12 @@ import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyTextFie
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
 import static org.easymock.EasyMock.anyObject;
+import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
+import static org.easymock.EasyMock.newCapture;
 import static org.easymock.EasyMock.reset;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
@@ -51,6 +53,7 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
 import org.apache.commons.lang3.StringUtils;
+import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -139,6 +142,8 @@ public class UdmEditValueWindowTest {
     private static final String CUP_FLAG_VALIDATION_MESSAGE = "Field value should be 'Y' or 'N'";
     private static final String YES = "Y";
     private static final String NO = "N";
+    private static final String CURRENCY_CAPTION = "Currency";
+    private static final String CURRENCY_COMBO_BOX = "currencyComboBox";
 
     static {
         PUBLICATION_TYPE = new PublicationType();
@@ -291,7 +296,7 @@ public class UdmEditValueWindowTest {
         setSpecialistExpectations();
         initEditWindow();
         TextField priceField = Whitebox.getInternalState(window, PRICE_FIELD);
-        ComboBox<Currency> currencyComboBox = Whitebox.getInternalState(window, "currencyComboBox");
+        ComboBox<Currency> currencyComboBox = Whitebox.getInternalState(window, CURRENCY_COMBO_BOX);
         Currency currency = new Currency("USD", "US Dollar");
         priceField.setValue(StringUtils.EMPTY);
         currencyComboBox.setValue(null);
@@ -312,7 +317,7 @@ public class UdmEditValueWindowTest {
         setSpecialistExpectations();
         initEditWindow();
         TextField priceField = Whitebox.getInternalState(window, PRICE_FIELD);
-        ComboBox<Currency> currencyComboBox = Whitebox.getInternalState(window, "currencyComboBox");
+        ComboBox<Currency> currencyComboBox = Whitebox.getInternalState(window, CURRENCY_COMBO_BOX);
         TextField currencyExchangeRateField = Whitebox.getInternalState(window, "currencyExchangeRateField");
         TextField currencyExchangeRateDateField = Whitebox.getInternalState(window, "currencyExchangeRateDateField");
         TextField priceInUsdField = Whitebox.getInternalState(window, "priceInUsdField");
@@ -786,6 +791,22 @@ public class UdmEditValueWindowTest {
         assertTrue(statusValues.contains(UdmValueStatusEnum.RESEARCH_COMPLETE));
     }
 
+    @Test
+    public void testChangeCurrencyComboBoxValue() {
+        setSpecialistExpectations();
+        UdmValueAuditFieldToValuesMap fieldToValueChangesMap = createMock(UdmValueAuditFieldToValuesMap.class);
+        Capture<String> currencyValueCapture = newCapture();
+        fieldToValueChangesMap.updateFieldValue(eq(CURRENCY_CAPTION), capture(currencyValueCapture));
+        expectLastCall().once();
+        replay(controller, fieldToValueChangesMap);
+        window = new UdmEditValueWindow(controller, udmValue, saveButtonClickListener, true);
+        Whitebox.setInternalState(window, fieldToValueChangesMap);
+        ComboBox<Currency> currencyComboBox = Whitebox.getInternalState(window, CURRENCY_COMBO_BOX);
+        currencyComboBox.setValue(new Currency("USD", "US Dollar"));
+        assertEquals("USD", currencyValueCapture.getValue());
+        verify(controller,  fieldToValueChangesMap);
+    }
+
     private void verifyContentButtonsLayout(Component component) {
         assertThat(component, instanceOf(VerticalLayout.class));
         var layout = (VerticalLayout) component;
@@ -838,7 +859,7 @@ public class UdmEditValueWindowTest {
         VerticalLayout priceContent = (VerticalLayout) pricePanel.getContent();
         assertEquals(16, priceContent.getComponentCount());
         verifyTextFieldLayout(priceContent.getComponent(0), "Price", false, true, "udm-value-edit-price-field");
-        verifyComboBoxLayout(priceContent.getComponent(1), "Currency", true, true, List.of(CURRENCY));
+        verifyComboBoxLayout(priceContent.getComponent(1), CURRENCY_CAPTION, true, true, List.of(CURRENCY));
         verifyTextFieldLayout(priceContent.getComponent(2), "Currency Exchange Rate", true, false, StringUtils.EMPTY);
         verifyTextFieldLayout(priceContent.getComponent(3), "Currency Exchange Rate Date", true, false,
             StringUtils.EMPTY);
