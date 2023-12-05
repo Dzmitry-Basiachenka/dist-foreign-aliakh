@@ -1,3 +1,7 @@
+20.0.17
+-
+* CDP-2110: FDA: ACLCI Usages: ‘9’ grade is mapped to ‘Middle’ grade group instead of ‘HS’ grade group when uploading usage batch
+
 20.0.16
 -
 * CDP-2079 FDA UDM: Edit value: Redundant audit message appears in case currency was changed and then set back
