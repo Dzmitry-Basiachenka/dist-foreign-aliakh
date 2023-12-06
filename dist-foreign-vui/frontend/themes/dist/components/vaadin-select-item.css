@@ -1,0 +1,9 @@
+/**
+* Styles for vaadin select.
+* @see https://vaadin.com/docs/latest/styling/custom-theme/style-scopes
+*/
+
+:host {
+    height: 20px;
+    padding: 0;
+}
