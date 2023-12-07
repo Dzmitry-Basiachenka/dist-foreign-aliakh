@@ -131,8 +131,9 @@ public class AclGrantService implements IAclGrantService {
 
     private boolean isDifferentRh(List<RmsGrant> grants) {
         return grants.stream()
-            .collect(Collectors.groupingBy(RmsGrant::getWorkGroupOwnerOrgNumber))
-            .size() > TYPE_OF_USE_COUNT;
+            .map(RmsGrant::getWorkGroupOwnerOrgNumber)
+            .distinct()
+            .count() > TYPE_OF_USE_COUNT;
     }
 
     private boolean isDifferentTypesOfUse(List<RmsGrant> grants) {
