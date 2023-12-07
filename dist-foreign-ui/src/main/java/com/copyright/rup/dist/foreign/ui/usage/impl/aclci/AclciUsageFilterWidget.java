@@ -67,7 +67,7 @@ public class AclciUsageFilterWidget extends CommonUsageFilterWidget implements I
     @Override
     @SuppressWarnings("unchecked")
     public AclciUsageFilterWidget init() {
-        addComponents(initFiltersLayout(), initButtonsLayout(), buildAppliedFiltersHeaderLabel(),
+        addComponents(initFiltersLayout(), initFilterButtonsLayout(), buildAppliedFiltersHeaderLabel(),
             appliedFilterWidget);
         refreshFilterValues();
         setExpandRatio(appliedFilterWidget, 1f);
@@ -160,13 +160,13 @@ public class AclciUsageFilterWidget extends CommonUsageFilterWidget implements I
         return licenseTypesFilterWidget;
     }
 
-    private HorizontalLayout initButtonsLayout() {
+    private HorizontalLayout initFilterButtonsLayout() {
         applyButton = Buttons.createButton(ForeignUi.getMessage("button.apply"));
         applyButton.setEnabled(false);
         applyButton.addClickListener(event -> applyFilter());
-        Button clearButton = Buttons.createButton(ForeignUi.getMessage("button.clear"));
+        var clearButton = Buttons.createButton(ForeignUi.getMessage("button.clear"));
         clearButton.addClickListener(event -> clearFilter());
-        HorizontalLayout horizontalLayout = new HorizontalLayout(applyButton, clearButton);
+        var horizontalLayout = new HorizontalLayout(applyButton, clearButton);
         VaadinUtils.setMaxComponentsWidth(horizontalLayout, applyButton, clearButton);
         VaadinUtils.addComponentStyle(horizontalLayout, "filter-buttons");
         return horizontalLayout;

@@ -24,13 +24,7 @@ public class AclGrantDetailDuplicateInFileValidator implements DistCsvProcessor.
 
     @Override
     public boolean isValid(AclGrantDetailDto item) {
-        boolean valid = false;
-        Pair<Long, String> duplicatePair = Pair.of(item.getWrWrkInst(), item.getTypeOfUse());
-        if (!existingRecords.contains(duplicatePair)) {
-            valid = true;
-            existingRecords.add(duplicatePair);
-        }
-        return valid;
+        return existingRecords.add(Pair.of(item.getWrWrkInst(), item.getTypeOfUse()));
     }
 
     @Override

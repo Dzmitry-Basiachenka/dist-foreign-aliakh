@@ -191,8 +191,8 @@ public class AclGrantDetailService implements IAclGrantDetailService {
 
     private boolean isDifferentRh(List<AclGrantDetailDto> grants) {
         return grants.stream()
-            .collect(Collectors.groupingBy(AclGrantDetailDto::getRhAccountNumber))
-            .size() > TYPE_OF_USE_COUNT;
+            .map(AclGrantDetailDto::getRhAccountNumber)
+            .distinct().count() > TYPE_OF_USE_COUNT;
     }
 
     private boolean isDifferentTypesOfUse(List<AclGrantDetailDto> grants) {

@@ -24,13 +24,7 @@ public class AclFundPoolDuplicateInFileValidator implements DistCsvProcessor.IVa
 
     @Override
     public boolean isValid(AclFundPoolDetail item) {
-        boolean valid = false;
-        Pair<Integer, String> duplicatePair = Pair.of(item.getDetailLicenseeClass().getId(), item.getTypeOfUse());
-        if (!existingRecords.contains(duplicatePair)) {
-            valid = true;
-            existingRecords.add(duplicatePair);
-        }
-        return valid;
+        return existingRecords.add(Pair.of(item.getDetailLicenseeClass().getId(), item.getTypeOfUse()));
     }
 
     @Override
