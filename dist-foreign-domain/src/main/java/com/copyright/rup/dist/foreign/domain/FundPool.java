@@ -23,6 +23,8 @@ import java.util.Objects;
  */
 public class FundPool extends StoredEntity<String> {
 
+    private static final long serialVersionUID = -503076720014487188L;
+
     private String productFamily;
     private String name;
     private String comment;

@@ -21,6 +21,8 @@ import java.time.LocalDate;
  */
 public class UdmUsage extends StoredEntity<String> {
 
+    private static final long serialVersionUID = 3608739840741410932L;
+
     private String originalDetailId;
     private String batchId;
     private UsageStatusEnum status;

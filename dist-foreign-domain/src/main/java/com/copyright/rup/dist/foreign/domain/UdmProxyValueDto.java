@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.domain;
 
 import com.copyright.rup.dist.common.domain.StoredEntity;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -17,6 +18,8 @@ import java.math.BigDecimal;
  * @author Aliaksandr Liakh
  */
 public class UdmProxyValueDto extends StoredEntity<String> {
+
+    private static final long serialVersionUID = -2026382462307752176L;
 
     private String pubTypeName;
     private Integer period;

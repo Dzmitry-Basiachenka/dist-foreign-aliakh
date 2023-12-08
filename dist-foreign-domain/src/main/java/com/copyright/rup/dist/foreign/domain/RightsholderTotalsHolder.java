@@ -22,6 +22,8 @@ import java.math.BigDecimal;
  */
 public class RightsholderTotalsHolder extends StoredEntity<String> {
 
+    private static final long serialVersionUID = -6766338189814338499L;
+
     private Rightsholder rightsholder = new Rightsholder();
     private Rightsholder payee = new Rightsholder();
     private BigDecimal grossTotal = FdaConstants.DEFAULT_AMOUNT_SCALE_10;

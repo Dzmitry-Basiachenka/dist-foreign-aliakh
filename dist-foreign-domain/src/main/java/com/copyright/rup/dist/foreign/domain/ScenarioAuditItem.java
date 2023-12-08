@@ -17,6 +17,8 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  */
 public class ScenarioAuditItem extends StoredEntity<String> {
 
+    private static final long serialVersionUID = -7130115473665334300L;
+
     private String scenarioId;
     private ScenarioActionTypeEnum actionType;
     private String actionReason;

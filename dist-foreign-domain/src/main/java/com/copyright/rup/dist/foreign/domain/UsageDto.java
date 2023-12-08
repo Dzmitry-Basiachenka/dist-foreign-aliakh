@@ -22,6 +22,8 @@ import java.time.OffsetDateTime;
  */
 public class UsageDto extends StoredEntity<String> {
 
+    private static final long serialVersionUID = -8043339244067805096L;
+
     private String batchName;
     private Integer fiscalYear;
     private String rroName;

@@ -24,6 +24,8 @@ import java.util.Set;
  */
 public class UsageBatch extends StoredEntity<String> {
 
+    private static final long serialVersionUID = 1512685144463514107L;
+
     private String name;
     private Rightsholder rro;
     private String productFamily;

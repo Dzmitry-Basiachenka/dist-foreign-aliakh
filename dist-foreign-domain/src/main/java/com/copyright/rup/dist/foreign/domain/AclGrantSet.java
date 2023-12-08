@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.domain;
 
 import com.copyright.rup.dist.common.domain.StoredEntity;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -18,6 +19,8 @@ import java.util.Set;
  * @author Aliaksandr Liakh
  */
 public class AclGrantSet extends StoredEntity<String> {
+
+    private static final long serialVersionUID = -8512619663755375033L;
 
     private String name;
     private Integer grantPeriod;
@@ -42,11 +45,11 @@ public class AclGrantSet extends StoredEntity<String> {
     }
 
     public Set<Integer> getPeriods() {
-        return periods;
+        return Set.copyOf(periods);
     }
 
     public void setPeriods(Set<Integer> periods) {
-        this.periods = periods;
+        this.periods = Set.copyOf(periods);
     }
 
     public String getLicenseType() {

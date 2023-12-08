@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.domain;
 
 import com.copyright.rup.dist.common.domain.StoredEntity;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -15,6 +16,8 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  * @author Aliaksandr Liakh
  */
 public class UdmValueAuditItem extends StoredEntity<String> {
+
+    private static final long serialVersionUID = 8583301172709214608L;
 
     private String valueId;
     private UdmValueActionTypeEnum actionType;

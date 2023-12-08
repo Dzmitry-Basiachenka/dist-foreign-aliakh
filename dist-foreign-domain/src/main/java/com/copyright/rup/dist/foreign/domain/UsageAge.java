@@ -19,6 +19,8 @@ import java.math.BigDecimal;
  */
 public class UsageAge extends StoredEntity<String> {
 
+    private static final long serialVersionUID = -172783861120944038L;
+
     private Integer period;
     private BigDecimal weight;
 

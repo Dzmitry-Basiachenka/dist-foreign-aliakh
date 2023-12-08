@@ -19,6 +19,8 @@ import java.math.BigDecimal;
  */
 public class PublicationType extends StoredEntity<String> {
 
+    private static final long serialVersionUID = -7100991895181385565L;
+
     private String name;
     private String description;
     private String productFamily;

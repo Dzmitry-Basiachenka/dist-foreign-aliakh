@@ -20,6 +20,8 @@ import java.math.BigDecimal;
  */
 public class PayeeTotalHolder extends StoredEntity<String> {
 
+    private static final long serialVersionUID = 8324932040358394428L;
+
     private Rightsholder payee = new Rightsholder();
     private BigDecimal grossTotal;
     private BigDecimal serviceFeeTotal;

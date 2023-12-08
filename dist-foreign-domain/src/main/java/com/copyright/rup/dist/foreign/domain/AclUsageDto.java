@@ -19,6 +19,8 @@ import java.math.BigDecimal;
  */
 public class AclUsageDto extends StoredEntity<String> {
 
+    private static final long serialVersionUID = 7735220035828103657L;
+
     private String usageBatchId;
     private UdmUsageOriginEnum usageOrigin;
     private UdmChannelEnum channel;

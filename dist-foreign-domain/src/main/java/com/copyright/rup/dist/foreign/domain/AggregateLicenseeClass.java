@@ -17,6 +17,8 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  */
 public class AggregateLicenseeClass extends StoredEntity<Integer> {
 
+    private static final long serialVersionUID = 2105899373893974122L;
+
     private String enrollmentProfile;
     private String discipline;
     private String description;

@@ -20,6 +20,8 @@ import java.util.List;
  */
 public class AclScenarioDetail extends StoredEntity<String> {
 
+    private static final long serialVersionUID = 2103850538146445915L;
+
     private String scenarioId;
     private Integer period;
     private String originalDetailId;
@@ -212,11 +214,11 @@ public class AclScenarioDetail extends StoredEntity<String> {
     }
 
     public List<AclScenarioShareDetail> getScenarioShareDetails() {
-        return scenarioShareDetails;
+        return List.copyOf(scenarioShareDetails);
     }
 
     public void setScenarioShareDetails(List<AclScenarioShareDetail> scenarioShareDetails) {
-        this.scenarioShareDetails = scenarioShareDetails;
+        this.scenarioShareDetails = List.copyOf(scenarioShareDetails);
     }
 
     @Override

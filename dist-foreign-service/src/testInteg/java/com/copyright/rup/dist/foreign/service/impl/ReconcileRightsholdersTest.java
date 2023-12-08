@@ -23,6 +23,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -72,7 +73,7 @@ public class ReconcileRightsholdersTest {
                 buildUsage("fcdaea01-2439-4c51-b3e2-23649cf710c7", 1000003821L, 1000003821L, 471137470L,
                     "1000.0000000000", "840.0000000000", "160.0000000000", SERVICE_FEE_16, new BigDecimal("1000.00"),
                     true, true))
-            .expectUsageAudit(ImmutableMap.of("fcdaea01-2439-4c51-b3e2-23649cf710c7",
+            .expectUsageAudit(Map.of("fcdaea01-2439-4c51-b3e2-23649cf710c7",
                 List.of(buildLoadedAuditItem("Test Batch 1"))))
             .build()
             .run();

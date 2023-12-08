@@ -22,6 +22,8 @@ import java.util.List;
  */
 public class Scenario extends StoredEntity<String> {
 
+    private static final long serialVersionUID = 74985204900634092L;
+
     private String name;
     private String productFamily;
     private BigDecimal netTotal = FdaConstants.DEFAULT_AMOUNT_SCALE_10;

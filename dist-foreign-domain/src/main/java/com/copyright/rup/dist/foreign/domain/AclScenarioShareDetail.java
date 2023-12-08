@@ -4,6 +4,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
@@ -15,7 +16,9 @@ import java.math.BigDecimal;
  *
  * @author Anton Azarenka
  */
-public class AclScenarioShareDetail {
+public class AclScenarioShareDetail implements Serializable {
+
+    private static final long serialVersionUID = 6697778472760536071L;
 
     private Long wrWrkInst;
     private Long rhAccountNumber;
