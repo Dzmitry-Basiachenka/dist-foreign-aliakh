@@ -26,6 +26,7 @@ import org.powermock.reflect.Whitebox;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Verifies {@link RightsholderService}.
@@ -50,7 +51,8 @@ public class RightsholderServiceTest {
     public void setUp() {
         rightsholderRepository = createMock(IRightsholderRepository.class);
         IPrmRightsholderService prmRightsholderService = createMock(IPrmRightsholderService.class);
-        rightsholderService = new RightsholderService(rightsholderRepository, prmRightsholderService, null);
+        rightsholderService = new RightsholderService(rightsholderRepository, prmRightsholderService, null,
+            Executors.newSingleThreadExecutor());
     }
 
     @Test

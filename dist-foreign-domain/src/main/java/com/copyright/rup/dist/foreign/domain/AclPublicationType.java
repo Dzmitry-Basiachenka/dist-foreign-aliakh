@@ -33,6 +33,15 @@ public class AclPublicationType extends PublicationType {
         setPeriod(pubType.getPeriod());
     }
 
+    /**
+     * Constructor.
+     *
+     * @param pubType instance of {@link AclPublicationType}
+     */
+    public AclPublicationType(PublicationType pubType) {
+        super(pubType);
+    }
+
     public Integer getPeriod() {
         return period;
     }
