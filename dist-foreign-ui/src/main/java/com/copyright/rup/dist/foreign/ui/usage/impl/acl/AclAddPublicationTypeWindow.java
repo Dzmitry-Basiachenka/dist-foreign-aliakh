@@ -14,6 +14,7 @@ import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.data.Binder;
 import com.vaadin.data.ValidationException;
+import com.vaadin.data.ValueProvider;
 import com.vaadin.data.converter.StringToBigDecimalConverter;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -42,7 +43,7 @@ class AclAddPublicationTypeWindow extends Window {
 
     private final IAclScenariosController controller;
     private final Binder<AclPublicationType> binder = new Binder<>();
-    private ComboBox<PublicationType> pubTypeComboBox;
+    private ComboBox<AclPublicationType> pubTypeComboBox;
     private TextField pubTypePeriodField;
     private TextField pubTypeWeightField;
 
@@ -67,15 +68,15 @@ class AclAddPublicationTypeWindow extends Window {
         VaadinUtils.addComponentStyle(this, "acl-add-pub-type-weight-window");
     }
 
-    private ComboBox<PublicationType> initPublicationTypeCombobox() {
+    private ComboBox<AclPublicationType> initPublicationTypeCombobox() {
         pubTypeComboBox = new ComboBox<>(ForeignUi.getMessage("label.pub_type"));
-        pubTypeComboBox.setItems(controller.getPublicationTypes());
+        pubTypeComboBox.setItems(controller.getPublicationTypes().stream().map(AclPublicationType::new));
         pubTypeComboBox.setEmptySelectionAllowed(false);
         pubTypeComboBox.setPageLength(12);
         pubTypeComboBox.setItemCaptionGenerator(PublicationType::getNameAndDescription);
         binder.forField(pubTypeComboBox)
             .asRequired(ForeignUi.getMessage("field.error.empty"))
-            .bind(pubType -> pubType, (pubType, value) -> {
+            .bind(ValueProvider.identity(), (pubType, value) -> {
                 pubType.setId(value.getId());
                 pubType.setName(value.getName());
                 pubType.setDescription(value.getDescription());

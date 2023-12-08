@@ -152,7 +152,7 @@ public class AclAddPublicationTypeWindowTest {
         replay(controller);
         TestAclAddPublicationTypeWindow window = new TestAclAddPublicationTypeWindow(controller);
         VerticalLayout content = (VerticalLayout) window.getContent();
-        ComboBox<PublicationType> pubTypeComboBox = (ComboBox<PublicationType>) content.getComponent(0);
+        ComboBox<AclPublicationType> pubTypeComboBox = (ComboBox<AclPublicationType>) content.getComponent(0);
         pubTypeComboBox.setSelectedItem(buildPublicationType());
         TextField pubTypePeriodField = (TextField) content.getComponent(1);
         pubTypePeriodField.setValue(PUBLICATION_TYPE_PERIOD.toString());
@@ -201,8 +201,8 @@ public class AclAddPublicationTypeWindowTest {
         verify(controller, Windows.class);
     }
 
-    private PublicationType buildPublicationType() {
-        PublicationType publicationType = new PublicationType();
+    private AclPublicationType buildPublicationType() {
+        AclPublicationType publicationType = new AclPublicationType();
         publicationType.setId(PUBLICATION_TYPE_UID);
         publicationType.setName(PUBLICATION_TYPE_NAME);
         publicationType.setWeight(new BigDecimal(PUBLICATION_TYPE_WEIGHT));

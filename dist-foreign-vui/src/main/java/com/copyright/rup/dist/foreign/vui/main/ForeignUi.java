@@ -107,17 +107,17 @@ public class ForeignUi extends AppLayout implements AppShellConfigurator, ICommo
     }
 
     @Override
-    public String getApplicationTitle() {
+    public final String getApplicationTitle() {
         return getMessage("application.name");
     }
 
     @Override
-    public Component initMainWidget() {
+    public final Component initMainWidget() {
         return (Component) controller.initWidget();
     }
 
     @Override
-    public String getStringMessage(String key, Object... parameters) {
+    public final String getStringMessage(String key, Object... parameters) {
         return getMessage(key, parameters);
     }
 }
