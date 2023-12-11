@@ -60,6 +60,8 @@ public class ForeignUi extends ForeignCommonUi implements IMediatorProvider {
     private static final String UDM_REPORT_MENU_CSS_POSITION_APPROVER = "left: 540px; top: 29px;";
     private static final String ACL_REPORT_MENU_CSS_POSITION = "left: 400px; top: 29px;";
 
+    private final ComboBox<String> productFamilyComboBox = new ComboBox<>(getMessage("label.product_family"));
+
     @Autowired
     private IMainWidgetController controller;
     @Autowired
@@ -70,10 +72,6 @@ public class ForeignUi extends ForeignCommonUi implements IMediatorProvider {
     private IUdmReportController udmReportController;
     @Autowired
     private IAclReportController aclReportController;
-
-    private ComboBox<String> productFamilyComboBox;
-    private IUdmReportWidget udmReportWidget;
-    private IAclReportWidget aclReportWidget;
 
     /**
      * Gets a message associated with specified {@code key}.
@@ -89,7 +87,6 @@ public class ForeignUi extends ForeignCommonUi implements IMediatorProvider {
     @Override
     public IMediator initMediator() {
         ForeignUiMediator mediator = new ForeignUiMediator();
-        productFamilyComboBox = new ComboBox<>(getMessage("label.product_family"));
         mediator.setProductFamilyComboBox(productFamilyComboBox);
         mediator.setController(controller);
         mediator.setProductFamilyProvider(productFamilyProvider);
@@ -134,15 +131,6 @@ public class ForeignUi extends ForeignCommonUi implements IMediatorProvider {
         return List.of(initProductFamilyComboBox(), initRefreshButton());
     }
 
-    /**
-     * Sets main widget controller.
-     *
-     * @param mainWidgetController main widget controller
-     */
-    void setMainWidgetController(IMainWidgetController mainWidgetController) {
-        this.controller = mainWidgetController;
-    }
-
     private ComboBox<String> initProductFamilyComboBox() {
         initMediator().applyPermissions();
         productFamilyComboBox.setEmptySelectionAllowed(false);
@@ -164,33 +152,32 @@ public class ForeignUi extends ForeignCommonUi implements IMediatorProvider {
     }
 
     private void addReportMenu() {
-        initAclReportWidgets();
+        IUdmReportWidget udmReportWidget = initUdmReportWidget();
+        IAclReportWidget aclReportWidget = initAclReportWidget();
+        switchAclReportWidgets(udmReportWidget, aclReportWidget);
         getAbsoluteLayout().addComponent(reportController.initWidget(), REPORT_MENU_CSS_POSITION);
-        initMainWidgetSelectedTabChangeListener();
+        ((TabSheet) controller.getWidget()).addSelectedTabChangeListener(
+            event -> switchAclReportWidgets(udmReportWidget, aclReportWidget));
     }
 
-    private void initAclReportWidgets() {
-        initUdmReportWidget();
-        initAclReportWidget();
-        switchAclReportWidgets();
-    }
-
-    private void initUdmReportWidget() {
-        udmReportWidget = udmReportController.initWidget();
+    private IUdmReportWidget initUdmReportWidget() {
+        IUdmReportWidget udmReportWidget = udmReportController.initWidget();
         VaadinUtils.addComponentStyle(udmReportWidget, "udm-reports-menu");
+        return udmReportWidget;
     }
 
-    private void initAclReportWidget() {
-        aclReportWidget = aclReportController.initWidget();
+    private IAclReportWidget initAclReportWidget() {
+        IAclReportWidget aclReportWidget = aclReportController.initWidget();
         VaadinUtils.addComponentStyle(aclReportWidget, "acl-reports-menu");
+        return aclReportWidget;
     }
 
-    private void switchAclReportWidgets() {
+    private void switchAclReportWidgets(IUdmReportWidget udmReportWidget, IAclReportWidget aclReportWidget) {
         String selectedTabName = getSelectedTabName();
         if (Objects.nonNull(selectedTabName)) {
             if (isAclProductFamily()) {
                 if (UDM_TAB.equals(selectedTabName)) {
-                    addUdmReportWidgetToAbsoluteLayout();
+                    addUdmReportWidgetToAbsoluteLayout(udmReportWidget);
                     getAbsoluteLayout().removeComponent(aclReportWidget);
                 } else if (CALCULATIONS_TAB.equals(selectedTabName)) {
                     getAbsoluteLayout().addComponent(aclReportWidget, ACL_REPORT_MENU_CSS_POSITION);
@@ -213,7 +200,7 @@ public class ForeignUi extends ForeignCommonUi implements IMediatorProvider {
         return FdaConstants.ACL_PRODUCT_FAMILY.equals(productFamilyProvider.getSelectedProductFamily());
     }
 
-    private void addUdmReportWidgetToAbsoluteLayout() {
+    private void addUdmReportWidgetToAbsoluteLayout(IUdmReportWidget udmReportWidget) {
         if (ForeignSecurityUtils.hasResearcherPermission()) {
             getAbsoluteLayout().addComponent(udmReportWidget, UDM_REPORT_MENU_CSS_POSITION_RESEARCHER);
         } else if (ForeignSecurityUtils.hasSpecialistPermission()) {
@@ -229,9 +216,5 @@ public class ForeignUi extends ForeignCommonUi implements IMediatorProvider {
 
     private AbsoluteLayout getAbsoluteLayout() {
         return ((RootWidget) this.getUI().getContent()).getAbsoluteLayout();
-    }
-
-    private void initMainWidgetSelectedTabChangeListener() {
-        ((TabSheet) controller.getWidget()).addSelectedTabChangeListener(event -> switchAclReportWidgets());
     }
 }
