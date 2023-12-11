@@ -55,7 +55,6 @@ import java.util.function.Function;
  */
 public class UdmUsageFiltersWindow extends CommonAclFiltersWindow {
 
-    private static final String LENGTH_VALIDATION_MESSAGE = "field.error.length";
     private static final String BETWEEN_OPERATOR_VALIDATION_MESSAGE =
         ForeignUi.getMessage("field.error.populated_for_between_operator");
     private static final String GRATER_OR_EQUAL_VALIDATION_MESSAGE = "field.error.greater_or_equal_to";
@@ -285,11 +284,7 @@ public class UdmUsageFiltersWindow extends CommonAclFiltersWindow {
 
     private HorizontalLayout initReportedTitleLayout() {
         HorizontalLayout horizontalLayout = new HorizontalLayout(reportedTitleField, reportedTitleOperatorComboBox);
-        filterBinder.forField(reportedTitleField)
-            .withValidator(new StringLengthValidator(ForeignUi.getMessage(LENGTH_VALIDATION_MESSAGE, 2000), 0, 2000))
-            .bind(filter -> filter.getReportedTitleExpression().getFieldFirstValue(),
-                (filter, value) -> filter.getReportedTitleExpression()
-                    .setFieldFirstValue(StringUtils.trimToNull(value)));
+        bindTextField(reportedTitleField, UdmUsageFilter::getReportedTitleExpression, 2000);
         populateOperatorFilters(reportedTitleField, reportedTitleOperatorComboBox,
             usageFilter.getReportedTitleExpression());
         reportedTitleField.addValueChangeListener(event -> filterBinder.validate());
@@ -304,10 +299,7 @@ public class UdmUsageFiltersWindow extends CommonAclFiltersWindow {
 
     private HorizontalLayout initSystemTitleLayout() {
         HorizontalLayout horizontalLayout = new HorizontalLayout(systemTitleField, systemTitleOperatorComboBox);
-        filterBinder.forField(systemTitleField)
-            .withValidator(new StringLengthValidator(ForeignUi.getMessage(LENGTH_VALIDATION_MESSAGE, 2000), 0, 2000))
-            .bind(filter -> filter.getSystemTitleExpression().getFieldFirstValue(),
-                (filter, value) -> filter.getSystemTitleExpression().setFieldFirstValue(StringUtils.trimToNull(value)));
+        bindTextField(systemTitleField, UdmUsageFilter::getSystemTitleExpression, 2000);
         populateOperatorFilters(systemTitleField, systemTitleOperatorComboBox,
             usageFilter.getSystemTitleExpression());
         systemTitleField.addValueChangeListener(event -> filterBinder.validate());
@@ -322,11 +314,7 @@ public class UdmUsageFiltersWindow extends CommonAclFiltersWindow {
 
     private HorizontalLayout initUsageDetailIdLayout() {
         HorizontalLayout horizontalLayout = new HorizontalLayout(usageDetailIdField, usageDetailIdOperatorComboBox);
-        filterBinder.forField(usageDetailIdField)
-            .withValidator(new StringLengthValidator(ForeignUi.getMessage(LENGTH_VALIDATION_MESSAGE, 50), 0, 50))
-            .bind(filter -> filter.getUsageDetailIdExpression().getFieldFirstValue(),
-                (filter, value) -> filter.getUsageDetailIdExpression()
-                    .setFieldFirstValue(StringUtils.trimToNull(value)));
+        bindTextField(usageDetailIdField, UdmUsageFilter::getUsageDetailIdExpression, 50);
         populateOperatorFilters(usageDetailIdField, usageDetailIdOperatorComboBox,
             usageFilter.getUsageDetailIdExpression());
         usageDetailIdField.addValueChangeListener(event -> filterBinder.validate());
@@ -575,10 +563,7 @@ public class UdmUsageFiltersWindow extends CommonAclFiltersWindow {
 
     private HorizontalLayout initCompanyNameLayout() {
         HorizontalLayout horizontalLayout = new HorizontalLayout(companyNameField, companyNameOperatorComboBox);
-        filterBinder.forField(companyNameField)
-            .withValidator(new StringLengthValidator(ForeignUi.getMessage(LENGTH_VALIDATION_MESSAGE, 200), 0, 200))
-            .bind(filter -> filter.getCompanyNameExpression().getFieldFirstValue(),
-                (filter, value) -> filter.getCompanyNameExpression().setFieldFirstValue(StringUtils.trimToNull(value)));
+        bindTextField(companyNameField, UdmUsageFilter::getCompanyNameExpression, 200);
         populateOperatorFilters(companyNameField, companyNameOperatorComboBox,
             usageFilter.getCompanyNameExpression());
         companyNameField.addValueChangeListener(event -> filterBinder.validate());
@@ -595,11 +580,7 @@ public class UdmUsageFiltersWindow extends CommonAclFiltersWindow {
     private HorizontalLayout initSurveyRespondentLayout() {
         HorizontalLayout horizontalLayout =
             new HorizontalLayout(surveyRespondentField, surveyRespondentOperatorComboBox);
-        filterBinder.forField(surveyRespondentField)
-            .withValidator(new StringLengthValidator(ForeignUi.getMessage(LENGTH_VALIDATION_MESSAGE, 200), 0, 200))
-            .bind(filter -> filter.getSurveyRespondentExpression().getFieldFirstValue(),
-                (filter, value) -> filter.getSurveyRespondentExpression()
-                    .setFieldFirstValue(StringUtils.trimToNull(value)));
+        bindTextField(surveyRespondentField, UdmUsageFilter::getSurveyRespondentExpression, 200);
         populateOperatorFilters(surveyRespondentField, surveyRespondentOperatorComboBox,
             usageFilter.getSurveyRespondentExpression());
         surveyRespondentField.addValueChangeListener(event -> filterBinder.validate());
@@ -615,11 +596,7 @@ public class UdmUsageFiltersWindow extends CommonAclFiltersWindow {
 
     private HorizontalLayout initSurveyCountryLayout() {
         HorizontalLayout horizontalLayout = new HorizontalLayout(surveyCountryField, surveyCountryOperatorComboBox);
-        filterBinder.forField(surveyCountryField)
-            .withValidator(new StringLengthValidator(ForeignUi.getMessage(LENGTH_VALIDATION_MESSAGE, 100), 0, 100))
-            .bind(filter -> filter.getSurveyCountryExpression().getFieldFirstValue(),
-                (filter, value) -> filter.getSurveyCountryExpression()
-                    .setFieldFirstValue(StringUtils.trimToNull(value)));
+        bindTextField(surveyCountryField, UdmUsageFilter::getSurveyCountryExpression, 100);
         populateOperatorFilters(surveyCountryField, surveyCountryOperatorComboBox,
             usageFilter.getSurveyCountryExpression());
         surveyCountryField.addValueChangeListener(event -> filterBinder.validate());
@@ -635,10 +612,7 @@ public class UdmUsageFiltersWindow extends CommonAclFiltersWindow {
 
     private HorizontalLayout initLanguageLayout() {
         HorizontalLayout horizontalLayout = new HorizontalLayout(languageField, languageOperatorComboBox);
-        filterBinder.forField(languageField)
-            .withValidator(new StringLengthValidator(ForeignUi.getMessage(LENGTH_VALIDATION_MESSAGE, 255), 0, 255))
-            .bind(filter -> filter.getLanguageExpression().getFieldFirstValue(),
-                (filter, value) -> filter.getLanguageExpression().setFieldFirstValue(StringUtils.trimToNull(value)));
+        bindTextField(languageField, UdmUsageFilter::getLanguageExpression, 255);
         populateOperatorFilters(languageField, languageOperatorComboBox, usageFilter.getLanguageExpression());
         languageField.addValueChangeListener(event -> filterBinder.validate());
         bindFilterOperator(languageOperatorComboBox, UdmUsageFilter::getLanguageExpression);
@@ -687,6 +661,15 @@ public class UdmUsageFiltersWindow extends CommonAclFiltersWindow {
         publicationFormatFilterWidget.reset();
         actionReasonFilterWidget.reset();
         filterBinder.readBean(new UdmUsageFilter());
+    }
+
+    private void bindTextField(TextField textField, Function<UdmUsageFilter, FilterExpression<String>> getter,
+                               Integer maxLength) {
+        filterBinder.forField(textField)
+            .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.length", maxLength),
+                0, maxLength))
+            .bind(filter -> getter.apply(filter).getFieldFirstValue(),
+                (filter, value) -> getter.apply(filter).setFieldFirstValue(StringUtils.trimToNull(value)));
     }
 
     private void bindFilterOperator(ComboBox<FilterOperatorEnum> field,
