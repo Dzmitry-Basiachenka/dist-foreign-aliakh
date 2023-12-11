@@ -254,7 +254,7 @@ public class UdmUsageFiltersWindow extends CommonAclFiltersWindow {
         bindFilterOperator(wrWrkInstOperatorComboBox, UdmUsageFilter::getWrWrkInstExpression);
         wrWrkInstOperatorComboBox.addValueChangeListener(event ->
             updateOperatorField(filterBinder, wrWrkInstFromField, wrWrkInstToField, event.getValue()));
-        bindBetweenNumberFields(wrWrkInstFromField, wrWrkInstToField, wrWrkInstOperatorComboBox,
+        bindBetweenLongFields(wrWrkInstFromField, wrWrkInstToField, wrWrkInstOperatorComboBox,
             UdmUsageFilter::getWrWrkInstExpression, ForeignUi.getMessage("label.wr_wrk_inst_from"), 9);
         applyCommonNumericFieldFormatting(horizontalLayout, wrWrkInstFromField, wrWrkInstToField);
         VaadinUtils.addComponentStyle(wrWrkInstFromField, "udm-wr-wrk-inst-from-filter");
@@ -365,7 +365,7 @@ public class UdmUsageFiltersWindow extends CommonAclFiltersWindow {
         bindFilterOperator(annualMultiplierOperatorComboBox, UdmUsageFilter::getAnnualMultiplierExpression);
         annualMultiplierOperatorComboBox.addValueChangeListener(event ->
             updateOperatorField(filterBinder, annualMultiplierFromField, annualMultiplierToField, event.getValue()));
-        bindBetweenNumberFields(annualMultiplierFromField, annualMultiplierToField, annualMultiplierOperatorComboBox,
+        bindBetweenLongFields(annualMultiplierFromField, annualMultiplierToField, annualMultiplierOperatorComboBox,
             UdmUsageFilter::getAnnualMultiplierExpression, ForeignUi.getMessage("label.annual_multiplier_from"), 9);
         horizontalLayout.setEnabled(isFilterPermittedForUser);
         applyCommonNumericFieldFormatting(horizontalLayout, annualMultiplierFromField, annualMultiplierToField);
@@ -382,25 +382,9 @@ public class UdmUsageFiltersWindow extends CommonAclFiltersWindow {
             usageFilter.getAnnualizedCopiesExpression());
         bindFilterOperator(annualizedCopiesOperatorComboBox, UdmUsageFilter::getAnnualizedCopiesExpression);
         annualizedCopiesFromField.addValueChangeListener(event -> filterBinder.validate());
-        filterBinder.forField(annualizedCopiesFromField)
-            .withValidator(new AmountValidator())
-            .withValidator(getBetweenOperatorValidator(annualizedCopiesFromField, annualizedCopiesOperatorComboBox),
-                BETWEEN_OPERATOR_VALIDATION_MESSAGE)
-            .bind(filter -> Objects.toString(filter.getAnnualizedCopiesExpression().getFieldFirstValue(),
-                    StringUtils.EMPTY),
-                (filter, value) -> filter.getAnnualizedCopiesExpression()
-                    .setFieldFirstValue(NumberUtils.createBigDecimal(StringUtils.trimToNull(value))));
-        filterBinder.forField(annualizedCopiesToField)
-            .withValidator(new AmountValidator())
-            .withValidator(getBetweenOperatorValidator(annualizedCopiesToField, annualizedCopiesOperatorComboBox),
-                BETWEEN_OPERATOR_VALIDATION_MESSAGE)
-            .withValidator(value -> validateBigDecimalFromToValues(annualizedCopiesFromField, annualizedCopiesToField),
-                ForeignUi.getMessage(GRATER_OR_EQUAL_VALIDATION_MESSAGE,
-                    ForeignUi.getMessage("label.annualized_copies_from")))
-            .bind(filter -> Objects.toString(filter.getAnnualizedCopiesExpression().getFieldSecondValue(),
-                    StringUtils.EMPTY),
-                (filter, value) -> filter.getAnnualizedCopiesExpression()
-                    .setFieldSecondValue(NumberUtils.createBigDecimal(StringUtils.trimToNull(value))));
+        bindBetweenBigDecimalFields(annualizedCopiesFromField, annualizedCopiesToField,
+            annualizedCopiesOperatorComboBox, UdmUsageFilter::getAnnualizedCopiesExpression,
+            ForeignUi.getMessage("label.annualized_copies_from"));
         annualizedCopiesOperatorComboBox.addValueChangeListener(event ->
             updateOperatorField(filterBinder, annualizedCopiesFromField, annualizedCopiesToField, event.getValue()));
         horizontalLayout.setEnabled(isFilterPermittedForUser);
@@ -421,26 +405,9 @@ public class UdmUsageFiltersWindow extends CommonAclFiltersWindow {
         statisticalMultiplierOperatorComboBox.addValueChangeListener(event ->
             updateOperatorField(filterBinder, statisticalMultiplierFromField, statisticalMultiplierToField,
                 event.getValue()));
-        filterBinder.forField(statisticalMultiplierFromField)
-            .withValidator(new AmountValidator())
-            .withValidator(getBetweenOperatorValidator(statisticalMultiplierFromField,
-                statisticalMultiplierOperatorComboBox), BETWEEN_OPERATOR_VALIDATION_MESSAGE)
-            .bind(filter -> Objects.toString(filter.getStatisticalMultiplierExpression().getFieldFirstValue(),
-                    StringUtils.EMPTY),
-                (filter, value) -> filter.getStatisticalMultiplierExpression()
-                    .setFieldFirstValue(NumberUtils.createBigDecimal(StringUtils.trimToNull(value))));
-        filterBinder.forField(statisticalMultiplierToField)
-            .withValidator(new AmountValidator())
-            .withValidator(
-                value -> validateBigDecimalFromToValues(statisticalMultiplierFromField, statisticalMultiplierToField),
-                ForeignUi.getMessage(GRATER_OR_EQUAL_VALIDATION_MESSAGE,
-                    ForeignUi.getMessage("label.statistical_multiplier_from")))
-            .withValidator(getBetweenOperatorValidator(statisticalMultiplierToField,
-                statisticalMultiplierOperatorComboBox), BETWEEN_OPERATOR_VALIDATION_MESSAGE)
-            .bind(filter -> Objects.toString(filter.getStatisticalMultiplierExpression().getFieldSecondValue(),
-                    StringUtils.EMPTY),
-                (filter, value) -> filter.getStatisticalMultiplierExpression()
-                    .setFieldSecondValue(NumberUtils.createBigDecimal(StringUtils.trimToNull(value))));
+        bindBetweenBigDecimalFields(statisticalMultiplierFromField, statisticalMultiplierToField,
+            statisticalMultiplierOperatorComboBox, UdmUsageFilter::getStatisticalMultiplierExpression,
+            ForeignUi.getMessage("label.statistical_multiplier_from"));
         horizontalLayout.setEnabled(isFilterPermittedForUser);
         applyCommonNumericFieldFormatting(horizontalLayout, statisticalMultiplierFromField,
             statisticalMultiplierToField);
@@ -460,7 +427,7 @@ public class UdmUsageFiltersWindow extends CommonAclFiltersWindow {
         bindFilterOperator(quantityOperatorComboBox, UdmUsageFilter::getQuantityExpression);
         quantityOperatorComboBox.addValueChangeListener(event ->
             updateOperatorField(filterBinder, quantityFromField, quantityToField, event.getValue()));
-        bindBetweenNumberFields(quantityFromField, quantityToField, quantityOperatorComboBox,
+        bindBetweenLongFields(quantityFromField, quantityToField, quantityOperatorComboBox,
             UdmUsageFilter::getQuantityExpression, ForeignUi.getMessage("label.quantity_from"), 9);
         horizontalLayout.setEnabled(isFilterPermittedForUser);
         applyCommonNumericFieldFormatting(horizontalLayout, quantityFromField, quantityToField);
@@ -479,7 +446,7 @@ public class UdmUsageFiltersWindow extends CommonAclFiltersWindow {
         bindFilterOperator(companyIdOperatorComboBox, UdmUsageFilter::getCompanyIdExpression);
         companyIdOperatorComboBox.addValueChangeListener(event ->
             updateOperatorField(filterBinder, companyIdFromField, companyIdToField, event.getValue()));
-        bindBetweenNumberFields(companyIdFromField, companyIdToField, companyIdOperatorComboBox,
+        bindBetweenLongFields(companyIdFromField, companyIdToField, companyIdOperatorComboBox,
             UdmUsageFilter::getCompanyIdExpression, ForeignUi.getMessage("label.company_id_from"), 10);
         horizontalLayout.setEnabled(isFilterPermittedForUser);
         applyCommonNumericFieldFormatting(horizontalLayout, companyIdFromField, companyIdToField);
@@ -600,10 +567,10 @@ public class UdmUsageFiltersWindow extends CommonAclFiltersWindow {
                 (filter, value) -> getter.apply(filter).setFieldFirstValue(StringUtils.trimToNull(value)));
     }
 
-    private void bindBetweenNumberFields(TextField fromField, TextField toField,
-                                         ComboBox<FilterOperatorEnum> operatorComboBox,
-                                         Function<UdmUsageFilter, FilterExpression<Number>> getter,
-                                         String fromFieldName, Integer maxLength) {
+    private void bindBetweenLongFields(TextField fromField, TextField toField,
+                                       ComboBox<FilterOperatorEnum> operatorComboBox,
+                                       Function<UdmUsageFilter, FilterExpression<Number>> getter,
+                                       String fromFieldName, Integer maxLength) {
         StringLengthValidator stringLengthValidator =
             new StringLengthValidator(ForeignUi.getMessage("field.error.number_length", maxLength), 0, maxLength);
         filterBinder.forField(fromField)
@@ -626,9 +593,31 @@ public class UdmUsageFiltersWindow extends CommonAclFiltersWindow {
                     .setFieldSecondValue(NumberUtils.createLong(StringUtils.trimToNull(value))));
     }
 
-    private void bindFilterOperator(ComboBox<FilterOperatorEnum> field,
+    private void bindBetweenBigDecimalFields(TextField fromField, TextField toField,
+                                             ComboBox<FilterOperatorEnum> operatorComboBox,
+                                             Function<UdmUsageFilter, FilterExpression<Number>> getter,
+                                             String fromFieldName) {
+        filterBinder.forField(fromField)
+            .withValidator(new AmountValidator())
+            .withValidator(getBetweenOperatorValidator(fromField, operatorComboBox),
+                BETWEEN_OPERATOR_VALIDATION_MESSAGE)
+            .bind(filter -> Objects.toString(getter.apply(filter).getFieldFirstValue(), StringUtils.EMPTY),
+                (filter, value) -> getter.apply(filter)
+                    .setFieldFirstValue(NumberUtils.createBigDecimal(StringUtils.trimToNull(value))));
+        filterBinder.forField(toField)
+            .withValidator(new AmountValidator())
+            .withValidator(getBetweenOperatorValidator(toField, operatorComboBox),
+                BETWEEN_OPERATOR_VALIDATION_MESSAGE)
+            .withValidator(value -> validateBigDecimalFromToValues(fromField, toField),
+                ForeignUi.getMessage(GRATER_OR_EQUAL_VALIDATION_MESSAGE, fromFieldName))
+            .bind(filter -> Objects.toString(getter.apply(filter).getFieldSecondValue(), StringUtils.EMPTY),
+                (filter, value) -> getter.apply(filter)
+                    .setFieldSecondValue(NumberUtils.createBigDecimal(StringUtils.trimToNull(value))));
+    }
+
+    private void bindFilterOperator(ComboBox<FilterOperatorEnum> operatorComboBox,
                                     Function<UdmUsageFilter, FilterExpression<?>> getter) {
-        filterBinder.forField(field)
+        filterBinder.forField(operatorComboBox)
             .bind(filter -> ObjectUtils.defaultIfNull(
                     getter.apply(filter).getOperator(), FilterOperatorEnum.valueOf(EQUALS)),
                 (filter, value) -> getter.apply(filter).setOperator(value));
