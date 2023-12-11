@@ -65,13 +65,13 @@ public class ForeignUiTest {
     @After
     public void tearDown() {
         SecurityContextHolder.clearContext();
+        Whitebox.setInternalState(ForeignUi.class, "MESSAGES",
+            ResourceBundle.getBundle("com.copyright.rup.dist.foreign.ui.messages"));
     }
 
     @Before
     public void setUp() {
         foreignUi = new ForeignUi();
-        Whitebox.setInternalState(ForeignUi.class, "MESSAGES",
-            ResourceBundle.getBundle("com.copyright.rup.dist.foreign.ui.messages"));
     }
 
     @Test
@@ -82,7 +82,7 @@ public class ForeignUiTest {
         assertEquals(PARAMETER_1, ForeignUi.getMessage("Case with 2 digit, one ignore", 1, 2));
         assertEquals("Parameters are 1, string", ForeignUi.getMessage("Case with digit and string", 1, "string"));
         assertEquals("Parameters are 1, 2", ForeignUi.getMessage("Case with 2 digits", 1, 2));
-        verify(ForeignUi.class, bundle);
+        verify(bundle);
     }
 
     @Test
@@ -93,7 +93,7 @@ public class ForeignUiTest {
         assertEquals(PARAMETER_1, foreignUi.getStringMessage("Case with 2 digit, one ignore", 1, 2));
         assertEquals("Parameters are 1, string", foreignUi.getStringMessage("Case with digit and string", 1, "string"));
         assertEquals("Parameters are 1, 2", foreignUi.getStringMessage("Case with 2 digits", 1, 2));
-        verify(ForeignUi.class, bundle);
+        verify(bundle);
     }
 
     @Test
@@ -219,7 +219,7 @@ public class ForeignUiTest {
         expect(bundle.getString("Case with 2 digit, one ignore")).andReturn("Parameter is %d");
         expect(bundle.getString("Case with digit and string")).andReturn("Parameters are %d, %s");
         expect(bundle.getString("Case with 2 digits")).andReturn("Parameters are %d, %d");
-        replay(ForeignUi.class, bundle);
+        replay(bundle);
     }
 
     private static class MockSecurityContext implements SecurityContext {
