@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.value;
 
 import com.copyright.rup.dist.foreign.domain.Currency;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
+import com.copyright.rup.dist.foreign.domain.filter.FilterExpression;
 import com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmValueFilter;
 import com.copyright.rup.dist.foreign.ui.common.validator.AmountValidator;
@@ -35,6 +36,7 @@ import org.apache.commons.lang3.math.NumberUtils;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Function;
 
 /**
  * Window to apply additional filters for {@link UdmValueFilterWidget}.
@@ -209,16 +211,7 @@ public class UdmValueFiltersWindow extends CommonAclFiltersWindow {
     }
 
     private HorizontalLayout initSystemTitleLayout() {
-        filterBinder.forField(systemTitleField)
-            .withValidator(getTextStringLengthValidator(2000))
-            .bind(filter -> Objects.toString(
-                filter.getSystemTitleExpression().getFieldFirstValue(), StringUtils.EMPTY),
-                (filter, value) ->
-                    filter.getSystemTitleExpression().setFieldFirstValue(StringUtils.trimToNull(value)));
-        filterBinder.forField(systemTitleOperatorComboBox)
-            .bind(filter -> ObjectUtils.defaultIfNull(
-                    filter.getSystemTitleExpression().getOperator(), FilterOperatorEnum.valueOf(EQUALS)),
-                (filter, value) -> filter.getSystemTitleExpression().setOperator(value));
+        bindStringField(systemTitleField, systemTitleOperatorComboBox, UdmValueFilter::getSystemTitleExpression, 2000);
         systemTitleOperatorComboBox.addValueChangeListener(
             event -> updateOperatorField(filterBinder, systemTitleField, event.getValue()));
         HorizontalLayout horizontalLayout = new HorizontalLayout(systemTitleField, systemTitleOperatorComboBox);
@@ -229,16 +222,8 @@ public class UdmValueFiltersWindow extends CommonAclFiltersWindow {
     }
 
     private HorizontalLayout initSystemStandardNumberLayout() {
-        filterBinder.forField(systemStandardNumberField)
-            .withValidator(getTextStringLengthValidator(1000))
-            .bind(filter -> Objects.toString(
-                filter.getSystemStandardNumberExpression().getFieldFirstValue(), StringUtils.EMPTY),
-                (filter, value) -> filter.getSystemStandardNumberExpression()
-                    .setFieldFirstValue(StringUtils.trimToNull(value)));
-        filterBinder.forField(systemStandardNumberOperatorComboBox)
-            .bind(filter -> ObjectUtils.defaultIfNull(
-                    filter.getSystemStandardNumberExpression().getOperator(), FilterOperatorEnum.valueOf(EQUALS)),
-                (filter, value) -> filter.getSystemStandardNumberExpression().setOperator(value));
+        bindStringField(systemStandardNumberField, systemStandardNumberOperatorComboBox,
+            UdmValueFilter::getSystemStandardNumberExpression, 1000);
         systemStandardNumberOperatorComboBox.addValueChangeListener(
             event -> updateOperatorField(filterBinder, systemStandardNumberField, event.getValue()));
         HorizontalLayout horizontalLayout =
@@ -289,14 +274,7 @@ public class UdmValueFiltersWindow extends CommonAclFiltersWindow {
     }
 
     private HorizontalLayout initRhNameLayout() {
-        filterBinder.forField(rhNameField)
-            .withValidator(getTextStringLengthValidator(255))
-            .bind(filter -> Objects.toString(filter.getRhNameExpression().getFieldFirstValue(), StringUtils.EMPTY),
-                (filter, value) -> filter.getRhNameExpression().setFieldFirstValue(StringUtils.trimToNull(value)));
-        filterBinder.forField(rhNameOperatorComboBox)
-            .bind(filter -> ObjectUtils.defaultIfNull(
-                    filter.getRhNameExpression().getOperator(), FilterOperatorEnum.valueOf(EQUALS)),
-                (filter, value) -> filter.getRhNameExpression().setOperator(value));
+        bindStringField(rhNameField, rhNameOperatorComboBox, UdmValueFilter::getRhNameExpression, 255);
         rhNameOperatorComboBox.addValueChangeListener(
             event -> updateOperatorField(filterBinder, rhNameField, event.getValue()));
         HorizontalLayout horizontalLayout = new HorizontalLayout(rhNameField, rhNameOperatorComboBox);
@@ -426,16 +404,8 @@ public class UdmValueFiltersWindow extends CommonAclFiltersWindow {
     }
 
     private HorizontalLayout initPriceCommentLayout() {
-        filterBinder.forField(priceCommentField)
-            .withValidator(getTextStringLengthValidator(1024))
-            .bind(filter -> Objects.toString(
-                filter.getPriceCommentExpression().getFieldFirstValue(), StringUtils.EMPTY),
-                (filter, value) ->
-                    filter.getPriceCommentExpression().setFieldFirstValue(StringUtils.trimToNull(value)));
-        filterBinder.forField(priceCommentOperatorComboBox)
-            .bind(filter -> ObjectUtils.defaultIfNull(
-                    filter.getPriceCommentExpression().getOperator(), FilterOperatorEnum.valueOf(EQUALS)),
-                (filter, value) -> filter.getPriceCommentExpression().setOperator(value));
+        bindStringField(priceCommentField, priceCommentOperatorComboBox,
+            UdmValueFilter::getPriceCommentExpression, 1024);
         priceCommentOperatorComboBox.addValueChangeListener(
             event -> updateOperatorField(filterBinder, priceCommentField, event.getValue()));
         HorizontalLayout horizontalLayout = new HorizontalLayout(priceCommentField, priceCommentOperatorComboBox);
@@ -446,16 +416,8 @@ public class UdmValueFiltersWindow extends CommonAclFiltersWindow {
     }
 
     private HorizontalLayout initLastPriceCommentLayout() {
-        filterBinder.forField(lastPriceCommentField)
-            .withValidator(getTextStringLengthValidator(1024))
-            .bind(filter -> Objects.toString(
-                filter.getLastPriceCommentExpression().getFieldFirstValue(), StringUtils.EMPTY),
-                (filter, value) ->
-                filter.getLastPriceCommentExpression().setFieldFirstValue(StringUtils.trimToNull(value)));
-        filterBinder.forField(lastPriceCommentOperatorComboBox)
-            .bind(filter -> ObjectUtils.defaultIfNull(
-                    filter.getLastPriceCommentExpression().getOperator(), FilterOperatorEnum.valueOf(EQUALS)),
-                (filter, value) -> filter.getLastPriceCommentExpression().setOperator(value));
+        bindStringField(lastPriceCommentField, lastPriceCommentOperatorComboBox,
+            UdmValueFilter::getLastPriceCommentExpression, 1024);
         lastPriceCommentOperatorComboBox.addValueChangeListener(
             event -> updateOperatorField(filterBinder, lastPriceCommentField, event.getValue()));
         HorizontalLayout horizontalLayout =
@@ -502,16 +464,8 @@ public class UdmValueFiltersWindow extends CommonAclFiltersWindow {
     }
 
     private HorizontalLayout initContentCommentLayout() {
-        filterBinder.forField(contentCommentField)
-            .withValidator(getTextStringLengthValidator(1024))
-            .bind(filter -> Objects.toString(
-                filter.getContentCommentExpression().getFieldFirstValue(), StringUtils.EMPTY),
-                (filter, value) ->
-                    filter.getContentCommentExpression().setFieldFirstValue(StringUtils.trimToNull(value)));
-        filterBinder.forField(contentCommentOperatorComboBox)
-            .bind(filter -> ObjectUtils.defaultIfNull(
-                    filter.getContentCommentExpression().getOperator(), FilterOperatorEnum.valueOf(EQUALS)),
-                (filter, value) -> filter.getContentCommentExpression().setOperator(value));
+        bindStringField(contentCommentField, contentCommentOperatorComboBox,
+            UdmValueFilter::getContentCommentExpression, 1024);
         contentCommentOperatorComboBox.addValueChangeListener(
             event -> updateOperatorField(filterBinder, contentCommentField, event.getValue()));
         HorizontalLayout horizontalLayout =
@@ -539,16 +493,8 @@ public class UdmValueFiltersWindow extends CommonAclFiltersWindow {
     }
 
     private HorizontalLayout initLastContentCommentLayout() {
-        filterBinder.forField(lastContentCommentField)
-            .withValidator(getTextStringLengthValidator(1024))
-            .bind(filter -> Objects.toString(
-                filter.getLastContentCommentExpression().getFieldFirstValue(), StringUtils.EMPTY),
-                (filter, value) ->
-                    filter.getLastContentCommentExpression().setFieldFirstValue(StringUtils.trimToNull(value)));
-        filterBinder.forField(lastContentCommentOperatorComboBox)
-            .bind(filter -> ObjectUtils.defaultIfNull(
-                    filter.getLastContentCommentExpression().getOperator(), FilterOperatorEnum.valueOf(EQUALS)),
-                (filter, value) -> filter.getLastContentCommentExpression().setOperator(value));
+        bindStringField(lastContentCommentField, lastContentCommentOperatorComboBox,
+            UdmValueFilter::getLastContentCommentExpression, 1024);
         lastContentCommentOperatorComboBox.addValueChangeListener(
             event -> updateOperatorField(filterBinder, lastContentCommentField, event.getValue()));
         HorizontalLayout horizontalLayout =
@@ -608,14 +554,7 @@ public class UdmValueFiltersWindow extends CommonAclFiltersWindow {
     }
 
     private HorizontalLayout initCommentLayout() {
-        filterBinder.forField(commentField)
-            .withValidator(getTextStringLengthValidator(1024))
-            .bind(filter -> Objects.toString(filter.getCommentExpression().getFieldFirstValue(), StringUtils.EMPTY),
-                (filter, value) -> filter.getCommentExpression().setFieldFirstValue(StringUtils.trimToNull(value)));
-        filterBinder.forField(commentOperatorComboBox)
-            .bind(filter -> ObjectUtils.defaultIfNull(
-                    filter.getCommentExpression().getOperator(), FilterOperatorEnum.valueOf(EQUALS)),
-                (filter, value) -> filter.getCommentExpression().setOperator(value));
+        bindStringField(commentField, commentOperatorComboBox, UdmValueFilter::getCommentExpression, 1024);
         commentOperatorComboBox.addValueChangeListener(
             event -> updateOperatorField(filterBinder, commentField, event.getValue()));
         HorizontalLayout horizontalLayout = new HorizontalLayout(commentField, commentOperatorComboBox);
@@ -626,14 +565,8 @@ public class UdmValueFiltersWindow extends CommonAclFiltersWindow {
     }
 
     private HorizontalLayout initLastCommentLayout() {
-        filterBinder.forField(lastCommentField)
-            .withValidator(getTextStringLengthValidator(1024))
-            .bind(filter -> Objects.toString(filter.getLastCommentExpression().getFieldFirstValue(), StringUtils.EMPTY),
-                (filter, value) -> filter.getLastCommentExpression().setFieldFirstValue(StringUtils.trimToNull(value)));
-        filterBinder.forField(lastCommentOperatorComboBox)
-            .bind(filter -> ObjectUtils.defaultIfNull(
-                    filter.getLastCommentExpression().getOperator(), FilterOperatorEnum.valueOf(EQUALS)),
-                (filter, value) -> filter.getLastCommentExpression().setOperator(value));
+        bindStringField(lastCommentField, lastCommentOperatorComboBox,
+            UdmValueFilter::getLastCommentExpression, 1024);
         lastCommentOperatorComboBox.addValueChangeListener(
             event -> updateOperatorField(filterBinder, lastCommentField, event.getValue()));
         HorizontalLayout horizontalLayout = new HorizontalLayout(lastCommentField, lastCommentOperatorComboBox);
@@ -671,5 +604,16 @@ public class UdmValueFiltersWindow extends CommonAclFiltersWindow {
         assigneeFilterWidget.reset();
         lastValuePeriodFilterWidget.reset();
         filterBinder.readBean(new UdmValueFilter());
+    }
+
+    private void bindStringField(TextField textField, ComboBox<FilterOperatorEnum> operatorComboBox,
+                                 Function<UdmValueFilter, FilterExpression<String>> getter, Integer maxLength) {
+        filterBinder.forField(textField)
+            .withValidator(getTextStringLengthValidator(maxLength))
+            .bind(filter -> Objects.toString(getter.apply(filter).getFieldFirstValue(), StringUtils.EMPTY),
+                (filter, value) -> getter.apply(filter).setFieldFirstValue(StringUtils.trimToNull(value)));
+        filterBinder.forField(operatorComboBox)
+            .bind(filter -> ObjectUtils.defaultIfNull(getter.apply(filter).getOperator(), FilterOperatorEnum.EQUALS),
+                (filter, value) -> getter.apply(filter).setOperator(value));
     }
 }
