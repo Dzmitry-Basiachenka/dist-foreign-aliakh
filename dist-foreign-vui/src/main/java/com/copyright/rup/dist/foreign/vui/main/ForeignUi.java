@@ -102,7 +102,7 @@ public class ForeignUi extends AppLayout implements AppShellConfigurator, ICommo
     }
 
     @Override
-    public boolean hasAccessPermission() {
+    public final boolean hasAccessPermission() {
         return ForeignSecurityUtils.hasAccessPermission();
     }
 
