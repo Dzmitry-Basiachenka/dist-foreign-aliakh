@@ -94,6 +94,9 @@ abstract class AbstractUsageChainExecutor<T> implements IChainExecutor<T> {
     @PostConstruct
     void postConstruct() {
         productFamilyToProcessorMap = getProductFamilyToProcessorMap();
+        if (Objects.nonNull(executorService)) {
+            executorService.shutdown();
+        }
         executorService = getExecutorService();
     }
 
