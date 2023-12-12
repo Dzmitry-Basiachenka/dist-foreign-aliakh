@@ -277,27 +277,8 @@ public class UdmValueFiltersWindow extends CommonAclFiltersWindow {
 
     private HorizontalLayout initPriceLayout() {
         priceToField.setEnabled(false);
-        filterBinder.forField(priceFromField)
-            .withValidator(new AmountValidator())
-            .withValidator(getBetweenOperatorValidator(priceFromField, priceOperatorComboBox),
-                BETWEEN_OPERATOR_VALIDATION_MESSAGE)
-            .bind(filter -> Objects.toString(filter.getPriceExpression().getFieldFirstValue(), StringUtils.EMPTY),
-                (filter, value) -> filter.getPriceExpression()
-                    .setFieldFirstValue(NumberUtils.createBigDecimal(StringUtils.trimToNull(value))));
-        filterBinder.forField(priceToField)
-            .withValidator(new AmountValidator())
-            .withValidator(getBetweenOperatorValidator(priceToField, priceOperatorComboBox),
-                BETWEEN_OPERATOR_VALIDATION_MESSAGE)
-            .withValidator(value -> validateBigDecimalFromToValues(priceFromField, priceToField),
-                ForeignUi.getMessage(GRATER_OR_EQUAL_VALIDATION_MESSAGE,
-                    ForeignUi.getMessage("label.price_from")))
-            .bind(filter -> Objects.toString(filter.getPriceExpression().getFieldSecondValue(), StringUtils.EMPTY),
-                (filter, value) -> filter.getPriceExpression()
-                    .setFieldSecondValue(NumberUtils.createBigDecimal(StringUtils.trimToNull(value))));
-        filterBinder.forField(priceOperatorComboBox)
-            .bind(filter -> ObjectUtils.defaultIfNull(
-                    filter.getPriceExpression().getOperator(), FilterOperatorEnum.valueOf(EQUALS)),
-                (filter, value) -> filter.getPriceExpression().setOperator(value));
+        bindBetweenBigDecimalFields(priceFromField, priceToField, priceOperatorComboBox,
+            UdmValueFilter::getPriceExpression, ForeignUi.getMessage("label.price_from"));
         priceOperatorComboBox.addValueChangeListener(event ->
             updateOperatorField(filterBinder, priceFromField, priceToField, event.getValue()));
         HorizontalLayout horizontalLayout =
@@ -311,27 +292,8 @@ public class UdmValueFiltersWindow extends CommonAclFiltersWindow {
 
     private HorizontalLayout initPriceInUsdLayout() {
         priceInUsdToField.setEnabled(false);
-        filterBinder.forField(priceInUsdFromField)
-            .withValidator(new AmountValidator())
-            .withValidator(getBetweenOperatorValidator(priceInUsdFromField, priceInUsdOperatorComboBox),
-                BETWEEN_OPERATOR_VALIDATION_MESSAGE)
-            .bind(filter -> Objects.toString(filter.getPriceInUsdExpression().getFieldFirstValue(), StringUtils.EMPTY),
-                (filter, value) -> filter.getPriceInUsdExpression()
-                    .setFieldFirstValue(NumberUtils.createBigDecimal(StringUtils.trimToNull(value))));
-        filterBinder.forField(priceInUsdToField)
-            .withValidator(new AmountValidator())
-            .withValidator(getBetweenOperatorValidator(priceInUsdToField, priceInUsdOperatorComboBox),
-                BETWEEN_OPERATOR_VALIDATION_MESSAGE)
-            .withValidator(value -> validateBigDecimalFromToValues(priceInUsdFromField, priceInUsdToField),
-                ForeignUi.getMessage(GRATER_OR_EQUAL_VALIDATION_MESSAGE,
-                    ForeignUi.getMessage("label.price_in_usd_from")))
-            .bind(filter -> Objects.toString(filter.getPriceInUsdExpression().getFieldSecondValue(), StringUtils.EMPTY),
-                (filter, value) -> filter.getPriceInUsdExpression()
-                    .setFieldSecondValue(NumberUtils.createBigDecimal(StringUtils.trimToNull(value))));
-        filterBinder.forField(priceInUsdOperatorComboBox)
-            .bind(filter -> ObjectUtils.defaultIfNull(
-                    filter.getPriceInUsdExpression().getOperator(), FilterOperatorEnum.valueOf(EQUALS)),
-                (filter, value) -> filter.getPriceInUsdExpression().setOperator(value));
+        bindBetweenBigDecimalFields(priceInUsdFromField, priceInUsdToField, priceInUsdOperatorComboBox,
+            UdmValueFilter::getPriceInUsdExpression, ForeignUi.getMessage("label.price_in_usd_from"));
         priceInUsdOperatorComboBox.addValueChangeListener(event ->
             updateOperatorField(filterBinder, priceInUsdFromField, priceInUsdToField, event.getValue()));
         HorizontalLayout horizontalLayout =
@@ -387,27 +349,8 @@ public class UdmValueFiltersWindow extends CommonAclFiltersWindow {
 
     private HorizontalLayout initContentLayout() {
         contentToField.setEnabled(false);
-        filterBinder.forField(contentFromField)
-            .withValidator(new AmountValidator())
-            .withValidator(getBetweenOperatorValidator(contentFromField, contentOperatorComboBox),
-                BETWEEN_OPERATOR_VALIDATION_MESSAGE)
-            .bind(filter -> Objects.toString(filter.getContentExpression().getFieldFirstValue(), StringUtils.EMPTY),
-                (filter, value) -> filter.getContentExpression()
-                    .setFieldFirstValue(NumberUtils.createBigDecimal(StringUtils.trimToNull(value))));
-        filterBinder.forField(contentToField)
-            .withValidator(new AmountValidator())
-            .withValidator(getBetweenOperatorValidator(contentToField, contentOperatorComboBox),
-                BETWEEN_OPERATOR_VALIDATION_MESSAGE)
-            .withValidator(value -> validateBigDecimalFromToValues(contentFromField, contentToField),
-                ForeignUi.getMessage(GRATER_OR_EQUAL_VALIDATION_MESSAGE,
-                    ForeignUi.getMessage("label.content_from")))
-            .bind(filter -> Objects.toString(filter.getContentExpression().getFieldSecondValue(), StringUtils.EMPTY),
-                (filter, value) -> filter.getContentExpression()
-                    .setFieldSecondValue(NumberUtils.createBigDecimal(StringUtils.trimToNull(value))));
-        filterBinder.forField(contentOperatorComboBox)
-            .bind(filter -> ObjectUtils.defaultIfNull(
-                    filter.getContentExpression().getOperator(), FilterOperatorEnum.valueOf(EQUALS)),
-                (filter, value) -> filter.getContentExpression().setOperator(value));
+        bindBetweenBigDecimalFields(contentFromField, contentToField, contentOperatorComboBox,
+            UdmValueFilter::getContentExpression, ForeignUi.getMessage("label.content_from"));
         contentOperatorComboBox.addValueChangeListener(event ->
             updateOperatorField(filterBinder, contentFromField, contentToField, event.getValue()));
         HorizontalLayout horizontalLayout =
@@ -464,32 +407,12 @@ public class UdmValueFiltersWindow extends CommonAclFiltersWindow {
 
     private HorizontalLayout initContentUnitPriceLayout() {
         contentUnitPriceToField.setEnabled(false);
-        filterBinder.forField(contentUnitPriceFromField)
-            .withValidator(new AmountValidator())
-            .withValidator(getBetweenOperatorValidator(contentUnitPriceFromField, contentUnitPriceOperatorComboBox),
-                BETWEEN_OPERATOR_VALIDATION_MESSAGE)
-            .bind(filter ->
-                    Objects.toString(filter.getContentUnitPriceExpression().getFieldFirstValue(), StringUtils.EMPTY),
-                (filter, value) -> filter.getContentUnitPriceExpression()
-                    .setFieldFirstValue(NumberUtils.createBigDecimal(StringUtils.trimToNull(value))));
-        filterBinder.forField(contentUnitPriceToField)
-            .withValidator(new AmountValidator())
-            .withValidator(getBetweenOperatorValidator(contentUnitPriceToField, contentUnitPriceOperatorComboBox),
-                BETWEEN_OPERATOR_VALIDATION_MESSAGE)
-            .withValidator(value -> validateBigDecimalFromToValues(contentUnitPriceFromField, contentUnitPriceToField),
-                ForeignUi.getMessage(GRATER_OR_EQUAL_VALIDATION_MESSAGE,
-                    ForeignUi.getMessage("label.content_unit_price_from")))
-            .bind(filter ->
-                    Objects.toString(filter.getContentUnitPriceExpression().getFieldSecondValue(), StringUtils.EMPTY),
-                (filter, value) -> filter.getContentUnitPriceExpression()
-                    .setFieldSecondValue(NumberUtils.createBigDecimal(StringUtils.trimToNull(value))));
+        bindBetweenBigDecimalFields(contentUnitPriceFromField, contentUnitPriceToField,
+            contentUnitPriceOperatorComboBox, UdmValueFilter::getContentUnitPriceExpression,
+            ForeignUi.getMessage("label.content_unit_price_from"));
         contentUnitPriceOperatorComboBox.addValueChangeListener(
             event -> updateOperatorField(filterBinder, contentUnitPriceFromField, contentUnitPriceToField,
                 event.getValue()));
-        filterBinder.forField(contentUnitPriceOperatorComboBox)
-            .bind(filter -> ObjectUtils.defaultIfNull(
-                filter.getContentUnitPriceExpression().getOperator(), FilterOperatorEnum.valueOf(EQUALS)),
-                (filter, value) -> filter.getContentUnitPriceExpression().setOperator(value));
         HorizontalLayout horizontalLayout =
             new HorizontalLayout(contentUnitPriceFromField, contentUnitPriceToField, contentUnitPriceOperatorComboBox);
         applyCommonNumericFieldFormatting(horizontalLayout, contentUnitPriceFromField, contentUnitPriceToField);
@@ -597,6 +520,32 @@ public class UdmValueFiltersWindow extends CommonAclFiltersWindow {
                     .setFieldSecondValue(NumberUtils.createLong(StringUtils.trimToNull(value))));
         filterBinder.forField(operatorComboBox)
             .bind(filter -> ObjectUtils.defaultIfNull(getter.apply(filter).getOperator(), FilterOperatorEnum.EQUALS),
+                (filter, value) -> getter.apply(filter).setOperator(value));
+    }
+
+    private void bindBetweenBigDecimalFields(TextField fromField, TextField toField,
+                                             ComboBox<FilterOperatorEnum> operatorComboBox,
+                                             Function<UdmValueFilter, FilterExpression<Number>> getter,
+                                             String fromFieldName) {
+        filterBinder.forField(fromField)
+            .withValidator(new AmountValidator())
+            .withValidator(getBetweenOperatorValidator(fromField, operatorComboBox),
+                BETWEEN_OPERATOR_VALIDATION_MESSAGE)
+            .bind(filter -> Objects.toString(getter.apply(filter).getFieldFirstValue(), StringUtils.EMPTY),
+                (filter, value) -> getter.apply(filter)
+                    .setFieldFirstValue(NumberUtils.createBigDecimal(StringUtils.trimToNull(value))));
+        filterBinder.forField(toField)
+            .withValidator(new AmountValidator())
+            .withValidator(getBetweenOperatorValidator(toField, operatorComboBox),
+                BETWEEN_OPERATOR_VALIDATION_MESSAGE)
+            .withValidator(value -> validateBigDecimalFromToValues(fromField, toField),
+                ForeignUi.getMessage(GRATER_OR_EQUAL_VALIDATION_MESSAGE, fromFieldName))
+            .bind(filter -> Objects.toString(getter.apply(filter).getFieldSecondValue(), StringUtils.EMPTY),
+                (filter, value) -> getter.apply(filter)
+                    .setFieldSecondValue(NumberUtils.createBigDecimal(StringUtils.trimToNull(value))));
+        filterBinder.forField(operatorComboBox)
+            .bind(filter -> ObjectUtils.defaultIfNull(
+                    getter.apply(filter).getOperator(), FilterOperatorEnum.valueOf(EQUALS)),
                 (filter, value) -> getter.apply(filter).setOperator(value));
     }
 }
