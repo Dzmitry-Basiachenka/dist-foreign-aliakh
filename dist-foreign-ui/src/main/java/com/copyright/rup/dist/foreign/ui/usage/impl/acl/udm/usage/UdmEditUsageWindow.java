@@ -171,15 +171,14 @@ public class UdmEditUsageWindow extends CommonUdmUsageWindow implements IDateFor
                 UdmUsageDto::setResearchUrl, "udm-edit-research-url-field"),
             buildReadOnlyLayout("label.det_lc", buildDetailLicenseeClassValueProvider(), binder),
             buildReadOnlyLayout("label.channel", usage -> usage.getChannel().name(), binder),
-            buildReadOnlyLayout("label.usage_date", usage -> toShortFormat(usage.getUsageDate()), binder),
-            buildReadOnlyLayout("label.survey_start_date", usage -> toShortFormat(usage.getSurveyStartDate()),
-                binder),
-            buildReadOnlyLayout("label.survey_end_date", usage -> toShortFormat(usage.getSurveyEndDate()), binder),
+            buildReadOnlyLayout("label.usage_date", toShortFormat(UdmUsageDto::getUsageDate), binder),
+            buildReadOnlyLayout("label.survey_start_date", toShortFormat(UdmUsageDto::getSurveyStartDate), binder),
+            buildReadOnlyLayout("label.survey_end_date", toShortFormat(UdmUsageDto::getSurveyEndDate), binder),
             buildReadOnlyLayout("label.reported_tou", UdmUsageDto::getReportedTypeOfUse, binder),
             buildReadOnlyLayout("label.ineligible_reason", buildIneligibleReasonValueProvider(), binder),
-            buildReadOnlyLayout("label.load_date", usage -> toShortFormat(usage.getCreateDate()), binder),
+            buildReadOnlyLayout("label.load_date", toShortFormat(UdmUsageDto::getCreateDate), binder),
             buildReadOnlyLayout("label.updated_by", UdmUsageDto::getUpdateUser, binder),
-            buildReadOnlyLayout("label.updated_date", usage -> toShortFormat(usage.getUpdateDate()), binder)
+            buildReadOnlyLayout("label.updated_date", toShortFormat(UdmUsageDto::getUpdateDate), binder)
         };
     }
 
@@ -222,19 +221,18 @@ public class UdmEditUsageWindow extends CommonUdmUsageWindow implements IDateFor
             buildReadOnlyLayout("label.ip_address", UdmUsageDto::getIpAddress, binder),
             buildReadOnlyLayout("label.survey_country", UdmUsageDto::getSurveyCountry, binder),
             buildReadOnlyLayout("label.channel", usage -> usage.getChannel().name(), binder),
-            buildReadOnlyLayout("label.usage_date", usage -> toShortFormat(usage.getUsageDate()), binder),
-            buildReadOnlyLayout("label.survey_start_date", usage -> toShortFormat(usage.getSurveyStartDate()),
-                binder),
-            buildReadOnlyLayout("label.survey_end_date", usage -> toShortFormat(usage.getSurveyEndDate()), binder),
+            buildReadOnlyLayout("label.usage_date", toShortFormat(UdmUsageDto::getUsageDate), binder),
+            buildReadOnlyLayout("label.survey_start_date", toShortFormat(UdmUsageDto::getSurveyStartDate), binder),
+            buildReadOnlyLayout("label.survey_end_date", toShortFormat(UdmUsageDto::getSurveyEndDate), binder),
             buildAnnualMultiplierLayout(),
             buildStatisticalMultiplier(),
             buildReadOnlyLayout("label.reported_tou", UdmUsageDto::getReportedTypeOfUse, binder),
             buildQuantityLayout(),
             buildAnnualizedCopiesField(),
             initIneligibleReasonLayout(),
-            buildReadOnlyLayout("label.load_date", usage -> toShortFormat(usage.getCreateDate()), binder),
+            buildReadOnlyLayout("label.load_date", toShortFormat(UdmUsageDto::getCreateDate), binder),
             buildReadOnlyLayout("label.updated_by", UdmUsageDto::getUpdateUser, binder),
-            buildReadOnlyLayout("label.updated_date", usage -> toShortFormat(usage.getUpdateDate()), binder)
+            buildReadOnlyLayout("label.updated_date", toShortFormat(UdmUsageDto::getUpdateDate), binder)
         };
     }
 

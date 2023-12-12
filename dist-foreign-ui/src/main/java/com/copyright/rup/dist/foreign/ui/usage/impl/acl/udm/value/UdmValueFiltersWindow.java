@@ -52,7 +52,6 @@ public class UdmValueFiltersWindow extends CommonAclFiltersWindow {
     private static final String BETWEEN_OPERATOR_VALIDATION_MESSAGE =
         ForeignUi.getMessage("field.error.populated_for_between_operator");
     private static final String GRATER_OR_EQUAL_VALIDATION_MESSAGE = "field.error.greater_or_equal_to";
-    private static final String EQUALS = "EQUALS";
 
     private final Binder<UdmValueFilter> filterBinder = new Binder<>();
     private AssigneeFilterWidget assigneeFilterWidget;
@@ -544,8 +543,7 @@ public class UdmValueFiltersWindow extends CommonAclFiltersWindow {
                 (filter, value) -> getter.apply(filter)
                     .setFieldSecondValue(NumberUtils.createBigDecimal(StringUtils.trimToNull(value))));
         filterBinder.forField(operatorComboBox)
-            .bind(filter -> ObjectUtils.defaultIfNull(
-                    getter.apply(filter).getOperator(), FilterOperatorEnum.valueOf(EQUALS)),
+            .bind(filter -> ObjectUtils.defaultIfNull(getter.apply(filter).getOperator(), FilterOperatorEnum.EQUALS),
                 (filter, value) -> getter.apply(filter).setOperator(value));
     }
 }

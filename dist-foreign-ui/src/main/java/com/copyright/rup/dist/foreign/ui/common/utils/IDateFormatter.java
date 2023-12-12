@@ -2,6 +2,9 @@ package com.copyright.rup.dist.foreign.ui.common.utils;
 
 import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
+
+import com.vaadin.data.ValueProvider;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.FastDateFormat;
 
@@ -10,6 +13,7 @@ import java.time.LocalDate;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.function.Function;
 
 /**
  * Class for conversions between dates and {@link String}.
@@ -33,6 +37,17 @@ public interface IDateFormatter {
     }
 
     /**
+     * Gets function that formats instance of {@link LocalDate} to {@link String} by pattern "MM/dd/yyyy".
+     *
+     * @param getter  bean getter
+     * @return function that formats date to string if date is not {@code null}, otherwise to empty string
+     * @param <T> bean type
+     */
+    default <T> ValueProvider<T, String> toShortFormat(Function<T, LocalDate> getter) {
+        return bean -> toShortFormat(getter.apply(bean));
+    }
+
+    /**
      * Formats instance of {@link Date} to {@link String} by pattern "MM/dd/yyyy".
      *
      * @param date instance of {@link Date}
@@ -42,6 +57,17 @@ public interface IDateFormatter {
         return Objects.nonNull(date)
             ? FastDateFormat.getInstance(RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT).format(date)
             : StringUtils.EMPTY;
+    }
+
+    /**
+     * Gets function that formats instance of {@link Date} to {@link String} by pattern "MM/dd/yyyy".
+     *
+     * @param getter bean getter
+     * @return function that formats date to string if date is not {@code null}, otherwise to empty string
+     * @param <T> bean type
+     */
+    default <T> ValueProvider<T, String> toShortFormat(com.google.common.base.Function<T, Date> getter) {
+        return bean -> toShortFormat(getter.apply(bean));
     }
 
     /**
