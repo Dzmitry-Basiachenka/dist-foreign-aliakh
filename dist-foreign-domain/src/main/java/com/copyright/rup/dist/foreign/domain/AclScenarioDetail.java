@@ -214,11 +214,11 @@ public class AclScenarioDetail extends StoredEntity<String> {
     }
 
     public List<AclScenarioShareDetail> getScenarioShareDetails() {
-        return List.copyOf(scenarioShareDetails);
+        return scenarioShareDetails;
     }
 
     public void setScenarioShareDetails(List<AclScenarioShareDetail> scenarioShareDetails) {
-        this.scenarioShareDetails = List.copyOf(scenarioShareDetails);
+        this.scenarioShareDetails = scenarioShareDetails;
     }
 
     @Override
