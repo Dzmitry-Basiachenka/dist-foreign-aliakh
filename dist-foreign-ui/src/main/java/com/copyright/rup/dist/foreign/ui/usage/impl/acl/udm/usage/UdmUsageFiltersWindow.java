@@ -24,7 +24,6 @@ import com.copyright.rup.vaadin.widget.LocalDateWidget;
 
 import com.vaadin.data.Binder;
 import com.vaadin.data.ValidationException;
-import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -58,7 +57,6 @@ public class UdmUsageFiltersWindow extends CommonAclFiltersWindow {
     private static final String BETWEEN_OPERATOR_VALIDATION_MESSAGE =
         ForeignUi.getMessage("field.error.populated_for_between_operator");
     private static final String GRATER_OR_EQUAL_VALIDATION_MESSAGE = "field.error.greater_or_equal_to";
-    private static final String EQUALS = "EQUALS";
 
     private final TextField annualMultiplierFromField =
         new TextField(ForeignUi.getMessage("label.annual_multiplier_from"));
@@ -561,8 +559,7 @@ public class UdmUsageFiltersWindow extends CommonAclFiltersWindow {
     private void bindStringField(TextField textField, Function<UdmUsageFilter, FilterExpression<String>> getter,
                                  Integer maxLength) {
         filterBinder.forField(textField)
-            .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.length", maxLength),
-                0, maxLength))
+            .withValidator(getTextStringLengthValidator(maxLength))
             .bind(filter -> getter.apply(filter).getFieldFirstValue(),
                 (filter, value) -> getter.apply(filter).setFieldFirstValue(StringUtils.trimToNull(value)));
     }
@@ -571,10 +568,8 @@ public class UdmUsageFiltersWindow extends CommonAclFiltersWindow {
                                        ComboBox<FilterOperatorEnum> operatorComboBox,
                                        Function<UdmUsageFilter, FilterExpression<Number>> getter,
                                        String fromFieldName, Integer maxLength) {
-        StringLengthValidator stringLengthValidator =
-            new StringLengthValidator(ForeignUi.getMessage("field.error.number_length", maxLength), 0, maxLength);
         filterBinder.forField(fromField)
-            .withValidator(stringLengthValidator)
+            .withValidator(getNumberStringLengthValidator(maxLength))
             .withValidator(new NumericValidator())
             .withValidator(getBetweenOperatorValidator(fromField, operatorComboBox),
                 BETWEEN_OPERATOR_VALIDATION_MESSAGE)
@@ -582,7 +577,7 @@ public class UdmUsageFiltersWindow extends CommonAclFiltersWindow {
                 (filter, value) -> getter.apply(filter)
                     .setFieldFirstValue(NumberUtils.createLong(StringUtils.trimToNull(value))));
         filterBinder.forField(toField)
-            .withValidator(stringLengthValidator)
+            .withValidator(getNumberStringLengthValidator(maxLength))
             .withValidator(new NumericValidator())
             .withValidator(getBetweenOperatorValidator(toField, operatorComboBox),
                 BETWEEN_OPERATOR_VALIDATION_MESSAGE)
@@ -619,7 +614,7 @@ public class UdmUsageFiltersWindow extends CommonAclFiltersWindow {
                                     Function<UdmUsageFilter, FilterExpression<?>> getter) {
         filterBinder.forField(operatorComboBox)
             .bind(filter -> ObjectUtils.defaultIfNull(
-                    getter.apply(filter).getOperator(), FilterOperatorEnum.valueOf(EQUALS)),
+                    getter.apply(filter).getOperator(), FilterOperatorEnum.EQUALS),
                 (filter, value) -> getter.apply(filter).setOperator(value));
     }
 }
