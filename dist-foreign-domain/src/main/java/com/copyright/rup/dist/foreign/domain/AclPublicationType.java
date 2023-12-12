@@ -15,6 +15,8 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  */
 public class AclPublicationType extends PublicationType {
 
+    private static final long serialVersionUID = 5403295006906269221L;
+
     private Integer period;
 
     /**

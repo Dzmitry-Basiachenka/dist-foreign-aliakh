@@ -20,6 +20,8 @@ import java.time.LocalDate;
  */
 public class UdmUsageDto extends StoredEntity<String> {
 
+    private static final long serialVersionUID = -2213778696510700333L;
+
     private Integer period;
     private LocalDate periodEndDate;
     private UdmUsageOriginEnum usageOrigin;

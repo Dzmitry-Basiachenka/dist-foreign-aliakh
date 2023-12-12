@@ -20,6 +20,8 @@ import java.util.List;
  */
 public class AclScenario extends StoredEntity<String> {
 
+    private static final long serialVersionUID = -1398682761794313098L;
+
     private String usageBatchId;
     private String fundPoolId;
     private String grantSetId;
@@ -115,27 +117,27 @@ public class AclScenario extends StoredEntity<String> {
     }
 
     public List<AclPublicationType> getPublicationTypes() {
-        return publicationTypes;
+        return List.copyOf(publicationTypes);
     }
 
     public void setPublicationTypes(List<AclPublicationType> publicationTypes) {
-        this.publicationTypes = publicationTypes;
+        this.publicationTypes = List.copyOf(publicationTypes);
     }
 
     public List<UsageAge> getUsageAges() {
-        return usageAges;
+        return List.copyOf(usageAges);
     }
 
     public void setUsageAges(List<UsageAge> usageAges) {
-        this.usageAges = usageAges;
+        this.usageAges = List.copyOf(usageAges);
     }
 
     public List<DetailLicenseeClass> getDetailLicenseeClasses() {
-        return detailLicenseeClasses;
+        return List.copyOf(detailLicenseeClasses);
     }
 
     public void setDetailLicenseeClasses(List<DetailLicenseeClass> detailLicenseeClasses) {
-        this.detailLicenseeClasses = detailLicenseeClasses;
+        this.detailLicenseeClasses = List.copyOf(detailLicenseeClasses);
     }
 
     @Override

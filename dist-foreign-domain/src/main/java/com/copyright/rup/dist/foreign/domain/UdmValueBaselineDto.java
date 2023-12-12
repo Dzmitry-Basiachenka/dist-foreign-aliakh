@@ -19,6 +19,8 @@ import java.math.BigDecimal;
  */
 public class UdmValueBaselineDto extends StoredEntity<String> {
 
+    private static final long serialVersionUID = -7575333468753289266L;
+
     private Integer period;
     private Long wrWrkInst;
     private String systemTitle;

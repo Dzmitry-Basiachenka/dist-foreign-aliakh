@@ -20,6 +20,8 @@ import java.time.LocalDate;
  */
 public class UdmValueDto extends StoredEntity<String> {
 
+    private static final long serialVersionUID = -8017593507938568331L;
+
     private Integer valuePeriod;
     private UdmValueStatusEnum status;
     private String assignee;

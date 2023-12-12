@@ -23,6 +23,8 @@ import java.time.LocalDate;
 // TODO extract FAS specific fields to separate domain
 public class Usage extends StoredEntity<String> {
 
+    private static final long serialVersionUID = 7086178225417672529L;
+
     private String batchId;
     private String scenarioId;
     private String fundPoolId;

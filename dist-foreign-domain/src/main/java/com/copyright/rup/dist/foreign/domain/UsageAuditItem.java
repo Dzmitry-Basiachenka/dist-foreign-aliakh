@@ -17,6 +17,8 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  */
 public class UsageAuditItem extends StoredEntity<String> {
 
+    private static final long serialVersionUID = 948568975716976112L;
+
     private String usageId;
     private UsageActionTypeEnum actionType;
     private String actionReason;

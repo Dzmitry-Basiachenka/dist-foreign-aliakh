@@ -17,6 +17,8 @@ import java.math.BigDecimal;
  */
 public class AclScenarioDto extends AclScenario {
 
+    private static final long serialVersionUID = 7140503822487392291L;
+
     private BigDecimal grossTotal = FdaConstants.DEFAULT_AMOUNT_SCALE_10;
     private BigDecimal grossTotalPrint = FdaConstants.DEFAULT_AMOUNT_SCALE_10;
     private BigDecimal grossTotalDigital = FdaConstants.DEFAULT_AMOUNT_SCALE_10;

@@ -18,6 +18,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  */
 public class WorkClassification extends StoredEntity<String> {
 
+    private static final long serialVersionUID = -7304263070348821784L;
+
     private Long wrWrkInst;
     private String systemTitle;
     private String classification;

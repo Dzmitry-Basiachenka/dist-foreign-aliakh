@@ -15,6 +15,8 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  */
 public class AclFundPoolDetailDto extends AclFundPoolDetail {
 
+    private static final long serialVersionUID = 1567078515284594954L;
+
     private String fundPoolName;
     private int period;
     private AggregateLicenseeClass aggregateLicenseeClass = new AggregateLicenseeClass();

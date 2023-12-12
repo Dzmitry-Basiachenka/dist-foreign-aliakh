@@ -17,6 +17,8 @@ import java.math.BigDecimal;
  */
 public class AclRightsholderTotalsHolderDto extends AclRightsholderTotalsHolder {
 
+    private static final long serialVersionUID = -7097106332467646693L;
+
     private Long wrWrkInst;
     private String systemTitle;
     private BigDecimal grossTotal = FdaConstants.DEFAULT_AMOUNT_SCALE_10;

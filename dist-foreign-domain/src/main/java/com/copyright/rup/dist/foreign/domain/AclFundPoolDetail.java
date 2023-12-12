@@ -19,6 +19,8 @@ import java.math.BigDecimal;
  */
 public class AclFundPoolDetail extends StoredEntity<String> {
 
+    private static final long serialVersionUID = -5267946110397029091L;
+
     private String fundPoolId;
     private DetailLicenseeClass detailLicenseeClass = new DetailLicenseeClass();
     private String licenseType;

@@ -19,6 +19,8 @@ import java.math.BigDecimal;
  */
 public class FundPoolDetail extends StoredEntity<String> {
 
+    private static final long serialVersionUID = -4081910422573326490L;
+
     private String fundPoolId;
     private AggregateLicenseeClass aggregateLicenseeClass = new AggregateLicenseeClass();
     private BigDecimal grossAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;

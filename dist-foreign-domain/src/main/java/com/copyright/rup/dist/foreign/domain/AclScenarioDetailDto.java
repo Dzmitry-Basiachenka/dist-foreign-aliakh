@@ -19,6 +19,8 @@ import java.math.BigDecimal;
  */
 public class AclScenarioDetailDto extends StoredEntity<String> {
 
+    private static final long serialVersionUID = 7380136916991049265L;
+
     private String originalDetailId;
     private String productFamily;
     private String usageBatchName;

@@ -20,6 +20,8 @@ import java.math.BigDecimal;
  */
 public class AclRightsholderTotalsHolder extends StoredEntity<String> {
 
+    private static final long serialVersionUID = -6076085593387521676L;
+
     private Rightsholder rightsholder = new Rightsholder();
     private Long printPayeeAccountNumber;
     private String printPayeeName;

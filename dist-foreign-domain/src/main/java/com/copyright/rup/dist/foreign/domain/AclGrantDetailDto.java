@@ -15,6 +15,8 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  */
 public class AclGrantDetailDto extends AclGrantDetail {
 
+    private static final long serialVersionUID = 1935304095882904661L;
+
     private String licenseType;
     private String rhName;
     private Integer grantPeriod;

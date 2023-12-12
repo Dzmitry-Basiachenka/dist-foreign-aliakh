@@ -17,6 +17,8 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  */
 public class UdmValue extends StoredEntity<String> {
 
+    private static final long serialVersionUID = 4362211219558915256L;
+
     private Integer period;
     private UdmValueStatusEnum status;
     private Long rhAccountNumber;

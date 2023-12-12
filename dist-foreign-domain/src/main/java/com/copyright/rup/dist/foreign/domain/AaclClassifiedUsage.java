@@ -18,6 +18,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  */
 public class AaclClassifiedUsage extends StoredEntity<String> {
 
+    private static final long serialVersionUID = -7719518357952373978L;
+
     private String detailId;
     private Long wrWrkInst;
     private String enrollmentProfile;

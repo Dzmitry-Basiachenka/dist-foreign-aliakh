@@ -18,6 +18,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  */
 public class ResearchedUsage extends StoredEntity<String> {
 
+    private static final long serialVersionUID = 4370998937952555300L;
+
     private String usageId;
     private String standardNumber;
     private String standardNumberType;

@@ -17,6 +17,8 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  */
 public class UdmBatch extends StoredEntity<String> {
 
+    private static final long serialVersionUID = 3877248073792061502L;
+
     private Integer period;
     private String name;
     private UdmUsageOriginEnum usageOrigin;

@@ -19,6 +19,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  */
 public class RightsholderDiscrepancy extends StoredEntity<String> {
 
+    private static final long serialVersionUID = 3408324253266063408L;
+
     private Long wrWrkInst;
     private String workTitle;
     private String productFamily;

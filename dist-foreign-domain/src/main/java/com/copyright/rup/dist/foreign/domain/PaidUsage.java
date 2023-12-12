@@ -18,6 +18,8 @@ import java.time.OffsetDateTime;
  */
 public class PaidUsage extends Usage {
 
+    private static final long serialVersionUID = 5651810208744743067L;
+
     private Long rroAccountNumber;
     private String checkNumber;
     private OffsetDateTime checkDate;
