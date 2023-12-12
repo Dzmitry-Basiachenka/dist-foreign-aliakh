@@ -117,27 +117,27 @@ public class AclScenario extends StoredEntity<String> {
     }
 
     public List<AclPublicationType> getPublicationTypes() {
-        return List.copyOf(publicationTypes);
+        return publicationTypes;
     }
 
     public void setPublicationTypes(List<AclPublicationType> publicationTypes) {
-        this.publicationTypes = List.copyOf(publicationTypes);
+        this.publicationTypes = publicationTypes;
     }
 
     public List<UsageAge> getUsageAges() {
-        return List.copyOf(usageAges);
+        return usageAges;
     }
 
     public void setUsageAges(List<UsageAge> usageAges) {
-        this.usageAges = List.copyOf(usageAges);
+        this.usageAges = usageAges;
     }
 
     public List<DetailLicenseeClass> getDetailLicenseeClasses() {
-        return List.copyOf(detailLicenseeClasses);
+        return detailLicenseeClasses;
     }
 
     public void setDetailLicenseeClasses(List<DetailLicenseeClass> detailLicenseeClasses) {
-        this.detailLicenseeClasses = List.copyOf(detailLicenseeClasses);
+        this.detailLicenseeClasses = detailLicenseeClasses;
     }
 
     @Override

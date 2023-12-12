@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.domain;
 
+import com.google.common.collect.ImmutableSet;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.EnumSet;
@@ -115,17 +117,17 @@ public final class FdaConstants {
      * Set of FAS and FAS2 product families.
      */
     public static final Set<String> FAS_FAS2_PRODUCT_FAMILY_SET =
-        Set.of(FAS_PRODUCT_FAMILY, CLA_FAS_PRODUCT_FAMILY);
+        ImmutableSet.of(FAS_PRODUCT_FAMILY, CLA_FAS_PRODUCT_FAMILY);
 
     /**
      * Set of ACL License Types.
      */
-    public static final Set<String> ACL_LICENSE_TYPES = Set.of("ACL", "MACL", "VGW", "JACDCL");
+    public static final Set<String> ACL_LICENSE_TYPES = ImmutableSet.of("ACL", "MACL", "VGW", "JACDCL");
 
     /**
      * Set of available months for ACL periods.
      */
-    public static final Set<String> ACL_PERIOD_MONTHS = Set.of("06", "12");
+    public static final Set<String> ACL_PERIOD_MONTHS = ImmutableSet.of("06", "12");
 
     /**
      * Archived scenario statuses.
