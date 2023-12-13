@@ -8,6 +8,7 @@ import com.copyright.rup.dist.foreign.service.api.processor.IJobProcessor;
 import com.copyright.rup.dist.foreign.service.impl.chain.JobInfoUtils;
 
 import com.google.common.collect.Iterables;
+
 import org.springframework.beans.factory.annotation.Value;
 
 import java.util.ArrayList;
@@ -19,7 +20,6 @@ import java.util.concurrent.Executors;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
 /**
@@ -34,16 +34,15 @@ import javax.annotation.PreDestroy;
  */
 abstract class AbstractUsageChainExecutor<T> implements IChainExecutor<T> {
 
+    private final ExecutorService executorService = Executors.newCachedThreadPool();
+
     @Value("$RUP{dist.foreign.usages.chunk_size}")
     private Integer chunkSize;
-
-    private ExecutorService executorService;
-    private Map<String, IChainProcessor<T>> productFamilyToProcessorMap;
 
     @Override
     public JobInfo execute(ChainProcessorTypeEnum type) {
         List<JobInfo> jobInfos = new ArrayList<>();
-        productFamilyToProcessorMap.forEach((productFamily, processor) ->
+        getProductFamilyToProcessorMap().forEach((productFamily, processor) ->
             jobInfos.addAll(execute(productFamily, processor, type)));
         return JobInfoUtils.mergeJobResults(jobInfos);
     }
@@ -53,7 +52,7 @@ abstract class AbstractUsageChainExecutor<T> implements IChainExecutor<T> {
         Map<String, List<T>> productFamilyToUsagesMap = items.stream()
             .collect(Collectors.groupingBy(getProductFamilyFunction()));
         productFamilyToUsagesMap.forEach((productFamily, usagesList) -> {
-            IChainProcessor<T> processor = productFamilyToProcessorMap.get(productFamily);
+            IChainProcessor<T> processor = getProductFamilyToProcessorMap().get(productFamily);
             if (Objects.nonNull(processor)) {
                 execute(items, processor, type);
             } else {
@@ -69,16 +68,6 @@ abstract class AbstractUsageChainExecutor<T> implements IChainExecutor<T> {
     }
 
     /**
-     * Gets instance of {@link ExecutorService} with 2 threads.
-     * Used for sending usages to queues to process them.
-     *
-     * @return instance of {@link ExecutorService}
-     */
-    protected ExecutorService getExecutorService() {
-        return Executors.newCachedThreadPool();
-    }
-
-    /**
      * @return product family to processor map
      */
     abstract Map<String, IChainProcessor<T>> getProductFamilyToProcessorMap();
@@ -87,18 +76,6 @@ abstract class AbstractUsageChainExecutor<T> implements IChainExecutor<T> {
      * @return function that returns product family.
      */
     abstract Function<T, String> getProductFamilyFunction();
-
-    /**
-     * Post construct method.
-     */
-    @PostConstruct
-    void postConstruct() {
-        productFamilyToProcessorMap = getProductFamilyToProcessorMap();
-        if (Objects.nonNull(executorService)) {
-            executorService.shutdown();
-        }
-        executorService = getExecutorService();
-    }
 
     /**
      * Pre destroy method.

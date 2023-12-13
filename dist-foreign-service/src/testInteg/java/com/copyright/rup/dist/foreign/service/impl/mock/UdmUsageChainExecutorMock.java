@@ -3,8 +3,7 @@ package com.copyright.rup.dist.foreign.service.impl.mock;
 import com.copyright.rup.dist.foreign.service.impl.chain.executor.UdmUsageChainExecutor;
 
 import org.apache.camel.util.concurrent.SynchronousExecutorService;
-
-import java.util.concurrent.ExecutorService;
+import org.powermock.reflect.Whitebox;
 
 /**
  * Mock for {@link UdmUsageChainExecutor} with synchronous executor service.
@@ -17,8 +16,7 @@ import java.util.concurrent.ExecutorService;
  */
 public class UdmUsageChainExecutorMock extends UdmUsageChainExecutor {
 
-    @Override
-    protected ExecutorService getExecutorService() {
-        return new SynchronousExecutorService();
+    public UdmUsageChainExecutorMock() {
+        Whitebox.setInternalState(this, "executorService", new SynchronousExecutorService());
     }
 }

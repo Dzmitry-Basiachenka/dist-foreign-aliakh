@@ -4,8 +4,6 @@ import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.UdmUsage;
 import com.copyright.rup.dist.foreign.service.api.processor.IChainProcessor;
 
-import com.google.common.collect.ImmutableMap;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -31,11 +29,11 @@ public class UdmUsageChainExecutor extends AbstractUsageChainExecutor<UdmUsage> 
 
     @Override
     Map<String, IChainProcessor<UdmUsage>> getProductFamilyToProcessorMap() {
-        return ImmutableMap.of(FdaConstants.ACL_PRODUCT_FAMILY, udmProcessor);
+        return Map.of(FdaConstants.ACL_PRODUCT_FAMILY, udmProcessor);
     }
 
     @Override
     Function<UdmUsage, String> getProductFamilyFunction() {
-        return (udmUsage) -> FdaConstants.ACL_PRODUCT_FAMILY;
+        return udmUsage -> FdaConstants.ACL_PRODUCT_FAMILY;
     }
 }
