@@ -6,7 +6,6 @@ import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.UdmValueDto;
 import com.copyright.rup.dist.foreign.domain.UdmValueStatusEnum;
 import com.copyright.rup.dist.foreign.ui.audit.impl.UdmValueAuditFieldToValuesMap;
-import com.copyright.rup.dist.foreign.ui.common.utils.BooleanUtils;
 import com.copyright.rup.dist.foreign.ui.common.validator.AmountValidator;
 import com.copyright.rup.dist.foreign.ui.common.validator.AmountZeroValidator;
 import com.copyright.rup.dist.foreign.ui.common.validator.RequiredValidator;
@@ -245,7 +244,7 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
                 buildReadOnlyLayout("label.last_price_source", UdmValueDto::getLastPriceSource, binder),
                 buildReadOnlyLayout("label.last_price_comment", UdmValueDto::getLastPriceComment, binder),
                 buildReadOnlyLayout("label.last_price_flag",
-                    bean -> BooleanUtils.toYNString(bean.isLastPriceFlag()), binder),
+                    fromBooleanToYNString(UdmValueDto::isLastPriceFlag), binder),
                 buildClearPriceSectionLayout()
             ))
         );
@@ -278,7 +277,7 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
                 buildReadOnlyLayout("label.last_content_source", UdmValueDto::getLastContentSource, binder),
                 buildReadOnlyLayout("label.last_content_comment", UdmValueDto::getLastContentComment, binder),
                 buildReadOnlyLayout("label.last_content_flag",
-                    bean -> BooleanUtils.toYNString(bean.isLastContentFlag()), binder),
+                    fromBooleanToYNString(UdmValueDto::isLastContentFlag), binder),
                 buildContentUnitPriceLayout(contentUnitPriceField,
                     fromBigDecimalToMoneyString(UdmValueDto::getContentUnitPrice),
                     fromStringToBigDecimal(UdmValueDto::setContentUnitPrice)),
