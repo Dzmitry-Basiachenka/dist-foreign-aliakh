@@ -39,7 +39,7 @@ public interface IDateFormatter {
     /**
      * Gets function that formats instance of {@link LocalDate} to {@link String} by pattern "MM/dd/yyyy".
      *
-     * @param getter  bean getter
+     * @param getter bean getter
      * @return function that formats date to string if date is not {@code null}, otherwise to empty string
      * @param <T> bean type
      */

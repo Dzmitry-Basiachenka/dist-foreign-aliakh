@@ -15,6 +15,7 @@ import com.vaadin.ui.Window;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
+import java.util.function.Function;
 
 /**
  * Contains common functionality for UDM usage window.
@@ -59,6 +60,16 @@ public abstract class CommonUdmUsageWindow extends Window {
         layout.setSizeFull();
         layout.setExpandRatio(component, 1);
         return layout;
+    }
+
+    /**
+     * Gets a value provider that returns the name of the enum.
+     *
+     * @param getter bean getter
+     * @return instance of {@code ValueProvider}
+     */
+    protected ValueProvider<UdmUsageDto, String> buildEnumNameValueProvider(Function<UdmUsageDto, Enum<?>> getter) {
+        return usage -> getter.apply(usage).name();
     }
 
     /**
