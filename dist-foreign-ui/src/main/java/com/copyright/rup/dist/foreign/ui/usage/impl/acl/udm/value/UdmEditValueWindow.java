@@ -295,8 +295,7 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
             )),
             new Panel(new VerticalLayout(
                 buildReadOnlyLayout("label.updated_by", UdmValueDto::getUpdateUser, binder),
-                buildReadOnlyLayout("label.updated_date",
-                    bean -> toShortFormat(bean.getUpdateDate()), binder)
+                buildReadOnlyLayout("label.updated_date", toShortFormat(UdmValueDto::getUpdateDate), binder)
             ))
         );
     }

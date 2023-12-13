@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.common.utils;
 
 import static org.junit.Assert.assertEquals;
 
+import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 
@@ -21,19 +22,40 @@ import java.util.Date;
  */
 public class IDateFormatterTest {
 
+    private static final LocalDate LOCAL_DATE = LocalDate.of(2021, 6, 1);
+    private static final Date DATE = Date.from(LOCAL_DATE.atStartOfDay(ZoneId.systemDefault()).toInstant());
+    private static final String SHORT_FORMATTED_DATE = "06/01/2021";
+
     private final IDateFormatter dateFormatter = new IDateFormatter() {};
 
     @Test
     public void testToShortFormatLocalDate() {
-        assertEquals("06/01/2021", dateFormatter.toShortFormat(LocalDate.of(2021, 6, 1)));
+        assertEquals(SHORT_FORMATTED_DATE, dateFormatter.toShortFormat(LOCAL_DATE));
         assertEquals(StringUtils.EMPTY, dateFormatter.toShortFormat((LocalDate) null));
     }
 
     @Test
+    public void testToShortFormatLocalDateGetter() {
+        UdmUsageDto bean = new UdmUsageDto();
+        bean.setUsageDate(LOCAL_DATE);
+        assertEquals(SHORT_FORMATTED_DATE, dateFormatter.toShortFormat(UdmUsageDto::getUsageDate).apply(bean));
+        bean.setUsageDate(null);
+        assertEquals(StringUtils.EMPTY, dateFormatter.toShortFormat(UdmUsageDto::getUsageDate).apply(bean));
+    }
+
+    @Test
     public void testToShortFormatDate() {
-        assertEquals("06/01/2021", dateFormatter.toShortFormat(
-            Date.from(LocalDate.of(2021, 6, 1).atStartOfDay(ZoneId.systemDefault()).toInstant())));
-        assertEquals(StringUtils.EMPTY, dateFormatter.toShortFormat((LocalDate) null));
+        assertEquals(SHORT_FORMATTED_DATE, dateFormatter.toShortFormat(DATE));
+        assertEquals(StringUtils.EMPTY, dateFormatter.toShortFormat((Date) null));
+    }
+
+    @Test
+    public void testToShortFormatDateGetter() {
+        UdmUsageDto bean = new UdmUsageDto();
+        bean.setCreateDate(DATE);
+        assertEquals(SHORT_FORMATTED_DATE, dateFormatter.toShortFormat(UdmUsageDto::getCreateDate).apply(bean));
+        bean.setCreateDate(null);
+        assertEquals(StringUtils.EMPTY, dateFormatter.toShortFormat(UdmUsageDto::getCreateDate).apply(bean));
     }
 
     @Test
