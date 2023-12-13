@@ -47,7 +47,6 @@ public class UsageChainExecutorTest {
     private IChainProcessor<Usage> fasEligibilityProcessor;
 
     @Before
-    @SuppressWarnings("unchecked")
     public void setUp() {
         executor = new UsageChainExecutor();
         fasProcessor = createMock(IChainProcessor.class);
@@ -62,7 +61,6 @@ public class UsageChainExecutorTest {
         Whitebox.setInternalState(executor, "salProcessor", salProcessor);
         Whitebox.setInternalState(executor, "aclciProcessor", aclciProcessor);
         Whitebox.setInternalState(executor, "chunkSize", 1);
-        executor.postConstruct();
     }
 
     @Test

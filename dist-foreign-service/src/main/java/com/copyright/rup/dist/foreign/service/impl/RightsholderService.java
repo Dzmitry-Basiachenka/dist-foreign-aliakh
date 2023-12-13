@@ -23,7 +23,10 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
+
+import javax.annotation.PreDestroy;
 
 /**
  * Implementation of {@link IRightsholderService}.
@@ -41,7 +44,7 @@ public class RightsholderService extends CommonRightsholderService implements IR
 
     private final IRightsholderRepository rightsholderRepository;
 
-    private final ExecutorService executorService;
+    private final ExecutorService executorService = Executors.newCachedThreadPool();
 
     /**
      * Constructor.
@@ -49,18 +52,15 @@ public class RightsholderService extends CommonRightsholderService implements IR
      * @param rightsholderRepository             an instance of {@link IRightsholderRepository}
      * @param prmRightsholderService             an instance of {@link IPrmRightsholderService}
      * @param prmRightsholderOrganizationService an instance of {@link IPrmRightsholderOrganizationService}
-     * @param executorService                    an instance of {@link ExecutorService}
      */
     @Autowired
     public RightsholderService(IRightsholderRepository rightsholderRepository,
                                @Qualifier("dist.common.integration.rest.prmRightsholderAsyncService")
                                IPrmRightsholderService prmRightsholderService,
                                @Qualifier("dist.common.integration.rest.prmRightsholderOrganizationAsyncService")
-                               IPrmRightsholderOrganizationService prmRightsholderOrganizationService,
-                               ExecutorService executorService) {
+                               IPrmRightsholderOrganizationService prmRightsholderOrganizationService) {
         super(rightsholderRepository, prmRightsholderService, prmRightsholderOrganizationService);
         this.rightsholderRepository = rightsholderRepository;
-        this.executorService = executorService;
     }
 
     @Override
@@ -126,5 +126,13 @@ public class RightsholderService extends CommonRightsholderService implements IR
     @Override
     public List<Rightsholder> getRightsholdersByAccountNumbers(Set<Long> accountNumbers) {
         return rightsholderRepository.findByAccountNumbers(accountNumbers);
+    }
+
+    /**
+     * Pre destroy method.
+     */
+    @PreDestroy
+    void preDestroy() {
+        executorService.shutdown();
     }
 }

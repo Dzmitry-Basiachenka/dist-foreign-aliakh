@@ -32,14 +32,12 @@ public class UdmUsageChainExecutorTest {
     private IChainProcessor<UdmUsage> udmRightsProcessor;
 
     @Before
-    @SuppressWarnings("unchecked")
     public void setUp() {
         executor = new UdmUsageChainExecutor();
         udmMatchingProcessor = createMock(IChainProcessor.class);
         udmRightsProcessor = createMock(IChainProcessor.class);
         Whitebox.setInternalState(executor, "chunkSize", 1);
         Whitebox.setInternalState(executor, "udmProcessor", udmMatchingProcessor);
-        executor.postConstruct();
     }
 
     @Test

@@ -15,9 +15,6 @@
     <import resource="classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-chain-usage-processors-context.xml"/>
     <import resource="classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-chain-udm-usage-processors-context.xml"/>
 
-    <bean id="executorService" class="java.util.concurrent.Executors" factory-method="newSingleThreadExecutor"
-          destroy-method="shutdownNow"/>
-
     <bean id="df.service.rmsCacheService" class="com.copyright.rup.dist.foreign.integration.rms.impl.RmsRightsCacheService">
         <constructor-arg ref="dist.common.integration.rmsRightsService"/>
         <constructor-arg value="$RUP{dist.foreign.rest.rms.ttl.minutes}"/>

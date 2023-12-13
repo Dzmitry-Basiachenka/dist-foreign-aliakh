@@ -72,13 +72,10 @@
 
     <bean id="rightsholderRepository" class="com.copyright.rup.dist.foreign.repository.impl.RightsholderRepository"/>
 
-    <bean id="executorService" class="org.apache.camel.util.concurrent.SynchronousExecutorService"/>
-
-    <bean id="rightsholderService" class="com.copyright.rup.dist.foreign.service.impl.RightsholderService">
+    <bean id="rightsholderService" class="com.copyright.rup.dist.foreign.service.impl.mock.RightsholderServiceMock">
         <constructor-arg ref="rightsholderRepository"/>
         <constructor-arg ref="dist.common.integration.rest.prmRightsholderAsyncService"/>
         <constructor-arg ref="dist.common.integration.rest.prmRightsholderOrganizationAsyncService"/>
-        <constructor-arg ref="executorService"/>
     </bean>
 
     <import resource="classpath:/com/copyright/rup/dist/common/test/mock/aws/dist-common-sqs-test-context.xml"/>
