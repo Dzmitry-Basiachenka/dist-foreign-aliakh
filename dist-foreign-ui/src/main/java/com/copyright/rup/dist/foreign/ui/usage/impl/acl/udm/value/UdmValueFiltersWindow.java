@@ -485,7 +485,7 @@ public class UdmValueFiltersWindow extends CommonAclFiltersWindow {
     }
 
     private void bindStringField(TextField textField, ComboBox<FilterOperatorEnum> operatorComboBox,
-                                 Function<UdmValueFilter, FilterExpression<String>> getter, Integer maxLength) {
+                                 Function<UdmValueFilter, FilterExpression<String>> getter, int maxLength) {
         filterBinder.forField(textField)
             .withValidator(getTextStringLengthValidator(maxLength))
             .bind(filter -> Objects.toString(getter.apply(filter).getFieldFirstValue(), StringUtils.EMPTY),
@@ -498,7 +498,7 @@ public class UdmValueFiltersWindow extends CommonAclFiltersWindow {
     private void bindBetweenLongFields(TextField fromField, TextField toField,
                                        ComboBox<FilterOperatorEnum> operatorComboBox,
                                        Function<UdmValueFilter, FilterExpression<Number>> getter,
-                                       String fromFieldName, Integer maxLength) {
+                                       String fromFieldName, int maxLength) {
         filterBinder.forField(fromField)
             .withValidator(getNumberStringLengthValidator(maxLength))
             .withValidator(new NumericValidator())

@@ -492,8 +492,7 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
                 NUMBER_VALIDATION_MESSAGE)
             .withValidator(new AmountValidator())
             .bind(fromBigDecimalToMoneyString(UdmValueDto::getPrice),
-                (bean, value) -> bean.setPrice(StringUtils.isNotBlank(value)
-                    ? NumberUtils.createBigDecimal(value.trim()) : null));
+                fromStringToBigDecimal(UdmValueDto::setPrice));
         priceField.addValueChangeListener(event -> {
             binder.validate();
             fieldToValueChangesMap.updateFieldValue(fieldName, event.getValue().trim());
@@ -625,8 +624,7 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
                 NUMBER_VALIDATION_MESSAGE)
             .withValidator(new AmountZeroValidator())
             .bind(fromBigDecimalToMoneyString(UdmValueDto::getContent),
-                (bean, value) -> bean.setContent(StringUtils.isNotBlank(value)
-                    ? NumberUtils.createBigDecimal(value.trim()) : null));
+                fromStringToBigDecimal(UdmValueDto::setContent));
         contentField.addValueChangeListener(event -> {
             binder.validate();
             fieldToValueChangesMap.updateFieldValue(fieldName, event.getValue().trim());

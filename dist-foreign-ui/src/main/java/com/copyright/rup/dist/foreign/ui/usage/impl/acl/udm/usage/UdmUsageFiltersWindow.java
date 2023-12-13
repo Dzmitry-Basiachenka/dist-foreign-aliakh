@@ -557,7 +557,7 @@ public class UdmUsageFiltersWindow extends CommonAclFiltersWindow {
     }
 
     private void bindStringField(TextField textField, Function<UdmUsageFilter, FilterExpression<String>> getter,
-                                 Integer maxLength) {
+                                 int maxLength) {
         filterBinder.forField(textField)
             .withValidator(getTextStringLengthValidator(maxLength))
             .bind(filter -> getter.apply(filter).getFieldFirstValue(),
@@ -567,7 +567,7 @@ public class UdmUsageFiltersWindow extends CommonAclFiltersWindow {
     private void bindBetweenLongFields(TextField fromField, TextField toField,
                                        ComboBox<FilterOperatorEnum> operatorComboBox,
                                        Function<UdmUsageFilter, FilterExpression<Number>> getter,
-                                       String fromFieldName, Integer maxLength) {
+                                       String fromFieldName, int maxLength) {
         filterBinder.forField(fromField)
             .withValidator(getNumberStringLengthValidator(maxLength))
             .withValidator(new NumericValidator())
