@@ -191,7 +191,8 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
     private ComponentContainer initRootLayout() {
         VerticalLayout rootLayout = new VerticalLayout();
         VerticalLayout editFieldsLayout = new VerticalLayout();
-        editFieldsLayout.addComponents(new HorizontalLayout(initLeftColumn(), initRightColumn()));
+        editFieldsLayout.addComponents(new HorizontalLayout(new LeftColumnBuilder().build(),
+            new RightColumnBuilder().build()));
         Panel panel = new Panel(editFieldsLayout);
         panel.setSizeFull();
         editFieldsLayout.setMargin(false);
@@ -205,98 +206,6 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
         binder.validate();
         binder.addValueChangeListener(event -> saveButton.setEnabled(binder.hasChanges()));
         return rootLayout;
-    }
-
-    private VerticalLayout initLeftColumn() {
-        return buildVerticalLayoutWithFixedWidth(
-            new Panel(ForeignUi.getMessage("label.work_information"), new VerticalLayout(
-                buildReadOnlyLayout("label.system_title", UdmValueDto::getSystemTitle, binder),
-                buildReadOnlyLayout("label.wr_wrk_inst", bean -> Objects.toString(bean.getWrWrkInst()), binder),
-                buildReadOnlyLayout("label.system_standard_number", UdmValueDto::getSystemStandardNumber, binder),
-                buildReadOnlyLayout("label.rh_name", UdmValueDto::getRhName, binder),
-                buildReadOnlyLayout("label.rh_account_number",
-                    bean -> Objects.toString(bean.getRhAccountNumber()), binder)
-            )),
-            new Panel(ForeignUi.getMessage("label.price"), new VerticalLayout(
-                buildPriceLayout(),
-                buildCurrencyLayout(),
-                buildReadOnlyLayout(currencyExchangeRateField, "label.currency_exchange_rate",
-                    fromBigDecimalToString(UdmValueDto::getCurrencyExchangeRate),
-                    fromStringToBigDecimal(UdmValueDto::setCurrencyExchangeRate)),
-                buildReadOnlyLayout(currencyExchangeRateDateField, "label.currency_exchange_rate_date",
-                    fromLocalDateToString(UdmValueDto::getCurrencyExchangeRateDate),
-                    fromStringToLocalDate(UdmValueDto::setCurrencyExchangeRateDate)),
-                buildReadOnlyLayout(priceInUsdField, "label.price_in_usd",
-                    fromBigDecimalToMoneyString(UdmValueDto::getPriceInUsd),
-                    fromStringToBigDecimal(UdmValueDto::setPriceInUsd)),
-                buildPriceTypeLayout(),
-                buildPriceAccessTypeLayout(),
-                buildPriceYearLayout(),
-                buildPriceSourceLayout(),
-                buildEditableStringLayout(priceCommentField, "label.price_comment", 1000,
-                    UdmValueDto::getPriceComment, UdmValueDto::setPriceComment,
-                    "udm-value-edit-price-comment-field"),
-                buildReadOnlyLayout(priceFlagField, "label.price_flag",
-                    fromBooleanToYNString(UdmValueDto::isPriceFlag),
-                    fromYNStringToBoolean(UdmValueDto::setPriceFlag)),
-                buildReadOnlyLayout("label.last_price_in_usd",
-                    fromBigDecimalToMoneyString(UdmValueDto::getLastPriceInUsd), binder),
-                buildReadOnlyLayout("label.last_price_source", UdmValueDto::getLastPriceSource, binder),
-                buildReadOnlyLayout("label.last_price_comment", UdmValueDto::getLastPriceComment, binder),
-                buildReadOnlyLayout("label.last_price_flag",
-                    fromBooleanToYNString(UdmValueDto::isLastPriceFlag), binder),
-                buildClearPriceSectionLayout()
-            ))
-        );
-    }
-
-    private VerticalLayout initRightColumn() {
-        return buildVerticalLayoutWithFixedWidth(
-            new Panel(ForeignUi.getMessage("label.general"), new VerticalLayout(
-                buildReadOnlyLayout("label.value_period", bean -> Objects.toString(bean.getValuePeriod()), binder),
-                buildReadOnlyLayout("label.last_value_period",
-                    bean -> Objects.toString(bean.getLastValuePeriod(), StringUtils.EMPTY), binder),
-                buildReadOnlyLayout("label.assignee", UdmValueDto::getAssignee, binder),
-                initValueStatusLayout()
-            )),
-            new Panel(ForeignUi.getMessage("label.publication_type"), new VerticalLayout(
-                buildPubTypeLayout(),
-                buildReadOnlyLayout("label.last_pub_type", UdmValueDto::getLastPubType, binder)
-            )),
-            new Panel(ForeignUi.getMessage("label.content"), new VerticalLayout(
-                buildContentLayout(),
-                buildContentSourceLayout(),
-                buildEditableStringLayout(contentCommentField, "label.content_comment", 1000,
-                    UdmValueDto::getContentComment, UdmValueDto::setContentComment,
-                    "udm-value-edit-content-comment-field"),
-                buildReadOnlyLayout(contentFlagField, "label.content_flag",
-                    fromBooleanToYNString(UdmValueDto::isContentFlag),
-                    fromYNStringToBoolean(UdmValueDto::setContentFlag)),
-                buildReadOnlyLayout("label.last_content",
-                    fromBigDecimalToMoneyString(UdmValueDto::getLastContent), binder),
-                buildReadOnlyLayout("label.last_content_source", UdmValueDto::getLastContentSource, binder),
-                buildReadOnlyLayout("label.last_content_comment", UdmValueDto::getLastContentComment, binder),
-                buildReadOnlyLayout("label.last_content_flag",
-                    fromBooleanToYNString(UdmValueDto::isLastContentFlag), binder),
-                buildContentUnitPriceLayout(contentUnitPriceField,
-                    fromBigDecimalToMoneyString(UdmValueDto::getContentUnitPrice),
-                    fromStringToBigDecimal(UdmValueDto::setContentUnitPrice)),
-                buildContentUnitPriceFlagLayout(contentUnitPriceFlagField,
-                    fromBooleanToYNString(UdmValueDto::isContentUnitPriceFlag),
-                    fromYNStringToBoolean(UdmValueDto::setContentUnitPriceFlag)),
-                initContentButtonsLayout()
-            )),
-            new Panel(ForeignUi.getMessage("label.comment"), new VerticalLayout(
-                buildEditableStringLayout(commentField, "label.comment", 1000,
-                    UdmValueDto::getComment, UdmValueDto::setComment,
-                    "udm-value-edit-comment-field"),
-                buildReadOnlyLayout("label.last_comment", UdmValueDto::getLastComment, binder)
-            )),
-            new Panel(new VerticalLayout(
-                buildReadOnlyLayout("label.updated_by", UdmValueDto::getUpdateUser, binder),
-                buildReadOnlyLayout("label.updated_date", toShortFormat(UdmValueDto::getUpdateDate), binder)
-            ))
-        );
     }
 
     private VerticalLayout initContentButtonsLayout() {
@@ -651,5 +560,103 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
                 (value, fieldValue) -> value.setContentSource(StringUtils.trimToNull(fieldValue)));
         VaadinUtils.addComponentStyle(contentSourceField, "udm-value-edit-content-source-field");
         return buildCommonLayout(contentSourceField, fieldName);
+    }
+
+    private class LeftColumnBuilder {
+
+        private VerticalLayout build() {
+            return buildVerticalLayoutWithFixedWidth(
+                new Panel(ForeignUi.getMessage("label.work_information"), new VerticalLayout(
+                    buildReadOnlyLayout("label.system_title", UdmValueDto::getSystemTitle, binder),
+                    buildReadOnlyLayout("label.wr_wrk_inst", bean -> Objects.toString(bean.getWrWrkInst()), binder),
+                    buildReadOnlyLayout("label.system_standard_number", UdmValueDto::getSystemStandardNumber, binder),
+                    buildReadOnlyLayout("label.rh_name", UdmValueDto::getRhName, binder),
+                    buildReadOnlyLayout("label.rh_account_number",
+                        bean -> Objects.toString(bean.getRhAccountNumber()), binder)
+                )),
+                new Panel(ForeignUi.getMessage("label.price"), new VerticalLayout(
+                    buildPriceLayout(),
+                    buildCurrencyLayout(),
+                    buildReadOnlyLayout(currencyExchangeRateField, "label.currency_exchange_rate",
+                        fromBigDecimalToString(UdmValueDto::getCurrencyExchangeRate),
+                        fromStringToBigDecimal(UdmValueDto::setCurrencyExchangeRate)),
+                    buildReadOnlyLayout(currencyExchangeRateDateField, "label.currency_exchange_rate_date",
+                        fromLocalDateToString(UdmValueDto::getCurrencyExchangeRateDate),
+                        fromStringToLocalDate(UdmValueDto::setCurrencyExchangeRateDate)),
+                    buildReadOnlyLayout(priceInUsdField, "label.price_in_usd",
+                        fromBigDecimalToMoneyString(UdmValueDto::getPriceInUsd),
+                        fromStringToBigDecimal(UdmValueDto::setPriceInUsd)),
+                    buildPriceTypeLayout(),
+                    buildPriceAccessTypeLayout(),
+                    buildPriceYearLayout(),
+                    buildPriceSourceLayout(),
+                    buildEditableStringLayout(priceCommentField, "label.price_comment", 1000,
+                        UdmValueDto::getPriceComment, UdmValueDto::setPriceComment,
+                        "udm-value-edit-price-comment-field"),
+                    buildReadOnlyLayout(priceFlagField, "label.price_flag",
+                        fromBooleanToYNString(UdmValueDto::isPriceFlag),
+                        fromYNStringToBoolean(UdmValueDto::setPriceFlag)),
+                    buildReadOnlyLayout("label.last_price_in_usd",
+                        fromBigDecimalToMoneyString(UdmValueDto::getLastPriceInUsd), binder),
+                    buildReadOnlyLayout("label.last_price_source", UdmValueDto::getLastPriceSource, binder),
+                    buildReadOnlyLayout("label.last_price_comment", UdmValueDto::getLastPriceComment, binder),
+                    buildReadOnlyLayout("label.last_price_flag",
+                        fromBooleanToYNString(UdmValueDto::isLastPriceFlag), binder),
+                    buildClearPriceSectionLayout()
+                ))
+            );
+        }
+    }
+
+    private class RightColumnBuilder {
+
+        private VerticalLayout build() {
+            return buildVerticalLayoutWithFixedWidth(
+                new Panel(ForeignUi.getMessage("label.general"), new VerticalLayout(
+                    buildReadOnlyLayout("label.value_period", bean -> Objects.toString(bean.getValuePeriod()), binder),
+                    buildReadOnlyLayout("label.last_value_period",
+                        bean -> Objects.toString(bean.getLastValuePeriod(), StringUtils.EMPTY), binder),
+                    buildReadOnlyLayout("label.assignee", UdmValueDto::getAssignee, binder),
+                    initValueStatusLayout()
+                )),
+                new Panel(ForeignUi.getMessage("label.publication_type"), new VerticalLayout(
+                    buildPubTypeLayout(),
+                    buildReadOnlyLayout("label.last_pub_type", UdmValueDto::getLastPubType, binder)
+                )),
+                new Panel(ForeignUi.getMessage("label.content"), new VerticalLayout(
+                    buildContentLayout(),
+                    buildContentSourceLayout(),
+                    buildEditableStringLayout(contentCommentField, "label.content_comment", 1000,
+                        UdmValueDto::getContentComment, UdmValueDto::setContentComment,
+                        "udm-value-edit-content-comment-field"),
+                    buildReadOnlyLayout(contentFlagField, "label.content_flag",
+                        fromBooleanToYNString(UdmValueDto::isContentFlag),
+                        fromYNStringToBoolean(UdmValueDto::setContentFlag)),
+                    buildReadOnlyLayout("label.last_content",
+                        fromBigDecimalToMoneyString(UdmValueDto::getLastContent), binder),
+                    buildReadOnlyLayout("label.last_content_source", UdmValueDto::getLastContentSource, binder),
+                    buildReadOnlyLayout("label.last_content_comment", UdmValueDto::getLastContentComment, binder),
+                    buildReadOnlyLayout("label.last_content_flag",
+                        fromBooleanToYNString(UdmValueDto::isLastContentFlag), binder),
+                    buildContentUnitPriceLayout(contentUnitPriceField,
+                        fromBigDecimalToMoneyString(UdmValueDto::getContentUnitPrice),
+                        fromStringToBigDecimal(UdmValueDto::setContentUnitPrice)),
+                    buildContentUnitPriceFlagLayout(contentUnitPriceFlagField,
+                        fromBooleanToYNString(UdmValueDto::isContentUnitPriceFlag),
+                        fromYNStringToBoolean(UdmValueDto::setContentUnitPriceFlag)),
+                    initContentButtonsLayout()
+                )),
+                new Panel(ForeignUi.getMessage("label.comment"), new VerticalLayout(
+                    buildEditableStringLayout(commentField, "label.comment", 1000,
+                        UdmValueDto::getComment, UdmValueDto::setComment,
+                        "udm-value-edit-comment-field"),
+                    buildReadOnlyLayout("label.last_comment", UdmValueDto::getLastComment, binder)
+                )),
+                new Panel(new VerticalLayout(
+                    buildReadOnlyLayout("label.updated_by", UdmValueDto::getUpdateUser, binder),
+                    buildReadOnlyLayout("label.updated_date", toShortFormat(UdmValueDto::getUpdateDate), binder)
+                ))
+            );
+        }
     }
 }
