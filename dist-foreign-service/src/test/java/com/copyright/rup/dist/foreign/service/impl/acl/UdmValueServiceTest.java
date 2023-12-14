@@ -73,9 +73,7 @@ public class UdmValueServiceTest {
         udmValueAuditService = createMock(IUdmValueAuditService.class);
         udmBaselineRepository = createMock(IUdmBaselineRepository.class);
         rightsService = createMock(IRightsService.class);
-        udmValueService = new UdmValueService();
-        Whitebox.setInternalState(udmValueService, "currencyCodesToCurrencyNamesMap",
-            ImmutableMap.of("USD", "US Dollar", "EUR", "Euro"));
+        udmValueService = new UdmValueService(ImmutableMap.of("USD", "US Dollar", "EUR", "Euro"));
         Whitebox.setInternalState(udmValueService, udmValueRepository);
         Whitebox.setInternalState(udmValueService, udmValueAuditService);
         Whitebox.setInternalState(udmValueService, udmBaselineRepository);
