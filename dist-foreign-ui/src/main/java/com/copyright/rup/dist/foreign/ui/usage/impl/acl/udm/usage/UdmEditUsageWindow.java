@@ -128,7 +128,7 @@ public class UdmEditUsageWindow extends CommonUdmUsageWindow implements IDateFor
         VerticalLayout rootLayout = new VerticalLayout();
         VerticalLayout editFieldsLayout = new VerticalLayout();
         editFieldsLayout.addComponents(hasResearcherPermission
-            ? getComponentsForResearcher() : getComponentsForSpecialistAndManager());
+            ? new ResearcherComponentsBuilder().build() : new SpecialistAndManagerComponentsBuilder().build());
         Panel panel = new Panel(editFieldsLayout);
         panel.setSizeFull();
         editFieldsLayout.setMargin(new MarginInfo(true));
@@ -142,98 +142,6 @@ public class UdmEditUsageWindow extends CommonUdmUsageWindow implements IDateFor
         binder.validate();
         binder.addValueChangeListener(event -> saveButton.setEnabled(binder.hasChanges()));
         return rootLayout;
-    }
-
-    private Component[] getComponentsForResearcher() {
-        udmUsageFieldsBeforeChanges = new UdmUsageFieldsForStatusValidation(udmUsage.getWrWrkInst());
-        return new Component[]{
-            buildReadOnlyLayout("label.detail_id", UdmUsageDto::getId, binder),
-            buildReadOnlyLayout("label.period", usage -> Objects.toString(usage.getPeriod()), binder),
-            buildReadOnlyLayout("label.usage_detail_id", UdmUsageDto::getOriginalDetailId, binder),
-            initDetailStatusLayout(),
-            buildReadOnlyLayout("label.assignee", UdmUsageDto::getAssignee, binder),
-            buildReadOnlyLayout("label.rh_account_number",
-                usage -> Objects.toString(usage.getRhAccountNumber(), StringUtils.EMPTY), binder),
-            buildReadOnlyLayout("label.rh_name", UdmUsageDto::getRhName, binder),
-            buildWrWrkInstLayout(),
-            buildReadOnlyLayout("label.reported_title", UdmUsageDto::getReportedTitle, binder),
-            buildReadOnlyLayout("label.system_title", UdmUsageDto::getSystemTitle, binder),
-            buildReadOnlyLayout("label.reported_standard_number", UdmUsageDto::getReportedStandardNumber, binder),
-            buildReadOnlyLayout("label.standard_number", UdmUsageDto::getStandardNumber, binder),
-            buildReadOnlyLayout("label.reported_pub_type", UdmUsageDto::getReportedPubType, binder),
-            buildReadOnlyLayout("label.publication_format", UdmUsageDto::getPubFormat, binder),
-            buildReadOnlyLayout("label.article", UdmUsageDto::getArticle, binder),
-            buildReadOnlyLayout("label.language", UdmUsageDto::getLanguage, binder),
-            initActionReasonLayout(),
-            buildEditableStringLayout(commentField, "label.comment", 4000, UdmUsageDto::getComment,
-                UdmUsageDto::setComment, "udm-edit-comment-field"),
-            buildEditableStringLayout(researchUrlField, "label.research_url", 1000, UdmUsageDto::getResearchUrl,
-                UdmUsageDto::setResearchUrl, "udm-edit-research-url-field"),
-            buildReadOnlyLayout("label.det_lc", buildDetailLicenseeClassValueProvider(), binder),
-            buildReadOnlyLayout("label.channel", buildEnumNameValueProvider(UdmUsageDto::getChannel), binder),
-            buildReadOnlyLayout("label.usage_date", toShortFormat(UdmUsageDto::getUsageDate), binder),
-            buildReadOnlyLayout("label.survey_start_date", toShortFormat(UdmUsageDto::getSurveyStartDate), binder),
-            buildReadOnlyLayout("label.survey_end_date", toShortFormat(UdmUsageDto::getSurveyEndDate), binder),
-            buildReadOnlyLayout("label.reported_tou", UdmUsageDto::getReportedTypeOfUse, binder),
-            buildReadOnlyLayout("label.ineligible_reason", buildIneligibleReasonValueProvider(), binder),
-            buildReadOnlyLayout("label.load_date", toShortFormat(UdmUsageDto::getCreateDate), binder),
-            buildReadOnlyLayout("label.updated_by", UdmUsageDto::getUpdateUser, binder),
-            buildReadOnlyLayout("label.updated_date", toShortFormat(UdmUsageDto::getUpdateDate), binder)
-        };
-    }
-
-    private Component[] getComponentsForSpecialistAndManager() {
-        udmUsageFieldsBeforeChanges = new UdmUsageFieldsForStatusValidation(udmUsage.getWrWrkInst(),
-            udmUsage.getReportedTitle(), udmUsage.getReportedStandardNumber());
-        return new Component[]{
-            buildReadOnlyLayout("label.detail_id", UdmUsageDto::getId, binder),
-            buildReadOnlyLayout("label.period", usage -> Objects.toString(usage.getPeriod()), binder),
-            buildReadOnlyLayout("label.usage_origin", buildEnumNameValueProvider(UdmUsageDto::getUsageOrigin), binder),
-            buildReadOnlyLayout("label.usage_detail_id", UdmUsageDto::getOriginalDetailId, binder),
-            initDetailStatusLayout(),
-            buildReadOnlyLayout("label.assignee", UdmUsageDto::getAssignee, binder),
-            buildReadOnlyLayout("label.rh_account_number",
-                usage -> Objects.toString(usage.getRhAccountNumber(), StringUtils.EMPTY), binder),
-            buildReadOnlyLayout("label.rh_name", UdmUsageDto::getRhName, binder),
-            buildWrWrkInstLayout(),
-            buildEditableStringLayoutWithValidation(reportedTitleField, "label.reported_title", 1000,
-                UdmUsageDto::getReportedTitle,
-                UdmUsageDto::setReportedTitle, "udm-edit-reported-title-field"),
-            buildReadOnlyLayout("label.system_title", UdmUsageDto::getSystemTitle, binder),
-            buildEditableStringLayoutWithValidation(reportedStandardNumberField, "label.reported_standard_number", 100,
-                UdmUsageDto::getReportedStandardNumber, UdmUsageDto::setReportedStandardNumber,
-                "udm-edit-reported-standard-number-field"),
-            buildReadOnlyLayout("label.standard_number", UdmUsageDto::getStandardNumber, binder),
-            buildEditableStringLayout(reportedPubTypeField, "label.reported_pub_type", 100,
-                UdmUsageDto::getReportedPubType, UdmUsageDto::setReportedPubType, "udm-edit-reported-pub-type-field"),
-            buildReadOnlyLayout("label.publication_format", UdmUsageDto::getPubFormat, binder),
-            buildReadOnlyLayout("label.article", UdmUsageDto::getArticle, binder),
-            buildReadOnlyLayout("label.language", UdmUsageDto::getLanguage, binder),
-            initActionReasonLayout(),
-            buildEditableStringLayout(commentField, "label.comment", 4000, UdmUsageDto::getComment,
-                UdmUsageDto::setComment, "udm-edit-comment-field"),
-            buildEditableStringLayout(researchUrlField, "label.research_url", 1000, UdmUsageDto::getResearchUrl,
-                UdmUsageDto::setResearchUrl, "udm-edit-research-url-field"),
-            buildCompanyLayout(),
-            buildCompanyNameLayout(),
-            initDetailLicenseeClassLayout(),
-            buildReadOnlyLayout("label.survey_respondent", UdmUsageDto::getSurveyRespondent, binder),
-            buildReadOnlyLayout("label.ip_address", UdmUsageDto::getIpAddress, binder),
-            buildReadOnlyLayout("label.survey_country", UdmUsageDto::getSurveyCountry, binder),
-            buildReadOnlyLayout("label.channel", buildEnumNameValueProvider(UdmUsageDto::getChannel), binder),
-            buildReadOnlyLayout("label.usage_date", toShortFormat(UdmUsageDto::getUsageDate), binder),
-            buildReadOnlyLayout("label.survey_start_date", toShortFormat(UdmUsageDto::getSurveyStartDate), binder),
-            buildReadOnlyLayout("label.survey_end_date", toShortFormat(UdmUsageDto::getSurveyEndDate), binder),
-            buildAnnualMultiplierLayout(),
-            buildStatisticalMultiplier(),
-            buildReadOnlyLayout("label.reported_tou", UdmUsageDto::getReportedTypeOfUse, binder),
-            buildQuantityLayout(),
-            buildAnnualizedCopiesField(),
-            initIneligibleReasonLayout(),
-            buildReadOnlyLayout("label.load_date", toShortFormat(UdmUsageDto::getCreateDate), binder),
-            buildReadOnlyLayout("label.updated_by", UdmUsageDto::getUpdateUser, binder),
-            buildReadOnlyLayout("label.updated_date", toShortFormat(UdmUsageDto::getUpdateDate), binder)
-        };
     }
 
     private HorizontalLayout buildEditableStringLayout(TextField textField, String caption, int maxLength,
@@ -626,6 +534,106 @@ public class UdmEditUsageWindow extends CommonUdmUsageWindow implements IDateFor
                 .append("reportedTitle", reportedTitle)
                 .append("reportedStandardNumber", reportedStandardNumber)
                 .toString();
+        }
+    }
+
+    private class ResearcherComponentsBuilder {
+
+        private Component[] build() {
+            udmUsageFieldsBeforeChanges = new UdmUsageFieldsForStatusValidation(udmUsage.getWrWrkInst());
+            return new Component[]{
+                buildReadOnlyLayout("label.detail_id", UdmUsageDto::getId, binder),
+                buildReadOnlyLayout("label.period", usage -> Objects.toString(usage.getPeriod()), binder),
+                buildReadOnlyLayout("label.usage_detail_id", UdmUsageDto::getOriginalDetailId, binder),
+                initDetailStatusLayout(),
+                buildReadOnlyLayout("label.assignee", UdmUsageDto::getAssignee, binder),
+                buildReadOnlyLayout("label.rh_account_number",
+                    usage -> Objects.toString(usage.getRhAccountNumber(), StringUtils.EMPTY), binder),
+                buildReadOnlyLayout("label.rh_name", UdmUsageDto::getRhName, binder),
+                buildWrWrkInstLayout(),
+                buildReadOnlyLayout("label.reported_title", UdmUsageDto::getReportedTitle, binder),
+                buildReadOnlyLayout("label.system_title", UdmUsageDto::getSystemTitle, binder),
+                buildReadOnlyLayout("label.reported_standard_number", UdmUsageDto::getReportedStandardNumber, binder),
+                buildReadOnlyLayout("label.standard_number", UdmUsageDto::getStandardNumber, binder),
+                buildReadOnlyLayout("label.reported_pub_type", UdmUsageDto::getReportedPubType, binder),
+                buildReadOnlyLayout("label.publication_format", UdmUsageDto::getPubFormat, binder),
+                buildReadOnlyLayout("label.article", UdmUsageDto::getArticle, binder),
+                buildReadOnlyLayout("label.language", UdmUsageDto::getLanguage, binder),
+                initActionReasonLayout(),
+                buildEditableStringLayout(commentField, "label.comment", 4000, UdmUsageDto::getComment,
+                    UdmUsageDto::setComment, "udm-edit-comment-field"),
+                buildEditableStringLayout(researchUrlField, "label.research_url", 1000, UdmUsageDto::getResearchUrl,
+                    UdmUsageDto::setResearchUrl, "udm-edit-research-url-field"),
+                buildReadOnlyLayout("label.det_lc", buildDetailLicenseeClassValueProvider(), binder),
+                buildReadOnlyLayout("label.channel", buildEnumNameValueProvider(UdmUsageDto::getChannel), binder),
+                buildReadOnlyLayout("label.usage_date", toShortFormat(UdmUsageDto::getUsageDate), binder),
+                buildReadOnlyLayout("label.survey_start_date", toShortFormat(UdmUsageDto::getSurveyStartDate), binder),
+                buildReadOnlyLayout("label.survey_end_date", toShortFormat(UdmUsageDto::getSurveyEndDate), binder),
+                buildReadOnlyLayout("label.reported_tou", UdmUsageDto::getReportedTypeOfUse, binder),
+                buildReadOnlyLayout("label.ineligible_reason", buildIneligibleReasonValueProvider(), binder),
+                buildReadOnlyLayout("label.load_date", toShortFormat(UdmUsageDto::getCreateDate), binder),
+                buildReadOnlyLayout("label.updated_by", UdmUsageDto::getUpdateUser, binder),
+                buildReadOnlyLayout("label.updated_date", toShortFormat(UdmUsageDto::getUpdateDate), binder)
+            };
+        }
+    }
+
+    private class SpecialistAndManagerComponentsBuilder {
+
+        private Component[] build() {
+            udmUsageFieldsBeforeChanges = new UdmUsageFieldsForStatusValidation(udmUsage.getWrWrkInst(),
+                udmUsage.getReportedTitle(), udmUsage.getReportedStandardNumber());
+            return new Component[]{
+                buildReadOnlyLayout("label.detail_id", UdmUsageDto::getId, binder),
+                buildReadOnlyLayout("label.period", usage -> Objects.toString(usage.getPeriod()), binder),
+                buildReadOnlyLayout("label.usage_origin",
+                    buildEnumNameValueProvider(UdmUsageDto::getUsageOrigin), binder),
+                buildReadOnlyLayout("label.usage_detail_id", UdmUsageDto::getOriginalDetailId, binder),
+                initDetailStatusLayout(),
+                buildReadOnlyLayout("label.assignee", UdmUsageDto::getAssignee, binder),
+                buildReadOnlyLayout("label.rh_account_number",
+                    usage -> Objects.toString(usage.getRhAccountNumber(), StringUtils.EMPTY), binder),
+                buildReadOnlyLayout("label.rh_name", UdmUsageDto::getRhName, binder),
+                buildWrWrkInstLayout(),
+                buildEditableStringLayoutWithValidation(reportedTitleField, "label.reported_title", 1000,
+                    UdmUsageDto::getReportedTitle, UdmUsageDto::setReportedTitle,
+                    "udm-edit-reported-title-field"),
+                buildReadOnlyLayout("label.system_title", UdmUsageDto::getSystemTitle, binder),
+                buildEditableStringLayoutWithValidation(reportedStandardNumberField, "label.reported_standard_number",
+                    100, UdmUsageDto::getReportedStandardNumber, UdmUsageDto::setReportedStandardNumber,
+                    "udm-edit-reported-standard-number-field"),
+                buildReadOnlyLayout("label.standard_number", UdmUsageDto::getStandardNumber, binder),
+                buildEditableStringLayout(reportedPubTypeField, "label.reported_pub_type", 100,
+                    UdmUsageDto::getReportedPubType, UdmUsageDto::setReportedPubType,
+                    "udm-edit-reported-pub-type-field"),
+                buildReadOnlyLayout("label.publication_format", UdmUsageDto::getPubFormat, binder),
+                buildReadOnlyLayout("label.article", UdmUsageDto::getArticle, binder),
+                buildReadOnlyLayout("label.language", UdmUsageDto::getLanguage, binder),
+                initActionReasonLayout(),
+                buildEditableStringLayout(commentField, "label.comment", 4000,
+                    UdmUsageDto::getComment, UdmUsageDto::setComment, "udm-edit-comment-field"),
+                buildEditableStringLayout(researchUrlField, "label.research_url", 1000,
+                    UdmUsageDto::getResearchUrl, UdmUsageDto::setResearchUrl, "udm-edit-research-url-field"),
+                buildCompanyLayout(),
+                buildCompanyNameLayout(),
+                initDetailLicenseeClassLayout(),
+                buildReadOnlyLayout("label.survey_respondent", UdmUsageDto::getSurveyRespondent, binder),
+                buildReadOnlyLayout("label.ip_address", UdmUsageDto::getIpAddress, binder),
+                buildReadOnlyLayout("label.survey_country", UdmUsageDto::getSurveyCountry, binder),
+                buildReadOnlyLayout("label.channel", buildEnumNameValueProvider(UdmUsageDto::getChannel), binder),
+                buildReadOnlyLayout("label.usage_date", toShortFormat(UdmUsageDto::getUsageDate), binder),
+                buildReadOnlyLayout("label.survey_start_date", toShortFormat(UdmUsageDto::getSurveyStartDate), binder),
+                buildReadOnlyLayout("label.survey_end_date", toShortFormat(UdmUsageDto::getSurveyEndDate), binder),
+                buildAnnualMultiplierLayout(),
+                buildStatisticalMultiplier(),
+                buildReadOnlyLayout("label.reported_tou", UdmUsageDto::getReportedTypeOfUse, binder),
+                buildQuantityLayout(),
+                buildAnnualizedCopiesField(),
+                initIneligibleReasonLayout(),
+                buildReadOnlyLayout("label.load_date", toShortFormat(UdmUsageDto::getCreateDate), binder),
+                buildReadOnlyLayout("label.updated_by", UdmUsageDto::getUpdateUser, binder),
+                buildReadOnlyLayout("label.updated_date", toShortFormat(UdmUsageDto::getUpdateDate), binder)
+            };
         }
     }
 }
