@@ -7,6 +7,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -188,7 +189,9 @@ public class Scenario extends StoredEntity<String> {
     /**
      * Represents fields specific for AACL scenario.
      */
-    public static class AaclFields {
+    public static class AaclFields implements Serializable {
+
+        private static final long serialVersionUID = 8405387501973148761L;
 
         private String fundPoolId;
         private List<PublicationType> publicationTypes = new ArrayList<>();
@@ -268,7 +271,9 @@ public class Scenario extends StoredEntity<String> {
     /**
      * Represents fields specific for NTS scenario.
      */
-    public static class NtsFields {
+    public static class NtsFields implements Serializable {
+
+        private static final long serialVersionUID = 672166004447710796L;
 
         private BigDecimal rhMinimumAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
         private BigDecimal preServiceFeeAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
@@ -372,7 +377,9 @@ public class Scenario extends StoredEntity<String> {
     /**
      * Represents fields specific for SAL scenario.
      */
-    public static class SalFields {
+    public static class SalFields implements Serializable {
+
+        private static final long serialVersionUID = -8162708823658064076L;
 
         private String fundPoolId;
 

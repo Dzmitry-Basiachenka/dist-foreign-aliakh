@@ -34,7 +34,7 @@ public class UdmActionReason extends StoredEntity<String> {
      * @param reason action reason
      */
     public UdmActionReason(String id, String reason) {
-        this.setId(id);
+        super.setId(id);
         this.reason = reason;
     }
 

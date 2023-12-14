@@ -38,7 +38,7 @@ public class PublicationType extends StoredEntity<String> {
      * @param pubType instance of {@link PublicationType}
      */
     public PublicationType(PublicationType pubType) {
-        setId(pubType.getId());
+        super.setId(pubType.getId());
         this.name = pubType.getName();
         this.description = pubType.getDescription();
         this.productFamily = pubType.getProductFamily();

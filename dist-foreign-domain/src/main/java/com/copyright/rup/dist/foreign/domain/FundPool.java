@@ -7,6 +7,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Objects;
@@ -175,7 +176,9 @@ public class FundPool extends StoredEntity<String> {
     /**
      * Represents SAL specific fields.
      */
-    public static class SalFields {
+    public static class SalFields implements Serializable {
+
+        private static final long serialVersionUID = 209227786607818508L;
 
         private LocalDate dateReceived;
         private String assessmentName;
@@ -375,7 +378,9 @@ public class FundPool extends StoredEntity<String> {
     /**
      * Represents ACLCI specific fields.
      */
-    public static class AclciFields {
+    public static class AclciFields implements Serializable {
+
+        private static final long serialVersionUID = -8919007425492446262L;
 
         private String coverageYears;
         private long gradeKto2NumberOfStudents;

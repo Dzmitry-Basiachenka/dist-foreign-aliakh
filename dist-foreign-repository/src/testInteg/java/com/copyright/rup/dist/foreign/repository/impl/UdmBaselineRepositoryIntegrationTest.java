@@ -135,9 +135,9 @@ public class UdmBaselineRepositoryIntegrationTest {
     @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindCountByFilterReportedTypeOfUses() {
         verifyFilteringFindCountByFilter(filter ->
-            filter.setReportedTypeOfUses(ImmutableSet.of(REPORTED_TYPE_OF_USE_1)), 1);
+            filter.setReportedTypeOfUses(Set.of(REPORTED_TYPE_OF_USE_1)), 1);
         verifyFilteringFindCountByFilter(filter ->
-            filter.setReportedTypeOfUses(ImmutableSet.of(REPORTED_TYPE_OF_USE_2)), 0);
+            filter.setReportedTypeOfUses(Set.of(REPORTED_TYPE_OF_USE_2)), 0);
     }
 
     @Test

@@ -5,6 +5,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -17,7 +18,9 @@ import java.time.LocalDate;
  *
  * @author Ihar Suvorau
  */
-public class AaclUsage {
+public class AaclUsage implements Serializable {
+
+    private static final long serialVersionUID = -686148016256389579L;
 
     private DetailLicenseeClass detailLicenseeClass = new DetailLicenseeClass();
     private PublicationType publicationType = new PublicationType();

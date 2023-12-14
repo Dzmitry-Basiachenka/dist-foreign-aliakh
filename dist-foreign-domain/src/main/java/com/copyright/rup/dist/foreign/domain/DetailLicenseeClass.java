@@ -19,6 +19,8 @@ import java.util.Objects;
  */
 public class DetailLicenseeClass extends StoredEntity<Integer> {
 
+    private static final long serialVersionUID = -6802698690358904422L;
+
     private String enrollmentProfile;
     private String discipline;
     private String description;
@@ -36,11 +38,11 @@ public class DetailLicenseeClass extends StoredEntity<Integer> {
      * @param detailLicenseeClass instance of {@link DetailLicenseeClass} to copy
      */
     public DetailLicenseeClass(DetailLicenseeClass detailLicenseeClass) {
-        this.setId(detailLicenseeClass.getId());
+        super.setId(detailLicenseeClass.getId());
         this.enrollmentProfile = detailLicenseeClass.getEnrollmentProfile();
         this.discipline = detailLicenseeClass.getDiscipline();
         this.description = detailLicenseeClass.getDescription();
-        AggregateLicenseeClass aggregateLicenseeClassClone = detailLicenseeClass.getAggregateLicenseeClass();
+        var aggregateLicenseeClassClone = detailLicenseeClass.getAggregateLicenseeClass();
         this.aggregateLicenseeClass = Objects.nonNull(aggregateLicenseeClassClone)
             ? new AggregateLicenseeClass(aggregateLicenseeClassClone)
             : null;
@@ -53,7 +55,7 @@ public class DetailLicenseeClass extends StoredEntity<Integer> {
      * @param description description
      */
     public DetailLicenseeClass(Integer id, String description) {
-        this.setId(id);
+        super.setId(id);
         this.description = description;
     }
 
