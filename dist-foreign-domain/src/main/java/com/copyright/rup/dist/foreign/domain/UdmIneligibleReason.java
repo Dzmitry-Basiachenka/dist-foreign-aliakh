@@ -34,7 +34,7 @@ public class UdmIneligibleReason extends StoredEntity<String> {
      * @param reason ineligible reason
      */
     public UdmIneligibleReason(String id, String reason) {
-        this.setId(id);
+        super.setId(id);
         this.reason = reason;
     }
 

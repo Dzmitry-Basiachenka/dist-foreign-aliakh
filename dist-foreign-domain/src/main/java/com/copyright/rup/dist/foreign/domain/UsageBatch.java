@@ -8,6 +8,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -190,7 +191,9 @@ public class UsageBatch extends StoredEntity<String> {
     /**
      * Represents NTS specific fields.
      */
-    public static class NtsFields {
+    public static class NtsFields implements Serializable {
+
+        private static final long serialVersionUID = -3496067088605156453L;
 
         private Integer fundPoolPeriodFrom;
         private Integer fundPoolPeriodTo;
@@ -318,7 +321,9 @@ public class UsageBatch extends StoredEntity<String> {
     /**
      * Represents SAL specific fields.
      */
-    public static class SalFields {
+    public static class SalFields implements Serializable {
+
+        private static final long serialVersionUID = -4023149073249005829L;
 
         private Long licenseeAccountNumber;
         private String licenseeName;
@@ -374,7 +379,9 @@ public class UsageBatch extends StoredEntity<String> {
     /**
      * Represents ACLCI specific fields.
      */
-    public static class AclciFields {
+    public static class AclciFields implements Serializable {
+
+        private static final long serialVersionUID = 380874807509289559L;
 
         private Long licenseeAccountNumber;
         private String licenseeName;

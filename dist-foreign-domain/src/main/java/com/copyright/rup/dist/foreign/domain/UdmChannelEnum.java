@@ -18,5 +18,5 @@ public enum UdmChannelEnum {
     /**
      * Rightsdirect channel.
      */
-    Rightsdirect
+    Rightsdirect;
 }

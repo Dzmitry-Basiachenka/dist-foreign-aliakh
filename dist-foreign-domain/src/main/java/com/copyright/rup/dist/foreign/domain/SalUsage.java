@@ -5,6 +5,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -17,7 +18,9 @@ import java.time.LocalDate;
  *
  * @author Uladzislau Shalamitski
  */
-public class SalUsage {
+public class SalUsage implements Serializable {
+
+    private static final long serialVersionUID = 1032571108344521974L;
 
     private Long licenseeAccountNumber;
     private String licenseeName;

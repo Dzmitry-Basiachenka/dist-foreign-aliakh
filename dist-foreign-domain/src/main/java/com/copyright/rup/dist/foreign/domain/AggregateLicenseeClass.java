@@ -35,7 +35,7 @@ public class AggregateLicenseeClass extends StoredEntity<Integer> {
      * @param aggregateLicenseeClass instance of {@link AggregateLicenseeClass} to copy
      */
     public AggregateLicenseeClass(AggregateLicenseeClass aggregateLicenseeClass) {
-        this.setId(aggregateLicenseeClass.getId());
+        super.setId(aggregateLicenseeClass.getId());
         enrollmentProfile = aggregateLicenseeClass.getEnrollmentProfile();
         discipline = aggregateLicenseeClass.getDiscipline();
         description = aggregateLicenseeClass.getDescription();
