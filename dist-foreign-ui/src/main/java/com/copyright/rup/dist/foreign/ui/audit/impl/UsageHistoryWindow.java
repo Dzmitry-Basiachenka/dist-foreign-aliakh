@@ -26,6 +26,8 @@ import java.util.List;
  */
 public class UsageHistoryWindow extends Window implements IDateFormatter {
 
+    private static final long serialVersionUID = 1549151569542393263L;
+
     /**
      * Constructor.
      *
@@ -33,14 +35,14 @@ public class UsageHistoryWindow extends Window implements IDateFormatter {
      * @param usageAuditItems audit items
      */
     public UsageHistoryWindow(String detailId, List<UsageAuditItem> usageAuditItems) {
-        setCaption(ForeignUi.getMessage("window.usage_history", detailId));
-        setContent(initContent(usageAuditItems));
-        setWidth(700, Unit.PIXELS);
-        setHeight(300, Unit.PIXELS);
+        super.setCaption(ForeignUi.getMessage("window.usage_history", detailId));
+        super.setContent(initContent(usageAuditItems));
+        super.setWidth(700, Unit.PIXELS);
+        super.setHeight(300, Unit.PIXELS);
         VaadinUtils.addComponentStyle(this, "usage-history-window");
     }
 
-    private Grid initGrid(List<UsageAuditItem> usageAuditItems) {
+    private Grid<UsageAuditItem> initGrid(List<UsageAuditItem> usageAuditItems) {
         Grid<UsageAuditItem> grid = new Grid<>();
         grid.setSelectionMode(SelectionMode.NONE);
         grid.setItems(usageAuditItems);
@@ -62,9 +64,9 @@ public class UsageHistoryWindow extends Window implements IDateFormatter {
     }
 
     private VerticalLayout initContent(List<UsageAuditItem> usageAuditItems) {
-        Grid grid = initGrid(usageAuditItems);
+        var grid = initGrid(usageAuditItems);
         Button closeButton = Buttons.createCloseButton(this);
-        VerticalLayout content = new VerticalLayout(grid, closeButton);
+        var content = new VerticalLayout(grid, closeButton);
         content.setComponentAlignment(closeButton, Alignment.BOTTOM_RIGHT);
         content.setMargin(true);
         content.setSpacing(true);

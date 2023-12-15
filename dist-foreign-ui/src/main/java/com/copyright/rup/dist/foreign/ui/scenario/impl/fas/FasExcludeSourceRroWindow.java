@@ -34,6 +34,8 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class FasExcludeSourceRroWindow extends Window implements ISearchController {
 
+    private static final long serialVersionUID = -1083890548488635343L;
+
     private final IFasScenarioController scenarioController;
     private SearchWidget searchWidget;
     private Grid<Rightsholder> grid;
@@ -46,9 +48,9 @@ public class FasExcludeSourceRroWindow extends Window implements ISearchControll
     FasExcludeSourceRroWindow(IFasScenarioController scenarioController) {
         super(ForeignUi.getMessage("label.exclude.rro"));
         this.scenarioController = scenarioController;
-        setWidth(880, Unit.PIXELS);
-        setHeight(500, Unit.PIXELS);
-        setContent(initContent());
+        super.setWidth(880, Unit.PIXELS);
+        super.setHeight(500, Unit.PIXELS);
+        super.setContent(initContent());
     }
 
     @Override

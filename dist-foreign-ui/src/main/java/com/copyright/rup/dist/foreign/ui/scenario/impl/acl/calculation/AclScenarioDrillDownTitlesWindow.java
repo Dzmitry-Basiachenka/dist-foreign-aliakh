@@ -44,6 +44,8 @@ import java.util.stream.Stream;
  */
 public class AclScenarioDrillDownTitlesWindow extends Window implements ISearchController {
 
+    private static final long serialVersionUID = -908278790636631515L;
+
     private static final String STYLE_ALIGN_RIGHT = "v-align-right";
     private static final String WR_WRK_INST_PROPERTY = "wrWrkInst";
     private static final String SYSTEM_TITLE_PROPERTY = "systemTitle";
@@ -71,18 +73,18 @@ public class AclScenarioDrillDownTitlesWindow extends Window implements ISearchC
     public AclScenarioDrillDownTitlesWindow(IAclScenarioController controller, RightsholderResultsFilter filter) {
         this.controller = controller;
         this.filter = filter;
-        setWidth(1280, Unit.PIXELS);
-        setHeight(Objects.nonNull(filter.getAggregateLicenseeClassId()) ? 75 : 85, Unit.PERCENTAGE);
+        super.setWidth(1280, Unit.PIXELS);
+        super.setHeight(Objects.nonNull(filter.getAggregateLicenseeClassId()) ? 75 : 85, Unit.PERCENTAGE);
         searchWidget = new SearchWidget(this);
         searchWidget.setPrompt(ForeignUi.getMessage("field.prompt.view_titles_by_rightsholder.search.acl"));
         initGrid();
-        Button closeButton = Buttons.createCloseButton(this);
-        VerticalLayout content = new VerticalLayout(initMetaInfoLayout(), searchWidget, grid, closeButton);
+        var closeButton = Buttons.createCloseButton(this);
+        var content = new VerticalLayout(initMetaInfoLayout(), searchWidget, grid, closeButton);
         content.setSizeFull();
         content.setExpandRatio(grid, 1);
         content.setComponentAlignment(closeButton, Alignment.BOTTOM_RIGHT);
-        setContent(content);
-        setCaption(ForeignUi.getMessage("window.acl_scenario_drill_down_titles"));
+        super.setContent(content);
+        super.setCaption(ForeignUi.getMessage("window.acl_scenario_drill_down_titles"));
         VaadinUtils.addComponentStyle(this, "acl-scenario-drill-down-titles-window");
     }
 

@@ -29,6 +29,8 @@ import java.util.function.Supplier;
 public class LicenseTypeFilterWidget extends BaseUdmItemsFilterWidget<String>
     implements IFilterWindowController<String> {
 
+    private static final long serialVersionUID = -4595307987935823000L;
+
     private final Supplier<List<String>> supplier;
     private final Set<String> selectedItemsIds = new HashSet<>();
 
@@ -42,7 +44,7 @@ public class LicenseTypeFilterWidget extends BaseUdmItemsFilterWidget<String>
         super(ForeignUi.getMessage("label.license_types"));
         this.supplier = supplier;
         this.selectedItemsIds.addAll(selectedItemsIds);
-        setLabelValue(selectedItemsIds.size());
+        super.setLabelValue(selectedItemsIds.size());
     }
 
     @Override

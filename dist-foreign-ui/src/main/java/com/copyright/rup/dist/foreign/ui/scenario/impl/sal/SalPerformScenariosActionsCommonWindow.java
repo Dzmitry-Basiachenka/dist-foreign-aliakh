@@ -61,11 +61,11 @@ public abstract class SalPerformScenariosActionsCommonWindow extends Window impl
         this.controller = controller;
         this.actionButtonCaption = ForeignUi.getMessage(actionButtonCaptionLabelName);
         this.displayedStatus = displayedStatus;
-        setHeight(400, Unit.PIXELS);
-        setWidth(500, Unit.PIXELS);
-        setResizable(true);
-        setContent(initAndGetContentLayout());
-        setCaption(ForeignUi.getMessage("window.choose_scenarios_to", actionButtonCaption));
+        super.setHeight(400, Unit.PIXELS);
+        super.setWidth(500, Unit.PIXELS);
+        super.setResizable(true);
+        super.setContent(initAndGetContentLayout());
+        super.setCaption(ForeignUi.getMessage("window.choose_scenarios_to", actionButtonCaption));
         VaadinUtils.addComponentStyle(this, "sal-choose-scenarios-window");
     }
 

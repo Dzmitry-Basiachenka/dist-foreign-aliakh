@@ -35,6 +35,8 @@ import java.util.Objects;
  */
 public class NtsScenariosWidget extends CommonScenariosWidget implements INtsScenariosWidget {
 
+    private static final long serialVersionUID = -1899625559383613044L;
+
     private final Button viewButton = Buttons.createButton(ForeignUi.getMessage("button.view"));
     private final Button editNameButton = Buttons.createButton(ForeignUi.getMessage("button.edit_name"));
     private final Button deleteButton = Buttons.createButton(ForeignUi.getMessage("button.delete"));
@@ -63,7 +65,7 @@ public class NtsScenariosWidget extends CommonScenariosWidget implements INtsSce
      */
     NtsScenariosWidget(INtsScenariosController controller, IScenarioHistoryController historyController) {
         super(historyController);
-        setController(controller);
+        super.setController(controller);
         this.controller = controller;
     }
 

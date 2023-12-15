@@ -8,7 +8,6 @@ import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
@@ -25,6 +24,8 @@ import com.vaadin.ui.Window;
  */
 public class ErrorUploadWindow extends Window {
 
+    private static final long serialVersionUID = 1560651189615413754L;
+
     /**
      * Constructor.
      *
@@ -32,26 +33,26 @@ public class ErrorUploadWindow extends Window {
      * @param labelCaption label caption
      */
     public ErrorUploadWindow(IStreamSource streamSource, String labelCaption) {
-        setCaption(ForeignUi.getMessage("window.error"));
-        setWidth(365, Unit.PIXELS);
-        setHeight(150, Unit.PIXELS);
-        setResizable(false);
+        super.setCaption(ForeignUi.getMessage("window.error"));
+        super.setWidth(365, Unit.PIXELS);
+        super.setHeight(150, Unit.PIXELS);
+        super.setResizable(false);
         HorizontalLayout buttonsLayout = buildButtonsLayout(streamSource);
-        Label label = new Label(labelCaption, ContentMode.HTML);
-        VerticalLayout layout = new VerticalLayout(label, buttonsLayout);
+        var label = new Label(labelCaption, ContentMode.HTML);
+        var layout = new VerticalLayout(label, buttonsLayout);
         layout.setMargin(true);
         layout.setSizeFull();
         layout.setComponentAlignment(buttonsLayout, Alignment.MIDDLE_RIGHT);
-        setContent(layout);
+        super.setContent(layout);
         VaadinUtils.addComponentStyle(this, "upload-error-window");
     }
 
     private HorizontalLayout buildButtonsLayout(IStreamSource streamSource) {
-        Button downloadButton = Buttons.createButton(ForeignUi.getMessage("button.download"));
-        OnDemandFileDownloader fileDownloader = new OnDemandFileDownloader(streamSource.getSource());
+        var downloadButton = Buttons.createButton(ForeignUi.getMessage("button.download"));
+        var fileDownloader = new OnDemandFileDownloader(streamSource.getSource());
         fileDownloader.extend(downloadButton);
-        Button closeButton = Buttons.createCloseButton(this);
-        HorizontalLayout buttonsLayout = new HorizontalLayout();
+        var closeButton = Buttons.createCloseButton(this);
+        var buttonsLayout = new HorizontalLayout();
         buttonsLayout.addComponents(downloadButton, closeButton);
         return buttonsLayout;
     }

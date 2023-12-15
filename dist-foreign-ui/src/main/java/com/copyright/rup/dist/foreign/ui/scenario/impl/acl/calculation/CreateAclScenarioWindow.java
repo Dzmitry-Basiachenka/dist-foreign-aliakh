@@ -65,6 +65,7 @@ import java.util.stream.Collectors;
  */
 public class CreateAclScenarioWindow extends Window implements IDateFormatter {
 
+    private static final long serialVersionUID = -3227421558308838235L;
     private static final String EMPTY_FIELD_MESSAGE = "field.error.empty";
 
     private final Binder<AclScenario> scenarioBinder = new Binder<>();
@@ -105,12 +106,12 @@ public class CreateAclScenarioWindow extends Window implements IDateFormatter {
     public CreateAclScenarioWindow(IAclScenariosController controller, ClickListener clickListener) {
         this.controller = controller;
         this.createButtonClickListener = clickListener;
-        setResizable(false);
-        setWidth(400, Unit.PIXELS);
-        setCaption(ForeignUi.getMessage("window.create_scenario"));
+        super.setResizable(false);
+        super.setWidth(400, Unit.PIXELS);
+        super.setCaption(ForeignUi.getMessage("window.create_scenario"));
         initFields();
-        HorizontalLayout buttonsLayout = initButtonsLayout();
-        VerticalLayout layout =
+        var buttonsLayout = initButtonsLayout();
+        var layout =
             new VerticalLayout(scenarioNameField, periodComboBox, licenseTypeComboBox, usageBatchComboBox,
                 fundPoolComboBox, grantSetComboBox, aclCopyFromScenarioComboBox, usageAgeWeightWidget,
                 publicationTypeWeightWidget, licenseeClassMappingWidget, editableCheckBox, descriptionArea,
@@ -119,7 +120,7 @@ public class CreateAclScenarioWindow extends Window implements IDateFormatter {
         layout.setMargin(true);
         layout.setComponentAlignment(buttonsLayout, Alignment.MIDDLE_RIGHT);
         scenarioNameField.focus();
-        setContent(layout);
+        super.setContent(layout);
         VaadinUtils.addComponentStyle(this, "create-acl-scenario-window");
         validate();
     }

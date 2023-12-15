@@ -5,6 +5,7 @@ import com.copyright.rup.dist.foreign.ui.common.utils.IDateFormatter;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.util.VaadinUtils;
+
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
@@ -25,6 +26,8 @@ import java.util.List;
  */
 public class UdmValueHistoryWindow extends Window implements IDateFormatter {
 
+    private static final long serialVersionUID = 1187827921121009110L;
+
     /**
      * Constructor.
      *
@@ -32,10 +35,10 @@ public class UdmValueHistoryWindow extends Window implements IDateFormatter {
      * @param auditItems audit items
      */
     public UdmValueHistoryWindow(String udmValueId, List<UdmValueAuditItem> auditItems) {
-        setCaption(ForeignUi.getMessage("window.udm_value_history", udmValueId));
-        setContent(initContent(auditItems));
-        setWidth(700, Unit.PIXELS);
-        setHeight(300, Unit.PIXELS);
+        super.setCaption(ForeignUi.getMessage("window.udm_value_history", udmValueId));
+        super.setContent(initContent(auditItems));
+        super.setWidth(700, Unit.PIXELS);
+        super.setHeight(300, Unit.PIXELS);
         VaadinUtils.addComponentStyle(this, "udm-value-history-window");
     }
 

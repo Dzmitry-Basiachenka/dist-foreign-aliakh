@@ -14,7 +14,6 @@ import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.vaadin.data.ValueProvider;
 import com.vaadin.server.SerializableComparator;
 import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.SelectionMode;
 import com.vaadin.ui.HorizontalLayout;
@@ -42,6 +41,8 @@ import java.util.stream.Stream;
  */
 public class AclScenarioDrillDownUsageDetailsWindow extends Window {
 
+    private static final long serialVersionUID = -2460767303253579454L;
+
     private static final String STYLE_ALIGN_RIGHT = "v-align-right";
 
     private final IAclScenarioController controller;
@@ -58,16 +59,16 @@ public class AclScenarioDrillDownUsageDetailsWindow extends Window {
     public AclScenarioDrillDownUsageDetailsWindow(IAclScenarioController controller, RightsholderResultsFilter filter) {
         this.controller = controller;
         this.filter = Objects.requireNonNull(filter);
-        setWidth(1280, Unit.PIXELS);
-        setHeight(65, Unit.PERCENTAGE);
+        super.setWidth(1280, Unit.PIXELS);
+        super.setHeight(65, Unit.PERCENTAGE);
         initGrid();
-        Button closeButton = Buttons.createCloseButton(this);
-        VerticalLayout content = new VerticalLayout(initMetaInfoLayout(), grid, closeButton);
+        var closeButton = Buttons.createCloseButton(this);
+        var content = new VerticalLayout(initMetaInfoLayout(), grid, closeButton);
         content.setSizeFull();
         content.setExpandRatio(grid, 1);
         content.setComponentAlignment(closeButton, Alignment.BOTTOM_RIGHT);
-        setContent(content);
-        setCaption(ForeignUi.getMessage("window.acl_scenario_drill_down_usage_details"));
+        super.setContent(content);
+        super.setCaption(ForeignUi.getMessage("window.acl_scenario_drill_down_usage_details"));
         VaadinUtils.addComponentStyle(this, "acl-scenario-drill-down-usage-details-window");
     }
 
@@ -84,7 +85,7 @@ public class AclScenarioDrillDownUsageDetailsWindow extends Window {
         )
             .filter(Objects::nonNull)
             .toArray(HorizontalLayout[]::new);
-        VerticalLayout verticalLayout = new VerticalLayout();
+        var verticalLayout = new VerticalLayout();
         verticalLayout.setMargin(false);
         verticalLayout.setSpacing(false);
         verticalLayout.addComponents(components);

@@ -33,6 +33,8 @@ import java.util.stream.Collectors;
 public class AclAggregateLicenseeClassMappingEditWindow
     extends CommonScenarioParameterWindow<List<DetailLicenseeClass>> {
 
+    private static final long serialVersionUID = -8088118012002362394L;
+
     private List<DetailLicenseeClass> defaultValues;
     private List<DetailLicenseeClass> currentValues;
     private Grid<DetailLicenseeClass> grid;
@@ -53,8 +55,8 @@ public class AclAggregateLicenseeClassMappingEditWindow
         layout.setSizeFull();
         layout.setExpandRatio(grid, 1);
         layout.setComponentAlignment(buttonsLayout, Alignment.MIDDLE_RIGHT);
-        setContent(layout);
-        setCaption(ForeignUi.getMessage("window.licensee_class_mapping"));
+        super.setContent(layout);
+        super.setCaption(ForeignUi.getMessage("window.licensee_class_mapping"));
     }
 
     @Override
