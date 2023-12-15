@@ -45,6 +45,7 @@ import java.util.function.Function;
  */
 public class AclScenarioWidget extends Window implements IAclScenarioWidget, SearchWidget.ISearchController {
 
+    private static final long serialVersionUID = -8227881821301132345L;
     private static final String STYLE_ALIGN_RIGHT = "v-align-right";
     private static final String PROPERTY_PRINT_GROSS_TOTAL = "grossTotalPrint";
     private static final String PROPERTY_PRINT_SERVICE_FEE_TOTAL = "serviceFeeTotalPrint";

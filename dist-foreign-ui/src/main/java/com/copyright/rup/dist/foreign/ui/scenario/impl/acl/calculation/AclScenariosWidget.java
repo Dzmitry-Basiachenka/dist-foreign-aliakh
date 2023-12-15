@@ -69,6 +69,8 @@ import java.util.Objects;
  */
 public class AclScenariosWidget extends VerticalLayout implements IAclScenariosWidget, IDateFormatter {
 
+    private static final long serialVersionUID = 3822583325597833263L;
+
     private final Label ownerLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
     private final Label grossTotalPrintLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
     private final Label grossTotalDigitalLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);

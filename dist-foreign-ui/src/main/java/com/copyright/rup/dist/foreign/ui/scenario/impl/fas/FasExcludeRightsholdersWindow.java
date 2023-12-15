@@ -40,6 +40,8 @@ import java.util.stream.Collectors;
  */
 public class FasExcludeRightsholdersWindow extends Window implements ISearchController {
 
+    private static final long serialVersionUID = -1083890548488635343L;
+
     private final Long accountNumber;
     private final IFasScenarioController scenarioController;
     private Grid<RightsholderPayeePair> rightsholdersGrid;
@@ -54,7 +56,7 @@ public class FasExcludeRightsholdersWindow extends Window implements ISearchCont
     FasExcludeRightsholdersWindow(Long rroAccountNumber, IFasScenarioController scenarioController) {
         this.accountNumber = rroAccountNumber;
         this.scenarioController = scenarioController;
-        setCaption(ForeignUi.getMessage("window.exclude.rh", rroAccountNumber));
+        super.setCaption(ForeignUi.getMessage("window.exclude.rh", rroAccountNumber));
         initContent();
     }
 

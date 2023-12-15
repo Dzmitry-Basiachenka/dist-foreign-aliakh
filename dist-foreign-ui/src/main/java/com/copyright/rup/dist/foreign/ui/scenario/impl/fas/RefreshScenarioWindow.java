@@ -42,6 +42,8 @@ import java.util.Objects;
  */
 public class RefreshScenarioWindow extends Window {
 
+    private static final long serialVersionUID = -6803326666265723117L;
+
     private final IFasScenariosController controller;
     private final DataProvider<UsageDto, Void> dataProvider;
     private Grid<UsageDto> grid;
@@ -57,12 +59,12 @@ public class RefreshScenarioWindow extends Window {
     public RefreshScenarioWindow(FetchCallback<UsageDto, Void> fetchCallback,
                                  CountCallback<UsageDto, Void> countCallback, IFasScenariosController controller) {
         this.controller = controller;
-        setCaption(ForeignUi.getMessage("label.refresh_scenario"));
-        setWidth(800, Unit.PIXELS);
-        setHeight(400, Unit.PIXELS);
+        super.setCaption(ForeignUi.getMessage("label.refresh_scenario"));
+        super.setWidth(800, Unit.PIXELS);
+        super.setHeight(400, Unit.PIXELS);
         VaadinUtils.addComponentStyle(this, "refresh-scenario-window");
         dataProvider = LoadingIndicatorDataProvider.fromCallbacks(fetchCallback, countCallback);
-        setContent(initContent());
+        super.setContent(initContent());
     }
 
     private VerticalLayout initContent() {

@@ -33,7 +33,7 @@ public class FdaLoggingMeterRegistry extends StepMeterRegistry {
      */
     public FdaLoggingMeterRegistry(ILoggingRegistryConfig config, Clock clock) {
         super(config, clock);
-        start(new NamedThreadFactory("dist-foreign-metrics-publisher"));
+        super.start(new NamedThreadFactory("dist-foreign-metrics-publisher"));
     }
 
     @Override

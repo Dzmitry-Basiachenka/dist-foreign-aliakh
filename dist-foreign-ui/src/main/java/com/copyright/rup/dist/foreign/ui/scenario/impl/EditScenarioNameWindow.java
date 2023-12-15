@@ -33,6 +33,8 @@ import java.util.Set;
  */
 class EditScenarioNameWindow extends Window {
 
+    private static final long serialVersionUID = -8227881821301132345L;
+
     private final Scenario scenario;
     private final ICommonScenariosController controller;
     private final Binder<String> binder = new Binder<>();
@@ -47,17 +49,17 @@ class EditScenarioNameWindow extends Window {
     EditScenarioNameWindow(ICommonScenariosController controller, Scenario scenario) {
         this.controller = controller;
         this.scenario = scenario;
-        setResizable(false);
-        setWidth(320, Unit.PIXELS);
-        setCaption(ForeignUi.getMessage("window.edit_scenario_name"));
+        super.setResizable(false);
+        super.setWidth(320, Unit.PIXELS);
+        super.setCaption(ForeignUi.getMessage("window.edit_scenario_name"));
         initScenarioNameField();
-        HorizontalLayout buttonsLayout = initButtonsLayout();
-        VerticalLayout layout = new VerticalLayout(scenarioNameField, buttonsLayout);
+        var buttonsLayout = initButtonsLayout();
+        var layout = new VerticalLayout(scenarioNameField, buttonsLayout);
         layout.setSpacing(true);
         layout.setMargin(true);
         layout.setComponentAlignment(buttonsLayout, Alignment.MIDDLE_RIGHT);
         scenarioNameField.focus();
-        setContent(layout);
+        super.setContent(layout);
         VaadinUtils.addComponentStyle(this, "edit-scenario-name-window");
     }
 

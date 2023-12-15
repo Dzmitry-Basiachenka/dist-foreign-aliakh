@@ -40,6 +40,7 @@ import java.util.stream.Stream;
  */
 public class AclScenarioDrillDownAggLcClassesWindow extends Window {
 
+    private static final long serialVersionUID = 4362686284040591320L;
     private static final String STYLE_ALIGN_RIGHT = "v-align-right";
     private static final String PRINT_GROSS_TOTAL_PROPERTY = "grossTotalPrint";
     private static final String PRINT_NET_TOTAL_PROPERTY = "netTotalPrint";
@@ -64,16 +65,16 @@ public class AclScenarioDrillDownAggLcClassesWindow extends Window {
                                                   RightsholderResultsFilter filter) {
         this.controller = controller;
         this.filter = filter;
-        setWidth(1280, Unit.PIXELS);
-        setHeight(Objects.nonNull(filter.getWrWrkInst()) ? 75 : 85, Unit.PERCENTAGE);
+        super.setWidth(1280, Unit.PIXELS);
+        super.setHeight(Objects.nonNull(filter.getWrWrkInst()) ? 75 : 85, Unit.PERCENTAGE);
         initGrid();
-        Button closeButton = Buttons.createCloseButton(this);
+        var closeButton = Buttons.createCloseButton(this);
         VerticalLayout content = new VerticalLayout(initMetaInfoLayout(), grid, closeButton);
         content.setSizeFull();
         content.setExpandRatio(grid, 1);
         content.setComponentAlignment(closeButton, Alignment.BOTTOM_RIGHT);
-        setContent(content);
-        setCaption(ForeignUi.getMessage("window.acl_scenario_drill_down_aggregate_licensee_class"));
+        super.setContent(content);
+        super.setCaption(ForeignUi.getMessage("window.acl_scenario_drill_down_aggregate_licensee_class"));
         VaadinUtils.addComponentStyle(this, "acl-scenario-drill-down-aggregate-licensee-class-window");
     }
 
@@ -86,7 +87,7 @@ public class AclScenarioDrillDownAggLcClassesWindow extends Window {
         )
             .filter(Objects::nonNull)
             .toArray(HorizontalLayout[]::new);
-        VerticalLayout verticalLayout = new VerticalLayout();
+        var verticalLayout = new VerticalLayout();
         verticalLayout.setMargin(false);
         verticalLayout.setSpacing(false);
         verticalLayout.addComponents(components);

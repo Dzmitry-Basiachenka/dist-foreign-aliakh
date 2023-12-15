@@ -31,6 +31,8 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class SalScenariosWidget extends CommonScenariosWidget implements ISalScenariosWidget {
 
+    private static final long serialVersionUID = -5158392303926219381L;
+
     private final ISalScenariosController controller;
     private SalScenariosMediator mediator;
     private final Button viewButton = Buttons.createButton(ForeignUi.getMessage("button.view"));
@@ -56,7 +58,7 @@ public class SalScenariosWidget extends CommonScenariosWidget implements ISalSce
      */
     SalScenariosWidget(ISalScenariosController controller, IScenarioHistoryController historyController) {
         super(historyController);
-        setController(controller);
+        super.setController(controller);
         this.controller = controller;
     }
 

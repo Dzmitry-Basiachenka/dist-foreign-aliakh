@@ -36,6 +36,8 @@ import java.util.List;
  */
 class RightsholderDiscrepanciesWindow extends Window {
 
+    private static final long serialVersionUID = -6803326666265723117L;
+
     private final IReconcileRightsholdersController controller;
     private final IFasScenariosController scenariosController;
     private Grid<RightsholderDiscrepancy> grid;
@@ -50,10 +52,10 @@ class RightsholderDiscrepanciesWindow extends Window {
                                     IFasScenariosController scenariosController) {
         this.controller = reconcileRightsholdersController;
         this.scenariosController = scenariosController;
-        setWidth(900, Unit.PIXELS);
-        setHeight(530, Unit.PIXELS);
-        setContent(initContent());
-        setCaption(ForeignUi.getMessage("label.reconcile_rightsholders"));
+        super.setWidth(900, Unit.PIXELS);
+        super.setHeight(530, Unit.PIXELS);
+        super.setContent(initContent());
+        super.setCaption(ForeignUi.getMessage("label.reconcile_rightsholders"));
         VaadinUtils.addComponentStyle(this, "rightsholder-discrepancies-window");
     }
 

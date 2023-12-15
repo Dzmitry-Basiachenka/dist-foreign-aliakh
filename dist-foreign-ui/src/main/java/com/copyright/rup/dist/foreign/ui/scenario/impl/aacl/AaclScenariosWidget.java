@@ -50,6 +50,8 @@ import java.util.stream.Collectors;
  */
 public class AaclScenariosWidget extends CommonScenariosWidget implements IAaclScenariosWidget {
 
+    private static final long serialVersionUID = -8618422365640372283L;
+
     private final IAaclScenariosController controller;
     private final IAaclUsageController usageController;
     private final Button viewButton = Buttons.createButton(ForeignUi.getMessage("button.view"));
@@ -82,7 +84,7 @@ public class AaclScenariosWidget extends CommonScenariosWidget implements IAaclS
     AaclScenariosWidget(IAaclScenariosController controller, IScenarioHistoryController historyController,
                         IAaclUsageController usageController) {
         super(historyController);
-        setController(controller);
+        super.setController(controller);
         this.controller = controller;
         this.usageController = usageController;
     }
