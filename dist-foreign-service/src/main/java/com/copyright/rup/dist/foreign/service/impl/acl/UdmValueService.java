@@ -49,8 +49,7 @@ public class UdmValueService implements IUdmValueService {
 
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
-    @Value("#{$RUP{dist.foreign.udm.currencies}}")
-    private Map<String, String> currencyCodesToCurrencyNamesMap;
+    private final List<Currency> allCurrencies;
     @Autowired
     private IUdmValueRepository udmValueRepository;
     @Autowired
@@ -61,6 +60,21 @@ public class UdmValueService implements IUdmValueService {
     private IRightsService rightsService;
     @Value("$RUP{dist.foreign.grid.multi.select.record.threshold}")
     private int udmRecordsThreshold;
+
+    /**
+     * Constructor.
+     *
+     * @param currencyCodesToCurrencyNamesMap map from currency codes to currency names
+     */
+    @Autowired
+    public UdmValueService(@Value("#{$RUP{dist.foreign.udm.currencies}}")
+                           Map<String, String> currencyCodesToCurrencyNamesMap) {
+        this.allCurrencies = List.copyOf(currencyCodesToCurrencyNamesMap
+            .entrySet()
+            .stream()
+            .map(entry -> new Currency(entry.getKey(), entry.getValue()))
+            .collect(Collectors.toList()));
+    }
 
     @Override
     @Transactional
@@ -78,11 +92,7 @@ public class UdmValueService implements IUdmValueService {
 
     @Override
     public List<Currency> getAllCurrencies() {
-        return List.copyOf(currencyCodesToCurrencyNamesMap
-            .entrySet()
-            .stream()
-            .map(entry -> new Currency(entry.getKey(), entry.getValue()))
-            .collect(Collectors.toList()));
+        return List.copyOf(allCurrencies);
     }
 
     @Override
