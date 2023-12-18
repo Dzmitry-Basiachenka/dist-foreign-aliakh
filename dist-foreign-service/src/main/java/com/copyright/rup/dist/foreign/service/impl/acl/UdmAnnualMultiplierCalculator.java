@@ -2,19 +2,18 @@ package com.copyright.rup.dist.foreign.service.impl.acl;
 
 import com.copyright.rup.common.exception.RupRuntimeException;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Range;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
-import javax.annotation.PostConstruct;
 
 /**
  * Calculator of annual multiplier for UDM usages.
@@ -28,18 +27,18 @@ import javax.annotation.PostConstruct;
 @Component
 public class UdmAnnualMultiplierCalculator {
 
-    @Value("#{$RUP{dist.foreign.udm.difference_in_days.to.annual_multiplier}}")
-    private Map<String, Integer> differenceInDaysToAnnualMultiplierMap;
-
-    private Map<Range<Integer>, Integer> intervalInDaysToAnnualMultiplierMap;
+    private final List<Map.Entry<Range<Integer>, Integer>> intervalInDaysToAnnualMultipliers;
 
     /**
-     * Post construct method.
+     * Constructor.
+     *
+     * @param differenceInDaysToAnnualMultiplierMap map from difference in days to annual multiplier
      */
-    @PostConstruct
-    void postConstruct() {
-        this.intervalInDaysToAnnualMultiplierMap = ImmutableMap.copyOf(
-            this.differenceInDaysToAnnualMultiplierMap
+    @Autowired
+    UdmAnnualMultiplierCalculator(@Value("#{$RUP{dist.foreign.udm.difference_in_days.to.annual_multiplier}}")
+                                  Map<String, Integer> differenceInDaysToAnnualMultiplierMap) {
+        this.intervalInDaysToAnnualMultipliers =
+            differenceInDaysToAnnualMultiplierMap
                 .entrySet()
                 .stream()
                 .map(entry -> {
@@ -58,7 +57,7 @@ public class UdmAnnualMultiplierCalculator {
                         throw new RupRuntimeException("Unable to parse the range of the annual multiplier: " + range);
                     }
                 })
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)));
+                .collect(Collectors.toUnmodifiableList());
     }
 
     /**
@@ -70,8 +69,7 @@ public class UdmAnnualMultiplierCalculator {
      */
     public int calculate(LocalDate surveyStartDate, LocalDate surveyEndDate) {
         int differenceInDays = (int) (ChronoUnit.DAYS.between(surveyStartDate, surveyEndDate) + 1);
-        return intervalInDaysToAnnualMultiplierMap
-            .entrySet()
+        return intervalInDaysToAnnualMultipliers
             .stream()
             .filter(entry -> entry.getKey().contains(differenceInDays))
             .findFirst()
