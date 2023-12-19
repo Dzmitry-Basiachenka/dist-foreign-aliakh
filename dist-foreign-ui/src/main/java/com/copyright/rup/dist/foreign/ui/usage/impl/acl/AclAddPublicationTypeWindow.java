@@ -41,8 +41,11 @@ import java.util.Objects;
  */
 class AclAddPublicationTypeWindow extends Window {
 
+    private static final long serialVersionUID = 1376458036423731110L;
+
     private final IAclScenariosController controller;
     private final Binder<AclPublicationType> binder = new Binder<>();
+
     private ComboBox<AclPublicationType> pubTypeComboBox;
     private TextField pubTypePeriodField;
     private TextField pubTypeWeightField;
@@ -54,17 +57,17 @@ class AclAddPublicationTypeWindow extends Window {
      */
     AclAddPublicationTypeWindow(IAclScenariosController controller) {
         this.controller = controller;
-        setResizable(false);
-        setWidth(250, Unit.PIXELS);
-        setCaption(ForeignUi.getMessage("window.add_pub_type_weight"));
-        HorizontalLayout buttonsLayout = initButtonsLayout();
-        VerticalLayout layout = new VerticalLayout(initPublicationTypeCombobox(), initPubTypePeriodLayout(),
+        super.setResizable(false);
+        super.setWidth(250, Unit.PIXELS);
+        super.setCaption(ForeignUi.getMessage("window.add_pub_type_weight"));
+        var buttonsLayout = initButtonsLayout();
+        var layout = new VerticalLayout(initPublicationTypeCombobox(), initPubTypePeriodLayout(),
             initPubTypeWeightField(), buttonsLayout);
         layout.setSpacing(true);
         layout.setMargin(true);
         layout.setComponentAlignment(buttonsLayout, Alignment.MIDDLE_RIGHT);
         pubTypeComboBox.focus();
-        setContent(layout);
+        super.setContent(layout);
         VaadinUtils.addComponentStyle(this, "acl-add-pub-type-weight-window");
     }
 

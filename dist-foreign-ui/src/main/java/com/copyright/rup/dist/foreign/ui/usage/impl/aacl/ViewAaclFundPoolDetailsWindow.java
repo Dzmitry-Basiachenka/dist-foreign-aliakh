@@ -8,7 +8,6 @@ import com.copyright.rup.vaadin.util.CurrencyUtils;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.SelectionMode;
 import com.vaadin.ui.HorizontalLayout;
@@ -29,31 +28,33 @@ import java.util.Objects;
  */
 public class ViewAaclFundPoolDetailsWindow extends Window {
 
+    private static final long serialVersionUID = -8710043628252847377L;
+
     private Grid<FundPoolDetail> grid;
 
     /**
      * Constructor.
      *
-     * @param fundPool   an {@link FundPool} to view
+     * @param fundPool        an {@link FundPool} to view
      * @param fundPoolDetails list of {@link FundPoolDetail}s
      */
     public ViewAaclFundPoolDetailsWindow(FundPool fundPool, List<FundPoolDetail> fundPoolDetails) {
-        setWidth(600, Unit.PIXELS);
-        setHeight(600, Unit.PIXELS);
+        super.setWidth(600, Unit.PIXELS);
+        super.setHeight(600, Unit.PIXELS);
         initGrid(Objects.requireNonNull(fundPoolDetails));
-        HorizontalLayout buttonsLayout = initButtons();
-        VerticalLayout layout = new VerticalLayout(grid, buttonsLayout);
+        var buttonsLayout = initButtons();
+        var layout = new VerticalLayout(grid, buttonsLayout);
         layout.setSizeFull();
         layout.setExpandRatio(grid, 1);
         layout.setComponentAlignment(buttonsLayout, Alignment.MIDDLE_RIGHT);
-        setContent(layout);
-        setCaption(Objects.requireNonNull(fundPool).getName());
+        super.setContent(layout);
+        super.setCaption(Objects.requireNonNull(fundPool).getName());
         VaadinUtils.addComponentStyle(this, "view-aacl-fund-pool-details-window");
     }
 
     private HorizontalLayout initButtons() {
-        Button closeButton = Buttons.createCloseButton(this);
-        HorizontalLayout layout = new HorizontalLayout(closeButton);
+        var closeButton = Buttons.createCloseButton(this);
+        var layout = new HorizontalLayout(closeButton);
         layout.setSpacing(true);
         VaadinUtils.addComponentStyle(layout, "view-aacl-fund-pool-details-buttons");
         return layout;

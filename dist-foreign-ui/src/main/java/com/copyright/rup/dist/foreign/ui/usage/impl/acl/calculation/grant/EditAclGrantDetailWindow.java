@@ -41,10 +41,13 @@ import java.util.function.Consumer;
  */
 public class EditAclGrantDetailWindow extends Window {
 
+    private static final long serialVersionUID = 8800584995067306690L;
+
     private final Binder<AclGrantDetailDto> binder = new Binder<>();
     private final IAclGrantDetailController controller;
     private final Set<AclGrantDetailDto> selectedGrants;
     private final ClickListener saveButtonClickListener;
+
     private ComboBox<String> grantStatusField;
     private TextField rhAccountNumberField;
     private TextField rhNameField;
@@ -64,11 +67,11 @@ public class EditAclGrantDetailWindow extends Window {
         this.controller = controller;
         this.selectedGrants = selectedGrants;
         this.saveButtonClickListener = clickListener;
-        setContent(initRootLayout());
-        setCaption(ForeignUi.getMessage("window.edit_grant_detail"));
-        setResizable(false);
-        setWidth(350, Unit.PIXELS);
-        setHeight(270, Unit.PIXELS);
+        super.setContent(initRootLayout());
+        super.setCaption(ForeignUi.getMessage("window.edit_grant_detail"));
+        super.setResizable(false);
+        super.setWidth(350, Unit.PIXELS);
+        super.setHeight(270, Unit.PIXELS);
         VaadinUtils.addComponentStyle(this, "edit-grant-detail-window");
     }
 

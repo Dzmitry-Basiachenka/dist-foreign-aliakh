@@ -40,6 +40,8 @@ import java.util.List;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class AclFundPoolController extends CommonController<IAclFundPoolWidget> implements IAclFundPoolController {
 
+    private static final long serialVersionUID = 302131767626157815L;
+
     @Autowired
     private IAclFundPoolFilterController aclFundPoolFilterController;
     @Autowired

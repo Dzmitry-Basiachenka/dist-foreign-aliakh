@@ -21,6 +21,8 @@ import java.util.function.Function;
  */
 public class FasNtsUsageAppliedFilterWidget extends CommonUsageAppliedFilterWidget implements IDateFormatter {
 
+    private static final long serialVersionUID = -6615888316116581454L;
+
     /**
      * Constructor.
      *

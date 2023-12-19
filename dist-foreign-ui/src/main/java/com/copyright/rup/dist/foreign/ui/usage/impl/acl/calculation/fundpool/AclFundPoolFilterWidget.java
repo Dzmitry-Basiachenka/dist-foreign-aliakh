@@ -35,6 +35,8 @@ import java.util.stream.Collectors;
  */
 public class AclFundPoolFilterWidget extends VerticalLayout implements IAclFundPoolFilterWidget {
 
+    private static final long serialVersionUID = -52302449156744684L;
+
     private IAclFundPoolFilterController controller;
     private Button applyButton;
     private AclFundPoolDetailFilter aclFundPoolDetailFilter = new AclFundPoolDetailFilter();

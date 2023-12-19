@@ -38,6 +38,8 @@ import java.util.function.Function;
  */
 public class AclFundPoolWidget extends HorizontalSplitPanel implements IAclFundPoolWidget, IMediatorProvider {
 
+    private static final long serialVersionUID = -4290600546550074975L;
+
     private IAclFundPoolController controller;
     private MenuBar aclFundPoolMenuBar;
     private MenuBar.MenuItem createMenuItem;

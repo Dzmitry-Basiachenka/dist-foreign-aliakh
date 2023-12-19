@@ -39,6 +39,8 @@ import java.util.Set;
  */
 public class ClassifiedUsagesUploadWindow extends Window {
 
+    private static final long serialVersionUID = -9108464420946943048L;
+
     private final IAaclUsageController usageController;
     private final Binder<String> uploadBinder = new Binder<>();
     private UploadField uploadField;

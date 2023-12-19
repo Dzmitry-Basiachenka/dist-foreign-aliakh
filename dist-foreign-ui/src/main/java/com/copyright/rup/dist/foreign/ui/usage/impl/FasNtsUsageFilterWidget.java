@@ -39,6 +39,7 @@ public class FasNtsUsageFilterWidget extends CommonUsageFilterWidget implements 
     private static final Set<UsageStatusEnum> NTS_STATUSES = ImmutableSet.of(UsageStatusEnum.WORK_FOUND,
         UsageStatusEnum.RH_FOUND, UsageStatusEnum.UNCLASSIFIED, UsageStatusEnum.ELIGIBLE,
         UsageStatusEnum.SCENARIO_EXCLUDED);
+    private static final long serialVersionUID = -533018108072874988L;
 
     private final IFasNtsUsageFilterController controller;
     private LocalDateWidget paymentDateWidget;

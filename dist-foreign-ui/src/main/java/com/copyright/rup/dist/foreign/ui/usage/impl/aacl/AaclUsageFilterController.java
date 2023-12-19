@@ -24,6 +24,8 @@ import java.util.List;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 class AaclUsageFilterController extends CommonUsageFilterController implements IAaclUsageFilterController {
 
+    private static final long serialVersionUID = -8175240439383713007L;
+
     @Autowired
     private IAaclUsageService aaclUsageService;
 

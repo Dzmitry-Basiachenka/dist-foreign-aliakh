@@ -45,6 +45,7 @@ import java.util.List;
 public class CreateAclFundPoolWindow extends Window {
 
     private static final String EMPTY_FIELD_MESSAGE = "field.error.empty";
+    private static final long serialVersionUID = 2259064780804783110L;
 
     private final Binder<AclFundPool> fundPoolBinder = new Binder<>();
     private final Binder<String> binder = new Binder<>();
@@ -64,11 +65,11 @@ public class CreateAclFundPoolWindow extends Window {
      */
     public CreateAclFundPoolWindow(IAclFundPoolController fundPoolController) {
         this.fundPoolController = fundPoolController;
-        setContent(initRootLayout());
-        setCaption(ForeignUi.getMessage("window.create_acl_fund_pool"));
-        setResizable(false);
-        setWidth(400, Unit.PIXELS);
-        setHeight(285, Unit.PIXELS);
+        super.setContent(initRootLayout());
+        super.setCaption(ForeignUi.getMessage("window.create_acl_fund_pool"));
+        super.setResizable(false);
+        super.setWidth(400, Unit.PIXELS);
+        super.setHeight(285, Unit.PIXELS);
         binder.validate();
         VaadinUtils.addComponentStyle(this, "create-acl-fund-pool-window");
     }

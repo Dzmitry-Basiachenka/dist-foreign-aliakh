@@ -25,6 +25,8 @@ import java.time.format.DateTimeFormatter;
  */
 public class ViewAaclUsageBatchWindow extends AbstractViewUsageBatchWindow {
 
+    private static final long serialVersionUID = -209068756778449046L;
+
     /**
      * Constructor.
      *
@@ -32,7 +34,7 @@ public class ViewAaclUsageBatchWindow extends AbstractViewUsageBatchWindow {
      */
     public ViewAaclUsageBatchWindow(IAaclUsageController controller) {
         super(controller);
-        setWidth(800, Unit.PIXELS);
+        super.setWidth(800, Unit.PIXELS);
     }
 
     @Override

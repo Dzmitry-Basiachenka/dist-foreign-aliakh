@@ -49,6 +49,7 @@ public class AaclUsageBatchUploadWindow extends Window {
 
     private static final int MIN_YEAR = 1950;
     private static final int MAX_YEAR = 2099;
+    private static final long serialVersionUID = 9176666947089144170L;
 
     private final IAaclUsageController usagesController;
     private final Binder<UsageBatch> binder = new Binder<>();
@@ -65,11 +66,11 @@ public class AaclUsageBatchUploadWindow extends Window {
      */
     public AaclUsageBatchUploadWindow(IAaclUsageController usagesController) {
         this.usagesController = usagesController;
-        setContent(initRootLayout());
-        setCaption(ForeignUi.getMessage("window.upload_usage_batch"));
-        setResizable(false);
-        setWidth(380, Unit.PIXELS);
-        setHeight(210, Unit.PIXELS);
+        super.setContent(initRootLayout());
+        super.setCaption(ForeignUi.getMessage("window.upload_usage_batch"));
+        super.setResizable(false);
+        super.setWidth(380, Unit.PIXELS);
+        super.setHeight(210, Unit.PIXELS);
         VaadinUtils.addComponentStyle(this, "usage-upload-window");
     }
 

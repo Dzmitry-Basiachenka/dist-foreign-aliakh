@@ -42,6 +42,8 @@ import java.util.List;
  */
 public class AaclFundPoolUploadWindow extends Window {
 
+    private static final long serialVersionUID = -1219956392479581815L;
+
     private final IAaclUsageController aaclUsageController;
     private final Binder<FundPool> fundPoolBinder = new Binder<>();
     private final Binder<String> uploadBinder = new Binder<>();
@@ -55,11 +57,11 @@ public class AaclFundPoolUploadWindow extends Window {
      */
     public AaclFundPoolUploadWindow(IAaclUsageController aaclUsageController) {
         this.aaclUsageController = aaclUsageController;
-        setContent(initRootLayout());
-        setCaption(ForeignUi.getMessage("window.upload_fund_pool"));
-        setResizable(false);
-        setWidth(380, Unit.PIXELS);
-        setHeight(165, Unit.PIXELS);
+        super.setContent(initRootLayout());
+        super.setCaption(ForeignUi.getMessage("window.upload_fund_pool"));
+        super.setResizable(false);
+        super.setWidth(380, Unit.PIXELS);
+        super.setHeight(165, Unit.PIXELS);
         VaadinUtils.addComponentStyle(this, "aacl-fund-pool-upload-window");
     }
 

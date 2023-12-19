@@ -31,13 +31,16 @@ import java.util.stream.Collectors;
  */
 public class AclGrantDetailFilterWidget extends VerticalLayout implements IAclGrantDetailFilterWidget {
 
+    private static final long serialVersionUID = -5618057611022659570L;
+
+    private final AclGrantDetailAppliedFilterWidget appliedFilterWidget;
+
     private IAclGrantDetailFilterController controller;
     private AclGrantDetailFilter grantDetailFilter = new AclGrantDetailFilter();
     private AclGrantDetailFilter appliedGrantDetailFilter = new AclGrantDetailFilter();
     private AclGrantSetFilterWidget aclGrantSetFilterWidget;
     private Button applyButton;
     private Button moreFiltersButton;
-    private final AclGrantDetailAppliedFilterWidget appliedFilterWidget;
 
     /**
      * Constructor.

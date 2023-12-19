@@ -9,6 +9,7 @@ import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.CurrencyUtils;
 import com.copyright.rup.vaadin.util.VaadinUtils;
+
 import com.vaadin.data.provider.DataProvider;
 import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.ui.Alignment;
@@ -34,10 +35,13 @@ import java.util.stream.Collectors;
  */
 public class AclPublicationTypeWeightsWindow extends Window {
 
+    private static final long serialVersionUID = -2367809400710487012L;
+
     private final IAclScenariosController controller;
     private final List<AclPublicationType> currentValues = new ArrayList<>();
     private final ListDataProvider<AclPublicationType> dataProvider = DataProvider.ofCollection(currentValues);
     private final boolean isEditable;
+
     private Grid<AclPublicationType> grid;
 
     /**
@@ -49,17 +53,17 @@ public class AclPublicationTypeWeightsWindow extends Window {
     public AclPublicationTypeWeightsWindow(IAclScenariosController controller, boolean isEditable) {
         this.controller = controller;
         this.isEditable = isEditable;
-        setWidth(525, Unit.PIXELS);
-        setHeight(405, Unit.PIXELS);
-        setResizable(false);
+        super.setWidth(525, Unit.PIXELS);
+        super.setHeight(405, Unit.PIXELS);
+        super.setResizable(false);
         initGrid();
-        HorizontalLayout buttonsLayout = initButtonsLayout();
-        VerticalLayout mainLayout = new VerticalLayout(grid, buttonsLayout);
+        var buttonsLayout = initButtonsLayout();
+        var mainLayout = new VerticalLayout(grid, buttonsLayout);
         mainLayout.setComponentAlignment(buttonsLayout, Alignment.BOTTOM_RIGHT);
         mainLayout.setExpandRatio(grid, 1);
         mainLayout.setSizeFull();
-        setContent(mainLayout);
-        setCaption(ForeignUi.getMessage("window.publication_type_weights"));
+        super.setContent(mainLayout);
+        super.setCaption(ForeignUi.getMessage("window.publication_type_weights"));
         VaadinUtils.addComponentStyle(this, "acl-publication-type-weight-window");
     }
 

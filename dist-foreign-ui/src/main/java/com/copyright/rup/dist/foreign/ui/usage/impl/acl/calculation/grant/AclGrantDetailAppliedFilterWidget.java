@@ -19,6 +19,8 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class AclGrantDetailAppliedFilterWidget extends CommonAppliedFilterPanel {
 
+    private static final long serialVersionUID = -7305559172414578378L;
+
     /**
      * Constructor.
      */

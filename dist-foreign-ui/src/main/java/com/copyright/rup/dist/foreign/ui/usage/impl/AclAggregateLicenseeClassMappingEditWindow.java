@@ -46,8 +46,8 @@ public class AclAggregateLicenseeClassMappingEditWindow
      * @param aggregateLicenseeClasses list of {@link AggregateLicenseeClass}es from a database
      */
     public AclAggregateLicenseeClassMappingEditWindow(List<AggregateLicenseeClass> aggregateLicenseeClasses) {
-        setWidth(600, Unit.PIXELS);
-        setHeight(550, Unit.PIXELS);
+        super.setWidth(600, Unit.PIXELS);
+        super.setHeight(550, Unit.PIXELS);
         this.aggregateLicenseeClasses = aggregateLicenseeClasses;
         initGrid();
         HorizontalLayout buttonsLayout = initButtons();

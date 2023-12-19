@@ -42,6 +42,7 @@ public class AclGrantDetailWidget extends HorizontalSplitPanel implements IAclGr
 
     private static final String EMPTY_STYLE_NAME = "empty-grants-grid";
     private static final String FOOTER_LABEL = "Grant Details Count: %s";
+    private static final long serialVersionUID = -8686573178630714389L;
 
     private IAclGrantDetailController controller;
     private Grid<AclGrantDetailDto> aclGrantDetailsGrid;

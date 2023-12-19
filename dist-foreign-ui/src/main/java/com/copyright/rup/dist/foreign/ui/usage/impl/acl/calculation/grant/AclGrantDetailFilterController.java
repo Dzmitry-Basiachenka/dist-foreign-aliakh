@@ -27,6 +27,8 @@ import java.util.List;
 public class AclGrantDetailFilterController extends CommonController<IAclGrantDetailFilterWidget>
     implements IAclGrantDetailFilterController {
 
+    private static final long serialVersionUID = -5142663199766997447L;
+
     @Autowired
     private IAclGrantSetService aclGrantSetService;
 

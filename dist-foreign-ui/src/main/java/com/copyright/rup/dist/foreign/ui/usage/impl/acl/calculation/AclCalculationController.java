@@ -27,6 +27,8 @@ import org.springframework.stereotype.Component;
 public class AclCalculationController extends CommonController<IAclCalculationWidget>
     implements IAclCalculationController {
 
+    private static final long serialVersionUID = -3385047080298474063L;
+
     @Autowired
     private IAclUsageController aclUsageController;
     @Autowired

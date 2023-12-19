@@ -51,9 +51,10 @@ public class AclGrantDetailFiltersWindow extends CommonAclFiltersWindow {
     private static final String GRATER_OR_EQUAL_VALIDATION_MESSAGE = "field.error.greater_or_equal_to";
     private static final String EQUALS = "EQUALS";
     private static final FilterOperatorEnum[] NUMERIC_OPERATOR_ITEMS = {
-            FilterOperatorEnum.EQUALS, FilterOperatorEnum.DOES_NOT_EQUAL,
-            FilterOperatorEnum.GREATER_THAN, FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO, FilterOperatorEnum.LESS_THAN,
-            FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO, FilterOperatorEnum.BETWEEN};
+        FilterOperatorEnum.EQUALS, FilterOperatorEnum.DOES_NOT_EQUAL,
+        FilterOperatorEnum.GREATER_THAN, FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO, FilterOperatorEnum.LESS_THAN,
+        FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO, FilterOperatorEnum.BETWEEN};
+    private static final long serialVersionUID = 7314294160181558330L;
 
     private final Binder<AclGrantDetailFilter> filterBinder = new Binder<>();
     private final ComboBox<Integer> grantSetPeriodComboBox =
@@ -92,11 +93,11 @@ public class AclGrantDetailFiltersWindow extends CommonAclFiltersWindow {
                                        AclGrantDetailFilter aclGrantDetailFilter) {
         this.controller = controller;
         this.aclGrantDetailFilter = new AclGrantDetailFilter(aclGrantDetailFilter);
-        setContent(initRootLayout());
-        setCaption(ForeignUi.getMessage("window.acl_grant_details_additional_filters"));
-        setResizable(false);
-        setWidth(600, Unit.PIXELS);
-        setHeight(350, Unit.PIXELS);
+        super.setContent(initRootLayout());
+        super.setCaption(ForeignUi.getMessage("window.acl_grant_details_additional_filters"));
+        super.setResizable(false);
+        super.setWidth(600, Unit.PIXELS);
+        super.setHeight(350, Unit.PIXELS);
         VaadinUtils.addComponentStyle(this, "acl-grant-details-additional-filters-window");
     }
 
@@ -213,7 +214,7 @@ public class AclGrantDetailFiltersWindow extends CommonAclFiltersWindow {
             .withValidator(getBetweenOperatorValidator(rhAccountNumberFromField, rhAccountNumberOperatorComboBox),
                 BETWEEN_OPERATOR_VALIDATION_MESSAGE)
             .bind(filter -> Objects.toString(
-                filter.getRhAccountNumberExpression().getFieldFirstValue(), StringUtils.EMPTY),
+                    filter.getRhAccountNumberExpression().getFieldFirstValue(), StringUtils.EMPTY),
                 (filter, value) -> filter.getRhAccountNumberExpression()
                     .setFieldFirstValue(NumberUtils.createLong(StringUtils.trimToNull(value))));
         filterBinder.forField(rhAccountNumberToField)
@@ -225,7 +226,7 @@ public class AclGrantDetailFiltersWindow extends CommonAclFiltersWindow {
                 ForeignUi.getMessage(GRATER_OR_EQUAL_VALIDATION_MESSAGE,
                     ForeignUi.getMessage("label.rh_account_number_from")))
             .bind(filter -> Objects.toString(
-                filter.getRhAccountNumberExpression().getFieldSecondValue(), StringUtils.EMPTY),
+                    filter.getRhAccountNumberExpression().getFieldSecondValue(), StringUtils.EMPTY),
                 (filter, value) -> filter.getRhAccountNumberExpression()
                     .setFieldSecondValue(NumberUtils.createLong(StringUtils.trimToNull(value))));
         filterBinder.forField(rhAccountNumberOperatorComboBox)
