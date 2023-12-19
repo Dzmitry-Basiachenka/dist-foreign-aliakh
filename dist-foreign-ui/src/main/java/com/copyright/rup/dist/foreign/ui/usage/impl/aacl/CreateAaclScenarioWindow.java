@@ -51,9 +51,12 @@ import java.util.stream.Collectors;
  */
 class CreateAaclScenarioWindow extends Window {
 
+    private static final long serialVersionUID = -8332553041135466984L;
+
     private final IAaclUsageController controller;
     private final Binder<Scenario> scenarioBinder = new Binder<>();
     private final Binder<AtomicReference<FundPool>> fundPoolBinder = new Binder<>();
+
     private TextField scenarioNameField;
     private ComboBox<FundPool> fundPoolComboBox;
     private ScenarioParameterWidget<List<UsageAge>> usageAgeWeightWidget;
@@ -68,19 +71,19 @@ class CreateAaclScenarioWindow extends Window {
      */
     CreateAaclScenarioWindow(IAaclUsageController controller) {
         this.controller = controller;
-        setResizable(false);
-        setWidth(300, Unit.PIXELS);
-        setCaption(ForeignUi.getMessage("window.create_scenario"));
+        super.setResizable(false);
+        super.setWidth(300, Unit.PIXELS);
+        super.setCaption(ForeignUi.getMessage("window.create_scenario"));
         initFields();
-        HorizontalLayout buttonsLayout = initButtonsLayout();
-        VerticalLayout layout =
+        var buttonsLayout = initButtonsLayout();
+        var layout =
             new VerticalLayout(scenarioNameField, fundPoolComboBox, usageAgeWeightWidget, publicationTypeWeightWidget,
                 licenseeClassMappingWidget, descriptionArea, buttonsLayout);
         layout.setSpacing(true);
         layout.setMargin(true);
         layout.setComponentAlignment(buttonsLayout, Alignment.MIDDLE_RIGHT);
         scenarioNameField.focus();
-        setContent(layout);
+        super.setContent(layout);
         VaadinUtils.addComponentStyle(this, "create-scenario-window");
         scenarioBinder.validate();
         fundPoolBinder.validate();

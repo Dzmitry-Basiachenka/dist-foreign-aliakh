@@ -30,6 +30,8 @@ import java.util.List;
 public class AclFundPoolFilterController extends CommonController<IAclFundPoolFilterWidget>
     implements IAclFundPoolFilterController {
 
+    private static final long serialVersionUID = 5895128810564683055L;
+
     @Autowired
     private ILicenseeClassService licenseeClassService;
     @Autowired

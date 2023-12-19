@@ -35,6 +35,8 @@ import java.util.stream.Collectors;
  */
 public class PublicationTypeWeightsWindow extends CommonScenarioParameterWindow<List<PublicationType>> {
 
+    private static final long serialVersionUID = -4975358029914222102L;
+
     private List<PublicationType> defaultValues;
     private Map<String, BigDecimal> idsToDefaultWeights;
     private List<PublicationType> currentValues;
@@ -48,17 +50,17 @@ public class PublicationTypeWeightsWindow extends CommonScenarioParameterWindow<
      */
     public PublicationTypeWeightsWindow(boolean isEditable) {
         this.isEditable = isEditable;
-        setWidth(525, Unit.PIXELS);
-        setHeight(250, Unit.PIXELS);
-        setResizable(false);
+        super.setWidth(525, Unit.PIXELS);
+        super.setHeight(250, Unit.PIXELS);
+        super.setResizable(false);
         initGrid();
-        HorizontalLayout buttonsLayout = initButtonsLayout();
-        VerticalLayout mainLayout = new VerticalLayout(grid, buttonsLayout);
+        var buttonsLayout = initButtonsLayout();
+        var mainLayout = new VerticalLayout(grid, buttonsLayout);
         mainLayout.setComponentAlignment(buttonsLayout, Alignment.BOTTOM_RIGHT);
         mainLayout.setExpandRatio(grid, 1);
         mainLayout.setSizeFull();
-        setContent(mainLayout);
-        setCaption(ForeignUi.getMessage("window.publication_type_weights"));
+        super.setContent(mainLayout);
+        super.setCaption(ForeignUi.getMessage("window.publication_type_weights"));
         VaadinUtils.addComponentStyle(this, "aacl-publication-type-weight-window");
     }
 

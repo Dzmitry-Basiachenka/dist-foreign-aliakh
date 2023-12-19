@@ -27,6 +27,8 @@ import java.util.function.Supplier;
 public class MarketFilterWidget extends BaseItemsFilterWidget<String>
     implements IFilterWindowController<String> {
 
+    private static final long serialVersionUID = 6057100539027034797L;
+
     private final Supplier<List<String>> supplier;
     private final Set<String> selectedItemsIds = new HashSet<>();
 

@@ -35,8 +35,11 @@ import java.util.stream.Collectors;
  */
 public class ViewAclGrantSetWindow extends Window implements SearchWidget.ISearchController {
 
+    private static final long serialVersionUID = -7704194142628469332L;
+
     private final SearchWidget searchWidget;
     private final IAclGrantDetailController controller;
+
     private Grid<AclGrantSet> grid;
     private Button deleteButton;
 
@@ -47,19 +50,19 @@ public class ViewAclGrantSetWindow extends Window implements SearchWidget.ISearc
      */
     public ViewAclGrantSetWindow(IAclGrantDetailController controller) {
         this.controller = controller;
-        setWidth(1200, Unit.PIXELS);
-        setHeight(550, Unit.PIXELS);
+        super.setWidth(1200, Unit.PIXELS);
+        super.setHeight(550, Unit.PIXELS);
         searchWidget = new SearchWidget(this);
         searchWidget.setPrompt(ForeignUi.getMessage("field.prompt.view_grant_set.search"));
         initGrantSetsGrid();
-        HorizontalLayout buttonsLayout = initButtons();
+        var buttonsLayout = initButtons();
         initMediator();
-        VerticalLayout layout = new VerticalLayout(searchWidget, grid, buttonsLayout);
+        var layout = new VerticalLayout(searchWidget, grid, buttonsLayout);
         layout.setSizeFull();
         layout.setExpandRatio(grid, 1);
         layout.setComponentAlignment(buttonsLayout, Alignment.MIDDLE_RIGHT);
-        setContent(layout);
-        setCaption(ForeignUi.getMessage("window.view_acl_grant_set"));
+        super.setContent(layout);
+        super.setCaption(ForeignUi.getMessage("window.view_acl_grant_set"));
         VaadinUtils.addComponentStyle(this, "view-acl-grant-set-window");
     }
 
@@ -71,7 +74,7 @@ public class ViewAclGrantSetWindow extends Window implements SearchWidget.ISearc
         if (StringUtils.isNotBlank(searchValue)) {
             dataProvider.setFilter(grantSet -> StringUtils.containsIgnoreCase(grantSet.getName(), searchValue));
         }
-        // Gets round an issue when Vaadin do not recalculates columns widths once vertical scroll is disappeared
+        // Gets round an issue when Vaadin does not recalculate columns widths once vertical scroll is disappeared
         grid.recalculateColumnWidths();
     }
 

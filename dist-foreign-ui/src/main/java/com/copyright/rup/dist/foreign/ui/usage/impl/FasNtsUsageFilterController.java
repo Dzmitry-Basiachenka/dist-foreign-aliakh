@@ -22,6 +22,8 @@ import java.util.List;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 class FasNtsUsageFilterController extends CommonUsageFilterController implements IFasNtsUsageFilterController {
 
+    private static final long serialVersionUID = 4364431450109560234L;
+
     @Override
     public List<Rightsholder> getRros() {
         return getRightsholderService().getRros(getSelectedProductFamily());

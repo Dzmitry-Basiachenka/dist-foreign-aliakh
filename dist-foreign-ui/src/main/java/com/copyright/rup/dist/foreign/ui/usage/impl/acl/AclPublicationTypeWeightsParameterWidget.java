@@ -25,7 +25,10 @@ import java.util.function.Supplier;
  */
 public class AclPublicationTypeWeightsParameterWidget extends HorizontalLayout {
 
+    private static final long serialVersionUID = -3706221935455642033L;
+
     private final Supplier<AclPublicationTypeWeightsWindow> windowSupplier;
+
     private List<AclPublicationType> appliedParameters;
     private Button button;
 
@@ -42,7 +45,7 @@ public class AclPublicationTypeWeightsParameterWidget extends HorizontalLayout {
         this.appliedParameters = defaultParameters;
         initButton(caption);
         addComponent(button);
-        setExpandRatio(button, 1);
+        super.setExpandRatio(button, 1);
     }
 
     public List<AclPublicationType> getAppliedParameters() {

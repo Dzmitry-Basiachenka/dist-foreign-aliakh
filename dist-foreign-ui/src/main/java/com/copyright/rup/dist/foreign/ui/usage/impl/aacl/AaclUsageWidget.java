@@ -39,6 +39,7 @@ import java.util.stream.Collectors;
 public class AaclUsageWidget extends CommonUsageWidget implements IAaclUsageWidget {
 
     private static final String BATCH_NAMES_LIST_SEPARATOR = "<br><li>";
+    private static final long serialVersionUID = -7714913675577589759L;
 
     private MenuBar usageBatchMenuBar;
     private MenuBar.MenuItem loadUsageBatchMenuItem;

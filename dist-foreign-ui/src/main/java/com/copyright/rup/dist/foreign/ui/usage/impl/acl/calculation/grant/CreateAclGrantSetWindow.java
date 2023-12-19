@@ -44,6 +44,7 @@ public class CreateAclGrantSetWindow extends Window {
 
     private static final String EMPTY_PERIOD_STYLE = "empty-item-filter-widget";
     private static final String EMPTY_FIELD_MESSAGE = "field.error.empty";
+    private static final long serialVersionUID = -7311530697550144699L;
 
     private final Binder<AclGrantSet> grantSetBinder = new Binder<>();
     private final Binder<String> binder = new Binder<>();
@@ -67,11 +68,11 @@ public class CreateAclGrantSetWindow extends Window {
      */
     public CreateAclGrantSetWindow(IAclGrantDetailController controller) {
         this.aclGrantDetailController = controller;
-        setContent(initRootLayout());
-        setCaption(ForeignUi.getMessage("window.create_acl_grant_set"));
-        setResizable(false);
-        setWidth(400, Unit.PIXELS);
-        setHeight(310, Unit.PIXELS);
+        super.setContent(initRootLayout());
+        super.setCaption(ForeignUi.getMessage("window.create_acl_grant_set"));
+        super.setResizable(false);
+        super.setWidth(400, Unit.PIXELS);
+        super.setHeight(310, Unit.PIXELS);
         VaadinUtils.addComponentStyle(this, "create-acl-grant-set-window");
     }
 

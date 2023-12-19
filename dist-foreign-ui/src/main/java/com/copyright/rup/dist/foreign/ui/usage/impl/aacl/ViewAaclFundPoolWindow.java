@@ -34,8 +34,11 @@ import java.util.Objects;
  */
 public class ViewAaclFundPoolWindow extends Window implements SearchWidget.ISearchController, IDateFormatter {
 
+    private static final long serialVersionUID = 6467821318650140527L;
+
     private final SearchWidget searchWidget;
     private final IAaclUsageController controller;
+
     private Grid<FundPool> grid;
     private Button deleteButton;
     private Button viewButton;
@@ -47,19 +50,19 @@ public class ViewAaclFundPoolWindow extends Window implements SearchWidget.ISear
      */
     public ViewAaclFundPoolWindow(IAaclUsageController controller) {
         this.controller = controller;
-        setWidth(900, Unit.PIXELS);
-        setHeight(550, Unit.PIXELS);
+        super.setWidth(900, Unit.PIXELS);
+        super.setHeight(550, Unit.PIXELS);
         searchWidget = new SearchWidget(this);
         searchWidget.setPrompt(ForeignUi.getMessage("field.prompt.view_fund_pool.search"));
         initGrid();
-        HorizontalLayout buttonsLayout = initButtons();
+        var buttonsLayout = initButtons();
         initMediator();
-        VerticalLayout layout = new VerticalLayout(searchWidget, grid, buttonsLayout);
+        var layout = new VerticalLayout(searchWidget, grid, buttonsLayout);
         layout.setSizeFull();
         layout.setExpandRatio(grid, 1);
         layout.setComponentAlignment(buttonsLayout, Alignment.MIDDLE_RIGHT);
-        setContent(layout);
-        setCaption(ForeignUi.getMessage("window.view_fund_pool"));
+        super.setContent(layout);
+        super.setCaption(ForeignUi.getMessage("window.view_fund_pool"));
         VaadinUtils.addComponentStyle(this, "view-aacl-fund-pool-window");
     }
 

@@ -34,11 +34,14 @@ import java.util.stream.Collectors;
  */
 public class UsageAgeWeightWindow extends CommonScenarioParameterWindow<List<UsageAge>> {
 
+    private static final long serialVersionUID = 3724004273636105011L;
+
+    private final boolean isEditable;
+
     private List<UsageAge> defaultValues;
     private Map<Integer, BigDecimal> periodsToDefaultWeights;
     private List<UsageAge> currentValues;
     private Grid<UsageAge> grid;
-    private final boolean isEditable;
 
     /**
      * Constructor.
@@ -47,17 +50,17 @@ public class UsageAgeWeightWindow extends CommonScenarioParameterWindow<List<Usa
      */
     public UsageAgeWeightWindow(boolean isEditable) {
         this.isEditable = isEditable;
-        setWidth(525, Unit.PIXELS);
-        setHeight(300, Unit.PIXELS);
-        setResizable(false);
+        super.setWidth(525, Unit.PIXELS);
+        super.setHeight(300, Unit.PIXELS);
+        super.setResizable(false);
         initGrid();
-        HorizontalLayout buttonsLayout = initButtonsLayout();
-        VerticalLayout mainLayout = new VerticalLayout(grid, buttonsLayout);
+        var buttonsLayout = initButtonsLayout();
+        var mainLayout = new VerticalLayout(grid, buttonsLayout);
         mainLayout.setComponentAlignment(buttonsLayout, Alignment.BOTTOM_RIGHT);
         mainLayout.setExpandRatio(grid, 1);
         mainLayout.setSizeFull();
-        setContent(mainLayout);
-        setCaption(ForeignUi.getMessage("window.usage_age_weights"));
+        super.setContent(mainLayout);
+        super.setCaption(ForeignUi.getMessage("window.usage_age_weights"));
         VaadinUtils.addComponentStyle(this, "aacl-usage-age-weight-window");
     }
 

@@ -32,6 +32,8 @@ import java.util.stream.Collectors;
  */
 public class AggregateLicenseeClassMappingWindow extends CommonScenarioParameterWindow<List<DetailLicenseeClass>> {
 
+    private static final long serialVersionUID = -5516628610762919061L;
+
     private List<DetailLicenseeClass> defaultValues;
     private List<DetailLicenseeClass> currentValues;
     private Grid<DetailLicenseeClass> grid;
@@ -43,17 +45,17 @@ public class AggregateLicenseeClassMappingWindow extends CommonScenarioParameter
      * @param isEditable {@code true} if window should be in edit mode, otherwise {@code false}
      */
     public AggregateLicenseeClassMappingWindow(boolean isEditable) {
-        setWidth(950, Unit.PIXELS);
-        setHeight(550, Unit.PIXELS);
+        super.setWidth(950, Unit.PIXELS);
+        super.setHeight(550, Unit.PIXELS);
         this.isEditable = isEditable;
         initGrid();
-        HorizontalLayout buttonsLayout = initButtons();
-        VerticalLayout layout = new VerticalLayout(grid, buttonsLayout);
+        var buttonsLayout = initButtons();
+        var layout = new VerticalLayout(grid, buttonsLayout);
         layout.setSizeFull();
         layout.setExpandRatio(grid, 1);
         layout.setComponentAlignment(buttonsLayout, Alignment.MIDDLE_RIGHT);
-        setContent(layout);
-        setCaption(ForeignUi.getMessage("window.licensee_class_mapping"));
+        super.setContent(layout);
+        super.setCaption(ForeignUi.getMessage("window.licensee_class_mapping"));
     }
 
     @Override

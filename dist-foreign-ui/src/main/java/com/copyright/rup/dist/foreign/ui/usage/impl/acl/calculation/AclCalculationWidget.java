@@ -24,6 +24,8 @@ import java.util.function.Supplier;
  */
 public class AclCalculationWidget extends TabSheet implements IAclCalculationWidget {
 
+    private static final long serialVersionUID = -1763139522782105204L;
+
     private IAclCalculationController aclCalculationController;
 
     @Override

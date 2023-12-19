@@ -40,6 +40,8 @@ import java.util.stream.Collectors;
  */
 public class UploadGrantDetailWindow extends Window {
 
+    private static final long serialVersionUID = 5553908739008500915L;
+
     private final IAclGrantDetailController controller;
     private final Binder<String> binder = new Binder<>();
     private final Binder<AclGrantSet> grantSetBinder = new Binder<>();
@@ -53,11 +55,11 @@ public class UploadGrantDetailWindow extends Window {
      */
     public UploadGrantDetailWindow(IAclGrantDetailController controller) {
         this.controller = controller;
-        setContent(initRootLayout());
-        setCaption(ForeignUi.getMessage("window.upload_grant_detail"));
-        setResizable(false);
-        setWidth(350, Unit.PIXELS);
-        setHeight(170, Unit.PIXELS);
+        super.setContent(initRootLayout());
+        super.setCaption(ForeignUi.getMessage("window.upload_grant_detail"));
+        super.setResizable(false);
+        super.setWidth(350, Unit.PIXELS);
+        super.setHeight(170, Unit.PIXELS);
         binder.validate();
         VaadinUtils.addComponentStyle(this, "upload-grant-detail-window");
     }

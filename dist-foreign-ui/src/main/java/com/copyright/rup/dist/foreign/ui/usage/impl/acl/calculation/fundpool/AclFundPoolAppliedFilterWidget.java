@@ -19,6 +19,8 @@ import com.vaadin.ui.VerticalLayout;
  */
 public class AclFundPoolAppliedFilterWidget extends CommonAppliedFilterPanel {
 
+    private static final long serialVersionUID = -927290636844095126L;
+
     /**
      * Constructor.
      */

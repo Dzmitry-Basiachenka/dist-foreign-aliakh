@@ -30,6 +30,8 @@ import java.util.function.Supplier;
 public class AclFundPoolItemFilterWidget extends BaseItemsFilterWidget<AclFundPool>
     implements IFilterWindowController<AclFundPool> {
 
+    private static final long serialVersionUID = -6842885595281976323L;
+
     private final Supplier<List<AclFundPool>> supplier;
     private final Set<AclFundPool> selectedItemsIds = new HashSet<>();
 

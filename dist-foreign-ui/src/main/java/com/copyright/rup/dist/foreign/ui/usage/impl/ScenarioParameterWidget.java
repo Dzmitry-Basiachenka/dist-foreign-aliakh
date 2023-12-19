@@ -26,6 +26,8 @@ import java.util.function.Supplier;
  */
 public class ScenarioParameterWidget<T> extends HorizontalLayout {
 
+    private static final long serialVersionUID = -4039438710710040763L;
+
     private final Supplier<CommonScenarioParameterWindow<T>> windowSupplier;
     private T defaultParameters;
     private T appliedParameters;
@@ -44,8 +46,8 @@ public class ScenarioParameterWidget<T> extends HorizontalLayout {
         this.defaultParameters = defaultParameters;
         this.appliedParameters = defaultParameters;
         initButton(caption);
-        addComponent(button);
-        setExpandRatio(button, 1);
+        super.addComponent(button);
+        super.setExpandRatio(button, 1);
     }
 
     public T getDefaultParameters() {

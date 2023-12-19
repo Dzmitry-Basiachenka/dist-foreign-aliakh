@@ -6,6 +6,7 @@ import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.impl.ScenarioParameterWidget.ParametersSaveEvent;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.util.VaadinUtils;
+
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.SelectionMode;
@@ -28,6 +29,8 @@ import java.util.stream.Collectors;
 public class AclAggregateLicenseeClassMappingViewWindow
     extends CommonScenarioParameterWindow<List<DetailLicenseeClass>> {
 
+    private static final long serialVersionUID = -1495182788325466966L;
+
     private Map<Integer, AggregateLicenseeClass> idsToDefaultAggLicClasses;
     private Grid<DetailLicenseeClass> grid;
 
@@ -35,16 +38,16 @@ public class AclAggregateLicenseeClassMappingViewWindow
      * Constructor.
      */
     public AclAggregateLicenseeClassMappingViewWindow() {
-        setWidth(850, Unit.PIXELS);
-        setHeight(550, Unit.PIXELS);
+        super.setWidth(850, Unit.PIXELS);
+        super.setHeight(550, Unit.PIXELS);
         initGrid();
-        HorizontalLayout buttonsLayout = initButtons();
-        VerticalLayout layout = new VerticalLayout(grid, buttonsLayout);
+        var buttonsLayout = initButtons();
+        var layout = new VerticalLayout(grid, buttonsLayout);
         layout.setSizeFull();
         layout.setExpandRatio(grid, 1);
         layout.setComponentAlignment(buttonsLayout, Alignment.MIDDLE_RIGHT);
-        setContent(layout);
-        setCaption(ForeignUi.getMessage("window.licensee_class_mapping"));
+        super.setContent(layout);
+        super.setCaption(ForeignUi.getMessage("window.licensee_class_mapping"));
     }
 
     @Override

@@ -52,6 +52,8 @@ import java.util.Set;
 public class AclGrantDetailController extends CommonController<IAclGrantDetailWidget>
     implements IAclGrantDetailController {
 
+    private static final long serialVersionUID = 320783822426387382L;
+
     @Autowired
     private IUdmBaselineService udmBaselineService;
     @Autowired
