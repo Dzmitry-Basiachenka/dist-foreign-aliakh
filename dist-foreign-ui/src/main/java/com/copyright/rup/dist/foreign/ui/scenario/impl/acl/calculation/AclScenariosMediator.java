@@ -21,8 +21,9 @@ import java.util.Objects;
 class AclScenariosMediator implements IMediator {
 
     private Button createButton;
-    private Button deleteButton;
     private Button viewButton;
+    private Button editNameButton;
+    private Button deleteButton;
     private Button pubTypeWeights;
     private Button submitButton;
     private Button rejectButton;
@@ -35,6 +36,7 @@ class AclScenariosMediator implements IMediator {
             ForeignSecurityUtils.hasSpecialistPermission() || ForeignSecurityUtils.hasManagerPermission();
         boolean hasSpecialistPermission = ForeignSecurityUtils.hasSpecialistPermission();
         createButton.setVisible(hasSpecialistOrManagerPermission);
+        editNameButton.setVisible(hasSpecialistPermission);
         deleteButton.setVisible(hasSpecialistOrManagerPermission);
         pubTypeWeights.setVisible(hasSpecialistPermission);
         submitButton.setVisible(ForeignSecurityUtils.hasManagerPermission());
@@ -53,6 +55,7 @@ class AclScenariosMediator implements IMediator {
             viewButton.setEnabled(true);
             ScenarioStatusEnum status = aclScenario.getStatus();
             boolean inProgressStatus = ScenarioStatusEnum.IN_PROGRESS == status;
+            editNameButton.setEnabled(inProgressStatus);
             deleteButton.setEnabled(
                 inProgressStatus && (ForeignSecurityUtils.hasSpecialistPermission() || aclScenario.isEditableFlag()));
             submitButton.setEnabled(inProgressStatus && !aclScenario.isEditableFlag());
@@ -62,6 +65,7 @@ class AclScenariosMediator implements IMediator {
             sentToLmButton.setEnabled(ScenarioStatusEnum.APPROVED == status);
         } else {
             viewButton.setEnabled(false);
+            editNameButton.setEnabled(false);
             deleteButton.setEnabled(false);
             submitButton.setEnabled(false);
             rejectButton.setEnabled(false);
@@ -74,12 +78,16 @@ class AclScenariosMediator implements IMediator {
         this.createButton = createButton;
     }
 
-    public void setDeleteButton(Button deleteButton) {
-        this.deleteButton = deleteButton;
-    }
-
     public void setViewButton(Button viewButton) {
         this.viewButton = viewButton;
+    }
+
+    public void setEditNameButton(Button editNameButton) {
+        this.editNameButton = editNameButton;
+    }
+
+    public void setDeleteButton(Button deleteButton) {
+        this.deleteButton = deleteButton;
     }
 
     public void setPubTypeWeights(Button pubTypeWeights) {
