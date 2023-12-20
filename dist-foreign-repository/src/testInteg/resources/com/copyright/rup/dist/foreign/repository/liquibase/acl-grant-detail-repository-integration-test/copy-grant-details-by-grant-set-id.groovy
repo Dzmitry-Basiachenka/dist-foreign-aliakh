@@ -23,11 +23,12 @@ databaseChangeLog {
             column(name: 'system_title', value: 'Technology review')
             column(name: 'rh_account_number', value: 1000028511)
             column(name: 'is_eligible', value: true)
+            column(name: 'manual_upload_flag', value: false)
+            column(name: 'payee_account_number', value: 2000123124)
             column(name: 'created_by_user', value: 'auser@copyright.com')
             column(name: 'updated_by_user', value: 'auser@copyright.com')
             column(name: 'created_datetime', value: '2021-02-14 12:00:00+00')
             column(name: 'updated_datetime', value: '2021-02-14 12:00:00+00')
-            column(name: 'manual_upload_flag', value: false)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_acl_grant_set') {

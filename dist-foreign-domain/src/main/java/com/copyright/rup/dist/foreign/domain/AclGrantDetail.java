@@ -17,7 +17,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  */
 public class AclGrantDetail extends StoredEntity<String> {
 
-    private static final long serialVersionUID = -4902979874269710753L;
+    private static final long serialVersionUID = 5601976659993664487L;
 
     private String grantSetId;
     private String grantStatus;
@@ -28,6 +28,7 @@ public class AclGrantDetail extends StoredEntity<String> {
     private Long rhAccountNumber;
     private Boolean eligible;
     private Boolean manualUploadFlag;
+    private Long payeeAccountNumber;
 
     public String getGrantSetId() {
         return grantSetId;
@@ -101,6 +102,14 @@ public class AclGrantDetail extends StoredEntity<String> {
         this.manualUploadFlag = manualUploadFlag;
     }
 
+    public Long getPayeeAccountNumber() {
+        return payeeAccountNumber;
+    }
+
+    public void setPayeeAccountNumber(Long payeeAccountNumber) {
+        this.payeeAccountNumber = payeeAccountNumber;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -121,6 +130,7 @@ public class AclGrantDetail extends StoredEntity<String> {
             .append(rhAccountNumber, that.rhAccountNumber)
             .append(eligible, that.eligible)
             .append(manualUploadFlag, that.manualUploadFlag)
+            .append(payeeAccountNumber, that.payeeAccountNumber)
             .isEquals();
     }
 
@@ -137,6 +147,7 @@ public class AclGrantDetail extends StoredEntity<String> {
             .append(rhAccountNumber)
             .append(eligible)
             .append(manualUploadFlag)
+            .append(payeeAccountNumber)
             .toHashCode();
     }
 
@@ -153,6 +164,7 @@ public class AclGrantDetail extends StoredEntity<String> {
             .append("rhAccountNumber", rhAccountNumber)
             .append("eligible", eligible)
             .append("manualUploadFlag", manualUploadFlag)
+            .append("payeeAccountNumber", payeeAccountNumber)
             .toString();
     }
 }

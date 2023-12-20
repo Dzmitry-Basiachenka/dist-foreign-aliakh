@@ -12,6 +12,7 @@
     "updateUser": "user@copyright.com",
     "createDate": 1611979200000,
     "updateDate": 1612065600000,
-    "manualUploadFlag": false
+    "manualUploadFlag": false,
+    "payeeAccountNumber": 2000123124
   }
 ]

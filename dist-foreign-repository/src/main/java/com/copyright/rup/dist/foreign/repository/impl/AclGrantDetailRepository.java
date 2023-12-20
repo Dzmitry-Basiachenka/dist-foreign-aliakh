@@ -7,7 +7,6 @@ import com.copyright.rup.dist.foreign.domain.AclGrantDetailDto;
 import com.copyright.rup.dist.foreign.domain.filter.AclGrantDetailFilter;
 import com.copyright.rup.dist.foreign.repository.api.IAclGrantDetailRepository;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 
 import org.springframework.stereotype.Repository;
@@ -41,7 +40,7 @@ public class AclGrantDetailRepository extends AclBaseRepository implements IAclG
     @Override
     public int findCountByFilter(AclGrantDetailFilter filter) {
         return selectOne("IAclGrantDetailMapper.findCountByFilter",
-            ImmutableMap.of("filter", escapeSqlLikePattern(Objects.requireNonNull(filter))));
+            Map.of("filter", escapeSqlLikePattern(Objects.requireNonNull(filter))));
     }
 
     @Override

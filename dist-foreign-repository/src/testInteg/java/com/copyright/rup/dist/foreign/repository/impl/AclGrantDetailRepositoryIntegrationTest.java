@@ -88,8 +88,7 @@ public class AclGrantDetailRepositoryIntegrationTest {
     public void testInsert() {
         AclGrantDetail grantDetail = buildAclGrantDetail();
         aclGrantDetailRepository.insert(grantDetail);
-        List<AclGrantDetail> actualGrantDetails =
-            aclGrantDetailRepository.findByIds(List.of(ACL_GRANT_DETAIL_UID_1));
+        List<AclGrantDetail> actualGrantDetails = aclGrantDetailRepository.findByIds(List.of(ACL_GRANT_DETAIL_UID_1));
         assertEquals(1, actualGrantDetails.size());
         AclGrantDetail actualGrantDetail = actualGrantDetails.get(0);
         assertNotNull(actualGrantDetail);
@@ -226,7 +225,6 @@ public class AclGrantDetailRepositoryIntegrationTest {
         filter.setRhAccountNumberExpression(new FilterExpression<>(FilterOperatorEnum.CONTAINS, 28511, null));
         filter.setRhNameExpression(new FilterExpression<>(FilterOperatorEnum.CONTAINS, "Greenleaf", null));
         filter.setEditableExpression(new FilterExpression<>(FilterOperatorEnum.Y));
-        filter.setEligibleExpression(new FilterExpression<>(FilterOperatorEnum.Y));
         List<AclGrantDetailDto> values = aclGrantDetailRepository.findDtosByFilter(filter, null, buildSort());
         assertEquals(1, values.size());
         verifyAclGrantDetailDto(loadExpectedDtos("json/acl/acl_grant_detail_dto.json").get(0), values.get(0), true);
@@ -454,6 +452,7 @@ public class AclGrantDetailRepositoryIntegrationTest {
         assertEquals(expectedGrantDetail.getSystemTitle(), actualGrantDetail.getSystemTitle());
         assertEquals(expectedGrantDetail.getRhAccountNumber(), actualGrantDetail.getRhAccountNumber());
         assertEquals(expectedGrantDetail.getEligible(), actualGrantDetail.getEligible());
+        assertEquals(expectedGrantDetail.getPayeeAccountNumber(), actualGrantDetail.getPayeeAccountNumber());
         if (isValidateAdditionalFields) {
             assertEquals(expectedGrantDetail.getVersion(), actualGrantDetail.getVersion());
             assertEquals(expectedGrantDetail.getCreateUser(), actualGrantDetail.getCreateUser());
@@ -485,6 +484,8 @@ public class AclGrantDetailRepositoryIntegrationTest {
         assertEquals(expectedGrantDetail.getTypeOfUse(), actualGrantDetail.getTypeOfUse());
         assertEquals(expectedGrantDetail.getGrantPeriod(), actualGrantDetail.getGrantPeriod());
         assertEquals(expectedGrantDetail.getEditable(), actualGrantDetail.getEditable());
+        assertEquals(expectedGrantDetail.getManualUploadFlag(), actualGrantDetail.getManualUploadFlag());
+        assertEquals(expectedGrantDetail.getPayeeAccountNumber(), actualGrantDetail.getPayeeAccountNumber());
         assertEquals(expectedGrantDetail.getVersion(), actualGrantDetail.getVersion());
         assertEquals(expectedGrantDetail.getCreateUser(), actualGrantDetail.getCreateUser());
         assertEquals(expectedGrantDetail.getUpdateUser(), actualGrantDetail.getUpdateUser());
@@ -492,7 +493,6 @@ public class AclGrantDetailRepositoryIntegrationTest {
         if (isValidateDate) {
             assertEquals(expectedGrantDetail.getUpdateDate(), actualGrantDetail.getUpdateDate());
         }
-        assertEquals(expectedGrantDetail.getManualUploadFlag(), actualGrantDetail.getManualUploadFlag());
     }
 
     private void assertFilteringFindDtosByFilter(Consumer<AclGrantDetailFilter> consumer, String... detailIds) {
@@ -516,6 +516,7 @@ public class AclGrantDetailRepositoryIntegrationTest {
         grantDetail.setRhAccountNumber(7000813806L);
         grantDetail.setEligible(ELIGIBLE);
         grantDetail.setManualUploadFlag(false);
+        grantDetail.setPayeeAccountNumber(2000024750L);
         return grantDetail;
     }
 
