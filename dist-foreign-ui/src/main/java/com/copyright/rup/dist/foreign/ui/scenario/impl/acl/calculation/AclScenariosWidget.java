@@ -70,6 +70,7 @@ import java.util.Objects;
 public class AclScenariosWidget extends VerticalLayout implements IAclScenariosWidget, IDateFormatter {
 
     private static final long serialVersionUID = 3822583325597833263L;
+    private static final String SCENARIO_DETAILED_AMOUNT_STYLE = "scenario-detailed-amount";
 
     private final Label ownerLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
     private final Label grossTotalPrintLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
@@ -94,8 +95,9 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
     private final Label actionReason = new Label(StringUtils.EMPTY, ContentMode.HTML);
     private final IAclScenarioHistoryController aclScenarioHistoryController;
     private final Button createButton = Buttons.createButton(ForeignUi.getMessage("button.create"));
-    private final Button deleteButton = Buttons.createButton(ForeignUi.getMessage("button.delete"));
     private final Button viewButton = Buttons.createButton(ForeignUi.getMessage("button.view"));
+    private final Button editNameButton = Buttons.createButton(ForeignUi.getMessage("button.edit_name"));
+    private final Button deleteButton = Buttons.createButton(ForeignUi.getMessage("button.delete"));
     private final Button pubTypeWeights = Buttons.createButton(ForeignUi.getMessage("button.publication_type_weights"));
     private final Button submitButton = Buttons.createButton(ForeignUi.getMessage("button.submit"));
     private final Button rejectButton = Buttons.createButton(ForeignUi.getMessage("button.reject"));
@@ -163,6 +165,7 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
         mediator = new AclScenariosMediator();
         mediator.setCreateButton(createButton);
         mediator.setViewButton(viewButton);
+        mediator.setEditNameButton(editNameButton);
         mediator.setDeleteButton(deleteButton);
         mediator.setPubTypeWeights(pubTypeWeights);
         mediator.setApproveButton(approveButton);
@@ -234,10 +237,10 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
     private HorizontalLayout initButtonsLayout() {
         addButtonsListeners();
         HorizontalLayout buttonsLayout =
-            new HorizontalLayout(createButton, viewButton, deleteButton, pubTypeWeights, submitButton, rejectButton,
-                approveButton, sendToLmButton);
-        VaadinUtils.setButtonsAutoDisabled(createButton, viewButton, deleteButton, pubTypeWeights, submitButton,
-            rejectButton, approveButton, sendToLmButton);
+            new HorizontalLayout(createButton, viewButton, editNameButton, deleteButton, pubTypeWeights, submitButton,
+                rejectButton, approveButton, sendToLmButton);
+        VaadinUtils.setButtonsAutoDisabled(createButton, viewButton, editNameButton, deleteButton, pubTypeWeights,
+            submitButton, rejectButton, approveButton, sendToLmButton);
         buttonsLayout.setMargin(true);
         VaadinUtils.addComponentStyle(buttonsLayout, "acl-scenario-buttons-layout");
         return buttonsLayout;
@@ -247,6 +250,8 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
         createButton.addClickListener(event ->
             Windows.showModalWindow(new CreateAclScenarioWindow(aclScenariosController, createEvent -> refresh())));
         viewButton.addClickListener(event -> onClickViewButton());
+        //TODO: {dbasiachenka} implement
+        editNameButton.addClickListener(event -> {});
         deleteButton.addClickListener(event -> aclScenariosController.onDeleteButtonClicked());
         pubTypeWeights.addClickListener(event -> {
             AclPublicationTypeWeightsWindow window = new AclPublicationTypeWeightsWindow(aclScenariosController, true);
@@ -306,7 +311,7 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
     private VerticalLayout initGrossTotalLayout() {
         VerticalLayout layout = new VerticalLayout(grossTotalPrintLabel, grossTotalDigitalLabel, numberOfRhsPrintLabel,
             numberOfRhsDigitalLabel, numberOfWorksPrintLabel, numberOfWorksDigitalLabel);
-        VaadinUtils.addComponentStyle(layout, "scenario-detailed-amount");
+        VaadinUtils.addComponentStyle(layout, SCENARIO_DETAILED_AMOUNT_STYLE);
         layout.setCaptionAsHtml(true);
         layout.setSpacing(false);
         layout.setMargin(false);
@@ -317,7 +322,7 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
 
     private VerticalLayout initServiceFeeTotalLayout() {
         VerticalLayout layout = new VerticalLayout(serviceFeeTotalPrintLabel, serviceFeeTotalDigitalLabel);
-        VaadinUtils.addComponentStyle(layout, "scenario-detailed-amount");
+        VaadinUtils.addComponentStyle(layout, SCENARIO_DETAILED_AMOUNT_STYLE);
         layout.setCaptionAsHtml(true);
         layout.setSpacing(false);
         layout.setMargin(false);
@@ -327,7 +332,7 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
 
     private VerticalLayout initNetTotalLayout() {
         VerticalLayout layout = new VerticalLayout(netTotalPrintLabel, netTotalDigitalLabel);
-        VaadinUtils.addComponentStyle(layout, "scenario-detailed-amount");
+        VaadinUtils.addComponentStyle(layout, SCENARIO_DETAILED_AMOUNT_STYLE);
         layout.setCaptionAsHtml(true);
         layout.setSpacing(false);
         layout.setMargin(false);
