@@ -15,6 +15,7 @@
         <result property="rhAccountNumber" column="rh_account_number"/>
         <result property="eligible" column="is_eligible"/>
         <result property="manualUploadFlag" column="manual_upload_flag"/>
+        <result property="payeeAccountNumber" column="payee_account_number"/>
     </resultMap>
 
     <resultMap id="aclGrantDetailDtoResultMap" type="AclGrantDetailDto" extends="StoredEntityMapper.storedEntityResult">
@@ -32,6 +33,7 @@
         <result property="grantSetName" column="name"/>
         <result property="editable" column="is_editable"/>
         <result property="manualUploadFlag" column="manual_upload_flag"/>
+        <result property="payeeAccountNumber" column="payee_account_number"/>
     </resultMap>
 
     <sql id="aclGrantDetailColumns">
@@ -45,6 +47,7 @@
         rh_account_number,
         is_eligible,
         manual_upload_flag,
+        payee_account_number,
         <include refid="StoredEntityMapper.additionalColumns"/>
     </sql>
 
@@ -72,6 +75,7 @@
             gs.name,
             gs.is_editable,
             manual_upload_flag,
+            payee_account_number,
             gd.created_datetime,
             gd.updated_datetime
         from ${schema}.df_acl_grant_detail gd
@@ -227,7 +231,8 @@
             gd.wr_wrk_inst,
             gd.rh_account_number,
             gd.is_eligible,
-            gd.manual_upload_flag
+            gd.manual_upload_flag,
+            gd.payee_account_number
         from ${schema}.df_acl_grant_detail gd
         left join ${schema}.df_acl_grant_detail gd2 on gd.df_acl_grant_set_uid = gd2.df_acl_grant_set_uid
             and gd2.wr_wrk_inst = gd.wr_wrk_inst
@@ -249,6 +254,7 @@
             #{rhAccountNumber},
             #{eligible},
             #{manualUploadFlag},
+            #{payeeAccountNumber},
             <include refid="StoredEntityMapper.insert"/>
         )
     </insert>
@@ -303,6 +309,7 @@
             rh_account_number,
             is_eligible,
             manual_upload_flag,
+            payee_account_number,
             <include refid="StoredEntityMapper.insert"/>
         from ${schema}.df_acl_grant_detail
         where df_acl_grant_set_uid = #{sourceGrantSetId}
