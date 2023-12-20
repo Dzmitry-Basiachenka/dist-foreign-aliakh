@@ -114,4 +114,17 @@ databaseChangeLog {
             }
         }
     }
+
+    changeSet(id: '2023-12-20-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
+        comment("CDP-1968 FDA: ACL - Populate payees at point of Grant Set population: " +
+                "add payee_account_number column to df_acl_grant_detail table")
+
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_acl_grant_detail') {
+            column(name: 'payee_account_number', type: 'NUMERIC(22)', remarks: 'The payee account number')
+        }
+
+        rollback {
+            dropColumn(schemaName: dbAppsSchema, tableName: 'df_acl_grant_detail', columnName: 'payee_account_number')
+        }
+    }
 }
