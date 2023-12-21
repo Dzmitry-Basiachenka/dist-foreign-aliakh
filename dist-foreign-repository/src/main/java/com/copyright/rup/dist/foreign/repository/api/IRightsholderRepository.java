@@ -73,6 +73,14 @@ public interface IRightsholderRepository extends ICommonRightsholderRepository {
     List<RightsholderTypeOfUsePair> findByAclScenarioId(String aclScenarioId);
 
     /**
+     * Finds list of {@link RightsholderTypeOfUsePair}s from ACL grant details by ACL grant set id.
+     *
+     * @param grantSetId grant set id
+     * @return list of {@link RightsholderTypeOfUsePair}s
+     */
+    List<RightsholderTypeOfUsePair> findByAclGrantSetId(String grantSetId);
+
+    /**
      * Finds all {@link RightsholderPayeePair}s within the scenario with given id.
      *
      * @param scenarioId {@link com.copyright.rup.dist.foreign.domain.Scenario} id

@@ -87,6 +87,17 @@ public class AclGrantDetailRepository extends AclBaseRepository implements IAclG
         return selectList("IAclGrantDetailMapper.copyGrantDetails", parameters);
     }
 
+    @Override
+    public void updatePayeeAccountNumber(String grantSetId, Long rhAccountNumber, String typeOfUse,
+                                         Long payeeAccountNumber) {
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(4);
+        params.put("grantSetId", Objects.requireNonNull(grantSetId));
+        params.put("rhAccountNumber", Objects.requireNonNull(rhAccountNumber));
+        params.put("typeOfUse", Objects.requireNonNull(typeOfUse));
+        params.put("payeeAccountNumber", Objects.requireNonNull(payeeAccountNumber));
+        update("IAclGrantDetailMapper.updatePayeeAccountNumber", params);
+    }
+
     private AclGrantDetailFilter escapeSqlLikePattern(AclGrantDetailFilter aclGrantDetailFilter) {
         AclGrantDetailFilter filterCopy = new AclGrantDetailFilter(aclGrantDetailFilter);
         filterCopy.setRhNameExpression(

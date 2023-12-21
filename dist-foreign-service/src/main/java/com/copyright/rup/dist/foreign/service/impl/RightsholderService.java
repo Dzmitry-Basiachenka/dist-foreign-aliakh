@@ -119,6 +119,11 @@ public class RightsholderService extends CommonRightsholderService implements IR
     }
 
     @Override
+    public List<RightsholderTypeOfUsePair> getByAclGrantSetId(String grantSetId) {
+        return rightsholderRepository.findByAclGrantSetId(grantSetId);
+    }
+
+    @Override
     public List<RightsholderPayeePair> getRhPayeePairByScenarioId(String scenarioId) {
         return rightsholderRepository.findRhPayeePairByScenarioId(scenarioId);
     }

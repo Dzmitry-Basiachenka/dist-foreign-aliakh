@@ -56,6 +56,8 @@ public class RightsholderRepositoryIntegrationTest {
     private static final String RH_NAME_2000017004 = "Access Copyright, The Canadian Copyright Agency";
     private static final String RH_NAME_2000017010 = "JAC, Japan Academic Association for Copyright Clearance, Inc.";
     private static final String FAS_PRODUCT_FAMILY = "FAS";
+    private static final String DIGITAL = "DIGITAL";
+    private static final String PRINT = "PRINT";
     private static final String SCENARIO_ID_1 = "f933e8cb-3795-44bb-bc6a-f59d5c37781d";
     private static final String USAGE_BATCH_ID = "435a1689-8dfd-4a94-8ef5-72e2c4e6f3fa";
 
@@ -219,15 +221,35 @@ public class RightsholderRepositoryIntegrationTest {
         Rightsholder rightsholder = rightsholderTypeOfUsePairs.get(0).getRightsholder();
         assertEquals("ccc4da89-aa29-45d6-9bdf-2f7402f9aa08", rightsholder.getId());
         assertEquals(1000000001L, rightsholder.getAccountNumber(), 0);
-        assertEquals("PRINT", rightsholderTypeOfUsePairs.get(0).getTypeOfUse());
+        assertEquals(PRINT, rightsholderTypeOfUsePairs.get(0).getTypeOfUse());
         Rightsholder rightsholder1 = rightsholderTypeOfUsePairs.get(1).getRightsholder();
         assertEquals("d13cf4d3-2d7d-45d5-99eb-5aaeca0a6121", rightsholder1.getId());
         assertEquals(1000002859L, rightsholder1.getAccountNumber(), 0);
-        assertEquals("DIGITAL", rightsholderTypeOfUsePairs.get(1).getTypeOfUse());
+        assertEquals(DIGITAL, rightsholderTypeOfUsePairs.get(1).getTypeOfUse());
         rightsholder1 = rightsholderTypeOfUsePairs.get(2).getRightsholder();
         assertEquals("d13cf4d3-2d7d-45d5-99eb-5aaeca0a6121", rightsholder1.getId());
         assertEquals(1000002859L, rightsholder1.getAccountNumber(), 0);
-        assertEquals("PRINT", rightsholderTypeOfUsePairs.get(2).getTypeOfUse());
+        assertEquals(PRINT, rightsholderTypeOfUsePairs.get(2).getTypeOfUse());
+    }
+
+    @Test
+    @TestData(fileName = FOLDER_NAME + "find-by-acl-grant-set-id.groovy")
+    public void testFindByAclGrantSetId() {
+        List<RightsholderTypeOfUsePair> rightsholderTypeOfUsePairs =
+            rightsholderRepository.findByAclGrantSetId("6d560952-070c-44cb-ba96-710f17a36017");
+        assertEquals(3, rightsholderTypeOfUsePairs.size());
+        Rightsholder rightsholder1 = rightsholderTypeOfUsePairs.get(0).getRightsholder();
+        assertEquals("7b18daf7-679d-4bcf-a0c3-3a3cf8f7ee8c", rightsholder1.getId());
+        assertEquals(7001645719L, rightsholder1.getAccountNumber(), 0);
+        assertEquals(DIGITAL, rightsholderTypeOfUsePairs.get(0).getTypeOfUse());
+        Rightsholder rightsholder2 = rightsholderTypeOfUsePairs.get(1).getRightsholder();
+        assertEquals("7b18daf7-679d-4bcf-a0c3-3a3cf8f7ee8c", rightsholder2.getId());
+        assertEquals(7001645719L, rightsholder2.getAccountNumber(), 0);
+        assertEquals(PRINT, rightsholderTypeOfUsePairs.get(1).getTypeOfUse());
+        Rightsholder rightsholder3 = rightsholderTypeOfUsePairs.get(2).getRightsholder();
+        assertEquals("f2b84227-e24d-4da0-81b8-a6d9635576a2", rightsholder3.getId());
+        assertEquals(2000155939L, rightsholder3.getAccountNumber(), 0);
+        assertEquals(PRINT, rightsholderTypeOfUsePairs.get(2).getTypeOfUse());
     }
 
     private Rightsholder buildRightsholder() {

@@ -93,4 +93,14 @@ public interface IAclGrantDetailRepository {
      * @return list of inserted grant details ids
      */
     List<String> copyGrantDetailsByGrantSetId(String sourceGrantSetId, String targetGrantSetId, String userName);
+
+    /**
+     * Sets payee account number for ACL grant detail by ACL grant set id, RH account number, and type of use.
+     *
+     * @param grantSetId         grant set id
+     * @param rhAccountNumber    RH account number
+     * @param typeOfUse          type of use
+     * @param payeeAccountNumber payee account number
+     */
+    void updatePayeeAccountNumber(String grantSetId, Long rhAccountNumber, String typeOfUse, Long payeeAccountNumber);
 }
