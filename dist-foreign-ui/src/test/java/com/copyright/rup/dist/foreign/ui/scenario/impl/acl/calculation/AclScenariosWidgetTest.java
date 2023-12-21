@@ -328,6 +328,24 @@ public class AclScenariosWidgetTest {
         verify(Windows.class, grid, controller);
     }
 
+    @Test
+    public void testEditNameButtonClick() {
+        mockStatic(Windows.class);
+        Capture<EditAclScenarioNameWindow> windowCapture = newCapture();
+        expect(controller.getWidget()).andReturn(scenariosWidget).once();
+        expect(controller.aclScenarioExists(scenario.getName())).andReturn(true).once();
+        Windows.showModalWindow(capture(windowCapture));
+        expectLastCall().once();
+        replay(Windows.class, controller);
+        Button button = Whitebox.getInternalState(scenariosWidget, "editNameButton");
+        button.click();
+        EditAclScenarioNameWindow window = windowCapture.getValue();
+        assertNotNull(window);
+        assertEquals("Edit Scenario Name", window.getCaption());
+        assertEquals("edit-acl-scenario-name-window", window.getStyleName());
+        verify(Windows.class, controller);
+    }
+
     private AclScenario buildAclScenario(ScenarioStatusEnum status) {
         AclScenario aclScenario = new AclScenario();
         aclScenario.setId(SCENARIO_UID);

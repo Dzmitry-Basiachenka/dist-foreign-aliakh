@@ -122,7 +122,7 @@ public interface IAclScenarioService {
      * @param fundPoolId fund pool id
      * @param grantSetId grant set id
      * @param mapping    {@link DetailLicenseeClass}es mapping
-     * @return list of {@link AclFundPoolDetailDto}es
+     * @return set of {@link AclFundPoolDetailDto}es
      */
     Set<AclFundPoolDetailDto> getFundPoolDetailsNotToBeDistributed(String batchId, String fundPoolId,
                                                                    String grantSetId,
@@ -204,4 +204,12 @@ public interface IAclScenarioService {
      * @param scenario {@link AclScenario} instance
      */
     void sendToLm(AclScenario scenario);
+
+    /**
+     * Updates {@link AclScenario} name by provided identifier.
+     *
+     * @param scenarioId {@link AclScenario} identifier
+     * @param name       new scenario name
+     */
+    void updateName(String scenarioId, String name);
 }

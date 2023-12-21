@@ -584,6 +584,17 @@ public class AclScenariosControllerTest {
         verify(scenariosWidget, Windows.class, aclScenarioService);
     }
 
+    @Test
+    public void testEditAclScenarioName() {
+        String id = aclScenario.getId();
+        String newName = "New scenario name";
+        aclScenarioService.updateName(id, newName);
+        expectLastCall().once();
+        replay(aclScenarioService);
+        aclScenariosController.editAclScenarioName(id, newName);
+        verify(aclScenarioService);
+    }
+
     private AclScenario buildAclScenario() {
         AclScenario scenario = new AclScenario();
         scenario.setId(SCENARIO_UID);

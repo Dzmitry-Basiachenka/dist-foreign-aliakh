@@ -337,6 +337,11 @@ public class AclScenarioServiceTest {
             RupContextUtils.class);
     }
 
+    @Test
+    public void testUpdateName() {
+        //TODO: {dbasiachenka} implement
+    }
+
     private AclScenario buildAclScenario() {
         AclScenario aclScenario = new AclScenario();
         aclScenario.setId(SCENARIO_UID);
