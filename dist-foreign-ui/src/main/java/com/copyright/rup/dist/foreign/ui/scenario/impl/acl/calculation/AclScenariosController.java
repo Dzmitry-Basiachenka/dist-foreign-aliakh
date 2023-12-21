@@ -322,11 +322,6 @@ public class AclScenariosController extends CommonController<IAclScenariosWidget
     }
 
     @Override
-    protected IAclScenariosWidget instantiateWidget() {
-        return new AclScenariosWidget(this, aclScenarioHistoryController);
-    }
-
-    @Override
     public IAclScenariosFilterWidget initAclScenariosFilterWidget() {
         IAclScenariosFilterWidget widget = aclScenariosFilterController.initWidget();
         widget.addListener(FilterChangedEvent.class, this, IAclScenariosController.ON_FILTER_CHANGED);
@@ -347,6 +342,16 @@ public class AclScenariosController extends CommonController<IAclScenariosWidget
             .findFirst()
             .filter(auditItem -> userName.equals(auditItem.getCreateUser()))
             .isEmpty();
+    }
+
+    @Override
+    public void editAclScenarioName(String scenarioId, String newScenarioName) {
+        aclScenarioService.updateName(scenarioId, newScenarioName);
+    }
+
+    @Override
+    protected IAclScenariosWidget instantiateWidget() {
+        return new AclScenariosWidget(this, aclScenarioHistoryController);
     }
 
     private void appendCriterionMessage(StringBuilder builder, String criterionName, Object values) {

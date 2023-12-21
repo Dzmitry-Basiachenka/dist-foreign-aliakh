@@ -27,8 +27,6 @@ import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
 import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 import com.copyright.rup.dist.foreign.service.impl.InconsistentUsageStateException;
 
-import com.google.common.collect.ImmutableSet;
-
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -146,7 +144,7 @@ public class UdmUsageService implements IUdmUsageService {
         actionReasons.forEach(actionReason ->
             udmUsageAuditService.logAction(udmUsageDto.getId(), UsageActionTypeEnum.USAGE_EDIT, actionReason));
         if (udmUsageDto.isBaselineFlag()) {
-            baselineService.deleteFromBaseline(ImmutableSet.of(udmUsageDto.getId()), reason, userName);
+            baselineService.deleteFromBaseline(Set.of(udmUsageDto.getId()), reason, userName);
         }
         LOGGER.debug("Update UDM usage. Finished. Usage={}, Reasons={}, IsResearcher={}, Reason={}, UserName={}",
             udmUsageDto, actionReasons, isResearcher, reason, userName);

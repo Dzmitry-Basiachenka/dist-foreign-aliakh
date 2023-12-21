@@ -261,6 +261,11 @@ public class AclScenarioService implements IAclScenarioService {
             userName);
     }
 
+    @Override
+    public void updateName(String scenarioId, String name) {
+        //TODO: {dbasiachenka} implement
+    }
+
     private void populateScenario(AclScenario aclScenario, String userName, String scenarioId) {
         aclScenario.setId(scenarioId);
         aclScenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);

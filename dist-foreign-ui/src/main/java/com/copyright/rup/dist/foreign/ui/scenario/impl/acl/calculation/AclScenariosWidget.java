@@ -250,8 +250,9 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
         createButton.addClickListener(event ->
             Windows.showModalWindow(new CreateAclScenarioWindow(aclScenariosController, createEvent -> refresh())));
         viewButton.addClickListener(event -> onClickViewButton());
-        //TODO: {dbasiachenka} implement
-        editNameButton.addClickListener(event -> {});
+        editNameButton.addClickListener(event ->
+            Windows.showModalWindow(new EditAclScenarioNameWindow(aclScenariosController,
+                aclScenariosController.getWidget().getSelectedScenario())));
         deleteButton.addClickListener(event -> aclScenariosController.onDeleteButtonClicked());
         pubTypeWeights.addClickListener(event -> {
             AclPublicationTypeWeightsWindow window = new AclPublicationTypeWeightsWindow(aclScenariosController, true);

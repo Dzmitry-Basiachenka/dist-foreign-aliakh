@@ -272,4 +272,12 @@ public interface IAclScenariosController extends IController<IAclScenariosWidget
      * Handles send to LM action.
      */
     void sendToLm();
+
+    /**
+     * Updates name for selected {@link AclScenario}.
+     *
+     * @param scenarioId      id of selected {@link AclScenario}
+     * @param newScenarioName new scenario name to set
+     */
+    void editAclScenarioName(String scenarioId, String newScenarioName);
 }
