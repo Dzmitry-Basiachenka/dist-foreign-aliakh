@@ -22,6 +22,8 @@ import java.util.Set;
  */
 public class UdmCommonProxyValueFilterWindow<T> extends FilterWindow<T> {
 
+    private static final long serialVersionUID = -1909982535564550018L;
+
     /**
      * Constructor.
      *

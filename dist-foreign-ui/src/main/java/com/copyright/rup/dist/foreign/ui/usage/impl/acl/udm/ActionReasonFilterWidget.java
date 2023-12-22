@@ -29,6 +29,8 @@ import java.util.function.Supplier;
 public class ActionReasonFilterWidget extends BaseUdmItemsFilterWidget<UdmActionReason>
     implements IFilterWindowController<UdmActionReason> {
 
+    private static final long serialVersionUID = 3085484342631894428L;
+
     private final Supplier<List<UdmActionReason>> supplier;
     private final Set<UdmActionReason> selectedItemsIds = new HashSet<>();
 
@@ -42,7 +44,7 @@ public class ActionReasonFilterWidget extends BaseUdmItemsFilterWidget<UdmAction
         super(ForeignUi.getMessage("label.action_reasons_udm"));
         this.supplier = supplier;
         this.selectedItemsIds.addAll(selectedItemsIds);
-        setLabelValue(selectedItemsIds.size());
+        super.setLabelValue(selectedItemsIds.size());
     }
 
     @Override

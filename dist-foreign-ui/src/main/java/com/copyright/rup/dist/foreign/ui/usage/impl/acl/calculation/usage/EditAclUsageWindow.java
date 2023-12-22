@@ -51,6 +51,7 @@ public class EditAclUsageWindow extends Window {
     private static final Range<BigDecimal> ANNUALIZED_COPIES_RANGE =
         Range.closed(new BigDecimal("0.00001"), new BigDecimal("9999999999.99999"));
     private static final Range<Integer> ANNUALIZED_COPIES_SCALE_RANGE = Range.closed(0, 5);
+    private static final long serialVersionUID = 6845376803178335937L;
 
     private final TextField periodField = new TextField(ForeignUi.getMessage("label.edit.period"));
     private final TextField wrWrkInstField = new TextField(ForeignUi.getMessage("label.wr_wrk_inst"));
@@ -80,11 +81,11 @@ public class EditAclUsageWindow extends Window {
         this.selectedUsages = selectedUsages;
         this.saveButtonClickListener = clickListener;
         bindedUsageDto = new AclUsageDto();
-        setContent(initRootLayout());
-        setCaption(ForeignUi.getMessage("window.edit_acl_usages"));
-        setResizable(false);
-        setWidth(400, Unit.PIXELS);
-        setHeight(300, Unit.PIXELS);
+        super.setContent(initRootLayout());
+        super.setCaption(ForeignUi.getMessage("window.edit_acl_usages"));
+        super.setResizable(false);
+        super.setWidth(400, Unit.PIXELS);
+        super.setHeight(300, Unit.PIXELS);
         VaadinUtils.addComponentStyle(this, "edit-acl-usages-window");
     }
 

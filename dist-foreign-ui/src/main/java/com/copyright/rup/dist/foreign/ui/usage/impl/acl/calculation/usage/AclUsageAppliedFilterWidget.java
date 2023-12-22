@@ -22,6 +22,8 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class AclUsageAppliedFilterWidget extends CommonAppliedFilterPanel {
 
+    private static final long serialVersionUID = -3313668266292683499L;
+
     /**
      * Constructor.
      */

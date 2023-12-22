@@ -21,6 +21,8 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class UdmBaselineAppliedFilterWidget extends CommonAppliedFilterPanel {
 
+    private static final long serialVersionUID = -4597508259261266305L;
+
     /**
      * Constructor.
      */

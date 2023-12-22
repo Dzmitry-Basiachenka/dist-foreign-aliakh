@@ -7,6 +7,7 @@ import com.copyright.rup.dist.foreign.service.api.acl.IUdmProxyValueService;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmProxyValueFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmProxyValueFilterWidget;
 import com.copyright.rup.vaadin.widget.api.CommonController;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -28,6 +29,8 @@ import java.util.stream.Collectors;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class UdmProxyValueFilterController extends CommonController<IUdmProxyValueFilterWidget>
     implements IUdmProxyValueFilterController {
+
+    private static final long serialVersionUID = 1562963591735375624L;
 
     @Autowired
     private IPublicationTypeService publicationTypeService;

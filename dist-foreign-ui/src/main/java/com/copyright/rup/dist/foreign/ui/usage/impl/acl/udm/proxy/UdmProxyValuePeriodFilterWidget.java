@@ -30,6 +30,8 @@ import java.util.Set;
 public class UdmProxyValuePeriodFilterWidget extends BaseItemsFilterWidget<Integer> implements
     CommonFilterWindow.IFilterSaveListener<Integer>, IFilterWindowController<Integer> {
 
+    private static final long serialVersionUID = -5262923558008427425L;
+
     private final IUdmProxyValueFilterController controller;
     private final Set<Integer> selectedItemsIds = new HashSet<>();
 

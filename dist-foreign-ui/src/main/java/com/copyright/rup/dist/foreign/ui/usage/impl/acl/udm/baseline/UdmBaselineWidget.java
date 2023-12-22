@@ -55,6 +55,7 @@ public class UdmBaselineWidget extends HorizontalSplitPanel implements IUdmBasel
 
     private static final String EMPTY_STYLE_NAME = "empty-baseline-grid";
     private static final String FOOTER_LABEL = "Usages Count: %s";
+    private static final long serialVersionUID = -3414621425346137844L;
 
     private boolean hasSpecialistPermission;
     private IUdmBaselineController controller;

@@ -30,6 +30,7 @@ public class AssigneeFilterWidget extends BaseUdmItemsFilterWidget<String>
     implements IFilterWindowController<String> {
 
     private static final String UNASSIGNED = ForeignUi.getMessage("label.unassigned");
+    private static final long serialVersionUID = -6462411707448565336L;
 
     private final Supplier<List<String>> supplier;
     private final Set<String> selectedItemsIds = new HashSet<>();
@@ -44,7 +45,7 @@ public class AssigneeFilterWidget extends BaseUdmItemsFilterWidget<String>
         super(ForeignUi.getMessage("label.assignees"));
         this.supplier = supplier;
         this.selectedItemsIds.addAll(selectedItemsIds);
-        setLabelValue(selectedItemsIds.size());
+        super.setLabelValue(selectedItemsIds.size());
     }
 
     @Override

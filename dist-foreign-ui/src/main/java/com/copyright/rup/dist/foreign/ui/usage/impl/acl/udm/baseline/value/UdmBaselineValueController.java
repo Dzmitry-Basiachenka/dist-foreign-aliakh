@@ -41,6 +41,8 @@ import java.util.List;
 public class UdmBaselineValueController extends CommonController<IUdmBaselineValueWidget> implements
     IUdmBaselineValueController {
 
+    private static final long serialVersionUID = 6608186400121447496L;
+
     @Autowired
     private IUdmBaselineValueFilterController udmBaselineValueFilterController;
     @Autowired

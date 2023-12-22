@@ -63,6 +63,7 @@ public class AclUsageFiltersWindow extends CommonAclFiltersWindow {
             FilterOperatorEnum.EQUALS, FilterOperatorEnum.DOES_NOT_EQUAL,
             FilterOperatorEnum.GREATER_THAN, FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO, FilterOperatorEnum.LESS_THAN,
             FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO, FilterOperatorEnum.BETWEEN};
+    private static final long serialVersionUID = 4040987577161727196L;
 
     private final StringLengthValidator numberStringLengthValidator =
         new StringLengthValidator(ForeignUi.getMessage("field.error.number_length", 9), 0, 9);
@@ -117,11 +118,11 @@ public class AclUsageFiltersWindow extends CommonAclFiltersWindow {
     public AclUsageFiltersWindow(IAclUsageFilterController controller, AclUsageFilter aclUsageFilter) {
         this.controller = controller;
         this.usageFilter = aclUsageFilter;
-        setContent(initRootLayout());
-        setCaption(ForeignUi.getMessage("window.acl_usages_additional_filters"));
-        setResizable(false);
-        setWidth(600, Unit.PIXELS);
-        setHeight(540, Unit.PIXELS);
+        super.setContent(initRootLayout());
+        super.setCaption(ForeignUi.getMessage("window.acl_usages_additional_filters"));
+        super.setResizable(false);
+        super.setWidth(600, Unit.PIXELS);
+        super.setHeight(540, Unit.PIXELS);
         VaadinUtils.addComponentStyle(this, "acl-usages-additional-filters-window");
     }
 
@@ -133,7 +134,7 @@ public class AclUsageFiltersWindow extends CommonAclFiltersWindow {
     }
 
     private ComponentContainer initRootLayout() {
-        VerticalLayout fieldsLayout = new VerticalLayout();
+        var fieldsLayout = new VerticalLayout();
         fieldsLayout.addComponents(initPeriodDetailLicenseeClassLayout(), initAggregateLicenseeClassPubTypeLayout(),
             initReportedTypeOfUseFilterWidget(), initUsageOriginChannelLayout(), initTypeOfUseComboBox(),
             initUsageDetailIdLayout(), initWrWrkInstLayout(), initSystemTitleLayout(), initSurveyCountryLayout(),

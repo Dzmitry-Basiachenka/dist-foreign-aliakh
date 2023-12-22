@@ -31,6 +31,8 @@ import java.util.Objects;
  */
 public class ViewBaselineWindow extends Window implements IDateFormatter {
 
+    private static final long serialVersionUID = 8187557542259773964L;
+
     private final UdmBaselineDto udmBaselineDto;
     private final Binder<UdmBaselineDto> binder = new Binder<>();
 
@@ -41,11 +43,11 @@ public class ViewBaselineWindow extends Window implements IDateFormatter {
      */
     public ViewBaselineWindow(UdmBaselineDto selectedBaseline) {
         udmBaselineDto = selectedBaseline;
-        setContent(initRootLayout());
-        setCaption(ForeignUi.getMessage("window.view_udm_baseline"));
-        setResizable(false);
-        setWidth(500, Unit.PIXELS);
-        setHeight(700, Unit.PIXELS);
+        super.setContent(initRootLayout());
+        super.setCaption(ForeignUi.getMessage("window.view_udm_baseline"));
+        super.setResizable(false);
+        super.setWidth(500, Unit.PIXELS);
+        super.setHeight(700, Unit.PIXELS);
         VaadinUtils.addComponentStyle(this, "view-udm-baseline-window");
     }
 
