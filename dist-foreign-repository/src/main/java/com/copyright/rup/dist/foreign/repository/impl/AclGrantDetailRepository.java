@@ -38,6 +38,11 @@ public class AclGrantDetailRepository extends AclBaseRepository implements IAclG
     }
 
     @Override
+    public List<AclGrantDetail> findByGrantSetId(String grantSetId) {
+        return selectList("IAclGrantDetailMapper.findByGrantSetId", Objects.requireNonNull(grantSetId));
+    }
+
+    @Override
     public int findCountByFilter(AclGrantDetailFilter filter) {
         return selectOne("IAclGrantDetailMapper.findCountByFilter",
             Map.of("filter", escapeSqlLikePattern(Objects.requireNonNull(filter))));
@@ -45,11 +50,11 @@ public class AclGrantDetailRepository extends AclBaseRepository implements IAclG
 
     @Override
     public List<AclGrantDetailDto> findDtosByFilter(AclGrantDetailFilter filter, Pageable pageable, Sort sort) {
-        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
-        parameters.put("filter", escapeSqlLikePattern(Objects.requireNonNull(filter)));
-        parameters.put("pageable", pageable);
-        parameters.put("sort", sort);
-        return selectList("IAclGrantDetailMapper.findDtosByFilter", parameters);
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(3);
+        params.put("filter", escapeSqlLikePattern(Objects.requireNonNull(filter)));
+        params.put("pageable", pageable);
+        params.put("sort", sort);
+        return selectList("IAclGrantDetailMapper.findDtosByFilter", params);
     }
 
     @Override
@@ -69,22 +74,22 @@ public class AclGrantDetailRepository extends AclBaseRepository implements IAclG
 
     @Override
     public boolean isGrantDetailExist(String grantSetId, Long wrWrkInst, String typeOfUse) {
-        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
-        parameters.put("grantSetId", Objects.requireNonNull(grantSetId));
-        parameters.put("wrWrkInst", Objects.requireNonNull(wrWrkInst));
-        parameters.put("typeOfUse", Objects.requireNonNull(typeOfUse));
-        return selectOne("IAclGrantDetailMapper.isGrantDetailExist", parameters);
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(3);
+        params.put("grantSetId", Objects.requireNonNull(grantSetId));
+        params.put("wrWrkInst", Objects.requireNonNull(wrWrkInst));
+        params.put("typeOfUse", Objects.requireNonNull(typeOfUse));
+        return selectOne("IAclGrantDetailMapper.isGrantDetailExist", params);
     }
 
     @Override
     public List<String> copyGrantDetailsByGrantSetId(String sourceGrantSetId, String targetGrantSetId,
                                                      String userName) {
-        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(4);
-        parameters.put("sourceGrantSetId", Objects.requireNonNull(sourceGrantSetId));
-        parameters.put("targetGrantSetId", Objects.requireNonNull(targetGrantSetId));
-        parameters.put("createUser", Objects.requireNonNull(userName));
-        parameters.put("updateUser", userName);
-        return selectList("IAclGrantDetailMapper.copyGrantDetails", parameters);
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(4);
+        params.put("sourceGrantSetId", Objects.requireNonNull(sourceGrantSetId));
+        params.put("targetGrantSetId", Objects.requireNonNull(targetGrantSetId));
+        params.put("createUser", Objects.requireNonNull(userName));
+        params.put("updateUser", userName);
+        return selectList("IAclGrantDetailMapper.copyGrantDetails", params);
     }
 
     @Override

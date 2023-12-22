@@ -118,71 +118,71 @@ public class AclScenarioUsageRepository extends AclBaseRepository implements IAc
     public List<AclScenarioDetailDto> findByScenarioIdAndRhAccountNumber(Long accountNumber, String scenarioId,
                                                                          String searchValue, Pageable pageable,
                                                                          Sort sort) {
-        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(5);
-        parameters.put(ACCOUNT_NUMBER_KEY, Objects.requireNonNull(accountNumber));
-        parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
-        parameters.put(SEARCH_VALUE_KEY, escapeSqlLikePattern(searchValue));
-        parameters.put(PAGEABLE_KEY, pageable);
-        parameters.put(SORT_KEY, sort);
-        return selectList("IAclScenarioUsageMapper.findByScenarioIdAndRhAccountNumber", parameters);
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(5);
+        params.put(ACCOUNT_NUMBER_KEY, Objects.requireNonNull(accountNumber));
+        params.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
+        params.put(SEARCH_VALUE_KEY, escapeSqlLikePattern(searchValue));
+        params.put(PAGEABLE_KEY, pageable);
+        params.put(SORT_KEY, sort);
+        return selectList("IAclScenarioUsageMapper.findByScenarioIdAndRhAccountNumber", params);
     }
 
     @Override
     public int findCountByScenarioIdAndRhAccountNumber(Long accountNumber, String scenarioId, String searchValue) {
-        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
-        parameters.put(ACCOUNT_NUMBER_KEY, Objects.requireNonNull(accountNumber));
-        parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
-        parameters.put(SEARCH_VALUE_KEY, escapeSqlLikePattern(searchValue));
-        return selectOne("IAclScenarioUsageMapper.findCountByScenarioIdAndRhAccountNumber", parameters);
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(3);
+        params.put(ACCOUNT_NUMBER_KEY, Objects.requireNonNull(accountNumber));
+        params.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
+        params.put(SEARCH_VALUE_KEY, escapeSqlLikePattern(searchValue));
+        return selectOne("IAclScenarioUsageMapper.findCountByScenarioIdAndRhAccountNumber", params);
     }
 
     @Override
     public List<AclScenarioDetailDto> findByScenarioId(String scenarioId, String searchValue, Pageable pageable,
                                                        Sort sort) {
-        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(4);
-        parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
-        parameters.put(SEARCH_VALUE_KEY, escapeSqlLikePattern(searchValue));
-        parameters.put(PAGEABLE_KEY, pageable);
-        parameters.put(SORT_KEY, sort);
-        return selectList("IAclScenarioUsageMapper.findByScenarioId", parameters);
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(4);
+        params.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
+        params.put(SEARCH_VALUE_KEY, escapeSqlLikePattern(searchValue));
+        params.put(PAGEABLE_KEY, pageable);
+        params.put(SORT_KEY, sort);
+        return selectList("IAclScenarioUsageMapper.findByScenarioId", params);
     }
 
     @Override
     public int findCountByScenarioId(String scenarioId, String searchValue) {
-        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
-        parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
-        parameters.put(SEARCH_VALUE_KEY, escapeSqlLikePattern(searchValue));
-        return selectOne("IAclScenarioUsageMapper.findCountByScenarioId", parameters);
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(2);
+        params.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
+        params.put(SEARCH_VALUE_KEY, escapeSqlLikePattern(searchValue));
+        return selectOne("IAclScenarioUsageMapper.findCountByScenarioId", params);
     }
 
     @Override
     public List<AclScenarioDetailDto> findRightsholderDetailsResults(RightsholderResultsFilter filter) {
         Objects.requireNonNull(filter);
-        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(4);
-        parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(filter.getScenarioId()));
-        parameters.put(ACCOUNT_NUMBER_KEY, Objects.requireNonNull(filter.getRhAccountNumber()));
-        parameters.put(WR_WRK_INST_KEY, Objects.requireNonNull(filter.getWrWrkInst()));
-        parameters.put("aggregateLicenseeClassId", Objects.requireNonNull(filter.getAggregateLicenseeClassId()));
-        return selectList("IAclScenarioUsageMapper.findRightsholderDetailsResults", parameters);
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(4);
+        params.put(SCENARIO_ID_KEY, Objects.requireNonNull(filter.getScenarioId()));
+        params.put(ACCOUNT_NUMBER_KEY, Objects.requireNonNull(filter.getRhAccountNumber()));
+        params.put(WR_WRK_INST_KEY, Objects.requireNonNull(filter.getWrWrkInst()));
+        params.put("aggregateLicenseeClassId", Objects.requireNonNull(filter.getAggregateLicenseeClassId()));
+        return selectList("IAclScenarioUsageMapper.findRightsholderDetailsResults", params);
     }
 
     @Override
     public List<AclRightsholderTotalsHolderDto> findRightsholderTitleResults(RightsholderResultsFilter filter) {
         Objects.requireNonNull(filter);
-        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
-        parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(filter.getScenarioId()));
-        parameters.put(ACCOUNT_NUMBER_KEY, Objects.requireNonNull(filter.getRhAccountNumber()));
-        parameters.put("aggregateLicenseeClassId", filter.getAggregateLicenseeClassId());
-        return selectList("IAclScenarioUsageMapper.findRightsholderTitleResults", parameters);
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(3);
+        params.put(SCENARIO_ID_KEY, Objects.requireNonNull(filter.getScenarioId()));
+        params.put(ACCOUNT_NUMBER_KEY, Objects.requireNonNull(filter.getRhAccountNumber()));
+        params.put("aggregateLicenseeClassId", filter.getAggregateLicenseeClassId());
+        return selectList("IAclScenarioUsageMapper.findRightsholderTitleResults", params);
     }
 
     @Override
     public List<AclRightsholderTotalsHolderDto> findRightsholderAggLcClassResults(RightsholderResultsFilter filter) {
-        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
-        parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(filter.getScenarioId()));
-        parameters.put(ACCOUNT_NUMBER_KEY, Objects.requireNonNull(filter.getRhAccountNumber()));
-        parameters.put(WR_WRK_INST_KEY, filter.getWrWrkInst());
-        return selectList("IAclScenarioUsageMapper.findAclAggregateLicenseeClassesByRightsholder", parameters);
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(3);
+        params.put(SCENARIO_ID_KEY, Objects.requireNonNull(filter.getScenarioId()));
+        params.put(ACCOUNT_NUMBER_KEY, Objects.requireNonNull(filter.getRhAccountNumber()));
+        params.put(WR_WRK_INST_KEY, filter.getWrWrkInst());
+        return selectList("IAclScenarioUsageMapper.findAclAggregateLicenseeClassesByRightsholder", params);
     }
 
     @Override

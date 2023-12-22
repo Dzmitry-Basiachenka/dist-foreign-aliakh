@@ -1,0 +1,28 @@
+[
+  {
+    "id": "4e15747c-e145-4e92-8348-cd15e9c2f39b",
+    "grantSetId": "80a935c4-27ce-440d-8c91-9b49d830b85b",
+    "grantStatus": "GRANT",
+    "typeOfUse": "DIGITAL",
+    "typeOfUseStatus": "Digital Only",
+    "wrWrkInst": 122820638,
+    "systemTitle": "Technology review",
+    "rhAccountNumber": 1000028511,
+    "eligible": false,
+    "manualUploadFlag": false,
+    "payeeAccountNumber": 7001645719
+  },
+  {
+    "id": "501f66a1-2bca-4084-bb89-65a9fbe01f3f",
+    "grantSetId": "80a935c4-27ce-440d-8c91-9b49d830b85b",
+    "grantStatus": "GRANT",
+    "typeOfUse": "PRINT",
+    "typeOfUseStatus": "Print Only",
+    "wrWrkInst": 269040891,
+    "systemTitle": "Snap to grid",
+    "rhAccountNumber": 1000002859,
+    "eligible": false,
+    "manualUploadFlag": false,
+    "payeeAccountNumber": 2000155939
+  }
+]

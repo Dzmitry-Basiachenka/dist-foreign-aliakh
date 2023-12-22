@@ -110,6 +110,15 @@ public class AclGrantDetailServiceTest {
     }
 
     @Test
+    public void testGetByGrantSetId() {
+        List<AclGrantDetail> grantDetails = List.of();
+        expect(aclGrantDetailRepository.findByGrantSetId(ACL_GRANT_SET_ID)).andReturn(grantDetails).once();
+        replay(aclGrantDetailRepository);
+        assertSame(grantDetails, aclGrantDetailService.getByGrantSetId(ACL_GRANT_SET_ID));
+        verify(aclGrantDetailRepository);
+    }
+
+    @Test
     public void testUpdatePayees() {
         AclGrantDetail grantDetail = new AclGrantDetail();
         grantDetail.setRhAccountNumber(RH_ACCOUNT_NUMBER);
