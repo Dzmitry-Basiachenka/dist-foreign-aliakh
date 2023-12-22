@@ -53,6 +53,7 @@ public class AclScenarioRepositoryIntegrationTest {
     private static final String FOLDER_NAME = "acl-scenario-repository-integration-test/";
     private static final String FIND_ALL_FILE = "find-all.groovy";
     private static final String SCENARIO_UID = "cf1b6b34-0a67-4177-a456-4429f20fe2c5";
+    private static final String SCENARIO_UID_1 = "70d880ed-da0b-47fa-b7cf-2282ed389deb";
     private static final String SCENARIO_NAME = "ACL Scenario 201812";
     private static final String LICENSE_TYPE_ACL = "ACL";
     private static final String DESCRIPTION = "Description";
@@ -323,6 +324,19 @@ public class AclScenarioRepositoryIntegrationTest {
         assertEquals(scenario.getName(), updatedScenario.getName());
         assertEquals(scenario.getDescription(), updatedScenario.getDescription());
         assertEquals("SYSTEM", updatedScenario.getUpdateUser());
+    }
+
+    @Test
+    @TestData(fileName = FOLDER_NAME + "update-name-by-id.groovy")
+    public void testUpdateNameById() {
+        AclScenario scenario = aclScenarioRepository.findById(SCENARIO_UID_1);
+        assertNotNull(scenario);
+        assertEquals("ACL Scenario 202312", scenario.getName());
+        assertEquals("SYSTEM", scenario.getUpdateUser());
+        aclScenarioRepository.updateNameById(SCENARIO_UID_1, "New scenario name", USER_NAME);
+        AclScenario updatedScenario = aclScenarioRepository.findById(SCENARIO_UID_1);
+        assertEquals("New scenario name", updatedScenario.getName());
+        assertEquals(USER_NAME, updatedScenario.getUpdateUser());
     }
 
     private UsageAge buildUsageAge(Integer period, String weight) {

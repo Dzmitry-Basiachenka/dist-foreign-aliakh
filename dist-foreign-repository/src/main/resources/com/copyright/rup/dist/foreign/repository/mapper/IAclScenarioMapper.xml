@@ -511,4 +511,12 @@
             <include refid="StoredEntityMapper.update"/>
         where df_acl_scenario_uid = #{scenarioId}
     </update>
+
+    <update id="updateNameById" parameterType="map">
+        update ${schema}.df_acl_scenario
+        set
+            name = #{name},
+            <include refid="StoredEntityMapper.update"/>
+        where df_acl_scenario_uid = #{scenarioId}
+    </update>
 </mapper>

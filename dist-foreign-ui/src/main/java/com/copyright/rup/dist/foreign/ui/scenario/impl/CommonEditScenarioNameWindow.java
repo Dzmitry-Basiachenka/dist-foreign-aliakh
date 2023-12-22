@@ -103,7 +103,7 @@ public abstract class CommonEditScenarioNameWindow extends Window {
 
     private void onSaveButtonClicked() {
         if (binder.isValid()) {
-            updateScenarioName(scenarioNameField.getValue());
+            updateScenarioName(scenarioNameField.getValue().trim());
             close();
         } else {
             Windows.showValidationErrorWindow(Set.of(scenarioNameField));

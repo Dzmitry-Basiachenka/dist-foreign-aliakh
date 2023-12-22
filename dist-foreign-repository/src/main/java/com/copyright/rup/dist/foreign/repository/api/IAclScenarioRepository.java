@@ -185,4 +185,13 @@ public interface IAclScenarioRepository {
      * @param scenario {@link Scenario} to update
      */
     void updateStatus(AclScenario scenario);
+
+    /**
+     * Updates {@link AclScenario} name by provided id.
+     *
+     * @param scenarioId {@link AclScenario} identifier
+     * @param name       new scenario name
+     * @param userName   user name
+     */
+    void updateNameById(String scenarioId, String name, String userName);
 }
