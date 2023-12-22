@@ -42,6 +42,7 @@ public class ViewAclGrantSetWindow extends Window implements SearchWidget.ISearc
 
     private Grid<AclGrantSet> grid;
     private Button deleteButton;
+    private Button refreshPayeesButton;
 
     /**
      * Constructor.
@@ -82,8 +83,11 @@ public class ViewAclGrantSetWindow extends Window implements SearchWidget.ISearc
         grid = new Grid<>();
         grid.setSelectionMode(Grid.SelectionMode.SINGLE);
         grid.setItems(controller.getAllAclGrantSets());
-        grid.addSelectionListener(
-            event -> deleteButton.setEnabled(CollectionUtils.isNotEmpty(event.getAllSelectedItems())));
+        grid.addSelectionListener(event -> {
+            boolean enabled = CollectionUtils.isNotEmpty(event.getAllSelectedItems());
+            deleteButton.setEnabled(enabled);
+            refreshPayeesButton.setEnabled(enabled);
+        });
         grid.setSizeFull();
         addGridColumns();
         VaadinUtils.addComponentStyle(grid, "view-acl-grant-set-grid");
@@ -120,11 +124,16 @@ public class ViewAclGrantSetWindow extends Window implements SearchWidget.ISearc
         Button closeButton = Buttons.createCloseButton(this);
         deleteButton = Buttons.createButton(ForeignUi.getMessage("button.delete"));
         deleteButton.addClickListener(event ->
-            deleteGrantSet(grid.getSelectedItems().stream().findFirst().orElse(null)));
+            grid.getSelectedItems().stream().findFirst().ifPresent(this::deleteGrantSet));
         deleteButton.setEnabled(false);
-        HorizontalLayout layout = new HorizontalLayout(deleteButton, closeButton);
+        refreshPayeesButton = Buttons.createButton(ForeignUi.getMessage("button.refresh_payees"));
+        refreshPayeesButton.addClickListener(event ->
+            grid.getSelectedItems().stream().findFirst().ifPresent(selectedGrantSet ->
+                controller.refreshPayeesAsync(selectedGrantSet.getId())));
+        refreshPayeesButton.setEnabled(false);
+        var layout = new HorizontalLayout(deleteButton, refreshPayeesButton, closeButton);
         layout.setSpacing(true);
-        VaadinUtils.setButtonsAutoDisabled(deleteButton);
+        VaadinUtils.setButtonsAutoDisabled(deleteButton, refreshPayeesButton);
         VaadinUtils.addComponentStyle(layout, "view-acl-grant-set-buttons");
         return layout;
     }
@@ -132,6 +141,7 @@ public class ViewAclGrantSetWindow extends Window implements SearchWidget.ISearc
     private void initMediator() {
         ViewAclGrantSetMediator mediator = new ViewAclGrantSetMediator();
         mediator.setDeleteButton(deleteButton);
+        mediator.setRefreshPayeesButton(deleteButton);
         mediator.applyPermissions();
     }
 

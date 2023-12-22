@@ -29,32 +29,37 @@ import org.powermock.modules.junit4.PowerMockRunner;
 public class ViewAclGrantSetMediatorTest {
 
     private Button deleteButton;
+    private Button refreshPayeesButton;
     private ViewAclGrantSetMediator mediator;
 
     @Before
     public void setUp() {
         deleteButton = new Button();
+        refreshPayeesButton = new Button();
         mediator = new ViewAclGrantSetMediator();
         mediator.setDeleteButton(deleteButton);
+        mediator.setRefreshPayeesButton(refreshPayeesButton);
     }
 
     @Test
     public void testApplySpecialistPermissions() {
         mockStatic(SecurityUtils.class);
-        expect(SecurityUtils.hasPermission("FDA_SPECIALIST_PERMISSION")).andReturn(true).once();
+        expect(SecurityUtils.hasPermission("FDA_SPECIALIST_PERMISSION")).andReturn(true).times(2);
         replay(SecurityUtils.class);
         mediator.applyPermissions();
         assertTrue(deleteButton.isVisible());
+        assertTrue(refreshPayeesButton.isVisible());
         verify(SecurityUtils.class);
     }
 
     @Test
     public void testApplyManagerPermissions() {
         mockStatic(SecurityUtils.class);
-        expect(SecurityUtils.hasPermission("FDA_SPECIALIST_PERMISSION")).andReturn(false).once();
+        expect(SecurityUtils.hasPermission("FDA_SPECIALIST_PERMISSION")).andReturn(false).times(2);
         replay(SecurityUtils.class);
         mediator.applyPermissions();
         assertFalse(deleteButton.isVisible());
+        assertFalse(refreshPayeesButton.isVisible());
         verify(SecurityUtils.class);
     }
 }

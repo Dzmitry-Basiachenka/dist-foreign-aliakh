@@ -169,4 +169,11 @@ public interface IAclGrantDetailController extends IController<IAclGrantDetailWi
      * @return count of copied grant details
      */
     int copyAclGrantSet(AclGrantSet grantSet, String sourceGrantSetId);
+
+    /**
+     * Populates payees in ACL grant details of ACL grant set asynchronously.
+     *
+     * @param grantSetId grant set id
+     */
+    void refreshPayeesAsync(String grantSetId);
 }

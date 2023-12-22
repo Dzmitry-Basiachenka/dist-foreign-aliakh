@@ -73,7 +73,7 @@ public class ViewAclGrantSetWindowTest {
         mockStatic(ForeignSecurityUtils.class);
         controller = createMock(IAclGrantDetailController.class);
         aclGrantSetGrid = createMock(Grid.class);
-        expect(ForeignSecurityUtils.hasSpecialistPermission()).andReturn(true).once();
+        expect(ForeignSecurityUtils.hasSpecialistPermission()).andReturn(true).times(2);
         expect(controller.getAllAclGrantSets()).andReturn(List.of(buildAclGrantSet()));
         replay(ForeignSecurityUtils.class, controller);
         window = new ViewAclGrantSetWindow(controller);
@@ -108,7 +108,7 @@ public class ViewAclGrantSetWindowTest {
             Triple.of("Periods", 580.0, -1),
             Triple.of("Editable", 80.0, -1)
         ));
-        verifyButtonsLayout(content.getComponent(2), "Delete", "Close");
+        verifyButtonsLayout(content.getComponent(2), "Delete", "Refresh Payees", "Close");
         assertEquals("view-acl-grant-set-window", window.getStyleName());
         assertEquals("view-acl-grant-set-window", window.getId());
     }

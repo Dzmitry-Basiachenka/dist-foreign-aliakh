@@ -16,13 +16,19 @@ import com.vaadin.ui.Button;
 class ViewAclGrantSetMediator implements IMediator {
 
     private Button deleteButton;
+    private Button refreshPayeesButton;
 
     @Override
     public void applyPermissions() {
         deleteButton.setVisible(ForeignSecurityUtils.hasSpecialistPermission());
+        refreshPayeesButton.setVisible(ForeignSecurityUtils.hasSpecialistPermission());
     }
 
     public void setDeleteButton(Button deleteButton) {
         this.deleteButton = deleteButton;
+    }
+
+    public void setRefreshPayeesButton(Button refreshPayeesButton) {
+        this.refreshPayeesButton = refreshPayeesButton;
     }
 }
