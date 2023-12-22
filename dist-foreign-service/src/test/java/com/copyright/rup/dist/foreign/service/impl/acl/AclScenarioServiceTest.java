@@ -56,7 +56,7 @@ import java.util.Set;
  * @author Dzmitry Basiachenka
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({RupContextUtils.class})
+@PrepareForTest(RupContextUtils.class)
 public class AclScenarioServiceTest {
 
     private static final String SCENARIO_UID = "732f1f1f-1d63-45a4-9f07-357cba3429fc";
@@ -339,7 +339,13 @@ public class AclScenarioServiceTest {
 
     @Test
     public void testUpdateName() {
-        //TODO: {dbasiachenka} implement
+        mockStatic(RupContextUtils.class);
+        expect(RupContextUtils.getUserName()).andReturn("user@copyright.com").once();
+        aclScenarioRepository.updateNameById(SCENARIO_UID, SCENARIO_NAME, "user@copyright.com");
+        expectLastCall().once();
+        replay(aclScenarioRepository, RupContextUtils.class);
+        aclScenarioService.updateName(SCENARIO_UID, SCENARIO_NAME);
+        verify(aclScenarioRepository, RupContextUtils.class);
     }
 
     private AclScenario buildAclScenario() {

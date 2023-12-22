@@ -161,4 +161,13 @@ public class AclScenarioRepository extends BaseRepository implements IAclScenari
         params.put(UPDATE_USER_KEY, Objects.requireNonNull(scenario.getUpdateUser()));
         update("IAclScenarioMapper.updateStatusById", params);
     }
+
+    @Override
+    public void updateNameById(String scenarioId, String name, String userName) {
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(3);
+        params.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
+        params.put("name", Objects.requireNonNull(name));
+        params.put(UPDATE_USER_KEY, Objects.requireNonNull(userName));
+        update("IAclScenarioMapper.updateNameById", params);
+    }
 }

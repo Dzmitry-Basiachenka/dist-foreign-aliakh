@@ -263,7 +263,12 @@ public class AclScenarioService implements IAclScenarioService {
 
     @Override
     public void updateName(String scenarioId, String name) {
-        //TODO: {dbasiachenka} implement
+        String userName = RupContextUtils.getUserName();
+        LOGGER.info("Update ACL scenario name. Started. ScenarioId={}, NewName={}, User={}", scenarioId, name,
+            userName);
+        aclScenarioRepository.updateNameById(scenarioId, name, userName);
+        LOGGER.info("Update ACL scenario name. Finished. ScenarioId={}, NewName={}, User={}", scenarioId, name,
+            userName);
     }
 
     private void populateScenario(AclScenario aclScenario, String userName, String scenarioId) {
