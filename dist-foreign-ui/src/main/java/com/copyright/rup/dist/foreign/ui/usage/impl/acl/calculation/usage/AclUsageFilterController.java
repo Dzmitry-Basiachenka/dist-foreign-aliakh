@@ -35,6 +35,8 @@ import java.util.List;
 public class AclUsageFilterController extends CommonController<IAclUsageFilterWidget>
     implements IAclUsageFilterController {
 
+    private static final long serialVersionUID = -5004972291161372713L;
+
     @Autowired
     private IAclUsageBatchService aclUsageBatchService;
     @Autowired

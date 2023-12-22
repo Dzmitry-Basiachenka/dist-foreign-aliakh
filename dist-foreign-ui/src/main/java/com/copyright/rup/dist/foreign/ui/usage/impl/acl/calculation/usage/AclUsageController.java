@@ -50,6 +50,8 @@ import java.util.Set;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class AclUsageController extends CommonController<IAclUsageWidget> implements IAclUsageController {
 
+    private static final long serialVersionUID = 6676434173301243305L;
+
     @Autowired
     private IAclUsageFilterController aclUsageFilterController;
     @Autowired
@@ -78,7 +80,7 @@ public class AclUsageController extends CommonController<IAclUsageWidget> implem
     public List<AclUsageDto> loadBeans(int startIndex, int count, List<QuerySortOrder> sortOrders) {
         Sort sort = null;
         if (CollectionUtils.isNotEmpty(sortOrders)) {
-            QuerySortOrder sortOrder = sortOrders.get(0);
+            var sortOrder = sortOrders.get(0);
             sort = new Sort(sortOrder.getSorted(), Direction.of(SortDirection.ASCENDING == sortOrder.getDirection()));
         }
         return aclUsageService.getDtos(getFilter(), new Pageable(startIndex, count), sort);

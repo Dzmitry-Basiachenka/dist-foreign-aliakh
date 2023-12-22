@@ -43,6 +43,7 @@ import java.util.Set;
 public class CreateAclUsageBatchWindow extends Window {
 
     private static final String EMPTY_PERIOD_STYLE = "empty-selected-periods";
+    private static final long serialVersionUID = 257602006663358957L;
 
     private final Binder<AclUsageBatch> usageBatchBinder = new Binder<>();
     private final Binder<String> binder = new Binder<>();
@@ -64,11 +65,11 @@ public class CreateAclUsageBatchWindow extends Window {
      */
     public CreateAclUsageBatchWindow(IAclUsageController controller) {
         this.aclUsageController = controller;
-        setContent(initRootLayout());
-        setCaption(ForeignUi.getMessage("window.create_acl_usage_batch"));
-        setResizable(false);
-        setWidth(400, Unit.PIXELS);
-        setHeight(265, Unit.PIXELS);
+        super.setContent(initRootLayout());
+        super.setCaption(ForeignUi.getMessage("window.create_acl_usage_batch"));
+        super.setResizable(false);
+        super.setWidth(400, Unit.PIXELS);
+        super.setHeight(265, Unit.PIXELS);
         VaadinUtils.addComponentStyle(this, "create-acl-usage-batch-window");
     }
 

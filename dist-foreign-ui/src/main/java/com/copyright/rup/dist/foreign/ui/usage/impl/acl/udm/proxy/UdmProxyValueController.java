@@ -12,6 +12,7 @@ import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmProxyValueFilterContr
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmProxyValueFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmProxyValueWidget;
 import com.copyright.rup.vaadin.widget.api.CommonController;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -32,6 +33,8 @@ import java.util.List;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class UdmProxyValueController extends CommonController<IUdmProxyValueWidget>
     implements IUdmProxyValueController {
+
+    private static final long serialVersionUID = -2957759946773313712L;
 
     @Autowired
     private IUdmProxyValueFilterController udmProxyValueFilterController;

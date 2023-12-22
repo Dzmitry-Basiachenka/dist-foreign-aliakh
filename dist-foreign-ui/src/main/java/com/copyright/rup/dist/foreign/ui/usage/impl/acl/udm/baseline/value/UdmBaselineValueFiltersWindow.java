@@ -46,6 +46,7 @@ public class UdmBaselineValueFiltersWindow extends CommonAclFiltersWindow {
         ForeignUi.getMessage("field.error.populated_for_between_operator");
     private static final String GRATER_OR_EQUAL_VALIDATION_MESSAGE = "field.error.greater_or_equal_to";
     private static final String EQUALS = "EQUALS";
+    private static final long serialVersionUID = 3158175701193146043L;
 
     private final StringLengthValidator numberStringLengthValidator =
         new StringLengthValidator(ForeignUi.getMessage("field.error.number_length", 9), 0, 9);
@@ -83,11 +84,11 @@ public class UdmBaselineValueFiltersWindow extends CommonAclFiltersWindow {
      */
     public UdmBaselineValueFiltersWindow(UdmBaselineValueFilter filter) {
         this.baselineValueFilter = filter;
-        setContent(initRootLayout());
-        setCaption(ForeignUi.getMessage("window.udm_baseline_values_additional_filters"));
-        setResizable(false);
-        setWidth(600, Unit.PIXELS);
-        setHeight(400, Unit.PIXELS);
+        super.setContent(initRootLayout());
+        super.setCaption(ForeignUi.getMessage("window.udm_baseline_values_additional_filters"));
+        super.setResizable(false);
+        super.setWidth(600, Unit.PIXELS);
+        super.setHeight(400, Unit.PIXELS);
         VaadinUtils.addComponentStyle(this, "udm-baseline-values-additional-filters-window");
     }
 

@@ -15,8 +15,10 @@ import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineFilterControl
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineWidget;
 import com.copyright.rup.vaadin.widget.api.CommonController;
+
 import com.vaadin.data.provider.QuerySortOrder;
 import com.vaadin.shared.data.sort.SortDirection;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -38,6 +40,8 @@ import java.util.Set;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class UdmBaselineController extends CommonController<IUdmBaselineWidget> implements IUdmBaselineController {
+
+    private static final long serialVersionUID = 7732993636076915011L;
 
     @Autowired
     private IUdmBaselineFilterController udmBaselineFilterController;

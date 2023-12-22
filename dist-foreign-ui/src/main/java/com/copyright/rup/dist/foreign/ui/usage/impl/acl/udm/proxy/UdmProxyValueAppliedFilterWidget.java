@@ -16,6 +16,9 @@ import com.vaadin.ui.VerticalLayout;
  * @author Stepan Karakhanov
  */
 public class UdmProxyValueAppliedFilterWidget extends CommonAppliedFilterPanel {
+
+    private static final long serialVersionUID = -2381655989602580487L;
+
     /**
      * Constructor.
      */

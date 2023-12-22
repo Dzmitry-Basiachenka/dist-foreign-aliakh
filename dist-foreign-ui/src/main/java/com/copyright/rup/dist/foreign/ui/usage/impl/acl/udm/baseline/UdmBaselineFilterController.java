@@ -31,6 +31,8 @@ import java.util.List;
 public class UdmBaselineFilterController extends CommonController<IUdmBaselineFilterWidget>
     implements IUdmBaselineFilterController {
 
+    private static final long serialVersionUID = -2404364467417609683L;
+
     @Autowired
     private IUdmBaselineService udmBaselineService;
     @Autowired

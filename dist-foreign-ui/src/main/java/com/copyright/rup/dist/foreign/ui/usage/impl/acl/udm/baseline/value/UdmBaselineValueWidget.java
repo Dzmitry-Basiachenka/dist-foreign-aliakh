@@ -39,6 +39,7 @@ public class UdmBaselineValueWidget extends HorizontalSplitPanel implements IUdm
 
     private static final String EMPTY_STYLE_NAME = "empty-values-grid";
     private static final String FOOTER_LABEL = "Values Count: %s";
+    private static final long serialVersionUID = 2509637065886715148L;
 
     private IUdmBaselineValueController controller;
     private Grid<UdmValueBaselineDto> udmBaselineValueGrid;
@@ -50,7 +51,7 @@ public class UdmBaselineValueWidget extends HorizontalSplitPanel implements IUdm
         setSecondComponent(initBaselineLayout());
         setSplitPosition(270, Unit.PIXELS);
         setLocked(true);
-        setSizeFull();
+        super.setSizeFull();
         return this;
     }
 

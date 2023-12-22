@@ -9,6 +9,7 @@ import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.filter.FilterWindow;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.util.VaadinUtils;
+
 import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
@@ -24,6 +25,8 @@ import com.vaadin.ui.VerticalLayout;
  * @author Uladzislau Shalamitski
  */
 public class UdmProxyValueFilterWidget extends VerticalLayout implements IUdmProxyValueFilterWidget {
+
+    private static final long serialVersionUID = -8585273501485992381L;
 
     private Button applyButton;
     private UdmProxyValuePeriodFilterWidget periodFilterWidget;
@@ -52,7 +55,7 @@ public class UdmProxyValueFilterWidget extends VerticalLayout implements IUdmPro
     @SuppressWarnings("unchecked")
     public IUdmProxyValueFilterWidget init() {
         appliedFilterWidget = new UdmProxyValueAppliedFilterWidget();
-        addComponents(initFiltersLayout(), initButtonsLayout(), buildAppliedFiltersHeaderLabel(), appliedFilterWidget);
+        super.addComponents(initFiltersLayout(), initButtonsLayout(), buildAppliedFiltersHeaderLabel(), appliedFilterWidget);
         VaadinUtils.setMaxComponentsWidth(this);
         VaadinUtils.addComponentStyle(this, "udm-proxy-value-filter-widget");
         return this;

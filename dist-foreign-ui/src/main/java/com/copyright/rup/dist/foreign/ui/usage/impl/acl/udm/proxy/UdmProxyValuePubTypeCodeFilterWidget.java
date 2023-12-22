@@ -31,6 +31,8 @@ import java.util.Set;
 public class UdmProxyValuePubTypeCodeFilterWidget extends BaseItemsFilterWidget<String> implements
     CommonFilterWindow.IFilterSaveListener<String>, IFilterWindowController<String> {
 
+    private static final long serialVersionUID = 6849139382509632227L;
+
     private final IUdmProxyValueFilterController controller;
     private final Set<String> selectedItemsIds = new HashSet<>();
 

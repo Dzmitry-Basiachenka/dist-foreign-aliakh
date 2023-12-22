@@ -50,6 +50,7 @@ public class AclUsageWidget extends HorizontalSplitPanel implements IAclUsageWid
 
     private static final String EMPTY_STYLE_NAME = "empty-acl-usages-grid";
     private static final String FOOTER_LABEL = "Usages Count: %s";
+    private static final long serialVersionUID = -7300883623532118029L;
 
     private IAclUsageController controller;
     private Grid<AclUsageDto> aclUsagesGrid;
@@ -66,7 +67,7 @@ public class AclUsageWidget extends HorizontalSplitPanel implements IAclUsageWid
         setFirstComponent(controller.initAclUsageFilterWidget());
         setSecondComponent(initUsagesLayout());
         setLocked(true);
-        setSizeFull();
+        super.setSizeFull();
         return this;
     }
 

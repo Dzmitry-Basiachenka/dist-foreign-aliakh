@@ -32,7 +32,10 @@ import com.vaadin.ui.themes.ValoTheme;
  */
 public class UdmBaselineFilterWidget extends VerticalLayout implements IUdmBaselineFilterWidget {
 
+    private static final long serialVersionUID = 8692956419673511853L;
+
     private final UdmBaselineAppliedFilterWidget appliedFilterWidget;
+
     private IUdmBaselineFilterController controller;
     private Button applyButton;
     private Button moreFiltersButton;

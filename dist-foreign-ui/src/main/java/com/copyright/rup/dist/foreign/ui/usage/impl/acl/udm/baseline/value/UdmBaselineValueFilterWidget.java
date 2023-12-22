@@ -31,7 +31,10 @@ import com.vaadin.ui.themes.ValoTheme;
  */
 public class UdmBaselineValueFilterWidget extends VerticalLayout implements IUdmBaselineValueFilterWidget {
 
+    private static final long serialVersionUID = 6165509743040282347L;
+
     private final UdmBaselineValueAppliedFilterWidget appliedFilterWidget;
+
     private UdmBaselineValueFilter udmBaselineValueFilter = new UdmBaselineValueFilter();
     private UdmBaselineValueFilter appliedBaselineValueFilter = new UdmBaselineValueFilter();
     private PeriodFilterWidget periodFilterWidget;

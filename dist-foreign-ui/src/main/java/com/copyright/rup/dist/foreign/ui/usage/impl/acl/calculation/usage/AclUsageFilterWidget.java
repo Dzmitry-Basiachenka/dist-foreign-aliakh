@@ -32,13 +32,16 @@ import java.util.stream.Collectors;
  */
 public class AclUsageFilterWidget extends VerticalLayout implements IAclUsageFilterWidget {
 
+    private static final long serialVersionUID = -4815434985886270445L;
+
+    private final AclUsageAppliedFilterWidget appliedFilterWidget;
+
     private IAclUsageFilterController controller;
     private Button applyButton;
     private Button moreFiltersButton;
     private ComboBox<String> usageBatchNameComboBox;
     private AclUsageFilter aclUsageFilter = new AclUsageFilter();
     private AclUsageFilter appliedAclUsageFilter = new AclUsageFilter();
-    private final AclUsageAppliedFilterWidget appliedFilterWidget;
 
     /**
      * Constructor.
@@ -66,7 +69,7 @@ public class AclUsageFilterWidget extends VerticalLayout implements IAclUsageFil
         addComponents(initFiltersLayout(), initButtonsLayout(), buildAppliedFiltersHeaderLabel(),
             appliedFilterWidget);
         refreshFilter();
-        setExpandRatio(appliedFilterWidget, 1f);
+        super.setExpandRatio(appliedFilterWidget, 1f);
         VaadinUtils.setMaxComponentsWidth(this);
         VaadinUtils.addComponentStyle(this, "acl-usage-filter-widget");
         return this;

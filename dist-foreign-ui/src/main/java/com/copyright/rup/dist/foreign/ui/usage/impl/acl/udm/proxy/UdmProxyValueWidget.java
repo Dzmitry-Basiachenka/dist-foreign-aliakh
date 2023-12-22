@@ -37,6 +37,7 @@ import java.util.function.Function;
 public class UdmProxyValueWidget extends HorizontalSplitPanel implements IUdmProxyValueWidget {
 
     private static final String EMPTY_STYLE_NAME = "empty-values-grid";
+    private static final long serialVersionUID = 9070320839546019230L;
 
     private IUdmProxyValueController controller;
     private Grid<UdmProxyValueDto> udmValuesGrid;

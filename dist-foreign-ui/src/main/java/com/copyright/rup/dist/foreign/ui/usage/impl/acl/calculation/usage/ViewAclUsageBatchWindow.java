@@ -35,8 +35,11 @@ import java.util.stream.Collectors;
  */
 public class ViewAclUsageBatchWindow extends Window implements SearchWidget.ISearchController {
 
+    private static final long serialVersionUID = 3773827044963668334L;
+
     private final SearchWidget searchWidget;
     private final IAclUsageController controller;
+
     private Grid<AclUsageBatch> grid;
     private Button deleteButton;
 
@@ -47,19 +50,19 @@ public class ViewAclUsageBatchWindow extends Window implements SearchWidget.ISea
      */
     public ViewAclUsageBatchWindow(IAclUsageController controller) {
         this.controller = controller;
-        setWidth(1100, Unit.PIXELS);
-        setHeight(550, Unit.PIXELS);
+        super.setWidth(1100, Unit.PIXELS);
+        super.setHeight(550, Unit.PIXELS);
         searchWidget = new SearchWidget(this);
         searchWidget.setPrompt(ForeignUi.getMessage("field.prompt.view_batch.search.udm"));
         initUsageBatchGrid();
-        HorizontalLayout buttonsLayout = initButtons();
+        var buttonsLayout = initButtons();
         initMediator();
-        VerticalLayout layout = new VerticalLayout(searchWidget, grid, buttonsLayout);
+        var layout = new VerticalLayout(searchWidget, grid, buttonsLayout);
         layout.setSizeFull();
         layout.setExpandRatio(grid, 1);
         layout.setComponentAlignment(buttonsLayout, Alignment.MIDDLE_RIGHT);
-        setContent(layout);
-        setCaption(ForeignUi.getMessage("window.view_acl_usage_batch"));
+        super.setContent(layout);
+        super.setCaption(ForeignUi.getMessage("window.view_acl_usage_batch"));
         VaadinUtils.addComponentStyle(this, "view-acl-usage-batch-window");
     }
 
