@@ -236,7 +236,7 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
 
     private HorizontalLayout initButtonsLayout() {
         addButtonsListeners();
-        HorizontalLayout buttonsLayout =
+        var buttonsLayout =
             new HorizontalLayout(createButton, viewButton, editNameButton, deleteButton, pubTypeWeights, submitButton,
                 rejectButton, approveButton, sendToLmButton);
         VaadinUtils.setButtonsAutoDisabled(createButton, viewButton, editNameButton, deleteButton, pubTypeWeights,

@@ -329,12 +329,12 @@ public class AclScenarioRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FOLDER_NAME + "update-name-by-id.groovy")
     public void testUpdateNameById() {
-        AclScenario scenario = aclScenarioRepository.findById(SCENARIO_UID_1);
+        var scenario = aclScenarioRepository.findById(SCENARIO_UID_1);
         assertNotNull(scenario);
         assertEquals("ACL Scenario 202312", scenario.getName());
         assertEquals("SYSTEM", scenario.getUpdateUser());
         aclScenarioRepository.updateNameById(SCENARIO_UID_1, "New scenario name", USER_NAME);
-        AclScenario updatedScenario = aclScenarioRepository.findById(SCENARIO_UID_1);
+        var updatedScenario = aclScenarioRepository.findById(SCENARIO_UID_1);
         assertEquals("New scenario name", updatedScenario.getName());
         assertEquals(USER_NAME, updatedScenario.getUpdateUser());
     }

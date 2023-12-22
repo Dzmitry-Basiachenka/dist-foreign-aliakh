@@ -55,7 +55,8 @@ public class UdmProxyValueFilterWidget extends VerticalLayout implements IUdmPro
     @SuppressWarnings("unchecked")
     public IUdmProxyValueFilterWidget init() {
         appliedFilterWidget = new UdmProxyValueAppliedFilterWidget();
-        super.addComponents(initFiltersLayout(), initButtonsLayout(), buildAppliedFiltersHeaderLabel(), appliedFilterWidget);
+        super.addComponents(initFiltersLayout(), initButtonsLayout(), buildAppliedFiltersHeaderLabel(),
+            appliedFilterWidget);
         VaadinUtils.setMaxComponentsWidth(this);
         VaadinUtils.addComponentStyle(this, "udm-proxy-value-filter-widget");
         return this;
