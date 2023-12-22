@@ -10,7 +10,6 @@ import com.vaadin.data.Binder;
 import com.vaadin.data.ValueProvider;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
@@ -31,6 +30,7 @@ import java.util.Set;
  */
 public abstract class CommonEditScenarioNameWindow extends Window {
 
+    private static final int MAX_LENGTH = 50;
     private final Binder<String> binder = new Binder<>();
     private TextField scenarioNameField;
 
@@ -42,7 +42,7 @@ public abstract class CommonEditScenarioNameWindow extends Window {
      */
     protected CommonEditScenarioNameWindow(String scenarioName, String styleName) {
         super.setResizable(false);
-        super.setWidth(320, Unit.PIXELS);
+        super.setWidth("320px");
         super.setCaption(ForeignUi.getMessage("window.edit_scenario_name"));
         initScenarioNameField(scenarioName);
         var buttonsLayout = initButtonsLayout();
@@ -79,10 +79,10 @@ public abstract class CommonEditScenarioNameWindow extends Window {
     protected abstract void updateScenarioName(String scenarioName);
 
     private HorizontalLayout initButtonsLayout() {
-        Button saveButton = Buttons.createButton(ForeignUi.getMessage("button.save"));
+        var saveButton = Buttons.createButton(ForeignUi.getMessage("button.save"));
         saveButton.addClickListener(listener -> onSaveButtonClicked());
         VaadinUtils.setButtonsAutoDisabled(saveButton);
-        HorizontalLayout layout = new HorizontalLayout(saveButton, Buttons.createCancelButton(this));
+        var layout = new HorizontalLayout(saveButton, Buttons.createCancelButton(this));
         layout.setSpacing(true);
         return layout;
     }
@@ -93,7 +93,8 @@ public abstract class CommonEditScenarioNameWindow extends Window {
         scenarioNameField.setValue(scenarioName);
         binder.forField(scenarioNameField)
             .withValidator(new RequiredValidator())
-            .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.length", 50), 0, 50))
+            .withValidator(
+                new StringLengthValidator(ForeignUi.getMessage("field.error.length", MAX_LENGTH), 0, MAX_LENGTH))
             .withValidator(value -> !isScenarioExists(StringUtils.trimToEmpty(value)),
                 ForeignUi.getMessage("message.error.unique_name", "Scenario"))
             .bind(ValueProvider.identity(), (bean, fieldValue) -> bean = fieldValue);

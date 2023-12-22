@@ -339,7 +339,7 @@ public class AclScenariosWidgetTest {
         replay(Windows.class, controller);
         Button button = Whitebox.getInternalState(scenariosWidget, "editNameButton");
         button.click();
-        EditAclScenarioNameWindow window = windowCapture.getValue();
+        var window = windowCapture.getValue();
         assertNotNull(window);
         assertEquals("Edit Scenario Name", window.getCaption());
         assertEquals("edit-acl-scenario-name-window", window.getStyleName());
@@ -347,7 +347,7 @@ public class AclScenariosWidgetTest {
     }
 
     private AclScenario buildAclScenario(ScenarioStatusEnum status) {
-        AclScenario aclScenario = new AclScenario();
+        var aclScenario = new AclScenario();
         aclScenario.setId(SCENARIO_UID);
         aclScenario.setName("ACL Scenario name");
         aclScenario.setDescription("some description");
@@ -361,7 +361,7 @@ public class AclScenariosWidgetTest {
     }
 
     private AclScenarioDto buildAclScenarioDto() {
-        AclScenarioDto aclScenario = new AclScenarioDto();
+        var aclScenario = new AclScenarioDto();
         aclScenario.setId(SCENARIO_UID);
         aclScenario.setName("ACL Scenario name");
         aclScenario.setDescription("some description");
@@ -389,7 +389,7 @@ public class AclScenariosWidgetTest {
     }
 
     private ScenarioAuditItem buildScenarioAuditItem() {
-        ScenarioAuditItem auditItem = new ScenarioAuditItem();
+        var auditItem = new ScenarioAuditItem();
         auditItem.setActionType(ScenarioActionTypeEnum.ADDED_USAGES);
         auditItem.setActionReason("some reason");
         auditItem.setCreateUser("user@copyright.com");
@@ -398,14 +398,14 @@ public class AclScenariosWidgetTest {
     }
 
     private List<UsageAge> buildUsageAges() {
-        UsageAge usageAge = new UsageAge();
+        var usageAge = new UsageAge();
         usageAge.setPeriod(0);
         usageAge.setWeight(new BigDecimal("1.00"));
         return List.of(usageAge);
     }
 
     private List<AclPublicationType> buildPublicationTypes() {
-        AclPublicationType publicationType = new AclPublicationType();
+        var publicationType = new AclPublicationType();
         publicationType.setName("BK");
         publicationType.setWeight(new BigDecimal("1.00"));
         publicationType.setPeriod(202012);
@@ -413,7 +413,7 @@ public class AclScenariosWidgetTest {
     }
 
     private List<DetailLicenseeClass> buildDetailLicenseeClasses() {
-        DetailLicenseeClass detailLicenseeClass = new DetailLicenseeClass();
+        var detailLicenseeClass = new DetailLicenseeClass();
         detailLicenseeClass.setId(1);
         detailLicenseeClass.setDescription("Food and Tobacco");
         AggregateLicenseeClass aggregateLicenseeClass = new AggregateLicenseeClass();
