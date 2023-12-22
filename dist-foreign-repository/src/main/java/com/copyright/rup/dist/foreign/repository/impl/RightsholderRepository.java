@@ -74,6 +74,11 @@ public class RightsholderRepository extends CommonRightsholderRepository impleme
     }
 
     @Override
+    public List<RightsholderTypeOfUsePair> findByAclGrantSetId(String grantSetId) {
+        return selectList("RightsholderMapper.findByAclGrantSetId", Objects.requireNonNull(grantSetId));
+    }
+
+    @Override
     protected String getPrefix() {
         return "df";
     }

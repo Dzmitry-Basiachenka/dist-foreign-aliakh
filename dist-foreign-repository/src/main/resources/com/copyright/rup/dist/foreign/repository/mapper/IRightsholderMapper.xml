@@ -133,6 +133,18 @@
         order by rh.df_rightsholder_uid
     </select>
 
+    <select id="findByAclGrantSetId" resultMap="rightsholderTypeOfUserPairResultMap" parameterType="string">
+        select distinct
+            rh.df_rightsholder_uid rightsholder_uid,
+            rh.rh_account_number,
+            gd.type_of_use
+        from ${schema}.df_acl_grant_detail gd
+        join ${schema}.df_acl_grant_set gs on gd.df_acl_grant_set_uid = gs.df_acl_grant_set_uid
+        join ${schema}.df_rightsholder rh on gd.rh_account_number = rh.rh_account_number
+        where gs.df_acl_grant_set_uid = #{grantSetId}
+        order by rh.df_rightsholder_uid, gd.type_of_use
+    </select>
+
     <select id="findRhPayeeByScenarioIds" parameterType="string" resultMap="rightsholderPayeePairResultMap">
         select distinct
             u.rh_account_number,

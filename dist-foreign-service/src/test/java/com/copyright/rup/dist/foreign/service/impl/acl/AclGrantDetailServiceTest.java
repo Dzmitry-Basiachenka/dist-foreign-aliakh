@@ -13,6 +13,7 @@ import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
@@ -20,6 +21,7 @@ import com.copyright.rup.dist.foreign.domain.AclGrantDetail;
 import com.copyright.rup.dist.foreign.domain.AclGrantDetailDto;
 import com.copyright.rup.dist.foreign.domain.AclGrantSet;
 import com.copyright.rup.dist.foreign.domain.AclIneligibleRightsholder;
+import com.copyright.rup.dist.foreign.domain.RightsholderTypeOfUsePair;
 import com.copyright.rup.dist.foreign.domain.filter.AclGrantDetailFilter;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.IAclGrantDetailRepository;
@@ -29,6 +31,7 @@ import com.copyright.rup.dist.foreign.service.api.acl.IUdmBaselineService;
 
 import com.google.common.collect.ImmutableMap;
 
+import org.apache.camel.util.concurrent.SynchronousExecutorService;
 import org.easymock.Capture;
 import org.easymock.EasyMock;
 import org.junit.Before;
@@ -39,8 +42,10 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -56,6 +61,11 @@ import java.util.Set;
 @PrepareForTest(RupContextUtils.class)
 public class AclGrantDetailServiceTest {
 
+    private static final String RH_ID = "b0e6b1f6-89e9-4767-b143-db0f49f32769";
+    private static final Long RH_ACCOUNT_NUMBER = 2000073957L;
+    private static final String PAYEE_ID = "17e52d33-a059-46c2-9ecf-dc03a60d815b";
+    private static final Long PAYEE_ACCOUNT_NUMBER = 1000023408L;
+    private static final String ACL_GRANT_SET_ID = "87a48751-1ee5-49a4-ae0b-3d655731bc1e";
     private static final String ACL_GRANT_SET_NAME = "ACL Grant Set 2021";
     private static final String ACL_GRANT_ID_1 = "979c5888-d768-4983-bc11-6cec49657dc3";
     private static final String ACL_GRANT_ID_2 = "fe1d13bd-ce53-4bdc-84dd-8e505b734ac9";
@@ -78,6 +88,7 @@ public class AclGrantDetailServiceTest {
     @Before
     public void setUp() {
         aclGrantDetailService = new AclGrantDetailService();
+        Whitebox.setInternalState(aclGrantDetailService, "executorService", new SynchronousExecutorService());
         aclGrantDetailRepository = createMock(IAclGrantDetailRepository.class);
         rightsholderService = createMock(IRightsholderService.class);
         udmBaselineService = createMock(IUdmBaselineService.class);
@@ -96,6 +107,64 @@ public class AclGrantDetailServiceTest {
         replay(aclGrantDetailRepository);
         aclGrantDetailService.insert(List.of(grantDetail));
         verify(aclGrantDetailRepository);
+    }
+
+    @Test
+    public void testUpdatePayees() {
+        AclGrantDetail grantDetail = new AclGrantDetail();
+        grantDetail.setRhAccountNumber(RH_ACCOUNT_NUMBER);
+        grantDetail.setTypeOfUse(PRINT_TOU);
+        List<AclGrantDetail> grantDetails = List.of(grantDetail);
+        Rightsholder rightsholder = new Rightsholder();
+        rightsholder.setId(RH_ID);
+        rightsholder.setAccountNumber(RH_ACCOUNT_NUMBER);
+        RightsholderTypeOfUsePair rightsholderTypeOfUsePair = new RightsholderTypeOfUsePair();
+        rightsholderTypeOfUsePair.setRightsholder(rightsholder);
+        rightsholderTypeOfUsePair.setTypeOfUse(PRINT_TOU);
+        expect(rightsholderService.getByAclGrantSetId(ACL_GRANT_SET_ID)).andReturn(List.of(rightsholderTypeOfUsePair))
+            .once();
+        Map<String, Map<String, Rightsholder>> rollUps = new HashMap<>();
+        Rightsholder payee = new Rightsholder();
+        payee.setId(PAYEE_ID);
+        payee.setAccountNumber(PAYEE_ACCOUNT_NUMBER);
+        rollUps.put(RH_ID, ImmutableMap.of("ACLPRINT", payee));
+        expect(prmIntegrationService.getRollUps(Set.of(RH_ID))).andReturn(rollUps).once();
+        aclGrantDetailRepository.updatePayeeAccountNumber(ACL_GRANT_SET_ID, RH_ACCOUNT_NUMBER, PRINT_TOU,
+            PAYEE_ACCOUNT_NUMBER);
+        expectLastCall().once();
+        expect(rightsholderService.updateRightsholders(Set.of(PAYEE_ACCOUNT_NUMBER))).andReturn(List.of()).once();
+        replay(rightsholderService, prmIntegrationService, aclGrantDetailRepository);
+        aclGrantDetailService.populatePayees(ACL_GRANT_SET_ID, grantDetails);
+        verify(rightsholderService, prmIntegrationService, aclGrantDetailRepository);
+    }
+
+    @Test
+    public void testUpdatePayeesAndInsertAsync() {
+        AclGrantDetail grantDetail = new AclGrantDetail();
+        grantDetail.setRhAccountNumber(RH_ACCOUNT_NUMBER);
+        grantDetail.setTypeOfUse(PRINT_TOU);
+        List<AclGrantDetail> grantDetails = List.of(grantDetail);
+        Rightsholder rightsholder = new Rightsholder();
+        rightsholder.setId(RH_ID);
+        rightsholder.setAccountNumber(RH_ACCOUNT_NUMBER);
+        RightsholderTypeOfUsePair rightsholderTypeOfUsePair = new RightsholderTypeOfUsePair();
+        rightsholderTypeOfUsePair.setRightsholder(rightsholder);
+        rightsholderTypeOfUsePair.setTypeOfUse(PRINT_TOU);
+        expect(rightsholderService.getByAclGrantSetId(ACL_GRANT_SET_ID)).andReturn(List.of(rightsholderTypeOfUsePair))
+            .once();
+        Map<String, Map<String, Rightsholder>> rollUps = new HashMap<>();
+        Rightsholder payee = new Rightsholder();
+        payee.setId(PAYEE_ID);
+        payee.setAccountNumber(PAYEE_ACCOUNT_NUMBER);
+        rollUps.put(RH_ID, ImmutableMap.of("ACLPRINT", payee));
+        expect(prmIntegrationService.getRollUps(Set.of(RH_ID))).andReturn(rollUps).once();
+        aclGrantDetailRepository.updatePayeeAccountNumber(ACL_GRANT_SET_ID, RH_ACCOUNT_NUMBER, PRINT_TOU,
+            PAYEE_ACCOUNT_NUMBER);
+        expectLastCall().once();
+        expect(rightsholderService.updateRightsholders(Set.of(PAYEE_ACCOUNT_NUMBER))).andReturn(List.of()).once();
+        replay(rightsholderService, prmIntegrationService, aclGrantDetailRepository);
+        aclGrantDetailService.populatePayeesAsync(ACL_GRANT_SET_ID, grantDetails);
+        verify(rightsholderService, prmIntegrationService, aclGrantDetailRepository);
     }
 
     @Test

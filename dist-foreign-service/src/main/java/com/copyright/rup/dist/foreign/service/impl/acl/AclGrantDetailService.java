@@ -1,6 +1,8 @@
 package com.copyright.rup.dist.foreign.service.impl.acl;
 
 import com.copyright.rup.common.logging.RupLogUtils;
+import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.common.integration.rest.prm.PrmRollUpService;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
@@ -9,6 +11,8 @@ import com.copyright.rup.dist.foreign.domain.AclGrantDetailDto;
 import com.copyright.rup.dist.foreign.domain.AclGrantSet;
 import com.copyright.rup.dist.foreign.domain.AclGrantTypeOfUseStatusEnum;
 import com.copyright.rup.dist.foreign.domain.AclIneligibleRightsholder;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
+import com.copyright.rup.dist.foreign.domain.RightsholderTypeOfUsePair;
 import com.copyright.rup.dist.foreign.domain.filter.AclGrantDetailFilter;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.IAclGrantDetailRepository;
@@ -28,7 +32,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
+
+import javax.annotation.PreDestroy;
 
 import io.micrometer.core.annotation.Timed;
 
@@ -46,6 +54,8 @@ public class AclGrantDetailService implements IAclGrantDetailService {
 
     private static final int TYPE_OF_USE_COUNT = 1;
     private static final Logger LOGGER = RupLogUtils.getLogger();
+
+    private final ExecutorService executorService = Executors.newCachedThreadPool();
 
     @Autowired
     private IAclGrantDetailRepository aclGrantDetailRepository;
@@ -65,6 +75,40 @@ public class AclGrantDetailService implements IAclGrantDetailService {
         LOGGER.info("Insert ACL grant details. Started. AclGrantDetailsCount={}, UserName={}", size, userName);
         grantDetails.forEach(aclGrantDetail -> aclGrantDetailRepository.insert(aclGrantDetail));
         LOGGER.info("Insert ACL grant details. Finished. AclGrantDetailsCount={}, UserName={}", size, userName);
+    }
+
+    @Transactional
+    @Override
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
+    public void populatePayees(String grantSetId, List<AclGrantDetail> grantDetails) {
+        LOGGER.info("Populate payees in ACL grant set. Started. GrantSetId={}, GrantDetailCount={}",
+            grantSetId, grantDetails.size());
+        List<RightsholderTypeOfUsePair> rightsholderTypeOfUsePairs = rightsholderService.getByAclGrantSetId(grantSetId);
+        Set<String> rightsholdersIds = rightsholderTypeOfUsePairs.stream()
+            .map(pair -> pair.getRightsholder().getId())
+            .collect(Collectors.toSet());
+        Map<String, Map<String, Rightsholder>> rollUps = prmIntegrationService.getRollUps(rightsholdersIds);
+        LOGGER.info("Populate payees in ACL grant set. Roll-ups read. GrantSetId={},  RollUpsCount={}",
+            grantSetId, rollUps.size());
+        Set<Long> payeeAccountNumbers = rightsholderTypeOfUsePairs.stream()
+            .map(pair -> {
+                Rightsholder rightsholder = pair.getRightsholder();
+                String typeOfUse = pair.getTypeOfUse();
+                String productFamily = FdaConstants.ACL_PRODUCT_FAMILY + typeOfUse;
+                Rightsholder payee = PrmRollUpService.getPayee(rollUps, rightsholder, productFamily);
+                Long payeeAccountNumber = payee.getAccountNumber();
+                aclGrantDetailRepository.updatePayeeAccountNumber(grantSetId, rightsholder.getAccountNumber(),
+                    typeOfUse, payeeAccountNumber);
+                return payeeAccountNumber;
+            })
+            .collect(Collectors.toSet());
+        rightsholderService.updateRightsholders(payeeAccountNumbers);
+        LOGGER.info("Populate payees for ACL grant set. Finished. GrantSetId={}", grantSetId);
+    }
+
+    @Override
+    public void populatePayeesAsync(String grantSetId, List<AclGrantDetail> grantDetails) {
+        executorService.execute(() -> populatePayees(grantSetId, grantDetails));
     }
 
     @Transactional
@@ -155,6 +199,14 @@ public class AclGrantDetailService implements IAclGrantDetailService {
     public int copyGrantDetails(String sourceGrantSetId, String targetGrantSetId, String userName) {
         return aclGrantDetailRepository.copyGrantDetailsByGrantSetId(sourceGrantSetId, targetGrantSetId, userName)
             .size();
+    }
+
+    /**
+     * Pre destroy method.
+     */
+    @PreDestroy
+    void preDestroy() {
+        executorService.shutdown();
     }
 
     private boolean getEligibleStatus(AclGrantDetail grant, Set<AclIneligibleRightsholder> ineligibleRightsholders) {

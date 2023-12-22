@@ -9,6 +9,7 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
@@ -139,6 +140,16 @@ public class RightsholderServiceTest {
         expect(rightsholderRepository.findByAclScenarioId(scenarioId)).andReturn(rightsholderTypeOfUsePairs).once();
         replay(rightsholderRepository);
         assertEquals(rightsholderTypeOfUsePairs, rightsholderService.getByAclScenarioId(scenarioId));
+        verify(rightsholderRepository);
+    }
+
+    @Test
+    public void testGetByAclGrantSetId() {
+        List<RightsholderTypeOfUsePair> rightsholderTypeOfUsePairs = List.of();
+        String grantSetId = "986b542c-f6c9-4fbb-ad16-d7051d2bf1a1";
+        expect(rightsholderRepository.findByAclGrantSetId(grantSetId)).andReturn(rightsholderTypeOfUsePairs).once();
+        replay(rightsholderRepository);
+        assertSame(rightsholderTypeOfUsePairs, rightsholderService.getByAclGrantSetId(grantSetId));
         verify(rightsholderRepository);
     }
 

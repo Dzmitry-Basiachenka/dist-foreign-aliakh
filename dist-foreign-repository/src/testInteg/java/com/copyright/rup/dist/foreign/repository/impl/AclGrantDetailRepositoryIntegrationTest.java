@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.repository.impl;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.repository.api.Sort;
@@ -439,6 +440,22 @@ public class AclGrantDetailRepositoryIntegrationTest {
         expectedGrantDetails.get(0).setId(copiedGrantDetailsIds.get(0));
         expectedGrantDetails.get(0).setGrantSetId(targetGrantSetId);
         verifyAclGrantDetail(expectedGrantDetails.get(0), actualGrantDetails.get(0), true);
+    }
+
+    @Test
+    @TestData(fileName = FOLDER_NAME + "update-payee-account-number.groovy")
+    public void testUpdatePayeeAccountNumber() {
+        String grantSetId = "ac16e4fd-ab85-4f6e-9ffe-f87c3b7f0467";
+        List<String> grantDetailIds = List.of("018c6593-7eb4-4dc7-bc5e-f9a4b5fd7df8");
+        List<AclGrantDetail> actualGrantDetails = aclGrantDetailRepository.findByIds(grantDetailIds);
+        assertEquals(1, actualGrantDetails.size());
+        AclGrantDetail actualGrantDetail = actualGrantDetails.get(0);
+        assertNull(actualGrantDetail.getPayeeAccountNumber());
+        aclGrantDetailRepository.updatePayeeAccountNumber(grantSetId, 1000028511L, "DIGITAL", 1000019896L);
+        actualGrantDetails = aclGrantDetailRepository.findByIds(grantDetailIds);
+        assertEquals(1, actualGrantDetails.size());
+        actualGrantDetail = actualGrantDetails.get(0);
+        assertEquals(1000019896L, actualGrantDetail.getPayeeAccountNumber(), 0);
     }
 
     private void verifyAclGrantDetail(AclGrantDetail expectedGrantDetail, AclGrantDetail actualGrantDetail,
