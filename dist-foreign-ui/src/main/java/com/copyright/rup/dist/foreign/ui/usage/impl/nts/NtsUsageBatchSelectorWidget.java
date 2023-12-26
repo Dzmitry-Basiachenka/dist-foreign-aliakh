@@ -25,6 +25,8 @@ import java.util.stream.Collectors;
  */
 public class NtsUsageBatchSelectorWidget implements IFilterWindowController<UsageBatch> {
 
+    private static final long serialVersionUID = 4182035989051872505L;
+
     private final INtsUsageController usagesController;
 
     /**

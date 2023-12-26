@@ -13,6 +13,7 @@ import com.copyright.rup.dist.foreign.ui.usage.api.aclci.IAclciUsageController;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
+
 import com.vaadin.data.Binder;
 import com.vaadin.data.Result;
 import com.vaadin.data.ValueContext;
@@ -28,6 +29,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
@@ -46,6 +48,7 @@ import java.util.function.Predicate;
  */
 class AclciFundPoolLoadWindow extends Window {
 
+    private static final long serialVersionUID = -2117265621977700801L;
     private static final String NOT_NUMERIC_MESSAGE = ForeignUi.getMessage("field.error.not_numeric");
     private static final String NUMBER_OF_STUDENTS_NOT_ZERO_MESSAGE =
         ForeignUi.getMessage("field.error.number_of_students_not_zero_when_curriculum_db_split_percent_100");
@@ -87,11 +90,11 @@ class AclciFundPoolLoadWindow extends Window {
         this.usageController = usageController;
         this.fundPool = new FundPool();
         this.fundPool.setAclciFields(new AclciFields());
-        setContent(initRootLayout());
-        setCaption(ForeignUi.getMessage("window.load_fund_pool"));
-        setResizable(false);
-        setWidth(500, Unit.PIXELS);
-        setHeight(485, Unit.PIXELS);
+        super.setContent(initRootLayout());
+        super.setCaption(ForeignUi.getMessage("window.load_fund_pool"));
+        super.setResizable(false);
+        super.setWidth(500, Unit.PIXELS);
+        super.setHeight(485, Unit.PIXELS);
         VaadinUtils.addComponentStyle(this, "fund-pool-upload-window");
     }
 

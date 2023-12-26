@@ -27,6 +27,8 @@ import java.time.format.DateTimeFormatter;
  */
 class ViewFundPoolWindow extends AbstractViewUsageBatchWindow {
 
+    private static final long serialVersionUID = -7223760637238404615L;
+
     /**
      * Constructor.
      *

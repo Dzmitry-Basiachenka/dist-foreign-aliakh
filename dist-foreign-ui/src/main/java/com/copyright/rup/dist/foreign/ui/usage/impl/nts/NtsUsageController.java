@@ -49,6 +49,8 @@ import java.util.Set;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class NtsUsageController extends CommonUsageController implements INtsUsageController {
 
+    private static final long serialVersionUID = -3195564864166620200L;
+
     @Autowired
     private IStreamSourceHandler streamSourceHandler;
     @Autowired

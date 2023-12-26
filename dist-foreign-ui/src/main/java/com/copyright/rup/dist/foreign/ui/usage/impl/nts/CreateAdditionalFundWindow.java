@@ -39,6 +39,8 @@ import java.util.Set;
  */
 class CreateAdditionalFundWindow extends Window {
 
+    private static final long serialVersionUID = 325443931908820135L;
+
     private final INtsUsageController controller;
     private final Set<String> batchIds;
     private final BigDecimal amount;
@@ -66,9 +68,9 @@ class CreateAdditionalFundWindow extends Window {
         this.amount = amount;
         this.batchesFilterWindow = batchesFilterWindow;
         this.filteredBatchesWindow = filteredBatchesWindow;
-        setResizable(false);
-        setWidth(320, Unit.PIXELS);
-        setCaption(ForeignUi.getMessage("window.create_fund"));
+        super.setResizable(false);
+        super.setWidth(320, Unit.PIXELS);
+        super.setCaption(ForeignUi.getMessage("window.create_fund"));
         initPreServiceFeeFundNameField();
         initCommentArea();
         binder.validate();
@@ -78,7 +80,7 @@ class CreateAdditionalFundWindow extends Window {
         layout.setMargin(true);
         layout.setComponentAlignment(buttonsLayout, Alignment.MIDDLE_RIGHT);
         fundNameField.focus();
-        setContent(layout);
+        super.setContent(layout);
     }
 
     private void initPreServiceFeeFundNameField() {

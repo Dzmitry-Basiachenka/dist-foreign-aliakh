@@ -54,6 +54,8 @@ import java.util.Set;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class SalUsageController extends CommonUsageController implements ISalUsageController {
 
+    private static final long serialVersionUID = -8012973134324949006L;
+
     @Autowired
     private ISalUsageService salUsageService;
     @Autowired

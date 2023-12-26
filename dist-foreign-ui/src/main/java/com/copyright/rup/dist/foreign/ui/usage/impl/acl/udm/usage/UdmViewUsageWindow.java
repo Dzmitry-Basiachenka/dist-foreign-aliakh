@@ -33,6 +33,8 @@ import java.util.Objects;
  */
 public class UdmViewUsageWindow extends CommonUdmUsageWindow implements IDateFormatter {
 
+    private static final long serialVersionUID = 6243814149069229205L;
+
     private final Binder<UdmUsageDto> binder = new Binder<>();
     private final UdmUsageDto udmUsage;
 
@@ -43,11 +45,11 @@ public class UdmViewUsageWindow extends CommonUdmUsageWindow implements IDateFor
      */
     public UdmViewUsageWindow(UdmUsageDto selectedUdmUsage) {
         udmUsage = selectedUdmUsage;
-        setContent(initRootLayout());
-        setCaption(ForeignUi.getMessage("window.view_udm_usage"));
-        setResizable(false);
-        setWidth(650, Unit.PIXELS);
-        setHeight(700, Unit.PIXELS);
+        super.setContent(initRootLayout());
+        super.setCaption(ForeignUi.getMessage("window.view_udm_usage"));
+        super.setResizable(false);
+        super.setWidth(650, Unit.PIXELS);
+        super.setHeight(700, Unit.PIXELS);
         VaadinUtils.addComponentStyle(this, "view-udm-usage-window");
     }
 

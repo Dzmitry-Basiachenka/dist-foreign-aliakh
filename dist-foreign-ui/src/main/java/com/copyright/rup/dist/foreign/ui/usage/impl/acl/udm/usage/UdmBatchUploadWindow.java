@@ -46,6 +46,7 @@ import java.util.List;
 public class UdmBatchUploadWindow extends Window {
 
     private static final String EMPTY_FIELD_MESSAGE = "field.error.empty";
+    private static final long serialVersionUID = 7698006271993103210L;
 
     private final Binder<UdmBatch> batchBinder = new Binder<>();
     private final Binder<String> binder = new Binder<>();
@@ -63,11 +64,11 @@ public class UdmBatchUploadWindow extends Window {
      */
     public UdmBatchUploadWindow(IUdmUsageController controller) {
         this.udmUsageController = controller;
-        setContent(initRootLayout());
-        setCaption(ForeignUi.getMessage("window.upload_udm_usage_batch"));
-        setResizable(false);
-        setWidth(400, Unit.PIXELS);
-        setHeight(211, Unit.PIXELS);
+        super.setContent(initRootLayout());
+        super.setCaption(ForeignUi.getMessage("window.upload_udm_usage_batch"));
+        super.setResizable(false);
+        super.setWidth(400, Unit.PIXELS);
+        super.setHeight(211, Unit.PIXELS);
         VaadinUtils.addComponentStyle(this, "udm-batch-usage-upload-window");
     }
 

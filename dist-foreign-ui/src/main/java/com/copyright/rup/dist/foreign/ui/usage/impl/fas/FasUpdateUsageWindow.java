@@ -40,6 +40,8 @@ import java.util.stream.Collectors;
  */
 class FasUpdateUsageWindow extends Window implements IFasUpdateUsageWindow {
 
+    private static final long serialVersionUID = 3933778706035133427L;
+
     private final IFasUsageController controller;
     private SearchWidget searchWidget;
     private Grid<UsageDto> usagesGrid;
@@ -54,10 +56,10 @@ class FasUpdateUsageWindow extends Window implements IFasUpdateUsageWindow {
      */
     FasUpdateUsageWindow(IFasUsageController controller) {
         this.controller = controller;
-        setWidth(1280, Unit.PIXELS);
-        setHeight(530, Unit.PIXELS);
-        setContent(initContent());
-        setCaption(ForeignUi.getMessage("window.update_usages"));
+        super.setWidth(1280, Unit.PIXELS);
+        super.setHeight(530, Unit.PIXELS);
+        super.setContent(initContent());
+        super.setCaption(ForeignUi.getMessage("window.update_usages"));
         VaadinUtils.addComponentStyle(this, "update-usages-window");
     }
 

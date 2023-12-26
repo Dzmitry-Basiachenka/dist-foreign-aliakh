@@ -34,6 +34,7 @@ import java.util.stream.Collectors;
  */
 public class SalUsageFilterWidget extends CommonUsageFilterWidget implements IAaclUsageFilterWidget {
 
+    private static final long serialVersionUID = -5013274945770331680L;
     private static final Set<UsageStatusEnum> SAL_STATUSES =
         ImmutableSet.of(UsageStatusEnum.NEW, UsageStatusEnum.WORK_FOUND, UsageStatusEnum.WORK_NOT_FOUND,
             UsageStatusEnum.RH_FOUND, UsageStatusEnum.WORK_NOT_GRANTED, UsageStatusEnum.RH_NOT_FOUND,

@@ -57,6 +57,7 @@ import java.util.Objects;
  */
 public class UdmEditValueWindow extends CommonUdmValueWindow {
 
+    private static final long serialVersionUID = -5204489990468602113L;
     private static final String NUMBER_VALIDATION_MESSAGE = ForeignUi.getMessage("field.error.not_numeric");
     private static final String YES = "Y";
     private static final String NO = "N";
@@ -110,11 +111,11 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
         this.hasSpecialistPermission = hasSpecialistPermission;
         saveButtonClickListener = clickListener;
         fieldToValueChangesMap = new UdmValueAuditFieldToValuesMap(udmValue);
-        setContent(initRootLayout());
-        setCaption(ForeignUi.getMessage("window.edit_udm_value"));
-        setResizable(false);
-        setWidth(960, Unit.PIXELS);
-        setHeight(700, Unit.PIXELS);
+        super.setContent(initRootLayout());
+        super.setCaption(ForeignUi.getMessage("window.edit_udm_value"));
+        super.setResizable(false);
+        super.setWidth(960, Unit.PIXELS);
+        super.setHeight(700, Unit.PIXELS);
         VaadinUtils.addComponentStyle(this, "edit-udm-value-window");
     }
 

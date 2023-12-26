@@ -50,6 +50,8 @@ import java.util.Set;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class AclciUsageController extends CommonUsageController implements IAclciUsageController {
 
+    private static final long serialVersionUID = -158557609682880552L;
+
     @Autowired
     private IAclciUsageFilterController aclciUsageFilterController;
     @Autowired

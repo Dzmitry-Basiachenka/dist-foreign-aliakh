@@ -5,7 +5,6 @@ import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.common.util.UsageBatchUtils;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageController;
-
 import com.copyright.rup.dist.foreign.ui.usage.impl.AbstractViewUsageBatchWindow;
 
 import com.vaadin.server.SerializableComparator;
@@ -27,6 +26,8 @@ import java.time.format.DateTimeFormatter;
  * @author Uladzislau Shalamitski
  */
 class ViewUsageBatchWindow extends AbstractViewUsageBatchWindow {
+
+    private static final long serialVersionUID = -8417390380475219393L;
 
     /**
      * Constructor.

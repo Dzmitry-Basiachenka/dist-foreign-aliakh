@@ -46,6 +46,7 @@ import java.util.Set;
  */
 class FundPoolLoadWindow extends Window {
 
+    private static final long serialVersionUID = -3082206348453157583L;
     private static final String EMPTY_MARKET_STYLE = "empty-item-filter-widget";
     private static final String NOT_NUMERIC_MESSAGE = "field.error.not_numeric";
     private static final int MIN_YEAR = 1950;
@@ -76,11 +77,11 @@ class FundPoolLoadWindow extends Window {
      */
     FundPoolLoadWindow(INtsUsageController usagesController) {
         this.usagesController = usagesController;
-        setContent(initRootLayout());
-        setCaption(ForeignUi.getMessage("window.load_fund_pool"));
-        setResizable(false);
-        setWidth(440, Unit.PIXELS);
-        setHeight(360, Unit.PIXELS);
+        super.setContent(initRootLayout());
+        super.setCaption(ForeignUi.getMessage("window.load_fund_pool"));
+        super.setResizable(false);
+        super.setWidth(440, Unit.PIXELS);
+        super.setHeight(360, Unit.PIXELS);
         VaadinUtils.addComponentStyle(this, "fund-pool-upload-window");
     }
 

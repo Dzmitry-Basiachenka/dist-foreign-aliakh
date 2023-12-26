@@ -40,6 +40,8 @@ import java.util.stream.Collectors;
  */
 class AclciUsageUpdateWindow extends Window implements IAclciUsageUpdateWindow {
 
+    private static final long serialVersionUID = 1940659956816565294L;
+
     private final IAclciUsageController controller;
     private SearchWidget searchWidget;
     private Grid<UsageDto> usagesGrid;
@@ -54,10 +56,10 @@ class AclciUsageUpdateWindow extends Window implements IAclciUsageUpdateWindow {
      */
     AclciUsageUpdateWindow(IAclciUsageController controller) {
         this.controller = controller;
-        setWidth(1000, Unit.PIXELS);
-        setHeight(530, Unit.PIXELS);
-        setContent(initContent());
-        setCaption(ForeignUi.getMessage("window.update_usages"));
+        super.setWidth(1000, Unit.PIXELS);
+        super.setHeight(530, Unit.PIXELS);
+        super.setContent(initContent());
+        super.setCaption(ForeignUi.getMessage("window.update_usages"));
         VaadinUtils.addComponentStyle(this, "update-usages-window");
     }
 

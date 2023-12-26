@@ -53,6 +53,7 @@ import java.util.stream.Collectors;
  */
 public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWidget, IDateFormatter {
 
+    private static final long serialVersionUID = 1886776610579809855L;
     private static final String EMPTY_STYLE_NAME = "empty-values-grid";
     private static final String FOOTER_LABEL = "Values Count: %s";
     private static final Set<UdmValueStatusEnum> VALUE_STATUSES_ASSIGNEE_ALLOWED_FOR_RESEARCHER =
@@ -83,7 +84,7 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
         setFirstComponent(controller.initValuesFilterWidget());
         setSecondComponent(initValuesLayout());
         setLocked(true);
-        setSizeFull();
+        super.setSizeFull();
         return this;
     }
 

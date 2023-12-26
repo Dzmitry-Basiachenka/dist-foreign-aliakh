@@ -39,10 +39,12 @@ import java.util.stream.Collectors;
  */
 public class UdmUsageFilterWidget extends VerticalLayout implements IUdmUsageFilterWidget {
 
+    private static final long serialVersionUID = 6430443543720686514L;
     private static final Set<UsageStatusEnum> ACL_STATUSES = ImmutableSet.of(UsageStatusEnum.NEW,
         UsageStatusEnum.INELIGIBLE, UsageStatusEnum.WORK_FOUND, UsageStatusEnum.WORK_NOT_FOUND,
         UsageStatusEnum.RH_FOUND, UsageStatusEnum.RH_NOT_FOUND, UsageStatusEnum.OPS_REVIEW,
         UsageStatusEnum.SPECIALIST_REVIEW, UsageStatusEnum.ELIGIBLE);
+
     private final UdmUsageAppliedFilterWidget appliedFilterWidget;
     private Button applyButton;
     private Button moreFiltersButton;

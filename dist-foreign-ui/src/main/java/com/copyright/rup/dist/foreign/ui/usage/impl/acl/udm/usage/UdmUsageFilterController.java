@@ -33,6 +33,8 @@ import java.util.List;
 public class UdmUsageFilterController extends CommonController<IUdmUsageFilterWidget>
     implements IUdmUsageFilterController {
 
+    private static final long serialVersionUID = 6296641528804992255L;
+
     @Autowired
     private IUdmBatchService udmBatchService;
     @Autowired

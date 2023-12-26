@@ -50,6 +50,8 @@ import java.util.function.Consumer;
  */
 class WorkClassificationWindow extends Window {
 
+    private static final long serialVersionUID = -4120963939990636156L;
+
     private Grid<WorkClassification> grid;
     private SearchWidget searchWidget;
     private ListDataProvider<WorkClassification> listDataProvider;
@@ -66,10 +68,10 @@ class WorkClassificationWindow extends Window {
     WorkClassificationWindow(Set<String> batchesIds, IWorkClassificationController controller) {
         this.controller = controller;
         selectedBatchesIds = batchesIds;
-        setWidth(1000, Unit.PIXELS);
-        setHeight(530, Unit.PIXELS);
-        setContent(initContent());
-        setCaption(ForeignUi.getMessage("window.works_classification"));
+        super.setWidth(1000, Unit.PIXELS);
+        super.setHeight(530, Unit.PIXELS);
+        super.setContent(initContent());
+        super.setCaption(ForeignUi.getMessage("window.works_classification"));
     }
 
     private Component initContent() {

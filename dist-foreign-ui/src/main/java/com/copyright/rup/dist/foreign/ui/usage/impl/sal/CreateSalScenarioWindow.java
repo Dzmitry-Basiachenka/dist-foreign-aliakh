@@ -47,6 +47,8 @@ import java.util.stream.Collectors;
  */
 class CreateSalScenarioWindow extends Window {
 
+    private static final long serialVersionUID = 8029520717534021156L;
+
     private final ISalUsageController controller;
     private final Binder<Scenario> scenarioBinder = new Binder<>();
     private final Binder<AtomicReference<FundPool>> fundPoolBinder = new Binder<>();
@@ -61,17 +63,17 @@ class CreateSalScenarioWindow extends Window {
      */
     CreateSalScenarioWindow(ISalUsageController controller) {
         this.controller = controller;
-        setResizable(false);
-        setWidth(320, Unit.PIXELS);
-        setCaption(ForeignUi.getMessage("window.create_scenario"));
+        super.setResizable(false);
+        super.setWidth(320, Unit.PIXELS);
+        super.setCaption(ForeignUi.getMessage("window.create_scenario"));
         initFields();
-        HorizontalLayout buttonsLayout = initButtonsLayout();
-        VerticalLayout layout = new VerticalLayout(scenarioNameField, fundPoolComboBox, descriptionArea, buttonsLayout);
+        var buttonsLayout = initButtonsLayout();
+        var layout = new VerticalLayout(scenarioNameField, fundPoolComboBox, descriptionArea, buttonsLayout);
         layout.setSpacing(true);
         layout.setMargin(true);
         layout.setComponentAlignment(buttonsLayout, Alignment.MIDDLE_RIGHT);
         scenarioNameField.focus();
-        setContent(layout);
+        super.setContent(layout);
         VaadinUtils.addComponentStyle(this, "create-scenario-window");
         scenarioBinder.validate();
         fundPoolBinder.validate();

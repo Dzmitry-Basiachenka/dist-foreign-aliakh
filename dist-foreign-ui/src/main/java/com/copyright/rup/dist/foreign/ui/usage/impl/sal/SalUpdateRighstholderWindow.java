@@ -38,6 +38,8 @@ import java.util.Set;
  */
 class SalUpdateRighstholderWindow extends Window {
 
+    private static final long serialVersionUID = 5502236382794801137L;
+
     private final ISalUsageController salUsageController;
     private final Set<String> usageIds;
     private final Binder<Usage> usageBinder = new Binder<>();
@@ -57,11 +59,11 @@ class SalUpdateRighstholderWindow extends Window {
         this.salUsageController = salUsageController;
         this.detailsWindow = detailsWindow;
         this.usageIds = usageIds;
-        setContent(initRootLayout());
-        setCaption(ForeignUi.getMessage("window.update_rightsholder"));
-        setResizable(false);
-        setWidth(440, Unit.PIXELS);
-        setHeight(165, Unit.PIXELS);
+        super.setContent(initRootLayout());
+        super.setCaption(ForeignUi.getMessage("window.update_rightsholder"));
+        super.setResizable(false);
+        super.setWidth(440, Unit.PIXELS);
+        super.setHeight(165, Unit.PIXELS);
         VaadinUtils.addComponentStyle(this, "update-rh-window");
     }
 

@@ -26,6 +26,8 @@ import com.vaadin.ui.Window;
  */
 public class UdmUsageBaselinePublishWindow extends Window {
 
+    private static final long serialVersionUID = 8312470760852793577L;
+
     private final IUdmUsageController controller;
     private final Button publishButton = Buttons.createButton(ForeignUi.getMessage("button.publish"));
     private final ComboBox<Integer> periodComboBox = new ComboBox<>(ForeignUi.getMessage("label.period"));
@@ -40,11 +42,11 @@ public class UdmUsageBaselinePublishWindow extends Window {
     public UdmUsageBaselinePublishWindow(IUdmUsageController controller, ClickListener clickListener) {
         this.controller = controller;
         this.publishButtonClickListener = clickListener;
-        setContent(initRootLayout());
-        setCaption(ForeignUi.getMessage("window.publish_baseline"));
-        setResizable(false);
-        setWidth(280, Unit.PIXELS);
-        setHeight(120, Unit.PIXELS);
+        super.setContent(initRootLayout());
+        super.setCaption(ForeignUi.getMessage("window.publish_baseline"));
+        super.setResizable(false);
+        super.setWidth(280, Unit.PIXELS);
+        super.setHeight(120, Unit.PIXELS);
         VaadinUtils.addComponentStyle(this, "publish-baseline-udm-usage-window");
     }
 

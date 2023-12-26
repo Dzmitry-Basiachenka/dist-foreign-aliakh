@@ -48,6 +48,7 @@ import java.util.Objects;
  */
 public class ItemBankUploadWindow extends Window {
 
+    private static final long serialVersionUID = -2178155971582601473L;
     private static final int MIN_YEAR = 1950;
     private static final int MAX_YEAR = 2099;
 
@@ -67,11 +68,11 @@ public class ItemBankUploadWindow extends Window {
      */
     ItemBankUploadWindow(ISalUsageController usagesController) {
         this.usagesController = usagesController;
-        setContent(initRootLayout());
-        setCaption(ForeignUi.getMessage("window.upload_item_bank"));
-        setResizable(false);
-        setWidth(400, Unit.PIXELS);
-        setHeight(305, Unit.PIXELS);
+        super.setContent(initRootLayout());
+        super.setCaption(ForeignUi.getMessage("window.upload_item_bank"));
+        super.setResizable(false);
+        super.setWidth(400, Unit.PIXELS);
+        super.setHeight(305, Unit.PIXELS);
         VaadinUtils.addComponentStyle(this, "usage-upload-window");
     }
 

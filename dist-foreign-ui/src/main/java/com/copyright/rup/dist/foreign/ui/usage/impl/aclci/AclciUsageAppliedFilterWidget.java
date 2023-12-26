@@ -23,6 +23,8 @@ import java.util.stream.Collectors;
  */
 public class AclciUsageAppliedFilterWidget extends CommonUsageAppliedFilterWidget {
 
+    private static final long serialVersionUID = 7982177046744894058L;
+
     /**
      * Constructor.
      *

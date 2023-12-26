@@ -62,6 +62,7 @@ import java.util.Objects;
  */
 public class UdmEditUsageWindow extends CommonUdmUsageWindow implements IDateFormatter {
 
+    private static final long serialVersionUID = -4535236976089173633L;
     private static final Range<BigDecimal> STATISTICAL_MULTIPLIER_RANGE =
         Range.closed(new BigDecimal("0.00001"), BigDecimal.ONE);
     private static final Range<Integer> STATISTICAL_MULTIPLIER_SCALE_RANGE = Range.closed(0, 5);
@@ -116,11 +117,11 @@ public class UdmEditUsageWindow extends CommonUdmUsageWindow implements IDateFor
         fieldToValueChangesMap = new UdmUsageAuditFieldToValuesMap(udmUsage);
         saveButtonClickListener = clickListener;
         idToLicenseeClassMap = controller.getIdsToDetailLicenseeClasses();
-        setContent(initRootLayout());
-        setCaption(ForeignUi.getMessage("window.edit_udm_usage"));
-        setResizable(false);
-        setWidth(650, Unit.PIXELS);
-        setHeight(700, Unit.PIXELS);
+        super.setContent(initRootLayout());
+        super.setCaption(ForeignUi.getMessage("window.edit_udm_usage"));
+        super.setResizable(false);
+        super.setWidth(650, Unit.PIXELS);
+        super.setHeight(700, Unit.PIXELS);
         VaadinUtils.addComponentStyle(this, "edit-udm-usage-window");
     }
 
@@ -129,10 +130,10 @@ public class UdmEditUsageWindow extends CommonUdmUsageWindow implements IDateFor
         VerticalLayout editFieldsLayout = new VerticalLayout();
         editFieldsLayout.addComponents(hasResearcherPermission
             ? new ResearcherComponentsBuilder().build() : new SpecialistAndManagerComponentsBuilder().build());
-        Panel panel = new Panel(editFieldsLayout);
+        var panel = new Panel(editFieldsLayout);
         panel.setSizeFull();
         editFieldsLayout.setMargin(new MarginInfo(true));
-        HorizontalLayout buttonsLayout = initButtonsLayout();
+        var buttonsLayout = initButtonsLayout();
         rootLayout.addComponents(panel, buttonsLayout);
         rootLayout.setComponentAlignment(buttonsLayout, Alignment.BOTTOM_RIGHT);
         rootLayout.setExpandRatio(panel, 1f);
@@ -250,9 +251,9 @@ public class UdmEditUsageWindow extends CommonUdmUsageWindow implements IDateFor
                 NUMBER_VALIDATION_MESSAGE)
             .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.number_length", 9), 0, 9))
             .withValidator(value -> hasResearcherPermission
-                || StringUtils.isNotEmpty(value.trim())
-                || StringUtils.isNotEmpty(reportedTitleField.getValue().trim())
-                || StringUtils.isNotEmpty(reportedStandardNumberField.getValue().trim()),
+                    || StringUtils.isNotEmpty(value.trim())
+                    || StringUtils.isNotEmpty(reportedTitleField.getValue().trim())
+                    || StringUtils.isNotEmpty(reportedStandardNumberField.getValue().trim()),
                 ForeignUi.getMessage("field.error.work_information_not_found"))
             .bind(usage -> Objects.toString(usage.getWrWrkInst(), StringUtils.EMPTY),
                 (usage, value) -> usage.setWrWrkInst(NumberUtils.createLong(StringUtils.trimToNull(value))));

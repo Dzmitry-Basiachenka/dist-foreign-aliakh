@@ -42,6 +42,7 @@ import java.util.Set;
  */
 public class SalUsageWidget extends CommonUsageWidget implements ISalUsageWidget {
 
+    private static final long serialVersionUID = 5691403981248058168L;
     private static final String EMPTY_STYLE_NAME = "empty-usages-grid";
     private static final int EXPECTED_BATCH_SIZE = 1;
 

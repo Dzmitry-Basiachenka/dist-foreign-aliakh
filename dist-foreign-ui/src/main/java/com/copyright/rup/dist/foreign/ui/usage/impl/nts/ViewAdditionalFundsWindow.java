@@ -35,6 +35,8 @@ import java.util.Objects;
  */
 class ViewAdditionalFundsWindow extends Window {
 
+    private static final long serialVersionUID = -2993574115589450787L;
+
     private final SearchWidget searchWidget;
     private final INtsUsageController controller;
     private Grid<FundPool> grid;
@@ -46,18 +48,18 @@ class ViewAdditionalFundsWindow extends Window {
      */
     ViewAdditionalFundsWindow(INtsUsageController controller) {
         this.controller = controller;
-        setCaption(ForeignUi.getMessage("window.view_fund"));
-        setWidth(1100, Unit.PIXELS);
-        setHeight(450, Unit.PIXELS);
+        super.setCaption(ForeignUi.getMessage("window.view_fund"));
+        super.setWidth(1100, Unit.PIXELS);
+        super.setHeight(450, Unit.PIXELS);
         searchWidget = new SearchWidget(new SearchController());
         searchWidget.setPrompt(ForeignUi.getMessage("prompt.fund_pool"));
         initUsageBatchesGrid();
-        Button closeButton = Buttons.createCloseButton(this);
-        VerticalLayout layout = new VerticalLayout(searchWidget, grid, closeButton);
+        var closeButton = Buttons.createCloseButton(this);
+        var layout = new VerticalLayout(searchWidget, grid, closeButton);
         layout.setSizeFull();
         layout.setExpandRatio(grid, 1);
         layout.setComponentAlignment(closeButton, Alignment.MIDDLE_RIGHT);
-        setContent(layout);
+        super.setContent(layout);
     }
 
     private void initUsageBatchesGrid() {
@@ -90,12 +92,12 @@ class ViewAdditionalFundsWindow extends Window {
             .setSortProperty("comment")
             .setWidth(320);
         grid.addComponentColumn(fundPool -> {
-            Button deleteButton = Buttons.createButton(ForeignUi.getMessage("button.delete"));
-            deleteButton.setId(fundPool.getId());
-            deleteButton.addClickListener(event -> deleteFund(fundPool));
-            VaadinUtils.setButtonsAutoDisabled(deleteButton);
-            return deleteButton;
-        }).setId("delete")
+                Button deleteButton = Buttons.createButton(ForeignUi.getMessage("button.delete"));
+                deleteButton.setId(fundPool.getId());
+                deleteButton.addClickListener(event -> deleteFund(fundPool));
+                VaadinUtils.setButtonsAutoDisabled(deleteButton);
+                return deleteButton;
+            }).setId("delete")
             .setWidth(90)
             .setSortable(false);
         VaadinUtils.addComponentStyle(grid, "view-fund-pool-grid");

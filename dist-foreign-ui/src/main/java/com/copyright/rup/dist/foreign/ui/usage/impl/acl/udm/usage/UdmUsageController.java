@@ -66,6 +66,8 @@ import java.util.stream.Collectors;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class UdmUsageController extends CommonController<IUdmUsageWidget> implements IUdmUsageController {
 
+    private static final long serialVersionUID = -7827969056230545787L;
+
     @Autowired
     private IUdmUsageService udmUsageService;
     @Autowired

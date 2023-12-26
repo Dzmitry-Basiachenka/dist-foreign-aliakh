@@ -58,6 +58,7 @@ import java.util.stream.Collectors;
  */
 public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWidget, IDateFormatter {
 
+    private static final long serialVersionUID = -5893066489854352835L;
     private static final String EMPTY_STYLE_NAME = "empty-usages-grid";
     private static final String FOOTER_LABEL = "Usages Count: %s";
     private static final Set<UsageStatusEnum> USAGE_STATUSES_EDIT_ALLOWED_FOR_RESEARCHER = EnumSet.of(
@@ -88,7 +89,7 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
         setFirstComponent(controller.initUsagesFilterWidget());
         setSecondComponent(initUsagesLayout());
         setLocked(true);
-        setSizeFull();
+        super.setSizeFull();
         return this;
     }
 

@@ -14,7 +14,6 @@ import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.vaadin.data.Binder;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
@@ -37,6 +36,8 @@ import java.util.List;
  */
 class CreateScenarioWindow extends Window {
 
+    private static final long serialVersionUID = -4515391344997139909L;
+
     private final ICommonUsageController controller;
     private final Binder<Scenario> binder = new Binder<>();
     private TextField scenarioNameField;
@@ -49,22 +50,22 @@ class CreateScenarioWindow extends Window {
      */
     CreateScenarioWindow(ICommonUsageController controller) {
         this.controller = controller;
-        setResizable(false);
-        setWidth(320, Unit.PIXELS);
-        setCaption(ForeignUi.getMessage("window.create_scenario"));
+        super.setResizable(false);
+        super.setWidth(320, Unit.PIXELS);
+        super.setCaption(ForeignUi.getMessage("window.create_scenario"));
         initFields();
-        HorizontalLayout buttonsLayout = initButtonsLayout();
-        VerticalLayout layout = new VerticalLayout(scenarioNameField, descriptionArea, buttonsLayout);
+        var buttonsLayout = initButtonsLayout();
+        var layout = new VerticalLayout(scenarioNameField, descriptionArea, buttonsLayout);
         layout.setSpacing(true);
         layout.setMargin(true);
         layout.setComponentAlignment(buttonsLayout, Alignment.MIDDLE_RIGHT);
         scenarioNameField.focus();
-        setContent(layout);
+        super.setContent(layout);
         VaadinUtils.addComponentStyle(this, "create-scenario-window");
     }
 
     private HorizontalLayout initButtonsLayout() {
-        Button confirmButton = Buttons.createButton(ForeignUi.getMessage("button.confirm"));
+        var confirmButton = Buttons.createButton(ForeignUi.getMessage("button.confirm"));
         confirmButton.addClickListener(listener -> onConfirmButtonClicked());
         VaadinUtils.setButtonsAutoDisabled(confirmButton);
         HorizontalLayout layout = new HorizontalLayout(confirmButton, Buttons.createCancelButton(this));

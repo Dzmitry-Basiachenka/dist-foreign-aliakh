@@ -31,6 +31,8 @@ import java.util.Objects;
  */
 public class AclciUsageWidget extends CommonUsageWidget implements IAclciUsageWidget {
 
+    private static final long serialVersionUID = 7382414798768120766L;
+
     private final IAclciUsageController controller;
     private MenuBar usageBatchMenuBar;
     private MenuBar.MenuItem loadUsageBatchMenuItem;

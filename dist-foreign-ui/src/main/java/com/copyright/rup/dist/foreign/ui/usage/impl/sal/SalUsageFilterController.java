@@ -25,6 +25,8 @@ import java.util.List;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class SalUsageFilterController extends CommonUsageFilterController implements ISalUsageFilterController {
 
+    private static final long serialVersionUID = 2673532644351774897L;
+
     @Autowired
     private ISalUsageService salUsageService;
 

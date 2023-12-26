@@ -25,6 +25,8 @@ import com.vaadin.ui.Window;
  */
 public class UdmPopulateValueBatchWindow extends Window {
 
+    private static final long serialVersionUID = -4928806543879513817L;
+
     private final IUdmValueController controller;
     private final ComboBox<Integer> periodComboBox = new ComboBox<>(ForeignUi.getMessage("label.period"));
     private final Button continueButton = Buttons.createButton(ForeignUi.getMessage("button.continue"));
@@ -36,18 +38,18 @@ public class UdmPopulateValueBatchWindow extends Window {
      */
     public UdmPopulateValueBatchWindow(IUdmValueController controller) {
         this.controller = controller;
-        setContent(initRootLayout());
-        setCaption(ForeignUi.getMessage("window.populate_value_batch"));
-        setResizable(false);
-        setWidth(280, Unit.PIXELS);
-        setHeight(120, Unit.PIXELS);
+        super.setContent(initRootLayout());
+        super.setCaption(ForeignUi.getMessage("window.populate_value_batch"));
+        super.setResizable(false);
+        super.setWidth(280, Unit.PIXELS);
+        super.setHeight(120, Unit.PIXELS);
         VaadinUtils.addComponentStyle(this, "udm-value-populate-value-batch-window");
     }
 
     private ComponentContainer initRootLayout() {
-        VerticalLayout verticalLayout = new VerticalLayout();
+        var verticalLayout = new VerticalLayout();
         initPeriodCombobox();
-        HorizontalLayout buttonsLayout = initButtonsLayout();
+        var buttonsLayout = initButtonsLayout();
         verticalLayout.addComponents(periodComboBox, buttonsLayout);
         verticalLayout.setComponentAlignment(buttonsLayout, Alignment.BOTTOM_RIGHT);
         return verticalLayout;

@@ -56,6 +56,8 @@ import java.util.Set;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class UdmValueController extends CommonController<IUdmValueWidget> implements IUdmValueController {
 
+    private static final long serialVersionUID = -4629364383011104673L;
+
     @Autowired
     private IUdmValueFilterController udmValueFilterController;
     @Autowired

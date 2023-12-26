@@ -38,6 +38,8 @@ import java.util.function.Consumer;
  */
 public class ViewSalUsageBatchWindow extends Window implements SearchWidget.ISearchController, IDateFormatter {
 
+    private static final long serialVersionUID = 1892057967164817915L;
+
     private final SearchWidget searchWidget;
     private final ISalUsageController controller;
     private Grid<UsageBatch> grid;
@@ -51,19 +53,19 @@ public class ViewSalUsageBatchWindow extends Window implements SearchWidget.ISea
      */
     public ViewSalUsageBatchWindow(ISalUsageController controller) {
         this.controller = controller;
-        setWidth(1000, Unit.PIXELS);
-        setHeight(550, Unit.PIXELS);
+        super.setWidth(1000, Unit.PIXELS);
+        super.setHeight(550, Unit.PIXELS);
         searchWidget = new SearchWidget(this);
         searchWidget.setPrompt(ForeignUi.getMessage("field.prompt.view_batch.search.sal_aclci"));
         initUsageBatchesGrid();
-        HorizontalLayout buttonsLayout = initButtons();
+        var buttonsLayout = initButtons();
         initMediator();
-        VerticalLayout layout = new VerticalLayout(searchWidget, grid, buttonsLayout);
+        var layout = new VerticalLayout(searchWidget, grid, buttonsLayout);
         layout.setSizeFull();
         layout.setExpandRatio(grid, 1);
         layout.setComponentAlignment(buttonsLayout, Alignment.MIDDLE_RIGHT);
-        setContent(layout);
-        setCaption(ForeignUi.getMessage("window.view_usage_batch"));
+        super.setContent(layout);
+        super.setCaption(ForeignUi.getMessage("window.view_usage_batch"));
         VaadinUtils.addComponentStyle(this, "view-batch-window");
     }
 
