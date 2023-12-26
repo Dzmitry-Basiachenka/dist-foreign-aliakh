@@ -77,6 +77,11 @@ public class AclGrantDetailService implements IAclGrantDetailService {
         LOGGER.info("Insert ACL grant details. Finished. AclGrantDetailsCount={}, UserName={}", size, userName);
     }
 
+    @Override
+    public List<AclGrantDetail> getByGrantSetId(String grantSetId) {
+        return aclGrantDetailRepository.findByGrantSetId(grantSetId);
+    }
+
     @Transactional
     @Override
     @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})

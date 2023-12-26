@@ -270,6 +270,14 @@
         order by df_acl_grant_detail_uid
     </select>
 
+    <select id="findByGrantSetId" resultMap="aclGrantDetailResultMap">
+        select
+            <include refid="aclGrantDetailColumns"/>
+        from ${schema}.df_acl_grant_detail
+        where df_acl_grant_set_uid = #{grantSetId}
+        order by df_acl_grant_detail_uid
+    </select>
+
     <select id="findCountByFilter" parameterType="map" resultType="int">
         <include refid="IAclGrantDetailMapper.selectCountByFilterSql"/>
     </select>
