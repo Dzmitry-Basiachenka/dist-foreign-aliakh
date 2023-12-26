@@ -20,6 +20,7 @@ import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.reporting.api.IStreamSourceHandler;
 import com.copyright.rup.dist.common.reporting.impl.StreamSource;
 import com.copyright.rup.dist.common.repository.api.Pageable;
+import com.copyright.rup.dist.foreign.domain.AclGrantDetail;
 import com.copyright.rup.dist.foreign.domain.AclGrantDetailDto;
 import com.copyright.rup.dist.foreign.domain.AclGrantSet;
 import com.copyright.rup.dist.foreign.domain.filter.AclGrantDetailFilter;
@@ -304,6 +305,17 @@ public class AclGrantDetailControllerTest {
         replay(aclGrantSetService, aclGrantDetailFilterController, aclGrantDetailFilterWidget);
         assertEquals(1, controller.copyAclGrantSet(aclGrantSet, GRANT_SET_ID));
         verify(aclGrantSetService, aclGrantDetailFilterController, aclGrantDetailFilterWidget);
+    }
+
+    @Test
+    public void testRefreshPayeesAsync() {
+        List<AclGrantDetail> grantDetails = List.of();
+        expect(aclGrantDetailService.getByGrantSetId(GRANT_SET_ID)).andReturn(grantDetails).once();
+        aclGrantDetailService.populatePayeesAsync(GRANT_SET_ID, grantDetails);
+        expectLastCall().once();
+        replay(aclGrantDetailService);
+        controller.refreshPayeesAsync(GRANT_SET_ID);
+        verify(aclGrantDetailService);
     }
 
     private AclGrantSet buildAclGrantSet() {
