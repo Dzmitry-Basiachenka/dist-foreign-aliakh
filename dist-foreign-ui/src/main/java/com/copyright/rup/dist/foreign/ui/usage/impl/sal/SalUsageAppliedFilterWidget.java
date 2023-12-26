@@ -17,6 +17,8 @@ import com.vaadin.ui.VerticalLayout;
  */
 public class SalUsageAppliedFilterWidget extends CommonUsageAppliedFilterWidget {
 
+    private static final long serialVersionUID = -4665936297173865031L;
+
     /**
      * Constructor.
      *

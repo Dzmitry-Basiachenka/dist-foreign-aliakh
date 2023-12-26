@@ -47,6 +47,8 @@ import java.util.Objects;
  */
 public class AclciUsageBatchUploadWindow extends Window {
 
+    private static final long serialVersionUID = 4259791686280467591L;
+
     private final IAclciUsageController usageController;
     private final Binder<UsageBatch> binder = new Binder<>();
     private final Binder<String> uploadBinder = new Binder<>();

@@ -28,6 +28,7 @@ import java.util.stream.Collectors;
  */
 public class UdmValueAppliedFilterWidget extends CommonAppliedFilterPanel {
 
+    private static final long serialVersionUID = 5145574940680572574L;
     private static final String NULL = "NULL";
 
     /**

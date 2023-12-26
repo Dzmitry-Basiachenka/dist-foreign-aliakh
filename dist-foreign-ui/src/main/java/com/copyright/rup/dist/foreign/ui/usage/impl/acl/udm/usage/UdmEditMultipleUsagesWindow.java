@@ -58,6 +58,7 @@ import java.util.function.Function;
  */
 public class UdmEditMultipleUsagesWindow extends Window {
 
+    private static final long serialVersionUID = 4637923287336034491L;
     private static final Range<BigDecimal> STATISTICAL_MULTIPLIER_RANGE =
         Range.closed(new BigDecimal("0.00001"), BigDecimal.ONE);
     private static final Range<Integer> STATISTICAL_MULTIPLIER_SCALE_RANGE = Range.closed(0, 5);
@@ -110,11 +111,11 @@ public class UdmEditMultipleUsagesWindow extends Window {
         saveButtonClickListener = clickListener;
         idToLicenseeClassMap = controller.getIdsToDetailLicenseeClasses();
         bindedUsageDto = new UdmUsageDto();
-        setContent(initRootLayout());
-        setCaption(ForeignUi.getMessage("window.multiple.edit_udm_usages"));
-        setResizable(false);
-        setWidth(650, Unit.PIXELS);
-        setHeight(530, Unit.PIXELS);
+        super.setContent(initRootLayout());
+        super.setCaption(ForeignUi.getMessage("window.multiple.edit_udm_usages"));
+        super.setResizable(false);
+        super.setWidth(650, Unit.PIXELS);
+        super.setHeight(530, Unit.PIXELS);
         VaadinUtils.addComponentStyle(this, "multiple-edit-udm-usages-window");
     }
 

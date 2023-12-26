@@ -42,6 +42,7 @@ import java.util.stream.Collectors;
 public class NtsUsageWidget extends CommonUsageWidget implements INtsUsageWidget {
 
     private static final String BATCH_NAMES_LIST_SEPARATOR = "<br><li>";
+    private static final long serialVersionUID = 7962483141394161599L;
 
     private Button addToScenarioButton;
     private Button assignClassificationButton;

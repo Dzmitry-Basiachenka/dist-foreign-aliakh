@@ -35,6 +35,8 @@ import java.util.Objects;
  */
 public class FasUsageWidget extends CommonUsageWidget implements IFasUsageWidget {
 
+    private static final long serialVersionUID = -3584395313084707377L;
+
     private MenuBar usageBatchMenuBar;
     private MenuBar.MenuItem loadUsageBatchMenuItem;
     private Button sendForResearchButton;

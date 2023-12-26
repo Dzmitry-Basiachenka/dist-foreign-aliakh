@@ -39,6 +39,8 @@ import java.util.Set;
  */
 class AclciMultipleEditUsagesWindow extends Window {
 
+    private static final long serialVersionUID = -1406549196696208300L;
+
     private final IAclciUsageController controller;
     private final Set<String> usageIds;
     private final Binder<Usage> binder = new Binder<>();
@@ -59,11 +61,11 @@ class AclciMultipleEditUsagesWindow extends Window {
         this.controller = controller;
         this.usageUpdateWindow = usageUpdateWindow;
         this.usageIds = usageIds;
-        setContent(initRootLayout());
-        setCaption(ForeignUi.getMessage("window.multiple.edit_aclci_usages"));
-        setResizable(false);
-        setWidth(440, Unit.PIXELS);
-        setHeight(210, Unit.PIXELS);
+        super.setContent(initRootLayout());
+        super.setCaption(ForeignUi.getMessage("window.multiple.edit_aclci_usages"));
+        super.setResizable(false);
+        super.setWidth(440, Unit.PIXELS);
+        super.setHeight(210, Unit.PIXELS);
         VaadinUtils.addComponentStyle(this, "multiple-edit-aclci-usages-window");
     }
 

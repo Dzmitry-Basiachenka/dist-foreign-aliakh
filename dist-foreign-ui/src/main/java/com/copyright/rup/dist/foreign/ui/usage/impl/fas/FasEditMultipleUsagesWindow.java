@@ -36,6 +36,8 @@ import java.util.Objects;
  */
 class FasEditMultipleUsagesWindow extends Window {
 
+    private static final long serialVersionUID = 275482487974743826L;
+
     private final IFasUsageController controller;
     private final List<String> usageIds;
     private final Binder<Usage> binder = new Binder<>();
@@ -54,11 +56,11 @@ class FasEditMultipleUsagesWindow extends Window {
         this.controller = controller;
         this.updateUsageWindow = updateUsageWindow;
         this.usageIds = usageIds;
-        setContent(initRootLayout());
-        setCaption(ForeignUi.getMessage("window.multiple.edit_fas_fas2_usages"));
-        setResizable(false);
-        setWidth(280, Unit.PIXELS);
-        setHeight(120, Unit.PIXELS);
+        super.setContent(initRootLayout());
+        super.setCaption(ForeignUi.getMessage("window.multiple.edit_fas_fas2_usages"));
+        super.setResizable(false);
+        super.setWidth(280, Unit.PIXELS);
+        super.setHeight(120, Unit.PIXELS);
         VaadinUtils.addComponentStyle(this, "multiple-edit-fas-usages-window");
     }
 

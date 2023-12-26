@@ -32,6 +32,8 @@ import java.util.stream.Collectors;
  */
 public class UdmUsageAppliedFilterWidget extends CommonAppliedFilterPanel implements IDateFormatter {
 
+    private static final long serialVersionUID = 2966144265867656631L;
+
     private final IUdmUsageFilterController controller;
 
     /**

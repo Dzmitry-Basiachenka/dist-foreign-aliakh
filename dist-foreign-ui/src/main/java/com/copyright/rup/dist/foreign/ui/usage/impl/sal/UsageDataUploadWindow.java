@@ -42,6 +42,8 @@ import java.util.Set;
  */
 public class UsageDataUploadWindow extends Window {
 
+    private static final long serialVersionUID = 3726280940620939336L;
+
     private final ISalUsageController usagesController;
     private final Binder<UsageBatch> itemBankBinder = new Binder<>();
     private final Binder<String> uploadBinder = new Binder<>();
@@ -55,11 +57,11 @@ public class UsageDataUploadWindow extends Window {
      */
     UsageDataUploadWindow(ISalUsageController usagesController) {
         this.usagesController = usagesController;
-        setContent(initRootLayout());
-        setCaption(ForeignUi.getMessage("window.upload_usage_data"));
-        setResizable(false);
-        setWidth(400, Unit.PIXELS);
-        setHeight(170, Unit.PIXELS);
+        super.setContent(initRootLayout());
+        super.setCaption(ForeignUi.getMessage("window.upload_usage_data"));
+        super.setResizable(false);
+        super.setWidth(400, Unit.PIXELS);
+        super.setHeight(170, Unit.PIXELS);
         VaadinUtils.addComponentStyle(this, "usage-upload-window");
     }
 

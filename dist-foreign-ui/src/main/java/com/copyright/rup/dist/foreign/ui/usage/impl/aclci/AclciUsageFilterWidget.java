@@ -37,6 +37,7 @@ import java.util.stream.Collectors;
  */
 public class AclciUsageFilterWidget extends CommonUsageFilterWidget implements IAclciUsageFilterWidget {
 
+    private static final long serialVersionUID = -8383184686127401514L;
     private static final Set<UsageStatusEnum> STATUSES =
         ImmutableSet.of(UsageStatusEnum.NEW, UsageStatusEnum.WORK_FOUND, UsageStatusEnum.WORK_NOT_FOUND,
             UsageStatusEnum.RH_FOUND, UsageStatusEnum.WORK_NOT_GRANTED, UsageStatusEnum.RH_NOT_FOUND,

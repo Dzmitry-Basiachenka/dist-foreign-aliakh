@@ -36,6 +36,8 @@ import java.util.List;
  */
 public class UdmValueFilterWidget extends VerticalLayout implements IUdmValueFilterWidget {
 
+    private static final long serialVersionUID = 8189091149582138997L;
+
     private ComboBox<UdmValueStatusEnum> statusComboBox;
     private PublicationTypeFilterWidget pubTypeFilterWidget;
     private Button moreFiltersButton;

@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.aclci;
 
 import com.copyright.rup.dist.foreign.ui.usage.api.aclci.IAclciUsageFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.impl.CommonUsageFilterController;
+
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -18,6 +19,8 @@ import org.springframework.stereotype.Component;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class AclciUsageFilterController extends CommonUsageFilterController implements IAclciUsageFilterController {
+
+    private static final long serialVersionUID = -5287833743534767407L;
 
     @Override
     public AclciUsageFilterWidget instantiateWidget() {

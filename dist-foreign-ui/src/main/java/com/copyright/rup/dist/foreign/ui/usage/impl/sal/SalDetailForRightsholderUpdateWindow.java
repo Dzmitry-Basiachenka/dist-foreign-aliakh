@@ -40,6 +40,8 @@ import java.util.stream.Collectors;
  */
 class SalDetailForRightsholderUpdateWindow extends Window implements ISalDetailForRightsholderUpdateWindow {
 
+    private static final long serialVersionUID = -6539711308734377039L;
+
     private SearchWidget searchWidget;
     private Grid<UsageDto> usagesGrid;
     private MultiSelectionModelImpl<UsageDto> gridSelectionModel;
@@ -54,10 +56,10 @@ class SalDetailForRightsholderUpdateWindow extends Window implements ISalDetailF
      */
     SalDetailForRightsholderUpdateWindow(ISalUsageController controller) {
         this.controller = controller;
-        setWidth(1000, Unit.PIXELS);
-        setHeight(530, Unit.PIXELS);
-        setContent(initContent());
-        setCaption(ForeignUi.getMessage("window.ib_details_for_rh_update"));
+        super.setWidth(1000, Unit.PIXELS);
+        super.setHeight(530, Unit.PIXELS);
+        super.setContent(initContent());
+        super.setCaption(ForeignUi.getMessage("window.ib_details_for_rh_update"));
     }
 
     @Override

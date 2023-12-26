@@ -23,6 +23,8 @@ import java.util.List;
  */
 class AdditionalFundBatchesFilterWindow extends FilterWindow<UsageBatch> implements IAdditionalFundBatchesFilterWindow {
 
+    private static final long serialVersionUID = -7344078853025641434L;
+
     /**
      * Constructor.
      *

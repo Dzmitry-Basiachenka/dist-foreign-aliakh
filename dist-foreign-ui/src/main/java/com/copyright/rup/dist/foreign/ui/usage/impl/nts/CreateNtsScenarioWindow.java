@@ -46,6 +46,8 @@ import java.util.Objects;
  */
 class CreateNtsScenarioWindow extends Window {
 
+    private static final long serialVersionUID = 931915979919885932L;
+
     private final INtsUsageController controller;
     private final Binder<Scenario> scenarioBinder = new Binder<>();
     private final Binder<FundPool> fundBinder = new Binder<>();
@@ -63,18 +65,18 @@ class CreateNtsScenarioWindow extends Window {
      */
     CreateNtsScenarioWindow(INtsUsageController controller) {
         this.controller = controller;
-        setResizable(false);
-        setWidth(320, Unit.PIXELS);
-        setCaption(ForeignUi.getMessage("window.create_scenario"));
+        super.setResizable(false);
+        super.setWidth(320, Unit.PIXELS);
+        super.setCaption(ForeignUi.getMessage("window.create_scenario"));
         initFields();
-        HorizontalLayout buttonsLayout = initButtonsLayout();
-        VerticalLayout layout = new VerticalLayout(scenarioNameField, rhMinimumAmountField, preServiceFeeAmountField,
+        var buttonsLayout = initButtonsLayout();
+        var layout = new VerticalLayout(scenarioNameField, rhMinimumAmountField, preServiceFeeAmountField,
             postServiceFeeAmountField, fundsComboBox, descriptionArea, buttonsLayout);
         layout.setSpacing(true);
         layout.setMargin(true);
         layout.setComponentAlignment(buttonsLayout, Alignment.MIDDLE_RIGHT);
         scenarioNameField.focus();
-        setContent(layout);
+        super.setContent(layout);
         VaadinUtils.addComponentStyle(this, "create-scenario-window");
     }
 

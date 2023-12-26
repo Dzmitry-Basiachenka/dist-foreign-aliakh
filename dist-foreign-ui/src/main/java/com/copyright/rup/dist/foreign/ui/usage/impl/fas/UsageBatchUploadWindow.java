@@ -51,6 +51,8 @@ import java.util.List;
  */
 public class UsageBatchUploadWindow extends Window {
 
+    private static final long serialVersionUID = -4055282191058832638L;
+
     private final IFasUsageController usagesController;
     private final Binder<UsageBatch> binder = new Binder<>();
     private final Binder<String> uploadBinder = new Binder<>();
@@ -72,11 +74,11 @@ public class UsageBatchUploadWindow extends Window {
      */
     UsageBatchUploadWindow(IFasUsageController usagesController) {
         this.usagesController = usagesController;
-        setContent(initRootLayout());
-        setCaption(ForeignUi.getMessage("window.upload_usage_batch"));
-        setResizable(false);
-        setWidth(440, Unit.PIXELS);
-        setHeight(350, Unit.PIXELS);
+        super.setContent(initRootLayout());
+        super.setCaption(ForeignUi.getMessage("window.upload_usage_batch"));
+        super.setResizable(false);
+        super.setWidth(440, Unit.PIXELS);
+        super.setHeight(350, Unit.PIXELS);
         VaadinUtils.addComponentStyle(this, "usage-upload-window");
     }
 

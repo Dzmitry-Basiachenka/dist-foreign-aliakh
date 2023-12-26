@@ -32,6 +32,8 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class ViewUdmBatchWindow extends Window implements SearchWidget.ISearchController, IDateFormatter {
 
+    private static final long serialVersionUID = -9056181146746465932L;
+
     private final SearchWidget searchWidget;
     private final IUdmUsageController controller;
     private Grid<UdmBatch> grid;
@@ -44,18 +46,18 @@ public class ViewUdmBatchWindow extends Window implements SearchWidget.ISearchCo
      */
     public ViewUdmBatchWindow(IUdmUsageController controller) {
         this.controller = controller;
-        setWidth(1000, Unit.PIXELS);
-        setHeight(550, Unit.PIXELS);
+        super.setWidth(1000, Unit.PIXELS);
+        super.setHeight(550, Unit.PIXELS);
         searchWidget = new SearchWidget(this);
         searchWidget.setPrompt(ForeignUi.getMessage("field.prompt.view_batch.search.udm"));
         initUdmBatchesGrid();
-        HorizontalLayout buttonsLayout = initButtons();
-        VerticalLayout layout = new VerticalLayout(searchWidget, grid, buttonsLayout);
+        var buttonsLayout = initButtons();
+        var layout = new VerticalLayout(searchWidget, grid, buttonsLayout);
         layout.setSizeFull();
         layout.setExpandRatio(grid, 1);
         layout.setComponentAlignment(buttonsLayout, Alignment.MIDDLE_RIGHT);
-        setContent(layout);
-        setCaption(ForeignUi.getMessage("window.view_udm_usage_batch"));
+        super.setContent(layout);
+        super.setCaption(ForeignUi.getMessage("window.view_udm_usage_batch"));
         VaadinUtils.addComponentStyle(this, "view-udm-batch-window");
     }
 

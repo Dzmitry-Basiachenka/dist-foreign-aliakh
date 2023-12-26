@@ -25,6 +25,8 @@ import java.util.function.Supplier;
 public class AdditionalFundBatchesFilterWidget implements IAdditionalFundBatchesFilterWidget,
     IFilterWindowController<UsageBatch>  {
 
+    private static final long serialVersionUID = -2452045965750249648L;
+
     private final Supplier<List<UsageBatch>> supplier;
     private final List<UsageBatch> selectedUsageBatches = new ArrayList<>();
 

@@ -49,6 +49,8 @@ import java.util.Set;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class FasUsageController extends CommonUsageController implements IFasUsageController {
 
+    private static final long serialVersionUID = 3710103111906798426L;
+
     @Autowired
     private CsvProcessorFactory csvProcessorFactory;
     @Autowired

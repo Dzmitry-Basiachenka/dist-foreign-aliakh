@@ -50,6 +50,8 @@ public class UdmEditMultipleUsagesResearcherWindow extends Window {
 
     private static final List<UsageStatusEnum> EDIT_AVAILABLE_STATUSES =
         List.of(UsageStatusEnum.NEW, UsageStatusEnum.OPS_REVIEW, UsageStatusEnum.SPECIALIST_REVIEW);
+    private static final long serialVersionUID = -1925945768528407133L;
+
     private final IUdmUsageController controller;
     private final ComboBox<UsageStatusEnum> statusComboBox =
         new ComboBox<>(ForeignUi.getMessage("label.detail_status"));
@@ -77,11 +79,11 @@ public class UdmEditMultipleUsagesResearcherWindow extends Window {
         this.selectedUdmUsages = selectedUdmUsages;
         saveButtonClickListener = clickListener;
         bindedUsageDto = new UdmUsageDto();
-        setContent(initRootLayout());
-        setCaption(ForeignUi.getMessage("window.multiple.edit_udm_usages"));
-        setResizable(false);
-        setWidth(650, Unit.PIXELS);
-        setHeight(215, Unit.PIXELS);
+        super.setContent(initRootLayout());
+        super.setCaption(ForeignUi.getMessage("window.multiple.edit_udm_usages"));
+        super.setResizable(false);
+        super.setWidth(650, Unit.PIXELS);
+        super.setHeight(215, Unit.PIXELS);
         VaadinUtils.addComponentStyle(this, "multiple-edit-udm-usages-window");
     }
 

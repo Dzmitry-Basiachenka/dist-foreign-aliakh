@@ -49,6 +49,7 @@ import java.util.function.Function;
  */
 public class UdmValueFiltersWindow extends CommonAclFiltersWindow {
 
+    private static final long serialVersionUID = -2270422945892329477L;
     private static final String BETWEEN_OPERATOR_VALIDATION_MESSAGE =
         ForeignUi.getMessage("field.error.populated_for_between_operator");
     private static final String GRATER_OR_EQUAL_VALIDATION_MESSAGE = "field.error.greater_or_equal_to";
@@ -121,11 +122,11 @@ public class UdmValueFiltersWindow extends CommonAclFiltersWindow {
     public UdmValueFiltersWindow(IUdmValueFilterController controller, UdmValueFilter udmValueFilter) {
         this.controller = controller;
         valueFilter = new UdmValueFilter(udmValueFilter);
-        setContent(initRootLayout());
-        setCaption(ForeignUi.getMessage("window.udm_values_additional_filters"));
-        setResizable(false);
-        setWidth(600, Unit.PIXELS);
-        setHeight(650, Unit.PIXELS);
+        super.setContent(initRootLayout());
+        super.setCaption(ForeignUi.getMessage("window.udm_values_additional_filters"));
+        super.setResizable(false);
+        super.setWidth(600, Unit.PIXELS);
+        super.setHeight(650, Unit.PIXELS);
         VaadinUtils.addComponentStyle(this, "udm-values-additional-filters-window");
     }
 

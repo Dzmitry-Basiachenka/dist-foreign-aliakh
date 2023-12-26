@@ -38,6 +38,8 @@ import java.util.stream.Collectors;
  */
 class AdditionalFundFilteredBatchesWindow extends Window implements IAdditionalFundFilteredBatchesWindow {
 
+    private static final long serialVersionUID = -8114032381217044183L;
+
     private final INtsUsageController controller;
     private final IAdditionalFundBatchesFilterWindow batchesFilterWindow;
 

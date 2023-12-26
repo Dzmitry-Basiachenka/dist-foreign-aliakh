@@ -53,19 +53,19 @@ public class ViewSalFundPoolWindow extends Window implements SearchWidget.ISearc
      */
     public ViewSalFundPoolWindow(ISalUsageController controller) {
         this.controller = controller;
-        setWidth(900, Unit.PIXELS);
-        setHeight(550, Unit.PIXELS);
+        super.setWidth(900, Unit.PIXELS);
+        super.setHeight(550, Unit.PIXELS);
         searchWidget = new SearchWidget(this);
         searchWidget.setPrompt(ForeignUi.getMessage("field.prompt.view_fund_pool.search"));
         initGrid();
-        HorizontalLayout buttonsLayout = initButtons();
+        var buttonsLayout = initButtons();
         initMediator();
-        VerticalLayout layout = new VerticalLayout(searchWidget, grid, buttonsLayout);
+        var layout = new VerticalLayout(searchWidget, grid, buttonsLayout);
         layout.setSizeFull();
         layout.setExpandRatio(grid, 1);
         layout.setComponentAlignment(buttonsLayout, Alignment.MIDDLE_RIGHT);
-        setContent(layout);
-        setCaption(ForeignUi.getMessage("window.view_fund_pool"));
+        super.setContent(layout);
+        super.setCaption(ForeignUi.getMessage("window.view_fund_pool"));
         VaadinUtils.addComponentStyle(this, "view-sal-fund-pool-window");
     }
 

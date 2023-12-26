@@ -46,6 +46,7 @@ import java.util.Objects;
  */
 class SalFundPoolLoadWindow extends Window {
 
+    private static final long serialVersionUID = -4730362998378807102L;
     private static final String NOT_NUMERIC_MESSAGE = ForeignUi.getMessage("field.error.not_numeric");
     private static final BigDecimal HUNDRED = new BigDecimal("100");
     private static final int SCALE_2 = 2;
@@ -80,11 +81,11 @@ class SalFundPoolLoadWindow extends Window {
      */
     SalFundPoolLoadWindow(ISalUsageController usagesController) {
         this.usagesController = usagesController;
-        setContent(initRootLayout());
-        setCaption(ForeignUi.getMessage("window.load_fund_pool"));
-        setResizable(false);
-        setWidth(500, Unit.PIXELS);
-        setHeight(530, Unit.PIXELS);
+        super.setContent(initRootLayout());
+        super.setCaption(ForeignUi.getMessage("window.load_fund_pool"));
+        super.setResizable(false);
+        super.setWidth(500, Unit.PIXELS);
+        super.setHeight(530, Unit.PIXELS);
         VaadinUtils.addComponentStyle(this, "fund-pool-upload-window");
     }
 

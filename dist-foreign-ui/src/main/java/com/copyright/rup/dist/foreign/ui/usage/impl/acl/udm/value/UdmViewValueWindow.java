@@ -34,6 +34,8 @@ import java.util.Objects;
  */
 public class UdmViewValueWindow extends CommonUdmValueWindow {
 
+    private static final long serialVersionUID = 2065578419953929619L;
+
     private final Binder<UdmValueDto> binder = new Binder<>();
     private final IUdmValueController controller;
     private final UdmValueDto udmValueDto;
@@ -47,11 +49,11 @@ public class UdmViewValueWindow extends CommonUdmValueWindow {
     public UdmViewValueWindow(IUdmValueController valueController, UdmValueDto selectedUdmValue) {
         controller = valueController;
         udmValueDto = selectedUdmValue;
-        setContent(initRootLayout());
-        setCaption(ForeignUi.getMessage("window.view_udm_value"));
-        setResizable(false);
-        setWidth(960, Unit.PIXELS);
-        setHeight(700, Unit.PIXELS);
+        super.setContent(initRootLayout());
+        super.setCaption(ForeignUi.getMessage("window.view_udm_value"));
+        super.setResizable(false);
+        super.setWidth(960, Unit.PIXELS);
+        super.setHeight(700, Unit.PIXELS);
         VaadinUtils.addComponentStyle(this, "view-udm-value-window");
     }
 
