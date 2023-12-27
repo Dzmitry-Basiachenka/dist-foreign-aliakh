@@ -89,13 +89,23 @@ public class AclGrantDetailRepository extends AclBaseRepository implements IAclG
 
     @Override
     public void updatePayeeAccountNumber(String grantSetId, Long rhAccountNumber, String typeOfUse,
-                                         Long payeeAccountNumber) {
-        Map<String, Object> params = Maps.newHashMapWithExpectedSize(4);
+                                         Long payeeAccountNumber, String userName) {
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(5);
         params.put("grantSetId", Objects.requireNonNull(grantSetId));
         params.put("rhAccountNumber", Objects.requireNonNull(rhAccountNumber));
         params.put("typeOfUse", Objects.requireNonNull(typeOfUse));
         params.put("payeeAccountNumber", Objects.requireNonNull(payeeAccountNumber));
+        params.put("updateUser", Objects.requireNonNull(userName));
         update("IAclGrantDetailMapper.updatePayeeAccountNumber", params);
+    }
+
+    @Override
+    public void updatePayeeAccountNumberById(String grantDetailId, Long payeeAccountNumber, String userName) {
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(3);
+        params.put("grantDetailId", Objects.requireNonNull(grantDetailId));
+        params.put("payeeAccountNumber", Objects.requireNonNull(payeeAccountNumber));
+        params.put("updateUser", Objects.requireNonNull(userName));
+        update("IAclGrantDetailMapper.updatePayeeAccountNumberById", params);
     }
 
     private AclGrantDetailFilter escapeSqlLikePattern(AclGrantDetailFilter aclGrantDetailFilter) {

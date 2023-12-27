@@ -110,7 +110,9 @@ public class AclGrantDetailServiceTest {
     }
 
     @Test
-    public void testUpdatePayees() {
+    public void testPopulatePayees() {
+        mockStatic(RupContextUtils.class);
+        expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
         Rightsholder rightsholder = new Rightsholder();
         rightsholder.setId(RH_ID);
         rightsholder.setAccountNumber(RH_ACCOUNT_NUMBER);
@@ -126,16 +128,18 @@ public class AclGrantDetailServiceTest {
         rollUps.put(RH_ID, ImmutableMap.of("ACLPRINT", payee));
         expect(prmIntegrationService.getRollUps(Set.of(RH_ID))).andReturn(rollUps).once();
         aclGrantDetailRepository.updatePayeeAccountNumber(ACL_GRANT_SET_ID, RH_ACCOUNT_NUMBER, PRINT_TOU,
-            PAYEE_ACCOUNT_NUMBER);
+            PAYEE_ACCOUNT_NUMBER, USER_NAME);
         expectLastCall().once();
         expect(rightsholderService.updateRightsholders(Set.of(PAYEE_ACCOUNT_NUMBER))).andReturn(List.of()).once();
-        replay(rightsholderService, prmIntegrationService, aclGrantDetailRepository);
+        replay(RupContextUtils.class, rightsholderService, prmIntegrationService, aclGrantDetailRepository);
         aclGrantDetailService.populatePayees(ACL_GRANT_SET_ID);
-        verify(rightsholderService, prmIntegrationService, aclGrantDetailRepository);
+        verify(RupContextUtils.class, rightsholderService, prmIntegrationService, aclGrantDetailRepository);
     }
 
     @Test
-    public void testUpdatePayeesAndInsertAsync() {
+    public void testPopulatePayeesAsync() {
+        mockStatic(RupContextUtils.class);
+        expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
         Rightsholder rightsholder = new Rightsholder();
         rightsholder.setId(RH_ID);
         rightsholder.setAccountNumber(RH_ACCOUNT_NUMBER);
@@ -151,12 +155,40 @@ public class AclGrantDetailServiceTest {
         rollUps.put(RH_ID, ImmutableMap.of("ACLPRINT", payee));
         expect(prmIntegrationService.getRollUps(Set.of(RH_ID))).andReturn(rollUps).once();
         aclGrantDetailRepository.updatePayeeAccountNumber(ACL_GRANT_SET_ID, RH_ACCOUNT_NUMBER, PRINT_TOU,
-            PAYEE_ACCOUNT_NUMBER);
+            PAYEE_ACCOUNT_NUMBER, USER_NAME);
         expectLastCall().once();
         expect(rightsholderService.updateRightsholders(Set.of(PAYEE_ACCOUNT_NUMBER))).andReturn(List.of()).once();
-        replay(rightsholderService, prmIntegrationService, aclGrantDetailRepository);
+        replay(RupContextUtils.class, rightsholderService, prmIntegrationService, aclGrantDetailRepository);
         aclGrantDetailService.populatePayeesAsync(ACL_GRANT_SET_ID);
-        verify(rightsholderService, prmIntegrationService, aclGrantDetailRepository);
+        verify(RupContextUtils.class, rightsholderService, prmIntegrationService, aclGrantDetailRepository);
+    }
+
+    @Test
+    public void testPopulatePayeesByGrantDetails() {
+        mockStatic(RupContextUtils.class);
+        expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
+        AclGrantDetailDto grantDetail = new AclGrantDetailDto();
+        grantDetail.setId(ACL_GRANT_ID_1);
+        grantDetail.setRhAccountNumber(RH_ACCOUNT_NUMBER);
+        grantDetail.setTypeOfUse("PRINT");
+        List<AclGrantDetailDto> grantDetails = List.of(grantDetail);
+        Rightsholder rightsholder = new Rightsholder();
+        rightsholder.setId(RH_ID);
+        rightsholder.setAccountNumber(RH_ACCOUNT_NUMBER);
+        expect(rightsholderService.updateRightsholders(Set.of(RH_ACCOUNT_NUMBER))).andReturn(List.of(rightsholder))
+            .once();
+        Map<String, Map<String, Rightsholder>> rollUps = new HashMap<>();
+        Rightsholder payee = new Rightsholder();
+        payee.setId(PAYEE_ID);
+        payee.setAccountNumber(PAYEE_ACCOUNT_NUMBER);
+        rollUps.put(RH_ID, ImmutableMap.of("ACLPRINT", payee));
+        expect(prmIntegrationService.getRollUps(Set.of(RH_ID))).andReturn(rollUps).once();
+        expect(rightsholderService.updateRightsholders(Set.of(PAYEE_ACCOUNT_NUMBER))).andReturn(List.of()).once();
+        aclGrantDetailRepository.updatePayeeAccountNumberById(grantDetail.getId(), PAYEE_ACCOUNT_NUMBER, USER_NAME);
+        expectLastCall().once();
+        replay(RupContextUtils.class, rightsholderService, prmIntegrationService, aclGrantDetailRepository);
+        aclGrantDetailService.populatePayees(grantDetails);
+        verify(RupContextUtils.class, rightsholderService, prmIntegrationService, aclGrantDetailRepository);
     }
 
     @Test

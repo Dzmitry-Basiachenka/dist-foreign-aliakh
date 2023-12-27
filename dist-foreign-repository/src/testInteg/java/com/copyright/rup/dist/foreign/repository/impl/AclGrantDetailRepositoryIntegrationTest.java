@@ -74,6 +74,7 @@ public class AclGrantDetailRepositoryIntegrationTest {
     private static final String RH_NAME_WITH_METASYMBOLS = "Alexander Stille !@#$%^&*()_+-=?/\\'\"}{][<>";
     private static final Boolean ELIGIBLE = true;
     private static final String ACL_LICENSE_TYPE = "ACL";
+    private static final String USER_NAME = "user@copyright.com";
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     static {
@@ -451,11 +452,28 @@ public class AclGrantDetailRepositoryIntegrationTest {
         assertEquals(1, actualGrantDetails.size());
         AclGrantDetail actualGrantDetail = actualGrantDetails.get(0);
         assertNull(actualGrantDetail.getPayeeAccountNumber());
-        aclGrantDetailRepository.updatePayeeAccountNumber(grantSetId, 1000028511L, "DIGITAL", 1000019896L);
+        aclGrantDetailRepository.updatePayeeAccountNumber(grantSetId, 1000028511L, "DIGITAL", 1000019896L, USER_NAME);
         actualGrantDetails = aclGrantDetailRepository.findByIds(grantDetailIds);
         assertEquals(1, actualGrantDetails.size());
         actualGrantDetail = actualGrantDetails.get(0);
         assertEquals(1000019896L, actualGrantDetail.getPayeeAccountNumber(), 0);
+        assertEquals(USER_NAME, actualGrantDetail.getUpdateUser());
+    }
+
+    @Test
+    @TestData(fileName = FOLDER_NAME + "update-payee-account-number.groovy")
+    public void testUpdatePayeeAccountNumberById() {
+        String grantDetailId = "018c6593-7eb4-4dc7-bc5e-f9a4b5fd7df8";
+        List<AclGrantDetail> actualGrantDetails = aclGrantDetailRepository.findByIds(List.of(grantDetailId));
+        assertEquals(1, actualGrantDetails.size());
+        AclGrantDetail actualGrantDetail = actualGrantDetails.get(0);
+        assertNull(actualGrantDetail.getPayeeAccountNumber());
+        aclGrantDetailRepository.updatePayeeAccountNumberById(grantDetailId, 1000019896L, USER_NAME);
+        actualGrantDetails = aclGrantDetailRepository.findByIds(List.of(grantDetailId));
+        assertEquals(1, actualGrantDetails.size());
+        actualGrantDetail = actualGrantDetails.get(0);
+        assertEquals(1000019896L, actualGrantDetail.getPayeeAccountNumber(), 0);
+        assertEquals(USER_NAME, actualGrantDetail.getUpdateUser());
     }
 
     private void verifyAclGrantDetail(AclGrantDetail expectedGrantDetail, AclGrantDetail actualGrantDetail,
