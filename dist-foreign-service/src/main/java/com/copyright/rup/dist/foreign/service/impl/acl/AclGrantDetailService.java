@@ -77,17 +77,11 @@ public class AclGrantDetailService implements IAclGrantDetailService {
         LOGGER.info("Insert ACL grant details. Finished. AclGrantDetailsCount={}, UserName={}", size, userName);
     }
 
-    @Override
-    public List<AclGrantDetail> getByGrantSetId(String grantSetId) {
-        return aclGrantDetailRepository.findByGrantSetId(grantSetId);
-    }
-
     @Transactional
     @Override
     @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
-    public void populatePayees(String grantSetId, List<AclGrantDetail> grantDetails) {
-        LOGGER.info("Populate payees in ACL grant set. Started. GrantSetId={}, GrantDetailCount={}",
-            grantSetId, grantDetails.size());
+    public void populatePayees(String grantSetId) {
+        LOGGER.info("Populate payees in ACL grant set. Started. GrantSetId={}", grantSetId);
         List<RightsholderTypeOfUsePair> rightsholderTypeOfUsePairs = rightsholderService.getByAclGrantSetId(grantSetId);
         Set<String> rightsholdersIds = rightsholderTypeOfUsePairs.stream()
             .map(pair -> pair.getRightsholder().getId())
@@ -112,8 +106,8 @@ public class AclGrantDetailService implements IAclGrantDetailService {
     }
 
     @Override
-    public void populatePayeesAsync(String grantSetId, List<AclGrantDetail> grantDetails) {
-        executorService.execute(() -> populatePayees(grantSetId, grantDetails));
+    public void populatePayeesAsync(String grantSetId) {
+        executorService.execute(() -> populatePayees(grantSetId));
     }
 
     @Transactional

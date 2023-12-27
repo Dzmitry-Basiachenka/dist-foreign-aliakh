@@ -38,11 +38,6 @@ public class AclGrantDetailRepository extends AclBaseRepository implements IAclG
     }
 
     @Override
-    public List<AclGrantDetail> findByGrantSetId(String grantSetId) {
-        return selectList("IAclGrantDetailMapper.findByGrantSetId", Objects.requireNonNull(grantSetId));
-    }
-
-    @Override
     public int findCountByFilter(AclGrantDetailFilter filter) {
         return selectOne("IAclGrantDetailMapper.findCountByFilter",
             Map.of("filter", escapeSqlLikePattern(Objects.requireNonNull(filter))));

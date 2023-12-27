@@ -30,28 +30,18 @@ public interface IAclGrantDetailService {
     void insert(List<AclGrantDetail> grantDetails);
 
     /**
-     * Gets ACL grant details by their ACL grant set id.
-     *
-     * @param grantSetId grant set id
-     * @return list of {@link AclGrantDetail}s
-     */
-    List<AclGrantDetail> getByGrantSetId(String grantSetId);
-
-    /**
      * Populates payees in ACL grant details.
      *
-     * @param grantSetId   grant set id
-     * @param grantDetails list of {@link AclGrantDetail}
+     * @param grantSetId grant set id
      */
-    void populatePayees(String grantSetId, List<AclGrantDetail> grantDetails);
+    void populatePayees(String grantSetId);
 
     /**
      * Populates payees in ACL grant details asynchronously.
      *
-     * @param grantSetId   grant set id
-     * @param grantDetails list of {@link AclGrantDetail}
+     * @param grantSetId grant set id
      */
-    void populatePayeesAsync(String grantSetId, List<AclGrantDetail> grantDetails);
+    void populatePayeesAsync(String grantSetId);
 
     /**
      * Adds {@link AclGrantDetailDto}s to specified {@link AclGrantSet}.

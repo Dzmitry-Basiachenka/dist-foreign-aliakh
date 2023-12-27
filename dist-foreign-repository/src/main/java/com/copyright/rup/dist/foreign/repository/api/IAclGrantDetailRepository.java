@@ -35,14 +35,6 @@ public interface IAclGrantDetailRepository {
     List<AclGrantDetail> findByIds(List<String> grantDetailIds);
 
     /**
-     * Finds ACL grant details by their ACL grant set id.
-     *
-     * @param grantSetId grant set id
-     * @return list of {@link AclGrantDetail}s
-     */
-    List<AclGrantDetail> findByGrantSetId(String grantSetId);
-
-    /**
      * Finds count of ACL grant details based on applied filter.
      *
      * @param filter instance of {@link AclGrantDetailFilter}
