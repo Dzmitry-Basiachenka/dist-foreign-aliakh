@@ -46,16 +46,16 @@ public interface IAclGrantDetailService {
     /**
      * Populates payees in ACL grant details.
      *
-     * @param grantDetails list of {@link AclGrantDetailDto}
+     * @param grantDetailDtos collection of {@link AclGrantDetailDto}
      */
-    void populatePayees(List<AclGrantDetailDto> grantDetails);
+    void populatePayees(Collection<AclGrantDetailDto> grantDetailDtos);
 
     /**
      * Populates payees in ACL grant details asynchronously.
      *
-     * @param grantDetails list of {@link AclGrantDetailDto}
+     * @param grantDetailDtos collection of {@link AclGrantDetailDto}
      */
-    void populatePayeesAsync(List<AclGrantDetailDto> grantDetails);
+    void populatePayeesAsync(Collection<AclGrantDetailDto> grantDetailDtos);
 
     /**
      * Adds {@link AclGrantDetailDto}s to specified {@link AclGrantSet}.

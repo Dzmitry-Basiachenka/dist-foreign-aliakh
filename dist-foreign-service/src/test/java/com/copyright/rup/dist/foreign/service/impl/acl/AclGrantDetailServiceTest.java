@@ -167,11 +167,11 @@ public class AclGrantDetailServiceTest {
     public void testPopulatePayeesByGrantDetails() {
         mockStatic(RupContextUtils.class);
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
-        AclGrantDetailDto grantDetail = new AclGrantDetailDto();
-        grantDetail.setId(ACL_GRANT_ID_1);
-        grantDetail.setRhAccountNumber(RH_ACCOUNT_NUMBER);
-        grantDetail.setTypeOfUse("PRINT");
-        List<AclGrantDetailDto> grantDetails = List.of(grantDetail);
+        var grantDetailDto = new AclGrantDetailDto();
+        grantDetailDto.setId(ACL_GRANT_ID_1);
+        grantDetailDto.setRhAccountNumber(RH_ACCOUNT_NUMBER);
+        grantDetailDto.setTypeOfUse("PRINT");
+        List<AclGrantDetailDto> grantDetailDtos = List.of(grantDetailDto);
         Rightsholder rightsholder = new Rightsholder();
         rightsholder.setId(RH_ID);
         rightsholder.setAccountNumber(RH_ACCOUNT_NUMBER);
@@ -184,10 +184,10 @@ public class AclGrantDetailServiceTest {
         rollUps.put(RH_ID, ImmutableMap.of("ACLPRINT", payee));
         expect(prmIntegrationService.getRollUps(Set.of(RH_ID))).andReturn(rollUps).once();
         expect(rightsholderService.updateRightsholders(Set.of(PAYEE_ACCOUNT_NUMBER))).andReturn(List.of()).once();
-        aclGrantDetailRepository.updatePayeeAccountNumberById(grantDetail.getId(), PAYEE_ACCOUNT_NUMBER, USER_NAME);
+        aclGrantDetailRepository.updatePayeeAccountNumberById(grantDetailDto.getId(), PAYEE_ACCOUNT_NUMBER, USER_NAME);
         expectLastCall().once();
         replay(RupContextUtils.class, rightsholderService, prmIntegrationService, aclGrantDetailRepository);
-        aclGrantDetailService.populatePayees(grantDetails);
+        aclGrantDetailService.populatePayees(grantDetailDtos);
         verify(RupContextUtils.class, rightsholderService, prmIntegrationService, aclGrantDetailRepository);
     }
 
@@ -230,7 +230,7 @@ public class AclGrantDetailServiceTest {
     public void testUpdateGrants() {
         mockStatic(RupContextUtils.class);
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
-        AclGrantDetailDto grantDetailDto = new AclGrantDetailDto();
+        var grantDetailDto = new AclGrantDetailDto();
         grantDetailDto.setGrantStatus("Grant");
         aclGrantDetailRepository.updateGrant(grantDetailDto);
         expectLastCall().once();

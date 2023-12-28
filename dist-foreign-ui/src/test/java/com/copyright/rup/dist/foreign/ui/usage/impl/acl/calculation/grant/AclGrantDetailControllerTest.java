@@ -179,16 +179,16 @@ public class AclGrantDetailControllerTest {
     @Test
     public void testInsertAclGrantDetails() {
         AclGrantSet grantSet = buildAclGrantSet();
-        List<AclGrantDetailDto> grantDetails = new ArrayList<>();
-        aclGrantDetailService.addToGrantSet(grantSet, grantDetails);
+        List<AclGrantDetailDto> grantDetailDtos = new ArrayList<>();
+        aclGrantDetailService.addToGrantSet(grantSet, grantDetailDtos);
         expectLastCall().once();
-        aclGrantDetailService.populatePayeesAsync(grantDetails);
+        aclGrantDetailService.populatePayeesAsync(grantDetailDtos);
         expectLastCall().once();
         expect(aclGrantDetailFilterController.getWidget()).andReturn(aclGrantDetailFilterWidget).once();
         aclGrantDetailFilterWidget.clearFilter();
         expectLastCall().once();
         replay(aclGrantDetailService, aclGrantDetailFilterController, aclGrantDetailFilterWidget);
-        controller.insertAclGrantDetails(grantSet, grantDetails);
+        controller.insertAclGrantDetails(grantSet, grantDetailDtos);
         verify(aclGrantDetailService, aclGrantDetailFilterController, aclGrantDetailFilterWidget);
     }
 
@@ -230,10 +230,13 @@ public class AclGrantDetailControllerTest {
 
     @Test
     public void testUpdateAclGrantDetails() {
-        aclGrantDetailService.updateGrants(Set.of(new AclGrantDetailDto()), true);
+        Set<AclGrantDetailDto> grantDetailDtos = Set.of(new AclGrantDetailDto());
+        aclGrantDetailService.updateGrants(grantDetailDtos, true);
+        expectLastCall().once();
+        aclGrantDetailService.populatePayeesAsync(grantDetailDtos);
         expectLastCall().once();
         replay(aclGrantDetailService);
-        controller.updateAclGrants(Set.of(new AclGrantDetailDto()), true);
+        controller.updateAclGrants(grantDetailDtos, true);
         verify(aclGrantDetailService);
     }
 
