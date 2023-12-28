@@ -891,6 +891,7 @@ public class ServiceTestHelper {
     private void verifyAclScenarioShareDetails(AclScenarioShareDetail expectedDetail,
                                                AclScenarioShareDetail actualDetail) {
         assertEquals(expectedDetail.getRhAccountNumber(), actualDetail.getRhAccountNumber());
+        assertEquals(expectedDetail.getPayeeAccountNumber(), actualDetail.getPayeeAccountNumber());
         assertEquals(expectedDetail.getTypeOfUse(), actualDetail.getTypeOfUse());
         assertEquals(expectedDetail.getVolumeWeight(), actualDetail.getVolumeWeight());
         assertEquals(expectedDetail.getValueWeight(), actualDetail.getValueWeight());

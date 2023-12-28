@@ -89,15 +89,6 @@ public interface IRightsholderService extends ICommonRightsholderService {
     List<Rightsholder> getByScenarioId(String scenarioId);
 
     /**
-     * Returns list of {@link RightsholderTypeOfUsePair}s from scenario share details with given ACL
-     * scenario identifier.
-     *
-     * @param aclScenarioId ACL scenario identifier
-     * @return list of {@link RightsholderTypeOfUsePair}s
-     */
-    List<RightsholderTypeOfUsePair> getByAclScenarioId(String aclScenarioId);
-
-    /**
      * Gets list of {@link RightsholderTypeOfUsePair}s from scenario share details with given ACL grant set id.
      *
      * @param grantSetId ACL grant set id

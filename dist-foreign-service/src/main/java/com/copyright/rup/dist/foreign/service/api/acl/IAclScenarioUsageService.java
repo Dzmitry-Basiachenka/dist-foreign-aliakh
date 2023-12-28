@@ -159,13 +159,6 @@ public interface IAclScenarioUsageService {
     List<AclRightsholderTotalsHolderDto> getRightsholderAggLcClassResults(RightsholderResultsFilter filter);
 
     /**
-     * Gets rollups from PRM service and populates for specified ACL scenario.
-     *
-     * @param scenarioId scenario identifier
-     */
-    void populatePayees(String scenarioId);
-
-    /**
      * Gets unique combinations of RH, payee and product family with type of use from ACL scenarios.
      *
      * @param scenarioIds set of scenario ids

@@ -55,7 +55,7 @@ public class AclGrantDetailService implements IAclGrantDetailService {
     private static final int TYPE_OF_USE_COUNT = 1;
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
-    private final ExecutorService executorService = Executors.newCachedThreadPool();
+    private final ExecutorService executorService = Executors.newSingleThreadExecutor();
 
     @Autowired
     private IAclGrantDetailRepository aclGrantDetailRepository;
