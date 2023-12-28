@@ -106,8 +106,9 @@ public class AclGrantDetailController extends CommonController<IAclGrantDetailWi
     }
 
     @Override
-    public void updateAclGrants(Set<AclGrantDetailDto> aclGrantDetailDtos, boolean doUpdateTouStatus) {
-        aclGrantDetailService.updateGrants(aclGrantDetailDtos, doUpdateTouStatus);
+    public void updateAclGrants(Set<AclGrantDetailDto> grantDetailDtos, boolean doUpdateTouStatus) {
+        aclGrantDetailService.updateGrants(grantDetailDtos, doUpdateTouStatus);
+        aclGrantDetailService.populatePayeesAsync(grantDetailDtos);
     }
 
     @Override
@@ -123,9 +124,9 @@ public class AclGrantDetailController extends CommonController<IAclGrantDetailWi
     }
 
     @Override
-    public void insertAclGrantDetails(AclGrantSet grantSet, List<AclGrantDetailDto> details) {
-        aclGrantDetailService.addToGrantSet(grantSet, details);
-        aclGrantDetailService.populatePayeesAsync(details);
+    public void insertAclGrantDetails(AclGrantSet grantSet, List<AclGrantDetailDto> grantDetailDtos) {
+        aclGrantDetailService.addToGrantSet(grantSet, grantDetailDtos);
+        aclGrantDetailService.populatePayeesAsync(grantDetailDtos);
         aclGrantDetailFilterController.getWidget().clearFilter();
     }
 

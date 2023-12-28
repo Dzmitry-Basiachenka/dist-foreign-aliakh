@@ -114,11 +114,11 @@ public class AclGrantDetailService implements IAclGrantDetailService {
     @Transactional
     @Override
     @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
-    public void populatePayees(List<AclGrantDetailDto> grantDetails) {
+    public void populatePayees(Collection<AclGrantDetailDto> grantDetailDtos) {
         String userName = RupContextUtils.getUserName();
         LOGGER.info("Populate payees in ACL grant details. Started. GrantDetailCount={}, UserName={}",
-            grantDetails.size(), userName);
-        Set<Long> rhAccountNumbers = grantDetails.stream()
+            grantDetailDtos.size(), userName);
+        Set<Long> rhAccountNumbers = grantDetailDtos.stream()
             .map(AclGrantDetail::getRhAccountNumber)
             .collect(Collectors.toSet());
         List<Rightsholder> rightsholders = rightsholderService.updateRightsholders(rhAccountNumbers);
@@ -129,8 +129,8 @@ public class AclGrantDetailService implements IAclGrantDetailService {
             .collect(Collectors.toSet());
         Map<String, Map<String, Rightsholder>> rollUps = prmIntegrationService.getRollUps(rightsholdersIds);
         LOGGER.info("Populate payees in ACL grant details. Roll-ups read. GrantDetailCount={}, RollUpsCount={}",
-            grantDetails.size(), rollUps.size());
-        Set<Long> payeeAccountNumbers = grantDetails.stream()
+            grantDetailDtos.size(), rollUps.size());
+        Set<Long> payeeAccountNumbers = grantDetailDtos.stream()
             .map(grantDetail -> {
                 Rightsholder rightsholder = new Rightsholder();
                 rightsholder.setId(rhAccountNumbersToIds.get(grantDetail.getRhAccountNumber()));
@@ -145,12 +145,12 @@ public class AclGrantDetailService implements IAclGrantDetailService {
             })
             .collect(Collectors.toSet());
         rightsholderService.updateRightsholders(payeeAccountNumbers);
-        LOGGER.info("Populate payees for ACL grant details. Finished. GrantDetailCount={}", grantDetails.size());
+        LOGGER.info("Populate payees for ACL grant details. Finished. GrantDetailCount={}", grantDetailDtos.size());
     }
 
     @Override
-    public void populatePayeesAsync(List<AclGrantDetailDto> grantDetails) {
-        executorService.execute(() -> populatePayees(grantDetails));
+    public void populatePayeesAsync(Collection<AclGrantDetailDto> grantDetailDtos) {
+        executorService.execute(() -> populatePayees(grantDetailDtos));
     }
 
     @Transactional

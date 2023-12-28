@@ -81,10 +81,10 @@ public interface IAclGrantDetailController extends IController<IAclGrantDetailWi
     /**
      * Inserts uploaded {@link AclGrantDetailDto}s to specified {@link AclGrantSet}.
      *
-     * @param grantSet {@link AclGrantSet} to be updated
-     * @param details  list of details to insert
+     * @param grantSet        {@link AclGrantSet} to be updated
+     * @param grantDetailDtos list of details to insert
      */
-    void insertAclGrantDetails(AclGrantSet grantSet, List<AclGrantDetailDto> details);
+    void insertAclGrantDetails(AclGrantSet grantSet, List<AclGrantDetailDto> grantDetailDtos);
 
     /**
      * Gets list of all ACL grant sets.
@@ -110,10 +110,10 @@ public interface IAclGrantDetailController extends IController<IAclGrantDetailWi
     /**
      * Updates ACL grants.
      *
-     * @param aclGrantDetailDtos set of {@link AclGrantDetailDto} for update
-     * @param doUpdateTouStatus  <code>true</code> if system should update TOU status
+     * @param grantDetailDtos   set of {@link AclGrantDetailDto} for update
+     * @param doUpdateTouStatus <code>true</code> if system should update TOU status
      */
-    void updateAclGrants(Set<AclGrantDetailDto> aclGrantDetailDtos, boolean doUpdateTouStatus);
+    void updateAclGrants(Set<AclGrantDetailDto> grantDetailDtos, boolean doUpdateTouStatus);
 
     /**
      * Gets {@link Rightsholder} from PRM by account number.
