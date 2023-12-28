@@ -319,9 +319,18 @@
     <update id="updatePayeeAccountNumber" parameterType="map">
         update ${schema}.df_acl_grant_detail
         set
-            payee_account_number = #{payeeAccountNumber}
+            payee_account_number = #{payeeAccountNumber},
+            <include refid="StoredEntityMapper.update"/>
         where df_acl_grant_set_uid = #{grantSetId}
             and rh_account_number = #{rhAccountNumber}
             and type_of_use = #{typeOfUse}
+    </update>
+
+    <update id="updatePayeeAccountNumberById" parameterType="map">
+        update ${schema}.df_acl_grant_detail
+        set
+            payee_account_number = #{payeeAccountNumber},
+            <include refid="StoredEntityMapper.update"/>
+        where df_acl_grant_detail_uid = #{grantDetailId}
     </update>
 </mapper>

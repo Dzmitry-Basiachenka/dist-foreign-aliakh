@@ -81,13 +81,14 @@ public class AclGrantDetailService implements IAclGrantDetailService {
     @Override
     @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
     public void populatePayees(String grantSetId) {
-        LOGGER.info("Populate payees in ACL grant set. Started. GrantSetId={}", grantSetId);
+        String userName = RupContextUtils.getUserName();
+        LOGGER.info("Populate payees in ACL grant set. Started. GrantSetId={}, UserName={}", grantSetId, userName);
         List<RightsholderTypeOfUsePair> rightsholderTypeOfUsePairs = rightsholderService.getByAclGrantSetId(grantSetId);
         Set<String> rightsholdersIds = rightsholderTypeOfUsePairs.stream()
             .map(pair -> pair.getRightsholder().getId())
             .collect(Collectors.toSet());
         Map<String, Map<String, Rightsholder>> rollUps = prmIntegrationService.getRollUps(rightsholdersIds);
-        LOGGER.info("Populate payees in ACL grant set. Roll-ups read. GrantSetId={},  RollUpsCount={}",
+        LOGGER.info("Populate payees in ACL grant set. Roll-ups read. GrantSetId={}, RollUpsCount={}",
             grantSetId, rollUps.size());
         Set<Long> payeeAccountNumbers = rightsholderTypeOfUsePairs.stream()
             .map(pair -> {
@@ -97,7 +98,7 @@ public class AclGrantDetailService implements IAclGrantDetailService {
                 Rightsholder payee = PrmRollUpService.getPayee(rollUps, rightsholder, productFamily);
                 Long payeeAccountNumber = payee.getAccountNumber();
                 aclGrantDetailRepository.updatePayeeAccountNumber(grantSetId, rightsholder.getAccountNumber(),
-                    typeOfUse, payeeAccountNumber);
+                    typeOfUse, payeeAccountNumber, userName);
                 return payeeAccountNumber;
             })
             .collect(Collectors.toSet());
@@ -108,6 +109,48 @@ public class AclGrantDetailService implements IAclGrantDetailService {
     @Override
     public void populatePayeesAsync(String grantSetId) {
         executorService.execute(() -> populatePayees(grantSetId));
+    }
+
+    @Transactional
+    @Override
+    @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
+    public void populatePayees(List<AclGrantDetailDto> grantDetails) {
+        String userName = RupContextUtils.getUserName();
+        LOGGER.info("Populate payees in ACL grant details. Started. GrantDetailCount={}, UserName={}",
+            grantDetails.size(), userName);
+        Set<Long> rhAccountNumbers = grantDetails.stream()
+            .map(AclGrantDetail::getRhAccountNumber)
+            .collect(Collectors.toSet());
+        List<Rightsholder> rightsholders = rightsholderService.updateRightsholders(rhAccountNumbers);
+        Map<Long, String> rhAccountNumbersToIds = rightsholders.stream()
+            .collect(Collectors.toMap(Rightsholder::getAccountNumber, Rightsholder::getId));
+        Set<String> rightsholdersIds = rightsholders.stream()
+            .map(Rightsholder::getId)
+            .collect(Collectors.toSet());
+        Map<String, Map<String, Rightsholder>> rollUps = prmIntegrationService.getRollUps(rightsholdersIds);
+        LOGGER.info("Populate payees in ACL grant details. Roll-ups read. GrantDetailCount={}, RollUpsCount={}",
+            grantDetails.size(), rollUps.size());
+        Set<Long> payeeAccountNumbers = grantDetails.stream()
+            .map(grantDetail -> {
+                Rightsholder rightsholder = new Rightsholder();
+                rightsholder.setId(rhAccountNumbersToIds.get(grantDetail.getRhAccountNumber()));
+                rightsholder.setAccountNumber(grantDetail.getRhAccountNumber());
+                String typeOfUse = grantDetail.getTypeOfUse();
+                String productFamily = FdaConstants.ACL_PRODUCT_FAMILY + typeOfUse;
+                Rightsholder payee = PrmRollUpService.getPayee(rollUps, rightsholder, productFamily);
+                Long payeeAccountNumber = payee.getAccountNumber();
+                aclGrantDetailRepository.updatePayeeAccountNumberById(grantDetail.getId(), payeeAccountNumber,
+                    userName);
+                return payeeAccountNumber;
+            })
+            .collect(Collectors.toSet());
+        rightsholderService.updateRightsholders(payeeAccountNumbers);
+        LOGGER.info("Populate payees for ACL grant details. Finished. GrantDetailCount={}", grantDetails.size());
+    }
+
+    @Override
+    public void populatePayeesAsync(List<AclGrantDetailDto> grantDetails) {
+        executorService.execute(() -> populatePayees(grantDetails));
     }
 
     @Transactional

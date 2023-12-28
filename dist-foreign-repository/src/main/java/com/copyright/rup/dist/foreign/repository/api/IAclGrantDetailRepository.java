@@ -101,6 +101,16 @@ public interface IAclGrantDetailRepository {
      * @param rhAccountNumber    RH account number
      * @param typeOfUse          type of use
      * @param payeeAccountNumber payee account number
+     * @param userName           user name
      */
-    void updatePayeeAccountNumber(String grantSetId, Long rhAccountNumber, String typeOfUse, Long payeeAccountNumber);
+    void updatePayeeAccountNumber(String grantSetId, Long rhAccountNumber, String typeOfUse, Long payeeAccountNumber,
+                                  String userName);
+    /**
+     * Sets payee account number for ACL grant detail by ACL grant set id, RH account number, and type of use.
+     *
+     * @param grantDetailId      grant detail id
+     * @param payeeAccountNumber payee account number
+     * @param userName           user name
+     */
+    void updatePayeeAccountNumberById(String grantDetailId, Long payeeAccountNumber, String userName);
 }

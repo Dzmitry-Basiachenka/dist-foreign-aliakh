@@ -182,6 +182,8 @@ public class AclGrantDetailControllerTest {
         List<AclGrantDetailDto> grantDetails = new ArrayList<>();
         aclGrantDetailService.addToGrantSet(grantSet, grantDetails);
         expectLastCall().once();
+        aclGrantDetailService.populatePayeesAsync(grantDetails);
+        expectLastCall().once();
         expect(aclGrantDetailFilterController.getWidget()).andReturn(aclGrantDetailFilterWidget).once();
         aclGrantDetailFilterWidget.clearFilter();
         expectLastCall().once();
@@ -317,6 +319,7 @@ public class AclGrantDetailControllerTest {
 
     private AclGrantSet buildAclGrantSet() {
         AclGrantSet aclGrantSet = new AclGrantSet();
+        aclGrantSet.setId(GRANT_SET_ID);
         aclGrantSet.setName(GRANT_SET_NAME);
         aclGrantSet.setGrantPeriod(202012);
         aclGrantSet.setPeriods(Set.of(202112));
