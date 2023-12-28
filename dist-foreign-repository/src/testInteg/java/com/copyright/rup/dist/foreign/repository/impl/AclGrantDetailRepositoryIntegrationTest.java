@@ -97,18 +97,6 @@ public class AclGrantDetailRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = FOLDER_NAME + "find-by-grant-set-id.groovy")
-    public void testFindByGrantSetId() {
-        List<AclGrantDetail> actualGrantDetails =
-            aclGrantDetailRepository.findByGrantSetId("80a935c4-27ce-440d-8c91-9b49d830b85b");
-        assertEquals(2, actualGrantDetails.size());
-        List<AclGrantDetail> expectedGrantDetails =
-            loadExpectedDetails("json/acl/acl_grant_details_by_grant_set_id.json");
-        verifyAclGrantDetail(expectedGrantDetails.get(0), actualGrantDetails.get(0), false);
-        verifyAclGrantDetail(expectedGrantDetails.get(1), actualGrantDetails.get(1), false);
-    }
-
-    @Test
     @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindCountByAllFilter() {
         AclGrantDetailFilter filter = new AclGrantDetailFilter();

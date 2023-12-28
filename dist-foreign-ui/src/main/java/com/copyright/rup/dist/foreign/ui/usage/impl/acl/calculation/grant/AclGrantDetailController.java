@@ -182,7 +182,7 @@ public class AclGrantDetailController extends CommonController<IAclGrantDetailWi
 
     @Override
     public void refreshPayeesAsync(String grantSetId) {
-        aclGrantDetailService.populatePayeesAsync(grantSetId, aclGrantDetailService.getByGrantSetId(grantSetId));
+        aclGrantDetailService.populatePayeesAsync(grantSetId);
     }
 
     @Override

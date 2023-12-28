@@ -110,20 +110,7 @@ public class AclGrantDetailServiceTest {
     }
 
     @Test
-    public void testGetByGrantSetId() {
-        List<AclGrantDetail> grantDetails = List.of();
-        expect(aclGrantDetailRepository.findByGrantSetId(ACL_GRANT_SET_ID)).andReturn(grantDetails).once();
-        replay(aclGrantDetailRepository);
-        assertSame(grantDetails, aclGrantDetailService.getByGrantSetId(ACL_GRANT_SET_ID));
-        verify(aclGrantDetailRepository);
-    }
-
-    @Test
     public void testUpdatePayees() {
-        AclGrantDetail grantDetail = new AclGrantDetail();
-        grantDetail.setRhAccountNumber(RH_ACCOUNT_NUMBER);
-        grantDetail.setTypeOfUse(PRINT_TOU);
-        List<AclGrantDetail> grantDetails = List.of(grantDetail);
         Rightsholder rightsholder = new Rightsholder();
         rightsholder.setId(RH_ID);
         rightsholder.setAccountNumber(RH_ACCOUNT_NUMBER);
@@ -143,16 +130,12 @@ public class AclGrantDetailServiceTest {
         expectLastCall().once();
         expect(rightsholderService.updateRightsholders(Set.of(PAYEE_ACCOUNT_NUMBER))).andReturn(List.of()).once();
         replay(rightsholderService, prmIntegrationService, aclGrantDetailRepository);
-        aclGrantDetailService.populatePayees(ACL_GRANT_SET_ID, grantDetails);
+        aclGrantDetailService.populatePayees(ACL_GRANT_SET_ID);
         verify(rightsholderService, prmIntegrationService, aclGrantDetailRepository);
     }
 
     @Test
     public void testUpdatePayeesAndInsertAsync() {
-        AclGrantDetail grantDetail = new AclGrantDetail();
-        grantDetail.setRhAccountNumber(RH_ACCOUNT_NUMBER);
-        grantDetail.setTypeOfUse(PRINT_TOU);
-        List<AclGrantDetail> grantDetails = List.of(grantDetail);
         Rightsholder rightsholder = new Rightsholder();
         rightsholder.setId(RH_ID);
         rightsholder.setAccountNumber(RH_ACCOUNT_NUMBER);
@@ -172,7 +155,7 @@ public class AclGrantDetailServiceTest {
         expectLastCall().once();
         expect(rightsholderService.updateRightsholders(Set.of(PAYEE_ACCOUNT_NUMBER))).andReturn(List.of()).once();
         replay(rightsholderService, prmIntegrationService, aclGrantDetailRepository);
-        aclGrantDetailService.populatePayeesAsync(ACL_GRANT_SET_ID, grantDetails);
+        aclGrantDetailService.populatePayeesAsync(ACL_GRANT_SET_ID);
         verify(rightsholderService, prmIntegrationService, aclGrantDetailRepository);
     }
 
