@@ -85,7 +85,6 @@ public class AclScenarioUsageRepositoryIntegrationTest {
     private static final String SCENARIO_UID_6 = "8e93510e-a90c-4808-8d7c-f0b151f2c4a1";
     private static final String LICENSE_TYPE_ACL = "ACL";
     private static final Long RH_ACCOUNT_NUMBER_1 = 1000002859L;
-    private static final Long RH_ACCOUNT_NUMBER_2 = 1000000001L;
     private static final String RH_ACCOUNT_NUMBER = "1000002859";
     private static final String INCOMPLETE_RH_ACCOUNT_NUMBER = "1000002";
     private static final String RH_NAME = "John Wiley & Sons - Books";
@@ -1196,7 +1195,7 @@ public class AclScenarioUsageRepositoryIntegrationTest {
     private List<AclScenarioDetail> loadExpectedAclScenarioDetails(String fileName) {
         try {
             String content = TestUtils.fileToString(this.getClass(), fileName);
-            return OBJECT_MAPPER.readValue(content, new TypeReference<List<AclScenarioDetail>>() {
+            return OBJECT_MAPPER.readValue(content, new TypeReference<>() {
             });
         } catch (IOException e) {
             throw new AssertionError(e);
@@ -1206,7 +1205,7 @@ public class AclScenarioUsageRepositoryIntegrationTest {
     private List<AclScenarioDetailDto> loadExpectedAclScenarioDetailDto(String fileName) {
         try {
             String content = TestUtils.fileToString(this.getClass(), fileName);
-            return OBJECT_MAPPER.readValue(content, new TypeReference<List<AclScenarioDetailDto>>() {
+            return OBJECT_MAPPER.readValue(content, new TypeReference<>() {
             });
         } catch (IOException e) {
             throw new AssertionError(e);
@@ -1216,17 +1215,7 @@ public class AclScenarioUsageRepositoryIntegrationTest {
     private List<AclRightsholderTotalsHolderDto> loadExpectedAclRightsholderTotalsHolderDto(String fileName) {
         try {
             String content = TestUtils.fileToString(this.getClass(), fileName);
-            return OBJECT_MAPPER.readValue(content, new TypeReference<List<AclRightsholderTotalsHolderDto>>() {
-            });
-        } catch (IOException e) {
-            throw new AssertionError(e);
-        }
-    }
-
-    private List<AclScenarioShareDetail> loadExpectedAclScenarioShareDetailDto(String fileName) {
-        try {
-            String content = TestUtils.fileToString(this.getClass(), fileName);
-            return OBJECT_MAPPER.readValue(content, new TypeReference<List<AclScenarioShareDetail>>() {
+            return OBJECT_MAPPER.readValue(content, new TypeReference<>() {
             });
         } catch (IOException e) {
             throw new AssertionError(e);
@@ -1237,7 +1226,7 @@ public class AclScenarioUsageRepositoryIntegrationTest {
         String fileName) {
         try {
             String content = TestUtils.fileToString(this.getClass(), fileName);
-            return OBJECT_MAPPER.readValue(content, new TypeReference<List<RightsholderPayeeProductFamilyHolder>>() {
+            return OBJECT_MAPPER.readValue(content, new TypeReference<>() {
             });
         } catch (IOException e) {
             throw new AssertionError(e);
@@ -1247,7 +1236,7 @@ public class AclScenarioUsageRepositoryIntegrationTest {
     private List<AclScenarioLiabilityDetail> loadExpectedAclScenarioLiabilityDetails(String fileName) {
         try {
             String content = TestUtils.fileToString(this.getClass(), fileName);
-            return OBJECT_MAPPER.readValue(content, new TypeReference<List<AclScenarioLiabilityDetail>>() {
+            return OBJECT_MAPPER.readValue(content, new TypeReference<>() {
             });
         } catch (IOException e) {
             throw new AssertionError(e);
