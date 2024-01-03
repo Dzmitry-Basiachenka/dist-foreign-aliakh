@@ -172,11 +172,8 @@ public class AclGrantDetailServiceTest {
         grantDetailDto.setRhAccountNumber(RH_ACCOUNT_NUMBER);
         grantDetailDto.setTypeOfUse("PRINT");
         List<AclGrantDetailDto> grantDetailDtos = List.of(grantDetailDto);
-        Rightsholder rightsholder = new Rightsholder();
-        rightsholder.setId(RH_ID);
-        rightsholder.setAccountNumber(RH_ACCOUNT_NUMBER);
-        expect(rightsholderService.updateRightsholders(Set.of(RH_ACCOUNT_NUMBER))).andReturn(List.of(rightsholder))
-            .once();
+        expect(rightsholderService.findRightsholderIdsByAccountNumbers(Set.of(RH_ACCOUNT_NUMBER)))
+            .andReturn(Map.of(RH_ACCOUNT_NUMBER, RH_ID)).once();
         Map<String, Map<String, Rightsholder>> rollUps = new HashMap<>();
         Rightsholder payee = new Rightsholder();
         payee.setId(PAYEE_ID);

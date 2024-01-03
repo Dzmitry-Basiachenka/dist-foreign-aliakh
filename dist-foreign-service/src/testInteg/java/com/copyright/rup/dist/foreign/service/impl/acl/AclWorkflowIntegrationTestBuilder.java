@@ -34,6 +34,7 @@ import com.copyright.rup.dist.foreign.repository.api.IAclScenarioUsageRepository
 import com.copyright.rup.dist.foreign.service.api.ILicenseeClassService;
 import com.copyright.rup.dist.foreign.service.api.IPublicationTypeService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclFundPoolService;
+import com.copyright.rup.dist.foreign.service.api.acl.IAclGrantDetailService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclGrantSetService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageBatchService;
@@ -99,6 +100,8 @@ public class AclWorkflowIntegrationTestBuilder implements Builder<Runner> {
     private IAclFundPoolService aclFundPoolService;
     @Autowired
     private IAclGrantSetService aclGrantSetService;
+    @Autowired
+    private IAclGrantDetailService aclGrantDetailService;
     @Autowired
     private IAclScenarioService aclScenarioService;
     @Autowired
@@ -438,6 +441,7 @@ public class AclWorkflowIntegrationTestBuilder implements Builder<Runner> {
 
         private void createAclGrantSet() {
             aclGrantSetService.insert(aclGrantSet);
+            aclGrantDetailService.populatePayeesAsync(aclGrantSet.getId());
         }
 
         private void createAclScenario() {

@@ -168,6 +168,8 @@ public class AclGrantDetailControllerTest {
     public void testInsertAclGrantSet() {
         AclGrantSet grantSet = buildAclGrantSet();
         expect(aclGrantSetService.insert(grantSet)).andReturn(1).once();
+        aclGrantDetailService.populatePayeesAsync(grantSet.getId());
+        expectLastCall().once();
         expect(aclGrantDetailFilterController.getWidget()).andReturn(aclGrantDetailFilterWidget).once();
         aclGrantDetailFilterWidget.clearFilter();
         expectLastCall().once();

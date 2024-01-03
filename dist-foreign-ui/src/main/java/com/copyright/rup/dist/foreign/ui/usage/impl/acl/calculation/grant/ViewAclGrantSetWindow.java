@@ -128,8 +128,10 @@ public class ViewAclGrantSetWindow extends Window implements SearchWidget.ISearc
         deleteButton.setEnabled(false);
         refreshPayeesButton = Buttons.createButton(ForeignUi.getMessage("button.refresh_payees"));
         refreshPayeesButton.addClickListener(event ->
-            grid.getSelectedItems().stream().findFirst().ifPresent(selectedGrantSet ->
-                controller.refreshPayeesAsync(selectedGrantSet.getId())));
+            grid.getSelectedItems().stream().findFirst().ifPresent(selectedGrantSet -> {
+                controller.refreshPayeesAsync(selectedGrantSet.getId());
+                Windows.showNotificationWindow(ForeignUi.getMessage("message.notification.refresh_payees"));
+            }));
         refreshPayeesButton.setEnabled(false);
         var layout = new HorizontalLayout(deleteButton, refreshPayeesButton, closeButton);
         layout.setSpacing(true);
