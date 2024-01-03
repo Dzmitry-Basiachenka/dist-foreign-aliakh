@@ -69,11 +69,6 @@ public class RightsholderRepository extends CommonRightsholderRepository impleme
     }
 
     @Override
-    public List<RightsholderTypeOfUsePair> findByAclScenarioId(String scenarioId) {
-        return selectList("RightsholderMapper.findByAclScenarioId", Objects.requireNonNull(scenarioId));
-    }
-
-    @Override
     public List<RightsholderTypeOfUsePair> findByAclGrantSetId(String grantSetId) {
         return selectList("RightsholderMapper.findByAclGrantSetId", Objects.requireNonNull(grantSetId));
     }

@@ -132,10 +132,10 @@ public class AclScenarioUsageRepositoryIntegrationTest {
         assertEquals(2, scenarioDetails.size());
         Map<String, List<AclScenarioShareDetail>> detailSharesMap = new HashMap<>();
         detailSharesMap.put("df038efe-72c1-4081-88e7-17fa4fa5ff6a", List.of(
-            buildAclScenarioShareDetail(1000028511L, PRINT_TOU, 6.0, 3.0)));
+            buildAclScenarioShareDetail(1000028511L, 1000000294L, PRINT_TOU, 6.0, 3.0)));
         detailSharesMap.put("8827d6c6-16d8-4102-b257-ce861ce77491", List.of(
-            buildAclScenarioShareDetail(1000028511L, DIGITAL_TOU, 9.5, 5.0),
-            buildAclScenarioShareDetail(2580011451L, PRINT_TOU, 9.5, 5.0)));
+            buildAclScenarioShareDetail(1000028511L, 1000000206L, DIGITAL_TOU, 9.5, 5.0),
+            buildAclScenarioShareDetail(2580011451L, 1000000229L, PRINT_TOU, 9.5, 5.0)));
         scenarioDetails.forEach(actualDetail -> {
             List<AclScenarioShareDetail> actualShareDetails = actualDetail.getScenarioShareDetails();
             List<AclScenarioShareDetail> expectedShareDetails = detailSharesMap.get(actualDetail.getId());
@@ -821,31 +821,6 @@ public class AclScenarioUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = FOLDER_NAME + "update-payee-by-account-number.groovy")
-    public void testUpdatePayeeByAccountNumber() {
-        String scenarioId = "f5808122-3784-4055-90f8-1c420e67fd0a";
-        List<AclScenarioShareDetail> expectedShareDetailsWithoutPayee = loadExpectedAclScenarioShareDetailDto(
-            "json/acl/acl_scenario_share_detail_without_payee.json");
-        List<AclScenarioShareDetail> actualShareDetails =
-            aclScenarioUsageRepository.findScenarioDetailsByScenarioId(scenarioId).stream()
-                .flatMap(e -> e.getScenarioShareDetails().stream()).collect(Collectors.toList());
-        assertEquals(4, actualShareDetails.size());
-        assertEquals(expectedShareDetailsWithoutPayee.size(), actualShareDetails.size());
-        IntStream.range(0, expectedShareDetailsWithoutPayee.size()).forEach(i ->
-            verifyAclScenarioShareDetails(expectedShareDetailsWithoutPayee.get(i), actualShareDetails.get(i)));
-        aclScenarioUsageRepository.updatePayeeByAccountNumber(RH_ACCOUNT_NUMBER_1, scenarioId, 2015489976L, "PRINT");
-        aclScenarioUsageRepository.updatePayeeByAccountNumber(RH_ACCOUNT_NUMBER_1, scenarioId, 1000489976L, "DIGITAL");
-        aclScenarioUsageRepository.updatePayeeByAccountNumber(RH_ACCOUNT_NUMBER_2, scenarioId, 2878895976L, "PRINT");
-        aclScenarioUsageRepository.updatePayeeByAccountNumber(RH_ACCOUNT_NUMBER_2, scenarioId, 1526489976L, "DIGITAL");
-        List<AclScenarioShareDetail> expectedShareDetails = loadExpectedAclScenarioShareDetailDto(
-            "json/acl/acl_scenario_share_detail.json");
-        IntStream.range(0, expectedShareDetails.size()).forEach(
-            i -> verifyAclScenarioShareDetails(expectedShareDetails.get(i),
-                aclScenarioUsageRepository.findScenarioDetailsByScenarioId(scenarioId).stream()
-                    .flatMap(e -> e.getScenarioShareDetails().stream()).collect(Collectors.toList()).get(i)));
-    }
-
-    @Test
     @TestData(fileName = FOLDER_NAME + "find-rightsholder-payee-product-family-holders.groovy")
     public void testFindRightsholderPayeeProductFamilyHoldersByAclScenarioIds() {
         Comparator<RightsholderPayeeProductFamilyHolder> comparator = Comparator
@@ -1013,6 +988,15 @@ public class AclScenarioUsageRepositoryIntegrationTest {
         aclScenarioShareDetail.setValueWeight(BigDecimal.valueOf(valueWeight).setScale(10, RoundingMode.HALF_UP));
         aclScenarioShareDetail.setVolumeWeight(BigDecimal.valueOf(volumeWeight).setScale(10, RoundingMode.HALF_UP));
         aclScenarioShareDetail.setTypeOfUse(typeOfUse);
+        return aclScenarioShareDetail;
+    }
+
+    private AclScenarioShareDetail buildAclScenarioShareDetail(Long rhAccountNumber, Long payeeAccountNumber,
+                                                               String typeOfUse, Double valueWeight,
+                                                               Double volumeWeight) {
+        AclScenarioShareDetail aclScenarioShareDetail =
+            buildAclScenarioShareDetail(rhAccountNumber, typeOfUse, valueWeight, volumeWeight);
+        aclScenarioShareDetail.setPayeeAccountNumber(payeeAccountNumber);
         return aclScenarioShareDetail;
     }
 

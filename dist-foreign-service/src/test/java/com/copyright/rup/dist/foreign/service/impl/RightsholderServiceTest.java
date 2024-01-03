@@ -133,17 +133,6 @@ public class RightsholderServiceTest {
     }
 
     @Test
-    public void testGetByAclScenarioId() {
-        List<RightsholderTypeOfUsePair> rightsholderTypeOfUsePairs =
-            List.of(buildRightsholderTypeOfUsePair(7000813806L), buildRightsholderTypeOfUsePair(1000009522L));
-        String scenarioId = "bf6d4cf2-bb84-455c-877e-6fd3afb4deca";
-        expect(rightsholderRepository.findByAclScenarioId(scenarioId)).andReturn(rightsholderTypeOfUsePairs).once();
-        replay(rightsholderRepository);
-        assertEquals(rightsholderTypeOfUsePairs, rightsholderService.getByAclScenarioId(scenarioId));
-        verify(rightsholderRepository);
-    }
-
-    @Test
     public void testGetByAclGrantSetId() {
         List<RightsholderTypeOfUsePair> rightsholderTypeOfUsePairs = List.of();
         String grantSetId = "986b542c-f6c9-4fbb-ad16-d7051d2bf1a1";
@@ -178,12 +167,5 @@ public class RightsholderServiceTest {
         rightsholder.setAccountNumber(accountNumber);
         rightsholder.setName(RIGHTSHOLDER_NAME);
         return rightsholder;
-    }
-
-    private RightsholderTypeOfUsePair buildRightsholderTypeOfUsePair(Long accountNumber) {
-        RightsholderTypeOfUsePair rightsholderTypeOfUsePair = new RightsholderTypeOfUsePair();
-        rightsholderTypeOfUsePair.setRightsholder(buildRightsholder(accountNumber));
-        rightsholderTypeOfUsePair.setTypeOfUse("PRINT");
-        return rightsholderTypeOfUsePair;
     }
 }

@@ -62,6 +62,7 @@ public class AclGrantSetService implements IAclGrantSetService {
         aclGrantDetailService.insert(grantDetails);
         rightsholderService.updateRightsholders(
             grantDetails.stream().map(AclGrantDetail::getRhAccountNumber).collect(Collectors.toSet()));
+        aclGrantDetailService.populatePayeesAsync(grantSet.getId());
         LOGGER.info("Insert ACL grant set. Finished. AclGrantSet={}, AclGrantDetailsCount={}, UserName={}",
             grantSet, grantDetails.size(), userName);
         return grantDetails.size();

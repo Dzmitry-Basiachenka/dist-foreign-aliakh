@@ -431,6 +431,7 @@
                 sd.wr_wrk_inst,
                 gd.type_of_use,
                 gd.rh_account_number,
+                gd.payee_account_number,
                 slc.aggregate_licensee_class_id,
                 number_of_copies * usage_age_weight volume_weight,
                 number_of_copies * usage_age_weight * content_unit_price * pub_type_weight value_weight
@@ -450,6 +451,7 @@
             wr_wrk_inst,
             type_of_use,
             rh_account_number,
+            payee_account_number,
             aggregate_licensee_class_id,
             volume_weight,
             value_weight,
@@ -747,15 +749,6 @@
         group by scd.wr_wrk_inst, system_title
         order by scd.wr_wrk_inst
     </select>
-
-    <update id="updatePayeeByAccountNumber" parameterType="map">
-        update ${schema}.df_acl_share_detail
-        set
-            payee_account_number = #{payeeAccountNumber}
-        where rh_account_number = #{rhAccountNumber}
-            and df_acl_scenario_uid = #{scenarioId}
-            and type_of_use = #{typeOfUse}
-    </update>
 
     <select id="findRightsholderPayeeProductFamilyHoldersByAclScenarioIds" resultMap="IUsageMapper.rightsholderPayeeProductFamilyHolderResultMap" parameterType="list">
         select

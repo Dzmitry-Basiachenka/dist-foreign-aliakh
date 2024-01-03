@@ -177,17 +177,6 @@ public interface IAclScenarioUsageRepository {
     List<AclRightsholderTotalsHolderDto> findRightsholderAggLcClassResults(RightsholderResultsFilter filter);
 
     /**
-     * Sets payee account number for ACL scenario share detail with given RH account number type of use and
-     * ACL scenario id.
-     *
-     * @param rhAccountNumber    RH account number
-     * @param scenarioId         scenario id
-     * @param payeeAccountNumber payee account number
-     * @param typeOfUse          type of use
-     */
-    void updatePayeeByAccountNumber(Long rhAccountNumber, String scenarioId, Long payeeAccountNumber, String typeOfUse);
-
-    /**
      * Finds unique combinations of RH, payee and product family with type of use from ACL scenarios.
      *
      * @param scenarioIds set of scenario ids
