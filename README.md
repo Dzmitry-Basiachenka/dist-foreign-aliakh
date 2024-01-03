@@ -1,6 +1,14 @@
+20.0.19
+-
+* CDP-1968 FDA: ACL - Populate payees at point of Grant Set population: implement widget and controller to refresh payees
+* CDP-1968 FDA: ACL - Populate payees at point of Grant Set population: remove unnecessary parameter
+* CDP-1968 FDA: ACL - Populate payees at point of Grant Set population: implement refreshing payees when grant details uploaded
+* CDP-1968 FDA: ACL - Populate payees at point of Grant Set population: implement refreshing payees when grant details edited
+* CDP-1968 FDA: ACL - Populate payees at point of Grant Set population: refactor scenario creation service to use pre-populated payees
+* CDP-1968 FDA: ACL - Populate payees at point of Grant Set population: fix pdm rules in ACL Scenario usage repository integration test
+
 20.0.18
 -
-
 * CDP-1771 Tech Debt: FDA: improve view Select component in FDA and CDP 
 * CDP-1620 FDA: SonarQube metric improvements: fix SonarQube bugs 
 * CDP-1620 FDA: SonarQube metric improvements: fix SonarQube bugs 
