@@ -190,8 +190,28 @@ public class ViewAclGrantSetWindow extends Window implements SearchWidget.ISearc
         public void run() {
             ui.access(() -> {
                 new Notification("Success",
-                    "Success",
+                    "HUMANIZED_MESSAGE",
+                    Notification.Type.HUMANIZED_MESSAGE, true)
+                    .show(ui.getPage());
+
+                new Notification("Success",
+                    "WARNING_MESSAGE",
+                    Notification.Type.WARNING_MESSAGE, true)
+                    .show(ui.getPage());
+
+                new Notification("Success",
+                    "ERROR_MESSAGE",
+                    Notification.Type.ERROR_MESSAGE, true)
+                    .show(ui.getPage());
+
+                new Notification("Success",
+                    "TRAY_NOTIFICATION",
                     Notification.Type.TRAY_NOTIFICATION, true)
+                    .show(ui.getPage());
+
+                new Notification("Success",
+                    "ASSISTIVE_NOTIFICATION",
+                    Notification.Type.ASSISTIVE_NOTIFICATION, true)
                     .show(ui.getPage());
                 ui.push();
             });
