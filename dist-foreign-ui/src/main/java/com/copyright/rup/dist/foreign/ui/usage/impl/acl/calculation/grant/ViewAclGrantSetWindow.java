@@ -14,6 +14,8 @@ import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Notification;
+import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
@@ -129,8 +131,15 @@ public class ViewAclGrantSetWindow extends Window implements SearchWidget.ISearc
         refreshPayeesButton = Buttons.createButton(ForeignUi.getMessage("button.refresh_payees"));
         refreshPayeesButton.addClickListener(event ->
             grid.getSelectedItems().stream().findFirst().ifPresent(selectedGrantSet -> {
-                controller.refreshPayeesAsync(selectedGrantSet.getId());
-                Windows.showNotificationWindow(ForeignUi.getMessage("message.notification.refresh_payees"));
+                UI ui = UI.getCurrent();
+                controller.refreshPayeesAsync(selectedGrantSet.getId(),
+                    new OnSuccessRunnable(ui),
+                    new OnErrorRunnable(ui)
+                );
+                new Notification("Success",
+                    "Payees refresh process is started",
+                    Notification.Type.TRAY_NOTIFICATION, false)
+                    .show(ui.getPage());
             }));
         refreshPayeesButton.setEnabled(false);
         var layout = new HorizontalLayout(deleteButton, refreshPayeesButton, closeButton);
@@ -170,5 +179,45 @@ public class ViewAclGrantSetWindow extends Window implements SearchWidget.ISearc
         }
         htmlNamesList.append("</ul>");
         return ForeignUi.getMessage(key, param, associatedField, htmlNamesList.toString());
+    }
+
+    private static class OnSuccessRunnable implements Runnable {
+
+        private final UI ui;
+
+        OnSuccessRunnable(UI ui) {
+            this.ui = ui;
+        }
+
+        @Override
+        public void run() {
+            ui.access(() -> {
+                new Notification("Success",
+                    "Payees refresh process completed successfully",
+                    Notification.Type.TRAY_NOTIFICATION, false)
+                    .show(ui.getPage());
+                ui.push();
+            });
+        }
+    }
+
+    private static class OnErrorRunnable implements Runnable {
+
+        private final UI ui;
+
+        OnErrorRunnable(UI ui) {
+            this.ui = ui;
+        }
+
+        @Override
+        public void run() {
+            ui.access(() -> {
+                new Notification("Error",
+                    "Payees refresh process failed",
+                    Notification.Type.TRAY_NOTIFICATION, false)
+                    .show(ui.getPage());
+                ui.push();
+            });
+        }
     }
 }

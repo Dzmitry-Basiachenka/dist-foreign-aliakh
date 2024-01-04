@@ -82,6 +82,18 @@ public class AclGrantDetailService implements IAclGrantDetailService {
     }
 
     @Override
+    public void populatePayeesAsync(String grantSetId, Runnable onSuccess, Runnable onError) {
+        executorService.execute(() -> {
+            try {
+                aclGrantDetailPayeeService.populatePayees(grantSetId);
+                onSuccess.run();
+            } catch (Exception e) {
+                onError.run();
+            }
+        });
+    }
+
+    @Override
     public void populatePayeesAsync(Collection<AclGrantDetailDto> grantDetailDtos) {
         executorService.execute(() -> aclGrantDetailPayeeService.populatePayees(grantDetailDtos));
     }
