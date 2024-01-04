@@ -119,6 +119,7 @@ public class AclGrantDetailController extends CommonController<IAclGrantDetailWi
     @Override
     public int insertAclGrantSet(AclGrantSet grantSet) {
         int grantDetailsCount = aclGrantSetService.insert(grantSet);
+        aclGrantDetailService.populatePayeesAsync(grantSet.getId());
         aclGrantDetailFilterController.getWidget().clearFilter();
         return grantDetailsCount;
     }

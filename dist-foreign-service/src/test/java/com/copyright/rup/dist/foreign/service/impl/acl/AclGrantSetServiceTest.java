@@ -97,13 +97,10 @@ public class AclGrantSetServiceTest {
         expectLastCall().once();
         expect(rightsholderService.updateRightsholders(Set.of(7000813806L)))
             .andReturn(List.of(new Rightsholder()));
-        Capture<String> grantSetIdCapture = newCapture();
-        aclGrantDetailService.populatePayeesAsync(capture(grantSetIdCapture));
         expectLastCall().once();
         replay(RupContextUtils.class, udmBaselineService, aclGrantService, aclGrantSetRepository,
             aclGrantDetailService);
         assertEquals(1, aclGrantSetService.insert(grantSet));
-        assertEquals(grantSet.getId(), grantSetIdCapture.getValue());
         verify(RupContextUtils.class, udmBaselineService, aclGrantService, aclGrantSetRepository,
             aclGrantDetailService);
     }

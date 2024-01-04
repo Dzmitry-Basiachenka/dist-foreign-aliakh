@@ -121,12 +121,9 @@ public class AclGrantDetailService implements IAclGrantDetailService {
         Set<Long> rhAccountNumbers = grantDetailDtos.stream()
             .map(AclGrantDetail::getRhAccountNumber)
             .collect(Collectors.toSet());
-        List<Rightsholder> rightsholders = rightsholderService.updateRightsholders(rhAccountNumbers);
-        Map<Long, String> rhAccountNumbersToIds = rightsholders.stream()
-            .collect(Collectors.toMap(Rightsholder::getAccountNumber, Rightsholder::getId));
-        Set<String> rightsholdersIds = rightsholders.stream()
-            .map(Rightsholder::getId)
-            .collect(Collectors.toSet());
+        Map<Long, String> rhAccountNumbersToIds =
+            rightsholderService.findRightsholderIdsByAccountNumbers(rhAccountNumbers);
+        Set<String> rightsholdersIds = Set.copyOf(rhAccountNumbersToIds.values());
         Map<String, Map<String, Rightsholder>> rollUps = prmIntegrationService.getRollUps(rightsholdersIds);
         LOGGER.info("Populate payees in ACL grant details. Roll-ups read. GrantDetailCount={}, RollUpsCount={}",
             grantDetailDtos.size(), rollUps.size());
