@@ -175,5 +175,5 @@ public interface IAclGrantDetailController extends IController<IAclGrantDetailWi
      *
      * @param grantSetId grant set id
      */
-    void refreshPayeesAsync(String grantSetId);
+    void refreshPayeesAsync(String grantSetId, Runnable onSuccess, Runnable onError);
 }

@@ -10,10 +10,13 @@ import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
 import com.vaadin.data.provider.ListDataProvider;
+import com.vaadin.server.Page;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Notification;
+import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
@@ -127,9 +130,13 @@ public class ViewAclGrantSetWindow extends Window implements SearchWidget.ISearc
             grid.getSelectedItems().stream().findFirst().ifPresent(this::deleteGrantSet));
         deleteButton.setEnabled(false);
         refreshPayeesButton = Buttons.createButton(ForeignUi.getMessage("button.refresh_payees"));
+        //https://vaadin.com/forum/thread/15304760/vaadin-8-ui-getcurrent-returns-null-on-non-request-threads
         refreshPayeesButton.addClickListener(event ->
             grid.getSelectedItems().stream().findFirst().ifPresent(selectedGrantSet -> {
-                controller.refreshPayeesAsync(selectedGrantSet.getId());
+                controller.refreshPayeesAsync(selectedGrantSet.getId(),
+                    new OnSuccessRunnable(UI.getCurrent()),
+                    new OnErrorRunnable(UI.getCurrent())
+                );
                 Windows.showNotificationWindow(ForeignUi.getMessage("message.notification.refresh_payees"));
             }));
         refreshPayeesButton.setEnabled(false);
@@ -170,5 +177,51 @@ public class ViewAclGrantSetWindow extends Window implements SearchWidget.ISearc
         }
         htmlNamesList.append("</ul>");
         return ForeignUi.getMessage(key, param, associatedField, htmlNamesList.toString());
+    }
+
+    private class OnSuccessRunnable implements Runnable {
+
+        private final UI ui;
+
+        public OnSuccessRunnable(UI ui) {
+            this.ui = ui;
+        }
+
+        @Override
+        public void run() {
+            ui.access(new Runnable() {
+                          @Override
+                          public void run() {
+                              new Notification("Success",
+                                  "Success",
+                                  Notification.Type.TRAY_NOTIFICATION, true)
+                                  .show(ui.getPage());
+                          }
+                      }
+            );
+        }
+    }
+
+    private class OnErrorRunnable implements Runnable {
+
+        private final UI ui;
+
+        public OnErrorRunnable(UI ui) {
+            this.ui = ui;
+        }
+
+        @Override
+        public void run() {
+            ui.access(new Runnable() {
+                          @Override
+                          public void run() {
+                              new Notification("Error",
+                                  "Error",
+                                  Notification.Type.TRAY_NOTIFICATION, true)
+                                  .show(ui.getPage());
+                          }
+                      }
+            );
+        }
     }
 }
