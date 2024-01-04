@@ -16,8 +16,11 @@ import com.copyright.rup.vaadin.widget.api.IController;
 import com.copyright.rup.vaadin.widget.api.IMediator;
 import com.copyright.rup.vaadin.widget.api.IMediatorProvider;
 
+import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Theme;
 import com.vaadin.server.ErrorHandler;
+import com.vaadin.shared.communication.PushMode;
+import com.vaadin.shared.ui.ui.Transport;
 import com.vaadin.spring.annotation.EnableVaadin;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.AbsoluteLayout;
@@ -45,6 +48,7 @@ import java.util.ResourceBundle;
 @EnableVaadin
 @Theme("foreign")
 @SpringUI
+@Push(value = PushMode.MANUAL, transport = Transport.LONG_POLLING)
 public class ForeignUi extends ForeignCommonUi implements IMediatorProvider {
 
     private static final ResourceBundle MESSAGES =

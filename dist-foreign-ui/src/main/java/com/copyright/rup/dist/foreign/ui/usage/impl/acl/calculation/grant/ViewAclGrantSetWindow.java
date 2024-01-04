@@ -10,7 +10,6 @@ import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
 import com.vaadin.data.provider.ListDataProvider;
-import com.vaadin.server.Page;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
@@ -179,48 +178,38 @@ public class ViewAclGrantSetWindow extends Window implements SearchWidget.ISearc
         return ForeignUi.getMessage(key, param, associatedField, htmlNamesList.toString());
     }
 
-    private class OnSuccessRunnable implements Runnable {
+    private static class OnSuccessRunnable implements Runnable {
 
         private final UI ui;
 
-        public OnSuccessRunnable(UI ui) {
+        OnSuccessRunnable(UI ui) {
             this.ui = ui;
         }
 
         @Override
         public void run() {
-            ui.access(new Runnable() {
-                          @Override
-                          public void run() {
-                              new Notification("Success",
-                                  "Success",
-                                  Notification.Type.TRAY_NOTIFICATION, true)
-                                  .show(ui.getPage());
-                          }
-                      }
+            ui.access(() -> new Notification("Success",
+                "Success",
+                Notification.Type.TRAY_NOTIFICATION, true)
+                .show(ui.getPage())
             );
         }
     }
 
-    private class OnErrorRunnable implements Runnable {
+    private static class OnErrorRunnable implements Runnable {
 
         private final UI ui;
 
-        public OnErrorRunnable(UI ui) {
+        OnErrorRunnable(UI ui) {
             this.ui = ui;
         }
 
         @Override
         public void run() {
-            ui.access(new Runnable() {
-                          @Override
-                          public void run() {
-                              new Notification("Error",
-                                  "Error",
-                                  Notification.Type.TRAY_NOTIFICATION, true)
-                                  .show(ui.getPage());
-                          }
-                      }
+            ui.access(() -> new Notification("Error",
+                "Error",
+                Notification.Type.TRAY_NOTIFICATION, true)
+                .show(ui.getPage())
             );
         }
     }
