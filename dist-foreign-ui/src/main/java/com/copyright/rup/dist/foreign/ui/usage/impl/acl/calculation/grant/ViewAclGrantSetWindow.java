@@ -143,7 +143,7 @@ public class ViewAclGrantSetWindow extends Window implements SearchWidget.ISearc
     private void initMediator() {
         ViewAclGrantSetMediator mediator = new ViewAclGrantSetMediator();
         mediator.setDeleteButton(deleteButton);
-        mediator.setRefreshPayeesButton(deleteButton);
+        mediator.setRefreshPayeesButton(refreshPayeesButton);
         mediator.applyPermissions();
     }
 
