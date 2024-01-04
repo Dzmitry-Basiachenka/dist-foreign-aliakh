@@ -48,7 +48,7 @@ import java.util.ResourceBundle;
 @EnableVaadin
 @Theme("foreign")
 @SpringUI
-@Push(value = PushMode.MANUAL, transport = Transport.LONG_POLLING)
+@Push(value = PushMode.MANUAL, transport = Transport.WEBSOCKET)
 public class ForeignUi extends ForeignCommonUi implements IMediatorProvider {
 
     private static final ResourceBundle MESSAGES =

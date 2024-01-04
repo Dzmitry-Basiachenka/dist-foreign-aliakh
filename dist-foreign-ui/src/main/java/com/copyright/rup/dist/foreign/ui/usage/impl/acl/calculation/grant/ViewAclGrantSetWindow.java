@@ -188,11 +188,13 @@ public class ViewAclGrantSetWindow extends Window implements SearchWidget.ISearc
 
         @Override
         public void run() {
-            ui.access(() -> new Notification("Success",
-                "Success",
-                Notification.Type.TRAY_NOTIFICATION, true)
-                .show(ui.getPage())
-            );
+            ui.access(() -> {
+                new Notification("Success",
+                    "Success",
+                    Notification.Type.TRAY_NOTIFICATION, true)
+                    .show(ui.getPage());
+                ui.push();
+            });
         }
     }
 
@@ -206,11 +208,13 @@ public class ViewAclGrantSetWindow extends Window implements SearchWidget.ISearc
 
         @Override
         public void run() {
-            ui.access(() -> new Notification("Error",
-                "Error",
-                Notification.Type.TRAY_NOTIFICATION, true)
-                .show(ui.getPage())
-            );
+            ui.access(() -> {
+                new Notification("Error",
+                    "Error",
+                    Notification.Type.TRAY_NOTIFICATION, true)
+                    .show(ui.getPage());
+                ui.push();
+            });
         }
     }
 }
