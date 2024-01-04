@@ -1,51 +1,41 @@
+20.0.20
+-
+* CDP-1968 FDA: Populate payees at point of Grant Set population: refactor grant detail service do not refresh rightholders
+* CDP-1968 FDA: Populate payees at point of Grant Set population: fix Refresh Payees button permissions
+
 20.0.19
 -
-* CDP-1968 FDA: ACL - Populate payees at point of Grant Set population: implement widget and controller to refresh payees
-* CDP-1968 FDA: ACL - Populate payees at point of Grant Set population: remove unnecessary parameter
-* CDP-1968 FDA: ACL - Populate payees at point of Grant Set population: implement refreshing payees when grant details uploaded
-* CDP-1968 FDA: ACL - Populate payees at point of Grant Set population: implement refreshing payees when grant details edited
-* CDP-1968 FDA: ACL - Populate payees at point of Grant Set population: refactor scenario creation service to use pre-populated payees
-* CDP-1968 FDA: ACL - Populate payees at point of Grant Set population: fix pdm rules in ACL Scenario usage repository integration test
+* CDP-1968 FDA: Populate payees at point of Grant Set population: implement widget and controller to refresh payees
+* CDP-1968 FDA: Populate payees at point of Grant Set population: remove unnecessary parameter
+* CDP-1968 FDA: Populate payees at point of Grant Set population: implement refreshing payees when grant details uploaded
+* CDP-1968 FDA: Populate payees at point of Grant Set population: implement refreshing payees when grant details edited
+* CDP-1968 FDA: Populate payees at point of Grant Set population: refactor scenario creation service to use pre-populated payees
+* CDP-1968 FDA: Populate payees at point of Grant Set population: fix pdm rules in ACL Scenario usage repository integration test
 
 20.0.18
 -
-* CDP-1771 Tech Debt: FDA: improve view Select component in FDA and CDP 
-* CDP-1620 FDA: SonarQube metric improvements: fix SonarQube bugs 
-* CDP-1620 FDA: SonarQube metric improvements: fix SonarQube bugs 
-* CDP-1620 CDP: SonarQube metric improvements - Sprint 5: fix bug 'Constructor makes call to non-final method' in ForeignUi class 
-* CDP-1620 FDA: SonarQube metric improvements - Sprint 5: fix SonarQube bug 'Method UdmUsageFiltersWindow.$deserializeLambda$(SerializedLambda) is too long to be compiled by the JIT' 
-* CDP-1620 FDA: SonarQube metric improvements - Sprint 5: fix SonarQube bug 'Method UdmUsageFiltersWindow.$deserializeLambda$(SerializedLambda) is too long to be compiled by the JIT' 
-* CDP-1620 CDP: SonarQube metric improvements - Sprint 5: fix bug 'Method of Singleton class writes to a field in an unsynchronized manner' in ForeignUi class 
-* CDP-1620 FDA: SonarQube metric improvements - Sprint 5: fix SonarQube bug 'Method UdmUsageFiltersWindow.$deserializeLambda$(SerializedLambda) is too long to be compiled by the JIT' 
-* CDP-1620 FDA: SonarQube metric improvements - Sprint 5: fix SonarQube bug 'Method UdmValueFiltersWindow.$deserializeLambda$(SerializedLambda) is too long to be compiled by the JIT' 
-* CDP-1620 FDA: SonarQube metric improvements - Sprint 5: fix SonarQube bug 'Method UdmValueFiltersWindow.$deserializeLambda$(SerializedLambda) is too long to be compiled by the JIT' 
-* CDP-1620 FDA: SonarQube metric improvements - Sprint 5: fix SonarQube bug 'Method UdmValueFiltersWindow.$deserializeLambda$(SerializedLambda) is too long to be compiled by the JIT' 
-* CDP-1620 FDA: SonarQube metric improvements: fix SonarQube bugs 
-* CDP-1620 FDA: SonarQube metric improvements - Sprint 5: fix bug 'An ExecutorService isn't shutdown before the reference to it is lost' in AbstractUsageChainExecutors class 
-* CDP-1620 FDA: SonarQube metric improvements: revert chages to fix build 
-* CDP-1620 FDA: SonarQube metric improvements - Sprint 5: fix SonarQube bug 'Method UdmEditUsageWindow.$deserializeLambda$(SerializedLambda) is too long to be compiled by the JIT' 
-* CDP-1620 FDA: SonarQube metric improvements - Sprint 5: fix SonarQube bug 'Method UdmEditValueWindow.$deserializeLambda$(SerializedLambda) is too long to be compiled by the JIT' 
-* CDP-1620 FDA: SonarQube metric improvements - Sprint 5: fix SonarQube bug 'Method UdmEditValueWindow.$deserializeLambda$(SerializedLambda) is too long to be compiled by the JIT' 
-* CDP-1620 CDP: SonarQube metric improvements: upgrade tomcat version to fix CVE-2023-46589 
-* CDP-1620 FDA: SonarQube metric improvements - Sprint 5: fix SonarQube bug 'Method UdmEditUsageWindow.$deserializeLambda$(SerializedLambda) is too long to be compiled by the JIT' 
-* CDP-1620 FDA: SonarQube metric improvements - Sprint 5: remove initialization of ExecutorService through PostConstruct in AbstractUsageChainExecutor 
-* CDP-1620 FDA: SonarQube metric improvements - Sprint 5: fix SonarQube bugs 'Method $deserializeLambda$(SerializedLambda) is too long to be compiled by the JIT' in classes UdmEditUsageWindow, UdmEditValueWindow 
-* CDP-1620 FDA: SonarQube metric improvements: fix SonarQube code smells 
-* CDP-1620 FDA: SonarQube metric improvements - Sprint 5: fix SonarQube bug 'Class UdmValueService holds a map-type field currencyCodesToCurrencyNamesMap, but uses it as only a List' 
-* CDP-1620 FDA: SonarQube metric improvements: fix SonarQube code smells 
-* CDP-1620 FDA: SonarQube metric improvements - Sprint 5: fix SonarQube bug 'Class UdmAnnualMultiplierCalculator holds a map-type field differenceInDaysToAnnualMultiplierMap, but uses it as only a List' 
-* CDP-1620 FDA: SonarQube metric improvements: fix SonarQube code smells 
-* CDP-1968 FDA: ACL - Populate payees at point of Grant Set population: add payee_account_number column to df_acl_grant_detail table 
-* CDP-1892 FDA: Edit ACL Scenario Names in FDA: add Edit Name button on UI and apply permissions 
-* CDP-1968 FDA: ACL - Populate payees at point of Grant Set population: modify repository to populate payees during the grant set population 
-* CDP-1892 FDA: Edit ACL Scenario Names in FDA: implement Edit ACL Scenario Name window 
-* CDP-1892 FDA: Edit ACL Scenario Names in FDA: implement back-end logic to edit ACL Scenario name 
-* CDP-2158 Tech Debt: FDA: decrease number of critical code smells 
-* CDP-1892 FDA: Edit ACL Scenario Names in FDA: make changes based on comments 
-* CDP-2158 Tech Debt: FDA: fix issue with line longer 120 
-* CDP-1968 FDA: ACL - Populate payees at point of Grant Set population: implement service to populate payees during the grant set population 
-* CDP-2158 Tech Debt: FDA: decrease number of critical code smells 
-* CDP-1968 FDA: ACL - Populate payees at point of Grant Set population: implement service to refresh payees 
+* CDP-1620 CDP: SonarQube metric improvements: fix bug 'Constructor makes call to non-final method' in ForeignUi class
+* CDP-1620 CDP: SonarQube metric improvements: fix bug 'Method of Singleton class writes to a field in an unsynchronized manner' in ForeignUi class
+* CDP-1620 FDA: SonarQube metric improvements: fix bug 'An ExecutorService isn't shutdown before the reference to it is lost' in AbstractUsageChainExecutors class
+* CDP-1620 FDA: SonarQube metric improvements: fix SonarQube code smells
+* CDP-1620 FDA: SonarQube metric improvements: fix SonarQube bug 'Class UdmValueService holds a map-type field currencyCodesToCurrencyNamesMap, but uses it as only a List'
+* CDP-1620 FDA: SonarQube metric improvements: fix SonarQube bug 'Method UdmUsageFiltersWindow.$deserializeLambda$(SerializedLambda) is too long to be compiled by the JIT'
+* CDP-1620 FDA: SonarQube metric improvements: fix SonarQube bug 'Method UdmEditUsageWindow.$deserializeLambda$(SerializedLambda) is too long to be compiled by the JIT'
+* CDP-1620 FDA: SonarQube metric improvements: fix SonarQube bug 'Method $deserializeLambda$(SerializedLambda) is too long to be compiled by the JIT' in classes UdmEditUsageWindow, UdmEditValueWindow
+* CDP-1620 FDA: SonarQube metric improvements: fix SonarQube bug 'Class UdmAnnualMultiplierCalculator holds a map-type field differenceInDaysToAnnualMultiplierMap, but uses it as only a List'
+* CDP-1620 CDP: SonarQube metric improvements: upgrade tomcat version to fix CVE-2023-46589
+* CDP-1620 FDA: SonarQube metric improvements: remove initialization of ExecutorService through PostConstruct in AbstractUsageChainExecutor
+* CDP-1892 FDA: Edit ACL Scenario Names in FDA: add Edit Name button on UI and apply permissions
+* CDP-1892 FDA: Edit ACL Scenario Names in FDA: implement Edit ACL Scenario Name window
+* CDP-1892 FDA: Edit ACL Scenario Names in FDA: implement back-end logic to edit ACL Scenario name
+* CDP-1892 FDA: Edit ACL Scenario Names in FDA: make changes based on comments
+* CDP-1968 FDA: Populate payees at point of Grant Set population: implement service to populate payees during the grant set population
+* CDP-1968 FDA: Populate payees at point of Grant Set population: add payee_account_number column to df_acl_grant_detail table
+* CDP-1968 FDA: Populate payees at point of Grant Set population: modify repository to populate payees during the grant set population
+* CDP-1968 FDA: Populate payees at point of Grant Set population: implement service to refresh payees
+* CDP-2158 Tech Debt: FDA: decrease number of critical code smells
+* CDP-1771 Tech Debt: FDA: improve view Select component in FDA and CDP
+* CDP-2158 Tech Debt: FDA: fix issue with line longer 120
 
 20.0.17
 -
