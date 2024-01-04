@@ -208,11 +208,6 @@ public class ViewAclGrantSetWindow extends Window implements SearchWidget.ISearc
                     "TRAY_NOTIFICATION",
                     Notification.Type.TRAY_NOTIFICATION, true)
                     .show(ui.getPage());
-
-                new Notification("Success",
-                    "ASSISTIVE_NOTIFICATION",
-                    Notification.Type.ASSISTIVE_NOTIFICATION, true)
-                    .show(ui.getPage());
                 ui.push();
             });
         }
