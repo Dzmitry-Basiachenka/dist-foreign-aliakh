@@ -17,6 +17,7 @@ import java.util.Set;
  */
 public class AaclStatusFilterWidget extends CommonStatusFilterWidget {
 
+    private static final long serialVersionUID = -7463534033650499304L;
     private static final Set<UsageStatusEnum> AACL_STATUSES =
         Set.of(UsageStatusEnum.NEW, UsageStatusEnum.WORK_FOUND, UsageStatusEnum.WORK_NOT_FOUND,
             UsageStatusEnum.WORK_RESEARCH, UsageStatusEnum.RH_FOUND, UsageStatusEnum.ELIGIBLE,

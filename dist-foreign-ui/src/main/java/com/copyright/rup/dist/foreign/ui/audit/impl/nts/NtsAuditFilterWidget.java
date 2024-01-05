@@ -23,6 +23,8 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class NtsAuditFilterWidget extends CommonAuditFilterWidget {
 
+    private static final long serialVersionUID = 2374703703458839058L;
+
     private final INtsAuditFilterController controller;
 
     private LazyRightsholderFilterWidget rightsholderFilterWidget;

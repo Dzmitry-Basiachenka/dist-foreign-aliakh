@@ -24,6 +24,8 @@ import java.util.Objects;
  */
 public class SalAuditWidget extends CommonAuditWidget implements ISalAuditWidget {
 
+    private static final long serialVersionUID = -2997830052261688097L;
+
     private final ISalAuditController controller;
 
     /**

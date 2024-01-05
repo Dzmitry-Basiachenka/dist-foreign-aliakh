@@ -30,6 +30,8 @@ import org.springframework.stereotype.Component;
 public abstract class CommonAuditController extends CommonController<ICommonAuditWidget>
     implements ICommonAuditController {
 
+    private static final long serialVersionUID = -1134914079609850050L;
+
     @Autowired
     private IUsageAuditService usageAuditService;
     @Autowired

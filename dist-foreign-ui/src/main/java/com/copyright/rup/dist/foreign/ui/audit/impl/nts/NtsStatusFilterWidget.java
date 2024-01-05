@@ -17,6 +17,7 @@ import java.util.Set;
  */
 public class NtsStatusFilterWidget extends CommonStatusFilterWidget {
 
+    private static final long serialVersionUID = 5405397414330951434L;
     private static final Set<UsageStatusEnum> NTS_STATUSES =
         Set.of(UsageStatusEnum.WORK_FOUND, UsageStatusEnum.RH_FOUND,
             UsageStatusEnum.UNCLASSIFIED, UsageStatusEnum.ELIGIBLE, UsageStatusEnum.SCENARIO_EXCLUDED,

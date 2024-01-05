@@ -17,6 +17,8 @@ import com.vaadin.ui.VerticalLayout;
  */
 public class FasAuditAppliedFilterWidget extends CommonAuditAppliedFilterWidget {
 
+    private static final long serialVersionUID = 2575637179143286942L;
+
     /**
      * Constructor.
      *

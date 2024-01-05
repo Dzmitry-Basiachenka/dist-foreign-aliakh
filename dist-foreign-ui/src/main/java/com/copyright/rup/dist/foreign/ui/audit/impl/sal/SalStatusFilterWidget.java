@@ -17,6 +17,7 @@ import java.util.Set;
  */
 public class SalStatusFilterWidget extends CommonStatusFilterWidget {
 
+    private static final long serialVersionUID = -5754794249784330724L;
     private static final Set<UsageStatusEnum> SAL_STATUSES =
         Set.of(UsageStatusEnum.SENT_TO_LM, UsageStatusEnum.LOCKED, UsageStatusEnum.PAID,
             UsageStatusEnum.RH_FOUND, UsageStatusEnum.RH_NOT_FOUND, UsageStatusEnum.WORK_FOUND,

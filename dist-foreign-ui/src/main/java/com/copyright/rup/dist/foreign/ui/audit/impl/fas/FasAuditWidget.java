@@ -28,6 +28,8 @@ import java.util.Objects;
  */
 public class FasAuditWidget extends CommonAuditWidget implements IFasAuditWidget {
 
+    private static final long serialVersionUID = -452589487559089711L;
+
     private final IFasAuditController controller;
 
     /**

@@ -36,6 +36,8 @@ import java.util.List;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class FasAuditController extends CommonAuditController implements IFasAuditController {
 
+    private static final long serialVersionUID = -428426226566412873L;
+
     @Autowired
     private IFasAuditFilterController controller;
 

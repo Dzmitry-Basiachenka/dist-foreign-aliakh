@@ -36,6 +36,8 @@ import java.util.List;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class NtsAuditController extends CommonAuditController implements INtsAuditController {
 
+    private static final long serialVersionUID = 5877596419240945865L;
+
     @Autowired
     private INtsAuditFilterController controller;
 

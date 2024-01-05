@@ -38,6 +38,8 @@ import java.util.Set;
 public abstract class CommonAuditFilterController extends CommonController<ICommonAuditFilterWidget> implements
     ICommonAuditFilterController {
 
+    private static final long serialVersionUID = -7401099793631216111L;
+
     @Autowired
     private IUsageBatchService usageBatchService;
     @Autowired

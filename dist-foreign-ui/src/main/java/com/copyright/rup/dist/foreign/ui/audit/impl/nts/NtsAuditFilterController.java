@@ -20,6 +20,9 @@ import org.springframework.stereotype.Component;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class NtsAuditFilterController extends CommonAuditFilterController implements INtsAuditFilterController {
+
+    private static final long serialVersionUID = 160199903523896116L;
+
     @Override
     protected ICommonAuditFilterWidget instantiateWidget() {
         return new NtsAuditFilterWidget(this);

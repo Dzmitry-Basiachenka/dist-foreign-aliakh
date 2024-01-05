@@ -17,6 +17,7 @@ import java.util.Set;
  */
 public class FasStatusFilterWidget extends CommonStatusFilterWidget {
 
+    private static final long serialVersionUID = 636407497524717991L;
     private static final Set<UsageStatusEnum> FAS_FAS2_STATUSES =
         Set.of(UsageStatusEnum.NEW, UsageStatusEnum.WORK_NOT_FOUND, UsageStatusEnum.WORK_RESEARCH,
             UsageStatusEnum.WORK_FOUND, UsageStatusEnum.RH_NOT_FOUND, UsageStatusEnum.RH_FOUND,

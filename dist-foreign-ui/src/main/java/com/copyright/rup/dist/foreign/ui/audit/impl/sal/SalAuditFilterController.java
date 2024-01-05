@@ -23,6 +23,8 @@ import java.util.List;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class SalAuditFilterController extends CommonAuditFilterController implements ISalAuditFilterController {
 
+    private static final long serialVersionUID = 230341555614884808L;
+
     @Override
     protected ICommonAuditFilterWidget instantiateWidget() {
         return new SalAuditFilterWidget(this);
