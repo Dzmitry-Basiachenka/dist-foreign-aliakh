@@ -17,6 +17,8 @@ import java.time.LocalDate;
  */
 public class LocalDateConverter implements Converter<String, LocalDate> {
 
+    private static final long serialVersionUID = 7361647157502366222L;
+
     @Override
     public Result<LocalDate> convertToModel(String value, ValueContext context) {
         return Result.ok(LocalDate.of(Integer.parseInt(value), 6, 30));

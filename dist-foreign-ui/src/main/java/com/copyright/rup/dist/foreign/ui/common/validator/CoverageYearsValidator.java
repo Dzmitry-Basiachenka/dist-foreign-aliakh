@@ -16,6 +16,7 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class CoverageYearsValidator extends AbstractValidator<String> {
 
+    private static final long serialVersionUID = -4193847674064331118L;
     private static final int YEARS_LENGTH = 9;
 
     /**

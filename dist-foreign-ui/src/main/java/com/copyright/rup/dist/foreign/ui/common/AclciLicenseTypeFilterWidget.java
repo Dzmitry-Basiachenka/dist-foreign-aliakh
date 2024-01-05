@@ -26,6 +26,8 @@ import java.util.Set;
 public class AclciLicenseTypeFilterWidget extends BaseItemsFilterWidget<AclciLicenseTypeEnum>
     implements IFilterWindowController<AclciLicenseTypeEnum> {
 
+    private static final long serialVersionUID = 4004093543608867699L;
+
     private final Set<AclciLicenseTypeEnum> licenseTypes;
     private final Set<AclciLicenseTypeEnum> selectedItemsIds = new HashSet<>();
 

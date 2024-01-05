@@ -34,6 +34,8 @@ import java.util.Set;
 public class LazyRightsholderFilterWidget extends BaseItemsFilterWidget<Rightsholder> implements
     ILazyFilterWindowController<Rightsholder> {
 
+    private static final long serialVersionUID = -6090835779486552935L;
+
     private final ICommonAuditFilterController controller;
     private final Set<Rightsholder> selectedItemsIds = new HashSet<>();
 

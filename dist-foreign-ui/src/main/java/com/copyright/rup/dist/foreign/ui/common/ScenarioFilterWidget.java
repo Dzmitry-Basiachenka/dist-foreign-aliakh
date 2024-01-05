@@ -30,6 +30,8 @@ import java.util.function.Supplier;
 public class ScenarioFilterWidget extends BaseItemsFilterWidget<Scenario>
     implements IFilterWindowController<Scenario> {
 
+    private static final long serialVersionUID = 4733273653096915275L;
+
     private final Supplier<List<Scenario>> supplier;
     private final Set<Scenario> selectedItemsIds = new HashSet<>();
 

@@ -30,6 +30,8 @@ import java.util.function.Supplier;
 public class UdmBatchFilterWidget extends BaseItemsFilterWidget<UdmBatch>
     implements IFilterWindowController<UdmBatch> {
 
+    private static final long serialVersionUID = 984179108473050697L;
+
     private final Supplier<List<UdmBatch>> supplier;
     private final Set<UdmBatch> selectedItemsIds = new HashSet<>();
 
