@@ -21,6 +21,8 @@ import java.time.LocalDate;
  */
 public class NtsWithDrawnBatchSummaryReportDto extends StoredEntity<String> {
 
+    private static final long serialVersionUID = -2106360246960648970L;
+
     private String batchName;
     private Long rroAccountNumber;
     private String rroName;

@@ -21,6 +21,8 @@ import java.time.LocalDate;
  */
 public class SalFundPoolReportDto extends StoredEntity<String> {
 
+    private static final long serialVersionUID = -121507256353727327L;
+
     private String fundPoolName;
     private String scenarioName;
     private LocalDate dateReceived;

@@ -21,6 +21,8 @@ import java.time.LocalDate;
  */
 public class UndistributedLiabilitiesReportDto extends StoredEntity<String> {
 
+    private static final long serialVersionUID = -6143796894438478045L;
+
     private String rroName;
     private Long rroAccountNumber;
     private LocalDate paymentDate;

@@ -21,6 +21,8 @@ import java.time.LocalDate;
  */
 public class SalUndistributedLiabilitiesReportDto extends StoredEntity<String> {
 
+    private static final long serialVersionUID = -5702702342935708517L;
+
     private LocalDate dateReceived;
     private String fundPoolName;
     private BigDecimal grossAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;

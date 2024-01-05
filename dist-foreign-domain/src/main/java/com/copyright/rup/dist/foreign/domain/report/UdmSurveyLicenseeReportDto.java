@@ -19,6 +19,8 @@ import java.time.LocalDate;
  */
 public class UdmSurveyLicenseeReportDto extends StoredEntity<String> {
 
+    private static final long serialVersionUID = 5704492502601543224L;
+
     private Integer period;
     private String channel;
     private String usageOrigin;

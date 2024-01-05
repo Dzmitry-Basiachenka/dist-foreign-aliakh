@@ -18,6 +18,8 @@ import java.util.Date;
  */
 public class UdmWeeklySurveyReportDto extends StoredEntity<String> {
 
+    private static final long serialVersionUID = -3006561612669235355L;
+
     private Integer period;
     private Date dateReceived;
     private String channel;

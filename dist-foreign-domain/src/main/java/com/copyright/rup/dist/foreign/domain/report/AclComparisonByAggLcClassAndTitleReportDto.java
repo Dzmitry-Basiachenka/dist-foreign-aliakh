@@ -19,6 +19,8 @@ import java.math.BigDecimal;
  */
 public class AclComparisonByAggLcClassAndTitleReportDto extends StoredEntity<String> {
 
+    private static final long serialVersionUID = 2663813581119127578L;
+
     private Integer aggregateLicenseeClassId;
     private String aggregateLicenseeClassName;
     private String wrWrkInst;

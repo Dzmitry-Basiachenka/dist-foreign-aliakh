@@ -21,6 +21,8 @@ import java.math.BigDecimal;
  */
 public class WorkSharesByAggLcClassReportDto extends StoredEntity<String> {
 
+    private static final long serialVersionUID = -3946545660142989502L;
+
     private AggregateLicenseeClass aggregateLicenseeClass = new AggregateLicenseeClass();
     private Long wrWrkInst;
     private String workTitle;

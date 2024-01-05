@@ -19,6 +19,8 @@ import java.math.BigDecimal;
  */
 public class AclLiabilitiesByAggLicClassReportDto extends StoredEntity<String> {
 
+    private static final long serialVersionUID = -3374862716228600124L;
+
     private Integer aggregateLicenseeClassId;
     private String aggregateLicenseeClassName;
     private BigDecimal grossAmount;

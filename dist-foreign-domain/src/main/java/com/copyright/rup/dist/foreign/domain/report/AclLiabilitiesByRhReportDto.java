@@ -19,6 +19,8 @@ import java.math.BigDecimal;
  */
 public class AclLiabilitiesByRhReportDto extends StoredEntity<String> {
 
+    private static final long serialVersionUID = 5429346272477178110L;
+
     private Long rhAccountNumber;
     private String rhName;
     private Long printPayeeAccountNumber;

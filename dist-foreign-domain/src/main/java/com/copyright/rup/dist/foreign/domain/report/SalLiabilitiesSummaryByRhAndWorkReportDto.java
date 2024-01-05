@@ -18,6 +18,8 @@ import java.math.BigDecimal;
  */
 public class SalLiabilitiesSummaryByRhAndWorkReportDto extends StoredEntity<String> {
 
+    private static final long serialVersionUID = 4407852465473613283L;
+
     private Long rhAccountNumber;
     private String rhName;
     private String wrWrkInst;
