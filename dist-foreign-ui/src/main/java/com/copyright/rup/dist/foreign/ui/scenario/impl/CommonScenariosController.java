@@ -44,6 +44,8 @@ import javax.annotation.PostConstruct;
 public abstract class CommonScenariosController extends CommonController<ICommonScenariosWidget>
     implements ICommonScenariosController {
 
+    private static final long serialVersionUID = -3846695471033412890L;
+
     private Map<ScenarioActionTypeEnum, IActionHandler> actionHandlers;
 
     @Autowired

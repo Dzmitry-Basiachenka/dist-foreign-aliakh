@@ -34,6 +34,8 @@ import java.util.Objects;
  */
 public class AclScenariosFilterWidget extends VerticalLayout implements IAclScenariosFilterWidget {
 
+    private static final long serialVersionUID = 2932740831815178381L;
+
     private IAclScenariosFilterController controller;
     private Button applyButton;
     private AclScenarioFilter aclScenarioFilter = new AclScenarioFilter();

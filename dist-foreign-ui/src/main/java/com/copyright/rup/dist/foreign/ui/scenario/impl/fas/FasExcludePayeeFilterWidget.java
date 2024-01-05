@@ -40,6 +40,8 @@ import java.util.stream.Collectors;
  */
 public class FasExcludePayeeFilterWidget extends VerticalLayout implements IFasExcludePayeeFilterWidget {
 
+    private static final long serialVersionUID = 4800535657480115497L;
+
     private final Binder<String> binder = new Binder<>();
     private IFasExcludePayeeFilterController controller;
     private ExcludePayeeFilter filter = new ExcludePayeeFilter();

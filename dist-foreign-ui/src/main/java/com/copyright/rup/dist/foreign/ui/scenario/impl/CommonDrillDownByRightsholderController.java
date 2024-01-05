@@ -25,6 +25,8 @@ public abstract class CommonDrillDownByRightsholderController
     extends CommonController<ICommonDrillDownByRightsholderWidget>
     implements ICommonDrillDownByRightsholderController {
 
+    private static final long serialVersionUID = -2918812075901755563L;
+
     private Long selectedRightsholderAccountNumber;
     private Scenario selectedScenario;
 

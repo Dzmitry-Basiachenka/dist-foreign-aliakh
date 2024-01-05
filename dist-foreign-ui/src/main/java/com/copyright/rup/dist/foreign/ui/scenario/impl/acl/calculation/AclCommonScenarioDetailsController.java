@@ -27,6 +27,8 @@ import java.util.List;
 public abstract class AclCommonScenarioDetailsController extends CommonController<IAclCommonScenarioDetailsWidget>
     implements IAclCommonScenarioDetailsController {
 
+    private static final long serialVersionUID = 2128943302580500181L;
+
     @Override
     public abstract List<AclScenarioDetailDto> loadBeans(int startIndex, int count, List<QuerySortOrder> sortOrders);
 

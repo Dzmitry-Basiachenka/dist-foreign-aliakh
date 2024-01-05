@@ -18,6 +18,8 @@ import com.vaadin.ui.VerticalLayout;
  */
 public class AclScenariosAppliedFilterWidget extends CommonAppliedFilterPanel {
 
+    private static final long serialVersionUID = -5263240497963857423L;
+
     /**
      * Constructor.
      */

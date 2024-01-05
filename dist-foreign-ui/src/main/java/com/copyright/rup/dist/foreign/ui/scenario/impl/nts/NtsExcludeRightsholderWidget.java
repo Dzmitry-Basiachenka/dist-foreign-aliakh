@@ -44,6 +44,8 @@ import java.util.stream.Collectors;
  */
 public class NtsExcludeRightsholderWidget extends Window implements INtsExcludeRightsholderWidget {
 
+    private static final long serialVersionUID = -3165943003586100415L;
+
     private SearchWidget searchWidget;
     private INtsExcludeRightsholderController controller;
     private Grid<RightsholderPayeePair> rightsholderPayeePairGrid;

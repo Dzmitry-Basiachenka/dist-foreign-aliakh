@@ -42,6 +42,7 @@ import java.util.Objects;
  */
 public abstract class CommonScenarioWidget extends Window implements ICommonScenarioWidget {
 
+    private static final long serialVersionUID = 2553035495189233138L;
     private static final String STYLE_ALIGN_RIGHT = "v-align-right";
     private static final String PROPERTY_GROSS_TOTAL = "grossTotal";
     private static final String PROPERTY_SERVICE_FEE_TOTAL = "serviceFeeTotal";

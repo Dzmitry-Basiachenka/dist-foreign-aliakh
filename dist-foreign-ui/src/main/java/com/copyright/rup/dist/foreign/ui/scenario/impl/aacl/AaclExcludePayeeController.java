@@ -35,6 +35,8 @@ import java.util.Set;
 public class AaclExcludePayeeController extends CommonController<IAaclExcludePayeeWidget>
     implements IAaclExcludePayeeController {
 
+    private static final long serialVersionUID = -1395464394219199803L;
+
     private Scenario selectedScenario;
 
     @Autowired

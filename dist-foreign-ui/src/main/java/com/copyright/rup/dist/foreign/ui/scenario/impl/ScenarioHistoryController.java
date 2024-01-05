@@ -27,6 +27,8 @@ import java.util.List;
 public class ScenarioHistoryController extends CommonController<IScenarioHistoryWidget>
     implements IScenarioHistoryController {
 
+    private static final long serialVersionUID = 5318311842924613754L;
+
     @Autowired
     private IScenarioAuditService scenarioAuditService;
 

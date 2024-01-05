@@ -18,6 +18,8 @@ import java.util.Set;
  */
 public class SalSubmitForApprovalScenariosWindow extends SalPerformScenariosActionsCommonWindow {
 
+    private static final long serialVersionUID = -2253386354742173877L;
+
     private final ISalScenariosController controller;
 
     /**

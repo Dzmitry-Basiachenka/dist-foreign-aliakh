@@ -26,6 +26,8 @@ import com.vaadin.ui.Window;
  */
 public class AclScenarioHistoryWidget extends Window implements IAclScenarioHistoryWidget, IDateFormatter {
 
+    private static final long serialVersionUID = -8535638969190092238L;
+
     private IAclScenarioHistoryController controller;
     private Grid<ScenarioAuditItem> grid;
 

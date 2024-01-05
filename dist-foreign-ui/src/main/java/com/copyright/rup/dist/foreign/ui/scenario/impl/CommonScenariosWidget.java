@@ -48,6 +48,8 @@ import java.util.Objects;
  */
 public abstract class CommonScenariosWidget extends VerticalLayout implements ICommonScenariosWidget, IDateFormatter {
 
+    private static final long serialVersionUID = -263403958929272237L;
+
     private final Label actionType = new Label(StringUtils.EMPTY, ContentMode.HTML);
     private final Label actionCreatedUser = new Label(StringUtils.EMPTY, ContentMode.HTML);
     private final Label actionCreatedDate = new Label(StringUtils.EMPTY, ContentMode.HTML);

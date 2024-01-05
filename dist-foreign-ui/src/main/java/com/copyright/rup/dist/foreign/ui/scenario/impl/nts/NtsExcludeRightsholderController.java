@@ -30,6 +30,8 @@ import java.util.Set;
 public class NtsExcludeRightsholderController extends CommonController<INtsExcludeRightsholderWidget>
     implements INtsExcludeRightsholderController {
 
+    private static final long serialVersionUID = 3425173966100571599L;
+
     private Scenario selectedScenario;
 
     @Autowired

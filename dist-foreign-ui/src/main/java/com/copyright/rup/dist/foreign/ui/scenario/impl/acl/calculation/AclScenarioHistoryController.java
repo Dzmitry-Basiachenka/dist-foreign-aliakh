@@ -26,6 +26,8 @@ import java.util.List;
 public class AclScenarioHistoryController extends CommonController<IAclScenarioHistoryWidget>
     implements IAclScenarioHistoryController {
 
+    private static final long serialVersionUID = 329650487833675987L;
+
     @Autowired
     private IAclScenarioAuditService aclScenarioAuditService;
 

@@ -34,6 +34,7 @@ import java.util.Map;
 public class FasExcludePayeeFilterController extends CommonController<IFasExcludePayeeFilterWidget>
     implements IFasExcludePayeeFilterController {
 
+    private static final long serialVersionUID = 6749081504593928993L;
     private static final Map<String, Boolean> PARTICIPATING_STATUSES =
         ImmutableMap.of(ForeignUi.getMessage("label.participating"), Boolean.TRUE,
                         ForeignUi.getMessage("label.not_participating"), Boolean.FALSE);

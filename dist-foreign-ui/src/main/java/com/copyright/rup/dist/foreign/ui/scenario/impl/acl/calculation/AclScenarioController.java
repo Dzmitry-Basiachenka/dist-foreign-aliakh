@@ -39,6 +39,8 @@ import java.util.Objects;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class AclScenarioController extends CommonController<IAclScenarioWidget> implements IAclScenarioController {
 
+    private static final long serialVersionUID = 6406874531879043851L;
+
     @Autowired
     private IAclScenarioUsageService scenarioUsageService;
     @Autowired

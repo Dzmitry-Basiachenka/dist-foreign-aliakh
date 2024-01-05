@@ -33,6 +33,8 @@ import java.io.PipedOutputStream;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class NtsScenarioController extends CommonScenarioController implements INtsScenarioController {
 
+    private static final long serialVersionUID = -938988495729027135L;
+
     @Autowired
     private INtsDrillDownByRightsholderController drillDownByRightsholderController;
     @Autowired

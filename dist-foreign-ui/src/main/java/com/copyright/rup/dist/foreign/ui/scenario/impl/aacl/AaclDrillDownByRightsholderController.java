@@ -34,6 +34,8 @@ import java.util.List;
 public class AaclDrillDownByRightsholderController extends CommonDrillDownByRightsholderController
     implements IAaclDrillDownByRightsholderController {
 
+    private static final long serialVersionUID = 7928607570506975166L;
+
     @Autowired
     private IAaclUsageService usageService;
 

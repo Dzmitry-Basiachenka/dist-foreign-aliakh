@@ -40,6 +40,7 @@ import java.util.function.Function;
 public abstract class CommonDrillDownByRightsholderWidget extends Window
     implements ICommonDrillDownByRightsholderWidget {
 
+    private static final long serialVersionUID = 5513951425218447888L;
     private static final String STYLE_ALIGN_RIGHT = "v-align-right";
 
     private ICommonDrillDownByRightsholderController controller;

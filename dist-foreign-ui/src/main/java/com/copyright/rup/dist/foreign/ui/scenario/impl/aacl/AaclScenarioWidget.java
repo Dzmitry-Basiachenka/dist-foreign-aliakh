@@ -27,6 +27,8 @@ import com.vaadin.ui.VerticalLayout;
  */
 public class AaclScenarioWidget extends CommonScenarioWidget implements IAaclScenarioWidget {
 
+    private static final long serialVersionUID = 3715080992766828407L;
+
     private final IAaclScenarioController scenarioController;
     private Button exportDetailsButton;
     private Button exportButton;

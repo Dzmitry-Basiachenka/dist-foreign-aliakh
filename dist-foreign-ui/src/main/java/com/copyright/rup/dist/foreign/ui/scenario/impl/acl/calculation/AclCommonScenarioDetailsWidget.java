@@ -36,6 +36,7 @@ import java.util.function.Function;
  */
 public abstract class AclCommonScenarioDetailsWidget extends Window implements IAclCommonScenarioDetailsWidget {
 
+    private static final long serialVersionUID = 2889008063596309193L;
     private static final String STYLE_ALIGN_RIGHT = "v-align-right";
 
     private IAclCommonScenarioDetailsController controller;

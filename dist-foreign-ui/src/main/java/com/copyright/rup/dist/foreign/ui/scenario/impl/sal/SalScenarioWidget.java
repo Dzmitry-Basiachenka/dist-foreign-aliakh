@@ -26,6 +26,8 @@ import com.vaadin.ui.VerticalLayout;
  */
 public class SalScenarioWidget extends CommonScenarioWidget implements ISalScenarioWidget {
 
+    private static final long serialVersionUID = -5375388834604969358L;
+
     private final ISalScenarioController scenarioController;
 
     /**

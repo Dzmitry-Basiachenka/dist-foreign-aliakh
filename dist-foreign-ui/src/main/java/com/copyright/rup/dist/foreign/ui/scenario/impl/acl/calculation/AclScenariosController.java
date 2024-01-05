@@ -67,6 +67,8 @@ import javax.annotation.PostConstruct;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class AclScenariosController extends CommonController<IAclScenariosWidget> implements IAclScenariosController {
 
+    private static final long serialVersionUID = 1939626129733791058L;
+
     private Map<ScenarioActionTypeEnum, IAclScenarioActionHandler> actionHandlers;
 
     @Autowired

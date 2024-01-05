@@ -33,6 +33,8 @@ import java.io.PipedOutputStream;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class AaclScenarioController extends CommonScenarioController implements IAaclScenarioController {
 
+    private static final long serialVersionUID = -1907121306776405475L;
+
     @Autowired
     private IAaclDrillDownByRightsholderController drillDownByRightsholderController;
     @Autowired

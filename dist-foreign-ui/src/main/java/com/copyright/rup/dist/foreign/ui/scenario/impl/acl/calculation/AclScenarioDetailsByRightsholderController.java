@@ -38,6 +38,8 @@ import java.util.Objects;
 public class AclScenarioDetailsByRightsholderController extends AclCommonScenarioDetailsController
     implements IAclScenarioDetailsByRightsholderController {
 
+    private static final long serialVersionUID = 8754784354324452108L;
+
     @Autowired
     private IAclScenarioUsageService aclScenarioUsageService;
     private Long selectedRightsholderAccountNumber;

@@ -34,6 +34,8 @@ import java.math.BigDecimal;
  */
 public class AaclExcludePayeeFilterWidget extends VerticalLayout implements IAaclExcludePayeeFilterWidget {
 
+    private static final long serialVersionUID = -7215411798756846433L;
+
     private final Binder<String> binder = new Binder<>();
     private ExcludePayeeFilter filter = new ExcludePayeeFilter();
     private ExcludePayeeFilter appliedFilter = new ExcludePayeeFilter();

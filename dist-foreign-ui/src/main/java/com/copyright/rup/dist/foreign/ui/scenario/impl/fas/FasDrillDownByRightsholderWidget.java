@@ -21,6 +21,8 @@ import java.util.Objects;
 public class FasDrillDownByRightsholderWidget extends CommonDrillDownByRightsholderWidget
     implements IFasDrillDownByRightsholderWidget {
 
+    private static final long serialVersionUID = 7357607253356175567L;
+
     @Override
     protected void addColumns() {
         addColumn(UsageDto::getId, "table.column.detail_id", "detailId", false, 130);

@@ -57,6 +57,7 @@ import java.util.stream.Collectors;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class FasScenariosController extends CommonScenariosController implements IFasScenariosController {
 
+    private static final long serialVersionUID = -6177062690772736817L;
     private static final String LIST_SEPARATOR = ", ";
 
     @Autowired

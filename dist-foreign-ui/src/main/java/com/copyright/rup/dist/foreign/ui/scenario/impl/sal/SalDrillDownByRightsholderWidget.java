@@ -19,6 +19,8 @@ import com.copyright.rup.dist.foreign.ui.scenario.impl.CommonDrillDownByRightsho
 public class SalDrillDownByRightsholderWidget extends CommonDrillDownByRightsholderWidget implements
     ISalDrillDownByRightsholderWidget {
 
+    private static final long serialVersionUID = -93345055952266111L;
+
     @Override
     protected void addColumns() {
         addColumn(UsageDto::getId, "table.column.detail_id", "detailId", false, 130);
