@@ -16,6 +16,8 @@ import com.vaadin.ui.Label;
  */
 public abstract class BaseUdmItemsFilterWidget<T> extends BaseItemsFilterWidget<T> {
 
+    private static final long serialVersionUID = 1431161208711954024L;
+
     /**
      * Constructor.
      *

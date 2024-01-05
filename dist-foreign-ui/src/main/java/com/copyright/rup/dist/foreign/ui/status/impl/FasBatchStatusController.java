@@ -25,6 +25,8 @@ import java.util.List;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class FasBatchStatusController extends CommonBatchStatusController implements IFasBatchStatusController {
 
+    private static final long serialVersionUID = 7208362337278267183L;
+
     @Autowired
     private IProductFamilyProvider productFamilyProvider;
 

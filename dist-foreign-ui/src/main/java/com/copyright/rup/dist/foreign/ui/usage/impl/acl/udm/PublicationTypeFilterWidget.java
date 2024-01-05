@@ -30,6 +30,7 @@ import java.util.function.Supplier;
 public class PublicationTypeFilterWidget extends BaseUdmItemsFilterWidget<PublicationType>
     implements IFilterWindowController<PublicationType> {
 
+    private static final long serialVersionUID = -6155687442529937223L;
     private static final String NULL = "NULL";
 
     private final Supplier<List<PublicationType>> supplier;

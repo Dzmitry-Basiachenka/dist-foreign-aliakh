@@ -14,6 +14,8 @@ import com.copyright.rup.dist.foreign.ui.status.api.IAaclBatchStatusWidget;
  */
 public class AaclBatchStatusWidget extends CommonBatchStatusWidget implements IAaclBatchStatusWidget {
 
+    private static final long serialVersionUID = -1023068004640174221L;
+
     @Override
     protected void addColumns() {
         addColumn(UsageBatchStatus::getBatchName, "table.column.batch_name", "batchName", true);

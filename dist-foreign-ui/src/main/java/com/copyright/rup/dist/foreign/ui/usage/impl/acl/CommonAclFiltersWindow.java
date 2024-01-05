@@ -36,6 +36,7 @@ import java.util.function.Predicate;
  */
 public abstract class CommonAclFiltersWindow extends Window {
 
+    private static final long serialVersionUID = 540294758762608397L;
     private static final List<FilterOperatorEnum> FLAG_ITEMS = List.of(FilterOperatorEnum.Y, FilterOperatorEnum.N);
     private static final List<FilterOperatorEnum> LAST_VALUE_FLAG_ITEMS =
         List.of(FilterOperatorEnum.Y, FilterOperatorEnum.N, FilterOperatorEnum.IS_NULL);

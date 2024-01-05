@@ -88,6 +88,8 @@ public class ScenarioParameterWidget<T> extends HorizontalLayout {
      */
     public static class ParametersSaveEvent<T> extends Event {
 
+        private static final long serialVersionUID = -5345394014667341431L;
+
         private final T savedParameters;
 
         /**

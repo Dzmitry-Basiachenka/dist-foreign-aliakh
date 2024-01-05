@@ -26,6 +26,7 @@ import java.util.List;
  */
 public abstract class CommonBatchStatusWidget extends VerticalLayout implements ICommonBatchStatusWidget {
 
+    private static final long serialVersionUID = -3771458158529160391L;
     private static final String EMPTY_STYLE_NAME = "empty-batch-status-grid";
 
     private ICommonBatchStatusController controller;

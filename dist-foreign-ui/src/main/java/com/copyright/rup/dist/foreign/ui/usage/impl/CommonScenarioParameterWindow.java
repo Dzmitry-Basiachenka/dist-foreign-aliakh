@@ -16,6 +16,8 @@ import com.vaadin.ui.Window;
  */
 public abstract class CommonScenarioParameterWindow<T> extends Window {
 
+    private static final long serialVersionUID = -7886076868059841715L;
+
     /**
      * Sets default parameters for the window.
      *

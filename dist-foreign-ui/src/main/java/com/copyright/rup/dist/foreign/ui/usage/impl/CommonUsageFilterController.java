@@ -26,6 +26,8 @@ import java.util.Set;
 public abstract class CommonUsageFilterController extends CommonController<ICommonUsageFilterWidget>
     implements ICommonUsageFilterController {
 
+    private static final long serialVersionUID = -9168818254812318926L;
+
     @Autowired
     private IProductFamilyProvider productFamilyProvider;
 

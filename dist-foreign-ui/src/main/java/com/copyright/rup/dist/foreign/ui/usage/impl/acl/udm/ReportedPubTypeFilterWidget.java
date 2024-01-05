@@ -28,6 +28,8 @@ import java.util.function.Supplier;
 public class ReportedPubTypeFilterWidget extends BaseUdmItemsFilterWidget<String>
     implements IFilterWindowController<String> {
 
+    private static final long serialVersionUID = -3041200122050151889L;
+
     private final Supplier<List<String>> supplier;
     private final Set<String> selectedItemsIds = new HashSet<>();
 

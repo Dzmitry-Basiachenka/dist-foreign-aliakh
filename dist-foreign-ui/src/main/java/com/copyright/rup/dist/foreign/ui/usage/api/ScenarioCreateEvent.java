@@ -15,6 +15,9 @@ import com.vaadin.ui.Component.Event;
  * @author Pavel Liakh
  */
 public class ScenarioCreateEvent extends Event {
+
+    private static final long serialVersionUID = -2098343739030729321L;
+
     private final Scenario scenario;
 
     /**

@@ -28,6 +28,8 @@ import java.util.function.Function;
  */
 public abstract class CommonUdmUsageWindow extends Window {
 
+    private static final long serialVersionUID = -174850047266705547L;
+
     /**
      * Builds read only horizontal layout.
      *

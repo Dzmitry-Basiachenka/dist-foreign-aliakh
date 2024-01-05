@@ -14,6 +14,8 @@ import com.copyright.rup.dist.foreign.ui.status.api.INtsBatchStatusWidget;
  */
 public class NtsBatchStatusWidget extends CommonBatchStatusWidget implements INtsBatchStatusWidget {
 
+    private static final long serialVersionUID = 5061512660191028638L;
+
     @Override
     protected void addColumns() {
         addColumn(UsageBatchStatus::getBatchName, "table.column.batch_name", "batchName", true);

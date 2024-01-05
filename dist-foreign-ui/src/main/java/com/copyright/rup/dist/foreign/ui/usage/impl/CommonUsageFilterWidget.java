@@ -25,6 +25,8 @@ import com.vaadin.ui.VerticalLayout;
  */
 public abstract class CommonUsageFilterWidget extends VerticalLayout implements ICommonUsageFilterWidget {
 
+    private static final long serialVersionUID = 9089378281952722930L;
+
     private ICommonUsageFilterController controller;
     private Button applyButton;
     private UsageFilter usageFilter = new UsageFilter();

@@ -23,6 +23,8 @@ import java.util.List;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class NtsBatchStatusController extends CommonBatchStatusController implements INtsBatchStatusController {
 
+    private static final long serialVersionUID = 2219025797193366673L;
+
     @Override
     public List<UsageBatchStatus> getBatchStatuses() {
         return getUsageBatchStatusService().getUsageBatchStatusesNts();

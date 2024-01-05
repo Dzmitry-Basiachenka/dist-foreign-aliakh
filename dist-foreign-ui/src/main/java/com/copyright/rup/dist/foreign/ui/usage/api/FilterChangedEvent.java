@@ -13,6 +13,8 @@ import com.vaadin.ui.Component;
  */
 public class FilterChangedEvent extends Component.Event {
 
+    private static final long serialVersionUID = -6008545726970512259L;
+
     /**
      * Constructs a new event with the specified source component.
      *

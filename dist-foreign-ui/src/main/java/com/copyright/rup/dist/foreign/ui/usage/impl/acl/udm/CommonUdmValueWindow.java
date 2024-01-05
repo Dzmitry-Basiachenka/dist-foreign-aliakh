@@ -37,6 +37,7 @@ import java.util.Objects;
  */
 public abstract class CommonUdmValueWindow extends Window implements IDateFormatter {
 
+    private static final long serialVersionUID = 3496785917830322885L;
     private static final DateTimeFormatter DATE_TIME_FORMATTER =
         DateTimeFormatter.ofPattern(RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT, Locale.US);
 

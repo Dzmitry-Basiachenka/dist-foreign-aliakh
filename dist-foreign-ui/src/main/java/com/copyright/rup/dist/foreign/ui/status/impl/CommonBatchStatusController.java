@@ -24,6 +24,8 @@ import org.springframework.stereotype.Component;
 public abstract class CommonBatchStatusController extends CommonController<ICommonBatchStatusWidget>
     implements ICommonBatchStatusController {
 
+    private static final long serialVersionUID = -5238762328238205363L;
+
     @Autowired
     private IUsageBatchStatusService usageBatchStatusService;
 
