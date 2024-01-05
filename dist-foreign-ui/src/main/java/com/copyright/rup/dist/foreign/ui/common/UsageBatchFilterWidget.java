@@ -30,6 +30,8 @@ import java.util.function.Supplier;
 public class UsageBatchFilterWidget extends BaseItemsFilterWidget<UsageBatch>
     implements IFilterWindowController<UsageBatch> {
 
+    private static final long serialVersionUID = -2321559734957825265L;
+
     private final Supplier<List<UsageBatch>> supplier;
     private final Set<UsageBatch> selectedItemsIds = new HashSet<>();
 

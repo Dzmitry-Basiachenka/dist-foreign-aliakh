@@ -19,6 +19,8 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class RequiredValidator extends AbstractValidator<String> {
 
+    private static final long serialVersionUID = 2267019253181583757L;
+
     /**
      * Constructor.
      */

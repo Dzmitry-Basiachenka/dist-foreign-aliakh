@@ -21,6 +21,8 @@ import java.util.Objects;
  */
 public class DateValidator extends AbstractValidator<LocalDate> {
 
+    private static final long serialVersionUID = 8339133126465741929L;
+
     private final LocalDateWidget dateFromWidget;
     private final LocalDateWidget dateToWidget;
 

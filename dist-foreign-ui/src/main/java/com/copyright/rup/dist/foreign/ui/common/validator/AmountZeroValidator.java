@@ -22,6 +22,7 @@ import java.math.RoundingMode;
  */
 public class AmountZeroValidator extends AbstractValidator<String> {
 
+    private static final long serialVersionUID = 996539779734523547L;
     private static final String AMOUNT_REGEX = "(0|([1-9]\\d{0,9}))(\\.\\d{1,10})?";
 
     /**

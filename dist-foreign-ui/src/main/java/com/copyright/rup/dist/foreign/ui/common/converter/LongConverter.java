@@ -19,6 +19,8 @@ import java.util.Objects;
  */
 public class LongConverter implements Converter<String, Long> {
 
+    private static final long serialVersionUID = 7409178131452267269L;
+
     private final String errorMessage;
 
     /**

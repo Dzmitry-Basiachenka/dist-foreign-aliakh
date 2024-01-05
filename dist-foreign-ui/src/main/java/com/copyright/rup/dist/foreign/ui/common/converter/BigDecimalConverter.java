@@ -18,6 +18,8 @@ import java.math.BigDecimal;
  */
 public class BigDecimalConverter implements Converter<String, BigDecimal> {
 
+    private static final long serialVersionUID = 8931238654211912393L;
+
     @Override
     public Result<BigDecimal> convertToModel(String value, ValueContext context) {
         return Result.ok(new BigDecimal(StringUtils.trimToEmpty(value)).setScale(2, BigDecimal.ROUND_HALF_UP));

@@ -17,6 +17,7 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class YearValidator extends AbstractValidator<String> {
 
+    private static final long serialVersionUID = -3375196726841313175L;
     private static final int MIN_YEAR = 1950;
     private static final int MAX_YEAR = 2099;
 

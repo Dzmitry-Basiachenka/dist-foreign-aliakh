@@ -31,6 +31,8 @@ import java.util.function.Supplier;
 public class RightsholderFilterWidget extends BaseItemsFilterWidget<Rightsholder>
     implements IFilterWindowController<Rightsholder> {
 
+    private static final long serialVersionUID = 2207676973399937775L;
+
     private final String searchPrompt;
     private final String caption;
     private final String rightsholderNotFoundString;

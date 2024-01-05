@@ -19,6 +19,8 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class NumericValidator extends AbstractValidator<String> {
 
+    private static final long serialVersionUID = 8862386283553929466L;
+
     /**
      * Default Constructor.
      */

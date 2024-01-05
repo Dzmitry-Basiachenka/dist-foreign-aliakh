@@ -19,6 +19,7 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class AmountValidator extends AbstractValidator<String> {
 
+    private static final long serialVersionUID = 6593096592819251745L;
     private static final String AMOUNT_REGEX = "(0|([1-9]\\d{0,9}))(\\.\\d{1,10})?";
 
     /**
