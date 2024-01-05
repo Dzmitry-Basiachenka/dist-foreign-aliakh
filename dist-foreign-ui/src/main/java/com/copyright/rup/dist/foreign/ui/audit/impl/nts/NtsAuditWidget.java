@@ -28,6 +28,8 @@ import java.util.Objects;
  */
 public class NtsAuditWidget extends CommonAuditWidget implements INtsAuditWidget {
 
+    private static final long serialVersionUID = -3481844881825089678L;
+
     private final INtsAuditController controller;
 
     /**

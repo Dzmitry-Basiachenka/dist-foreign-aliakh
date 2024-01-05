@@ -21,6 +21,8 @@ import org.springframework.stereotype.Component;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class FasAuditFilterController extends CommonAuditFilterController implements IFasAuditFilterController {
 
+    private static final long serialVersionUID = 1522048026593191748L;
+
     @Override
     protected ICommonAuditFilterWidget instantiateWidget() {
         return new FasAuditFilterWidget(this);

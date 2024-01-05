@@ -23,6 +23,8 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class FasAuditFilterWidget extends CommonAuditFilterWidget {
 
+    private static final long serialVersionUID = 1826849913053314229L;
+
     private final IFasAuditFilterController controller;
 
     private LazyRightsholderFilterWidget rightsholderFilterWidget;

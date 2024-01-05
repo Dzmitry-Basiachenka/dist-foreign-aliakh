@@ -29,6 +29,8 @@ import java.util.function.Supplier;
 class SalLicenseeFilterWidget extends BaseItemsFilterWidget<SalLicensee>
     implements IFilterWindowController<SalLicensee> {
 
+    private static final long serialVersionUID = 3546998422100932222L;
+
     private final String searchPrompt;
     private final String caption;
     private final Supplier<List<SalLicensee>> supplier;

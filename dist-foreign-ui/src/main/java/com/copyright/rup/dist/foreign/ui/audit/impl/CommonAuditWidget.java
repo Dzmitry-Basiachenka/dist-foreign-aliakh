@@ -43,6 +43,8 @@ public abstract class CommonAuditWidget extends HorizontalSplitPanel implements 
 
     private static final String EMPTY_STYLE_NAME = "empty-audit-grid";
 
+    private static final long serialVersionUID = 3719304140302915594L;
+
     private ICommonAuditController controller;
     private SearchWidget searchWidget;
     private Grid<UsageDto> auditGrid;

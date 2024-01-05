@@ -37,6 +37,8 @@ import java.util.List;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class SalAuditController extends CommonAuditController implements ISalAuditController {
 
+    private static final long serialVersionUID = -6198325948700143225L;
+
     @Autowired
     private ISalAuditFilterController controller;
     @Autowired

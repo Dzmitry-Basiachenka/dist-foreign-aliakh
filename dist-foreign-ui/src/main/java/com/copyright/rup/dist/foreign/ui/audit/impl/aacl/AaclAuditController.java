@@ -37,6 +37,8 @@ import java.util.List;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class AaclAuditController extends CommonAuditController implements IAaclAuditController {
 
+    private static final long serialVersionUID = -2423045440172687438L;
+
     @Autowired
     private IAaclAuditFilterController controller;
     @Autowired

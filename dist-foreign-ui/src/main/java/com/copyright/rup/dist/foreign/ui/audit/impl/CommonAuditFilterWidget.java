@@ -37,6 +37,8 @@ import java.util.stream.Collectors;
  */
 public abstract class CommonAuditFilterWidget extends VerticalLayout implements ICommonAuditFilterWidget {
 
+    private static final long serialVersionUID = 2025696776113463320L;
+
     private ICommonAuditFilterController controller;
     private AuditFilter filter;
     private AuditFilter appliedFilter;

@@ -26,6 +26,8 @@ import java.util.Set;
 public abstract class CommonStatusFilterWidget extends BaseItemsFilterWidget<UsageStatusEnum>
     implements IFilterWindowController<UsageStatusEnum> {
 
+    private static final long serialVersionUID = 4015041757424417668L;
+
     private final EnumSet<UsageStatusEnum> selectedItemsIds = EnumSet.noneOf(UsageStatusEnum.class);
 
     /**

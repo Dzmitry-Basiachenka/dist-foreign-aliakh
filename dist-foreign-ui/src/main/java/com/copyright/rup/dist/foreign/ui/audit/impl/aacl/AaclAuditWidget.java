@@ -25,6 +25,8 @@ import java.util.Objects;
  */
 public class AaclAuditWidget extends CommonAuditWidget implements IAaclAuditWidget {
 
+    private static final long serialVersionUID = 3782190209610342273L;
+
     private final IAaclAuditController controller;
 
     /**

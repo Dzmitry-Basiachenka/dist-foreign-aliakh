@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
  */
 public class SalAuditAppliedFilterWidget extends CommonAuditAppliedFilterWidget {
 
+    private static final long serialVersionUID = 6829189486401132890L;
     private final ISalAuditFilterController controller;
 
     /**

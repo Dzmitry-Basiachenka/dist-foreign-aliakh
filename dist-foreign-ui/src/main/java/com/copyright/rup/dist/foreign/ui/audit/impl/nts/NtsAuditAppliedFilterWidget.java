@@ -17,6 +17,8 @@ import com.vaadin.ui.VerticalLayout;
  */
 public class NtsAuditAppliedFilterWidget extends CommonAuditAppliedFilterWidget {
 
+    private static final long serialVersionUID = -3875780924310059268L;
+
     /**
      * Constructor.
      *

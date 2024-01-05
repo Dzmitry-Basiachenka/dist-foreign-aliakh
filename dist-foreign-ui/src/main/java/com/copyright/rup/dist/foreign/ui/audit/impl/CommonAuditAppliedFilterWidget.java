@@ -23,6 +23,8 @@ import java.util.stream.Collectors;
  */
 public abstract class CommonAuditAppliedFilterWidget extends CommonAppliedFilterPanel {
 
+    private static final long serialVersionUID = 7438808219835864740L;
+
     private final ICommonAuditFilterController controller;
 
     /**

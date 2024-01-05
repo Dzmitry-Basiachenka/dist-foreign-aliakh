@@ -25,6 +25,8 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class AaclAuditFilterWidget extends CommonAuditFilterWidget {
 
+    private static final long serialVersionUID = 3421128322830506328L;
+
     private final IAaclAuditFilterController controller;
     private LazyRightsholderFilterWidget rightsholderFilterWidget;
     private UsageBatchFilterWidget usageBatchFilterWidget;
