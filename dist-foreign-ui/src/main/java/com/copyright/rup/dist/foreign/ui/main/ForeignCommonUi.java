@@ -13,6 +13,8 @@ import com.copyright.rup.vaadin.ui.CommonUi;
  */
 public abstract class ForeignCommonUi extends CommonUi {
 
+    private static final long serialVersionUID = -1129431279765902313L;
+
     /**
      * Gets string message by key and parameters.
      *

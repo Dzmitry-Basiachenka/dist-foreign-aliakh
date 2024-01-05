@@ -30,6 +30,8 @@ import java.util.Objects;
  */
 public class UndistributedLiabilitiesReportWidget extends Window implements IUndistributedLiabilitiesReportWidget {
 
+    private static final long serialVersionUID = -4109860175769744069L;
+
     private IUndistributedLiabilitiesReportController controller;
     private LocalDateWidget paymentDateToWidget;
     private Button exportButton;

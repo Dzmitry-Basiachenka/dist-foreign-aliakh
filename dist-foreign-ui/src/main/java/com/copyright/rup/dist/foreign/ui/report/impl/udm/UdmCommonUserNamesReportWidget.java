@@ -36,6 +36,8 @@ import java.util.Set;
  */
 public class UdmCommonUserNamesReportWidget extends Window implements IUdmCommonUserNamesReportWidget {
 
+    private static final long serialVersionUID = 7046325403529768535L;
+
     private IUdmCommonUserNamesReportController controller;
     private PeriodFilterWidget periodFilterWidget;
     private UserNameFilterWidget userNameFilterWidget;

@@ -28,6 +28,8 @@ import java.util.List;
 public class UdmUsageEditsInBaselineReportController extends CommonController<IUdmUsageEditsInBaselineReportWidget>
     implements IUdmUsageEditsInBaselineReportController {
 
+    private static final long serialVersionUID = -5039678015666577583L;
+
     @Autowired
     private IUdmReportService udmReportService;
     @Autowired

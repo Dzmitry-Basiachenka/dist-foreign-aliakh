@@ -25,6 +25,8 @@ import org.springframework.stereotype.Component;
 public class UdmVerifiedDetailsBySourceReportController extends UdmCommonReportController
     implements IUdmVerifiedDetailsBySourceReportController {
 
+    private static final long serialVersionUID = -603944637965943303L;
+
     @Autowired
     private IUdmReportService udmReportService;
 

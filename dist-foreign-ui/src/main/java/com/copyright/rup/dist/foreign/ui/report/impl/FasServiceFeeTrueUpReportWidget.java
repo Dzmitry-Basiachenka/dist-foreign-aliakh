@@ -30,6 +30,8 @@ import java.util.Objects;
  */
 public class FasServiceFeeTrueUpReportWidget extends Window implements IFasServiceFeeTrueUpReportWidget {
 
+    private static final long serialVersionUID = -8970184754589050227L;
+
     private IFasServiceFeeTrueUpReportController controller;
     private LocalDateWidget paymentDateToWidget;
     private LocalDateWidget toDateWidget;

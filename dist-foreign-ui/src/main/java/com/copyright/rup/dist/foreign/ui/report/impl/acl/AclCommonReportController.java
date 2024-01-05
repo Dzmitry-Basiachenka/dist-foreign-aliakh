@@ -27,6 +27,8 @@ import java.util.List;
 public abstract class AclCommonReportController extends CommonController<IAclCommonReportWidget>
     implements IAclCommonReportController {
 
+    private static final long serialVersionUID = -3128189265611072651L;
+
     @Autowired
     private IAclScenarioService scenarioService;
 

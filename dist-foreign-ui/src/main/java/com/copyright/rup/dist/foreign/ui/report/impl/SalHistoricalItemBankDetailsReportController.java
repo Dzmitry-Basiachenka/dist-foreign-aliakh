@@ -30,6 +30,8 @@ public class SalHistoricalItemBankDetailsReportController
     extends CommonController<ISalHistoricalItemBankDetailsReportWidget>
     implements ISalHistoricalItemBankDetailsReportController {
 
+    private static final long serialVersionUID = -6971726011634540500L;
+
     @Autowired
     private IUsageBatchService usageBatchService;
     @Autowired

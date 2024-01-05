@@ -26,6 +26,8 @@ import java.util.List;
 public abstract class UdmCommonReportController extends CommonController<IUdmCommonReportWidget>
     implements IUdmCommonReportController {
 
+    private static final long serialVersionUID = 9205052365365882970L;
+
     @Autowired
     private IUdmUsageService udmUsageService;
 

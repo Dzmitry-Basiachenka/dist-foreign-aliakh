@@ -34,6 +34,8 @@ import com.vaadin.ui.TabSheet;
  */
 public class MainWidget extends TabSheet implements IMainWidget {
 
+    private static final long serialVersionUID = -6721393535731738442L;
+
     private IMainWidgetController controller;
 
     private SwitchableWidget<ICommonUsageWidget, ICommonUsageController> usagesWidget;

@@ -32,6 +32,7 @@ import java.util.ArrayList;
  */
 public class AclCommonReportWidget extends Window implements IAclCommonReportWidget {
 
+    private static final long serialVersionUID = -5043025891111576660L;
     private final Button exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
     private final ComboBox<Integer> periodComboBox = new ComboBox<>(ForeignUi.getMessage("label.period"));
     private AclScenarioFilterWidget scenarioFilterWidget;

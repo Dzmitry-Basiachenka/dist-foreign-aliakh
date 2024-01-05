@@ -36,6 +36,7 @@ import java.util.stream.Collectors;
  */
 public abstract class CommonAppliedFilterPanel extends Panel {
 
+    private static final long serialVersionUID = -4488314718001147769L;
     private static final String LIST_SEPARATOR = ", ";
 
     /**

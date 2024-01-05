@@ -33,6 +33,8 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class AaclBaselineUsagesReportWidget extends Window implements IAaclBaselineUsagesReportWidget {
 
+    private static final long serialVersionUID = -7224548672273357917L;
+
     private IAaclBaselineUsagesReportController controller;
     private TextField numberOfBaselineYearsField;
     private final Binder<Integer> binder = new Binder<>();

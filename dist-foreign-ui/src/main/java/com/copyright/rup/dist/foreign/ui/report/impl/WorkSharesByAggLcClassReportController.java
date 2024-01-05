@@ -31,6 +31,8 @@ import java.util.List;
 public class WorkSharesByAggLcClassReportController extends CommonController<ICommonScenarioReportWidget>
     implements ICommonScenarioReportController {
 
+    private static final long serialVersionUID = -7441498228591972343L;
+
     @Autowired
     private IScenarioService scenarioService;
     @Autowired

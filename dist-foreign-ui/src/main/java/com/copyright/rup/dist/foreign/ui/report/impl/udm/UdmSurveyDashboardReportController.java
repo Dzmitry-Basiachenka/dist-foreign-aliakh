@@ -29,6 +29,8 @@ import java.util.List;
 public class UdmSurveyDashboardReportController extends CommonController<IUdmSurveyDashboardReportWidget>
     implements IUdmSurveyDashboardReportController {
 
+    private static final long serialVersionUID = 4684875413632633320L;
+
     @Autowired
     private IUdmBatchService udmBatchService;
     @Autowired

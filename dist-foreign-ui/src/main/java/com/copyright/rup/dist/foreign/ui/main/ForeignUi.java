@@ -47,6 +47,7 @@ import java.util.ResourceBundle;
 @SpringUI
 public class ForeignUi extends ForeignCommonUi implements IMediatorProvider {
 
+    private static final long serialVersionUID = -5563984271691916395L;
     private static final ResourceBundle MESSAGES =
         ResourceBundle.getBundle("com.copyright.rup.dist.foreign.ui.messages");
     private static final String UDM_TAB = "UDM";

@@ -27,6 +27,8 @@ import org.springframework.stereotype.Component;
 public class UndistributedLiabilitiesReportController extends CommonController<IUndistributedLiabilitiesReportWidget>
     implements IUndistributedLiabilitiesReportController {
 
+    private static final long serialVersionUID = 4236362850636742386L;
+
     @Autowired
     private IReportService reportService;
 

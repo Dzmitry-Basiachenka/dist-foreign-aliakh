@@ -24,6 +24,8 @@ import java.util.Objects;
  */
 public class ReportStreamSource extends StreamResource {
 
+    private static final long serialVersionUID = -2445737255212548259L;
+
     private DownloadStream downloadStream;
 
     /**

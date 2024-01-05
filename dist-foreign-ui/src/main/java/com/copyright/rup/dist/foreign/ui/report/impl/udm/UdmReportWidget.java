@@ -21,6 +21,8 @@ import com.vaadin.ui.Window;
  */
 public class UdmReportWidget extends MenuBar implements IUdmReportWidget {
 
+    private static final long serialVersionUID = -668631129185002124L;
+
     private IUdmReportController controller;
 
     @Override

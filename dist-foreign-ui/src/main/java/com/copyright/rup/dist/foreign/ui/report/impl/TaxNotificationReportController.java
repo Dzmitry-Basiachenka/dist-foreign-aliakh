@@ -36,6 +36,8 @@ import java.util.Set;
 public class TaxNotificationReportController extends CommonController<ITaxNotificationReportWidget>
     implements ITaxNotificationReportController {
 
+    private static final long serialVersionUID = 5435754508646932860L;
+
     @Autowired
     private IScenarioService scenarioService;
     @Autowired

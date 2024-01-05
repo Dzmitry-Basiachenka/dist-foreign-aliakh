@@ -32,6 +32,8 @@ import java.util.Set;
  */
 public class UdmSurveyDashboardReportWidget extends Window implements IUdmSurveyDashboardReportWidget {
 
+    private static final long serialVersionUID = 2644027767756835211L;
+
     private IUdmSurveyDashboardReportController controller;
     private Grid<Integer> grid;
     private Button exportButton;

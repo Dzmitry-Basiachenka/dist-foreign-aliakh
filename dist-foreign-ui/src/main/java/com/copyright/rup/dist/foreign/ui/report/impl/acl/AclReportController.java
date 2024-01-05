@@ -26,6 +26,8 @@ import org.springframework.stereotype.Component;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class AclReportController extends CommonController<IAclReportWidget> implements IAclReportController {
 
+    private static final long serialVersionUID = 6491233177330520783L;
+
     @Autowired
     @Qualifier("df.aclLiabilitiesByAggLicClassReportController")
     private IAclCommonReportController liabilitiesByAggLicClassReportController;

@@ -29,6 +29,8 @@ import java.util.List;
 public class UdmUsableDetailsByCountryReportController extends CommonController<IUdmUsableDetailsByCountryReportWidget>
     implements IUdmUsableDetailsByCountryReportController {
 
+    private static final long serialVersionUID = -6808247625653831733L;
+
     @Autowired
     private IUdmUsageService udmUsageService;
     @Autowired

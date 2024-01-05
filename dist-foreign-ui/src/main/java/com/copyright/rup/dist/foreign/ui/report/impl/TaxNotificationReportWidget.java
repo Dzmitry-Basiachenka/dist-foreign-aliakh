@@ -46,6 +46,7 @@ import java.util.stream.Collectors;
  */
 public class TaxNotificationReportWidget extends Window implements ITaxNotificationReportWidget, ISearchController {
 
+    private static final long serialVersionUID = -7360779731865184201L;
     private static final Integer DAYS_MIN_VALUE = 0;
     private static final Integer DAYS_MAX_VALUE = 99999;
 

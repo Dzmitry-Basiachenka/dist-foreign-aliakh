@@ -20,6 +20,8 @@ import com.vaadin.ui.Window;
  */
 public class AclReportWidget extends MenuBar implements IAclReportWidget {
 
+    private static final long serialVersionUID = -3905081625930117794L;
+
     private IAclReportController controller;
 
     @Override

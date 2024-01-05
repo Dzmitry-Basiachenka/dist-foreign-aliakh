@@ -37,6 +37,7 @@ import java.util.stream.Collectors;
  */
 public class AclFundPoolByAggLcReportWidget extends Window implements IAclFundPoolByAggLcReportWidget {
 
+    private static final long serialVersionUID = -786730447502706644L;
     private static final String EMPTY_FILTER_STYLE = "empty-item-filter-widget";
 
     private final Button exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));

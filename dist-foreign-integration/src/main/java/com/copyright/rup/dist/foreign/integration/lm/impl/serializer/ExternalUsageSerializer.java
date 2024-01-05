@@ -20,6 +20,8 @@ import java.io.IOException;
  */
 public class ExternalUsageSerializer extends StdSerializer<ExternalUsageWrapper> {
 
+    private static final long serialVersionUID = 1299697721496866760L;
+
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     /**

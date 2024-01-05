@@ -35,6 +35,7 @@ import org.apache.commons.lang3.StringUtils;
 public class SalHistoricalItemBankDetailsReportWidget extends Window
     implements ISalHistoricalItemBankDetailsReportWidget {
 
+    private static final long serialVersionUID = -6584825393044891669L;
     private static final int MIN_YEAR = 1950;
     private static final int MAX_YEAR = 2099;
 

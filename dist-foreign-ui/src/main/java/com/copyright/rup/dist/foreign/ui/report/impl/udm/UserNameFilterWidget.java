@@ -28,6 +28,8 @@ import java.util.function.Supplier;
  */
 public class UserNameFilterWidget extends BaseUdmItemsFilterWidget<String> implements IFilterWindowController<String> {
 
+    private static final long serialVersionUID = 3677161789932056075L;
+
     private final Supplier<List<String>> supplier;
     private final Set<String> selectedItemsIds = new HashSet<>();
 

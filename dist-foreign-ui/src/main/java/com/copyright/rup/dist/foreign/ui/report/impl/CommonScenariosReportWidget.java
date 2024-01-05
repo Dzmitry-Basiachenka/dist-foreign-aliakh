@@ -39,6 +39,7 @@ import java.util.stream.Collectors;
 public class CommonScenariosReportWidget extends Window
     implements ICommonScenariosReportWidget, SearchWidget.ISearchController {
 
+    private static final long serialVersionUID = -7281942894519453374L;
     private static final SerializableComparator<Scenario> SCENARIOS_COMPARATOR = (scenario1, scenario2) ->
         Comparator.comparing(Scenario::getName, String::compareToIgnoreCase).compare(scenario1, scenario2);
 

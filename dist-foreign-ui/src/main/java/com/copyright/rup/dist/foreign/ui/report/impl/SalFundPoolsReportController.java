@@ -26,6 +26,8 @@ import org.springframework.stereotype.Component;
 public class SalFundPoolsReportController extends CommonController<ISalFundPoolsReportWidget>
     implements ISalFundPoolsReportController {
 
+    private static final long serialVersionUID = -5467768478073288254L;
+
     @Autowired
     private IReportService reportService;
 
