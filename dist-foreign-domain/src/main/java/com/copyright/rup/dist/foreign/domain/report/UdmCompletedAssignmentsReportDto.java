@@ -17,6 +17,8 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  */
 public class UdmCompletedAssignmentsReportDto extends StoredEntity<String> {
 
+    private static final long serialVersionUID = -5972072264730368517L;
+
     private String userName;
     private int usagesCount;
     private int valuesCount;

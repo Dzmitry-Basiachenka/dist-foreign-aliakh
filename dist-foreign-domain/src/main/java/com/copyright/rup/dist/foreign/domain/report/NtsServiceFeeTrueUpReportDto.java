@@ -20,6 +20,8 @@ import java.math.BigDecimal;
  */
 public class NtsServiceFeeTrueUpReportDto extends StoredEntity<String> {
 
+    private static final long serialVersionUID = -9024083274855145121L;
+
     private BigDecimal batchGrossAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
     private BigDecimal preServiceFeeAmount = FdaConstants.DEFAULT_AMOUNT_SCALE_2;
     private BigDecimal preServiceFeeFunds = FdaConstants.DEFAULT_AMOUNT_SCALE_2;

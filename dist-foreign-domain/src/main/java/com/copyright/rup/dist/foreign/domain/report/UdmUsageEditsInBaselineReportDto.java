@@ -17,6 +17,8 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  */
 public class UdmUsageEditsInBaselineReportDto extends StoredEntity<String> {
 
+    private static final long serialVersionUID = -1019377321993347108L;
+
     private String usageId;
     private UsageActionTypeEnum actionType;
     private String actionReason;

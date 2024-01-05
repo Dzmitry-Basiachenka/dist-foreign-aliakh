@@ -17,6 +17,8 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  */
 public class UdmVerifiedDetailsBySourceReportDto extends StoredEntity<String> {
 
+    private static final long serialVersionUID = -4416093829927159276L;
+
     private Integer detailLicenseeClassId;
     private String detailLicenseeClassName;
     private Integer aggregateLicenseeClassId;

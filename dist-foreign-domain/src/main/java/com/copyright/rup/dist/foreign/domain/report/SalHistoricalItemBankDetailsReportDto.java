@@ -18,6 +18,8 @@ import java.time.LocalDate;
  */
 public class SalHistoricalItemBankDetailsReportDto extends StoredEntity<String> {
 
+    private static final long serialVersionUID = 1461789612399161523L;
+
     private String itemBankName;
     private LocalDate periodEndDate;
     private Long licenseeAccountNumber;

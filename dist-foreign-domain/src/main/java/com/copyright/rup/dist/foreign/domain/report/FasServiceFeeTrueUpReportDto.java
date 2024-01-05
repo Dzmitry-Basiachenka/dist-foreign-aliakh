@@ -21,6 +21,8 @@ import java.time.LocalDate;
  */
 public class FasServiceFeeTrueUpReportDto extends StoredEntity<String> {
 
+    private static final long serialVersionUID = 5858463130124974294L;
+
     private Long rroAccountNumber;
     private String rroName;
     private LocalDate paymentDate;

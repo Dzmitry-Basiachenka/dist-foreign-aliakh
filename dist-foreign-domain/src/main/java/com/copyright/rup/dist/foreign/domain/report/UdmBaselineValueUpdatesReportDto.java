@@ -18,6 +18,8 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  */
 public class UdmBaselineValueUpdatesReportDto extends StoredEntity<String> {
 
+    private static final long serialVersionUID = 4808643356850641526L;
+
     private String valueId;
     private UdmValueActionTypeEnum actionType;
     private String actionReason;

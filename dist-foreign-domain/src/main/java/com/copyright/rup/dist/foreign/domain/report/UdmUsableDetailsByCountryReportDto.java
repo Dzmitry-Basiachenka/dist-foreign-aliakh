@@ -17,6 +17,8 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  */
 public class UdmUsableDetailsByCountryReportDto extends StoredEntity<String> {
 
+    private static final long serialVersionUID = 800528229254022182L;
+
     private Integer period;
     private String channel;
     private String usageOrigin;

@@ -25,6 +25,8 @@ import java.util.stream.Collectors;
  */
 public class ScenarioUsageFilter extends StoredEntity<String> {
 
+    private static final long serialVersionUID = 4304899498074675738L;
+
     private String scenarioId;
     private Set<Long> rhAccountNumbers = new HashSet<>();
     private Set<UsageBatch> usageBatches = new HashSet<>();

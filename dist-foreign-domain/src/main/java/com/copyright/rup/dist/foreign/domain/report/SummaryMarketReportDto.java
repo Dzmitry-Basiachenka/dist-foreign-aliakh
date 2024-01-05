@@ -21,6 +21,8 @@ import java.time.LocalDate;
  */
 public class SummaryMarketReportDto extends StoredEntity<String> {
 
+    private static final long serialVersionUID = -740745273841610218L;
+
     private String batchName;
     private String rroName;
     private Long rroAccountNumber;

@@ -21,6 +21,8 @@ import java.time.LocalDate;
  */
 public class FasBatchSummaryReportDto extends StoredEntity<String> {
 
+    private static final long serialVersionUID = -2209304288938093178L;
+
     private String batchName;
     private String rroName;
     private Long rroAccountNumber;

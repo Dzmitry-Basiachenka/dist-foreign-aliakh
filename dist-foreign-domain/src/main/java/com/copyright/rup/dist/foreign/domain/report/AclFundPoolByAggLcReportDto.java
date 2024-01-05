@@ -19,6 +19,8 @@ import java.math.BigDecimal;
  */
 public class AclFundPoolByAggLcReportDto extends StoredEntity<String> {
 
+    private static final long serialVersionUID = 3785362500136424184L;
+
     private String fundPoolName;
     private String licenseType;
     private int period;

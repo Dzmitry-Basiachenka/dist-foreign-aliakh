@@ -21,6 +21,8 @@ import java.time.LocalDate;
  */
 public class ResearchStatusReportDto extends StoredEntity<String> {
 
+    private static final long serialVersionUID = -5797938549840470662L;
+
     private String batchName;
     private String rroName;
     private Long rroAccountNumber;
