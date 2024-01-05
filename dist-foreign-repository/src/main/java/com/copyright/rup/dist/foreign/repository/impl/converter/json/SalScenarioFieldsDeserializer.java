@@ -20,6 +20,7 @@ import java.io.IOException;
  */
 public class SalScenarioFieldsDeserializer extends CommonJsonFieldsDeserializer<SalFields> {
 
+    private static final long serialVersionUID = 7706328839793379219L;
     private static final String FUND_POOL_ID = "fund_pool_uid";
 
     /**

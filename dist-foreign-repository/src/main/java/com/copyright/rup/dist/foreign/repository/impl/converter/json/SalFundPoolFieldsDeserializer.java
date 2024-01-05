@@ -24,6 +24,7 @@ import java.io.IOException;
  */
 public class SalFundPoolFieldsDeserializer extends CommonJsonFieldsDeserializer<SalFields> {
 
+    private static final long serialVersionUID = 5092625239982320918L;
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
     /**

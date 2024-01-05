@@ -25,6 +25,7 @@ import java.util.List;
  */
 public class AaclScenarioFieldsDeserializer extends CommonJsonFieldsDeserializer<AaclFields> {
 
+    private static final long serialVersionUID = -8585512689637489777L;
     private static final String FUND_POOL_ID = "fund_pool_uid";
     private static final String PUBLICATION_TYPES = "publicationTypes";
     private static final String USAGE_AGES = "usageAges";

@@ -24,6 +24,7 @@ import java.io.IOException;
  */
 public class NtsScenarioFieldsDeserializer extends CommonJsonFieldsDeserializer<NtsFields> {
 
+    private static final long serialVersionUID = 8786773180858901895L;
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
     /**

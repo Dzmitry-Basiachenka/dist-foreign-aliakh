@@ -19,6 +19,8 @@ import java.io.IOException;
  */
 public class NtsBatchFieldsSerializer extends StdSerializer<NtsFields> {
 
+    private static final long serialVersionUID = -7699625406971570053L;
+
     /**
      * Default constructor.
      */

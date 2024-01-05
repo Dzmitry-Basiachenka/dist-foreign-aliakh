@@ -19,6 +19,8 @@ import java.io.IOException;
  */
 public class SalBatchFieldsSerializer extends StdSerializer<SalFields> {
 
+    private static final long serialVersionUID = 326385360807491588L;
+
     /**
      * Default constructor.
      */

@@ -20,6 +20,7 @@ import java.io.IOException;
  */
 public class SalBatchFieldsDeserializer extends CommonJsonFieldsDeserializer<SalFields> {
 
+    private static final long serialVersionUID = -3643565260739263742L;
     private static final String LICENSEE_ACCOUNT_NUMBER = "licensee_account_number";
     private static final String LICENSEE_NAME = "licensee_name";
 

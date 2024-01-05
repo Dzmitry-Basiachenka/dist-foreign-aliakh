@@ -19,6 +19,8 @@ import java.io.IOException;
  */
 public class AclciFundPoolFieldsSerializer extends StdSerializer<FundPool.AclciFields> {
 
+    private static final long serialVersionUID = 3034436079351355643L;
+
     /**
      * Default constructor.
      */

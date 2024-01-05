@@ -23,6 +23,8 @@ import java.util.Objects;
  */
 public abstract class CommonJsonFieldsDeserializer<T> extends StdDeserializer<T> {
 
+    private static final long serialVersionUID = -7376819371694590645L;
+
     /**
      * Constructor.
      *

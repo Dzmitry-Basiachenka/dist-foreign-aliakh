@@ -19,6 +19,8 @@ import java.io.IOException;
  */
 public class SalScenarioFieldsSerializer extends StdSerializer<SalFields> {
 
+    private static final long serialVersionUID = 6345837415696634943L;
+
     /**
      * Constructor.
      */

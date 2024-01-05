@@ -21,6 +21,8 @@ import java.time.format.DateTimeFormatter;
  */
 public class SalFundPoolFieldsSerializer extends StdSerializer<FundPool.SalFields> {
 
+    private static final long serialVersionUID = -5873321484417928291L;
+
     /**
      * Default constructor.
      */

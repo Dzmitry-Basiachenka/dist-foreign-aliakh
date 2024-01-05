@@ -27,6 +27,7 @@ import java.util.Set;
  */
 public class NtsBatchFieldsDeserializer extends CommonJsonFieldsDeserializer<NtsFields> {
 
+    private static final long serialVersionUID = 5297058521268135670L;
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
     /**

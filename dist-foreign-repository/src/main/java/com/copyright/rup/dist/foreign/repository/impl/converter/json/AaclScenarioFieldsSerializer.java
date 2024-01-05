@@ -23,6 +23,8 @@ import java.util.List;
  */
 public class AaclScenarioFieldsSerializer extends StdSerializer<AaclFields> {
 
+    private static final long serialVersionUID = 2309613724167900666L;
+
     /**
      * Constructor.
      */
