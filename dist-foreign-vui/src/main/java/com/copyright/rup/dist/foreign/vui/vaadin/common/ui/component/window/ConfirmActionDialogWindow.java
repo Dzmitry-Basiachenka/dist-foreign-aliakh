@@ -34,6 +34,8 @@ import java.util.function.Consumer;
 //TODO {vaadin23} check the ability to inherit from ConfirmDialogWindow
 public class ConfirmActionDialogWindow extends Dialog {
 
+    private static final long serialVersionUID = -5792848926766681285L;
+
     private final Consumer<String> action;
     private final Binder<String> binder = new Binder<>();
     private TextField reasonField;

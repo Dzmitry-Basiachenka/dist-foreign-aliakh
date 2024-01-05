@@ -22,6 +22,7 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class HeaderWidget extends HorizontalLayout {
 
+    private static final long serialVersionUID = -5799526500224853304L;
     private static final String COPYRIGHT_LOGO = "img/cccLogo.svg";
 
     /**

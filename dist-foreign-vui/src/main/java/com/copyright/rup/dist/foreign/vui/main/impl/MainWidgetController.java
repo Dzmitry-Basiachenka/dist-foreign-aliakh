@@ -28,6 +28,8 @@ import org.springframework.stereotype.Component;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class MainWidgetController extends TabController<IMainWidget> implements IMainWidgetController {
 
+    private static final long serialVersionUID = 1942785770570959518L;
+
     @Autowired
     private IProductFamilyProvider productFamilyProvider;
     @Autowired

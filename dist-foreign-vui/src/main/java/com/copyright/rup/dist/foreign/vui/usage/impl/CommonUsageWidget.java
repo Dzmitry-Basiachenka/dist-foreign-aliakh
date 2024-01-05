@@ -17,6 +17,8 @@ import com.vaadin.flow.component.splitlayout.SplitLayout;
  */
 public abstract class CommonUsageWidget extends SplitLayout implements ICommonUsageWidget {
 
+    private static final long serialVersionUID = 896352795557005012L;
+
     private ICommonUsageController controller;
 
     @Override

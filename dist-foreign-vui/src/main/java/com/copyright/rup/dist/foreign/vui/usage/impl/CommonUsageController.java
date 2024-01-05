@@ -24,6 +24,8 @@ import org.springframework.stereotype.Component;
 public abstract class CommonUsageController extends CommonController<ICommonUsageWidget>
     implements ICommonUsageController {
 
+    private static final long serialVersionUID = -7865816770301754381L;
+
     @Autowired
     private IUsageService usageService;
 

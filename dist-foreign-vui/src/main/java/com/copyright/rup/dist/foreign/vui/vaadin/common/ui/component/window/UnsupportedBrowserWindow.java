@@ -24,6 +24,8 @@ import java.util.Set;
  */
 public class UnsupportedBrowserWindow extends Dialog {
 
+    private static final long serialVersionUID = -4633021324239537256L;
+
     /**
      * Constructs widget.
      *

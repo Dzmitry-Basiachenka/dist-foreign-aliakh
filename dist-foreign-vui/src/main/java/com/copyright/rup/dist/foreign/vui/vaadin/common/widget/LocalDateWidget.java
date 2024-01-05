@@ -21,6 +21,8 @@ import java.util.Objects;
  */
 public class LocalDateWidget extends CustomField<LocalDate> {
 
+    private static final long serialVersionUID = -6692506401496134559L;
+
     private final DateWidget popupDateWidget = new DateWidget();
 
     /**

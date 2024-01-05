@@ -16,6 +16,8 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
  */
 public class FasUsageWidget extends CommonUsageWidget implements IFasUsageWidget {
 
+    private static final long serialVersionUID = 1643854281913653002L;
+
     @Override
     public FasUsageWidget init() {
         return this;

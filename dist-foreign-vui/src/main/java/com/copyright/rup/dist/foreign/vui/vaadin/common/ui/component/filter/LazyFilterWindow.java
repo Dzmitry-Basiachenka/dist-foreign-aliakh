@@ -33,6 +33,8 @@ import java.util.Set;
  */
 public class LazyFilterWindow<T> extends CommonFilterWindow<T> {
 
+    private static final long serialVersionUID = -3551911397094518841L;
+
     private final ILazyFilterWindowController<T> controller;
     private final SearchWidget searchWidget;
     private Grid<T> grid;

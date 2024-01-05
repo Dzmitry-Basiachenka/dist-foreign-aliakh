@@ -21,6 +21,8 @@ import org.springframework.stereotype.Component;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class FasUsageController extends CommonUsageController implements IFasUsageController {
 
+    private static final long serialVersionUID = -4661450280132153067L;
+
     @Override
     protected ICommonUsageWidget instantiateWidget() {
         return new FasUsageWidget();

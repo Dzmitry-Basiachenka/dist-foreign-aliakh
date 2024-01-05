@@ -25,6 +25,7 @@ import java.util.Objects;
  */
 public class CommonErrorHandler extends DefaultErrorHandler {
 
+    private static final long serialVersionUID = -1910981884092111300L;
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
     @Override

@@ -29,6 +29,8 @@ import java.time.LocalDate;
  */
 public class DateWidget extends HorizontalLayout {
 
+    private static final long serialVersionUID = 1482958776010451795L;
+
     private final DatePicker datePicker;
 
     /**

@@ -11,6 +11,8 @@ package com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.downloader
  */
 public class FileDownloadException extends RuntimeException {
 
+    private static final long serialVersionUID = 6116138145775031651L;
+
     /**
      * Constructor.
      *

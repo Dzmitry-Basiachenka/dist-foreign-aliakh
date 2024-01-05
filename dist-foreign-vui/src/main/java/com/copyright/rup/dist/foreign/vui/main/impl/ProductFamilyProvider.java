@@ -23,6 +23,8 @@ import java.util.concurrent.atomic.AtomicReference;
 @VaadinSessionScope
 public class ProductFamilyProvider implements IProductFamilyProvider, Serializable {
 
+    private static final long serialVersionUID = 1048349420836748697L;
+
     //TODO {vaadin23}  should be change to ACL after migration ACL PF
     private final AtomicReference<String> selectedProductFamilyHolder =
         new AtomicReference<>(FdaConstants.FAS_PRODUCT_FAMILY);

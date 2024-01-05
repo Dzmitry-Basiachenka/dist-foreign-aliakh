@@ -29,6 +29,8 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class ErrorWindow extends Dialog {
 
+    private static final long serialVersionUID = 4914906305223639303L;
+
     private final String message;
     private final String stackTrace;
 
@@ -120,6 +122,8 @@ public class ErrorWindow extends Dialog {
      * ClickListener for button, which allows hiding or showing stacktrace.
      */
     class DetailsButtonClickListener implements ComponentEventListener<ClickEvent<Button>> {
+
+        private static final long serialVersionUID = -6645356531789145850L;
 
         private final Button details;
         private final VerticalLayout stackTracePanel;

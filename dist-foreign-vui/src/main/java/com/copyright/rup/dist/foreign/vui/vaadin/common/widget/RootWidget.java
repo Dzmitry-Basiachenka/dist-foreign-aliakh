@@ -14,6 +14,8 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
  */
 public class RootWidget extends VerticalLayout {
 
+    private static final long serialVersionUID = -1198661048850890627L;
+
     /**
      * Constructor.
      *

@@ -16,6 +16,8 @@ import java.util.Objects;
  */
 public abstract class CommonController<T extends IWidget> implements IController<T> {
 
+    private static final long serialVersionUID = 4618417493519814254L;
+
     private T widget;
     private boolean widgetInitialized;
 

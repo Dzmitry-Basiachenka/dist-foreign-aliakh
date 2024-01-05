@@ -16,6 +16,8 @@ import com.vaadin.flow.component.dialog.Dialog;
  */
 public class CommonDialog extends Dialog {
 
+    private static final long serialVersionUID = 2584339011947788897L;
+
     /**
      * Sets modal window properties.
      *

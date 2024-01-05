@@ -23,6 +23,8 @@ import java.util.Objects;
  */
 public class SearchWidget extends HorizontalLayout {
 
+    private static final long serialVersionUID = 4255307363854603850L;
+
     private final TextField searchField = new TextField();
     private final ISearchController controller;
     private Button searchButton;
