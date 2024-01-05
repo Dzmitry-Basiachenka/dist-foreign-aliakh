@@ -37,6 +37,8 @@ import java.util.List;
 public abstract class AbstractViewUsageBatchWindow extends Window
     implements SearchWidget.ISearchController, IDateFormatter {
 
+    private static final long serialVersionUID = -963897423065702705L;
+
     private final SearchWidget searchWidget;
     private final ICommonUsageController controller;
     private Grid<UsageBatch> grid;

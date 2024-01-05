@@ -28,6 +28,8 @@ import java.util.function.Supplier;
 public class PublicationFormatFilterWidget extends BaseUdmItemsFilterWidget<String>
     implements IFilterWindowController<String> {
 
+    private static final long serialVersionUID = -680550639764882190L;
+
     private final Supplier<List<String>> supplier;
     private final Set<String> selectedItemsIds = new HashSet<>();
 

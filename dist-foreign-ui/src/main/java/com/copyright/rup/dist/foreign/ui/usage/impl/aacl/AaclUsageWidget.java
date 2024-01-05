@@ -218,6 +218,8 @@ public class AaclUsageWidget extends CommonUsageWidget implements IAaclUsageWidg
 
     private static class SendForClassificationFileDownloader extends OnDemandFileDownloader {
 
+        private static final long serialVersionUID = -1855906146723770253L;
+
         private final IAaclUsageController controller;
 
         /**

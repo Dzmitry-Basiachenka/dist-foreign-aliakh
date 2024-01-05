@@ -27,6 +27,8 @@ import java.util.List;
 public class UdmBatchStatusController extends CommonController<IUdmBatchStatusWidget>
     implements IUdmBatchStatusController {
 
+    private static final long serialVersionUID = -4786697883019745936L;
+
     @Autowired
     private IUsageBatchStatusService usageBatchStatusService;
 

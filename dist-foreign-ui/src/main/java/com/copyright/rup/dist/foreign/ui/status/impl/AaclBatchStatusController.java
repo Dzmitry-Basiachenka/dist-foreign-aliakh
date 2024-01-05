@@ -23,6 +23,8 @@ import java.util.List;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class AaclBatchStatusController extends CommonBatchStatusController implements IAaclBatchStatusController {
 
+    private static final long serialVersionUID = -6647817195661634746L;
+
     @Override
     public List<UsageBatchStatus> getBatchStatuses() {
         return getUsageBatchStatusService().getUsageBatchStatusesAacl();

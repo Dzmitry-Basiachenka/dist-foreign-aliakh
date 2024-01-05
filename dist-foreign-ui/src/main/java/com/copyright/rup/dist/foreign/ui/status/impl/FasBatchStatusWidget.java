@@ -14,6 +14,8 @@ import com.copyright.rup.dist.foreign.ui.status.api.IFasBatchStatusWidget;
  */
 public class FasBatchStatusWidget extends CommonBatchStatusWidget implements IFasBatchStatusWidget {
 
+    private static final long serialVersionUID = 6562944003794416364L;
+
     @Override
     protected void addColumns() {
         addColumn(UsageBatchStatus::getBatchName, "table.column.batch_name", "batchName", true);

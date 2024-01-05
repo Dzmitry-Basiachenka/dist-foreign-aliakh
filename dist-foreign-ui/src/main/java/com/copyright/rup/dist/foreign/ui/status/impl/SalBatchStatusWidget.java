@@ -14,6 +14,8 @@ import com.copyright.rup.dist.foreign.ui.status.api.ISalBatchStatusWidget;
  */
 public class SalBatchStatusWidget extends CommonBatchStatusWidget implements ISalBatchStatusWidget {
 
+    private static final long serialVersionUID = 5136145361472648311L;
+
     @Override
     protected void addColumns() {
         addColumn(UsageBatchStatus::getBatchName, "table.column.batch_name", "batchName", true);

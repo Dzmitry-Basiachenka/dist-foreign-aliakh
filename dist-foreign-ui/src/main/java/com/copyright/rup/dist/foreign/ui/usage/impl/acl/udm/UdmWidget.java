@@ -24,6 +24,8 @@ import java.util.function.Supplier;
  */
 public class UdmWidget extends TabSheet implements IUdmWidget {
 
+    private static final long serialVersionUID = -5149820206062150920L;
+
     private IUdmController udmController;
 
     @Override

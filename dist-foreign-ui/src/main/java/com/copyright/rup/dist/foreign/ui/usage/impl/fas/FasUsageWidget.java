@@ -172,6 +172,8 @@ public class FasUsageWidget extends CommonUsageWidget implements IFasUsageWidget
 
     private static class SendForResearchFileDownloader extends OnDemandFileDownloader {
 
+        private static final long serialVersionUID = 6867695144256161791L;
+
         private final IFasUsageController controller;
 
         /**

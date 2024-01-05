@@ -23,6 +23,8 @@ import java.util.List;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class SalBatchStatusController extends CommonBatchStatusController implements ISalBatchStatusController {
 
+    private static final long serialVersionUID = 9210068253550654679L;
+
     @Override
     public List<UsageBatchStatus> getBatchStatuses() {
         return getUsageBatchStatusService().getUsageBatchStatusesSal();

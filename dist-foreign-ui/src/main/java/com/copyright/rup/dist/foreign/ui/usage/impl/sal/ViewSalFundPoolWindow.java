@@ -39,6 +39,7 @@ import java.util.Objects;
  */
 public class ViewSalFundPoolWindow extends Window implements SearchWidget.ISearchController, IDateFormatter {
 
+    private static final long serialVersionUID = -426255196803507625L;
     private static final int SCALE_1 = 1;
 
     private final SearchWidget searchWidget;

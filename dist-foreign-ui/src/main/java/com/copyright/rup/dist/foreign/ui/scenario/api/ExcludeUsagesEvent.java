@@ -14,6 +14,8 @@ import com.vaadin.ui.Component.Event;
  */
 public class ExcludeUsagesEvent extends Event {
 
+    private static final long serialVersionUID = -3160141471638653949L;
+
     /**
      * Constructs a new event with the specified source component.
      *

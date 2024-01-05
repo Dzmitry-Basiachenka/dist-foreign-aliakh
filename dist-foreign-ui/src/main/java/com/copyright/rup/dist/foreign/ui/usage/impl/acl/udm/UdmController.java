@@ -28,6 +28,8 @@ import org.springframework.stereotype.Component;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class UdmController extends CommonController<IUdmWidget> implements IUdmController {
 
+    private static final long serialVersionUID = 7640205029167826104L;
+
     @Autowired
     private IUdmUsageController udmUsageController;
     @Autowired

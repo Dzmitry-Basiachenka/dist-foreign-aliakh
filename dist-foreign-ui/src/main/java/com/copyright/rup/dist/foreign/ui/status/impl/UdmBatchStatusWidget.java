@@ -27,6 +27,7 @@ import java.util.List;
  */
 public class UdmBatchStatusWidget extends VerticalLayout implements IUdmBatchStatusWidget {
 
+    private static final long serialVersionUID = -5803338747966920198L;
     private static final String EMPTY_STYLE_NAME = "empty-batch-status-grid";
 
     private Grid<UsageBatchStatus> batchStatusGrid;

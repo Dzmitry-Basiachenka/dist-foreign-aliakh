@@ -30,6 +30,8 @@ import java.util.function.Supplier;
 public class AclGrantSetFilterWidget extends BaseItemsFilterWidget<AclGrantSet>
     implements IFilterWindowController<AclGrantSet> {
 
+    private static final long serialVersionUID = -4540434102477359005L;
+
     private final Supplier<List<AclGrantSet>> supplier;
     private final Set<AclGrantSet> selectedItemsIds = new HashSet<>();
 

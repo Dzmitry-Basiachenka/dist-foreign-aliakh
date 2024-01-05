@@ -36,6 +36,7 @@ import java.util.function.Function;
  */
 public abstract class CommonUsageWidget extends HorizontalSplitPanel implements ICommonUsageWidget {
 
+    private static final long serialVersionUID = 6521223260066415297L;
     private static final String EMPTY_STYLE_NAME = "empty-usages-grid";
 
     private ICommonUsageController controller;

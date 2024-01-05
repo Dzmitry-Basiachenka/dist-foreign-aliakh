@@ -42,6 +42,8 @@ import java.util.List;
 public abstract class CommonUsageController extends CommonController<ICommonUsageWidget>
     implements ICommonUsageController {
 
+    private static final long serialVersionUID = 8776033166851131516L;
+
     @Autowired
     private IUsageBatchService usageBatchService;
     @Autowired

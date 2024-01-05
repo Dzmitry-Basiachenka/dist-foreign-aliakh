@@ -28,6 +28,8 @@ import java.util.function.Supplier;
 public class PeriodFilterWidget extends BaseUdmItemsFilterWidget<Integer>
     implements IFilterWindowController<Integer> {
 
+    private static final long serialVersionUID = 6881093816614919184L;
+
     private final Supplier<List<Integer>> supplier;
     private final Set<Integer> periods = new HashSet<>();
 
