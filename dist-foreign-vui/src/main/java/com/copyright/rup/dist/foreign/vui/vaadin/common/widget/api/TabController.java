@@ -18,6 +18,8 @@ import java.util.stream.Collectors;
  */
 public abstract class TabController<T extends IWidget> extends CommonController<T> {
 
+    private static final long serialVersionUID = -3036393362820122446L;
+
     /**
      * Refreshes currently selected tab if it is an instance of {@link IRefreshable}.
      */

@@ -25,6 +25,8 @@ import org.apache.commons.lang3.StringUtils;
  */
 public final class NotificationWindow extends CommonDialog {
 
+    private static final long serialVersionUID = 4863532500716854085L;
+
     /**
      * Constructs new notification window with given message.
      * If message is blank or empty - {@link IllegalArgumentException} will be thrown.

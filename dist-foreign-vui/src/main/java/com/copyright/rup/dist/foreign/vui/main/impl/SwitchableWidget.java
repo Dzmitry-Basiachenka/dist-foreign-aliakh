@@ -25,6 +25,8 @@ import java.util.stream.Collectors;
  */
 class SwitchableWidget<W extends IWidget<C>, C extends IController<W>> extends Section implements IRefreshable {
 
+    private static final long serialVersionUID = 171888250885295354L;
+
     private final IControllerProvider<C> controllerProvider;
     private final Consumer<W> listenerRegisterer;
 

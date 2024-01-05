@@ -41,6 +41,8 @@ import java.util.Set;
  */
 public class FilterWindow<T> extends CommonFilterWindow<T> {
 
+    private static final long serialVersionUID = -5049143488372574216L;
+
     private final IFilterWindowController<T> controller;
     private final Collection<T> filterItems;
     private CheckboxGroup<T> checkBoxGroup;

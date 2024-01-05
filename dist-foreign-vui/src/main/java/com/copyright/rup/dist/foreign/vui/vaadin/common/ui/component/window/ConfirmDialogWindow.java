@@ -25,6 +25,8 @@ import org.apache.commons.lang3.StringUtils;
  */
 public final class ConfirmDialogWindow extends Dialog {
 
+    private static final long serialVersionUID = 2469268903333756266L;
+
     private final IConfirmCancelListener listener;
     private final Button confirmButton;
     private final Button declineButton;

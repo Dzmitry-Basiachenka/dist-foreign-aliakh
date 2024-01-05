@@ -31,6 +31,8 @@ import com.vaadin.flow.component.tabs.TabSheetVariant;
  */
 public class MainWidget extends TabSheet implements IMainWidget, IMediatorProvider {
 
+    private static final long serialVersionUID = 2631811534809187222L;
+
     private IMainWidgetController controller;
     private Select<String> productFamilySelect = new Select<>(ForeignUi.getMessage("label.product_family"));
 

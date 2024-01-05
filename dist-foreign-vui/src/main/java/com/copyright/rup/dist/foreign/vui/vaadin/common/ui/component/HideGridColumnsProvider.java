@@ -106,6 +106,8 @@ public class HideGridColumnsProvider<T> {
      */
     static class HideColumnsContextMenu<T> extends ContextMenu {
 
+        private static final long serialVersionUID = -3824296304264715526L;
+
         /**
          * Constructor.
          *

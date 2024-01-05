@@ -21,6 +21,8 @@ import java.util.Set;
  */
 public class CommonFilterWindow<T> extends CommonDialog {
 
+    private static final long serialVersionUID = -6486755477136957336L;
+
     /**
      * Constructor.
      *
@@ -43,6 +45,8 @@ public class CommonFilterWindow<T> extends CommonDialog {
      * An event that occurs when user clicks 'Save' button on filter window.
      */
     public static class FilterSaveEvent<T> extends ComponentEvent<Dialog> {
+
+        private static final long serialVersionUID = -5899327809956259843L;
 
         private final Set<T> selectedItemsIds;
 

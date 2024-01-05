@@ -44,6 +44,7 @@ import java.util.ResourceBundle;
 public class ForeignUi extends AppLayout implements AppShellConfigurator, ICommonUi,
     IMessageSource {
 
+    private static final long serialVersionUID = -2562773459192866252L;
     private static final ResourceBundle MESSAGES =
         ResourceBundle.getBundle("com.copyright.rup.dist.foreign.vui.messages");
     private static final Logger LOGGER = RupLogUtils.getLogger();

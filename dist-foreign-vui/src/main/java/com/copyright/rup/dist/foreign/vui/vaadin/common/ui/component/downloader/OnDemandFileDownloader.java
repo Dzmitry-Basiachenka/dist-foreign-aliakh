@@ -19,6 +19,8 @@ import java.util.function.Supplier;
  */
 public class OnDemandFileDownloader extends Anchor {
 
+    private static final long serialVersionUID = 3737454227274730384L;
+
     /**
      * Default constructor.
      */

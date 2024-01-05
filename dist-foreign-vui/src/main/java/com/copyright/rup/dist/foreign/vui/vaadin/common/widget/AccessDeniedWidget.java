@@ -17,6 +17,8 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
  */
 public final class AccessDeniedWidget extends VerticalLayout {
 
+    private static final long serialVersionUID = 3178420604643165026L;
+
     /**
      * Constructor.
      */

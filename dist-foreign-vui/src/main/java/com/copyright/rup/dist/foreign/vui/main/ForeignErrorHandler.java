@@ -23,6 +23,8 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
  */
 public class ForeignErrorHandler extends CommonErrorHandler {
 
+    private static final long serialVersionUID = 5378941347982266961L;
+
     private final IMessageSource messageSource;
 
     /**

@@ -31,6 +31,8 @@ import java.util.Objects;
  */
 public abstract class BaseItemsFilterWidget<T> extends HorizontalLayout {
 
+    private static final long serialVersionUID = -6998002724565034576L;
+
     private IFilterSaveListener<T> saveListener;
     private Html label;
     private Button button;
