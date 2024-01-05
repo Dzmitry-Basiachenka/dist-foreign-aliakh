@@ -27,6 +27,8 @@ import com.vaadin.ui.VerticalLayout;
  */
 public class FasScenarioWidget extends CommonScenarioWidget implements IFasScenarioWidget {
 
+    private static final long serialVersionUID = -4351529966457448454L;
+
     private final IFasScenarioController scenarioController;
     private Button exportDetailsButton;
     private Button exportButton;

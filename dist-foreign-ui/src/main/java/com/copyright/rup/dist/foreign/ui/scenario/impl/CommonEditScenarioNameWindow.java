@@ -30,7 +30,9 @@ import java.util.Set;
  */
 public abstract class CommonEditScenarioNameWindow extends Window {
 
+    private static final long serialVersionUID = 2640928797386096029L;
     private static final int MAX_LENGTH = 50;
+
     private final Binder<String> binder = new Binder<>();
     private TextField scenarioNameField;
 

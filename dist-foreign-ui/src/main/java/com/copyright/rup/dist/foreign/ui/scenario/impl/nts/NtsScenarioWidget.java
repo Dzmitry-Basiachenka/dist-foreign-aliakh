@@ -27,6 +27,8 @@ import com.vaadin.ui.VerticalLayout;
  */
 public class NtsScenarioWidget extends CommonScenarioWidget implements INtsScenarioWidget {
 
+    private static final long serialVersionUID = 5238463217370047408L;
+
     private final INtsScenarioController scenarioController;
     private Button exportDetailsButton;
     private Button exportButton;

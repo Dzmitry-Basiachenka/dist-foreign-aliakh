@@ -33,6 +33,8 @@ import java.util.List;
 public class FasDrillDownByRightsholderController extends CommonDrillDownByRightsholderController
     implements IFasDrillDownByRightsholderController {
 
+    private static final long serialVersionUID = 3393274374756024792L;
+
     @Autowired
     private IUsageService usageService;
 

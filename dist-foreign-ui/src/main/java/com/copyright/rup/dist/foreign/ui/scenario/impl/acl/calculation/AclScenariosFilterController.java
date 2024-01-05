@@ -26,6 +26,8 @@ import java.util.List;
 public class AclScenariosFilterController extends CommonController<IAclScenariosFilterWidget>
     implements IAclScenariosFilterController {
 
+    private static final long serialVersionUID = -8497831244807841397L;
+
     @Autowired
     private IAclScenarioService scenarioService;
 

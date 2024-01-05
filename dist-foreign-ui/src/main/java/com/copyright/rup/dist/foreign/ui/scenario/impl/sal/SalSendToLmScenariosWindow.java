@@ -17,6 +17,8 @@ import java.util.Set;
  */
 public class SalSendToLmScenariosWindow extends SalPerformScenariosActionsCommonWindow {
 
+    private static final long serialVersionUID = -4130051824872776380L;
+
     private final ISalScenariosController controller;
 
     /**

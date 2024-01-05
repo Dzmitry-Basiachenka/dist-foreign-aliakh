@@ -41,6 +41,7 @@ import java.util.stream.Collectors;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class NtsScenariosController extends CommonScenariosController implements INtsScenariosController {
 
+    private static final long serialVersionUID = 8473036207569391131L;
     private static final String LIST_SEPARATOR = ", ";
 
     @Autowired

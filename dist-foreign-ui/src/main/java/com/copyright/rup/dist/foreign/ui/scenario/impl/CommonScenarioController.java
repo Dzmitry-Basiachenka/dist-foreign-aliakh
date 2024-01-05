@@ -36,6 +36,8 @@ import java.util.List;
 public abstract class CommonScenarioController extends CommonController<ICommonScenarioWidget>
     implements ICommonScenarioController {
 
+    private static final long serialVersionUID = 5857000239462224435L;
+
     private Scenario scenario;
 
     @Autowired

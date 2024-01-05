@@ -19,6 +19,8 @@ import com.vaadin.ui.HorizontalLayout;
 public class AclScenarioDetailsByRightsholderWidget extends AclCommonScenarioDetailsWidget
     implements IAclScenarioDetailsByRightsholderWidget {
 
+    private static final long serialVersionUID = 2158602411331655317L;
+
     @Override
     protected String getSearchPrompt() {
         return ForeignUi.getMessage("field.prompt.acl_scenario_details_by_rightsholder.search_widget");

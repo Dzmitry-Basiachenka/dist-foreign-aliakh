@@ -33,6 +33,8 @@ import java.util.List;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class FasScenarioController extends CommonScenarioController implements IFasScenarioController {
 
+    private static final long serialVersionUID = -5765806659495251970L;
+
     @Autowired
     private IFasDrillDownByRightsholderController drillDownByRightsholderController;
     @Autowired

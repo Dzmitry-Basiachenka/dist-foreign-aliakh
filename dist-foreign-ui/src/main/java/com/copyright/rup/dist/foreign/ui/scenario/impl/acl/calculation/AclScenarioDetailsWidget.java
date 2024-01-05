@@ -21,6 +21,8 @@ import com.vaadin.ui.HorizontalLayout;
  */
 public class AclScenarioDetailsWidget extends AclCommonScenarioDetailsWidget implements IAclScenarioDetailsWidget {
 
+    private static final long serialVersionUID = -4632027398055818539L;
+
     private final IAclScenarioDetailsController controller;
 
     /**

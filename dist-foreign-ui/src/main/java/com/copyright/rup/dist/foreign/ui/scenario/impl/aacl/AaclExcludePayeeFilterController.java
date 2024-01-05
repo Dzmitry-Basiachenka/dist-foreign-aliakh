@@ -22,6 +22,8 @@ import org.springframework.stereotype.Component;
 public class AaclExcludePayeeFilterController extends CommonController<IAaclExcludePayeeFilterWidget>
     implements IAaclExcludePayeeFilterController {
 
+    private static final long serialVersionUID = -7280002847103913180L;
+
     @Override
     protected IAaclExcludePayeeFilterWidget instantiateWidget() {
         return new AaclExcludePayeeFilterWidget();

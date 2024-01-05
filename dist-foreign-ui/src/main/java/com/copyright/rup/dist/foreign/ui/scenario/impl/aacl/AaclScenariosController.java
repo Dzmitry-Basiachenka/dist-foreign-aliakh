@@ -44,6 +44,7 @@ import java.util.stream.Collectors;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class AaclScenariosController extends CommonScenariosController implements IAaclScenariosController {
 
+    private static final long serialVersionUID = 7102900146214269366L;
     private static final String LIST_SEPARATOR = ", ";
 
     @Autowired

@@ -38,6 +38,7 @@ import java.util.Set;
  */
 public abstract class SalPerformScenariosActionsCommonWindow extends Window implements SearchWidget.ISearchController {
 
+    private static final long serialVersionUID = 47135999302560204L;
     private static final SerializableComparator<Scenario> SCENARIOS_COMPARATOR = (scenario1, scenario2) ->
         Comparator.comparing(Scenario::getName, String::compareToIgnoreCase).compare(scenario1, scenario2);
 

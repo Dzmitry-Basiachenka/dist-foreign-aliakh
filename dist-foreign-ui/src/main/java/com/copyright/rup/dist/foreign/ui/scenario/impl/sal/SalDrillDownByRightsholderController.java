@@ -33,6 +33,9 @@ import java.util.List;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class SalDrillDownByRightsholderController extends CommonDrillDownByRightsholderController implements
     ISalDrillDownByRightsholderController {
+
+    private static final long serialVersionUID = -3256976897390493543L;
+
     @Autowired
     private ISalUsageService usageService;
 

@@ -27,6 +27,8 @@ import java.io.PipedOutputStream;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class SalScenarioController extends CommonScenarioController implements ISalScenarioController {
 
+    private static final long serialVersionUID = 4763053341116713554L;
+
     @Autowired
     private ISalDrillDownByRightsholderController drillDownByRightsholderController;
 

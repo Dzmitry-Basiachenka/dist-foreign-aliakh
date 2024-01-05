@@ -40,6 +40,8 @@ import java.util.Objects;
 public class AclScenarioDetailsController extends AclCommonScenarioDetailsController
     implements IAclScenarioDetailsController {
 
+    private static final long serialVersionUID = -1016614485648987109L;
+
     @Autowired
     private IAclScenarioUsageService aclScenarioUsageService;
     @Autowired

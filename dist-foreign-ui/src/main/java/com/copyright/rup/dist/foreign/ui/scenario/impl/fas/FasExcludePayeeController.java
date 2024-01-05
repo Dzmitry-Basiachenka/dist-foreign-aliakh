@@ -34,6 +34,8 @@ import java.util.Set;
 public class FasExcludePayeeController extends CommonController<IFasExcludePayeeWidget>
     implements IFasExcludePayeeController {
 
+    private static final long serialVersionUID = 8540434712859534695L;
+
     @Autowired
     private IUsageService usageService;
     @Autowired

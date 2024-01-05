@@ -51,6 +51,7 @@ import java.util.stream.Collectors;
  */
 public class FasExcludePayeeWidget extends Window implements IFasExcludePayeeWidget {
 
+    private static final long serialVersionUID = -7110342271534547788L;
     private static final String STYLE_ALIGN_RIGHT = "v-align-right";
 
     private SearchWidget searchWidget;

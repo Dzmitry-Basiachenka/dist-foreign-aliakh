@@ -51,6 +51,7 @@ import javax.annotation.PostConstruct;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class SalScenariosController extends CommonScenariosController implements ISalScenariosController {
 
+    private static final long serialVersionUID = 2452013940957834227L;
     private static final String LIST_SEPARATOR = ", ";
     private static final String SCENARIO_NAMES_LIST_SEPARATOR = "<br><li>";
     private Map<ScenarioActionTypeEnum, ISalScenarioActionHandler> actionHandlers;

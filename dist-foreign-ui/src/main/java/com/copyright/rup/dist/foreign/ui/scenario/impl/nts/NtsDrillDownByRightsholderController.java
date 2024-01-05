@@ -33,6 +33,8 @@ import java.util.List;
 public class NtsDrillDownByRightsholderController extends CommonDrillDownByRightsholderController
     implements INtsDrillDownByRightsholderController {
 
+    private static final long serialVersionUID = 152373475503491541L;
+
     @Autowired
     private IUsageService usageService;
 

@@ -32,6 +32,8 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class FasScenariosWidget extends CommonScenariosWidget implements IFasScenariosWidget {
 
+    private static final long serialVersionUID = 4177511252740766591L;
+
     private final Button viewButton = Buttons.createButton(ForeignUi.getMessage("button.view"));
     private final Button editNameButton = Buttons.createButton(ForeignUi.getMessage("button.edit_name"));
     private final Button deleteButton = Buttons.createButton(ForeignUi.getMessage("button.delete"));
