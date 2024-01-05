@@ -24,6 +24,7 @@ import java.io.IOException;
  */
 public class AclciFundPoolFieldsDeserializer extends CommonJsonFieldsDeserializer<AclciFields> {
 
+    private static final long serialVersionUID = -8620992041205623349L;
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
     /**

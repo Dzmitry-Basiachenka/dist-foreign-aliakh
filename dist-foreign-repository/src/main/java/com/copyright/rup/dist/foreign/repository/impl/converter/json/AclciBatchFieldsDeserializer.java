@@ -20,6 +20,7 @@ import java.io.IOException;
  */
 public class AclciBatchFieldsDeserializer extends CommonJsonFieldsDeserializer<AclciFields> {
 
+    private static final long serialVersionUID = 340469983819507553L;
     private static final String LICENSEE_ACCOUNT_NUMBER = "licensee_account_number";
     private static final String LICENSEE_NAME = "licensee_name";
 

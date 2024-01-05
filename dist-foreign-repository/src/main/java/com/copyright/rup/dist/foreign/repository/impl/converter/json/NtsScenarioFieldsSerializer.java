@@ -19,6 +19,8 @@ import java.io.IOException;
  */
 public class NtsScenarioFieldsSerializer extends StdSerializer<NtsFields> {
 
+    private static final long serialVersionUID = 4839520822338035649L;
+
     /**
      * Constructor.
      */

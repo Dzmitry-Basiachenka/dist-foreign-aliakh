@@ -18,6 +18,8 @@ import java.io.IOException;
  */
 public class AclciBatchFieldsSerializer extends StdSerializer<AclciFields> {
 
+    private static final long serialVersionUID = 6068493155990937791L;
+
     /**
      * Default constructor.
      */
