@@ -33,6 +33,8 @@ import java.util.Set;
 public class SalLiabilitiesByRhReportController extends CommonController<ICommonScenariosReportWidget>
     implements ICommonScenariosReportController {
 
+    private static final long serialVersionUID = 2810741201795937978L;
+
     @Autowired
     private IScenarioService scenarioService;
     @Autowired

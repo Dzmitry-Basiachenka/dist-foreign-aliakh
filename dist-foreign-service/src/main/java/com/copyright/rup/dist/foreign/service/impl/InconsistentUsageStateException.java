@@ -15,6 +15,8 @@ import com.copyright.rup.dist.foreign.domain.Usage;
  */
 public class InconsistentUsageStateException extends RupRuntimeException {
 
+    private static final long serialVersionUID = 1722825530300632728L;
+
     /**
      * Constructor.
      *

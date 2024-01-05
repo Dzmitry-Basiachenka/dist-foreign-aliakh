@@ -24,6 +24,8 @@ import org.springframework.stereotype.Component;
 public abstract class UdmCommonUserNamesReportController extends CommonController<IUdmCommonUserNamesReportWidget>
     implements IUdmCommonUserNamesReportController {
 
+    private static final long serialVersionUID = -1016725386985315660L;
+
     @Autowired
     private IUdmReportService udmReportService;
 

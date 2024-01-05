@@ -24,6 +24,8 @@ import org.springframework.stereotype.Component;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class AclComparisonByAggLcClassAndTitleReportController extends AclCommonReportController {
 
+    private static final long serialVersionUID = -7918063164695445414L;
+
     @Autowired
     private IAclCalculationReportService reportService;
 

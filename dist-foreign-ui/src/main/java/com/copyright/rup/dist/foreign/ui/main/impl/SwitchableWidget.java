@@ -24,6 +24,8 @@ import java.util.function.Consumer;
  */
 class SwitchableWidget<W extends IWidget<C>, C extends IController<W>> extends Panel implements IRefreshable {
 
+    private static final long serialVersionUID = 49717909478005586L;
+
     private final IControllerProvider<C> controllerProvider;
     private final Consumer<W> listenerRegisterer;
 

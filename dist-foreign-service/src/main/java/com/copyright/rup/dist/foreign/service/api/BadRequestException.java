@@ -13,6 +13,8 @@ import com.copyright.rup.common.exception.RupRuntimeException;
  */
 public class BadRequestException extends RupRuntimeException {
 
+    private static final long serialVersionUID = 7630313456695843929L;
+
     /**
      * Constructor.
      *

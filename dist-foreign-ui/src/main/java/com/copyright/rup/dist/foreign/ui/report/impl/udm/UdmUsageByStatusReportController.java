@@ -29,6 +29,8 @@ import java.util.List;
 public class UdmUsageByStatusReportController extends CommonController<IUdmCommonStatusReportWidget>
     implements IUdmUsagesByStatusReportController {
 
+    private static final long serialVersionUID = -8288571346928521613L;
+
     @Autowired
     private IUdmUsageService udmUsageService;
     @Autowired

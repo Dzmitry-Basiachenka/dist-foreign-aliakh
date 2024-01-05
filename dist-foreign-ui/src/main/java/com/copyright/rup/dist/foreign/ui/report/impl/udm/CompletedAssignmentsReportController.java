@@ -25,6 +25,8 @@ import java.util.List;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class CompletedAssignmentsReportController extends UdmCommonUserNamesReportController {
 
+    private static final long serialVersionUID = -6553265373250759878L;
+
     @Autowired
     private IUdmUsageService udmUsageService;
 

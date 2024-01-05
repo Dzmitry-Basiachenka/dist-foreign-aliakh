@@ -27,6 +27,8 @@ import com.vaadin.ui.Window;
  */
 public class UdmCommonStatusReportWidget extends Window implements IUdmCommonStatusReportWidget {
 
+    private static final long serialVersionUID = 2610641501942218862L;
+
     private final Button exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
     private final ComboBox<Integer> periodComboBox = new ComboBox<>(ForeignUi.getMessage("label.period"));
     private IUdmCommonStatusReportController controller;

@@ -38,6 +38,8 @@ import java.util.List;
  */
 public class SummaryMarketReportWidget extends Window implements ISummaryMarketReportWidget {
 
+    private static final long serialVersionUID = -5455990222491417006L;
+
     private ISummaryMarketReportController controller;
     private List<UsageBatch> batches;
     private CheckBoxGroup<UsageBatch> checkBoxGroup;

@@ -30,6 +30,8 @@ import java.util.function.Supplier;
 public class AclScenarioFilterWidget extends BaseItemsFilterWidget<AclScenario>
     implements IFilterWindowController<AclScenario> {
 
+    private static final long serialVersionUID = 4861949738674041432L;
+
     private final Supplier<List<AclScenario>> supplier;
     private final Set<AclScenario> scenarios = new HashSet<>();
     private final String widgetCaptionLabelName;

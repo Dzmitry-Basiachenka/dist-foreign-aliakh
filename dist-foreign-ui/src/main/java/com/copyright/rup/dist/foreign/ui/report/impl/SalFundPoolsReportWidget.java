@@ -34,6 +34,7 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class SalFundPoolsReportWidget extends Window implements ISalFundPoolsReportWidget {
 
+    private static final long serialVersionUID = -2521644370941073892L;
     private static final int MIN_YEAR = 1950;
     private static final int MAX_YEAR = 2099;
 

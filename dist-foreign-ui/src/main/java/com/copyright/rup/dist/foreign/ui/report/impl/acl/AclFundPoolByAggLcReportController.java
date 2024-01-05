@@ -31,6 +31,8 @@ import java.util.Set;
 public class AclFundPoolByAggLcReportController extends CommonController<IAclFundPoolByAggLcReportWidget>
     implements IAclFundPoolByAggLcReportController {
 
+    private static final long serialVersionUID = 6759390375818568194L;
+
     @Autowired
     private IAclCalculationReportService reportService;
 

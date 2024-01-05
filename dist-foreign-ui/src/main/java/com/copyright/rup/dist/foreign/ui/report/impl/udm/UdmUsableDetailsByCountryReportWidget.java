@@ -36,6 +36,8 @@ import java.util.Set;
  */
 public class UdmUsableDetailsByCountryReportWidget extends Window implements IUdmUsableDetailsByCountryReportWidget {
 
+    private static final long serialVersionUID = 5999026015198685400L;
+
     private IUdmUsableDetailsByCountryReportController controller;
     private PeriodFilterWidget periodFilterWidget;
     private LocalDateWidget dateFromWidget;

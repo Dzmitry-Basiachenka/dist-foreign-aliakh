@@ -29,6 +29,8 @@ import com.vaadin.ui.Window;
  */
 public class CommonScenarioReportWidget extends Window implements ICommonScenarioReportWidget {
 
+    private static final long serialVersionUID = 1779334293021201886L;
+
     private ICommonScenarioReportController controller;
     private ComboBox<Scenario> scenarioComboBox;
     private Button exportButton;

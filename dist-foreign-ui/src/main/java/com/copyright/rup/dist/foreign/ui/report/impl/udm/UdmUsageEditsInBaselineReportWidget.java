@@ -36,6 +36,8 @@ import java.util.Set;
  */
 public class UdmUsageEditsInBaselineReportWidget extends Window implements IUdmUsageEditsInBaselineReportWidget {
 
+    private static final long serialVersionUID = 5636120406770509699L;
+
     private IUdmUsageEditsInBaselineReportController controller;
     private PeriodFilterWidget periodFilterWidget;
     private LocalDateWidget dateFromWidget;

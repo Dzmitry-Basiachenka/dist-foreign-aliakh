@@ -28,6 +28,8 @@ import com.vaadin.ui.Window;
  */
 public class ReportWidget extends MenuBar implements IReportWidget {
 
+    private static final long serialVersionUID = 6710773464631535911L;
+
     private IReportController controller;
 
     @Override

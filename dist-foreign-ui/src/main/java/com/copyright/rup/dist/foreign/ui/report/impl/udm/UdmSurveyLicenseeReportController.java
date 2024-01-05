@@ -25,6 +25,8 @@ import org.springframework.stereotype.Component;
 public class UdmSurveyLicenseeReportController extends UdmCommonReportController
     implements IUdmSurveyLicenseeReportController {
 
+    private static final long serialVersionUID = -9185384109673447105L;
+
     @Autowired
     private IUdmReportService udmReportService;
 

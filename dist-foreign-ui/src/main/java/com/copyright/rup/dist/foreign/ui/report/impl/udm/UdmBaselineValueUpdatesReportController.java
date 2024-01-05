@@ -26,6 +26,8 @@ import java.util.List;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class UdmBaselineValueUpdatesReportController extends UdmCommonUserNamesReportController {
 
+    private static final long serialVersionUID = 3936436708507290908L;
+
     @Autowired
     private IUdmValueService udmValueService;
     @Autowired

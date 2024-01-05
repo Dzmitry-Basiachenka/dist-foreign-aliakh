@@ -13,6 +13,8 @@ import com.copyright.rup.common.exception.RupRuntimeException;
  */
 public class NotFoundException extends RupRuntimeException {
 
+    private static final long serialVersionUID = -8717717292340527872L;
+
     /**
      * Constructor.
      *

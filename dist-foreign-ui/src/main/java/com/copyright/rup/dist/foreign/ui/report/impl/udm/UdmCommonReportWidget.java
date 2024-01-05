@@ -41,6 +41,8 @@ import java.util.Set;
  */
 public class UdmCommonReportWidget extends Window implements IUdmCommonReportWidget {
 
+    private static final long serialVersionUID = 3069379897645882293L;
+
     private IUdmCommonReportController controller;
     private ComboBox<UdmChannelEnum> channelComboBox;
     private ComboBox<UdmUsageOriginEnum> usageOriginComboBox;

@@ -34,6 +34,7 @@ import java.util.Set;
 public class OwnershipAdjustmentReportController extends CommonController<ICommonScenarioReportWidget>
     implements ICommonScenarioReportController {
 
+    private static final long serialVersionUID = 7863264680449413367L;
     private static final Set<RightsholderDiscrepancyStatusEnum> REPORT_STATUSES =
         ImmutableSet.of(RightsholderDiscrepancyStatusEnum.DRAFT, RightsholderDiscrepancyStatusEnum.APPROVED);
 

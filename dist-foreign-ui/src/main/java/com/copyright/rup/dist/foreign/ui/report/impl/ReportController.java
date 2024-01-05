@@ -36,6 +36,8 @@ import org.springframework.stereotype.Component;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class ReportController extends CommonController<IReportWidget> implements IReportController {
 
+    private static final long serialVersionUID = -395767068632612665L;
+
     @Autowired
     private IUndistributedLiabilitiesReportController undistributedLiabilitiesReportController;
     @Autowired

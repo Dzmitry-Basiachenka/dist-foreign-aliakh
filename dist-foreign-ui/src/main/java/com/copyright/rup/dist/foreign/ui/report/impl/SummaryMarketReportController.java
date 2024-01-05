@@ -31,6 +31,8 @@ import java.util.List;
 public class SummaryMarketReportController extends CommonController<ISummaryMarketReportWidget>
     implements ISummaryMarketReportController {
 
+    private static final long serialVersionUID = 1163601123485149996L;
+
     @Autowired
     private IReportService reportService;
     @Autowired

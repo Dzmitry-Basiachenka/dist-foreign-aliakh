@@ -33,6 +33,8 @@ import java.util.Set;
 public class NtsServiceFeeTrueUpReportController extends CommonController<ICommonScenarioReportWidget>
     implements ICommonScenarioReportController {
 
+    private static final long serialVersionUID = 1929074207467193116L;
+
     @Autowired
     private IScenarioService scenarioService;
     @Autowired

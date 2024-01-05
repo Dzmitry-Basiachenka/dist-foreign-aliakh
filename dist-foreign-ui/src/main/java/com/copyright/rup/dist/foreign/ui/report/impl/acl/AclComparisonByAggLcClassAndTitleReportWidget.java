@@ -33,6 +33,7 @@ import java.util.List;
  */
 public class AclComparisonByAggLcClassAndTitleReportWidget extends Window implements IAclCommonReportWidget {
 
+    private static final long serialVersionUID = 781349365661221557L;
     private static final String EMPTY_FILTER_STYLE = "empty-item-filter-widget";
 
     private final Button exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));

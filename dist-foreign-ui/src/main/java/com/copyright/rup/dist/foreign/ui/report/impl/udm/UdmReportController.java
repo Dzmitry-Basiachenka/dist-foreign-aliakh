@@ -32,6 +32,8 @@ import org.springframework.stereotype.Component;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class UdmReportController extends CommonController<IUdmReportWidget> implements IUdmReportController {
 
+    private static final long serialVersionUID = -8911291632171329843L;
+
     @Autowired
     private IUdmWeeklySurveyReportController udmWeeklySurveyReportController;
     @Autowired

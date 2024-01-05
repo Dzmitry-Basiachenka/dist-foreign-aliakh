@@ -26,6 +26,8 @@ import org.springframework.stereotype.Component;
 public class FasServiceFeeTrueUpReportController extends CommonController<IFasServiceFeeTrueUpReportWidget>
     implements IFasServiceFeeTrueUpReportController {
 
+    private static final long serialVersionUID = 6740772978171194318L;
+
     @Autowired
     private IReportService reportService;
 

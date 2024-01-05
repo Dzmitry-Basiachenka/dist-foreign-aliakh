@@ -24,6 +24,7 @@ import java.util.concurrent.atomic.AtomicReference;
 @UIScope
 public class ProductFamilyProvider implements IProductFamilyProvider, Serializable {
 
+    private static final long serialVersionUID = 1976191657247382594L;
     private final AtomicReference<String> selectedProductFamilyHolder =
         new AtomicReference<>(FdaConstants.ACL_PRODUCT_FAMILY);
 

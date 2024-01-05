@@ -26,6 +26,8 @@ import org.springframework.stereotype.Component;
 public class AaclBaselineUsagesReportController extends CommonController<IAaclBaselineUsagesReportWidget>
     implements IAaclBaselineUsagesReportController {
 
+    private static final long serialVersionUID = 2305759302461204903L;
+
     @Autowired
     private IReportService reportService;
 

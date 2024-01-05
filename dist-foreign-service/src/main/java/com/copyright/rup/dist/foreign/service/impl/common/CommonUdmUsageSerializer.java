@@ -28,6 +28,8 @@ import java.util.Objects;
 @Component("df.service.commonUdmUsageSerializer")
 public class CommonUdmUsageSerializer extends StdSerializer<List<UdmUsage>> {
 
+    private static final long serialVersionUID = 6353017648735018111L;
+
     /**
      * Constructor.
      */

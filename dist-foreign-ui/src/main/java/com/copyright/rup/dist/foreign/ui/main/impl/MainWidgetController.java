@@ -34,6 +34,7 @@ import org.springframework.stereotype.Component;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class MainWidgetController extends TabController<IMainWidget> implements IMainWidgetController {
 
+    private static final long serialVersionUID = 2501181206823240898L;
     private static final int SCENARIOS_TAB_INDEX = 1;
 
     @Autowired
