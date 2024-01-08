@@ -6,7 +6,9 @@ import com.copyright.rup.vaadin.ui.component.filter.FilterWindow;
 import com.copyright.rup.vaadin.ui.component.filter.IFilterWindowController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
+
 import com.vaadin.data.ValueProvider;
+
 import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.HashSet;
@@ -41,7 +43,7 @@ public class ReportedTypeOfUseFilterWidget extends BaseUdmItemsFilterWidget<Stri
         super(ForeignUi.getMessage("label.reported_types_of_use"));
         this.supplier = supplier;
         this.selectedItemsIds.addAll(selectedItemsIds);
-        setLabelValue(selectedItemsIds.size());
+        super.setLabelValue(selectedItemsIds.size());
     }
 
     @Override

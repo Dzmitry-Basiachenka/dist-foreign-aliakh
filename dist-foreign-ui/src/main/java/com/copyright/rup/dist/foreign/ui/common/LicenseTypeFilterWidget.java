@@ -8,8 +8,6 @@ import com.copyright.rup.vaadin.ui.component.filter.IFilterWindowController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
-import com.vaadin.data.ValueProvider;
-
 import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.HashSet;
@@ -80,8 +78,7 @@ public class LicenseTypeFilterWidget extends BaseUdmItemsFilterWidget<String>
     @Override
     public FilterWindow<String> showFilterWindow() {
         FilterWindow<String> filterWindow =
-            Windows.showFilterWindow(ForeignUi.getMessage("window.license_types_filter"), this,
-                (ValueProvider<String, List<String>>) List::of);
+            Windows.showFilterWindow(ForeignUi.getMessage("window.license_types_filter"), this, List::of);
         filterWindow.setSelectedItemsIds(selectedItemsIds);
         filterWindow.setSelectAllButtonVisible();
         filterWindow.setSearchPromptString(ForeignUi.getMessage("prompt.license_type"));

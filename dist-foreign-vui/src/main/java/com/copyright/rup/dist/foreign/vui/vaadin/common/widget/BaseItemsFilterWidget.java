@@ -45,8 +45,8 @@ public abstract class BaseItemsFilterWidget<T> extends HorizontalLayout {
     public BaseItemsFilterWidget(String caption) {
         initButton(caption);
         initLabel();
-        setSpacing(false);
-        add(label, button);
+        super.setSpacing(false);
+        super.add(label, button);
     }
 
     /**

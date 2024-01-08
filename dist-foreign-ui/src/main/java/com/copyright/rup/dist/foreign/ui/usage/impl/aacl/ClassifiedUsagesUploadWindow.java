@@ -52,11 +52,11 @@ public class ClassifiedUsagesUploadWindow extends Window {
      */
     public ClassifiedUsagesUploadWindow(IAaclUsageController usageController) {
         this.usageController = usageController;
-        setContent(initRootLayout());
-        setCaption(ForeignUi.getMessage("window.upload_classified_usages"));
-        setResizable(false);
-        setWidth(400, Unit.PIXELS);
-        setHeight(135, Unit.PIXELS);
+        super.setContent(initRootLayout());
+        super.setCaption(ForeignUi.getMessage("window.upload_classified_usages"));
+        super.setResizable(false);
+        super.setWidth(400, Unit.PIXELS);
+        super.setHeight(135, Unit.PIXELS);
         VaadinUtils.addComponentStyle(this, "classified-usages-upload-window");
     }
 

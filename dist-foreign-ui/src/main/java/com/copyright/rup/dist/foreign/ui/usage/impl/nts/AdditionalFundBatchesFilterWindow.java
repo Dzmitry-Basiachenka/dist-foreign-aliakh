@@ -33,7 +33,7 @@ class AdditionalFundBatchesFilterWindow extends FilterWindow<UsageBatch> impleme
     AdditionalFundBatchesFilterWindow(IFilterWindowController<UsageBatch> controller) {
         super(ForeignUi.getMessage("window.batches_filter"), controller, "Continue", null,
             (ValueProvider<UsageBatch, List<String>>) batch -> List.of(batch.getName()));
-        this.setSearchPromptString(ForeignUi.getMessage("prompt.batch"));
+        super.setSearchPromptString(ForeignUi.getMessage("prompt.batch"));
         VaadinUtils.addComponentStyle(this, "batches-filter-window");
     }
 

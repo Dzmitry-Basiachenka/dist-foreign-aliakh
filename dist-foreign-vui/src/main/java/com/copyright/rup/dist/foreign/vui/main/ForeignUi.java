@@ -12,7 +12,6 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.page.AppShellConfigurator;
-import com.vaadin.flow.component.page.LoadingIndicatorConfiguration;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.AppShellSettings;
 import com.vaadin.flow.spring.annotation.VaadinSessionScope;
@@ -59,8 +58,8 @@ public class ForeignUi extends AppLayout implements AppShellConfigurator, ICommo
     public ForeignUi(@Autowired IMainWidgetController controller) {
         this.controller = controller;
         String applicationTitle = getApplicationTitle();
-        addToNavbar(initHeader(applicationTitle));
-        UI current = UI.getCurrent();
+        super.addToNavbar(initHeader(applicationTitle));
+        var current = UI.getCurrent();
         if (Objects.nonNull(current)) {
             LOGGER.info("Initialize UI. User={}, ClientDate={}, ServerTimeZone={}", getActiveUser(),
                 LocalDateTime.now(ZoneId.systemDefault()), ZoneId.systemDefault());
@@ -69,16 +68,16 @@ public class ForeignUi extends AppLayout implements AppShellConfigurator, ICommo
             current.getPage().retrieveExtendedClientDetails(extendedClientDetails -> {
             });
             if (!hasAccessPermission()) {
-                setContent(new AccessDeniedWidget());
+                super.setContent(new AccessDeniedWidget());
             } else if (!isWebBrowserSupported()) {
-                UnsupportedBrowserWindow unsupportedBrowserWindow =
+                var unsupportedBrowserWindow =
                     new UnsupportedBrowserWindow(applicationTitle, getSupportedBrowsers());
                 unsupportedBrowserWindow.open();
             } else {
                 Component widget = Objects.requireNonNull(initMainWidget());
-                setContent(initRootWidget(widget));
+                super.setContent(initRootWidget(widget));
             }
-            LoadingIndicatorConfiguration conf = current.getLoadingIndicatorConfiguration();
+            var conf = current.getLoadingIndicatorConfiguration();
             conf.setApplyDefaultTheme(false);
         }
     }

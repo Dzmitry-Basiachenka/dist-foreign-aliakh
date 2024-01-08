@@ -10,6 +10,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.springframework.util.CollectionUtils;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -23,7 +24,9 @@ import java.util.Set;
  *
  * @author Aliaksandr Radkevich
  */
-public class AuditFilter {
+public class AuditFilter implements Serializable {
+
+    private static final long serialVersionUID = 7685302969208427378L;
 
     private Set<Long> rhAccountNumbers = new HashSet<>();
     private Set<Long> licenseeAccountNumbers = new HashSet<>();

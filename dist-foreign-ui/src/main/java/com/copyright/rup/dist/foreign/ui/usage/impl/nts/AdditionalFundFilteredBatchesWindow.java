@@ -54,21 +54,21 @@ class AdditionalFundFilteredBatchesWindow extends Window implements IAdditionalF
                                         IAdditionalFundBatchesFilterWindow batchesFilterWindow) {
         this.controller = controller;
         this.batchesFilterWindow = batchesFilterWindow;
-        BigDecimal grossAmount = batches
+        var grossAmount = batches
             .stream()
             .map(UsageBatch::getGrossAmount)
             .reduce(BigDecimal.ZERO, BigDecimal::add);
-        setCaption(ForeignUi.getMessage("window.filtered_batches"));
-        setWidth(700, Unit.PIXELS);
-        setHeight(400, Unit.PIXELS);
+        super.setCaption(ForeignUi.getMessage("window.filtered_batches"));
+        super.setWidth(700, Unit.PIXELS);
+        super.setHeight(400, Unit.PIXELS);
         Grid<UsageBatch> grid = initUsageBatchesGrid(batches, grossAmount);
-        VerticalLayout content = new VerticalLayout();
-        HorizontalLayout buttonsLayout = createButtonsLayout(batches, grossAmount);
+        var content = new VerticalLayout();
+        var buttonsLayout = createButtonsLayout(batches, grossAmount);
         content.addComponents(grid, buttonsLayout);
         content.setExpandRatio(grid, 1f);
         content.setSizeFull();
         content.setComponentAlignment(buttonsLayout, Alignment.MIDDLE_RIGHT);
-        setContent(content);
+        super.setContent(content);
         VaadinUtils.addComponentStyle(this, "batches-filter-window");
     }
 

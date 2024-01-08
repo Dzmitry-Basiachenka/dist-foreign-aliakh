@@ -115,7 +115,7 @@ public class HideGridColumnsProvider<T> {
          */
         public HideColumnsContextMenu(Component component) {
             super(component);
-            setOpenOnClick(true);
+            super.setOpenOnClick(true);
         }
 
         /**

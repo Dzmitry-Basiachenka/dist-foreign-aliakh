@@ -56,7 +56,7 @@ public class PublicationTypeFilterWidget extends BaseUdmItemsFilterWidget<Public
                                        Set<PublicationType> selectedItemsIds) {
         this(supplier);
         this.selectedItemsIds.addAll(selectedItemsIds);
-        setLabelValue(selectedItemsIds.size());
+        super.setLabelValue(selectedItemsIds.size());
     }
 
     @Override

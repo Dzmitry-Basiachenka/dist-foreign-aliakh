@@ -32,8 +32,8 @@ public class LocalDateWidget extends CustomField<LocalDate> {
      */
     public LocalDateWidget(String caption) {
         popupDateWidget.setLabel(caption);
-        add(popupDateWidget);
-        setWidthFull();
+        super.add(popupDateWidget);
+        super.setWidthFull();
     }
 
     @Override

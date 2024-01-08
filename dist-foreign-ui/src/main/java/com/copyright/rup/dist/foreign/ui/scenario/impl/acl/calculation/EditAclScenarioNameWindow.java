@@ -30,7 +30,7 @@ class EditAclScenarioNameWindow extends CommonEditScenarioNameWindow {
         super(scenario.getName(), "edit-acl-scenario-name-window");
         this.controller = controller;
         this.scenario = scenario;
-        validateBinder();
+        super.validateBinder();
     }
 
     @Override

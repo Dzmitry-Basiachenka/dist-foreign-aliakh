@@ -25,7 +25,7 @@ public class OnDemandFileDownloader extends Anchor {
      * Default constructor.
      */
     public OnDemandFileDownloader() {
-        getElement().setAttribute("download", true);
+        super.getElement().setAttribute("download", true);
     }
 
     /**
