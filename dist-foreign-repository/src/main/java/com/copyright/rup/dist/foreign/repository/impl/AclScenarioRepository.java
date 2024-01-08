@@ -36,6 +36,7 @@ import java.util.Set;
 public class AclScenarioRepository extends BaseRepository implements IAclScenarioRepository {
 
     private static final String SCENARIO_ID_KEY = "scenarioId";
+    private static final String CREATE_USER_KEY = "createUser";
     private static final String UPDATE_USER_KEY = "updateUser";
 
     @Override
@@ -69,7 +70,7 @@ public class AclScenarioRepository extends BaseRepository implements IAclScenari
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
         parameters.put("usageAge", Objects.requireNonNull(usageAge));
         parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
-        parameters.put("createUser", Objects.requireNonNull(userName));
+        parameters.put(CREATE_USER_KEY, Objects.requireNonNull(userName));
         parameters.put(UPDATE_USER_KEY, Objects.requireNonNull(userName));
         insert("IAclScenarioMapper.insertAclScenarioUsageAgeWeight", parameters);
     }
@@ -79,7 +80,7 @@ public class AclScenarioRepository extends BaseRepository implements IAclScenari
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
         parameters.put("licenseeClass", Objects.requireNonNull(licenseeClass));
         parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
-        parameters.put("createUser", Objects.requireNonNull(userName));
+        parameters.put(CREATE_USER_KEY, Objects.requireNonNull(userName));
         parameters.put(UPDATE_USER_KEY, Objects.requireNonNull(userName));
         insert("IAclScenarioMapper.insertAclScenarioLicenseeClass", parameters);
     }
@@ -89,7 +90,7 @@ public class AclScenarioRepository extends BaseRepository implements IAclScenari
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(4);
         parameters.put("publicationType", Objects.requireNonNull(publicationType));
         parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
-        parameters.put("createUser", Objects.requireNonNull(userName));
+        parameters.put(CREATE_USER_KEY, Objects.requireNonNull(userName));
         parameters.put(UPDATE_USER_KEY, Objects.requireNonNull(userName));
         insert("IAclScenarioMapper.insertAclScenarioPubTypeWeight", parameters);
     }

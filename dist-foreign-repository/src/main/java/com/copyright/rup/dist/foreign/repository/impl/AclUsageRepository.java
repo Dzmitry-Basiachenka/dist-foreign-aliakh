@@ -32,6 +32,9 @@ import java.util.Set;
 public class AclUsageRepository extends AclBaseRepository implements IAclUsageRepository {
 
     private static final List<String> ELIGIBLE_GRANT_STATUSES = List.of("Print&Digital", "Different RH");
+    private static final String BATCH_ID_KEY = "batchId";
+    private static final String GRANT_SET_ID_KEY = "grantSetId";
+    private static final String GRANT_STATUSES_KEY = "grantStatuses";
     private static final String PAGEABLE_KEY = "pageable";
     private static final String SORT_KEY = "sort";
     private static final String UPDATE_USER = "updateUser";
@@ -83,11 +86,11 @@ public class AclUsageRepository extends AclBaseRepository implements IAclUsageRe
     public boolean usageExistForLicenseeClassesAndTypeOfUse(String batchId, String grantSetId,
                                                             Set<Integer> licenseeClassIds, String typeOfUse) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(5);
-        parameters.put("batchId", escapeSqlLikePattern(Objects.requireNonNull(batchId)));
-        parameters.put("grantSetId", grantSetId);
+        parameters.put(BATCH_ID_KEY, escapeSqlLikePattern(Objects.requireNonNull(batchId)));
+        parameters.put(GRANT_SET_ID_KEY, grantSetId);
         parameters.put("licenseeClassIds", licenseeClassIds);
         parameters.put("typeOfUse", typeOfUse);
-        parameters.put("grantStatuses", ELIGIBLE_GRANT_STATUSES);
+        parameters.put(GRANT_STATUSES_KEY, ELIGIBLE_GRANT_STATUSES);
         return selectOne("IAclUsageMapper.usageExistForLicenseeClassesAndTypeOfUse", parameters);
     }
 
@@ -100,11 +103,11 @@ public class AclUsageRepository extends AclBaseRepository implements IAclUsageRe
     public int findCountInvalidUsages(String batchId, String grantSetId, Integer distributionPeriod,
                                       List<Integer> periodPriors) {
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(5);
-        params.put("batchId", Objects.requireNonNull(batchId));
-        params.put("grantSetId", Objects.requireNonNull(grantSetId));
+        params.put(BATCH_ID_KEY, Objects.requireNonNull(batchId));
+        params.put(GRANT_SET_ID_KEY, Objects.requireNonNull(grantSetId));
         params.put("periodPriors", Objects.requireNonNull(periodPriors));
         params.put("distributionPeriod", Objects.requireNonNull(distributionPeriod));
-        params.put("grantStatuses", ELIGIBLE_GRANT_STATUSES);
+        params.put(GRANT_STATUSES_KEY, ELIGIBLE_GRANT_STATUSES);
         return selectOne("IAclUsageMapper.findCountInvalidUsages", params);
     }
 
@@ -113,11 +116,11 @@ public class AclUsageRepository extends AclBaseRepository implements IAclUsageRe
                                             List<Integer> periodPriors, OutputStream outputStream) {
         try (AclUsageCsvReportHandler handler = new AclUsageCsvReportHandler(Objects.requireNonNull(outputStream))) {
             Map<String, Object> params = Maps.newHashMapWithExpectedSize(5);
-            params.put("batchId", Objects.requireNonNull(batchId));
-            params.put("grantSetId", Objects.requireNonNull(grantSetId));
+            params.put(BATCH_ID_KEY, Objects.requireNonNull(batchId));
+            params.put(GRANT_SET_ID_KEY, Objects.requireNonNull(grantSetId));
             params.put("periodPriors", Objects.requireNonNull(periodPriors));
             params.put("distributionPeriod", Objects.requireNonNull(distributionPeriod));
-            params.put("grantStatuses", ELIGIBLE_GRANT_STATUSES);
+            params.put(GRANT_STATUSES_KEY, ELIGIBLE_GRANT_STATUSES);
             getTemplate().select("IAclUsageMapper.findInvalidUsagesDtos", Objects.requireNonNull(params), handler);
         }
     }

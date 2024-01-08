@@ -27,6 +27,9 @@ import java.util.Objects;
 @Repository
 public class AclGrantDetailRepository extends AclBaseRepository implements IAclGrantDetailRepository {
 
+    private static final String CREATE_USER_KEY = "createUser";
+    private static final String UPDATE_USER_KEY = "updateUser";
+
     @Override
     public void insert(AclGrantDetail grantDetail) {
         insert("IAclGrantDetailMapper.insert", Objects.requireNonNull(grantDetail));
@@ -82,8 +85,8 @@ public class AclGrantDetailRepository extends AclBaseRepository implements IAclG
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(4);
         params.put("sourceGrantSetId", Objects.requireNonNull(sourceGrantSetId));
         params.put("targetGrantSetId", Objects.requireNonNull(targetGrantSetId));
-        params.put("createUser", Objects.requireNonNull(userName));
-        params.put("updateUser", userName);
+        params.put(CREATE_USER_KEY, Objects.requireNonNull(userName));
+        params.put(UPDATE_USER_KEY, userName);
         return selectList("IAclGrantDetailMapper.copyGrantDetails", params);
     }
 
@@ -95,7 +98,7 @@ public class AclGrantDetailRepository extends AclBaseRepository implements IAclG
         params.put("rhAccountNumber", Objects.requireNonNull(rhAccountNumber));
         params.put("typeOfUse", Objects.requireNonNull(typeOfUse));
         params.put("payeeAccountNumber", Objects.requireNonNull(payeeAccountNumber));
-        params.put("updateUser", Objects.requireNonNull(userName));
+        params.put(UPDATE_USER_KEY, Objects.requireNonNull(userName));
         update("IAclGrantDetailMapper.updatePayeeAccountNumber", params);
     }
 
@@ -104,7 +107,7 @@ public class AclGrantDetailRepository extends AclBaseRepository implements IAclG
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(3);
         params.put("grantDetailId", Objects.requireNonNull(grantDetailId));
         params.put("payeeAccountNumber", Objects.requireNonNull(payeeAccountNumber));
-        params.put("updateUser", Objects.requireNonNull(userName));
+        params.put(UPDATE_USER_KEY, Objects.requireNonNull(userName));
         update("IAclGrantDetailMapper.updatePayeeAccountNumberById", params);
     }
 

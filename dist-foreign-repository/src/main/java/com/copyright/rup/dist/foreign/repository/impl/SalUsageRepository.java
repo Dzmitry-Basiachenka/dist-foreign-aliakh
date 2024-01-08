@@ -49,6 +49,7 @@ public class SalUsageRepository extends BaseRepository implements ISalUsageRepos
     private static final String SORT_KEY = "sort";
     private static final String SEARCH_VALUE_KEY = "searchValue";
     private static final String ACCOUNT_NUMBER_KEY = "accountNumber";
+    private static final String BATCH_ID_KEY = "batchId";
 
     @Override
     public void insertItemBankDetail(Usage usage) {
@@ -60,7 +61,7 @@ public class SalUsageRepository extends BaseRepository implements ISalUsageRepos
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(4);
         parameters.put("usage", Objects.requireNonNull(usage));
         parameters.put("createUser", Objects.requireNonNull(usage.getCreateUser()));
-        parameters.put("updateUser", usage.getCreateUser());
+        parameters.put(UPDATE_USER_KEY, usage.getCreateUser());
         parameters.put("itemBankDetailType", SalDetailTypeEnum.IB);
         insert("ISalUsageMapper.insertUsageDataDetail", parameters);
     }
@@ -102,7 +103,7 @@ public class SalUsageRepository extends BaseRepository implements ISalUsageRepos
     public boolean workPortionIdExists(String workPortionId, String batchId) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
         parameters.put("workPortionId", Objects.requireNonNull(workPortionId));
-        parameters.put("batchId", Objects.requireNonNull(batchId));
+        parameters.put(BATCH_ID_KEY, Objects.requireNonNull(batchId));
         return selectOne("ISalUsageMapper.workPortionIdExistsInBatch", parameters);
     }
 
@@ -117,7 +118,7 @@ public class SalUsageRepository extends BaseRepository implements ISalUsageRepos
     @Override
     public boolean usageDataExistByBatchId(String batchId) {
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(2);
-        params.put("batchId", Objects.requireNonNull(batchId));
+        params.put(BATCH_ID_KEY, Objects.requireNonNull(batchId));
         params.put(DETAIL_TYPE_KEY, SalDetailTypeEnum.UD);
         return selectOne("ISalUsageMapper.usageDataExistByBatchId", params);
     }
@@ -133,7 +134,7 @@ public class SalUsageRepository extends BaseRepository implements ISalUsageRepos
     @Override
     public void deleteUsageData(String batchId) {
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(2);
-        params.put("batchId", Objects.requireNonNull(batchId));
+        params.put(BATCH_ID_KEY, Objects.requireNonNull(batchId));
         params.put(DETAIL_TYPE_KEY, SalDetailTypeEnum.UD);
         delete("ISalUsageMapper.deleteUsageData", params);
     }
@@ -245,7 +246,7 @@ public class SalUsageRepository extends BaseRepository implements ISalUsageRepos
     public List<UsageDto> findForAudit(AuditFilter filter, Pageable pageable, Sort sort) {
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(3);
         params.put(FILTER_KEY, escapeSqlLikePattern(Objects.requireNonNull(filter)));
-        params.put("pageable", pageable);
+        params.put(PAGEABLE_KEY, pageable);
         params.put("sort", sort);
         return selectList("ISalUsageMapper.findForAudit", params);
     }

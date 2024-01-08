@@ -41,6 +41,7 @@ public class FasUsageRepository extends BaseRepository implements IFasUsageRepos
     private static final int MAX_VARIABLES_COUNT = 32000;
     private static final String SCENARIO_IDS_KEY = "scenarioIds";
     private static final String SCENARIO_STATUS_KEY = "scenarioStatus";
+    private static final String ACCOUNT_NUMBERS_KEY = "accountNumbers";
     private static final String UPDATE_USER_KEY = "updateUser";
     private static final String STATUS_KEY = "status";
 
@@ -71,7 +72,7 @@ public class FasUsageRepository extends BaseRepository implements IFasUsageRepos
         parameters.put(UPDATE_USER_KEY, Objects.requireNonNull(userName));
         Iterables.partition(Objects.requireNonNull(accountNumbers), MAX_VARIABLES_COUNT)
             .forEach(partition -> {
-                parameters.put("accountNumbers", partition);
+                parameters.put(ACCOUNT_NUMBERS_KEY, partition);
                 result.addAll(selectList("IFasUsageMapper.deleteFromScenarioByPayees", parameters));
             });
         return result;
@@ -88,7 +89,7 @@ public class FasUsageRepository extends BaseRepository implements IFasUsageRepos
         parameters.put(UPDATE_USER_KEY, Objects.requireNonNull(userName));
         Iterables.partition(Objects.requireNonNull(accountNumbers), MAX_VARIABLES_COUNT)
             .forEach(partition -> {
-                parameters.put("accountNumbers", partition);
+                parameters.put(ACCOUNT_NUMBERS_KEY, partition);
                 result.addAll(selectList("IFasUsageMapper.redesignateToNtsWithdrawnByPayees", parameters));
             });
         return result;
@@ -102,7 +103,7 @@ public class FasUsageRepository extends BaseRepository implements IFasUsageRepos
         parameters.put(SCENARIO_STATUS_KEY, ScenarioStatusEnum.IN_PROGRESS);
         Iterables.partition(Objects.requireNonNull(accountNumbers), MAX_VARIABLES_COUNT)
             .forEach(partition -> {
-                parameters.put("accountNumbers", partition);
+                parameters.put(ACCOUNT_NUMBERS_KEY, partition);
                 result.addAll(selectList("IFasUsageMapper.findAccountNumbersInvalidForExclude", parameters));
             });
         return result;
@@ -144,8 +145,8 @@ public class FasUsageRepository extends BaseRepository implements IFasUsageRepos
     public void updateUsagesWorkAndStatus(List<String> usageIds, Work work, UsageStatusEnum status, String userName) {
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(4);
         params.put("work", work);
-        params.put("status", status);
-        params.put("updateUser", Objects.requireNonNull(userName));
+        params.put(STATUS_KEY, status);
+        params.put(UPDATE_USER_KEY, Objects.requireNonNull(userName));
         Iterables.partition(Objects.requireNonNull(usageIds), MAX_VARIABLES_COUNT).forEach(partition -> {
             params.put("usageIds", partition);
             update("IFasUsageMapper.updateUsagesWorkAndStatus", params);

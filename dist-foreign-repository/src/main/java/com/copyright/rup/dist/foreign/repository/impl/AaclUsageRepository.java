@@ -238,8 +238,8 @@ public class AaclUsageRepository extends BaseRepository implements IAaclUsageRep
     public List<UsageDto> findForAudit(AuditFilter filter, Pageable pageable, Sort sort) {
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(3);
         params.put(FILTER_KEY, escapeSqlLikePattern(Objects.requireNonNull(filter)));
-        params.put("pageable", pageable);
-        params.put("sort", sort);
+        params.put(PAGEABLE_KEY, pageable);
+        params.put(SORT_KEY, sort);
         return selectList("IAaclUsageMapper.findForAudit", params);
     }
 

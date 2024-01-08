@@ -52,7 +52,7 @@ public class NtsReportRepository extends CommonReportRepository implements INtsR
                  new NtsServiceFeeTrueUpReportHandler(Objects.requireNonNull(outputStream))) {
             if (ScenarioStatusEnum.SENT_TO_LM == Objects.requireNonNull(scenario).getStatus()) {
                 Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
-                parameters.put("scenarioId", Objects.requireNonNull(scenario.getId()));
+                parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenario.getId()));
                 parameters.put("defaultEstimatedServiceFee", Objects.requireNonNull(defaultEstimatedServiceFee));
                 getTemplate().select("INtsReportMapper.findNtsServiceFeeTrueUpReportDtos", parameters, handler);
             }
