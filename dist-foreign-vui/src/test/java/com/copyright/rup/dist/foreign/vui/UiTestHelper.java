@@ -16,12 +16,14 @@ import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.CheckboxGroup;
 import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.contextmenu.MenuItem;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.Grid.Column;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.html.Section;
+import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.Scroller;
 import com.vaadin.flow.data.binder.Binder;
@@ -335,6 +337,29 @@ public final class UiTestHelper {
         assertEquals(value, ((AbstractField) actualField).getValue());
         assertEquals(message, actualErrorMessage);
         assertEquals(isValid, Objects.isNull(actualErrorMessage));
+    }
+
+    /**
+     * Verifies menu bar.
+     *
+     * @param component        instance of {@link Component}
+     * @param menuBarName      menu bar name
+     * @param isMenuBarVisible menu bar visibility
+     * @param menuItemNames    menu item names
+     */
+    public static void verifyMenuBar(Component component, String menuBarName, boolean isMenuBarVisible,
+                                     List<String> menuItemNames) {
+        assertThat(component, instanceOf(MenuBar.class));
+        MenuBar menuBar = (MenuBar) component;
+        assertEquals(isMenuBarVisible, menuBar.isVisible());
+        List<MenuItem> parentItems = menuBar.getItems();
+        assertEquals(1, parentItems.size());
+        MenuItem item = parentItems.get(0);
+        assertEquals(menuBarName, item.getText());
+        List<MenuItem> childItems = item.getSubMenu().getItems();
+        assertEquals(menuItemNames.size(), childItems.size());
+        IntStream.range(0, menuItemNames.size())
+            .forEach(index -> assertEquals(menuItemNames.get(index), childItems.get(index).getText()));
     }
 
     /**

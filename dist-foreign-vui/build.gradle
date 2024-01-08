@@ -61,6 +61,9 @@ dependencies {
     implementation("org.springframework:spring-webmvc:${rupJava.standardDependencies.spring.version}")
     implementation("commons-io:commons-io:${commonsIoVersion}")
 
+    compile("com.copyright.rup.dist.common:dist-common-reporting:${distCommonVersion}") {
+        exclude group: 'net.sf.jasperreports'
+    }
     compile("org.springframework:spring-context-support:${rupJava.standardDependencies.spring.version}")
     compile("org.springframework.security:spring-security-core:${springSecurityVersion}")
     compile("org.hibernate:hibernate-validator:${hibernateValidatorVersion}")
