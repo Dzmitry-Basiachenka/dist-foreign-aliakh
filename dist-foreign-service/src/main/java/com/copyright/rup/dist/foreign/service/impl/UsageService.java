@@ -317,7 +317,7 @@ public class UsageService implements IUsageService {
                 ", ArchivedUsagesCount=" + archivedUsagesCount + ", NotReportedUsagesCount=" +
                 invalidUsageIds.size() + ", ArchivedScenariosCount=" + archivedScenariosCount);
         } else {
-            String message = "PaidUsagesCount=" + paidUsagesCount + ", Reason=There are no usages";
+            var message = "PaidUsagesCount=" + paidUsagesCount + ", Reason=There are no usages";
             LOGGER.info("Send to CRM. Skipped. {}", message);
             jobInfo = new JobInfo(JobStatusEnum.SKIPPED, message);
         }

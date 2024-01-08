@@ -43,8 +43,8 @@ public class ResearchedUsagesCsvProcessor extends DistCsvProcessor<ResearchedUsa
 
     @Override
     public void initPlainValidators() {
-        RequiredValidator requiredValidator = new RequiredValidator();
-        PositiveNumberValidator positiveNumberValidator = new PositiveNumberValidator();
+        var requiredValidator = new RequiredValidator();
+        var positiveNumberValidator = new PositiveNumberValidator();
         addPlainValidators(Header.DETAIL_ID, requiredValidator, new LengthValidator(36),
             new DuplicateInFileValidator());
         addPlainValidators(Header.STANDARD_NUMBER, new LengthValidator(1000));

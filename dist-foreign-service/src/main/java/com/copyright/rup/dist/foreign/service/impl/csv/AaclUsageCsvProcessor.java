@@ -46,8 +46,8 @@ public class AaclUsageCsvProcessor extends DistCsvProcessor<Usage> {
 
     @Override
     public void initPlainValidators() {
-        RequiredValidator requiredValidator = new RequiredValidator();
-        PositiveNumberValidator positiveNumberValidator = new PositiveNumberValidator();
+        var requiredValidator = new RequiredValidator();
+        var positiveNumberValidator = new PositiveNumberValidator();
         addPlainValidators(Header.WR_WRK_INST, requiredValidator, positiveNumberValidator, new LengthValidator(9));
         addPlainValidators(Header.INSTITUTION, new LengthValidator(255));
         addPlainValidators(Header.USAGE_SOURCE, requiredValidator, new LengthValidator(150));

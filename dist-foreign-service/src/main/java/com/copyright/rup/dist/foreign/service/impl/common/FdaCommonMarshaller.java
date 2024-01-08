@@ -39,9 +39,9 @@ public class FdaCommonMarshaller<T> extends CommonMarshaller {
 
     @Override
     protected ObjectMapper getObjectMapper() {
-        SimpleModule simpleModule = new SimpleModule();
+        var simpleModule = new SimpleModule();
         simpleModule.addSerializer(serializer);
-        ObjectMapper objectMapper = new ObjectMapper();
+        var objectMapper = new ObjectMapper();
         objectMapper.registerModule(simpleModule);
         return objectMapper;
     }

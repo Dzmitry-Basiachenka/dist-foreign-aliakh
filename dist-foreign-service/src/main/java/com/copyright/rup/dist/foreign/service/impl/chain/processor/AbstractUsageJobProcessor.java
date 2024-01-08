@@ -68,11 +68,11 @@ abstract class AbstractUsageJobProcessor extends AbstractChainProcessor<Usage> i
             Iterables.partition(usageIds, usagesBatchSize)
                 .forEach(partition -> usageLoader.apply(partition)
                     .forEach(usage -> process(List.of(usage))));
-            String message = "ProductFamily=" + productFamily + ", UsagesCount=" + usagesCount;
+            var message = "ProductFamily=" + productFamily + ", UsagesCount=" + usagesCount;
             LOGGER.info("Send {} usages for processing. Finished. {}", usageStatus, message);
             jobInfo = new JobInfo(JobStatusEnum.FINISHED, message);
         } else {
-            String message = "ProductFamily=" + productFamily + ", Reason=There are no usages";
+            var message = "ProductFamily=" + productFamily + ", Reason=There are no usages";
             LOGGER.info("Send {} usages for processing. Skipped. {}", usageStatus, message);
             jobInfo = new JobInfo(JobStatusEnum.SKIPPED, message);
         }

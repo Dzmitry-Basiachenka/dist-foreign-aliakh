@@ -51,10 +51,10 @@ public class SalItemBankCsvProcessor extends DistCsvProcessor<Usage> {
 
     @Override
     public void initPlainValidators() {
-        RequiredValidator requiredValidator = new RequiredValidator();
-        LengthValidator lengthValidator1000 = new LengthValidator(1000);
-        LengthValidator lengthValidator100 = new LengthValidator(100);
-        PositiveNumberValidator positiveNumberValidator = new PositiveNumberValidator();
+        var requiredValidator = new RequiredValidator();
+        var lengthValidator1000 = new LengthValidator(1000);
+        var lengthValidator100 = new LengthValidator(100);
+        var positiveNumberValidator = new PositiveNumberValidator();
         addPlainValidators(Header.ASSESSMENT_NAME, requiredValidator, lengthValidator1000);
         addPlainValidators(Header.COVERAGE_YEAR, requiredValidator, lengthValidator100);
         addPlainValidators(Header.GRADE, new SalGradeValidator(), new LengthValidator(32));

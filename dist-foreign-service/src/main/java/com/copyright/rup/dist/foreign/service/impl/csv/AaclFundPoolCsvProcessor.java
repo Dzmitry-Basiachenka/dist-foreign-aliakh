@@ -38,7 +38,7 @@ public class AaclFundPoolCsvProcessor extends DistCsvProcessor<FundPoolDetail> {
 
     @Override
     public void initPlainValidators() {
-        RequiredValidator requiredValidator = new RequiredValidator();
+        var requiredValidator = new RequiredValidator();
         addPlainValidators(Header.AGGREGATE_LICENSEE_CLASS_ID, requiredValidator, new PositiveNumberValidator(),
             new DuplicateInFileValidator(), new LengthValidator(9));
         addPlainValidators(Header.GROSS_AMOUNT, requiredValidator, new AmountValidator());

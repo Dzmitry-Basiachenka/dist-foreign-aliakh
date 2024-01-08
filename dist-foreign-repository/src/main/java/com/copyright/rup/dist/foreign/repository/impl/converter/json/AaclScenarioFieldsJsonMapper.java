@@ -22,10 +22,10 @@ public class AaclScenarioFieldsJsonMapper {
     private static final ObjectMapper OBJECT_MAPPER = buildObjectMapper();
 
     private static ObjectMapper buildObjectMapper() {
-        SimpleModule simpleModule = new SimpleModule();
+        var simpleModule = new SimpleModule();
         simpleModule.addSerializer(AaclFields.class, new AaclScenarioFieldsSerializer());
         simpleModule.addDeserializer(AaclFields.class, new AaclScenarioFieldsDeserializer());
-        ObjectMapper objectMapper = new ObjectMapper();
+        var objectMapper = new ObjectMapper();
         objectMapper.registerModule(simpleModule);
         return objectMapper;
     }

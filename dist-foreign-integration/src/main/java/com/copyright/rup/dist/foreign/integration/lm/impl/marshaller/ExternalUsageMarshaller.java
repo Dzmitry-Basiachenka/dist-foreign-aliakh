@@ -33,9 +33,9 @@ public class ExternalUsageMarshaller extends CommonMarshaller {
 
     @Override
     protected ObjectMapper getObjectMapper() {
-        SimpleModule simpleModule = new SimpleModule();
+        var simpleModule = new SimpleModule();
         simpleModule.addSerializer(new ExternalUsageSerializer());
-        ObjectMapper objectMapper = new ObjectMapper();
+        var objectMapper = new ObjectMapper();
         objectMapper.registerModule(simpleModule);
         return objectMapper;
     }
