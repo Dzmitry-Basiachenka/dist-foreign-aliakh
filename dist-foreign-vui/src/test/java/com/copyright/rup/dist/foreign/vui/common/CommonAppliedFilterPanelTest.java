@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Test for {@link CommonAppliedFilterPanel}.
+ * Verifies {@link CommonAppliedFilterPanel}.
  * <p>
  * Copyright (C) 2021 copyright.com
  * <p>
