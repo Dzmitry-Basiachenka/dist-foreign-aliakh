@@ -106,7 +106,7 @@ public class UsageBatchRepository extends BaseRepository implements IUsageBatchR
 
     @Override
     public Map<String, String> findBatchesNamesToScenariosNames(Set<String> batchesIds) {
-        BatchesNamesToScenariosNamesResultHandler handler = new BatchesNamesToScenariosNamesResultHandler();
+        var handler = new BatchesNamesToScenariosNamesResultHandler();
         getTemplate().select("IUsageBatchMapper.findBatchesNamesToScenariosNames",
             Objects.requireNonNull(batchesIds), handler);
         return handler.getBatchesNamesToScenariosNames();

@@ -105,6 +105,7 @@ public interface IAclGrantDetailRepository {
      */
     void updatePayeeAccountNumber(String grantSetId, Long rhAccountNumber, String typeOfUse, Long payeeAccountNumber,
                                   String userName);
+
     /**
      * Sets payee account number for ACL grant detail by ACL grant set id, RH account number, and type of use.
      *

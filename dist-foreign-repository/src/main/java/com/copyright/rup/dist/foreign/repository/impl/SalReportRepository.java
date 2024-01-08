@@ -66,8 +66,7 @@ public class SalReportRepository extends CommonReportRepository implements ISalR
 
     @Override
     public void writeSalLiabilitiesByRhCsvReport(List<Scenario> scenarios, OutputStream outputStream) {
-        try (SalLiabilitiesByRhReportHandler handler =
-                 new SalLiabilitiesByRhReportHandler(Objects.requireNonNull(outputStream))) {
+        try (var handler = new SalLiabilitiesByRhReportHandler(Objects.requireNonNull(outputStream))) {
             Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(4);
             parameters.put(PRODUCT_FAMILY, FdaConstants.SAL_PRODUCT_FAMILY);
             parameters.put("itemBankType", SalDetailTypeEnum.IB);
@@ -83,8 +82,7 @@ public class SalReportRepository extends CommonReportRepository implements ISalR
     @Override
     public void writeSalLiabilitiesSummaryByRhAndWorkCsvReport(List<Scenario> scenarios,
                                                                OutputStream outputStream) {
-        try (SalLiabilitiesSummaryByRhAndWorkReportHandler handler =
-                 new SalLiabilitiesSummaryByRhAndWorkReportHandler(Objects.requireNonNull(outputStream))) {
+        try (var handler = new SalLiabilitiesSummaryByRhAndWorkReportHandler(Objects.requireNonNull(outputStream))) {
             Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
             parameters.put(PRODUCT_FAMILY, FdaConstants.SAL_PRODUCT_FAMILY);
             parameters.put("scenarioIds", Objects.requireNonNull(scenarios).stream()
@@ -116,8 +114,7 @@ public class SalReportRepository extends CommonReportRepository implements ISalR
 
     @Override
     public void writeSalUndistributedLiabilitiesCsvReport(OutputStream outputStream) {
-        try (SalUndistributedLiabilitiesReportHandler handler =
-                 new SalUndistributedLiabilitiesReportHandler(Objects.requireNonNull(outputStream))) {
+        try (var handler = new SalUndistributedLiabilitiesReportHandler(Objects.requireNonNull(outputStream))) {
             Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
             parameters.put(PRODUCT_FAMILY, FdaConstants.SAL_PRODUCT_FAMILY);
             parameters.put(STATUSES, List.of(ScenarioStatusEnum.IN_PROGRESS, ScenarioStatusEnum.SUBMITTED,
@@ -128,16 +125,14 @@ public class SalReportRepository extends CommonReportRepository implements ISalR
 
     @Override
     public void writeSalFundPoolsCsvReport(OutputStream outputStream) {
-        try (SalFundPoolsExportHandler handler =
-                 new SalFundPoolsExportHandler(Objects.requireNonNull(outputStream))) {
+        try (var handler = new SalFundPoolsExportHandler(Objects.requireNonNull(outputStream))) {
             getTemplate().select("ISalReportMapper.findSalFundPools", FdaConstants.SAL_PRODUCT_FAMILY, handler);
         }
     }
 
     @Override
     public void writeSalFundPoolsCsvReport(int distributionYear, OutputStream outputStream) {
-        try (SalFundPoolsReportHandler handler =
-                 new SalFundPoolsReportHandler(Objects.requireNonNull(outputStream))) {
+        try (var handler = new SalFundPoolsReportHandler(Objects.requireNonNull(outputStream))) {
             Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
             parameters.put(PRODUCT_FAMILY, FdaConstants.SAL_PRODUCT_FAMILY);
             parameters.put("distributionYear", Objects.requireNonNull(distributionYear));
@@ -148,8 +143,7 @@ public class SalReportRepository extends CommonReportRepository implements ISalR
     @Override
     public void writeSalHistoricalItemBankDetailsReport(Long licenseeAccountNumber, Integer periodEndYearFrom,
                                                         Integer periodEndYearTo, OutputStream outputStream) {
-        try (SalHistoricalItemBankDetailsReportHandler handler =
-                 new SalHistoricalItemBankDetailsReportHandler(Objects.requireNonNull(outputStream))) {
+        try (var handler = new SalHistoricalItemBankDetailsReportHandler(Objects.requireNonNull(outputStream))) {
             Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(5);
             parameters.put(PRODUCT_FAMILY, FdaConstants.SAL_PRODUCT_FAMILY);
             parameters.put("detailType", SalDetailTypeEnum.IB);

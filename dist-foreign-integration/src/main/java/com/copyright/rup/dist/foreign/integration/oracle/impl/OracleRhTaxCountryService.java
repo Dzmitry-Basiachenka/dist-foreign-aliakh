@@ -43,7 +43,7 @@ public class OracleRhTaxCountryService implements IOracleRhTaxCountryService {
     @Override
     public Map<Long, Boolean> getAccountNumbersToUsTaxCountryFlags(Set<Long> accountNumbers) {
         try {
-            OracleRhTaxCountryRestHandler handler = new OracleRhTaxCountryRestHandler(restTemplate);
+            var handler = new OracleRhTaxCountryRestHandler(restTemplate);
             return handler.handleResponse(rhTaxCountryUrl, ImmutableMap.of("accountNumbers",
                 Joiner.on(",").skipNulls().join(accountNumbers)));
         } catch (HttpClientErrorException | ResourceAccessException e) {

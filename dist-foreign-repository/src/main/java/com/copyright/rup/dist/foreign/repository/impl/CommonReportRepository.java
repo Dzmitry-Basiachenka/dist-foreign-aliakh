@@ -36,7 +36,7 @@ public class CommonReportRepository extends BaseRepository {
                                          boolean precondition,
                                          Supplier<? extends BaseCsvReportHandler> handlerSupplier) {
         int size = selectOne(countMethodName, parameters);
-        try (BaseCsvReportHandler handler = handlerSupplier.get()) {
+        try (var handler = handlerSupplier.get()) {
             if (precondition && 0 < size) {
                 for (int offset = 0; offset < size; offset += REPORT_BATCH_SIZE) {
                     parameters.put(PAGEABLE_KEY, new Pageable(offset, REPORT_BATCH_SIZE));

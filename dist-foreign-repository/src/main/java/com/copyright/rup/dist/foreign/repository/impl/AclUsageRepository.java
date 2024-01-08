@@ -114,7 +114,7 @@ public class AclUsageRepository extends AclBaseRepository implements IAclUsageRe
     @Override
     public void writeInvalidUsagesCsvReport(String batchId, String grantSetId, Integer distributionPeriod,
                                             List<Integer> periodPriors, OutputStream outputStream) {
-        try (AclUsageCsvReportHandler handler = new AclUsageCsvReportHandler(Objects.requireNonNull(outputStream))) {
+        try (var handler = new AclUsageCsvReportHandler(Objects.requireNonNull(outputStream))) {
             Map<String, Object> params = Maps.newHashMapWithExpectedSize(5);
             params.put(BATCH_ID_KEY, Objects.requireNonNull(batchId));
             params.put(GRANT_SET_ID_KEY, Objects.requireNonNull(grantSetId));

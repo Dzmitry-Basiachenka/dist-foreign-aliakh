@@ -330,7 +330,7 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(2);
         params.put("batchName", Objects.requireNonNull(batchName));
         params.put(STATUS_KEY, Objects.requireNonNull(status));
-        WrWrkInstToUsageIdResultHandler handler = new WrWrkInstToUsageIdResultHandler();
+        var handler = new WrWrkInstToUsageIdResultHandler();
         getTemplate().select("IUsageMapper.findWrWrkInstToUsageIdsByBatchNameAndUsageStatus", params, handler);
         return handler.getWrWrkInstToUsageIdsMap();
     }

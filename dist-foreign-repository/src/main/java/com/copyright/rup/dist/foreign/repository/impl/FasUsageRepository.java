@@ -116,7 +116,7 @@ public class FasUsageRepository extends BaseRepository implements IFasUsageRepos
 
     @Override
     public Map<Long, Usage> findRightsholdersInformation(String scenarioId) {
-        RightsholdersInfoResultHandler handler = new RightsholdersInfoResultHandler();
+        var handler = new RightsholdersInfoResultHandler();
         getTemplate().select("IFasUsageMapper.findRightsholdersInformation", Objects.requireNonNull(scenarioId),
             handler);
         return handler.getRhToUsageMap();

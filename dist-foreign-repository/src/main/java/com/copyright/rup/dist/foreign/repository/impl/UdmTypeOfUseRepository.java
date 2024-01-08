@@ -27,7 +27,7 @@ public class UdmTypeOfUseRepository extends BaseRepository implements IUdmTypeOf
 
     @Override
     public Map<String, String> findUdmTouToRmsTouMap() {
-        UdmTouToRmsTouResultHandler handler = new UdmTouToRmsTouResultHandler();
+        var handler = new UdmTouToRmsTouResultHandler();
         getTemplate().select("IUdmTouMapper.findUdmTouToRmsTouMap", handler);
         return handler.getUdmTousToRmsTous();
     }
