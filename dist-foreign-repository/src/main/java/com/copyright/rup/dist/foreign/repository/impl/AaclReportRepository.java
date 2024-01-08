@@ -54,8 +54,7 @@ public class AaclReportRepository extends CommonReportRepository implements IAac
         parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
         parameters.put("status", Objects.requireNonNull(status));
         parameters.put("archivedStatuses", List.of(ScenarioStatusEnum.SENT_TO_LM, ScenarioStatusEnum.ARCHIVED));
-        try (WorkSharesByAggLcClassSummaryReportHandler handler =
-                 new WorkSharesByAggLcClassSummaryReportHandler(Objects.requireNonNull(outputStream))) {
+        try (var handler = new WorkSharesByAggLcClassSummaryReportHandler(Objects.requireNonNull(outputStream))) {
             getTemplate().select("IAaclReportMapper.findWorkSharesByAggLcClassSummaryReportDtos", parameters, handler);
         }
     }
@@ -67,8 +66,7 @@ public class AaclReportRepository extends CommonReportRepository implements IAac
         parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
         parameters.put("status", Objects.requireNonNull(status));
         parameters.put("archivedStatuses", List.of(ScenarioStatusEnum.SENT_TO_LM, ScenarioStatusEnum.ARCHIVED));
-        try (WorkSharesByAggLcClassReportHandler handler =
-                 new WorkSharesByAggLcClassReportHandler(Objects.requireNonNull(outputStream))) {
+        try (var handler = new WorkSharesByAggLcClassReportHandler(Objects.requireNonNull(outputStream))) {
             getTemplate().select("IAaclReportMapper.findWorkSharesByAggLcClassReportDtos", parameters, handler);
         }
     }
@@ -122,8 +120,7 @@ public class AaclReportRepository extends CommonReportRepository implements IAac
 
     @Override
     public void writeAaclBaselineUsagesCsvReport(int numberOfYears, OutputStream outputStream) {
-        try (AaclBaselineUsagesCsvReportHandler handler =
-                 new AaclBaselineUsagesCsvReportHandler(Objects.requireNonNull(outputStream))) {
+        try (var handler = new AaclBaselineUsagesCsvReportHandler(Objects.requireNonNull(outputStream))) {
             getTemplate().select("IAaclReportMapper.findAaclBaselineUsages", numberOfYears, handler);
         }
     }
@@ -131,7 +128,7 @@ public class AaclReportRepository extends CommonReportRepository implements IAac
     @Override
     public void writeAaclExcludeDetailsByPayeeCsvReport(ExcludePayeeFilter filter, Set<Long> selectedAccountNumbers,
                                                         PipedOutputStream pipedOutputStream) {
-        try (AaclExcludeDetailsByPayeeCsvReportHandler handler = new AaclExcludeDetailsByPayeeCsvReportHandler(
+        try (var handler = new AaclExcludeDetailsByPayeeCsvReportHandler(
             Objects.requireNonNull(pipedOutputStream),
             Objects.requireNonNull(selectedAccountNumbers))) {
             if (!Objects.requireNonNull(filter).isEmpty()) {
@@ -143,8 +140,7 @@ public class AaclReportRepository extends CommonReportRepository implements IAac
 
     @Override
     public void writeAaclUndistributedLiabilitiesCsvReport(OutputStream outputStream) {
-        try (AaclUndistributedLiabilitiesReportHandler handler =
-                 new AaclUndistributedLiabilitiesReportHandler(Objects.requireNonNull(outputStream))) {
+        try (var handler = new AaclUndistributedLiabilitiesReportHandler(Objects.requireNonNull(outputStream))) {
             Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
             parameters.put("serviceFee", 0.25);
             parameters.put(PRODUCT_FAMILY, FdaConstants.AACL_PRODUCT_FAMILY);

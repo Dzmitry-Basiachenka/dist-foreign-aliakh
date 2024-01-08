@@ -51,7 +51,7 @@ public class PrmIneligibleRightsholderService implements IPrmIneligibleRightshol
     public Set<AclIneligibleRightsholder> getIneligibleRightsholders(LocalDate periodEndDate, String licenseType) {
         Map<String, List<AclIneligibleRightsholder>> parents =
             getParentsByLicenseType(periodEndDate, licenseType);
-        IneligibleRightsholdersHandler handler = new IneligibleRightsholdersHandler(restTemplate, periodEndDate);
+        var handler = new IneligibleRightsholdersHandler(restTemplate, periodEndDate);
         Set<AclIneligibleRightsholder> rightsholders = new HashSet<>();
         parents.forEach((key, value) -> {
             handler.setTypeOfUse(getTypeOfUse(key));

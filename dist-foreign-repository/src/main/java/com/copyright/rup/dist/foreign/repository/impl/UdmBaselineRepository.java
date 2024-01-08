@@ -73,7 +73,7 @@ public class UdmBaselineRepository extends AclBaseRepository implements IUdmBase
 
     @Override
     public Map<Long, String> findWrWrkInstToSystemTitles(Set<Integer> periods) {
-        WrWrkInstToSystemTitlesResultHandler handler = new WrWrkInstToSystemTitlesResultHandler();
+        var handler = new WrWrkInstToSystemTitlesResultHandler();
         getTemplate().select("IUdmBaselineMapper.findWrWrkInstToSystemTitleMap", Objects.requireNonNull(periods),
             handler);
         return handler.getWrWrkInstToSystemTitles();

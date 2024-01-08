@@ -48,8 +48,7 @@ public class NtsReportRepository extends CommonReportRepository implements INtsR
     @Override
     public void writeNtsServiceFeeTrueUpCsvReport(Scenario scenario, OutputStream outputStream,
                                                   BigDecimal defaultEstimatedServiceFee) {
-        try (NtsServiceFeeTrueUpReportHandler handler =
-                 new NtsServiceFeeTrueUpReportHandler(Objects.requireNonNull(outputStream))) {
+        try (var handler = new NtsServiceFeeTrueUpReportHandler(Objects.requireNonNull(outputStream))) {
             if (ScenarioStatusEnum.SENT_TO_LM == Objects.requireNonNull(scenario).getStatus()) {
                 Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
                 parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenario.getId()));
@@ -120,8 +119,7 @@ public class NtsReportRepository extends CommonReportRepository implements INtsR
 
     @Override
     public void writeNtsWithdrawnBatchSummaryCsvReport(OutputStream outputStream) {
-        try (NtsWithdrawnBatchSummaryReportHandler handler =
-                 new NtsWithdrawnBatchSummaryReportHandler(Objects.requireNonNull(outputStream))) {
+        try (var handler = new NtsWithdrawnBatchSummaryReportHandler(Objects.requireNonNull(outputStream))) {
             getTemplate().select("INtsReportMapper.findNtsWithdrawnBatchSummaryReportDtos", handler);
         }
     }
@@ -129,8 +127,7 @@ public class NtsReportRepository extends CommonReportRepository implements INtsR
     @Override
     public void writeNtsUndistributedLiabilitiesCsvReport(BigDecimal estimatedServiceFee,
                                                           OutputStream outputStream) {
-        try (NtsUndistributedLiabilitiesReportHandler handler =
-                 new NtsUndistributedLiabilitiesReportHandler(Objects.requireNonNull(outputStream))) {
+        try (var handler = new NtsUndistributedLiabilitiesReportHandler(Objects.requireNonNull(outputStream))) {
             Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
             parameters.put("estimatedServiceFee", estimatedServiceFee);
             parameters.put(PRODUCT_FAMILY, FdaConstants.NTS_PRODUCT_FAMILY);
@@ -141,7 +138,7 @@ public class NtsReportRepository extends CommonReportRepository implements INtsR
 
     @Override
     public void writeNtsFundPoolsCsvReport(OutputStream outputStream) {
-        try (NtsFundPoolsCsvReportHandler handler = new NtsFundPoolsCsvReportHandler(outputStream)) {
+        try (var handler = new NtsFundPoolsCsvReportHandler(outputStream)) {
             getTemplate().select("INtsReportMapper.findNtsFundPools", handler);
         }
     }

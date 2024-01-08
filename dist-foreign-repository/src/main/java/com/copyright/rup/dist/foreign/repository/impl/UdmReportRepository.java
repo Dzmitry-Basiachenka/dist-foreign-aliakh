@@ -52,8 +52,7 @@ public class UdmReportRepository extends CommonReportRepository implements IUdmR
 
     @Override
     public void writeUdmProxyValueCsvReport(UdmProxyValueFilter filter, PipedOutputStream pipedOutputStream) {
-        try (UdmProxyValueCsvReportHandler handler =
-                 new UdmProxyValueCsvReportHandler(Objects.requireNonNull(pipedOutputStream))) {
+        try (var handler = new UdmProxyValueCsvReportHandler(Objects.requireNonNull(pipedOutputStream))) {
             if (!Objects.requireNonNull(filter).isEmpty()) {
                 Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(1);
                 parameters.put(FILTER_KEY, filter);
@@ -99,80 +98,70 @@ public class UdmReportRepository extends CommonReportRepository implements IUdmR
 
     @Override
     public void writeUdmWeeklySurveyCsvReport(UdmReportFilter filter, OutputStream outputStream) {
-        try (UdmWeeklySurveyReportHandler handler =
-                 new UdmWeeklySurveyReportHandler(Objects.requireNonNull(outputStream))) {
+        try (var handler = new UdmWeeklySurveyReportHandler(Objects.requireNonNull(outputStream))) {
             getTemplate().select("IUdmReportMapper.findUdmWeeklySurveyReportDtos", filter, handler);
         }
     }
 
     @Override
     public void writeUdmSurveyLicenseeCsvReport(UdmReportFilter filter, OutputStream outputStream) {
-        try (UdmSurveyLicenseeReportHandler handler =
-                 new UdmSurveyLicenseeReportHandler(Objects.requireNonNull(outputStream))) {
+        try (var handler = new UdmSurveyLicenseeReportHandler(Objects.requireNonNull(outputStream))) {
             getTemplate().select("IUdmReportMapper.findUdmSurveyLicenseeReportDtos", filter, handler);
         }
     }
 
     @Override
     public void writeUdmVerifiedDetailsBySourceReport(UdmReportFilter filter, OutputStream outputStream) {
-        try (UdmVerifiedDetailsBySourceReportHandler handler =
-                 new UdmVerifiedDetailsBySourceReportHandler(Objects.requireNonNull(outputStream))) {
+        try (var handler = new UdmVerifiedDetailsBySourceReportHandler(Objects.requireNonNull(outputStream))) {
             getTemplate().select("IUdmReportMapper.findUdmVerifiedDetailsBySourceReportDtos", filter, handler);
         }
     }
 
     @Override
     public void writeUdmCompletedAssignmentsCsvReport(UdmReportFilter filter, OutputStream outputStream) {
-        try (UdmCompletedAssignmentsReportHandler handler =
-                 new UdmCompletedAssignmentsReportHandler(Objects.requireNonNull(outputStream))) {
+        try (var handler = new UdmCompletedAssignmentsReportHandler(Objects.requireNonNull(outputStream))) {
             getTemplate().select("IUdmReportMapper.findUdmCompletedAssignmentsReportDtos", filter, handler);
         }
     }
 
     @Override
     public void writeUdmUsageEditsInBaselineCsvReport(UdmReportFilter reportFilter, OutputStream outputStream) {
-        try (UdmUsageEditsInBaselineReportHandler handler =
-                 new UdmUsageEditsInBaselineReportHandler(Objects.requireNonNull(outputStream))) {
+        try (var handler = new UdmUsageEditsInBaselineReportHandler(Objects.requireNonNull(outputStream))) {
             getTemplate().select("IUdmReportMapper.findUdmUsageEditsInBaselineReportDtos", reportFilter, handler);
         }
     }
 
     @Override
     public void writeUdmUsableDetailsByCountryCsvReport(UdmReportFilter filter, OutputStream outputStream) {
-        try (UdmUsableDetailsByCountryReportHandler handler =
-                 new UdmUsableDetailsByCountryReportHandler(Objects.requireNonNull(outputStream))) {
+        try (var handler = new UdmUsableDetailsByCountryReportHandler(Objects.requireNonNull(outputStream))) {
             getTemplate().select("IUdmReportMapper.findUdmUsableDetailsByCountryReportDtos", filter, handler);
         }
     }
 
     @Override
     public void writeUdmValuesByStatusCsvReport(Integer period, OutputStream outputStream) {
-        try (UdmAssigneesByStatusReportHandler handler =
-                 new UdmAssigneesByStatusReportHandler(Objects.requireNonNull(outputStream))) {
+        try (var handler = new UdmAssigneesByStatusReportHandler(Objects.requireNonNull(outputStream))) {
             getTemplate().select("IUdmReportMapper.findUdmValuesByStatusReportDtos", period, handler);
         }
     }
 
     @Override
     public void writeUdmUsagesByStatusCsvReport(Integer period, OutputStream outputStream) {
-        try (UdmAssigneesByStatusReportHandler handler =
-                 new UdmAssigneesByStatusReportHandler(Objects.requireNonNull(outputStream))) {
+        try (var handler = new UdmAssigneesByStatusReportHandler(Objects.requireNonNull(outputStream))) {
             getTemplate().select("IUdmReportMapper.findUdmUsagesByStatusReportDtos", period, handler);
         }
     }
 
     @Override
     public void writeUdmBaselineValueUpdatesCsvReport(UdmReportFilter reportFilter, OutputStream outputStream) {
-        try (UdmBaselineValueUpdatesReportHandler handler =
-                 new UdmBaselineValueUpdatesReportHandler(Objects.requireNonNull(outputStream))) {
+        try (var handler = new UdmBaselineValueUpdatesReportHandler(Objects.requireNonNull(outputStream))) {
             getTemplate().select("IUdmReportMapper.findUdmBaselineValueUpdatesReportDtos", reportFilter, handler);
         }
     }
 
     @Override
     public void writeUdmSurveyDashboardCsvReport(Set<Integer> periods, OutputStream outputStream) {
-        try (UdmSurveyDashboardCsvReportHandler handler =
-                 new UdmSurveyDashboardCsvReportHandler(Objects.requireNonNull(outputStream))) {
+        try (var handler = new UdmSurveyDashboardCsvReportHandler(Objects.requireNonNull(outputStream))) {
             getTemplate().select("IUdmReportMapper.findUdmSurveyDashboardReportDtos",
                 ImmutableMap.of("periods", Objects.requireNonNull(periods)), handler);
         }

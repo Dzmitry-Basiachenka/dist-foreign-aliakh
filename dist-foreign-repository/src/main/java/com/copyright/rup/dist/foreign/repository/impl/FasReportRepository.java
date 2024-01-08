@@ -69,8 +69,7 @@ public class FasReportRepository extends CommonReportRepository implements IFasR
         parameters.put("withdrawnStatuses", List.of(UsageStatusEnum.NTS_WITHDRAWN, UsageStatusEnum.TO_BE_DISTRIBUTED));
         parameters.put("defaultEstimatedServiceFee", Objects.requireNonNull(defaultEstimatedServiceFee));
         parameters.put("productFamilies", productFamilies);
-        try (UndistributedLiabilitiesReportHandler handler =
-                 new UndistributedLiabilitiesReportHandler(Objects.requireNonNull(outputStream))) {
+        try (var handler = new UndistributedLiabilitiesReportHandler(Objects.requireNonNull(outputStream))) {
             getTemplate().select("IFasReportMapper.findUndistributedLiabilitiesReportDtos", parameters, handler);
         }
     }
@@ -79,8 +78,7 @@ public class FasReportRepository extends CommonReportRepository implements IFasR
     public void writeFasServiceFeeTrueUpCsvReport(LocalDate fromDate, LocalDate toDate, LocalDate paymentDateTo,
                                                   OutputStream outputStream, Long claAccountNumber,
                                                   BigDecimal defaultEstimatedServiceFee) {
-        try (FasServiceFeeTrueUpReportHandler handler =
-                 new FasServiceFeeTrueUpReportHandler(Objects.requireNonNull(outputStream))) {
+        try (var handler = new FasServiceFeeTrueUpReportHandler(Objects.requireNonNull(outputStream))) {
             Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(8);
             parameters.put("paymentDateTo", Objects.requireNonNull(paymentDateTo));
             parameters.put("fromDate", Objects.requireNonNull(fromDate));
@@ -97,8 +95,7 @@ public class FasReportRepository extends CommonReportRepository implements IFasR
 
     @Override
     public void writeSummaryMarketCsvReport(List<String> batchIds, OutputStream outputStream) {
-        try (SummaryMarketReportHandler handler =
-                 new SummaryMarketReportHandler(Objects.requireNonNull(outputStream))) {
+        try (var handler = new SummaryMarketReportHandler(Objects.requireNonNull(outputStream))) {
             getTemplate().select("IFasReportMapper.findSummaryMarketReportDtos", Objects.requireNonNull(batchIds),
                 handler);
         }
@@ -106,16 +103,14 @@ public class FasReportRepository extends CommonReportRepository implements IFasR
 
     @Override
     public void writeFasBatchSummaryCsvReport(OutputStream outputStream) {
-        try (FasBatchSummaryReportHandler handler =
-                 new FasBatchSummaryReportHandler(Objects.requireNonNull(outputStream))) {
+        try (var handler = new FasBatchSummaryReportHandler(Objects.requireNonNull(outputStream))) {
             getTemplate().select("IFasReportMapper.findFasBatchSummaryReportDtos", handler);
         }
     }
 
     @Override
     public void writeResearchStatusCsvReport(OutputStream outputStream) {
-        try (ResearchStatusReportHandler handler =
-                 new ResearchStatusReportHandler(Objects.requireNonNull(outputStream))) {
+        try (var handler = new ResearchStatusReportHandler(Objects.requireNonNull(outputStream))) {
             getTemplate().select("IFasReportMapper.findResearchStatusReportDtos", handler);
         }
     }
@@ -127,8 +122,7 @@ public class FasReportRepository extends CommonReportRepository implements IFasR
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
         parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
         parameters.put(STATUSES, statuses);
-        try (OwnershipAdjustmentReportHandler handler =
-                 new OwnershipAdjustmentReportHandler(Objects.requireNonNull(outputStream))) {
+        try (var handler = new OwnershipAdjustmentReportHandler(Objects.requireNonNull(outputStream))) {
             getTemplate().select("IFasReportMapper.findOwnershipAdjustmentReportDtos", parameters, handler);
         }
     }
@@ -159,8 +153,7 @@ public class FasReportRepository extends CommonReportRepository implements IFasR
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
         parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
         parameters.put("sort", new Sort("rightsholder.accountNumber", Direction.ASC));
-        try (ScenarioRightsholderTotalsCsvReportHandler handler =
-                 new ScenarioRightsholderTotalsCsvReportHandler(pipedOutputStream)) {
+        try (var handler = new ScenarioRightsholderTotalsCsvReportHandler(pipedOutputStream)) {
             getTemplate().select("IFasReportMapper.findRightsholderTotalsHoldersReportDtos", parameters, handler);
         }
     }
@@ -172,8 +165,7 @@ public class FasReportRepository extends CommonReportRepository implements IFasR
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
         parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
         parameters.put("sort", new Sort("rightsholder.accountNumber", Direction.ASC));
-        try (ScenarioRightsholderTotalsCsvReportHandler handler =
-                 new ScenarioRightsholderTotalsCsvReportHandler(pipedOutputStream)) {
+        try (var handler = new ScenarioRightsholderTotalsCsvReportHandler(pipedOutputStream)) {
             getTemplate().select("IFasReportMapper.findArchivedRightsholderTotalsHoldersReportDtos", parameters,
                 handler);
         }
@@ -210,7 +202,7 @@ public class FasReportRepository extends CommonReportRepository implements IFasR
     @Override
     public void writeFasExcludeDetailsByPayeeCsvReport(ExcludePayeeFilter filter, Set<Long> selectedAccountNumbers,
                                                        PipedOutputStream pipedOutputStream) {
-        try (FasExcludeDetailsByPayeeCsvReportHandler handler = new FasExcludeDetailsByPayeeCsvReportHandler(
+        try (var handler = new FasExcludeDetailsByPayeeCsvReportHandler(
             Objects.requireNonNull(pipedOutputStream),
             Objects.requireNonNull(selectedAccountNumbers))) {
             if (!Objects.requireNonNull(filter).isEmpty()) {

@@ -71,7 +71,7 @@ public class AclCalculationReportRepository extends CommonReportRepository imple
     public void writeAclFundPoolDetailsCsvReport(AclFundPoolDetailFilter filter, PipedOutputStream pipedOutputStream) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(1);
         parameters.put(FILTER_KEY, Objects.requireNonNull(filter));
-        try (AclFundPoolDetailsCsvReportHandler handler = new AclFundPoolDetailsCsvReportHandler(
+        try (var handler = new AclFundPoolDetailsCsvReportHandler(
             Objects.requireNonNull(pipedOutputStream))) {
             if (!filter.isEmpty()) {
                 getTemplate().select("IAclCalculationReportMapper.writeAclFundPoolDetailsCsvReport", parameters,
@@ -94,7 +94,7 @@ public class AclCalculationReportRepository extends CommonReportRepository imple
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
         parameters.put("scenarioId", Objects.requireNonNull(scenarioId));
         parameters.put("sort", new Sort("rightsholder.accountNumber", Direction.ASC));
-        try (AclScenarioRightsholderTotalsCsvReportHandler handler =
+        try (var handler =
                  new AclScenarioRightsholderTotalsCsvReportHandler(Objects.requireNonNull(pipedOutputStream))) {
             getTemplate().select("IAclCalculationReportMapper.findAclRightsholderTotalsHoldersReportDtos",
                 parameters, handler);
@@ -105,8 +105,7 @@ public class AclCalculationReportRepository extends CommonReportRepository imple
     public void writeSummaryOfWorkSharesByAggLcCsvReport(AclCalculationReportsInfoDto reportInfo,
                                                          OutputStream outputStream) {
         String scenarioId = Objects.requireNonNull(reportInfo.getScenarios().get(0).getId());
-        try (AclSummaryOfWorkSharesByAggLcCsvReportHandler handler =
-                 new AclSummaryOfWorkSharesByAggLcCsvReportHandler(Objects.requireNonNull(outputStream))) {
+        try (var handler = new AclSummaryOfWorkSharesByAggLcCsvReportHandler(Objects.requireNonNull(outputStream))) {
             getTemplate().select("IAclCalculationReportMapper.findSummaryOfWorkSharesByAggLcReportDtos",
                 scenarioId, handler);
             handler.writeMetadata(reportInfo);
@@ -116,8 +115,7 @@ public class AclCalculationReportRepository extends CommonReportRepository imple
     @Override
     public void writeWorkSharesByAggLcCsvReport(AclCalculationReportsInfoDto reportInfo, OutputStream outputStream) {
         String scenarioId = Objects.requireNonNull(reportInfo.getScenarios().get(0).getId());
-        try (AclWorkSharesByAggLcCsvReportHandler handler =
-                 new AclWorkSharesByAggLcCsvReportHandler(Objects.requireNonNull(outputStream))) {
+        try (var handler = new AclWorkSharesByAggLcCsvReportHandler(Objects.requireNonNull(outputStream))) {
             getTemplate().select("IAclCalculationReportMapper.findWorkSharesByAggLcReportDtos", scenarioId, handler);
             handler.writeMetadata(reportInfo);
         }
@@ -125,8 +123,7 @@ public class AclCalculationReportRepository extends CommonReportRepository imple
 
     @Override
     public void writeAclLiabilityDetailsReport(AclCalculationReportsInfoDto reportInfo, OutputStream outputStream) {
-        try (AclLiabilityDetailsCsvReportHandler handler =
-                 new AclLiabilityDetailsCsvReportHandler(Objects.requireNonNull(outputStream))) {
+        try (var handler = new AclLiabilityDetailsCsvReportHandler(Objects.requireNonNull(outputStream))) {
             getTemplate().select("IAclCalculationReportMapper.findAclScenarioDetailsReportDtos", reportInfo, handler);
             handler.writeTotals(
                 selectOne("IAclCalculationReportMapper.findTotalAmountsOfAclScenarioDetailsReport", reportInfo));
@@ -137,8 +134,7 @@ public class AclCalculationReportRepository extends CommonReportRepository imple
     @Override
     public void writeAclLiabilitiesByAggLicClassReport(AclCalculationReportsInfoDto reportInfo,
                                                        OutputStream outputStream) {
-        try (AclLiabilitiesByAggLicClassCsvReportHandler handler =
-                 new AclLiabilitiesByAggLicClassCsvReportHandler(Objects.requireNonNull(outputStream))) {
+        try (var handler = new AclLiabilitiesByAggLicClassCsvReportHandler(Objects.requireNonNull(outputStream))) {
             getTemplate().select("IAclCalculationReportMapper.findAclLiabilitiesByAggLicClassReportDtos",
                 reportInfo, handler);
             handler.writeTotals(
@@ -149,8 +145,7 @@ public class AclCalculationReportRepository extends CommonReportRepository imple
 
     @Override
     public void writeAclLiabilitiesByRhReport(AclCalculationReportsInfoDto reportInfo, OutputStream outputStream) {
-        try (AclLiabilitiesByRhCsvReportHandler handler =
-                 new AclLiabilitiesByRhCsvReportHandler(Objects.requireNonNull(outputStream))) {
+        try (var handler = new AclLiabilitiesByRhCsvReportHandler(Objects.requireNonNull(outputStream))) {
             getTemplate().select("IAclCalculationReportMapper.findAclLiabilitiesByRhReportDtos", reportInfo, handler);
             handler.writeTotals(
                 selectOne("IAclCalculationReportMapper.findAclLiabilitiesByRhReportTotalAmounts", reportInfo));
@@ -161,7 +156,7 @@ public class AclCalculationReportRepository extends CommonReportRepository imple
     @Override
     public void writeAclComparisonByAggLcClassAndTitleReport(AclCalculationReportsInfoDto reportInfo,
                                                              OutputStream outputStream) {
-        try (AclComparisonByAggLcClassAndTitleCsvReportHandler handler =
+        try (var handler =
                  new AclComparisonByAggLcClassAndTitleCsvReportHandler(Objects.requireNonNull(outputStream))) {
             getTemplate().select("IAclCalculationReportMapper.findAclComparisonByAggLcClassAndTitleReportDtos",
                 reportInfo, handler);
@@ -171,8 +166,7 @@ public class AclCalculationReportRepository extends CommonReportRepository imple
 
     @Override
     public void writeAclFundPoolByAggLcReport(Set<String> fundPoolIds, OutputStream outputStream) {
-        try (AclFundPoolByAggLcCsvReportHandler handler =
-                 new AclFundPoolByAggLcCsvReportHandler(Objects.requireNonNull(outputStream))) {
+        try (var handler = new AclFundPoolByAggLcCsvReportHandler(Objects.requireNonNull(outputStream))) {
             getTemplate().select("IAclCalculationReportMapper.writeAclFundPoolByAggLcReport", fundPoolIds, handler);
         }
     }
@@ -183,7 +177,7 @@ public class AclCalculationReportRepository extends CommonReportRepository imple
                                          boolean precondition,
                                          Supplier<? extends BaseCsvReportHandler> handlerSupplier) {
         int size = selectOne(countMethodName, parameters);
-        try (BaseCsvReportHandler handler = handlerSupplier.get()) {
+        try (var handler = handlerSupplier.get()) {
             if (precondition && 0 < size) {
                 for (int offset = 0; offset < size; offset += REPORT_BATCH_SIZE) {
                     parameters.put(PAGEABLE_KEY, new Pageable(offset, REPORT_BATCH_SIZE));
