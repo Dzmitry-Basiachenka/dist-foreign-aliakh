@@ -1,11 +1,10 @@
 package com.copyright.rup.dist.foreign.service.impl.acl;
 
-import com.google.common.collect.ImmutableSet;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Set;
 
 /**
@@ -20,10 +19,10 @@ import java.util.Set;
 @Component
 public class UdmAnnualizedCopiesCalculator {
 
-    private static final Set<String> EMAIL_TOU = ImmutableSet.of("EMAIL_COPY", "SHARE_SINGLE_ELECTRONIC_COPY",
+    private static final Set<String> EMAIL_TOU = Set.of("EMAIL_COPY", "SHARE_SINGLE_ELECTRONIC_COPY",
         "SUBMIT_ELECTRONIC_COPY");
-    private static final Set<String> INTRANET_TOU = ImmutableSet.of("DISPLAY_IN_POWERPOINT",
-        "DISTRIBUTE_IN_POWERPOINT", "STORE_COPY", "DIGITAL_SHARING_OTHER");
+    private static final Set<String> INTRANET_TOU = Set.of("DISPLAY_IN_POWERPOINT", "DISTRIBUTE_IN_POWERPOINT",
+        "STORE_COPY", "DIGITAL_SHARING_OTHER");
 
     @Value("$RUP{dist.foreign.udm.capped_quantity}")
     private int cappedQuantity;
@@ -47,16 +46,16 @@ public class UdmAnnualizedCopiesCalculator {
             BigDecimal statisticalQuantity = new BigDecimal(quantity).multiply(statisticalMultiplier);
             BigDecimal annualizedCopies = statisticalQuantity.multiply(new BigDecimal(annualMultiplier));
             if (statisticalQuantity.compareTo(emailCappedQuantity) > 0) {
-                return annualizedCopies.setScale(5, BigDecimal.ROUND_HALF_UP);
+                return annualizedCopies.setScale(5, RoundingMode.HALF_UP);
             } else {
-                return annualizedCopies.min(maxEmailAnnualizedQuantity).setScale(5, BigDecimal.ROUND_HALF_UP);
+                return annualizedCopies.min(maxEmailAnnualizedQuantity).setScale(5, RoundingMode.HALF_UP);
             }
         } else if (INTRANET_TOU.contains(reportedTypeOfUse)) {
             return new BigDecimal(Math.min(quantity, cappedQuantity) * annualMultiplier)
-                .multiply(statisticalMultiplier).setScale(5, BigDecimal.ROUND_HALF_UP);
+                .multiply(statisticalMultiplier).setScale(5, RoundingMode.HALF_UP);
         } else {
             return new BigDecimal(quantity * annualMultiplier)
-                .multiply(statisticalMultiplier).setScale(5, BigDecimal.ROUND_HALF_UP);
+                .multiply(statisticalMultiplier).setScale(5, RoundingMode.HALF_UP);
         }
     }
 }

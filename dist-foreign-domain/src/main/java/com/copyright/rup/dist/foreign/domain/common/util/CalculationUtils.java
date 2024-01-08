@@ -63,7 +63,7 @@ public final class CalculationUtils {
     public static BigDecimal calculateServiceFeeAmount(BigDecimal grossAmount, BigDecimal serviceFee) {
         checkArgument(0 > BigDecimal.ZERO.compareTo(grossAmount));
         checkArgument(0 > BigDecimal.ZERO.compareTo(serviceFee));
-        return grossAmount.multiply(serviceFee).setScale(10, BigDecimal.ROUND_HALF_UP);
+        return grossAmount.multiply(serviceFee).setScale(10, RoundingMode.HALF_UP);
     }
 
     /**

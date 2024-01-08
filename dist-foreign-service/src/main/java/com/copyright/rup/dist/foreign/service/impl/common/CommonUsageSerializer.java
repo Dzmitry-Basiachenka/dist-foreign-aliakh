@@ -33,6 +33,7 @@ import java.util.Objects;
 public class CommonUsageSerializer extends StdSerializer<List<Usage>> {
 
     private static final long serialVersionUID = 7321491874268040968L;
+    private static final String BATCH_PERIOD_END_DATE_FIELD_NAME = "batch_period_end_date";
 
     /**
      * Constructor.
@@ -72,13 +73,15 @@ public class CommonUsageSerializer extends StdSerializer<List<Usage>> {
             writeNotNullField(jsonGenerator, "status", usage.getStatus().name());
             writeNotNullField(jsonGenerator, "product_family", usage.getProductFamily());
             if (FdaConstants.AACL_PRODUCT_FAMILY.equals(usage.getProductFamily())) {
-                writeNotNullField(jsonGenerator, "batch_period_end_date", usage.getAaclUsage().getBatchPeriodEndDate());
+                writeNotNullField(
+                    jsonGenerator, BATCH_PERIOD_END_DATE_FIELD_NAME, usage.getAaclUsage().getBatchPeriodEndDate());
                 writeNotNullField(jsonGenerator, "baselineId", usage.getAaclUsage().getBaselineId());
             } else if (FdaConstants.SAL_PRODUCT_FAMILY.equals(usage.getProductFamily())) {
-                writeNotNullField(jsonGenerator, "batch_period_end_date", usage.getSalUsage().getBatchPeriodEndDate());
+                writeNotNullField(
+                    jsonGenerator, BATCH_PERIOD_END_DATE_FIELD_NAME, usage.getSalUsage().getBatchPeriodEndDate());
             } else if (FdaConstants.ACLCI_PRODUCT_FAMILY.equals(usage.getProductFamily())) {
                 writeNotNullField(jsonGenerator, "license_type", usage.getAclciUsage().getLicenseType().name());
-                writeNotNullField(jsonGenerator, "batch_period_end_date",
+                writeNotNullField(jsonGenerator, BATCH_PERIOD_END_DATE_FIELD_NAME,
                     usage.getAclciUsage().getBatchPeriodEndDate());
             }
             jsonGenerator.writeNumberField("record_version", usage.getVersion());

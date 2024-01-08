@@ -38,6 +38,7 @@ import java.util.List;
 public class CommonUsageDeserializer extends JsonDeserializer<List<Usage>> {
 
     private static final Logger LOGGER = RupLogUtils.getLogger();
+    private static final String BATCH_PERIOD_END_DATE_FIELD_NAME = "batch_period_end_date";
 
     @Override
     public List<Usage> deserialize(JsonParser parser, DeserializationContext context)
@@ -75,18 +76,18 @@ public class CommonUsageDeserializer extends JsonDeserializer<List<Usage>> {
         if (FdaConstants.AACL_PRODUCT_FAMILY.equals(usage.getProductFamily())) {
             usage.setAaclUsage(new AaclUsage());
             usage.getAaclUsage()
-                .setBatchPeriodEndDate(JsonUtils.getLocalDateValue(jsonNode.get("batch_period_end_date")));
+                .setBatchPeriodEndDate(JsonUtils.getLocalDateValue(jsonNode.get(BATCH_PERIOD_END_DATE_FIELD_NAME)));
             usage.getAaclUsage().setBaselineId(JsonUtils.getStringValue(jsonNode.get("baselineId")));
         } else if (FdaConstants.SAL_PRODUCT_FAMILY.equals(usage.getProductFamily())) {
             usage.setSalUsage(new SalUsage());
             usage.getSalUsage()
-                .setBatchPeriodEndDate(JsonUtils.getLocalDateValue(jsonNode.get("batch_period_end_date")));
+                .setBatchPeriodEndDate(JsonUtils.getLocalDateValue(jsonNode.get(BATCH_PERIOD_END_DATE_FIELD_NAME)));
         } else if (FdaConstants.ACLCI_PRODUCT_FAMILY.equals(usage.getProductFamily())) {
             usage.setAclciUsage(new AclciUsage());
             usage.getAclciUsage()
                 .setLicenseType(AclciLicenseTypeEnum.valueOf(JsonUtils.getStringValue(jsonNode.get("license_type"))));
             usage.getAclciUsage()
-                .setBatchPeriodEndDate(JsonUtils.getLocalDateValue(jsonNode.get("batch_period_end_date")));
+                .setBatchPeriodEndDate(JsonUtils.getLocalDateValue(jsonNode.get(BATCH_PERIOD_END_DATE_FIELD_NAME)));
         }
         usage.setVersion(JsonUtils.getIntegerValue(jsonNode.get("record_version")));
         return usage;

@@ -5,6 +5,7 @@ import com.copyright.rup.dist.foreign.domain.report.WorkSharesByAggLcClassReport
 
 import java.io.OutputStream;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,6 +50,6 @@ public class WorkSharesByAggLcClassSummaryReportHandler
     }
 
     private String roundBigDecimal(BigDecimal value) {
-        return value.setScale(10, BigDecimal.ROUND_HALF_UP).toString();
+        return value.setScale(10, RoundingMode.HALF_UP).toString();
     }
 }

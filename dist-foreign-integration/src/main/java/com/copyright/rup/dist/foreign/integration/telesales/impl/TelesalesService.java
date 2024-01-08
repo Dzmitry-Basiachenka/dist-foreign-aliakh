@@ -7,7 +7,6 @@ import com.copyright.rup.dist.foreign.integration.telesales.api.ITelesalesServic
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.ImmutableMap;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -39,6 +38,7 @@ import io.micrometer.core.annotation.Timed;
 public class TelesalesService implements ITelesalesService {
 
     private static final Logger LOGGER = RupLogUtils.getLogger();
+    private static final String COMPANY_CODE_KEY = "companyCode";
 
     @Autowired
     private RestTemplate restTemplate;
@@ -53,7 +53,7 @@ public class TelesalesService implements ITelesalesService {
         LOGGER.info("Get licensee information. Started. LicneseeAccountNumber={}",
             Objects.requireNonNull(licenseeAccountNumber));
         CompanyInformation companyInformation =
-            handleResponse(salesInfoUrl, ImmutableMap.of("companyCode", licenseeAccountNumber));
+            handleResponse(salesInfoUrl, Map.of(COMPANY_CODE_KEY, licenseeAccountNumber));
         result = companyInformation.getName();
         LOGGER.info("Get licensee information. Finished. LicneseeAccountNumber={}, Result={}", licenseeAccountNumber,
             result);
@@ -63,8 +63,7 @@ public class TelesalesService implements ITelesalesService {
     @Override
     public CompanyInformation getCompanyInformation(Long companyId) {
         LOGGER.info("Get company information. Started. CompanyId={}", Objects.requireNonNull(companyId));
-        CompanyInformation companyInformation =
-            handleResponse(salesInfoUrl, ImmutableMap.of("companyCode", companyId));
+        CompanyInformation companyInformation = handleResponse(salesInfoUrl, Map.of(COMPANY_CODE_KEY, companyId));
         LOGGER.info("Get company information. Finished. CompanyId={}, Result={}", companyId, companyInformation);
         return companyInformation;
     }
@@ -80,7 +79,7 @@ public class TelesalesService implements ITelesalesService {
                         objectMapper.readTree(response).get("com.copyright.svc.telesales.api.data.SalesData"),
                             "Missing response");
                 Long companyId =
-                    NumberUtils.createLong(Objects.toString(urlVariables.get("companyCode"), null));
+                    NumberUtils.createLong(Objects.toString(urlVariables.get(COMPANY_CODE_KEY), null));
                 result = getCompanyInformation(companyId, responseJson);
             }
             LOGGER.debug("Handle company information response. Finished. URL={}, UrlVariables={}, Response={}",
