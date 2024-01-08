@@ -44,6 +44,8 @@ public class UsageArchiveRepository extends BaseRepository implements IUsageArch
     private static final String SCENARIO_ID_KEY = "scenarioId";
     private static final String STATUS_KEY = "status";
     private static final String ACCOUNT_NUMBER_KEY = "accountNumber";
+    private static final String CREATE_USER_KEY = "createUser";
+    private static final String UPDATE_USER_KEY = "updateUser";
 
     @Override
     public void deleteByBatchId(String batchId) {
@@ -151,7 +153,7 @@ public class UsageArchiveRepository extends BaseRepository implements IUsageArch
         checkArgument(CollectionUtils.isNotEmpty(usageIds));
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
         parameters.put(STATUS_KEY, Objects.requireNonNull(status));
-        parameters.put("updateUser", StoredEntity.DEFAULT_USER);
+        parameters.put(UPDATE_USER_KEY, StoredEntity.DEFAULT_USER);
         usageIds.forEach(usageId -> {
             parameters.put("usageId", usageId);
             update("IUsageArchiveMapper.updateStatusById", parameters);
@@ -196,8 +198,8 @@ public class UsageArchiveRepository extends BaseRepository implements IUsageArch
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(4);
         params.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
         params.put(STATUS_KEY, UsageStatusEnum.SENT_TO_LM);
-        params.put("createUser", Objects.requireNonNull(userName));
-        params.put("updateUser", userName);
+        params.put(CREATE_USER_KEY, Objects.requireNonNull(userName));
+        params.put(UPDATE_USER_KEY, userName);
         return selectList("IUsageArchiveMapper.copyToArchiveByScenarioId", params);
     }
 
@@ -206,8 +208,8 @@ public class UsageArchiveRepository extends BaseRepository implements IUsageArch
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(4);
         params.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
         params.put(STATUS_KEY, UsageStatusEnum.SENT_TO_LM);
-        params.put("createUser", Objects.requireNonNull(userName));
-        params.put("updateUser", userName);
+        params.put(CREATE_USER_KEY, Objects.requireNonNull(userName));
+        params.put(UPDATE_USER_KEY, userName);
         return selectList("IUsageArchiveMapper.copyNtsToArchiveByScenarioId", params);
     }
 
@@ -231,7 +233,7 @@ public class UsageArchiveRepository extends BaseRepository implements IUsageArch
     public List<UsageDto> findAaclDtosByScenarioId(String scenarioId) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
         parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
-        parameters.put("pageable", null);
+        parameters.put(PAGEABLE_KEY, null);
         return selectList("IUsageArchiveMapper.findAaclDtosByScenarioId", parameters);
     }
 

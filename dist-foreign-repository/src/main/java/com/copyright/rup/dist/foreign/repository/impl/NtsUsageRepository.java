@@ -179,7 +179,7 @@ public class NtsUsageRepository extends BaseRepository implements INtsUsageRepos
         params.put("statusToFind", UsageStatusEnum.NTS_WITHDRAWN);
         params.put("statusToSet", UsageStatusEnum.TO_BE_DISTRIBUTED);
         params.put("batchIds", Objects.requireNonNull(batchIds));
-        params.put("updateUser", Objects.requireNonNull(userName));
+        params.put(UPDATE_USER_KEY, Objects.requireNonNull(userName));
         update("INtsUsageMapper.addWithdrawnUsagesToNtsFundPool", params);
     }
 

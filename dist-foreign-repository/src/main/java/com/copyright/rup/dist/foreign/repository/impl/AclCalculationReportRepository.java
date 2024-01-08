@@ -47,11 +47,12 @@ public class AclCalculationReportRepository extends CommonReportRepository imple
 
     private static final int REPORT_BATCH_SIZE = 1000;
     private static final String PAGEABLE_KEY = "pageable";
+    private static final String FILTER_KEY = "filter";
 
     @Override
     public void writeAclGrantDetailCsvReport(AclGrantDetailFilter filter, PipedOutputStream pipedOutputStream) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
-        parameters.put("filter", Objects.requireNonNull(filter));
+        parameters.put(FILTER_KEY, Objects.requireNonNull(filter));
         writeCsvReportByParts("IAclCalculationReportMapper.findAclGrantDetailsCountByFilter",
             "IAclCalculationReportMapper.findAclGrantDetailDtosByFilter", parameters, !filter.isEmpty(),
             () -> new AclGrantDetailCsvReportHandler(Objects.requireNonNull(pipedOutputStream)));
@@ -60,7 +61,7 @@ public class AclCalculationReportRepository extends CommonReportRepository imple
     @Override
     public void writeAclUsageCsvReport(AclUsageFilter filter, PipedOutputStream pipedOutputStream) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
-        parameters.put("filter", Objects.requireNonNull(filter));
+        parameters.put(FILTER_KEY, Objects.requireNonNull(filter));
         writeCsvReportByParts("IAclCalculationReportMapper.findAclUsagesCountByFilter",
             "IAclCalculationReportMapper.findAclUsageDtosByFilter", parameters, !filter.isEmpty(),
             () -> new AclUsageCsvReportHandler(Objects.requireNonNull(pipedOutputStream)));
@@ -69,7 +70,7 @@ public class AclCalculationReportRepository extends CommonReportRepository imple
     @Override
     public void writeAclFundPoolDetailsCsvReport(AclFundPoolDetailFilter filter, PipedOutputStream pipedOutputStream) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(1);
-        parameters.put("filter", Objects.requireNonNull(filter));
+        parameters.put(FILTER_KEY, Objects.requireNonNull(filter));
         try (AclFundPoolDetailsCsvReportHandler handler = new AclFundPoolDetailsCsvReportHandler(
             Objects.requireNonNull(pipedOutputStream))) {
             if (!filter.isEmpty()) {

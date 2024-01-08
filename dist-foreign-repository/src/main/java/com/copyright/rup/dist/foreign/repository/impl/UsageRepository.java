@@ -270,7 +270,7 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     public List<UsageDto> findForAudit(AuditFilter filter, Pageable pageable, Sort sort) {
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(3);
         params.put(FILTER_KEY, escapeSqlLikePattern(Objects.requireNonNull(filter)));
-        params.put("pageable", pageable);
+        params.put(PAGEABLE_KEY, pageable);
         params.put("sort", sort);
         return selectList("IUsageMapper.findForAudit", params);
     }
@@ -329,7 +329,7 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
                                                                                    UsageStatusEnum status) {
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(2);
         params.put("batchName", Objects.requireNonNull(batchName));
-        params.put("status", Objects.requireNonNull(status));
+        params.put(STATUS_KEY, Objects.requireNonNull(status));
         WrWrkInstToUsageIdResultHandler handler = new WrWrkInstToUsageIdResultHandler();
         getTemplate().select("IUsageMapper.findWrWrkInstToUsageIdsByBatchNameAndUsageStatus", params, handler);
         return handler.getWrWrkInstToUsageIdsMap();

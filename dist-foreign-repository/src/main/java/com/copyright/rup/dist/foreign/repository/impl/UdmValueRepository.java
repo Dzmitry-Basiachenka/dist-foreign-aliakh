@@ -32,6 +32,7 @@ import java.util.Set;
 public class UdmValueRepository extends AclBaseRepository implements IUdmValueRepository {
 
     private static final String PERIOD_KEY = "period";
+    private static final String UPDATE_USER_KEY = "updateUser";
 
     @Override
     public void insert(UdmValue value) {
@@ -67,7 +68,7 @@ public class UdmValueRepository extends AclBaseRepository implements IUdmValueRe
     public void updateAssignee(Set<String> valueIds, String assignee, String updateUser) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
         parameters.put("valueIds", Objects.requireNonNull(valueIds));
-        parameters.put("updateUser", Objects.requireNonNull(updateUser));
+        parameters.put(UPDATE_USER_KEY, Objects.requireNonNull(updateUser));
         parameters.put("assignee", assignee);
         update("IUdmValueMapper.updateAssignee", parameters);
     }
@@ -94,7 +95,7 @@ public class UdmValueRepository extends AclBaseRepository implements IUdmValueRe
     public List<String> publishToBaseline(Integer period, String userName) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
         parameters.put(PERIOD_KEY, Objects.requireNonNull(period));
-        parameters.put("updateUser", Objects.requireNonNull(userName));
+        parameters.put(UPDATE_USER_KEY, Objects.requireNonNull(userName));
         parameters.put("createUser", userName);
         return selectList("IUdmValueMapper.publishToBaseline", parameters);
     }
@@ -103,7 +104,7 @@ public class UdmValueRepository extends AclBaseRepository implements IUdmValueRe
     public void updateResearchedInPrevPeriod(Integer period, String userName) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
         parameters.put(PERIOD_KEY, Objects.requireNonNull(period));
-        parameters.put("updateUser", Objects.requireNonNull(userName));
+        parameters.put(UPDATE_USER_KEY, Objects.requireNonNull(userName));
         update("IUdmValueMapper.updateResearchedInPrevPeriod", parameters);
     }
 

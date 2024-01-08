@@ -25,6 +25,9 @@ import java.util.Objects;
 @Repository
 public class UdmProxyValueRepository extends BaseRepository implements IUdmProxyValueRepository {
 
+    private static final String PERIOD_KEY = "period";
+    private static final String UPDATE_USER_KEY = "updateUser";
+
     @Override
     public List<Integer> findPeriods() {
         return selectList("IUdmProxyValueMapper.findPeriods");
@@ -38,25 +41,25 @@ public class UdmProxyValueRepository extends BaseRepository implements IUdmProxy
     @Override
     public void clearProxyValues(Integer period, String userName) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
-        parameters.put("period", Objects.requireNonNull(period));
-        parameters.put("updateUser", userName);
+        parameters.put(PERIOD_KEY, Objects.requireNonNull(period));
+        parameters.put(UPDATE_USER_KEY, userName);
         update("IUdmProxyValueMapper.clearProxyValues", parameters);
     }
 
     @Override
     public void insertProxyValues(Integer period, String userName) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
-        parameters.put("period", Objects.requireNonNull(period));
+        parameters.put(PERIOD_KEY, Objects.requireNonNull(period));
         parameters.put("createUser", Objects.requireNonNull(userName));
-        parameters.put("updateUser", userName);
+        parameters.put(UPDATE_USER_KEY, userName);
         insert("IUdmProxyValueMapper.insertProxyValues", parameters);
     }
 
     @Override
     public List<String> applyProxyValues(Integer period, String userName) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
-        parameters.put("period", Objects.requireNonNull(period));
-        parameters.put("updateUser", userName);
+        parameters.put(PERIOD_KEY, Objects.requireNonNull(period));
+        parameters.put(UPDATE_USER_KEY, userName);
         return selectList("IUdmProxyValueMapper.applyProxyValues", parameters);
     }
 
