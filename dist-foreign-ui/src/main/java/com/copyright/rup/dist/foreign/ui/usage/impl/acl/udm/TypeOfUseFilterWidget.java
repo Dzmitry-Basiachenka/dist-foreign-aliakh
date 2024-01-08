@@ -43,7 +43,7 @@ public class TypeOfUseFilterWidget extends BaseUdmItemsFilterWidget<String>
         super(ForeignUi.getMessage("label.types_of_use"));
         this.supplier = supplier;
         this.selectedItemsIds.addAll(selectedItemsIds);
-        setLabelValue(selectedItemsIds.size());
+        super.setLabelValue(selectedItemsIds.size());
     }
 
     @Override

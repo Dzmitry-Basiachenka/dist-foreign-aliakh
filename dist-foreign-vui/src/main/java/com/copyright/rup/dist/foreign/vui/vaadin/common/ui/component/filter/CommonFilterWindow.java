@@ -29,7 +29,7 @@ public class CommonFilterWindow<T> extends CommonDialog {
      * @param caption window caption
      */
     public CommonFilterWindow(String caption) {
-        setHeaderTitle(caption);
+        super.setHeaderTitle(caption);
     }
 
     /**

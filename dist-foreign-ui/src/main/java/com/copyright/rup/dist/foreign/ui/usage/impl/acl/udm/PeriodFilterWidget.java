@@ -52,7 +52,7 @@ public class PeriodFilterWidget extends BaseUdmItemsFilterWidget<Integer>
     public PeriodFilterWidget(Supplier<List<Integer>> supplier, Set<Integer> selectedItemsIds) {
         this(supplier);
         this.periods.addAll(selectedItemsIds);
-        setLabelValue(selectedItemsIds.size());
+        super.setLabelValue(selectedItemsIds.size());
     }
 
     @Override

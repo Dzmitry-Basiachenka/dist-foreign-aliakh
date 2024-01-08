@@ -43,7 +43,7 @@ public class PublicationFormatFilterWidget extends BaseUdmItemsFilterWidget<Stri
         super(ForeignUi.getMessage("label.publication_formats"));
         this.supplier = supplier;
         this.selectedItemsIds.addAll(selectedItemsIds);
-        setLabelValue(selectedItemsIds.size());
+        super.setLabelValue(selectedItemsIds.size());
     }
 
     @Override

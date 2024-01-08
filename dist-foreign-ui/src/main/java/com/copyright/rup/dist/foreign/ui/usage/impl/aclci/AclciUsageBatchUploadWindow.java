@@ -65,11 +65,11 @@ public class AclciUsageBatchUploadWindow extends Window {
      */
     AclciUsageBatchUploadWindow(IAclciUsageController usageController) {
         this.usageController = usageController;
-        setContent(initRootLayout());
-        setCaption(ForeignUi.getMessage("window.upload_usage_batch"));
-        setResizable(false);
-        setWidth(400, Unit.PIXELS);
-        setHeight(305, Unit.PIXELS);
+        super.setContent(initRootLayout());
+        super.setCaption(ForeignUi.getMessage("window.upload_usage_batch"));
+        super.setResizable(false);
+        super.setWidth(400, Unit.PIXELS);
+        super.setHeight(305, Unit.PIXELS);
         VaadinUtils.addComponentStyle(this, "usage-upload-window");
     }
 

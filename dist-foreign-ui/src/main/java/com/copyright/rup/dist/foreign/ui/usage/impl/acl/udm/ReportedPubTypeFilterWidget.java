@@ -43,7 +43,7 @@ public class ReportedPubTypeFilterWidget extends BaseUdmItemsFilterWidget<String
         super(ForeignUi.getMessage("label.reported_pub_types"));
         this.supplier = supplier;
         this.selectedItemsIds.addAll(selectedItemsIds);
-        setLabelValue(selectedItemsIds.size());
+        super.setLabelValue(selectedItemsIds.size());
     }
 
     @Override

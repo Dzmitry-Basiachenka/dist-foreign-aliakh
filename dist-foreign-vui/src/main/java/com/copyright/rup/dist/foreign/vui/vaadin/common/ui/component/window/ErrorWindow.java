@@ -43,14 +43,14 @@ public class ErrorWindow extends Dialog {
     public ErrorWindow(String message, String stackTrace) {
         this.message = message;
         this.stackTrace = stackTrace;
-        setHeaderTitle("Error");
-        getHeader().add(Buttons.createCloseIcon(this));
-        add(initRootLayout());
-        setVisible(true);
-        setResizable(true);
-        setWidth(500, Unit.PIXELS);
-        setHeight(200, Unit.PIXELS);
-        getFooter().add(buildControlsLayout());
+        super.setHeaderTitle("Error");
+        super.getHeader().add(Buttons.createCloseIcon(this));
+        super.add(initRootLayout());
+        super.setVisible(true);
+        super.setResizable(true);
+        super.setWidth(500, Unit.PIXELS);
+        super.setHeight(200, Unit.PIXELS);
+        super.getFooter().add(buildControlsLayout());
     }
 
     /**
@@ -58,13 +58,13 @@ public class ErrorWindow extends Dialog {
      */
     //TODO {sonar} apply private access modifier and adjust tests
     final VerticalLayout initRootLayout() {
-        VerticalLayout rootLayout = new VerticalLayout();
+        var rootLayout = new VerticalLayout();
         VaadinUtils.setMaxComponentsWidth(rootLayout);
         HorizontalLayout errorMessage = buildErrorMessageLayout();
         rootLayout.add(errorMessage);
         if (StringUtils.isNotBlank(stackTrace)) {
             VerticalLayout errorStackTracePanel = buildErrorStackTracePanel(stackTrace);
-            Button details = new Button("Show more");
+            var details = new Button("Show more");
             details.addClickListener(new DetailsButtonClickListener(details, errorStackTracePanel));
             getFooter().add(details);
             rootLayout.setMargin(true);

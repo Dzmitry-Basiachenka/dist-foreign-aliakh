@@ -44,7 +44,7 @@ public class AclPublicationTypeWeightsParameterWidget extends HorizontalLayout {
         this.windowSupplier = windowInitializer;
         this.appliedParameters = defaultParameters;
         initButton(caption);
-        addComponent(button);
+        super.addComponent(button);
         super.setExpandRatio(button, 1);
     }
 

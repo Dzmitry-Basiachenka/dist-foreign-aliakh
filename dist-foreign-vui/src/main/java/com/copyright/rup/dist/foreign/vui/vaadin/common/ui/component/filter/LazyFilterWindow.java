@@ -62,18 +62,18 @@ public class LazyFilterWindow<T> extends CommonFilterWindow<T> {
                             String clearButtonCaption) {
         super(caption);
         this.controller = Objects.requireNonNull(controller);
-        addFilterSaveListener(controller);
-        setWidth(550, Unit.PIXELS);
-        setHeight(530, Unit.PIXELS);
-        VerticalLayout content = new VerticalLayout();
+        super.addFilterSaveListener(controller);
+        super.setWidth(550, Unit.PIXELS);
+        super.setHeight(530, Unit.PIXELS);
+        var content = new VerticalLayout();
         searchWidget = new SearchWidget(() -> dataProvider.refreshAll());
         content.add(searchWidget, initGrid());
         content.setMargin(false);
         content.setSpacing(false);
         content.setSizeFull();
         VaadinUtils.setPadding(content, 10, 10, 10, 10);
-        getFooter().add(createButtonsLayout(saveButtonCaption, clearButtonCaption));
-        add(content);
+        super.getFooter().add(createButtonsLayout(saveButtonCaption, clearButtonCaption));
+        super.add(content);
     }
 
     /**

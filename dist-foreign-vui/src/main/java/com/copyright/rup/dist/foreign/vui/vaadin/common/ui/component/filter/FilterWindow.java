@@ -86,20 +86,20 @@ public class FilterWindow<T> extends CommonFilterWindow<T> {
         super(caption);
         this.controller = Objects.requireNonNull(controller);
         this.filterItems = controller.loadBeans();
-        setWidth(450, Unit.PIXELS);
-        setHeight(400, Unit.PIXELS);
-        VerticalLayout content = new VerticalLayout();
-        Scroller scroller = new Scroller(new Div(initItemsPanel()));
+        super.setWidth(450, Unit.PIXELS);
+        super.setHeight(400, Unit.PIXELS);
+        var content = new VerticalLayout();
+        var scroller = new Scroller(new Div(initItemsPanel()));
         scroller.setScrollDirection(Scroller.ScrollDirection.VERTICAL);
         if (ArrayUtils.isNotEmpty(values)) {
             searchWidget = createSearchWidget(values);
             content.add(searchWidget);
         }
-        addFilterSaveListener(controller);
+        super.addFilterSaveListener(controller);
         content.add(scroller);
-        getFooter().add(createButtonsLayout(saveButtonCaption, clearButtonCaption));
+        super.getFooter().add(createButtonsLayout(saveButtonCaption, clearButtonCaption));
         content.setSizeFull();
-        add(content);
+        super.add(content);
     }
 
     /**

@@ -33,20 +33,20 @@ public class UnsupportedBrowserWindow extends Dialog {
      * @param supportedBrowsers set of supported browsers.
      */
     public UnsupportedBrowserWindow(String applicationTitle, Set<Browser> supportedBrowsers) {
-        getHeader().add(new Span("Error"));
-        setSizeFull();
-        setDraggable(false);
-        setCloseOnEsc(false);
-        setResizable(false);
-        setCloseOnOutsideClick(false);
-        add(initLayout(buildUnsupportedBrowserMessage(applicationTitle, supportedBrowsers)));
+        super.getHeader().add(new Span("Error"));
+        super.setSizeFull();
+        super.setDraggable(false);
+        super.setCloseOnEsc(false);
+        super.setResizable(false);
+        super.setCloseOnOutsideClick(false);
+        super.add(initLayout(buildUnsupportedBrowserMessage(applicationTitle, supportedBrowsers)));
     }
 
     private VerticalLayout initLayout(String unsupportedBrowserMessage) {
-        Label label = new Label(unsupportedBrowserMessage);
+        var label = new Label(unsupportedBrowserMessage);
         label.setSizeFull();
         VaadinUtils.addComponentStyle(label, "unsupported-browser-label");
-        VerticalLayout layout = new VerticalLayout(label);
+        var layout = new VerticalLayout(label);
         layout.setSizeFull();
         layout.setSpacing(false);
         layout.setMargin(false);
