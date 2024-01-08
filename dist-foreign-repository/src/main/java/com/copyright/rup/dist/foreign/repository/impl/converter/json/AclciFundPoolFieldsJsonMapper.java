@@ -23,10 +23,10 @@ public class AclciFundPoolFieldsJsonMapper {
     private static final ObjectMapper OBJECT_MAPPER = buildObjectMapper();
 
     private static ObjectMapper buildObjectMapper() {
-        SimpleModule simpleModule = new SimpleModule();
+        var simpleModule = new SimpleModule();
         simpleModule.addSerializer(FundPool.AclciFields.class, new AclciFundPoolFieldsSerializer());
         simpleModule.addDeserializer(FundPool.AclciFields.class, new AclciFundPoolFieldsDeserializer());
-        ObjectMapper objectMapper = new ObjectMapper();
+        var objectMapper = new ObjectMapper();
         objectMapper.registerModule(simpleModule);
         return objectMapper;
     }

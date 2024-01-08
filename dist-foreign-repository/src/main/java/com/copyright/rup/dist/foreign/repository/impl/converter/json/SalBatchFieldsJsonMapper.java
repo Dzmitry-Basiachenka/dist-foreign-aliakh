@@ -22,10 +22,10 @@ public class SalBatchFieldsJsonMapper {
     private static final ObjectMapper OBJECT_MAPPER = buildObjectMapper();
 
     private static ObjectMapper buildObjectMapper() {
-        SimpleModule simpleModule = new SimpleModule();
+        var simpleModule = new SimpleModule();
         simpleModule.addSerializer(SalFields.class, new SalBatchFieldsSerializer());
         simpleModule.addDeserializer(SalFields.class, new SalBatchFieldsDeserializer());
-        ObjectMapper objectMapper = new ObjectMapper();
+        var objectMapper = new ObjectMapper();
         objectMapper.registerModule(simpleModule);
         return objectMapper;
     }

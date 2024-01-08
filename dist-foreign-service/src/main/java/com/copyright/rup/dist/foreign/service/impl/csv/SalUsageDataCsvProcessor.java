@@ -49,8 +49,8 @@ public class SalUsageDataCsvProcessor extends DistCsvProcessor<Usage> {
 
     @Override
     public void initPlainValidators() {
-        RequiredValidator requiredValidator = new RequiredValidator();
-        LengthValidator lengthValidator1000 = new LengthValidator(1000);
+        var requiredValidator = new RequiredValidator();
+        var lengthValidator1000 = new LengthValidator(1000);
         addPlainValidators(Header.DATE_OF_SCORED_ASSESSMENT, requiredValidator, new DateFormatValidator());
         addPlainValidators(Header.REPORTED_WORK_PORTION_ID, requiredValidator, lengthValidator1000);
         addPlainValidators(Header.ASSESSMENT_TYPE, requiredValidator, lengthValidator1000);

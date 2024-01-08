@@ -23,7 +23,7 @@ public class PeriodsJsonMapper {
     private static final TypeReference<Set<Integer>> TYPE_REFERENCE = new TypeReference<Set<Integer>>() {};
 
     private static ObjectMapper buildObjectMapper() {
-        ObjectMapper objectMapper = new ObjectMapper();
+        var objectMapper = new ObjectMapper();
         objectMapper.registerModule(new SimpleModule());
         return objectMapper;
     }

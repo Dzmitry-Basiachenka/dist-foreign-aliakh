@@ -45,10 +45,10 @@ public class AclciUsageCsvProcessor extends DistCsvProcessor<Usage> {
 
     @Override
     public void initPlainValidators() {
-        RequiredValidator requiredValidator = new RequiredValidator();
-        LengthValidator lengthValidator100 = new LengthValidator(100);
-        LengthValidator lengthValidator1000 = new LengthValidator(1000);
-        PositiveNumberValidator positiveNumberValidator = new PositiveNumberValidator();
+        var requiredValidator = new RequiredValidator();
+        var lengthValidator100 = new LengthValidator(100);
+        var lengthValidator1000 = new LengthValidator(1000);
+        var positiveNumberValidator = new PositiveNumberValidator();
         addPlainValidators(Header.COVERAGE_PERIOD, requiredValidator, lengthValidator100);
         addPlainValidators(Header.LICENSE_TYPE, requiredValidator, new AclciLicenseTypeValidator());
         addPlainValidators(Header.NUMBER_OF_STUDENTS, requiredValidator, new IntegerValidator(),

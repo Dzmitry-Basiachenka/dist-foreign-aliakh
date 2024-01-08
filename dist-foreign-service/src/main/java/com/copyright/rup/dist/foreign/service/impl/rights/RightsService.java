@@ -162,7 +162,7 @@ public class RightsService implements IRightsService {
                 usageService.getUsagesByStatusAndProductFamily(UsageStatusEnum.SENT_FOR_RA, productFamily);
             if (CollectionUtils.isNotEmpty(usages)) {
                 LogUtils.ILogWrapper usagesCount = LogUtils.size(usages);
-                String message = String.format("ProductFamily=%s, UsagesCount=%s; ", productFamily, usagesCount);
+                var message = String.format("ProductFamily=%s, UsagesCount=%s; ", productFamily, usagesCount);
                 LOGGER.info("Update rights for SEND_FOR_RA usages. Started. {}", message);
                 updateSentForRaUsagesRightsholders(usages, productFamily);
                 LOGGER.info("Update rights for SEND_FOR_RA usages. Finished. {}", message);
@@ -175,7 +175,7 @@ public class RightsService implements IRightsService {
                     jobInfo.setResult(jobInfo.getResult() + message);
                 }
             } else {
-                String message = "ProductFamily=" + productFamily + ", Reason=There are no usages;";
+                var message = "ProductFamily=" + productFamily + ", Reason=There are no usages;";
                 LOGGER.info("Update rights for SEND_FOR_RA usages. Skipped. {}", message);
                 if (Objects.isNull(jobInfo)) {
                     jobInfo = new JobInfo(JobStatusEnum.SKIPPED, message);

@@ -39,8 +39,8 @@ public class AclGrantDetailCsvProcessor extends DistCsvProcessor<AclGrantDetailD
 
     @Override
     public void initPlainValidators() {
-        RequiredValidator requiredValidator = new RequiredValidator();
-        PositiveNumberValidator positiveNumberValidator = new PositiveNumberValidator();
+        var requiredValidator = new RequiredValidator();
+        var positiveNumberValidator = new PositiveNumberValidator();
         addPlainValidators(Header.WR_WRK_INST, requiredValidator, positiveNumberValidator, new LengthValidator(9));
         addPlainValidators(Header.TYPE_OF_USE, requiredValidator, new LengthValidator(7),
             new GrantTypeOfUseValidator());

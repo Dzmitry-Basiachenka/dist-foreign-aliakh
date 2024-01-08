@@ -23,10 +23,10 @@ public class SalFundPoolFieldsJsonMapper {
     private static final ObjectMapper OBJECT_MAPPER = buildObjectMapper();
 
     private static ObjectMapper buildObjectMapper() {
-        SimpleModule simpleModule = new SimpleModule();
+        var simpleModule = new SimpleModule();
         simpleModule.addSerializer(FundPool.SalFields.class, new SalFundPoolFieldsSerializer());
         simpleModule.addDeserializer(FundPool.SalFields.class, new SalFundPoolFieldsDeserializer());
-        ObjectMapper objectMapper = new ObjectMapper();
+        var objectMapper = new ObjectMapper();
         objectMapper.registerModule(simpleModule);
         return objectMapper;
     }

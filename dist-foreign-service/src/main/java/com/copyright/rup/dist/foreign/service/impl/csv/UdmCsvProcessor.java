@@ -47,13 +47,13 @@ public class UdmCsvProcessor extends DistCsvProcessor<UdmUsage> {
 
     @Override
     public void initPlainValidators() {
-        RequiredValidator requiredValidator = new RequiredValidator();
-        LengthValidator lengthValidator1000 = new LengthValidator(1000);
-        LengthValidator lengthValidator100 = new LengthValidator(100);
-        LengthValidator lengthValidator50 = new LengthValidator(50);
-        LengthValidator lengthValidator20 = new LengthValidator(20);
-        DateFormatValidator dateFormatValidator = new DateFormatValidator();
-        PositiveNumberValidator positiveNumberValidator = new PositiveNumberValidator();
+        var requiredValidator = new RequiredValidator();
+        var lengthValidator1000 = new LengthValidator(1000);
+        var lengthValidator100 = new LengthValidator(100);
+        var lengthValidator50 = new LengthValidator(50);
+        var lengthValidator20 = new LengthValidator(20);
+        var dateFormatValidator = new DateFormatValidator();
+        var positiveNumberValidator = new PositiveNumberValidator();
         addPlainValidators(UdmCsvProcessor.Header.USAGE_ORIGINAL_DETAIL_ID, requiredValidator,
             new DuplicateInFileValidator(), lengthValidator50);
         addPlainValidators(UdmCsvProcessor.Header.USAGE_DATE, requiredValidator, dateFormatValidator);

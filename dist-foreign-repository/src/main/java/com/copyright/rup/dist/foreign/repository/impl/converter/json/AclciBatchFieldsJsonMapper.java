@@ -21,10 +21,10 @@ public class AclciBatchFieldsJsonMapper {
     private static final ObjectMapper OBJECT_MAPPER = buildObjectMapper();
 
     private static ObjectMapper buildObjectMapper() {
-        SimpleModule simpleModule = new SimpleModule();
+        var simpleModule = new SimpleModule();
         simpleModule.addSerializer(AclciFields.class, new AclciBatchFieldsSerializer());
         simpleModule.addDeserializer(AclciFields.class, new AclciBatchFieldsDeserializer());
-        ObjectMapper objectMapper = new ObjectMapper();
+        var objectMapper = new ObjectMapper();
         objectMapper.registerModule(simpleModule);
         return objectMapper;
     }
