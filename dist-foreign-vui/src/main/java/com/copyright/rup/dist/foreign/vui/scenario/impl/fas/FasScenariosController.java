@@ -25,4 +25,9 @@ public class FasScenariosController extends CommonScenariosController implements
     protected IFasScenariosWidget instantiateWidget() {
         return new FasScenariosWidget();
     }
+
+    @Override
+    public boolean scenarioExists(String scenarioName) {
+        return false;
+    }
 }

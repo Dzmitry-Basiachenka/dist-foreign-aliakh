@@ -3,9 +3,12 @@ package com.copyright.rup.dist.foreign.vui;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
+import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasSize;
+import com.vaadin.flow.component.HasValidation;
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.CheckboxGroup;
@@ -16,6 +19,7 @@ import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Section;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.Scroller;
+import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.dom.Element;
 
 import org.apache.commons.lang3.tuple.Pair;
@@ -36,6 +40,8 @@ import java.util.stream.IntStream;
  * @author Anton Azarenka
  */
 public final class UiTestHelper {
+
+    private static final String UNCHECKED = "unchecked";
 
     private UiTestHelper() {
         throw new IllegalStateException("Constructor shouldn't be called directly");
@@ -198,6 +204,34 @@ public final class UiTestHelper {
             columns.stream().map(Column::getHeaderText).collect(Collectors.toList()));
         assertEquals(columnsToWidth.stream().map(Pair::getRight).collect(Collectors.toList()),
             columns.stream().map(Column::getWidth).collect(Collectors.toList()));
+    }
+
+    /**
+     * Verifies fields.
+     *
+     * @param field   field
+     * @param value   value of field
+     * @param binder  binder
+     * @param message error message
+     * @param isValid <code>true</code> if valid otherwise <code>false</code>
+     */
+    @SuppressWarnings(UNCHECKED)
+    public static <T> void validateFieldAndVerifyErrorMessage(AbstractField field, T value, Binder binder,
+                                                              String message, boolean isValid) {
+        field.setValue(value);
+        binder.validate();
+        List<HasValidation> fields = (List<HasValidation>) binder.getFields()
+            .filter(actualField -> actualField.equals(field))
+            .collect(Collectors.toList());
+        assertEquals(1, fields.size());
+        HasValidation actualField = fields.get(0);
+        assertNotNull(actualField);
+        String actualErrorMessage = Objects.nonNull(actualField.getErrorMessage())
+            ? actualField.getErrorMessage()
+            : null;
+        assertEquals(value, ((AbstractField) actualField).getValue());
+        assertEquals(message, actualErrorMessage);
+        assertEquals(isValid, Objects.isNull(actualErrorMessage));
     }
 
     private static HorizontalLayout getElementContent(Element element) {
