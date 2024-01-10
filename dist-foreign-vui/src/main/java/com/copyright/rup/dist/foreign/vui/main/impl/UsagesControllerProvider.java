@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 import java.util.Map;
 
 /**
- * Implementation of {@link com.copyright.rup.dist.foreign.ui.main.api.IControllerProvider} for usage controllers.
+ * Implementation of {@link com.copyright.rup.dist.foreign.vui.main.api.IControllerProvider} for usage controllers.
  * <p>
  * Copyright (C) 2019 copyright.com
  * <p>
