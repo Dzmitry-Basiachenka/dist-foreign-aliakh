@@ -12,4 +12,9 @@ import com.copyright.rup.dist.foreign.vui.scenario.api.ICommonScenariosControlle
  * @author Stanislau Rudak
  */
 public interface IFasScenariosController extends ICommonScenariosController {
+
+    /**
+     * Handles click on 'Exclude Payees' button.
+     */
+    void onExcludePayeesButtonClicked();
 }
