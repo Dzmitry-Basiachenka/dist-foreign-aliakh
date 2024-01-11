@@ -6,8 +6,8 @@ import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.filter.FilterExpression;
 import com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum;
 import com.copyright.rup.dist.foreign.vui.main.ForeignUi;
-
 import com.copyright.rup.dist.foreign.vui.vaadin.common.util.VaadinUtils;
+
 import com.vaadin.flow.component.Html;
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.html.Label;

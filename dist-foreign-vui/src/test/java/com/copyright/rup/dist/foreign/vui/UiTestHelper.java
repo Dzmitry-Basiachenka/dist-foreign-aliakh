@@ -3,32 +3,41 @@ package com.copyright.rup.dist.foreign.vui;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasSize;
 import com.vaadin.flow.component.HasValidation;
+import com.vaadin.flow.component.Html;
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.CheckboxGroup;
+import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.Grid.Column;
 import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.html.Section;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.Scroller;
 import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.dom.Element;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.hamcrest.core.IsInstanceOf;
 
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 /**
  * Utils class for testing UI.
@@ -114,6 +123,44 @@ public final class UiTestHelper {
     }
 
     /**
+     * Verifies label.
+     *
+     * @param component UI component
+     * @param caption   caption
+     * @param width     width
+     */
+    public static void verifyLabel(Component component, String caption, String width) {
+        assertThat(component, instanceOf(Label.class));
+        Label label = (Label) component;
+        assertEquals(width, label.getWidth());
+        assertEquals(caption, label.getText());
+    }
+
+    /**
+     * Verifies label.
+     *
+     * @param component UI component
+     * @param caption   caption
+     */
+    public static void verifyLabel(Component component, String caption) {
+        assertThat(component, instanceOf(Label.class));
+        Label label = (Label) component;
+        assertEquals(caption, label.getText());
+    }
+
+    /**
+     * Verifies filters label.
+     *
+     * @param component UI component
+     */
+    public static void verifyFiltersLabel(Component component) {
+        assertThat(component, instanceOf(Label.class));
+        Label label = (Label) component;
+        assertEquals("Filters", label.getText());
+        assertEquals("filter-label", label.getClassName());
+    }
+
+    /**
      * Verifies vertical layout size.
      *
      * @param component  instance of {@link HasSize}
@@ -193,6 +240,62 @@ public final class UiTestHelper {
     }
 
     /**
+     * Verifies combobox.
+     *
+     * @param component             UI component
+     * @param caption               caption of combobox
+     * @param emptySelectionAllowed {@code true} if empty selection allowed, {@code false} otherwise
+     * @param expectedItems         expected items of combobox
+     * @return instance of {@link ComboBox}
+     */
+    @SafeVarargs
+    public static <T> ComboBox<T> verifyComboBox(Component component, String caption, boolean emptySelectionAllowed,
+                                                 T... expectedItems) {
+        return verifyComboBox(component, caption, emptySelectionAllowed,
+            Stream.of(expectedItems).collect(Collectors.toList()));
+    }
+
+    /**
+     * Verifies combobox.
+     *
+     * @param component             UI component
+     * @param caption               caption of combobox
+     * @param emptySelectionAllowed {@code true} if empty selection allowed, {@code false} otherwise
+     * @param expectedItems         expected items of combobox
+     * @return instance of {@link ComboBox}
+     */
+    public static <T> ComboBox<T> verifyComboBox(Component component, String caption, boolean emptySelectionAllowed,
+                                                 Collection<T> expectedItems) {
+        return verifyComboBox(component, caption, "100%", emptySelectionAllowed, expectedItems);
+    }
+
+    /**
+     * Verifies combobox with expected size.
+     *
+     * @param component             UI component
+     * @param caption               caption of combobox
+     * @param emptySelectionAllowed {@code true} if empty selection allowed, {@code false} otherwise
+     * @param expectedItems         expected items of combobox
+     * @param width                 expected combobox width
+     * @return instance of {@link ComboBox}
+     */
+    @SuppressWarnings(UNCHECKED)
+    public static <T> ComboBox<T> verifyComboBox(Component component, String caption, String width,
+                                                 boolean emptySelectionAllowed, Collection<T> expectedItems) {
+        assertThat(component, instanceOf(ComboBox.class));
+        ComboBox<T> comboBox = (ComboBox<T>) component;
+        assertFalse(comboBox.isReadOnly());
+        assertEquals(emptySelectionAllowed, !comboBox.isRequired());
+        assertEquals(caption, comboBox.getLabel());
+        assertEquals(width, comboBox.getWidth());
+        ListDataProvider<T> listDataProvider = (ListDataProvider<T>) comboBox.getDataProvider();
+        Collection<T> actualItems = listDataProvider.getItems();
+        assertEquals(expectedItems.size(), actualItems.size());
+        assertEquals(expectedItems, actualItems);
+        return comboBox;
+    }
+
+    /**
      * Verifies grid. Receives list instances of {@link Pair}'s where left is column caption, middle is column width.
      *
      * @param grid           grid
@@ -232,6 +335,36 @@ public final class UiTestHelper {
         assertEquals(value, ((AbstractField) actualField).getValue());
         assertEquals(message, actualErrorMessage);
         assertEquals(isValid, Objects.isNull(actualErrorMessage));
+    }
+
+    /**
+     * Verifies filter widget.
+     *
+     * @param component UI component
+     * @param caption   caption of filter widget
+     */
+    @SuppressWarnings(UNCHECKED)
+    public static void verifyItemsFilterWidget(Component component, String caption) {
+        verifyItemsFilterWidget(component, true, caption);
+    }
+
+    /**
+     * Verifies filter widget.
+     *
+     * @param component UI component
+     * @param isEnabled true - if widget is enabled, false - otherwise
+     * @param caption   caption of filter widget
+     */
+    public static void verifyItemsFilterWidget(Component component, boolean isEnabled, String caption) {
+        assertThat(component, instanceOf(HorizontalLayout.class));
+        HorizontalLayout layout = (HorizontalLayout) component;
+        assertEquals(isEnabled, layout.isEnabled());
+        Iterator<Component> iterator = layout.getChildren().iterator();
+        assertEquals("(0)", ((Html) iterator.next()).getInnerHtml());
+        Button button = (Button) iterator.next();
+        assertEquals(caption, button.getText());
+        assertTrue(button.isDisableOnClick());
+        assertFalse(iterator.hasNext());
     }
 
     private static HorizontalLayout getElementContent(Element element) {
