@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.vui.scenario.impl.fas;
 
+import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.vui.scenario.api.fas.IFasScenariosWidget;
 import com.copyright.rup.dist.foreign.vui.scenario.impl.CommonScenariosWidget;
 
@@ -13,4 +14,10 @@ import com.copyright.rup.dist.foreign.vui.scenario.impl.CommonScenariosWidget;
  * @author Stanislau Rudak
  */
 public class FasScenariosWidget extends CommonScenariosWidget implements IFasScenariosWidget {
+
+    @Override
+    public Scenario getSelectedScenario() {
+        //todo will implement later
+        return null;
+    }
 }
