@@ -1,5 +1,9 @@
 package com.copyright.rup.dist.foreign.vui.scenario.impl;
 
+import static org.easymock.EasyMock.expect;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
 import static org.powermock.api.easymock.PowerMock.replay;
@@ -44,6 +48,26 @@ public class CommonScenariosControllerTest {
     }
 
     @Test
+    public void testScenarioExists() {
+        String newName = "new scenario name";
+        expect(scenarioService.scenarioExists(scenario.getName())).andReturn(true).once();
+        expect(scenarioService.scenarioExists(newName)).andReturn(false).once();
+        replay(scenarioService);
+        assertTrue(scenariosController.scenarioExists(scenario.getName()));
+        assertFalse(scenariosController.scenarioExists(newName));
+        verify(scenarioService);
+    }
+
+    @Test
+    public void testGetScenarioWithAmountsAndLastAction() {
+        var fullScenario = new Scenario();
+        expect(scenarioService.getScenarioWithAmountsAndLastAction(scenario)).andReturn(fullScenario).once();
+        replay(scenarioService);
+        assertSame(fullScenario, scenariosController.getScenarioWithAmountsAndLastAction(scenario));
+        verify(scenarioService);
+    }
+
+    @Test
     public void testEditScenarioName() {
         String newName = "new scenario name";
         scenarioService.updateName(scenario.getId(), newName);
@@ -60,6 +84,11 @@ public class CommonScenariosControllerTest {
     }
 
     private static class CommonScenariosControllerMock extends CommonScenariosController {
+
+        @Override
+        public String getCriteriaHtmlRepresentation() {
+            return null;
+        }
 
         @Override
         protected ICommonScenariosWidget instantiateWidget() {
