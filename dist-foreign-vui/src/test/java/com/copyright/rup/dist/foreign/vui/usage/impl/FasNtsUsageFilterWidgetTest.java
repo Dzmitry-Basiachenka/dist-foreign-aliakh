@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.vui.usage.impl;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyComboBox;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyFiltersLabel;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyItemsFilterWidget;
+
 import static org.easymock.EasyMock.expect;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;

@@ -13,10 +13,12 @@ import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.vui.usage.api.ICommonUsageFilterController;
+
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Html;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+
 import org.junit.Test;
 
 import java.time.LocalDate;
@@ -105,7 +107,7 @@ public class FasNtsUsageAppliedFilterWidgetTest {
     }
 
     private Rightsholder buildRightsholder(String name, Long accountNumber) {
-        Rightsholder rightsholder = new Rightsholder();
+        var rightsholder = new Rightsholder();
         rightsholder.setName(name);
         rightsholder.setAccountNumber(accountNumber);
         return rightsholder;

@@ -176,7 +176,7 @@ public class FasUsageControllerTest {
 
     @Test
     public void testDeleteUsageBatch() {
-        UsageBatch usageBatch = new UsageBatch();
+        var usageBatch = new UsageBatch();
         usageBatchService.deleteUsageBatch(usageBatch);
         expectLastCall().once();
         expect(filterController.getWidget()).andReturn(filterWidget).once();
@@ -269,7 +269,7 @@ public class FasUsageControllerTest {
 
     @Test
     public void testLoadUsageBatch() {
-        UsageBatch usageBatch = new UsageBatch();
+        var usageBatch = new UsageBatch();
         List<Usage> usages = List.of(new Usage());
         expect(filterController.getWidget()).andReturn(filterWidget).once();
         filterWidget.clearFilter();
@@ -301,7 +301,7 @@ public class FasUsageControllerTest {
 
     @Test
     public void testGetRightsholder() {
-        Rightsholder rightsholder = new Rightsholder();
+        var rightsholder = new Rightsholder();
         rightsholder.setName(RRO_ACCOUNT_NAME);
         rightsholder.setAccountNumber(RRO_ACCOUNT_NUMBER);
         rightsholder.setId(RupPersistUtils.generateUuid());

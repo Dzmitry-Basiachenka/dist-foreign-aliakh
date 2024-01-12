@@ -219,6 +219,7 @@ public abstract class CommonUsageWidget extends SplitLayout implements ICommonUs
         layout.setSizeFull();
         layout.setMargin(false);
         layout.setSpacing(false);
+        layout.setPadding(false);
         VaadinUtils.addComponentStyle(layout, "usages-layout");
         return layout;
     }

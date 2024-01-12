@@ -119,7 +119,7 @@ public class RightsholderFilterWidgetTest {
     }
 
     private Rightsholder buildRightsholder() {
-        Rightsholder rightsholder = new Rightsholder();
+        var rightsholder = new Rightsholder();
         rightsholder.setName(RH_NAME);
         rightsholder.setAccountNumber(RH_ACCOUNT_NUMBER);
         return rightsholder;
