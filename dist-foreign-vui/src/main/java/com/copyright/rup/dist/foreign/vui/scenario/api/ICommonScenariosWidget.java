@@ -16,7 +16,19 @@ import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.api.IWidget;
 public interface ICommonScenariosWidget extends IWidget<ICommonScenariosController>, IRefreshable {
 
     /**
+     * Selects specified {@link Scenario} in grid.
+     *
+     * @param scenario scenario to select
+     */
+    void selectScenario(Scenario scenario);
+
+    /**
      * @return selected {@link Scenario} or {@code null} if no one selected.
      */
     Scenario getSelectedScenario();
+
+    /**
+     * Refreshes metadata information for selected {@link Scenario}.
+     */
+    void refreshSelectedScenario();
 }

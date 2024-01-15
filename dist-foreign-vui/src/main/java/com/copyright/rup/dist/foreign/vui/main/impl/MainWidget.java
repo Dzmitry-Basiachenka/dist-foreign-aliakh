@@ -52,7 +52,7 @@ public class MainWidget extends TabSheet implements IMainWidget, IMediatorProvid
         scenariosWidget = new SwitchableWidget<>(controller.getScenariosControllerProvider(), widget -> {});
         usagesTab = addTab(ForeignUi.getMessage("tab.usages"), usagesWidget, "main-usages-tab");
         scenariosTab = addTab(ForeignUi.getMessage("tab.scenarios"), scenariosWidget, "main-scenarios-tab");
-        updateProductFamily();
+        addSelectedChangeListener(event -> controller.refreshWidget());
         setSuffixComponent(createSuffixComponent());
         setSizeFull();
         addThemeVariants(TabSheetVariant.LUMO_TABS_SMALL);

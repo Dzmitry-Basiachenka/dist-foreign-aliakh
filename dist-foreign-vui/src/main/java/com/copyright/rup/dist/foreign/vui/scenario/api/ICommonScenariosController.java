@@ -1,6 +1,9 @@
 package com.copyright.rup.dist.foreign.vui.scenario.api;
 
+import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.api.IController;
+
+import java.util.List;
 
 /**
  * Controller interface for {@link ICommonScenariosWidget}.
@@ -14,6 +17,11 @@ import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.api.IController;
 public interface ICommonScenariosController extends IController<ICommonScenariosWidget> {
 
     /**
+     * @return list of {@link Scenario}s.
+     */
+    List<Scenario> getScenarios();
+
+    /**
      * Checks whether {@link Scenario} with specified name already exists in database.
      *
      * @param scenarioName name of {@link Scenario} to check
@@ -23,10 +31,23 @@ public interface ICommonScenariosController extends IController<ICommonScenarios
     boolean scenarioExists(String scenarioName);
 
     /**
+     * Gets {@link Scenario} with calculated amounts and last audit action.
+     *
+     * @param scenario selected {@link Scenario}
+     * @return scenario {@link Scenario}
+     */
+    Scenario getScenarioWithAmountsAndLastAction(Scenario scenario);
+
+    /**
      * Updates name for selected {@link Scenario}.
      *
      * @param scenarioId      id of selected {@link Scenario}
      * @param newScenarioName new scenario name to set
      */
     void editScenarioName(String scenarioId, String newScenarioName);
+
+    /**
+     * @return HTML filter representation for selected scenario.
+     */
+    String getCriteriaHtmlRepresentation();
 }

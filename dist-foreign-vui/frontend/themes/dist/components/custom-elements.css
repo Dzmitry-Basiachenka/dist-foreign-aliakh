@@ -5,3 +5,30 @@
 .global-product-family-select vaadin-select-value-button {
     color: var(--tab-text-color);
 }
+
+.scenarios-metadata div {
+    font-size: 14px;
+    word-wrap: break-word;
+}
+
+.scenarios-metadata span.label-amount {
+    text-align: left;
+    display: inline;
+}
+
+.scenarios-metadata ul, .scenarios-metadata li {
+    list-style-type: none;
+    margin: 0px;
+}
+
+.scenarios-metadata ul {
+    padding-left: 20px;
+}
+
+.scenarios-metadata-panel-scroller {
+    border: 1px solid #dcdcdc;
+}
+
+.scenarios-tables-panel-split-layout::part(splitter)  {
+    background-color: unset;
+}
