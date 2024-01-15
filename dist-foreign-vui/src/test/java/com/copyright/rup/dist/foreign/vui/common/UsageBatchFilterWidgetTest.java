@@ -36,7 +36,7 @@ import java.util.Set;
  * <p/>
  * Copyright (C) 2017 copyright.com
  * <p/>
- * Date: 2/15/2017
+ * Date: 02/15/2017
  *
  * @author Mikalai Bezmen
  */
@@ -98,7 +98,7 @@ public class UsageBatchFilterWidgetTest {
     }
 
     private UsageBatch buildUsageBatch() {
-        UsageBatch usageBatch = new UsageBatch();
+        var usageBatch = new UsageBatch();
         usageBatch.setId(USAGE_BATCH_ID);
         usageBatch.setName(USAGE_BATCH_NAME);
         return usageBatch;

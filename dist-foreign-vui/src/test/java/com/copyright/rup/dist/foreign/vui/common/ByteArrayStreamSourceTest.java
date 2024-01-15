@@ -8,6 +8,7 @@ import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.foreign.vui.common.ByteArrayStreamSource.IByteArrayReportWriter;
+
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 

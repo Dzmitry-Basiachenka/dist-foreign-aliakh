@@ -10,6 +10,7 @@ import com.copyright.rup.dist.foreign.vui.usage.api.fas.IFasUsageWidget;
 import com.copyright.rup.dist.foreign.vui.usage.impl.CommonUsageWidget;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.Buttons;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.downloader.OnDemandFileDownloader;
+import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.Windows;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.util.VaadinUtils;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.api.IMediator;
 
@@ -134,7 +135,7 @@ public class FasUsageWidget extends CommonUsageWidget implements IFasUsageWidget
         loadUsageBatchMenuItem = menuItem.getSubMenu().addItem(ForeignUi.getMessage("menu.item.load"),
             item -> {}); //TODO {aliakh} implement Windows.showModalWindow(new UsageBatchUploadWindow(controller))
         menuItem.getSubMenu().addItem(ForeignUi.getMessage("menu.item.view"),
-            item -> {}); //TODO {aliakh} implement Windows.showModalWindow(new ViewUsageBatchWindow(controller))
+            item -> Windows.showModalWindow(new ViewUsageBatchWindow(controller)));
         VaadinUtils.addComponentStyle(usageBatchMenuBar, "usage-batch-menu-bar");
     }
 

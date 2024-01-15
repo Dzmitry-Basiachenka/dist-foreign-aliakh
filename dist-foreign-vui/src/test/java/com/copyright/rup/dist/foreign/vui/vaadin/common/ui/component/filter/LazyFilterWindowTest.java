@@ -110,7 +110,7 @@ public class LazyFilterWindowTest {
     }
 
     private Rightsholder buildRightsholder() {
-        Rightsholder rightsholder = new Rightsholder();
+        var rightsholder = new Rightsholder();
         rightsholder.setAccountNumber(12345678L);
         rightsholder.setName("Rightsholder");
         return rightsholder;

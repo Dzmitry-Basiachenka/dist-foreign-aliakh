@@ -35,6 +35,9 @@ public abstract class CommonUsageFilterWidget extends VerticalLayout implements 
     @Override
     @SuppressWarnings("unchecked")
     public CommonUsageFilterWidget init() {
+        setSpacing(false);
+        setMinWidth("150px");
+        VaadinUtils.setPadding(this, 0, 10, 0, 10);
         appliedFilterWidget = getAppliedFilterWidget();
         add(initFiltersLayout(), initButtonsLayout(), buildAppliedFiltersHeaderLabel(), appliedFilterWidget);
         refreshFilter();
