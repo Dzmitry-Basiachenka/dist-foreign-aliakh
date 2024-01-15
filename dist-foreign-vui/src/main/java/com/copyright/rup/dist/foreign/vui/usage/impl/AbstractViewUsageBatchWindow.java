@@ -175,7 +175,6 @@ public abstract class AbstractViewUsageBatchWindow extends CommonDialog
         add(layout);
         setHeaderTitle(getCaptionMessage());
         setModalWindowProperties("view-batch-window", true);
-        VaadinUtils.addComponentStyle(this, "view-batch-window");
     }
 
     private void initMediator() {

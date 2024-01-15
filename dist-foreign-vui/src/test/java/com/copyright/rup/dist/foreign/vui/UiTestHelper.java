@@ -6,6 +6,14 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.powermock.api.easymock.PowerMock.expectLastCall;
+import static org.powermock.api.easymock.PowerMock.mockStatic;
+import static org.powermock.api.easymock.PowerMock.replay;
+import static org.powermock.api.easymock.PowerMock.reset;
+import static org.powermock.api.easymock.PowerMock.verify;
+
+import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.upload.UploadField;
+import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.Windows;
 
 import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.component.Component;
@@ -26,12 +34,15 @@ import com.vaadin.flow.component.html.Section;
 import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.Scroller;
+import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.data.binder.BindingValidationStatus;
 import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.dom.Element;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.hamcrest.core.IsInstanceOf;
+import org.powermock.reflect.Whitebox;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -163,6 +174,31 @@ public final class UiTestHelper {
     }
 
     /**
+     * Verifies listeners by fields.
+     *
+     * @param loadButton load button
+     */
+    public static void verifyLoadClickListener(Button loadButton) {
+        mockStatic(Windows.class);
+        Windows.showValidationErrorWindow();
+        expectLastCall().once();
+        replay(Windows.class);
+        loadButton.click();
+        verify(Windows.class);
+        reset(Windows.class);
+    }
+
+    /**
+     * Verifies upload component.
+     *
+     * @param component instance of {@link Component}
+     */
+    public static void verifyUploadComponent(Component component, String width) {
+        assertThat(component, instanceOf(UploadField.class));
+        assertEquals(width, ((UploadField) component).getWidth());
+    }
+
+    /**
      * Verifies vertical layout size.
      *
      * @param component  instance of {@link HasSize}
@@ -213,6 +249,45 @@ public final class UiTestHelper {
         assertEquals(text, button.getText());
         assertEquals(isVisible, button.isVisible());
         return button;
+    }
+
+    /**
+     * Sets text field value.
+     *
+     * @param dialog instance of {@link Dialog}
+     * @param field  name of the text field
+     * @param value  value
+     */
+    public static void setTextFieldValue(Dialog dialog, String field, String value) {
+        ((TextField) Whitebox.getInternalState(dialog, field)).setValue(value);
+    }
+
+    /**
+     * Verifies text field.
+     *
+     * @param component UI component
+     * @param label     label of field
+     * @return instance of {@link TextField}
+     */
+    public static TextField verifyTextField(Component component, String label, String styleName) {
+        return verifyTextField(component, label, "100%", styleName);
+    }
+
+    /**
+     * Verifies text field.
+     *
+     * @param component UI component
+     * @param label     label of field
+     * @param width     width
+     * @return of {@link TextField}
+     */
+    public static TextField verifyTextField(Component component, String label, String width, String styleName) {
+        assertThat(component, instanceOf(TextField.class));
+        TextField textField = (TextField) component;
+        assertEquals(label, textField.getLabel());
+        assertEquals(width, textField.getWidth());
+        assertEquals(styleName, textField.getClassName());
+        return textField;
     }
 
     /**
@@ -337,6 +412,34 @@ public final class UiTestHelper {
         assertEquals(value, ((AbstractField) actualField).getValue());
         assertEquals(message, actualErrorMessage);
         assertEquals(isValid, Objects.isNull(actualErrorMessage));
+    }
+
+    /**
+     * Verifies fields.
+     *
+     * @param field   field
+     * @param value   value of field
+     * @param binder  binder
+     * @param message error message
+     * @param isValid <code>true</code> if valid otherwise <code>false</code>
+     */
+    public static <T> void assertFieldValidationMessage(AbstractField<?, T> field, T value, Binder<?> binder,
+                                                        String message, boolean isValid) {
+        field.setValue(value);
+        BindingValidationStatus<?> fieldStatus = binder
+            .validate()
+            .getFieldValidationStatuses()
+            .stream()
+            .filter(status -> status.getField() == field)
+            .findFirst()
+            .orElseThrow();
+        if (isValid) {
+            assertFalse(fieldStatus.isError());
+            assertTrue(fieldStatus.getMessage().isEmpty());
+        } else {
+            assertTrue(fieldStatus.isError());
+            assertEquals(message, fieldStatus.getMessage().get());
+        }
     }
 
     /**

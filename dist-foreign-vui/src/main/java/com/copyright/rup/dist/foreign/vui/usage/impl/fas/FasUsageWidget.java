@@ -133,7 +133,7 @@ public class FasUsageWidget extends CommonUsageWidget implements IFasUsageWidget
         MenuItem menuItem =
             usageBatchMenuBar.addItem(ForeignUi.getMessage("menu.caption.usage_batch"), null, null);
         loadUsageBatchMenuItem = menuItem.getSubMenu().addItem(ForeignUi.getMessage("menu.item.load"),
-            item -> {}); //TODO {aliakh} implement Windows.showModalWindow(new UsageBatchUploadWindow(controller))
+            item -> Windows.showModalWindow(new UsageBatchUploadWindow(controller)));
         menuItem.getSubMenu().addItem(ForeignUi.getMessage("menu.item.view"),
             item -> Windows.showModalWindow(new ViewUsageBatchWindow(controller)));
         VaadinUtils.addComponentStyle(usageBatchMenuBar, "usage-batch-menu-bar");

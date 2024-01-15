@@ -23,12 +23,13 @@ import com.copyright.rup.dist.foreign.vui.usage.api.IFasNtsUsageFilterController
 import com.copyright.rup.dist.foreign.vui.usage.api.fas.IFasUsageController;
 import com.copyright.rup.dist.foreign.vui.usage.impl.FasNtsUsageFilterWidget;
 
-import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.contextmenu.MenuItem;
+import com.vaadin.flow.component.contextmenu.SubMenu;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
@@ -91,9 +92,9 @@ public class FasUsageWidgetTest {
     @Test
     public void testWidgetStructure() {
         assertThat(widget.getPrimaryComponent(), instanceOf(FasNtsUsageFilterWidget.class));
-        Component secondComponent = widget.getSecondaryComponent();
+        var secondComponent = widget.getSecondaryComponent();
         assertThat(secondComponent, instanceOf(VerticalLayout.class));
-        VerticalLayout layout = (VerticalLayout) secondComponent;
+        var layout = (VerticalLayout) secondComponent;
         assertEquals(2, layout.getComponentCount());
         verifyButtonsLayout((HorizontalLayout) layout.getComponentAt(0));
         Grid<?> grid = (Grid<?>) layout.getComponentAt(1);
@@ -131,7 +132,19 @@ public class FasUsageWidgetTest {
 
     @Test
     public void testSelectUsageBatchMenuItems() {
-        //TODO {aliakh} implement
+        replay(controller);
+        var layout = (HorizontalLayout) ((VerticalLayout) widget.getSecondaryComponent()).getComponentAt(0);
+        MenuBar menuBar = (MenuBar) layout.getComponentAt(0);
+        List<MenuItem> menuItems = menuBar.getItems();
+        assertEquals(1, menuItems.size());
+        MenuItem menuItem = menuItems.get(0);
+        assertEquals("Usage Batch", menuItem.getText());
+        SubMenu subMenu = menuItem.getSubMenu();
+        List<MenuItem> subMenuItems = subMenu.getItems();
+        assertEquals(2, subMenuItems.size());
+        assertEquals("Load", subMenuItems.get(0).getText());
+        assertEquals("View", subMenuItems.get(1).getText());
+        verify(controller);
     }
 
     @Test

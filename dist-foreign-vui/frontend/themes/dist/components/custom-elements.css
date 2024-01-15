@@ -32,3 +32,7 @@
 .scenarios-tables-panel-split-layout::part(splitter)  {
     background-color: unset;
 }
+
+.usage-batch-upload-widget-layout {
+    padding: 0 20px 0 20px
+}
