@@ -13,4 +13,8 @@ import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.api.IController;
  */
 public interface IFasExcludePayeeController extends IController<IFasExcludePayeeWidget> {
 
+    /**
+     * @return payee filter controller
+     */
+    IFasExcludePayeeFilterController getExcludePayeesFilterController();
 }
