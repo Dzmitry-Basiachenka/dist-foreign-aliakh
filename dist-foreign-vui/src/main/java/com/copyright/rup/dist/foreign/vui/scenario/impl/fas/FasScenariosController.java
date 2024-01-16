@@ -5,6 +5,7 @@ import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.filter.ScenarioUsageFilter;
 import com.copyright.rup.dist.foreign.vui.main.ForeignUi;
+import com.copyright.rup.dist.foreign.vui.scenario.api.ExcludeUsagesEvent;
 import com.copyright.rup.dist.foreign.vui.scenario.api.IScenarioHistoryController;
 import com.copyright.rup.dist.foreign.vui.scenario.api.fas.IFasExcludePayeeController;
 import com.copyright.rup.dist.foreign.vui.scenario.api.fas.IFasExcludePayeeWidget;
@@ -13,6 +14,8 @@ import com.copyright.rup.dist.foreign.vui.scenario.api.fas.IFasScenariosWidget;
 import com.copyright.rup.dist.foreign.vui.scenario.impl.CommonScenariosController;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.Windows;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.CommonDialog;
+
+import com.vaadin.flow.component.ComponentUtil;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -53,7 +56,8 @@ public class FasScenariosController extends CommonScenariosController implements
     @Override
     public void onExcludePayeesButtonClicked() {
         IFasExcludePayeeWidget widget = excludePayeesController.initWidget();
-        //TODO {Vaadin23} add listener for updating scenario
+        ComponentUtil.addListener((FasExcludePayeeWidget) widget, ExcludeUsagesEvent.class,
+            event -> excludePayeesController.onFilterChanged());
         Windows.showModalWindow((CommonDialog) widget);
     }
 
