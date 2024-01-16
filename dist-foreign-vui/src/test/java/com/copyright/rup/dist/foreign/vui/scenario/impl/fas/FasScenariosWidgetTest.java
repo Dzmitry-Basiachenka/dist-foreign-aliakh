@@ -2,26 +2,33 @@ package com.copyright.rup.dist.foreign.vui.scenario.impl.fas;
 
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifySize;
 
-import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.reset;
-import static org.easymock.EasyMock.verify;
+import static org.easymock.EasyMock.newCapture;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
+import static org.powermock.api.easymock.PowerMock.createMock;
+import static org.powermock.api.easymock.PowerMock.expectLastCall;
+import static org.powermock.api.easymock.PowerMock.mockStatic;
+import static org.powermock.api.easymock.PowerMock.replay;
+import static org.powermock.api.easymock.PowerMock.reset;
+import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.vui.UiTestHelper;
+import com.copyright.rup.dist.foreign.vui.scenario.api.IScenarioHistoryController;
 import com.copyright.rup.dist.foreign.vui.scenario.api.fas.IFasScenariosController;
-import com.copyright.rup.dist.foreign.vui.scenario.impl.ScenarioHistoryController;
+import com.copyright.rup.dist.foreign.vui.scenario.impl.ScenarioHistoryWidget;
+import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.Windows;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Html;
@@ -40,8 +47,13 @@ import com.vaadin.flow.component.splitlayout.SplitLayout.Orientation;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
+import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.core.classloader.annotations.PowerMockIgnore;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
@@ -61,6 +73,9 @@ import java.util.Set;
  * @author Aliaksandr Radkevich
  * @author Mikalai Bezmen
  */
+@RunWith(PowerMockRunner.class)
+@PrepareForTest(Windows.class)
+@PowerMockIgnore({"com.sun.org.apache.xerces.*", "javax.xml.*", "org.xml.*", "javax.management.*"})
 public class FasScenariosWidgetTest {
 
     private static final String SCENARIO_ID = "526f0f5f-8fe9-4c9c-8f46-dea1236ba259";
@@ -70,11 +85,13 @@ public class FasScenariosWidgetTest {
     private FasScenariosWidget scenariosWidget;
     private IFasScenariosController controller;
     private Scenario scenario;
+    private IScenarioHistoryController scenarioHistoryController;
 
     @Before
     public void setUp() {
         controller = createMock(IFasScenariosController.class);
-        scenariosWidget = new FasScenariosWidget(controller, new ScenarioHistoryController());
+        scenarioHistoryController = createMock(IScenarioHistoryController.class);
+        scenariosWidget = new FasScenariosWidget(controller, scenarioHistoryController);
         scenariosWidget.setController(controller);
         scenario = buildScenario();
         expect(controller.getScenarios()).andReturn(List.of(scenario)).once();
@@ -162,6 +179,35 @@ public class FasScenariosWidgetTest {
         replay(grid);
         assertNull(scenariosWidget.getSelectedScenario());
         verify(grid);
+    }
+
+    @Test
+    public void testViewAllActionsButtonClickListener() {
+        mockStatic(Windows.class);
+        var scenarioHistoryWidget = new ScenarioHistoryWidget();
+        scenarioHistoryWidget.setController(scenarioHistoryController);
+        scenarioHistoryWidget.init();
+        expect(scenarioHistoryController.initWidget()).andReturn(scenarioHistoryWidget).once();
+        expect(scenarioHistoryController.getActions(scenario.getId())).andReturn(List.of()).once();
+        expect(controller.getScenarios()).andReturn(List.of(scenario)).once();
+        expect(controller.getScenarioWithAmountsAndLastAction(scenario)).andReturn(scenario).times(2);
+        expect(controller.getCriteriaHtmlRepresentation()).andReturn(StringUtils.EMPTY).times(2);
+        Capture<ScenarioHistoryWidget> historyWidgetCapture = newCapture();
+        Windows.showModalWindow(capture(historyWidgetCapture));
+        expectLastCall().once();
+        replay(Windows.class, controller, scenarioHistoryController);
+        scenariosWidget.refresh();
+        Scroller scroller = (Scroller) ((SplitLayout) scenariosWidget.getComponentAt(1)).getSecondaryComponent();
+        Section section = (Section) scroller.getContent();
+        VerticalLayout lastActionLayout =
+            (VerticalLayout) ((VerticalLayout) section.getComponentAt(0)).getComponentAt(6);
+        Button viewAllActionsButton = (Button) lastActionLayout.getComponentAt(2);
+        viewAllActionsButton.click();
+        assertNotNull(historyWidgetCapture.getValue());
+        assertSame(scenarioHistoryWidget, historyWidgetCapture.getValue());
+        assertEquals("History for FAS Distribution 04/07/2022 scenario",
+            historyWidgetCapture.getValue().getHeaderTitle());
+        verify(Windows.class, controller, scenarioHistoryController);
     }
 
     private void verifyScroller(Component component) {
