@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.vui.usage.impl.fas;
 import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.common.util.UsageBatchUtils;
 import com.copyright.rup.dist.foreign.vui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.vui.usage.api.fas.IFasUsageController;
@@ -10,6 +11,7 @@ import com.copyright.rup.dist.foreign.vui.usage.api.fas.IFasUsageWidget;
 import com.copyright.rup.dist.foreign.vui.usage.impl.CommonUsageWidget;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.Buttons;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.downloader.OnDemandFileDownloader;
+import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.NotificationWindow;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.Windows;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.util.VaadinUtils;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.api.IMediator;
@@ -109,17 +111,32 @@ public class FasUsageWidget extends CommonUsageWidget implements IFasUsageWidget
         addToScenarioButton = Buttons.createButton(ForeignUi.getMessage("button.add_to_scenario"));
         //TODO {aliakh} implement addToScenarioButton.addClickListener
         var exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
-        OnDemandFileDownloader exportDownloader =
-            new OnDemandFileDownloader(controller.getExportUsagesStreamSource().getSource());
+        var exportDownloader = new OnDemandFileDownloader(controller.getExportUsagesStreamSource().getSource());
         exportDownloader.extend(exportButton);
         sendForResearchButton = Buttons.createButton(ForeignUi.getMessage("button.send_for_research"));
-        //TODO {aliakh} implement sendForResearchDownloader.extend(sendForResearchButton);
-        //TODO {aliakh} implement sendForResearchButton.addClickListener
+        var sendForResearchDownloader =
+            new OnDemandFileDownloader(controller.getSendForResearchUsagesStreamSource().getSource());
+        sendForResearchDownloader.extend(sendForResearchButton);
+        sendForResearchButton.addClickListener(clickEvent -> {
+            if (!controller.isValidFilteredUsageStatus(UsageStatusEnum.WORK_NOT_FOUND)) {
+                Windows.showNotificationWindow(
+                    ForeignUi.getMessage("message.error.invalid_usages_status", UsageStatusEnum.WORK_NOT_FOUND,
+                        "sent for research"));
+            } else {
+                var window = new NotificationWindow(ForeignUi.getMessage("message.download_in_progress"));
+                window.addOpenedChangeListener(closeEvent -> {
+                    if (!closeEvent.isOpened()) {
+                        controller.clearFilter();
+                    }
+                });
+                Windows.showModalWindow(window);
+            }
+        });
         initUsageBatchMenuBar();
         initUpdateUsagesButton();
         VaadinUtils.setButtonsAutoDisabled(loadResearchedUsagesButton, updateUsagesButton, addToScenarioButton);
-        var layout = new HorizontalLayout(usageBatchMenuBar, sendForResearchButton, loadResearchedUsagesButton,
-            updateUsagesButton, addToScenarioButton, exportButton, getHideGridColumnsProvider().getMenuButton());
+        var layout = new HorizontalLayout(usageBatchMenuBar, sendForResearchDownloader, loadResearchedUsagesButton,
+            updateUsagesButton, addToScenarioButton, exportDownloader, getHideGridColumnsProvider().getMenuButton());
         layout.setMargin(true);
         VaadinUtils.addComponentStyle(layout, "usages-buttons");
         return layout;

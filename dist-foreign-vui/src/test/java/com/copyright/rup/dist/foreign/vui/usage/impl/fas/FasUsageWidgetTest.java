@@ -19,6 +19,7 @@ import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.vui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.vui.usage.api.IFasNtsUsageFilterController;
 import com.copyright.rup.dist.foreign.vui.usage.api.fas.IFasUsageController;
@@ -86,6 +87,7 @@ public class FasUsageWidgetTest {
             new SimpleImmutableEntry<>(() -> "file_name.txt", () -> new ByteArrayInputStream(new byte[]{}));
         expect(streamSource.getSource()).andReturn(source).times(2);
         expect(controller.getExportUsagesStreamSource()).andReturn(streamSource).once();
+        expect(controller.getSendForResearchUsagesStreamSource()).andReturn(streamSource).once();
         replay(UI.class, ui, controller, streamSource);
         widget.init();
         verify(controller);
@@ -194,7 +196,16 @@ public class FasUsageWidgetTest {
 
     @Test
     public void testSendForResearchInvalidUsagesState() {
-        //TODO {aliakh} implement
+        mockStatic(Windows.class);
+        Button sendForResearchButton = Whitebox.getInternalState(widget, "sendForResearchButton");
+        Grid<?> grid = new Grid<>();
+        Whitebox.setInternalState(widget, grid);
+        expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.WORK_NOT_FOUND)).andReturn(false).once();
+        Windows.showNotificationWindow("Only usages in WORK_NOT_FOUND status can be sent for research");
+        expectLastCall().once();
+        replay(Windows.class, controller);
+        sendForResearchButton.click();
+        verify(Windows.class, controller);
     }
 
     @Test
@@ -219,10 +230,12 @@ public class FasUsageWidgetTest {
     private void verifyButtonsLayout(HorizontalLayout layout) {
         assertEquals(7, layout.getComponentCount());
         verifyMenuBar(layout.getComponentAt(0), "Usage Batch", true, List.of("Load", "View"));
-        assertEquals("Send for Research", ((Button) layout.getComponentAt(1)).getText());
+        assertEquals("Send for Research",
+            ((Button) layout.getComponentAt(1).getChildren().findFirst().orElseThrow()).getText());
         assertEquals("Load Researched Details", ((Button) layout.getComponentAt(2)).getText());
         assertEquals("Update Usages", ((Button) layout.getComponentAt(3)).getText());
         assertEquals("Add To Scenario", ((Button) layout.getComponentAt(4)).getText());
-        assertEquals("Export", ((Button) layout.getComponentAt(5)).getText());
+        assertEquals("Export",
+            ((Button) layout.getComponentAt(5).getChildren().findFirst().orElseThrow()).getText());
     }
 }

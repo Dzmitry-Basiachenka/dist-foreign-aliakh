@@ -119,7 +119,7 @@ public abstract class CommonUsageFilterWidget extends VerticalLayout implements 
      */
     protected Label buildAppliedFiltersHeaderLabel() {
         Label label = new Label(ForeignUi.getMessage("label.applied_filters"));
-        label.addClassName("applied-filter-header"); //TODO {aliakh} verify CSS
+        label.addClassNames("filter-label", "applied-filter-header");
         return label;
     }
 
