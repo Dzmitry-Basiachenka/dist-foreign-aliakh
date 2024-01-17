@@ -17,4 +17,9 @@ public interface IFasScenariosController extends ICommonScenariosController {
      * Handles click on 'Exclude Payees' button.
      */
     void onExcludePayeesButtonClicked();
+
+    /**
+     * Handles click on 'Reconcile Rightsholders' button.
+     */
+    void onReconcileRightsholdersButtonClicked();
 }

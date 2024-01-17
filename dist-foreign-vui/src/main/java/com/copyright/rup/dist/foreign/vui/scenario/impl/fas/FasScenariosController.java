@@ -62,6 +62,11 @@ public class FasScenariosController extends CommonScenariosController implements
     }
 
     @Override
+    public void onReconcileRightsholdersButtonClicked() {
+        //TODO {aazarenka} will implement later
+    }
+
+    @Override
     public String getCriteriaHtmlRepresentation() {
         ScenarioUsageFilter filter =
             getScenarioUsageFilterService().getByScenarioId(getWidget().getSelectedScenario().getId());
