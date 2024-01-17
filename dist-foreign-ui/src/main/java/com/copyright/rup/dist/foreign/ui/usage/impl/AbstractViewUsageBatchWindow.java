@@ -158,8 +158,8 @@ public abstract class AbstractViewUsageBatchWindow extends Window
 
     private void initLayout() {
         this.searchWidget.setPrompt(getSearchMessage());
-        setWidth(1000, Unit.PIXELS);
-        setHeight(550, Unit.PIXELS);
+        setWidth("1000px");
+        setHeight("550px");
         initUsageBatchesGrid();
         HorizontalLayout buttonsLayout = initButtons();
         initMediator();

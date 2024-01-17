@@ -18,7 +18,9 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
+import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.vui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.vui.usage.api.IFasNtsUsageFilterController;
@@ -47,6 +49,7 @@ import org.powermock.reflect.Whitebox;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.time.LocalDate;
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.List;
 import java.util.Map;
@@ -66,6 +69,12 @@ import java.util.function.Supplier;
 @PrepareForTest({FasUsageWidget.class, Dialog.class, ForeignSecurityUtils.class, Windows.class, UI.class})
 @PowerMockIgnore({"com.sun.org.apache.xerces.*", "javax.xml.*", "org.xml.*", "javax.management.*"})
 public class FasUsageWidgetTest {
+
+    private static final String DATE =
+        CommonDateUtils.format(LocalDate.now(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT);
+    private static final String FAS_PRODUCT_FAMILY = "FAS";
+    private static final String FAS_SCENARIO_NAME_PREFIX = "FAS Distribution ";
+    private static final String ADD_TO_SCENARIO_BUTTON = "addToScenarioButton";
 
     private FasUsageWidget widget;
     private IFasUsageController controller;
@@ -99,10 +108,11 @@ public class FasUsageWidgetTest {
         assertThat(widget.getPrimaryComponent(), instanceOf(FasNtsUsageFilterWidget.class));
         var secondComponent = widget.getSecondaryComponent();
         assertThat(secondComponent, instanceOf(VerticalLayout.class));
-        var layout = (VerticalLayout) secondComponent;
-        assertEquals(2, layout.getComponentCount());
-        verifyButtonsLayout((HorizontalLayout) layout.getComponentAt(0));
-        Grid<?> grid = (Grid<?>) layout.getComponentAt(1);
+        var contentLayout = (VerticalLayout) secondComponent;
+        assertEquals(2, contentLayout.getComponentCount());
+        var toolbarLayout = (HorizontalLayout) contentLayout.getComponentAt(0);
+        verifyButtonsLayout((HorizontalLayout) toolbarLayout.getComponentAt(0));
+        Grid<?> grid = (Grid<?>) contentLayout.getComponentAt(1);
         verifyGrid(grid, List.of(
             Pair.of("Detail ID", "130px"),
             Pair.of("Detail Status", "115px"),
@@ -138,8 +148,9 @@ public class FasUsageWidgetTest {
     @Test
     public void testSelectUsageBatchMenuItems() {
         replay(controller);
-        var layout = (HorizontalLayout) ((VerticalLayout) widget.getSecondaryComponent()).getComponentAt(0);
-        MenuBar menuBar = (MenuBar) layout.getComponentAt(0);
+        var contentLayout = (HorizontalLayout) ((VerticalLayout) widget.getSecondaryComponent()).getComponentAt(0);
+        var toolbarLayout = (HorizontalLayout) contentLayout.getComponentAt(0);
+        MenuBar menuBar = (MenuBar) toolbarLayout.getComponentAt(0);
         List<MenuItem> menuItems = menuBar.getItems();
         assertEquals(1, menuItems.size());
         MenuItem menuItem = menuItems.get(0);
@@ -176,22 +187,76 @@ public class FasUsageWidgetTest {
 
     @Test
     public void testAddToScenarioButtonEmptyUsagesTableClickListener() {
-        //TODO {aliakh} implement
+        mockStatic(Windows.class);
+        Grid<?> grid = new Grid<>();
+        Whitebox.setInternalState(widget, grid);
+        Button addToScenarioButton = Whitebox.getInternalState(widget, ADD_TO_SCENARIO_BUTTON);
+        assertTrue(addToScenarioButton.isDisableOnClick());
+        Windows.showNotificationWindow("Scenario cannot be created. There are no usages to include into scenario");
+        expectLastCall().once();
+        expect(controller.getBeansCount()).andReturn(0).once();
+        expect(controller.getSelectedProductFamily()).andReturn(FAS_PRODUCT_FAMILY).once();
+        expect(controller.scenarioExists(FAS_SCENARIO_NAME_PREFIX + DATE)).andReturn(true).once();
+        replay(Windows.class, controller);
+        addToScenarioButton.click();
+        verify(Windows.class, controller);
     }
 
     @Test
     public void testAddToScenarioButtonInvalidFilterSelectedClickListener() {
-        //TODO {aliakh} implement
+        mockStatic(Windows.class);
+        Grid<?> grid = new Grid<>();
+        Whitebox.setInternalState(widget, grid);
+        Button addToScenarioButton = Whitebox.getInternalState(widget, ADD_TO_SCENARIO_BUTTON);
+        assertTrue(addToScenarioButton.isDisableOnClick());
+        expect(controller.getSelectedProductFamily()).andReturn(FAS_PRODUCT_FAMILY).once();
+        expect(controller.scenarioExists(FAS_SCENARIO_NAME_PREFIX + DATE)).andReturn(true).once();
+        expect(controller.getBeansCount()).andReturn(1).once();
+        expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(false).once();
+        Windows.showNotificationWindow("Only usages in ELIGIBLE status can be added to scenario");
+        expectLastCall().once();
+        replay(Windows.class, controller);
+        addToScenarioButton.click();
+        verify(Windows.class, controller);
     }
 
     @Test
     public void testAddToScenarioButtonClickListenerInvalidRightsholders() {
-        //TODO {aliakh} implement
+        mockStatic(Windows.class);
+        Grid<?> grid = new Grid<>();
+        Whitebox.setInternalState(widget, grid);
+        Button addToScenarioButton = Whitebox.getInternalState(widget, ADD_TO_SCENARIO_BUTTON);
+        assertTrue(addToScenarioButton.isDisableOnClick());
+        expect(controller.getSelectedProductFamily()).andReturn(FAS_PRODUCT_FAMILY).once();
+        expect(controller.scenarioExists(FAS_SCENARIO_NAME_PREFIX + DATE)).andReturn(true).once();
+        expect(controller.getBeansCount()).andReturn(1).once();
+        expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
+        expect(controller.getInvalidRightsholders()).andReturn(List.of(1000000001L)).once();
+        Windows.showNotificationWindow("Scenario cannot be created. The following rightsholder(s) are absent " +
+            "in PRM: <i><b>[1000000001]</b></i>");
+        expectLastCall().once();
+        replay(Windows.class, controller);
+        addToScenarioButton.click();
+        verify(Windows.class, controller);
     }
 
     @Test
     public void testAddToScenarioButtonClickListenerFasProductFamily() {
-        //TODO {aliakh} implement
+        mockStatic(Windows.class);
+        Grid<?> grid = new Grid<>();
+        Whitebox.setInternalState(widget, grid);
+        Button addToScenarioButton = Whitebox.getInternalState(widget, ADD_TO_SCENARIO_BUTTON);
+        assertTrue(addToScenarioButton.isDisableOnClick());
+        expect(controller.getBeansCount()).andReturn(1).once();
+        expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
+        expect(controller.getInvalidRightsholders()).andReturn(List.of()).once();
+        expect(controller.getSelectedProductFamily()).andReturn(FAS_PRODUCT_FAMILY).once();
+        expect(controller.scenarioExists(FAS_SCENARIO_NAME_PREFIX + DATE)).andReturn(true).once();
+        Windows.showModalWindow(anyObject(CreateScenarioWindow.class));
+        expectLastCall().once();
+        replay(Windows.class, controller);
+        addToScenarioButton.click();
+        verify(Windows.class, controller);
     }
 
     @Test
@@ -228,7 +293,7 @@ public class FasUsageWidgetTest {
     }
 
     private void verifyButtonsLayout(HorizontalLayout layout) {
-        assertEquals(7, layout.getComponentCount());
+        assertEquals(6, layout.getComponentCount());
         verifyMenuBar(layout.getComponentAt(0), "Usage Batch", true, List.of("Load", "View"));
         assertEquals("Send for Research",
             ((Button) layout.getComponentAt(1).getChildren().findFirst().orElseThrow()).getText());

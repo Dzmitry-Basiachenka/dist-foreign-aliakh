@@ -16,9 +16,11 @@ import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.Wind
 import com.copyright.rup.dist.foreign.vui.vaadin.common.util.VaadinUtils;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.api.IMediator;
 
+import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.contextmenu.MenuItem;
 import com.vaadin.flow.component.menubar.MenuBar;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 
 import java.util.Objects;
@@ -109,10 +111,9 @@ public class FasUsageWidget extends CommonUsageWidget implements IFasUsageWidget
         loadResearchedUsagesButton.addClickListener(event ->
             Windows.showModalWindow(new ResearchedUsagesUploadWindow(controller)));
         addToScenarioButton = Buttons.createButton(ForeignUi.getMessage("button.add_to_scenario"));
-        //TODO {aliakh} implement addToScenarioButton.addClickListener
-        var exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
+        addToScenarioButton.addClickListener(event -> onAddToScenarioClicked(new CreateScenarioWindow(controller)));
         var exportDownloader = new OnDemandFileDownloader(controller.getExportUsagesStreamSource().getSource());
-        exportDownloader.extend(exportButton);
+        exportDownloader.extend(Buttons.createButton(ForeignUi.getMessage("button.export")));
         sendForResearchButton = Buttons.createButton(ForeignUi.getMessage("button.send_for_research"));
         var sendForResearchDownloader =
             new OnDemandFileDownloader(controller.getSendForResearchUsagesStreamSource().getSource());
@@ -135,11 +136,13 @@ public class FasUsageWidget extends CommonUsageWidget implements IFasUsageWidget
         initUsageBatchMenuBar();
         initUpdateUsagesButton();
         VaadinUtils.setButtonsAutoDisabled(loadResearchedUsagesButton, updateUsagesButton, addToScenarioButton);
-        var layout = new HorizontalLayout(usageBatchMenuBar, sendForResearchDownloader, loadResearchedUsagesButton,
-            updateUsagesButton, addToScenarioButton, exportDownloader, getHideGridColumnsProvider().getMenuButton());
-        layout.setMargin(true);
-        VaadinUtils.addComponentStyle(layout, "usages-buttons");
-        return layout;
+        var buttonsLayout = new HorizontalLayout(usageBatchMenuBar, sendForResearchDownloader,
+            loadResearchedUsagesButton, updateUsagesButton, addToScenarioButton, exportDownloader);
+        var toolbarLayout = new HorizontalLayout(buttonsLayout, getHideGridColumnsProvider().getMenuButton());
+        toolbarLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.BETWEEN);
+        toolbarLayout.setWidth(100, Unit.PERCENTAGE);
+        VaadinUtils.addComponentStyle(toolbarLayout, "usages-toolbar");
+        return toolbarLayout;
     }
 
     @Override
