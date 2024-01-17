@@ -95,5 +95,6 @@ public class FasScenariosWidget extends CommonScenariosWidget implements IFasSce
         //TODO: implement
         editNameButton.addClickListener(event -> onEditNameButtonClicked());
         excludePayeesButton.addClickListener(event -> controller.onExcludePayeesButtonClicked());
+        reconcileRightsholdersButton.addClickListener(event -> controller.onReconcileRightsholdersButtonClicked());
     }
 }
