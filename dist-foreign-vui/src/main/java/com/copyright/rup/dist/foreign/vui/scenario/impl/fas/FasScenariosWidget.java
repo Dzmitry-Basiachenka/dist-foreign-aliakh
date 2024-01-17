@@ -45,7 +45,7 @@ public class FasScenariosWidget extends CommonScenariosWidget implements IFasSce
     private final IFasScenariosController controller;
 
     /**
-     * Controller.
+     * Constructor.
      *
      * @param fasScenariosController instance of {@link IFasScenariosController}
      * @param historyController      instance of {@link IScenarioHistoryController}

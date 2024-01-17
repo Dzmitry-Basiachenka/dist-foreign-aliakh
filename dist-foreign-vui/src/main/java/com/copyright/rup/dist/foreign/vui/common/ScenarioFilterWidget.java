@@ -36,7 +36,7 @@ public class ScenarioFilterWidget extends BaseItemsFilterWidget<Scenario>
     private final Set<Scenario> selectedItemsIds = new HashSet<>();
 
     /**
-     * Controller.
+     * Constructor.
      *
      * @param supplier {@link Scenario}s supplier
      */

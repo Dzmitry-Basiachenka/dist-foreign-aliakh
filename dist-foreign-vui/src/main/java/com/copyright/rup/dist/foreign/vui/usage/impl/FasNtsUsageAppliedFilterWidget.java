@@ -32,6 +32,7 @@ public class FasNtsUsageAppliedFilterWidget extends CommonUsageAppliedFilterWidg
 
     @Override
     public void refreshFilterPanel(UsageFilter filter) {
+        removeAll();
         var layout = initFilterPanel();
         if (!filter.isEmpty()) {
             addLabel(createLabelWithMultipleValues(convertBatchIdsToBatchNames(filter.getUsageBatchesIds()),

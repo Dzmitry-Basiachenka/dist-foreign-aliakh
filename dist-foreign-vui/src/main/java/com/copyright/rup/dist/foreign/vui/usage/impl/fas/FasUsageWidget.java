@@ -43,9 +43,9 @@ public class FasUsageWidget extends CommonUsageWidget implements IFasUsageWidget
     private Button addToScenarioButton;
 
     /**
-     * Controller.
+     * Constructor.
      *
-     * @param controller {@link IFasUsageController} instance
+     * @param controller instance of {@link IFasUsageController}
      */
     FasUsageWidget(IFasUsageController controller) {
         this.controller = controller;
@@ -64,6 +64,7 @@ public class FasUsageWidget extends CommonUsageWidget implements IFasUsageWidget
 
     @Override
     protected void addGridColumns() {
+        //TODO {aliakh} fix column widths
         addColumn(UsageDto::getId, "table.column.detail_id", "detailId", "130px");
         addColumn(UsageDto::getStatus, "table.column.usage_status", "status", "115px");
         addColumn(UsageDto::getProductFamily, "table.column.product_family", "productFamily", "125px");
@@ -103,7 +104,8 @@ public class FasUsageWidget extends CommonUsageWidget implements IFasUsageWidget
     @Override
     protected HorizontalLayout initButtonsLayout() {
         loadResearchedUsagesButton = Buttons.createButton(ForeignUi.getMessage("button.load_researched_details"));
-        //TODO {aliakh} implement loadResearchedUsagesButton.addClickListener
+        loadResearchedUsagesButton.addClickListener(event ->
+            Windows.showModalWindow(new ResearchedUsagesUploadWindow(controller)));
         addToScenarioButton = Buttons.createButton(ForeignUi.getMessage("button.add_to_scenario"));
         //TODO {aliakh} implement addToScenarioButton.addClickListener
         var exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
