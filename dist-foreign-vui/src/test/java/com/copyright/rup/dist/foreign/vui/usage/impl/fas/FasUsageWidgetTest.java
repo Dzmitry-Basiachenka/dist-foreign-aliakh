@@ -9,6 +9,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
 import static org.powermock.api.easymock.PowerMock.expectNew;
@@ -22,6 +23,7 @@ import com.copyright.rup.dist.foreign.vui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.vui.usage.api.IFasNtsUsageFilterController;
 import com.copyright.rup.dist.foreign.vui.usage.api.fas.IFasUsageController;
 import com.copyright.rup.dist.foreign.vui.usage.impl.FasNtsUsageFilterWidget;
+import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.Windows;
 
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
@@ -40,6 +42,7 @@ import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+import org.powermock.reflect.Whitebox;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -59,7 +62,7 @@ import java.util.function.Supplier;
  * @author Uladzislau Shalamitski
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({FasUsageWidget.class, Dialog.class, ForeignSecurityUtils.class, UI.class})
+@PrepareForTest({FasUsageWidget.class, Dialog.class, ForeignSecurityUtils.class, Windows.class, UI.class})
 @PowerMockIgnore({"com.sun.org.apache.xerces.*", "javax.xml.*", "org.xml.*", "javax.management.*"})
 public class FasUsageWidgetTest {
 
@@ -149,7 +152,14 @@ public class FasUsageWidgetTest {
 
     @Test
     public void testLoadResearchedUsagesButtonClickListener() {
-        //TODO {aliakh} implement
+        mockStatic(Windows.class);
+        Button loadResearchedUsagesButton = Whitebox.getInternalState(widget, "loadResearchedUsagesButton");
+        assertTrue(loadResearchedUsagesButton.isDisableOnClick());
+        Windows.showModalWindow(anyObject(ResearchedUsagesUploadWindow.class));
+        expectLastCall().once();
+        replay(Windows.class, controller);
+        loadResearchedUsagesButton.click();
+        verify(Windows.class, controller);
     }
 
     @Test

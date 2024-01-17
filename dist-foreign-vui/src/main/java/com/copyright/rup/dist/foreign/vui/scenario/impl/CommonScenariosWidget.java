@@ -64,7 +64,7 @@ public abstract class CommonScenariosWidget extends VerticalLayout implements IC
     private Grid<Scenario> scenarioGrid;
 
     /**
-     * Controller.
+     * Constructor.
      *
      * @param historyController instance of {@link IScenarioHistoryController}
      */
