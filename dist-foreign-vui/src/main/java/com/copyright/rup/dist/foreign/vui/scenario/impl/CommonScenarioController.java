@@ -1,9 +1,12 @@
 package com.copyright.rup.dist.foreign.vui.scenario.impl;
 
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.vui.scenario.api.ICommonScenarioController;
 import com.copyright.rup.dist.foreign.vui.scenario.api.ICommonScenarioWidget;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.api.CommonController;
+
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.PipedOutputStream;
 
@@ -20,6 +23,30 @@ public abstract class CommonScenarioController extends CommonController<ICommonS
     implements ICommonScenarioController {
 
     private static final long serialVersionUID = 5857000239462224435L;
+
+    private Scenario scenario;
+
+    @Autowired
+    private IUsageService usageService;
+
+    @Override
+    public Scenario getScenario() {
+        return scenario;
+    }
+
+    @Override
+    public void setScenario(Scenario scenario) {
+        this.scenario = scenario;
+    }
+
+    @Override
+    public boolean isScenarioEmpty() {
+        return getUsageService().isScenarioEmpty(getScenario());
+    }
+
+    protected IUsageService getUsageService() {
+        return usageService;
+    }
 
     /**
      * Writes scenario usages into csv output stream.
