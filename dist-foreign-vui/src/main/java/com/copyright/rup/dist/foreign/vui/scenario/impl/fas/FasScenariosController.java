@@ -12,6 +12,7 @@ import com.copyright.rup.dist.foreign.vui.scenario.api.IScenarioHistoryControlle
 import com.copyright.rup.dist.foreign.vui.scenario.api.fas.IFasExcludePayeeController;
 import com.copyright.rup.dist.foreign.vui.scenario.api.fas.IFasExcludePayeeWidget;
 import com.copyright.rup.dist.foreign.vui.scenario.api.fas.IFasScenarioController;
+import com.copyright.rup.dist.foreign.vui.scenario.api.fas.IFasScenarioWidget;
 import com.copyright.rup.dist.foreign.vui.scenario.api.fas.IFasScenariosController;
 import com.copyright.rup.dist.foreign.vui.scenario.api.fas.IFasScenariosWidget;
 import com.copyright.rup.dist.foreign.vui.scenario.api.fas.IReconcileRightsholdersController;
@@ -48,11 +49,11 @@ public class FasScenariosController extends CommonScenariosController implements
     private static final String LIST_SEPARATOR = ", ";
 
     @Autowired
+    private IFasExcludePayeeController excludePayeesController;
+    @Autowired
     private IScenarioHistoryController scenarioHistoryController;
     @Autowired
     private IFasScenarioController scenarioController;
-    @Autowired
-    private IFasExcludePayeeController excludePayeesController;
     @Autowired
     private IReconcileRightsholdersController reconcileRightsholdersController;
     @Autowired
@@ -98,8 +99,7 @@ public class FasScenariosController extends CommonScenariosController implements
 
     @Override
     public String getCriteriaHtmlRepresentation() {
-        var filter =
-            getScenarioUsageFilterService().getByScenarioId(getWidget().getSelectedScenario().getId());
+        var filter = getScenarioUsageFilterService().getByScenarioId(getWidget().getSelectedScenario().getId());
         var sb = new StringBuilder(128).append(ForeignUi.getMessage("label.criteria"));
         if (Objects.nonNull(filter)) {
             sb.append("<ul>");
@@ -128,6 +128,22 @@ public class FasScenariosController extends CommonScenariosController implements
             sb.append("</ul>");
         }
         return sb.toString();
+    }
+
+    @Override
+    protected IFasScenarioController getScenarioController() {
+        return scenarioController;
+    }
+
+    @Override
+    protected IFasScenarioWidget initScenarioWidget() {
+        IFasScenarioWidget scenarioWidget = (IFasScenarioWidget) scenarioController.initWidget();
+        ComponentUtil.addListener((FasScenarioWidget) scenarioWidget, ExcludeUsagesEvent.class, event -> {
+            scenarioWidget.refresh();
+            scenarioWidget.refreshTable();
+            getWidget().refreshSelectedScenario();
+        });
+        return scenarioWidget;
     }
 
     @Override

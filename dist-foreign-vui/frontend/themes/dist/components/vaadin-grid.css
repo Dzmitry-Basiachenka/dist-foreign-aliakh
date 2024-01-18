@@ -31,3 +31,7 @@
 [part~='cell'] ::slotted(vaadin-grid-cell-content) {
     font-size: 14px;
 }
+
+:host([theme~="hide-first-footer"]) tfoot [part="row"]:first-child {
+    display: none;
+}

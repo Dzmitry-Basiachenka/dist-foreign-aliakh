@@ -50,6 +50,7 @@ class SwitchableWidget<W extends IWidget<C>, C extends IController<W>> extends S
     public boolean updateProductFamily() {
         Optional<C> controller = controllerProvider.getController();
         if (controller.isPresent()) {
+            removeAll();
             W widget = controller.get().initWidget();
             listenerRegisterer.accept(widget);
             add((Component) widget);

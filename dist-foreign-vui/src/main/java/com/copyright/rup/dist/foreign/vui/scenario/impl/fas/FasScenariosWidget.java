@@ -88,11 +88,12 @@ public class FasScenariosWidget extends CommonScenariosWidget implements IFasSce
             formatAmount(scenarioWithAmounts.getServiceFeeTotal())));
         updateDivContent(descriptionDiv,
             ForeignUi.getMessage("label.description", scenarioWithAmounts.getDescription()));
-        updateDivContent(selectionCriteriaDiv, getController().getCriteriaHtmlRepresentation());
+        updateDivContent(selectionCriteriaDiv,
+            getController().getCriteriaHtmlRepresentation());
     }
 
     private void addButtonsListeners() {
-        //TODO: implement
+        viewButton.addClickListener(event -> controller.onViewButtonClicked());
         editNameButton.addClickListener(event -> onEditNameButtonClicked());
         excludePayeesButton.addClickListener(event -> controller.onExcludePayeesButtonClicked());
         reconcileRightsholdersButton.addClickListener(event -> controller.onReconcileRightsholdersButtonClicked());

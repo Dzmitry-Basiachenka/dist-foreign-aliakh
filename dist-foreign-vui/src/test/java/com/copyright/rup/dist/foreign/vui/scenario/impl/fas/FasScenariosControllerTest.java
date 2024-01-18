@@ -75,6 +75,7 @@ public class FasScenariosControllerTest {
     private IFasScenariosWidget scenariosWidget;
     private IProductFamilyProvider productFamilyProvider;
     private Scenario scenario;
+    private FasScenarioController scenarioController;
 
     @Before
     public void setUp() {
@@ -84,7 +85,7 @@ public class FasScenariosControllerTest {
         excludePayeesController = createMock(IFasExcludePayeeController.class);
         scenariosController = new FasScenariosController();
         buildScenario();
-        FasScenarioController scenarioController = createMock(FasScenarioController.class);
+        scenarioController = createMock(FasScenarioController.class);
         Whitebox.setInternalState(scenariosController, "scenarioController", scenarioController);
         scenariosWidget = createMock(IFasScenariosWidget.class);
         Whitebox.setInternalState(scenariosController, "widget", scenariosWidget);
@@ -178,6 +179,21 @@ public class FasScenariosControllerTest {
         scenariosController.onReconcileRightsholdersButtonClicked();
         verify(scenariosWidget, fasScenarioService, reconcileRightsholdersController, rightsholderDiscrepancyService,
             Windows.class, streamSource, ui, UI.class);
+    }
+
+    @Test
+    public void testOnViewButtonClicked() {
+        mockStatic(Windows.class);
+        FasScenarioWidget scenarioWidget = createMock(FasScenarioWidget.class);
+        expect(scenariosWidget.getSelectedScenario()).andReturn(scenario).once();
+        scenarioController.setScenario(scenario);
+        expectLastCall().once();
+        expect(scenarioController.initWidget()).andReturn(scenarioWidget).once();
+        Windows.showModalWindow(scenarioWidget);
+        expectLastCall().once();
+        replay(scenariosWidget, scenarioController, Windows.class);
+        scenariosController.onViewButtonClicked();
+        verify(scenariosWidget, scenarioController, Windows.class);
     }
 
     private void buildScenario() {

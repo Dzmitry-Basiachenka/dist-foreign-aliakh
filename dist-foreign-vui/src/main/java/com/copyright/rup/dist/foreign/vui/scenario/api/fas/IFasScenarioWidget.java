@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.vui.scenario.api.fas;
 
 import com.copyright.rup.dist.foreign.vui.scenario.api.ICommonScenarioWidget;
+import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.api.IRefreshable;
 
 /**
  * Interface for scenario view widget for FAS product family.
@@ -11,6 +12,10 @@ import com.copyright.rup.dist.foreign.vui.scenario.api.ICommonScenarioWidget;
  *
  * @author Stanislau Rudak
  */
-public interface IFasScenarioWidget extends ICommonScenarioWidget {
+public interface IFasScenarioWidget extends ICommonScenarioWidget, IRefreshable {
 
+    /**
+     * Refresh table.
+     */
+    void refreshTable();
 }

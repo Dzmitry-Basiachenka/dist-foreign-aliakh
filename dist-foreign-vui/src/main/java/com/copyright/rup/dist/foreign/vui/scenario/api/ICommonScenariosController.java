@@ -39,6 +39,11 @@ public interface ICommonScenariosController extends IController<ICommonScenarios
     Scenario getScenarioWithAmountsAndLastAction(Scenario scenario);
 
     /**
+     * Handles click on 'View' button.
+     */
+    void onViewButtonClicked();
+
+    /**
      * Updates name for selected {@link Scenario}.
      *
      * @param scenarioId      id of selected {@link Scenario}

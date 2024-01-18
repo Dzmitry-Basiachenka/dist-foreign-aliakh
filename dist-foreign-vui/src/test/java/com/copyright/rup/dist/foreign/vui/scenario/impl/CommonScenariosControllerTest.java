@@ -11,6 +11,8 @@ import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
+import com.copyright.rup.dist.foreign.vui.scenario.api.ICommonScenarioController;
+import com.copyright.rup.dist.foreign.vui.scenario.api.ICommonScenarioWidget;
 import com.copyright.rup.dist.foreign.vui.scenario.api.ICommonScenariosWidget;
 import com.copyright.rup.dist.foreign.vui.scenario.api.fas.IFasScenariosWidget;
 
@@ -87,6 +89,16 @@ public class CommonScenariosControllerTest {
 
         @Override
         public String getCriteriaHtmlRepresentation() {
+            return null;
+        }
+
+        @Override
+        protected ICommonScenarioController getScenarioController() {
+            return null;
+        }
+
+        @Override
+        protected ICommonScenarioWidget initScenarioWidget() {
             return null;
         }
 
