@@ -37,6 +37,7 @@ import java.util.Objects;
 public class FasUsageWidget extends CommonUsageWidget implements IFasUsageWidget {
 
     private static final long serialVersionUID = -3584395313084707377L;
+    private static final String WIDTH_300 = "300px";
 
     private final IFasUsageController controller;
     private MenuBar usageBatchMenuBar;
@@ -68,40 +69,39 @@ public class FasUsageWidget extends CommonUsageWidget implements IFasUsageWidget
 
     @Override
     protected void addGridColumns() {
-        //TODO {aliakh} fix column widths
-        addColumn(UsageDto::getId, "table.column.detail_id", "detailId", "130px");
-        addColumn(UsageDto::getStatus, "table.column.usage_status", "status", "115px");
-        addColumn(UsageDto::getProductFamily, "table.column.product_family", "productFamily", "125px");
-        addColumn(UsageDto::getBatchName, "table.column.batch_name", "batchName", "145px");
-        addColumn(UsageDto::getRroAccountNumber, "table.column.rro_account_number", "rroAccountNumber", "125px");
-        addColumn(UsageDto::getRroName, "table.column.rro_account_name", "rroName", "135px");
-        addColumn(UsageDto::getRhAccountNumber, "table.column.rh_account_number", "rhAccountNumber", "115px");
-        addColumn(UsageDto::getRhName, "table.column.rh_account_name", "rhName", "300px");
-        addColumn(UsageDto::getWrWrkInst, "table.column.wr_wrk_inst", "wrWrkInst", "110px");
-        addColumn(UsageDto::getSystemTitle, "table.column.system_title", "systemTitle", "300px");
-        addColumn(usageDto -> Objects.nonNull(usageDto.getFasUsage())
-                ? usageDto.getFasUsage().getReportedStandardNumber() : null,
-            "table.column.reported_standard_number", "reportedStandardNumber", "190px");
-        addColumn(UsageDto::getStandardNumber, "table.column.standard_number", "standardNumber", "140px");
-        addColumn(UsageDto::getStandardNumberType, "table.column.standard_number_type", "standardNumberType", "155px");
+        addColumn(UsageDto::getId, "table.column.detail_id", "detailId", WIDTH_300);
+        addColumn(UsageDto::getStatus, "table.column.usage_status", "status", "180px");
+        addColumn(UsageDto::getProductFamily, "table.column.product_family", "productFamily", "160px");
+        addColumn(UsageDto::getBatchName, "table.column.batch_name", "batchName", "200px");
+        addColumn(UsageDto::getRroAccountNumber, "table.column.rro_account_number", "rroAccountNumber", "160px");
+        addColumn(UsageDto::getRroName, "table.column.rro_account_name", "rroName", WIDTH_300);
+        addColumn(UsageDto::getRhAccountNumber, "table.column.rh_account_number", "rhAccountNumber", "150px");
+        addColumn(UsageDto::getRhName, "table.column.rh_account_name", "rhName", WIDTH_300);
+        addColumn(UsageDto::getWrWrkInst, "table.column.wr_wrk_inst", "wrWrkInst", "140px");
+        addColumn(UsageDto::getSystemTitle, "table.column.system_title", "systemTitle", WIDTH_300);
+        addColumn(usage -> Objects.nonNull(usage.getFasUsage())
+                ? usage.getFasUsage().getReportedStandardNumber() : null,
+            "table.column.reported_standard_number", "reportedStandardNumber", "260px");
+        addColumn(UsageDto::getStandardNumber, "table.column.standard_number", "standardNumber", "180px");
+        addColumn(UsageDto::getStandardNumberType, "table.column.standard_number_type", "standardNumberType", "225px");
         addColumn(usage -> UsageBatchUtils.getFiscalYear(usage.getFiscalYear()),
-            "table.column.fiscal_year", "fiscalYear", "105px");
+            "table.column.fiscal_year", "fiscalYear", "130px");
         addColumn(usage -> CommonDateUtils.format(usage.getPaymentDate(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT),
-            "table.column.payment_date", "paymentDate", "115px");
-        addColumn(UsageDto::getWorkTitle, "table.column.reported_title", "workTitle", "300px");
+            "table.column.payment_date", "paymentDate", "145px");
+        addColumn(UsageDto::getWorkTitle, "table.column.reported_title", "workTitle", WIDTH_300);
         addColumn(UsageDto::getArticle, "table.column.article", "article", "135px");
         addColumn(UsageDto::getPublisher, "table.column.publisher", "publisher", "135px");
         addColumn(usage ->
                 CommonDateUtils.format(usage.getPublicationDate(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT),
-            "table.column.publication_date", "publicationDate", "90px");
-        addColumn(UsageDto::getNumberOfCopies, "table.column.number_of_copies", "numberOfCopies", "140px");
-        addAmountColumn(UsageDto::getReportedValue, "table.column.reported_value", "reportedValue", "130px");
-        addAmountColumn(UsageDto::getGrossAmount, "table.column.gross_amount_in_usd", "grossAmount", "155px");
-        addAmountColumn(UsageDto::getBatchGrossAmount, "table.column.batch_gross_amount", "batchGrossAmount", "155px");
+            "table.column.publication_date", "publicationDate", "110px");
+        addColumn(UsageDto::getNumberOfCopies, "table.column.number_of_copies", "numberOfCopies", "185px");
+        addAmountColumn(UsageDto::getReportedValue, "table.column.reported_value", "reportedValue", "170px");
+        addAmountColumn(UsageDto::getGrossAmount, "table.column.gross_amount_in_usd", "grossAmount", "170px");
+        addAmountColumn(UsageDto::getBatchGrossAmount, "table.column.batch_gross_amount", "batchGrossAmount", "170px");
         addColumn(UsageDto::getMarket, "table.column.market", "market", "120px");
-        addColumn(UsageDto::getMarketPeriodFrom, "table.column.market_period_from", "marketPeriodFrom", "150px");
-        addColumn(UsageDto::getMarketPeriodTo, "table.column.market_period_to", "marketPeriodTo", "145px");
-        addColumn(UsageDto::getAuthor, "table.column.author", "author", "305px");
+        addColumn(UsageDto::getMarketPeriodFrom, "table.column.market_period_from", "marketPeriodFrom", "200px");
+        addColumn(UsageDto::getMarketPeriodTo, "table.column.market_period_to", "marketPeriodTo", "185px");
+        addColumn(UsageDto::getAuthor, "table.column.author", "author", WIDTH_300);
         addColumn(UsageDto::getComment, "table.column.comment", "comment", "200px");
     }
 
@@ -163,6 +163,12 @@ public class FasUsageWidget extends CommonUsageWidget implements IFasUsageWidget
 
     private void initUpdateUsagesButton() {
         updateUsagesButton = Buttons.createButton(ForeignUi.getMessage("button.update_usages"));
-        //TODO {aliakh} implement updateUsagesButton.addClickListener
+        updateUsagesButton.addClickListener(event -> {
+            if (0 != controller.getBeansCount()) {
+                Windows.showModalWindow(new FasUpdateUsageWindow(controller));
+            } else {
+                Windows.showNotificationWindow(ForeignUi.getMessage("message.error.update.empty_usages"));
+            }
+        });
     }
 }

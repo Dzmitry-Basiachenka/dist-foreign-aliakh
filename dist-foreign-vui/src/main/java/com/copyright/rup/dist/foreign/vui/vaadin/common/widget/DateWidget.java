@@ -108,7 +108,7 @@ public class DateWidget extends HorizontalLayout {
     /**
      * Sets date to the widget.
      *
-     * @param value instance of  {@link LocalDate}
+     * @param value instance of {@link LocalDate}
      */
     public void setValue(LocalDate value) {
         datePicker.setValue(value);

@@ -12,6 +12,7 @@ import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.SearchWidget;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.provider.ListDataProvider;
@@ -51,7 +52,7 @@ public abstract class AbstractViewUsageBatchWindow extends CommonDialog
     public AbstractViewUsageBatchWindow(ICommonUsageController controller) {
         this.controller = controller;
         this.searchWidget = new SearchWidget(this);
-        initLayout();
+        initRootLayout();
     }
 
     @Override
@@ -158,21 +159,21 @@ public abstract class AbstractViewUsageBatchWindow extends CommonDialog
      * Gets {@link SerializablePredicate} to filter batches based on search value.
      *
      * @param searchValue search value
-     * @return instance of  {@link SerializablePredicate}
+     * @return instance of {@link SerializablePredicate}
      */
     protected abstract SerializablePredicate<UsageBatch> getSearchFilter(String searchValue);
 
-    private void initLayout() {
+    private void initRootLayout() {
         this.searchWidget.setPrompt(getSearchMessage());
         setWidth("1000px");
         setHeight("550px");
         initUsageBatchesGrid();
         var buttonsLayout = initButtons();
         initMediator();
-        var layout = new VerticalLayout(searchWidget, grid, buttonsLayout);
-        layout.setSizeFull();
-        //TODO {aliakh} layout.setComponentAlignment(buttonsLayout, Alignment.MIDDLE_RIGHT);
-        add(layout);
+        var rootLayout = new VerticalLayout(searchWidget, grid, buttonsLayout);
+        rootLayout.setSizeFull();
+        rootLayout.setHorizontalComponentAlignment(Alignment.END, buttonsLayout);
+        add(rootLayout);
         setHeaderTitle(getCaptionMessage());
         setModalWindowProperties("view-batch-window", true);
     }
@@ -187,11 +188,11 @@ public abstract class AbstractViewUsageBatchWindow extends CommonDialog
         var closeButton = Buttons.createCloseButton(this);
         deleteButton = Buttons.createButton(ForeignUi.getMessage("button.delete"));
         deleteButton.addClickListener(event ->
-            deleteUsageBatch(grid.getSelectedItems().stream().findFirst().orElse(null)));
+            grid.getSelectedItems().stream().findFirst().ifPresent(this::deleteUsageBatch));
         deleteButton.setEnabled(false);
         VaadinUtils.setButtonsAutoDisabled(deleteButton);
         var layout = new HorizontalLayout(deleteButton, closeButton);
-        layout.setSpacing(true);
+        layout.setSpacing(true); //TODO {aliackh} check
         VaadinUtils.addComponentStyle(layout, "view-batch-buttons");
         return layout;
     }
