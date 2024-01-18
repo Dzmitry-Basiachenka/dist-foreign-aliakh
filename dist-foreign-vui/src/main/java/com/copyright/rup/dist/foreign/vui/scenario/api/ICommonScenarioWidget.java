@@ -13,4 +13,13 @@ import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.api.IWidget;
  */
 public interface ICommonScenarioWidget extends IWidget<ICommonScenarioController> {
 
+    /**
+     * @return value from search field.
+     */
+    String getSearchValue();
+
+    /**
+     * Applies search value for table container.
+     */
+    void applySearch();
 }

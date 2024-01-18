@@ -23,3 +23,7 @@ td[(selected)]{
     text-align: right;
     color: red !important;
 }
+
+.v-align-right {
+	text-align: right;
+}

@@ -8,9 +8,14 @@ import com.copyright.rup.dist.foreign.service.api.IScenarioUsageFilterService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.vui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.vui.main.api.IProductFamilyProvider;
+import com.copyright.rup.dist.foreign.vui.scenario.api.ICommonScenarioController;
+import com.copyright.rup.dist.foreign.vui.scenario.api.ICommonScenarioWidget;
 import com.copyright.rup.dist.foreign.vui.scenario.api.ICommonScenariosController;
 import com.copyright.rup.dist.foreign.vui.scenario.api.ICommonScenariosWidget;
+import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.Windows;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.api.CommonController;
+
+import com.vaadin.flow.component.dialog.Dialog;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +37,7 @@ import java.util.stream.Collectors;
 public abstract class CommonScenariosController extends CommonController<ICommonScenariosWidget>
     implements ICommonScenariosController {
 
-    private static final long serialVersionUID = -8428455534890061352L;
+    private static final long serialVersionUID = 3614460469774293884L;
 
     @Autowired
     private IUsageService usageService;
@@ -61,6 +66,12 @@ public abstract class CommonScenariosController extends CommonController<ICommon
     }
 
     @Override
+    public void onViewButtonClicked() {
+        getScenarioController().setScenario(getWidget().getSelectedScenario());
+        Windows.showModalWindow((Dialog) initScenarioWidget());
+    }
+
+    @Override
     public void editScenarioName(String scenarioId, String newScenarioName) {
         scenarioService.updateName(scenarioId, newScenarioName);
     }
@@ -85,6 +96,18 @@ public abstract class CommonScenariosController extends CommonController<ICommon
     protected IScenarioUsageFilterService getScenarioUsageFilterService() {
         return scenarioUsageFilterService;
     }
+
+    /**
+     * @return an {@link ICommonScenarioController} instance.
+     */
+    protected abstract ICommonScenarioController getScenarioController();
+
+    /**
+     * Inits scenario view widget.
+     *
+     * @return an {@link ICommonScenarioWidget} instance
+     */
+    protected abstract ICommonScenarioWidget initScenarioWidget();
 
     /**
      * Appends creation message.

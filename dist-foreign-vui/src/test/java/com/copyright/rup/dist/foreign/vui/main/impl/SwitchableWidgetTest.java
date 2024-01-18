@@ -90,7 +90,7 @@ public class SwitchableWidgetTest {
         widget.updateProductFamily();
         assertFalse(firstWidget.isRefreshed());
         verify(firstControllerMock, secondControllerMock, controllerProviderMock, listenerRegistererMock);
-        assertEquals(secondWidget, widget.getChildren().collect(Collectors.toList()).get(1));
+        assertEquals(secondWidget, widget.getChildren().collect(Collectors.toList()).get(0));
     }
 
     private void prepareInitWidgetExpectations(ITestController controllerMock, ITestWidget content) {

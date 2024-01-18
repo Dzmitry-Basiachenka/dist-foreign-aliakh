@@ -1,13 +1,14 @@
 package com.copyright.rup.dist.foreign.vui.scenario.impl.fas;
 
-import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
-import com.copyright.rup.dist.foreign.vui.scenario.api.ICommonScenarioController;
+import com.copyright.rup.dist.foreign.vui.main.ForeignUi;
+import com.copyright.rup.dist.foreign.vui.scenario.api.fas.IFasScenarioController;
 import com.copyright.rup.dist.foreign.vui.scenario.api.fas.IFasScenarioWidget;
 import com.copyright.rup.dist.foreign.vui.scenario.impl.CommonScenarioWidget;
+import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.Buttons;
+import com.copyright.rup.dist.foreign.vui.vaadin.common.util.VaadinUtils;
 
-import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
 /**
  * Implementation of {@link IFasScenarioWidget}.
@@ -20,19 +21,43 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
  */
 public class FasScenarioWidget extends CommonScenarioWidget implements IFasScenarioWidget {
 
-    @Override
-    protected VerticalLayout initLayout(VerticalLayout searchLayout, Grid<RightsholderTotalsHolder> grid,
-                                        VerticalLayout emptyUsagesVerticalLayout, HorizontalLayout buttons) {
-        return new VerticalLayout();
+    private static final long serialVersionUID = -6382799539636718478L;
+
+    private final IFasScenarioController scenarioController;
+
+    /**
+     * Constructor.
+     *
+     * @param scenarioController instance of {@link IFasScenarioController}
+     */
+    public FasScenarioWidget(IFasScenarioController scenarioController) {
+        this.scenarioController = scenarioController;
     }
 
     @Override
-    public FasScenarioWidget init() {
-        return this;
+    public void refresh() {
+        //TODO: {dbasiachenka} implement
     }
 
     @Override
-    public void setController(ICommonScenarioController controller) {
+    public void refreshTable() {
+        getDataProvider().refreshAll();
+        updateFooter();
+    }
 
+    @Override
+    protected HorizontalLayout initButtons() {
+        var excludeByRroButton = Buttons.createButton(ForeignUi.getMessage("button.exclude_by_rro"));
+        excludeByRroButton.addClickListener(event -> scenarioController.onExcludeByRroClicked());
+        //TODO: {dbasiachenka} implement export logic
+        var exportDetailsButton = Buttons.createButton(ForeignUi.getMessage("button.export_details"));
+        var exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
+        var buttonsLayout = new HorizontalLayout(excludeByRroButton, exportDetailsButton, exportButton,
+            Buttons.createCloseButton(this));
+        VaadinUtils.addComponentStyle(buttonsLayout, "scenario-buttons-layout");
+        VaadinUtils.setMaxComponentsWidth(buttonsLayout);
+        buttonsLayout.setWidth("100%");
+        buttonsLayout.setJustifyContentMode(JustifyContentMode.CENTER);
+        return buttonsLayout;
     }
 }
