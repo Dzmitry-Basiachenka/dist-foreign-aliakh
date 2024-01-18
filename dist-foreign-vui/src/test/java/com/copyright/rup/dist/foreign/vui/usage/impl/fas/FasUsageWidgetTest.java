@@ -75,6 +75,7 @@ public class FasUsageWidgetTest {
     private static final String FAS_PRODUCT_FAMILY = "FAS";
     private static final String FAS_SCENARIO_NAME_PREFIX = "FAS Distribution ";
     private static final String ADD_TO_SCENARIO_BUTTON = "addToScenarioButton";
+    private static final String WIDTH_300 = "300px";
 
     private FasUsageWidget widget;
     private IFasUsageController controller;
@@ -114,33 +115,33 @@ public class FasUsageWidgetTest {
         verifyButtonsLayout((HorizontalLayout) toolbarLayout.getComponentAt(0));
         Grid<?> grid = (Grid<?>) contentLayout.getComponentAt(1);
         verifyGrid(grid, List.of(
-            Pair.of("Detail ID", "130px"),
-            Pair.of("Detail Status", "115px"),
-            Pair.of("Product Family", "125px"),
-            Pair.of("Usage Batch Name", "145px"),
-            Pair.of("RRO Account #", "125px"),
-            Pair.of("RRO Name", "135px"),
-            Pair.of("RH Account #", "115px"),
-            Pair.of("RH Name", "300px"),
-            Pair.of("Wr Wrk Inst", "110px"),
-            Pair.of("System Title", "300px"),
-            Pair.of("Reported Standard Number", "190px"),
-            Pair.of("Standard Number", "140px"),
-            Pair.of("Standard Number Type", "155px"),
-            Pair.of("Fiscal Year", "105px"),
-            Pair.of("Payment Date", "115px"),
-            Pair.of("Reported Title", "300px"),
+            Pair.of("Detail ID", WIDTH_300),
+            Pair.of("Detail Status", "180px"),
+            Pair.of("Product Family", "160px"),
+            Pair.of("Usage Batch Name", "200px"),
+            Pair.of("RRO Account #", "160px"),
+            Pair.of("RRO Name", WIDTH_300),
+            Pair.of("RH Account #", "150px"),
+            Pair.of("RH Name", WIDTH_300),
+            Pair.of("Wr Wrk Inst", "140px"),
+            Pair.of("System Title", WIDTH_300),
+            Pair.of("Reported Standard Number", "260px"),
+            Pair.of("Standard Number", "180px"),
+            Pair.of("Standard Number Type", "225px"),
+            Pair.of("Fiscal Year", "130px"),
+            Pair.of("Payment Date", "145px"),
+            Pair.of("Reported Title", WIDTH_300),
             Pair.of("Article", "135px"),
             Pair.of("Publisher", "135px"),
-            Pair.of("Pub Date", "90px"),
-            Pair.of("Number of Copies", "140px"),
-            Pair.of("Reported Value", "130px"),
-            Pair.of("Gross Amt in USD", "155px"),
-            Pair.of("Batch Amt in USD", "155px"),
+            Pair.of("Pub Date", "110px"),
+            Pair.of("Number of Copies", "185px"),
+            Pair.of("Reported Value", "170px"),
+            Pair.of("Gross Amt in USD", "170px"),
+            Pair.of("Batch Amt in USD", "170px"),
             Pair.of("Market", "120px"),
-            Pair.of("Market Period From", "150px"),
-            Pair.of("Market Period To", "145px"),
-            Pair.of("Author", "305px"),
+            Pair.of("Market Period From", "200px"),
+            Pair.of("Market Period To", "185px"),
+            Pair.of("Author", WIDTH_300),
             Pair.of("Comment", "200px")
         ));
     }

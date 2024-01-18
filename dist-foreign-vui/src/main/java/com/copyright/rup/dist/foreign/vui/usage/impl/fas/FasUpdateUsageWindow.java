@@ -1,0 +1,165 @@
+package com.copyright.rup.dist.foreign.vui.usage.impl.fas;
+
+import com.copyright.rup.dist.foreign.domain.UsageDto;
+import com.copyright.rup.dist.foreign.vui.main.ForeignUi;
+import com.copyright.rup.dist.foreign.vui.usage.api.fas.IFasUpdateUsageWindow;
+import com.copyright.rup.dist.foreign.vui.usage.api.fas.IFasUsageController;
+import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.Buttons;
+import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.Windows;
+import com.copyright.rup.dist.foreign.vui.vaadin.common.util.VaadinUtils;
+import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.CommonDialog;
+import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.SearchWidget;
+
+import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.Unit;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.grid.AbstractGridMultiSelectionModel;
+import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.GridMultiSelectionModel.SelectAllCheckboxVisibility;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.data.provider.DataProvider;
+import com.vaadin.flow.data.provider.ListDataProvider;
+
+import com.vaadin.flow.function.ValueProvider;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.Comparator;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
+/**
+ * Window to display FAS usages to update.
+ * <p>
+ * Copyright (C) 2023 copyright.com
+ * <p>
+ * Date: 02/09/2023
+ *
+ * @author Aliaksandr Liakh
+ */
+class FasUpdateUsageWindow extends CommonDialog implements IFasUpdateUsageWindow {
+
+    private static final long serialVersionUID = 3933778706035133427L;
+
+    private final IFasUsageController controller;
+    private SearchWidget searchWidget;
+    private Grid<UsageDto> usagesGrid;
+    private AbstractGridMultiSelectionModel<UsageDto> gridSelectionModel;
+    private ListDataProvider<UsageDto> dataProvider;
+    private Button updateButton;
+
+    /**
+     * Constructor.
+     *
+     * @param controller instance of {@link IFasUsageController}
+     */
+    FasUpdateUsageWindow(IFasUsageController controller) {
+        this.controller = controller;
+        super.setWidth("1280px");
+        super.setHeight("530px");
+        super.add(initContent());
+        super.setHeaderTitle(ForeignUi.getMessage("window.update_usages"));
+        setModalWindowProperties("update-usages-window", true);
+    }
+
+    @Override
+    public void refresh() {
+        performSearch();
+        dataProvider.refreshAll();
+    }
+
+    private Component initContent() {
+        initSearchWidget();
+        initGrid();
+        var buttonsLayout = buildButtonsLayout();
+        var content = new VerticalLayout(searchWidget, usagesGrid, buttonsLayout);
+        content.setSizeFull();
+        //TODO {aliakh} content.setComponentAlignment(searchWidget, Alignment.MIDDLE_CENTER);
+        //TODO {aliakh} content.setComponentAlignment(buttonsLayout, Alignment.BOTTOM_RIGHT);
+        return content;
+    }
+
+    private void initSearchWidget() {
+        searchWidget = new SearchWidget(this::refresh);
+        searchWidget.setPrompt(ForeignUi.getMessage("prompt.rightsholder_update"));
+        searchWidget.setWidth(70, Unit.PERCENTAGE);
+    }
+
+    private void initGrid() {
+        List<UsageDto> usages = controller.getUsageDtosToUpdate();
+        dataProvider = DataProvider.ofCollection(usages);
+        usagesGrid = new Grid<>();
+        usagesGrid.setDataProvider(dataProvider);
+        usagesGrid.setSizeFull();
+        gridSelectionModel =
+            (AbstractGridMultiSelectionModel<UsageDto>) usagesGrid.setSelectionMode(Grid.SelectionMode.MULTI);
+        switchSelectAllCheckBoxVisibility(usages.size());
+        addGridColumns();
+        usagesGrid.addSelectionListener(event ->
+            updateButton.setEnabled(CollectionUtils.isNotEmpty(event.getAllSelectedItems())));
+        usagesGrid.getColumns().forEach(column -> column.setSortable(true));
+        VaadinUtils.setGridProperties(usagesGrid, "update-fas-usages-grid");
+    }
+
+    private void switchSelectAllCheckBoxVisibility(int beansCount) {
+        boolean selectAllCheckBoxVisibility = 0 == beansCount || beansCount > controller.getRecordsThreshold();
+        gridSelectionModel.setSelectAllCheckboxVisibility(selectAllCheckBoxVisibility
+            ? SelectAllCheckboxVisibility.HIDDEN : SelectAllCheckboxVisibility.VISIBLE);
+        if (selectAllCheckBoxVisibility) {
+            gridSelectionModel.setSelectionColumnFrozen(true);
+        }
+    }
+
+    private void addGridColumns() {
+        addColumn(UsageDto::getId, "table.column.detail_id", "300px");
+        usagesGrid.addColumn((ValueProvider<UsageDto, ?>) UsageDto::getStatus)
+            .setHeader(ForeignUi.getMessage("table.column.status"))
+            .setComparator(Comparator.comparing(status -> status.getStatus().name()))
+            .setFlexGrow(0)
+            .setWidth("180px")
+            .setSortable(true)
+            .setResizable(true);
+        addColumn(UsageDto::getBatchName, "table.column.batch_name", "200px");
+        addColumn(UsageDto::getWrWrkInst, "table.column.wr_wrk_inst", "140px");
+        usagesGrid.addColumn((ValueProvider<UsageDto, ?>) UsageDto::getSystemTitle)
+            .setHeader(ForeignUi.getMessage("table.column.system_title"))
+            .setFlexGrow(0)
+            .setSortable(true)
+            .setResizable(true);
+        addColumn(UsageDto::getRhAccountNumber, "table.column.rh_account_number", "170px");
+        addColumn(UsageDto::getRhName, "table.column.rh_account_name", "300px");
+    }
+
+    private void addColumn(ValueProvider<UsageDto, ?> provider, String captionProperty, String width) {
+        usagesGrid.addColumn(provider)
+            .setHeader(ForeignUi.getMessage(captionProperty))
+            .setFlexGrow(0)
+            .setWidth(width)
+            .setSortable(true)
+            .setResizable(true);
+    }
+
+    private HorizontalLayout buildButtonsLayout() {
+        var buttonsLayout = new HorizontalLayout();
+        updateButton = Buttons.createButton(ForeignUi.getMessage("button.update"));
+        updateButton.addClickListener(event -> Windows.showModalWindow(new FasEditMultipleUsagesWindow(controller,
+            this, usagesGrid.getSelectedItems().stream().map(UsageDto::getId).collect(Collectors.toList()))));
+        updateButton.setEnabled(false);
+        var closeButton = Buttons.createCloseButton(this);
+        VaadinUtils.setButtonsAutoDisabled(updateButton);
+        buttonsLayout.add(updateButton, closeButton);
+        return buttonsLayout;
+    }
+
+    private void performSearch() {
+        dataProvider.clearFilters();
+        var searchValue = searchWidget.getSearchValue();
+        if (StringUtils.isNotBlank(searchValue)) {
+            dataProvider.addFilter(
+                value -> StringUtils.containsIgnoreCase(Objects.toString(value.getWrWrkInst(), null), searchValue)
+                    || StringUtils.containsIgnoreCase(value.getSystemTitle(), searchValue));
+        }
+    }
+}

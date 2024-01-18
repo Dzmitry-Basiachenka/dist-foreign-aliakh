@@ -95,7 +95,7 @@ public class UsageBatchUploadWindowTest {
     private static final String EMPTY_MESSAGE = "Field value should be specified";
     private static final String INVALID_USAGE_BATCH_LENGTH_MESSAGE = "Field value should not exceed 50 characters";
     private static final String USAGE_BATCH_EXISTS_MESSAGE = "Usage Batch with such name already exists";
-    private static final String INVALID_NUMERIC_VALUE_MESSAGE = "Field value should contain numeric values only";
+    private static final String INVALID_NUMBER_MESSAGE = "Field value should contain numeric values only";
     private static final String INVALID_NUMBER_LENGTH_MESSAGE = "Field value should not exceed 10 digits";
     private static final String INVALID_GROSS_AMOUNT_LENGTH_MESSAGE =
         "Field value should be positive number and should not exceed 10 digits";
@@ -159,8 +159,8 @@ public class UsageBatchUploadWindowTest {
         assertFieldValidationMessage(accountNumberField, "10000018631", binder, INVALID_NUMBER_LENGTH_MESSAGE, false);
         assertFieldValidationMessage(accountNumberField, "9999999999.99", binder, INVALID_NUMBER_LENGTH_MESSAGE,
             false);
-        assertFieldValidationMessage(accountNumberField, "0.00", binder, INVALID_NUMERIC_VALUE_MESSAGE, false);
-        assertFieldValidationMessage(accountNumberField, "value", binder, INVALID_NUMERIC_VALUE_MESSAGE, false);
+        assertFieldValidationMessage(accountNumberField, "0.00", binder, INVALID_NUMBER_MESSAGE, false);
+        assertFieldValidationMessage(accountNumberField, "value", binder, INVALID_NUMBER_MESSAGE, false);
         assertFieldValidationMessage(accountNumberField, "0", binder, null, true);
         assertFieldValidationMessage(accountNumberField, FAS_RRO_ACCOUNT_NUMBER.toString(), binder, null, true);
         verify(controller);

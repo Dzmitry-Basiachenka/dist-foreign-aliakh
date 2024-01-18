@@ -193,7 +193,7 @@ public class UsageBatchUploadWindow extends CommonDialog {
         var accountNumber = initRightsholderAccountNumberField();
         var productFamily = initProductFamilyField();
         var verifyButton = initVerifyButton();
-        verifyButton.setWidth(72, Unit.PIXELS);
+        verifyButton.setWidth(72, Unit.PIXELS); //TODO {aliackh} check
         rroAccountLayout.add(accountNumber, productFamily);
         rroAccountLayout.setSizeFull();
         var horizontalLayout = new HorizontalLayout(rroAccountLayout, verifyButton);
