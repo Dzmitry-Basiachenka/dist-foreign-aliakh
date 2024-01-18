@@ -2,15 +2,19 @@ package com.copyright.rup.dist.foreign.vui.scenario.impl.fas;
 
 import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
+import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancyStatusEnum;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
-import com.copyright.rup.dist.foreign.domain.filter.ScenarioUsageFilter;
+import com.copyright.rup.dist.foreign.service.api.fas.IFasScenarioService;
+import com.copyright.rup.dist.foreign.service.api.fas.IRightsholderDiscrepancyService;
 import com.copyright.rup.dist.foreign.vui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.vui.scenario.api.ExcludeUsagesEvent;
 import com.copyright.rup.dist.foreign.vui.scenario.api.IScenarioHistoryController;
 import com.copyright.rup.dist.foreign.vui.scenario.api.fas.IFasExcludePayeeController;
 import com.copyright.rup.dist.foreign.vui.scenario.api.fas.IFasExcludePayeeWidget;
+import com.copyright.rup.dist.foreign.vui.scenario.api.fas.IFasScenarioController;
 import com.copyright.rup.dist.foreign.vui.scenario.api.fas.IFasScenariosController;
 import com.copyright.rup.dist.foreign.vui.scenario.api.fas.IFasScenariosWidget;
+import com.copyright.rup.dist.foreign.vui.scenario.api.fas.IReconcileRightsholdersController;
 import com.copyright.rup.dist.foreign.vui.scenario.impl.CommonScenariosController;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.Windows;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.CommonDialog;
@@ -44,9 +48,17 @@ public class FasScenariosController extends CommonScenariosController implements
     private static final String LIST_SEPARATOR = ", ";
 
     @Autowired
+    private IScenarioHistoryController scenarioHistoryController;
+    @Autowired
+    private IFasScenarioController scenarioController;
+    @Autowired
     private IFasExcludePayeeController excludePayeesController;
     @Autowired
-    private IScenarioHistoryController scenarioHistoryController;
+    private IReconcileRightsholdersController reconcileRightsholdersController;
+    @Autowired
+    private IRightsholderDiscrepancyService rightsholderDiscrepancyService;
+    @Autowired
+    private IFasScenarioService fasScenarioService;
 
     @Override
     public boolean scenarioExists(String scenarioName) {
@@ -63,14 +75,32 @@ public class FasScenariosController extends CommonScenariosController implements
 
     @Override
     public void onReconcileRightsholdersButtonClicked() {
-        //TODO {aazarenka} will implement later
+        var scenario = getWidget().getSelectedScenario();
+        scenarioController.setScenario(scenario);
+        if (!scenarioController.isScenarioEmpty()) {
+            fasScenarioService.reconcileRightsholders(scenario);
+            if (0 < rightsholderDiscrepancyService.getCountByScenarioIdAndStatus(scenario.getId(),
+                RightsholderDiscrepancyStatusEnum.DRAFT)) {
+                reconcileRightsholdersController.setScenario(scenario);
+                Windows.showModalWindow(new RightsholderDiscrepanciesWindow(reconcileRightsholdersController, this));
+            } else {
+                Windows.showConfirmDialog(ForeignUi.getMessage("window.reconcile_rightsholders", scenario.getName()),
+                    () -> {
+                        fasScenarioService.updateRhPayeeParticipating(scenario);
+                        getWidget().refreshSelectedScenario();
+                    });
+            }
+        } else {
+            Windows.showNotificationWindow(
+                ForeignUi.getMessage("message.warning.action_for_empty_scenario", "recalculated"));
+        }
     }
 
     @Override
     public String getCriteriaHtmlRepresentation() {
-        ScenarioUsageFilter filter =
+        var filter =
             getScenarioUsageFilterService().getByScenarioId(getWidget().getSelectedScenario().getId());
-        StringBuilder sb = new StringBuilder(128).append(ForeignUi.getMessage("label.criteria"));
+        var sb = new StringBuilder(128).append(ForeignUi.getMessage("label.criteria"));
         if (Objects.nonNull(filter)) {
             sb.append("<ul>");
             if (Objects.nonNull(filter.getProductFamily())) {

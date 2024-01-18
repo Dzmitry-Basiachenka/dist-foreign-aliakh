@@ -104,12 +104,12 @@ public class FasScenariosWidgetTest {
     @Test
     public void testComponentStructure() {
         assertEquals(2, scenariosWidget.getComponentCount());
-        Component component = scenariosWidget.getComponentAt(0);
+        var component = scenariosWidget.getComponentAt(0);
         assertThat(component, instanceOf(HorizontalLayout.class));
         verifyButtonsLayout((HorizontalLayout) component);
         component = scenariosWidget.getComponentAt(1);
         assertThat(component, instanceOf(SplitLayout.class));
-        SplitLayout splitLayout = (SplitLayout) component;
+        var splitLayout = (SplitLayout) component;
         assertEquals(Orientation.HORIZONTAL, splitLayout.getOrientation());
         assertEquals("scenarios-tables-panel-split-layout", splitLayout.getClassName());
         component = splitLayout.getPrimaryComponent();
@@ -199,7 +199,7 @@ public class FasScenariosWidgetTest {
         scenariosWidget.refresh();
         Scroller scroller = (Scroller) ((SplitLayout) scenariosWidget.getComponentAt(1)).getSecondaryComponent();
         Section section = (Section) scroller.getContent();
-        VerticalLayout lastActionLayout =
+        var lastActionLayout =
             (VerticalLayout) ((VerticalLayout) section.getComponentAt(0)).getComponentAt(6);
         Button viewAllActionsButton = (Button) lastActionLayout.getComponentAt(2);
         viewAllActionsButton.click();
@@ -212,7 +212,7 @@ public class FasScenariosWidgetTest {
 
     private void verifyScroller(Component component) {
         assertThat(component, instanceOf(Scroller.class));
-        Scroller scroller = (Scroller) component;
+        var scroller = (Scroller) component;
         assertEquals("scenarios-metadata-panel-scroller", scroller.getClassName());
         assertEquals(ScrollDirection.VERTICAL, scroller.getScrollDirection());
         assertThat(scroller.getContent(), instanceOf(Section.class));
