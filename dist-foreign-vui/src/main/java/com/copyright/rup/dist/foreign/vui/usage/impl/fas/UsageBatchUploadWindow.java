@@ -9,7 +9,8 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.common.util.UsageBatchUtils;
 import com.copyright.rup.dist.foreign.service.impl.csv.UsageCsvProcessor;
-import com.copyright.rup.dist.foreign.vui.common.validator.AmountZeroValidator;
+import com.copyright.rup.dist.foreign.vui.common.validator.AmountRangeValidator;
+import com.copyright.rup.dist.foreign.vui.common.validator.RequiredBigDecimalValidator;
 import com.copyright.rup.dist.foreign.vui.common.validator.RequiredValidator;
 import com.copyright.rup.dist.foreign.vui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.vui.usage.api.fas.IFasUsageController;
@@ -26,16 +27,16 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.BigDecimalField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.BindingValidationStatus;
-import com.vaadin.flow.data.converter.StringToBigDecimalConverter;
 import com.vaadin.flow.data.validator.StringLengthValidator;
 import com.vaadin.flow.function.ValueProvider;
 
 import org.apache.commons.lang3.StringUtils;
 
-import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 /**
  * Window for uploading a usage batch with usages.
@@ -65,7 +66,7 @@ public class UsageBatchUploadWindow extends CommonDialog {
     private Rightsholder rro;
     private LocalDateWidget paymentDateWidget;
     private TextField fiscalYearField;
-    private TextField grossAmountField;
+    private BigDecimalField grossAmountField;
 
     /**
      * Constructor.
@@ -128,8 +129,7 @@ public class UsageBatchUploadWindow extends CommonDialog {
         usageBatch.setRro(rro);
         usageBatch.setPaymentDate(paymentDateWidget.getValue());
         usageBatch.setFiscalYear(UsageBatchUtils.calculateFiscalYear(paymentDateWidget.getValue()));
-        usageBatch.setGrossAmount(
-            new BigDecimal(StringUtils.trim(grossAmountField.getValue())).setScale(2, BigDecimal.ROUND_HALF_UP));
+        usageBatch.setGrossAmount(grossAmountField.getValue().setScale(2, RoundingMode.HALF_UP));
         return usageBatch;
     }
 
@@ -300,13 +300,12 @@ public class UsageBatchUploadWindow extends CommonDialog {
         return horizontalLayout;
     }
 
-    private TextField initGrossAmountField() {
-        grossAmountField = new TextField(ForeignUi.getMessage("label.gross_amount_usd"));
+    private BigDecimalField initGrossAmountField() {
+        grossAmountField = new BigDecimalField(ForeignUi.getMessage("label.gross_amount_usd"));
         grossAmountField.setRequiredIndicatorVisible(true);
         binder.forField(grossAmountField)
-            .withValidator(requiredValidator)
-            .withValidator(new AmountZeroValidator())
-            .withConverter(new StringToBigDecimalConverter(ForeignUi.getMessage("field.error.not_numeric")))
+            .withValidator(new RequiredBigDecimalValidator())
+            .withValidator(AmountRangeValidator.amountValidator())
             .bind(UsageBatch::getGrossAmount, UsageBatch::setGrossAmount);
         VaadinUtils.setMaxComponentsWidth(grossAmountField);
         VaadinUtils.addComponentStyle(grossAmountField, "gross-amount-field");

@@ -2,7 +2,9 @@ package com.copyright.rup.dist.foreign.vui.usage.impl.fas;
 
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.assertFieldValidationMessage;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.getDialogContent;
+import static com.copyright.rup.dist.foreign.vui.UiTestHelper.setBigDecimalFieldValue;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.setTextFieldValue;
+import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyBigDecimalField;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyButton;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyLoadClickListener;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyTextField;
@@ -41,11 +43,11 @@ import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.BigDecimalField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 
 import org.apache.commons.lang3.StringUtils;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -170,19 +172,21 @@ public class UsageBatchUploadWindowTest {
     public void testIsValidGrossAmountField() {
         replay(controller);
         window = new UsageBatchUploadWindow(controller);
-        TextField grossAmountField = Whitebox.getInternalState(window, GROSS_AMOUNT_FIELD);
+        BigDecimalField grossAmountField = Whitebox.getInternalState(window, GROSS_AMOUNT_FIELD);
         Binder<?> binder = Whitebox.getInternalState(window, "binder");
-        assertFieldValidationMessage(grossAmountField, StringUtils.EMPTY, binder, EMPTY_MESSAGE, false);
-        assertFieldValidationMessage(grossAmountField, "   ", binder, EMPTY_MESSAGE, false);
-        assertFieldValidationMessage(grossAmountField, "0", binder, INVALID_GROSS_AMOUNT_LENGTH_MESSAGE, false);
-        assertFieldValidationMessage(grossAmountField, "0.00", binder, INVALID_GROSS_AMOUNT_LENGTH_MESSAGE, false);
-        assertFieldValidationMessage(grossAmountField, "0.004", binder, INVALID_GROSS_AMOUNT_LENGTH_MESSAGE, false);
-        assertFieldValidationMessage(grossAmountField, "value", binder, INVALID_GROSS_AMOUNT_LENGTH_MESSAGE, false);
-        assertFieldValidationMessage(grossAmountField, "10000000000.00", binder, INVALID_GROSS_AMOUNT_LENGTH_MESSAGE,
+        assertFieldValidationMessage(grossAmountField, null, binder, EMPTY_MESSAGE, false);
+        assertFieldValidationMessage(grossAmountField, BigDecimal.ZERO, binder, INVALID_GROSS_AMOUNT_LENGTH_MESSAGE,
             false);
-        assertFieldValidationMessage(grossAmountField, "0.005", binder, null, true);
-        assertFieldValidationMessage(grossAmountField, "123.5684", binder, null, true);
-        assertFieldValidationMessage(grossAmountField, "9999999999.99", binder, null, true);
+        assertFieldValidationMessage(grossAmountField, new BigDecimal("0.00"), binder,
+            INVALID_GROSS_AMOUNT_LENGTH_MESSAGE, false);
+        assertFieldValidationMessage(grossAmountField, new BigDecimal("0.009"), binder,
+            INVALID_GROSS_AMOUNT_LENGTH_MESSAGE, false);
+        assertFieldValidationMessage(grossAmountField, new BigDecimal("10000000000.00"), binder,
+            INVALID_GROSS_AMOUNT_LENGTH_MESSAGE,
+            false);
+        assertFieldValidationMessage(grossAmountField, new BigDecimal("0.01"), binder, null, true);
+        assertFieldValidationMessage(grossAmountField, new BigDecimal("123.5684"), binder, null, true);
+        assertFieldValidationMessage(grossAmountField, new BigDecimal("9999999999.99"), binder, null, true);
         verify(controller);
     }
 
@@ -204,7 +208,7 @@ public class UsageBatchUploadWindowTest {
         assertFalse(window.isValid());
         Whitebox.getInternalState(window, LocalDateWidget.class).setValue(LocalDate.now());
         assertFalse(window.isValid());
-        setTextFieldValue(window, GROSS_AMOUNT_FIELD, GROSS_AMOUNT);
+        setBigDecimalFieldValue(window, GROSS_AMOUNT_FIELD, GROSS_AMOUNT);
         assertFalse(window.isValid());
         setTextFieldValue(window, USAGE_BATCH_NAME_FIELD, USAGE_BATCH_NAME);
         assertTrue(window.isValid());
@@ -234,7 +238,9 @@ public class UsageBatchUploadWindowTest {
         Whitebox.setInternalState(window, "rro", rro);
         Whitebox.setInternalState(window, PAYMENT_DATE_WIDGET, paymentDateWidget);
         Whitebox.setInternalState(window, FISCAL_YEAR_FIELD, buildTextField("Fiscal Year", FISCAL_YEAR));
-        Whitebox.setInternalState(window, GROSS_AMOUNT_FIELD, buildTextField("Gross Amount", GROSS_AMOUNT));
+        BigDecimalField grossAmountField = new BigDecimalField("Gross Amount");
+        grossAmountField.setValue(new BigDecimal(GROSS_AMOUNT));
+        Whitebox.setInternalState(window, GROSS_AMOUNT_FIELD, grossAmountField);
         expect(window.isValid()).andReturn(true).once();
         window.close();
         expectLastCall().once();
@@ -362,7 +368,8 @@ public class UsageBatchUploadWindowTest {
         assertThat(component, instanceOf(HorizontalLayout.class));
         var horizontalLayout = (HorizontalLayout) component;
         assertEquals(2, horizontalLayout.getComponentCount());
-        verifyTextField(horizontalLayout.getComponentAt(0), "Gross Amount in USD", WIDTH_CALC, "gross-amount-field");
+        verifyBigDecimalField(horizontalLayout.getComponentAt(0), "Gross Amount in USD", WIDTH_CALC,
+            "gross-amount-field");
     }
 
     private UsageBatch buildUsageBatch(Rightsholder rro) {

@@ -23,10 +23,9 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.select.Select;
-import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.component.textfield.BigDecimalField;
 import com.vaadin.flow.data.provider.ListDataProvider;
 
-import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
@@ -83,24 +82,19 @@ public class FasExcludePayeeFilterWidgetTest {
         replay(controller);
         widget.init();
         BigDecimal filterValue = new BigDecimal("45.10");
-        TextField threshold = Whitebox.getInternalState(widget, "minimumNetThreshold");
+        BigDecimalField threshold = Whitebox.getInternalState(widget, "minimumNetThreshold");
         Button applyButton = Whitebox.getInternalState(widget, "applyButton");
         ExcludePayeeFilter filter = Whitebox.getInternalState(widget, "filter");
         setThresholdAndValidateFilterAndApplyButton(threshold, applyButton, filter, "45.10", filterValue, true);
         setThresholdAndValidateFilterAndApplyButton(threshold, applyButton, filter, "-45.10", filterValue, false);
-        setThresholdAndValidateFilterAndApplyButton(threshold, applyButton, filter, "45,10", filterValue, false);
-        setThresholdAndValidateFilterAndApplyButton(threshold, applyButton, filter, "45.10a", filterValue, false);
-        setThresholdAndValidateFilterAndApplyButton(threshold, applyButton, filter, " 0 ", filterValue, false);
         setThresholdAndValidateFilterAndApplyButton(threshold, applyButton, filter, "0", filterValue, false);
-        setThresholdAndValidateFilterAndApplyButton(threshold, applyButton, filter, StringUtils.EMPTY, null, false);
-        setThresholdAndValidateFilterAndApplyButton(threshold, applyButton, filter, "   ", null, false);
         verify(controller);
     }
 
-    private void setThresholdAndValidateFilterAndApplyButton(TextField minimumNetThreshold, Button applyButton,
+    private void setThresholdAndValidateFilterAndApplyButton(BigDecimalField minimumNetThreshold, Button applyButton,
                                                              ExcludePayeeFilter filter, String valueToSet,
                                                              BigDecimal filterValue, boolean applyEnabled) {
-        minimumNetThreshold.setValue(valueToSet);
+        minimumNetThreshold.setValue(new BigDecimal(valueToSet));
         if (Objects.nonNull(minimumNetThreshold.getErrorMessage())) {
             assertEquals("Field value should be positive number and should not exceed 10 digits",
                 minimumNetThreshold.getErrorMessage());
@@ -111,8 +105,8 @@ public class FasExcludePayeeFilterWidgetTest {
 
     private void verifyMinimumNetThresholdComponent(Component component) {
         assertNotNull(component);
-        assertEquals(TextField.class, component.getClass());
-        TextField textField = (TextField) component;
+        assertEquals(BigDecimalField.class, component.getClass());
+        BigDecimalField textField = (BigDecimalField) component;
         assertEquals("Minimum Net Threshold", textField.getLabel());
         assertEquals("calc(99.9% - 0rem)", textField.getWidth());
     }
@@ -134,7 +128,7 @@ public class FasExcludePayeeFilterWidgetTest {
     }
 
     private <T> Select<T> verifySelectField(Component component, String caption, boolean emptySelectionAllowed,
-                                                 Collection<T> expectedItems) {
+                                            Collection<T> expectedItems) {
         assertThat(component, instanceOf(Select.class));
         Select<T> comboBox = (Select<T>) component;
         assertFalse(comboBox.isReadOnly());
