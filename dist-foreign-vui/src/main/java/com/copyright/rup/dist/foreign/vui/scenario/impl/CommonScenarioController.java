@@ -1,10 +1,13 @@
 package com.copyright.rup.dist.foreign.vui.scenario.impl;
 
+import com.copyright.rup.dist.common.reporting.api.IStreamSource;
+import com.copyright.rup.dist.common.reporting.api.IStreamSourceHandler;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.vui.scenario.api.ICommonScenarioController;
@@ -42,6 +45,10 @@ public abstract class CommonScenarioController extends CommonController<ICommonS
     private IUsageService usageService;
     @Autowired
     private IScenarioService scenarioService;
+    @Autowired
+    private IReportService reportService;
+    @Autowired
+    private IStreamSourceHandler streamSourceHandler;
 
     @Override
     public int getSize() {
@@ -70,6 +77,18 @@ public abstract class CommonScenarioController extends CommonController<ICommonS
     }
 
     @Override
+    public IStreamSource getExportScenarioUsagesStreamSource() {
+        return streamSourceHandler.getCsvStreamSource(() -> scenario.getName() + "_Details_",
+            pos -> writeScenarioUsagesCsvReport(scenario, pos));
+    }
+
+    @Override
+    public IStreamSource getExportScenarioRightsholderTotalsStreamSource() {
+        return streamSourceHandler.getCsvStreamSource(() -> scenario.getName() + "_",
+            pos -> reportService.writeScenarioRightsholderTotalsCsvReport(scenario, pos));
+    }
+
+    @Override
     public void onRightsholderAccountNumberClicked(Long accountNumber, String rhName) {
         //TODO: {dbasiachenka} implement
         Windows.showNotificationWindow(StringUtils.EMPTY);
@@ -92,6 +111,10 @@ public abstract class CommonScenarioController extends CommonController<ICommonS
 
     protected IUsageService getUsageService() {
         return usageService;
+    }
+
+    protected IReportService getReportService() {
+        return reportService;
     }
 
     /**

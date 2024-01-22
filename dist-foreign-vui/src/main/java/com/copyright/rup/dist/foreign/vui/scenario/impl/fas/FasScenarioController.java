@@ -56,7 +56,7 @@ public class FasScenarioController extends CommonScenarioController implements I
 
     @Override
     protected void writeScenarioUsagesCsvReport(Scenario scenarioForReport, PipedOutputStream pos) {
-        //TODO: {dbasiachenka} implement
+        getReportService().writeFasScenarioUsagesCsvReport(scenarioForReport, pos);
     }
 
     @Override

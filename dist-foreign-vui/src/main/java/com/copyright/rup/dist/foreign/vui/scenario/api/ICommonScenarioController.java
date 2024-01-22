@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.vui.scenario.api;
 
+import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.SearchWidget.ISearchController;
@@ -19,6 +20,16 @@ import java.util.List;
  * @author Stanislau Rudak
  */
 public interface ICommonScenarioController extends IController<ICommonScenarioWidget>, ISearchController {
+
+    /**
+     * @return instance of {@link IStreamSource} for export details.
+     */
+    IStreamSource getExportScenarioUsagesStreamSource();
+
+    /**
+     * @return instance of {@link IStreamSource} for export scenario.
+     */
+    IStreamSource getExportScenarioRightsholderTotalsStreamSource();
 
     /**
      * Handles click on "Rightsholder Account Number" button.
