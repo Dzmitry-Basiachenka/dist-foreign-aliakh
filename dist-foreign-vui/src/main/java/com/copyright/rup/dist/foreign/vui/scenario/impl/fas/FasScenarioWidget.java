@@ -5,6 +5,7 @@ import com.copyright.rup.dist.foreign.vui.scenario.api.fas.IFasScenarioControlle
 import com.copyright.rup.dist.foreign.vui.scenario.api.fas.IFasScenarioWidget;
 import com.copyright.rup.dist.foreign.vui.scenario.impl.CommonScenarioWidget;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.Buttons;
+import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.downloader.OnDemandFileDownloader;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.util.VaadinUtils;
 
 import com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode;
@@ -49,11 +50,16 @@ public class FasScenarioWidget extends CommonScenarioWidget implements IFasScena
     protected HorizontalLayout initButtons() {
         var excludeByRroButton = Buttons.createButton(ForeignUi.getMessage("button.exclude_by_rro"));
         excludeByRroButton.addClickListener(event -> scenarioController.onExcludeByRroClicked());
-        //TODO: {dbasiachenka} implement export logic
         var exportDetailsButton = Buttons.createButton(ForeignUi.getMessage("button.export_details"));
+        var exportDetailsFileDownloader =
+            new OnDemandFileDownloader(scenarioController.getExportScenarioUsagesStreamSource().getSource());
+        exportDetailsFileDownloader.extend(exportDetailsButton);
         var exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
-        var buttonsLayout = new HorizontalLayout(excludeByRroButton, exportDetailsButton, exportButton,
-            Buttons.createCloseButton(this));
+        var exportScenarioFileDownloader = new OnDemandFileDownloader(
+            scenarioController.getExportScenarioRightsholderTotalsStreamSource().getSource());
+        exportScenarioFileDownloader.extend(exportButton);
+        var buttonsLayout = new HorizontalLayout(excludeByRroButton, exportDetailsFileDownloader,
+            exportScenarioFileDownloader, Buttons.createCloseButton(this));
         VaadinUtils.addComponentStyle(buttonsLayout, "scenario-buttons-layout");
         VaadinUtils.setMaxComponentsWidth(buttonsLayout);
         buttonsLayout.setWidth("100%");

@@ -3,24 +3,27 @@ package com.copyright.rup.dist.foreign.vui.scenario.impl.fas;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.getDialogContent;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.getFooterComponent;
 
-import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.reset;
-import static org.easymock.EasyMock.verify;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.powermock.api.easymock.PowerMock.createMock;
+import static org.powermock.api.easymock.PowerMock.mockStatic;
+import static org.powermock.api.easymock.PowerMock.replay;
+import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.domain.Scenario;
-import com.copyright.rup.dist.foreign.vui.UiTestHelper;
 import com.copyright.rup.dist.foreign.vui.scenario.api.fas.IFasScenarioController;
+import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.downloader.OnDemandFileDownloader;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.SearchWidget;
 
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.Unit;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.FooterRow;
 import com.vaadin.flow.component.grid.FooterRow.FooterCell;
 import com.vaadin.flow.component.grid.Grid;
@@ -34,10 +37,19 @@ import com.vaadin.flow.component.textfield.TextField;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.core.classloader.annotations.PowerMockIgnore;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.math.BigDecimal;
+import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 /**
@@ -49,6 +61,9 @@ import java.util.stream.Collectors;
  *
  * @author Ihar Suvorau
  */
+@RunWith(PowerMockRunner.class)
+@PrepareForTest(UI.class)
+@PowerMockIgnore({"com.sun.org.apache.xerces.*", "javax.xml.*", "org.xml.*", "javax.management.*"})
 public class FasScenarioWidgetTest {
 
     private FasScenarioWidget scenarioWidget;
@@ -56,16 +71,25 @@ public class FasScenarioWidgetTest {
 
     @Before
     public void setUp() {
+        mockStatic(UI.class);
+        UI ui = createMock(UI.class);
+        expect(UI.getCurrent()).andReturn(ui).times(2);
+        expect(ui.getUIId()).andReturn(1).times(2);
+        IStreamSource streamSource = createMock(IStreamSource.class);
+        Map.Entry<Supplier<String>, Supplier<InputStream>> fileSource =
+            new SimpleImmutableEntry<>(() -> "file.txt", () -> new ByteArrayInputStream(new byte[]{}));
+        expect(streamSource.getSource()).andReturn(fileSource).times(2);
         controller = createMock(IFasScenarioController.class);
-        scenarioWidget = new FasScenarioWidget(controller);
-        scenarioWidget.setController(controller);
+        expect(controller.getExportScenarioUsagesStreamSource()).andReturn(streamSource).once();
+        expect(controller.getExportScenarioRightsholderTotalsStreamSource()).andReturn(streamSource).once();
         Scenario scenario = buildScenario();
         expect(controller.getScenario()).andReturn(scenario).once();
         expect(controller.getScenarioWithAmountsAndLastAction()).andReturn(scenario).once();
-        replay(controller);
+        replay(controller, streamSource, ui, UI.class);
+        scenarioWidget = new FasScenarioWidget(controller);
+        scenarioWidget.setController(controller);
         scenarioWidget.init();
-        verify(controller);
-        reset(controller);
+        verify(controller, streamSource, ui, UI.class);
     }
 
     @Test
@@ -137,8 +161,23 @@ public class FasScenarioWidgetTest {
     }
 
     private void verifyButtonsLayout(Component component) {
-        UiTestHelper.verifyButtonsLayout(component, true, "Exclude By RRO", "Export Details", "Export", "Close");
-        assertTrue(((HorizontalLayout) component).isSpacing());
+        assertThat(component, instanceOf(HorizontalLayout.class));
+        HorizontalLayout layout = (HorizontalLayout) component;
+        assertTrue(layout.isSpacing());
+        assertEquals("scenario-buttons-layout", layout.getId().orElseThrow());
+        assertEquals(4, layout.getComponentCount());
+        Component excludeByRroButton = layout.getComponentAt(0);
+        assertThat(excludeByRroButton, instanceOf(Button.class));
+        assertEquals("Exclude By RRO", ((Button) excludeByRroButton).getText());
+        Component fileDownloader = layout.getComponentAt(1);
+        assertThat(fileDownloader, instanceOf(OnDemandFileDownloader.class));
+        assertEquals("Export Details", ((Button) fileDownloader.getChildren().findFirst().orElseThrow()).getText());
+        fileDownloader = layout.getComponentAt(2);
+        assertThat(fileDownloader, instanceOf(OnDemandFileDownloader.class));
+        assertEquals("Export", ((Button) fileDownloader.getChildren().findFirst().orElseThrow()).getText());
+        Component closeButton = layout.getComponentAt(3);
+        assertThat(closeButton, instanceOf(Button.class));
+        assertEquals("Close", ((Button) closeButton).getText());
     }
 
     private Scenario buildScenario() {
