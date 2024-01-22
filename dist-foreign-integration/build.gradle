@@ -4,8 +4,6 @@ dependencies {
     compile project(':dist-foreign-domain')
 
     compile("com.copyright.rup.aws:rup-aws-sns:${rupAwsVersion}")
-    //updated version of transitive dependency snakeyaml from dependency rup-aws-sns to fix vulnerability CVE-2022-1471
-    compile("org.yaml:snakeyaml:${snakeyamlVersion}")
     compile("com.copyright.rup.aws:rup-aws-sqs:${rupAwsVersion}")
     compile("com.copyright.rup.dist.common:dist-common-integration:${distCommonVersion}")
     //transitive dependency of rup-es-api to avoid CVE-2020-9488, CVE-2020-21913
@@ -23,7 +21,9 @@ dependencies {
     compile("org.apache.commons:commons-collections4:${commonsCollectionsVersion}")
     compile("org.apache.httpcomponents:httpasyncclient:${httpAsyncClientVersion}")
     compile("org.springframework:spring-web:${rupJava.standardDependencies.spring.version}")
+    compile("org.yaml:snakeyaml:${snakeyamlVersion}")
     compile("io.micrometer:micrometer-core:${micrometerVersion}")
+    compile("io.netty:netty-all:${nettyVersion}")
 
     testCompile("com.copyright.rup.dist.common:dist-common-test:${distCommonVersion}")
 
