@@ -41,13 +41,10 @@ import com.copyright.rup.dist.foreign.service.api.fas.IFasUsageService;
 import com.copyright.rup.dist.foreign.service.impl.csv.CsvProcessorFactory;
 import com.copyright.rup.dist.foreign.service.impl.csv.ResearchedUsagesCsvProcessor;
 import com.copyright.rup.dist.foreign.vui.common.ByteArrayStreamSource;
-import com.copyright.rup.dist.foreign.vui.usage.api.FilterChangedEvent;
 import com.copyright.rup.dist.foreign.vui.usage.api.IFasNtsUsageFilterController;
 import com.copyright.rup.dist.foreign.vui.usage.api.IFasNtsUsageFilterWidget;
 import com.copyright.rup.dist.foreign.vui.usage.api.ScenarioCreateEvent;
 import com.copyright.rup.dist.foreign.vui.usage.api.fas.IFasUsageWidget;
-
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -97,7 +94,6 @@ public class FasUsageControllerTest {
     private IFasUsageService fasUsageService;
     private IFasNtsUsageFilterController filterController;
     private IFasNtsUsageFilterWidget filterWidget;
-    private IFasUsageWidget usagesWidget;
     private IUsageBatchService usageBatchService;
     private IPrmIntegrationService prmIntegrationService;
     private IResearchService researchService;
@@ -113,7 +109,6 @@ public class FasUsageControllerTest {
         fasUsageService = createMock(IFasUsageService.class);
         usageBatchService = createMock(IUsageBatchService.class);
         filterController = createMock(IFasNtsUsageFilterController.class);
-        usagesWidget = createMock(IFasUsageWidget.class);
         prmIntegrationService = createMock(IPrmIntegrationService.class);
         researchService = createMock(IResearchService.class);
         filterWidget = createMock(IFasNtsUsageFilterWidget.class);
@@ -123,7 +118,6 @@ public class FasUsageControllerTest {
         Whitebox.setInternalState(controller, usageBatchService);
         Whitebox.setInternalState(controller, usageService);
         Whitebox.setInternalState(controller, fasUsageService);
-        Whitebox.setInternalState(controller, usagesWidget);
         Whitebox.setInternalState(controller, filterController);
         Whitebox.setInternalState(controller, prmIntegrationService);
         Whitebox.setInternalState(controller, researchService);
@@ -190,16 +184,6 @@ public class FasUsageControllerTest {
     @Test
     public void testInstantiateWidget() {
         assertThat(controller.instantiateWidget(), instanceOf(FasUsageWidget.class));
-    }
-
-    @Test
-    public void testOnFilterChanged() {
-        FilterChangedEvent filterChangedEvent = new FilterChangedEvent(new HorizontalLayout());
-        usagesWidget.refresh();
-        expectLastCall().once();
-        replay(usagesWidget);
-        controller.onFilterChanged(filterChangedEvent);
-        verify(usagesWidget);
     }
 
     @Test

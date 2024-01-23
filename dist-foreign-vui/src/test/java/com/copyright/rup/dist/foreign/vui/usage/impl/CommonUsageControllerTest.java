@@ -18,7 +18,6 @@ import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.impl.UsageService;
-import com.copyright.rup.dist.foreign.vui.usage.api.FilterChangedEvent;
 import com.copyright.rup.dist.foreign.vui.usage.api.ICommonUsageController;
 import com.copyright.rup.dist.foreign.vui.usage.api.ICommonUsageFilterController;
 import com.copyright.rup.dist.foreign.vui.usage.api.ICommonUsageWidget;
@@ -161,10 +160,6 @@ public class CommonUsageControllerTest {
         @Override
         public IStreamSource getExportUsagesStreamSource() {
             return null;
-        }
-
-        @Override
-        public void onFilterChanged(FilterChangedEvent event) {
         }
 
         @Override

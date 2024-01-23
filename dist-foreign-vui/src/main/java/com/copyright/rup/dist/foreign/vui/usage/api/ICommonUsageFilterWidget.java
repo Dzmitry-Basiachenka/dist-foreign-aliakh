@@ -1,7 +1,7 @@
 package com.copyright.rup.dist.foreign.vui.usage.api;
 
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
-
+import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.filter.IFilterSaveAction;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.api.IFilterWidget;
 
 /**
@@ -24,4 +24,11 @@ public interface ICommonUsageFilterWidget extends IFilterWidget<ICommonUsageFilt
      * @return applied {@link UsageFilter}.
      */
     UsageFilter getAppliedFilter();
+
+    /**
+     * Sets filter save action.
+     *
+     * @param action action to be performed
+     */
+    void setFilterSaveAction(IFilterSaveAction action);
 }
