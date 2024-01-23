@@ -76,6 +76,7 @@ public class FasNtsUsageFilterWidgetTest {
         controller = createMock(IFasNtsUsageFilterController.class);
         widget = new FasNtsUsageFilterWidget(controller);
         widget.setController(controller);
+        widget.setFilterSaveAction(() -> {});
         expect(controller.getFiscalYears()).andReturn(List.of(FISCAL_YEAR)).once();
     }
 

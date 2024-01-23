@@ -43,13 +43,6 @@ public interface ICommonUsageController extends IController<ICommonUsageWidget> 
     ICommonUsageFilterWidget initUsagesFilterWidget();
 
     /**
-     * Handles changes of filter.
-     *
-     * @param event event
-     */
-    void onFilterChanged(FilterChangedEvent event);
-
-    /**
      * Gets RH from PRM by account number.
      *
      * @param rhAccountNumber RH account number

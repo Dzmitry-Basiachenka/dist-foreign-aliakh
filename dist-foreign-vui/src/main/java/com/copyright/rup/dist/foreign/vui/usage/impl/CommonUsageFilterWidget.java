@@ -2,10 +2,10 @@ package com.copyright.rup.dist.foreign.vui.usage.impl;
 
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.vui.main.ForeignUi;
-import com.copyright.rup.dist.foreign.vui.usage.api.FilterChangedEvent;
 import com.copyright.rup.dist.foreign.vui.usage.api.ICommonUsageFilterController;
 import com.copyright.rup.dist.foreign.vui.usage.api.ICommonUsageFilterWidget;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.Buttons;
+import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.filter.IFilterSaveAction;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.util.VaadinUtils;
 
 import com.vaadin.flow.component.button.Button;
@@ -31,6 +31,7 @@ public abstract class CommonUsageFilterWidget extends VerticalLayout implements 
     private UsageFilter usageFilter = new UsageFilter();
     private UsageFilter appliedUsageFilter = new UsageFilter();
     private CommonUsageAppliedFilterWidget appliedFilterWidget;
+    private IFilterSaveAction filterSaveAction;
 
     @Override
     @SuppressWarnings("unchecked")
@@ -47,11 +48,16 @@ public abstract class CommonUsageFilterWidget extends VerticalLayout implements 
     }
 
     @Override
+    public void setFilterSaveAction(IFilterSaveAction action) {
+        this.filterSaveAction = action;
+    }
+
+    @Override
     public void applyFilter() {
         appliedUsageFilter = new UsageFilter(usageFilter);
         appliedFilterWidget.refreshFilterPanel(appliedUsageFilter);
+        filterSaveAction.onFilterSaveAction();
         filterChanged();
-        fireEvent(new FilterChangedEvent(this));
     }
 
     @Override

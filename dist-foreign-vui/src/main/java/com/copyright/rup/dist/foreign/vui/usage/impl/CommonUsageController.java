@@ -11,7 +11,6 @@ import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchStatusService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.vui.main.api.IProductFamilyProvider;
-import com.copyright.rup.dist.foreign.vui.usage.api.FilterChangedEvent;
 import com.copyright.rup.dist.foreign.vui.usage.api.ICommonUsageController;
 import com.copyright.rup.dist.foreign.vui.usage.api.ICommonUsageFilterWidget;
 import com.copyright.rup.dist.foreign.vui.usage.api.ICommonUsageWidget;
@@ -19,8 +18,6 @@ import com.copyright.rup.dist.foreign.vui.usage.api.ScenarioCreateEvent;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.api.CommonController;
 
 import com.google.common.base.MoreObjects;
-
-import com.vaadin.flow.component.ComponentUtil;
 
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,13 +63,8 @@ public abstract class CommonUsageController extends CommonController<ICommonUsag
     @Override
     public ICommonUsageFilterWidget initUsagesFilterWidget() {
         ICommonUsageFilterWidget widget = getUsageFilterController().initWidget();
-        ComponentUtil.addListener((CommonUsageFilterWidget)widget, FilterChangedEvent.class, this::onFilterChanged);
+        widget.setFilterSaveAction(() -> getWidget().refresh());
         return widget;
-    }
-
-    @Override
-    public void onFilterChanged(FilterChangedEvent event) {
-        getWidget().refresh();
     }
 
     @Override
