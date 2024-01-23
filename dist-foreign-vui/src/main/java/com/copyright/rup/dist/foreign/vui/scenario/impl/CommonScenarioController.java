@@ -10,16 +10,15 @@ import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.vui.scenario.api.ICommonDrillDownByRightsholderController;
 import com.copyright.rup.dist.foreign.vui.scenario.api.ICommonScenarioController;
 import com.copyright.rup.dist.foreign.vui.scenario.api.ICommonScenarioWidget;
-import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.Windows;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.api.CommonController;
 
 import com.vaadin.flow.data.provider.QuerySortOrder;
 import com.vaadin.flow.data.provider.SortDirection;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.PipedOutputStream;
@@ -57,7 +56,7 @@ public abstract class CommonScenarioController extends CommonController<ICommonS
 
     @Override
     public boolean isScenarioEmpty() {
-        return usageService.isScenarioEmpty(getScenario());
+        return getUsageService().isScenarioEmpty(getScenario());
     }
 
     @Override
@@ -90,8 +89,7 @@ public abstract class CommonScenarioController extends CommonController<ICommonS
 
     @Override
     public void onRightsholderAccountNumberClicked(Long accountNumber, String rhName) {
-        //TODO: {dbasiachenka} implement
-        Windows.showNotificationWindow(StringUtils.EMPTY);
+        getDrillDownByRightsholderController().showWidget(accountNumber, rhName, scenario);
     }
 
     @Override
@@ -116,6 +114,11 @@ public abstract class CommonScenarioController extends CommonController<ICommonS
     protected IReportService getReportService() {
         return reportService;
     }
+
+    /**
+     * @return an {@link ICommonDrillDownByRightsholderController} instance.
+     */
+    protected abstract ICommonDrillDownByRightsholderController getDrillDownByRightsholderController();
 
     /**
      * Writes scenario usages into csv output stream.
