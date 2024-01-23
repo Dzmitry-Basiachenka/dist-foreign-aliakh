@@ -86,10 +86,13 @@ vaadin-tab:hover {
     margin: 0;
 }
 
-.label-note {
-    font-size: 14px;
+.label-note, #label-note {
     color: #000099;
     font-weight: bold;
+}
+
+.label-note b, #label-note b {
+    color: #CC0033;
 }
 
 .v-label-white-space-normal {

@@ -79,6 +79,18 @@ public class CommonScenariosControllerTest {
         verify(scenarioService, scenariosWidget);
     }
 
+    @Test
+    public void testRefreshScenario() {
+        expect(scenariosWidget.getSelectedScenario()).andReturn(scenario).once();
+        scenarioService.refreshScenario(scenario);
+        expectLastCall().once();
+        scenariosWidget.refreshSelectedScenario();
+        expectLastCall().once();
+        replay(scenariosWidget, scenarioService);
+        scenariosController.refreshScenario();
+        verify(scenariosWidget, scenarioService);
+    }
+
     private void buildScenario() {
         scenario = new Scenario();
         scenario.setId(SCENARIO_ID);
