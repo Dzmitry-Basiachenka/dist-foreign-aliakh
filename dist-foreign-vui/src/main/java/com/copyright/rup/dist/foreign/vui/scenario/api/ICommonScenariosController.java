@@ -55,4 +55,9 @@ public interface ICommonScenariosController extends IController<ICommonScenarios
      * @return HTML filter representation for selected scenario.
      */
     String getCriteriaHtmlRepresentation();
+
+    /**
+     * Refreshes selected scenario.
+     */
+    void refreshScenario();
 }

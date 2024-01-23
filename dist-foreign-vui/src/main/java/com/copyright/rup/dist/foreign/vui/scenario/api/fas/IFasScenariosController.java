@@ -2,6 +2,8 @@ package com.copyright.rup.dist.foreign.vui.scenario.api.fas;
 
 import com.copyright.rup.dist.foreign.vui.scenario.api.ICommonScenariosController;
 
+import java.util.List;
+
 /**
  * Controller interface for {@link IFasScenariosWidget}.
  * <p>
@@ -14,6 +16,11 @@ import com.copyright.rup.dist.foreign.vui.scenario.api.ICommonScenariosControlle
 public interface IFasScenariosController extends ICommonScenariosController {
 
     /**
+     * @return rightsholders account numbers that are not presented in database based on applied usage filter.
+     */
+    List<Long> getInvalidRightsholders();
+
+    /**
      * Handles click on 'Exclude Payees' button.
      */
     void onExcludePayeesButtonClicked();
@@ -22,4 +29,9 @@ public interface IFasScenariosController extends ICommonScenariosController {
      * Handles click on 'Reconcile Rightsholders' button.
      */
     void onReconcileRightsholdersButtonClicked();
+
+    /**
+     * Handles click on 'Refresh Scenario' button.
+     */
+    void onRefreshScenarioButtonClicked();
 }

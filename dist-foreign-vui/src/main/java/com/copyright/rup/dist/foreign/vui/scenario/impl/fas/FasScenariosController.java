@@ -1,11 +1,19 @@
 package com.copyright.rup.dist.foreign.vui.scenario.impl.fas;
 
 import com.copyright.rup.common.date.RupDateUtils;
+import com.copyright.rup.dist.common.repository.api.Pageable;
+import com.copyright.rup.dist.common.repository.api.Sort;
+import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancyStatusEnum;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
+import com.copyright.rup.dist.foreign.domain.UsageDto;
+import com.copyright.rup.dist.foreign.domain.filter.ScenarioUsageFilter;
+import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.service.api.fas.IFasScenarioService;
+import com.copyright.rup.dist.foreign.service.api.fas.IFasUsageService;
 import com.copyright.rup.dist.foreign.service.api.fas.IRightsholderDiscrepancyService;
+import com.copyright.rup.dist.foreign.service.impl.converter.ScenarioUsageFilterToUsageFilterConverter;
 import com.copyright.rup.dist.foreign.vui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.vui.scenario.api.ExcludeUsagesEvent;
 import com.copyright.rup.dist.foreign.vui.scenario.api.IScenarioHistoryController;
@@ -21,6 +29,8 @@ import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.Wind
 import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.CommonDialog;
 
 import com.vaadin.flow.component.ComponentUtil;
+import com.vaadin.flow.data.provider.QuerySortOrder;
+import com.vaadin.flow.data.provider.SortDirection;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -29,6 +39,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -60,6 +71,8 @@ public class FasScenariosController extends CommonScenariosController implements
     private IRightsholderDiscrepancyService rightsholderDiscrepancyService;
     @Autowired
     private IFasScenarioService fasScenarioService;
+    @Autowired
+    private IFasUsageService fasUsageService;
 
     @Override
     public boolean scenarioExists(String scenarioName) {
@@ -95,6 +108,32 @@ public class FasScenariosController extends CommonScenariosController implements
             Windows.showNotificationWindow(
                 ForeignUi.getMessage("message.warning.action_for_empty_scenario", "recalculated"));
         }
+    }
+
+    @Override
+    public void onRefreshScenarioButtonClicked() {
+        ScenarioUsageFilter filter =
+            getScenarioUsageFilterService().getByScenarioId(getWidget().getSelectedScenario().getId());
+        if (Objects.nonNull(filter)) {
+            UsageFilter usageFilter = new ScenarioUsageFilterToUsageFilterConverter().apply(filter);
+            if (0 < fasUsageService.getUsagesCount(usageFilter)) {
+                Windows.showModalWindow(new RefreshScenarioWindow(
+                    query ->
+                        loadBeans(query.getOffset(), query.getLimit(), query.getSortOrders(), usageFilter).stream(),
+                    query -> fasUsageService.getUsagesCount(usageFilter), this));
+            } else {
+                Windows.showNotificationWindow(ForeignUi.getMessage("message.info.refresh_scenario.nothing_to_add"));
+            }
+        } else {
+            Windows.showNotificationWindow(ForeignUi.getMessage("message.info.refresh_scenario.nothing_to_add"));
+        }
+    }
+
+    @Override
+    public List<Long> getInvalidRightsholders() {
+        return getUsageService().getInvalidRightsholdersByFilter(
+            new ScenarioUsageFilterToUsageFilterConverter().apply(
+                getScenarioUsageFilterService().getByScenarioId(getWidget().getSelectedScenario().getId())));
     }
 
     @Override
@@ -149,5 +188,15 @@ public class FasScenariosController extends CommonScenariosController implements
     @Override
     protected IFasScenariosWidget instantiateWidget() {
         return new FasScenariosWidget(this, scenarioHistoryController);
+    }
+
+    private List<UsageDto> loadBeans(int startIndex, int count, List<QuerySortOrder> sortOrders,
+                                     UsageFilter usageFilter) {
+        Sort sort = null;
+        if (CollectionUtils.isNotEmpty(sortOrders)) {
+            QuerySortOrder sortOrder = sortOrders.get(0);
+            sort = new Sort(sortOrder.getSorted(), Direction.of(SortDirection.ASCENDING == sortOrder.getDirection()));
+        }
+        return fasUsageService.getUsageDtos(usageFilter, new Pageable(startIndex, count), sort);
     }
 }

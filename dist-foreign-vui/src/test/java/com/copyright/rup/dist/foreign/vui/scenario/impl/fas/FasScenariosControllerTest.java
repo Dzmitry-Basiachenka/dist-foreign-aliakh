@@ -16,12 +16,15 @@ import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancyStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
+import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.ScenarioUsageFilter;
+import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioUsageFilterService;
 import com.copyright.rup.dist.foreign.service.api.fas.IFasScenarioService;
+import com.copyright.rup.dist.foreign.service.api.fas.IFasUsageService;
 import com.copyright.rup.dist.foreign.service.api.fas.IRightsholderDiscrepancyService;
 import com.copyright.rup.dist.foreign.vui.main.api.IProductFamilyProvider;
 import com.copyright.rup.dist.foreign.vui.scenario.api.fas.IFasExcludePayeeController;
@@ -76,9 +79,11 @@ public class FasScenariosControllerTest {
     private IProductFamilyProvider productFamilyProvider;
     private Scenario scenario;
     private FasScenarioController scenarioController;
+    private IFasUsageService fasUsageService;
 
     @Before
     public void setUp() {
+        fasUsageService = createMock(IFasUsageService.class);
         scenarioService = createMock(IScenarioService.class);
         fasScenarioService = createMock(IFasScenarioService.class);
         productFamilyProvider = createMock(IProductFamilyProvider.class);
@@ -91,6 +96,7 @@ public class FasScenariosControllerTest {
         Whitebox.setInternalState(scenariosController, "widget", scenariosWidget);
         Whitebox.setInternalState(scenariosController, "scenarioService", scenarioService);
         Whitebox.setInternalState(scenariosController, "fasScenarioService", fasScenarioService);
+        Whitebox.setInternalState(scenariosController, "fasUsageService", fasUsageService);
         Whitebox.setInternalState(scenariosController, "productFamilyProvider", productFamilyProvider);
         Whitebox.setInternalState(scenariosController, excludePayeesController);
         verify(SecurityUtils.class);
@@ -179,6 +185,37 @@ public class FasScenariosControllerTest {
         scenariosController.onReconcileRightsholdersButtonClicked();
         verify(scenariosWidget, fasScenarioService, reconcileRightsholdersController, rightsholderDiscrepancyService,
             Windows.class, streamSource, ui, UI.class);
+    }
+
+    @Test
+    public void testOnRefreshScenarioButtonClickedNullFilter() {
+        mockStatic(Windows.class);
+        IScenarioUsageFilterService scenarioUsageFilterService = createMock(IScenarioUsageFilterService.class);
+        Whitebox.setInternalState(scenariosController, scenarioUsageFilterService);
+        expect(scenariosWidget.getSelectedScenario()).andReturn(scenario).once();
+        expect(scenarioUsageFilterService.getByScenarioId(SCENARIO_ID)).andReturn(null).once();
+        Windows.showNotificationWindow("There are no usages that meet the criteria");
+        expectLastCall().once();
+        replay(Windows.class, scenariosWidget, scenarioUsageFilterService);
+        scenariosController.onRefreshScenarioButtonClicked();
+        verify(Windows.class, scenariosWidget, scenarioUsageFilterService);
+    }
+
+    @Test
+    public void testOnRefreshScenarioButtonClickedNotNullFilter() {
+        mockStatic(Windows.class);
+        IScenarioUsageFilterService scenarioUsageFilterService = createMock(IScenarioUsageFilterService.class);
+        Whitebox.setInternalState(scenariosController, scenarioUsageFilterService);
+        expect(scenariosWidget.getSelectedScenario()).andReturn(scenario).once();
+        expect(scenarioUsageFilterService.getByScenarioId(SCENARIO_ID)).andReturn(new ScenarioUsageFilter()).once();
+        UsageDto usageDto = new UsageDto();
+        usageDto.setId("ef0863ad-eb6f-405d-90bd-f10d363bd320");
+        expect(fasUsageService.getUsagesCount(new UsageFilter())).andReturn(1).once();
+        Windows.showModalWindow(anyObject(RefreshScenarioWindow.class));
+        expectLastCall().once();
+        replay(Windows.class, scenariosWidget, scenarioUsageFilterService, fasUsageService);
+        scenariosController.onRefreshScenarioButtonClicked();
+        verify(Windows.class, scenariosWidget, scenarioUsageFilterService, fasUsageService);
     }
 
     @Test
