@@ -3,7 +3,7 @@ package com.copyright.rup.dist.foreign.vui.scenario.impl.fas;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.filter.ExcludePayeeFilter;
 import com.copyright.rup.dist.foreign.vui.common.ScenarioFilterWidget;
-import com.copyright.rup.dist.foreign.vui.common.validator.AmountZeroValidator;
+import com.copyright.rup.dist.foreign.vui.common.validator.AmountRangeValidator;
 import com.copyright.rup.dist.foreign.vui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.vui.scenario.api.fas.IFasExcludePayeeFilterController;
 import com.copyright.rup.dist.foreign.vui.scenario.api.fas.IFasExcludePayeeFilterWidget;
@@ -17,12 +17,10 @@ import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.select.Select;
-import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.component.textfield.BigDecimalField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.function.ValueProvider;
-
-import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
 import java.util.Map;
@@ -41,12 +39,12 @@ public class FasExcludePayeeFilterWidget extends VerticalLayout implements IFasE
 
     private static final long serialVersionUID = 4800535657480115497L;
 
-    private final Binder<String> binder = new Binder<>();
+    private final Binder<BigDecimal> binder = new Binder<>();
     private IFasExcludePayeeFilterController controller;
     private ExcludePayeeFilter filter = new ExcludePayeeFilter();
     private ExcludePayeeFilter appliedFilter = new ExcludePayeeFilter();
     private Select<String> participatingSelectField;
-    private TextField minimumNetThreshold;
+    private BigDecimalField minimumNetThreshold;
     private ScenarioFilterWidget scenarioFilterWidget;
     private Button applyButton;
 
@@ -131,14 +129,13 @@ public class FasExcludePayeeFilterWidget extends VerticalLayout implements IFasE
     }
 
     private void initMinimumNetThresholdFilter() {
-        minimumNetThreshold = new TextField(ForeignUi.getMessage("label.minimum_net_threshold"));
+        minimumNetThreshold = new BigDecimalField(ForeignUi.getMessage("label.minimum_net_threshold"));
         binder.forField(minimumNetThreshold)
-            .withValidator(new AmountZeroValidator())
+            .withValidator(AmountRangeValidator.amountValidator())
             .bind(ValueProvider.identity(), (beanValue, fieldValue) -> beanValue = fieldValue);
         minimumNetThreshold.addValueChangeListener(event -> {
             if (!binder.validate().hasErrors()) {
-                filter.setNetAmountMinThreshold(StringUtils.isNotBlank(event.getValue())
-                    ? new BigDecimal(StringUtils.trimToEmpty(event.getValue())) : null);
+                filter.setNetAmountMinThreshold(event.getValue());
             }
             filterChanged();
         });

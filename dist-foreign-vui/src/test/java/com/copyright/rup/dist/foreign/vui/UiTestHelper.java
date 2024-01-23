@@ -34,6 +34,7 @@ import com.vaadin.flow.component.html.Section;
 import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.Scroller;
+import com.vaadin.flow.component.textfield.BigDecimalField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.BindingValidationStatus;
@@ -44,6 +45,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.hamcrest.core.IsInstanceOf;
 import org.powermock.reflect.Whitebox;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -263,6 +265,17 @@ public final class UiTestHelper {
     }
 
     /**
+     * Sets BigDecimal field value.
+     *
+     * @param dialog instance of {@link Dialog}
+     * @param field  name of the text field
+     * @param value  value
+     */
+    public static void setBigDecimalFieldValue(Dialog dialog, String field, String value) {
+        ((BigDecimalField) Whitebox.getInternalState(dialog, field)).setValue(new BigDecimal(value));
+    }
+
+    /**
      * Verifies text field.
      *
      * @param component UI component
@@ -288,6 +301,24 @@ public final class UiTestHelper {
         assertEquals(width, textField.getWidth());
         assertEquals(styleName, textField.getClassName());
         return textField;
+    }
+
+    /**
+     * Verifies BigDecimal field.
+     *
+     * @param component UI component
+     * @param label     label of field
+     * @param width     width
+     * @return of {@link TextField}
+     */
+    public static BigDecimalField verifyBigDecimalField(Component component, String label, String width,
+                                                        String styleName) {
+        assertThat(component, instanceOf(BigDecimalField.class));
+        BigDecimalField field = (BigDecimalField) component;
+        assertEquals(label, field.getLabel());
+        assertEquals(width, field.getWidth());
+        assertEquals(styleName, field.getClassName());
+        return field;
     }
 
     /**
