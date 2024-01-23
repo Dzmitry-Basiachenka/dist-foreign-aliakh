@@ -4,6 +4,8 @@ import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.service.api.fas.IFasScenarioService;
+import com.copyright.rup.dist.foreign.vui.scenario.api.ICommonDrillDownByRightsholderController;
+import com.copyright.rup.dist.foreign.vui.scenario.api.fas.IFasDrillDownByRightsholderController;
 import com.copyright.rup.dist.foreign.vui.scenario.api.fas.IFasScenarioController;
 import com.copyright.rup.dist.foreign.vui.scenario.api.fas.IFasScenarioWidget;
 import com.copyright.rup.dist.foreign.vui.scenario.impl.CommonScenarioController;
@@ -33,6 +35,8 @@ public class FasScenarioController extends CommonScenarioController implements I
 
     @Autowired
     private IFasScenarioService fasScenarioService;
+    @Autowired
+    private IFasDrillDownByRightsholderController drillDownByRightsholderController;
 
     @Override
     public void onExcludeByRroClicked() {
@@ -52,6 +56,11 @@ public class FasScenarioController extends CommonScenarioController implements I
     @Override
     public List<RightsholderPayeePair> getRightsholdersPayeePairs(Long rroAccountNumber) {
         return fasScenarioService.getRightsholdersByScenarioAndSourceRro(getScenario().getId(), rroAccountNumber);
+    }
+
+    @Override
+    protected ICommonDrillDownByRightsholderController getDrillDownByRightsholderController() {
+        return drillDownByRightsholderController;
     }
 
     @Override
