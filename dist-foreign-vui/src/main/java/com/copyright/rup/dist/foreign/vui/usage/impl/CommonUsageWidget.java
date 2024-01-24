@@ -128,11 +128,11 @@ public abstract class CommonUsageWidget extends SplitLayout implements ICommonUs
         usagesGrid.addColumn(usageDto -> CurrencyUtils.format(function.apply(usageDto), null))
             .setHeader(ForeignUi.getMessage(captionProperty))
             .setSortProperty(sort)
+            .setClassNameGenerator(item -> "label-amount")
             .setFlexGrow(0)
             .setWidth(width)
             .setSortable(true)
             .setResizable(true);
-            //TODO {aliakh} implement setStyleGenerator(item -> "v-align-right")
     }
 
     /**
