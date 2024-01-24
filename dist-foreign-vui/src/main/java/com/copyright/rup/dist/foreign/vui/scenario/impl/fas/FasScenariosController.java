@@ -130,6 +130,20 @@ public class FasScenariosController extends CommonScenariosController implements
     }
 
     @Override
+    public void sendToLm() {
+        var scenario = getWidget().getSelectedScenario();
+        Windows.showConfirmDialog(ForeignUi.getMessage("window.send_scenario", scenario.getName()),
+            () -> {
+                try {
+                    fasScenarioService.sendToLm(scenario);
+                } catch (RuntimeException e) {
+                    Windows.showNotificationWindow(e.getMessage());
+                }
+                getWidget().refresh();
+            });
+    }
+
+    @Override
     public List<Long> getInvalidRightsholders() {
         return getUsageService().getInvalidRightsholdersByFilter(
             new ScenarioUsageFilterToUsageFilterConverter().apply(
@@ -167,6 +181,16 @@ public class FasScenariosController extends CommonScenariosController implements
             sb.append("</ul>");
         }
         return sb.toString();
+    }
+
+    @Override
+    public void onDeleteButtonClicked() {
+        var scenario = getWidget().getSelectedScenario();
+        Windows.showConfirmDialog(ForeignUi.getMessage("message.confirm.delete_action", scenario.getName(), "scenario"),
+            () -> {
+                getScenarioService().deleteScenario(scenario);
+                getWidget().refresh();
+            });
     }
 
     @Override

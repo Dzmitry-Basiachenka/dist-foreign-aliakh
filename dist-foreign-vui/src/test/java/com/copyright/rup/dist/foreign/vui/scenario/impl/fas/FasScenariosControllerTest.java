@@ -1,7 +1,10 @@
 package com.copyright.rup.dist.foreign.vui.scenario.impl.fas;
 
 import static org.easymock.EasyMock.anyObject;
+import static org.easymock.EasyMock.capture;
+import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.newCapture;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
@@ -31,10 +34,13 @@ import com.copyright.rup.dist.foreign.vui.scenario.api.fas.IFasExcludePayeeContr
 import com.copyright.rup.dist.foreign.vui.scenario.api.fas.IFasScenariosWidget;
 import com.copyright.rup.dist.foreign.vui.scenario.api.fas.IReconcileRightsholdersController;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.security.SecurityUtils;
+import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.IConfirmCancelListener;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.Windows;
 
 import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.dialog.Dialog;
 
+import org.easymock.Capture;
 import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Test;
@@ -126,6 +132,42 @@ public class FasScenariosControllerTest {
         replay(scenarioService, productFamilyProvider);
         assertEquals(List.of(), scenariosController.getScenarios());
         verify(scenarioService, productFamilyProvider);
+    }
+
+    @Test
+    public void testOnDeleteButtonClicked() {
+        mockStatic(Windows.class);
+        Capture<IConfirmCancelListener> listenerCapture = newCapture();
+        expect(scenariosWidget.getSelectedScenario()).andReturn(scenario).once();
+        expect(Windows.showConfirmDialog(
+            eq("Are you sure you want to delete <i><b>'" + SCENARIO_NAME + "'</b></i> scenario?"),
+            capture(listenerCapture))).andReturn(null).once();
+        scenarioService.deleteScenario(scenario);
+        expectLastCall().once();
+        scenariosWidget.refresh();
+        expectLastCall().once();
+        replay(scenariosWidget, scenarioService, Windows.class);
+        scenariosController.onDeleteButtonClicked();
+        listenerCapture.getValue().confirm();
+        verify(scenariosWidget, scenarioService, Windows.class);
+    }
+
+    @Test
+    public void testSendScenarioToLm() {
+        mockStatic(Windows.class);
+        expect(scenariosWidget.getSelectedScenario()).andReturn(scenario).once();
+        Capture<IConfirmCancelListener> listenerCapture = newCapture();
+        expect(Windows.showConfirmDialog(
+            eq("Are you sure that you want to send scenario <i><b>" + SCENARIO_NAME + "</b></i> to Liability Manager?"),
+            capture(listenerCapture))).andReturn(new Dialog());
+        fasScenarioService.sendToLm(scenario);
+        expectLastCall().once();
+        scenariosWidget.refresh();
+        expectLastCall().once();
+        replay(scenariosWidget, fasScenarioService, Windows.class);
+        scenariosController.sendToLm();
+        listenerCapture.getValue().confirm();
+        verify(scenariosWidget, fasScenarioService, Windows.class);
     }
 
     @Test
