@@ -18,7 +18,6 @@ import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
-import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.reporting.api.IStreamSourceHandler;
@@ -288,7 +287,6 @@ public class FasUsageControllerTest {
         var rightsholder = new Rightsholder();
         rightsholder.setName(RRO_ACCOUNT_NAME);
         rightsholder.setAccountNumber(RRO_ACCOUNT_NUMBER);
-        rightsholder.setId(RupPersistUtils.generateUuid());
         expect(prmIntegrationService.getRightsholder(RRO_ACCOUNT_NUMBER)).andReturn(rightsholder).once();
         replay(prmIntegrationService);
         assertEquals(rightsholder, controller.getRightsholder(RRO_ACCOUNT_NUMBER));

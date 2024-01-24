@@ -22,7 +22,6 @@ import com.copyright.rup.dist.foreign.vui.vaadin.common.util.VaadinUtils;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.CommonDialog;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.LocalDateWidget;
 
-import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -193,7 +192,7 @@ public class UsageBatchUploadWindow extends CommonDialog {
         var accountNumber = initRightsholderAccountNumberField();
         var productFamily = initProductFamilyField();
         var verifyButton = initVerifyButton();
-        verifyButton.setWidth(72, Unit.PIXELS); //TODO {aliackh} check
+        verifyButton.setWidth("72px");
         rroAccountLayout.add(accountNumber, productFamily);
         rroAccountLayout.setSizeFull();
         var horizontalLayout = new HorizontalLayout(rroAccountLayout, verifyButton);

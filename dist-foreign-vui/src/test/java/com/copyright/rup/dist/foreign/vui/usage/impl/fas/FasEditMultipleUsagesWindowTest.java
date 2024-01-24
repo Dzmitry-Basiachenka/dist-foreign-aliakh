@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.vui.usage.impl.fas;
 
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.assertFieldValidationMessage;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.getDialogContent;
+import static com.copyright.rup.dist.foreign.vui.UiTestHelper.getFooterLayout;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.setTextFieldValue;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyTextField;
@@ -25,7 +26,6 @@ import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.Wind
 
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
@@ -79,11 +79,11 @@ public class FasEditMultipleUsagesWindowTest {
     public void testConstructor() {
         replay(controller);
         window = new FasEditMultipleUsagesWindow(controller, updateUsageWindow, USAGE_IDS);
-        verifyWindow(window, "Edit multiple FAS/FAS2 Usages", "560px", "215px", Unit.PIXELS, false);
+        verifyWindow(window, "Edit multiple FAS/FAS2 Usages", "400px", "205px", Unit.PIXELS, false);
         VerticalLayout contentLayout = (VerticalLayout) getDialogContent(window);
-        assertEquals(2, contentLayout.getComponentCount());
+        assertEquals(1, contentLayout.getComponentCount());
         verifyTextField(contentLayout.getComponentAt(0), "Wr Wrk Inst", "wr-wrk-inst-field");
-        verifyButtonsLayout(contentLayout.getComponentAt(1), true, "Save", "Close");
+        verifyButtonsLayout(getFooterLayout(window), true, "Save", "Close");
         verify(controller);
     }
 
@@ -121,8 +121,7 @@ public class FasEditMultipleUsagesWindowTest {
         updateUsageWindow.close();
         expectLastCall().once();
         replay(ConfirmWindows.class, controller, updateUsageWindow);
-        var contentLayout = (VerticalLayout) getDialogContent(window);
-        var buttonsLayout = (HorizontalLayout) contentLayout.getComponentAt(1);
+        var buttonsLayout = getFooterLayout(window);
         var saveButton = (Button) buttonsLayout.getComponentAt(0);
         saveButton.click();
         actionCapture.getValue().accept(REASON);
@@ -136,8 +135,7 @@ public class FasEditMultipleUsagesWindowTest {
         expectLastCall().once();
         window = new FasEditMultipleUsagesWindow(controller, updateUsageWindow, USAGE_IDS);
         replay(Windows.class, controller, updateUsageWindow);
-        var contentLayout = (VerticalLayout) getDialogContent(window);
-        var buttonsLayout = (HorizontalLayout) contentLayout.getComponentAt(1);
+        var buttonsLayout = getFooterLayout(window);
         var saveButton = (Button) buttonsLayout.getComponentAt(0);
         saveButton.click();
         verify(Windows.class, controller, updateUsageWindow);

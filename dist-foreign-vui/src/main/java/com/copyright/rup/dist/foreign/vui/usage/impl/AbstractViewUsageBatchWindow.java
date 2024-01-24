@@ -191,10 +191,10 @@ public abstract class AbstractViewUsageBatchWindow extends CommonDialog
             grid.getSelectedItems().stream().findFirst().ifPresent(this::deleteUsageBatch));
         deleteButton.setEnabled(false);
         VaadinUtils.setButtonsAutoDisabled(deleteButton);
-        var layout = new HorizontalLayout(deleteButton, closeButton);
-        layout.setSpacing(true); //TODO {aliackh} check
-        VaadinUtils.addComponentStyle(layout, "view-batch-buttons");
-        return layout;
+        var buttonsLayout = new HorizontalLayout(deleteButton, closeButton);
+        buttonsLayout.setSpacing(true);
+        VaadinUtils.addComponentStyle(buttonsLayout, "view-batch-buttons");
+        return buttonsLayout;
     }
 
     private void initUsageBatchesGrid() {
