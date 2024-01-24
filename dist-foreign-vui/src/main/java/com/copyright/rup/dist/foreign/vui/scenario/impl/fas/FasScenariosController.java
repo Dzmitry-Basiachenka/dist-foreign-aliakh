@@ -83,7 +83,7 @@ public class FasScenariosController extends CommonScenariosController implements
     public void onExcludePayeesButtonClicked() {
         IFasExcludePayeeWidget widget = excludePayeesController.initWidget();
         ComponentUtil.addListener((FasExcludePayeeWidget) widget, ExcludeUsagesEvent.class,
-            event -> excludePayeesController.onFilterChanged());
+            event -> getWidget().refreshSelectedScenario());
         Windows.showModalWindow((CommonDialog) widget);
     }
 
@@ -115,7 +115,7 @@ public class FasScenariosController extends CommonScenariosController implements
         ScenarioUsageFilter filter =
             getScenarioUsageFilterService().getByScenarioId(getWidget().getSelectedScenario().getId());
         if (Objects.nonNull(filter)) {
-            UsageFilter usageFilter = new ScenarioUsageFilterToUsageFilterConverter().apply(filter);
+            var usageFilter = new ScenarioUsageFilterToUsageFilterConverter().apply(filter);
             if (0 < fasUsageService.getUsagesCount(usageFilter)) {
                 Windows.showModalWindow(new RefreshScenarioWindow(
                     query ->

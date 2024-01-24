@@ -86,6 +86,7 @@ public class FasExcludePayeeWidget extends CommonDialog implements IFasExcludePa
     @SuppressWarnings("unchecked")
     public FasExcludePayeeWidget init() {
         var filterWidget = controller.getExcludePayeesFilterController().initWidget();
+        filterWidget.setFilterSaveAction(controller::onFilterChanged);
         super.setWidth("1500px");
         super.setHeight("500px");
         super.setHeaderTitle(ForeignUi.getMessage("window.exclude.payee"));

@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.vui.scenario.api.fas;
 
 import com.copyright.rup.dist.foreign.domain.filter.ExcludePayeeFilter;
+import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.filter.IFilterSaveAction;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.api.IFilterWidget;
 
 /**
@@ -18,4 +19,11 @@ public interface IFasExcludePayeeFilterWidget extends IFilterWidget<IFasExcludeP
      * @return currently applied {@link ExcludePayeeFilter}.
      */
     ExcludePayeeFilter getAppliedFilter();
+
+    /**
+     * Sets filter save action.
+     *
+     * @param action action to be performed
+     */
+    void setFilterSaveAction(IFilterSaveAction action);
 }
