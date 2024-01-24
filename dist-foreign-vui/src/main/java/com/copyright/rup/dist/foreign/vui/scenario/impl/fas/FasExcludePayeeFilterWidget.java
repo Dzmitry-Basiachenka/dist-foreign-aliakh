@@ -7,9 +7,9 @@ import com.copyright.rup.dist.foreign.vui.common.validator.AmountRangeValidator;
 import com.copyright.rup.dist.foreign.vui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.vui.scenario.api.fas.IFasExcludePayeeFilterController;
 import com.copyright.rup.dist.foreign.vui.scenario.api.fas.IFasExcludePayeeFilterWidget;
-import com.copyright.rup.dist.foreign.vui.usage.api.FilterChangedEvent;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.Buttons;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.filter.CommonFilterWindow.IFilterSaveListener;
+import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.filter.IFilterSaveAction;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.util.VaadinUtils;
 
 import com.vaadin.flow.component.button.Button;
@@ -47,6 +47,7 @@ public class FasExcludePayeeFilterWidget extends VerticalLayout implements IFasE
     private BigDecimalField minimumNetThreshold;
     private ScenarioFilterWidget scenarioFilterWidget;
     private Button applyButton;
+    private IFilterSaveAction filterSaveAction;
 
     @Override
     public ExcludePayeeFilter getAppliedFilter() {
@@ -54,10 +55,15 @@ public class FasExcludePayeeFilterWidget extends VerticalLayout implements IFasE
     }
 
     @Override
+    public void setFilterSaveAction(IFilterSaveAction action) {
+        this.filterSaveAction = action;
+    }
+
+    @Override
     public void applyFilter() {
         appliedFilter = new ExcludePayeeFilter(filter);
         filterChanged();
-        fireEvent(new FilterChangedEvent(this));
+        filterSaveAction.onFilterSaveAction();
     }
 
     @Override

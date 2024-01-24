@@ -95,7 +95,7 @@ public abstract class CommonScenariosController extends CommonController<ICommon
     @Override
     public void handleAction(ScenarioActionTypeEnum actionType) {
         if (!usageService.isScenarioEmpty(getWidget().getSelectedScenario())) {
-            IActionHandler actionHandler = actionHandlers.get(actionType);
+            var actionHandler = actionHandlers.get(actionType);
             if (Objects.nonNull(actionHandler)) {
                 ConfirmWindows.showConfirmDialogWithReason(
                     ForeignUi.getMessage("window.confirm"),
@@ -193,8 +193,8 @@ public abstract class CommonScenariosController extends CommonController<ICommon
         return rightsholderMap.entrySet().stream()
             .sorted(Map.Entry.comparingByKey())
             .map(entry -> {
-                String rightsholderRepresentation = String.valueOf(entry.getKey());
-                Rightsholder rightsholder = entry.getValue();
+                var rightsholderRepresentation = String.valueOf(entry.getKey());
+                var rightsholder = entry.getValue();
                 if (Objects.nonNull(rightsholder) && StringUtils.isNotBlank(rightsholder.getName())) {
                     rightsholderRepresentation += ": " + rightsholder.getName();
                 }
