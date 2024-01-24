@@ -181,6 +181,7 @@ public class FasScenarioWidgetTest {
 
     private void verifyEmptyScenarioLabel(Component component) {
         assertEquals(Label.class, component.getClass());
+        assertEquals("label-scenario-empty-message", ((Label) component).getClassName());
         assertTrue(StringUtils.contains(component.getElement().getOuterHTML(),
             "Scenario is empty due to all usages were excluded"));
     }

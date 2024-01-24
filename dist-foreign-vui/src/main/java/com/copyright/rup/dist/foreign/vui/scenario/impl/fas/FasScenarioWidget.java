@@ -63,6 +63,7 @@ public class FasScenarioWidget extends CommonScenarioWidget implements IFasScena
         mediator.setEmptyUsagesLayout(getEmptyUsagesLayout());
         mediator.setRightsholderGrid(getRightsholdersGrid());
         mediator.setSearchWidget(getSearchWidget());
+        mediator.setMenuButton(getMenuButton());
         return mediator;
     }
 

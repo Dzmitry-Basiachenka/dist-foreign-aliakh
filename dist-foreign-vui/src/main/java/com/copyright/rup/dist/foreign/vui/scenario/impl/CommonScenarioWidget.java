@@ -22,6 +22,7 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.Grid.SelectionMode;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
 import com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -57,6 +58,7 @@ public abstract class CommonScenarioWidget extends CommonDialog implements IComm
     private VerticalLayout emptyUsagesLayout;
     private Grid<RightsholderTotalsHolder> rightsholdersGrid;
     private DataProvider<RightsholderTotalsHolder, Void> dataProvider;
+    private Button menuButton;
 
     @Override
     public CommonScenarioWidget init() {
@@ -106,6 +108,10 @@ public abstract class CommonScenarioWidget extends CommonDialog implements IComm
 
     protected DataProvider<RightsholderTotalsHolder, Void> getDataProvider() {
         return dataProvider;
+    }
+
+    protected Button getMenuButton() {
+        return menuButton;
     }
 
     /**
@@ -208,10 +214,10 @@ public abstract class CommonScenarioWidget extends CommonDialog implements IComm
         emptyScenarioMessage.add(
             new Html(String.format("<div>%s</div>", ForeignUi.getMessage("label.content.empty_scenario"))));
         emptyScenarioMessage.setSizeUndefined();
-        //TODO: {dbasiachenka} add style for emptyScenarioMessage
-        //emptyScenarioMessage.addStyleName(Cornerstone.LABEL_H2);
+        emptyScenarioMessage.setClassName("label-scenario-empty-message");
         emptyUsagesLayout = new VerticalLayout(emptyScenarioMessage);
         emptyUsagesLayout.setJustifyContentMode(JustifyContentMode.CENTER);
+        emptyUsagesLayout.setAlignItems(Alignment.CENTER);
         emptyUsagesLayout.setSizeFull();
         emptyUsagesLayout.setVisible(false);
     }
@@ -221,7 +227,7 @@ public abstract class CommonScenarioWidget extends CommonDialog implements IComm
         HideGridColumnsProvider<RightsholderTotalsHolder> hideGridColumnsProvider =
             new HideGridColumnsProvider<>();
         hideGridColumnsProvider.hideColumns(rightsholdersGrid.getColumns(), "RH Account #");
-        Button menuButton = hideGridColumnsProvider.getMenuButton();
+        menuButton = hideGridColumnsProvider.getMenuButton();
         var toolbar = new HorizontalLayout(new Div(), searchWidget, menuButton);
         toolbar.setJustifyContentMode(JustifyContentMode.BETWEEN);
         toolbar.setWidth("100%");
