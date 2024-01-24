@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.vui.usage.impl.fas;
 
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.getDialogContent;
+import static com.copyright.rup.dist.foreign.vui.UiTestHelper.getFooterLayout;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyGrid;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyWindow;
@@ -76,9 +77,10 @@ public class FasUpdateUsageWindowTest {
     public void testComponentStructure() {
         verifyWindow(window, "Update Usages", "1280px", "530px", Unit.PIXELS, true);
         assertEquals("update-usages-window", window.getId().get());
-        VerticalLayout contentLayout = (VerticalLayout) getDialogContent(window);
-        assertEquals(3, contentLayout.getComponentCount());
-        assertEquals(SearchWidget.class, contentLayout.getComponentAt(0).getClass());
+        var contentLayout = (VerticalLayout) getDialogContent(window);
+        assertEquals(2, contentLayout.getComponentCount());
+        var toolbarLayout = (HorizontalLayout) contentLayout.getComponentAt(0);
+        assertEquals(SearchWidget.class, toolbarLayout.getComponentAt(0).getClass());
         verifyGrid((Grid<?>) contentLayout.getComponentAt(1), List.of(
             Pair.of("Detail ID", "300px"),
             Pair.of("Status", "180px"),
@@ -88,7 +90,7 @@ public class FasUpdateUsageWindowTest {
             Pair.of("RH Account #", "170px"),
             Pair.of("RH Name", "300px")
         ));
-        verifyButtonsLayout(contentLayout.getComponentAt(2), true, "Update", "Close");
+        verifyButtonsLayout(getFooterLayout(window), true, "Update", "Close");
     }
 
     @Test
@@ -99,8 +101,7 @@ public class FasUpdateUsageWindowTest {
         Grid<UsageDto> usagesGrid = createMock(Grid.class);
         expect(usagesGrid.getSelectedItems()).andReturn(Set.of(new UsageDto())).once();
         Whitebox.setInternalState(window, USAGES_GRID, usagesGrid);
-        var contentLayout = (VerticalLayout) getDialogContent(window);
-        var buttonsLayout = (HorizontalLayout) contentLayout.getComponentAt(2);
+        var buttonsLayout = (HorizontalLayout) getFooterLayout(window);
         var updateButton = (Button) buttonsLayout.getComponentAt(0);
         replay(Windows.class, usagesGrid);
         updateButton.click();
