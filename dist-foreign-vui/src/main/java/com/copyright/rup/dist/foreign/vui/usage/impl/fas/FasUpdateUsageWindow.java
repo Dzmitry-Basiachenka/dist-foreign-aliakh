@@ -11,11 +11,11 @@ import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.CommonDialog;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.SearchWidget;
 
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.AbstractGridMultiSelectionModel;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridMultiSelectionModel.SelectAllCheckboxVisibility;
+import com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.provider.DataProvider;
@@ -71,23 +71,28 @@ class FasUpdateUsageWindow extends CommonDialog implements IFasUpdateUsageWindow
     }
 
     private Component initContent() {
-        initSearchWidget();
-        initGrid();
-        var buttonsLayout = buildButtonsLayout();
-        var content = new VerticalLayout(searchWidget, usagesGrid, buttonsLayout);
+        var toolbarLayout = new HorizontalLayout(initSearchWidget());
+        toolbarLayout.setWidth("100%");
+        toolbarLayout.setSpacing(false);
+        toolbarLayout.setJustifyContentMode(JustifyContentMode.CENTER);
+        VaadinUtils.setPadding(toolbarLayout, 2, 0, 2, 0);
+        var content = new VerticalLayout(toolbarLayout, initGrid());
         content.setSizeFull();
-        //TODO {aliakh} content.setComponentAlignment(searchWidget, Alignment.MIDDLE_CENTER);
-        //TODO {aliakh} content.setComponentAlignment(buttonsLayout, Alignment.BOTTOM_RIGHT);
+        content.setMargin(false);
+        content.setSpacing(false);
+        content.setPadding(false);
+        getFooter().add(initButtonsLayout());
         return content;
     }
 
-    private void initSearchWidget() {
+    private SearchWidget initSearchWidget() {
         searchWidget = new SearchWidget(this::refresh);
         searchWidget.setPrompt(ForeignUi.getMessage("prompt.rightsholder_update"));
-        searchWidget.setWidth(70, Unit.PERCENTAGE);
+        searchWidget.setWidth("70%");
+        return searchWidget;
     }
 
-    private void initGrid() {
+    private Grid<UsageDto> initGrid() {
         List<UsageDto> usages = controller.getUsageDtosToUpdate();
         dataProvider = DataProvider.ofCollection(usages);
         usagesGrid = new Grid<>();
@@ -101,6 +106,7 @@ class FasUpdateUsageWindow extends CommonDialog implements IFasUpdateUsageWindow
             updateButton.setEnabled(CollectionUtils.isNotEmpty(event.getAllSelectedItems())));
         usagesGrid.getColumns().forEach(column -> column.setSortable(true));
         VaadinUtils.setGridProperties(usagesGrid, "update-fas-usages-grid");
+        return usagesGrid;
     }
 
     private void switchSelectAllCheckBoxVisibility(int beansCount) {
@@ -141,7 +147,7 @@ class FasUpdateUsageWindow extends CommonDialog implements IFasUpdateUsageWindow
             .setResizable(true);
     }
 
-    private HorizontalLayout buildButtonsLayout() {
+    private HorizontalLayout initButtonsLayout() {
         var buttonsLayout = new HorizontalLayout();
         updateButton = Buttons.createButton(ForeignUi.getMessage("button.update"));
         updateButton.addClickListener(event -> Windows.showModalWindow(new FasEditMultipleUsagesWindow(controller,

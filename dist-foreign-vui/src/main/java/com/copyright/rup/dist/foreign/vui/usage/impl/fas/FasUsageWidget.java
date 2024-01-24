@@ -16,7 +16,6 @@ import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.Wind
 import com.copyright.rup.dist.foreign.vui.vaadin.common.util.VaadinUtils;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.api.IMediator;
 
-import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.contextmenu.MenuItem;
 import com.vaadin.flow.component.menubar.MenuBar;
@@ -140,7 +139,7 @@ public class FasUsageWidget extends CommonUsageWidget implements IFasUsageWidget
             loadResearchedUsagesButton, updateUsagesButton, addToScenarioButton, exportDownloader);
         var toolbarLayout = new HorizontalLayout(buttonsLayout, getHideGridColumnsProvider().getMenuButton());
         toolbarLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.BETWEEN);
-        toolbarLayout.setWidth(100, Unit.PERCENTAGE);
+        toolbarLayout.setWidth("100%");
         VaadinUtils.addComponentStyle(toolbarLayout, "usages-toolbar");
         return toolbarLayout;
     }

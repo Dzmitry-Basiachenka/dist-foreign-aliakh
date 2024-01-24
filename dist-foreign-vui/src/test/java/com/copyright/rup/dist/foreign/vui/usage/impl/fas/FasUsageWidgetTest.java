@@ -21,6 +21,7 @@ import static org.powermock.api.easymock.PowerMock.verify;
 import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
+import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.vui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.vui.usage.api.IFasNtsUsageFilterController;
@@ -74,6 +75,7 @@ public class FasUsageWidgetTest {
         CommonDateUtils.format(LocalDate.now(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT);
     private static final String FAS_PRODUCT_FAMILY = "FAS";
     private static final String FAS_SCENARIO_NAME_PREFIX = "FAS Distribution ";
+    private static final int RECORD_THRESHOLD = 10000;
     private static final String ADD_TO_SCENARIO_BUTTON = "addToScenarioButton";
     private static final String WIDTH_300 = "300px";
 
@@ -178,12 +180,28 @@ public class FasUsageWidgetTest {
 
     @Test
     public void testUpdateUsagesButtonClickListener() {
-        //TODO {aliakh} implement
+        mockStatic(Windows.class);
+        expect(controller.getBeansCount()).andReturn(1).once();
+        expect(controller.getUsageDtosToUpdate()).andReturn(List.of(new UsageDto())).once();
+        expect(controller.getRecordsThreshold()).andReturn(RECORD_THRESHOLD).once();
+        Windows.showModalWindow(anyObject(FasUpdateUsageWindow.class));
+        expectLastCall().once();
+        replay(Windows.class, controller);
+        Button updateUsagesButton = Whitebox.getInternalState(widget, "updateUsagesButton");
+        updateUsagesButton.click();
+        verify(Windows.class, controller);
     }
 
     @Test
     public void testUpdateUsagesButtonClickListenerNoUsages() {
-        //TODO {aliakh} implement
+        mockStatic(Windows.class);
+        expect(controller.getBeansCount()).andReturn(0).once();
+        Windows.showNotificationWindow("There are no usages to update");
+        expectLastCall().once();
+        replay(Windows.class, controller);
+        Button updateUsagesButton = Whitebox.getInternalState(widget, "updateUsagesButton");
+        updateUsagesButton.click();
+        verify(Windows.class, controller);
     }
 
     @Test
