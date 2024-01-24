@@ -56,20 +56,18 @@ class FasEditMultipleUsagesWindow extends CommonDialog {
         super.add(initRootLayout());
         super.setHeaderTitle(ForeignUi.getMessage("window.multiple.edit_fas_fas2_usages"));
         super.setResizable(false);
-        super.setWidth("560px");
-        super.setHeight("215px");
+        super.setWidth("400px");
+        super.setHeight("205px");
+        getFooter().add(initButtonsLayout());
         VaadinUtils.addComponentStyle(this, "multiple-edit-fas-usages-window");
+        binder.validate();
     }
 
     private VerticalLayout initRootLayout() {
-        var buttonsLayout = buildButtonsLayout();
-        var rootLayout = new VerticalLayout(buildWrWrkInstField(), buttonsLayout);
-        //TODO {aliakh} rootLayout.setComponentAlignment(buttonsLayout, Alignment.BOTTOM_RIGHT);
-        binder.validate();
-        return rootLayout;
+        return new VerticalLayout(initWrWrkInstField()); //TODO get rid of VerticalLayout
     }
 
-    private TextField buildWrWrkInstField() {
+    private TextField initWrWrkInstField() {
         wrWrkInstField = new TextField(ForeignUi.getMessage("label.wr_wrk_inst"));
         wrWrkInstField.setSizeFull();
         binder.forField(wrWrkInstField)
@@ -84,7 +82,7 @@ class FasEditMultipleUsagesWindow extends CommonDialog {
         return wrWrkInstField;
     }
 
-    private HorizontalLayout buildButtonsLayout() {
+    private HorizontalLayout initButtonsLayout() {
         var saveButton = Buttons.createButton(ForeignUi.getMessage("button.save"));
         var closeButton = Buttons.createCloseButton(this);
         saveButton.addClickListener(event -> {

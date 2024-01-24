@@ -26,7 +26,6 @@ import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
-import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
 import com.copyright.rup.dist.foreign.domain.Usage;
@@ -92,7 +91,6 @@ public class UsageBatchUploadWindowTest {
     private static final String PRODUCT_FAMILY_FIELD = "productFamilyField";
     private static final String ACCOUNT_NAME_FIELD = "accountNameField";
     private static final String PAYMENT_DATE_WIDGET = "paymentDateWidget";
-    private static final String FISCAL_YEAR_FIELD = "fiscalYearField";
     private static final String GROSS_AMOUNT_FIELD = "grossAmountField";
     private static final String EMPTY_MESSAGE = "Field value should be specified";
     private static final String INVALID_USAGE_BATCH_LENGTH_MESSAGE = "Field value should not exceed 50 characters";
@@ -114,11 +112,9 @@ public class UsageBatchUploadWindowTest {
     @Test
     public void testConstructor() {
         var fasRro = new Rightsholder();
-        fasRro.setId(RupPersistUtils.generateUuid());
         fasRro.setAccountNumber(FAS_RRO_ACCOUNT_NUMBER);
         fasRro.setName(FAS_RRO_ACCOUNT_NAME);
         var claRro = new Rightsholder();
-        claRro.setId(RupPersistUtils.generateUuid());
         claRro.setAccountNumber(CLA_RRO_ACCOUNT_NUMBER);
         claRro.setName(CLA_RRO_ACCOUNT_NAME);
         expect(controller.getClaAccountNumber()).andReturn(CLA_RRO_ACCOUNT_NUMBER).times(2);
@@ -221,29 +217,17 @@ public class UsageBatchUploadWindowTest {
         var rro = new Rightsholder();
         rro.setAccountNumber(FAS_RRO_ACCOUNT_NUMBER);
         rro.setName(RRO_NAME);
-        rro.setId(RupPersistUtils.generateUuid());
         UploadField uploadField = createPartialMock(UploadField.class, "getStreamToUploadedFile");
         UsageCsvProcessor processor = createMock(UsageCsvProcessor.class);
         var paymentDateWidget = new LocalDateWidget("Payment Date");
         paymentDateWidget.setValue(PAYMENT_DATE);
         ProcessingResult<Usage> processingResult = buildCsvProcessingResult();
-        window = createPartialMock(UsageBatchUploadWindow.class, "isValid", "close");
-        Whitebox.setInternalState(window, controller);
-        Whitebox.setInternalState(window, USAGE_BATCH_NAME_FIELD, buildTextField("Usage Batch Name", USAGE_BATCH_NAME));
+        window = createPartialMock(UsageBatchUploadWindow.class, new String[]{"isValid", "close"}, controller);
         Whitebox.setInternalState(window, UPLOAD_FIELD, uploadField);
-        Whitebox.setInternalState(window, ACCOUNT_NUMBER_FIELD, buildTextField("RRO Account #",
-            FAS_RRO_ACCOUNT_NUMBER.toString()));
-        Whitebox.setInternalState(window, PRODUCT_FAMILY_FIELD, buildTextField("Product Family", FAS_PRODUCT_FAMILY));
-        Whitebox.setInternalState(window, ACCOUNT_NAME_FIELD, buildTextField("RRO Account Name", RRO_NAME));
-        Whitebox.setInternalState(window, "rro", rro);
-        Whitebox.setInternalState(window, PAYMENT_DATE_WIDGET, paymentDateWidget);
-        Whitebox.setInternalState(window, FISCAL_YEAR_FIELD, buildTextField("Fiscal Year", FISCAL_YEAR));
-        BigDecimalField grossAmountField = new BigDecimalField("Gross Amount");
-        grossAmountField.setValue(new BigDecimal(GROSS_AMOUNT));
-        Whitebox.setInternalState(window, GROSS_AMOUNT_FIELD, grossAmountField);
         expect(window.isValid()).andReturn(true).once();
         window.close();
         expectLastCall().once();
+        expect(controller.usageBatchExists(USAGE_BATCH_NAME)).andReturn(false).once();
         expect(controller.getCsvProcessor(FAS_PRODUCT_FAMILY)).andReturn(processor).once();
         expect(processor.process(anyObject())).andReturn(processingResult).once();
         expect(controller.loadUsageBatch(buildUsageBatch(rro), processingResult.get())).andReturn(1).once();
@@ -251,14 +235,15 @@ public class UsageBatchUploadWindowTest {
         Windows.showNotificationWindow("Upload completed: 1 record(s) were stored successfully");
         expectLastCall().once();
         replay(Windows.class, window, controller, uploadField, processor);
+        setTextFieldValue(window, USAGE_BATCH_NAME_FIELD, USAGE_BATCH_NAME);
+        setTextFieldValue(window, ACCOUNT_NUMBER_FIELD, FAS_RRO_ACCOUNT_NUMBER.toString());
+        setTextFieldValue(window, PRODUCT_FAMILY_FIELD, FAS_PRODUCT_FAMILY);
+        setTextFieldValue(window, ACCOUNT_NAME_FIELD, RRO_NAME);
+        Whitebox.setInternalState(window, "rro", rro);
+        ((LocalDateWidget) Whitebox.getInternalState(window, PAYMENT_DATE_WIDGET)).setValue(PAYMENT_DATE);
+        setBigDecimalFieldValue(window, GROSS_AMOUNT_FIELD, GROSS_AMOUNT);
         window.onUploadClicked();
         verify(Windows.class, window, controller, uploadField, processor);
-    }
-
-    private TextField buildTextField(String label, String value) {
-        var textField = new TextField(label);
-        textField.setValue(value);
-        return textField;
     }
 
     private ProcessingResult<Usage> buildCsvProcessingResult() {
