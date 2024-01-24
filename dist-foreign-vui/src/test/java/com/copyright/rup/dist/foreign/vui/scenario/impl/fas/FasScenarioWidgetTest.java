@@ -8,14 +8,18 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
+import static org.powermock.api.easymock.PowerMock.expectLastCall;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
+import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.vui.scenario.api.fas.IFasScenarioController;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.downloader.OnDemandFileDownloader;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.SearchWidget;
@@ -28,6 +32,7 @@ import com.vaadin.flow.component.grid.FooterRow;
 import com.vaadin.flow.component.grid.FooterRow.FooterCell;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.Grid.Column;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -68,6 +73,8 @@ public class FasScenarioWidgetTest {
 
     private FasScenarioWidget scenarioWidget;
     private IFasScenarioController controller;
+    private FasScenarioMediator mediator;
+    private Scenario scenario;
 
     @Before
     public void setUp() {
@@ -80,16 +87,19 @@ public class FasScenarioWidgetTest {
             new SimpleImmutableEntry<>(() -> "file.txt", () -> new ByteArrayInputStream(new byte[]{}));
         expect(streamSource.getSource()).andReturn(fileSource).times(2);
         controller = createMock(IFasScenarioController.class);
+        mediator = createMock(FasScenarioMediator.class);
         expect(controller.getExportScenarioUsagesStreamSource()).andReturn(streamSource).once();
         expect(controller.getExportScenarioRightsholderTotalsStreamSource()).andReturn(streamSource).once();
-        Scenario scenario = buildScenario();
+        buildScenario();
         expect(controller.getScenario()).andReturn(scenario).once();
         expect(controller.getScenarioWithAmountsAndLastAction()).andReturn(scenario).once();
-        replay(controller, streamSource, ui, UI.class);
         scenarioWidget = new FasScenarioWidget(controller);
+        Whitebox.setInternalState(scenarioWidget, mediator);
         scenarioWidget.setController(controller);
+        replay(controller, streamSource, ui, UI.class, mediator);
         scenarioWidget.init();
-        verify(controller, streamSource, ui, UI.class);
+        verify(controller, streamSource, ui, UI.class, mediator);
+        reset(controller, mediator);
     }
 
     @Test
@@ -110,31 +120,46 @@ public class FasScenarioWidgetTest {
 
     @Test
     public void testRefresh() {
-        //TODO: {dbasiachenka} implement
+        expect(controller.isScenarioEmpty()).andReturn(false).once();
+        expect(controller.getScenario()).andReturn(scenario).once();
+        mediator.onScenarioUpdated(false, scenario);
+        expectLastCall().once();
+        replay(controller, mediator);
+        scenarioWidget.refresh();
+        verify(controller, mediator);
     }
 
     private void verifyContent(Component content) {
         assertEquals(VerticalLayout.class, content.getClass());
         VerticalLayout layout = (VerticalLayout) content;
         assertEquals(3, layout.getComponentCount());
-        verifySearchWidget(layout.getComponentAt(0));
+        verifyToolbar(layout.getComponentAt(0));
         verifyGrid(layout.getComponentAt(1));
         verifyEmptyScenarioLabel(((VerticalLayout) layout.getComponentAt(2)).getComponentAt(0));
         verifyButtonsLayout(getFooterComponent(scenarioWidget, 1));
     }
 
-    private void verifySearchWidget(Component component) {
+    private void verifyToolbar(Component component) {
         assertThat(component, instanceOf(HorizontalLayout.class));
         HorizontalLayout horizontalLayout = (HorizontalLayout) component;
-        assertEquals(JustifyContentMode.CENTER, horizontalLayout.getJustifyContentMode());
-        assertEquals("100%", horizontalLayout.getWidth());
+        assertEquals(3, horizontalLayout.getComponentCount());
         assertTrue(horizontalLayout.isSpacing());
-        assertEquals(1, horizontalLayout.getComponentCount());
-        SearchWidget searchWidget = (SearchWidget) horizontalLayout.getComponentAt(0);
+        assertEquals(JustifyContentMode.BETWEEN, horizontalLayout.getJustifyContentMode());
+        assertEquals("100%", horizontalLayout.getWidth());
+        assertEquals(Unit.PERCENTAGE, horizontalLayout.getWidthUnit().orElseThrow());
+        assertEquals("view-scenario-toolbar", horizontalLayout.getId().orElseThrow());
+        assertEquals("view-scenario-toolbar", horizontalLayout.getClassName());
+        var div = (Div) horizontalLayout.getComponentAt(0);
+        assertEquals("<div></div>", div.getElement().getOuterHTML());
+        var searchWidget = (SearchWidget) horizontalLayout.getComponentAt(1);
         assertEquals("Enter Rightsholder Name/Account # or Payee Name/Account #",
             Whitebox.getInternalState(searchWidget, TextField.class).getPlaceholder());
         assertEquals("60%", searchWidget.getWidth());
-        assertEquals(Unit.PERCENTAGE, searchWidget.getWidthUnit().orElseThrow());
+        var menuComponent = horizontalLayout.getComponentAt(2);
+        assertThat(menuComponent, instanceOf(Button.class));
+        var menuButton = (Button) menuComponent;
+        assertNotNull(menuComponent);
+        assertEquals("Hide/Unhide", menuButton.getTooltip().getText());
     }
 
     private void verifyGrid(Component component) {
@@ -166,27 +191,27 @@ public class FasScenarioWidgetTest {
         assertTrue(layout.isSpacing());
         assertEquals("scenario-buttons-layout", layout.getId().orElseThrow());
         assertEquals(4, layout.getComponentCount());
-        Component excludeByRroButton = layout.getComponentAt(0);
+        var excludeByRroButton = layout.getComponentAt(0);
         assertThat(excludeByRroButton, instanceOf(Button.class));
         assertEquals("Exclude By RRO", ((Button) excludeByRroButton).getText());
-        Component fileDownloader = layout.getComponentAt(1);
+        var fileDownloader = layout.getComponentAt(1);
         assertThat(fileDownloader, instanceOf(OnDemandFileDownloader.class));
         assertEquals("Export Details", ((Button) fileDownloader.getChildren().findFirst().orElseThrow()).getText());
         fileDownloader = layout.getComponentAt(2);
         assertThat(fileDownloader, instanceOf(OnDemandFileDownloader.class));
         assertEquals("Export", ((Button) fileDownloader.getChildren().findFirst().orElseThrow()).getText());
-        Component closeButton = layout.getComponentAt(3);
+        var closeButton = layout.getComponentAt(3);
         assertThat(closeButton, instanceOf(Button.class));
         assertEquals("Close", ((Button) closeButton).getText());
     }
 
-    private Scenario buildScenario() {
-        var scenario = new Scenario();
+    private void buildScenario() {
+        scenario = new Scenario();
         scenario.setId("65d4cdde-eeff-4b31-885f-78170d9e7790");
         scenario.setName("Scenario name");
         scenario.setGrossTotal(new BigDecimal("20000.00"));
         scenario.setServiceFeeTotal(new BigDecimal("6400.00"));
         scenario.setNetTotal(new BigDecimal("13600.00"));
-        return scenario;
+        scenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);
     }
 }

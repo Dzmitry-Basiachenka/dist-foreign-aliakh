@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.vui.scenario.api.fas;
 
 import com.copyright.rup.dist.foreign.vui.scenario.api.ICommonScenarioWidget;
+import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.api.IMediatorProvider;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.api.IRefreshable;
 
 /**
@@ -12,7 +13,7 @@ import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.api.IRefreshable;
  *
  * @author Stanislau Rudak
  */
-public interface IFasScenarioWidget extends ICommonScenarioWidget, IRefreshable {
+public interface IFasScenarioWidget extends ICommonScenarioWidget, IRefreshable, IMediatorProvider {
 
     /**
      * Refresh table.
