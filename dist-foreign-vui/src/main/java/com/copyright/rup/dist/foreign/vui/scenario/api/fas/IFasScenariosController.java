@@ -34,4 +34,9 @@ public interface IFasScenariosController extends ICommonScenariosController {
      * Handles click on 'Refresh Scenario' button.
      */
     void onRefreshScenarioButtonClicked();
+
+    /**
+     * Handles send to LM action.
+     */
+    void sendToLm();
 }

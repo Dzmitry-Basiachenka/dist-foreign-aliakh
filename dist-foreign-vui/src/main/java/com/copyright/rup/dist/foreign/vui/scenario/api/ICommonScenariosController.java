@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.vui.scenario.api;
 
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.api.IController;
 
 import java.util.List;
@@ -60,4 +61,16 @@ public interface ICommonScenariosController extends IController<ICommonScenarios
      * Refreshes selected scenario.
      */
     void refreshScenario();
+
+    /**
+     * Handles click on 'Delete' button.
+     */
+    void onDeleteButtonClicked();
+
+    /**
+     * Handles actions with {@link Scenario}.
+     *
+     * @param actionType scenario action type
+     */
+    void handleAction(ScenarioActionTypeEnum actionType);
 }

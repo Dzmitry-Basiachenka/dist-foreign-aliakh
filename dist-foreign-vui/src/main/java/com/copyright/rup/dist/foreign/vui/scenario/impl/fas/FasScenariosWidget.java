@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.vui.scenario.impl.fas;
 
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.vui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.vui.scenario.api.IScenarioHistoryController;
 import com.copyright.rup.dist.foreign.vui.scenario.api.fas.IFasScenariosController;
@@ -95,8 +96,13 @@ public class FasScenariosWidget extends CommonScenariosWidget implements IFasSce
     private void addButtonsListeners() {
         viewButton.addClickListener(event -> controller.onViewButtonClicked());
         editNameButton.addClickListener(event -> onEditNameButtonClicked());
+        deleteButton.addClickListener(event -> controller.onDeleteButtonClicked());
         excludePayeesButton.addClickListener(event -> controller.onExcludePayeesButtonClicked());
         reconcileRightsholdersButton.addClickListener(event -> controller.onReconcileRightsholdersButtonClicked());
+        submitButton.addClickListener(event -> controller.handleAction(ScenarioActionTypeEnum.SUBMITTED));
+        rejectButton.addClickListener(event -> controller.handleAction(ScenarioActionTypeEnum.REJECTED));
+        approveButton.addClickListener(event -> controller.handleAction(ScenarioActionTypeEnum.APPROVED));
+        sendToLmButton.addClickListener(event -> controller.sendToLm());
         refreshScenarioButton.addClickListener(event -> controller.onRefreshScenarioButtonClicked());
     }
 }
