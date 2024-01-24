@@ -43,6 +43,7 @@ public class FasScenarioMediatorTest {
     private final SearchWidget searchWidget = new SearchWidget(() -> {/*stub*/});
     private final Grid grid = new Grid();
     private final VerticalLayout emptyUsagesLayout = new VerticalLayout();
+    private final Button menuButton = new Button();
     private FasScenarioMediator mediator;
     private Scenario scenario;
 
@@ -58,6 +59,7 @@ public class FasScenarioMediatorTest {
         mediator.setSearchWidget(searchWidget);
         mediator.setRightsholderGrid(grid);
         mediator.setEmptyUsagesLayout(emptyUsagesLayout);
+        mediator.setMenuButton(menuButton);
     }
 
     @Test
@@ -71,6 +73,7 @@ public class FasScenarioMediatorTest {
         assertTrue(grid.isVisible());
         assertTrue(emptyUsagesLayout.isVisible());
         assertTrue(searchWidget.isVisible());
+        assertTrue(menuButton.isVisible());
         verify(SecurityUtils.class);
     }
 
@@ -85,6 +88,7 @@ public class FasScenarioMediatorTest {
         assertTrue(grid.isVisible());
         assertTrue(emptyUsagesLayout.isVisible());
         assertTrue(searchWidget.isVisible());
+        assertTrue(menuButton.isVisible());
         verify(SecurityUtils.class);
     }
 
@@ -101,6 +105,7 @@ public class FasScenarioMediatorTest {
         assertTrue(grid.isVisible());
         assertFalse(emptyUsagesLayout.isVisible());
         assertTrue(searchWidget.isVisible());
+        assertTrue(menuButton.isVisible());
         verify(SecurityUtils.class);
     }
 
@@ -117,6 +122,7 @@ public class FasScenarioMediatorTest {
         assertTrue(grid.isVisible());
         assertFalse(emptyUsagesLayout.isVisible());
         assertTrue(searchWidget.isVisible());
+        assertTrue(menuButton.isVisible());
         verify(SecurityUtils.class);
     }
 
@@ -133,6 +139,7 @@ public class FasScenarioMediatorTest {
         assertFalse(grid.isVisible());
         assertTrue(emptyUsagesLayout.isVisible());
         assertFalse(searchWidget.isVisible());
+        assertFalse(menuButton.isVisible());
         verify(SecurityUtils.class);
     }
 
@@ -150,6 +157,7 @@ public class FasScenarioMediatorTest {
         assertFalse(grid.isVisible());
         assertTrue(emptyUsagesLayout.isVisible());
         assertFalse(searchWidget.isVisible());
+        assertFalse(menuButton.isVisible());
         verify(SecurityUtils.class);
     }
 }

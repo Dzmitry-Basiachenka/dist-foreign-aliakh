@@ -29,6 +29,7 @@ class FasScenarioMediator implements IMediator {
     private Grid<RightsholderTotalsHolder> rightsholderGrid;
     private SearchWidget searchWidget;
     private VerticalLayout emptyUsagesLayout;
+    private Button menuButton;
 
     @Override
     public void applyPermissions() {
@@ -50,6 +51,7 @@ class FasScenarioMediator implements IMediator {
         rightsholderGrid.setVisible(!scenarioEmpty);
         emptyUsagesLayout.setVisible(scenarioEmpty);
         searchWidget.setVisible(!scenarioEmpty);
+        menuButton.setVisible(!scenarioEmpty);
     }
 
     void setExcludeByRroButton(Button excludeByRroButton) {
@@ -74,5 +76,9 @@ class FasScenarioMediator implements IMediator {
 
     void setSearchWidget(SearchWidget searchWidget) {
         this.searchWidget = searchWidget;
+    }
+
+    void setMenuButton(Button menuButton) {
+        this.menuButton = menuButton;
     }
 }
