@@ -6,6 +6,7 @@ import com.copyright.rup.dist.foreign.vui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.vui.scenario.api.ICommonScenarioController;
 import com.copyright.rup.dist.foreign.vui.scenario.api.ICommonScenarioWidget;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.Buttons;
+import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.HideGridColumnsProvider;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.MaximizeModalWindowManager;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.util.CurrencyUtils;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.util.VaadinUtils;
@@ -19,6 +20,7 @@ import com.vaadin.flow.component.grid.FooterRow;
 import com.vaadin.flow.component.grid.FooterRow.FooterCell;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.Grid.SelectionMode;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -125,7 +127,7 @@ public abstract class CommonScenarioWidget extends CommonDialog implements IComm
         addColumns();
         addFooter();
         initEmptyScenarioMessage();
-        var rootLayout = new VerticalLayout(initSearchWidget(), rightsholdersGrid, emptyUsagesLayout);
+        var rootLayout = new VerticalLayout(initToolbar(), rightsholdersGrid, emptyUsagesLayout);
         rootLayout.setPadding(false);
         rootLayout.setSpacing(false);
         rootLayout.setSizeFull();
@@ -214,14 +216,24 @@ public abstract class CommonScenarioWidget extends CommonDialog implements IComm
         emptyUsagesLayout.setVisible(false);
     }
 
-    private HorizontalLayout initSearchWidget() {
+    private HorizontalLayout initToolbar() {
+        initSearchWidget();
+        HideGridColumnsProvider<RightsholderTotalsHolder> hideGridColumnsProvider =
+            new HideGridColumnsProvider<>();
+        hideGridColumnsProvider.hideColumns(rightsholdersGrid.getColumns(), "RH Account #");
+        Button menuButton = hideGridColumnsProvider.getMenuButton();
+        var toolbar = new HorizontalLayout(new Div(), searchWidget, menuButton);
+        toolbar.setJustifyContentMode(JustifyContentMode.BETWEEN);
+        toolbar.setWidth("100%");
+        VaadinUtils.setPadding(toolbar, 0, 3, 0, 0);
+        VaadinUtils.addComponentStyle(toolbar, "view-scenario-toolbar");
+        return toolbar;
+    }
+
+    private void initSearchWidget() {
         searchWidget = new SearchWidget(controller);
         searchWidget.setPrompt(ForeignUi.getMessage("field.prompt.scenario.search_widget"));
         searchWidget.setWidth("60%");
-        var toolbar = new HorizontalLayout(searchWidget);
-        toolbar.setJustifyContentMode(JustifyContentMode.CENTER);
-        toolbar.setWidth("100%");
-        return toolbar;
     }
 
     /**

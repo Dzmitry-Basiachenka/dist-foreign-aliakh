@@ -7,7 +7,9 @@ import com.copyright.rup.dist.foreign.vui.scenario.impl.CommonScenarioWidget;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.Buttons;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.downloader.OnDemandFileDownloader;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.util.VaadinUtils;
+import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.api.IMediator;
 
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 
@@ -26,6 +28,11 @@ public class FasScenarioWidget extends CommonScenarioWidget implements IFasScena
 
     private final IFasScenarioController scenarioController;
 
+    private Button excludeByRroButton;
+    private OnDemandFileDownloader exportDetailsFileDownloader;
+    private OnDemandFileDownloader exportScenarioFileDownloader;
+    private FasScenarioMediator mediator;
+
     /**
      * Constructor.
      *
@@ -33,11 +40,12 @@ public class FasScenarioWidget extends CommonScenarioWidget implements IFasScena
      */
     public FasScenarioWidget(IFasScenarioController scenarioController) {
         this.scenarioController = scenarioController;
+        super.addAttachListener(event -> refresh());
     }
 
     @Override
     public void refresh() {
-        //TODO: {dbasiachenka} implement
+        mediator.onScenarioUpdated(scenarioController.isScenarioEmpty(), scenarioController.getScenario());
     }
 
     @Override
@@ -47,15 +55,27 @@ public class FasScenarioWidget extends CommonScenarioWidget implements IFasScena
     }
 
     @Override
+    public IMediator initMediator() {
+        mediator = new FasScenarioMediator();
+        mediator.setExcludeByRroButton(excludeByRroButton);
+        mediator.setExportDetailsFileDownloader(exportDetailsFileDownloader);
+        mediator.setExportScenarioFileDownloader(exportScenarioFileDownloader);
+        mediator.setEmptyUsagesLayout(getEmptyUsagesLayout());
+        mediator.setRightsholderGrid(getRightsholdersGrid());
+        mediator.setSearchWidget(getSearchWidget());
+        return mediator;
+    }
+
+    @Override
     protected HorizontalLayout initButtons() {
-        var excludeByRroButton = Buttons.createButton(ForeignUi.getMessage("button.exclude_by_rro"));
+        excludeByRroButton = Buttons.createButton(ForeignUi.getMessage("button.exclude_by_rro"));
         excludeByRroButton.addClickListener(event -> scenarioController.onExcludeByRroClicked());
         var exportDetailsButton = Buttons.createButton(ForeignUi.getMessage("button.export_details"));
-        var exportDetailsFileDownloader =
+        exportDetailsFileDownloader =
             new OnDemandFileDownloader(scenarioController.getExportScenarioUsagesStreamSource().getSource());
         exportDetailsFileDownloader.extend(exportDetailsButton);
         var exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
-        var exportScenarioFileDownloader = new OnDemandFileDownloader(
+        exportScenarioFileDownloader = new OnDemandFileDownloader(
             scenarioController.getExportScenarioRightsholderTotalsStreamSource().getSource());
         exportScenarioFileDownloader.extend(exportButton);
         var buttonsLayout = new HorizontalLayout(excludeByRroButton, exportDetailsFileDownloader,
