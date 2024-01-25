@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.vui.usage.impl.fas;
 
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.getDialogContent;
+import static com.copyright.rup.dist.foreign.vui.UiTestHelper.getFooterLayout;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyGrid;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyWindow;
@@ -28,7 +29,6 @@ import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.provider.ListDataProvider;
 
@@ -65,7 +65,7 @@ public class ViewUsageBatchWindowTest {
     private static final String USAGE_BATCH_ID = "410ee825-6a6b-422b-8d27-57950e70d810";
 
     private Grid<UsageBatch> grid;
-    private ViewUsageBatchWindow viewUsageBatchWindow;
+    private ViewUsageBatchWindow window;
     private IFasUsageController controller;
 
     @Before
@@ -77,17 +77,17 @@ public class ViewUsageBatchWindowTest {
         expect(controller.getSelectedProductFamily()).andReturn("FAS").once();
         expect(controller.getUsageBatches("FAS")).andReturn(List.of(buildUsageBatch())).once();
         replay(controller, ForeignSecurityUtils.class);
-        viewUsageBatchWindow = new ViewUsageBatchWindow(controller);
-        Whitebox.setInternalState(viewUsageBatchWindow, "grid", grid);
+        window = new ViewUsageBatchWindow(controller);
+        Whitebox.setInternalState(window, "grid", grid);
         verify(controller, ForeignSecurityUtils.class);
         reset(controller, ForeignSecurityUtils.class);
     }
 
     @Test
     public void testStructure() {
-        verifyWindow(viewUsageBatchWindow, "View Usage Batch", "1000px", "550px", Unit.PIXELS, true);
-        VerticalLayout content = (VerticalLayout) getDialogContent(viewUsageBatchWindow);
-        assertEquals(3, content.getComponentCount());
+        verifyWindow(window, "View Usage Batch", "1000px", "550px", Unit.PIXELS, true);
+        VerticalLayout content = (VerticalLayout) getDialogContent(window);
+        assertEquals(2, content.getComponentCount());
         assertEquals(SearchWidget.class, content.getComponentAt(0).getClass());
         verifyGrid((Grid) content.getComponentAt(1), List.of(
             Pair.of("Usage Batch Name", "200px"),
@@ -99,7 +99,7 @@ public class ViewUsageBatchWindowTest {
             Pair.of("Created By", "330px"),
             Pair.of("Created Date", null)
         ));
-        verifyButtonsLayout(content.getComponentAt(2), true, "Delete", "Close");
+        verifyButtonsLayout(getFooterLayout(window), true, "Delete", "Close");
     }
 
     @Test
@@ -164,17 +164,16 @@ public class ViewUsageBatchWindowTest {
     @Test
     public void testPerformSearch() {
         SearchWidget searchWidget = createMock(SearchWidget.class);
-        Whitebox.setInternalState(viewUsageBatchWindow, searchWidget);
+        Whitebox.setInternalState(window, searchWidget);
         expect(grid.getDataProvider()).andReturn(new ListDataProvider(List.of())).once();
         expect(searchWidget.getSearchValue()).andReturn("Search").once();
         replay(searchWidget, grid);
-        viewUsageBatchWindow.performSearch();
+        window.performSearch();
         verify(searchWidget, grid);
     }
 
     private Button getDeleteButton() {
-        VerticalLayout content = (VerticalLayout) getDialogContent(viewUsageBatchWindow);
-        HorizontalLayout buttonsLayout = (HorizontalLayout) content.getComponentAt(2);
+        var buttonsLayout = getFooterLayout(window);
         return (Button) buttonsLayout.getComponentAt(0);
     }
 

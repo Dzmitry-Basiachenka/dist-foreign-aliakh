@@ -12,7 +12,6 @@ import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.SearchWidget;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.provider.ListDataProvider;
@@ -114,11 +113,11 @@ public abstract class AbstractViewUsageBatchWindow extends CommonDialog
         grid.addColumn(valueProvider)
             .setHeader(ForeignUi.getMessage(caption))
             .setComparator(comparator)
+            .setClassNameGenerator(item -> "label-amount")
             .setFlexGrow(0)
             .setWidth(width)
             .setSortable(true)
             .setResizable(true);
-            //TODO {aliakh} implement setStyleGenerator(item -> "v-align-right")
     }
 
     /**
@@ -168,13 +167,16 @@ public abstract class AbstractViewUsageBatchWindow extends CommonDialog
         setWidth("1000px");
         setHeight("550px");
         initUsageBatchesGrid();
-        var buttonsLayout = initButtons();
+        var buttonsLayout = initButtonsLayout();
         initMediator();
-        var rootLayout = new VerticalLayout(searchWidget, grid, buttonsLayout);
+        var rootLayout = new VerticalLayout(searchWidget, grid);
         rootLayout.setSizeFull();
-        rootLayout.setHorizontalComponentAlignment(Alignment.END, buttonsLayout);
+        rootLayout.setMargin(false);
+        rootLayout.setSpacing(false);
+        rootLayout.setPadding(false);
         add(rootLayout);
         setHeaderTitle(getCaptionMessage());
+        getFooter().add(buttonsLayout);
         setModalWindowProperties("view-batch-window", true);
     }
 
@@ -184,7 +186,7 @@ public abstract class AbstractViewUsageBatchWindow extends CommonDialog
         mediator.applyPermissions();
     }
 
-    private HorizontalLayout initButtons() {
+    private HorizontalLayout initButtonsLayout() {
         var closeButton = Buttons.createCloseButton(this);
         deleteButton = Buttons.createButton(ForeignUi.getMessage("button.delete"));
         deleteButton.addClickListener(event ->

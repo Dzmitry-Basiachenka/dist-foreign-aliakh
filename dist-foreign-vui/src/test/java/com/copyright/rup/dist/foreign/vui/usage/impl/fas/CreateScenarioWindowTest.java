@@ -57,7 +57,6 @@ public class CreateScenarioWindowTest {
     private static final String SCENARIO_NAME = "FAS Distribution " + DATE;
     private static final String FAS_PRODUCT_FAMILY = "FAS";
 
-    private CreateScenarioWindow createScenarioWindow;
     private IFasUsageController controller;
 
     @Before
@@ -70,11 +69,11 @@ public class CreateScenarioWindowTest {
         expect(controller.getSelectedProductFamily()).andReturn(FAS_PRODUCT_FAMILY).once();
         expect(controller.scenarioExists(SCENARIO_NAME)).andReturn(false).once();
         replay(controller);
-        createScenarioWindow = new CreateScenarioWindow(controller);
+        var window = new CreateScenarioWindow(controller);
         verify(controller);
-        verifyWindow(createScenarioWindow, "Create Scenario", "650px", null, Unit.PIXELS, false);
-        assertEquals("create-scenario-window", createScenarioWindow.getId().get());
-        var content = (VerticalLayout) getDialogContent(createScenarioWindow);
+        verifyWindow(window, "Create Scenario", "650px", null, Unit.PIXELS, false);
+        assertEquals("create-scenario-window", window.getId().get());
+        var content = (VerticalLayout) getDialogContent(window);
         assertEquals(3, content.getComponentCount());
         verifyScenarioNameField(content.getComponentAt(0));
         verifyDescriptionArea(content.getComponentAt(1));
@@ -91,8 +90,7 @@ public class CreateScenarioWindowTest {
         replay(controller, scenarioService);
         var window = new TestCreateScenarioWindow(controller);
         var content = (VerticalLayout) getDialogContent(window);
-        var component = content.getComponentAt(2);
-        var buttonsLayout = (HorizontalLayout) component;
+        var buttonsLayout = (HorizontalLayout) content.getComponentAt(2);
         var confirmButton = verifyButton(buttonsLayout.getComponentAt(0), "Confirm", true);
         confirmButton.click();
         var event = window.getComponentEvent();
@@ -112,8 +110,7 @@ public class CreateScenarioWindowTest {
         var window = new TestCreateScenarioWindow(controller);
         assertFalse(window.isClosed());
         var content = (VerticalLayout) getDialogContent(window);
-        var component = content.getComponentAt(2);
-        var buttonsLayout = (HorizontalLayout) component;
+        var buttonsLayout = (HorizontalLayout) content.getComponentAt(2);
         var cancelButton = verifyButton(buttonsLayout.getComponentAt(1), "Cancel", true);
         cancelButton.click();
         assertTrue(window.isClosed());
@@ -127,9 +124,9 @@ public class CreateScenarioWindowTest {
         expect(controller.scenarioExists(SCENARIO_NAME)).andReturn(false).times(3);
         expect(controller.scenarioExists(existingScenarioName)).andReturn(true).times(4);
         replay(controller);
-        createScenarioWindow = new CreateScenarioWindow(controller);
-        Binder<?> binder = Whitebox.getInternalState(createScenarioWindow, "binder");
-        TextField scenarioNameField = Whitebox.getInternalState(createScenarioWindow, "scenarioNameField");
+        var window = new CreateScenarioWindow(controller);
+        Binder<?> binder = Whitebox.getInternalState(window, "binder");
+        TextField scenarioNameField = Whitebox.getInternalState(window, "scenarioNameField");
         assertFieldValidationMessage(scenarioNameField, StringUtils.EMPTY, binder,
             "Field value should be specified", false);
         assertFieldValidationMessage(scenarioNameField, "    ", binder,
@@ -146,7 +143,7 @@ public class CreateScenarioWindowTest {
 
     private void verifyScenarioNameField(Component component) {
         assertNotNull(component);
-        TextField scenarioNameField = (TextField) component;
+        var scenarioNameField = (TextField) component;
         assertEquals("Scenario Name", scenarioNameField.getLabel());
         assertEquals(SCENARIO_NAME, scenarioNameField.getValue());
         assertEquals("scenario-name", scenarioNameField.getId().get());
@@ -154,7 +151,7 @@ public class CreateScenarioWindowTest {
 
     private void verifyDescriptionArea(Component component) {
         assertNotNull(component);
-        TextArea descriptionArea = (TextArea) component;
+        var descriptionArea = (TextArea) component;
         assertEquals("Description", descriptionArea.getLabel());
         assertEquals("scenario-description", descriptionArea.getId().get());
     }
