@@ -6,6 +6,19 @@
     color: var(--tab-text-color);
 }
 
+.global-product-family-select vaadin-select-value-button vaadin-select-item {
+    font-weight: bold;
+}
+
+.global-product-family-select-layout {
+    align-items: center;
+}
+
+.global-product-family-select-layout label {
+    font-weight: bold;
+    color: var(--tab-text-color);
+}
+
 .scenarios-metadata div {
     font-size: 14px;
     word-wrap: break-word;
