@@ -125,7 +125,7 @@ public abstract class CommonUsageFilterWidget extends VerticalLayout implements 
      */
     protected Label buildAppliedFiltersHeaderLabel() {
         Label label = new Label(ForeignUi.getMessage("label.applied_filters"));
-        label.addClassNames("filter-label", "applied-filter-header");
+        label.addClassNames("filter-label");
         return label;
     }
 
@@ -141,9 +141,9 @@ public abstract class CommonUsageFilterWidget extends VerticalLayout implements 
         applyButton.addClickListener(event -> applyFilter());
         var clearButton = Buttons.createButton(ForeignUi.getMessage("button.clear"));
         clearButton.addClickListener(event -> clearFilter());
-        var horizontalLayout = new HorizontalLayout(applyButton, clearButton);
-        VaadinUtils.setMaxComponentsWidth(horizontalLayout, applyButton, clearButton);
-        VaadinUtils.addComponentStyle(horizontalLayout, "filter-buttons");
-        return horizontalLayout;
+        var buttonsLayout = new HorizontalLayout(applyButton, clearButton);
+        VaadinUtils.setMaxComponentsWidth(buttonsLayout, applyButton, clearButton);
+        VaadinUtils.addComponentStyle(buttonsLayout, "filter-buttons");
+        return buttonsLayout;
     }
 }

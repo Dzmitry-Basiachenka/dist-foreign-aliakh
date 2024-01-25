@@ -9,7 +9,6 @@ import com.copyright.rup.dist.foreign.vui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.util.VaadinUtils;
 
 import com.vaadin.flow.component.Html;
-import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.html.Section;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -204,9 +203,8 @@ public abstract class CommonAppliedFilterPanel extends Section {
     }
 
     private void initLayout() {
-        setWidth(265, Unit.PIXELS);
-        setHeight(700, Unit.PIXELS);
-        //TODO {aliakh} implement setStyleName(Cornerstone.FORMLAYOUT_LIGHT);
+        setWidth("265px");
+        setHeight("700px");
         setSizeFull();
     }
 
