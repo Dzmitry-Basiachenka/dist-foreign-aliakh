@@ -13,6 +13,7 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.LongField;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.upload.UploadField;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.Windows;
 
@@ -281,6 +282,17 @@ public final class UiTestHelper {
     }
 
     /**
+     * Sets Long field value.
+     *
+     * @param dialog instance of {@link Dialog}
+     * @param field  name of the text field
+     * @param value  value
+     */
+    public static void setLongFieldValue(Dialog dialog, String field, String value) {
+        ((LongField) Whitebox.getInternalState(dialog, field)).setValue(Long.valueOf(value));
+    }
+
+    /**
      * Verifies text field.
      *
      * @param component UI component
@@ -314,12 +326,29 @@ public final class UiTestHelper {
      * @param component UI component
      * @param label     label of field
      * @param width     width
-     * @return of {@link TextField}
+     * @return of {@link BigDecimalField}
      */
     public static BigDecimalField verifyBigDecimalField(Component component, String label, String width,
                                                         String styleName) {
         assertThat(component, instanceOf(BigDecimalField.class));
         BigDecimalField field = (BigDecimalField) component;
+        assertEquals(label, field.getLabel());
+        assertEquals(width, field.getWidth());
+        assertEquals(styleName, field.getClassName());
+        return field;
+    }
+
+    /**
+     * Verifies Long field.
+     *
+     * @param component UI component
+     * @param label     label of field
+     * @param width     width
+     * @return of {@link LongField}
+     */
+    public static LongField verifyLongField(Component component, String label, String width, String styleName) {
+        assertThat(component, instanceOf(LongField.class));
+        LongField field = (LongField) component;
         assertEquals(label, field.getLabel());
         assertEquals(width, field.getWidth());
         assertEquals(styleName, field.getClassName());

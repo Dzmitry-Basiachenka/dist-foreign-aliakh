@@ -3,9 +3,9 @@ package com.copyright.rup.dist.foreign.vui.usage.impl.fas;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.assertFieldValidationMessage;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.getDialogContent;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.getFooterLayout;
-import static com.copyright.rup.dist.foreign.vui.UiTestHelper.setTextFieldValue;
+import static com.copyright.rup.dist.foreign.vui.UiTestHelper.setLongFieldValue;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyButtonsLayout;
-import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyTextField;
+import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyLongField;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyWindow;
 
 import static org.easymock.EasyMock.anyObject;
@@ -21,17 +21,16 @@ import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.foreign.vui.usage.api.fas.IFasUpdateUsageWindow;
 import com.copyright.rup.dist.foreign.vui.usage.api.fas.IFasUsageController;
+import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.LongField;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.ConfirmWindows;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.Windows;
 
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.Validator;
 
-import org.apache.commons.lang3.StringUtils;
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
@@ -61,9 +60,7 @@ public class FasEditMultipleUsagesWindowTest {
     private static final List<String> USAGE_IDS = List.of("232eb540-8dc8-41c6-bd6e-b367eaa16cfa");
     private static final Long WR_WRK_INST = 210001899L;
     private static final String REASON = "some reason";
-    private static final String EMPTY_FIELD_MESSAGE = "Field value should be specified";
     private static final String INVALID_NUMBER_LENGTH_MESSAGE = "Field value should not exceed 9 digits";
-    private static final String INVALID_NUMBER_MESSAGE = "Field value should contain numeric values only";
 
     private IFasUsageController controller;
     private IFasUpdateUsageWindow updateUsageWindow;
@@ -82,7 +79,7 @@ public class FasEditMultipleUsagesWindowTest {
         verifyWindow(window, "Edit multiple FAS/FAS2 Usages", "400px", "205px", Unit.PIXELS, false);
         VerticalLayout contentLayout = (VerticalLayout) getDialogContent(window);
         assertEquals(1, contentLayout.getComponentCount());
-        verifyTextField(contentLayout.getComponentAt(0), "Wr Wrk Inst", "wr-wrk-inst-field");
+        verifyLongField(contentLayout.getComponentAt(0), "Wr Wrk Inst", "100%", "wr-wrk-inst-field");
         verifyButtonsLayout(getFooterLayout(window), true, "Save", "Close");
         verify(controller);
     }
@@ -92,15 +89,11 @@ public class FasEditMultipleUsagesWindowTest {
         replay(controller);
         window = new FasEditMultipleUsagesWindow(controller, updateUsageWindow, USAGE_IDS);
         Binder<?> binder = Whitebox.getInternalState(window, "binder");
-        TextField wrWrkInstField = Whitebox.getInternalState(window, "wrWrkInstField");
-        assertFieldValidationMessage(wrWrkInstField, StringUtils.EMPTY, binder, EMPTY_FIELD_MESSAGE, false);
-        assertFieldValidationMessage(wrWrkInstField, "  ", binder, EMPTY_FIELD_MESSAGE, false);
-        assertFieldValidationMessage(wrWrkInstField, "1", binder, null, true);
-        assertFieldValidationMessage(wrWrkInstField, " 1 ", binder, null, true);
-        assertFieldValidationMessage(wrWrkInstField, "123456789", binder, null, true);
-        assertFieldValidationMessage(wrWrkInstField, "1234567890", binder, INVALID_NUMBER_LENGTH_MESSAGE, false);
-        assertFieldValidationMessage(wrWrkInstField, "0.1", binder, INVALID_NUMBER_MESSAGE, false);
-        assertFieldValidationMessage(wrWrkInstField, "not_a_number", binder, INVALID_NUMBER_MESSAGE, false);
+        LongField wrWrkInstField = Whitebox.getInternalState(window, "wrWrkInstField");
+        assertFieldValidationMessage(wrWrkInstField, 0L, binder, INVALID_NUMBER_LENGTH_MESSAGE, false);
+        assertFieldValidationMessage(wrWrkInstField, 1L, binder, null, true);
+        assertFieldValidationMessage(wrWrkInstField, 123456789L, binder, null, true);
+        assertFieldValidationMessage(wrWrkInstField, 1234567890L, binder, INVALID_NUMBER_LENGTH_MESSAGE, false);
         verify(controller);
     }
 
@@ -113,7 +106,7 @@ public class FasEditMultipleUsagesWindowTest {
             capture(actionCapture), anyObject(Validator.class));
         expectLastCall().once();
         window = new FasEditMultipleUsagesWindow(controller, updateUsageWindow, USAGE_IDS);
-        setTextFieldValue(window, "wrWrkInstField", WR_WRK_INST.toString());
+        setLongFieldValue(window, "wrWrkInstField", WR_WRK_INST.toString());
         controller.updateUsages(USAGE_IDS, WR_WRK_INST, REASON);
         expectLastCall().once();
         controller.refreshWidget();

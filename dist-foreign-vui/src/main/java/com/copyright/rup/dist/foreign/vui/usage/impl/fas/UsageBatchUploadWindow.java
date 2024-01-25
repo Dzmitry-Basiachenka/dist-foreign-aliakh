@@ -11,11 +11,13 @@ import com.copyright.rup.dist.foreign.domain.common.util.UsageBatchUtils;
 import com.copyright.rup.dist.foreign.service.impl.csv.UsageCsvProcessor;
 import com.copyright.rup.dist.foreign.vui.common.validator.AmountRangeValidator;
 import com.copyright.rup.dist.foreign.vui.common.validator.RequiredBigDecimalValidator;
+import com.copyright.rup.dist.foreign.vui.common.validator.RequiredLongValidator;
 import com.copyright.rup.dist.foreign.vui.common.validator.RequiredValidator;
 import com.copyright.rup.dist.foreign.vui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.vui.usage.api.fas.IFasUsageController;
 import com.copyright.rup.dist.foreign.vui.usage.impl.ErrorUploadWindow;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.Buttons;
+import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.LongField;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.upload.UploadField;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.Windows;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.util.VaadinUtils;
@@ -30,6 +32,7 @@ import com.vaadin.flow.component.textfield.BigDecimalField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.BindingValidationStatus;
+import com.vaadin.flow.data.validator.LongRangeValidator;
 import com.vaadin.flow.data.validator.StringLengthValidator;
 import com.vaadin.flow.function.ValueProvider;
 
@@ -58,8 +61,8 @@ public class UsageBatchUploadWindow extends CommonDialog {
 
     private TextField usageBatchNameField;
     private UploadField uploadField;
-    private TextField accountNumberField;
-    private Binder.Binding<UsageBatch, String> accountNumberBinding;
+    private LongField accountNumberField;
+    private Binder.Binding<UsageBatch, Long> accountNumberBinding;
     private TextField productFamilyField;
     private TextField accountNameField;
     private Rightsholder rro;
@@ -206,16 +209,15 @@ public class UsageBatchUploadWindow extends CommonDialog {
         return verticalLayout;
     }
 
-    private TextField initRightsholderAccountNumberField() {
-        accountNumberField = new TextField(ForeignUi.getMessage("label.rro_account_number"));
+    private LongField initRightsholderAccountNumberField() {
+        accountNumberField = new LongField(ForeignUi.getMessage("label.rro_account_number"));
         accountNumberField.setRequiredIndicatorVisible(true);
         accountNumberBinding = binder.forField(accountNumberField)
-            .withValidator(requiredValidator)
-            .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.number_length", 10), 0, 10))
-            .withValidator(value -> StringUtils.isNumeric(StringUtils.trim(value)),
-                ForeignUi.getMessage("field.error.not_numeric"))
-            .bind(usageBatch -> usageBatch.getRro().getAccountNumber().toString(),
-                (usageBatch, value) -> usageBatch.getRro().setAccountNumber(Long.valueOf(value)));
+            .withValidator(new RequiredLongValidator())
+            .withValidator(
+                new LongRangeValidator(ForeignUi.getMessage("field.error.number_length", 10), 1L, 9999999999L))
+            .bind(usageBatch -> usageBatch.getRro().getAccountNumber(),
+                (usageBatch, value) -> usageBatch.getRro().setAccountNumber(value));
         VaadinUtils.setMaxComponentsWidth(accountNumberField);
         VaadinUtils.addComponentStyle(accountNumberField, "rro-account-number-field");
         accountNumberField.addValueChangeListener(event -> {
@@ -237,7 +239,7 @@ public class UsageBatchUploadWindow extends CommonDialog {
         var button = Buttons.createButton(ForeignUi.getMessage("button.verify"));
         button.addClickListener(event -> {
             if (BindingValidationStatus.Status.OK == accountNumberBinding.validate().getStatus()) {
-                rro = usagesController.getRightsholder(Long.valueOf(StringUtils.trim(accountNumberField.getValue())));
+                rro = usagesController.getRightsholder(accountNumberField.getValue());
                 if (StringUtils.isNotBlank(rro.getName())) {
                     accountNameField.setValue(rro.getName());
                     productFamilyField.setValue(
