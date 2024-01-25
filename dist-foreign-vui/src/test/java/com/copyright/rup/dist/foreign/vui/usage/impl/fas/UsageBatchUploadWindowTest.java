@@ -4,10 +4,12 @@ import static com.copyright.rup.dist.foreign.vui.UiTestHelper.assertFieldValidat
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.getDialogContent;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.getFooterLayout;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.setBigDecimalFieldValue;
+import static com.copyright.rup.dist.foreign.vui.UiTestHelper.setLongFieldValue;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.setTextFieldValue;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyBigDecimalField;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyButton;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyLoadClickListener;
+import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyLongField;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyTextField;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyUploadComponent;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyWindow;
@@ -34,6 +36,7 @@ import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.service.impl.csv.UsageCsvProcessor;
 import com.copyright.rup.dist.foreign.vui.usage.api.fas.IFasUsageController;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.security.SecurityUtils;
+import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.LongField;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.upload.UploadField;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.Windows;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.LocalDateWidget;
@@ -96,7 +99,6 @@ public class UsageBatchUploadWindowTest {
     private static final String EMPTY_MESSAGE = "Field value should be specified";
     private static final String INVALID_USAGE_BATCH_LENGTH_MESSAGE = "Field value should not exceed 50 characters";
     private static final String USAGE_BATCH_EXISTS_MESSAGE = "Usage Batch with such name already exists";
-    private static final String INVALID_NUMBER_MESSAGE = "Field value should contain numeric values only";
     private static final String INVALID_NUMBER_LENGTH_MESSAGE = "Field value should not exceed 10 digits";
     private static final String INVALID_GROSS_AMOUNT_LENGTH_MESSAGE =
         "Field value should be positive number and should not exceed 10 digits";
@@ -151,17 +153,12 @@ public class UsageBatchUploadWindowTest {
     public void testIsValidAccountNumberField() {
         replay(controller);
         window = new UsageBatchUploadWindow(controller);
-        TextField accountNumberField = Whitebox.getInternalState(window, ACCOUNT_NUMBER_FIELD);
+        LongField accountNumberField = Whitebox.getInternalState(window, ACCOUNT_NUMBER_FIELD);
         Binder<?> binder = Whitebox.getInternalState(window, "binder");
-        assertFieldValidationMessage(accountNumberField, StringUtils.EMPTY, binder, EMPTY_MESSAGE, false);
-        assertFieldValidationMessage(accountNumberField, "   ", binder, EMPTY_MESSAGE, false);
-        assertFieldValidationMessage(accountNumberField, "10000018631", binder, INVALID_NUMBER_LENGTH_MESSAGE, false);
-        assertFieldValidationMessage(accountNumberField, "9999999999.99", binder, INVALID_NUMBER_LENGTH_MESSAGE,
-            false);
-        assertFieldValidationMessage(accountNumberField, "0.00", binder, INVALID_NUMBER_MESSAGE, false);
-        assertFieldValidationMessage(accountNumberField, "value", binder, INVALID_NUMBER_MESSAGE, false);
-        assertFieldValidationMessage(accountNumberField, "0", binder, null, true);
-        assertFieldValidationMessage(accountNumberField, FAS_RRO_ACCOUNT_NUMBER.toString(), binder, null, true);
+        assertFieldValidationMessage(accountNumberField, 10000018631L, binder, INVALID_NUMBER_LENGTH_MESSAGE, false);
+        assertFieldValidationMessage(accountNumberField, 0L, binder, INVALID_NUMBER_LENGTH_MESSAGE, false);
+        assertFieldValidationMessage(accountNumberField, 1L, binder, null, true);
+        assertFieldValidationMessage(accountNumberField, FAS_RRO_ACCOUNT_NUMBER, binder, null, true);
         verify(controller);
     }
 
@@ -196,7 +193,7 @@ public class UsageBatchUploadWindowTest {
         UploadField uploadField = Whitebox.getInternalState(window, UploadField.class);
         Whitebox.setInternalState(uploadField, "fileName", "test.csv");
         assertFalse(window.isValid());
-        setTextFieldValue(window, ACCOUNT_NUMBER_FIELD, FAS_RRO_ACCOUNT_NUMBER.toString());
+        setLongFieldValue(window, ACCOUNT_NUMBER_FIELD, FAS_RRO_ACCOUNT_NUMBER.toString());
         assertFalse(window.isValid());
         TextField accountNameField = Whitebox.getInternalState(window, ACCOUNT_NAME_FIELD);
         accountNameField.setReadOnly(false);
@@ -237,7 +234,7 @@ public class UsageBatchUploadWindowTest {
         expectLastCall().once();
         replay(Windows.class, window, controller, uploadField, processor);
         setTextFieldValue(window, USAGE_BATCH_NAME_FIELD, USAGE_BATCH_NAME);
-        setTextFieldValue(window, ACCOUNT_NUMBER_FIELD, FAS_RRO_ACCOUNT_NUMBER.toString());
+        setLongFieldValue(window, ACCOUNT_NUMBER_FIELD, FAS_RRO_ACCOUNT_NUMBER.toString());
         setTextFieldValue(window, PRODUCT_FAMILY_FIELD, FAS_PRODUCT_FAMILY);
         setTextFieldValue(window, ACCOUNT_NAME_FIELD, RRO_NAME);
         Whitebox.setInternalState(window, "rro", rro);
@@ -293,7 +290,7 @@ public class UsageBatchUploadWindowTest {
         assertTrue(accountNameField.isReadOnly());
         assertEquals(2, horizontalLayout.getComponentCount());
         var rroAccountLayout = (HorizontalLayout) horizontalLayout.getComponentAt(0);
-        var accountNumberField = verifyTextField(rroAccountLayout.getComponentAt(0), "RRO Account #", WIDTH_CALC,
+        var accountNumberField = verifyLongField(rroAccountLayout.getComponentAt(0), "RRO Account #", WIDTH_CALC,
             "rro-account-number-field");
         var productFamilyField = verifyTextField(rroAccountLayout.getComponentAt(1), "Product Family", WIDTH_CALC,
             "product-family-field");
@@ -302,7 +299,7 @@ public class UsageBatchUploadWindowTest {
             productFamilyField);
     }
 
-    private void verifyVerifyButton(Component component, TextField accountNumberField, TextField accountNameField,
+    private void verifyVerifyButton(Component component, LongField accountNumberField, TextField accountNameField,
                                     TextField productFamilyField) {
         assertThat(component, instanceOf(Button.class));
         var verifyButton = (Button) component;
@@ -312,23 +309,19 @@ public class UsageBatchUploadWindowTest {
         verifyButton.click();
         assertEquals(StringUtils.EMPTY, accountNameField.getValue());
         assertEquals(StringUtils.EMPTY, productFamilyField.getValue());
-        accountNumberField.setValue("value");
+        accountNumberField.setValue(123456789874541246L);
         verifyButton.click();
         assertEquals(StringUtils.EMPTY, accountNameField.getValue());
         assertEquals(StringUtils.EMPTY, productFamilyField.getValue());
-        accountNumberField.setValue("123456789874541246");
-        verifyButton.click();
-        assertEquals(StringUtils.EMPTY, accountNameField.getValue());
-        assertEquals(StringUtils.EMPTY, productFamilyField.getValue());
-        accountNumberField.setValue(FAS_RRO_ACCOUNT_NUMBER.toString());
+        accountNumberField.setValue(FAS_RRO_ACCOUNT_NUMBER);
         verifyButton.click();
         assertEquals(FAS_RRO_ACCOUNT_NAME, accountNameField.getValue());
         assertEquals(FAS_PRODUCT_FAMILY, productFamilyField.getValue());
-        accountNumberField.setValue(CLA_RRO_ACCOUNT_NUMBER.toString());
+        accountNumberField.setValue(CLA_RRO_ACCOUNT_NUMBER);
         verifyButton.click();
         assertEquals(CLA_RRO_ACCOUNT_NAME, accountNameField.getValue());
         assertEquals(FAS2_PRODUCT_FAMILY, productFamilyField.getValue());
-        accountNumberField.setValue(UNKNOWN_ACCOUNT_NAME.toString());
+        accountNumberField.setValue(UNKNOWN_ACCOUNT_NAME);
         verifyButton.click();
         assertEquals(StringUtils.EMPTY, accountNameField.getValue());
         assertEquals(StringUtils.EMPTY, productFamilyField.getValue());
