@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.vui;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -38,13 +39,17 @@ import com.vaadin.flow.component.textfield.BigDecimalField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.BindingValidationStatus;
+import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.data.provider.ListDataProvider;
+import com.vaadin.flow.data.provider.Query;
 import com.vaadin.flow.dom.Element;
+import com.vaadin.flow.function.ValueProvider;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.hamcrest.core.IsInstanceOf;
 import org.powermock.reflect.Whitebox;
 
+import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Iterator;
@@ -415,6 +420,33 @@ public final class UiTestHelper {
             columns.stream().map(Column::getHeaderText).collect(Collectors.toList()));
         assertEquals(columnsToWidth.stream().map(Pair::getRight).collect(Collectors.toList()),
             columns.stream().map(Column::getWidth).collect(Collectors.toList()));
+    }
+
+    /**
+     * Verifies grid items.
+     *
+     * @param grid          grid
+     * @param expectedItems expected items
+     * @param expectedCells expected cells
+     */
+    @SuppressWarnings("unchecked")
+    public static <T> void verifyGridItems(Grid grid, List<T> expectedItems, Object[]... expectedCells) {
+        DataProvider<T, ?> dataProvider = grid.getDataProvider();
+        assertEquals(expectedItems.size(), dataProvider.size(new Query<>()));
+        assertEquals(expectedItems, dataProvider.fetch(new Query<>()).collect(Collectors.toList()));
+        List<Grid.Column<T>> columns = grid.getColumns();
+        Object[][] actualCells = (Object[][]) Array.newInstance(Object.class, expectedItems.size(), columns.size());
+        for (int y = 0; y < expectedItems.size(); y++) {
+            for (int x = 0; x < columns.size(); x++) {
+                ValueProvider<T, ?> valueProvider =
+                    columns.get(x).getRenderer().getValueProviders().get(String.format("col%s", x));
+                Object actualResult = valueProvider.apply(expectedItems.get(y));
+                actualCells[y][x] = actualResult instanceof Button
+                    ? ((Button) actualResult).getText()
+                    : actualResult;
+            }
+        }
+        assertArrayEquals(expectedCells, actualCells);
     }
 
     /**

@@ -1,9 +1,11 @@
 package com.copyright.rup.dist.foreign.vui.scenario.impl.fas;
 
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyGrid;
+import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyGridItems;
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.reset;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
@@ -12,11 +14,15 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
+import com.copyright.rup.dist.common.test.TestUtils;
+import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancy;
 import com.copyright.rup.dist.foreign.vui.UiTestHelper;
 import com.copyright.rup.dist.foreign.vui.scenario.api.fas.IFasScenariosController;
 import com.copyright.rup.dist.foreign.vui.scenario.api.fas.IReconcileRightsholdersController;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.downloader.OnDemandFileDownloader;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
@@ -33,6 +39,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.List;
@@ -53,11 +60,16 @@ import java.util.function.Supplier;
 @PowerMockIgnore({"com.sun.org.apache.xerces.*", "javax.xml.*", "org.xml.*", "javax.management.*"})
 public class RightsholderDiscrepanciesWindowTest {
 
+    private final List<RightsholderDiscrepancy> rightsholderDiscrepancies =
+        loadExpectedRightsholderDiscrepancy("rightsholder_discrepancy_123456789.json");
+
     private RightsholderDiscrepanciesWindow window;
+    private IReconcileRightsholdersController controller;
+
 
     @Before
     public void setUp() throws Exception {
-        IReconcileRightsholdersController controller = createMock(IReconcileRightsholdersController.class);
+        controller = createMock(IReconcileRightsholdersController.class);
         IFasScenariosController scenariosController = createMock(IFasScenariosController.class);
         mockStatic(UI.class);
         UI ui = createMock(UI.class);
@@ -71,6 +83,7 @@ public class RightsholderDiscrepanciesWindowTest {
         replay(controller, streamSource, ui, UI.class);
         window = new RightsholderDiscrepanciesWindow(controller, scenariosController);
         verify(controller, streamSource, ui, UI.class);
+        reset(controller, streamSource);
     }
 
     @Test
@@ -96,7 +109,15 @@ public class RightsholderDiscrepanciesWindowTest {
 
     @Test
     public void testGridValues() {
-        //TODO: {Vaadin23} will implement later
+        expect(controller.loadBeans(0, Integer.MAX_VALUE, List.of())).andReturn(rightsholderDiscrepancies).once();
+        expect(controller.getBeansCount()).andReturn(1).once();
+        replay(controller);
+        Grid<?> grid = (Grid<?>) ((VerticalLayout) UiTestHelper.getDialogContent(window)).getComponentAt(0);
+        Object[][] expectedCells = {
+            {"1000009522", "Zoological Society of Pakistan [T]", "2000070936", "Frances Lincoln Ltd", "123456789",
+                "504 absolutely essential words"}
+        };
+        verifyGridItems(grid, rightsholderDiscrepancies, expectedCells);
     }
 
     public void verifyButtonsLayout(Component component) {
@@ -113,5 +134,16 @@ public class RightsholderDiscrepanciesWindowTest {
         assertThat(cancelButton, instanceOf(Button.class));
         assertEquals("Cancel", ((Button) cancelButton).getText());
         assertEquals("rightsholder-discrepancies-buttons-layout", layout.getId().orElseThrow());
+    }
+
+    private List<RightsholderDiscrepancy> loadExpectedRightsholderDiscrepancy(String fileName) {
+        try {
+            String content = TestUtils.fileToString(this.getClass(), fileName);
+            ObjectMapper mapper = new ObjectMapper();
+            return mapper.readValue(content, new TypeReference<>() {
+            });
+        } catch (IOException e) {
+            throw new AssertionError(e);
+        }
     }
 }

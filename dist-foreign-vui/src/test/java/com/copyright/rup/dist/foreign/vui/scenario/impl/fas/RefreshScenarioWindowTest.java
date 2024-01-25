@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.vui.scenario.impl.fas;
 
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyGrid;
+import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyGridItems;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyWindow;
 
 import static org.easymock.EasyMock.expect;
@@ -14,10 +15,17 @@ import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.dist.common.test.TestUtils;
+import com.copyright.rup.dist.foreign.domain.UsageDto;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.vui.UiTestHelper;
 import com.copyright.rup.dist.foreign.vui.scenario.api.fas.IFasScenariosController;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.Windows;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
@@ -31,6 +39,7 @@ import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -46,6 +55,8 @@ import java.util.List;
 @PrepareForTest({Windows.class})
 @PowerMockIgnore({"com.sun.org.apache.xerces.*", "javax.xml.*", "org.xml.*", "javax.management.*"})
 public class RefreshScenarioWindowTest {
+
+    private final List<UsageDto> usages = loadExpectedUsageDto("usage_dto_377594f8.json");
 
     @Test
     public void testStructure() {
@@ -90,7 +101,16 @@ public class RefreshScenarioWindowTest {
 
     @Test
     public void testGridValues() {
-        //TODO: {vaadin23} will implement later
+        RefreshScenarioWindow window = new RefreshScenarioWindow(query -> usages.stream(), query -> 1, null);
+        Grid<?> grid = (Grid<?>) ((VerticalLayout) UiTestHelper.getDialogContent(window)).getComponentAt(1);
+        Object[][] expectedCells = {
+            {"377594f8-a247-4277-b29f-0b33ff360a7e", UsageStatusEnum.PAID.name(), "FAS", "Paid batch", "1000000004",
+                "Computers for Design and Construction", "1000002859", "John Wiley & Sons - Books", "243904752",
+                "100 ROAD MOVIES", "1008902112317555XX", "1008902112317555XX", "VALISBN13", "FY2021", "02/12/2021",
+                "100 ROAD MOVIES", "some article", "some publisher", "02/13/2021", "2", "3,000.00", "500.00",
+                "1,000.00", "lib", "1980", "2000", "author", "usage from usages_10.csv"}
+        };
+        verifyGridItems(grid, usages, expectedCells);
     }
 
     @Test
@@ -121,5 +141,18 @@ public class RefreshScenarioWindowTest {
         replay(controller, Windows.class);
         okButton.click();
         verify(controller, Windows.class);
+    }
+
+    private List<UsageDto> loadExpectedUsageDto(String fileName) {
+        try {
+            String content = TestUtils.fileToString(this.getClass(), fileName);
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.registerModule(new JavaTimeModule());
+            mapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
+            return mapper.readValue(content, new TypeReference<List<UsageDto>>() {
+            });
+        } catch (IOException e) {
+            throw new AssertionError(e);
+        }
     }
 }
