@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.vui.usage.impl.fas;
 
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.getDialogContent;
+import static com.copyright.rup.dist.foreign.vui.UiTestHelper.getFooterLayout;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyLoadClickListener;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyUploadComponent;
@@ -32,7 +33,6 @@ import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.Wind
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
 import org.junit.Before;
@@ -71,7 +71,7 @@ public class ResearchedUsagesUploadWindowTest {
     public void testConstructor() {
         replay(controller);
         window = new ResearchedUsagesUploadWindow(controller);
-        verifyWindow(window, "Upload Researched Details", "540px", "270px", Unit.PIXELS, false);
+        verifyWindow(window, "Upload Researched Details", "520px", "265px", Unit.PIXELS, false);
         verifyRootLayout(getDialogContent(window));
         verify(controller);
     }
@@ -124,10 +124,11 @@ public class ResearchedUsagesUploadWindowTest {
     private void verifyRootLayout(Component component) {
         assertThat(component, instanceOf(VerticalLayout.class));
         var verticalLayout = (VerticalLayout) component;
-        assertEquals(2, verticalLayout.getComponentCount());
+        assertEquals(1, verticalLayout.getComponentCount());
         verifyUploadComponent(verticalLayout.getComponentAt(0), "calc(99.9% - 0rem)");
-        verifyButtonsLayout(verticalLayout.getComponentAt(1), true, "Upload", "Close");
-        var loadButton = (Button) ((HorizontalLayout) (verticalLayout.getComponentAt(1))).getComponentAt(0);
+        var buttonsLayout = getFooterLayout(window);
+        verifyButtonsLayout(buttonsLayout, true, "Upload", "Close");
+        var loadButton = (Button) buttonsLayout.getComponentAt(0);
         verifyLoadClickListener(loadButton);
     }
 }

@@ -116,7 +116,7 @@ public abstract class CommonAppliedFilterPanel extends Section {
      */
     protected void addLabel(Label label, VerticalLayout verticalLayout) {
         if (Objects.nonNull(label)) {
-            //TODO {aliakh} implement label.setStyleName("v-label-white-space-normal");
+            label.addClassName("v-label-white-space-normal");
             verticalLayout.add(label);
         }
     }

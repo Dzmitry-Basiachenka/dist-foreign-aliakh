@@ -48,8 +48,9 @@ class ResearchedUsagesUploadWindow extends CommonDialog {
         this.usagesController = usagesController;
         super.add(initRootLayout());
         super.setHeaderTitle(ForeignUi.getMessage("window.upload_researched_usages"));
-        super.setWidth("540px");
-        super.setHeight("270px");
+        super.setWidth("520px");
+        super.setHeight("265px");
+        super.getFooter().add(initButtonsLayout());
         setModalWindowProperties("researched-usages-upload-window", false);
     }
 
@@ -94,12 +95,7 @@ class ResearchedUsagesUploadWindow extends CommonDialog {
     }
 
     private VerticalLayout initRootLayout() {
-        var buttonsLayout = initButtonsLayout();
-        var rootLayout = new VerticalLayout();
-        rootLayout.add(initUploadField(), buttonsLayout);
-        rootLayout.setSpacing(true);
-        VaadinUtils.setMaxComponentsWidth(rootLayout);
-        return rootLayout;
+        return new VerticalLayout(initUploadField());
     }
 
     private UploadField initUploadField() {
@@ -122,8 +118,8 @@ class ResearchedUsagesUploadWindow extends CommonDialog {
         uploadButton.addClickListener(event -> onUploadClicked());
         var closeButton = Buttons.createCloseButton(this);
         VaadinUtils.setButtonsAutoDisabled(uploadButton);
-        var horizontalLayout = new HorizontalLayout();
-        horizontalLayout.add(uploadButton, closeButton);
-        return horizontalLayout;
+        var buttonsLayout = new HorizontalLayout();
+        buttonsLayout.add(uploadButton, closeButton);
+        return buttonsLayout;
     }
 }
