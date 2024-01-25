@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.vui.usage.impl.fas;
 
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.assertFieldValidationMessage;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.getDialogContent;
+import static com.copyright.rup.dist.foreign.vui.UiTestHelper.getFooterLayout;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.setBigDecimalFieldValue;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.setTextFieldValue;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyBigDecimalField;
@@ -259,13 +260,13 @@ public class UsageBatchUploadWindowTest {
     private void verifyRootLayout(Component component) {
         assertThat(component, instanceOf(VerticalLayout.class));
         var verticalLayout = (VerticalLayout) component;
-        assertEquals(6, verticalLayout.getComponentCount());
+        assertEquals(5, verticalLayout.getComponentCount());
         verifyUsageBatchNameComponent(verticalLayout.getComponentAt(0));
         verifyUploadComponent(verticalLayout.getComponentAt(1), WIDTH_CALC);
         verifyRightsholdersComponents(verticalLayout.getComponentAt(2));
         verifyDateComponents(verticalLayout.getComponentAt(3));
         verifyGrossAmount(verticalLayout.getComponentAt(4));
-        verifyButtonsLayout(verticalLayout.getComponentAt(5));
+        verifyButtonsLayout(getFooterLayout(window));
     }
 
     private void verifyUsageBatchNameComponent(Component component) {

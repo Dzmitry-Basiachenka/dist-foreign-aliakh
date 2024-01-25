@@ -78,6 +78,7 @@ public class UsageBatchUploadWindow extends CommonDialog {
         super.setHeaderTitle(ForeignUi.getMessage("window.upload_usage_batch"));
         super.setWidth("590px");
         super.setHeight("700px");
+        super.getFooter().add(initButtonsLayout());
         setModalWindowProperties("usage-upload-window", false);
     }
 
@@ -133,11 +134,11 @@ public class UsageBatchUploadWindow extends CommonDialog {
     }
 
     private VerticalLayout initRootLayout() {
-        var buttonsLayout = initButtonsLayout();
         var rootLayout = new VerticalLayout();
         rootLayout.add(initUsageBatchNameField(), initUploadField(), initRightsholderLayout(),
-            initPaymentDataLayout(), initGrossAmountLayout(), buttonsLayout);
+            initPaymentDataLayout(), initGrossAmountLayout());
         rootLayout.setSpacing(false);
+        rootLayout.setPadding(false);
         rootLayout.setMargin(false);
         rootLayout.setSizeFull();
         VaadinUtils.addComponentStyle(rootLayout, "usage-batch-upload-widget-layout");
@@ -181,9 +182,9 @@ public class UsageBatchUploadWindow extends CommonDialog {
         var uploadButton = Buttons.createButton(ForeignUi.getMessage("button.upload"));
         uploadButton.addClickListener(event -> onUploadClicked());
         VaadinUtils.setButtonsAutoDisabled(uploadButton);
-        var horizontalLayout = new HorizontalLayout();
-        horizontalLayout.add(uploadButton, closeButton);
-        return horizontalLayout;
+        var buttonsLayout = new HorizontalLayout();
+        buttonsLayout.add(uploadButton, closeButton);
+        return buttonsLayout;
     }
 
     private VerticalLayout initRightsholderLayout() {
@@ -191,16 +192,15 @@ public class UsageBatchUploadWindow extends CommonDialog {
         var rroAccountLayout = new HorizontalLayout();
         var accountNumber = initRightsholderAccountNumberField();
         var productFamily = initProductFamilyField();
-        var verifyButton = initVerifyButton();
-        verifyButton.setWidth("72px");
         rroAccountLayout.add(accountNumber, productFamily);
         rroAccountLayout.setSizeFull();
-        var horizontalLayout = new HorizontalLayout(rroAccountLayout, verifyButton);
+        var horizontalLayout = new HorizontalLayout(rroAccountLayout, initVerifyButton());
         horizontalLayout.setSizeFull();
         var accountName = initRightsholderAccountNameField();
         accountName.setSizeFull();
         verticalLayout.add(horizontalLayout, accountName);
         verticalLayout.setSpacing(false);
+        verticalLayout.setPadding(false);
         verticalLayout.setMargin(false);
         verticalLayout.setSizeFull();
         return verticalLayout;
