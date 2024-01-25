@@ -3,8 +3,14 @@
 * @see https://vaadin.com/docs/latest/styling/custom-theme/style-scopes
 */
 
-[part='input-field'] {
+:host(.global-product-family-select) [part='input-field'] {
    height: 20px;
+   font-weight: bold;
+   background: var(--tabsheet-background-color);
+}
+
+[part='input-field'] {
+   height: 28px;
 }
 
 [class$='container'] {

@@ -14,6 +14,7 @@ import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.api.IMediator;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.api.IMediatorProvider;
 
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
 import com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -36,7 +37,7 @@ public class MainWidget extends TabSheet implements IMainWidget, IMediatorProvid
     private static final long serialVersionUID = 2631811534809187222L;
 
     private IMainWidgetController controller;
-    private Select<String> productFamilySelect = new Select<>(ForeignUi.getMessage("label.product_family"));
+    private Select<String> productFamilySelect;
 
     private SwitchableWidget<ICommonUsageWidget, ICommonUsageController> usagesWidget;
     private SwitchableWidget<ICommonScenariosWidget, ICommonScenariosController> scenariosWidget;
@@ -47,8 +48,7 @@ public class MainWidget extends TabSheet implements IMainWidget, IMediatorProvid
     @SuppressWarnings("unchecked")
     public MainWidget init() {
         VaadinUtils.addComponentStyle(this, Cornerstone.MAIN_TABSHEET);
-        usagesWidget = new SwitchableWidget<>(controller.getUsagesControllerProvider(), widget -> {
-        });
+        usagesWidget = new SwitchableWidget<>(controller.getUsagesControllerProvider(), widget -> {});
         scenariosWidget = new SwitchableWidget<>(controller.getScenariosControllerProvider(), widget -> {});
         usagesTab = addTab(ForeignUi.getMessage("tab.usages"), usagesWidget, "main-usages-tab");
         scenariosTab = addTab(ForeignUi.getMessage("tab.scenarios"), scenariosWidget, "main-scenarios-tab");
@@ -89,22 +89,28 @@ public class MainWidget extends TabSheet implements IMainWidget, IMediatorProvid
     private HorizontalLayout createSuffixComponent() {
         var horizontalLayout = new HorizontalLayout();
         var refreshIcon = Buttons.createRefreshIcon();
-        productFamilySelect = initProductFamilySelect();
         refreshIcon.addClickListener(event -> controller.refreshWidget());
-        horizontalLayout.add(productFamilySelect, refreshIcon);
+        horizontalLayout.add(initProductFamilySelectLayout(), refreshIcon);
         horizontalLayout.setJustifyContentMode(JustifyContentMode.END);
         horizontalLayout.setDefaultVerticalComponentAlignment(Alignment.CENTER);
         VaadinUtils.addComponentStyle(horizontalLayout, "reports-tab-refresh-button-layout");
         return horizontalLayout;
     }
 
-    private Select<String> initProductFamilySelect() {
+    private HorizontalLayout initProductFamilySelectLayout() {
+        var selectLayout = new HorizontalLayout();
+        selectLayout.setPadding(false);
+        selectLayout.setSpacing(false);
+        VaadinUtils.addComponentStyle(selectLayout, "global-product-family-select-layout");
+        var productFamilyLabel = new Label(ForeignUi.getMessage("label.product_family"));
+        productFamilySelect = new Select<>();
         productFamilySelect.addValueChangeListener(event -> {
             controller.getProductFamilyProvider().setProductFamily(event.getValue());
             controller.onProductFamilyChanged();
         });
-        productFamilySelect.setWidth("200px");
+        productFamilySelect.setWidth("95px");
         VaadinUtils.addComponentStyle(productFamilySelect, "global-product-family-select");
-        return productFamilySelect;
+        selectLayout.add(productFamilyLabel, productFamilySelect);
+        return selectLayout;
     }
 }
