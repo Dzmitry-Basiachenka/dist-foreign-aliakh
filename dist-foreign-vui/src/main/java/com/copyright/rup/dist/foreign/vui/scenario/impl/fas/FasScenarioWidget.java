@@ -9,6 +9,8 @@ import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.downloader.
 import com.copyright.rup.dist.foreign.vui.vaadin.common.util.VaadinUtils;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.api.IMediator;
 
+import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -52,6 +54,11 @@ public class FasScenarioWidget extends CommonScenarioWidget implements IFasScena
     public void refreshTable() {
         getDataProvider().refreshAll();
         updateFooter();
+    }
+
+    @Override
+    public void fireWidgetEvent(ComponentEvent<Component> event) {
+        fireEvent(event);
     }
 
     @Override
