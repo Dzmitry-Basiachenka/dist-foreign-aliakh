@@ -76,10 +76,12 @@ public class FasNtsUsageFilterWidget extends CommonUsageFilterWidget implements 
         initPaymentDateFilter();
         initFiscalYearFilter();
         initStatusFilter();
-        var verticalLayout = new VerticalLayout(buildFiltersHeaderLabel(), buildUsageBatchFilter(),
+        var filtersLayout = new VerticalLayout(buildFiltersHeaderLabel(), buildUsageBatchFilter(),
             buildRroAccountNumberFilter(), paymentDateWidget, statusComboBox, fiscalYearComboBox);
-        verticalLayout.setMargin(false);
-        return verticalLayout;
+        filtersLayout.setMargin(false);
+        filtersLayout.setSpacing(false);
+        filtersLayout.setPadding(false);
+        return filtersLayout;
     }
 
     @Override

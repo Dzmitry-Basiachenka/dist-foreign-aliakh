@@ -64,7 +64,7 @@ public abstract class CommonUsageWidget extends SplitLayout implements ICommonUs
     public ICommonUsageWidget init() {
         usagesFilterWidget = controller.initUsagesFilterWidget();
         addToPrimary((CommonUsageFilterWidget) usagesFilterWidget);
-        addToSecondary(initUsagesLayout());
+        addToSecondary(initContent());
         setSplitterPosition(15);
         setSizeFull();
         return this;
@@ -213,15 +213,15 @@ public abstract class CommonUsageWidget extends SplitLayout implements ICommonUs
         return message;
     }
 
-    private VerticalLayout initUsagesLayout() {
+    private VerticalLayout initContent() {
         initUsagesGrid();
-        var layout = new VerticalLayout(initButtonsLayout(), usagesGrid);
-        layout.setSizeFull();
-        layout.setMargin(false);
-        layout.setSpacing(false);
-        layout.setPadding(false);
-        VaadinUtils.addComponentStyle(layout, "usages-layout");
-        return layout;
+        var content = new VerticalLayout(initButtonsLayout(), usagesGrid);
+        content.setSizeFull();
+        content.setMargin(false);
+        content.setSpacing(false);
+        content.setPadding(false);
+        VaadinUtils.addComponentStyle(content, "usages-layout");
+        return content;
     }
 
     private void initUsagesGrid() {
