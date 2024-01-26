@@ -126,7 +126,7 @@ public class UsageBatchUploadWindowTest {
         expect(controller.getRightsholder(UNKNOWN_ACCOUNT_NAME)).andReturn(new Rightsholder()).once();
         replay(controller);
         window = new UsageBatchUploadWindow(controller);
-        verifyWindow(window, "Upload Usage Batch", "590px", "700px", Unit.PIXELS, false);
+        verifyWindow(window, "Upload Usage Batch", "600px", "700px", Unit.PIXELS, false);
         verifyRootLayout(getDialogContent(window));
         verify(controller);
     }

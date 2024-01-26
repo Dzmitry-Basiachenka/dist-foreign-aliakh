@@ -79,7 +79,7 @@ public class UsageBatchUploadWindow extends CommonDialog {
         this.usagesController = usagesController;
         super.add(initRootLayout());
         super.setHeaderTitle(ForeignUi.getMessage("window.upload_usage_batch"));
-        super.setWidth("590px");
+        super.setWidth("600px");
         super.setHeight("700px");
         super.getFooter().add(initButtonsLayout());
         setModalWindowProperties("usage-upload-window", false);
