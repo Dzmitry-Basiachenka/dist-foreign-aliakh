@@ -1,3 +1,50 @@
+21.0.0
+-
+* CDP-2158 FDA: Tech Debt: fix critical SonarQube code smell '"Serializable" classes should have a "serialVersionUID"'
+* CDP-2158 FDA: Tech Debt: fix critical SonarQube code smell 'String literals should not be duplicated'
+* CDP-2158 FDA: Tech Debt: fix critical SonarQube code smell 'Local-Variable Type Inference should be used'7
+* CDP-2158 FDA: Tech Debt: decrease number of critical code smells
+* CDP-2158 FDA: Tech Debt: fix security vulnerability CVE-2023-44487
+* CDP-2055: Sonarqube improvements: fix bug with redundant boxing to parse Long
+* CDP-1968 FDA: ACL - Populate payees at point of Grant Set population: fix SonarQube bug 'Methods should not call same-class methods with incompatible "@Transactional" values'
+* CDP-1768 Tech Debt: FDA: update jackson to latest version
+* CDP-1672 FDA: Vaadin Migration: FAS/FAS2 - Usages Tab: migrate window 'Upload Usage Batch'
+* CDP-1672 FDA: Vaadin Migration: FAS/FAS2 - Usages Tab: migrate window 'Upload Researched Details'
+* CDP-1672 FDA: Vaadin Migration: FAS/FAS2 - Usages Tab: migrate button 'Send for Research'
+* CDP-1672 FDA: Vaadin Migration: FAS/FAS2 - Usages Tab: migrate window 'Create Scenario'
+* CDP-1672 FDA: Vaadin Migration: FAS/FAS2 - Usages Tab: migrate window 'Update Usages'
+* CDP-1672 FDA: Vaadin Migration: FAS/FAS2 - Usages Tab: migrate interfaces of widgets and controllers
+* CDP-1672 FDA: Vaadin Migration: FAS/FAS2 - Usages Tab: migrate validators and formatters
+* CDP-1672 FDA: Vaadin Migration: FAS/FAS2 - Usages Tab: migrate filter widgets
+* CDP-1672 FDA: Vaadin Migration: FAS/FAS2 - Usages Tab: replace amount text fields with BigDecimal fields
+* CDP-1672 FDA: Vaadin Migration: FAS/FAS2 - Usages Tab: revise filter save listeners to have uniform interface
+* CDP-1672 FDA: Vaadin Migration: FAS/FAS2 - Usages Tab: migrate filter widgets and controllers
+* CDP-1672 FDA: Vaadin Migration: FAS/FAS2 - Usages Tab: migrate usages widget
+* CDP-1672 FDA: Vaadin Migration: FAS/FAS2 - Usages Tab: migrate window 'Upload Usage Batch'
+* CDP-1672 FDA: Vaadin Migration: FAS/FAS2 - Usages Tab: implement LongField component and apply to WrWrkInst and Rh fields
+* CDP-1672 FDA: Vaadin Migration: FAS/FAS2 - Usages Tab: adjust the size and position of widgets
+* CDP-2052 FDA: Vaadin Migration: FAS/FAS2 - Scenarios Tab Actions: migrate Edit Scenario name window
+* CDP-2052 FDA: Vaadin Migration: FAS/FAS2 - Scenarios Tab Actions: migrate Exclude Payees Window frame
+* CDP-2052 FDA: Vaadin Migration: FAS/FAS2 - Scenarios Tab Actions: migrate Exclude Payees Filter Window
+* CDP-2052 FDA: Vaadin Migration: FAS/FAS2 - Scenarios Tab Actions: migrate Exclude Payees grid
+* CDP-2052 FDA: Vaadin Migration: FAS/FAS2 - Scenarios Tab Actions: implement common scenario classes
+* CDP-2052 FDA: Vaadin Migration: FAS/FAS2 - Scenarios Tab Actions: implement common drill down by rightsholder classes
+* CDP-2052 FDA: Vaadin Migration: FAS/FAS2 - Scenarios Tab Actions: implement refresh scenario window
+* CDP-2052 FDA: Vaadin Migration: FAS/FAS2 - Scenarios Tab Actions: migrate reconcile rightsholder window
+* CDP-2052 FDA: Vaadin Migration: FAS/FAS2 - Scenarios Tab Actions: implement delete, sentToLm, aprove, reject actions
+* CDP-2052 FDA: Vaadin Migration: FAS/FAS2 - Scenarios Tab Actions: migrate apply button action on exclude payee filter widget
+* CDP-2052 FDA: Vaadin Migration: FAS/FAS2 - Scenarios Tab Actions: adjust product family select
+* CDP-2052 FDA: Vaadin Migration: FAS/FAS2 - Scenarios Tab Actions: migrate exclude rightsholder window
+* CDP-1673 FDA: Vaadin Migration: FAS/FAS2 - Scenarios Tab Main View: migrate Scenarios widget and controller logic
+* CDP-1673 FDA: Vaadin Migration: FAS/FAS2 - Scenarios Tab Main View: migrate Scenario History widget and controller logic
+* CDP-1673 FDA: Vaadin Migration: FAS/FAS2 - Scenarios Tab Main View: migrate Scenario widget and controller logic
+* CDP-1673 FDA: Vaadin Migration: FAS/FAS2 - Scenarios Tab Main View: migrate exports to Scenario widget
+* CDP-1673 FDA: Vaadin Migration: FAS/FAS2 - Scenarios Tab Main View: migrate Drill Down by RH widget and controller logic
+* CDP-1673 FDA: Vaadin Migration: FAS/FAS2 - Scenarios Tab Main View: add permissions for buttons on View Scenario window
+* CDP-1673 FDA: Vaadin Migration: FAS/FAS2 - Scenarios Tab Main View: add menu button to FAS scenario mediator
+* CDP-1673 FDA: Vaadin Migration: FAS/FAS2 - Scenarios Tab Main View: migrate Exclude Details by Source RRO window
+* CDP-1673 FDA: Vaadin Migration: FAS/FAS2 - Scenarios Tab Main View: add Scenarios tab on UI
+
 20.0.20
 -
 * CDP-1968 FDA: Populate payees at point of Grant Set population: refactor grant detail service do not refresh rightholders
