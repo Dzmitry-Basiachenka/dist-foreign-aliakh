@@ -467,6 +467,7 @@ public final class UiTestHelper {
         Object[][] actualCells = (Object[][]) Array.newInstance(Object.class, expectedItems.size(), columns.size());
         for (int y = 0; y < expectedItems.size(); y++) {
             for (int x = 0; x < columns.size(); x++) {
+                //TODO: {vaadin23} improve for column with Buttons
                 ValueProvider<T, ?> valueProvider =
                     columns.get(x).getRenderer().getValueProviders().get(String.format("col%s", x));
                 Object actualResult = valueProvider.apply(expectedItems.get(y));

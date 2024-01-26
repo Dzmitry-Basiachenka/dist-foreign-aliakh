@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.vui.scenario.api.fas;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
+import com.copyright.rup.dist.foreign.vui.scenario.api.ExcludeUsagesEvent;
 import com.copyright.rup.dist.foreign.vui.scenario.api.ICommonScenarioController;
 
 import java.util.List;
@@ -44,4 +45,11 @@ public interface IFasScenarioController extends ICommonScenarioController {
      * @param reason           reason
      */
     void deleteFromScenario(Long rroAccountNumber, List<Long> accountNumbers, String reason);
+
+    /**
+     * Fires {@link ExcludeUsagesEvent}.
+     *
+     * @param event an instance of {@link ExcludeUsagesEvent}
+     */
+    void onUsagesExcluded(ExcludeUsagesEvent event);
 }

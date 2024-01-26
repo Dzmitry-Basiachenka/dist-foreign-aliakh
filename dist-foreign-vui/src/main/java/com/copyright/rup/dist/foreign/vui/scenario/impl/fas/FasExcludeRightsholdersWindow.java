@@ -99,16 +99,20 @@ public class FasExcludeRightsholdersWindow extends CommonDialog implements ISear
     private void addColumns() {
         rightsholdersGrid.addColumn(rightsholderPayeePair -> rightsholderPayeePair.getPayee().getAccountNumber())
             .setHeader(ForeignUi.getMessage("table.column.payee_account_number"))
-            .setSortProperty("payee.accountNumber");
+            .setSortProperty("payee.accountNumber")
+            .setResizable(true);
         rightsholdersGrid.addColumn(rightsholderPayeePair -> rightsholderPayeePair.getPayee().getName())
             .setHeader(ForeignUi.getMessage("table.column.payee_name"))
-            .setSortProperty("payee.name");
+            .setSortProperty("payee.name")
+            .setResizable(true);
         rightsholdersGrid.addColumn(rightsholderPayeePair -> rightsholderPayeePair.getRightsholder().getAccountNumber())
             .setHeader(ForeignUi.getMessage("table.column.rh_account_number"))
-            .setSortProperty("rightsholder.accountNumber");
+            .setSortProperty("rightsholder.accountNumber")
+            .setResizable(true);
         rightsholdersGrid.addColumn(rightsholderPayeePair -> rightsholderPayeePair.getRightsholder().getName())
             .setHeader(ForeignUi.getMessage("table.column.rh_account_name"))
-            .setSortProperty("rightsholder.name");
+            .setSortProperty("rightsholder.name")
+            .setResizable(true);
     }
 
     private HorizontalLayout createButtonsLayout() {

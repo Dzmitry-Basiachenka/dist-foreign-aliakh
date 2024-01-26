@@ -4,11 +4,13 @@ import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.service.api.fas.IFasScenarioService;
+import com.copyright.rup.dist.foreign.vui.scenario.api.ExcludeUsagesEvent;
 import com.copyright.rup.dist.foreign.vui.scenario.api.ICommonDrillDownByRightsholderController;
 import com.copyright.rup.dist.foreign.vui.scenario.api.fas.IFasDrillDownByRightsholderController;
 import com.copyright.rup.dist.foreign.vui.scenario.api.fas.IFasScenarioController;
 import com.copyright.rup.dist.foreign.vui.scenario.api.fas.IFasScenarioWidget;
 import com.copyright.rup.dist.foreign.vui.scenario.impl.CommonScenarioController;
+import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.Windows;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -40,7 +42,7 @@ public class FasScenarioController extends CommonScenarioController implements I
 
     @Override
     public void onExcludeByRroClicked() {
-        //TODO: {dbasiachenka} implement
+        Windows.showModalWindow(new FasExcludeSourceRroWindow(this));
     }
 
     @Override
@@ -56,6 +58,11 @@ public class FasScenarioController extends CommonScenarioController implements I
     @Override
     public List<RightsholderPayeePair> getRightsholdersPayeePairs(Long rroAccountNumber) {
         return fasScenarioService.getRightsholdersByScenarioAndSourceRro(getScenario().getId(), rroAccountNumber);
+    }
+
+    @Override
+    public void onUsagesExcluded(ExcludeUsagesEvent event) {
+        ((IFasScenarioWidget) getWidget()).fireWidgetEvent(event);
     }
 
     @Override

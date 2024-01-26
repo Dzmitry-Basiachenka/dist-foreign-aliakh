@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.vui.scenario.impl.fas;
 
+import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
@@ -30,7 +31,9 @@ import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.fas.IFasScenarioService;
 import com.copyright.rup.dist.foreign.service.impl.UsageService;
+import com.copyright.rup.dist.foreign.vui.scenario.api.ExcludeUsagesEvent;
 import com.copyright.rup.dist.foreign.vui.scenario.api.fas.IFasScenarioWidget;
+import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.Windows;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.api.IWidget;
 
 import org.apache.commons.collections4.CollectionUtils;
@@ -65,7 +68,7 @@ import java.util.function.Supplier;
  * @author Ihar Suvorau
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({OffsetDateTime.class, StreamSource.class})
+@PrepareForTest({OffsetDateTime.class, StreamSource.class, Windows.class})
 @PowerMockIgnore({"com.sun.org.apache.xerces.*", "javax.xml.*", "org.xml.*", "javax.management.*"})
 public class FasScenarioControllerTest {
 
@@ -254,6 +257,29 @@ public class FasScenarioControllerTest {
         Consumer<PipedOutputStream> posConsumer = posConsumerCapture.getValue();
         posConsumer.accept(pos);
         verify(OffsetDateTime.class, streamSourceHandler, reportService);
+    }
+
+    @Test
+    public void testOnExcludeByRroClickedWithoutDiscrepancies() {
+        mockStatic(Windows.class);
+        Windows.showModalWindow(anyObject(FasExcludeSourceRroWindow.class));
+        expectLastCall().once();
+        expect(fasScenarioService.getSourceRros(SCENARIO_ID)).andReturn(
+                List.of(buildRightsholder(1000009522L, "Societa Italiana Autori ed Editori (SIAE)")))
+            .once();
+        replay(fasScenarioService, Windows.class);
+        controller.onExcludeByRroClicked();
+        verify(fasScenarioService, Windows.class);
+    }
+
+    @Test
+    public void testOnUsagesExcluded() {
+        ExcludeUsagesEvent event = createMock(ExcludeUsagesEvent.class);
+        scenarioWidget.fireWidgetEvent(event);
+        expectLastCall().once();
+        replay(scenarioWidget, event);
+        controller.onUsagesExcluded(event);
+        verify(scenarioWidget, event);
     }
 
     private Scenario buildScenario() {
