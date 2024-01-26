@@ -17,3 +17,14 @@
 :host(:hover[theme='menu-bar-item']) [part='content'] {
     color: var(--tab-text-color-hover);
 }
+
+:host([id='button-menubar']) [part='content'] {
+    margin-top: 0px;
+    color: var(--lumo-primary-text-color);
+    background: var(--button-background-color);
+    font-weight: 300;
+}
+
+:host(:hover[id='button-menubar']) [part='content'] {
+    color: var(--button-color-hover);
+}

@@ -157,7 +157,9 @@ public class FasUsageWidget extends CommonUsageWidget implements IFasUsageWidget
             item -> Windows.showModalWindow(new UsageBatchUploadWindow(controller)));
         menuItem.getSubMenu().addItem(ForeignUi.getMessage("menu.item.view"),
             item -> Windows.showModalWindow(new ViewUsageBatchWindow(controller)));
+        VaadinUtils.addComponentStyle(menuItem, "button-menubar");
         VaadinUtils.addComponentStyle(usageBatchMenuBar, "usage-batch-menu-bar");
+        VaadinUtils.addComponentStyle(usageBatchMenuBar, "button-menubar");
     }
 
     private void initUpdateUsagesButton() {
