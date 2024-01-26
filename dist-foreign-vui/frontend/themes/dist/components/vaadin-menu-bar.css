@@ -1,0 +1,9 @@
+/**
+* Styles for menu bar button. (Reports tab)
+* @see https://vaadin.com/docs/latest/styling/custom-theme/style-scopes
+*/
+
+[part='container'] {
+    height: 28px;
+    margin-top: -2px;
+}
