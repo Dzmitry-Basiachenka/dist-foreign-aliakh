@@ -4,11 +4,13 @@ import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.vui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.vui.scenario.api.IScenarioHistoryController;
+import com.copyright.rup.dist.foreign.vui.scenario.api.IScenariosMediator;
 import com.copyright.rup.dist.foreign.vui.scenario.api.fas.IFasScenariosController;
 import com.copyright.rup.dist.foreign.vui.scenario.api.fas.IFasScenariosWidget;
 import com.copyright.rup.dist.foreign.vui.scenario.impl.CommonScenariosWidget;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.Buttons;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.util.VaadinUtils;
+import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.api.IMediator;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Div;
@@ -44,6 +46,7 @@ public class FasScenariosWidget extends CommonScenariosWidget implements IFasSce
     private final Div descriptionDiv = new Div();
     private final Div selectionCriteriaDiv = new Div();
     private final IFasScenariosController controller;
+    private FasScenariosMediator mediator;
 
     /**
      * Constructor.
@@ -54,6 +57,23 @@ public class FasScenariosWidget extends CommonScenariosWidget implements IFasSce
     FasScenariosWidget(IFasScenariosController fasScenariosController, IScenarioHistoryController historyController) {
         super(historyController);
         controller = fasScenariosController;
+    }
+
+    @Override
+    public IMediator initMediator() {
+        mediator = new FasScenariosMediator();
+        mediator.setViewButton(viewButton);
+        mediator.setEditNameButton(editNameButton);
+        mediator.setDeleteButton(deleteButton);
+        mediator.setExcludePayeesButton(excludePayeesButton);
+        mediator.setReconcileRightsholdersButton(reconcileRightsholdersButton);
+        mediator.setSubmitButton(submitButton);
+        mediator.setRejectButton(rejectButton);
+        mediator.setApproveButton(approveButton);
+        mediator.setSendToLmButton(sendToLmButton);
+        mediator.setRefreshScenarioButton(refreshScenarioButton);
+        mediator.selectedScenarioChanged(getSelectedScenario());
+        return mediator;
     }
 
     @Override
@@ -90,6 +110,11 @@ public class FasScenariosWidget extends CommonScenariosWidget implements IFasSce
         updateDivContent(descriptionDiv,
             ForeignUi.getMessage("label.description", scenarioWithAmounts.getDescription()));
         updateDivContent(selectionCriteriaDiv, getController().getCriteriaHtmlRepresentation());
+    }
+
+    @Override
+    protected IScenariosMediator getMediator() {
+        return mediator;
     }
 
     private void addButtonsListeners() {
