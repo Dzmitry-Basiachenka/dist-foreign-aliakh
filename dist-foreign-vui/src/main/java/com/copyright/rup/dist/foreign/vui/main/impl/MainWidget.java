@@ -7,6 +7,8 @@ import com.copyright.rup.dist.foreign.vui.scenario.api.ICommonScenariosControlle
 import com.copyright.rup.dist.foreign.vui.scenario.api.ICommonScenariosWidget;
 import com.copyright.rup.dist.foreign.vui.usage.api.ICommonUsageController;
 import com.copyright.rup.dist.foreign.vui.usage.api.ICommonUsageWidget;
+import com.copyright.rup.dist.foreign.vui.usage.api.ScenarioCreateEvent;
+import com.copyright.rup.dist.foreign.vui.usage.impl.CommonUsageWidget;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.themes.Cornerstone;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.Buttons;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.util.VaadinUtils;
@@ -14,6 +16,7 @@ import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.api.IMediator;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.api.IMediatorProvider;
 
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.ComponentUtil;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
 import com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode;
@@ -48,7 +51,9 @@ public class MainWidget extends TabSheet implements IMainWidget, IMediatorProvid
     @SuppressWarnings("unchecked")
     public MainWidget init() {
         VaadinUtils.addComponentStyle(this, Cornerstone.MAIN_TABSHEET);
-        usagesWidget = new SwitchableWidget<>(controller.getUsagesControllerProvider(), widget -> {});
+        usagesWidget = new SwitchableWidget<>(controller.getUsagesControllerProvider(), widget ->
+            ComponentUtil.addListener((CommonUsageWidget) widget, ScenarioCreateEvent.class,
+                event -> controller.onScenarioCreated(event)));
         scenariosWidget = new SwitchableWidget<>(controller.getScenariosControllerProvider(), widget -> {});
         usagesTab = addTab(ForeignUi.getMessage("tab.usages"), usagesWidget, "main-usages-tab");
         scenariosTab = addTab(ForeignUi.getMessage("tab.scenarios"), scenariosWidget, "main-scenarios-tab");

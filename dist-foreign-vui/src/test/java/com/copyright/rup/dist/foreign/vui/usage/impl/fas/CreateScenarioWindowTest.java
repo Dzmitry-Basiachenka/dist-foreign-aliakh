@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.vui.usage.impl.fas;
 
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.assertFieldValidationMessage;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.getDialogContent;
+import static com.copyright.rup.dist.foreign.vui.UiTestHelper.getFooterLayout;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyButton;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyWindow;
@@ -27,7 +28,6 @@ import com.copyright.rup.dist.foreign.vui.usage.api.fas.IFasUsageController;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.Unit;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
@@ -71,13 +71,13 @@ public class CreateScenarioWindowTest {
         replay(controller);
         var window = new CreateScenarioWindow(controller);
         verify(controller);
-        verifyWindow(window, "Create Scenario", "650px", null, Unit.PIXELS, false);
+        verifyWindow(window, "Create Scenario", "600px", null, Unit.PIXELS, false);
         assertEquals("create-scenario-window", window.getId().get());
         var content = (VerticalLayout) getDialogContent(window);
-        assertEquals(3, content.getComponentCount());
+        assertEquals(2, content.getComponentCount());
         verifyScenarioNameField(content.getComponentAt(0));
         verifyDescriptionArea(content.getComponentAt(1));
-        verifyButtonsLayout(content.getComponentAt(2), true, "Confirm", "Cancel");
+        verifyButtonsLayout(getFooterLayout(window), true, "Confirm", "Cancel");
     }
 
     @Test
@@ -89,8 +89,7 @@ public class CreateScenarioWindowTest {
         expect(controller.scenarioExists(SCENARIO_NAME)).andReturn(false).times(2);
         replay(controller, scenarioService);
         var window = new TestCreateScenarioWindow(controller);
-        var content = (VerticalLayout) getDialogContent(window);
-        var buttonsLayout = (HorizontalLayout) content.getComponentAt(2);
+        var buttonsLayout = getFooterLayout(window);
         var confirmButton = verifyButton(buttonsLayout.getComponentAt(0), "Confirm", true);
         confirmButton.click();
         var event = window.getComponentEvent();
@@ -109,8 +108,7 @@ public class CreateScenarioWindowTest {
         replay(controller, scenarioService);
         var window = new TestCreateScenarioWindow(controller);
         assertFalse(window.isClosed());
-        var content = (VerticalLayout) getDialogContent(window);
-        var buttonsLayout = (HorizontalLayout) content.getComponentAt(2);
+        var buttonsLayout = getFooterLayout(window);
         var cancelButton = verifyButton(buttonsLayout.getComponentAt(1), "Cancel", true);
         cancelButton.click();
         assertTrue(window.isClosed());
