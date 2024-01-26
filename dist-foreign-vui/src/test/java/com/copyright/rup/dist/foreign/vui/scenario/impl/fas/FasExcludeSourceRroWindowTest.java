@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.vui.scenario.impl.fas;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.getDialogContent;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.getFooterComponent;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyButton;
+import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyGridItems;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifySize;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyWindow;
 
@@ -76,7 +77,12 @@ public class FasExcludeSourceRroWindowTest {
 
     @Test
     public void testGridValues() {
-        //TODO: {vaadin23} implement
+        Grid<?> grid = (Grid<?>) ((VerticalLayout) getDialogContent(window)).getComponentAt(1);
+        Object[][] expectedCells = {
+            {"2000017004", "Access Copyright, The Canadian Copyright Agency", "Exclude"},
+            {"2000017006", "CAL, Copyright Agency Limited", "Exclude"}
+        };
+        verifyGridItems(grid, rightsholders, expectedCells);
     }
 
     @Test

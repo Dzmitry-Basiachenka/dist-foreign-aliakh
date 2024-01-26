@@ -28,6 +28,8 @@ import com.vaadin.flow.component.checkbox.CheckboxGroup;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.contextmenu.MenuItem;
 import com.vaadin.flow.component.dialog.Dialog;
+import com.vaadin.flow.component.grid.FooterRow;
+import com.vaadin.flow.component.grid.FooterRow.FooterCell;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.Grid.Column;
 import com.vaadin.flow.component.html.Div;
@@ -43,9 +45,12 @@ import com.vaadin.flow.data.binder.BindingValidationStatus;
 import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.data.provider.Query;
+import com.vaadin.flow.data.renderer.Renderer;
 import com.vaadin.flow.dom.Element;
+import com.vaadin.flow.function.SerializableFunction;
 import com.vaadin.flow.function.ValueProvider;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.hamcrest.core.IsInstanceOf;
 import org.powermock.reflect.Whitebox;
@@ -55,6 +60,7 @@ import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -467,16 +473,41 @@ public final class UiTestHelper {
         Object[][] actualCells = (Object[][]) Array.newInstance(Object.class, expectedItems.size(), columns.size());
         for (int y = 0; y < expectedItems.size(); y++) {
             for (int x = 0; x < columns.size(); x++) {
-                //TODO: {vaadin23} improve for column with Buttons
-                ValueProvider<T, ?> valueProvider =
-                    columns.get(x).getRenderer().getValueProviders().get(String.format("col%s", x));
-                Object actualResult = valueProvider.apply(expectedItems.get(y));
-                actualCells[y][x] = actualResult instanceof Button
-                    ? ((Button) actualResult).getText()
-                    : actualResult;
+                Renderer<T> renderer = columns.get(x).getRenderer();
+                Map<String, ValueProvider<T, ?>> valueProvidersMap = renderer.getValueProviders();
+                if (valueProvidersMap.isEmpty()) {
+                    SerializableFunction<T, ?> componentFunction =
+                        Whitebox.getInternalState(renderer, "componentFunction");
+                    actualCells[y][x] = ((Button) componentFunction.apply(expectedItems.get(y))).getText();
+                } else {
+                    ValueProvider<T, ?> valueProvider = valueProvidersMap.get(String.format("col%s", x));
+                    actualCells[y][x] = valueProvider.apply(expectedItems.get(y));
+                }
             }
         }
         assertArrayEquals(expectedCells, actualCells);
+    }
+
+    /**
+     * Verifies grid footer items.
+     *
+     * @param grid                  grid
+     * @param rowNumber             row number
+     * @param footerTitle           footer title
+     * @param expectedFooterColumns expected footer columns
+     */
+    public static void verifyFooterItems(Grid<?> grid, int rowNumber, String footerTitle,
+                                         Object[]... expectedFooterColumns) {
+        FooterRow footerRow = grid.getFooterRows().get(rowNumber);
+        assertNotNull(footerRow);
+        assertEquals(footerTitle, footerRow.getCells().get(0).getText());
+        for (Object[] expectedFooterColumn : expectedFooterColumns) {
+            FooterCell footerCell = footerRow.getCell(grid.getColumnByKey((String) expectedFooterColumn[0]));
+            Label label = (Label) footerCell.getComponent();
+            Html html = (Html) label.getChildren().findFirst().orElseThrow();
+            assertTrue(StringUtils.contains(html.getInnerHtml(), (String) expectedFooterColumn[1]));
+            assertEquals(expectedFooterColumn[2], label.getClassName());
+        }
     }
 
     /**
