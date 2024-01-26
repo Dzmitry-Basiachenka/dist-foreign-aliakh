@@ -25,6 +25,7 @@ import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.CommonDialog;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.LocalDateWidget;
 
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -80,7 +81,7 @@ public class UsageBatchUploadWindow extends CommonDialog {
         super.add(initRootLayout());
         super.setHeaderTitle(ForeignUi.getMessage("window.upload_usage_batch"));
         super.setWidth("600px");
-        super.setHeight("700px");
+        super.setHeight("670px");
         super.getFooter().add(initButtonsLayout());
         setModalWindowProperties("usage-upload-window", false);
     }
@@ -137,13 +138,9 @@ public class UsageBatchUploadWindow extends CommonDialog {
     }
 
     private VerticalLayout initRootLayout() {
-        var rootLayout = new VerticalLayout();
+        var rootLayout = VaadinUtils.initCommonVerticalLayout();
         rootLayout.add(initUsageBatchNameField(), initUploadField(), initRightsholderLayout(),
             initPaymentDataLayout(), initGrossAmountLayout());
-        rootLayout.setSpacing(false);
-        rootLayout.setPadding(false);
-        rootLayout.setMargin(false);
-        rootLayout.setSizeFull();
         VaadinUtils.addComponentStyle(rootLayout, "usage-batch-upload-widget-layout");
         binder.validate();
         return rootLayout;
@@ -158,7 +155,6 @@ public class UsageBatchUploadWindow extends CommonDialog {
             .withValidator(value -> !usagesController.usageBatchExists(StringUtils.trimToEmpty(value)),
                 ForeignUi.getMessage("message.error.unique_name", "Usage Batch"))
             .bind(UsageBatch::getName, UsageBatch::setName);
-        usageBatchNameField.setSizeFull();
         VaadinUtils.setMaxComponentsWidth(usageBatchNameField);
         VaadinUtils.addComponentStyle(usageBatchNameField, "usage-batch-name-field");
         return usageBatchNameField;
@@ -166,7 +162,6 @@ public class UsageBatchUploadWindow extends CommonDialog {
 
     private UploadField initUploadField() {
         uploadField = new UploadField();
-        uploadField.setSizeFull();
         uploadField.setRequiredIndicatorVisible(true);
         uploadBinder.forField(uploadField)
             .withValidator(requiredValidator)
@@ -191,26 +186,13 @@ public class UsageBatchUploadWindow extends CommonDialog {
     }
 
     private VerticalLayout initRightsholderLayout() {
-        var verticalLayout = new VerticalLayout();
-        var rroAccountLayout = new HorizontalLayout();
-        var accountNumber = initRightsholderAccountNumberField();
-        var productFamily = initProductFamilyField();
-        rroAccountLayout.add(accountNumber, productFamily);
+        var rroAccountLayout = new HorizontalLayout(initRightsholderAccountNumberField(), initProductFamilyField());
+        rroAccountLayout.setWidthFull();
         rroAccountLayout.setDefaultVerticalComponentAlignment(Alignment.BASELINE);
-        rroAccountLayout.setSizeFull();
-        var verifyButton = initVerifyButton();
-        verifyButton.setWidth("72px");
-        var horizontalLayout = new HorizontalLayout(rroAccountLayout, verifyButton);
-        horizontalLayout.setSizeFull();
+        var horizontalLayout = new HorizontalLayout(rroAccountLayout, initVerifyButton());
+        horizontalLayout.setWidthFull();
         horizontalLayout.setDefaultVerticalComponentAlignment(Alignment.BASELINE);
-        var accountName = initRightsholderAccountNameField();
-        accountName.setSizeFull();
-        verticalLayout.add(horizontalLayout, accountName);
-        verticalLayout.setSpacing(false);
-        verticalLayout.setPadding(false);
-        verticalLayout.setMargin(false);
-        verticalLayout.setSizeFull();
-        return verticalLayout;
+        return VaadinUtils.initCommonVerticalLayout(horizontalLayout, initRightsholderAccountNameField());
     }
 
     private LongField initRightsholderAccountNumberField() {
@@ -241,6 +223,7 @@ public class UsageBatchUploadWindow extends CommonDialog {
 
     private Button initVerifyButton() {
         var button = Buttons.createButton(ForeignUi.getMessage("button.verify"));
+        button.setWidth("72px");
         button.addClickListener(event -> {
             if (BindingValidationStatus.Status.OK == accountNumberBinding.validate().getStatus()) {
                 rro = usagesController.getRightsholder(accountNumberField.getValue());
@@ -262,11 +245,11 @@ public class UsageBatchUploadWindow extends CommonDialog {
         accountNameField = new TextField(ForeignUi.getMessage("label.rro_account_name"));
         accountNameField.setRequiredIndicatorVisible(true);
         accountNameField.setReadOnly(true);
+        accountNameField.setWidthFull();
         binder.forField(accountNameField)
             .asRequired(ForeignUi.getMessage("field.error.rro_name.empty"))
             .bind(usageBatch -> usageBatch.getRro().getName(),
                 (usageBatch, value) -> usageBatch.getRro().setName(value));
-        VaadinUtils.setMaxComponentsWidth(accountNameField);
         VaadinUtils.addComponentStyle(accountNameField, "rro-account-name-field");
         return accountNameField;
     }
@@ -275,7 +258,7 @@ public class UsageBatchUploadWindow extends CommonDialog {
         var horizontalLayout = new HorizontalLayout();
         horizontalLayout.add(initPaymentDateWidget(), initFiscalYearField());
         horizontalLayout.setDefaultVerticalComponentAlignment(Alignment.BASELINE);
-        horizontalLayout.setSizeFull();
+        horizontalLayout.setWidthFull();
         return horizontalLayout;
     }
 
@@ -308,6 +291,7 @@ public class UsageBatchUploadWindow extends CommonDialog {
 
     private BigDecimalField initGrossAmountField() {
         grossAmountField = new BigDecimalField(ForeignUi.getMessage("label.gross_amount_usd"));
+        grossAmountField.setPrefixComponent(VaadinIcon.DOLLAR.create());
         grossAmountField.setRequiredIndicatorVisible(true);
         binder.forField(grossAmountField)
             .withValidator(new RequiredBigDecimalValidator())

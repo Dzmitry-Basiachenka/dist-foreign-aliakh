@@ -7,6 +7,7 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.dom.Style;
 
 import org.apache.commons.lang3.ArrayUtils;
@@ -150,5 +151,21 @@ public final class VaadinUtils {
                 element.setEnabled(enabled);
             }
         }
+    }
+
+    /**
+     * Initializes vertical layout without spacing, padding and margin by default.
+     *
+     * @param components components to be added to vertical layout, can be empty
+     * @return new instance of {@link VerticalLayout}
+     */
+    public static VerticalLayout initCommonVerticalLayout(Component... components) {
+        VerticalLayout layout = new VerticalLayout();
+        layout.setSpacing(false);
+        layout.setPadding(false);
+        layout.setMargin(false);
+        layout.setWidthFull();
+        layout.add(components);
+        return layout;
     }
 }

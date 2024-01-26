@@ -20,6 +20,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.powermock.api.easymock.PowerMock.createMock;
@@ -44,6 +45,7 @@ import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.LocalDateWidget;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.BigDecimalField;
@@ -126,7 +128,7 @@ public class UsageBatchUploadWindowTest {
         expect(controller.getRightsholder(UNKNOWN_ACCOUNT_NAME)).andReturn(new Rightsholder()).once();
         replay(controller);
         window = new UsageBatchUploadWindow(controller);
-        verifyWindow(window, "Upload Usage Batch", "600px", "700px", Unit.PIXELS, false);
+        verifyWindow(window, "Upload Usage Batch", "600px", "670px", Unit.PIXELS, false);
         verifyRootLayout(getDialogContent(window));
         verify(controller);
     }
@@ -347,8 +349,11 @@ public class UsageBatchUploadWindowTest {
         assertThat(component, instanceOf(HorizontalLayout.class));
         var horizontalLayout = (HorizontalLayout) component;
         assertEquals(1, horizontalLayout.getComponentCount());
-        verifyBigDecimalField(horizontalLayout.getComponentAt(0), "Gross Amount in USD", WIDTH_CALC,
-            "gross-amount-field");
+        BigDecimalField grossAmountField = verifyBigDecimalField(horizontalLayout.getComponentAt(0),
+            "Gross Amount in USD", WIDTH_CALC, "gross-amount-field");
+        Component prefixComponent = grossAmountField.getPrefixComponent();
+        assertNotNull(prefixComponent);
+        assertThat(prefixComponent, instanceOf(Icon.class));
     }
 
     private UsageBatch buildUsageBatch(Rightsholder rro) {
