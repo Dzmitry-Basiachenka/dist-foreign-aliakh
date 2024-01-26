@@ -25,7 +25,6 @@ import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.CommonDialog;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.LocalDateWidget;
 
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -197,10 +196,13 @@ public class UsageBatchUploadWindow extends CommonDialog {
         var accountNumber = initRightsholderAccountNumberField();
         var productFamily = initProductFamilyField();
         rroAccountLayout.add(accountNumber, productFamily);
+        rroAccountLayout.setDefaultVerticalComponentAlignment(Alignment.BASELINE);
         rroAccountLayout.setSizeFull();
-        var horizontalLayout = new HorizontalLayout(rroAccountLayout, initVerifyButton());
+        var verifyButton = initVerifyButton();
+        verifyButton.setWidth("72px");
+        var horizontalLayout = new HorizontalLayout(rroAccountLayout, verifyButton);
         horizontalLayout.setSizeFull();
-        horizontalLayout.setDefaultVerticalComponentAlignment(Alignment.CENTER);
+        horizontalLayout.setDefaultVerticalComponentAlignment(Alignment.BASELINE);
         var accountName = initRightsholderAccountNameField();
         accountName.setSizeFull();
         verticalLayout.add(horizontalLayout, accountName);
@@ -272,6 +274,7 @@ public class UsageBatchUploadWindow extends CommonDialog {
     private HorizontalLayout initPaymentDataLayout() {
         var horizontalLayout = new HorizontalLayout();
         horizontalLayout.add(initPaymentDateWidget(), initFiscalYearField());
+        horizontalLayout.setDefaultVerticalComponentAlignment(Alignment.BASELINE);
         horizontalLayout.setSizeFull();
         return horizontalLayout;
     }
@@ -298,8 +301,8 @@ public class UsageBatchUploadWindow extends CommonDialog {
 
     private HorizontalLayout initGrossAmountLayout() {
         var horizontalLayout = new HorizontalLayout();
-        horizontalLayout.add(initGrossAmountField(), new Label());
-        horizontalLayout.setSizeFull();
+        horizontalLayout.add(initGrossAmountField());
+        horizontalLayout.setWidth("50%");
         return horizontalLayout;
     }
 
