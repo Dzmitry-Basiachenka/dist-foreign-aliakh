@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.vui.scenario.impl.fas;
 
+import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyGridItems;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifySize;
 
 import static org.easymock.EasyMock.capture;
@@ -97,6 +98,7 @@ public class FasScenariosWidgetTest {
         expect(controller.getScenarios()).andReturn(List.of(scenario)).once();
         replay(controller);
         scenariosWidget.init();
+        scenariosWidget.initMediator();
         verify(controller);
         reset(controller);
     }
@@ -120,14 +122,14 @@ public class FasScenariosWidgetTest {
 
     @Test
     public void testInitMediator() {
-        //TODO: {dbasiachenka} implement
+        assertThat(scenariosWidget.initMediator(), instanceOf(FasScenariosMediator.class));
     }
 
     @Test
     public void testRefresh() {
         expect(controller.getScenarios()).andReturn(List.of(scenario)).once();
-        expect(controller.getScenarioWithAmountsAndLastAction(scenario)).andReturn(scenario).times(2);
-        expect(controller.getCriteriaHtmlRepresentation()).andReturn(SELECTION_CRITERIA).times(2);
+        expect(controller.getScenarioWithAmountsAndLastAction(scenario)).andReturn(scenario).once();
+        expect(controller.getCriteriaHtmlRepresentation()).andReturn(SELECTION_CRITERIA).once();
         replay(controller);
         scenariosWidget.refresh();
         verifyScenarioMetadataPanel();
@@ -190,8 +192,8 @@ public class FasScenariosWidgetTest {
         expect(scenarioHistoryController.initWidget()).andReturn(scenarioHistoryWidget).once();
         expect(scenarioHistoryController.getActions(scenario.getId())).andReturn(List.of()).once();
         expect(controller.getScenarios()).andReturn(List.of(scenario)).once();
-        expect(controller.getScenarioWithAmountsAndLastAction(scenario)).andReturn(scenario).times(2);
-        expect(controller.getCriteriaHtmlRepresentation()).andReturn(StringUtils.EMPTY).times(2);
+        expect(controller.getScenarioWithAmountsAndLastAction(scenario)).andReturn(scenario).once();
+        expect(controller.getCriteriaHtmlRepresentation()).andReturn(StringUtils.EMPTY).once();
         Capture<ScenarioHistoryWidget> historyWidgetCapture = newCapture();
         Windows.showModalWindow(capture(historyWidgetCapture));
         expectLastCall().once();
@@ -208,6 +210,13 @@ public class FasScenariosWidgetTest {
         assertEquals("History for FAS Distribution 04/07/2022 scenario",
             historyWidgetCapture.getValue().getHeaderTitle());
         verify(Windows.class, controller, scenarioHistoryController);
+    }
+
+    @Test
+    public void testGridValues() {
+        Grid<?> grid = (Grid<?>) ((SplitLayout) scenariosWidget.getComponentAt(1)).getPrimaryComponent();
+        Object[][] expectedCells = {{"FAS Distribution 04/07/2022", "04/07/2022", "IN_PROGRESS"}};
+        verifyGridItems(grid, List.of(scenario), expectedCells);
     }
 
     private void verifyScroller(Component component) {

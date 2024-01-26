@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.vui.scenario.api;
 
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.api.IMediatorProvider;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.api.IRefreshable;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.api.IWidget;
 
@@ -13,7 +14,7 @@ import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.api.IWidget;
  *
  * @author Stanislau Rudak
  */
-public interface ICommonScenariosWidget extends IWidget<ICommonScenariosController>, IRefreshable {
+public interface ICommonScenariosWidget extends IWidget<ICommonScenariosController>, IRefreshable, IMediatorProvider {
 
     /**
      * Selects specified {@link Scenario} in grid.

@@ -8,6 +8,7 @@ import com.copyright.rup.dist.foreign.vui.scenario.api.ICommonScenariosControlle
 import com.copyright.rup.dist.foreign.vui.scenario.api.ICommonScenariosWidget;
 import com.copyright.rup.dist.foreign.vui.scenario.api.IScenarioHistoryController;
 import com.copyright.rup.dist.foreign.vui.scenario.api.IScenarioHistoryWidget;
+import com.copyright.rup.dist.foreign.vui.scenario.api.IScenariosMediator;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.Buttons;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.Windows;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.util.CurrencyUtils;
@@ -94,7 +95,6 @@ public abstract class CommonScenariosWidget extends VerticalLayout implements IC
         scenarioGrid.setDataProvider(dataProvider);
         if (CollectionUtils.isNotEmpty(scenarios)) {
             selectScenario(scenarios.get(0));
-            refreshSelectedScenario();
         }
     }
 
@@ -171,6 +171,11 @@ public abstract class CommonScenariosWidget extends VerticalLayout implements IC
      * @see ICommonScenariosController#getScenarioWithAmountsAndLastAction(Scenario)
      */
     protected abstract void updateScenarioMetadata(Scenario scenarioWithAmounts);
+
+    /**
+     * @return an {@link IScenariosMediator} instance.
+     */
+    protected abstract IScenariosMediator getMediator();
 
     /**
      * Updates div content.
@@ -276,8 +281,7 @@ public abstract class CommonScenariosWidget extends VerticalLayout implements IC
             }
             metadataPanel.add(metadataLayout);
         }
-        //TODO: {dbasiachenka} uncomment after migration of mediator
-        //getMediator().selectedScenarioChanged(scenario);
+        getMediator().selectedScenarioChanged(scenario);
     }
 
     private String getStringFromDate(Date date) {
