@@ -22,7 +22,7 @@
     margin-top: 0px;
     color: var(--lumo-primary-text-color);
     background: var(--button-background-color);
-    font-weight: 300;
+    font-weight: 500;
 }
 
 :host(:hover[id='button-menubar']) [part='content'] {
