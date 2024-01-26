@@ -19,7 +19,7 @@ public class LongField extends AbstractNumberField<LongField, Long> {
 
     private static final SerializableFunction<String, Long> PARSER = value -> {
         try {
-            return StringUtils.isNotEmpty(value) ? Long.parseLong(value) : null;
+            return StringUtils.isNotEmpty(value) ? Long.valueOf(value) : null;
         } catch (NumberFormatException e) {
             return null;
         }
