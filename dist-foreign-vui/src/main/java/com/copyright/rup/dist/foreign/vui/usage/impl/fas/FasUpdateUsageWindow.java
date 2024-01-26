@@ -110,9 +110,9 @@ class FasUpdateUsageWindow extends CommonDialog implements IFasUpdateUsageWindow
     }
 
     private void switchSelectAllCheckBoxVisibility(int beansCount) {
-        boolean selectAllCheckBoxVisibility = 0 == beansCount || beansCount > controller.getRecordsThreshold();
+        boolean selectAllCheckBoxVisibility = 0 < beansCount && beansCount < controller.getRecordsThreshold();
         gridSelectionModel.setSelectAllCheckboxVisibility(selectAllCheckBoxVisibility
-            ? SelectAllCheckboxVisibility.HIDDEN : SelectAllCheckboxVisibility.VISIBLE);
+            ? SelectAllCheckboxVisibility.VISIBLE : SelectAllCheckboxVisibility.HIDDEN);
         if (selectAllCheckBoxVisibility) {
             gridSelectionModel.setSelectionColumnFrozen(true);
         }

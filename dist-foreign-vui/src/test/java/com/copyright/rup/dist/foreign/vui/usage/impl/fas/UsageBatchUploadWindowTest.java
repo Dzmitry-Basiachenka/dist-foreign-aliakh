@@ -346,7 +346,7 @@ public class UsageBatchUploadWindowTest {
     private void verifyGrossAmount(Component component) {
         assertThat(component, instanceOf(HorizontalLayout.class));
         var horizontalLayout = (HorizontalLayout) component;
-        assertEquals(2, horizontalLayout.getComponentCount());
+        assertEquals(1, horizontalLayout.getComponentCount());
         verifyBigDecimalField(horizontalLayout.getComponentAt(0), "Gross Amount in USD", WIDTH_CALC,
             "gross-amount-field");
     }

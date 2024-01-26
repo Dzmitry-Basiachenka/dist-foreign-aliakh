@@ -35,7 +35,7 @@ public abstract class CommonUsageAppliedFilterWidget extends CommonAppliedFilter
     public CommonUsageAppliedFilterWidget(ICommonUsageFilterController controller) {
         super();
         this.controller = controller;
-        VaadinUtils.addComponentStyle(this, "aclci-usage-filter-panel-widget");
+        VaadinUtils.addComponentStyle(this, "usage-filter-panel-widget");
     }
 
     /**
