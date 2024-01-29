@@ -13,6 +13,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
+
 /**
  * Implementation of {@link com.copyright.rup.dist.foreign.vui.main.api.IControllerProvider} for usage controllers.
  * <p>
@@ -26,13 +28,24 @@ import java.util.Map;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class UsagesControllerProvider extends CommonControllerProvider<ICommonUsageController> {
 
+    private Map<String, ICommonUsageController> productFamilyMap;
+
     @Autowired
     private IFasUsageController fasUsagesController;
 
+    /**
+     * Initialises product family map.
+     */
+    @PostConstruct
+    public void initProductFamilyMap() {
+        productFamilyMap = ImmutableMap.<String, ICommonUsageController>builder()
+            .put(FdaConstants.FAS_PRODUCT_FAMILY, fasUsagesController)
+            .put(FdaConstants.CLA_FAS_PRODUCT_FAMILY, fasUsagesController)
+            .build();
+    }
+
     @Override
     protected Map<String, ICommonUsageController> getProductFamilyToControllerMap() {
-        return ImmutableMap.<String, ICommonUsageController>builder()
-            .put(FdaConstants.FAS_PRODUCT_FAMILY, fasUsagesController)
-            .build();
+        return productFamilyMap;
     }
 }
