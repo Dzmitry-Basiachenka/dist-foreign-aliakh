@@ -75,7 +75,7 @@ public class ConfirmActionDialogWindow extends Dialog {
         VaadinUtils.setMaxComponentsWidth(reasonField);
         VerticalLayout contentLayout = new VerticalLayout(contentLabel, reasonField);
         contentLayout.setClassName("v-label-white-space-normal");
-        contentLayout.setWidth(100, Unit.PERCENTAGE);
+        contentLayout.setWidthFull();
         return contentLayout;
     }
 

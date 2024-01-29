@@ -75,9 +75,7 @@ public class FasExcludeSourceRroWindow extends CommonDialog implements ISearchCo
         searchWidget = new SearchWidget(this);
         searchWidget.setPrompt(ForeignUi.getMessage("field.prompt.scenario.search_widget.rro"));
         initGrid();
-        var layout = new VerticalLayout(searchWidget, grid);
-        layout.setSpacing(false);
-        layout.setSizeFull();
+        var layout = VaadinUtils.initCommonVerticalLayout(searchWidget, grid);
         VaadinUtils.setPadding(layout, 3, 10, 10, 10);
         getFooter().add(Buttons.createCancelButton(this));
         return layout;

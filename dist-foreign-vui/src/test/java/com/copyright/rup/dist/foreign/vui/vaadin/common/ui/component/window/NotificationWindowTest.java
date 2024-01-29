@@ -57,7 +57,7 @@ public class NotificationWindowTest {
         verifyLabel(verticalLayout.getComponentAt(0));
         verifyButton(getButtonFromFooter(widget, 0));
         assertTrue(verticalLayout.isSpacing());
-        assertEquals("100.0%", verticalLayout.getWidth());
+        assertEquals("100%", verticalLayout.getWidth());
         assertEquals(Unit.PERCENTAGE, verticalLayout.getWidthUnit().orElseThrow());
     }
 

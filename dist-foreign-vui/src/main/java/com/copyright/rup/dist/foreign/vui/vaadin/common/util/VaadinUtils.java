@@ -101,7 +101,8 @@ public final class VaadinUtils {
      * @param style class name for css
      */
     public static void setGridProperties(Grid<?> grid, String style) {
-        grid.addThemeVariants(GridVariant.LUMO_COMPACT,
+        grid.addThemeVariants(
+            GridVariant.LUMO_COMPACT,
             GridVariant.LUMO_COLUMN_BORDERS,
             GridVariant.LUMO_ROW_STRIPES
         );

@@ -139,7 +139,7 @@ public class ConfirmActionDialogWindowTest {
         VerticalLayout contentLayout = (VerticalLayout) component;
         assertEquals(2, contentLayout.getComponentCount());
         assertNotNull(contentLayout);
-        assertEquals("100.0%", contentLayout.getWidth());
+        assertEquals("100%", contentLayout.getWidth());
         assertEquals(Unit.PERCENTAGE, contentLayout.getWidthUnit().orElseThrow());
         assertTrue(contentLayout.isSpacing());
         assertEquals(2, contentLayout.getComponentCount());

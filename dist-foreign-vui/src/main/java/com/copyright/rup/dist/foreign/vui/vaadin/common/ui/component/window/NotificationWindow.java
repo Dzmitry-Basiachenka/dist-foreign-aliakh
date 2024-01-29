@@ -58,7 +58,7 @@ public final class NotificationWindow extends CommonDialog {
         VerticalLayout layout = new VerticalLayout(label);
         layout.setClassName("v-layout-white-space-normal");
         layout.setClassName("v-layout-notification-window");
-        layout.setWidth(100, Unit.PERCENTAGE);
+        layout.setWidthFull();
         return layout;
     }
 }

@@ -15,7 +15,6 @@ import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.SearchWidget.ISea
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.Grid.SelectionMode;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.data.validator.StringLengthValidator;
 
@@ -80,11 +79,8 @@ public class FasExcludeRightsholdersWindow extends CommonDialog implements ISear
         searchWidget.setPrompt(ForeignUi.getMessage("field.prompt.scenario.search_widget.rh_payee"));
         setModalWindowProperties("exclude-rightsholders-window", true);
         initGrid();
-        var layout = new VerticalLayout(searchWidget, rightsholdersGrid);
         getFooter().add(createButtonsLayout());
-        layout.setMargin(false);
-        layout.setSizeFull();
-        add(layout);
+        add(VaadinUtils.initCommonVerticalLayout(searchWidget, rightsholdersGrid));
     }
 
     private void initGrid() {

@@ -228,8 +228,8 @@ public abstract class CommonScenariosWidget extends VerticalLayout implements IC
     }
 
     private VerticalLayout initScenarioActionLayout() {
-        var actionMetadataLayout = VaadinUtils.initCommonVerticalLayout(actionType, actionCreatedUser,
-            actionCreatedDate, actionReason);
+        var actionMetadataLayout =
+            VaadinUtils.initCommonVerticalLayout(actionType, actionCreatedUser, actionCreatedDate, actionReason);
         VaadinUtils.setPadding(actionMetadataLayout, 0, 0, 0, 20);
         var viewAllActionsButton = Buttons.createLinkButton(ForeignUi.getMessage("button.caption.view_all_actions"));
         viewAllActionsButton.addClickListener(event -> {
@@ -239,8 +239,8 @@ public abstract class CommonScenariosWidget extends VerticalLayout implements IC
         });
         var lastActionCaption =
             new Html(String.format("<div><b>%s</b></div>", ForeignUi.getMessage("label.scenario.action")));
-        var layout = VaadinUtils.initCommonVerticalLayout(lastActionCaption, actionMetadataLayout,
-            viewAllActionsButton);
+        var layout =
+            VaadinUtils.initCommonVerticalLayout(lastActionCaption, actionMetadataLayout, viewAllActionsButton);
         layout.setHorizontalComponentAlignment(Alignment.END, viewAllActionsButton);
         VaadinUtils.addComponentStyle(layout, "scenario-last-action");
         VaadinUtils.setMaxComponentsWidth(layout, actionType, actionCreatedUser, actionCreatedDate, actionReason);

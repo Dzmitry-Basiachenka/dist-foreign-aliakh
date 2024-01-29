@@ -91,8 +91,8 @@ public class FasScenariosWidget extends CommonScenariosWidget implements IFasSce
 
     @Override
     protected VerticalLayout initMetadataLayout() {
-        var metadataLayout = new VerticalLayout(ownerDiv, grossTotalDiv, serviceFeeTotalDiv, netTotalDiv,
-            descriptionDiv, selectionCriteriaDiv);
+        var amountsLayout = VaadinUtils.initCommonVerticalLayout(grossTotalDiv, serviceFeeTotalDiv, netTotalDiv);
+        var metadataLayout = new VerticalLayout(ownerDiv, amountsLayout, descriptionDiv, selectionCriteriaDiv);
         VaadinUtils.setMaxComponentsWidth(ownerDiv, grossTotalDiv, serviceFeeTotalDiv, netTotalDiv, descriptionDiv,
             selectionCriteriaDiv);
         metadataLayout.setMargin(false);

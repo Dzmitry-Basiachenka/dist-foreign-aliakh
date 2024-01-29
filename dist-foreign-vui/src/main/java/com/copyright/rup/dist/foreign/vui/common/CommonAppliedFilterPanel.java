@@ -127,10 +127,7 @@ public abstract class CommonAppliedFilterPanel extends Section {
      * @return instance of {@link VerticalLayout}
      */
     protected VerticalLayout initFilterPanel() {
-        var filterPanel = new VerticalLayout();
-        filterPanel.setSpacing(false);
-        VaadinUtils.setMaxComponentsWidth(filterPanel);
-        return filterPanel;
+        return VaadinUtils.initCommonVerticalLayout();
     }
 
     /**

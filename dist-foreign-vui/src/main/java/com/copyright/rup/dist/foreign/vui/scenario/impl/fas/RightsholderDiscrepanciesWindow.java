@@ -15,7 +15,6 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.Grid.SelectionMode;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.provider.DataProvider;
 
 import org.apache.commons.collections4.CollectionUtils;
@@ -59,8 +58,8 @@ class RightsholderDiscrepanciesWindow extends CommonDialog {
     private Component initContent() {
         initGrid();
         getFooter().add(initButtons());
-        var content = new VerticalLayout(grid);
-        content.setSizeFull();
+        var content = VaadinUtils.initCommonVerticalLayout(grid);
+        content.setHeightFull();
         VaadinUtils.setGridProperties(grid, "rightsholder-discrepancies-grid");
         return content;
     }

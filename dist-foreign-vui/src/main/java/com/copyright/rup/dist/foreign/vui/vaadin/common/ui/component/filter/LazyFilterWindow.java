@@ -11,7 +11,6 @@ import com.vaadin.flow.component.grid.AbstractGridMultiSelectionModel;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.Grid.SelectionMode;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.provider.DataProvider;
 
 import org.apache.commons.lang3.StringUtils;
@@ -65,12 +64,9 @@ public class LazyFilterWindow<T> extends CommonFilterWindow<T> {
         super.addFilterSaveListener(controller);
         super.setWidth(550, Unit.PIXELS);
         super.setHeight(530, Unit.PIXELS);
-        var content = new VerticalLayout();
         searchWidget = new SearchWidget(() -> dataProvider.refreshAll());
-        content.add(searchWidget, initGrid());
-        content.setMargin(false);
-        content.setSpacing(false);
-        content.setSizeFull();
+        var content = VaadinUtils.initCommonVerticalLayout(searchWidget, initGrid());
+        content.setHeightFull();
         VaadinUtils.setPadding(content, 10, 10, 10, 10);
         super.getFooter().add(createButtonsLayout(saveButtonCaption, clearButtonCaption));
         super.add(content);
