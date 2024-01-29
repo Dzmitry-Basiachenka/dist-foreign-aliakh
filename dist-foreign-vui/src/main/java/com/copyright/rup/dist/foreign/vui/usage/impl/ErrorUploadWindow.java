@@ -39,8 +39,8 @@ public class ErrorUploadWindow extends Dialog {
         var layout = new VerticalLayout(label);
         layout.setMargin(false);
         layout.setSizeFull();
-        add(layout);
-        getFooter().add(buildButtonsLayout(streamSource));
+        super.add(layout);
+        super.getFooter().add(buildButtonsLayout(streamSource));
         VaadinUtils.addComponentStyle(this, "upload-error-window");
     }
 

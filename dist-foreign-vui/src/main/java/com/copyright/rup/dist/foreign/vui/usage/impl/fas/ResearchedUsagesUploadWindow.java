@@ -51,7 +51,7 @@ class ResearchedUsagesUploadWindow extends CommonDialog {
         super.setWidth("520px");
         super.setHeight("265px");
         super.getFooter().add(initButtonsLayout());
-        setModalWindowProperties("researched-usages-upload-window", false);
+        super.setModalWindowProperties("researched-usages-upload-window", false);
     }
 
     /**

@@ -148,12 +148,12 @@ public class UploadField extends CustomField<String> {
     private static class CustomInternationalization extends UploadI18N {
 
         CustomInternationalization() {
-            setDropFiles(new DropFiles().setOne("Drop file here").setMany("Drop files here"));
-            setAddFiles(new AddFiles().setOne("Browse").setMany("Upload Files..."));
-            setError(new Error().setTooManyFiles("Too Many Files")
+            super.setDropFiles(new DropFiles().setOne("Drop file here").setMany("Drop files here"));
+            super.setAddFiles(new AddFiles().setOne("Browse").setMany("Upload Files..."));
+            super.setError(new Error().setTooManyFiles("Too Many Files")
                 .setFileIsTooBig("File is Too Big")
                 .setIncorrectFileType("Incorrect File Type"));
-            setUploading(new Uploading()
+            super.setUploading(new Uploading()
                 .setStatus(new Uploading.Status().setConnecting("Connecting...")
                     .setStalled("Stalled")
                     .setProcessing("Processing File...").setHeld("Queued"))
@@ -164,7 +164,7 @@ public class UploadField extends CustomField<String> {
                     .setServerUnavailable("Upload failed, please try again later")
                     .setUnexpectedServerError("Upload failed due to server error")
                     .setForbidden("Upload forbidden")));
-            setUnits(new Units().setSize(List.of("B", "kB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB")));
+            super.setUnits(new Units().setSize(List.of("B", "kB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB")));
         }
     }
 }

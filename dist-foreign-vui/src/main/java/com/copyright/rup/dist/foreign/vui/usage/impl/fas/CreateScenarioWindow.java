@@ -56,7 +56,7 @@ class CreateScenarioWindow extends CommonDialog {
         content.setSizeFull();
         super.add(content);
         super.getFooter().add(initButtonsLayout());
-        setModalWindowProperties("create-scenario-window", false);
+        super.setModalWindowProperties("create-scenario-window", false);
     }
 
     private HorizontalLayout initButtonsLayout() {

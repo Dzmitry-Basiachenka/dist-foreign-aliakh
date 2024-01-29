@@ -61,7 +61,7 @@ class FasUpdateUsageWindow extends CommonDialog implements IFasUpdateUsageWindow
         super.setHeight("530px");
         super.add(initContent());
         super.setHeaderTitle(ForeignUi.getMessage("window.update_usages"));
-        setModalWindowProperties("update-usages-window", true);
+        super.setModalWindowProperties("update-usages-window", true);
     }
 
     @Override

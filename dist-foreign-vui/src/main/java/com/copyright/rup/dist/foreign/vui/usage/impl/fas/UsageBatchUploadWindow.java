@@ -83,7 +83,7 @@ public class UsageBatchUploadWindow extends CommonDialog {
         super.setWidth("500px");
         super.setHeight("570px");
         super.getFooter().add(initButtonsLayout());
-        setModalWindowProperties("usage-upload-window", false);
+        super.setModalWindowProperties("usage-upload-window", false);
     }
 
     /**
