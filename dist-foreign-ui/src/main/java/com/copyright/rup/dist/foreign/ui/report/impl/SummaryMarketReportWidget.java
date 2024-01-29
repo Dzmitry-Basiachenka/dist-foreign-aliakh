@@ -7,7 +7,6 @@ import com.copyright.rup.dist.foreign.ui.report.api.ISummaryMarketReportControll
 import com.copyright.rup.dist.foreign.ui.report.api.ISummaryMarketReportWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
-import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
@@ -20,6 +19,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
+import com.vaadin.ui.themes.ValoTheme;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -84,7 +84,7 @@ public class SummaryMarketReportWidget extends Window implements ISummaryMarketR
             exportButton.setEnabled(CollectionUtils.isNotEmpty(batches));
         });
         Panel panel = new Panel(checkBoxGroup);
-        panel.setStyleName(Cornerstone.FORMLAYOUT_LIGHT);
+        panel.setStyleName(ValoTheme.FORMLAYOUT_LIGHT);
         panel.setSizeFull();
         return panel;
     }

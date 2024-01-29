@@ -16,7 +16,6 @@ import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.vaadin.ui.component.filter.IFilterWindowController;
-import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
 import com.google.common.collect.ImmutableSet;
@@ -29,6 +28,7 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.themes.ValoTheme;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -106,7 +106,7 @@ public class UdmCommonProxyValueFilterWindowTest {
     @SuppressWarnings(UNCHECKED)
     private void verifyPanel(Panel panel) {
         verifyWindow(panel, null, 100, 100, Sizeable.Unit.PERCENTAGE);
-        assertEquals(Cornerstone.LABEL_LIGHT, panel.getStyleName());
+        assertEquals(ValoTheme.LABEL_LIGHT, panel.getStyleName());
         Iterator<Component> iterator = panel.iterator();
         CheckBoxGroup<String> optionGroup = (CheckBoxGroup<String>) iterator.next();
         assertTrue(optionGroup.isHtmlContentAllowed());

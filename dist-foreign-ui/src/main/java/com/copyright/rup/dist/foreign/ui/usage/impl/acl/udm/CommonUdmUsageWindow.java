@@ -2,7 +2,6 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm;
 
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
-import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 
 import com.vaadin.data.Binder;
 import com.vaadin.data.ValueProvider;
@@ -11,6 +10,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.Window;
+import com.vaadin.ui.themes.ValoTheme;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -56,7 +56,7 @@ public abstract class CommonUdmUsageWindow extends Window {
      */
     protected HorizontalLayout buildCommonLayout(Component component, String labelCaption) {
         Label label = new Label(labelCaption);
-        label.addStyleName(Cornerstone.LABEL_BOLD);
+        label.addStyleName(ValoTheme.LABEL_BOLD);
         label.setWidth(165, Unit.PIXELS);
         HorizontalLayout layout = new HorizontalLayout(label, component);
         layout.setSizeFull();

@@ -13,7 +13,6 @@ import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageController;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
-import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.google.common.collect.Range;
@@ -33,6 +32,7 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
+import com.vaadin.ui.themes.ValoTheme;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -340,7 +340,7 @@ public class UdmEditMultipleUsagesWindow extends Window {
 
     private HorizontalLayout buildCommonLayout(Component component, String labelCaption) {
         Label label = new Label(ForeignUi.getMessage(labelCaption));
-        label.addStyleName(Cornerstone.LABEL_BOLD);
+        label.addStyleName(ValoTheme.LABEL_BOLD);
         label.setWidth(165, Unit.PIXELS);
         HorizontalLayout layout = new HorizontalLayout(label, component);
         layout.setSizeFull();

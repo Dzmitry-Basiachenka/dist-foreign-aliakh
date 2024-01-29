@@ -13,8 +13,8 @@ import com.copyright.rup.dist.foreign.ui.usage.api.aclci.IAclciUsageFilterWidget
 import com.copyright.rup.dist.foreign.ui.usage.impl.CommonUsageAppliedFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.impl.CommonUsageFilterWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
+import com.copyright.rup.vaadin.ui.component.filter.CommonFilterWindow;
 import com.copyright.rup.vaadin.ui.component.filter.CommonFilterWindow.IFilterSaveListener;
-import com.copyright.rup.vaadin.ui.component.filter.FilterWindow;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.google.common.collect.ImmutableSet;
@@ -131,7 +131,7 @@ public class AclciUsageFilterWidget extends CommonUsageFilterWidget implements I
 
     private HorizontalLayout buildUsageBatchFilter() {
         usageBatchFilterWidget = new UsageBatchFilterWidget(controller::getUsageBatches);
-        usageBatchFilterWidget.addFilterSaveListener((FilterWindow.IFilterSaveListener<UsageBatch>) saveEvent -> {
+        usageBatchFilterWidget.addFilterSaveListener((CommonFilterWindow.IFilterSaveListener<UsageBatch>) saveEvent -> {
             usageFilter.setUsageBatchesIds(saveEvent.getSelectedItemsIds().stream()
                 .map(UsageBatch::getId)
                 .collect(Collectors.toSet()));

@@ -6,14 +6,14 @@ import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmProxyValueFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmProxyValueFilterWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
-import com.copyright.rup.vaadin.ui.component.filter.FilterWindow;
-import com.copyright.rup.vaadin.ui.themes.Cornerstone;
+import com.copyright.rup.vaadin.ui.component.filter.CommonFilterWindow;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.themes.ValoTheme;
 
 /**
  * Implementation of {@link IUdmProxyValueFilterWidget}.
@@ -91,7 +91,7 @@ public class UdmProxyValueFilterWidget extends VerticalLayout implements IUdmPro
 
     private UdmProxyValuePeriodFilterWidget buildPeriodFilter() {
         periodFilterWidget = new UdmProxyValuePeriodFilterWidget(controller);
-        periodFilterWidget.addFilterSaveListener((FilterWindow.IFilterSaveListener<Integer>) saveEvent -> {
+        periodFilterWidget.addFilterSaveListener((CommonFilterWindow.IFilterSaveListener<Integer>) saveEvent -> {
             udmValueFilter.setPeriods(saveEvent.getSelectedItemsIds());
             filterChanged();
         });
@@ -101,7 +101,7 @@ public class UdmProxyValueFilterWidget extends VerticalLayout implements IUdmPro
 
     private UdmProxyValuePubTypeCodeFilterWidget buildPubTypeCodeFilter() {
         pubTypeCodeFilterWidget = new UdmProxyValuePubTypeCodeFilterWidget(controller);
-        pubTypeCodeFilterWidget.addFilterSaveListener((FilterWindow.IFilterSaveListener<String>) saveEvent -> {
+        pubTypeCodeFilterWidget.addFilterSaveListener((CommonFilterWindow.IFilterSaveListener<String>) saveEvent -> {
             udmValueFilter.setPubTypeNames(saveEvent.getSelectedItemsIds());
             filterChanged();
         });
@@ -123,13 +123,13 @@ public class UdmProxyValueFilterWidget extends VerticalLayout implements IUdmPro
 
     private Label buildFiltersHeaderLabel() {
         Label filterHeaderLabel = new Label(ForeignUi.getMessage("label.filters"));
-        filterHeaderLabel.addStyleName(Cornerstone.LABEL_H2);
+        filterHeaderLabel.addStyleName(ValoTheme.LABEL_H2);
         return filterHeaderLabel;
     }
 
     private Label buildAppliedFiltersHeaderLabel() {
         Label appliedFilterHeaderLabel = new Label(ForeignUi.getMessage("label.applied_filters"));
-        appliedFilterHeaderLabel.addStyleNames(Cornerstone.LABEL_H2, "applied-filter-header");
+        appliedFilterHeaderLabel.addStyleNames(ValoTheme.LABEL_H2, "applied-filter-header");
         return appliedFilterHeaderLabel;
     }
 }

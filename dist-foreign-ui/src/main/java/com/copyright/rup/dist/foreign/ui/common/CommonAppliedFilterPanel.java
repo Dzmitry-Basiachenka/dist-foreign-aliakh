@@ -6,7 +6,6 @@ import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.filter.FilterExpression;
 import com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
-import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.shared.ui.ContentMode;
@@ -14,6 +13,7 @@ import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.themes.ValoTheme;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -210,7 +210,7 @@ public abstract class CommonAppliedFilterPanel extends Panel {
     private void initLayout() {
         setWidth(265, Unit.PIXELS);
         setHeight(700, Unit.PIXELS);
-        setStyleName(Cornerstone.FORMLAYOUT_LIGHT);
+        setStyleName(ValoTheme.FORMLAYOUT_LIGHT);
         setSizeFull();
     }
 

@@ -5,7 +5,7 @@ import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.filter.Comm
 import java.util.Collection;
 
 /**
- * Implement this interface to use {@link com.copyright.rup.vaadin.ui.component.filter.FilterWindow}.
+ * Implement this interface to use {@link FilterWindow}.
  * <p/>
  * Copyright (C) 2017 copyright.com
  * <p/>

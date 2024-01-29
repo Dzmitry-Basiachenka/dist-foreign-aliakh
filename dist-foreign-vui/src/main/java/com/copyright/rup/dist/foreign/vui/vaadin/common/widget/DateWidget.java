@@ -54,7 +54,7 @@ public class DateWidget extends HorizontalLayout {
     /**
      * Add value change listener.
      *
-     * @param listener instance of {@link  com.vaadin.data.HasValue.ValueChangeListener}
+     * @param listener instance of {@link HasValue.ValueChangeListener}
      * @return instance of {@link Registration}
      */
     public Registration addValueChangeListener(

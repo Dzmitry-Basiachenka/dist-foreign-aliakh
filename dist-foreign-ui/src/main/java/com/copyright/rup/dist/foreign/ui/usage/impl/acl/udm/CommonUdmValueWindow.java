@@ -6,7 +6,6 @@ import com.copyright.rup.dist.foreign.ui.common.utils.BigDecimalUtils;
 import com.copyright.rup.dist.foreign.ui.common.utils.BooleanUtils;
 import com.copyright.rup.dist.foreign.ui.common.utils.IDateFormatter;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
-import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 
 import com.vaadin.data.Binder;
 import com.vaadin.data.ValueProvider;
@@ -16,6 +15,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.Window;
+import com.vaadin.ui.themes.ValoTheme;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -67,7 +67,7 @@ public abstract class CommonUdmValueWindow extends Window implements IDateFormat
      */
     protected HorizontalLayout buildCommonLayout(Component component, String labelCaption) {
         Label label = new Label(labelCaption);
-        label.addStyleName(Cornerstone.LABEL_BOLD);
+        label.addStyleName(ValoTheme.LABEL_BOLD);
         label.setWidth(175, Unit.PIXELS);
         HorizontalLayout layout = new HorizontalLayout(label, component);
         layout.setSizeFull();

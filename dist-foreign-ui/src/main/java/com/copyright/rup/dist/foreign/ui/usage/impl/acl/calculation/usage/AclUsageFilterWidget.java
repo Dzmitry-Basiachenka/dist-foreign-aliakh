@@ -8,7 +8,6 @@ import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclUsageFilterController
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclUsageFilterWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
-import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.ui.Button;
@@ -148,7 +147,7 @@ public class AclUsageFilterWidget extends VerticalLayout implements IAclUsageFil
 
     private Label buildFiltersHeaderLabel() {
         Label filterHeaderLabel = new Label(ForeignUi.getMessage("label.filters"));
-        filterHeaderLabel.addStyleName(Cornerstone.LABEL_H2);
+        filterHeaderLabel.addStyleName(ValoTheme.LABEL_H2);
         return filterHeaderLabel;
     }
 
@@ -166,7 +165,7 @@ public class AclUsageFilterWidget extends VerticalLayout implements IAclUsageFil
 
     private Label buildAppliedFiltersHeaderLabel() {
         Label appliedFilterHeaderLabel = new Label(ForeignUi.getMessage("label.applied_filters"));
-        appliedFilterHeaderLabel.addStyleNames(Cornerstone.LABEL_H2, "applied-filter-header");
+        appliedFilterHeaderLabel.addStyleNames(ValoTheme.LABEL_H2, "applied-filter-header");
         return appliedFilterHeaderLabel;
     }
 }
