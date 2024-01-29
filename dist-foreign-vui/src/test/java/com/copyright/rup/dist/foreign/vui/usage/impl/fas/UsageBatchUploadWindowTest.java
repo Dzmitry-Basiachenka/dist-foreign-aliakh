@@ -128,7 +128,7 @@ public class UsageBatchUploadWindowTest {
         expect(controller.getRightsholder(UNKNOWN_ACCOUNT_NAME)).andReturn(new Rightsholder()).once();
         replay(controller);
         window = new UsageBatchUploadWindow(controller);
-        verifyWindow(window, "Upload Usage Batch", "600px", "670px", Unit.PIXELS, false);
+        verifyWindow(window, "Upload Usage Batch", "500px", "570px", Unit.PIXELS, false);
         verifyRootLayout(getDialogContent(window));
         verify(controller);
     }
@@ -227,7 +227,7 @@ public class UsageBatchUploadWindowTest {
         expect(window.isValid()).andReturn(true).once();
         window.close();
         expectLastCall().once();
-        expect(controller.usageBatchExists(USAGE_BATCH_NAME)).andReturn(false).once();
+        expect(controller.usageBatchExists(USAGE_BATCH_NAME)).andReturn(false).times(2);
         expect(controller.getCsvProcessor(FAS_PRODUCT_FAMILY)).andReturn(processor).once();
         expect(processor.process(anyObject())).andReturn(processingResult).once();
         expect(controller.loadUsageBatch(buildUsageBatch(rro), processingResult.get())).andReturn(1).once();
@@ -290,14 +290,13 @@ public class UsageBatchUploadWindowTest {
         var accountNameField = verifyTextField(verticalLayout.getComponentAt(1), "RRO Account Name",
             "rro-account-name-field");
         assertTrue(accountNameField.isReadOnly());
-        assertEquals(2, horizontalLayout.getComponentCount());
-        var rroAccountLayout = (HorizontalLayout) horizontalLayout.getComponentAt(0);
-        var accountNumberField = verifyLongField(rroAccountLayout.getComponentAt(0), "RRO Account #", WIDTH_CALC,
+        assertEquals(3, horizontalLayout.getComponentCount());
+        var accountNumberField = verifyLongField(horizontalLayout.getComponentAt(0), "RRO Account #", "50%",
             "rro-account-number-field");
-        var productFamilyField = verifyTextField(rroAccountLayout.getComponentAt(1), "Product Family", WIDTH_CALC,
+        var productFamilyField = verifyTextField(horizontalLayout.getComponentAt(1), "Product Family", "130px",
             "product-family-field");
         assertTrue(productFamilyField.isReadOnly());
-        verifyVerifyButton(horizontalLayout.getComponentAt(1), accountNumberField, accountNameField,
+        verifyVerifyButton(horizontalLayout.getComponentAt(2), accountNumberField, accountNameField,
             productFamilyField);
     }
 

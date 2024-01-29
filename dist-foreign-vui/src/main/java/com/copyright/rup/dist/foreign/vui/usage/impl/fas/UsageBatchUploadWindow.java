@@ -80,8 +80,8 @@ public class UsageBatchUploadWindow extends CommonDialog {
         this.usagesController = usagesController;
         super.add(initRootLayout());
         super.setHeaderTitle(ForeignUi.getMessage("window.upload_usage_batch"));
-        super.setWidth("600px");
-        super.setHeight("670px");
+        super.setWidth("500px");
+        super.setHeight("570px");
         super.getFooter().add(initButtonsLayout());
         setModalWindowProperties("usage-upload-window", false);
     }
@@ -90,6 +90,8 @@ public class UsageBatchUploadWindow extends CommonDialog {
      * Initiates file uploading.
      */
     void onUploadClicked() {
+        binder.validate();
+        uploadBinder.validate();
         if (isValid()) {
             try {
                 UsageCsvProcessor processor = usagesController.getCsvProcessor(productFamilyField.getValue());
@@ -142,7 +144,6 @@ public class UsageBatchUploadWindow extends CommonDialog {
         rootLayout.add(initUsageBatchNameField(), initUploadField(), initRightsholderLayout(),
             initPaymentDataLayout(), initGrossAmountLayout());
         VaadinUtils.addComponentStyle(rootLayout, "usage-batch-upload-widget-layout");
-        binder.validate();
         return rootLayout;
     }
 
@@ -167,8 +168,7 @@ public class UsageBatchUploadWindow extends CommonDialog {
             .withValidator(requiredValidator)
             .withValidator(value -> StringUtils.endsWith(value, ".csv"),
                 ForeignUi.getMessage("error.upload_file.invalid_extension"))
-            .bind(ValueProvider.identity(), (usageBatch, value) -> usageBatch = value)
-            .validate();
+            .bind(ValueProvider.identity(), (usageBatch, value) -> usageBatch = value);
         uploadField.addSucceededListener(event -> uploadBinder.validate());
         VaadinUtils.setMaxComponentsWidth(uploadField);
         VaadinUtils.addComponentStyle(uploadField, "usage-upload-component");
@@ -186,37 +186,35 @@ public class UsageBatchUploadWindow extends CommonDialog {
     }
 
     private VerticalLayout initRightsholderLayout() {
-        var rroAccountLayout = new HorizontalLayout(initRightsholderAccountNumberField(), initProductFamilyField());
+        var rroAccountLayout =
+            new HorizontalLayout(initRightsholderAccountNumberField(), initProductFamilyField(), initVerifyButton());
         rroAccountLayout.setWidthFull();
         rroAccountLayout.setDefaultVerticalComponentAlignment(Alignment.BASELINE);
-        var horizontalLayout = new HorizontalLayout(rroAccountLayout, initVerifyButton());
-        horizontalLayout.setWidthFull();
-        horizontalLayout.setDefaultVerticalComponentAlignment(Alignment.BASELINE);
-        return VaadinUtils.initCommonVerticalLayout(horizontalLayout, initRightsholderAccountNameField());
+        return VaadinUtils.initCommonVerticalLayout(rroAccountLayout, initRightsholderAccountNameField());
     }
 
     private LongField initRightsholderAccountNumberField() {
         accountNumberField = new LongField(ForeignUi.getMessage("label.rro_account_number"));
+        accountNumberField.setWidth("50%");
         accountNumberField.setRequiredIndicatorVisible(true);
+        VaadinUtils.addComponentStyle(accountNumberField, "rro-account-number-field");
+        accountNumberField.addValueChangeListener(event -> {
+            accountNameField.setValue(StringUtils.EMPTY);
+            productFamilyField.setValue(StringUtils.EMPTY);
+        });
         accountNumberBinding = binder.forField(accountNumberField)
             .withValidator(new RequiredLongValidator())
             .withValidator(
                 new LongRangeValidator(ForeignUi.getMessage("field.error.number_length", 10), 1L, 9999999999L))
             .bind(usageBatch -> usageBatch.getRro().getAccountNumber(),
                 (usageBatch, value) -> usageBatch.getRro().setAccountNumber(value));
-        VaadinUtils.setMaxComponentsWidth(accountNumberField);
-        VaadinUtils.addComponentStyle(accountNumberField, "rro-account-number-field");
-        accountNumberField.addValueChangeListener(event -> {
-            accountNameField.setValue(StringUtils.EMPTY);
-            productFamilyField.setValue(StringUtils.EMPTY);
-        });
         return accountNumberField;
     }
 
     private TextField initProductFamilyField() {
         productFamilyField = new TextField(ForeignUi.getMessage("label.product_family"));
         productFamilyField.setReadOnly(true);
-        VaadinUtils.setMaxComponentsWidth(productFamilyField);
+        productFamilyField.setWidth("130px");
         VaadinUtils.addComponentStyle(productFamilyField, "product-family-field");
         return productFamilyField;
     }
