@@ -43,6 +43,6 @@ public class LongField extends AbstractNumberField<LongField, Long> {
      */
     public LongField(String label) {
         this();
-        setLabel(label);
+        super.setLabel(label);
     }
 }

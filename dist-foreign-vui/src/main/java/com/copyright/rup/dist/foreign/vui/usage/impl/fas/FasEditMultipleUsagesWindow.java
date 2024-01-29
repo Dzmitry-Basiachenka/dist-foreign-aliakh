@@ -56,7 +56,7 @@ class FasEditMultipleUsagesWindow extends CommonDialog {
         super.setResizable(false);
         super.setWidth("400px");
         super.setHeight("215px");
-        getFooter().add(initButtonsLayout());
+        super.getFooter().add(initButtonsLayout());
         VaadinUtils.addComponentStyle(this, "multiple-edit-fas-usages-window");
         binder.validate();
     }
