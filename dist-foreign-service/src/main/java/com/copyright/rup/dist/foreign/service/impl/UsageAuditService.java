@@ -33,6 +33,8 @@ import java.util.Set;
 @Service
 public class UsageAuditService implements IUsageAuditService {
 
+    private static final long serialVersionUID = 4352076233395979968L;
+
     @Autowired
     private IUsageAuditRepository usageAuditRepository;
 

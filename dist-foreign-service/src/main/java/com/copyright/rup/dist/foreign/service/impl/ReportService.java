@@ -47,6 +47,8 @@ import io.micrometer.core.annotation.Timed;
 @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
 public class ReportService implements IReportService {
 
+    private static final long serialVersionUID = -208729443505734520L;
+
     @Autowired
     private IAaclReportRepository aaclReportRepository;
     @Autowired

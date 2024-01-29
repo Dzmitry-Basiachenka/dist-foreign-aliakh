@@ -54,6 +54,7 @@ import java.util.Set;
 @Repository
 public class FasReportRepository extends CommonReportRepository implements IFasReportRepository {
 
+    private static final long serialVersionUID = 8110518523915927727L;
     private static final String FILTER_KEY = "filter";
     private static final String SCENARIO_ID_KEY = "scenarioId";
     private static final String STATUSES = "statuses";

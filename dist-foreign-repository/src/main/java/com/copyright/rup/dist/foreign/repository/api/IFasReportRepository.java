@@ -7,6 +7,7 @@ import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
 import java.io.OutputStream;
 import java.io.PipedOutputStream;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -21,7 +22,7 @@ import java.util.Set;
  *
  * @author Dzmitry Basiachenka
  */
-public interface IFasReportRepository {
+public interface IFasReportRepository extends Serializable {
 
     /**
      * Writes Undistributed Liabilities Reconciliation Report into the output stream in CSV format.

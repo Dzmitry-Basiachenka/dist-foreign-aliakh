@@ -39,6 +39,7 @@ import java.util.Set;
 @Repository
 public class NtsReportRepository extends CommonReportRepository implements INtsReportRepository {
 
+    private static final long serialVersionUID = -2243889661438814036L;
     private static final String FILTER_KEY = "filter";
     private static final String SEARCH_VALUE_KEY = "searchValue";
     private static final String SCENARIO_ID_KEY = "scenarioId";

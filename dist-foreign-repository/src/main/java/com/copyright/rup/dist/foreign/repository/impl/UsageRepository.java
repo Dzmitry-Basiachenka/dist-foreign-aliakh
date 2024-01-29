@@ -48,6 +48,7 @@ import java.util.Set;
 @Repository
 public class UsageRepository extends BaseRepository implements IUsageRepository {
 
+    private static final long serialVersionUID = -2571942278644516424L;
     /**
      * It's a max value for count of variables in statement.
      */

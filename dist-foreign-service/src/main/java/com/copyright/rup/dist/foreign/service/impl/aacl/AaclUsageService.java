@@ -51,6 +51,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -77,8 +78,9 @@ import io.micrometer.core.annotation.Timed;
  * @author Ihar Suvorau
  */
 @Service
-public class AaclUsageService implements IAaclUsageService {
+public class AaclUsageService implements IAaclUsageService, Serializable {
 
+    private static final long serialVersionUID = -6646458765805807371L;
     private static final List<BigDecimal> DEFAULT_USAGES_AGE_WEIGHTS =
         List.of(new BigDecimal("1.00"), new BigDecimal("0.75"), new BigDecimal("0.50"), new BigDecimal("0.25"));
     private static final BigDecimal USAGES_AGE_WEIGHT_ZERO = new BigDecimal("0.00");
