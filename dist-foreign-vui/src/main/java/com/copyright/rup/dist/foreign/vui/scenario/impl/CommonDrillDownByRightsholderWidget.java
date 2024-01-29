@@ -160,9 +160,7 @@ public abstract class CommonDrillDownByRightsholderWidget extends CommonDialog
 
     private VerticalLayout initContent() {
         initGrid();
-        var content = new VerticalLayout(initToolbar(), grid);
-        content.setPadding(false);
-        content.setSpacing(false);
+        var content = VaadinUtils.initCommonVerticalLayout(initToolbar(), grid);
         content.setSizeFull();
         getFooter().add(Buttons.createCloseButton(this));
         return content;

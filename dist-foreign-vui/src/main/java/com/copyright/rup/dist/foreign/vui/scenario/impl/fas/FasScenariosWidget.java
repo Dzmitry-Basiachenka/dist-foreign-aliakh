@@ -28,6 +28,8 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
  */
 public class FasScenariosWidget extends CommonScenariosWidget implements IFasScenariosWidget {
 
+    private static final long serialVersionUID = 741390963520460309L;
+
     private final Button viewButton = Buttons.createButton(ForeignUi.getMessage("button.view"));
     private final Button editNameButton = Buttons.createButton(ForeignUi.getMessage("button.edit_name"));
     private final Button deleteButton = Buttons.createButton(ForeignUi.getMessage("button.delete"));

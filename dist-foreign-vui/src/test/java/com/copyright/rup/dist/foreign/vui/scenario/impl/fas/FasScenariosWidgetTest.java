@@ -199,11 +199,11 @@ public class FasScenariosWidgetTest {
         expectLastCall().once();
         replay(Windows.class, controller, scenarioHistoryController);
         scenariosWidget.refresh();
-        Scroller scroller = (Scroller) ((SplitLayout) scenariosWidget.getComponentAt(1)).getSecondaryComponent();
-        Section section = (Section) scroller.getContent();
+        var scroller = (Scroller) ((SplitLayout) scenariosWidget.getComponentAt(1)).getSecondaryComponent();
+        var section = (Section) scroller.getContent();
         var lastActionLayout =
             (VerticalLayout) ((VerticalLayout) section.getComponentAt(0)).getComponentAt(6);
-        Button viewAllActionsButton = (Button) lastActionLayout.getComponentAt(2);
+        var viewAllActionsButton = (Button) lastActionLayout.getComponentAt(2);
         viewAllActionsButton.click();
         assertNotNull(historyWidgetCapture.getValue());
         assertSame(scenarioHistoryWidget, historyWidgetCapture.getValue());
@@ -247,14 +247,14 @@ public class FasScenariosWidgetTest {
     }
 
     private void verifyScenarioMetadataPanel() {
-        Scroller scroller = (Scroller) ((SplitLayout) scenariosWidget.getComponentAt(1)).getSecondaryComponent();
+        var scroller = (Scroller) ((SplitLayout) scenariosWidget.getComponentAt(1)).getSecondaryComponent();
         assertEquals("scenarios-metadata-panel-scroller", scroller.getClassName());
-        Section section = (Section) scroller.getContent();
+        var section = (Section) scroller.getContent();
         assertEquals("scenarios-metadata", section.getId().orElseThrow());
         assertEquals("scenarios-metadata", section.getClassName());
-        Component content = section.getComponentAt(0);
+        var content = section.getComponentAt(0);
         assertThat(content, instanceOf(VerticalLayout.class));
-        VerticalLayout layout = (VerticalLayout) content;
+        var layout = (VerticalLayout) content;
         assertFalse(layout.isMargin());
         assertTrue(layout.isSpacing());
         assertEquals(7, layout.getComponentCount());
@@ -268,16 +268,16 @@ public class FasScenariosWidgetTest {
         verifyDiv(layout.getComponentAt(4), "<b>Description: </b>Description");
         verifyDiv(layout.getComponentAt(5), SELECTION_CRITERIA);
         assertThat(layout.getComponentAt(6), instanceOf(VerticalLayout.class));
-        VerticalLayout lastActionLayout = (VerticalLayout) layout.getComponentAt(6);
+        var lastActionLayout = (VerticalLayout) layout.getComponentAt(6);
         assertEquals(3, lastActionLayout.getComponentCount());
         assertEquals("<b>Last Action:</b>", ((Html) lastActionLayout.getComponentAt(0)).getInnerHtml());
-        VerticalLayout actionMetadataLayout = (VerticalLayout) lastActionLayout.getComponentAt(1);
+        var actionMetadataLayout = (VerticalLayout) lastActionLayout.getComponentAt(1);
         assertEquals(4, actionMetadataLayout.getComponentCount());
         verifyDiv(actionMetadataLayout.getComponentAt(0), "<b>Type:</b> ADDED_USAGES");
         verifyDiv(actionMetadataLayout.getComponentAt(1), "<b>User:</b> user@copyright.com");
         verifyDiv(actionMetadataLayout.getComponentAt(2), "<b>Date:</b> 12/24/2016 12:00 AM");
         verifyDiv(actionMetadataLayout.getComponentAt(3), "<b>Reason:</b> ");
-        Component viewAllActionsButton = lastActionLayout.getComponentAt(2);
+        var viewAllActionsButton = lastActionLayout.getComponentAt(2);
         assertThat(viewAllActionsButton, instanceOf(Button.class));
         assertEquals("View All Actions", ((Button) viewAllActionsButton).getText());
     }
