@@ -77,12 +77,8 @@ public class RefreshScenarioWindow extends CommonDialog {
         horizontalLayout.setAlignItems(Alignment.CENTER);
         VaadinUtils.setMaxComponentsWidth(horizontalLayout);
         initTable();
-        var content = new VerticalLayout(horizontalLayout, grid);
         getFooter().add(buttonsLayout);
-        content.setSizeFull();
-        content.setSpacing(false);
-        content.setMargin(false);
-        return content;
+        return VaadinUtils.initCommonVerticalLayout(horizontalLayout, grid);
     }
 
     private void initButtonsLayout() {

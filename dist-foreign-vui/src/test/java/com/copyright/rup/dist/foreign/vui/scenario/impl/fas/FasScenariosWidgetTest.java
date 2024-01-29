@@ -202,7 +202,7 @@ public class FasScenariosWidgetTest {
         var scroller = (Scroller) ((SplitLayout) scenariosWidget.getComponentAt(1)).getSecondaryComponent();
         var section = (Section) scroller.getContent();
         var lastActionLayout =
-            (VerticalLayout) ((VerticalLayout) section.getComponentAt(0)).getComponentAt(6);
+            (VerticalLayout) ((VerticalLayout) section.getComponentAt(0)).getComponentAt(4);
         var viewAllActionsButton = (Button) lastActionLayout.getComponentAt(2);
         viewAllActionsButton.click();
         assertNotNull(historyWidgetCapture.getValue());
@@ -257,18 +257,29 @@ public class FasScenariosWidgetTest {
         var layout = (VerticalLayout) content;
         assertFalse(layout.isMargin());
         assertTrue(layout.isSpacing());
-        assertEquals(7, layout.getComponentCount());
+        assertEquals(5, layout.getComponentCount());
         verifyDiv(layout.getComponentAt(0), "<b>Owner: </b>User@copyright.com");
-        verifyDiv(layout.getComponentAt(1),
+        verifyAmountsLayout(layout.getComponentAt(1));
+        verifyDiv(layout.getComponentAt(2), "<b>Description: </b>Description");
+        verifyDiv(layout.getComponentAt(3), SELECTION_CRITERIA);
+        verifyMetadataActionLayout(layout.getComponentAt(4));
+    }
+
+    private void verifyAmountsLayout(Component amountsComponent) {
+        assertThat(amountsComponent, instanceOf(VerticalLayout.class));
+        var amountsLayout = (VerticalLayout) amountsComponent;
+        assertEquals(3, amountsLayout.getComponentCount());
+        verifyDiv(amountsLayout.getComponentAt(0),
             "<b>Gross Amt in USD: </b><span class='label-amount'>10,000.00</span>");
-        verifyDiv(layout.getComponentAt(2),
+        verifyDiv(amountsLayout.getComponentAt(1),
             "<b>Service Fee Amt in USD: </b><span class='label-amount'>3,200.00</span>");
-        verifyDiv(layout.getComponentAt(3),
+        verifyDiv(amountsLayout.getComponentAt(2),
             "<b>Net Amt in USD: </b><span class='label-amount'>6,800.00</span>");
-        verifyDiv(layout.getComponentAt(4), "<b>Description: </b>Description");
-        verifyDiv(layout.getComponentAt(5), SELECTION_CRITERIA);
-        assertThat(layout.getComponentAt(6), instanceOf(VerticalLayout.class));
-        var lastActionLayout = (VerticalLayout) layout.getComponentAt(6);
+    }
+
+    private void verifyMetadataActionLayout(Component lastActionComponent) {
+        assertThat(lastActionComponent, instanceOf(VerticalLayout.class));
+        var lastActionLayout = (VerticalLayout) lastActionComponent;
         assertEquals(3, lastActionLayout.getComponentCount());
         assertEquals("<b>Last Action:</b>", ((Html) lastActionLayout.getComponentAt(0)).getInnerHtml());
         var actionMetadataLayout = (VerticalLayout) lastActionLayout.getComponentAt(1);

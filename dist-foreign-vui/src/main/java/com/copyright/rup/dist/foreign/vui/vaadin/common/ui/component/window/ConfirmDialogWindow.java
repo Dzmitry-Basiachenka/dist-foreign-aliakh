@@ -62,7 +62,7 @@ public final class ConfirmDialogWindow extends Dialog {
         HorizontalLayout buttons = new HorizontalLayout(confirmButton, declineButton);
         VerticalLayout contentLayout = new VerticalLayout(contentLabel, buttons);
         contentLayout.setClassName("v-label-white-space-normal");
-        contentLayout.setWidth(100, Unit.PERCENTAGE);
+        contentLayout.setWidthFull();
         add(contentLayout);
         getFooter().add(buttons);
         confirmButton.addClickListener(event -> {

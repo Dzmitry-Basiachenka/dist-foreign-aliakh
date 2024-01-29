@@ -17,7 +17,6 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridMultiSelectionModel.SelectAllCheckboxVisibility;
 import com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.function.ValueProvider;
@@ -72,16 +71,13 @@ class FasUpdateUsageWindow extends CommonDialog implements IFasUpdateUsageWindow
 
     private Component initContent() {
         var toolbarLayout = new HorizontalLayout(initSearchWidget());
-        toolbarLayout.setWidth("100%");
+        toolbarLayout.setWidthFull();
         toolbarLayout.setSpacing(false);
         toolbarLayout.setJustifyContentMode(JustifyContentMode.CENTER);
         VaadinUtils.setPadding(toolbarLayout, 2, 0, 2, 0);
-        var content = new VerticalLayout(toolbarLayout, initGrid());
-        content.setSizeFull();
-        content.setMargin(false);
-        content.setSpacing(false);
-        content.setPadding(false);
         getFooter().add(initButtonsLayout());
+        var content = VaadinUtils.initCommonVerticalLayout(toolbarLayout, initGrid());
+        content.setHeightFull();
         return content;
     }
 

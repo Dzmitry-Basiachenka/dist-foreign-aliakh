@@ -21,7 +21,6 @@ import com.vaadin.flow.component.grid.Grid.Column;
 import com.vaadin.flow.component.grid.Grid.SelectionMode;
 import com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.splitlayout.SplitLayout;
 import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.data.provider.ListDataProvider;
@@ -85,26 +84,23 @@ public class FasExcludePayeeWidget extends CommonDialog implements IFasExcludePa
     @Override
     @SuppressWarnings("unchecked")
     public FasExcludePayeeWidget init() {
-        var filterWidget = controller.getExcludePayeesFilterController().initWidget();
-        filterWidget.setFilterSaveAction(controller::onFilterChanged);
         super.setWidth("1500px");
         super.setHeight("500px");
         super.setHeaderTitle(ForeignUi.getMessage("window.exclude.payee"));
         super.setModalWindowProperties("exclude-details-by-payee-window", true);
         super.getFooter().add(createButtonsLayout());
         initGrid();
-        var toolbar = initToolbar();
-        var mainLayout = new VerticalLayout(toolbar, payeesGrid);
-        mainLayout.setSpacing(false);
-        mainLayout.setPadding(false);
-        VaadinUtils.setPadding(this, 0, 10, 0, 10);
-        mainLayout.setSizeFull();
+        var filterWidget = controller.getExcludePayeesFilterController().initWidget();
+        filterWidget.setFilterSaveAction(controller::onFilterChanged);
         var splitPanel = new SplitLayout();
         splitPanel.setSizeFull();
         splitPanel.addToPrimary((FasExcludePayeeFilterWidget) filterWidget);
+        var mainLayout = VaadinUtils.initCommonVerticalLayout(initToolbar(), payeesGrid);
+        mainLayout.setHeightFull();
         splitPanel.addToSecondary(mainLayout);
         splitPanel.setSplitterPosition(16);
         add(splitPanel);
+        VaadinUtils.setPadding(this, 0, 10, 0, 10);
         return this;
     }
 
@@ -114,12 +110,12 @@ public class FasExcludePayeeWidget extends CommonDialog implements IFasExcludePa
         searchWidget.setWidth("75%");
         var searchWidgetLayout = new HorizontalLayout(searchWidget);
         searchWidgetLayout.setJustifyContentMode(JustifyContentMode.CENTER);
-        searchWidgetLayout.setWidth("100%");
+        searchWidgetLayout.setWidthFull();
         var exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
         var fileDownloader = new OnDemandFileDownloader(new CsvStreamSource(controller).getSource());
         fileDownloader.extend(exportButton);
         var toolbar = new HorizontalLayout(fileDownloader, searchWidgetLayout);
-        toolbar.setWidth("100%");
+        toolbar.setWidthFull();
         toolbar.setSpacing(false);
         VaadinUtils.setPadding(toolbar, 0, 10, 0, 5);
         return toolbar;

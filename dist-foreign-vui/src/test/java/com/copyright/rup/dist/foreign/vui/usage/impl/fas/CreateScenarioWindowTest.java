@@ -71,7 +71,7 @@ public class CreateScenarioWindowTest {
         replay(controller);
         var window = new CreateScenarioWindow(controller);
         verify(controller);
-        verifyWindow(window, "Create Scenario", "600px", null, Unit.PIXELS, false);
+        verifyWindow(window, "Create Scenario", "400px", null, Unit.PIXELS, false);
         assertEquals("create-scenario-window", window.getId().get());
         var content = (VerticalLayout) getDialogContent(window);
         assertEquals(2, content.getComponentCount());

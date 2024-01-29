@@ -139,7 +139,7 @@ public class FasUsageWidget extends CommonUsageWidget implements IFasUsageWidget
             loadResearchedUsagesButton, updateUsagesButton, addToScenarioButton, exportDownloader);
         var toolbarLayout = new HorizontalLayout(buttonsLayout, getHideGridColumnsProvider().getMenuButton());
         toolbarLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.BETWEEN);
-        toolbarLayout.setWidth("100%");
+        toolbarLayout.setWidthFull();
         VaadinUtils.setPadding(toolbarLayout, 1, 3, 1, 3);
         return toolbarLayout;
     }

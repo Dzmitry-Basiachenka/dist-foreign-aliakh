@@ -48,13 +48,9 @@ class CreateScenarioWindow extends CommonDialog {
      */
     CreateScenarioWindow(ICommonUsageController controller) {
         this.controller = controller;
-        super.setWidth("600px");
+        super.setWidth("400px");
         super.setHeaderTitle(ForeignUi.getMessage("window.create_scenario"));
-        initFields();
-        var content = new VerticalLayout(scenarioNameField, descriptionArea);
-        content.setSpacing(false);
-        content.setSizeFull();
-        super.add(content);
+        super.add(initContent());
         super.getFooter().add(initButtonsLayout());
         setModalWindowProperties("create-scenario-window", false);
     }
@@ -66,10 +62,14 @@ class CreateScenarioWindow extends CommonDialog {
         return new HorizontalLayout(confirmButton, Buttons.createCancelButton(this));
     }
 
-    private void initFields() {
+    private VerticalLayout initContent() {
         initScenarioNameField();
         initDescriptionArea();
         scenarioNameField.focus();
+        var content = new VerticalLayout(scenarioNameField, descriptionArea);
+        content.setSpacing(false);
+        content.setSizeFull();
+        return content;
     }
 
     private void initDescriptionArea() {

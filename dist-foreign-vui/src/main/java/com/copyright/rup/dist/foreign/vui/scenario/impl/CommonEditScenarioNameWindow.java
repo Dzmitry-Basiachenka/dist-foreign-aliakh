@@ -41,16 +41,10 @@ public abstract class CommonEditScenarioNameWindow extends CommonDialog {
      */
     protected CommonEditScenarioNameWindow(String scenarioName, String styleName) {
         super.setResizable(false);
-        super.setWidth("520px");
+        super.setWidth("400px");
         super.setHeaderTitle(ForeignUi.getMessage("window.edit_scenario_name"));
-        initScenarioNameField(scenarioName);
-        var buttonsLayout = initButtonsLayout();
-        super.getFooter().add(buttonsLayout);
-        var layout = new VerticalLayout(scenarioNameField);
-        layout.setSpacing(false);
-        layout.setMargin(false);
-        scenarioNameField.focus();
-        super.add(layout);
+        super.add(initContent(scenarioName));
+        super.getFooter().add(initButtonsLayout());
         super.setModalWindowProperties(styleName, false);
     }
 
@@ -86,10 +80,11 @@ public abstract class CommonEditScenarioNameWindow extends CommonDialog {
         return layout;
     }
 
-    private void initScenarioNameField(String scenarioName) {
+    private VerticalLayout initContent(String scenarioName) {
         scenarioNameField = new TextField(ForeignUi.getMessage("field.scenario_name"));
         scenarioNameField.setRequiredIndicatorVisible(true);
         scenarioNameField.setValue(scenarioName);
+        scenarioNameField.focus();
         binder.forField(scenarioNameField)
             .withValidator(new RequiredValidator())
             .withValidator(
@@ -99,6 +94,7 @@ public abstract class CommonEditScenarioNameWindow extends CommonDialog {
             .bind(ValueProvider.identity(), (bean, fieldValue) -> bean = fieldValue);
         VaadinUtils.setMaxComponentsWidth(scenarioNameField);
         VaadinUtils.addComponentStyle(scenarioNameField, "scenario-name");
+        return new VerticalLayout(scenarioNameField);
     }
 
     private void onSaveButtonClicked() {

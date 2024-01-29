@@ -134,7 +134,7 @@ public abstract class CommonScenarioWidget extends CommonDialog implements IComm
         addFooter();
         initEmptyScenarioMessage();
         var rootLayout = VaadinUtils.initCommonVerticalLayout(initToolbar(), rightsholdersGrid, emptyUsagesLayout);
-        rootLayout.setSizeFull();
+        rootLayout.setHeightFull();
         getFooter().add(initButtons());
         return rootLayout;
     }
@@ -228,7 +228,7 @@ public abstract class CommonScenarioWidget extends CommonDialog implements IComm
         menuButton = hideGridColumnsProvider.getMenuButton();
         var toolbar = new HorizontalLayout(new Div(), searchWidget, menuButton);
         toolbar.setJustifyContentMode(JustifyContentMode.BETWEEN);
-        toolbar.setWidth("100%");
+        toolbar.setWidthFull();
         VaadinUtils.setPadding(toolbar, 0, 3, 0, 0);
         VaadinUtils.addComponentStyle(toolbar, "view-scenario-toolbar");
         return toolbar;

@@ -161,7 +161,7 @@ public abstract class CommonDrillDownByRightsholderWidget extends CommonDialog
     private VerticalLayout initContent() {
         initGrid();
         var content = VaadinUtils.initCommonVerticalLayout(initToolbar(), grid);
-        content.setSizeFull();
+        content.setHeightFull();
         getFooter().add(Buttons.createCloseButton(this));
         return content;
     }
@@ -187,7 +187,7 @@ public abstract class CommonDrillDownByRightsholderWidget extends CommonDialog
         Button menuButton = hideGridColumnsProvider.getMenuButton();
         var toolbar = new HorizontalLayout(new Div(), searchWidget, menuButton);
         toolbar.setJustifyContentMode(JustifyContentMode.BETWEEN);
-        toolbar.setWidth("100%");
+        toolbar.setWidthFull();
         VaadinUtils.setPadding(toolbar, 0, 3, 0, 0);
         VaadinUtils.addComponentStyle(toolbar, "drill-down-by-rightsholder-toolbar");
         return toolbar;

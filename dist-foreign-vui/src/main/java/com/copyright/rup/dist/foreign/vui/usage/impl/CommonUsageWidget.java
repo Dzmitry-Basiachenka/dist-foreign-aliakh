@@ -215,11 +215,7 @@ public abstract class CommonUsageWidget extends SplitLayout implements ICommonUs
 
     private VerticalLayout initContent() {
         initUsagesGrid();
-        var content = new VerticalLayout(initButtonsLayout(), usagesGrid);
-        content.setSizeFull();
-        content.setMargin(false);
-        content.setSpacing(false);
-        content.setPadding(false);
+        var content = VaadinUtils.initCommonVerticalLayout(initButtonsLayout(), usagesGrid);
         VaadinUtils.addComponentStyle(content, "usages-layout");
         return content;
     }
