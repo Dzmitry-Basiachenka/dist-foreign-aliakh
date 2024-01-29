@@ -37,7 +37,7 @@ public class IDateFormatterTest {
 
     @Test
     public void testToShortFormatLocalDateGetter() {
-        UdmUsageDto bean = new UdmUsageDto();
+        var bean = new UdmUsageDto();
         bean.setUsageDate(LOCAL_DATE);
         assertEquals(SHORT_FORMATTED_DATE, dateFormatter.toShortFormat(UdmUsageDto::getUsageDate).apply(bean));
         bean.setUsageDate(null);
@@ -52,7 +52,7 @@ public class IDateFormatterTest {
 
     @Test
     public void testToShortFormatDateGetter() {
-        UdmUsageDto bean = new UdmUsageDto();
+        var bean = new UdmUsageDto();
         bean.setCreateDate(DATE);
         assertEquals(SHORT_FORMATTED_DATE, dateFormatter.toShortFormat(UdmUsageDto::getCreateDate).apply(bean));
         bean.setCreateDate(null);

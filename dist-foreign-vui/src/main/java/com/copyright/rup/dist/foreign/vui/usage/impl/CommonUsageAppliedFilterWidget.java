@@ -7,6 +7,8 @@ import com.copyright.rup.dist.foreign.vui.common.CommonAppliedFilterPanel;
 import com.copyright.rup.dist.foreign.vui.usage.api.ICommonUsageFilterController;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.util.VaadinUtils;
 
+import org.apache.commons.collections4.CollectionUtils;
+
 import java.util.Comparator;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -52,7 +54,7 @@ public abstract class CommonUsageAppliedFilterWidget extends CommonAppliedFilter
      * @return set of batches names
      */
     protected Set<String> convertBatchIdsToBatchNames(Set<String> batchesIds) {
-        if (batchesIds == null || batchesIds.isEmpty()) {
+        if (CollectionUtils.isEmpty(batchesIds)) {
             return Set.of();
         }
         return controller.getUsageBatches()
@@ -70,7 +72,7 @@ public abstract class CommonUsageAppliedFilterWidget extends CommonAppliedFilter
      * @return set of RROs names
      */
     protected Set<String> convertRroAccountNumbersToRroNames(Set<Long> accountNumbers) {
-        if (accountNumbers == null || accountNumbers.isEmpty()) {
+        if (CollectionUtils.isEmpty(accountNumbers)) {
             return Set.of();
         }
         return controller.getRightsholdersByAccountNumbers(accountNumbers)

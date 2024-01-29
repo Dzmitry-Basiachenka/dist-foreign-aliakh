@@ -100,8 +100,6 @@ class FasEditMultipleUsagesWindow extends CommonDialog {
             }
         });
         VaadinUtils.setButtonsAutoDisabled(saveButton);
-        var horizontalLayout = new HorizontalLayout();
-        horizontalLayout.add(saveButton, closeButton);
-        return horizontalLayout;
+        return new HorizontalLayout(saveButton, closeButton);
     }
 }

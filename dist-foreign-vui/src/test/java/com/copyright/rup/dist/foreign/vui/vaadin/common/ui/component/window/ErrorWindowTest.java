@@ -114,7 +114,7 @@ public class ErrorWindowTest {
     private void verifyLabel(Component component) {
         assertNotNull(component);
         assertEquals(Label.class, component.getClass());
-        Label label = (Label) component;
+        var label = (Label) component;
         assertEquals(ERROR_MESSAGE, label.getText());
     }
 }

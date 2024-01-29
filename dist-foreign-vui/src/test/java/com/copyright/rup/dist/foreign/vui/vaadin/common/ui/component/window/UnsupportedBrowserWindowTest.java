@@ -66,7 +66,7 @@ public class UnsupportedBrowserWindowTest {
 
     private void verifyLabel(Component component) {
         assertEquals(Label.class, component.getClass());
-        Label label = (Label) component;
+        var label = (Label) component;
         assertTrue(StringUtils.contains(label.getText(), "The Application"));
         assertTrue(StringUtils.contains(label.getText(), Browser.BrowserType.CHROME.toString()));
         assertTrue(StringUtils.contains(label.getText(), Browser.BrowserType.FIREFOX.toString()));

@@ -141,7 +141,7 @@ public abstract class CommonUsageWidget extends SplitLayout implements ICommonUs
      * @param window implementation of window
      */
     protected void onAddToScenarioClicked(Dialog window) {
-        String message = getScenarioValidationMessage();
+        var message = getScenarioValidationMessage();
         if (null != message) {
             Windows.showNotificationWindow(message);
         } else {

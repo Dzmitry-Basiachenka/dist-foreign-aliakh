@@ -124,7 +124,7 @@ public abstract class CommonUsageFilterWidget extends VerticalLayout implements 
      * @return instance of {@link Label}
      */
     protected Label buildAppliedFiltersHeaderLabel() {
-        Label label = new Label(ForeignUi.getMessage("label.applied_filters"));
+        var label = new Label(ForeignUi.getMessage("label.applied_filters"));
         label.addClassNames("filter-label");
         return label;
     }

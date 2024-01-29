@@ -84,7 +84,7 @@ public abstract class CommonUsageController extends CommonController<ICommonUsag
 
     @Override
     public Scenario createScenario(String scenarioName, String description) {
-        Scenario scenario = scenarioService.createScenario(scenarioName, description,
+        var scenario = scenarioService.createScenario(scenarioName, description,
             getUsageFilterController().getWidget().getAppliedFilter());
         getUsageFilterController().getWidget().clearFilter();
         return scenario;

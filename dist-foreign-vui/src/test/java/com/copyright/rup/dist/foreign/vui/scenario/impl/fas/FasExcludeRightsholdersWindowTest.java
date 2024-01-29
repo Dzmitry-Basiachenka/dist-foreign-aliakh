@@ -119,7 +119,7 @@ public class FasExcludeRightsholdersWindowTest {
     }
 
     private Rightsholder buildRightsholder(Long accountNumber, String name) {
-        Rightsholder rightsholder = new Rightsholder();
+        var rightsholder = new Rightsholder();
         rightsholder.setAccountNumber(accountNumber);
         rightsholder.setName(name);
         return rightsholder;

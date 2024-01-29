@@ -82,7 +82,7 @@ public class FasNtsUsageAppliedFilterWidgetTest {
 
     private void verifyLabel(Component component, String labelName, String labelValue) {
         assertThat(component, instanceOf(Label.class));
-        Label label = (Label) component;
+        var label = (Label) component;
         Html html = (Html) label.getChildren().findFirst().orElseThrow();
         String actualText = html.getElement().toString();
         String expectedText = String.format("<li><b><i>%s: </i></b>%s</li>", labelName, labelValue);
