@@ -33,6 +33,8 @@ import java.util.Set;
 @Repository
 public class UsageAuditRepository extends BaseRepository implements IUsageAuditRepository {
 
+    private static final long serialVersionUID = -1980340112874102111L;
+
     @Override
     public void insert(UsageAuditItem auditItem) {
         insert("IUsageAuditMapper.insert", Objects.requireNonNull(auditItem));

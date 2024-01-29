@@ -7,6 +7,7 @@ import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
 import java.io.OutputStream;
 import java.io.PipedOutputStream;
+import java.io.Serializable;
 import java.util.Set;
 
 /**
@@ -18,7 +19,7 @@ import java.util.Set;
  *
  * @author Dzmitry Basiachenka
  */
-public interface IAaclReportRepository {
+public interface IAaclReportRepository extends Serializable {
 
     /**
      * Finds AACL usages according to given {@link UsageFilter} and writes them to the output stream

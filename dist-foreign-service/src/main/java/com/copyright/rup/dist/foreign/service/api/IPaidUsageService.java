@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.service.api;
 
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -13,7 +14,7 @@ import java.util.List;
  *
  * @author Anton Azarenka
  */
-public interface IPaidUsageService {
+public interface IPaidUsageService extends Serializable {
 
     /**
      * Updates paid information for {@link PaidUsage}s

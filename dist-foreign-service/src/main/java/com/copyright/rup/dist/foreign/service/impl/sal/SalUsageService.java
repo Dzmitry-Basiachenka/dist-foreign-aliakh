@@ -66,6 +66,7 @@ import io.micrometer.core.annotation.Timed;
 public class SalUsageService implements ISalUsageService {
 
     private static final Logger LOGGER = RupLogUtils.getLogger();
+    private static final long serialVersionUID = -7312321768418383910L;
 
     @Autowired
     private IUsageAuditService usageAuditService;

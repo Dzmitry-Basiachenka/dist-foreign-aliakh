@@ -42,6 +42,7 @@ import java.util.Set;
 @Repository
 public class AaclReportRepository extends CommonReportRepository implements IAaclReportRepository {
 
+    private static final long serialVersionUID = -8718571645665438408L;
     private static final String FILTER_KEY = "filter";
     private static final String SCENARIO_ID_KEY = "scenarioId";
     private static final String PRODUCT_FAMILY = "productFamily";

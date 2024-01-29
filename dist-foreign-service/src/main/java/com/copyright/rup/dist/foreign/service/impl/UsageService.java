@@ -76,6 +76,7 @@ import io.micrometer.core.annotation.Timed;
 @Service
 public class UsageService implements IUsageService {
 
+    private static final long serialVersionUID = 3908905481676474369L;
     private static final String SEND_TO_CRM_FINISHED_INFO_LOG_MESSAGE = "Send to CRM. Finished. PaidUsagesCount={}, " +
         "ArchivedUsagesCount={}, NotReportedUsagesCount={}, ArchivedScenariosCount={}";
     private static final String SEND_TO_CRM_FINISHED_DEBUG_LOG_MESSAGE = "Send to CRM. Finished. PaidUsagesCount={}, " +
@@ -83,6 +84,7 @@ public class UsageService implements IUsageService {
     private static final String UPDATE_PAID_NOT_FOUND_WARN_LOG_MESSAGE = "Update paid information. Not found usages. " +
         "UsagesCount={}, CreatedCount={}, UpdatedCount={}, NotFoundUsageIds={}";
     private static final Logger LOGGER = RupLogUtils.getLogger();
+
     @Autowired
     private IUsageRepository usageRepository;
     @Autowired

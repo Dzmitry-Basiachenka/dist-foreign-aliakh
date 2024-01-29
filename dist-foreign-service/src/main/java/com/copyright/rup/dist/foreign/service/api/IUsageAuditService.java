@@ -4,6 +4,7 @@ import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.domain.report.BatchStatistic;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
@@ -18,7 +19,7 @@ import java.util.Set;
  * @author Uladzislau_Shalamitski
  * @author Aliaksandr Radkevich
  */
-public interface IUsageAuditService {
+public interface IUsageAuditService extends Serializable {
 
     /**
      * Logs usage action.

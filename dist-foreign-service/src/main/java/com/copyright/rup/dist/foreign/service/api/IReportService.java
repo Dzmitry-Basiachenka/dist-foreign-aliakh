@@ -9,6 +9,7 @@ import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
 import java.io.OutputStream;
 import java.io.PipedOutputStream;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -23,7 +24,7 @@ import java.util.Set;
  *
  * @author Nikita Levyankov
  */
-public interface IReportService {
+public interface IReportService extends Serializable {
 
     /**
      * Writes FAS and FAS2 usages found by {@link AuditFilter} into CSV output stream.

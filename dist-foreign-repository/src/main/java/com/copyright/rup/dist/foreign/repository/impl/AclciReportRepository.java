@@ -24,6 +24,8 @@ import java.util.Objects;
 @Repository
 public class AclciReportRepository extends CommonReportRepository implements IAclciReportRepository {
 
+    private static final long serialVersionUID = -3997215481975823950L;
+
     @Override
     public void writeAclciUsagesCsvReport(UsageFilter filter, PipedOutputStream pipedOutputStream) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(1);
