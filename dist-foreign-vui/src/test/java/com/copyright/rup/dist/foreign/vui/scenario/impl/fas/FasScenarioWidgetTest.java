@@ -160,17 +160,17 @@ public class FasScenarioWidgetTest {
 
     private void verifyContent(Component content) {
         assertEquals(VerticalLayout.class, content.getClass());
-        VerticalLayout layout = (VerticalLayout) content;
-        assertEquals(3, layout.getComponentCount());
-        verifyToolbar(layout.getComponentAt(0));
-        verifyGrid(layout.getComponentAt(1));
-        verifyEmptyScenarioLabel(((VerticalLayout) layout.getComponentAt(2)).getComponentAt(0));
+        var verticalLayout = (VerticalLayout) content;
+        assertEquals(3, verticalLayout.getComponentCount());
+        verifyToolbar(verticalLayout.getComponentAt(0));
+        verifyGrid(verticalLayout.getComponentAt(1));
+        verifyEmptyScenarioLabel(((VerticalLayout) verticalLayout.getComponentAt(2)).getComponentAt(0));
         verifyButtonsLayout(getFooterComponent(scenarioWidget, 1));
     }
 
     private void verifyToolbar(Component component) {
         assertThat(component, instanceOf(HorizontalLayout.class));
-        HorizontalLayout horizontalLayout = (HorizontalLayout) component;
+        var horizontalLayout = (HorizontalLayout) component;
         assertEquals(3, horizontalLayout.getComponentCount());
         assertTrue(horizontalLayout.isSpacing());
         assertEquals(JustifyContentMode.BETWEEN, horizontalLayout.getJustifyContentMode());
@@ -209,20 +209,20 @@ public class FasScenarioWidgetTest {
 
     private void verifyButtonsLayout(Component component) {
         assertThat(component, instanceOf(HorizontalLayout.class));
-        HorizontalLayout layout = (HorizontalLayout) component;
-        assertTrue(layout.isSpacing());
-        assertEquals("scenario-buttons-layout", layout.getId().orElseThrow());
-        assertEquals(4, layout.getComponentCount());
-        var excludeByRroButton = layout.getComponentAt(0);
+        var horizontalLayout = (HorizontalLayout) component;
+        assertTrue(horizontalLayout.isSpacing());
+        assertEquals("scenario-buttons-layout", horizontalLayout.getId().orElseThrow());
+        assertEquals(4, horizontalLayout.getComponentCount());
+        var excludeByRroButton = horizontalLayout.getComponentAt(0);
         assertThat(excludeByRroButton, instanceOf(Button.class));
         assertEquals("Exclude By RRO", ((Button) excludeByRroButton).getText());
-        var fileDownloader = layout.getComponentAt(1);
+        var fileDownloader = horizontalLayout.getComponentAt(1);
         assertThat(fileDownloader, instanceOf(OnDemandFileDownloader.class));
         assertEquals("Export Details", ((Button) fileDownloader.getChildren().findFirst().orElseThrow()).getText());
-        fileDownloader = layout.getComponentAt(2);
+        fileDownloader = horizontalLayout.getComponentAt(2);
         assertThat(fileDownloader, instanceOf(OnDemandFileDownloader.class));
         assertEquals("Export", ((Button) fileDownloader.getChildren().findFirst().orElseThrow()).getText());
-        var closeButton = layout.getComponentAt(3);
+        var closeButton = horizontalLayout.getComponentAt(3);
         assertThat(closeButton, instanceOf(Button.class));
         assertEquals("Close", ((Button) closeButton).getText());
     }

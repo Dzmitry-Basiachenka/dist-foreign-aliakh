@@ -17,6 +17,8 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.function.ValueProvider;
 
+import java.util.Objects;
+
 /**
  * Implementation of {@link IScenarioHistoryWidget}.
  * <p>
@@ -45,7 +47,7 @@ public class ScenarioHistoryWidget extends CommonDialog implements IScenarioHist
 
     @Override
     public void populateHistory(Scenario scenario) {
-        if (null != scenario) {
+        if (Objects.nonNull(scenario)) {
             setHeaderTitle(ForeignUi.getMessage("window.caption.scenario_history", scenario.getName()));
             grid.setItems(controller.getActions(scenario.getId()));
         }

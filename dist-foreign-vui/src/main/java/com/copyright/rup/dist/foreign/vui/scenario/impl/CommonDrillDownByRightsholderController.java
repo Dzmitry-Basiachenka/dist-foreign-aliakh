@@ -35,7 +35,7 @@ public abstract class CommonDrillDownByRightsholderController
     public void showWidget(Long accountNumber, String rhName, Scenario scenario) {
         selectedRightsholderAccountNumber = Objects.requireNonNull(accountNumber);
         selectedScenario = Objects.requireNonNull(scenario);
-        Dialog drillDownWindow = (Dialog) initWidget();
+        var drillDownWindow = (Dialog) initWidget();
         drillDownWindow.setHeaderTitle(ForeignUi.getMessage("table.foreign.rightsholder.format",
             StringUtils.defaultString(rhName), accountNumber));
         Windows.showModalWindow(drillDownWindow);

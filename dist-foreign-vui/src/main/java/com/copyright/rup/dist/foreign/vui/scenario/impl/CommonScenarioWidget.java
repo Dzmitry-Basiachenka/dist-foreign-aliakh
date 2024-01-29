@@ -133,9 +133,7 @@ public abstract class CommonScenarioWidget extends CommonDialog implements IComm
         addColumns();
         addFooter();
         initEmptyScenarioMessage();
-        var rootLayout = new VerticalLayout(initToolbar(), rightsholdersGrid, emptyUsagesLayout);
-        rootLayout.setPadding(false);
-        rootLayout.setSpacing(false);
+        var rootLayout = VaadinUtils.initCommonVerticalLayout(initToolbar(), rightsholdersGrid, emptyUsagesLayout);
         rootLayout.setSizeFull();
         getFooter().add(initButtons());
         return rootLayout;
