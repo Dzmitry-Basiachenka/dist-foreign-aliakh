@@ -2,6 +2,8 @@ package com.copyright.rup.dist.foreign.vui.scenario.impl.fas;
 
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.getDialogContent;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.getFooterComponent;
+import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyFooterItems;
+import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyGridItems;
 
 import static org.easymock.EasyMock.expect;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -18,18 +20,20 @@ import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
+import com.copyright.rup.dist.common.test.TestUtils;
+import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.vui.scenario.api.fas.IFasScenarioController;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.downloader.OnDemandFileDownloader;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.SearchWidget;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.grid.FooterRow;
-import com.vaadin.flow.component.grid.FooterRow.FooterCell;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.Grid.Column;
 import com.vaadin.flow.component.html.Div;
@@ -49,6 +53,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.AbstractMap.SimpleImmutableEntry;
@@ -70,6 +75,11 @@ import java.util.stream.Collectors;
 @PrepareForTest(UI.class)
 @PowerMockIgnore({"com.sun.org.apache.xerces.*", "javax.xml.*", "org.xml.*", "javax.management.*"})
 public class FasScenarioWidgetTest {
+
+    private static final String STYLE_ALIGN_RIGHT = "v-align-right";
+
+    private final List<RightsholderTotalsHolder> rightsholderTotalsHolders =
+        loadExpectedRightsholderTotalsHolder("rightsholder_total_holder_1000010022.json");
 
     private FasScenarioWidget scenarioWidget;
     private IFasScenarioController controller;
@@ -129,6 +139,25 @@ public class FasScenarioWidgetTest {
         verify(controller, mediator);
     }
 
+    @Test
+    public void testGridValues() {
+        expect(controller.loadBeans(0, Integer.MAX_VALUE, List.of())).andReturn(rightsholderTotalsHolders).once();
+        expect(controller.getSize()).andReturn(1).once();
+        replay(controller);
+        Grid<?> grid = (Grid<?>) ((VerticalLayout) getDialogContent(scenarioWidget)).getComponentAt(1);
+        Object[][] expectedCells = {
+            {"2000197554", "Andrew Goodwin", "2000017003", "ProLitteris", "20,000.00", "6,400.00", "13,600.00", "16.0"}
+        };
+        verifyGridItems(grid, rightsholderTotalsHolders, expectedCells);
+        verify(controller);
+        Object[][] expectedFooterColumns = {
+            {"grossTotal", "20,000.00", STYLE_ALIGN_RIGHT},
+            {"serviceFeeTotal", "6,400.00", STYLE_ALIGN_RIGHT},
+            {"netTotal", "13,600.00", STYLE_ALIGN_RIGHT}
+        };
+        verifyFooterItems(grid, 1, "Totals", expectedFooterColumns);
+    }
+
     private void verifyContent(Component content) {
         assertEquals(VerticalLayout.class, content.getClass());
         VerticalLayout layout = (VerticalLayout) content;
@@ -169,14 +198,6 @@ public class FasScenarioWidgetTest {
         assertEquals(List.of("RH Account #", "RH Name", "Payee Account #", "Payee Name", "Gross Amt in USD",
                 "Service Fee Amount", "Net Amt in USD", "Service Fee %"),
             columns.stream().map(column -> column.getHeaderText()).collect(Collectors.toList()));
-        FooterRow footerRow = (FooterRow) grid.getFooterRows().get(1);
-        verifyTotalCellValue(footerRow.getCell(grid.getColumnByKey("grossTotal")), "20,000.00");
-        verifyTotalCellValue(footerRow.getCell(grid.getColumnByKey("serviceFeeTotal")), "6,400.00");
-        verifyTotalCellValue(footerRow.getCell(grid.getColumnByKey("netTotal")), "13,600.00");
-    }
-
-    private void verifyTotalCellValue(FooterCell cell, String expectedValue) {
-        assertTrue(StringUtils.contains(cell.getComponent().getElement().getOuterHTML(), expectedValue));
     }
 
     private void verifyEmptyScenarioLabel(Component component) {
@@ -214,5 +235,16 @@ public class FasScenarioWidgetTest {
         scenario.setServiceFeeTotal(new BigDecimal("6400.00"));
         scenario.setNetTotal(new BigDecimal("13600.00"));
         scenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);
+    }
+
+    private List<RightsholderTotalsHolder> loadExpectedRightsholderTotalsHolder(String fileName) {
+        try {
+            String content = TestUtils.fileToString(this.getClass(), fileName);
+            ObjectMapper mapper = new ObjectMapper();
+            return mapper.readValue(content, new TypeReference<List<RightsholderTotalsHolder>>() {
+            });
+        } catch (IOException e) {
+            throw new AssertionError(e);
+        }
     }
 }

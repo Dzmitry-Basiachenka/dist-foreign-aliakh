@@ -1,0 +1,16 @@
+[
+  {
+    "rightsholder": {
+      "accountNumber": 2000197554,
+      "name": "Andrew Goodwin"
+    },
+    "payee": {
+      "accountNumber": 2000017003,
+      "name": "ProLitteris"
+    },
+    "grossTotal": 20000.00,
+    "serviceFeeTotal": 6400.00,
+    "netTotal": 13600.00,
+    "serviceFee": 0.16
+  }
+]
