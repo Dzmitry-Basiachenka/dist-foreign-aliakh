@@ -1,8 +1,7 @@
 package com.copyright.rup.dist.foreign.vui.vaadin.common.themes;
 
 /**
- * Custom theme class inherited from {@link } class.
- * Contains custom constants with styles.
+ * Custom theme class, contains custom constants with styles.
  * <p/>
  * Copyright (C) 2014 copyright.com
  * <p/>

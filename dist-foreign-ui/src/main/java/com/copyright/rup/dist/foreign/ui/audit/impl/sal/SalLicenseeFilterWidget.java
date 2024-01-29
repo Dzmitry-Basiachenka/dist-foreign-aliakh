@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.audit.impl.sal;
 
 import com.copyright.rup.dist.foreign.domain.report.SalLicensee;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
+import com.copyright.rup.vaadin.ui.component.filter.CommonFilterWindow;
 import com.copyright.rup.vaadin.ui.component.filter.FilterWindow;
 import com.copyright.rup.vaadin.ui.component.filter.IFilterWindowController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
@@ -70,7 +71,7 @@ class SalLicenseeFilterWidget extends BaseItemsFilterWidget<SalLicensee>
     }
 
     @Override
-    public void onSave(FilterWindow.FilterSaveEvent<SalLicensee> event) {
+    public void onSave(CommonFilterWindow.FilterSaveEvent<SalLicensee> event) {
         Set<SalLicensee> itemsIds = event.getSelectedItemsIds();
         selectedItemsIds.clear();
         if (CollectionUtils.isNotEmpty(itemsIds)) {

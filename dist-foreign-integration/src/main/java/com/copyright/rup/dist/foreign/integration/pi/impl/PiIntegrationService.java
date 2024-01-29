@@ -16,7 +16,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
-import org.apache.lucene.queryparser.classic.QueryParser;
+import org.apache.lucene.queryparser.classic.QueryParserBase;
 import org.opensearch.OpenSearchException;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -104,7 +104,7 @@ public class PiIntegrationService implements IPiIntegrationService {
      */
     String buildQueryString(String field, Object value) {
         return String.format("%s:\"%s\"", field, value instanceof String
-            ? QueryParser.escape(((String) value).trim())
+            ? QueryParserBase.escape(((String) value).trim())
             : value);
     }
 

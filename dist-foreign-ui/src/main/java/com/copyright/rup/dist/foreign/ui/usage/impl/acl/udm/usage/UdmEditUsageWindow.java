@@ -15,7 +15,6 @@ import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.CommonUdmUsageWindow;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
-import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.google.common.collect.Range;
@@ -36,6 +35,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.themes.ValoTheme;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -138,7 +138,7 @@ public class UdmEditUsageWindow extends CommonUdmUsageWindow implements IDateFor
         rootLayout.setComponentAlignment(buttonsLayout, Alignment.BOTTOM_RIGHT);
         rootLayout.setExpandRatio(panel, 1f);
         rootLayout.setSizeFull();
-        panel.setStyleName(Cornerstone.FORMLAYOUT_LIGHT);
+        panel.setStyleName(ValoTheme.FORMLAYOUT_LIGHT);
         binder.readBean(udmUsage);
         binder.validate();
         binder.addValueChangeListener(event -> saveButton.setEnabled(binder.hasChanges()));

@@ -12,7 +12,8 @@ import com.copyright.rup.dist.foreign.ui.usage.api.nts.INtsUsageWidget;
 import com.copyright.rup.dist.foreign.ui.usage.impl.CommonUsageWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
-import com.copyright.rup.vaadin.ui.component.filter.FilterWindow;
+import com.copyright.rup.vaadin.ui.component.filter.CommonFilterWindow.FilterSaveEvent;
+import com.copyright.rup.vaadin.ui.component.filter.CommonFilterWindow.IFilterSaveListener;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.api.IMediator;
@@ -190,7 +191,7 @@ public class NtsUsageWidget extends CommonUsageWidget implements INtsUsageWidget
                     Windows.showNotificationWindow(ForeignUi.getMessage("message.usage.batches.empty"));
                 }
             });
-        window.addListener(FilterWindow.FilterSaveEvent.class, widget, FilterWindow.IFilterSaveListener.SAVE_HANDLER);
+        window.addListener(FilterSaveEvent.class, widget, IFilterSaveListener.SAVE_HANDLER);
         return window;
     }
 

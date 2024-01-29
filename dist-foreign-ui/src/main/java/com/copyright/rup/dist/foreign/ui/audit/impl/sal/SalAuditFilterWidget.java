@@ -9,7 +9,7 @@ import com.copyright.rup.dist.foreign.ui.audit.impl.CommonStatusFilterWidget;
 import com.copyright.rup.dist.foreign.ui.common.LazyRightsholderFilterWidget;
 import com.copyright.rup.dist.foreign.ui.common.UsageBatchFilterWidget;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
-import com.copyright.rup.vaadin.ui.component.filter.FilterWindow;
+import com.copyright.rup.vaadin.ui.component.filter.CommonFilterWindow;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.ui.ComboBox;
@@ -96,7 +96,7 @@ public class SalAuditFilterWidget extends CommonAuditFilterWidget {
 
     private SalLicenseeFilterWidget buildLicenseesFilter() {
         licenseeFilterWidget = new SalLicenseeFilterWidget(controller::getSalLicensees);
-        licenseeFilterWidget.addFilterSaveListener((FilterWindow.IFilterSaveListener<SalLicensee>) event -> {
+        licenseeFilterWidget.addFilterSaveListener((CommonFilterWindow.IFilterSaveListener<SalLicensee>) event -> {
             getFilter().setLicenseeAccountNumbers(event.getSelectedItemsIds()
                 .stream()
                 .map(SalLicensee::getAccountNumber)

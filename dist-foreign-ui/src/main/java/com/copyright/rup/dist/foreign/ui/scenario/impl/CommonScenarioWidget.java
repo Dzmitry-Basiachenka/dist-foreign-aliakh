@@ -7,7 +7,6 @@ import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonScenarioController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonScenarioWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.dataprovider.LoadingIndicatorDataProvider;
-import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.util.CurrencyUtils;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.SearchWidget;
@@ -251,7 +250,7 @@ public abstract class CommonScenarioWidget extends Window implements ICommonScen
         Label emptyScenarioMessage =
             new Label(ForeignUi.getMessage("label.content.empty_scenario"), ContentMode.HTML);
         emptyScenarioMessage.setSizeUndefined();
-        emptyScenarioMessage.addStyleName(Cornerstone.LABEL_H2);
+        emptyScenarioMessage.addStyleName(ValoTheme.LABEL_H2);
         emptyUsagesLayout = new VerticalLayout(emptyScenarioMessage);
         emptyUsagesLayout.setComponentAlignment(emptyScenarioMessage, Alignment.MIDDLE_CENTER);
         emptyUsagesLayout.setSizeFull();

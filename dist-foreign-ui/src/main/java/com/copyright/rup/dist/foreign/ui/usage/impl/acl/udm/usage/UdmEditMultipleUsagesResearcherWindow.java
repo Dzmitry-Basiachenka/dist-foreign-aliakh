@@ -4,12 +4,12 @@ import com.copyright.rup.dist.foreign.domain.UdmActionReason;
 import com.copyright.rup.dist.foreign.domain.UdmIneligibleReason;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.ui.audit.impl.CommonAuditFieldToValuesMap;
 import com.copyright.rup.dist.foreign.ui.audit.impl.UdmUsageAuditFieldToValuesMap;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageController;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
-import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.data.Binder;
@@ -25,6 +25,7 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
+import com.vaadin.ui.themes.ValoTheme;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -151,7 +152,7 @@ public class UdmEditMultipleUsagesResearcherWindow extends Window {
 
     private HorizontalLayout buildCommonLayout(Component component, String labelCaption) {
         Label label = new Label(ForeignUi.getMessage(labelCaption));
-        label.addStyleName(Cornerstone.LABEL_BOLD);
+        label.addStyleName(ValoTheme.LABEL_BOLD);
         label.setWidth(110, Unit.PIXELS);
         HorizontalLayout layout = new HorizontalLayout(label, component);
         layout.setSizeFull();
@@ -167,7 +168,7 @@ public class UdmEditMultipleUsagesResearcherWindow extends Window {
                 binder.writeBean(bindedUsageDto);
                 updateUsagesFields();
                 controller.updateUsages(
-                    UdmUsageAuditFieldToValuesMap.getDtoToAuditReasonsMap(udmUsageDtoToFieldValuesMap),
+                    CommonAuditFieldToValuesMap.getDtoToAuditReasonsMap(udmUsageDtoToFieldValuesMap),
                     true, StringUtils.EMPTY);
                 saveButtonClickListener.buttonClick(event);
                 close();

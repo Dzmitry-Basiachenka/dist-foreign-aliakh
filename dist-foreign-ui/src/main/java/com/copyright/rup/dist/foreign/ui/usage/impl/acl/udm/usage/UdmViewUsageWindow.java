@@ -6,7 +6,6 @@ import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.CommonUdmUsageWindow;
 import com.copyright.rup.vaadin.ui.Buttons;
-import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.data.Binder;
@@ -17,6 +16,7 @@ import com.vaadin.ui.ComponentContainer;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.themes.ValoTheme;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -67,7 +67,7 @@ public class UdmViewUsageWindow extends CommonUdmUsageWindow implements IDateFor
         rootLayout.setComponentAlignment(buttonsLayout, Alignment.BOTTOM_RIGHT);
         rootLayout.setExpandRatio(panel, 1f);
         rootLayout.setSizeFull();
-        panel.setStyleName(Cornerstone.FORMLAYOUT_LIGHT);
+        panel.setStyleName(ValoTheme.FORMLAYOUT_LIGHT);
         binder.readBean(udmUsage);
         binder.validate();
         return rootLayout;

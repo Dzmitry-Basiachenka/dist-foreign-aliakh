@@ -89,7 +89,7 @@ public class FasNtsUsageFilterWidget extends CommonUsageFilterWidget implements 
     }
 
     private HorizontalLayout buildUsageBatchFilter() {
-        usageBatchFilterWidget = new UsageBatchFilterWidget(() -> controller.getUsageBatches());
+        usageBatchFilterWidget = new UsageBatchFilterWidget(controller::getUsageBatches);
         usageBatchFilterWidget.addFilterSaveListener((IFilterSaveListener<UsageBatch>) saveEvent -> {
             getFilter().setUsageBatchesIds(
                 saveEvent.getSelectedItemsIds().stream().map(UsageBatch::getId).collect(Collectors.toSet()));

@@ -16,7 +16,6 @@ import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.vaadin.ui.component.upload.UploadField;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
-import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 
 import com.vaadin.data.Binder;
 import com.vaadin.data.HasValue;
@@ -41,6 +40,7 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.components.grid.FooterCell;
 import com.vaadin.ui.components.grid.FooterRow;
+import com.vaadin.ui.themes.ValoTheme;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -143,7 +143,7 @@ public final class UiTestHelper {
         assertThat(component, instanceOf(Label.class));
         Label label = (Label) component;
         assertEquals("Filters", label.getValue());
-        assertEquals(Cornerstone.LABEL_H2, label.getStyleName());
+        assertEquals(ValoTheme.LABEL_H2, label.getStyleName());
     }
 
     /**
@@ -300,7 +300,7 @@ public final class UiTestHelper {
         assertThat(component, instanceOf(Button.class));
         Button button = (Button) component;
         assertEquals("More Filters", component.getCaption());
-        assertTrue(StringUtils.contains(button.getStyleName(), Cornerstone.BUTTON_LINK));
+        assertTrue(StringUtils.contains(button.getStyleName(), ValoTheme.BUTTON_LINK));
         Collection<?> listeners = button.getListeners(ClickEvent.class);
         assertTrue(CollectionUtils.isNotEmpty(listeners));
         assertEquals(listenersCount, listeners.size());
@@ -521,7 +521,7 @@ public final class UiTestHelper {
         assertEquals(caption, button.getCaption());
         assertEquals(2, button.getListeners(Button.ClickEvent.class).size());
         assertTrue(button.isDisableOnClick());
-        assertTrue(StringUtils.contains(button.getStyleName(), Cornerstone.BUTTON_LINK));
+        assertTrue(StringUtils.contains(button.getStyleName(), ValoTheme.BUTTON_LINK));
         assertFalse(iterator.hasNext());
     }
 }

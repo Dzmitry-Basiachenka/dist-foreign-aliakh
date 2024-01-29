@@ -5,7 +5,6 @@ import com.copyright.rup.dist.foreign.domain.filter.RightsholderResultsFilter;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioController;
 import com.copyright.rup.vaadin.ui.Buttons;
-import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.util.CurrencyUtils;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
@@ -99,7 +98,7 @@ public class AclScenarioDrillDownAggLcClassesWindow extends Window {
         if (Objects.nonNull(value)) {
             Label titleLabel = new Label(ForeignUi.getMessage("label.title", title));
             titleLabel.setWidth(90, Unit.PIXELS);
-            titleLabel.addStyleName(Cornerstone.LABEL_BOLD);
+            titleLabel.addStyleName(ValoTheme.LABEL_BOLD);
             Label valueLabel = new Label(String.valueOf(value));
             valueLabel.setSizeFull();
             horizontalLayout = new HorizontalLayout();

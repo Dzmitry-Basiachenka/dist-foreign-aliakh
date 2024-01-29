@@ -43,7 +43,7 @@ public class OnDemandFileDownloader extends Anchor {
     /**
      * Adds component for generating report.
      *
-     * @param component instance of {@link}
+     * @param component instance of {@link Component}
      */
     public void extend(Component component) {
         removeAll();

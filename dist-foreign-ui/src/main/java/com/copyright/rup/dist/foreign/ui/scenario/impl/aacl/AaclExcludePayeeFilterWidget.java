@@ -7,7 +7,6 @@ import com.copyright.rup.dist.foreign.ui.scenario.api.aacl.IAaclExcludePayeeFilt
 import com.copyright.rup.dist.foreign.ui.scenario.api.aacl.IAaclExcludePayeeFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.vaadin.ui.Buttons;
-import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.data.Binder;
@@ -18,6 +17,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.themes.ValoTheme;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -113,7 +113,7 @@ public class AaclExcludePayeeFilterWidget extends VerticalLayout implements IAac
 
     private Label buildFiltersHeaderLabel() {
         Label filterHeaderLabel = new Label(ForeignUi.getMessage("label.filters"));
-        filterHeaderLabel.addStyleName(Cornerstone.LABEL_H2);
+        filterHeaderLabel.addStyleName(ValoTheme.LABEL_H2);
         return filterHeaderLabel;
     }
 }
