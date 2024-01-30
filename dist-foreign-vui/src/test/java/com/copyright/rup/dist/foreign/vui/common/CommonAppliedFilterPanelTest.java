@@ -50,7 +50,7 @@ public class CommonAppliedFilterPanelTest {
         assertNull(
             filterPanel.createLabelWithSingleValue(UdmUsageFilter::getUsageStatus, udmUsageFilter, "label.status"));
         udmUsageFilter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
-        Label actualLabel =
+        var actualLabel =
             filterPanel.createLabelWithSingleValue(UdmUsageFilter::getUsageStatus, udmUsageFilter, "label.status");
         verifyLabel(actualLabel);
     }
@@ -61,7 +61,7 @@ public class CommonAppliedFilterPanelTest {
         assertNull(filterPanel.createLabelWithMultipleValues(udmUsageFilter.getAssignees(), "label.assignees",
             String::valueOf));
         udmUsageFilter.setAssignees(new HashSet<>(List.of("user@copyright.com", "john@copyright.com")));
-        Label actualLabel = filterPanel.createLabelWithMultipleValues(udmUsageFilter.getAssignees(), "label.assignees",
+        var actualLabel = filterPanel.createLabelWithMultipleValues(udmUsageFilter.getAssignees(), "label.assignees",
             String::valueOf);
         verifyLabel(actualLabel);
     }
@@ -78,7 +78,7 @@ public class CommonAppliedFilterPanelTest {
         filterExpression.setFieldSecondValue(100);
         filterExpression.setOperator(FilterOperatorEnum.BETWEEN);
         udmUsageFilter.setAnnualMultiplierExpression(filterExpression);
-        Label actualLabel = filterPanel.createLabelWithOperator(filterExpression, "label.annual_multiplier_from",
+        var actualLabel = filterPanel.createLabelWithOperator(filterExpression, "label.annual_multiplier_from",
             "label.annual_multiplier_to");
         verifyLabel(actualLabel);
     }
@@ -88,7 +88,7 @@ public class CommonAppliedFilterPanelTest {
         expectedLabel.add(new Html("<div><li><b><i>Price: </i></b>IS_NULL</li></div>"));
         FilterExpression<Number> filterExpression = new FilterExpression<>();
         filterExpression.setOperator(FilterOperatorEnum.IS_NULL);
-        Label actualLabel = filterPanel.createLabelWithOperator(filterExpression, "label.price", StringUtils.EMPTY);
+        var actualLabel = filterPanel.createLabelWithOperator(filterExpression, "label.price", StringUtils.EMPTY);
         verifyLabel(actualLabel);
     }
 

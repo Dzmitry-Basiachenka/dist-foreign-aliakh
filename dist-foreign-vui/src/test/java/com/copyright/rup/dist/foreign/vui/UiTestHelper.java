@@ -158,7 +158,7 @@ public final class UiTestHelper {
      */
     public static void verifyLabel(Component component, String caption, String width) {
         assertThat(component, instanceOf(Label.class));
-        Label label = (Label) component;
+        var label = (Label) component;
         assertEquals(width, label.getWidth());
         assertEquals(caption, label.getText());
     }
@@ -171,7 +171,7 @@ public final class UiTestHelper {
      */
     public static void verifyLabel(Component component, String caption) {
         assertThat(component, instanceOf(Label.class));
-        Label label = (Label) component;
+        var label = (Label) component;
         assertEquals(caption, label.getText());
     }
 
@@ -182,7 +182,7 @@ public final class UiTestHelper {
      */
     public static void verifyFiltersLabel(Component component) {
         assertThat(component, instanceOf(Label.class));
-        Label label = (Label) component;
+        var label = (Label) component;
         assertEquals("Filters", label.getText());
         assertEquals("filter-label", label.getClassName());
     }
@@ -503,7 +503,7 @@ public final class UiTestHelper {
         assertEquals(footerTitle, footerRow.getCells().get(0).getText());
         for (Object[] expectedFooterColumn : expectedFooterColumns) {
             FooterCell footerCell = footerRow.getCell(grid.getColumnByKey((String) expectedFooterColumn[0]));
-            Label label = (Label) footerCell.getComponent();
+            var label = (Label) footerCell.getComponent();
             Html html = (Html) label.getChildren().findFirst().orElseThrow();
             assertTrue(StringUtils.contains(html.getInnerHtml(), (String) expectedFooterColumn[1]));
             assertEquals(expectedFooterColumn[2], label.getClassName());

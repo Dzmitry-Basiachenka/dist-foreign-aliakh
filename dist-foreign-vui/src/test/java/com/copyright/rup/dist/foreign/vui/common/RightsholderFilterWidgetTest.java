@@ -72,13 +72,13 @@ public class RightsholderFilterWidgetTest {
 
     @Test
     public void testGetBeanItemCaption() {
-        Rightsholder rightsholder = buildRightsholder();
+        var rightsholder = buildRightsholder();
         assertEquals("1000000001 - Rothchild Consultants", rightsholderFilterWidget.getBeanItemCaption(rightsholder));
     }
 
     @Test
     public void testGetBeanItemCaptionNullName() {
-        Rightsholder rightsholder = buildRightsholder();
+        var rightsholder = buildRightsholder();
         rightsholder.setName(null);
         assertEquals("1000000001 - <span class=\"filter-field-empty-name\">Rightsholder is absent in PRM</span>",
             rightsholderFilterWidget.getBeanItemCaption(rightsholder));

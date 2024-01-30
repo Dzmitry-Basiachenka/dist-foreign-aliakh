@@ -88,7 +88,7 @@ public class HeaderWidgetTest {
         Span span = (Span) headerWidget.getComponentAt(1);
         assertEquals(APPLICATION_TITLE, span.getText());
         assertTrue(headerWidget.getComponentAt(2) instanceof Label);
-        Label label = (Label) headerWidget.getComponentAt(2);
+        var label = (Label) headerWidget.getComponentAt(2);
         assertEquals(USER_NAME, label.getText());
         assertTrue(headerWidget.getComponentAt(3) instanceof Button);
         verifyButton((Button) headerWidget.getComponentAt(3));
