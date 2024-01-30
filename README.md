@@ -1,3 +1,17 @@
+21.0.1
+-
+* CDP-1672 FDA: Vaadin Migration: FAS/FAS2 - Usages Tab: adjust the size and position of widgets
+* CDP-1672 FDA: Vaadin Migration: FAS/FAS2 - Usages Tab: introduce init method for VerticalLayout and applied to Upload Usage batch window
+* CDP-1672 FDA: Vaadin Migration: FAS/FAS2 - Usages Tab: remove default validation messages on UploadUsageBatch window
+* CDP-2052 FDA: Vaadin Migration: FAS/FAS2 - Scenarios Tab Actions: improve usage batch menu button
+* CDP-1673 FDA: Vaadin Migration: FAS/FAS2 - Scenarios Tab Main View: add permissions for buttons on Scenarios tab
+* CDP-1673 FDA: Vaadin Migration: FAS/FAS2 - Scenarios Tab Main View: refine methods for testing grid items and footer items
+* CDP-1673 FDA: Vaadin Migration: FAS/FAS2 - Scenarios Tab Main View: make changes based on comments
+* CDP-2252 FDA: Usages tab dissappears after switcihng to FAS2 product family
+* CDP-2055: Sonarqube improvements: reuse base classes for static method calls
+* CDP-2055: Sonarqube improvements S2: FDA: decrease number of critical code smells
+* CDP-2231: FDA: Tech Debt: replace VerticalLayout constructions with init method from VaadinUtils
+
 21.0.0
 -
 * CDP-2158 FDA: Tech Debt: fix critical SonarQube code smell '"Serializable" classes should have a "serialVersionUID"'
