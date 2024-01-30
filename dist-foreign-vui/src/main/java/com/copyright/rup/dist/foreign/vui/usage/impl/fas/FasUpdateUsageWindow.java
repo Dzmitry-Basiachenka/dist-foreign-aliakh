@@ -76,9 +76,7 @@ class FasUpdateUsageWindow extends CommonDialog implements IFasUpdateUsageWindow
         toolbarLayout.setJustifyContentMode(JustifyContentMode.CENTER);
         VaadinUtils.setPadding(toolbarLayout, 2, 0, 2, 0);
         getFooter().add(initButtonsLayout());
-        var content = VaadinUtils.initCommonVerticalLayout(toolbarLayout, initGrid());
-        content.setHeightFull();
-        return content;
+        return VaadinUtils.initSizeFullVerticalLayout(toolbarLayout, initGrid());
     }
 
     private SearchWidget initSearchWidget() {

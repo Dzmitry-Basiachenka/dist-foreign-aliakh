@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.vui.vaadin.common.util;
 
+import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.SearchWidget;
+
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasEnabled;
 import com.vaadin.flow.component.HasStyle;
@@ -7,6 +9,8 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
+import com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.dom.Style;
 
@@ -168,5 +172,35 @@ public final class VaadinUtils {
         layout.setWidthFull();
         layout.add(components);
         return layout;
+    }
+
+    /**
+     * Initializes size full vertical layout without spacing, padding and margin by default.
+     *
+     * @param components components to be added to vertical layout, can be empty
+     * @return new instance of {@link VerticalLayout}
+     */
+    public static VerticalLayout initSizeFullVerticalLayout(Component... components) {
+        var layout = initCommonVerticalLayout(components);
+        layout.setHeightFull();
+        return layout;
+    }
+
+    /**
+     * Inits search widget layout to be used in modal window with default width as 70%.
+     *
+     * @param searchWidget search widget
+     * @param prompt       prompt for search widget
+     * @return horizontal layout with common search widget parameters
+     */
+    public static HorizontalLayout initSearchWidgetLayout(SearchWidget searchWidget, String prompt) {
+        searchWidget.setPrompt(prompt);
+        searchWidget.setWidth("70%");
+        var toolbarLayout = new HorizontalLayout(searchWidget);
+        toolbarLayout.setWidthFull();
+        toolbarLayout.setSpacing(false);
+        toolbarLayout.setJustifyContentMode(JustifyContentMode.CENTER);
+        VaadinUtils.setPadding(toolbarLayout, 2, 0, 2, 0);
+        return toolbarLayout;
     }
 }

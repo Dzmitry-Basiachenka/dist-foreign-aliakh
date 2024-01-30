@@ -4,12 +4,15 @@ import static com.copyright.rup.dist.foreign.vui.UiTestHelper.getDialogContent;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.getFooterLayout;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyGrid;
+import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyWidth;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyWindow;
 
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.anyString;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
@@ -25,11 +28,14 @@ import com.copyright.rup.dist.foreign.vui.usage.api.fas.IFasUsageController;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.Windows;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.SearchWidget;
 
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.provider.ListDataProvider;
 
 import org.apache.commons.lang3.tuple.Pair;
@@ -85,10 +91,11 @@ public class ViewUsageBatchWindowTest {
 
     @Test
     public void testStructure() {
-        verifyWindow(window, "View Usage Batch", "1000px", "550px", Unit.PIXELS, true);
+        verifyWindow(window, "View Usage Batch", "1150px", "550px", Unit.PIXELS, true);
         VerticalLayout content = (VerticalLayout) getDialogContent(window);
         assertEquals(2, content.getComponentCount());
-        assertEquals(SearchWidget.class, content.getComponentAt(0).getClass());
+        var searchLayout = (HorizontalLayout) content.getComponentAt(0);
+        verifySearchWidget(searchLayout.getComponentAt(0));
         verifyGrid((Grid) content.getComponentAt(1), List.of(
             Pair.of("Usage Batch Name", "200px"),
             Pair.of("RRO Account #", "160px"),
@@ -97,7 +104,7 @@ public class ViewUsageBatchWindowTest {
             Pair.of("Fiscal Year", "140px"),
             Pair.of("Batch Amt in USD", "180px"),
             Pair.of("Created By", "330px"),
-            Pair.of("Created Date", null)
+            Pair.of("Created Date", "150px")
         ));
         verifyButtonsLayout(getFooterLayout(window), true, "Delete", "Close");
     }
@@ -170,6 +177,14 @@ public class ViewUsageBatchWindowTest {
         replay(searchWidget, grid);
         window.performSearch();
         verify(searchWidget, grid);
+    }
+
+    private void verifySearchWidget(Component component) {
+        assertThat(component, instanceOf(SearchWidget.class));
+        var searchWidget = (SearchWidget) component;
+        verifyWidth(searchWidget, "70%", Unit.PERCENTAGE);
+        assertEquals("Enter Batch Name or Payment Date (MM/dd/yyyy) or Source RRO Name/Account #",
+            Whitebox.getInternalState(searchWidget, TextField.class).getPlaceholder());
     }
 
     private Button getDeleteButton() {

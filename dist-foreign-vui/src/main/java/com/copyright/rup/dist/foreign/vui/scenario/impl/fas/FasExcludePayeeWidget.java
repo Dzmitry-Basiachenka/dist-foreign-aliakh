@@ -95,9 +95,7 @@ public class FasExcludePayeeWidget extends CommonDialog implements IFasExcludePa
         var splitPanel = new SplitLayout();
         splitPanel.setSizeFull();
         splitPanel.addToPrimary((FasExcludePayeeFilterWidget) filterWidget);
-        var mainLayout = VaadinUtils.initCommonVerticalLayout(initToolbar(), payeesGrid);
-        mainLayout.setHeightFull();
-        splitPanel.addToSecondary(mainLayout);
+        splitPanel.addToSecondary(VaadinUtils.initSizeFullVerticalLayout(initToolbar(), payeesGrid));
         splitPanel.setSplitterPosition(16);
         add(splitPanel);
         VaadinUtils.setPadding(this, 0, 10, 0, 10);

@@ -162,13 +162,13 @@ public abstract class AbstractViewUsageBatchWindow extends CommonDialog
     protected abstract SerializablePredicate<UsageBatch> getSearchFilter(String searchValue);
 
     private void initRootLayout() {
-        this.searchWidget.setPrompt(getSearchMessage());
-        setWidth("1000px");
+        setWidth("1150px");
         setHeight("550px");
         initUsageBatchesGrid();
         var buttonsLayout = initButtonsLayout();
         initMediator();
-        add(VaadinUtils.initCommonVerticalLayout(searchWidget, grid));
+        add(VaadinUtils.initSizeFullVerticalLayout(
+            VaadinUtils.initSearchWidgetLayout(searchWidget, getSearchMessage()), grid));
         setHeaderTitle(getCaptionMessage());
         getFooter().add(buttonsLayout);
         setModalWindowProperties("view-batch-window", true);

@@ -5,6 +5,7 @@ import static com.copyright.rup.dist.foreign.vui.UiTestHelper.getFooterComponent
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyButton;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyGridItems;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifySize;
+import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyWidth;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyWindow;
 
 import static org.easymock.EasyMock.createMock;
@@ -26,6 +27,7 @@ import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.SearchWidget;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.provider.ListDataProvider;
@@ -70,7 +72,8 @@ public class FasExcludeSourceRroWindowTest {
         verifyWindow(window, "Exclude Details by Source RRO", "880px", "500px", Unit.PIXELS, true);
         var content = (VerticalLayout) getDialogContent(window);
         assertEquals(2, content.getComponentCount());
-        verifySearchWidget(content.getComponentAt(0));
+        var searchLayout = (HorizontalLayout) content.getComponentAt(0);
+        verifySearchWidget(searchLayout.getComponentAt(0));
         verifyGrid(content.getComponentAt(1));
         verifyButton(getFooterComponent(window, 1), "Cancel", true);
     }
@@ -107,9 +110,9 @@ public class FasExcludeSourceRroWindowTest {
         assertNotNull(component);
         assertThat(component, instanceOf(SearchWidget.class));
         var searchWidget = (SearchWidget) component;
+        verifyWidth(searchWidget, "70%", Unit.PERCENTAGE);
         assertEquals("Enter Source RRO Name/Account #",
             Whitebox.getInternalState(searchWidget, TextField.class).getPlaceholder());
-        assertEquals("calc(99.9% - 0rem)", searchWidget.getWidth());
     }
 
     private void verifyGrid(Component component) {
@@ -122,7 +125,7 @@ public class FasExcludeSourceRroWindowTest {
         UiTestHelper.verifyGrid(grid, List.of(
             Pair.of("Source RRO Account #", null),
             Pair.of("Source RRO Name", null),
-            Pair.of(StringUtils.EMPTY, "100px")
+            Pair.of(StringUtils.EMPTY, "95px")
         ));
     }
 

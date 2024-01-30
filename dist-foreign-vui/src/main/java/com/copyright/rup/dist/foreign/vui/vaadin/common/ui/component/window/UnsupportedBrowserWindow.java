@@ -46,8 +46,7 @@ public class UnsupportedBrowserWindow extends Dialog {
         var label = new Label(unsupportedBrowserMessage);
         label.setSizeFull();
         VaadinUtils.addComponentStyle(label, "unsupported-browser-label");
-        var layout = VaadinUtils.initCommonVerticalLayout(label);
-        layout.setHeightFull();
+        var layout = VaadinUtils.initSizeFullVerticalLayout(label);
         layout.setAlignSelf(Alignment.CENTER, label);
         VaadinUtils.addComponentStyle(layout, "unsupported-browser-layout");
         return layout;

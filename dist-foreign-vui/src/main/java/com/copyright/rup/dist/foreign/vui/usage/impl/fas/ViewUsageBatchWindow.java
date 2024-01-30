@@ -80,7 +80,7 @@ class ViewUsageBatchWindow extends AbstractViewUsageBatchWindow {
             (batch1, batch2) -> batch1.getGrossAmount().compareTo(batch2.getGrossAmount()));
         addColumn(UsageBatch::getCreateUser, "table.column.created_by", "330px",
             (batch1, batch2) -> batch1.getCreateUser().compareToIgnoreCase(batch2.getCreateUser()));
-        addColumn(batch -> toLongFormat(batch.getCreateDate()), "table.column.created_date", null,
+        addColumn(batch -> toLongFormat(batch.getCreateDate()), "table.column.created_date", "150px",
             (batch1, batch2) -> batch1.getCreateDate().compareTo(batch2.getCreateDate()));
     }
 }

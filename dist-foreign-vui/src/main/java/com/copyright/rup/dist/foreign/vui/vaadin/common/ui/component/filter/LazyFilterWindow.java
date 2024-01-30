@@ -65,8 +65,7 @@ public class LazyFilterWindow<T> extends CommonFilterWindow<T> {
         super.setWidth(550, Unit.PIXELS);
         super.setHeight(530, Unit.PIXELS);
         searchWidget = new SearchWidget(() -> dataProvider.refreshAll());
-        var content = VaadinUtils.initCommonVerticalLayout(searchWidget, initGrid());
-        content.setHeightFull();
+        var content = VaadinUtils.initSizeFullVerticalLayout(searchWidget, initGrid());
         VaadinUtils.setPadding(content, 10, 10, 10, 10);
         super.getFooter().add(createButtonsLayout(saveButtonCaption, clearButtonCaption));
         super.add(content);
