@@ -75,10 +75,11 @@ public class RefreshScenarioWindow extends CommonDialog {
         var horizontalLayout = new HorizontalLayout(label, hideGridColumnsProvider.getMenuButton());
         horizontalLayout.setJustifyContentMode(JustifyContentMode.BETWEEN);
         horizontalLayout.setAlignItems(Alignment.CENTER);
-        VaadinUtils.setMaxComponentsWidth(horizontalLayout);
+        horizontalLayout.setWidthFull();
+        VaadinUtils.setPadding(horizontalLayout, 0, 10, 0, 10);
         initTable();
         getFooter().add(buttonsLayout);
-        return VaadinUtils.initCommonVerticalLayout(horizontalLayout, grid);
+        return VaadinUtils.initSizeFullVerticalLayout(horizontalLayout, grid);
     }
 
     private void initButtonsLayout() {

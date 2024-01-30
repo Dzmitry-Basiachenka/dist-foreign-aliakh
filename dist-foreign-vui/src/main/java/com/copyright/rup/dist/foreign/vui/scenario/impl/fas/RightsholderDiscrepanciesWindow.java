@@ -58,10 +58,8 @@ class RightsholderDiscrepanciesWindow extends CommonDialog {
     private Component initContent() {
         initGrid();
         getFooter().add(initButtons());
-        var content = VaadinUtils.initCommonVerticalLayout(grid);
-        content.setHeightFull();
         VaadinUtils.setGridProperties(grid, "rightsholder-discrepancies-grid");
-        return content;
+        return VaadinUtils.initSizeFullVerticalLayout(grid);
     }
 
     private HorizontalLayout initButtons() {

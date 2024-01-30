@@ -15,7 +15,7 @@ import com.vaadin.flow.component.ComponentUtil;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.Grid.SelectionMode;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.function.ValueProvider;
 
@@ -51,7 +51,8 @@ public class FasExcludeSourceRroWindow extends CommonDialog implements ISearchCo
         super.setHeaderTitle(ForeignUi.getMessage("label.exclude.rro"));
         super.setWidth("880px");
         super.setHeight("500px");
-        super.add(initContent());
+        super.add(VaadinUtils.initSizeFullVerticalLayout(initSearchWidget(), initGrid()));
+        getFooter().add(Buttons.createCancelButton(this));
         super.setModalWindowProperties("exclude-source-rro-window", true);
     }
 
@@ -71,23 +72,20 @@ public class FasExcludeSourceRroWindow extends CommonDialog implements ISearchCo
         return StringUtils.contains(StringUtils.lowerCase(where), StringUtils.lowerCase(what));
     }
 
-    private VerticalLayout initContent() {
+    private HorizontalLayout initSearchWidget() {
         searchWidget = new SearchWidget(this);
-        searchWidget.setPrompt(ForeignUi.getMessage("field.prompt.scenario.search_widget.rro"));
-        initGrid();
-        var layout = VaadinUtils.initCommonVerticalLayout(searchWidget, grid);
-        VaadinUtils.setPadding(layout, 3, 10, 10, 10);
-        getFooter().add(Buttons.createCancelButton(this));
-        return layout;
+        return VaadinUtils.initSearchWidgetLayout(searchWidget,
+            ForeignUi.getMessage("field.prompt.scenario.search_widget.rro"));
     }
 
-    private void initGrid() {
+    private Grid<Rightsholder> initGrid() {
         grid = new Grid<>();
         grid.setItems(scenarioController.getSourceRros());
         grid.setSelectionMode(SelectionMode.NONE);
         grid.setSizeFull();
         addColumns();
         VaadinUtils.setGridProperties(grid, "exclude-details-by-rro-grid");
+        return grid;
     }
 
     private void addColumns() {
@@ -109,7 +107,8 @@ public class FasExcludeSourceRroWindow extends CommonDialog implements ISearchCo
             });
             VaadinUtils.setButtonsAutoDisabled(excludeButton);
             return excludeButton;
-        }).setWidth("100px")
+        })
+            .setWidth("95px")
             .setFlexGrow(0)
             .setSortable(false)
             .setResizable(true);

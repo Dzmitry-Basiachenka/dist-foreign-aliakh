@@ -213,7 +213,7 @@ public final class UiTestHelper {
     }
 
     /**
-     * Verifies vertical layout size.
+     * Verifies component's size.
      *
      * @param component  instance of {@link HasSize}
      * @param width      width
@@ -223,10 +223,21 @@ public final class UiTestHelper {
      */
     public static void verifySize(HasSize component, String width, Unit widthUnit, String height,
                                   Unit heightUnit) {
-        assertEquals(width, component.getWidth());
-        assertEquals(widthUnit, component.getWidthUnit().orElseThrow());
+        verifyWidth(component, width, widthUnit);
         assertEquals(height, component.getHeight());
         assertEquals(heightUnit, component.getHeightUnit().orElseThrow());
+    }
+
+    /**
+     * Verifies component's width.
+     *
+     * @param component instance of {@link HasSize}
+     * @param width     width
+     * @param widthUnit widthUnit
+     */
+    public static void verifyWidth(HasSize component, String width, Unit widthUnit) {
+        assertEquals(width, component.getWidth());
+        assertEquals(widthUnit, component.getWidthUnit().orElseThrow());
     }
 
     /**
