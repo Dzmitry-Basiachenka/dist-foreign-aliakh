@@ -5,6 +5,8 @@ import com.copyright.rup.dist.foreign.vui.main.api.IMainWidget;
 import com.copyright.rup.dist.foreign.vui.main.api.IMainWidgetController;
 import com.copyright.rup.dist.foreign.vui.scenario.api.ICommonScenariosController;
 import com.copyright.rup.dist.foreign.vui.scenario.api.ICommonScenariosWidget;
+import com.copyright.rup.dist.foreign.vui.status.api.ICommonBatchStatusController;
+import com.copyright.rup.dist.foreign.vui.status.api.ICommonBatchStatusWidget;
 import com.copyright.rup.dist.foreign.vui.usage.api.ICommonUsageController;
 import com.copyright.rup.dist.foreign.vui.usage.api.ICommonUsageWidget;
 import com.copyright.rup.dist.foreign.vui.usage.api.ScenarioCreateEvent;
@@ -44,8 +46,10 @@ public class MainWidget extends TabSheet implements IMainWidget, IMediatorProvid
 
     private SwitchableWidget<ICommonUsageWidget, ICommonUsageController> usagesWidget;
     private SwitchableWidget<ICommonScenariosWidget, ICommonScenariosController> scenariosWidget;
+    private SwitchableWidget<ICommonBatchStatusWidget, ICommonBatchStatusController> batchStatusWidget;
     private Tab usagesTab;
     private Tab scenariosTab;
+    private Tab batchStatusTab;
 
     @Override
     @SuppressWarnings("unchecked")
@@ -55,8 +59,10 @@ public class MainWidget extends TabSheet implements IMainWidget, IMediatorProvid
             ComponentUtil.addListener((CommonUsageWidget) widget, ScenarioCreateEvent.class,
                 event -> controller.onScenarioCreated(event)));
         scenariosWidget = new SwitchableWidget<>(controller.getScenariosControllerProvider(), widget -> {});
+        batchStatusWidget = new SwitchableWidget<>(controller.getBatchStatusControllerProvider(), widget -> {});
         usagesTab = addTab(ForeignUi.getMessage("tab.usages"), usagesWidget, "main-usages-tab");
         scenariosTab = addTab(ForeignUi.getMessage("tab.scenarios"), scenariosWidget, "main-scenarios-tab");
+        batchStatusTab = addTab(ForeignUi.getMessage("tab.batch_status"), batchStatusWidget, "main-batch-statuses-tab");
         addSelectedChangeListener(event -> controller.refreshWidget());
         setSuffixComponent(createSuffixComponent());
         setSizeFull();
@@ -69,6 +75,7 @@ public class MainWidget extends TabSheet implements IMainWidget, IMediatorProvid
     public void updateProductFamily() {
         usagesTab.setVisible(usagesWidget.updateProductFamily());
         scenariosTab.setVisible(scenariosWidget.updateProductFamily());
+        batchStatusTab.setVisible(batchStatusWidget.updateProductFamily());
     }
 
     @Override

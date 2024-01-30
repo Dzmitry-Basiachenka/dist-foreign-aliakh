@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.vui.main.api;
 
 import com.copyright.rup.dist.foreign.vui.scenario.api.ICommonScenariosController;
+import com.copyright.rup.dist.foreign.vui.status.api.ICommonBatchStatusController;
 import com.copyright.rup.dist.foreign.vui.usage.api.ICommonUsageController;
 import com.copyright.rup.dist.foreign.vui.usage.api.ScenarioCreateEvent;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.api.IController;
@@ -37,6 +38,11 @@ public interface IMainWidgetController extends IController<IMainWidget> {
      * @return instance of {@link IControllerProvider} for {@link ICommonScenariosController}.
      */
     IControllerProvider<ICommonScenariosController> getScenariosControllerProvider();
+
+    /**
+     * @return instance of {@link IControllerProvider} for {@link ICommonBatchStatusController}.
+     */
+    IControllerProvider<ICommonBatchStatusController> getBatchStatusControllerProvider();
 
     /**
      * Handles scenario creation.
