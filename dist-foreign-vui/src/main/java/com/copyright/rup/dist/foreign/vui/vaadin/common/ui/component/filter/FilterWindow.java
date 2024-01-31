@@ -4,7 +4,6 @@ import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.Buttons;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.util.VaadinUtils;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.SearchWidget;
 
-import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.CheckboxGroup;
 import com.vaadin.flow.component.checkbox.CheckboxGroupVariant;
@@ -84,22 +83,13 @@ public class FilterWindow<T> extends CommonFilterWindow<T> {
                         String saveButtonCaption, String clearButtonCaption,
                         ValueProvider<T, List<String>>... values) {
         super(caption);
-        this.controller = Objects.requireNonNull(controller);
         this.filterItems = controller.loadBeans();
-        super.setWidth(450, Unit.PIXELS);
-        super.setHeight(400, Unit.PIXELS);
-        var content = new VerticalLayout();
-        var scroller = new Scroller(new Div(initItemsPanel()));
-        scroller.setScrollDirection(Scroller.ScrollDirection.VERTICAL);
-        if (ArrayUtils.isNotEmpty(values)) {
-            searchWidget = createSearchWidget(values);
-            content.add(searchWidget);
-        }
+        this.controller = Objects.requireNonNull(controller);
+        super.setWidth("450px");
+        super.setHeight("400px");
         super.addFilterSaveListener(controller);
-        content.add(scroller);
+        super.add(initContent(values));
         super.getFooter().add(createButtonsLayout(saveButtonCaption, clearButtonCaption));
-        content.setSizeFull();
-        super.add(content);
     }
 
     /**
@@ -124,7 +114,7 @@ public class FilterWindow<T> extends CommonFilterWindow<T> {
      * @param promptString prompt string to be displayed when search field is empty
      */
     public void setSearchPromptString(String promptString) {
-        if (null != searchWidget) {
+        if (Objects.nonNull(searchWidget)) {
             searchWidget.setPrompt(promptString);
         }
     }
@@ -134,6 +124,23 @@ public class FilterWindow<T> extends CommonFilterWindow<T> {
      */
     public void setSelectAllButtonVisible() {
         selectAllButton.setVisible(true);
+    }
+
+    /**
+     * Performs search in the listDataProvider when user clicks on search icon.
+     *
+     * @param values searchable listDataProvider properties
+     */
+    @SuppressWarnings("unchecked")
+    public void performSearch(ValueProvider<T, List<String>>... values) {
+        listDataProvider.clearFilters();
+        String searchValue = searchWidget.getSearchValue();
+        if (StringUtils.isNotBlank(searchValue)) {
+            Arrays.asList(values).forEach(provider -> listDataProvider.addFilter(
+                value -> provider.apply(value)
+                    .stream()
+                    .anyMatch(field -> caseInsensitiveContains(field, searchValue))));
+        }
     }
 
     /**
@@ -157,6 +164,7 @@ public class FilterWindow<T> extends CommonFilterWindow<T> {
         fireEvent(new FilterSaveEvent(this, checkBoxGroup.getValue()));
     }
 
+    //{TODO vaadin23} check do we need all this methods once migration is completed
     protected Button getSaveButton() {
         return saveButton;
     }
@@ -189,21 +197,17 @@ public class FilterWindow<T> extends CommonFilterWindow<T> {
         filterItems.forEach(item -> checkBoxGroup.select(item));
     }
 
-    /**
-     * Performs search in the listDataProvider when user clicks on search icon.
-     *
-     * @param values searchable listDataProvider properties
-     */
-    @SuppressWarnings("unchecked")
-    public void performSearch(ValueProvider<T, List<String>>... values) {
-        listDataProvider.clearFilters();
-        String searchValue = searchWidget.getSearchValue();
-        if (StringUtils.isNotBlank(searchValue)) {
-            Arrays.asList(values).forEach(provider -> listDataProvider.addFilter(
-                value -> provider.apply(value)
-                    .stream()
-                    .anyMatch(field -> caseInsensitiveContains(field, searchValue))));
+    @SafeVarargs
+    private VerticalLayout initContent(ValueProvider<T, List<String>>... values) {
+        var content = new VerticalLayout();
+        content.setSizeFull();
+        if (ArrayUtils.isNotEmpty(values)) {
+            content.add(initSearchWidget(values));
         }
+        var scroller = new Scroller(new Div(initItemsPanel()));
+        scroller.setScrollDirection(Scroller.ScrollDirection.VERTICAL);
+        content.add(scroller);
+        return content;
     }
 
     private HorizontalLayout createButtonsLayout(String saveButtonCaption, String clearButtonCaption) {
@@ -237,10 +241,10 @@ public class FilterWindow<T> extends CommonFilterWindow<T> {
     }
 
     @SafeVarargs
-    private SearchWidget createSearchWidget(ValueProvider<T, List<String>>... values) {
-        SearchWidget widget = new SearchWidget(() -> performSearch(values));
+    private SearchWidget initSearchWidget(ValueProvider<T, List<String>>... values) {
+        searchWidget = new SearchWidget(() -> performSearch(values));
         setSearchPromptString("Enter search value");
-        return widget;
+        return searchWidget;
     }
 
     private Boolean caseInsensitiveContains(String where, String what) {

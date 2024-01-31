@@ -38,6 +38,20 @@ public class SearchWidget extends HorizontalLayout {
     public SearchWidget(ISearchController controller) {
         this.controller = Objects.requireNonNull(controller);
         init();
+        searchField.setWidthFull();
+    }
+
+    /**
+     * Constructs search widget with default prompt and widget width.
+     *
+     * @param controller an instance of {@link ISearchController}
+     * @param prompt     text field prompt
+     * @param width      text field width
+     */
+    public SearchWidget(ISearchController controller, String prompt, String width) {
+        this(controller);
+        setPrompt(prompt);
+        searchField.setWidth(width);
     }
 
     /**
@@ -82,19 +96,19 @@ public class SearchWidget extends HorizontalLayout {
     }
 
     private void init() {
-        VaadinUtils.addComponentStyle(this, "search-toolbar");
-        VaadinUtils.setMaxComponentsWidth(this);
         initSearchField();
         initButtons();
-        VaadinUtils.setMaxComponentsWidth(this);
         setSpacing(false);
+        setPadding(false);
+        setWidthFull();
+        setJustifyContentMode(JustifyContentMode.CENTER);
+        VaadinUtils.addComponentStyle(this, "search-toolbar");
     }
 
     private void initButtons() {
         searchButton = new Button(VaadinIcon.SEARCH.create(), event -> performSearch());
         searchButton.getElement().getStyle().set("margin", "4px 1px 1px 1px");
         searchButton.setTooltipText("Search");
-        searchField.setPrefixComponent(VaadinIcon.SEARCH.create());
         searchButton.addClassName("button-search");
         Button clearButton = new Button(VaadinIcon.CLOSE_SMALL.create(), event -> {
             searchField.clear();
@@ -106,7 +120,7 @@ public class SearchWidget extends HorizontalLayout {
     }
 
     private void initSearchField() {
-        VaadinUtils.setMaxComponentsWidth(searchField);
+        searchField.setPrefixComponent(VaadinIcon.SEARCH.create());
         searchField.addFocusListener(event -> searchButton.addClickShortcut(Key.ENTER));
         add(searchField);
     }

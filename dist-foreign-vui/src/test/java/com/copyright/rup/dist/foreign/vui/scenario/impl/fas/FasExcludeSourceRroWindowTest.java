@@ -27,7 +27,6 @@ import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.SearchWidget;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.provider.ListDataProvider;
@@ -72,8 +71,7 @@ public class FasExcludeSourceRroWindowTest {
         verifyWindow(window, "Exclude Details by Source RRO", "880px", "500px", Unit.PIXELS, true);
         var content = (VerticalLayout) getDialogContent(window);
         assertEquals(2, content.getComponentCount());
-        var searchLayout = (HorizontalLayout) content.getComponentAt(0);
-        verifySearchWidget(searchLayout.getComponentAt(0));
+        verifySearchWidget(content.getComponentAt(0));
         verifyGrid(content.getComponentAt(1));
         verifyButton(getFooterComponent(window, 1), "Cancel", true);
     }
@@ -110,9 +108,9 @@ public class FasExcludeSourceRroWindowTest {
         assertNotNull(component);
         assertThat(component, instanceOf(SearchWidget.class));
         var searchWidget = (SearchWidget) component;
-        verifyWidth(searchWidget, "70%", Unit.PERCENTAGE);
-        assertEquals("Enter Source RRO Name/Account #",
-            Whitebox.getInternalState(searchWidget, TextField.class).getPlaceholder());
+        TextField textField = Whitebox.getInternalState(searchWidget, TextField.class);
+        verifyWidth(textField, "70%", Unit.PERCENTAGE);
+        assertEquals("Enter Source RRO Name/Account #", textField.getPlaceholder());
     }
 
     private void verifyGrid(Component component) {

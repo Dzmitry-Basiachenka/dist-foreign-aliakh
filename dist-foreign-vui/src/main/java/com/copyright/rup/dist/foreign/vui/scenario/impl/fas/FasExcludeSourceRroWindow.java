@@ -15,7 +15,6 @@ import com.vaadin.flow.component.ComponentUtil;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.Grid.SelectionMode;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.function.ValueProvider;
 
@@ -37,9 +36,8 @@ public class FasExcludeSourceRroWindow extends CommonDialog implements ISearchCo
     private static final long serialVersionUID = 6320399153641040818L;
 
     private final IFasScenarioController scenarioController;
-
-    private SearchWidget searchWidget;
-    private Grid<Rightsholder> grid;
+    private final SearchWidget searchWidget;
+    private final Grid<Rightsholder> grid = new Grid<>();
 
     /**
      * Constructs window.
@@ -48,10 +46,11 @@ public class FasExcludeSourceRroWindow extends CommonDialog implements ISearchCo
      */
     FasExcludeSourceRroWindow(IFasScenarioController scenarioController) {
         this.scenarioController = scenarioController;
+        searchWidget = new SearchWidget(this, ForeignUi.getMessage("field.prompt.scenario.search_widget.rro"), "70%");
         super.setHeaderTitle(ForeignUi.getMessage("label.exclude.rro"));
         super.setWidth("880px");
         super.setHeight("500px");
-        super.add(VaadinUtils.initSizeFullVerticalLayout(initSearchWidget(), initGrid()));
+        super.add(VaadinUtils.initSizeFullVerticalLayout(searchWidget, initGrid()));
         getFooter().add(Buttons.createCancelButton(this));
         super.setModalWindowProperties("exclude-source-rro-window", true);
     }
@@ -72,14 +71,7 @@ public class FasExcludeSourceRroWindow extends CommonDialog implements ISearchCo
         return StringUtils.contains(StringUtils.lowerCase(where), StringUtils.lowerCase(what));
     }
 
-    private HorizontalLayout initSearchWidget() {
-        searchWidget = new SearchWidget(this);
-        return VaadinUtils.initSearchWidgetLayout(searchWidget,
-            ForeignUi.getMessage("field.prompt.scenario.search_widget.rro"));
-    }
-
     private Grid<Rightsholder> initGrid() {
-        grid = new Grid<>();
         grid.setItems(scenarioController.getSourceRros());
         grid.setSelectionMode(SelectionMode.NONE);
         grid.setSizeFull();

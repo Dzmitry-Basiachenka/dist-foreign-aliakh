@@ -15,7 +15,6 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.AbstractGridMultiSelectionModel;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridMultiSelectionModel.SelectAllCheckboxVisibility;
-import com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.data.provider.ListDataProvider;
@@ -70,20 +69,9 @@ class FasUpdateUsageWindow extends CommonDialog implements IFasUpdateUsageWindow
     }
 
     private Component initContent() {
-        var toolbarLayout = new HorizontalLayout(initSearchWidget());
-        toolbarLayout.setWidthFull();
-        toolbarLayout.setSpacing(false);
-        toolbarLayout.setJustifyContentMode(JustifyContentMode.CENTER);
-        VaadinUtils.setPadding(toolbarLayout, 2, 0, 2, 0);
+        searchWidget = new SearchWidget(this::refresh, ForeignUi.getMessage("prompt.rightsholder_update"), "70%");
         getFooter().add(initButtonsLayout());
-        return VaadinUtils.initSizeFullVerticalLayout(toolbarLayout, initGrid());
-    }
-
-    private SearchWidget initSearchWidget() {
-        searchWidget = new SearchWidget(this::refresh);
-        searchWidget.setPrompt(ForeignUi.getMessage("prompt.rightsholder_update"));
-        searchWidget.setWidth("70%");
-        return searchWidget;
+        return VaadinUtils.initSizeFullVerticalLayout(searchWidget, initGrid());
     }
 
     private Grid<UsageDto> initGrid() {

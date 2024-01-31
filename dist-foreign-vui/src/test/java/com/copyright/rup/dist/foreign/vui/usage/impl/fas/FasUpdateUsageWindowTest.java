@@ -79,8 +79,7 @@ public class FasUpdateUsageWindowTest {
         assertEquals("update-usages-window", window.getId().get());
         var contentLayout = (VerticalLayout) getDialogContent(window);
         assertEquals(2, contentLayout.getComponentCount());
-        var toolbarLayout = (HorizontalLayout) contentLayout.getComponentAt(0);
-        assertEquals(SearchWidget.class, toolbarLayout.getComponentAt(0).getClass());
+        assertEquals(SearchWidget.class, contentLayout.getComponentAt(0).getClass());
         verifyGrid((Grid<?>) contentLayout.getComponentAt(1), List.of(
             Pair.of("Detail ID", "300px"),
             Pair.of("Status", "180px"),

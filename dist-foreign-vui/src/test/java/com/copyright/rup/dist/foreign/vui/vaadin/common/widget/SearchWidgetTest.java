@@ -4,7 +4,10 @@ import static org.easymock.EasyMock.createMock;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import com.copyright.rup.dist.foreign.vui.UiTestHelper;
+
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.textfield.TextField;
 
@@ -14,6 +17,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+import org.powermock.reflect.Whitebox;
 
 /**
  * Verifies {@link SearchWidget}.
@@ -31,7 +35,7 @@ public class SearchWidgetTest {
     private static final String EXPECTED_VALID_VALUE = "Expected Value";
     private static final String SEARCH_VALUE = "search value";
     private static final String EXPECTED_WIDGET_STYLE = "search-toolbar";
-    private static final String EXPECTED_WIDGET_WIDTH = "calc(99.9% - 0rem)";
+    private static final String DEFAULT_WIDTH = "100%";
 
     private SearchWidget searchWidget;
     private SearchWidget.ISearchController searchController;
@@ -42,13 +46,26 @@ public class SearchWidgetTest {
     }
 
     @Test
-    public void testConstructorWithArgument() {
+    public void testConstructor() {
         searchWidget = new SearchWidget(searchController);
         assertNotNull(searchWidget);
         assertEquals(searchController, searchWidget.getController());
-        assertEquals(EXPECTED_WIDGET_WIDTH, searchWidget.getWidth());
         assertEquals(EXPECTED_WIDGET_STYLE, searchWidget.getClassName());
-        verifySearchField(searchWidget.getComponentAt(0));
+        UiTestHelper.verifyWidth(searchWidget, DEFAULT_WIDTH, Unit.PERCENTAGE);
+        verifySearchField(searchWidget.getComponentAt(0), DEFAULT_WIDTH);
+        verifyButtons(searchWidget.getComponentAt(1), searchWidget.getComponentAt(2));
+    }
+
+    @Test
+    public void testConstructorWithArguments() {
+        searchWidget = new SearchWidget(searchController, "search prompt", "70%");
+        assertNotNull(searchWidget);
+        assertEquals(searchController, searchWidget.getController());
+        assertEquals(EXPECTED_WIDGET_STYLE, searchWidget.getClassName());
+        UiTestHelper.verifyWidth(searchWidget, DEFAULT_WIDTH, Unit.PERCENTAGE);
+        verifySearchField(searchWidget.getComponentAt(0), "70%");
+        assertEquals("search prompt",
+            Whitebox.getInternalState(searchWidget, TextField.class).getPlaceholder());
         verifyButtons(searchWidget.getComponentAt(1), searchWidget.getComponentAt(2));
     }
 
@@ -83,10 +100,10 @@ public class SearchWidgetTest {
         assertEquals(SEARCH_VALUE, searchWidget.getSearchValue());
     }
 
-    private void verifySearchField(Component component) {
+    private void verifySearchField(Component component, String expectedWidth) {
         assertNotNull(component);
         assertEquals(TextField.class, component.getClass());
-        assertEquals(EXPECTED_WIDGET_WIDTH, ((TextField) component).getWidth());
+        assertEquals(expectedWidth, ((TextField) component).getWidth());
     }
 
     private void verifyButtons(Component searchButton, Component clearButton) {

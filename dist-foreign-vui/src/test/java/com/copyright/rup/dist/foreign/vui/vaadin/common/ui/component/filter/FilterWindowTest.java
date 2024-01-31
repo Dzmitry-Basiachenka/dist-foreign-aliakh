@@ -73,7 +73,7 @@ public class FilterWindowTest {
     @Test
     public void testWindowStructure() {
         assertEquals(CAPTION, filterWindow.getHeaderTitle());
-        verifyWindow(filterWindow, CAPTION, "450.0px", "400.0px", Unit.PIXELS, false);
+        verifyWindow(filterWindow, CAPTION, "450px", "400px", Unit.PIXELS, false);
         assertFalse(filterWindow.isResizable());
         VerticalLayout content = (VerticalLayout) getDialogContent(filterWindow);
         assertTrue(content.isSpacing());
