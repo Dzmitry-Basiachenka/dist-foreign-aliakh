@@ -4,6 +4,7 @@ import com.copyright.rup.dist.foreign.vui.main.api.IControllerProvider;
 import com.copyright.rup.dist.foreign.vui.main.api.IMainWidget;
 import com.copyright.rup.dist.foreign.vui.main.api.IMainWidgetController;
 import com.copyright.rup.dist.foreign.vui.main.api.IProductFamilyProvider;
+import com.copyright.rup.dist.foreign.vui.report.api.IReportController;
 import com.copyright.rup.dist.foreign.vui.scenario.api.ICommonScenariosController;
 import com.copyright.rup.dist.foreign.vui.status.api.ICommonBatchStatusController;
 import com.copyright.rup.dist.foreign.vui.usage.api.ICommonUsageController;
@@ -45,11 +46,18 @@ public class MainWidgetController extends TabController<IMainWidget> implements 
     @Autowired
     @Qualifier("dist.foreign.batchStatusControllerProvider")
     private IControllerProvider<ICommonBatchStatusController> batchStatusControllerProvider;
+    @Autowired
+    private IReportController reportController;
 
     @Override
     public void onProductFamilyChanged() {
         getWidget().updateProductFamily();
         refreshWidget();
+    }
+
+    @Override
+    public IReportController getReportController() {
+        return reportController;
     }
 
     @Override

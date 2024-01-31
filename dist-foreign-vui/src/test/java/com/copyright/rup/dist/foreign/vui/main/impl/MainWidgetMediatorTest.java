@@ -12,6 +12,8 @@ import static org.powermock.api.easymock.PowerMock.verify;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.vui.main.api.IMainWidgetController;
 import com.copyright.rup.dist.foreign.vui.main.api.IProductFamilyProvider;
+import com.copyright.rup.dist.foreign.vui.report.api.IReportController;
+import com.copyright.rup.dist.foreign.vui.report.impl.ReportController;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.security.SecurityUtils;
 
 import com.vaadin.flow.component.select.Select;
@@ -22,6 +24,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+import org.powermock.reflect.Whitebox;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -48,16 +51,19 @@ public class MainWidgetMediatorTest {
     private Select<String> productFamilyComboBox;
     private IProductFamilyProvider productFamilyProvider;
     private IMainWidgetController controller;
+    private IReportController reportController;
     private MainWidgetMediator mediator;
 
     @Before
     public void setUp() {
         productFamilyComboBox = new Select<>();
         controller = createMock(MainWidgetController.class);
+        reportController = createMock(ReportController.class);
         productFamilyProvider = new ProductFamilyProvider();
         mediator = new MainWidgetMediator();
         mediator.setProductFamilySelect(productFamilyComboBox);
         mediator.setProductFamilyProvider(productFamilyProvider);
+        Whitebox.setInternalState(controller, reportController);
         mediator.setController(controller);
     }
 
@@ -66,13 +72,16 @@ public class MainWidgetMediatorTest {
         mockResearcherPermissions();
         controller.onProductFamilyChanged();
         expectLastCall().once();
-        replay(SecurityUtils.class, controller);
+        expect(controller.getReportController()).andReturn(reportController).once();
+        reportController.onProductFamilyChanged();
+        expectLastCall().once();
+        replay(SecurityUtils.class, controller, reportController);
         mediator.applyPermissions();
         Collection<String> products = ((ListDataProvider<String>) productFamilyComboBox.getDataProvider()).getItems();
         assertEquals(List.of(FdaConstants.FAS_PRODUCT_FAMILY), products);
         assertEquals(FdaConstants.FAS_PRODUCT_FAMILY, productFamilyComboBox.getValue());
         assertEquals(FdaConstants.FAS_PRODUCT_FAMILY, productFamilyProvider.getSelectedProductFamily());
-        verify(SecurityUtils.class, controller);
+        verify(SecurityUtils.class, controller, reportController);
     }
 
     @Test

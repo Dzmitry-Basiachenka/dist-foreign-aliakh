@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.vui.main.impl;
 import com.copyright.rup.dist.foreign.vui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.vui.main.api.IMainWidget;
 import com.copyright.rup.dist.foreign.vui.main.api.IMainWidgetController;
+import com.copyright.rup.dist.foreign.vui.report.impl.ReportWidget;
 import com.copyright.rup.dist.foreign.vui.scenario.api.ICommonScenariosController;
 import com.copyright.rup.dist.foreign.vui.scenario.api.ICommonScenariosWidget;
 import com.copyright.rup.dist.foreign.vui.status.api.ICommonBatchStatusController;
@@ -99,14 +100,15 @@ public class MainWidget extends TabSheet implements IMainWidget, IMediatorProvid
     }
 
     private HorizontalLayout createSuffixComponent() {
-        var horizontalLayout = new HorizontalLayout();
+        var suffixComponent = new HorizontalLayout();
         var refreshIcon = Buttons.createRefreshIcon();
         refreshIcon.addClickListener(event -> controller.refreshWidget());
-        horizontalLayout.add(initProductFamilySelectLayout(), refreshIcon);
-        horizontalLayout.setJustifyContentMode(JustifyContentMode.END);
-        horizontalLayout.setDefaultVerticalComponentAlignment(Alignment.CENTER);
-        VaadinUtils.addComponentStyle(horizontalLayout, "reports-tab-refresh-button-layout");
-        return horizontalLayout;
+        suffixComponent.add((ReportWidget) controller.getReportController().initWidget(), refreshIcon);
+        suffixComponent.add(new HorizontalLayout(initProductFamilySelectLayout(), refreshIcon));
+        suffixComponent.setJustifyContentMode(JustifyContentMode.BETWEEN);
+        suffixComponent.setDefaultVerticalComponentAlignment(Alignment.CENTER);
+        VaadinUtils.addComponentStyle(suffixComponent, "reports-tab-refresh-button-layout");
+        return suffixComponent;
     }
 
     private HorizontalLayout initProductFamilySelectLayout() {
@@ -119,6 +121,7 @@ public class MainWidget extends TabSheet implements IMainWidget, IMediatorProvid
         productFamilySelect.addValueChangeListener(event -> {
             controller.getProductFamilyProvider().setProductFamily(event.getValue());
             controller.onProductFamilyChanged();
+            controller.getReportController().onProductFamilyChanged();
         });
         productFamilySelect.setWidth("95px");
         VaadinUtils.addComponentStyle(productFamilySelect, "global-product-family-select");
