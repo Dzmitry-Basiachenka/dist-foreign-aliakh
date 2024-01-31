@@ -37,6 +37,7 @@ public class MainWidgetMediator implements IMediator {
             productFamilyProvider.setProductFamily(FdaConstants.FAS_PRODUCT_FAMILY);
             productFamilySelect.setValue(FdaConstants.FAS_PRODUCT_FAMILY);
             controller.onProductFamilyChanged();
+            controller.getReportController().onProductFamilyChanged();
         } else {
             productFamilySelect.setItems(PRODUCT_FAMILIES);
             productFamilySelect.setValue(FdaConstants.FAS_PRODUCT_FAMILY);

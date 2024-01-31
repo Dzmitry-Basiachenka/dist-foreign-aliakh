@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.vui.main.api;
 
+import com.copyright.rup.dist.foreign.vui.report.api.IReportController;
 import com.copyright.rup.dist.foreign.vui.scenario.api.ICommonScenariosController;
 import com.copyright.rup.dist.foreign.vui.status.api.ICommonBatchStatusController;
 import com.copyright.rup.dist.foreign.vui.usage.api.ICommonUsageController;
@@ -50,4 +51,9 @@ public interface IMainWidgetController extends IController<IMainWidget> {
      * @param event {@link ScenarioCreateEvent}
      */
     void onScenarioCreated(ScenarioCreateEvent event);
+
+    /**
+     * @return instance of {@link IReportController}
+     */
+    IReportController getReportController();
 }
