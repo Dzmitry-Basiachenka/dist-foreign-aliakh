@@ -14,6 +14,7 @@ import static org.easymock.EasyMock.expect;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
@@ -33,7 +34,6 @@ import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.provider.ListDataProvider;
@@ -94,8 +94,7 @@ public class ViewUsageBatchWindowTest {
         verifyWindow(window, "View Usage Batch", "1150px", "550px", Unit.PIXELS, true);
         VerticalLayout content = (VerticalLayout) getDialogContent(window);
         assertEquals(2, content.getComponentCount());
-        var searchLayout = (HorizontalLayout) content.getComponentAt(0);
-        verifySearchWidget(searchLayout.getComponentAt(0));
+        verifySearchWidget(content.getComponentAt(0));
         verifyGrid((Grid) content.getComponentAt(1), List.of(
             Pair.of("Usage Batch Name", "200px"),
             Pair.of("RRO Account #", "160px"),
@@ -180,11 +179,13 @@ public class ViewUsageBatchWindowTest {
     }
 
     private void verifySearchWidget(Component component) {
+        assertNotNull(component);
         assertThat(component, instanceOf(SearchWidget.class));
         var searchWidget = (SearchWidget) component;
-        verifyWidth(searchWidget, "70%", Unit.PERCENTAGE);
+        TextField textField = Whitebox.getInternalState(searchWidget, TextField.class);
+        verifyWidth(textField, "70%", Unit.PERCENTAGE);
         assertEquals("Enter Batch Name or Payment Date (MM/dd/yyyy) or Source RRO Name/Account #",
-            Whitebox.getInternalState(searchWidget, TextField.class).getPlaceholder());
+            textField.getPlaceholder());
     }
 
     private Button getDeleteButton() {

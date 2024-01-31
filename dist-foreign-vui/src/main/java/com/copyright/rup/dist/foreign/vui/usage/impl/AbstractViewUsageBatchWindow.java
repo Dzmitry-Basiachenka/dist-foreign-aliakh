@@ -49,7 +49,7 @@ public abstract class AbstractViewUsageBatchWindow extends CommonDialog
      */
     public AbstractViewUsageBatchWindow(ICommonUsageController controller) {
         this.controller = controller;
-        this.searchWidget = new SearchWidget(this);
+        searchWidget = new SearchWidget(this, getSearchMessage(), "70%");
         initRootLayout();
     }
 
@@ -167,8 +167,7 @@ public abstract class AbstractViewUsageBatchWindow extends CommonDialog
         initUsageBatchesGrid();
         var buttonsLayout = initButtonsLayout();
         initMediator();
-        add(VaadinUtils.initSizeFullVerticalLayout(
-            VaadinUtils.initSearchWidgetLayout(searchWidget, getSearchMessage()), grid));
+        add(VaadinUtils.initSizeFullVerticalLayout(searchWidget, grid));
         setHeaderTitle(getCaptionMessage());
         getFooter().add(buttonsLayout);
         setModalWindowProperties("view-batch-window", true);
