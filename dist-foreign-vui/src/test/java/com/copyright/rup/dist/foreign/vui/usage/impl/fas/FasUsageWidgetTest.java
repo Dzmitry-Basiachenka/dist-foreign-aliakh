@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.vui.usage.impl.fas;
 
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyGrid;
+import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyGridItems;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyMenuBar;
 
 import static org.easymock.EasyMock.anyObject;
@@ -20,6 +21,7 @@ import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
+import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
@@ -29,6 +31,10 @@ import com.copyright.rup.dist.foreign.vui.usage.api.fas.IFasUsageController;
 import com.copyright.rup.dist.foreign.vui.usage.impl.FasNtsUsageFilterWidget;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.Windows;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.contextmenu.MenuItem;
@@ -49,6 +55,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDate;
 import java.util.AbstractMap.SimpleImmutableEntry;
@@ -115,7 +122,7 @@ public class FasUsageWidgetTest {
         assertEquals(2, contentLayout.getComponentCount());
         var toolbarLayout = (HorizontalLayout) contentLayout.getComponentAt(0);
         verifyButtonsLayout((HorizontalLayout) toolbarLayout.getComponentAt(0));
-        Grid<?> grid = (Grid<?>) contentLayout.getComponentAt(1);
+        var grid = (Grid<?>) contentLayout.getComponentAt(1);
         verifyGrid(grid, List.of(
             Pair.of("Detail ID", WIDTH_300),
             Pair.of("Detail Status", "180px"),
@@ -146,6 +153,26 @@ public class FasUsageWidgetTest {
             Pair.of("Author", WIDTH_300),
             Pair.of("Comment", "200px")
         ));
+    }
+
+    @Test
+    public void testGridValues() {
+        List<UsageDto> usages = loadExpectedUsageDtos("usage_dto_05f0385c.json");
+        expect(controller.loadBeans(0, Integer.MAX_VALUE, List.of())).andReturn(usages).once();
+        expect(controller.getBeansCount()).andReturn(1).once();
+        replay(controller);
+        var secondComponent = widget.getSecondaryComponent();
+        var contentLayout = (VerticalLayout) secondComponent;
+        var grid = (Grid<?>) contentLayout.getComponentAt(1);
+        Object[][] expectedCells = {{
+            "05f0385c-798d-4c96-8278-8f5ff873b15f", "PAID", "FAS", "Paid batch", "1000000004",
+            "Computers for Design and Construction", "1000002859", "John Wiley & Sons - Books", "243904752",
+            "100 ROAD MOVIES", "1008902112317555XX", "1008902112317555XX", "VALISBN13", "FY2021", "02/12/2021",
+            "100 ROAD MOVIES", "some article", "some publisher", "02/13/2021", "2", "3,000.00", "500.00", "1,000.00",
+            "lib", "1980", "2000", "author", "usage from usages.csv"
+        }};
+        verifyGridItems(grid, usages, expectedCells);
+        verify(controller);
     }
 
     @Test
@@ -321,5 +348,18 @@ public class FasUsageWidgetTest {
         assertEquals("Add To Scenario", ((Button) layout.getComponentAt(4)).getText());
         assertEquals("Export",
             ((Button) layout.getComponentAt(5).getChildren().findFirst().orElseThrow()).getText());
+    }
+
+    private List<UsageDto> loadExpectedUsageDtos(String fileName) {
+        try {
+            var content = TestUtils.fileToString(this.getClass(), fileName);
+            var mapper = new ObjectMapper();
+            mapper.registerModule(new JavaTimeModule());
+            mapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
+            return mapper.readValue(content, new TypeReference<>() {
+            });
+        } catch (IOException e) {
+            throw new AssertionError(e);
+        }
     }
 }

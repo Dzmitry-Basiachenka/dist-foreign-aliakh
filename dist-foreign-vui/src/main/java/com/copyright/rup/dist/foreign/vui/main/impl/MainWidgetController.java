@@ -5,6 +5,7 @@ import com.copyright.rup.dist.foreign.vui.main.api.IMainWidget;
 import com.copyright.rup.dist.foreign.vui.main.api.IMainWidgetController;
 import com.copyright.rup.dist.foreign.vui.main.api.IProductFamilyProvider;
 import com.copyright.rup.dist.foreign.vui.scenario.api.ICommonScenariosController;
+import com.copyright.rup.dist.foreign.vui.status.api.ICommonBatchStatusController;
 import com.copyright.rup.dist.foreign.vui.usage.api.ICommonUsageController;
 import com.copyright.rup.dist.foreign.vui.usage.api.ScenarioCreateEvent;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.api.TabController;
@@ -41,6 +42,9 @@ public class MainWidgetController extends TabController<IMainWidget> implements 
     @Autowired
     @Qualifier("dist.foreign.scenariosControllerProvider")
     private IControllerProvider<ICommonScenariosController> scenariosControllerProvider;
+    @Autowired
+    @Qualifier("dist.foreign.batchStatusControllerProvider")
+    private IControllerProvider<ICommonBatchStatusController> batchStatusControllerProvider;
 
     @Override
     public void onProductFamilyChanged() {
@@ -61,6 +65,11 @@ public class MainWidgetController extends TabController<IMainWidget> implements 
     @Override
     public IControllerProvider<ICommonScenariosController> getScenariosControllerProvider() {
         return scenariosControllerProvider;
+    }
+
+    @Override
+    public IControllerProvider<ICommonBatchStatusController> getBatchStatusControllerProvider() {
+        return batchStatusControllerProvider;
     }
 
     @Override
