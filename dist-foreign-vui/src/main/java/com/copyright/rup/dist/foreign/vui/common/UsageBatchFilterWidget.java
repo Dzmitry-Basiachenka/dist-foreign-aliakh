@@ -23,7 +23,7 @@ import java.util.function.Supplier;
  * <p/>
  * Copyright (C) 2017 copyright.com
  * <p/>
- * Date: 2/15/2017
+ * Date: 02/15/2017
  *
  * @author Mikalai Bezmen
  */
