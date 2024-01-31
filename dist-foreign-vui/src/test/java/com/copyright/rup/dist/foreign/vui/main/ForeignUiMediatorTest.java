@@ -34,7 +34,7 @@ import java.util.List;
  * <p>
  * Copyright (C) 2021 copyright.com
  * <p>
- * Date: 06/14/21
+ * Date: 06/14/2021
  *
  * @author Anton Azarenka
  */
@@ -43,7 +43,11 @@ import java.util.List;
 public class ForeignUiMediatorTest {
 
     private static final String FDA_ACCESS_APPLICATION = "FDA_ACCESS_APPLICATION";
-    private static final List<String> PRODUCT_FAMILIES = List.of(FdaConstants.FAS_PRODUCT_FAMILY);
+    private static final List<String> PRODUCT_FAMILIES = List.of(
+        FdaConstants.FAS_PRODUCT_FAMILY,
+        FdaConstants.CLA_FAS_PRODUCT_FAMILY,
+        FdaConstants.NTS_PRODUCT_FAMILY
+    );
 
     private Select<String> productFamilyComboBox;
     private IProductFamilyProvider productFamilyProvider;

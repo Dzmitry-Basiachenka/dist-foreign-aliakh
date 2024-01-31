@@ -23,7 +23,9 @@ public class MainWidgetMediator implements IMediator {
 
     private static final List<String> PRODUCT_FAMILIES = List.of(
         FdaConstants.FAS_PRODUCT_FAMILY,
-        FdaConstants.CLA_FAS_PRODUCT_FAMILY);
+        FdaConstants.CLA_FAS_PRODUCT_FAMILY,
+        FdaConstants.NTS_PRODUCT_FAMILY
+    );
 
     private Select<String> productFamilySelect;
     private IProductFamilyProvider productFamilyProvider;
