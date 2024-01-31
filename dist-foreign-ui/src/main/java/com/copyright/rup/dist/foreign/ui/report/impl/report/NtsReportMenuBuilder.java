@@ -22,6 +22,7 @@ public class NtsReportMenuBuilder implements IReportMenuBuilder {
     public void addItems(IReportController controller, IReportWidget widget, MenuItem rootItem) {
         String taxNotificationReport = ForeignUi.getMessage("menu.report.tax_notification_report");
         String serviceFeeTrueUpReport = ForeignUi.getMessage("menu.report.service_fee_true_up");
+        String preServiceFeeFundReport = ForeignUi.getMessage("menu.report.nts_pre_service_fee_fund");
         rootItem.addItem(ForeignUi.getMessage("menu.report.nts_batch_summary"), menuItem ->
             widget.generateReport(controller.getNtsWithdrawnBatchSummaryReportStreamSource()));
         rootItem.addItem(ForeignUi.getMessage("menu.report.undistributed_liabilities"), menuItem ->
@@ -32,5 +33,7 @@ public class NtsReportMenuBuilder implements IReportMenuBuilder {
             widget.openReportWindow(serviceFeeTrueUpReport, controller.getNtsServiceFeeTrueUpReportController()));
         rootItem.addItem(ForeignUi.getMessage("menu.report.nts_fund_pools"), menuItem ->
             widget.generateReport(controller.getNtsFundPoolsReportStreamSource()));
+        rootItem.addItem(preServiceFeeFundReport, menuItem ->
+            widget.openReportWindow(preServiceFeeFundReport, controller.getNtsPreServiceFeeFundReportController()));
     }
 }

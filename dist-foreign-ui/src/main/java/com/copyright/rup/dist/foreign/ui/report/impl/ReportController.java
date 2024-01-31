@@ -8,6 +8,7 @@ import com.copyright.rup.dist.foreign.ui.report.api.IAaclBaselineUsagesReportCon
 import com.copyright.rup.dist.foreign.ui.report.api.ICommonScenarioReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.ICommonScenariosReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.IFasServiceFeeTrueUpReportController;
+import com.copyright.rup.dist.foreign.ui.report.api.INtsPreServiceFeeFundReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.IReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.IReportWidget;
 import com.copyright.rup.dist.foreign.ui.report.api.ISalFundPoolsReportController;
@@ -70,6 +71,8 @@ public class ReportController extends CommonController<IReportWidget> implements
     private ITaxNotificationReportController taxNotificationReportController;
     @Autowired
     private ISalFundPoolsReportController salFundPoolsReportController;
+    @Autowired
+    private INtsPreServiceFeeFundReportController ntsPreServiceFeeFundReportController;
     @Autowired
     private IReportService reportService;
     @Autowired
@@ -190,6 +193,11 @@ public class ReportController extends CommonController<IReportWidget> implements
     public IStreamSource getNtsFundPoolsReportStreamSource() {
         return new ByteArrayStreamSource("nts_fund_pools_",
             outputStream -> reportService.writeNtsFundPoolsCsvReport(outputStream));
+    }
+
+    @Override
+    public INtsPreServiceFeeFundReportController getNtsPreServiceFeeFundReportController() {
+        return ntsPreServiceFeeFundReportController;
     }
 
     @Override
