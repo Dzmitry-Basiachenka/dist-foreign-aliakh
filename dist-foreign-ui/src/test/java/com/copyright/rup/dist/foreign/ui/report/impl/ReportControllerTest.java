@@ -18,6 +18,7 @@ import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
 import com.copyright.rup.dist.foreign.ui.report.api.ICommonScenarioReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.ICommonScenariosReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.IFasServiceFeeTrueUpReportController;
+import com.copyright.rup.dist.foreign.ui.report.api.INtsPreServiceFeeFundReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.IReportWidget;
 import com.copyright.rup.dist.foreign.ui.report.api.ISalFundPoolsReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.IUndistributedLiabilitiesReportController;
@@ -52,6 +53,7 @@ public class ReportControllerTest {
     private ICommonScenariosReportController salLiabilitiesSummaryByRhAndWorkReportController;
     private ICommonScenarioReportController ntsServiceFeeTrueUpReportController;
     private ISalFundPoolsReportController salFundPoolsReportController;
+    private INtsPreServiceFeeFundReportController ntsPreServiceFeeFundReportController;
     private ReportController reportController;
     private IReportService reportService;
     private IProductFamilyProvider productFamilyProvider;
@@ -67,6 +69,7 @@ public class ReportControllerTest {
         ntsServiceFeeTrueUpReportController = createMock(ICommonScenarioReportController.class);
         productFamilyProvider = createMock(IProductFamilyProvider.class);
         salFundPoolsReportController = createMock(ISalFundPoolsReportController.class);
+        ntsPreServiceFeeFundReportController = createMock(INtsPreServiceFeeFundReportController.class);
         Whitebox.setInternalState(reportController, undistributedLiabilitiesReportController);
         Whitebox.setInternalState(reportController, fasServiceFeeTrueUpReportController);
         Whitebox.setInternalState(reportController, "salLiabilitiesByRhReportController",
@@ -78,6 +81,7 @@ public class ReportControllerTest {
         Whitebox.setInternalState(reportController, reportService);
         Whitebox.setInternalState(reportController, productFamilyProvider);
         Whitebox.setInternalState(reportController, salFundPoolsReportController);
+        Whitebox.setInternalState(reportController, ntsPreServiceFeeFundReportController);
     }
 
     @Test
@@ -213,5 +217,10 @@ public class ReportControllerTest {
         assertEquals("nts_fund_pools_01_02_2023_03_04.csv",
             reportController.getNtsFundPoolsReportStreamSource().getSource().getKey().get());
         verify(OffsetDateTime.class);
+    }
+
+    @Test
+    public void testGetNtsPreServiceFeeFundReportController() {
+        assertSame(ntsPreServiceFeeFundReportController, reportController.getNtsPreServiceFeeFundReportController());
     }
 }

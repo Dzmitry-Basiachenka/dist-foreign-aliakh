@@ -124,4 +124,9 @@ public interface IReportController extends IController<IReportWidget> {
      * @return SAL Historical Item Bank Details Report controller.
      */
     ISalHistoricalItemBankDetailsReportController getSalHistoricalItemBankDetailsReportController();
+
+    /**
+     * @return pre-service fee fund report controller for NTS.
+     */
+    INtsPreServiceFeeFundReportController getNtsPreServiceFeeFundReportController();
 }

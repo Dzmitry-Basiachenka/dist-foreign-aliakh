@@ -14,6 +14,7 @@ import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
 import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
 import com.copyright.rup.dist.foreign.ui.report.api.ICommonScenarioReportController;
+import com.copyright.rup.dist.foreign.ui.report.api.INtsPreServiceFeeFundReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.IReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.ISummaryMarketReportController;
 import com.copyright.rup.dist.foreign.ui.report.impl.report.ReportStreamSource;
@@ -255,6 +256,22 @@ public class ReportWidgetTest {
         verifyAll();
     }
 
+    @Test
+    public void testNtsPreServiceFeeFundReportSelected() {
+        INtsPreServiceFeeFundReportController controller = createMock(INtsPreServiceFeeFundReportController.class);
+        NtsPreServiceFeeFundReportWidget widget = createMock(NtsPreServiceFeeFundReportWidget.class);
+        expect(reportController.getNtsPreServiceFeeFundReportController()).andReturn(controller).once();
+        expect(controller.initWidget()).andReturn(widget).once();
+        widget.setCaption("NTS Pre-Service Fee Fund Report");
+        expectLastCall().once();
+        Windows.showModalWindow(widget);
+        expectLastCall().once();
+        expectProductFamily(FdaConstants.NTS_PRODUCT_FAMILY);
+        replayAll();
+        selectMenuItem(5);
+        verifyAll();
+    }
+
     private void selectMenuItem(int index) {
         reportWidget.init();
         reportWidget.getItems().get(0).getChildren().get(index).getCommand().menuSelected(null);
@@ -297,12 +314,13 @@ public class ReportWidgetTest {
     private void assertReportsMenuNts() {
         assertEquals(1, CollectionUtils.size(reportWidget.getItems()));
         List<MenuItem> menuItems = reportWidget.getItems().get(0).getChildren();
-        assertEquals(5, CollectionUtils.size(menuItems));
+        assertEquals(6, CollectionUtils.size(menuItems));
         assertEquals("NTS Withdrawn Batch Summary Report", menuItems.get(0).getText());
         assertEquals("Undistributed Liabilities Reconciliation Report", menuItems.get(1).getText());
         assertEquals("Tax Notification Report", menuItems.get(2).getText());
         assertEquals("Service Fee True-up Report", menuItems.get(3).getText());
         assertEquals("NTS Fund Pools Report", menuItems.get(4).getText());
+        assertEquals("NTS Pre-Service Fee Fund Report", menuItems.get(5).getText());
     }
 
     private void assertReportsMenuAacl() {
