@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.report.api;
 
+import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.vaadin.widget.api.IWidget;
 
 /**
@@ -12,4 +13,9 @@ import com.copyright.rup.vaadin.widget.api.IWidget;
  * @author Dzmitry Basiachenka
  */
 public interface INtsPreServiceFeeFundReportWidget extends IWidget<INtsPreServiceFeeFundReportController> {
+
+    /**
+     * @return the selected fund pool.
+     */
+    FundPool getFundPool();
 }

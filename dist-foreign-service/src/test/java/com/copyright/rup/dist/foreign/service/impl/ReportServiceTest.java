@@ -6,7 +6,6 @@ import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 
-import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.test.ReportTestUtils;
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.RhTaxInformation;
@@ -660,15 +659,20 @@ public class ReportServiceTest {
         verify(ntsReportRepository);
     }
 
+    @Test
+    public void testWriteNtsPreServiceFeeFundCsvReport() {
+        //TODO: {dbasiachenka} implement
+    }
+
     private Scenario buildScenario(ScenarioStatusEnum status) {
-        Scenario scenario = new Scenario();
-        scenario.setId(RupPersistUtils.generateUuid());
+        var scenario = new Scenario();
+        scenario.setId("3049d34e-85ea-45d8-affc-d69dc9e33085");
         scenario.setStatus(status);
         return scenario;
     }
 
     private UsageBatch buildUsageBatch() {
-        UsageBatch usageBatch = new UsageBatch();
+        var usageBatch = new UsageBatch();
         usageBatch.setId("2358deb3-caa3-4c4e-85cd-c353fcc8e6b9");
         usageBatch.setName("Copibec 25May18");
         usageBatch.setGrossAmount(USAGE_BATCH_GROSS_AMOUNT);
