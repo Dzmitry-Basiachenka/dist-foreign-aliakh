@@ -157,7 +157,7 @@ public class FasUsageWidgetTest {
 
     @Test
     public void testGridValues() {
-        List<UsageDto> usages = loadExpectedUsageDtos("usage_dto_05f0385c.json");
+        var usages = loadExpectedUsageDtos("usage_dto_05f0385c.json");
         expect(controller.loadBeans(0, Integer.MAX_VALUE, List.of())).andReturn(usages).once();
         expect(controller.getBeansCount()).andReturn(1).once();
         replay(controller);

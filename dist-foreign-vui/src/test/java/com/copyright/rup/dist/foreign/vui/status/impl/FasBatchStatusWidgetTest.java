@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.vui.status.impl;
 
+import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyGrid;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyGridItems;
 
 import static org.easymock.EasyMock.createMock;
@@ -12,7 +13,6 @@ import static org.junit.Assert.assertEquals;
 
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.UsageBatchStatus;
-import com.copyright.rup.dist.foreign.vui.UiTestHelper;
 import com.copyright.rup.dist.foreign.vui.status.api.ICommonBatchStatusController;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -58,7 +58,7 @@ public class FasBatchStatusWidgetTest {
         assertThat(component, instanceOf(Grid.class));
         var grid = (Grid<?>) component;
         assertEquals("batch-status-grid", grid.getId().get());
-        UiTestHelper.verifyGrid(grid, List.of(
+        verifyGrid(grid, List.of(
             Pair.of("Usage Batch Name", null),
             Pair.of("Total Count", "140px"),
             Pair.of("New", "70px"),
@@ -95,10 +95,7 @@ public class FasBatchStatusWidgetTest {
         expect(controller.getBatchStatuses()).andReturn(List.of(new UsageBatchStatus())).once();
         replay(controller);
         widget.refresh();
-        assertEquals(1, widget.getComponentCount());
-        var component = widget.getComponentAt(0);
-        assertThat(component, instanceOf(Grid.class));
-        var grid = (Grid<?>) component;
+        var grid = (Grid<?>) widget.getComponentAt(0);
         assertEquals(1, ((ListDataProvider<?>) grid.getDataProvider()).getItems().size());
         verify(controller);
     }

@@ -4,6 +4,7 @@ import static org.easymock.EasyMock.createMock;
 import static org.junit.Assert.assertEquals;
 
 import com.copyright.rup.dist.foreign.vui.usage.api.fas.IFasUsageController;
+import com.copyright.rup.dist.foreign.vui.usage.api.nts.INtsUsageController;
 
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
@@ -23,10 +24,19 @@ public class UsageControllerProviderTest {
 
     @Test
     public void testGetProductFamilyToControllerMap() {
-        UsagesControllerProvider provider = new UsagesControllerProvider();
-        IFasUsageController controller = createMock(IFasUsageController.class);
-        Whitebox.setInternalState(provider, controller);
+        var provider = new UsagesControllerProvider();
+        var fasUsagesController = createMock(IFasUsageController.class);
+        var ntsUsagesController = createMock(INtsUsageController.class);
+        Whitebox.setInternalState(provider, fasUsagesController);
+        Whitebox.setInternalState(provider, ntsUsagesController);
         provider.initProductFamilyMap();
-        assertEquals(Map.of("FAS", controller, "FAS2", controller), provider.getProductFamilyToControllerMap());
+        assertEquals(
+            Map.of(
+                "FAS", fasUsagesController,
+                "FAS2", fasUsagesController,
+                "NTS", ntsUsagesController
+            ),
+            provider.getProductFamilyToControllerMap()
+        );
     }
 }

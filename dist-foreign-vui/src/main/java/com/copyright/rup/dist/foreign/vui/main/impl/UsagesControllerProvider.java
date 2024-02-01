@@ -3,8 +3,7 @@ package com.copyright.rup.dist.foreign.vui.main.impl;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.vui.usage.api.ICommonUsageController;
 import com.copyright.rup.dist.foreign.vui.usage.api.fas.IFasUsageController;
-
-import com.google.common.collect.ImmutableMap;
+import com.copyright.rup.dist.foreign.vui.usage.api.nts.INtsUsageController;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -32,16 +31,19 @@ public class UsagesControllerProvider extends CommonControllerProvider<ICommonUs
 
     @Autowired
     private IFasUsageController fasUsagesController;
+    @Autowired
+    private INtsUsageController ntsUsagesController;
 
     /**
      * Initialises product family map.
      */
     @PostConstruct
     public void initProductFamilyMap() {
-        productFamilyMap = ImmutableMap.<String, ICommonUsageController>builder()
-            .put(FdaConstants.FAS_PRODUCT_FAMILY, fasUsagesController)
-            .put(FdaConstants.CLA_FAS_PRODUCT_FAMILY, fasUsagesController)
-            .build();
+        productFamilyMap = Map.of(
+            FdaConstants.FAS_PRODUCT_FAMILY, fasUsagesController,
+            FdaConstants.CLA_FAS_PRODUCT_FAMILY, fasUsagesController,
+            FdaConstants.NTS_PRODUCT_FAMILY, ntsUsagesController
+        );
     }
 
     @Override

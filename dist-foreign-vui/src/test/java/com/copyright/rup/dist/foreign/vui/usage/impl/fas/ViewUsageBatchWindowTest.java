@@ -4,6 +4,7 @@ import static com.copyright.rup.dist.foreign.vui.UiTestHelper.getDialogContent;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.getFooterLayout;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyGrid;
+import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyGridItems;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyWidth;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyWindow;
 
@@ -106,6 +107,17 @@ public class ViewUsageBatchWindowTest {
             Pair.of("Created Date", "150px")
         ));
         verifyButtonsLayout(getFooterLayout(window), true, "Delete", "Close");
+    }
+
+    @Test
+    public void testGridValues() {
+        List<UsageBatch> expectedItems = List.of(buildUsageBatch());
+        Object[][] expectedCells = {{
+            "FAS batch", "1000000008", "ProLitteris", "09/12/2022", "FY2022", "5000.00", "user@copyright.com",
+            "09/01/2022 12:00 AM"
+        }};
+        verifyGridItems((Grid<?>) ((VerticalLayout) getDialogContent(window)).getComponentAt(1),
+            expectedItems, expectedCells);
     }
 
     @Test

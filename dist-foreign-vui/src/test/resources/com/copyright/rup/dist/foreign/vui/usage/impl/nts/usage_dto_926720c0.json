@@ -1,0 +1,30 @@
+[
+  {
+    "id": "926720c0-d83a-4339-b21c-e62d3ea20b76",
+    "status": "PAID",
+    "productFamily": "NTS",
+    "batchName": "Paid batch",
+    "rroAccountNumber": 1000000004,
+    "rroName":  "Computers for Design and Construction",
+    "rhAccountNumber": 1000002859,
+    "rhName": "John Wiley & Sons - Books",
+    "wrWrkInst": 243904752,
+    "systemTitle": "100 ROAD MOVIES",
+    "standardNumber": "1008902112317555XX",
+    "standardNumberType": "VALISBN13",
+    "fiscalYear": 2021,
+    "paymentDate": "2021-02-12",
+    "workTitle": "100 ROAD MOVIES",
+    "article": "some article",
+    "publisher": "some publisher",
+    "publicationDate": "2021-02-13",
+    "numberOfCopies": 2,
+    "reportedValue": 3000.00000,
+    "grossAmount": 500.0000000000,
+    "market": "lib",
+    "marketPeriodFrom": 1980,
+    "marketPeriodTo": 2000,
+    "author": "author",
+    "comment": "usage from usages_10.csv"
+  }
+]
