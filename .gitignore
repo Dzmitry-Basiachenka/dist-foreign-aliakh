@@ -7,6 +7,7 @@ derby.log
 styles.css.gz
 dist-foreign-ui/src/main/webapp/VAADIN/themes/foreign/styles.css
 addons.scss
+catalina.base_IS_UNDEFINED
 
 # IntelliJ project files 
 *.iml

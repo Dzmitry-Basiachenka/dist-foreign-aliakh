@@ -76,7 +76,7 @@ public class FasEditMultipleUsagesWindowTest {
     public void testConstructor() {
         replay(controller);
         window = new FasEditMultipleUsagesWindow(controller, updateUsageWindow, USAGE_IDS);
-        verifyWindow(window, "Edit multiple FAS/FAS2 Usages", "400px", "215px", Unit.PIXELS, false);
+        verifyWindow(window, "Edit multiple FAS/FAS2 Usages", "400px", null, Unit.PIXELS, false);
         VerticalLayout contentLayout = (VerticalLayout) getDialogContent(window);
         assertEquals(1, contentLayout.getComponentCount());
         verifyLongField(contentLayout.getComponentAt(0), "Wr Wrk Inst", "100%", "wr-wrk-inst-field");

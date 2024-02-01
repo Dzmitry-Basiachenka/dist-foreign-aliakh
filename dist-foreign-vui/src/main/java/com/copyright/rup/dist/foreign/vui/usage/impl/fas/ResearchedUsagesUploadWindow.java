@@ -49,7 +49,7 @@ class ResearchedUsagesUploadWindow extends CommonDialog {
         super.add(initRootLayout());
         super.setHeaderTitle(ForeignUi.getMessage("window.upload_researched_usages"));
         super.setWidth("520px");
-        super.setHeight("265px");
+        super.setHeight("230px");
         super.getFooter().add(initButtonsLayout());
         super.setModalWindowProperties("researched-usages-upload-window", false);
     }
@@ -58,7 +58,7 @@ class ResearchedUsagesUploadWindow extends CommonDialog {
      * Initiates file uploading.
      */
     void onUploadClicked() {
-        if (isValid()) {
+        if (uploadBinder.validate().isOk()) {
             try {
                 ResearchedUsagesCsvProcessor processor = usagesController.getResearchedUsagesCsvProcessor();
                 ProcessingResult<ResearchedUsage> processingResult =
@@ -87,15 +87,10 @@ class ResearchedUsagesUploadWindow extends CommonDialog {
         }
     }
 
-    /**
-     * @return {@code true} if all inputs are valid, {@code false} - otherwise
-     */
-    boolean isValid() {
-        return uploadBinder.isValid();
-    }
-
     private VerticalLayout initRootLayout() {
-        return new VerticalLayout(initUploadField());
+        var content = new VerticalLayout(initUploadField());
+        VaadinUtils.setPadding(content, 0, 10, 0, 10);
+        return content;
     }
 
     private UploadField initUploadField() {
@@ -106,7 +101,7 @@ class ResearchedUsagesUploadWindow extends CommonDialog {
             .withValidator(new RequiredValidator())
             .withValidator(value -> StringUtils.endsWith(value, ".csv"),
                 ForeignUi.getMessage("error.upload_file.invalid_extension"))
-            .bind(ValueProvider.identity(), (bean, value) -> bean = value).validate();
+            .bind(ValueProvider.identity(), (bean, value) -> bean = value);
         uploadField.addSucceededListener(event -> uploadBinder.validate());
         VaadinUtils.setMaxComponentsWidth(uploadField);
         VaadinUtils.addComponentStyle(uploadField, "researched-usages-upload-component");

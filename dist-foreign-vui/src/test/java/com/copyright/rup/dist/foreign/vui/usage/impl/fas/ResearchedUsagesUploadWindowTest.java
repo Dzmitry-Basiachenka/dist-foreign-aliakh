@@ -12,8 +12,6 @@ import static org.easymock.EasyMock.expect;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.createPartialMock;
@@ -34,6 +32,8 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.data.binder.BinderValidationStatus;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -71,32 +71,26 @@ public class ResearchedUsagesUploadWindowTest {
     public void testConstructor() {
         replay(controller);
         window = new ResearchedUsagesUploadWindow(controller);
-        verifyWindow(window, "Upload Researched Details", "520px", "265px", Unit.PIXELS, false);
+        verifyWindow(window, "Upload Researched Details", "520px", "230px", Unit.PIXELS, false);
         verifyRootLayout(getDialogContent(window));
         verify(controller);
     }
 
     @Test
-    public void testIsValid() {
-        replay(controller);
-        window = new ResearchedUsagesUploadWindow(controller);
-        assertFalse(window.isValid());
-        UploadField uploadField = Whitebox.getInternalState(window, UploadField.class);
-        Whitebox.setInternalState(uploadField, "fileName", "test.csv");
-        assertTrue(window.isValid());
-        verify(controller);
-    }
-
-    @Test
+    @SuppressWarnings("unchecked")
     public void testOnUploadClickedValidFields() {
         mockStatic(Windows.class);
         UploadField uploadField = createPartialMock(UploadField.class, "getStreamToUploadedFile");
         ResearchedUsagesCsvProcessor processor = createMock(ResearchedUsagesCsvProcessor.class);
+        Binder<String> binder = createMock(Binder.class);
         ProcessingResult<ResearchedUsage> processingResult = buildCsvProcessingResult();
         window = createPartialMock(ResearchedUsagesUploadWindow.class, "isValid", "close");
-        Whitebox.setInternalState(window, "usagesController", controller);
-        Whitebox.setInternalState(window, "uploadField", uploadField);
-        expect(window.isValid()).andReturn(true).once();
+        Whitebox.setInternalState(window, controller);
+        Whitebox.setInternalState(window, uploadField);
+        Whitebox.setInternalState(window, binder);
+        BinderValidationStatus<String> validationStatus = createMock(BinderValidationStatus.class);
+        expect(binder.validate()).andReturn(validationStatus).once();
+        expect(validationStatus.isOk()).andReturn(true).once();
         window.close();
         expectLastCall().once();
         expect(controller.getResearchedUsagesCsvProcessor()).andReturn(processor).once();
@@ -106,9 +100,9 @@ public class ResearchedUsagesUploadWindowTest {
         expect(uploadField.getStreamToUploadedFile()).andReturn(createMock(ByteArrayOutputStream.class)).once();
         Windows.showNotificationWindow("Upload completed: 1 record(s) were stored successfully");
         expectLastCall().once();
-        replay(Windows.class, window, controller, uploadField, processor);
+        replay(Windows.class, window, controller, uploadField, processor, binder, validationStatus);
         window.onUploadClicked();
-        verify(Windows.class, window, controller, uploadField, processor);
+        verify(Windows.class, window, controller, uploadField, processor, binder, validationStatus);
     }
 
     private ProcessingResult<ResearchedUsage> buildCsvProcessingResult() {
