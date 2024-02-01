@@ -75,11 +75,6 @@ public class FasScenariosController extends CommonScenariosController implements
     private IFasUsageService fasUsageService;
 
     @Override
-    public boolean scenarioExists(String scenarioName) {
-        return false;
-    }
-
-    @Override
     public void onExcludePayeesButtonClicked() {
         IFasExcludePayeeWidget widget = excludePayeesController.initWidget();
         ComponentUtil.addListener((FasExcludePayeeWidget) widget, ExcludeUsagesEvent.class,
