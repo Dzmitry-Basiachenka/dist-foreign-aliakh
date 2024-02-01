@@ -11,6 +11,7 @@ import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Section;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.Scroller;
+import com.vaadin.flow.component.orderedlayout.Scroller.ScrollDirection;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.function.ValueProvider;
@@ -133,6 +134,7 @@ public class FilterWindow<T> extends CommonFilterWindow<T> {
      */
     @SuppressWarnings("unchecked")
     public void performSearch(ValueProvider<T, List<String>>... values) {
+        Set<T> selectedItems = checkBoxGroup.getValue();
         listDataProvider.clearFilters();
         String searchValue = searchWidget.getSearchValue();
         if (StringUtils.isNotBlank(searchValue)) {
@@ -141,6 +143,7 @@ public class FilterWindow<T> extends CommonFilterWindow<T> {
                     .stream()
                     .anyMatch(field -> caseInsensitiveContains(field, searchValue))));
         }
+        checkBoxGroup.setValue(selectedItems);
     }
 
     /**
@@ -199,13 +202,13 @@ public class FilterWindow<T> extends CommonFilterWindow<T> {
 
     @SafeVarargs
     private VerticalLayout initContent(ValueProvider<T, List<String>>... values) {
-        var content = new VerticalLayout();
-        content.setSizeFull();
+        var content = VaadinUtils.initSizeFullVerticalLayout();
+        VaadinUtils.setPadding(content, 0, 10, 0, 10);
         if (ArrayUtils.isNotEmpty(values)) {
             content.add(initSearchWidget(values));
         }
         var scroller = new Scroller(new Div(initItemsPanel()));
-        scroller.setScrollDirection(Scroller.ScrollDirection.VERTICAL);
+        scroller.setScrollDirection(ScrollDirection.BOTH);
         content.add(scroller);
         return content;
     }
@@ -235,7 +238,7 @@ public class FilterWindow<T> extends CommonFilterWindow<T> {
     private void initCheckboxGroup() {
         checkBoxGroup = new CheckboxGroup<>();
         listDataProvider = new ListDataProvider<>(Objects.requireNonNull(filterItems));
-        checkBoxGroup.setDataProvider(listDataProvider);
+        checkBoxGroup.setItems(listDataProvider);
         checkBoxGroup.setItemLabelGenerator(controller::getBeanItemCaption);
         checkBoxGroup.addThemeVariants(CheckboxGroupVariant.MATERIAL_VERTICAL);
     }

@@ -5,6 +5,7 @@
 
 :host([has-label]) ::slotted(label) {
     font-size: 13px;
+    white-space: nowrap;
 }
 
 .vaadin-checkbox-container {
