@@ -35,6 +35,16 @@ public enum ReportMenuBuilder implements IReportMenuBuilder {
         public void addItems(IReportController controller, IReportWidget widget, MenuItem rootItem) {
             new FasReportMenuBuilder().addItems(controller, widget, rootItem);
         }
+    },
+
+    /**
+     * Report builder for NTS product family
+     */
+    NTS(false) {
+        @Override
+        public void addItems(IReportController controller, IReportWidget widget, MenuItem rootItem) {
+            //TODO: implement on scope of corresponding story
+        }
     };
 
     private final boolean visible;

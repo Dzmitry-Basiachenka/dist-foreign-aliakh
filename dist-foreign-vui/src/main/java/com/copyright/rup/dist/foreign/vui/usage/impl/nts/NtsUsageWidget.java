@@ -11,6 +11,7 @@ import com.copyright.rup.dist.foreign.vui.usage.api.nts.INtsUsageWidget;
 import com.copyright.rup.dist.foreign.vui.usage.impl.CommonUsageWidget;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.Buttons;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.downloader.OnDemandFileDownloader;
+import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.Windows;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.util.VaadinUtils;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.api.IMediator;
 
@@ -160,7 +161,7 @@ public class NtsUsageWidget extends CommonUsageWidget implements INtsUsageWidget
         loadFundPoolMenuItem = menuItem.getSubMenu().addItem(ForeignUi.getMessage("menu.item.load"),
             item -> {}); //TODO {aliakh} FundPoolLoadWindow
         menuItem.getSubMenu().addItem(ForeignUi.getMessage("menu.item.view"),
-            item -> {}); //TODO {aliakh} ViewFundPoolWindow
+            item -> Windows.showModalWindow(new ViewFundPoolWindow(controller)));
         VaadinUtils.addComponentStyle(fundPoolMenuBar, "fund-pool-menu-bar");
         VaadinUtils.addComponentStyle(fundPoolMenuBar, "v-menubar-df");
     }
