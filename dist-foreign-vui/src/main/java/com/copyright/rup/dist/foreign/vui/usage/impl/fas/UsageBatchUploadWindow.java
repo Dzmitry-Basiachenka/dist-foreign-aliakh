@@ -141,10 +141,9 @@ public class UsageBatchUploadWindow extends CommonDialog {
 
     private VerticalLayout initRootLayout() {
         var rootLayout = VaadinUtils.initCommonVerticalLayout();
-        VaadinUtils.setPadding(rootLayout, 10, 10, 0, 10);
         rootLayout.add(initUsageBatchNameField(), initUploadField(), initRightsholderLayout(),
             initPaymentDataLayout(), initGrossAmountLayout());
-        VaadinUtils.addComponentStyle(rootLayout, "usage-batch-upload-widget-layout");
+        VaadinUtils.setPadding(rootLayout, 10, 10, 0, 10);
         return rootLayout;
     }
 
@@ -177,12 +176,11 @@ public class UsageBatchUploadWindow extends CommonDialog {
     }
 
     private HorizontalLayout initButtonsLayout() {
-        var closeButton = Buttons.createCloseButton(this);
         var uploadButton = Buttons.createButton(ForeignUi.getMessage("button.upload"));
         uploadButton.addClickListener(event -> onUploadClicked());
         VaadinUtils.setButtonsAutoDisabled(uploadButton);
         var buttonsLayout = new HorizontalLayout();
-        buttonsLayout.add(uploadButton, closeButton);
+        buttonsLayout.add(uploadButton, Buttons.createCloseButton(this));
         return buttonsLayout;
     }
 

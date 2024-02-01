@@ -57,7 +57,7 @@ public class FasUsageWidget extends CommonUsageWidget implements IFasUsageWidget
 
     @Override
     public IMediator initMediator() {
-        FasUsageMediator mediator = new FasUsageMediator();
+        var mediator = new FasUsageMediator();
         mediator.setLoadUsageBatchMenuItem(loadUsageBatchMenuItem);
         mediator.setSendForResearchButton(sendForResearchButton);
         mediator.setLoadResearchedUsagesButton(loadResearchedUsagesButton);
