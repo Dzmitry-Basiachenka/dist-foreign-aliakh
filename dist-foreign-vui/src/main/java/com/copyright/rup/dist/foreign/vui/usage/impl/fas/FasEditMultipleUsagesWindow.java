@@ -53,16 +53,16 @@ class FasEditMultipleUsagesWindow extends CommonDialog {
         this.usageIds = usageIds;
         super.add(initRootLayout());
         super.setHeaderTitle(ForeignUi.getMessage("window.multiple.edit_fas_fas2_usages"));
-        super.setResizable(false);
-        super.setWidth("400px");
-        super.setHeight("215px");
         super.getFooter().add(initButtonsLayout());
-        VaadinUtils.addComponentStyle(this, "multiple-edit-fas-usages-window");
-        binder.validate();
+        super.setModalWindowProperties("multiple-edit-fas-usages-window", false);
+        super.setWidth("400px");
+        super.setMinHeight("180px");
     }
 
     private VerticalLayout initRootLayout() {
-        return new VerticalLayout(initWrWrkInstField()); //TODO get rid of VerticalLayout
+        var content = new VerticalLayout(initWrWrkInstField());
+        VaadinUtils.setPadding(content, 0, 10, 0, 10);
+        return content;
     }
 
     private LongField initWrWrkInstField() {
@@ -82,7 +82,7 @@ class FasEditMultipleUsagesWindow extends CommonDialog {
         var saveButton = Buttons.createButton(ForeignUi.getMessage("button.save"));
         var closeButton = Buttons.createCloseButton(this);
         saveButton.addClickListener(event -> {
-            if (binder.isValid()) {
+            if (binder.validate().isOk()) {
                 Long wrWrkInst = wrWrkInstField.getValue();
                 ConfirmWindows.showConfirmDialogWithReason(
                     ForeignUi.getMessage("window.confirm"),
