@@ -29,7 +29,6 @@ class EditScenarioNameWindow extends CommonEditScenarioNameWindow {
         super(scenario.getName(), "edit-scenario-name-window");
         this.controller = controller;
         this.scenario = scenario;
-        super.validateBinder();
     }
 
     @Override

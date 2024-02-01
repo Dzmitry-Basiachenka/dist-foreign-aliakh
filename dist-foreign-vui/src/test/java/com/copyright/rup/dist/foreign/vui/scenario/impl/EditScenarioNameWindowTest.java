@@ -55,7 +55,6 @@ public class EditScenarioNameWindowTest {
     @Before
     public void setUp() {
         controller = createMock(ICommonScenariosController.class);
-        expect(controller.scenarioExists(SCENARIO_NAME)).andReturn(false).once();
         scenario = new Scenario();
         scenario.setId("d936a589-176c-4efd-a119-9702b057ec58");
         scenario.setName(SCENARIO_NAME);

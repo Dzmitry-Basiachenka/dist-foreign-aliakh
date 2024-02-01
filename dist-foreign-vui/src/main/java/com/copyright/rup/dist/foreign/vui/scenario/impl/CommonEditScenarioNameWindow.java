@@ -46,13 +46,7 @@ public abstract class CommonEditScenarioNameWindow extends CommonDialog {
         super.add(initContent(scenarioName));
         super.getFooter().add(initButtonsLayout());
         super.setModalWindowProperties(styleName, false);
-    }
-
-    /**
-     * Validates scenario name field.
-     */
-    protected void validateBinder() {
-        binder.validate();
+        super.setMinHeight("180px");
     }
 
     /**
@@ -82,6 +76,7 @@ public abstract class CommonEditScenarioNameWindow extends CommonDialog {
 
     private VerticalLayout initContent(String scenarioName) {
         scenarioNameField = new TextField(ForeignUi.getMessage("field.scenario_name"));
+        scenarioNameField.setWidthFull();
         scenarioNameField.setRequiredIndicatorVisible(true);
         scenarioNameField.setValue(scenarioName);
         scenarioNameField.focus();
@@ -92,13 +87,14 @@ public abstract class CommonEditScenarioNameWindow extends CommonDialog {
             .withValidator(value -> !isScenarioExists(StringUtils.trimToEmpty(value)),
                 ForeignUi.getMessage("message.error.unique_name", "Scenario"))
             .bind(ValueProvider.identity(), (bean, fieldValue) -> bean = fieldValue);
-        VaadinUtils.setMaxComponentsWidth(scenarioNameField);
+        var content = new VerticalLayout(scenarioNameField);
+        VaadinUtils.setPadding(content, 0, 10, 0, 10);
         VaadinUtils.addComponentStyle(scenarioNameField, "scenario-name");
-        return new VerticalLayout(scenarioNameField);
+        return content;
     }
 
     private void onSaveButtonClicked() {
-        if (binder.isValid()) {
+        if (binder.validate().isOk()) {
             updateScenarioName(scenarioNameField.getValue().trim());
             close();
         } else {
