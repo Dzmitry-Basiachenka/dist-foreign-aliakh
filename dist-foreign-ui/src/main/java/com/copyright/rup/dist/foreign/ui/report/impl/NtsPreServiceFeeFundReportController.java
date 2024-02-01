@@ -1,15 +1,15 @@
 package com.copyright.rup.dist.foreign.ui.report.impl;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
+import com.copyright.rup.dist.common.reporting.api.IStreamSourceHandler;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.service.api.IFundPoolService;
-import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
+import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.ui.report.api.INtsPreServiceFeeFundReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.INtsPreServiceFeeFundReportWidget;
 import com.copyright.rup.vaadin.widget.api.CommonController;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -34,12 +34,17 @@ public class NtsPreServiceFeeFundReportController extends CommonController<INtsP
     private static final long serialVersionUID = 8678976704969839045L;
 
     @Autowired
+    private IStreamSourceHandler streamSourceHandler;
+    @Autowired
+    private IReportService reportService;
+    @Autowired
     private IFundPoolService fundPoolService;
 
     @Override
     public IStreamSource getCsvStreamSource() {
-        //TODO: {dbasiachenka} implement
-        return new ByteArrayStreamSource(StringUtils.EMPTY, os -> {});
+        return streamSourceHandler.getCsvStreamSource(
+            () -> String.format("nts_pre_service_fee_fund_report_%s_", getWidget().getFundPool().getName()),
+            pos -> reportService.writeNtsPreServiceFeeFundCsvReport(getWidget().getFundPool(), pos));
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.service.impl;
 
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
+import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.RhTaxInformation;
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancyStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Scenario;
@@ -309,5 +310,10 @@ public class ReportService implements IReportService {
     @Override
     public void writeNtsFundPoolsCsvReport(OutputStream outputStream) {
         ntsReportRepository.writeNtsFundPoolsCsvReport(outputStream);
+    }
+
+    @Override
+    public void writeNtsPreServiceFeeFundCsvReport(FundPool fundPool, OutputStream outputStream) {
+        //TODO: {dbasiachenka} implement
     }
 }

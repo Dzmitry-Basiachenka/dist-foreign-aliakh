@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.service.api;
 
+import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancyStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
@@ -351,4 +352,12 @@ public interface IReportService extends Serializable {
      * @param outputStream instance of {@link OutputStream}
      */
     void writeNtsFundPoolsCsvReport(OutputStream outputStream);
+
+    /**
+     * Writes NTS Pre-Service Fee Fund Report into csv output stream.
+     *
+     * @param fundPool     {@link FundPool}
+     * @param outputStream instance of {@link OutputStream}
+     */
+    void writeNtsPreServiceFeeFundCsvReport(FundPool fundPool, OutputStream outputStream);
 }
