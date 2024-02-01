@@ -74,7 +74,8 @@ class ViewUsageBatchWindow extends AbstractViewUsageBatchWindow {
         addColumn(batch -> batch.getRro().getName(), "table.column.rro_account_name", "300px",
             (batch1, batch2) -> batch1.getRro().getName().compareToIgnoreCase(batch2.getRro().getName()));
         addColumn(batch -> CommonDateUtils.format(batch.getPaymentDate(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT),
-            "table.column.payment_date", "150px");
+            "table.column.payment_date", "150px",
+            (batch1, batch2) -> batch1.getPaymentDate().compareTo(batch2.getPaymentDate()));
         addColumn(batch -> UsageBatchUtils.getFiscalYear(batch.getFiscalYear()), "table.column.fiscal_year", "140px");
         addAmountColumn(UsageBatch::getGrossAmount, "table.column.batch_gross_amount", "180px",
             (batch1, batch2) -> batch1.getGrossAmount().compareTo(batch2.getGrossAmount()));

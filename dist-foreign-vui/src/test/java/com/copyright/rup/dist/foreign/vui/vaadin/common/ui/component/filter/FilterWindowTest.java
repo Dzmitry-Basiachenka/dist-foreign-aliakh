@@ -18,7 +18,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.reset;
 
 import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.SearchWidget;
@@ -76,7 +75,7 @@ public class FilterWindowTest {
         verifyWindow(filterWindow, CAPTION, "450px", "400px", Unit.PIXELS, false);
         assertFalse(filterWindow.isResizable());
         VerticalLayout content = (VerticalLayout) getDialogContent(filterWindow);
-        assertTrue(content.isSpacing());
+        assertFalse(content.isSpacing());
         Component component = content.getComponentAt(0);
         assertThat(component, instanceOf(SearchWidget.class));
         verifyPanel((Scroller) content.getComponentAt(1));
@@ -93,7 +92,7 @@ public class FilterWindowTest {
         assertFalse(filterWindow.isResizable());
         VerticalLayout content = (VerticalLayout) getDialogContent(filterWindow);
         verifySize(content, "100%", Unit.PERCENTAGE, "100%", Unit.PERCENTAGE);
-        assertTrue(content.isSpacing());
+        assertFalse(content.isSpacing());
         Component component = content.getComponentAt(0);
         assertThat(component, instanceOf(SearchWidget.class));
         verifyPanel((Scroller) content.getComponentAt(1));
@@ -113,28 +112,39 @@ public class FilterWindowTest {
     public void testPerformSearch() {
         ListDataProvider<EntityMock> listDataProvider = createMock(ListDataProvider.class);
         SearchWidget searchWidgetMock = createMock(SearchWidget.class);
-        Whitebox.setInternalState(filterWindow, "searchWidget", searchWidgetMock);
-        Whitebox.setInternalState(filterWindow, "listDataProvider", listDataProvider);
+        CheckboxGroup<EntityMock> checkboxGroupMock = createMock(CheckboxGroup.class);
+        Whitebox.setInternalState(filterWindow, searchWidgetMock);
+        Whitebox.setInternalState(filterWindow, listDataProvider);
+        Whitebox.setInternalState(filterWindow, checkboxGroupMock);
+        Set<EntityMock> selectedItems = Set.of(new EntityMock("test"));
+        expect(checkboxGroupMock.getValue()).andReturn(selectedItems).once();
         listDataProvider.clearFilters();
         expectLastCall().once();
+        checkboxGroupMock.setValue(selectedItems);
+        expectLastCall().once();
         expect(searchWidgetMock.getSearchValue()).andReturn("o").once();
-        replay(listDataProvider, searchWidgetMock);
+        replay(listDataProvider, searchWidgetMock, checkboxGroupMock);
         filterWindow.performSearch();
-        verify(listDataProvider, searchWidgetMock);
+        verify(listDataProvider, searchWidgetMock, checkboxGroupMock);
     }
 
     @Test
     public void testPerformSearchEmptySearchValue() {
         ListDataProvider<EntityMock> listDataProvider = createMock(ListDataProvider.class);
         SearchWidget searchWidgetMock = createMock(SearchWidget.class);
+        CheckboxGroup<EntityMock> checkboxGroupMock = createMock(CheckboxGroup.class);
         Whitebox.setInternalState(filterWindow, "searchWidget", searchWidgetMock);
         Whitebox.setInternalState(filterWindow, "listDataProvider", listDataProvider);
+        Whitebox.setInternalState(filterWindow, checkboxGroupMock);
+        expect(checkboxGroupMock.getValue()).andReturn(Set.of()).once();
         listDataProvider.clearFilters();
         expectLastCall().once();
+        checkboxGroupMock.setValue(Set.of());
+        expectLastCall().once();
         expect(searchWidgetMock.getSearchValue()).andReturn(StringUtils.EMPTY).once();
-        replay(listDataProvider, searchWidgetMock);
+        replay(listDataProvider, searchWidgetMock, checkboxGroupMock);
         filterWindow.performSearch();
-        verify(listDataProvider, searchWidgetMock);
+        verify(listDataProvider, searchWidgetMock, checkboxGroupMock);
     }
 
     @Test

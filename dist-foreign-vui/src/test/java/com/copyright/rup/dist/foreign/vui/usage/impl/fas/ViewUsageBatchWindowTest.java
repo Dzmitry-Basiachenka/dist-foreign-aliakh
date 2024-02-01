@@ -184,7 +184,7 @@ public class ViewUsageBatchWindowTest {
         var searchWidget = (SearchWidget) component;
         TextField textField = Whitebox.getInternalState(searchWidget, TextField.class);
         verifyWidth(textField, "70%", Unit.PERCENTAGE);
-        assertEquals("Enter Batch Name or Payment Date (MM/dd/yyyy) or Source RRO Name/Account #",
+        assertEquals("Enter Batch Name or Payment Date (mm/dd/yyyy) or Source RRO Name/Account #",
             textField.getPlaceholder());
     }
 
