@@ -1,8 +1,10 @@
 package com.copyright.rup.dist.foreign.domain;
 
 import com.copyright.rup.dist.common.test.TestUtils;
+import com.copyright.rup.dist.foreign.domain.report.NtsPreServiceFeeFundReportDto;
 import com.copyright.rup.dist.foreign.domain.report.NtsServiceFeeTrueUpReportDto;
 import com.copyright.rup.dist.foreign.domain.report.NtsWithDrawnBatchSummaryReportDto;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -41,6 +43,7 @@ public class NtsDomainVerifierTest {
             {Scenario.NtsFields.class},
             {NtsWithDrawnBatchSummaryReportDto.class},
             {NtsServiceFeeTrueUpReportDto.class},
+            {NtsPreServiceFeeFundReportDto.class}
         };
         return List.of(testData);
     }

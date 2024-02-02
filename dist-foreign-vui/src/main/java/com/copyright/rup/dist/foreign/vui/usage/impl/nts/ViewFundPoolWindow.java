@@ -8,16 +8,12 @@ import com.copyright.rup.dist.foreign.vui.usage.api.ICommonUsageController;
 import com.copyright.rup.dist.foreign.vui.usage.impl.AbstractViewUsageBatchWindow;
 
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.data.renderer.LocalDateRenderer;
 import com.vaadin.flow.function.SerializableComparator;
 import com.vaadin.flow.function.SerializablePredicate;
 
 import org.apache.commons.lang3.StringUtils;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.Objects;
 
 /**
  * Modal window that provides functionality for viewing and deleting {@link UsageBatch}es.
