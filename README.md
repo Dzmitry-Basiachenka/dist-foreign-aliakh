@@ -1,3 +1,23 @@
+21.0.2
+-
+* CDP-2323 FDA: Edit scenario name: Scenario name can be changed to the one already existing in the system
+* CDP-2322 FDA: Usages filter: Selected checkboxes become unchecked if search is applied on the filter window
+* CDP-1672 FDA: Vaadin Migration: FAS/FAS2 - Usages Tab: make changes based on comments in code review
+* CDP-1675 FDA: Vaadin Migration: FAS/FAS2 - Batch Status Tab: implement tab and grid
+* CDP-1676 FDA: Vaadin Migration: FAS/FAS2 - Reports Tab: init Reports Tab on the Tabs panel
+* CDP-1677 FDA: Vaadin Migration: NTS - Usages Tab: migrate interfaces of widgets and controllers
+* CDP-1677 FDA: Vaadin Migration: NTS - Usages Tab: migrate the main widget and controller
+* CDP-1677 FDA: Vaadin Migration: NTS - Usages Tab: migrate View Fund Pool widget
+* CDP-1170 FDA: NTS: Report of Pre-Service Fee Funds: add report item to Reports tab
+* CDP-1170 FDA: NTS: Report of Pre-Service Fee Funds: implement window 'NTS Pre-Service Fee Fund Report'
+* CDP-1170 FDA: NTS: Report of Pre-Service Fee Funds: implement controller logic to get all NTS pre-service fee funds
+* CDP-1170 FDA: NTS: Report of Pre-Service Fee Funds: implement NTS Pre-Service Fee Fund Report handler and domain object
+* CDP-1170 FDA: NTS: Report of Pre-Service Fee Funds: implement back-end logic to generate report
+* CDP-2231 FDA: Tech Debt: fix height of vertical layouts with grids
+* CDP-2231 FDA: Tech Debt: revise SearchWidget implementation
+* CDP-2232 FDA: Tech Debt: remove initial validation errors on ResearchedUsagesUpload and FasEditUsages windows
+* CDP-2327 FDA: Tech Debt: fix Vaadin UI issues
+
 21.0.1
 -
 * CDP-1672 FDA: Vaadin Migration: FAS/FAS2 - Usages Tab: adjust the size and position of widgets
@@ -2419,7 +2439,7 @@
 -
 * B-57772 Tech Debt: FDA: clear usage filters after item bank or usage data is loaded
 * B-57897 FDA: Create SAL Scenario: implement service logic to create scenario
-* B-57903 FDA: View and Delete SAL batch:  CDP-942: FDA: Delete SAL Usage Bach: Usages from deleted usage batch are still displayed filtered on ‘Usages’ table in case the usage batch is previously filtered on ‘Usages’ tab
+* B-57903 FDA: View and Delete SAL batch: CDP-942: FDA: Delete SAL Usage Bach: Usages from deleted usage batch are still displayed filtered on ‘Usages’ table in case the usage batch is previously filtered on ‘Usages’ tab
 * B-57917 FDA: Load SAL fund pool: Adjust SAL Fund Pool calculation and rename Total Amount and Item Bank Amount columns on Load Fund Pool window
 * CDP-941 FDA: Load SAL Item Bank: User with 'Manager' and 'View Only' roles is able to load Item Bank
 
@@ -3826,7 +3846,7 @@ integration
 
 5.1.11
 -
-*  CDP-707 FDA: Create Additional Funds: fix sorting on Delete UsageBatch/PreService fee fund windows
+* CDP-707 FDA: Create Additional Funds: fix sorting on Delete UsageBatch/PreService fee fund windows
 * B-48995 FDA: Delete NTS withdrawn fund pool: make changes based on comments in CR-DIST-FOREIGN-98
 * B-49462 FDA: Add parameters dateFrom and dateTo to the batch statistic REST: correct test for the method UsageAuditService.getBatchesStatisticByDateFromAndDateTo
 * B-49462 FDA: Add parameters dateFrom and dateTo to the batch statistic REST: make changes based on comments in CR-DIST-FOREIGN-95
