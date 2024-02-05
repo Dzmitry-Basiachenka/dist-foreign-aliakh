@@ -24,8 +24,6 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -38,7 +36,6 @@ import java.util.stream.Collectors;
  *
  * @author Uladzislau Shalamitski
  */
-//TODO {aliakh} use the 'var' keyword
 public class NtsUsageWidget extends CommonUsageWidget implements INtsUsageWidget {
 
     private static final long serialVersionUID = 7962483141394161599L;
@@ -62,7 +59,7 @@ public class NtsUsageWidget extends CommonUsageWidget implements INtsUsageWidget
 
     @Override
     public IMediator initMediator() {
-        NtsUsageMediator mediator = new NtsUsageMediator();
+        var mediator = new NtsUsageMediator();
         mediator.setAddToScenarioButton(addToScenarioButton);
         mediator.setAssignClassificationButton(assignClassificationButton);
         mediator.setAdditionalFundsMenuBar(additionalFundsMenuBar);
@@ -111,8 +108,7 @@ public class NtsUsageWidget extends CommonUsageWidget implements INtsUsageWidget
         addToScenarioButton = Buttons.createButton(ForeignUi.getMessage("button.add_to_scenario"));
         //TODO {aliakh} addToScenarioButton.addClickListener(onAddToScenarioClicked(new CreateNtsScenarioWindow()));
         var exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
-        OnDemandFileDownloader fileDownloader =
-            new OnDemandFileDownloader(controller.getExportUsagesStreamSource().getSource());
+        var fileDownloader = new OnDemandFileDownloader(controller.getExportUsagesStreamSource().getSource());
         fileDownloader.extend(exportButton);
         assignClassificationButton = Buttons.createButton(ForeignUi.getMessage("button.assign_classification"));
         //TODO {aliakh} assignClassificationButton.addClickListener(NtsUsageBatchSelectorWidget());
@@ -131,17 +127,16 @@ public class NtsUsageWidget extends CommonUsageWidget implements INtsUsageWidget
     @Override
     protected String getProductFamilySpecificScenarioValidationMessage() {
         String message;
-        Set<String> batchesIds = getFilterWidget().getAppliedFilter().getUsageBatchesIds();
+        var batchesIds = getFilterWidget().getAppliedFilter().getUsageBatchesIds();
         if (CollectionUtils.isEmpty(batchesIds)) {
             message = ForeignUi.getMessage("message.error.empty_usage_batches");
         } else {
-            List<String> batchesNames = controller.getProcessingBatchesNames(batchesIds);
+            var batchesNames = controller.getProcessingBatchesNames(batchesIds);
             if (CollectionUtils.isNotEmpty(batchesNames)) {
                 message = ForeignUi.getMessage("message.error.processing_batches_names",
                     String.join(BATCH_NAMES_LIST_SEPARATOR, batchesNames));
             } else {
-                Map<String, String> batchesNamesToScenarioNames =
-                    controller.getBatchesNamesToScenariosNames(batchesIds);
+                var batchesNamesToScenarioNames = controller.getBatchesNamesToScenariosNames(batchesIds);
                 if (batchesNamesToScenarioNames.isEmpty()) {
                     message = getClassificationValidationMessage(batchesIds);
                 } else {
@@ -159,7 +154,7 @@ public class NtsUsageWidget extends CommonUsageWidget implements INtsUsageWidget
         fundPoolMenuBar = new MenuBar();
         MenuItem menuItem = fundPoolMenuBar.addItem(ForeignUi.getMessage("menu.caption.fund_pool"), null, null);
         loadFundPoolMenuItem = menuItem.getSubMenu().addItem(ForeignUi.getMessage("menu.item.load"),
-            item -> {}); //TODO {aliakh} FundPoolLoadWindow
+            item -> Windows.showModalWindow(new FundPoolLoadWindow(controller)));
         menuItem.getSubMenu().addItem(ForeignUi.getMessage("menu.item.view"),
             item -> Windows.showModalWindow(new ViewFundPoolWindow(controller)));
         VaadinUtils.addComponentStyle(fundPoolMenuBar, "fund-pool-menu-bar");
@@ -180,18 +175,15 @@ public class NtsUsageWidget extends CommonUsageWidget implements INtsUsageWidget
 
     private String getClassificationValidationMessage(Set<String> batchesIds) {
         String message = null;
-        List<String> batchesWithUnclassifiedWorks = controller.getBatchNamesWithUnclassifiedWorks(batchesIds);
+        var batchesWithUnclassifiedWorks = controller.getBatchNamesWithUnclassifiedWorks(batchesIds);
         if (CollectionUtils.isNotEmpty(batchesWithUnclassifiedWorks)) {
             message = ForeignUi.getMessage("message.error.invalid_batch.unclassified_works",
                 String.join(BATCH_NAMES_LIST_SEPARATOR, batchesWithUnclassifiedWorks));
         } else {
-            Map<String, List<String>> batchesWithoutRhsForStmOrNonStm =
-                controller.getBatchNamesWithInvalidStmOrNonStmUsagesState(
-                    getFilterWidget().getAppliedFilter().getUsageBatchesIds());
-            List<String> batchesWithoutRhsForStm =
-                batchesWithoutRhsForStmOrNonStm.get(FdaConstants.STM_CLASSIFICATION);
-            List<String> batchesWithoutRhsForNonStm =
-                batchesWithoutRhsForStmOrNonStm.get(FdaConstants.NON_STM_CLASSIFICATION);
+            var batchesWithoutRhsForStmOrNonStm = controller.getBatchNamesWithInvalidStmOrNonStmUsagesState(
+                getFilterWidget().getAppliedFilter().getUsageBatchesIds());
+            var batchesWithoutRhsForStm = batchesWithoutRhsForStmOrNonStm.get(FdaConstants.STM_CLASSIFICATION);
+            var batchesWithoutRhsForNonStm = batchesWithoutRhsForStmOrNonStm.get(FdaConstants.NON_STM_CLASSIFICATION);
             if (CollectionUtils.isNotEmpty(batchesWithoutRhsForStm)) {
                 message = ForeignUi.getMessage("message.error.invalid_batch.no_stm_rhs",
                     String.join(BATCH_NAMES_LIST_SEPARATOR, batchesWithoutRhsForStm));

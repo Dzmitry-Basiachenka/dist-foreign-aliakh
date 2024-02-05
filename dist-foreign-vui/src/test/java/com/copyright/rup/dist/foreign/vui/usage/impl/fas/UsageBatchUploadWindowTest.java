@@ -98,11 +98,11 @@ public class UsageBatchUploadWindowTest {
     private static final String ACCOUNT_NAME_FIELD = "accountNameField";
     private static final String PAYMENT_DATE_WIDGET = "paymentDateWidget";
     private static final String GROSS_AMOUNT_FIELD = "grossAmountField";
-    private static final String EMPTY_MESSAGE = "Field value should be specified";
+    private static final String EMPTY_FIELD_MESSAGE = "Field value should be specified";
     private static final String INVALID_USAGE_BATCH_LENGTH_MESSAGE = "Field value should not exceed 50 characters";
     private static final String USAGE_BATCH_EXISTS_MESSAGE = "Usage Batch with such name already exists";
     private static final String INVALID_NUMBER_LENGTH_MESSAGE = "Field value should not exceed 10 digits";
-    private static final String INVALID_GROSS_AMOUNT_LENGTH_MESSAGE =
+    private static final String INVALID_GROSS_AMOUNT_MESSAGE =
         "Field value should be positive number and should not exceed 10 digits";
     private static final String WIDTH_CALC = "calc(99.9% - 0rem)";
 
@@ -142,8 +142,8 @@ public class UsageBatchUploadWindowTest {
         window = new UsageBatchUploadWindow(controller);
         TextField usageBatchNameField = Whitebox.getInternalState(window, USAGE_BATCH_NAME_FIELD);
         Binder<?> binder = Whitebox.getInternalState(window, "binder");
-        assertFieldValidationMessage(usageBatchNameField, StringUtils.EMPTY, binder, EMPTY_MESSAGE, false);
-        assertFieldValidationMessage(usageBatchNameField, "   ", binder, EMPTY_MESSAGE, false);
+        assertFieldValidationMessage(usageBatchNameField, StringUtils.EMPTY, binder, EMPTY_FIELD_MESSAGE, false);
+        assertFieldValidationMessage(usageBatchNameField, "   ", binder, EMPTY_FIELD_MESSAGE, false);
         assertFieldValidationMessage(usageBatchNameField, StringUtils.repeat('a', 51), binder,
             INVALID_USAGE_BATCH_LENGTH_MESSAGE, false);
         assertFieldValidationMessage(usageBatchNameField, batchName, binder, USAGE_BATCH_EXISTS_MESSAGE, false);
@@ -157,10 +157,11 @@ public class UsageBatchUploadWindowTest {
         window = new UsageBatchUploadWindow(controller);
         LongField accountNumberField = Whitebox.getInternalState(window, ACCOUNT_NUMBER_FIELD);
         Binder<?> binder = Whitebox.getInternalState(window, "binder");
-        assertFieldValidationMessage(accountNumberField, 10000018631L, binder, INVALID_NUMBER_LENGTH_MESSAGE, false);
         assertFieldValidationMessage(accountNumberField, 0L, binder, INVALID_NUMBER_LENGTH_MESSAGE, false);
         assertFieldValidationMessage(accountNumberField, 1L, binder, null, true);
         assertFieldValidationMessage(accountNumberField, FAS_RRO_ACCOUNT_NUMBER, binder, null, true);
+        assertFieldValidationMessage(accountNumberField, 9999999999L, binder, null, true);
+        assertFieldValidationMessage(accountNumberField, 10000000000L, binder, INVALID_NUMBER_LENGTH_MESSAGE, false);
         verify(controller);
     }
 
@@ -170,16 +171,15 @@ public class UsageBatchUploadWindowTest {
         window = new UsageBatchUploadWindow(controller);
         BigDecimalField grossAmountField = Whitebox.getInternalState(window, GROSS_AMOUNT_FIELD);
         Binder<?> binder = Whitebox.getInternalState(window, "binder");
-        assertFieldValidationMessage(grossAmountField, null, binder, EMPTY_MESSAGE, false);
-        assertFieldValidationMessage(grossAmountField, BigDecimal.ZERO, binder, INVALID_GROSS_AMOUNT_LENGTH_MESSAGE,
+        assertFieldValidationMessage(grossAmountField, null, binder, EMPTY_FIELD_MESSAGE, false);
+        assertFieldValidationMessage(grossAmountField, BigDecimal.ZERO, binder, INVALID_GROSS_AMOUNT_MESSAGE,
             false);
         assertFieldValidationMessage(grossAmountField, new BigDecimal("0.00"), binder,
-            INVALID_GROSS_AMOUNT_LENGTH_MESSAGE, false);
+            INVALID_GROSS_AMOUNT_MESSAGE, false);
         assertFieldValidationMessage(grossAmountField, new BigDecimal("0.009"), binder,
-            INVALID_GROSS_AMOUNT_LENGTH_MESSAGE, false);
+            INVALID_GROSS_AMOUNT_MESSAGE, false);
         assertFieldValidationMessage(grossAmountField, new BigDecimal("10000000000.00"), binder,
-            INVALID_GROSS_AMOUNT_LENGTH_MESSAGE,
-            false);
+            INVALID_GROSS_AMOUNT_MESSAGE, false);
         assertFieldValidationMessage(grossAmountField, new BigDecimal("0.01"), binder, null, true);
         assertFieldValidationMessage(grossAmountField, new BigDecimal("123.5684"), binder, null, true);
         assertFieldValidationMessage(grossAmountField, new BigDecimal("9999999999.99"), binder, null, true);
@@ -278,8 +278,8 @@ public class UsageBatchUploadWindowTest {
         var horizontalLayout = (HorizontalLayout) component;
         assertEquals(2, horizontalLayout.getComponentCount());
         var uploadButton = verifyButton(horizontalLayout.getComponentAt(0), "Upload", true);
-        verifyButton(horizontalLayout.getComponentAt(1), "Close", true);
         verifyLoadClickListener(uploadButton);
+        verifyButton(horizontalLayout.getComponentAt(1), "Close", true);
     }
 
     private void verifyRightsholdersComponents(Component component) {
@@ -310,7 +310,7 @@ public class UsageBatchUploadWindowTest {
         verifyButton.click();
         assertEquals(StringUtils.EMPTY, accountNameField.getValue());
         assertEquals(StringUtils.EMPTY, productFamilyField.getValue());
-        accountNumberField.setValue(123456789874541246L);
+        accountNumberField.setValue(123456789987654321L);
         verifyButton.click();
         assertEquals(StringUtils.EMPTY, accountNameField.getValue());
         assertEquals(StringUtils.EMPTY, productFamilyField.getValue());
