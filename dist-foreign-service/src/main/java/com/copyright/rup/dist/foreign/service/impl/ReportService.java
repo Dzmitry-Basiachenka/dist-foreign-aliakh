@@ -314,6 +314,6 @@ public class ReportService implements IReportService {
 
     @Override
     public void writeNtsPreServiceFeeFundCsvReport(FundPool fundPool, OutputStream outputStream) {
-        //TODO: {dbasiachenka} implement
+        ntsReportRepository.writeNtsPreServiceFeeFundCsvReport(fundPool.getId(), outputStream);
     }
 }

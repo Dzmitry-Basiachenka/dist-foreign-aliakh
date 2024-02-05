@@ -103,4 +103,12 @@ public interface INtsReportRepository extends Serializable {
      * @param outputStream instance of {@link OutputStream}
      */
     void writeNtsFundPoolsCsvReport(OutputStream outputStream);
+
+    /**
+     * Writes NTS Pre-Service Fee Fund Report into the output strean in CSV format.
+     *
+     * @param fundPoolId   fund pool id
+     * @param outputStream instance of {@link OutputStream}
+     */
+    void writeNtsPreServiceFeeFundCsvReport(String fundPoolId, OutputStream outputStream);
 }

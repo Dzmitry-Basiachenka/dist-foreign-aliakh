@@ -222,4 +222,22 @@ public class NtsCsvReportsIntegrationTest extends CsvReportsTestHelper {
             outputStream -> reportRepository.writeNtsFundPoolsCsvReport(outputStream),
             "nts/nts_fund_pools_report_empty.csv");
     }
+
+    @Test
+    @TestData(fileName = FOLDER_NAME + "write-nts-pre-service-fee-fund-csv-report.groovy")
+    public void testWriteNtsPreServiceFeeFundCsvReport() throws IOException {
+        assertFilesWithExecutor(
+            outputStream -> reportRepository.writeNtsPreServiceFeeFundCsvReport(
+                "9d7aa059-4697-4038-981e-b196614cb3e7", outputStream),
+            "nts/nts_pre_service_fee_fund_report.csv");
+    }
+
+    @Test
+    @TestData(fileName = FOLDER_NAME + "write-nts-pre-service-fee-fund-csv-report.groovy")
+    public void testWriteNtsPreServiceFeeFundCsvReportEmpty() throws IOException {
+        assertFilesWithExecutor(
+            outputStream -> reportRepository.writeNtsPreServiceFeeFundCsvReport(
+                "f61c7c53-329b-4c79-b0bb-43f43136e6fb", outputStream),
+            "nts/nts_pre_service_fee_fund_report_empty.csv");
+    }
 }
