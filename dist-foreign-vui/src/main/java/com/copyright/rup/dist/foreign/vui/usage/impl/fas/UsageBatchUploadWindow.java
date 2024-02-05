@@ -141,6 +141,7 @@ public class UsageBatchUploadWindow extends CommonDialog {
 
     private VerticalLayout initRootLayout() {
         var rootLayout = VaadinUtils.initCommonVerticalLayout();
+        VaadinUtils.setPadding(rootLayout, 10, 10, 0, 10);
         rootLayout.add(initUsageBatchNameField(), initUploadField(), initRightsholderLayout(),
             initPaymentDataLayout(), initGrossAmountLayout());
         VaadinUtils.addComponentStyle(rootLayout, "usage-batch-upload-widget-layout");

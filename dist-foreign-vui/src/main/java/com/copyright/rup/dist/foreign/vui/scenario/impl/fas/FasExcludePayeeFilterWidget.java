@@ -86,8 +86,8 @@ public class FasExcludePayeeFilterWidget extends VerticalLayout implements IFasE
         super.setSizeFull();
         super.setMinWidth("150px");
         super.setSpacing(false);
+        super.setWidthFull();
         VaadinUtils.setPadding(this, 0, 10, 0, 10);
-        VaadinUtils.setMaxComponentsWidth(this);
         initScenarioFilterWidget();
         initParticipatingFilter();
         initMinimumNetThresholdFilter();
@@ -112,11 +112,13 @@ public class FasExcludePayeeFilterWidget extends VerticalLayout implements IFasE
         applyButton = Buttons.createButton(ForeignUi.getMessage("button.apply"));
         applyButton.addClickListener(event -> applyFilter());
         applyButton.setEnabled(false);
+        applyButton.setWidthFull();
         var clearButton = Buttons.createButton(ForeignUi.getMessage("button.clear"));
         clearButton.addClickListener(event -> clearFilter());
+        clearButton.setWidthFull();
         var layout = new HorizontalLayout(applyButton, clearButton);
         layout.setSpacing(true);
-        VaadinUtils.setMaxComponentsWidth(layout, applyButton, clearButton);
+        layout.setWidthFull();
         VaadinUtils.addComponentStyle(layout, "filter-buttons");
         return layout;
     }
@@ -124,29 +126,30 @@ public class FasExcludePayeeFilterWidget extends VerticalLayout implements IFasE
     private void initParticipatingFilter() {
         Map<String, Boolean> participatingStatuses = controller.getParticipatingStatuses();
         participatingSelectField = new Select<>();
+        participatingSelectField.setWidthFull();
+        participatingSelectField.setEmptySelectionAllowed(true);
         participatingSelectField.setLabel(ForeignUi.getMessage("label.participating_status"));
         participatingSelectField.setItems(participatingStatuses.keySet());
         participatingSelectField.addValueChangeListener(event -> {
             filter.setPayeeParticipating(participatingStatuses.get(event.getValue()));
             filterChanged();
         });
-        VaadinUtils.setMaxComponentsWidth(participatingSelectField);
         VaadinUtils.addComponentStyle(participatingSelectField, "participating-filter");
     }
 
     private void initMinimumNetThresholdFilter() {
         minimumNetThreshold = new BigDecimalField(ForeignUi.getMessage("label.minimum_net_threshold"));
-        binder.forField(minimumNetThreshold)
-            .withValidator(AmountRangeValidator.amountValidator())
-            .bind(ValueProvider.identity(), (beanValue, fieldValue) -> beanValue = fieldValue);
+        minimumNetThreshold.setWidthFull();
+        minimumNetThreshold.setValueChangeMode(ValueChangeMode.LAZY);
         minimumNetThreshold.addValueChangeListener(event -> {
             if (!binder.validate().hasErrors()) {
                 filter.setNetAmountMinThreshold(event.getValue());
             }
             filterChanged();
         });
-        minimumNetThreshold.setValueChangeMode(ValueChangeMode.LAZY);
-        VaadinUtils.setMaxComponentsWidth(minimumNetThreshold);
+        binder.forField(minimumNetThreshold)
+            .withValidator(AmountRangeValidator.amountValidator())
+            .bind(ValueProvider.identity(), (beanValue, fieldValue) -> beanValue = fieldValue);
         VaadinUtils.addComponentStyle(minimumNetThreshold, "minimum-net-threshold-filter");
     }
 

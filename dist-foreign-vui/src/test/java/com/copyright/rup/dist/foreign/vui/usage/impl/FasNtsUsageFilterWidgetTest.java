@@ -219,9 +219,9 @@ public class FasNtsUsageFilterWidgetTest {
         verifyItemsFilterWidget(verticalLayout.getComponentAt(1), "Batches");
         verifyItemsFilterWidget(verticalLayout.getComponentAt(2), "RROs");
         verifyDateWidget(verticalLayout.getComponentAt(3));
-        verifyComboBox(verticalLayout.getComponentAt(4), "Status", "calc(99.9% - 0rem)", true,
+        verifyComboBox(verticalLayout.getComponentAt(4), "Status", "100%", true,
             FAS_FAS2_STATUSES);
-        verifyComboBox(verticalLayout.getComponentAt(5), "Fiscal Year To", "calc(99.9% - 0rem)", true,
+        verifyComboBox(verticalLayout.getComponentAt(5), "Fiscal Year To", "100%", true,
             List.of(FISCAL_YEAR));
     }
 

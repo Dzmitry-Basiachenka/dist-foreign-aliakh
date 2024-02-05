@@ -115,7 +115,7 @@ public class FasNtsUsageFilterWidget extends CommonUsageFilterWidget implements 
 
     private void initStatusFilter() {
         statusComboBox = new ComboBox<>(ForeignUi.getMessage("label.status"));
-        VaadinUtils.setMaxComponentsWidth(statusComboBox);
+        statusComboBox.setWidthFull();
         statusComboBox.addValueChangeListener(event -> {
             getFilter().setUsageStatus(statusComboBox.getValue());
             filterChanged();
@@ -125,7 +125,7 @@ public class FasNtsUsageFilterWidget extends CommonUsageFilterWidget implements 
 
     private void initFiscalYearFilter() {
         fiscalYearComboBox = new ComboBox<>(ForeignUi.getMessage("label.fiscal_year_to"));
-        VaadinUtils.setMaxComponentsWidth(fiscalYearComboBox);
+        fiscalYearComboBox.setWidthFull();
         fiscalYearComboBox.addValueChangeListener(event -> {
             getFilter().setFiscalYear(fiscalYearComboBox.getValue());
             filterChanged();

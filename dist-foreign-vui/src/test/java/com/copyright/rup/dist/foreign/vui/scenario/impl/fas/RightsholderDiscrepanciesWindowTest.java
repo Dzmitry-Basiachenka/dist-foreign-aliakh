@@ -97,12 +97,12 @@ public class RightsholderDiscrepanciesWindowTest {
         Grid grid = (Grid) content.getComponentAt(0);
         assertEquals("rightsholder-discrepancies-grid", grid.getId().orElseThrow());
         verifyGrid(grid, List.of(
-            Pair.of("RH Account #", "115px"),
-            Pair.of("RH Name", null),
-            Pair.of("New RH Account #", "140px"),
-            Pair.of("New RH Name", null),
+            Pair.of("RH Account #", "135px"),
+            Pair.of("RH Name", "300px"),
+            Pair.of("New RH Account #", "170px"),
+            Pair.of("New RH Name", "300px"),
             Pair.of("Wr Wrk Inst", "110px"),
-            Pair.of("Title", null)
+            Pair.of("Title", "300px")
         ));
         verifyButtonsLayout(UiTestHelper.getFooterComponent(window, 1));
     }

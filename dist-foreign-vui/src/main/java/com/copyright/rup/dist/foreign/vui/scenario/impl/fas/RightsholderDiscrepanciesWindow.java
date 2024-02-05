@@ -16,6 +16,7 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.Grid.SelectionMode;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.data.provider.DataProvider;
+import com.vaadin.flow.function.ValueProvider;
 
 import org.apache.commons.collections4.CollectionUtils;
 
@@ -104,26 +105,26 @@ class RightsholderDiscrepanciesWindow extends CommonDialog {
     }
 
     private void addColumns() {
-        grid.addColumn(discrepancy -> discrepancy.getOldRightsholder().getAccountNumber())
-            .setHeader(ForeignUi.getMessage("table.column.rh_account_number"))
-            .setSortProperty("oldRightsholder.rhAccountNumber")
-            .setWidth("115px");
-        grid.addColumn(discrepancy -> discrepancy.getOldRightsholder().getName())
-            .setHeader(ForeignUi.getMessage("table.column.rh_account_name"))
-            .setSortProperty("oldRightsholder.rhName");
-        grid.addColumn(discrepancy -> discrepancy.getNewRightsholder().getAccountNumber())
-            .setHeader(ForeignUi.getMessage("table.column.new_rh_account_number"))
-            .setSortProperty("newRightsholder.rhAccountNumber")
-            .setWidth("140px");
-        grid.addColumn(discrepancy -> discrepancy.getNewRightsholder().getName())
-            .setHeader(ForeignUi.getMessage("table.column.new_rh_name"))
-            .setSortProperty("newRightsholder.rhName");
-        grid.addColumn(RightsholderDiscrepancy::getWrWrkInst)
-            .setHeader(ForeignUi.getMessage("table.column.wr_wrk_inst"))
-            .setSortProperty("wrWrkInst")
-            .setWidth("110px");
-        grid.addColumn(RightsholderDiscrepancy::getWorkTitle)
-            .setHeader(ForeignUi.getMessage("table.column.work_title"))
-            .setSortProperty("workTitle");
+        addColumn(discrepancy -> discrepancy.getOldRightsholder().getAccountNumber(), "table.column.rh_account_number",
+            "oldRightsholder.rhAccountNumber", "135px");
+        addColumn(discrepancy -> discrepancy.getOldRightsholder().getName(), "table.column.rh_account_name",
+            "oldRightsholder.rhName", "300px");
+        addColumn(discrepancy -> discrepancy.getNewRightsholder().getAccountNumber(),
+            "table.column.new_rh_account_number", "newRightsholder.rhName", "170px");
+        addColumn(discrepancy -> discrepancy.getNewRightsholder().getName(), "table.column.new_rh_name",
+            "newRightsholder.rhName", "300px");
+        addColumn(RightsholderDiscrepancy::getWrWrkInst, "table.column.wr_wrk_inst", "wrWrkInst", "110px");
+        addColumn(RightsholderDiscrepancy::getWorkTitle, "table.column.work_title", "workTitle", "300px");
+    }
+
+    private void addColumn(ValueProvider<RightsholderDiscrepancy, ?> provider, String captionProperty, String sort,
+                           String width) {
+        grid.addColumn(provider)
+            .setHeader(ForeignUi.getMessage(captionProperty))
+            .setSortProperty(sort)
+            .setSortable(true)
+            .setResizable(true)
+            .setWidth(width)
+            .setFlexGrow(0);
     }
 }

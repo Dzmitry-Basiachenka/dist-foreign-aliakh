@@ -108,7 +108,7 @@ public class FasExcludePayeeFilterWidgetTest {
         assertEquals(BigDecimalField.class, component.getClass());
         BigDecimalField textField = (BigDecimalField) component;
         assertEquals("Minimum Net Threshold", textField.getLabel());
-        assertEquals("calc(99.9% - 0rem)", textField.getWidth());
+        assertEquals("100%", textField.getWidth());
     }
 
     private void verifyButtonsLayout(Component component) {
@@ -124,7 +124,7 @@ public class FasExcludePayeeFilterWidgetTest {
         assertThat(component, instanceOf(Button.class));
         Button button = (Button) component;
         assertEquals(caption, button.getText());
-        assertEquals("calc(99.9% - 0rem)", button.getWidth());
+        assertEquals("100%", button.getWidth());
     }
 
     private <T> Select<T> verifySelectField(Component component, String caption, boolean emptySelectionAllowed,
@@ -132,9 +132,9 @@ public class FasExcludePayeeFilterWidgetTest {
         assertThat(component, instanceOf(Select.class));
         Select<T> comboBox = (Select<T>) component;
         assertFalse(comboBox.isReadOnly());
-        assertEquals(emptySelectionAllowed, !comboBox.isEmptySelectionAllowed());
+        assertEquals(emptySelectionAllowed, comboBox.isEmptySelectionAllowed());
         assertEquals(caption, comboBox.getLabel());
-        assertEquals("calc(99.9% - 0rem)", comboBox.getWidth());
+        assertEquals("100%", comboBox.getWidth());
         ListDataProvider<T> listDataProvider = (ListDataProvider<T>) comboBox.getDataProvider();
         Collection<T> actualItems = listDataProvider.getItems();
         assertEquals(expectedItems.size(), actualItems.size());

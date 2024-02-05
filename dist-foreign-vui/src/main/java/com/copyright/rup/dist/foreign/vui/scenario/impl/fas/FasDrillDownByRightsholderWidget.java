@@ -47,7 +47,7 @@ public class FasDrillDownByRightsholderWidget extends CommonDrillDownByRightshol
         addColumn(
             usageDto -> CommonDateUtils.format(usageDto.getPaymentDate(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT),
             "table.column.payment_date", "paymentDate", WIDTH_150_PX);
-        addColumn(UsageDto::getWorkTitle, "table.column.reported_title", "workTitle");
+        addColumn(UsageDto::getWorkTitle, "table.column.reported_title", "workTitle", "300px");
         addColumn(UsageDto::getArticle, "table.column.article", "article");
         addColumn(UsageDto::getPublisher, "table.column.publisher", "publisher", "135px");
         addColumn(usageDto -> CommonDateUtils.format(usageDto.getPublicationDate(),
