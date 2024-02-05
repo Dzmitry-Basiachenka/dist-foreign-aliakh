@@ -56,7 +56,7 @@ public abstract class AbstractViewUsageBatchWindow extends CommonDialog
     @Override
     @SuppressWarnings("unchecked")
     public void performSearch() {
-        ListDataProvider<UsageBatch> dataProvider = (ListDataProvider<UsageBatch>) grid.getDataProvider();
+        var dataProvider = (ListDataProvider<UsageBatch>) grid.getDataProvider();
         dataProvider.clearFilters();
         var searchValue = searchWidget.getSearchValue();
         if (StringUtils.isNotBlank(searchValue)) {
