@@ -9,6 +9,7 @@ import com.copyright.rup.dist.foreign.repository.api.INtsReportRepository;
 import com.copyright.rup.dist.foreign.repository.impl.csv.fas.NtsServiceFeeTrueUpReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.nts.AuditNtsCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.nts.NtsFundPoolsCsvReportHandler;
+import com.copyright.rup.dist.foreign.repository.impl.csv.nts.NtsPreServiceFeeFundCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.nts.NtsScenarioUsagesCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.nts.NtsUndistributedLiabilitiesReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.nts.NtsUsageCsvReportHandler;
@@ -141,6 +142,14 @@ public class NtsReportRepository extends CommonReportRepository implements INtsR
     public void writeNtsFundPoolsCsvReport(OutputStream outputStream) {
         try (var handler = new NtsFundPoolsCsvReportHandler(outputStream)) {
             getTemplate().select("INtsReportMapper.findNtsFundPools", handler);
+        }
+    }
+
+    @Override
+    public void writeNtsPreServiceFeeFundCsvReport(String fundPoolId, OutputStream outputStream) {
+        try (var handler = new NtsPreServiceFeeFundCsvReportHandler(Objects.requireNonNull(outputStream))) {
+            getTemplate().select("INtsReportMapper.findNtsPreServiceFeeFundReportDtos",
+                Objects.requireNonNull(fundPoolId), handler);
         }
     }
 }

@@ -3,12 +3,12 @@ package com.copyright.rup.dist.foreign.repository.impl.csv.nts;
 import com.copyright.rup.dist.common.repository.impl.csv.BaseCsvReportHandler;
 import com.copyright.rup.dist.foreign.domain.report.NtsPreServiceFeeFundReportDto;
 
-import java.io.PipedOutputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Writes NTS pre-service fee fund into a {@link PipedOutputStream} connected to the {@link java.io.PipedInputStream}.
+ * Writes NTS pre-service fee fund into a {@link OutputStream} connected to the {@link java.io.InputStream}.
  * <p/>
  * Copyright (C) 2024 copyright.com
  * <p/>
@@ -24,10 +24,10 @@ public class NtsPreServiceFeeFundCsvReportHandler extends BaseCsvReportHandler<N
     /**
      * Constructor.
      *
-     * @param pipedOutputStream instance of {@link PipedOutputStream}
+     * @param outputStream instance of {@link OutputStream}
      */
-    public NtsPreServiceFeeFundCsvReportHandler(PipedOutputStream pipedOutputStream) {
-        super(pipedOutputStream);
+    public NtsPreServiceFeeFundCsvReportHandler(OutputStream outputStream) {
+        super(outputStream);
     }
 
     @Override

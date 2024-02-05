@@ -39,6 +39,13 @@
         <result property="toBeDistributedDetailsGrossAmount" column="to_be_distributed_details_gross_amount"/>
     </resultMap>
 
+    <resultMap id="ntsPreServiceFeeFundReportDtoResultMap" type="NtsPreServiceFeeFundReportDto">
+        <result property="batchName" column="batch_name"/>
+        <result property="paymentDate" column="payment_date"/>
+        <result property="numberOfDetails" column="number_of_details"/>
+        <result property="grossAmount" column="gross_amount"/>
+    </resultMap>
+
     <select id="findNtsUndistributedLiabilitiesReportDtos" parameterType="map" resultMap="ntsUndistributedLiabilitiesReportDtoResultMap">
         select
             usages_gross_amount,
@@ -199,5 +206,38 @@
         join ${schema}.df_usage u on ub.df_usage_batch_uid = u.df_usage_batch_uid
         where ub.product_family = 'NTS'
         order by ub.rro_account_number, ub.created_datetime desc
+    </select>
+
+    <select id="findNtsPreServiceFeeFundReportDtos" resultMap="ntsPreServiceFeeFundReportDtoResultMap">
+        select
+            report.name batch_name,
+            report.payment_date,
+            sum(report.number_of_details) number_of_details,
+            sum(report.gross_amount) gross_amount
+        from (
+            select
+                ub.name,
+                ub.payment_date,
+                count(1) number_of_details,
+                sum(u.gross_amount) gross_amount
+            from ${schema}.df_usage u
+            join ${schema}.df_usage_fas ufas on u.df_usage_uid = ufas.df_usage_fas_uid
+            join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
+            where df_fund_pool_uid = #{fundPoolId}
+            group by ub.name, ub.payment_date
+            union all
+            select
+                ub.name,
+                ub.payment_date,
+                count(1) number_of_details,
+                sum(ua.gross_amount) gross_amount
+            from ${schema}.df_usage_archive ua
+            join ${schema}.df_usage_fas ufas on ua.df_usage_archive_uid = ufas.df_usage_fas_uid
+            join ${schema}.df_usage_batch ub on ua.df_usage_batch_uid = ub.df_usage_batch_uid
+            where df_fund_pool_uid = #{fundPoolId}
+            group by ub.name, ub.payment_date
+        ) report
+        group by report.name, report.payment_date
+        order by report.payment_date desc, report.name
     </select>
 </mapper>

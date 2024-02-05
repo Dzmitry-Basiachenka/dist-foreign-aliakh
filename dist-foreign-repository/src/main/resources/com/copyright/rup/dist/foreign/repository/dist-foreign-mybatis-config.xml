@@ -122,6 +122,7 @@
         <typeAlias alias="AclScenarioFilter" type="com.copyright.rup.dist.foreign.domain.filter.AclScenarioFilter"/>
         <typeAlias alias="UdmSurveyDashboardReportDto" type="com.copyright.rup.dist.foreign.domain.report.UdmSurveyDashboardReportDto"/>
         <typeAlias alias="AclComparisonByAggLcClassAndTitleReportDto" type="com.copyright.rup.dist.foreign.domain.report.AclComparisonByAggLcClassAndTitleReportDto"/>
+        <typeAlias alias="NtsPreServiceFeeFundReportDto" type="com.copyright.rup.dist.foreign.domain.report.NtsPreServiceFeeFundReportDto"/>
     </typeAliases>
 
     <typeHandlers>

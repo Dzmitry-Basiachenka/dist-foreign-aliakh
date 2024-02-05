@@ -8,6 +8,7 @@ import static org.easymock.EasyMock.verify;
 
 import com.copyright.rup.dist.common.test.ReportTestUtils;
 import com.copyright.rup.dist.common.test.TestUtils;
+import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.RhTaxInformation;
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancyStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Scenario;
@@ -654,6 +655,7 @@ public class ReportServiceTest {
     public void writeNtsFundPoolsCsvReport() {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         ntsReportRepository.writeNtsFundPoolsCsvReport(outputStream);
+        expectLastCall().once();
         replay(ntsReportRepository);
         reportService.writeNtsFundPoolsCsvReport(outputStream);
         verify(ntsReportRepository);
@@ -661,7 +663,14 @@ public class ReportServiceTest {
 
     @Test
     public void testWriteNtsPreServiceFeeFundCsvReport() {
-        //TODO: {dbasiachenka} implement
+        var fundPool = new FundPool();
+        fundPool.setId("17dba7b6-29ca-4ec8-82a5-c880fd734da4");
+        var outputStream = new ByteArrayOutputStream();
+        ntsReportRepository.writeNtsPreServiceFeeFundCsvReport(fundPool.getId(), outputStream);
+        expectLastCall().once();
+        replay(ntsReportRepository);
+        reportService.writeNtsPreServiceFeeFundCsvReport(fundPool, outputStream);
+        verify(ntsReportRepository);
     }
 
     private Scenario buildScenario(ScenarioStatusEnum status) {
