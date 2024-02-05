@@ -43,6 +43,7 @@ public final class VaadinUtils {
      *
      * @param components components to set width.
      */
+    @Deprecated //use setWidthFull instead
     public static void setMaxComponentsWidth(Component... components) {
         Arrays.stream(components).filter(Objects::nonNull).forEach(component -> {
             Style style = component.getElement().getStyle();

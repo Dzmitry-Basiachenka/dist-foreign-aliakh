@@ -164,7 +164,7 @@ public class FasDrillDownByRightsholderWidgetTest {
             Pair.of("Standard Number Type", "220px"),
             Pair.of("Fiscal Year", WIDTH_130_PX),
             Pair.of("Payment Date", WIDTH_150_PX),
-            Pair.of("Reported Title", null),
+            Pair.of("Reported Title", "300px"),
             Pair.of("Article", null),
             Pair.of("Publisher", "135px"),
             Pair.of("Pub Date", WIDTH_130_PX),
