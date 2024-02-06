@@ -19,7 +19,7 @@ import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.api.IMediator;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.contextmenu.MenuItem;
 import com.vaadin.flow.component.menubar.MenuBar;
-import com.vaadin.flow.component.orderedlayout.FlexComponent;
+import com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 
 import java.util.Objects;
@@ -138,7 +138,7 @@ public class FasUsageWidget extends CommonUsageWidget implements IFasUsageWidget
         var buttonsLayout = new HorizontalLayout(usageBatchMenuBar, sendForResearchDownloader,
             loadResearchedUsagesButton, updateUsagesButton, addToScenarioButton, exportDownloader);
         var toolbarLayout = new HorizontalLayout(buttonsLayout, getHideGridColumnsProvider().getMenuButton());
-        toolbarLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.BETWEEN);
+        toolbarLayout.setJustifyContentMode(JustifyContentMode.BETWEEN);
         toolbarLayout.setWidthFull();
         VaadinUtils.setPadding(toolbarLayout, 1, 3, 1, 3);
         return toolbarLayout;

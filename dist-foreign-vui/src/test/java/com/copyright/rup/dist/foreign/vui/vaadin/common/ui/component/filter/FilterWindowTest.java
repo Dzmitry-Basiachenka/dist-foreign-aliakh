@@ -5,6 +5,7 @@ import static com.copyright.rup.dist.foreign.vui.UiTestHelper.getCheckboxGroup;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.getDialogContent;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.getFooterLayout;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyButtonsLayout;
+import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifySearchWidget;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifySize;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyWindow;
 
@@ -77,7 +78,7 @@ public class FilterWindowTest {
         VerticalLayout content = (VerticalLayout) getDialogContent(filterWindow);
         assertFalse(content.isSpacing());
         Component component = content.getComponentAt(0);
-        assertThat(component, instanceOf(SearchWidget.class));
+        verifySearchWidget(component, "Enter search value", "100%");
         verifyPanel((Scroller) content.getComponentAt(1));
         verifyButtonsLayout(getFooterLayout(filterWindow), true, "Save", "Select All", "Clear", "Close");
     }

@@ -18,7 +18,7 @@ import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.api.IMediator;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.contextmenu.MenuItem;
 import com.vaadin.flow.component.menubar.MenuBar;
-import com.vaadin.flow.component.orderedlayout.FlexComponent;
+import com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 
 import org.apache.commons.collections4.CollectionUtils;
@@ -40,6 +40,7 @@ public class NtsUsageWidget extends CommonUsageWidget implements INtsUsageWidget
 
     private static final long serialVersionUID = 7962483141394161599L;
     private static final String BATCH_NAMES_LIST_SEPARATOR = "<br><li>";
+    private static final String CLASS_BUTTON_MENUBAR = "button-menubar";
 
     private final INtsUsageController controller;
     private Button addToScenarioButton;
@@ -117,7 +118,7 @@ public class NtsUsageWidget extends CommonUsageWidget implements INtsUsageWidget
         var buttonsLayout = new HorizontalLayout(fundPoolMenuBar, additionalFundsMenuBar, assignClassificationButton,
             addToScenarioButton, exportDownloader);
         var toolbarLayout = new HorizontalLayout(buttonsLayout, getHideGridColumnsProvider().getMenuButton());
-        toolbarLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.BETWEEN);
+        toolbarLayout.setJustifyContentMode(JustifyContentMode.BETWEEN);
         toolbarLayout.setWidthFull();
         VaadinUtils.setPadding(toolbarLayout, 1, 3, 1, 3);
         return toolbarLayout;
@@ -156,8 +157,9 @@ public class NtsUsageWidget extends CommonUsageWidget implements INtsUsageWidget
             item -> Windows.showModalWindow(new FundPoolLoadWindow(controller)));
         menuItem.getSubMenu().addItem(ForeignUi.getMessage("menu.item.view"),
             item -> Windows.showModalWindow(new ViewFundPoolWindow(controller)));
+        VaadinUtils.addComponentStyle(menuItem, CLASS_BUTTON_MENUBAR);
         VaadinUtils.addComponentStyle(fundPoolMenuBar, "fund-pool-menu-bar");
-        VaadinUtils.addComponentStyle(fundPoolMenuBar, "v-menubar-df");
+        VaadinUtils.addComponentStyle(fundPoolMenuBar, CLASS_BUTTON_MENUBAR);
     }
 
     private void initAdditionalFundsMenuBar() {
@@ -165,11 +167,12 @@ public class NtsUsageWidget extends CommonUsageWidget implements INtsUsageWidget
         MenuItem menuItem =
             additionalFundsMenuBar.addItem(ForeignUi.getMessage("menu.caption.additional_funds"), null, null);
         menuItem.getSubMenu().addItem(ForeignUi.getMessage("menu.item.create"),
-            item -> {}); //TODO {aliakh} initAdditionalFundBatchesFilterWindow
+            item -> new AdditionalFundBatchesFilterWindow(controller).showFilterWindow());
         menuItem.getSubMenu().addItem(ForeignUi.getMessage("menu.item.view"),
             item -> Windows.showModalWindow(new ViewAdditionalFundsWindow(controller)));
+        VaadinUtils.addComponentStyle(menuItem, CLASS_BUTTON_MENUBAR);
         VaadinUtils.addComponentStyle(additionalFundsMenuBar, "additional-funds-menu-bar");
-        VaadinUtils.addComponentStyle(additionalFundsMenuBar, "v-menubar-df");
+        VaadinUtils.addComponentStyle(additionalFundsMenuBar, CLASS_BUTTON_MENUBAR);
     }
 
     private String getClassificationValidationMessage(Set<String> batchesIds) {

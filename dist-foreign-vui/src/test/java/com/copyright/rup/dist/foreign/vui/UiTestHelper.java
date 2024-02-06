@@ -18,6 +18,7 @@ import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.downloader.
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.upload.UploadField;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.Windows;
 
+import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.SearchWidget;
 import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasSize;
@@ -311,6 +312,31 @@ public final class UiTestHelper {
                                               boolean isDisableOnClick) {
         assertThat(component, instanceOf(OnDemandFileDownloader.class));
         return verifyButton(component.getChildren().findFirst().orElseThrow(), text, isVisible, isDisableOnClick);
+    }
+
+    /**
+     * Verifies search widget.
+     *
+     * @param component   search widget component
+     * @param placeholder placeholder
+     * @param width       width
+     */
+    public static void verifySearchWidget(Component component, String placeholder, String width) {
+        assertThat(component, instanceOf(SearchWidget.class));
+        var searchWidget = (SearchWidget) component;
+        var textField = Whitebox.getInternalState(searchWidget, TextField.class);
+        assertEquals(placeholder, textField.getPlaceholder());
+        verifyWidth(textField, width, Unit.PERCENTAGE);
+    }
+
+    /**
+     * Verifies search widget.
+     *
+     * @param component   search widget component
+     * @param placeholder placeholder
+     */
+    public static void verifySearchWidget(Component component, String placeholder) {
+        verifySearchWidget(component, placeholder, "70%");
     }
 
     /**
