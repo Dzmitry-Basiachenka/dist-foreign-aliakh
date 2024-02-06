@@ -4,8 +4,7 @@ import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.common.util.UsageBatchUtils;
 import com.copyright.rup.dist.foreign.vui.common.validator.AmountRangeValidator;
-import com.copyright.rup.dist.foreign.vui.common.validator.RequiredBigDecimalValidator;
-import com.copyright.rup.dist.foreign.vui.common.validator.RequiredLongValidator;
+import com.copyright.rup.dist.foreign.vui.common.validator.RequiredNumberValidator;
 import com.copyright.rup.dist.foreign.vui.common.validator.RequiredValidator;
 import com.copyright.rup.dist.foreign.vui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.vui.usage.api.nts.INtsUsageController;
@@ -24,13 +23,13 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.BigDecimalField;
+import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
-import com.vaadin.flow.data.binder.BindingValidationStatus;
 import com.vaadin.flow.data.validator.LongRangeValidator;
+import com.vaadin.flow.data.validator.RangeValidator;
 import com.vaadin.flow.data.validator.StringLengthValidator;
 import com.vaadin.flow.function.SerializablePredicate;
-import com.vaadin.flow.function.ValueProvider;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -50,22 +49,22 @@ class FundPoolLoadWindow extends CommonDialog {
 
     private static final long serialVersionUID = -3082206348453157583L;
     private static final String EMPTY_MARKET_STYLE = "empty-item-filter-widget";
-    private static final String NOT_NUMERIC_MESSAGE = "field.error.not_numeric";
     private static final int MIN_YEAR = 1950;
     private static final int MAX_YEAR = 2099;
+    private static final String YEAR_ERROR_MESSAGE =
+        ForeignUi.getMessage("field.error.number_not_in_range", MIN_YEAR, MAX_YEAR);
 
     private final INtsUsageController usagesController;
     private final Binder<UsageBatch> binder = new Binder<>();
-    private final Binder<String> stringBinder = new Binder<>();
 
     private TextField usageBatchNameField;
     private LongField accountNumberField;
     private Binder.Binding<UsageBatch, Long> accountNumberBinding;
     private TextField accountNameField;
     private LocalDateWidget paymentDateWidget;
-    private TextField fundPoolPeriodFromField;
-    private TextField fundPoolPeriodToField;
-    private TextField marketValidationField;
+    private IntegerField fundPoolPeriodFromField;
+    private IntegerField fundPoolPeriodToField;
+    private IntegerField marketValidationField;
     private Set<String> selectedMarkets;
     private BigDecimalField stmAmountField;
     private BigDecimalField nonStmAmountField;
@@ -83,8 +82,8 @@ class FundPoolLoadWindow extends CommonDialog {
         this.usagesController = usagesController;
         super.add(initRootLayout());
         super.setHeaderTitle(ForeignUi.getMessage("window.load_fund_pool"));
-        super.setWidth("700px");
-        super.setHeight("580px");
+        super.setWidth("520px");
+        super.setHeight("510px");
         super.getFooter().add(initButtonsLayout());
         super.setModalWindowProperties("fund-pool-upload-window", false);
     }
@@ -114,9 +113,10 @@ class FundPoolLoadWindow extends CommonDialog {
      * @return {@code true} if all inputs are valid, {@code false} - otherwise
      */
     boolean isValid() {
-        return binder.isValid() && stringBinder.isValid();
+        return binder.validate().isOk();
     }
 
+    //TODO {vaadin23} replace with binder approach
     private UsageBatch buildUsageBatch() {
         var usageBatch = new UsageBatch();
         usageBatch.setName(StringUtils.trim(usageBatchNameField.getValue()));
@@ -126,8 +126,8 @@ class FundPoolLoadWindow extends CommonDialog {
         usageBatch.setFiscalYear(UsageBatchUtils.calculateFiscalYear(paymentDateWidget.getValue()));
         var ntsFields = new UsageBatch.NtsFields();
         ntsFields.setMarkets(selectedMarkets);
-        ntsFields.setFundPoolPeriodFrom(Integer.valueOf(fundPoolPeriodFromField.getValue()));
-        ntsFields.setFundPoolPeriodTo(Integer.valueOf(fundPoolPeriodToField.getValue()));
+        ntsFields.setFundPoolPeriodFrom(fundPoolPeriodFromField.getValue());
+        ntsFields.setFundPoolPeriodTo(fundPoolPeriodToField.getValue());
         ntsFields.setStmAmount(stmAmountField.getValue());
         ntsFields.setNonStmAmount(nonStmAmountField.getValue());
         ntsFields.setStmMinimumAmount(stmMinAmountField.getValue());
@@ -142,20 +142,19 @@ class FundPoolLoadWindow extends CommonDialog {
         rootLayout.add(initUsageBatchNameField(), initRightsholderLayout(), initPaymentDataLayout(),
             initMarketFilterWidget(), initAmountsLayout(), initMinAmountsLayout(), initExcludeStmCheckBox());
         VaadinUtils.setPadding(rootLayout, 10, 10, 0, 10);
-        binder.validate();
         return rootLayout;
     }
 
     private TextField initUsageBatchNameField() {
         usageBatchNameField = new TextField(ForeignUi.getMessage("label.usage_batch_name"));
         usageBatchNameField.setRequiredIndicatorVisible(true);
+        usageBatchNameField.setWidthFull();
         binder.forField(usageBatchNameField)
             .withValidator(new RequiredValidator())
             .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.length", 50), 0, 50))
             .withValidator(value -> !usagesController.usageBatchExists(StringUtils.trimToEmpty(value)),
                 ForeignUi.getMessage("message.error.unique_name", "Usage Batch"))
             .bind(UsageBatch::getName, UsageBatch::setName);
-        VaadinUtils.setMaxComponentsWidth(usageBatchNameField);
         VaadinUtils.addComponentStyle(usageBatchNameField, "usage-batch-name-field");
         return usageBatchNameField;
     }
@@ -183,7 +182,7 @@ class FundPoolLoadWindow extends CommonDialog {
         accountNumberField.setRequiredIndicatorVisible(true);
         accountNumberField.addValueChangeListener(event -> accountNameField.setValue(StringUtils.EMPTY));
         accountNumberBinding = binder.forField(accountNumberField)
-            .withValidator(new RequiredLongValidator())
+            .withValidator(new RequiredNumberValidator())
             .withValidator(
                 new LongRangeValidator(ForeignUi.getMessage("field.error.number_length", 10), 1L, 9999999999L))
             .bind(usageBatch -> usageBatch.getRro().getAccountNumber(),
@@ -194,9 +193,9 @@ class FundPoolLoadWindow extends CommonDialog {
 
     private TextField initRightsholderAccountNameField() {
         accountNameField = new TextField(ForeignUi.getMessage("label.rro_account_name"));
+        accountNameField.setWidth("50%");
         accountNameField.setRequiredIndicatorVisible(true);
         accountNameField.setReadOnly(true);
-        accountNameField.setWidthFull();
         binder.forField(accountNameField)
             .asRequired(ForeignUi.getMessage("field.error.rro_name.empty"))
             .bind(usageBatch -> usageBatch.getRro().getName(),
@@ -207,9 +206,9 @@ class FundPoolLoadWindow extends CommonDialog {
 
     private Button initVerifyButton() {
         var button = Buttons.createButton(ForeignUi.getMessage("button.verify"));
-        button.setWidth("72px"); //TODO {aliakh} check
+        button.setWidth("72px");
         button.addClickListener(event -> {
-            if (BindingValidationStatus.Status.OK == accountNumberBinding.validate().getStatus()) {
+            if (!accountNumberBinding.validate().isError()) {
                 rro = usagesController.getRightsholder(accountNumberField.getValue());
                 if (StringUtils.isNotBlank(rro.getName())) {
                     accountNameField.setValue(rro.getName());
@@ -222,8 +221,8 @@ class FundPoolLoadWindow extends CommonDialog {
     }
 
     private HorizontalLayout initPaymentDataLayout() {
-        var horizontalLayout = new HorizontalLayout(initPaymentDateWidget(), initFundPoolPeriodFromField(),
-            initFundPoolPeriodToField());
+        var horizontalLayout =
+            new HorizontalLayout(initPaymentDateWidget(), initFundPoolPeriodFromField(), initFundPoolPeriodToField());
         horizontalLayout.setDefaultVerticalComponentAlignment(Alignment.BASELINE);
         horizontalLayout.setWidthFull();
         return horizontalLayout;
@@ -239,58 +238,47 @@ class FundPoolLoadWindow extends CommonDialog {
         return paymentDateWidget;
     }
 
-    private TextField initFundPoolPeriodFromField() {
-        fundPoolPeriodFromField = new TextField(ForeignUi.getMessage("label.fund.pool.period.from"));
+    private IntegerField initFundPoolPeriodFromField() {
+        fundPoolPeriodFromField = new IntegerField(ForeignUi.getMessage("label.fund.pool.period.from"));
         fundPoolPeriodFromField.setRequiredIndicatorVisible(true);
-        fundPoolPeriodFromField.setSizeFull();
-        fundPoolPeriodFromField.addValueChangeListener(event -> stringBinder.validate());
+        fundPoolPeriodFromField.setWidth("33%");
         VaadinUtils.addComponentStyle(fundPoolPeriodFromField, "fund-pool-period-from-field");
-        stringBinder.forField(fundPoolPeriodFromField)
-            .withValidator(new RequiredValidator())
-            .withValidator(getNumericValidator(), ForeignUi.getMessage(NOT_NUMERIC_MESSAGE))
-            .withValidator(getYearValidator(), ForeignUi.getMessage("field.error.number_not_in_range",
-                MIN_YEAR, MAX_YEAR))
-            .bind(ValueProvider.identity(), (bean, value) -> bean = value)
-            .validate();
+        binder.forField(fundPoolPeriodFromField)
+            .withValidator(new RequiredNumberValidator())
+            .withValidator(RangeValidator.of(YEAR_ERROR_MESSAGE, MIN_YEAR, MAX_YEAR))
+            .bind(batch -> batch.getNtsFields().getFundPoolPeriodFrom(),
+                (batch, value) -> batch.getNtsFields().setFundPoolPeriodFrom(value));
         return fundPoolPeriodFromField;
     }
 
-    private TextField initFundPoolPeriodToField() {
-        fundPoolPeriodToField = new TextField(ForeignUi.getMessage("label.fund.pool.period.to"));
+    private IntegerField initFundPoolPeriodToField() {
+        fundPoolPeriodToField = new IntegerField(ForeignUi.getMessage("label.fund.pool.period.to"));
         fundPoolPeriodToField.setRequiredIndicatorVisible(true);
         fundPoolPeriodToField.setSizeFull();
+        fundPoolPeriodToField.setWidth("30%");
         VaadinUtils.addComponentStyle(fundPoolPeriodToField, "fund-pool-period-to-field");
-        stringBinder.forField(fundPoolPeriodToField)
-            .withValidator(new RequiredValidator())
-            .withValidator(getNumericValidator(), ForeignUi.getMessage(NOT_NUMERIC_MESSAGE))
-            .withValidator(getYearValidator(), ForeignUi.getMessage("field.error.number_not_in_range",
-                MIN_YEAR, MAX_YEAR))
-            .withValidator(value -> {
-                String periodFrom = fundPoolPeriodFromField.getValue();
-                return StringUtils.isEmpty(periodFrom)
-                    || !getNumericValidator().test(periodFrom)
-                    || !getYearValidator().test(periodFrom)
-                    || 0 <= fundPoolPeriodToField.getValue().compareTo(periodFrom);
-            }, ForeignUi.getMessage("field.error.greater_or_equal_to",
-                ForeignUi.getMessage("label.fund.pool.period.from")))
-            .bind(ValueProvider.identity(), (bean, value) -> bean = value)
-            .validate();
+        binder.forField(fundPoolPeriodToField)
+            .withValidator(new RequiredNumberValidator())
+            .withValidator(RangeValidator.of(YEAR_ERROR_MESSAGE, MIN_YEAR, MAX_YEAR))
+            .withValidator(value -> 0 <= fundPoolPeriodToField.getValue().compareTo(fundPoolPeriodFromField.getValue()),
+                ForeignUi.getMessage("field.error.greater_or_equal_to",
+                    ForeignUi.getMessage("label.fund.pool.period.from")))
+            .bind(batch -> batch.getNtsFields().getFundPoolPeriodTo(),
+                (batch, value) -> batch.getNtsFields().setFundPoolPeriodTo(value));
         return fundPoolPeriodToField;
     }
 
     private MarketFilterWidget initMarketFilterWidget() {
-        marketValidationField = new TextField(ForeignUi.getMessage("label.markets"));
-        stringBinder.forField(marketValidationField)
-            .withValidator(value -> Integer.parseInt(value) > 0, ForeignUi.getMessage("message.market.empty"))
-            .bind(ValueProvider.identity(), (bean, value) -> bean = value)
-            .validate();
+        marketValidationField = new IntegerField(ForeignUi.getMessage("label.markets"));
+        binder.forField(marketValidationField)
+            .withValidator(value -> value > 0, ForeignUi.getMessage("message.market.empty"))
+            .bindReadOnly(usageBatch -> usageBatch.getNtsFields().getMarkets().size());
         var marketFilterWidget = new MarketFilterWidget(usagesController::getMarkets);
         VaadinUtils.addComponentStyle(marketFilterWidget, "market-filter-widget");
         marketFilterWidget.addClassName(EMPTY_MARKET_STYLE);
         marketFilterWidget.addFilterSaveListener(event -> {
             int size = event.getSelectedItemsIds().size();
-            marketValidationField.setValue(String.valueOf(size));
-            stringBinder.validate();
+            marketValidationField.setValue(size);
             if (0 < size) {
                 marketFilterWidget.removeClassName(EMPTY_MARKET_STYLE);
             } else {
@@ -325,28 +313,27 @@ class FundPoolLoadWindow extends CommonDialog {
 
     private BigDecimalField initAmountField(String label) {
         var field = new BigDecimalField(label);
+        field.setWidthFull();
         field.setPrefixComponent(VaadinIcon.DOLLAR.create());
         field.setRequiredIndicatorVisible(true);
         binder.forField(field)
-            .withValidator(new RequiredBigDecimalValidator())
+            .withValidator(new RequiredNumberValidator())
             .withValidator(AmountRangeValidator.zeroAmountValidator())
             .bind(UsageBatch::getGrossAmount, UsageBatch::setGrossAmount);
-        VaadinUtils.setMaxComponentsWidth(field);
         return field;
     }
 
     private BigDecimalField initNonStmFundPoolAmountField(String label) {
         var field = new BigDecimalField(label);
+        field.setWidthFull();
         field.setPrefixComponent(VaadinIcon.DOLLAR.create());
         field.setRequiredIndicatorVisible(true);
         binder.forField(field)
-            .withValidator(new RequiredBigDecimalValidator())
+            .withValidator(new RequiredNumberValidator())
             .withValidator(AmountRangeValidator.zeroAmountValidator())
             .withValidator(getFundPoolAmountValidator(),
                 ForeignUi.getMessage("message.error.invalid_stm_or_non_stm_amount"))
             .bind(UsageBatch::getGrossAmount, UsageBatch::setGrossAmount);
-        binder.addValueChangeListener(event -> binder.validate());
-        VaadinUtils.setMaxComponentsWidth(field);
         return field;
     }
 
@@ -355,15 +342,6 @@ class FundPoolLoadWindow extends CommonDialog {
         excludeStmCheckbox.setLabel(ForeignUi.getMessage("label.exclude.stm"));
         VaadinUtils.addComponentStyle(excludeStmCheckbox, "exclude-stm-rhs-checkbox");
         return excludeStmCheckbox;
-    }
-
-    private SerializablePredicate<String> getNumericValidator() {
-        return value -> StringUtils.isNumeric(StringUtils.trim(value));
-    }
-
-    //TODO {aliakh} reuse YearValidator instead
-    private SerializablePredicate<String> getYearValidator() {
-        return value -> Integer.parseInt(value) >= MIN_YEAR && Integer.parseInt(value) <= MAX_YEAR;
     }
 
     private SerializablePredicate<BigDecimal> getFundPoolAmountValidator() {

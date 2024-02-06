@@ -1,7 +1,7 @@
 package com.copyright.rup.dist.foreign.vui.usage.impl.fas;
 
 import com.copyright.rup.dist.foreign.domain.Usage;
-import com.copyright.rup.dist.foreign.vui.common.validator.RequiredLongValidator;
+import com.copyright.rup.dist.foreign.vui.common.validator.RequiredNumberValidator;
 import com.copyright.rup.dist.foreign.vui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.vui.usage.api.fas.IFasUpdateUsageWindow;
 import com.copyright.rup.dist.foreign.vui.usage.api.fas.IFasUsageController;
@@ -69,7 +69,7 @@ class FasEditMultipleUsagesWindow extends CommonDialog {
         wrWrkInstField = new LongField(ForeignUi.getMessage("label.wr_wrk_inst"));
         wrWrkInstField.setSizeFull();
         binder.forField(wrWrkInstField)
-            .withValidator(new RequiredLongValidator())
+            .withValidator(new RequiredNumberValidator())
             .withValidator(
                 new LongRangeValidator(ForeignUi.getMessage("field.error.number_length", 9), 1L, 999999999L))
             .bind(Usage::getWrWrkInst, Usage::setWrWrkInst);

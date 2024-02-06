@@ -6,11 +6,10 @@ import com.vaadin.flow.data.binder.ValidationResult;
 import com.vaadin.flow.data.binder.ValueContext;
 import com.vaadin.flow.data.validator.AbstractValidator;
 
-import java.math.BigDecimal;
 import java.util.Objects;
 
 /**
- * The validator to check that BigDecimal value is not null.
+ * The validator to check that Long value is not null.
  * <p>
  * Copyright (C) 2024 copyright.com
  * <p>
@@ -18,19 +17,19 @@ import java.util.Objects;
  *
  * @author Ihar Suvorau
  */
-public class RequiredBigDecimalValidator extends AbstractValidator<BigDecimal> {
+public class RequiredNumberValidator extends AbstractValidator<Number> {
 
-    private static final long serialVersionUID = -6340244211878446594L;
+    private static final long serialVersionUID = 7818434813526555831L;
 
     /**
      * Constructor.
      */
-    public RequiredBigDecimalValidator() {
+    public RequiredNumberValidator() {
         super(ForeignUi.getMessage("field.error.empty"));
     }
 
     @Override
-    public ValidationResult apply(BigDecimal value, ValueContext context) {
+    public ValidationResult apply(Number value, ValueContext context) {
         return toResult(value, Objects.nonNull(value));
     }
 }

@@ -195,7 +195,7 @@ public class UsageBatchUploadWindowTest {
         UploadField uploadField = Whitebox.getInternalState(window, UploadField.class);
         Whitebox.setInternalState(uploadField, "fileName", "test.csv");
         assertFalse(window.isValid());
-        setLongFieldValue(window, ACCOUNT_NUMBER_FIELD, FAS_RRO_ACCOUNT_NUMBER.toString());
+        setLongFieldValue(window, ACCOUNT_NUMBER_FIELD, FAS_RRO_ACCOUNT_NUMBER);
         assertFalse(window.isValid());
         TextField accountNameField = Whitebox.getInternalState(window, ACCOUNT_NAME_FIELD);
         accountNameField.setReadOnly(false);
@@ -236,7 +236,7 @@ public class UsageBatchUploadWindowTest {
         expectLastCall().once();
         replay(Windows.class, window, controller, uploadField, processor);
         setTextFieldValue(window, USAGE_BATCH_NAME_FIELD, USAGE_BATCH_NAME);
-        setLongFieldValue(window, ACCOUNT_NUMBER_FIELD, FAS_RRO_ACCOUNT_NUMBER.toString());
+        setLongFieldValue(window, ACCOUNT_NUMBER_FIELD, FAS_RRO_ACCOUNT_NUMBER);
         setTextFieldValue(window, PRODUCT_FAMILY_FIELD, FAS_PRODUCT_FAMILY);
         setTextFieldValue(window, ACCOUNT_NAME_FIELD, RRO_NAME);
         Whitebox.setInternalState(window, "rro", rro);
