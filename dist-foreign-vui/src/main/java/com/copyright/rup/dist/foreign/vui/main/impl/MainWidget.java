@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.vui.main.impl;
 
+import com.copyright.rup.dist.foreign.vui.audit.api.ICommonAuditController;
+import com.copyright.rup.dist.foreign.vui.audit.api.ICommonAuditWidget;
 import com.copyright.rup.dist.foreign.vui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.vui.main.api.IMainWidget;
 import com.copyright.rup.dist.foreign.vui.main.api.IMainWidgetController;
@@ -47,9 +49,11 @@ public class MainWidget extends TabSheet implements IMainWidget, IMediatorProvid
 
     private SwitchableWidget<ICommonUsageWidget, ICommonUsageController> usagesWidget;
     private SwitchableWidget<ICommonScenariosWidget, ICommonScenariosController> scenariosWidget;
+    private SwitchableWidget<ICommonAuditWidget, ICommonAuditController> auditWidget;
     private SwitchableWidget<ICommonBatchStatusWidget, ICommonBatchStatusController> batchStatusWidget;
     private Tab usagesTab;
     private Tab scenariosTab;
+    private Tab auditTab;
     private Tab batchStatusTab;
 
     @Override
@@ -60,9 +64,11 @@ public class MainWidget extends TabSheet implements IMainWidget, IMediatorProvid
             ComponentUtil.addListener((CommonUsageWidget) widget, ScenarioCreateEvent.class,
                 event -> controller.onScenarioCreated(event)));
         scenariosWidget = new SwitchableWidget<>(controller.getScenariosControllerProvider(), widget -> {});
+        auditWidget = new SwitchableWidget<>(controller.getAuditControllerProvider(), widget -> {});
         batchStatusWidget = new SwitchableWidget<>(controller.getBatchStatusControllerProvider(), widget -> {});
         usagesTab = addTab(ForeignUi.getMessage("tab.usages"), usagesWidget, "main-usages-tab");
         scenariosTab = addTab(ForeignUi.getMessage("tab.scenarios"), scenariosWidget, "main-scenarios-tab");
+        auditTab = addTab(ForeignUi.getMessage("tab.audit"), auditWidget, "main-audit-tab");
         batchStatusTab = addTab(ForeignUi.getMessage("tab.batch_status"), batchStatusWidget, "main-batch-statuses-tab");
         addSelectedChangeListener(event -> controller.refreshWidget());
         setSuffixComponent(createSuffixComponent());
@@ -76,6 +82,7 @@ public class MainWidget extends TabSheet implements IMainWidget, IMediatorProvid
     public void updateProductFamily() {
         usagesTab.setVisible(usagesWidget.updateProductFamily());
         scenariosTab.setVisible(scenariosWidget.updateProductFamily());
+        auditTab.setVisible(auditWidget.updateProductFamily());
         batchStatusTab.setVisible(batchStatusWidget.updateProductFamily());
     }
 
