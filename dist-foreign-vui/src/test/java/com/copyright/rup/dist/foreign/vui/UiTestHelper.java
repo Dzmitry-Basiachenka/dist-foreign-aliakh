@@ -39,6 +39,7 @@ import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.Scroller;
 import com.vaadin.flow.component.textfield.BigDecimalField;
+import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.BindingValidationStatus;
@@ -305,8 +306,19 @@ public final class UiTestHelper {
      * @param field  name of the text field
      * @param value  value
      */
-    public static void setLongFieldValue(Dialog dialog, String field, String value) {
-        ((LongField) Whitebox.getInternalState(dialog, field)).setValue(Long.valueOf(value));
+    public static void setLongFieldValue(Dialog dialog, String field, Long value) {
+        ((LongField) Whitebox.getInternalState(dialog, field)).setValue(value);
+    }
+
+    /**
+     * Sets Integer field value.
+     *
+     * @param dialog instance of {@link Dialog}
+     * @param field  name of the text field
+     * @param value  value
+     */
+    public static void setIntegerFieldValue(Dialog dialog, String field, Integer value) {
+        ((IntegerField) Whitebox.getInternalState(dialog, field)).setValue(value);
     }
 
     /**
@@ -366,6 +378,23 @@ public final class UiTestHelper {
     public static LongField verifyLongField(Component component, String label, String width, String styleName) {
         assertThat(component, instanceOf(LongField.class));
         LongField field = (LongField) component;
+        assertEquals(label, field.getLabel());
+        assertEquals(width, field.getWidth());
+        assertEquals(styleName, field.getClassName());
+        return field;
+    }
+
+    /**
+     * Verifies Integer field.
+     *
+     * @param component UI component
+     * @param label     label of field
+     * @param width     width
+     * @return of {@link LongField}
+     */
+    public static IntegerField verifyIntegerField(Component component, String label, String width, String styleName) {
+        assertThat(component, instanceOf(IntegerField.class));
+        IntegerField field = (IntegerField) component;
         assertEquals(label, field.getLabel());
         assertEquals(width, field.getWidth());
         assertEquals(styleName, field.getClassName());

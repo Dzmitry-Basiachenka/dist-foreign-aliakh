@@ -106,7 +106,7 @@ public class FasEditMultipleUsagesWindowTest {
             capture(actionCapture), anyObject(Validator.class));
         expectLastCall().once();
         window = new FasEditMultipleUsagesWindow(controller, updateUsageWindow, USAGE_IDS);
-        setLongFieldValue(window, "wrWrkInstField", WR_WRK_INST.toString());
+        setLongFieldValue(window, "wrWrkInstField", WR_WRK_INST);
         controller.updateUsages(USAGE_IDS, WR_WRK_INST, REASON);
         expectLastCall().once();
         controller.refreshWidget();
