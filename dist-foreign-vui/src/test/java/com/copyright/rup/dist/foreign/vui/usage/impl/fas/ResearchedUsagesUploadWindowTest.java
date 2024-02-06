@@ -117,9 +117,9 @@ public class ResearchedUsagesUploadWindowTest {
 
     private void verifyRootLayout(Component component) {
         assertThat(component, instanceOf(VerticalLayout.class));
-        var verticalLayout = (VerticalLayout) component;
-        assertEquals(1, verticalLayout.getComponentCount());
-        verifyUploadComponent(verticalLayout.getComponentAt(0), "calc(99.9% - 0rem)");
+        var rootLayout = (VerticalLayout) component;
+        assertEquals(1, rootLayout.getComponentCount());
+        verifyUploadComponent(rootLayout.getComponentAt(0), "calc(99.9% - 0rem)");
         var buttonsLayout = getFooterLayout(window);
         verifyButtonsLayout(buttonsLayout, true, "Upload", "Close");
         var loadButton = (Button) buttonsLayout.getComponentAt(0);

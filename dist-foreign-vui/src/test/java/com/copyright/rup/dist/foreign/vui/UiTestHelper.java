@@ -40,6 +40,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.Scroller;
 import com.vaadin.flow.component.textfield.BigDecimalField;
 import com.vaadin.flow.component.textfield.IntegerField;
+import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.BindingValidationStatus;
@@ -319,6 +320,17 @@ public final class UiTestHelper {
      */
     public static void setIntegerFieldValue(Dialog dialog, String field, Integer value) {
         ((IntegerField) Whitebox.getInternalState(dialog, field)).setValue(value);
+    }
+
+    /**
+     * Sets text area value.
+     *
+     * @param dialog instance of {@link Dialog}
+     * @param field  name of the text area
+     * @param value  value
+     */
+    public static void setTextAreaValue(Dialog dialog, String field, String value) {
+        ((TextArea) Whitebox.getInternalState(dialog, field)).setValue(value);
     }
 
     /**
