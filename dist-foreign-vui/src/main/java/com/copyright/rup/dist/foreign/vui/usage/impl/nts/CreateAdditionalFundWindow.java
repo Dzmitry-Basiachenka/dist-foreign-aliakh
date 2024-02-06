@@ -67,7 +67,7 @@ class CreateAdditionalFundWindow extends CommonDialog {
         this.filteredBatchesWindow = filteredBatchesWindow;
         super.add(initRootLayout());
         super.setHeaderTitle(ForeignUi.getMessage("window.create_fund"));
-        super.setWidth("400px");
+        super.setWidth("500px");
         super.getFooter().add(initButtonsLayout());
         super.setModalWindowProperties("create-additional-fund-window", false);
     }

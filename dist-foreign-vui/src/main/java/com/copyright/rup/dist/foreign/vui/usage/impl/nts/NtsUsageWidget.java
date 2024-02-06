@@ -107,16 +107,15 @@ public class NtsUsageWidget extends CommonUsageWidget implements INtsUsageWidget
     protected HorizontalLayout initButtonsLayout() {
         addToScenarioButton = Buttons.createButton(ForeignUi.getMessage("button.add_to_scenario"));
         //TODO {aliakh} addToScenarioButton.addClickListener(onAddToScenarioClicked(new CreateNtsScenarioWindow()));
-        var exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
-        var fileDownloader = new OnDemandFileDownloader(controller.getExportUsagesStreamSource().getSource());
-        fileDownloader.extend(exportButton);
+        var exportDownloader = new OnDemandFileDownloader(controller.getExportUsagesStreamSource().getSource());
+        exportDownloader.extend(Buttons.createButton(ForeignUi.getMessage("button.export")));
         assignClassificationButton = Buttons.createButton(ForeignUi.getMessage("button.assign_classification"));
         //TODO {aliakh} assignClassificationButton.addClickListener(NtsUsageBatchSelectorWidget());
         initFundPoolMenuBar();
         initAdditionalFundsMenuBar();
         VaadinUtils.setButtonsAutoDisabled(assignClassificationButton, addToScenarioButton);
         var buttonsLayout = new HorizontalLayout(fundPoolMenuBar, additionalFundsMenuBar, assignClassificationButton,
-            addToScenarioButton, exportButton);
+            addToScenarioButton, exportDownloader);
         var toolbarLayout = new HorizontalLayout(buttonsLayout, getHideGridColumnsProvider().getMenuButton());
         toolbarLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.BETWEEN);
         toolbarLayout.setWidthFull();

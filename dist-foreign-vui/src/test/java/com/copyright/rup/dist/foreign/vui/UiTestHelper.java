@@ -14,6 +14,7 @@ import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.LongField;
+import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.downloader.OnDemandFileDownloader;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.upload.UploadField;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.Windows;
 
@@ -245,8 +246,9 @@ public final class UiTestHelper {
     /**
      * Verifies buttons in horizontal layout. Captions should be conveying by ordering.
      *
-     * @param component horizontal layout
-     * @param captions  headers of buttons.
+     * @param component        horizontal layout
+     * @param isDisableOnClick {@code true} if button is disabled on click, {@code false} otherwise
+     * @param captions         headers of buttons.
      */
     public static void verifyButtonsLayout(Component component, boolean isDisableOnClick, String... captions) {
         assertThat(component, instanceOf(HorizontalLayout.class));
@@ -276,6 +278,39 @@ public final class UiTestHelper {
         assertEquals(text, button.getText());
         assertEquals(isVisible, button.isVisible());
         return button;
+    }
+
+    /**
+     * Verifies button.
+     *
+     * @param component        button component
+     * @param text             button text
+     * @param isVisible        {@code true} if button is visible, {@code false} otherwise
+     * @param isDisableOnClick {@code true} if button is disabled on click, {@code false} otherwise
+     * @return instance of {@link Button}
+     */
+    public static Button verifyButton(Component component, String text, boolean isVisible, boolean isDisableOnClick) {
+        assertThat(component, instanceOf(Button.class));
+        Button button = (Button) component;
+        assertEquals(text, button.getText());
+        assertEquals(isVisible, button.isVisible());
+        assertEquals(isDisableOnClick, button.isDisableOnClick());
+        return button;
+    }
+
+    /**
+     * Verifies file downloader.
+     *
+     * @param component        button component
+     * @param text             button text
+     * @param isVisible        {@code true} if button is visible, {@code false} otherwise
+     * @param isDisableOnClick {@code true} if button is disabled on click, {@code false} otherwise
+     * @return instance of {@link Button}
+     */
+    public static Button verifyFileDownloader(Component component, String text, boolean isVisible,
+                                              boolean isDisableOnClick) {
+        assertThat(component, instanceOf(OnDemandFileDownloader.class));
+        return verifyButton(component.getChildren().findFirst().orElseThrow(), text, isVisible, isDisableOnClick);
     }
 
     /**

@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.vui.usage.impl.fas;
 
+import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyButton;
+import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyFileDownloader;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyGrid;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyGridItems;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyMenuBar;
@@ -341,13 +343,11 @@ public class FasUsageWidgetTest {
     private void verifyButtonsLayout(HorizontalLayout layout) {
         assertEquals(6, layout.getComponentCount());
         verifyMenuBar(layout.getComponentAt(0), "Usage Batch", true, List.of("Load", "View"));
-        assertEquals("Send for Research",
-            ((Button) layout.getComponentAt(1).getChildren().findFirst().orElseThrow()).getText());
-        assertEquals("Load Researched Details", ((Button) layout.getComponentAt(2)).getText());
-        assertEquals("Update Usages", ((Button) layout.getComponentAt(3)).getText());
-        assertEquals("Add To Scenario", ((Button) layout.getComponentAt(4)).getText());
-        assertEquals("Export",
-            ((Button) layout.getComponentAt(5).getChildren().findFirst().orElseThrow()).getText());
+        verifyFileDownloader(layout.getComponentAt(1), "Send for Research", true, true);
+        verifyButton(layout.getComponentAt(2), "Load Researched Details", true, true);
+        verifyButton(layout.getComponentAt(3), "Update Usages", true, true);
+        verifyButton(layout.getComponentAt(4), "Add To Scenario", true, true);
+        verifyFileDownloader(layout.getComponentAt(5), "Export", true, true);
     }
 
     private List<UsageDto> loadExpectedUsageDtos(String fileName) {
