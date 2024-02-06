@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.vui.main.impl;
 
+import com.copyright.rup.dist.foreign.vui.audit.api.ICommonAuditController;
 import com.copyright.rup.dist.foreign.vui.main.api.IControllerProvider;
 import com.copyright.rup.dist.foreign.vui.main.api.IMainWidget;
 import com.copyright.rup.dist.foreign.vui.main.api.IMainWidgetController;
@@ -44,6 +45,9 @@ public class MainWidgetController extends TabController<IMainWidget> implements 
     @Qualifier("dist.foreign.scenariosControllerProvider")
     private IControllerProvider<ICommonScenariosController> scenariosControllerProvider;
     @Autowired
+    @Qualifier("dist.foreign.auditControllerProvider")
+    private IControllerProvider<ICommonAuditController> auditControllerProvider;
+    @Autowired
     @Qualifier("dist.foreign.batchStatusControllerProvider")
     private IControllerProvider<ICommonBatchStatusController> batchStatusControllerProvider;
     @Autowired
@@ -73,6 +77,11 @@ public class MainWidgetController extends TabController<IMainWidget> implements 
     @Override
     public IControllerProvider<ICommonScenariosController> getScenariosControllerProvider() {
         return scenariosControllerProvider;
+    }
+
+    @Override
+    public IControllerProvider<ICommonAuditController> getAuditControllerProvider() {
+        return auditControllerProvider;
     }
 
     @Override

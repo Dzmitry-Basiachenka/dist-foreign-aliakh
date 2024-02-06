@@ -2,7 +2,7 @@ package com.copyright.rup.dist.foreign.vui.usage.impl.nts;
 
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.getDialogContent;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.getFooterComponent;
-import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyButtonsLayout;
+import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyButton;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyGridItems;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyWindow;
 
@@ -33,8 +33,8 @@ import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.provider.ListDataProvider;
-
 import com.vaadin.flow.data.renderer.ComponentRenderer;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.easymock.Capture;
@@ -85,7 +85,7 @@ public class ViewAdditionalFundsWindowTest {
         assertEquals(2, content.getComponentCount());
         assertEquals(SearchWidget.class, content.getComponentAt(0).getClass());
         verifyGrid((Grid) content.getComponentAt(1));
-        verifyButtonsLayout(getFooterComponent(window, 1), true, "Close");
+        verifyButton(getFooterComponent(window, 1), "Close", true);
     }
 
     @Test

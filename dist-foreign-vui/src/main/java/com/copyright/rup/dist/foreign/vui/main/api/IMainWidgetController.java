@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.vui.main.api;
 
+import com.copyright.rup.dist.foreign.vui.audit.api.ICommonAuditController;
 import com.copyright.rup.dist.foreign.vui.report.api.IReportController;
 import com.copyright.rup.dist.foreign.vui.scenario.api.ICommonScenariosController;
 import com.copyright.rup.dist.foreign.vui.status.api.ICommonBatchStatusController;
@@ -39,6 +40,11 @@ public interface IMainWidgetController extends IController<IMainWidget> {
      * @return instance of {@link IControllerProvider} for {@link ICommonScenariosController}.
      */
     IControllerProvider<ICommonScenariosController> getScenariosControllerProvider();
+
+    /**
+     * @return instance of {@link IControllerProvider} for {@link ICommonAuditController}.
+     */
+    IControllerProvider<ICommonAuditController> getAuditControllerProvider();
 
     /**
      * @return instance of {@link IControllerProvider} for {@link ICommonBatchStatusController}.

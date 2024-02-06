@@ -12,6 +12,7 @@ import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
+import com.copyright.rup.dist.foreign.vui.audit.api.ICommonAuditController;
 import com.copyright.rup.dist.foreign.vui.main.api.IControllerProvider;
 import com.copyright.rup.dist.foreign.vui.main.api.IMainWidget;
 import com.copyright.rup.dist.foreign.vui.main.api.IProductFamilyProvider;
@@ -71,10 +72,13 @@ public class MainWidgetTest {
         IControllerProvider<ICommonUsageController> commonUsageController = createMock(IControllerProvider.class);
         IControllerProvider<ICommonScenariosController> commonScenariosController =
             createMock(IControllerProvider.class);
+        IControllerProvider<ICommonAuditController> commonAuditController =
+            createMock(IControllerProvider.class);
         IReportController reportController = createMock(IReportController.class);
         IProductFamilyProvider productFamilyProvider = createMock(IProductFamilyProvider.class);
         expect(controller.getUsagesControllerProvider()).andReturn(commonUsageController).once();
         expect(controller.getScenariosControllerProvider()).andReturn(commonScenariosController).once();
+        expect(controller.getAuditControllerProvider()).andReturn(commonAuditController).once();
         expect(controller.getReportController()).andReturn(reportController).times(2);
         expect(controller.getProductFamilyProvider()).andReturn(productFamilyProvider).times(2);
         expect(controller.getBatchStatusControllerProvider()).andReturn(
