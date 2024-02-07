@@ -19,6 +19,7 @@
 }
 
 ::slotted([slot='tabs']) {
+    padding: 0px -10px 0px 0px;
     flex: 1;
     align-self: stretch;
     min-width: var(--tabs-width-size, max-content);
