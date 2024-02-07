@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.vui.audit.api;
 
+import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.api.IRefreshable;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.api.IWidget;
 
 /**
@@ -11,7 +12,7 @@ import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.api.IWidget;
  *
  * @author Aliaksanr Liakh
  */
-public interface ICommonAuditWidget extends IWidget<ICommonAuditController> {
+public interface ICommonAuditWidget extends IWidget<ICommonAuditController>, IRefreshable {
 
     /**
      * @return controller for the widget.
