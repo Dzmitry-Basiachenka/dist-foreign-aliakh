@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.vui.usage.impl.nts;
 
+import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyButton;
+import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyFileDownloader;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyGridItems;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyMenuBar;
 
@@ -192,14 +194,9 @@ public class NtsUsageWidgetTest {
         assertEquals(5, layout.getComponentCount());
         verifyMenuBar(layout.getComponentAt(0), "Fund Pool", true, List.of("Load", "View"));
         verifyMenuBar(layout.getComponentAt(1), "Additional Funds", true, List.of("Create", "View"));
-        assertEquals("Assign Classification", ((Button) layout.getComponentAt(2)).getText());
-        assertEquals("Add To Scenario", ((Button) layout.getComponentAt(3)).getText());
-//        Component component = layout.getComponentAt(4);
-//        assertEquals("Export", component.getCaption());
-//        Collection<Extension> extensions = component.getExtensions();
-//        assertTrue(CollectionUtils.isNotEmpty(extensions));
-//        assertEquals(1, extensions.size());
-//        assertThat(extensions.iterator().next(), instanceOf(OnDemandFileDownloader.class));
+        verifyButton(layout.getComponentAt(2), "Assign Classification", true, true);
+        verifyButton(layout.getComponentAt(3), "Add To Scenario", true, true);
+        verifyFileDownloader(layout.getComponentAt(4), "Export", true, true);
     }
 
     private void verifyGrid(Grid grid) {

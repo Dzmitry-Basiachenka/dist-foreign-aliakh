@@ -75,7 +75,7 @@ public class CreateAdditionalFundWindowTest {
 
     @Test
     public void testConstructor() {
-        verifyWindow(window, "Create NTS Pre-Service Fee Funds", "400px", null, Unit.PIXELS, false);
+        verifyWindow(window, "Create NTS Pre-Service Fee Funds", "500px", null, Unit.PIXELS, false);
         verifyRootLayout(getDialogContent(window));
     }
 
