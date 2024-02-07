@@ -12,7 +12,7 @@ html {
 
     /* Size of all tabs. Not includes report tab */
     --tabsheet-background-color: #416f93;
-    --tabs-width-size: 633px;
+    --tabs-width-size: 392px;
     --tab-text-color: aliceblue;
     --tab-text-color-hover: #f0a80b;
     --tab-font-weight: 16px;

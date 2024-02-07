@@ -23,4 +23,9 @@ public interface IReportController extends IController<IReportWidget> {
      * @return product family provider.
      */
     IProductFamilyProvider getProductFamilyProvider();
+
+    /**
+     * @return undistributed liabilities report controller.
+     */
+    IUndistributedLiabilitiesReportController getUndistributedLiabilitiesReportController();
 }

@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.vui.report.impl.report;
 
+import com.copyright.rup.dist.foreign.vui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.vui.report.api.IReportController;
 import com.copyright.rup.dist.foreign.vui.report.api.IReportMenuBuilder;
 import com.copyright.rup.dist.foreign.vui.report.api.IReportWidget;
@@ -19,6 +20,11 @@ public class FasReportMenuBuilder implements IReportMenuBuilder {
 
     @Override
     public void addItems(IReportController controller, IReportWidget widget, MenuItem rootItem) {
+        var subMenu = rootItem.getSubMenu();
+        var undistributedLiabilitiesReport = ForeignUi.getMessage("menu.report.undistributed_liabilities");
+        subMenu.addItem(undistributedLiabilitiesReport,
+            menuItem -> widget.openReportWindow(undistributedLiabilitiesReport,
+                controller.getUndistributedLiabilitiesReportController()));
         //TODO {vaadin23} will implement later
     }
 }
