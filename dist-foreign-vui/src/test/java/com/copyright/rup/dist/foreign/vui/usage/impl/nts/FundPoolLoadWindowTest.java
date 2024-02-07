@@ -347,15 +347,15 @@ public class FundPoolLoadWindowTest {
 
     private void verifyRootLayout(Component component) {
         assertThat(component, instanceOf(VerticalLayout.class));
-        var verticalLayout = (VerticalLayout) component;
-        assertEquals(7, verticalLayout.getComponentCount());
-        verifyUsageBatchNameComponent(verticalLayout.getComponentAt(0));
-        verifyRightsholdersComponents(verticalLayout.getComponentAt(1));
-        verifyDateComponents(verticalLayout.getComponentAt(2));
-        verifyItemsFilterWidget(verticalLayout.getComponentAt(3), "Markets");
-        verifyAmountsComponent(verticalLayout.getComponentAt(4));
-        verifyMinAmountsComponent(verticalLayout.getComponentAt(5));
-        verifyExcludeStmCheckbox(verticalLayout.getComponentAt(6));
+        var rootLayout = (VerticalLayout) component;
+        assertEquals(7, rootLayout.getComponentCount());
+        verifyUsageBatchNameComponent(rootLayout.getComponentAt(0));
+        verifyRightsholdersComponents(rootLayout.getComponentAt(1));
+        verifyDateComponents(rootLayout.getComponentAt(2));
+        verifyItemsFilterWidget(rootLayout.getComponentAt(3), "Markets");
+        verifyAmountsComponent(rootLayout.getComponentAt(4));
+        verifyMinAmountsComponent(rootLayout.getComponentAt(5));
+        verifyExcludeStmCheckbox(rootLayout.getComponentAt(6));
         verifyButtonsLayout(getFooterLayout(window));
     }
 
