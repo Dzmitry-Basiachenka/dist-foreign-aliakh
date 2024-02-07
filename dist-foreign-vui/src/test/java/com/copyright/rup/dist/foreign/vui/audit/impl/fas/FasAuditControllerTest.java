@@ -25,6 +25,36 @@ public class FasAuditControllerTest {
     }
 
     @Test
+    public void testGetSizeEmptyFilter() {
+        //TODO: {dbasiachenka} implement
+    }
+
+    @Test
+    public void testGetSize() {
+        //TODO: {dbasiachenka} implement
+    }
+
+    @Test
+    public void testLoadBeans() {
+        //TODO: {dbasiachenka} implement
+    }
+
+    @Test
+    public void testLoadBeansEmptyFilter() {
+        //TODO: {dbasiachenka} implement
+    }
+
+    @Test
+    public void testShowUsageHistory() {
+        //TODO: {dbasiachenka} implement
+    }
+
+    @Test
+    public void testGetCsvStreamSource() {
+        //TODO: {dbasiachenka} implement
+    }
+
+    @Test
     public void testInstantiateWidget() {
         assertThat(controller.instantiateWidget(), instanceOf(FasAuditWidget.class));
     }
