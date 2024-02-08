@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.vui.report.api;
 
+import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.vui.main.api.IProductFamilyProvider;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.api.IController;
 
@@ -28,4 +29,9 @@ public interface IReportController extends IController<IReportWidget> {
      * @return undistributed liabilities report controller.
      */
     IUndistributedLiabilitiesReportController getUndistributedLiabilitiesReportController();
+
+    /**
+     * @return instance of {@link IStreamSource} for FAS/FAS2 Batch Summary Report.
+     */
+    IStreamSource getFasBatchSummaryReportStreamSource();
 }

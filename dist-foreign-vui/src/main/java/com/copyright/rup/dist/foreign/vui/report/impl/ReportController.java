@@ -1,5 +1,8 @@
 package com.copyright.rup.dist.foreign.vui.report.impl;
 
+import com.copyright.rup.dist.common.reporting.api.IStreamSource;
+import com.copyright.rup.dist.foreign.service.api.IReportService;
+import com.copyright.rup.dist.foreign.vui.common.ByteArrayStreamSource;
 import com.copyright.rup.dist.foreign.vui.main.api.IProductFamilyProvider;
 import com.copyright.rup.dist.foreign.vui.report.api.IReportController;
 import com.copyright.rup.dist.foreign.vui.report.api.IReportWidget;
@@ -30,6 +33,8 @@ public class ReportController extends CommonController<IReportWidget> implements
     private IUndistributedLiabilitiesReportController undistributedLiabilitiesReportController;
     @Autowired
     private IProductFamilyProvider productFamilyProvider;
+    @Autowired
+    private IReportService reportService;
 
     @Override
     public void onProductFamilyChanged() {
@@ -44,6 +49,12 @@ public class ReportController extends CommonController<IReportWidget> implements
     @Override
     public IUndistributedLiabilitiesReportController getUndistributedLiabilitiesReportController() {
         return undistributedLiabilitiesReportController;
+    }
+
+    @Override
+    public IStreamSource getFasBatchSummaryReportStreamSource() {
+        return new ByteArrayStreamSource("fas_batch_summary_report_",
+            outputStream -> reportService.writeFasBatchSummaryCsvReport(outputStream));
     }
 
     @Override
