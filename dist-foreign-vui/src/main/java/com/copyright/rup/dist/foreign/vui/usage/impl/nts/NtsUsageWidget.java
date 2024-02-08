@@ -43,11 +43,11 @@ public class NtsUsageWidget extends CommonUsageWidget implements INtsUsageWidget
     private static final String CLASS_BUTTON_MENUBAR = "button-menubar";
 
     private final INtsUsageController controller;
-    private Button addToScenarioButton;
-    private Button assignClassificationButton;
-    private MenuBar additionalFundsMenuBar;
     private MenuBar fundPoolMenuBar;
     private MenuItem loadFundPoolMenuItem;
+    private MenuBar additionalFundsMenuBar;
+    private Button assignClassificationButton;
+    private Button addToScenarioButton;
 
     /**
      * Constructor.
@@ -61,10 +61,10 @@ public class NtsUsageWidget extends CommonUsageWidget implements INtsUsageWidget
     @Override
     public IMediator initMediator() {
         var mediator = new NtsUsageMediator();
-        mediator.setAddToScenarioButton(addToScenarioButton);
-        mediator.setAssignClassificationButton(assignClassificationButton);
-        mediator.setAdditionalFundsMenuBar(additionalFundsMenuBar);
         mediator.setLoadFundPoolMenuItem(loadFundPoolMenuItem);
+        mediator.setAdditionalFundsMenuBar(additionalFundsMenuBar);
+        mediator.setAssignClassificationButton(assignClassificationButton);
+        mediator.setAddToScenarioButton(addToScenarioButton);
         return mediator;
     }
 
@@ -106,8 +106,6 @@ public class NtsUsageWidget extends CommonUsageWidget implements INtsUsageWidget
 
     @Override
     protected HorizontalLayout initButtonsLayout() {
-        addToScenarioButton = Buttons.createButton(ForeignUi.getMessage("button.add_to_scenario"));
-        //TODO {aliakh} addToScenarioButton.addClickListener(onAddToScenarioClicked(new CreateNtsScenarioWindow()));
         var exportDownloader = new OnDemandFileDownloader(controller.getExportUsagesStreamSource().getSource());
         exportDownloader.extend(Buttons.createButton(ForeignUi.getMessage("button.export")));
         initFundPoolMenuBar();
@@ -115,6 +113,8 @@ public class NtsUsageWidget extends CommonUsageWidget implements INtsUsageWidget
         assignClassificationButton = Buttons.createButton(ForeignUi.getMessage("button.assign_classification"));
         assignClassificationButton.addClickListener(
             event -> new NtsUsageBatchSelectorWidget(controller).showFilterWindow());
+        addToScenarioButton = Buttons.createButton(ForeignUi.getMessage("button.add_to_scenario"));
+        addToScenarioButton.addClickListener(event -> onAddToScenarioClicked(new CreateNtsScenarioWindow(controller)));
         VaadinUtils.setButtonsAutoDisabled(assignClassificationButton, addToScenarioButton);
         var buttonsLayout = new HorizontalLayout(fundPoolMenuBar, additionalFundsMenuBar, assignClassificationButton,
             addToScenarioButton, exportDownloader);
@@ -153,7 +153,7 @@ public class NtsUsageWidget extends CommonUsageWidget implements INtsUsageWidget
 
     private void initFundPoolMenuBar() {
         fundPoolMenuBar = new MenuBar();
-        MenuItem menuItem = fundPoolMenuBar.addItem(ForeignUi.getMessage("menu.caption.fund_pool"), null, null);
+        var menuItem = fundPoolMenuBar.addItem(ForeignUi.getMessage("menu.caption.fund_pool"), null, null);
         loadFundPoolMenuItem = menuItem.getSubMenu().addItem(ForeignUi.getMessage("menu.item.load"),
             item -> Windows.showModalWindow(new FundPoolLoadWindow(controller)));
         menuItem.getSubMenu().addItem(ForeignUi.getMessage("menu.item.view"),
@@ -165,7 +165,7 @@ public class NtsUsageWidget extends CommonUsageWidget implements INtsUsageWidget
 
     private void initAdditionalFundsMenuBar() {
         additionalFundsMenuBar = new MenuBar();
-        MenuItem menuItem =
+        var menuItem =
             additionalFundsMenuBar.addItem(ForeignUi.getMessage("menu.caption.additional_funds"), null, null);
         menuItem.getSubMenu().addItem(ForeignUi.getMessage("menu.item.create"),
             item -> new AdditionalFundBatchesFilterWindow(controller).showFilterWindow());

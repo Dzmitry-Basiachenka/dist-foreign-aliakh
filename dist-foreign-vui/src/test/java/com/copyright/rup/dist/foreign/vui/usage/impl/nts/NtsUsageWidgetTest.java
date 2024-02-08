@@ -12,6 +12,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
 import static org.powermock.api.easymock.PowerMock.expectNew;
@@ -20,11 +21,15 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.test.TestUtils;
+import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.vui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.vui.usage.api.IFasNtsUsageFilterController;
+import com.copyright.rup.dist.foreign.vui.usage.api.IFasNtsUsageFilterWidget;
 import com.copyright.rup.dist.foreign.vui.usage.api.nts.INtsUsageController;
 import com.copyright.rup.dist.foreign.vui.usage.impl.FasNtsUsageFilterWidget;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.Windows;
@@ -56,6 +61,7 @@ import org.powermock.reflect.Whitebox;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.LocalDate;
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.List;
 import java.util.Map;
@@ -76,8 +82,15 @@ import java.util.function.Supplier;
 @PowerMockIgnore({"com.sun.org.apache.xerces.*", "javax.xml.*", "org.xml.*", "javax.management.*"})
 public class NtsUsageWidgetTest {
 
+    private static final String DATE =
+        CommonDateUtils.format(LocalDate.now(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT);
+    private static final String NTS_PRODUCT_FAMILY = "NTS";
+    private static final String NTS_SCENARIO_NAME_PREFIX = "NTS Distribution ";
+    private static final Set<String> BATCHES_IDS = Set.of("e0f2287a-f7f4-437f-95ad-56bd1b1c51cf");
+
     private NtsUsageWidget widget;
     private INtsUsageController controller;
+    private IFasNtsUsageFilterWidget filterWidget;
 
     @Before
     public void setUp() {
@@ -88,8 +101,8 @@ public class NtsUsageWidgetTest {
         controller = createMock(INtsUsageController.class);
         widget = new NtsUsageWidget(controller);
         widget.setController(controller);
-        var filterWidget = new FasNtsUsageFilterWidget(createMock(IFasNtsUsageFilterController.class));
-        filterWidget.getFilter().setUsageBatchesIds(Set.of("e0f2287a-f7f4-437f-95ad-56bd1b1c51cf"));
+        filterWidget = new FasNtsUsageFilterWidget(createMock(IFasNtsUsageFilterController.class));
+        filterWidget.getAppliedFilter().setUsageBatchesIds(BATCHES_IDS);
         expect(controller.initUsagesFilterWidget()).andReturn(filterWidget).once();
         IStreamSource streamSource = createMock(IStreamSource.class);
         Map.Entry<Supplier<String>, Supplier<InputStream>> source =
@@ -171,32 +184,171 @@ public class NtsUsageWidgetTest {
 
     @Test
     public void testAddToScenarioButtonClickListener() {
-        //TODO {aliakh} implement
+        mockStatic(Windows.class);
+        mockStatic(UI.class);
+        UI ui = createMock(UI.class);
+        expect(UI.getCurrent()).andReturn(ui).anyTimes();
+        expect(ui.getLocale()).andReturn(null).anyTimes();
+        Grid grid = new Grid();
+        Whitebox.setInternalState(widget, grid);
+        Button addToScenarioButton = getAddToScenarioButton();
+        assertTrue(addToScenarioButton.isDisableOnClick());
+        prepareCreateScenarioExpectation();
+        expect(controller.getBeansCount()).andReturn(1).once();
+        expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
+        expect(controller.getInvalidRightsholders()).andReturn(List.of()).once();
+        expect(controller.getProcessingBatchesNames(BATCHES_IDS)).andReturn(List.of()).once();
+        expect(controller.getBatchesNamesToScenariosNames(BATCHES_IDS)).andReturn(Map.of()).once();
+        expect(controller.getBatchNamesWithUnclassifiedWorks(filterWidget.getAppliedFilter().getUsageBatchesIds()))
+            .andReturn(List.of()).once();
+        expect(controller.getBatchNamesWithInvalidStmOrNonStmUsagesState(
+            filterWidget.getAppliedFilter().getUsageBatchesIds()))
+            .andReturn(Map.of("STM", List.of(), "NON-STM", List.of())).once();
+        Windows.showModalWindow(anyObject(CreateNtsScenarioWindow.class));
+        expectLastCall().once();
+        replay(Windows.class, UI.class, ui, controller);
+        addToScenarioButton.click();
+        verify(Windows.class, UI.class, ui, controller);
     }
 
     @Test
     public void testAddToScenarioButtonClickListenerProcessingBatches() {
-        //TODO {aliakh} implement
+        mockStatic(Windows.class);
+        mockStatic(UI.class);
+        UI ui = createMock(UI.class);
+        expect(UI.getCurrent()).andReturn(ui).anyTimes();
+        expect(ui.getLocale()).andReturn(null).anyTimes();
+        Grid grid = new Grid();
+        Whitebox.setInternalState(widget, grid);
+        Button addToScenarioButton = getAddToScenarioButton();
+        assertTrue(addToScenarioButton.isDisableOnClick());
+        prepareCreateScenarioExpectation();
+        expect(controller.getBeansCount()).andReturn(1).once();
+        expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
+        expect(controller.getInvalidRightsholders()).andReturn(List.of()).once();
+        expect(controller.getProcessingBatchesNames(BATCHES_IDS))
+            .andReturn(List.of("Usage Batch 1", "Usage Batch 2")).once();
+        Windows.showNotificationWindow("Please wait while batch(es) processing is completed:" +
+            "<ul><li><i><b>Usage Batch 1<br><li>Usage Batch 2</b></i></ul>");
+        expectLastCall().once();
+        replay(Windows.class, UI.class, ui, controller);
+        addToScenarioButton.click();
+        verify(Windows.class, UI.class, ui, controller);
     }
 
     @Test
     public void testAddToScenarioButtonClickListenerBatchInScenario() {
-        //TODO {aliakh} implement
+        mockStatic(Windows.class);
+        mockStatic(UI.class);
+        UI ui = createMock(UI.class);
+        expect(UI.getCurrent()).andReturn(ui).anyTimes();
+        expect(ui.getLocale()).andReturn(null).anyTimes();
+        Grid grid = new Grid();
+        Whitebox.setInternalState(widget, grid);
+        Button addToScenarioButton = getAddToScenarioButton();
+        assertTrue(addToScenarioButton.isDisableOnClick());
+        prepareCreateScenarioExpectation();
+        expect(controller.getBeansCount()).andReturn(1).once();
+        expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
+        expect(controller.getInvalidRightsholders()).andReturn(List.of()).once();
+        expect(controller.getProcessingBatchesNames(BATCHES_IDS)).andReturn(List.of()).once();
+        expect(controller.getBatchesNamesToScenariosNames(BATCHES_IDS))
+            .andReturn(Map.of("Usage Batch", "Scenario")).once();
+        Windows.showNotificationWindow("The following batch(es) already associated with scenario(s):" +
+            "<ul><li><i><b>Usage Batch : Scenario</b></i></ul>");
+        expectLastCall().once();
+        replay(Windows.class, UI.class, ui, controller);
+        addToScenarioButton.click();
+        verify(Windows.class, UI.class, ui, controller);
     }
 
     @Test
     public void testAddToScenarioButtonClickListenerUnclassifiedUsages() {
-        //TODO {aliakh} implement
+        mockStatic(Windows.class);
+        mockStatic(UI.class);
+        UI ui = createMock(UI.class);
+        expect(UI.getCurrent()).andReturn(ui).anyTimes();
+        expect(ui.getLocale()).andReturn(null).anyTimes();
+        Grid grid = new Grid();
+        Whitebox.setInternalState(widget, grid);
+        Button addToScenarioButton = getAddToScenarioButton();
+        assertTrue(addToScenarioButton.isDisableOnClick());
+        expect(controller.getBeansCount()).andReturn(1).once();
+        prepareCreateScenarioExpectation();
+        expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
+        expect(controller.getInvalidRightsholders()).andReturn(List.of()).once();
+        expect(controller.getBatchNamesWithUnclassifiedWorks(filterWidget.getAppliedFilter().getUsageBatchesIds()))
+            .andReturn(List.of("Batch with unclassified usages")).once();
+        expect(controller.getProcessingBatchesNames(BATCHES_IDS)).andReturn(List.of()).once();
+        expect(controller.getBatchesNamesToScenariosNames(BATCHES_IDS)).andReturn(Map.of()).once();
+        Windows.showNotificationWindow(
+            "The following batches have unclassified works:<ul><li><i><b>Batch with unclassified usages</b></i></ul>");
+        expectLastCall().once();
+        replay(Windows.class, UI.class, ui, controller);
+        addToScenarioButton.click();
+        verify(Windows.class, UI.class, ui, controller);
     }
 
     @Test
     public void testAddToScenarioButtonClickListenerNoStmRhs() {
-        //TODO {aliakh} implement
+        mockStatic(Windows.class);
+        mockStatic(UI.class);
+        UI ui = createMock(UI.class);
+        expect(UI.getCurrent()).andReturn(ui).anyTimes();
+        expect(ui.getLocale()).andReturn(null).anyTimes();
+        Grid grid = new Grid();
+        Whitebox.setInternalState(widget, grid);
+        Button addToScenarioButton = getAddToScenarioButton();
+        assertTrue(addToScenarioButton.isDisableOnClick());
+        expect(controller.getBeansCount()).andReturn(1).once();
+        prepareCreateScenarioExpectation();
+        expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
+        expect(controller.getInvalidRightsholders()).andReturn(List.of()).once();
+        expect(controller.getBatchNamesWithUnclassifiedWorks(filterWidget.getAppliedFilter().getUsageBatchesIds()))
+            .andReturn(List.of()).once();
+        expect(controller.getProcessingBatchesNames(BATCHES_IDS)).andReturn(List.of()).once();
+        expect(controller.getBatchesNamesToScenariosNames(BATCHES_IDS)).andReturn(Map.of()).once();
+        expect(controller.getBatchNamesWithInvalidStmOrNonStmUsagesState(
+            filterWidget.getAppliedFilter().getUsageBatchesIds()))
+            .andReturn(Map.of("STM", List.of("Batch without STM RHs"))).once();
+        Windows.showNotificationWindow("There are no STM rightsholders in the following batches: " +
+            "<ul><li><i><b>Batch without STM RHs</b></i></ul>");
+        expectLastCall().once();
+        replay(Windows.class, UI.class, ui, controller);
+        addToScenarioButton.click();
+        verify(Windows.class, UI.class, ui, controller);
     }
 
     @Test
     public void testAddToScenarioButtonClickListenerNoStmAndNonStmRhs() {
-        //TODO {aliakh} implement
+        mockStatic(Windows.class);
+        mockStatic(UI.class);
+        UI ui = createMock(UI.class);
+        expect(UI.getCurrent()).andReturn(ui).anyTimes();
+        expect(ui.getLocale()).andReturn(null).anyTimes();
+        Grid grid = new Grid();
+        Whitebox.setInternalState(widget, grid);
+        Button addToScenarioButton = getAddToScenarioButton();
+        assertTrue(addToScenarioButton.isDisableOnClick());
+        prepareCreateScenarioExpectation();
+        expect(controller.getBeansCount()).andReturn(1).once();
+        expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
+        expect(controller.getInvalidRightsholders()).andReturn(List.of()).once();
+        expect(controller.getProcessingBatchesNames(BATCHES_IDS)).andReturn(List.of()).once();
+        expect(controller.getBatchesNamesToScenariosNames(BATCHES_IDS)).andReturn(Map.of()).once();
+        expect(controller.getBatchNamesWithUnclassifiedWorks(filterWidget.getAppliedFilter().getUsageBatchesIds()))
+            .andReturn(List.of()).once();
+        expect(controller.getBatchNamesWithInvalidStmOrNonStmUsagesState(
+            filterWidget.getAppliedFilter().getUsageBatchesIds()))
+            .andReturn(Map.of("STM", List.of("Batch without STM RHs"),
+                "NON-STM", List.of("Batch without NON-STM RHs"))).once();
+        Windows.showNotificationWindow("There are no STM rightsholders in the following batches: " +
+            "<ul><li><i><b>Batch without STM RHs</b></i></ul>There are no NON-STM rightsholders " +
+            "in the following batches: <ul><li><i><b>Batch without NON-STM RHs</b></i></ul>");
+        expectLastCall().once();
+        replay(Windows.class, UI.class, ui, controller);
+        addToScenarioButton.click();
+        verify(Windows.class, UI.class, ui, controller);
     }
 
     @Test
@@ -223,6 +375,16 @@ public class NtsUsageWidgetTest {
         verifyButton(layout.getComponentAt(2), "Assign Classification", true, true);
         verifyButton(layout.getComponentAt(3), "Add To Scenario", true, true);
         verifyFileDownloader(layout.getComponentAt(4), "Export", true, true);
+    }
+
+    private void prepareCreateScenarioExpectation() {
+        expect(controller.getSelectedProductFamily()).andReturn(NTS_PRODUCT_FAMILY).once();
+        expect(controller.scenarioExists(NTS_SCENARIO_NAME_PREFIX + DATE)).andReturn(true).once();
+        expect(controller.getAdditionalFundsNotAttachedToScenario()).andReturn(List.of()).once();
+    }
+
+    private Button getAddToScenarioButton() {
+        return Whitebox.getInternalState(widget, "addToScenarioButton");
     }
 
     private List<UsageDto> loadExpectedUsageDtos(String fileName) {

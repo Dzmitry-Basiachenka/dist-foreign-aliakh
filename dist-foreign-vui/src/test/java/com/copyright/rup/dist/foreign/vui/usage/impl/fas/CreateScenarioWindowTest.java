@@ -7,16 +7,16 @@ import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyButton;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyWindow;
 
+import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.powermock.api.easymock.PowerMock.createMock;
-import static org.powermock.api.easymock.PowerMock.replay;
-import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
@@ -56,6 +56,11 @@ public class CreateScenarioWindowTest {
         CommonDateUtils.format(LocalDate.now(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT);
     private static final String SCENARIO_NAME = "FAS Distribution " + DATE;
     private static final String FAS_PRODUCT_FAMILY = "FAS";
+    private static final String STRING_50_CHARACTERS = StringUtils.repeat('a', 50);
+    private static final String STRING_51_CHARACTERS = StringUtils.repeat('a', 51);
+    private static final String EMPTY_FIELD_MESSAGE = "Field value should be specified";
+    private static final String SCENARIO_EXISTS_MESSAGE = "Scenario with such name already exists";
+    private static final String VALUE_EXCEED_50_CHARACTERS_MESSAGE = "Field value should not exceed 50 characters";
 
     private IFasUsageController controller;
 
@@ -120,21 +125,21 @@ public class CreateScenarioWindowTest {
         String existingScenarioName = "Scenario 09/17/2021";
         expect(controller.getSelectedProductFamily()).andReturn(FAS_PRODUCT_FAMILY).once();
         expect(controller.scenarioExists(SCENARIO_NAME)).andReturn(false).times(3);
+        expect(controller.scenarioExists(STRING_50_CHARACTERS)).andReturn(false).times(2);
         expect(controller.scenarioExists(existingScenarioName)).andReturn(true).times(4);
         replay(controller);
         var window = new CreateScenarioWindow(controller);
         Binder<?> binder = Whitebox.getInternalState(window, "binder");
         TextField scenarioNameField = Whitebox.getInternalState(window, "scenarioNameField");
-        assertFieldValidationMessage(scenarioNameField, StringUtils.EMPTY, binder,
-            "Field value should be specified", false);
-        assertFieldValidationMessage(scenarioNameField, "    ", binder,
-            "Field value should be specified", false);
-        assertFieldValidationMessage(scenarioNameField, StringUtils.repeat('a', 51), binder,
-            "Field value should not exceed 50 characters", false);
+        assertFieldValidationMessage(scenarioNameField, StringUtils.EMPTY, binder, EMPTY_FIELD_MESSAGE, false);
+        assertFieldValidationMessage(scenarioNameField, "    ", binder, EMPTY_FIELD_MESSAGE, false);
+        assertFieldValidationMessage(scenarioNameField, STRING_50_CHARACTERS, binder, null, true);
+        assertFieldValidationMessage(scenarioNameField, STRING_51_CHARACTERS, binder,
+            VALUE_EXCEED_50_CHARACTERS_MESSAGE, false);
         assertFieldValidationMessage(scenarioNameField, existingScenarioName, binder,
-            "Scenario with such name already exists", false);
+            SCENARIO_EXISTS_MESSAGE, false);
         assertFieldValidationMessage(scenarioNameField, ' ' + existingScenarioName + ' ', binder,
-            "Scenario with such name already exists", false);
+            SCENARIO_EXISTS_MESSAGE, false);
         assertFieldValidationMessage(scenarioNameField, SCENARIO_NAME, binder, null, true);
         verify(controller);
     }
@@ -151,6 +156,7 @@ public class CreateScenarioWindowTest {
         assertNotNull(component);
         var descriptionArea = (TextArea) component;
         assertEquals("Description", descriptionArea.getLabel());
+        assertEquals(StringUtils.EMPTY, descriptionArea.getValue());
         assertEquals("scenario-description", descriptionArea.getId().get());
     }
 

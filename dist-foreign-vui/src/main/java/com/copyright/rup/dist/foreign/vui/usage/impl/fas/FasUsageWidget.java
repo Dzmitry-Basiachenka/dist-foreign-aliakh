@@ -151,7 +151,7 @@ public class FasUsageWidget extends CommonUsageWidget implements IFasUsageWidget
 
     private void initUsageBatchMenuBar() {
         usageBatchMenuBar = new MenuBar();
-        MenuItem menuItem =
+        var menuItem =
             usageBatchMenuBar.addItem(ForeignUi.getMessage("menu.caption.usage_batch"), null, null);
         loadUsageBatchMenuItem = menuItem.getSubMenu().addItem(ForeignUi.getMessage("menu.item.load"),
             item -> Windows.showModalWindow(new UsageBatchUploadWindow(controller)));

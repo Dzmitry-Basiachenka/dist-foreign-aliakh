@@ -88,6 +88,9 @@ public class UsageBatchUploadWindowTest {
     private static final Long UNKNOWN_ACCOUNT_NAME = 20000170L;
     private static final String FAS_PRODUCT_FAMILY = "FAS";
     private static final String FAS2_PRODUCT_FAMILY = "FAS2";
+    private static final String SPACES_STRING = "    ";
+    private static final String STRING_50_CHARACTERS = StringUtils.repeat('a', 50);
+    private static final String STRING_51_CHARACTERS = StringUtils.repeat('a', 51);
     private static final LocalDate PAYMENT_DATE = LocalDate.of(2017, 2, 27);
     private static final String FISCAL_YEAR = "FY2017";
     private static final String GROSS_AMOUNT = "100.00";
@@ -99,7 +102,7 @@ public class UsageBatchUploadWindowTest {
     private static final String PAYMENT_DATE_WIDGET = "paymentDateWidget";
     private static final String GROSS_AMOUNT_FIELD = "grossAmountField";
     private static final String EMPTY_FIELD_MESSAGE = "Field value should be specified";
-    private static final String INVALID_USAGE_BATCH_LENGTH_MESSAGE = "Field value should not exceed 50 characters";
+    private static final String VALUE_EXCEED_50_CHARACTERS_MESSAGE = "Field value should not exceed 50 characters";
     private static final String USAGE_BATCH_EXISTS_MESSAGE = "Usage Batch with such name already exists";
     private static final String INVALID_NUMBER_LENGTH_MESSAGE = "Field value should not exceed 10 digits";
     private static final String INVALID_GROSS_AMOUNT_MESSAGE =
@@ -138,14 +141,16 @@ public class UsageBatchUploadWindowTest {
         String batchName = "Existing Batch Name";
         expect(controller.usageBatchExists(batchName)).andReturn(true).times(2);
         expect(controller.usageBatchExists(USAGE_BATCH_NAME)).andReturn(false).times(2);
+        expect(controller.usageBatchExists(STRING_50_CHARACTERS)).andReturn(false).times(2);
         replay(controller);
         window = new UsageBatchUploadWindow(controller);
         TextField usageBatchNameField = Whitebox.getInternalState(window, USAGE_BATCH_NAME_FIELD);
         Binder<?> binder = Whitebox.getInternalState(window, "binder");
         assertFieldValidationMessage(usageBatchNameField, StringUtils.EMPTY, binder, EMPTY_FIELD_MESSAGE, false);
-        assertFieldValidationMessage(usageBatchNameField, "   ", binder, EMPTY_FIELD_MESSAGE, false);
-        assertFieldValidationMessage(usageBatchNameField, StringUtils.repeat('a', 51), binder,
-            INVALID_USAGE_BATCH_LENGTH_MESSAGE, false);
+        assertFieldValidationMessage(usageBatchNameField, SPACES_STRING, binder, EMPTY_FIELD_MESSAGE, false);
+        assertFieldValidationMessage(usageBatchNameField, STRING_50_CHARACTERS, binder, null, true);
+        assertFieldValidationMessage(usageBatchNameField, STRING_51_CHARACTERS, binder,
+            VALUE_EXCEED_50_CHARACTERS_MESSAGE, false);
         assertFieldValidationMessage(usageBatchNameField, batchName, binder, USAGE_BATCH_EXISTS_MESSAGE, false);
         assertFieldValidationMessage(usageBatchNameField, USAGE_BATCH_NAME, binder, null, true);
         verify(controller);
