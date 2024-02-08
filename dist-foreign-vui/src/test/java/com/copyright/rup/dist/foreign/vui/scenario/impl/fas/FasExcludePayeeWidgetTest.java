@@ -4,6 +4,7 @@ import static com.copyright.rup.dist.foreign.vui.UiTestHelper.getDialogContent;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.getFooterComponent;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyGrid;
+import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifySearchWidget;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyWindow;
 
 import static org.easymock.EasyMock.anyObject;
@@ -32,7 +33,6 @@ import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.downloader.
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.ConfirmDialogWindow;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.ConfirmWindows;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.Windows;
-import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.SearchWidget;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
@@ -43,7 +43,6 @@ import com.vaadin.flow.component.grid.GridSelectionModel;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.splitlayout.SplitLayout;
-import com.vaadin.flow.component.textfield.TextField;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.easymock.Capture;
@@ -208,15 +207,8 @@ public class FasExcludePayeeWidgetTest {
         var layout = (HorizontalLayout) component;
         assertEquals(2, layout.getComponentCount());
         verifyExportButton(layout.getComponentAt(0));
-        verifySearchWidget(((HorizontalLayout) layout.getComponentAt(1)).getComponentAt(0));
-    }
-
-    private void verifySearchWidget(Component component) {
-        var searchLayout = (HorizontalLayout) component;
-        assertThat(searchLayout, instanceOf(SearchWidget.class));
-        var searchWidget = (SearchWidget) searchLayout;
-        assertEquals("Enter Payee Name/Account #",
-            Whitebox.getInternalState(searchWidget, TextField.class).getPlaceholder());
+        verifySearchWidget(((HorizontalLayout) layout.getComponentAt(1)).getComponentAt(0),
+            "Enter Payee Name/Account #", "100%");
     }
 
     private void verifyExportButton(Component component) {

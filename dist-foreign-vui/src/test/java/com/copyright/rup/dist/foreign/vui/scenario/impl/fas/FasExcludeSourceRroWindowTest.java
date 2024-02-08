@@ -4,8 +4,8 @@ import static com.copyright.rup.dist.foreign.vui.UiTestHelper.getDialogContent;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.getFooterComponent;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyButton;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyGridItems;
+import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifySearchWidget;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifySize;
-import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyWidth;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyWindow;
 
 import static org.easymock.EasyMock.createMock;
@@ -28,7 +28,6 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.function.SerializablePredicate;
 
@@ -71,7 +70,7 @@ public class FasExcludeSourceRroWindowTest {
         verifyWindow(window, "Exclude Details by Source RRO", "880px", "500px", Unit.PIXELS, true);
         var content = (VerticalLayout) getDialogContent(window);
         assertEquals(2, content.getComponentCount());
-        verifySearchWidget(content.getComponentAt(0));
+        verifySearchWidget(content.getComponentAt(0), "Enter Source RRO Name/Account #");
         verifyGrid(content.getComponentAt(1));
         verifyButton(getFooterComponent(window, 1), "Cancel", true);
     }
@@ -102,15 +101,6 @@ public class FasExcludeSourceRroWindowTest {
         assertTrue(filter.test(buildRightsholder(2000017004L, "Access Copyright, The Canadian Copyright Agency")));
         assertFalse(filter.test(buildRightsholder(2000017006L, "CAL, Copyright Agency Limited")));
         verify(searchWidget, grid);
-    }
-
-    private void verifySearchWidget(Component component) {
-        assertNotNull(component);
-        assertThat(component, instanceOf(SearchWidget.class));
-        var searchWidget = (SearchWidget) component;
-        TextField textField = Whitebox.getInternalState(searchWidget, TextField.class);
-        verifyWidth(textField, "70%", Unit.PERCENTAGE);
-        assertEquals("Enter Source RRO Name/Account #", textField.getPlaceholder());
     }
 
     private void verifyGrid(Component component) {

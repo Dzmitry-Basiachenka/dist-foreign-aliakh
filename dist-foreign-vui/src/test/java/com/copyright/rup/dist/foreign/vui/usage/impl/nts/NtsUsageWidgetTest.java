@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.vui.usage.impl.nts;
 
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyButton;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyFileDownloader;
+import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyGrid;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyGridItems;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyMenuBar;
 
@@ -39,17 +40,18 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.contextmenu.MenuItem;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.grid.Grid.Column;
 import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+import org.powermock.reflect.Whitebox;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -59,7 +61,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 /**
  * Verifies {@link NtsUsageWidget}.
@@ -73,8 +74,6 @@ import java.util.stream.Collectors;
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({NtsUsageWidget.class, Dialog.class, ForeignSecurityUtils.class, Windows.class, UI.class})
 @PowerMockIgnore({"com.sun.org.apache.xerces.*", "javax.xml.*", "org.xml.*", "javax.management.*"})
-//TODO {aliakh} adjust tests if necessary
-//TODO {aliakh} use the 'var' keyword
 public class NtsUsageWidgetTest {
 
     private NtsUsageWidget widget;
@@ -112,7 +111,34 @@ public class NtsUsageWidgetTest {
         assertEquals(2, contentLayout.getComponentCount());
         var toolbarLayout = (HorizontalLayout) contentLayout.getComponentAt(0);
         verifyButtonsLayout((HorizontalLayout) toolbarLayout.getComponentAt(0));
-        verifyGrid((Grid<?>) contentLayout.getComponentAt(1));
+        verifyGrid((Grid<?>) contentLayout.getComponentAt(1), List.of(
+            Pair.of("Detail ID", "130px"),
+            Pair.of("Detail Status", "115px"),
+            Pair.of("Product Family", "125px"),
+            Pair.of("Usage Batch Name", "145px"),
+            Pair.of("RRO Account #", "125px"),
+            Pair.of("RRO Name", "135px"),
+            Pair.of("RH Account #", "115px"),
+            Pair.of("RH Name", "300px"),
+            Pair.of("Wr Wrk Inst", "110px"),
+            Pair.of("System Title", "305px"),
+            Pair.of("Standard Number", "140px"),
+            Pair.of("Standard Number Type", "155px"),
+            Pair.of("Fiscal Year", "105px"),
+            Pair.of("Payment Date", "115px"),
+            Pair.of("Title", "305px"),
+            Pair.of("Article", "135px"),
+            Pair.of("Publisher", "135px"),
+            Pair.of("Pub Date", "90px"),
+            Pair.of("Number of Copies", "140px"),
+            Pair.of("Reported Value", "130px"),
+            Pair.of("Gross Amt in USD", "130px"),
+            Pair.of("Market", "125px"),
+            Pair.of("Market Period From", "150px"),
+            Pair.of("Market Period To", "145px"),
+            Pair.of("Author", "300px"),
+            Pair.of("Comment", "200px")
+        ));
     }
 
     @Test
@@ -121,7 +147,7 @@ public class NtsUsageWidgetTest {
         expect(controller.loadBeans(0, Integer.MAX_VALUE, List.of())).andReturn(usages).once();
         expect(controller.getBeansCount()).andReturn(1).once();
         replay(controller);
-        Grid<?> grid = (Grid<?>) ((VerticalLayout) widget.getSecondaryComponent()).getComponentAt(1);
+        Grid<?> grid = Whitebox.getInternalState(widget, "usagesGrid");
         Object[][] expectedCells = {{
             "926720c0-d83a-4339-b21c-e62d3ea20b76", "PAID", "NTS", "Paid batch", "1000000004",
             "Computers for Design and Construction", "1000002859", "John Wiley & Sons - Books", "243904752",
@@ -197,16 +223,6 @@ public class NtsUsageWidgetTest {
         verifyButton(layout.getComponentAt(2), "Assign Classification", true, true);
         verifyButton(layout.getComponentAt(3), "Add To Scenario", true, true);
         verifyFileDownloader(layout.getComponentAt(4), "Export", true, true);
-    }
-
-    private void verifyGrid(Grid grid) {
-        List<Column> columns = grid.getColumns();
-        assertEquals(List.of("Detail ID", "Detail Status", "Product Family", "Usage Batch Name",
-            "RRO Account #", "RRO Name", "RH Account #", "RH Name", "Wr Wrk Inst", "System Title", "Standard Number",
-            "Standard Number Type", "Fiscal Year", "Payment Date", "Title", "Article", "Publisher", "Pub Date",
-            "Number of Copies", "Reported Value", "Gross Amt in USD", "Market", "Market Period From",
-            "Market Period To", "Author", "Comment"),
-            columns.stream().map(Column::getHeaderText).collect(Collectors.toList()));
     }
 
     private List<UsageDto> loadExpectedUsageDtos(String fileName) {
