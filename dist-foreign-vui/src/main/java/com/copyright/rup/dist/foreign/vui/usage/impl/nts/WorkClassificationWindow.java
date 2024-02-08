@@ -153,7 +153,6 @@ class WorkClassificationWindow extends CommonDialog {
         gridSelectionModel.setSelectAllCheckboxVisibility(SelectAllCheckboxVisibility.HIDDEN);
         gridSelectionModel.setSelectionColumnFrozen(true);
         addColumns();
-        grid.getColumns().forEach(column -> column.setSortable(true));
         VaadinUtils.setGridProperties(grid, "works-classification-grid");
         return grid;
     }
@@ -195,13 +194,15 @@ class WorkClassificationWindow extends CommonDialog {
                     .compare(classification1, classification2));
     }
 
-    //TODO {aliakh} fix columns
     private Column<WorkClassification> addColumn(ValueProvider<WorkClassification, ?> provider, String captionProperty,
                                                  String sort, String width) {
         return grid.addColumn(provider)
             .setHeader(ForeignUi.getMessage(captionProperty))
             .setSortProperty(sort)
-            .setWidth(width);
+            .setFlexGrow(0)
+            .setWidth(width)
+            .setSortable(true)
+            .setResizable(true);
     }
 
     private void addClassificationDateColumn(ValueProvider<WorkClassification, Date> provider) {
@@ -210,7 +211,10 @@ class WorkClassificationWindow extends CommonDialog {
                 : null)
             .setHeader(ForeignUi.getMessage("table.column.classification_date"))
             .setSortProperty("updateDate")
-            .setWidth("135px");
+            .setFlexGrow(0)
+            .setWidth("135px")
+            .setSortable(true)
+            .setResizable(true);
     }
 
     private void performSearch() {

@@ -109,7 +109,7 @@ public class WorkClassificationWindowTest {
         var toolbarLayout = (HorizontalLayout) rootLayout.getComponentAt(1);
         verifyFileDownloader(toolbarLayout.getComponentAt(0), "Export", true, true);
         verifySearchWidget(toolbarLayout.getComponentAt(1),
-            "Enter Wr Wrk Inst or System Title or Standard # or Rightsholder Name/Account #", "70%");
+            "Enter Wr Wrk Inst or System Title or Standard # or Rightsholder Name/Account #");
         verifyGrid((Grid) rootLayout.getComponentAt(2), List.of(
             Pair.of("Wr Wrk Inst", "100px"),
             Pair.of("System Title", "285px"),
