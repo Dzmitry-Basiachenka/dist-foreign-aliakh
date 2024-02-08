@@ -14,6 +14,7 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.AbstractGridMultiSelectionModel;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.Grid.SelectionMode;
 import com.vaadin.flow.component.grid.GridMultiSelectionModel.SelectAllCheckboxVisibility;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.data.provider.DataProvider;
@@ -81,7 +82,7 @@ class FasUpdateUsageWindow extends CommonDialog implements IFasUpdateUsageWindow
         usagesGrid.setDataProvider(dataProvider);
         usagesGrid.setSizeFull();
         gridSelectionModel =
-            (AbstractGridMultiSelectionModel<UsageDto>) usagesGrid.setSelectionMode(Grid.SelectionMode.MULTI);
+            (AbstractGridMultiSelectionModel<UsageDto>) usagesGrid.setSelectionMode(SelectionMode.MULTI);
         switchSelectAllCheckBoxVisibility(usages.size());
         addGridColumns();
         usagesGrid.addSelectionListener(event ->

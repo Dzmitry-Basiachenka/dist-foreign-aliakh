@@ -12,6 +12,7 @@ import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.SearchWidget;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.Grid.SelectionMode;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.function.SerializableComparator;
@@ -194,7 +195,7 @@ public abstract class AbstractViewUsageBatchWindow extends CommonDialog
 
     private void initUsageBatchesGrid() {
         grid = new Grid<>();
-        grid.setSelectionMode(Grid.SelectionMode.SINGLE);
+        grid.setSelectionMode(SelectionMode.SINGLE);
         grid.setItems(controller.getUsageBatches(controller.getSelectedProductFamily()));
         grid.addSelectionListener(event ->
             deleteButton.setEnabled(CollectionUtils.isNotEmpty(event.getAllSelectedItems())));

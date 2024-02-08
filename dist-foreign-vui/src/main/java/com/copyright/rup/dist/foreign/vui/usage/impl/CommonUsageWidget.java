@@ -17,6 +17,7 @@ import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentUtil;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.Grid.SelectionMode;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.splitlayout.SplitLayout;
@@ -175,7 +176,7 @@ public abstract class CommonUsageWidget extends SplitLayout implements ICommonUs
      * @param grid grid to set selection mode
      */
     protected void setGridSelectionMode(Grid<UsageDto> grid) {
-        grid.setSelectionMode(Grid.SelectionMode.NONE);
+        grid.setSelectionMode(SelectionMode.NONE);
     }
 
     /**
