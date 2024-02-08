@@ -5,6 +5,7 @@ import com.copyright.rup.dist.foreign.vui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.vui.report.api.IReportController;
 import com.copyright.rup.dist.foreign.vui.report.api.IReportWidget;
 import com.copyright.rup.dist.foreign.vui.report.impl.report.ReportMenuBuilder;
+import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.downloader.OnDemandFileDownloader;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.Windows;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.util.VaadinUtils;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.api.IController;
@@ -63,6 +64,8 @@ public class ReportWidget extends MenuBar implements IReportWidget {
 
     @Override
     public void generateReport(IStreamSource streamSource) {
-        //todo: {vaadin23} {aazarenka} will be implement later
+        var fileDownloader = new OnDemandFileDownloader(streamSource.getSource());
+        add(fileDownloader);
+        fileDownloader.getElement().callJsFunction("click");
     }
 }

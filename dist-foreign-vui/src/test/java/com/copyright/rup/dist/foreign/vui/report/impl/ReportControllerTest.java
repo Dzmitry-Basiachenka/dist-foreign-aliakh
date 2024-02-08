@@ -1,16 +1,28 @@
 package com.copyright.rup.dist.foreign.vui.report.impl;
 
 import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
+import static org.powermock.api.easymock.PowerMock.mockStatic;
+import static org.powermock.api.easymock.PowerMock.replay;
+import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.dist.foreign.vui.common.ByteArrayStreamSource;
 import com.copyright.rup.dist.foreign.vui.main.api.IProductFamilyProvider;
 import com.copyright.rup.dist.foreign.vui.report.api.IUndistributedLiabilitiesReportController;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.core.classloader.annotations.PowerMockIgnore;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
+
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 
 /**
  * Verifies {@link ReportController}.
@@ -21,6 +33,9 @@ import org.powermock.reflect.Whitebox;
  *
  * @author Uladzislau_Shalamitski
  */
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({OffsetDateTime.class, ByteArrayStreamSource.class})
+@PowerMockIgnore({"com.sun.org.apache.xerces.*", "javax.xml.*", "org.xml.*", "javax.management.*"})
 public class ReportControllerTest {
 
     private ReportController reportController;
@@ -52,5 +67,16 @@ public class ReportControllerTest {
     public void testGetUndistributedLiabilitiesReportController() {
         assertSame(undistributedLiabilitiesReportController,
             reportController.getUndistributedLiabilitiesReportController());
+    }
+
+    @Test
+    public void testFasBatchSummaryStreamSourceFileName() {
+        OffsetDateTime now = OffsetDateTime.of(2019, 1, 2, 3, 4, 5, 6, ZoneOffset.ofHours(0));
+        mockStatic(OffsetDateTime.class);
+        expect(OffsetDateTime.now()).andReturn(now).once();
+        replay(OffsetDateTime.class);
+        assertEquals("fas_batch_summary_report_01_02_2019_03_04.csv",
+            reportController.getFasBatchSummaryReportStreamSource().getSource().getKey().get());
+        verify(OffsetDateTime.class);
     }
 }
