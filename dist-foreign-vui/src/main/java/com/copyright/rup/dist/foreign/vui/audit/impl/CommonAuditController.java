@@ -41,8 +41,9 @@ public abstract class CommonAuditController extends CommonController<ICommonAudi
 
     @Override
     public AuditFilter getFilter() {
-        //TODO: {dbasiachenka} implement
-        return new AuditFilter();
+        var filter = getAuditFilterController().getWidget().getAppliedFilter();
+        filter.setSearchValue(getWidget().getSearchValue());
+        return filter;
     }
 
     @Override

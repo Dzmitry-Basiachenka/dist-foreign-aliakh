@@ -21,6 +21,11 @@ import java.util.List;
 public interface ICommonAuditController extends IController<ICommonAuditWidget>, ICsvReportProvider {
 
     /**
+     * @return audit filter controller.
+     */
+    ICommonAuditFilterController getAuditFilterController();
+
+    /**
      * @return audit filter.
      */
     AuditFilter getFilter();
