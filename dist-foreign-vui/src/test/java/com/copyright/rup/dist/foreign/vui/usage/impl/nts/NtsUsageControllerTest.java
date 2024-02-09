@@ -45,6 +45,7 @@ import com.copyright.rup.dist.foreign.vui.usage.api.IFasNtsUsageFilterController
 import com.copyright.rup.dist.foreign.vui.usage.api.IFasNtsUsageFilterWidget;
 import com.copyright.rup.dist.foreign.vui.usage.api.ScenarioCreateEvent;
 import com.copyright.rup.dist.foreign.vui.usage.api.nts.INtsUsageWidget;
+import com.copyright.rup.dist.foreign.vui.usage.api.nts.IWorkClassificationController;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -98,6 +99,7 @@ public class NtsUsageControllerTest {
     private IFasUsageService fasUsageService;
     private INtsUsageService ntsUsageService;
     private IFasNtsUsageFilterController filterController;
+    private IWorkClassificationController workClassificationController;
     private IFasNtsUsageFilterWidget filterWidget;
     private IUsageBatchService usageBatchService;
     private IPrmIntegrationService prmIntegrationService;
@@ -115,6 +117,7 @@ public class NtsUsageControllerTest {
         ntsUsageService = createMock(INtsUsageService.class);
         usageBatchService = createMock(IUsageBatchService.class);
         filterController = createMock(IFasNtsUsageFilterController.class);
+        workClassificationController = createMock(IWorkClassificationController.class);
         ntsScenarioService = createMock(INtsScenarioService.class);
         prmIntegrationService = createMock(IPrmIntegrationService.class);
         filterWidget = createMock(IFasNtsUsageFilterWidget.class);
@@ -126,6 +129,7 @@ public class NtsUsageControllerTest {
         Whitebox.setInternalState(controller, fasUsageService);
         Whitebox.setInternalState(controller, ntsUsageService);
         Whitebox.setInternalState(controller, filterController);
+        Whitebox.setInternalState(controller, workClassificationController);
         Whitebox.setInternalState(controller, prmIntegrationService);
         Whitebox.setInternalState(controller, ntsScenarioService);
         Whitebox.setInternalState(controller, fundPoolService);
@@ -334,6 +338,11 @@ public class NtsUsageControllerTest {
         replay(ntsUsageService);
         assertEquals(1, controller.getUsagesCountForNtsBatch(usageBatch));
         verify(ntsUsageService);
+    }
+
+    @Test
+    public void testGetWorkClassificationController() {
+        assertSame(workClassificationController, controller.getWorkClassificationController());
     }
 
     @Test

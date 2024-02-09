@@ -56,6 +56,8 @@ public class NtsUsageController extends CommonUsageController implements INtsUsa
     @Autowired
     private IFasNtsUsageFilterController fasNtsUsageFilterController;
     @Autowired
+    private IWorkClassificationController workClassificationController;
+    @Autowired
     private IFasUsageService fasUsageService;
     @Autowired
     private INtsUsageService ntsUsageService;
@@ -160,7 +162,7 @@ public class NtsUsageController extends CommonUsageController implements INtsUsa
 
     @Override
     public IWorkClassificationController getWorkClassificationController() {
-        return null; //TODO {aliakh} implement
+        return workClassificationController;
     }
 
     @Override
