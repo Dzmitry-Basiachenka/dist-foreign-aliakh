@@ -22,6 +22,7 @@ public class FasReportMenuBuilder implements IReportMenuBuilder {
     public void addItems(IReportController controller, IReportWidget widget, MenuItem rootItem) {
         var subMenu = rootItem.getSubMenu();
         var undistributedLiabilitiesReport = ForeignUi.getMessage("menu.report.undistributed_liabilities");
+        var ownershipAdjustmentReport = ForeignUi.getMessage("menu.report.ownership_adjustment_report");
         subMenu.addItem(ForeignUi.getMessage("menu.report.batch_summary"), menuItem ->
             widget.generateReport(controller.getFasBatchSummaryReportStreamSource()));
         subMenu.addItem(ForeignUi.getMessage("menu.report.research_status"), menuItem ->
@@ -29,6 +30,8 @@ public class FasReportMenuBuilder implements IReportMenuBuilder {
         subMenu.addItem(undistributedLiabilitiesReport,
             menuItem -> widget.openReportWindow(undistributedLiabilitiesReport,
                 controller.getUndistributedLiabilitiesReportController()));
+        subMenu.addItem(ownershipAdjustmentReport, menuItem ->
+            widget.openReportWindow(ownershipAdjustmentReport, controller.getOwnershipAdjustmentReportController()));
         //TODO {vaadin23} will implement later
     }
 }

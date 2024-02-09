@@ -13,6 +13,7 @@ import static org.powermock.api.easymock.PowerMock.verifyAll;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.vui.common.ByteArrayStreamSource;
 import com.copyright.rup.dist.foreign.vui.main.api.IProductFamilyProvider;
+import com.copyright.rup.dist.foreign.vui.report.api.ICommonScenarioReportController;
 import com.copyright.rup.dist.foreign.vui.report.api.IReportController;
 import com.copyright.rup.dist.foreign.vui.report.api.IUndistributedLiabilitiesReportController;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.Windows;
@@ -93,8 +94,7 @@ public class ReportWidgetTest {
         expect(UI.getCurrent()).andReturn(ui).once();
         expect(ui.getUIId()).andReturn(1).once();
         expect(reportController.getFasBatchSummaryReportStreamSource()).andReturn(
-            new ByteArrayStreamSource("name", outputStream -> {
-            })).once();
+            new ByteArrayStreamSource("name", outputStream -> {})).once();
         IProductFamilyProvider productFamilyProvider = createMock(IProductFamilyProvider.class);
         expect(productFamilyProvider.getSelectedProductFamily()).andReturn(FdaConstants.FAS_PRODUCT_FAMILY).once();
         expect(reportController.getProductFamilyProvider()).andReturn(productFamilyProvider).once();
@@ -110,8 +110,7 @@ public class ReportWidgetTest {
         expect(UI.getCurrent()).andReturn(ui).once();
         expect(ui.getUIId()).andReturn(1).once();
         expect(reportController.getResearchStatusReportStreamSource()).andReturn(
-            new ByteArrayStreamSource("name", outputStream -> {
-            })).once();
+            new ByteArrayStreamSource("name", outputStream -> {})).once();
         IProductFamilyProvider productFamilyProvider = createMock(IProductFamilyProvider.class);
         expect(productFamilyProvider.getSelectedProductFamily()).andReturn(FdaConstants.FAS_PRODUCT_FAMILY).once();
         expect(reportController.getProductFamilyProvider()).andReturn(productFamilyProvider).once();
@@ -141,6 +140,24 @@ public class ReportWidgetTest {
     }
 
     @Test
+    public void testOwnershiAdjustmentReportSelected() {
+        ICommonScenarioReportController scenarioReportController = createMock(ICommonScenarioReportController.class);
+        expect(reportController.getOwnershipAdjustmentReportController()).andReturn(scenarioReportController).once();
+        CommonScenarioReportWidget widget = createMock(CommonScenarioReportWidget.class);
+        expect(scenarioReportController.initWidget()).andReturn(widget).once();
+        widget.setHeaderTitle("Ownership Adjustment Report");
+        expectLastCall().once();
+        Windows.showModalWindow(widget);
+        expectLastCall().once();
+        IProductFamilyProvider productFamilyProvider = createMock(IProductFamilyProvider.class);
+        expect(productFamilyProvider.getSelectedProductFamily()).andReturn(FdaConstants.FAS_PRODUCT_FAMILY).once();
+        expect(reportController.getProductFamilyProvider()).andReturn(productFamilyProvider).once();
+        replay(reportController, productFamilyProvider, widget, scenarioReportController);
+        selectMenuItem(3);
+        verify(reportController, productFamilyProvider, widget, scenarioReportController);
+    }
+
+    @Test
     public void testOpenReportWindow() throws Exception {
         mockStatic(Dialog.class);
         IController controller = createMock(IController.class);
@@ -151,8 +168,7 @@ public class ReportWidgetTest {
         widget.setHeaderTitle(UNDISTRIBUTED_LIABILITIES_REPORT);
         expectLastCall().once();
         replayAll();
-        Whitebox.invokeMethod(reportWidget, "openReportWindow", UNDISTRIBUTED_LIABILITIES_REPORT,
-            controller);
+        Whitebox.invokeMethod(reportWidget, "openReportWindow", UNDISTRIBUTED_LIABILITIES_REPORT, controller);
         verifyAll();
     }
 
@@ -171,9 +187,10 @@ public class ReportWidgetTest {
     private void assertReportsMenuFasFas2() {
         assertEquals(1, CollectionUtils.size(reportWidget.getItems()));
         List<MenuItem> menuItems = reportWidget.getItems().get(0).getSubMenu().getItems();
-        assertEquals(3, CollectionUtils.size(menuItems));
+        assertEquals(4, CollectionUtils.size(menuItems));
         assertEquals("FAS Batch Summary Report", menuItems.get(0).getText());
         assertEquals("Research Status Report", menuItems.get(1).getText());
         assertEquals(UNDISTRIBUTED_LIABILITIES_REPORT, menuItems.get(2).getText());
+        assertEquals("Ownership Adjustment Report", menuItems.get(3).getText());
     }
 }

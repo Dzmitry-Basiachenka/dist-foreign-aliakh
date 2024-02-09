@@ -39,4 +39,9 @@ public interface IReportController extends IController<IReportWidget> {
      * @return instance of {@link IStreamSource} for research status report.
      */
     IStreamSource getResearchStatusReportStreamSource();
+
+    /**
+     * @return ownership adjustment report controller.
+     */
+    ICommonScenarioReportController getOwnershipAdjustmentReportController();
 }
