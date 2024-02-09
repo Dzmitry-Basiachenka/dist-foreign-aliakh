@@ -38,8 +38,8 @@ public abstract class AbstractViewUsageBatchWindow extends CommonDialog
 
     private static final long serialVersionUID = -963897423065702705L;
 
-    private final SearchWidget searchWidget;
     private final ICommonUsageController controller;
+    private SearchWidget searchWidget;
     private Grid<UsageBatch> grid;
     private Button deleteButton;
 
@@ -50,7 +50,6 @@ public abstract class AbstractViewUsageBatchWindow extends CommonDialog
      */
     public AbstractViewUsageBatchWindow(ICommonUsageController controller) {
         this.controller = controller;
-        searchWidget = new SearchWidget(this, getSearchMessage(), "70%");
         initRootLayout();
     }
 
@@ -165,11 +164,12 @@ public abstract class AbstractViewUsageBatchWindow extends CommonDialog
     private void initRootLayout() {
         setWidth("1150px");
         setHeight("550px");
+        searchWidget = new SearchWidget(this, getSearchMessage(), "70%");
         initUsageBatchesGrid();
         var buttonsLayout = initButtonsLayout();
         initMediator();
-        add(VaadinUtils.initSizeFullVerticalLayout(searchWidget, grid));
         setHeaderTitle(getCaptionMessage());
+        add(VaadinUtils.initSizeFullVerticalLayout(searchWidget, grid));
         getFooter().add(buttonsLayout);
         setModalWindowProperties("view-batch-window", true);
     }

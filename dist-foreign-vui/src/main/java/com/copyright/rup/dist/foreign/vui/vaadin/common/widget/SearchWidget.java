@@ -50,7 +50,7 @@ public class SearchWidget extends HorizontalLayout {
      */
     public SearchWidget(ISearchController controller, String prompt, String width) {
         this(controller);
-        setPrompt(prompt);
+        this.setPrompt(prompt);
         searchField.setWidth(width);
     }
 

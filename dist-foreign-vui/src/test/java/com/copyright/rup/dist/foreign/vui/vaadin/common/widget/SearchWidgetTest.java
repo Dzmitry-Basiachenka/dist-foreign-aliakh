@@ -1,6 +1,9 @@
 package com.copyright.rup.dist.foreign.vui.vaadin.common.widget;
 
 import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.expectLastCall;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -98,6 +101,20 @@ public class SearchWidgetTest {
         searchWidget = new SearchWidget(searchController);
         searchWidget.setSearchValue(SEARCH_VALUE);
         assertEquals(SEARCH_VALUE, searchWidget.getSearchValue());
+    }
+
+    @Test
+    public void testSearchButtonClicked() {
+        searchWidget = new SearchWidget(searchController);
+        TextField searchField = Whitebox.getInternalState(searchWidget, "searchField");
+        searchField.setValue(SEARCH_VALUE);
+        Button searchButton = Whitebox.getInternalState(searchWidget, "searchButton");
+        searchController.performSearch();
+        expectLastCall().once();
+        replay(searchController);
+        searchButton.click();
+        assertEquals(SEARCH_VALUE, searchWidget.getSearchValue());
+        verify(searchController);
     }
 
     private void verifySearchField(Component component, String expectedWidth) {
