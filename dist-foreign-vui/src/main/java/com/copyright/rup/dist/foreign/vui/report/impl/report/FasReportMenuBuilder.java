@@ -24,6 +24,8 @@ public class FasReportMenuBuilder implements IReportMenuBuilder {
         var undistributedLiabilitiesReport = ForeignUi.getMessage("menu.report.undistributed_liabilities");
         subMenu.addItem(ForeignUi.getMessage("menu.report.batch_summary"), menuItem ->
             widget.generateReport(controller.getFasBatchSummaryReportStreamSource()));
+        subMenu.addItem(ForeignUi.getMessage("menu.report.research_status"), menuItem ->
+            widget.generateReport(controller.getResearchStatusReportStreamSource()));
         subMenu.addItem(undistributedLiabilitiesReport,
             menuItem -> widget.openReportWindow(undistributedLiabilitiesReport,
                 controller.getUndistributedLiabilitiesReportController()));

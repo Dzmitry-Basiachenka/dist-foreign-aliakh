@@ -58,6 +58,12 @@ public class ReportController extends CommonController<IReportWidget> implements
     }
 
     @Override
+    public IStreamSource getResearchStatusReportStreamSource() {
+        return new ByteArrayStreamSource("research_status_report_",
+            outputStream -> reportService.writeResearchStatusCsvReport(outputStream));
+    }
+
+    @Override
     protected IReportWidget instantiateWidget() {
         return new ReportWidget();
     }

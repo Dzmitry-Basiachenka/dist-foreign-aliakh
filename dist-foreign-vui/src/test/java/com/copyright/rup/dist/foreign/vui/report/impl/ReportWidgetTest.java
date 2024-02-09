@@ -14,6 +14,7 @@ import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.vui.common.ByteArrayStreamSource;
 import com.copyright.rup.dist.foreign.vui.main.api.IProductFamilyProvider;
 import com.copyright.rup.dist.foreign.vui.report.api.IReportController;
+import com.copyright.rup.dist.foreign.vui.report.api.IUndistributedLiabilitiesReportController;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.Windows;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.api.IController;
 
@@ -47,6 +48,8 @@ import java.util.List;
 @PrepareForTest(UI.class)
 @PowerMockIgnore({"com.sun.org.apache.xerces.*", "javax.xml.*", "org.xml.*", "javax.management.*"})
 public class ReportWidgetTest {
+
+    private static final String UNDISTRIBUTED_LIABILITIES_REPORT = "Undistributed Liabilities Reconciliation Report";
 
     private ReportWidget reportWidget;
     private IReportController reportController;
@@ -101,6 +104,43 @@ public class ReportWidgetTest {
     }
 
     @Test
+    public void testResearchStatusReportSelected() {
+        mockStatic(UI.class);
+        UI ui = createMock(UI.class);
+        expect(UI.getCurrent()).andReturn(ui).once();
+        expect(ui.getUIId()).andReturn(1).once();
+        expect(reportController.getResearchStatusReportStreamSource()).andReturn(
+            new ByteArrayStreamSource("name", outputStream -> {
+            })).once();
+        IProductFamilyProvider productFamilyProvider = createMock(IProductFamilyProvider.class);
+        expect(productFamilyProvider.getSelectedProductFamily()).andReturn(FdaConstants.FAS_PRODUCT_FAMILY).once();
+        expect(reportController.getProductFamilyProvider()).andReturn(productFamilyProvider).once();
+        replay(reportController, UI.class, ui, productFamilyProvider);
+        selectMenuItem(1);
+        verify(reportController, UI.class, ui, productFamilyProvider);
+    }
+
+    @Test
+    public void testUndistributedLiabilitiesReportSelected() {
+        IUndistributedLiabilitiesReportController liabilitiesReportController =
+            createMock(IUndistributedLiabilitiesReportController.class);
+        expect(reportController.getUndistributedLiabilitiesReportController()).andReturn(liabilitiesReportController)
+            .once();
+        UndistributedLiabilitiesReportWidget widget = createMock(UndistributedLiabilitiesReportWidget.class);
+        expect(liabilitiesReportController.initWidget()).andReturn(widget).once();
+        widget.setHeaderTitle(UNDISTRIBUTED_LIABILITIES_REPORT);
+        expectLastCall().once();
+        Windows.showModalWindow(widget);
+        expectLastCall().once();
+        IProductFamilyProvider productFamilyProvider = createMock(IProductFamilyProvider.class);
+        expect(productFamilyProvider.getSelectedProductFamily()).andReturn(FdaConstants.FAS_PRODUCT_FAMILY).once();
+        expect(reportController.getProductFamilyProvider()).andReturn(productFamilyProvider).once();
+        replay(reportController, productFamilyProvider, widget, liabilitiesReportController);
+        selectMenuItem(2);
+        verify(reportController, productFamilyProvider, widget, liabilitiesReportController);
+    }
+
+    @Test
     public void testOpenReportWindow() throws Exception {
         mockStatic(Dialog.class);
         IController controller = createMock(IController.class);
@@ -108,10 +148,10 @@ public class ReportWidgetTest {
         expect(controller.initWidget()).andReturn(widget).once();
         Windows.showModalWindow(widget);
         expectLastCall().once();
-        widget.setHeaderTitle("Undistributes Liabilities Reconciliation Report");
+        widget.setHeaderTitle(UNDISTRIBUTED_LIABILITIES_REPORT);
         expectLastCall().once();
         replayAll();
-        Whitebox.invokeMethod(reportWidget, "openReportWindow", "Undistributes Liabilities Reconciliation Report",
+        Whitebox.invokeMethod(reportWidget, "openReportWindow", UNDISTRIBUTED_LIABILITIES_REPORT,
             controller);
         verifyAll();
     }
@@ -131,8 +171,9 @@ public class ReportWidgetTest {
     private void assertReportsMenuFasFas2() {
         assertEquals(1, CollectionUtils.size(reportWidget.getItems()));
         List<MenuItem> menuItems = reportWidget.getItems().get(0).getSubMenu().getItems();
-        assertEquals(2, CollectionUtils.size(menuItems));
+        assertEquals(3, CollectionUtils.size(menuItems));
         assertEquals("FAS Batch Summary Report", menuItems.get(0).getText());
-        assertEquals("Undistributed Liabilities Reconciliation Report", menuItems.get(1).getText());
+        assertEquals("Research Status Report", menuItems.get(1).getText());
+        assertEquals(UNDISTRIBUTED_LIABILITIES_REPORT, menuItems.get(2).getText());
     }
 }

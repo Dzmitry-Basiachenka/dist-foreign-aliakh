@@ -34,4 +34,9 @@ public interface IReportController extends IController<IReportWidget> {
      * @return instance of {@link IStreamSource} for FAS/FAS2 Batch Summary Report.
      */
     IStreamSource getFasBatchSummaryReportStreamSource();
+
+    /**
+     * @return instance of {@link IStreamSource} for research status report.
+     */
+    IStreamSource getResearchStatusReportStreamSource();
 }
