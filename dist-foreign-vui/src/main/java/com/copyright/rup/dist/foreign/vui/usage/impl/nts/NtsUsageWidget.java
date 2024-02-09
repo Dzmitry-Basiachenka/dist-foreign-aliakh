@@ -110,10 +110,11 @@ public class NtsUsageWidget extends CommonUsageWidget implements INtsUsageWidget
         //TODO {aliakh} addToScenarioButton.addClickListener(onAddToScenarioClicked(new CreateNtsScenarioWindow()));
         var exportDownloader = new OnDemandFileDownloader(controller.getExportUsagesStreamSource().getSource());
         exportDownloader.extend(Buttons.createButton(ForeignUi.getMessage("button.export")));
-        assignClassificationButton = Buttons.createButton(ForeignUi.getMessage("button.assign_classification"));
-        //TODO {aliakh} assignClassificationButton.addClickListener(NtsUsageBatchSelectorWidget());
         initFundPoolMenuBar();
         initAdditionalFundsMenuBar();
+        assignClassificationButton = Buttons.createButton(ForeignUi.getMessage("button.assign_classification"));
+        assignClassificationButton.addClickListener(
+            event -> new NtsUsageBatchSelectorWidget(controller).showFilterWindow());
         VaadinUtils.setButtonsAutoDisabled(assignClassificationButton, addToScenarioButton);
         var buttonsLayout = new HorizontalLayout(fundPoolMenuBar, additionalFundsMenuBar, assignClassificationButton,
             addToScenarioButton, exportDownloader);
