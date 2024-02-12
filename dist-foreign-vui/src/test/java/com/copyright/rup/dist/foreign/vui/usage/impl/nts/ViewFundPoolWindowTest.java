@@ -94,19 +94,19 @@ public class ViewFundPoolWindowTest {
         verifySearchWidget(content.getComponentAt(0),
             "Enter Fund Pool Name or Payment Date (mm/dd/yyyy) or Source RRO Name/Account #");
         verifyGrid((Grid) content.getComponentAt(1), List.of(
-            Pair.of("Fund Pool Name", "150px"),
-            Pair.of("RRO Account #", "120px"),
-            Pair.of("RRO Name", "150px"),
-            Pair.of("Payment Date", "100px"),
-            Pair.of("Fiscal Year", "90px"),
-            Pair.of("STM Amount", "100px"),
-            Pair.of("Non-STM Amount", "115px"),
-            Pair.of("STM Minimum Amount", "140px"),
-            Pair.of("Non-STM Minimum Amount", "160px"),
+            Pair.of("Fund Pool Name", "200px"),
+            Pair.of("RRO Account #", "160px"),
+            Pair.of("RRO Name", "300px"),
+            Pair.of("Payment Date", "150px"),
+            Pair.of("Fiscal Year", "140px"),
+            Pair.of("STM Amount", "130px"),
+            Pair.of("Non-STM Amount", "165px"),
+            Pair.of("STM Minimum Amount", "200px"),
+            Pair.of("Non-STM Minimum Amount", "235px"),
             Pair.of("Market(s)", "140px"),
-            Pair.of("Market Period From", "140px"),
-            Pair.of("Market Period To", "125px"),
-            Pair.of("Created By", "170px"),
+            Pair.of("Market Period From", "200px"),
+            Pair.of("Market Period To", "185px"),
+            Pair.of("Created By", "330px"),
             Pair.of("Created Date", null)
         ));
         verifyButtonsLayout(getFooterLayout(window), true, "Delete", "Close");

@@ -87,6 +87,7 @@ public class NtsUsageWidgetTest {
     private static final String NTS_PRODUCT_FAMILY = "NTS";
     private static final String NTS_SCENARIO_NAME_PREFIX = "NTS Distribution ";
     private static final Set<String> BATCHES_IDS = Set.of("e0f2287a-f7f4-437f-95ad-56bd1b1c51cf");
+    private static final String WIDTH_300 = "300px";
 
     private NtsUsageWidget widget;
     private INtsUsageController controller;
@@ -125,31 +126,31 @@ public class NtsUsageWidgetTest {
         var toolbarLayout = (HorizontalLayout) contentLayout.getComponentAt(0);
         verifyButtonsLayout((HorizontalLayout) toolbarLayout.getComponentAt(0));
         verifyGrid((Grid<?>) contentLayout.getComponentAt(1), List.of(
-            Pair.of("Detail ID", "130px"),
-            Pair.of("Detail Status", "115px"),
-            Pair.of("Product Family", "125px"),
-            Pair.of("Usage Batch Name", "145px"),
-            Pair.of("RRO Account #", "125px"),
-            Pair.of("RRO Name", "135px"),
-            Pair.of("RH Account #", "115px"),
-            Pair.of("RH Name", "300px"),
-            Pair.of("Wr Wrk Inst", "110px"),
-            Pair.of("System Title", "305px"),
-            Pair.of("Standard Number", "140px"),
-            Pair.of("Standard Number Type", "155px"),
-            Pair.of("Fiscal Year", "105px"),
-            Pair.of("Payment Date", "115px"),
-            Pair.of("Title", "305px"),
+            Pair.of("Detail ID", WIDTH_300),
+            Pair.of("Detail Status", "180px"),
+            Pair.of("Product Family", "160px"),
+            Pair.of("Usage Batch Name", "200px"),
+            Pair.of("RRO Account #", "160px"),
+            Pair.of("RRO Name", WIDTH_300),
+            Pair.of("RH Account #", "150px"),
+            Pair.of("RH Name", WIDTH_300),
+            Pair.of("Wr Wrk Inst", "140px"),
+            Pair.of("System Title", WIDTH_300),
+            Pair.of("Standard Number", "180px"),
+            Pair.of("Standard Number Type", "225px"),
+            Pair.of("Fiscal Year", "130px"),
+            Pair.of("Payment Date", "145px"),
+            Pair.of("Title", WIDTH_300),
             Pair.of("Article", "135px"),
             Pair.of("Publisher", "135px"),
-            Pair.of("Pub Date", "90px"),
-            Pair.of("Number of Copies", "140px"),
-            Pair.of("Reported Value", "130px"),
-            Pair.of("Gross Amt in USD", "130px"),
-            Pair.of("Market", "125px"),
-            Pair.of("Market Period From", "150px"),
-            Pair.of("Market Period To", "145px"),
-            Pair.of("Author", "300px"),
+            Pair.of("Pub Date", "110px"),
+            Pair.of("Number of Copies", "185px"),
+            Pair.of("Reported Value", "170px"),
+            Pair.of("Gross Amt in USD", "170px"),
+            Pair.of("Market", "120px"),
+            Pair.of("Market Period From", "200px"),
+            Pair.of("Market Period To", "185px"),
+            Pair.of("Author", WIDTH_300),
             Pair.of("Comment", "200px")
         ));
     }
