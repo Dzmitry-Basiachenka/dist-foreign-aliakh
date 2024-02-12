@@ -15,6 +15,7 @@ import com.copyright.rup.dist.foreign.vui.common.ByteArrayStreamSource;
 import com.copyright.rup.dist.foreign.vui.main.api.IProductFamilyProvider;
 import com.copyright.rup.dist.foreign.vui.report.api.ICommonScenarioReportController;
 import com.copyright.rup.dist.foreign.vui.report.api.IReportController;
+import com.copyright.rup.dist.foreign.vui.report.api.ISummaryMarketReportController;
 import com.copyright.rup.dist.foreign.vui.report.api.IUndistributedLiabilitiesReportController;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.Windows;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.api.IController;
@@ -94,7 +95,8 @@ public class ReportWidgetTest {
         expect(UI.getCurrent()).andReturn(ui).once();
         expect(ui.getUIId()).andReturn(1).once();
         expect(reportController.getFasBatchSummaryReportStreamSource()).andReturn(
-            new ByteArrayStreamSource("name", outputStream -> {})).once();
+            new ByteArrayStreamSource("name", outputStream -> {
+            })).once();
         IProductFamilyProvider productFamilyProvider = createMock(IProductFamilyProvider.class);
         expect(productFamilyProvider.getSelectedProductFamily()).andReturn(FdaConstants.FAS_PRODUCT_FAMILY).once();
         expect(reportController.getProductFamilyProvider()).andReturn(productFamilyProvider).once();
@@ -104,18 +106,37 @@ public class ReportWidgetTest {
     }
 
     @Test
+    public void testSummaryMarketReportSelected() {
+        ISummaryMarketReportController summaryMarketReportController = createMock(ISummaryMarketReportController.class);
+        expect(reportController.getSummaryMarketReportController()).andReturn(summaryMarketReportController).once();
+        SummaryMarketReportWidget widget = createMock(SummaryMarketReportWidget.class);
+        expect(summaryMarketReportController.initWidget()).andReturn(widget).once();
+        widget.setHeaderTitle("Summary of Market Report");
+        expectLastCall().once();
+        Windows.showModalWindow(widget);
+        expectLastCall().once();
+        IProductFamilyProvider productFamilyProvider = createMock(IProductFamilyProvider.class);
+        expect(reportController.getProductFamilyProvider()).andReturn(productFamilyProvider).once();
+        expect(productFamilyProvider.getSelectedProductFamily()).andReturn(FdaConstants.FAS_PRODUCT_FAMILY).once();
+        replay(reportController, productFamilyProvider, widget, summaryMarketReportController);
+        selectMenuItem(1);
+        verify(reportController, productFamilyProvider, widget, summaryMarketReportController);
+    }
+
+    @Test
     public void testResearchStatusReportSelected() {
         mockStatic(UI.class);
         UI ui = createMock(UI.class);
         expect(UI.getCurrent()).andReturn(ui).once();
         expect(ui.getUIId()).andReturn(1).once();
         expect(reportController.getResearchStatusReportStreamSource()).andReturn(
-            new ByteArrayStreamSource("name", outputStream -> {})).once();
+            new ByteArrayStreamSource("name", outputStream -> {
+            })).once();
         IProductFamilyProvider productFamilyProvider = createMock(IProductFamilyProvider.class);
         expect(productFamilyProvider.getSelectedProductFamily()).andReturn(FdaConstants.FAS_PRODUCT_FAMILY).once();
         expect(reportController.getProductFamilyProvider()).andReturn(productFamilyProvider).once();
         replay(reportController, UI.class, ui, productFamilyProvider);
-        selectMenuItem(1);
+        selectMenuItem(2);
         verify(reportController, UI.class, ui, productFamilyProvider);
     }
 
@@ -135,12 +156,12 @@ public class ReportWidgetTest {
         expect(productFamilyProvider.getSelectedProductFamily()).andReturn(FdaConstants.FAS_PRODUCT_FAMILY).once();
         expect(reportController.getProductFamilyProvider()).andReturn(productFamilyProvider).once();
         replay(reportController, productFamilyProvider, widget, liabilitiesReportController);
-        selectMenuItem(2);
+        selectMenuItem(3);
         verify(reportController, productFamilyProvider, widget, liabilitiesReportController);
     }
 
     @Test
-    public void testOwnershiAdjustmentReportSelected() {
+    public void testOwnershipAdjustmentReportSelected() {
         ICommonScenarioReportController scenarioReportController = createMock(ICommonScenarioReportController.class);
         expect(reportController.getOwnershipAdjustmentReportController()).andReturn(scenarioReportController).once();
         CommonScenarioReportWidget widget = createMock(CommonScenarioReportWidget.class);
@@ -153,7 +174,7 @@ public class ReportWidgetTest {
         expect(productFamilyProvider.getSelectedProductFamily()).andReturn(FdaConstants.FAS_PRODUCT_FAMILY).once();
         expect(reportController.getProductFamilyProvider()).andReturn(productFamilyProvider).once();
         replay(reportController, productFamilyProvider, widget, scenarioReportController);
-        selectMenuItem(3);
+        selectMenuItem(4);
         verify(reportController, productFamilyProvider, widget, scenarioReportController);
     }
 
@@ -187,10 +208,11 @@ public class ReportWidgetTest {
     private void assertReportsMenuFasFas2() {
         assertEquals(1, CollectionUtils.size(reportWidget.getItems()));
         List<MenuItem> menuItems = reportWidget.getItems().get(0).getSubMenu().getItems();
-        assertEquals(4, CollectionUtils.size(menuItems));
+        assertEquals(5, CollectionUtils.size(menuItems));
         assertEquals("FAS Batch Summary Report", menuItems.get(0).getText());
-        assertEquals("Research Status Report", menuItems.get(1).getText());
-        assertEquals(UNDISTRIBUTED_LIABILITIES_REPORT, menuItems.get(2).getText());
-        assertEquals("Ownership Adjustment Report", menuItems.get(3).getText());
+        assertEquals("Summary of Market Report", menuItems.get(1).getText());
+        assertEquals("Research Status Report", menuItems.get(2).getText());
+        assertEquals(UNDISTRIBUTED_LIABILITIES_REPORT, menuItems.get(3).getText());
+        assertEquals("Ownership Adjustment Report", menuItems.get(4).getText());
     }
 }

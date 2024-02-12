@@ -7,6 +7,7 @@ import com.copyright.rup.dist.foreign.vui.main.api.IProductFamilyProvider;
 import com.copyright.rup.dist.foreign.vui.report.api.ICommonScenarioReportController;
 import com.copyright.rup.dist.foreign.vui.report.api.IReportController;
 import com.copyright.rup.dist.foreign.vui.report.api.IReportWidget;
+import com.copyright.rup.dist.foreign.vui.report.api.ISummaryMarketReportController;
 import com.copyright.rup.dist.foreign.vui.report.api.IUndistributedLiabilitiesReportController;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.api.CommonController;
 
@@ -37,6 +38,8 @@ public class ReportController extends CommonController<IReportWidget> implements
     @Autowired
     private IUndistributedLiabilitiesReportController undistributedLiabilitiesReportController;
     @Autowired
+    private ISummaryMarketReportController summaryMarketReportController;
+    @Autowired
     private IProductFamilyProvider productFamilyProvider;
     @Autowired
     private IReportService reportService;
@@ -60,6 +63,11 @@ public class ReportController extends CommonController<IReportWidget> implements
     public IStreamSource getFasBatchSummaryReportStreamSource() {
         return new ByteArrayStreamSource("fas_batch_summary_report_",
             outputStream -> reportService.writeFasBatchSummaryCsvReport(outputStream));
+    }
+
+    @Override
+    public ISummaryMarketReportController getSummaryMarketReportController() {
+        return summaryMarketReportController;
     }
 
     @Override
