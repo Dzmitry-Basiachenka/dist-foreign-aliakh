@@ -59,19 +59,19 @@ public class UndistributedLiabilitiesReportWidgetTest {
             createMock(UndistributedLiabilitiesReportController.class);
         mockStatic(UI.class);
         UI ui = createMock(UI.class);
-        expect(UI.getCurrent()).andReturn(ui).times(2);
-        expect(ui.getUIId()).andReturn(1).times(2);
+        expect(UI.getCurrent()).andReturn(ui).once();
+        expect(ui.getUIId()).andReturn(1).once();
         Map.Entry<Supplier<String>, Supplier<InputStream>> source =
             new SimpleImmutableEntry<>(() -> "file_name.txt", () -> new ByteArrayInputStream(new byte[]{}));
         IStreamSource streamSource = createMock(IStreamSource.class);
-        expect(streamSource.getSource()).andReturn(source).times(2);
+        expect(streamSource.getSource()).andReturn(source).once();
         expect(controller.getCsvStreamSource()).andReturn(streamSource).once();
         widget = new UndistributedLiabilitiesReportWidget();
         expect(controller.instantiateWidget()).andReturn(widget).once();
         widget.setController(controller);
         replay(UI.class, ui, controller, streamSource);
         widget.init();
-        verify(controller);
+        verify(UI.class, ui, controller, streamSource);
     }
 
     @Test
