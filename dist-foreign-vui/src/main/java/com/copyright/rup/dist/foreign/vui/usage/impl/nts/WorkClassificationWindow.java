@@ -173,17 +173,16 @@ class WorkClassificationWindow extends CommonDialog {
     }
 
     private void addColumns() {
-        //TODO {aliakh} fix column width
-        addColumn(WorkClassification::getWrWrkInst, "table.column.wr_wrk_inst", "wrWrkInst", "100px");
-        addStringColumn(WorkClassification::getSystemTitle, "table.column.system_title", "systemTitle", "285px");
-        addColumn(WorkClassification::getClassification, "table.column.classification", "classification", "110px");
-        addColumn(WorkClassification::getStandardNumber, "table.column.standard_number", "standardNumber", "140px");
+        addColumn(WorkClassification::getWrWrkInst, "table.column.wr_wrk_inst", "wrWrkInst", "140px");
+        addStringColumn(WorkClassification::getSystemTitle, "table.column.system_title", "systemTitle", "300px");
+        addColumn(WorkClassification::getClassification, "table.column.classification", "classification", "150px");
+        addColumn(WorkClassification::getStandardNumber, "table.column.standard_number", "standardNumber", "180px");
         addColumn(WorkClassification::getStandardNumberType, "table.column.standard_number_type", "standardNumberType",
-            "155px");
-        addColumn(WorkClassification::getRhAccountNumber, "table.column.rh_account_number", "rhAccountNumber", "100px");
-        addStringColumn(WorkClassification::getRhName, "table.column.rh_account_name", "rhName", "285px");
+            "225px");
+        addColumn(WorkClassification::getRhAccountNumber, "table.column.rh_account_number", "rhAccountNumber", "150px");
+        addStringColumn(WorkClassification::getRhName, "table.column.rh_account_name", "rhName", "300px");
         addClassificationDateColumn(WorkClassification::getUpdateDate);
-        addStringColumn(WorkClassification::getUpdateUser, "table.column.classified_by", "updateUser", "245px");
+        addStringColumn(WorkClassification::getUpdateUser, "table.column.classified_by", "updateUser", "300px");
     }
 
     private void addStringColumn(ValueProvider<WorkClassification, String> provider, String caption, String property,
@@ -212,7 +211,7 @@ class WorkClassificationWindow extends CommonDialog {
             .setHeader(ForeignUi.getMessage("table.column.classification_date"))
             .setSortProperty("updateDate")
             .setFlexGrow(0)
-            .setWidth("135px")
+            .setWidth("190px")
             .setSortable(true)
             .setResizable(true);
     }

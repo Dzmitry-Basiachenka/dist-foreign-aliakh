@@ -11,7 +11,6 @@ import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.CommonDialog;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.SearchWidget;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.SearchWidget.ISearchController;
 
-import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.Grid.SelectionMode;
 import com.vaadin.flow.data.provider.ListDataProvider;
@@ -66,7 +65,6 @@ class ViewAdditionalFundsWindow extends CommonDialog implements ISearchControlle
         }
     }
 
-    //TODO {aliakh} fix column width
     private Grid<FundPool> initGrid() {
         grid = new Grid<>();
         grid.setItems(controller.getAdditionalFunds());
@@ -77,7 +75,6 @@ class ViewAdditionalFundsWindow extends CommonDialog implements ISearchControlle
             .setComparator((SerializableComparator<FundPool>) (fundPool1, fundPool2) ->
                 fundPool1.getName().compareToIgnoreCase(fundPool2.getName()))
             .setSortProperty("name")
-            .setFlexGrow(0)
             .setSortable(true)
             .setResizable(true);
         grid.addColumn(fundPool -> CurrencyUtils.format(fundPool.getTotalAmount(), null))
@@ -87,14 +84,14 @@ class ViewAdditionalFundsWindow extends CommonDialog implements ISearchControlle
             .setSortProperty("amount")
             .setClassNameGenerator(item -> "v-align-right")
             .setFlexGrow(0)
-            .setWidth("100px")
+            .setWidth("140px")
             .setSortable(true)
             .setResizable(true);
         grid.addColumn(FundPool::getCreateUser)
             .setHeader(ForeignUi.getMessage("table.column.created_by"))
             .setSortProperty("createUser")
             .setFlexGrow(0)
-            .setWidth("140px")
+            .setWidth("300px")
             .setSortable(true)
             .setResizable(true);
         grid.addColumn(FundPool::getComment)
@@ -104,16 +101,17 @@ class ViewAdditionalFundsWindow extends CommonDialog implements ISearchControlle
                     .compare(fundPool1, fundPool2))
             .setSortProperty("comment")
             .setFlexGrow(0)
-            .setWidth("320px")
+            .setWidth("200px")
             .setSortable(true)
             .setResizable(true);
         grid.addComponentColumn(fundPool -> {
-                Button deleteButton = Buttons.createButton(ForeignUi.getMessage("button.delete"));
+                var deleteButton = Buttons.createButton(ForeignUi.getMessage("button.delete"));
                 deleteButton.setId(fundPool.getId());
                 deleteButton.addClickListener(event -> deleteFund(fundPool));
                 VaadinUtils.setButtonsAutoDisabled(deleteButton);
                 return deleteButton;
             })
+            .setFlexGrow(0)
             .setWidth("90px")
             .setSortable(false)
             .setResizable(false)

@@ -111,15 +111,15 @@ public class WorkClassificationWindowTest {
         verifySearchWidget(toolbarLayout.getComponentAt(1),
             "Enter Wr Wrk Inst or System Title or Standard # or Rightsholder Name/Account #");
         verifyGrid((Grid) rootLayout.getComponentAt(2), List.of(
-            Pair.of("Wr Wrk Inst", "100px"),
-            Pair.of("System Title", "285px"),
-            Pair.of("Classification", "110px"),
-            Pair.of("Standard Number", "140px"),
-            Pair.of("Standard Number Type", "155px"),
-            Pair.of("RH Account #", "100px"),
-            Pair.of("RH Name", "285px"),
-            Pair.of("Classification Date", "135px"),
-            Pair.of("Classified By", "245px")
+            Pair.of("Wr Wrk Inst", "140px"),
+            Pair.of("System Title", "300px"),
+            Pair.of("Classification", "150px"),
+            Pair.of("Standard Number", "180px"),
+            Pair.of("Standard Number Type", "225px"),
+            Pair.of("RH Account #", "150px"),
+            Pair.of("RH Name", "300px"),
+            Pair.of("Classification Date", "190px"),
+            Pair.of("Classified By", "300px")
         ));
         verifyButtonsLayout(getFooterLayout(window), true,
             "Mark as STM", "Mark as Non-STM", "Mark as Belletristic", "Delete Classification", "Clear", "Close");

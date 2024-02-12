@@ -107,16 +107,11 @@ public class NtsUsageWidget extends CommonUsageWidget implements INtsUsageWidget
     protected HorizontalLayout initButtonsLayout() {
         initFundPoolMenuBar();
         initAdditionalFundsMenuBar();
-        assignClassificationButton = Buttons.createButton(ForeignUi.getMessage("button.assign_classification"));
-        assignClassificationButton.addClickListener(
-            event -> new NtsUsageBatchSelectorWidget(controller).showFilterWindow());
-        addToScenarioButton = Buttons.createButton(ForeignUi.getMessage("button.add_to_scenario"));
-        addToScenarioButton.addClickListener(event -> onAddToScenarioClicked(new CreateNtsScenarioWindow(controller)));
-        var exportDownloader = new OnDemandFileDownloader(controller.getExportUsagesStreamSource().getSource());
-        exportDownloader.extend(Buttons.createButton(ForeignUi.getMessage("button.export")));
+        initAssignClassificationButton();
+        initAddToScenarioButton();
         VaadinUtils.setButtonsAutoDisabled(assignClassificationButton, addToScenarioButton);
         var buttonsLayout = new HorizontalLayout(fundPoolMenuBar, additionalFundsMenuBar, assignClassificationButton,
-            addToScenarioButton, exportDownloader);
+            addToScenarioButton, initExportDownloader());
         var toolbarLayout = new HorizontalLayout(buttonsLayout, getHideGridColumnsProvider().getMenuButton());
         toolbarLayout.setJustifyContentMode(JustifyContentMode.BETWEEN);
         toolbarLayout.setWidthFull();
@@ -199,5 +194,22 @@ public class NtsUsageWidget extends CommonUsageWidget implements INtsUsageWidget
             }
         }
         return message;
+    }
+
+    private void initAssignClassificationButton() {
+        assignClassificationButton = Buttons.createButton(ForeignUi.getMessage("button.assign_classification"));
+        assignClassificationButton.addClickListener(
+            event -> new NtsUsageBatchSelectorWidget(controller).showFilterWindow());
+    }
+
+    private void initAddToScenarioButton() {
+        addToScenarioButton = Buttons.createButton(ForeignUi.getMessage("button.add_to_scenario"));
+        addToScenarioButton.addClickListener(event -> onAddToScenarioClicked(new CreateNtsScenarioWindow(controller)));
+    }
+
+    private OnDemandFileDownloader initExportDownloader() {
+        var exportDownloader = new OnDemandFileDownloader(controller.getExportUsagesStreamSource().getSource());
+        exportDownloader.extend(Buttons.createButton(ForeignUi.getMessage("button.export")));
+        return exportDownloader;
     }
 }

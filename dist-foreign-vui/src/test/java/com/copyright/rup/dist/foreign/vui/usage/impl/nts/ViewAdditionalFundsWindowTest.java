@@ -157,9 +157,9 @@ public class ViewAdditionalFundsWindowTest {
     private void verifyGrid(Grid grid) {
         UiTestHelper.verifyGrid(grid, List.of(
             Pair.of("Fund Name", null),
-            Pair.of("Fund Amount", "100px"),
-            Pair.of("Created By", "140px"),
-            Pair.of("Comment", "320px"),
+            Pair.of("Fund Amount", "140px"),
+            Pair.of("Created By", "300px"),
+            Pair.of("Comment", "200px"),
             Pair.of(StringUtils.EMPTY, "90px")
         ));
         assertEquals("Delete", getDeleteButton().getText());
