@@ -85,7 +85,6 @@ public class FasUsageWidgetTest {
     private static final String FAS_PRODUCT_FAMILY = "FAS";
     private static final String FAS_SCENARIO_NAME_PREFIX = "FAS Distribution ";
     private static final int RECORD_THRESHOLD = 10000;
-    private static final String ADD_TO_SCENARIO_BUTTON = "addToScenarioButton";
     private static final String WIDTH_300 = "300px";
 
     private FasUsageWidget widget;
@@ -238,7 +237,7 @@ public class FasUsageWidgetTest {
         mockStatic(Windows.class);
         Grid<?> grid = new Grid<>();
         Whitebox.setInternalState(widget, grid);
-        Button addToScenarioButton = Whitebox.getInternalState(widget, ADD_TO_SCENARIO_BUTTON);
+        Button addToScenarioButton = getAddToScenarioButton();
         assertTrue(addToScenarioButton.isDisableOnClick());
         Windows.showNotificationWindow("Scenario cannot be created. There are no usages to include into scenario");
         expectLastCall().once();
@@ -255,7 +254,7 @@ public class FasUsageWidgetTest {
         mockStatic(Windows.class);
         Grid<?> grid = new Grid<>();
         Whitebox.setInternalState(widget, grid);
-        Button addToScenarioButton = Whitebox.getInternalState(widget, ADD_TO_SCENARIO_BUTTON);
+        Button addToScenarioButton = getAddToScenarioButton();
         assertTrue(addToScenarioButton.isDisableOnClick());
         expect(controller.getSelectedProductFamily()).andReturn(FAS_PRODUCT_FAMILY).once();
         expect(controller.scenarioExists(FAS_SCENARIO_NAME_PREFIX + DATE)).andReturn(true).once();
@@ -273,7 +272,7 @@ public class FasUsageWidgetTest {
         mockStatic(Windows.class);
         Grid<?> grid = new Grid<>();
         Whitebox.setInternalState(widget, grid);
-        Button addToScenarioButton = Whitebox.getInternalState(widget, ADD_TO_SCENARIO_BUTTON);
+        Button addToScenarioButton = getAddToScenarioButton();
         assertTrue(addToScenarioButton.isDisableOnClick());
         expect(controller.getSelectedProductFamily()).andReturn(FAS_PRODUCT_FAMILY).once();
         expect(controller.scenarioExists(FAS_SCENARIO_NAME_PREFIX + DATE)).andReturn(true).once();
@@ -293,7 +292,7 @@ public class FasUsageWidgetTest {
         mockStatic(Windows.class);
         Grid<?> grid = new Grid<>();
         Whitebox.setInternalState(widget, grid);
-        Button addToScenarioButton = Whitebox.getInternalState(widget, ADD_TO_SCENARIO_BUTTON);
+        Button addToScenarioButton = getAddToScenarioButton();
         assertTrue(addToScenarioButton.isDisableOnClick());
         expect(controller.getBeansCount()).andReturn(1).once();
         expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
@@ -348,6 +347,10 @@ public class FasUsageWidgetTest {
         verifyButton(layout.getComponentAt(3), "Update Usages", true, true);
         verifyButton(layout.getComponentAt(4), "Add To Scenario", true, true);
         verifyFileDownloader(layout.getComponentAt(5), "Export", true, true);
+    }
+
+    private Button getAddToScenarioButton() {
+        return Whitebox.getInternalState(widget, "addToScenarioButton");
     }
 
     private List<UsageDto> loadExpectedUsageDtos(String fileName) {
