@@ -9,6 +9,7 @@ import static org.easymock.EasyMock.newCapture;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
@@ -21,13 +22,16 @@ import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
+import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.vui.audit.api.ICommonAuditFilterController;
 import com.copyright.rup.dist.foreign.vui.audit.api.ICommonAuditFilterWidget;
 import com.copyright.rup.dist.foreign.vui.audit.api.fas.IFasAuditFilterController;
 import com.copyright.rup.dist.foreign.vui.audit.api.fas.IFasAuditFilterWidget;
 import com.copyright.rup.dist.foreign.vui.audit.api.fas.IFasAuditWidget;
+import com.copyright.rup.dist.foreign.vui.audit.impl.UsageHistoryWindow;
 import com.copyright.rup.dist.foreign.vui.common.ByteArrayStreamSource;
+import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.Windows;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -60,11 +64,12 @@ import java.util.function.Supplier;
  * @author Aliaksandr Radkevich
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({OffsetDateTime.class, ByteArrayStreamSource.class, StreamSource.class})
+@PrepareForTest({OffsetDateTime.class, ByteArrayStreamSource.class, StreamSource.class, Windows.class})
 @PowerMockIgnore({"com.sun.org.apache.xerces.*", "javax.xml.*", "org.xml.*", "javax.management.*"})
 public class FasAuditControllerTest {
 
     private FasAuditController controller;
+    private IUsageAuditService usageAuditService;
     private ICommonAuditFilterController auditFilterController;
     private IFasAuditWidget auditWidget;
     private ICommonAuditFilterWidget filterWidget;
@@ -74,6 +79,7 @@ public class FasAuditControllerTest {
 
     @Before
     public void setUp() {
+        usageAuditService = createMock(IUsageAuditService.class);
         auditFilterController = createMock(IFasAuditFilterController.class);
         auditWidget = createMock(IFasAuditWidget.class);
         filterWidget = createMock(IFasAuditFilterWidget.class);
@@ -81,6 +87,7 @@ public class FasAuditControllerTest {
         reportService = createMock(IReportService.class);
         streamSourceHandler = createMock(IStreamSourceHandler.class);
         controller = new FasAuditController();
+        Whitebox.setInternalState(controller, usageAuditService);
         Whitebox.setInternalState(controller, auditFilterController);
         Whitebox.setInternalState(controller, auditWidget);
         Whitebox.setInternalState(controller, usageService);
@@ -140,7 +147,19 @@ public class FasAuditControllerTest {
 
     @Test
     public void testShowUsageHistory() {
-        //TODO: {dbasiachenka} implement
+        mockStatic(Windows.class);
+        Capture<UsageHistoryWindow> windowCapture = newCapture();
+        String usageId = "01e7c4c8-6b04-4920-9b23-08a2f551c926";
+        String detailId = "8830c9f1-b806-467d-927e-81fcf17ba013";
+        expect(usageAuditService.getUsageAudit(usageId)).andReturn(List.of()).once();
+        Windows.showModalWindow(capture(windowCapture));
+        expectLastCall().once();
+        replay(Windows.class, usageAuditService);
+        controller.showUsageHistory(usageId, detailId);
+        var window = windowCapture.getValue();
+        assertNotNull(windowCapture.getValue());
+        assertEquals("History for usage detail " + detailId, window.getHeaderTitle());
+        verify(Windows.class, usageAuditService);
     }
 
     @Test
