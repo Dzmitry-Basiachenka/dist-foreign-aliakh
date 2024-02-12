@@ -3,7 +3,7 @@ package com.copyright.rup.dist.foreign.vui.audit.impl.fas;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyFileDownloader;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyGrid;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyGridItems;
-import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyWidth;
+import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifySearchWidget;
 
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.eq;
@@ -23,9 +23,9 @@ import static org.powermock.api.easymock.PowerMock.verify;
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
+import com.copyright.rup.dist.foreign.vui.audit.api.ICommonAuditFilterController;
 import com.copyright.rup.dist.foreign.vui.audit.api.fas.IFasAuditController;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.Windows;
-import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.SearchWidget;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -39,7 +39,6 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.provider.CallbackDataProvider;
 import com.vaadin.flow.data.provider.Query;
 import com.vaadin.flow.data.provider.QuerySortOrder;
@@ -52,7 +51,6 @@ import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
-import org.powermock.reflect.Whitebox;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -93,15 +91,20 @@ public class FasAuditWidgetTest {
         controller = createMock(IFasAuditController.class);
         widget = new FasAuditWidget(controller);
         widget.setController(controller);
+        ICommonAuditFilterController filterController = createMock(ICommonAuditFilterController.class);
+        var filterWidget = new FasAuditFilterWidget();
+        filterWidget.setController(filterController);
+        expect(controller.getAuditFilterController()).andReturn(filterController).once();
+        expect(filterController.initWidget()).andReturn(filterWidget).once();
         IStreamSource streamSource = createMock(IStreamSource.class);
         Map.Entry<Supplier<String>, Supplier<InputStream>> source =
             new SimpleImmutableEntry<>(() -> "file_name.txt", () -> new ByteArrayInputStream(new byte[]{}));
         expect(streamSource.getSource()).andReturn(source).once();
         expect(controller.getCsvStreamSource()).andReturn(streamSource).once();
-        replay(UI.class, ui, controller, streamSource);
+        replay(UI.class, ui, controller, filterController, streamSource);
         widget.init();
-        verify(UI.class, ui, controller, streamSource);
-        reset(controller, streamSource);
+        verify(UI.class, ui, controller, filterController, streamSource);
+        reset(controller, filterController, streamSource);
     }
 
     @Test
@@ -124,6 +127,7 @@ public class FasAuditWidgetTest {
 
     @Test
     public void testWidgetStructure() {
+        assertThat(widget.getPrimaryComponent(), instanceOf(FasAuditFilterWidget.class));
         assertEquals("audit-widget", widget.getClassName());
         var component = widget.getPrimaryComponent();
         assertThat(component, instanceOf(VerticalLayout.class));
@@ -208,16 +212,9 @@ public class FasAuditWidgetTest {
         assertEquals("audit-toolbar", horizontalLayout.getId().orElseThrow());
         assertEquals("audit-toolbar", horizontalLayout.getClassName());
         verifyFileDownloader(horizontalLayout.getComponentAt(0), "Export", true, true);
-        verifySearchWidget(horizontalLayout.getComponentAt(1));
+        verifySearchWidget(
+            horizontalLayout.getComponentAt(1), "Enter Detail ID or Wr Wrk Inst or System Title or Work Title", "70%");
         verifyMenuButton(horizontalLayout.getComponentAt(2));
-    }
-
-    private void verifySearchWidget(Component component) {
-        assertThat(component, instanceOf(SearchWidget.class));
-        SearchWidget searchWidget = (SearchWidget) component;
-        var textField = Whitebox.getInternalState(searchWidget, TextField.class);
-        verifyWidth(textField, "75%", Unit.PERCENTAGE);
-        assertEquals("Enter Detail ID or Wr Wrk Inst or System Title or Work Title", textField.getPlaceholder());
     }
 
     private void verifyMenuButton(Component component) {

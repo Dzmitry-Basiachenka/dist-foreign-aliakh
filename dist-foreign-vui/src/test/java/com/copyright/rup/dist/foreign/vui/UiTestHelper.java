@@ -17,8 +17,8 @@ import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.LongField;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.downloader.OnDemandFileDownloader;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.upload.UploadField;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.Windows;
-
 import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.SearchWidget;
+
 import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasSize;
@@ -185,9 +185,19 @@ public final class UiTestHelper {
      * @param component UI component
      */
     public static void verifyFiltersLabel(Component component) {
+        verifyFiltersLabel(component, "Filters");
+    }
+
+    /**
+     * Verifies filters label.
+     *
+     * @param component UI component
+     * @param caption   caption
+     */
+    public static void verifyFiltersLabel(Component component, String caption) {
         assertThat(component, instanceOf(Label.class));
         var label = (Label) component;
-        assertEquals("Filters", label.getText());
+        assertEquals(caption, label.getText());
         assertEquals("filter-label", label.getClassName());
     }
 

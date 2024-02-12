@@ -53,8 +53,7 @@ public abstract class CommonAuditWidget extends SplitLayout implements ICommonAu
     @SuppressWarnings("unchecked")
     @Override
     public ICommonAuditWidget init() {
-        //TODO: {dbasiachenka} add filter widget
-        addToPrimary(new VerticalLayout());
+        addToPrimary(initAuditFilter());
         addToSecondary(initContent());
         setSplitterPosition(15);
         setSizeFull();
@@ -134,6 +133,12 @@ public abstract class CommonAuditWidget extends SplitLayout implements ICommonAu
      */
     protected abstract void addColumns();
 
+    private CommonAuditFilterWidget initAuditFilter() {
+        var auditFilterWidget = (CommonAuditFilterWidget) controller.getAuditFilterController().initWidget();
+        auditFilterWidget.setFilterSaveAction(this::refresh);
+        return auditFilterWidget;
+    }
+
     private VerticalLayout initContent() {
         dataProvider = DataProvider.fromCallbacks(
             query -> controller.loadBeans(query.getOffset(), query.getLimit(), query.getSortOrders()).stream(),
@@ -161,7 +166,7 @@ public abstract class CommonAuditWidget extends SplitLayout implements ICommonAu
         var exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
         var fileDownloader = new OnDemandFileDownloader(new CsvStreamSource(controller).getSource());
         fileDownloader.extend(exportButton);
-        searchWidget = new SearchWidget(this::refresh, ForeignUi.getMessage(initSearchMessage()), "75%");
+        searchWidget = new SearchWidget(this::refresh, ForeignUi.getMessage(initSearchMessage()), "70%");
         var hideGridColumnsProvider = new HideGridColumnsProvider<UsageDto>();
         hideGridColumnsProvider.hideColumns(auditGrid.getColumns(), "Detail ID");
         var menuButton = hideGridColumnsProvider.getMenuButton();

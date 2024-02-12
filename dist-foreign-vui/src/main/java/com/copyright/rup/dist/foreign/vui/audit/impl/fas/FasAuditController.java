@@ -6,14 +6,17 @@ import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
+import com.copyright.rup.dist.foreign.vui.audit.api.ICommonAuditFilterController;
 import com.copyright.rup.dist.foreign.vui.audit.api.ICommonAuditWidget;
 import com.copyright.rup.dist.foreign.vui.audit.api.fas.IFasAuditController;
+import com.copyright.rup.dist.foreign.vui.audit.api.fas.IFasAuditFilterController;
 import com.copyright.rup.dist.foreign.vui.audit.impl.CommonAuditController;
 
 import com.vaadin.flow.data.provider.QuerySortOrder;
 import com.vaadin.flow.data.provider.SortDirection;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -34,6 +37,9 @@ import java.util.List;
 public class FasAuditController extends CommonAuditController implements IFasAuditController {
 
     private static final long serialVersionUID = 1568758804212203021L;
+
+    @Autowired
+    private IFasAuditFilterController controller;
 
     @Override
     public IStreamSource getCsvStreamSource() {
@@ -58,6 +64,11 @@ public class FasAuditController extends CommonAuditController implements IFasAud
         return !filter.isEmpty()
             ? getUsageService().getForAudit(filter, new Pageable(startIndex, count), sort)
             : List.of();
+    }
+
+    @Override
+    public ICommonAuditFilterController getAuditFilterController() {
+        return controller;
     }
 
     @Override
