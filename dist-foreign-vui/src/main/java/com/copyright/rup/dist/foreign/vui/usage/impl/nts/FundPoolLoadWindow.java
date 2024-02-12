@@ -18,6 +18,7 @@ import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.LocalDateWidget;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -31,6 +32,7 @@ import com.vaadin.flow.data.validator.RangeValidator;
 import com.vaadin.flow.data.validator.StringLengthValidator;
 import com.vaadin.flow.function.SerializablePredicate;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
@@ -56,7 +58,9 @@ class FundPoolLoadWindow extends CommonDialog {
 
     private final INtsUsageController usagesController;
     private final Binder<UsageBatch> binder = new Binder<>();
+    private final Div errorDiv = new Div();
 
+    private VerticalLayout marketLayout;
     private TextField usageBatchNameField;
     private LongField accountNumberField;
     private Binder.Binding<UsageBatch, Long> accountNumberBinding;
@@ -64,7 +68,6 @@ class FundPoolLoadWindow extends CommonDialog {
     private LocalDateWidget paymentDateWidget;
     private IntegerField fundPoolPeriodFromField;
     private IntegerField fundPoolPeriodToField;
-    private IntegerField marketValidationField;
     private Set<String> selectedMarkets;
     private BigDecimalField stmAmountField;
     private BigDecimalField nonStmAmountField;
@@ -113,7 +116,8 @@ class FundPoolLoadWindow extends CommonDialog {
      * @return {@code true} if all inputs are valid, {@code false} - otherwise
      */
     boolean isValid() {
-        return binder.validate().isOk();
+        boolean isValidBinder = binder.validate().isOk();
+        return areValidMarkets() && isValidBinder;
     }
 
     //TODO {vaadin23} replace with binder approach
@@ -268,25 +272,21 @@ class FundPoolLoadWindow extends CommonDialog {
         return fundPoolPeriodToField;
     }
 
-    private MarketFilterWidget initMarketFilterWidget() {
-        marketValidationField = new IntegerField(ForeignUi.getMessage("label.markets"));
-        binder.forField(marketValidationField)
-            .withValidator(value -> value > 0, ForeignUi.getMessage("message.market.empty"))
-            .bindReadOnly(usageBatch -> usageBatch.getNtsFields().getMarkets().size());
+    private VerticalLayout initMarketFilterWidget() {
         var marketFilterWidget = new MarketFilterWidget(usagesController::getMarkets);
-        VaadinUtils.addComponentStyle(marketFilterWidget, "market-filter-widget");
-        marketFilterWidget.addClassName(EMPTY_MARKET_STYLE);
         marketFilterWidget.addFilterSaveListener(event -> {
-            int size = event.getSelectedItemsIds().size();
-            marketValidationField.setValue(size);
-            if (0 < size) {
-                marketFilterWidget.removeClassName(EMPTY_MARKET_STYLE);
-            } else {
-                marketFilterWidget.addClassName(EMPTY_MARKET_STYLE);
-            }
             selectedMarkets = event.getSelectedItemsIds();
+            areValidMarkets();
         });
-        return marketFilterWidget;
+        VaadinUtils.addComponentStyle(marketFilterWidget, "market-filter-widget");
+        initErrorMarketDiv();
+        marketLayout = VaadinUtils.initCommonVerticalLayout(marketFilterWidget);
+        return marketLayout;
+    }
+
+    private void initErrorMarketDiv() {
+        errorDiv.getElement().setProperty("innerHTML", ForeignUi.getMessage("message.market.empty"));
+        errorDiv.setClassName(EMPTY_MARKET_STYLE);
     }
 
     private HorizontalLayout initAmountsLayout() {
@@ -345,7 +345,19 @@ class FundPoolLoadWindow extends CommonDialog {
     }
 
     private SerializablePredicate<BigDecimal> getFundPoolAmountValidator() {
-        return value -> 0 > BigDecimal.ZERO.compareTo(value)
-            || 0 > BigDecimal.ZERO.compareTo(stmAmountField.getValue());
+        return value -> 0 > BigDecimal.ZERO.compareTo(value) || 0 > BigDecimal.ZERO.compareTo(
+            stmAmountField.getValue());
+    }
+
+    private boolean areValidMarkets() {
+        boolean isSelected = CollectionUtils.isNotEmpty(selectedMarkets);
+        if (isSelected) {
+            marketLayout.remove(errorDiv);
+            marketLayout.removeClassName(EMPTY_MARKET_STYLE);
+        } else {
+            marketLayout.add(errorDiv);
+            marketLayout.addClassName(EMPTY_MARKET_STYLE);
+        }
+        return isSelected;
     }
 }
