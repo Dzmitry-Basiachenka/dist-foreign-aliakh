@@ -41,6 +41,7 @@ public class NtsUsageWidget extends CommonUsageWidget implements INtsUsageWidget
     private static final long serialVersionUID = 7962483141394161599L;
     private static final String BATCH_NAMES_LIST_SEPARATOR = "<br><li>";
     private static final String CLASS_BUTTON_MENUBAR = "button-menubar";
+    private static final String WIDTH_300 = "300px";
 
     private final INtsUsageController controller;
     private MenuBar fundPoolMenuBar;
@@ -70,44 +71,40 @@ public class NtsUsageWidget extends CommonUsageWidget implements INtsUsageWidget
 
     @Override
     protected void addGridColumns() {
-        //TODO {aliakh} fix column width
-        addColumn(UsageDto::getId, "table.column.detail_id", "detailId", "130px");
-        addColumn(UsageDto::getStatus, "table.column.usage_status", "status", "115px");
-        addColumn(UsageDto::getProductFamily, "table.column.product_family", "productFamily", "125px");
-        addColumn(UsageDto::getBatchName, "table.column.batch_name", "batchName", "145px");
-        addColumn(UsageDto::getRroAccountNumber, "table.column.rro_account_number", "rroAccountNumber", "125px");
-        addColumn(UsageDto::getRroName, "table.column.rro_account_name", "rroName", "135px");
-        addColumn(UsageDto::getRhAccountNumber, "table.column.rh_account_number", "rhAccountNumber", "115px");
-        addColumn(UsageDto::getRhName, "table.column.rh_account_name", "rhName", "300px");
-        addColumn(UsageDto::getWrWrkInst, "table.column.wr_wrk_inst", "wrWrkInst", "110px");
-        addColumn(UsageDto::getSystemTitle, "table.column.system_title", "systemTitle", "305px");
-        addColumn(UsageDto::getStandardNumber, "table.column.standard_number", "standardNumber", "140px");
-        addColumn(UsageDto::getStandardNumberType, "table.column.standard_number_type",
-            "standardNumberType", "155px");
+        addColumn(UsageDto::getId, "table.column.detail_id", "detailId", WIDTH_300);
+        addColumn(UsageDto::getStatus, "table.column.usage_status", "status", "180px");
+        addColumn(UsageDto::getProductFamily, "table.column.product_family", "productFamily", "160px");
+        addColumn(UsageDto::getBatchName, "table.column.batch_name", "batchName", "200px");
+        addColumn(UsageDto::getRroAccountNumber, "table.column.rro_account_number", "rroAccountNumber", "160px");
+        addColumn(UsageDto::getRroName, "table.column.rro_account_name", "rroName", WIDTH_300);
+        addColumn(UsageDto::getRhAccountNumber, "table.column.rh_account_number", "rhAccountNumber", "150px");
+        addColumn(UsageDto::getRhName, "table.column.rh_account_name", "rhName", WIDTH_300);
+        addColumn(UsageDto::getWrWrkInst, "table.column.wr_wrk_inst", "wrWrkInst", "140px");
+        addColumn(UsageDto::getSystemTitle, "table.column.system_title", "systemTitle", WIDTH_300);
+        addColumn(UsageDto::getStandardNumber, "table.column.standard_number", "standardNumber", "180px");
+        addColumn(UsageDto::getStandardNumberType, "table.column.standard_number_type", "standardNumberType", "225px");
         addColumn(usage -> UsageBatchUtils.getFiscalYear(usage.getFiscalYear()), "table.column.fiscal_year",
-            "fiscalYear", "105px");
+            "fiscalYear", "130px");
         addColumn(usage -> CommonDateUtils.format(usage.getPaymentDate(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT),
-            "table.column.payment_date", "paymentDate", "115px");
-        addColumn(UsageDto::getWorkTitle, "table.column.work_title", "workTitle", "305px");
+            "table.column.payment_date", "paymentDate", "145px");
+        addColumn(UsageDto::getWorkTitle, "table.column.work_title", "workTitle", WIDTH_300);
         addColumn(UsageDto::getArticle, "table.column.article", "article", "135px");
         addColumn(UsageDto::getPublisher, "table.column.publisher", "publisher", "135px");
         addColumn(usage ->
                 CommonDateUtils.format(usage.getPublicationDate(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT),
-            "table.column.publication_date", "publicationDate", "90px");
-        addColumn(UsageDto::getNumberOfCopies, "table.column.number_of_copies", "numberOfCopies", "140px");
-        addAmountColumn(UsageDto::getReportedValue, "table.column.reported_value", "reportedValue", "130px");
-        addAmountColumn(UsageDto::getGrossAmount, "table.column.gross_amount_in_usd", "grossAmount", "130px");
-        addColumn(UsageDto::getMarket, "table.column.market", "market", "125px");
-        addColumn(UsageDto::getMarketPeriodFrom, "table.column.market_period_from", "marketPeriodFrom", "150px");
-        addColumn(UsageDto::getMarketPeriodTo, "table.column.market_period_to", "marketPeriodTo", "145px");
-        addColumn(UsageDto::getAuthor, "table.column.author", "author", "300px");
+            "table.column.publication_date", "publicationDate", "110px");
+        addColumn(UsageDto::getNumberOfCopies, "table.column.number_of_copies", "numberOfCopies", "185px");
+        addAmountColumn(UsageDto::getReportedValue, "table.column.reported_value", "reportedValue", "170px");
+        addAmountColumn(UsageDto::getGrossAmount, "table.column.gross_amount_in_usd", "grossAmount", "170px");
+        addColumn(UsageDto::getMarket, "table.column.market", "market", "120px");
+        addColumn(UsageDto::getMarketPeriodFrom, "table.column.market_period_from", "marketPeriodFrom", "200px");
+        addColumn(UsageDto::getMarketPeriodTo, "table.column.market_period_to", "marketPeriodTo", "185px");
+        addColumn(UsageDto::getAuthor, "table.column.author", "author", WIDTH_300);
         addColumn(UsageDto::getComment, "table.column.comment", "comment", "200px");
     }
 
     @Override
     protected HorizontalLayout initButtonsLayout() {
-        var exportDownloader = new OnDemandFileDownloader(controller.getExportUsagesStreamSource().getSource());
-        exportDownloader.extend(Buttons.createButton(ForeignUi.getMessage("button.export")));
         initFundPoolMenuBar();
         initAdditionalFundsMenuBar();
         assignClassificationButton = Buttons.createButton(ForeignUi.getMessage("button.assign_classification"));
@@ -115,6 +112,8 @@ public class NtsUsageWidget extends CommonUsageWidget implements INtsUsageWidget
             event -> new NtsUsageBatchSelectorWidget(controller).showFilterWindow());
         addToScenarioButton = Buttons.createButton(ForeignUi.getMessage("button.add_to_scenario"));
         addToScenarioButton.addClickListener(event -> onAddToScenarioClicked(new CreateNtsScenarioWindow(controller)));
+        var exportDownloader = new OnDemandFileDownloader(controller.getExportUsagesStreamSource().getSource());
+        exportDownloader.extend(Buttons.createButton(ForeignUi.getMessage("button.export")));
         VaadinUtils.setButtonsAutoDisabled(assignClassificationButton, addToScenarioButton);
         var buttonsLayout = new HorizontalLayout(fundPoolMenuBar, additionalFundsMenuBar, assignClassificationButton,
             addToScenarioButton, exportDownloader);

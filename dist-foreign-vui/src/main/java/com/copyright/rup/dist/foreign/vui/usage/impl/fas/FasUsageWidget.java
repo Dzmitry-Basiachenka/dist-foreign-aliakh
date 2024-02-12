@@ -109,10 +109,6 @@ public class FasUsageWidget extends CommonUsageWidget implements IFasUsageWidget
         loadResearchedUsagesButton = Buttons.createButton(ForeignUi.getMessage("button.load_researched_details"));
         loadResearchedUsagesButton.addClickListener(event ->
             Windows.showModalWindow(new ResearchedUsagesUploadWindow(controller)));
-        addToScenarioButton = Buttons.createButton(ForeignUi.getMessage("button.add_to_scenario"));
-        addToScenarioButton.addClickListener(event -> onAddToScenarioClicked(new CreateScenarioWindow(controller)));
-        var exportDownloader = new OnDemandFileDownloader(controller.getExportUsagesStreamSource().getSource());
-        exportDownloader.extend(Buttons.createButton(ForeignUi.getMessage("button.export")));
         sendForResearchButton = Buttons.createButton(ForeignUi.getMessage("button.send_for_research"));
         var sendForResearchDownloader =
             new OnDemandFileDownloader(controller.getSendForResearchUsagesStreamSource().getSource());
@@ -134,6 +130,10 @@ public class FasUsageWidget extends CommonUsageWidget implements IFasUsageWidget
         });
         initUsageBatchMenuBar();
         initUpdateUsagesButton();
+        addToScenarioButton = Buttons.createButton(ForeignUi.getMessage("button.add_to_scenario"));
+        addToScenarioButton.addClickListener(event -> onAddToScenarioClicked(new CreateScenarioWindow(controller)));
+        var exportDownloader = new OnDemandFileDownloader(controller.getExportUsagesStreamSource().getSource());
+        exportDownloader.extend(Buttons.createButton(ForeignUi.getMessage("button.export")));
         VaadinUtils.setButtonsAutoDisabled(loadResearchedUsagesButton, updateUsagesButton, addToScenarioButton);
         var buttonsLayout = new HorizontalLayout(usageBatchMenuBar, sendForResearchDownloader,
             loadResearchedUsagesButton, updateUsagesButton, addToScenarioButton, exportDownloader);
