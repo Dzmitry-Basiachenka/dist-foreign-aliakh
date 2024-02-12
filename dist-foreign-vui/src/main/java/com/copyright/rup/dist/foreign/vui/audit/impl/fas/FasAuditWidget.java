@@ -52,7 +52,7 @@ public class FasAuditWidget extends CommonAuditWidget implements IFasAuditWidget
             .setHeader(ForeignUi.getMessage("table.column.detail_id"))
             .setSortable(true)
             .setSortProperty("detailId")
-            .setWidth("130px")
+            .setWidth(WIDTH_300)
             .setFlexGrow(0)
             .setResizable(true);
         addColumn(UsageDto::getStatus, "table.column.usage_status", "status", "145px");

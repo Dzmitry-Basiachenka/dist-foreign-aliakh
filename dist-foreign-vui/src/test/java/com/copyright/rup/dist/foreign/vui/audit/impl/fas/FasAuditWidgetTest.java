@@ -171,7 +171,7 @@ public class FasAuditWidgetTest {
         assertEquals(2, content.getComponentCount());
         verifyToolbar(content.getComponentAt(0));
         verifyGrid((Grid) content.getComponentAt(1), List.of(
-            Pair.of("Detail ID", "130px"),
+            Pair.of("Detail ID", WIDTH_300),
             Pair.of("Detail Status", "145px"),
             Pair.of("Product Family", WIDTH_165),
             Pair.of("Usage Batch Name", "180px"),
