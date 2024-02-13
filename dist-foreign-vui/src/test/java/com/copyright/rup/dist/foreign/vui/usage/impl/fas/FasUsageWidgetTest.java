@@ -38,10 +38,13 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+
+import com.vaadin.flow.component.ClickEvent;
+import com.vaadin.flow.component.ComponentEventListener;
+import com.vaadin.flow.component.ComponentUtil;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.contextmenu.MenuItem;
-import com.vaadin.flow.component.contextmenu.SubMenu;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.menubar.MenuBar;
@@ -178,22 +181,53 @@ public class FasUsageWidgetTest {
     }
 
     @Test
-    public void testSelectUsageBatchMenuItems() {
-        replay(controller);
-        var contentLayout = (HorizontalLayout) ((VerticalLayout) widget.getSecondaryComponent()).getComponentAt(0);
-        var toolbarLayout = (HorizontalLayout) contentLayout.getComponentAt(0);
-        MenuBar menuBar = (MenuBar) toolbarLayout.getComponentAt(0);
-        List<MenuItem> menuItems = menuBar.getItems();
+    public void testSelectLoadUsageBatchMenuItem() {
+        mockStatic(UI.class);
+        UI ui = createMock(UI.class);
+        expect(UI.getCurrent()).andReturn(ui).anyTimes();
+        expect(ui.getLocale()).andReturn(null).anyTimes();
+        mockStatic(Windows.class);
+        Windows.showModalWindow(anyObject(UsageBatchUploadWindow.class));
+        expectLastCall().once();
+        replay(UI.class, ui, controller, Windows.class);
+        var menuItems = getMenuBar(0).getItems();
         assertEquals(1, menuItems.size());
-        MenuItem menuItem = menuItems.get(0);
+        var menuItem = menuItems.get(0);
         assertEquals("Usage Batch", menuItem.getText());
-        SubMenu subMenu = menuItem.getSubMenu();
-        List<MenuItem> subMenuItems = subMenu.getItems();
+        var subMenuItems = menuItem.getSubMenu().getItems();
         assertEquals(2, subMenuItems.size());
-        assertEquals("Load", subMenuItems.get(0).getText());
-        assertEquals("View", subMenuItems.get(1).getText());
-        verify(controller);
+        var subMenuItem = subMenuItems.get(0);
+        assertEquals("Load", subMenuItem.getText());
+        clickMenuItem(subMenuItem);
+        verify(UI.class, ui, controller, Windows.class);
     }
+
+    @Test
+    public void testSelectViewUsageBatchMenuItem() {
+        mockStatic(UI.class);
+        UI ui = createMock(UI.class);
+        expect(UI.getCurrent()).andReturn(ui).anyTimes();
+        expect(ui.getLocale()).andReturn(null).anyTimes();
+        expect(controller.getSelectedProductFamily()).andReturn(FAS_PRODUCT_FAMILY).once();
+        expect(controller.getUsageBatches(FAS_PRODUCT_FAMILY)).andReturn(List.of()).once();
+        mockStatic(ForeignSecurityUtils.class);
+        expect(ForeignSecurityUtils.hasDeleteUsagePermission()).andReturn(true).once();
+        mockStatic(Windows.class);
+        Windows.showModalWindow(anyObject(ViewUsageBatchWindow.class));
+        expectLastCall().once();
+        replay(UI.class, ui, controller, ForeignSecurityUtils.class, Windows.class);
+        var menuItems = getMenuBar(0).getItems();
+        assertEquals(1, menuItems.size());
+        var menuItem = menuItems.get(0);
+        assertEquals("Usage Batch", menuItem.getText());
+        var subMenuItems = menuItem.getSubMenu().getItems();
+        assertEquals(2, subMenuItems.size());
+        var subMenuItem = subMenuItems.get(1);
+        assertEquals("View", subMenuItem.getText());
+        clickMenuItem(subMenuItem);
+        verify(UI.class, ui, controller, ForeignSecurityUtils.class, Windows.class);
+    }
+
 
     @Test
     public void testLoadResearchedUsagesButtonClickListener() {
@@ -350,6 +384,21 @@ public class FasUsageWidgetTest {
         verifyButton(layout.getComponentAt(3), "Update Usages", true, true);
         verifyButton(layout.getComponentAt(4), "Add To Scenario", true, true);
         verifyFileDownloader(layout.getComponentAt(5), "Export", true, true);
+    }
+
+    private MenuBar getMenuBar(int toolbarIdx) {
+        var secondaryComponent = (VerticalLayout) widget.getSecondaryComponent();
+        var contentLayout = (HorizontalLayout) secondaryComponent.getComponentAt(0);
+        var toolbarLayout = (HorizontalLayout) contentLayout.getComponentAt(0);
+        return (MenuBar) toolbarLayout.getComponentAt(toolbarIdx);
+    }
+
+    private void clickMenuItem(MenuItem menuItem) {
+        var eventListeners = (List<ComponentEventListener<ClickEvent<MenuItem>>>)
+            ComponentUtil.getListeners(menuItem, ClickEvent.class);
+        assertEquals(1, eventListeners.size());
+        var eventListener = eventListeners.get(0);
+        eventListener.onComponentEvent(createMock(ClickEvent.class));
     }
 
     private Button getAddToScenarioButton() {

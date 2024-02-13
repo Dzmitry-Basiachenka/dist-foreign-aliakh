@@ -4,6 +4,7 @@ import static com.copyright.rup.dist.foreign.vui.UiTestHelper.getDialogContent;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.getFooterLayout;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyButton;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyFileDownloader;
+import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyFooterItems;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyGrid;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyGridItems;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyWindow;
@@ -12,7 +13,6 @@ import static org.easymock.EasyMock.expect;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
@@ -24,15 +24,12 @@ import com.copyright.rup.dist.foreign.vui.usage.api.nts.IAdditionalFundBatchesFi
 import com.copyright.rup.dist.foreign.vui.usage.api.nts.INtsUsageController;
 
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.Html;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -99,18 +96,10 @@ public class AdditionalFundFilteredBatchesWindowTest {
             {"Usage Batch 2", "2,345,678.90"}
         };
         verifyGridItems(grid, buildUsageBatches(), expectedCells);
-        verifyFooter(grid);
-    }
-
-    private void verifyFooter(Grid<?> grid) {
-        var footerRow = grid.getFooterRows().get(0);
-        var totalCell = footerRow.getCell(grid.getColumnByKey("name"));
-        assertEquals("Total", totalCell.getText());
-        var amountCell = footerRow.getCell(grid.getColumnByKey("grossAmount"));
-        var label = (Label) amountCell.getComponent();
-        var html = (Html) label.getChildren().findFirst().orElseThrow();
-        assertTrue(StringUtils.contains(html.getInnerHtml(), "3,580,246.79"));
-        assertEquals("v-align-right", label.getClassName());
+        Object[][] expectedFooterColumns = {
+            {"grossAmount", "3,580,246.79", "v-align-right"}
+        };
+        verifyFooterItems(grid, 0, "Total", expectedFooterColumns);
     }
 
     private void verifyButtonsLayout(HorizontalLayout buttonsLayout) {

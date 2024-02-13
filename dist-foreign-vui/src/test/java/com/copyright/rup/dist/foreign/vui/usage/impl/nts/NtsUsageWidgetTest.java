@@ -32,6 +32,7 @@ import com.copyright.rup.dist.foreign.vui.usage.api.IFasNtsUsageFilterController
 import com.copyright.rup.dist.foreign.vui.usage.api.IFasNtsUsageFilterWidget;
 import com.copyright.rup.dist.foreign.vui.usage.api.nts.INtsUsageController;
 import com.copyright.rup.dist.foreign.vui.usage.impl.FasNtsUsageFilterWidget;
+import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.filter.FilterWindow;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.Windows;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -39,7 +40,10 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
+import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.ComponentEventListener;
+import com.vaadin.flow.component.ComponentUtil;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.contextmenu.MenuItem;
@@ -87,6 +91,7 @@ public class NtsUsageWidgetTest {
     private static final String NTS_PRODUCT_FAMILY = "NTS";
     private static final String NTS_SCENARIO_NAME_PREFIX = "NTS Distribution ";
     private static final Set<String> BATCHES_IDS = Set.of("e0f2287a-f7f4-437f-95ad-56bd1b1c51cf");
+    private static final String VIEW = "View";
     private static final String WIDTH_300 = "300px";
 
     private NtsUsageWidget widget;
@@ -119,9 +124,9 @@ public class NtsUsageWidgetTest {
     @Test
     public void testWidgetStructure() {
         assertThat(widget.getPrimaryComponent(), instanceOf(FasNtsUsageFilterWidget.class));
-        Component secondComponent = widget.getSecondaryComponent();
-        assertThat(secondComponent, instanceOf(VerticalLayout.class));
-        VerticalLayout contentLayout = (VerticalLayout) secondComponent;
+        var secondaryComponent = widget.getSecondaryComponent();
+        assertThat(secondaryComponent, instanceOf(VerticalLayout.class));
+        var contentLayout = (VerticalLayout) secondaryComponent;
         assertEquals(2, contentLayout.getComponentCount());
         var toolbarLayout = (HorizontalLayout) contentLayout.getComponentAt(0);
         verifyButtonsLayout((HorizontalLayout) toolbarLayout.getComponentAt(0));
@@ -174,13 +179,97 @@ public class NtsUsageWidgetTest {
     }
 
     @Test
-    public void testSelectFundPoolMenuItems() {
-        //TODO {aliakh} implement
+    public void testSelectLoadFundPoolMenuItem() {
+        mockStatic(UI.class);
+        UI ui = createMock(UI.class);
+        expect(UI.getCurrent()).andReturn(ui).anyTimes();
+        expect(ui.getLocale()).andReturn(null).anyTimes();
+        mockStatic(Windows.class);
+        Windows.showModalWindow(anyObject(FundPoolLoadWindow.class));
+        expectLastCall().once();
+        replay(UI.class, ui, controller, Windows.class);
+        var menuItems = getMenuBar(0).getItems();
+        assertEquals(1, menuItems.size());
+        var menuItem = menuItems.get(0);
+        assertEquals("Fund Pool", menuItem.getText());
+        var subMenuItems = menuItem.getSubMenu().getItems();
+        assertEquals(2, subMenuItems.size());
+        var subMenuItem = subMenuItems.get(0);
+        assertEquals("Load", subMenuItem.getText());
+        clickMenuItem(subMenuItem);
+        verify(UI.class, ui, controller, Windows.class);
     }
 
     @Test
-    public void testSelectAdditionalFundsMenuItems() {
-        //TODO {aliakh} implement
+    public void testSelectViewFundPoolMenuItem() {
+        mockStatic(UI.class);
+        UI ui = createMock(UI.class);
+        expect(UI.getCurrent()).andReturn(ui).anyTimes();
+        expect(ui.getLocale()).andReturn(null).anyTimes();
+        expect(controller.getSelectedProductFamily()).andReturn(NTS_PRODUCT_FAMILY).once();
+        expect(controller.getUsageBatches(NTS_PRODUCT_FAMILY)).andReturn(List.of()).once();
+        mockStatic(ForeignSecurityUtils.class);
+        expect(ForeignSecurityUtils.hasDeleteUsagePermission()).andReturn(true).once();
+        mockStatic(Windows.class);
+        Windows.showModalWindow(anyObject(ViewFundPoolWindow.class));
+        expectLastCall().once();
+        replay(UI.class, ui, controller, ForeignSecurityUtils.class, Windows.class);
+        var menuItems = getMenuBar(0).getItems();
+        assertEquals(1, menuItems.size());
+        var menuItem = menuItems.get(0);
+        assertEquals("Fund Pool", menuItem.getText());
+        var subMenuItems = menuItem.getSubMenu().getItems();
+        assertEquals(2, subMenuItems.size());
+        var subMenuItem = subMenuItems.get(1);
+        assertEquals(VIEW, subMenuItem.getText());
+        clickMenuItem(subMenuItem);
+        verify(UI.class, ui, controller, ForeignSecurityUtils.class, Windows.class);
+    }
+
+    @Test
+    public void testSelectCreateAdditionalFundsMenuItem() {
+        mockStatic(UI.class);
+        UI ui = createMock(UI.class);
+        expect(UI.getCurrent()).andReturn(ui).anyTimes();
+        expect(ui.getLocale()).andReturn(null).anyTimes();
+        expect(controller.getUsageBatchesForAdditionalFunds()).andReturn(List.of()).once();
+        mockStatic(Windows.class);
+        Windows.showModalWindow(anyObject(FilterWindow.class));
+        expectLastCall().once();
+        replay(UI.class, ui, controller, Windows.class);
+        var menuItems = getMenuBar(1).getItems();
+        assertEquals(1, menuItems.size());
+        var menuItem = menuItems.get(0);
+        assertEquals("Additional Funds", menuItem.getText());
+        var subMenuItems = menuItem.getSubMenu().getItems();
+        assertEquals(2, subMenuItems.size());
+        var subMenuItem = subMenuItems.get(0);
+        assertEquals("Create", subMenuItem.getText());
+        clickMenuItem(subMenuItem);
+        verify(UI.class, ui, controller, Windows.class);
+    }
+
+    @Test
+    public void testSelectViewAdditionalFundsMenuItem() {
+        mockStatic(UI.class);
+        UI ui = createMock(UI.class);
+        expect(UI.getCurrent()).andReturn(ui).anyTimes();
+        expect(ui.getLocale()).andReturn(null).anyTimes();
+        expect(controller.getAdditionalFunds()).andReturn(List.of()).once();
+        mockStatic(Windows.class);
+        Windows.showModalWindow(anyObject(ViewAdditionalFundsWindow.class));
+        expectLastCall().once();
+        replay(UI.class, ui, controller, Windows.class);
+        var menuItems = getMenuBar(1).getItems();
+        assertEquals(1, menuItems.size());
+        var menuItem = menuItems.get(0);
+        assertEquals("Additional Funds", menuItem.getText());
+        var subMenuItems = menuItem.getSubMenu().getItems();
+        assertEquals(2, subMenuItems.size());
+        var subMenuItem = subMenuItems.get(1);
+        assertEquals(VIEW, subMenuItem.getText());
+        clickMenuItem(subMenuItem);
+        verify(UI.class, ui, controller, Windows.class);
     }
 
     @Test
@@ -190,7 +279,7 @@ public class NtsUsageWidgetTest {
         UI ui = createMock(UI.class);
         expect(UI.getCurrent()).andReturn(ui).anyTimes();
         expect(ui.getLocale()).andReturn(null).anyTimes();
-        Grid grid = new Grid();
+        Grid<?> grid = new Grid<>();
         Whitebox.setInternalState(widget, grid);
         Button addToScenarioButton = getAddToScenarioButton();
         assertTrue(addToScenarioButton.isDisableOnClick());
@@ -219,7 +308,7 @@ public class NtsUsageWidgetTest {
         UI ui = createMock(UI.class);
         expect(UI.getCurrent()).andReturn(ui).anyTimes();
         expect(ui.getLocale()).andReturn(null).anyTimes();
-        Grid grid = new Grid();
+        Grid<?> grid = new Grid<>();
         Whitebox.setInternalState(widget, grid);
         Button addToScenarioButton = getAddToScenarioButton();
         assertTrue(addToScenarioButton.isDisableOnClick());
@@ -244,7 +333,7 @@ public class NtsUsageWidgetTest {
         UI ui = createMock(UI.class);
         expect(UI.getCurrent()).andReturn(ui).anyTimes();
         expect(ui.getLocale()).andReturn(null).anyTimes();
-        Grid grid = new Grid();
+        Grid<?> grid = new Grid<>();
         Whitebox.setInternalState(widget, grid);
         Button addToScenarioButton = getAddToScenarioButton();
         assertTrue(addToScenarioButton.isDisableOnClick());
@@ -270,7 +359,7 @@ public class NtsUsageWidgetTest {
         UI ui = createMock(UI.class);
         expect(UI.getCurrent()).andReturn(ui).anyTimes();
         expect(ui.getLocale()).andReturn(null).anyTimes();
-        Grid grid = new Grid();
+        Grid<?> grid = new Grid<>();
         Whitebox.setInternalState(widget, grid);
         Button addToScenarioButton = getAddToScenarioButton();
         assertTrue(addToScenarioButton.isDisableOnClick());
@@ -297,7 +386,7 @@ public class NtsUsageWidgetTest {
         UI ui = createMock(UI.class);
         expect(UI.getCurrent()).andReturn(ui).anyTimes();
         expect(ui.getLocale()).andReturn(null).anyTimes();
-        Grid grid = new Grid();
+        Grid<?> grid = new Grid<>();
         Whitebox.setInternalState(widget, grid);
         Button addToScenarioButton = getAddToScenarioButton();
         assertTrue(addToScenarioButton.isDisableOnClick());
@@ -327,7 +416,7 @@ public class NtsUsageWidgetTest {
         UI ui = createMock(UI.class);
         expect(UI.getCurrent()).andReturn(ui).anyTimes();
         expect(ui.getLocale()).andReturn(null).anyTimes();
-        Grid grid = new Grid();
+        Grid<?> grid = new Grid<>();
         Whitebox.setInternalState(widget, grid);
         Button addToScenarioButton = getAddToScenarioButton();
         assertTrue(addToScenarioButton.isDisableOnClick());
@@ -371,8 +460,8 @@ public class NtsUsageWidgetTest {
 
     private void verifyButtonsLayout(HorizontalLayout layout) {
         assertEquals(5, layout.getComponentCount());
-        verifyMenuBar(layout.getComponentAt(0), "Fund Pool", true, List.of("Load", "View"));
-        verifyMenuBar(layout.getComponentAt(1), "Additional Funds", true, List.of("Create", "View"));
+        verifyMenuBar(layout.getComponentAt(0), "Fund Pool", true, List.of("Load", VIEW));
+        verifyMenuBar(layout.getComponentAt(1), "Additional Funds", true, List.of("Create", VIEW));
         verifyButton(layout.getComponentAt(2), "Assign Classification", true, true);
         verifyButton(layout.getComponentAt(3), "Add To Scenario", true, true);
         verifyFileDownloader(layout.getComponentAt(4), "Export", true, true);
@@ -382,6 +471,21 @@ public class NtsUsageWidgetTest {
         expect(controller.getSelectedProductFamily()).andReturn(NTS_PRODUCT_FAMILY).once();
         expect(controller.scenarioExists(NTS_SCENARIO_NAME_PREFIX + DATE)).andReturn(true).once();
         expect(controller.getAdditionalFundsNotAttachedToScenario()).andReturn(List.of()).once();
+    }
+
+    private MenuBar getMenuBar(int toolbarIdx) {
+        var secondaryComponent = (VerticalLayout) widget.getSecondaryComponent();
+        var contentLayout = (HorizontalLayout) secondaryComponent.getComponentAt(0);
+        var toolbarLayout = (HorizontalLayout) contentLayout.getComponentAt(0);
+        return (MenuBar) toolbarLayout.getComponentAt(toolbarIdx);
+    }
+
+    private void clickMenuItem(MenuItem menuItem) {
+        var eventListeners = (List<ComponentEventListener<ClickEvent<MenuItem>>>)
+            ComponentUtil.getListeners(menuItem, ClickEvent.class);
+        assertEquals(1, eventListeners.size());
+        var eventListener = eventListeners.get(0);
+        eventListener.onComponentEvent(createMock(ClickEvent.class));
     }
 
     private Button getAddToScenarioButton() {
