@@ -44,7 +44,6 @@ public class NtsUsageWidget extends CommonUsageWidget implements INtsUsageWidget
     private static final String WIDTH_300 = "300px";
 
     private final INtsUsageController controller;
-    private MenuBar fundPoolMenuBar;
     private MenuItem loadFundPoolMenuItem;
     private MenuBar additionalFundsMenuBar;
     private Button assignClassificationButton;
@@ -105,13 +104,8 @@ public class NtsUsageWidget extends CommonUsageWidget implements INtsUsageWidget
 
     @Override
     protected HorizontalLayout initButtonsLayout() {
-        initFundPoolMenuBar();
-        initAdditionalFundsMenuBar();
-        initAssignClassificationButton();
-        initAddToScenarioButton();
-        VaadinUtils.setButtonsAutoDisabled(assignClassificationButton, addToScenarioButton);
-        var buttonsLayout = new HorizontalLayout(fundPoolMenuBar, additionalFundsMenuBar, assignClassificationButton,
-            addToScenarioButton, initExportDownloader());
+        var buttonsLayout = new HorizontalLayout(initFundPoolMenuBar(), initAdditionalFundsMenuBar(),
+            initAssignClassificationButton(), initAddToScenarioButton(), initExportDownloader());
         var toolbarLayout = new HorizontalLayout(buttonsLayout, getHideGridColumnsProvider().getMenuButton());
         toolbarLayout.setJustifyContentMode(JustifyContentMode.BETWEEN);
         toolbarLayout.setWidthFull();
@@ -145,8 +139,8 @@ public class NtsUsageWidget extends CommonUsageWidget implements INtsUsageWidget
         return message;
     }
 
-    private void initFundPoolMenuBar() {
-        fundPoolMenuBar = new MenuBar();
+    private MenuBar initFundPoolMenuBar() {
+        var fundPoolMenuBar = new MenuBar();
         var menuItem = fundPoolMenuBar.addItem(ForeignUi.getMessage("menu.caption.fund_pool"), null, null);
         loadFundPoolMenuItem = menuItem.getSubMenu().addItem(ForeignUi.getMessage("menu.item.load"),
             item -> Windows.showModalWindow(new FundPoolLoadWindow(controller)));
@@ -155,9 +149,10 @@ public class NtsUsageWidget extends CommonUsageWidget implements INtsUsageWidget
         VaadinUtils.addComponentStyle(menuItem, CLASS_BUTTON_MENUBAR);
         VaadinUtils.addComponentStyle(fundPoolMenuBar, "fund-pool-menu-bar");
         VaadinUtils.addComponentStyle(fundPoolMenuBar, CLASS_BUTTON_MENUBAR);
+        return fundPoolMenuBar;
     }
 
-    private void initAdditionalFundsMenuBar() {
+    private MenuBar initAdditionalFundsMenuBar() {
         additionalFundsMenuBar = new MenuBar();
         var menuItem =
             additionalFundsMenuBar.addItem(ForeignUi.getMessage("menu.caption.additional_funds"), null, null);
@@ -168,6 +163,7 @@ public class NtsUsageWidget extends CommonUsageWidget implements INtsUsageWidget
         VaadinUtils.addComponentStyle(menuItem, CLASS_BUTTON_MENUBAR);
         VaadinUtils.addComponentStyle(additionalFundsMenuBar, "additional-funds-menu-bar");
         VaadinUtils.addComponentStyle(additionalFundsMenuBar, CLASS_BUTTON_MENUBAR);
+        return additionalFundsMenuBar;
     }
 
     private String getClassificationValidationMessage(Set<String> batchesIds) {
@@ -196,15 +192,17 @@ public class NtsUsageWidget extends CommonUsageWidget implements INtsUsageWidget
         return message;
     }
 
-    private void initAssignClassificationButton() {
+    private Button initAssignClassificationButton() {
         assignClassificationButton = Buttons.createButton(ForeignUi.getMessage("button.assign_classification"));
         assignClassificationButton.addClickListener(
             event -> new NtsUsageBatchSelectorWidget(controller).showFilterWindow());
+        return assignClassificationButton;
     }
 
-    private void initAddToScenarioButton() {
+    private Button initAddToScenarioButton() {
         addToScenarioButton = Buttons.createButton(ForeignUi.getMessage("button.add_to_scenario"));
         addToScenarioButton.addClickListener(event -> onAddToScenarioClicked(new CreateNtsScenarioWindow(controller)));
+        return addToScenarioButton;
     }
 
     private OnDemandFileDownloader initExportDownloader() {

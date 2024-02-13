@@ -31,6 +31,7 @@ import com.copyright.rup.dist.foreign.vui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.vui.usage.api.IFasNtsUsageFilterController;
 import com.copyright.rup.dist.foreign.vui.usage.api.fas.IFasUsageController;
 import com.copyright.rup.dist.foreign.vui.usage.impl.FasNtsUsageFilterWidget;
+import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.downloader.OnDemandFileDownloader;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.Windows;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -327,6 +328,8 @@ public class FasUsageWidgetTest {
         mediator.setLoadUsageBatchMenuItem(anyObject(MenuItem.class));
         expectLastCall().once();
         mediator.setSendForResearchButton(anyObject(Button.class));
+        expectLastCall().once();
+        mediator.setSendForResearchDownloader(anyObject(OnDemandFileDownloader.class));
         expectLastCall().once();
         mediator.setLoadResearchedUsagesButton(anyObject(Button.class));
         expectLastCall().once();

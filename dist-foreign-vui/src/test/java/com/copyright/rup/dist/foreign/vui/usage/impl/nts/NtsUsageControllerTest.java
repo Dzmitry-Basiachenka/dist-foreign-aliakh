@@ -27,7 +27,6 @@ import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
-import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
@@ -82,11 +81,9 @@ import java.util.function.Supplier;
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({RupContextUtils.class, OffsetDateTime.class, ByteArrayStreamSource.class, StreamSource.class})
 @PowerMockIgnore({"com.sun.org.apache.xerces.*", "javax.xml.*", "org.xml.*", "javax.management.*"})
-//TODO {aliakh} adjust tests if necessary
 public class NtsUsageControllerTest {
 
     private static final OffsetDateTime DATE = OffsetDateTime.of(2019, 1, 2, 3, 4, 5, 6, ZoneOffset.ofHours(0));
-    private static final String RRO_ACCOUNT_NAME = "Account Name";
     private static final String USAGE_BATCH_ID = "47dbb3ec-ca8d-4feb-98dc-bce07bf9907e";
     private static final Long RRO_ACCOUNT_NUMBER = 12345678L;
     private static final String USER_NAME = "Test User Name";
@@ -158,12 +155,12 @@ public class NtsUsageControllerTest {
         expect(fasUsageService.getUsageDtos(eq(usageFilter), capture(pageableCapture), isNull()))
             .andReturn(List.of()).once();
         replay(filterWidget, usageService, fasUsageService, filterController);
-        List<UsageDto> result = controller.loadBeans(10, 150, null);
+        var usages = controller.loadBeans(10, 100, null);
         Pageable pageable = pageableCapture.getValue();
         assertEquals(10, pageable.getOffset());
-        assertEquals(150, pageable.getLimit());
-        assertNotNull(result);
-        assertEquals(0, result.size());
+        assertEquals(100, pageable.getLimit());
+        assertNotNull(usages);
+        assertEquals(0, usages.size());
         verify(filterWidget, usageService, fasUsageService, filterController);
     }
 
@@ -262,7 +259,7 @@ public class NtsUsageControllerTest {
 
     @Test
     public void testGetUsageBatchesForAdditionalFunds() {
-        List<UsageBatch> usageBatches = List.of();
+        var usageBatches = List.<UsageBatch>of();
         expect(usageBatchService.getUsageBatchesForNtsFundPool()).andReturn(usageBatches).once();
         replay(usageBatchService);
         assertSame(usageBatches, controller.getUsageBatchesForAdditionalFunds());
@@ -302,13 +299,13 @@ public class NtsUsageControllerTest {
 
     @Test
     public void testGetPreServiceSeeFunds() {
-        List<FundPool> fundPools = List.of(new FundPool());
+        var fundPools = List.of(new FundPool());
         IProductFamilyProvider productFamilyProvider = createMock(IProductFamilyProvider.class);
         Whitebox.setInternalState(controller, productFamilyProvider);
         expect(controller.getSelectedProductFamily()).andReturn("NTS").once();
         expect(fundPoolService.getFundPools("NTS")).andReturn(fundPools).once();
         replay(productFamilyProvider, fundPoolService);
-        assertEquals(fundPools, controller.getAdditionalFunds());
+        assertSame(fundPools, controller.getAdditionalFunds());
         verify(productFamilyProvider, fundPoolService);
     }
 
@@ -348,9 +345,7 @@ public class NtsUsageControllerTest {
     @Test
     public void testGetRightsholder() {
         var rightsholder = new Rightsholder();
-        rightsholder.setName(RRO_ACCOUNT_NAME);
         rightsholder.setAccountNumber(RRO_ACCOUNT_NUMBER);
-        rightsholder.setId("53686adc-1f20-473a-b57f-25ff23425372");
         expect(prmIntegrationService.getRightsholder(RRO_ACCOUNT_NUMBER)).andReturn(rightsholder).once();
         replay(prmIntegrationService);
         assertEquals(rightsholder, controller.getRightsholder(RRO_ACCOUNT_NUMBER));
@@ -367,14 +362,14 @@ public class NtsUsageControllerTest {
 
     @Test
     public void testOnScenarioCreated() {
-        INtsUsageWidget usageWidgetMock = createMock(INtsUsageWidget.class);
-        ScenarioCreateEvent eventMock = createMock(ScenarioCreateEvent.class);
-        Whitebox.setInternalState(controller, "widget", usageWidgetMock);
-        usageWidgetMock.fireWidgetEvent(eventMock);
+        INtsUsageWidget usageWidget = createMock(INtsUsageWidget.class);
+        ScenarioCreateEvent event = createMock(ScenarioCreateEvent.class);
+        Whitebox.setInternalState(controller, "widget", usageWidget);
+        usageWidget.fireWidgetEvent(event);
         expectLastCall().once();
-        replay(usageWidgetMock, eventMock);
-        controller.onScenarioCreated(eventMock);
-        verify(usageWidgetMock, eventMock);
+        replay(usageWidget, event);
+        controller.onScenarioCreated(event);
+        verify(usageWidget, event);
     }
 
     @Test
