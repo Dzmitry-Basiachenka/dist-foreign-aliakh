@@ -15,6 +15,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
+import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.vui.UiTestHelper;
 import com.copyright.rup.dist.foreign.vui.audit.api.fas.IFasAuditFilterController;
 import com.copyright.rup.dist.foreign.vui.audit.impl.CommonAuditFilterWidget;
@@ -31,6 +32,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -54,7 +56,7 @@ public class FasAuditFilterWidgetTest {
     public void setUp() {
         controller = createMock(IFasAuditFilterController.class);
         expect(controller.getProductFamily()).andReturn(FAS_PRODUCT_FAMILY).times(2);
-        widget = new FasAuditFilterWidget();
+        widget = new FasAuditFilterWidget(controller);
         widget.setController(controller);
         widget.setFilterSaveAction(() -> {});
     }
@@ -63,7 +65,7 @@ public class FasAuditFilterWidgetTest {
     public void testInit() {
         replay(controller);
         widget.init();
-        assertEquals(8, widget.getComponentCount());
+        assertEquals(9, widget.getComponentCount());
         assertEquals("audit-filter-widget", widget.getId().orElseThrow());
         assertEquals("audit-filter-widget", widget.getClassName());
         verifyFilters();
@@ -74,6 +76,9 @@ public class FasAuditFilterWidgetTest {
 
     @Test
     public void testApplyFilter() {
+        expect(controller.getRightsholdersByAccountNumbers(Set.of(ACCOUNT_NUMBER)))
+            .andReturn(List.of(buildRightsholder())).once();
+        expect(controller.getUsageBatches()).andReturn(List.of()).once();
         replay(controller);
         widget.init();
         var applyButton = getApplyButton();
@@ -106,6 +111,9 @@ public class FasAuditFilterWidgetTest {
     @Test
     public void testClearFilter() {
         expect(controller.getProductFamily()).andReturn(FAS_PRODUCT_FAMILY).once();
+        expect(controller.getRightsholdersByAccountNumbers(Set.of(ACCOUNT_NUMBER)))
+            .andReturn(List.of(buildRightsholder())).once();
+        expect(controller.getUsageBatches()).andReturn(List.of()).once();
         replay(controller);
         widget.init();
         var applyButton = getApplyButton();
@@ -172,5 +180,12 @@ public class FasAuditFilterWidgetTest {
 
     private Button getApplyButton() {
         return Whitebox.getInternalState(widget, "applyButton");
+    }
+
+    private Rightsholder buildRightsholder() {
+        var rightsholder = new Rightsholder();
+        rightsholder.setAccountNumber(ACCOUNT_NUMBER);
+        rightsholder.setName("CANADIAN CERAMIC SOCIETY");
+        return rightsholder;
     }
 }

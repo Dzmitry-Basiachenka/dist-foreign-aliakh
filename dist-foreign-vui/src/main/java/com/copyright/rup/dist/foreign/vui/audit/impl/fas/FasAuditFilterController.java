@@ -25,6 +25,6 @@ public class FasAuditFilterController extends CommonAuditFilterController implem
 
     @Override
     protected ICommonAuditFilterWidget instantiateWidget() {
-        return new FasAuditFilterWidget();
+        return new FasAuditFilterWidget(this);
     }
 }

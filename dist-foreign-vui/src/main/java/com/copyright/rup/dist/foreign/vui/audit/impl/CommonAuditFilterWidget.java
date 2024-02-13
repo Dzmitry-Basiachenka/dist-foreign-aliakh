@@ -43,6 +43,7 @@ public abstract class CommonAuditFilterWidget extends VerticalLayout implements 
     private AuditFilter appliedFilter;
     private Button applyButton;
     private IFilterSaveAction filterSaveAction;
+    private CommonAuditAppliedFilterWidget appliedFilterWidget;
 
     @SuppressWarnings("unchecked")
     @Override
@@ -50,9 +51,9 @@ public abstract class CommonAuditFilterWidget extends VerticalLayout implements 
         setMinWidth("150px");
         filter = buildAuditFilter();
         appliedFilter = buildAuditFilter();
-        //TODO: {dbasiachenka} add applied filter widget
+        appliedFilterWidget = getAppliedFilterWidget();
         initFields();
-        add(buildButtonsLayout(), buildAppliedFiltersHeaderLabel());
+        add(buildButtonsLayout(), buildAppliedFiltersHeaderLabel(), appliedFilterWidget);
         setSpacing(false);
         this.setWidthFull();
         VaadinUtils.setPadding(this, 0, 10, 0, 10);
@@ -73,6 +74,7 @@ public abstract class CommonAuditFilterWidget extends VerticalLayout implements 
     @Override
     public void applyFilter() {
         appliedFilter = new AuditFilter(filter);
+        appliedFilterWidget.refreshFilterPanel(appliedFilter);
         filterSaveAction.onFilterSaveAction();
         filterChanged();
     }
@@ -110,6 +112,11 @@ public abstract class CommonAuditFilterWidget extends VerticalLayout implements 
     protected void refreshFilter() {
         filter = buildAuditFilter();
     }
+
+    /**
+     * @return instantiated applied filter widget.
+     */
+    protected abstract CommonAuditAppliedFilterWidget getAppliedFilterWidget();
 
     /**
      * @return rightsholder filter {@link LazyRightsholderFilterWidget}.
