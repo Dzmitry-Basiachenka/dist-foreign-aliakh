@@ -156,7 +156,7 @@ public class ReportWidgetTest {
         expect(productFamilyProvider.getSelectedProductFamily()).andReturn(FdaConstants.FAS_PRODUCT_FAMILY).once();
         expect(reportController.getProductFamilyProvider()).andReturn(productFamilyProvider).once();
         replay(reportController, productFamilyProvider, widget, liabilitiesReportController);
-        selectMenuItem(3);
+        selectMenuItem(4);
         verify(reportController, productFamilyProvider, widget, liabilitiesReportController);
     }
 
@@ -174,8 +174,28 @@ public class ReportWidgetTest {
         expect(productFamilyProvider.getSelectedProductFamily()).andReturn(FdaConstants.FAS_PRODUCT_FAMILY).once();
         expect(reportController.getProductFamilyProvider()).andReturn(productFamilyProvider).once();
         replay(reportController, productFamilyProvider, widget, scenarioReportController);
-        selectMenuItem(4);
+        selectMenuItem(5);
         verify(reportController, productFamilyProvider, widget, scenarioReportController);
+    }
+
+    @Test
+    public void testFasServiceFeeTrueUpReportSelected() {
+        FasServiceFeeTrueUpReportController fasServiceFeeTrueUpReportController =
+            createMock(FasServiceFeeTrueUpReportController.class);
+        expect(reportController.getFasServiceFeeTrueUpReportController())
+            .andReturn(fasServiceFeeTrueUpReportController).once();
+        FasServiceFeeTrueUpReportWidget widget = createMock(FasServiceFeeTrueUpReportWidget.class);
+        expect(fasServiceFeeTrueUpReportController.initWidget()).andReturn(widget).once();
+        widget.setHeaderTitle("Service Fee True-up Report");
+        expectLastCall().once();
+        Windows.showModalWindow(widget);
+        expectLastCall().once();
+        IProductFamilyProvider productFamilyProvider = createMock(IProductFamilyProvider.class);
+        expect(reportController.getProductFamilyProvider()).andReturn(productFamilyProvider).once();
+        expect(productFamilyProvider.getSelectedProductFamily()).andReturn(FdaConstants.FAS_PRODUCT_FAMILY).once();
+        replay(reportController, productFamilyProvider, widget, fasServiceFeeTrueUpReportController);
+        selectMenuItem(3);
+        verify(reportController, productFamilyProvider, widget, fasServiceFeeTrueUpReportController);
     }
 
     @Test
@@ -208,11 +228,12 @@ public class ReportWidgetTest {
     private void assertReportsMenuFasFas2() {
         assertEquals(1, CollectionUtils.size(reportWidget.getItems()));
         List<MenuItem> menuItems = reportWidget.getItems().get(0).getSubMenu().getItems();
-        assertEquals(5, CollectionUtils.size(menuItems));
+        assertEquals(6, CollectionUtils.size(menuItems));
         assertEquals("FAS Batch Summary Report", menuItems.get(0).getText());
         assertEquals("Summary of Market Report", menuItems.get(1).getText());
         assertEquals("Research Status Report", menuItems.get(2).getText());
-        assertEquals(UNDISTRIBUTED_LIABILITIES_REPORT, menuItems.get(3).getText());
-        assertEquals("Ownership Adjustment Report", menuItems.get(4).getText());
+        assertEquals("Service Fee True-up Report", menuItems.get(3).getText());
+        assertEquals(UNDISTRIBUTED_LIABILITIES_REPORT, menuItems.get(4).getText());
+        assertEquals("Ownership Adjustment Report", menuItems.get(5).getText());
     }
 }
