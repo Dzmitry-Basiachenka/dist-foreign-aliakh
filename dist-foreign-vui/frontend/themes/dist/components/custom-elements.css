@@ -2,14 +2,6 @@
 * Styles for widgets.
 */
 
-.global-product-family-select vaadin-select-value-button {
-    color: var(--tab-text-color);
-}
-
-.global-product-family-select vaadin-select-value-button vaadin-select-item {
-    font-weight: bold;
-}
-
 .global-product-family-select-layout {
     align-items: center;
 }
@@ -17,6 +9,7 @@
 .global-product-family-select-layout label {
     font-weight: bold;
     color: var(--tab-text-color);
+    padding-right: 10px;
 }
 
 .scenarios-metadata div {
@@ -69,9 +62,9 @@
 }
 
 .empty-item-filter-widget {
-   color: var(--lumo-error-text-color);
+    color: var(--lumo-error-text-color);
 }
 
 .empty-item-filter-widget div {
-   font-size: var(--lumo-font-size-xs);
+    font-size: var(--lumo-font-size-xs);
 }
