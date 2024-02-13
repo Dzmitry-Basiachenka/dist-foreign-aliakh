@@ -46,6 +46,11 @@ public interface IReportController extends IController<IReportWidget> {
     IStreamSource getResearchStatusReportStreamSource();
 
     /**
+     * @return service fee true-up report controller for FAS/FAS2.
+     */
+    IFasServiceFeeTrueUpReportController getFasServiceFeeTrueUpReportController();
+
+    /**
      * @return ownership adjustment report controller.
      */
     ICommonScenarioReportController getOwnershipAdjustmentReportController();

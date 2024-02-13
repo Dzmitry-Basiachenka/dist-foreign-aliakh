@@ -5,6 +5,7 @@ import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.vui.common.ByteArrayStreamSource;
 import com.copyright.rup.dist.foreign.vui.main.api.IProductFamilyProvider;
 import com.copyright.rup.dist.foreign.vui.report.api.ICommonScenarioReportController;
+import com.copyright.rup.dist.foreign.vui.report.api.IFasServiceFeeTrueUpReportController;
 import com.copyright.rup.dist.foreign.vui.report.api.IReportController;
 import com.copyright.rup.dist.foreign.vui.report.api.IReportWidget;
 import com.copyright.rup.dist.foreign.vui.report.api.ISummaryMarketReportController;
@@ -40,6 +41,8 @@ public class ReportController extends CommonController<IReportWidget> implements
     @Autowired
     private ISummaryMarketReportController summaryMarketReportController;
     @Autowired
+    private IFasServiceFeeTrueUpReportController fasServiceFeeTrueUpReportController;
+    @Autowired
     private IProductFamilyProvider productFamilyProvider;
     @Autowired
     private IReportService reportService;
@@ -74,6 +77,11 @@ public class ReportController extends CommonController<IReportWidget> implements
     public IStreamSource getResearchStatusReportStreamSource() {
         return new ByteArrayStreamSource("research_status_report_",
             outputStream -> reportService.writeResearchStatusCsvReport(outputStream));
+    }
+
+    @Override
+    public IFasServiceFeeTrueUpReportController getFasServiceFeeTrueUpReportController() {
+        return fasServiceFeeTrueUpReportController;
     }
 
     @Override
