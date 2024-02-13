@@ -65,7 +65,6 @@ class AdditionalFundFilteredBatchesWindow extends CommonDialog implements IAddit
         super.setModalWindowProperties("batches-filter-window", true);
     }
 
-    //TODO {aliakh} fix column width
     private Grid<UsageBatch> initGrid(List<UsageBatch> usageBatches, BigDecimal grossAmount) {
         Grid<UsageBatch> grid = new Grid<>();
         grid.setItems(usageBatches);
@@ -76,6 +75,8 @@ class AdditionalFundFilteredBatchesWindow extends CommonDialog implements IAddit
             .setSortProperty(COLUMN_NAME)
             .setComparator((SerializableComparator<UsageBatch>) (batch1, batch2) ->
                 batch1.getName().compareToIgnoreCase(batch2.getName()))
+            .setSortable(true)
+            .setResizable(true)
             .setKey(COLUMN_NAME)
             .setId(COLUMN_NAME);
         grid.addColumn(usageBatch -> CurrencyUtils.format(usageBatch.getGrossAmount(), null))
@@ -84,7 +85,10 @@ class AdditionalFundFilteredBatchesWindow extends CommonDialog implements IAddit
             .setComparator((SerializableComparator<UsageBatch>) (batch1, batch2) ->
                 batch1.getGrossAmount().compareTo(batch2.getGrossAmount()))
             .setClassNameGenerator(item -> "v-align-right")
-            .setWidth("200px")
+            .setFlexGrow(0)
+            .setWidth("280px")
+            .setSortable(true)
+            .setResizable(true)
             .setKey(COLUMN_GROSS_AMOUNT)
             .setId(COLUMN_GROSS_AMOUNT);
         grid.appendFooterRow();

@@ -88,7 +88,7 @@ public class AdditionalFundFilteredBatchesWindowTest {
         var grid = (Grid) rootLayout.getComponentAt(0);
         verifyGrid(grid, List.of(
             Pair.of("Usage Batch Name", null),
-            Pair.of("Gross NTS Withdrawn Amount", "200px")
+            Pair.of("Gross NTS Withdrawn Amount", "280px")
         ));
         Object[][] expectedCells = {
             {"Usage Batch 1", "1,234,567.89"},
