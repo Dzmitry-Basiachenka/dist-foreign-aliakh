@@ -12,8 +12,10 @@ import com.copyright.rup.dist.foreign.vui.vaadin.common.util.CurrencyUtils;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.util.VaadinUtils;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.CommonDialog;
 
+import com.vaadin.flow.component.Html;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.Grid.SelectionMode;
+import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.function.SerializableComparator;
@@ -96,17 +98,18 @@ class AdditionalFundFilteredBatchesWindow extends CommonDialog implements IAddit
         var totalCell = footerRow.getCell(grid.getColumnByKey(COLUMN_NAME));
         totalCell.setText(ForeignUi.getMessage("table.column.total"));
         var amountCell = footerRow.getCell(grid.getColumnByKey(COLUMN_GROSS_AMOUNT));
-        amountCell.setText(CurrencyUtils.format(grossAmount, null));
-        //TODO {aliakh} amountCell.setStyleName("v-align-right");
+        var label = new Label();
+        label.addClassName("v-align-right");
+        label.add(new Html(CurrencyUtils.formatAsHtml(grossAmount, null)));
+        amountCell.setComponent(label);
         VaadinUtils.setGridProperties(grid, "batches-filter-grid");
         return grid;
     }
 
     private HorizontalLayout initButtonsLayout(List<UsageBatch> usageBatches, BigDecimal grossAmount) {
-        var exportButton = Buttons.createButton("Export");
         var exportDownloader = new OnDemandFileDownloader(
             controller.getAdditionalFundBatchesStreamSource(usageBatches, grossAmount).getSource());
-        exportDownloader.extend(exportButton);
+        exportDownloader.extend(Buttons.createButton("Export"));
         var continueButton = Buttons.createButton("Continue");
         continueButton.addClickListener(event ->
             Windows.showModalWindow(new CreateAdditionalFundWindow(controller,

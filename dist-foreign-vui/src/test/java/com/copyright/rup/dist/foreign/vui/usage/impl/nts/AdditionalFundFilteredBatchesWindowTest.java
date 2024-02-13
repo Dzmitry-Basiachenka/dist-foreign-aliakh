@@ -12,6 +12,7 @@ import static org.easymock.EasyMock.expect;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
@@ -23,12 +24,15 @@ import com.copyright.rup.dist.foreign.vui.usage.api.nts.IAdditionalFundBatchesFi
 import com.copyright.rup.dist.foreign.vui.usage.api.nts.INtsUsageController;
 
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.Html;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -103,7 +107,10 @@ public class AdditionalFundFilteredBatchesWindowTest {
         var totalCell = footerRow.getCell(grid.getColumnByKey("name"));
         assertEquals("Total", totalCell.getText());
         var amountCell = footerRow.getCell(grid.getColumnByKey("grossAmount"));
-        assertEquals("3,580,246.79", amountCell.getText());
+        var label = (Label) amountCell.getComponent();
+        var html = (Html) label.getChildren().findFirst().orElseThrow();
+        assertTrue(StringUtils.contains(html.getInnerHtml(), "3,580,246.79"));
+        assertEquals("v-align-right", label.getClassName());
     }
 
     private void verifyButtonsLayout(HorizontalLayout buttonsLayout) {
