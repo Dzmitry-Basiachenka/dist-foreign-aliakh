@@ -23,8 +23,8 @@ import static org.powermock.api.easymock.PowerMock.verify;
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
-import com.copyright.rup.dist.foreign.vui.audit.api.ICommonAuditFilterController;
 import com.copyright.rup.dist.foreign.vui.audit.api.fas.IFasAuditController;
+import com.copyright.rup.dist.foreign.vui.audit.api.fas.IFasAuditFilterController;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.Windows;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -91,8 +91,8 @@ public class FasAuditWidgetTest {
         controller = createMock(IFasAuditController.class);
         widget = new FasAuditWidget(controller);
         widget.setController(controller);
-        ICommonAuditFilterController filterController = createMock(ICommonAuditFilterController.class);
-        var filterWidget = new FasAuditFilterWidget();
+        IFasAuditFilterController filterController = createMock(IFasAuditFilterController.class);
+        var filterWidget = new FasAuditFilterWidget(filterController);
         filterWidget.setController(filterController);
         expect(controller.getAuditFilterController()).andReturn(filterController).once();
         expect(filterController.initWidget()).andReturn(filterWidget).once();
