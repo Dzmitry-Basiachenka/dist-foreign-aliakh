@@ -44,6 +44,7 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.BigDecimalField;
@@ -63,6 +64,8 @@ import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Collections;
+import java.util.Set;
 
 /**
  * Verifies {@link FundPoolLoadWindow}.
@@ -94,10 +97,7 @@ public class FundPoolLoadWindowTest {
     private static final String ZERO_AMOUNT = "0.00";
     private static final String BINDER = "binder";
     private static final String USAGE_BATCH_NAME_FIELD = "usageBatchNameField";
-    private static final String ACCOUNT_NAME_FIELD = "accountNameField";
-    private static final String PAYMENT_DATE_WIDGET = "paymentDateWidget";
     private static final String PERIOD_FROM_FIELD = "fundPoolPeriodFromField";
-    private static final String MARKET_VALIDATION_FIELD = "marketValidationField";
     private static final String PERIOD_TO_FIELD = "fundPoolPeriodToField";
     private static final String STM_FIELD = "stmAmountField";
     private static final String NON_STM_FIELD = "nonStmAmountField";
@@ -106,13 +106,9 @@ public class FundPoolLoadWindowTest {
     private static final String ACCOUNT_NUMBER_FIELD = "accountNumberField";
     private static final String EXCLUDE_STM_CHECKBOX = "excludeStmCheckbox";
     private static final Long ACCOUNT_NUMBER = 1000001863L;
-    private static final String SPACES_STRING = "   ";
     private static final String EMPTY_FIELD_MESSAGE = "Field value should be specified";
     private static final String INVALID_PERIOD_MESSAGE = "Field value should be in range from 1950 to 2099";
-    private static final String INVALID_MARKET_MESSAGE = "Please select at least one market";
     private static final String INVALID_NUMBER_LENGTH_MESSAGE = "Field value should not exceed 10 digits";
-    private static final String INVALID_AMOUNT_MESSAGE =
-        "Field value should be positive number and should not exceed 10 digits";
     private static final String WIDTH_CALC = "100%";
 
     private FundPoolLoadWindow window;
@@ -150,7 +146,7 @@ public class FundPoolLoadWindowTest {
         Binder<?> binder = Whitebox.getInternalState(window, BINDER);
         TextField usageBatchNameField = Whitebox.getInternalState(window, USAGE_BATCH_NAME_FIELD);
         assertFieldValidationMessage(usageBatchNameField, StringUtils.EMPTY, binder, EMPTY_FIELD_MESSAGE, false);
-        assertFieldValidationMessage(usageBatchNameField, SPACES_STRING, binder, EMPTY_FIELD_MESSAGE, false);
+        assertFieldValidationMessage(usageBatchNameField, "   ", binder, EMPTY_FIELD_MESSAGE, false);
         assertFieldValidationMessage(usageBatchNameField, StringUtils.repeat('a', 51), binder,
             "Field value should not exceed 50 characters", false);
         assertFieldValidationMessage(usageBatchNameField, USAGE_BATCH_NAME, binder,
@@ -199,15 +195,17 @@ public class FundPoolLoadWindowTest {
     }
 
     @Test
-    public void testMarketValidationFieldValidation() {
+    public void testMarketValidationField() {
         replay(controller);
         window = new FundPoolLoadWindow(controller);
-        Binder<?> binder = Whitebox.getInternalState(window, BINDER);
-        IntegerField marketValidationField = Whitebox.getInternalState(window, MARKET_VALIDATION_FIELD);
-        assertFieldValidationMessage(marketValidationField, 1000, binder, null, true);
-        assertFieldValidationMessage(marketValidationField, 99999999, binder, null, true);
-        assertFieldValidationMessage(marketValidationField, 0, binder, INVALID_MARKET_MESSAGE, false);
-        assertFieldValidationMessage(marketValidationField, -1000, binder, INVALID_MARKET_MESSAGE, false);
+        VerticalLayout marketsLayout = getMarketsLayout();
+        assertEquals(1, marketsLayout.getComponentCount());
+        validateSelectedMarket(marketsLayout, Set.of("Bus"), 1);
+        validateSelectedMarket(marketsLayout, null, 2);
+        validateSelectedMarket(marketsLayout, Collections.emptySet(), 2);
+        Component errorDiv = marketsLayout.getComponentAt(1);
+        assertThat(errorDiv, instanceOf(Div.class));
+        assertEquals("Please select at least one market", errorDiv.getElement().getProperty("innerHTML"));
         verify(controller);
     }
 
@@ -227,12 +225,13 @@ public class FundPoolLoadWindowTest {
         expect(controller.usageBatchExists(USAGE_BATCH_NAME)).andReturn(false).anyTimes();
         replay(controller);
         window = new FundPoolLoadWindow(controller);
+        populateSelectedMarkets(Set.of("Bus"));
         assertFalse(window.isValid());
         setTextFieldValue(window, USAGE_BATCH_NAME_FIELD, USAGE_BATCH_NAME);
         assertFalse(window.isValid());
         setLongFieldValue(window, ACCOUNT_NUMBER_FIELD, ACCOUNT_NUMBER);
         assertFalse(window.isValid());
-        TextField accountNameField = Whitebox.getInternalState(window, ACCOUNT_NAME_FIELD);
+        TextField accountNameField = Whitebox.getInternalState(window, "accountNameField");
         accountNameField.setReadOnly(false);
         accountNameField.setValue("Account Name");
         accountNameField.setReadOnly(true);
@@ -246,8 +245,6 @@ public class FundPoolLoadWindowTest {
         setBigDecimalFieldValue(window, NON_STM_FIELD, AMOUNT);
         setBigDecimalFieldValue(window, STM_MIN_FIELD, MIN_AMOUNT);
         setBigDecimalFieldValue(window, NON_STM_MIN_FIELD, MIN_AMOUNT);
-        assertFalse(window.isValid());
-        setIntegerFieldValue(window, MARKET_VALIDATION_FIELD, 2);
         assertTrue(window.isValid());
         setBigDecimalFieldValue(window, STM_FIELD, AMOUNT);
         setBigDecimalFieldValue(window, NON_STM_FIELD, ZERO_AMOUNT);
@@ -316,10 +313,9 @@ public class FundPoolLoadWindowTest {
     private void initUploadComponents() {
         setTextFieldValue(window, USAGE_BATCH_NAME_FIELD, USAGE_BATCH_NAME);
         setLongFieldValue(window, ACCOUNT_NUMBER_FIELD, ACCOUNT_NUMBER);
-        ((LocalDateWidget) Whitebox.getInternalState(window, PAYMENT_DATE_WIDGET)).setValue(PAYMENT_DATE);
+        ((LocalDateWidget) Whitebox.getInternalState(window, "paymentDateWidget")).setValue(PAYMENT_DATE);
         setIntegerFieldValue(window, PERIOD_FROM_FIELD, PERIOD_FROM);
         setIntegerFieldValue(window, PERIOD_TO_FIELD, PERIOD_TO);
-        setIntegerFieldValue(window, MARKET_VALIDATION_FIELD, 2);
         setBigDecimalFieldValue(window, STM_FIELD, AMOUNT);
         setBigDecimalFieldValue(window, NON_STM_FIELD, AMOUNT);
         setBigDecimalFieldValue(window, STM_MIN_FIELD, MIN_AMOUNT);
@@ -342,7 +338,7 @@ public class FundPoolLoadWindowTest {
         assertFieldValidationMessage(amountField, new BigDecimal("9999999999"), binder, null, true);
         assertFieldValidationMessage(amountField, new BigDecimal("9999999999.99"), binder, null, true);
         assertFieldValidationMessage(amountField, new BigDecimal("10000000000.00"), binder,
-            INVALID_AMOUNT_MESSAGE, false);
+            "Field value should be positive number and should not exceed 10 digits", false);
     }
 
     private void verifyRootLayout(Component component) {
@@ -352,7 +348,7 @@ public class FundPoolLoadWindowTest {
         verifyUsageBatchNameComponent(rootLayout.getComponentAt(0));
         verifyRightsholdersComponents(rootLayout.getComponentAt(1));
         verifyDateComponents(rootLayout.getComponentAt(2));
-        verifyItemsFilterWidget(rootLayout.getComponentAt(3), "Markets");
+        verifyItemsFilterWidget(getMarketsLayout().getComponentAt(0), "Markets");
         verifyAmountsComponent(rootLayout.getComponentAt(4));
         verifyMinAmountsComponent(rootLayout.getComponentAt(5));
         verifyExcludeStmCheckbox(rootLayout.getComponentAt(6));
@@ -454,5 +450,21 @@ public class FundPoolLoadWindowTest {
         assertEquals("Exclude STM RHs", checkbox.getLabel());
         assertEquals("exclude-stm-rhs-checkbox", checkbox.getClassName());
         assertFalse(checkbox.getValue());
+    }
+
+    private VerticalLayout getMarketsLayout() {
+        VerticalLayout rootLayout = (VerticalLayout) getDialogContent(window);
+        return (VerticalLayout) rootLayout.getComponentAt(3);
+    }
+
+    private void validateSelectedMarket(VerticalLayout marketsLayout, Set<String> markets,
+                                        int expectedComponentsCount) {
+        populateSelectedMarkets(markets);
+        window.isValid();
+        assertEquals(expectedComponentsCount, marketsLayout.getComponentCount());
+    }
+
+    private void populateSelectedMarkets(Set<String> markets) {
+        Whitebox.setInternalState(window, "selectedMarkets", markets);
     }
 }

@@ -42,7 +42,7 @@
     border: 1px solid #dcdcdc;
 }
 
-.scenarios-tables-panel-split-layout::part(splitter)  {
+.scenarios-tables-panel-split-layout::part(splitter) {
     background-color: unset;
 }
 
@@ -66,4 +66,12 @@
     background-image: url("./themes/dist/img/empty_table.png");
     background-repeat: no-repeat;
     background-position: center center;
+}
+
+.empty-item-filter-widget {
+   color: var(--lumo-error-text-color);
+}
+
+.empty-item-filter-widget div {
+   font-size: var(--lumo-font-size-xs);
 }
