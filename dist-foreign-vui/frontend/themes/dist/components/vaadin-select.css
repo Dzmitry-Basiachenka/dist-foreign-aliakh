@@ -3,20 +3,19 @@
 * @see https://vaadin.com/docs/latest/styling/custom-theme/style-scopes
 */
 
-:host(.global-product-family-select) [part='input-field'] {
-   height: 20px;
-   font-weight: bold;
-   background: var(--tabsheet-background-color);
-}
-
 [part='input-field'] {
-   height: 28px;
+    height: 28px;
 }
 
 [class$='container'] {
     justify-content: center;
 }
 
+:host(.global-product-family-select) [part='input-field'] {
+    height: 20px;
+    background: var(--tab-text-color);
+}
+
 :host(.global-product-family-select) [part$='button']::before {
-  color: var(--tab-text-color);
+    color: var(--lumo-body-text-color);
 }
