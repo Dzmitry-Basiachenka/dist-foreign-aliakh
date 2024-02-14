@@ -199,6 +199,26 @@ public class ReportWidgetTest {
     }
 
     @Test
+    public void testTaxNotificationReportSelected() {
+        TaxNotificationReportController taxNotificationReportController =
+            createMock(TaxNotificationReportController.class);
+        expect(reportController.getTaxNotificationReportController())
+            .andReturn(taxNotificationReportController).once();
+        TaxNotificationReportWidget widget = createMock(TaxNotificationReportWidget.class);
+        expect(taxNotificationReportController.initWidget()).andReturn(widget).once();
+        widget.setHeaderTitle("Tax Notification Report");
+        expectLastCall().once();
+        Windows.showModalWindow(widget);
+        expectLastCall().once();
+        IProductFamilyProvider productFamilyProvider = createMock(IProductFamilyProvider.class);
+        expect(reportController.getProductFamilyProvider()).andReturn(productFamilyProvider).once();
+        expect(productFamilyProvider.getSelectedProductFamily()).andReturn(FdaConstants.FAS_PRODUCT_FAMILY).once();
+        replay(reportController, productFamilyProvider, widget, taxNotificationReportController);
+        selectMenuItem(6);
+        verify(reportController, productFamilyProvider, widget, taxNotificationReportController);
+    }
+
+    @Test
     public void testOpenReportWindow() throws Exception {
         mockStatic(Dialog.class);
         IController controller = createMock(IController.class);
@@ -228,12 +248,13 @@ public class ReportWidgetTest {
     private void assertReportsMenuFasFas2() {
         assertEquals(1, CollectionUtils.size(reportWidget.getItems()));
         List<MenuItem> menuItems = reportWidget.getItems().get(0).getSubMenu().getItems();
-        assertEquals(6, CollectionUtils.size(menuItems));
+        assertEquals(7, CollectionUtils.size(menuItems));
         assertEquals("FAS Batch Summary Report", menuItems.get(0).getText());
         assertEquals("Summary of Market Report", menuItems.get(1).getText());
         assertEquals("Research Status Report", menuItems.get(2).getText());
         assertEquals("Service Fee True-up Report", menuItems.get(3).getText());
         assertEquals(UNDISTRIBUTED_LIABILITIES_REPORT, menuItems.get(4).getText());
         assertEquals("Ownership Adjustment Report", menuItems.get(5).getText());
+        assertEquals("Tax Notification Report", menuItems.get(6).getText());
     }
 }

@@ -54,4 +54,9 @@ public interface IReportController extends IController<IReportWidget> {
      * @return ownership adjustment report controller.
      */
     ICommonScenarioReportController getOwnershipAdjustmentReportController();
+
+    /**
+     * @return tax notification report controller.
+     */
+    ITaxNotificationReportController getTaxNotificationReportController();
 }

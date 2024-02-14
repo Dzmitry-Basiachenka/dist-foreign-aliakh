@@ -25,6 +25,7 @@ public class FasReportMenuBuilder implements IReportMenuBuilder {
         var summaryMarketReport = ForeignUi.getMessage("menu.report.market_summary");
         var serviceFeeTrueUpReport = ForeignUi.getMessage("menu.report.service_fee_true_up");
         var ownershipAdjustmentReport = ForeignUi.getMessage("menu.report.ownership_adjustment_report");
+        var taxNotificationReport = ForeignUi.getMessage("menu.report.tax_notification_report");
         subMenu.addItem(ForeignUi.getMessage("menu.report.batch_summary"), menuItem ->
             widget.generateReport(controller.getFasBatchSummaryReportStreamSource()));
         subMenu.addItem(summaryMarketReport, menuItem ->
@@ -38,6 +39,7 @@ public class FasReportMenuBuilder implements IReportMenuBuilder {
                 controller.getUndistributedLiabilitiesReportController()));
         subMenu.addItem(ownershipAdjustmentReport, menuItem ->
             widget.openReportWindow(ownershipAdjustmentReport, controller.getOwnershipAdjustmentReportController()));
-        //TODO {vaadin23} will implement later
+        subMenu.addItem(taxNotificationReport, menuItem ->
+            widget.openReportWindow(taxNotificationReport, controller.getTaxNotificationReportController()));
     }
 }
