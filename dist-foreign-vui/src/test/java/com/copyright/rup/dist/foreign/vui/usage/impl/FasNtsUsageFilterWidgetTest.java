@@ -60,11 +60,11 @@ public class FasNtsUsageFilterWidgetTest {
     private static final Integer FISCAL_YEAR = 2017;
     private static final Long ACCOUNT_NUMBER = 12345678L;
     private static final String FAS_PRODUCT_FAMILY = "FAS";
-    private static final Set<UsageStatusEnum> FAS_FAS2_STATUSES = Set.of(UsageStatusEnum.NEW,
-        UsageStatusEnum.WORK_NOT_FOUND, UsageStatusEnum.WORK_RESEARCH, UsageStatusEnum.WORK_FOUND,
-        UsageStatusEnum.RH_NOT_FOUND, UsageStatusEnum.RH_FOUND, UsageStatusEnum.SENT_FOR_RA, UsageStatusEnum.ELIGIBLE,
-        UsageStatusEnum.NTS_WITHDRAWN, UsageStatusEnum.TO_BE_DISTRIBUTED);
-    private static final Set<UsageStatusEnum> NTS_STATUSES = Set.of(UsageStatusEnum.WORK_FOUND,
+    private static final List<UsageStatusEnum> FAS_FAS2_STATUSES = List.of(UsageStatusEnum.NEW,
+        UsageStatusEnum.WORK_NOT_FOUND, UsageStatusEnum.WORK_RESEARCH, UsageStatusEnum.NTS_WITHDRAWN,
+        UsageStatusEnum.TO_BE_DISTRIBUTED, UsageStatusEnum.WORK_FOUND, UsageStatusEnum.RH_NOT_FOUND,
+        UsageStatusEnum.RH_FOUND, UsageStatusEnum.SENT_FOR_RA, UsageStatusEnum.ELIGIBLE);
+    private static final List<UsageStatusEnum> NTS_STATUSES = List.of(UsageStatusEnum.WORK_FOUND,
         UsageStatusEnum.RH_FOUND, UsageStatusEnum.UNCLASSIFIED, UsageStatusEnum.ELIGIBLE,
         UsageStatusEnum.SCENARIO_EXCLUDED);
 
@@ -76,7 +76,8 @@ public class FasNtsUsageFilterWidgetTest {
         controller = createMock(IFasNtsUsageFilterController.class);
         widget = new FasNtsUsageFilterWidget(controller);
         widget.setController(controller);
-        widget.setFilterSaveAction(() -> {});
+        widget.setFilterSaveAction(() -> {
+        });
         expect(controller.getFiscalYears()).andReturn(List.of(FISCAL_YEAR)).once();
     }
 
