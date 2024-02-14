@@ -42,12 +42,8 @@
     border: 1px solid #dcdcdc;
 }
 
-.scenarios-tables-panel-split-layout::part(splitter)  {
+.scenarios-tables-panel-split-layout::part(splitter) {
     background-color: unset;
-}
-
-.usage-batch-upload-widget-layout {
-    padding: 0 20px 0 20px
 }
 
 .label-scenario-empty-message {
@@ -64,4 +60,18 @@
     height: 28px;
     padding: 0px;
     font-size: 11px;
+}
+
+.empty-audit-grid {
+    background-image: url("./themes/dist/img/empty_table.png");
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+.empty-item-filter-widget {
+   color: var(--lumo-error-text-color);
+}
+
+.empty-item-filter-widget div {
+   font-size: var(--lumo-font-size-xs);
 }

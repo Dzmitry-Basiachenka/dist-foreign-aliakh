@@ -19,7 +19,7 @@ import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.api.IMediator;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.contextmenu.MenuItem;
 import com.vaadin.flow.component.menubar.MenuBar;
-import com.vaadin.flow.component.orderedlayout.FlexComponent;
+import com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 
 import java.util.Objects;
@@ -39,9 +39,9 @@ public class FasUsageWidget extends CommonUsageWidget implements IFasUsageWidget
     private static final String WIDTH_300 = "300px";
 
     private final IFasUsageController controller;
-    private MenuBar usageBatchMenuBar;
     private MenuItem loadUsageBatchMenuItem;
     private Button sendForResearchButton;
+    private OnDemandFileDownloader sendForResearchDownloader;
     private Button loadResearchedUsagesButton;
     private Button updateUsagesButton;
     private Button addToScenarioButton;
@@ -57,9 +57,10 @@ public class FasUsageWidget extends CommonUsageWidget implements IFasUsageWidget
 
     @Override
     public IMediator initMediator() {
-        FasUsageMediator mediator = new FasUsageMediator();
+        var mediator = new FasUsageMediator();
         mediator.setLoadUsageBatchMenuItem(loadUsageBatchMenuItem);
         mediator.setSendForResearchButton(sendForResearchButton);
+        mediator.setSendForResearchDownloader(sendForResearchDownloader);
         mediator.setLoadResearchedUsagesButton(loadResearchedUsagesButton);
         mediator.setUpdateUsagesButton(updateUsagesButton);
         mediator.setAddToScenarioButton(addToScenarioButton);
@@ -106,15 +107,38 @@ public class FasUsageWidget extends CommonUsageWidget implements IFasUsageWidget
 
     @Override
     protected HorizontalLayout initButtonsLayout() {
-        loadResearchedUsagesButton = Buttons.createButton(ForeignUi.getMessage("button.load_researched_details"));
-        loadResearchedUsagesButton.addClickListener(event ->
-            Windows.showModalWindow(new ResearchedUsagesUploadWindow(controller)));
-        addToScenarioButton = Buttons.createButton(ForeignUi.getMessage("button.add_to_scenario"));
-        addToScenarioButton.addClickListener(event -> onAddToScenarioClicked(new CreateScenarioWindow(controller)));
-        var exportDownloader = new OnDemandFileDownloader(controller.getExportUsagesStreamSource().getSource());
-        exportDownloader.extend(Buttons.createButton(ForeignUi.getMessage("button.export")));
+        var buttonsLayout = new HorizontalLayout(initUsageBatchMenuBar(), initSendForResearchDownloader(),
+            initLoadResearchedUsagesButton(), initUpdateUsagesButton(), initAddToScenarioButton(),
+            initExportDownloader());
+        var toolbarLayout = new HorizontalLayout(buttonsLayout, getHideGridColumnsProvider().getMenuButton());
+        toolbarLayout.setJustifyContentMode(JustifyContentMode.BETWEEN);
+        toolbarLayout.setWidthFull();
+        VaadinUtils.setPadding(toolbarLayout, 1, 3, 1, 3);
+        return toolbarLayout;
+    }
+
+    @Override
+    protected String getProductFamilySpecificScenarioValidationMessage() {
+        return null;
+    }
+
+    private MenuBar initUsageBatchMenuBar() {
+        var usageBatchMenuBar = new MenuBar();
+        var menuItem =
+            usageBatchMenuBar.addItem(ForeignUi.getMessage("menu.caption.usage_batch"), null, null);
+        loadUsageBatchMenuItem = menuItem.getSubMenu().addItem(ForeignUi.getMessage("menu.item.load"),
+            item -> Windows.showModalWindow(new UsageBatchUploadWindow(controller)));
+        menuItem.getSubMenu().addItem(ForeignUi.getMessage("menu.item.view"),
+            item -> Windows.showModalWindow(new ViewUsageBatchWindow(controller)));
+        VaadinUtils.addComponentStyle(menuItem, "button-menubar");
+        VaadinUtils.addComponentStyle(usageBatchMenuBar, "usage-batch-menu-bar");
+        VaadinUtils.addComponentStyle(usageBatchMenuBar, "button-menubar");
+        return usageBatchMenuBar;
+    }
+
+    private OnDemandFileDownloader initSendForResearchDownloader() {
         sendForResearchButton = Buttons.createButton(ForeignUi.getMessage("button.send_for_research"));
-        var sendForResearchDownloader =
+        sendForResearchDownloader =
             new OnDemandFileDownloader(controller.getSendForResearchUsagesStreamSource().getSource());
         sendForResearchDownloader.extend(sendForResearchButton);
         sendForResearchButton.addClickListener(clickEvent -> {
@@ -132,37 +156,17 @@ public class FasUsageWidget extends CommonUsageWidget implements IFasUsageWidget
                 Windows.showModalWindow(window);
             }
         });
-        initUsageBatchMenuBar();
-        initUpdateUsagesButton();
-        VaadinUtils.setButtonsAutoDisabled(loadResearchedUsagesButton, updateUsagesButton, addToScenarioButton);
-        var buttonsLayout = new HorizontalLayout(usageBatchMenuBar, sendForResearchDownloader,
-            loadResearchedUsagesButton, updateUsagesButton, addToScenarioButton, exportDownloader);
-        var toolbarLayout = new HorizontalLayout(buttonsLayout, getHideGridColumnsProvider().getMenuButton());
-        toolbarLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.BETWEEN);
-        toolbarLayout.setWidthFull();
-        VaadinUtils.setPadding(toolbarLayout, 1, 3, 1, 3);
-        return toolbarLayout;
+        return sendForResearchDownloader;
     }
 
-    @Override
-    protected String getProductFamilySpecificScenarioValidationMessage() {
-        return null;
+    private Button initLoadResearchedUsagesButton() {
+        loadResearchedUsagesButton = Buttons.createButton(ForeignUi.getMessage("button.load_researched_details"));
+        loadResearchedUsagesButton.addClickListener(event ->
+            Windows.showModalWindow(new ResearchedUsagesUploadWindow(controller)));
+        return loadResearchedUsagesButton;
     }
 
-    private void initUsageBatchMenuBar() {
-        usageBatchMenuBar = new MenuBar();
-        MenuItem menuItem =
-            usageBatchMenuBar.addItem(ForeignUi.getMessage("menu.caption.usage_batch"), null, null);
-        loadUsageBatchMenuItem = menuItem.getSubMenu().addItem(ForeignUi.getMessage("menu.item.load"),
-            item -> Windows.showModalWindow(new UsageBatchUploadWindow(controller)));
-        menuItem.getSubMenu().addItem(ForeignUi.getMessage("menu.item.view"),
-            item -> Windows.showModalWindow(new ViewUsageBatchWindow(controller)));
-        VaadinUtils.addComponentStyle(menuItem, "button-menubar");
-        VaadinUtils.addComponentStyle(usageBatchMenuBar, "usage-batch-menu-bar");
-        VaadinUtils.addComponentStyle(usageBatchMenuBar, "button-menubar");
-    }
-
-    private void initUpdateUsagesButton() {
+    private Button initUpdateUsagesButton() {
         updateUsagesButton = Buttons.createButton(ForeignUi.getMessage("button.update_usages"));
         updateUsagesButton.addClickListener(event -> {
             if (0 != controller.getBeansCount()) {
@@ -171,5 +175,18 @@ public class FasUsageWidget extends CommonUsageWidget implements IFasUsageWidget
                 Windows.showNotificationWindow(ForeignUi.getMessage("message.error.update.empty_usages"));
             }
         });
+        return updateUsagesButton;
+    }
+
+    private Button initAddToScenarioButton() {
+        addToScenarioButton = Buttons.createButton(ForeignUi.getMessage("button.add_to_scenario"));
+        addToScenarioButton.addClickListener(event -> onAddToScenarioClicked(new CreateScenarioWindow(controller)));
+        return addToScenarioButton;
+    }
+
+    private OnDemandFileDownloader initExportDownloader() {
+        var exportDownloader = new OnDemandFileDownloader(controller.getExportUsagesStreamSource().getSource());
+        exportDownloader.extend(Buttons.createButton(ForeignUi.getMessage("button.export")));
+        return exportDownloader;
     }
 }

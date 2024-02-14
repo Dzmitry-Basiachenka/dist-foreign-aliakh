@@ -10,8 +10,7 @@ import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.common.util.UsageBatchUtils;
 import com.copyright.rup.dist.foreign.service.impl.csv.UsageCsvProcessor;
 import com.copyright.rup.dist.foreign.vui.common.validator.AmountRangeValidator;
-import com.copyright.rup.dist.foreign.vui.common.validator.RequiredBigDecimalValidator;
-import com.copyright.rup.dist.foreign.vui.common.validator.RequiredLongValidator;
+import com.copyright.rup.dist.foreign.vui.common.validator.RequiredNumberValidator;
 import com.copyright.rup.dist.foreign.vui.common.validator.RequiredValidator;
 import com.copyright.rup.dist.foreign.vui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.vui.usage.api.fas.IFasUsageController;
@@ -143,7 +142,7 @@ public class UsageBatchUploadWindow extends CommonDialog {
         var rootLayout = VaadinUtils.initCommonVerticalLayout();
         rootLayout.add(initUsageBatchNameField(), initUploadField(), initRightsholderLayout(),
             initPaymentDataLayout(), initGrossAmountLayout());
-        VaadinUtils.addComponentStyle(rootLayout, "usage-batch-upload-widget-layout");
+        VaadinUtils.setPadding(rootLayout, 10, 10, 0, 10);
         return rootLayout;
     }
 
@@ -176,12 +175,11 @@ public class UsageBatchUploadWindow extends CommonDialog {
     }
 
     private HorizontalLayout initButtonsLayout() {
-        var closeButton = Buttons.createCloseButton(this);
         var uploadButton = Buttons.createButton(ForeignUi.getMessage("button.upload"));
         uploadButton.addClickListener(event -> onUploadClicked());
         VaadinUtils.setButtonsAutoDisabled(uploadButton);
         var buttonsLayout = new HorizontalLayout();
-        buttonsLayout.add(uploadButton, closeButton);
+        buttonsLayout.add(uploadButton, Buttons.createCloseButton(this));
         return buttonsLayout;
     }
 
@@ -203,7 +201,7 @@ public class UsageBatchUploadWindow extends CommonDialog {
             productFamilyField.setValue(StringUtils.EMPTY);
         });
         accountNumberBinding = binder.forField(accountNumberField)
-            .withValidator(new RequiredLongValidator())
+            .withValidator(new RequiredNumberValidator())
             .withValidator(
                 new LongRangeValidator(ForeignUi.getMessage("field.error.number_length", 10), 1L, 9999999999L))
             .bind(usageBatch -> usageBatch.getRro().getAccountNumber(),
@@ -292,7 +290,7 @@ public class UsageBatchUploadWindow extends CommonDialog {
         grossAmountField.setPrefixComponent(VaadinIcon.DOLLAR.create());
         grossAmountField.setRequiredIndicatorVisible(true);
         binder.forField(grossAmountField)
-            .withValidator(new RequiredBigDecimalValidator())
+            .withValidator(new RequiredNumberValidator())
             .withValidator(AmountRangeValidator.amountValidator())
             .bind(UsageBatch::getGrossAmount, UsageBatch::setGrossAmount);
         VaadinUtils.setMaxComponentsWidth(grossAmountField);

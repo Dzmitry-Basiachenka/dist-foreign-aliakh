@@ -14,8 +14,10 @@ import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.LongField;
+import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.downloader.OnDemandFileDownloader;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.upload.UploadField;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.Windows;
+import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.SearchWidget;
 
 import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.component.Component;
@@ -39,6 +41,8 @@ import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.Scroller;
 import com.vaadin.flow.component.textfield.BigDecimalField;
+import com.vaadin.flow.component.textfield.IntegerField;
+import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.BindingValidationStatus;
@@ -243,8 +247,9 @@ public final class UiTestHelper {
     /**
      * Verifies buttons in horizontal layout. Captions should be conveying by ordering.
      *
-     * @param component horizontal layout
-     * @param captions  headers of buttons.
+     * @param component        horizontal layout
+     * @param isDisableOnClick {@code true} if button is disabled on click, {@code false} otherwise
+     * @param captions         headers of buttons.
      */
     public static void verifyButtonsLayout(Component component, boolean isDisableOnClick, String... captions) {
         assertThat(component, instanceOf(HorizontalLayout.class));
@@ -277,6 +282,64 @@ public final class UiTestHelper {
     }
 
     /**
+     * Verifies button.
+     *
+     * @param component        button component
+     * @param text             button text
+     * @param isVisible        {@code true} if button is visible, {@code false} otherwise
+     * @param isDisableOnClick {@code true} if button is disabled on click, {@code false} otherwise
+     * @return instance of {@link Button}
+     */
+    public static Button verifyButton(Component component, String text, boolean isVisible, boolean isDisableOnClick) {
+        assertThat(component, instanceOf(Button.class));
+        Button button = (Button) component;
+        assertEquals(text, button.getText());
+        assertEquals(isVisible, button.isVisible());
+        assertEquals(isDisableOnClick, button.isDisableOnClick());
+        return button;
+    }
+
+    /**
+     * Verifies file downloader.
+     *
+     * @param component        button component
+     * @param text             button text
+     * @param isVisible        {@code true} if button is visible, {@code false} otherwise
+     * @param isDisableOnClick {@code true} if button is disabled on click, {@code false} otherwise
+     * @return instance of {@link Button}
+     */
+    public static Button verifyFileDownloader(Component component, String text, boolean isVisible,
+                                              boolean isDisableOnClick) {
+        assertThat(component, instanceOf(OnDemandFileDownloader.class));
+        return verifyButton(component.getChildren().findFirst().orElseThrow(), text, isVisible, isDisableOnClick);
+    }
+
+    /**
+     * Verifies search widget.
+     *
+     * @param component   search widget component
+     * @param placeholder placeholder
+     * @param width       width
+     */
+    public static void verifySearchWidget(Component component, String placeholder, String width) {
+        assertThat(component, instanceOf(SearchWidget.class));
+        var searchWidget = (SearchWidget) component;
+        var textField = Whitebox.getInternalState(searchWidget, TextField.class);
+        assertEquals(placeholder, textField.getPlaceholder());
+        verifyWidth(textField, width, Unit.PERCENTAGE);
+    }
+
+    /**
+     * Verifies search widget.
+     *
+     * @param component   search widget component
+     * @param placeholder placeholder
+     */
+    public static void verifySearchWidget(Component component, String placeholder) {
+        verifySearchWidget(component, placeholder, "70%");
+    }
+
+    /**
      * Sets text field value.
      *
      * @param dialog instance of {@link Dialog}
@@ -305,8 +368,30 @@ public final class UiTestHelper {
      * @param field  name of the text field
      * @param value  value
      */
-    public static void setLongFieldValue(Dialog dialog, String field, String value) {
-        ((LongField) Whitebox.getInternalState(dialog, field)).setValue(Long.valueOf(value));
+    public static void setLongFieldValue(Dialog dialog, String field, Long value) {
+        ((LongField) Whitebox.getInternalState(dialog, field)).setValue(value);
+    }
+
+    /**
+     * Sets Integer field value.
+     *
+     * @param dialog instance of {@link Dialog}
+     * @param field  name of the text field
+     * @param value  value
+     */
+    public static void setIntegerFieldValue(Dialog dialog, String field, Integer value) {
+        ((IntegerField) Whitebox.getInternalState(dialog, field)).setValue(value);
+    }
+
+    /**
+     * Sets text area value.
+     *
+     * @param dialog instance of {@link Dialog}
+     * @param field  name of the text area
+     * @param value  value
+     */
+    public static void setTextAreaValue(Dialog dialog, String field, String value) {
+        ((TextArea) Whitebox.getInternalState(dialog, field)).setValue(value);
     }
 
     /**
@@ -366,6 +451,23 @@ public final class UiTestHelper {
     public static LongField verifyLongField(Component component, String label, String width, String styleName) {
         assertThat(component, instanceOf(LongField.class));
         LongField field = (LongField) component;
+        assertEquals(label, field.getLabel());
+        assertEquals(width, field.getWidth());
+        assertEquals(styleName, field.getClassName());
+        return field;
+    }
+
+    /**
+     * Verifies Integer field.
+     *
+     * @param component UI component
+     * @param label     label of field
+     * @param width     width
+     * @return of {@link LongField}
+     */
+    public static IntegerField verifyIntegerField(Component component, String label, String width, String styleName) {
+        assertThat(component, instanceOf(IntegerField.class));
+        IntegerField field = (IntegerField) component;
         assertEquals(label, field.getLabel());
         assertEquals(width, field.getWidth());
         assertEquals(styleName, field.getClassName());

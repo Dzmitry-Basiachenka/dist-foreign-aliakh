@@ -10,6 +10,7 @@ import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.foreign.vui.vaadin.common.security.SecurityUtils;
 
+import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.downloader.OnDemandFileDownloader;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.contextmenu.MenuItem;
 import com.vaadin.flow.component.menubar.MenuBar;
@@ -37,6 +38,7 @@ public class FasUsageMediatorTest {
     private MenuBar usageBatchMenuBar;
     private MenuItem loadUsageBatchMenuItem;
     private Button sendForResearchButton;
+    private OnDemandFileDownloader sendForResearchDownloader;
     private Button loadResearchedUsagesButton;
     private Button updateUsagesButton;
     private Button addToScenarioButton;
@@ -50,12 +52,14 @@ public class FasUsageMediatorTest {
             .getSubMenu()
             .addItem(StringUtils.EMPTY, null);
         sendForResearchButton = new Button();
+        sendForResearchDownloader = new OnDemandFileDownloader();
         loadResearchedUsagesButton = new Button();
         updateUsagesButton = new Button();
         addToScenarioButton = new Button();
         mediator = new FasUsageMediator();
         mediator.setLoadUsageBatchMenuItem(loadUsageBatchMenuItem);
         mediator.setSendForResearchButton(sendForResearchButton);
+        mediator.setSendForResearchDownloader(sendForResearchDownloader);
         mediator.setLoadResearchedUsagesButton(loadResearchedUsagesButton);
         mediator.setUpdateUsagesButton(updateUsagesButton);
         mediator.setAddToScenarioButton(addToScenarioButton);
@@ -69,6 +73,7 @@ public class FasUsageMediatorTest {
         assertTrue(usageBatchMenuBar.isVisible());
         assertFalse(loadUsageBatchMenuItem.isVisible());
         assertFalse(sendForResearchButton.isVisible());
+        assertFalse(sendForResearchDownloader.isVisible());
         assertFalse(loadResearchedUsagesButton.isVisible());
         assertFalse(updateUsagesButton.isVisible());
         assertFalse(addToScenarioButton.isVisible());
@@ -83,6 +88,7 @@ public class FasUsageMediatorTest {
         assertTrue(usageBatchMenuBar.isVisible());
         assertFalse(loadUsageBatchMenuItem.isVisible());
         assertFalse(sendForResearchButton.isVisible());
+        assertFalse(sendForResearchDownloader.isVisible());
         assertFalse(loadResearchedUsagesButton.isVisible());
         assertFalse(updateUsagesButton.isVisible());
         assertFalse(addToScenarioButton.isVisible());
@@ -97,6 +103,7 @@ public class FasUsageMediatorTest {
         assertTrue(usageBatchMenuBar.isVisible());
         assertTrue(loadUsageBatchMenuItem.isVisible());
         assertTrue(sendForResearchButton.isVisible());
+        assertTrue(sendForResearchDownloader.isVisible());
         assertTrue(loadResearchedUsagesButton.isVisible());
         assertTrue(updateUsagesButton.isVisible());
         assertTrue(addToScenarioButton.isVisible());

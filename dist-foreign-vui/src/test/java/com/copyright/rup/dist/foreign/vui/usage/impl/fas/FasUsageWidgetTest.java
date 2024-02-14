@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.vui.usage.impl.fas;
 
+import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyButton;
+import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyFileDownloader;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyGrid;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyGridItems;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyMenuBar;
@@ -29,16 +31,20 @@ import com.copyright.rup.dist.foreign.vui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.vui.usage.api.IFasNtsUsageFilterController;
 import com.copyright.rup.dist.foreign.vui.usage.api.fas.IFasUsageController;
 import com.copyright.rup.dist.foreign.vui.usage.impl.FasNtsUsageFilterWidget;
+import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.downloader.OnDemandFileDownloader;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.Windows;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+
+import com.vaadin.flow.component.ClickEvent;
+import com.vaadin.flow.component.ComponentEventListener;
+import com.vaadin.flow.component.ComponentUtil;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.contextmenu.MenuItem;
-import com.vaadin.flow.component.contextmenu.SubMenu;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.menubar.MenuBar;
@@ -83,7 +89,6 @@ public class FasUsageWidgetTest {
     private static final String FAS_PRODUCT_FAMILY = "FAS";
     private static final String FAS_SCENARIO_NAME_PREFIX = "FAS Distribution ";
     private static final int RECORD_THRESHOLD = 10000;
-    private static final String ADD_TO_SCENARIO_BUTTON = "addToScenarioButton";
     private static final String WIDTH_300 = "300px";
 
     private FasUsageWidget widget;
@@ -157,7 +162,7 @@ public class FasUsageWidgetTest {
 
     @Test
     public void testGridValues() {
-        List<UsageDto> usages = loadExpectedUsageDtos("usage_dto_05f0385c.json");
+        var usages = loadExpectedUsageDtos("usage_dto_05f0385c.json");
         expect(controller.loadBeans(0, Integer.MAX_VALUE, List.of())).andReturn(usages).once();
         expect(controller.getBeansCount()).andReturn(1).once();
         replay(controller);
@@ -176,22 +181,53 @@ public class FasUsageWidgetTest {
     }
 
     @Test
-    public void testSelectUsageBatchMenuItems() {
-        replay(controller);
-        var contentLayout = (HorizontalLayout) ((VerticalLayout) widget.getSecondaryComponent()).getComponentAt(0);
-        var toolbarLayout = (HorizontalLayout) contentLayout.getComponentAt(0);
-        MenuBar menuBar = (MenuBar) toolbarLayout.getComponentAt(0);
-        List<MenuItem> menuItems = menuBar.getItems();
+    public void testSelectLoadUsageBatchMenuItem() {
+        mockStatic(UI.class);
+        UI ui = createMock(UI.class);
+        expect(UI.getCurrent()).andReturn(ui).anyTimes();
+        expect(ui.getLocale()).andReturn(null).anyTimes();
+        mockStatic(Windows.class);
+        Windows.showModalWindow(anyObject(UsageBatchUploadWindow.class));
+        expectLastCall().once();
+        replay(UI.class, ui, controller, Windows.class);
+        var menuItems = getMenuBar(0).getItems();
         assertEquals(1, menuItems.size());
-        MenuItem menuItem = menuItems.get(0);
+        var menuItem = menuItems.get(0);
         assertEquals("Usage Batch", menuItem.getText());
-        SubMenu subMenu = menuItem.getSubMenu();
-        List<MenuItem> subMenuItems = subMenu.getItems();
+        var subMenuItems = menuItem.getSubMenu().getItems();
         assertEquals(2, subMenuItems.size());
-        assertEquals("Load", subMenuItems.get(0).getText());
-        assertEquals("View", subMenuItems.get(1).getText());
-        verify(controller);
+        var subMenuItem = subMenuItems.get(0);
+        assertEquals("Load", subMenuItem.getText());
+        clickMenuItem(subMenuItem);
+        verify(UI.class, ui, controller, Windows.class);
     }
+
+    @Test
+    public void testSelectViewUsageBatchMenuItem() {
+        mockStatic(UI.class);
+        UI ui = createMock(UI.class);
+        expect(UI.getCurrent()).andReturn(ui).anyTimes();
+        expect(ui.getLocale()).andReturn(null).anyTimes();
+        expect(controller.getSelectedProductFamily()).andReturn(FAS_PRODUCT_FAMILY).once();
+        expect(controller.getUsageBatches(FAS_PRODUCT_FAMILY)).andReturn(List.of()).once();
+        mockStatic(ForeignSecurityUtils.class);
+        expect(ForeignSecurityUtils.hasDeleteUsagePermission()).andReturn(true).once();
+        mockStatic(Windows.class);
+        Windows.showModalWindow(anyObject(ViewUsageBatchWindow.class));
+        expectLastCall().once();
+        replay(UI.class, ui, controller, ForeignSecurityUtils.class, Windows.class);
+        var menuItems = getMenuBar(0).getItems();
+        assertEquals(1, menuItems.size());
+        var menuItem = menuItems.get(0);
+        assertEquals("Usage Batch", menuItem.getText());
+        var subMenuItems = menuItem.getSubMenu().getItems();
+        assertEquals(2, subMenuItems.size());
+        var subMenuItem = subMenuItems.get(1);
+        assertEquals("View", subMenuItem.getText());
+        clickMenuItem(subMenuItem);
+        verify(UI.class, ui, controller, ForeignSecurityUtils.class, Windows.class);
+    }
+
 
     @Test
     public void testLoadResearchedUsagesButtonClickListener() {
@@ -236,7 +272,7 @@ public class FasUsageWidgetTest {
         mockStatic(Windows.class);
         Grid<?> grid = new Grid<>();
         Whitebox.setInternalState(widget, grid);
-        Button addToScenarioButton = Whitebox.getInternalState(widget, ADD_TO_SCENARIO_BUTTON);
+        Button addToScenarioButton = getAddToScenarioButton();
         assertTrue(addToScenarioButton.isDisableOnClick());
         Windows.showNotificationWindow("Scenario cannot be created. There are no usages to include into scenario");
         expectLastCall().once();
@@ -253,7 +289,7 @@ public class FasUsageWidgetTest {
         mockStatic(Windows.class);
         Grid<?> grid = new Grid<>();
         Whitebox.setInternalState(widget, grid);
-        Button addToScenarioButton = Whitebox.getInternalState(widget, ADD_TO_SCENARIO_BUTTON);
+        Button addToScenarioButton = getAddToScenarioButton();
         assertTrue(addToScenarioButton.isDisableOnClick());
         expect(controller.getSelectedProductFamily()).andReturn(FAS_PRODUCT_FAMILY).once();
         expect(controller.scenarioExists(FAS_SCENARIO_NAME_PREFIX + DATE)).andReturn(true).once();
@@ -271,7 +307,7 @@ public class FasUsageWidgetTest {
         mockStatic(Windows.class);
         Grid<?> grid = new Grid<>();
         Whitebox.setInternalState(widget, grid);
-        Button addToScenarioButton = Whitebox.getInternalState(widget, ADD_TO_SCENARIO_BUTTON);
+        Button addToScenarioButton = getAddToScenarioButton();
         assertTrue(addToScenarioButton.isDisableOnClick());
         expect(controller.getSelectedProductFamily()).andReturn(FAS_PRODUCT_FAMILY).once();
         expect(controller.scenarioExists(FAS_SCENARIO_NAME_PREFIX + DATE)).andReturn(true).once();
@@ -291,7 +327,7 @@ public class FasUsageWidgetTest {
         mockStatic(Windows.class);
         Grid<?> grid = new Grid<>();
         Whitebox.setInternalState(widget, grid);
-        Button addToScenarioButton = Whitebox.getInternalState(widget, ADD_TO_SCENARIO_BUTTON);
+        Button addToScenarioButton = getAddToScenarioButton();
         assertTrue(addToScenarioButton.isDisableOnClick());
         expect(controller.getBeansCount()).andReturn(1).once();
         expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
@@ -327,6 +363,8 @@ public class FasUsageWidgetTest {
         expectLastCall().once();
         mediator.setSendForResearchButton(anyObject(Button.class));
         expectLastCall().once();
+        mediator.setSendForResearchDownloader(anyObject(OnDemandFileDownloader.class));
+        expectLastCall().once();
         mediator.setLoadResearchedUsagesButton(anyObject(Button.class));
         expectLastCall().once();
         mediator.setUpdateUsagesButton(anyObject(Button.class));
@@ -341,13 +379,30 @@ public class FasUsageWidgetTest {
     private void verifyButtonsLayout(HorizontalLayout layout) {
         assertEquals(6, layout.getComponentCount());
         verifyMenuBar(layout.getComponentAt(0), "Usage Batch", true, List.of("Load", "View"));
-        assertEquals("Send for Research",
-            ((Button) layout.getComponentAt(1).getChildren().findFirst().orElseThrow()).getText());
-        assertEquals("Load Researched Details", ((Button) layout.getComponentAt(2)).getText());
-        assertEquals("Update Usages", ((Button) layout.getComponentAt(3)).getText());
-        assertEquals("Add To Scenario", ((Button) layout.getComponentAt(4)).getText());
-        assertEquals("Export",
-            ((Button) layout.getComponentAt(5).getChildren().findFirst().orElseThrow()).getText());
+        verifyFileDownloader(layout.getComponentAt(1), "Send for Research", true, true);
+        verifyButton(layout.getComponentAt(2), "Load Researched Details", true, true);
+        verifyButton(layout.getComponentAt(3), "Update Usages", true, true);
+        verifyButton(layout.getComponentAt(4), "Add To Scenario", true, true);
+        verifyFileDownloader(layout.getComponentAt(5), "Export", true, true);
+    }
+
+    private MenuBar getMenuBar(int toolbarIdx) {
+        var secondaryComponent = (VerticalLayout) widget.getSecondaryComponent();
+        var contentLayout = (HorizontalLayout) secondaryComponent.getComponentAt(0);
+        var toolbarLayout = (HorizontalLayout) contentLayout.getComponentAt(0);
+        return (MenuBar) toolbarLayout.getComponentAt(toolbarIdx);
+    }
+
+    private void clickMenuItem(MenuItem menuItem) {
+        var eventListeners = (List<ComponentEventListener<ClickEvent<MenuItem>>>)
+            ComponentUtil.getListeners(menuItem, ClickEvent.class);
+        assertEquals(1, eventListeners.size());
+        var eventListener = eventListeners.get(0);
+        eventListener.onComponentEvent(createMock(ClickEvent.class));
+    }
+
+    private Button getAddToScenarioButton() {
+        return Whitebox.getInternalState(widget, "addToScenarioButton");
     }
 
     private List<UsageDto> loadExpectedUsageDtos(String fileName) {

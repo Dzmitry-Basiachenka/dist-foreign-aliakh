@@ -1,7 +1,9 @@
 package com.copyright.rup.dist.foreign.vui.usage.impl.fas;
 
 import com.copyright.rup.dist.foreign.vui.main.security.ForeignSecurityUtils;
+import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.downloader.OnDemandFileDownloader;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.api.IMediator;
+
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.contextmenu.MenuItem;
 
@@ -18,6 +20,7 @@ class FasUsageMediator implements IMediator {
 
     private MenuItem loadUsageBatchMenuItem;
     private Button sendForResearchButton;
+    private OnDemandFileDownloader sendForResearchDownloader;
     private Button loadResearchedUsagesButton;
     private Button updateUsagesButton;
     private Button addToScenarioButton;
@@ -26,6 +29,7 @@ class FasUsageMediator implements IMediator {
     public void applyPermissions() {
         loadUsageBatchMenuItem.setVisible(ForeignSecurityUtils.hasLoadUsagePermission());
         sendForResearchButton.setVisible(ForeignSecurityUtils.hasSendForWorkResearchPermission());
+        sendForResearchDownloader.setVisible(ForeignSecurityUtils.hasSendForWorkResearchPermission());
         loadResearchedUsagesButton.setVisible(ForeignSecurityUtils.hasLoadResearchedUsagePermission());
         updateUsagesButton.setVisible(ForeignSecurityUtils.hasUpdateRightsholderPermission());
         addToScenarioButton.setVisible(ForeignSecurityUtils.hasCreateEditScenarioPermission());
@@ -37,6 +41,10 @@ class FasUsageMediator implements IMediator {
 
     void setSendForResearchButton(Button sendForResearchButton) {
         this.sendForResearchButton = sendForResearchButton;
+    }
+
+    public void setSendForResearchDownloader(OnDemandFileDownloader sendForResearchDownloader) {
+        this.sendForResearchDownloader = sendForResearchDownloader;
     }
 
     void setLoadResearchedUsagesButton(Button loadResearchedUsagesButton) {

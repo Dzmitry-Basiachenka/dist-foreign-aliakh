@@ -4,17 +4,15 @@ import static com.copyright.rup.dist.foreign.vui.UiTestHelper.getDialogContent;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.getFooterLayout;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyGrid;
-import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyWidth;
+import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyGridItems;
+import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifySearchWidget;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyWindow;
 
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.anyString;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
@@ -29,13 +27,11 @@ import com.copyright.rup.dist.foreign.vui.usage.api.fas.IFasUsageController;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.Windows;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.SearchWidget;
 
-import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.provider.ListDataProvider;
 
 import org.apache.commons.lang3.tuple.Pair;
@@ -84,17 +80,19 @@ public class ViewUsageBatchWindowTest {
         expect(controller.getUsageBatches("FAS")).andReturn(List.of(buildUsageBatch())).once();
         replay(controller, ForeignSecurityUtils.class);
         window = new ViewUsageBatchWindow(controller);
-        Whitebox.setInternalState(window, "grid", grid);
+        Whitebox.setInternalState(window, grid);
         verify(controller, ForeignSecurityUtils.class);
         reset(controller, ForeignSecurityUtils.class);
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testStructure() {
         verifyWindow(window, "View Usage Batch", "1150px", "550px", Unit.PIXELS, true);
         VerticalLayout content = (VerticalLayout) getDialogContent(window);
         assertEquals(2, content.getComponentCount());
-        verifySearchWidget(content.getComponentAt(0));
+        verifySearchWidget(content.getComponentAt(0),
+            "Enter Batch Name or Payment Date (mm/dd/yyyy) or Source RRO Name/Account #");
         verifyGrid((Grid) content.getComponentAt(1), List.of(
             Pair.of("Usage Batch Name", "200px"),
             Pair.of("RRO Account #", "160px"),
@@ -109,6 +107,17 @@ public class ViewUsageBatchWindowTest {
     }
 
     @Test
+    public void testGridValues() {
+        List<UsageBatch> expectedItems = List.of(buildUsageBatch());
+        Object[][] expectedCells = {{
+            "FAS batch", "1000000008", "ProLitteris", "09/12/2022", "FY2022", "5000.00", "user@copyright.com",
+            "09/01/2022 12:00 AM"
+        }};
+        verifyGridItems((Grid<?>) ((VerticalLayout) getDialogContent(window)).getComponentAt(1),
+            expectedItems, expectedCells);
+    }
+
+    @Test
     public void testDeleteClickListenerAssociatedFunds() {
         mockStatic(Windows.class);
         expect(grid.getSelectedItems()).andReturn(Set.of(buildUsageBatch())).once();
@@ -117,9 +126,9 @@ public class ViewUsageBatchWindowTest {
         Windows.showNotificationWindow("Usage batch cannot be deleted because it is associated with the following " +
             "additional funds:<ul><li>Batch 1</li><li>Batch 2</li></ul>");
         expectLastCall().once();
-        replay(controller, grid, Windows.class);
+        replay(Windows.class, grid, controller);
         getDeleteButton().click();
-        verify(controller, grid, Windows.class);
+        verify(Windows.class, grid, controller);
     }
 
     @Test
@@ -132,9 +141,9 @@ public class ViewUsageBatchWindowTest {
         Windows.showNotificationWindow("Usage batch cannot be deleted because it is associated with the following " +
             "scenarios:<ul><li>Scenario 1</li><li>Scenario 2</li></ul>");
         expectLastCall().once();
-        replay(controller, grid, Windows.class);
+        replay(Windows.class, grid, controller);
         getDeleteButton().click();
-        verify(controller, grid, Windows.class);
+        verify(Windows.class, grid, controller);
     }
 
     @Test
@@ -147,9 +156,9 @@ public class ViewUsageBatchWindowTest {
         expect(controller.isBatchProcessingCompleted(USAGE_BATCH_ID)).andReturn(false).once();
         Windows.showNotificationWindow("'FAS batch' batch cannot be deleted because processing is not completed yet");
         expectLastCall().once();
-        replay(controller, confirmWindowCapture, grid, Windows.class);
+        replay(Windows.class, grid, controller, confirmWindowCapture);
         getDeleteButton().click();
-        verify(controller, confirmWindowCapture, grid, Windows.class);
+        verify(Windows.class, grid, controller, confirmWindowCapture);
     }
 
     @Test
@@ -162,9 +171,9 @@ public class ViewUsageBatchWindowTest {
         expect(controller.isBatchProcessingCompleted(USAGE_BATCH_ID)).andReturn(true).once();
         expect(Windows.showConfirmDialog(eq("Are you sure you want to delete <i><b>'FAS batch'</b></i> usage batch?"),
             anyObject())).andReturn(confirmWindowCapture).once();
-        replay(controller, confirmWindowCapture, grid, Windows.class);
+        replay(Windows.class, grid, controller, confirmWindowCapture);
         getDeleteButton().click();
-        verify(controller, confirmWindowCapture, grid, Windows.class);
+        verify(Windows.class, grid, controller, confirmWindowCapture);
     }
 
     @Test
@@ -178,19 +187,8 @@ public class ViewUsageBatchWindowTest {
         verify(searchWidget, grid);
     }
 
-    private void verifySearchWidget(Component component) {
-        assertNotNull(component);
-        assertThat(component, instanceOf(SearchWidget.class));
-        var searchWidget = (SearchWidget) component;
-        TextField textField = Whitebox.getInternalState(searchWidget, TextField.class);
-        verifyWidth(textField, "70%", Unit.PERCENTAGE);
-        assertEquals("Enter Batch Name or Payment Date (MM/dd/yyyy) or Source RRO Name/Account #",
-            textField.getPlaceholder());
-    }
-
     private Button getDeleteButton() {
-        var buttonsLayout = getFooterLayout(window);
-        return (Button) buttonsLayout.getComponentAt(0);
+        return (Button) getFooterLayout(window).getComponentAt(0);
     }
 
     private UsageBatch buildUsageBatch() {
