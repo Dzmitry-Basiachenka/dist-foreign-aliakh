@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.vui.usage.impl.nts;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.common.util.UsageBatchUtils;
 import com.copyright.rup.dist.foreign.vui.common.validator.AmountRangeValidator;
@@ -27,10 +28,12 @@ import com.vaadin.flow.component.textfield.BigDecimalField;
 import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.data.binder.Setter;
 import com.vaadin.flow.data.validator.LongRangeValidator;
 import com.vaadin.flow.data.validator.RangeValidator;
 import com.vaadin.flow.data.validator.StringLengthValidator;
 import com.vaadin.flow.function.SerializablePredicate;
+import com.vaadin.flow.function.ValueProvider;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -61,7 +64,6 @@ class FundPoolLoadWindow extends CommonDialog {
     private final Div errorDiv = new Div();
 
     private VerticalLayout marketLayout;
-    private TextField usageBatchNameField;
     private LongField accountNumberField;
     private Binder.Binding<UsageBatch, Long> accountNumberBinding;
     private TextField accountNameField;
@@ -70,11 +72,6 @@ class FundPoolLoadWindow extends CommonDialog {
     private IntegerField fundPoolPeriodToField;
     private Set<String> selectedMarkets;
     private BigDecimalField stmAmountField;
-    private BigDecimalField nonStmAmountField;
-    private BigDecimalField stmMinAmountField;
-    private BigDecimalField nonStmMinAmountField;
-    private Checkbox excludeStmCheckbox;
-    private Rightsholder rro;
 
     /**
      * Constructor.
@@ -89,6 +86,7 @@ class FundPoolLoadWindow extends CommonDialog {
         super.setHeight("510px");
         super.getFooter().add(initButtonsLayout());
         super.setModalWindowProperties("fund-pool-upload-window", false);
+        initBinder();
     }
 
     /**
@@ -96,7 +94,9 @@ class FundPoolLoadWindow extends CommonDialog {
      */
     void onUploadClicked() {
         if (isValid()) {
-            var usageBatch = buildUsageBatch();
+            var usageBatch = binder.getBean();
+            usageBatch.setFiscalYear(UsageBatchUtils.calculateFiscalYear(paymentDateWidget.getValue()));
+            usageBatch.getNtsFields().setMarkets(selectedMarkets);
             int usagesCount = usagesController.getUsagesCountForNtsBatch(usageBatch);
             if (0 < usagesCount) {
                 int insertedUsages = usagesController.loadNtsBatch(usageBatch);
@@ -116,29 +116,7 @@ class FundPoolLoadWindow extends CommonDialog {
      * @return {@code true} if all inputs are valid, {@code false} - otherwise
      */
     boolean isValid() {
-        boolean isValidBinder = binder.validate().isOk();
-        return areValidMarkets() && isValidBinder;
-    }
-
-    //TODO {vaadin23} replace with binder approach
-    private UsageBatch buildUsageBatch() {
-        var usageBatch = new UsageBatch();
-        usageBatch.setName(StringUtils.trim(usageBatchNameField.getValue()));
-        usageBatch.setRro(rro);
-        usageBatch.setProductFamily("NTS");
-        usageBatch.setPaymentDate(paymentDateWidget.getValue());
-        usageBatch.setFiscalYear(UsageBatchUtils.calculateFiscalYear(paymentDateWidget.getValue()));
-        var ntsFields = new UsageBatch.NtsFields();
-        ntsFields.setMarkets(selectedMarkets);
-        ntsFields.setFundPoolPeriodFrom(fundPoolPeriodFromField.getValue());
-        ntsFields.setFundPoolPeriodTo(fundPoolPeriodToField.getValue());
-        ntsFields.setStmAmount(stmAmountField.getValue());
-        ntsFields.setNonStmAmount(nonStmAmountField.getValue());
-        ntsFields.setStmMinimumAmount(stmMinAmountField.getValue());
-        ntsFields.setNonStmMinimumAmount(nonStmMinAmountField.getValue());
-        ntsFields.setExcludingStm(excludeStmCheckbox.getValue());
-        usageBatch.setNtsFields(ntsFields);
-        return usageBatch;
+        return areValidMarkets() && binder.isValid();
     }
 
     private VerticalLayout initRootLayout() {
@@ -149,8 +127,20 @@ class FundPoolLoadWindow extends CommonDialog {
         return rootLayout;
     }
 
+    private void initBinder() {
+        var usageBatch = new UsageBatch();
+        usageBatch.setProductFamily(FdaConstants.NTS_PRODUCT_FAMILY);
+        usageBatch.setRro(new Rightsholder());
+        var ntsFields = new UsageBatch.NtsFields();
+        ntsFields.setStmMinimumAmount(new BigDecimal("50"));
+        ntsFields.setNonStmMinimumAmount(new BigDecimal("7"));
+        usageBatch.setNtsFields(ntsFields);
+        binder.setBean(usageBatch);
+        binder.validate();
+    }
+
     private TextField initUsageBatchNameField() {
-        usageBatchNameField = new TextField(ForeignUi.getMessage("label.usage_batch_name"));
+        var usageBatchNameField = new TextField(ForeignUi.getMessage("label.usage_batch_name"));
         usageBatchNameField.setRequiredIndicatorVisible(true);
         usageBatchNameField.setWidthFull();
         binder.forField(usageBatchNameField)
@@ -189,8 +179,8 @@ class FundPoolLoadWindow extends CommonDialog {
             .withValidator(new RequiredNumberValidator())
             .withValidator(
                 new LongRangeValidator(ForeignUi.getMessage("field.error.number_length", 10), 1L, 9999999999L))
-            .bind(usageBatch -> usageBatch.getRro().getAccountNumber(),
-                (usageBatch, value) -> usageBatch.getRro().setAccountNumber(value));
+            .bind(batch -> batch.getRro().getAccountNumber(),
+                (batch, value) -> batch.getRro().setAccountNumber(value));
         VaadinUtils.addComponentStyle(accountNumberField, "rro-account-number-field");
         return accountNumberField;
     }
@@ -202,8 +192,8 @@ class FundPoolLoadWindow extends CommonDialog {
         accountNameField.setReadOnly(true);
         binder.forField(accountNameField)
             .asRequired(ForeignUi.getMessage("field.error.rro_name.empty"))
-            .bind(usageBatch -> usageBatch.getRro().getName(),
-                (usageBatch, value) -> usageBatch.getRro().setName(value));
+            .bind(batch -> batch.getRro().getName(),
+                (batch, value) -> batch.getRro().setName(value));
         VaadinUtils.addComponentStyle(accountNameField, "rro-account-name-field");
         return accountNameField;
     }
@@ -213,7 +203,7 @@ class FundPoolLoadWindow extends CommonDialog {
         button.setWidth("72px");
         button.addClickListener(event -> {
             if (!accountNumberBinding.validate().isError()) {
-                rro = usagesController.getRightsholder(accountNumberField.getValue());
+                var rro = usagesController.getRightsholder(accountNumberField.getValue());
                 if (StringUtils.isNotBlank(rro.getName())) {
                     accountNameField.setValue(rro.getName());
                 } else {
@@ -290,28 +280,33 @@ class FundPoolLoadWindow extends CommonDialog {
     }
 
     private HorizontalLayout initAmountsLayout() {
-        stmAmountField = initAmountField(ForeignUi.getMessage("label.stm.amount"));
+        stmAmountField = initAmountField(ForeignUi.getMessage("label.stm.amount"),
+            batch -> batch.getNtsFields().getStmAmount(),
+            (batch, value) -> batch.getNtsFields().setStmAmount(value));
         VaadinUtils.addComponentStyle(stmAmountField, "stm-amount-field");
-        nonStmAmountField = initNonStmFundPoolAmountField(ForeignUi.getMessage("label.non.stm.amount"));
+        var nonStmAmountField = initNonStmFundPoolAmountField(ForeignUi.getMessage("label.non.stm.amount"));
         VaadinUtils.addComponentStyle(nonStmAmountField, "non-stm-amount-field");
-        HorizontalLayout amountLayout = new HorizontalLayout(stmAmountField, nonStmAmountField);
+        var amountLayout = new HorizontalLayout(stmAmountField, nonStmAmountField);
         amountLayout.setSizeFull();
         return amountLayout;
     }
 
     private HorizontalLayout initMinAmountsLayout() {
-        stmMinAmountField = initAmountField(ForeignUi.getMessage("label.stm.minimum.amount"));
-        stmMinAmountField.setValue(new BigDecimal("50"));
+        var stmMinAmountField = initAmountField(ForeignUi.getMessage("label.stm.minimum.amount"),
+            batch -> batch.getNtsFields().getStmMinimumAmount(),
+            (batch, value) -> batch.getNtsFields().setStmMinimumAmount(value));
         VaadinUtils.addComponentStyle(stmMinAmountField, "stm-minimum-amount-field");
-        nonStmMinAmountField = initAmountField(ForeignUi.getMessage("label.non.stm.minimum.amount"));
-        nonStmMinAmountField.setValue(new BigDecimal("7"));
+        var nonStmMinAmountField = initAmountField(ForeignUi.getMessage("label.non.stm.minimum.amount"),
+            batch -> batch.getNtsFields().getNonStmMinimumAmount(),
+            (batch, value) -> batch.getNtsFields().setNonStmMinimumAmount(value));
         VaadinUtils.addComponentStyle(nonStmMinAmountField, "non-stm-minimum-amount-field");
-        HorizontalLayout minAmountLayout = new HorizontalLayout(stmMinAmountField, nonStmMinAmountField);
+        var minAmountLayout = new HorizontalLayout(stmMinAmountField, nonStmMinAmountField);
         minAmountLayout.setSizeFull();
         return minAmountLayout;
     }
 
-    private BigDecimalField initAmountField(String label) {
+    private BigDecimalField initAmountField(String label, ValueProvider<UsageBatch, BigDecimal> getter,
+                                            Setter<UsageBatch, BigDecimal> setter) {
         var field = new BigDecimalField(label);
         field.setWidthFull();
         field.setPrefixComponent(VaadinIcon.DOLLAR.create());
@@ -319,7 +314,7 @@ class FundPoolLoadWindow extends CommonDialog {
         binder.forField(field)
             .withValidator(new RequiredNumberValidator())
             .withValidator(AmountRangeValidator.zeroAmountValidator())
-            .bind(UsageBatch::getGrossAmount, UsageBatch::setGrossAmount);
+            .bind(getter, setter);
         return field;
     }
 
@@ -333,14 +328,18 @@ class FundPoolLoadWindow extends CommonDialog {
             .withValidator(AmountRangeValidator.zeroAmountValidator())
             .withValidator(getFundPoolAmountValidator(),
                 ForeignUi.getMessage("message.error.invalid_stm_or_non_stm_amount"))
-            .bind(UsageBatch::getGrossAmount, UsageBatch::setGrossAmount);
+            .bind(batch -> batch.getNtsFields().getNonStmAmount(),
+                (batch, value) -> batch.getNtsFields().setNonStmAmount(value));
         return field;
     }
 
     private Checkbox initExcludeStmCheckBox() {
-        excludeStmCheckbox = new Checkbox();
+        var excludeStmCheckbox = new Checkbox();
         excludeStmCheckbox.setLabel(ForeignUi.getMessage("label.exclude.stm"));
         VaadinUtils.addComponentStyle(excludeStmCheckbox, "exclude-stm-rhs-checkbox");
+        binder.forField(excludeStmCheckbox)
+            .bind(batch -> batch.getNtsFields().isExcludingStm(),
+                (batch, value) -> batch.getNtsFields().setExcludingStm(value));
         return excludeStmCheckbox;
     }
 
