@@ -17,7 +17,7 @@ import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
-import java.util.Set;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -31,11 +31,11 @@ import java.util.stream.Collectors;
  */
 public class FasNtsUsageFilterWidget extends CommonUsageFilterWidget implements IFasNtsUsageFilterWidget {
 
-    private static final Set<UsageStatusEnum> FAS_FAS2_STATUSES = Set.of(UsageStatusEnum.NEW,
-        UsageStatusEnum.WORK_NOT_FOUND, UsageStatusEnum.WORK_RESEARCH, UsageStatusEnum.WORK_FOUND,
-        UsageStatusEnum.RH_NOT_FOUND, UsageStatusEnum.RH_FOUND, UsageStatusEnum.SENT_FOR_RA, UsageStatusEnum.ELIGIBLE,
-        UsageStatusEnum.NTS_WITHDRAWN, UsageStatusEnum.TO_BE_DISTRIBUTED);
-    private static final Set<UsageStatusEnum> NTS_STATUSES = Set.of(UsageStatusEnum.WORK_FOUND,
+    private static final List<UsageStatusEnum> FAS_FAS2_STATUSES = List.of(UsageStatusEnum.NEW,
+        UsageStatusEnum.WORK_NOT_FOUND, UsageStatusEnum.WORK_RESEARCH, UsageStatusEnum.NTS_WITHDRAWN,
+        UsageStatusEnum.TO_BE_DISTRIBUTED, UsageStatusEnum.WORK_FOUND, UsageStatusEnum.RH_NOT_FOUND,
+        UsageStatusEnum.RH_FOUND, UsageStatusEnum.SENT_FOR_RA, UsageStatusEnum.ELIGIBLE);
+    private static final List<UsageStatusEnum> NTS_STATUSES = List.of(UsageStatusEnum.WORK_FOUND,
         UsageStatusEnum.RH_FOUND, UsageStatusEnum.UNCLASSIFIED, UsageStatusEnum.ELIGIBLE,
         UsageStatusEnum.SCENARIO_EXCLUDED);
     private static final long serialVersionUID = -533018108072874988L;
@@ -59,7 +59,8 @@ public class FasNtsUsageFilterWidget extends CommonUsageFilterWidget implements 
     @Override
     protected void refreshFilterValues() {
         fiscalYearComboBox.setItems(controller.getFiscalYears());
-        statusComboBox.setItems(getStatuses());
+        List<UsageStatusEnum> statuses = getStatuses();
+        statusComboBox.setItems(statuses);
     }
 
     @Override
@@ -142,7 +143,7 @@ public class FasNtsUsageFilterWidget extends CommonUsageFilterWidget implements 
         VaadinUtils.addComponentStyle(paymentDateWidget, "payment-date-filter");
     }
 
-    private Set<UsageStatusEnum> getStatuses() {
+    private List<UsageStatusEnum> getStatuses() {
         return FdaConstants.FAS_FAS2_PRODUCT_FAMILY_SET.contains(controller.getSelectedProductFamily())
             ? FAS_FAS2_STATUSES
             : NTS_STATUSES;

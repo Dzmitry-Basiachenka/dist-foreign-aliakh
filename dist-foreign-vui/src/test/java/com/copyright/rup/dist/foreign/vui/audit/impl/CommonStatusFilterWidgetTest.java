@@ -23,6 +23,7 @@ import org.powermock.reflect.Whitebox;
 
 import java.util.EnumSet;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -42,12 +43,12 @@ public class CommonStatusFilterWidgetTest {
 
     private static final String SELECTED_ITEMS_IDS = "selectedItemsIds";
 
-    private static final Set<UsageStatusEnum> FAS_FAS2_STATUSES =
-        Set.of(UsageStatusEnum.NEW, UsageStatusEnum.WORK_NOT_FOUND, UsageStatusEnum.WORK_RESEARCH,
-            UsageStatusEnum.WORK_FOUND, UsageStatusEnum.RH_NOT_FOUND, UsageStatusEnum.RH_FOUND,
-            UsageStatusEnum.SENT_FOR_RA, UsageStatusEnum.ELIGIBLE, UsageStatusEnum.LOCKED, UsageStatusEnum.SENT_TO_LM,
-            UsageStatusEnum.PAID, UsageStatusEnum.ARCHIVED, UsageStatusEnum.NTS_WITHDRAWN,
-            UsageStatusEnum.TO_BE_DISTRIBUTED);
+    private static final List<UsageStatusEnum> FAS_FAS2_STATUSES =
+        List.of(UsageStatusEnum.NEW, UsageStatusEnum.WORK_NOT_FOUND, UsageStatusEnum.WORK_RESEARCH,
+            UsageStatusEnum.WORK_FOUND, UsageStatusEnum.NTS_WITHDRAWN, UsageStatusEnum.TO_BE_DISTRIBUTED,
+            UsageStatusEnum.RH_NOT_FOUND, UsageStatusEnum.RH_FOUND, UsageStatusEnum.SENT_FOR_RA,
+            UsageStatusEnum.ELIGIBLE, UsageStatusEnum.LOCKED, UsageStatusEnum.SENT_TO_LM, UsageStatusEnum.PAID,
+            UsageStatusEnum.ARCHIVED);
 
     @Test
     public void testLoadBeansFas() {

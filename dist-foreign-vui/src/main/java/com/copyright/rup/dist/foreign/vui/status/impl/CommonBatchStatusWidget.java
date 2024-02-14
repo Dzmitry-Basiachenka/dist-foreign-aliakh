@@ -35,6 +35,8 @@ public abstract class CommonBatchStatusWidget extends VerticalLayout implements 
     @SuppressWarnings("unchecked")
     @Override
     public ICommonBatchStatusWidget init() {
+        super.setMargin(false);
+        super.setPadding(false);
         setSizeFull();
         grid = new Grid<>();
         addColumns();
