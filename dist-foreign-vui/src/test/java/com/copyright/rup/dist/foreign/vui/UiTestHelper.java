@@ -658,7 +658,8 @@ public final class UiTestHelper {
             : null;
         assertEquals(value, ((AbstractField) actualField).getValue());
         assertEquals(message, actualErrorMessage);
-        assertEquals(isValid, Objects.isNull(actualErrorMessage));
+        assertEquals(isValid, Objects.isNull(actualErrorMessage) || StringUtils.isBlank(actualErrorMessage));
+        actualField.setErrorMessage(null);
     }
 
     /**

@@ -9,6 +9,7 @@ import com.copyright.rup.dist.foreign.vui.report.api.IFasServiceFeeTrueUpReportC
 import com.copyright.rup.dist.foreign.vui.report.api.IReportController;
 import com.copyright.rup.dist.foreign.vui.report.api.IReportWidget;
 import com.copyright.rup.dist.foreign.vui.report.api.ISummaryMarketReportController;
+import com.copyright.rup.dist.foreign.vui.report.api.ITaxNotificationReportController;
 import com.copyright.rup.dist.foreign.vui.report.api.IUndistributedLiabilitiesReportController;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.api.CommonController;
 
@@ -40,6 +41,8 @@ public class ReportController extends CommonController<IReportWidget> implements
     private IUndistributedLiabilitiesReportController undistributedLiabilitiesReportController;
     @Autowired
     private ISummaryMarketReportController summaryMarketReportController;
+    @Autowired
+    private ITaxNotificationReportController taxNotificationReportController;
     @Autowired
     private IFasServiceFeeTrueUpReportController fasServiceFeeTrueUpReportController;
     @Autowired
@@ -87,6 +90,11 @@ public class ReportController extends CommonController<IReportWidget> implements
     @Override
     public ICommonScenarioReportController getOwnershipAdjustmentReportController() {
         return ownershipAdjustmentReportController;
+    }
+
+    @Override
+    public ITaxNotificationReportController getTaxNotificationReportController() {
+        return taxNotificationReportController;
     }
 
     @Override
