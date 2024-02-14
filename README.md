@@ -1,3 +1,32 @@
+21.0.3
+-
+* CDP -1677 FDA: Vaadin Migration: NTS - Usages Tab: migrate Load Fund Pool widget
+* CDP -1677 FDA: Vaadin Migration: NTS - Usages Tab: migrate View Additional Funds widget
+* CDP -1677 FDA: Vaadin Migration: NTS - Usages Tab: apply common components and styles on Batch Upload window
+* CDP -1677 FDA: Vaadin Migration: NTS - Usages Tab: migrate CreateAdditionalFundWindow
+* CDP -1677 FDA: Vaadin Migration: NTS - Usages Tab: migrate AdditionalFundFilteredBatchesWindow
+* CDP -1677 FDA: Vaadin Migration: NTS - Usages Tab: migrate AdditionalFundBatchesFilterWindow
+* CDP -1677 FDA: Vaadin Migration: NTS - Usages Tab: migrate WorkClassificationWindow widget
+* CDP -1677 FDA: Vaadin Migration: NTS - Usages Tab: migrate NtsUsageBatchSelectorWidget widget
+* CDP -1677 FDA: Vaadin Migration: NTS - Usages Tab: migrate CreateNtsScenarioWindow widget
+* CDP -1677 FDA: Vaadin Migration: NTS - Usages Tab: implement markets validation on NTS upload Fund Pool window
+* CDP -1677 FDA: Vaadin Migration: NTS - Usages Tab: adjust the size and position of widgets
+* CDP -1676 FDA: Vaadin Migration: FAS/FAS2 - Reports Tab: migrate logic for undistributed liabilities report
+* CDP -1676 FDA: Vaadin Migration: FAS/FAS2 - Reports Tab: migrate logic for FAS batch summary report
+* CDP -1676 FDA: Vaadin Migration: FAS/FAS2 - Reports Tab: migrate logic for Research Status Report
+* CDP -1676 FDA: Vaadin Migration: FAS/FAS2 - Reports Tab: migrate logic for Ownership Adjustment Report
+* CDP -1676 FDA: Vaadin Migration: FAS/FAS2 - Reports Tab: migrate logic for Summary Market Report
+* CDP -1676 FDA: Vaadin Migration: FAS/FAS2 - Reports Tab: migrate logic for Tax Notification report
+* CDP -1676 FDA: Vaadin Migration: FAS/FAS2 - Reports Tab: migrate logic for Fas Service Fee True up Report
+* CDP -1674 FDA: Vaadin Migration: FAS/FAS2 - Audit Tab: add Audit tab on UI
+* CDP -1674 FDA: Vaadin Migration: FAS/FAS2 - Audit Tab: migrate Audit filter widget and controller logic
+* CDP -1674 FDA: Vaadin Migration: FAS/FAS2 - Audit Tab: migrate Audit widget and controller logic
+* CDP -1674 FDA: Vaadin Migration: FAS/FAS2 - Audit Tab: migrate Usage History window
+* CDP -1674 FDA: Vaadin Migration: FAS/FAS2 - Audit Tab: migrate Applied Audit filter widget
+* CDP -2232 Tech Debt: FDA: update styles for global product family combobox
+* CDP -2232 Tech Debt: FDA: update status filter to display it in correct order
+* CDP -2232 Tech Debt: FDA: fix sonar bugs for new code
+
 21.0.2
 -
 * CDP-2323 FDA: Edit scenario name: Scenario name can be changed to the one already existing in the system
