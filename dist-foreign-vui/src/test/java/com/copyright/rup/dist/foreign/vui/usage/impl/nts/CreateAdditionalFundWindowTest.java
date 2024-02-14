@@ -139,11 +139,13 @@ public class CreateAdditionalFundWindowTest {
         var fundNameField = (TextField) component;
         assertEquals("Fund Name", fundNameField.getLabel());
         assertEquals(StringUtils.EMPTY, fundNameField.getValue());
+        assertEquals("additional-fund-name", fundNameField.getId().get());
     }
 
     private void verifyCommentArea(Component component) {
         var commentArea = (TextArea) component;
         assertEquals("Comment", commentArea.getLabel());
         assertEquals(StringUtils.EMPTY, commentArea.getValue());
+        assertEquals("additional-fund-comment", commentArea.getId().get());
     }
 }

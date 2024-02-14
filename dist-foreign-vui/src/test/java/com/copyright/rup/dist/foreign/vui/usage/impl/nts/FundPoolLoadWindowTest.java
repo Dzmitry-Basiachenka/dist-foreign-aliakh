@@ -448,7 +448,7 @@ public class FundPoolLoadWindowTest {
         assertThat(component, instanceOf(Checkbox.class));
         Checkbox checkbox = (Checkbox) component;
         assertEquals("Exclude STM RHs", checkbox.getLabel());
-        assertEquals("exclude-stm-rhs-checkbox", checkbox.getClassName());
+        assertEquals("exclude-stm-rhs-checkbox", checkbox.getId().get());
         assertFalse(checkbox.getValue());
     }
 

@@ -84,23 +84,25 @@ class CreateAdditionalFundWindow extends CommonDialog {
     private void initFundNameField() {
         fundNameField = new TextField(ForeignUi.getMessage("field.fund_name"));
         fundNameField.setRequiredIndicatorVisible(true);
+        fundNameField.setWidthFull();
         binder.forField(fundNameField)
             .withValidator(new RequiredValidator())
             .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.length", 50), 0, 50))
             .withValidator(value -> !controller.additionalFundExists(StringUtils.trim(value)),
                 ForeignUi.getMessage("message.error.unique_name", "Fund"))
             .bind(FundPool::getName, FundPool::setName);
-        fundNameField.setWidthFull();
+        VaadinUtils.addComponentStyle(fundNameField, "additional-fund-name");
     }
 
     private void initCommentArea() {
         commentArea = new TextArea(ForeignUi.getMessage("field.comment"));
         commentArea.setRequiredIndicatorVisible(true);
+        commentArea.setWidthFull();
         binder.forField(commentArea)
             .withValidator(new RequiredValidator())
             .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.length", 2000), 0, 2000))
             .bind(FundPool::getComment, FundPool::setComment);
-        commentArea.setWidthFull();
+        VaadinUtils.addComponentStyle(commentArea, "additional-fund-comment");
     }
 
     private HorizontalLayout initButtonsLayout() {
