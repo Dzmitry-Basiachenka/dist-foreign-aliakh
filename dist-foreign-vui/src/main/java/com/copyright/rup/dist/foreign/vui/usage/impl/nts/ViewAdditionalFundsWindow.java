@@ -13,6 +13,7 @@ import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.SearchWidget.ISea
 
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.Grid.SelectionMode;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.function.SerializableComparator;
 
@@ -34,8 +35,8 @@ class ViewAdditionalFundsWindow extends CommonDialog implements ISearchControlle
 
     private static final long serialVersionUID = -2993574115589450787L;
 
-    private final SearchWidget searchWidget;
     private final INtsUsageController controller;
+    private SearchWidget searchWidget;
     private Grid<FundPool> grid;
 
     /**
@@ -47,9 +48,8 @@ class ViewAdditionalFundsWindow extends CommonDialog implements ISearchControlle
         this.controller = controller;
         super.setWidth("1100px");
         super.setHeight("450px");
-        searchWidget = new SearchWidget(this, ForeignUi.getMessage("prompt.fund_pool"), "70%");
-        super.add(VaadinUtils.initSizeFullVerticalLayout(searchWidget, initGrid()));
         super.setHeaderTitle(ForeignUi.getMessage("window.view_fund"));
+        super.add(initContent());
         super.getFooter().add(Buttons.createCloseButton(this));
         setModalWindowProperties("view-fund-pool-window", true);
     }
@@ -65,11 +65,15 @@ class ViewAdditionalFundsWindow extends CommonDialog implements ISearchControlle
         }
     }
 
+    private VerticalLayout initContent() {
+        searchWidget = new SearchWidget(this, ForeignUi.getMessage("prompt.fund_pool"), "70%");
+        return VaadinUtils.initSizeFullVerticalLayout(searchWidget, initGrid());
+    }
+
     private Grid<FundPool> initGrid() {
         grid = new Grid<>();
         grid.setItems(controller.getAdditionalFunds());
         grid.setSelectionMode(SelectionMode.NONE);
-        grid.setSizeFull();
         grid.addColumn(FundPool::getName)
             .setHeader(ForeignUi.getMessage("table.column.fund_name"))
             .setComparator((SerializableComparator<FundPool>) (fundPool1, fundPool2) ->

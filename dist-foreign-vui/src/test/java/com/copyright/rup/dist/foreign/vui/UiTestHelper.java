@@ -285,7 +285,7 @@ public final class UiTestHelper {
      */
     public static Button verifyButton(Component component, String text, boolean isVisible) {
         assertThat(component, instanceOf(Button.class));
-        Button button = (Button) component;
+        var button = (Button) component;
         assertEquals(text, button.getText());
         assertEquals(isVisible, button.isVisible());
         return button;
@@ -302,7 +302,7 @@ public final class UiTestHelper {
      */
     public static Button verifyButton(Component component, String text, boolean isVisible, boolean isDisableOnClick) {
         assertThat(component, instanceOf(Button.class));
-        Button button = (Button) component;
+        var button = (Button) component;
         assertEquals(text, button.getText());
         assertEquals(isVisible, button.isVisible());
         assertEquals(isDisableOnClick, button.isDisableOnClick());
@@ -425,7 +425,7 @@ public final class UiTestHelper {
      */
     public static TextField verifyTextField(Component component, String label, String width, String styleName) {
         assertThat(component, instanceOf(TextField.class));
-        TextField textField = (TextField) component;
+        var textField = (TextField) component;
         assertEquals(label, textField.getLabel());
         assertEquals(width, textField.getWidth());
         assertEquals(styleName, textField.getClassName());
@@ -443,7 +443,7 @@ public final class UiTestHelper {
     public static BigDecimalField verifyBigDecimalField(Component component, String label, String width,
                                                         String styleName) {
         assertThat(component, instanceOf(BigDecimalField.class));
-        BigDecimalField field = (BigDecimalField) component;
+        var field = (BigDecimalField) component;
         assertEquals(label, field.getLabel());
         assertEquals(width, field.getWidth());
         assertEquals(styleName, field.getClassName());
@@ -460,7 +460,7 @@ public final class UiTestHelper {
      */
     public static LongField verifyLongField(Component component, String label, String width, String styleName) {
         assertThat(component, instanceOf(LongField.class));
-        LongField field = (LongField) component;
+        var field = (LongField) component;
         assertEquals(label, field.getLabel());
         assertEquals(width, field.getWidth());
         assertEquals(styleName, field.getClassName());
@@ -477,7 +477,7 @@ public final class UiTestHelper {
      */
     public static IntegerField verifyIntegerField(Component component, String label, String width, String styleName) {
         assertThat(component, instanceOf(IntegerField.class));
-        IntegerField field = (IntegerField) component;
+        var field = (IntegerField) component;
         assertEquals(label, field.getLabel());
         assertEquals(width, field.getWidth());
         assertEquals(styleName, field.getClassName());

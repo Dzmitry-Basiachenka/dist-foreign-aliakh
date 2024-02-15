@@ -440,7 +440,7 @@ public class FundPoolLoadWindowTest {
     }
 
     private VerticalLayout getMarketsLayout() {
-        VerticalLayout rootLayout = (VerticalLayout) getDialogContent(window);
+        var rootLayout = (VerticalLayout) getDialogContent(window);
         return (VerticalLayout) rootLayout.getComponentAt(3);
     }
 

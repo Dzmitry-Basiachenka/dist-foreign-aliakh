@@ -67,8 +67,8 @@ class WorkClassificationWindow extends CommonDialog {
         this.selectedBatchesIds = batchesIds;
         super.setWidth("1000px");
         super.setHeight("530px");
-        super.add(initRootLayout());
         super.setHeaderTitle(ForeignUi.getMessage("window.works_classification"));
+        super.add(initRootLayout());
         super.getFooter().add(initButtonsLayout());
         super.setModalWindowProperties("works-classification-window", true);
     }
@@ -137,8 +137,6 @@ class WorkClassificationWindow extends CommonDialog {
         var clearButton = Buttons.createButton(ForeignUi.getMessage("button.clear"));
         clearButton.addClickListener(event -> grid.deselectAll());
         var closeButton = Buttons.createCloseButton(this);
-        VaadinUtils.setButtonsAutoDisabled(markAsStmButton, markAsNonStmButton, markAsBelletristicButton,
-            deleteClassificationButton, clearButton, closeButton);
         buttonsLayout.add(markAsStmButton, markAsNonStmButton, markAsBelletristicButton,
             deleteClassificationButton, clearButton, closeButton);
         return buttonsLayout;
@@ -147,7 +145,6 @@ class WorkClassificationWindow extends CommonDialog {
     private Grid<WorkClassification> initGrid() {
         grid = new Grid<>();
         grid.setDataProvider(initDataProvider());
-        grid.setSizeFull();
         var gridSelectionModel =
             (AbstractGridMultiSelectionModel<WorkClassification>) grid.setSelectionMode(SelectionMode.MULTI);
         gridSelectionModel.setSelectAllCheckboxVisibility(SelectAllCheckboxVisibility.HIDDEN);
