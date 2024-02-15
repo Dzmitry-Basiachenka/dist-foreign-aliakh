@@ -9,8 +9,8 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.foreign.vui.vaadin.common.security.SecurityUtils;
-
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.downloader.OnDemandFileDownloader;
+
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.contextmenu.MenuItem;
 import com.vaadin.flow.component.menubar.MenuBar;
@@ -58,7 +58,6 @@ public class FasUsageMediatorTest {
         addToScenarioButton = new Button();
         mediator = new FasUsageMediator();
         mediator.setLoadUsageBatchMenuItem(loadUsageBatchMenuItem);
-        mediator.setSendForResearchButton(sendForResearchButton);
         mediator.setSendForResearchButton(sendForResearchButton);
         mediator.setSendForResearchDownloader(sendForResearchDownloader);
         mediator.setLoadResearchedUsagesButton(loadResearchedUsagesButton);

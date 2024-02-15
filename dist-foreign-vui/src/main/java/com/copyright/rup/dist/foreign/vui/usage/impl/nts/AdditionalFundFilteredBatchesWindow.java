@@ -60,18 +60,21 @@ class AdditionalFundFilteredBatchesWindow extends CommonDialog implements IAddit
         super.setHeaderTitle(ForeignUi.getMessage("window.filtered_batches"));
         super.setWidth("700px");
         super.setHeight("400px");
-        var rootLayout = new VerticalLayout(initGrid(usageBatches, grossAmount));
-        rootLayout.setSizeFull();
-        super.add(rootLayout);
+        super.add(initContent(usageBatches, grossAmount));
         super.getFooter().add(initButtonsLayout(usageBatches, grossAmount));
         super.setModalWindowProperties("batches-filter-window", true);
+    }
+
+    private VerticalLayout initContent(List<UsageBatch> usageBatches, BigDecimal grossAmount) {
+        var content = new VerticalLayout(initGrid(usageBatches, grossAmount));
+        content.setSizeFull();
+        return content;
     }
 
     private Grid<UsageBatch> initGrid(List<UsageBatch> usageBatches, BigDecimal grossAmount) {
         Grid<UsageBatch> grid = new Grid<>();
         grid.setItems(usageBatches);
         grid.setSelectionMode(SelectionMode.NONE);
-        grid.setSizeFull();
         grid.addColumn(UsageBatch::getName)
             .setHeader(ForeignUi.getMessage("table.column.batch_name"))
             .setSortProperty(COLUMN_NAME)
@@ -81,7 +84,7 @@ class AdditionalFundFilteredBatchesWindow extends CommonDialog implements IAddit
             .setResizable(true)
             .setKey(COLUMN_NAME)
             .setId(COLUMN_NAME);
-        grid.addColumn(usageBatch -> CurrencyUtils.format(usageBatch.getGrossAmount(), null))
+        grid.addColumn(batch -> CurrencyUtils.format(batch.getGrossAmount(), null))
             .setHeader(ForeignUi.getMessage("table.column.withdrawn_amount"))
             .setSortProperty(COLUMN_GROSS_AMOUNT)
             .setComparator((SerializableComparator<UsageBatch>) (batch1, batch2) ->

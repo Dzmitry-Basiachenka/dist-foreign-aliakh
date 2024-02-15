@@ -178,9 +178,7 @@ public class UsageBatchUploadWindow extends CommonDialog {
         var uploadButton = Buttons.createButton(ForeignUi.getMessage("button.upload"));
         uploadButton.addClickListener(event -> onUploadClicked());
         VaadinUtils.setButtonsAutoDisabled(uploadButton);
-        var buttonsLayout = new HorizontalLayout();
-        buttonsLayout.add(uploadButton, Buttons.createCloseButton(this));
-        return buttonsLayout;
+        return new HorizontalLayout(uploadButton, Buttons.createCloseButton(this));
     }
 
     private VerticalLayout initRightsholderLayout() {

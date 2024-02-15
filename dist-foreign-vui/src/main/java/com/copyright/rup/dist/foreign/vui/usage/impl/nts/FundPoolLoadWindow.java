@@ -80,10 +80,10 @@ class FundPoolLoadWindow extends CommonDialog {
      */
     FundPoolLoadWindow(INtsUsageController usagesController) {
         this.usagesController = usagesController;
-        super.add(initRootLayout());
-        super.setHeaderTitle(ForeignUi.getMessage("window.load_fund_pool"));
         super.setWidth("520px");
         super.setHeight("510px");
+        super.setHeaderTitle(ForeignUi.getMessage("window.load_fund_pool"));
+        super.add(initRootLayout());
         super.getFooter().add(initButtonsLayout());
         super.setModalWindowProperties("fund-pool-upload-window", false);
         initBinder();
@@ -156,10 +156,7 @@ class FundPoolLoadWindow extends CommonDialog {
     private HorizontalLayout initButtonsLayout() {
         var uploadButton = Buttons.createButton(ForeignUi.getMessage("button.upload"));
         uploadButton.addClickListener(event -> onUploadClicked());
-        VaadinUtils.setButtonsAutoDisabled(uploadButton);
-        var horizontalLayout = new HorizontalLayout();
-        horizontalLayout.add(uploadButton, Buttons.createCloseButton(this));
-        return horizontalLayout;
+        return new HorizontalLayout(uploadButton, Buttons.createCloseButton(this));
     }
 
     private HorizontalLayout initRightsholderLayout() {

@@ -92,7 +92,7 @@ public class CreateNtsScenarioWindowTest {
         verify(controller);
         verifyWindow(window, "Create Scenario", "320px", null, Unit.PIXELS, false);
         assertEquals("create-scenario-window", window.getId().get());
-        VerticalLayout content = (VerticalLayout)getDialogContent(window);
+        var content = (VerticalLayout) getDialogContent(window);
         assertEquals(6, content.getComponentCount());
         verifyScenarioNameField(content.getComponentAt(0));
         verifyRhMinimumAmountField(content.getComponentAt(1));

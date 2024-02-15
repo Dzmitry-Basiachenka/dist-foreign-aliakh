@@ -165,7 +165,6 @@ class CreateNtsScenarioWindow extends CommonDialog {
     private HorizontalLayout initButtonsLayout() {
         var confirmButton = Buttons.createButton(ForeignUi.getMessage("button.confirm"));
         confirmButton.addClickListener(listener -> onConfirmButtonClicked());
-        VaadinUtils.setButtonsAutoDisabled(confirmButton);
         return new HorizontalLayout(confirmButton, Buttons.createCancelButton(this));
     }
 

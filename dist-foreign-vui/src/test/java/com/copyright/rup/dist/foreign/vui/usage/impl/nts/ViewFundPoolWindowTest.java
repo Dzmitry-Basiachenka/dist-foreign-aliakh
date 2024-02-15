@@ -89,7 +89,7 @@ public class ViewFundPoolWindowTest {
     @SuppressWarnings("unchecked")
     public void testStructure() {
         verifyWindow(window, "View Fund Pool", "1150px", "550px", Unit.PIXELS, true);
-        VerticalLayout content = (VerticalLayout) getDialogContent(window);
+        var content = (VerticalLayout) getDialogContent(window);
         assertEquals(2, content.getComponentCount());
         verifySearchWidget(content.getComponentAt(0),
             "Enter Fund Pool Name or Payment Date (mm/dd/yyyy) or Source RRO Name/Account #");
