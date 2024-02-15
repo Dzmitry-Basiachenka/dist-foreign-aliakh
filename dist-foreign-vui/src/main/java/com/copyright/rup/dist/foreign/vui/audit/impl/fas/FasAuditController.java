@@ -5,7 +5,6 @@ import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
-import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.vui.audit.api.ICommonAuditFilterController;
 import com.copyright.rup.dist.foreign.vui.audit.api.ICommonAuditWidget;
 import com.copyright.rup.dist.foreign.vui.audit.api.fas.IFasAuditController;
@@ -49,13 +48,13 @@ public class FasAuditController extends CommonAuditController implements IFasAud
 
     @Override
     public int getSize() {
-        AuditFilter filter = getFilter();
+        var filter = getFilter();
         return !filter.isEmpty() ? getUsageService().getCountForAudit(filter) : 0;
     }
 
     @Override
     public List<UsageDto> loadBeans(int startIndex, int count, List<QuerySortOrder> sortOrders) {
-        AuditFilter filter = getFilter();
+        var filter = getFilter();
         Sort sort = null;
         if (CollectionUtils.isNotEmpty(sortOrders)) {
             QuerySortOrder sortOrder = sortOrders.get(0);

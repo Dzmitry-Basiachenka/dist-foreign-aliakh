@@ -149,7 +149,7 @@ public class FasAuditFilterWidgetTest {
         widget.getFilter().setRhAccountNumbers(accountNumbers);
         applyButton.setEnabled(true);
         assertFalse(widget.getFilter().isEmpty());
-        Button clearButton = (Button) ((HorizontalLayout) widget.getComponentAt(6)).getComponentAt(1);
+        var clearButton = (Button) ((HorizontalLayout) widget.getComponentAt(6)).getComponentAt(1);
         clearButton.click();
         assertFalse(applyButton.isEnabled());
         assertTrue(widget.getFilter().isEmpty());

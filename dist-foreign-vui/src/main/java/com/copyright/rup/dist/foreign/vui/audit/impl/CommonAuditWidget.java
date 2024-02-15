@@ -155,7 +155,6 @@ public abstract class CommonAuditWidget extends SplitLayout implements ICommonAu
         auditGrid.setItems(dataProvider);
         auditGrid.setSelectionMode(SelectionMode.NONE);
         VaadinUtils.setGridProperties(auditGrid, "audit-grid");
-        auditGrid.setSizeFull();
         addColumns();
         var layout = VaadinUtils.initSizeFullVerticalLayout(initToolbar(), auditGrid);
         VaadinUtils.addComponentStyle(layout, "audit-layout");
