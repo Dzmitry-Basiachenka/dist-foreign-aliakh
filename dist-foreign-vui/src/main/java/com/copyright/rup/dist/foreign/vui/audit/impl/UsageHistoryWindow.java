@@ -55,7 +55,6 @@ public class UsageHistoryWindow extends CommonDialog implements IDateFormatter {
         Grid<UsageAuditItem> grid = new Grid<>();
         grid.setSelectionMode(SelectionMode.NONE);
         grid.setItems(usageAuditItems);
-        grid.setSizeFull();
         VaadinUtils.setGridProperties(grid, "usage-history-grid");
         grid.addColumn(item -> item.getActionType().name())
             .setHeader(ForeignUi.getMessage("label.action_type"))

@@ -149,8 +149,8 @@ public class FasAuditControllerTest {
     public void testShowUsageHistory() {
         mockStatic(Windows.class);
         Capture<UsageHistoryWindow> windowCapture = newCapture();
-        String usageId = "01e7c4c8-6b04-4920-9b23-08a2f551c926";
-        String detailId = "8830c9f1-b806-467d-927e-81fcf17ba013";
+        var usageId = "01e7c4c8-6b04-4920-9b23-08a2f551c926";
+        var detailId = "8830c9f1-b806-467d-927e-81fcf17ba013";
         expect(usageAuditService.getUsageAudit(usageId)).andReturn(List.of()).once();
         Windows.showModalWindow(capture(windowCapture));
         expectLastCall().once();

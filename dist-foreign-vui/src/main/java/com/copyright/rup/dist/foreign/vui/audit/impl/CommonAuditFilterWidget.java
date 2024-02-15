@@ -49,13 +49,9 @@ public abstract class CommonAuditFilterWidget extends VerticalLayout implements 
     @Override
     public CommonAuditFilterWidget init() {
         setMinWidth("150px");
-        filter = buildAuditFilter();
-        appliedFilter = buildAuditFilter();
-        appliedFilterWidget = getAppliedFilterWidget();
-        initFields();
-        add(buildButtonsLayout(), buildAppliedFiltersHeaderLabel(), appliedFilterWidget);
         setSpacing(false);
-        this.setWidthFull();
+        setWidthFull();
+        initContent();
         VaadinUtils.setPadding(this, 0, 10, 0, 10);
         VaadinUtils.addComponentStyle(this, "audit-filter-widget");
         return this;
@@ -90,12 +86,12 @@ public abstract class CommonAuditFilterWidget extends VerticalLayout implements 
     }
 
     /**
-     * Init fields.
+     * Initializes fields.
      */
     public abstract void initFields();
 
     /**
-     * trim values of filter.
+     * Trims values of filter.
      */
     public abstract void trimFilterValues();
 
@@ -107,16 +103,18 @@ public abstract class CommonAuditFilterWidget extends VerticalLayout implements 
     }
 
     /**
-     * refresh filter.
+     * Refreshes filter.
      */
     protected void refreshFilter() {
         filter = buildAuditFilter();
     }
 
     /**
-     * @return instantiated applied filter widget.
+     * Initializes applied filter widget.
+     *
+     * @return instantiated applied filter widget
      */
-    protected abstract CommonAuditAppliedFilterWidget getAppliedFilterWidget();
+    protected abstract CommonAuditAppliedFilterWidget initAppliedFilterWidget();
 
     /**
      * @return rightsholder filter {@link LazyRightsholderFilterWidget}.
@@ -184,6 +182,20 @@ public abstract class CommonAuditFilterWidget extends VerticalLayout implements 
         return label;
     }
 
+    private void initContent() {
+        filter = buildAuditFilter();
+        appliedFilter = buildAuditFilter();
+        appliedFilterWidget = initAppliedFilterWidget();
+        initFields();
+        add(buildButtonsLayout(), buildAppliedFiltersHeaderLabel(), appliedFilterWidget);
+    }
+
+    private AuditFilter buildAuditFilter() {
+        var auditFilter = new AuditFilter();
+        auditFilter.setProductFamily(controller.getProductFamily());
+        return auditFilter;
+    }
+
     private HorizontalLayout buildButtonsLayout() {
         applyButton = Buttons.createButton(ForeignUi.getMessage("button.apply"));
         applyButton.addClickListener(event -> trimFilterValues());
@@ -198,10 +210,10 @@ public abstract class CommonAuditFilterWidget extends VerticalLayout implements 
         return layout;
     }
 
-    private AuditFilter buildAuditFilter() {
-        var auditFilter = new AuditFilter();
-        auditFilter.setProductFamily(controller.getProductFamily());
-        return auditFilter;
+    private Label buildAppliedFiltersHeaderLabel() {
+        var label = new Label(ForeignUi.getMessage("label.applied_filters"));
+        label.addClassNames("filter-label");
+        return label;
     }
 
     private TextField buildTextField(String caption) {
@@ -209,11 +221,5 @@ public abstract class CommonAuditFilterWidget extends VerticalLayout implements 
         textField.setWidthFull();
         textField.setValueChangeMode(ValueChangeMode.LAZY);
         return textField;
-    }
-
-    private Label buildAppliedFiltersHeaderLabel() {
-        var label = new Label(ForeignUi.getMessage("label.applied_filters"));
-        label.addClassNames("filter-label");
-        return label;
     }
 }

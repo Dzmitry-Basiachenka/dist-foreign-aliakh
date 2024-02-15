@@ -72,7 +72,7 @@ public class FasAuditFilterWidget extends CommonAuditFilterWidget {
     }
 
     @Override
-    protected CommonAuditAppliedFilterWidget getAppliedFilterWidget() {
+    protected CommonAuditAppliedFilterWidget initAppliedFilterWidget() {
         return new FasAuditAppliedFilterWidget(controller);
     }
 

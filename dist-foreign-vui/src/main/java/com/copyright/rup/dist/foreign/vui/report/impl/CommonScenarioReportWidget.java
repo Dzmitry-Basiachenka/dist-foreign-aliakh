@@ -20,7 +20,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
 
-
 /**
  * Implementation of {@link ICommonScenarioReportWidget}.
  * <p>
