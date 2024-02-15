@@ -17,6 +17,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.Grid.SelectionMode;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.provider.ListDataProvider;
@@ -62,13 +63,8 @@ public class TaxNotificationReportWidget extends CommonDialog implements ITaxNot
     public ITaxNotificationReportWidget init() {
         setHeight("400px");
         setWidth("600px");
-        initSearchWidget();
-        initGrid();
-        initNumberOfDaysField();
+        add(initContent());
         getFooter().add(initButtonsLayout());
-        var layout = VaadinUtils.initSizeFullVerticalLayout(searchWidget, grid, numberOfDaysField);
-        layout.setPadding(true);
-        add(layout);
         setModalWindowProperties("tax-notification-report-window", true);
         return this;
     }
@@ -100,6 +96,15 @@ public class TaxNotificationReportWidget extends CommonDialog implements ITaxNot
     @Override
     public int getNumberOfDays() {
         return numberOfDaysField.getValue();
+    }
+
+    private VerticalLayout initContent() {
+        initSearchWidget();
+        initGrid();
+        initNumberOfDaysField();
+        var content = VaadinUtils.initSizeFullVerticalLayout(searchWidget, grid, numberOfDaysField);
+        content.setPadding(true);
+        return content;
     }
 
     private void initSearchWidget() {

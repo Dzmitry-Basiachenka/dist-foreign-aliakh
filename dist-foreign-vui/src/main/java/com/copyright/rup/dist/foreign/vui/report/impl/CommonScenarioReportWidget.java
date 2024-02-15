@@ -15,6 +15,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -42,12 +43,10 @@ public class CommonScenarioReportWidget extends CommonDialog implements ICommonS
     @Override
     @SuppressWarnings("unchecked")
     public ICommonScenarioReportWidget init() {
-        setModalWindowProperties("report-scenario-widget", false);
-        var content = VaadinUtils.initCommonVerticalLayout(getScenarioCombobox());
-        getFooter().add(getButtonsLayout());
-        content.setPadding(true);
-        add(content);
         setWidth("500px");
+        add(initContent());
+        getFooter().add(getButtonsLayout());
+        setModalWindowProperties("report-scenario-widget", false);
         return this;
     }
 
@@ -59,6 +58,12 @@ public class CommonScenarioReportWidget extends CommonDialog implements ICommonS
     @Override
     public Scenario getScenario() {
         return scenarioComboBox.getValue();
+    }
+
+    private VerticalLayout initContent() {
+        var content = VaadinUtils.initCommonVerticalLayout(getScenarioCombobox());
+        content.setPadding(true);
+        return content;
     }
 
     private Component getScenarioCombobox() {

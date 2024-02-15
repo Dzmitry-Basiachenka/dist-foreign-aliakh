@@ -19,6 +19,7 @@ import com.vaadin.flow.component.html.Section;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.Scroller;
 import com.vaadin.flow.component.orderedlayout.Scroller.ScrollDirection;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.provider.ListDataProvider;
 
 import org.apache.commons.collections4.CollectionUtils;
@@ -53,13 +54,9 @@ public class SummaryMarketReportWidget extends CommonDialog implements ISummaryM
     public ISummaryMarketReportWidget init() {
         setWidth("400px");
         setHeight("450px");
-        setModalWindowProperties("summary-market-report-window", false);
-        var scroller = new Scroller(new Div(buildPanel()));
-        scroller.setScrollDirection(ScrollDirection.BOTH);
-        var content = VaadinUtils.initSizeFullVerticalLayout(createSearchWidget(), scroller);
-        VaadinUtils.setPadding(content, 0, 10, 0, 10);
+        add(initContent());
         getFooter().add(buildButtonsLayout());
-        add(content);
+        setModalWindowProperties("summary-market-report-window", false);
         return this;
     }
 
@@ -79,6 +76,14 @@ public class SummaryMarketReportWidget extends CommonDialog implements ISummaryM
         VaadinUtils.addComponentStyle(section, "scroller-panel");
         section.setSizeFull();
         return section;
+    }
+
+    private VerticalLayout initContent() {
+        var scroller = new Scroller(new Div(buildPanel()));
+        scroller.setScrollDirection(ScrollDirection.BOTH);
+        var content = VaadinUtils.initSizeFullVerticalLayout(createSearchWidget(), scroller);
+        VaadinUtils.setPadding(content, 0, 10, 0, 10);
+        return content;
     }
 
     private void initCheckboxGroup() {

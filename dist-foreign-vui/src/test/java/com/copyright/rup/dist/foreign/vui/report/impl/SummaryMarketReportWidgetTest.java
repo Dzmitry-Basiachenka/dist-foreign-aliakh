@@ -67,19 +67,19 @@ public class SummaryMarketReportWidgetTest {
     public void testInit() {
         verifyWindow(widget, StringUtils.EMPTY, "400px", "450px", Unit.PIXELS, false);
         assertThat(UiTestHelper.getDialogContent(widget), instanceOf(VerticalLayout.class));
-        VerticalLayout content = (VerticalLayout) UiTestHelper.getDialogContent(widget);
+        var content = (VerticalLayout) UiTestHelper.getDialogContent(widget);
         assertEquals(2, content.getComponentCount());
-        Component firstComponent = content.getComponentAt(0);
+        var firstComponent = content.getComponentAt(0);
         assertThat(firstComponent, instanceOf(SearchWidget.class));
-        Component secondComponent = content.getComponentAt(1);
+        var secondComponent = content.getComponentAt(1);
         assertThat(secondComponent, instanceOf(Scroller.class));
-        Scroller panel = (Scroller) secondComponent;
+        var panel = (Scroller) secondComponent;
         assertThat(panel.getContent(), instanceOf(Div.class));
         assertThat(((Div) panel.getContent()).getComponentAt(0), instanceOf(Section.class));
-        Section section = (Section) ((Div) panel.getContent()).getComponentAt(0);
+        var section = (Section) ((Div) panel.getContent()).getComponentAt(0);
         assertEquals(1, section.getComponentCount());
         assertThat(section.getComponentAt(0), instanceOf(CheckboxGroup.class));
-        verifyButtonsLayout(UiTestHelper.getFooterComponent(widget, 2));
+        verifyButtonsLayout(UiTestHelper.getFooterComponent(widget, 1));
         assertEquals("summary-market-report-window", widget.getClassName());
         assertEquals("summary-market-report-window", widget.getId().orElseThrow());
     }
