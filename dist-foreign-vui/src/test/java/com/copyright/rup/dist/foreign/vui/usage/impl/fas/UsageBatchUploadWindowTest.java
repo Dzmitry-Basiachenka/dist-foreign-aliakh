@@ -3,9 +3,6 @@ package com.copyright.rup.dist.foreign.vui.usage.impl.fas;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.assertFieldValidationMessage;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.getDialogContent;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.getFooterLayout;
-import static com.copyright.rup.dist.foreign.vui.UiTestHelper.setBigDecimalFieldValue;
-import static com.copyright.rup.dist.foreign.vui.UiTestHelper.setLongFieldValue;
-import static com.copyright.rup.dist.foreign.vui.UiTestHelper.setTextFieldValue;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyBigDecimalField;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyButton;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyLoadClickListener;
@@ -35,6 +32,7 @@ import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.Processin
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.service.impl.csv.UsageCsvProcessor;
+import com.copyright.rup.dist.foreign.vui.IVaadinComponentFinder;
 import com.copyright.rup.dist.foreign.vui.usage.api.fas.IFasUsageController;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.security.SecurityUtils;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.LongField;
@@ -77,7 +75,7 @@ import java.time.LocalDate;
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({Windows.class, SecurityUtils.class, UsageBatchUploadWindow.class})
 @PowerMockIgnore({"com.sun.org.apache.xerces.*", "javax.xml.*", "org.xml.*", "javax.management.*"})
-public class UsageBatchUploadWindowTest {
+public class UsageBatchUploadWindowTest implements IVaadinComponentFinder {
 
     private static final String USAGE_BATCH_NAME = "Usage Batch";
     private static final Long FAS_RRO_ACCOUNT_NUMBER = 1000001863L;
@@ -94,20 +92,20 @@ public class UsageBatchUploadWindowTest {
     private static final LocalDate PAYMENT_DATE = LocalDate.of(2017, 2, 27);
     private static final String FISCAL_YEAR = "FY2017";
     private static final String GROSS_AMOUNT = "100.00";
-    private static final String USAGE_BATCH_NAME_FIELD = "usageBatchNameField";
+    private static final String USAGE_BATCH_NAME_LABEL = "Usage Batch Name";
     private static final String UPLOAD_FIELD = "uploadField";
-    private static final String ACCOUNT_NUMBER_FIELD = "accountNumberField";
-    private static final String PRODUCT_FAMILY_FIELD = "productFamilyField";
-    private static final String ACCOUNT_NAME_FIELD = "accountNameField";
+    private static final String ACCOUNT_NUMBER_LABEL = "RRO Account #";
+    private static final String PRODUCT_FAMILY_LABEL = "Product Family";
+    private static final String ACCOUNT_NAME_LABEL = "RRO Account Name";
     private static final String PAYMENT_DATE_WIDGET = "paymentDateWidget";
-    private static final String GROSS_AMOUNT_FIELD = "grossAmountField";
+    private static final String GROSS_AMOUNT_LABEL = "Gross Amount in USD";
     private static final String EMPTY_FIELD_MESSAGE = "Field value should be specified";
     private static final String VALUE_EXCEED_50_CHARACTERS_MESSAGE = "Field value should not exceed 50 characters";
     private static final String USAGE_BATCH_EXISTS_MESSAGE = "Usage Batch with such name already exists";
     private static final String INVALID_NUMBER_LENGTH_MESSAGE = "Field value should not exceed 10 digits";
     private static final String INVALID_GROSS_AMOUNT_MESSAGE =
         "Field value should be positive number and should not exceed 10 digits";
-    private static final String WIDTH = "100%";
+    private static final String WIDTH_FULL = "100%";
 
     private UsageBatchUploadWindow window;
     private IFasUsageController controller;
@@ -144,7 +142,7 @@ public class UsageBatchUploadWindowTest {
         expect(controller.usageBatchExists(STRING_50_CHARACTERS)).andReturn(false).times(2);
         replay(controller);
         window = new UsageBatchUploadWindow(controller);
-        TextField usageBatchNameField = Whitebox.getInternalState(window, USAGE_BATCH_NAME_FIELD);
+        var usageBatchNameField = getTextField(window, USAGE_BATCH_NAME_LABEL);
         Binder<?> binder = Whitebox.getInternalState(window, "binder");
         assertFieldValidationMessage(usageBatchNameField, StringUtils.EMPTY, binder, EMPTY_FIELD_MESSAGE, false);
         assertFieldValidationMessage(usageBatchNameField, SPACES_STRING, binder, EMPTY_FIELD_MESSAGE, false);
@@ -160,7 +158,7 @@ public class UsageBatchUploadWindowTest {
     public void testIsValidAccountNumberField() {
         replay(controller);
         window = new UsageBatchUploadWindow(controller);
-        LongField accountNumberField = Whitebox.getInternalState(window, ACCOUNT_NUMBER_FIELD);
+        var accountNumberField = getLongField(window, ACCOUNT_NUMBER_LABEL);
         Binder<?> binder = Whitebox.getInternalState(window, "binder");
         assertFieldValidationMessage(accountNumberField, 0L, binder, INVALID_NUMBER_LENGTH_MESSAGE, false);
         assertFieldValidationMessage(accountNumberField, 1L, binder, null, true);
@@ -174,7 +172,7 @@ public class UsageBatchUploadWindowTest {
     public void testIsValidGrossAmountField() {
         replay(controller);
         window = new UsageBatchUploadWindow(controller);
-        BigDecimalField grossAmountField = Whitebox.getInternalState(window, GROSS_AMOUNT_FIELD);
+        var grossAmountField = getBigDecimalField(window, GROSS_AMOUNT_LABEL);
         Binder<?> binder = Whitebox.getInternalState(window, "binder");
         assertFieldValidationMessage(grossAmountField, null, binder, EMPTY_FIELD_MESSAGE, false);
         assertFieldValidationMessage(grossAmountField, BigDecimal.ZERO, binder, INVALID_GROSS_AMOUNT_MESSAGE,
@@ -200,18 +198,18 @@ public class UsageBatchUploadWindowTest {
         UploadField uploadField = Whitebox.getInternalState(window, UploadField.class);
         Whitebox.setInternalState(uploadField, "fileName", "test.csv");
         assertFalse(window.isValid());
-        setLongFieldValue(window, ACCOUNT_NUMBER_FIELD, FAS_RRO_ACCOUNT_NUMBER);
+        setLongFieldValue(window, ACCOUNT_NUMBER_LABEL, FAS_RRO_ACCOUNT_NUMBER);
         assertFalse(window.isValid());
-        TextField accountNameField = Whitebox.getInternalState(window, ACCOUNT_NAME_FIELD);
+        var accountNameField = getTextField(window, ACCOUNT_NAME_LABEL);
         accountNameField.setReadOnly(false);
         accountNameField.setValue(RRO_NAME);
         accountNameField.setReadOnly(true);
         assertFalse(window.isValid());
         Whitebox.getInternalState(window, LocalDateWidget.class).setValue(LocalDate.now());
         assertFalse(window.isValid());
-        setBigDecimalFieldValue(window, GROSS_AMOUNT_FIELD, GROSS_AMOUNT);
+        setBigDecimalFieldValue(window, GROSS_AMOUNT_LABEL, GROSS_AMOUNT);
         assertFalse(window.isValid());
-        setTextFieldValue(window, USAGE_BATCH_NAME_FIELD, USAGE_BATCH_NAME);
+        setTextFieldValue(window, USAGE_BATCH_NAME_LABEL, USAGE_BATCH_NAME);
         assertTrue(window.isValid());
         verify(controller);
     }
@@ -240,13 +238,12 @@ public class UsageBatchUploadWindowTest {
         Windows.showNotificationWindow("Upload completed: 1 record(s) were stored successfully");
         expectLastCall().once();
         replay(Windows.class, window, controller, uploadField, processor);
-        setTextFieldValue(window, USAGE_BATCH_NAME_FIELD, USAGE_BATCH_NAME);
-        setLongFieldValue(window, ACCOUNT_NUMBER_FIELD, FAS_RRO_ACCOUNT_NUMBER);
-        setTextFieldValue(window, PRODUCT_FAMILY_FIELD, FAS_PRODUCT_FAMILY);
-        setTextFieldValue(window, ACCOUNT_NAME_FIELD, RRO_NAME);
-        Whitebox.setInternalState(window, "rro", rro);
+        setTextFieldValue(window, USAGE_BATCH_NAME_LABEL, USAGE_BATCH_NAME);
+        setLongFieldValue(window, ACCOUNT_NUMBER_LABEL, FAS_RRO_ACCOUNT_NUMBER);
+        setTextFieldValue(window, PRODUCT_FAMILY_LABEL, FAS_PRODUCT_FAMILY);
+        setTextFieldValue(window, ACCOUNT_NAME_LABEL, RRO_NAME);
         ((LocalDateWidget) Whitebox.getInternalState(window, PAYMENT_DATE_WIDGET)).setValue(PAYMENT_DATE);
-        setBigDecimalFieldValue(window, GROSS_AMOUNT_FIELD, GROSS_AMOUNT);
+        setBigDecimalFieldValue(window, GROSS_AMOUNT_LABEL, GROSS_AMOUNT);
         window.onUploadClicked();
         verify(Windows.class, window, controller, uploadField, processor);
     }
@@ -266,7 +263,7 @@ public class UsageBatchUploadWindowTest {
         var rootLayout = (VerticalLayout) component;
         assertEquals(5, rootLayout.getComponentCount());
         verifyUsageBatchNameComponent(rootLayout.getComponentAt(0));
-        verifyUploadComponent(rootLayout.getComponentAt(1), WIDTH);
+        verifyUploadComponent(rootLayout.getComponentAt(1), WIDTH_FULL);
         verifyRightsholdersComponents(rootLayout.getComponentAt(2));
         verifyDateComponents(rootLayout.getComponentAt(3));
         verifyGrossAmount(rootLayout.getComponentAt(4));
@@ -274,7 +271,7 @@ public class UsageBatchUploadWindowTest {
     }
 
     private void verifyUsageBatchNameComponent(Component component) {
-        var textField = verifyTextField(component, "Usage Batch Name", WIDTH, "usage-batch-name-field");
+        var textField = verifyTextField(component, "Usage Batch Name", WIDTH_FULL, "usage-batch-name-field");
         assertEquals(StringUtils.EMPTY, textField.getValue());
     }
 
@@ -342,7 +339,7 @@ public class UsageBatchUploadWindowTest {
         assertThat(paymentDateLayout, instanceOf(LocalDateWidget.class));
         var localDateWidget = (LocalDateWidget) paymentDateLayout;
         assertEquals("Payment Date", localDateWidget.getLabel());
-        var fiscalYearField = verifyTextField(fiscalYearLayout, "Fiscal Year", WIDTH, "fiscal-year-field");
+        var fiscalYearField = verifyTextField(fiscalYearLayout, "Fiscal Year", WIDTH_FULL, "fiscal-year-field");
         assertTrue(fiscalYearField.isReadOnly());
         assertEquals(StringUtils.EMPTY, fiscalYearField.getValue());
         localDateWidget.setValue(LocalDate.of(2017, 2, 2));
@@ -354,7 +351,7 @@ public class UsageBatchUploadWindowTest {
         var horizontalLayout = (HorizontalLayout) component;
         assertEquals(1, horizontalLayout.getComponentCount());
         BigDecimalField grossAmountField = verifyBigDecimalField(horizontalLayout.getComponentAt(0),
-            "Gross Amount in USD", WIDTH, "gross-amount-field");
+            "Gross Amount in USD", WIDTH_FULL, "gross-amount-field");
         Component prefixComponent = grossAmountField.getPrefixComponent();
         assertNotNull(prefixComponent);
         assertThat(prefixComponent, instanceOf(Icon.class));
