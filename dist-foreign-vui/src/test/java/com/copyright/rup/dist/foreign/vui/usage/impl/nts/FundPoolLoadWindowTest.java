@@ -3,10 +3,8 @@ package com.copyright.rup.dist.foreign.vui.usage.impl.nts;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.assertFieldValidationMessage;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.getDialogContent;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.getFooterLayout;
-import static com.copyright.rup.dist.foreign.vui.UiTestHelper.setBigDecimalFieldValue;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.setIntegerFieldValue;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.setLongFieldValue;
-import static com.copyright.rup.dist.foreign.vui.UiTestHelper.setTextFieldValue;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyBigDecimalField;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyButton;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyIntegerField;
@@ -64,7 +62,6 @@ import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Collections;
 import java.util.Set;
 
 /**
@@ -96,16 +93,9 @@ public class FundPoolLoadWindowTest {
     private static final String MIN_AMOUNT = "10.00";
     private static final String ZERO_AMOUNT = "0.00";
     private static final String BINDER = "binder";
-    private static final String USAGE_BATCH_NAME_FIELD = "usageBatchNameField";
     private static final String PERIOD_FROM_FIELD = "fundPoolPeriodFromField";
     private static final String PERIOD_TO_FIELD = "fundPoolPeriodToField";
-    private static final String STM_FIELD = "stmAmountField";
-    private static final String NON_STM_FIELD = "nonStmAmountField";
-    private static final String STM_MIN_FIELD = "stmMinAmountField";
-    private static final String NON_STM_MIN_FIELD = "nonStmMinAmountField";
     private static final String ACCOUNT_NUMBER_FIELD = "accountNumberField";
-    private static final String EXCLUDE_STM_CHECKBOX = "excludeStmCheckbox";
-    private static final Long ACCOUNT_NUMBER = 1000001863L;
     private static final String EMPTY_FIELD_MESSAGE = "Field value should be specified";
     private static final String INVALID_PERIOD_MESSAGE = "Field value should be in range from 1950 to 2099";
     private static final String INVALID_NUMBER_LENGTH_MESSAGE = "Field value should not exceed 10 digits";
@@ -144,7 +134,7 @@ public class FundPoolLoadWindowTest {
         replay(controller);
         window = new FundPoolLoadWindow(controller);
         Binder<?> binder = Whitebox.getInternalState(window, BINDER);
-        TextField usageBatchNameField = Whitebox.getInternalState(window, USAGE_BATCH_NAME_FIELD);
+        TextField usageBatchNameField = getUsageBatchNameField();
         assertFieldValidationMessage(usageBatchNameField, StringUtils.EMPTY, binder, EMPTY_FIELD_MESSAGE, false);
         assertFieldValidationMessage(usageBatchNameField, "   ", binder, EMPTY_FIELD_MESSAGE, false);
         assertFieldValidationMessage(usageBatchNameField, StringUtils.repeat('a', 51), binder,
@@ -202,7 +192,7 @@ public class FundPoolLoadWindowTest {
         assertEquals(1, marketsLayout.getComponentCount());
         validateSelectedMarket(marketsLayout, Set.of("Bus"), 1);
         validateSelectedMarket(marketsLayout, null, 2);
-        validateSelectedMarket(marketsLayout, Collections.emptySet(), 2);
+        validateSelectedMarket(marketsLayout, Set.of(), 2);
         Component errorDiv = marketsLayout.getComponentAt(1);
         assertThat(errorDiv, instanceOf(Div.class));
         assertEquals("Please select at least one market", errorDiv.getElement().getProperty("innerHTML"));
@@ -213,10 +203,10 @@ public class FundPoolLoadWindowTest {
     public void testAmountFieldValidation() {
         replay(controller);
         window = new FundPoolLoadWindow(controller);
-        verifyAmountFieldValidation(STM_FIELD);
-        verifyAmountFieldValidation(NON_STM_FIELD);
-        verifyAmountFieldValidation(STM_MIN_FIELD);
-        verifyAmountFieldValidation(NON_STM_MIN_FIELD);
+        verifyAmountFieldValidation(getStmAmountField());
+        verifyAmountFieldValidation(getNonStmAmountField());
+        verifyAmountFieldValidation(getStmMinAmountField());
+        verifyAmountFieldValidation(getNonStmMinAmountField());
         verify(controller);
     }
 
@@ -227,9 +217,9 @@ public class FundPoolLoadWindowTest {
         window = new FundPoolLoadWindow(controller);
         populateSelectedMarkets(Set.of("Bus"));
         assertFalse(window.isValid());
-        setTextFieldValue(window, USAGE_BATCH_NAME_FIELD, USAGE_BATCH_NAME);
+        getUsageBatchNameField().setValue(USAGE_BATCH_NAME);
         assertFalse(window.isValid());
-        setLongFieldValue(window, ACCOUNT_NUMBER_FIELD, ACCOUNT_NUMBER);
+        setLongFieldValue(window, ACCOUNT_NUMBER_FIELD, FAS_RRO_ACCOUNT_NUMBER);
         assertFalse(window.isValid());
         TextField accountNameField = Whitebox.getInternalState(window, "accountNameField");
         accountNameField.setReadOnly(false);
@@ -241,19 +231,19 @@ public class FundPoolLoadWindowTest {
         setIntegerFieldValue(window, PERIOD_TO_FIELD, PERIOD_TO);
         setIntegerFieldValue(window, PERIOD_FROM_FIELD, PERIOD_FROM);
         assertFalse(window.isValid());
-        setBigDecimalFieldValue(window, STM_FIELD, AMOUNT);
-        setBigDecimalFieldValue(window, NON_STM_FIELD, AMOUNT);
-        setBigDecimalFieldValue(window, STM_MIN_FIELD, MIN_AMOUNT);
-        setBigDecimalFieldValue(window, NON_STM_MIN_FIELD, MIN_AMOUNT);
+        getStmAmountField().setValue(new BigDecimal(AMOUNT));
+        getNonStmAmountField().setValue(new BigDecimal(AMOUNT));
+        getStmMinAmountField().setValue(new BigDecimal(MIN_AMOUNT));
+        getNonStmMinAmountField().setValue(new BigDecimal(MIN_AMOUNT));
         assertTrue(window.isValid());
-        setBigDecimalFieldValue(window, STM_FIELD, AMOUNT);
-        setBigDecimalFieldValue(window, NON_STM_FIELD, ZERO_AMOUNT);
+        getStmAmountField().setValue(new BigDecimal(AMOUNT));
+        getNonStmAmountField().setValue(new BigDecimal(ZERO_AMOUNT));
         assertTrue(window.isValid());
-        setBigDecimalFieldValue(window, STM_FIELD, ZERO_AMOUNT);
-        setBigDecimalFieldValue(window, NON_STM_FIELD, AMOUNT);
+        getStmAmountField().setValue(new BigDecimal(ZERO_AMOUNT));
+        getNonStmAmountField().setValue(new BigDecimal(AMOUNT));
         assertTrue(window.isValid());
-        setBigDecimalFieldValue(window, STM_FIELD, ZERO_AMOUNT);
-        setBigDecimalFieldValue(window, NON_STM_FIELD, "0");
+        getStmAmountField().setValue(new BigDecimal(ZERO_AMOUNT));
+        getNonStmAmountField().setValue(BigDecimal.ZERO);
         assertFalse(window.isValid());
         verify(controller);
     }
@@ -267,6 +257,7 @@ public class FundPoolLoadWindowTest {
         expectLastCall().once();
         expect(controller.usageBatchExists(USAGE_BATCH_NAME)).andReturn(false).once();
         Capture<UsageBatch> usageBatchCapture = newCapture();
+        expect(controller.getRightsholder(FAS_RRO_ACCOUNT_NUMBER)).andReturn(buildRro()).once();
         expect(controller.getUsagesCountForNtsBatch(capture(usageBatchCapture))).andReturn(3).once();
         expect(controller.loadNtsBatch(capture(usageBatchCapture))).andReturn(3).once();
         Windows.showNotificationWindow("Upload completed: 3 record(s) were stored successfully");
@@ -287,7 +278,6 @@ public class FundPoolLoadWindowTest {
         assertEquals(new BigDecimal(AMOUNT), ntsFields.getNonStmAmount());
         assertEquals(new BigDecimal(MIN_AMOUNT), ntsFields.getStmMinimumAmount());
         assertEquals(new BigDecimal(MIN_AMOUNT), ntsFields.getNonStmMinimumAmount());
-        assertEquals(new BigDecimal(MIN_AMOUNT), ntsFields.getNonStmMinimumAmount());
         assertTrue(ntsFields.isExcludingStm());
         verify(Windows.class, window, controller);
     }
@@ -298,6 +288,7 @@ public class FundPoolLoadWindowTest {
         window = createPartialMock(FundPoolLoadWindow.class, new String[]{"isValid"}, controller);
         expect(window.isValid()).andReturn(true).once();
         expect(controller.usageBatchExists(USAGE_BATCH_NAME)).andReturn(false).once();
+        expect(controller.getRightsholder(FAS_RRO_ACCOUNT_NUMBER)).andReturn(buildRro()).once();
         Capture<UsageBatch> usageBatchCapture = newCapture();
         expect(controller.getUsagesCountForNtsBatch(capture(usageBatchCapture))).andReturn(0).once();
         Windows.showNotificationWindow("There are no usages matching selected Markets and Fund Pool Period");
@@ -311,24 +302,20 @@ public class FundPoolLoadWindowTest {
     }
 
     private void initUploadComponents() {
-        setTextFieldValue(window, USAGE_BATCH_NAME_FIELD, USAGE_BATCH_NAME);
-        setLongFieldValue(window, ACCOUNT_NUMBER_FIELD, ACCOUNT_NUMBER);
+        getUsageBatchNameField().setValue(USAGE_BATCH_NAME);
+        setLongFieldValue(window, ACCOUNT_NUMBER_FIELD, FAS_RRO_ACCOUNT_NUMBER);
+        getVerifyButton().click();
         ((LocalDateWidget) Whitebox.getInternalState(window, "paymentDateWidget")).setValue(PAYMENT_DATE);
         setIntegerFieldValue(window, PERIOD_FROM_FIELD, PERIOD_FROM);
         setIntegerFieldValue(window, PERIOD_TO_FIELD, PERIOD_TO);
-        setBigDecimalFieldValue(window, STM_FIELD, AMOUNT);
-        setBigDecimalFieldValue(window, NON_STM_FIELD, AMOUNT);
-        setBigDecimalFieldValue(window, STM_MIN_FIELD, MIN_AMOUNT);
-        setBigDecimalFieldValue(window, NON_STM_MIN_FIELD, MIN_AMOUNT);
-        ((Checkbox) Whitebox.getInternalState(window, EXCLUDE_STM_CHECKBOX)).setValue(true);
-        var rro = new Rightsholder();
-        rro.setAccountNumber(FAS_RRO_ACCOUNT_NUMBER);
-        rro.setName(RRO_NAME);
-        Whitebox.setInternalState(window, "rro", rro);
+        getStmAmountField().setValue(new BigDecimal(AMOUNT));
+        getNonStmAmountField().setValue(new BigDecimal(AMOUNT));
+        getStmMinAmountField().setValue(new BigDecimal(MIN_AMOUNT));
+        getNonStmMinAmountField().setValue(new BigDecimal(MIN_AMOUNT));
+        getExcludeStmCheckbox().setValue(true);
     }
 
-    private void verifyAmountFieldValidation(String fieldName) {
-        BigDecimalField amountField = Whitebox.getInternalState(window, fieldName);
+    private void verifyAmountFieldValidation(BigDecimalField amountField) {
         Binder<?> binder = Whitebox.getInternalState(window, BINDER);
         assertFieldValidationMessage(amountField, BigDecimal.ZERO, binder, null, true);
         assertFieldValidationMessage(amountField, new BigDecimal("0.00"), binder, null, true);
@@ -391,7 +378,7 @@ public class FundPoolLoadWindowTest {
         accountNumberField.setValue(123456789987654321L);
         verifyButton.click();
         assertEquals(StringUtils.EMPTY, accountNameField.getValue());
-        accountNumberField.setValue(ACCOUNT_NUMBER);
+        accountNumberField.setValue(FAS_RRO_ACCOUNT_NUMBER);
         verifyButton.click();
         assertEquals(FAS_RRO_ACCOUNT_NAME, accountNameField.getValue());
         accountNumberField.setValue(CLA_RRO_ACCOUNT_NUMBER);
@@ -446,7 +433,7 @@ public class FundPoolLoadWindowTest {
 
     private void verifyExcludeStmCheckbox(Component component) {
         assertThat(component, instanceOf(Checkbox.class));
-        Checkbox checkbox = (Checkbox) component;
+        var checkbox = (Checkbox) component;
         assertEquals("Exclude STM RHs", checkbox.getLabel());
         assertEquals("exclude-stm-rhs-checkbox", checkbox.getId().get());
         assertFalse(checkbox.getValue());
@@ -466,5 +453,52 @@ public class FundPoolLoadWindowTest {
 
     private void populateSelectedMarkets(Set<String> markets) {
         Whitebox.setInternalState(window, "selectedMarkets", markets);
+    }
+
+    private TextField getUsageBatchNameField() {
+        var rootLayout = (VerticalLayout) getDialogContent(window);
+        return (TextField) rootLayout.getComponentAt(0);
+    }
+
+    private Button getVerifyButton() {
+        var rootLayout = (VerticalLayout) getDialogContent(window);
+        var rroAccountLayout = (HorizontalLayout) rootLayout.getComponentAt(1);
+        return (Button) rroAccountLayout.getComponentAt(2);
+    }
+
+    private BigDecimalField getStmAmountField() {
+        var rootLayout = (VerticalLayout) getDialogContent(window);
+        var amountLayout = (HorizontalLayout) rootLayout.getComponentAt(4);
+        return (BigDecimalField) amountLayout.getComponentAt(0);
+    }
+
+    private BigDecimalField getNonStmAmountField() {
+        var rootLayout = (VerticalLayout) getDialogContent(window);
+        var amountLayout = (HorizontalLayout) rootLayout.getComponentAt(4);
+        return (BigDecimalField) amountLayout.getComponentAt(1);
+    }
+
+    private BigDecimalField getStmMinAmountField() {
+        var rootLayout = (VerticalLayout) getDialogContent(window);
+        var minAmountLayout = (HorizontalLayout) rootLayout.getComponentAt(5);
+        return (BigDecimalField) minAmountLayout.getComponentAt(0);
+    }
+
+    private BigDecimalField getNonStmMinAmountField() {
+        var rootLayout = (VerticalLayout) getDialogContent(window);
+        var minAmountLayout = (HorizontalLayout) rootLayout.getComponentAt(5);
+        return (BigDecimalField) minAmountLayout.getComponentAt(1);
+    }
+
+    private Checkbox getExcludeStmCheckbox() {
+        var rootLayout = (VerticalLayout) getDialogContent(window);
+        return (Checkbox) rootLayout.getComponentAt(6);
+    }
+
+    private Rightsholder buildRro() {
+        var rro = new Rightsholder();
+        rro.setAccountNumber(FAS_RRO_ACCOUNT_NUMBER);
+        rro.setName(RRO_NAME);
+        return rro;
     }
 }
