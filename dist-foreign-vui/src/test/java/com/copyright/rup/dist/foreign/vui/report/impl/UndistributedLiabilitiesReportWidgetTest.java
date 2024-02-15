@@ -83,7 +83,7 @@ public class UndistributedLiabilitiesReportWidgetTest {
         var firstComponent = content.getComponentAt(0);
         assertEquals(LocalDateWidget.class, firstComponent.getClass());
         assertEquals("Payment Date To", ((LocalDateWidget) firstComponent).getLabel());
-        verifyButtonsLayout(UiTestHelper.getFooterComponent(widget, 2));
+        verifyButtonsLayout(UiTestHelper.getFooterComponent(widget, 1));
         assertEquals("report-undistributed-liabilities-window", widget.getClassName());
         assertEquals("report-undistributed-liabilities-window", widget.getId().orElseThrow());
     }

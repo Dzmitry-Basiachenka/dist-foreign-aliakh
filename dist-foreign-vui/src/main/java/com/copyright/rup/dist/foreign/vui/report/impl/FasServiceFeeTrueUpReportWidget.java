@@ -13,6 +13,7 @@ import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.LocalDateWidget;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
 import java.time.LocalDate;
 import java.util.Objects;
@@ -40,12 +41,9 @@ public class FasServiceFeeTrueUpReportWidget extends CommonDialog implements IFa
     @Override
     @SuppressWarnings("unchecked")
     public IFasServiceFeeTrueUpReportWidget init() {
-        initDatesFilters();
-        var content = VaadinUtils.initSizeFullVerticalLayout(fromDateWidget, toDateWidget, paymentDateToWidget);
-        content.setPadding(true);
-        getFooter().add(getButtonsLayout());
-        add(content);
         setWidth("400px");
+        add(initContent());
+        getFooter().add(getButtonsLayout());
         setModalWindowProperties("report-service-fee-true-up-window", false);
         return this;
     }
@@ -68,6 +66,13 @@ public class FasServiceFeeTrueUpReportWidget extends CommonDialog implements IFa
     @Override
     public LocalDate getPaymentDateTo() {
         return paymentDateToWidget.getValue();
+    }
+
+    private VerticalLayout initContent() {
+        initDatesFilters();
+        var content = VaadinUtils.initSizeFullVerticalLayout(fromDateWidget, toDateWidget, paymentDateToWidget);
+        content.setPadding(true);
+        return content;
     }
 
     private void initDatesFilters() {

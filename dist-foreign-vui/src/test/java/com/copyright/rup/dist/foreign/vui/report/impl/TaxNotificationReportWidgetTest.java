@@ -77,7 +77,7 @@ public class TaxNotificationReportWidgetTest {
     private ITaxNotificationReportController controller;
 
     private static Scenario buildScenario(String id, String name) {
-        Scenario scenario = new Scenario();
+        var scenario = new Scenario();
         scenario.setId(id);
         scenario.setName(name);
         return scenario;

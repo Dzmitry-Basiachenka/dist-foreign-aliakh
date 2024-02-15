@@ -39,13 +39,10 @@ public class UndistributedLiabilitiesReportWidget extends CommonDialog
     @Override
     @SuppressWarnings("unchecked")
     public IUndistributedLiabilitiesReportWidget init() {
-        initPaymentDateToFilter();
-        setModalWindowProperties("report-undistributed-liabilities-window", false);
         setWidth("650px");
+        add(initContent());
         getFooter().add(getButtonsLayout());
-        var content = new VerticalLayout(paymentDateToWidget);
-        content.setHeightFull();
-        add(content);
+        setModalWindowProperties("report-undistributed-liabilities-window", false);
         return this;
     }
 
@@ -57,6 +54,13 @@ public class UndistributedLiabilitiesReportWidget extends CommonDialog
     @Override
     public LocalDate getPaymentDate() {
         return paymentDateToWidget.getValue();
+    }
+
+    private VerticalLayout initContent() {
+        initPaymentDateToFilter();
+        var content = new VerticalLayout(paymentDateToWidget);
+        content.setHeightFull();
+        return content;
     }
 
     private void initPaymentDateToFilter() {
