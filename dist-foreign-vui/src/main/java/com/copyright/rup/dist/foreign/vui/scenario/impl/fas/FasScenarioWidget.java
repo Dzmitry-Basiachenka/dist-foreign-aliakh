@@ -89,7 +89,6 @@ public class FasScenarioWidget extends CommonScenarioWidget implements IFasScena
         var buttonsLayout = new HorizontalLayout(excludeByRroButton, exportDetailsFileDownloader,
             exportScenarioFileDownloader, Buttons.createCloseButton(this));
         VaadinUtils.addComponentStyle(buttonsLayout, "scenario-buttons-layout");
-        VaadinUtils.setMaxComponentsWidth(buttonsLayout);
         buttonsLayout.setWidthFull();
         buttonsLayout.setJustifyContentMode(JustifyContentMode.CENTER);
         return buttonsLayout;

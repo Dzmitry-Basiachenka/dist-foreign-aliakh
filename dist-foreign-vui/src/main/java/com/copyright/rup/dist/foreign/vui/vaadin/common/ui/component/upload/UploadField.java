@@ -1,7 +1,6 @@
 package com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.upload;
 
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.Windows;
-import com.copyright.rup.dist.foreign.vui.vaadin.common.util.VaadinUtils;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEventListener;
@@ -117,7 +116,7 @@ public class UploadField extends CustomField<String> {
     private void init() {
         setLabel("File to Upload");
         add(initUploadComponent());
-        VaadinUtils.setMaxComponentsWidth(this);
+        setWidthFull();
         addSucceededListener(event -> fileName = event.getFileName());
     }
 

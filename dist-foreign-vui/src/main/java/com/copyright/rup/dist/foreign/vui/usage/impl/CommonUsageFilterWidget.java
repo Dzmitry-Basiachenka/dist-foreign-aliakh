@@ -36,13 +36,11 @@ public abstract class CommonUsageFilterWidget extends VerticalLayout implements 
     @Override
     @SuppressWarnings("unchecked")
     public CommonUsageFilterWidget init() {
-        setSpacing(false);
         setMinWidth("150px");
+        setSpacing(false);
+        setWidthFull();
+        initContent();
         VaadinUtils.setPadding(this, 0, 10, 0, 10);
-        appliedFilterWidget = getAppliedFilterWidget();
-        add(initFiltersLayout(), initButtonsLayout(), buildAppliedFiltersHeaderLabel(), appliedFilterWidget);
-        refreshFilter();
-        VaadinUtils.setMaxComponentsWidth(this);
         VaadinUtils.addComponentStyle(this, "usages-filter-widget");
         return this;
     }
@@ -129,6 +127,12 @@ public abstract class CommonUsageFilterWidget extends VerticalLayout implements 
         return label;
     }
 
+    private void initContent() {
+        appliedFilterWidget = getAppliedFilterWidget();
+        add(initFiltersLayout(), initButtonsLayout(), buildAppliedFiltersHeaderLabel(), appliedFilterWidget);
+        refreshFilter();
+    }
+
     private void refreshFilter() {
         refreshFilterValues();
         usageFilter = new UsageFilter();
@@ -142,7 +146,7 @@ public abstract class CommonUsageFilterWidget extends VerticalLayout implements 
         var clearButton = Buttons.createButton(ForeignUi.getMessage("button.clear"));
         clearButton.addClickListener(event -> clearFilter());
         var buttonsLayout = new HorizontalLayout(applyButton, clearButton);
-        VaadinUtils.setMaxComponentsWidth(buttonsLayout, applyButton, clearButton);
+        VaadinUtils.setFullComponentsWidth(buttonsLayout, applyButton, clearButton);
         VaadinUtils.addComponentStyle(buttonsLayout, "filter-buttons");
         return buttonsLayout;
     }

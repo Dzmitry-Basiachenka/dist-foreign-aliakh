@@ -1,11 +1,9 @@
 package com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window;
 
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.Buttons;
-import com.copyright.rup.dist.foreign.vui.vaadin.common.util.VaadinUtils;
 
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.ComponentEventListener;
-import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.Label;
@@ -43,13 +41,13 @@ public class ErrorWindow extends Dialog {
     public ErrorWindow(String message, String stackTrace) {
         this.message = message;
         this.stackTrace = stackTrace;
-        super.setHeaderTitle("Error");
-        super.getHeader().add(Buttons.createCloseIcon(this));
-        super.add(initRootLayout());
+        super.setWidth("500px");
+        super.setHeight("200px");
         super.setVisible(true);
         super.setResizable(true);
-        super.setWidth(500, Unit.PIXELS);
-        super.setHeight(200, Unit.PIXELS);
+        super.getHeader().add(Buttons.createCloseIcon(this));
+        super.setHeaderTitle("Error");
+        super.add(initRootLayout());
         super.getFooter().add(buildControlsLayout());
     }
 
@@ -59,15 +57,12 @@ public class ErrorWindow extends Dialog {
     //TODO {sonar} apply private access modifier and adjust tests
     final VerticalLayout initRootLayout() {
         var rootLayout = new VerticalLayout();
-        VaadinUtils.setMaxComponentsWidth(rootLayout);
-        HorizontalLayout errorMessage = buildErrorMessageLayout();
-        rootLayout.add(errorMessage);
+        rootLayout.add(buildErrorMessageLayout());
         if (StringUtils.isNotBlank(stackTrace)) {
             VerticalLayout errorStackTracePanel = buildErrorStackTracePanel(stackTrace);
             var details = new Button("Show more");
             details.addClickListener(new DetailsButtonClickListener(details, errorStackTracePanel));
             getFooter().add(details);
-            rootLayout.setMargin(true);
             rootLayout.add(errorStackTracePanel);
         }
         return rootLayout;
@@ -77,8 +72,8 @@ public class ErrorWindow extends Dialog {
      * @return {@link HorizontalLayout}, which contains a label with error message.
      */
     HorizontalLayout buildErrorMessageLayout() {
-        Label errorMessage = new Label(StringUtils.defaultIfBlank(message, "Exception occurred"));
-        HorizontalLayout horizontalLayout = new HorizontalLayout(errorMessage);
+        var errorMessage = new Label(StringUtils.defaultIfBlank(message, "Exception occurred"));
+        var horizontalLayout = new HorizontalLayout(errorMessage);
         horizontalLayout.setSizeFull();
         return horizontalLayout;
     }
@@ -88,11 +83,9 @@ public class ErrorWindow extends Dialog {
      */
     //TODO {sonar} apply private access modifier and adjust tests
     final HorizontalLayout buildControlsLayout() {
-        Button okButton = Buttons.createOkButton();
+        var okButton = Buttons.createOkButton();
         okButton.addClickListener(event -> close());
-        HorizontalLayout controlPanel = new HorizontalLayout();
-        controlPanel.add(okButton);
-        return controlPanel;
+        return new HorizontalLayout(okButton);
     }
 
     /**
@@ -102,9 +95,9 @@ public class ErrorWindow extends Dialog {
      * @return {@link VerticalLayout} instance, which contains a label with stacktrace
      */
     VerticalLayout buildErrorStackTracePanel(String stacktraceValue) {
-        Pre errorStackTrace = new Pre();
+        var errorStackTrace = new Pre();
         errorStackTrace.add(stacktraceValue);
-        VerticalLayout layout = new VerticalLayout(errorStackTrace);
+        var layout = new VerticalLayout(errorStackTrace);
         layout.setVisible(false);
         layout.setSizeFull();
         return layout;
@@ -158,12 +151,12 @@ public class ErrorWindow extends Dialog {
             boolean visible = stackTracePanel.isVisible();
             if (visible) {
                 details.setText("Show more");
-                setHeight(200, Unit.PIXELS);
-                setWidth(500, Unit.PIXELS);
+                setHeight("200px");
+                setWidth("500px");
             } else {
                 details.setText("Show less");
-                setHeight(70, Unit.PERCENTAGE);
-                setWidth(80, Unit.PERCENTAGE);
+                setHeight("70%");
+                setWidth("80%");
             }
             stackTracePanel.setVisible(!visible);
         }

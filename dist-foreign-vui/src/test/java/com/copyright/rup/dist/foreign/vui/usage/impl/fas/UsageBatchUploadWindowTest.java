@@ -107,7 +107,7 @@ public class UsageBatchUploadWindowTest {
     private static final String INVALID_NUMBER_LENGTH_MESSAGE = "Field value should not exceed 10 digits";
     private static final String INVALID_GROSS_AMOUNT_MESSAGE =
         "Field value should be positive number and should not exceed 10 digits";
-    private static final String WIDTH_CALC = "calc(99.9% - 0rem)";
+    private static final String WIDTH = "100%";
 
     private UsageBatchUploadWindow window;
     private IFasUsageController controller;
@@ -266,7 +266,7 @@ public class UsageBatchUploadWindowTest {
         var rootLayout = (VerticalLayout) component;
         assertEquals(5, rootLayout.getComponentCount());
         verifyUsageBatchNameComponent(rootLayout.getComponentAt(0));
-        verifyUploadComponent(rootLayout.getComponentAt(1), WIDTH_CALC);
+        verifyUploadComponent(rootLayout.getComponentAt(1), WIDTH);
         verifyRightsholdersComponents(rootLayout.getComponentAt(2));
         verifyDateComponents(rootLayout.getComponentAt(3));
         verifyGrossAmount(rootLayout.getComponentAt(4));
@@ -274,7 +274,7 @@ public class UsageBatchUploadWindowTest {
     }
 
     private void verifyUsageBatchNameComponent(Component component) {
-        var textField = verifyTextField(component, "Usage Batch Name", WIDTH_CALC, "usage-batch-name-field");
+        var textField = verifyTextField(component, "Usage Batch Name", WIDTH, "usage-batch-name-field");
         assertEquals(StringUtils.EMPTY, textField.getValue());
     }
 
@@ -342,7 +342,7 @@ public class UsageBatchUploadWindowTest {
         assertThat(paymentDateLayout, instanceOf(LocalDateWidget.class));
         var localDateWidget = (LocalDateWidget) paymentDateLayout;
         assertEquals("Payment Date", localDateWidget.getLabel());
-        var fiscalYearField = verifyTextField(fiscalYearLayout, "Fiscal Year", WIDTH_CALC, "fiscal-year-field");
+        var fiscalYearField = verifyTextField(fiscalYearLayout, "Fiscal Year", WIDTH, "fiscal-year-field");
         assertTrue(fiscalYearField.isReadOnly());
         assertEquals(StringUtils.EMPTY, fiscalYearField.getValue());
         localDateWidget.setValue(LocalDate.of(2017, 2, 2));
@@ -354,7 +354,7 @@ public class UsageBatchUploadWindowTest {
         var horizontalLayout = (HorizontalLayout) component;
         assertEquals(1, horizontalLayout.getComponentCount());
         BigDecimalField grossAmountField = verifyBigDecimalField(horizontalLayout.getComponentAt(0),
-            "Gross Amount in USD", WIDTH_CALC, "gross-amount-field");
+            "Gross Amount in USD", WIDTH, "gross-amount-field");
         Component prefixComponent = grossAmountField.getPrefixComponent();
         assertNotNull(prefixComponent);
         assertThat(prefixComponent, instanceOf(Icon.class));

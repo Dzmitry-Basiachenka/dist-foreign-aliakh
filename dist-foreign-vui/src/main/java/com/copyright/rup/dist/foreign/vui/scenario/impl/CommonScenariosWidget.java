@@ -92,7 +92,7 @@ public abstract class CommonScenariosWidget extends VerticalLayout implements IC
     public void refresh() {
         List<Scenario> scenarios = controller.getScenarios();
         dataProvider = DataProvider.ofCollection(scenarios);
-        scenarioGrid.setDataProvider(dataProvider);
+        scenarioGrid.setItems(dataProvider);
         if (CollectionUtils.isNotEmpty(scenarios)) {
             selectScenario(scenarios.get(0));
         }
@@ -190,7 +190,7 @@ public abstract class CommonScenariosWidget extends VerticalLayout implements IC
     private void initGrid() {
         dataProvider = DataProvider.ofCollection(controller.getScenarios());
         scenarioGrid = new Grid<>();
-        scenarioGrid.setDataProvider(dataProvider);
+        scenarioGrid.setItems(dataProvider);
         addColumns();
         scenarioGrid.setSizeFull();
         scenarioGrid.getColumns().forEach(column -> column.setSortable(true));
@@ -224,7 +224,7 @@ public abstract class CommonScenariosWidget extends VerticalLayout implements IC
         VaadinUtils.addComponentStyle(metadataPanel, "scenarios-metadata");
         metadataLayout = initMetadataLayout();
         metadataLayout.add(initScenarioActionLayout());
-        VaadinUtils.setMaxComponentsWidth(metadataLayout);
+        metadataLayout.setWidthFull();
     }
 
     private VerticalLayout initScenarioActionLayout() {
@@ -243,7 +243,7 @@ public abstract class CommonScenariosWidget extends VerticalLayout implements IC
             VaadinUtils.initCommonVerticalLayout(lastActionCaption, actionMetadataLayout, viewAllActionsButton);
         layout.setHorizontalComponentAlignment(Alignment.END, viewAllActionsButton);
         VaadinUtils.addComponentStyle(layout, "scenario-last-action");
-        VaadinUtils.setMaxComponentsWidth(layout, actionType, actionCreatedUser, actionCreatedDate, actionReason);
+        VaadinUtils.setFullComponentsWidth(layout, actionType, actionCreatedUser, actionCreatedDate, actionReason);
         return layout;
     }
 
