@@ -27,6 +27,8 @@ import java.util.Objects;
 @Repository
 public class UdmBaselineValueRepository extends AclBaseRepository implements IUdmBaselineValueRepository {
 
+    private static final long serialVersionUID = 6805233238167479611L;
+
     @Override
     public List<Integer> findPeriods() {
         return selectList("IUdmBaselineValueMapper.findPeriods");

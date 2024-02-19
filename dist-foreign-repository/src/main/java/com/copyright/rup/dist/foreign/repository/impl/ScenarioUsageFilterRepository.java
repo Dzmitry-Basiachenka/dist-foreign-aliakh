@@ -29,6 +29,7 @@ import java.util.Set;
 @Repository
 public class ScenarioUsageFilterRepository extends BaseRepository implements IScenarioUsageFilterRepository {
 
+    private static final long serialVersionUID = 7389593674237605447L;
     private static final String CREATE_USER_KEY = "createUser";
     private static final String UPDATE_USER_KEY = "updateUser";
 

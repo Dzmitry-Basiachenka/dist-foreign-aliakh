@@ -29,6 +29,8 @@ import java.util.Objects;
 @Repository
 public class FundPoolRepository extends BaseRepository implements IFundPoolRepository {
 
+    private static final long serialVersionUID = 2069160090027856203L;
+
     @Override
     public void insert(FundPool fundPool) {
         insert("IFundPoolMapper.insert", Objects.requireNonNull(fundPool));

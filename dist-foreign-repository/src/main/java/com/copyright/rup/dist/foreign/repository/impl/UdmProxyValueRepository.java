@@ -25,6 +25,7 @@ import java.util.Objects;
 @Repository
 public class UdmProxyValueRepository extends BaseRepository implements IUdmProxyValueRepository {
 
+    private static final long serialVersionUID = -6335344051655567440L;
     private static final String PERIOD_KEY = "period";
     private static final String UPDATE_USER_KEY = "updateUser";
 

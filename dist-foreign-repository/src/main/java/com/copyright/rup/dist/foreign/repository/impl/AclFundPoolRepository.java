@@ -27,6 +27,8 @@ import java.util.Set;
 @Repository
 public class AclFundPoolRepository extends AclBaseRepository implements IAclFundPoolRepository {
 
+    private static final long serialVersionUID = -8805961809668214827L;
+
     @Override
     public void insert(AclFundPool fundPool) {
         insert("IAclFundPoolMapper.insert", Objects.requireNonNull(fundPool));

@@ -20,6 +20,8 @@ import java.util.List;
 @Repository
 public class UdmActionReasonRepository extends BaseRepository implements IUdmActionReasonRepository {
 
+    private static final long serialVersionUID = -7987466102114322737L;
+
     @Override
     public List<UdmActionReason> findAll() {
         return selectList("IUdmActionReasonMapper.findAll");

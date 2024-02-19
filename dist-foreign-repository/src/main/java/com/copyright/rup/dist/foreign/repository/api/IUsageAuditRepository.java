@@ -4,7 +4,6 @@ import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.domain.report.BatchStatistic;
 import com.copyright.rup.dist.foreign.domain.report.UsageStatistic;
 
-import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
@@ -18,7 +17,7 @@ import java.util.Set;
  *
  * @author Uladzislau_Shalamitski
  */
-public interface IUsageAuditRepository extends Serializable {
+public interface IUsageAuditRepository {
     /**
      * Inserts {@link UsageAuditItem}.
      *

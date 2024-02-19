@@ -28,6 +28,8 @@ import java.util.Objects;
 @Repository
 public class ScenarioAuditRepository extends BaseRepository implements IScenarioAuditRepository {
 
+    private static final long serialVersionUID = 5959131205287186750L;
+
     @Override
     public void insert(ScenarioAuditItem auditItem) {
         insert("IScenarioAuditMapper.insert", Objects.requireNonNull(auditItem));

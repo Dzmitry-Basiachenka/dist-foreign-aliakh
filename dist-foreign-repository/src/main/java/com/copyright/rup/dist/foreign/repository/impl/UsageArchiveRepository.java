@@ -37,6 +37,7 @@ import java.util.Set;
 @Repository
 public class UsageArchiveRepository extends BaseRepository implements IUsageArchiveRepository {
 
+    private static final long serialVersionUID = -8820132218109970618L;
     private static final int BATCH_SIZE = 32000;
     private static final String PAGEABLE_KEY = "pageable";
     private static final String SORT_KEY = "sort";

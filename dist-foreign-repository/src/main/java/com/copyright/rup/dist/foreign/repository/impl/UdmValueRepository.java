@@ -31,6 +31,7 @@ import java.util.Set;
 @Repository
 public class UdmValueRepository extends AclBaseRepository implements IUdmValueRepository {
 
+    private static final long serialVersionUID = -3245488743422148655L;
     private static final String PERIOD_KEY = "period";
     private static final String UPDATE_USER_KEY = "updateUser";
 

@@ -25,6 +25,8 @@ import java.util.Objects;
 @Repository
 public class PublicationTypeRepository extends BaseRepository implements IPublicationTypeRepository {
 
+    private static final long serialVersionUID = -2221375931172421668L;
+
     @Override
     public boolean isExistForProductFamily(String pubTypeName, String productFamily) {
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(2);

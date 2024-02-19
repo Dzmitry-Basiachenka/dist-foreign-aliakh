@@ -40,6 +40,7 @@ import java.util.Set;
 @Repository
 public class AaclUsageRepository extends BaseRepository implements IAaclUsageRepository {
 
+    private static final long serialVersionUID = 6802288540327376604L;
     /**
      * It's a max value for count of variables in statement.
      */

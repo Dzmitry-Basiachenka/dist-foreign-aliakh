@@ -28,6 +28,7 @@ import java.util.Set;
 @Repository
 public class WorkClassificationRepository extends BaseRepository implements IWorkClassificationRepository {
 
+    private static final long serialVersionUID = 9159369427467116091L;
     private static final String SEARCH_VALUE_KEY = "searchValue";
 
     @Override

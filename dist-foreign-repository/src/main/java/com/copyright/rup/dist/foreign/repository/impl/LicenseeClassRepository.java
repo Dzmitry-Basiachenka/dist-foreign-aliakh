@@ -25,6 +25,8 @@ import java.util.Objects;
 @Repository
 public class LicenseeClassRepository extends BaseRepository implements ILicenseeClassRepository {
 
+    private static final long serialVersionUID = 7410353313643877436L;
+
     @Override
     public boolean aaclDetailLicenseeClassExists(String enrollmentProfile, String discipline) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);

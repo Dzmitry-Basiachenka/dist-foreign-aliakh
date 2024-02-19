@@ -20,6 +20,8 @@ import java.util.List;
 @Repository
 public class UdmIneligibleReasonRepository extends BaseRepository implements IUdmIneligibleReasonRepository {
 
+    private static final long serialVersionUID = -1086410899091272918L;
+
     @Override
     public List<UdmIneligibleReason> findAll() {
         return selectList("IUdmIneligibleReasonMapper.findAll");
