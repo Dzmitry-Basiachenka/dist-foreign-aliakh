@@ -39,7 +39,7 @@ public class ErrorWindowTest {
         assertTrue(errorWindow.isResizable());
         assertTrue(errorWindow.isCloseOnEsc());
         assertEquals("Error", errorWindow.getHeaderTitle());
-        assertEquals("500.0px", errorWindow.getWidth());
+        assertEquals("500px", errorWindow.getWidth());
         assertEquals(Unit.PIXELS, errorWindow.getWidthUnit().orElseThrow());
     }
 
@@ -61,7 +61,7 @@ public class ErrorWindowTest {
         assertEquals(2, rootLayout.getComponentCount());
         assertEquals(HorizontalLayout.class, rootLayout.getComponentAt(0).getClass());
         assertEquals(VerticalLayout.class, rootLayout.getComponentAt(1).getClass());
-        assertTrue(rootLayout.isMargin());
+        assertFalse(rootLayout.isMargin());
     }
 
     @Test

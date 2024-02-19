@@ -23,16 +23,14 @@ public class VaadinUtilsTest {
 
     @Test
     public void testSetMaxComponentWidth() {
-        VerticalLayout layout = new VerticalLayout();
-        VaadinUtils.setMaxComponentsWidth(layout);
-        assertEquals("calc(99.9% - 0rem)", layout.getStyle().get("width"));
-        assertEquals("0px", layout.getStyle().get("margin-left"));
-        assertEquals("0px", layout.getStyle().get("margin-right"));
+        var layout = new VerticalLayout();
+        VaadinUtils.setFullComponentsWidth(layout);
+        assertEquals("100%", layout.getStyle().get("width"));
     }
 
     @Test
     public void testSetButtonsAutoDisabled() {
-        Button button = new Button();
+        var button = new Button();
         VaadinUtils.setButtonsAutoDisabled(button);
         assertTrue(button.isDisableOnClick());
         button.click();
@@ -47,8 +45,8 @@ public class VaadinUtilsTest {
 
     @Test
     public void testAddComponentStyle() {
-        Button sourceComponent = new Button();
-        String testStyleName = "testStyle1";
+        var sourceComponent = new Button();
+        var testStyleName = "testStyle1";
         VaadinUtils.addComponentStyle(sourceComponent, testStyleName);
         assertEquals(testStyleName, sourceComponent.getId().orElseThrow());
         assertTrue(sourceComponent.getClassName().contains(testStyleName));
@@ -56,9 +54,9 @@ public class VaadinUtilsTest {
 
     @Test
     public void testAddComponentStyleWithDuplicateId() {
-        Button sourceComponent = new Button();
-        String testStyleName = "testStyle1";
-        String anotherStyle = "testStyle2";
+        var sourceComponent = new Button();
+        var testStyleName = "testStyle1";
+        var anotherStyle = "testStyle2";
         VaadinUtils.addComponentStyle(sourceComponent, testStyleName);
         assertEquals(testStyleName, sourceComponent.getId().orElseThrow());
         VaadinUtils.addComponentStyle(sourceComponent, anotherStyle);
@@ -68,7 +66,7 @@ public class VaadinUtilsTest {
 
     @Test
     public void testSetElementsEnabled() {
-        Button button = new Button();
+        var button = new Button();
         VaadinUtils.setComponentsEnabled(true, button);
         assertTrue(button.isEnabled());
         VaadinUtils.setComponentsEnabled(false, button);

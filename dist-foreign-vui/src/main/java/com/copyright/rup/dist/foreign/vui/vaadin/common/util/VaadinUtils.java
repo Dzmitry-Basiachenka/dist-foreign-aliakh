@@ -2,13 +2,13 @@ package com.copyright.rup.dist.foreign.vui.vaadin.common.util;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasEnabled;
+import com.vaadin.flow.component.HasSize;
 import com.vaadin.flow.component.HasStyle;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.dom.Style;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -43,14 +43,8 @@ public final class VaadinUtils {
      *
      * @param components components to set width.
      */
-    @Deprecated //use setWidthFull instead
-    public static void setMaxComponentsWidth(Component... components) {
-        Arrays.stream(components).filter(Objects::nonNull).forEach(component -> {
-            Style style = component.getElement().getStyle();
-            style.set("width", "calc(99.9% - 0rem)");
-            style.set("margin-left", "0px");
-            style.set("margin-right", "0px");
-        });
+    public static void setFullComponentsWidth(HasSize... components) {
+        Arrays.stream(components).filter(Objects::nonNull).forEach(HasSize::setWidthFull);
     }
 
     /**

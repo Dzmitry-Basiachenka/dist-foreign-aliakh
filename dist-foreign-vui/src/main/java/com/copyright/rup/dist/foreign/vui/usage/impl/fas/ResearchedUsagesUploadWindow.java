@@ -46,10 +46,10 @@ class ResearchedUsagesUploadWindow extends CommonDialog {
      */
     ResearchedUsagesUploadWindow(IFasUsageController usagesController) {
         this.usagesController = usagesController;
-        super.add(initRootLayout());
-        super.setHeaderTitle(ForeignUi.getMessage("window.upload_researched_usages"));
         super.setWidth("520px");
         super.setHeight("230px");
+        super.setHeaderTitle(ForeignUi.getMessage("window.upload_researched_usages"));
+        super.add(initRootLayout());
         super.getFooter().add(initButtonsLayout());
         super.setModalWindowProperties("researched-usages-upload-window", false);
     }
@@ -103,7 +103,7 @@ class ResearchedUsagesUploadWindow extends CommonDialog {
                 ForeignUi.getMessage("error.upload_file.invalid_extension"))
             .bind(ValueProvider.identity(), (bean, value) -> bean = value);
         uploadField.addSucceededListener(event -> uploadBinder.validate());
-        VaadinUtils.setMaxComponentsWidth(uploadField);
+        uploadField.setWidthFull();
         VaadinUtils.addComponentStyle(uploadField, "researched-usages-upload-component");
         return uploadField;
     }

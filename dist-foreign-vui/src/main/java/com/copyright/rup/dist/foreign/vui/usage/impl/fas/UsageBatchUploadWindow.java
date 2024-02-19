@@ -77,10 +77,10 @@ public class UsageBatchUploadWindow extends CommonDialog {
      */
     UsageBatchUploadWindow(IFasUsageController usagesController) {
         this.usagesController = usagesController;
-        super.add(initRootLayout());
-        super.setHeaderTitle(ForeignUi.getMessage("window.upload_usage_batch"));
         super.setWidth("500px");
         super.setHeight("570px");
+        super.setHeaderTitle(ForeignUi.getMessage("window.upload_usage_batch"));
+        super.add(initRootLayout());
         super.getFooter().add(initButtonsLayout());
         super.setModalWindowProperties("usage-upload-window", false);
     }
@@ -155,7 +155,7 @@ public class UsageBatchUploadWindow extends CommonDialog {
             .withValidator(value -> !usagesController.usageBatchExists(StringUtils.trimToEmpty(value)),
                 ForeignUi.getMessage("message.error.unique_name", "Usage Batch"))
             .bind(UsageBatch::getName, UsageBatch::setName);
-        VaadinUtils.setMaxComponentsWidth(usageBatchNameField);
+        usageBatchNameField.setWidthFull();
         VaadinUtils.addComponentStyle(usageBatchNameField, "usage-batch-name-field");
         return usageBatchNameField;
     }
@@ -169,7 +169,7 @@ public class UsageBatchUploadWindow extends CommonDialog {
                 ForeignUi.getMessage("error.upload_file.invalid_extension"))
             .bind(ValueProvider.identity(), (usageBatch, value) -> usageBatch = value);
         uploadField.addSucceededListener(event -> uploadBinder.validate());
-        VaadinUtils.setMaxComponentsWidth(uploadField);
+        uploadField.setWidthFull();
         VaadinUtils.addComponentStyle(uploadField, "usage-upload-component");
         return uploadField;
     }
@@ -258,7 +258,7 @@ public class UsageBatchUploadWindow extends CommonDialog {
 
     private LocalDateWidget initPaymentDateWidget() {
         paymentDateWidget = new LocalDateWidget(ForeignUi.getMessage("label.payment_date"));
-        VaadinUtils.setMaxComponentsWidth(paymentDateWidget);
+        paymentDateWidget.setWidthFull();
         paymentDateWidget.addValueChangeListener(event ->
             fiscalYearField.setValue(UsageBatchUtils.getFiscalYear(paymentDateWidget.getValue())));
         binder.forField(paymentDateWidget)
@@ -271,7 +271,7 @@ public class UsageBatchUploadWindow extends CommonDialog {
     private TextField initFiscalYearField() {
         fiscalYearField = new TextField(ForeignUi.getMessage("label.fiscal_year"));
         fiscalYearField.setReadOnly(true);
-        VaadinUtils.setMaxComponentsWidth(fiscalYearField);
+        fiscalYearField.setWidthFull();
         VaadinUtils.addComponentStyle(fiscalYearField, "fiscal-year-field");
         return fiscalYearField;
     }
@@ -291,7 +291,7 @@ public class UsageBatchUploadWindow extends CommonDialog {
             .withValidator(new RequiredNumberValidator())
             .withValidator(AmountRangeValidator.amountValidator())
             .bind(UsageBatch::getGrossAmount, UsageBatch::setGrossAmount);
-        VaadinUtils.setMaxComponentsWidth(grossAmountField);
+        grossAmountField.setWidthFull();
         VaadinUtils.addComponentStyle(grossAmountField, "gross-amount-field");
         return grossAmountField;
     }

@@ -70,10 +70,10 @@ public class ConfirmActionDialogWindow extends Dialog {
     }
 
     private VerticalLayout initContentLayout(String message) {
-        Html contentLabel = new Html(String.format("<div>%s</div>", message));
+        var contentLabel = new Html(String.format("<div>%s</div>", message));
         reasonField = new TextField("Reason");
-        VaadinUtils.setMaxComponentsWidth(reasonField);
-        VerticalLayout contentLayout = new VerticalLayout(contentLabel, reasonField);
+        reasonField.setWidthFull();
+        var contentLayout = new VerticalLayout(contentLabel, reasonField);
         contentLayout.setClassName("v-label-white-space-normal");
         contentLayout.setWidthFull();
         return contentLayout;
