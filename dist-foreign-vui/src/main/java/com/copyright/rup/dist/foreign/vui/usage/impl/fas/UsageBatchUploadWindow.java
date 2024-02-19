@@ -38,8 +38,6 @@ import com.vaadin.flow.function.ValueProvider;
 
 import org.apache.commons.lang3.StringUtils;
 
-import java.math.RoundingMode;
-
 /**
  * Window for uploading a usage batch with usages.
  * <p>
@@ -59,16 +57,13 @@ public class UsageBatchUploadWindow extends CommonDialog {
     private final Binder<String> uploadBinder = new Binder<>();
     private final RequiredValidator requiredValidator = new RequiredValidator();
 
-    private TextField usageBatchNameField;
     private UploadField uploadField;
     private LongField accountNumberField;
     private Binder.Binding<UsageBatch, Long> accountNumberBinding;
     private TextField productFamilyField;
     private TextField accountNameField;
-    private Rightsholder rro;
     private LocalDateWidget paymentDateWidget;
     private TextField fiscalYearField;
-    private BigDecimalField grossAmountField;
 
     /**
      * Constructor.
@@ -83,6 +78,7 @@ public class UsageBatchUploadWindow extends CommonDialog {
         super.add(initRootLayout());
         super.getFooter().add(initButtonsLayout());
         super.setModalWindowProperties("usage-upload-window", false);
+        initBinder();
     }
 
     /**
@@ -96,7 +92,9 @@ public class UsageBatchUploadWindow extends CommonDialog {
                 UsageCsvProcessor processor = usagesController.getCsvProcessor(productFamilyField.getValue());
                 ProcessingResult<Usage> processingResult = processor.process(uploadField.getStreamToUploadedFile());
                 if (processingResult.isSuccessful()) {
-                    int usagesCount = usagesController.loadUsageBatch(buildUsageBatch(), processingResult.get());
+                    var usageBatch = binder.getBean();
+                    usageBatch.setFiscalYear(UsageBatchUtils.calculateFiscalYear(paymentDateWidget.getValue()));
+                    int usagesCount = usagesController.loadUsageBatch(usageBatch, processingResult.get());
                     close();
                     Windows.showNotificationWindow(ForeignUi.getMessage("message.upload_completed", usagesCount));
                 } else {
@@ -127,15 +125,10 @@ public class UsageBatchUploadWindow extends CommonDialog {
         return binder.isValid() && uploadBinder.isValid();
     }
 
-    private UsageBatch buildUsageBatch() {
+    private void initBinder() {
         var usageBatch = new UsageBatch();
-        usageBatch.setName(StringUtils.trim(usageBatchNameField.getValue()));
-        usageBatch.setProductFamily(StringUtils.trim(productFamilyField.getValue()));
-        usageBatch.setRro(rro);
-        usageBatch.setPaymentDate(paymentDateWidget.getValue());
-        usageBatch.setFiscalYear(UsageBatchUtils.calculateFiscalYear(paymentDateWidget.getValue()));
-        usageBatch.setGrossAmount(grossAmountField.getValue().setScale(2, RoundingMode.HALF_UP));
-        return usageBatch;
+        usageBatch.setRro(new Rightsholder());
+        binder.setBean(usageBatch);
     }
 
     private VerticalLayout initRootLayout() {
@@ -147,15 +140,15 @@ public class UsageBatchUploadWindow extends CommonDialog {
     }
 
     private TextField initUsageBatchNameField() {
-        usageBatchNameField = new TextField(ForeignUi.getMessage("label.usage_batch_name"));
+        var usageBatchNameField = new TextField(ForeignUi.getMessage("label.usage_batch_name"));
         usageBatchNameField.setRequiredIndicatorVisible(true);
+        usageBatchNameField.setWidthFull();
         binder.forField(usageBatchNameField)
             .withValidator(requiredValidator)
             .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.length", 50), 0, 50))
             .withValidator(value -> !usagesController.usageBatchExists(StringUtils.trimToEmpty(value)),
                 ForeignUi.getMessage("message.error.unique_name", "Usage Batch"))
             .bind(UsageBatch::getName, UsageBatch::setName);
-        usageBatchNameField.setWidthFull();
         VaadinUtils.addComponentStyle(usageBatchNameField, "usage-batch-name-field");
         return usageBatchNameField;
     }
@@ -163,13 +156,13 @@ public class UsageBatchUploadWindow extends CommonDialog {
     private UploadField initUploadField() {
         uploadField = new UploadField();
         uploadField.setRequiredIndicatorVisible(true);
+        uploadField.setWidthFull();
         uploadBinder.forField(uploadField)
             .withValidator(requiredValidator)
             .withValidator(value -> StringUtils.endsWith(value, ".csv"),
                 ForeignUi.getMessage("error.upload_file.invalid_extension"))
             .bind(ValueProvider.identity(), (usageBatch, value) -> usageBatch = value);
         uploadField.addSucceededListener(event -> uploadBinder.validate());
-        uploadField.setWidthFull();
         VaadinUtils.addComponentStyle(uploadField, "usage-upload-component");
         return uploadField;
     }
@@ -211,6 +204,8 @@ public class UsageBatchUploadWindow extends CommonDialog {
         productFamilyField = new TextField(ForeignUi.getMessage("label.product_family"));
         productFamilyField.setReadOnly(true);
         productFamilyField.setWidth("130px");
+        binder.forField(productFamilyField)
+            .bind(UsageBatch::getProductFamily, UsageBatch::setProductFamily);
         VaadinUtils.addComponentStyle(productFamilyField, "product-family-field");
         return productFamilyField;
     }
@@ -220,12 +215,13 @@ public class UsageBatchUploadWindow extends CommonDialog {
         button.setWidth("72px");
         button.addClickListener(event -> {
             if (BindingValidationStatus.Status.OK == accountNumberBinding.validate().getStatus()) {
-                rro = usagesController.getRightsholder(accountNumberField.getValue());
+                var rro = usagesController.getRightsholder(accountNumberField.getValue());
                 if (StringUtils.isNotBlank(rro.getName())) {
                     accountNameField.setValue(rro.getName());
                     productFamilyField.setValue(
                         usagesController.getClaAccountNumber().equals(rro.getAccountNumber())
                             ? FdaConstants.CLA_FAS_PRODUCT_FAMILY : FdaConstants.FAS_PRODUCT_FAMILY);
+                    binder.getBean().getRro().setId(rro.getId());
                 } else {
                     accountNameField.clear();
                     productFamilyField.clear();
@@ -258,9 +254,9 @@ public class UsageBatchUploadWindow extends CommonDialog {
 
     private LocalDateWidget initPaymentDateWidget() {
         paymentDateWidget = new LocalDateWidget(ForeignUi.getMessage("label.payment_date"));
-        paymentDateWidget.setWidthFull();
         paymentDateWidget.addValueChangeListener(event ->
             fiscalYearField.setValue(UsageBatchUtils.getFiscalYear(paymentDateWidget.getValue())));
+        paymentDateWidget.setWidthFull();
         binder.forField(paymentDateWidget)
             .asRequired(ForeignUi.getMessage("field.error.empty"))
             .bind(UsageBatch::getPaymentDate, UsageBatch::setPaymentDate);
@@ -284,14 +280,14 @@ public class UsageBatchUploadWindow extends CommonDialog {
     }
 
     private BigDecimalField initGrossAmountField() {
-        grossAmountField = new BigDecimalField(ForeignUi.getMessage("label.gross_amount_usd"));
+        var grossAmountField = new BigDecimalField(ForeignUi.getMessage("label.gross_amount_usd"));
         grossAmountField.setPrefixComponent(VaadinIcon.DOLLAR.create());
         grossAmountField.setRequiredIndicatorVisible(true);
+        grossAmountField.setWidthFull();
         binder.forField(grossAmountField)
             .withValidator(new RequiredNumberValidator())
             .withValidator(AmountRangeValidator.amountValidator())
             .bind(UsageBatch::getGrossAmount, UsageBatch::setGrossAmount);
-        grossAmountField.setWidthFull();
         VaadinUtils.addComponentStyle(grossAmountField, "gross-amount-field");
         return grossAmountField;
     }

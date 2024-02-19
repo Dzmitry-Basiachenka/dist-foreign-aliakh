@@ -93,6 +93,7 @@ class FundPoolLoadWindow extends CommonDialog {
      * Initiates file uploading.
      */
     void onUploadClicked() {
+        binder.validate();
         if (isValid()) {
             var usageBatch = binder.getBean();
             usageBatch.setFiscalYear(UsageBatchUtils.calculateFiscalYear(paymentDateWidget.getValue()));
@@ -136,7 +137,6 @@ class FundPoolLoadWindow extends CommonDialog {
         ntsFields.setNonStmMinimumAmount(new BigDecimal("7"));
         usageBatch.setNtsFields(ntsFields);
         binder.setBean(usageBatch);
-        binder.validate();
     }
 
     private TextField initUsageBatchNameField() {
