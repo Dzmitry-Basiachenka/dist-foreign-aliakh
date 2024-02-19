@@ -24,6 +24,8 @@ import java.util.Objects;
 @Repository
 public class AclUsageBatchRepository extends BaseRepository implements IAclUsageBatchRepository {
 
+    private static final long serialVersionUID = 3358113845495924846L;
+
     @Override
     public boolean isAclUsageBatchExist(String usageBatchName) {
         return selectOne("IAclUsageBatchMapper.isAclUsageBatchExist", Objects.requireNonNull(usageBatchName));

@@ -31,6 +31,7 @@ import java.util.Set;
 @Repository
 public class RightsholderDiscrepancyRepository extends BaseRepository implements IRightsholderDiscrepancyRepository {
 
+    private static final long serialVersionUID = -3062191312806775784L;
     private static final String STATUS_KEY = "status";
     private static final String SCENARIO_ID_KEY = "scenarioId";
 

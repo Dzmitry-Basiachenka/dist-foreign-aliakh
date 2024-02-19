@@ -19,6 +19,8 @@ import java.util.List;
 @Repository
 public class UdmPriceTypeRepository extends BaseRepository implements IUdmPriceTypeRepository {
 
+    private static final long serialVersionUID = -2557037867795039284L;
+
     @Override
     public List<String> findAllPriceTypes() {
         return selectList("IUdmPriceTypeMapper.findAllPriceTypes");

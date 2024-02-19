@@ -19,6 +19,7 @@ import java.util.function.Supplier;
  */
 public class CommonReportRepository extends BaseRepository {
 
+    private static final long serialVersionUID = -4630982319060097908L;
     private static final int REPORT_BATCH_SIZE = 100000;
     private static final String PAGEABLE_KEY = "pageable";
 

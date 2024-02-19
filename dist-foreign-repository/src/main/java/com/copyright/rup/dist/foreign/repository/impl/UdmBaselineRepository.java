@@ -29,6 +29,7 @@ import java.util.Set;
 @Repository
 public class UdmBaselineRepository extends AclBaseRepository implements IUdmBaselineRepository {
 
+    private static final long serialVersionUID = -408453695048346187L;
     private static final String FILTER_KEY = "filter";
     private static final String PAGEABLE_KEY = "pageable";
     private static final String SORT_KEY = "sort";

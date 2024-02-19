@@ -26,6 +26,8 @@ import java.util.Set;
 @Repository
 public class UdmBatchRepository extends BaseRepository implements IUdmBatchRepository {
 
+    private static final long serialVersionUID = 4318689773183687352L;
+
     @Override
     public void insert(UdmBatch udmBatch) {
         insert("IUdmBatchMapper.insert", Objects.requireNonNull(udmBatch));

@@ -35,6 +35,7 @@ import java.util.Set;
 @Repository
 public class FasUsageRepository extends BaseRepository implements IFasUsageRepository {
 
+    private static final long serialVersionUID = -5236504758289576417L;
     /**
      * It's a max value for count of variables in statement.
      */

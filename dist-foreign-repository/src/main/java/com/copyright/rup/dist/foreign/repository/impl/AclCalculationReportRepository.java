@@ -45,6 +45,7 @@ import java.util.function.Supplier;
 @Repository
 public class AclCalculationReportRepository extends CommonReportRepository implements IAclCalculationReportRepository {
 
+    private static final long serialVersionUID = -8827098935223122903L;
     private static final int REPORT_BATCH_SIZE = 1000;
     private static final String PAGEABLE_KEY = "pageable";
     private static final String FILTER_KEY = "filter";

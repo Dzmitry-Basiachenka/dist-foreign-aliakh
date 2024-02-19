@@ -24,6 +24,8 @@ import java.util.Objects;
 @Repository
 public class AclGrantSetRepository extends BaseRepository implements IAclGrantSetRepository {
 
+    private static final long serialVersionUID = 8966405484824923826L;
+
     @Override
     public void insert(AclGrantSet grantSet) {
         insert("IAclGrantSetMapper.insert", Objects.requireNonNull(grantSet));

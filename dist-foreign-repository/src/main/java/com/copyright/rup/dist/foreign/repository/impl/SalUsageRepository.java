@@ -40,6 +40,7 @@ import java.util.Set;
 @Repository
 public class SalUsageRepository extends BaseRepository implements ISalUsageRepository {
 
+    private static final long serialVersionUID = -5707696406505377889L;
     private static final int MAX_VARIABLES_COUNT = 32000;
     private static final String DETAIL_TYPE_KEY = "detailType";
     private static final String FILTER_KEY = "filter";

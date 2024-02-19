@@ -21,6 +21,8 @@ import java.util.Objects;
 @Repository
 public class UdmUsageAuditRepository extends BaseRepository implements IUdmUsageAuditRepository {
 
+    private static final long serialVersionUID = -6327223132555439434L;
+
     @Override
     public void insert(UsageAuditItem auditItem) {
         insert("IUdmUsageAuditMapper.insert", Objects.requireNonNull(auditItem));

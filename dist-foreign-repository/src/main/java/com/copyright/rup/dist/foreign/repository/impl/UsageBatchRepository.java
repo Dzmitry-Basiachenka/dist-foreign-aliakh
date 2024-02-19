@@ -33,6 +33,8 @@ import java.util.Set;
 @Repository
 public class UsageBatchRepository extends BaseRepository implements IUsageBatchRepository {
 
+    private static final long serialVersionUID = 4231828989230948441L;
+
     @Override
     public void insert(UsageBatch usageBatch) {
         insert("IUsageBatchMapper.insert", checkNotNull(usageBatch));

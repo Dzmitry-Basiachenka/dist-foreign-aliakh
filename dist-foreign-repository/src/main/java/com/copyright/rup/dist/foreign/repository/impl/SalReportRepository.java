@@ -41,6 +41,7 @@ import java.util.stream.Collectors;
 @Repository
 public class SalReportRepository extends CommonReportRepository implements ISalReportRepository {
 
+    private static final long serialVersionUID = -5817441817411692273L;
     private static final String FILTER_KEY = "filter";
     private static final String SCENARIO_ID_KEY = "scenarioId";
     private static final String PRODUCT_FAMILY = "productFamily";

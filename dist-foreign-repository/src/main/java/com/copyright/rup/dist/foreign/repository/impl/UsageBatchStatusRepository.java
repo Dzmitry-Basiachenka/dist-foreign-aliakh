@@ -28,6 +28,7 @@ import java.util.Set;
 @Repository
 public class UsageBatchStatusRepository extends BaseRepository implements IUsageBatchStatusRepository {
 
+    private static final long serialVersionUID = 1300382781528145480L;
     private static final String START_DATE_KEY = "startDate";
 
     @Override

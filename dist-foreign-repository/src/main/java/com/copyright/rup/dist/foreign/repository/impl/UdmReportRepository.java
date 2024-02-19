@@ -48,6 +48,7 @@ import java.util.Set;
 @Repository
 public class UdmReportRepository extends CommonReportRepository implements IUdmReportRepository {
 
+    private static final long serialVersionUID = -2979664287915595076L;
     private static final String FILTER_KEY = "filter";
 
     @Override

@@ -20,6 +20,8 @@ import java.util.Map;
 @Repository
 public class UdmTypeOfUseRepository extends BaseRepository implements IUdmTypeOfUseRepository {
 
+    private static final long serialVersionUID = 1470368452186724275L;
+
     @Override
     public List<String> findAllUdmTous() {
         return selectList("IUdmTouMapper.findAllUdmTous");

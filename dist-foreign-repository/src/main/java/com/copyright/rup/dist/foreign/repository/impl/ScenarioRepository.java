@@ -36,6 +36,7 @@ import java.util.Set;
 @Repository
 public class ScenarioRepository extends BaseRepository implements IScenarioRepository {
 
+    private static final long serialVersionUID = -7552022380264035196L;
     private static final String SCENARIO_ID_KEY = "scenarioId";
     private static final String UPDATE_USER_KEY = "updateUser";
     private static final String STATUS_KEY = "status";

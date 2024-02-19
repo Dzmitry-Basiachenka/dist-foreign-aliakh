@@ -32,6 +32,8 @@ import java.util.Set;
 @Repository
 public class RightsholderRepository extends CommonRightsholderRepository implements IRightsholderRepository {
 
+    private static final long serialVersionUID = 3665474313753546228L;
+
     @Override
     public List<Rightsholder> findRros(String productFamily) {
         return selectList("RightsholderMapper.findRros", Objects.requireNonNull(productFamily));

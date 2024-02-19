@@ -31,6 +31,7 @@ import java.util.Set;
 @Repository
 public class AclUsageRepository extends AclBaseRepository implements IAclUsageRepository {
 
+    private static final long serialVersionUID = 2773312360046534607L;
     private static final List<String> ELIGIBLE_GRANT_STATUSES = List.of("Print&Digital", "Different RH");
     private static final String BATCH_ID_KEY = "batchId";
     private static final String GRANT_SET_ID_KEY = "grantSetId";

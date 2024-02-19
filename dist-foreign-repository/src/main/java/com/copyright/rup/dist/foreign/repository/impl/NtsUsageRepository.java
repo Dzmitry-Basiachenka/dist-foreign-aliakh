@@ -36,6 +36,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Repository
 public class NtsUsageRepository extends BaseRepository implements INtsUsageRepository {
 
+    private static final long serialVersionUID = -8130442869624704626L;
     /**
      * It's a max value for count of variables in statement.
      */

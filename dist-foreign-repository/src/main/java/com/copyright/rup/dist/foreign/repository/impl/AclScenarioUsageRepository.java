@@ -34,6 +34,7 @@ import java.util.Set;
 @Repository
 public class AclScenarioUsageRepository extends AclBaseRepository implements IAclScenarioUsageRepository {
 
+    private static final long serialVersionUID = 5108317885409637331L;
     private static final String SCENARIO_ID_KEY = "scenarioId";
     private static final String SEARCH_VALUE_KEY = "searchValue";
     private static final String ACCOUNT_NUMBER_KEY = "accountNumber";

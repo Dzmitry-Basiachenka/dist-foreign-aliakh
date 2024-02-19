@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.repository.impl;
 
 import com.copyright.rup.dist.common.repository.BaseRepository;
 import com.copyright.rup.dist.foreign.domain.filter.FilterExpression;
+
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
@@ -16,6 +17,8 @@ import java.util.Objects;
  * @author Aliaksandr Liakh
  */
 class AclBaseRepository extends BaseRepository {
+
+    private static final long serialVersionUID = 653365730630923022L;
 
     /**
      * Escapes filter expression that is used inside a MyBatis 'sql' fragment.

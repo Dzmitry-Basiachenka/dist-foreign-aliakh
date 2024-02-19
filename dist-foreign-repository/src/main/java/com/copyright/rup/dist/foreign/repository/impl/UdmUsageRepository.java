@@ -33,6 +33,7 @@ import java.util.Set;
 @Repository
 public class UdmUsageRepository extends AclBaseRepository implements IUdmUsageRepository {
 
+    private static final long serialVersionUID = -6852008266705574347L;
     private static final int MAX_VARIABLES_COUNT = 32000;
     private static final String FILTER_KEY = "filter";
     private static final String PAGEABLE_KEY = "pageable";

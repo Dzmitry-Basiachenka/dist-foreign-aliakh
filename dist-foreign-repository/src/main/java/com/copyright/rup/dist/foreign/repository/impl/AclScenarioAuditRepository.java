@@ -21,6 +21,8 @@ import java.util.Objects;
 @Repository
 public class AclScenarioAuditRepository extends BaseRepository implements IAclScenarioAuditRepository {
 
+    private static final long serialVersionUID = 7105040532174861053L;
+
     @Override
     public void insert(ScenarioAuditItem auditItem) {
         insert("IAclScenarioAuditMapper.insert", Objects.requireNonNull(auditItem));
