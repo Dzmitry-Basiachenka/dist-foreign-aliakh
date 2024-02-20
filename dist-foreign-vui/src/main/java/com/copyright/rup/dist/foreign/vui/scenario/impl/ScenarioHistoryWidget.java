@@ -71,7 +71,6 @@ public class ScenarioHistoryWidget extends CommonDialog implements IScenarioHist
     private void initActionsGrid() {
         grid = new Grid<>();
         grid.setSelectionMode(SelectionMode.NONE);
-        grid.setSizeFull();
         addColumn(ScenarioAuditItem::getActionType, "table.column.type");
         addColumn(ScenarioAuditItem::getCreateUser, "table.column.action.user");
         addColumn(auditItem -> toLongFormat(auditItem.getCreateDate()), "table.column.date");

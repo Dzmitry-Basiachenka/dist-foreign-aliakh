@@ -74,7 +74,6 @@ public class FasExcludeSourceRroWindow extends CommonDialog implements ISearchCo
     private Grid<Rightsholder> initGrid() {
         grid.setItems(scenarioController.getSourceRros());
         grid.setSelectionMode(SelectionMode.NONE);
-        grid.setSizeFull();
         addColumns();
         VaadinUtils.setGridProperties(grid, "exclude-details-by-rro-grid");
         return grid;

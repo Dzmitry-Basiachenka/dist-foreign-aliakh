@@ -126,8 +126,7 @@ public abstract class CommonScenarioWidget extends CommonDialog implements IComm
             query -> controller.loadBeans(query.getOffset(), query.getLimit(), query.getSortOrders()).stream(),
             query -> controller.getSize());
         rightsholdersGrid = new Grid<>();
-        rightsholdersGrid.setDataProvider(dataProvider);
-        rightsholdersGrid.setSizeFull();
+        rightsholdersGrid.setItems(dataProvider);
         rightsholdersGrid.setSelectionMode(SelectionMode.NONE);
         VaadinUtils.setGridProperties(rightsholdersGrid, "rightsholders-totals-table");
         addColumns();
@@ -170,7 +169,7 @@ public abstract class CommonScenarioWidget extends CommonDialog implements IComm
     }
 
     private void addColumn(ValueProvider<RightsholderTotalsHolder, ?> provider, String captionProperty,
-                             String columnId, String className) {
+                           String columnId, String className) {
         rightsholdersGrid.addColumn(provider)
             .setHeader(ForeignUi.getMessage(captionProperty))
             .setSortable(true)

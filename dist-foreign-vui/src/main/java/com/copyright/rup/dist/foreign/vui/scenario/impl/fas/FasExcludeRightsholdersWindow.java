@@ -17,6 +17,7 @@ import com.vaadin.flow.component.grid.Grid.SelectionMode;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.data.validator.StringLengthValidator;
+import com.vaadin.flow.function.ValueProvider;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -85,29 +86,28 @@ public class FasExcludeRightsholdersWindow extends CommonDialog implements ISear
 
     private void initGrid() {
         rightsholdersGrid = new Grid<>();
-        VaadinUtils.setGridProperties(rightsholdersGrid, "exclude-rightsholders-table");
         rightsholdersGrid.setItems(scenarioController.getRightsholdersPayeePairs(accountNumber));
         rightsholdersGrid.setSelectionMode(SelectionMode.MULTI);
-        rightsholdersGrid.setSizeFull();
         addColumns();
+        VaadinUtils.setGridProperties(rightsholdersGrid, "exclude-rightsholders-table");
     }
 
     private void addColumns() {
-        rightsholdersGrid.addColumn(rightsholderPayeePair -> rightsholderPayeePair.getPayee().getAccountNumber())
-            .setHeader(ForeignUi.getMessage("table.column.payee_account_number"))
-            .setSortProperty("payee.accountNumber")
-            .setResizable(true);
-        rightsholdersGrid.addColumn(rightsholderPayeePair -> rightsholderPayeePair.getPayee().getName())
-            .setHeader(ForeignUi.getMessage("table.column.payee_name"))
-            .setSortProperty("payee.name")
-            .setResizable(true);
-        rightsholdersGrid.addColumn(rightsholderPayeePair -> rightsholderPayeePair.getRightsholder().getAccountNumber())
-            .setHeader(ForeignUi.getMessage("table.column.rh_account_number"))
-            .setSortProperty("rightsholder.accountNumber")
-            .setResizable(true);
-        rightsholdersGrid.addColumn(rightsholderPayeePair -> rightsholderPayeePair.getRightsholder().getName())
-            .setHeader(ForeignUi.getMessage("table.column.rh_account_name"))
-            .setSortProperty("rightsholder.name")
+        addColumn(rightsholderPayeePair -> rightsholderPayeePair.getPayee().getAccountNumber(),
+            "table.column.payee_account_number", "payee.accountNumber");
+        addColumn(rightsholderPayeePair -> rightsholderPayeePair.getPayee().getName(), "table.column.payee_name",
+            "payee.name");
+        addColumn(rightsholderPayeePair -> rightsholderPayeePair.getRightsholder().getAccountNumber(),
+            "table.column.rh_account_number", "rightsholder.accountNumber");
+        addColumn(rightsholderPayeePair -> rightsholderPayeePair.getRightsholder().getName(),
+            "table.column.rh_account_name", "rightsholder.name");
+    }
+
+    private void addColumn(ValueProvider<RightsholderPayeePair, ?> provider, String captionProperty, String sort) {
+        rightsholdersGrid.addColumn(provider)
+            .setHeader(ForeignUi.getMessage(captionProperty))
+            .setSortable(true)
+            .setSortProperty(sort)
             .setResizable(true);
     }
 

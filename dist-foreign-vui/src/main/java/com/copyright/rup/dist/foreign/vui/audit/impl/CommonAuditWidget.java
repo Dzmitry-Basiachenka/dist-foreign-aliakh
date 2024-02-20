@@ -13,6 +13,7 @@ import com.copyright.rup.dist.foreign.vui.vaadin.common.util.VaadinUtils;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.SearchWidget;
 
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.Grid.Column;
 import com.vaadin.flow.component.grid.Grid.SelectionMode;
 import com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -97,9 +98,11 @@ public abstract class CommonAuditWidget extends SplitLayout implements ICommonAu
      * @param captionProperty the column caption property
      * @param sort            the column sort
      * @param width           the column width
+     * @return the column for method chaining
      */
-    protected void addColumn(ValueProvider<UsageDto, ?> provider, String captionProperty, String sort, String width) {
-        auditGrid.addColumn(provider)
+    protected Column<UsageDto> addColumn(ValueProvider<UsageDto, ?> provider, String captionProperty, String sort,
+                                         String width) {
+        return auditGrid.addColumn(provider)
             .setHeader(ForeignUi.getMessage(captionProperty))
             .setSortable(true)
             .setSortProperty(sort)
@@ -115,17 +118,12 @@ public abstract class CommonAuditWidget extends SplitLayout implements ICommonAu
      * @param captionProperty the column caption property
      * @param sort            the column sort
      * @param width           the column width
+     * @return the column for method chaining
      */
-    protected void addAmountColumn(Function<UsageDto, BigDecimal> function, String captionProperty, String sort,
-                                   String width) {
-        auditGrid.addColumn(usageDto -> CurrencyUtils.format(function.apply(usageDto), null))
-            .setHeader(ForeignUi.getMessage(captionProperty))
-            .setSortable(true)
-            .setSortProperty(sort)
-            .setClassNameGenerator(item -> "v-align-right")
-            .setWidth(width)
-            .setFlexGrow(0)
-            .setResizable(true);
+    protected Column<UsageDto> addAmountColumn(Function<UsageDto, BigDecimal> function, String captionProperty,
+                                               String sort, String width) {
+        return addColumn(usageDto -> CurrencyUtils.format(function.apply(usageDto), null), captionProperty, sort, width)
+            .setClassNameGenerator(item -> "v-align-right");
     }
 
     /**
@@ -154,8 +152,8 @@ public abstract class CommonAuditWidget extends SplitLayout implements ICommonAu
         auditGrid = new Grid<>();
         auditGrid.setItems(dataProvider);
         auditGrid.setSelectionMode(SelectionMode.NONE);
-        VaadinUtils.setGridProperties(auditGrid, "audit-grid");
         addColumns();
+        VaadinUtils.setGridProperties(auditGrid, "audit-grid");
         var layout = VaadinUtils.initSizeFullVerticalLayout(initToolbar(), auditGrid);
         VaadinUtils.addComponentStyle(layout, "audit-layout");
         return layout;

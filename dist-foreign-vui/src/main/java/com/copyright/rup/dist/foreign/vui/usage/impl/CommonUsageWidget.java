@@ -17,6 +17,7 @@ import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentUtil;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.Grid.Column;
 import com.vaadin.flow.component.grid.Grid.SelectionMode;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -105,9 +106,11 @@ public abstract class CommonUsageWidget extends SplitLayout implements ICommonUs
      * @param captionProperty property of the column's caption
      * @param sort            sort property
      * @param width           width of the column
+     * @return the column for method chaining
      */
-    protected void addColumn(ValueProvider<UsageDto, ?> provider, String captionProperty, String sort, String width) {
-        usagesGrid.addColumn(provider)
+    protected Column<UsageDto> addColumn(ValueProvider<UsageDto, ?> provider, String captionProperty, String sort,
+                                         String width) {
+        return usagesGrid.addColumn(provider)
             .setHeader(ForeignUi.getMessage(captionProperty))
             .setSortProperty(sort)
             .setFlexGrow(0)
@@ -123,17 +126,12 @@ public abstract class CommonUsageWidget extends SplitLayout implements ICommonUs
      * @param captionProperty property of the column's caption
      * @param sort            sort property
      * @param width           width of the column
+     * @return the column for method chaining
      */
-    protected void addAmountColumn(Function<UsageDto, BigDecimal> function, String captionProperty, String sort,
-                                   String width) {
-        usagesGrid.addColumn(usageDto -> CurrencyUtils.format(function.apply(usageDto), null))
-            .setHeader(ForeignUi.getMessage(captionProperty))
-            .setSortProperty(sort)
-            .setClassNameGenerator(item -> "label-amount")
-            .setFlexGrow(0)
-            .setWidth(width)
-            .setSortable(true)
-            .setResizable(true);
+    protected Column<UsageDto> addAmountColumn(Function<UsageDto, BigDecimal> function, String captionProperty,
+                                               String sort, String width) {
+        return addColumn(usageDto -> CurrencyUtils.format(function.apply(usageDto), null), captionProperty, sort, width)
+            .setClassNameGenerator(item -> "label-amount");
     }
 
     /**
@@ -226,7 +224,6 @@ public abstract class CommonUsageWidget extends SplitLayout implements ICommonUs
         initDataProvider(usagesGrid);
         setGridSelectionMode(usagesGrid);
         addGridColumns();
-        usagesGrid.setSizeFull();
         VaadinUtils.setGridProperties(usagesGrid, "usages-grid");
         hideGridColumnsProvider = new HideGridColumnsProvider<>(usagesGrid);
     }
