@@ -121,7 +121,7 @@ public class LazyFilterWindow<T> extends CommonFilterWindow<T> {
                 query.getOffset(), query.getLimit(), query.getSortOrders()).stream(),
             query -> controller.getBeansCount(getSearchValue()));
         grid = new Grid<>();
-        grid.setDataProvider(dataProvider);
+        grid.setItems(dataProvider);
         grid.setSelectionMode(SelectionMode.MULTI);
         ((AbstractGridMultiSelectionModel<T>) grid.getSelectionModel()).setSelectionColumnFrozen(true);
         grid.addColumn(controller.getGridColumnValueProvider()).setAutoWidth(true);

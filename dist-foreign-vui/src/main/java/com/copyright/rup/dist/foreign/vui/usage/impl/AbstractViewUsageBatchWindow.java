@@ -12,6 +12,7 @@ import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.SearchWidget;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.Grid.Column;
 import com.vaadin.flow.component.grid.Grid.SelectionMode;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.data.provider.ListDataProvider;
@@ -70,9 +71,10 @@ public abstract class AbstractViewUsageBatchWindow extends CommonDialog
      * @param valueProvider column value provider
      * @param caption       column caption
      * @param width         column width
+     * @return the column for method chaining
      */
-    protected void addColumn(ValueProvider<UsageBatch, ?> valueProvider, String caption, String width) {
-        grid.addColumn(valueProvider)
+    protected Column<UsageBatch> addColumn(ValueProvider<UsageBatch, ?> valueProvider, String caption, String width) {
+        return grid.addColumn(valueProvider)
             .setHeader(ForeignUi.getMessage(caption))
             .setFlexGrow(0)
             .setWidth(width)
@@ -87,16 +89,12 @@ public abstract class AbstractViewUsageBatchWindow extends CommonDialog
      * @param caption       column caption
      * @param width         column width
      * @param comparator    column comparator
+     * @return the column for method chaining
      */
-    protected void addColumn(ValueProvider<UsageBatch, ?> valueProvider, String caption, String width,
-                             SerializableComparator<UsageBatch> comparator) {
-        grid.addColumn(valueProvider)
-            .setHeader(ForeignUi.getMessage(caption))
-            .setComparator(comparator)
-            .setFlexGrow(0)
-            .setWidth(width)
-            .setSortable(true)
-            .setResizable(true);
+    protected Column<UsageBatch> addColumn(ValueProvider<UsageBatch, ?> valueProvider, String caption, String width,
+                                           SerializableComparator<UsageBatch> comparator) {
+        return addColumn(valueProvider, caption, width)
+            .setComparator(comparator);
     }
 
     /**
@@ -106,17 +104,12 @@ public abstract class AbstractViewUsageBatchWindow extends CommonDialog
      * @param caption       column caption
      * @param width         column width
      * @param comparator    column comparator
+     * @return the column for method chaining
      */
-    protected void addAmountColumn(ValueProvider<UsageBatch, ?> valueProvider, String caption, String width,
-                                   SerializableComparator<UsageBatch> comparator) {
-        grid.addColumn(valueProvider)
-            .setHeader(ForeignUi.getMessage(caption))
-            .setComparator(comparator)
-            .setClassNameGenerator(item -> "label-amount")
-            .setFlexGrow(0)
-            .setWidth(width)
-            .setSortable(true)
-            .setResizable(true);
+    protected Column<UsageBatch> addAmountColumn(ValueProvider<UsageBatch, ?> valueProvider, String caption,
+                                                 String width, SerializableComparator<UsageBatch> comparator) {
+        return addColumn(valueProvider, caption, width, comparator)
+            .setClassNameGenerator(item -> "label-amount");
     }
 
     /**
@@ -199,7 +192,6 @@ public abstract class AbstractViewUsageBatchWindow extends CommonDialog
         grid.setItems(controller.getUsageBatches(controller.getSelectedProductFamily()));
         grid.addSelectionListener(event ->
             deleteButton.setEnabled(CollectionUtils.isNotEmpty(event.getAllSelectedItems())));
-        grid.setSizeFull();
         addGridColumns(grid);
         VaadinUtils.setGridProperties(grid, "view-batch-grid");
     }

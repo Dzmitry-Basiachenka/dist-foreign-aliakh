@@ -40,7 +40,6 @@ public abstract class CommonBatchStatusWidget extends VerticalLayout implements 
         setSizeFull();
         grid = new Grid<>();
         addColumns();
-        grid.setSizeFull();
         add(grid);
         VaadinUtils.setGridProperties(grid, "batch-status-grid");
         VaadinUtils.addComponentStyle(this, "batch-status-widget");
@@ -60,7 +59,7 @@ public abstract class CommonBatchStatusWidget extends VerticalLayout implements 
     @Override
     public void refresh() {
         var batchStatuses = controller.getBatchStatuses();
-        grid.setDataProvider(DataProvider.ofCollection(batchStatuses));
+        grid.setItems(DataProvider.ofCollection(batchStatuses));
         updateGridStyle(batchStatuses);
     }
 

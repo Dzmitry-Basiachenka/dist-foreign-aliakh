@@ -8,10 +8,12 @@ import com.copyright.rup.dist.foreign.vui.vaadin.common.util.VaadinUtils;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.CommonDialog;
 
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.Grid.Column;
 import com.vaadin.flow.component.grid.Grid.SelectionMode;
 import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
 import com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.function.ValueProvider;
 
 import java.util.List;
 
@@ -27,6 +29,8 @@ import java.util.List;
 public class UsageHistoryWindow extends CommonDialog implements IDateFormatter {
 
     private static final long serialVersionUID = 8394123336511924026L;
+
+    private Grid<UsageAuditItem> grid;
 
     /**
      * Constructor.
@@ -52,32 +56,24 @@ public class UsageHistoryWindow extends CommonDialog implements IDateFormatter {
     }
 
     private Grid<UsageAuditItem> initGrid(List<UsageAuditItem> usageAuditItems) {
-        Grid<UsageAuditItem> grid = new Grid<>();
+        grid = new Grid<>();
         grid.setSelectionMode(SelectionMode.NONE);
         grid.setItems(usageAuditItems);
+        addColumn(item -> item.getActionType().name(), "label.action_type");
+        addColumn(UsageAuditItem::getCreateUser, "label.action_user")
+            .setComparator((item1, item2) -> item1.getCreateUser().compareToIgnoreCase(item2.getCreateUser()));
+        addColumn(item -> toLongFormat(item.getCreateDate()), "label.action_date");
+        addColumn(UsageAuditItem::getActionReason, "label.action_reason")
+            .setComparator((item1, item2) -> item1.getActionReason().compareToIgnoreCase(item2.getActionReason()));
         VaadinUtils.setGridProperties(grid, "usage-history-grid");
-        grid.addColumn(item -> item.getActionType().name())
-            .setHeader(ForeignUi.getMessage("label.action_type"))
-            .setResizable(true)
-            .setSortable(true)
-            .setAutoWidth(true);
-        grid.addColumn(UsageAuditItem::getCreateUser)
-            .setHeader(ForeignUi.getMessage("label.action_user"))
-            .setComparator((item1, item2) -> item1.getCreateUser().compareToIgnoreCase(item2.getCreateUser()))
-            .setSortable(true)
-            .setAutoWidth(true)
-            .setResizable(true);
-        grid.addColumn(item -> toLongFormat(item.getCreateDate()))
-            .setHeader(ForeignUi.getMessage("label.action_date"))
-            .setResizable(true)
-            .setSortable(true)
-            .setAutoWidth(true);
-        grid.addColumn(UsageAuditItem::getActionReason)
-            .setHeader(ForeignUi.getMessage("label.action_reason"))
-            .setComparator((item1, item2) -> item1.getActionReason().compareToIgnoreCase(item2.getActionReason()))
-            .setSortable(true)
-            .setAutoWidth(true)
-            .setResizable(true);
         return grid;
+    }
+
+    private Column<UsageAuditItem> addColumn(ValueProvider<UsageAuditItem, ?> provider, String captionProperty) {
+        return grid.addColumn(provider)
+            .setHeader(ForeignUi.getMessage(captionProperty))
+            .setSortable(true)
+            .setAutoWidth(true)
+            .setResizable(true);
     }
 }

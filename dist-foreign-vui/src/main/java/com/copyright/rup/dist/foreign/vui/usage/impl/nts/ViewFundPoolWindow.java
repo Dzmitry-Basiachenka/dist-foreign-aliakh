@@ -27,6 +27,7 @@ import java.time.format.DateTimeFormatter;
 class ViewFundPoolWindow extends AbstractViewUsageBatchWindow {
 
     private static final long serialVersionUID = -7223760637238404615L;
+    private static final String WIDTH_200 = "200px";
 
     /**
      * Constructor.
@@ -68,13 +69,8 @@ class ViewFundPoolWindow extends AbstractViewUsageBatchWindow {
 
     @Override
     protected void addGridColumns(Grid<UsageBatch> grid) {
-        grid.addColumn(UsageBatch::getName)
-            .setHeader(ForeignUi.getMessage("table.column.fund_pool_name"))
-            .setComparator((batch1, batch2) -> batch1.getName().compareToIgnoreCase(batch2.getName()))
-            .setFlexGrow(0)
-            .setWidth("200px")
-            .setSortable(true)
-            .setResizable(true);
+        addColumn(UsageBatch::getName,"table.column.fund_pool_name", WIDTH_200,
+            (batch1, batch2) -> batch1.getName().compareToIgnoreCase(batch2.getName()));
         addColumn(batch -> batch.getRro().getAccountNumber(), "table.column.rro_account_number", "160px");
         addColumn(batch -> batch.getRro().getName(), "table.column.rro_account_name", "300px",
             (batch1, batch2) -> batch1.getRro().getName().compareToIgnoreCase(batch2.getRro().getName()));
@@ -87,14 +83,15 @@ class ViewFundPoolWindow extends AbstractViewUsageBatchWindow {
         addAmountColumn(batch -> batch.getNtsFields().getNonStmAmount(), "table.column.non_stm_amount", "165px",
             (batch1, batch2) -> batch1.getNtsFields().getNonStmAmount()
                 .compareTo(batch2.getNtsFields().getNonStmAmount()));
-        addAmountColumn(batch -> batch.getNtsFields().getStmMinimumAmount(), "table.column.stm_minimum_amount", "200px",
+        addAmountColumn(
+            batch -> batch.getNtsFields().getStmMinimumAmount(), "table.column.stm_minimum_amount", WIDTH_200,
             (batch1, batch2) -> batch1.getNtsFields().getStmMinimumAmount()
                 .compareTo(batch2.getNtsFields().getStmMinimumAmount()));
         addAmountColumn(batch -> batch.getNtsFields().getNonStmMinimumAmount(), "table.column.non_stm_minimum_amount",
             "235px", (batch1, batch2) -> batch1.getNtsFields().getNonStmMinimumAmount()
                 .compareTo(batch2.getNtsFields().getNonStmMinimumAmount()));
         addColumn(batch -> String.join(", ", batch.getNtsFields().getMarkets()), "table.column.markets", "140px");
-        addColumn(batch -> batch.getNtsFields().getFundPoolPeriodFrom(), "table.column.market_period_from", "200px");
+        addColumn(batch -> batch.getNtsFields().getFundPoolPeriodFrom(), "table.column.market_period_from", WIDTH_200);
         addColumn(batch -> batch.getNtsFields().getFundPoolPeriodTo(), "table.column.market_period_to", "185px");
         addColumn(UsageBatch::getCreateUser, "table.column.created_by", "330px",
             (batch1, batch2) -> batch1.getCreateUser().compareToIgnoreCase(batch2.getCreateUser()));

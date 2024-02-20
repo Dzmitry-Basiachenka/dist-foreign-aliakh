@@ -192,7 +192,6 @@ public abstract class CommonScenariosWidget extends VerticalLayout implements IC
         scenarioGrid = new Grid<>();
         scenarioGrid.setItems(dataProvider);
         addColumns();
-        scenarioGrid.setSizeFull();
         scenarioGrid.getColumns().forEach(column -> column.setSortable(true));
         scenarioGrid.addSelectionListener(event -> onItemChanged(event.getFirstSelectedItem().orElse(null)));
         VaadinUtils.setGridProperties(scenarioGrid, "scenarios-table");

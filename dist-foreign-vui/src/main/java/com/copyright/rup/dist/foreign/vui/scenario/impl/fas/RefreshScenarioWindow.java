@@ -103,9 +103,8 @@ public class RefreshScenarioWindow extends CommonDialog {
     private void initTable() {
         grid = new Grid<>();
         grid.setItems(dataProvider);
-        grid.setSizeFull();
-        addColumns();
         grid.setSelectionMode(SelectionMode.NONE);
+        addColumns();
         VaadinUtils.setGridProperties(grid, "refresh-usages-table");
     }
 

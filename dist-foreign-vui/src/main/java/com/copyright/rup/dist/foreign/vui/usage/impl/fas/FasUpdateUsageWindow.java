@@ -14,6 +14,7 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.AbstractGridMultiSelectionModel;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.Grid.Column;
 import com.vaadin.flow.component.grid.Grid.SelectionMode;
 import com.vaadin.flow.component.grid.GridMultiSelectionModel.SelectAllCheckboxVisibility;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -79,8 +80,7 @@ class FasUpdateUsageWindow extends CommonDialog implements IFasUpdateUsageWindow
         List<UsageDto> usages = controller.getUsageDtosToUpdate();
         dataProvider = DataProvider.ofCollection(usages);
         usagesGrid = new Grid<>();
-        usagesGrid.setDataProvider(dataProvider);
-        usagesGrid.setSizeFull();
+        usagesGrid.setItems(dataProvider);
         gridSelectionModel =
             (AbstractGridMultiSelectionModel<UsageDto>) usagesGrid.setSelectionMode(SelectionMode.MULTI);
         switchSelectAllCheckBoxVisibility(usages.size());
@@ -103,13 +103,8 @@ class FasUpdateUsageWindow extends CommonDialog implements IFasUpdateUsageWindow
 
     private void addGridColumns() {
         addColumn(UsageDto::getId, "table.column.detail_id", "300px");
-        usagesGrid.addColumn((ValueProvider<UsageDto, ?>) UsageDto::getStatus)
-            .setHeader(ForeignUi.getMessage("table.column.status"))
-            .setComparator(Comparator.comparing(status -> status.getStatus().name()))
-            .setFlexGrow(0)
-            .setWidth("180px")
-            .setSortable(true)
-            .setResizable(true);
+        addColumn((ValueProvider<UsageDto, ?>) UsageDto::getStatus, "table.column.status", "180px")
+            .setComparator(Comparator.comparing(status -> status.getStatus().name()));
         addColumn(UsageDto::getBatchName, "table.column.batch_name", "200px");
         addColumn(UsageDto::getWrWrkInst, "table.column.wr_wrk_inst", "140px");
         usagesGrid.addColumn((ValueProvider<UsageDto, ?>) UsageDto::getSystemTitle)
@@ -121,8 +116,8 @@ class FasUpdateUsageWindow extends CommonDialog implements IFasUpdateUsageWindow
         addColumn(UsageDto::getRhName, "table.column.rh_account_name", "300px");
     }
 
-    private void addColumn(ValueProvider<UsageDto, ?> provider, String captionProperty, String width) {
-        usagesGrid.addColumn(provider)
+    private Column<UsageDto> addColumn(ValueProvider<UsageDto, ?> provider, String captionProperty, String width) {
+        return usagesGrid.addColumn(provider)
             .setHeader(ForeignUi.getMessage(captionProperty))
             .setFlexGrow(0)
             .setWidth(width)

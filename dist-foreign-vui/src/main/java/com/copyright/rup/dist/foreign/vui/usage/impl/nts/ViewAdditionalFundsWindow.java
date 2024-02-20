@@ -12,10 +12,12 @@ import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.SearchWidget;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.SearchWidget.ISearchController;
 
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.Grid.Column;
 import com.vaadin.flow.component.grid.Grid.SelectionMode;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.function.SerializableComparator;
+import com.vaadin.flow.function.ValueProvider;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -74,40 +76,25 @@ class ViewAdditionalFundsWindow extends CommonDialog implements ISearchControlle
         grid = new Grid<>();
         grid.setItems(controller.getAdditionalFunds());
         grid.setSelectionMode(SelectionMode.NONE);
-        grid.addColumn(FundPool::getName)
-            .setHeader(ForeignUi.getMessage("table.column.fund_name"))
+        addColumn(FundPool::getName, "table.column.fund_name", "name")
             .setComparator((SerializableComparator<FundPool>) (fundPool1, fundPool2) ->
-                fundPool1.getName().compareToIgnoreCase(fundPool2.getName()))
-            .setSortProperty("name")
-            .setSortable(true)
-            .setResizable(true);
-        grid.addColumn(fundPool -> CurrencyUtils.format(fundPool.getTotalAmount(), null))
-            .setHeader(ForeignUi.getMessage("table.column.fund_amount"))
+                fundPool1.getName().compareToIgnoreCase(fundPool2.getName()));
+        addColumn(
+            fundPool -> CurrencyUtils.format(fundPool.getTotalAmount(), null), "table.column.fund_amount", "amount")
             .setComparator((SerializableComparator<FundPool>) (fundPool1, fundPool2) ->
                 fundPool1.getTotalAmount().compareTo(fundPool2.getTotalAmount()))
-            .setSortProperty("amount")
             .setClassNameGenerator(item -> "v-align-right")
             .setFlexGrow(0)
-            .setWidth("140px")
-            .setSortable(true)
-            .setResizable(true);
-        grid.addColumn(FundPool::getCreateUser)
-            .setHeader(ForeignUi.getMessage("table.column.created_by"))
-            .setSortProperty("createUser")
+            .setWidth("140px");
+        addColumn(FundPool::getCreateUser, "table.column.created_by", "createUser")
             .setFlexGrow(0)
-            .setWidth("300px")
-            .setSortable(true)
-            .setResizable(true);
-        grid.addColumn(FundPool::getComment)
-            .setHeader(ForeignUi.getMessage("table.column.comment"))
+            .setWidth("300px");
+        addColumn(FundPool::getComment, "table.column.comment", "comment")
             .setComparator((SerializableComparator<FundPool>) (fundPool1, fundPool2) ->
                 Comparator.comparing(FundPool::getComment, Comparator.nullsLast(String.CASE_INSENSITIVE_ORDER))
                     .compare(fundPool1, fundPool2))
-            .setSortProperty("comment")
             .setFlexGrow(0)
-            .setWidth("200px")
-            .setSortable(true)
-            .setResizable(true);
+            .setWidth("200px");
         grid.addComponentColumn(fundPool -> {
                 var deleteButton = Buttons.createButton(ForeignUi.getMessage("button.delete"));
                 deleteButton.setId(fundPool.getId());
@@ -123,6 +110,14 @@ class ViewAdditionalFundsWindow extends CommonDialog implements ISearchControlle
             .setId("delete");
         VaadinUtils.setGridProperties(grid, "view-fund-pool-grid");
         return grid;
+    }
+
+    private Column<FundPool> addColumn(ValueProvider<FundPool, ?> provider, String captionProperty, String sort) {
+        return grid.addColumn(provider)
+            .setHeader(ForeignUi.getMessage(captionProperty))
+            .setSortable(true)
+            .setSortProperty(sort)
+            .setResizable(true);
     }
 
     private void deleteFund(FundPool fundPool) {

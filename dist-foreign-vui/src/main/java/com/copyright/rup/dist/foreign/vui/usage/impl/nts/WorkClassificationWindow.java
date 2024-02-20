@@ -171,20 +171,19 @@ class WorkClassificationWindow extends CommonDialog {
 
     private void addColumns() {
         addColumn(WorkClassification::getWrWrkInst, "table.column.wr_wrk_inst", "wrWrkInst", "140px");
-        addStringColumn(WorkClassification::getSystemTitle, "table.column.system_title", "systemTitle", "300px");
+        addStringColumn(WorkClassification::getSystemTitle, "table.column.system_title", "systemTitle");
         addColumn(WorkClassification::getClassification, "table.column.classification", "classification", "150px");
         addColumn(WorkClassification::getStandardNumber, "table.column.standard_number", "standardNumber", "180px");
         addColumn(WorkClassification::getStandardNumberType, "table.column.standard_number_type", "standardNumberType",
             "225px");
         addColumn(WorkClassification::getRhAccountNumber, "table.column.rh_account_number", "rhAccountNumber", "150px");
-        addStringColumn(WorkClassification::getRhName, "table.column.rh_account_name", "rhName", "300px");
+        addStringColumn(WorkClassification::getRhName, "table.column.rh_account_name", "rhName");
         addClassificationDateColumn(WorkClassification::getUpdateDate);
-        addStringColumn(WorkClassification::getUpdateUser, "table.column.classified_by", "updateUser", "300px");
+        addStringColumn(WorkClassification::getUpdateUser, "table.column.classified_by", "updateUser");
     }
 
-    private void addStringColumn(ValueProvider<WorkClassification, String> provider, String caption, String property,
-                                 String width) {
-        addColumn(provider, caption, property, width)
+    private void addStringColumn(ValueProvider<WorkClassification, String> provider, String caption, String property) {
+        addColumn(provider, caption, property, "300px")
             .setComparator((SerializableComparator<WorkClassification>) (classification1, classification2) ->
                 Comparator.comparing(provider, Comparator.nullsFirst(String.CASE_INSENSITIVE_ORDER))
                     .compare(classification1, classification2));
@@ -250,20 +249,20 @@ class WorkClassificationWindow extends CommonDialog {
         if (Objects.nonNull(listDataProvider)) {
             listDataProvider = DataProvider.ofCollection(controller.getClassifications(selectedBatchesIds, null, 0,
                 controller.getWorkClassificationThreshold(), null));
-            grid.setDataProvider(listDataProvider);
+            grid.setItems(listDataProvider);
         } else {
             dataProvider.refreshAll();
-            grid.setDataProvider(dataProvider);
+            grid.setItems(dataProvider);
         }
     }
 
     private void refreshDataProvider() {
         if (Objects.nonNull(listDataProvider)) {
             listDataProvider.refreshAll();
-            grid.setDataProvider(listDataProvider);
+            grid.setItems(listDataProvider);
         } else {
             dataProvider.refreshAll();
-            grid.setDataProvider(dataProvider);
+            grid.setItems(dataProvider);
         }
     }
 }

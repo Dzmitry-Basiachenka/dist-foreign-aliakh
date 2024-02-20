@@ -34,6 +34,7 @@ import java.util.List;
 class RightsholderDiscrepanciesWindow extends CommonDialog {
 
     private static final long serialVersionUID = -6803326666265723117L;
+    private static final String WIDTH_300 = "300px";
 
     private final IReconcileRightsholdersController controller;
     private final IFasScenariosController scenariosController;
@@ -100,7 +101,6 @@ class RightsholderDiscrepanciesWindow extends CommonDialog {
         addColumns();
         grid.setSizeFull();
         grid.setSelectionMode(SelectionMode.NONE);
-        grid.getColumns().forEach(column -> column.setSortable(true));
         VaadinUtils.addComponentStyle(grid, "rightsholder-discrepancies-grid");
     }
 
@@ -108,13 +108,13 @@ class RightsholderDiscrepanciesWindow extends CommonDialog {
         addColumn(discrepancy -> discrepancy.getOldRightsholder().getAccountNumber(), "table.column.rh_account_number",
             "oldRightsholder.rhAccountNumber", "135px");
         addColumn(discrepancy -> discrepancy.getOldRightsholder().getName(), "table.column.rh_account_name",
-            "oldRightsholder.rhName", "300px");
+            "oldRightsholder.rhName", WIDTH_300);
         addColumn(discrepancy -> discrepancy.getNewRightsholder().getAccountNumber(),
             "table.column.new_rh_account_number", "newRightsholder.rhName", "170px");
         addColumn(discrepancy -> discrepancy.getNewRightsholder().getName(), "table.column.new_rh_name",
-            "newRightsholder.rhName", "300px");
+            "newRightsholder.rhName", WIDTH_300);
         addColumn(RightsholderDiscrepancy::getWrWrkInst, "table.column.wr_wrk_inst", "wrWrkInst", "110px");
-        addColumn(RightsholderDiscrepancy::getWorkTitle, "table.column.work_title", "workTitle", "300px");
+        addColumn(RightsholderDiscrepancy::getWorkTitle, "table.column.work_title", "workTitle", WIDTH_300);
     }
 
     private void addColumn(ValueProvider<RightsholderDiscrepancy, ?> provider, String captionProperty, String sort,

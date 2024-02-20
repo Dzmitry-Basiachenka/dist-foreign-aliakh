@@ -121,11 +121,10 @@ public class FasExcludePayeeWidget extends CommonDialog implements IFasExcludePa
 
     private void initGrid() {
         payeesGrid = new Grid<>();
-        VaadinUtils.setGridProperties(payeesGrid, "exclude-details-by-payee-grid");
         payeesGrid.setSelectionMode(SelectionMode.MULTI);
-        payeesGrid.setSizeFull();
         initDataProvider();
         addColumns();
+        VaadinUtils.setGridProperties(payeesGrid, "exclude-details-by-payee-grid");
     }
 
     private void initDataProvider() {
@@ -143,24 +142,21 @@ public class FasExcludePayeeWidget extends CommonDialog implements IFasExcludePa
         addAmountColumn(PayeeTotalHolder::getServiceFeeTotal, "table.column.service_fee_amount",
             "serviceFeeTotal");
         addAmountColumn(PayeeTotalHolder::getNetTotal, "table.column.net_amount_in_usd", "netTotal");
-        payeesGrid.addColumn(holder -> holder.isPayeeParticipating() ? 'Y' : 'N')
-            .setHeader(ForeignUi.getMessage("table.column.participating"))
-            .setSortProperty("payeeParticipating");
-        payeesGrid.getColumns().forEach(column -> column.setSortable(true));
+        addColumn(
+            holder -> holder.isPayeeParticipating() ? 'Y' : 'N', "table.column.participating", "payeeParticipating");
     }
 
     private Column<PayeeTotalHolder> addColumn(ValueProvider<PayeeTotalHolder, ?> provider,
                                                String captionProperty, String sortProperty) {
         return payeesGrid.addColumn(provider)
             .setHeader(ForeignUi.getMessage(captionProperty))
+            .setSortable(true)
             .setSortProperty(sortProperty);
     }
 
     private void addAmountColumn(Function<PayeeTotalHolder, BigDecimal> function, String captionProperty,
                                  String sortProperty) {
-        payeesGrid.addColumn(holder -> CurrencyUtils.format(function.apply(holder), null))
-            .setHeader(ForeignUi.getMessage(captionProperty))
-            .setSortProperty(sortProperty)
+        addColumn(holder -> CurrencyUtils.format(function.apply(holder), null), captionProperty,  sortProperty)
             .setComparator(Comparator.comparing(function))
             .setClassNameGenerator(item -> STYLE_ALIGN_RIGHT);
     }

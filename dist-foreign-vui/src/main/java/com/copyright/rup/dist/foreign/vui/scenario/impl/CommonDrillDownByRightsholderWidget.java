@@ -13,6 +13,7 @@ import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.SearchWidget;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.Grid.Column;
 import com.vaadin.flow.component.grid.Grid.SelectionMode;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode;
@@ -106,10 +107,11 @@ public abstract class CommonDrillDownByRightsholderWidget extends CommonDialog
      * @param captionProperty caption property
      * @param sort            sort property
      * @param width           column width
+     * @return the column for method chaining
      */
-    protected void addColumn(ValueProvider<UsageDto, ?> provider, String captionProperty, String sort,
-                             String width) {
-        grid.addColumn(provider)
+    protected Column<UsageDto> addColumn(ValueProvider<UsageDto, ?> provider, String captionProperty, String sort,
+                                         String width) {
+        return grid.addColumn(provider)
             .setHeader(ForeignUi.getMessage(captionProperty))
             .setSortProperty(sort)
             .setFlexGrow(0)
@@ -124,16 +126,12 @@ public abstract class CommonDrillDownByRightsholderWidget extends CommonDialog
      * @param captionProperty caption property
      * @param sort            sort property
      * @param width           column width
+     * @return the column for method chaining
      */
-    protected void addAmountColumn(Function<UsageDto, BigDecimal> function, String captionProperty, String sort,
-                                   String width) {
-        grid.addColumn(usageDto -> CurrencyUtils.format(function.apply(usageDto), null))
-            .setHeader(ForeignUi.getMessage(captionProperty))
-            .setSortProperty(sort)
-            .setClassNameGenerator(item -> STYLE_ALIGN_RIGHT)
-            .setFlexGrow(0)
-            .setWidth(width)
-            .setResizable(true);
+    protected Column<UsageDto> addAmountColumn(Function<UsageDto, BigDecimal> function, String captionProperty,
+                                               String sort, String width) {
+        return addColumn(usageDto -> CurrencyUtils.format(function.apply(usageDto), null), captionProperty, sort, width)
+            .setClassNameGenerator(item -> STYLE_ALIGN_RIGHT);
     }
 
     /**
@@ -173,7 +171,6 @@ public abstract class CommonDrillDownByRightsholderWidget extends CommonDialog
         addColumns();
         grid.getColumns().forEach(usageDtoColumn -> usageDtoColumn.setSortable(true));
         grid.setSelectionMode(SelectionMode.NONE);
-        grid.setSizeFull();
         VaadinUtils.setGridProperties(grid, "drill-down-by-rightsholder-table");
     }
 
