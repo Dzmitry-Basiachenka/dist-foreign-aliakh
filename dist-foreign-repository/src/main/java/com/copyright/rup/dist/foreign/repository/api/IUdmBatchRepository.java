@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.repository.api;
 import com.copyright.rup.dist.foreign.domain.UdmBatch;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
@@ -15,7 +16,7 @@ import java.util.Set;
  *
  * @author Uladzislau Shalamitski
  */
-public interface IUdmBatchRepository {
+public interface IUdmBatchRepository extends Serializable {
 
     /**
      * Inserts UDM usage batch.

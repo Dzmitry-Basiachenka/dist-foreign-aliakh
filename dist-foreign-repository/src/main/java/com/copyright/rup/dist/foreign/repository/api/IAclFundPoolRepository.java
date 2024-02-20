@@ -5,6 +5,7 @@ import com.copyright.rup.dist.foreign.domain.AclFundPoolDetail;
 import com.copyright.rup.dist.foreign.domain.AclFundPoolDetailDto;
 import com.copyright.rup.dist.foreign.domain.filter.AclFundPoolDetailFilter;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
@@ -17,7 +18,7 @@ import java.util.Set;
  *
  * @author Anton Azarenka
  */
-public interface IAclFundPoolRepository {
+public interface IAclFundPoolRepository extends Serializable {
 
     /**
      * Inserts {@link AclFundPool}.

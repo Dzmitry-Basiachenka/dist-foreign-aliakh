@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.repository.api;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -14,7 +15,7 @@ import java.util.List;
  *
  * @author Uladzislau_Shalamitski
  */
-public interface IScenarioAuditRepository {
+public interface IScenarioAuditRepository extends Serializable {
 
     /**
      * Inserts {@link ScenarioAuditItem}.

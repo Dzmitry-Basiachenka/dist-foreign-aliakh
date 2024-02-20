@@ -12,6 +12,7 @@ import com.copyright.rup.dist.foreign.domain.AclScenarioLiabilityDetail;
 import com.copyright.rup.dist.foreign.domain.RightsholderPayeeProductFamilyHolder;
 import com.copyright.rup.dist.foreign.domain.filter.RightsholderResultsFilter;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
@@ -24,7 +25,7 @@ import java.util.Set;
  *
  * @author Mikita Maistrenka
  */
-public interface IAclScenarioUsageRepository {
+public interface IAclScenarioUsageRepository  extends Serializable {
 
     /**
      * Attaches usages to scenario.

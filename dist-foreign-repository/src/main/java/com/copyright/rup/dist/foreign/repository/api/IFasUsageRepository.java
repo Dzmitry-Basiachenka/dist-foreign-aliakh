@@ -6,6 +6,7 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Work;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -19,7 +20,7 @@ import java.util.Set;
  *
  * @author Ihar Suvorau
  */
-public interface IFasUsageRepository {
+public interface IFasUsageRepository extends Serializable {
 
     /**
      * Inserts Usage into database.

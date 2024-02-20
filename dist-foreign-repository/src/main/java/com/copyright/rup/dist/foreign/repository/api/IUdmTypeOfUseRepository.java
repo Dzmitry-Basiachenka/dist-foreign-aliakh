@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.repository.api;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
@@ -12,7 +13,7 @@ import java.util.Map;
  *
  * @author Dzmitry Basiachenka
  */
-public interface IUdmTypeOfUseRepository {
+public interface IUdmTypeOfUseRepository extends Serializable {
 
     /**
      * Finds all UDM type of uses.

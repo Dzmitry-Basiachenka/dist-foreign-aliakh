@@ -7,6 +7,7 @@ import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
 import com.copyright.rup.dist.foreign.domain.RightsholderTypeOfUsePair;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -20,7 +21,7 @@ import java.util.List;
  * @author Mikalai Bezmen
  * @author Aliaksandr Radkevich
  */
-public interface IRightsholderRepository extends ICommonRightsholderRepository {
+public interface IRightsholderRepository extends ICommonRightsholderRepository, Serializable {
 
     /**
      * Finds list of RROs stored in DB associated with specified Product Family.

@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.repository.api;
 
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
@@ -15,7 +16,7 @@ import java.util.Set;
  *
  * @author Aliaksandr Liakh
  */
-public interface INtsUsageRepository {
+public interface INtsUsageRepository extends Serializable {
 
     /**
      * Inserts usages from archived FAS usages based on NTS Batch criteria (Market Period From/To, Markets).

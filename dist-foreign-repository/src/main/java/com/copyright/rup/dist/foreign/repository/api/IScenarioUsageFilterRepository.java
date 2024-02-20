@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.repository.api;
 
 import com.copyright.rup.dist.foreign.domain.filter.ScenarioUsageFilter;
 
+import java.io.Serializable;
 import java.util.Set;
 
 /**
@@ -13,7 +14,7 @@ import java.util.Set;
  *
  * @author Aliaksandr Liakh
  */
-public interface IScenarioUsageFilterRepository {
+public interface IScenarioUsageFilterRepository extends Serializable {
 
     /**
      * Inserts new usage filter.

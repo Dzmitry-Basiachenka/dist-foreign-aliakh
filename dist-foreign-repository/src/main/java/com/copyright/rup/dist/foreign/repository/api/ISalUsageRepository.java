@@ -10,6 +10,7 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
@@ -22,7 +23,7 @@ import java.util.Set;
  *
  * @author Aliaksandr Liakh
  */
-public interface ISalUsageRepository {
+public interface ISalUsageRepository extends Serializable {
 
     /**
      * Inserts SAL item bank detail into database.

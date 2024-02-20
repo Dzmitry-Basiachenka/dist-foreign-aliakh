@@ -5,6 +5,7 @@ import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.UdmValueBaselineDto;
 import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineValueFilter;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -16,7 +17,7 @@ import java.util.List;
  *
  * @author Anton Azarenka
  */
-public interface IUdmBaselineValueRepository {
+public interface IUdmBaselineValueRepository extends Serializable {
 
     /**
      * Finds list of periods from UDM baseline value.

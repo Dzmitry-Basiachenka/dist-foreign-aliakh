@@ -9,6 +9,7 @@ import com.copyright.rup.dist.foreign.domain.filter.UdmValueFilter;
 
 import java.io.OutputStream;
 import java.io.PipedOutputStream;
+import java.io.Serializable;
 import java.util.Set;
 
 /**
@@ -20,7 +21,7 @@ import java.util.Set;
  *
  * @author Dzmitry Basiachenka
  */
-public interface IUdmReportRepository {
+public interface IUdmReportRepository extends Serializable {
 
     /**
      * Writes UDM proxy values found by filter into csv output stream.

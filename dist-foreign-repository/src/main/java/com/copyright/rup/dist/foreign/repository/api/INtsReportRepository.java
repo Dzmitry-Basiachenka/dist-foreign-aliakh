@@ -6,6 +6,7 @@ import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
 import java.io.OutputStream;
 import java.io.PipedOutputStream;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Set;
 
@@ -18,7 +19,7 @@ import java.util.Set;
  *
  * @author Dzmitry Basiachenka
  */
-public interface INtsReportRepository {
+public interface INtsReportRepository extends Serializable {
 
     /**
      * Writes Service Fee True-up Report for NTS into the output stream in CSV format.

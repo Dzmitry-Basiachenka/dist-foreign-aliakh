@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.repository.api;
 
 import com.copyright.rup.dist.foreign.domain.UdmValueAuditItem;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -13,7 +14,7 @@ import java.util.List;
  *
  * @author Aliaksandr Liakh
  */
-public interface IUdmValueAuditRepository {
+public interface IUdmValueAuditRepository extends Serializable {
 
     /**
      * Inserts {@link UdmValueAuditItem}.

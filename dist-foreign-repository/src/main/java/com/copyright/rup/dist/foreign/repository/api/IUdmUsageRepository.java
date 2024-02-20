@@ -7,6 +7,7 @@ import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
@@ -19,7 +20,7 @@ import java.util.Set;
  *
  * @author Uladzislau Shalamitski
  */
-public interface IUdmUsageRepository {
+public interface IUdmUsageRepository extends Serializable {
 
     /**
      * Inserts UDM usage.

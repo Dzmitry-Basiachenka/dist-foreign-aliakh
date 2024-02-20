@@ -12,6 +12,7 @@ import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.ExcludePayeeFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
@@ -25,7 +26,7 @@ import java.util.Set;
  *
  * @author Ihar Suvorau
  */
-public interface IAaclUsageRepository {
+public interface IAaclUsageRepository extends Serializable {
 
     /**
      * Inserts AACL usage into database.

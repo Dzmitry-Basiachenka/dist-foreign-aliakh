@@ -4,6 +4,7 @@ import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.report.SalLicensee;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -18,7 +19,7 @@ import java.util.Set;
  * @author Mikalai Bezmen
  * @author Aliaksandr Radkevich
  */
-public interface IUsageBatchRepository {
+public interface IUsageBatchRepository extends Serializable {
 
     /**
      * Inserts {@link UsageBatch}.

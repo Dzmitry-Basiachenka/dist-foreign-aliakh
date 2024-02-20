@@ -6,6 +6,7 @@ import com.copyright.rup.dist.foreign.domain.UdmBaselineDto;
 import com.copyright.rup.dist.foreign.domain.UdmValue;
 import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineFilter;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -19,7 +20,7 @@ import java.util.Set;
  *
  * @author Anton Azarenka
  */
-public interface IUdmBaselineRepository {
+public interface IUdmBaselineRepository extends Serializable {
 
     /**
      * Finds list of {@link UdmBaselineDto}s by UDM baseline filter.

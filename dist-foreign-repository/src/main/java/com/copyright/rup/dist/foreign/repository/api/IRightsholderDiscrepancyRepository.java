@@ -5,6 +5,7 @@ import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancy;
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancyStatusEnum;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -16,7 +17,7 @@ import java.util.List;
  *
  * @author Ihar Suvorau
  */
-public interface IRightsholderDiscrepancyRepository {
+public interface IRightsholderDiscrepancyRepository extends Serializable {
 
     /**
      * Inserts given {@link RightsholderDiscrepancy}ies into database and binds them to scenario.
