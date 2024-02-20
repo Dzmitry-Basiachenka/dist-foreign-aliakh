@@ -8,6 +8,7 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
@@ -20,7 +21,7 @@ import java.util.Set;
  *
  * @author Ihar Suvorau
  */
-public interface IUsageArchiveRepository {
+public interface IUsageArchiveRepository extends Serializable {
 
     /**
      * Deletes archived {@link Usage}s by given batch identifier.

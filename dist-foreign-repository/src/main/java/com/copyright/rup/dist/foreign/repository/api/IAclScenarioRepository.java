@@ -8,6 +8,7 @@ import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.domain.filter.AclScenarioFilter;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
@@ -20,7 +21,7 @@ import java.util.Set;
  *
  * @author Dzmitry Basiachenka
  */
-public interface IAclScenarioRepository {
+public interface IAclScenarioRepository extends Serializable {
 
     /**
      * Finds list of {@link AclScenario}s based on applied filter.

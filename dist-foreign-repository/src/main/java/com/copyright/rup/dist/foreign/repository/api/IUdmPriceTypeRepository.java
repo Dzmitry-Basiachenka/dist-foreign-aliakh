@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.repository.api;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -11,7 +12,7 @@ import java.util.List;
  *
  * @author Ihar Suvorau
  */
-public interface IUdmPriceTypeRepository {
+public interface IUdmPriceTypeRepository extends Serializable {
 
     /**
      * @return list of all price types.

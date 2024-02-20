@@ -12,6 +12,7 @@ import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.ExcludePayeeFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
@@ -28,7 +29,7 @@ import java.util.Set;
  * @author Aliaksandr Radkevich
  * @author Mikalai Bezmen
  */
-public interface IUsageRepository {
+public interface IUsageRepository extends Serializable {
     /**
      * Finds list of {@link UsageDto}s by usage filter.
      *

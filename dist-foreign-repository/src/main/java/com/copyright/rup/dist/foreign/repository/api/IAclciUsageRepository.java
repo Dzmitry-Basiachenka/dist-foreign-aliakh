@@ -6,6 +6,7 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
@@ -18,7 +19,7 @@ import java.util.Set;
  *
  * @author Aliaksandr Liakh
  */
-public interface IAclciUsageRepository {
+public interface IAclciUsageRepository extends Serializable {
 
     /**
      * Inserts ACLCI usage.

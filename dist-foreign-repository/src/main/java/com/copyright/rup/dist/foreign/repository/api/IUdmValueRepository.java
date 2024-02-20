@@ -6,6 +6,7 @@ import com.copyright.rup.dist.foreign.domain.UdmValue;
 import com.copyright.rup.dist.foreign.domain.UdmValueDto;
 import com.copyright.rup.dist.foreign.domain.filter.UdmValueFilter;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
@@ -18,7 +19,7 @@ import java.util.Set;
  *
  * @author Anton Azarenka
  */
-public interface IUdmValueRepository {
+public interface IUdmValueRepository extends Serializable {
 
     /**
      * Inserts UDM Value into database.

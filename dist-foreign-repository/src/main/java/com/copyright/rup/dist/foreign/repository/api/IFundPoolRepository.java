@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.repository.api;
 import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.FundPoolDetail;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -14,7 +15,7 @@ import java.util.List;
  *
  * @author Aliaksandr Liakh
  */
-public interface IFundPoolRepository {
+public interface IFundPoolRepository extends Serializable {
 
     /**
      * Inserts {@link FundPool}.

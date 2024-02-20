@@ -6,6 +6,7 @@ import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
 import java.io.OutputStream;
 import java.io.PipedOutputStream;
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -17,7 +18,7 @@ import java.util.List;
  *
  * @author Dzmitry Basiachenka
  */
-public interface ISalReportRepository {
+public interface ISalReportRepository extends Serializable {
 
     /**
      * Finds SAL usages according to given {@link UsageFilter} and writes them to the output stream

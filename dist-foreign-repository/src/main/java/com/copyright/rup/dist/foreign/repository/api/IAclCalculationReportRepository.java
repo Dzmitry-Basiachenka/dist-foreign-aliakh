@@ -7,6 +7,7 @@ import com.copyright.rup.dist.foreign.domain.report.AclCalculationReportsInfoDto
 
 import java.io.OutputStream;
 import java.io.PipedOutputStream;
+import java.io.Serializable;
 import java.util.Set;
 
 /**
@@ -18,7 +19,7 @@ import java.util.Set;
  *
  * @author Dzmitry Basiachenka
  */
-public interface IAclCalculationReportRepository {
+public interface IAclCalculationReportRepository extends Serializable {
 
     /**
      * Finds ACL grant details according to given {@link AclGrantDetailFilter} and writes them to the output stream in

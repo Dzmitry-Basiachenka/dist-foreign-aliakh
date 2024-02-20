@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.repository.api;
 import com.copyright.rup.dist.foreign.domain.AclPublicationType;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -14,7 +15,7 @@ import java.util.List;
  *
  * @author Anton Azarenka
  */
-public interface IPublicationTypeRepository {
+public interface IPublicationTypeRepository extends Serializable {
 
     /**
      * Checks whether publication type id exists with provided name ignoring case for specified product family.

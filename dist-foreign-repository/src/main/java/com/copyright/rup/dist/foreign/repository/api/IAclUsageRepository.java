@@ -7,6 +7,7 @@ import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.domain.filter.AclUsageFilter;
 
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
@@ -19,7 +20,7 @@ import java.util.Set;
  *
  * @author Aliaksandr Liakh
  */
-public interface IAclUsageRepository {
+public interface IAclUsageRepository extends Serializable {
 
     /**
      * Populates ACL usages from UDM usages and UDM values and inserts them.

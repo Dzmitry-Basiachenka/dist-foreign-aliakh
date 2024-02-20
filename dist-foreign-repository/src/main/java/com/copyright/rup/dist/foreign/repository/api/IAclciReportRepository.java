@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.repository.api;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
 import java.io.PipedOutputStream;
+import java.io.Serializable;
 
 /**
  * Interface for ACLCI report repository.
@@ -13,7 +14,7 @@ import java.io.PipedOutputStream;
  *
  * @author Aliaksandr Liakh
  */
-public interface IAclciReportRepository {
+public interface IAclciReportRepository extends Serializable {
 
     /**
      * Finds ACLCI usages according to given {@link UsageFilter} and writes them to the output stream in CSV format.

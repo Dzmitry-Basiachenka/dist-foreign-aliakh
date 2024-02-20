@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.repository.api;
 import com.copyright.rup.dist.foreign.domain.UsageBatchStatus;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
@@ -16,7 +17,7 @@ import java.util.Set;
  *
  * @author Ihar Suvorau
  */
-public interface IUsageBatchStatusRepository {
+public interface IUsageBatchStatusRepository extends Serializable {
 
     /**
      * Finds list of FAS/FAS2 usage batch statuses for specified usage batch ids.

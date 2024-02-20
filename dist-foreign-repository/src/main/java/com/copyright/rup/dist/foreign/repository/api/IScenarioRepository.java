@@ -6,6 +6,7 @@ import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
@@ -20,7 +21,7 @@ import java.util.Set;
  * @author Aliaksandr Radkevich
  * @author Mikalai Bezmen
  */
-public interface IScenarioRepository {
+public interface IScenarioRepository extends Serializable {
 
     /**
      * Inserts {@link Scenario} into database.

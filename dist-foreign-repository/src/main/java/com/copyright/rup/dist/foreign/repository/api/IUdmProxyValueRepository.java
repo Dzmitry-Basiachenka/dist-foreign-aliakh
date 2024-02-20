@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.repository.api;
 import com.copyright.rup.dist.foreign.domain.UdmProxyValueDto;
 import com.copyright.rup.dist.foreign.domain.filter.UdmProxyValueFilter;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -14,7 +15,7 @@ import java.util.List;
  *
  * @author Aliaksandr Liakh
  */
-public interface IUdmProxyValueRepository {
+public interface IUdmProxyValueRepository extends Serializable {
 
     /**
      * Finds list of periods from UDM proxy values.
