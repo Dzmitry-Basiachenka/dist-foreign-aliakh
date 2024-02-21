@@ -40,10 +40,10 @@ public enum ReportMenuBuilder implements IReportMenuBuilder {
     /**
      * Report builder for NTS product family
      */
-    NTS(false) {
+    NTS(true) {
         @Override
         public void addItems(IReportController controller, IReportWidget widget, MenuItem rootItem) {
-            //TODO: implement on scope of corresponding story
+            new NtsReportMenuBuilder().addItems(controller, widget, rootItem);
         }
     };
 
