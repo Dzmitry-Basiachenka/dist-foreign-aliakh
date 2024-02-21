@@ -59,4 +59,9 @@ public interface IReportController extends IController<IReportWidget> {
      * @return tax notification report controller.
      */
     ITaxNotificationReportController getTaxNotificationReportController();
+
+    /**
+     * @return instance of {@link IStreamSource} for NTS withdrawn Batch Summary Report.
+     */
+    IStreamSource getNtsWithdrawnBatchSummaryReportStreamSource();
 }

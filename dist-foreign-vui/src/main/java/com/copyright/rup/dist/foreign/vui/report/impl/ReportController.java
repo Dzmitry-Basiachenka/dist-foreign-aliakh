@@ -98,6 +98,12 @@ public class ReportController extends CommonController<IReportWidget> implements
     }
 
     @Override
+    public IStreamSource getNtsWithdrawnBatchSummaryReportStreamSource() {
+        return new ByteArrayStreamSource("nts_withdrawn_batch_summary_report_",
+            outputStream -> reportService.writeNtsWithdrawnBatchSummaryCsvReport(outputStream));
+    }
+
+    @Override
     protected IReportWidget instantiateWidget() {
         return new ReportWidget();
     }
