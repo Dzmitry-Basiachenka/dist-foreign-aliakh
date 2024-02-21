@@ -22,6 +22,7 @@ import java.util.List;
 public class ForeignUiMediator implements IMediator {
 
     private static final List<String> PRODUCT_FAMILIES = List.of(
+        FdaConstants.AACL_PRODUCT_FAMILY,
         FdaConstants.FAS_PRODUCT_FAMILY,
         FdaConstants.CLA_FAS_PRODUCT_FAMILY,
         FdaConstants.NTS_PRODUCT_FAMILY

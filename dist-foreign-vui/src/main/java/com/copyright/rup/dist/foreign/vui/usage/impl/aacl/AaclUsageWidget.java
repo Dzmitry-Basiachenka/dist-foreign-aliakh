@@ -38,6 +38,7 @@ public class AaclUsageWidget extends CommonUsageWidget implements IAaclUsageWidg
 
     private static final long serialVersionUID = -7714913675577589759L;
     private static final String BATCH_NAMES_LIST_SEPARATOR = "<br><li>";
+    private static final String CLASS_BUTTON_MENUBAR = "button-menubar";
     private static final String WIDTH_140 = "140px";
 
     private final IAaclUsageController controller;
@@ -164,8 +165,9 @@ public class AaclUsageWidget extends CommonUsageWidget implements IAaclUsageWidg
             item -> {}); //TODO {aliakh} AaclUsageBatchUploadWindow
         menuItem.getSubMenu().addItem(ForeignUi.getMessage("menu.item.view"),
             item -> {}); //TODO {aliakh} ViewAaclUsageBatchWindow
+        VaadinUtils.addComponentStyle(menuItem, CLASS_BUTTON_MENUBAR);
         VaadinUtils.addComponentStyle(usageBatchMenuBar, "usage-batch-menu-bar");
-        VaadinUtils.addComponentStyle(usageBatchMenuBar, "v-menubar-df");
+        VaadinUtils.addComponentStyle(usageBatchMenuBar, CLASS_BUTTON_MENUBAR);
     }
 
     private void initFundPoolMenuBar() {
@@ -176,8 +178,9 @@ public class AaclUsageWidget extends CommonUsageWidget implements IAaclUsageWidg
             item -> {}); //TODO {aliakh} AaclFundPoolUploadWindow
         menuItem.getSubMenu().addItem(ForeignUi.getMessage("menu.item.view"),
             item -> {}); //TODO {aliakh} ViewAaclFundPoolWindow
+        VaadinUtils.addComponentStyle(menuItem, CLASS_BUTTON_MENUBAR);
         VaadinUtils.addComponentStyle(fundPoolMenuBar, "fund-pool-menu-bar");
-        VaadinUtils.addComponentStyle(fundPoolMenuBar, "v-menubar-df");
+        VaadinUtils.addComponentStyle(fundPoolMenuBar, CLASS_BUTTON_MENUBAR);
     }
 
     private OnDemandFileDownloader initSendForClassificationDownloade() {
