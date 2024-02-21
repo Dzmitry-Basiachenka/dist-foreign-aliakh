@@ -79,4 +79,15 @@ public class ReportControllerTest {
             reportController.getFasBatchSummaryReportStreamSource().getSource().getKey().get());
         verify(OffsetDateTime.class);
     }
+
+    @Test
+    public void testNtsWithdrawnBatchSummaryReportStreamSourceFileName() {
+        OffsetDateTime now = OffsetDateTime.of(2019, 1, 2, 3, 4, 5, 6, ZoneOffset.ofHours(0));
+        mockStatic(OffsetDateTime.class);
+        expect(OffsetDateTime.now()).andReturn(now).once();
+        replay(OffsetDateTime.class);
+        assertEquals("nts_withdrawn_batch_summary_report_01_02_2019_03_04.csv",
+            reportController.getNtsWithdrawnBatchSummaryReportStreamSource().getSource().getKey().get());
+        verify(OffsetDateTime.class);
+    }
 }
