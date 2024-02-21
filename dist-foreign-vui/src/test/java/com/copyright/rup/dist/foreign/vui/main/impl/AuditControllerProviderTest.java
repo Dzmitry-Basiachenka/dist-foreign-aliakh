@@ -4,6 +4,7 @@ import static org.easymock.EasyMock.createMock;
 import static org.junit.Assert.assertEquals;
 
 import com.copyright.rup.dist.foreign.vui.audit.api.fas.IFasAuditController;
+import com.copyright.rup.dist.foreign.vui.audit.api.nts.INtsAuditController;
 
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
@@ -25,11 +26,14 @@ public class AuditControllerProviderTest {
     public void testGetProductFamilyToControllerMap() {
         var provider = new AuditControllerProvider();
         var fasAuditController = createMock(IFasAuditController.class);
+        var ntsAuditController = createMock(INtsAuditController.class);
         Whitebox.setInternalState(provider, fasAuditController);
+        Whitebox.setInternalState(provider, ntsAuditController);
         assertEquals(
             Map.of(
                 "FAS", fasAuditController,
-                "FAS2", fasAuditController
+                "FAS2", fasAuditController,
+                "NTS", ntsAuditController
             ),
             provider.getProductFamilyToControllerMap()
         );

@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.vui.main.impl;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.vui.audit.api.ICommonAuditController;
 import com.copyright.rup.dist.foreign.vui.audit.api.fas.IFasAuditController;
+import com.copyright.rup.dist.foreign.vui.audit.api.nts.INtsAuditController;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -26,12 +27,15 @@ public class AuditControllerProvider extends CommonControllerProvider<ICommonAud
 
     @Autowired
     private IFasAuditController fasAuditController;
+    @Autowired
+    private INtsAuditController ntsAuditController;
 
     @Override
     protected Map<String, ICommonAuditController> getProductFamilyToControllerMap() {
         return Map.of(
             FdaConstants.FAS_PRODUCT_FAMILY, fasAuditController,
-            FdaConstants.CLA_FAS_PRODUCT_FAMILY, fasAuditController
+            FdaConstants.CLA_FAS_PRODUCT_FAMILY, fasAuditController,
+            FdaConstants.NTS_PRODUCT_FAMILY, ntsAuditController
         );
     }
 }
