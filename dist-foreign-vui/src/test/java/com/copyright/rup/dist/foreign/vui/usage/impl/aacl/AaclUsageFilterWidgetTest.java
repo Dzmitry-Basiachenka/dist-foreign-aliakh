@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.vui.usage.impl;
+package com.copyright.rup.dist.foreign.vui.usage.impl.aacl;
 
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyComboBox;
@@ -20,13 +20,11 @@ import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
-import com.copyright.rup.common.exception.RupRuntimeException;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.vui.IVaadinComponentFinder;
-import com.copyright.rup.dist.foreign.vui.usage.api.IFasNtsUsageFilterController;
-import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.Windows;
-import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.LocalDateWidget;
+import com.copyright.rup.dist.foreign.vui.usage.api.aacl.IAaclUsageFilterController;
 
+import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.Windows;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
@@ -45,44 +43,40 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Verifies {@link FasNtsUsageFilterWidget}.
+ * Verifies {@link AaclUsageFilterWidget}.
  * <p>
  * Copyright (C) 2019 copyright.com
  * <p>
- * Date: 12/12/2019
+ * Date: 12/23/2019
  *
- * @author Uladzislau Shalamitski
+ * @author Aliaksandr Liakhi
  */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(Windows.class)
 @PowerMockIgnore({"com.sun.org.apache.xerces.*", "javax.xml.*", "org.xml.*", "javax.management.*"})
-public class FasNtsUsageFilterWidgetTest implements IVaadinComponentFinder {
+public class AaclUsageFilterWidgetTest implements IVaadinComponentFinder {
 
-    private static final Integer FISCAL_YEAR = 2017;
+    private static final int USAGE_PERIOD = 2020;
     private static final Long ACCOUNT_NUMBER = 12345678L;
-    private static final String FAS_PRODUCT_FAMILY = "FAS";
-    private static final List<UsageStatusEnum> FAS_FAS2_STATUSES = List.of(UsageStatusEnum.NEW,
-        UsageStatusEnum.WORK_NOT_FOUND, UsageStatusEnum.WORK_RESEARCH, UsageStatusEnum.NTS_WITHDRAWN,
-        UsageStatusEnum.TO_BE_DISTRIBUTED, UsageStatusEnum.WORK_FOUND, UsageStatusEnum.RH_NOT_FOUND,
-        UsageStatusEnum.RH_FOUND, UsageStatusEnum.SENT_FOR_RA, UsageStatusEnum.ELIGIBLE);
-    private static final List<UsageStatusEnum> NTS_STATUSES = List.of(UsageStatusEnum.WORK_FOUND,
-        UsageStatusEnum.RH_FOUND, UsageStatusEnum.UNCLASSIFIED, UsageStatusEnum.ELIGIBLE,
-        UsageStatusEnum.SCENARIO_EXCLUDED);
+    private static final String AACL_PRODUCT_FAMILY = "AACL";
+    private static final Set<UsageStatusEnum> AACL_STATUSES = Set.of(UsageStatusEnum.NEW,
+        UsageStatusEnum.WORK_FOUND, UsageStatusEnum.RH_FOUND, UsageStatusEnum.WORK_NOT_FOUND,
+        UsageStatusEnum.WORK_RESEARCH, UsageStatusEnum.ELIGIBLE, UsageStatusEnum.SCENARIO_EXCLUDED);
 
-    private FasNtsUsageFilterWidget widget;
-    private IFasNtsUsageFilterController controller;
+    private AaclUsageFilterWidget widget;
+    private IAaclUsageFilterController controller;
 
     @Before
     public void setUp() {
-        controller = createMock(IFasNtsUsageFilterController.class);
-        widget = new FasNtsUsageFilterWidget(controller);
+        controller = createMock(IAaclUsageFilterController.class);
+        widget = new AaclUsageFilterWidget(controller);
         widget.setController(controller);
-        expect(controller.getFiscalYears()).andReturn(List.of(FISCAL_YEAR)).once();
     }
 
     @Test
     public void testInit() {
-        expect(controller.getSelectedProductFamily()).andReturn(FAS_PRODUCT_FAMILY).times(2);
+        expect(controller.getUsagePeriods()).andReturn(List.of(USAGE_PERIOD)).once();
+        expect(controller.getSelectedProductFamily()).andReturn(AACL_PRODUCT_FAMILY).once();
         replay(controller);
         assertSame(widget, widget.init());
         assertEquals(4, widget.getComponentCount());
@@ -93,9 +87,8 @@ public class FasNtsUsageFilterWidgetTest implements IVaadinComponentFinder {
 
     @Test
     public void testApplyFilter() {
-        expect(controller.getSelectedProductFamily()).andReturn(FAS_PRODUCT_FAMILY).times(4);
-        expect(controller.getFiscalYears()).andReturn(List.of(FISCAL_YEAR)).once();
-        expect(controller.getRightsholdersByAccountNumbers(Set.of(ACCOUNT_NUMBER))).andReturn(List.of()).once();
+        expect(controller.getUsagePeriods()).andReturn(List.of(USAGE_PERIOD)).times(2);
+        expect(controller.getSelectedProductFamily()).andReturn(AACL_PRODUCT_FAMILY).times(2);
         replay(controller);
         widget.init();
         widget.clearFilter();
@@ -118,7 +111,8 @@ public class FasNtsUsageFilterWidgetTest implements IVaadinComponentFinder {
 
     @Test
     public void testFilterChangedEmptyFilter() {
-        expect(controller.getSelectedProductFamily()).andReturn(FAS_PRODUCT_FAMILY).times(2);
+        expect(controller.getUsagePeriods()).andReturn(List.of(USAGE_PERIOD)).once();
+        expect(controller.getSelectedProductFamily()).andReturn(AACL_PRODUCT_FAMILY).once();
         replay(controller);
         widget.init();
         var applyButton = getApplyButton();
@@ -130,40 +124,38 @@ public class FasNtsUsageFilterWidgetTest implements IVaadinComponentFinder {
 
     @Test
     public void testClearFilter() {
-        expect(controller.getSelectedProductFamily()).andReturn(FAS_PRODUCT_FAMILY).times(4);
-        expect(controller.getFiscalYears()).andReturn(List.of(FISCAL_YEAR)).once();
-        expect(controller.getRightsholdersByAccountNumbers(Set.of(ACCOUNT_NUMBER))).andReturn(List.of()).once();
+        expect(controller.getUsagePeriods()).andReturn(List.of(USAGE_PERIOD)).times(2);
+        expect(controller.getSelectedProductFamily()).andReturn(AACL_PRODUCT_FAMILY).times(2);
         replay(controller);
         widget.init();
         var applyButton = getApplyButton();
         assertTrue(widget.getFilter().getRhAccountNumbers().isEmpty());
         assertTrue(widget.getAppliedFilter().getRhAccountNumbers().isEmpty());
-        assertEquals(FAS_PRODUCT_FAMILY, widget.getFilter().getProductFamily());
+        assertEquals(AACL_PRODUCT_FAMILY, widget.getFilter().getProductFamily());
         assertNull(widget.getAppliedFilter().getProductFamily());
         widget.getFilter().setRhAccountNumbers(Set.of(ACCOUNT_NUMBER));
-        widget.getFilter().setProductFamily(FAS_PRODUCT_FAMILY);
+        widget.getFilter().setProductFamily(AACL_PRODUCT_FAMILY);
         applyButton.setEnabled(true);
         applyButton.click();
         assertFalse(widget.getFilter().getRhAccountNumbers().isEmpty());
         assertFalse(widget.getAppliedFilter().getRhAccountNumbers().isEmpty());
-        assertEquals(FAS_PRODUCT_FAMILY, widget.getFilter().getProductFamily());
-        assertEquals(FAS_PRODUCT_FAMILY, widget.getAppliedFilter().getProductFamily());
+        assertEquals(AACL_PRODUCT_FAMILY, widget.getFilter().getProductFamily());
+        assertEquals(AACL_PRODUCT_FAMILY, widget.getAppliedFilter().getProductFamily());
         widget.clearFilter();
         assertTrue(widget.getFilter().getRhAccountNumbers().isEmpty());
         assertTrue(widget.getAppliedFilter().getRhAccountNumbers().isEmpty());
-        assertEquals(FAS_PRODUCT_FAMILY, widget.getFilter().getProductFamily());
-        assertEquals(FAS_PRODUCT_FAMILY, widget.getAppliedFilter().getProductFamily());
+        assertEquals(AACL_PRODUCT_FAMILY, widget.getFilter().getProductFamily());
+        assertEquals(AACL_PRODUCT_FAMILY, widget.getAppliedFilter().getProductFamily());
         assertFalse(applyButton.isEnabled());
-        LocalDateWidget localDateWidget = Whitebox.getInternalState(widget, "paymentDateWidget");
-        assertNull(localDateWidget.getValue());
-        ComboBox fiscalYearComboBox = Whitebox.getInternalState(widget, "fiscalYearComboBox");
-        assertNull(fiscalYearComboBox.getValue());
+        ComboBox usagePeriodComboBox = Whitebox.getInternalState(widget, "usagePeriodComboBox");
+        assertNull(usagePeriodComboBox.getValue());
         verify(controller);
     }
 
     @Test
     public void verifyApplyButtonClickListener() {
-        expect(controller.getSelectedProductFamily()).andReturn(FAS_PRODUCT_FAMILY).times(2);
+        expect(controller.getUsagePeriods()).andReturn(List.of(USAGE_PERIOD)).once();
+        expect(controller.getSelectedProductFamily()).andReturn(AACL_PRODUCT_FAMILY).once();
         mockStatic(Windows.class);
         ClickEvent clickEvent = createMock(ClickEvent.class);
         Windows.showNotificationWindow("Apply filter clicked");
@@ -176,10 +168,10 @@ public class FasNtsUsageFilterWidgetTest implements IVaadinComponentFinder {
     }
 
     @Test
-    public void verifyClearButtonClickListener() {
-        expect(controller.getSelectedProductFamily()).andReturn(FAS_PRODUCT_FAMILY).times(4);
+    public void verifyButtonClickListener() {
+        expect(controller.getUsagePeriods()).andReturn(List.of(USAGE_PERIOD)).times(2);
+        expect(controller.getSelectedProductFamily()).andReturn(AACL_PRODUCT_FAMILY).times(2);
         ClickEvent clickEvent = createMock(ClickEvent.class);
-        expect(controller.getFiscalYears()).andReturn(List.of(FISCAL_YEAR)).once();
         replay(clickEvent, controller);
         widget.init();
         var accountNumbers = Set.of(ACCOUNT_NUMBER);
@@ -194,50 +186,17 @@ public class FasNtsUsageFilterWidgetTest implements IVaadinComponentFinder {
         verify(clickEvent, controller);
     }
 
-    @Test
-    public void testGetAvailableStatusesFasProductFamily() {
-        expect(controller.getSelectedProductFamily()).andReturn(FAS_PRODUCT_FAMILY).times(3);
-        replay(controller);
-        widget.init();
-        assertEquals(FAS_FAS2_STATUSES, getGetStatuses());
-    }
-
-    @Test
-    public void testGetAvailableStatusesNtsProductFamily() {
-        expect(controller.getSelectedProductFamily()).andReturn("NTS").times(3);
-        expect(controller.getFiscalYears()).andReturn(List.of(FISCAL_YEAR)).once();
-        replay(controller);
-        widget.init();
-        assertEquals(NTS_STATUSES, getGetStatuses());
-    }
-
     private void verifyFiltersLayout(Component component) {
         assertThat(component, instanceOf(VerticalLayout.class));
-        var filtersLayout = (VerticalLayout) component;
-        assertEquals(6, filtersLayout.getComponentCount());
-        verifyFiltersLabel(filtersLayout.getComponentAt(0));
-        verifyItemsFilterWidget(filtersLayout.getComponentAt(1), "Batches");
-        verifyItemsFilterWidget(filtersLayout.getComponentAt(2), "RROs");
-        verifyDateWidget(filtersLayout.getComponentAt(3));
-        verifyComboBox(filtersLayout.getComponentAt(4), "Status", "100%", true,
-            FAS_FAS2_STATUSES);
-        verifyComboBox(filtersLayout.getComponentAt(5), "Fiscal Year To", "100%", true,
-            List.of(FISCAL_YEAR));
-    }
-
-    private void verifyDateWidget(Component component) {
-        assertThat(component, instanceOf(LocalDateWidget.class));
+        var filterLayout = (VerticalLayout) component;
+        assertEquals(4, filterLayout.getComponentCount());
+        verifyFiltersLabel(filterLayout.getComponentAt(0));
+        verifyItemsFilterWidget(filterLayout.getComponentAt(1), "Batches");
+        verifyComboBox(filterLayout.getComponentAt(2), "Status", true, AACL_STATUSES);
+        verifyComboBox(filterLayout.getComponentAt(3), "Usage Period", true, USAGE_PERIOD);
     }
 
     private Button getApplyButton() {
         return getButton(widget, "Apply");
-    }
-
-    private Object getGetStatuses() {
-        try {
-            return Whitebox.invokeMethod(widget, "getStatuses");
-        } catch (Exception e) {
-            throw new RupRuntimeException(e);
-        }
     }
 }

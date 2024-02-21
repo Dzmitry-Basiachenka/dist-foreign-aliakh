@@ -43,7 +43,7 @@ class FasUsageMediator implements IMediator {
         this.sendForResearchButton = sendForResearchButton;
     }
 
-    public void setSendForResearchDownloader(OnDemandFileDownloader sendForResearchDownloader) {
+    void setSendForResearchDownloader(OnDemandFileDownloader sendForResearchDownloader) {
         this.sendForResearchDownloader = sendForResearchDownloader;
     }
 

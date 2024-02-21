@@ -7,7 +7,6 @@ import com.vaadin.flow.component.HasLabel;
 import com.vaadin.flow.component.HasText;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
-import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.textfield.BigDecimalField;
 import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.TextArea;
@@ -54,132 +53,132 @@ public interface IVaadinComponentFinder {
     /**
      * Gets checkbox.
      *
-     * @param dialog     instance of {@link Dialog}
+     * @param component  instance of {@link Component}
      * @param identifier label or text of the {@link Checkbox}
      * @return instance of {@link Checkbox}
      */
-    default Button getButton(Dialog dialog, String identifier) {
-        return (Button) findComponent(dialog, identifier);
+    default Button getButton(Component component, String identifier) {
+        return (Button) findComponent(component, identifier);
     }
 
     /**
      * Gets checkbox.
      *
-     * @param dialog     instance of {@link Dialog}
+     * @param component  instance of {@link Component}
      * @param identifier label or text of the {@link Checkbox}
      * @return instance of {@link Checkbox}
      */
-    default Checkbox getCheckbox(Dialog dialog, String identifier) {
-        return (Checkbox) findComponent(dialog, identifier);
+    default Checkbox getCheckbox(Component component, String identifier) {
+        return (Checkbox) findComponent(component, identifier);
     }
 
     /**
      * Gets text field.
      *
-     * @param dialog     instance of {@link Dialog}
+     * @param component  instance of {@link Component}
      * @param identifier label or text of the {@link TextField}
      * @return instance of {@link TextField}
      */
-    default TextField getTextField(Dialog dialog, String identifier) {
-        return (TextField) findComponent(dialog, identifier);
+    default TextField getTextField(Component component, String identifier) {
+        return (TextField) findComponent(component, identifier);
     }
 
     /**
      * Gets Integer field.
      *
-     * @param dialog     instance of {@link Dialog}
+     * @param component  instance of {@link Component}
      * @param identifier label or text of the {@link IntegerField}
      * @return instance of {@link IntegerField}
      */
-    default IntegerField getIntegerField(Dialog dialog, String identifier) {
-        return (IntegerField) findComponent(dialog, identifier);
+    default IntegerField getIntegerField(Component component, String identifier) {
+        return (IntegerField) findComponent(component, identifier);
     }
 
     /**
      * Gets Long field.
      *
-     * @param dialog     instance of {@link Dialog}
+     * @param component  instance of {@link Component}
      * @param identifier label or text of the {@link LongField}
      * @return instance of {@link LongField}
      */
-    default LongField getLongField(Dialog dialog, String identifier) {
-        return (LongField) findComponent(dialog, identifier);
+    default LongField getLongField(Component component, String identifier) {
+        return (LongField) findComponent(component, identifier);
     }
 
     /**
      * Gets BigDecimal field.
      *
-     * @param dialog     instance of {@link Dialog}
+     * @param component  instance of {@link Component}
      * @param identifier label or text of the {@link BigDecimalField}
      * @return instance of {@link BigDecimalField}
      */
-    default BigDecimalField getBigDecimalField(Dialog dialog, String identifier) {
-        return (BigDecimalField) findComponent(dialog, identifier);
+    default BigDecimalField getBigDecimalField(Component component, String identifier) {
+        return (BigDecimalField) findComponent(component, identifier);
     }
 
     /**
      * Sets checkbox value.
      *
-     * @param dialog     instance of {@link Dialog}
+     * @param component  instance of {@link Component}
      * @param identifier label or text of the {@link Checkbox}
      * @param value      value
      */
-    default void setCheckboxValue(Dialog dialog, String identifier, Boolean value) {
-        getCheckbox(dialog, identifier).setValue(value);
+    default void setCheckboxValue(Component component, String identifier, Boolean value) {
+        getCheckbox(component, identifier).setValue(value);
     }
 
     /**
      * Sets text field value.
      *
-     * @param dialog     instance of {@link Dialog}
+     * @param component  instance of {@link Component}
      * @param identifier label or text of the {@link TextField}
      * @param value      value
      */
-    default void setTextFieldValue(Dialog dialog, String identifier, String value) {
-        getTextField(dialog, identifier).setValue(value);
+    default void setTextFieldValue(Component component, String identifier, String value) {
+        getTextField(component, identifier).setValue(value);
     }
 
     /**
      * Sets Integer field value.
      *
-     * @param dialog     instance of {@link Dialog}
+     * @param component  instance of {@link Component}
      * @param identifier label or text of the {@link IntegerField}
      * @param value      value
      */
-    default void setIntegerFieldValue(Dialog dialog, String identifier, Integer value) {
-        getIntegerField(dialog, identifier).setValue(value);
+    default void setIntegerFieldValue(Component component, String identifier, Integer value) {
+        getIntegerField(component, identifier).setValue(value);
     }
 
     /**
      * Sets Long field value.
      *
-     * @param dialog     instance of {@link Dialog}
+     * @param component  instance of {@link Component}
      * @param identifier label or text of the {@link LongField}
      * @param value      value
      */
-    default void setLongFieldValue(Dialog dialog, String identifier, Long value) {
-        getLongField(dialog, identifier).setValue(value);
+    default void setLongFieldValue(Component component, String identifier, Long value) {
+        getLongField(component, identifier).setValue(value);
     }
 
     /**
      * Sets BigDecimal field value.
      *
-     * @param dialog     instance of {@link Dialog}
+     * @param component  instance of {@link Component}
      * @param identifier label or text of the {@link BigDecimalField}
      * @param value      value
      */
-    default void setBigDecimalFieldValue(Dialog dialog, String identifier, String value) {
-        getBigDecimalField(dialog, identifier).setValue(new BigDecimal(value));
+    default void setBigDecimalFieldValue(Component component, String identifier, String value) {
+        getBigDecimalField(component, identifier).setValue(new BigDecimal(value));
     }
 
     /**
      * Sets text area value.
      *
-     * @param dialog     instance of {@link Dialog}
+     * @param component  instance of {@link Component}
      * @param identifier label or text of the {@link TextArea}
      * @param value      value
      */
-    default void setTextAreaValue(Dialog dialog, String identifier, String value) {
-        ((TextArea) findComponent(dialog, identifier)).setValue(value);
+    default void setTextAreaValue(Component component, String identifier, String value) {
+        ((TextArea) findComponent(component, identifier)).setValue(value);
     }
 }
