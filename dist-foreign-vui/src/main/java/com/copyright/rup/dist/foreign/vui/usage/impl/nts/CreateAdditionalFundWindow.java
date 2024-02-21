@@ -77,7 +77,7 @@ class CreateAdditionalFundWindow extends CommonDialog {
         initCommentArea();
         fundNameField.focus();
         var rootLayout = VaadinUtils.initCommonVerticalLayout(fundNameField, commentArea);
-        VaadinUtils.setPadding(rootLayout, 10, 10, 0, 10);
+        VaadinUtils.setPadding(rootLayout, 10, 10, 10, 10);
         return rootLayout;
     }
 

@@ -30,7 +30,7 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * Verifies {@link FasBatchStatusWidget}.
+ * Verifies {@link NtsBatchStatusWidget}.
  * <p>
  * Copyright (C) 2021 copyright.com
  * <p>
@@ -38,15 +38,15 @@ import java.util.List;
  *
  * @author Darya Baraukova
  */
-public class FasBatchStatusWidgetTest {
+public class NtsBatchStatusWidgetTest {
 
-    private FasBatchStatusWidget widget;
+    private NtsBatchStatusWidget widget;
     private ICommonBatchStatusController controller;
 
     @Before
     public void setUp() {
         controller = createMock(ICommonBatchStatusController.class);
-        widget = new FasBatchStatusWidget();
+        widget = new NtsBatchStatusWidget();
         widget.setController(controller);
     }
 
@@ -61,15 +61,13 @@ public class FasBatchStatusWidgetTest {
         verifyGrid(grid, List.of(
             Pair.of("Usage Batch Name", null),
             Pair.of("Total Count", "140px"),
-            Pair.of("New", "70px"),
-            Pair.of("Work Not Found", "170px"),
             Pair.of("Work Found", "140px"),
-            Pair.of("Sent For Research", "190px"),
-            Pair.of("RH Not Found", "150px"),
             Pair.of("RH Found", "110px"),
-            Pair.of("Sent For RA", "130px"),
-            Pair.of("NTS Withdrawn", "160px"),
+            Pair.of("Non-STM RH", "130px"),
+            Pair.of("US Tax Country", "160px"),
+            Pair.of("Unclassified", "140px"),
             Pair.of("Eligible", "100px"),
+            Pair.of("Excluded", "120px"),
             Pair.of("Status", null)
         ));
         assertEquals(0, grid.getDataProvider().size(new Query<>()));
@@ -78,12 +76,12 @@ public class FasBatchStatusWidgetTest {
     @Test
     public void testGridValues() {
         widget.init();
-        var batchStatuses = loadExpectedUsageBatchStatuses("usage_batch_status.json");
+        var batchStatuses = loadExpectedUsageBatchStatuses("nts_usage_batch_status.json");
         expect(controller.getBatchStatuses()).andReturn(batchStatuses).once();
         replay(controller);
         widget.refresh();
         var grid = (Grid<?>) widget.getComponentAt(0);
-        Object[][] expectedCells = {{"Usage Batch", "51", "8", "6", "4", "2", "7", "5", "3", "1", "15", "COMPLETED"}};
+        Object[][] expectedCells = {{"Usage Batch", "50", "4", "5", "6", "7", "3", "15", "10", "COMPLETED"}};
         verifyGridItems(grid, batchStatuses, expectedCells);
         verify(controller);
     }

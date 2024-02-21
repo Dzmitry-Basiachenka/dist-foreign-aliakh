@@ -98,7 +98,6 @@ public abstract class CommonBatchStatusWidget extends VerticalLayout implements 
         grid.addColumn(provider)
             .setHeader(ForeignUi.getMessage(captionProperty))
             .setSortProperty(sort)
-            .setFlexGrow(0)
             .setSortable(true)
             .setResizable(true);
     }

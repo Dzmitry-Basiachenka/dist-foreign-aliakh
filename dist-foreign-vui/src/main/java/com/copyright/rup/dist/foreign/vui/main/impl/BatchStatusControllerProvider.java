@@ -4,6 +4,7 @@ import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.vui.status.api.ICommonBatchStatusController;
 import com.copyright.rup.dist.foreign.vui.status.api.IFasBatchStatusController;
 
+import com.copyright.rup.dist.foreign.vui.status.api.INtsBatchStatusController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -27,12 +28,15 @@ public class BatchStatusControllerProvider extends CommonControllerProvider<ICom
 
     @Autowired
     private IFasBatchStatusController fasBatchStatusController;
+    @Autowired
+    private INtsBatchStatusController ntsBatchStatusController;
 
     @Override
     protected Map<String, ICommonBatchStatusController> getProductFamilyToControllerMap() {
         return Map.of(
             FdaConstants.FAS_PRODUCT_FAMILY, fasBatchStatusController,
-            FdaConstants.CLA_FAS_PRODUCT_FAMILY, fasBatchStatusController
+            FdaConstants.CLA_FAS_PRODUCT_FAMILY, fasBatchStatusController,
+            FdaConstants.NTS_PRODUCT_FAMILY, ntsBatchStatusController
         );
     }
 }

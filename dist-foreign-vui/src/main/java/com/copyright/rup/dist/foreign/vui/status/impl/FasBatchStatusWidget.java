@@ -27,7 +27,7 @@ public class FasBatchStatusWidget extends CommonBatchStatusWidget implements IFa
         addColumn(UsageBatchStatus::getWorkResearchCount, "table.column.sent_for_research", "workResearchCount",
             "190px");
         addColumn(UsageBatchStatus::getRhNotFoundCount, "table.column.rh_not_found", "rhNotFoundCount", "150px");
-        addColumn(UsageBatchStatus::getRhFoundCount, "table.column.rh_found", "rhFoundCount", "120px");
+        addColumn(UsageBatchStatus::getRhFoundCount, "table.column.rh_found", "rhFoundCount", "110px");
         addColumn(UsageBatchStatus::getSentForRaCount, "table.column.sent_for_ra", "sentForRaCount", "130px");
         addColumn(UsageBatchStatus::getNtsWithdrawnCount, "table.column.nts_withdrawn", "ntsWithdrawnCount", "160px");
         addColumn(UsageBatchStatus::getEligibleCount, "table.column.eligible", "eligibleCount", "100px");
