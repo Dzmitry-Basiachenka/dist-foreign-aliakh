@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.vui.main.impl;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.vui.scenario.api.ICommonScenariosController;
 import com.copyright.rup.dist.foreign.vui.scenario.api.fas.IFasScenariosController;
+import com.copyright.rup.dist.foreign.vui.scenario.api.nts.INtsScenariosController;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -26,12 +27,15 @@ public class ScenariosControllerProvider extends CommonControllerProvider<ICommo
 
     @Autowired
     private IFasScenariosController fasScenariosController;
+    @Autowired
+    private INtsScenariosController ntsScenariosController;
 
     @Override
     protected Map<String, ICommonScenariosController> getProductFamilyToControllerMap() {
         return Map.of(
             FdaConstants.FAS_PRODUCT_FAMILY, fasScenariosController,
-            FdaConstants.CLA_FAS_PRODUCT_FAMILY, fasScenariosController
+            FdaConstants.CLA_FAS_PRODUCT_FAMILY, fasScenariosController,
+            FdaConstants.NTS_PRODUCT_FAMILY, ntsScenariosController
         );
     }
 }
