@@ -23,6 +23,8 @@ public class NtsReportMenuBuilder implements IReportMenuBuilder {
         var subMenu = rootItem.getSubMenu();
         subMenu.addItem(ForeignUi.getMessage("menu.report.nts_batch_summary"), menuItem ->
             widget.generateReport(controller.getNtsWithdrawnBatchSummaryReportStreamSource()));
+        subMenu.addItem(ForeignUi.getMessage("menu.report.undistributed_liabilities"), menuItem ->
+            widget.generateReport(controller.getNtsUndistributedLiabilitiesReportStreamSource()));
         //TODO: {vaadin23} will implement later
     }
 }
