@@ -49,8 +49,8 @@ import java.util.List;
 @PowerMockIgnore({"com.sun.org.apache.xerces.*", "javax.xml.*", "org.xml.*", "javax.management.*"})
 public class ReportWidgetTest {
 
+    private static final String FILE_NAME = "report-name_03_12_2004.csv";
     private static final String UNDISTRIBUTED_LIABILITIES_REPORT = "Undistributed Liabilities Reconciliation Report";
-
     private ReportWidget reportWidget;
     private IReportController reportController;
 
@@ -102,7 +102,7 @@ public class ReportWidgetTest {
         expect(UI.getCurrent()).andReturn(ui).once();
         expect(ui.getUIId()).andReturn(1).once();
         expect(reportController.getFasBatchSummaryReportStreamSource()).andReturn(
-            new ByteArrayStreamSource("name", outputStream -> {
+            new ByteArrayStreamSource(FILE_NAME, outputStream -> {
             })).once();
         expectProductFamily(FdaConstants.FAS_PRODUCT_FAMILY);
         replayAll();
@@ -130,7 +130,7 @@ public class ReportWidgetTest {
     public void testResearchStatusReportSelected() {
         setUiExpectation();
         expect(reportController.getResearchStatusReportStreamSource()).andReturn(
-            new ByteArrayStreamSource("name", outputStream -> {
+            new ByteArrayStreamSource(FILE_NAME, outputStream -> {
             })).once();
         expectProductFamily(FdaConstants.FAS_PRODUCT_FAMILY);
         replayAll();
@@ -227,11 +227,23 @@ public class ReportWidgetTest {
     public void testNtsWithdrawnBatchSummaryReportSelected() {
         setUiExpectation();
         expect(reportController.getNtsWithdrawnBatchSummaryReportStreamSource()).andReturn(
-            new ByteArrayStreamSource("name", outputStream -> {
+            new ByteArrayStreamSource(FILE_NAME, outputStream -> {
             })).once();
         expectProductFamily(FdaConstants.NTS_PRODUCT_FAMILY);
         replayAll();
         selectMenuItem(0);
+        verifyAll();
+    }
+
+    @Test
+    public void testNtsUndistributedLiabilitiesReportSelected() {
+        setUiExpectation();
+        expect(reportController.getNtsUndistributedLiabilitiesReportStreamSource()).andReturn(
+            new ByteArrayStreamSource(FILE_NAME, outputStream -> {
+            })).once();
+        expectProductFamily(FdaConstants.NTS_PRODUCT_FAMILY);
+        replayAll();
+        selectMenuItem(1);
         verifyAll();
     }
 
@@ -270,7 +282,8 @@ public class ReportWidgetTest {
     private void assertReportsMenuNts() {
         assertEquals(1, CollectionUtils.size(reportWidget.getItems()));
         List<MenuItem> menuItems = reportWidget.getItems().get(0).getSubMenu().getItems();
-        assertEquals(1, CollectionUtils.size(menuItems));
+        assertEquals(2, CollectionUtils.size(menuItems));
         assertEquals("NTS Withdrawn Batch Summary Report", menuItems.get(0).getText());
+        assertEquals("Undistributed Liabilities Reconciliation Report", menuItems.get(1).getText());
     }
 }

@@ -1,7 +1,9 @@
 package com.copyright.rup.dist.foreign.vui.report.impl;
 
+import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.expectLastCall;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
@@ -9,6 +11,8 @@ import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
+import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.vui.common.ByteArrayStreamSource;
 import com.copyright.rup.dist.foreign.vui.main.api.IProductFamilyProvider;
 import com.copyright.rup.dist.foreign.vui.report.api.IUndistributedLiabilitiesReportController;
@@ -21,6 +25,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
+import java.io.OutputStream;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 
@@ -41,14 +46,17 @@ public class ReportControllerTest {
     private ReportController reportController;
     private IProductFamilyProvider productFamilyProvider;
     private IUndistributedLiabilitiesReportController undistributedLiabilitiesReportController;
+    private IReportService reportService;
 
     @Before
     public void setUp() {
         reportController = new ReportController();
+        reportService = createMock(IReportService.class);
         productFamilyProvider = createMock(IProductFamilyProvider.class);
         undistributedLiabilitiesReportController = createMock(IUndistributedLiabilitiesReportController.class);
         Whitebox.setInternalState(reportController, undistributedLiabilitiesReportController);
         Whitebox.setInternalState(reportController, productFamilyProvider);
+        Whitebox.setInternalState(reportController, reportService);
     }
 
     @Test
@@ -89,5 +97,16 @@ public class ReportControllerTest {
         assertEquals("nts_withdrawn_batch_summary_report_01_02_2019_03_04.csv",
             reportController.getNtsWithdrawnBatchSummaryReportStreamSource().getSource().getKey().get());
         verify(OffsetDateTime.class);
+    }
+
+    @Test
+    public void testNtsWithdrawnBatchSummaryReportStreamSource() {
+        reportService.writeNtsWithdrawnBatchSummaryCsvReport(anyObject(OutputStream.class));
+        expectLastCall().once();
+        expect(productFamilyProvider.getSelectedProductFamily()).andReturn(FdaConstants.NTS_PRODUCT_FAMILY).once();
+        replay(reportService, productFamilyProvider);
+        reportController.initWidget();
+        assertNotNull(reportController.getNtsWithdrawnBatchSummaryReportStreamSource().getSource().getValue().get());
+        verify(reportService, productFamilyProvider);
     }
 }
