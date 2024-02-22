@@ -45,13 +45,16 @@ public class NtsAuditWidget extends CommonAuditWidget implements INtsAuditWidget
     protected void addColumns() {
         getAuditGrid().addComponentColumn(usage -> {
                 var detailId = Objects.toString(usage.getId());
-                var button = Buttons.createButton(detailId);
+                var button = Buttons.createLinkButton(detailId);
                 button.addClickListener(event -> controller.showUsageHistory(usage.getId(), detailId));
                 return button;
             })
             .setHeader(ForeignUi.getMessage("table.column.detail_id"))
+            .setWidth(WIDTH_300)
             .setSortProperty("detailId")
-            .setWidth(WIDTH_300);
+            .setSortable(true)
+            .setFlexGrow(0)
+            .setResizable(true);
         addColumn(UsageDto::getStatus, "table.column.usage_status", "status", "145px");
         addColumn(UsageDto::getProductFamily, "table.column.product_family", "productFamily", WIDTH_165);
         addColumn(UsageDto::getBatchName, "table.column.batch_name", "batchName", "180px");

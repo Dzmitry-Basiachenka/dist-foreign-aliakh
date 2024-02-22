@@ -28,5 +28,18 @@ public class NtsAuditAppliedFilterWidget extends CommonAuditAppliedFilterWidget 
 
     @Override
     public void refreshFilterPanel(AuditFilter filter) {
+        removeAll();
+        var layout = initFilterPanel();
+        if (!filter.isEmpty()) {
+            addLabel(createLabelWithMultipleValues(convertRroAccountNumbersToRroNames(filter.getRhAccountNumbers()),
+                "label.rightsholders", String::valueOf), layout);
+            addLabel(createLabelWithMultipleValues(convertBatchIdsToBatchNames(filter.getBatchesIds()),
+                "label.batches", String::valueOf), layout);
+            addLabel(createLabelWithMultipleValues(filter.getStatuses(), "label.statuses", String::valueOf), layout);
+            addLabel(createLabelWithSingleValue(AuditFilter::getCccEventId, filter, "label.event_id"), layout);
+            addLabel(createLabelWithSingleValue(AuditFilter::getDistributionName, filter, "label.distribution_name"),
+                layout);
+        }
+        add(layout);
     }
 }
