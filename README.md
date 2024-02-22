@@ -1,3 +1,24 @@
+21.0.4
+-
+* CDP-1676 FDA: Vaadin Migration: FAS/FAS2 - Reports Tab: make changes based on comments in code review
+* CDP-1674 FDA: Vaadin Migration: FAS/FAS2 - Audit Tab: make changes based on comments
+* CDP-1677 FDA: Vaadin Migration: NTS - Usages Tab: refactor UsageBatchUploadWindow to use binging correctly
+* CDP-1677 FDA: Vaadin Migration: NTS - Usages Tab: refactor FundPoolLoadWindow to use binging correctly
+* CDP-1677 FDA: Vaadin Migration: NTS - Usages Tab: make changes based on comments in code review
+* CDP-1678 FDA: Vaadin Migration: NTS - Scenarios Tab Main View: add Scenarios tab on UI
+* CDP-1679 FDA: Vaadin Migration: NTS - Audit Tab: introduce NTS audit widget
+* CDP-1679 FDA: Vaadin Migration: NTS - Audit Tab: implement filters panel
+* CDP-1680 FDA: Vaadin Migration: NTS - Batch Status Tab: implement tab and grid
+* CDP-1681 FDA: Vaadin Migration: NTS - Reports Tab: add Reports tab
+* CDP-1681 FDA: Vaadin Migration: NTS - Reports Tab: migrate logic for Nts Withdrawn Batch Summary report
+* CDP-1681 FDA: Vaadin Migration: NTS - Reports Tab: migrate logic for Nts Undistributed Liabilities report
+* CDP-1681 FDA: Vaadin Migration: NTS - Reports Tab: migrate logic for Tax Notification report
+* CDP-1682 FDA: Vaadin Migration: AACL - Usages Tab: migrate the main widget and controller
+* CDP-1682 FDA: Vaadin Migration: AACL - Usages Tab: migrate interfaces of widgets and controllers
+* CDP-2232 Tech Debt: FDA: decrease number of SonarQube issues
+* CDP-2232 Tech Debt: FDA: replace deprecated setMaxComponentWidth() method with setWidthFull()
+* CDP-2232 Tech Debt: FDA: refactor methods for adding grid columns in VUI module
+
 21.0.3
 -
 * CDP -1677 FDA: Vaadin Migration: NTS - Usages Tab: migrate Load Fund Pool widget
