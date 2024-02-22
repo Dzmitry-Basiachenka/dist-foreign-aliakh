@@ -191,20 +191,18 @@ public class ReportWidgetTest {
     }
 
     @Test
-    public void testTaxNotificationReportSelected() {
-        TaxNotificationReportController taxNotificationReportController =
-            createMock(TaxNotificationReportController.class);
-        expect(reportController.getTaxNotificationReportController())
-            .andReturn(taxNotificationReportController).once();
-        TaxNotificationReportWidget widget = createMock(TaxNotificationReportWidget.class);
-        expect(taxNotificationReportController.initWidget()).andReturn(widget).once();
-        widget.setHeaderTitle("Tax Notification Report");
-        expectLastCall().once();
-        Windows.showModalWindow(widget);
-        expectLastCall().once();
-        expectProductFamily(FdaConstants.FAS_PRODUCT_FAMILY);
+    public void testFasTaxNotificationReportSelected() {
+        taxNotificationReportExpectation(FdaConstants.FAS_PRODUCT_FAMILY);
         replayAll();
         selectMenuItem(6);
+        verifyAll();
+    }
+
+    @Test
+    public void testNtsTaxNotificationReportSelected() {
+        taxNotificationReportExpectation(FdaConstants.NTS_PRODUCT_FAMILY);
+        replayAll();
+        selectMenuItem(2);
         verifyAll();
     }
 
@@ -266,6 +264,20 @@ public class ReportWidgetTest {
         expect(reportController.getProductFamilyProvider()).andReturn(productFamilyProvider).once();
     }
 
+    private void taxNotificationReportExpectation(String productFamily) {
+        TaxNotificationReportController taxNotificationReportController =
+            createMock(TaxNotificationReportController.class);
+        expect(reportController.getTaxNotificationReportController())
+            .andReturn(taxNotificationReportController).once();
+        TaxNotificationReportWidget widget = createMock(TaxNotificationReportWidget.class);
+        expect(taxNotificationReportController.initWidget()).andReturn(widget).once();
+        widget.setHeaderTitle("Tax Notification Report");
+        expectLastCall().once();
+        Windows.showModalWindow(widget);
+        expectLastCall().once();
+        expectProductFamily(productFamily);
+    }
+
     private void assertReportsMenuFasFas2() {
         assertEquals(1, CollectionUtils.size(reportWidget.getItems()));
         List<MenuItem> menuItems = reportWidget.getItems().get(0).getSubMenu().getItems();
@@ -282,8 +294,9 @@ public class ReportWidgetTest {
     private void assertReportsMenuNts() {
         assertEquals(1, CollectionUtils.size(reportWidget.getItems()));
         List<MenuItem> menuItems = reportWidget.getItems().get(0).getSubMenu().getItems();
-        assertEquals(2, CollectionUtils.size(menuItems));
+        assertEquals(3, CollectionUtils.size(menuItems));
         assertEquals("NTS Withdrawn Batch Summary Report", menuItems.get(0).getText());
         assertEquals("Undistributed Liabilities Reconciliation Report", menuItems.get(1).getText());
+        assertEquals("Tax Notification Report", menuItems.get(2).getText());
     }
 }
