@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.vui.main.impl;
 
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.vui.usage.api.ICommonUsageController;
+import com.copyright.rup.dist.foreign.vui.usage.api.aacl.IAaclUsageController;
 import com.copyright.rup.dist.foreign.vui.usage.api.fas.IFasUsageController;
 import com.copyright.rup.dist.foreign.vui.usage.api.nts.INtsUsageController;
 
@@ -30,6 +31,8 @@ public class UsagesControllerProvider extends CommonControllerProvider<ICommonUs
     private Map<String, ICommonUsageController> productFamilyMap;
 
     @Autowired
+    private IAaclUsageController aaclUsagesController;
+    @Autowired
     private IFasUsageController fasUsagesController;
     @Autowired
     private INtsUsageController ntsUsagesController;
@@ -40,6 +43,7 @@ public class UsagesControllerProvider extends CommonControllerProvider<ICommonUs
     @PostConstruct
     public void initProductFamilyMap() {
         productFamilyMap = Map.of(
+            FdaConstants.AACL_PRODUCT_FAMILY, aaclUsagesController,
             FdaConstants.FAS_PRODUCT_FAMILY, fasUsagesController,
             FdaConstants.CLA_FAS_PRODUCT_FAMILY, fasUsagesController,
             FdaConstants.NTS_PRODUCT_FAMILY, ntsUsagesController

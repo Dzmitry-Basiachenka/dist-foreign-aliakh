@@ -29,12 +29,12 @@ public abstract class CommonUsageFilterWidget extends VerticalLayout implements 
 
     private static final long serialVersionUID = 9089378281952722930L;
 
+    private final Set<IFilterSaveAction> filterSaveActions = new HashSet<>();
     private ICommonUsageFilterController controller;
     private Button applyButton;
     private UsageFilter usageFilter = new UsageFilter();
     private UsageFilter appliedUsageFilter = new UsageFilter();
     private CommonUsageAppliedFilterWidget appliedFilterWidget;
-    private final Set<IFilterSaveAction> filterSaveActions = new HashSet<>();
 
     @Override
     @SuppressWarnings("unchecked")

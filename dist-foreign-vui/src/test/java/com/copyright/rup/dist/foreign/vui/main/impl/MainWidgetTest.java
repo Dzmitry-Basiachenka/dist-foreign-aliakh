@@ -131,9 +131,12 @@ public class MainWidgetTest {
         assertEquals("Product Family", productFamilyLabel.getText());
         assertThat(productFamilyLayout.getComponentAt(1), instanceOf(Select.class));
         Select<String> productFamilySelect = (Select) productFamilyLayout.getComponentAt(1);
-        List<String> list = productFamilySelect.getListDataView().getItems().collect(Collectors.toList());
-        assertEquals(FdaConstants.FAS_PRODUCT_FAMILY, list.get(0));
-        assertEquals(FdaConstants.CLA_FAS_PRODUCT_FAMILY, list.get(1));
+        List<String> productFamilies = productFamilySelect.getListDataView().getItems().collect(Collectors.toList());
+        assertEquals(4, productFamilies.size());
+        assertEquals(FdaConstants.AACL_PRODUCT_FAMILY, productFamilies.get(0));
+        assertEquals(FdaConstants.FAS_PRODUCT_FAMILY, productFamilies.get(1));
+        assertEquals(FdaConstants.CLA_FAS_PRODUCT_FAMILY, productFamilies.get(2));
+        assertEquals(FdaConstants.NTS_PRODUCT_FAMILY, productFamilies.get(3));
     }
 
     private void verifyRefreshButton(Component component) {

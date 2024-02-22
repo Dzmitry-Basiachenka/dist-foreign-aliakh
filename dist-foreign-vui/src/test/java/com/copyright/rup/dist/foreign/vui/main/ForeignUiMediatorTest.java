@@ -44,6 +44,7 @@ public class ForeignUiMediatorTest {
 
     private static final String FDA_ACCESS_APPLICATION = "FDA_ACCESS_APPLICATION";
     private static final List<String> PRODUCT_FAMILIES = List.of(
+        FdaConstants.AACL_PRODUCT_FAMILY,
         FdaConstants.FAS_PRODUCT_FAMILY,
         FdaConstants.CLA_FAS_PRODUCT_FAMILY,
         FdaConstants.NTS_PRODUCT_FAMILY
