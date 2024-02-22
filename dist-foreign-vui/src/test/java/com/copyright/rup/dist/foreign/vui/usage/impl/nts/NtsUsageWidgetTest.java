@@ -456,13 +456,13 @@ public class NtsUsageWidgetTest {
         verify(NtsUsageMediator.class, mediator, controller);
     }
 
-    private void verifyButtonsLayout(HorizontalLayout layout) {
-        assertEquals(5, layout.getComponentCount());
-        verifyMenuBar(layout.getComponentAt(0), "Fund Pool", true, List.of("Load", VIEW));
-        verifyMenuBar(layout.getComponentAt(1), "Additional Funds", true, List.of("Create", VIEW));
-        verifyButton(layout.getComponentAt(2), "Assign Classification", true, true);
-        verifyButton(layout.getComponentAt(3), "Add To Scenario", true, true);
-        verifyFileDownloader(layout.getComponentAt(4), "Export", true, true);
+    private void verifyButtonsLayout(HorizontalLayout buttonsLayout) {
+        assertEquals(5, buttonsLayout.getComponentCount());
+        verifyMenuBar(buttonsLayout.getComponentAt(0), "Fund Pool", true, List.of("Load", VIEW));
+        verifyMenuBar(buttonsLayout.getComponentAt(1), "Additional Funds", true, List.of("Create", VIEW));
+        verifyButton(buttonsLayout.getComponentAt(2), "Assign Classification", true, true);
+        verifyButton(buttonsLayout.getComponentAt(3), "Add To Scenario", true, true);
+        verifyFileDownloader(buttonsLayout.getComponentAt(4), "Export", true, true);
     }
 
     private void prepareCreateScenarioExpectation() {

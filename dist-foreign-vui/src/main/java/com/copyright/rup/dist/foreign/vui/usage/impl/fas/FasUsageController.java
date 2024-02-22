@@ -77,7 +77,7 @@ public class FasUsageController extends CommonUsageController implements IFasUsa
     public List<UsageDto> loadBeans(int startIndex, int count, List<QuerySortOrder> sortOrders) {
         Sort sort = null;
         if (CollectionUtils.isNotEmpty(sortOrders)) {
-            QuerySortOrder sortOrder = sortOrders.get(0);
+            var sortOrder = sortOrders.get(0);
             sort = new Sort(sortOrder.getSorted(), Direction.of(SortDirection.ASCENDING == sortOrder.getDirection()));
         }
         return fasUsageService.getUsageDtos(getUsageFilterController().getWidget().getAppliedFilter(),

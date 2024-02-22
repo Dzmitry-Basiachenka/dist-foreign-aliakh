@@ -156,7 +156,17 @@ public class FasUsageWidget extends CommonUsageWidget implements IFasUsageWidget
                 Windows.showModalWindow(window);
             }
         });
+        enableSendForResearchDownloader();
+        getFilterWidget().addFilterSaveAction(this::enableSendForResearchDownloader);
         return sendForResearchDownloader;
+    }
+
+    private void enableSendForResearchDownloader() {
+        var enabled = UsageStatusEnum.WORK_NOT_FOUND.equals(getFilterWidget().getAppliedFilter().getUsageStatus());
+        sendForResearchDownloader.setEnabled(enabled);
+        sendForResearchButton.setEnabled(enabled);
+        sendForResearchDownloader.setTitle(ForeignUi.getMessage("message.error.invalid_usages_status",
+            UsageStatusEnum.WORK_NOT_FOUND, "sent for research"));
     }
 
     private Button initLoadResearchedUsagesButton() {

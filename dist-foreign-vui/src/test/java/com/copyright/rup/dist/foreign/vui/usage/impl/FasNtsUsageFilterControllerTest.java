@@ -57,7 +57,7 @@ public class FasNtsUsageFilterControllerTest {
     @Test
     public void testGetFiscalYears() {
         expect(productFamilyProvider.getSelectedProductFamily()).andReturn(FAS_PRODUCT_FAMILY).once();
-        List<Integer> fiscalYears = List.of(2024);
+        var fiscalYears = List.of(2024);
         expect(usageBatchService.getFiscalYears(FAS_PRODUCT_FAMILY)).andReturn(fiscalYears).once();
         replay(productFamilyProvider, usageBatchService, rightsholderService);
         assertSame(fiscalYears, controller.getFiscalYears());
@@ -67,7 +67,7 @@ public class FasNtsUsageFilterControllerTest {
     @Test
     public void testGetUsageBatchesForFilter() {
         expect(productFamilyProvider.getSelectedProductFamily()).andReturn(FAS_PRODUCT_FAMILY).once();
-        List<UsageBatch> usageBatches = List.of(new UsageBatch());
+        var usageBatches = List.of(new UsageBatch());
         expect(usageBatchService.getUsageBatches(FAS_PRODUCT_FAMILY)).andReturn(usageBatches).once();
         replay(productFamilyProvider, usageBatchService, rightsholderService);
         assertSame(usageBatches, controller.getUsageBatches());
@@ -77,7 +77,7 @@ public class FasNtsUsageFilterControllerTest {
     @Test
     public void testGetRros() {
         expect(productFamilyProvider.getSelectedProductFamily()).andReturn(FAS_PRODUCT_FAMILY).once();
-        List<Rightsholder> rightsholders = List.of(new Rightsholder());
+        var rightsholders = List.of(new Rightsholder());
         expect(rightsholderService.getRros(FAS_PRODUCT_FAMILY)).andReturn(rightsholders).once();
         replay(productFamilyProvider, usageBatchService, rightsholderService);
         assertSame(rightsholders, controller.getRros());

@@ -121,14 +121,13 @@ public class FasUsageWidgetTest {
     @Test
     public void testWidgetStructure() {
         assertThat(widget.getPrimaryComponent(), instanceOf(FasNtsUsageFilterWidget.class));
-        var secondComponent = widget.getSecondaryComponent();
-        assertThat(secondComponent, instanceOf(VerticalLayout.class));
-        var contentLayout = (VerticalLayout) secondComponent;
+        var secondaryComponent = widget.getSecondaryComponent();
+        assertThat(secondaryComponent, instanceOf(VerticalLayout.class));
+        var contentLayout = (VerticalLayout) secondaryComponent;
         assertEquals(2, contentLayout.getComponentCount());
         var toolbarLayout = (HorizontalLayout) contentLayout.getComponentAt(0);
         verifyButtonsLayout((HorizontalLayout) toolbarLayout.getComponentAt(0));
-        var grid = (Grid<?>) contentLayout.getComponentAt(1);
-        verifyGrid(grid, List.of(
+        verifyGrid((Grid<?>) contentLayout.getComponentAt(1), List.of(
             Pair.of("Detail ID", WIDTH_300),
             Pair.of("Detail Status", "180px"),
             Pair.of("Product Family", "160px"),
@@ -166,8 +165,8 @@ public class FasUsageWidgetTest {
         expect(controller.loadBeans(0, Integer.MAX_VALUE, List.of())).andReturn(usages).once();
         expect(controller.getBeansCount()).andReturn(1).once();
         replay(controller);
-        var secondComponent = widget.getSecondaryComponent();
-        var contentLayout = (VerticalLayout) secondComponent;
+        var secondaryComponent = widget.getSecondaryComponent();
+        var contentLayout = (VerticalLayout) secondaryComponent;
         var grid = (Grid<?>) contentLayout.getComponentAt(1);
         Object[][] expectedCells = {{
             "05f0385c-798d-4c96-8278-8f5ff873b15f", "PAID", "FAS", "Paid batch", "1000000004",
@@ -376,14 +375,14 @@ public class FasUsageWidgetTest {
         verify(FasUsageMediator.class, mediator, controller);
     }
 
-    private void verifyButtonsLayout(HorizontalLayout layout) {
-        assertEquals(6, layout.getComponentCount());
-        verifyMenuBar(layout.getComponentAt(0), "Usage Batch", true, List.of("Load", "View"));
-        verifyFileDownloader(layout.getComponentAt(1), "Send for Research", true, true);
-        verifyButton(layout.getComponentAt(2), "Load Researched Details", true, true);
-        verifyButton(layout.getComponentAt(3), "Update Usages", true, true);
-        verifyButton(layout.getComponentAt(4), "Add To Scenario", true, true);
-        verifyFileDownloader(layout.getComponentAt(5), "Export", true, true);
+    private void verifyButtonsLayout(HorizontalLayout buttonsLayout) {
+        assertEquals(6, buttonsLayout.getComponentCount());
+        verifyMenuBar(buttonsLayout.getComponentAt(0), "Usage Batch", true, List.of("Load", "View"));
+        verifyFileDownloader(buttonsLayout.getComponentAt(1), "Send for Research", true, true);
+        verifyButton(buttonsLayout.getComponentAt(2), "Load Researched Details", true, true);
+        verifyButton(buttonsLayout.getComponentAt(3), "Update Usages", true, true);
+        verifyButton(buttonsLayout.getComponentAt(4), "Add To Scenario", true, true);
+        verifyFileDownloader(buttonsLayout.getComponentAt(5), "Export", true, true);
     }
 
     private MenuBar getMenuBar(int toolbarIdx) {
