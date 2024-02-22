@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.vui.usage.impl.nts;
 
+import static com.copyright.rup.dist.foreign.vui.IVaadinJsonConverter.assertJsonSnapshot;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.assertFieldValidationMessage;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.getDialogContent;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.getFooterLayout;
@@ -77,6 +78,11 @@ public class CreateAdditionalFundWindowTest {
     public void testConstructor() {
         verifyWindow(window, "Create NTS Pre-Service Fee Funds", "500px", null, Unit.PIXELS, false);
         verifyRootLayout(getDialogContent(window));
+    }
+
+    @Test
+    public void testJsonSnapshot() {
+        assertJsonSnapshot("usage/impl/nts/create-additional-fund-window.json", window);
     }
 
     @Test

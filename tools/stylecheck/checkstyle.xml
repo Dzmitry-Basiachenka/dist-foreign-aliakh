@@ -712,8 +712,10 @@
             <property name="excludes"
                       value="com.google.common.base.Preconditions.*,org.junit.Assert.*,org.junit.Assume.*,org.easymock.EasyMock.*,
                             org.powermock.api.easymock.PowerMock.*,junit.framework.TestCase.*,org.hamcrest.Matchers.*,
-                            com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.*,org.hamcrest.MatcherAssert.*,
-                            com.copyright.rup.dist.foreign.vui.UiTestHelper.*,org.hamcrest.core.IsInstanceOf.*"/>
+                            org.hamcrest.MatcherAssert.*,org.hamcrest.core.IsInstanceOf.*,
+                            com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.*,
+                            com.copyright.rup.dist.foreign.vui.UiTestHelper.*,
+                            com.copyright.rup.dist.foreign.vui.IVaadinJsonConverter.*"/>
         </module>
 
         <!-- Checks for imports from a set of illegal packages. !-->

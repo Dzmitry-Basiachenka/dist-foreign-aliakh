@@ -77,6 +77,8 @@ import java.time.LocalDate;
 @PowerMockIgnore({"com.sun.org.apache.xerces.*", "javax.xml.*", "org.xml.*", "javax.management.*"})
 public class UsageBatchUploadWindowTest implements IVaadinComponentFinder {
 
+    private static final String FAS_PRODUCT_FAMILY = "FAS";
+    private static final String FAS2_PRODUCT_FAMILY = "FAS2";
     private static final String USAGE_BATCH_NAME = "Usage Batch";
     private static final Long FAS_RRO_ACCOUNT_NUMBER = 1000001863L;
     private static final String FAS_RRO_ACCOUNT_NAME = "CANADIAN CERAMIC SOCIETY";
@@ -84,8 +86,6 @@ public class UsageBatchUploadWindowTest implements IVaadinComponentFinder {
     private static final String CLA_RRO_ACCOUNT_NAME = "CLA, The Copyright Licensing Agency Ltd.";
     private static final String RRO_NAME = "RRO name";
     private static final Long UNKNOWN_ACCOUNT_NAME = 20000170L;
-    private static final String FAS_PRODUCT_FAMILY = "FAS";
-    private static final String FAS2_PRODUCT_FAMILY = "FAS2";
     private static final String SPACES_STRING = "    ";
     private static final String STRING_50_CHARACTERS = StringUtils.repeat('a', 50);
     private static final String STRING_51_CHARACTERS = StringUtils.repeat('a', 51);
@@ -136,10 +136,10 @@ public class UsageBatchUploadWindowTest implements IVaadinComponentFinder {
 
     @Test
     public void testIsValidUsageBatchNameField() {
-        String batchName = "Existing Batch Name";
-        expect(controller.usageBatchExists(batchName)).andReturn(true).times(2);
-        expect(controller.usageBatchExists(USAGE_BATCH_NAME)).andReturn(false).times(2);
+        String usageBatchName = "existing Usage Batch";
         expect(controller.usageBatchExists(STRING_50_CHARACTERS)).andReturn(false).times(2);
+        expect(controller.usageBatchExists(usageBatchName)).andReturn(true).times(2);
+        expect(controller.usageBatchExists(USAGE_BATCH_NAME)).andReturn(false).times(2);
         replay(controller);
         window = new UsageBatchUploadWindow(controller);
         var usageBatchNameField = getTextField(window, USAGE_BATCH_NAME_LABEL);
@@ -149,7 +149,7 @@ public class UsageBatchUploadWindowTest implements IVaadinComponentFinder {
         assertFieldValidationMessage(usageBatchNameField, STRING_50_CHARACTERS, binder, null, true);
         assertFieldValidationMessage(usageBatchNameField, STRING_51_CHARACTERS, binder,
             VALUE_EXCEED_50_CHARACTERS_MESSAGE, false);
-        assertFieldValidationMessage(usageBatchNameField, batchName, binder, USAGE_BATCH_EXISTS_MESSAGE, false);
+        assertFieldValidationMessage(usageBatchNameField, usageBatchName, binder, USAGE_BATCH_EXISTS_MESSAGE, false);
         assertFieldValidationMessage(usageBatchNameField, USAGE_BATCH_NAME, binder, null, true);
         verify(controller);
     }
@@ -224,7 +224,7 @@ public class UsageBatchUploadWindowTest implements IVaadinComponentFinder {
         UsageCsvProcessor processor = createMock(UsageCsvProcessor.class);
         var paymentDateWidget = new LocalDateWidget("Payment Date");
         paymentDateWidget.setValue(PAYMENT_DATE);
-        ProcessingResult<Usage> processingResult = buildCsvProcessingResult();
+        var processingResult = buildCsvProcessingResult();
         window = createPartialMock(UsageBatchUploadWindow.class, new String[]{"isValid", "close"}, controller);
         Whitebox.setInternalState(window, UPLOAD_FIELD, uploadField);
         expect(window.isValid()).andReturn(true).once();
@@ -248,16 +248,6 @@ public class UsageBatchUploadWindowTest implements IVaadinComponentFinder {
         verify(Windows.class, window, controller, uploadField, processor);
     }
 
-    private ProcessingResult<Usage> buildCsvProcessingResult() {
-        ProcessingResult<Usage> processingResult = new ProcessingResult<>();
-        try {
-            Whitebox.invokeMethod(processingResult, "addRecord", new Usage());
-        } catch (Exception e) {
-            fail();
-        }
-        return processingResult;
-    }
-
     private void verifyRootLayout(Component component) {
         assertThat(component, instanceOf(VerticalLayout.class));
         var rootLayout = (VerticalLayout) component;
@@ -277,11 +267,11 @@ public class UsageBatchUploadWindowTest implements IVaadinComponentFinder {
 
     private void verifyButtonsLayout(Component component) {
         assertThat(component, instanceOf(HorizontalLayout.class));
-        var horizontalLayout = (HorizontalLayout) component;
-        assertEquals(2, horizontalLayout.getComponentCount());
-        var uploadButton = verifyButton(horizontalLayout.getComponentAt(0), "Upload", true);
+        var buttonsLayout = (HorizontalLayout) component;
+        assertEquals(2, buttonsLayout.getComponentCount());
+        var uploadButton = verifyButton(buttonsLayout.getComponentAt(0), "Upload", true);
         verifyLoadClickListener(uploadButton);
-        verifyButton(horizontalLayout.getComponentAt(1), "Close", true);
+        verifyButton(buttonsLayout.getComponentAt(1), "Close", true);
     }
 
     private void verifyRightsholdersComponents(Component component) {
@@ -366,5 +356,15 @@ public class UsageBatchUploadWindowTest implements IVaadinComponentFinder {
         usageBatch.setFiscalYear(2017);
         usageBatch.setGrossAmount(new BigDecimal(GROSS_AMOUNT));
         return usageBatch;
+    }
+
+    private ProcessingResult<Usage> buildCsvProcessingResult() {
+        var processingResult = new ProcessingResult<Usage>();
+        try {
+            Whitebox.invokeMethod(processingResult, "addRecord", new Usage());
+        } catch (Exception e) {
+            fail();
+        }
+        return processingResult;
     }
 }
