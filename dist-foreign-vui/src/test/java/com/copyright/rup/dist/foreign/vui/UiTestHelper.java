@@ -180,6 +180,22 @@ public final class UiTestHelper {
     }
 
     /**
+     * Finds and verifies HTML fragment inside provided component with corresponding name.
+     *
+     * @param component  parent component
+     * @param labelName  label name
+     * @param labelValue expected label value
+     */
+    public static void verifyAppliedFiltersLabel(Component component, String labelName, String labelValue) {
+        assertThat(component, instanceOf(Label.class));
+        var label = (Label) component;
+        var html = (Html) label.getChildren().findFirst().orElseThrow();
+        var actualText = html.getElement().toString();
+        var expectedText = String.format("<li><b><i>%s: </i></b>%s</li>", labelName, labelValue);
+        assertEquals(expectedText, actualText);
+    }
+
+    /**
      * Verifies filters label.
      *
      * @param component UI component

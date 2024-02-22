@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.vui.audit.impl.fas;
+package com.copyright.rup.dist.foreign.vui.audit.impl.nts;
 
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyAppliedFiltersLabel;
 
@@ -14,7 +14,7 @@ import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
-import com.copyright.rup.dist.foreign.vui.audit.api.fas.IFasAuditFilterController;
+import com.copyright.rup.dist.foreign.vui.audit.api.nts.INtsAuditFilterController;
 
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Verifies {@link FasAuditAppliedFilterWidget}.
+ * Verifies {@link NtsAuditAppliedFilterWidget}.
  * <p>
  * Copyright (C) 2023 copyright.com
  * <p>
@@ -32,7 +32,7 @@ import java.util.Set;
  *
  * @author Stepan Karakhanov
  */
-public class FasAuditAppliedFilterWidgetTest {
+public class NtsAuditAppliedFilterWidgetTest {
 
     private static final String BATCH_ID_1 = "42575c34-9fe8-4652-b885-f6da23946bd1";
     private static final String BATCH_ID_2 = "7b1ef7e1-8269-4929-a5f4-6a17bb7cbca6";
@@ -42,12 +42,12 @@ public class FasAuditAppliedFilterWidgetTest {
     private static final String DISTRIBUTION_NAME = "Dist. name";
     private static final Long ACCOUNT_NUMBER = 1000000001L;
 
-    private FasAuditAppliedFilterWidget widget;
+    private NtsAuditAppliedFilterWidget widget;
 
     @Test
     public void testRefreshFilterPanel() {
-        IFasAuditFilterController controller = createMock(IFasAuditFilterController.class);
-        widget = new FasAuditAppliedFilterWidget(controller);
+        INtsAuditFilterController controller = createMock(INtsAuditFilterController.class);
+        widget = new NtsAuditAppliedFilterWidget(controller);
         expect(controller.getUsageBatches()).andReturn(
             List.of(buildBatch(BATCH_ID_1, NAME_1), buildBatch(BATCH_ID_2, NAME_2))).once();
         expect(controller.getRightsholdersByAccountNumbers(Set.of(ACCOUNT_NUMBER))).andReturn(

@@ -78,7 +78,7 @@ public class FasAuditWidget extends CommonAuditWidget implements IFasAuditWidget
         addAmountColumn(
             UsageDto::getBatchGrossAmount, "table.column.batch_gross_amount", "batchGrossAmount", WIDTH_165);
         addColumn(usage -> {
-            BigDecimal value = usage.getServiceFee();
+            var value = usage.getServiceFee();
             return Objects.nonNull(value)
                 ? Objects.toString(value.multiply(new BigDecimal("100")).setScale(1, RoundingMode.HALF_UP))
                 : StringUtils.EMPTY;
