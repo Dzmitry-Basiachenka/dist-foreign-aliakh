@@ -25,6 +25,8 @@ import com.vaadin.flow.function.ValueProvider;
 import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.Objects;
 import java.util.function.Function;
 
 /**
@@ -127,6 +129,15 @@ public abstract class CommonAuditWidget extends SplitLayout implements ICommonAu
     }
 
     /**
+     * Adds a calculated service fee column to the audit grid.
+     *
+     * @return the column for method chaining
+     */
+    protected Column<UsageDto> addServiceFeeColumn() {
+        return addColumn(this::calculateServiceFee, "table.column.service_fee", "serviceFee", "145px");
+    }
+
+    /**
      * Adds columns to the audit grid.
      */
     protected abstract void addColumns();
@@ -173,5 +184,12 @@ public abstract class CommonAuditWidget extends SplitLayout implements ICommonAu
         VaadinUtils.setPadding(toolbar, 0, 3, 0, 3);
         VaadinUtils.addComponentStyle(toolbar, "audit-toolbar");
         return toolbar;
+    }
+
+    private String calculateServiceFee(UsageDto usageDto) {
+        var value = usageDto.getServiceFee();
+        return Objects.nonNull(value)
+            ? Objects.toString(value.multiply(new BigDecimal("100")).setScale(1, RoundingMode.HALF_UP))
+            : StringUtils.EMPTY;
     }
 }

@@ -22,6 +22,7 @@ import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.vui.main.security.ForeignSecurityUtils;
+import com.copyright.rup.dist.foreign.vui.usage.api.ICommonUsageFilterController;
 import com.copyright.rup.dist.foreign.vui.usage.api.aacl.IAaclUsageController;
 import com.copyright.rup.dist.foreign.vui.usage.api.aacl.IAaclUsageFilterController;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.downloader.OnDemandFileDownloader;
@@ -80,19 +81,21 @@ public class AaclUsageWidgetTest {
         controller = createMock(IAaclUsageController.class);
         var filterWidget = new AaclUsageFilterWidget(createMock(IAaclUsageFilterController.class));
         filterWidget.getAppliedFilter().setUsageBatchesIds(Set.of(BATCH_ID));
-        widget = new AaclUsageWidget(controller);
-        widget.setController(controller);
-        expect(controller.initUsagesFilterWidget()).andReturn(filterWidget).once();
+        ICommonUsageFilterController filterController = createMock(ICommonUsageFilterController.class);
+        expect(controller.getUsageFilterController()).andReturn(filterController).once();
+        expect(filterController.initWidget()).andReturn(filterWidget).once();
         IStreamSource streamSource = createMock(IStreamSource.class);
         Map.Entry<Supplier<String>, Supplier<InputStream>> source =
             new SimpleImmutableEntry<>(() -> "file_name.txt", () -> new ByteArrayInputStream(new byte[]{}));
         expect(streamSource.getSource()).andReturn(source).times(2);
         expect(controller.getExportUsagesStreamSource()).andReturn(streamSource).once();
         expect(controller.getSendForClassificationUsagesStreamSource()).andReturn(streamSource).once();
-        replay(UI.class, ui, controller, streamSource);
+        replay(UI.class, ui, controller, filterController, streamSource);
+        widget = new AaclUsageWidget(controller);
+        widget.setController(controller);
         widget.init();
-        verify(UI.class, ui, controller, streamSource);
-        reset(UI.class, ui, controller, streamSource);
+        verify(UI.class, ui, controller, filterController, streamSource);
+        reset(UI.class, ui, controller, filterController, streamSource);
     }
 
     @Test

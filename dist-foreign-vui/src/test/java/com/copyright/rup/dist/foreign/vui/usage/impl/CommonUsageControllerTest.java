@@ -75,15 +75,6 @@ public class CommonUsageControllerTest {
     }
 
     @Test
-    public void testInitUsagesFilterWidget() {
-        IFasNtsUsageFilterWidget filterWidget = new FasNtsUsageFilterWidget(filterController);
-        expect(filterController.initWidget()).andReturn(filterWidget).once();
-        replay(filterController);
-        assertSame(filterWidget, controller.initUsagesFilterWidget());
-        verify(filterController);
-    }
-
-    @Test
     public void testGetScenariosNamesAssociatedWithUsageBatch() {
         List<String> scenarioNames = List.of(SCENARIO_NAME);
         expect(scenarioService.getScenariosNamesByUsageBatchId(USAGE_BATCH_ID)).andReturn(scenarioNames).once();

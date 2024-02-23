@@ -28,6 +28,7 @@ import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.vui.main.security.ForeignSecurityUtils;
+import com.copyright.rup.dist.foreign.vui.usage.api.ICommonUsageFilterController;
 import com.copyright.rup.dist.foreign.vui.usage.api.IFasNtsUsageFilterController;
 import com.copyright.rup.dist.foreign.vui.usage.api.fas.IFasUsageController;
 import com.copyright.rup.dist.foreign.vui.usage.impl.FasNtsUsageFilterWidget;
@@ -38,7 +39,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.ComponentUtil;
@@ -101,21 +101,23 @@ public class FasUsageWidgetTest {
         expect(UI.getCurrent()).andReturn(ui).times(2);
         expect(ui.getUIId()).andReturn(1).times(2);
         controller = createMock(IFasUsageController.class);
-        widget = new FasUsageWidget(controller);
-        widget.setController(controller);
         var filterWidget = new FasNtsUsageFilterWidget(createMock(IFasNtsUsageFilterController.class));
         filterWidget.getFilter().setUsageBatchesIds(Set.of("3a070817-03ae-4ebd-b25f-dd3168a7ffb0"));
-        expect(controller.initUsagesFilterWidget()).andReturn(filterWidget).once();
+        ICommonUsageFilterController filterController = createMock(ICommonUsageFilterController.class);
+        expect(controller.getUsageFilterController()).andReturn(filterController).once();
+        expect(filterController.initWidget()).andReturn(filterWidget).once();
         IStreamSource streamSource = createMock(IStreamSource.class);
         Map.Entry<Supplier<String>, Supplier<InputStream>> source =
             new SimpleImmutableEntry<>(() -> "file_name.txt", () -> new ByteArrayInputStream(new byte[]{}));
         expect(streamSource.getSource()).andReturn(source).times(2);
         expect(controller.getExportUsagesStreamSource()).andReturn(streamSource).once();
         expect(controller.getSendForResearchUsagesStreamSource()).andReturn(streamSource).once();
-        replay(UI.class, ui, controller, streamSource);
+        replay(UI.class, ui, controller, filterController, streamSource);
+        widget = new FasUsageWidget(controller);
+        widget.setController(controller);
         widget.init();
-        verify(controller);
-        reset(UI.class, ui, controller, streamSource);
+        verify(UI.class, ui, controller, filterController, streamSource);
+        reset(UI.class, ui, controller, filterController, streamSource);
     }
 
     @Test

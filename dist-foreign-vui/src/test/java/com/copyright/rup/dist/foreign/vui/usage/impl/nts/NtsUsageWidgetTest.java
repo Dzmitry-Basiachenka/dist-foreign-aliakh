@@ -28,6 +28,7 @@ import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.vui.main.security.ForeignSecurityUtils;
+import com.copyright.rup.dist.foreign.vui.usage.api.ICommonUsageFilterController;
 import com.copyright.rup.dist.foreign.vui.usage.api.IFasNtsUsageFilterController;
 import com.copyright.rup.dist.foreign.vui.usage.api.IFasNtsUsageFilterWidget;
 import com.copyright.rup.dist.foreign.vui.usage.api.nts.INtsUsageController;
@@ -100,23 +101,25 @@ public class NtsUsageWidgetTest {
     public void setUp() {
         mockStatic(UI.class);
         UI ui = createMock(UI.class);
-        expect(UI.getCurrent()).andReturn(ui).times(2);
-        expect(ui.getUIId()).andReturn(1).times(2);
+        expect(UI.getCurrent()).andReturn(ui).once();
+        expect(ui.getUIId()).andReturn(1).once();
         controller = createMock(INtsUsageController.class);
-        widget = new NtsUsageWidget(controller);
-        widget.setController(controller);
         filterWidget = new FasNtsUsageFilterWidget(createMock(IFasNtsUsageFilterController.class));
         filterWidget.getAppliedFilter().setUsageBatchesIds(BATCHES_IDS);
-        expect(controller.initUsagesFilterWidget()).andReturn(filterWidget).once();
+        ICommonUsageFilterController filterController = createMock(ICommonUsageFilterController.class);
+        expect(controller.getUsageFilterController()).andReturn(filterController).once();
+        expect(filterController.initWidget()).andReturn(filterWidget).once();
         IStreamSource streamSource = createMock(IStreamSource.class);
         Map.Entry<Supplier<String>, Supplier<InputStream>> source =
             new SimpleImmutableEntry<>(() -> "file_name.txt", () -> new ByteArrayInputStream(new byte[]{}));
-        expect(streamSource.getSource()).andReturn(source).times(2);
+        expect(streamSource.getSource()).andReturn(source).once();
         expect(controller.getExportUsagesStreamSource()).andReturn(streamSource).once();
-        replay(UI.class, ui, controller, streamSource);
+        replay(UI.class, ui, controller, filterController, streamSource);
+        widget = new NtsUsageWidget(controller);
+        widget.setController(controller);
         widget.init();
-        verify(controller);
-        reset(UI.class, ui, controller, streamSource);
+        verify(UI.class, ui, controller, filterController, streamSource);
+        reset(UI.class, ui, controller, filterController, streamSource);
     }
 
     @Test
