@@ -1,14 +1,11 @@
 package com.copyright.rup.dist.foreign.vui.usage.impl.fas;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
-import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ThresholdExceededException;
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ValidationException;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
-import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.common.util.UsageBatchUtils;
-import com.copyright.rup.dist.foreign.service.impl.csv.UsageCsvProcessor;
 import com.copyright.rup.dist.foreign.vui.common.validator.AmountRangeValidator;
 import com.copyright.rup.dist.foreign.vui.common.validator.RequiredNumberValidator;
 import com.copyright.rup.dist.foreign.vui.common.validator.RequiredValidator;
@@ -89,8 +86,8 @@ public class UsageBatchUploadWindow extends CommonDialog {
         uploadBinder.validate();
         if (isValid()) {
             try {
-                UsageCsvProcessor processor = usagesController.getCsvProcessor(productFamilyField.getValue());
-                ProcessingResult<Usage> processingResult = processor.process(uploadField.getStreamToUploadedFile());
+                var processor = usagesController.getCsvProcessor(productFamilyField.getValue());
+                var processingResult = processor.process(uploadField.getStreamToUploadedFile());
                 if (processingResult.isSuccessful()) {
                     var usageBatch = binder.getBean();
                     usageBatch.setFiscalYear(UsageBatchUtils.calculateFiscalYear(paymentDateWidget.getValue()));
@@ -161,7 +158,7 @@ public class UsageBatchUploadWindow extends CommonDialog {
             .withValidator(requiredValidator)
             .withValidator(value -> StringUtils.endsWith(value, ".csv"),
                 ForeignUi.getMessage("error.upload_file.invalid_extension"))
-            .bind(ValueProvider.identity(), (usageBatch, value) -> usageBatch = value);
+            .bind(ValueProvider.identity(), (bean, value) -> bean = value);
         uploadField.addSucceededListener(event -> uploadBinder.validate());
         VaadinUtils.addComponentStyle(uploadField, "usage-upload-component");
         return uploadField;
