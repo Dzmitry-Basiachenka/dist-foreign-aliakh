@@ -58,11 +58,6 @@ public class NtsAuditController extends CommonAuditController implements INtsAud
     }
 
     @Override
-    protected ICommonAuditWidget instantiateWidget() {
-        return new NtsAuditWidget(this);
-    }
-
-    @Override
     public List<UsageDto> loadBeans(int startIndex, int count, List<QuerySortOrder> sortOrders) {
         var filter = getFilter();
         Sort sort = null;
@@ -73,5 +68,10 @@ public class NtsAuditController extends CommonAuditController implements INtsAud
         return !filter.isEmpty()
             ? getUsageService().getForAudit(filter, new Pageable(startIndex, count), sort)
             : List.of();
+    }
+
+    @Override
+    protected ICommonAuditWidget instantiateWidget() {
+        return new NtsAuditWidget(this);
     }
 }

@@ -83,7 +83,7 @@ public class ConfirmActionDialogWindow extends Dialog {
         Button confirmButton = StringUtils.isNotBlank(confirmCaption)
             ? Buttons.createButton(confirmCaption) : Buttons.createYesButton();
         confirmButton.addClickListener(event -> {
-            if (!binder.isValid()) {
+            if (!binder.validate().isOk()) {
                 Windows.showValidationErrorWindow();
             } else {
                 action.accept(reasonField.getValue());
@@ -102,7 +102,7 @@ public class ConfirmActionDialogWindow extends Dialog {
             for (Validator<String> validator : validators) {
                 builder = builder.withValidator(validator);
             }
-            builder.bind(ValueProvider.identity(), (s, v) -> s = v).validate();
+            builder.bind(ValueProvider.identity(), (s, v) -> s = v);
             reasonField.setRequiredIndicatorVisible(true);
             reasonField.setValueChangeMode(ValueChangeMode.LAZY);
         }

@@ -230,7 +230,7 @@ public class UsageBatchUploadWindowTest implements IVaadinComponentFinder {
         expect(window.isValid()).andReturn(true).once();
         window.close();
         expectLastCall().once();
-        expect(controller.usageBatchExists(USAGE_BATCH_NAME)).andReturn(false).times(2);
+        expect(controller.usageBatchExists(USAGE_BATCH_NAME)).andReturn(false).once();
         expect(controller.getCsvProcessor(FAS_PRODUCT_FAMILY)).andReturn(processor).once();
         expect(processor.process(anyObject())).andReturn(processingResult).once();
         expect(controller.loadUsageBatch(buildUsageBatch(rro), processingResult.get())).andReturn(1).once();

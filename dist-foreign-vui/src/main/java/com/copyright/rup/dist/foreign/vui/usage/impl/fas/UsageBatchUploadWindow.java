@@ -82,8 +82,6 @@ public class UsageBatchUploadWindow extends CommonDialog {
      * Initiates file uploading.
      */
     void onUploadClicked() {
-        binder.validate();
-        uploadBinder.validate();
         if (isValid()) {
             try {
                 var processor = usagesController.getCsvProcessor(productFamilyField.getValue());
@@ -119,7 +117,8 @@ public class UsageBatchUploadWindow extends CommonDialog {
      * @return {@code true} if all inputs are valid, {@code false} - otherwise
      */
     boolean isValid() {
-        return binder.isValid() && uploadBinder.isValid();
+        var isBinderValid = binder.validate().isOk();
+        return uploadBinder.validate().isOk() && isBinderValid;
     }
 
     private void initBinder() {

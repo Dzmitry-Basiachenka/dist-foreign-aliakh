@@ -93,7 +93,6 @@ class FundPoolLoadWindow extends CommonDialog {
      * Initiates file uploading.
      */
     void onUploadClicked() {
-        binder.validate();
         if (isValid()) {
             var usageBatch = binder.getBean();
             usageBatch.setFiscalYear(UsageBatchUtils.calculateFiscalYear(paymentDateWidget.getValue()));
@@ -117,7 +116,8 @@ class FundPoolLoadWindow extends CommonDialog {
      * @return {@code true} if all inputs are valid, {@code false} - otherwise
      */
     boolean isValid() {
-        return areValidMarkets() && binder.isValid();
+        var isBinderValid = binder.validate().isOk();
+        return areValidMarkets() && isBinderValid;
     }
 
     private VerticalLayout initRootLayout() {

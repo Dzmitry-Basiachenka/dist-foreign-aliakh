@@ -72,8 +72,6 @@ public class AaclUsageBatchUploadWindow extends CommonDialog {
      * Initiates file uploading.
      */
     void onUploadClicked() {
-        binder.validate();
-        uploadBinder.validate();
         if (isValid()) {
             try {
                 if (StringUtils.isNotEmpty(uploadField.getValue())) {
@@ -117,7 +115,8 @@ public class AaclUsageBatchUploadWindow extends CommonDialog {
      * @return {@code true} if all inputs are valid, {@code false} - otherwise
      */
     boolean isValid() {
-        return binder.isValid() && uploadBinder.isValid();
+        var isBinderValid = binder.validate().isOk();
+        return uploadBinder.validate().isOk() && isBinderValid;
     }
 
     private void initBinder() {
@@ -140,8 +139,7 @@ public class AaclUsageBatchUploadWindow extends CommonDialog {
         uploadBinder.forField(uploadField)
             .withValidator(value -> StringUtils.isEmpty(value)
                 || StringUtils.endsWith(value, ".csv"), ForeignUi.getMessage("error.upload_file.invalid_extension"))
-            .bind(ValueProvider.identity(), (bean, value) -> bean = value)
-            .validate();
+            .bind(ValueProvider.identity(), (bean, value) -> bean = value);
         VaadinUtils.addComponentStyle(uploadField, "usage-upload-component");
         return uploadField;
     }
