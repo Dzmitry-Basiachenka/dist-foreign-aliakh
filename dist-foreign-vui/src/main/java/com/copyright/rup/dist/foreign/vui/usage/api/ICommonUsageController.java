@@ -36,13 +36,6 @@ public interface ICommonUsageController extends IController<ICommonUsageWidget> 
     IStreamSource getExportUsagesStreamSource();
 
     /**
-     * Initializes {@link ICommonUsageFilterWidget}.
-     *
-     * @return initialized {@link ICommonUsageFilterWidget}
-     */
-    ICommonUsageFilterWidget initUsagesFilterWidget();
-
-    /**
      * Gets RH from PRM by account number.
      *
      * @param rhAccountNumber RH account number

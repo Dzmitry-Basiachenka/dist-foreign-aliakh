@@ -64,7 +64,7 @@ public abstract class CommonUsageWidget extends SplitLayout implements ICommonUs
     @Override
     @SuppressWarnings("unchecked")
     public ICommonUsageWidget init() {
-        usagesFilterWidget = controller.initUsagesFilterWidget();
+        usagesFilterWidget = initUsagesFilterWidget();
         addToPrimary((CommonUsageFilterWidget) usagesFilterWidget);
         addToSecondary(initContent());
         setSplitterPosition(15);
@@ -186,6 +186,12 @@ public abstract class CommonUsageWidget extends SplitLayout implements ICommonUs
 
     protected HideGridColumnsProvider<UsageDto> getHideGridColumnsProvider() {
         return hideGridColumnsProvider;
+    }
+
+    private ICommonUsageFilterWidget initUsagesFilterWidget() {
+        ICommonUsageFilterWidget widget = controller.getUsageFilterController().initWidget();
+        widget.addFilterSaveAction(this::refresh);
+        return widget;
     }
 
     private void showCreateScenarioWindow(Dialog window) {

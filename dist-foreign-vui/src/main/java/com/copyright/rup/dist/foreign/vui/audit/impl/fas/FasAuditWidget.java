@@ -9,10 +9,6 @@ import com.copyright.rup.dist.foreign.vui.audit.impl.CommonAuditWidget;
 import com.copyright.rup.dist.foreign.vui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.Buttons;
 
-import org.apache.commons.lang3.StringUtils;
-
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.Objects;
 
 /**
@@ -77,12 +73,7 @@ public class FasAuditWidget extends CommonAuditWidget implements IFasAuditWidget
         addAmountColumn(UsageDto::getGrossAmount, "table.column.gross_amount_in_usd", "grossAmount", "170px");
         addAmountColumn(
             UsageDto::getBatchGrossAmount, "table.column.batch_gross_amount", "batchGrossAmount", WIDTH_165);
-        addColumn(usage -> {
-            var value = usage.getServiceFee();
-            return Objects.nonNull(value)
-                ? Objects.toString(value.multiply(new BigDecimal("100")).setScale(1, RoundingMode.HALF_UP))
-                : StringUtils.EMPTY;
-        }, "table.column.service_fee", "serviceFee", "145px");
+        addServiceFeeColumn();
         addColumn(UsageDto::getScenarioName, "table.column.scenario_name", "scenarioName", "155px");
         addColumn(UsageDto::getCheckNumber, "table.column.check_number", "checkNumber", "100px");
         addColumn(usage -> CommonDateUtils.format(usage.getCheckDate(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT),

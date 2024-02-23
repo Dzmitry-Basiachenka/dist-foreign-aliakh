@@ -16,6 +16,7 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.foreign.vui.IVaadinComponentFinder;
 import com.copyright.rup.dist.foreign.vui.UiTestHelper;
 import com.copyright.rup.dist.foreign.vui.audit.api.nts.INtsAuditFilterController;
 import com.copyright.rup.dist.foreign.vui.audit.impl.CommonAuditFilterWidget;
@@ -25,12 +26,10 @@ import com.copyright.rup.dist.foreign.vui.common.UsageBatchFilterWidget;
 
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.powermock.reflect.Whitebox;
 
 import java.util.List;
 import java.util.Set;
@@ -44,9 +43,10 @@ import java.util.Set;
  *
  * @author Anton Azarenka
  */
-public class NtsAuditFilterWidgetTest {
+public class NtsAuditFilterWidgetTest implements IVaadinComponentFinder {
 
     private static final String NTS_PRODUCT_FAMILY = "NTS";
+    private static final String APPLY_BUTTON = "Apply";
     private static final Long ACCOUNT_NUMBER = 2000017000L;
 
     private CommonAuditFilterWidget widget;
@@ -82,7 +82,7 @@ public class NtsAuditFilterWidgetTest {
         expect(controller.getUsageBatches()).andReturn(List.of()).once();
         replay(controller);
         widget.init();
-        var applyButton = getApplyButton();
+        var applyButton = getButton(widget, APPLY_BUTTON);
         assertFalse(applyButton.isEnabled());
         assertTrue(widget.getAppliedFilter().getRhAccountNumbers().isEmpty());
         assertTrue(widget.getFilter().getRhAccountNumbers().isEmpty());
@@ -102,7 +102,7 @@ public class NtsAuditFilterWidgetTest {
     public void testFilterChangedEmptyFilter() {
         replay(controller);
         widget.init();
-        var applyButton = getApplyButton();
+        var applyButton = getButton(widget, APPLY_BUTTON);
         assertFalse(applyButton.isEnabled());
         widget.applyFilter();
         verify(controller);
@@ -117,7 +117,7 @@ public class NtsAuditFilterWidgetTest {
         expect(controller.getUsageBatches()).andReturn(List.of()).once();
         replay(controller);
         widget.init();
-        var applyButton = getApplyButton();
+        var applyButton = getButton(widget, APPLY_BUTTON);
         assertTrue(widget.getFilter().getRhAccountNumbers().isEmpty());
         assertTrue(widget.getAppliedFilter().getRhAccountNumbers().isEmpty());
         assertEquals(NTS_PRODUCT_FAMILY, widget.getFilter().getProductFamily());
@@ -146,11 +146,11 @@ public class NtsAuditFilterWidgetTest {
         replay(clickEvent, controller);
         widget.init();
         Set<Long> accountNumbers = Set.of(ACCOUNT_NUMBER);
-        var applyButton = getApplyButton();
+        var applyButton = getButton(widget, APPLY_BUTTON);
         widget.getFilter().setRhAccountNumbers(accountNumbers);
         applyButton.setEnabled(true);
         assertFalse(widget.getFilter().isEmpty());
-        var clearButton = (Button) ((HorizontalLayout) widget.getComponentAt(6)).getComponentAt(1);
+        var clearButton = getButton(widget, "Clear");
         clearButton.click();
         assertFalse(applyButton.isEnabled());
         assertTrue(widget.getFilter().isEmpty());
@@ -177,10 +177,6 @@ public class NtsAuditFilterWidgetTest {
         var layout = (HorizontalLayout) component;
         assertEquals("filter-buttons", layout.getId().orElseThrow());
         assertEquals("filter-buttons", layout.getClassName());
-    }
-
-    private Button getApplyButton() {
-        return Whitebox.getInternalState(widget, "applyButton");
     }
 
     private Rightsholder buildRightsholder() {

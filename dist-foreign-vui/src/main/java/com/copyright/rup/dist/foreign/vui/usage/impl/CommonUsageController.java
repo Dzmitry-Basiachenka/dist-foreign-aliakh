@@ -12,7 +12,6 @@ import com.copyright.rup.dist.foreign.service.api.IUsageBatchStatusService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.vui.main.api.IProductFamilyProvider;
 import com.copyright.rup.dist.foreign.vui.usage.api.ICommonUsageController;
-import com.copyright.rup.dist.foreign.vui.usage.api.ICommonUsageFilterWidget;
 import com.copyright.rup.dist.foreign.vui.usage.api.ICommonUsageWidget;
 import com.copyright.rup.dist.foreign.vui.usage.api.ScenarioCreateEvent;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.api.CommonController;
@@ -59,13 +58,6 @@ public abstract class CommonUsageController extends CommonController<ICommonUsag
     private IFundPoolService fundPoolService;
     @Autowired
     private IProductFamilyProvider productFamilyProvider;
-
-    @Override
-    public ICommonUsageFilterWidget initUsagesFilterWidget() {
-        ICommonUsageFilterWidget widget = getUsageFilterController().initWidget();
-        widget.addFilterSaveAction(() -> getWidget().refresh());
-        return widget;
-    }
 
     @Override
     public Rightsholder getRightsholder(Long rhAccountNumber) {
