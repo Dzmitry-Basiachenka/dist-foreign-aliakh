@@ -18,7 +18,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Scenario.NtsFields;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
@@ -66,7 +65,7 @@ import java.util.Set;
  */
 public class NtsScenariosWidgetTest {
 
-    private static final String SCENARIO_ID = RupPersistUtils.generateUuid();
+    private static final String SCENARIO_ID = "ffcd4d2e-28e0-4f4e-95f0-b720fb2487ca";
     private static final String GRID_ID = "scenarioGrid";
     private static final String SELECTION_CRITERIA = "<b>Selection Criteria:</b>";
 
