@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.vui.usage.impl.fas;
 
+import static com.copyright.rup.dist.foreign.vui.IVaadinJsonConverter.assertJsonSnapshot;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.assertFieldValidationMessage;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.getDialogContent;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.getFooterLayout;
@@ -132,6 +133,11 @@ public class UsageBatchUploadWindowTest implements IVaadinComponentFinder {
         verifyWindow(window, "Upload Usage Batch", "500px", "570px", Unit.PIXELS, false);
         verifyRootLayout(getDialogContent(window));
         verify(controller);
+    }
+
+    @Test
+    public void testJsonSnapshot() {
+        assertJsonSnapshot("usage/impl/fas/usage-batch-upload-window.json", new UsageBatchUploadWindow(controller));
     }
 
     @Test

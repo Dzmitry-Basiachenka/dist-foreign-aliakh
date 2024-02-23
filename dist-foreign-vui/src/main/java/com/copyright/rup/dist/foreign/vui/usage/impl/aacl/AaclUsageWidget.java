@@ -164,7 +164,7 @@ public class AaclUsageWidget extends CommonUsageWidget implements IAaclUsageWidg
         loadUsageBatchMenuItem = menuItem.getSubMenu().addItem(ForeignUi.getMessage("menu.item.load"),
             item -> Windows.showModalWindow(new AaclUsageBatchUploadWindow(controller)));
         menuItem.getSubMenu().addItem(ForeignUi.getMessage("menu.item.view"),
-            item -> {}); //TODO {aliakh} ViewAaclUsageBatchWindow
+            item -> Windows.showModalWindow(new ViewAaclUsageBatchWindow(controller)));
         VaadinUtils.addComponentStyle(menuItem, CLASS_BUTTON_MENUBAR);
         VaadinUtils.addComponentStyle(usageBatchMenuBar, "usage-batch-menu-bar");
         VaadinUtils.addComponentStyle(usageBatchMenuBar, CLASS_BUTTON_MENUBAR);
