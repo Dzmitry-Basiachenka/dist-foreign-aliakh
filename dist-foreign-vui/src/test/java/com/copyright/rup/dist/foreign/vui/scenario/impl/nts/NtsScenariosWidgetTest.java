@@ -1,35 +1,29 @@
-package com.copyright.rup.dist.foreign.vui.scenario.impl.fas;
+package com.copyright.rup.dist.foreign.vui.scenario.impl.nts;
 
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyGridItems;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifySize;
 
-import static org.easymock.EasyMock.capture;
+import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.newCapture;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.reset;
+import static org.easymock.EasyMock.verify;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
-import static org.powermock.api.easymock.PowerMock.createMock;
-import static org.powermock.api.easymock.PowerMock.expectLastCall;
-import static org.powermock.api.easymock.PowerMock.mockStatic;
-import static org.powermock.api.easymock.PowerMock.replay;
-import static org.powermock.api.easymock.PowerMock.reset;
-import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.Scenario.NtsFields;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.vui.UiTestHelper;
-import com.copyright.rup.dist.foreign.vui.scenario.api.IScenarioHistoryController;
-import com.copyright.rup.dist.foreign.vui.scenario.api.fas.IFasScenariosController;
-import com.copyright.rup.dist.foreign.vui.scenario.impl.ScenarioHistoryWidget;
-import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.Windows;
+import com.copyright.rup.dist.foreign.vui.scenario.api.nts.INtsScenariosController;
+import com.copyright.rup.dist.foreign.vui.scenario.impl.ScenarioHistoryController;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Html;
@@ -48,13 +42,8 @@ import com.vaadin.flow.component.splitlayout.SplitLayout.Orientation;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
-import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.powermock.core.classloader.annotations.PowerMockIgnore;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
@@ -65,7 +54,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Verifies {@link FasScenariosWidget}.
+ * Verifies {@link NtsScenariosWidget}.
  * <p>
  * Copyright (C) 2017 copyright.com
  * <p>
@@ -74,26 +63,20 @@ import java.util.Set;
  * @author Aliaksandr Radkevich
  * @author Mikalai Bezmen
  */
-@RunWith(PowerMockRunner.class)
-@PrepareForTest(Windows.class)
-@PowerMockIgnore({"com.sun.org.apache.xerces.*", "javax.xml.*", "org.xml.*", "javax.management.*"})
-public class FasScenariosWidgetTest {
+public class NtsScenariosWidgetTest {
 
-    private static final String SCENARIO_ID = "526f0f5f-8fe9-4c9c-8f46-dea1236ba259";
+    private static final String SCENARIO_ID = "6b8ea64f-0ede-4d30-906e-54e48683b293";
     private static final String GRID_ID = "scenarioGrid";
     private static final String SELECTION_CRITERIA = "<b>Selection Criteria:</b>";
 
-    private FasScenariosWidget scenariosWidget;
-    private IFasScenariosController controller;
+    private NtsScenariosWidget scenariosWidget;
+    private INtsScenariosController controller;
     private Scenario scenario;
-    private IScenarioHistoryController scenarioHistoryController;
 
     @Before
     public void setUp() {
-        controller = createMock(IFasScenariosController.class);
-        scenarioHistoryController = createMock(IScenarioHistoryController.class);
-        scenariosWidget = new FasScenariosWidget(controller, scenarioHistoryController);
-        scenariosWidget.setController(controller);
+        controller = createMock(INtsScenariosController.class);
+        scenariosWidget = new NtsScenariosWidget(controller, new ScenarioHistoryController());
         scenario = buildScenario();
         expect(controller.getScenarios()).andReturn(List.of(scenario)).once();
         replay(controller);
@@ -121,8 +104,15 @@ public class FasScenariosWidgetTest {
     }
 
     @Test
+    public void testGridValues() {
+        Grid<?> grid = (Grid<?>) ((SplitLayout) scenariosWidget.getComponentAt(1)).getPrimaryComponent();
+        Object[][] expectedCells = {{"Scenario nts 20", "09/13/2022", "IN_PROGRESS"}};
+        verifyGridItems(grid, List.of(scenario), expectedCells);
+    }
+
+    @Test
     public void testInitMediator() {
-        assertThat(scenariosWidget.initMediator(), instanceOf(FasScenariosMediator.class));
+        assertThat(scenariosWidget.initMediator(), instanceOf(NtsScenariosMediator.class));
     }
 
     @Test
@@ -181,48 +171,50 @@ public class FasScenariosWidgetTest {
         verify(grid);
     }
 
-    @Test
-    public void testViewAllActionsButtonClickListener() {
-        mockStatic(Windows.class);
-        var scenarioHistoryWidget = new ScenarioHistoryWidget();
-        scenarioHistoryWidget.setController(scenarioHistoryController);
-        scenarioHistoryWidget.init();
-        expect(scenarioHistoryController.initWidget()).andReturn(scenarioHistoryWidget).once();
-        expect(scenarioHistoryController.getActions(scenario.getId())).andReturn(List.of()).once();
-        expect(controller.getScenarios()).andReturn(List.of(scenario)).once();
-        expect(controller.getScenarioWithAmountsAndLastAction(scenario)).andReturn(scenario).once();
-        expect(controller.getCriteriaHtmlRepresentation()).andReturn(StringUtils.EMPTY).once();
-        Capture<ScenarioHistoryWidget> historyWidgetCapture = newCapture();
-        Windows.showModalWindow(capture(historyWidgetCapture));
-        expectLastCall().once();
-        replay(Windows.class, controller, scenarioHistoryController);
-        scenariosWidget.refresh();
-        var scroller = (Scroller) ((SplitLayout) scenariosWidget.getComponentAt(1)).getSecondaryComponent();
-        var section = (Section) scroller.getContent();
-        var lastActionLayout =
-            (VerticalLayout) ((VerticalLayout) section.getComponentAt(0)).getComponentAt(6);
-        var viewAllActionsButton = (Button) lastActionLayout.getComponentAt(2);
-        viewAllActionsButton.click();
-        assertNotNull(historyWidgetCapture.getValue());
-        assertSame(scenarioHistoryWidget, historyWidgetCapture.getValue());
-        assertEquals("History for FAS Distribution 04/07/2022 scenario",
-            historyWidgetCapture.getValue().getHeaderTitle());
-        verify(Windows.class, controller, scenarioHistoryController);
+    private Scenario buildScenario() {
+        var ntsScenario = new Scenario();
+        ntsScenario.setId(SCENARIO_ID);
+        ntsScenario.setName("Scenario nts 20");
+        ntsScenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);
+        ntsScenario.setNtsFields(buildNtsFields());
+        ntsScenario.setDescription("Description");
+        ntsScenario.setNetTotal(new BigDecimal("6800.00"));
+        ntsScenario.setServiceFeeTotal(new BigDecimal("3200.00"));
+        ntsScenario.setGrossTotal(new BigDecimal("10000.00"));
+        ntsScenario.setCreateUser("User@copyright.com");
+        ntsScenario.setCreateDate(
+            Date.from(LocalDate.of(2022, 9, 13).atStartOfDay(ZoneId.systemDefault()).toInstant()));
+        ntsScenario.setAuditItem(buildScenarioAuditItem());
+        return ntsScenario;
     }
 
-    @Test
-    public void testGridValues() {
-        Grid<?> grid = (Grid<?>) ((SplitLayout) scenariosWidget.getComponentAt(1)).getPrimaryComponent();
-        Object[][] expectedCells = {{"FAS Distribution 04/07/2022", "04/07/2022", "IN_PROGRESS"}};
-        verifyGridItems(grid, List.of(scenario), expectedCells);
+    private NtsFields buildNtsFields() {
+        var ntsFields = new NtsFields();
+        ntsFields.setRhMinimumAmount(new BigDecimal("300.00"));
+        ntsFields.setPreServiceFeeAmount(new BigDecimal("500.00"));
+        ntsFields.setPostServiceFeeAmount(new BigDecimal("800.00"));
+        ntsFields.setPreServiceFeeFundTotal(new BigDecimal("300.00"));
+        ntsFields.setPreServiceFeeFundId("40f97da2-79f6-4917-b683-1cfa0fccd669");
+        ntsFields.setPreServiceFeeFundName("test name");
+        return ntsFields;
     }
 
-    private void verifyScroller(Component component) {
-        assertThat(component, instanceOf(Scroller.class));
-        var scroller = (Scroller) component;
-        assertEquals("scenarios-metadata-panel-scroller", scroller.getClassName());
-        assertEquals(ScrollDirection.VERTICAL, scroller.getScrollDirection());
-        assertThat(scroller.getContent(), instanceOf(Section.class));
+    private ScenarioAuditItem buildScenarioAuditItem() {
+        var scenarioAuditItem = new ScenarioAuditItem();
+        scenarioAuditItem.setActionType(ScenarioActionTypeEnum.ADDED_USAGES);
+        scenarioAuditItem.setActionReason(StringUtils.EMPTY);
+        scenarioAuditItem.setCreateUser("user@copyright.com");
+        scenarioAuditItem.setCreateDate(
+            Date.from(LocalDate.of(2016, 12, 24).atStartOfDay(ZoneId.systemDefault()).toInstant()));
+        return scenarioAuditItem;
+    }
+
+    private void verifyButtonsLayout(HorizontalLayout layout) {
+        assertEquals("scenarios-buttons", layout.getId().orElseThrow());
+        assertEquals("scenarios-buttons", layout.getClassName());
+        assertEquals(7, layout.getComponentCount());
+        UiTestHelper.verifyButtonsLayout(layout, true, "View", "Edit Name", "Delete", "Submit for Approval", "Reject",
+            "Approve", "Send to LM");
     }
 
     private void verifyGrid(Grid grid) {
@@ -236,12 +228,12 @@ public class FasScenariosWidgetTest {
         ));
     }
 
-    private void verifyButtonsLayout(HorizontalLayout layout) {
-        assertEquals("scenarios-buttons", layout.getId().orElseThrow());
-        assertEquals("scenarios-buttons", layout.getClassName());
-        assertEquals(10, layout.getComponentCount());
-        UiTestHelper.verifyButtonsLayout(layout, true, "View", "Edit Name", "Delete", "Exclude Payees",
-            "Reconcile Rightsholders", "Submit for Approval", "Reject", "Approve", "Send to LM", "Refresh Scenario");
+    private void verifyScroller(Component component) {
+        assertThat(component, instanceOf(Scroller.class));
+        var scroller = (Scroller) component;
+        assertEquals("scenarios-metadata-panel-scroller", scroller.getClassName());
+        assertEquals(ScrollDirection.VERTICAL, scroller.getScrollDirection());
+        assertThat(scroller.getContent(), instanceOf(Section.class));
     }
 
     private void verifyScenarioMetadataPanel() {
@@ -255,7 +247,7 @@ public class FasScenariosWidgetTest {
         var layout = (VerticalLayout) content;
         assertFalse(layout.isMargin());
         assertTrue(layout.isSpacing());
-        assertEquals(7, layout.getComponentCount());
+        assertEquals(11, layout.getComponentCount());
         verifyDiv(layout.getComponentAt(0), "<b>Owner: </b>User@copyright.com");
         verifyDiv(layout.getComponentAt(1),
             "<b>Gross Amt in USD: </b><span class='label-amount'>10,000.00</span>");
@@ -263,9 +255,18 @@ public class FasScenariosWidgetTest {
             "<b>Service Fee Amt in USD: </b><span class='label-amount'>3,200.00</span>");
         verifyDiv(layout.getComponentAt(3),
             "<b>Net Amt in USD: </b><span class='label-amount'>6,800.00</span>");
-        verifyDiv(layout.getComponentAt(4), "<b>Description: </b>Description");
-        verifyDiv(layout.getComponentAt(5), SELECTION_CRITERIA);
-        verifyMetadataActionLayout(layout.getComponentAt(6));
+        verifyDiv(layout.getComponentAt(4),
+            "<b>RH Minimum Amt in USD: </b><span class='label-amount'>300.00</span>");
+        verifyDiv(layout.getComponentAt(5),
+            "<b>Pre-Service Fee Amount: </b><span class='label-amount'>500.00</span>");
+        verifyDiv(layout.getComponentAt(6),
+            "<b>Post-Service Fee Amount: </b><span class='label-amount'>800.00</span>");
+        verifyDiv(layout.getComponentAt(7),
+            "<b>Pre-Service Fee Fund: </b>test name (<span class='label-amount'>300.00</span>)");
+        verifyDiv(layout.getComponentAt(8), "<b>Description: </b>Description");
+        verifyDiv(layout.getComponentAt(9), SELECTION_CRITERIA);
+        assertThat(layout.getComponentAt(10), instanceOf(VerticalLayout.class));
+        verifyMetadataActionLayout(layout.getComponentAt(10));
     }
 
     private void verifyMetadataActionLayout(Component lastActionComponent) {
@@ -282,32 +283,6 @@ public class FasScenariosWidgetTest {
         var viewAllActionsButton = lastActionLayout.getComponentAt(2);
         assertThat(viewAllActionsButton, instanceOf(Button.class));
         assertEquals("View All Actions", ((Button) viewAllActionsButton).getText());
-    }
-
-    private Scenario buildScenario() {
-        var fasScenario = new Scenario();
-        fasScenario.setId(SCENARIO_ID);
-        fasScenario.setName("FAS Distribution 04/07/2022");
-        fasScenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);
-        fasScenario.setDescription("Description");
-        fasScenario.setNetTotal(new BigDecimal("6800.00"));
-        fasScenario.setServiceFeeTotal(new BigDecimal("3200.00"));
-        fasScenario.setGrossTotal(new BigDecimal("10000.00"));
-        fasScenario.setCreateUser("User@copyright.com");
-        fasScenario.setCreateDate(
-            Date.from(LocalDate.of(2022, 4, 7).atStartOfDay(ZoneId.systemDefault()).toInstant()));
-        fasScenario.setAuditItem(buildScenarioAuditItem());
-        return fasScenario;
-    }
-
-    private ScenarioAuditItem buildScenarioAuditItem() {
-        var scenarioAuditItem = new ScenarioAuditItem();
-        scenarioAuditItem.setActionType(ScenarioActionTypeEnum.ADDED_USAGES);
-        scenarioAuditItem.setActionReason(StringUtils.EMPTY);
-        scenarioAuditItem.setCreateUser("user@copyright.com");
-        scenarioAuditItem.setCreateDate(
-            Date.from(LocalDate.of(2016, 12, 24).atStartOfDay(ZoneId.systemDefault()).toInstant()));
-        return scenarioAuditItem;
     }
 
     private void verifyDiv(Component component, String expectedValue) {
