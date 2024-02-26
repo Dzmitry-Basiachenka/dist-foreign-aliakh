@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.vui.usage.impl;
 
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.vui.common.utils.GridColumnEnum;
 import com.copyright.rup.dist.foreign.vui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.vui.usage.api.ICommonUsageController;
 import com.copyright.rup.dist.foreign.vui.usage.api.ICommonUsageFilterWidget;
@@ -102,19 +103,16 @@ public abstract class CommonUsageWidget extends SplitLayout implements ICommonUs
     /**
      * Adds column to the grid.
      *
-     * @param provider        value provider
-     * @param captionProperty property of the column's caption
-     * @param sort            sort property
-     * @param width           width of the column
+     * @param provider   value provider
+     * @param gridColumn grid column
      * @return the column for method chaining
      */
-    protected Column<UsageDto> addColumn(ValueProvider<UsageDto, ?> provider, String captionProperty, String sort,
-                                         String width) {
+    protected Column<UsageDto> addColumn(ValueProvider<UsageDto, ?> provider, GridColumnEnum gridColumn) {
         return usagesGrid.addColumn(provider)
-            .setHeader(ForeignUi.getMessage(captionProperty))
-            .setSortProperty(sort)
+            .setHeader(ForeignUi.getMessage(gridColumn.getCaption()))
+            .setSortProperty(gridColumn.getSort())
             .setFlexGrow(0)
-            .setWidth(width)
+            .setWidth(gridColumn.getWidth())
             .setSortable(true)
             .setResizable(true);
     }
@@ -122,15 +120,12 @@ public abstract class CommonUsageWidget extends SplitLayout implements ICommonUs
     /**
      * Adds amount column to the grid.
      *
-     * @param function        function to get value
-     * @param captionProperty property of the column's caption
-     * @param sort            sort property
-     * @param width           width of the column
+     * @param function   function to get value
+     * @param gridColumn grid column
      * @return the column for method chaining
      */
-    protected Column<UsageDto> addAmountColumn(Function<UsageDto, BigDecimal> function, String captionProperty,
-                                               String sort, String width) {
-        return addColumn(usageDto -> CurrencyUtils.format(function.apply(usageDto), null), captionProperty, sort, width)
+    protected Column<UsageDto> addAmountColumn(Function<UsageDto, BigDecimal> function, GridColumnEnum gridColumn) {
+        return addColumn(usageDto -> CurrencyUtils.format(function.apply(usageDto), null), gridColumn)
             .setClassNameGenerator(item -> "label-amount");
     }
 
@@ -154,7 +149,7 @@ public abstract class CommonUsageWidget extends SplitLayout implements ICommonUs
      * @param grid grid to set initialized data provider
      */
     protected void initDataProvider(Grid<UsageDto> grid) {
-        grid.setDataProvider(
+        grid.setItems(
             DataProvider.fromCallbacks(
                 query -> controller.loadBeans(query.getOffset(), query.getLimit(), query.getSortOrders()).stream(),
                 query -> {

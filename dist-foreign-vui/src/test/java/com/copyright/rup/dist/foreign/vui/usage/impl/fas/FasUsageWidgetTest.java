@@ -90,6 +90,7 @@ public class FasUsageWidgetTest {
     private static final String FAS_SCENARIO_NAME_PREFIX = "FAS Distribution ";
     private static final int RECORD_THRESHOLD = 10000;
     private static final String WIDTH_300 = "300px";
+    private static final String WIDTH_200 = "200px";
 
     private FasUsageWidget widget;
     private IFasUsageController controller;
@@ -133,7 +134,7 @@ public class FasUsageWidgetTest {
             Pair.of("Detail ID", WIDTH_300),
             Pair.of("Detail Status", "180px"),
             Pair.of("Product Family", "160px"),
-            Pair.of("Usage Batch Name", "200px"),
+            Pair.of("Usage Batch Name", WIDTH_200),
             Pair.of("RRO Account #", "160px"),
             Pair.of("RRO Name", WIDTH_300),
             Pair.of("RH Account #", "150px"),
@@ -154,10 +155,10 @@ public class FasUsageWidgetTest {
             Pair.of("Gross Amt in USD", "170px"),
             Pair.of("Batch Amt in USD", "170px"),
             Pair.of("Market", "120px"),
-            Pair.of("Market Period From", "200px"),
+            Pair.of("Market Period From", WIDTH_200),
             Pair.of("Market Period To", "185px"),
-            Pair.of("Author", WIDTH_300),
-            Pair.of("Comment", "200px")
+            Pair.of("Author", WIDTH_200),
+            Pair.of("Comment", WIDTH_200)
         ));
     }
 
