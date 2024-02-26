@@ -17,9 +17,29 @@ public enum GridColumnEnum {
      */
     BATCH_NAME("table.column.batch_name", "batchName", WidthConstants.WIDTH_200),
     /**
+     * CCC event id column.
+     */
+    CCC_EVENT_ID("table.column.event_id", "cccEventId", "100px"),
+    /**
      * Comment column.
      */
     COMMENT("table.column.comment", "comment", WidthConstants.WIDTH_200),
+    /**
+     * Check date column.
+     */
+    CHECK_DATE("table.column.check_date", "checkDate", "125px"),
+    /**
+     * Check number column.
+     */
+    CHECK_NUMBER("table.column.check_number", "checkNumber", "100px"),
+    /**
+     * Distribution date column.
+     */
+    DISTRIBUTION_DATE("table.column.distribution_date", "distributionDate", "110px"),
+    /**
+     * Distribution name column.
+     */
+    DISTRIBUTION_NAME("table.column.distribution_name", "distributionName", "115px"),
     /**
      * Id column.
      */
@@ -28,6 +48,18 @@ public enum GridColumnEnum {
      * Number of copied column.
      */
     NUMBER_OF_COPIES("table.column.number_of_copies", "numberOfCopies", "185px"),
+    /**
+     * Payee account # column.
+     */
+    PAYEE_ACCOUNT_NUMBER("table.column.payee_account_number", "payeeAccountNumber", "165px"),
+    /**
+     * Payee account # column.
+     */
+    PAYEE_NAME("table.column.payee_name", "payeeName", WidthConstants.WIDTH_300),
+    /**
+     * Period end date column.
+     */
+    PERIOD_END_DATE("table.column.period_ending", "periodEndDate", "150px"),
     /**
      * Product family column.
      */
@@ -56,6 +88,14 @@ public enum GridColumnEnum {
      * RRO name column.
      */
     RRO_NAME("table.column.rro_account_name", "rroName", WidthConstants.WIDTH_300),
+    /**
+     * Scenario name column.
+     */
+    SCENARIO_NAME("table.column.scenario_name", "scenarioName", "155px"),
+    /**
+     * Service fee column.
+     */
+    SERVICE_FEE("table.column.service_fee", "serviceFee", "145px"),
     /**
      * Standard number column.
      */

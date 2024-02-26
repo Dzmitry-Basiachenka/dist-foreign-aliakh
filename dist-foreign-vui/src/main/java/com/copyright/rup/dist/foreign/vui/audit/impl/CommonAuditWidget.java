@@ -4,6 +4,7 @@ import com.copyright.rup.dist.common.reporting.impl.CsvStreamSource;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.vui.audit.api.ICommonAuditController;
 import com.copyright.rup.dist.foreign.vui.audit.api.ICommonAuditWidget;
+import com.copyright.rup.dist.foreign.vui.common.utils.GridColumnEnum;
 import com.copyright.rup.dist.foreign.vui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.Buttons;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.HideGridColumnsProvider;
@@ -96,19 +97,16 @@ public abstract class CommonAuditWidget extends SplitLayout implements ICommonAu
     /**
      * Adds a column to the audit grid.
      *
-     * @param provider        the column value provider
-     * @param captionProperty the column caption property
-     * @param sort            the column sort
-     * @param width           the column width
+     * @param provider   the column value provider
+     * @param gridColumn the column grid column
      * @return the column for method chaining
      */
-    protected Column<UsageDto> addColumn(ValueProvider<UsageDto, ?> provider, String captionProperty, String sort,
-                                         String width) {
+    protected Column<UsageDto> addColumn(ValueProvider<UsageDto, ?> provider, GridColumnEnum gridColumn) {
         return auditGrid.addColumn(provider)
-            .setHeader(ForeignUi.getMessage(captionProperty))
+            .setHeader(ForeignUi.getMessage(gridColumn.getCaption()))
             .setSortable(true)
-            .setSortProperty(sort)
-            .setWidth(width)
+            .setSortProperty(gridColumn.getSort())
+            .setWidth(gridColumn.getWidth())
             .setFlexGrow(0)
             .setResizable(true);
     }
@@ -116,15 +114,12 @@ public abstract class CommonAuditWidget extends SplitLayout implements ICommonAu
     /**
      * Adds an amount column to the audit grid.
      *
-     * @param function        the column amount function
-     * @param captionProperty the column caption property
-     * @param sort            the column sort
-     * @param width           the column width
+     * @param function   the column amount function
+     * @param gridColumn the column grid column
      * @return the column for method chaining
      */
-    protected Column<UsageDto> addAmountColumn(Function<UsageDto, BigDecimal> function, String captionProperty,
-                                               String sort, String width) {
-        return addColumn(usageDto -> CurrencyUtils.format(function.apply(usageDto), null), captionProperty, sort, width)
+    protected Column<UsageDto> addAmountColumn(Function<UsageDto, BigDecimal> function, GridColumnEnum gridColumn) {
+        return addColumn(usageDto -> CurrencyUtils.format(function.apply(usageDto), null), gridColumn)
             .setClassNameGenerator(item -> "v-align-right");
     }
 
@@ -134,7 +129,7 @@ public abstract class CommonAuditWidget extends SplitLayout implements ICommonAu
      * @return the column for method chaining
      */
     protected Column<UsageDto> addServiceFeeColumn() {
-        return addColumn(this::calculateServiceFee, "table.column.service_fee", "serviceFee", "145px");
+        return addColumn(this::calculateServiceFee, GridColumnEnum.SERVICE_FEE);
     }
 
     /**
