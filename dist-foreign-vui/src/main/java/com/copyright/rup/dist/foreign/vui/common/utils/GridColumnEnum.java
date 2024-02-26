@@ -33,6 +33,14 @@ public enum GridColumnEnum {
      */
     CHECK_NUMBER("table.column.check_number", "checkNumber", "100px"),
     /**
+     * Created by user column.
+     */
+    CREATED_USER("table.column.created_by", "createdUser", "330px"),
+    /**
+     * Created date column.
+     */
+    CREATED_DATE("table.column.created_date", "createdDate", "150px"),
+    /**
      * Distribution date column.
      */
     DISTRIBUTION_DATE("table.column.distribution_date", "distributionDate", "110px"),
@@ -183,6 +191,10 @@ public enum GridColumnEnum {
      */
     FISCAL_YEAR("table.column.fiscal_year", "fiscalYear", "130px"),
     /**
+     * Fund Pool name column.
+     */
+    FUND_POOL_NAME("table.column.fund_pool_name", "fundPoolName", WidthConstants.WIDTH_200),
+    /**
      * Gross amount column.
      */
     GROSS_AMOUNT("table.column.gross_amount_in_usd", "grossAmount", "170px"),
@@ -199,6 +211,18 @@ public enum GridColumnEnum {
      */
     MARKET_PERIOD_TO("table.column.market_period_to", "marketPeriodTo", "185px"),
     /**
+     * Markets column.
+     */
+    MARKETS("table.column.markets", "markets", "140px"),
+    /**
+     * Non STM amount column.
+     */
+    NON_STM_AMOUNT("table.column.non_stm_amount", "nonStmAmount", "165px"),
+    /**
+     * Non STM amount minimum column.
+     */
+    NON_STM_MIN_AMOUNT("table.column.non_stm_minimum_amount", "nonStmMinimumAmount", "235px"),
+    /**
      * Payment date column.
      */
     PAYMENT_DATE("table.column.payment_date", "paymentDate", "145px"),
@@ -213,7 +237,15 @@ public enum GridColumnEnum {
     /**
      * Reported value column.
      */
-    REPORTED_VALUE("table.column.reported_value", "reportedValue", "170px");
+    REPORTED_VALUE("table.column.reported_value", "reportedValue", "170px"),
+    /**
+     * STM amount column.
+     */
+    STM_AMOUNT("table.column.stm_amount", "stmAmount", "130px"),
+    /**
+     * STM minimum amount column.
+     */
+    STM_MIN_AMOUNT("table.column.stm_minimum_amount", "stmMinimumAmount", WidthConstants.WIDTH_200);
 
     private final String caption;
     private final String sort;

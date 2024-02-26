@@ -97,9 +97,9 @@ public class ViewUsageBatchWindowTest {
             Pair.of("Usage Batch Name", "200px"),
             Pair.of("RRO Account #", "160px"),
             Pair.of("RRO Name", "300px"),
-            Pair.of("Payment Date", "150px"),
-            Pair.of("Fiscal Year", "140px"),
-            Pair.of("Batch Amt in USD", "180px"),
+            Pair.of("Payment Date", "145px"),
+            Pair.of("Fiscal Year", "130px"),
+            Pair.of("Batch Amt in USD", "170px"),
             Pair.of("Created By", "330px"),
             Pair.of("Created Date", "150px")
         ));
