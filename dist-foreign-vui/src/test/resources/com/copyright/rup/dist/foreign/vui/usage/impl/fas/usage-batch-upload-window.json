@@ -1,0 +1,175 @@
+{
+  "javaClass" : "com.copyright.rup.dist.foreign.vui.usage.impl.fas.UsageBatchUploadWindow",
+  "id" : "usage-upload-window",
+  "class" : "[usage-upload-window]",
+  "headerTitle" : "Upload Usage Batch",
+  "isModal" : true,
+  "isDraggable" : true,
+  "isResizable" : false,
+  "isCloseOnEsc" : false,
+  "isCloseOnOutsideClick" : false,
+  "isOpened" : false,
+  "width" : "500px",
+  "minHeight" : "200px",
+  "height" : "570px",
+  "children" : [ {
+    "javaClass" : "com.vaadin.flow.component.orderedlayout.VerticalLayout",
+    "style" : "width:100%;padding:10.0px 10.0px 0.0px 10.0px",
+    "width" : "100%",
+    "children" : [ {
+      "javaClass" : "com.vaadin.flow.component.textfield.TextField",
+      "id" : "usage-batch-name-field",
+      "class" : "[usage-batch-name-field]",
+      "style" : "width:100%",
+      "label" : "Usage Batch Name",
+      "width" : "100%",
+      "value" : "",
+      "requiredIndicatorVisible" : true,
+      "valid" : true
+    }, {
+      "javaClass" : "com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.upload.UploadField",
+      "id" : "usage-upload-component",
+      "class" : "[usage-upload-component]",
+      "style" : "width:100%",
+      "label" : "File to Upload",
+      "width" : "100%",
+      "requiredIndicatorVisible" : true,
+      "valid" : true,
+      "children" : [ {
+        "javaClass" : "com.vaadin.flow.component.upload.Upload",
+        "property_maxFiles" : "1",
+        "property_accept" : "text/csv,.csv"
+      } ]
+    }, {
+      "javaClass" : "com.vaadin.flow.component.orderedlayout.VerticalLayout",
+      "style" : "width:100%",
+      "width" : "100%",
+      "children" : [ {
+        "javaClass" : "com.vaadin.flow.component.orderedlayout.HorizontalLayout",
+        "style" : "width:100%;align-items:baseline",
+        "theme" : "spacing",
+        "width" : "100%",
+        "children" : [ {
+          "javaClass" : "com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.LongField",
+          "id" : "rro-account-number-field",
+          "class" : "[rro-account-number-field]",
+          "style" : "width:50%",
+          "label" : "RRO Account #",
+          "width" : "50%",
+          "requiredIndicatorVisible" : true,
+          "valid" : true
+        }, {
+          "javaClass" : "com.vaadin.flow.component.textfield.TextField",
+          "id" : "product-family-field",
+          "class" : "[product-family-field]",
+          "style" : "width:130px",
+          "label" : "Product Family",
+          "width" : "130px",
+          "value" : "",
+          "readonly" : true,
+          "requiredIndicatorVisible" : false,
+          "valid" : true
+        }, {
+          "javaClass" : "com.vaadin.flow.component.button.Button",
+          "id" : "Verify",
+          "class" : "[Verify]",
+          "style" : "width:72px",
+          "text" : "Verify",
+          "width" : "72px",
+          "disableOnClick" : true
+        } ]
+      }, {
+        "javaClass" : "com.vaadin.flow.component.textfield.TextField",
+        "id" : "rro-account-name-field",
+        "class" : "[rro-account-name-field]",
+        "style" : "width:100%",
+        "label" : "RRO Account Name",
+        "width" : "100%",
+        "value" : "",
+        "readonly" : true,
+        "requiredIndicatorVisible" : true,
+        "valid" : true
+      } ]
+    }, {
+      "javaClass" : "com.vaadin.flow.component.orderedlayout.HorizontalLayout",
+      "style" : "width:100%;align-items:baseline",
+      "theme" : "spacing",
+      "width" : "100%",
+      "children" : [ {
+        "javaClass" : "com.copyright.rup.dist.foreign.vui.vaadin.common.widget.LocalDateWidget",
+        "id" : "payment-date-field",
+        "class" : "[payment-date-field]",
+        "style" : "width:100%",
+        "label" : "Payment Date",
+        "width" : "100%",
+        "requiredIndicatorVisible" : true,
+        "valid" : true,
+        "children" : [ {
+          "javaClass" : "com.copyright.rup.dist.foreign.vui.vaadin.common.widget.DateWidget",
+          "class" : "[popup-date-widget-layout]",
+          "style" : "width:100%",
+          "width" : "100%",
+          "children" : [ {
+            "javaClass" : "com.vaadin.flow.component.datepicker.DatePicker",
+            "style" : "width:100%",
+            "label" : "Payment Date",
+            "width" : "100%",
+            "requiredIndicatorVisible" : false,
+            "valid" : true,
+            "property_placeholder" : "mm/dd/yyyy",
+            "property_clearButtonVisible" : "true"
+          } ]
+        } ]
+      }, {
+        "javaClass" : "com.vaadin.flow.component.textfield.TextField",
+        "id" : "fiscal-year-field",
+        "class" : "[fiscal-year-field]",
+        "style" : "width:100%",
+        "label" : "Fiscal Year",
+        "width" : "100%",
+        "value" : "",
+        "readonly" : true,
+        "requiredIndicatorVisible" : false,
+        "valid" : true
+      } ]
+    }, {
+      "javaClass" : "com.vaadin.flow.component.orderedlayout.HorizontalLayout",
+      "style" : "width:50%",
+      "theme" : "spacing",
+      "width" : "50%",
+      "children" : [ {
+        "javaClass" : "com.vaadin.flow.component.textfield.BigDecimalField",
+        "id" : "gross-amount-field",
+        "class" : "[gross-amount-field]",
+        "style" : "width:100%",
+        "label" : "Gross Amount in USD",
+        "width" : "100%",
+        "requiredIndicatorVisible" : true,
+        "valid" : true,
+        "property__decimalSeparator" : ".",
+        "children" : [ {
+          "javaClass" : "com.vaadin.flow.component.icon.Icon",
+          "icon" : "vaadin:dollar",
+          "slot" : "prefix"
+        } ]
+      } ]
+    } ]
+  } ],
+  "footer" : {
+    "javaClass" : "com.vaadin.flow.component.orderedlayout.HorizontalLayout",
+    "theme" : "spacing",
+    "children" : [ {
+      "javaClass" : "com.vaadin.flow.component.button.Button",
+      "id" : "Upload",
+      "class" : "[Upload]",
+      "text" : "Upload",
+      "disableOnClick" : true
+    }, {
+      "javaClass" : "com.vaadin.flow.component.button.Button",
+      "id" : "Close",
+      "class" : "[Close]",
+      "text" : "Close",
+      "disableOnClick" : true
+    } ]
+  }
+}

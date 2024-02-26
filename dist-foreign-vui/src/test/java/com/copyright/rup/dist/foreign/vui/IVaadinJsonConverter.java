@@ -20,6 +20,8 @@ import com.vaadin.flow.component.HasValue;
 import com.vaadin.flow.component.HasValueAndElement;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
+import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.Grid.Column;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.dom.Element;
 
@@ -41,7 +43,9 @@ import java.util.stream.Collectors;
  */
 public interface IVaadinJsonConverter {
 
+    String ICON = "icon";
     Set<String> IGNORED_PROPERTY_NAMES = Set.of(
+        "_flowId",
         "draggable",
         "errorMessage",
         "headerTitle",
@@ -53,15 +57,21 @@ public interface IVaadinJsonConverter {
         "noCloseOnOutsideClick",
         "opened",
         "openOn",
+        "pageSize",
+        "path",
+        "readonly",
         "required",
         "resizable",
         "stackTrace",
-        "value"
+        "value",
+        "width"
     );
     Set<String> IGNORED_ATTRIBUTE_NAMES = Set.of(
         "class",
         "disableonclick",
+        ICON,
         "id",
+        "slot",
         "style",
         "theme"
     );
@@ -95,7 +105,10 @@ public interface IVaadinJsonConverter {
         putStyle(component, tree);
         putDialog(component, tree);
         putInterfaces(component, tree);
-        putClasses(component, tree);
+        putButton(component, tree);
+        putIcon(component, tree);
+        putGrid(component, tree);
+        putGridColumn(component, tree);
         putProperties(component, tree);
         putAttributes(component, tree);
         putChildren(component, tree);
@@ -179,14 +192,47 @@ public interface IVaadinJsonConverter {
         }
     }
 
-    private static void putClasses(Component component, Map<String, Object> tree) {
+    private static void putButton(Component component, Map<String, Object> tree) {
         if (component instanceof Button) {
             var button = (Button) component;
             tree.put("disableOnClick", button.isDisableOnClick());
             var icon = (Icon) button.getIcon();
             if (Objects.nonNull(icon)) {
-                put(tree, "icon", icon.getElement().getAttribute("icon"));
+                put(tree, ICON, toMap(icon, new LinkedHashMap<>()));
             }
+        }
+    }
+
+    private static void putIcon(Component component, Map<String, Object> tree) {
+        if (component instanceof Icon) {
+            var icon = (Icon) component;
+            var element = icon.getElement();
+            put(tree, ICON, element.getAttribute(ICON));
+            put(tree, "slot", element.getAttribute("slot"));
+        }
+    }
+
+    private static void putGrid(Component component, Map<String, Object> tree) {
+        if (component instanceof Grid) {
+            var grid = (Grid<?>) component;
+            put(tree, "pageSize", grid.getPageSize());
+        }
+    }
+
+    private static void putGridColumn(Component component, Map<String, Object> tree) {
+        if (component instanceof Column) {
+            var column = (Column<?>) component;
+            if (column.getId().isPresent()) {
+                put(tree, "id", column.getId());
+            }
+            put(tree, "key", column.getKey());
+            put(tree, "headerText", column.getHeaderText());
+            put(tree, "textAlign", column.getTextAlign());
+            put(tree, "flexGrow", column.getFlexGrow());
+            put(tree, "width", column.getWidth());
+            put(tree, "autoWidth", column.isAutoWidth());
+            put(tree, "sortable", column.isSortable());
+            put(tree, "resizable", column.isResizable());
         }
     }
 
