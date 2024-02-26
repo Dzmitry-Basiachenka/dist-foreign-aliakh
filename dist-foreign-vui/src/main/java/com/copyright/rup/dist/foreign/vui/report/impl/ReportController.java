@@ -1,23 +1,25 @@
 package com.copyright.rup.dist.foreign.vui.report.impl;
 
-import com.copyright.rup.dist.common.reporting.api.IStreamSource;
-import com.copyright.rup.dist.foreign.service.api.IReportService;
-import com.copyright.rup.dist.foreign.vui.common.ByteArrayStreamSource;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.vui.main.api.IProductFamilyProvider;
-import com.copyright.rup.dist.foreign.vui.report.api.ICommonScenarioReportController;
-import com.copyright.rup.dist.foreign.vui.report.api.IFasServiceFeeTrueUpReportController;
 import com.copyright.rup.dist.foreign.vui.report.api.IReportController;
+import com.copyright.rup.dist.foreign.vui.report.api.IReportMenuBuilder;
 import com.copyright.rup.dist.foreign.vui.report.api.IReportWidget;
-import com.copyright.rup.dist.foreign.vui.report.api.ISummaryMarketReportController;
-import com.copyright.rup.dist.foreign.vui.report.api.ITaxNotificationReportController;
-import com.copyright.rup.dist.foreign.vui.report.api.IUndistributedLiabilitiesReportController;
+import com.copyright.rup.dist.foreign.vui.report.impl.report.ReportControllerProvider;
+import com.copyright.rup.dist.foreign.vui.report.impl.report.builder.FasReportMenuBuilder;
+import com.copyright.rup.dist.foreign.vui.report.impl.report.builder.NtsReportMenuBuilder;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.api.CommonController;
 
+import com.vaadin.flow.component.contextmenu.MenuItem;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * Implementation of {@link IReportController}.
@@ -28,27 +30,28 @@ import org.springframework.stereotype.Component;
  *
  * @author Nikita Levyankov
  */
-@Component
+@Component("df.reportController")
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class ReportController extends CommonController<IReportWidget> implements IReportController {
 
     private static final long serialVersionUID = -395767068632612665L;
 
+    private final Map<String, IReportMenuBuilder> reportMenuBuilderMap;
+
     @Autowired
-    @Qualifier("df.ownershipAdjustmentReportController")
-    private ICommonScenarioReportController ownershipAdjustmentReportController;
-    @Autowired
-    private IUndistributedLiabilitiesReportController undistributedLiabilitiesReportController;
-    @Autowired
-    private ISummaryMarketReportController summaryMarketReportController;
-    @Autowired
-    private ITaxNotificationReportController taxNotificationReportController;
-    @Autowired
-    private IFasServiceFeeTrueUpReportController fasServiceFeeTrueUpReportController;
+    private ReportControllerProvider reportControllerProvider;
     @Autowired
     private IProductFamilyProvider productFamilyProvider;
-    @Autowired
-    private IReportService reportService;
+
+    /**
+     * Controller.
+     */
+    public ReportController() {
+        reportMenuBuilderMap = new HashMap<>();
+        reportMenuBuilderMap.put(FdaConstants.FAS_PRODUCT_FAMILY, new FasReportMenuBuilder());
+        reportMenuBuilderMap.put(FdaConstants.CLA_FAS_PRODUCT_FAMILY, new FasReportMenuBuilder());
+        reportMenuBuilderMap.put(FdaConstants.NTS_PRODUCT_FAMILY, new NtsReportMenuBuilder());
+    }
 
     @Override
     public void onProductFamilyChanged() {
@@ -61,52 +64,15 @@ public class ReportController extends CommonController<IReportWidget> implements
     }
 
     @Override
-    public IUndistributedLiabilitiesReportController getUndistributedLiabilitiesReportController() {
-        return undistributedLiabilitiesReportController;
+    @SuppressWarnings("unchecked")
+    public void addItems(String productFamily, MenuItem rootItem) {
+        reportMenuBuilderMap.get(productFamily)
+            .addItems(reportControllerProvider.getController(productFamily), getWidget(), rootItem);
     }
 
     @Override
-    public IStreamSource getFasBatchSummaryReportStreamSource() {
-        return new ByteArrayStreamSource("fas_batch_summary_report_",
-            outputStream -> reportService.writeFasBatchSummaryCsvReport(outputStream));
-    }
-
-    @Override
-    public ISummaryMarketReportController getSummaryMarketReportController() {
-        return summaryMarketReportController;
-    }
-
-    @Override
-    public IStreamSource getResearchStatusReportStreamSource() {
-        return new ByteArrayStreamSource("research_status_report_",
-            outputStream -> reportService.writeResearchStatusCsvReport(outputStream));
-    }
-
-    @Override
-    public IFasServiceFeeTrueUpReportController getFasServiceFeeTrueUpReportController() {
-        return fasServiceFeeTrueUpReportController;
-    }
-
-    @Override
-    public ICommonScenarioReportController getOwnershipAdjustmentReportController() {
-        return ownershipAdjustmentReportController;
-    }
-
-    @Override
-    public ITaxNotificationReportController getTaxNotificationReportController() {
-        return taxNotificationReportController;
-    }
-
-    @Override
-    public IStreamSource getNtsWithdrawnBatchSummaryReportStreamSource() {
-        return new ByteArrayStreamSource("nts_withdrawn_batch_summary_report_",
-            outputStream -> reportService.writeNtsWithdrawnBatchSummaryCsvReport(outputStream));
-    }
-
-    @Override
-    public IStreamSource getNtsUndistributedLiabilitiesReportStreamSource() {
-        return new ByteArrayStreamSource("undistributed_liabilities_",
-            outputStream -> reportService.writeNtsUndistributedLiabilitiesReport(outputStream));
+    public boolean isReportVisible(String productFamily) {
+        return Objects.nonNull(reportMenuBuilderMap.get(productFamily));
     }
 
     @Override

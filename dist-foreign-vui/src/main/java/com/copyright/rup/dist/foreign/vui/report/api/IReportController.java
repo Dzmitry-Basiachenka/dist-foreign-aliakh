@@ -1,8 +1,9 @@
 package com.copyright.rup.dist.foreign.vui.report.api;
 
-import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.vui.main.api.IProductFamilyProvider;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.api.IController;
+
+import com.vaadin.flow.component.contextmenu.MenuItem;
 
 /**
  * Controller for report menu.
@@ -26,47 +27,18 @@ public interface IReportController extends IController<IReportWidget> {
     IProductFamilyProvider getProductFamilyProvider();
 
     /**
-     * @return undistributed liabilities report controller.
+     * Adds menu items to a root menu item.
+     *
+     * @param productFamily product family
+     * @param rootItem      root item
      */
-    IUndistributedLiabilitiesReportController getUndistributedLiabilitiesReportController();
+    void addItems(String productFamily, MenuItem rootItem);
 
     /**
-     * @return instance of {@link IStreamSource} for FAS/FAS2 Batch Summary Report.
+     * Returns visible flag for provided product family.
+     *
+     * @param productFamily product family
+     * @return <code>true</code> if visible, otherwise <code>flase</code>
      */
-    IStreamSource getFasBatchSummaryReportStreamSource();
-
-    /**
-     * @return summary market report controller.
-     */
-    ISummaryMarketReportController getSummaryMarketReportController();
-
-    /**
-     * @return instance of {@link IStreamSource} for research status report.
-     */
-    IStreamSource getResearchStatusReportStreamSource();
-
-    /**
-     * @return service fee true-up report controller for FAS/FAS2.
-     */
-    IFasServiceFeeTrueUpReportController getFasServiceFeeTrueUpReportController();
-
-    /**
-     * @return ownership adjustment report controller.
-     */
-    ICommonScenarioReportController getOwnershipAdjustmentReportController();
-
-    /**
-     * @return tax notification report controller.
-     */
-    ITaxNotificationReportController getTaxNotificationReportController();
-
-    /**
-     * @return instance of {@link IStreamSource} for NTS withdrawn Batch Summary Report.
-     */
-    IStreamSource getNtsWithdrawnBatchSummaryReportStreamSource();
-
-    /**
-     * @return instance of {@link IStreamSource} for NTS Undistributed Liabilities Report.
-     */
-    IStreamSource getNtsUndistributedLiabilitiesReportStreamSource();
+    boolean isReportVisible(String productFamily);
 }

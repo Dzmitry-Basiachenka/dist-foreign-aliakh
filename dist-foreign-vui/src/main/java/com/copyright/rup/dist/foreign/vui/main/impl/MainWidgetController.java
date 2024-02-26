@@ -51,6 +51,7 @@ public class MainWidgetController extends TabController<IMainWidget> implements 
     @Qualifier("dist.foreign.batchStatusControllerProvider")
     private IControllerProvider<ICommonBatchStatusController> batchStatusControllerProvider;
     @Autowired
+    @Qualifier("df.reportController")
     private IReportController reportController;
 
     @Override

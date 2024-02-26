@@ -1,9 +1,9 @@
-package com.copyright.rup.dist.foreign.vui.report.impl.report;
+package com.copyright.rup.dist.foreign.vui.report.impl.report.builder;
 
 import com.copyright.rup.dist.foreign.vui.main.ForeignUi;
-import com.copyright.rup.dist.foreign.vui.report.api.IReportController;
 import com.copyright.rup.dist.foreign.vui.report.api.IReportMenuBuilder;
 import com.copyright.rup.dist.foreign.vui.report.api.IReportWidget;
+import com.copyright.rup.dist.foreign.vui.report.api.fas.IFasReportController;
 
 import com.vaadin.flow.component.contextmenu.MenuItem;
 
@@ -16,10 +16,10 @@ import com.vaadin.flow.component.contextmenu.MenuItem;
  *
  * @author Aliaksanr Liakh
  */
-public class FasReportMenuBuilder implements IReportMenuBuilder {
+public class FasReportMenuBuilder implements IReportMenuBuilder<IFasReportController> {
 
     @Override
-    public void addItems(IReportController controller, IReportWidget widget, MenuItem rootItem) {
+    public void addItems(IFasReportController controller, IReportWidget widget, MenuItem rootItem) {
         var subMenu = rootItem.getSubMenu();
         var undistributedLiabilitiesReport = ForeignUi.getMessage("menu.report.undistributed_liabilities");
         var summaryMarketReport = ForeignUi.getMessage("menu.report.market_summary");
