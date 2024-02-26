@@ -4,6 +4,7 @@ import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.vui.common.utils.GridColumnEnum;
 import com.copyright.rup.dist.foreign.vui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.vui.usage.api.aacl.IAaclUsageController;
 import com.copyright.rup.dist.foreign.vui.usage.api.aacl.IAaclUsageWidget;
@@ -39,7 +40,6 @@ public class AaclUsageWidget extends CommonUsageWidget implements IAaclUsageWidg
     private static final long serialVersionUID = -7714913675577589759L;
     private static final String BATCH_NAMES_LIST_SEPARATOR = "<br><li>";
     private static final String CLASS_BUTTON_MENUBAR = "button-menubar";
-    private static final String WIDTH_140 = "140px";
 
     private final IAaclUsageController controller;
     private MenuBar usageBatchMenuBar;
@@ -74,40 +74,31 @@ public class AaclUsageWidget extends CommonUsageWidget implements IAaclUsageWidg
 
     @Override
     protected void addGridColumns() {
-        //TODO {aliakh} fix column width
-        addColumn(UsageDto::getId, "table.column.detail_id", "detailId", "130px");
-        addColumn(UsageDto::getStatus, "table.column.usage_status", "status", "115px");
-        addColumn(UsageDto::getProductFamily, "table.column.product_family", "productFamily", "125px");
-        addColumn(UsageDto::getBatchName, "table.column.batch_name", "batchName", "145px");
+        addColumn(UsageDto::getId, GridColumnEnum.ID);
+        addColumn(UsageDto::getStatus, GridColumnEnum.STATUS);
+        addColumn(UsageDto::getProductFamily, GridColumnEnum.PRODUCT_FAMILY);
+        addColumn(UsageDto::getBatchName, GridColumnEnum.BATCH_NAME);
         addColumn(usage -> CommonDateUtils.format(usage.getAaclUsage().getBatchPeriodEndDate(),
-            RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT), "table.column.period_end_date", "periodEndDate", "115px");
-        addColumn(UsageDto::getRhAccountNumber, "table.column.rh_account_number", "rhAccountNumber", "115px");
-        addColumn(UsageDto::getRhName, "table.column.rh_account_name", "rhName", "300px");
-        addColumn(UsageDto::getWrWrkInst, "table.column.wr_wrk_inst", "wrWrkInst", "110px");
-        addColumn(UsageDto::getSystemTitle, "table.column.system_title", "systemTitle", "300px");
-        addColumn(UsageDto::getStandardNumber, "table.column.standard_number", "standardNumber", WIDTH_140);
-        addColumn(UsageDto::getStandardNumberType, "table.column.standard_number_type", "standardNumberType",
-            "155px");
-        addColumn(usage -> usage.getAaclUsage().getDetailLicenseeClass().getId(), "table.column.det_lc_id",
-            "detailLicenseeClassId", "80px");
+            RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT), GridColumnEnum.BATCH_PERIOD_END_DATE);
+        addColumn(UsageDto::getRhAccountNumber, GridColumnEnum.RH_ACCOUNT_NUMBER);
+        addColumn(UsageDto::getRhName, GridColumnEnum.RH_NAME);
+        addColumn(UsageDto::getWrWrkInst, GridColumnEnum.WR_WRK_INST);
+        addColumn(UsageDto::getSystemTitle, GridColumnEnum.SYSTEM_TITLE);
+        addColumn(UsageDto::getStandardNumber, GridColumnEnum.STANDARD_NUMBER);
+        addColumn(UsageDto::getStandardNumberType, GridColumnEnum.STANDARD_NUMBER_TYPE);
+        addColumn(usage -> usage.getAaclUsage().getDetailLicenseeClass().getId(), GridColumnEnum.DET_LC_ID);
         addColumn(usage -> usage.getAaclUsage().getDetailLicenseeClass().getEnrollmentProfile(),
-            "table.column.det_lc_enrollment", "detailLicenseeEnrollment", WIDTH_140);
+            GridColumnEnum.DET_LC_ENROLLMENT);
         addColumn(usage -> usage.getAaclUsage().getDetailLicenseeClass().getDiscipline(),
-            "table.column.det_lc_discipline", "detailLicenseeDiscipline", WIDTH_140);
-        addColumn(usage -> usage.getAaclUsage().getPublicationType().getName(), "table.column.publication_type",
-            "publicationType", WIDTH_140);
-        addColumn(usage -> usage.getAaclUsage().getInstitution(), "table.column.institution", "institution",
-            WIDTH_140);
-        addColumn(usage -> usage.getAaclUsage().getUsageAge().getPeriod(), "table.column.usage_period", "usagePeriod",
-            "100px");
-        addColumn(usage -> usage.getAaclUsage().getUsageSource(), "table.column.usage_source", "usageSource",
-            WIDTH_140);
-        addColumn(UsageDto::getNumberOfCopies, "table.column.number_of_copies", "numberOfCopies", WIDTH_140);
-        addColumn(usage -> usage.getAaclUsage().getNumberOfPages(), "table.column.number_of_pages",
-            "numberOfPages", WIDTH_140);
-        addColumn(usage -> usage.getAaclUsage().getRightLimitation(), "table.column.right_limitation",
-            "rightLimitation", "120px");
-        addColumn(UsageDto::getComment, "table.column.comment", "comment", "200px");
+            GridColumnEnum.DET_LC_DISCIPLINE);
+        addColumn(usage -> usage.getAaclUsage().getPublicationType().getName(), GridColumnEnum.PUB_TYPE);
+        addColumn(usage -> usage.getAaclUsage().getInstitution(), GridColumnEnum.INSTITUTION);
+        addColumn(usage -> usage.getAaclUsage().getUsageAge().getPeriod(), GridColumnEnum.PERIOD);
+        addColumn(usage -> usage.getAaclUsage().getUsageSource(), GridColumnEnum.USAGE_SOURCE);
+        addColumn(UsageDto::getNumberOfCopies, GridColumnEnum.NUMBER_OF_COPIES);
+        addColumn(usage -> usage.getAaclUsage().getNumberOfPages(), GridColumnEnum.NUMBER_OF_PAGES);
+        addColumn(usage -> usage.getAaclUsage().getRightLimitation(), GridColumnEnum.RIGHT_LIMITATION);
+        addColumn(UsageDto::getComment, GridColumnEnum.COMMENT);
     }
 
     @Override
