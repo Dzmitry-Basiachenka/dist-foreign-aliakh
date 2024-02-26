@@ -4,12 +4,16 @@ import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.vui.main.ForeignUi;
+import com.copyright.rup.dist.foreign.vui.scenario.api.ExcludeUsagesEvent;
 import com.copyright.rup.dist.foreign.vui.scenario.api.ICommonScenarioWidget;
 import com.copyright.rup.dist.foreign.vui.scenario.api.IScenarioHistoryController;
 import com.copyright.rup.dist.foreign.vui.scenario.api.nts.INtsScenarioController;
+import com.copyright.rup.dist.foreign.vui.scenario.api.nts.INtsScenarioWidget;
 import com.copyright.rup.dist.foreign.vui.scenario.api.nts.INtsScenariosController;
 import com.copyright.rup.dist.foreign.vui.scenario.api.nts.INtsScenariosWidget;
 import com.copyright.rup.dist.foreign.vui.scenario.impl.CommonScenariosController;
+
+import com.vaadin.flow.component.ComponentUtil;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -92,8 +96,13 @@ public class NtsScenariosController extends CommonScenariosController implements
 
     @Override
     protected ICommonScenarioWidget initScenarioWidget() {
-        //TODO: {dbasiachenka} implement
-        return scenarioController.initWidget();
+        var scenarioWidget = (INtsScenarioWidget) scenarioController.initWidget();
+        ComponentUtil.addListener((NtsScenarioWidget) scenarioWidget, ExcludeUsagesEvent.class, event -> {
+            scenarioWidget.refresh();
+            scenarioWidget.refreshTable();
+            getWidget().refreshSelectedScenario();
+        });
+        return scenarioWidget;
     }
 
     @Override

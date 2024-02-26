@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.vui.scenario.impl.fas;
+package com.copyright.rup.dist.foreign.vui.scenario.impl.nts;
 
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.getDialogContent;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.getFooterComponent;
@@ -19,13 +19,14 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.vui.UiTestHelper;
-import com.copyright.rup.dist.foreign.vui.scenario.api.fas.IFasScenarioController;
+import com.copyright.rup.dist.foreign.vui.scenario.api.nts.INtsScenarioController;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.downloader.OnDemandFileDownloader;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.SearchWidget;
 
@@ -63,7 +64,7 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 /**
- * Verifies {@link FasScenarioWidget}.
+ * Verifies {@link NtsScenarioWidget}.
  * <p>
  * Copyright (C) 2017 copyright.com
  * <p>
@@ -74,16 +75,15 @@ import java.util.function.Supplier;
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(UI.class)
 @PowerMockIgnore({"com.sun.org.apache.xerces.*", "javax.xml.*", "org.xml.*", "javax.management.*"})
-public class FasScenarioWidgetTest {
+public class NtsScenarioWidgetTest {
 
     private static final String STYLE_ALIGN_RIGHT = "v-align-right";
 
     private final List<RightsholderTotalsHolder> rightsholderTotalsHolders =
-        loadExpectedRightsholderTotalsHolder("rightsholder_total_holder_1000010022.json");
-
-    private FasScenarioWidget scenarioWidget;
-    private IFasScenarioController controller;
-    private FasScenarioMediator mediator;
+        loadExpectedRightsholderTotalsHolders("rightsholder_total_holder_1000001770.json");
+    private NtsScenarioWidget scenarioWidget;
+    private INtsScenarioController controller;
+    private NtsScenarioMediator mediator;
     private Scenario scenario;
 
     @Before
@@ -96,16 +96,16 @@ public class FasScenarioWidgetTest {
         Map.Entry<Supplier<String>, Supplier<InputStream>> fileSource =
             new SimpleImmutableEntry<>(() -> "file.txt", () -> new ByteArrayInputStream(new byte[]{}));
         expect(streamSource.getSource()).andReturn(fileSource).times(2);
-        controller = createMock(IFasScenarioController.class);
-        mediator = createMock(FasScenarioMediator.class);
+        controller = createMock(INtsScenarioController.class);
+        mediator = createMock(NtsScenarioMediator.class);
+        buildScenario();
+        scenarioWidget = new NtsScenarioWidget(controller);
+        scenarioWidget.setController(controller);
+        Whitebox.setInternalState(scenarioWidget, "mediator", mediator);
         expect(controller.getExportScenarioUsagesStreamSource()).andReturn(streamSource).once();
         expect(controller.getExportScenarioRightsholderTotalsStreamSource()).andReturn(streamSource).once();
-        buildScenario();
         expect(controller.getScenario()).andReturn(scenario).once();
         expect(controller.getScenarioWithAmountsAndLastAction()).andReturn(scenario).once();
-        scenarioWidget = new FasScenarioWidget(controller);
-        Whitebox.setInternalState(scenarioWidget, mediator);
-        scenarioWidget.setController(controller);
         replay(controller, streamSource, ui, UI.class, mediator);
         scenarioWidget.init();
         verify(controller, streamSource, ui, UI.class, mediator);
@@ -121,32 +121,13 @@ public class FasScenarioWidgetTest {
     }
 
     @Test
-    public void testGetSearchValue() {
-        var searchWidget = new SearchWidget(controller);
-        searchWidget.setSearchValue("search");
-        Whitebox.setInternalState(scenarioWidget, searchWidget);
-        assertEquals("search", scenarioWidget.getSearchValue());
-    }
-
-    @Test
-    public void testRefresh() {
-        expect(controller.isScenarioEmpty()).andReturn(false).once();
-        expect(controller.getScenario()).andReturn(scenario).once();
-        mediator.onScenarioUpdated(false, scenario);
-        expectLastCall().once();
-        replay(controller, mediator);
-        scenarioWidget.refresh();
-        verify(controller, mediator);
-    }
-
-    @Test
     public void testGridValues() {
         expect(controller.loadBeans(0, Integer.MAX_VALUE, List.of())).andReturn(rightsholderTotalsHolders).once();
         expect(controller.getSize()).andReturn(1).once();
         replay(controller);
         Grid<?> grid = (Grid<?>) ((VerticalLayout) getDialogContent(scenarioWidget)).getComponentAt(1);
         Object[][] expectedCells = {
-            {"2000197554", "Andrew Goodwin", "2000017003", "ProLitteris", "20,000.00", "6,400.00", "13,600.00", "16.0"}
+            {"1000001770", "Andrew Goodwin", "2000017003", "ProLitteris", "20,000.00", "6,400.00", "13,600.00", "16.0"}
         };
         verifyGridItems(grid, rightsholderTotalsHolders, expectedCells);
         verify(controller);
@@ -156,6 +137,26 @@ public class FasScenarioWidgetTest {
             {"netTotal", "13,600.00", STYLE_ALIGN_RIGHT}
         };
         verifyFooterItems(grid, 1, "Totals", expectedFooterColumns);
+    }
+
+    @Test
+    public void testGetSearchValue() {
+        var searchWidget = new SearchWidget(controller);
+        searchWidget.setSearchValue("search");
+        Whitebox.setInternalState(scenarioWidget, searchWidget);
+        assertEquals("search", scenarioWidget.getSearchValue());
+    }
+
+    @Test
+    public void testRefresh() {
+        scenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);
+        expect(controller.isScenarioEmpty()).andReturn(false).once();
+        expect(controller.getScenario()).andReturn(scenario).once();
+        mediator.onScenarioUpdated(false, scenario);
+        expectLastCall().once();
+        replay(mediator, controller);
+        scenarioWidget.refresh();
+        verify(mediator, controller);
     }
 
     private void verifyContent(Component content) {
@@ -221,7 +222,7 @@ public class FasScenarioWidgetTest {
         assertEquals(4, horizontalLayout.getComponentCount());
         var excludeByRroButton = horizontalLayout.getComponentAt(0);
         assertThat(excludeByRroButton, instanceOf(Button.class));
-        assertEquals("Exclude By RRO", ((Button) excludeByRroButton).getText());
+        assertEquals("Exclude by RH", ((Button) excludeByRroButton).getText());
         var fileDownloader = horizontalLayout.getComponentAt(1);
         assertThat(fileDownloader, instanceOf(OnDemandFileDownloader.class));
         assertEquals("Export Details", ((Button) fileDownloader.getChildren().findFirst().orElseThrow()).getText());
@@ -235,18 +236,17 @@ public class FasScenarioWidgetTest {
 
     private void buildScenario() {
         scenario = new Scenario();
-        scenario.setId("65d4cdde-eeff-4b31-885f-78170d9e7790");
+        scenario.setId(RupPersistUtils.generateUuid());
         scenario.setName("Scenario name");
         scenario.setGrossTotal(new BigDecimal("20000.00"));
         scenario.setServiceFeeTotal(new BigDecimal("6400.00"));
         scenario.setNetTotal(new BigDecimal("13600.00"));
-        scenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);
     }
 
-    private List<RightsholderTotalsHolder> loadExpectedRightsholderTotalsHolder(String fileName) {
+    private List<RightsholderTotalsHolder> loadExpectedRightsholderTotalsHolders(String fileName) {
         try {
-            String content = TestUtils.fileToString(this.getClass(), fileName);
-            ObjectMapper mapper = new ObjectMapper();
+            var content = TestUtils.fileToString(this.getClass(), fileName);
+            var mapper = new ObjectMapper();
             return mapper.readValue(content, new TypeReference<List<RightsholderTotalsHolder>>() {
             });
         } catch (IOException e) {

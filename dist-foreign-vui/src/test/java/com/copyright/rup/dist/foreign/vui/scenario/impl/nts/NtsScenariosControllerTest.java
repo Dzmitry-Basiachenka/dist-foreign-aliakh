@@ -1,13 +1,15 @@
 package com.copyright.rup.dist.foreign.vui.scenario.impl.nts;
 
-import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.verify;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
+import static org.powermock.api.easymock.PowerMock.createMock;
+import static org.powermock.api.easymock.PowerMock.expectLastCall;
+import static org.powermock.api.easymock.PowerMock.mockStatic;
+import static org.powermock.api.easymock.PowerMock.replay;
+import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
@@ -18,10 +20,16 @@ import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioUsageFilterService;
 import com.copyright.rup.dist.foreign.vui.main.api.IProductFamilyProvider;
+import com.copyright.rup.dist.foreign.vui.scenario.api.nts.INtsScenarioController;
 import com.copyright.rup.dist.foreign.vui.scenario.api.nts.INtsScenariosWidget;
+import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.Windows;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.core.classloader.annotations.PowerMockIgnore;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.time.LocalDate;
@@ -38,6 +46,9 @@ import java.util.Set;
  *
  * @author Stanislau Rudak
  */
+@RunWith(PowerMockRunner.class)
+@PrepareForTest(Windows.class)
+@PowerMockIgnore({"com.sun.org.apache.xerces.*", "javax.xml.*", "org.xml.*", "javax.management.*"})
 public class NtsScenariosControllerTest {
 
     private static final String SCENARIO_ID = "199bb4cb-4743-4bb1-a2cd-fbd6888614ff";
@@ -49,17 +60,20 @@ public class NtsScenariosControllerTest {
     private Scenario scenario;
     private INtsScenariosWidget scenariosWidget;
     private IProductFamilyProvider productFamilyProvider;
+    private INtsScenarioController scenarioController;
 
     @Before
     public void setUp() {
         scenarioService = createMock(IScenarioService.class);
         productFamilyProvider = createMock(IProductFamilyProvider.class);
         scenariosWidget = createMock(INtsScenariosWidget.class);
+        scenarioController = createMock(INtsScenarioController.class);
         buildScenario();
         scenariosController = new NtsScenariosController();
         Whitebox.setInternalState(scenariosController, "widget", scenariosWidget);
         Whitebox.setInternalState(scenariosController, "scenarioService", scenarioService);
         Whitebox.setInternalState(scenariosController, "productFamilyProvider", productFamilyProvider);
+        Whitebox.setInternalState(scenariosController, "scenarioController", scenarioController);
     }
 
     @Test
@@ -84,7 +98,17 @@ public class NtsScenariosControllerTest {
 
     @Test
     public void testOnViewButtonClicked() {
-        //TODO: {dbasiachenka} implement
+        mockStatic(Windows.class);
+        NtsScenarioWidget scenarioWidget = createMock(NtsScenarioWidget.class);
+        expect(scenariosWidget.getSelectedScenario()).andReturn(scenario).once();
+        scenarioController.setScenario(scenario);
+        expectLastCall().once();
+        expect(scenarioController.initWidget()).andReturn(scenarioWidget).once();
+        Windows.showModalWindow(scenarioWidget);
+        expectLastCall().once();
+        replay(scenariosWidget, scenarioController, Windows.class);
+        scenariosController.onViewButtonClicked();
+        verify(scenariosWidget, scenarioController, Windows.class);
     }
 
     @Test
