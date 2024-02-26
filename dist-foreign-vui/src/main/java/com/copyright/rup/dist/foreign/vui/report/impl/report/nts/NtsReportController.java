@@ -2,9 +2,12 @@ package com.copyright.rup.dist.foreign.vui.report.impl.report.nts;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.vui.common.ByteArrayStreamSource;
+import com.copyright.rup.dist.foreign.vui.report.api.ICommonScenarioReportController;
 import com.copyright.rup.dist.foreign.vui.report.api.nts.INtsReportController;
 import com.copyright.rup.dist.foreign.vui.report.impl.report.CommonReportController;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -22,6 +25,10 @@ import org.springframework.stereotype.Component;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class NtsReportController extends CommonReportController implements INtsReportController {
 
+    @Autowired
+    @Qualifier("df.ntsServiceFeeTrueUpReportController")
+    private ICommonScenarioReportController ntsServiceFeeTrueUpReportController;
+
     @Override
     public IStreamSource getNtsWithdrawnBatchSummaryReportStreamSource() {
         return new ByteArrayStreamSource("nts_withdrawn_batch_summary_report_",
@@ -32,5 +39,10 @@ public class NtsReportController extends CommonReportController implements INtsR
     public IStreamSource getNtsUndistributedLiabilitiesReportStreamSource() {
         return new ByteArrayStreamSource("undistributed_liabilities_",
             outputStream -> getReportService().writeNtsUndistributedLiabilitiesReport(outputStream));
+    }
+
+    @Override
+    public ICommonScenarioReportController getNtsServiceFeeTrueUpReportController() {
+        return ntsServiceFeeTrueUpReportController;
     }
 }
