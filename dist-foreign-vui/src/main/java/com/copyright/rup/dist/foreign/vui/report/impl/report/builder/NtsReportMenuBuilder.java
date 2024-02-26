@@ -1,9 +1,9 @@
-package com.copyright.rup.dist.foreign.vui.report.impl.report;
+package com.copyright.rup.dist.foreign.vui.report.impl.report.builder;
 
 import com.copyright.rup.dist.foreign.vui.main.ForeignUi;
-import com.copyright.rup.dist.foreign.vui.report.api.IReportController;
 import com.copyright.rup.dist.foreign.vui.report.api.IReportMenuBuilder;
 import com.copyright.rup.dist.foreign.vui.report.api.IReportWidget;
+import com.copyright.rup.dist.foreign.vui.report.api.nts.INtsReportController;
 
 import com.vaadin.flow.component.contextmenu.MenuItem;
 
@@ -16,10 +16,10 @@ import com.vaadin.flow.component.contextmenu.MenuItem;
  *
  * @author Aliaksanr Liakh
  */
-public class NtsReportMenuBuilder implements IReportMenuBuilder {
+public class NtsReportMenuBuilder implements IReportMenuBuilder<INtsReportController> {
 
     @Override
-    public void addItems(IReportController controller, IReportWidget widget, MenuItem rootItem) {
+    public void addItems(INtsReportController controller, IReportWidget widget, MenuItem rootItem) {
         var subMenu = rootItem.getSubMenu();
         String taxNotificationReport = ForeignUi.getMessage("menu.report.tax_notification_report");
         subMenu.addItem(ForeignUi.getMessage("menu.report.nts_batch_summary"), menuItem ->

@@ -4,7 +4,6 @@ import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.vui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.vui.report.api.IReportController;
 import com.copyright.rup.dist.foreign.vui.report.api.IReportWidget;
-import com.copyright.rup.dist.foreign.vui.report.impl.report.ReportMenuBuilder;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.downloader.OnDemandFileDownloader;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.Windows;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.util.VaadinUtils;
@@ -34,11 +33,10 @@ public class ReportWidget extends MenuBar implements IReportWidget {
         removeAll();
         var productFamilyProvider = controller.getProductFamilyProvider();
         var productFamily = productFamilyProvider.getSelectedProductFamily();
-        var builder = ReportMenuBuilder.valueOf(productFamily);
-        if (builder.isVisible()) {
+        if (controller.isReportVisible(productFamily)) {
             MenuItem rootItem = addItem(ForeignUi.getMessage("tab.reports"));
             setClassName("reports-menu-root");
-            builder.addItems(controller, this, rootItem);
+            controller.addItems(productFamily, rootItem);
         }
     }
 

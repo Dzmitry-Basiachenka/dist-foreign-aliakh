@@ -9,17 +9,15 @@ import static org.powermock.api.easymock.PowerMock.replayAll;
 import static org.powermock.api.easymock.PowerMock.verifyAll;
 
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
-import com.copyright.rup.dist.foreign.vui.common.ByteArrayStreamSource;
 import com.copyright.rup.dist.foreign.vui.main.api.IProductFamilyProvider;
-import com.copyright.rup.dist.foreign.vui.report.api.ICommonScenarioReportController;
+import com.copyright.rup.dist.foreign.vui.report.api.ICommonReportController;
 import com.copyright.rup.dist.foreign.vui.report.api.IReportController;
-import com.copyright.rup.dist.foreign.vui.report.api.ISummaryMarketReportController;
-import com.copyright.rup.dist.foreign.vui.report.api.IUndistributedLiabilitiesReportController;
+import com.copyright.rup.dist.foreign.vui.report.api.fas.IFasReportController;
+import com.copyright.rup.dist.foreign.vui.report.api.nts.INtsReportController;
+import com.copyright.rup.dist.foreign.vui.report.impl.report.ReportControllerProvider;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.Windows;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.api.IController;
 
-import com.vaadin.flow.component.ClickEvent;
-import com.vaadin.flow.component.ComponentUtil;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.contextmenu.MenuItem;
 import com.vaadin.flow.component.dialog.Dialog;
@@ -49,30 +47,47 @@ import java.util.List;
 @PowerMockIgnore({"com.sun.org.apache.xerces.*", "javax.xml.*", "org.xml.*", "javax.management.*"})
 public class ReportWidgetTest {
 
-    private static final String FILE_NAME = "report-name_03_12_2004.csv";
     private static final String UNDISTRIBUTED_LIABILITIES_REPORT = "Undistributed Liabilities Reconciliation Report";
     private ReportWidget reportWidget;
-    private IReportController reportController;
+    private ReportControllerProvider controllerProvider;
+    private IFasReportController fasReportController;
+    private INtsReportController ntsReportController;
+    private IProductFamilyProvider productFamilyProvider;
 
     @Before
     public void setUp() {
         reportWidget = new ReportWidget();
-        reportController = createMock(IReportController.class);
+        productFamilyProvider = createMock(IProductFamilyProvider.class);
+        controllerProvider = createMock(ReportControllerProvider.class);
+        IReportController reportController = new ReportController();
+        fasReportController = createMock(IFasReportController.class);
+        ntsReportController = createMock(INtsReportController.class);
         reportWidget.setController(reportController);
+        Whitebox.setInternalState(reportController, productFamilyProvider);
+        Whitebox.setInternalState(reportController, controllerProvider);
     }
 
     @Test
     public void testInit() {
-        expectProductFamily(FdaConstants.FAS_PRODUCT_FAMILY);
+        expectProductFamily(FdaConstants.FAS_PRODUCT_FAMILY, fasReportController);
         replayAll();
         reportWidget.init();
         assertEquals("reports-menu-root", reportWidget.getClassName());
         assertReportsMenuFasFas2();
+        verifyAll();
     }
 
     @Test
     public void testRefreshProductFamilyFas() {
-        expectProductFamily(FdaConstants.FAS_PRODUCT_FAMILY);
+        expectProductFamily(FdaConstants.FAS_PRODUCT_FAMILY, fasReportController);
+        replayAll();
+        reportWidget.refresh();
+        verifyAll();
+    }
+
+    @Test
+    public void testRefreshProductFamilyFas2() {
+        expectProductFamily(FdaConstants.CLA_FAS_PRODUCT_FAMILY, fasReportController);
         replayAll();
         reportWidget.refresh();
         verifyAll();
@@ -80,129 +95,10 @@ public class ReportWidgetTest {
 
     @Test
     public void testRefreshProductFamilyNts() {
-        expectProductFamily(FdaConstants.NTS_PRODUCT_FAMILY);
+        expectProductFamily(FdaConstants.NTS_PRODUCT_FAMILY, ntsReportController);
         replayAll();
         reportWidget.refresh();
-        verifyAll();
         assertReportsMenuNts();
-    }
-
-    @Test
-    public void testRefreshProductFamilyFas2() {
-        expectProductFamily(FdaConstants.CLA_FAS_PRODUCT_FAMILY);
-        replayAll();
-        reportWidget.refresh();
-        verifyAll();
-    }
-
-    @Test
-    public void testFasBatchSummaryReportSelected() {
-        mockStatic(UI.class);
-        UI ui = createMock(UI.class);
-        expect(UI.getCurrent()).andReturn(ui).once();
-        expect(ui.getUIId()).andReturn(1).once();
-        expect(reportController.getFasBatchSummaryReportStreamSource()).andReturn(
-            new ByteArrayStreamSource(FILE_NAME, outputStream -> {
-            })).once();
-        expectProductFamily(FdaConstants.FAS_PRODUCT_FAMILY);
-        replayAll();
-        selectMenuItem(0);
-        verifyAll();
-    }
-
-    @Test
-    public void testSummaryMarketReportSelected() {
-        ISummaryMarketReportController summaryMarketReportController = createMock(ISummaryMarketReportController.class);
-        expect(reportController.getSummaryMarketReportController()).andReturn(summaryMarketReportController).once();
-        SummaryMarketReportWidget widget = createMock(SummaryMarketReportWidget.class);
-        expect(summaryMarketReportController.initWidget()).andReturn(widget).once();
-        widget.setHeaderTitle("Summary of Market Report");
-        expectLastCall().once();
-        Windows.showModalWindow(widget);
-        expectLastCall().once();
-        expectProductFamily(FdaConstants.FAS_PRODUCT_FAMILY);
-        replayAll();
-        selectMenuItem(1);
-        verifyAll();
-    }
-
-    @Test
-    public void testResearchStatusReportSelected() {
-        setUiExpectation();
-        expect(reportController.getResearchStatusReportStreamSource()).andReturn(
-            new ByteArrayStreamSource(FILE_NAME, outputStream -> {
-            })).once();
-        expectProductFamily(FdaConstants.FAS_PRODUCT_FAMILY);
-        replayAll();
-        selectMenuItem(2);
-        verifyAll();
-    }
-
-    @Test
-    public void testUndistributedLiabilitiesReportSelected() {
-        IUndistributedLiabilitiesReportController liabilitiesReportController =
-            createMock(IUndistributedLiabilitiesReportController.class);
-        expect(reportController.getUndistributedLiabilitiesReportController()).andReturn(liabilitiesReportController)
-            .once();
-        UndistributedLiabilitiesReportWidget widget = createMock(UndistributedLiabilitiesReportWidget.class);
-        expect(liabilitiesReportController.initWidget()).andReturn(widget).once();
-        widget.setHeaderTitle(UNDISTRIBUTED_LIABILITIES_REPORT);
-        expectLastCall().once();
-        Windows.showModalWindow(widget);
-        expectLastCall().once();
-        expectProductFamily(FdaConstants.FAS_PRODUCT_FAMILY);
-        replayAll();
-        selectMenuItem(4);
-        verifyAll();
-    }
-
-    @Test
-    public void testOwnershipAdjustmentReportSelected() {
-        ICommonScenarioReportController scenarioReportController = createMock(ICommonScenarioReportController.class);
-        expect(reportController.getOwnershipAdjustmentReportController()).andReturn(scenarioReportController).once();
-        CommonScenarioReportWidget widget = createMock(CommonScenarioReportWidget.class);
-        expect(scenarioReportController.initWidget()).andReturn(widget).once();
-        widget.setHeaderTitle("Ownership Adjustment Report");
-        expectLastCall().once();
-        Windows.showModalWindow(widget);
-        expectLastCall().once();
-        expectProductFamily(FdaConstants.FAS_PRODUCT_FAMILY);
-        replayAll();
-        selectMenuItem(5);
-        verifyAll();
-    }
-
-    @Test
-    public void testFasServiceFeeTrueUpReportSelected() {
-        FasServiceFeeTrueUpReportController fasServiceFeeTrueUpReportController =
-            createMock(FasServiceFeeTrueUpReportController.class);
-        expect(reportController.getFasServiceFeeTrueUpReportController())
-            .andReturn(fasServiceFeeTrueUpReportController).once();
-        FasServiceFeeTrueUpReportWidget widget = createMock(FasServiceFeeTrueUpReportWidget.class);
-        expect(fasServiceFeeTrueUpReportController.initWidget()).andReturn(widget).once();
-        widget.setHeaderTitle("Service Fee True-up Report");
-        expectLastCall().once();
-        Windows.showModalWindow(widget);
-        expectLastCall().once();
-        expectProductFamily(FdaConstants.FAS_PRODUCT_FAMILY);
-        replayAll();
-        selectMenuItem(3);
-        verifyAll();
-    }
-
-    @Test
-    public void testFasTaxNotificationReportSelected() {
-        taxNotificationReportExpectation(FdaConstants.FAS_PRODUCT_FAMILY);
-        replayAll();
-        selectMenuItem(6);
-        verifyAll();
-    }
-
-    @Test
-    public void testNtsTaxNotificationReportSelected() {
-        taxNotificationReportExpectation(FdaConstants.NTS_PRODUCT_FAMILY);
-        replayAll();
-        selectMenuItem(2);
         verifyAll();
     }
 
@@ -221,61 +117,9 @@ public class ReportWidgetTest {
         verifyAll();
     }
 
-    @Test
-    public void testNtsWithdrawnBatchSummaryReportSelected() {
-        setUiExpectation();
-        expect(reportController.getNtsWithdrawnBatchSummaryReportStreamSource()).andReturn(
-            new ByteArrayStreamSource(FILE_NAME, outputStream -> {
-            })).once();
-        expectProductFamily(FdaConstants.NTS_PRODUCT_FAMILY);
-        replayAll();
-        selectMenuItem(0);
-        verifyAll();
-    }
-
-    @Test
-    public void testNtsUndistributedLiabilitiesReportSelected() {
-        setUiExpectation();
-        expect(reportController.getNtsUndistributedLiabilitiesReportStreamSource()).andReturn(
-            new ByteArrayStreamSource(FILE_NAME, outputStream -> {
-            })).once();
-        expectProductFamily(FdaConstants.NTS_PRODUCT_FAMILY);
-        replayAll();
-        selectMenuItem(1);
-        verifyAll();
-    }
-
-    private void setUiExpectation() {
-        mockStatic(UI.class);
-        UI ui = createMock(UI.class);
-        expect(UI.getCurrent()).andReturn(ui).once();
-        expect(ui.getUIId()).andReturn(1).once();
-    }
-
-    private void selectMenuItem(int index) {
-        reportWidget.init();
-        MenuItem menuItem = reportWidget.getItems().get(0).getSubMenu().getItems().get(index);
-        ComponentUtil.fireEvent(menuItem, new ClickEvent<>(menuItem));
-    }
-
-    private void expectProductFamily(String productFamily) {
-        IProductFamilyProvider productFamilyProvider = createMock(IProductFamilyProvider.class);
+    private void expectProductFamily(String productFamily, ICommonReportController commonReportController) {
         expect(productFamilyProvider.getSelectedProductFamily()).andReturn(productFamily).once();
-        expect(reportController.getProductFamilyProvider()).andReturn(productFamilyProvider).once();
-    }
-
-    private void taxNotificationReportExpectation(String productFamily) {
-        TaxNotificationReportController taxNotificationReportController =
-            createMock(TaxNotificationReportController.class);
-        expect(reportController.getTaxNotificationReportController())
-            .andReturn(taxNotificationReportController).once();
-        TaxNotificationReportWidget widget = createMock(TaxNotificationReportWidget.class);
-        expect(taxNotificationReportController.initWidget()).andReturn(widget).once();
-        widget.setHeaderTitle("Tax Notification Report");
-        expectLastCall().once();
-        Windows.showModalWindow(widget);
-        expectLastCall().once();
-        expectProductFamily(productFamily);
+        expect(controllerProvider.getController(productFamily)).andReturn(commonReportController).once();
     }
 
     private void assertReportsMenuFasFas2() {
