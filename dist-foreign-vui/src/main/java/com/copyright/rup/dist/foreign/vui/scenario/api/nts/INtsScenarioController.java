@@ -12,4 +12,9 @@ import com.copyright.rup.dist.foreign.vui.scenario.api.ICommonScenarioController
  * @author Stanislau Rudak
  */
 public interface INtsScenarioController extends ICommonScenarioController {
+
+    /**
+     * Handles click on 'Exclude by RH' button.
+     */
+    void onExcludeRhButtonClicked();
 }

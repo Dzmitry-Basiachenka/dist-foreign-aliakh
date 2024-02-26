@@ -1,10 +1,9 @@
-package com.copyright.rup.dist.foreign.vui.scenario.impl.fas;
+package com.copyright.rup.dist.foreign.vui.scenario.impl.nts;
 
-import static org.easymock.EasyMock.anyObject;
+import static org.easymock.EasyMock.anyString;
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.isNull;
 import static org.easymock.EasyMock.newCapture;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -12,31 +11,25 @@ import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
+import static org.powermock.api.easymock.PowerMock.expectLastCall;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
-import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.reporting.api.IStreamSourceHandler;
 import com.copyright.rup.dist.common.reporting.impl.StreamSource;
 import com.copyright.rup.dist.common.repository.api.Pageable;
-import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
-import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
-import com.copyright.rup.dist.foreign.service.api.fas.IFasScenarioService;
 import com.copyright.rup.dist.foreign.service.impl.UsageService;
-import com.copyright.rup.dist.foreign.vui.scenario.api.ExcludeUsagesEvent;
-import com.copyright.rup.dist.foreign.vui.scenario.api.fas.IFasScenarioWidget;
+import com.copyright.rup.dist.foreign.vui.scenario.api.nts.INtsScenarioWidget;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.Windows;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.api.IWidget;
 
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.easymock.Capture;
@@ -59,50 +52,39 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 /**
- * Verifies {@link FasScenarioController}.
+ * Verifies {@link NtsScenarioController}.
  * <p>
  * Copyright (C) 2017 copyright.com
  * <p>
- * Date: 04/07/17
+ * Date: 04/07/2017
  *
  * @author Ihar Suvorau
  */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({OffsetDateTime.class, StreamSource.class, Windows.class})
 @PowerMockIgnore({"com.sun.org.apache.xerces.*", "javax.xml.*", "org.xml.*", "javax.management.*"})
-public class FasScenarioControllerTest {
+public class NtsScenarioControllerTest {
 
-    private static final String SCENARIO_ID = "1ab5079f-2b90-4d8d-85d5-fa7ef6df0ed6";
     private static final OffsetDateTime NOW = OffsetDateTime.of(2019, 1, 2, 3, 4, 5, 6, ZoneOffset.ofHours(0));
+    private static final String SCENARIO_ID = "669eeb53-3191-4649-90c5-001d385d2549";
 
-    private FasScenarioController controller;
+    private NtsScenarioController controller;
     private IUsageService usageService;
-    private IScenarioService scenarioService;
-    private IFasScenarioService fasScenarioService;
-    private Scenario scenario;
     private IReportService reportService;
     private IStreamSourceHandler streamSourceHandler;
-    private IFasScenarioWidget scenarioWidget;
+    private INtsScenarioWidget scenarioWidget;
+    private Scenario scenario;
 
     @Before
     public void setUp() {
-        scenario = new Scenario();
-        scenario.setId(SCENARIO_ID);
-        scenario.setDescription("Description");
-        scenario.setNetTotal(new BigDecimal("10000.00"));
-        scenario.setGrossTotal(new BigDecimal("20000.00"));
-        scenario.setCreateUser("User@copyright.com");
-        controller = new FasScenarioController();
-        controller.setScenario(buildScenario());
+        buildScenario();
+        controller = new NtsScenarioController();
+        controller.setScenario(scenario);
         usageService = createMock(UsageService.class);
-        scenarioService = createMock(IScenarioService.class);
-        fasScenarioService = createMock(IFasScenarioService.class);
         reportService = createMock(IReportService.class);
         streamSourceHandler = createMock(IStreamSourceHandler.class);
-        scenarioWidget = createMock(IFasScenarioWidget.class);
+        scenarioWidget = createMock(INtsScenarioWidget.class);
         Whitebox.setInternalState(controller, usageService);
-        Whitebox.setInternalState(controller, scenarioService);
-        Whitebox.setInternalState(controller, fasScenarioService);
         Whitebox.setInternalState(controller, reportService);
         Whitebox.setInternalState(controller, streamSourceHandler);
         Whitebox.setInternalState(controller, IWidget.class, scenarioWidget);
@@ -111,7 +93,7 @@ public class FasScenarioControllerTest {
     @Test
     public void testLoadBeans() {
         Capture<Pageable> pageableCapture = newCapture();
-        expect(usageService.getRightsholderTotalsHoldersByScenario(eq(scenario), eq(StringUtils.EMPTY),
+        expect(usageService.getRightsholderTotalsHoldersByScenario(eq(scenario), anyString(),
             capture(pageableCapture), isNull())).andReturn(List.of()).once();
         expect(scenarioWidget.getSearchValue()).andReturn(StringUtils.EMPTY).once();
         replay(usageService, scenarioWidget);
@@ -136,18 +118,16 @@ public class FasScenarioControllerTest {
 
     @Test
     public void testInstantiateWidget() {
-        assertThat(controller.instantiateWidget(), instanceOf(FasScenarioWidget.class));
+        assertThat(controller.instantiateWidget(), instanceOf(NtsScenarioWidget.class));
     }
 
     @Test
-    public void testApplySearch() {
-        IFasScenarioWidget widget = createMock(IFasScenarioWidget.class);
-        Whitebox.setInternalState(controller, IWidget.class, widget);
-        widget.applySearch();
+    public void testPerformSearch() {
+        scenarioWidget.applySearch();
         expectLastCall().once();
-        replay(widget, scenarioService);
+        replay(scenarioWidget);
         controller.performSearch();
-        verify(widget, scenarioService);
+        verify(scenarioWidget);
     }
 
     @Test
@@ -162,68 +142,19 @@ public class FasScenarioControllerTest {
     }
 
     @Test
-    public void testIsScenarioEmpty() {
-        controller.setScenario(scenario);
-        expect(usageService.isScenarioEmpty(scenario)).andReturn(true).once();
-        replay(usageService);
-        assertTrue(controller.isScenarioEmpty());
-        verify(usageService);
-    }
-
-    @Test
-    public void testGetSourceRros() {
-        Whitebox.setInternalState(controller, "scenarioService", scenarioService);
-        expect(fasScenarioService.getSourceRros(SCENARIO_ID)).andReturn(
-            List.of(buildRightsholder(1000009522L, "Societa Italiana Autori ed Editori (SIAE)")))
-            .once();
-        replay(fasScenarioService);
-        List<Rightsholder> rros = controller.getSourceRros();
-        assertEquals(1, CollectionUtils.size(rros));
-        assertEquals(Long.valueOf(1000009522L), rros.get(0).getAccountNumber());
-        assertEquals("Societa Italiana Autori ed Editori (SIAE)", rros.get(0).getName());
-        verify(fasScenarioService);
-    }
-
-    @Test
-    public void testDeleteFromScenario() {
-        List<Long> accountNumbers = List.of(1000009522L);
-        usageService.deleteFromScenario(SCENARIO_ID, 2000017010L, accountNumbers, "reason");
-        expectLastCall().once();
-        replay(usageService);
-        controller.deleteFromScenario(2000017010L, accountNumbers, "reason");
-        verify(usageService);
-    }
-
-    @Test
-    public void testGetRightsholdersPayeePairs() {
-        Whitebox.setInternalState(controller, "scenarioService", scenarioService);
-        expect(fasScenarioService.getRightsholdersByScenarioAndSourceRro(SCENARIO_ID, 1000009522L))
-            .andReturn(List.of(buildRightsholderPayeePair())).once();
-        replay(fasScenarioService);
-        List<RightsholderPayeePair> pairs = controller.getRightsholdersPayeePairs(1000009522L);
-        assertEquals(1, CollectionUtils.size(pairs));
-        RightsholderPayeePair pair = pairs.get(0);
-        assertEquals(Long.valueOf(2000017001L), pair.getPayee().getAccountNumber());
-        assertEquals("ICLA, Irish Copyright Licensing Agency", pair.getPayee().getName());
-        assertEquals(Long.valueOf(2000017006L), pair.getRightsholder().getAccountNumber());
-        assertEquals("CAL, Copyright Agency Limited", pair.getRightsholder().getName());
-        verify(fasScenarioService);
-    }
-
-    @Test
     public void testGetExportScenarioUsagesStreamSource() {
         mockStatic(OffsetDateTime.class);
         Capture<Supplier<String>> fileNameSupplierCapture = newCapture();
         Capture<Consumer<PipedOutputStream>> posConsumerCapture = newCapture();
-        String fileName = scenario.getName() + "_Details_";
+        var fileName = scenario.getName() + "_Details_";
         Supplier<String> fileNameSupplier = () -> fileName;
         Supplier<InputStream> inputStreamSupplier =
-            () -> IOUtils.toInputStream(StringUtils.EMPTY, StandardCharsets.UTF_8);
+                () -> IOUtils.toInputStream(StringUtils.EMPTY, StandardCharsets.UTF_8);
         PipedOutputStream pos = new PipedOutputStream();
         expect(OffsetDateTime.now()).andReturn(NOW).once();
         expect(streamSourceHandler.getCsvStreamSource(capture(fileNameSupplierCapture), capture(posConsumerCapture)))
             .andReturn(new StreamSource(fileNameSupplier, "csv", inputStreamSupplier)).once();
-        reportService.writeFasScenarioUsagesCsvReport(scenario, pos);
+        reportService.writeNtsScenarioUsagesCsvReport(scenario, pos);
         expectLastCall().once();
         replay(OffsetDateTime.class, streamSourceHandler, reportService);
         IStreamSource streamSource = controller.getExportScenarioUsagesStreamSource();
@@ -239,10 +170,10 @@ public class FasScenarioControllerTest {
         mockStatic(OffsetDateTime.class);
         Capture<Supplier<String>> fileNameSupplierCapture = newCapture();
         Capture<Consumer<PipedOutputStream>> posConsumerCapture = newCapture();
-        String fileName = scenario.getName() + "_";
+        var fileName = scenario.getName() + "_";
         Supplier<String> fileNameSupplier = () -> fileName;
         Supplier<InputStream> inputStreamSupplier =
-            () -> IOUtils.toInputStream(StringUtils.EMPTY, StandardCharsets.UTF_8);
+                () -> IOUtils.toInputStream(StringUtils.EMPTY, StandardCharsets.UTF_8);
         PipedOutputStream pos = new PipedOutputStream();
         expect(OffsetDateTime.now()).andReturn(NOW).once();
         expect(streamSourceHandler.getCsvStreamSource(capture(fileNameSupplierCapture), capture(posConsumerCapture)))
@@ -258,46 +189,14 @@ public class FasScenarioControllerTest {
         verify(OffsetDateTime.class, streamSourceHandler, reportService);
     }
 
-    @Test
-    public void testOnExcludeByRroClickedWithoutDiscrepancies() {
-        mockStatic(Windows.class);
-        Windows.showModalWindow(anyObject(FasExcludeSourceRroWindow.class));
-        expectLastCall().once();
-        expect(fasScenarioService.getSourceRros(SCENARIO_ID)).andReturn(
-                List.of(buildRightsholder(1000009522L, "Societa Italiana Autori ed Editori (SIAE)")))
-            .once();
-        replay(fasScenarioService, Windows.class);
-        controller.onExcludeByRroClicked();
-        verify(fasScenarioService, Windows.class);
-    }
-
-    @Test
-    public void testOnUsagesExcluded() {
-        ExcludeUsagesEvent event = createMock(ExcludeUsagesEvent.class);
-        scenarioWidget.fireWidgetEvent(event);
-        expectLastCall().once();
-        replay(scenarioWidget, event);
-        controller.onUsagesExcluded(event);
-        verify(scenarioWidget, event);
-    }
-
     private Scenario buildScenario() {
+        scenario = new Scenario();
         scenario.setId(SCENARIO_ID);
         scenario.setName("Scenario name");
+        scenario.setDescription("Description");
+        scenario.setNetTotal(new BigDecimal("10000.00"));
+        scenario.setGrossTotal(new BigDecimal("20000.00"));
+        scenario.setCreateUser("User@copyright.com");
         return scenario;
-    }
-
-    private Rightsholder buildRightsholder(Long accountNumber, String name) {
-        var rightsholder = new Rightsholder();
-        rightsholder.setName(name);
-        rightsholder.setAccountNumber(accountNumber);
-        return rightsholder;
-    }
-
-    private RightsholderPayeePair buildRightsholderPayeePair() {
-        var pair = new RightsholderPayeePair();
-        pair.setPayee(buildRightsholder(2000017001L, "ICLA, Irish Copyright Licensing Agency"));
-        pair.setRightsholder(buildRightsholder(2000017006L, "CAL, Copyright Agency Limited"));
-        return pair;
     }
 }

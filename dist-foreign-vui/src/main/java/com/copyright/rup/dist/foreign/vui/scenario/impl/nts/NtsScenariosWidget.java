@@ -81,7 +81,7 @@ public class NtsScenariosWidget extends CommonScenariosWidget implements INtsSce
     protected HorizontalLayout initButtonsLayout() {
         var layout = new HorizontalLayout(viewButton, editNameButton, deleteButton, submitButton, rejectButton,
             approveButton, sendToLmButton);
-        //TODO: {dbasiachenka} add method for listeners
+        addButtonsListeners();
         layout.setMargin(false);
         VaadinUtils.addComponentStyle(layout, "scenarios-buttons");
         return layout;
@@ -129,5 +129,9 @@ public class NtsScenariosWidget extends CommonScenariosWidget implements INtsSce
     @Override
     protected IScenariosMediator getMediator() {
         return mediator;
+    }
+
+    private void addButtonsListeners() {
+        viewButton.addClickListener(event -> controller.onViewButtonClicked());
     }
 }

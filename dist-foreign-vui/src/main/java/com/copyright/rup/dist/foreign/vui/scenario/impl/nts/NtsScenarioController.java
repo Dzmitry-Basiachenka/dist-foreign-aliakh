@@ -33,8 +33,8 @@ public class NtsScenarioController extends CommonScenarioController implements I
     private INtsDrillDownByRightsholderController drillDownByRightsholderController;
 
     @Override
-    protected INtsScenarioWidget instantiateWidget() {
-        return new NtsScenarioWidget();
+    public void onExcludeRhButtonClicked() {
+        //TODO: {dbasiachenka} implement
     }
 
     @Override
@@ -45,5 +45,10 @@ public class NtsScenarioController extends CommonScenarioController implements I
     @Override
     protected void writeScenarioUsagesCsvReport(Scenario scenarioForReport, PipedOutputStream pos) {
         getReportService().writeNtsScenarioUsagesCsvReport(scenarioForReport, pos);
+    }
+
+    @Override
+    protected INtsScenarioWidget instantiateWidget() {
+        return new NtsScenarioWidget(this);
     }
 }
