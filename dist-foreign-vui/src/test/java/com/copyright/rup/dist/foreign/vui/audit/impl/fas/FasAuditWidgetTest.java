@@ -76,7 +76,6 @@ import java.util.stream.Stream;
 @PowerMockIgnore({"com.sun.org.apache.xerces.*", "javax.xml.*", "org.xml.*", "javax.management.*"})
 public class FasAuditWidgetTest {
 
-    private static final String WIDTH_165 = "165px";
     private static final String WIDTH_300 = "300px";
 
     private FasAuditWidget widget;
@@ -172,23 +171,23 @@ public class FasAuditWidgetTest {
         verifyToolbar(content.getComponentAt(0));
         verifyGrid((Grid) content.getComponentAt(1), List.of(
             Pair.of("Detail ID", WIDTH_300),
-            Pair.of("Detail Status", "145px"),
-            Pair.of("Product Family", WIDTH_165),
-            Pair.of("Usage Batch Name", "180px"),
-            Pair.of("Payment Date", "140px"),
-            Pair.of("RH Account #", "140px"),
+            Pair.of("Detail Status", "180px"),
+            Pair.of("Product Family", "160px"),
+            Pair.of("Usage Batch Name", "200px"),
+            Pair.of("Payment Date", "145px"),
+            Pair.of("RH Account #", "150px"),
             Pair.of("RH Name", WIDTH_300),
-            Pair.of("Payee Account #", WIDTH_165),
+            Pair.of("Payee Account #", "165px"),
             Pair.of("Payee Name", WIDTH_300),
-            Pair.of("Wr Wrk Inst", "130px"),
+            Pair.of("Wr Wrk Inst", "140px"),
             Pair.of("System Title", WIDTH_300),
             Pair.of("Reported Title", WIDTH_300),
             Pair.of("Reported Standard Number", "260px"),
-            Pair.of("Standard Number", "175px"),
-            Pair.of("Standard Number Type", "220px"),
-            Pair.of("Reported Value", WIDTH_165),
+            Pair.of("Standard Number", "180px"),
+            Pair.of("Standard Number Type", "225px"),
+            Pair.of("Reported Value", "170px"),
             Pair.of("Gross Amt in USD", "170px"),
-            Pair.of("Batch Amt in USD", WIDTH_165),
+            Pair.of("Batch Amt in USD", "170px"),
             Pair.of("Service Fee %", "145px"),
             Pair.of("Scenario Name", "155px"),
             Pair.of("Check #", "100px"),
