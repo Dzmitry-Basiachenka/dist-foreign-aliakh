@@ -4,6 +4,7 @@ import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
@@ -14,10 +15,12 @@ import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.vui.common.ByteArrayStreamSource;
 import com.copyright.rup.dist.foreign.vui.main.api.IProductFamilyProvider;
+import com.copyright.rup.dist.foreign.vui.report.api.ICommonScenarioReportController;
 import com.copyright.rup.dist.foreign.vui.report.api.nts.INtsReportController;
 import com.copyright.rup.dist.foreign.vui.report.impl.report.ReportControllerProvider;
 import com.copyright.rup.dist.foreign.vui.report.impl.report.nts.NtsReportController;
 
+import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -48,6 +51,7 @@ public class NtsReportControllerTest {
     private INtsReportController ntsReportController;
     private ReportController reportController;
     private IReportService reportService;
+    private ICommonScenarioReportController ntsServiceFeeTrueUpReportController;
 
     @Before
     public void setUp() {
@@ -56,9 +60,11 @@ public class NtsReportControllerTest {
         ReportControllerProvider reportControllerProvider = createMock(ReportControllerProvider.class);
         reportService = createMock(IReportService.class);
         productFamilyProvider = createMock(IProductFamilyProvider.class);
+        ntsServiceFeeTrueUpReportController = EasyMock.createMock(ICommonScenarioReportController.class);
         Whitebox.setInternalState(reportController, productFamilyProvider);
         Whitebox.setInternalState(reportController, reportControllerProvider);
         Whitebox.setInternalState(ntsReportController, reportService);
+        Whitebox.setInternalState(ntsReportController, ntsServiceFeeTrueUpReportController);
         expect(reportControllerProvider.getController(FdaConstants.FAS_PRODUCT_FAMILY)).andReturn(ntsReportController)
             .once();
     }
@@ -83,5 +89,10 @@ public class NtsReportControllerTest {
         reportController.initWidget();
         assertNotNull(ntsReportController.getNtsWithdrawnBatchSummaryReportStreamSource().getSource().getValue().get());
         verify(reportService, productFamilyProvider);
+    }
+
+    @Test
+    public void testGetNtsServiceFeeTrueUpReportController() {
+        assertSame(ntsServiceFeeTrueUpReportController, ntsReportController.getNtsServiceFeeTrueUpReportController());
     }
 }

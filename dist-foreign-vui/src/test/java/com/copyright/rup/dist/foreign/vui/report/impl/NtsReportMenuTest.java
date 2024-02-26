@@ -10,7 +10,6 @@ import static org.powermock.api.easymock.PowerMock.verifyAll;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.vui.common.ByteArrayStreamSource;
 import com.copyright.rup.dist.foreign.vui.main.api.IProductFamilyProvider;
-import com.copyright.rup.dist.foreign.vui.report.api.IReportController;
 import com.copyright.rup.dist.foreign.vui.report.api.nts.INtsReportController;
 import com.copyright.rup.dist.foreign.vui.report.impl.report.ReportControllerProvider;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.Windows;
@@ -53,10 +52,11 @@ public class NtsReportMenuTest {
         reportWidget = new ReportWidget();
         productFamilyProvider = createMock(IProductFamilyProvider.class);
         controllerProvider = createMock(ReportControllerProvider.class);
-        IReportController controller = new ReportController();
+        var controller = new ReportController();
         ntsReportController = createMock(INtsReportController.class);
         reportWidget.setController(controller);
         Whitebox.setInternalState(controller, productFamilyProvider);
+        Whitebox.setInternalState(controller, controllerProvider);
         Whitebox.setInternalState(controller, controllerProvider);
     }
 
@@ -89,6 +89,24 @@ public class NtsReportMenuTest {
         expectProductFamily();
         replayAll();
         selectMenuItem(1);
+        verifyAll();
+    }
+
+    @Test
+    public void testNtsServiceFeeTrueUpReportSelected() {
+        NtsServiceFeeTrueUpReportController ntsServiceFeeTrueUpReportController =
+            createMock(NtsServiceFeeTrueUpReportController.class);
+        expect(ntsReportController.getNtsServiceFeeTrueUpReportController())
+            .andReturn(ntsServiceFeeTrueUpReportController).once();
+        CommonScenarioReportWidget widget = createMock(CommonScenarioReportWidget.class);
+        expect(ntsServiceFeeTrueUpReportController.initWidget()).andReturn(widget).once();
+        widget.setHeaderTitle("Service Fee True-up Report");
+        expectLastCall().once();
+        Windows.showModalWindow(widget);
+        expectLastCall().once();
+        expectProductFamily();
+        replayAll();
+        selectMenuItem(3);
         verifyAll();
     }
 
