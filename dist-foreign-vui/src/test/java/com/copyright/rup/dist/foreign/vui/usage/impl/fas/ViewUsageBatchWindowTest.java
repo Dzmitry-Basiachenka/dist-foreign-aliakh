@@ -78,11 +78,11 @@ public class ViewUsageBatchWindowTest {
         expect(ForeignSecurityUtils.hasDeleteUsagePermission()).andReturn(true).once();
         expect(controller.getSelectedProductFamily()).andReturn("FAS").once();
         expect(controller.getUsageBatches("FAS")).andReturn(List.of(buildUsageBatch())).once();
-        replay(controller, ForeignSecurityUtils.class);
+        replay(ForeignSecurityUtils.class, controller);
         window = new ViewUsageBatchWindow(controller);
         Whitebox.setInternalState(window, grid);
-        verify(controller, ForeignSecurityUtils.class);
-        reset(controller, ForeignSecurityUtils.class);
+        verify(ForeignSecurityUtils.class, controller);
+        reset(ForeignSecurityUtils.class, controller);
     }
 
     @Test

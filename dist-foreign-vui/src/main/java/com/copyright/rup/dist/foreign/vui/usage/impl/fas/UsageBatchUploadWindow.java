@@ -49,7 +49,7 @@ public class UsageBatchUploadWindow extends CommonDialog {
 
     private static final long serialVersionUID = -4055282191058832638L;
 
-    private final IFasUsageController usagesController;
+    private final IFasUsageController usageController;
     private final Binder<UsageBatch> binder = new Binder<>();
     private final Binder<String> uploadBinder = new Binder<>();
     private final RequiredValidator requiredValidator = new RequiredValidator();
@@ -65,10 +65,10 @@ public class UsageBatchUploadWindow extends CommonDialog {
     /**
      * Constructor.
      *
-     * @param usagesController instance of {@link IFasUsageController}
+     * @param usageController instance of {@link IFasUsageController}
      */
-    UsageBatchUploadWindow(IFasUsageController usagesController) {
-        this.usagesController = usagesController;
+    UsageBatchUploadWindow(IFasUsageController usageController) {
+        this.usageController = usageController;
         super.setWidth("500px");
         super.setHeight("570px");
         super.setHeaderTitle(ForeignUi.getMessage("window.upload_usage_batch"));
@@ -84,24 +84,24 @@ public class UsageBatchUploadWindow extends CommonDialog {
     void onUploadClicked() {
         if (isValid()) {
             try {
-                var processor = usagesController.getCsvProcessor(productFamilyField.getValue());
+                var processor = usageController.getCsvProcessor(productFamilyField.getValue());
                 var processingResult = processor.process(uploadField.getStreamToUploadedFile());
                 if (processingResult.isSuccessful()) {
                     var usageBatch = binder.getBean();
                     usageBatch.setFiscalYear(UsageBatchUtils.calculateFiscalYear(paymentDateWidget.getValue()));
-                    int usagesCount = usagesController.loadUsageBatch(usageBatch, processingResult.get());
+                    int usagesCount = usageController.loadUsageBatch(usageBatch, processingResult.get());
                     close();
                     Windows.showNotificationWindow(ForeignUi.getMessage("message.upload_completed", usagesCount));
                 } else {
                     Windows.showModalWindow(
                         new ErrorUploadWindow(
-                            usagesController.getErrorResultStreamSource(uploadField.getValue(), processingResult),
+                            usageController.getErrorResultStreamSource(uploadField.getValue(), processingResult),
                             ForeignUi.getMessage("message.error.upload")));
                 }
             } catch (ThresholdExceededException e) {
                 Windows.showModalWindow(
                     new ErrorUploadWindow(
-                        usagesController.getErrorResultStreamSource(uploadField.getValue(), e.getProcessingResult()),
+                        usageController.getErrorResultStreamSource(uploadField.getValue(), e.getProcessingResult()),
                         e.getMessage() + ForeignUi.getMessage("message.error.upload.threshold.exceeded")));
             } catch (ValidationException e) {
                 Windows.showNotificationWindow(ForeignUi.getMessage("window.error"), e.getHtmlMessage());
@@ -142,7 +142,7 @@ public class UsageBatchUploadWindow extends CommonDialog {
         binder.forField(usageBatchNameField)
             .withValidator(requiredValidator)
             .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.length", 50), 0, 50))
-            .withValidator(value -> !usagesController.usageBatchExists(StringUtils.trimToEmpty(value)),
+            .withValidator(value -> !usageController.usageBatchExists(StringUtils.trimToEmpty(value)),
                 ForeignUi.getMessage("message.error.unique_name", "Usage Batch"))
             .bind(UsageBatch::getName, UsageBatch::setName);
         VaadinUtils.addComponentStyle(usageBatchNameField, "usage-batch-name-field");
@@ -166,7 +166,6 @@ public class UsageBatchUploadWindow extends CommonDialog {
     private HorizontalLayout initButtonsLayout() {
         var uploadButton = Buttons.createButton(ForeignUi.getMessage("button.upload"));
         uploadButton.addClickListener(event -> onUploadClicked());
-        VaadinUtils.setButtonsAutoDisabled(uploadButton);
         return new HorizontalLayout(uploadButton, Buttons.createCloseButton(this));
     }
 
@@ -211,11 +210,11 @@ public class UsageBatchUploadWindow extends CommonDialog {
         button.setWidth("72px");
         button.addClickListener(event -> {
             if (BindingValidationStatus.Status.OK == accountNumberBinding.validate().getStatus()) {
-                var rro = usagesController.getRightsholder(accountNumberField.getValue());
+                var rro = usageController.getRightsholder(accountNumberField.getValue());
                 if (StringUtils.isNotBlank(rro.getName())) {
                     accountNameField.setValue(rro.getName());
                     productFamilyField.setValue(
-                        usagesController.getClaAccountNumber().equals(rro.getAccountNumber())
+                        usageController.getClaAccountNumber().equals(rro.getAccountNumber())
                             ? FdaConstants.CLA_FAS_PRODUCT_FAMILY : FdaConstants.FAS_PRODUCT_FAMILY);
                     binder.getBean().getRro().setId(rro.getId());
                 } else {

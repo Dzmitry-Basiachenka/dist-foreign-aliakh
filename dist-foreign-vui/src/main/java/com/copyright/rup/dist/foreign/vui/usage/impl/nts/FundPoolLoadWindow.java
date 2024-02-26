@@ -59,7 +59,7 @@ class FundPoolLoadWindow extends CommonDialog {
     private static final String YEAR_ERROR_MESSAGE =
         ForeignUi.getMessage("field.error.number_not_in_range", MIN_YEAR, MAX_YEAR);
 
-    private final INtsUsageController usagesController;
+    private final INtsUsageController usageController;
     private final Binder<UsageBatch> binder = new Binder<>();
     private final Div errorDiv = new Div();
 
@@ -76,10 +76,10 @@ class FundPoolLoadWindow extends CommonDialog {
     /**
      * Constructor.
      *
-     * @param usagesController instance of {@link INtsUsageController}
+     * @param usageController instance of {@link INtsUsageController}
      */
-    FundPoolLoadWindow(INtsUsageController usagesController) {
-        this.usagesController = usagesController;
+    FundPoolLoadWindow(INtsUsageController usageController) {
+        this.usageController = usageController;
         super.setWidth("520px");
         super.setHeight("510px");
         super.setHeaderTitle(ForeignUi.getMessage("window.load_fund_pool"));
@@ -97,9 +97,9 @@ class FundPoolLoadWindow extends CommonDialog {
             var usageBatch = binder.getBean();
             usageBatch.setFiscalYear(UsageBatchUtils.calculateFiscalYear(paymentDateWidget.getValue()));
             usageBatch.getNtsFields().setMarkets(selectedMarkets);
-            int usagesCount = usagesController.getUsagesCountForNtsBatch(usageBatch);
+            int usagesCount = usageController.getUsagesCountForNtsBatch(usageBatch);
             if (0 < usagesCount) {
-                int insertedUsages = usagesController.loadNtsBatch(usageBatch);
+                int insertedUsages = usageController.loadNtsBatch(usageBatch);
                 close();
                 Windows.showNotificationWindow(ForeignUi.getMessage("message.upload_completed", insertedUsages));
             } else {
@@ -146,7 +146,7 @@ class FundPoolLoadWindow extends CommonDialog {
         binder.forField(usageBatchNameField)
             .withValidator(new RequiredValidator())
             .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.length", 50), 0, 50))
-            .withValidator(value -> !usagesController.usageBatchExists(StringUtils.trimToEmpty(value)),
+            .withValidator(value -> !usageController.usageBatchExists(StringUtils.trimToEmpty(value)),
                 ForeignUi.getMessage("message.error.unique_name", "Usage Batch"))
             .bind(UsageBatch::getName, UsageBatch::setName);
         VaadinUtils.addComponentStyle(usageBatchNameField, "usage-batch-name-field");
@@ -200,7 +200,7 @@ class FundPoolLoadWindow extends CommonDialog {
         button.setWidth("72px");
         button.addClickListener(event -> {
             if (!accountNumberBinding.validate().isError()) {
-                var rro = usagesController.getRightsholder(accountNumberField.getValue());
+                var rro = usageController.getRightsholder(accountNumberField.getValue());
                 if (StringUtils.isNotBlank(rro.getName())) {
                     accountNameField.setValue(rro.getName());
                 } else {
@@ -260,7 +260,7 @@ class FundPoolLoadWindow extends CommonDialog {
     }
 
     private VerticalLayout initMarketFilterWidget() {
-        var marketFilterWidget = new MarketFilterWidget(usagesController::getMarkets);
+        var marketFilterWidget = new MarketFilterWidget(usageController::getMarkets);
         marketFilterWidget.addFilterSaveListener(event -> {
             selectedMarkets = event.getSelectedItemsIds();
             areValidMarkets();

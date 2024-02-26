@@ -78,11 +78,11 @@ public class ViewFundPoolWindowTest {
         expect(ForeignSecurityUtils.hasDeleteUsagePermission()).andReturn(true).once();
         expect(controller.getSelectedProductFamily()).andReturn("NTS").once();
         expect(controller.getUsageBatches("NTS")).andReturn(List.of(buildUsageBatch())).once();
-        replay(controller, ForeignSecurityUtils.class);
+        replay(ForeignSecurityUtils.class, controller);
         window = new ViewFundPoolWindow(controller);
         Whitebox.setInternalState(window, grid);
-        verify(controller, ForeignSecurityUtils.class);
-        reset(controller, ForeignSecurityUtils.class);
+        verify(ForeignSecurityUtils.class, controller);
+        reset(ForeignSecurityUtils.class, controller);
     }
 
     @Test

@@ -1,9 +1,9 @@
 package com.copyright.rup.dist.foreign.vui.usage.impl.aacl;
 
 import com.copyright.rup.common.date.RupDateUtils;
-import com.copyright.rup.dist.common.domain.StoredEntity;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
+import com.copyright.rup.dist.foreign.vui.common.utils.GridColumnEnum;
 import com.copyright.rup.dist.foreign.vui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.vui.usage.api.aacl.IAaclUsageController;
 import com.copyright.rup.dist.foreign.vui.usage.impl.AbstractViewUsageBatchWindow;
@@ -14,7 +14,6 @@ import com.vaadin.flow.function.SerializablePredicate;
 import org.apache.commons.lang3.StringUtils;
 
 import java.time.format.DateTimeFormatter;
-import java.util.Comparator;
 
 /**
  * Modal window that provides functionality for viewing and deleting AACL {@link UsageBatch}es.
@@ -36,7 +35,6 @@ public class ViewAaclUsageBatchWindow extends AbstractViewUsageBatchWindow {
      */
     public ViewAaclUsageBatchWindow(IAaclUsageController controller) {
         super(controller);
-        super.setWidth("800px");
     }
 
     @Override
@@ -68,26 +66,15 @@ public class ViewAaclUsageBatchWindow extends AbstractViewUsageBatchWindow {
 
     @Override
     protected void addGridColumns(Grid<UsageBatch> grid) {
-        //TODO {aliakh} fix column width
-        //TODO {aliakh} reuse methods addColumn from AbstractViewUsageBatchWindow
-        grid.addColumn(UsageBatch::getName)
-            .setHeader(ForeignUi.getMessage("table.column.batch_name"))
-            .setComparator((batch1, batch2) -> batch1.getName().compareToIgnoreCase(batch2.getName()));
-        grid.addColumn(
-            batch -> CommonDateUtils.format(batch.getPaymentDate(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT))
-            .setHeader(ForeignUi.getMessage("table.column.period_end_date"))
-            .setWidth("120px");
-        grid.addColumn(UsageBatch::getNumberOfBaselineYears)
-            .setHeader(ForeignUi.getMessage("table.column.number_of_baseline_years"))
-            .setComparator(Comparator.comparing(UsageBatch::getNumberOfBaselineYears))
-            .setWidth("180px");
-        grid.addColumn(UsageBatch::getCreateUser)
-            .setHeader(ForeignUi.getMessage("table.column.created_by"))
-            .setComparator((batch1, batch2) -> batch1.getCreateUser().compareToIgnoreCase(batch2.getCreateUser()))
-            .setWidth("170px");
-        grid.addColumn(batch -> toLongFormat(batch.getCreateDate()))
-            .setHeader(ForeignUi.getMessage("table.column.created_date"))
-            .setComparator(Comparator.comparing(StoredEntity::getCreateDate))
-            .setWidth("170px");
+        addColumn(UsageBatch::getName, GridColumnEnum.BATCH_NAME,
+            (batch1, batch2) -> batch1.getName().compareToIgnoreCase(batch2.getName()));
+        addColumn(batch -> CommonDateUtils.format(batch.getPaymentDate(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT),
+            GridColumnEnum.BATCH_PERIOD_END_DATE);
+        addColumn(UsageBatch::getNumberOfBaselineYears, GridColumnEnum.NUMBER_OF_BASELINE_YEARS,
+            (batch1, batch2) -> batch1.getNumberOfBaselineYears().compareTo(batch2.getNumberOfBaselineYears()));
+        addColumn(UsageBatch::getCreateUser, GridColumnEnum.CREATED_USER,
+            (batch1, batch2) -> batch1.getCreateUser().compareToIgnoreCase(batch2.getCreateUser()));
+        addColumn(batch -> toLongFormat(batch.getCreateDate()), GridColumnEnum.CREATED_DATE,
+            (batch1, batch2) -> batch1.getCreateDate().compareTo(batch2.getCreateDate()));
     }
 }

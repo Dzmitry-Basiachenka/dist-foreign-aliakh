@@ -111,10 +111,6 @@ class ResearchedUsagesUploadWindow extends CommonDialog {
     private HorizontalLayout initButtonsLayout() {
         var uploadButton = Buttons.createButton(ForeignUi.getMessage("button.upload"));
         uploadButton.addClickListener(event -> onUploadClicked());
-        var closeButton = Buttons.createCloseButton(this);
-        VaadinUtils.setButtonsAutoDisabled(uploadButton);
-        var buttonsLayout = new HorizontalLayout();
-        buttonsLayout.add(uploadButton, closeButton);
-        return buttonsLayout;
+        return new HorizontalLayout(uploadButton, Buttons.createCloseButton(this));
     }
 }
