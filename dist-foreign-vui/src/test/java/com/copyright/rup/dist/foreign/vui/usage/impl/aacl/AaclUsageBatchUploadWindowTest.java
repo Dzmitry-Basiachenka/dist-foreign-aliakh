@@ -183,7 +183,7 @@ public class AaclUsageBatchUploadWindowTest implements IVaadinComponentFinder {
         expect(uploadField.getValue()).andReturn("file.csv");
         expect(controller.getCsvProcessor()).andReturn(processor).once();
         expect(processor.process(anyObject())).andReturn(processingResult).once();
-        expect(controller.usageBatchExists(USAGE_BATCH_NAME)).andReturn(false).times(2);
+        expect(controller.usageBatchExists(USAGE_BATCH_NAME)).andReturn(false).once();
         expect(controller.loadUsageBatch(buildUsageBatch(), processingResult.get())).andReturn(3).once();
         expect(uploadField.getStreamToUploadedFile()).andReturn(createMock(ByteArrayOutputStream.class)).once();
         Windows.showNotificationWindow(
@@ -206,7 +206,7 @@ public class AaclUsageBatchUploadWindowTest implements IVaadinComponentFinder {
         Whitebox.setInternalState(window, "uploadField", uploadField);
         expect(window.isValid()).andReturn(true).once();
         expect(uploadField.getValue()).andReturn(null);
-        expect(controller.usageBatchExists(USAGE_BATCH_NAME)).andReturn(false).times(2);
+        expect(controller.usageBatchExists(USAGE_BATCH_NAME)).andReturn(false).once();
         expect(controller.loadUsageBatch(buildUsageBatch(), List.of())).andReturn(1).once();
         Windows.showNotificationWindow(
             "Upload completed: 0 record(s) were uploaded, 1 record(s) were pulled from baseline");

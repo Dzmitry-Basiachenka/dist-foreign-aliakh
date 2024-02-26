@@ -259,7 +259,7 @@ public class FundPoolLoadWindowTest implements IVaadinComponentFinder {
         expect(window.isValid()).andReturn(true).once();
         window.close();
         expectLastCall().once();
-        expect(controller.usageBatchExists(USAGE_BATCH_NAME)).andReturn(false).times(2);
+        expect(controller.usageBatchExists(USAGE_BATCH_NAME)).andReturn(false).once();
         Capture<UsageBatch> usageBatchCapture = newCapture();
         expect(controller.getRightsholder(FAS_RRO_ACCOUNT_NUMBER)).andReturn(buildRro()).once();
         expect(controller.getUsagesCountForNtsBatch(capture(usageBatchCapture))).andReturn(3).once();
@@ -291,7 +291,7 @@ public class FundPoolLoadWindowTest implements IVaadinComponentFinder {
         mockStatic(Windows.class);
         window = createPartialMock(FundPoolLoadWindow.class, new String[]{"isValid"}, controller);
         expect(window.isValid()).andReturn(true).once();
-        expect(controller.usageBatchExists(USAGE_BATCH_NAME)).andReturn(false).times(2);
+        expect(controller.usageBatchExists(USAGE_BATCH_NAME)).andReturn(false).once();
         expect(controller.getRightsholder(FAS_RRO_ACCOUNT_NUMBER)).andReturn(buildRro()).once();
         Capture<UsageBatch> usageBatchCapture = newCapture();
         expect(controller.getUsagesCountForNtsBatch(capture(usageBatchCapture))).andReturn(0).once();

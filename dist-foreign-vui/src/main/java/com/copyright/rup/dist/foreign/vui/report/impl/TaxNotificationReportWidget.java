@@ -139,8 +139,7 @@ public class TaxNotificationReportWidget extends CommonDialog implements ITaxNot
             .withValidator(new IntegerRangeValidator(
                 ForeignUi.getMessage("field.error.positive_number_or_zero_and_max_value", DAYS_MAX_VALUE),
                 DAYS_MIN_VALUE, DAYS_MAX_VALUE))
-            .bind(ValueProvider.identity(), (bean, fieldValue) -> bean = fieldValue)
-            .validate();
+            .bind(ValueProvider.identity(), (bean, fieldValue) -> bean = fieldValue);
     }
 
     private HorizontalLayout initButtonsLayout() {
@@ -153,7 +152,7 @@ public class TaxNotificationReportWidget extends CommonDialog implements ITaxNot
     }
 
     private void updateExportButtonState() {
-        boolean isValidValues = binder.isValid() && CollectionUtils.isNotEmpty(grid.getSelectedItems());
+        boolean isValidValues = binder.validate().isOk() && CollectionUtils.isNotEmpty(grid.getSelectedItems());
         exportButton.setEnabled(isValidValues);
         if (isValidValues) {
             downloader.setResource(new CsvStreamSource(controller).getSource());
