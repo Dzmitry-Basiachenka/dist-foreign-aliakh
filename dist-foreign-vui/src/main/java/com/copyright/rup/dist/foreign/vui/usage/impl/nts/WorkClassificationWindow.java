@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.vui.usage.impl.nts;
 import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.WorkClassification;
+import com.copyright.rup.dist.foreign.vui.common.utils.GridColumnEnum;
 import com.copyright.rup.dist.foreign.vui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.vui.usage.api.nts.IWorkClassificationController;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.Buttons;
@@ -170,32 +171,32 @@ class WorkClassificationWindow extends CommonDialog {
     }
 
     private void addColumns() {
-        addColumn(WorkClassification::getWrWrkInst, "table.column.wr_wrk_inst", "wrWrkInst", "140px");
-        addStringColumn(WorkClassification::getSystemTitle, "table.column.system_title", "systemTitle");
-        addColumn(WorkClassification::getClassification, "table.column.classification", "classification", "150px");
-        addColumn(WorkClassification::getStandardNumber, "table.column.standard_number", "standardNumber", "180px");
-        addColumn(WorkClassification::getStandardNumberType, "table.column.standard_number_type", "standardNumberType",
-            "225px");
-        addColumn(WorkClassification::getRhAccountNumber, "table.column.rh_account_number", "rhAccountNumber", "150px");
-        addStringColumn(WorkClassification::getRhName, "table.column.rh_account_name", "rhName");
+        addColumn(WorkClassification::getWrWrkInst, GridColumnEnum.WR_WRK_INST);
+        addColumnWithComparator(WorkClassification::getSystemTitle, GridColumnEnum.SYSTEM_TITLE);
+        addColumn(WorkClassification::getClassification, GridColumnEnum.CLASSIFICATION);
+        addColumn(WorkClassification::getStandardNumber, GridColumnEnum.STANDARD_NUMBER);
+        addColumn(WorkClassification::getStandardNumberType, GridColumnEnum.STANDARD_NUMBER_TYPE);
+        addColumn(WorkClassification::getRhAccountNumber, GridColumnEnum.RH_ACCOUNT_NUMBER);
+        addColumnWithComparator(WorkClassification::getRhName, GridColumnEnum.RH_NAME);
         addClassificationDateColumn(WorkClassification::getUpdateDate);
-        addStringColumn(WorkClassification::getUpdateUser, "table.column.classified_by", "updateUser");
+        addColumnWithComparator(WorkClassification::getUpdateUser, GridColumnEnum.CLASSIFIED_BY);
     }
 
-    private void addStringColumn(ValueProvider<WorkClassification, String> provider, String caption, String property) {
-        addColumn(provider, caption, property, "300px")
-            .setComparator((SerializableComparator<WorkClassification>) (classification1, classification2) ->
+    private void addColumnWithComparator(ValueProvider<WorkClassification, String> provider,
+                                         GridColumnEnum gridColumn) {
+        addColumn(provider, gridColumn).setComparator(
+            (SerializableComparator<WorkClassification>) (classification1, classification2) ->
                 Comparator.comparing(provider, Comparator.nullsFirst(String.CASE_INSENSITIVE_ORDER))
                     .compare(classification1, classification2));
     }
 
-    private Column<WorkClassification> addColumn(ValueProvider<WorkClassification, ?> provider, String captionProperty,
-                                                 String sort, String width) {
+    private Column<WorkClassification> addColumn(ValueProvider<WorkClassification, ?> provider,
+                                                 GridColumnEnum gridColumn) {
         return grid.addColumn(provider)
-            .setHeader(ForeignUi.getMessage(captionProperty))
-            .setSortProperty(sort)
+            .setHeader(ForeignUi.getMessage(gridColumn.getCaption()))
+            .setSortProperty(gridColumn.getSort())
             .setFlexGrow(0)
-            .setWidth(width)
+            .setWidth(gridColumn.getWidth())
             .setSortable(true)
             .setResizable(true);
     }
@@ -238,7 +239,10 @@ class WorkClassificationWindow extends CommonDialog {
                 Windows.showConfirmDialog(0 < usageCount
                         ? ForeignUi.getMessage(message, usageCount)
                         : ForeignUi.getMessage("message.confirm.action"),
-                    () -> consumer.accept(selectedItems));
+                    () -> {
+                        grid.deselectAll();
+                        consumer.accept(selectedItems);
+                    });
             } else {
                 Windows.showNotificationWindow(ForeignUi.getMessage("message.classification.empty"));
             }

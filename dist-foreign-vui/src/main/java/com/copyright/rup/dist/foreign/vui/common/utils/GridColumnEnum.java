@@ -39,7 +39,7 @@ public enum GridColumnEnum {
     /**
      * Created date column.
      */
-    CREATED_DATE("table.column.created_date", "createdDate", "150px"),
+    CREATED_DATE("table.column.created_date", "createdDate", WidthConstants.WIDTH_150),
     /**
      * Distribution date column.
      */
@@ -67,11 +67,11 @@ public enum GridColumnEnum {
     /**
      * Period end date column.
      */
-    PERIOD_END_DATE("table.column.period_ending", "periodEndDate", "150px"),
+    PERIOD_END_DATE("table.column.period_ending", "periodEndDate", WidthConstants.WIDTH_150),
     /**
      * Product family column.
      */
-    PRODUCT_FAMILY("table.column.product_family", "productFamily", "160px"),
+    PRODUCT_FAMILY("table.column.product_family", "productFamily", WidthConstants.WIDTH_160),
     /**
      * Reported standard number column.
      */
@@ -83,7 +83,7 @@ public enum GridColumnEnum {
     /**
      * Rightsholder account # column.
      */
-    RH_ACCOUNT_NUMBER("table.column.rh_account_number", "rhAccountNumber", "150px"),
+    RH_ACCOUNT_NUMBER("table.column.rh_account_number", "rhAccountNumber", WidthConstants.WIDTH_150),
     /**
      * Rightsholder name column.
      */
@@ -91,7 +91,7 @@ public enum GridColumnEnum {
     /**
      * RRO account # column.
      */
-    RRO_ACCOUNT_NUMBER("table.column.rro_account_number", "rroAccountNumber", "160px"),
+    RRO_ACCOUNT_NUMBER("table.column.rro_account_number", "rroAccountNumber", WidthConstants.WIDTH_160),
     /**
      * RRO name column.
      */
@@ -171,7 +171,7 @@ public enum GridColumnEnum {
     /**
      * Rights limitation column.
      */
-    RIGHT_LIMITATION("table.column.right_limitation", "rightLimitation", "160px"),
+    RIGHT_LIMITATION("table.column.right_limitation", "rightLimitation", WidthConstants.WIDTH_160),
     /**
      * Usage source column.
      */
@@ -191,6 +191,14 @@ public enum GridColumnEnum {
      * Batch gross amount column.
      */
     BATCH_GROSS_AMOUNT("table.column.batch_gross_amount", "batchGrossAmount", "170px"),
+    /**
+     * Classification column.
+     */
+    CLASSIFICATION("table.column.classification", "classification", WidthConstants.WIDTH_150),
+    /**
+     * Classified by user column.
+     */
+    CLASSIFIED_BY("table.column.classified_by", "updateUser", WidthConstants.WIDTH_300),
     /**
      * Fiscal year column.
      */
@@ -283,6 +291,8 @@ public enum GridColumnEnum {
 
     private static class WidthConstants {
         private static final String WIDTH_140 = "140px";
+        private static final String WIDTH_150 = "150px";
+        private static final String WIDTH_160 = "160px";
         private static final String WIDTH_180 = "180px";
         private static final String WIDTH_200 = "200px";
         private static final String WIDTH_300 = "300px";
