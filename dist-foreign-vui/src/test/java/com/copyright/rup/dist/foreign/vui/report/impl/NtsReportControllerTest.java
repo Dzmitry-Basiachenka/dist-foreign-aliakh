@@ -16,6 +16,7 @@ import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.vui.common.ByteArrayStreamSource;
 import com.copyright.rup.dist.foreign.vui.main.api.IProductFamilyProvider;
 import com.copyright.rup.dist.foreign.vui.report.api.ICommonScenarioReportController;
+import com.copyright.rup.dist.foreign.vui.report.api.INtsPreServiceFeeFundReportController;
 import com.copyright.rup.dist.foreign.vui.report.api.nts.INtsReportController;
 import com.copyright.rup.dist.foreign.vui.report.impl.report.ReportControllerProvider;
 import com.copyright.rup.dist.foreign.vui.report.impl.report.nts.NtsReportController;
@@ -52,6 +53,7 @@ public class NtsReportControllerTest {
     private ReportController reportController;
     private IReportService reportService;
     private ICommonScenarioReportController ntsServiceFeeTrueUpReportController;
+    private INtsPreServiceFeeFundReportController ntsPreServiceFeeFundReportController;
 
     @Before
     public void setUp() {
@@ -61,12 +63,14 @@ public class NtsReportControllerTest {
         reportService = createMock(IReportService.class);
         productFamilyProvider = createMock(IProductFamilyProvider.class);
         ntsServiceFeeTrueUpReportController = EasyMock.createMock(ICommonScenarioReportController.class);
+        ntsPreServiceFeeFundReportController = EasyMock.createMock(INtsPreServiceFeeFundReportController.class);
         Whitebox.setInternalState(reportController, productFamilyProvider);
         Whitebox.setInternalState(reportController, reportControllerProvider);
         Whitebox.setInternalState(ntsReportController, reportService);
         Whitebox.setInternalState(ntsReportController, ntsServiceFeeTrueUpReportController);
         expect(reportControllerProvider.getController(FdaConstants.FAS_PRODUCT_FAMILY)).andReturn(ntsReportController)
             .once();
+        Whitebox.setInternalState(ntsReportController, ntsPreServiceFeeFundReportController);
     }
 
     @Test
@@ -105,5 +109,10 @@ public class NtsReportControllerTest {
         assertEquals("nts_fund_pools_01_02_2023_03_04.csv",
             ntsReportController.getNtsFundPoolsReportStreamSource().getSource().getKey().get());
         verify(OffsetDateTime.class);
+    }
+
+    @Test
+    public void testGetNtsPreServiceFeeFundReportController() {
+        assertSame(ntsPreServiceFeeFundReportController, ntsReportController.getNtsPreServiceFeeFundReportController());
     }
 }

@@ -10,6 +10,7 @@ import static org.powermock.api.easymock.PowerMock.verifyAll;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.vui.common.ByteArrayStreamSource;
 import com.copyright.rup.dist.foreign.vui.main.api.IProductFamilyProvider;
+import com.copyright.rup.dist.foreign.vui.report.api.INtsPreServiceFeeFundReportController;
 import com.copyright.rup.dist.foreign.vui.report.api.nts.INtsReportController;
 import com.copyright.rup.dist.foreign.vui.report.impl.report.ReportControllerProvider;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.Windows;
@@ -119,6 +120,22 @@ public class NtsReportMenuTest {
         expectProductFamily();
         replayAll();
         selectMenuItem(4);
+        verifyAll();
+    }
+
+    @Test
+    public void testNtsPreServiceFeeFundReportSelected() {
+        INtsPreServiceFeeFundReportController controller = createMock(INtsPreServiceFeeFundReportController.class);
+        NtsPreServiceFeeFundReportWidget widget = createMock(NtsPreServiceFeeFundReportWidget.class);
+        expect(ntsReportController.getNtsPreServiceFeeFundReportController()).andReturn(controller).once();
+        expect(controller.initWidget()).andReturn(widget).once();
+        widget.setHeaderTitle("NTS Pre-Service Fee Fund Report");
+        expectLastCall().once();
+        Windows.showModalWindow(widget);
+        expectLastCall().once();
+        expectProductFamily();
+        replayAll();
+        selectMenuItem(5);
         verifyAll();
     }
 

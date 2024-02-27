@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.vui.report.impl.report.nts;
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.vui.common.ByteArrayStreamSource;
 import com.copyright.rup.dist.foreign.vui.report.api.ICommonScenarioReportController;
+import com.copyright.rup.dist.foreign.vui.report.api.INtsPreServiceFeeFundReportController;
 import com.copyright.rup.dist.foreign.vui.report.api.nts.INtsReportController;
 import com.copyright.rup.dist.foreign.vui.report.impl.report.CommonReportController;
 
@@ -28,6 +29,8 @@ public class NtsReportController extends CommonReportController implements INtsR
     @Autowired
     @Qualifier("df.ntsServiceFeeTrueUpReportController")
     private ICommonScenarioReportController ntsServiceFeeTrueUpReportController;
+    @Autowired
+    private INtsPreServiceFeeFundReportController ntsPreServiceFeeFundReportController;
 
     @Override
     public IStreamSource getNtsWithdrawnBatchSummaryReportStreamSource() {
@@ -50,5 +53,10 @@ public class NtsReportController extends CommonReportController implements INtsR
     public IStreamSource getNtsFundPoolsReportStreamSource() {
         return new ByteArrayStreamSource("nts_fund_pools_",
             outputStream -> getReportService().writeNtsFundPoolsCsvReport(outputStream));
+    }
+
+    @Override
+    public INtsPreServiceFeeFundReportController getNtsPreServiceFeeFundReportController() {
+        return ntsPreServiceFeeFundReportController;
     }
 }
