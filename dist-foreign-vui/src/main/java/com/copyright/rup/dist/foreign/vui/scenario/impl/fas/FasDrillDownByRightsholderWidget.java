@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.vui.scenario.impl.fas;
 import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
+import com.copyright.rup.dist.foreign.vui.common.utils.GridColumnEnum;
 import com.copyright.rup.dist.foreign.vui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.vui.scenario.api.fas.IFasDrillDownByRightsholderWidget;
 import com.copyright.rup.dist.foreign.vui.scenario.impl.CommonDrillDownByRightsholderWidget;
@@ -22,52 +23,41 @@ public class FasDrillDownByRightsholderWidget extends CommonDrillDownByRightshol
     implements IFasDrillDownByRightsholderWidget {
 
     private static final long serialVersionUID = -6030611472342480603L;
-    private static final String WIDTH_130_PX = "130px";
-    private static final String WIDTH_170_PX = "170px";
-    private static final String WIDTH_150_PX = "150px";
-    private static final String WIDTH_200_PX = "200px";
 
     @Override
     protected void addColumns() {
-        addColumn(UsageDto::getId, "table.column.detail_id", "detailId", WIDTH_130_PX);
-        addColumn(UsageDto::getProductFamily, "table.column.product_family", "productFamily", WIDTH_170_PX);
-        addColumn(UsageDto::getBatchName, "table.column.batch_name", "batchName", "180px");
-        addColumn(UsageDto::getRroAccountNumber, "table.column.rro_account_number", "rroAccountNumber", WIDTH_150_PX);
-        addColumn(UsageDto::getRroName, "table.column.rro_account_name", "rroName", "140px");
-        addColumn(UsageDto::getWrWrkInst, "table.column.wr_wrk_inst", "wrWrkInst", WIDTH_130_PX);
-        addColumn(UsageDto::getSystemTitle, "table.column.system_title", "systemTitle", "300px");
+        addColumn(UsageDto::getId, GridColumnEnum.ID);
+        addColumn(UsageDto::getProductFamily, GridColumnEnum.PRODUCT_FAMILY);
+        addColumn(UsageDto::getBatchName, GridColumnEnum.BATCH_NAME);
+        addColumn(UsageDto::getRroAccountNumber, GridColumnEnum.RRO_ACCOUNT_NUMBER);
+        addColumn(UsageDto::getRroName, GridColumnEnum.RRO_NAME);
+        addColumn(UsageDto::getWrWrkInst, GridColumnEnum.WR_WRK_INST);
+        addColumn(UsageDto::getSystemTitle, GridColumnEnum.SYSTEM_TITLE);
         addColumn(usageDto -> Objects.nonNull(usageDto.getFasUsage())
-                ? usageDto.getFasUsage().getReportedStandardNumber() : null, "table.column.reported_standard_number",
-            "reportedStandardNumber", "270px");
-        addColumn(UsageDto::getStandardNumber, "table.column.standard_number", "standardNumber", "190px");
-        addColumn(
-            UsageDto::getStandardNumberType, "table.column.standard_number_type", "standardNumberType", "220px");
-        addColumn(usageDto -> formatFiscalYear(usageDto.getFiscalYear()), "table.column.fiscal_year", "fiscalYear",
-            WIDTH_130_PX);
+            ? usageDto.getFasUsage().getReportedStandardNumber() : null, GridColumnEnum.REPORTED_STANDARD_NUMBER);
+        addColumn(UsageDto::getStandardNumber, GridColumnEnum.STANDARD_NUMBER);
+        addColumn(UsageDto::getStandardNumberType, GridColumnEnum.STANDARD_NUMBER_TYPE);
+        addColumn(usageDto -> formatFiscalYear(usageDto.getFiscalYear()), GridColumnEnum.FISCAL_YEAR);
         addColumn(
             usageDto -> CommonDateUtils.format(usageDto.getPaymentDate(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT),
-            "table.column.payment_date", "paymentDate", WIDTH_150_PX);
-        addColumn(UsageDto::getWorkTitle, "table.column.reported_title", "workTitle", "300px");
-        addColumn(UsageDto::getArticle, "table.column.article", "article");
-        addColumn(UsageDto::getPublisher, "table.column.publisher", "publisher", "135px");
+            GridColumnEnum.PAYMENT_DATE);
+        addColumn(UsageDto::getWorkTitle, GridColumnEnum.REPORTED_TITLE);
+        addColumn(UsageDto::getArticle, GridColumnEnum.ARTICLE);
+        addColumn(UsageDto::getPublisher, GridColumnEnum.PUBLISHER);
         addColumn(usageDto -> CommonDateUtils.format(usageDto.getPublicationDate(),
-            RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT), "table.column.publication_date", "publicationDate",
-            WIDTH_130_PX);
-        addColumn(UsageDto::getNumberOfCopies, "table.column.number_of_copies", "numberOfCopies", "180px");
-        addAmountColumn(UsageDto::getReportedValue, "table.column.reported_value", "reportedValue", WIDTH_170_PX);
-        addAmountColumn(UsageDto::getGrossAmount, "table.column.gross_amount_in_usd", "grossAmount", WIDTH_170_PX);
-        addAmountColumn(
-            UsageDto::getBatchGrossAmount, "table.column.batch_gross_amount", "batchGrossAmount", WIDTH_170_PX);
-        addAmountColumn(
-            UsageDto::getServiceFeeAmount, "table.column.service_fee_amount", "serviceFeeAmount", WIDTH_200_PX);
-        addAmountColumn(UsageDto::getNetAmount, "table.column.net_amount_in_usd", "netAmount", WIDTH_150_PX);
-        addColumn(usageDto -> formatServiceFee(usageDto.getServiceFee()), "table.column.service_fee", "serviceFee",
-            WIDTH_150_PX);
-        addColumn(UsageDto::getMarket, "table.column.market", "market", "115px");
-        addColumn(UsageDto::getMarketPeriodFrom, "table.column.market_period_from", "marketPeriodFrom", WIDTH_200_PX);
-        addColumn(UsageDto::getMarketPeriodTo, "table.column.market_period_to", "marketPeriodTo", "190px");
-        addColumn(UsageDto::getAuthor, "table.column.author", "author", "105px");
-        addColumn(UsageDto::getComment, "table.column.comment", "comment", WIDTH_200_PX);
+            RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT), GridColumnEnum.PUB_DATE);
+        addColumn(UsageDto::getNumberOfCopies, GridColumnEnum.NUMBER_OF_COPIES);
+        addAmountColumn(UsageDto::getReportedValue, GridColumnEnum.REPORTED_VALUE);
+        addAmountColumn(UsageDto::getGrossAmount, GridColumnEnum.GROSS_AMOUNT);
+        addAmountColumn(UsageDto::getBatchGrossAmount, GridColumnEnum.BATCH_GROSS_AMOUNT);
+        addAmountColumn(UsageDto::getServiceFeeAmount, GridColumnEnum.SERVICE_FEE_AMOUNT);
+        addAmountColumn(UsageDto::getNetAmount, GridColumnEnum.NET_AMOUNT);
+        addColumn(usageDto -> formatServiceFee(usageDto.getServiceFee()), GridColumnEnum.SERVICE_FEE);
+        addColumn(UsageDto::getMarket, GridColumnEnum.MARKET);
+        addColumn(UsageDto::getMarketPeriodFrom, GridColumnEnum.MARKET_PERIOD_FROM);
+        addColumn(UsageDto::getMarketPeriodTo, GridColumnEnum.MARKET_PERIOD_TO);
+        addColumn(UsageDto::getAuthor, GridColumnEnum.AUTHOR);
+        addColumn(UsageDto::getComment, GridColumnEnum.COMMENT);
     }
 
     @Override

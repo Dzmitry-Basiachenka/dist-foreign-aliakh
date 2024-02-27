@@ -1,0 +1,31 @@
+[
+  {
+    "id": "e2fabeb2-69f8-4288-b34f-698d8c514c84",
+    "status": "PAID",
+    "productFamily": "FAS",
+    "batchName": "Paid batch",
+    "rroAccountNumber": 1000000004,
+    "rroName":  "Computers for Design and Construction",
+    "wrWrkInst": 243904752,
+    "systemTitle": "100 ROAD MOVIES",
+    "standardNumber": "1008902112317555XX",
+    "standardNumberType": "VALISBN13",
+    "fiscalYear": 2021,
+    "paymentDate": "2021-02-12",
+    "workTitle": "100 ROAD MOVIES",
+    "article": "some article",
+    "publisher": "some publisher",
+    "publicationDate": "2021-02-13",
+    "numberOfCopies": 2,
+    "reportedValue": 3000.00000,
+    "grossAmount": 500.0000000000,
+    "serviceFeeAmount": 160.00,
+    "netAmount": 340.00,
+    "serviceFee": 0.32,
+    "market": "lib",
+    "marketPeriodFrom": 1980,
+    "marketPeriodTo": 2000,
+    "author": "author",
+    "comment": "comment"
+  }
+]

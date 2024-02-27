@@ -21,7 +21,6 @@ import com.copyright.rup.dist.foreign.vui.report.api.nts.INtsReportController;
 import com.copyright.rup.dist.foreign.vui.report.impl.report.ReportControllerProvider;
 import com.copyright.rup.dist.foreign.vui.report.impl.report.nts.NtsReportController;
 
-import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -62,8 +61,8 @@ public class NtsReportControllerTest {
         ReportControllerProvider reportControllerProvider = createMock(ReportControllerProvider.class);
         reportService = createMock(IReportService.class);
         productFamilyProvider = createMock(IProductFamilyProvider.class);
-        ntsServiceFeeTrueUpReportController = EasyMock.createMock(ICommonScenarioReportController.class);
-        ntsPreServiceFeeFundReportController = EasyMock.createMock(INtsPreServiceFeeFundReportController.class);
+        ntsServiceFeeTrueUpReportController = createMock(ICommonScenarioReportController.class);
+        ntsPreServiceFeeFundReportController = createMock(INtsPreServiceFeeFundReportController.class);
         Whitebox.setInternalState(reportController, productFamilyProvider);
         Whitebox.setInternalState(reportController, reportControllerProvider);
         Whitebox.setInternalState(ntsReportController, reportService);
