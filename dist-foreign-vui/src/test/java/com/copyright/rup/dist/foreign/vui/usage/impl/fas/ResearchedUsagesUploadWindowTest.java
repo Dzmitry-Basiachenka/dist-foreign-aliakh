@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.vui.usage.impl.fas;
 
+import static com.copyright.rup.dist.foreign.vui.IVaadinJsonConverter.assertJsonSnapshot;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.getDialogContent;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.getFooterLayout;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyButtonsLayout;
@@ -74,6 +75,12 @@ public class ResearchedUsagesUploadWindowTest {
         verifyWindow(window, "Upload Researched Details", "520px", "230px", Unit.PIXELS, false);
         verifyRootLayout(getDialogContent(window));
         verify(controller);
+    }
+
+    @Test
+    public void testJsonSnapshot() {
+        assertJsonSnapshot("usage/impl/fas/researched-usages-upload-window.json",
+            new ResearchedUsagesUploadWindow(controller));
     }
 
     @Test

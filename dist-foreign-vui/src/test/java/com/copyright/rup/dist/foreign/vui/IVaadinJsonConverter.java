@@ -48,6 +48,7 @@ public interface IVaadinJsonConverter {
         "_flowId",
         "draggable",
         "errorMessage",
+        "flexGrow",
         "headerTitle",
         "i18n",
         "innerHTML",

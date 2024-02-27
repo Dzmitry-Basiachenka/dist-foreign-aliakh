@@ -47,7 +47,7 @@ public class AaclUsageBatchUploadWindow extends CommonDialog {
     private static final String YEAR_ERROR_MESSAGE =
         ForeignUi.getMessage("field.error.number_not_in_range", MIN_YEAR, MAX_YEAR);
 
-    private final IAaclUsageController usagesController;
+    private final IAaclUsageController usageController;
     private final Binder<UsageBatch> binder = new Binder<>();
     private final Binder<String> uploadBinder = new Binder<>();
     private UploadField uploadField;
@@ -55,10 +55,10 @@ public class AaclUsageBatchUploadWindow extends CommonDialog {
     /**
      * Constructor.
      *
-     * @param usagesController instance of {@link IAaclUsageController}
+     * @param usageController instance of {@link IAaclUsageController}
      */
-    public AaclUsageBatchUploadWindow(IAaclUsageController usagesController) {
-        this.usagesController = usagesController;
+    public AaclUsageBatchUploadWindow(IAaclUsageController usageController) {
+        this.usageController = usageController;
         super.setWidth("500px");
         super.setHeight("420px");
         super.setHeaderTitle(ForeignUi.getMessage("window.upload_usage_batch"));
@@ -75,10 +75,10 @@ public class AaclUsageBatchUploadWindow extends CommonDialog {
         if (isValid()) {
             try {
                 if (StringUtils.isNotEmpty(uploadField.getValue())) {
-                    var processor = usagesController.getCsvProcessor();
+                    var processor = usageController.getCsvProcessor();
                     var processingResult = processor.process(uploadField.getStreamToUploadedFile());
                     if (processingResult.isSuccessful()) {
-                        int totalCount = usagesController.loadUsageBatch(binder.getBean(), processingResult.get());
+                        int totalCount = usageController.loadUsageBatch(binder.getBean(), processingResult.get());
                         int uploadedCount = processingResult.get().size();
                         close();
                         Windows.showNotificationWindow(ForeignUi.getMessage("message.upload_aacl_batch_completed",
@@ -86,11 +86,11 @@ public class AaclUsageBatchUploadWindow extends CommonDialog {
                     } else {
                         Windows.showModalWindow(
                             new ErrorUploadWindow(
-                                usagesController.getErrorResultStreamSource(uploadField.getValue(), processingResult),
+                                usageController.getErrorResultStreamSource(uploadField.getValue(), processingResult),
                                 ForeignUi.getMessage("message.error.upload")));
                     }
                 } else {
-                    int baselineUsagesCount = usagesController.loadUsageBatch(binder.getBean(), List.of());
+                    int baselineUsagesCount = usageController.loadUsageBatch(binder.getBean(), List.of());
                     close();
                     Windows.showNotificationWindow(
                         ForeignUi.getMessage("message.upload_aacl_batch_completed", 0, baselineUsagesCount));
@@ -98,7 +98,7 @@ public class AaclUsageBatchUploadWindow extends CommonDialog {
             } catch (ThresholdExceededException e) {
                 Windows.showModalWindow(
                     new ErrorUploadWindow(
-                        usagesController.getErrorResultStreamSource(uploadField.getValue(), e.getProcessingResult()),
+                        usageController.getErrorResultStreamSource(uploadField.getValue(), e.getProcessingResult()),
                         String.format("%s%s", e.getMessage(),
                             ForeignUi.getMessage("message.error.upload.threshold.exceeded"))));
             } catch (ValidationException e) {
@@ -134,8 +134,8 @@ public class AaclUsageBatchUploadWindow extends CommonDialog {
 
     private UploadField initUploadField() {
         uploadField = new UploadField();
-        uploadField.setSizeFull();
         uploadField.addSucceededListener(event -> uploadBinder.validate());
+        uploadField.setSizeFull();
         uploadBinder.forField(uploadField)
             .withValidator(value -> StringUtils.isEmpty(value)
                 || StringUtils.endsWith(value, ".csv"), ForeignUi.getMessage("error.upload_file.invalid_extension"))
@@ -147,7 +147,6 @@ public class AaclUsageBatchUploadWindow extends CommonDialog {
     private HorizontalLayout initButtonsLayout() {
         var uploadButton = Buttons.createButton(ForeignUi.getMessage("button.upload"));
         uploadButton.addClickListener(event -> onUploadClicked());
-        VaadinUtils.setButtonsAutoDisabled(uploadButton);
         return new HorizontalLayout(uploadButton, Buttons.createCloseButton(this));
     }
 
@@ -158,7 +157,7 @@ public class AaclUsageBatchUploadWindow extends CommonDialog {
         binder.forField(usageBatchNameField)
             .withValidator(new RequiredValidator())
             .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.length", 50), 0, 50))
-            .withValidator(value -> !usagesController.usageBatchExists(StringUtils.trimToEmpty(value)),
+            .withValidator(value -> !usageController.usageBatchExists(StringUtils.trimToEmpty(value)),
                 ForeignUi.getMessage("message.error.unique_name", "Usage Batch"))
             .bind(UsageBatch::getName, UsageBatch::setName);
         VaadinUtils.addComponentStyle(usageBatchNameField, "usage-batch-name-field");

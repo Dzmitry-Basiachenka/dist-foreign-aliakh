@@ -1,0 +1,237 @@
+{
+  "javaClass" : "com.copyright.rup.dist.foreign.vui.usage.impl.nts.FundPoolLoadWindow",
+  "id" : "fund-pool-upload-window",
+  "class" : "[fund-pool-upload-window]",
+  "headerTitle" : "Load Fund Pool",
+  "isModal" : true,
+  "isDraggable" : true,
+  "isResizable" : false,
+  "isCloseOnEsc" : false,
+  "isCloseOnOutsideClick" : false,
+  "isOpened" : false,
+  "width" : "520px",
+  "minHeight" : "200px",
+  "height" : "510px",
+  "children" : [ {
+    "javaClass" : "com.vaadin.flow.component.orderedlayout.VerticalLayout",
+    "style" : "width:100%;padding:10.0px 10.0px 0.0px 10.0px",
+    "width" : "100%",
+    "children" : [ {
+      "javaClass" : "com.vaadin.flow.component.textfield.TextField",
+      "id" : "usage-batch-name-field",
+      "class" : "[usage-batch-name-field]",
+      "style" : "width:100%",
+      "label" : "Usage Batch Name",
+      "width" : "100%",
+      "value" : "",
+      "requiredIndicatorVisible" : true,
+      "valid" : true
+    }, {
+      "javaClass" : "com.vaadin.flow.component.orderedlayout.HorizontalLayout",
+      "style" : "width:100%;align-items:baseline",
+      "theme" : "spacing",
+      "width" : "100%",
+      "children" : [ {
+        "javaClass" : "com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.LongField",
+        "id" : "rro-account-number-field",
+        "class" : "[rro-account-number-field]",
+        "style" : "width:30%",
+        "label" : "RRO Account #",
+        "width" : "30%",
+        "requiredIndicatorVisible" : true,
+        "valid" : true
+      }, {
+        "javaClass" : "com.vaadin.flow.component.textfield.TextField",
+        "id" : "rro-account-name-field",
+        "class" : "[rro-account-name-field]",
+        "style" : "width:50%",
+        "label" : "RRO Account Name",
+        "width" : "50%",
+        "value" : "",
+        "readonly" : true,
+        "requiredIndicatorVisible" : true,
+        "valid" : true
+      }, {
+        "javaClass" : "com.vaadin.flow.component.button.Button",
+        "id" : "Verify",
+        "class" : "[Verify]",
+        "style" : "width:72px",
+        "text" : "Verify",
+        "width" : "72px",
+        "disableOnClick" : true
+      } ]
+    }, {
+      "javaClass" : "com.vaadin.flow.component.orderedlayout.HorizontalLayout",
+      "style" : "width:100%;align-items:baseline",
+      "theme" : "spacing",
+      "width" : "100%",
+      "children" : [ {
+        "javaClass" : "com.copyright.rup.dist.foreign.vui.vaadin.common.widget.LocalDateWidget",
+        "id" : "payment-date-field",
+        "class" : "[payment-date-field]",
+        "style" : "width:30%",
+        "label" : "Payment Date",
+        "width" : "30%",
+        "requiredIndicatorVisible" : true,
+        "valid" : true,
+        "children" : [ {
+          "javaClass" : "com.copyright.rup.dist.foreign.vui.vaadin.common.widget.DateWidget",
+          "class" : "[popup-date-widget-layout]",
+          "style" : "width:100%",
+          "width" : "100%",
+          "children" : [ {
+            "javaClass" : "com.vaadin.flow.component.datepicker.DatePicker",
+            "style" : "width:100%",
+            "label" : "Payment Date",
+            "width" : "100%",
+            "requiredIndicatorVisible" : false,
+            "valid" : true,
+            "property_placeholder" : "mm/dd/yyyy",
+            "property_clearButtonVisible" : "true"
+          } ]
+        } ]
+      }, {
+        "javaClass" : "com.vaadin.flow.component.textfield.IntegerField",
+        "id" : "fund-pool-period-from-field",
+        "class" : "[fund-pool-period-from-field]",
+        "style" : "width:33%",
+        "label" : "Fund Pool Period From",
+        "width" : "33%",
+        "requiredIndicatorVisible" : true,
+        "valid" : true
+      }, {
+        "javaClass" : "com.vaadin.flow.component.textfield.IntegerField",
+        "id" : "fund-pool-period-to-field",
+        "class" : "[fund-pool-period-to-field]",
+        "style" : "width:30%;height:100%",
+        "label" : "Fund Pool Period To",
+        "width" : "30%",
+        "height" : "100%",
+        "requiredIndicatorVisible" : true,
+        "valid" : true
+      } ]
+    }, {
+      "javaClass" : "com.vaadin.flow.component.orderedlayout.VerticalLayout",
+      "style" : "width:100%",
+      "width" : "100%",
+      "children" : [ {
+        "javaClass" : "com.copyright.rup.dist.foreign.vui.usage.impl.MarketFilterWidget",
+        "id" : "market-filter-widget",
+        "class" : "[market-filter-widget]",
+        "children" : [ {
+          "javaClass" : "com.vaadin.flow.component.Html",
+          "style" : "padding:0px 5px 0px 0px"
+        }, {
+          "javaClass" : "com.vaadin.flow.component.button.Button",
+          "id" : "Markets",
+          "class" : "[Markets]",
+          "theme" : "small tertiary-inline",
+          "text" : "Markets",
+          "disableOnClick" : true
+        } ]
+      } ]
+    }, {
+      "javaClass" : "com.vaadin.flow.component.orderedlayout.HorizontalLayout",
+      "style" : "width:100%;height:100%",
+      "theme" : "spacing",
+      "width" : "100%",
+      "height" : "100%",
+      "children" : [ {
+        "javaClass" : "com.vaadin.flow.component.textfield.BigDecimalField",
+        "id" : "stm-amount-field",
+        "class" : "[stm-amount-field]",
+        "style" : "width:100%",
+        "label" : "STM Amount",
+        "width" : "100%",
+        "requiredIndicatorVisible" : true,
+        "valid" : true,
+        "property__decimalSeparator" : ".",
+        "children" : [ {
+          "javaClass" : "com.vaadin.flow.component.icon.Icon",
+          "icon" : "vaadin:dollar",
+          "slot" : "prefix"
+        } ]
+      }, {
+        "javaClass" : "com.vaadin.flow.component.textfield.BigDecimalField",
+        "id" : "non-stm-amount-field",
+        "class" : "[non-stm-amount-field]",
+        "style" : "width:100%",
+        "label" : "Non-STM Amount",
+        "width" : "100%",
+        "requiredIndicatorVisible" : true,
+        "valid" : true,
+        "property__decimalSeparator" : ".",
+        "children" : [ {
+          "javaClass" : "com.vaadin.flow.component.icon.Icon",
+          "icon" : "vaadin:dollar",
+          "slot" : "prefix"
+        } ]
+      } ]
+    }, {
+      "javaClass" : "com.vaadin.flow.component.orderedlayout.HorizontalLayout",
+      "style" : "width:100%;height:100%",
+      "theme" : "spacing",
+      "width" : "100%",
+      "height" : "100%",
+      "children" : [ {
+        "javaClass" : "com.vaadin.flow.component.textfield.BigDecimalField",
+        "id" : "stm-minimum-amount-field",
+        "class" : "[stm-minimum-amount-field]",
+        "style" : "width:100%",
+        "label" : "STM Minimum Amount",
+        "width" : "100%",
+        "value" : 50,
+        "requiredIndicatorVisible" : true,
+        "valid" : true,
+        "property__decimalSeparator" : ".",
+        "children" : [ {
+          "javaClass" : "com.vaadin.flow.component.icon.Icon",
+          "icon" : "vaadin:dollar",
+          "slot" : "prefix"
+        } ]
+      }, {
+        "javaClass" : "com.vaadin.flow.component.textfield.BigDecimalField",
+        "id" : "non-stm-minimum-amount-field",
+        "class" : "[non-stm-minimum-amount-field]",
+        "style" : "width:100%",
+        "label" : "Non-STM Minimum Amount",
+        "width" : "100%",
+        "value" : 7,
+        "requiredIndicatorVisible" : true,
+        "valid" : true,
+        "property__decimalSeparator" : ".",
+        "children" : [ {
+          "javaClass" : "com.vaadin.flow.component.icon.Icon",
+          "icon" : "vaadin:dollar",
+          "slot" : "prefix"
+        } ]
+      } ]
+    }, {
+      "javaClass" : "com.vaadin.flow.component.checkbox.Checkbox",
+      "id" : "exclude-stm-rhs-checkbox",
+      "class" : "[exclude-stm-rhs-checkbox]",
+      "label" : "Exclude STM RHs",
+      "value" : false,
+      "requiredIndicatorVisible" : false,
+      "property_checked" : "false",
+      "property_indeterminate" : "false"
+    } ]
+  } ],
+  "footer" : {
+    "javaClass" : "com.vaadin.flow.component.orderedlayout.HorizontalLayout",
+    "theme" : "spacing",
+    "children" : [ {
+      "javaClass" : "com.vaadin.flow.component.button.Button",
+      "id" : "Upload",
+      "class" : "[Upload]",
+      "text" : "Upload",
+      "disableOnClick" : true
+    }, {
+      "javaClass" : "com.vaadin.flow.component.button.Button",
+      "id" : "Close",
+      "class" : "[Close]",
+      "text" : "Close",
+      "disableOnClick" : true
+    } ]
+  }
+}

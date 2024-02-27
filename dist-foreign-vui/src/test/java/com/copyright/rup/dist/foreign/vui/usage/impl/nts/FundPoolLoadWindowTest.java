@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.vui.usage.impl.nts;
 
+import static com.copyright.rup.dist.foreign.vui.IVaadinJsonConverter.assertJsonSnapshot;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.assertFieldValidationMessage;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.getDialogContent;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.getFooterLayout;
@@ -100,7 +101,12 @@ public class FundPoolLoadWindowTest implements IVaadinComponentFinder {
     private static final String NON_STM_MIN_LABEL = "Non-STM Minimum Amount";
     private static final String ACCOUNT_NUMBER_LABEL = "RRO Account #";
     private static final String EXCLUDE_STM_CHECKBOX_LABEL= "Exclude STM RHs";
+    private static final String SPACES_STRING = "    ";
+    private static final String STRING_50_CHARACTERS = StringUtils.repeat('a', 50);
+    private static final String STRING_51_CHARACTERS = StringUtils.repeat('a', 51);
     private static final String EMPTY_FIELD_MESSAGE = "Field value should be specified";
+    private static final String VALUE_EXCEED_50_CHARACTERS_MESSAGE = "Field value should not exceed 50 characters";
+    private static final String USAGE_BATCH_EXISTS_MESSAGE = "Usage Batch with such name already exists";
     private static final String INVALID_PERIOD_MESSAGE = "Field value should be in range from 1950 to 2099";
     private static final String INVALID_NUMBER_LENGTH_MESSAGE = "Field value should not exceed 10 digits";
     private static final String WIDTH_FULL = "100%";
@@ -132,20 +138,27 @@ public class FundPoolLoadWindowTest implements IVaadinComponentFinder {
     }
 
     @Test
+    public void testJsonSnapshot() {
+        assertJsonSnapshot("usage/impl/nts/fund-pool-load-window.json", new FundPoolLoadWindow(controller));
+    }
+
+    @Test
     public void testUsageBatchNameFieldValidation() {
-        expect(controller.usageBatchExists(USAGE_BATCH_NAME)).andReturn(true).times(2);
-        expect(controller.usageBatchExists("Batch")).andReturn(false).times(2);
+        String usageBatchName = "existing Usage Batch";
+        expect(controller.usageBatchExists(STRING_50_CHARACTERS)).andReturn(false).times(2);
+        expect(controller.usageBatchExists(usageBatchName)).andReturn(true).times(2);
+        expect(controller.usageBatchExists(USAGE_BATCH_NAME)).andReturn(false).times(2);
         replay(controller);
         window = new FundPoolLoadWindow(controller);
         Binder<?> binder = Whitebox.getInternalState(window, BINDER);
         var usageBatchNameField = getTextField(window, USAGE_BATCH_NAME_LABEL);
         assertFieldValidationMessage(usageBatchNameField, StringUtils.EMPTY, binder, EMPTY_FIELD_MESSAGE, false);
-        assertFieldValidationMessage(usageBatchNameField, "   ", binder, EMPTY_FIELD_MESSAGE, false);
-        assertFieldValidationMessage(usageBatchNameField, StringUtils.repeat('a', 51), binder,
-            "Field value should not exceed 50 characters", false);
-        assertFieldValidationMessage(usageBatchNameField, USAGE_BATCH_NAME, binder,
-            "Usage Batch with such name already exists", false);
-        assertFieldValidationMessage(usageBatchNameField, "Batch", binder, null, true);
+        assertFieldValidationMessage(usageBatchNameField, SPACES_STRING, binder, EMPTY_FIELD_MESSAGE, false);
+        assertFieldValidationMessage(usageBatchNameField, STRING_50_CHARACTERS, binder, null, true);
+        assertFieldValidationMessage(usageBatchNameField, STRING_51_CHARACTERS, binder,
+            VALUE_EXCEED_50_CHARACTERS_MESSAGE, false);
+        assertFieldValidationMessage(usageBatchNameField, usageBatchName, binder, USAGE_BATCH_EXISTS_MESSAGE, false);
+        assertFieldValidationMessage(usageBatchNameField, USAGE_BATCH_NAME, binder, null, true);
         verify(controller);
     }
 

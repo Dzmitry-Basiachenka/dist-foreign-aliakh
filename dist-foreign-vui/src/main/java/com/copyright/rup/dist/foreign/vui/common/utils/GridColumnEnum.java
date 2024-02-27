@@ -107,7 +107,7 @@ public enum GridColumnEnum {
     /**
      * Standard number column.
      */
-    STANDARD_NUMBER("table.column.standard_number", "standardNumber", "180px"),
+    STANDARD_NUMBER("table.column.standard_number", "standardNumber", WidthConstants.WIDTH_180),
     /**
      * Standard number type column.
      */
@@ -115,7 +115,7 @@ public enum GridColumnEnum {
     /**
      * Status column.
      */
-    STATUS("table.column.usage_status", "status", "180px"),
+    STATUS("table.column.usage_status", "status", WidthConstants.WIDTH_180),
     /**
      * System title column.
      */
@@ -142,7 +142,7 @@ public enum GridColumnEnum {
     /**
      * Detail licensee class enrollment column.
      */
-    DET_LC_ENROLLMENT("table.column.det_lc_enrollment", "detailLicenseeEnrollment", "180px"),
+    DET_LC_ENROLLMENT("table.column.det_lc_enrollment", "detailLicenseeEnrollment", WidthConstants.WIDTH_180),
     /**
      * Detail licensee class id column.
      */
@@ -151,6 +151,11 @@ public enum GridColumnEnum {
      * Institution column.
      */
     INSTITUTION("table.column.institution", "institution", WidthConstants.WIDTH_140),
+    /**
+     * Number of baseline years column.
+     */
+    NUMBER_OF_BASELINE_YEARS("table.column.number_of_baseline_years", "numberOfBaselineYears",
+        WidthConstants.WIDTH_180),
     /**
      * Number of pages column.
      */
@@ -278,6 +283,7 @@ public enum GridColumnEnum {
 
     private static class WidthConstants {
         private static final String WIDTH_140 = "140px";
+        private static final String WIDTH_180 = "180px";
         private static final String WIDTH_200 = "200px";
         private static final String WIDTH_300 = "300px";
     }

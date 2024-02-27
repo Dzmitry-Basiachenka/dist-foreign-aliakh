@@ -1,0 +1,65 @@
+{
+  "javaClass" : "com.copyright.rup.dist.foreign.vui.usage.impl.aacl.AaclFundPoolUploadWindow",
+  "id" : "aacl-fund-pool-upload-window",
+  "class" : "[aacl-fund-pool-upload-window]",
+  "headerTitle" : "Upload Fund Pool",
+  "isModal" : true,
+  "isDraggable" : true,
+  "isResizable" : false,
+  "isCloseOnEsc" : false,
+  "isCloseOnOutsideClick" : false,
+  "isOpened" : false,
+  "width" : "500px",
+  "minHeight" : "200px",
+  "height" : "340px",
+  "children" : [ {
+    "javaClass" : "com.vaadin.flow.component.orderedlayout.VerticalLayout",
+    "style" : "width:100%;padding:10.0px 10.0px 0.0px 10.0px",
+    "theme" : "padding spacing",
+    "width" : "100%",
+    "children" : [ {
+      "javaClass" : "com.vaadin.flow.component.textfield.TextField",
+      "id" : "aacl-fund-pool-name-field",
+      "class" : "[aacl-fund-pool-name-field]",
+      "style" : "width:100%;height:100%",
+      "label" : "Fund Pool Name",
+      "width" : "100%",
+      "height" : "100%",
+      "value" : "",
+      "requiredIndicatorVisible" : true,
+      "valid" : true
+    }, {
+      "javaClass" : "com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.upload.UploadField",
+      "id" : "aacl-fund-pool-upload-component",
+      "class" : "[aacl-fund-pool-upload-component]",
+      "style" : "width:100%;height:100%",
+      "label" : "File to Upload",
+      "width" : "100%",
+      "height" : "100%",
+      "requiredIndicatorVisible" : true,
+      "valid" : true,
+      "children" : [ {
+        "javaClass" : "com.vaadin.flow.component.upload.Upload",
+        "property_maxFiles" : "1",
+        "property_accept" : "text/csv,.csv"
+      } ]
+    } ]
+  } ],
+  "footer" : {
+    "javaClass" : "com.vaadin.flow.component.orderedlayout.HorizontalLayout",
+    "theme" : "spacing",
+    "children" : [ {
+      "javaClass" : "com.vaadin.flow.component.button.Button",
+      "id" : "Upload",
+      "class" : "[Upload]",
+      "text" : "Upload",
+      "disableOnClick" : true
+    }, {
+      "javaClass" : "com.vaadin.flow.component.button.Button",
+      "id" : "Close",
+      "class" : "[Close]",
+      "text" : "Close",
+      "disableOnClick" : true
+    } ]
+  }
+}

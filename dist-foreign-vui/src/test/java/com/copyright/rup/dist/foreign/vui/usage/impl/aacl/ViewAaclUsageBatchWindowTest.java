@@ -73,25 +73,25 @@ public class ViewAaclUsageBatchWindowTest implements IVaadinComponentFinder {
         expect(ForeignSecurityUtils.hasDeleteUsagePermission()).andReturn(true).once();
         expect(controller.getSelectedProductFamily()).andReturn(AACL_PRODUCT_FAMILY).once();
         expect(controller.getUsageBatches(AACL_PRODUCT_FAMILY)).andReturn(List.of(new UsageBatch())).once();
-        replay(controller, ForeignSecurityUtils.class);
+        replay(ForeignSecurityUtils.class, controller);
         window = new ViewAaclUsageBatchWindow(controller);
-        verify(controller, ForeignSecurityUtils.class);
-        reset(controller, ForeignSecurityUtils.class);
+        verify(ForeignSecurityUtils.class, controller);
+        reset(ForeignSecurityUtils.class, controller);
     }
 
     @Test
     public void testStructure() {
-        replay(controller, ForeignSecurityUtils.class);
-        verifyWindow(window, "View Usage Batch", "800px", "550px", Unit.PIXELS, true);
+        replay(ForeignSecurityUtils.class, controller);
+        verifyWindow(window, "View Usage Batch", "1150px", "550px", Unit.PIXELS, true);
         var content = (VerticalLayout) getDialogContent(window);
         assertEquals(2, content.getComponentCount());
         verifySearchWidget(content.getComponentAt(0), "Enter Batch Name or Period End Date (mm/dd/yyyy)");
         verifyGrid((Grid<?>) content.getComponentAt(1), List.of(
-            Pair.of("Usage Batch Name", null),
-            Pair.of("Period End Date", "120px"),
+            Pair.of("Usage Batch Name", "200px"),
+            Pair.of("Period End Date", "155px"),
             Pair.of("Number of Baseline Years", "180px"),
-            Pair.of("Created By", "170px"),
-            Pair.of("Created Date", "170px")));
+            Pair.of("Created By", "330px"),
+            Pair.of("Created Date", "150px")));
         verifyButtonsLayout(getFooterLayout(window), true, "Delete", "Close");
     }
 

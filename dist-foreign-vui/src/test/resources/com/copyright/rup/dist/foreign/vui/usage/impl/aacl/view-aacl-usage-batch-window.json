@@ -9,7 +9,7 @@
   "isCloseOnEsc" : false,
   "isCloseOnOutsideClick" : false,
   "isOpened" : false,
-  "width" : "800px",
+  "width" : "1150px",
   "maxWidth" : "101.7%",
   "minHeight" : "200px",
   "height" : "550px",
@@ -86,46 +86,47 @@
         "javaClass" : "com.vaadin.flow.component.grid.Grid$Column",
         "headerText" : "Usage Batch Name",
         "textAlign" : "START",
-        "flexGrow" : 1,
+        "flexGrow" : 0,
+        "width" : "200px",
         "autoWidth" : false,
         "sortable" : true,
-        "resizable" : false
+        "resizable" : true
       }, {
         "javaClass" : "com.vaadin.flow.component.grid.Grid$Column",
         "headerText" : "Period End Date",
         "textAlign" : "START",
-        "flexGrow" : 1,
-        "width" : "120px",
+        "flexGrow" : 0,
+        "width" : "155px",
         "autoWidth" : false,
-        "sortable" : false,
-        "resizable" : false
+        "sortable" : true,
+        "resizable" : true
       }, {
         "javaClass" : "com.vaadin.flow.component.grid.Grid$Column",
         "headerText" : "Number of Baseline Years",
         "textAlign" : "START",
-        "flexGrow" : 1,
+        "flexGrow" : 0,
         "width" : "180px",
         "autoWidth" : false,
         "sortable" : true,
-        "resizable" : false
+        "resizable" : true
       }, {
         "javaClass" : "com.vaadin.flow.component.grid.Grid$Column",
         "headerText" : "Created By",
         "textAlign" : "START",
-        "flexGrow" : 1,
-        "width" : "170px",
+        "flexGrow" : 0,
+        "width" : "330px",
         "autoWidth" : false,
         "sortable" : true,
-        "resizable" : false
+        "resizable" : true
       }, {
         "javaClass" : "com.vaadin.flow.component.grid.Grid$Column",
         "headerText" : "Created Date",
         "textAlign" : "START",
-        "flexGrow" : 1,
-        "width" : "170px",
+        "flexGrow" : 0,
+        "width" : "150px",
         "autoWidth" : false,
         "sortable" : true,
-        "resizable" : false
+        "resizable" : true
       } ]
     } ]
   } ],

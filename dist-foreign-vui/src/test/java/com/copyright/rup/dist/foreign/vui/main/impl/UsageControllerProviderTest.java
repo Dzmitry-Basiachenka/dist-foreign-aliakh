@@ -25,10 +25,10 @@ public class UsageControllerProviderTest {
 
     @Test
     public void testGetProductFamilyToControllerMap() {
-        var provider = new UsagesControllerProvider();
         var aaclUsagesController = createMock(IAaclUsageController.class);
         var fasUsagesController = createMock(IFasUsageController.class);
         var ntsUsagesController = createMock(INtsUsageController.class);
+        var provider = new UsagesControllerProvider();
         Whitebox.setInternalState(provider, aaclUsagesController);
         Whitebox.setInternalState(provider, fasUsagesController);
         Whitebox.setInternalState(provider, ntsUsagesController);

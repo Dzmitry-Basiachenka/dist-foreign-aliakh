@@ -128,7 +128,7 @@ public class AaclUsageBatchUploadWindowTest implements IVaadinComponentFinder {
 
     @Test
     public void testUsageBatchNameFieldValidation() {
-        String usageBatchName = "existing Usage Batch";
+        var usageBatchName = "existing Usage Batch";
         expect(controller.usageBatchExists(STRING_50_CHARACTERS)).andReturn(false).times(2);
         expect(controller.usageBatchExists(usageBatchName)).andReturn(true).times(2);
         expect(controller.usageBatchExists(USAGE_BATCH_NAME)).andReturn(false).times(2);
