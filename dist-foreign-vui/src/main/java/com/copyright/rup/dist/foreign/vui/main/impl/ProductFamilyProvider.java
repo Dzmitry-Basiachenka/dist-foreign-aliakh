@@ -4,7 +4,10 @@ import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.vui.main.api.IProductFamilyProvider;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
-import com.vaadin.flow.spring.annotation.VaadinSessionScope;
+import com.vaadin.flow.spring.scopes.VaadinUIScope;
+
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -20,7 +23,7 @@ import java.util.concurrent.atomic.AtomicReference;
  * @author Stanislau Rudak
  */
 @SpringComponent
-@VaadinSessionScope
+@Scope(value = VaadinUIScope.VAADIN_UI_SCOPE_NAME, proxyMode = ScopedProxyMode.INTERFACES)
 public class ProductFamilyProvider implements IProductFamilyProvider, Serializable {
 
     private static final long serialVersionUID = 1048349420836748697L;

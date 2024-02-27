@@ -14,11 +14,13 @@ import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.page.AppShellConfigurator;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.AppShellSettings;
-import com.vaadin.flow.spring.annotation.VaadinSessionScope;
+import com.vaadin.flow.spring.scopes.VaadinUIScope;
 import com.vaadin.flow.theme.Theme;
 
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -39,7 +41,7 @@ import java.util.ResourceBundle;
 @Route("")
 @Theme("dist")
 @CssImport(themeFor = "vaadin-grid", value = "./themes/dist/components/vaadin-grid-cell.css")
-@VaadinSessionScope
+@Scope(value = VaadinUIScope.VAADIN_UI_SCOPE_NAME, proxyMode = ScopedProxyMode.INTERFACES)
 public class ForeignUi extends AppLayout implements AppShellConfigurator, ICommonUi,
     IMessageSource {
 
