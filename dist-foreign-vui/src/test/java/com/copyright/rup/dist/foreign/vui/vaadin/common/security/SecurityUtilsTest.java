@@ -12,7 +12,7 @@ import static org.powermock.api.easymock.PowerMock.verify;
 import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.server.WrappedSession;
 
-import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections4.CollectionUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;

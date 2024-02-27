@@ -168,7 +168,7 @@ public class AaclUsageWidget extends CommonUsageWidget implements IAaclUsageWidg
         loadFundPoolMenuItem = menuItem.getSubMenu().addItem(ForeignUi.getMessage("menu.item.load"),
             item -> Windows.showModalWindow(new AaclFundPoolUploadWindow(controller)));
         menuItem.getSubMenu().addItem(ForeignUi.getMessage("menu.item.view"),
-            item -> {}); //TODO {aliakh} ViewAaclFundPoolWindow
+            item -> Windows.showModalWindow(new ViewAaclFundPoolWindow(controller)));
         VaadinUtils.addComponentStyle(menuItem, CLASS_BUTTON_MENUBAR);
         VaadinUtils.addComponentStyle(fundPoolMenuBar, "fund-pool-menu-bar");
         VaadinUtils.addComponentStyle(fundPoolMenuBar, CLASS_BUTTON_MENUBAR);

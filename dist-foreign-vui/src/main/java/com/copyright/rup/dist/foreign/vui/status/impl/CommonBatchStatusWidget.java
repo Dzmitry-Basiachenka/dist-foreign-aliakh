@@ -11,7 +11,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.function.ValueProvider;
 
-import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.List;
 

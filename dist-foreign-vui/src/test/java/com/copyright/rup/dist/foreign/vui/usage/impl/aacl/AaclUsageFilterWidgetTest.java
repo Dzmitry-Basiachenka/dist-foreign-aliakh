@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.vui.usage.impl.aacl;
 
 import static com.copyright.rup.dist.foreign.vui.IVaadinComponentFinder.getButton;
+import static com.copyright.rup.dist.foreign.vui.IVaadinJsonConverter.assertJsonSnapshot;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyComboBox;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyFiltersLabel;
@@ -59,9 +60,9 @@ public class AaclUsageFilterWidgetTest {
     private static final int USAGE_PERIOD = 2020;
     private static final Long ACCOUNT_NUMBER = 12345678L;
     private static final String AACL_PRODUCT_FAMILY = "AACL";
-    private static final Set<UsageStatusEnum> AACL_STATUSES = Set.of(UsageStatusEnum.NEW,
-        UsageStatusEnum.WORK_FOUND, UsageStatusEnum.RH_FOUND, UsageStatusEnum.WORK_NOT_FOUND,
-        UsageStatusEnum.WORK_RESEARCH, UsageStatusEnum.ELIGIBLE, UsageStatusEnum.SCENARIO_EXCLUDED);
+    private static final List<UsageStatusEnum> AACL_STATUSES = List.of(UsageStatusEnum.NEW,
+        UsageStatusEnum.WORK_FOUND, UsageStatusEnum.WORK_NOT_FOUND, UsageStatusEnum.WORK_RESEARCH,
+        UsageStatusEnum.RH_FOUND, UsageStatusEnum.ELIGIBLE, UsageStatusEnum.SCENARIO_EXCLUDED);
 
     private AaclUsageFilterWidget widget;
     private IAaclUsageFilterController controller;
@@ -82,6 +83,16 @@ public class AaclUsageFilterWidgetTest {
         assertEquals(4, widget.getComponentCount());
         verifyFiltersLayout(widget.getComponentAt(0));
         verifyButtonsLayout(widget.getComponentAt(1), true, "Apply", "Clear");
+        verify(controller);
+    }
+
+    @Test
+    public void testJsonSnapshot() {
+        expect(controller.getUsagePeriods()).andReturn(List.of(USAGE_PERIOD)).once();
+        expect(controller.getSelectedProductFamily()).andReturn(AACL_PRODUCT_FAMILY).once();
+        replay(controller);
+        widget.init();
+        assertJsonSnapshot("usage/impl/aacl/aacl-usage-filter-widget.json", widget);
         verify(controller);
     }
 
