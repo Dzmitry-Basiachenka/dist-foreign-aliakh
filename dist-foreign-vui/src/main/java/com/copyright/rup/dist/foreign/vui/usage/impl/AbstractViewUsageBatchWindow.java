@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.vui.usage.impl;
 
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
+import com.copyright.rup.dist.foreign.vui.common.utils.GridColumnEnum;
 import com.copyright.rup.dist.foreign.vui.common.utils.IDateFormatter;
 import com.copyright.rup.dist.foreign.vui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.vui.usage.api.ICommonUsageController;
@@ -69,15 +70,14 @@ public abstract class AbstractViewUsageBatchWindow extends CommonDialog
      * Adds column to data grid.
      *
      * @param valueProvider column value provider
-     * @param caption       column caption
-     * @param width         column width
+     * @param gridColumn    grid column
      * @return the column for method chaining
      */
-    protected Column<UsageBatch> addColumn(ValueProvider<UsageBatch, ?> valueProvider, String caption, String width) {
+    protected Column<UsageBatch> addColumn(ValueProvider<UsageBatch, ?> valueProvider, GridColumnEnum gridColumn) {
         return grid.addColumn(valueProvider)
-            .setHeader(ForeignUi.getMessage(caption))
+            .setHeader(ForeignUi.getMessage(gridColumn.getCaption()))
             .setFlexGrow(0)
-            .setWidth(width)
+            .setWidth(gridColumn.getWidth())
             .setSortable(true)
             .setResizable(true);
     }
@@ -86,30 +86,26 @@ public abstract class AbstractViewUsageBatchWindow extends CommonDialog
      * Adds column to data grid.
      *
      * @param valueProvider column value provider
-     * @param caption       column caption
-     * @param width         column width
+     * @param gridColumn    grid column
      * @param comparator    column comparator
      * @return the column for method chaining
      */
-    protected Column<UsageBatch> addColumn(ValueProvider<UsageBatch, ?> valueProvider, String caption, String width,
+    protected Column<UsageBatch> addColumn(ValueProvider<UsageBatch, ?> valueProvider, GridColumnEnum gridColumn,
                                            SerializableComparator<UsageBatch> comparator) {
-        return addColumn(valueProvider, caption, width)
-            .setComparator(comparator);
+        return addColumn(valueProvider, gridColumn).setComparator(comparator);
     }
 
     /**
      * Adds amount column to data grid.
      *
      * @param valueProvider column value provider
-     * @param caption       column caption
-     * @param width         column width
+     * @param gridColumn    grid column
      * @param comparator    column comparator
      * @return the column for method chaining
      */
-    protected Column<UsageBatch> addAmountColumn(ValueProvider<UsageBatch, ?> valueProvider, String caption,
-                                                 String width, SerializableComparator<UsageBatch> comparator) {
-        return addColumn(valueProvider, caption, width, comparator)
-            .setClassNameGenerator(item -> "label-amount");
+    protected Column<UsageBatch> addAmountColumn(ValueProvider<UsageBatch, ?> valueProvider, GridColumnEnum gridColumn,
+                                                 SerializableComparator<UsageBatch> comparator) {
+        return addColumn(valueProvider, gridColumn, comparator).setClassNameGenerator(item -> "label-amount");
     }
 
     /**

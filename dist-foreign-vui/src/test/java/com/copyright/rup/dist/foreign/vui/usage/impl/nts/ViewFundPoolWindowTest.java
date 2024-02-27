@@ -97,8 +97,8 @@ public class ViewFundPoolWindowTest {
             Pair.of("Fund Pool Name", "200px"),
             Pair.of("RRO Account #", "160px"),
             Pair.of("RRO Name", "300px"),
-            Pair.of("Payment Date", "150px"),
-            Pair.of("Fiscal Year", "140px"),
+            Pair.of("Payment Date", "145px"),
+            Pair.of("Fiscal Year", "130px"),
             Pair.of("STM Amount", "130px"),
             Pair.of("Non-STM Amount", "165px"),
             Pair.of("STM Minimum Amount", "200px"),
@@ -107,7 +107,7 @@ public class ViewFundPoolWindowTest {
             Pair.of("Market Period From", "200px"),
             Pair.of("Market Period To", "185px"),
             Pair.of("Created By", "330px"),
-            Pair.of("Created Date", null)
+            Pair.of("Created Date", "150px")
         ));
         verifyButtonsLayout(getFooterLayout(window), true, "Delete", "Close");
     }

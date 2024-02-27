@@ -4,6 +4,7 @@ import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.common.util.UsageBatchUtils;
+import com.copyright.rup.dist.foreign.vui.common.utils.GridColumnEnum;
 import com.copyright.rup.dist.foreign.vui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.vui.usage.api.ICommonUsageController;
 import com.copyright.rup.dist.foreign.vui.usage.impl.AbstractViewUsageBatchWindow;
@@ -68,20 +69,20 @@ class ViewUsageBatchWindow extends AbstractViewUsageBatchWindow {
 
     @Override
     protected void addGridColumns(Grid<UsageBatch> grid) {
-        addColumn(UsageBatch::getName, "table.column.batch_name", "200px",
+        addColumn(UsageBatch::getName, GridColumnEnum.BATCH_NAME,
             (batch1, batch2) -> batch1.getName().compareToIgnoreCase(batch2.getName()));
-        addColumn(batch -> batch.getRro().getAccountNumber(), "table.column.rro_account_number", "160px");
-        addColumn(batch -> batch.getRro().getName(), "table.column.rro_account_name", "300px",
+        addColumn(batch -> batch.getRro().getAccountNumber(), GridColumnEnum.RRO_ACCOUNT_NUMBER);
+        addColumn(batch -> batch.getRro().getName(), GridColumnEnum.RRO_NAME,
             (batch1, batch2) -> batch1.getRro().getName().compareToIgnoreCase(batch2.getRro().getName()));
         addColumn(batch -> CommonDateUtils.format(batch.getPaymentDate(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT),
-            "table.column.payment_date", "150px",
+            GridColumnEnum.PAYMENT_DATE,
             (batch1, batch2) -> batch1.getPaymentDate().compareTo(batch2.getPaymentDate()));
-        addColumn(batch -> UsageBatchUtils.getFiscalYear(batch.getFiscalYear()), "table.column.fiscal_year", "140px");
-        addAmountColumn(UsageBatch::getGrossAmount, "table.column.batch_gross_amount", "180px",
+        addColumn(batch -> UsageBatchUtils.getFiscalYear(batch.getFiscalYear()), GridColumnEnum.FISCAL_YEAR);
+        addAmountColumn(UsageBatch::getGrossAmount, GridColumnEnum.BATCH_GROSS_AMOUNT,
             (batch1, batch2) -> batch1.getGrossAmount().compareTo(batch2.getGrossAmount()));
-        addColumn(UsageBatch::getCreateUser, "table.column.created_by", "330px",
+        addColumn(UsageBatch::getCreateUser, GridColumnEnum.CREATED_USER,
             (batch1, batch2) -> batch1.getCreateUser().compareToIgnoreCase(batch2.getCreateUser()));
-        addColumn(batch -> toLongFormat(batch.getCreateDate()), "table.column.created_date", "150px",
+        addColumn(batch -> toLongFormat(batch.getCreateDate()), GridColumnEnum.CREATED_DATE,
             (batch1, batch2) -> batch1.getCreateDate().compareTo(batch2.getCreateDate()));
     }
 }
