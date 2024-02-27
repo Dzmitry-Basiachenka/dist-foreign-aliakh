@@ -24,9 +24,14 @@ public interface INtsReportController extends ICommonReportController {
      * @return instance of {@link IStreamSource} for NTS withdrawn Batch Summary Report.
      */
     IStreamSource getNtsWithdrawnBatchSummaryReportStreamSource();
-    
+
     /**
      * @return service fee true-up report controller for NTS.
      */
     ICommonScenarioReportController getNtsServiceFeeTrueUpReportController();
+
+    /**
+     * @return instance of {@link IStreamSource} for NTS Fund Pools Report.
+     */
+    IStreamSource getNtsFundPoolsReportStreamSource();
 }

@@ -110,6 +110,18 @@ public class NtsReportMenuTest {
         verifyAll();
     }
 
+    @Test
+    public void testNtsFundPoolsReportSelected() {
+        setUiExpectation();
+        expect(ntsReportController.getNtsFundPoolsReportStreamSource()).andReturn(
+            new ByteArrayStreamSource(FILE_NAME, outputStream -> {
+            })).once();
+        expectProductFamily();
+        replayAll();
+        selectMenuItem(4);
+        verifyAll();
+    }
+
     private void taxNotificationReportExpectation() {
         TaxNotificationReportController taxNotificationReportController =
             createMock(TaxNotificationReportController.class);
