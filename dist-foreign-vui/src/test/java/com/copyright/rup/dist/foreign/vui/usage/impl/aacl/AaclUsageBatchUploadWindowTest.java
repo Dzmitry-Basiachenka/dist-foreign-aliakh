@@ -1,5 +1,9 @@
 package com.copyright.rup.dist.foreign.vui.usage.impl.aacl;
 
+import static com.copyright.rup.dist.foreign.vui.IVaadinComponentFinder.getIntegerField;
+import static com.copyright.rup.dist.foreign.vui.IVaadinComponentFinder.getTextField;
+import static com.copyright.rup.dist.foreign.vui.IVaadinComponentFinder.setIntegerFieldValue;
+import static com.copyright.rup.dist.foreign.vui.IVaadinComponentFinder.setTextFieldValue;
 import static com.copyright.rup.dist.foreign.vui.IVaadinJsonConverter.assertJsonSnapshot;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.assertFieldValidationMessage;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.getDialogContent;
@@ -30,7 +34,6 @@ import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.Processin
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.service.impl.csv.AaclUsageCsvProcessor;
-import com.copyright.rup.dist.foreign.vui.IVaadinComponentFinder;
 import com.copyright.rup.dist.foreign.vui.usage.api.aacl.IAaclUsageController;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.upload.UploadField;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.Windows;
@@ -66,7 +69,7 @@ import java.util.List;
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({Windows.class, AaclUsageBatchUploadWindow.class})
 @PowerMockIgnore({"com.sun.org.apache.xerces.*", "javax.xml.*", "org.xml.*", "javax.management.*"})
-public class AaclUsageBatchUploadWindowTest implements IVaadinComponentFinder {
+public class AaclUsageBatchUploadWindowTest {
 
     private static final String AACL_PRODUCT_FAMILY = "AACL";
     private static final String USAGE_BATCH_NAME = "Usage Batch";

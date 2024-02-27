@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.vui.audit.impl.nts;
 
+import static com.copyright.rup.dist.foreign.vui.IVaadinComponentFinder.getButton;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyFiltersLabel;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyItemsFilterWidget;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyTextField;
@@ -16,7 +17,6 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
-import com.copyright.rup.dist.foreign.vui.IVaadinComponentFinder;
 import com.copyright.rup.dist.foreign.vui.UiTestHelper;
 import com.copyright.rup.dist.foreign.vui.audit.api.nts.INtsAuditFilterController;
 import com.copyright.rup.dist.foreign.vui.audit.impl.CommonAuditFilterWidget;
@@ -43,7 +43,7 @@ import java.util.Set;
  *
  * @author Anton Azarenka
  */
-public class NtsAuditFilterWidgetTest implements IVaadinComponentFinder {
+public class NtsAuditFilterWidgetTest {
 
     private static final String NTS_PRODUCT_FAMILY = "NTS";
     private static final String APPLY_BUTTON = "Apply";

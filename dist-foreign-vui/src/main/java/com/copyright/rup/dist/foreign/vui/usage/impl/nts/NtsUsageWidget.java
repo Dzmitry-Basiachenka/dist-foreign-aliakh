@@ -93,7 +93,7 @@ public class NtsUsageWidget extends CommonUsageWidget implements INtsUsageWidget
             GridColumnEnum.PUB_DATE);
         addColumn(UsageDto::getNumberOfCopies, GridColumnEnum.NUMBER_OF_COPIES);
         addAmountColumn(UsageDto::getReportedValue, GridColumnEnum.REPORTED_VALUE);
-        addAmountColumn(UsageDto::getGrossAmount, GridColumnEnum.GROSS_AMOUNT);
+        addAmountColumn(UsageDto::getGrossAmount, GridColumnEnum.GROSS_AMOUNT_IN_USD);
         addColumn(UsageDto::getMarket, GridColumnEnum.MARKET);
         addColumn(UsageDto::getMarketPeriodFrom, GridColumnEnum.MARKET_PERIOD_FROM);
         addColumn(UsageDto::getMarketPeriodTo, GridColumnEnum.MARKET_PERIOD_TO);

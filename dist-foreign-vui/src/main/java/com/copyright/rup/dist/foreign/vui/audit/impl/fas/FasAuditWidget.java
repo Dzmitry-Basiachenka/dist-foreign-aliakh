@@ -67,7 +67,7 @@ public class FasAuditWidget extends CommonAuditWidget implements IFasAuditWidget
         addColumn(UsageDto::getStandardNumber, GridColumnEnum.STANDARD_NUMBER);
         addColumn(UsageDto::getStandardNumberType, GridColumnEnum.STANDARD_NUMBER_TYPE);
         addAmountColumn(UsageDto::getReportedValue, GridColumnEnum.REPORTED_VALUE);
-        addAmountColumn(UsageDto::getGrossAmount, GridColumnEnum.GROSS_AMOUNT);
+        addAmountColumn(UsageDto::getGrossAmount, GridColumnEnum.GROSS_AMOUNT_IN_USD);
         addAmountColumn(UsageDto::getBatchGrossAmount, GridColumnEnum.BATCH_GROSS_AMOUNT);
         addServiceFeeColumn();
         addColumn(UsageDto::getScenarioName, GridColumnEnum.SCENARIO_NAME);

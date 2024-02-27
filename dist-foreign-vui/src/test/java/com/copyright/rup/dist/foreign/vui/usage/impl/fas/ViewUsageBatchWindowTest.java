@@ -149,31 +149,31 @@ public class ViewUsageBatchWindowTest {
     @Test
     public void testDeleteClickListenerInProgressBatch() {
         mockStatic(Windows.class);
-        Dialog confirmWindowCapture = createMock(Dialog.class);
+        Dialog confirmWindow = createMock(Dialog.class);
         expect(grid.getSelectedItems()).andReturn(Set.of(buildUsageBatch())).once();
         expect(controller.getAdditionalFundNamesByUsageBatchId(USAGE_BATCH_ID)).andReturn(List.of()).once();
         expect(controller.getScenariosNamesAssociatedWithUsageBatch(USAGE_BATCH_ID)).andReturn(List.of()).once();
         expect(controller.isBatchProcessingCompleted(USAGE_BATCH_ID)).andReturn(false).once();
         Windows.showNotificationWindow("'FAS batch' batch cannot be deleted because processing is not completed yet");
         expectLastCall().once();
-        replay(Windows.class, grid, controller, confirmWindowCapture);
+        replay(Windows.class, grid, controller, confirmWindow);
         getDeleteButton().click();
-        verify(Windows.class, grid, controller, confirmWindowCapture);
+        verify(Windows.class, grid, controller, confirmWindow);
     }
 
     @Test
     public void testDeleteClickListenerEmptyAssociatedScenarios() {
         mockStatic(Windows.class);
-        Dialog confirmWindowCapture = createMock(Dialog.class);
+        Dialog confirmWindow = createMock(Dialog.class);
         expect(grid.getSelectedItems()).andReturn(Set.of(buildUsageBatch())).once();
         expect(controller.getAdditionalFundNamesByUsageBatchId(USAGE_BATCH_ID)).andReturn(List.of()).once();
         expect(controller.getScenariosNamesAssociatedWithUsageBatch(USAGE_BATCH_ID)).andReturn(List.of()).once();
         expect(controller.isBatchProcessingCompleted(USAGE_BATCH_ID)).andReturn(true).once();
         expect(Windows.showConfirmDialog(eq("Are you sure you want to delete <i><b>'FAS batch'</b></i> usage batch?"),
-            anyObject())).andReturn(confirmWindowCapture).once();
-        replay(Windows.class, grid, controller, confirmWindowCapture);
+            anyObject())).andReturn(confirmWindow).once();
+        replay(Windows.class, grid, controller, confirmWindow);
         getDeleteButton().click();
-        verify(Windows.class, grid, controller, confirmWindowCapture);
+        verify(Windows.class, grid, controller, confirmWindow);
     }
 
     @Test

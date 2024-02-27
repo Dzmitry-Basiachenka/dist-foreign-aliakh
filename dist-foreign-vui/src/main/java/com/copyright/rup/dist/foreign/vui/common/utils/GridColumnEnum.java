@@ -136,6 +136,18 @@ public enum GridColumnEnum {
     // AACL specific columns
 
     /**
+     * Agg LC Discipline column.
+     */
+    AGGREGATE_LC_DISCIPLINE("table.column.aggregate_lc_discipline", "aggregateLcDiscipline", "230px"),
+    /**
+     * Agg LC Enrollment column.
+     */
+    AGGREGATE_LC_ENROLLMENT("table.column.aggregate_lc_enrollment", "aggregateLcEnrollment", "190px"),
+    /**
+     * Agg LC ID column.
+     */
+    AGGREGATE_LICENSEE_CLASS_ID("table.column.aggregate_licensee_class_id", "aggregateLicenseeClassId", "110px"),
+    /**
      * Batch period end date column.
      */
     BATCH_PERIOD_END_DATE("table.column.period_end_date", "periodEndDate", "155px"),
@@ -151,6 +163,10 @@ public enum GridColumnEnum {
      * Detail licensee class id column.
      */
     DET_LC_ID("table.column.det_lc_id", "detailLicenseeClassId", "105px"),
+    /**
+     * Gross fund pool total column.
+     */
+    GROSS_FUND_POOL_TOTAL("table.column.gross_fund_pool_total", "grossFundPoolTotal", "220px"),
     /**
      * Institution column.
      */
@@ -215,10 +231,15 @@ public enum GridColumnEnum {
      * Fund Pool name column.
      */
     FUND_POOL_NAME("table.column.fund_pool_name", "fundPoolName", WidthConstants.WIDTH_200),
+    //TODO {vaadin23} unify column names: GROSS_AMOUNT and GROSS_AMOUNT_IN_USD
     /**
      * Gross amount column.
      */
-    GROSS_AMOUNT("table.column.gross_amount_in_usd", "grossAmount", "170px"),
+    GROSS_AMOUNT("table.column.gross_amount", "grossAmount", WidthConstants.WIDTH_160),
+    /**
+     * Gross amount in USD column.
+     */
+    GROSS_AMOUNT_IN_USD("table.column.gross_amount_in_usd", "grossAmount", "170px"),
     /**
      * Market column.
      */

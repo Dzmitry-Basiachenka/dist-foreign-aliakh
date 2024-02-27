@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.vui;
 
+import static com.copyright.rup.dist.foreign.vui.IVaadinComponentFinder.getDialogFooter;
 import static org.junit.Assert.assertEquals;
 
 import com.copyright.rup.common.exception.RupRuntimeException;
@@ -23,7 +24,6 @@ import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.Grid.Column;
 import com.vaadin.flow.component.icon.Icon;
-import com.vaadin.flow.dom.Element;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -277,16 +277,7 @@ public interface IVaadinJsonConverter {
 
     private static void putDialogFooter(Component component, Map<String, Object> tree) {
         if (component instanceof Dialog) {
-            component
-                .getElement()
-                .getChildren()
-                .filter(element -> element.getStyle().has("display"))
-                .findFirst()
-                .flatMap(element -> element
-                    .getChildren()
-                    .findFirst()
-                    .flatMap(Element::getComponent)
-                )
+            getDialogFooter((Dialog) component)
                 .ifPresent(value -> tree.put("footer", toMap(value, new LinkedHashMap<>())));
         }
     }

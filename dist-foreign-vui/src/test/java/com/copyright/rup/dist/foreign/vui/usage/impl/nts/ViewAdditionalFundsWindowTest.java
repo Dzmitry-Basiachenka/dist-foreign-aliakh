@@ -99,35 +99,35 @@ public class ViewAdditionalFundsWindowTest {
     public void testDeleteClickListenerConfirm() {
         mockStatic(Windows.class);
         Capture<IConfirmCancelListener> listenerCapture = newCapture();
-        Dialog confirmWindowCapture = createMock(Dialog.class);
+        Dialog confirmWindow = createMock(Dialog.class);
         expect(Windows.showConfirmDialog(
             eq("Are you sure you want to delete <i><b>'Fund Pool'</b></i> additional fund?"),
-            capture(listenerCapture))).andReturn(confirmWindowCapture).once();
+            capture(listenerCapture))).andReturn(confirmWindow).once();
         expect(controller.getScenarioNameAssociatedWithAdditionalFund(fundPool.getId())).andReturn(null).once();
         controller.deleteAdditionalFund(fundPool);
         expectLastCall().once();
         expect(controller.getAdditionalFunds()).andReturn(List.of()).once();
-        replay(Windows.class, confirmWindowCapture, controller);
+        replay(Windows.class, confirmWindow, controller);
         getDeleteButton().click();
         IConfirmCancelListener listener = listenerCapture.getValue();
         listener.confirm();
-        verify(Windows.class, confirmWindowCapture, controller);
+        verify(Windows.class, confirmWindow, controller);
     }
 
     @Test
     public void testDeleteClickListenerCancel() {
         mockStatic(Windows.class);
         Capture<IConfirmCancelListener> listenerCapture = newCapture();
-        Dialog confirmWindowCapture = createMock(Dialog.class);
+        Dialog confirmWindow = createMock(Dialog.class);
         expect(Windows.showConfirmDialog(
             eq("Are you sure you want to delete <i><b>'Fund Pool'</b></i> additional fund?"),
-            capture(listenerCapture))).andReturn(confirmWindowCapture).once();
+            capture(listenerCapture))).andReturn(confirmWindow).once();
         expect(controller.getScenarioNameAssociatedWithAdditionalFund(fundPool.getId())).andReturn(null).once();
-        replay(Windows.class, confirmWindowCapture, controller);
+        replay(Windows.class, confirmWindow, controller);
         getDeleteButton().click();
         IConfirmCancelListener listener = listenerCapture.getValue();
         listener.cancel();
-        verify(Windows.class, confirmWindowCapture, controller);
+        verify(Windows.class, confirmWindow, controller);
     }
 
     @Test

@@ -1,5 +1,11 @@
 package com.copyright.rup.dist.foreign.vui.usage.impl.fas;
 
+import static com.copyright.rup.dist.foreign.vui.IVaadinComponentFinder.getBigDecimalField;
+import static com.copyright.rup.dist.foreign.vui.IVaadinComponentFinder.getLongField;
+import static com.copyright.rup.dist.foreign.vui.IVaadinComponentFinder.getTextField;
+import static com.copyright.rup.dist.foreign.vui.IVaadinComponentFinder.setBigDecimalFieldValue;
+import static com.copyright.rup.dist.foreign.vui.IVaadinComponentFinder.setLongFieldValue;
+import static com.copyright.rup.dist.foreign.vui.IVaadinComponentFinder.setTextFieldValue;
 import static com.copyright.rup.dist.foreign.vui.IVaadinJsonConverter.assertJsonSnapshot;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.assertFieldValidationMessage;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.getDialogContent;
@@ -33,7 +39,6 @@ import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.Processin
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.service.impl.csv.UsageCsvProcessor;
-import com.copyright.rup.dist.foreign.vui.IVaadinComponentFinder;
 import com.copyright.rup.dist.foreign.vui.usage.api.fas.IFasUsageController;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.security.SecurityUtils;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.LongField;
@@ -76,7 +81,7 @@ import java.time.LocalDate;
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({Windows.class, SecurityUtils.class, UsageBatchUploadWindow.class})
 @PowerMockIgnore({"com.sun.org.apache.xerces.*", "javax.xml.*", "org.xml.*", "javax.management.*"})
-public class UsageBatchUploadWindowTest implements IVaadinComponentFinder {
+public class UsageBatchUploadWindowTest {
 
     private static final String FAS_PRODUCT_FAMILY = "FAS";
     private static final String FAS2_PRODUCT_FAMILY = "FAS2";

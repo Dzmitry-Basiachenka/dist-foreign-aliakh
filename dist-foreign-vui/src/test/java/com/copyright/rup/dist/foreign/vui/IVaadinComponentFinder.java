@@ -7,13 +7,16 @@ import com.vaadin.flow.component.HasLabel;
 import com.vaadin.flow.component.HasText;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
+import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.textfield.BigDecimalField;
 import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.dom.Element;
 
 import java.math.BigDecimal;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
@@ -34,7 +37,7 @@ public interface IVaadinComponentFinder {
      * @param identifier label or text of the child component
      * @return instance of found child component of {@code null}
      */
-    default Component findComponent(Component parent, String identifier) {
+    static Component findComponent(Component parent, String identifier) {
         if (parent instanceof HasLabel && identifier.equals(((HasLabel) parent).getLabel())) {
             return parent;
         }
@@ -47,6 +50,16 @@ public interface IVaadinComponentFinder {
                 component.set(findComponent(child, identifier));
             }
         });
+        if (parent instanceof Dialog) {
+            getDialogFooter((Dialog) parent)
+                .ifPresent(footer -> {
+                    footer.getChildren().forEach(child -> {
+                        if (Objects.isNull(component.get())) {
+                            component.set(findComponent(child, identifier));
+                        }
+                    });
+                });
+        }
         return component.get();
     }
 
@@ -57,7 +70,7 @@ public interface IVaadinComponentFinder {
      * @param identifier label or text of the {@link Checkbox}
      * @return instance of {@link Checkbox}
      */
-    default Button getButton(Component component, String identifier) {
+    static Button getButton(Component component, String identifier) {
         return (Button) findComponent(component, identifier);
     }
 
@@ -68,7 +81,7 @@ public interface IVaadinComponentFinder {
      * @param identifier label or text of the {@link Checkbox}
      * @return instance of {@link Checkbox}
      */
-    default Checkbox getCheckbox(Component component, String identifier) {
+    static Checkbox getCheckbox(Component component, String identifier) {
         return (Checkbox) findComponent(component, identifier);
     }
 
@@ -79,7 +92,7 @@ public interface IVaadinComponentFinder {
      * @param identifier label or text of the {@link TextField}
      * @return instance of {@link TextField}
      */
-    default TextField getTextField(Component component, String identifier) {
+    static TextField getTextField(Component component, String identifier) {
         return (TextField) findComponent(component, identifier);
     }
 
@@ -90,7 +103,7 @@ public interface IVaadinComponentFinder {
      * @param identifier label or text of the {@link IntegerField}
      * @return instance of {@link IntegerField}
      */
-    default IntegerField getIntegerField(Component component, String identifier) {
+    static IntegerField getIntegerField(Component component, String identifier) {
         return (IntegerField) findComponent(component, identifier);
     }
 
@@ -101,7 +114,7 @@ public interface IVaadinComponentFinder {
      * @param identifier label or text of the {@link LongField}
      * @return instance of {@link LongField}
      */
-    default LongField getLongField(Component component, String identifier) {
+    static LongField getLongField(Component component, String identifier) {
         return (LongField) findComponent(component, identifier);
     }
 
@@ -112,7 +125,7 @@ public interface IVaadinComponentFinder {
      * @param identifier label or text of the {@link BigDecimalField}
      * @return instance of {@link BigDecimalField}
      */
-    default BigDecimalField getBigDecimalField(Component component, String identifier) {
+    static BigDecimalField getBigDecimalField(Component component, String identifier) {
         return (BigDecimalField) findComponent(component, identifier);
     }
 
@@ -123,7 +136,7 @@ public interface IVaadinComponentFinder {
      * @param identifier label or text of the {@link Checkbox}
      * @param value      value
      */
-    default void setCheckboxValue(Component component, String identifier, Boolean value) {
+    static void setCheckboxValue(Component component, String identifier, Boolean value) {
         getCheckbox(component, identifier).setValue(value);
     }
 
@@ -134,7 +147,7 @@ public interface IVaadinComponentFinder {
      * @param identifier label or text of the {@link TextField}
      * @param value      value
      */
-    default void setTextFieldValue(Component component, String identifier, String value) {
+    static void setTextFieldValue(Component component, String identifier, String value) {
         getTextField(component, identifier).setValue(value);
     }
 
@@ -145,7 +158,7 @@ public interface IVaadinComponentFinder {
      * @param identifier label or text of the {@link IntegerField}
      * @param value      value
      */
-    default void setIntegerFieldValue(Component component, String identifier, Integer value) {
+    static void setIntegerFieldValue(Component component, String identifier, Integer value) {
         getIntegerField(component, identifier).setValue(value);
     }
 
@@ -156,7 +169,7 @@ public interface IVaadinComponentFinder {
      * @param identifier label or text of the {@link LongField}
      * @param value      value
      */
-    default void setLongFieldValue(Component component, String identifier, Long value) {
+    static void setLongFieldValue(Component component, String identifier, Long value) {
         getLongField(component, identifier).setValue(value);
     }
 
@@ -167,7 +180,7 @@ public interface IVaadinComponentFinder {
      * @param identifier label or text of the {@link BigDecimalField}
      * @param value      value
      */
-    default void setBigDecimalFieldValue(Component component, String identifier, String value) {
+    static void setBigDecimalFieldValue(Component component, String identifier, String value) {
         getBigDecimalField(component, identifier).setValue(new BigDecimal(value));
     }
 
@@ -178,7 +191,26 @@ public interface IVaadinComponentFinder {
      * @param identifier label or text of the {@link TextArea}
      * @param value      value
      */
-    default void setTextAreaValue(Component component, String identifier, String value) {
+    static void setTextAreaValue(Component component, String identifier, String value) {
         ((TextArea) findComponent(component, identifier)).setValue(value);
+    }
+
+    /**
+     * Gets dialog footer.
+     *
+     * @param dialog instance of {@link Dialog}
+     * @return dialog footer {@link Component}, if presents
+     */
+    static Optional<Component> getDialogFooter(Dialog dialog) {
+        return dialog
+            .getElement()
+            .getChildren()
+            .filter(element -> element.getStyle().has("display"))
+            .findFirst()
+            .flatMap(element -> element
+                .getChildren()
+                .findFirst()
+                .flatMap(Element::getComponent)
+            );
     }
 }

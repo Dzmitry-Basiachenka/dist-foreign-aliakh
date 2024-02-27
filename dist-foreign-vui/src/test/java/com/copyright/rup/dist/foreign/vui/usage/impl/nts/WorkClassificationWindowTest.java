@@ -145,19 +145,19 @@ public class WorkClassificationWindowTest {
     @Test
     public void testMarkWithoutSelectedItems() {
         mockStatic(Windows.class);
-        Dialog confirmWindowCapture = createMock(Dialog.class);
+        Dialog confirmWindow = createMock(Dialog.class);
         var button = (Button) getFooterLayout(window).getComponentAt(0);
         Windows.showNotificationWindow(eq("Please select at least one work"));
         expectLastCall().once();
-        replay(Windows.class, controller, confirmWindowCapture);
+        replay(Windows.class, controller, confirmWindow);
         button.click();
-        verify(Windows.class, controller, confirmWindowCapture);
+        verify(Windows.class, controller, confirmWindow);
     }
 
     @Test
     public void testMarkWithUpdatedUsages() {
         mockStatic(Windows.class);
-        Dialog confirmWindowCapture = createMock(Dialog.class);
+        Dialog confirmWindow = createMock(Dialog.class);
         var grid = Whitebox.<Grid<WorkClassification>>getInternalState(window, "grid");
         var classifications = buildClassifications();
         grid.setItems(classifications);
@@ -166,19 +166,19 @@ public class WorkClassificationWindowTest {
         Capture<IConfirmCancelListener> confirmListener = newCapture();
         expect(controller.getCountToUpdate(classifications)).andReturn(2).once();
         expect(Windows.showConfirmDialog(eq("2 usages will be updated. Are you sure you want to confirm action?"),
-            capture(confirmListener))).andReturn(confirmWindowCapture).once();
+            capture(confirmListener))).andReturn(confirmWindow).once();
         controller.updateClassifications(classifications, "STM");
         expectLastCall().once();
-        replay(Windows.class, controller, confirmWindowCapture);
+        replay(Windows.class, controller, confirmWindow);
         button.click();
         confirmListener.getValue().confirm();
-        verify(Windows.class, controller, confirmWindowCapture);
+        verify(Windows.class, controller, confirmWindow);
     }
 
     @Test
     public void testMarkWithoutUpdatedUsages() {
         mockStatic(Windows.class);
-        Dialog confirmWindowCapture = createMock(Dialog.class);
+        Dialog confirmWindow = createMock(Dialog.class);
         var grid = Whitebox.<Grid<WorkClassification>>getInternalState(window, "grid");
         var classifications = buildClassifications();
         grid.setItems(classifications);
@@ -187,13 +187,13 @@ public class WorkClassificationWindowTest {
         Capture<IConfirmCancelListener> confirmListener = newCapture();
         expect(controller.getCountToUpdate(classifications)).andReturn(0).once();
         expect(Windows.showConfirmDialog(eq("Are you sure you want to perform action?"), capture(confirmListener)))
-            .andReturn(confirmWindowCapture).once();
+            .andReturn(confirmWindow).once();
         controller.updateClassifications(classifications, "STM");
         expectLastCall().once();
-        replay(Windows.class, controller, confirmWindowCapture);
+        replay(Windows.class, controller, confirmWindow);
         button.click();
         confirmListener.getValue().confirm();
-        verify(Windows.class, controller, confirmWindowCapture);
+        verify(Windows.class, controller, confirmWindow);
     }
 
     private Set<WorkClassification> buildClassifications() {
