@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.vui.scenario.impl;
 
 import com.copyright.rup.dist.foreign.domain.UsageDto;
+import com.copyright.rup.dist.foreign.vui.common.utils.GridColumnEnum;
 import com.copyright.rup.dist.foreign.vui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.vui.scenario.api.ICommonDrillDownByRightsholderController;
 import com.copyright.rup.dist.foreign.vui.scenario.api.ICommonDrillDownByRightsholderWidget;
@@ -89,48 +90,28 @@ public abstract class CommonDrillDownByRightsholderWidget extends CommonDialog
     /**
      * Adds a column.
      *
-     * @param provider        a {@link ValueProvider} for the column value
-     * @param captionProperty caption property
-     * @param sort            sort property
-     */
-    protected void addColumn(ValueProvider<UsageDto, ?> provider, String captionProperty, String sort) {
-        grid.addColumn(provider)
-            .setHeader(ForeignUi.getMessage(captionProperty))
-            .setSortProperty(sort)
-            .setResizable(true);
-    }
-
-    /**
-     * Adds a column.
-     *
-     * @param provider        a {@link ValueProvider} for the column value
-     * @param captionProperty caption property
-     * @param sort            sort property
-     * @param width           column width
+     * @param provider   a {@link ValueProvider} for the column value
+     * @param gridColumn grid column
      * @return the column for method chaining
      */
-    protected Column<UsageDto> addColumn(ValueProvider<UsageDto, ?> provider, String captionProperty, String sort,
-                                         String width) {
+    protected Column<UsageDto> addColumn(ValueProvider<UsageDto, ?> provider, GridColumnEnum gridColumn) {
         return grid.addColumn(provider)
-            .setHeader(ForeignUi.getMessage(captionProperty))
-            .setSortProperty(sort)
+            .setHeader(ForeignUi.getMessage(gridColumn.getCaption()))
+            .setSortProperty(gridColumn.getSort())
             .setFlexGrow(0)
-            .setWidth(width)
+            .setWidth(gridColumn.getWidth())
             .setResizable(true);
     }
 
     /**
      * Adds a column, formatted as amount.
      *
-     * @param function        a {@link Function} to get {@link BigDecimal} value from {@link UsageDto}
-     * @param captionProperty caption property
-     * @param sort            sort property
-     * @param width           column width
+     * @param function   a {@link Function} to get {@link BigDecimal} value from {@link UsageDto}
+     * @param gridColumn grid column
      * @return the column for method chaining
      */
-    protected Column<UsageDto> addAmountColumn(Function<UsageDto, BigDecimal> function, String captionProperty,
-                                               String sort, String width) {
-        return addColumn(usageDto -> CurrencyUtils.format(function.apply(usageDto), null), captionProperty, sort, width)
+    protected Column<UsageDto> addAmountColumn(Function<UsageDto, BigDecimal> function, GridColumnEnum gridColumn) {
+        return addColumn(usageDto -> CurrencyUtils.format(function.apply(usageDto), null), gridColumn)
             .setClassNameGenerator(item -> STYLE_ALIGN_RIGHT);
     }
 

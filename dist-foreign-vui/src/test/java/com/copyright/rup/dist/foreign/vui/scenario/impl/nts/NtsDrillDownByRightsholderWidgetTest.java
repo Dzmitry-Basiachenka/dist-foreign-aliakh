@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.vui.scenario.impl.fas;
+package com.copyright.rup.dist.foreign.vui.scenario.impl.nts;
 
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.getDialogContent;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.getFooterComponent;
@@ -9,6 +9,8 @@ import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyWindow;
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertArrayEquals;
@@ -16,13 +18,11 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.powermock.api.easymock.PowerMock.replay;
-import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.vui.UiTestHelper;
-import com.copyright.rup.dist.foreign.vui.scenario.api.fas.IFasDrillDownByRightsholderController;
+import com.copyright.rup.dist.foreign.vui.scenario.api.nts.INtsDrillDownByRightsholderController;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.SearchWidget;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -50,31 +50,28 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * Verifies {@link FasDrillDownByRightsholderWidget}.
+ * Verifies {@link NtsDrillDownByRightsholderWidget}.
  * <p>
  * Copyright (C) 2019 copyright.com
  * <p>
- * Date: 12/9/19
+ * Date: 12/9/2019
  *
  * @author Stanislau Rudak
  */
-public class FasDrillDownByRightsholderWidgetTest {
+public class NtsDrillDownByRightsholderWidgetTest {
 
-    private static final String WIDTH_300 = "300px";
-    private static final String WIDTH_200 = "200px";
-    private static final String WIDTH_170 = "170px";
     private static final String SEARCH_PROMPT =
         "Enter Detail ID or Standard Number or Wr Wrk Inst or RRO Name/Account #";
-
-    private final List<UsageDto> usages = loadExpectedUsageDto("usage_dto_c2c29b7b.json");
-
-    private FasDrillDownByRightsholderWidget widget;
-    private IFasDrillDownByRightsholderController controller;
+    private static final String WIDTH_300 = "300px";
+    private static final String WIDTH_200 = "200px";
+    private final List<UsageDto> usages = loadExpectedUsageDtos("usage_dto_e2fabeb2.json");
+    private NtsDrillDownByRightsholderWidget widget;
+    private INtsDrillDownByRightsholderController controller;
 
     @Before
     public void setUp() {
-        controller = createMock(IFasDrillDownByRightsholderController.class);
-        widget = new FasDrillDownByRightsholderWidget();
+        controller = createMock(INtsDrillDownByRightsholderController.class);
+        widget = new NtsDrillDownByRightsholderWidget();
         widget.setController(controller);
         widget.init();
     }
@@ -113,11 +110,10 @@ public class FasDrillDownByRightsholderWidgetTest {
         replay(controller);
         Grid<?> grid = (Grid<?>) ((VerticalLayout) getDialogContent(widget)).getComponentAt(1);
         Object[][] expectedCells = {
-            {"c2c29b7b-13e1-4f02-afc0-ed1684253e20", "FAS", "Paid batch", "1000000008", "Intercept Limited [T]",
-                "340415946", "100 ROAD MOVIES", "1046-9055", "2046-9055", "VALISSN", "FY2021", "02/12/2021",
-                "Paediatrics and international child health", "some article", "some publisher", "02/13/2021", "2",
-                "3,000.00", "500.00", "1,000.00", "1,866.67", "9,800.00", "16.0", "Univ", "2015", "2016", "author",
-                "usage from usages_10.csv"}
+            {"e2fabeb2-69f8-4288-b34f-698d8c514c84", "FAS", "Paid batch", "1000000004",
+                "Computers for Design and Construction", "243904752", "100 ROAD MOVIES", "1008902112317555XX",
+                "VALISBN13", "FY2021", "02/12/2021", "100 ROAD MOVIES", "some article", "some publisher", "02/13/2021",
+                "2", "3,000.00", "500.00", "160.00", "340.00", "32.0", "lib", "1980", "2000", "author", "comment"}
         };
         verifyGridItems(grid, usages, expectedCells);
         verify(controller);
@@ -135,7 +131,7 @@ public class FasDrillDownByRightsholderWidgetTest {
         assertEquals("drill-down-by-rightsholder-toolbar", horizontalLayout.getClassName());
         var div = (Div) horizontalLayout.getComponentAt(0);
         assertEquals("<div></div>", div.getElement().getOuterHTML());
-        SearchWidget searchWidget = (SearchWidget) horizontalLayout.getComponentAt(1);
+        var searchWidget = (SearchWidget) horizontalLayout.getComponentAt(1);
         assertEquals(SEARCH_PROMPT, Whitebox.getInternalState(searchWidget, TextField.class).getPlaceholder());
         assertEquals("60%", searchWidget.getWidth());
         var menuComponent = horizontalLayout.getComponentAt(2);
@@ -160,19 +156,17 @@ public class FasDrillDownByRightsholderWidgetTest {
             Pair.of("RRO Name", WIDTH_300),
             Pair.of("Wr Wrk Inst", "140px"),
             Pair.of("System Title", WIDTH_300),
-            Pair.of("Reported Standard Number", "260px"),
             Pair.of("Standard Number", "180px"),
             Pair.of("Standard Number Type", "225px"),
             Pair.of("Fiscal Year", "130px"),
             Pair.of("Payment Date", "145px"),
-            Pair.of("Reported Title", WIDTH_300),
+            Pair.of("Title", WIDTH_300),
             Pair.of("Article", "135px"),
             Pair.of("Publisher", "135px"),
             Pair.of("Pub Date", "110px"),
             Pair.of("Number of Copies", "185px"),
-            Pair.of("Reported Value", WIDTH_170),
-            Pair.of("Gross Amt in USD", WIDTH_170),
-            Pair.of("Batch Amt in USD", WIDTH_170),
+            Pair.of("Reported Value", "170px"),
+            Pair.of("Gross Amt in USD", "170px"),
             Pair.of("Service Fee Amount", WIDTH_200),
             Pair.of("Net Amt in USD", "150px"),
             Pair.of("Service Fee %", "145px"),
@@ -184,7 +178,7 @@ public class FasDrillDownByRightsholderWidgetTest {
         ));
     }
 
-    private List<UsageDto> loadExpectedUsageDto(String fileName) {
+    private List<UsageDto> loadExpectedUsageDtos(String fileName) {
         try {
             var content = TestUtils.fileToString(this.getClass(), fileName);
             var mapper = new ObjectMapper();

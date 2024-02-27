@@ -105,6 +105,10 @@ public enum GridColumnEnum {
      */
     SERVICE_FEE("table.column.service_fee", "serviceFee", "145px"),
     /**
+     * Service fee amount column.
+     */
+    SERVICE_FEE_AMOUNT("table.column.service_fee_amount", "serviceFeeAmount", WidthConstants.WIDTH_200),
+    /**
      * Standard number column.
      */
     STANDARD_NUMBER("table.column.standard_number", "standardNumber", WidthConstants.WIDTH_180),
@@ -176,6 +180,10 @@ public enum GridColumnEnum {
      * Usage source column.
      */
     USAGE_SOURCE("table.column.usage_source", "usageSource", WidthConstants.WIDTH_140),
+    /**
+     * Net amount column.
+     */
+    NET_AMOUNT("table.column.net_amount_in_usd", "netAmount", WidthConstants.WIDTH_150),
 
     // FAS NTS specific columns
 
