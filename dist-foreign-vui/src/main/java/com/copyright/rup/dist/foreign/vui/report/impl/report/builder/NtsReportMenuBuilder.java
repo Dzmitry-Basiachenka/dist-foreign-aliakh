@@ -31,6 +31,8 @@ public class NtsReportMenuBuilder implements IReportMenuBuilder<INtsReportContro
             widget.openReportWindow(taxNotificationReport, controller.getTaxNotificationReportController()));
         subMenu.addItem(serviceFeeTrueUpReport, menuItem ->
             widget.openReportWindow(serviceFeeTrueUpReport, controller.getNtsServiceFeeTrueUpReportController()));
+        subMenu.addItem(ForeignUi.getMessage("menu.report.nts_fund_pools"), menuItem ->
+            widget.generateReport(controller.getNtsFundPoolsReportStreamSource()));
         //TODO: {vaadin23} will implement later
     }
 }

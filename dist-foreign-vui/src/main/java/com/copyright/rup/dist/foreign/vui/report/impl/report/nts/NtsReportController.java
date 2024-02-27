@@ -45,4 +45,10 @@ public class NtsReportController extends CommonReportController implements INtsR
     public ICommonScenarioReportController getNtsServiceFeeTrueUpReportController() {
         return ntsServiceFeeTrueUpReportController;
     }
+
+    @Override
+    public IStreamSource getNtsFundPoolsReportStreamSource() {
+        return new ByteArrayStreamSource("nts_fund_pools_",
+            outputStream -> getReportService().writeNtsFundPoolsCsvReport(outputStream));
+    }
 }

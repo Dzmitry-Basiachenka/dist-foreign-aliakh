@@ -95,4 +95,15 @@ public class NtsReportControllerTest {
     public void testGetNtsServiceFeeTrueUpReportController() {
         assertSame(ntsServiceFeeTrueUpReportController, ntsReportController.getNtsServiceFeeTrueUpReportController());
     }
+
+    @Test
+    public void testGetNtsFundPoolsReportStreamSource() {
+        OffsetDateTime now = OffsetDateTime.of(2023, 1, 2, 3, 4, 5, 6, ZoneOffset.ofHours(0));
+        mockStatic(OffsetDateTime.class);
+        expect(OffsetDateTime.now()).andReturn(now).once();
+        replay(OffsetDateTime.class);
+        assertEquals("nts_fund_pools_01_02_2023_03_04.csv",
+            ntsReportController.getNtsFundPoolsReportStreamSource().getSource().getKey().get());
+        verify(OffsetDateTime.class);
+    }
 }
