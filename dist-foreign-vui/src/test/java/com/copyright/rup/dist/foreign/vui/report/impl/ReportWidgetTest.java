@@ -138,11 +138,12 @@ public class ReportWidgetTest {
     private void assertReportsMenuNts() {
         assertEquals(1, CollectionUtils.size(reportWidget.getItems()));
         List<MenuItem> menuItems = reportWidget.getItems().get(0).getSubMenu().getItems();
-        assertEquals(5, CollectionUtils.size(menuItems));
+        assertEquals(6, CollectionUtils.size(menuItems));
         assertEquals("NTS Withdrawn Batch Summary Report", menuItems.get(0).getText());
         assertEquals("Undistributed Liabilities Reconciliation Report", menuItems.get(1).getText());
         assertEquals("Tax Notification Report", menuItems.get(2).getText());
         assertEquals("Service Fee True-up Report", menuItems.get(3).getText());
         assertEquals("NTS Fund Pools Report", menuItems.get(4).getText());
+        assertEquals("NTS Pre-Service Fee Fund Report", menuItems.get(5).getText());
     }
 }
