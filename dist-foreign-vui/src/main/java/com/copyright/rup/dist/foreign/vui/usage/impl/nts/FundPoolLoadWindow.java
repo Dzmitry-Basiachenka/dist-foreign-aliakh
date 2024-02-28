@@ -117,7 +117,8 @@ class FundPoolLoadWindow extends CommonDialog {
      */
     boolean isValid() {
         var isBinderValid = binder.validate().isOk();
-        return areValidMarkets() && isBinderValid;
+        var areMarketsValid = validateMarkets();
+        return areMarketsValid && isBinderValid;
     }
 
     private VerticalLayout initRootLayout() {
@@ -263,7 +264,7 @@ class FundPoolLoadWindow extends CommonDialog {
         var marketFilterWidget = new MarketFilterWidget(usageController::getMarkets);
         marketFilterWidget.addFilterSaveListener(event -> {
             selectedMarkets = event.getSelectedItemsIds();
-            areValidMarkets();
+            validateMarkets();
         });
         VaadinUtils.addComponentStyle(marketFilterWidget, "market-filter-widget");
         initErrorMarketDiv();
@@ -345,7 +346,7 @@ class FundPoolLoadWindow extends CommonDialog {
             stmAmountField.getValue());
     }
 
-    private boolean areValidMarkets() {
+    private boolean validateMarkets() {
         boolean isSelected = CollectionUtils.isNotEmpty(selectedMarkets);
         if (isSelected) {
             marketLayout.remove(errorDiv);
