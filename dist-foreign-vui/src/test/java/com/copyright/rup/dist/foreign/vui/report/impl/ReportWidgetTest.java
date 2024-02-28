@@ -14,7 +14,7 @@ import com.copyright.rup.dist.foreign.vui.report.api.ICommonReportController;
 import com.copyright.rup.dist.foreign.vui.report.api.IReportController;
 import com.copyright.rup.dist.foreign.vui.report.api.fas.IFasReportController;
 import com.copyright.rup.dist.foreign.vui.report.api.nts.INtsReportController;
-import com.copyright.rup.dist.foreign.vui.report.impl.report.ReportControllerProvider;
+import com.copyright.rup.dist.foreign.vui.report.impl.fas.UndistributedLiabilitiesReportWidget;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.Windows;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.api.IController;
 
