@@ -448,24 +448,18 @@
         )
     </select>
 
-    <sql id="periodPriorSql">
-        <!--Gets period_prior for each usage 'years interval * 12 + month interval / 6'  for example: 202212 and 202012 returns 4-->
-        select (
-            extract(year from age(to_date(${period}::text, 'YYYYMM'), to_date(u.period::text, 'YYYYMM')::timestamp)) * 12 +
-            extract(month from age(to_date(${period}::text, 'YYYYMM'), to_date(u.period::text, 'YYYYMM')::timestamp))
-        ) / 6
-    </sql>
-
     <sql id="invalidUsagesWhereClause">
         where u.df_acl_usage_batch_uid = #{batchId}
             and (u.publication_type_uid is null or u.content_unit_price is null)
-            and
-                <foreach collection="periodPriors" item="periodPrior" open="(" separator=" or " close=")">
-                   #{periodPrior} = (
-                        <include refid="periodPriorSql">
-                            <property name="period" value="#{distributionPeriod}"/>
-                        </include>
-                    )
+            and (
+                <!--Gets period_prior for each usage 'years interval * 12 + month interval / 6'  for example: 202212 and 202012 returns 4-->
+                select (
+                    extract(year from age(to_date(${distributionPeriod}::text, 'YYYYMM'), to_date(u.period::text, 'YYYYMM')::timestamp)) * 12 +
+                    extract(month from age(to_date(${distributionPeriod}::text, 'YYYYMM'), to_date(u.period::text, 'YYYYMM')::timestamp))
+                ) / 6
+            ) in
+                <foreach collection="periodPriors" item="periodPrior" open="(" close=")" separator=",">
+                   #{periodPrior}
                 </foreach>
             and u.annualized_copies &lt; 2000
     </sql>
