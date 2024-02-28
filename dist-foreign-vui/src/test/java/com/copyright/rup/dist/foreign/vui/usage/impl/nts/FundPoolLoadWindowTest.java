@@ -1,5 +1,15 @@
 package com.copyright.rup.dist.foreign.vui.usage.impl.nts;
 
+import static com.copyright.rup.dist.foreign.vui.IVaadinComponentFinder.getBigDecimalField;
+import static com.copyright.rup.dist.foreign.vui.IVaadinComponentFinder.getButton;
+import static com.copyright.rup.dist.foreign.vui.IVaadinComponentFinder.getIntegerField;
+import static com.copyright.rup.dist.foreign.vui.IVaadinComponentFinder.getLongField;
+import static com.copyright.rup.dist.foreign.vui.IVaadinComponentFinder.getTextField;
+import static com.copyright.rup.dist.foreign.vui.IVaadinComponentFinder.setBigDecimalFieldValue;
+import static com.copyright.rup.dist.foreign.vui.IVaadinComponentFinder.setCheckboxValue;
+import static com.copyright.rup.dist.foreign.vui.IVaadinComponentFinder.setIntegerFieldValue;
+import static com.copyright.rup.dist.foreign.vui.IVaadinComponentFinder.setLongFieldValue;
+import static com.copyright.rup.dist.foreign.vui.IVaadinComponentFinder.setTextFieldValue;
 import static com.copyright.rup.dist.foreign.vui.IVaadinJsonConverter.assertJsonSnapshot;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.assertFieldValidationMessage;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.getDialogContent;
@@ -31,7 +41,6 @@ import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
-import com.copyright.rup.dist.foreign.vui.IVaadinComponentFinder;
 import com.copyright.rup.dist.foreign.vui.usage.api.nts.INtsUsageController;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.security.SecurityUtils;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.LongField;
@@ -75,7 +84,7 @@ import java.util.Set;
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({Windows.class, SecurityUtils.class, FundPoolLoadWindow.class})
 @PowerMockIgnore({"com.sun.org.apache.xerces.*", "javax.xml.*", "org.xml.*", "javax.management.*"})
-public class FundPoolLoadWindowTest implements IVaadinComponentFinder {
+public class FundPoolLoadWindowTest {
 
     private static final String USAGE_BATCH_NAME = "Usage Batch";
     private static final Long FAS_RRO_ACCOUNT_NUMBER = 1000001863L;

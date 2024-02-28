@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.vui.usage.impl;
 
+import static com.copyright.rup.dist.foreign.vui.IVaadinComponentFinder.getButton;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyComboBox;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyFiltersLabel;
@@ -22,7 +23,6 @@ import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.common.exception.RupRuntimeException;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
-import com.copyright.rup.dist.foreign.vui.IVaadinComponentFinder;
 import com.copyright.rup.dist.foreign.vui.usage.api.IFasNtsUsageFilterController;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.Windows;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.LocalDateWidget;
@@ -56,7 +56,7 @@ import java.util.Set;
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(Windows.class)
 @PowerMockIgnore({"com.sun.org.apache.xerces.*", "javax.xml.*", "org.xml.*", "javax.management.*"})
-public class FasNtsUsageFilterWidgetTest implements IVaadinComponentFinder {
+public class FasNtsUsageFilterWidgetTest {
 
     private static final Integer FISCAL_YEAR = 2017;
     private static final Long ACCOUNT_NUMBER = 12345678L;

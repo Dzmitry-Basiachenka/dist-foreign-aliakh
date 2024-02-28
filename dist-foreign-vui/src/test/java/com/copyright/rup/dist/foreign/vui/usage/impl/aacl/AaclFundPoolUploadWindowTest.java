@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.vui.usage.impl.aacl;
 
+import static com.copyright.rup.dist.foreign.vui.IVaadinComponentFinder.getTextField;
+import static com.copyright.rup.dist.foreign.vui.IVaadinComponentFinder.setTextFieldValue;
 import static com.copyright.rup.dist.foreign.vui.IVaadinJsonConverter.assertJsonSnapshot;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.assertFieldValidationMessage;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.getDialogContent;
@@ -29,7 +31,6 @@ import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.Processin
 import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.FundPoolDetail;
 import com.copyright.rup.dist.foreign.service.impl.csv.AaclFundPoolCsvProcessor;
-import com.copyright.rup.dist.foreign.vui.IVaadinComponentFinder;
 import com.copyright.rup.dist.foreign.vui.usage.api.aacl.IAaclUsageController;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.upload.UploadField;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.Windows;
@@ -63,7 +64,7 @@ import java.io.ByteArrayOutputStream;
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({Windows.class, AaclFundPoolUploadWindow.class})
 @PowerMockIgnore({"com.sun.org.apache.xerces.*", "javax.xml.*", "org.xml.*", "javax.management.*"})
-public class AaclFundPoolUploadWindowTest implements IVaadinComponentFinder {
+public class AaclFundPoolUploadWindowTest {
 
     private static final String AACL_PRODUCT_FAMILY = "AACL";
     private static final String FUND_POOL_NAME = "Fund Pool";

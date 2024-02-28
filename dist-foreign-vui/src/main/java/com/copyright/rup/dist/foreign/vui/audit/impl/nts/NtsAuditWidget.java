@@ -69,7 +69,7 @@ public class NtsAuditWidget extends CommonAuditWidget implements INtsAuditWidget
         addColumn(UsageDto::getStandardNumber, GridColumnEnum.STANDARD_NUMBER);
         addColumn(UsageDto::getStandardNumberType, GridColumnEnum.STANDARD_NUMBER_TYPE);
         addAmountColumn(UsageDto::getReportedValue, GridColumnEnum.REPORTED_VALUE);
-        addAmountColumn(UsageDto::getGrossAmount, GridColumnEnum.GROSS_AMOUNT);
+        addAmountColumn(UsageDto::getGrossAmount, GridColumnEnum.GROSS_AMOUNT_IN_USD);
         addColumn(usage -> {
             var value = usage.getServiceFee();
             return Objects.nonNull(value)

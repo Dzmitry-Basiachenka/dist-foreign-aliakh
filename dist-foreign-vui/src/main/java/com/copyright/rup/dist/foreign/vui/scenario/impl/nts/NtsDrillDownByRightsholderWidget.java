@@ -45,7 +45,7 @@ public class NtsDrillDownByRightsholderWidget extends CommonDrillDownByRightshol
             GridColumnEnum.PUB_DATE);
         addColumn(UsageDto::getNumberOfCopies, GridColumnEnum.NUMBER_OF_COPIES);
         addAmountColumn(UsageDto::getReportedValue, GridColumnEnum.REPORTED_VALUE);
-        addAmountColumn(UsageDto::getGrossAmount, GridColumnEnum.GROSS_AMOUNT);
+        addAmountColumn(UsageDto::getGrossAmount, GridColumnEnum.GROSS_AMOUNT_IN_USD);
         addAmountColumn(UsageDto::getServiceFeeAmount, GridColumnEnum.SERVICE_FEE_AMOUNT);
         addAmountColumn(UsageDto::getNetAmount, GridColumnEnum.NET_AMOUNT);
         addColumn(usageDto -> formatServiceFee(usageDto.getServiceFee()), GridColumnEnum.SERVICE_FEE);

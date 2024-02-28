@@ -1,0 +1,82 @@
+{
+  "javaClass" : "com.copyright.rup.dist.foreign.vui.usage.impl.aacl.ViewAaclFundPoolDetailsWindow",
+  "id" : "view-aacl-fund-pool-details-window",
+  "class" : "[view-aacl-fund-pool-details-window]",
+  "headerTitle" : "Fund Pool",
+  "isModal" : true,
+  "isDraggable" : true,
+  "isResizable" : true,
+  "isCloseOnEsc" : false,
+  "isCloseOnOutsideClick" : false,
+  "isOpened" : false,
+  "width" : "700px",
+  "maxWidth" : "101.7%",
+  "minHeight" : "200px",
+  "height" : "600px",
+  "maxHeight" : "103.7%",
+  "children" : [ {
+    "javaClass" : "com.vaadin.flow.component.orderedlayout.VerticalLayout",
+    "style" : "width:100%;height:100%",
+    "width" : "100%",
+    "height" : "100%",
+    "children" : [ {
+      "javaClass" : "com.vaadin.flow.component.grid.Grid",
+      "id" : "view-aacl-fund-pool-details-grid",
+      "class" : "[view-aacl-fund-pool-details-grid]",
+      "style" : "width:100%;height:100%",
+      "theme" : "column-borders compact row-stripes",
+      "width" : "100%",
+      "height" : "100%",
+      "pageSize" : 50,
+      "attribute_multi-sort-priority" : "prepend",
+      "children" : [ {
+        "javaClass" : "com.vaadin.flow.component.grid.Grid$Column",
+        "headerText" : "Agg LC ID",
+        "textAlign" : "START",
+        "flexGrow" : 0,
+        "width" : "110px",
+        "autoWidth" : false,
+        "sortable" : true,
+        "resizable" : true
+      }, {
+        "javaClass" : "com.vaadin.flow.component.grid.Grid$Column",
+        "headerText" : "Agg LC Enrollment",
+        "textAlign" : "START",
+        "flexGrow" : 0,
+        "width" : "190px",
+        "autoWidth" : false,
+        "sortable" : true,
+        "resizable" : true
+      }, {
+        "javaClass" : "com.vaadin.flow.component.grid.Grid$Column",
+        "headerText" : "Agg LC Discipline",
+        "textAlign" : "START",
+        "flexGrow" : 0,
+        "width" : "230px",
+        "autoWidth" : false,
+        "sortable" : true,
+        "resizable" : true
+      }, {
+        "javaClass" : "com.vaadin.flow.component.grid.Grid$Column",
+        "headerText" : "Gross Amount",
+        "textAlign" : "START",
+        "flexGrow" : 0,
+        "width" : "160px",
+        "autoWidth" : false,
+        "sortable" : true,
+        "resizable" : true
+      } ]
+    } ]
+  } ],
+  "footer" : {
+    "javaClass" : "com.vaadin.flow.component.orderedlayout.HorizontalLayout",
+    "theme" : "spacing",
+    "children" : [ {
+      "javaClass" : "com.vaadin.flow.component.button.Button",
+      "id" : "Close",
+      "class" : "[Close]",
+      "text" : "Close",
+      "disableOnClick" : true
+    } ]
+  }
+}

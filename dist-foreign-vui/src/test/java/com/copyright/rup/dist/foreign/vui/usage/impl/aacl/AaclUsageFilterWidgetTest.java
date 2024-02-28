@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.vui.usage.impl.aacl;
 
+import static com.copyright.rup.dist.foreign.vui.IVaadinComponentFinder.getButton;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyComboBox;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyFiltersLabel;
@@ -21,10 +22,9 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
-import com.copyright.rup.dist.foreign.vui.IVaadinComponentFinder;
 import com.copyright.rup.dist.foreign.vui.usage.api.aacl.IAaclUsageFilterController;
-
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.Windows;
+
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
@@ -54,7 +54,7 @@ import java.util.Set;
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(Windows.class)
 @PowerMockIgnore({"com.sun.org.apache.xerces.*", "javax.xml.*", "org.xml.*", "javax.management.*"})
-public class AaclUsageFilterWidgetTest implements IVaadinComponentFinder {
+public class AaclUsageFilterWidgetTest {
 
     private static final int USAGE_PERIOD = 2020;
     private static final Long ACCOUNT_NUMBER = 12345678L;

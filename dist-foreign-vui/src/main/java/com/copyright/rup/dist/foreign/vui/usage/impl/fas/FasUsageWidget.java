@@ -94,7 +94,7 @@ public class FasUsageWidget extends CommonUsageWidget implements IFasUsageWidget
             GridColumnEnum.PUB_DATE);
         addColumn(UsageDto::getNumberOfCopies, GridColumnEnum.NUMBER_OF_COPIES);
         addAmountColumn(UsageDto::getReportedValue, GridColumnEnum.REPORTED_VALUE);
-        addAmountColumn(UsageDto::getGrossAmount, GridColumnEnum.GROSS_AMOUNT);
+        addAmountColumn(UsageDto::getGrossAmount, GridColumnEnum.GROSS_AMOUNT_IN_USD);
         addAmountColumn(UsageDto::getBatchGrossAmount, GridColumnEnum.BATCH_GROSS_AMOUNT);
         addColumn(UsageDto::getMarket, GridColumnEnum.MARKET);
         addColumn(UsageDto::getMarketPeriodFrom, GridColumnEnum.MARKET_PERIOD_FROM);

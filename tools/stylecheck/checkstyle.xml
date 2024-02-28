@@ -715,6 +715,7 @@
                             org.hamcrest.MatcherAssert.*,org.hamcrest.core.IsInstanceOf.*,
                             com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.*,
                             com.copyright.rup.dist.foreign.vui.UiTestHelper.*,
+                            com.copyright.rup.dist.foreign.vui.IVaadinComponentFinder.*,
                             com.copyright.rup.dist.foreign.vui.IVaadinJsonConverter.*"/>
         </module>
 
