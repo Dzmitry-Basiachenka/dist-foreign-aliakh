@@ -3,7 +3,6 @@ package com.copyright.rup.dist.foreign.vui.report.api.nts;
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.vui.report.api.ICommonReportController;
 import com.copyright.rup.dist.foreign.vui.report.api.ICommonScenarioReportController;
-import com.copyright.rup.dist.foreign.vui.report.api.INtsPreServiceFeeFundReportController;
 
 /**
  * Interface for NTS report controller.

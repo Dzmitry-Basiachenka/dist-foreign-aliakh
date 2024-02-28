@@ -3,9 +3,6 @@ package com.copyright.rup.dist.foreign.vui.report.api.fas;
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.vui.report.api.ICommonReportController;
 import com.copyright.rup.dist.foreign.vui.report.api.ICommonScenarioReportController;
-import com.copyright.rup.dist.foreign.vui.report.api.IFasServiceFeeTrueUpReportController;
-import com.copyright.rup.dist.foreign.vui.report.api.ISummaryMarketReportController;
-import com.copyright.rup.dist.foreign.vui.report.api.IUndistributedLiabilitiesReportController;
 
 /**
  * Interface for FAS report controller.

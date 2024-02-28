@@ -5,9 +5,8 @@ import com.copyright.rup.dist.foreign.vui.main.api.IProductFamilyProvider;
 import com.copyright.rup.dist.foreign.vui.report.api.IReportController;
 import com.copyright.rup.dist.foreign.vui.report.api.IReportMenuBuilder;
 import com.copyright.rup.dist.foreign.vui.report.api.IReportWidget;
-import com.copyright.rup.dist.foreign.vui.report.impl.report.ReportControllerProvider;
-import com.copyright.rup.dist.foreign.vui.report.impl.report.builder.FasReportMenuBuilder;
-import com.copyright.rup.dist.foreign.vui.report.impl.report.builder.NtsReportMenuBuilder;
+import com.copyright.rup.dist.foreign.vui.report.impl.builder.FasReportMenuBuilder;
+import com.copyright.rup.dist.foreign.vui.report.impl.builder.NtsReportMenuBuilder;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.api.CommonController;
 
 import com.vaadin.flow.component.contextmenu.MenuItem;
