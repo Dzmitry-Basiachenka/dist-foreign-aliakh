@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.vui.usage.impl.fas;
+package com.copyright.rup.dist.foreign.vui.usage.impl.aacl;
 
 import static com.copyright.rup.dist.foreign.vui.IVaadinJsonConverter.assertJsonSnapshot;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.assertFieldValidationMessage;
@@ -14,7 +14,6 @@ import static org.easymock.EasyMock.expect;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.createPartialMock;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
@@ -23,9 +22,9 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
-import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
-import com.copyright.rup.dist.foreign.service.impl.csv.ResearchedUsagesCsvProcessor;
-import com.copyright.rup.dist.foreign.vui.usage.api.fas.IFasUsageController;
+import com.copyright.rup.dist.foreign.domain.AaclClassifiedUsage;
+import com.copyright.rup.dist.foreign.service.impl.csv.ClassifiedUsageCsvProcessor;
+import com.copyright.rup.dist.foreign.vui.usage.api.aacl.IAaclUsageController;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.security.SecurityUtils;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.upload.UploadField;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.Windows;
@@ -47,57 +46,58 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.io.ByteArrayOutputStream;
+import java.util.List;
 
 /**
- * Verifies {@link ResearchedUsagesUploadWindow}.
- * <p/>
- * Copyright (C) 2018 copyright.com
- * <p/>
- * Date: 03/27/2018
+ * Verifies {@link ClassifiedUsagesUploadWindow}.
+ * <p>
+ * Copyright (C) 2020 copyright.com
+ * <p>
+ * Date: 01/28/2020
  *
- * @author Aliaksandr Liakh
+ * @author Stanislau Rudak
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({Windows.class, SecurityUtils.class, ResearchedUsagesUploadWindow.class})
+@PrepareForTest({Windows.class, SecurityUtils.class, ClassifiedUsagesUploadWindow.class})
 @PowerMockIgnore({"com.sun.org.apache.xerces.*", "javax.xml.*", "org.xml.*", "javax.management.*"})
-public class ResearchedUsagesUploadWindowTest {
+public class ClassifiedUsagesUploadWindowTest {
 
     private static final String SPACES_STRING = "    ";
     private static final String EMPTY_FIELD_MESSAGE = "Field value should be specified";
     private static final String INVALID_FILE_EXTENSION_MESSAGE = "File extension is incorrect";
 
-    private ResearchedUsagesUploadWindow window;
-    private IFasUsageController controller;
+    private ClassifiedUsagesUploadWindow window;
+    private IAaclUsageController controller;
 
     @Before
     public void setUp() {
-        controller = createMock(IFasUsageController.class);
+        controller = createMock(IAaclUsageController.class);
     }
 
     @Test
     public void testConstructor() {
         replay(controller);
-        window = new ResearchedUsagesUploadWindow(controller);
-        verifyWindow(window, "Upload Researched Details", "520px", "230px", Unit.PIXELS, false);
+        window = new ClassifiedUsagesUploadWindow(controller);
+        verifyWindow(window, "Upload Classified Details", "500px", "230px", Unit.PIXELS, false);
         verifyRootLayout(getDialogContent(window));
         verify(controller);
     }
 
     @Test
     public void testJsonSnapshot() {
-        assertJsonSnapshot("usage/impl/fas/researched-usages-upload-window.json",
-            new ResearchedUsagesUploadWindow(controller));
+        assertJsonSnapshot("usage/impl/aacl/classified-usages-upload-window.json",
+            new ClassifiedUsagesUploadWindow(controller));
     }
 
     @Test
-    @SuppressWarnings("unchecked")
     public void testOnUploadClickedValidFields() {
         mockStatic(Windows.class);
         UploadField uploadField = createPartialMock(UploadField.class, "getStreamToUploadedFile");
-        ResearchedUsagesCsvProcessor processor = createMock(ResearchedUsagesCsvProcessor.class);
+        ClassifiedUsageCsvProcessor processor = createMock(ClassifiedUsageCsvProcessor.class);
         Binder<String> binder = createMock(Binder.class);
-        var processingResult = buildCsvProcessingResult();
-        window = createPartialMock(ResearchedUsagesUploadWindow.class, "isValid", "close");
+        var classifiedUsages = List.of(new AaclClassifiedUsage(), new AaclClassifiedUsage(), new AaclClassifiedUsage());
+        var processingResult = buildCsvProcessingResult(classifiedUsages);
+        window = createPartialMock(ClassifiedUsagesUploadWindow.class, "isValid", "close");
         Whitebox.setInternalState(window, controller);
         Whitebox.setInternalState(window, uploadField);
         Whitebox.setInternalState(window, binder);
@@ -106,12 +106,12 @@ public class ResearchedUsagesUploadWindowTest {
         expect(validationStatus.isOk()).andReturn(true).once();
         window.close();
         expectLastCall().once();
-        expect(controller.getResearchedUsagesCsvProcessor()).andReturn(processor).once();
+        expect(controller.getClassifiedUsageCsvProcessor()).andReturn(processor).once();
         expect(processor.process(anyObject())).andReturn(processingResult).once();
-        controller.loadResearchedUsages(processingResult.get());
-        expectLastCall().once();
+        expect(controller.loadClassifiedUsages(classifiedUsages)).andReturn(1).once();
         expect(uploadField.getStreamToUploadedFile()).andReturn(createMock(ByteArrayOutputStream.class)).once();
-        Windows.showNotificationWindow("Upload completed: 1 record(s) were stored successfully");
+        Windows.showNotificationWindow(
+            "Upload completed: 1 record(s) were updated successfully, 2 disqualified record(s) were deleted");
         expectLastCall().once();
         replay(Windows.class, window, controller, uploadField, processor, binder, validationStatus);
         window.onUploadClicked();
@@ -120,7 +120,7 @@ public class ResearchedUsagesUploadWindowTest {
 
     @Test
     public void testUploadFieldValidation() {
-        window = new ResearchedUsagesUploadWindow(controller);
+        window = new ClassifiedUsagesUploadWindow(controller);
         Binder<?> binder = Whitebox.getInternalState(window, "uploadBinder");
         UploadField uploadField = Whitebox.getInternalState(window, "uploadField");
         assertFieldValidationMessage(uploadField, StringUtils.EMPTY, binder, EMPTY_FIELD_MESSAGE, false);
@@ -141,13 +141,15 @@ public class ResearchedUsagesUploadWindowTest {
         verifyLoadClickListener(loadButton);
     }
 
-    private ProcessingResult<ResearchedUsage> buildCsvProcessingResult() {
-        var processingResult = new ProcessingResult<ResearchedUsage>();
-        try {
-            Whitebox.invokeMethod(processingResult, "addRecord", new ResearchedUsage());
-        } catch (Exception e) {
-            fail();
-        }
+    private ProcessingResult<AaclClassifiedUsage> buildCsvProcessingResult(List<AaclClassifiedUsage> classifiedUsages) {
+        var processingResult = new ProcessingResult<AaclClassifiedUsage>();
+        classifiedUsages.forEach(usage -> {
+            try {
+                Whitebox.invokeMethod(processingResult, "addRecord", usage);
+            } catch (Exception e) {
+                throw new AssertionError(e);
+            }
+        });
         return processingResult;
     }
 }

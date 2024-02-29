@@ -54,7 +54,7 @@ public class AaclUsageWidget extends CommonUsageWidget implements IAaclUsageWidg
     /**
      * Controller.
      *
-     * @param controller {@link IAaclUsageController} instance
+     * @param controller instance of {@link IAaclUsageController}
      */
     AaclUsageWidget(IAaclUsageController controller) {
         this.controller = controller;
@@ -106,10 +106,9 @@ public class AaclUsageWidget extends CommonUsageWidget implements IAaclUsageWidg
         //TODO {aliakh} inline initialization
         initUsageBatchMenuBar();
         initFundPoolMenuBar();
-        initLoadClassifiedUsagesButton();
         initAddToScenarioButton();
         var buttonsLayout = new HorizontalLayout(usageBatchMenuBar, fundPoolMenuBar,
-            initSendForClassificationDownloade(), loadClassifiedUsagesButton, addToScenarioButton,
+            initSendForClassificationDownloade(), initLoadClassifiedUsagesButton(), addToScenarioButton,
             initExportDownloader());
         var toolbarLayout = new HorizontalLayout(buttonsLayout, getHideGridColumnsProvider().getMenuButton());
         toolbarLayout.setJustifyContentMode(JustifyContentMode.BETWEEN);
@@ -205,9 +204,11 @@ public class AaclUsageWidget extends CommonUsageWidget implements IAaclUsageWidg
             ForeignUi.getMessage("message.error.invalid_usages_for_classification"));
     }
 
-    private void initLoadClassifiedUsagesButton() {
+    private Button initLoadClassifiedUsagesButton() {
         loadClassifiedUsagesButton = Buttons.createButton(ForeignUi.getMessage("button.load_classified_details"));
-        //TODO {aliakh} loadClassifiedUsagesButton.addClickListener(new ClassifiedUsagesUploadWindow(controller));
+        loadClassifiedUsagesButton.addClickListener(event ->
+            Windows.showModalWindow(new ClassifiedUsagesUploadWindow(controller)));
+        return loadClassifiedUsagesButton;
     }
 
     private void initAddToScenarioButton() {

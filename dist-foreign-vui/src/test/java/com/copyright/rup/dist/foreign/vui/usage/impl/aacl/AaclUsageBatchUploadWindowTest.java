@@ -183,7 +183,7 @@ public class AaclUsageBatchUploadWindowTest {
         window = createPartialMock(AaclUsageBatchUploadWindow.class, new String[]{"isValid"}, controller);
         Whitebox.setInternalState(window, "uploadField", uploadField);
         expect(window.isValid()).andReturn(true).once();
-        expect(uploadField.getValue()).andReturn("file.csv");
+        expect(uploadField.getValue()).andReturn("test.csv");
         expect(controller.getCsvProcessor()).andReturn(processor).once();
         expect(processor.process(anyObject())).andReturn(processingResult).once();
         expect(controller.usageBatchExists(USAGE_BATCH_NAME)).andReturn(false).once();

@@ -57,9 +57,9 @@ import java.util.Set;
 @PowerMockIgnore({"com.sun.org.apache.xerces.*", "javax.xml.*", "org.xml.*", "javax.management.*"})
 public class AaclUsageFilterWidgetTest {
 
+    private static final String AACL_PRODUCT_FAMILY = "AACL";
     private static final int USAGE_PERIOD = 2020;
     private static final Long ACCOUNT_NUMBER = 12345678L;
-    private static final String AACL_PRODUCT_FAMILY = "AACL";
     private static final List<UsageStatusEnum> AACL_STATUSES = List.of(UsageStatusEnum.NEW,
         UsageStatusEnum.WORK_FOUND, UsageStatusEnum.WORK_NOT_FOUND, UsageStatusEnum.WORK_RESEARCH,
         UsageStatusEnum.RH_FOUND, UsageStatusEnum.ELIGIBLE, UsageStatusEnum.SCENARIO_EXCLUDED);
@@ -158,7 +158,7 @@ public class AaclUsageFilterWidgetTest {
         assertEquals(AACL_PRODUCT_FAMILY, widget.getFilter().getProductFamily());
         assertEquals(AACL_PRODUCT_FAMILY, widget.getAppliedFilter().getProductFamily());
         assertFalse(applyButton.isEnabled());
-        ComboBox usagePeriodComboBox = Whitebox.getInternalState(widget, "usagePeriodComboBox");
+        ComboBox<?> usagePeriodComboBox = Whitebox.getInternalState(widget, "usagePeriodComboBox");
         assertNull(usagePeriodComboBox.getValue());
         verify(controller);
     }
