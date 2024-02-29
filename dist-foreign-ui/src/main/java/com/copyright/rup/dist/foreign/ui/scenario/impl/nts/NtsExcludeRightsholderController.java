@@ -40,11 +40,6 @@ public class NtsExcludeRightsholderController extends CommonController<INtsExclu
     private INtsUsageService ntsUsageService;
 
     @Override
-    protected INtsExcludeRightsholderWidget instantiateWidget() {
-        return new NtsExcludeRightsholderWidget();
-    }
-
-    @Override
     public List<RightsholderPayeePair> getRightsholderPayeePairs() {
         return rightsholderService.getRhPayeePairByScenarioId(selectedScenario.getId());
     }
@@ -57,5 +52,10 @@ public class NtsExcludeRightsholderController extends CommonController<INtsExclu
     @Override
     public void setSelectedScenario(Scenario scenario) {
         this.selectedScenario = scenario;
+    }
+
+    @Override
+    protected INtsExcludeRightsholderWidget instantiateWidget() {
+        return new NtsExcludeRightsholderWidget();
     }
 }

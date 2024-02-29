@@ -26,6 +26,7 @@ import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.impl.UsageService;
+import com.copyright.rup.dist.foreign.vui.scenario.api.nts.INtsExcludeRightsholderController;
 import com.copyright.rup.dist.foreign.vui.scenario.api.nts.INtsScenarioWidget;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.Windows;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.api.IWidget;
@@ -73,6 +74,7 @@ public class NtsScenarioControllerTest {
     private IReportService reportService;
     private IStreamSourceHandler streamSourceHandler;
     private INtsScenarioWidget scenarioWidget;
+    private INtsExcludeRightsholderController excludeController;
     private Scenario scenario;
 
     @Before
@@ -84,10 +86,12 @@ public class NtsScenarioControllerTest {
         reportService = createMock(IReportService.class);
         streamSourceHandler = createMock(IStreamSourceHandler.class);
         scenarioWidget = createMock(INtsScenarioWidget.class);
+        excludeController = createMock(INtsExcludeRightsholderController.class);
         Whitebox.setInternalState(controller, usageService);
         Whitebox.setInternalState(controller, reportService);
         Whitebox.setInternalState(controller, streamSourceHandler);
         Whitebox.setInternalState(controller, IWidget.class, scenarioWidget);
+        Whitebox.setInternalState(controller, excludeController);
     }
 
     @Test
@@ -187,6 +191,20 @@ public class NtsScenarioControllerTest {
         Consumer<PipedOutputStream> posConsumer = posConsumerCapture.getValue();
         posConsumer.accept(pos);
         verify(OffsetDateTime.class, streamSourceHandler, reportService);
+    }
+
+    @Test
+    public void testOnExcludeRhButtonClicked() {
+        mockStatic(Windows.class);
+        var widget = new NtsExcludeRightsholderWidget();
+        excludeController.setSelectedScenario(controller.getScenario());
+        expectLastCall().once();
+        expect(excludeController.initWidget()).andReturn(widget).once();
+        Windows.showModalWindow(widget);
+        expectLastCall().once();
+        replay(excludeController, Windows.class);
+        controller.onExcludeRhButtonClicked();
+        verify(excludeController, Windows.class);
     }
 
     private Scenario buildScenario() {

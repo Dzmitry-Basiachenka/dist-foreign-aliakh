@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.vui.scenario.api.nts;
 
+import com.copyright.rup.dist.foreign.vui.scenario.api.ExcludeUsagesEvent;
 import com.copyright.rup.dist.foreign.vui.scenario.api.ICommonScenarioController;
 
 /**
@@ -17,4 +18,11 @@ public interface INtsScenarioController extends ICommonScenarioController {
      * Handles click on 'Exclude by RH' button.
      */
     void onExcludeRhButtonClicked();
+
+    /**
+     * Fires {@link ExcludeUsagesEvent}.
+     *
+     * @param event an instance of {@link ExcludeUsagesEvent}
+     */
+    void fireWidgetEvent(ExcludeUsagesEvent event);
 }

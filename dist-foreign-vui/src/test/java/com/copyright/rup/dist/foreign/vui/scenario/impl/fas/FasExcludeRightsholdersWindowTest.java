@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.vui.scenario.impl.fas;
 
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyGridItems;
+import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifySearchWidget;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyWindow;
 
 import static org.easymock.EasyMock.createMock;
@@ -67,8 +68,9 @@ public class FasExcludeRightsholdersWindowTest {
         verifyWindow(window, "Exclude RH Details for Source RRO #: 1000009522", "830px", "500px", Unit.PIXELS, true);
         VerticalLayout content = (VerticalLayout) UiTestHelper.getDialogContent(window);
         assertEquals(2, content.getComponentCount());
+        verifySearchWidget(content.getComponentAt(0), "Enter Payee/RH Name/Account #");
         verifyGrid(content.getComponentAt(1));
-        verifyButtonsLayout(UiTestHelper.getFooterComponent(window, 2), true, "Confirm", "Clear", "Close");
+        verifyButtonsLayout(UiTestHelper.getFooterComponent(window, 1), true, "Confirm", "Clear", "Close");
     }
 
     @Test
