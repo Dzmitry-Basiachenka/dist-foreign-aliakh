@@ -716,7 +716,8 @@
                             com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.*,
                             com.copyright.rup.dist.foreign.vui.UiTestHelper.*,
                             com.copyright.rup.dist.foreign.vui.IVaadinComponentFinder.*,
-                            com.copyright.rup.dist.foreign.vui.IVaadinJsonConverter.*"/>
+                            com.copyright.rup.dist.foreign.vui.IVaadinJsonConverter.*,
+                            com.copyright.rup.dist.foreign.vui.GridColumnVerifier.*"/>
         </module>
 
         <!-- Checks for imports from a set of illegal packages. !-->

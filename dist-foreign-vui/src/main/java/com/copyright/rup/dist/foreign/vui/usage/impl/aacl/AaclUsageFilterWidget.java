@@ -15,7 +15,7 @@ import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
-import java.util.Set;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -29,10 +29,10 @@ import java.util.stream.Collectors;
  */
 public class AaclUsageFilterWidget extends CommonUsageFilterWidget implements IAaclUsageFilterWidget {
 
-    private static final Set<UsageStatusEnum> AACL_STATUSES = Set.of(UsageStatusEnum.NEW,
-        UsageStatusEnum.WORK_FOUND, UsageStatusEnum.RH_FOUND, UsageStatusEnum.WORK_NOT_FOUND,
-        UsageStatusEnum.WORK_RESEARCH, UsageStatusEnum.ELIGIBLE, UsageStatusEnum.SCENARIO_EXCLUDED);
     private static final long serialVersionUID = 3090392499920631454L;
+    private static final List<UsageStatusEnum> AACL_STATUSES = List.of(UsageStatusEnum.NEW,
+        UsageStatusEnum.WORK_FOUND, UsageStatusEnum.WORK_NOT_FOUND, UsageStatusEnum.WORK_RESEARCH,
+        UsageStatusEnum.RH_FOUND, UsageStatusEnum.ELIGIBLE, UsageStatusEnum.SCENARIO_EXCLUDED);
 
     private final IAaclUsageFilterController controller;
 

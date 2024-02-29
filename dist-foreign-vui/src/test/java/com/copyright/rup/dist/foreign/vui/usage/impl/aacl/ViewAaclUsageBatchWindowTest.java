@@ -1,5 +1,9 @@
 package com.copyright.rup.dist.foreign.vui.usage.impl.aacl;
 
+import static com.copyright.rup.dist.foreign.vui.GridColumnVerifier.verifyDateColumnLongFormat;
+import static com.copyright.rup.dist.foreign.vui.GridColumnVerifier.verifyIntegerColumn;
+import static com.copyright.rup.dist.foreign.vui.GridColumnVerifier.verifyLocalDateColumnShortFormat;
+import static com.copyright.rup.dist.foreign.vui.GridColumnVerifier.verifyStringColumnIgnoreCase;
 import static com.copyright.rup.dist.foreign.vui.IVaadinComponentFinder.getButton;
 import static com.copyright.rup.dist.foreign.vui.IVaadinJsonConverter.assertJsonSnapshot;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.getDialogContent;
@@ -20,7 +24,6 @@ import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
-import com.copyright.rup.dist.foreign.vui.GridColumnVerifier;
 import com.copyright.rup.dist.foreign.vui.UiTestHelper;
 import com.copyright.rup.dist.foreign.vui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.vui.usage.api.aacl.IAaclUsageController;
@@ -34,7 +37,6 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.provider.ListDataProvider;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Before;
 import org.junit.Test;
@@ -44,8 +46,6 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
-import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -170,25 +170,11 @@ public class ViewAaclUsageBatchWindowTest {
             Pair.of("Created By", "330px"),
             Pair.of("Created Date", "150px")));
         assertEquals(5, grid.getColumns().size());
-        new GridColumnVerifier<>(grid, 0, UsageBatch::new, UsageBatch::setName)
-            .verifyComparator("Usage Batch 1", "USAGE BATCH 2")
-            .verifyClassNameGenerator(null);
-        new GridColumnVerifier<>(grid, 1, UsageBatch::new, UsageBatch::setPaymentDate)
-            .verifyDataProvider(LocalDate.of(2020, 1, 2), "01/02/2020")
-            .verifyDataProvider(null, StringUtils.EMPTY)
-            .verifyComparator(LocalDate.of(2020, 1, 1), LocalDate.of(2020, 1, 2))
-            .verifyClassNameGenerator(null);
-        new GridColumnVerifier<>(grid, 2, UsageBatch::new, UsageBatch::setNumberOfBaselineYears)
-            .verifyDataProvider(1, "1")
-            .verifyComparator(1, 2)
-            .verifyClassNameGenerator(null);
-        new GridColumnVerifier<>(grid, 3, UsageBatch::new, UsageBatch::setCreateUser)
-            .verifyComparator("user1", "USER2")
-            .verifyClassNameGenerator(null);
-        new GridColumnVerifier<>(grid, 4, UsageBatch::new, UsageBatch::setCreateDate)
-            .verifyDataProvider(new Date(0L), "12/31/1969 7:00 PM")
-            .verifyComparator(new Date(1), new Date(2))
-            .verifyClassNameGenerator(null);
+        verifyStringColumnIgnoreCase(grid, 0, UsageBatch::new, UsageBatch::setName);
+        verifyLocalDateColumnShortFormat(grid, 1, UsageBatch::new, UsageBatch::setPaymentDate);
+        verifyIntegerColumn(grid, 2, UsageBatch::new, UsageBatch::setNumberOfBaselineYears);
+        verifyStringColumnIgnoreCase(grid, 3, UsageBatch::new, UsageBatch::setCreateUser);
+        verifyDateColumnLongFormat(grid, 4, UsageBatch::new, UsageBatch::setCreateDate);
     }
 
     private Button getDeleteButton() {

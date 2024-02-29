@@ -20,11 +20,15 @@ import com.vaadin.flow.component.HasValidation;
 import com.vaadin.flow.component.HasValue;
 import com.vaadin.flow.component.HasValueAndElement;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.Grid.Column;
 import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.data.provider.DataProvider;
+import com.vaadin.flow.data.provider.ListDataProvider;
 
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -108,6 +112,7 @@ public interface IVaadinJsonConverter {
         putInterfaces(component, tree);
         putButton(component, tree);
         putIcon(component, tree);
+        putComboBox(component, tree);
         putGrid(component, tree);
         putGridColumn(component, tree);
         putProperties(component, tree);
@@ -210,6 +215,19 @@ public interface IVaadinJsonConverter {
             var element = icon.getElement();
             put(tree, ICON, element.getAttribute(ICON));
             put(tree, "slot", element.getAttribute("slot"));
+        }
+    }
+
+    private static void putComboBox(Component component, Map<String, Object> tree) {
+        if (component instanceof ComboBox) {
+            var comboBox = (ComboBox<?>) component;
+            put(tree, "allowCustomValue", comboBox.isAllowCustomValue());
+            DataProvider<?, ?> dataProvider = comboBox.getDataProvider();
+            if (dataProvider instanceof ListDataProvider) {
+                ListDataProvider<?> listDataProvider = (ListDataProvider<?>) comboBox.getDataProvider();
+                Collection<?> items = listDataProvider.getItems();
+                put(tree, "items", List.copyOf(items));
+            }
         }
     }
 
