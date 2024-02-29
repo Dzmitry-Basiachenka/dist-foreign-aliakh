@@ -252,10 +252,9 @@
         left join ${schema}.df_udm_value v on v.wr_wrk_inst = u.wr_wrk_inst
         where u.period &lt;= #{period}
             and u.is_baseline_flag = true
-            <!-- work is absent in df_udm_value table -->
-            and (v.wr_wrk_inst is null
-                <!-- work from current period hasn't been populated yet -->
-                or (u.period = #{period} and u.wr_wrk_inst not in (select * from current_period_works)))
+            and u.df_udm_value_uid is null
+            <!-- work hasn't been populated yet for current period -->
+            and u.wr_wrk_inst not in (select * from current_period_works)
         order by u.wr_wrk_inst, u.period desc
     </select>
 

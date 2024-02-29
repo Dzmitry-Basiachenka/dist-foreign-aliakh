@@ -4,6 +4,57 @@ databaseChangeLog {
     changeSet(id: '2021-09-27-00', author: 'Uladzislau Shalamitski <ushalamitski@copyright.com>') {
         comment('Inserting test data for testFindNotPopulatedValuesFromBaseline')
 
+        // 201512
+        insert(schemaName: dbAppsSchema, tableName: 'df_udm_value') {
+            column(name: 'df_udm_value_uid', value: 'e7285d8f-2fc7-4e44-83e3-ac809f3a7094')
+            column(name: 'period', value: 201512)
+            column(name: 'status_ind', value: "NEW")
+            column(name: 'rh_account_number', value: 1000002859)
+            column(name: 'wr_wrk_inst', value: 10003378)
+            column(name: 'system_title', value: 'Amsterdam tomorrow')
+            column(name: 'standard_number', value: '0927-7765')
+            column(name: 'publication_type_uid', value: '076f2c40-f524-405d-967a-3840df2b57df')
+            column(name: 'assignee', value: 'jjohn@copyright.com')
+        }
+
+        // 201506
+        insert(schemaName: dbAppsSchema, tableName: 'df_udm_value') {
+            column(name: 'df_udm_value_uid', value: 'ff285d8f-2268c-4e44-83e3-ac809f3a7091')
+            column(name: 'period', value: 201506)
+            column(name: 'status_ind', value: "NEW")
+            column(name: 'rh_account_number', value: 1000002859)
+            column(name: 'wr_wrk_inst', value: 10003378)
+            column(name: 'system_title', value: 'Amsterdam tomorrow')
+            column(name: 'standard_number', value: '0927-7765')
+            column(name: 'publication_type_uid', value: '076f2c40-f524-405d-967a-3840df2b57df')
+            column(name: 'assignee', value: 'jjohn@copyright.com')
+        }
+
+        // 201406
+        insert(schemaName: dbAppsSchema, tableName: 'df_udm_value') {
+            column(name: 'df_udm_value_uid', value: 'e10ff22f-48f6-4192-bd31-66373e39924e')
+            column(name: 'period', value: 201406)
+            column(name: 'status_ind', value: "NEW")
+            column(name: 'rh_account_number', value: 1000002835)
+            column(name: 'wr_wrk_inst', value: 10002508)
+            column(name: 'system_title', value: 'Tenside, surfactants, detergents')
+            column(name: 'standard_number', value: '0927-7765')
+            column(name: 'publication_type_uid', value: '076f2c40-f524-405d-967a-3840df2b57df')
+            column(name: 'assignee', value: 'jjohn@copyright.com')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_udm_value') {
+            column(name: 'df_udm_value_uid', value: '50fb5f24-23ed-494c-9ddb-f8660c376dfc')
+            column(name: 'period', value: 201406)
+            column(name: 'status_ind', value: "NEW")
+            column(name: 'rh_account_number', value: 1000002835)
+            column(name: 'wr_wrk_inst', value: 70063308)
+            column(name: 'system_title', value: 'Artifacts in video compression')
+            column(name: 'standard_number', value: '0927-7765')
+            column(name: 'publication_type_uid', value: '076f2c40-f524-405d-967a-3840df2b57df')
+            column(name: 'assignee', value: 'jjohn@copyright.com')
+        }
+
         insert(schemaName: dbAppsSchema, tableName: 'df_udm_usage_batch') {
             column(name: 'df_udm_usage_batch_uid', value: 'f0405f18-b5c9-43a0-a877-d064117e08a6')
             column(name: 'name', value: 'UDM Batch 2015')
@@ -146,6 +197,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_udm_usage') {
             column(name: 'df_udm_usage_uid', value: 'c9e42f40-ef81-45c4-8c0f-c6c1ec1829a9')
             column(name: 'df_udm_usage_batch_uid', value: 'f0405f18-b5c9-43a0-a877-d064117e08a6')
+            column(name: 'df_udm_value_uid', value: 'e7285d8f-2fc7-4e44-83e3-ac809f3a7094')
             column(name: 'original_detail_id', value: 'OGN554GHASG003')
             column(name: 'period', value: 201512)
             column(name: 'period_end_date', value: '2015-12-31')
@@ -279,7 +331,7 @@ databaseChangeLog {
         }
 
         // Wr Wrk Inst: 70063308. Period: 201506. Populated in 201406
-        // Result for period 201512: won't be returned as it was populated in 201406 and not included into 201512 period
+        // Result for period 201512: work will be returned as it was not populated in 201506
         // Result for period 201412: work won't be returned by query as it has already been populated in 201406
         insert(schemaName: dbAppsSchema, tableName: 'df_udm_usage') {
             column(name: 'df_udm_usage_uid', value: '63c44e26-0872-45a9-931f-4545d1521c59')
@@ -291,7 +343,7 @@ databaseChangeLog {
             column(name: 'rh_account_number', value: 1000002835)
             column(name: 'wr_wrk_inst', value: 70063308)
             column(name: 'reported_title', value: 'Artifacts in video compression')
-            column(name: 'reported_title', value: 'Artifacts in video compression')
+            column(name: 'system_title', value: 'Artifacts in video compression')
             column(name: 'reported_standard_number', value: '0927-7722')
             column(name: 'standard_number', value: '1873-7722')
             column(name: 'reported_pub_type', value: 'Book')
@@ -336,6 +388,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_udm_usage') {
             column(name: 'df_udm_usage_uid', value: '2dacaab5-dca6-459f-bb79-a8a1532e4225')
             column(name: 'df_udm_usage_batch_uid', value: '34447286-a9eb-48f3-a050-b928ca3113c46')
+            column(name: 'df_udm_value_uid', value: 'e10ff22f-48f6-4192-bd31-66373e39924e')
             column(name: 'original_detail_id', value: 'OGN554GHASG005')
             column(name: 'period', value: 201406)
             column(name: 'period_end_date', value: '2014-06-30')
@@ -379,6 +432,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_udm_usage') {
             column(name: 'df_udm_usage_uid', value: 'c4575e31-024e-4f88-9ab9-5ac306bbbfb6')
             column(name: 'df_udm_usage_batch_uid', value: '34447286-a9eb-48f3-a050-b928ca3113c46')
+            column(name: 'df_udm_value_uid', value: '50fb5f24-23ed-494c-9ddb-f8660c376dfc')
             column(name: 'original_detail_id', value: 'OGN554GHASG008')
             column(name: 'period', value: 201406)
             column(name: 'period_end_date', value: '2014-06-30')
@@ -518,69 +572,6 @@ databaseChangeLog {
             column(name: 'created_datetime', value: '2020-02-15 12:00:00+00')
             column(name: 'updated_by_user', value: 'wjohn@copyright.com')
             column(name: 'updated_datetime', value: '2020-04-15 12:00:00+00')
-        }
-
-        // 201512
-        insert(schemaName: dbAppsSchema, tableName: 'df_udm_value') {
-            column(name: 'df_udm_value_uid', value: 'e7285d8f-2fc7-4e44-83e3-ac809f3a7094')
-            column(name: 'period', value: 201512)
-            column(name: 'status_ind', value: "NEW")
-            column(name: 'rh_account_number', value: 1000002859)
-            column(name: 'wr_wrk_inst', value: 10003378)
-            column(name: 'system_title', value: 'Amsterdam tomorrow')
-            column(name: 'standard_number', value: '0927-7765')
-            column(name: 'publication_type_uid', value: '076f2c40-f524-405d-967a-3840df2b57df')
-            column(name: 'assignee', value: 'jjohn@copyright.com')
-        }
-
-        insert(schemaName: dbAppsSchema, tableName: 'df_udm_value') {
-            column(name: 'df_udm_value_uid', value: '15da6e3e-1701-4987-b5c8-dbf1d8b0f5da')
-            column(name: 'period', value: 201512)
-            column(name: 'status_ind', value: "NEW")
-            column(name: 'rh_account_number', value: 1000006963)
-            column(name: 'wr_wrk_inst', value: 10007822)
-            column(name: 'system_title', value: 'Edge of future')
-            column(name: 'standard_number', value: '0927-7765')
-            column(name: 'publication_type_uid', value: '076f2c40-f524-405d-967a-3840df2b57df')
-            column(name: 'assignee', value: 'jjohn@copyright.com')
-        }
-
-        // 201506
-        insert(schemaName: dbAppsSchema, tableName: 'df_udm_value') {
-            column(name: 'df_udm_value_uid', value: 'ff285d8f-2268c-4e44-83e3-ac809f3a7091')
-            column(name: 'period', value: 201506)
-            column(name: 'status_ind', value: "NEW")
-            column(name: 'rh_account_number', value: 1000002859)
-            column(name: 'wr_wrk_inst', value: 10003378)
-            column(name: 'system_title', value: 'Amsterdam tomorrow')
-            column(name: 'standard_number', value: '0927-7765')
-            column(name: 'publication_type_uid', value: '076f2c40-f524-405d-967a-3840df2b57df')
-            column(name: 'assignee', value: 'jjohn@copyright.com')
-        }
-
-        // 201406
-        insert(schemaName: dbAppsSchema, tableName: 'df_udm_value') {
-            column(name: 'df_udm_value_uid', value: 'e10ff22f-48f6-4192-bd31-66373e39924e')
-            column(name: 'period', value: 201406)
-            column(name: 'status_ind', value: "NEW")
-            column(name: 'rh_account_number', value: 1000002835)
-            column(name: 'wr_wrk_inst', value: 10002508)
-            column(name: 'system_title', value: 'Tenside, surfactants, detergents')
-            column(name: 'standard_number', value: '0927-7765')
-            column(name: 'publication_type_uid', value: '076f2c40-f524-405d-967a-3840df2b57df')
-            column(name: 'assignee', value: 'jjohn@copyright.com')
-        }
-
-        insert(schemaName: dbAppsSchema, tableName: 'df_udm_value') {
-            column(name: 'df_udm_value_uid', value: '50fb5f24-23ed-494c-9ddb-f8660c376dfc')
-            column(name: 'period', value: 201406)
-            column(name: 'status_ind', value: "NEW")
-            column(name: 'rh_account_number', value: 1000002835)
-            column(name: 'wr_wrk_inst', value: 70063308)
-            column(name: 'system_title', value: 'Artifacts in video compression')
-            column(name: 'standard_number', value: '0927-7765')
-            column(name: 'publication_type_uid', value: '076f2c40-f524-405d-967a-3840df2b57df')
-            column(name: 'assignee', value: 'jjohn@copyright.com')
         }
 
         rollback {
