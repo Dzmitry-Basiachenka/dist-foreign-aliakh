@@ -1,3 +1,30 @@
+21.0.5
+-
+* CDP-1682 FDA: Vaadin Migration: AACL - Usages Tab: migrate AACL usages tab
+* CDP-1682 FDA: Vaadin Migration: AACL - Usages Tab: migrate AaclUsageBatchUploadWindow
+* CDP-1682 FDA: Vaadin Migration: AACL - Usages Tab: migrate ViewAaclFundPoolDetailsWindow
+* CDP-1682 FDA: Vaadin Migration: AACL - Usages Tab: migrate ViewAaclFundPoolWindow
+* CDP-1682 FDA: Vaadin Migration: AACL - Usages Tab: migrate ViewAaclUsageBatchWindow
+* CDP-1682 FDA: Vaadin Migration: AACL - Usages Tab: migrate AaclFundPoolUploadWindow
+* CDP-1678 FDA: Vaadin Migration: NTS - Scenarios Tab Main View: migrate View Scenario window and controller logic
+* CDP-1678 FDA: Vaadin Migration: NTS - Scenarios Tab Main View: migrate Scenarios widget and controller logic
+* CDP-1678 FDA: Vaadin Migration: NTS - Scenarios Tab Main View: migrate Drill Down by Rightsholder window
+* CDP-1681 FDA: Vaadin Migration: NTS - Reports Tab: migrate logic for NTS Service True-Up report
+* CDP-1681 FDA: Vaadin Migration: NTS - Reports Tab: refactor build report menu logic and rewrite tests
+* CDP-1681 FDA: Vaadin Migration: NTS - Reports Tab: migrate logic for NTS Fund Pools report
+* CDP-1681 FDA: Vaadin Migration: NTS - Reports Tab: migrate logic for NTS Pre Service Fee Fund report
+* CDP-1681 FDA: Vaadin Migration: NTS - Reports Tab: arrange the classes associated with the report and add missed test
+* CDP-1679 FDA: Vaadin Migration: NTS - Audit Tab: refine filter applied action
+* CDP-2433 FDA (Vaadin23): NTS works classification: Classification of a work is applied to all previously classified works on the 'Works Classification' window
+* CDP-2326 FDA: Update how we repopulate new value batch with works that are outside of the assigned distribution period: update SQL query to get works to be populated
+* CDP-2057 FDA: Sonarqube improvements S4: decrease sonarqube bugs
+* CDP-2233 Tech Debt: FDA: simplify query to get invalid usages for ACL scenario creation
+* CDP-2233 Tech Debt: FDA: refine validation process on Upload windows to avoid double validation
+* CDP-2233 Tech Debt: FDA: introduce Grid column enum and apply for Usage widgets
+* CDP-2233 Tech Debt: FDA: apply Grid column enum to audit widgets
+* CDP-2233 Tech Debt: FDA: apply Grid column enum to view usage batch windows
+* CDP-2233 Tech Debt: FDA: replace VaadinSession scope with VaadinIU to avoid multitab UI issues
+
 21.0.4
 -
 * CDP-1676 FDA: Vaadin Migration: FAS/FAS2 - Reports Tab: make changes based on comments in code review
