@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.vui.scenario.impl.fas;
 
 import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
+import com.copyright.rup.dist.foreign.vui.common.utils.GridColumnEnum;
 import com.copyright.rup.dist.foreign.vui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.vui.scenario.api.ExcludeUsagesEvent;
 import com.copyright.rup.dist.foreign.vui.scenario.api.fas.IFasScenarioController;
@@ -15,6 +16,7 @@ import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.SearchWidget.ISea
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.Grid.SelectionMode;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.data.validator.StringLengthValidator;
 import com.vaadin.flow.function.ValueProvider;
@@ -55,7 +57,11 @@ public class FasExcludeRightsholdersWindow extends CommonDialog implements ISear
         this.accountNumber = rroAccountNumber;
         this.scenarioController = scenarioController;
         super.setHeaderTitle(ForeignUi.getMessage("window.exclude.rh", rroAccountNumber));
-        initContent();
+        super.setWidth("830px");
+        super.setHeight("500px");
+        super.add(initContent());
+        super.getFooter().add(createButtonsLayout());
+        super.setModalWindowProperties("exclude-rightsholders-window", true);
     }
 
     @Override
@@ -73,15 +79,11 @@ public class FasExcludeRightsholdersWindow extends CommonDialog implements ISear
         }
     }
 
-    private void initContent() {
-        setWidth("830px");
-        setHeight("500px");
-        searchWidget = new SearchWidget(this);
-        searchWidget.setPrompt(ForeignUi.getMessage("field.prompt.scenario.search_widget.rh_payee"));
-        setModalWindowProperties("exclude-rightsholders-window", true);
+    private VerticalLayout initContent() {
+        searchWidget =
+            new SearchWidget(this, ForeignUi.getMessage("field.prompt.scenario.search_widget.rh_payee"), "70%");
         initGrid();
-        getFooter().add(createButtonsLayout());
-        add(VaadinUtils.initCommonVerticalLayout(searchWidget, rightsholdersGrid));
+        return VaadinUtils.initSizeFullVerticalLayout(searchWidget, rightsholdersGrid);
     }
 
     private void initGrid() {
@@ -94,20 +96,19 @@ public class FasExcludeRightsholdersWindow extends CommonDialog implements ISear
 
     private void addColumns() {
         addColumn(rightsholderPayeePair -> rightsholderPayeePair.getPayee().getAccountNumber(),
-            "table.column.payee_account_number", "payee.accountNumber");
-        addColumn(rightsholderPayeePair -> rightsholderPayeePair.getPayee().getName(), "table.column.payee_name",
-            "payee.name");
+            GridColumnEnum.PAYEE_ACCOUNT_NUMBER);
+        addColumn(rightsholderPayeePair -> rightsholderPayeePair.getPayee().getName(), GridColumnEnum.PAYEE_NAME);
         addColumn(rightsholderPayeePair -> rightsholderPayeePair.getRightsholder().getAccountNumber(),
-            "table.column.rh_account_number", "rightsholder.accountNumber");
+            GridColumnEnum.RH_ACCOUNT_NUMBER);
         addColumn(rightsholderPayeePair -> rightsholderPayeePair.getRightsholder().getName(),
-            "table.column.rh_account_name", "rightsholder.name");
+            GridColumnEnum.RH_NAME);
     }
 
-    private void addColumn(ValueProvider<RightsholderPayeePair, ?> provider, String captionProperty, String sort) {
+    private void addColumn(ValueProvider<RightsholderPayeePair, ?> provider, GridColumnEnum gridColumn) {
         rightsholdersGrid.addColumn(provider)
-            .setHeader(ForeignUi.getMessage(captionProperty))
+            .setHeader(ForeignUi.getMessage(gridColumn.getCaption()))
             .setSortable(true)
-            .setSortProperty(sort)
+            .setSortProperty(gridColumn.getSort())
             .setResizable(true);
     }
 

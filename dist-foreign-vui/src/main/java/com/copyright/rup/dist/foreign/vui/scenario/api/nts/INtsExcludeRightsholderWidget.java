@@ -3,6 +3,8 @@ package com.copyright.rup.dist.foreign.vui.scenario.api.nts;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.api.IRefreshable;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.api.IWidget;
 
+import java.util.Set;
+
 /**
  * Interface for exclude rightsholder widget.
  * <p>
@@ -13,4 +15,16 @@ import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.api.IWidget;
  * @author Anton Azarenka
  */
 public interface INtsExcludeRightsholderWidget extends IWidget<INtsExcludeRightsholderController>, IRefreshable {
+
+    /**
+     * @return search value string.
+     */
+    String getSearchValue();
+
+    /**
+     * Gets set of account numbers of selected rightsholders.
+     *
+     * @return set of account numbers of selected rightsholders
+     */
+    Set<Long> getSelectedAccountNumbers();
 }

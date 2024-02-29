@@ -1,11 +1,18 @@
 package com.copyright.rup.dist.foreign.vui.scenario.impl.nts;
 
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.vui.scenario.api.ExcludeUsagesEvent;
 import com.copyright.rup.dist.foreign.vui.scenario.api.ICommonDrillDownByRightsholderController;
 import com.copyright.rup.dist.foreign.vui.scenario.api.nts.INtsDrillDownByRightsholderController;
+import com.copyright.rup.dist.foreign.vui.scenario.api.nts.INtsExcludeRightsholderController;
+import com.copyright.rup.dist.foreign.vui.scenario.api.nts.INtsExcludeRightsholderWidget;
 import com.copyright.rup.dist.foreign.vui.scenario.api.nts.INtsScenarioController;
 import com.copyright.rup.dist.foreign.vui.scenario.api.nts.INtsScenarioWidget;
 import com.copyright.rup.dist.foreign.vui.scenario.impl.CommonScenarioController;
+import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.Windows;
+import com.copyright.rup.dist.foreign.vui.vaadin.common.widget.CommonDialog;
+
+import com.vaadin.flow.component.ComponentUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -31,10 +38,21 @@ public class NtsScenarioController extends CommonScenarioController implements I
 
     @Autowired
     private INtsDrillDownByRightsholderController drillDownByRightsholderController;
+    @Autowired
+    private INtsExcludeRightsholderController excludeController;
 
     @Override
     public void onExcludeRhButtonClicked() {
-        //TODO: {dbasiachenka} implement
+        excludeController.setSelectedScenario(this.getScenario());
+        INtsExcludeRightsholderWidget widget = excludeController.initWidget();
+        ComponentUtil.addListener(
+            (NtsExcludeRightsholderWidget) widget, ExcludeUsagesEvent.class, this::fireWidgetEvent);
+        Windows.showModalWindow((CommonDialog) widget);
+    }
+
+    @Override
+    public void fireWidgetEvent(ExcludeUsagesEvent event) {
+        ((INtsScenarioWidget) getWidget()).fireWidgetEvent(event);
     }
 
     @Override
