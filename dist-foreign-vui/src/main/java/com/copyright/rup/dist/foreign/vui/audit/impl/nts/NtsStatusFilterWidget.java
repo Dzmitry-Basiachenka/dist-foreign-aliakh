@@ -4,7 +4,7 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.vui.audit.impl.CommonStatusFilterWidget;
 
 import java.util.Collection;
-import java.util.Set;
+import java.util.List;
 
 /**
  * Implementation of NTS for filter widget.
@@ -19,8 +19,8 @@ public class NtsStatusFilterWidget extends CommonStatusFilterWidget {
 
     private static final long serialVersionUID = 5405397414330951434L;
 
-    private static final Set<UsageStatusEnum> NTS_STATUSES =
-        Set.of(UsageStatusEnum.WORK_FOUND, UsageStatusEnum.RH_FOUND,
+    private static final List<UsageStatusEnum> NTS_STATUSES =
+        List.of(UsageStatusEnum.WORK_FOUND, UsageStatusEnum.RH_FOUND,
             UsageStatusEnum.UNCLASSIFIED, UsageStatusEnum.ELIGIBLE, UsageStatusEnum.SCENARIO_EXCLUDED,
             UsageStatusEnum.NON_STM_RH, UsageStatusEnum.US_TAX_COUNTRY, UsageStatusEnum.LOCKED,
             UsageStatusEnum.SENT_TO_LM, UsageStatusEnum.PAID, UsageStatusEnum.ARCHIVED);

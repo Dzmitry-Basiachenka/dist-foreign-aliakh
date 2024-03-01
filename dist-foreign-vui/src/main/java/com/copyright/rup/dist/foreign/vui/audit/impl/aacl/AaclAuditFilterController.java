@@ -1,14 +1,15 @@
 package com.copyright.rup.dist.foreign.vui.audit.impl.aacl;
 
+import com.copyright.rup.dist.foreign.service.api.aacl.IAaclUsageService;
 import com.copyright.rup.dist.foreign.vui.audit.api.ICommonAuditFilterWidget;
 import com.copyright.rup.dist.foreign.vui.audit.api.aacl.IAaclAuditFilterController;
 import com.copyright.rup.dist.foreign.vui.audit.impl.CommonAuditFilterController;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,9 +27,12 @@ public class AaclAuditFilterController extends CommonAuditFilterController imple
 
     private static final long serialVersionUID = 4274662577084969374L;
 
+    @Autowired
+    private IAaclUsageService aaclUsageService;
+
     @Override
     public List<Integer> getUsagePeriods() {
-        return new ArrayList<>();
+        return aaclUsageService.getUsagePeriods();
     }
 
     @Override
