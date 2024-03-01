@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.vui.main.impl;
 import static org.easymock.EasyMock.createMock;
 import static org.junit.Assert.assertEquals;
 
+import com.copyright.rup.dist.foreign.vui.audit.api.aacl.IAaclAuditController;
 import com.copyright.rup.dist.foreign.vui.audit.api.fas.IFasAuditController;
 import com.copyright.rup.dist.foreign.vui.audit.api.nts.INtsAuditController;
 
@@ -27,13 +28,16 @@ public class AuditControllerProviderTest {
         var provider = new AuditControllerProvider();
         var fasAuditController = createMock(IFasAuditController.class);
         var ntsAuditController = createMock(INtsAuditController.class);
+        var aaclAuditController = createMock(IAaclAuditController.class);
         Whitebox.setInternalState(provider, fasAuditController);
         Whitebox.setInternalState(provider, ntsAuditController);
+        Whitebox.setInternalState(provider, aaclAuditController);
         assertEquals(
             Map.of(
                 "FAS", fasAuditController,
                 "FAS2", fasAuditController,
-                "NTS", ntsAuditController
+                "NTS", ntsAuditController,
+                "AACL", aaclAuditController
             ),
             provider.getProductFamilyToControllerMap()
         );
