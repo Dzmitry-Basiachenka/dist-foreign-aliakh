@@ -45,6 +45,11 @@ public interface ICommonScenariosController extends IController<ICommonScenarios
     void onViewButtonClicked();
 
     /**
+     * Handles click on 'Edit Name' button.
+     */
+    void onEditNameButtonClicked();
+
+    /**
      * Updates name for selected {@link Scenario}.
      *
      * @param scenarioId      id of selected {@link Scenario}

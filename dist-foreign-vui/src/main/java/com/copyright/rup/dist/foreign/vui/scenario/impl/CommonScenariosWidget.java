@@ -119,13 +119,6 @@ public abstract class CommonScenariosWidget extends VerticalLayout implements IC
     }
 
     /**
-     * Handles click on 'Edit Name' button.
-     */
-    protected void onEditNameButtonClicked() {
-        Windows.showModalWindow(new EditScenarioNameWindow(controller, controller.getWidget().getSelectedScenario()));
-    }
-
-    /**
      * Formats scenario metadata label.
      *
      * @param caption label caption

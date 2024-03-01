@@ -82,6 +82,11 @@ public abstract class CommonScenariosController extends CommonController<ICommon
     }
 
     @Override
+    public void onEditNameButtonClicked() {
+        Windows.showModalWindow(new EditScenarioNameWindow(this, getWidget().getSelectedScenario()));
+    }
+
+    @Override
     public void editScenarioName(String scenarioId, String newScenarioName) {
         scenarioService.updateName(scenarioId, newScenarioName);
     }

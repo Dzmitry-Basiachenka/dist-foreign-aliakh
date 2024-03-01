@@ -120,7 +120,7 @@ public class FasScenariosWidget extends CommonScenariosWidget implements IFasSce
 
     private void addButtonsListeners() {
         viewButton.addClickListener(event -> controller.onViewButtonClicked());
-        editNameButton.addClickListener(event -> onEditNameButtonClicked());
+        editNameButton.addClickListener(event -> controller.onEditNameButtonClicked());
         deleteButton.addClickListener(event -> controller.onDeleteButtonClicked());
         excludePayeesButton.addClickListener(event -> controller.onExcludePayeesButtonClicked());
         reconcileRightsholdersButton.addClickListener(event -> controller.onReconcileRightsholdersButtonClicked());
