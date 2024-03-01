@@ -1,6 +1,8 @@
 package com.copyright.rup.dist.foreign.vui.scenario.impl.nts;
 
+import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.newCapture;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
@@ -22,8 +24,10 @@ import com.copyright.rup.dist.foreign.service.api.IScenarioUsageFilterService;
 import com.copyright.rup.dist.foreign.vui.main.api.IProductFamilyProvider;
 import com.copyright.rup.dist.foreign.vui.scenario.api.nts.INtsScenarioController;
 import com.copyright.rup.dist.foreign.vui.scenario.api.nts.INtsScenariosWidget;
+import com.copyright.rup.dist.foreign.vui.scenario.impl.EditScenarioNameWindow;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.Windows;
 
+import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -109,6 +113,19 @@ public class NtsScenariosControllerTest {
         replay(scenariosWidget, scenarioController, Windows.class);
         scenariosController.onViewButtonClicked();
         verify(scenariosWidget, scenarioController, Windows.class);
+    }
+
+    @Test
+    public void testOnEditNameButtonClicked() {
+        mockStatic(Windows.class);
+        Capture<EditScenarioNameWindow> editScenarioNameWindowCapture = newCapture();
+        expect(scenariosWidget.getSelectedScenario()).andReturn(scenario).once();
+        Windows.showModalWindow(capture(editScenarioNameWindowCapture));
+        expectLastCall().once();
+        replay(scenariosWidget, Windows.class);
+        scenariosController.onEditNameButtonClicked();
+        assertEquals("Edit Scenario Name", editScenarioNameWindowCapture.getValue().getHeaderTitle());
+        verify(scenariosWidget, Windows.class);
     }
 
     @Test

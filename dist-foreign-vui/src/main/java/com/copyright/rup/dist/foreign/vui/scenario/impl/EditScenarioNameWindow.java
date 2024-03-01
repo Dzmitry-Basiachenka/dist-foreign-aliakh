@@ -12,7 +12,7 @@ import com.copyright.rup.dist.foreign.vui.scenario.api.ICommonScenariosControlle
  *
  * @author Ihar Suvorau
  */
-class EditScenarioNameWindow extends CommonEditScenarioNameWindow {
+public class EditScenarioNameWindow extends CommonEditScenarioNameWindow {
 
     private static final long serialVersionUID = -8227881821301132345L;
 
@@ -25,7 +25,7 @@ class EditScenarioNameWindow extends CommonEditScenarioNameWindow {
      * @param controller instance of {@link ICommonScenariosController}
      * @param scenario   selected {@link Scenario}
      */
-    EditScenarioNameWindow(ICommonScenariosController controller, Scenario scenario) {
+    public EditScenarioNameWindow(ICommonScenariosController controller, Scenario scenario) {
         super(scenario.getName(), "edit-scenario-name-window");
         this.controller = controller;
         this.scenario = scenario;

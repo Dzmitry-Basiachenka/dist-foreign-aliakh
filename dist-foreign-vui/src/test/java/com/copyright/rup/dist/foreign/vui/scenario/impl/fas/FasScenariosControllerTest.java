@@ -33,6 +33,7 @@ import com.copyright.rup.dist.foreign.vui.main.api.IProductFamilyProvider;
 import com.copyright.rup.dist.foreign.vui.scenario.api.fas.IFasExcludePayeeController;
 import com.copyright.rup.dist.foreign.vui.scenario.api.fas.IFasScenariosWidget;
 import com.copyright.rup.dist.foreign.vui.scenario.api.fas.IReconcileRightsholdersController;
+import com.copyright.rup.dist.foreign.vui.scenario.impl.EditScenarioNameWindow;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.security.SecurityUtils;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.IConfirmCancelListener;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.Windows;
@@ -273,6 +274,19 @@ public class FasScenariosControllerTest {
         replay(scenariosWidget, scenarioController, Windows.class);
         scenariosController.onViewButtonClicked();
         verify(scenariosWidget, scenarioController, Windows.class);
+    }
+
+    @Test
+    public void testOnEditNameButtonClicked() {
+        mockStatic(Windows.class);
+        Capture<EditScenarioNameWindow> editScenarioNameWindowCapture = newCapture();
+        expect(scenariosWidget.getSelectedScenario()).andReturn(scenario).once();
+        Windows.showModalWindow(capture(editScenarioNameWindowCapture));
+        expectLastCall().once();
+        replay(scenariosWidget, Windows.class);
+        scenariosController.onEditNameButtonClicked();
+        assertEquals("Edit Scenario Name", editScenarioNameWindowCapture.getValue().getHeaderTitle());
+        verify(scenariosWidget, Windows.class);
     }
 
     private void buildScenario() {
