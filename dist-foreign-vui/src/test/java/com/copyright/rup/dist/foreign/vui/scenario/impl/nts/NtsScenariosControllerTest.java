@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.vui.scenario.impl.nts;
 
 import static org.easymock.EasyMock.capture;
+import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.newCapture;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -21,10 +22,12 @@ import com.copyright.rup.dist.foreign.domain.filter.ScenarioUsageFilter;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioUsageFilterService;
+import com.copyright.rup.dist.foreign.service.api.nts.INtsScenarioService;
 import com.copyright.rup.dist.foreign.vui.main.api.IProductFamilyProvider;
 import com.copyright.rup.dist.foreign.vui.scenario.api.nts.INtsScenarioController;
 import com.copyright.rup.dist.foreign.vui.scenario.api.nts.INtsScenariosWidget;
 import com.copyright.rup.dist.foreign.vui.scenario.impl.EditScenarioNameWindow;
+import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.IConfirmCancelListener;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.Windows;
 
 import org.easymock.Capture;
@@ -64,6 +67,7 @@ public class NtsScenariosControllerTest {
     private Scenario scenario;
     private INtsScenariosWidget scenariosWidget;
     private IProductFamilyProvider productFamilyProvider;
+    private INtsScenarioService ntsScenarioService;
     private INtsScenarioController scenarioController;
 
     @Before
@@ -72,12 +76,14 @@ public class NtsScenariosControllerTest {
         productFamilyProvider = createMock(IProductFamilyProvider.class);
         scenariosWidget = createMock(INtsScenariosWidget.class);
         scenarioController = createMock(INtsScenarioController.class);
+        ntsScenarioService = createMock(INtsScenarioService.class);
         buildScenario();
         scenariosController = new NtsScenariosController();
         Whitebox.setInternalState(scenariosController, "widget", scenariosWidget);
         Whitebox.setInternalState(scenariosController, "scenarioService", scenarioService);
         Whitebox.setInternalState(scenariosController, "productFamilyProvider", productFamilyProvider);
         Whitebox.setInternalState(scenariosController, "scenarioController", scenarioController);
+        Whitebox.setInternalState(scenariosController, "ntsScenarioService", ntsScenarioService);
     }
 
     @Test
@@ -97,7 +103,20 @@ public class NtsScenariosControllerTest {
 
     @Test
     public void testOnDeleteButtonClicked() {
-        //TODO: {dbasiachenka} implement
+        mockStatic(Windows.class);
+        Capture<IConfirmCancelListener> listenerCapture = newCapture();
+        expect(scenariosWidget.getSelectedScenario()).andReturn(scenario).once();
+        expect(Windows.showConfirmDialog(
+            eq("Are you sure you want to delete <i><b>'" + SCENARIO_NAME + "'</b></i> scenario?"),
+            capture(listenerCapture))).andReturn(null).once();
+        ntsScenarioService.deleteScenario(scenario);
+        expectLastCall().once();
+        scenariosWidget.refresh();
+        expectLastCall().once();
+        replay(scenariosWidget, ntsScenarioService, Windows.class);
+        scenariosController.onDeleteButtonClicked();
+        listenerCapture.getValue().confirm();
+        verify(scenariosWidget, ntsScenarioService, Windows.class);
     }
 
     @Test
