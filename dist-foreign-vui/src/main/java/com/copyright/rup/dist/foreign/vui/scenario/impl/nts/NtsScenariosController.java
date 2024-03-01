@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.vui.scenario.impl.nts;
 import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
+import com.copyright.rup.dist.foreign.service.api.nts.INtsScenarioService;
 import com.copyright.rup.dist.foreign.vui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.vui.scenario.api.ExcludeUsagesEvent;
 import com.copyright.rup.dist.foreign.vui.scenario.api.ICommonScenarioWidget;
@@ -12,6 +13,7 @@ import com.copyright.rup.dist.foreign.vui.scenario.api.nts.INtsScenarioWidget;
 import com.copyright.rup.dist.foreign.vui.scenario.api.nts.INtsScenariosController;
 import com.copyright.rup.dist.foreign.vui.scenario.api.nts.INtsScenariosWidget;
 import com.copyright.rup.dist.foreign.vui.scenario.impl.CommonScenariosController;
+import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.Windows;
 
 import com.vaadin.flow.component.ComponentUtil;
 
@@ -45,6 +47,8 @@ public class NtsScenariosController extends CommonScenariosController implements
     private IScenarioHistoryController scenarioHistoryController;
     @Autowired
     private INtsScenarioController scenarioController;
+    @Autowired
+    private INtsScenarioService ntsScenarioService;
 
     @Override
     public void sendToLm() {
@@ -86,7 +90,12 @@ public class NtsScenariosController extends CommonScenariosController implements
 
     @Override
     public void onDeleteButtonClicked() {
-        //TODO: {dbasiachenka} implement
+        var scenario = getWidget().getSelectedScenario();
+        Windows.showConfirmDialog(ForeignUi.getMessage("message.confirm.delete_action", scenario.getName(), "scenario"),
+            () -> {
+                ntsScenarioService.deleteScenario(scenario);
+                getWidget().refresh();
+            });
     }
 
     @Override

@@ -134,5 +134,6 @@ public class NtsScenariosWidget extends CommonScenariosWidget implements INtsSce
     private void addButtonsListeners() {
         viewButton.addClickListener(event -> controller.onViewButtonClicked());
         editNameButton.addClickListener(event -> controller.onEditNameButtonClicked());
+        deleteButton.addClickListener(event -> controller.onDeleteButtonClicked());
     }
 }
