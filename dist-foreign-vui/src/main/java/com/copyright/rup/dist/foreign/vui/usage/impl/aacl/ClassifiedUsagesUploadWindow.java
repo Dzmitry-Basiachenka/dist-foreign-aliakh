@@ -1,10 +1,10 @@
-package com.copyright.rup.dist.foreign.vui.usage.impl.fas;
+package com.copyright.rup.dist.foreign.vui.usage.impl.aacl;
 
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ThresholdExceededException;
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ValidationException;
 import com.copyright.rup.dist.foreign.vui.common.validator.RequiredValidator;
 import com.copyright.rup.dist.foreign.vui.main.ForeignUi;
-import com.copyright.rup.dist.foreign.vui.usage.api.fas.IFasUsageController;
+import com.copyright.rup.dist.foreign.vui.usage.api.aacl.IAaclUsageController;
 import com.copyright.rup.dist.foreign.vui.usage.impl.ErrorUploadWindow;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.Buttons;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.upload.UploadField;
@@ -20,35 +20,35 @@ import com.vaadin.flow.function.ValueProvider;
 import org.apache.commons.lang3.StringUtils;
 
 /**
- * Window for uploading researched usage details.
- * <p/>
- * Copyright (C) 2018 copyright.com
- * <p/>
- * Date: 03/27/2018
+ * Window for uploading classified usage details.
+ * <p>
+ * Copyright (C) 2020 copyright.com
+ * <p>
+ * Date: 01/28/2020
  *
- * @author Aliaksandr Liakh
+ * @author Stanislau Rudak
  */
-class ResearchedUsagesUploadWindow extends CommonDialog {
+public class ClassifiedUsagesUploadWindow extends CommonDialog {
 
-    private static final long serialVersionUID = 3241667285068475662L;
+    private static final long serialVersionUID = -9108464420946943048L;
 
-    private final IFasUsageController usagesController;
+    private final IAaclUsageController usageController;
     private final Binder<String> uploadBinder = new Binder<>();
     private UploadField uploadField;
 
     /**
      * Constructor.
      *
-     * @param usagesController instance of {@link IFasUsageController}
+     * @param usageController instance of {@link IAaclUsageController}
      */
-    ResearchedUsagesUploadWindow(IFasUsageController usagesController) {
-        this.usagesController = usagesController;
-        super.setWidth("520px");
+    public ClassifiedUsagesUploadWindow(IAaclUsageController usageController) {
+        this.usageController = usageController;
+        super.setWidth("500px");
         super.setHeight("230px");
-        super.setHeaderTitle(ForeignUi.getMessage("window.upload_researched_usages"));
+        super.setHeaderTitle(ForeignUi.getMessage("window.upload_classified_usages"));
         super.add(initRootLayout());
         super.getFooter().add(initButtonsLayout());
-        super.setModalWindowProperties("researched-usages-upload-window", false);
+        super.setModalWindowProperties("classified-usages-upload-window", false);
     }
 
     /**
@@ -57,23 +57,25 @@ class ResearchedUsagesUploadWindow extends CommonDialog {
     void onUploadClicked() {
         if (uploadBinder.validate().isOk()) {
             try {
-                var processor = usagesController.getResearchedUsagesCsvProcessor();
+                var processor = usageController.getClassifiedUsageCsvProcessor();
                 var processingResult = processor.process(uploadField.getStreamToUploadedFile());
                 if (processingResult.isSuccessful()) {
-                    int count = processingResult.get().size();
-                    usagesController.loadResearchedUsages(processingResult.get());
+                    int loadedCount = processingResult.get().size();
+                    int updatedCount = usageController.loadClassifiedUsages(processingResult.get());
                     close();
-                    Windows.showNotificationWindow(ForeignUi.getMessage("message.upload_completed", count));
+                    Windows.showNotificationWindow(
+                        ForeignUi.getMessage("message.upload_classified_completed", updatedCount,
+                            loadedCount - updatedCount));
                 } else {
                     Windows.showModalWindow(
                         new ErrorUploadWindow(
-                            usagesController.getErrorResultStreamSource(uploadField.getValue(), processingResult),
+                            usageController.getErrorResultStreamSource(uploadField.getValue(), processingResult),
                             ForeignUi.getMessage("message.error.upload")));
                 }
             } catch (ThresholdExceededException e) {
                 Windows.showModalWindow(
                     new ErrorUploadWindow(
-                        usagesController.getErrorResultStreamSource(uploadField.getValue(), e.getProcessingResult()),
+                        usageController.getErrorResultStreamSource(uploadField.getValue(), e.getProcessingResult()),
                         e.getMessage() + ForeignUi.getMessage("message.error.upload.threshold.exceeded")));
             } catch (ValidationException e) {
                 Windows.showNotificationWindow(ForeignUi.getMessage("window.error"), e.getHtmlMessage());
@@ -99,7 +101,7 @@ class ResearchedUsagesUploadWindow extends CommonDialog {
             .withValidator(value -> StringUtils.endsWith(value, ".csv"),
                 ForeignUi.getMessage("error.upload_file.invalid_extension"))
             .bind(ValueProvider.identity(), (bean, value) -> bean = value);
-        VaadinUtils.addComponentStyle(uploadField, "researched-usages-upload-component");
+        VaadinUtils.addComponentStyle(uploadField, "classified-usages-upload-component");
         return uploadField;
     }
 

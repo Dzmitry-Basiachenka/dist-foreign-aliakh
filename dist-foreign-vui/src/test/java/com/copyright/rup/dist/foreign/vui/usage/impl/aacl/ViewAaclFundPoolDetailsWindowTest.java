@@ -1,10 +1,12 @@
 package com.copyright.rup.dist.foreign.vui.usage.impl.aacl;
 
+import static com.copyright.rup.dist.foreign.vui.GridColumnVerifier.verifyAmountColumn;
+import static com.copyright.rup.dist.foreign.vui.GridColumnVerifier.verifyIntegerColumn;
+import static com.copyright.rup.dist.foreign.vui.GridColumnVerifier.verifyStringColumn;
 import static com.copyright.rup.dist.foreign.vui.IVaadinJsonConverter.assertJsonSnapshot;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.getDialogContent;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.getFooterLayout;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyButtonsLayout;
-import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyGrid;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyWindow;
 
 import static org.junit.Assert.assertEquals;
@@ -13,6 +15,7 @@ import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.FundPoolDetail;
 
+import com.copyright.rup.dist.foreign.vui.UiTestHelper;
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -51,17 +54,29 @@ public class ViewAaclFundPoolDetailsWindowTest {
         verifyWindow(window, FUND_POOL_NAME, "700px", "600px", Unit.PIXELS, true);
         var content = (VerticalLayout) getDialogContent(window);
         assertEquals(1, content.getComponentCount());
-        verifyGrid((Grid<?>) content.getComponentAt(0), List.of(
-            Pair.of("Agg LC ID", "110px"),
-            Pair.of("Agg LC Enrollment", "190px"),
-            Pair.of("Agg LC Discipline", "230px"),
-            Pair.of("Gross Amount", "160px")));
+        verifyGrid((Grid<FundPoolDetail>) content.getComponentAt(0));
         verifyButtonsLayout(getFooterLayout(window), true, "Close");
     }
 
     @Test
     public void testJsonSnapshot() {
         assertJsonSnapshot("usage/impl/aacl/view-aacl-fund-pool-details-window.json", window);
+    }
+
+    private void verifyGrid(Grid<FundPoolDetail> grid) {
+        UiTestHelper.verifyGrid(grid, List.of(
+            Pair.of("Agg LC ID", "110px"),
+            Pair.of("Agg LC Enrollment", "190px"),
+            Pair.of("Agg LC Discipline", "230px"),
+            Pair.of("Gross Amount", "160px")));
+        assertEquals(4, grid.getColumns().size());
+        verifyIntegerColumn(grid, 0, FundPoolDetail::new,
+            (bean, value) -> bean.getAggregateLicenseeClass().setId(value));
+        verifyStringColumn(grid, 1, FundPoolDetail::new,
+            (bean, value) -> bean.getAggregateLicenseeClass().setEnrollmentProfile(value));
+        verifyStringColumn(grid, 2, FundPoolDetail::new,
+            (bean, value) -> bean.getAggregateLicenseeClass().setDiscipline(value));
+        verifyAmountColumn(grid, 3, FundPoolDetail::new, FundPoolDetail::setGrossAmount);
     }
 
     private FundPool buildFundPool() {

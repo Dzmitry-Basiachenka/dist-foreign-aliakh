@@ -21,7 +21,6 @@ import java.util.Date;
 import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 
-import elemental.json.JsonObject;
 import elemental.json.impl.JreJsonFactory;
 import elemental.json.impl.JreJsonObject;
 
@@ -53,7 +52,7 @@ public class GridColumnVerifier<T, V> {
      * @param grid         grid
      * @param columnIdx    column index
      * @param itemSupplier item supplier
-     * @param setter       setter
+     * @param setter       field setter
      */
     public GridColumnVerifier(Grid<T> grid, int columnIdx, Supplier<T> itemSupplier, BiConsumer<T, V> setter) {
         this.column = grid.getColumns().get(columnIdx);
@@ -68,7 +67,7 @@ public class GridColumnVerifier<T, V> {
      * @param grid         grid
      * @param columnIdx    column index
      * @param itemSupplier item supplier
-     * @param setter       setter
+     * @param setter       field setter
      * @param <T>          bean type
      * @return instance of {@link GridColumnVerifier}
      */
@@ -82,12 +81,31 @@ public class GridColumnVerifier<T, V> {
     }
 
     /**
+     * Verifies Long column.
+     *
+     * @param grid         grid
+     * @param columnIdx    column index
+     * @param itemSupplier item supplier
+     * @param setter       field setter
+     * @param <T>          bean type
+     * @return instance of {@link GridColumnVerifier}
+     */
+    public static <T> GridColumnVerifier<T, Long> verifyLongColumn(Grid<T> grid, int columnIdx,
+                                                                   Supplier<T> itemSupplier,
+                                                                   BiConsumer<T, Long> setter) {
+        return new GridColumnVerifier<>(grid, columnIdx, itemSupplier, setter)
+            .verifyDataProvider(0L, "0")
+            .verifyComparator(0L, 1L)
+            .verifyClassNameGenerator(null);
+    }
+
+    /**
      * Verifies case-sensitive String column.
      *
      * @param grid         grid
      * @param columnIdx    column index
      * @param itemSupplier item supplier
-     * @param setter       setter
+     * @param setter       field setter
      * @param <T>          bean type
      * @return instance of {@link GridColumnVerifier}
      */
@@ -107,7 +125,7 @@ public class GridColumnVerifier<T, V> {
      * @param grid         grid
      * @param columnIdx    column index
      * @param itemSupplier item supplier
-     * @param setter       setter
+     * @param setter       field setter
      * @param <T>          bean type
      * @return instance of {@link GridColumnVerifier}
      */
@@ -127,7 +145,7 @@ public class GridColumnVerifier<T, V> {
      * @param grid         grid
      * @param columnIdx    column index
      * @param itemSupplier item supplier
-     * @param setter       setter
+     * @param setter       field setter
      * @param <T>          bean type
      * @return instance of {@link GridColumnVerifier}
      */
@@ -147,7 +165,7 @@ public class GridColumnVerifier<T, V> {
      * @param grid         grid
      * @param columnIdx    column index
      * @param itemSupplier item supplier
-     * @param setter       setter
+     * @param setter       field setter
      * @param <T>          bean type
      * @return instance of {@link GridColumnVerifier}
      */
@@ -167,7 +185,7 @@ public class GridColumnVerifier<T, V> {
      * @param grid         grid
      * @param columnIdx    column index
      * @param itemSupplier item supplier
-     * @param setter       setter
+     * @param setter       field setter
      * @param <T>          bean type
      * @return instance of {@link GridColumnVerifier}
      */
@@ -178,6 +196,49 @@ public class GridColumnVerifier<T, V> {
             .verifyDataProvider(new BigDecimal("1234567.89"), "1,234,567.89")
             .verifyDataProvider(null, StringUtils.EMPTY)
             .verifyComparator(BigDecimal.ZERO, BigDecimal.ONE)
+            .verifyClassNameGenerator(null);
+    }
+
+    /**
+     * Verifies BigDecimal amount column.
+     *
+     * @param grid         grid
+     * @param columnIdx    column index
+     * @param itemSupplier item supplier
+     * @param setter       field setter
+     * @param <T>          bean type
+     * @return instance of {@link GridColumnVerifier}
+     */
+    public static <T> GridColumnVerifier<T, BigDecimal> verifyAmountColumn(Grid<T> grid, int columnIdx,
+                                                                           Supplier<T> itemSupplier,
+                                                                           BiConsumer<T, BigDecimal> setter) {
+        return new GridColumnVerifier<>(grid, columnIdx, itemSupplier, setter)
+            .verifyDataProvider(new BigDecimal("1234567.89"), "1,234,567.89")
+            .verifyDataProvider(null, StringUtils.EMPTY)
+            .verifyComparator(BigDecimal.ZERO, BigDecimal.ONE)
+            .verifyClassNameGenerator("label-amount");
+    }
+
+    /**
+     * Verifies Enum column.
+     *
+     * @param grid         grid
+     * @param columnIdx    column index
+     * @param itemSupplier item supplier
+     * @param setter       field setter
+     * @param minValue     minimum field value
+     * @param maxValue     maximum field value
+     * @param <T>          bean type
+     * @param <E>          field enum type
+     * @return instance of {@link GridColumnVerifier}
+     */
+    public static <T, E> GridColumnVerifier<T, E> verifyEnumColumn(Grid<T> grid, int columnIdx,
+                                                                   Supplier<T> itemSupplier,
+                                                                   BiConsumer<T, E> setter,
+                                                                   E minValue, E maxValue) {
+        return new GridColumnVerifier<>(grid, columnIdx, itemSupplier, setter)
+            .verifyDataProvider(minValue, minValue.toString())
+            .verifyComparator(minValue, maxValue)
             .verifyClassNameGenerator(null);
     }
 
@@ -194,9 +255,9 @@ public class GridColumnVerifier<T, V> {
         var rendering = renderer.render(new Element("div"), new KeyMapper<>());
         assertTrue(rendering.getDataGenerator().isPresent());
         var dataGenerator = rendering.getDataGenerator().get();
-        JsonObject jsonObject = new JreJsonObject(new JreJsonFactory());
         T item = itemSupplier.get();
         setter.accept(item, value);
+        var jsonObject = new JreJsonObject(new JreJsonFactory());
         dataGenerator.generateData(item, jsonObject);
         assertEquals(expectedResult, jsonObject.getString("col" + columnIdx));
         return this;
@@ -205,8 +266,8 @@ public class GridColumnVerifier<T, V> {
     /**
      * Verifies column comparator.
      *
-     * @param minValue minimum value
-     * @param maxValue maximum value
+     * @param minValue minimum field value
+     * @param maxValue maximum field value
      * @return instance of {@link GridColumnVerifier}
      */
     public GridColumnVerifier<T, V> verifyComparator(V minValue, V maxValue) {

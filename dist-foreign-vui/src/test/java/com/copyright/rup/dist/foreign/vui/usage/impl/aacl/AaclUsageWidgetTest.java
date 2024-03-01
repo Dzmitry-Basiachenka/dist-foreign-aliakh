@@ -1,8 +1,12 @@
 package com.copyright.rup.dist.foreign.vui.usage.impl.aacl;
 
+import static com.copyright.rup.dist.foreign.vui.GridColumnVerifier.verifyEnumColumn;
+import static com.copyright.rup.dist.foreign.vui.GridColumnVerifier.verifyIntegerColumn;
+import static com.copyright.rup.dist.foreign.vui.GridColumnVerifier.verifyLocalDateColumnShortFormat;
+import static com.copyright.rup.dist.foreign.vui.GridColumnVerifier.verifyLongColumn;
+import static com.copyright.rup.dist.foreign.vui.GridColumnVerifier.verifyStringColumn;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyButton;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyFileDownloader;
-import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyGrid;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyMenuBar;
 
 import static org.easymock.EasyMock.anyObject;
@@ -21,6 +25,10 @@ import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
+import com.copyright.rup.dist.foreign.domain.AaclUsage;
+import com.copyright.rup.dist.foreign.domain.UsageDto;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.vui.UiTestHelper;
 import com.copyright.rup.dist.foreign.vui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.vui.usage.api.ICommonUsageFilterController;
 import com.copyright.rup.dist.foreign.vui.usage.api.aacl.IAaclUsageController;
@@ -28,7 +36,6 @@ import com.copyright.rup.dist.foreign.vui.usage.api.aacl.IAaclUsageFilterControl
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.downloader.OnDemandFileDownloader;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.Windows;
 
-import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.contextmenu.MenuItem;
@@ -101,34 +108,12 @@ public class AaclUsageWidgetTest {
     @Test
     public void testWidgetStructure() {
         assertThat(widget.getPrimaryComponent(), instanceOf(AaclUsageFilterWidget.class));
-        Component secondaryComponent = widget.getSecondaryComponent();
+        var secondaryComponent = widget.getSecondaryComponent();
         assertThat(secondaryComponent, instanceOf(VerticalLayout.class));
-        VerticalLayout contentLayout = (VerticalLayout) secondaryComponent;
+        var contentLayout = (VerticalLayout) secondaryComponent;
         var toolbarLayout = (HorizontalLayout) contentLayout.getComponentAt(0);
         verifyButtonsLayout((HorizontalLayout) toolbarLayout.getComponentAt(0));
-        verifyGrid((Grid<?>) contentLayout.getComponentAt(1), List.of(
-            Pair.of("Detail ID", "300px"),
-            Pair.of("Detail Status", "180px"),
-            Pair.of("Product Family", "160px"),
-            Pair.of("Usage Batch Name", "200px"),
-            Pair.of("Period End Date", "155px"),
-            Pair.of("RH Account #", "150px"),
-            Pair.of("RH Name", "300px"),
-            Pair.of("Wr Wrk Inst", "140px"),
-            Pair.of("System Title", "300px"),
-            Pair.of("Standard Number", "180px"),
-            Pair.of("Standard Number Type", "225px"),
-            Pair.of("Det LC ID", "105px"),
-            Pair.of("Det LC Enrollment", "180px"),
-            Pair.of("Det LC Discipline", "155px"),
-            Pair.of("Pub Type", WIDTH_140),
-            Pair.of("Institution", WIDTH_140),
-            Pair.of("Usage Period", "135px"),
-            Pair.of("Usage Source", WIDTH_140),
-            Pair.of("Number of Copies", "185px"),
-            Pair.of("Number of Pages", "165px"),
-            Pair.of("Right Limitation", "160px"),
-            Pair.of("Comment", "200px")));
+        verifyGrid((Grid<UsageDto>) contentLayout.getComponentAt(1));
     }
 
     @Test
@@ -220,5 +205,70 @@ public class AaclUsageWidgetTest {
         verifyButton(buttonsLayout.getComponentAt(3), "Load Classified Details", true, true);
         verifyButton(buttonsLayout.getComponentAt(4), "Add To Scenario", true, true);
         verifyFileDownloader(buttonsLayout.getComponentAt(5), "Export", true, true);
+    }
+
+    private void verifyGrid(Grid<UsageDto> grid) {
+        UiTestHelper.verifyGrid(grid, List.of(
+            Pair.of("Detail ID", "300px"),
+            Pair.of("Detail Status", "180px"),
+            Pair.of("Product Family", "160px"),
+            Pair.of("Usage Batch Name", "200px"),
+            Pair.of("Period End Date", "155px"),
+            Pair.of("RH Account #", "150px"),
+            Pair.of("RH Name", "300px"),
+            Pair.of("Wr Wrk Inst", "140px"),
+            Pair.of("System Title", "300px"),
+            Pair.of("Standard Number", "180px"),
+            Pair.of("Standard Number Type", "225px"),
+            Pair.of("Det LC ID", "105px"),
+            Pair.of("Det LC Enrollment", "180px"),
+            Pair.of("Det LC Discipline", "155px"),
+            Pair.of("Pub Type", WIDTH_140),
+            Pair.of("Institution", WIDTH_140),
+            Pair.of("Usage Period", "135px"),
+            Pair.of("Usage Source", WIDTH_140),
+            Pair.of("Number of Copies", "185px"),
+            Pair.of("Number of Pages", "165px"),
+            Pair.of("Right Limitation", "160px"),
+            Pair.of("Comment", "200px")));
+        assertEquals(22, grid.getColumns().size());
+        Supplier<UsageDto> itemSupplier = () -> {
+            var usage = new UsageDto();
+            usage.setAaclUsage(new AaclUsage());
+            return usage;
+        };
+        verifyStringColumn(grid, 0, UsageDto::new, UsageDto::setId);
+        verifyEnumColumn(grid, 1, UsageDto::new, UsageDto::setStatus,
+            UsageStatusEnum.NEW, UsageStatusEnum.ARCHIVED);
+        verifyStringColumn(grid, 2, UsageDto::new, UsageDto::setProductFamily);
+        verifyStringColumn(grid, 3, UsageDto::new, UsageDto::setBatchName);
+        verifyLocalDateColumnShortFormat(grid, 4, itemSupplier,
+            (bean, value) -> bean.getAaclUsage().setBatchPeriodEndDate(value));
+        verifyLongColumn(grid, 5, UsageDto::new, UsageDto::setRhAccountNumber);
+        verifyStringColumn(grid, 6, UsageDto::new, UsageDto::setRhName);
+        verifyLongColumn(grid, 7, UsageDto::new, UsageDto::setWrWrkInst);
+        verifyStringColumn(grid, 8, UsageDto::new, UsageDto::setSystemTitle);
+        verifyStringColumn(grid, 9, UsageDto::new, UsageDto::setStandardNumber);
+        verifyStringColumn(grid, 10, UsageDto::new, UsageDto::setStandardNumberType);
+        verifyIntegerColumn(grid, 11, itemSupplier,
+            (bean, value) -> bean.getAaclUsage().getDetailLicenseeClass().setId(value));
+        verifyStringColumn(grid, 12, itemSupplier,
+            (bean, value) -> bean.getAaclUsage().getDetailLicenseeClass().setEnrollmentProfile(value));
+        verifyStringColumn(grid, 13, itemSupplier,
+            (bean, value) -> bean.getAaclUsage().getDetailLicenseeClass().setDiscipline(value));
+        verifyStringColumn(grid, 14, itemSupplier,
+            (bean, value) -> bean.getAaclUsage().getPublicationType().setName(value));
+        verifyStringColumn(grid, 15, itemSupplier,
+            (bean, value) -> bean.getAaclUsage().setInstitution(value));
+        verifyIntegerColumn(grid, 16, itemSupplier,
+            (bean, value) -> bean.getAaclUsage().getUsageAge().setPeriod(value));
+        verifyStringColumn(grid, 17, itemSupplier,
+            (bean, value) -> bean.getAaclUsage().setUsageSource(value));
+        verifyIntegerColumn(grid, 18, UsageDto::new, UsageDto::setNumberOfCopies);
+        verifyIntegerColumn(grid, 19, itemSupplier,
+            (bean, value) -> bean.getAaclUsage().setNumberOfPages(value));
+        verifyStringColumn(grid, 20, itemSupplier,
+            (bean, value) -> bean.getAaclUsage().setRightLimitation(value));
+        verifyStringColumn(grid, 21, UsageDto::new, UsageDto::setComment);
     }
 }
