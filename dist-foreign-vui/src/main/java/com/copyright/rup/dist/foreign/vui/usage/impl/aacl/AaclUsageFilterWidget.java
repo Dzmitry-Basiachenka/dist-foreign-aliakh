@@ -64,10 +64,8 @@ public class AaclUsageFilterWidget extends CommonUsageFilterWidget implements IA
 
     @Override
     protected VerticalLayout initFiltersLayout() {
-        initStatusFilter();
-        initUsagePeriodFilter();
         return VaadinUtils.initCommonVerticalLayout(buildFiltersHeaderLabel(), buildUsageBatchFilter(),
-            statusComboBox, usagePeriodComboBox);
+            initStatusComboBox(), initUsagePeriodComboBox());
     }
 
     @Override
@@ -86,7 +84,7 @@ public class AaclUsageFilterWidget extends CommonUsageFilterWidget implements IA
         return usageBatchFilterWidget;
     }
 
-    private void initStatusFilter() {
+    private ComboBox<UsageStatusEnum> initStatusComboBox() {
         statusComboBox = new ComboBox<>(ForeignUi.getMessage("label.status"));
         statusComboBox.setWidthFull();
         statusComboBox.addValueChangeListener(event -> {
@@ -94,9 +92,10 @@ public class AaclUsageFilterWidget extends CommonUsageFilterWidget implements IA
             filterChanged();
         });
         VaadinUtils.addComponentStyle(statusComboBox, "status-filter");
+        return statusComboBox;
     }
 
-    private void initUsagePeriodFilter() {
+    private ComboBox<Integer> initUsagePeriodComboBox() {
         usagePeriodComboBox = new ComboBox<>(ForeignUi.getMessage("label.usage_period"));
         usagePeriodComboBox.setWidthFull();
         usagePeriodComboBox.addValueChangeListener(event -> {
@@ -104,5 +103,6 @@ public class AaclUsageFilterWidget extends CommonUsageFilterWidget implements IA
             filterChanged();
         });
         VaadinUtils.addComponentStyle(usagePeriodComboBox, "usage-period-filter");
+        return usagePeriodComboBox;
     }
 }
