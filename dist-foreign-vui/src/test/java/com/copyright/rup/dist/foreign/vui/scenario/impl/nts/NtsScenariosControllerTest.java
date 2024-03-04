@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.vui.scenario.impl.nts;
 
+import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
@@ -29,6 +30,8 @@ import com.copyright.rup.dist.foreign.vui.scenario.api.nts.INtsScenariosWidget;
 import com.copyright.rup.dist.foreign.vui.scenario.impl.EditScenarioNameWindow;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.IConfirmCancelListener;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.Windows;
+
+import com.vaadin.flow.component.dialog.Dialog;
 
 import org.easymock.Capture;
 import org.junit.Before;
@@ -149,7 +152,15 @@ public class NtsScenariosControllerTest {
 
     @Test
     public void testSendToLm() {
-        //TODO: {dbasiachenka} implement
+        mockStatic(Windows.class);
+        Dialog confirmWindow = createMock(Dialog.class);
+        expect(scenariosWidget.getSelectedScenario()).andReturn(scenario).once();
+        expect(Windows.showConfirmDialog(
+            eq("Are you sure that you want to send scenario <i><b>Scenario name</b></i> to Liability Manager?"),
+            anyObject(IConfirmCancelListener.class))).andReturn(confirmWindow).once();
+        replay(Windows.class, scenariosWidget, confirmWindow);
+        scenariosController.sendToLm();
+        verify(Windows.class, scenariosWidget, confirmWindow);
     }
 
     @Test

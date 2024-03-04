@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.vui.scenario.impl.nts;
 
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.vui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.vui.scenario.api.IScenarioHistoryController;
 import com.copyright.rup.dist.foreign.vui.scenario.api.IScenariosMediator;
@@ -135,5 +136,9 @@ public class NtsScenariosWidget extends CommonScenariosWidget implements INtsSce
         viewButton.addClickListener(event -> controller.onViewButtonClicked());
         editNameButton.addClickListener(event -> controller.onEditNameButtonClicked());
         deleteButton.addClickListener(event -> controller.onDeleteButtonClicked());
+        submitButton.addClickListener(event -> controller.handleAction(ScenarioActionTypeEnum.SUBMITTED));
+        rejectButton.addClickListener(event -> controller.handleAction(ScenarioActionTypeEnum.REJECTED));
+        approveButton.addClickListener(event -> controller.handleAction(ScenarioActionTypeEnum.APPROVED));
+        sendToLmButton.addClickListener(event -> controller.sendToLm());
     }
 }
