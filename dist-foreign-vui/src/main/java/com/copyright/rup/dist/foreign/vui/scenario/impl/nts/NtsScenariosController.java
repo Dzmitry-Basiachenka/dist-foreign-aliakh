@@ -52,7 +52,16 @@ public class NtsScenariosController extends CommonScenariosController implements
 
     @Override
     public void sendToLm() {
-        //TODO: {dbasiachenka} implement
+        var scenario = getWidget().getSelectedScenario();
+        Windows.showConfirmDialog(ForeignUi.getMessage("window.send_scenario", scenario.getName()),
+            () -> {
+                try {
+                    ntsScenarioService.sendToLm(scenario);
+                } catch (RuntimeException e) {
+                    Windows.showNotificationWindow(e.getMessage());
+                }
+                getWidget().refresh();
+            });
     }
 
     @Override
