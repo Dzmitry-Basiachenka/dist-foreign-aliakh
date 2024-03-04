@@ -1,0 +1,45 @@
+[
+  {
+    "id": "23b192ff-4d4d-4107-a113-46a3791dd5a5",
+    "status": "PAID",
+    "productFamily": "AACL",
+    "batchName": "Paid batch",
+    "paymentDate": "2021-02-12",
+    "rhAccountNumber": 1000002859,
+    "rhName": "John Wiley & Sons - Books",
+    "payeeAccountNumber": 1000000001,
+    "payeeName": "Rothchild Consultants",
+    "wrWrkInst": 243904752,
+    "systemTitle": "100 ROAD MOVIES",
+    "standardNumber": "1008902112317555XX",
+    "standardNumberType": "VALISBN13",
+    "reportedValue": 3000.00000,
+    "grossAmount": 500.0000000000,
+    "serviceFee": 0.16,
+    "netAmount": 420.0000000000,
+    "scenarioName": "scenario name",
+    "checkNumber": 650738,
+    "checkDate": "2022-02-13T00:00-04:00",
+    "cccEventId": 97423,
+    "distributionName": "dist name",
+    "distributionDate": "2022-01-02T00:00-04:00",
+    "periodEndDate": "2022-01-03",
+    "aaclUsage": {
+      "baselineId": "0a0485b1-6ab1-47a2-8bbb-1dee3f531f20",
+      "batchPeriodEndDate": "2022-04-10",
+      "usageSource": "google.com",
+      "detailLicenseeClass": {
+        "id": 143,
+        "discipline": "Engineering",
+        "enrollmentProfile": "EXGP"
+      },
+      "publicationType": {
+        "name": "BK2"
+      },
+      "usageAge": {
+        "period": 2016
+      }
+    },
+    "comment": "some comment"
+  }
+]

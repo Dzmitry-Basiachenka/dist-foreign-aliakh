@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.vui.audit.impl.nts;
+package com.copyright.rup.dist.foreign.vui.audit.impl.aacl;
 
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyFileDownloader;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyGrid;
@@ -23,8 +23,9 @@ import static org.powermock.api.easymock.PowerMock.verify;
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
-import com.copyright.rup.dist.foreign.vui.audit.api.nts.INtsAuditController;
+import com.copyright.rup.dist.foreign.vui.audit.api.aacl.IAaclAuditController;
 import com.copyright.rup.dist.foreign.vui.audit.api.nts.INtsAuditFilterController;
+import com.copyright.rup.dist.foreign.vui.audit.impl.nts.NtsAuditFilterWidget;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.component.window.Windows;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -63,23 +64,23 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * Verifies {@link NtsAuditWidget}.
+ * Verifies {@link AaclAuditWidget}.
  * <p>
- * Copyright (C) 2018 copyright.com
+ * Copyright (C) 2020 copyright.com
  * <p>
- * Date: 1/23/18
+ * Date: 03/12/2020
  *
- * @author Aliaksandr Radkevich
+ * @author Anton Azarenka
  */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({Windows.class, UI.class})
 @PowerMockIgnore({"com.sun.org.apache.xerces.*", "javax.xml.*", "org.xml.*", "javax.management.*"})
-public class NtsAuditWidgetTest {
+public class AaclAuditWidgetTest {
 
     private static final String WIDTH_300 = "300px";
 
-    private NtsAuditWidget widget;
-    private INtsAuditController controller;
+    private AaclAuditWidget widget;
+    private IAaclAuditController controller;
 
     @Before
     public void setUp() {
@@ -87,8 +88,8 @@ public class NtsAuditWidgetTest {
         UI ui = createMock(UI.class);
         expect(UI.getCurrent()).andReturn(ui).once();
         expect(ui.getUIId()).andReturn(1).once();
-        controller = createMock(INtsAuditController.class);
-        widget = new NtsAuditWidget(controller);
+        controller = createMock(IAaclAuditController.class);
+        widget = new AaclAuditWidget(controller);
         widget.setController(controller);
         INtsAuditFilterController filterController = createMock(INtsAuditFilterController.class);
         var filterWidget = new NtsAuditFilterWidget(filterController);
@@ -104,23 +105,6 @@ public class NtsAuditWidgetTest {
         widget.init();
         verify(UI.class, ui, controller, filterController, streamSource);
         reset(controller, filterController, streamSource);
-    }
-
-    @Test
-    public void testGridValues() {
-        List<UsageDto> usages = loadExpectedUsageDtos("usage_dto_0a9941d6.json");
-        expect(controller.loadBeans(0, Integer.MAX_VALUE, List.of())).andReturn(usages).once();
-        expect(controller.getSize()).andReturn(1).once();
-        replay(controller);
-        Grid<?> grid = (Grid<?>) ((VerticalLayout) widget.getSecondaryComponent()).getComponentAt(1);
-        Object[][] expectedCells = {
-            {"0a9941d6-254d-457a-a667-498c87e5df5e", "PAID", "NTS", "Paid batch", "02/12/2021", "1000002859",
-                "John Wiley & Sons - Books", "1000000001", "Rothchild Consultants", "243904752", "100 ROAD MOVIES",
-                "100 ROAD MOVIES", "1008902112317555XX", "VALISBN13", "3,000.00", "500.00", "16.0", "scenario name",
-                "650738", "02/13/2022", "97423", "dist name", "01/02/2022", "01/03/2022", "some comment"}
-        };
-        verifyGridItems(grid, usages, expectedCells);
-        verify(controller);
     }
 
     @Test
@@ -163,6 +147,24 @@ public class NtsAuditWidgetTest {
         verify(controller);
     }
 
+    @Test
+    public void testGridValues() {
+        List<UsageDto> usages = loadExpectedUsageDtos("usage_dto_23b192ff.json");
+        expect(controller.loadBeans(0, Integer.MAX_VALUE, List.of())).andReturn(usages).once();
+        expect(controller.getSize()).andReturn(1).once();
+        replay(controller);
+        Grid<?> grid = (Grid<?>) ((VerticalLayout) widget.getSecondaryComponent()).getComponentAt(1);
+        Object[][] expectedCells = {
+            {"23b192ff-4d4d-4107-a113-46a3791dd5a5", "0a0485b1-6ab1-47a2-8bbb-1dee3f531f20", "PAID", "AACL",
+                "Paid batch", "04/10/2022", "1000002859", "John Wiley & Sons - Books", "1000000001",
+                "Rothchild Consultants", "243904752", "100 ROAD MOVIES", "1008902112317555XX", "VALISBN13", "500.00",
+                "16.0", "420.00", "scenario name", "650738", "02/13/2022", "97423", "dist name", "01/02/2022", "143",
+                "EXGP", "Engineering", "BK2", "2016", "google.com", "some comment"}
+        };
+        verifyGridItems(grid, usages, expectedCells);
+        verify(controller);
+    }
+
     private void verifyContent(Component component) {
         assertThat(component, instanceOf(VerticalLayout.class));
         var content = (VerticalLayout) component;
@@ -170,29 +172,34 @@ public class NtsAuditWidgetTest {
         verifyToolbar(content.getComponentAt(0));
         verifyGrid((Grid) content.getComponentAt(1), List.of(
             Pair.of("Detail ID", WIDTH_300),
+            Pair.of("Baseline ID", WIDTH_300),
             Pair.of("Detail Status", "180px"),
             Pair.of("Product Family", "160px"),
             Pair.of("Usage Batch Name", "200px"),
-            Pair.of("Payment Date", "145px"),
+            Pair.of("Period End Date", "155px"),
             Pair.of("RH Account #", "150px"),
             Pair.of("RH Name", WIDTH_300),
             Pair.of("Payee Account #", "165px"),
             Pair.of("Payee Name", WIDTH_300),
             Pair.of("Wr Wrk Inst", "140px"),
             Pair.of("System Title", WIDTH_300),
-            Pair.of("Title", WIDTH_300),
             Pair.of("Standard Number", "180px"),
             Pair.of("Standard Number Type", "225px"),
-            Pair.of("Reported Value", "170px"),
             Pair.of("Gross Amt in USD", "170px"),
             Pair.of("Service Fee %", "145px"),
+            Pair.of("Net Amt in USD", "150px"),
             Pair.of("Scenario Name", "155px"),
             Pair.of("Check #", "100px"),
             Pair.of("Check Date", "125px"),
             Pair.of("Event ID", "100px"),
             Pair.of("Dist. Name", "115px"),
             Pair.of("Dist. Date", "110px"),
-            Pair.of("Period Ending", "150px"),
+            Pair.of("Det LC ID", "105px"),
+            Pair.of("Det LC Enrollment", "180px"),
+            Pair.of("Det LC Discipline", "155px"),
+            Pair.of("Pub Type", "140px"),
+            Pair.of("Usage Period", "135px"),
+            Pair.of("Usage Source", "140px"),
             Pair.of("Comment", "200px")
         ));
     }
@@ -209,7 +216,7 @@ public class NtsAuditWidgetTest {
         assertEquals("audit-toolbar", horizontalLayout.getClassName());
         verifyFileDownloader(horizontalLayout.getComponentAt(0), "Export", true, true);
         verifySearchWidget(
-            horizontalLayout.getComponentAt(1), "Enter Detail ID or Wr Wrk Inst or System Title or Work Title", "70%");
+            horizontalLayout.getComponentAt(1), "Enter Detail ID or Wr Wrk Inst or System Title", "70%");
         verifyMenuButton(horizontalLayout.getComponentAt(2));
     }
 

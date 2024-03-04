@@ -148,6 +148,10 @@ public enum GridColumnEnum {
      */
     AGGREGATE_LICENSEE_CLASS_ID("table.column.aggregate_licensee_class_id", "aggregateLicenseeClassId", "110px"),
     /**
+     * Baseline Id column.
+     */
+    BASELINE_ID("table.column.baseline_id", "baselineId", WidthConstants.WIDTH_300),
+    /**
      * Batch period end date column.
      */
     BATCH_PERIOD_END_DATE("table.column.period_end_date", "periodEndDate", "155px"),

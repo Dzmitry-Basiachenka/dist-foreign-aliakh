@@ -1,7 +1,11 @@
 package com.copyright.rup.dist.foreign.vui.audit.impl.aacl;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
+import com.copyright.rup.dist.common.repository.api.Pageable;
+import com.copyright.rup.dist.common.repository.api.Sort;
+import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
+import com.copyright.rup.dist.foreign.service.api.aacl.IAaclUsageService;
 import com.copyright.rup.dist.foreign.vui.audit.api.ICommonAuditFilterController;
 import com.copyright.rup.dist.foreign.vui.audit.api.ICommonAuditWidget;
 import com.copyright.rup.dist.foreign.vui.audit.api.aacl.IAaclAuditController;
@@ -9,13 +13,14 @@ import com.copyright.rup.dist.foreign.vui.audit.api.aacl.IAaclAuditFilterControl
 import com.copyright.rup.dist.foreign.vui.audit.impl.CommonAuditController;
 
 import com.vaadin.flow.data.provider.QuerySortOrder;
+import com.vaadin.flow.data.provider.SortDirection;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -35,6 +40,8 @@ public class AaclAuditController extends CommonAuditController implements IAaclA
 
     @Autowired
     private IAaclAuditFilterController filterController;
+    @Autowired
+    private IAaclUsageService aaclUsageService;
 
     @Override
     public ICommonAuditFilterController getAuditFilterController() {
@@ -43,25 +50,31 @@ public class AaclAuditController extends CommonAuditController implements IAaclA
 
     @Override
     public IStreamSource getCsvStreamSource() {
-        //TODO: will implement later
-        return getStreamSourceHandler().getCsvStreamSource(() -> "export_usage_audit_", temp -> {});
+        return getStreamSourceHandler().getCsvStreamSource(() -> "export_usage_audit_",
+            pos -> getReportService().writeAuditAaclCsvReport(getFilter(), pos));
     }
 
     @Override
     public int getSize() {
-        //TODO: will implement later
-        return 0;
+        var filter = getFilter();
+        return !filter.isEmpty() ? aaclUsageService.getCountForAudit(filter) : 0;
     }
 
     @Override
     public List<UsageDto> loadBeans(int startIndex, int count, List<QuerySortOrder> sortOrders) {
-        //TODO: will implement later
-        return new ArrayList<>();
+        var filter = getFilter();
+        Sort sort = null;
+        if (CollectionUtils.isNotEmpty(sortOrders)) {
+            QuerySortOrder sortOrder = sortOrders.get(0);
+            sort = new Sort(sortOrder.getSorted(), Direction.of(SortDirection.ASCENDING == sortOrder.getDirection()));
+        }
+        return !filter.isEmpty()
+            ? aaclUsageService.getForAudit(filter, new Pageable(startIndex, count), sort)
+            : List.of();
     }
 
     @Override
     protected ICommonAuditWidget instantiateWidget() {
-        //TODO: will implement later
-        return new AaclAuditWidget();
+        return new AaclAuditWidget(this);
     }
 }
