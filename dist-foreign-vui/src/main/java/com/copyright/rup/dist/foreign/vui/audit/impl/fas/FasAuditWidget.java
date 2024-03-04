@@ -39,7 +39,7 @@ public class FasAuditWidget extends CommonAuditWidget implements IFasAuditWidget
     @Override
     protected void addColumns() {
         getAuditGrid().addComponentColumn(usage -> {
-                String detailId = Objects.toString(usage.getId());
+                var detailId = Objects.toString(usage.getId());
                 var button = Buttons.createLinkButton(detailId);
                 button.addClickListener(event -> controller.showUsageHistory(usage.getId(), detailId));
                 return button;
