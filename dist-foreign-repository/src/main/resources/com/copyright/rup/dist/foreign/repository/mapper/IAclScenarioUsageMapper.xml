@@ -311,17 +311,17 @@
         net_amount
     </sql>
 
-    <sql id="grantDetailJoinSql">
-        join ${schema}.df_acl_grant_detail gd on gd.df_acl_grant_set_uid = #{scenario.grantSetId}
-            and gd.wr_wrk_inst = ${wrWrkInst}
-            and gd.grant_status = 'GRANT'
-            and gd.is_eligible = true
-            and (gd.type_of_use_status in
-                <foreach collection="grantStatuses" item="status" separator="," open="(" close=")">
-                    #{status}
-                </foreach>
-                or gd.type_of_use = ${typeOfUse}
-            )
+    <sql id="grantDetailSelectSql">
+        select
+            wr_wrk_inst,
+            type_of_use,
+            type_of_use_status,
+            rh_account_number,
+            payee_account_number
+        from apps.df_acl_grant_detail
+        where df_acl_grant_set_uid = #{scenario.grantSetId}
+            and grant_status = 'GRANT'
+            and is_eligible = true
     </sql>
 
     <sql id="findAclRightsholderTotalsHoldersByScenarioIdSql">
@@ -357,7 +357,18 @@
     </sql>
 
     <insert id="addToScenario" parameterType="map">
-        with usages as materialized (
+        with grant_details as materialized (
+            <include refid="grantDetailSelectSql"/>
+        ),
+        eligible_periods as materialized (
+            select
+                to_char(to_date(#{scenario.periodEndDate}::text, 'YYYYMM') - interval  '6 month' * period_prior ,  'YYYYMM')::integer as period,
+                weight
+            from ${schema}.df_acl_scenario_usage_age_weight
+            where df_acl_scenario_uid = #{scenario.id}
+                and weight > 0
+        ),
+        usages as materialized (
             select distinct on (u.df_acl_usage_uid)
                 uuid_generate_v4() df_acl_scenario_detail_uid,
                 #{scenario.id} df_acl_scenario_uid,
@@ -376,22 +387,18 @@
                 content_unit_price,
                 content_unit_price_flag,
                 annualized_copies,
-                uaw.weight usage_age_weight,
+                p.weight usage_age_weight,
                 survey_country,
-                uaw.weight * annualized_copies weighted_copies
+                p.weight * annualized_copies weighted_copies
             from ${schema}.df_acl_usage u
-            <include refid="grantDetailJoinSql">
-                <property name="wrWrkInst" value="u.wr_wrk_inst"/>
-                <property name="typeOfUse" value="u.type_of_use"/>
-            </include>
-            join ${schema}.df_acl_scenario_usage_age_weight uaw on uaw.df_acl_scenario_uid = #{scenario.id}
-                and uaw.period_prior = (
-                    <include refid="periodPriorSql">
-                        <property name="period" value="#{scenario.periodEndDate}"/>
-                    </include>
-                )
+            join grant_details gd on gd.wr_wrk_inst = u.wr_wrk_inst
+                and (gd.type_of_use_status in
+                    <foreach collection="grantStatuses" item="status" separator="," open="(" close=")">
+                        #{status}
+                    </foreach>
+                    or gd.type_of_use = u.type_of_use)
+            join eligible_periods p on u.period = p.period
             where df_acl_usage_batch_uid = #{scenario.usageBatchId}
-                and uaw.weight > 0
                 and annualized_copies &lt; 2000
         )
         insert into ${schema}.df_acl_scenario_detail (
@@ -423,7 +430,10 @@
     </insert>
 
     <insert id="addScenarioShares" parameterType="map">
-        with shares as materialized (
+        with grant_details as materialized (
+            <include refid="grantDetailSelectSql"/>
+        ),
+        shares as materialized (
             select
                 uuid_generate_v4() df_acl_share_detail_uid,
                 #{scenario.id} df_acl_scenario_uid,
@@ -438,10 +448,12 @@
             from ${schema}.df_acl_scenario_detail sd
             join ${schema}.df_acl_scenario_licensee_class slc on sd.df_acl_scenario_uid = slc.df_acl_scenario_uid
                 and sd.detail_licensee_class_id = slc.detail_licensee_class_id
-            <include refid="grantDetailJoinSql">
-                <property name="wrWrkInst" value="sd.wr_wrk_inst"/>
-                <property name="typeOfUse" value="sd.type_of_use"/>
-            </include>
+            join grant_details gd on gd.wr_wrk_inst = sd.wr_wrk_inst
+                and (gd.type_of_use_status in
+                    <foreach collection="grantStatuses" item="status" separator="," open="(" close=")">
+                        #{status}
+                    </foreach>
+                    or gd.type_of_use = sd.type_of_use)
             where sd.df_acl_scenario_uid = #{scenario.id}
         )
         insert into ${schema}.df_acl_share_detail (
