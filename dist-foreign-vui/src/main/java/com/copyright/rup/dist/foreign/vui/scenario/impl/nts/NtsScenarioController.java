@@ -5,7 +5,6 @@ import com.copyright.rup.dist.foreign.vui.scenario.api.ExcludeUsagesEvent;
 import com.copyright.rup.dist.foreign.vui.scenario.api.ICommonDrillDownByRightsholderController;
 import com.copyright.rup.dist.foreign.vui.scenario.api.nts.INtsDrillDownByRightsholderController;
 import com.copyright.rup.dist.foreign.vui.scenario.api.nts.INtsExcludeRightsholderController;
-import com.copyright.rup.dist.foreign.vui.scenario.api.nts.INtsExcludeRightsholderWidget;
 import com.copyright.rup.dist.foreign.vui.scenario.api.nts.INtsScenarioController;
 import com.copyright.rup.dist.foreign.vui.scenario.api.nts.INtsScenarioWidget;
 import com.copyright.rup.dist.foreign.vui.scenario.impl.CommonScenarioController;
@@ -44,7 +43,7 @@ public class NtsScenarioController extends CommonScenarioController implements I
     @Override
     public void onExcludeRhButtonClicked() {
         excludeController.setSelectedScenario(this.getScenario());
-        INtsExcludeRightsholderWidget widget = excludeController.initWidget();
+        var widget = excludeController.initWidget();
         ComponentUtil.addListener(
             (NtsExcludeRightsholderWidget) widget, ExcludeUsagesEvent.class, this::fireWidgetEvent);
         Windows.showModalWindow((CommonDialog) widget);

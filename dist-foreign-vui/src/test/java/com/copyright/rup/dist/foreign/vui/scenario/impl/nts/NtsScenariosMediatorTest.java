@@ -122,7 +122,7 @@ public class NtsScenariosMediatorTest {
 
     @Test
     public void testSelectedScenarioChangedInProgress() {
-        Scenario scenario = new Scenario();
+        var scenario = new Scenario();
         scenario.setProductFamily(NTS_PRODUCT_FAMILY);
         scenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);
         mediator.selectedScenarioChanged(scenario);
@@ -137,7 +137,7 @@ public class NtsScenariosMediatorTest {
 
     @Test
     public void testSelectedScenarioChangedSubmitted() {
-        Scenario scenario = new Scenario();
+        var scenario = new Scenario();
         scenario.setProductFamily(NTS_PRODUCT_FAMILY);
         scenario.setStatus(ScenarioStatusEnum.SUBMITTED);
         mediator.selectedScenarioChanged(scenario);
@@ -152,7 +152,7 @@ public class NtsScenariosMediatorTest {
 
     @Test
     public void testSelectedScenarioChangedApproved() {
-        Scenario scenario = new Scenario();
+        var scenario = new Scenario();
         scenario.setProductFamily(NTS_PRODUCT_FAMILY);
         scenario.setStatus(ScenarioStatusEnum.APPROVED);
         mediator.selectedScenarioChanged(scenario);
@@ -167,7 +167,7 @@ public class NtsScenariosMediatorTest {
 
     @Test
     public void testSelectedScenarioChangedSentToLm() {
-        Scenario scenario = new Scenario();
+        var scenario = new Scenario();
         scenario.setProductFamily(NTS_PRODUCT_FAMILY);
         scenario.setStatus(ScenarioStatusEnum.SENT_TO_LM);
         mediator.selectedScenarioChanged(scenario);
