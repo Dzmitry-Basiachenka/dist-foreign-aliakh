@@ -47,6 +47,7 @@ import java.util.stream.Collectors;
 @Component
 public class RhTaxService implements IRhTaxService {
 
+    private static final long serialVersionUID = 1494728363907218780L;
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
     @Autowired

@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.service.api;
 import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -14,7 +15,7 @@ import java.util.List;
  *
  * @author Anton Azarenka
  */
-public interface ILicenseeClassService {
+public interface ILicenseeClassService extends Serializable {
 
     /**
      * Checks whether AACL detail licensee class with provided enrollment profile and discipline exists in database.

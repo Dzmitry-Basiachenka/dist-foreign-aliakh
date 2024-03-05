@@ -25,6 +25,7 @@ import java.util.List;
  */
 public class StmRhProcessor extends AbstractUsageJobProcessor {
 
+    private static final long serialVersionUID = 4789312275831949638L;
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
     @Autowired

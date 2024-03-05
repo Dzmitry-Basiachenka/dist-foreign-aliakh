@@ -25,6 +25,7 @@ import java.util.List;
  */
 public class MatchingProcessor extends AbstractUsageJobProcessor {
 
+    private static final long serialVersionUID = -6353101579551393467L;
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
     @Autowired

@@ -27,6 +27,7 @@ import java.util.stream.Collectors;
  */
 public class UnclassifiedStatusProcessor extends AbstractChainProcessor<Usage> {
 
+    private static final long serialVersionUID = 954874539690089156L;
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
     @Autowired

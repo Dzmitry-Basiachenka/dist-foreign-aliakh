@@ -24,6 +24,7 @@ import java.util.List;
  */
 public class UdmRightsProcessor extends AbstractUdmJobProcessor {
 
+    private static final long serialVersionUID = 2752541242911315762L;
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
     @Autowired

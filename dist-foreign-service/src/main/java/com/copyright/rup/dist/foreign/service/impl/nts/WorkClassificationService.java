@@ -46,6 +46,7 @@ import java.util.Set;
 @Service
 public class WorkClassificationService implements IWorkClassificationService {
 
+    private static final long serialVersionUID = 3221113779175777599L;
     private static final Logger LOGGER = RupLogUtils.getLogger();
     private static final Set<String> NON_BELLETRISTIC_CLASSIFICATIONS = ImmutableSet.of(FdaConstants.STM_CLASSIFICATION,
         FdaConstants.NON_STM_CLASSIFICATION);

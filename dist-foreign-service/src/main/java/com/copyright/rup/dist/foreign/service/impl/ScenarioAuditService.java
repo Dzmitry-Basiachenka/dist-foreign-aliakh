@@ -25,6 +25,8 @@ import java.util.Set;
 @Service
 public class ScenarioAuditService implements IScenarioAuditService {
 
+    private static final long serialVersionUID = -4023758804837896855L;
+
     @Autowired
     private IScenarioAuditRepository scenarioAuditRepository;
 

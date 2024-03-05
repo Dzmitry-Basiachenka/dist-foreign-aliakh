@@ -44,6 +44,8 @@ import io.micrometer.core.annotation.Timed;
 @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
 public class PrmIntegrationService implements IPrmIntegrationService {
 
+    private static final long serialVersionUID = 4214086720727585612L;
+
     @Autowired
     @Qualifier("dist.common.integration.rest.prmRightsholderAsyncService")
     private IPrmRightsholderService prmRightsholderService;

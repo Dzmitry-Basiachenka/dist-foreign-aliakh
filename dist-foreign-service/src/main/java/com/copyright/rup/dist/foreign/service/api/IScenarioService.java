@@ -4,6 +4,7 @@ import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
@@ -18,7 +19,7 @@ import java.util.Set;
  * @author Ihar Suvorau
  * @author Mikalai Bezmen
  */
-public interface IScenarioService {
+public interface IScenarioService extends Serializable {
 
     /**
      * Gets list of {@link Scenario}s by product family.

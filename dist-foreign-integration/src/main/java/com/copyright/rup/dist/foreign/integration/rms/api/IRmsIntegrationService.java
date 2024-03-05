@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.integration.rms.api;
 
 import com.copyright.rup.dist.common.integration.rest.rms.RightsAssignmentResult;
 
+import java.io.Serializable;
 import java.util.Set;
 
 /**
@@ -13,7 +14,7 @@ import java.util.Set;
  *
  * @author Aliaksandr Liakh
  */
-public interface IRmsIntegrationService {
+public interface IRmsIntegrationService extends Serializable {
 
     /**
      * Sends set of Wr Wrk Insts with provided job name to RMS for rights assignment.

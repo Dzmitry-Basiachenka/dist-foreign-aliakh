@@ -25,6 +25,7 @@ import java.util.List;
  */
 public class RhTaxProcessor extends AbstractUsageJobProcessor {
 
+    private static final long serialVersionUID = -5273010708342185106L;
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
     @Autowired

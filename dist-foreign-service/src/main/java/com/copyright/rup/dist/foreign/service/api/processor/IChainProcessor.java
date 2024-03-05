@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.service.api.processor;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -13,7 +14,7 @@ import java.util.function.Predicate;
  * @param <T> type of items to process
  * @author Uladzislau Shalamitski
  */
-public interface IChainProcessor<T> {
+public interface IChainProcessor<T> extends Serializable {
 
     /**
      * Processes specific items.

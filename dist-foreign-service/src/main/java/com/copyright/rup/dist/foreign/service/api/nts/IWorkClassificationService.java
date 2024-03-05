@@ -4,6 +4,7 @@ import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.WorkClassification;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
@@ -16,7 +17,7 @@ import java.util.Set;
  *
  * @author Pavel Liakh
  */
-public interface IWorkClassificationService {
+public interface IWorkClassificationService extends Serializable {
 
     /**
      * Inserts or updates work classification and updates

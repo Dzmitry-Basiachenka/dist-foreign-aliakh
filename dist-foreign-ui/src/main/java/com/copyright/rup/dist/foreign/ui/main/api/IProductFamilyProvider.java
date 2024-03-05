@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.main.api;
 
+import java.io.Serializable;
+
 /**
  * Provides globally selected product family.
  * <p>
@@ -9,7 +11,7 @@ package com.copyright.rup.dist.foreign.ui.main.api;
  *
  * @author Stanislau Rudak
  */
-public interface IProductFamilyProvider {
+public interface IProductFamilyProvider extends Serializable{
 
     /**
      * @return selected product family.

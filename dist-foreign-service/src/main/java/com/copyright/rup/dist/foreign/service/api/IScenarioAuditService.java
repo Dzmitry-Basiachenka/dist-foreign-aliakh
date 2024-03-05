@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.service.api;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
@@ -15,7 +16,7 @@ import java.util.Set;
  *
  * @author Uladzislau_Shalamitski
  */
-public interface IScenarioAuditService {
+public interface IScenarioAuditService extends Serializable {
 
     /**
      * Logs scenario action.

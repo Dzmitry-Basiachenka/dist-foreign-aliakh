@@ -51,6 +51,7 @@ import io.micrometer.core.annotation.Timed;
 @Service
 public class ScenarioService implements IScenarioService {
 
+    private static final long serialVersionUID = -8935214014879957758L;
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
     @Autowired
