@@ -32,10 +32,11 @@ public class AggregateLicenseeClassMappingWindow extends CommonScenarioParameter
 
     private static final long serialVersionUID = -5516628610762919061L;
 
+    private final boolean isEditable;
+
     private List<DetailLicenseeClass> defaultValues;
     private List<DetailLicenseeClass> currentValues;
     private Grid<DetailLicenseeClass> grid;
-    private final boolean isEditable;
 
     /**
      * Constructor.
@@ -84,15 +85,11 @@ public class AggregateLicenseeClassMappingWindow extends CommonScenarioParameter
         var defaultButton = Buttons.createButton(ForeignUi.getMessage("button.default"));
         defaultButton.setVisible(isEditable);
         defaultButton.addClickListener(event -> setAppliedParameters(defaultValues));
-        var buttonsLayout = new HorizontalLayout(saveButton, Buttons.createCloseButton(this), placeholderLabel,
-            defaultButton);
-        VaadinUtils.addComponentStyle(buttonsLayout, "view-aacl-fund-pool-buttons");
-        return buttonsLayout;
+        return new HorizontalLayout(saveButton, Buttons.createCloseButton(this), placeholderLabel, defaultButton);
     }
 
     private Grid<DetailLicenseeClass> initGrid() {
         grid = new Grid<>();
-        grid.setSizeFull();
         grid.setSelectionMode(SelectionMode.NONE);
         addGridColumns();
         return grid;

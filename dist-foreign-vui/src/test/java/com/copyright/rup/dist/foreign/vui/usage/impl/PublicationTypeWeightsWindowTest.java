@@ -14,8 +14,7 @@ import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
-import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
-import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
+import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.vui.UiTestHelper;
 import com.copyright.rup.dist.foreign.vui.usage.impl.ScenarioParameterWidget.ParametersSaveEvent;
 
@@ -25,38 +24,44 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
-import com.vaadin.flow.data.provider.ListDataProvider;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
+import java.math.BigDecimal;
 import java.util.EventObject;
 import java.util.List;
 
 /**
- * Verifies {@link AggregateLicenseeClassMappingWindow}.
+ * Verifies {@link PublicationTypeWeightsWindow}.
  * <p>
  * Copyright (C) 2020 copyright.com
  * <p>
  * Date: 03/12/2020
  *
- * @author Ihar Suvorau
+ * @author Aliaksandr Liakh
  */
-public class AggregateLicenseeClassMappingWindowTest {
+public class PublicationTypeWeightsWindowTest {
 
-    private final List<DetailLicenseeClass> defaultParams = List.of(
-        buildDetailLicenseeClass(1, "EXGP", "Life Sciences", 51, "HGP", "Social & Behavioral Sciences"),
-        buildDetailLicenseeClass(2, "MU", "Business Management", 52, "EXU4", "Medical & Health"));
-    private final List<DetailLicenseeClass> appliedParams = List.of(
-        buildDetailLicenseeClass(1, "EXGP", "Life Sciences", 51, "HGP", "Social & Behavioral Sciences"),
-        buildDetailLicenseeClass(2, "MU", "Business Management", 53, "EXU2", "Education"));
-    private AggregateLicenseeClassMappingWindow window;
+    private static final String NAME_1 = "Book";
+    private static final String NAME_2 = "Business or Trade Journal";
+    private static final String WEIGHT_1 = "1.00";
+    private static final String WEIGHT_2 = "1.50";
+    private static final String WEIGHT_3 = "2.00";
+
+    private final List<PublicationType> defaultParams = List.of(
+        buildPublicationType("2fe9c0a0-7672-4b56-bc64-9d4125fecf6e", NAME_1, WEIGHT_1),
+        buildPublicationType("68fd94c0-a8c0-4a59-bfe3-6674c4b12199", NAME_2, WEIGHT_2));
+    private final List<PublicationType> appliedParams = List.of(
+        buildPublicationType("2fe9c0a0-7672-4b56-bc64-9d4125fecf6e", NAME_1, WEIGHT_1),
+        buildPublicationType("68fd94c0-a8c0-4a59-bfe3-6674c4b12199", NAME_2, WEIGHT_3));
+    private PublicationTypeWeightsWindow window;
 
     @Before
     public void setUp() {
-        window = new AggregateLicenseeClassMappingWindow(true);
+        window = new PublicationTypeWeightsWindow(true);
         window.setDefault(defaultParams);
     }
 
@@ -71,8 +76,8 @@ public class AggregateLicenseeClassMappingWindowTest {
     }
 
     @Test
-    public void testConstructorInReadOnlyMode() {
-        window = new AggregateLicenseeClassMappingWindow(false);
+    public void testConstructorInViewMode() {
+        window = new PublicationTypeWeightsWindow(false);
         verifyContent((VerticalLayout) getDialogContent(window));
         var buttonsLayout = getFooterLayout(window);
         verifyButton(buttonsLayout.getComponentAt(0), "Save", false, true);
@@ -83,7 +88,7 @@ public class AggregateLicenseeClassMappingWindowTest {
 
     @Test
     public void testSaveButtonClickListener() {
-        var mappingWindow = new TestAggregateLicenseeClassMappingWindow(true);
+        var mappingWindow = new TestPublicationTypeWeightsWindow(true);
         mappingWindow.setAppliedParameters(appliedParams);
         var saveButton = (Button) getFooterLayout(mappingWindow).getComponentAt(0);
         saveButton.click();
@@ -99,7 +104,12 @@ public class AggregateLicenseeClassMappingWindowTest {
     public void testDefaultButtonClickListener() {
         var defaultButton = (Button) getFooterLayout(window).getComponentAt(3);
         defaultButton.click();
-        assertGridItems(defaultParams);
+        Object[][] expectedCells = {
+            {NAME_1, WEIGHT_1, WEIGHT_1},
+            {NAME_2, WEIGHT_2, WEIGHT_2},
+        };
+        Grid grid = (Grid) ((VerticalLayout) getDialogContent(window)).getComponentAt(0);
+        verifyGridItems(grid, defaultParams, expectedCells);
     }
 
     @Test
@@ -110,70 +120,52 @@ public class AggregateLicenseeClassMappingWindowTest {
 
     @Test
     public void testSetAppliedParameters() {
-        window = new AggregateLicenseeClassMappingWindow(false);
         window.setAppliedParameters(appliedParams);
-        List<DetailLicenseeClass> currentValues = Whitebox.getInternalState(window, "currentValues");
+        List<PublicationType> currentValues = Whitebox.getInternalState(window, "currentValues");
         assertNotSame(appliedParams, currentValues);
         assertEquals(appliedParams, currentValues);
         currentValues.forEach(
             currentValue -> assertNotSame(appliedParams.get(currentValues.indexOf(currentValue)), currentValue));
         Object[][] expectedCells = {
-            {"1", "EXGP", "Life Sciences", "51", "HGP", "Social & Behavioral Sciences"},
-            {"2", "MU", "Business Management", "53", "EXU2", "Education"}
+            {NAME_1, WEIGHT_1, WEIGHT_1},
+            {NAME_2, WEIGHT_2, WEIGHT_3},
         };
         Grid grid = (Grid) ((VerticalLayout) getDialogContent(window)).getComponentAt(0);
         verifyGridItems(grid, appliedParams, expectedCells);
     }
 
+    @Test
+    public void testPublicationTypeWeightFieldValidation() {
+        //TODO {aliakh} implement when new grid editing is implemented
+    }
+
     private void verifyContent(VerticalLayout content) {
-        verifyWindow(window, "Licensee Class Mapping", "950px", "550px", Unit.PIXELS, false);
+        verifyWindow(window, "Pub Type Weights", "525px", "250px", Unit.PIXELS, false);
         assertEquals(1, content.getComponentCount());
-        verifyGrid((Grid<DetailLicenseeClass>) content.getComponentAt(0));
+        verifyGrid((Grid<PublicationType>) content.getComponentAt(0));
     }
 
     private void verifyGrid(Grid grid) {
         UiTestHelper.verifyGrid(grid, List.of(
-            Pair.of("Det LC ID", null),
-            Pair.of("Det LC Enrollment", null),
-            Pair.of("Det LC Discipline", null),
-            Pair.of("Agg LC ID", null),
-            Pair.of("Agg LC Enrollment", null),
-            Pair.of("Agg LC Discipline", null)));
+            Pair.of("Pub Type", null),
+            Pair.of("Default Weight", null),
+            Pair.of("Scenario Weight", null)));
     }
 
-    private void assertGridItems(List<DetailLicenseeClass> params) {
-        var content = (VerticalLayout) getDialogContent(window);
-        var grid = (Grid<DetailLicenseeClass>) content.getComponentAt(0);
-        assertEquals(params, ((ListDataProvider<DetailLicenseeClass>) grid.getDataProvider()).getItems());
+    private PublicationType buildPublicationType(String id, String name, String weight) {
+        var pubType = new PublicationType();
+        pubType.setId(id);
+        pubType.setName(name);
+        pubType.setWeight(new BigDecimal(weight));
+        return pubType;
     }
 
-    private DetailLicenseeClass buildDetailLicenseeClass(Integer detLicClassId, String detLicClassEnrollment,
-                                                         String detLicClassDiscipline, Integer aggLicClassId,
-                                                         String aggLicClassEnrollment, String aggLicClassDiscipline) {
-        var detLicClass = new DetailLicenseeClass();
-        detLicClass.setId(detLicClassId);
-        detLicClass.setEnrollmentProfile(detLicClassEnrollment);
-        detLicClass.setDiscipline(detLicClassDiscipline);
-        detLicClass.setAggregateLicenseeClass(
-            buildAggregateLicenseeClass(aggLicClassId, aggLicClassEnrollment, aggLicClassDiscipline));
-        return detLicClass;
-    }
-
-    private AggregateLicenseeClass buildAggregateLicenseeClass(Integer aggLicClassId, String aggLicClassEnrollment,
-                                                               String aggLicClassDiscipline) {
-        var aggLicClass = new AggregateLicenseeClass();
-        aggLicClass.setId(aggLicClassId);
-        aggLicClass.setEnrollmentProfile(aggLicClassEnrollment);
-        aggLicClass.setDiscipline(aggLicClassDiscipline);
-        return aggLicClass;
-    }
-
-    private static class TestAggregateLicenseeClassMappingWindow extends AggregateLicenseeClassMappingWindow {
+    private static class TestPublicationTypeWeightsWindow extends PublicationTypeWeightsWindow {
 
         private ComponentEvent<?> componentEvent;
         private boolean closed;
 
-        TestAggregateLicenseeClassMappingWindow(boolean isEditable) {
+        TestPublicationTypeWeightsWindow(boolean isEditable) {
             super(isEditable);
         }
 
