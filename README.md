@@ -1,3 +1,15 @@
+21.0.6
+-
+* CDP-1678 FDA: Vaadin Migration: NTS - Scenarios Tab Main View: migrate Exclude Rightsholder window
+* CDP-1684 FDA: Vaadin Migration: AACL - Audit Tab: introduce Audit tab
+* CDP-1682 FDA: Vaadin Migration: AACL - Usages Tab: migrate ClassifiedUsagesUploadWindow
+* CDP-1678 FDA: Vaadin Migration: NTS - Scenarios Tab Main View: implement action for Edit Name button
+* CDP-1678 FDA: Vaadin Migration: NTS - Scenarios Tab Main View: implement action for Delete button
+* CDP-1684 FDA: Vaadin Migration: AACL - Audit Tab: migrate filter panel
+* CDP-2233 Tech Debt: FDA: optimize queries to insert usages and shares for ACL scenario
+* CDP-1678 FDA: Vaadin Migration: NTS - Scenarios Tab Main View: implement actions for reject, approve, submit, and send to LM
+* CDP-1684 FDA: Vaadin Migration: AACL - Audit Tab: migrate audit view
+
 21.0.5
 -
 * CDP-1682 FDA: Vaadin Migration: AACL - Usages Tab: migrate AACL usages tab
