@@ -1,6 +1,9 @@
 package com.copyright.rup.dist.foreign.vui.usage.impl;
 
 import com.copyright.rup.dist.foreign.domain.UsageAge;
+import com.copyright.rup.dist.foreign.vui.common.utils.GridColumnEnum;
+import com.copyright.rup.dist.foreign.vui.common.validator.AmountRangeValidator;
+import com.copyright.rup.dist.foreign.vui.common.validator.RequiredNumberValidator;
 import com.copyright.rup.dist.foreign.vui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.vui.usage.impl.ScenarioParameterWidget.ParametersSaveEvent;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.Buttons;
@@ -8,10 +11,14 @@ import com.copyright.rup.dist.foreign.vui.vaadin.common.util.CurrencyUtils;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.util.VaadinUtils;
 
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.Grid.Column;
 import com.vaadin.flow.component.grid.Grid.SelectionMode;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.BigDecimalField;
+import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.function.ValueProvider;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -45,7 +52,7 @@ public class UsageAgeWeightWindow extends CommonScenarioParameterWindow<List<Usa
      */
     public UsageAgeWeightWindow(boolean isEditable) {
         this.isEditable = isEditable;
-        super.setWidth("525px");
+        super.setWidth("450px");
         super.setHeight("300px");
         super.setHeaderTitle(ForeignUi.getMessage("window.usage_age_weights"));
         super.add(initRootLayout());
@@ -79,19 +86,42 @@ public class UsageAgeWeightWindow extends CommonScenarioParameterWindow<List<Usa
     private Grid<UsageAge> initGrid() {
         grid = new Grid<>();
         grid.setSelectionMode(SelectionMode.NONE);
-        //TODO {aliakh} use GridColumnEnum and IGridColumnAdder
-        grid.addColumn(UsageAge::getPeriod)
-            .setHeader(ForeignUi.getMessage("label.usage_period"))
-            .setSortable(false);
-        grid.addColumn(item -> CurrencyUtils.format(periodsToDefaultWeights.get(item.getPeriod()), null))
-            .setHeader(ForeignUi.getMessage("table.column.default_weight"))
-            .setSortable(false);
-        grid.addColumn(item -> CurrencyUtils.format(item.getWeight(), null))
-            .setHeader(ForeignUi.getMessage("table.column.scenario_weight"))
-            .setSortable(false);
-        //TODO {aliakh} implement if (isEditable)
+        addColumn(UsageAge::getPeriod, GridColumnEnum.PERIOD);
+        addColumn(usageAge -> CurrencyUtils.format(periodsToDefaultWeights.get(usageAge.getPeriod()), null),
+            GridColumnEnum.DEFAULT_WEIGHT);
+        var scenarioWeightColumn = addColumn(usageAge -> CurrencyUtils.format(usageAge.getWeight(), null),
+            GridColumnEnum.SCENARIO_WEIGHT);
+        if (isEditable) {
+            var editor = grid.getEditor();
+            var binder = new Binder<>(UsageAge.class);
+            editor.setBinder(binder);
+            scenarioWeightColumn.setEditorComponent(initScenarioWeightField(binder));
+            grid.addItemClickListener(event -> {
+                editor.editItem(event.getItem());
+                ((BigDecimalField) scenarioWeightColumn.getEditorComponent()).focus();
+            });
+        }
         VaadinUtils.setGridProperties(grid, "aacl-usage-age-weight-grid");
         return grid;
+    }
+
+    private Column<UsageAge> addColumn(ValueProvider<UsageAge, ?> provider, GridColumnEnum gridColumn) {
+        return grid.addColumn(provider)
+            .setHeader(ForeignUi.getMessage(gridColumn.getCaption()))
+            .setSortable(false)
+            .setWidth(gridColumn.getWidth())
+            .setFlexGrow(0)
+            .setResizable(false);
+    }
+
+    private BigDecimalField initScenarioWeightField(Binder<UsageAge> binder) {
+        var scenarioWeightField = new BigDecimalField();
+        scenarioWeightField.setWidthFull();
+        binder.forField(scenarioWeightField)
+            .withValidator(new RequiredNumberValidator())
+            .withValidator(AmountRangeValidator.zeroAmountValidator())
+            .bind(UsageAge::getWeight, UsageAge::setWeight);
+        return scenarioWeightField;
     }
 
     private HorizontalLayout initButtonsLayout() {

@@ -138,16 +138,16 @@ public class UsageAgeWeightWindowTest {
     }
 
     private void verifyContent(VerticalLayout content) {
-        verifyWindow(window, "Usage Age Weights", "525px", "300px", Unit.PIXELS, false);
+        verifyWindow(window, "Usage Age Weights", "450px", "300px", Unit.PIXELS, false);
         assertEquals(1, content.getComponentCount());
         verifyGrid((Grid<UsageAge>) content.getComponentAt(0));
     }
 
     private void verifyGrid(Grid grid) {
         UiTestHelper.verifyGrid(grid, List.of(
-            Pair.of("Usage Period", null),
-            Pair.of("Default Weight", null),
-            Pair.of("Scenario Weight", null)));
+            Pair.of("Usage Period", "135px"),
+            Pair.of("Default Weight", "150px"),
+            Pair.of("Scenario Weight", "160px")));
     }
 
     private UsageAge buildUsageAge(Integer period, BigDecimal weight) {
