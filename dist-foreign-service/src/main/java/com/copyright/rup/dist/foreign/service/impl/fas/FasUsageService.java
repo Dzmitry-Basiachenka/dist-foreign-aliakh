@@ -61,6 +61,7 @@ import io.micrometer.core.annotation.Timed;
 @Service
 public class FasUsageService implements IFasUsageService {
 
+    private static final long serialVersionUID = -2583206925460378237L;
     private static final String CALCULATION_FINISHED_LOG_MESSAGE = "Calculated usages gross amount. " +
         "UsageBatchName={}, FundPoolAmount={}, TotalAmount={}, ConversionRate={}";
     private static final Logger LOGGER = RupLogUtils.getLogger();

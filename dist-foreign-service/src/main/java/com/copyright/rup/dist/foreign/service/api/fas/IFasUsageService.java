@@ -9,6 +9,7 @@ import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -22,7 +23,7 @@ import java.util.Set;
  *
  * @author Ihar Suvorau
  */
-public interface IFasUsageService {
+public interface IFasUsageService extends Serializable {
 
     /**
      * Inserts usages.

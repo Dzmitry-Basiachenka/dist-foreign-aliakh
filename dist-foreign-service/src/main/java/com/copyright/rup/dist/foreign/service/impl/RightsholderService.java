@@ -40,6 +40,7 @@ import javax.annotation.PreDestroy;
 @Service
 public class RightsholderService extends CommonRightsholderService implements IRightsholderService {
 
+    private static final long serialVersionUID = -2032644424224289510L;
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
     private final IRightsholderRepository rightsholderRepository;

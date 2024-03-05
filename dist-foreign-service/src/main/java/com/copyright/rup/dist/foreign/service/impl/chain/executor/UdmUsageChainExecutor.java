@@ -23,6 +23,8 @@ import java.util.function.Function;
 @Component("udmUsageChainExecutor")
 public class UdmUsageChainExecutor extends AbstractUsageChainExecutor<UdmUsage> {
 
+    private static final long serialVersionUID = -6720563067798738252L;
+
     @Autowired
     @Qualifier("df.service.udmMatchingProcessor")
     private IChainProcessor<UdmUsage> udmProcessor;

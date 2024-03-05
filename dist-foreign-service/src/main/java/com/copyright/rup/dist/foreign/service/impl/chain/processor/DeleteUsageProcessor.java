@@ -26,6 +26,7 @@ import java.util.List;
  */
 public class DeleteUsageProcessor extends AbstractChainProcessor<Usage> {
 
+    private static final long serialVersionUID = -6938549513867493129L;
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
     @Autowired

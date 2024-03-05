@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.service.api.executor;
 import com.copyright.rup.dist.common.domain.job.JobInfo;
 import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -15,7 +16,7 @@ import java.util.List;
  * @param <T> type of items to process
  * @author Uladzislau Shalamitski
  */
-public interface IChainExecutor<T> {
+public interface IChainExecutor<T> extends Serializable {
 
     /**
      * Executes all chains of processors starting with {@link ChainProcessorTypeEnum}.

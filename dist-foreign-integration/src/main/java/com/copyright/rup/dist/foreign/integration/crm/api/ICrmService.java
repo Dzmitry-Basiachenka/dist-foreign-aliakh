@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.integration.crm.api;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -11,7 +12,7 @@ import java.util.List;
  *
  * @author Darya Baraukova
  */
-public interface ICrmService {
+public interface ICrmService extends Serializable {
 
     /**
      * Sends list of {@link CrmRightsDistributionRequest} to the CRM system.

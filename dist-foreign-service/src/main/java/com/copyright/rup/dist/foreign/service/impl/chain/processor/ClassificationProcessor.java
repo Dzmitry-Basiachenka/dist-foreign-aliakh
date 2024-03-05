@@ -26,6 +26,7 @@ import java.util.Objects;
  */
 public class ClassificationProcessor extends AbstractChainProcessor<Usage> {
 
+    private static final long serialVersionUID = -8993029961787864458L;
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
     @Autowired

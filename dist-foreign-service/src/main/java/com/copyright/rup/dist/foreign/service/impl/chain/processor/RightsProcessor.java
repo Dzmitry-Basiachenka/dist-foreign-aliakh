@@ -25,6 +25,7 @@ import java.util.List;
  */
 public class RightsProcessor extends AbstractUsageJobProcessor {
 
+    private static final long serialVersionUID = -7035398660255484744L;
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
     @Autowired

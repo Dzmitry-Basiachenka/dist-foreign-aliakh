@@ -25,6 +25,7 @@ import io.micrometer.core.annotation.Timed;
 @Timed(percentiles = {0, 0.25, 0.5, 0.75, 0.95, 0.99})
 public class CrmIntegrationService implements ICrmIntegrationService {
 
+    private static final long serialVersionUID = -4563378742368912213L;
     @Autowired
     private ICrmService crmService;
 

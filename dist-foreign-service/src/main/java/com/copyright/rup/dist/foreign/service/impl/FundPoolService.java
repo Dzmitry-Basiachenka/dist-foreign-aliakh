@@ -41,6 +41,7 @@ import io.micrometer.core.annotation.Timed;
 @Service
 public class FundPoolService implements IFundPoolService {
 
+    private static final long serialVersionUID = 1689912491056132780L;
     private static final int DEFAULT_SCALE = 2;
     private static final int SCALE_10 = 10;
     private static final BigDecimal ZERO = FdaConstants.DEFAULT_AMOUNT_SCALE_2;

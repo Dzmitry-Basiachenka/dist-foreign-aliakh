@@ -26,6 +26,7 @@ import java.util.List;
  */
 public class NonBelletristicProcessor extends AbstractChainProcessor<Usage> {
 
+    private static final long serialVersionUID = 856315188860617033L;
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
     @Autowired

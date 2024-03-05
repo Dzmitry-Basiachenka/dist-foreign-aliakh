@@ -25,6 +25,7 @@ import java.util.List;
  */
 public class RhEligibilityProcessorUsage extends AbstractUsageJobProcessor {
 
+    private static final long serialVersionUID = 4385172495442463287L;
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
     @Autowired

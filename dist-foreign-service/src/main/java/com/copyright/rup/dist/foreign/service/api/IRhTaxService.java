@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.service.api;
 import com.copyright.rup.dist.foreign.domain.RhTaxInformation;
 import com.copyright.rup.dist.foreign.domain.Usage;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
@@ -15,7 +16,7 @@ import java.util.Set;
  *
  * @author Uladzislau Shalamitski
  */
-public interface IRhTaxService {
+public interface IRhTaxService extends Serializable {
 
     /**
      * Verifies whether RH tax country for NTS {@link Usage}s is US or not. For US usages updates status of to

@@ -24,6 +24,7 @@ import java.util.List;
  */
 public class UdmMatchingProcessor extends AbstractUdmJobProcessor {
 
+    private static final long serialVersionUID = 8362721368409962845L;
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
     @Autowired

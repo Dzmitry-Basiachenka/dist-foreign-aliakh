@@ -22,6 +22,8 @@ import java.util.List;
 @Service
 public class LicenseeClassService implements ILicenseeClassService {
 
+    private static final long serialVersionUID = -1237246981576711015L;
+
     @Autowired
     private ILicenseeClassRepository licenseeClassRepository;
 

@@ -6,6 +6,7 @@ import com.copyright.rup.dist.foreign.domain.AclIneligibleRightsholder;
 
 import com.google.common.collect.Table;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -21,7 +22,7 @@ import java.util.Set;
  *
  * @author Mikalai Bezmen
  */
-public interface IPrmIntegrationService {
+public interface IPrmIntegrationService extends Serializable {
 
     /**
      * Retrieves list of {@link Rightsholder} by specified set of account numbers from PRM.

@@ -8,6 +8,7 @@ import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
 import com.copyright.rup.dist.foreign.domain.RightsholderTypeOfUsePair;
 import com.copyright.rup.dist.foreign.domain.Usage;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -21,7 +22,7 @@ import java.util.Set;
  *
  * @author Mikita Hladkikh
  */
-public interface IRightsholderService extends ICommonRightsholderService {
+public interface IRightsholderService extends ICommonRightsholderService, Serializable {
 
     /**
      * Gets list of RROs presented in DB associated with specified Product Family.

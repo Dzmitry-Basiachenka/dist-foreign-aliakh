@@ -30,6 +30,7 @@ import java.util.stream.Collectors;
  */
 public class EligibilityProcessor extends AbstractChainProcessor<Usage> {
 
+    private static final long serialVersionUID = 4141527778443320443L;
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
     @Autowired
