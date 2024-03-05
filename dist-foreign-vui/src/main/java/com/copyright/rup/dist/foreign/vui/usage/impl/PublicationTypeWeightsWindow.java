@@ -46,7 +46,7 @@ public class PublicationTypeWeightsWindow extends CommonScenarioParameterWindow<
     public PublicationTypeWeightsWindow(boolean isEditable) {
         this.isEditable = isEditable;
         super.setWidth("525px");
-        super.setHeight("250px");
+        super.setHeight("300px");
         super.setHeaderTitle(ForeignUi.getMessage("window.publication_type_weights"));
         super.add(initRootLayout());
         super.getFooter().add(initButtonsLayout());

@@ -140,7 +140,7 @@ public class PublicationTypeWeightsWindowTest {
     }
 
     private void verifyContent(VerticalLayout content) {
-        verifyWindow(window, "Pub Type Weights", "525px", "250px", Unit.PIXELS, false);
+        verifyWindow(window, "Pub Type Weights", "525px", "300px", Unit.PIXELS, false);
         assertEquals(1, content.getComponentCount());
         verifyGrid((Grid<PublicationType>) content.getComponentAt(0));
     }

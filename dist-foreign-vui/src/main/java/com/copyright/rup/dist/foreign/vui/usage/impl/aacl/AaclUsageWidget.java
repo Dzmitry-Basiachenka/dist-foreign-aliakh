@@ -42,9 +42,7 @@ public class AaclUsageWidget extends CommonUsageWidget implements IAaclUsageWidg
     private static final String CLASS_BUTTON_MENUBAR = "button-menubar";
 
     private final IAaclUsageController controller;
-    private MenuBar usageBatchMenuBar;
     private MenuItem loadUsageBatchMenuItem;
-    private MenuBar fundPoolMenuBar;
     private MenuItem loadFundPoolMenuItem;
     private Button sendForClassificationButton;
     private OnDemandFileDownloader sendForClassificationDownloader;
@@ -103,12 +101,8 @@ public class AaclUsageWidget extends CommonUsageWidget implements IAaclUsageWidg
 
     @Override
     protected HorizontalLayout initButtonsLayout() {
-        //TODO {aliakh} inline initialization
-        initUsageBatchMenuBar();
-        initFundPoolMenuBar();
-        initAddToScenarioButton();
-        var buttonsLayout = new HorizontalLayout(usageBatchMenuBar, fundPoolMenuBar,
-            initSendForClassificationDownloade(), initLoadClassifiedUsagesButton(), addToScenarioButton,
+        var buttonsLayout = new HorizontalLayout(initUsageBatchMenuBar(), initFundPoolMenuBar(),
+            initSendForClassificationDownloader(), initLoadClassifiedUsagesButton(), initAddToScenarioButton(),
             initExportDownloader());
         var toolbarLayout = new HorizontalLayout(buttonsLayout, getHideGridColumnsProvider().getMenuButton());
         toolbarLayout.setJustifyContentMode(JustifyContentMode.BETWEEN);
@@ -147,8 +141,8 @@ public class AaclUsageWidget extends CommonUsageWidget implements IAaclUsageWidg
         return message;
     }
 
-    private void initUsageBatchMenuBar() {
-        usageBatchMenuBar = new MenuBar();
+    private MenuBar initUsageBatchMenuBar() {
+        var usageBatchMenuBar = new MenuBar();
         var menuItem =
             usageBatchMenuBar.addItem(ForeignUi.getMessage("menu.caption.usage_batch"), null, null);
         loadUsageBatchMenuItem = menuItem.getSubMenu().addItem(ForeignUi.getMessage("menu.item.load"),
@@ -158,10 +152,11 @@ public class AaclUsageWidget extends CommonUsageWidget implements IAaclUsageWidg
         VaadinUtils.addComponentStyle(menuItem, CLASS_BUTTON_MENUBAR);
         VaadinUtils.addComponentStyle(usageBatchMenuBar, "usage-batch-menu-bar");
         VaadinUtils.addComponentStyle(usageBatchMenuBar, CLASS_BUTTON_MENUBAR);
+        return usageBatchMenuBar;
     }
 
-    private void initFundPoolMenuBar() {
-        fundPoolMenuBar = new MenuBar();
+    private MenuBar initFundPoolMenuBar() {
+        var fundPoolMenuBar = new MenuBar();
         var menuItem =
             fundPoolMenuBar.addItem(ForeignUi.getMessage("menu.caption.fund_pool"), null, null);
         loadFundPoolMenuItem = menuItem.getSubMenu().addItem(ForeignUi.getMessage("menu.item.load"),
@@ -171,9 +166,10 @@ public class AaclUsageWidget extends CommonUsageWidget implements IAaclUsageWidg
         VaadinUtils.addComponentStyle(menuItem, CLASS_BUTTON_MENUBAR);
         VaadinUtils.addComponentStyle(fundPoolMenuBar, "fund-pool-menu-bar");
         VaadinUtils.addComponentStyle(fundPoolMenuBar, CLASS_BUTTON_MENUBAR);
+        return fundPoolMenuBar;
     }
 
-    private OnDemandFileDownloader initSendForClassificationDownloade() {
+    private OnDemandFileDownloader initSendForClassificationDownloader() {
         sendForClassificationButton = Buttons.createButton(ForeignUi.getMessage("button.send_for_classification"));
         sendForClassificationDownloader =
             new OnDemandFileDownloader(controller.getSendForClassificationUsagesStreamSource().getSource());
@@ -211,9 +207,10 @@ public class AaclUsageWidget extends CommonUsageWidget implements IAaclUsageWidg
         return loadClassifiedUsagesButton;
     }
 
-    private void initAddToScenarioButton() {
+    private Button initAddToScenarioButton() {
         addToScenarioButton = Buttons.createButton(ForeignUi.getMessage("button.add_to_scenario"));
-        //TODO {aliakh} addToScenarioButton.addClickListener(new CreateAaclScenarioWindow(controller));
+        addToScenarioButton.addClickListener(event -> onAddToScenarioClicked(new CreateAaclScenarioWindow(controller)));
+        return addToScenarioButton;
     }
 
     private OnDemandFileDownloader initExportDownloader() {
