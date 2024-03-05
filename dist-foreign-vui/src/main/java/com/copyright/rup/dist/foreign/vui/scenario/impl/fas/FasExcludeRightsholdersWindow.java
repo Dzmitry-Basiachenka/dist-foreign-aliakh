@@ -56,9 +56,9 @@ public class FasExcludeRightsholdersWindow extends CommonDialog implements ISear
     FasExcludeRightsholdersWindow(Long rroAccountNumber, IFasScenarioController scenarioController) {
         this.accountNumber = rroAccountNumber;
         this.scenarioController = scenarioController;
-        super.setHeaderTitle(ForeignUi.getMessage("window.exclude.rh", rroAccountNumber));
         super.setWidth("830px");
         super.setHeight("500px");
+        super.setHeaderTitle(ForeignUi.getMessage("window.exclude.rh", rroAccountNumber));
         super.add(initContent());
         super.getFooter().add(createButtonsLayout());
         super.setModalWindowProperties("exclude-rightsholders-window", true);

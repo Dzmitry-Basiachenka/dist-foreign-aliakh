@@ -19,7 +19,6 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
-import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
@@ -236,7 +235,7 @@ public class NtsScenarioWidgetTest {
 
     private void buildScenario() {
         scenario = new Scenario();
-        scenario.setId(RupPersistUtils.generateUuid());
+        scenario.setId("a4032a77-0713-45bc-94a6-8b2e31f30fc2");
         scenario.setName("Scenario name");
         scenario.setGrossTotal(new BigDecimal("20000.00"));
         scenario.setServiceFeeTotal(new BigDecimal("6400.00"));
