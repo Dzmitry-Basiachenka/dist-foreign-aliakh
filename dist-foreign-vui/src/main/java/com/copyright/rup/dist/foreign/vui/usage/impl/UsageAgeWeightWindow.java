@@ -116,6 +116,7 @@ public class UsageAgeWeightWindow extends CommonScenarioParameterWindow<List<Usa
 
     private BigDecimalField initScenarioWeightField(Binder<UsageAge> binder) {
         var scenarioWeightField = new BigDecimalField();
+        scenarioWeightField.addBlurListener(event -> grid.getDataProvider().refreshAll());
         scenarioWeightField.setWidthFull();
         binder.forField(scenarioWeightField)
             .withValidator(new RequiredNumberValidator())
