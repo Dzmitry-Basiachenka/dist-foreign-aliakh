@@ -2,6 +2,8 @@ package com.copyright.rup.dist.foreign.vui.usage.impl;
 
 import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
+import com.copyright.rup.dist.foreign.vui.common.IGridColumnAdder;
+import com.copyright.rup.dist.foreign.vui.common.utils.GridColumnEnum;
 import com.copyright.rup.dist.foreign.vui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.vui.usage.impl.ScenarioParameterWidget.ParametersSaveEvent;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.Buttons;
@@ -28,7 +30,8 @@ import java.util.stream.Collectors;
  *
  * @author Ihar Suvorau
  */
-public class AggregateLicenseeClassMappingWindow extends CommonScenarioParameterWindow<List<DetailLicenseeClass>> {
+public class AggregateLicenseeClassMappingWindow extends CommonScenarioParameterWindow<List<DetailLicenseeClass>>
+    implements IGridColumnAdder<DetailLicenseeClass> {
 
     private static final long serialVersionUID = -5516628610762919061L;
 
@@ -96,32 +99,30 @@ public class AggregateLicenseeClassMappingWindow extends CommonScenarioParameter
     }
 
     private void addGridColumns() {
-        //TODO {aliakh} use GridColumnEnum and IGridColumnAdder
-        grid.addColumn(DetailLicenseeClass::getId)
-            .setHeader(ForeignUi.getMessage("table.column.det_lc_id"));
-        grid.addColumn(DetailLicenseeClass::getEnrollmentProfile)
-            .setHeader(ForeignUi.getMessage("table.column.det_lc_enrollment"));
-        grid.addColumn(DetailLicenseeClass::getDiscipline)
-            .setHeader(ForeignUi.getMessage("table.column.det_lc_discipline"));
+        addColumn(grid, DetailLicenseeClass::getId, GridColumnEnum.DET_LC_ID);
+        addColumn(grid, DetailLicenseeClass::getEnrollmentProfile, GridColumnEnum.DET_LC_ENROLLMENT);
+        addColumn(grid, DetailLicenseeClass::getDiscipline, GridColumnEnum.DET_LC_DISCIPLINE);
         addAggregateLicenseeClassIdColumn();
-        grid.addColumn(licenseeClass -> licenseeClass.getAggregateLicenseeClass().getEnrollmentProfile())
-            .setHeader(ForeignUi.getMessage("table.column.aggregate_lc_enrollment"));
-        grid.addColumn(licenseeClass -> licenseeClass.getAggregateLicenseeClass().getDiscipline())
-            .setHeader(ForeignUi.getMessage("table.column.aggregate_lc_discipline"));
-        grid.getColumns().forEach(column -> column.setSortable(true));
+        addColumn(grid, licenseeClass -> licenseeClass.getAggregateLicenseeClass().getEnrollmentProfile(),
+            GridColumnEnum.AGGREGATE_LC_ENROLLMENT);
+        addColumn(grid, licenseeClass -> licenseeClass.getAggregateLicenseeClass().getDiscipline(),
+            GridColumnEnum.AGGREGATE_LC_DISCIPLINE);
         VaadinUtils.setGridProperties(grid, "aggregate-licensee-class-mapping-grid");
     }
 
     private void addAggregateLicenseeClassIdColumn() {
         if (isEditable) {
             grid.addComponentColumn(this::buildComboBox)
-                .setHeader(ForeignUi.getMessage("table.column.aggregate_licensee_class_id"))
-                .setClassNameGenerator(item -> "combobox-column")
+                .setHeader(ForeignUi.getMessage(GridColumnEnum.AGGREGATE_LICENSEE_CLASS_ID.getCaption()))
+                .setFlexGrow(0)
+                .setWidth(GridColumnEnum.AGGREGATE_LICENSEE_CLASS_ID.getWidth())
+                .setSortable(true)
+                .setResizable(true)
                 .setComparator((SerializableComparator<DetailLicenseeClass>) (detail1, detail2) ->
                     detail1.getAggregateLicenseeClass().getId().compareTo(detail2.getAggregateLicenseeClass().getId()));
         } else {
-            grid.addColumn(licenseeClass -> licenseeClass.getAggregateLicenseeClass().getId())
-                .setHeader(ForeignUi.getMessage("table.column.aggregate_licensee_class_id"));
+            addColumn(grid, licenseeClass -> licenseeClass.getAggregateLicenseeClass().getId(),
+                GridColumnEnum.AGGREGATE_LICENSEE_CLASS_ID);
         }
     }
 

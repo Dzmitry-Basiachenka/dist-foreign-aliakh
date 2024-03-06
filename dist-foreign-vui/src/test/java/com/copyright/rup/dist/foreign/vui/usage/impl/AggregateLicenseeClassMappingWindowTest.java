@@ -133,12 +133,12 @@ public class AggregateLicenseeClassMappingWindowTest {
 
     private void verifyGrid(Grid grid) {
         UiTestHelper.verifyGrid(grid, List.of(
-            Pair.of("Det LC ID", null),
-            Pair.of("Det LC Enrollment", null),
-            Pair.of("Det LC Discipline", null),
-            Pair.of("Agg LC ID", null),
-            Pair.of("Agg LC Enrollment", null),
-            Pair.of("Agg LC Discipline", null)));
+            Pair.of("Det LC ID", "105px"),
+            Pair.of("Det LC Enrollment", "180px"),
+            Pair.of("Det LC Discipline", "155px"),
+            Pair.of("Agg LC ID", "110px"),
+            Pair.of("Agg LC Enrollment", "190px"),
+            Pair.of("Agg LC Discipline", "230px")));
     }
 
     private void assertGridItems(List<DetailLicenseeClass> params) {
