@@ -22,6 +22,7 @@ import com.vaadin.flow.function.ValueProvider;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -96,8 +97,11 @@ public class UsageAgeWeightWindow extends CommonScenarioParameterWindow<List<Usa
             editor.setBinder(binder);
             scenarioWeightColumn.setEditorComponent(initScenarioWeightField(binder));
             grid.addItemClickListener(event -> {
-                editor.editItem(event.getItem());
-                ((BigDecimalField) scenarioWeightColumn.getEditorComponent()).focus();
+                var usageAge = event.getItem();
+                if (Objects.nonNull(usageAge)) {
+                    editor.editItem(usageAge);
+                    ((BigDecimalField) scenarioWeightColumn.getEditorComponent()).focus();
+                }
             });
         }
         VaadinUtils.setGridProperties(grid, "aacl-usage-age-weight-grid");
