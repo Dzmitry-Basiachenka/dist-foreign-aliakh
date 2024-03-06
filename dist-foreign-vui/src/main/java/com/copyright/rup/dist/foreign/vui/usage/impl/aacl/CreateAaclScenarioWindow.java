@@ -78,7 +78,7 @@ class CreateAaclScenarioWindow extends CommonDialog {
     }
 
     private VerticalLayout initRootLayout() {
-        var rootLayout = new VerticalLayout(initScenarioNameField(), initFundPoolComboBox(),
+        var rootLayout = VaadinUtils.initCommonVerticalLayout(initScenarioNameField(), initFundPoolComboBox(),
             initUsageAgeWeightsWidget(), initPubTypeWeightsWidget(), initLicenseeClassesMappingWidget(),
             initDescriptionArea());
         VaadinUtils.setPadding(rootLayout, 10, 10, 10, 10);
