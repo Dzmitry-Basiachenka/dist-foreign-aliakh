@@ -1,5 +1,7 @@
 dependencies {
     compile("com.copyright.rup.dist.common:dist-common-domain:${distCommonVersion}")
+    //dependency to avoid vulnerability CVE-2023-6378 associated with 'ch.qos.logback:logback-classic:1.2.11'
+    compile("ch.qos.logback:logback-classic:${rupJava.standardDependencies.logback.version}")
 
     testCompile("com.copyright.rup.dist.common:dist-common-test:${distCommonVersion}")
 }
