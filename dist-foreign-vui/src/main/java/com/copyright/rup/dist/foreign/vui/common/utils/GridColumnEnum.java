@@ -156,6 +156,10 @@ public enum GridColumnEnum {
      */
     BATCH_PERIOD_END_DATE("table.column.period_end_date", "periodEndDate", "155px"),
     /**
+     * Default weight column.
+     */
+    DEFAULT_WEIGHT("table.column.default_weight", "defaultWeight", WidthConstants.WIDTH_150),
+    /**
      * Detail licensee class discipline column.
      */
     DET_LC_DISCIPLINE("table.column.det_lc_discipline", "detailLicenseeDiscipline", "155px"),
@@ -196,6 +200,10 @@ public enum GridColumnEnum {
      * Rights limitation column.
      */
     RIGHT_LIMITATION("table.column.right_limitation", "rightLimitation", WidthConstants.WIDTH_160),
+    /**
+     * Scenario weight column.
+     */
+    SCENARIO_WEIGHT("table.column.scenario_weight", "scenarioWeight", WidthConstants.WIDTH_160),
     /**
      * Usage source column.
      */
