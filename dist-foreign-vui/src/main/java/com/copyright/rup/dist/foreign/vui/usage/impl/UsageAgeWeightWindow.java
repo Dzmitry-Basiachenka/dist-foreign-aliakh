@@ -1,7 +1,6 @@
 package com.copyright.rup.dist.foreign.vui.usage.impl;
 
 import com.copyright.rup.dist.foreign.domain.UsageAge;
-import com.copyright.rup.dist.foreign.vui.common.utils.GridColumnEnum;
 import com.copyright.rup.dist.foreign.vui.common.validator.AmountRangeValidator;
 import com.copyright.rup.dist.foreign.vui.common.validator.RequiredNumberValidator;
 import com.copyright.rup.dist.foreign.vui.main.ForeignUi;
@@ -52,7 +51,7 @@ public class UsageAgeWeightWindow extends CommonScenarioParameterWindow<List<Usa
      */
     public UsageAgeWeightWindow(boolean isEditable) {
         this.isEditable = isEditable;
-        super.setWidth("450px");
+        super.setWidth("500px");
         super.setHeight("300px");
         super.setHeaderTitle(ForeignUi.getMessage("window.usage_age_weights"));
         super.add(initRootLayout());
@@ -86,11 +85,11 @@ public class UsageAgeWeightWindow extends CommonScenarioParameterWindow<List<Usa
     private Grid<UsageAge> initGrid() {
         grid = new Grid<>();
         grid.setSelectionMode(SelectionMode.NONE);
-        addColumn(UsageAge::getPeriod, GridColumnEnum.PERIOD);
+        addColumn(UsageAge::getPeriod, "table.column.usage_period", "188px");
         addColumn(usageAge -> CurrencyUtils.format(periodsToDefaultWeights.get(usageAge.getPeriod()), null),
-            GridColumnEnum.DEFAULT_WEIGHT);
+            "table.column.default_weight", "150px");
         var scenarioWeightColumn = addColumn(usageAge -> CurrencyUtils.format(usageAge.getWeight(), null),
-            GridColumnEnum.SCENARIO_WEIGHT);
+            "table.column.scenario_weight", "160px");
         if (isEditable) {
             var editor = grid.getEditor();
             var binder = new Binder<>(UsageAge.class);
@@ -105,11 +104,12 @@ public class UsageAgeWeightWindow extends CommonScenarioParameterWindow<List<Usa
         return grid;
     }
 
-    private Column<UsageAge> addColumn(ValueProvider<UsageAge, ?> provider, GridColumnEnum gridColumn) {
+    private Column<UsageAge> addColumn(ValueProvider<UsageAge, ?> provider, String captionProperty,
+                                       String width) {
         return grid.addColumn(provider)
-            .setHeader(ForeignUi.getMessage(gridColumn.getCaption()))
+            .setHeader(ForeignUi.getMessage(captionProperty))
             .setSortable(false)
-            .setWidth(gridColumn.getWidth())
+            .setWidth(width)
             .setFlexGrow(0)
             .setResizable(false);
     }

@@ -1,6 +1,8 @@
 package com.copyright.rup.dist.foreign.vui.usage.impl;
 
 import com.copyright.rup.dist.foreign.domain.PublicationType;
+import com.copyright.rup.dist.foreign.vui.common.validator.AmountRangeValidator;
+import com.copyright.rup.dist.foreign.vui.common.validator.RequiredNumberValidator;
 import com.copyright.rup.dist.foreign.vui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.vui.usage.impl.ScenarioParameterWidget.ParametersSaveEvent;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.Buttons;
@@ -8,10 +10,14 @@ import com.copyright.rup.dist.foreign.vui.vaadin.common.util.CurrencyUtils;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.util.VaadinUtils;
 
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.Grid.Column;
 import com.vaadin.flow.component.grid.Grid.SelectionMode;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.BigDecimalField;
+import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.function.ValueProvider;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -45,7 +51,7 @@ public class PublicationTypeWeightsWindow extends CommonScenarioParameterWindow<
      */
     public PublicationTypeWeightsWindow(boolean isEditable) {
         this.isEditable = isEditable;
-        super.setWidth("525px");
+        super.setWidth("500px");
         super.setHeight("300px");
         super.setHeaderTitle(ForeignUi.getMessage("window.publication_type_weights"));
         super.add(initRootLayout());
@@ -79,19 +85,43 @@ public class PublicationTypeWeightsWindow extends CommonScenarioParameterWindow<
     private Grid<PublicationType> initGrid() {
         grid = new Grid<>();
         grid.setSelectionMode(SelectionMode.NONE);
-        //TODO {aliakh} use GridColumnEnum and IGridColumnAdder
-        grid.addColumn(PublicationType::getName)
-            .setHeader(ForeignUi.getMessage("table.column.publication_type"))
-            .setSortable(false);
-        grid.addColumn(item -> CurrencyUtils.format(idsToDefaultWeights.get(item.getId()), null))
-            .setHeader(ForeignUi.getMessage("table.column.default_weight"))
-            .setSortable(false);
-            grid.addColumn(item -> CurrencyUtils.format(item.getWeight(), null))
-                .setHeader(ForeignUi.getMessage("table.column.scenario_weight"))
-                .setSortable(false);
-        //TODO {aliakh} implement if (isEditable)
+        addColumn(PublicationType::getName, "table.column.publication_type", "188px");
+        addColumn(pubType -> CurrencyUtils.format(idsToDefaultWeights.get(pubType.getId()), null),
+            "table.column.default_weight", "150px");
+        var scenarioWeightColumn = addColumn(pubType -> CurrencyUtils.format(pubType.getWeight(), null),
+            "table.column.scenario_weight", "160px");
+        if (isEditable) {
+            var editor = grid.getEditor();
+            var binder = new Binder<>(PublicationType.class);
+            editor.setBinder(binder);
+            scenarioWeightColumn.setEditorComponent(initScenarioWeightField(binder));
+            grid.addItemClickListener(event -> {
+                editor.editItem(event.getItem());
+                ((BigDecimalField) scenarioWeightColumn.getEditorComponent()).focus();
+            });
+        }
         VaadinUtils.setGridProperties(grid, "aacl-publication-type-weight-grid");
         return grid;
+    }
+
+    private Column<PublicationType> addColumn(ValueProvider<PublicationType, ?> provider, String captionProperty,
+                                              String width) {
+        return grid.addColumn(provider)
+            .setHeader(ForeignUi.getMessage(captionProperty))
+            .setSortable(false)
+            .setWidth(width)
+            .setFlexGrow(0)
+            .setResizable(false);
+    }
+
+    private BigDecimalField initScenarioWeightField(Binder<PublicationType> binder) {
+        var scenarioWeightField = new BigDecimalField();
+        scenarioWeightField.setWidthFull();
+        binder.forField(scenarioWeightField)
+            .withValidator(new RequiredNumberValidator())
+            .withValidator(AmountRangeValidator.zeroAmountValidator())
+            .bind(PublicationType::getWeight, PublicationType::setWeight);
+        return scenarioWeightField;
     }
 
     private HorizontalLayout initButtonsLayout() {

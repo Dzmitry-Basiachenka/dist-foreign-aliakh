@@ -140,16 +140,16 @@ public class PublicationTypeWeightsWindowTest {
     }
 
     private void verifyContent(VerticalLayout content) {
-        verifyWindow(window, "Pub Type Weights", "525px", "300px", Unit.PIXELS, false);
+        verifyWindow(window, "Pub Type Weights", "500px", "300px", Unit.PIXELS, false);
         assertEquals(1, content.getComponentCount());
         verifyGrid((Grid<PublicationType>) content.getComponentAt(0));
     }
 
     private void verifyGrid(Grid grid) {
         UiTestHelper.verifyGrid(grid, List.of(
-            Pair.of("Pub Type", null),
-            Pair.of("Default Weight", null),
-            Pair.of("Scenario Weight", null)));
+            Pair.of("Pub Type", "188px"),
+            Pair.of("Default Weight", "150px"),
+            Pair.of("Scenario Weight", "160px")));
     }
 
     private PublicationType buildPublicationType(String id, String name, String weight) {
