@@ -22,6 +22,11 @@ apply plugin: 'org.sonarqube'
 
 allprojects {
     group = 'com.copyright.rup.dist.foreign'
+
+    //exclude to avoid vulnerability CVE-2024-21634 associated with 'software.amazon.ion:ion-java:1.0.2'
+    configurations.all {
+        exclude group: 'software.amazon.ion', module: 'ion-java'
+    }
 }
 
 subprojects {
