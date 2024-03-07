@@ -96,10 +96,11 @@ public class PublicationTypeWeightsWindow extends CommonScenarioParameterWindow<
             var editor = grid.getEditor();
             var binder = new Binder<>(PublicationType.class);
             editor.setBinder(binder);
+            editor.addCloseListener(event -> grid.setItems(currentValues));
             scenarioWeightColumn.setEditorComponent(initScenarioWeightField(binder));
             grid.addItemClickListener(event -> {
                 var publicationType = event.getItem();
-                if (Objects.nonNull(publicationType)) {
+                if (!Objects.equals(publicationType, editor.getItem())) {
                     editor.editItem(publicationType);
                     ((BigDecimalField) scenarioWeightColumn.getEditorComponent()).focus();
                 }
@@ -121,7 +122,6 @@ public class PublicationTypeWeightsWindow extends CommonScenarioParameterWindow<
 
     private BigDecimalField initScenarioWeightField(Binder<PublicationType> binder) {
         var scenarioWeightField = new BigDecimalField();
-        scenarioWeightField.addBlurListener(event -> grid.getDataProvider().refreshAll());
         scenarioWeightField.setWidthFull();
         binder.forField(scenarioWeightField)
             .withValidator(new RequiredNumberValidator())
