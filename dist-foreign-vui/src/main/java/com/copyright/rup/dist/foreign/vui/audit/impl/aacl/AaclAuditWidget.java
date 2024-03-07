@@ -10,10 +10,6 @@ import com.copyright.rup.dist.foreign.vui.common.utils.GridColumnEnum;
 import com.copyright.rup.dist.foreign.vui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.vui.vaadin.common.ui.Buttons;
 
-import org.apache.commons.lang3.StringUtils;
-
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.Objects;
 
 /**
@@ -74,12 +70,7 @@ public class AaclAuditWidget extends CommonAuditWidget implements IAaclAuditWidg
         addColumn(UsageDto::getStandardNumber, GridColumnEnum.STANDARD_NUMBER);
         addColumn(UsageDto::getStandardNumberType, GridColumnEnum.STANDARD_NUMBER_TYPE);
         addAmountColumn(UsageDto::getGrossAmount, GridColumnEnum.GROSS_AMOUNT_IN_USD);
-        addColumn(usage -> {
-            var value = usage.getServiceFee();
-            return Objects.nonNull(value)
-                ? Objects.toString(value.multiply(new BigDecimal("100")).setScale(1, RoundingMode.HALF_UP))
-                : StringUtils.EMPTY;
-        }, GridColumnEnum.SERVICE_FEE);
+        addServiceFeeColumn();
         addAmountColumn(UsageDto::getNetAmount, GridColumnEnum.NET_AMOUNT);
         addColumn(UsageDto::getScenarioName, GridColumnEnum.SCENARIO_NAME);
         addColumn(UsageDto::getCheckNumber, GridColumnEnum.CHECK_NUMBER);
