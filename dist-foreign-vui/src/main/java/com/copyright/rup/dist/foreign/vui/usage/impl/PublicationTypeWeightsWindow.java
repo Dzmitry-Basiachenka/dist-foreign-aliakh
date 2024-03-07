@@ -20,6 +20,7 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.function.ValueProvider;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -125,7 +126,8 @@ public class PublicationTypeWeightsWindow extends CommonScenarioParameterWindow<
         binder.forField(scenarioWeightField)
             .withValidator(new RequiredNumberValidator())
             .withValidator(AmountRangeValidator.zeroAmountValidator())
-            .bind(PublicationType::getWeight, PublicationType::setWeight);
+            .bind(PublicationType::getWeight,
+                (pubType, weight) -> pubType.setWeight(weight.setScale(2, RoundingMode.HALF_UP)));
         return scenarioWeightField;
     }
 

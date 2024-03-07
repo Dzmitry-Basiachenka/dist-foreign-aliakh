@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.vui.usage.impl;
 
+import static com.copyright.rup.dist.foreign.vui.UiTestHelper.assertFieldValidationMessage;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.getDialogContent;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.getFooterLayout;
 import static com.copyright.rup.dist.foreign.vui.UiTestHelper.verifyButton;
@@ -24,6 +25,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
+import com.vaadin.flow.component.textfield.BigDecimalField;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Before;
@@ -33,6 +35,7 @@ import org.powermock.reflect.Whitebox;
 import java.math.BigDecimal;
 import java.util.EventObject;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Verifies {@link UsageAgeWeightWindow}.
@@ -106,7 +109,7 @@ public class UsageAgeWeightWindowTest {
             {"2020", WEIGHT_1, WEIGHT_1},
             {"2019", WEIGHT_2, WEIGHT_2},
         };
-        Grid grid = (Grid) ((VerticalLayout) getDialogContent(window)).getComponentAt(0);
+        var grid = (Grid) ((VerticalLayout) getDialogContent(window)).getComponentAt(0);
         verifyGridItems(grid, defaultParams, expectedCells);
     }
 
@@ -128,13 +131,26 @@ public class UsageAgeWeightWindowTest {
             {"2020", WEIGHT_1, WEIGHT_1},
             {"2019", WEIGHT_2, WEIGHT_3},
         };
-        Grid grid = (Grid) ((VerticalLayout) getDialogContent(window)).getComponentAt(0);
+        var grid = (Grid) ((VerticalLayout) getDialogContent(window)).getComponentAt(0);
         verifyGridItems(grid, appliedParams, expectedCells);
     }
 
     @Test
     public void testWeightFieldValidation() {
-        //TODO {aliakh} implement when new grid editing is implemented
+        Grid grid = Whitebox.getInternalState(window, "grid");
+        var binder = grid.getEditor().getBinder();
+        var fields = (List<BigDecimalField>) binder.getFields().collect(Collectors.toList());
+        var weightField = fields.get(0);
+        var positiveNumberValidationMessage = "Field value should be positive number and should not exceed 10 digits";
+        assertFieldValidationMessage(weightField, new BigDecimal("-1"), binder, positiveNumberValidationMessage, false);
+        assertFieldValidationMessage(weightField, new BigDecimal(".05"), binder, null, true);
+        assertFieldValidationMessage(weightField, new BigDecimal("99999999999"), binder,
+            positiveNumberValidationMessage, false);
+        assertFieldValidationMessage(weightField, BigDecimal.ZERO, binder, null, true);
+        assertFieldValidationMessage(weightField, new BigDecimal("0.00"), binder, null, true);
+        assertFieldValidationMessage(weightField, new BigDecimal("125"), binder, null, true);
+        assertFieldValidationMessage(weightField, new BigDecimal("125.123456789"), binder, null, true);
+        assertFieldValidationMessage(weightField, new BigDecimal("9999999999.99"), binder, null, true);
     }
 
     private void verifyContent(VerticalLayout content) {
