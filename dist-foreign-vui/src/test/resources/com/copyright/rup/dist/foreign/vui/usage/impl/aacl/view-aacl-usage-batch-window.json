@@ -1,0 +1,153 @@
+{
+  "javaClass" : "com.copyright.rup.dist.foreign.vui.usage.impl.aacl.ViewAaclUsageBatchWindow",
+  "id" : "view-batch-window",
+  "class" : "[view-batch-window]",
+  "headerTitle" : "View Usage Batch",
+  "isModal" : true,
+  "isDraggable" : true,
+  "isResizable" : true,
+  "isCloseOnEsc" : false,
+  "isCloseOnOutsideClick" : false,
+  "isOpened" : false,
+  "width" : "1150px",
+  "maxWidth" : "101.7%",
+  "minHeight" : "200px",
+  "height" : "550px",
+  "maxHeight" : "103.7%",
+  "children" : [ {
+    "javaClass" : "com.vaadin.flow.component.orderedlayout.VerticalLayout",
+    "style" : "width:100%;height:100%",
+    "width" : "100%",
+    "height" : "100%",
+    "children" : [ {
+      "javaClass" : "com.copyright.rup.dist.foreign.vui.vaadin.common.widget.SearchWidget",
+      "id" : "search-toolbar",
+      "class" : "[search-toolbar]",
+      "style" : "width:100%;justify-content:center",
+      "width" : "100%",
+      "children" : [ {
+        "javaClass" : "com.vaadin.flow.component.textfield.TextField",
+        "style" : "width:70%",
+        "width" : "70%",
+        "value" : "",
+        "requiredIndicatorVisible" : false,
+        "valid" : true,
+        "property_placeholder" : "Enter Batch Name or Period End Date (mm/dd/yyyy)",
+        "children" : [ {
+          "javaClass" : "com.vaadin.flow.component.icon.Icon",
+          "icon" : "vaadin:search",
+          "slot" : "prefix"
+        } ]
+      }, {
+        "javaClass" : "com.vaadin.flow.component.button.Button",
+        "class" : "[button-search]",
+        "style" : "margin:4px 1px 1px 1px",
+        "theme" : "icon",
+        "text" : "",
+        "disableOnClick" : false,
+        "icon" : {
+          "javaClass" : "com.vaadin.flow.component.icon.Icon",
+          "icon" : "vaadin:search",
+          "slot" : "prefix"
+        },
+        "children" : [ {
+          "javaClass" : "com.vaadin.flow.component.icon.Icon",
+          "icon" : "vaadin:search",
+          "slot" : "prefix"
+        } ]
+      }, {
+        "javaClass" : "com.vaadin.flow.component.button.Button",
+        "class" : "[button-clear]",
+        "theme" : "icon",
+        "text" : "",
+        "disableOnClick" : false,
+        "icon" : {
+          "javaClass" : "com.vaadin.flow.component.icon.Icon",
+          "icon" : "vaadin:close-small",
+          "slot" : "prefix"
+        },
+        "children" : [ {
+          "javaClass" : "com.vaadin.flow.component.icon.Icon",
+          "icon" : "vaadin:close-small",
+          "slot" : "prefix"
+        } ]
+      } ]
+    }, {
+      "javaClass" : "com.vaadin.flow.component.grid.Grid",
+      "id" : "view-batch-grid",
+      "class" : "[view-batch-grid]",
+      "style" : "width:100%;height:100%",
+      "theme" : "column-borders compact row-stripes",
+      "width" : "100%",
+      "height" : "100%",
+      "pageSize" : 50,
+      "attribute_multi-sort-priority" : "prepend",
+      "children" : [ {
+        "javaClass" : "com.vaadin.flow.component.grid.Grid$Column",
+        "headerText" : "Usage Batch Name",
+        "textAlign" : "START",
+        "flexGrow" : 0,
+        "width" : "200px",
+        "autoWidth" : false,
+        "sortable" : true,
+        "resizable" : true
+      }, {
+        "javaClass" : "com.vaadin.flow.component.grid.Grid$Column",
+        "headerText" : "Period End Date",
+        "textAlign" : "START",
+        "flexGrow" : 0,
+        "width" : "155px",
+        "autoWidth" : false,
+        "sortable" : true,
+        "resizable" : true
+      }, {
+        "javaClass" : "com.vaadin.flow.component.grid.Grid$Column",
+        "headerText" : "Number of Baseline Years",
+        "textAlign" : "START",
+        "flexGrow" : 0,
+        "width" : "180px",
+        "autoWidth" : false,
+        "sortable" : true,
+        "resizable" : true
+      }, {
+        "javaClass" : "com.vaadin.flow.component.grid.Grid$Column",
+        "headerText" : "Created By",
+        "textAlign" : "START",
+        "flexGrow" : 0,
+        "width" : "330px",
+        "autoWidth" : false,
+        "sortable" : true,
+        "resizable" : true
+      }, {
+        "javaClass" : "com.vaadin.flow.component.grid.Grid$Column",
+        "headerText" : "Created Date",
+        "textAlign" : "START",
+        "flexGrow" : 0,
+        "width" : "150px",
+        "autoWidth" : false,
+        "sortable" : true,
+        "resizable" : true
+      } ]
+    } ]
+  } ],
+  "footer" : {
+    "javaClass" : "com.vaadin.flow.component.orderedlayout.HorizontalLayout",
+    "id" : "view-batch-buttons",
+    "class" : "[view-batch-buttons]",
+    "theme" : "spacing",
+    "children" : [ {
+      "javaClass" : "com.vaadin.flow.component.button.Button",
+      "id" : "Delete",
+      "class" : "[Delete]",
+      "enabled" : false,
+      "text" : "Delete",
+      "disableOnClick" : true
+    }, {
+      "javaClass" : "com.vaadin.flow.component.button.Button",
+      "id" : "Close",
+      "class" : "[Close]",
+      "text" : "Close",
+      "disableOnClick" : true
+    } ]
+  }
+}

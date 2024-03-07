@@ -1,0 +1,63 @@
+{
+  "javaClass" : "com.copyright.rup.dist.foreign.vui.usage.impl.nts.CreateAdditionalFundWindow",
+  "id" : "create-additional-fund-window",
+  "class" : "[create-additional-fund-window]",
+  "headerTitle" : "Create NTS Pre-Service Fee Funds",
+  "isModal" : true,
+  "isDraggable" : true,
+  "isResizable" : false,
+  "isCloseOnEsc" : false,
+  "isCloseOnOutsideClick" : false,
+  "isOpened" : false,
+  "width" : "500px",
+  "minHeight" : "200px",
+  "children" : [ {
+    "javaClass" : "com.vaadin.flow.component.orderedlayout.VerticalLayout",
+    "style" : "width:100%;padding:10.0px 10.0px 10.0px 10.0px",
+    "width" : "100%",
+    "children" : [ {
+      "javaClass" : "com.vaadin.flow.component.textfield.TextField",
+      "id" : "additional-fund-name",
+      "class" : "[additional-fund-name]",
+      "style" : "width:100%",
+      "label" : "Fund Name",
+      "width" : "100%",
+      "value" : "",
+      "requiredIndicatorVisible" : true,
+      "valid" : true
+    }, {
+      "javaClass" : "com.vaadin.flow.component.textfield.TextArea",
+      "id" : "additional-fund-comment",
+      "class" : "[additional-fund-comment]",
+      "style" : "width:100%",
+      "label" : "Comment",
+      "width" : "100%",
+      "value" : "",
+      "requiredIndicatorVisible" : true,
+      "valid" : true
+    } ]
+  } ],
+  "footer" : {
+    "javaClass" : "com.vaadin.flow.component.orderedlayout.HorizontalLayout",
+    "theme" : "spacing",
+    "children" : [ {
+      "javaClass" : "com.vaadin.flow.component.button.Button",
+      "id" : "Confirm",
+      "class" : "[Confirm]",
+      "text" : "Confirm",
+      "disableOnClick" : true
+    }, {
+      "javaClass" : "com.vaadin.flow.component.button.Button",
+      "id" : "Cancel",
+      "class" : "[Cancel]",
+      "text" : "Cancel",
+      "disableOnClick" : true
+    }, {
+      "javaClass" : "com.vaadin.flow.component.button.Button",
+      "id" : "Close",
+      "class" : "[Close]",
+      "text" : "Close",
+      "disableOnClick" : true
+    } ]
+  }
+}

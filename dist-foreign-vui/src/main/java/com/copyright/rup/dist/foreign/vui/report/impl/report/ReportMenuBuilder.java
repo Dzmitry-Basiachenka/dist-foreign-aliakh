@@ -18,6 +18,16 @@ import com.vaadin.flow.component.contextmenu.MenuItem;
 public enum ReportMenuBuilder implements IReportMenuBuilder {
 
     /**
+     * Report builder for AACL product family
+     */
+    AACL(false) {
+        @Override
+        public void addItems(IReportController controller, IReportWidget widget, MenuItem rootItem) {
+            //TODO: implement on scope of corresponding story
+        }
+    },
+
+    /**
      * Report builder for FAS product family
      */
     FAS(true) {

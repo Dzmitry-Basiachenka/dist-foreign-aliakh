@@ -26,9 +26,9 @@ public interface ICommonUsageFilterWidget extends IFilterWidget<ICommonUsageFilt
     UsageFilter getAppliedFilter();
 
     /**
-     * Sets filter save action.
+     * Add filter save action.
      *
      * @param action action to be performed
      */
-    void setFilterSaveAction(IFilterSaveAction action);
+    void addFilterSaveAction(IFilterSaveAction action);
 }

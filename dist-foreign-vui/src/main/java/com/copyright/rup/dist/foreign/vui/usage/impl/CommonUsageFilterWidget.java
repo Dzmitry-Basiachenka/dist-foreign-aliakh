@@ -13,6 +13,9 @@ import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Common widget for filtering usages.
  * <p>
@@ -26,12 +29,12 @@ public abstract class CommonUsageFilterWidget extends VerticalLayout implements 
 
     private static final long serialVersionUID = 9089378281952722930L;
 
+    private final Set<IFilterSaveAction> filterSaveActions = new HashSet<>();
     private ICommonUsageFilterController controller;
     private Button applyButton;
     private UsageFilter usageFilter = new UsageFilter();
     private UsageFilter appliedUsageFilter = new UsageFilter();
     private CommonUsageAppliedFilterWidget appliedFilterWidget;
-    private IFilterSaveAction filterSaveAction;
 
     @Override
     @SuppressWarnings("unchecked")
@@ -46,15 +49,15 @@ public abstract class CommonUsageFilterWidget extends VerticalLayout implements 
     }
 
     @Override
-    public void setFilterSaveAction(IFilterSaveAction action) {
-        this.filterSaveAction = action;
+    public void addFilterSaveAction(IFilterSaveAction action) {
+        this.filterSaveActions.add(action);
     }
 
     @Override
     public void applyFilter() {
         appliedUsageFilter = new UsageFilter(usageFilter);
         appliedFilterWidget.refreshFilterPanel(appliedUsageFilter);
-        filterSaveAction.onFilterSaveAction();
+        filterSaveActions.forEach(IFilterSaveAction::onFilterSaveAction);
         filterChanged();
     }
 
