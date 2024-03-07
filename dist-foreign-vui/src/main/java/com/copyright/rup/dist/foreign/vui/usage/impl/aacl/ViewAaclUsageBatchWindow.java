@@ -35,6 +35,7 @@ public class ViewAaclUsageBatchWindow extends AbstractViewUsageBatchWindow {
      */
     public ViewAaclUsageBatchWindow(IAaclUsageController controller) {
         super(controller);
+        super.setWidth("1016px");
     }
 
     @Override
