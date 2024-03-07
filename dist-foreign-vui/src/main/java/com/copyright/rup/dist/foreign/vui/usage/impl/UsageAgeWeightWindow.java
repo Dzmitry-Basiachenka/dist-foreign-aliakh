@@ -96,10 +96,11 @@ public class UsageAgeWeightWindow extends CommonScenarioParameterWindow<List<Usa
             var editor = grid.getEditor();
             var binder = new Binder<>(UsageAge.class);
             editor.setBinder(binder);
+            editor.addCloseListener(event -> grid.setItems(currentValues));
             scenarioWeightColumn.setEditorComponent(initScenarioWeightField(binder));
             grid.addItemClickListener(event -> {
                 var usageAge = event.getItem();
-                if (Objects.nonNull(usageAge)) {
+                if (!Objects.equals(usageAge, editor.getItem())) {
                     editor.editItem(usageAge);
                     ((BigDecimalField) scenarioWeightColumn.getEditorComponent()).focus();
                 }
@@ -121,7 +122,6 @@ public class UsageAgeWeightWindow extends CommonScenarioParameterWindow<List<Usa
 
     private BigDecimalField initScenarioWeightField(Binder<UsageAge> binder) {
         var scenarioWeightField = new BigDecimalField();
-        scenarioWeightField.addBlurListener(event -> grid.getDataProvider().refreshAll());
         scenarioWeightField.setWidthFull();
         binder.forField(scenarioWeightField)
             .withValidator(new RequiredNumberValidator())
