@@ -153,8 +153,8 @@ public class AaclUsageWidgetTest {
         mockStatic(Windows.class);
         mockStatic(UI.class);
         UI ui = createMock(UI.class);
-        expect(UI.getCurrent()).andReturn(ui).times(6);
-        expect(ui.getLocale()).andReturn(null).times(3);
+        expect(UI.getCurrent()).andReturn(ui).anyTimes();
+        expect(ui.getLocale()).andReturn(null).anyTimes();
         var addToScenarioButton = getButton(widget, ADD_TO_SCENARIO);
         expect(controller.getBeansCount()).andReturn(1).once();
         prepareCreateScenarioExpectation();
@@ -175,8 +175,8 @@ public class AaclUsageWidgetTest {
         mockStatic(Windows.class);
         mockStatic(UI.class);
         UI ui = createMock(UI.class);
-        expect(UI.getCurrent()).andReturn(ui).times(6);
-        expect(ui.getLocale()).andReturn(null).times(3);
+        expect(UI.getCurrent()).andReturn(ui).anyTimes();
+        expect(ui.getLocale()).andReturn(null).anyTimes();
         var addToScenarioButton = getButton(widget, ADD_TO_SCENARIO);
         expect(controller.getBeansCount()).andReturn(0).once();
         prepareCreateScenarioExpectation();
@@ -192,8 +192,8 @@ public class AaclUsageWidgetTest {
         mockStatic(Windows.class);
         mockStatic(UI.class);
         UI ui = createMock(UI.class);
-        expect(UI.getCurrent()).andReturn(ui).times(6);
-        expect(ui.getLocale()).andReturn(null).times(3);
+        expect(UI.getCurrent()).andReturn(ui).anyTimes();
+        expect(ui.getLocale()).andReturn(null).anyTimes();
         var addToScenarioButton = getButton(widget, ADD_TO_SCENARIO);
         prepareCreateScenarioExpectation();
         expect(controller.getBeansCount()).andReturn(1).once();
@@ -210,8 +210,8 @@ public class AaclUsageWidgetTest {
         mockStatic(Windows.class);
         mockStatic(UI.class);
         UI ui = createMock(UI.class);
-        expect(UI.getCurrent()).andReturn(ui).times(6);
-        expect(ui.getLocale()).andReturn(null).times(3);
+        expect(UI.getCurrent()).andReturn(ui).anyTimes();
+        expect(ui.getLocale()).andReturn(null).anyTimes();
         var addToScenarioButton = getButton(widget, ADD_TO_SCENARIO);
         prepareCreateScenarioExpectation();
         expect(controller.getBeansCount()).andReturn(1).once();
@@ -230,8 +230,8 @@ public class AaclUsageWidgetTest {
         mockStatic(Windows.class);
         mockStatic(UI.class);
         UI ui = createMock(UI.class);
-        expect(UI.getCurrent()).andReturn(ui).times(6);
-        expect(ui.getLocale()).andReturn(null).times(3);
+        expect(UI.getCurrent()).andReturn(ui).anyTimes();
+        expect(ui.getLocale()).andReturn(null).anyTimes();
         var addToScenarioButton = getButton(widget, ADD_TO_SCENARIO);
         prepareCreateScenarioExpectation();
         expect(controller.getBeansCount()).andReturn(1).once();
@@ -251,8 +251,8 @@ public class AaclUsageWidgetTest {
         mockStatic(Windows.class);
         mockStatic(UI.class);
         UI ui = createMock(UI.class);
-        expect(UI.getCurrent()).andReturn(ui).times(6);
-        expect(ui.getLocale()).andReturn(null).times(3);
+        expect(UI.getCurrent()).andReturn(ui).anyTimes();
+        expect(ui.getLocale()).andReturn(null).anyTimes();
         var addToScenarioButton = getButton(widget, ADD_TO_SCENARIO);
         prepareCreateScenarioExpectation();
         expect(controller.getBeansCount()).andReturn(1).once();
@@ -274,8 +274,8 @@ public class AaclUsageWidgetTest {
         mockStatic(Windows.class);
         mockStatic(UI.class);
         UI ui = createMock(UI.class);
-        expect(UI.getCurrent()).andReturn(ui).times(6);
-        expect(ui.getLocale()).andReturn(null).times(3);
+        expect(UI.getCurrent()).andReturn(ui).anyTimes();
+        expect(ui.getLocale()).andReturn(null).anyTimes();
         var addToScenarioButton = getButton(widget, ADD_TO_SCENARIO);
         prepareCreateScenarioExpectation();
         expect(controller.getBeansCount()).andReturn(1).once();

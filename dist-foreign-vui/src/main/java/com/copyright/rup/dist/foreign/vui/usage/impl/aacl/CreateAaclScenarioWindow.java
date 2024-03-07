@@ -27,13 +27,13 @@ import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.validator.StringLengthValidator;
+import com.vaadin.flow.function.ValueProvider;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 /**
@@ -51,14 +51,13 @@ class CreateAaclScenarioWindow extends CommonDialog {
 
     private final IAaclUsageController controller;
     private final Binder<Scenario> scenarioBinder = new Binder<>();
-    private final Binder<AtomicReference<FundPool>> fundPoolBinder = new Binder<>();
+    private final Binder<FundPool> fundPoolBinder = new Binder<>();
 
     private TextField scenarioNameField;
     private ComboBox<FundPool> fundPoolComboBox;
     private ScenarioParameterWidget<List<UsageAge>> usageAgeWeightWidget;
     private ScenarioParameterWidget<List<PublicationType>> publicationTypeWeightWidget;
     private ScenarioParameterWidget<List<DetailLicenseeClass>> licenseeClassMappingWidget;
-    private TextArea descriptionArea;
 
     /**
      * Constructor.
@@ -72,9 +71,15 @@ class CreateAaclScenarioWindow extends CommonDialog {
         super.add(initRootLayout());
         super.getFooter().add(initButtonsLayout());
         super.setModalWindowProperties("create-scenario-window", false);
+        initBinder();
         scenarioNameField.focus();
-        scenarioBinder.validate();
-        fundPoolBinder.validate();
+    }
+
+    private void initBinder() {
+        Scenario scenario = new Scenario();
+        scenario.setName(ForeignUi.getMessage("field.scenario_name.default", controller.getSelectedProductFamily(),
+            CommonDateUtils.format(LocalDate.now(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT)));
+        scenarioBinder.setBean(scenario);
     }
 
     private VerticalLayout initRootLayout() {
@@ -87,9 +92,6 @@ class CreateAaclScenarioWindow extends CommonDialog {
 
     private TextField initScenarioNameField() {
         scenarioNameField = new TextField(ForeignUi.getMessage("field.scenario_name"));
-        scenarioNameField.setValue(
-            ForeignUi.getMessage("field.scenario_name.default", controller.getSelectedProductFamily(),
-                CommonDateUtils.format(LocalDate.now(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT)));
         scenarioNameField.setRequiredIndicatorVisible(true);
         scenarioNameField.setWidthFull();
         scenarioBinder.forField(scenarioNameField)
@@ -110,7 +112,7 @@ class CreateAaclScenarioWindow extends CommonDialog {
         fundPoolComboBox.setWidthFull();
         fundPoolBinder.forField(fundPoolComboBox)
             .asRequired(ForeignUi.getMessage("field.error.fund_pool.empty"))
-            .bind(AtomicReference::get, AtomicReference::set);
+            .bind(ValueProvider.identity(), (bean, field) -> bean = field);
         VaadinUtils.addComponentStyle(fundPoolComboBox, "fund-pools-filter");
         return fundPoolComboBox;
     }
@@ -137,7 +139,7 @@ class CreateAaclScenarioWindow extends CommonDialog {
     }
 
     private TextArea initDescriptionArea() {
-        descriptionArea = new TextArea(ForeignUi.getMessage("field.description"));
+        var descriptionArea = new TextArea(ForeignUi.getMessage("field.description"));
         descriptionArea.setWidthFull();
         scenarioBinder.forField(descriptionArea)
             .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.length", 2000), 0, 2000))
@@ -153,7 +155,10 @@ class CreateAaclScenarioWindow extends CommonDialog {
     }
 
     private void onConfirmButtonClicked() {
-        if (scenarioBinder.isValid() && fundPoolBinder.isValid()) {
+        boolean isScenarioBinderValid = scenarioBinder.validate().isOk();
+        boolean isFundBoolBinderValid = fundPoolBinder.validate().isOk();
+        if (isScenarioBinderValid && isFundBoolBinderValid) {
+            var scenario = scenarioBinder.getBean();
             var aaclFields = new Scenario.AaclFields();
             aaclFields.setFundPoolId(fundPoolComboBox.getValue().getId());
             aaclFields.setUsageAges(usageAgeWeightWidget.getAppliedParameters());
@@ -164,8 +169,8 @@ class CreateAaclScenarioWindow extends CommonDialog {
                     aaclFields.getDetailLicenseeClasses());
             if (CollectionUtils.isEmpty(aggregateClassesWithoutUsages)) {
                 fireEvent(new ScenarioCreateEvent(this,
-                    controller.createAaclScenario(StringUtils.trimToEmpty(scenarioNameField.getValue()), aaclFields,
-                        StringUtils.trimToEmpty(descriptionArea.getValue()))));
+                    controller.createAaclScenario(StringUtils.trimToEmpty(scenario.getName()), aaclFields,
+                        StringUtils.trimToEmpty(scenario.getDescription()))));
                 close();
             } else {
                 var formattedAggregateClasses = aggregateClassesWithoutUsages.stream()
