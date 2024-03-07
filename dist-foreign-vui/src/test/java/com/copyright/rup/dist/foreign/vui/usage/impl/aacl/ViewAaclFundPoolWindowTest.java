@@ -90,7 +90,7 @@ public class ViewAaclFundPoolWindowTest {
 
     @Test
     public void testStructure() {
-        verifyWindow(window, "View Fund Pool", "900px", "600px", Unit.PIXELS, true);
+        verifyWindow(window, "View Fund Pool", "902px", "600px", Unit.PIXELS, true);
         var content = (VerticalLayout) getDialogContent(window);
         assertEquals(2, content.getComponentCount());
         verifySearchWidget(content.getComponentAt(0), "Enter Fund Pool Name");

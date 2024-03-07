@@ -86,7 +86,7 @@ public class ViewAaclUsageBatchWindowTest {
     @Test
     public void testStructure() {
         replay(ForeignSecurityUtils.class, controller);
-        verifyWindow(window, "View Usage Batch", "1150px", "550px", Unit.PIXELS, true);
+        verifyWindow(window, "View Usage Batch", "1016px", "550px", Unit.PIXELS, true);
         var content = (VerticalLayout) getDialogContent(window);
         assertEquals(2, content.getComponentCount());
         verifySearchWidget(content.getComponentAt(0), "Enter Batch Name or Period End Date (mm/dd/yyyy)");

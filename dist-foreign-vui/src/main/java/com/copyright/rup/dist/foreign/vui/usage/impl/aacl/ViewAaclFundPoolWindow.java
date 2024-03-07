@@ -52,7 +52,7 @@ public class ViewAaclFundPoolWindow extends CommonDialog implements ISearchContr
      */
     public ViewAaclFundPoolWindow(IAaclUsageController usageController) {
         this.usageController = usageController;
-        super.setWidth("900px");
+        super.setWidth("902px");
         super.setHeight("600px");
         super.setHeaderTitle(ForeignUi.getMessage("window.view_fund_pool"));
         super.add(initContent());
