@@ -15,7 +15,6 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Modal window to show AACL fund pool gross amounts.
@@ -39,14 +38,14 @@ public class ViewAaclFundPoolDetailsWindow extends CommonDialog implements IGrid
     public ViewAaclFundPoolDetailsWindow(FundPool fundPool, List<FundPoolDetail> fundPoolDetails) {
         super.setWidth("700px");
         super.setHeight("600px");
-        super.setHeaderTitle(Objects.requireNonNull(fundPool).getName());
+        super.setHeaderTitle(fundPool.getName());
         super.add(initContent(fundPoolDetails));
         super.getFooter().add(initButtonsLayout());
         super.setModalWindowProperties("view-aacl-fund-pool-details-window", true);
     }
 
     private VerticalLayout initContent(List<FundPoolDetail> fundPoolDetails) {
-        return VaadinUtils.initSizeFullVerticalLayout(initGrid(Objects.requireNonNull(fundPoolDetails)));
+        return VaadinUtils.initSizeFullVerticalLayout(initGrid(fundPoolDetails));
     }
 
     private Grid<FundPoolDetail> initGrid(List<FundPoolDetail> fundPoolDetails) {

@@ -57,8 +57,8 @@ public class ViewAaclFundPoolWindow extends CommonDialog implements ISearchContr
         super.setHeaderTitle(ForeignUi.getMessage("window.view_fund_pool"));
         super.add(initContent());
         super.getFooter().add(initButtonsLayout());
-        initMediator();
         super.setModalWindowProperties("view-aacl-fund-pool-window", true);
+        initMediator();
     }
 
     @Override

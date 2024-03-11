@@ -60,7 +60,7 @@ public class AaclUsageBatchUploadWindow extends CommonDialog {
     public AaclUsageBatchUploadWindow(IAaclUsageController usageController) {
         this.usageController = usageController;
         super.setWidth("500px");
-        super.setHeight("420px");
+        super.setHeight("380px");
         super.setHeaderTitle(ForeignUi.getMessage("window.upload_usage_batch"));
         super.add(initRootLayout());
         super.getFooter().add(initButtonsLayout());
@@ -115,8 +115,9 @@ public class AaclUsageBatchUploadWindow extends CommonDialog {
      * @return {@code true} if all inputs are valid, {@code false} - otherwise
      */
     boolean isValid() {
+        var isUploadBinderValid = uploadBinder.validate().isOk();
         var isBinderValid = binder.validate().isOk();
-        return uploadBinder.validate().isOk() && isBinderValid;
+        return isUploadBinderValid && isBinderValid;
     }
 
     private void initBinder() {
@@ -126,7 +127,7 @@ public class AaclUsageBatchUploadWindow extends CommonDialog {
     }
 
     private VerticalLayout initRootLayout() {
-        var rootLayout = new VerticalLayout();
+        var rootLayout = VaadinUtils.initCommonVerticalLayout();
         rootLayout.add(initUsageBatchNameField(), initUploadField(), initPeriodEndDateAndNumberOfBaselineYearsField());
         VaadinUtils.setPadding(rootLayout, 10, 10, 0, 10);
         return rootLayout;

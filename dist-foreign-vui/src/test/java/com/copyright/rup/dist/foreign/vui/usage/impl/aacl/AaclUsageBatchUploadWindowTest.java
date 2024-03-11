@@ -100,7 +100,7 @@ public class AaclUsageBatchUploadWindowTest {
     public void testConstructor() {
         replay(controller);
         window = new AaclUsageBatchUploadWindow(controller);
-        verifyWindow(window, "Upload Usage Batch", "500px", "420px", Unit.PIXELS, false);
+        verifyWindow(window, "Upload Usage Batch", "500px", "380px", Unit.PIXELS, false);
         verifyRootLayout(getDialogContent(window));
         verify(controller);
     }

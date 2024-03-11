@@ -30,12 +30,12 @@ class AaclUsageFilterController extends CommonUsageFilterController implements I
     private IAaclUsageService aaclUsageService;
 
     @Override
-    protected AaclUsageFilterWidget instantiateWidget() {
-        return new AaclUsageFilterWidget(this);
+    public List<Integer> getUsagePeriods() {
+        return aaclUsageService.getUsagePeriods();
     }
 
     @Override
-    public List<Integer> getUsagePeriods() {
-        return aaclUsageService.getUsagePeriods();
+    protected AaclUsageFilterWidget instantiateWidget() {
+        return new AaclUsageFilterWidget(this);
     }
 }

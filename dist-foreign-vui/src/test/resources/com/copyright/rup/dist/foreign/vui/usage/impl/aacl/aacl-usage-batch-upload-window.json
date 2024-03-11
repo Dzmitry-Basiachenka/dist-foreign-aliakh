@@ -11,11 +11,10 @@
   "isOpened" : false,
   "width" : "500px",
   "minHeight" : "200px",
-  "height" : "420px",
+  "height" : "380px",
   "children" : [ {
     "javaClass" : "com.vaadin.flow.component.orderedlayout.VerticalLayout",
     "style" : "width:100%;padding:10.0px 10.0px 0.0px 10.0px",
-    "theme" : "padding spacing",
     "width" : "100%",
     "children" : [ {
       "javaClass" : "com.vaadin.flow.component.textfield.TextField",
